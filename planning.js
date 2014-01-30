@@ -458,7 +458,7 @@ function add_burndowns(yaml_data, events, releases)
 		var todo = to_do(yaml_data, release);
 		console.log("release: " + release);
 		console.log(JSON.stringify(select(events,release, todo)));
-		make_burndown(select(events,release, todo), release)
+		make_burndown(select(events,release, todo), release);
 		//make_burndown(select(events, releases[i]), releases[i]);
 	}
 }
@@ -472,4 +472,4 @@ window.onload = function (started)
 	cumulative_workflow.render();
 	add_progress_bars(yaml_data, get_max_name_length(yaml_data.stories));
 	add_burndowns(yaml_data, events, get_release_dates(yaml_data));
-}
+};
