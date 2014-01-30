@@ -446,21 +446,19 @@ function make_burndown(data, release)
 									backgroundColor: "#F9F9F9",
 									data: data
 									});
-									console.log("a3");
-	console.log("a4");
 }
 
-function add_burndowns(yaml_data, events, releases)
+function make_burndowns(yaml_data, events, releases)
 {
-	for (var i in releases)
-	{
-		var release = releases[i];
-		var todo = to_do(yaml_data, release);
-		console.log("release: " + release);
-		console.log(JSON.stringify(select(events,release, todo)));
-		make_burndown(select(events,release, todo), release);
-		//make_burndown(select(events, releases[i]), releases[i]);
-	}
+    for (var i in releases)
+    {
+        var release = releases[i];
+        var todo = to_do(yaml_data, release);
+        console.log("release: " + release);
+        console.log(JSON.stringify(select(events,release, todo)));
+        make_burndown(select(events,release, todo), release).render();
+            //make_burndown(select(events, releases[i]), releases[i]);
+    }
 }
 
 window.onload = function (started)
