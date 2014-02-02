@@ -1,11 +1,11 @@
 ﻿#phases: [documented, integrated, coded, designed, started]
 phases: [started,designed,coded,integrated,documented]
 stories:
-    - name: <a href="http://www.google.com">feature 1</a>
+    - name: feature 1
       size: 3
       release: 1/2/2014
       started: 11/12/2013
-      designed: 14/12/2013
+      designed: 17/12/2013
     - name: very long feature name
       size: 4
       release: 2/2/2014
