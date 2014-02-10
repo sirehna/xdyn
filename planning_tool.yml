@@ -1,0 +1,64 @@
+﻿start: 1/2/2014
+stories:
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1688>Finish administrativia</a>
+    due by: 10/3/2014
+    tasks:
+    - task: Rédaction fiche de travaux
+      type: internal
+      size: 2
+      backlog: 5/2/2014
+      started: 6/2/2014
+      done: 6/2/2014
+      assigned to: cec
+    - task: Compte-rendu comité de pilotage #0
+      type: internal
+      size: 2
+      backlog: 5/2/2014
+      started: 6/2/2014
+      done: 6/2/2014
+      assigned to: cec
+    - task: Description process
+      type: internal
+      size: 4
+      backlog: 10/2/2014
+      started: 10/2/2014
+      assigned to: gj
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1687>Création dépôt Git</a>
+    due by: 10/3/2014
+    tasks:
+    - task: Droits sur dev_pilotage pour GJ + git externals
+      type: internal
+      size: 2
+      backlog: 10/2/2014
+      assigned to: cec
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1691>Setup Jenkins</a>
+    due by: 10/3/2014
+    tasks:
+    - task: Initialisation Jenkins sur PC EONAV (Windows + Linux)
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 10/2/2014
+    - task: Setup Doxygen on Jenkins
+      type: internal
+      size: 1
+      assigned to: gj
+      backlog: 10/2/2014
+    - task: Configure CPack
+      type: internal
+      size: 2
+      assigned to: gj
+      backlog: 10/2/2014
+    - task: Pouvoir récupérer pages wiki sur GitLab IRT
+      type: internal
+      size: 2
+      backlog: 10/2/2014
+      assigned to: cec
+    - task: GJ peut compiler le DataSource sous Eclipse
+      size: 1
+      type: internal
+      backlog: 10/2/2014
+    - task: Compile & run all tests on Jenkins
+      type: internal
+      size: 2
+      backlog: 10/2/2014

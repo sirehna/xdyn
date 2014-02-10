@@ -1,0 +1,29 @@
+﻿resources:
+    cec: c2
+    gj: c2
+    ppb: c2
+    nc: c1
+
+projects:
+  - name: Bassin numérique
+    budget: 100000
+    T0: 1/2/2014
+    prices:
+        c1: 687.0
+        c2: 488.5
+        c3: 391.8
+    resource usage:
+      - week ending on: 14/2/2014
+        cec: 5
+        gj: 5
+  - name: R&D autofinancée
+    budget: 50000
+    prices:
+        c1: 687.0
+        c2: 488.5
+        c3: 391.8
+    T0: 1/2/2014
+    resource usage:
+      - week ending on: 14/2/2014
+        cec: 5
+        gj: 0
