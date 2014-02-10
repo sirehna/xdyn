@@ -93,14 +93,15 @@ The reason of this choice comes from the fact that it is the version mostly used
 Newer versions are also used to benefit from new compiler features, such as code coverage.
 
 ### Generic tools used
-| Tools                                 | Description                                                   |
-| :--------------------------------     | :------------------------------------------------------------ |
-| [GIT](http://www.git-scm.com)         | Cross-platform open-source build system                       |
-| [CMake](http://www.cmake.org)         | Cross-platform open-source build system                       |
-| [Eclipse](http://www.eclipse.org)     | IDE with module CDT                                           |
-| [Jenkins](http://www.jenkins-ci.org)  | Continuous integration tool                                   |
-| [Doxygen](http://www.doxygen.org)     | Tool for generating documentation from annotated C++ sources  |
-| [Graphviz](http://www.graphviz.org)   | Optional tool for graph generation with documentation         |
+| Tools                                         | Description                                                   |
+| :-------------------------------------------  | :------------------------------------------------------------ |
+| [GIT](http://www.git-scm.com)                 | Cross-platform open-source build system                       |
+| [CMake](http://www.cmake.org)                 | Cross-platform open-source build system                       |
+| [Eclipse](http://www.eclipse.org)             | IDE with module CDT                                           |
+| [Jenkins](http://www.jenkins-ci.org)          | Continuous integration tool                                   |
+| [Pandoc](http://johnmacfarlane.net/pandoc/)   | Tool to used to generate documentation                        |
+| [Doxygen](http://www.doxygen.org)             | Tool for generating documentation from annotated C++ sources  |
+| [Graphviz](http://www.graphviz.org)           | Optional tool for graph generation with documentation         |
 
 ### Specific Windows tools
 | Tools                                             | Description                               |
