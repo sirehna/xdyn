@@ -47,7 +47,7 @@ Yaml.prototype =
 			}
 			return ret;
 		}
-		
+
 		this.getFileContents(file, function(data)
 		{
 			callback(new Yaml().parse(data));
@@ -102,12 +102,12 @@ Yaml.prototype =
 
 		return yaml.dump(array, inline);
 	},
-	
+
 	getXHR: function()
 	{
 		if ( window.XMLHttpRequest )
 			return new XMLHttpRequest();
-		 
+
 		if ( window.ActiveXObject )
 		{
 			var names = [
@@ -116,7 +116,7 @@ Yaml.prototype =
 			"Msxml2.XMLHTTP",
 			"Microsoft.XMLHTTP"
 			];
-			
+
 			for ( var i = 0; i < 4; i++ )
 			{
 				try{ return new ActiveXObject(names[i]); }
@@ -125,7 +125,7 @@ Yaml.prototype =
 		}
 		return null;
 	},
-	
+
 	getFileContents: function(file, callback)
 	{
 	    if ( YamlRunningUnderNode )
@@ -151,19 +151,19 @@ Yaml.prototype =
 	    else
 	    {
     		var request = this.getXHR();
-		
+
     		// Sync
     		if ( callback == null )
     		{
-    			request.open('GET', file, false);                  
+    			request.open('GET', file, false);
     			request.send(null);
 
     			if ( request.status == 200 || request.status == 0 )
     				return request.responseText;
-			
+
     			return null;
     		}
-		
+
     		// Async
     		request.onreadystatechange = function()
     		{
@@ -173,7 +173,7 @@ Yaml.prototype =
     				else
     					callback(null);
     		};
-    		request.open('GET', file, true);                  
+    		request.open('GET', file, true);
     		request.send(null);
 	    }
 	}
@@ -184,17 +184,17 @@ var YAML =
 	/*
 	 * @param integer inline The level where you switch to inline YAML
 	 */
-	 
+
 	stringify: function(input, inline, spaces)
 	{
 		return new Yaml().dump(input, inline, spaces);
 	},
-	
+
 	parse: function(input)
 	{
 		return new Yaml().parse(input);
 	},
-	
+
 	load: function(file, callback)
 	{
 		return new Yaml().parseFile(file, callback);
@@ -206,7 +206,7 @@ if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
         exports = module.exports = YAML;
         YamlRunningUnderNode = true;
-        
+
         // Add require handler
         (function () {
             var require_handler = function (module, filename) {

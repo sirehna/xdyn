@@ -14,7 +14,7 @@ YamlParser.prototype =
 	currentLineNb: -1,
 	currentLine: '',
 	refs: {},
-	
+
 	/**
 	 * Parses a YAML string to a JS value.
 	 *
@@ -27,23 +27,23 @@ YamlParser.prototype =
 		this.currentLineNb = -1;
 		this.currentLine = '';
 		this.lines = this.cleanup(value).split("\n");
-		
+
 		var data = null;
       var context = null;
-      		
+
 		while ( this.moveToNextLine() )
 		{
 			if ( this.isCurrentLineEmpty() )
 			{
 				continue;
 			}
-			
+
 			// tab?
 			if ( this.currentLine.charAt(0) == '\t' )
 			{
 				throw new YamlParseException('A YAML file cannot contain tabs as indentation.', this.getRealCurrentLineNb() + 1, this.currentLine);
 			}
-			
+
 			var isRef = false;
 			var isInPlace = false;
 			var isProcessed = false;
@@ -56,7 +56,7 @@ YamlParser.prototype =
 			var parsed = null;
 			var len = null;
 			var reverse = null;
-			
+
 			if ( values = /^\-((\s+)(.+?))?\s*$/.exec(this.currentLine) )
 			{
 
@@ -67,16 +67,16 @@ YamlParser.prototype =
 
 				if ( !this.isDefined(data) ) data = [];
 				//if ( !(data instanceof Array) ) throw new YamlParseException("Non array entry", this.getRealCurrentLineNb() + 1, this.currentLine);
-				
+
 				values = {leadspaces: values[2], value: values[3]};
-				
+
 				if ( this.isDefined(values.value) && ( matches = /^&([^ ]+) *(.*)/.exec(values.value) ) )
 				{
 					matches = {ref: matches[1], value: matches[2]};
 					isRef = matches.ref;
 					values.value = matches.value;
 				}
-				
+
 				// array
 				if ( !this.isDefined(values.value) || '' == this.trim(values.value) || values.value.replace(/^ +/,'').charAt(0) == '#' )
 				{
@@ -88,9 +88,9 @@ YamlParser.prototype =
 				}
 				else
 				{
-					if ( this.isDefined(values.leadspaces) && 
-						' ' == values.leadspaces && 
-						( matches = new RegExp('^('+YamlInline.REGEX_QUOTED_STRING+'|[^ \'"\{\[].*?) *\:(\\s+(.+?))?\\s*$').exec(values.value) ) 
+					if ( this.isDefined(values.leadspaces) &&
+						' ' == values.leadspaces &&
+						( matches = new RegExp('^('+YamlInline.REGEX_QUOTED_STRING+'|[^ \'"\{\[].*?) *\:(\\s+(.+?))?\\s*$').exec(values.value) )
 					) {
 						matches = {key: matches[1], value: matches[3]};
 						// this is a compact notation element, add to next block and parse
@@ -98,7 +98,7 @@ YamlParser.prototype =
 						parser = new YamlParser(c);
 						parser.refs = this.refs;
 						block = values.value;
-						
+
 						if ( !this.isNextLineIndented() )
 						{
 							block += "\n"+this.getNextEmbedBlock(this.getCurrentLineIndentation() + 2);
@@ -119,11 +119,11 @@ YamlParser.prototype =
 				if (context && 'sequence' == context) {
 					throw new YamlParseException('You cannot define a mapping item when in a sequence', this.getRealCurrentLineNb() + 1, this.currentLine);
 				}
-				context = 'mapping';				
+				context = 'mapping';
 				//if ( data instanceof Array ) throw new YamlParseException("Non mapped entry", this.getRealCurrentLineNb() + 1, this.currentLine);
-				
+
 				values = {key: values[1], value: values[3]};
-				
+
 				try {
 					key = new YamlInline().parseScalar(values.key);
 				} catch (e) {
@@ -132,9 +132,9 @@ YamlParser.prototype =
 						e.setSnippet(this.currentLine);
 					}
 					throw e;
-				}				
-				
-				
+				}
+
+
 				if ( '<<' == key )
 				{
 					if ( this.isDefined(values.value) && '*' == (values.value+'').charAt(0) )
@@ -155,13 +155,13 @@ YamlParser.prototype =
 						{
 							value = this.getNextEmbedBlock();
 						}
-						
+
 						c = this.getRealCurrentLineNb() + 1;
 						parser = new YamlParser(c);
 						parser.refs = this.refs;
 						parsed = parser.parse(value);
 						this.refs = parser.refs;
-				
+
 						var merged = [];
 						if ( !this.isObject(parsed) )
 						{
@@ -187,7 +187,7 @@ YamlParser.prototype =
 							// Associative array, merge
 							merged = this.mergeObject(merged, parsed);
 						}
-				
+
 						isProcessed = merged;
 					}
 				}
@@ -197,7 +197,7 @@ YamlParser.prototype =
 					isRef = matches.ref;
 					values.value = matches.value;
 				}
-				
+
 				if ( isProcessed )
 				{
 					// Merge keys
@@ -246,7 +246,7 @@ YamlParser.prototype =
 						}
 						throw e;
 					}
-					
+
 					if ( this.isObject(value) )
 					{
 						var first = value[0];
@@ -261,13 +261,13 @@ YamlParser.prototype =
 							value = data;
 						}
 					}
-				
+
 					return value;
 				}
-				
+
 				throw new YamlParseException('Unable to parse.', this.getRealCurrentLineNb() + 1, this.currentLine);
 			}
-		
+
 			if ( isRef )
 			{
 				if ( data instanceof Array )
@@ -283,7 +283,7 @@ YamlParser.prototype =
 				}
 			}
 		}
-		
+
 		return this.isEmpty(data) ? null : data;
 	},
 
@@ -325,7 +325,7 @@ YamlParser.prototype =
 		if ( !this.isDefined(indentation) )
 		{
 			newIndent = this.getCurrentLineIndentation();
-			
+
 			var unindentedEmbedBlock = this.isStringUnIndentedCollectionItem(this.currentLine);
 
 			if ( !this.isCurrentLineEmpty() && 0 == newIndent && !unindentedEmbedBlock )
@@ -479,7 +479,7 @@ YamlParser.prototype =
 	{
 		if ( indicator == undefined ) indicator = '';
 		if ( indentation == undefined ) indentation = 0;
-		
+
 		separator = '|' == separator ? "\n" : ' ';
 		var text = '';
 		var diff = null;
@@ -505,9 +505,9 @@ YamlParser.prototype =
 
 			return '';
 		}
-		
+
 		matches = {indent: matches[1], text: matches[2]};
-		
+
 		var textIndent = matches.indent;
 		var previousIndent = 0;
 
@@ -515,16 +515,16 @@ YamlParser.prototype =
 		while ( this.currentLineNb + 1 < this.lines.length )
 		{
 			this.moveToNextLine();
-			
+
 			if ( matches = new RegExp('^( {'+textIndent.length+',})(.+)$').exec(this.currentLine) )
 			{
 				matches = {indent: matches[1], text: matches[2]};
-				
+
 				if ( ' ' == separator && previousIndent != matches.indent )
 				{
 					text = text.substr(0, text.length - 1)+"\n";
 				}
-				
+
 				previousIndent = matches.indent;
 
 				diff = matches.indent.length - textIndent.length;
@@ -657,7 +657,7 @@ YamlParser.prototype =
 		if ( regex.test(value) )
 		{
 			var trimmedValue = value.replace(regex, '');
-			
+
 			// items have been removed, update the offset
 			this.offset += this.subStrCount(value, "\n") - this.subStrCount(trimmedValue, "\n");
 			value = trimmedValue;
@@ -668,7 +668,7 @@ YamlParser.prototype =
 		if ( regex.test(value) )
 		{
 			trimmedValue = value.replace(regex, '');
-			
+
 			// items have been removed, update the offset
 			this.offset += this.subStrCount(value, "\n") - this.subStrCount(trimmedValue, "\n");
 			value = trimmedValue;
@@ -721,22 +721,22 @@ YamlParser.prototype =
 	{
 		return (0 === this.currentLine.indexOf('- '));
 	},
-	
+
 	isObject: function(input)
 	{
 		return typeof(input) == 'object' && this.isDefined(input);
 	},
-	
+
 	isEmpty: function(input)
 	{
 		return input == undefined || input == null || input == '' || input == 0 || input == "0" || input == false;
 	},
-	
+
 	isDefined: function(input)
 	{
 		return input != undefined && input != null;
 	},
-	
+
 	reverseArray: function(input /* Array */)
 	{
 		var result = [];
@@ -745,15 +745,15 @@ YamlParser.prototype =
 		{
 			result.push(input[i]);
 		}
-		
+
 		return result;
 	},
-	
+
 	merge: function(a /* Object */, b /* Object */)
 	{
 		var c = {};
 		var i;
-		
+
 		for ( i in a )
 		{
 			if ( a.hasOwnProperty(i) )
@@ -766,10 +766,10 @@ YamlParser.prototype =
 				if ( /^\d+$/.test(i) ) c.push(b);
 				else c[i] = b[i];
 		}
-		
+
 		return c;
 	},
-	
+
 	strRepeat: function(str /* String */, count /* Integer */)
 	{
 		var i;
@@ -777,17 +777,17 @@ YamlParser.prototype =
 		for ( i = 0; i < count; i++ ) result += str;
 		return result;
 	},
-	
+
 	subStrCount: function(string, subString, start, length)
 	{
 		var c = 0;
-		
+
 		string = '' + string;
 		subString = '' + subString;
-		
+
 		if ( start != undefined ) string = string.substr(start);
-		if ( length != undefined ) string = string.substr(0, length); 
-		
+		if ( length != undefined ) string = string.substr(0, length);
+
 		var len = string.length;
 		var sublen = subString.length;
 		for ( var i = 0; i < len; i++ )
@@ -796,10 +796,10 @@ YamlParser.prototype =
 				c++;
 				i += sublen - 1;
 		}
-		
+
 		return c;
 	},
-	
+
 	trim: function(str /* String */)
 	{
 		return (str+'').replace(/^ +/,'').replace(/ +$/,'');

@@ -94,7 +94,7 @@ YamlUnescaper.prototype =
 				return this.pack('N', new YamlInline().hexdec(value.substr(2, 8)));
 		}
 	},
-	
+
 	/**
 	 * @see http://phpjs.org/functions/pack
 	 * @warning only modes used above copied

@@ -112,7 +112,7 @@ function get_ystep(delta)
     var max_n = 7;
     var h = 10 * Math.floor(Math.log10(delta));
     if (h == 0) return 1;
-    
+
     while (delta/h < min_n)
     {
         h = h/10;
@@ -132,7 +132,7 @@ function get_ystep(delta)
 function plot(div_id, data, xlabel, ylabel, names, title)
 {
     var ystep = get_ystep(get_delta(data));
-    
+
     var canvas = new CanvasJS.Chart(div_id,
             {
                 axisX: {
@@ -193,7 +193,7 @@ function get_remaining_budget_data(project, users, cost)
     var node = project['resource usage'];
     var x = [make_date(project['T0'])];
     var y = [remaining];
-	
+
     var price = {};
     for (i in users)
     {
@@ -233,7 +233,7 @@ function plot_remaining_budget(yaml_data)
     var projects = yaml_data['projects'];
     var rdata = [];
     var users = get_users(projects);
-    
+
     for (i in projects)
     {
         rdata.push(get_remaining_budget_data(projects[i],users,yaml_data['resources']));
@@ -319,7 +319,7 @@ function select_tasks_by_user(tasks,user)
 	{
 		if (tasks[j]['assigned to'] == user)
 		{
-			ret.push(tasks[j]);	
+			ret.push(tasks[j]);
 		}
 	}
 	return ret;
@@ -332,7 +332,7 @@ function select_tasks_by_type(tasks,type)
 	{
 		if (tasks[j].type == type)
 		{
-			ret.push(tasks[j]);	
+			ret.push(tasks[j]);
 		}
 	}
 	return ret;
@@ -436,7 +436,7 @@ function plot_cumulative_workflow(yaml_data,T0)
     var divname = 'cumulative_workflow';
     var all_dates = get_all_dates(yaml_data, T0);
     var tasks = convert_stories_to_tasks(yaml_data.stories);
-    
+
     var backlog = get_cumulated_points('backlog', select_tasks_by_phase(tasks, 'backlog'), T0, all_dates, "area");
     var started = get_cumulated_points('started', select_tasks_by_phase(tasks, 'started'), T0, all_dates, "area");
     var done = get_cumulated_points('done', select_tasks_by_phase(tasks, 'done'), T0, all_dates, "area");
@@ -464,7 +464,7 @@ function get_release_dates(yaml_data)
 		release_dates.push(new Date(make_date(yaml_data.stories[i]['due by'])));
 	}
 	release_dates = remove_duplicates(release_dates);
-	return release_dates.sort(function(a,b) {return a-b;});	
+	return release_dates.sort(function(a,b) {return a-b;});
 }
 
 function get_total_nb_of_points(tasks)

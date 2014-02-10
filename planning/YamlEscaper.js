@@ -35,14 +35,14 @@ YamlEscaper.prototype =
 		for (var i = 0; i < len; ++i)
 			if ( i >= maxlen ) esc.push('');
 
-		var ret = '';		
+		var ret = '';
 		ret = value.replace(new RegExp(YamlEscaper.escapees.join('|'),'g'), function(str){
 			for(var i = 0; i < len; ++i){
 				if( str == YamlEscaper.escapees[i] )
 					return esc[i];
 			}
 		});
-		return '"' + ret + '"'; 
+		return '"' + ret + '"';
 	},
 
 	/**
@@ -74,7 +74,7 @@ YamlEscaper.prototype =
 YamlEscaper.REGEX_CHARACTER_TO_ESCAPE = "[\\x00-\\x1f]|\xc2\x85|\xc2\xa0|\xe2\x80\xa8|\xe2\x80\xa9";
 
 // Mapping arrays for escaping a double quoted string. The backslash is
-// first to ensure proper escaping. 
+// first to ensure proper escaping.
 YamlEscaper.escapees = ['\\\\', '\\"', '"',
 									 "\x00",  "\x01",  "\x02",  "\x03",  "\x04",  "\x05",  "\x06",  "\x07",
 									 "\x08",  "\x09",  "\x0a",  "\x0b",  "\x0c",  "\x0d",  "\x0e",  "\x0f",

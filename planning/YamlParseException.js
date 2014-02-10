@@ -5,7 +5,7 @@
  *
  * @api
  */
- 
+
 /**
  * Constructor.
  *
@@ -23,7 +23,7 @@ var YamlParseException = function(message, parsedLine, snippet, parsedFile){
 		this.parsedFile = (parsedFile !== undefined) ? parsedFile : null;
 
 		this.updateRepr();
-		
+
 		this.message = message;
 
 };
@@ -32,7 +32,7 @@ YamlParseException.prototype =
 
 	name: 'YamlParseException',
 	message: null,
-	
+
 	parsedFile: null,
 	parsedLine: -1,
 	snippet: null,

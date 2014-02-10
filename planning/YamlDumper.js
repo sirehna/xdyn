@@ -34,16 +34,16 @@ YamlDumper.prototype =
 		{
 			var isAHash = !this.arrayEquals(this.getKeys(input), this.range(0,input.length - 1));
 			var willBeInlined;
-			
+
 			for ( var key in input )
 			{
 				if ( input.hasOwnProperty(key) )
 				{
 					willBeInlined = inline - 1 <= 0 || !this.isObject(input[key]) || this.isEmpty(input[key]);
-					
+
 					if ( isAHash ) yaml = new YamlInline();
-					
-					output += 
+
+					output +=
 						prefix + '' +
 						(isAHash ? yaml.dump(key)+':' : '-') + '' +
 						(willBeInlined ? ' ' : "\n") + '' +
@@ -55,7 +55,7 @@ YamlDumper.prototype =
 
 		return output;
 	},
-	
+
 	strRepeat: function(str /* String */, count /* Integer */)
 	{
 		var i;
@@ -63,12 +63,12 @@ YamlDumper.prototype =
 		for ( i = 0; i < count; i++ ) result += str;
 		return result;
 	},
-	
+
 	isObject: function(input)
 	{
 		return this.isDefined(input) && typeof(input) == 'object';
 	},
-	
+
 	isEmpty: function(input)
 	{
 		var ret = input == undefined || input == null || input == '' || input == 0 || input == "0" || input == false;
@@ -80,16 +80,16 @@ YamlDumper.prototype =
 		}
 		return ret;
 	},
-	
+
 	isDefined: function(input)
 	{
 		return input != undefined && input != null;
 	},
-	
+
 	getKeys: function(tab)
 	{
 		var ret = [];
-		
+
 		for ( var name in tab )
 		{
 			if ( tab.hasOwnProperty(name) )
@@ -97,35 +97,35 @@ YamlDumper.prototype =
 				ret.push(name);
 			}
 		}
-		
+
 		return ret;
 	},
-	
+
 	range: function(start, end)
 	{
 		if ( start > end ) return [];
-		
+
 		var ret = [];
-		
+
 		for ( var i = start; i <= end; i++ )
 		{
 			ret.push(i);
 		}
-		
+
 		return ret;
 	},
-	
+
 	arrayEquals: function(a,b)
 	{
 		if ( a.length != b.length ) return false;
-		
+
 		var len = a.length;
-		
+
 		for ( var i = 0; i < len; i++ )
 		{
 			if ( a[i] != b[i] ) return false;
 		}
-		
+
 		return true;
 	}
 };
