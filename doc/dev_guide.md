@@ -86,7 +86,11 @@ associated to the two files repositories
 
 ## Developpement environment
 
-This section presents the tools and libraries used to perform the development of the simulator
+This section presents the tools and libraries used to perform the development of the simulator.
+
+The compiler chosen for this project is (GNU GCC 4.5.2)[http://gcc.gnu.org/gcc-4.5].
+The reason of this choice comes from the fact that it is the version mostly used at Sirehna in projects.
+Newer versions are also used to benefit from new compiler features, such as code coverage.
 
 ### Generic tools used
 | Tools                                 | Description                                                   |
