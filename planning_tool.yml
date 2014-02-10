@@ -1,70 +1,64 @@
-﻿start: 1/1/2015
+﻿start: 1/2/2014
 stories:
-  - story: blablabla
-    due by: 1/1/15
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1688>Finish administrativia</a>
+    due by: 10/3/2014
     tasks:
-    - task: foo
+    - task: Rédaction fiche de travaux
+      type: internal
       size: 2
-      backlog: 1/1/2015
-      started: 2/1/2015
-      done: 2/2/2015
+      backlog: 5/2/2014
+      started: 6/2/2014
+      done: 6/2/2014
       assigned to: cec
-    - task: bar
-      size: 3
-      backlog: 2/1/2015
-      started: 5/1/2015
-      done: 3/2/2015
+    - task: Compte-rendu comité de pilotage #0
+      type: internal
+      size: 2
+      backlog: 5/2/2014
+      started: 6/2/2014
+      done: 6/2/2014
       assigned to: cec
-    - task: baz
+    - task: Description process
+      type: internal
       size: 4
-      backlog: 3/1/2015
-      started: 7/1/2015
-      done: 4/2/2015
+      backlog: 10/2/2014
+      started: 10/2/2014
       assigned to: gj
-    - task: boz
-      size: 8
-      backlog: 5/1/2015
-  - story: okokokokokok
-    due by: 3/2/2015
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1687>Création dépôt Git</a>
+    due by: 10/3/2014
     tasks:
-    - task: foo
+    - task: Droits sur dev_pilotage pour GJ + git externals
+      type: internal
       size: 2
-      backlog: 5/1/2015
-      started: 5/1/2015
-      done: 9/2/2015
-      assigned to: nc
-    - task: bar
-      size: 5
-      backlog: 8/1/2015
-      started: 10/1/2015
-      done: 2/2/2015
-      assigned to: nc
-    - task: baz
-      size: 10
-      backlog: 9/1/2015
-      started: 11/1/2015
-      done: 2/2/2015
+      backlog: 10/2/2014
+      assigned to: cec
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1691>Setup Jenkins</a>
+    due by: 10/3/2014
+    tasks:
+    - task: Initialisation Jenkins sur PC EONAV (Windows + Linux)
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 10/2/2014
+    - task: Setup Doxygen on Jenkins
+      type: internal
+      size: 1
       assigned to: gj
-
-#phases: [documented, integrated, coded, designed, started]
-#phases: [started,designed,coded,integrated,documented]
-#stories:
-#    - name: feature 1
-#      size: 3
-#      release: 1/2/2014
-#      started: 11/12/2013
-#      designed: 17/12/2013
-#    - name: very long feature name
-#      size: 4
-#      release: 2/2/2014
-#      started: 15/12/2013
-#      designed: 16/12/2013
-#      coded: 17/12/2013
-#      integrated: 18/12/2013
-#      documented: 21/12/2013
-#    - name: should be able to do something useful but quickly
-#      size: 5
-#      release: 2/2/2014
-#      started: 1/1/2014
-#      designed: 14/1/2014
-#
+      backlog: 10/2/2014
+    - task: Configure CPack
+      type: internal
+      size: 2
+      assigned to: gj
+      backlog: 10/2/2014
+    - task: Pouvoir récupérer pages wiki sur GitLab IRT
+      type: internal
+      size: 2
+      backlog: 10/2/2014
+      assigned to: cec
+    - task: GJ peut compiler le DataSource sous Eclipse
+      size: 1
+      type: internal
+      backlog: 10/2/2014
+    - task: Compile & run all tests on Jenkins
+      type: internal
+      size: 2
+      backlog: 10/2/2014

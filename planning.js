@@ -4,273 +4,49 @@
     return new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
 }
 
-//function add_date(events, fieldname, fielddate, story_size, release_date)
-//{
-//    if (fielddate !== undefined)
-//    {
-//
-//        if (events[make_date(fielddate)] === undefined)
-//        {
-//            var o = {};
-//            o[fieldname] = story_size;
-//            events[make_date(fielddate)] = o;
-//            events[make_date(fielddate)]["release"] = release_date;
-//        }
-//        else
-//        {
-//            events[make_date(fielddate)][fieldname] = story_size;
-//        }
-//    }
-//}
-//
-//function get_list_of_stories()
-//{
-//    var stories = [];
-//
-//    for (var i in yaml_data.stories)
-//    {
-//        var story = yaml_data.stories[i];
-//        stories.push(story.name);
-//    }
-//    return stories;
-//}
-//
-//
-//function build_events_table(yaml_data)
-//{
-//    var events = {};
-//
-//    for (var i in yaml_data.stories)
-//    {
-//        var story = yaml_data.stories[i];
-//        var story_size = story.size;
-//        for (j in yaml_data.phases)
-//        {
-//            var fieldname = yaml_data.phases[j];
-//            var fielddate = story[fieldname];
-//            var release_date = make_date(story["release"]);
-//            add_date(events, fieldname, fielddate, story_size, release_date);
-//        }
-//    }
-//    events = put_all_uninitialized_events_at_0(events, yaml_data.phases);
-//    events = build_cumulated(events, yaml_data.phases);
-//    return events;
-//}
-//
-//
-//function put_all_uninitialized_events_at_0(events, phases)
-//{
-//    for (i in events)
-//    {
-//        var e = events[i];
-//        for (j in phases)
-//        {
-//            var fieldname = phases[j];
-//            if (typeof e[fieldname] == "undefined")
-//            {
-//                events[i][fieldname] = 0;
-//            }
-//        }
-//    }
-//    return events;
-//}
-//
-//function get_dates(events)
-//{
-//    var dates_ = Object.keys(events);
-//    var dates = [];
-//    for (i in events)
-//    {
-//        dates.push(new Date(i));
-//    }
-//    return dates.sort(function(a, b) {
-//        return a - b
-//    });
-//}
-//
-//function build_cumulated(events, phases)
-//{
-//    var previous = {};
-//    for (j in phases)
-//    {
-//        var fieldname = phases[j];
-//        previous[fieldname] = 0;
-//    }
-//
-//    var dates = get_dates(events);
-//    for (i in dates)
-//    {
-//        var date = dates[i];
-//        var e = events[date];
-//        for (j in phases)
-//        {
-//            var fieldname = phases[j];
-//            if (fieldname != "release")
-//            {
-//                e[fieldname] += previous[fieldname];
-//                previous[fieldname] = e[fieldname];
-//            }
-//        }
-//    }
-//    return events;
-//}
-//
-//function random_color(fieldname)
-//{
-//    if (fieldname == 'coded')
-//        return '//FCE94F';
-//    if (fieldname == 'designed')
-//        return '//F57900';
-//    if (fieldname == 'started')
-//        return '//8AE234';
-//    if (fieldname == 'integrated')
-//        return '//729FCF';
-//    if (fieldname == 'documented')
-//        return '//AD7FA8';
-//    return '//' + Math.floor(Math.random() * 16777215).toString(16);
-//}
-//
-//function percent_complete(story, phases)
-//{
-//    var nb_complete = 0;
-//    for (i in phases)
-//    {
-//        var phase = phases[i];
-//        if (story[phase] !== undefined)
-//        {
-//            ++nb_complete;
-//        }
-//    }
-//    return Math.floor(100 * nb_complete / phases.length);
-//}
-//
-//function capitaliseFirstLetter(string)
-//{
-//    return string.charAt(0).toUpperCase() + string.slice(1);
-//}
-//
-//function make_datum(events, fieldname, dates)
-//{
-//    var data = {
-//        type: "area",
-//        name: capitaliseFirstLetter(fieldname),
-//        showInLegend: "true",
-//        color: random_color(fieldname)};
-//    var dataPoints = [];
-//    for (i in dates)
-//    {
-//        var date = dates[i];
-//        var e = events[date];
-//        dataPoints.push({x: new Date(date), y: e[fieldname]});
-//    }
-//    data.dataPoints = dataPoints;
-//
-//    return data;
-//}
-//
-//function make_cumulative_data(events, fieldnames)
-//{
-//    var data = [];
-//    var dates = get_dates(events);
-//    for (i in fieldnames)
-//    {
-//        data.push(make_datum(events, fieldnames[i], dates));
-//    }
-//
-//    return data;
-//}
-//
-//
+function capitaliseFirstLetter(s)
+{
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function last(l)
 {
     return l.slice(-1)[0];
 }
-//
-//function get_max(events)
-//{
-//    var max_pt = 0;
-//    var dates = Object.keys(events);
-//    var last_date = last(dates);
-//    var e = events[last_date];
-//    for (fieldname in e)
-//    {
-//        if (fieldname != "release")
-//        {
-//            max_pt = Math.max(max_pt, e[fieldname]);
-//        }
-//    }
-//    return max_pt;
-//}
-//
-//function sort_by_date(events)
-//{
-//    return events.sort;
-//}
-//
-//function add_progress_bar(story_name, percent_complete, max_length)
-//{
-//    var title = document.createElement("span");
-//    title.setAttribute('class', "progress-title");
-//    title.innerHTML = capitaliseFirstLetter(story_name);
-//    title.setAttribute('id', story_name + '_title');
-//
-//    var val = document.createElement("span");
-//    val.setAttribute('class', "progress-val");
-//    val.innerHTML = percent_complete + "%";
-//    val.setAttribute('id', story_name + '_val');
-//
-//    var bar = document.createElement("span");
-//    bar.setAttribute('class', "progress-bar");
-//    bar.setAttribute('id', story_name + '_bar');
-//
-//    var inn = document.createElement("span");
-//    inn.setAttribute('class', "progress-in");
-//    inn.style.width = percent_complete + "%";
-//    inn.setAttribute('id', story_name + '_inn');
-//    bar.appendChild(inn);
-//
-//    var progress = document.createElement('div');
-//    progress.setAttribute('class', 'progress');
-//    title.setAttribute('style', 'width: ' + (Math.floor(max_length / 2) + 1) + 'em');
-//    progress.setAttribute('id', story_name + "_progress");
-//    progress.appendChild(title);
-//    progress.appendChild(val);
-//    progress.appendChild(bar);
-//    document.getElementById("status").appendChild(progress);
-//    console.log(document.body.innerHTML);
-//    //document.body.appendChild(progress);
-//}
-//
-//function add_progress_bars(yaml_data, max_length)
-//{
-//    for (i in yaml_data.stories)
-//    {
-//        var story = yaml_data.stories[i];
-//        add_progress_bar(story.name, percent_complete(story, yaml_data.phases), max_length);
-//    }
-//}
-//
-//function daysBetween(date1, date2) {
-//    //Get 1 day in milliseconds
-//    var one_day = 1000 * 60 * 60 * 24;
-//
-//    // Convert both dates to milliseconds
-//    var date1_ms = date1.getTime();
-//    var date2_ms = date2.getTime();
-//
-//    // Calculate the difference in milliseconds
-//    var difference_ms = date2_ms - date1_ms;
-//
-//    // Convert back to days and return
-//    return Math.round(difference_ms / one_day);
-//}
-//
-//function get_nb_of_days(events)
-//{
-//    var dates = get_dates(events);
-//    return daysBetween(dates[0], dates[dates.length - 1]);
-//}
-//
+
+function add_progress_bar(story_name, percent_complete, max_length)
+{
+    var title = document.createElement("span");
+    title.setAttribute('class', "progress-title");
+    title.innerHTML = capitaliseFirstLetter(story_name);
+    title.setAttribute('id', story_name + '_title');
+
+    var val = document.createElement("span");
+    val.setAttribute('class', "progress-val");
+    val.innerHTML = percent_complete + "%";
+    val.setAttribute('id', story_name + '_val');
+
+    var bar = document.createElement("span");
+    bar.setAttribute('class', "progress-bar");
+    bar.setAttribute('id', story_name + '_bar');
+
+    var inn = document.createElement("span");
+    inn.setAttribute('class', "progress-in");
+    inn.style.width = percent_complete + "%";
+    inn.setAttribute('id', story_name + '_inn');
+    bar.appendChild(inn);
+
+    var progress = document.createElement('div');
+    progress.setAttribute('class', 'progress');
+    title.setAttribute('style', 'width: ' + (Math.floor(max_length / 2) + 1) + 'em');
+    progress.setAttribute('id', story_name + "_progress");
+    progress.appendChild(title);
+    progress.appendChild(val);
+    progress.appendChild(bar);
+    document.getElementById("status").appendChild(progress);
+    document.body.appendChild(progress);
+}
+
 function remove_duplicates(arr) {
     var dups = {};
     return arr.filter(function(el) {
@@ -280,164 +56,17 @@ function remove_duplicates(arr) {
         return !isDup;
     });
 }
-//
-//function get_release_dates(yaml_data)
-//{
-//    var dates = [];
-//    for (i in yaml_data.stories)
-//    {
-//        var date = make_date(yaml_data.stories[i].release);
-//        dates.push(date);
-//    }
-//    return remove_duplicates(dates);
-//}
-//
-//function get_cumulative_workflow(events, phases)
-//{
-//    var canvas = new CanvasJS.Chart("cumulative_workflow",
-//            {
-//                toolTip: {
-//                    shared: true
-//                },
-//                axisX: {
-//                    valueFormatString: "DD/MM/YYYY",
-//                    interval: Math.floor(get_nb_of_days(events) / 10),
-//                    intervalType: "day"
-//                },
-//                axisY: {
-//                    title: "Nb of story points",
-//                    maximum: get_max(events) * 1.5,
-//                    interval: Math.floor(get_max(events) / 10 + 0.5)
-//                },
-//                legend: {
-//                    verticalAlign: "bottom",
-//                    horizontalAlign: "center",
-//                    fontSize: 12,
-//                    fontFamily: "verdana",
-//                    fontColor: "//333",
-//                    borderColor: "black"
-//                },
-//                backgroundColor: "//F9F9F9",
-//                data: make_cumulative_data(events, phases)
-//            });
-//    return canvas;
-//}
-//
-//
-//function get_max_name_length(stories)
-//{
-//    var max_length = 0;
-//    for (i in stories)
-//    {
-//        var name = stories[i].name;
-//        max_length = Math.max(max_length, name.length);
-//    }
-//    return max_length;
-//}
-//
-//function sum_work_done(ev)
-//{
-//    var s = 0;
-//    for (var key in ev)
-//    {
-//        if (key != 'release')
-//        {
-//            s += ev[key];
-//        }
-//    }
-//    return s;
-//}
-//
-//function format(date)
-//{
-//    var day = date.getDate();
-//    var month = date.getMonth() + 1; //Months are zero based
-//    var year = date.getFullYear();
-//    return day + '/' + month + '/' + year;
-//}
-//
-//function select(events, target_release, nb_of_points_to_do)
-//{
-//    selected = [];
-//    for (date in events)
-//    {
-//        var release_date = events[date].release;
-//        if (daysBetween(release_date, target_release) == 0)
-//        {
-//            var work_left = nb_of_points_to_do - sum_work_done(events[date]);
-//            var e = {x: new Date(date), y: work_left};
-//            selected.push(e);
-//        }
-//    }
-//    var data = {
-//        type: "line",
-//        name: format(target_release),
-//        showInLegend: "true",
-//        color: random_color(JSON.stringify(target_release))};
-//    data.dataPoints = selected;
-//    return data;
-//}
-//
-//function to_do(yaml_data, target_release)
-//{
-//    var to_do = 0;
-//    var nb_of_phases = yaml_data.phases.length;
-//    for (i in yaml_data.stories)
-//    {
-//        var story = yaml_data.stories[i];
-//        if (daysBetween(make_date(story.release), target_release) == 0)
-//        {
-//            to_do += story['size'];
-//        }
-//    }
-//    return to_do * nb_of_phases;
-//}
-//
-//function get_burndown(data)
-//{
-//    var name = "burndown";
-//    var canvas = new CanvasJS.Chart(name,
-//            {
-//                toolTip: {
-//                    shared: true
-//                },
-//                axisX: {
-//                    valueFormatString: "DD/MM/YYYY",
-//                    interval: 5,
-//                    intervalType: "day"
-//                },
-//                axisY: {
-//                    title: "Nb of story points",
-//                    maximum: 100,
-//                    interval: 10
-//                },
-//                legend: {
-//                    verticalAlign: "bottom",
-//                    horizontalAlign: "center",
-//                    fontSize: 12,
-//                    fontFamily: "verdana",
-//                    fontColor: "//333",
-//                    borderColor: "black"
-//                },
-//                backgroundColor: "//F9F9F9",
-//                data: data
-//            });
-//
-//    return canvas;
-//}
-//
-//function get_burndowns(yaml_data, events, releases)
-//{
-//    var data = [];
-//    for (var i in releases)
-//    {
-//        var release = releases[i];
-//        var todo = to_do(yaml_data, release);
-//        data.push(select(events, release, todo));
-//    }
-//    return get_burndown(data);
-//
-//}
+
+function get_max_name_length(stories)
+{
+    var max_length = 0;
+    for (i in stories)
+    {
+        var name = stories[i].story;
+        max_length = Math.max(max_length, name.length);
+    }
+    return max_length;
+}
 
 function convert_special_characters_to_html_entities(string)
 {
@@ -482,6 +111,7 @@ function get_ystep(delta)
     var min_n = 3;
     var max_n = 7;
     var h = 10 * Math.floor(Math.log10(delta));
+    if (h == 0) return 1;
     
     while (delta/h < min_n)
     {
@@ -507,7 +137,9 @@ function plot(div_id, data, xlabel, ylabel, names, title)
             {
                 axisX: {
                     title: xlabel,
-                    interval: 1
+                    interval: 1,
+					valueFormatString: "DDD-MMM-DD" ,
+					labelAngle: -50
                 },
                 axisY: {
                     title: ylabel,
@@ -547,7 +179,7 @@ function get_price(n,cost)
     var price = 0;
     for (i in n)
     {
-        if (i != 'week')
+        if (i != 'week ending on')
         {
             price += n[i]*cost[i];
         }
@@ -555,21 +187,27 @@ function get_price(n,cost)
     return price;
 }
 
-function get_remaining_budget_data(data, cost)
+function get_remaining_budget_data(project, users, cost)
 {
-    var remaining = data['budget'];
-    var node = data['resource usage'];
-    var x = [data['T0']];
+    var remaining = project['budget'];
+    var node = project['resource usage'];
+    var x = [make_date(project['T0'])];
     var y = [remaining];
+	
+    var price = {};
+    for (i in users)
+    {
+        price[users[i]] = project['prices'][cost[users[i]]];
+    }
 
     for (i in node)
     {
         var n = node[i];
-        remaining -= get_price(n,cost);
-        x.push(n.week);
+        remaining -= get_price(n,price);
+        x.push(make_date(n['week ending on']));
         y.push(remaining);
     }
-    return get_canvas_JS_data(x,y,data['name'],"area");
+    return get_canvas_JS_data(x,y,project['name'],"line");
 }
 
 function get_users(data)
@@ -583,7 +221,7 @@ function get_users(data)
             var d = D[j];
             for (k in d)
             {
-                if (k != 'week') users.push(k);
+                if (k != 'week ending on') users.push(k);
             }
         }
     }
@@ -592,18 +230,13 @@ function get_users(data)
 
 function plot_remaining_budget(yaml_data)
 {
-    var data = yaml_data['budget'];
+    var projects = yaml_data['projects'];
     var rdata = [];
-    var users = get_users(data);
-    var cost = {};
-    for (i in users)
-    {
-        cost[users[i]] = yaml_data['prices'][yaml_data['resources'][users[i]]];
-    }
+    var users = get_users(projects);
     
-    for (i in data)
+    for (i in projects)
     {
-        rdata.push(get_remaining_budget_data(data[i],cost));
+        rdata.push(get_remaining_budget_data(projects[i],users,yaml_data['resources']));
     }
     plot('remaining_budget', rdata, 'Week', 'Remaining budget (€)');
 }
@@ -625,7 +258,7 @@ function get_resource_usage_data(node, users)
             {
                 val += r[j][user];
             }
-            x.push(r[j].week);
+            x.push(make_date(r[j]['week ending on']));
             y.push(val);
         }
         rdata.push(get_canvas_JS_data(x,y,user,"line"));
@@ -635,15 +268,15 @@ function get_resource_usage_data(node, users)
 
 function plot_resource_usage(yaml_data)
 {
-    var data = yaml_data['budget'];
-    var users = get_users(data);
+    var projects = yaml_data['projects'];
+    var users = get_users(projects);
     var rdata = [];
-    for (i in data)
+    for (i in projects)
     {
-        var d = data[i];
+        var project = projects[i];
         var divname = 'resource_usage_project_'+i;
         add_div_to_DOM(divname, 'resource_usage');
-        plot(divname, get_resource_usage_data(d, users), 'Week', 'Nb of days','mkljlm');
+        plot(divname, get_resource_usage_data(project, users), 'Week', 'Nb of days','mkljlm');
     }
 }
 
@@ -659,7 +292,7 @@ function get_all_dates(yaml_data, T0)
             var task = story.tasks[j];
             for (k in task)
             {
-                if ((k != 'size') && (k != 'task') && (k != 'assigned to'))
+                if ((k != 'size') && (k != 'task') && (k != 'assigned to') && (k != 'type'))
                 {
                     dates.push(new Date(make_date(task[k])));
                 }
@@ -670,83 +303,257 @@ function get_all_dates(yaml_data, T0)
     return dates.sort(function(a,b){return a-b;});
 }
 
-function find_idx(arr, val)
+function cumulate(x)
 {
-    if (arr[0]-val>0) return 0;
-    for (j = 0 ; j < arr.length-1 ; ++j)
+    for (i = 1 ; i < x.length ; ++i)
     {
-        if ((arr[j]-val<=0) && (arr[j+1]-val>0)) return j;
+        x[i] += x[i-1];
     }
-    return arr.length-1;
+	return x;
 }
 
-function get_cumulated_points(phase, yaml_data, T0, dates)
+function select_tasks_by_user(tasks,user)
 {
-    var stories = yaml_data.stories;
-    var x = [new Date(T0)];
-    var y = [0];
-    for (i in stories)
+	var ret = [];
+	for (j in story.tasks)
+	{
+		if (tasks[j]['assigned to'] == user)
+		{
+			ret.push(tasks[j]);	
+		}
+	}
+	return ret;
+}
+
+function select_tasks_by_type(tasks,type)
+{
+	var ret = [];
+	for (j in tasks)
+	{
+		if (tasks[j].type == type)
+		{
+			ret.push(tasks[j]);	
+		}
+	}
+	return ret;
+}
+
+function select_stories_by_date(stories, date)
+{
+	var ret = [];
+	for (i in stories)
+	{
+		var story = stories[i];
+		if (make_date(story['due by'])-date == 0)
+		{
+			ret.push(story);
+		}
+	}
+	return ret;
+}
+
+function convert_stories_to_tasks(stories)
+{
+	var tasks = [];
+	for (i in stories)
+	{
+		for (j in stories[i].tasks)
+		{
+			tasks.push(stories[i].tasks[j]);
+		}
+	}
+	return tasks;
+}
+
+function select_tasks_by_phase(tasks, phase)
+{
+	var ret = [];
+	for (j in tasks)
+	{
+		if (phase in tasks[j])
+		{
+			ret.push(tasks[j]);
+		}
+	}
+	return ret;
+}
+
+function make_data(tasks,phase,T0)
+{
+	var data = {x:[new Date(T0)], y:[0]};
+    for (i in tasks)
     {
-        var story = stories[i];
-        for (j in story.tasks)
+        var task = tasks[i];
+        if (typeof task[phase] != 'undefined')
         {
-            if (phase in story.tasks[j])
+            data.x.push(new Date(make_date(task[phase])));
+            data.y.push(task.size);
+        }
+    }
+	return data;
+}
+
+function sort(data)
+{
+	var new_data = {x: [], y:[]};
+    var indices = new Array(data.x.length);
+    for (i = 0 ; i < data.x.length ; ++i) indices[i] = i;
+    indices.sort(function(a,b){return data.x[a] - data.x[b] < 0 ? -1 : data.x[a] - data.x[b] > 0 ? 1 : 0;});
+    for (i in indices) new_data.x.push(data.x[indices[i]]);
+    for (i in indices) new_data.y.push(data.y[indices[i]]);
+	return new_data;
+}
+
+function interpolate(data, dates)
+{
+	var new_data = {x: dates, y:[]};
+	var j = 0;
+    for (i = 0 ; i < dates.length ; ++i)
+    {
+        new_data.y.push(0);
+        for (j = 0 ; j < data.x.length ; ++j)
+        {
+            if (data.x[j]-dates[i]<=0)
             {
-                x.push(new Date(make_date(story.tasks[j][phase])));
-                y.push(story.tasks[j].size);
+                new_data.y[i] = data.y[j];
             }
         }
     }
-    var indices = new Array(x.length);
-    for (i = 0 ; i < x.length ; ++i) indices[i] = i;
-    indices.sort(function(a,b){return x[a] - x[b] < 0 ? -1 : x[a] - x[b] > 0 ? 1 : 0;});
-    var new_x = [];
-    var new_y = [];
-    for (i in indices) new_x.push(x[indices[i]]);
-    for (i in indices) new_y.push(y[indices[i]]);
-    for (i = 1 ; i < new_y.length ; ++i)
-    {
-        new_y[i] += new_y[i-1];
-    }
-    var out = [];
-    for (i = 0 ; i < dates.length ; ++i)
-    {
-        var index = find_idx(new_x, dates[i]);
-        out.push(new_y[index]);
-    }
-    console.log('out = ' + out);
-    return get_canvas_JS_data(dates,out,phase,"area");
+	return new_data;
 }
 
-function get_cumulative_workflow_data(yaml_data)
+function get_cumulated_points(phase, tasks, T0, dates, canvas_type, legend)
+{
+    var legend = typeof(legend)=='undefined' ? phase : legend;
+	var data = sort(make_data(tasks, phase, T0));
+	data.y = cumulate(data.y);
+	data = interpolate(data, dates);
+    return get_canvas_JS_data(data.x,data.y,legend,canvas_type);
+}
+
+function plot_cumulative_workflow(yaml_data,T0)
 {
     var divname = 'cumulative_workflow';
-    var T0 = make_date(yaml_data.start);
     var all_dates = get_all_dates(yaml_data, T0);
-    console.log('all_dates = ' + JSON.stringify(all_dates));
-    var backlog = get_cumulated_points('backlog', yaml_data, T0, all_dates);
-    var started = get_cumulated_points('started', yaml_data, T0, all_dates);
-    var done = get_cumulated_points('done', yaml_data, T0, all_dates);
+    var tasks = convert_stories_to_tasks(yaml_data.stories);
+    
+    var backlog = get_cumulated_points('backlog', select_tasks_by_phase(tasks, 'backlog'), T0, all_dates, "area");
+    var started = get_cumulated_points('started', select_tasks_by_phase(tasks, 'started'), T0, all_dates, "area");
+    var done = get_cumulated_points('done', select_tasks_by_phase(tasks, 'done'), T0, all_dates, "area");
     plot(divname, [backlog,started,done], 'Date', 'Nb of points');
 }
 
-function plot_cumulative_workflow(yaml_data, T0)
+function plot_cumulative_workflow_by_type(yaml_data,T0)
 {
-    get_cumulative_workflow_data(yaml_data, T0);
+    var stuff_to_plot = [];
+    var divname = 'cumulative_workflow_by_type';
+    var all_dates = get_all_dates(yaml_data, T0);
+    var tasks = convert_stories_to_tasks(yaml_data.stories);
+    var interface_ = get_cumulated_points('done', select_tasks_by_type(tasks,'interface'), T0, all_dates, "line", 'Interface');
+    var kernel = get_cumulated_points('done', select_tasks_by_type(tasks,'kernel'), T0, all_dates, "line", 'Kernel');
+    var model = get_cumulated_points('done', select_tasks_by_type(tasks,'model'), T0, all_dates, "line", 'Model');
+    var internal = get_cumulated_points('done', select_tasks_by_type(tasks,'internal'), T0, all_dates, "line", 'Internal');
+    plot(divname, [interface_,kernel,model,internal], 'Date', 'Nb of points');
+}
+
+function get_release_dates(yaml_data)
+{
+	var release_dates = [];
+	for (i in yaml_data.stories)
+	{
+		release_dates.push(new Date(make_date(yaml_data.stories[i]['due by'])));
+	}
+	release_dates = remove_duplicates(release_dates);
+	return release_dates.sort(function(a,b) {return a-b;});	
+}
+
+function get_total_nb_of_points(tasks)
+{
+	var total_size = 0;
+	for (i in tasks)
+	{
+		total_size += tasks[i].size;
+	}
+	return total_size;
+}
+
+function convert_to_burndown(total_nb_of_points, data)
+{
+	if (data.y.length > 0)
+	{
+		data.y[0] = total_nb_of_points - data.y[0];
+		for (var i = 1 ; i < data.y.length ; ++i)
+		{
+			data.y[i] = data.y[i-1] - data.y[i];
+		}
+	}
+	return data;
+}
+
+function get_burndown_points(tasks, T0, name)
+{
+	var nb_of_points = get_total_nb_of_points(tasks);
+	var data = sort(make_data(select_tasks_by_phase(tasks, 'done'), 'done', T0));
+	data = convert_to_burndown(nb_of_points, data);
+	return get_canvas_JS_data(data.x,data.y,name,"line");
+}
+
+function print_date(d)
+{
+	var curr_date = d.getDate();
+	var curr_month = d.getMonth() + 1; //Months are zero based
+	var curr_year = d.getFullYear();
+	var ret = curr_date + '-' + curr_month + '-' + curr_year;
+	return ret;
+}
+
+function plot_burndown_by_release(yaml_data,T0)
+{
+	var release_dates = get_release_dates(yaml_data);
+	var points = [];
+	for (i in release_dates)
+	{
+		var date = release_dates[i];
+		var tasks = convert_stories_to_tasks(select_stories_by_date(yaml_data.stories, date));
+		points.push(get_burndown_points(tasks,T0,print_date(date)));
+	}
+    plot('burndown', points, 'Date', 'Remaining points');
+}
+
+function get_percentage_completed(story)
+{
+	var size = 0;
+	var completed = 0;
+	for (i in story.tasks)
+	{
+		var task = story.tasks[i];
+		size += task.size;
+		if ('done' in task) completed += task.size;
+	}
+    if (size == 0) return 0;
+    return Math.floor(100*completed/size+0.5);
+}
+
+function progress_bars(stories)
+{
+    var max_length = 30;//get_max_name_length(stories);
+    for (i in stories)
+    {
+        var story = stories[i];
+        var percent_complete = get_percentage_completed(story);
+        add_progress_bar(story.story, percent_complete, max_length);
+    }
 }
 
 window.onload = function(started)
 {
     var yaml_data = YAML.load("planning_tool.yml");
     var resource_usage = YAML.load("resource_usage.yml");
+    var T0 = make_date(yaml_data.start);
     plot_remaining_budget(resource_usage);
     plot_resource_usage(resource_usage);
-    plot_cumulative_workflow(yaml_data);
-
-    //var events = build_events_table(yaml_data);
-    //var burndowns = get_burndowns(yaml_data, events, get_release_dates(yaml_data));
-    //var cumulative_workflow = get_cumulative_workflow(events, yaml_data.phases);
-    //burndowns.render();
-    //cumulative_workflow.render();
-    //add_progress_bars(yaml_data, get_max_name_length(yaml_data.stories));
+    plot_cumulative_workflow(yaml_data,T0);
+	plot_burndown_by_release(yaml_data, T0);
+    progress_bars(yaml_data.stories);
+    plot_cumulative_workflow_by_type(yaml_data,T0)
 };
