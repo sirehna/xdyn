@@ -90,9 +90,10 @@ corresponding to the two files repositories
 
 This section presents the tools and libraries used to perform the development of the simulator.
 
-The compiler chosen for this project is (GNU GCC 4.5.2)[http://gcc.gnu.org/gcc-4.5].
+The compiler chosen for this project is [GNU GCC 4.5.2](http://gcc.gnu.org/gcc-4.5).
 The rationale behind this choice is that this compiler is widely used at Sirehna.
 GCC 4.7 is used on the Linux platform (Ubuntu) because:
+
 - More errors are detected by GCC 4.7
 - Code coverage appears to be broken with CMake & GCC 4.5.2.
 
@@ -137,7 +138,7 @@ Development will follow the Git branching model described [here](http://nvie.com
 * EOL should be Unix-styles with LF characters.
 * File should be UTF-8 encoded.
 * Committed files should not contain any trailing spaces.
-* For more informations, check the wiki [XWiki](http://sir6:8080/xwiki/bin/view/Espace+de+travail+commun/Checklist+de+Revue+de+code)
+* For more informations, check the [wiki](http://sir6:8080/xwiki/bin/view/Espace+de+travail+commun/Checklist+de+Revue+de+code).
 
 ## Compilation instructions
 
