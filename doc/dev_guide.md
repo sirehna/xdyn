@@ -121,6 +121,8 @@ GCC 4.7 is used on the Linux platform (Ubuntu) because:
 | :-------------------------                        | :---------------------------------------- |
 | [GTest](http://www.code.google.com/p/googletest)  | MIT Open-source unit testing library      |
 | [Yaml-CPP](http://www.code.google.com/p/yaml-cpp) | MIT Open-source input/output file library |
+| [Lapack](http://www.netlib.org/lapack)            | BSD Open-source C/Fortran algebra library |
+| [Eigen](http://www.eigen.tuxfamily.org/index.php) | MPL2 Open-source C++ algebra library      |
 
 
 ## Development policy and coding rules
@@ -207,4 +209,4 @@ User stories should follow the **INVEST** guidelines:
 |V       | Valuable                      | A user story must deliver value to the end user.                                                                  |
 |E       | Estimable                     | You must always be able to estimate the size of a user story.                                                     |
 |S       | Sized appropriately or Small  | User stories should not be so big as to become impossible to plan/task/prioritize with a certain level of         |certainty.
-|T 	    | Testable                      | The user story or its related description must provide the necessary information to make test development possible.|
+|T       | Testable                      | The user story or its related description must provide the necessary information to make test development possible.|
