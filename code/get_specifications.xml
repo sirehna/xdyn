@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+
+<xsl:template name="convert-test-name">
+	<xsl:param name="text"/>
+	<xsl:variable name="r1">
+		<xsl:value-of select="replace($text,'should_be_able_to','Can')"/>
+	</xsl:variable>
+	<xsl:variable name="r2">
+		<xsl:value-of select="replace($r1,'DISABLED_','')"/>
+	</xsl:variable>
+	<xsl:variable name="r3">
+		<xsl:value-of select="replace($r2,'_',' ')"/>
+	</xsl:variable>
+	<xsl:variable name="r4">
+		<xsl:value-of select="replace($r3,'should throw','throws')"/>
+	</xsl:variable>
+	<xsl:sequence select="concat(upper-case(substring($r4,1,1)),
+	                      substring($r4, 2),
+	                      ' '[not(last())]
+	                      )"
+	/>
+</xsl:template>
+<xsl:template name="add_line_to_table">
+	<xsl:param name="background_color"/>
+	<xsl:param name="first_cell"/>
+	<xsl:param name="second_cell"/>
+	<xsl:param name="third_cell"/>
+	<xsl:variable name="bug_nb">
+		<xsl:analyze-string select="$first_cell" regex=".*([0-9]{{4,}}).*">
+	 		<xsl:matching-substring>
+				<xsl:value-of select="regex-group(1)"/>
+			</xsl:matching-substring>
+		</xsl:analyze-string>
+	</xsl:variable>
+	<xsl:variable name="bugzilla">http://sir6/bugzilla/show_bug.cgi?id=</xsl:variable>
+	<tr>
+	<!--<xsl:attribute name="bgcolor"><xsl:value-of select="$background_color"/></xsl:attribute>-->
+		<td>
+			<xsl:choose>
+				<xsl:when test="$bug_nb != ''">
+					<a>
+						<xsl:attribute name="href">
+							<xsl:value-of select="$bugzilla" />
+							<xsl:value-of select="$bug_nb" />
+						</xsl:attribute>
+						<xsl:value-of select="$first_cell" />
+					</a>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$first_cell" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</td>
+		<td>
+		<xsl:value-of select="$second_cell"/>
+		</td>
+		<td>
+		<xsl:value-of select="$third_cell"/>
+		</td>
+	</tr>
+</xsl:template>
+
+<xsl:template name="display_feature">
+	<xsl:param name="testname"/>
+	<xsl:param name="class-name"/>
+		<xsl:if test="not(failure)">
+			<xsl:call-template name="add_line_to_table">
+				<xsl:with-param name="background_color">#94B84D</xsl:with-param>
+				<xsl:with-param name="first_cell"><xsl:value-of select="$testname"/></xsl:with-param>
+				<xsl:with-param name="second_cell"><xsl:value-of select="$class-name"/></xsl:with-param>
+				<xsl:with-param name="third_cell">YES</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
+		<xsl:if test="failure">
+			<xsl:call-template name="add_line_to_table">
+				<xsl:with-param name="background_color">#FF7070</xsl:with-param>
+				<xsl:with-param name="first_cell"><xsl:value-of select="$testname"/></xsl:with-param>
+				<xsl:with-param name="second_cell"><xsl:value-of select="$class-name"/></xsl:with-param>
+				<xsl:with-param name="third_cell">NO</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
+</xsl:template>
+
+<xsl:template name="display_feature_if_not_example">
+	<xsl:param name="classname"/>
+	<xsl:variable name="testname">
+		<xsl:call-template name="convert-test-name">
+			<xsl:with-param name="text"><xsl:value-of select="@name"/></xsl:with-param>
+		</xsl:call-template>
+	</xsl:variable>
+	<xsl:if test="$testname!='Example'">
+		<xsl:call-template name="display_feature">
+			<xsl:with-param name="testname"><xsl:value-of select="$testname"/></xsl:with-param>
+			<xsl:with-param name="class-name"><xsl:value-of select="$classname"/></xsl:with-param>
+		</xsl:call-template>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="/">
+
+<style type="text/css" media="screen">
+<xsl:text>
+/*====================================================
+	- HTML Table Filter stylesheet
+=====================================================*/
+@import "filtergrid.css";
+
+/*====================================================
+	- General html elements
+=====================================================*/
+body{
+	/*margin:15px; padding:15px; border:1px solid #666;*/
+	font-family:Arial, Helvetica, sans-serif; font-size:88%;
+}
+h2{ margin-top: 50px; }
+caption{ margin:10px 0 0 5px; padding:10px; text-align:left; }
+pre{ font-size:13px; margin:5px; padding:5px; background-color:#f4f4f4; border:1px solid #ccc;  }
+.mytable{
+	width:100%; font-size:12px;
+	border:1px solid #ccc;
+}
+div.tools{ margin:5px; }
+div.tools input{ background-color:#f4f4f4; border:2px outset #f4f4f4; margin:2px; }
+th{ background-color:#003366; color:#FFF; padding:2px; border:1px solid #ccc; }
+td{ padding:2px; border-bottom:1px solid #ccc; border-right:1px solid #ccc; }
+</xsl:text>
+</style>
+	<xsl:text disable-output-escaping="yes">
+	<![CDATA[
+	<script language="javascript" type="text/javascript" src="actb.js"></script>
+		<script language="javascript" type="text/javascript" src="tablefilter.js"></script>
+		]]>
+	</xsl:text>
+
+	<table id="feature_table" class="mytable">
+		<tr bgcolor="#A8A8A8"><th>List of features</th><th>Class providing feature</th><th>Implemented</th></tr>
+		<xsl:for-each select="testsuites/testsuite">
+		<!-- colspan="2"
+		<xsl:variable name="total-number-of-features">
+			<xsl:value-of select="count(descendant::testcase[@name!='example' and @name!='DISABLED_example'])"/>
+		</xsl:variable>
+		<xsl:variable name="ok-features">
+			<xsl:value-of select="$total-number-of-features - count(descendant::testcase[@name!='example' and @name!='DISABLED_example']/failure)"/>
+		</xsl:variable>
+		<xsl:if test="$total-number-of-features!=0">
+			<tr>
+			<th>Provided by class <xsl:value-of select="replace(@name,'Test','')"/></th>
+			<th><xsl:value-of select="$ok-features"/>/<xsl:value-of select="$total-number-of-features"/></th>
+			</tr>
+		</xsl:if>
+		<xsl:if test="$total-number-of-features=0">
+			<tr bgcolor="#FF7070">
+			<th colspan="2">No tests in class <xsl:value-of select="replace(@name,'Test','')"/></th>
+			</tr>
+		</xsl:if>-->
+		<xsl:variable name="classprovidingfeature">
+			<xsl:value-of select="replace(@name,'Test','')"/>
+		</xsl:variable>
+		<xsl:for-each select="testcase">
+			<xsl:call-template name="display_feature_if_not_example">
+				<xsl:with-param name="classname"><xsl:value-of select="$classprovidingfeature"/></xsl:with-param>
+			</xsl:call-template>
+		</xsl:for-each>
+      </xsl:for-each>
+	</table>
+	<script language="javascript" type="text/javascript">
+	<xsl:text disable-output-escaping="yes">//&lt;![CDATA[</xsl:text>
+	<xsl:comment>
+	var feature_table_Props = {
+					col_2: "select",
+					display_all_text: " [ Show all ] ",
+					sort_select: true,
+					alternate_rows: true,
+					col_width: ["500px","300px","50px"],//prevents column width variations
+					rows_counter: true,
+					rows_counter_text: "Number of displayed features: "
+				};
+	setFilterGrid( "feature_table",feature_table_Props );
+	</xsl:comment>
+	<xsl:text disable-output-escaping="yes">//]]&gt;</xsl:text>
+	</script>
+</xsl:template>
+</xsl:stylesheet>
