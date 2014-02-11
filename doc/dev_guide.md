@@ -153,3 +153,30 @@ Below are the typical commands to run to compile the simulator:
 * ``make install``
 * ``make test``
 * ``make package``
+
+## Process
+
+The methodology used in this project is a variant of the Extreme Programming
+methodology.
+
+### Artefacts
+
+Progress is made visible to the developpers, users & product owner by a physical
+kanban board & an HTML planning tool, homemade by CEC & which will be visible on
+the project's Jenkins page.
+
+#### Kanban board
+
+A kanban board. It contains three columns (todo, started & done) & post-its
+of various sizes & colors with the following conventions:
+
+- User stories: big blue post-it
+- Dev stories: big orange post-it
+- Interface tasks: small green post-it
+- Kernel tasks: small purple post-it
+- Physical models tasks: small yellow post-it  
+
+#### Planning tool
+
+Burndown & burnup charts are automatically generated using the data stored in
+two YAML files stored in the ``planning`` subdirectory.
