@@ -61,6 +61,11 @@ stories:
       type: internal
       backlog: 10/2/2014
       started: 11/2/2014
+    - task: Compile data_source module on gcc 4.7
+      type: internal
+      size: 2
+      backlog: 11/2/2014
+      started: 11/2/2014
     - task: Compile & run all tests on Jenkins
       type: internal
       size: 2
