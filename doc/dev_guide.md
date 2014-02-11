@@ -170,11 +170,12 @@ the project's Jenkins page.
 A kanban board. It contains three columns (todo, started & done) & post-its
 of various sizes & colors with the following conventions:
 
-- User stories: big blue post-it
-- Dev stories: big orange post-it
+- User stories (functional requirements): big blue post-it
+- Dev stories (non-functional requirements): big orange post-it
 - Interface tasks: small green post-it
 - Kernel tasks: small purple post-it
 - Physical models tasks: small yellow post-it  
+- Dev tasks: small pink post-it
 
 #### Planning tool
 
