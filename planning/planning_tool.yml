@@ -22,6 +22,7 @@ stories:
       size: 4
       backlog: 10/2/2014
       started: 10/2/2014
+      done: 11/2/2014
       assigned to: gj
   - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1687>Création dépôt Git</a>
     due by: 10/3/2014
@@ -31,6 +32,7 @@ stories:
       size: 2
       backlog: 10/2/2014
       assigned to: cec
+      done: 11/2/2014
   - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1691>Setup Jenkins</a>
     due by: 10/3/2014
     tasks:
@@ -58,6 +60,7 @@ stories:
       size: 1
       type: internal
       backlog: 10/2/2014
+      started: 11/2/2014
     - task: Compile & run all tests on Jenkins
       type: internal
       size: 2
