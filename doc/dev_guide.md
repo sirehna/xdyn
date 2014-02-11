@@ -181,3 +181,30 @@ of various sizes & colors with the following conventions:
 
 Burndown & burnup charts are automatically generated using the data stored in
 two YAML files stored in the ``planning`` subdirectory.
+
+#### User stories
+
+As stated on [Wikipedia](https://en.wikipedia.org/wiki/User_story), *a user
+story is one or more sentences in the everyday or business language of the end
+user or user of a system that captures what a user does or needs to do as part
+of his or her job function.* User stories are entered using [Bugzilla](http://sir6/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&bug_status=NEW&bug_status=OPEN&bug_status=ANALYSED&bug_status=ASSIGNED&bug_status=IMPLEMENTED&columnlist=priority%2Cassigned_to%2Cbug_status%2Cshort_desc%2Ccomponent%2Cdeadline&content=&product=Simulateur&query_format=specific&query_based_on=).
+They are written in the following form:
+
+**As a** *role*, **I want** *functionality* **so that** *benefit*
+
+* *role*: type of user. This impacts the expected interface & the level of detail
+in user interactions.
+* *functionality*: actual feature being implemented.
+* *benefit*: marketable value of the feature (how the customer will earn or save
+money using the feature).
+
+User stories should follow the **INVEST** guidelines:
+
+|Letter  |  Meaning                      | Description
+| :------|:------------------------------|:----------------------------------------------------------------------------------------------------------------------|
+|I       | Independent                   | The user story should be self-contained, in a way that there is no inherent dependency on another user story.     |
+|N       | Negotiable                    | User stories, up until they are part of an iteration, can always be changed and rewritten.                        |
+|V       | Valuable                      | A user story must deliver value to the end user.                                                                  |
+|E       | Estimable                     | You must always be able to estimate the size of a user story.                                                     |
+|S       | Sized appropriately or Small  | User stories should not be so big as to become impossible to plan/task/prioritize with a certain level of         |certainty.
+|T 	    | Testable                      | The user story or its related description must provide the necessary information to make test development possible.|
