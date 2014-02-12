@@ -47,8 +47,6 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         simulation_static           # static
         lapack                      # static
         gfortran                    # static
-        gfortranbegin               # static
-        m                           # static
         )
 
 INSTALL(TARGETS ${PROJECT_NAME}
@@ -90,5 +88,4 @@ ENDFOREACH()
 
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
-
 

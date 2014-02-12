@@ -3,7 +3,8 @@ FIND_PACKAGE(Doxygen)
 IF(DOXYGEN_FOUND)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLayout.in ${CMAKE_CURRENT_BINARY_DIR}/DoxygenLayout.xml @ONLY)
-
+    FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev")
+    FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html")
     ADD_CUSTOM_TARGET(test_results
         COMMAND ./${TEST_EXE} --gtest_also_run_disabled_tests --gtest_output=xml:test_output.xml
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -11,56 +12,60 @@ IF(DOXYGEN_FOUND)
         DEPENDS ${TEST_EXE}
     )
 
-    FIND_PROGRAM(SAXON_EXE Transform HINTS "c:/Program\ Files/Saxonica/SaxonHE9.4N/bin"
-                                           "c:/Program\ Files/Saxonica/SaxonHE9.5N/bin")
-    IF(SAXON_EXE-NOTFOUND)
-        MESSAGE(STATUS "Program SAXON not found")
-    ELSE()
-        MESSAGE(STATUS "Program SAXON found")
-    ENDIF()
-
+    FIND_PACKAGE(XmlTransform)
     ADD_CUSTOM_TARGET(functionalities
-        ${SAXON_EXE} -s:test_output.xml -xsl:${CMAKE_CURRENT_SOURCE_DIR}/get_specifications.xml -o:list_of_functionalities.html
+        ${XMLTRANSFORM_EXECUTABLE} -s:test_output.xml -xsl:${CMAKE_CURRENT_SOURCE_DIR}/get_specifications.xml -o:list_of_functionalities.html
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating list of functionalities from GTest's output XML" VERBATIM
         DEPENDS test_results
     )
-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/list_of_functionalities.html
-            DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../documentation/html)
+    FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/list_of_functionalities.html
+         DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html)
 
-    ADD_CUSTOM_TARGET(sdk_doc
+    FIND_PACKAGE(Pandoc)
+    IF(PANDOC_EXECUTABLE-NOTFOUND)
+        MESSAGE(STATUS "Program PANDOC not found")
+    ELSE()
+        ADD_CUSTOM_TARGET(doc_dev_guide
+            ${PANDOC_EXECUTABLE} dev_guide.md -o html/dev_guide.html
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev
+            COMMENT "Generating the developper guide" VERBATIM
+        )
+    ENDIF()
+
+    ADD_CUSTOM_TARGET(doc_dev
         ${DOXYGEN_EXECUTABLE} Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen" VERBATIM
         DEPENDS functionalities
     )
+    IF(NOT PANDOC-NOTFOUND)
+        ADD_DEPENDENCIES(doc_dev doc_dev_guide)
+    ENDIF()
+
 
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/../images_for_documentation/*.svg")
     FOREACH(f ${files})
-        FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../documentation/html)
+        FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html)
     ENDFOREACH()
 
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/../images_for_documentation/*.png")
     FOREACH(f ${files})
-        FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../documentation/latex)
+        FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/latex)
     ENDFOREACH()
 
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.js")
     FOREACH(f ${files})
-        FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../documentation/html)
+        FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html)
     ENDFOREACH()
 
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.css")
     FOREACH(f ${files})
-        FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../documentation/html)
+        FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html)
     ENDFOREACH()
 
-    INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../documentation/html
-            DESTINATION doc)
     IF(WIN32)
-        FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/doc.bat "\"html/index.html\"\n")
-        INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/doc.bat
-                DESTINATION doc)
+        FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/doc_developer.bat "\"html/index.html\"\n")
     ENDIF()
 ELSE()
     MESSAGE("Doxygen not found.")
@@ -68,7 +73,7 @@ ENDIF(DOXYGEN_FOUND)
 
 ADD_CUSTOM_TARGET(
     sloccount
-    sloccount `find . -maxdepth 1 -type d ! \\\( -name \".\" -o -name \"tools_ThirdParty\" -o -name \"doc\" -o -name \"data\" -o -name \"*bin*\" -o -name \".svn\" -o -name \".settings\" \\\)`> "${PROJECT_BINARY_DIR}/sloccount.txt"
+    sloccount `find . -maxdepth 1 -type d ! \\\( -name \".\" -o -name \"tools_ThirdParty\" -o -name \"doc\" -o -name \"data\" -o -name \"*bin*\" -o -name \".svn\" -o -name \".git\" -o -name \".settings\" \\\)`> "${PROJECT_BINARY_DIR}/sloccount.txt"
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Evaluates the amount of work of the project"
 )
