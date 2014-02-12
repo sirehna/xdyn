@@ -45,7 +45,7 @@ It is used on a Windows OS (Windows XP) and a POSIX OS (Ubuntu).
 
 # File repositories
 Because of the nature of the project, two GIT file
-repositories hosted on [Sir6](http://130.66.124.6/git/) will be used :
+repositories hosted on [Sir6](http://130.66.124.6/public/DOP/EtudesEnCours/ETI140043/) are be used :
 
 * One that will contain all developments performed during the project.
   It contains all the source code of
