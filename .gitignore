@@ -1,22 +1,4 @@
 
-nbproject/private/private.properties
+build
 
-lib/jasmine-jstd-adapter/MIT.LICENSE
-
-config/jsTestDriver.conf
-
-date_utilities.js
-
-lib/jasmine-jstd-adapter/JasmineAdapter.js
-
-unit/date_tests.js
-
-nbproject/private/private.xml
-
-lib/jasmine-jstd-adapter/version.txt
-
-lib/jasmine/MIT.LICENSE
-
-lib/jasmine/jasmine.css
-
-lib/jasmine/version.txt
+install
