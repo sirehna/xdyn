@@ -105,9 +105,9 @@ This section presents the tools and libraries used to perform the development of
 
 The compiler chosen for this project is [GNU GCC 4.5.2](http://gcc.gnu.org/gcc-4.5).
 The rationale behind this choice is that this compiler is widely used at Sirehna.
-GCC 4.7 is used on the Linux platform (Ubuntu) because:
+GCC 4.6 is used on the Linux platform (Ubuntu) because:
 
-- More errors are detected by GCC 4.7
+- More errors are detected by GCC 4.6
 - Code coverage appears to be broken with CMake & GCC 4.5.2.
 
 ## Generic tools used
