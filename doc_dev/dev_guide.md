@@ -47,13 +47,13 @@ It is used on a Windows OS (Windows XP) and a POSIX OS (Ubuntu).
 Because of the nature of the project, two GIT file
 repositories hosted on [Sir6](http://130.66.124.6/public/DOP/EtudesEnCours/ETI140043/) are be used :
 
-* One that will contain all developments performed during the project.
+* One that contains all developments performed during the project.
   It contains all the source code of
-  the physical models included in the simulator. It will also
+  the physical models included in the simulator. It also
   contain all the source code of the kernel of the simulator
   with, e.g., the ``DataSource`` that has been developed
-  for another project.
-* One that will match the repository hosted on the IRT JV's Git Lab server.
+  for another project (EONAV).
+* One that matches the repository hosted on the IRT JV's Git Lab server.
   It contains all physical models developed during this project
   with the binary version the kernel library.
 
