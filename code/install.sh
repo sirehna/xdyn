@@ -27,3 +27,8 @@ then
     make package
 fi
 
+if [ ${buildType} = "Coverage" ];
+then
+    make coverage
+    make coverage-xml
+fi
