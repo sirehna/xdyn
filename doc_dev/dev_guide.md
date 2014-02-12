@@ -1,4 +1,5 @@
-﻿# Developer guide
+﻿% IRT JV Simulator - Developer Guide
+% Guillaume Jacquenot, Charles-Edouard CADY
 
 This page is guide for the development of the lightweight temporal ship simulator.
 
@@ -16,7 +17,7 @@ This simulator is written in C++ and relies on:
 
 The following explains the philosophy of the development.
 
-## Guidelines
+# Guidelines
 
 Source files are versionned using [GIT](http://www.git-scm.com),
 a free and open-source distributed version control system.
@@ -40,7 +41,7 @@ is [Jenkins](http://www.jenkins-ci.org).
 
 It is used on a Windows OS (Windows XP) and a POSIX OS (Ubuntu).
 
-## File repositories
+# File repositories
 Because of the nature of the project, two GIT file
 repositories hosted on [Sir6](http://130.66.124.6/git/) will be used :
 
@@ -58,12 +59,12 @@ As a consequence, two Jenkins jobs will be used to compile, test and deploy
 the source
 code stored on these two file repositories.
 
-## Jenkins jobs
+# Jenkins jobs
 
 This section presents the two Jenkins jobs
 corresponding to the two files repositories
 
-### Sirehna/DCNS Research file repository
+## Sirehna/DCNS Research file repository
 
 | Jobs                  | Description                                                                                                                    |
 | :---------------------| :------------------------------------------------------------------------------------------------------------------------------|
@@ -76,7 +77,7 @@ corresponding to the two files repositories
 |                       | to follow the evolution of the project                                                                                         |
 
 
-### IRT JV file repository
+## IRT JV file repository
 
 | Jobs                  | Description                                                                                                         |
 | :---------------------| :------------------------------------------------------------------------------------------------------------------ |
@@ -86,7 +87,7 @@ corresponding to the two files repositories
 | ``test``              | Perform the integration tests                                                                                       |
 | ``package``           | Create an installation program that will be used by the final user                                                  |
 
-## Developpement environment
+# Developpement environment
 
 This section presents the tools and libraries used to perform the development of the simulator.
 
@@ -97,7 +98,7 @@ GCC 4.7 is used on the Linux platform (Ubuntu) because:
 - More errors are detected by GCC 4.7
 - Code coverage appears to be broken with CMake & GCC 4.5.2.
 
-### Generic tools used
+## Generic tools used
 | Tools                                         | Description                                                   |
 | :-------------------------------------------  | :------------------------------------------------------------ |
 | [GIT](http://www.git-scm.com)                 | Cross-platform open-source build system                       |
@@ -108,7 +109,7 @@ GCC 4.7 is used on the Linux platform (Ubuntu) because:
 | [Doxygen](http://www.doxygen.org)             | Tool for generating documentation from annotated C++ sources  |
 | [Graphviz](http://www.graphviz.org)           | Optional tool for graph generation with documentation         |
 
-### Specific Windows tools
+## Specific Windows tools
 | Tools                                             | Description                               |
 | :------------------------------------------------ | :---------------------------------------- |
 | [MINGW-MSYS](http://www.mingw.org)                | Tool chain compilation                    |
@@ -116,7 +117,7 @@ GCC 4.7 is used on the Linux platform (Ubuntu) because:
 | [NSIS](http://www.nsis.sourceforge.net/Main_Page) | Installation program generation           |
 | [Notepad++](http://www.notepad-plus-plus.org)     | Open source code editor                   |
 
-### Thirdparty libraries
+## Thirdparty libraries
 | Library                                           | Description                               |
 | :-------------------------                        | :---------------------------------------- |
 | [GTest](http://www.code.google.com/p/googletest)  | MIT Open-source unit testing library      |
@@ -125,9 +126,9 @@ GCC 4.7 is used on the Linux platform (Ubuntu) because:
 | [Eigen](http://www.eigen.tuxfamily.org/index.php) | MPL2 Open-source C++ algebra library      |
 
 
-## Development policy and coding rules
+# Development policy and coding rules
 
-### Development rules
+## Development rules
 
 Development will follow the Git branching model described [here](http://nvie.com/posts/a-successful-git-branching-model/):
 
@@ -135,14 +136,14 @@ Development will follow the Git branching model described [here](http://nvie.com
 * While developing these new features, a rebase on the trunk should be run regularly
   to merge possible conflicts as soon as possible, in the feature branch.
 
-### Coding rules
+## Coding rules
 
 * EOL should be Unix-styles with LF characters.
 * File should be UTF-8 encoded.
 * Committed files should not contain any trailing spaces.
 * For more informations, check the [wiki](http://sir6:8080/xwiki/bin/view/Espace+de+travail+commun/Checklist+de+Revue+de+code).
 
-## Compilation instructions
+# Compilation instructions
 
 Below are the typical commands to run to compile the simulator:
 
@@ -156,18 +157,18 @@ Below are the typical commands to run to compile the simulator:
 * ``make test``
 * ``make package``
 
-## Process
+# Process
 
 The methodology used in this project is a variant of the Extreme Programming
 methodology.
 
-### Artefacts
+## Artefacts
 
 Progress is made visible to the developpers, users & product owner by a physical
 kanban board & an HTML planning tool, homemade by CEC & which will be visible on
 the project's Jenkins page.
 
-#### Kanban board
+### Kanban board
 
 A kanban board. It contains three columns (todo, started & done) & post-its
 of various sizes & colors with the following conventions:
@@ -179,12 +180,12 @@ of various sizes & colors with the following conventions:
 - Physical models tasks: small yellow post-it  
 - Dev tasks: small pink post-it
 
-#### Planning tool
+### Planning tool
 
 Burndown & burnup charts are automatically generated using the data stored in
 two YAML files stored in the ``planning`` subdirectory.
 
-#### User stories
+### User stories
 
 As stated on [Wikipedia](https://en.wikipedia.org/wiki/User_story), *a user
 story is one or more sentences in the everyday or business language of the end
