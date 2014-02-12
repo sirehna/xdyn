@@ -1,0 +1,31 @@
+# - Find lcov
+# Will define:
+#
+# LCOV_EXECUTABLE - the lcov binary
+# GENHTML_EXECUTABLE - the genhtml executable
+
+
+INCLUDE(FindPackageHandleStandardArgs)
+
+FIND_PROGRAM(LCOV_EXECUTABLE lcov)
+IF(LCOV_EXECUTABLE-NOTFOUND)
+    INCLUDE(ExternalProject)
+    ExternalProject_Add(
+        lcov
+        SVN_REPOSITORY http://130.66.124.6/svn/tools/ThirdParty/lcov/1.10/bin/lcov
+        SVN_USERNAME gj
+        SVN_PASSWORD jacqueno
+        CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
+        BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/lcov
+        #INSTALL_DIR ${EXECUTABLE_OUTPUT_PATH}
+        #INSTALL_COMMAND "" # Disable installation
+       )
+    FIND_PROGRAM(LCOV_EXECUTABLE lcov PATHS ${CMAKE_CURRENT_BINARY_DIR}/lcov)
+ENDIF()
+
+FIND_PROGRAM(GENHTML_EXECUTABLE genhtml HINTS ${CMAKE_CURRENT_BINARY_DIR}/lcov)
+
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Lcov DEFAULT_MSG LCOV_EXECUTABLE GENHTML_EXECUTABLE)
+
+# only visible in advanced view
+MARK_AS_ADVANCED(LCOV_EXECUTABLE GENHTML_EXECUTABLE)
