@@ -24,7 +24,7 @@ IF(DOXYGEN_FOUND)
 
     FIND_PACKAGE(Pandoc)
     IF(PANDOC_EXECUTABLE-NOTFOUND)
-        MESSAGE(STATUS "Program PANDOC not found")
+        MESSAGE(STATUS "Program PANDOC not found -> Developer documentation will be uncomplete")
     ELSE()
         ADD_CUSTOM_TARGET(doc_dev_guide
             ${PANDOC_EXECUTABLE} dev_guide.md -o html/dev_guide.html
@@ -70,6 +70,21 @@ IF(DOXYGEN_FOUND)
 ELSE()
     MESSAGE("Doxygen not found.")
 ENDIF(DOXYGEN_FOUND)
+
+FIND_PACKAGE(Pandoc)
+IF(PANDOC_EXECUTABLE-NOTFOUND)
+    MESSAGE(STATUS "Program PANDOC not found -> No user documentation will be generated")
+ELSE()
+    FOREACH(f fr)
+        ADD_CUSTOM_COMMAND(
+            OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/user_guide_${f}.html
+            COMMAND ${PANDOC_EXECUTABLE} -s user_guide_${f}.md -o user_guide_${f}.html
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user)
+        LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/user_guide_${f}.html)
+    ENDFOREACH()
+    ADD_CUSTOM_TARGET(doc_user ALL DEPENDS ${DOC_USER_INSTALL_FILES})
+    INSTALL(FILES ${DOC_USER_INSTALL_FILES} DESTINATION doc)
+ENDIF()
 
 ADD_CUSTOM_TARGET(
     sloccount
