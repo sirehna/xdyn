@@ -57,14 +57,24 @@ repositories hosted on [Sir6](http://130.66.124.6/public/DOP/EtudesEnCours/ETI14
   It contains all physical models developed during this project
   with the binary version the kernel library.
 
-As a consequence, two Jenkins jobs will be used to compile, test and deploy
-the source
-code stored on these two file repositories.
+As a consequence, two Jenkins jobs are used to compile, test and deploy
+the source code stored on these two file repositories.
+
+# Version control
+The DVCS used is Git. The repository was initially created on a shared folder
+on ``pc-maroff``. It was then cloned on ``pc-gj`` while waiting for a git server
+on sir6. However, the installation of a Git server on sir6 proved unnecessary
+because the repository could be treated as a normal folder by Samba. The downside
+is a possible performance lag (compared to using ssh or the ``git`` protocol).
+The reference repository is now located at:
+
+[http://130.66.124.6/public/DOP/EtudesEnCours/ETI140043/simulator.git](http://130.66.124.6/public/DOP/EtudesEnCours/ETI140043/simulator.git)
 
 # Jenkins jobs
 
 This section presents the two Jenkins jobs
-corresponding to the two files repositories
+corresponding to the two file repositories (internal to SIREHNA & external for
+IRT JV).
 
 ## Sirehna/DCNS Research file repository
 
