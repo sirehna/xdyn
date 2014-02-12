@@ -21,7 +21,7 @@ The following explains the philosophy of the development.
 
 # Guidelines
 
-Source files are versionned using [GIT](http://www.git-scm.com),
+Source files are versionned using [GIT](http://www.git-scm.com) version 1.8.5.2 (windows) 1.7.9.5 (linux),
 a free and open-source distributed version control system.
 
 Among the many pros of GIT, it will allow easy branching for
