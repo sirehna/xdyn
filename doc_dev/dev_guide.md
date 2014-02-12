@@ -2,6 +2,8 @@
 % Guillaume Jacquenot, Charles-Edouard CADY
 
 This page is guide for the development of the lightweight temporal ship simulator.
+To generate this document, run:
+``pandoc dev_guide.md -s -c ../planning/stylesheet.css --toc -o dev_guide.html``
 
 This simulator is composed of a *kernel* that contains the core of the simulator and
 a set of modules that represent the physical models implemented in the simulator.
