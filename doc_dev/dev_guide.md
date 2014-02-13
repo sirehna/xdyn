@@ -9,7 +9,8 @@ This simulator is composed of a *kernel* that contains the core of the simulator
 a set of modules that represent the physical models implemented in the simulator.
 
 The kernel relies on previous developments and is thus the property of DCNS Research.
-The modules are developped within the context of the project and are the property of IRT Jules Verne.
+The modules are developped within the context of the project and are the property
+of IRT Jules Verne.
 
 This simulator is written in C++ and relies on:
 
