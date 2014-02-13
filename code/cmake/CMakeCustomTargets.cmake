@@ -14,13 +14,12 @@ IF(DOXYGEN_FOUND)
 
     FIND_PACKAGE(XmlTransform)
     ADD_CUSTOM_TARGET(functionalities
-        ${XMLTRANSFORM_EXECUTABLE} -s:test_output.xml -xsl:${CMAKE_CURRENT_SOURCE_DIR}/get_specifications.xml -o:list_of_functionalities.html
+        COMMAND ${XMLTRANSFORM_EXECUTABLE} -s:test_output.xml -xsl:${CMAKE_CURRENT_SOURCE_DIR}/get_specifications.xml -o:list_of_functionalities.html
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/list_of_functionalities.html ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating list of functionalities from GTest's output XML" VERBATIM
         DEPENDS test_results
     )
-    FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/list_of_functionalities.html
-         DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html)
 
     FIND_PACKAGE(Pandoc)
     IF(PANDOC_EXECUTABLE-NOTFOUND)
