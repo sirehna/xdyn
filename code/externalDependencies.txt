@@ -1,0 +1,10 @@
+http://130.66.124.6/svn/eonav/oad_and_monitoring_modules/trunk/libraries boost
+http://130.66.124.6/svn/eonav/oad_and_monitoring_modules/trunk/modules exception_handling
+http://130.66.124.6/svn/maroff/Product/Cpp/Tools random_data_generator
+http://130.66.124.6/svn/maroff/Product/Cpp/Tools macros
+http://130.66.124.6/svn/maroff/Product/Cpp/Tools interpolation
+http://130.66.124.6/svn/dev_pilotage/simulator_sdk/trunk data_source
+http://130.66.124.6/svn/dev_pilotage/simulator_sdk/trunk simulation
+http://130.66.124.6/svn/tools/ThirdParty gmock 1.7.0
+http://130.66.124.6/svn/tools/ThirdParty eigen 3.2.0
+http://130.66.124.6/svn/tools/ThirdParty lapack 3.5.0

@@ -37,13 +37,8 @@ function fetchAndUpdate {
     fi
 }
 
-fetchAndUpdate http://130.66.124.6/svn/eonav/oad_and_monitoring_modules/trunk/libraries boost
-fetchAndUpdate http://130.66.124.6/svn/eonav/oad_and_monitoring_modules/trunk/modules exception_handling
-fetchAndUpdate http://130.66.124.6/svn/maroff/Product/Cpp/Tools random_data_generator
-fetchAndUpdate http://130.66.124.6/svn/maroff/Product/Cpp/Tools macros
-fetchAndUpdate http://130.66.124.6/svn/maroff/Product/Cpp/Tools interpolation
-fetchAndUpdate http://130.66.124.6/svn/dev_pilotage/simulator_sdk/trunk data_source
-fetchAndUpdate http://130.66.124.6/svn/dev_pilotage/simulator_sdk/trunk simulation
-fetchAndUpdate http://130.66.124.6/svn/tools/ThirdParty gmock 1.7.0
-fetchAndUpdate http://130.66.124.6/svn/tools/ThirdParty eigen 3.2.0
-fetchAndUpdate http://130.66.124.6/svn/tools/ThirdParty lapack 3.5.0
+while read line
+do
+    echo "Dealing dependencies - $line"
+    fetchAndUpdate $line
+done < $1
