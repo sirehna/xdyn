@@ -2,12 +2,12 @@
 
 function svnExport {
     echo "> Retrieving $4"
-    svn export --username $1 --password $2 --non-interactive $3/$4 $4
+    svn export --force --username $1 --password $2 --non-interactive $3/$4 $4
 }
 
 function svnExportWithVersionNumber {
     echo "> Retrieving '$4' version $5"
-    svn export --username $1 --password $2 --non-interactive $3/$4/$5 $4
+    svn export --force --username $1 --password $2 --non-interactive $3/$4/$5 $4
 }
 
 function svn_export {
