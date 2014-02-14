@@ -1,32 +1,35 @@
 #!/bin/bash
 
 function svnExport {
-    echo "Retrieving $2"
-    svn export $1/$2 $2
+    echo "> Retrieving $4"
+    svn export --username $1 --password $2 --non-interactive $3/$4 $4
 }
 
 function svnExportWithVersionNumber {
-    echo "Retrieving $2"
-    svn export -r $3 $1/$2 $2
+    echo "> Retrieving '$4' version $5"
+    svn export --username $1 --password $2 --non-interactive $3/$4/$5 $4
 }
 
 function svn_export {
-    if [ $# -eq 0 ]
+    if [ $# -lt 4 ]
     then
-        echo No argument entered for function 
+        echo "Need at least four arguments: a username, a password, a repository & a destination folder. Optionally, a revision number as fifth argument."
         return
     fi
-    if [ $# -eq 2 ]
+    if [ $# -eq 4 ]
     then
-        svnExport $1 $2
-    elif [ $# -eq 3 ]
+        svnExport $1 $2 $3 $4
+    elif [ $# -eq 5 ]
     then
-        svnExportWithVersionNumber $1 $2 $3
+        svnExportWithVersionNumber $1 $2 $3 $4 $5
+    else
+        echo "Too many arguments: expected: a username, a password, a repository, a destination folder & (optionally) a revision number"
+        return
     fi
 }
 
 while read line
 do
-    echo "Dealing dependencies - $line"
-    svn_export $line
+    echo "Processing $line..."
+    svn_export $2 $3 $line
 done < $1
