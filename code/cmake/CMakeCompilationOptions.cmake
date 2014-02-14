@@ -16,12 +16,12 @@ IF(CMAKE_BUILD_TYPE_UPPER MATCHES COVERAGE)
     #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fprofile-arcs -ftest-coverage")
     #SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -g -fprofile-arcs -ftest-coverage")
     #SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -g -fprofile-arcs -ftest-coverage")
-    
-    
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --coverage")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
-    SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} --coverage")
-    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --coverage")
+
+
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g --coverage")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g --coverage")
+    SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -g --coverage")
+    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -g --coverage")
     INCLUDE(EnableCoverageReport)
 ENDIF()
 
