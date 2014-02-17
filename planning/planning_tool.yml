@@ -36,6 +36,13 @@ stories:
   - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1691>Setup Jenkins</a>
     due by: 10/3/2014
     tasks:
+    - task: Create CMakeLists.txt for project
+      type: internal
+      size: 4
+      assigned to: gj
+      backlog: 11/02/2014
+      started: 11/02/2014
+      done: 11/02/2014
     - task: Initialisation Jenkins sur PC EONAV (Windows + Linux)
       type: internal
       size: 4
