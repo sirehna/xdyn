@@ -25,7 +25,6 @@ ADD_SUBDIRECTORY(exception_handling)
 ADD_SUBDIRECTORY(data_source)
 ADD_SUBDIRECTORY(interpolation)
 ADD_SUBDIRECTORY(simulation)
-ADD_SUBDIRECTORY(test_data_generator)
 INCLUDE(CMakeLapackDouble)
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED
@@ -35,7 +34,6 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         data_source_static          # static
         simulation_static           # static
-        test_data_generator_static
         lapack                      # static
         gfortran                    # static
         )
