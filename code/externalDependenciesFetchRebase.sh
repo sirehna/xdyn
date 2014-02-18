@@ -39,6 +39,6 @@ function fetchAndUpdate {
 
 while read line
 do
-    echo "Dealing dependencies - $line"
+    echo "Fetching dependency - $line"
     fetchAndUpdate $line
 done < $1
