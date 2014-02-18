@@ -13,12 +13,21 @@ SET(CMAKE_INSTALL_PREFIX ../install${CMAKE_BUILD_TYPE})
 # Compilation configuration
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 INCLUDE(CMakeGMock)
+
 INCLUDE(CMakeOutputDirectories)
-INCLUDE(CMakeCompilationOptions)
+
+#############################################################################
+# Third party libraries
+set(BOOST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+find_package(Boost REQUIRED)
+ADD_SUBDIRECTORY(yaml-cpp)
+set(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include
+                          ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include/yaml-cpp)
 
 #############################################################################
 # Compilation part
-SET(boost_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to Boost's include directory")
+INCLUDE(CMakeCompilationOptions)
 ADD_SUBDIRECTORY(macros)
 ADD_SUBDIRECTORY(random_data_generator)
 ADD_SUBDIRECTORY(exception_handling)
