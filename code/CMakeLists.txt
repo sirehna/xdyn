@@ -34,6 +34,15 @@ ADD_SUBDIRECTORY(exception_handling)
 ADD_SUBDIRECTORY(data_source)
 ADD_SUBDIRECTORY(interpolation)
 ADD_SUBDIRECTORY(simulation)
+ADD_SUBDIRECTORY(yaml_parser)
+ADD_SUBDIRECTORY(dynamic_model)
+ADD_SUBDIRECTORY(dynamho_interface)
+ADD_SUBDIRECTORY(simulator_test_data_generator)
+ADD_SUBDIRECTORY(external_data_structures)
+ADD_SUBDIRECTORY(physical_models)
+enable_language(Fortran)
+ADD_SUBDIRECTORY(DyNaMHo)
+
 INCLUDE(CMakeLapackDouble)
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:exception_handling_object>
@@ -57,8 +66,12 @@ SET(TEST_EXE run_all_tests)
 
 ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:data_source_tests>
-        $<TARGET_OBJECTS:simulation_tests>
-        $<TARGET_OBJECTS:interpolation_object>)
+        $<TARGET_OBJECTS:interpolation_object>
+        $<TARGET_OBJECTS:external_data_structures_object>
+        $<TARGET_OBJECTS:physical_models_object>
+        $<TARGET_OBJECTS:dynamho_object>
+        $<TARGET_OBJECTS:dynamic_model_object>
+        )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
 
