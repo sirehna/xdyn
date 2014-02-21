@@ -36,9 +36,8 @@ ADD_SUBDIRECTORY(interpolation)
 ADD_SUBDIRECTORY(simulation)
 INCLUDE(CMakeLapackDouble)
 
-ADD_LIBRARY(${PROJECT_NAME} SHARED
-        $<TARGET_OBJECTS:exception_handling_object>
-        $<TARGET_OBJECTS:interpolation_object>)
+ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:exception_handling_object>
+                                   $<TARGET_OBJECTS:interpolation_object>)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         data_source_static          # static
