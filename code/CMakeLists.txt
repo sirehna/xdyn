@@ -66,6 +66,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest gtest_main                 # static
         gmock gmock_main                 # static
         random_data_generator_static     # static
+        simulator_test_data_generator_static
         ${PROJECT_NAME}
         )
 
