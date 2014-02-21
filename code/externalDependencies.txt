@@ -11,9 +11,9 @@ http://130.66.124.6/svn/tools/ThirdParty gmock 1.7.0
 http://130.66.124.6/svn/tools/ThirdParty eigen 3.2.0
 http://130.66.124.6/svn/tools/ThirdParty lapack 3.5.0
 http://130.66.124.6/svn/tools/ThirdParty yaml-cpp 0.5.1
-http://130.66.124.6/svn/sdk/fee107 dynamho_interface
-http://130.66.124.6/svn/sdk/fee107 external_data_structures
-http://130.66.124.6/svn/sdk/fee107 parser
-http://130.66.124.6/svn/sdk/fee107 physical_models
-http://130.66.124.6/svn/sdk/fee107 simulation
-http://130.66.124.6/svn/sdk/fee107 test_utilities
+http://130.66.124.6/svn/fee107/sdk dynamho_interface
+http://130.66.124.6/svn/fee107/sdk external_data_structures
+http://130.66.124.6/svn/fee107/sdk physical_models
+http://130.66.124.6/svn/fee107/sdk test_utilities
+http://130.66.124.6/svn/fee107/sdk dynamic_model
+http://130.66.124.6/svn/baracuda/trunk/dynamho DyNaMHo
