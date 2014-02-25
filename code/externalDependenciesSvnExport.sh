@@ -28,8 +28,4 @@ function svn_export {
     fi
 }
 
-while read line
-do
-    echo "Processing $line..."
-    svn_export $2 $3 $line
-done < $1
+svn_export $1 $2 $3 $4 $5
