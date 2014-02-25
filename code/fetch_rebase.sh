@@ -37,8 +37,4 @@ function fetchAndUpdate {
     fi
 }
 
-while read line
-do
-    echo "Fetching dependency - $line"
-    fetchAndUpdate $line
-done < $1
+fetchAndUpdate $1 $2 $3
