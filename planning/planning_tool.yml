@@ -69,6 +69,8 @@ stories:
       type: internal
       size: 2
       backlog: 10/2/2014
+      started: 17/2/2014
+      done: 20/2/2014
       assigned to: cec
     - task: GJ peut compiler le DataSource sous Eclipse
       size: 1
@@ -91,3 +93,93 @@ stories:
       assigned to: gj
       started: 12/02/2014
       done: 14/02/2014
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1692>Dérisquage intégration équa diff </a>
+    due by: 10/3/2014
+    tasks:
+    - task: Import FEE107 modules
+      type: kernel
+      size: 4
+      started: 18/2/2014
+      assigned to: cec
+      backlog: 17/2/2014
+      done: 21/2/2014
+    - task: Basic architecture
+      type: kernel
+      size: 8
+      started: 17/2/2014
+      assigned to: cec
+      backlog: 17/2/2014
+    - task: DataSource (de)serialization for replay
+      type: kernel
+      size: 8
+      started: 26/2/2014
+      assigned to: cec
+      backlog: 24/2/2014
+    - task: Architecture tests
+      type: kernel
+      size: 4
+      assigned to: cec
+      backlog: 17/2/2014
+      started: 26/2/2014
+    - task: Define test scenario
+      type: kernel
+      size: 2
+      assigned to: cec
+      backlog: 17/2/2014
+    - task: Pass test
+      type: kernel
+      size: 8
+      assigned to: cec
+      backlog: 17/2/2014
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1719>Finish configuring Jenkins</a>
+    due by: 10/3/2014
+    tasks:
+    - task: Configure permissions (Jenkins access)
+      type: internal
+      size: 2
+      started: 20/2/2014
+      assigned to: cec
+      backlog: 17/2/2014
+      done: 20/2/2014
+    - task: Link planning tool to Jenkins
+      type: internal
+      size: 2
+      assigned to: cec
+      backlog: 17/2/2014
+    - task: Add main executable to build
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 17/2/2014
+    - task: Add YAML test data to installer
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 17/2/2014
+    - task: CSS for dev guide
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 17/2/2014
+      started: 19/2/2014
+      done: 19/2/2014
+    - task: Links between Windows & Linux Jenkins
+      type: internal
+      size: 2
+      assigned to: cec
+      backlog: 17/2/2014
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1720>Finish configuring Git</a>
+    due by: 10/3/2014
+    tasks:
+    - task: Git under Jenkins
+      type: kernel
+      size: 8
+      started: 18/2/2014
+      assigned to: cec
+      backlog: 17/2/2014
+      done: 21/2/2014
+    - task: GitLab access for everyone
+      type: kernel
+      size: 2
+      assigned to: cec
+      backlog: 17/2/2014

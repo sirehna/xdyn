@@ -16,6 +16,13 @@ projects:
       - week ending on: 14/2/2014
         cec: 5
         gj: 5
+        nc: 1
+      - week ending on: 21/2/2014
+        cec: 4
+        nc: 0.5
+      - week ending on: 28/2/2014
+        cec: 5
+        nc: 0.5
   - name: R&D autofinancée
     budget: 50000
     prices:
@@ -25,5 +32,6 @@ projects:
     T0: 1/2/2014
     resource usage:
       - week ending on: 14/2/2014
-        cec: 5
+        cec: 0
         gj: 0
+
