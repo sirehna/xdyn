@@ -14,26 +14,26 @@ function last(l)
     return l.slice(-1)[0];
 }
 
-function add_progress_bar(story_name, percent_complete, max_length)
+function add_progress_bar(divid, story_name, percent_complete, max_length)
 {
     var title = document.createElement("span");
     title.setAttribute('class', "progress-title");
     title.innerHTML = capitaliseFirstLetter(story_name);
-    title.setAttribute('id', story_name + '_title');
+    title.setAttribute('id', divid + '_title');
 
     var val = document.createElement("span");
     val.setAttribute('class', "progress-val");
     val.innerHTML = percent_complete + "%";
-    val.setAttribute('id', story_name + '_val');
+    val.setAttribute('id', divid + '_val');
 
     var bar = document.createElement("span");
     bar.setAttribute('class', "progress-bar");
-    bar.setAttribute('id', story_name + '_bar');
+    bar.setAttribute('id', divid + '_bar');
 
     var inn = document.createElement("span");
     inn.setAttribute('class', "progress-in");
     inn.style.width = percent_complete + "%";
-    inn.setAttribute('id', story_name + '_inn');
+    inn.setAttribute('id', divid + '_inn');
     bar.appendChild(inn);
 
     var progress = document.createElement('div');
@@ -44,7 +44,7 @@ function add_progress_bar(story_name, percent_complete, max_length)
     progress.appendChild(val);
     progress.appendChild(bar);
     document.getElementById("status").appendChild(progress);
-    document.body.appendChild(progress);
+    return progress;
 }
 
 function remove_duplicates(arr) {
@@ -110,6 +110,7 @@ function get_ystep(delta)
 {
     var min_n = 3;
     var max_n = 7;
+    if (delta == 0) return 5;
     var h = 10 * Math.floor(Math.log10(delta));
     if (h == 0) return 1;
 
@@ -129,10 +130,9 @@ function get_ystep(delta)
     return h;
 }
 
-function plot(div_id, data, xlabel, ylabel, names, title)
+function plot(div_id, data, xlabel, ylabel, title)
 {
     var ystep = get_ystep(get_delta(data));
-
     var canvas = new CanvasJS.Chart(div_id,
             {
                 axisX: {
@@ -212,14 +212,14 @@ function get_remaining_budget_data(project, users, cost)
 
 function get_users(data)
 {
+    var users = [];
     for (i in data)
     {
-        var D = data[i]['resource usage'];
-        var users = [];
-        for (j in D)
+        var weeks = data[i]['resource usage'];
+        for (j in weeks)
         {
-            var d = D[j];
-            for (k in d)
+            var week = weeks[j];
+            for (k in week)
             {
                 if (k != 'week ending on') users.push(k);
             }
@@ -241,49 +241,62 @@ function plot_remaining_budget(yaml_data)
     plot('remaining_budget', rdata, 'Week', 'Remaining budget (€)');
 }
 
-function get_resource_usage_data(node, users)
+function interpolate(data, dates)
+{
+	var new_data = {x: dates, y:[]};
+	var j = 0;
+    for (i = 0 ; i < dates.length ; ++i)
+    {
+        new_data.y.push(0);
+        for (j = 0 ; j < data.x.length ; ++j)
+        {
+            if (data.x[j]-dates[i]<=0)
+            {
+                new_data.y[i] = data.y[j];
+            }
+        }
+    }
+	return new_data;
+}
+
+function get_resource_usage_data(node, users, all_dates)
 {
     var T0 = node['T0'];
-    var r = node['resource usage'];
+    var weeks = node['resource usage'];
     var rdata = [];
     for (i in users)
     {
         var user = users[i];
-        var x = [T0];
         var val = 0;
-        var y = [val];
-        for (j in r)
+        var data = {x:[T0],y:[val]};
+        for (j in weeks)
         {
-            if (user in r[j])
+            if (user in weeks[j])
             {
-                val += r[j][user];
+                val += weeks[j][user];
             }
-            x.push(make_date(r[j]['week ending on']));
-            y.push(val);
+            data.x.push(make_date(weeks[j]['week ending on']));
+            data.y.push(val);
         }
-        rdata.push(get_canvas_JS_data(x,y,user,"line"));
+        var interpolated_data = interpolate(data, all_dates);
+        rdata.push(get_canvas_JS_data(interpolated_data.x,interpolated_data.y,user,"line"));
     }
     return rdata;
 }
 
-function plot_resource_usage(yaml_data)
-{
-    var projects = yaml_data['projects'];
-    var users = get_users(projects);
-    var rdata = [];
-    for (i in projects)
-    {
-        var project = projects[i];
-        var divname = 'resource_usage_project_'+i;
-        add_div_to_DOM(divname, 'resource_usage');
-        plot(divname, get_resource_usage_data(project, users), 'Week', 'Nb of days','mkljlm');
-    }
-}
-
-function get_all_dates(yaml_data, T0)
+function get_all_dates(yaml_data, resource_usage, T0)
 {
     var dates = [new Date(T0)];
     var stories = yaml_data.stories;
+    var projects = resource_usage.projects;
+    for (i in projects)
+    {
+        var project = projects[i];
+        for (j in project['resource usage'])
+        {
+            dates.push(new Date(make_date(project['resource usage'][j]['week ending on'])));
+        }
+    }
     for (i in stories)
     {
         var story = stories[i];
@@ -301,6 +314,22 @@ function get_all_dates(yaml_data, T0)
     }
     dates = remove_duplicates(dates);
     return dates.sort(function(a,b){return a-b;});
+}
+
+function plot_resource_usage(yaml_data, all_dates)
+{
+    var projects = yaml_data['projects'];
+    var users = get_users(projects);
+    var rdata = [];
+    
+    
+    for (i in projects)
+    {
+        var project = projects[i];
+        var divname = 'resource_usage_project_'+i;
+        add_div_to_DOM(divname, 'resource_usage');
+        plot(divname, get_resource_usage_data(project, users, all_dates), 'Week', 'Nb of days',project.name);
+    }
 }
 
 function cumulate(x)
@@ -404,24 +433,6 @@ function sort(data)
 	return new_data;
 }
 
-function interpolate(data, dates)
-{
-	var new_data = {x: dates, y:[]};
-	var j = 0;
-    for (i = 0 ; i < dates.length ; ++i)
-    {
-        new_data.y.push(0);
-        for (j = 0 ; j < data.x.length ; ++j)
-        {
-            if (data.x[j]-dates[i]<=0)
-            {
-                new_data.y[i] = data.y[j];
-            }
-        }
-    }
-	return new_data;
-}
-
 function get_cumulated_points(phase, tasks, T0, dates, canvas_type, legend)
 {
     var legend = typeof(legend)=='undefined' ? phase : legend;
@@ -431,10 +442,9 @@ function get_cumulated_points(phase, tasks, T0, dates, canvas_type, legend)
     return get_canvas_JS_data(data.x,data.y,legend,canvas_type);
 }
 
-function plot_cumulative_workflow(yaml_data,T0)
+function plot_cumulative_workflow(yaml_data,T0,all_dates)
 {
     var divname = 'cumulative_workflow';
-    var all_dates = get_all_dates(yaml_data, T0);
     var tasks = convert_stories_to_tasks(yaml_data.stories);
 
     var backlog = get_cumulated_points('backlog', select_tasks_by_phase(tasks, 'backlog'), T0, all_dates, "area");
@@ -443,11 +453,10 @@ function plot_cumulative_workflow(yaml_data,T0)
     plot(divname, [backlog,started,done], 'Date', 'Nb of points');
 }
 
-function plot_cumulative_workflow_by_type(yaml_data,T0)
+function plot_cumulative_workflow_by_type(yaml_data,T0,all_dates)
 {
     var stuff_to_plot = [];
     var divname = 'cumulative_workflow_by_type';
-    var all_dates = get_all_dates(yaml_data, T0);
     var tasks = convert_stories_to_tasks(yaml_data.stories);
     var interface_ = get_cumulated_points('done', select_tasks_by_type(tasks,'interface'), T0, all_dates, "line", 'Interface');
     var kernel = get_cumulated_points('done', select_tasks_by_type(tasks,'kernel'), T0, all_dates, "line", 'Kernel');
@@ -534,6 +543,68 @@ function get_percentage_completed(story)
     return Math.floor(100*completed/size+0.5);
 }
 
+function get_task(task, divid)
+{
+    var table_row = document.createElement('tr');
+    table_row.setAttribute('class', 'task');
+    table_row.setAttribute('id', divid);
+    
+    var task_name = document.createElement('td');
+    task_name.setAttribute('id', divid + 'name');
+    task_name.innerHTML = task.task;
+    if ("done" in task)
+    {
+        task_name.setAttribute('class', 'taskdone');
+    }
+    else
+    {
+        task_name.setAttribute('class', 'tasknotdone');
+    }
+    var size_div = document.createElement('td');
+    size_div.setAttribute('class', 'tasksize');
+    size_div.setAttribute('id', divid + 'size');
+    size_div.innerHTML = task.size;
+    var assignee_div = document.createElement('td');
+    assignee_div.setAttribute('class', 'taskassignee');
+    assignee_div.setAttribute('id', divid + 'assignee');
+    assignee_div.innerHTML = task['assigned to'];
+    
+    table_row.appendChild(task_name);
+    table_row.appendChild(size_div);
+    table_row.appendChild(assignee_div);
+    return table_row;
+}
+
+function add_tasks_to_div(tasks, divid, div)
+{
+    var tasks_div = document.createElement('div');
+    tasks_div.setAttribute('class', 'tasks');
+    tasks_div.setAttribute('id', divid + "tasks");
+    var table = document.createElement('table');
+    table.setAttribute('id', divid + "table");
+    table.setAttribute('class', 'tasks');
+    var title_row = document.createElement('tr');
+    var title1 = document.createElement('th');
+    var title2 = document.createElement('th');
+    var title3 = document.createElement('th');
+    title1.innerHTML = 'Task';
+    title2.innerHTML = 'Size';
+    title3.innerHTML = 'Assignee';
+    title1.setAttribute('align', 'left');
+    title3.setAttribute('align', 'right');
+    title_row.appendChild(title1);
+    title_row.appendChild(title2);
+    title_row.appendChild(title3);
+    table.appendChild(title_row);
+    
+    for (i in tasks)
+    {
+        table.appendChild(get_task(tasks[i], divid + " task " + i));
+    }
+    div.appendChild(table);
+
+}
+
 function progress_bars(stories)
 {
     var max_length = 30;//get_max_name_length(stories);
@@ -541,7 +612,9 @@ function progress_bars(stories)
     {
         var story = stories[i];
         var percent_complete = get_percentage_completed(story);
-        add_progress_bar(story.story, percent_complete, max_length);
+        var divid = "story_"+i;
+        var div = add_progress_bar(divid, story.story, percent_complete, max_length);
+        add_tasks_to_div(story.tasks,divid,div);
     }
 }
 
@@ -550,10 +623,11 @@ window.onload = function(started)
     var yaml_data = YAML.load("planning_tool.yml");
     var resource_usage = YAML.load("resource_usage.yml");
     var T0 = make_date(yaml_data.start);
+    var all_dates = get_all_dates(yaml_data, resource_usage, T0);
     plot_remaining_budget(resource_usage);
-    plot_resource_usage(resource_usage);
-    plot_cumulative_workflow(yaml_data,T0);
+    plot_resource_usage(resource_usage,all_dates);
+    plot_cumulative_workflow(yaml_data,T0,all_dates);
 	plot_burndown_by_release(yaml_data, T0);
     progress_bars(yaml_data.stories);
-    plot_cumulative_workflow_by_type(yaml_data,T0)
+    plot_cumulative_workflow_by_type(yaml_data,T0,all_dates);
 };
