@@ -4,5 +4,5 @@
 while read line
 do
     echo "Executing $2 $line..."
-    ./$2 $line
+    ./$2 $line $3 $4 $5
 done < $1
