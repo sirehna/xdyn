@@ -3,6 +3,6 @@
 
 while read line
 do
-    echo "Executing $2 $line..."
-    ./$2 $line $3 $4 $5
+    echo "Executing $2 $3 $4 $5 $line..."
+    ./$2 $3 $4 $5 $line
 done < $1
