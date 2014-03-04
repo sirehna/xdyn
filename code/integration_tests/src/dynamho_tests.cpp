@@ -20,6 +20,9 @@
 #include <Eigen/Dense>
 #include <boost/algorithm/string.hpp>
 
+#include "simulator.hpp"
+
+
 dynamho_tests::dynamho_tests() : a(DataGenerator(21452))
 {
 }

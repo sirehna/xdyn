@@ -20,6 +20,7 @@ include_directories(${dynamic_model_INCLUDE_DIRS})
 include_directories(${data_source_INCLUDE_DIRS})
 include_directories(${simulation_INCLUDE_DIRS})
 include_directories(${physical_models_INCLUDE_DIRS})
+include_directories(${simulator_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 
