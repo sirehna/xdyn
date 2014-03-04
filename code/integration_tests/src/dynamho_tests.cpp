@@ -78,6 +78,7 @@ FORCE_MODULE(dynamho, hydrostatic, const auto p = PTR_GET(dynamho::inertia_param
                                    const auto g = PTR_GET(dynamho::geometry);\
                                    const auto a = PTR_GET(dynamho::euler_angles);\
                                    const Force f;\
+                                   (void)p;(void)g;(void)a;\
                                    PTR_SET(dynamho::hydrostatic, f))
 
 MODULE(dynamhoparser, const auto yaml = PTR_GET(dynamho::yaml);\
