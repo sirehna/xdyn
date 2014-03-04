@@ -16,4 +16,6 @@ http://130.66.124.6/svn/fee107/sdk external_data_structures
 http://130.66.124.6/svn/fee107/sdk physical_models
 http://130.66.124.6/svn/fee107/sdk test_utilities
 http://130.66.124.6/svn/fee107/sdk dynamic_model
+http://130.66.124.6/svn/fee107/sdk parser
 http://130.66.124.6/svn/baracuda/trunk/dynamho DyNaMHo
+http://130.66.124.6/svn/maroff/Product/Cpp/Tools decode_unit
