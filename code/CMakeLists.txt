@@ -118,7 +118,6 @@ ENDIF()
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
 
-set_target_properties(run-tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(parse PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(interpolation_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(simulation_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
