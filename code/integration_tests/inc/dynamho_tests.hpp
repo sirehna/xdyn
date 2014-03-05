@@ -8,10 +8,10 @@ class dynamho_tests : public ::testing::Test
 {
     protected:
         dynamho_tests();
-	    virtual ~dynamho_tests();
+        virtual ~dynamho_tests();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
+        DataGenerator a;
 
 };
 
