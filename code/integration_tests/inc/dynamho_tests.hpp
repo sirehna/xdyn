@@ -15,6 +15,7 @@ class dynamho_tests : public ::testing::Test
 
         DataGenerator a;
         std::string yaml;
+        DataSource make_ds(const std::string& yaml) const;
 };
 
 #endif  /* DYNAMHO_TESTS_HPP_ */
