@@ -23,7 +23,8 @@
 #include "simulator.hpp"
 
 
-dynamho_tests::dynamho_tests() : a(DataGenerator(21452))
+
+dynamho_tests::dynamho_tests() : a(DataGenerator(21452)), yaml(generate_yaml())
 {
 }
 
@@ -107,7 +108,7 @@ TEST_F(dynamho_tests, should_get_the_same_results_with_dynamho_and_DataSource)
 	ds.add<dynamhoparser>("parser");
 	APPEND_FORCE(dynamho::hydrostatic, ds);
 	const auto angles = parser.get_simulation_start_stop_parameters().initial_angles;
-	SET(ds,dynamho::euler_angles,angles);
+	//SET(ds,dynamho::euler_angles,angles);
 
 //! [dynamho_tests example]
 //! [dynamho_tests expected output]

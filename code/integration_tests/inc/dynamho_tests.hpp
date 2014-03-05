@@ -14,6 +14,7 @@ class dynamho_tests : public ::testing::Test
         virtual void TearDown();
 
         DataGenerator a;
+        std::string yaml;
 };
 
 #endif  /* DYNAMHO_TESTS_HPP_ */
