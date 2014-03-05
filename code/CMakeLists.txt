@@ -25,6 +25,8 @@ set(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include/yaml-cpp)
 set(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
+add_definitions(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
+add_definitions(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
