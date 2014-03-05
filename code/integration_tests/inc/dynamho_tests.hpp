@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
+#include "DataSource.hpp"
 
 class dynamho_tests : public ::testing::Test
 {
@@ -11,8 +12,8 @@ class dynamho_tests : public ::testing::Test
         virtual ~dynamho_tests();
         virtual void SetUp();
         virtual void TearDown();
-        DataGenerator a;
 
+        DataGenerator a;
 };
 
 #endif  /* DYNAMHO_TESTS_HPP_ */
