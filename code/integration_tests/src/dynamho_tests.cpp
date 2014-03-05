@@ -43,25 +43,23 @@ void dynamho_tests::TearDown()
 typedef  Eigen::SelfAdjointView<Eigen::Matrix<double, 6, 6>, Eigen::Upper> InertiaMatrix;
 typedef Eigen::Matrix<double, 6, 1> Force;
 
-DEFINE(simulator_base, list_of_forces, std::set<std::string>)
-
-#define FORCE_MODULE(ns, x, code) namespace ns {namespace x{static const std::string module_name = #x "ForceModule";MODULE(ForceModule, code)}}
+#define FORCE_MODULE(ns, x, code) namespace ns {namespace x{static const std::string signal_name = #ns "_" #x;MODULE(ForceModule, code)}}
 #define APPEND_FORCE(x, ds) ds.add<x::ForceModule>(#x);\
 	                        try\
 	                        {\
 	                        	ds.get<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name);\
-                            }\
-                            catch (const DataSourceException& exc)\
-                            {\
-                            	ds.set<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name,simulator_base::list_of_forces::_type());\
-                            }\
-	                        {\
-	                            auto __v = ds.get<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name);\
-	                            __v.insert(x::module_name);\
-	                            ds.set<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name,__v);\
-	                        }
+                                }\
+                                catch (const DataSourceException& exc)\
+                                {\
+                                    ds.set<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name,simulator_base::list_of_forces::_type());\
+                                }\
+                                    {\
+                                        auto __v = ds.get<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name);\
+                                        __v.insert(x::signal_name);\
+                                        ds.set<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name,__v);\
+                                    }
 
-
+DEFINE(simulator_base, list_of_forces, std::set<std::string>)
 DEFINE(dynamho, sim_start_stop, SimulationStartStopParameters)
 DEFINE(dynamho, inertia_matrix, InertiaMatrix)
 DEFINE(dynamho, inertia_parameters, Inertia)
