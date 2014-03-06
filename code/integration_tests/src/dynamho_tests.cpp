@@ -395,7 +395,7 @@ template<> EulerAngles<double> TypedScalarDataGenerator<EulerAngles<double> >::g
 TEST_F(dynamho_tests, Fx_hydrostatic_should_be_zero_for_mu_equal_to_one)
 {
     auto ds = make_ds(yaml);
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 100 ; ++i)
     {
         const EulerAngles<double> angles = a.random<EulerAngles<double> >();
         SET(ds,dynamho::euler_angles,angles);
@@ -412,7 +412,7 @@ TEST_F(dynamho_tests, Fx_hydrostatic_should_be_equal_to_g)
 {
     auto ds = make_ds(yaml);
     const double expected = 60.82*99.44*0.9993*1026*9.81;
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 100 ; ++i)
     {
         EulerAngles<double> angles = a.random<EulerAngles<double> >();
         angles.theta = PI/2.;
@@ -428,7 +428,7 @@ TEST_F(dynamho_tests, Fx_hydrostatic_should_be_equal_to_g)
 TEST_F(dynamho_tests, can_retrieve_hydrostatic_forces)
 {
     auto ds = make_ds(yaml);
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 100 ; ++i)
     {
         const EulerAngles<double> angles(a.random<double>(),PI/4.,a.random<double>());
         SET(ds,dynamho::euler_angles,angles);
