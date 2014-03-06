@@ -353,6 +353,19 @@ DataSource dynamho_tests::make_ds(const std::string& yaml_) const
     SET(ds,dynamho::angles_de_barre,start.initial_angles);
     SET(ds,dynamho::euler_angles,start.initial_state.p.angle);
 
+    DEFINE_DERIVATIVE(dynamho::x, dynamho::dx_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::y, dynamho::dy_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::z, dynamho::dz_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::phi, dynamho::dphi_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::theta, dynamho::dtheta_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::psi, dynamho::dpsi_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::u, dynamho::du_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::v, dynamho::dv_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::w, dynamho::dw_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::p, dynamho::dp_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::q, dynamho::dq_dt, ds);
+    DEFINE_DERIVATIVE(dynamho::r, dynamho::dr_dt, ds);
+
     ds.add<inertia_parser>("inertia_parser");
     ds.add<geometry_parser>("geometry_parser");
     ds.add<hydrodynamic_parser>("hydrodynamic_parser");
