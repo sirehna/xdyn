@@ -460,6 +460,12 @@ TEST_F(dynamho_tests, can_retrieve_sum_of_all_forces)
     const Force F = GET(ds, dynamho::sum_of_all_forces);
 }
 
+TEST_F(dynamho_tests, can_retrieve_X_dot)
+{
+    auto ds = make_ds(yaml);
+    const State<double> x_dot = GET(ds, dynamho::state_derivatives);
+}
+
 TEST_F(dynamho_tests, can_retrieve_the_matrix_pqr2phithetapsi)
 {
     auto ds = make_ds(yaml);
