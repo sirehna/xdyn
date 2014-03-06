@@ -216,6 +216,24 @@ MODULE(sum_of_all_forces, const auto forces = PTR_GET(simulator_base::list_of_fo
                           }\
                           PTR_SET(dynamho::sum_of_all_forces,Ftot);)
 
+MODULE(kinematics, const auto R1 = PTR_GET(dynamho::uvw2xyz_dot);\
+                   const auto R2 = PTR_GET(dynamho::pqr2phithetapsi);\
+                   const auto s = PTR_GET(dynamho::speed);\
+                   Eigen::Vector3d pqr;\
+                   pqr(0) = s.rot.p;\
+                   pqr(1) = s.rot.q;\
+                   pqr(2) = s.rot.r;\
+                   Eigen::Vector3d uvw;\
+                   uvw(0) = s.trans.u;\
+                   uvw(1) = s.trans.v;\
+                   uvw(2) = s.trans.w;\
+                   Eigen::Vector3d phithetapsi_dot;\
+                   Eigen::Vector3d xyz_dot;\
+                   if (not(ds->read_only())) xyz_dot = R1*uvw;\
+                   if (not(ds->read_only())) phithetapsi_dot = R2*pqr;\
+                   PTR_SET(dynamho::xyz_dot,xyz_dot);\
+                   PTR_SET(dynamho::phithetapsi_dot,phithetapsi_dot);\
+                   )
 DataSource dynamho_tests::make_ds(const std::string& yaml_) const
 {
     DataSource ds;
