@@ -43,7 +43,9 @@ void dynamho_tests::TearDown()
 }
 
 typedef Eigen::Matrix<double, 6, 6> InertiaMatrix;
+typedef Eigen::Matrix<double, 3, 3> RotationMatrix;
 typedef Eigen::Matrix<double, 6, 1> Force;
+typedef Eigen::Matrix<double, 6, 1> Uvwpqr;
 
 #define FORCE_MODULE(ns, x, code) namespace ns {namespace x{static const std::string signal_name = #ns "_" #x;MODULE(ForceModule, code)}}
 #define APPEND_FORCE(x, ds) ds.add<x::ForceModule>(#x);\
