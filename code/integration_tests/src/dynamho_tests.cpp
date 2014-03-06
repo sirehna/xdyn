@@ -176,6 +176,22 @@ MODULE(rotationmatrix, const auto euler = PTR_GET(dynamho::euler_angles);\
                        PTR_SET(dynamho::pqr2phithetapsi, R);)
 
 
+MODULE(uvw2xyz_dot,   const auto euler = PTR_GET(dynamho::euler_angles);\
+                      const double phi = euler.phi;\
+                      const double theta = euler.theta;\
+                      const double psi = euler.psi;\
+                      RotationMatrix R;\
+                      R(0,0) = cos(psi)*cos(theta);\
+                      R(0,1) = cos(psi)*sin(theta)*sin(phi)-sin(psi)*cos(phi);\
+                      R(0,2) = sin(psi)*sin(phi)+cos(psi)*sin(theta)*cos(phi);\
+                      R(1,0) = sin(psi)*cos(theta);\
+                      R(1,1) = cos(psi)*cos(phi)+sin(psi)*sin(theta)*sin(phi);\
+                      R(1,2) = sin(psi)*sin(theta)*cos(phi)-cos(psi)*sin(phi);\
+                      R(2,0) = -sin(theta);\
+                      R(2,1) = cos(theta)*sin(phi);\
+                      R(2,2) = cos(theta)*cos(phi);\
+                      PTR_SET(dynamho::uvw2xyz_dot, R);)
+
 MODULE(inertia_parser, const auto parser = PTR_GET(dynamho::yaml_parser);\
                 Inertia I;\
                 if (not(ds->read_only())) I = parser->get_inertia();\
