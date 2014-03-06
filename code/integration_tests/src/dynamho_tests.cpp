@@ -301,6 +301,12 @@ TEST_F(dynamho_tests, can_retrieve_sum_of_all_forces)
     const Force F = GET(ds, dynamho::sum_of_all_forces);
 }
 
+TEST_F(dynamho_tests, can_retrieve_the_matrix_pqr2phithetapsi)
+{
+    auto ds = make_ds(yaml);
+    const auto R = GET(ds, dynamho::pqr2phithetapsi);
+}
+
 TEST_F(dynamho_tests, DISABLED_should_get_the_same_results_with_dynamho_and_DataSource)
 {
 //! [dynamho_tests example]
