@@ -160,6 +160,22 @@ MODULE(dynamhoparser, const auto yaml = PTR_GET(dynamho::yaml);\
                       if (not(ds->read_only())) parser.reset(new DynamhoYamlParser(yaml));\
                       PTR_SET(dynamho::yaml_parser, parser);)
 
+MODULE(rotationmatrix, const auto euler = PTR_GET(dynamho::euler_angles);\
+                       const double phi = euler.phi;\
+                       const double theta = euler.theta;\
+                       RotationMatrix R;\
+                       R(0,0) = 1;\
+                       R(0,1) = tan(theta)*sin(phi);\
+                       R(0,2) = tan(theta)*cos(phi);\
+                       R(1,0) = 0;\
+                       R(1,1) = cos(phi);\
+                       R(1,2) = -sin(phi);\
+                       R(2,0) = 0;\
+                       R(2,1) = sin(phi)/cos(theta);\
+                       R(2,2) = cos(phi)/cos(theta);\
+                       PTR_SET(dynamho::pqr2phithetapsi, R);)
+
+
 MODULE(inertia_parser, const auto parser = PTR_GET(dynamho::yaml_parser);\
                 Inertia I;\
                 if (not(ds->read_only())) I = parser->get_inertia();\
