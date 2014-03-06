@@ -275,6 +275,69 @@ MODULE(vectorize, State<double> state_derivative;\
                   PTR_SET(dynamho::state_derivatives,state_derivative);\
                   )
 
+MODULE(inertia_computer, InertiaMatrix M;\
+size_t i = 0;\
+size_t j = 0;\
+const GeometryAndEnvironment G = PTR_GET(dynamho::geometry);\
+const auto I = PTR_GET(dynamho::inertia_parameters);\
+const double Mu = I.Mu;\
+const double Xg = G.Xg;\
+const double Yg = G.Yg;\
+const double Zg = G.Zg;\
+const double X_1 = I.X_1;\
+const double X_2 = I.X_2;\
+const double X_13 = I.X_13;\
+const double X_3 = I.X_3;\
+const double L = G.L;\
+M(i,j++) = +Mu;\
+ M(i,j++) = 0;\
+ M(i,j++) = 0;\
+ M(i,j++) = 0;\
+ M(i,j++) = +Mu * Zg;\
+ M(i++,j++) = -Mu * Yg;\
+ /* row 2 */
+ j = 0;\
+ M(i,j++) = 0;\
+ M(i,j++) = +Mu;\
+ M(i,j++) = 0;\
+ M(i,j++) = -Mu * Zg;\
+ M(i,j++) = 0;\
+ M(i++,j++) = +Mu * Xg;\
+ /* row 3 */
+ j = 0;\
+ M(i,j++) = 0;\
+ M(i,j++) = 0;\
+ M(i,j++) = +Mu;\
+ M(i,j++) = +Mu * Yg;\
+ M(i,j++) = -Mu * Xg;\
+ M(i++,j++) = 0;\
+ /* row 4 */
+ j = 0;\
+ M(i,j++) = 0;\
+ M(i,j++) = -Mu  * Zg;\
+ M(i,j++) = +Mu  * Yg;\
+ M(i,j++) = +L*L * X_1;\
+ M(i,j++) = 0;\
+ M(i++,j++) = -L*L * X_13;\
+ /* row 5 */
+ j = 0;\
+ M(i,j++) = +Mu  * Zg;\
+ M(i,j++) = 0;\
+ M(i,j++) = -Mu  * Xg;\
+ M(i,j++) = 0;\
+ M(i,j++) = +L*L * X_2;\
+ M(i++,j++) = 0;\
+ /* row 6 */
+ j = 0;\
+ M(i,j++) = -Mu  * Yg;\
+ M(i,j++) = +Mu  * Xg;\
+ M(i,j++) = 0;\
+ M(i,j++) = -L*L * X_13;\
+ M(i,j++) = 0;\
+ M(i,j) = L*L  * X_3;\
+ PTR_SET(dynamho::inertia_matrix, M);\
+)
+
 DataSource dynamho_tests::make_ds(const std::string& yaml_) const
 {
     DataSource ds;
