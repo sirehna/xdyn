@@ -242,6 +242,39 @@ MODULE(dynamics, const auto M = PTR_GET(dynamho::inertia_matrix);\
                  PTR_SET(dynamho::uvwpqr_dot, uvwpqr_dot);\
        )
 
+MODULE(scalarize, const auto xyz_dot = PTR_GET(dynamho::xyz_dot);\
+                  const auto phithetapsi_dot = PTR_GET(dynamho::phithetapsi_dot);\
+                  const auto uvwpqr_dot = PTR_GET(dynamho::uvwpqr_dot);\
+                  PTR_SET(dynamho::dx_dt, xyz_dot(0));\
+                  PTR_SET(dynamho::dy_dt, xyz_dot(1));\
+                  PTR_SET(dynamho::dz_dt, xyz_dot(2));\
+                  PTR_SET(dynamho::dphi_dt, phithetapsi_dot(0));\
+                  PTR_SET(dynamho::dtheta_dt, phithetapsi_dot(1));\
+                  PTR_SET(dynamho::dpsi_dt, phithetapsi_dot(2));\
+                  PTR_SET(dynamho::du_dt, uvwpqr_dot(0));\
+                  PTR_SET(dynamho::dv_dt, uvwpqr_dot(1));\
+                  PTR_SET(dynamho::dw_dt, uvwpqr_dot(2));\
+                  PTR_SET(dynamho::dp_dt, uvwpqr_dot(3));\
+                  PTR_SET(dynamho::dq_dt, uvwpqr_dot(4));\
+                  PTR_SET(dynamho::dr_dt, uvwpqr_dot(5));\
+)
+
+MODULE(vectorize, State<double> state_derivative;\
+                  state_derivative.p.coord.x = PTR_GET(dynamho::dx_dt);\
+                  state_derivative.p.coord.y = PTR_GET(dynamho::dy_dt);\
+                  state_derivative.p.coord.z = PTR_GET(dynamho::dz_dt);\
+                  state_derivative.p.angle.phi = PTR_GET(dynamho::dphi_dt);\
+                  state_derivative.p.angle.theta = PTR_GET(dynamho::dtheta_dt);\
+                  state_derivative.p.angle.psi = PTR_GET(dynamho::dpsi_dt);\
+                  state_derivative.s.trans.u = PTR_GET(dynamho::du_dt);\
+                  state_derivative.s.trans.v = PTR_GET(dynamho::dv_dt);\
+                  state_derivative.s.trans.w = PTR_GET(dynamho::dw_dt);\
+                  state_derivative.s.rot.p = PTR_GET(dynamho::dp_dt);\
+                  state_derivative.s.rot.q = PTR_GET(dynamho::dq_dt);\
+                  state_derivative.s.rot.r = PTR_GET(dynamho::dr_dt);\
+                  PTR_SET(dynamho::state_derivatives,state_derivative);\
+                  )
+
 DataSource dynamho_tests::make_ds(const std::string& yaml_) const
 {
     DataSource ds;
