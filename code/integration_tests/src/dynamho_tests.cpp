@@ -323,6 +323,12 @@ TEST_F(dynamho_tests, can_retrieve_the_matrix_pqr2phithetapsi)
     const auto R = GET(ds, dynamho::pqr2phithetapsi);
 }
 
+TEST_F(dynamho_tests, can_retrieve_the_matrix_uvw2xyz_dot)
+{
+    auto ds = make_ds(yaml);
+    const auto R = GET(ds, dynamho::uvw2xyz_dot);
+}
+
 TEST_F(dynamho_tests, DISABLED_should_get_the_same_results_with_dynamho_and_DataSource)
 {
 //! [dynamho_tests example]
