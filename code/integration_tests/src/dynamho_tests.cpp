@@ -478,17 +478,19 @@ TEST_F(dynamho_tests, can_retrieve_the_matrix_uvw2xyz_dot)
     const auto R = GET(ds, dynamho::uvw2xyz_dot);
 }
 
-TEST_F(dynamho_tests, DISABLED_should_get_the_same_results_with_dynamho_and_DataSource)
+TEST_F(dynamho_tests, should_get_the_same_initialization_with_dynamho_and_DataSource)
 {
 //! [dynamho_tests example]
     const DynamhoYamlParser parser(yaml);
     DynamhoSimulation dynamho(parser.get_simulation_parameters());
     const auto out1 = dynamho.initialize(parser.get_simulation_start_stop_parameters());
     ASSERT_DOUBLE_EQ(0,out1.ship_states.p.coord.x);
-
-    bool implemented = false;
+    auto ds = make_ds(yaml);
 //! [dynamho_tests example]
 //! [dynamho_tests expected output]
-    ASSERT_TRUE(implemented);
+    const State<double> x_dot = GET(ds, dynamho::state_derivatives);
+    ASSERT_DOUBLE_EQ(parser.get_simulation_start_stop_parameters().initial_state.s.trans.u,x_dot.p.coord.x);
+    ASSERT_DOUBLE_EQ(parser.get_simulation_start_stop_parameters().initial_state.s.trans.v,x_dot.p.coord.y);
+    ASSERT_DOUBLE_EQ(parser.get_simulation_start_stop_parameters().initial_state.s.trans.w,x_dot.p.coord.z);
 //! [dynamho_tests expected output]
 }
