@@ -370,6 +370,13 @@ DataSource dynamho_tests::make_ds(const std::string& yaml_) const
     ds.add<geometry_parser>("geometry_parser");
     ds.add<hydrodynamic_parser>("hydrodynamic_parser");
     ds.add<sum_of_all_forces>("Sum of forces");
+    ds.add<rotationmatrix>("From p,q,r to phi_dot,theta_dot,psi_dot");
+    ds.add<uvw2xyz_dot>("From u,v,w to x_dot,y_dot,z_dot");
+    ds.add<kinematics>("Kinematics");
+    ds.add<dynamics>("Dynamic model");
+    ds.add<vectorize>("Vectorize");
+    ds.add<scalarize>("Scalarize");
+    ds.add<inertia_computer>("Inertia Matrix");
     APPEND_FORCE(dynamho::hydrostatic, ds);
     APPEND_FORCE(dynamho::inertial_coupling, ds);
     APPEND_FORCE(dynamho::hydrodynamic, ds);
