@@ -42,7 +42,7 @@ void dynamho_tests::TearDown()
 {
 }
 
-typedef  Eigen::SelfAdjointView<Eigen::Matrix<double, 6, 6>, Eigen::Upper> InertiaMatrix;
+typedef Eigen::Matrix<double, 6, 6> InertiaMatrix;
 typedef Eigen::Matrix<double, 6, 1> Force;
 
 #define FORCE_MODULE(ns, x, code) namespace ns {namespace x{static const std::string signal_name = #ns "_" #x;MODULE(ForceModule, code)}}
