@@ -347,7 +347,6 @@ DataSource dynamho_tests::make_ds(const std::string& yaml_) const
     ds.add<dynamhoparser>("parser");
     const auto parser = GET(ds, dynamho::yaml_parser);
     const auto start = parser->get_simulation_start_stop_parameters();
-
     SET(ds,dynamho::speed,start.initial_state.s);
     SET(ds,dynamho::CzB2,0);
     SET(ds,dynamho::Yb2B,0);
