@@ -153,6 +153,16 @@ Development will follow the Git branching model described [here](http://nvie.com
 * EOL should be Unix-styles with LF characters.
 * File should be UTF-8 encoded.
 * Committed files should not contain any trailing spaces.
+* Class names are CamelCase & start with an uppercase letter
+* Namespaces & variables are lower case, separated by underscores
+* No m_ in front of member variables (need for such a convention is a sign
+  classes have too many members)
+* Use RAI objects (such as std::tr1::shared_ptr) for memory management
+* In general, there should not be more than half a dozen members & half a dozen
+  methods per class
+* Use forward-declarations (if practical) to split compilation units
+* Heavy use of STL & external, proven libraries (such as boost, Lapack, Blas, Eigen...)
+  (do not reinvent the wheel)
 * For more informations, check the [wiki](http://sir6:8080/xwiki/bin/view/Espace+de+travail+commun/Checklist+de+Revue+de+code).
 
 # Compilation instructions
