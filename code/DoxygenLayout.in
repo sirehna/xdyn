@@ -20,6 +20,7 @@
     </tab>
     <tab type="examples" visible="yes" title="" intro=""/>
     <tab type="user" url="list_of_functionalities.html" title="List of functionalities"/>
+    <tab type="user" url="concepts.html" title="Concepts"/>
     <tab type="user" url="dev_guide.html" title="Developer guide"/>
   </navindex>
 

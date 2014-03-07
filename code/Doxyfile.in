@@ -665,6 +665,7 @@ INPUT                  = "@CMAKE_CURRENT_SOURCE_DIR@/data_source" \
                          "@CMAKE_CURRENT_SOURCE_DIR@/data_source/module_documentation.txt" \
                          "@CMAKE_CURRENT_SOURCE_DIR@/simulation" \
                          "@CMAKE_CURRENT_SOURCE_DIR@/simulation/module_documentation.txt" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/simulator/concepts.txt" \
                          "@CMAKE_CURRENT_SOURCE_DIR@/DoxygenMainPage.txt"
 
 

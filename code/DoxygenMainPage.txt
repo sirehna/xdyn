@@ -3,7 +3,13 @@
 \tableofcontents
 
 \section desription Description
-This project
+This project aims at implementing a ship simulator. The documentation is generated
+using Doxygen & is divided in the following sections :
+
+- \ref Overview
+- \ref Concepts: (cf. <a href="http://www.boost.org/doc/libs/1_55_0/libs/concept_check/concept_check.htm">Boost Concepts</a>)
+  describes the set of requirements consisting of valid expressions, associated
+  types, invariants, and complexity guarantees.
 
 
 */
