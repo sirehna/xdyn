@@ -80,6 +80,7 @@ SET(TEST_EXE run_all_tests)
 ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:data_source_tests>
         $<TARGET_OBJECTS:data_source_serializers_tests>
+        $<TARGET_OBJECTS:interpolation_tests>
         $<TARGET_OBJECTS:physical_models_object>
         $<TARGET_OBJECTS:random_data_generator_tests>
         $<TARGET_OBJECTS:text_file_reader_tests>
@@ -121,7 +122,6 @@ INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
 
 set_target_properties(parse PROPERTIES EXCLUDE_FROM_ALL TRUE)
-set_target_properties(interpolation_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(simulation_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(make_test_data PROPERTIES EXCLUDE_FROM_ALL TRUE)
 set_target_properties(test_utilities_object PROPERTIES EXCLUDE_FROM_ALL TRUE)
