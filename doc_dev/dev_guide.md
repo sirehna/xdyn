@@ -165,7 +165,43 @@ Development will follow the Git branching model described [here](http://nvie.com
   (do not reinvent the wheel)
 * For more informations, check the [wiki](http://sir6:8080/xwiki/bin/view/Espace+de+travail+commun/Checklist+de+Revue+de+code).
 
-# Compilation instructions
+# Instructions to setup the development environment
+
+## Get the source code
+
+* Create an RSA key. For example, under MinGW, use ``ssh-keygen``. Please note
+  that changing terminal often implies a different location of the configuration
+  files which may lead to SSH not seeing the public RSA key.
+* Send the public key (``.pub`` extension) to the system administrator
+* The system administrator adds the key to ``/sir7/home/people/git_simulateur/.ssh/authorized_keys``
+* Test the setup is correct by running ``ssh git_simulateur@sir7`` from a MinGW
+  terminal. If a prompt appears, setup is correct. If a password is requested,
+  the RSA key was not found.
+* You can then run ``git clone ssh://git_simulateur@130.66.124.7/home/public/DOP/EtudesEnCours/ETI140043/simulator.git``
+  which will retrieve the source code.
+
+## Instructions for Eclipse
+This is how to setup the build environment, in seven easy steps.
+
+1. Create a new project from Eclipse
+    ![Right-click - New Project](create_eclipse_project.png)
+2. Select C++ Project
+    ![Select C++ Project](create_eclipse_project_2.png)
+3. Don't use default location
+    ![Don't use default location](create_eclipse_project_3_1.png)
+4. Choose "Empty Project"
+    ![Choose Empty project](create_eclipse_project_3_2.png)
+5. Choose MinGW GCC toolchain
+    ![MinGW GCC Toolchain](create_eclipse_project_3_3.png)
+6. Select build location
+    ![Change project properties](create_eclipse_project_4.png)
+    ![Check we're using external builder](create_eclipse_project_4_1.png)
+    ![Change build location to ${workspace}/build](create_eclipse_project_4_2.png)
+7. Create build targets
+    ![New target](create_eclipse_project_5.png)
+    ![Target parameters](create_eclipse_project_6.png)
+
+## Building
 
 Below are the typical commands to run to compile the simulator:
 
