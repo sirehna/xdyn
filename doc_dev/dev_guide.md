@@ -146,7 +146,7 @@ Development will follow the Git branching model described [here](http://nvie.com
 
 * Each new feature should be developed in a new branch.
 * While developing these new features, a rebase on the trunk should be run regularly
-  to merge possible conflicts as soon as possible, in the feature branch.
+  to fix possible merge conflicts as soon as possible, from the feature branch.
 
 ## Coding rules
 
