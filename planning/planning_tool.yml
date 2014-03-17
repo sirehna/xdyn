@@ -109,10 +109,11 @@ stories:
       started: 17/2/2014
       assigned to: cec
       backlog: 17/2/2014
-    - task: DataSource (de)serialization for replay
+    - task: DataSource (de)serialization for replay (principle & base class)
       type: kernel
       size: 8
       started: 26/2/2014
+      done: 3/3/2014
       assigned to: cec
       backlog: 24/2/2014
     - task: Architecture tests
@@ -146,6 +147,7 @@ stories:
       size: 2
       assigned to: cec
       backlog: 17/2/2014
+      done: 17/2/2014
     - task: Add main executable to build
       type: internal
       size: 4
@@ -183,3 +185,16 @@ stories:
       size: 2
       assigned to: cec
       backlog: 17/2/2014
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1779>Follow-up on first steering committee</a>
+    due by: 17/4/2014
+    tasks:
+    - task: Show velocity on planning
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 17/3/2014
+    - task: Document dynamic problem resolution
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 17/3/2014
