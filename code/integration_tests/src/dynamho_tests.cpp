@@ -441,7 +441,7 @@ TEST_F(dynamho_tests, can_retrieve_hydrostatic_forces)
         ASSERT_DOUBLE_EQ(0, F(5));
     }
 }
-
+/*
 TEST_F(dynamho_tests, can_retrieve_inertial_coupling_forces)
 {
     auto ds = make_ds(yaml);
@@ -477,7 +477,7 @@ TEST_F(dynamho_tests, can_retrieve_the_matrix_uvw2xyz_dot)
     auto ds = make_ds(yaml);
     const auto R = GET(ds, dynamho::uvw2xyz_dot);
 }
-
+*/
 TEST_F(dynamho_tests, should_get_the_same_initialization_with_dynamho_and_DataSource)
 {
 //! [dynamho_tests example]
