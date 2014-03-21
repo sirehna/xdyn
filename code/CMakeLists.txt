@@ -79,6 +79,7 @@ SET(TEST_EXE run_all_tests)
 
 ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:data_source_tests>
+        $<TARGET_OBJECTS:simulator_tests>
         $<TARGET_OBJECTS:data_source_serializers_tests>
         $<TARGET_OBJECTS:interpolation_tests>
         $<TARGET_OBJECTS:physical_models_object>
