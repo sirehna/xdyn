@@ -29,4 +29,6 @@
 
 DEFINE(simulator_base, list_of_forces, std::set<std::string>)
 
+#define DEFINE_DERIVATIVE(x, dx_dt, ds) ds.define_derivative(x::_name, dx_dt::_name);
+
 #endif /* DSSYSTEMMACROS_HPP_ */

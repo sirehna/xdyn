@@ -325,8 +325,6 @@ M(i,j++) = +Mu;\
  PTR_SET(dynamho::inertia_matrix, M);\
 )
 
-#define DEFINE_DERIVATIVE(x, dx_dt, ds) ds.define_derivative(x::_name, dx_dt::_name);
-
 DataSource dynamho_tests::make_ds(const std::string& yaml_) const
 {
     DataSource ds;
