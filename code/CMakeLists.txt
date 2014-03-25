@@ -48,6 +48,7 @@ ADD_SUBDIRECTORY(dynamic_model)
 ADD_SUBDIRECTORY(dynamho_interface)
 ADD_SUBDIRECTORY(physical_models)
 ADD_SUBDIRECTORY(simulator)
+ADD_SUBDIRECTORY(ds_integration)
 ADD_SUBDIRECTORY(integration_tests)
 ADD_SUBDIRECTORY(DyNaMHo)
 
@@ -65,6 +66,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         yaml_parser_static
         decode_unit_static
         data_source_serializers_static
+        ds_integration_static
         yaml-cpp
         )
 
@@ -93,6 +95,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:dynamho_yaml_data_generator>
         $<TARGET_OBJECTS:parser_object>
         $<TARGET_OBJECTS:dynamho_interface_object>
+        $<TARGET_OBJECTS:ds_integration_tests>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
