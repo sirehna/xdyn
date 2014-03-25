@@ -1,4 +1,4 @@
-/*
+ /*
  * dynamho_tests.cpp
  *
  *  Created on: 24 févr. 2014
@@ -15,6 +15,9 @@
 #include "hydrostatic.hpp"
 #include "inertia_coupling.hpp"
 #include "propulsion.hpp"
+
+#include "DsSystemMacros.hpp"
+
 #include "test_macros.hpp"
 
 #include <Eigen/Dense>
@@ -46,22 +49,6 @@ typedef Eigen::Matrix<double, 6, 6> InertiaMatrix;
 typedef Eigen::Matrix<double, 3, 3> RotationMatrix;
 typedef Eigen::Matrix<double, 6, 1> Force;
 typedef Eigen::Matrix<double, 6, 1> Uvwpqr;
-
-#define FORCE_MODULE(ns, x, code) namespace ns {namespace x{static const std::string signal_name = #ns "_" #x;MODULE(ForceModule, code)}}
-#define APPEND_FORCE(x, ds) ds.add<x::ForceModule>(#x);\
-	                        try\
-	                        {\
-	                        	ds.get<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name);\
-                                }\
-                                catch (const DataSourceException& exc)\
-                                {\
-                                    ds.set<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name,simulator_base::list_of_forces::_type());\
-                                }\
-                                    {\
-                                        auto __v = ds.get<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name);\
-                                        __v.insert(x::signal_name);\
-                                        ds.set<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name,__v);\
-                                    }
 
 DEFINE(simulator_base, list_of_forces, std::set<std::string>)
 DEFINE(dynamho, sim_start_stop, SimulationStartStopParameters)
