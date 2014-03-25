@@ -50,7 +50,7 @@ typedef Eigen::Matrix<double, 3, 3> RotationMatrix;
 typedef Eigen::Matrix<double, 6, 1> Force;
 typedef Eigen::Matrix<double, 6, 1> Uvwpqr;
 
-DEFINE(simulator_base, list_of_forces, std::set<std::string>)
+
 DEFINE(dynamho, sim_start_stop, SimulationStartStopParameters)
 DEFINE(dynamho, inertia_matrix, InertiaMatrix)
 DEFINE(dynamho, inertia_parameters, Inertia)

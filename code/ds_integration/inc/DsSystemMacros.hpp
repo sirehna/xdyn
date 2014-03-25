@@ -8,6 +8,9 @@
 #ifndef DSSYSTEMMACROS_HPP_
 #define DSSYSTEMMACROS_HPP_
 
+#include <set>
+#include "DataSource.hpp"
+
 #define FORCE_MODULE(ns, x, code) namespace ns {namespace x{static const std::string signal_name = #ns "_" #x;MODULE(ForceModule, code)}}
 #define APPEND_FORCE(x, ds) ds.add<x::ForceModule>(#x);\
                                 try\
@@ -23,5 +26,7 @@
                                         __v.insert(x::signal_name);\
                                         ds.set<simulator_base::list_of_forces::_type>(simulator_base::list_of_forces::_name,__v);\
                                     }
+
+DEFINE(simulator_base, list_of_forces, std::set<std::string>)
 
 #endif /* DSSYSTEMMACROS_HPP_ */
