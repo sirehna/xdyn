@@ -9,11 +9,9 @@
 #include "DsSystemMacros.hpp"
 #include "DataSource.hpp"
 #include "DataSourceModule.hpp"
-#include <Eigen/Dense>
 
 #include "test_macros.hpp"
 
-typedef Eigen::Matrix<double, 6, 1> Force;
 
 DsSystemTests::DsSystemTests() : a(DataGenerator(87514651))
 {
@@ -31,15 +29,17 @@ void DsSystemTests::TearDown()
 {
 }
 
-DEFINE(test, gravity, Force)
-
-FORCE_MODULE(test, ball,           Force g;\
-                                   g(3) = -9.81;\
-                                   PTR_SET(test::gravity, g))
+DEFINE(falling_ball, z, double)
+DEFINE(falling_ball, zdot, double)
+DEFINE(falling_ball, zdotdot, double)
 
 TEST_F(DsSystemTests, example)
 {
 //! [DsSystemTests example]
+    DataSource ds;
+    SET(ds, falling_ball::zdotdot, -9.81);
+    SET(ds, falling_ball::zdot, 0);
+    SET(ds, falling_ball::z, 0);
 //! [DsSystemTests example]
 //! [DsSystemTests expected output]
 //! [DsSystemTests expected output]
