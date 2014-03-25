@@ -109,6 +109,7 @@ stories:
       started: 17/2/2014
       assigned to: cec
       backlog: 17/2/2014
+      done: 21/3/2014
     - task: DataSource (de)serialization for replay (principle & base class)
       type: kernel
       size: 8
@@ -122,6 +123,7 @@ stories:
       assigned to: cec
       backlog: 17/2/2014
       started: 26/2/2014
+      done: 21/3/2014
     - task: Define test scenario
       type: kernel
       size: 2
@@ -185,6 +187,14 @@ stories:
       size: 2
       assigned to: cec
       backlog: 17/2/2014
+      started: 17/2/2014
+    - task: Send mail to Thierry Gautheret concerning intellectial property
+      type: kernel
+      size: 2
+      assigned to: cec
+      backlog: 24/3/2014
+      started: 24/3/2014
+      done: 24/3/2014
   - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1779>Follow-up on first steering committee</a>
     due by: 17/4/2014
     tasks:
