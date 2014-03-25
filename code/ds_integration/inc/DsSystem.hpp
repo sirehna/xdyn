@@ -12,7 +12,7 @@ class DSSystem
 {
     public:
         DSSystem();
-        virtual ~DSSystem();
+        ~DSSystem();
 };
 
 #endif /* DSSYSTEM_HPP_ */
