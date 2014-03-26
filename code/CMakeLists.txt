@@ -7,7 +7,12 @@ IF(NOT DEFINED CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug)
 ENDIF()
 
-SET(CMAKE_INSTALL_PREFIX ../install${CMAKE_BUILD_TYPE})
+IF(DEFINED INSTALL_PREFIX)
+    SET(CMAKE_INSTALL_PREFIX ${INSTALL_PREFIX})
+ELSE()
+    SET(CMAKE_INSTALL_PREFIX ../install${CMAKE_BUILD_TYPE})
+ENDIF()
+MESSAGE(STATUS "CMAKE_INSTALL_PREFIX :${CMAKE_INSTALL_PREFIX}")
 
 #############################################################################
 # Compilation configuration
