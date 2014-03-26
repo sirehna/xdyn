@@ -28,7 +28,15 @@
                                     }
 
 DEFINE(simulator_base, list_of_forces, std::set<std::string>)
+DEFINE(simulator_base, initial_time_step, double)
 
 #define DEFINE_DERIVATIVE(x, dx_dt, ds) ds.define_derivative(x::_name, dx_dt::_name);
+
+namespace solver
+{
+    typedef enum {RK4, EULER, RKCK54} SolverType;
+}
+
+DEFINE(simulator_base, stepper, solver::SolverType)
 
 #endif /* DSSYSTEMMACROS_HPP_ */
