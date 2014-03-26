@@ -85,6 +85,4 @@ void quicksolve(SystemType& sys, const double t0, const double tend, double dt, 
     solve_for_constant_step<StepperType,SystemType,ObserverType,DefaultScheduler,DefaultEventHandler>(sys,observer,stepper,scheduler,event_handler);
 }
 
-
-
 #endif /* SOLVE_HPP_ */
