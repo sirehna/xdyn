@@ -412,6 +412,7 @@ TEST_F(dynamho_tests, Fx_hydrostatic_should_be_equal_to_g)
 
 TEST_F(dynamho_tests, can_retrieve_hydrostatic_forces)
 {
+    const double EPS = 5E-3;
     auto ds = make_ds(yaml);
     for (size_t i = 0 ; i < 100 ; ++i)
     {
@@ -421,8 +422,8 @@ TEST_F(dynamho_tests, can_retrieve_hydrostatic_forces)
         ASSERT_DOUBLE_EQ(0, F(0));
         ASSERT_DOUBLE_EQ(0, F(1));
         ASSERT_DOUBLE_EQ(0, F(2));
-        ASSERT_DOUBLE_EQ(-0.3*9.81*cos(angles.theta)*sin(angles.phi)*60.82*99.44*0.9993*1026, F(3));
-        ASSERT_DOUBLE_EQ(-0.3*9.81*sin(PI/4.)*60.82*99.44*0.9993*1026, F(4));
+        ASSERT_NEAR(-0.3*9.81*cos(angles.theta)*sin(angles.phi)*60.82*99.44*0.9993*1026, F(3),EPS);
+        ASSERT_NEAR(-0.3*9.81*sin(PI/4.)*60.82*99.44*0.9993*1026, F(4),EPS);
         ASSERT_DOUBLE_EQ(0, F(5));
     }
 }
