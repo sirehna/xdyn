@@ -22,7 +22,17 @@ template <typename IteratorType, typename Stream> void serialize(Stream& os, con
     }
 }
 
-template <typename SystemType, typename StateType> class DefaultObserver
+class NullObserver
+{
+    public:
+        NullObserver() {}
+        template <typename SystemType, typename StateType> void observe(const SystemType& , const double )
+        {
+
+        }
+};
+
+template <typename SystemType> class DefaultObserver
 {
     public:
         DefaultObserver(std::ostream& os_) : os(os_), initialized(false) {}
