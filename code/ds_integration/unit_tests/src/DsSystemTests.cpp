@@ -7,9 +7,8 @@
 
 #include "DsSystemTests.hpp"
 #include "DsSystemMacros.hpp"
-#include "DataSource.hpp"
-#include "DataSourceModule.hpp"
-
+#include "DsSystem.hpp"
+#include "DsSolve.hpp"
 #include "test_macros.hpp"
 
 
@@ -40,6 +39,13 @@ TEST_F(DsSystemTests, example)
     SET(ds, falling_ball::zdotdot, -9.81);
     SET(ds, falling_ball::zdot, 0);
     SET(ds, falling_ball::z, 0);
+    SET(ds, simulator_base::initial_time_step, 1);
+    SET(ds, simulator_base::stepper, solver::EULER);
+    DEFINE_DERIVATIVE(falling_ball::z, falling_ball::zdot, ds);
+    DEFINE_DERIVATIVE(falling_ball::zdot, falling_ball::zdotdot, ds);
+    DefaultObserver<DSSystem> observer(std::cout);
+
+    integrate(ds, 0, 10, observer);
 //! [DsSystemTests example]
 //! [DsSystemTests expected output]
 //! [DsSystemTests expected output]

@@ -10,5 +10,6 @@ include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(${random_data_generator_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(${data_source_INCLUDE_DIRS})
+include_directories(${simulator_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME} OBJECT ${SRC})

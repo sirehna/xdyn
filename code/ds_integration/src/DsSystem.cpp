@@ -5,16 +5,26 @@
  *      Author: maroff
  */
 
-#include "C:/Transfert/simulator/code/ds_integration/inc/DsSystem.hpp"
+#include "DsSystem.hpp"
+#include "DataSource.hpp"
 
-DSSystem::DSSystem()
+DSSystem::DSSystem(DataSource& ds_) : state(std::vector<double>()), ds(ds_)
 {
-    // TODO Auto-generated constructor stub
+    state = ds.get_states();
+}
+
+void DSSystem::operator()(const std::vector<double>& x, std::vector<double>& dx_dt, double )
+{
+    ds.set_states(x);
+    ds.get_derivatives(dx_dt);
+}
+
+void DSSystem::update_discrete_states()
+{
 
 }
 
-DSSystem::~DSSystem()
+void DSSystem::update_continuous_states()
 {
-    // TODO Auto-generated destructor stub
+    ds.set_states(state);
 }
-
