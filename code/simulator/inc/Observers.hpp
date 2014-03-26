@@ -38,13 +38,13 @@ template <typename SystemType> class DefaultObserver
         DefaultObserver(std::ostream& os_) : os(os_), initialized(false) {}
         void observe(const SystemType& sys, const double t)
         {
-            const StateType x = sys.state;
+            const std::vector<double> x = sys.state;
             if (not(initialized))
             {
                 serialize_title(x.size());
                 initialized = true;
             }
-            StateType v;
+            std::vector<double> v;
             v.push_back(t);
             v.insert(v.end(), x.begin(), x.end());
             serialize(os, v.begin(), v.end());

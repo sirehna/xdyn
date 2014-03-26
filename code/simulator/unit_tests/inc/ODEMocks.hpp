@@ -39,9 +39,9 @@ class SystemWithMockButNoUpdate
 {
     public:
         SystemWithMockButNoUpdate(ODEMocks& mock_) : mock(mock_){}
-        void operator()(const std::vector<double>&v1, std::vector<double>&v2, double d)
+        void operator()(const std::vector<double>& x, std::vector<double>& dx_dt, double t)
         {
-            mock.model_function(v1,v2,d);
+            mock.model_function(x, dx_dt, t);
         }
 
         std::vector<double> state;
