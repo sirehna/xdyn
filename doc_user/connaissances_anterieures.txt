@@ -1,0 +1,34 @@
+﻿% Simulateur pour le Projet IRT Bassin Numérique - Connaissances antérieures SIREHNA
+% Charles-Edouard CADY
+
+Ce document vise à établir la liste des modules logiciels existant chez SIREHNA
+et utilisé dans le projet IRT Bassin Numérique.
+
+# Module "data_source"
+Conteneur de "signaux" calculés et de "modules" de calcul. Ce module infère
+automatiquement les dépendances entre signaux et modules et fournit la version
+la plus à jour de chaque signal, sans calcul inutile.
+
+# Module "solver"
+Module d'architecture, composé uniquement de fichiers d'en-tête (pas de DLL, donc)
+et composé de six éléments : (1) des steppers permettant de réaliser un pas
+d'intégration par différentes méthodes, (2) un calendrier d'évènement qui permet
+de gérer les états discrets et les discontinuités, (3) le système à intégrer,
+(4) un gestionnaire d'évènements pour les discontinuités, (5) un observateur
+pour effectuer des opérations (sauvegarde, tracés...) en cours de simulation
+et (6) le solveur proprement dit qui contient l'algorithme utilisant les cinq
+autres éléments.
+
+# Module "parser"
+Interface unifiée vers des parsers YAML.
+
+# Module "exception_handling"
+Utilitaires pour la gestion des exceptions logicielles.
+
+# Module "random_data_generator"
+Génération de données aléatoires pour les tests.
+
+# Module "simulator"
+Lien entre les modules "data_source" et "solver" : permet de définir le système
+à intégrer dans un DataSource afin de minimiser les calculs inutiles tout en
+gardant le maximum de souplesse dans la définition du système.
