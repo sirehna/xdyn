@@ -10,22 +10,6 @@
 
 typedef std::vector<double> StateType;
 
-struct Pendulum
-{
-    Pendulum(const double mu, const double omega, const double eps, StateType& x) : m_mu(mu),m_omega(omega),m_eps(eps),state(x)
-    {
-    }
-
-    void operator()(const StateType &x, StateType &dxdt, double t) const
-    {
-        dxdt[0] = x[1];
-        dxdt[1] = -sin(x[0]) - m_mu*x[1] + m_eps*sin(m_omega*t);
-    }
-
-    double m_mu, m_omega, m_eps;
-    StateType& state;
-};
-
 struct SimpleODE
 {
     SimpleODE(const StateType& x0) : state(x0)
