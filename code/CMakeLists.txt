@@ -18,15 +18,15 @@ INCLUDE(CMakeOutputDirectories)
 
 #############################################################################
 # Third party libraries
-set(BOOST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
-find_package(Boost REQUIRED)
+SET(BOOST_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+FIND_PACKAGE(Boost REQUIRED)
 ADD_SUBDIRECTORY(yaml-cpp)
-set(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
+SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include/yaml-cpp)
-set(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
-add_definitions(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
-add_definitions(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
+SET(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
+ADD_DEFINITIONS(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
+ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
@@ -125,7 +125,7 @@ ENDIF()
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
 
-set_target_properties(parse PROPERTIES EXCLUDE_FROM_ALL TRUE)
-set_target_properties(simulation_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
-set_target_properties(make_test_data PROPERTIES EXCLUDE_FROM_ALL TRUE)
-set_target_properties(test_utilities_object PROPERTIES EXCLUDE_FROM_ALL TRUE)
+SET_TARGET_PROPERTIES(parse PROPERTIES EXCLUDE_FROM_ALL TRUE)
+SET_TARGET_PROPERTIES(simulation_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
+SET_TARGET_PROPERTIES(make_test_data PROPERTIES EXCLUDE_FROM_ALL TRUE)
+SET_TARGET_PROPERTIES(test_utilities_object PROPERTIES EXCLUDE_FROM_ALL TRUE)
