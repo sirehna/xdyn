@@ -3,6 +3,7 @@ project (ds_integration)
 
 set(SRC src/DsSystem.cpp
         src/DsSolve.cpp
+        src/DsCsvObserver.cpp
         )
 
 
