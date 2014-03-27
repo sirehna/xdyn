@@ -12,6 +12,8 @@
 #include "DsSolve.hpp"
 #include "solve.hpp"
 #include "DsSystemMacros.hpp"
+#include "DsCsvObserver.hpp"
+#include "DsSystem.hpp"
 
 
 
@@ -37,7 +39,7 @@ struct Pendulum
 };
 
 
-void integrate(DataSource& ds, const double tstart, const double tend, DefaultObserver<DSSystem>& observer)
+void integrate(DataSource& ds, const double tstart, const double tend, DsCsvObserver& observer)
 {
     DSSystem sys(ds);
     std::vector<double> x0(2,0);

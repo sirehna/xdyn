@@ -9,6 +9,7 @@
 #include "DsSystemMacros.hpp"
 #include "DsSystem.hpp"
 #include "DsSolve.hpp"
+#include "DsCsvObserver.hpp"
 #include "test_macros.hpp"
 
 
@@ -43,7 +44,7 @@ TEST_F(DsSystemTests, example)
     SET(ds, simulator_base::stepper, solver::EULER);
     DEFINE_DERIVATIVE(falling_ball::z, falling_ball::zdot, ds);
     DEFINE_DERIVATIVE(falling_ball::zdot, falling_ball::zdotdot, ds);
-    DefaultObserver<DSSystem> observer(std::cout);
+    DsCsvObserver observer(std::cout);
 
     integrate(ds, 0, 10, observer);
 //! [DsSystemTests example]

@@ -8,10 +8,9 @@
 #ifndef DSSOLVE_HPP_
 #define DSSOLVE_HPP_
 
-#include "Observers.hpp"
-#include "DsSystem.hpp"
-
-void integrate(DataSource& ds, const double tstart, const double tend, DefaultObserver<DSSystem>& observer);
+class DataSource;
+class DsCsvObserver;
+void integrate(DataSource& ds, const double tstart, const double tend, DsCsvObserver& observer);
 void integrate(DataSource& ds, const double tstart, const double tend);
 
 #endif /* DSSOLVE_HPP_ */
