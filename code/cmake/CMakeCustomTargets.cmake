@@ -12,6 +12,7 @@ IF(DOXYGEN_FOUND)
         DEPENDS ${TEST_EXE}
     )
 
+    IF (WIN32)
     FIND_PACKAGE(XmlTransform)
     ADD_CUSTOM_TARGET(functionalities
         COMMAND ${XMLTRANSFORM_EXECUTABLE} -s:test_output.xml -xsl:${CMAKE_CURRENT_SOURCE_DIR}/get_specifications.xml -o:list_of_functionalities.html
@@ -20,6 +21,7 @@ IF(DOXYGEN_FOUND)
         COMMENT "Generating list of functionalities from GTest's output XML" VERBATIM
         DEPENDS test_results
     )
+    ENDIF()
 
     FIND_PACKAGE(Pandoc)
     IF(PANDOC_EXECUTABLE-NOTFOUND)
@@ -32,12 +34,20 @@ IF(DOXYGEN_FOUND)
         )
     ENDIF()
 
+    IF (WIN32)
     ADD_CUSTOM_TARGET(doc_dev
         ${DOXYGEN_EXECUTABLE} Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen" VERBATIM
         DEPENDS functionalities
     )
+    ELSE()
+    ADD_CUSTOM_TARGET(doc_dev
+        ${DOXYGEN_EXECUTABLE} Doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen" VERBATIM
+    )
+    ENDIF()
     IF(NOT PANDOC-NOTFOUND)
         ADD_DEPENDENCIES(doc_dev doc_dev_guide)
     ENDIF()
