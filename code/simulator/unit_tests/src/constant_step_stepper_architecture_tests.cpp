@@ -60,7 +60,7 @@ TEST_F(constant_step_stepper_architecture_tests, collaborators_should_be_called_
     EXPECT_CALL(mock, observe(_,_));
     EXPECT_CALL(mock, has_more_time_events()).RetiresOnSaturation();
 
-    solve_for_constant_step<ExplicitStepperWithMock,SystemWithMockAndStateUpdate,ObserverWithMock,SchedulerWithMock,EventHandlerWithMock>(sys,observer,stepper,scheduler,event_handler);
+    solve_for_constant_step<ExplicitStepperWithMock,SystemWithMockAndStateUpdate,ObserverWithMock<SystemWithMockAndStateUpdate>,SchedulerWithMock,EventHandlerWithMock>(sys,observer,stepper,scheduler,event_handler);
 }
 
 TEST_F(constant_step_stepper_architecture_tests, collaborators_should_be_called_in_the_right_sequence_for_constant_step_steppers_event_detected_without_state_update)
@@ -92,7 +92,7 @@ TEST_F(constant_step_stepper_architecture_tests, collaborators_should_be_called_
     EXPECT_CALL(mock, has_more_time_events()).RetiresOnSaturation();
 
 
-    solve_for_constant_step<ExplicitStepperWithMock,SystemWithMockButNoUpdate,ObserverWithMock,SchedulerWithMock,EventHandlerWithMock>(sys,observer,stepper,scheduler,event_handler);
+    solve_for_constant_step<ExplicitStepperWithMock,SystemWithMockButNoUpdate,ObserverWithMock<SystemWithMockButNoUpdate>,SchedulerWithMock,EventHandlerWithMock>(sys,observer,stepper,scheduler,event_handler);
 }
 
 TEST_F(constant_step_stepper_architecture_tests, collaborators_should_be_called_in_the_right_sequence_for_constant_step_steppers_no_event_detected_with_state_update)
@@ -123,7 +123,7 @@ TEST_F(constant_step_stepper_architecture_tests, collaborators_should_be_called_
     EXPECT_CALL(mock, observe(_,_));
     EXPECT_CALL(mock, has_more_time_events()).RetiresOnSaturation();
 
-    solve_for_constant_step<ExplicitStepperWithMock,SystemWithMockAndStateUpdate,ObserverWithMock,SchedulerWithMock,EventHandlerWithMock>(sys,observer,stepper,scheduler,event_handler);
+    solve_for_constant_step<ExplicitStepperWithMock,SystemWithMockAndStateUpdate,ObserverWithMock<SystemWithMockAndStateUpdate>,SchedulerWithMock,EventHandlerWithMock>(sys,observer,stepper,scheduler,event_handler);
 }
 
 TEST_F(constant_step_stepper_architecture_tests, collaborators_should_be_called_in_the_right_sequence_for_constant_step_steppers_no_event_detected_without_state_update)
@@ -152,5 +152,5 @@ TEST_F(constant_step_stepper_architecture_tests, collaborators_should_be_called_
     EXPECT_CALL(mock, observe(_,_));
     EXPECT_CALL(mock, has_more_time_events()).RetiresOnSaturation();
 
-    solve_for_constant_step<ExplicitStepperWithMock,SystemWithMockButNoUpdate,ObserverWithMock,SchedulerWithMock,EventHandlerWithMock>(sys,observer,stepper,scheduler,event_handler);
+    solve_for_constant_step<ExplicitStepperWithMock,SystemWithMockButNoUpdate,ObserverWithMock<SystemWithMockButNoUpdate>,SchedulerWithMock,EventHandlerWithMock>(sys,observer,stepper,scheduler,event_handler);
 }

@@ -16,11 +16,11 @@
 
 template <typename StepperType,
           typename SystemType,
-          template<typename T> class ObserverType,
+          typename ObserverType,
           typename SchedulerType,
           typename EventHandlerType>
 void
-solve_for_constant_step(SystemType& sys, ObserverType<SystemType>& observer, StepperType& stepper, SchedulerType& scheduler, EventHandlerType& event_handler)
+solve_for_constant_step(SystemType& sys, ObserverType& observer, StepperType& stepper, SchedulerType& scheduler, EventHandlerType& event_handler)
 {
     const double tstart = scheduler.get_time();
     observer.observe(sys,tstart);
@@ -43,11 +43,11 @@ solve_for_constant_step(SystemType& sys, ObserverType<SystemType>& observer, Ste
 
 template <typename StepperType,
           typename SystemType,
-          template<typename T> class ObserverType,
+          typename ObserverType,
           typename SchedulerType,
           typename EventHandlerType>
 void
-solve_for_adaptive_step(SystemType& sys, ObserverType<SystemType>& observer, StepperType& stepper, SchedulerType& scheduler, EventHandlerType& event_handler)
+solve_for_adaptive_step(SystemType& sys, ObserverType& observer, StepperType& stepper, SchedulerType& scheduler, EventHandlerType& event_handler)
 {
     const double tstart = scheduler.get_time();
     observer.observe(sys,tstart);
@@ -76,8 +76,8 @@ solve_for_adaptive_step(SystemType& sys, ObserverType<SystemType>& observer, Ste
 
 template <typename StepperType,
           typename SystemType,
-          template<typename T> class ObserverType>
-void quicksolve(SystemType& sys, const double t0, const double tend, double dt, ObserverType<SystemType>& observer)
+          typename ObserverType>
+void quicksolve(SystemType& sys, const double t0, const double tend, double dt, ObserverType& observer)
 {
     StepperType stepper;
     DefaultScheduler scheduler(t0, tend, dt);
