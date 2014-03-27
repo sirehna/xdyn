@@ -28,3 +28,8 @@ void DSSystem::update_continuous_states()
 {
     ds.set_states(state);
 }
+
+std::vector<std::string> DSSystem::get_state_names() const
+{
+    return ds.get_state_names();
+}

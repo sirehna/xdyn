@@ -9,6 +9,7 @@
 #define DSSYSTEM_HPP_
 
 #include <vector>
+#include <string>
 
 class DataSource;
 class DSSystem
@@ -20,6 +21,7 @@ class DSSystem
         void update_continuous_states();
 
         std::vector<double> state;
+        std::vector<std::string> get_state_names() const;
 
     private:
         DSSystem();
