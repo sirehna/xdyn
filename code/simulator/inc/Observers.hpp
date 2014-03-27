@@ -8,6 +8,9 @@
 #ifndef OBSERVERS_HPP_
 #define OBSERVERS_HPP_
 
+#include <sstream>
+#include <vector>
+
 template <typename IteratorType, typename Stream> void serialize(Stream& os, const IteratorType& begin, const IteratorType& end)
 {
     if (end-begin>0)
