@@ -9,6 +9,8 @@
 #define DSCSVOBSERVER_HPP_
 
 #include <ostream>
+#include "DsObserver.hpp"
+
 class DSSystem;
 
 /** \author cec
@@ -21,14 +23,13 @@ class DSSystem;
  *  \section ex2 Expected output
  *  \snippet ds_integration/unit_tests/src/DsCsvObserverTest.cpp DsCsvObserverTest expected output
  */
-class DsCsvObserver
+class DsCsvObserver : public DsObserver
 {
     public:
         DsCsvObserver(std::ostream& os);
         void observe(const DSSystem& sys, const double t);
 
     private:
-        std::ostream& os;
         bool initialized;
 };
 
