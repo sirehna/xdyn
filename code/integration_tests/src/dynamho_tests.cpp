@@ -17,10 +17,7 @@
 #include "propulsion.hpp"
 #include "extra_test_assertions.hpp"
 #include "DsSolve.hpp"
-#include "DsCsvObserver.hpp"
 #include "DsSystemMacros.hpp"
-
-#include "test_macros.hpp"
 
 #include <Eigen/Dense>
 #include <boost/algorithm/string.hpp>
