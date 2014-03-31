@@ -15,7 +15,9 @@
 #include "hydrostatic.hpp"
 #include "inertia_coupling.hpp"
 #include "propulsion.hpp"
-
+#include "extra_test_assertions.hpp"
+#include "DsSolve.hpp"
+#include "DsCsvObserver.hpp"
 #include "DsSystemMacros.hpp"
 
 #include "test_macros.hpp"
@@ -502,3 +504,40 @@ void dynamho_tests::initialize_DS_with_yaml_start_parameters(DataSource& ds, con
     SET(ds, dynamho::r, ss.initial_state.s.rot.r);
 }
 
+TEST_F(dynamho_tests, same_results_with_dynamho_and_DataSource_rk4)
+{
+    const DynamhoYamlParser parser(yaml);
+    auto par = parser.get_simulation_parameters();
+    par.simulation.initial_state.s.trans.u = 1;
+    par.simulation.initial_state.p.coord.z = 100;
+    par.simulation.Tmax = 1;
+    par.simulation.time_step = 1;
+    par.simulation.solver = "RK4";
+    par.tables.propulsion_data.D = 0;
+    DynamhoSimulation dynamho(par);
+
+    const auto out = dynamho.step(AngleDeBarre<double>());
+    auto ds = make_ds(yaml);
+    initialize_DS_with_yaml_start_parameters(ds, par.simulation);
+    SET(ds, simulator_base::initial_time_step, 1);
+    SET(ds, simulator_base::stepper, solver::RK4);
+    std::stringstream ss;
+    DsCsvObserver observer(std::cout);
+    integrate(ds, 0, 1, observer);
+
+    const double eps = 1e-6;
+
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.p.coord.x, GET(ds, dynamho::x),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.p.coord.y, GET(ds, dynamho::y),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.p.coord.z, GET(ds, dynamho::z),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.p.angle.phi, GET(ds, dynamho::phi),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.p.angle.theta, GET(ds, dynamho::theta),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.p.angle.psi, GET(ds, dynamho::psi),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.trans.u, GET(ds, dynamho::u),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.trans.v, GET(ds, dynamho::v),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.trans.w, GET(ds, dynamho::w),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.p, GET(ds, dynamho::p),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.q, GET(ds, dynamho::q),eps);
+    ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.r, GET(ds, dynamho::r),eps);
+
+}
