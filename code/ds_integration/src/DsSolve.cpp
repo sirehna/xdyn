@@ -12,10 +12,8 @@
 #include "DsSolve.hpp"
 #include "solve.hpp"
 #include "DsSystemMacros.hpp"
-#include "DsCsvObserver.hpp"
+#include "DsObserver.hpp"
 #include "DsSystem.hpp"
-
-
 
 typedef std::vector<double> StateType;
 typedef boost::numeric::odeint::euler<StateType> EulerStepper;
@@ -39,7 +37,7 @@ struct Pendulum
 };
 
 
-void integrate(DataSource& ds, const double tstart, const double tend, DsCsvObserver& observer)
+void integrate(DataSource& ds, const double tstart, const double tend, DsObserver& observer)
 {
     DSSystem sys(ds);
     std::vector<double> x0(2,0);
