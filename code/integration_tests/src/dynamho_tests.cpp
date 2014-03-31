@@ -278,29 +278,29 @@ MODULE(vectorize, State<double> state_derivative;\
                   )
 
 MODULE(inertia_computer, InertiaMatrix mat = InertiaMatrix::Zero();\
-const GeometryAndEnvironment G = PTR_GET(dynamho::geometry);\
-const auto I = PTR_GET(dynamho::inertia_parameters);\
-const double Mu_1 = I.Mu_1;\
-const double lambda_1 = I.Lambda_1;\
-const double lambda_2 = I.Lambda_2;\
-const double lambda_3 = I.Lambda_3;\
-const double lambda_13 = I.Lambda_13;\
-const double Nu_24 = I.Nu_24;\
-const double Nu_15 = I.Nu_15;\
-const double Nu_35 = I.Nu_35;\
-const double Nu_26 = I.Nu_26;\
-const double Mu = I.Mu;\
-const double Xg = G.Xg;\
-const double Mu_13 = I.Mu_13;\
-const double Mu_2 = I.Mu_2;\
-const double Mu_3 = I.Mu_3;\
-const double Yg = G.Yg;\
-const double Zg = G.Zg;\
-const double X_1 = I.X_1;\
-const double X_2 = I.X_2;\
-const double X_13 = I.X_13;\
-const double X_3 = I.X_3;\
-const double L = G.L;\
+    const GeometryAndEnvironment G = PTR_GET(dynamho::geometry);\
+    const auto I = PTR_GET(dynamho::inertia_parameters);\
+    const double Mu_1 = I.Mu_1;\
+    const double lambda_1 = I.Lambda_1;\
+    const double lambda_2 = I.Lambda_2;\
+    const double lambda_3 = I.Lambda_3;\
+    const double lambda_13 = I.Lambda_13;\
+    const double Nu_24 = I.Nu_24;\
+    const double Nu_15 = I.Nu_15;\
+    const double Nu_35 = I.Nu_35;\
+    const double Nu_26 = I.Nu_26;\
+    const double Mu = I.Mu;\
+    const double Xg = G.Xg;\
+    const double Mu_13 = I.Mu_13;\
+    const double Mu_2 = I.Mu_2;\
+    const double Mu_3 = I.Mu_3;\
+    const double Yg = G.Yg;\
+    const double Zg = G.Zg;\
+    const double X_1 = I.X_1;\
+    const double X_2 = I.X_2;\
+    const double X_13 = I.X_13;\
+    const double X_3 = I.X_3;\
+    const double L = G.L;\
     mat(0,0)=Mu+Mu_1;\
     mat(0,2)=Mu_13;\
     mat(1,1)=Mu+Mu_2;\
@@ -323,7 +323,7 @@ const double L = G.L;\
     mat(4,4)= L*L*(X_2+lambda_2);\
     mat(5,3)= mat(3,5);\
     mat(5,5)= L*L*(X_3+lambda_3);\
- PTR_SET(dynamho::inertia_matrix, mat);\
+    PTR_SET(dynamho::inertia_matrix, mat);\
 )
 
 DataSource dynamho_tests::make_ds(const std::string& yaml_) const
@@ -367,11 +367,11 @@ DataSource dynamho_tests::make_ds(const std::string& yaml_) const
 
 template<> EulerAngles<double> TypedScalarDataGenerator<EulerAngles<double> >::get() const
 {
-        EulerAngles<double> ret;
-        ret.phi = random<double>().between(-100,100);
-        ret.theta = random<double>().between(-100,100);
-        ret.psi = random<double>().between(-100,100);
-        return ret;
+    EulerAngles<double> ret;
+    ret.phi = random<double>().between(-100,100);
+    ret.theta = random<double>().between(-100,100);
+    ret.psi = random<double>().between(-100,100);
+    return ret;
 }
 
 TEST_F(dynamho_tests, Fx_hydrostatic_should_be_zero_for_mu_equal_to_one)
@@ -499,7 +499,6 @@ TEST_F(dynamho_tests, same_results_with_dynamho_and_DataSource_euler)
     ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.p, GET(ds, dynamho::p),eps);
     ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.q, GET(ds, dynamho::q),eps);
     ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.r, GET(ds, dynamho::r),eps);
-
 }
 
 TEST_F(dynamho_tests, same_results_with_dynamho_and_DataSource_rk4)
@@ -535,5 +534,4 @@ TEST_F(dynamho_tests, same_results_with_dynamho_and_DataSource_rk4)
     ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.p, GET(ds, dynamho::p),eps);
     ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.q, GET(ds, dynamho::q),eps);
     ASSERT_SMALL_RELATIVE_ERROR(out.ship_states.s.rot.r, GET(ds, dynamho::r),eps);
-
 }
