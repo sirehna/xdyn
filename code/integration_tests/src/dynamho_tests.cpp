@@ -103,34 +103,49 @@ DEFINE(dynamho, r, double)
 
 FORCE_MODULE(dynamho, hydrostatic, const auto I = PTR_GET(dynamho::inertia_parameters);\
                                    const auto G = PTR_GET(dynamho::geometry);\
-                                   const ::EulerAngles<double> angles = PTR_GET(dynamho::euler_angles);\
-                                   Force f;\
-                                   f(0) = ::hydrostatic::model::Fx(I, G, angles);\
-                                   f(1) = ::hydrostatic::model::Fy(I, G, angles);\
-                                   f(2) = ::hydrostatic::model::Fz(I, G, angles);\
-                                   f(3) = ::hydrostatic::model::Mx(I, G, angles);\
-                                   f(4) = ::hydrostatic::model::My(I, G, angles);\
-                                   f(5) = ::hydrostatic::model::Mz(I, G, angles);\
-                                   PTR_SET(dynamho::hydrostatic, f))
+                                   ::EulerAngles<double> angles;\
+                                   angles.phi = PTR_GET(dynamho::phi);\
+                                   angles.theta = PTR_GET(dynamho::theta);\
+                                   angles.psi = PTR_GET(dynamho::psi);\
+                                   Force fhydrostat;\
+                                   fhydrostat(0) = ::hydrostatic::model::Fx(I, G, angles);\
+                                   fhydrostat(1) = ::hydrostatic::model::Fy(I, G, angles);\
+                                   fhydrostat(2) = ::hydrostatic::model::Fz(I, G, angles);\
+                                   fhydrostat(3) = ::hydrostatic::model::Mx(I, G, angles);\
+                                   fhydrostat(4) = ::hydrostatic::model::My(I, G, angles);\
+                                   fhydrostat(5) = ::hydrostatic::model::Mz(I, G, angles);\
+                                   PTR_SET(dynamho::hydrostatic, fhydrostat))
 
 FORCE_MODULE(dynamho, inertial_coupling,
                       const auto I = PTR_GET(dynamho::inertia_parameters);\
                       const auto G = PTR_GET(dynamho::geometry);\
-                      const Speed<double> speed = PTR_GET(dynamho::speed);\
-                      Force f;\
-                      f(0) = ::inertia::model::Fx(I, G, speed);\
-                      f(1) = ::inertia::model::Fy(I, G, speed);\
-                      f(2) = ::inertia::model::Fz(I, G, speed);\
-                      f(3) = ::inertia::model::Mx(I, G, speed);\
-                      f(4) = ::inertia::model::My(I, G, speed);\
-                      f(5) = ::inertia::model::Mz(I, G, speed);\
-                      PTR_SET(dynamho::inertial_coupling, f))
+                      Speed<double> s;\
+                      s.trans.u = PTR_GET(dynamho::u);\
+                      s.trans.v = PTR_GET(dynamho::v);\
+                      s.trans.w = PTR_GET(dynamho::w);\
+                      s.rot.p = PTR_GET(dynamho::p);\
+                      s.rot.q = PTR_GET(dynamho::q);\
+                      s.rot.r = PTR_GET(dynamho::r);\
+                      Force finertia;\
+                      finertia(0) = ::inertia::model::Fx(I, G, s);\
+                      finertia(1) = ::inertia::model::Fy(I, G, s);\
+                      finertia(2) = ::inertia::model::Fz(I, G, s);\
+                      finertia(3) = ::inertia::model::Mx(I, G, s);\
+                      finertia(4) = ::inertia::model::My(I, G, s);\
+                      finertia(5) = ::inertia::model::Mz(I, G, s);\
+                      PTR_SET(dynamho::inertial_coupling, finertia))
 
 FORCE_MODULE(dynamho, hydrodynamic,
                     const ::hydrodynamic::Parameters h_param = PTR_GET(dynamho::hydrodynamic_parameters);\
                     const GeometryAndEnvironment g_param = PTR_GET(dynamho::geometry);\
                     const AngleDeBarre<double> anglesDeBarres = PTR_GET(dynamho::angles_de_barre);\
-                    const Speed<double> s = PTR_GET(dynamho::speed);\
+                    Speed<double> s;\
+                    s.trans.u = PTR_GET(dynamho::u);\
+                    s.trans.v = PTR_GET(dynamho::v);\
+                    s.trans.w = PTR_GET(dynamho::w);\
+                    s.rot.p = PTR_GET(dynamho::p);\
+                    s.rot.q = PTR_GET(dynamho::q);\
+                    s.rot.r = PTR_GET(dynamho::r);\
                     const double CzB2 = PTR_GET(dynamho::CzB2);
                     const double Yb2B = PTR_GET(dynamho::Yb2B);
                     Force f;\
@@ -147,9 +162,8 @@ MODULE(dynamhoparser, const auto yaml = PTR_GET(dynamho::yaml);\
                       if (not(ds->read_only())) parser.reset(new DynamhoYamlParser(yaml));\
                       PTR_SET(dynamho::yaml_parser, parser);)
 
-MODULE(rotationmatrix, const auto euler = PTR_GET(dynamho::euler_angles);\
-                       const double phi = euler.phi;\
-                       const double theta = euler.theta;\
+MODULE(rotationmatrix, const double phi = PTR_GET(dynamho::phi);\
+                       const double theta = PTR_GET(dynamho::theta);\
                        RotationMatrix R;\
                        R(0,0) = 1;\
                        R(0,1) = tan(theta)*sin(phi);\
@@ -163,10 +177,9 @@ MODULE(rotationmatrix, const auto euler = PTR_GET(dynamho::euler_angles);\
                        PTR_SET(dynamho::pqr2phithetapsi, R);)
 
 
-MODULE(uvw2xyz_dot,   const auto euler = PTR_GET(dynamho::euler_angles);\
-                      const double phi = euler.phi;\
-                      const double theta = euler.theta;\
-                      const double psi = euler.psi;\
+MODULE(uvw2xyz_dot,   const double phi = PTR_GET(dynamho::phi);\
+                      const double theta = PTR_GET(dynamho::theta);\
+                      const double psi = PTR_GET(dynamho::psi);\
                       RotationMatrix R;\
                       R(0,0) = cos(psi)*cos(theta);\
                       R(0,1) = cos(psi)*sin(theta)*sin(phi)-sin(psi)*cos(phi);\
@@ -205,15 +218,14 @@ MODULE(sum_of_all_forces, const auto forces = PTR_GET(simulator_base::list_of_fo
 
 MODULE(kinematics, const auto R1 = PTR_GET(dynamho::uvw2xyz_dot);\
                    const auto R2 = PTR_GET(dynamho::pqr2phithetapsi);\
-                   const auto s = PTR_GET(dynamho::speed);\
                    Eigen::Vector3d pqr;\
-                   pqr(0) = s.rot.p;\
-                   pqr(1) = s.rot.q;\
-                   pqr(2) = s.rot.r;\
+                   pqr(0) = PTR_GET(dynamho::p);\
+                   pqr(1) = PTR_GET(dynamho::q);\
+                   pqr(2) = PTR_GET(dynamho::r);\
                    Eigen::Vector3d uvw;\
-                   uvw(0) = s.trans.u;\
-                   uvw(1) = s.trans.v;\
-                   uvw(2) = s.trans.w;\
+                   uvw(0) = PTR_GET(dynamho::u);\
+                   uvw(1) = PTR_GET(dynamho::v);\
+                   uvw(2) = PTR_GET(dynamho::w);\
                    Eigen::Vector3d phithetapsi_dot;\
                    Eigen::Vector3d xyz_dot;\
                    if (not(ds->read_only())) xyz_dot = R1*uvw;\
@@ -332,11 +344,7 @@ DataSource dynamho_tests::make_ds(const std::string& yaml_) const
     ds.add<dynamhoparser>("parser");
     const auto parser = GET(ds, dynamho::yaml_parser);
     const auto start = parser->get_simulation_start_stop_parameters();
-    SET(ds,dynamho::speed,start.initial_state.s);
-    SET(ds,dynamho::CzB2,0);
-    SET(ds,dynamho::Yb2B,0);
-    SET(ds,dynamho::angles_de_barre,start.initial_angles);
-    SET(ds,dynamho::euler_angles,start.initial_state.p.angle);
+    initialize_DS_with_yaml_start_parameters(ds, start);
 
     DEFINE_DERIVATIVE(dynamho::x, dynamho::dx_dt, ds);
     DEFINE_DERIVATIVE(dynamho::y, dynamho::dy_dt, ds);
@@ -401,7 +409,9 @@ TEST_F(dynamho_tests, Fx_hydrostatic_should_be_equal_to_g)
     {
         EulerAngles<double> angles = a.random<EulerAngles<double> >();
         angles.theta = PI/2.;
-        SET(ds,dynamho::euler_angles,angles);
+        SET(ds,dynamho::phi,angles.phi);
+        SET(ds,dynamho::theta,angles.theta);
+        SET(ds,dynamho::psi,angles.psi);
         auto I = GET(ds, dynamho::inertia_parameters);
         I.Mu = 0;
         FORCE(ds, dynamho::inertia_parameters, I);
@@ -417,7 +427,9 @@ TEST_F(dynamho_tests, can_retrieve_hydrostatic_forces)
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const EulerAngles<double> angles(a.random<double>(),PI/4.,a.random<double>());
-        SET(ds,dynamho::euler_angles,angles);
+        SET(ds,dynamho::phi,angles.phi);
+        SET(ds,dynamho::theta,angles.theta);
+        SET(ds,dynamho::psi,angles.psi);
         const Force F = GET(ds, dynamho::hydrostatic);
         ASSERT_DOUBLE_EQ(0, F(0));
         ASSERT_DOUBLE_EQ(0, F(1));
@@ -483,6 +495,9 @@ TEST_F(dynamho_tests, should_get_the_same_initialization_with_dynamho_and_DataSo
 
 void dynamho_tests::initialize_DS_with_yaml_start_parameters(DataSource& ds, const SimulationStartStopParameters& ss) const
 {
+    SET(ds,dynamho::angles_de_barre, ss.initial_angles);
+    SET(ds,dynamho::CzB2,0);
+    SET(ds,dynamho::Yb2B,0);
     SET(ds, dynamho::x, ss.initial_state.p.coord.x);
     SET(ds, dynamho::y, ss.initial_state.p.coord.y);
     SET(ds, dynamho::z, ss.initial_state.p.coord.z);
