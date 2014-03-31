@@ -278,13 +278,23 @@ MODULE(vectorize, State<double> state_derivative;\
                   PTR_SET(dynamho::state_derivatives,state_derivative);\
                   )
 
-MODULE(inertia_computer, InertiaMatrix M;\
-size_t i = 0;\
-size_t j = 0;\
+MODULE(inertia_computer, InertiaMatrix mat = InertiaMatrix::Zero();\
 const GeometryAndEnvironment G = PTR_GET(dynamho::geometry);\
 const auto I = PTR_GET(dynamho::inertia_parameters);\
+const double Mu_1 = I.Mu_1;\
+const double lambda_1 = I.Lambda_1;\
+const double lambda_2 = I.Lambda_2;\
+const double lambda_3 = I.Lambda_3;\
+const double lambda_13 = I.Lambda_13;\
+const double Nu_24 = I.Nu_24;\
+const double Nu_15 = I.Nu_15;\
+const double Nu_35 = I.Nu_35;\
+const double Nu_26 = I.Nu_26;\
 const double Mu = I.Mu;\
 const double Xg = G.Xg;\
+const double Mu_13 = I.Mu_13;\
+const double Mu_2 = I.Mu_2;\
+const double Mu_3 = I.Mu_3;\
 const double Yg = G.Yg;\
 const double Zg = G.Zg;\
 const double X_1 = I.X_1;\
@@ -292,53 +302,29 @@ const double X_2 = I.X_2;\
 const double X_13 = I.X_13;\
 const double X_3 = I.X_3;\
 const double L = G.L;\
-M(i,j++) = +Mu;\
- M(i,j++) = 0;\
- M(i,j++) = 0;\
- M(i,j++) = 0;\
- M(i,j++) = +Mu * Zg;\
- M(i++,j++) = -Mu * Yg;\
- /* row 2 */
- j = 0;\
- M(i,j++) = 0;\
- M(i,j++) = +Mu;\
- M(i,j++) = 0;\
- M(i,j++) = -Mu * Zg;\
- M(i,j++) = 0;\
- M(i++,j++) = +Mu * Xg;\
- /* row 3 */
- j = 0;\
- M(i,j++) = 0;\
- M(i,j++) = 0;\
- M(i,j++) = +Mu;\
- M(i,j++) = +Mu * Yg;\
- M(i,j++) = -Mu * Xg;\
- M(i++,j++) = 0;\
- /* row 4 */
- j = 0;\
- M(i,j++) = 0;\
- M(i,j++) = -Mu  * Zg;\
- M(i,j++) = +Mu  * Yg;\
- M(i,j++) = +L*L * X_1;\
- M(i,j++) = 0;\
- M(i++,j++) = -L*L * X_13;\
- /* row 5 */
- j = 0;\
- M(i,j++) = +Mu  * Zg;\
- M(i,j++) = 0;\
- M(i,j++) = -Mu  * Xg;\
- M(i,j++) = 0;\
- M(i,j++) = +L*L * X_2;\
- M(i++,j++) = 0;\
- /* row 6 */
- j = 0;\
- M(i,j++) = -Mu  * Yg;\
- M(i,j++) = +Mu  * Xg;\
- M(i,j++) = 0;\
- M(i,j++) = -L*L * X_13;\
- M(i,j++) = 0;\
- M(i,j) = L*L  * X_3;\
- PTR_SET(dynamho::inertia_matrix, M);\
+    mat(0,0)=Mu+Mu_1;\
+    mat(0,2)=Mu_13;\
+    mat(1,1)=Mu+Mu_2;\
+    mat(2,0)=mat(0,2);\
+    mat(2,2)=Mu+Mu_3;\
+    mat(3,1)=-Mu*Zg-L*Nu_24;\
+    mat(3,2)= Mu*Yg;\
+    mat(4,0)= Mu*Zg-L*Nu_15;\
+    mat(4,2)=-Mu*Xg-L*Nu_35;\
+    mat(5,0)=-Mu*Yg;\
+    mat(5,1)= Mu*Xg-L*Nu_26;\
+    mat(0,4)=mat(4,0);\
+    mat(0,5)=mat(5,0);\
+    mat(1,3)=mat(3,1);\
+    mat(1,5)=mat(5,1);\
+    mat(2,3)=mat(3,2);\
+    mat(2,4)=mat(4,2);\
+    mat(3,3)= L*L*(X_1+lambda_1);\
+    mat(3,5)=-L*L*(X_13+lambda_13);\
+    mat(4,4)= L*L*(X_2+lambda_2);\
+    mat(5,3)= mat(3,5);\
+    mat(5,5)= L*L*(X_3+lambda_3);\
+ PTR_SET(dynamho::inertia_matrix, mat);\
 )
 
 DataSource dynamho_tests::make_ds(const std::string& yaml_) const
