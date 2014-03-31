@@ -146,14 +146,14 @@ FORCE_MODULE(dynamho, hydrodynamic,
                     s.rot.r = PTR_GET(dynamho::r);\
                     const double CzB2 = PTR_GET(dynamho::CzB2);
                     const double Yb2B = PTR_GET(dynamho::Yb2B);
-                    Force f;\
-                    f(0) = ::hydrodynamic::model::Fx(h_param, g_param, anglesDeBarres, s);\
-                    f(1) = ::hydrodynamic::model::Fy(h_param, g_param, anglesDeBarres, s);\
-                    f(2) = ::hydrodynamic::model::Fz(h_param, g_param, anglesDeBarres, s);\
-                    f(3) = ::hydrodynamic::model::Mx(h_param, g_param, anglesDeBarres, s, CzB2, Yb2B);\
-                    f(4) = ::hydrodynamic::model::My(h_param, g_param, anglesDeBarres, s);\
-                    f(5) = ::hydrodynamic::model::Mz(h_param, g_param, anglesDeBarres, s);\
-                    PTR_SET(dynamho::hydrodynamic, f))
+                    Force fhydrodynamic;\
+                    fhydrodynamic(0) = ::hydrodynamic::model::Fx(h_param, g_param, anglesDeBarres, s);\
+                    fhydrodynamic(1) = ::hydrodynamic::model::Fy(h_param, g_param, anglesDeBarres, s);\
+                    fhydrodynamic(2) = ::hydrodynamic::model::Fz(h_param, g_param, anglesDeBarres, s);\
+                    fhydrodynamic(3) = ::hydrodynamic::model::Mx(h_param, g_param, anglesDeBarres, s, CzB2, Yb2B);\
+                    fhydrodynamic(4) = ::hydrodynamic::model::My(h_param, g_param, anglesDeBarres, s);\
+                    fhydrodynamic(5) = ::hydrodynamic::model::Mz(h_param, g_param, anglesDeBarres, s);\
+                    PTR_SET(dynamho::hydrodynamic, fhydrodynamic))
 
 MODULE(dynamhoparser, const auto yaml = PTR_GET(dynamho::yaml);\
                       std::tr1::shared_ptr<DynamhoYamlParser> parser;
