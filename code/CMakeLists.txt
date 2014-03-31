@@ -51,17 +51,10 @@ ADD_SUBDIRECTORY(data_source_serializers)
 ADD_SUBDIRECTORY(interpolation)
 ADD_SUBDIRECTORY(simulation)
 ADD_SUBDIRECTORY(yaml_parser)
-ADD_SUBDIRECTORY(external_data_structures)
-ADD_SUBDIRECTORY(test_utilities)
-ADD_SUBDIRECTORY(parser)
-ADD_SUBDIRECTORY(dynamic_model)
-ADD_SUBDIRECTORY(dynamho_interface)
-ADD_SUBDIRECTORY(physical_models)
 ADD_SUBDIRECTORY(simulator)
 ADD_SUBDIRECTORY(ds_integration)
 ADD_SUBDIRECTORY(hydro_models)
-ADD_SUBDIRECTORY(integration_tests)
-ADD_SUBDIRECTORY(DyNaMHo)
+ADD_SUBDIRECTORY(internal_solver_validation)
 
 INCLUDE(CMakeLapackDouble)
 
@@ -96,20 +89,14 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:simulator_tests>
         $<TARGET_OBJECTS:data_source_serializers_tests>
         $<TARGET_OBJECTS:interpolation_tests>
-        $<TARGET_OBJECTS:physical_models_object>
         $<TARGET_OBJECTS:random_data_generator_tests>
         $<TARGET_OBJECTS:text_file_reader_tests>
         $<TARGET_OBJECTS:interpolation_object>
-        $<TARGET_OBJECTS:external_data_structures_object>
-        $<TARGET_OBJECTS:dynamho_object>
-        $<TARGET_OBJECTS:dynamic_model_object>
-        $<TARGET_OBJECTS:integration_tests>
-        $<TARGET_OBJECTS:dynamho_yaml_data_generator>
-        $<TARGET_OBJECTS:parser_object>
-        $<TARGET_OBJECTS:dynamho_interface_object>
         $<TARGET_OBJECTS:hydro_models_tests>
         $<TARGET_OBJECTS:ds_integration_tests>
+        $<TARGET_OBJECTS:integration_tests>
         )
+TARGET_LINK_LIBRARIES(${TEST_EXE} internal_solver_validation)
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
 
@@ -117,7 +104,6 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest gtest_main                 # static
         gmock gmock_main                 # static
         random_data_generator_static     # static
-        simulator_test_data_generator_static
         ${PROJECT_NAME}
         )
 
