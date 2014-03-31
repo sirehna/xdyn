@@ -480,3 +480,20 @@ TEST_F(dynamho_tests, should_get_the_same_initialization_with_dynamho_and_DataSo
     ASSERT_DOUBLE_EQ(parser.get_simulation_start_stop_parameters().initial_state.s.trans.w,x_dot.p.coord.z);
 //! [dynamho_tests expected output]
 }
+
+void dynamho_tests::initialize_DS_with_yaml_start_parameters(DataSource& ds, const SimulationStartStopParameters& ss) const
+{
+    SET(ds, dynamho::x, ss.initial_state.p.coord.x);
+    SET(ds, dynamho::y, ss.initial_state.p.coord.y);
+    SET(ds, dynamho::z, ss.initial_state.p.coord.z);
+    SET(ds, dynamho::phi, ss.initial_state.p.angle.phi);
+    SET(ds, dynamho::theta, ss.initial_state.p.angle.theta);
+    SET(ds, dynamho::psi, ss.initial_state.p.angle.psi);
+    SET(ds, dynamho::u, ss.initial_state.s.trans.u);
+    SET(ds, dynamho::v, ss.initial_state.s.trans.v);
+    SET(ds, dynamho::w, ss.initial_state.s.trans.w);
+    SET(ds, dynamho::p, ss.initial_state.s.rot.p);
+    SET(ds, dynamho::q, ss.initial_state.s.rot.q);
+    SET(ds, dynamho::r, ss.initial_state.s.rot.r);
+}
+

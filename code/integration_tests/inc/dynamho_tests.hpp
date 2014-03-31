@@ -5,6 +5,7 @@
 #include "DataGenerator.hpp"
 #include "DataSource.hpp"
 
+class SimulationStartStopParameters;
 class dynamho_tests : public ::testing::Test
 {
     protected:
@@ -16,6 +17,7 @@ class dynamho_tests : public ::testing::Test
         DataGenerator a;
         std::string yaml;
         DataSource make_ds(const std::string& yaml) const;
+        void initialize_DS_with_yaml_start_parameters(DataSource& ds, const SimulationStartStopParameters& ss) const;
 };
 
 #endif  /* DYNAMHO_TESTS_HPP_ */
