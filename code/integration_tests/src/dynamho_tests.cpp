@@ -51,7 +51,6 @@ typedef Eigen::Matrix<double, 6, 1> Force;
 typedef Eigen::Matrix<double, 6, 1> Uvwpqr;
 
 
-DEFINE(dynamho, sim_start_stop, SimulationStartStopParameters)
 DEFINE(dynamho, inertia_matrix, InertiaMatrix)
 DEFINE(dynamho, inertia_parameters, Inertia)
 DEFINE(dynamho, added_mass, InertiaMatrix)
@@ -59,7 +58,6 @@ DEFINE(dynamho, hydrostatic, Force)
 DEFINE(dynamho, inertial_coupling, Force)
 DEFINE(dynamho, hydrodynamic, Force)
 DEFINE(dynamho, hydrodynamic_parameters, ::hydrodynamic::Parameters)
-DEFINE(dynamho, propulsion, Force)
 DEFINE(dynamho, external, Force)
 DEFINE(dynamho, sum_of_all_forces, Force)
 DEFINE(dynamho, geometry, GeometryAndEnvironment)
