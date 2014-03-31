@@ -206,7 +206,13 @@ MODULE(hydrodynamic_parser, const auto parser = PTR_GET(dynamho::yaml_parser);\
        PTR_SET(dynamho::hydrodynamic_parameters, P);)
 
 MODULE(sum_of_all_forces, const auto forces = PTR_GET(simulator_base::list_of_forces);\
-                          Force Ftot;
+                          Force Ftot;\
+                          Ftot(0,0) = 0;\
+                          Ftot(1,0) = 0;\
+                          Ftot(2,0) = 0;\
+                          Ftot(3,0) = 0;\
+                          Ftot(4,0) = 0;\
+                          Ftot(5,0) = 0;\
                           for (auto it = forces.begin() ; it != forces.end() ; ++it)\
                           {\
                               const auto F = ds->get<Force>(*it);\
