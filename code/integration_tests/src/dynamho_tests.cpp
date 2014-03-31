@@ -558,9 +558,7 @@ TEST_F(dynamho_tests, same_results_with_dynamho_and_DataSource_rk4)
     initialize_DS_with_yaml_start_parameters(ds, par.simulation);
     SET(ds, simulator_base::initial_time_step, 1);
     SET(ds, simulator_base::stepper, solver::RK4);
-    std::stringstream ss;
-    DsCsvObserver observer(std::cout);
-    integrate(ds, 0, 1, observer);
+    integrate(ds, 0, 1);
 
     const double eps = 1e-6;
 
