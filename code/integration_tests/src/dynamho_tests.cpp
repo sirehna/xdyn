@@ -240,8 +240,8 @@ MODULE(kinematics, const auto R1 = PTR_GET(dynamho::uvw2xyz_dot);\
 
 MODULE(dynamics, const auto M = PTR_GET(dynamho::inertia_matrix);\
                  const auto F = PTR_GET(dynamho::sum_of_all_forces);\
-                 Uvwpqr uvwpqr_dot;
-                 if (not(ds->read_only())) uvwpqr_dot = M.ldlt().solve(F);\
+                 Uvwpqr uvwpqr_dot;\
+                 if (not(ds->read_only())) uvwpqr_dot = M.llt().solve(F);\
                  PTR_SET(dynamho::uvwpqr_dot, uvwpqr_dot);\
        )
 
