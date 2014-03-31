@@ -428,43 +428,7 @@ TEST_F(dynamho_tests, can_retrieve_hydrostatic_forces)
         ASSERT_DOUBLE_EQ(0, F(5));
     }
 }
-/*
-TEST_F(dynamho_tests, can_retrieve_inertial_coupling_forces)
-{
-    auto ds = make_ds(yaml);
-    const Force F = GET(ds, dynamho::inertial_coupling);
-}
 
-TEST_F(dynamho_tests, can_retrieve_hydrodynamic_forces)
-{
-    auto ds = make_ds(yaml);
-    const Force F = GET(ds, dynamho::hydrodynamic);
-}
-
-TEST_F(dynamho_tests, can_retrieve_sum_of_all_forces)
-{
-    auto ds = make_ds(yaml);
-    const Force F = GET(ds, dynamho::sum_of_all_forces);
-}
-
-TEST_F(dynamho_tests, can_retrieve_X_dot)
-{
-    auto ds = make_ds(yaml);
-    const State<double> x_dot = GET(ds, dynamho::state_derivatives);
-}
-
-TEST_F(dynamho_tests, can_retrieve_the_matrix_pqr2phithetapsi)
-{
-    auto ds = make_ds(yaml);
-    const auto R = GET(ds, dynamho::pqr2phithetapsi);
-}
-
-TEST_F(dynamho_tests, can_retrieve_the_matrix_uvw2xyz_dot)
-{
-    auto ds = make_ds(yaml);
-    const auto R = GET(ds, dynamho::uvw2xyz_dot);
-}
-*/
 TEST_F(dynamho_tests, should_get_the_same_initialization_with_dynamho_and_DataSource)
 {
 //! [dynamho_tests example]
