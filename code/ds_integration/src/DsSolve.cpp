@@ -70,3 +70,9 @@ void integrate(DataSource& ds, const double tstart, const double tend, DsObserve
             break;
     }
 }
+
+void integrate(DataSource& ds, const double tstart, const double tend)
+{
+    NoObservation observer;
+    integrate(ds, tstart, tend, observer);
+}
