@@ -49,7 +49,6 @@ ADD_SUBDIRECTORY(decode_unit)
 ADD_SUBDIRECTORY(data_source)
 ADD_SUBDIRECTORY(data_source_serializers)
 ADD_SUBDIRECTORY(interpolation)
-ADD_SUBDIRECTORY(simulation)
 ADD_SUBDIRECTORY(yaml_parser)
 ADD_SUBDIRECTORY(simulator)
 ADD_SUBDIRECTORY(ds_integration)
@@ -64,7 +63,6 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:exception_handling_object>
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         data_source_static          # static
-        simulation_static           # static
         lapack                      # static
         gfortran                    # static
         yaml_parser_static
@@ -125,7 +123,6 @@ INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
 
 SET_TARGET_PROPERTIES(parse PROPERTIES EXCLUDE_FROM_ALL TRUE)
-SET_TARGET_PROPERTIES(simulation_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
 SET_TARGET_PROPERTIES(make_test_data PROPERTIES EXCLUDE_FROM_ALL TRUE)
 SET_TARGET_PROPERTIES(test_utilities_object PROPERTIES EXCLUDE_FROM_ALL TRUE)
 SET_TARGET_PROPERTIES(parser_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
