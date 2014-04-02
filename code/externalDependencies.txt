@@ -1,4 +1,3 @@
-http://130.66.124.6/svn/eonav/oad_and_monitoring_modules/trunk/libraries boost
 http://130.66.124.6/svn/eonav/oad_and_monitoring_modules/trunk/modules exception_handling
 http://130.66.124.6/svn/maroff/Product/Cpp/Tools random_data_generator
 http://130.66.124.6/svn/maroff/Product/Cpp/Tools macros
