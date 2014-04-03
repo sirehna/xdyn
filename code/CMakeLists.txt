@@ -1,6 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(simulatorIrtJv)
 
+INCLUDE(CTest)
+
 #############################################################################
 # User configuration
 IF(NOT DEFINED CMAKE_BUILD_TYPE)
@@ -30,9 +32,9 @@ INCLUDE(CMakeOutputDirectories)
 #############################################################################
 # Third party libraries
 # Boost
-# Require at least version 1.53 of boost to use Odeint
+# -> Require at least version 1.53 of boost to use Odeint
+#SET(Boost_DEBUG 1)
 IF (WIN32)
-    #SET(Boost_DEBUG 1)
     IF(NOT DEFINED BOOST_ROOT)
         SET(BOOST_ROOT "C:\\Program Files\\boost")
         IF(NOT "$ENV{BOOST_ROOT}" STREQUAL "")
@@ -42,7 +44,7 @@ IF (WIN32)
     ENDIF()
 ENDIF()
 MESSAGE(STATUS "BOOST_ROOT : ${BOOST_ROOT}")
-FIND_PACKAGE(Boost REQUIRED)
+FIND_PACKAGE(Boost 1.53 REQUIRED)
 
 ADD_SUBDIRECTORY(yaml-cpp)
 SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
@@ -98,6 +100,11 @@ INSTALL(TARGETS ${PROJECT_NAME}
 #############################################################################
 # Testing part
 ENABLE_TESTING()
+IF(BUILD_TESTING)
+    SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+    MARK_AS_ADVANCED(BUILDNAME)
+ENDIF(BUILD_TESTING)
+
 SET(TEST_EXE run_all_tests)
 
 ADD_EXECUTABLE(${TEST_EXE}
