@@ -32,7 +32,8 @@ INCLUDE(CMakeOutputDirectories)
 #############################################################################
 # Third party libraries
 # Boost
-# Require at least version 1.53 of boost to use Odeint
+# -> Require at least version 1.53 of boost to use Odeint
+#SET(Boost_DEBUG 1)
 IF (WIN32)
     IF(NOT DEFINED BOOST_ROOT)
         SET(BOOST_ROOT "C:\\Program Files\\boost")
