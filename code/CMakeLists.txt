@@ -61,6 +61,7 @@ ADD_SUBDIRECTORY(simulator)
 ADD_SUBDIRECTORY(ds_integration)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(internal_solver_validation)
+ADD_SUBDIRECTORY(kinematics)
 
 INCLUDE(CMakeLapackDouble)
 
@@ -77,6 +78,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         data_source_serializers_static
         ds_integration_static
         hydro_models_static
+        kinematics_static
         yaml-cpp
         )
 
@@ -100,6 +102,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:hydro_models_tests>
         $<TARGET_OBJECTS:ds_integration_tests>
         $<TARGET_OBJECTS:integration_tests>
+        $<TARGET_OBJECTS:kinematics_tests>
         )
 TARGET_LINK_LIBRARIES(${TEST_EXE} internal_solver_validation)
 
