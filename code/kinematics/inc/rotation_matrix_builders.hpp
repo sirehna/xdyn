@@ -33,6 +33,7 @@ namespace kinematics
               int I,
               int J,
               int K> RotationMatrix rotation_matrix(const double phi, const double theta, const double psi);
+    RotationMatrix rot(const double lambda1, const double lambda2, const double lambda3, const double beta);
 }
 
 #endif /* ROTATION_MATRIX_BUILDERS_HPP_ */
