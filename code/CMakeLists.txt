@@ -79,6 +79,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         ds_integration_static
         hydro_models_static
         kinematics_static
+        robwork_static
         yaml-cpp
         )
 
