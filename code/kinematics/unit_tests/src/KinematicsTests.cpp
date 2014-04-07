@@ -9,9 +9,9 @@
 #include "test_macros.hpp"
 #include "kinematics.hpp"
 #include "FrameException.hpp"
+#include <cmath>
 
-KinematicsTests::KinematicsTests() : a(DataGenerator(122)),
-                                     base(kinematics::FixedFrame::get_instance())
+KinematicsTests::KinematicsTests() : a(DataGenerator(122))
 {
 }
 
