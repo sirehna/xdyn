@@ -8,6 +8,11 @@
 #ifndef KINEMATICS_HPP_
 #define KINEMATICS_HPP_
 
+#include <string>
+#include "rotation_matrix_builders.hpp"
+
+class Point;
+
 /** \author cec
  *  \brief Interface to robwork
  *  \details 
@@ -19,6 +24,8 @@
  */
 class Kinematics
 {
+    public:
+        void add_frame(const std::string& frame_of_reference, const Point& P, const RotationMatrix& R);
 
 };
 

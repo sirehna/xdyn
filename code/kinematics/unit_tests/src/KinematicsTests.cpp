@@ -9,6 +9,10 @@
 #include "test_macros.hpp"
 #include "Kinematics.hpp"
 #include "FrameException.hpp"
+#include "rotation_matrix_builders.hpp"
+#include "EulerAngles.hpp"
+#include "Point.hpp"
+
 #include <cmath>
 
 KinematicsTests::KinematicsTests() : a(DataGenerator(122))
@@ -28,6 +32,15 @@ void KinematicsTests::TearDown()
 }
 
 #define PI (4.*atan(1.))
+
+void KinematicsTests::add_frame(Kinematics& k, const std::string& name, const double x, const double y, const double z, const double phi, const double theta, const double psi) const
+{
+    using namespace kinematics;
+    const RotationMatrix R = rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(EulerAngles(phi,theta,psi));
+    const Point P("fixed", x, y, z);
+    k.add_frame(name, P, R);
+}
+
 /*
 TEST_F(KinematicsTests, can_change_the_reference_frame_of_a_point)
 {
@@ -61,13 +74,6 @@ TEST_F(KinematicsTests, cannot_project_a_point_in_a_non_existent_frame)
     ASSERT_THROW(k.project(P, a.random<std::string>()), KinematicsException);
 }
 
-void KinematicsTests::add_frame(Kinematics& k, const std::string& name, const double x, const double y, const double z, const double phi, const double theta, const double psi) const
-{
-    const RotationMatrix R = rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(EulerAngles(phi,theta,psi));
-    const Point P("fixed", x, y, z);
-    k.add_frame(name, P, R);
-}
-
 TEST_F(KinematicsTests, can_project_a_velocity_screw_in_a_different_frame)
 {
     Kinematics k;
@@ -90,8 +96,7 @@ TEST_F(KinematicsTests, cannot_project_a_wrench_in_a_non_existent_frame)
 {
 
 }
-*/
-/*
+
 kinematics::FramePtr KinematicsTests::get_random_frame(const std::string& name)
 {
     const kinematics::Vector3DInFrame u(base, a.random<double>(),
