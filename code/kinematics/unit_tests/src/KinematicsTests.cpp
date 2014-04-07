@@ -26,6 +26,71 @@ void KinematicsTests::SetUp()
 void KinematicsTests::TearDown()
 {
 }
+
+#define PI (4.*atan(1.))
+/*
+TEST_F(KinematicsTests, can_change_the_reference_frame_of_a_point)
+{
+    Kinematics k;
+    const Point P("fixed", 1, 2, 3);
+    add_frame(k, "b", 1, 2, 3, PI/3, PI/4, PI/6);
+    const Point Q("fixed", 4, 0, 1);
+    const Point R = k.project(Q, "b");
+}
+
+TEST_F(KinematicsTests, cannot_create_point_in_non_existent_frame)
+{
+    Kinematics k;
+    const std::string name = a.random<std::string>();
+    ASSERT_THROW(k.make_point(name, a.random<double>(), a.random<double>(), a.random<double>()), KinematicsException);
+}
+
+TEST_F(KinematicsTests, cannot_define_the_same_reference_frame_more_than_once)
+{
+    Kinematics k;
+    const std::string name = a.random<std::string>();
+    add_frame(k, name, 1, 2, 3, 4, 5, 6);
+    ASSERT_NO_THROW(k.add_frame(name, P, ang));
+    ASSERT_THROW(add_frame(k, name, 1, 2, 3, 4, 5, 6), KinematicsException);
+}
+
+TEST_F(KinematicsTests, cannot_project_a_point_in_a_non_existent_frame)
+{
+    Kinematics k;
+    const auto P = k.make_point("fixed", 1, 2, 3);
+    ASSERT_THROW(k.project(P, a.random<std::string>()), KinematicsException);
+}
+
+void KinematicsTests::add_frame(Kinematics& k, const std::string& name, const double x, const double y, const double z, const double phi, const double theta, const double psi) const
+{
+    const RotationMatrix R = rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(EulerAngles(phi,theta,psi));
+    const Point P("fixed", x, y, z);
+    k.add_frame(name, P, R);
+}
+
+TEST_F(KinematicsTests, can_project_a_velocity_screw_in_a_different_frame)
+{
+    Kinematics k;
+    add_frame(k, "b", 1,2,47,0,23,4);
+    const VelocityScrew v("b", -1,-2,7,8,9,16);
+
+}
+
+TEST_F(KinematicsTests, can_project_a_wrench_in_a_different_frame)
+{
+
+}
+
+TEST_F(KinematicsTests, cannot_project_a_velocity_screw_in_a_non_existent_frame)
+{
+
+}
+
+TEST_F(KinematicsTests, cannot_project_a_wrench_in_a_non_existent_frame)
+{
+
+}
+*/
 /*
 kinematics::FramePtr KinematicsTests::get_random_frame(const std::string& name)
 {
