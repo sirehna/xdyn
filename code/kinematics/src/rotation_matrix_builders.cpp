@@ -11,7 +11,7 @@ RotationMatrix kinematics::rot(const double lambda1, const double lambda2, const
 
 namespace kinematics
 {
-    template <> RotationMatrix rotation_matrix<INTRINSIC, ANGLE, CARDAN, 3, 2, 1>(const EulerAngles& angles)
+    template <> RotationMatrix rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(const EulerAngles& angles)
     {
         const RotationMatrix Rx_phi   = rot(1,0,0, angles.phi);
         const RotationMatrix Ry_theta = rot(0,1,0, angles.theta);

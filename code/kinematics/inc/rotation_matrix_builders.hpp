@@ -26,7 +26,7 @@ typedef Eigen::Matrix<double, 3, 3> RotationMatrix;
 namespace kinematics
 {
     typedef enum {EXTRINSIC, INTRINSIC} IntrinsicOrExtrinsic;
-    typedef enum {AXIS, ANGLE} OrderConvention;
+    typedef enum {ORDERED_BY_AXIS, ORDERED_BY_ANGLE} OrderConvention;
     typedef enum {PROPER_EULER, CARDAN} EulerOrCardan;
     template <IntrinsicOrExtrinsic,
               OrderConvention,
