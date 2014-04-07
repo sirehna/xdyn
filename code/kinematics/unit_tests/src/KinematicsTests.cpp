@@ -41,6 +41,20 @@ void KinematicsTests::add_frame(Kinematics& k, const std::string& name, const do
     k.add_frame(name, P, R);
 }
 
+
+TEST_F(KinematicsTests, the_reference_frame_should_be_correct_when_changing_reference_frame)
+{
+    Kinematics k;
+    const Point P("fixed", 1, 2, 3);
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const std::string name = a.random<std::string>();
+        add_frame(k, name, 1, 2, 3, PI/3, PI/4, PI/6);
+        const Point Q("fixed", 4, 0, 1);
+        const Point R = k.project(Q, name);
+        ASSERT_EQ(name, R.frame);
+    }
+}
 /*
 TEST_F(KinematicsTests, can_change_the_reference_frame_of_a_point)
 {

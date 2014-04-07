@@ -4,3 +4,8 @@ void Kinematics::add_frame(const std::string&, const Point& , const RotationMatr
 {
 
 }
+
+Point Kinematics::project(const Point& , const std::string& frame)
+{
+    return Point(frame, 0, 0, 0);
+}

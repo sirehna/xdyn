@@ -10,8 +10,7 @@
 
 #include <string>
 #include "rotation_matrix_builders.hpp"
-
-class Point;
+#include "Point.hpp"
 
 /** \author cec
  *  \brief Interface to robwork
@@ -26,6 +25,7 @@ class Kinematics
 {
     public:
         void add_frame(const std::string& frame_of_reference, const Point& P, const RotationMatrix& R);
+        Point project(const Point& P, const std::string& destination_frame);
 
 };
 
