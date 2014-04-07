@@ -8,6 +8,7 @@ set(SRC src/AbstractFrame.cpp
         src/Velocity.cpp
         src/rotation_matrix_builders.cpp
         src/EulerAngles.cpp
+        src/Kinematics.cpp
         src/Point.cpp
         )
 
