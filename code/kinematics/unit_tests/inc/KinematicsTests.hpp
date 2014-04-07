@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
+#include "AbstractFrame.hpp"
 
 class KinematicsTests : public ::testing::Test
 {
@@ -12,7 +13,9 @@ class KinematicsTests : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         DataGenerator a;
+        kinematics::FramePtr base;
 
+        kinematics::FramePtr get_random_frame(const std::string& name);
 };
 
 #endif  /* KINEMATICSTESTS_HPP_ */

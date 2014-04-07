@@ -9,6 +9,7 @@
 #define FRAME_HPP_
 
 #include <map>
+#include <string>
 #include <rw/models/WorkCell.hpp>
 
 #include "Vector3DInFrame.hpp"
@@ -28,10 +29,12 @@ namespace kinematics {
 class Frame : public AbstractFrame
 {
     public:
-        static FramePtr make_new(const Vector3DInFrame& P, const rw::math::Rotation3D<double>& R);
-        static FramePtr make_new(const FramePtr& F, const rw::math::Vector3D<double>& P, const rw::math::Rotation3D<double>& R);
-        static FramePtr make_new(const Vector3DInFrame& P);
-        static FramePtr make_new(const FramePtr& F, const rw::math::Rotation3D<double>& R);
+        static FramePtr make_new(const Vector3DInFrame& P, const rw::math::Rotation3D<double>& R, const std::string& name);
+        static FramePtr make_new(FramePtr& F, const rw::math::Vector3D<double>& P, const rw::math::Rotation3D<double>& R, const std::string& name);
+        static FramePtr make_new(const Vector3DInFrame& P, const std::string& name);
+        static FramePtr make_new(FramePtr& F, const rw::math::Rotation3D<double>& R, const std::string& name);
+
+        rw::math::Transform3D<double> get_transformation_from_this_to_frame(const FramePtr& from) const;
 
         /** \author cec
          *  \date 2 avr. 2014, 09:54:06
@@ -39,15 +42,15 @@ class Frame : public AbstractFrame
          *  \returns A transformation
          *  \snippet kinematics/unit_tests/src/FrameTest.cpp Frame get_transformation_from_this_to_example
          */
-        rw::math::Transform3D<double> get_transformation_from_this_to(const FramePtr& destination_frame //!< The destination frame
-                                                      );
-
+        rw::math::Transform3D<double> get_transformation_from_parent_to_this() const;
     private:
-        Frame(const Vector3DInFrame& position_of_origin, const rw::math::Rotation3D<double>& rotation);
+        Frame(const Vector3DInFrame& position_of_origin, const rw::math::Rotation3D<double>& rotation, const std::string& frame_name);
         Frame();
+        void add_frame_to_tree(AbstractFrame* parent_frame_, const std::tr1::shared_ptr<AbstractFrame>& child_frame);
+        rw::math::Transform3D<double> get_transformation_from_frame_to_frame(const std::string& from, const FramePtr& to) const;
+
+
         Vector3DInFrame P;
-        rw::math::Rotation3D<double> R;
-        std::map<FramePtr, rw::math::Transform3D<double> > transformations;
 };
 
 }

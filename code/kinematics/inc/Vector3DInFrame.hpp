@@ -8,9 +8,8 @@
 #ifndef POSITION_HPP_
 #define POSITION_HPP_
 
-#include <tr1/memory>
-#include "AbstractFrame.hpp"
 #include <rw/math/Vector3D.hpp>
+#include "AbstractFrame.hpp"
 
 /** \author cec
  *  \brief Position of a point in a reference frame.
@@ -21,6 +20,8 @@
  *  \snippet kinematics/unit_tests/src/PositionTest.cpp PositionTest expected output
  */
 namespace kinematics {
+class AbstractFrame;
+
 class Vector3DInFrame : public rw::math::Vector3D<double>
 {
     public:
@@ -35,8 +36,10 @@ class Vector3DInFrame : public rw::math::Vector3D<double>
          *  \returns Vector3D<T>
          *  \snippet kinematics/unit_tests/src/Vector3DInFrameTest.cpp Vector3DInFrame operator/_example
          */
-        Vector3DInFrame operator/(const FramePtr&  //!< Frame in which we want to project the coordinates.
+        Vector3DInFrame operator/(const FramePtr&  proj_frame//!< Frame in which we want to project the coordinates.
                              ) const;
+
+        FramePtr get_frame() const;
 
     private:
         Vector3DInFrame();
