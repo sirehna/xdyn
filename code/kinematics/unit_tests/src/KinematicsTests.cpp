@@ -7,7 +7,7 @@
 
 #include "KinematicsTests.hpp"
 #include "test_macros.hpp"
-#include "kinematics.hpp"
+#include "Kinematics.hpp"
 #include "FrameException.hpp"
 #include <cmath>
 
