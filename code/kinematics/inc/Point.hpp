@@ -22,7 +22,7 @@
 class Point
 {
     public:
-        Point(const double x, const double y, const double z, const std::string& frame);
+        Point(const std::string& frame, const double x, const double y, const double z);
         double x;
         double y;
         double z;
