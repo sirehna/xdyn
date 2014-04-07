@@ -8,6 +8,7 @@
 #include "rotation_matrix_builders_Test.hpp"
 #include "rotation_matrix_builders.hpp"
 #include "EulerAngles.hpp"
+#include "test_macros.hpp"
 #include <cmath>
 
 rotation_matrix_builders_Test::rotation_matrix_builders_Test() : a(DataGenerator(545))
@@ -85,3 +86,17 @@ TEST_F(rotation_matrix_builders_Test, can_get_rotation_around_z_axis)
     ASSERT_DOUBLE_EQ(1, R(2,2));
 }
 
+TEST_F(rotation_matrix_builders_Test, example)
+{
+//! [rotation_matrix_builders_Test example]
+    using namespace kinematics;
+    const EulerAngles angles(PI/3, PI/4, PI/6);
+    //const EulerAngles angles(PI/2,0,0);
+    const RotationMatrix R = rotation_matrix<INTRINSIC, ANGLE, CARDAN, 3, 2, 1>(angles);
+//! [rotation_matrix_builders_Test example]
+//! [rotation_matrix_builders_Test expected output]
+    ASSERT_DOUBLE_EQ(sqrt(6)/4, R(0,0));
+    ASSERT_DOUBLE_EQ(sqrt(3)/4+sqrt(6)/8, R(1,1));
+    ASSERT_DOUBLE_EQ(sqrt(2)/4, R(2,2));
+//! [rotation_matrix_builders_Test expected output]
+}

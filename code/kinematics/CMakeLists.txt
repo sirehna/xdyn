@@ -7,6 +7,7 @@ set(SRC src/AbstractFrame.cpp
         src/Vector3DInFrame.cpp
         src/Velocity.cpp
         src/rotation_matrix_builders.cpp
+        src/EulerAngles.cpp
         )
 
 include_directories(inc)

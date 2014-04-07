@@ -10,6 +10,7 @@
 
 #include <Eigen/Dense>
 
+class EulerAngles;
 typedef Eigen::Matrix<double, 3, 3> RotationMatrix;
 
 /** \author cec
@@ -32,7 +33,7 @@ namespace kinematics
               EulerOrCardan,
               int I,
               int J,
-              int K> RotationMatrix rotation_matrix(const double phi, const double theta, const double psi);
+              int K> RotationMatrix rotation_matrix(const EulerAngles& angles);
     RotationMatrix rot(const double lambda1, const double lambda2, const double lambda3, const double beta);
 }
 
