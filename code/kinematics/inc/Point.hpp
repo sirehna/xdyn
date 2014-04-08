@@ -8,7 +8,7 @@
 #ifndef POINT1_HPP_
 #define POINT1_HPP_
 
-#include <string>
+#include <Eigen/Dense>
 
 /** \author cec
  *  \brief 
@@ -22,14 +22,17 @@
 class Point
 {
     public:
-        Point(const std::string& frame, const double x, const double y, const double z);
-        double x;
-        double y;
-        double z;
-        std::string frame;
-
-    private:
         Point();
+        Point(const Point& P);
+        Point(const Eigen::Vector3d& v);
+        Point(const double x, const double y, const double z);
+        Point& operator=(const Point& rhs);
+
+    public:
+        Eigen::Vector3d v;
+        double& x;
+        double& y;
+        double& z;
 };
 
 #endif /* POINT1_HPP_ */
