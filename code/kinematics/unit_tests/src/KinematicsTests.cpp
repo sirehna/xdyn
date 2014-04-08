@@ -46,7 +46,7 @@ TEST_F(KinematicsTests, the_reference_frame_should_be_correct_when_changing_refe
 {
     Kinematics k;
     const Point P("fixed", 1, 2, 3);
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 40 ; ++i)
     {
         const std::string name = a.random<std::string>();
         add_frame(k, name, 1, 2, 3, PI/3, PI/4, PI/6);

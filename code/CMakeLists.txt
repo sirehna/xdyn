@@ -44,7 +44,7 @@ SET(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
 ADD_DEFINITIONS(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
 ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 
-ADD_SUBDIRECTORY(robwork)
+#ADD_SUBDIRECTORY(robwork)
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
@@ -79,7 +79,6 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         ds_integration_static
         hydro_models_static
         kinematics_static
-        robwork_static
         yaml-cpp
         )
 
