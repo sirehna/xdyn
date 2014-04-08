@@ -11,6 +11,7 @@
 #include <string>
 #include "rotation_matrix_builders.hpp"
 #include "Point.hpp"
+#include <tr1/memory>
 
 /** \author cec
  *  \brief Interface to robwork
@@ -24,9 +25,13 @@
 class Kinematics
 {
     public:
+        Kinematics();
         void add_frame(const std::string& frame_of_reference, const Point& P, const RotationMatrix& R);
         Point project(const Point& P, const std::string& destination_frame);
 
+    private:
+        class Impl;
+        std::tr1::shared_ptr<Impl> pimpl;
 };
 
 #endif /* KINEMATICS_HPP_ */
