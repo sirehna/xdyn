@@ -8,10 +8,9 @@
 #ifndef ROTATION_MATRIX_BUILDERS_HPP_
 #define ROTATION_MATRIX_BUILDERS_HPP_
 
-#include <Eigen/Dense>
+#include "RotationMatrix.hpp"
 
 class EulerAngles;
-typedef Eigen::Matrix<double, 3, 3> RotationMatrix;
 
 /** \author cec
  *  \brief 36 different rotation matrices
