@@ -5,8 +5,8 @@
  *      Author: maroff
  */
 
-#ifndef KINEMATICS_HPP_
-#define KINEMATICS_HPP_
+#ifndef KINEMATICS1_HPP_
+#define KINEMATICS1_HPP_
 
 #include <string>
 #include "rotation_matrix_builders.hpp"
@@ -34,4 +34,4 @@ class Kinematics
         std::tr1::shared_ptr<Impl> pimpl;
 };
 
-#endif /* KINEMATICS_HPP_ */
+#endif /* KINEMATICS1_HPP_ */

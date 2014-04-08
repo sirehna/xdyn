@@ -5,8 +5,8 @@
  *      Author: maroff
  */
 
-#ifndef POINT_HPP_
-#define POINT_HPP_
+#ifndef POINT1_HPP_
+#define POINT1_HPP_
 
 #include <string>
 
@@ -32,4 +32,4 @@ class Point
         Point();
 };
 
-#endif /* POINT_HPP_ */
+#endif /* POINT1_HPP_ */
