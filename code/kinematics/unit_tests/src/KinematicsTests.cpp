@@ -136,11 +136,23 @@ TEST_F(KinematicsTests, reimplementation_of_robwork)
 TEST_F(KinematicsTests, can_change_the_reference_frame_of_a_point)
 {
     Kinematics k;
-    const Point P("fixed", 1, 2, 3);
     add_frame(k, "b", 1, 2, 3, PI/3, PI/4, PI/6);
     const Point Q("fixed", 4, 0, 1);
     const Point R = k.project(Q, "b");
+    ASSERT_DOUBLE_EQ(3*sqrt(6)/4-sqrt(2)/2+sqrt(2), R.x);
 }
+/*
+TEST_F(KinematicsTests, should_be_able_to_change_the_position_of_a_reference_frame)
+{
+    Kinematics k;
+    add_frame(k, "b", 0, 0, 0, PI/3, PI/4, PI/6);
+    const Point P("fixed", 4, 0, 1);
+    const Point Q("fixed", 1, 2, 3);
+    k.update_position("b", Q);
+    const Point R = k.project(P, "b");
+    ASSERT_DOUBLE_EQ(3*sqrt(6)/4-sqrt(2)/2+sqrt(2), R.x);
+}
+
 
 TEST_F(KinematicsTests, cannot_create_point_in_non_existent_frame)
 {
