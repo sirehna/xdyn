@@ -26,10 +26,19 @@ Point Transform::operator*(const Point& P) const
 
 Transform Transform::operator*(const Transform& T) const
 {
+    if (get_from_frame() != T.get_to_frame())
+    {
+        THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Frames don't match in T1*T2: transform T1 goes from ") + get_from_frame() + " to " + to_frame + ", but transform T2 goes from " + T.get_from_frame() + " to " + T.get_to_frame());
+    }
     return Transform(Point(T.get_from_frame(), T.t.v+t.v), r*T.r, to_frame);
 }
 
 std::string Transform::get_from_frame() const
 {
     return t.get_frame();
+}
+
+std::string Transform::get_to_frame() const
+{
+    return to_frame;
 }

@@ -175,3 +175,20 @@ TEST_F(TransformTest, should_throw_if_applying_transform_to_a_point_in_wrong_fra
     }
 }
 
+TEST_F(TransformTest, should_throw_if_composing_transforms_in_wrong_frame)
+{
+    for (size_t i = 0 ; i<1000 ; ++i)
+    {
+        const std::string F1 = a.random<std::string>();
+        const std::string F2 = a.random<std::string>();
+        const Point O1 = random_point_in_frame(F1);
+        const Point O2 = random_point_in_frame(F2);
+        RotationMatrix R = a.random<RotationMatrix>();
+        kinematics::Transform T1(O1,R,F2);
+        kinematics::Transform T2(O2,R,a.random<std::string>());
+        ASSERT_NO_THROW(T2*T1);
+        ASSERT_THROW(T1*T1, KinematicsException);
+        ASSERT_THROW(T1*T2, KinematicsException);
+        ASSERT_THROW(T2*T2, KinematicsException);
+    }
+}
