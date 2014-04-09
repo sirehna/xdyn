@@ -192,3 +192,21 @@ TEST_F(TransformTest, should_throw_if_composing_transforms_in_wrong_frame)
         ASSERT_THROW(T2*T2, KinematicsException);
     }
 }
+
+TEST_F(TransformTest, should_throw_if_transforming_velocity_from_wrong_frame)
+{
+    for (size_t i = 0 ; i<1000 ; ++i)
+    {
+        const std::string F1 = a.random<std::string>();
+        const std::string F2 = a.random<std::string>();
+        const Point P = random_point_in_frame(F1);
+        const Point Q = random_point_in_frame(F2);
+        const Point w = random_point_in_frame(F1);
+        const RotationMatrix R = a.random<RotationMatrix>();
+        const kinematics::Transform T_same(P,R,a.random<std::string>());
+        const kinematics::Transform T_different(Q,R,a.random<std::string>());
+        const Velocity V(P, w);
+        ASSERT_NO_THROW(T_same*V);
+        ASSERT_THROW(T_different*V, KinematicsException);
+    }
+}

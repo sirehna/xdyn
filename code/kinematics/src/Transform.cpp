@@ -24,6 +24,15 @@ Point Transform::operator*(const Point& P) const
     return Point(to_frame, r*P.v+t.v);
 }
 
+Velocity Transform::operator*(const Velocity& V) const
+{
+    if (V.get_frame() != get_from_frame())
+    {
+        THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Frames don't match: transform goes from ") + get_from_frame() + " to " + to_frame + ", but velocity is expressed in frame " + V.get_frame());
+    }
+    return V;
+}
+
 Transform Transform::operator*(const Transform& T) const
 {
     if (get_from_frame() != T.get_to_frame())
