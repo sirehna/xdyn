@@ -155,33 +155,3 @@ TEST_F(TransformTest, can_translate_and_rotate_a_point)
         ASSERT_SMALL_RELATIVE_ERROR(O.z+P.z,Q.z,EPS);
     }
 }
-
-TEST_F(TransformTest, can_translate_a_velocity)
-{
-
-}
-
-TEST_F(TransformTest, can_rotate_a_velocity)
-{
-
-}
-
-TEST_F(TransformTest, can_translate_and_rotate_a_velocity)
-{
-
-}
-
-TEST_F(TransformTest, can_translate_a_wrench)
-{
-
-}
-
-TEST_F(TransformTest, can_rotate_a_wrench)
-{
-
-}
-
-TEST_F(TransformTest, can_translate_and_rotate_a_wrench)
-{
-
-}
