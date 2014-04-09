@@ -6,7 +6,7 @@ Velocity::Velocity(const Point& p_, const AngularVelocityVector& w) : P(p_), vP(
 {
     if (p_.get_frame() != w.get_frame())
     {
-        THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("P is expressed in frame") + p_.get_frame() + ", whereas omega is expressed in frame " + w.get_frame());
+        THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("P is expressed in frame ") + p_.get_frame() + ", whereas omega is expressed in frame " + w.get_frame());
     }
 }
 
