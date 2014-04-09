@@ -10,6 +10,21 @@ Velocity::Velocity(const Point& p_, const AngularVelocityVector& w) : P(p_), vP(
     }
 }
 
+Point Velocity::get_point() const
+{
+    return P;
+}
+
+AngularVelocityVector Velocity::get_angular_velocity() const
+{
+    return omega;
+}
+
+TranslationVelocityVector Velocity::get_translation_velocity() const
+{
+    return vP;
+}
+
 std::string Velocity::get_frame() const
 {
     return P.get_frame();

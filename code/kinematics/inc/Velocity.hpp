@@ -27,6 +27,9 @@ class Velocity
         Velocity& operator=(const Velocity& rhs);
         Velocity(const Velocity& rhs);
         std::string get_frame() const;
+        Point get_point() const;
+        AngularVelocityVector get_angular_velocity() const;
+        TranslationVelocityVector get_translation_velocity() const;
 
     private:
         Point P;
