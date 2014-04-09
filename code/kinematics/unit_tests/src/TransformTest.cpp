@@ -10,10 +10,12 @@
 #include "Point.hpp"
 #include "rotation_matrix_builders.hpp"
 #include "test_macros.hpp"
+#include "extra_test_assertions.hpp"
 
 #include <cmath>
 
 #define PI (4.*atan(1.))
+#define EPS 1E-13
 
 TransformTest::TransformTest() : a(DataGenerator(1215))
 {
@@ -52,15 +54,14 @@ template <> Point TypedScalarDataGenerator<Point>::get() const
     return Point(x, y, z);
 }
 
-TEST_F(TransformTest, can_change_the_reference_frame_of_a_point)
+TEST_F(TransformTest, can_translate_a_point)
 {
 //! [TransformTest example]
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
-        const RotationMatrix R = a.random<RotationMatrix>();
         const Point P1 = a.random<Point>();
         const Point P2 = a.random<Point>();
-        kinematics::Transform T(P1, R);
+        kinematics::Transform T(P1);
         const Point Q = T*P2;
 
         ASSERT_DOUBLE_EQ(P1.x+P2.x,Q.x);
