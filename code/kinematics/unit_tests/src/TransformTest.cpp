@@ -89,9 +89,20 @@ TEST_F(TransformTest, can_compose_two_translations)
     }
 }
 
-TEST_F(TransformTest, can_only_use_a_transformation_on_a_point_if_the_frames_match)
+TEST_F(TransformTest, can_rotate_a_point)
 {
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double beta = a.random<double>().between(-PI,PI);
+        RotationMatrix R = kinematics::rot(0,0,1, beta);
+        const Point P = a.random<Point>();
+        kinematics::Transform T(R);
+        const Point Q = T*P;
 
+        ASSERT_SMALL_RELATIVE_ERROR(cos(beta)*P.x-sin(beta)*P.y,Q.x,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(sin(beta)*P.x+cos(beta)*P.y,Q.y,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(P.z,Q.z,EPS);
+    }
 }
 
 TEST_F(TransformTest, can_only_compose_transformations_if_their_frames_match)
@@ -99,10 +110,7 @@ TEST_F(TransformTest, can_only_compose_transformations_if_their_frames_match)
 
 }
 
-TEST_F(TransformTest, can_rotate_a_point)
-{
-    kinematics::rot(0, 0, 1, PI/3);
-}
+
 
 TEST_F(TransformTest, can_translate_and_rotate_a_point)
 {

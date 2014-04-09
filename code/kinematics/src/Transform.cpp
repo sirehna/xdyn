@@ -20,10 +20,10 @@ Transform::Transform(const Point& translation, const RotationMatrix& rotation) :
 
 Point Transform::operator*(const Point& P) const
 {
-    return Point(P.v+t.v);
+    return Point(r*P.v+t.v);
 }
 
 Transform Transform::operator*(const Transform& P) const
 {
-    return Transform(Point(P.t.v+t.v), P.r);
+    return Transform(Point(P.t.v+t.v), r*P.r);
 }
