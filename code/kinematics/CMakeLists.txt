@@ -5,7 +5,7 @@ set(SRC #src/AbstractFrame.cpp
         #src/FixedFrame.cpp
         #src/Frame.cpp
         #src/Vector3DInFrame.cpp
-        #src/Velocity.cpp
+        src/Velocity.cpp
         src/rotation_matrix_builders.cpp
         src/EulerAngles.cpp
         #src/Kinematics.cpp

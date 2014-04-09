@@ -141,17 +141,17 @@ TEST_F(TransformTest, can_translate_and_rotate_a_point)
     }
 }
 
-TEST_F(TransformTest, can_rotate_a_screw)
+TEST_F(TransformTest, can_translate_a_velocity)
 {
 
 }
 
-TEST_F(TransformTest, can_translate_and_rotate_a_screw)
+TEST_F(TransformTest, can_rotate_a_velocity)
 {
 
 }
 
-TEST_F(TransformTest, can_only_use_a_transformation_on_a_wrench_if_the_frames_match)
+TEST_F(TransformTest, can_translate_and_rotate_a_velocity)
 {
 
 }
