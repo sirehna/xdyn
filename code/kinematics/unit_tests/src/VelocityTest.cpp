@@ -40,3 +40,15 @@ TEST_F(VelocityTest, throws_if_P_and_omega_are_not_projected_in_the_same_frame)
         ASSERT_THROW(Velocity(P, omega_in_different_frame), KinematicsException);
     }
 }
+
+TEST_F(VelocityTest, cannot_change_point_if_projection_frames_differ)
+{
+    const std::string projection_frame = a.random<std::string>();
+    const Point P(projection_frame,1,2,3);
+    const Point Q_in_same_frame(projection_frame,0,2,7);
+    const Point Q_in_different_frame(a.random<std::string>(),0,2,7);
+    const AngularVelocityVector omega(projection_frame, 4,5,6);
+    Velocity V(P, omega);
+    ASSERT_NO_THROW(V.change_point(Q_in_same_frame));
+    ASSERT_THROW(V.change_point(Q_in_different_frame), KinematicsException);
+}

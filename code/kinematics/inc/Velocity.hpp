@@ -22,14 +22,20 @@ class Velocity
 {
     public:
         Velocity(const Point& p, const AngularVelocityVector& w);
+
+    private:
         Point P;
         AngularVelocityVector omega;
+
+    public:
         double& u;
         double& v;
         double& w;
         double& p;
         double& q;
         double& r;
+
+        Velocity change_point(const Point& P) const;
 
 
     private:
