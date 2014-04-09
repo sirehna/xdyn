@@ -27,6 +27,8 @@ namespace kinematics
         public:
             Transform();
             Transform(const Point& translation, const RotationMatrix& rotation);
+            Transform(const Point& translation);
+            Transform(const RotationMatrix& rotation);
             Point operator*(const Point& P) const;
             Transform operator*(const Transform& P) const;
 

@@ -6,6 +6,13 @@ Transform::Transform() : t(Point()), r(RotationMatrix(Eigen::MatrixXd::Identity(
 {
 }
 
+Transform::Transform(const Point& translation) : t(translation), r(RotationMatrix(Eigen::MatrixXd::Identity(3,3)))
+{
+}
+
+Transform::Transform(const RotationMatrix& rotation) : t(Point()), r(rotation)
+{
+}
 
 Transform::Transform(const Point& translation, const RotationMatrix& rotation) : t(translation), r(rotation)
 {
