@@ -124,21 +124,21 @@ TEST_F(TransformTest, can_compose_two_rotations)
     }
 }
 
-
-
 TEST_F(TransformTest, can_translate_and_rotate_a_point)
 {
-    kinematics::rot(0, 0, 1, PI/3);
-}
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const Point O = a.random<Point>();
+        const Point P = a.random<Point>();
+        const double beta = a.random<double>().between(-PI,PI);
+        RotationMatrix R = kinematics::rot(0,0,1, beta);
+        kinematics::Transform T(O,R);
+        const Point Q = T*P;
 
-TEST_F(TransformTest, can_only_use_a_transformation_on_a_screw_if_the_frames_match)
-{
-
-}
-
-TEST_F(TransformTest, can_translate_a_screw)
-{
-
+        ASSERT_SMALL_RELATIVE_ERROR(O.x+cos(beta)*P.x-sin(beta)*P.y,Q.x,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(O.y+sin(beta)*P.x+cos(beta)*P.y,Q.y,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(O.z+P.z,Q.z,EPS);
+    }
 }
 
 TEST_F(TransformTest, can_rotate_a_screw)
