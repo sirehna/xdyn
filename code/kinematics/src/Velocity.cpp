@@ -45,5 +45,7 @@ Velocity Velocity::change_point(const Point& Q) const
     {
         THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Q is expressed in frame ") + P.get_frame() + ", but velocity is expressed in frame " + Q.get_frame());
     }
-    return *this;
+
+    const TranslationVelocityVector vQ = vP + (P - Q).cross(omega.v);
+    return Velocity(Q, vQ, omega);
 }

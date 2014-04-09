@@ -52,3 +52,29 @@ TEST_F(VelocityTest, cannot_change_point_if_projection_frames_differ)
     ASSERT_NO_THROW(V.change_point(Q_in_same_frame));
     ASSERT_THROW(V.change_point(Q_in_different_frame), KinematicsException);
 }
+
+TEST_F(VelocityTest, can_change_reference_point)
+{
+//! [VelocityTest example]
+    const std::string projection_frame = a.random<std::string>();
+    const Point P(projection_frame,1,2,3);
+    const Point Q(projection_frame,0,2,7);
+    const AngularVelocityVector omega(projection_frame, 4,5,6);
+    Velocity V(P, omega);
+    V.u = 10;
+    V.v = 21;
+    V.w = 12;
+    V.p = 23;
+    V.q = 14;
+    V.r = 25;
+    const Velocity V2 = V.change_point(Q);
+//! [VelocityTest example]
+//! [VelocityTest expected output]
+    ASSERT_DOUBLE_EQ(V.p,V2.p);
+    ASSERT_DOUBLE_EQ(V.q,V2.q);
+    ASSERT_DOUBLE_EQ(V.r,V2.r);
+    ASSERT_DOUBLE_EQ(V.u+4*V.q,V2.u);
+    ASSERT_DOUBLE_EQ(V.v-4*V.p-V.r,V2.v);
+    ASSERT_DOUBLE_EQ(V.w+V.q,V2.w);
+//! [VelocityTest expected output]
+}
