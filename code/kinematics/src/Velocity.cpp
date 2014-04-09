@@ -10,6 +10,11 @@ Velocity::Velocity(const Point& p_, const AngularVelocityVector& w) : P(p_), vP(
     }
 }
 
+std::string Velocity::get_frame() const
+{
+    return P.get_frame();
+}
+
 Velocity& Velocity::operator=(const Velocity& rhs)
 {
     if (this != &rhs)
