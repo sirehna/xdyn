@@ -11,7 +11,7 @@
 #include "Point.hpp"
 
 typedef Point AngularVelocityVector;
-typedef Eigen::Vector3d TranslationVelocityVector;
+typedef Point TranslationVelocityVector;
 
 
 /** \author cec
@@ -30,7 +30,7 @@ class Velocity
 
     private:
         Point P;
-        Eigen::Vector3d vP;
+        TranslationVelocityVector vP;
         AngularVelocityVector omega;
 
     public:

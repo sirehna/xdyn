@@ -201,7 +201,7 @@ TEST_F(TransformTest, should_throw_if_transforming_velocity_from_wrong_frame)
         const std::string F2 = a.random<std::string>();
         const Point P = random_point_in_frame(F1);
         const Point Q = random_point_in_frame(F2);
-        const Point w = random_point_in_frame(F1);
+        const AngularVelocityVector w = random_point_in_frame(F1);
         const RotationMatrix R = a.random<RotationMatrix>();
         const kinematics::Transform T_same(P,R,a.random<std::string>());
         const kinematics::Transform T_different(Q,R,a.random<std::string>());
