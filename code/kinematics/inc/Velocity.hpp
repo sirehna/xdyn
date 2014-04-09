@@ -10,24 +10,30 @@
 
 #include "Point.hpp"
 
+typedef Point AngularVelocityVector;
+
+
 /** \author cec
  *  \brief 
  *  \details 
  *  \ingroup kinematics
  */
-struct Velocity
+class Velocity
 {
-    Eigen::Vector3d translation;
-    Eigen::Vector3d rotation;
-    double& u;
-    double& v;
-    double& w;
-    double& p;
-    double& q;
-    double& r;
-    Point P;
-    std::string reference_frame;
-    std::string projection_frame;
+    public:
+        Velocity(const Point& p, const AngularVelocityVector& w);
+        Point P;
+        AngularVelocityVector omega;
+        double& u;
+        double& v;
+        double& w;
+        double& p;
+        double& q;
+        double& r;
+
+
+    private:
+        Velocity();
 };
 
 #endif // VELOCITY_HPP_
