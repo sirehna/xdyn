@@ -73,20 +73,19 @@ TEST_F(TransformTest, can_translate_a_point)
 //! [TransformTest expected output]
 }
 
-TEST_F(TransformTest, can_compose_two_transformations)
+TEST_F(TransformTest, can_compose_two_translations)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
-        const RotationMatrix R = a.random<RotationMatrix>();
         const Point P1 = a.random<Point>();
         const Point P2 = a.random<Point>();
-        kinematics::Transform T1(P1, R);
-        kinematics::Transform T2(P2, R);
+        kinematics::Transform T1(P1);
+        kinematics::Transform T2(P2);
         const Point Q = T1*T2*P1;
 
-        ASSERT_DOUBLE_EQ(2*P1.x+P2.x,Q.x);
-        ASSERT_DOUBLE_EQ(2*P1.y+P2.y,Q.y);
-        ASSERT_DOUBLE_EQ(2*P1.z+P2.z,Q.z);
+        ASSERT_SMALL_RELATIVE_ERROR(2*P1.x+P2.x,Q.x,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(2*P1.y+P2.y,Q.y,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(2*P1.z+P2.z,Q.z,EPS);
     }
 }
 
