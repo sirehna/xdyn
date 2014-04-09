@@ -31,6 +31,7 @@ namespace kinematics
             Point operator*(const Point& P) const;
             Transform operator*(const Transform& P) const;
             std::string get_from_frame() const;
+            std::string get_to_frame() const;
             
         private:
             Transform();
