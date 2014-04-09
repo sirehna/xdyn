@@ -25,16 +25,17 @@ namespace kinematics
     class Transform
     {
         public:
-            Transform();
-            Transform(const Point& translation, const RotationMatrix& rotation);
-            Transform(const Point& translation);
-            Transform(const RotationMatrix& rotation);
+            Transform(const Point& translation, const RotationMatrix& rotation, const std::string& to_frame);
+            Transform(const Point& translation, const std::string& to_frame);
+            Transform(const RotationMatrix& rotation, const std::string& from_frame, const std::string& to_frame);
             Point operator*(const Point& P) const;
             Transform operator*(const Transform& P) const;
-
+            
         private:
+            Transform();
             Point t;
             RotationMatrix r;
+            std::string to_frame;
     };
 }
 #endif /* TRANSFORM_HPP_ */

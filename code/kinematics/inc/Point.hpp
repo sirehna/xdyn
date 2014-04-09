@@ -9,6 +9,7 @@
 #define POINT1_HPP_
 
 #include <Eigen/Dense>
+#include <string>
 
 /** \author cec
  *  \brief 
@@ -22,16 +23,21 @@
 class Point
 {
     public:
-        Point();
+        Point(const std::string& frame);
         Point(const Point& P);
-        Point(const Eigen::Vector3d& v);
-        Point(const double x, const double y, const double z);
+        Point(const std::string& frame, const Eigen::Vector3d& v);
+        Point(const std::string& frame, const double x, const double y, const double z);
         Point& operator=(const Point& rhs);
 
         Eigen::Vector3d v;
         double& x;
         double& y;
         double& z;
+        std::string get_frame() const;
+        
+    private:
+        Point();
+        std::string frame;
 };
 
 #endif /* POINT1_HPP_ */

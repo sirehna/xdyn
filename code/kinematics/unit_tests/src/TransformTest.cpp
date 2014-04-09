@@ -51,7 +51,20 @@ template <> Point TypedScalarDataGenerator<Point>::get() const
     const double x = random<double>().between(-10,10);
     const double y = random<double>().between(-10,10);
     const double z = random<double>().between(-10,10);
-    return Point(x, y, z);
+    return Point(random<std::string>(), x, y, z);
+}
+
+Point TransformTest::random_point_in_frame(const std::string& frame) const
+{
+    const double x = a.random<double>().between(-10,10);
+    const double y = a.random<double>().between(-10,10);
+    const double z = a.random<double>().between(-10,10);
+    return Point(frame, x, y, z);
+}
+
+Point TransformTest::random_point() const
+{
+    return random_point_in_frame(a.random<std::string>());
 }
 
 TEST_F(TransformTest, can_translate_a_point)
@@ -59,9 +72,9 @@ TEST_F(TransformTest, can_translate_a_point)
 //! [TransformTest example]
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
-        const Point P1 = a.random<Point>();
-        const Point P2 = a.random<Point>();
-        kinematics::Transform T(P1);
+        const Point P1 = random_point();
+        const Point P2 = random_point_in_frame(P1.get_frame());
+        kinematics::Transform T(P1, a.random<std::string>());
         const Point Q = T*P2;
 
         ASSERT_SMALL_RELATIVE_ERROR(P1.x+P2.x,Q.x,EPS);
@@ -77,11 +90,12 @@ TEST_F(TransformTest, can_compose_two_translations)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
-        const Point P1 = a.random<Point>();
-        const Point P2 = a.random<Point>();
-        kinematics::Transform T1(P1);
-        kinematics::Transform T2(P2);
-        const Point Q = T1*T2*P1;
+        const std::string middle_frame = a.random<std::string>();
+        const Point P1 = random_point();
+        const Point P2 = random_point_in_frame(middle_frame);
+        kinematics::Transform T1(P1,middle_frame);
+        kinematics::Transform T2(P2,a.random<std::string>());
+        const Point Q = T2*T1*P1;
 
         ASSERT_SMALL_RELATIVE_ERROR(2*P1.x+P2.x,Q.x,EPS);
         ASSERT_SMALL_RELATIVE_ERROR(2*P1.y+P2.y,Q.y,EPS);
@@ -95,8 +109,8 @@ TEST_F(TransformTest, can_rotate_a_point)
     {
         const double beta = a.random<double>().between(-PI,PI);
         RotationMatrix R = kinematics::rot(0,0,1, beta);
-        const Point P = a.random<Point>();
-        kinematics::Transform T(R);
+        const Point P = random_point();
+        kinematics::Transform T(R, P.get_frame(), a.random<std::string>());
         const Point Q = T*P;
 
         ASSERT_SMALL_RELATIVE_ERROR(cos(beta)*P.x-sin(beta)*P.y,Q.x,EPS);
@@ -113,10 +127,11 @@ TEST_F(TransformTest, can_compose_two_rotations)
         const double beta2 = a.random<double>().between(-PI,PI);
         RotationMatrix R1 = kinematics::rot(0,0,1, beta1);
         RotationMatrix R2 = kinematics::rot(0,0,1, beta2);
-        const Point P = a.random<Point>();
-        kinematics::Transform T1(R1);
-        kinematics::Transform T2(R2);
-        const Point Q = T1*T2*P;
+        const Point P = random_point();
+        const std::string middle_frame = a.random<std::string>();
+        kinematics::Transform T1(R1, P.get_frame(), middle_frame);
+        kinematics::Transform T2(R2, middle_frame, a.random<std::string>());
+        const Point Q = T2*T1*P;
 
         ASSERT_SMALL_RELATIVE_ERROR(cos(beta1+beta2)*P.x-sin(beta1+beta2)*P.y,Q.x,EPS);
         ASSERT_SMALL_RELATIVE_ERROR(sin(beta1+beta2)*P.x+cos(beta1+beta2)*P.y,Q.y,EPS);
@@ -128,11 +143,11 @@ TEST_F(TransformTest, can_translate_and_rotate_a_point)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
-        const Point O = a.random<Point>();
-        const Point P = a.random<Point>();
+        const Point O = random_point();
+        const Point P = random_point_in_frame(O.get_frame());
         const double beta = a.random<double>().between(-PI,PI);
         RotationMatrix R = kinematics::rot(0,0,1, beta);
-        kinematics::Transform T(O,R);
+        kinematics::Transform T(O,R,a.random<std::string>());
         const Point Q = T*P;
 
         ASSERT_SMALL_RELATIVE_ERROR(O.x+cos(beta)*P.x-sin(beta)*P.y,Q.x,EPS);

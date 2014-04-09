@@ -1,29 +1,29 @@
 #include "Transform.hpp"
 
 using namespace kinematics;
-
+/*
 Transform::Transform() : t(Point()), r(RotationMatrix(Eigen::MatrixXd::Identity(3,3)))
 {
-}
+}*/
 
-Transform::Transform(const Point& translation) : t(translation), r(RotationMatrix(Eigen::MatrixXd::Identity(3,3)))
+Transform::Transform(const Point& translation, const std::string& to_frame_) : t(translation), r(RotationMatrix(Eigen::MatrixXd::Identity(3,3))), to_frame(to_frame_)
 {
 }
 
-Transform::Transform(const RotationMatrix& rotation) : t(Point()), r(rotation)
+Transform::Transform(const RotationMatrix& rotation, const std::string& from_frame, const std::string& to_frame_) : t(Point(from_frame)), r(rotation), to_frame(to_frame_)
 {
 }
 
-Transform::Transform(const Point& translation, const RotationMatrix& rotation) : t(translation), r(rotation)
+Transform::Transform(const Point& translation, const RotationMatrix& rotation, const std::string& to_frame_) : t(translation), r(rotation), to_frame(to_frame_)
 {
 }
 
 Point Transform::operator*(const Point& P) const
 {
-    return Point(r*P.v+t.v);
+    return Point(to_frame, r*P.v+t.v);
 }
 
-Transform Transform::operator*(const Transform& P) const
+Transform Transform::operator*(const Transform& T) const
 {
-    return Transform(Point(P.t.v+t.v), r*P.r);
+    return Transform(Point(T.t.get_frame(), T.t.v+t.v), r*T.r, to_frame);
 }
