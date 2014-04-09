@@ -1,13 +1,42 @@
 #include "Velocity.hpp"
 #include "KinematicsException.hpp"
 
-Velocity::Velocity(const Point& p_, const AngularVelocityVector& w) : P(p_), omega(w), u(P.v[0])
-, v(P.v[1]), w(P.v[2]), p(omega.v[0]), q(omega.v[1]), r(omega.v[2])
+Velocity::Velocity(const Point& p_, const AngularVelocityVector& w) : P(p_), vP(Eigen::Vector3d(0,0,0)), omega(w), u(vP[0])
+, v(vP[1]), w(vP[2]), p(omega.x), q(omega.y), r(omega.z)
 {
     if (p_.get_frame() != w.get_frame())
     {
         THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("P is expressed in frame") + p_.get_frame() + ", whereas omega is expressed in frame " + w.get_frame());
     }
+}
+
+Velocity& Velocity::operator=(const Velocity& rhs)
+{
+    if (this != &rhs)
+    {
+        P = rhs.P;
+        vP = rhs.vP;
+        omega = rhs.omega;
+        u = vP[0];
+        v = vP[1];
+        w = vP[2];
+        p = omega.x;
+        q = omega.y;
+        r = omega.z;
+    }
+    return *this;
+}
+
+Velocity::Velocity(const Velocity& rhs) : P(rhs.P), vP(rhs.vP), omega(rhs.omega), u(vP[0])
+, v(vP[1]), w(vP[2]), p(omega.x), q(omega.y), r(omega.z)
+{
+
+}
+
+Velocity::Velocity(const Point& p_, const TranslationVelocityVector& t_, const AngularVelocityVector& w) : P(p_), vP(t_), omega(w), u(vP[0])
+, v(vP[1]), w(vP[2]), p(omega.x), q(omega.y), r(omega.z)
+{
+
 }
 
 Velocity Velocity::change_point(const Point& Q) const
