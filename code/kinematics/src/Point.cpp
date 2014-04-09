@@ -34,3 +34,8 @@ std::string Point::get_frame() const
 {
     return frame;
 }
+
+Eigen::Vector3d Point::operator-(const Point& P) const
+{
+    return Eigen::Vector3d(x - P.x, y - P.y, z - P.z);
+}
