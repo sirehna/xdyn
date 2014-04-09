@@ -1,4 +1,5 @@
 #include "Transform.hpp"
+#include "KinematicsException.hpp"
 
 using namespace kinematics;
 
@@ -16,6 +17,10 @@ Transform::Transform(const Point& translation, const RotationMatrix& rotation, c
 
 Point Transform::operator*(const Point& P) const
 {
+    if (P.get_frame() != get_from_frame())
+    {
+        THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Frames don't match: transform goes from ") + get_from_frame() + " to " + to_frame + ", but point lies in " + P.get_frame());
+    }
     return Point(to_frame, r*P.v+t.v);
 }
 

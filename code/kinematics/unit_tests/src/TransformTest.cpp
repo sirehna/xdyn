@@ -11,6 +11,7 @@
 #include "rotation_matrix_builders.hpp"
 #include "test_macros.hpp"
 #include "extra_test_assertions.hpp"
+#include "KinematicsException.hpp"
 
 #include <cmath>
 
@@ -155,3 +156,22 @@ TEST_F(TransformTest, can_translate_and_rotate_a_point)
         ASSERT_SMALL_RELATIVE_ERROR(O.z+P.z,Q.z,EPS);
     }
 }
+
+TEST_F(TransformTest, should_throw_if_applying_transform_to_a_point_in_wrong_frame)
+{
+    for (size_t i = 0 ; i<1000 ; ++i)
+    {
+        const std::string F1 = a.random<std::string>();
+        const std::string F2 = a.random<std::string>();
+        const Point P1 = random_point_in_frame(F1);
+        const Point P2 = random_point_in_frame(F2);
+        RotationMatrix R = a.random<RotationMatrix>();
+        kinematics::Transform T1(P1,R,a.random<std::string>());
+        kinematics::Transform T2(P2,R,a.random<std::string>());
+        ASSERT_NO_THROW(T1*P1);
+        ASSERT_THROW(T1*P2, KinematicsException);
+        ASSERT_NO_THROW(T2*P2);
+        ASSERT_THROW(T2*P1, KinematicsException);
+    }
+}
+
