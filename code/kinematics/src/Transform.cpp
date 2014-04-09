@@ -2,7 +2,7 @@
 
 using namespace kinematics;
 
-Transform::Transform() : t(Point()), r(RotationMatrix())
+Transform::Transform() : t(Point()), r(RotationMatrix(Eigen::MatrixXd::Identity(3,3)))
 {
 }
 
