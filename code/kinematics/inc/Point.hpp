@@ -28,7 +28,6 @@ class Point
         Point(const double x, const double y, const double z);
         Point& operator=(const Point& rhs);
 
-    public:
         Eigen::Vector3d v;
         double& x;
         double& y;
