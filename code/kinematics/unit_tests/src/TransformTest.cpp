@@ -64,9 +64,9 @@ TEST_F(TransformTest, can_translate_a_point)
         kinematics::Transform T(P1);
         const Point Q = T*P2;
 
-        ASSERT_DOUBLE_EQ(P1.x+P2.x,Q.x);
-        ASSERT_DOUBLE_EQ(P1.y+P2.y,Q.y);
-        ASSERT_DOUBLE_EQ(P1.z+P2.z,Q.z);
+        ASSERT_SMALL_RELATIVE_ERROR(P1.x+P2.x,Q.x,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(P1.y+P2.y,Q.y,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(P1.z+P2.z,Q.z,EPS);
     }
 //! [TransformTest example]
 //! [TransformTest expected output]
