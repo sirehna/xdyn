@@ -30,7 +30,10 @@ Velocity Transform::operator*(const Velocity& V) const
     {
         THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Frames don't match: transform goes from ") + get_from_frame() + " to " + to_frame + ", but velocity is expressed in frame " + V.get_frame());
     }
-    return V;
+    const Point P = V.get_point();
+    const TranslationVelocityVector t = V.get_translation_velocity();
+    const AngularVelocityVector omega = V.get_angular_velocity();
+    return Velocity(V.get_point(), (*this)*t, (*this)*omega);
 }
 
 Transform Transform::operator*(const Transform& T) const

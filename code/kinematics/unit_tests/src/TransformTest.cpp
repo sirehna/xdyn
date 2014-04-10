@@ -210,3 +210,25 @@ TEST_F(TransformTest, should_throw_if_transforming_velocity_from_wrong_frame)
         ASSERT_THROW(T_different*V, KinematicsException);
     }
 }
+
+TEST_F(TransformTest, can_project_velocity_in_another_frame)
+{
+    const std::string F1 = a.random<std::string>();
+    const std::string F2 = a.random<std::string>();
+    const Point P(F1, 1, 2, 3);
+    const double beta = a.random<double>().between(-PI,PI);
+    const AngularVelocityVector w(F1, 7, 1, 89);
+    const TranslationVelocityVector t(F1, 10,11,12);
+    const Point Q(F1, 5,2,7);
+    const RotationMatrix R = kinematics::rot(1,0,0, beta);
+    const kinematics::Transform T(Q,R,F2);
+    const Velocity V1(P, t, w);
+    const Velocity V2 = T*V1;
+
+    ASSERT_SMALL_RELATIVE_ERROR(Q.x+V1.u, V2.u, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.y+cos(beta)*V1.v-sin(beta)*V1.w, V2.v, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.z+sin(beta)*V1.v+cos(beta)*V1.w, V2.w, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.x+V1.p, V2.p, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.y+cos(beta)*V1.q-sin(beta)*V1.r, V2.q, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.z+sin(beta)*V1.q+cos(beta)*V1.r, V2.r, EPS);
+}
