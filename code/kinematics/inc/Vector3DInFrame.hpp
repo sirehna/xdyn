@@ -1,12 +1,12 @@
 /*
- * Position.hpp
+ * Vector3DInFrame.hpp
  *
  *  Created on: 1 avr. 2014
  *      Author: maroff
  */
 
-#ifndef POSITION_HPP_
-#define POSITION_HPP_
+#ifndef VECTOR3DINFRAME_HPP_
+#define VECTOR3DINFRAME_HPP_
 
 #include <rw/math/Vector3D.hpp>
 #include "AbstractFrame.hpp"
@@ -47,4 +47,4 @@ class Vector3DInFrame : public rw::math::Vector3D<double>
 };
 }
 
-#endif /* POSITION_HPP_ */
+#endif /* VECTOR3DINFRAME_HPP_ */

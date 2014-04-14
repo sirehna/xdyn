@@ -5,15 +5,15 @@
  *      Author: maroff
  */
 
-#ifndef POINT1_HPP_
-#define POINT1_HPP_
+#ifndef POINT_HPP_
+#define POINT_HPP_
 
 #include <Eigen/Dense>
 #include <string>
 
 /** \author cec
- *  \brief 
- *  \details 
+ *  \brief
+ *  \details
  *  \ingroup kinematics
  *  \section ex1 Example
  *  \snippet kinematics/unit_tests/src/PointTest.cpp PointTest example
@@ -35,10 +35,10 @@ class Point
         double& y;
         double& z;
         std::string get_frame() const;
-        
+
     private:
         Point();
         std::string frame;
 };
 
-#endif /* POINT1_HPP_ */
+#endif /* POINT_HPP_ */
