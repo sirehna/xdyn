@@ -94,6 +94,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         hydro_models_static
         kinematics_static
         yaml-cpp
+        stl_reader_static
         )
 
 INSTALL(TARGETS ${PROJECT_NAME}
