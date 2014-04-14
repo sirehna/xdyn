@@ -25,6 +25,36 @@ std::string stl_single_facet()
     return data.str();
 }
 
+std::string stl_three_facets()
+{
+    std::stringstream data;
+    data << "solid MYSOLID\n"
+         << "  facet normal   0.000000E+00  0.000000E+00   1.00000\n"
+         << "    outer loop\n"
+         << "      vertex  -0.500000     -0.500000       1.00000\n"
+         << "      vertex   0.500000     -0.500000       1.00000\n"
+         << "      vertex   0.500000      0.500000       1.00000\n"
+         << "    endloop\n"
+         << "  endfacet\n"
+         << "  facet normal   0.000000E+00  0.000000E+00   1.00000\n"
+         << "    outer loop\n"
+         << "      vertex  -0.500000     -0.500000       1.00000\n"
+         << "      vertex   0.500000      0.500000       1.00000\n"
+         << "      vertex  -0.500000      0.500000       1.00000\n"
+         << "    endloop\n"
+         << "  endfacet\n"
+         << "\n"
+         << "  facet normal   0.000000E+00  0.000000E+00  -1.00000\n"
+         << "    outer loop\n"
+         << "      vertex   0.500000     -0.500000      0.000000E+00\n"
+         << "      vertex  -0.500000     -0.500000      0.000000E+00\n"
+         << "      vertex  -0.500000      0.500000      0.000000E+00\n"
+         << "    endloop\n"
+         << "  endfacet\n"
+         << "endsolid MYSOLID\n";
+    return data.str();
+}
+
 std::string stl_cube()
 {
     std::stringstream data;
