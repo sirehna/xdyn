@@ -60,6 +60,7 @@ ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
 ADD_SUBDIRECTORY(macros)
+ADD_SUBDIRECTORY(test_data_generator)
 ADD_SUBDIRECTORY(random_data_generator)
 ADD_SUBDIRECTORY(exception_handling)
 ADD_SUBDIRECTORY(text_file_reader)
@@ -73,6 +74,7 @@ ADD_SUBDIRECTORY(ds_integration)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(internal_solver_validation)
 ADD_SUBDIRECTORY(kinematics)
+ADD_SUBDIRECTORY(stl_reader)
 
 INCLUDE(CMakeLapackDouble)
 
@@ -119,6 +121,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:ds_integration_tests>
         $<TARGET_OBJECTS:integration_tests>
         $<TARGET_OBJECTS:kinematics_tests>
+        $<TARGET_OBJECTS:stl_reader_tests>
         )
 TARGET_LINK_LIBRARIES(${TEST_EXE} internal_solver_validation)
 
@@ -128,6 +131,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest gtest_main                 # static
         gmock gmock_main                 # static
         random_data_generator_static     # static
+        test_data_generator_static       # static
         ${PROJECT_NAME}
         )
 
