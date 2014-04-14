@@ -63,3 +63,10 @@ TEST_F(StlReaderTest, should_be_able_to_read_several_facets_properly)
 	ASSERT_DOUBLE_EQ( 0.50, facets.at(2).p3.y);
 	ASSERT_DOUBLE_EQ( 0.00, facets.at(2).p3.z);
 }
+
+TEST_F(StlReaderTest, should_be_able_to_read_a_cube)
+{
+	const VectorOfPoint3dTriplet facets = read_stl(stl_cube());
+	ASSERT_EQ(12, facets.size());
+}
+
