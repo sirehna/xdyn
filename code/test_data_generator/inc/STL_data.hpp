@@ -11,7 +11,10 @@
 #include <string>
 
 std::string stl_single_facet();
+<<<<<<< HEAD
 std::string stl_three_facets();
+=======
+>>>>>>> Stubbed StlReaderTest
 std::string stl_cube();
 
 

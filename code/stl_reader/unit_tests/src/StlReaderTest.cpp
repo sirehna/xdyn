@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "StlReader.hpp"
 #include "StlReaderException.hpp"
 #include "STL_data.hpp"
@@ -69,4 +70,11 @@ TEST_F(StlReaderTest, should_throw_an_exception_when_end_file_is_not_reached)
 {
 	const std::string data("solid MYSOLID\nfacet normal 0.4 0.4 0.2\nouterloop\n");
 	ASSERT_THROW(read_stl(data),StlReaderException);
+=======
+#include "StlReaderTest.hpp"
+
+TEST_F(StlReaderTest, example)
+{
+
+>>>>>>> Stubbed StlReaderTest
 }
