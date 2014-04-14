@@ -13,7 +13,6 @@ TEST_F(StlReaderTest, number_of_facets_should_be_correct_for_a_three_facet_file)
 	const VectorOfPoint3dTriplet facets = read_stl(stl_three_facets());
 	ASSERT_EQ(3, facets.size());
 }
-
 TEST_F(StlReaderTest, should_be_able_to_read_a_single_facet_properly)
 {
 	const VectorOfPoint3dTriplet facets = read_stl(stl_single_facet());
