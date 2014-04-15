@@ -1,10 +1,3 @@
-/*
- * TriMesh.hpp
- *
- *  Created on: 14 avr. 2014
- *      Author: jacquenot
- */
-
 #ifndef TRIMESH_HPP_
 #define TRIMESH_HPP_
 
@@ -26,4 +19,12 @@ struct Point3dTriplet
 
 typedef std::vector<Point3dTriplet> VectorOfPoint3dTriplet;
 
-#endif /* TRIMESH_HPP_ */
+struct Facet
+{
+    Point3dTriplet points;
+    Xyz unit_normal;
+};
+
+typedef std::vector<Facet> VectorOfFacet;
+
+#endif
