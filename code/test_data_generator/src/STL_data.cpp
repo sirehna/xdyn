@@ -1,12 +1,3 @@
-/*
- * STL_data.cpp
- *
- *  Created on: 14 avr. 2014
- *      Author: jacquenot
- */
-
-
-
 #include <sstream>
 #include "STL_data.hpp"
 
