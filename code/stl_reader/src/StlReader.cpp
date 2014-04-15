@@ -1,14 +1,11 @@
 #include <cstring>
 #include <string>
-#include <ostream>
 #include <sstream>
-#include <iostream>
-#include <fstream>
 
 #include "StlReaderException.hpp"
 #include "StlReader.hpp"
 
-const int LINE_MAX_LENGTH = 200;
+const int LINE_MAX_LENGTH = 256;
 const char TOKEN_vertex[] = "vertex";
 const char TOKEN_normal[] = "normal";
 
@@ -50,7 +47,9 @@ char* skipWhiteSpace(char *input){
     return next;
 }
 
-// reads a vertex from a line
+/**
+ * \brief reads a vertex from a line
+ */
 void readVertex(char *line, Xyz& vertices, ParserState& state)
 {
     int width;
@@ -76,25 +75,22 @@ void readNormal(char *line, Xyz& vertices, ParserState& state){
 
 /**
  * \brief reads the ASCII file from a char input stream
- * @param input_stream
- * @param result
- * @param state
  */
 void readAsciiStl(
-    std::istream& input_stream,
+    std::istream& input_stream, //!<
     VectorOfPoint3dTriplet& result,
     ParserState &state)
 {
-    //Start by storing the current locale. This is retrieved by passing NULL to setlocale
+    //Start by storing the current locale. This is retrieved by passing NULL to
+    // setlocale
     std::string locale = setlocale(LC_ALL, NULL);
     setlocale(LC_ALL, "C");
 
     bool endReached = false;
-
-    char *next;
-    double r1,r2,r3,r4;
+    char *next = NULL;
+    double r1 = 0.0,r2 = 0.0,r3 = 0.0,r4 = 0.0;
     char  token[LINE_MAX_LENGTH];
-    int   width;
+    int   width = 0;
     char input[LINE_MAX_LENGTH];
     state.getLine(input);
     Xyz normal;
