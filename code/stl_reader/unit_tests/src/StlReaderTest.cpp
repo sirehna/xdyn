@@ -1,4 +1,5 @@
 #include "StlReader.hpp"
+#include "StlReaderException.hpp"
 #include "STL_data.hpp"
 #include "StlReaderTest.hpp"
 
@@ -64,9 +65,8 @@ TEST_F(StlReaderTest, should_be_able_to_read_several_facets_properly)
 	ASSERT_DOUBLE_EQ( 0.00, facets.at(2).p3.z);
 }
 
-TEST_F(StlReaderTest, should_be_able_to_read_a_cube)
+TEST_F(StlReaderTest, should_throw_an_exception_when_end_file_is_not_reached)
 {
-	const VectorOfPoint3dTriplet facets = read_stl(stl_cube());
-	ASSERT_EQ(12, facets.size());
+	const std::string data("solid MYSOLID\nfacet normal 0.4 0.4 0.2\nouterloop\n");
+	ASSERT_THROW(read_stl(data),StlReaderException);
 }
-
