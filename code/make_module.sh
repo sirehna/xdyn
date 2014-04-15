@@ -3,8 +3,8 @@ mkdir -p $1/inc
 mkdir -p $1/src
 mkdir -p $1/unit_tests/inc
 mkdir -p $1/unit_tests/src
-echo "cmake_minimum_required (VERSION 2.8.8)" >> $1/CMakeLists.txt
-echo "project ($1)" >> $1/CMakeLists.txt
+echo "cmake_minimum_required(VERSION 2.8.8)" >> $1/CMakeLists.txt
+echo "project($1)" >> $1/CMakeLists.txt
 echo "" >> $1/CMakeLists.txt
 echo "set(SRC src/.cpp" >> $1/CMakeLists.txt
 echo "        )" >> $1/CMakeLists.txt
@@ -20,7 +20,7 @@ echo "" >> $1/CMakeLists.txt
 echo "add_subdirectory(unit_tests)" >> $1/CMakeLists.txt
 echo "# ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----" >> $1/unit_tests/CMakeLists.txt
 echo "set(MODULE_UNDER_TEST $1)" >> $1/unit_tests/CMakeLists.txt
-echo "project (\${MODULE_UNDER_TEST}_tests)" >> $1/unit_tests/CMakeLists.txt
+echo "project(\${MODULE_UNDER_TEST}_tests)" >> $1/unit_tests/CMakeLists.txt
 echo "FILE(GLOB SRC src/Test.cpp" >> $1/unit_tests/CMakeLists.txt
 echo "              )" >> $1/unit_tests/CMakeLists.txt
 echo "# ------8<---------------------------------------------->8-----" >> $1/unit_tests/CMakeLists.txt
@@ -32,4 +32,4 @@ echo "include_directories(\${random_data_generator_INCLUDE_DIRS})" >> $1/unit_te
 echo "include_directories(\${test_macros_SOURCE_DIR})" >> $1/unit_tests/CMakeLists.txt
 echo "include_directories(SYSTEM \${GTEST_INCLUDE_DIRS})" >> $1/unit_tests/CMakeLists.txt
 echo "" >> $1/unit_tests/CMakeLists.txt
-echo "add_library (\${PROJECT_NAME} OBJECT \${SRC})" >> $1/unit_tests/CMakeLists.txt
+echo "add_library(\${PROJECT_NAME} OBJECT \${SRC})" >> $1/unit_tests/CMakeLists.txt
