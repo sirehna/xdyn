@@ -1,22 +1,10 @@
 #include <cstring>
 #include <string>
-<<<<<<< HEAD
 #include <sstream>
-=======
-#include <ostream>
-#include <sstream>
-#include <iostream>
-#include <fstream>
->>>>>>> Added the read of a ASCII STL file
-
 #include "StlReaderException.hpp"
 #include "StlReader.hpp"
 
-<<<<<<< HEAD
 const int LINE_MAX_LENGTH = 256;
-=======
-const int LINE_MAX_LENGTH = 200;
->>>>>>> Added the read of a ASCII STL file
 const char TOKEN_vertex[] = "vertex";
 const char TOKEN_normal[] = "normal";
 
@@ -58,13 +46,6 @@ char* skipWhiteSpace(char *input){
     return next;
 }
 
-<<<<<<< HEAD
-/**
- * \brief reads a vertex from a line
- */
-=======
-// reads a vertex from a line
->>>>>>> Added the read of a ASCII STL file
 void readVertex(char *line, Xyz& vertices, ParserState& state)
 {
     int width;
@@ -90,7 +71,6 @@ void readNormal(char *line, Xyz& vertices, ParserState& state){
 
 /**
  * \brief reads the ASCII file from a char input stream
-<<<<<<< HEAD
  */
 void readAsciiStl(
     std::istream& input_stream, //!<
@@ -99,34 +79,12 @@ void readAsciiStl(
 {
     //Start by storing the current locale. This is retrieved by passing NULL to
     // setlocale
-=======
- * @param input_stream
- * @param result
- * @param state
- */
-void readAsciiStl(
-    std::istream& input_stream,
-    VectorOfPoint3dTriplet& result,
-    ParserState &state)
-{
-    //Start by storing the current locale. This is retrieved by passing NULL to setlocale
->>>>>>> Added the read of a ASCII STL file
     std::string locale = setlocale(LC_ALL, NULL);
     setlocale(LC_ALL, "C");
 
     bool endReached = false;
-<<<<<<< HEAD
-    char *next = NULL;
-    double r1 = 0.0,r2 = 0.0,r3 = 0.0,r4 = 0.0;
     char  token[LINE_MAX_LENGTH];
     int   width = 0;
-=======
-
-    char *next;
-    double r1,r2,r3,r4;
-    char  token[LINE_MAX_LENGTH];
-    int   width;
->>>>>>> Added the read of a ASCII STL file
     char input[LINE_MAX_LENGTH];
     state.getLine(input);
     Xyz normal;

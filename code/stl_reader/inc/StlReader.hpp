@@ -3,7 +3,6 @@
 
 /**
  *\brief reads an ASCII STL (stereolithography) file.
-<<<<<<< HEAD
  * \input[in] input String containing the STL data
  * \return Raw list of unmerged triangles
  * \note
@@ -11,12 +10,6 @@
  * normal and vertices (ordered by the right-hand rule) of the triangles using
  * a three-dimensional Cartesian coordinate system
  * \verbatim
-=======
- *
- * \input[in] input String containing the STL data
- * \return Raw list of unmerged triangles
- * \note:
- *   \verbatim
 >>>>>>> Added the read of a ASCII STL file
  *    solid MYSOLID
  *      facet normal 0.4 0.4 0.2
@@ -26,13 +19,7 @@
  *          vertex  3.1 4.5 6.7
  *        endloop
  *      endfacet
-<<<<<<< HEAD
- *      .
- *      .
- *      .
-=======
- *      ...
->>>>>>> Added the read of a ASCII STL file
+
  *      facet normal 0.2 0.2 0.4
  *        outerloop
  *          vertex  2.0 2.3 3.4
