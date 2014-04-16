@@ -84,3 +84,15 @@ TEST_F(SimulatorYamlParserTest, can_parse_initial_position_of_body_frame_relativ
     ASSERT_DOUBLE_EQ(14,input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.theta);
     ASSERT_DOUBLE_EQ(15,input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.psi);
 }
+
+
+TEST_F(SimulatorYamlParserTest, can_parse_initial_velocity_of_body_frame_relative_to_NED)
+{
+    ASSERT_EQ("body 1",input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.frame);
+    ASSERT_DOUBLE_EQ(-8,input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u);
+    ASSERT_DOUBLE_EQ(-9,input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.v);
+    ASSERT_DOUBLE_EQ(14,input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.w);
+    ASSERT_DOUBLE_EQ(56,input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p);
+    ASSERT_DOUBLE_EQ(7,input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q);
+    ASSERT_DOUBLE_EQ(6,input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r);
+}

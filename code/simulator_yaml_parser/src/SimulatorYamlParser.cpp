@@ -24,6 +24,7 @@ void operator >> (const YAML::Node& node, YamlModel& m);
 void operator >> (const YAML::Node& node, YamlPosition& m);
 void operator >> (const YAML::Node& node, YamlAngle& a);
 void operator >> (const YAML::Node& node, YamlCoordinates& c);
+void operator >> (const YAML::Node& node, YamlSpeed& s);
 
 double decode(const UV& uv);
 
@@ -69,6 +70,7 @@ void operator >> (const YAML::Node& node, YamlBody& b)
     node["external forces"] >> b.external_forces;
     node["position of body frame relative to mesh"] >> b.position_of_body_frame_relative_to_mesh;
     node["initial position of body frame relative to NED"] >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
+    node["initial velocity of body frame relative to NED"] >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
 }
 
 void operator >> (const YAML::Node& node, YamlModel& m)
@@ -93,10 +95,23 @@ void operator >> (const YAML::Node& node, YamlAngle& a)
     node["theta"] >> uv; a.theta = decode(uv);
     node["psi"] >> uv; a.psi = decode(uv);
 }
+
 void operator >> (const YAML::Node& node, YamlCoordinates& c)
 {
     UV uv;
     node["x"] >> uv; c.x = decode(uv);
     node["y"] >> uv; c.y = decode(uv);
     node["z"] >> uv; c.z = decode(uv);
+}
+
+void operator >> (const YAML::Node& node, YamlSpeed& s)
+{
+    node["frame"] >> s.frame;
+    UV uv;
+    node["u"] >> uv; s.u = decode(uv);
+    node["v"] >> uv; s.v = decode(uv);
+    node["w"] >> uv; s.w = decode(uv);
+    node["p"] >> uv; s.p = decode(uv);
+    node["q"] >> uv; s.q = decode(uv);
+    node["r"] >> uv; s.r = decode(uv);
 }
