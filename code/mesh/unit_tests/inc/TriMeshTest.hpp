@@ -1,12 +1,12 @@
-#ifndef MESH_TEST_HPP
-#define MESH_TEST_HPP
+#ifndef TRIMESH_TEST_HPP
+#define TRIMESH_TEST_HPP
 
 #include "gtest/gtest.h"
 
-class MeshTest : public ::testing::Test
+class TriMeshTest : public ::testing::Test
 {
     protected:
-        MeshTest(){}
+        TriMeshTest(){}
         virtual void SetUp(){}
         virtual void TearDown(){}
 };
