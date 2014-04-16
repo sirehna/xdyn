@@ -1,16 +1,16 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(mesh)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(mesh)
 
-set(SRC src/TriMesh.cpp
+SET(SRC src/TriMesh.cpp
         src/TriMeshBuilder.cpp)
 
-include_directories(inc)
-include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
-include_directories(${stl_reader_INCLUDE_DIRS})
-include_directories(${exception_handling_INCLUDE_DIRS})
-include_directories(${test_macros_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(inc)
+INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${exception_handling_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${test_macros_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME}_static STATIC ${SRC})
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+ADD_LIBRARY(${PROJECT_NAME}_static STATIC ${SRC})
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-add_subdirectory(unit_tests)
+ADD_SUBDIRECTORY(unit_tests)
