@@ -16,6 +16,7 @@ struct UV
     std::string unit;
 };
 
+void operator >> (const YAML::Node& node, YamlRotation& g);
 void operator >> (const YAML::Node& node, UV& g);
 
 double decode(const UV& uv);
@@ -31,7 +32,15 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
 
 YamlRotation SimulatorYamlParser::get_rotation()
 {
-    return YamlRotation();
+    YamlRotation ret;
+    (*node)["rotations"] >> ret;
+    return ret;
+}
+
+void operator >> (const YAML::Node& node, YamlRotation& g)
+{
+    node["convention"] >> g.convention;
+    node["order by"] >> g.order_by;
 }
 
 void operator >> (const YAML::Node& node, UV& g)
