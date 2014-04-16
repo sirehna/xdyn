@@ -9,7 +9,7 @@ class TriMeshBuilder;
  * \author gj
  * \brief Contains a triangular mesh
  * \details
- * \ingroup hydro_models
+ * \ingroup mesh
  * \section ex1 Example
  * \snippet mesh/unit_tests/src/TriMeshTest.cpp TriMeshTest example
  * \section ex2 Expected output
@@ -21,6 +21,7 @@ class TriMesh
 		TriMesh();
 		TriMesh(const std::vector<Xyz>& nodes_, const std::vector<Facet>& facets_);
 		TriMesh(const TriMeshBuilder& builder);
+		TriMesh(const Point3dTriplet& tri);
 		TriMesh(const VectorOfPoint3dTriplet& v);
 		std::vector<Xyz> nodes;
 		std::vector<Facet> facets;

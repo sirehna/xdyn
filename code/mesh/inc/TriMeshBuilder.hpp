@@ -2,6 +2,7 @@
 #define TRIMESHBUILDER_HPP
 
 #include <map>
+#include <Eigen/Dense>
 #include "GeometricTypes3d.hpp"
 #include "MeshNumeric.hpp"
 
@@ -38,6 +39,9 @@ class TriMeshBuilder
 		std::vector<Xyz> nodes;
 		std::vector<Facet> facets;
 	private:
+		Eigen::Vector3d evaluate_normal(const Point3dTriplet& tri) const;
+		Xyz evaluate_barycenter(const Point3dTriplet& tri) const;
+		double evaluate_area(const Point3dTriplet& tri) const;
 		size_t build_one_point(const Xyz& xyz);
 		bool point_is_in_map(const Xyz& xyz);
 		bool add_point_if_missing(const Xyz& xyz);
