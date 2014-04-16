@@ -2,7 +2,7 @@
 set(MODULE_UNDER_TEST mesh)
 project (${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC
-        src/MeshTest.cpp)
+        src/TriMeshTest.cpp)
 # ------8<---------------------------------------------->8-----
 
 # Include directories

@@ -1,5 +1,5 @@
-#include "Mesh.hpp"
-#include "MeshTest.hpp"
+#include "TriMesh.hpp"
+#include "TriMeshTest.hpp"
 
 Point3dTriplet generate_a_single_triangle();
 Point3dTriplet generate_a_single_triangle()
@@ -17,14 +17,14 @@ Point3dTriplet generate_a_single_triangle()
 	return P;
 }
 
-TEST_F(MeshTest, should_be_able_to_build_a_mesh_from_a_single_triangle)
+TEST_F(TriMeshTest, should_be_able_to_build_a_mesh_from_a_single_triangle)
 {
 	VectorOfPoint3dTriplet facets;
 	facets.push_back(generate_a_single_triangle());
 	TriMesh m(facets);
 }
 
-TEST_F(MeshTest, should_be_able_to_build_a_mesh_from_a_single_triangle22)
+TEST_F(TriMeshTest, should_be_able_to_build_a_mesh_from_a_single_triangle22)
 {
 	VectorOfPoint3dTriplet facets;
 	facets.push_back(generate_a_single_triangle());
