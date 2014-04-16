@@ -1,5 +1,5 @@
-#ifndef TRIMESH_HPP_
-#define TRIMESH_HPP_
+#ifndef GEOMETRICTYPES3D_HPP_
+#define GEOMETRICTYPES3D_HPP_
 
 #include <stddef.h>
 #include <vector>
