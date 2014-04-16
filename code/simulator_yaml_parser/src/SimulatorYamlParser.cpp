@@ -32,13 +32,6 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
     }
 }
 
-YamlRotation SimulatorYamlParser::get_rotation()
-{
-    YamlRotation ret;
-    (*node)["rotations"] >> ret;
-    return ret;
-}
-
 YamlModel SimulatorYamlParser::parse_model(const std::string& yaml) const
 {
     YAML::Node n;
@@ -64,6 +57,7 @@ YamlSimulatorInput SimulatorYamlParser::parse()
 {
     YamlSimulatorInput ret;
     (*node)["bodies"] >> ret.bodies;
+    (*node)["rotations"] >> ret.rotations;
     return ret;
 }
 
