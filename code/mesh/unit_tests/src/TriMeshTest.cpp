@@ -22,6 +22,8 @@ TEST_F(TriMeshTest, should_be_able_to_build_a_mesh_from_a_single_triangle)
 	VectorOfPoint3dTriplet facets;
 	facets.push_back(generate_a_single_triangle());
 	TriMesh m(facets);
+	ASSERT_EQ(1,m.facets.size());
+	ASSERT_EQ(3,m.nodes.size());
 }
 
 TEST_F(TriMeshTest, should_be_able_to_build_a_mesh_from_a_single_triangle22)

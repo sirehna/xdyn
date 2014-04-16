@@ -40,8 +40,7 @@ class TriMeshBuilder
 	private:
 		size_t build_one_point(const Xyz& xyz);
 		bool point_is_in_map(const Xyz& xyz);
-		void add_point_if_missing(Xyz xyz);
-		void get_next_point(const Xyz& xyz);
+		bool add_point_if_missing(const Xyz& xyz);
 };
 
 #endif
