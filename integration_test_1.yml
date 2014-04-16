@@ -83,6 +83,7 @@ outputs:
     angles:
       - frame: body 1
         relative to frame: NED
+        projected in frame: body 1
         axes: [x,y,z]
     linear velocities:
       - point: P
@@ -115,6 +116,7 @@ outputs:
         axes: [x,y]
     forces and torques:
       - type: non-linear hydrostatic
-        point in frame: centre of inertia body 1
+        point name: centre of inertia
+        point frame: body 1
         projected in frame: NED
         axes: [X, Z, K, N]
