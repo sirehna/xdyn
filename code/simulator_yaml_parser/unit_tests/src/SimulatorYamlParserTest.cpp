@@ -47,8 +47,10 @@ TEST_F(SimulatorYamlParserTest, can_parse_models)
     ASSERT_EQ("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity", mod2.yaml);
 }
 
-TEST_F(SimulatorYamlParserTest, DISABLED_can_parse_coordinates)
+TEST_F(SimulatorYamlParserTest, can_parse_environment)
 {
-    const bool implemented = false;
-    ASSERT_TRUE(implemented);
+    const std::vector<YamlModel> env = SimulatorYamlParser(test_data::hydrostatic_test()).get_environement();
+    ASSERT_EQ(2, env.size());
+    ASSERT_EQ("no waves", env.at(0).model);
+    ASSERT_EQ("no wind", env.at(1).model);
 }

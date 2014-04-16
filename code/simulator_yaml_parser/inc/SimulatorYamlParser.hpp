@@ -20,6 +20,7 @@ class SimulatorYamlParser : public YamlParser
         SimulatorYamlParser(const std::string& data);
         YamlRotation get_rotation();
         YamlModel parse_model(const std::string& yaml) const;
+        std::vector<YamlModel> get_environement();
 
     private:
         std::auto_ptr<YAML::Node> node;

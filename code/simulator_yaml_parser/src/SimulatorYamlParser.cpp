@@ -49,6 +49,18 @@ YamlModel SimulatorYamlParser::parse_model(const std::string& yaml) const
     return ret;
 }
 
+std::vector<YamlModel> SimulatorYamlParser::get_environement()
+{
+    std::vector<YamlModel> ret;
+    for (size_t i = 0 ; i <(*node)["environment"].size() ; ++i)
+    {
+        YAML::Emitter out;
+        out << (*node)["environment"][i];
+        ret.push_back(parse_model(out.c_str()));
+    }
+    return ret;
+}
+
 void operator >> (const YAML::Node& node, YamlRotation& g)
 {
     node["convention"] >> g.convention;
