@@ -1,16 +1,9 @@
-/*
- * TriMesh.hpp
- *
- *  Created on: 31 mars 2014
- *      Author: maroff
- */
-
 #ifndef TRIMESH_HPP_
 #define TRIMESH_HPP_
 
 /** \author cec
  *  \brief Contains a triangular mesh
- *  \details 
+ *  \details
  *  \ingroup hydro_models
  *  \section ex1 Example
  *  \snippet hydro_models/unit_tests/src/TriMeshTest.cpp TriMeshTest example
