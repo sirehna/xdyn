@@ -1,5 +1,5 @@
 #include <string>
-#include "TriMesh.hpp"
+#include "GeometricTypes3d.hpp"
 
 /**
  *\brief reads an ASCII STL (stereolithography) file.
