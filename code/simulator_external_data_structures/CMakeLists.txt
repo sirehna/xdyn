@@ -5,6 +5,7 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "P
 
 set(SRC src/YamlRotation.cpp
         src/YamlModel.cpp
+        src/YamlCoordinates.cpp
         )
 
 
