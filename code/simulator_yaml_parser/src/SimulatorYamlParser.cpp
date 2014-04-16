@@ -6,8 +6,9 @@
  */
 
 #include "SimulatorYamlParser.hpp"
+#include "yaml.h"
 
-SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
+SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data), node(new YAML::Node())
 {
 }
 
