@@ -8,13 +8,13 @@
 #ifndef YAMLDYNAMICS_HPP_
 #define YAMLDYNAMICS_HPP_
 
-#include "YamlPosition.hpp"
+#include "YamlPoint.hpp"
 #include "YamlInertiaMatrix.hpp"
 
 struct YamlDynamics
 {
     YamlDynamics();
-    YamlPosition position_of_centre_of_inertia;
+    YamlPoint position_of_centre_of_inertia;
     double mass;
     YamlInertiaMatrix inertia_matrix_divided_by_mass;
 };

@@ -8,7 +8,7 @@
 #include "YamlDynamics.hpp"
 
 YamlDynamics::YamlDynamics() :
-    position_of_centre_of_inertia(YamlPosition()),
+    position_of_centre_of_inertia(YamlPoint()),
     mass(0),
     inertia_matrix_divided_by_mass(YamlInertiaMatrix())
 {
