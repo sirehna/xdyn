@@ -8,23 +8,6 @@
 #include "yaml_data.hpp"
 #include <sstream>
 
-std::string test_data::model1()
-{
-    std::stringstream ss;
-    ss << "model: no waves" << std::endl
-       << "frame: NED" << std::endl
-       << "z: {value: 0, unit: m}" << std::endl;
-    return ss.str();
-}
-
-std::string test_data::model2()
-{
-    std::stringstream ss;
-    ss << "model: gravity" << std::endl
-       << "g: {value: 9.81, unit: m/s^2}" << std::endl;
-    return ss.str();
-}
-
 std::string test_data::hydrostatic_test()
 {
     std::stringstream ss;
@@ -146,14 +129,5 @@ std::string test_data::hydrostatic_test()
        << "        point frame: body 1\n"
        << "        projected in frame: NED\n"
        << "        axes: [X, Z, K, N]\n";
-    return ss.str();
-}
-
-std::string test_data::coordinates()
-{
-    std::stringstream ss;
-    ss << "x: {value: 1, unit: m}\n"
-       << "y: {value: 2, unit: km}\n"
-       << "z: {value: 3, unit: cm}";
     return ss.str();
 }

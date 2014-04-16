@@ -39,10 +39,10 @@ TEST_F(SimulatorYamlParserTest, can_parse_rotations)
 
 TEST_F(SimulatorYamlParserTest, can_parse_models)
 {
-    const YamlModel mod1 = SimulatorYamlParser(test_data::hydrostatic_test()).parse_model(test_data::model1());
+    const YamlModel mod1 = SimulatorYamlParser(test_data::hydrostatic_test()).parse().environment.at(0);
     ASSERT_EQ("no waves", mod1.model);
     ASSERT_EQ("frame: NED\nmodel: no waves\nz:\n  unit: m\n  value: 0", mod1.yaml);
-    const YamlModel mod2 = SimulatorYamlParser(test_data::hydrostatic_test()).parse_model(test_data::model2());
+    const YamlModel mod2 = SimulatorYamlParser(test_data::hydrostatic_test()).parse().bodies.at(0).external_forces.at(0);
     ASSERT_EQ("gravity", mod2.model);
     ASSERT_EQ("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity", mod2.yaml);
 }

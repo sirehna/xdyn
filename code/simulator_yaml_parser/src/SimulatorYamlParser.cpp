@@ -32,24 +32,11 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
     }
 }
 
-YamlModel SimulatorYamlParser::parse_model(const std::string& yaml) const
-{
-    YAML::Node n;
-    convert_stream_to_yaml_node(yaml, n);
-    YamlModel ret;
-    n >> ret;
-    return ret;
-}
 
 std::vector<YamlModel> SimulatorYamlParser::get_environement()
 {
     std::vector<YamlModel> ret;
-    for (size_t i = 0 ; i <(*node)["environment"].size() ; ++i)
-    {
-        YAML::Emitter out;
-        out << (*node)["environment"][i];
-        ret.push_back(parse_model(out.c_str()));
-    }
+    (*node)["environment"] >> ret;
     return ret;
 }
 
@@ -58,6 +45,7 @@ YamlSimulatorInput SimulatorYamlParser::parse()
     YamlSimulatorInput ret;
     (*node)["bodies"] >> ret.bodies;
     (*node)["rotations"] >> ret.rotations;
+    (*node)["environment"] >> ret.environment;
     return ret;
 }
 
