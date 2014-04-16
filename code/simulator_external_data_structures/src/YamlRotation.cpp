@@ -7,3 +7,6 @@
 
 #include "YamlRotation.hpp"
 
+YamlRotation::YamlRotation() : order_by(""), convention(std::vector<std::string>())
+{
+}
