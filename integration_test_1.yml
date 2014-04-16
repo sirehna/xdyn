@@ -19,14 +19,14 @@ bodies: # All bodies have NED as parent frame
         phi: {value: 0, unit: rad}
         theta: {value: 0, unit: rad}
         psi: {value: 0, unit: rad}
-    initial position of body frame relative to NED projected in NED:
+    initial position of body frame relative to NED:
         x: {value: 0, unit: m}
         y: {value: 0, unit: m}
         z: {value: 0, unit: m}
         phi: {value: 0, unit: rad}
         theta: {value: 0, unit: rad}
         psi: {value: 0, unit: rad}
-    initial velocity of body frame relative to NED projected in body:
+    initial velocity of body frame relative to NED:
         u: {value: 0, unit: m/s}
         v: {value: 0, unit: m/s}
         w: {value: 0, unit: m/s}
