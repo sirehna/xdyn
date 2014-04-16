@@ -15,6 +15,7 @@ class SimulatorYamlParser : public YamlParser
 {
     public:
         SimulatorYamlParser(const std::string& data);
+        YamlRotation get_rotation();
 };
 
 #endif /* SIMULATORYAMLPARSER_HPP_ */

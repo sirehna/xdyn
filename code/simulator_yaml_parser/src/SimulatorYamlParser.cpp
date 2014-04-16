@@ -11,3 +11,7 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
 {
 }
 
+YamlRotation SimulatorYamlParser::get_rotation()
+{
+    return YamlRotation();
+}
