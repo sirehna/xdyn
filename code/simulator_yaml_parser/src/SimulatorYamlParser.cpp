@@ -68,6 +68,7 @@ void operator >> (const YAML::Node& node, YamlBody& b)
     node["mesh"] >> b.mesh;
     node["external forces"] >> b.external_forces;
     node["position of body frame relative to mesh"] >> b.position_of_body_frame_relative_to_mesh;
+    node["initial position of body frame relative to NED"] >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
 }
 
 void operator >> (const YAML::Node& node, YamlModel& m)

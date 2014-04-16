@@ -73,3 +73,14 @@ TEST_F(SimulatorYamlParserTest, can_parse_position_of_body_frame_relative_to_mes
     ASSERT_DOUBLE_EQ(0.21,input.bodies.front().position_of_body_frame_relative_to_mesh.coordinates.y);
     ASSERT_DOUBLE_EQ(33e3,input.bodies.front().position_of_body_frame_relative_to_mesh.coordinates.z);
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_initial_position_of_body_frame_relative_to_NED)
+{
+    ASSERT_EQ("NED",input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.frame);
+    ASSERT_DOUBLE_EQ(4,input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.x);
+    ASSERT_DOUBLE_EQ(8,input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.y);
+    ASSERT_DOUBLE_EQ(12,input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.z);
+    ASSERT_DOUBLE_EQ(13,input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.phi);
+    ASSERT_DOUBLE_EQ(14,input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.theta);
+    ASSERT_DOUBLE_EQ(15,input.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.psi);
+}
