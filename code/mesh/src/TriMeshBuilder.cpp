@@ -19,7 +19,6 @@ std::vector<Facet> TriMeshBuilder::get_facets() const
 
 void TriMeshBuilder::build()
 {
-	COUT("size"<<v.size());
 	*this = std::for_each(v.begin(), v.end(), *this);
 }
 
@@ -28,7 +27,6 @@ void TriMeshBuilder::operator()(const Point3dTriplet& tri)
 	Facet facet;
 	Eigen::Vector3d normal = evaluate_normal(tri);
 	const double norm = normal.norm();
-	COUT("norm"<<norm);
 	if (norm<1000*std::numeric_limits<double>::epsilon())
 	{
 		THROW(__PRETTY_FUNCTION__, MeshException,"Input triangle is degenerated");
