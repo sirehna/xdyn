@@ -11,7 +11,7 @@
 #include "SimulatorYamlParser.hpp"
 
 SimulatorYamlParserTest::SimulatorYamlParserTest() : a(DataGenerator(1212)),
-                                                     input(SimulatorYamlParser(test_data::hydrostatic_test()).parse())
+                                                     input(SimulatorYamlParser(test_data::full_example()).parse())
 {
 }
 
@@ -41,7 +41,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_models)
 {
     const YamlModel mod1 = input.environment.at(0);
     ASSERT_EQ("no waves", mod1.model);
-    ASSERT_EQ("frame: NED\nmodel: no waves\nz:\n  unit: m\n  value: 0", mod1.yaml);
+    ASSERT_EQ("frame: NED\nmodel: no waves\nz:\n  unit: m\n  value: 12", mod1.yaml);
     const YamlModel mod2 = input.bodies.at(0).external_forces.at(0);
     ASSERT_EQ("gravity", mod2.model);
     ASSERT_EQ("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity", mod2.yaml);

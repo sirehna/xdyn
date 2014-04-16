@@ -13,6 +13,7 @@
 namespace test_data
 {
     std::string hydrostatic_test();
+    std::string full_example();
 }
 
 
