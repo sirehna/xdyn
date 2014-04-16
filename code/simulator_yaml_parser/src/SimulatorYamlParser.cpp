@@ -12,6 +12,7 @@
 
 struct UV
 {
+    UV() : value(0), unit("") {}
     double value;
     std::string unit;
 };
