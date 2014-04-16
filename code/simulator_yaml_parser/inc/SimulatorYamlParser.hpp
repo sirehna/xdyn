@@ -8,8 +8,13 @@
 #ifndef SIMULATORYAMLPARSER_HPP_
 #define SIMULATORYAMLPARSER_HPP_
 
-class SimulatorYamlParser
+#include "YamlParser.hpp"
+#include "YamlRotation.hpp"
+
+class SimulatorYamlParser : public YamlParser
 {
+    public:
+        SimulatorYamlParser(const std::string& data);
 };
 
 #endif /* SIMULATORYAMLPARSER_HPP_ */

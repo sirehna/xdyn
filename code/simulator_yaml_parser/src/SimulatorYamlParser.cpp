@@ -5,5 +5,9 @@
  *      Author: cady
  */
 
-#include "C:/Transfert/simulator/code/simulator_yaml_parser/inc/SimulatorYamlParser.hpp"
+#include "SimulatorYamlParser.hpp"
+
+SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
+{
+}
 
