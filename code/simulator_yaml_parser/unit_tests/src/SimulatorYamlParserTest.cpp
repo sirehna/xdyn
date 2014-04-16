@@ -62,3 +62,14 @@ TEST_F(SimulatorYamlParserTest, can_parse_bodies)
     ASSERT_EQ("anthineas.stl", input.bodies.at(0).mesh);
     ASSERT_EQ(2, input.bodies.at(0).external_forces.size());
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_position_of_body_frame_relative_to_mesh)
+{
+    ASSERT_DOUBLE_EQ(1,input.bodies.front().position_of_body_frame_relative_to_mesh.angle.phi);
+    ASSERT_DOUBLE_EQ(3,input.bodies.front().position_of_body_frame_relative_to_mesh.angle.theta);
+    ASSERT_DOUBLE_EQ(2,input.bodies.front().position_of_body_frame_relative_to_mesh.angle.psi);
+    ASSERT_EQ("mesh",input.bodies.front().position_of_body_frame_relative_to_mesh.frame);
+    ASSERT_DOUBLE_EQ(10,input.bodies.front().position_of_body_frame_relative_to_mesh.coordinates.x);
+    ASSERT_DOUBLE_EQ(0.21,input.bodies.front().position_of_body_frame_relative_to_mesh.coordinates.y);
+    ASSERT_DOUBLE_EQ(33e3,input.bodies.front().position_of_body_frame_relative_to_mesh.coordinates.z);
+}
