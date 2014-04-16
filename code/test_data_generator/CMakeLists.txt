@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 2.8.8)
 project (test_data_generator)
 
 set(SRC src/STL_data.cpp
+        src/yaml_data.cpp
         )
 
 
