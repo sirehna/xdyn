@@ -66,7 +66,7 @@ points:
     y: {value: 0, unit: m}
     z: {value: 0, unit: m}
 
-blocked degrees of freedom body/NED->body:
+blocked degrees of freedom of body frame relative to parent frame projected in body frame:
    - body: body 1
      blocked: [x, theta]
     
