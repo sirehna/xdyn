@@ -76,6 +76,7 @@ ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(internal_solver_validation)
 ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(stl_reader)
+ADD_SUBDIRECTORY(mesh)
 
 INCLUDE(CMakeLapackDouble)
 
@@ -95,6 +96,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         kinematics_static
         yaml-cpp
         stl_reader_static
+        mesh_static
         )
 
 INSTALL(TARGETS ${PROJECT_NAME}
@@ -124,6 +126,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:integration_tests>
         $<TARGET_OBJECTS:kinematics_tests>
         $<TARGET_OBJECTS:stl_reader_tests>
+        $<TARGET_OBJECTS:mesh_tests>
         )
 TARGET_LINK_LIBRARIES(${TEST_EXE} internal_solver_validation)
 
