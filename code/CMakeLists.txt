@@ -66,6 +66,7 @@ ADD_SUBDIRECTORY(random_data_generator)
 ADD_SUBDIRECTORY(exception_handling)
 ADD_SUBDIRECTORY(text_file_reader)
 ADD_SUBDIRECTORY(decode_unit)
+ADD_SUBDIRECTORY(simulator_yaml_parser)
 ADD_SUBDIRECTORY(data_source)
 ADD_SUBDIRECTORY(data_source_serializers)
 ADD_SUBDIRECTORY(interpolation)
@@ -94,6 +95,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         hydro_models_static
         kinematics_static
         yaml-cpp
+        simulator_yaml_parser_static
         )
 
 INSTALL(TARGETS ${PROJECT_NAME}
@@ -122,8 +124,8 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:ds_integration_tests>
         $<TARGET_OBJECTS:integration_tests>
         $<TARGET_OBJECTS:kinematics_tests>
-        $<TARGET_OBJECTS:stl_reader_tests>
-        )
+        $<TARGET_OBJECTS:simulator_yaml_parser_tests>
+        $<TARGET_OBJECTS:stl_reader_tests>        )
 TARGET_LINK_LIBRARIES(${TEST_EXE} internal_solver_validation)
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
