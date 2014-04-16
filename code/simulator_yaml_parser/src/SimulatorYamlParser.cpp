@@ -7,7 +7,16 @@
 
 #include "SimulatorYamlParser.hpp"
 #include "yaml.h"
+#include "DecodeUnit.h"
 #include "SimulatorYamlParserException.hpp"
+
+struct UV
+{
+    double value;
+    std::string unit;
+};
+
+double decode(const UV& uv);
 
 SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data), node(new YAML::Node())
 {
@@ -21,4 +30,9 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
 YamlRotation SimulatorYamlParser::get_rotation()
 {
     return YamlRotation();
+}
+
+double decode(const UV& uv)
+{
+    return uv.value * DecodeUnit::decodeUnit(uv.unit);
 }

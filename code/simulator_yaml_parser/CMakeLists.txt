@@ -11,6 +11,7 @@ include_directories(${test_macros_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
+include_directories(${decode_unit_INCLUDE_DIRS})
 include_directories(${exception_handling_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME}_static STATIC ${SRC})
