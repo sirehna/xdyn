@@ -6,6 +6,19 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "P
 set(SRC src/YamlRotation.cpp
         src/YamlModel.cpp
         src/YamlCoordinates.cpp
+        src/YamlAngle.cpp
+        src/YamlPosition.cpp
+        src/YamlPoint.cpp
+        src/YamlSpeed.cpp
+        src/YamlInertiaMatrix.cpp
+        src/YamlDynamics.cpp
+        src/YamlBody.cpp
+        src/YamlBlockedDegreesOfFreedom.cpp
+        src/YamlOutput.cpp
+        src/YamlPositionOutput.cpp
+        src/YamlAnglesOutput.cpp
+        src/YamlForcesAndTorquesOutput.cpp
+        src/YamlSimulatorInput.cpp
         )
 
 
