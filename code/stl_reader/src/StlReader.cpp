@@ -82,9 +82,11 @@ void readAsciiStl(
     std::string locale = setlocale(LC_ALL, NULL);
     setlocale(LC_ALL, "C");
 
+    double r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0;
     bool endReached = false;
-    char  token[LINE_MAX_LENGTH];
-    int   width = 0;
+    char token[LINE_MAX_LENGTH];
+    int  width = 0;
+    char *next = NULL;
     char input[LINE_MAX_LENGTH];
     state.getLine(input);
     Xyz normal;

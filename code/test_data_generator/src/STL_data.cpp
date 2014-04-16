@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-=======
-/*
- * STL_data.cpp
- *
- *  Created on: 14 avr. 2014
- *      Author: jacquenot
- */
-
-
-
->>>>>>> Stubbed StlReaderTest
 #include <sstream>
 #include "STL_data.hpp"
 
@@ -28,7 +16,6 @@ std::string stl_single_facet()
     return data.str();
 }
 
-<<<<<<< HEAD
 std::string stl_three_facets()
 {
     std::stringstream data;
@@ -59,8 +46,6 @@ std::string stl_three_facets()
     return data.str();
 }
 
-=======
->>>>>>> Stubbed StlReaderTest
 std::string stl_cube()
 {
     std::stringstream data;
