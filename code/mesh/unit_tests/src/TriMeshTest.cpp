@@ -55,17 +55,11 @@ TEST_F(TriMeshTest, should_be_able_to_evaluate_the_area_of_a_single_triangle)
 	ASSERT_DOUBLE_EQ(0.5*sqrt(v.x*v.x+v.y*v.y+v.z*v.z),m.facets.at(0).area);
 }
 
-<<<<<<< HEAD
 TEST_F(TriMeshTest, should_not_add_degenerated_triangles_to_mesh)
 {
 	TriMesh m(generate_a_degenerated_triangle());
 	ASSERT_TRUE(m.facets.empty());
 	ASSERT_TRUE(m.nodes.empty());
-=======
-TEST_F(TriMeshTest, should_throw_an_exception_for_a_degenerated_triangle)
-{
-	ASSERT_THROW(TriMesh m(generate_a_degenerated_triangle()),MeshException);
->>>>>>> a61299b8d08363adafec12510a26e9b55e5ee5d5
 }
 
 TEST_F(TriMeshTest, should_be_able_to_evaluate_the_normal_of_a_single_triangle)
