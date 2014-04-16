@@ -27,10 +27,14 @@ void SimulatorYamlParserTest::TearDown()
 {
 }
 
-TEST_F(SimulatorYamlParserTest, example)
+TEST_F(SimulatorYamlParserTest, DISABLED_can_parse_rotations)
 {
-//! [SimulatorYamlParserTest example]
-//! [SimulatorYamlParserTest example]
-//! [SimulatorYamlParserTest expected output]
-//! [SimulatorYamlParserTest expected output]
+    const bool implemented = false;
+    ASSERT_TRUE(implemented);
+}
+
+TEST_F(SimulatorYamlParserTest, DISABLED_can_parse_coordinates)
+{
+    const bool implemented = false;
+    ASSERT_TRUE(implemented);
 }
