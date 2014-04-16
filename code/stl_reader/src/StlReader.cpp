@@ -89,8 +89,6 @@ void readAsciiStl(
     char token[LINE_MAX_LENGTH];
     int  width = 0;
     char *next = NULL;
-    char  token[LINE_MAX_LENGTH];
-    int   width = 0;
     char input[LINE_MAX_LENGTH];
     state.getLine(input);
     Xyz normal;
