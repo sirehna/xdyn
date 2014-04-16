@@ -37,6 +37,18 @@ YamlRotation SimulatorYamlParser::get_rotation()
     return ret;
 }
 
+YamlModel SimulatorYamlParser::parse_model(const std::string& yaml) const
+{
+    YAML::Node n;
+    convert_stream_to_yaml_node(yaml, n);
+    YamlModel ret;
+    n["type"] >> ret.type;
+    YAML::Emitter out;
+    out << n;
+    ret.yaml = out.c_str();
+    return ret;
+}
+
 void operator >> (const YAML::Node& node, YamlRotation& g)
 {
     node["convention"] >> g.convention;
