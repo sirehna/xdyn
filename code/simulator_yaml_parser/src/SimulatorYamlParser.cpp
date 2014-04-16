@@ -42,7 +42,7 @@ YamlModel SimulatorYamlParser::parse_model(const std::string& yaml) const
     YAML::Node n;
     convert_stream_to_yaml_node(yaml, n);
     YamlModel ret;
-    n["type"] >> ret.type;
+    n["model"] >> ret.model;
     YAML::Emitter out;
     out << n;
     ret.yaml = out.c_str();

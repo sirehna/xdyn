@@ -13,7 +13,7 @@
 struct YamlModel
 {
     YamlModel();
-    std::string type;
+    std::string model;
     std::string yaml;
 };
 

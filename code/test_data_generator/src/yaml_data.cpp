@@ -20,7 +20,7 @@ std::string test_data::rotation()
 std::string test_data::model1()
 {
     std::stringstream ss;
-    ss << "type: no waves" << std::endl
+    ss << "model: no waves" << std::endl
        << "frame: NED" << std::endl
        << "z: {value: 0, unit: m}" << std::endl;
     return ss.str();
@@ -29,7 +29,7 @@ std::string test_data::model1()
 std::string test_data::model2()
 {
     std::stringstream ss;
-    ss << "type: gravity" << std::endl
+    ss << "model: gravity" << std::endl
        << "g: {value: 9.81, unit: m/s^2}" << std::endl;
     return ss.str();
 }

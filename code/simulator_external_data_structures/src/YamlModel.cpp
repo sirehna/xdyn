@@ -7,7 +7,7 @@
 
 #include "YamlModel.hpp"
 
-YamlModel::YamlModel() : type(""), yaml("")
+YamlModel::YamlModel() : model(""), yaml("")
 {
 
 }
