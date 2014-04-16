@@ -2,9 +2,7 @@
 #include <algorithm>
 #include <limits>
 #include <iostream>
-#include "test_macros.hpp"
 
-#include "MeshException.hpp"
 #include "TriMeshBuilder.hpp"
 
 std::vector<Xyz> TriMeshBuilder::get_nodes() const
@@ -29,7 +27,8 @@ void TriMeshBuilder::operator()(const Point3dTriplet& tri)
 	const double norm = normal.norm();
 	if (norm<1000*std::numeric_limits<double>::epsilon())
 	{
-		THROW(__PRETTY_FUNCTION__, MeshException,"Input triangle is degenerated");
+		std::cerr<<__PRETTY_FUNCTION__<<"Input triangle is degenerated"<<std::endl;
+		return;
 	}
 	normal/=norm;
 	facet.unit_normal.x = normal(0);
