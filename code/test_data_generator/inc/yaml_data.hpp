@@ -13,6 +13,8 @@
 namespace test_data
 {
     std::string rotation();
+    std::string model1();
+    std::string model2();
 }
 
 
