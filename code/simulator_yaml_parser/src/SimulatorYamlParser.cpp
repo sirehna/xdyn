@@ -32,14 +32,6 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
     }
 }
 
-
-std::vector<YamlModel> SimulatorYamlParser::get_environement()
-{
-    std::vector<YamlModel> ret;
-    (*node)["environment"] >> ret;
-    return ret;
-}
-
 YamlSimulatorInput SimulatorYamlParser::parse()
 {
     YamlSimulatorInput ret;

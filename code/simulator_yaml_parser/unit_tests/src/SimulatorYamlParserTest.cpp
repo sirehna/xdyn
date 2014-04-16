@@ -49,7 +49,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_models)
 
 TEST_F(SimulatorYamlParserTest, can_parse_environment)
 {
-    const std::vector<YamlModel> env = SimulatorYamlParser(test_data::hydrostatic_test()).get_environement();
+    const std::vector<YamlModel> env = SimulatorYamlParser(test_data::hydrostatic_test()).parse().environment;
     ASSERT_EQ(2, env.size());
     ASSERT_EQ("no waves", env.at(0).model);
     ASSERT_EQ("no wind", env.at(1).model);
