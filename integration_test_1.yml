@@ -3,14 +3,10 @@ rotations:
     convention: [x,y',z'']
 
 environment:
-    waves:
-       model:
-          type: no waves
-          frame: NED
-          z: {value: 0, unit: m}
-    wind:
-       model:
-          type: no wind
+  - model: no waves
+    frame: NED
+    z: {value: 0, unit: m}
+  - model: no wind
     
 # Fixed frame: NED
 bodies: # All bodies have NED as parent frame
@@ -53,9 +49,9 @@ bodies: # All bodies have NED as parent frame
             row 5: [0,0,0,0,1,0]
             row 6: [0,0,0,0,0,1]
     external forces:
-      - type: gravity
+      - model: gravity
         g: {value: 9.81, unit: m/s^2}
-      - type: non-linear hydrostatic
+      - model: non-linear hydrostatic
     
 
 points:
