@@ -8,9 +8,12 @@
 #ifndef YAMLSPEED_HPP_
 #define YAMLSPEED_HPP_
 
+#include <string>
+
 struct YamlSpeed
 {
     YamlSpeed();
+    std::string frame;
     double u;
     double v;
     double w;

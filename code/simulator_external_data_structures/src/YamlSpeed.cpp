@@ -7,7 +7,7 @@
 
 #include "YamlSpeed.hpp"
 
-YamlSpeed::YamlSpeed() : u(0), v(0), w(0), p(0), q(0), r(0)
+YamlSpeed::YamlSpeed() : frame(""), u(0), v(0), w(0), p(0), q(0), r(0)
 {
 
 }
