@@ -1,11 +1,7 @@
-# ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 SET(MODULE_UNDER_TEST stl_reader)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC
         src/StlReaderTest.cpp)
-# ------8<---------------------------------------------->8-----
-
-# Include directories
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})

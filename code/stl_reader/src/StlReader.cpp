@@ -1,6 +1,7 @@
 #include <cstring>
 #include <string>
 #include <sstream>
+
 #include "StlReaderException.hpp"
 #include "StlReader.hpp"
 
@@ -45,7 +46,9 @@ char* skipWhiteSpace(char *input){
     for (next = input; *next == '\t' && *next == ' '; next++){}
     return next;
 }
-
+/**
+ * \brief reads a vertex from a line
+ */
 void readVertex(char *line, Xyz& vertices, ParserState& state)
 {
     int width;
@@ -81,12 +84,13 @@ void readAsciiStl(
     // setlocale
     std::string locale = setlocale(LC_ALL, NULL);
     setlocale(LC_ALL, "C");
-
     double r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0;
     bool endReached = false;
     char token[LINE_MAX_LENGTH];
     int  width = 0;
     char *next = NULL;
+    char  token[LINE_MAX_LENGTH];
+    int   width = 0;
     char input[LINE_MAX_LENGTH];
     state.getLine(input);
     Xyz normal;
