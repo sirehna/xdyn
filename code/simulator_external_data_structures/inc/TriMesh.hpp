@@ -1,6 +1,7 @@
 #ifndef TRIMESH_HPP_
 #define TRIMESH_HPP_
 
+#include <stddef.h>
 #include <vector>
 
 struct Xyz
@@ -21,8 +22,10 @@ typedef std::vector<Point3dTriplet> VectorOfPoint3dTriplet;
 
 struct Facet
 {
-    Point3dTriplet points;
+    size_t index[3];
     Xyz unit_normal;
+    Xyz barycenter;
+    double area;
 };
 
 typedef std::vector<Facet> VectorOfFacet;
