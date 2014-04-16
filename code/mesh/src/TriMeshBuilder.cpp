@@ -5,7 +5,7 @@
 
 #include "TriMeshBuilder.hpp"
 
-std::vector<Xyz> TriMeshBuilder::get_nodes() const
+std::vector<Eigen::Vector3d> TriMeshBuilder::get_nodes() const
 {
 	return nodes;
 }
@@ -43,26 +43,24 @@ void TriMeshBuilder::operator()(const Point3dTriplet& tri)
 	facets.push_back(facet);
 }
 
-Xyz TriMeshBuilder::evaluate_barycenter(const Point3dTriplet& tri) const
+Eigen::Vector3d TriMeshBuilder::evaluate_barycenter(const Point3dTriplet& tri) const
 {
-	Xyz xyz;
-	xyz.x = (tri.p1.x+tri.p2.x+tri.p3.x)/3.0;
-	xyz.y = (tri.p1.y+tri.p2.y+tri.p3.y)/3.0;
-	xyz.z = (tri.p1.z+tri.p2.z+tri.p3.z)/3.0;
+	Eigen::Vector3d xyz;
+	xyz = (tri.p1+tri.p2+tri.p3)/3.0;
 	return xyz;
 }
 
 Eigen::Vector3d TriMeshBuilder::evaluate_normal(const Point3dTriplet& tri) const
 {
-	const Eigen::Vector3d n1(tri.p2.x-tri.p1.x,tri.p2.y-tri.p1.y,tri.p2.z-tri.p1.z);
-	const Eigen::Vector3d n2(tri.p3.x-tri.p1.x,tri.p3.y-tri.p1.y,tri.p3.z-tri.p1.z);
+	const Eigen::Vector3d n1(tri.p2-tri.p1);
+	const Eigen::Vector3d n2(tri.p3-tri.p1);
 	return n1.cross(n2);
 }
 
 double TriMeshBuilder::evaluate_area(const Point3dTriplet& tri) const
 {
-	const Eigen::Vector3d n1(tri.p2.x-tri.p1.x,tri.p2.y-tri.p1.y,tri.p2.z-tri.p1.z);
-	const Eigen::Vector3d n2(tri.p3.x-tri.p1.x,tri.p3.y-tri.p1.y,tri.p3.z-tri.p1.z);
+	const Eigen::Vector3d n1(tri.p2-tri.p1);
+	const Eigen::Vector3d n2(tri.p3-tri.p1);
 	return 0.5*fabs((n1.cross(n2)).norm());
 }
 
