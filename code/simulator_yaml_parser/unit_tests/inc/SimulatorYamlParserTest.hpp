@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
+#include "YamlSimulatorInput.hpp"
 
 class SimulatorYamlParserTest : public ::testing::Test
 {
@@ -12,6 +13,7 @@ class SimulatorYamlParserTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
 		DataGenerator a;
+		YamlSimulatorInput input;
 
 };
 
