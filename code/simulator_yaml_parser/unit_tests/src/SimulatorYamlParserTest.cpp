@@ -7,7 +7,7 @@
 
 
 #include "SimulatorYamlParserTest.hpp"
-#include "YamlRotation.hpp"
+#include "YamlSimulatorInput.hpp"
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
 
@@ -53,4 +53,13 @@ TEST_F(SimulatorYamlParserTest, can_parse_environment)
     ASSERT_EQ(2, env.size());
     ASSERT_EQ("no waves", env.at(0).model);
     ASSERT_EQ("no wind", env.at(1).model);
+}
+
+TEST_F(SimulatorYamlParserTest, can_parse_bodies)
+{
+    const YamlSimulatorInput input = SimulatorYamlParser(test_data::hydrostatic_test()).parse();
+    ASSERT_EQ(1, input.bodies.size());
+    ASSERT_EQ("body 1", input.bodies.at(0).name);
+    ASSERT_EQ("anthineas.stl", input.bodies.at(0).mesh);
+    ASSERT_EQ(2, input.bodies.at(0).external_forces.size());
 }

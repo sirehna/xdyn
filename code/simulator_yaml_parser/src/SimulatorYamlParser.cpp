@@ -18,6 +18,8 @@ struct UV
 
 void operator >> (const YAML::Node& node, YamlRotation& g);
 void operator >> (const YAML::Node& node, UV& g);
+void operator >> (const YAML::Node& node, YamlBody& b);
+void operator >> (const YAML::Node& node, YamlModel& m);
 
 double decode(const UV& uv);
 
@@ -42,10 +44,7 @@ YamlModel SimulatorYamlParser::parse_model(const std::string& yaml) const
     YAML::Node n;
     convert_stream_to_yaml_node(yaml, n);
     YamlModel ret;
-    n["model"] >> ret.model;
-    YAML::Emitter out;
-    out << n;
-    ret.yaml = out.c_str();
+    n >> ret;
     return ret;
 }
 
@@ -58,6 +57,13 @@ std::vector<YamlModel> SimulatorYamlParser::get_environement()
         out << (*node)["environment"][i];
         ret.push_back(parse_model(out.c_str()));
     }
+    return ret;
+}
+
+YamlSimulatorInput SimulatorYamlParser::parse()
+{
+    YamlSimulatorInput ret;
+    (*node)["bodies"] >> ret.bodies;
     return ret;
 }
 
@@ -76,4 +82,19 @@ void operator >> (const YAML::Node& node, UV& g)
 double decode(const UV& uv)
 {
     return uv.value * DecodeUnit::decodeUnit(uv.unit);
+}
+
+void operator >> (const YAML::Node& node, YamlBody& b)
+{
+    node["name"] >> b.name;
+    node["mesh"] >> b.mesh;
+    node["external forces"] >> b.external_forces;
+}
+
+void operator >> (const YAML::Node& node, YamlModel& m)
+{
+    node["model"] >> m.model;
+    YAML::Emitter out;
+    out << node;
+    m.yaml = out.c_str();
 }

@@ -10,9 +10,8 @@
 
 #include <memory>
 
+#include "YamlSimulatorInput.hpp"
 #include "YamlParser.hpp"
-#include "YamlRotation.hpp"
-#include "YamlModel.hpp"
 
 class SimulatorYamlParser : public YamlParser
 {
@@ -21,6 +20,7 @@ class SimulatorYamlParser : public YamlParser
         YamlRotation get_rotation();
         YamlModel parse_model(const std::string& yaml) const;
         std::vector<YamlModel> get_environement();
+        YamlSimulatorInput parse();
 
     private:
         std::auto_ptr<YAML::Node> node;
