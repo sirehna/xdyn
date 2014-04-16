@@ -16,6 +16,7 @@ namespace test_data
     std::string model1();
     std::string model2();
     std::string hydrostatic_test();
+    std::string coordinates();
 }
 
 

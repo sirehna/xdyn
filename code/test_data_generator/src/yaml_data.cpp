@@ -157,3 +157,12 @@ std::string test_data::hydrostatic_test()
        << "        axes: [X, Z, K, N]\n";
     return ss.str();
 }
+
+std::string test_data::coordinates()
+{
+    std::stringstream ss;
+    ss << "x: {value: 1, unit: m}\n"
+       << "y: {value: 2, unit: km}\n"
+       << "z: {value: 3, unit: cm}";
+    return ss.str();
+}
