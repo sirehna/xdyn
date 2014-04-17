@@ -5,7 +5,7 @@
 #include "GeometricTypes3d.hpp"
 #include "MeshNumeric.hpp"
 
-struct XyzComparator
+struct Vector3dComparator
 {
     bool operator() (const Eigen::Vector3d& lhs, const Eigen::Vector3d& rhs)
     {
@@ -19,26 +19,27 @@ struct XyzComparator
     }
 };
 
-typedef std::map< Eigen::Vector3d , size_t, XyzComparator > XyzMap;
+typedef std::map< Eigen::Vector3d , size_t, Vector3dComparator > Vector3dMap;
 
 class TriMesh;
 
 class TriMeshBuilder
 {
 	public:
-		TriMeshBuilder(const VectorOfPoint3dTriplet& v_):v(v_),xyzMap(XyzMap()), index(0),nodes(std::vector<Eigen::Vector3d>()),facets(std::vector<Facet>()){}
+		TriMeshBuilder(const VectorOfPoint3dTriplet& v_):v(v_),xyzMap(Vector3dMap()), index(0),nodes(std::vector<Eigen::Vector3d>()),facets(std::vector<Facet>()){}
 		void build();
 		void operator()(const Point3dTriplet& Tri);
 		std::vector<Eigen::Vector3d> get_nodes() const;
 		std::vector<Facet> get_facets() const;
 
 		VectorOfPoint3dTriplet v;
-		XyzMap xyzMap;
+		Vector3dMap xyzMap;
 		size_t index;
 		std::vector<Eigen::Vector3d> nodes;
 		std::vector<Facet> facets;
 	private:
 		Eigen::Vector3d evaluate_normal(const Point3dTriplet& tri) const;
+		bool evaluate_unit_normal(const Point3dTriplet& tri, Eigen::Vector3d& unit_normal) const;
 		Eigen::Vector3d evaluate_barycenter(const Point3dTriplet& tri) const;
 		double evaluate_area(const Point3dTriplet& tri) const;
 		size_t build_one_point(const Eigen::Vector3d& xyz);
