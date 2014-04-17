@@ -19,7 +19,7 @@ typedef std::vector<Point3dTriplet> VectorOfPoint3dTriplet;
 
 struct Facet
 {
-    //Facet():index({0,0,0}),unit_normal(Eigen::Vector3d()),barycenter(Eigen::Vector3d()),area(0.0){}
+    Facet():index(),unit_normal(Eigen::Vector3d()),barycenter(Eigen::Vector3d()),area(0.0){}
     size_t index[3];
     Eigen::Vector3d unit_normal;
     Eigen::Vector3d barycenter;
