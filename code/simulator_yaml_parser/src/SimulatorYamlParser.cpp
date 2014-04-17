@@ -31,6 +31,8 @@ void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::stri
 void parse_uv(const YAML::Node& node, double& d);
 void operator >> (const YAML::Node& node, YamlInertiaMatrix& m);
 void operator >> (const YAML::Node& node, YamlBlockedDegreesOfFreedom& m);
+void operator >> (const YAML::Node& node, YamlOutput& p);
+void operator >> (const YAML::Node& node, YamlPositionOutput& p);
 
 double decode(const UV& uv);
 
@@ -51,6 +53,7 @@ YamlSimulatorInput SimulatorYamlParser::parse()
     (*node)["environment"] >> ret.environment;
     (*node)["points"] >> ret.points;
     (*node)["blocked degrees of freedom body/NED->body"] >> ret.blocked_degrees_of_freedom;
+    (*node)["outputs"]["positions"] >> ret.position_output;
     return ret;
 }
 
@@ -167,4 +170,19 @@ void operator >> (const YAML::Node& node, YamlBlockedDegreesOfFreedom& m)
 {
     node["body"] >> m.body;
     node["blocked"] >> m.blocked;
+}
+
+void operator >> (const YAML::Node& node, YamlOutput& p)
+{
+    node["axes"] >> p.axes;
+    node["projected in frame"] >> p.projected_in_frame;
+}
+
+void operator >> (const YAML::Node& node, YamlPositionOutput& p)
+{
+    YamlOutput o;
+    node >> o;
+    p = o;
+    node["point"] >> p.point;
+    node["relative to frame"] >> p.relative_to_frame;
 }

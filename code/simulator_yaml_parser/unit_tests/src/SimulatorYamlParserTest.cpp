@@ -185,3 +185,15 @@ TEST_F(SimulatorYamlParserTest, can_parse_blocked_degrees_of_freedom)
     ASSERT_EQ("x", b.at(0).blocked.at(0));
     ASSERT_EQ("theta", b.at(0).blocked.at(1));
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_output_positions)
+{
+    const std::vector<YamlPositionOutput> p = input.position_output;
+    ASSERT_EQ(1, p.size());
+    ASSERT_EQ(2, p.at(0).axes.size());
+    ASSERT_EQ("x",p.at(0).axes.at(0));
+    ASSERT_EQ("z",p.at(0).axes.at(1));
+    ASSERT_EQ("O",p.at(0).point);
+    ASSERT_EQ("body 1",p.at(0).projected_in_frame);
+    ASSERT_EQ("NED",p.at(0).relative_to_frame);
+}
