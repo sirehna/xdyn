@@ -3,28 +3,26 @@
 
 #include <stddef.h>
 #include <vector>
+#include <Eigen/Dense>
 
-struct Xyz
-{
-    double x;
-    double y;
-    double z;
-};
+typedef std::vector<Eigen::Vector3d> VectorOfVector3d;
 
 struct Point3dTriplet
 {
-    Xyz p1;
-    Xyz p2;
-    Xyz p3;
+    Point3dTriplet():p1(Eigen::Vector3d()),p2(Eigen::Vector3d()),p3(Eigen::Vector3d()){}
+    Eigen::Vector3d p1;
+    Eigen::Vector3d p2;
+    Eigen::Vector3d p3;
 };
 
 typedef std::vector<Point3dTriplet> VectorOfPoint3dTriplet;
 
 struct Facet
 {
+    //Facet():index({0,0,0}),unit_normal(Eigen::Vector3d()),barycenter(Eigen::Vector3d()),area(0.0){}
     size_t index[3];
-    Xyz unit_normal;
-    Xyz barycenter;
+    Eigen::Vector3d unit_normal;
+    Eigen::Vector3d barycenter;
     double area;
 };
 

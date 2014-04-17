@@ -11,8 +11,8 @@ const char TOKEN_normal[] = "normal";
 
 struct ParserState;
 char* skipWhiteSpace(char *input);
-void readVertex(char *line, Xyz& vertices, ParserState& state);
-void readNormal(char *line, Xyz& vertices, ParserState& state);
+void readVertex(char *line, Eigen::Vector3d& vertices, ParserState& state);
+void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state);
 void readAsciiStl(
     std::istream& input_stream,
     VectorOfPoint3dTriplet& result,
@@ -49,7 +49,7 @@ char* skipWhiteSpace(char *input){
 /**
  * \brief reads a vertex from a line
  */
-void readVertex(char *line, Xyz& vertices, ParserState& state)
+void readVertex(char *line, Eigen::Vector3d& vertices, ParserState& state)
 {
     int width;
     char token[20];
@@ -58,10 +58,10 @@ void readVertex(char *line, Xyz& vertices, ParserState& state)
     if (strcmp(token, TOKEN_vertex)){
         THROW(__PRETTY_FUNCTION__, StlReaderException, state.parseErrorString(TOKEN_vertex));
     }
-    sscanf(line+width,"%lf %lf %lf",&vertices.x,&vertices.y,&vertices.z);
+    sscanf(line+width,"%lf %lf %lf",&vertices(0),&vertices(1),&vertices(2));
 }
 
-void readNormal(char *line, Xyz& vertices, ParserState& state){
+void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state){
     int width;
     char token[20];
     //char *str = skipWhiteSpace(line);
@@ -69,7 +69,7 @@ void readNormal(char *line, Xyz& vertices, ParserState& state){
     if (strcmp(token, TOKEN_normal)){
         THROW(__PRETTY_FUNCTION__, StlReaderException, state.parseErrorString(TOKEN_normal));
     }
-    sscanf(line+width,"%lf %lf %lf",&vertices.x,&vertices.y,&vertices.z);
+    sscanf(line+width,"%lf %lf %lf",&vertices(0),&vertices(1),&vertices(2));
 }
 
 /**
@@ -91,7 +91,7 @@ void readAsciiStl(
     char *next = NULL;
     char input[LINE_MAX_LENGTH];
     state.getLine(input);
-    Xyz normal;
+    Eigen::Vector3d normal;
 
     // while characters still exists and no errors occurs
     while (input_stream.fail() == 0 && input_stream.eof() == 0) {
