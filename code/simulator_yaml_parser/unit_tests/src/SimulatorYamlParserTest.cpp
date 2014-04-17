@@ -105,3 +105,8 @@ TEST_F(SimulatorYamlParserTest, can_parse_centre_of_inertia)
     ASSERT_EQ("body 1",input.bodies.front().dynamics.centre_of_inertia.frame);
     ASSERT_EQ("centre of inertia",input.bodies.front().dynamics.centre_of_inertia.name);
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_mass)
+{
+    ASSERT_DOUBLE_EQ(1E6, input.bodies.front().dynamics.mass);
+}
