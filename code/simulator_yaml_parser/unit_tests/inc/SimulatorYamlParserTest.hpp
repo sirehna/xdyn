@@ -13,7 +13,7 @@ class SimulatorYamlParserTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
 		DataGenerator a;
-		YamlSimulatorInput input;
+		YamlSimulatorInput yaml;
 
 };
 
