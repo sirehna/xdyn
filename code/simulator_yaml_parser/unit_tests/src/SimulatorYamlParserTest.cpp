@@ -197,3 +197,16 @@ TEST_F(SimulatorYamlParserTest, can_parse_output_positions)
     ASSERT_EQ("body 1",p.at(0).projected_in_frame);
     ASSERT_EQ("NED",p.at(0).relative_to_frame);
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_output_angles)
+{
+    const std::vector<YamlAnglesOutput> p = input.angles_output;
+    ASSERT_EQ(1, p.size());
+    ASSERT_EQ(3, p.at(0).axes.size());
+    ASSERT_EQ("x",p.at(0).axes.at(0));
+    ASSERT_EQ("y",p.at(0).axes.at(1));
+    ASSERT_EQ("z",p.at(0).axes.at(2));
+    ASSERT_EQ("body 1",p.at(0).projected_in_frame);
+    ASSERT_EQ("NED",p.at(0).relative_to_frame);
+    ASSERT_EQ("body 1",p.at(0).frame);
+}
