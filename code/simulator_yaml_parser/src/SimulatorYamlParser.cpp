@@ -59,6 +59,7 @@ YamlSimulatorInput SimulatorYamlParser::parse()
     (*node)["outputs"]["linear velocities"] >> ret.linear_velocities_output;
     (*node)["outputs"]["angular velocities"] >> ret.angular_velocities_output;
     (*node)["outputs"]["linear accelerations"] >> ret.linear_accelerations_output;
+    (*node)["outputs"]["angular accelerations"] >> ret.angular_accelerations_output;
     return ret;
 }
 
