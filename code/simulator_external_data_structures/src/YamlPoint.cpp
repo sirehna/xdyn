@@ -11,3 +11,8 @@ YamlPoint::YamlPoint() : YamlCoordinates(), name(""), frame("")
 {
 
 }
+
+YamlPoint::YamlPoint(const YamlCoordinates& c) : YamlCoordinates(c), name(""), frame("")
+{
+
+}

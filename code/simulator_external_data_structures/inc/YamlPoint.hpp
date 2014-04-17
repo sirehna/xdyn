@@ -15,6 +15,7 @@
 struct YamlPoint : public YamlCoordinates
 {
     YamlPoint();
+    YamlPoint(const YamlCoordinates& c);
     std::string name;
     std::string frame;
 };
