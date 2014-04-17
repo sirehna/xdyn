@@ -28,6 +28,7 @@ void operator >> (const YAML::Node& node, YamlSpeed& s);
 void operator >> (const YAML::Node& node, YamlDynamics& d);
 void operator >> (const YAML::Node& node, YamlPoint& p);
 void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::string& name);
+void parse_uv(const YAML::Node& node, double& d);
 
 double decode(const UV& uv);
 
@@ -139,4 +140,11 @@ void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::stri
     p = c;
     node["frame"] >> p.frame;
     p.name = name;
+}
+
+void parse_uv(const YAML::Node& node, double& d)
+{
+    UV uv;
+    node >> uv;
+    d = decode(uv);
 }
