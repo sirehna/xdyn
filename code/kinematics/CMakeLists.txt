@@ -1,5 +1,5 @@
-cmake_minimum_required (VERSION 2.8.8)
-project (kinematics)
+cmake_minimum_required(VERSION 2.8.8)
+project(kinematics)
 
 set(SRC #src/AbstractFrame.cpp
         #src/FixedFrame.cpp
@@ -10,12 +10,14 @@ set(SRC #src/AbstractFrame.cpp
         src/EulerAngles.cpp
         #src/Kinematics.cpp
         src/Point.cpp
+        src/PointMatrix.cpp
         src/Transform.cpp
         )
 
 include_directories(inc)
 include_directories(${exception_handling_INCLUDE_DIRS})
 include_directories(${test_macros_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
 #include_directories(SYSTEM ${robwork_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
