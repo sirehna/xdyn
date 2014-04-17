@@ -9,3 +9,8 @@
 
 YamlPositionOutput::YamlPositionOutput() : YamlOutput(), point(""), relative_to_frame("")
 {}
+
+YamlPositionOutput::YamlPositionOutput(const YamlOutput& rhs) : YamlOutput(rhs), point(""), relative_to_frame("")
+{
+
+}

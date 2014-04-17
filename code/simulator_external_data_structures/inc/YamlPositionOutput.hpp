@@ -13,6 +13,7 @@
 struct YamlPositionOutput : public YamlOutput
 {
     YamlPositionOutput();
+    YamlPositionOutput(const YamlOutput& rhs);
     std::string point;
     std::string relative_to_frame;
 };
