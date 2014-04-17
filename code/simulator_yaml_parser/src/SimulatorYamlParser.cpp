@@ -25,6 +25,7 @@ void operator >> (const YAML::Node& node, YamlPosition& m);
 void operator >> (const YAML::Node& node, YamlAngle& a);
 void operator >> (const YAML::Node& node, YamlCoordinates& c);
 void operator >> (const YAML::Node& node, YamlSpeed& s);
+void operator >> (const YAML::Node& node, YamlDynamics& d);
 void operator >> (const YAML::Node& node, YamlPoint& p);
 void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::string& name);
 
@@ -73,6 +74,7 @@ void operator >> (const YAML::Node& node, YamlBody& b)
     node["position of body frame relative to mesh"] >> b.position_of_body_frame_relative_to_mesh;
     node["initial position of body frame relative to NED"] >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
     node["initial velocity of body frame relative to NED"] >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
+    node["dynamics"] >> b.dynamics;
 }
 
 void operator >> (const YAML::Node& node, YamlModel& m)
@@ -116,6 +118,11 @@ void operator >> (const YAML::Node& node, YamlSpeed& s)
     node["p"] >> uv; s.p = decode(uv);
     node["q"] >> uv; s.q = decode(uv);
     node["r"] >> uv; s.r = decode(uv);
+}
+
+void operator >> (const YAML::Node& node, YamlDynamics& d)
+{
+    parse_point_with_name(node["centre of inertia"], d.position_of_centre_of_inertia, "centre of inertia");
 }
 
 void operator >> (const YAML::Node& node, YamlPoint& p)

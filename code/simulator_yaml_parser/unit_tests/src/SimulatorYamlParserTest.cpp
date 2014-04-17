@@ -96,3 +96,12 @@ TEST_F(SimulatorYamlParserTest, can_parse_initial_velocity_of_body_frame_relativ
     ASSERT_DOUBLE_EQ(7,input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q);
     ASSERT_DOUBLE_EQ(6,input.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r);
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_centre_of_inertia)
+{
+    ASSERT_DOUBLE_EQ(4,input.bodies.front().dynamics.position_of_centre_of_inertia.x);
+    ASSERT_DOUBLE_EQ(7,input.bodies.front().dynamics.position_of_centre_of_inertia.y);
+    ASSERT_DOUBLE_EQ(-10,input.bodies.front().dynamics.position_of_centre_of_inertia.z);
+    ASSERT_EQ("body 1",input.bodies.front().dynamics.position_of_centre_of_inertia.frame);
+    ASSERT_EQ("centre of inertia",input.bodies.front().dynamics.position_of_centre_of_inertia.name);
+}
