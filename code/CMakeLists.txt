@@ -78,6 +78,7 @@ ADD_SUBDIRECTORY(internal_solver_validation)
 ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(mesh)
+ADD_SUBDIRECTORY(executables)
 
 INCLUDE(CMakeLapackDouble)
 
