@@ -48,6 +48,7 @@ YamlSimulatorInput SimulatorYamlParser::parse()
     (*node)["bodies"] >> ret.bodies;
     (*node)["rotations"] >> ret.rotations;
     (*node)["environment"] >> ret.environment;
+    (*node)["points"] >> ret.points;
     return ret;
 }
 

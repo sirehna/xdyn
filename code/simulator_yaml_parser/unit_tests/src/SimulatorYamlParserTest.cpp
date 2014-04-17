@@ -157,3 +157,20 @@ TEST_F(SimulatorYamlParserTest, can_parse_inertia_matrix)
     ASSERT_DOUBLE_EQ(0, M.row_6.at(4));
     ASSERT_DOUBLE_EQ(6, M.row_6.at(5));
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_points)
+{
+    const std::vector<YamlPoint> points = input.points;
+    ASSERT_EQ(2, points.size());
+    ASSERT_EQ("P", points.at(0).name);
+    ASSERT_EQ("body 1", points.at(0).frame);
+    ASSERT_DOUBLE_EQ(10, points.at(0).x);
+    ASSERT_DOUBLE_EQ(10, points.at(0).y);
+    ASSERT_DOUBLE_EQ(20, points.at(0).z);
+
+    ASSERT_EQ("O", points.at(1).name);
+    ASSERT_EQ("NED", points.at(1).frame);
+    ASSERT_DOUBLE_EQ(0.03, points.at(1).x);
+    ASSERT_DOUBLE_EQ(-0.7, points.at(1).y);
+    ASSERT_DOUBLE_EQ(300, points.at(1).z);
+}
