@@ -68,6 +68,24 @@ Point TransformTest::random_point() const
     return random_point_in_frame(a.random<std::string>());
 }
 
+PointMatrix TransformTest::random_point_matrix() const
+{
+    return random_point_matrix_in_frame(a.random<std::string>());
+}
+
+PointMatrix TransformTest::random_point_matrix_in_frame(const std::string& frame) const
+{
+    PointMatrix p(frame);
+    p.m.resize(3,100);
+    for (size_t i=0;i<100;++i)
+    {
+        p.m(0,i)=a.random<double>().between(-10,10);
+        p.m(1,i)=a.random<double>().between(-10,10);
+        p.m(2,i)=a.random<double>().between(-10,10);
+    }
+    return p;
+}
+
 TEST_F(TransformTest, can_translate_a_point)
 {
 //! [TransformTest example]
@@ -101,6 +119,29 @@ TEST_F(TransformTest, can_compose_two_translations)
         ASSERT_SMALL_RELATIVE_ERROR(2*P1.x+P2.x,Q.x,EPS);
         ASSERT_SMALL_RELATIVE_ERROR(2*P1.y+P2.y,Q.y,EPS);
         ASSERT_SMALL_RELATIVE_ERROR(2*P1.z+P2.z,Q.z,EPS);
+    }
+}
+
+TEST_F(TransformTest, can_compose_two_translations_for_a_point_matrix)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const std::string middle_frame = a.random<std::string>();
+        const Point P1 = random_point();
+        const Point P2 = random_point_in_frame(middle_frame);
+        const kinematics::Transform T1(P1,middle_frame);
+        const kinematics::Transform T2(P2,a.random<std::string>());
+        const PointMatrix PC1 = random_point_matrix_in_frame(P1.get_frame());
+        const PointMatrix Q = T2*T1*PC1;
+        ASSERT_STREQ(T2.get_to_frame().c_str(),Q.get_frame().c_str());
+        ASSERT_EQ(3,Q.m.rows());
+        ASSERT_EQ(PC1.m.cols(),Q.m.cols());
+        for (size_t i=0;i<(size_t)(Q.m.cols());++i)
+        {
+            ASSERT_SMALL_RELATIVE_ERROR(P1.x+P2.x+PC1.m(0,i),Q.m(0,i),EPS);
+            ASSERT_SMALL_RELATIVE_ERROR(P1.y+P2.y+PC1.m(1,i),Q.m(1,i),EPS);
+            ASSERT_SMALL_RELATIVE_ERROR(P1.z+P2.z+PC1.m(2,i),Q.m(2,i),EPS);
+        }
     }
 }
 

@@ -4,6 +4,7 @@
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
 #include "Point.hpp"
+#include "PointMatrix.hpp"
 
 class TransformTest : public ::testing::Test
 {
@@ -14,7 +15,9 @@ class TransformTest : public ::testing::Test
         virtual void TearDown();
         Point random_point_in_frame(const std::string& frame) const;
         Point random_point() const;
-        
+        PointMatrix random_point_matrix() const;
+        PointMatrix random_point_matrix_in_frame(const std::string& frame) const;
+
         DataGenerator a;
 };
 
