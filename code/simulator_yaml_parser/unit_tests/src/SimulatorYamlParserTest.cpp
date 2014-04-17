@@ -37,22 +37,21 @@ TEST_F(SimulatorYamlParserTest, can_parse_rotations)
     ASSERT_EQ("z''", rot.convention.at(2));
 }
 
-TEST_F(SimulatorYamlParserTest, can_parse_models)
-{
-    const YamlModel mod1 = input.environment.at(0);
-    ASSERT_EQ("no waves", mod1.model);
-    ASSERT_EQ("frame: NED\nmodel: no waves\nz:\n  unit: m\n  value: 12", mod1.yaml);
-    const YamlModel mod2 = input.bodies.at(0).external_forces.at(0);
-    ASSERT_EQ("gravity", mod2.model);
-    ASSERT_EQ("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity", mod2.yaml);
-}
-
 TEST_F(SimulatorYamlParserTest, can_parse_environment)
 {
+    ASSERT_EQ(2, input.environment.size());
     const std::vector<YamlModel> env = input.environment;
-    ASSERT_EQ(2, env.size());
     ASSERT_EQ("no waves", env.at(0).model);
     ASSERT_EQ("no wind", env.at(1).model);
+    ASSERT_EQ("frame: NED\nmodel: no waves\nz:\n  unit: m\n  value: 12", env.at(0).yaml);
+}
+
+TEST_F(SimulatorYamlParserTest, can_parse_external_forces)
+{
+    ASSERT_EQ(2, input.bodies.at(0).external_forces.size());
+    const YamlModel external_forces = input.bodies.at(0).external_forces.at(0);
+    ASSERT_EQ("gravity", external_forces.model);
+    ASSERT_EQ("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity", external_forces.yaml);
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_bodies)
