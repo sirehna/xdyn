@@ -209,7 +209,7 @@ TEST_F(TransformTest, can_compose_two_rotations)
     }
 }
 
-TEST_F(TransformTest, can_translate_and_rotate_a_point)
+TEST_F(TransformTest, can_rotate_and_translate_a_point)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
