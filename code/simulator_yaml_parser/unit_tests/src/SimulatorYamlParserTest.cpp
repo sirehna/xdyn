@@ -272,3 +272,18 @@ TEST_F(SimulatorYamlParserTest, can_parse_output_angular_accelerations)
     ASSERT_EQ("NED",p.at(0).relative_to_frame);
     ASSERT_EQ("body 1",p.at(0).frame);
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_output_forces_and_torques)
+{
+    const std::vector<YamlForcesAndTorquesOutput> f = yaml.forces_and_torques_output;
+    ASSERT_EQ(1, f.size());
+    ASSERT_EQ(4, f.at(0).axes.size());
+    ASSERT_EQ("X", f.at(0).axes.at(0));
+    ASSERT_EQ("Z", f.at(0).axes.at(1));
+    ASSERT_EQ("K", f.at(0).axes.at(2));
+    ASSERT_EQ("N", f.at(0).axes.at(3));
+    ASSERT_EQ("body 1", f.at(0).point_frame);
+    ASSERT_EQ("centre of inertia", f.at(0).point_name);
+    ASSERT_EQ("NED", f.at(0).projected_in_frame);
+    ASSERT_EQ("non-linear hydrostatic", f.at(0).type);
+}

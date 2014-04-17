@@ -34,6 +34,7 @@ void operator >> (const YAML::Node& node, YamlBlockedDegreesOfFreedom& m);
 void operator >> (const YAML::Node& node, YamlOutput& p);
 void operator >> (const YAML::Node& node, YamlPositionOutput& p);
 void operator >> (const YAML::Node& node, YamlAnglesOutput& p);
+void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f);
 
 double decode(const UV& uv);
 
@@ -60,6 +61,7 @@ YamlSimulatorInput SimulatorYamlParser::parse()
     (*node)["outputs"]["angular velocities"] >> ret.angular_velocities_output;
     (*node)["outputs"]["linear accelerations"] >> ret.linear_accelerations_output;
     (*node)["outputs"]["angular accelerations"] >> ret.angular_accelerations_output;
+    (*node)["outputs"]["forces and torques"] >> ret.forces_and_torques_output;
     return ret;
 }
 
@@ -200,4 +202,13 @@ void operator >> (const YAML::Node& node, YamlAnglesOutput& p)
     p = o;
     node["frame"] >> p.frame;
     node["relative to frame"] >> p.relative_to_frame;
+}
+
+void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f)
+{
+    node["axes"] >> f.axes;
+    node["point frame"] >> f.point_frame;
+    node["point name"] >> f.point_name;
+    node["projected in frame"] >> f.projected_in_frame;
+    node["type"] >> f.type;
 }
