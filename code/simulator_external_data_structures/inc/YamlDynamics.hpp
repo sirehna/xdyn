@@ -14,7 +14,7 @@
 struct YamlDynamics
 {
     YamlDynamics();
-    YamlPoint position_of_centre_of_inertia;
+    YamlPoint centre_of_inertia;
     double mass;
     YamlInertiaMatrix inertia_matrix_divided_by_mass;
 };

@@ -122,7 +122,7 @@ void operator >> (const YAML::Node& node, YamlSpeed& s)
 
 void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
-    parse_point_with_name(node["centre of inertia"], d.position_of_centre_of_inertia, "centre of inertia");
+    parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
 }
 
 void operator >> (const YAML::Node& node, YamlPoint& p)
