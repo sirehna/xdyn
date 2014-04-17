@@ -162,6 +162,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_points)
 {
     const std::vector<YamlPoint> points = input.points;
     ASSERT_EQ(2, points.size());
+
     ASSERT_EQ("P", points.at(0).name);
     ASSERT_EQ("body 1", points.at(0).frame);
     ASSERT_DOUBLE_EQ(10, points.at(0).x);
