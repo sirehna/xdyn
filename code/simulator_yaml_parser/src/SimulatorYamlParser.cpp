@@ -95,30 +95,27 @@ void operator >> (const YAML::Node& node, YamlPosition& p)
 
 void operator >> (const YAML::Node& node, YamlAngle& a)
 {
-    UV uv;
-    node["phi"] >> uv; a.phi = decode(uv);
-    node["theta"] >> uv; a.theta = decode(uv);
-    node["psi"] >> uv; a.psi = decode(uv);
+    parse_uv(node["phi"], a.phi);
+    parse_uv(node["theta"], a.theta);
+    parse_uv(node["psi"], a.psi);
 }
 
 void operator >> (const YAML::Node& node, YamlCoordinates& c)
 {
-    UV uv;
-    node["x"] >> uv; c.x = decode(uv);
-    node["y"] >> uv; c.y = decode(uv);
-    node["z"] >> uv; c.z = decode(uv);
+    parse_uv(node["x"], c.x);
+    parse_uv(node["y"], c.y);
+    parse_uv(node["z"], c.z);
 }
 
 void operator >> (const YAML::Node& node, YamlSpeed& s)
 {
     node["frame"] >> s.frame;
-    UV uv;
-    node["u"] >> uv; s.u = decode(uv);
-    node["v"] >> uv; s.v = decode(uv);
-    node["w"] >> uv; s.w = decode(uv);
-    node["p"] >> uv; s.p = decode(uv);
-    node["q"] >> uv; s.q = decode(uv);
-    node["r"] >> uv; s.r = decode(uv);
+    parse_uv(node["u"], s.u);
+    parse_uv(node["v"], s.v);
+    parse_uv(node["w"], s.w);
+    parse_uv(node["p"], s.p);
+    parse_uv(node["q"], s.q);
+    parse_uv(node["r"], s.r);
 }
 
 void operator >> (const YAML::Node& node, YamlDynamics& d)
