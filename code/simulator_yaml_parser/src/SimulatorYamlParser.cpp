@@ -29,6 +29,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d);
 void operator >> (const YAML::Node& node, YamlPoint& p);
 void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::string& name);
 void parse_uv(const YAML::Node& node, double& d);
+void operator >> (const YAML::Node& node, YamlInertiaMatrix& m);
 
 double decode(const UV& uv);
 
@@ -122,6 +123,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
     parse_uv(node["mass"], d.mass);
+    node["inertia matrix divided by mass"] >> d.inertia_matrix_divided_by_mass;
 }
 
 void operator >> (const YAML::Node& node, YamlPoint& p)
@@ -145,4 +147,15 @@ void parse_uv(const YAML::Node& node, double& d)
     UV uv;
     node >> uv;
     d = decode(uv);
+}
+
+void operator >> (const YAML::Node& node, YamlInertiaMatrix& m)
+{
+    node["frame"] >> m.frame;
+    node["row 1"] >> m.row_1;
+    node["row 2"] >> m.row_2;
+    node["row 3"] >> m.row_3;
+    node["row 4"] >> m.row_4;
+    node["row 5"] >> m.row_5;
+    node["row 6"] >> m.row_6;
 }

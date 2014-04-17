@@ -110,3 +110,51 @@ TEST_F(SimulatorYamlParserTest, can_parse_mass)
 {
     ASSERT_DOUBLE_EQ(1E6, input.bodies.front().dynamics.mass);
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_inertia_matrix)
+{
+    const YamlInertiaMatrix M =  input.bodies.front().dynamics.inertia_matrix_divided_by_mass;
+    ASSERT_EQ("body 1", M.frame);
+    ASSERT_EQ(6, M.row_1.size());
+    ASSERT_EQ(6, M.row_2.size());
+    ASSERT_EQ(6, M.row_3.size());
+    ASSERT_EQ(6, M.row_4.size());
+    ASSERT_EQ(6, M.row_5.size());
+    ASSERT_EQ(6, M.row_6.size());
+    ASSERT_DOUBLE_EQ(1, M.row_1.at(0));
+    ASSERT_DOUBLE_EQ(2, M.row_1.at(1));
+    ASSERT_DOUBLE_EQ(3, M.row_1.at(2));
+    ASSERT_DOUBLE_EQ(4, M.row_1.at(3));
+    ASSERT_DOUBLE_EQ(5, M.row_1.at(4));
+    ASSERT_DOUBLE_EQ(6, M.row_1.at(5));
+    ASSERT_DOUBLE_EQ(7, M.row_2.at(0));
+    ASSERT_DOUBLE_EQ(2, M.row_2.at(1));
+    ASSERT_DOUBLE_EQ(1, M.row_2.at(2));
+    ASSERT_DOUBLE_EQ(2, M.row_2.at(3));
+    ASSERT_DOUBLE_EQ(11, M.row_2.at(4));
+    ASSERT_DOUBLE_EQ(13, M.row_2.at(5));
+    ASSERT_DOUBLE_EQ(20, M.row_3.at(0));
+    ASSERT_DOUBLE_EQ(30, M.row_3.at(1));
+    ASSERT_DOUBLE_EQ(3, M.row_3.at(2));
+    ASSERT_DOUBLE_EQ(80, M.row_3.at(3));
+    ASSERT_DOUBLE_EQ(0.9, M.row_3.at(4));
+    ASSERT_DOUBLE_EQ(0.1, M.row_3.at(5));
+    ASSERT_DOUBLE_EQ(0, M.row_4.at(0));
+    ASSERT_DOUBLE_EQ(0, M.row_4.at(1));
+    ASSERT_DOUBLE_EQ(0, M.row_4.at(2));
+    ASSERT_DOUBLE_EQ(4, M.row_4.at(3));
+    ASSERT_DOUBLE_EQ(0, M.row_4.at(4));
+    ASSERT_DOUBLE_EQ(0, M.row_4.at(5));
+    ASSERT_DOUBLE_EQ(0, M.row_5.at(0));
+    ASSERT_DOUBLE_EQ(0, M.row_5.at(1));
+    ASSERT_DOUBLE_EQ(0, M.row_5.at(2));
+    ASSERT_DOUBLE_EQ(0, M.row_5.at(3));
+    ASSERT_DOUBLE_EQ(5, M.row_5.at(4));
+    ASSERT_DOUBLE_EQ(0, M.row_5.at(5));
+    ASSERT_DOUBLE_EQ(0, M.row_6.at(0));
+    ASSERT_DOUBLE_EQ(0, M.row_6.at(1));
+    ASSERT_DOUBLE_EQ(0, M.row_6.at(2));
+    ASSERT_DOUBLE_EQ(0, M.row_6.at(3));
+    ASSERT_DOUBLE_EQ(0, M.row_6.at(4));
+    ASSERT_DOUBLE_EQ(6, M.row_6.at(5));
+}
