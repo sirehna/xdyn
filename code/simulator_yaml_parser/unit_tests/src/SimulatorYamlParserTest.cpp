@@ -210,3 +210,22 @@ TEST_F(SimulatorYamlParserTest, can_parse_output_angles)
     ASSERT_EQ("NED",p.at(0).relative_to_frame);
     ASSERT_EQ("body 1",p.at(0).frame);
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_output_linear_velocities)
+{
+    const std::vector<YamlPositionOutput> p = yaml.linear_velocities_output;
+    ASSERT_EQ(2, p.size());
+
+    ASSERT_EQ(2, p.at(0).axes.size());
+    ASSERT_EQ("x",p.at(0).axes.at(0));
+    ASSERT_EQ("y",p.at(0).axes.at(1));
+    ASSERT_EQ("P",p.at(0).point);
+    ASSERT_EQ("body 1",p.at(0).projected_in_frame);
+    ASSERT_EQ("NED",p.at(0).relative_to_frame);
+
+    ASSERT_EQ(1, p.at(1).axes.size());
+    ASSERT_EQ("z",p.at(1).axes.at(0));
+    ASSERT_EQ("P",p.at(1).point);
+    ASSERT_EQ("NED",p.at(1).projected_in_frame);
+    ASSERT_EQ("NED",p.at(1).relative_to_frame);
+}

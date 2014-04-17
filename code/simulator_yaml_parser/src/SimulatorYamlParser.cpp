@@ -56,6 +56,7 @@ YamlSimulatorInput SimulatorYamlParser::parse()
     (*node)["blocked degrees of freedom body/NED->body"] >> ret.blocked_degrees_of_freedom;
     (*node)["outputs"]["positions"] >> ret.position_output;
     (*node)["outputs"]["angles"] >> ret.angles_output;
+    (*node)["outputs"]["linear velocities"] >> ret.linear_velocities_output;
     return ret;
 }
 
