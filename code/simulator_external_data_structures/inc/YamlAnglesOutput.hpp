@@ -13,6 +13,7 @@
 struct YamlAnglesOutput : public YamlOutput
 {
     YamlAnglesOutput();
+    YamlAnglesOutput(const YamlOutput& rhs);
     std::string frame;
     std::string relative_to_frame;
 };

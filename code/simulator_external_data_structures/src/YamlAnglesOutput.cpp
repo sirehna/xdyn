@@ -11,3 +11,8 @@ YamlAnglesOutput::YamlAnglesOutput() : YamlOutput(), frame(""), relative_to_fram
 {
 
 }
+
+YamlAnglesOutput::YamlAnglesOutput(const YamlOutput& rhs) : YamlOutput(rhs), frame(""), relative_to_frame("")
+{
+
+}
