@@ -6,6 +6,7 @@
 #include <Eigen/Dense>
 
 typedef std::vector<Eigen::Vector3d> VectorOfVector3d;
+typedef Eigen::Matrix<double,3,Eigen::Dynamic> Matrix3Xd;
 
 struct Point3dTriplet
 {
