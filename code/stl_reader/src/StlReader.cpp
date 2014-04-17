@@ -1,6 +1,7 @@
 #include <cstring>
 #include <string>
 #include <sstream>
+#include <cstdio>
 
 #include "StlReaderException.hpp"
 #include "StlReader.hpp"
