@@ -78,6 +78,7 @@ ADD_SUBDIRECTORY(internal_solver_validation)
 ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(mesh)
+ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(executables)
 
 INCLUDE(CMakeLapackDouble)
@@ -102,10 +103,6 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         simulator_yaml_parser_static
         simulator_external_data_structures_static
         )
-
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-ADD_EXECUTABLE(sim executables/src/simulator.cpp)
-TARGET_LINK_LIBRARIES(sim ${PROJECT_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 INSTALL(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
