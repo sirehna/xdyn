@@ -133,7 +133,7 @@ TEST_F(TransformTest, can_compose_two_translations_for_a_point_matrix)
         const kinematics::Transform T2(P2,a.random<std::string>());
         const PointMatrix PC1 = random_point_matrix_in_frame(P1.get_frame());
         const PointMatrix Q = T2*T1*PC1;
-        ASSERT_STREQ(T2.get_to_frame().c_str(),Q.get_frame().c_str());
+        ASSERT_EQ(T2.get_to_frame(),Q.get_frame());
         ASSERT_EQ(3,Q.m.rows());
         ASSERT_EQ(PC1.m.cols(),Q.m.cols());
         for (size_t i=0;i<(size_t)(Q.m.cols());++i)
