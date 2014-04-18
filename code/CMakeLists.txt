@@ -78,6 +78,7 @@ ADD_SUBDIRECTORY(internal_solver_validation)
 ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(mesh)
+ADD_SUBDIRECTORY(simulator)
 
 INCLUDE(CMakeLapackDouble)
 
@@ -100,6 +101,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         mesh_static
         simulator_yaml_parser_static
         simulator_external_data_structures_static
+        simulator_static
         )
 
 INSTALL(TARGETS ${PROJECT_NAME}
@@ -130,7 +132,9 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:kinematics_tests>
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
-        $<TARGET_OBJECTS:stl_reader_tests>        )
+        $<TARGET_OBJECTS:stl_reader_tests>
+        $<TARGET_OBJECTS:simulator_tests>
+        )
 TARGET_LINK_LIBRARIES(${TEST_EXE} internal_solver_validation)
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
