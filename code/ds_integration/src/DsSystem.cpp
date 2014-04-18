@@ -8,9 +8,8 @@
 #include "DsSystem.hpp"
 #include "DataSource.hpp"
 
-DSSystem::DSSystem(DataSource& ds_) : state(std::vector<double>()), ds(ds_)
+DSSystem::DSSystem(DataSource& ds_) : ds(ds_), state(ds.get_states())
 {
-    state = ds.get_states();
 }
 
 void DSSystem::operator()(const std::vector<double>& x, std::vector<double>& dx_dt, double )
