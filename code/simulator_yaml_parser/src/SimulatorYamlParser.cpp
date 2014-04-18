@@ -47,7 +47,7 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
     }
 }
 
-YamlSimulatorInput SimulatorYamlParser::parse()
+YamlSimulatorInput SimulatorYamlParser::parse() const
 {
     YamlSimulatorInput ret;
     (*node)["bodies"] >> ret.bodies;

@@ -17,7 +17,7 @@ class SimulatorYamlParser : public YamlParser
 {
     public:
         SimulatorYamlParser(const std::string& data);
-        YamlSimulatorInput parse();
+        YamlSimulatorInput parse() const;
 
     private:
         std::auto_ptr<YAML::Node> node;
