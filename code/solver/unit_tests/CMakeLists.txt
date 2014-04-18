@@ -1,5 +1,5 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-set(MODULE_UNDER_TEST simulator)
+set(MODULE_UNDER_TEST solver)
 project (${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/ODEintTests.cpp
               src/constant_step_stepper_architecture_tests.cpp

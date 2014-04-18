@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.8.8)
-project (simulator)
+project (solver)
 
 include_directories(inc)
 include_directories(${exception_handling_INCLUDE_DIRS})

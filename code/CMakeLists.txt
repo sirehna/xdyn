@@ -71,7 +71,7 @@ ADD_SUBDIRECTORY(data_source_serializers)
 ADD_SUBDIRECTORY(interpolation)
 ADD_SUBDIRECTORY(yaml_parser)
 ADD_SUBDIRECTORY(simulator_yaml_parser)
-ADD_SUBDIRECTORY(simulator)
+ADD_SUBDIRECTORY(solver)
 ADD_SUBDIRECTORY(ds_integration)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(internal_solver_validation)
@@ -118,7 +118,7 @@ SET(TEST_EXE run_all_tests)
 
 ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:data_source_tests>
-        $<TARGET_OBJECTS:simulator_tests>
+        $<TARGET_OBJECTS:solver_tests>
         $<TARGET_OBJECTS:data_source_serializers_tests>
         $<TARGET_OBJECTS:interpolation_tests>
         $<TARGET_OBJECTS:random_data_generator_tests>
