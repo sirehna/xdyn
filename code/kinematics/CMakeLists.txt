@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 2.8.8)
 project(kinematics)
 
-set(SRC #src/AbstractFrame.cpp
-        #src/FixedFrame.cpp
-        #src/Frame.cpp
-        #src/Vector3DInFrame.cpp
-        src/Velocity.cpp
+set(SRC src/Velocity.cpp
         src/rotation_matrix_builders.cpp
         src/EulerAngles.cpp
         #src/Kinematics.cpp
