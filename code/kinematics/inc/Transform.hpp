@@ -13,6 +13,8 @@
 #include "RotationMatrix.hpp"
 #include "Velocity.hpp"
 
+#include <ostream>
+
 /** \author cec
  *  \brief
  *  \details
@@ -37,11 +39,15 @@ namespace kinematics
             std::string get_from_frame() const;
             std::string get_to_frame() const;
 
+            friend std::ostream& operator<<(std::ostream& os, const Transform& T);
         private:
             Transform();
             Point t;
             RotationMatrix r;
             std::string to_frame;
     };
+    std::ostream& operator<<(std::ostream& os, const Transform& T);
 }
+
+
 #endif /* TRANSFORM_HPP_ */
