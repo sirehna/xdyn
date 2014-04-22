@@ -113,6 +113,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         simulator_yaml_parser_static
         simulator_external_data_structures_static
         simulator_static
+        hydro_models_static
         )
 
 INSTALL(TARGETS ${PROJECT_NAME}

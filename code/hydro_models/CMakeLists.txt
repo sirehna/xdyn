@@ -1,12 +1,11 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(hydro_models)
 
-SET(SRC src/HydroModels.cpp
+SET(SRC src/WaveModelInterface.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${exception_handling_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${test_macros_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME}_static STATIC ${SRC})
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
