@@ -66,6 +66,11 @@ std::string Transform::get_to_frame() const
     return to_frame;
 }
 
+Transform Transform::inverse() const
+{
+    return Transform(Point(to_frame, -r.lu().solve(t.v)), r.inverse(), get_from_frame());
+}
+
 std::ostream& kinematics::operator<<(std::ostream& os, const Transform& T)
 {
     os << "(" << T.get_from_frame() << " -> " << T.get_to_frame() << "):" << std::endl
