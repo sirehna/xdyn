@@ -5,5 +5,9 @@
  *      Author: cady
  */
 
-#include "C:/Transfert/simulator/code/hydro_models/inc/DefaultWaveModel.hpp"
+#include "DefaultWaveModel.hpp"
 
+DefaultWaveModel::DefaultWaveModel(const double wave_height_) : wave_height(wave_height_)
+{
+
+}

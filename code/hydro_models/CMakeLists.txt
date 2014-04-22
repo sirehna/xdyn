@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(hydro_models)
 
-SET(SRC src/WaveModelInterface.cpp
+SET(SRC src/DefaultWaveModel.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)

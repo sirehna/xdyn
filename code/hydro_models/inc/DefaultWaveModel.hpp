@@ -10,6 +10,12 @@
 
 class DefaultWaveModel
 {
+    public:
+        DefaultWaveModel(const double wave_height);
+
+    private:
+        DefaultWaveModel(); // Disabled
+        double wave_height;
 };
 
 #endif /* DEFAULTWAVEMODEL_HPP_ */
