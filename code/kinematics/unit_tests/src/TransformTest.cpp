@@ -145,6 +145,29 @@ TEST_F(TransformTest, can_compose_two_translations_for_a_point_matrix)
     }
 }
 
+TEST_F(TransformTest, can_compose_two_translations_and_two_rotations)
+{
+    const double beta = PI/3;
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const std::string A = a.random<std::string>();
+        const std::string B = a.random<std::string>();
+        const std::string C = a.random<std::string>();
+        const Point P = random_point_in_frame(A);
+        const Point ta = random_point_in_frame(A);
+        const auto Ra = kinematics::rot(1,0,0,beta);
+        const Point tb = random_point_in_frame(B);
+        const auto Rb = kinematics::rot(0,1,0,beta);
+        const kinematics::Transform bTa(ta,Ra,B);
+        const kinematics::Transform cTb(tb,Rb,C);
+        const Point Pc = cTb*bTa*P;
+        ASSERT_EQ(C, Pc.get_frame());
+        ASSERT_SMALL_RELATIVE_ERROR((P.x+ta.x)/2.0+(3.0*P.y+sqrt(3.0)*P.z)/4.0+sqrt(3.0)*ta.z/2.0+tb.x,Pc.x,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR((P.y-sqrt(3.0)*P.z)/2.0+ta.y+tb.y,Pc.y,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR((P.y*sqrt(3.0)+P.z)/4.0+ta.z/2.0-(sqrt(3.0)/2.0)*(P.x+ta.x)+tb.z,Pc.z,EPS);
+    }
+}
+
 TEST_F(TransformTest, can_rotate_a_point)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
