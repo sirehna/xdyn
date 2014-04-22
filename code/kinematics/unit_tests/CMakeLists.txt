@@ -5,6 +5,7 @@ FILE(GLOB SRC #src/KinematicsTests.cpp
               src/rotation_matrix_builders_Test.cpp
               src/TransformTest.cpp
               src/VelocityTest.cpp
+              src/boost_graph_test.cpp
               )
 # ------8<---------------------------------------------->8-----
 
