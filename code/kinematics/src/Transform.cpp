@@ -65,3 +65,11 @@ std::string Transform::get_to_frame() const
 {
     return to_frame;
 }
+
+std::ostream& kinematics::operator<<(std::ostream& os, const Transform& T)
+{
+    os << "(" << T.get_from_frame() << " -> " << T.get_to_frame() << "):" << std::endl
+       << "R = " << T.r << std::endl
+       << "t = " << T.t.v << std::endl;
+    return os;
+}
