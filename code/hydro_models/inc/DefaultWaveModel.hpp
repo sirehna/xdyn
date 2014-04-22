@@ -8,10 +8,13 @@
 #ifndef DEFAULTWAVEMODEL_HPP_
 #define DEFAULTWAVEMODEL_HPP_
 
-class DefaultWaveModel
+#include "WaveModelInterface.hpp"
+
+class DefaultWaveModel : public WaveModelInterface
 {
     public:
         DefaultWaveModel(const double wave_height);
+        double get_relative_wave_height(const Point& P) const;
 
     private:
         DefaultWaveModel(); // Disabled

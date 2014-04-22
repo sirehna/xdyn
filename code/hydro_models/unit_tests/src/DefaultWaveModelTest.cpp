@@ -28,10 +28,10 @@ void DefaultWaveModelTest::TearDown()
 TEST_F(DefaultWaveModelTest, example)
 {
 //! [DefaultWaveModelTest example]
-    const Point P("A", 1, 2, 3);
-    const DefaultWaveModel w(3);
-
+    const Point P("A", 0, 0, 0);
+    const DefaultWaveModel w(0);
 //! [DefaultWaveModelTest example]
 //! [DefaultWaveModelTest expected output]
+    ASSERT_DOUBLE_EQ(0, w.get_relative_wave_height(P));
 //! [DefaultWaveModelTest expected output]
 }
