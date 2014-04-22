@@ -6,7 +6,6 @@
  */
 
 #include "TransformTest.hpp"
-#include "Transform.hpp"
 #include "Point.hpp"
 #include "rotation_matrix_builders.hpp"
 #include "test_macros.hpp"
@@ -84,6 +83,12 @@ PointMatrix TransformTest::random_point_matrix_in_frame(const std::string& frame
         p.m(2,i)=a.random<double>().between(-10,10);
     }
     return p;
+}
+
+kinematics::Transform TransformTest::random_transform(const std::string& from_frame, const std::string& to_frame) const
+{
+    const RotationMatrix R = a.random<RotationMatrix>();
+    return kinematics::Transform(random_point_in_frame(from_frame), R, to_frame);
 }
 
 TEST_F(TransformTest, can_translate_a_point)
@@ -295,4 +300,23 @@ TEST_F(TransformTest, can_project_velocity_in_another_frame)
     ASSERT_SMALL_RELATIVE_ERROR(Q.x+V1.p, V2.p, EPS);
     ASSERT_SMALL_RELATIVE_ERROR(Q.y+cos(beta)*V1.q-sin(beta)*V1.r, V2.q, EPS);
     ASSERT_SMALL_RELATIVE_ERROR(Q.z+sin(beta)*V1.q+cos(beta)*V1.r, V2.r, EPS);
+}
+
+TEST_F(TransformTest, can_compute_the_inverse_transform)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const std::string frame_a = a.random<std::string>();
+        const std::string frame_b = a.random<std::string>();
+        const Point Pa = random_point_in_frame(frame_a);
+        const Point Pb = random_point_in_frame(frame_b);
+        const auto bTa = random_transform(frame_a, frame_b);
+        const kinematics::Transform aTb = bTa.inverse();
+        ASSERT_SMALL_RELATIVE_ERROR(Pa.x,((aTb*bTa)*Pa).x,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pa.y,((aTb*bTa)*Pa).y,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pa.z,((aTb*bTa)*Pa).z,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pb.x,((bTa*aTb)*Pb).x,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pb.y,((bTa*aTb)*Pb).y,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pb.z,((bTa*aTb)*Pb).z,EPS);
+    }
 }

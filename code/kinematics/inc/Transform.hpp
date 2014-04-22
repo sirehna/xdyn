@@ -38,6 +38,7 @@ namespace kinematics
             Transform operator*(const Transform& P) const;
             std::string get_from_frame() const;
             std::string get_to_frame() const;
+            Transform inverse() const;
 
             friend std::ostream& operator<<(std::ostream& os, const Transform& T);
         private:
