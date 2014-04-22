@@ -306,4 +306,92 @@ stories:
       assigned to: gj
       backlog: 14/4/2014
       started: 16/4/2014
-      done: 17/4/2014
+      done: 17/4/2014
+    - task: Hydrostatic integration test on Anthineas
+      type: model
+      size: 8
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Hydrostatic analytical test case on cube
+      type: model
+      size: 4
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Create DataSourceBuilder (to set initial conditions & add modules)
+      type: kernel
+      size: 8
+      backlog: 14/4/2014
+      assigned to: cec
+      started: 18/4/2014
+    - task: Classify facets by number of immerged nodes
+      type: model
+      size: 1
+      backlog: 14/4/2014
+      assigned to: cec
+      started: 18/4/2014
+    - task: Create dummy wave module & interface
+      type: model
+      size: 8
+      backlog: 14/4/2014
+      assigned to: cec
+      started: 18/4/2014
+    - task: Wrench class + change its reference frame
+      type: kernel
+      size: 4
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Kinematics module (fills Kinematics objet according to states)
+      type: kernel
+      size: 4
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Gravity module (DS API, check input was set by DSBuilder, test output values)
+      type: model
+      size: 2
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Intersection between facet & free surface
+      type: model
+      size: 2
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Classify facets by type (number of immerged nodes)
+      type: model
+      size: 1
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Compute area of immerged triangle + position of centre of inertia
+      type: model
+      size: 4
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Create vector of immerged triangles (only pushback useful ones)
+      type: model
+      size: 1
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Calculate elementary force from area & position of centre of inertia
+      type: model
+      size: 1
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Integrate elementary hydrostatic forces
+      type: model
+      size: 1
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Create hydrostatic force module (DS API, check input was set by DSBuilder, test output values)
+      type: model
+      size: 4
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Sum of forces module (DS API, check input was set by DSBuilder, test output values)
+      type: model
+      size: 2
+      backlog: 22/4/2014
+      assigned to: cec
+    - task: Newton's second law of motion module
+      type: model
+      size: 4
+      backlog: 22/4/2014
+      assigned to: cec
