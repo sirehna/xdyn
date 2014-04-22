@@ -44,7 +44,7 @@ IF (WIN32)
     ENDIF()
 ENDIF()
 MESSAGE(STATUS "BOOST_ROOT : ${BOOST_ROOT}")
-FIND_PACKAGE(Boost 1.53 REQUIRED)
+FIND_PACKAGE(Boost 1.53 COMPONENTS program_options REQUIRED)
 
 ADD_SUBDIRECTORY(yaml-cpp)
 SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
@@ -78,6 +78,8 @@ ADD_SUBDIRECTORY(internal_solver_validation)
 ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(mesh)
+ADD_SUBDIRECTORY(boost_program_options_descriptions)
+ADD_SUBDIRECTORY(executables)
 
 INCLUDE(CMakeLapackDouble)
 
