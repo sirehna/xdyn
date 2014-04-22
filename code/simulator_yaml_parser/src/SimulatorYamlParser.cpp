@@ -47,7 +47,7 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
     }
 }
 
-YamlSimulatorInput SimulatorYamlParser::parse()
+YamlSimulatorInput SimulatorYamlParser::parse() const
 {
     YamlSimulatorInput ret;
     (*node)["bodies"] >> ret.bodies;
@@ -137,7 +137,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
     parse_uv(node["mass"], d.mass);
-    node["inertia matrix divided by mass"] >> d.inertia_matrix_divided_by_mass;
+    node["inertia matrix divided by total mass at the center of gravity projected in the body frame"] >> d.inertia_matrix_divided_by_mass;
 }
 
 void operator >> (const YAML::Node& node, YamlPoint& p)

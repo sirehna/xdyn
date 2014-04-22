@@ -20,12 +20,16 @@ class DSSystem
         void update_discrete_states();
         void update_continuous_states();
 
+    private:
+        DataSource& ds;
+
+    public:
         std::vector<double> state;
         std::vector<std::string> get_state_names() const;
 
     private:
         DSSystem();
-        DataSource& ds;
+
 };
 
 #endif /* DSSYSTEM_HPP_ */
