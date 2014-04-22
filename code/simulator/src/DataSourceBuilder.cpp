@@ -5,5 +5,14 @@
  *      Author: cady
  */
 
-#include "C:/Transfert/simulator/code/simulator/inc/DataSourceBuilder.hpp"
+#include "DataSourceBuilder.hpp"
 
+DataSourceBuilder::DataSourceBuilder(const SimulatorYamlParser& )
+{
+
+}
+
+DataSource DataSourceBuilder::build_ds()
+{
+    return DataSource();
+}
