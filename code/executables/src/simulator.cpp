@@ -5,10 +5,6 @@
  *      Author: cady
  */
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> dea22f1cd56d5dd2a1047d44afa160dbff9d5511
 #include "boost/program_options.hpp"
 #include "OptionPrinter.hpp"
 
@@ -124,16 +120,3 @@ int main(int argc, char** argv)
     const size_t error_code = get_input_data(argc, argv, input_data);
     return error_code;
 }
-<<<<<<< HEAD
-=======
-=======
-
-int main(int argc, const char* argv[])
-{
-    (void)argv;
-    return argc;
-}
-
-
->>>>>>> 8fd3d32ea7c44deff973a64b640b9b5378dabe87
->>>>>>> dea22f1cd56d5dd2a1047d44afa160dbff9d5511
