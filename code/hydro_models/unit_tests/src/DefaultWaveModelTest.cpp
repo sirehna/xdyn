@@ -6,6 +6,7 @@
  */
 
 #include "DefaultWaveModelTest.hpp"
+#include "Point.hpp"
 
 DefaultWaveModelTest::DefaultWaveModelTest() : a(DataGenerator(5466123))
 {
@@ -26,6 +27,8 @@ void DefaultWaveModelTest::TearDown()
 TEST_F(DefaultWaveModelTest, example)
 {
 //! [DefaultWaveModelTest example]
+    const Point P("A", 1, 2, 3);
+
 //! [DefaultWaveModelTest example]
 //! [DefaultWaveModelTest expected output]
 //! [DefaultWaveModelTest expected output]
