@@ -26,20 +26,8 @@ void rotation_matrix_builders_Test::SetUp()
 void rotation_matrix_builders_Test::TearDown()
 {
 }
-/*
- * typedef enum {EXTRINSIC, INTRINSIC} IntrinsicOrExtrinsic;
-    typedef enum {AXIS, ANGLE} OrderConvention;
-    typedef enum {PROPER_EULER, CARDAN} EulerOrCardan;
-    template <IntrinsicOrExtrinsic,
-              OrderConvention,
-              EulerOrCardan,
-              int I,
-              int J,
-              int K> RotationMatrix rotation_matrix(const double phi, const double theta, const double psi);
- */
 
 #define PI (4.*atan(1))
-
 
 TEST_F(rotation_matrix_builders_Test, can_get_rotation_around_x_axis)
 {
