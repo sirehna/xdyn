@@ -174,8 +174,10 @@ stories:
       size: 4
       assigned to: cec
       backlog: 17/2/2014
+      started: 17/4/2014
+      done: 18/4/2014
     - task: Add YAML test data to installer
-      type: internal
+      type: interface
       size: 4
       assigned to: cec
       backlog: 17/2/2014
@@ -236,3 +238,72 @@ stories:
       backlog: 24/3/2014
       started: 24/3/2014
       done: 24/3/2014
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1813>Read input YAML files</a>
+    due by: 11/6/2014
+    tasks:
+    - task: Define input format
+      type: interface
+      size: 4
+      assigned to: cec
+      backlog: 24/3/2014
+      started: 24/3/2014
+      done: 10/4/2014
+    - task: Create external data structures for YAML
+      type: interface
+      size: 2
+      assigned to: cec
+      backlog: 14/4/2014
+      started: 14/4/2014
+      done: 16/4/2014
+    - task: YAML parser
+      type: interface
+      size: 8
+      assigned to: cec
+      backlog: 14/4/2014
+      started: 16/4/2014
+      done: 17/4/2014
+    - task: Output definition in YAML + CsvDsObserver
+      type: interface
+      size: 4
+      assigned to: cec
+      backlog: 24/3/2014
+      started: 24/3/2014
+      done: 10/4/2014
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1693>Non-linear hydrostatic</a>
+    due by: 11/6/2014
+    tasks:
+    - task: Read STL files
+      type: interface
+      size: 4
+      assigned to: gj
+      backlog: 24/3/2014
+      started: 24/3/2014
+      done: 14/4/2014
+    - task: STL assign node to facet
+      type: model
+      size: 2
+      assigned to: gj
+      backlog: 14/4/2014
+      started: 14/4/2014
+      done: 15/4/2014
+    - task: Compute normal vector for each facet
+      type: model
+      size: 1
+      assigned to: gj
+      backlog: 14/4/2014
+      started: 14/4/2014
+      done: 15/4/2014
+    - task: Compute area of each facet
+      type: model
+      size: 1
+      assigned to: gj
+      backlog: 14/4/2014
+      started: 16/4/2014
+      done: 17/4/2014
+    - task: Compute centre of inertia of each facet
+      type: model
+      size: 1
+      assigned to: gj
+      backlog: 14/4/2014
+      started: 16/4/2014
+      done: 17/4/2014
