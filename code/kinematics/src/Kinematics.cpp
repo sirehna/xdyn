@@ -74,7 +74,7 @@ class Kinematics::Impl
             }
             catch (const DataSourceException& )
             {
-                THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Unable to find transform from ") + from_frame + " to " + to_frame);
+                THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Unable to compute transform from ") + from_frame + " to " + to_frame);
             }
         }
 

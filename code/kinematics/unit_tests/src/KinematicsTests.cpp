@@ -10,6 +10,7 @@
 #include "random_kinematics.hpp"
 #include "test_macros.hpp"
 #include "almost_equal.hpp"
+#include "KinematicsException.hpp"
 
 #define EPS 1E-13
 
@@ -121,4 +122,10 @@ TEST_F(KinematicsTests, can_retrieve_inverse_transform)
     ASSERT_TRUE(double_equal(identity(from_frame), aTb*bTa, EPS));
     ASSERT_TRUE(double_equal(identity(to_frame), bTa*aTb, EPS));
     //! [KinematicsTests get_example output]
+}
+
+TEST_F(KinematicsTests, throws_if_transform_is_not_computable)
+{
+    Kinematics k;
+    ASSERT_THROW(k.get(a.random<std::string>(),a.random<std::string>()), KinematicsException);
 }
