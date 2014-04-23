@@ -92,11 +92,8 @@ kinematics::Transform identity(const std::string& frame)
 TEST_F(KinematicsTests, can_add_a_transform_to_a_kinematics_object)
 {
     Kinematics k;
-    for (size_t i = 0 ; i < 1000 ; ++i)
-    {
-		const auto bTa = random_transform(a, a.random<std::string>(), a.random<std::string>());
-		k.add(bTa);
-    }
+    const auto bTa = random_transform(a, a.random<std::string>(), a.random<std::string>());
+    k.add(bTa);
 }
 
 TEST_F(KinematicsTests, can_retrieve_a_transform)
