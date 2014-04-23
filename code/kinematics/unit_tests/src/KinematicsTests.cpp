@@ -109,16 +109,16 @@ TEST_F(KinematicsTests, can_retrieve_a_transform)
 
 TEST_F(KinematicsTests, can_retrieve_inverse_transform)
 {
-    //! [KinematicsTests example]
+    //! [KinematicsTests get_example]
     Kinematics k;
     const std::string from_frame = a.random<std::string>();
     const std::string to_frame = a.random<std::string>();
     const auto bTa = random_transform(a, from_frame, to_frame);
     k.add(bTa);
     const auto aTb = k.get(to_frame, from_frame);
-    //! [KinematicsTests example]
-    //! [KinematicsTests expected output]
+    //! [KinematicsTests get_example]
+    //! [KinematicsTests get_example output]
     ASSERT_TRUE(double_equal(identity(from_frame), aTb*bTa, EPS));
     ASSERT_TRUE(double_equal(identity(to_frame), bTa*aTb, EPS));
-    //! [KinematicsTests expected output]
+    //! [KinematicsTests get_example output]
 }
