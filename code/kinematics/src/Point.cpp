@@ -1,5 +1,9 @@
 #include "Point.hpp"
 
+Point::Point() : v(0,0,0), x(v[0]), y(v[1]), z(v[2]), frame("")
+{
+}
+
 Point::Point(const std::string& frame_) : v(0,0,0), x(v[0]), y(v[1]), z(v[2]), frame(frame_)
 {
 

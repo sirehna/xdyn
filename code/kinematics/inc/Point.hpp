@@ -23,6 +23,7 @@
 class Point
 {
     public:
+        Point();
         Point(const std::string& frame);
         Point(const Point& P);
         Point(const std::string& frame, const Eigen::Vector3d& v);
@@ -37,7 +38,6 @@ class Point
         std::string get_frame() const;
 
     private:
-        Point();
         std::string frame;
 };
 
