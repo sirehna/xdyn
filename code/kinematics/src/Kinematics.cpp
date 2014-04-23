@@ -2,6 +2,19 @@
 #include "KinematicsException.hpp"
 #include "DataSource.hpp"
 #include "Transform.hpp"
+#include "KinematicTree.hpp"
+
+std::string make_transform_name(const std::string& from_frame, const std::string& to_frame);
+std::string make_transform_name(const std::string& from_frame, const std::string& to_frame)
+{
+    return from_frame + " -> " + to_frame;
+}
+
+std::string make_transform_name(const std::pair<std::string,std::string>& from_to);
+std::string make_transform_name(const std::pair<std::string,std::string>& from_to)
+{
+    return make_transform_name(from_to.first, from_to.second);
+}
 
 
 class InverseTransformComputer : public DataSourceModule
@@ -57,8 +70,8 @@ class Kinematics::Impl
 
         void add(const kinematics::Transform& t)
         {
-            const std::string direct_transform = t.get_from_frame() + " -> " + t.get_to_frame();
-            const std::string inverse_transform = t.get_to_frame() + " -> " + t.get_from_frame();
+            const std::string direct_transform = make_transform_name(t.get_from_frame(), t.get_to_frame());
+            const std::string inverse_transform = make_transform_name(t.get_to_frame(), t.get_from_frame());
             ds.set(direct_transform, t);
             InverseTransformComputer computer(&ds, std::string("reverse(")+direct_transform+")");
             computer.name_of_direct_transform = direct_transform;
@@ -70,7 +83,7 @@ class Kinematics::Impl
         {
             try
             {
-                return ds.get<kinematics::Transform>(from_frame + " -> " + to_frame);
+                return ds.get<kinematics::Transform>(make_transform_name(from_frame, to_frame));
             }
             catch (const DataSourceException& )
             {
