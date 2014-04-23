@@ -112,31 +112,23 @@ class KinematicTree::Impl
             return path;
         }
 
-        PathType dijkstra(const std::pair<Vertex,Vertex>& edge)
+        PredecessorMap get_predecessor_map(std::vector<Vertex>& predecessors, const Vertex& start)
         {
-            //PredecessorMap predecessor_map = compute_dijkstra_predecessor_map(edge.first);
-
-            std::vector<Vertex> predecessors(boost::num_vertices(g)); // To store parents
             std::vector<Weight> distances(boost::num_vertices(g)); // To store distances
-
             IndexMap indexMap = boost::get(boost::vertex_index, g);
             PredecessorMap predecessor_map(&predecessors[0], indexMap);
             DistanceMap distanceMap(&distances[0], indexMap);
 
-            const Vertex start = edge.first;
-
-
-
             // Compute shortest paths from 'start' to all vertices, and store the output in predecessors and distances
-            // boost::dijkstra_shortest_paths(g, v0, boost::predecessor_map(predecessorMap).distance_map(distanceMap));
-            // This is exactly the same as the above line - it is the idea of "named parameters" - you can pass the
-            // predecessor map and the distance map in any order.
             boost::dijkstra_shortest_paths(g, start, boost::distance_map(distanceMap).predecessor_map(predecessor_map));
+            return predecessor_map;
+        }
 
-
+        PathType dijkstra(const std::pair<Vertex,Vertex>& edge)
+        {
+            std::vector<Vertex> predecessors(boost::num_vertices(g)); // To store parents
+            PredecessorMap predecessor_map = get_predecessor_map(predecessors, edge.first);
             return get_path(edge.second, predecessor_map);
-
-
         }
 
         Graph g;
