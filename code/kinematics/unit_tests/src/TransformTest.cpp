@@ -6,15 +6,15 @@
  */
 
 #include "TransformTest.hpp"
-#include "Point.hpp"
-#include "rotation_matrix_builders.hpp"
-#include "test_macros.hpp"
 #include "extra_test_assertions.hpp"
 #include "KinematicsException.hpp"
+#include "random_kinematics.hpp"
+#include "rotation_matrix_builders.hpp"
 
-#include <cmath>
+#include <cmath> // For atan
 
 #define PI (4.*atan(1.))
+
 #define EPS 1E-13
 
 TransformTest::TransformTest() : a(DataGenerator(1215))
@@ -33,71 +33,13 @@ void TransformTest::TearDown()
 {
 }
 
-template <> RotationMatrix TypedScalarDataGenerator<RotationMatrix>::get() const
-{
-    double lambda1 = random<double>().between(-1,1);
-    double lambda2 = random<double>().between(-1,1);
-    double lambda3 = random<double>().between(-1,1);
-    const double D = sqrt(lambda1*lambda1+lambda2*lambda2+lambda3*lambda3);
-    lambda1 = lambda1/D;
-    lambda2 = lambda2/D;
-    lambda3 = lambda3/D;
-    const double beta = random<double>().between(-PI,PI);
-    return kinematics::rot(lambda1, lambda2, lambda3, beta);
-}
-
-template <> Point TypedScalarDataGenerator<Point>::get() const
-{
-    const double x = random<double>().between(-10,10);
-    const double y = random<double>().between(-10,10);
-    const double z = random<double>().between(-10,10);
-    return Point(random<std::string>(), x, y, z);
-}
-
-Point TransformTest::random_point_in_frame(const std::string& frame) const
-{
-    const double x = a.random<double>().between(-10,10);
-    const double y = a.random<double>().between(-10,10);
-    const double z = a.random<double>().between(-10,10);
-    return Point(frame, x, y, z);
-}
-
-Point TransformTest::random_point() const
-{
-    return random_point_in_frame(a.random<std::string>());
-}
-
-PointMatrix TransformTest::random_point_matrix() const
-{
-    return random_point_matrix_in_frame(a.random<std::string>());
-}
-
-PointMatrix TransformTest::random_point_matrix_in_frame(const std::string& frame) const
-{
-    PointMatrix p(frame);
-    p.m.resize(3,100);
-    for (size_t i=0;i<100;++i)
-    {
-        p.m(0,i)=a.random<double>().between(-10,10);
-        p.m(1,i)=a.random<double>().between(-10,10);
-        p.m(2,i)=a.random<double>().between(-10,10);
-    }
-    return p;
-}
-
-kinematics::Transform TransformTest::random_transform(const std::string& from_frame, const std::string& to_frame) const
-{
-    const RotationMatrix R = a.random<RotationMatrix>();
-    return kinematics::Transform(random_point_in_frame(from_frame), R, to_frame);
-}
-
 TEST_F(TransformTest, can_translate_a_point)
 {
 //! [TransformTest example]
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
-        const Point P1 = random_point();
-        const Point P2 = random_point_in_frame(P1.get_frame());
+        const Point P1 = random_point(a);
+        const Point P2 = random_point_in_frame(a, P1.get_frame());
         const kinematics::Transform T(P1, a.random<std::string>());
         const Point Q = T*P2;
 
@@ -115,8 +57,8 @@ TEST_F(TransformTest, can_compose_two_translations)
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         const std::string middle_frame = a.random<std::string>();
-        const Point P1 = random_point();
-        const Point P2 = random_point_in_frame(middle_frame);
+        const Point P1 = random_point(a);
+        const Point P2 = random_point_in_frame(a, middle_frame);
         const kinematics::Transform T1(P1,middle_frame);
         const kinematics::Transform T2(P2,a.random<std::string>());
         const Point Q = T2*T1*P1;
@@ -132,11 +74,11 @@ TEST_F(TransformTest, can_compose_two_translations_for_a_point_matrix)
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         const std::string middle_frame = a.random<std::string>();
-        const Point P1 = random_point();
-        const Point P2 = random_point_in_frame(middle_frame);
+        const Point P1 = random_point(a);
+        const Point P2 = random_point_in_frame(a, middle_frame);
         const kinematics::Transform T1(P1,middle_frame);
         const kinematics::Transform T2(P2,a.random<std::string>());
-        const PointMatrix PC1 = random_point_matrix_in_frame(P1.get_frame());
+        const PointMatrix PC1 = random_point_matrix_in_frame(a, P1.get_frame());
         const PointMatrix Q = T2*T1*PC1;
         ASSERT_EQ(T2.get_to_frame(),Q.get_frame());
         ASSERT_EQ(3,Q.m.rows());
@@ -158,10 +100,10 @@ TEST_F(TransformTest, can_compose_two_translations_and_two_rotations)
         const std::string A = a.random<std::string>();
         const std::string B = a.random<std::string>();
         const std::string C = a.random<std::string>();
-        const Point P = random_point_in_frame(A);
-        const Point ta = random_point_in_frame(A);
+        const Point P = random_point_in_frame(a, A);
+        const Point ta = random_point_in_frame(a, A);
         const auto Ra = kinematics::rot(1,0,0,beta);
-        const Point tb = random_point_in_frame(B);
+        const Point tb = random_point_in_frame(a, B);
         const auto Rb = kinematics::rot(0,1,0,beta);
         const kinematics::Transform bTa(ta,Ra,B);
         const kinematics::Transform cTb(tb,Rb,C);
@@ -179,7 +121,7 @@ TEST_F(TransformTest, can_rotate_a_point)
     {
         const double beta = a.random<double>().between(-PI,PI);
         const RotationMatrix R = kinematics::rot(0,0,1, beta);
-        const Point P = random_point();
+        const Point P = random_point(a);
         const kinematics::Transform T(R, P.get_frame(), a.random<std::string>());
         const Point Q = T*P;
 
@@ -197,7 +139,7 @@ TEST_F(TransformTest, can_compose_two_rotations)
         const double beta2 = a.random<double>().between(-PI,PI);
         const RotationMatrix R1 = kinematics::rot(0,0,1, beta1);
         const RotationMatrix R2 = kinematics::rot(0,0,1, beta2);
-        const Point P = random_point();
+        const Point P = random_point(a);
         const std::string middle_frame = a.random<std::string>();
         const kinematics::Transform T1(R1, P.get_frame(), middle_frame);
         const kinematics::Transform T2(R2, middle_frame, a.random<std::string>());
@@ -213,8 +155,8 @@ TEST_F(TransformTest, can_rotate_and_translate_a_point)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
-        const Point O = random_point();
-        const Point P = random_point_in_frame(O.get_frame());
+        const Point O = random_point(a);
+        const Point P = random_point_in_frame(a, O.get_frame());
         const double beta = a.random<double>().between(-PI,PI);
         const RotationMatrix R = kinematics::rot(0,0,1, beta);
         const kinematics::Transform T(O,R,a.random<std::string>());
@@ -232,8 +174,8 @@ TEST_F(TransformTest, should_throw_if_applying_transform_to_a_point_in_wrong_fra
     {
         const std::string F1 = a.random<std::string>();
         const std::string F2 = a.random<std::string>();
-        const Point P1 = random_point_in_frame(F1);
-        const Point P2 = random_point_in_frame(F2);
+        const Point P1 = random_point_in_frame(a, F1);
+        const Point P2 = random_point_in_frame(a, F2);
         const RotationMatrix R = a.random<RotationMatrix>();
         const kinematics::Transform T1(P1,R,a.random<std::string>());
         const kinematics::Transform T2(P2,R,a.random<std::string>());
@@ -250,8 +192,8 @@ TEST_F(TransformTest, should_throw_if_composing_transforms_in_wrong_frame)
     {
         const std::string F1 = a.random<std::string>();
         const std::string F2 = a.random<std::string>();
-        const Point O1 = random_point_in_frame(F1);
-        const Point O2 = random_point_in_frame(F2);
+        const Point O1 = random_point_in_frame(a, F1);
+        const Point O2 = random_point_in_frame(a, F2);
         const RotationMatrix R = a.random<RotationMatrix>();
         const kinematics::Transform T1(O1,R,F2);
         const kinematics::Transform T2(O2,R,a.random<std::string>());
@@ -268,9 +210,9 @@ TEST_F(TransformTest, should_throw_if_transforming_velocity_from_wrong_frame)
     {
         const std::string F1 = a.random<std::string>();
         const std::string F2 = a.random<std::string>();
-        const Point P = random_point_in_frame(F1);
-        const Point Q = random_point_in_frame(F2);
-        const AngularVelocityVector w = random_point_in_frame(F1);
+        const Point P = random_point_in_frame(a, F1);
+        const Point Q = random_point_in_frame(a, F2);
+        const AngularVelocityVector w = random_point_in_frame(a, F1);
         const RotationMatrix R = a.random<RotationMatrix>();
         const kinematics::Transform T_same(P,R,a.random<std::string>());
         const kinematics::Transform T_different(Q,R,a.random<std::string>());
@@ -308,9 +250,9 @@ TEST_F(TransformTest, can_compute_the_inverse_transform)
     {
         const std::string frame_a = a.random<std::string>();
         const std::string frame_b = a.random<std::string>();
-        const Point Pa = random_point_in_frame(frame_a);
-        const Point Pb = random_point_in_frame(frame_b);
-        const auto bTa = random_transform(frame_a, frame_b);
+        const Point Pa = random_point_in_frame(a, frame_a);
+        const Point Pb = random_point_in_frame(a, frame_b);
+        const auto bTa = random_transform(a, frame_a, frame_b);
         const kinematics::Transform aTb = bTa.inverse();
         ASSERT_SMALL_RELATIVE_ERROR(Pa.x,((aTb*bTa)*Pa).x,EPS);
         ASSERT_SMALL_RELATIVE_ERROR(Pa.y,((aTb*bTa)*Pa).y,EPS);

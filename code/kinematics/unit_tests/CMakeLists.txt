@@ -6,6 +6,7 @@ FILE(GLOB SRC #src/KinematicsTests.cpp
               src/TransformTest.cpp
               src/VelocityTest.cpp
               src/boost_graph_test.cpp
+              src/random_kinematics.cpp
               )
 # ------8<---------------------------------------------->8-----
 

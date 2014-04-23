@@ -6,14 +6,7 @@
  */
 
 #include "KinematicsTests.hpp"
-#include "test_macros.hpp"
 #include "Kinematics.hpp"
-#include "FrameException.hpp"
-#include "rotation_matrix_builders.hpp"
-#include "EulerAngles.hpp"
-#include "Point.hpp"
-
-#include <cmath>
 
 KinematicsTests::KinematicsTests() : a(DataGenerator(122))
 {
