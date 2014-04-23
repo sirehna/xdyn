@@ -13,6 +13,8 @@
 #include <vector>
 #include <utility> // std::pair
 
+typedef std::vector<std::pair<std::string,std::string> > PathType;
+
 /** \author cec
  *  \date 23 avr. 2014, 14:50:11
  *  \brief Computes the shortest Transform path between two reference frames.
@@ -43,9 +45,9 @@ class KinematicTree
           *  \returns Vector of links (pairs of nodes) from frame_A to frame_B.
           *  \snippet kinematics/unit_tests/src/KinematicTreeTest.cpp KinematicTreeTest get_path_example
           */
-        std::vector<std::pair<std::string,std::string> > get_path(const std::string& frame_A, //!< First node in the path
-                                                                  const std::string& frame_B  //!< Last node in the path
-                                                                 );
+        PathType get_path(const std::string& frame_A, //!< First node in the path
+                          const std::string& frame_B  //!< Last node in the path
+                         );
 
     private:
         class Impl;

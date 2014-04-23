@@ -28,7 +28,6 @@ typedef boost::property_map < Graph, boost::vertex_name_t >::type NameMap;
 
 typedef boost::iterator_property_map < Vertex*, IndexMap, Vertex, Vertex& > PredecessorMap;
 typedef boost::iterator_property_map < Weight*, IndexMap, Weight, Weight& > DistanceMap;
-typedef std::vector<std::string> PathType;
 typedef std::map<std::string,Vertex>::const_iterator VertexMapIter;
 
 class KinematicTree::Impl
@@ -57,10 +56,10 @@ class KinematicTree::Impl
             boost::add_edge(A, B, 1, g);
         }
 
-        std::vector<std::pair<std::string,std::string> > get_path(const std::string& frame_A, const std::string& frame_B)
+        PathType get_path(const std::string& frame_A, const std::string& frame_B)
         {
             const std::pair<Vertex,Vertex> edge = get_edge(frame_A, frame_B);
-            PathType path = dijkstra(edge);
+            std::vector<std::string> path = dijkstra(edge);
             std::vector<std::pair<std::string,std::string> > ret;
             for (size_t i = 0 ; i < path.size()-1 ; ++i)
             {
@@ -95,9 +94,9 @@ class KinematicTree::Impl
             return V;
         }
 
-        PathType get_path(const Vertex& destination, const PredecessorMap& predecessor_map)
+        std::vector<std::string> get_path(const Vertex& destination, const PredecessorMap& predecessor_map)
         {
-            PathType path;
+            std::vector<std::string> path;
             NameMap nameMap = boost::get(boost::vertex_name, g);
             Vertex v = destination; // We want to start at the destination and work our way back to the source
             for(Vertex u = predecessor_map[v]; // Start by setting 'u' to the destination node's predecessor
@@ -124,7 +123,7 @@ class KinematicTree::Impl
             return predecessor_map;
         }
 
-        PathType dijkstra(const std::pair<Vertex,Vertex>& edge)
+        std::vector<std::string> dijkstra(const std::pair<Vertex,Vertex>& edge)
         {
             std::vector<Vertex> predecessors(boost::num_vertices(g)); // To store parents
             PredecessorMap predecessor_map = get_predecessor_map(predecessors, edge.first);
@@ -145,7 +144,7 @@ void KinematicTree::add(const std::string& frame_A, const std::string& frame_B)
     pimpl->add(frame_A, frame_B);
 }
 
-std::vector<std::pair<std::string,std::string> > KinematicTree::get_path(const std::string& frame_A, const std::string& frame_B)
+PathType KinematicTree::get_path(const std::string& frame_A, const std::string& frame_B)
 {
     return pimpl->get_path(frame_A, frame_B);
 }
