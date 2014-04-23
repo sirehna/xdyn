@@ -29,6 +29,7 @@ namespace kinematics
     class Transform
     {
         public:
+            Transform();
             Transform(const Point& translation, const RotationMatrix& rotation, const std::string& to_frame);
             Transform(const Point& translation, const std::string& to_frame);
             Transform(const RotationMatrix& rotation, const std::string& from_frame, const std::string& to_frame);
@@ -41,8 +42,8 @@ namespace kinematics
             Transform inverse() const;
 
             friend std::ostream& operator<<(std::ostream& os, const Transform& T);
+
         private:
-            Transform();
             Point t;
             RotationMatrix r;
             std::string to_frame;

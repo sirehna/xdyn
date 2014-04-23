@@ -3,6 +3,10 @@
 
 using namespace kinematics;
 
+Transform::Transform() : t(Point()), r(RotationMatrix(Eigen::MatrixXd::Identity(3,3))), to_frame("")
+{
+}
+
 Transform::Transform(const Point& translation, const std::string& to_frame_) : t(translation), r(RotationMatrix(Eigen::MatrixXd::Identity(3,3))), to_frame(to_frame_)
 {
 }
