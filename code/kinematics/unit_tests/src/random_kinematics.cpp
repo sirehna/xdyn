@@ -55,8 +55,7 @@ PointMatrix random_point_matrix(const DataGenerator& a)
 
 PointMatrix random_point_matrix_in_frame(const DataGenerator& a, const std::string& frame)
 {
-    PointMatrix p(frame);
-    p.m.resize(3,100);
+    PointMatrix p(frame, 100);
     for (size_t i=0;i<100;++i)
     {
         p.m(0,i)=a.random<double>().between(-10,10);

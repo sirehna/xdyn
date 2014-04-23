@@ -7,7 +7,7 @@
 class PointMatrix
 {
     public:
-        PointMatrix(const std::string& frame);
+        PointMatrix(const std::string& frame, const size_t nb_of_columns);
         PointMatrix(const Matrix3Xd& m,const std::string& frame);
         Matrix3Xd m;
         std::string get_frame() const;
