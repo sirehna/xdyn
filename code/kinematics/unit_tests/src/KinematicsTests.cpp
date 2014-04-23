@@ -11,8 +11,8 @@
 #include "test_macros.hpp"
 #include "almost_equal.hpp"
 
-bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& t2);
-bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& t2)
+bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& t2, const double eps=0);
+bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& t2, const double eps)
 {
     if (t1.get_from_frame() != t2.get_from_frame())
     {
@@ -42,20 +42,20 @@ bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& 
     const std::vector<double> std_u22(&u22.x, &u22.x + 3);
     const std::vector<double> std_u23(&u23.x, &u23.x + 3);
 
-    if (not(almost_equal(std_u11, std_u21)))
+    if (not(almost_equal(std_u11, std_u21, eps)))
     {
         std::cerr << "t1*(1,0,0) = " << u11.v.transpose() << std::endl;
         std::cerr << "t2*(1,0,0) = " << u21.v.transpose() << std::endl;
         return false;
     }
 
-    if (not(almost_equal(std_u12, std_u22)))
+    if (not(almost_equal(std_u12, std_u22, eps)))
     {
         std::cerr << "t1*(0,1,0) = " << u12.v.transpose() << std::endl;
         std::cerr << "t2*(0,1,0) = " << u22.v.transpose() << std::endl;
         return false;
     }
-    if (not(almost_equal(std_u13, std_u23)))
+    if (not(almost_equal(std_u13, std_u23, eps)))
     {
         std::cerr << "t1*(0,0,1) = " << u13.v.transpose() << std::endl;
         std::cerr << "t2*(0,0,1) = " << u23.v.transpose() << std::endl;
