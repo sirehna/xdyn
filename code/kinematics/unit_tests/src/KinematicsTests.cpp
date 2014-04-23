@@ -81,6 +81,12 @@ void KinematicsTests::TearDown()
 {
 }
 
+kinematics::Transform identity(const std::string& frame);
+kinematics::Transform identity(const std::string& frame)
+{
+    return kinematics::Transform(Point(frame,0,0,0), frame);
+}
+
 TEST_F(KinematicsTests, can_add_a_transform_to_a_kinematics_object)
 {
     Kinematics k;
