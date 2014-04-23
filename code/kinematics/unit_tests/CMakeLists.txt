@@ -1,7 +1,7 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST kinematics)
 project (${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC #src/KinematicsTests.cpp
+FILE(GLOB SRC src/KinematicsTests.cpp
               src/rotation_matrix_builders_Test.cpp
               src/TransformTest.cpp
               src/VelocityTest.cpp
