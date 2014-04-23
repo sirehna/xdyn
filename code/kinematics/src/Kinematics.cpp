@@ -48,11 +48,47 @@ class InverseTransformComputer : public DataSourceModule
         std::string name_of_inverse_transform;
 };
 
+class CompositeTransformComputer : public DataSourceModule
+{
+    public:
+        CompositeTransformComputer(DataSource* const data_source, const std::string& module_name) : DataSourceModule(data_source, module_name), transforms(std::vector<std::pair<std::string,std::string> >())
+        {
+        }
+
+        CompositeTransformComputer(const CompositeTransformComputer& rhs, DataSource* const data_source) : DataSourceModule(rhs, data_source), transforms(std::vector<std::pair<std::string,std::string> >())
+        {
+        }
+
+        DataSourceModule* clone() const
+        {
+            return new CompositeTransformComputer(*this);
+        }
+
+        DataSourceModule* clone(DataSource* const data_source) const
+        {
+            return new CompositeTransformComputer(*this, data_source);
+        }
+
+        void update() const
+        {
+            kinematics::Transform t = ds->get<kinematics::Transform>(make_transform_name(transforms.front()));
+            const std::string name_of_transform = make_transform_name(transforms.front().first,transforms.back().second);
+
+            for (size_t i = 1 ; i < transforms.size() ; ++i)
+            {
+                t = ds->get<kinematics::Transform>(make_transform_name(transforms[i])) * t;
+            }
+            ds->set(name_of_transform, t);
+        }
+
+        PathType transforms;
+};
+
 
 class Kinematics::Impl
 {
     public:
-        Impl() : ds(DataSource()) {}
+        Impl() : ds(DataSource()), tree(KinematicTree()) {}
 
         ~Impl(){}
         Impl& operator=(const Impl& rhs)
@@ -60,11 +96,12 @@ class Kinematics::Impl
             if (this!=&rhs)
             {
                 ds = rhs.ds;
+                tree = rhs.tree;
             }
             return *this;
         }
 
-        Impl(const Impl& rhs) : ds(rhs.ds)
+        Impl(const Impl& rhs) : ds(rhs.ds), tree(rhs.tree)
         {
         }
 
@@ -77,6 +114,7 @@ class Kinematics::Impl
             computer.name_of_direct_transform = direct_transform;
             computer.name_of_inverse_transform = inverse_transform;
             ds.add(computer);
+            tree.add(t.get_from_frame(), t.get_to_frame());
         }
 
         kinematics::Transform get(const std::string& from_frame, const std::string& to_frame)
@@ -87,12 +125,23 @@ class Kinematics::Impl
             }
             catch (const DataSourceException& )
             {
-                THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Unable to compute transform from ") + from_frame + " to " + to_frame);
+                try
+                {
+                    CompositeTransformComputer computer(&ds, std::string("composite(")+make_transform_name(from_frame, to_frame)+")");
+                    computer.transforms = tree.get_path(from_frame, to_frame);
+                    ds.add(computer);
+                    return ds.get<kinematics::Transform>(make_transform_name(from_frame, to_frame));
+                }
+                catch (const KinematicsException& )
+                {
+                    THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Unable to compute transform from ") + make_transform_name(from_frame, to_frame));
+                }
             }
         }
 
     private:
         DataSource ds;
+        KinematicTree tree;
 
 };
 

@@ -133,3 +133,32 @@ TEST_F(KinematicsTests, throws_if_transform_is_not_computable)
     Kinematics k;
     ASSERT_THROW(k.get(a.random<std::string>(),a.random<std::string>()), KinematicsException);
 }
+
+TEST_F(KinematicsTests, can_compute_a_transformation_if_necessary_and_feasible)
+{
+    Kinematics k;
+
+    const auto bTa = random_transform(a, "A", "B");
+    const auto cTa = random_transform(a, "A", "C");
+    const auto dTb = random_transform(a, "B", "D");
+    const auto eTc = random_transform(a, "C", "E");
+    const auto fTc = random_transform(a, "C", "F");
+    const auto gTd = random_transform(a, "D", "G");
+    const auto hTd = random_transform(a, "D", "H");
+    const auto iTd = random_transform(a, "D", "I");
+    const auto dTe = random_transform(a, "E", "D");
+
+    k.add(bTa);
+    k.add(cTa);
+    k.add(dTb);
+    k.add(eTc);
+    k.add(fTc);
+    k.add(gTd);
+    k.add(hTd);
+    k.add(iTd);
+    k.add(dTe);
+
+    const auto hTe = k.get("E", "H");
+
+    ASSERT_TRUE(double_equal(hTe, hTd*dTe, EPS));
+}
