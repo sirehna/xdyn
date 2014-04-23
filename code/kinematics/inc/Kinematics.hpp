@@ -33,6 +33,8 @@ namespace kinematics
 class Kinematics
 {
     public:
+        Kinematics();
+
         /** \author cec
           *  \date 23 avr. 2014, 10:45:40
           *  \author cec
@@ -42,7 +44,20 @@ class Kinematics
         void add(const kinematics::Transform& transform_to_add //!< Transform to add
                 );
 
+        /** \author cec
+          *  \date 23 avr. 2014, 11:47:56
+          *  \author cec
+          *  \brief Returns the transform from one frame to another (or throws a KinematicsException).
+          *  \returns Transform from from_frame to to_frame
+          *  \snippet kinematics/unit_tests/src/KinematicsTest.cpp KinematicsTest get_example
+          */
+        kinematics::Transform get(const std::string& from_frame, //!< Name of the start frame
+                                  const std::string& to_frame    //!< Name of the end frame
+                                 );
+
     private:
+        class Impl;
+        std::tr1::shared_ptr<Impl> pimpl;
 };
 
 #endif /* KINEMATICS_HPP_ */

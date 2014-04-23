@@ -91,3 +91,13 @@ TEST_F(KinematicsTests, can_add_a_transform_to_a_kinematics_object)
     }
 }
 
+TEST_F(KinematicsTests, can_retrieve_a_transform)
+{
+	Kinematics k;
+	const std::string from_frame = a.random<std::string>();
+	const std::string to_frame = a.random<std::string>();
+	const auto bTa = random_transform(a, from_frame, to_frame);
+	k.add(bTa);
+	const auto transform = k.get(from_frame, to_frame);
+	ASSERT_TRUE(double_equal(transform, bTa));
+}
