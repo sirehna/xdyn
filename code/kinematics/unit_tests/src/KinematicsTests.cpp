@@ -19,12 +19,16 @@ bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& 
 {
     if (t1.get_from_frame() != t2.get_from_frame())
     {
-        std::cerr << "'from' frames don't match." << std::endl;
+        std::cerr << "'from' frames don't match:" << std::endl;
+        std::cerr << "t1 : " << t1.get_from_frame() << " -> " << t1.get_to_frame() << std::endl;
+        std::cerr << "t2 : " << t2.get_from_frame() << " -> " << t2.get_to_frame() << std::endl;
         return false;
     }
     if (t1.get_to_frame() != t2.get_to_frame())
     {
         std::cerr << "'to' frames don't match." << std::endl;
+        std::cerr << "t1 : " << t1.get_from_frame() << " -> " << t1.get_to_frame() << std::endl;
+        std::cerr << "t2 : " << t2.get_from_frame() << " -> " << t2.get_to_frame() << std::endl;
         return false;
     }
     const Point u1(t1.get_from_frame(), 1, 0, 0);
