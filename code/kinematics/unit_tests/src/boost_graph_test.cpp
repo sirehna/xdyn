@@ -10,6 +10,7 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+
 typedef float Weight;
 typedef boost::property<boost::edge_weight_t, Weight> WeightProperty;
 typedef boost::property<boost::vertex_name_t, std::string> NameProperty;
@@ -25,6 +26,8 @@ typedef boost::property_map < Graph, boost::vertex_name_t >::type NameMap;
 typedef boost::iterator_property_map < Vertex*, IndexMap, Vertex, Vertex& > PredecessorMap;
 typedef boost::iterator_property_map < Weight*, IndexMap, Weight, Weight& > DistanceMap;
 typedef std::vector<Graph::edge_descriptor> PathType;
+
+
 
 
 boost_graph_test::boost_graph_test() : a(DataGenerator(12222))
