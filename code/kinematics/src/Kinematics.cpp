@@ -3,6 +3,39 @@
 #include "DataSource.hpp"
 #include "Transform.hpp"
 
+
+class InverseTransformComputer : public DataSourceModule
+{
+    public:
+        InverseTransformComputer(DataSource* const data_source, const std::string& module_name) : DataSourceModule(data_source, module_name), name_of_direct_transform(""), name_of_inverse_transform("")
+        {
+        }
+
+        InverseTransformComputer(const InverseTransformComputer& rhs, DataSource* const data_source) : DataSourceModule(rhs, data_source), name_of_direct_transform(rhs.name_of_direct_transform), name_of_inverse_transform(rhs.name_of_inverse_transform)
+        {
+        }
+
+        DataSourceModule* clone() const
+        {
+            return new InverseTransformComputer(*this);
+        }
+
+        DataSourceModule* clone(DataSource* const data_source) const
+        {
+            return new InverseTransformComputer(*this, data_source);
+        }
+
+        void update() const
+        {
+            const kinematics::Transform t = ds->get<kinematics::Transform>(name_of_direct_transform);
+            ds->set(name_of_inverse_transform, t.inverse());
+        }
+
+        std::string name_of_direct_transform;
+        std::string name_of_inverse_transform;
+};
+
+
 class Kinematics::Impl
 {
     public:
@@ -24,7 +57,13 @@ class Kinematics::Impl
 
         void add(const kinematics::Transform& t)
         {
-            ds.set(t.get_from_frame() + " -> " + t.get_to_frame(), t);
+            const std::string direct_transform = t.get_from_frame() + " -> " + t.get_to_frame();
+            const std::string inverse_transform = t.get_to_frame() + " -> " + t.get_from_frame();
+            ds.set(direct_transform, t);
+            InverseTransformComputer computer(&ds, std::string("reverse(")+direct_transform+")");
+            computer.name_of_direct_transform = direct_transform;
+            computer.name_of_inverse_transform = inverse_transform;
+            ds.add(computer);
         }
 
         kinematics::Transform get(const std::string& from_frame, const std::string& to_frame)

@@ -11,6 +11,8 @@
 #include "test_macros.hpp"
 #include "almost_equal.hpp"
 
+#define EPS 1E-13
+
 bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& t2, const double eps=0);
 bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& t2, const double eps)
 {
@@ -106,4 +108,20 @@ TEST_F(KinematicsTests, can_retrieve_a_transform)
 	k.add(bTa);
 	const auto transform = k.get(from_frame, to_frame);
 	ASSERT_TRUE(double_equal(transform, bTa));
+}
+
+TEST_F(KinematicsTests, can_retrieve_inverse_transform)
+{
+    //! [KinematicsTests example]
+    Kinematics k;
+    const std::string from_frame = a.random<std::string>();
+    const std::string to_frame = a.random<std::string>();
+    const auto bTa = random_transform(a, from_frame, to_frame);
+    k.add(bTa);
+    const auto aTb = k.get(to_frame, from_frame);
+    //! [KinematicsTests example]
+    //! [KinematicsTests expected output]
+    ASSERT_TRUE(double_equal(identity(from_frame), aTb*bTa, EPS));
+    ASSERT_TRUE(double_equal(identity(to_frame), bTa*aTb, EPS));
+    //! [KinematicsTests expected output]
 }
