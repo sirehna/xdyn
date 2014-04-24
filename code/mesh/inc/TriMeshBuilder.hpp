@@ -32,12 +32,13 @@ class TriMeshBuilder
 		std::vector<Eigen::Vector3d> get_nodes() const;
 		std::vector<Facet> get_facets() const;
 
+	private:
 		VectorOfPoint3dTriplet v;
 		Vector3dMap xyzMap;
 		size_t index;
 		std::vector<Eigen::Vector3d> nodes;
 		std::vector<Facet> facets;
-	private:
+
 		Eigen::Vector3d evaluate_normal(const Point3dTriplet& tri) const;
 		bool evaluate_unit_normal(const Point3dTriplet& tri, Eigen::Vector3d& unit_normal) const;
 		Eigen::Vector3d evaluate_barycenter(const Point3dTriplet& tri) const;
