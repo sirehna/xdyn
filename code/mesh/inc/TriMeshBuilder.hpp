@@ -25,7 +25,7 @@ typedef std::map< Eigen::Vector3d , size_t, Vector3dComparator > Vector3dMap;
 class TriMeshBuilder
 {
 	public:
-		TriMeshBuilder(const VectorOfPoint3dTriplet& v_):v(v_),xyzMap(Vector3dMap()), index(0),nodes(std::vector<Eigen::Vector3d>()),facets(std::vector<Facet>()){}
+		TriMeshBuilder(const VectorOfPoint3dTriplet& v_);
 		TriMesh build();
 		void operator()(const Point3dTriplet& Tri);
 		std::vector<Eigen::Vector3d> get_nodes() const;

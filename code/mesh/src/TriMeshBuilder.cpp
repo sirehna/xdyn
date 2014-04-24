@@ -12,6 +12,14 @@ std::vector<Facet> TriMeshBuilder::get_facets() const
 	return facets;
 }
 
+TriMeshBuilder::TriMeshBuilder(const VectorOfPoint3dTriplet& v_) : v(v_),
+                                                                   xyzMap(Vector3dMap()),
+                                                                   index(0),
+                                                                   nodes(std::vector<Eigen::Vector3d>()),
+                                                                   facets(std::vector<Facet>())
+{
+}
+
 TriMesh TriMeshBuilder::build()
 {
 	*this = std::for_each(v.begin(), v.end(), *this);
