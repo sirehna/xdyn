@@ -14,13 +14,12 @@
  * \section ex2 Expected output
  * \snippet mesh/unit_tests/src/TriMeshTest.cpp TriMeshTest expected output
  */
-class TriMesh
+struct TriMesh
 {
-	public:
-		TriMesh();
-		TriMesh(const std::vector<Eigen::Vector3d>& nodes_, const std::vector<Facet>& facets_);
-		std::vector<Eigen::Vector3d> nodes;
-		std::vector<Facet> facets;
+    TriMesh();
+    TriMesh(const std::vector<Eigen::Vector3d>& nodes_, const std::vector<Facet>& facets_);
+    std::vector<Eigen::Vector3d> nodes;
+    std::vector<Facet> facets;
 };
 
 #endif //TRIMESH_HPP
