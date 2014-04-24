@@ -9,9 +9,6 @@ TriMesh::TriMesh(const std::vector<Eigen::Vector3d>& nodes_, const std::vector<F
 {
 }
 
-TriMesh::TriMesh(const TriMeshBuilder& builder):nodes(builder.get_nodes()),facets(builder.get_facets())
-{
-}
 TriMesh::TriMesh(const Point3dTriplet& tri):nodes(std::vector<Eigen::Vector3d>()),facets(std::vector<Facet>())
 {
 	TriMesh(std::vector<Point3dTriplet>(1,tri));
