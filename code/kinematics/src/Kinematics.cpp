@@ -130,6 +130,7 @@ class Kinematics::Impl
                     CompositeTransformComputer computer(&ds, std::string("composite(")+make_transform_name(from_frame, to_frame)+")");
                     computer.transforms = tree.get_path(from_frame, to_frame);
                     ds.add(computer);
+                    tree.add(from_frame, to_frame); // Register compose transform in kinematic tree so it can be used when computing shortest paths
                     return ds.get<kinematics::Transform>(make_transform_name(from_frame, to_frame));
                 }
                 catch (const KinematicsException& )
