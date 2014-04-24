@@ -88,3 +88,13 @@ TEST_F(KinematicTreeTest, case_with_more_than_one_solution)
     ASSERT_EQ("d", path_from_e_to_h.at(1).first);
     ASSERT_EQ("h", path_from_e_to_h.at(1).second);
 }
+
+TEST_F(KinematicTreeTest, can_retrieve_path_to_self)
+{
+    KinematicTree t;
+    t.add("a","b");
+    const std::vector<std::pair<std::string,std::string> > path_from_a_to_a = t.get_path("a", "a");
+    ASSERT_EQ(1, path_from_a_to_a.size());
+    ASSERT_EQ("a", path_from_a_to_a.at(0).first);
+    ASSERT_EQ("a", path_from_a_to_a.at(0).second);
+}

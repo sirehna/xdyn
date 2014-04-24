@@ -60,7 +60,8 @@ class KinematicTree::Impl
         {
             const std::pair<Vertex,Vertex> edge = get_edge(frame_A, frame_B);
             std::vector<std::string> path = dijkstra(edge);
-            std::vector<std::pair<std::string,std::string> > ret;
+            if (path.size() < 2) return PathType(1, std::make_pair(frame_A,frame_B));
+            PathType ret;
             for (size_t i = 0 ; i < path.size()-1 ; ++i)
             {
                 ret.push_back(std::make_pair(path[i], path[i+1]));
