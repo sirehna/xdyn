@@ -24,6 +24,7 @@ class Wrench
 {
     public:
         Wrench(const std::string& frame);
+        Wrench(const std::string& frame, const Point& P);
         double X;
         double Y;
         double Z;

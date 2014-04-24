@@ -17,3 +17,14 @@ Wrench::Wrench(const std::string& frame_) : X(0),
                                             P(Point(frame))
 {
 }
+
+Wrench::Wrench(const std::string& frame_, const Point& P_) : X(0),
+                                                             Y(0),
+                                                             Z(0),
+                                                             K(0),
+                                                             M(0),
+                                                             N(0),
+                                                             frame(frame_),
+                                                             P(P_)
+{
+}
