@@ -3,10 +3,10 @@
 
 #include "gtest/gtest.h"
 
-class TriMeshTest : public ::testing::Test
+class TriMeshBuilderTest : public ::testing::Test
 {
     protected:
-        TriMeshTest(){}
+        TriMeshBuilderTest(){}
         virtual void SetUp(){}
         virtual void TearDown(){}
 };
