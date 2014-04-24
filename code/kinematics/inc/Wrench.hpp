@@ -9,6 +9,7 @@
 #define WRENCH_HPP_
 
 #include <string>
+#include "Point.hpp"
 
 /** \author cec
  *  \date 24 avr. 2014, 12:35:30
@@ -33,6 +34,7 @@ class Wrench
     private:
         Wrench(); // Disabled because we must specify a frame for the coordinates
         std::string frame;
+        Point P; // Point of application
 };
 
 #endif /* WRENCH_HPP_ */
