@@ -9,6 +9,7 @@ set(SRC src/Velocity.cpp
         src/PointMatrix.cpp
         src/Transform.cpp
         src/KinematicTree.cpp
+        src/Wrench.cpp
         )
 
 include_directories(inc)
