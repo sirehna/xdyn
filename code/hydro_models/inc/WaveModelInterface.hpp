@@ -9,9 +9,11 @@
 #define WAVEMODELINTERFACE_HPP_
 
 #include <tr1/memory>
+#include <vector>
 
 class Point;
 class Kinematics;
+class PointMatrix;
 
 /** \author cec
  *  \date 24 avr. 2014, 10:28:25
@@ -42,6 +44,15 @@ class WaveModelInterface
           */
         double get_relative_wave_height(const Point& P //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
                                        ) const;
+
+        /**  \author cec
+          *  \date 24 avr. 2014, 13:00:47
+          *  \brief Computes the relative wave height for a matrix of Points.
+          *  \returns zwave - z for each point.
+          *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
+          */
+        std::vector<double> get_relative_wave_height(const PointMatrix& P //!< Points for which to compute the relative wave height
+                                                    ) const;
 
     private:
         WaveModelInterface(); // Disabled because we must have a Kinematics object to do anything
