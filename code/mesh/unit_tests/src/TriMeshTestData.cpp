@@ -1,6 +1,6 @@
 #include "TriMeshTestData.hpp"
 
-Point3dTriplet generate_a_single_triangle()
+Point3dTriplet one_triangle()
 {
 	Point3dTriplet P;
 	P.p1(0) = 1.0;
@@ -15,7 +15,7 @@ Point3dTriplet generate_a_single_triangle()
 	return P;
 }
 
-Point3dTriplet generate_a_degenerated_triangle()
+Point3dTriplet degenerated_triangle()
 {
 	Point3dTriplet P;
 	P.p1(0) = 1.0;
@@ -30,7 +30,7 @@ Point3dTriplet generate_a_degenerated_triangle()
 	return P;
 }
 
-VectorOfPoint3dTriplet generate_a_unit_cube()
+VectorOfPoint3dTriplet unit_cube()
 {
 	VectorOfPoint3dTriplet V;
 	Point3dTriplet P;
