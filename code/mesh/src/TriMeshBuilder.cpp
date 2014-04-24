@@ -12,9 +12,10 @@ std::vector<Facet> TriMeshBuilder::get_facets() const
 	return facets;
 }
 
-void TriMeshBuilder::build()
+TriMesh TriMeshBuilder::build()
 {
 	*this = std::for_each(v.begin(), v.end(), *this);
+	return TriMesh(nodes, facets);
 }
 
 void TriMeshBuilder::operator()(const Point3dTriplet& tri)
