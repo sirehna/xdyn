@@ -156,3 +156,12 @@ TEST_F(KinematicsTests, can_compute_a_transformation_if_necessary_and_feasible)
 
     ASSERT_TRUE(double_equal(hTe, hTd*dTe, EPS));
 }
+
+TEST_F(KinematicsTests, can_compute_identity)
+{
+    Kinematics k;
+    const auto bTa = random_transform(a, "A", "B");
+    k.add(bTa);
+    const auto aTa = k.get("A", "A");
+    ASSERT_TRUE(double_equal(kinematics::identity("A"), aTa, EPS));
+}

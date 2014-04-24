@@ -119,6 +119,7 @@ class Kinematics::Impl
 
         kinematics::Transform get(const std::string& from_frame, const std::string& to_frame)
         {
+            if (from_frame == to_frame) return kinematics::identity(from_frame);
             try
             {
                 return ds.get<kinematics::Transform>(make_transform_name(from_frame, to_frame));
