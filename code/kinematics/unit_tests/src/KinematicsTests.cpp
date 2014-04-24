@@ -88,12 +88,6 @@ void KinematicsTests::TearDown()
 {
 }
 
-kinematics::Transform identity(const std::string& frame);
-kinematics::Transform identity(const std::string& frame)
-{
-    return kinematics::Transform(Point(frame,0,0,0), frame);
-}
-
 TEST_F(KinematicsTests, can_add_a_transform_to_a_kinematics_object)
 {
     Kinematics k;
@@ -123,8 +117,8 @@ TEST_F(KinematicsTests, can_retrieve_inverse_transform)
     const auto aTb = k.get(to_frame, from_frame);
     //! [KinematicsTests get_example]
     //! [KinematicsTests get_example output]
-    ASSERT_TRUE(double_equal(identity(from_frame), aTb*bTa, EPS));
-    ASSERT_TRUE(double_equal(identity(to_frame), bTa*aTb, EPS));
+    ASSERT_TRUE(double_equal(kinematics::identity(from_frame), aTb*bTa, EPS));
+    ASSERT_TRUE(double_equal(kinematics::identity(to_frame), bTa*aTb, EPS));
     //! [KinematicsTests get_example output]
 }
 

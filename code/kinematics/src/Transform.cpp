@@ -82,3 +82,8 @@ std::ostream& kinematics::operator<<(std::ostream& os, const Transform& T)
        << "t = " << T.t.v << std::endl;
     return os;
 }
+
+kinematics::Transform kinematics::identity(const std::string& frame)
+{
+    return kinematics::Transform(Point(frame,0,0,0), frame);
+}

@@ -49,6 +49,7 @@ namespace kinematics
             std::string to_frame;
     };
     std::ostream& operator<<(std::ostream& os, const Transform& T);
+    Transform identity(const std::string& frame);
 }
 
 
