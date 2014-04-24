@@ -1,4 +1,5 @@
-#include <math.h>
+#include <cmath>
+
 #include "MeshException.hpp"
 #include "TriMesh.hpp"
 #include "TriMeshBuilderTest.hpp"
