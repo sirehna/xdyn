@@ -26,6 +26,7 @@ class TriMeshBuilder
 {
 	public:
 		TriMeshBuilder(const VectorOfPoint3dTriplet& v_);
+		TriMeshBuilder(const Point3dTriplet& tri);
 		TriMesh build();
 		void operator()(const Point3dTriplet& Tri);
 		std::vector<Eigen::Vector3d> get_nodes() const;

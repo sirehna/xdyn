@@ -3,6 +3,7 @@
 #include "TriMesh.hpp"
 #include "TriMeshTest.hpp"
 #include "TriMeshTestData.hpp"
+#include "TriMeshBuilder.hpp"
 
 TEST_F(TriMeshTest, should_be_able_to_build_a_mesh_from_a_single_triangle)
 {
@@ -57,7 +58,7 @@ TEST_F(TriMeshTest, should_be_able_to_evaluate_the_area_of_a_single_triangle)
 
 TEST_F(TriMeshTest, should_not_add_degenerated_triangles_to_mesh)
 {
-	TriMesh m(generate_a_degenerated_triangle());
+	TriMesh m = TriMeshBuilder(generate_a_degenerated_triangle()).build();
 	ASSERT_TRUE(m.facets.empty());
 	ASSERT_TRUE(m.nodes.empty());
 }

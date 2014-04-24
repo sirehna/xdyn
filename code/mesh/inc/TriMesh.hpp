@@ -19,7 +19,6 @@ class TriMesh
 	public:
 		TriMesh();
 		TriMesh(const std::vector<Eigen::Vector3d>& nodes_, const std::vector<Facet>& facets_);
-		TriMesh(const Point3dTriplet& tri);
 		TriMesh(const VectorOfPoint3dTriplet& v);
 		std::vector<Eigen::Vector3d> nodes;
 		std::vector<Facet> facets;
