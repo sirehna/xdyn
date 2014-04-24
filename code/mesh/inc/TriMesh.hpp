@@ -4,8 +4,6 @@
 #include <vector>
 #include "GeometricTypes3d.hpp"
 
-class TriMeshBuilder;
-
 /**
  * \author gj
  * \brief Contains a triangular mesh
