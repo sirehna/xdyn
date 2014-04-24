@@ -7,7 +7,6 @@
 
 #include "DefaultWaveModelTest.hpp"
 #include "DefaultWaveModel.hpp"
-#include "Point.hpp"
 #include "Kinematics.hpp"
 #include "Transform.hpp"
 

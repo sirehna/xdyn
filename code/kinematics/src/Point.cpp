@@ -44,9 +44,9 @@ Eigen::Vector3d Point::operator-(const Point& P) const
     return Eigen::Vector3d(x - P.x, y - P.y, z - P.z);
 }
 
-Eigen::Vector3d Point::operator+(const Point& P) const
+Point Point::operator+(const Point& P) const
 {
-    return Eigen::Vector3d(x + P.x, y + P.y, z + P.z);
+    return Point(frame, x + P.x, y + P.y, z + P.z);
 }
 
 std::ostream& operator<<(std::ostream& os, const Point& P)
