@@ -10,6 +10,7 @@
 
 #include <Eigen/Dense>
 #include <string>
+#include <ostream>
 
 /** \author cec
  *  \brief
@@ -41,4 +42,5 @@ class Point
         std::string frame;
 };
 
+std::ostream& operator<<(std::ostream& os, const Point& P);
 #endif /* POINT_HPP_ */

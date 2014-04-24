@@ -43,3 +43,9 @@ Eigen::Vector3d Point::operator-(const Point& P) const
 {
     return Eigen::Vector3d(x - P.x, y - P.y, z - P.z);
 }
+
+std::ostream& operator<<(std::ostream& os, const Point& P)
+{
+    os << "[" << P.v.transpose() << "] [in " << P.get_frame() << "]";
+    return os;
+}
