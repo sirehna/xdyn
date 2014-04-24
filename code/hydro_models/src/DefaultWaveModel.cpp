@@ -7,11 +7,11 @@
 
 #include "DefaultWaveModel.hpp"
 
-DefaultWaveModel::DefaultWaveModel(const double wave_height_) : wave_height(wave_height_)
+DefaultWaveModel::DefaultWaveModel(const double wave_height_, const std::tr1::shared_ptr<Kinematics>& k_) : WaveModelInterface(k_), zwave(wave_height_)
 {
 }
 
-double DefaultWaveModel::get_relative_wave_height(const Point&) const
+double DefaultWaveModel::wave_height(double , double , double z) const
 {
-    return 0;
+    return zwave - z;
 }

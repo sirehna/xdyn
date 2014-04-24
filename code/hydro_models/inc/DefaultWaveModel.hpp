@@ -27,12 +27,23 @@
 class DefaultWaveModel : public WaveModelInterface
 {
     public:
-        DefaultWaveModel(const double wave_height);
-        double get_relative_wave_height(const Point& P) const;
+        DefaultWaveModel(const double wave_height, const std::tr1::shared_ptr<Kinematics>& k);
 
     private:
         DefaultWaveModel(); // Disabled
-        double wave_height;
+
+        /**  \author cec
+          *  \date 24 avr. 2014, 10:57:09
+          *  \brief Flat sea surface model.
+          *  \returns zwave - z;
+          *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest wave_height_example
+          */
+        double wave_height(double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                           double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                           double z  //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                           ) const;
+
+        double zwave;
 };
 
 #endif /* DEFAULTWAVEMODEL_HPP_ */
