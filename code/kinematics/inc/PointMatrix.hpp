@@ -2,7 +2,9 @@
 #define POINTMATRIX_HPP_
 
 #include <string>
-#include "GeometricTypes3d.hpp"
+#include <Eigen/Dense>
+
+typedef Eigen::Matrix<double,3,Eigen::Dynamic> Matrix3Xd;
 
 class PointMatrix
 {
