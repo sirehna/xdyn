@@ -78,8 +78,8 @@ Transform Transform::inverse() const
 std::ostream& kinematics::operator<<(std::ostream& os, const Transform& T)
 {
     os << "(" << T.get_from_frame() << " -> " << T.get_to_frame() << "):" << std::endl
-       << "R = " << T.r << std::endl
-       << "t = " << T.t.v << std::endl;
+       << "R = " << std::endl << T.r << std::endl
+       << "t = " << T.t.v.transpose() << std::endl;
     return os;
 }
 
