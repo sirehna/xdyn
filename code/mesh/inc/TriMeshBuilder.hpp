@@ -29,14 +29,14 @@ class TriMeshBuilder
 		TriMeshBuilder(const Point3dTriplet& tri);
 		TriMesh build();
 		void operator()(const Point3dTriplet& Tri);
-		std::vector<Eigen::Vector3d> get_nodes() const;
+		Eigen::Matrix<double,3,Eigen::Dynamic> get_nodes() const;
 		std::vector<Facet> get_facets() const;
 
 	private:
 		VectorOfPoint3dTriplet v;
 		Vector3dMap xyzMap;
 		size_t index;
-		std::vector<Eigen::Vector3d> nodes;
+		Eigen::Matrix<double,3,Eigen::Dynamic> nodes;
 		std::vector<Facet> facets;
 
 		Eigen::Vector3d evaluate_normal(const Point3dTriplet& tri) const;

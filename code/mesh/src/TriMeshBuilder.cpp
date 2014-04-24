@@ -2,7 +2,7 @@
 #include <iostream>
 #include "TriMeshBuilder.hpp"
 
-std::vector<Eigen::Vector3d> TriMeshBuilder::get_nodes() const
+Eigen::Matrix<double,3,Eigen::Dynamic> TriMeshBuilder::get_nodes() const
 {
 	return nodes;
 }
@@ -15,7 +15,7 @@ std::vector<Facet> TriMeshBuilder::get_facets() const
 TriMeshBuilder::TriMeshBuilder(const VectorOfPoint3dTriplet& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    index(0),
-                                                                   nodes(std::vector<Eigen::Vector3d>()),
+                                                                   nodes(Eigen::Matrix<double,3,Eigen::Dynamic>(Eigen::MatrixXd::Zero(3,3*v.size()))),
                                                                    facets(std::vector<Facet>())
 {
 }
@@ -23,7 +23,7 @@ TriMeshBuilder::TriMeshBuilder(const VectorOfPoint3dTriplet& v_) : v(v_),
 TriMeshBuilder::TriMeshBuilder(const Point3dTriplet& tri) : v(VectorOfPoint3dTriplet(1,tri)),
                                                             xyzMap(Vector3dMap()),
                                                             index(0),
-                                                            nodes(std::vector<Eigen::Vector3d>()),
+                                                            nodes(Eigen::Matrix<double,3,Eigen::Dynamic>(Eigen::MatrixXd::Zero(3,3))),
                                                             facets(std::vector<Facet>())
 {
 }
@@ -31,6 +31,7 @@ TriMeshBuilder::TriMeshBuilder(const Point3dTriplet& tri) : v(VectorOfPoint3dTri
 TriMesh TriMeshBuilder::build()
 {
 	*this = std::for_each(v.begin(), v.end(), *this);
+	nodes.resize(3, index);
 	return TriMesh(nodes, facets);
 }
 
@@ -96,7 +97,7 @@ bool TriMeshBuilder::add_point_if_missing(const Eigen::Vector3d& xyz)
 	if (not(point_is_in_map(xyz)))
 	{
 		xyzMap.insert(std::make_pair(xyz,index));
-		nodes.push_back(xyz);
+		nodes.col(index) = xyz;
 		point_has_been_added = true;
 	}
 	return point_has_been_added;

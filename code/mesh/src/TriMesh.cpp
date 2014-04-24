@@ -1,10 +1,10 @@
 #include "TriMeshBuilder.hpp"
 #include "TriMesh.hpp"
 
-TriMesh::TriMesh():nodes(std::vector<Eigen::Vector3d>()),facets(std::vector<Facet>())
+TriMesh::TriMesh():nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),facets(std::vector<Facet>())
 {
 }
 
-TriMesh::TriMesh(const std::vector<Eigen::Vector3d>& nodes_, const std::vector<Facet>& facets_):nodes(nodes_),facets(facets_)
+TriMesh::TriMesh(const Eigen::Matrix<double,3,Eigen::Dynamic>& nodes_, const std::vector<Facet>& facets_):nodes(nodes_),facets(facets_)
 {
 }

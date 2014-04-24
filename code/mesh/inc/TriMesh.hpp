@@ -17,8 +17,9 @@
 struct TriMesh
 {
     TriMesh();
-    TriMesh(const std::vector<Eigen::Vector3d>& nodes_, const std::vector<Facet>& facets_);
-    std::vector<Eigen::Vector3d> nodes;
+    TriMesh(const Eigen::Matrix<double,3,Eigen::Dynamic>& nodes, const std::vector<Facet>& facets);
+
+    Eigen::Matrix<double,3,Eigen::Dynamic> nodes;
     std::vector<Facet> facets;
 };
 
