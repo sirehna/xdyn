@@ -1,5 +1,5 @@
 #ifndef TRIMESH_HPP
-#define MESH_HPP
+#define TRIMESH_HPP
 
 #include <vector>
 #include "GeometricTypes3d.hpp"
@@ -27,4 +27,4 @@ class TriMesh
 		std::vector<Facet> facets;
 };
 
-#endif
+#endif //TRIMESH_HPP
