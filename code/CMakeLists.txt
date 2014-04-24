@@ -3,6 +3,7 @@ PROJECT(simulatorIrtJv)
 
 INCLUDE(CTest)
 
+SET(CMAKE_VERBOSE_MAKEFILE OFF)
 #############################################################################
 # User configuration
 IF(NOT DEFINED CMAKE_BUILD_TYPE)
@@ -44,7 +45,14 @@ IF (WIN32)
     ENDIF()
 ENDIF()
 MESSAGE(STATUS "BOOST_ROOT : ${BOOST_ROOT}")
+SET(Boost_USE_STATIC_LIBS        ON)
+SET(Boost_USE_MULTITHREADED     OFF)
+SET(Boost_USE_STATIC_RUNTIME    OFF)
 FIND_PACKAGE(Boost 1.53 COMPONENTS program_options REQUIRED)
+IF(Boost_FOUND)
+    MESSAGE(STATUS "Boost_INCLUDE_DIRS  : ${Boost_INCLUDE_DIRS}")
+    MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
+ENDIF()
 
 ADD_SUBDIRECTORY(yaml-cpp)
 SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
