@@ -31,6 +31,7 @@ class Point
         Point(const std::string& frame, const double x, const double y, const double z);
         Point& operator=(const Point& rhs);
         Eigen::Vector3d operator-(const Point& P) const;
+        Eigen::Vector3d operator+(const Point& P) const;
 
         Eigen::Vector3d v;
         double& x;
