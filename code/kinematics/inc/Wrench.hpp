@@ -8,7 +8,6 @@
 #ifndef WRENCH_HPP_
 #define WRENCH_HPP_
 
-#include <string>
 #include "Point.hpp"
 
 /** \author cec
