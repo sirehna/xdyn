@@ -37,6 +37,8 @@ class Wrench
         double& N;
 
         Wrench operator+(const Wrench& rhs) const;
+        Wrench operator-(const Wrench& rhs) const;
+
 
     private:
         Wrench(); // Disabled because we must specify a frame for the coordinates

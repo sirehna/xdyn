@@ -87,3 +87,16 @@ Wrench Wrench::operator+(const Wrench& rhs) const
 	return Wrench(P, force + rhs.force, torque + rhs.torque);
 }
 
+Wrench Wrench::operator-(const Wrench& rhs) const
+{
+	if (not(equal(P, rhs.P)))
+	{
+		std::stringstream ss;
+		ss << "Wrenches are not expressed at the same point: lhs is at "
+		   << P
+		   << ", whereas rhs is at " << rhs.P;
+		THROW(__PRETTY_FUNCTION__, KinematicsException, ss.str());
+	}
+	return Wrench(P, force - rhs.force, torque - rhs.torque);
+}
+
