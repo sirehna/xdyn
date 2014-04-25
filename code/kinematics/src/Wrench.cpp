@@ -6,6 +6,19 @@
  */
 
 #include "Wrench.hpp"
+#include "KinematicsException.hpp"
+#include "almost_equal.hpp"
+
+bool equal(const Point& P, const Point& Q);
+bool equal(const Point& P, const Point& Q)
+{
+	if (P.get_frame() != Q.get_frame()) return false;
+	if (not(almost_equal(P.x, Q.x)))    return false;
+	if (not(almost_equal(P.y, Q.y)))    return false;
+	if (not(almost_equal(P.z, Q.z)))    return false;
+	                                    return true;
+}
+
 
 Wrench::Wrench(const Point& P_) : force(Eigen::Vector3d()),
 		                          torque(Eigen::Vector3d()),
@@ -60,3 +73,17 @@ Wrench& Wrench::operator=(const Wrench& rhs)
 	}
 	return *this;
 }
+
+Wrench Wrench::operator+(const Wrench& rhs) const
+{
+	if (not(equal(P, rhs.P)))
+	{
+		std::stringstream ss;
+		ss << "Wrenches are not expressed at the same point: lhs is at "
+		   << P
+		   << ", whereas rhs is at " << rhs.P;
+		THROW(__PRETTY_FUNCTION__, KinematicsException, ss.str());
+	}
+	return Wrench(P, force + rhs.force, torque + rhs.torque);
+}
+
