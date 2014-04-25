@@ -22,18 +22,23 @@
 class Wrench
 {
     public:
-        Wrench(const std::string& frame);
-        Wrench(const std::string& frame, const Point& P);
-        double X;
-        double Y;
-        double Z;
-        double K;
-        double M;
-        double N;
+        Wrench(const Point& P);
+        Wrench(const Point& P, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);
+        Wrench(const Wrench& rhs);
+        Wrench& operator=(const Wrench& rhs);
+
+        Eigen::Vector3d force;
+        Eigen::Vector3d torque;
+        double& X;
+        double& Y;
+        double& Z;
+        double& K;
+        double& M;
+        double& N;
+
 
     private:
         Wrench(); // Disabled because we must specify a frame for the coordinates
-        std::string frame;
         Point P; // Point of application
 };
 

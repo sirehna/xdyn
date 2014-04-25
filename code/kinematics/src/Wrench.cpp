@@ -7,24 +7,56 @@
 
 #include "Wrench.hpp"
 
-Wrench::Wrench(const std::string& frame_) : X(0),
-                                            Y(0),
-                                            Z(0),
-                                            K(0),
-                                            M(0),
-                                            N(0),
-                                            frame(frame_),
-                                            P(Point(frame))
+Wrench::Wrench(const Point& P_) : force(Eigen::Vector3d()),
+		                          torque(Eigen::Vector3d()),
+                                  X(force[0]),
+                                  Y(force[1]),
+                                  Z(force[2]),
+                                  K(torque[0]),
+                                  M(torque[1]),
+                                  N(torque[2]),
+                                  P(P_)
 {
 }
 
-Wrench::Wrench(const std::string& frame_, const Point& P_) : X(0),
-                                                             Y(0),
-                                                             Z(0),
-                                                             K(0),
-                                                             M(0),
-                                                             N(0),
-                                                             frame(frame_),
-                                                             P(P_)
+Wrench::Wrench(const Point& P_, const Eigen::Vector3d& force_, const Eigen::Vector3d& torque_) : force(force_),
+		                                                                                         torque(torque_),
+		                                                                                         X(force[0]),
+		                                                                                         Y(force[1]),
+		                                                                                         Z(force[2]),
+		                                                                                         K(torque[0]),
+		                                                                                         M(torque[1]),
+		                                                                                         N(torque[2]),
+		                                                                                         P(P_)
 {
+}
+
+
+Wrench::Wrench(const Wrench& rhs) : force(rhs.force),
+		                          torque(rhs.torque),
+                                  X(force[0]),
+                                  Y(force[1]),
+                                  Z(force[2]),
+                                  K(torque[0]),
+                                  M(torque[1]),
+                                  N(torque[2]),
+                                  P(rhs.P)
+{
+}
+
+Wrench& Wrench::operator=(const Wrench& rhs)
+{
+	if (this != &rhs)
+	{
+		force = rhs.force;
+		torque = rhs.torque;
+		X = force[0];
+		Y = force[1];
+		Z = force[2];
+		K = torque[0];
+		M = torque[1];
+		N = torque[2];
+		P = rhs.P;
+	}
+	return *this;
 }
