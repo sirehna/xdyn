@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
+#include "DataSource.hpp"
 
 class DataSourceBuilderTest : public ::testing::Test
 {
@@ -12,7 +13,7 @@ class DataSourceBuilderTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
 		DataGenerator a;
-
+		DataSource ds;
 };
 
 #endif  /* DATASOURCEBUILDERTEST_HPP_ */

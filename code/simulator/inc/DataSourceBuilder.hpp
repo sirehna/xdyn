@@ -9,14 +9,18 @@
 #define DATASOURCEBUILDER_HPP_
 
 #include "DataSource.hpp"
-
-class SimulatorYamlParser;
+#include "YamlSimulatorInput.hpp"
 
 class DataSourceBuilder
 {
     public:
-        DataSourceBuilder(const SimulatorYamlParser& parser);
+        DataSourceBuilder(const YamlSimulatorInput& input);
         DataSource build_ds();
+
+    private:
+        void add_initial_conditions(const YamlBody& body) ;
+        YamlSimulatorInput input;
+        DataSource ds;
 };
 
 #endif /* DATASOURCEBUILDER_HPP_ */
