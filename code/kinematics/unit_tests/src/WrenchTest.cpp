@@ -10,10 +10,13 @@
 #include "KinematicsException.hpp"
 #include "Wrench.hpp"
 #include "rotation_matrix_builders.hpp"
+#include "extra_test_assertions.hpp"
 
 #include <cmath>
 
 #define PI (4.*atan(1.))
+#define EPS 1E-13
+
 
 WrenchTest::WrenchTest() : a(DataGenerator(1215))
 {
@@ -58,6 +61,43 @@ TEST_F(WrenchTest, cannot_change_reference_point_if_ref_frames_dont_match)
 	{
 		Wrench w(random_point(a));
 		ASSERT_THROW(w.change_point_of_application(random_point(a)), KinematicsException);
+	}
+}
+
+TEST_F(WrenchTest, can_project_wrench_in_a_different_frame_and_change_reference_point)
+{
+	const std::string frame_A = a.random<std::string>();
+	const std::string frame_B = a.random<std::string>();
+	const Point A(frame_A, 4,-2,9);
+	const Point B(frame_A, 0, 3, -9);
+	Wrench wA(A);
+	wA.X = 11;
+	wA.Y = -20;
+	wA.Z = 89;
+	wA.K = 1;
+	wA.M = 2;
+	wA.N = 3;
+
+	const double beta = a.random<double>().between(-PI,PI);
+	const RotationMatrix R = kinematics::rot(0,0,1, beta);
+	const kinematics::Transform T(B, R, frame_B);
+	const Wrench wB = wA.change_ref_point_then_change_frame(T);
+
+	ASSERT_SMALL_RELATIVE_ERROR(11*cos(beta)+20*sin(beta), wB.X, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(11*sin(beta)-20*cos(beta), wB.Y, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(89, wB.Z, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(-84*cos(beta)+156*sin(beta), wB.K, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(-84*sin(beta)-156*cos(beta), wB.M, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(-22, wB.N, EPS);
+}
+
+TEST_F(WrenchTest, cannot_project_wrench_if_frames_dont_match)
+{
+	for (size_t i = 0 ; i < 20 ; ++i)
+	{
+		const Wrench w(random_point(a));
+		const kinematics::Transform T = random_transform(a, a.random<std::string>(), a.random<std::string>());
+		ASSERT_THROW(w.change_ref_point_then_change_frame(T), KinematicsException);
 	}
 }
 

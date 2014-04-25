@@ -8,6 +8,9 @@
 #include "Wrench.hpp"
 #include "KinematicsException.hpp"
 #include "almost_equal.hpp"
+#include "Transform.hpp"
+
+#include <sstream>
 
 bool equal(const Point& P, const Point& Q);
 bool equal(const Point& P, const Point& Q)
@@ -119,3 +122,17 @@ Wrench Wrench::change_point_of_application(const Point& Q) const
 	return Wrench(Q, force, transport(torque,P, Q, force));
 }
 
+Wrench Wrench::change_ref_point_then_change_frame(const kinematics::Transform& T) const
+{
+	if (P.get_frame() != T.get_from_frame())
+	{
+		std::stringstream ss;
+		ss << "Frames mismatch: Wrench is expressed in "
+		   << P.get_frame()
+		   << ", but transform is " << T;
+		THROW(__PRETTY_FUNCTION__, KinematicsException, ss.str());
+	}
+	const Point Q = T.get_point();
+	const RotationMatrix R = T.get_rot();
+	return Wrench(Q, R*force, R*transport(torque,P, Q, force));
+}

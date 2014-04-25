@@ -10,6 +10,8 @@
 
 #include "Point.hpp"
 
+namespace kinematics{class Transform;}
+
 /** \author cec
  *  \date 24 avr. 2014, 12:35:30
  *  \brief Stores a force & a torque, projected in a given reference frame.
@@ -49,6 +51,16 @@ class Wrench
         Wrench change_point_of_application(const Point& Q //!< New point of application
         		                          ) const;
 
+        /**  \author cec
+		  *  \date Apr 25, 2014, 11:01:49 AM
+		  *  \brief Expresses the wrench in a new frame, using the new origin as point of application
+		  *  \details Rotation + translation. Please note that the order is not important, as
+		  *  RT + AB x RF = RT + RF x BA = R (T + F x BA) = R (T + AB x F)
+		  *  \returns Wrench expressed in a new frame & moved to a new point.
+		  *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest project_and_change_ref_example
+		  */
+        Wrench change_ref_point_then_change_frame(const kinematics::Transform& T //!< Transform from current frame to new frame
+                                   ) const;
 
     private:
         Wrench(); // Disabled because we must specify a frame for the coordinates
