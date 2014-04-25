@@ -40,6 +40,9 @@ namespace kinematics
             std::string get_from_frame() const;
             std::string get_to_frame() const;
             Transform inverse() const;
+            Point get_point() const;
+            RotationMatrix get_rot() const;
+
 
             friend std::ostream& operator<<(std::ostream& os, const Transform& T);
 

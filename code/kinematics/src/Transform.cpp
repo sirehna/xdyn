@@ -75,6 +75,16 @@ Transform Transform::inverse() const
     return Transform(Point(to_frame, -r.lu().solve(t.v)), r.inverse(), get_from_frame());
 }
 
+Point Transform::get_point() const
+{
+	return t;
+}
+
+RotationMatrix Transform::get_rot() const
+{
+	return r;
+}
+
 std::ostream& kinematics::operator<<(std::ostream& os, const Transform& T)
 {
     os << "(" << T.get_from_frame() << " -> " << T.get_to_frame() << "):" << std::endl
