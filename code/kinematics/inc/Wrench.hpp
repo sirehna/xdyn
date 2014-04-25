@@ -52,6 +52,16 @@ class Wrench
         		                          ) const;
 
         /**  \author cec
+		  *  \date Apr 25, 2014, 9:34:06 AM
+		  *  \brief Expresses the wrench in a new frame, without changing the point of application
+		  *  \details Only rotation, no translation involved.
+		  *  \returns Wrench at same point, but expressed in a new frame.
+		  *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest change_point_of_application_example
+		  */
+        Wrench change_frame_but_keep_ref_point(const kinematics::Transform& T //!< Transform from current frame to new frame
+        		                   ) const;
+
+        /**  \author cec
 		  *  \date Apr 25, 2014, 11:01:49 AM
 		  *  \brief Expresses the wrench in a new frame, using the new origin as point of application
 		  *  \details Rotation + translation. Please note that the order is not important, as

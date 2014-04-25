@@ -122,6 +122,20 @@ Wrench Wrench::change_point_of_application(const Point& Q) const
 	return Wrench(Q, force, transport(torque,P, Q, force));
 }
 
+Wrench Wrench::change_frame_but_keep_ref_point(const kinematics::Transform& T) const
+{
+	if (P.get_frame() != T.get_from_frame())
+	{
+		std::stringstream ss;
+		ss << "Frames mismatch: Wrench is expressed in "
+		   << P.get_frame()
+		   << ", but transform is " << T;
+		THROW(__PRETTY_FUNCTION__, KinematicsException, ss.str());
+	}
+	const RotationMatrix R = T.get_rot();
+	return Wrench(P, R*force, R*torque);
+}
+
 Wrench Wrench::change_ref_point_then_change_frame(const kinematics::Transform& T) const
 {
 	if (P.get_frame() != T.get_from_frame())

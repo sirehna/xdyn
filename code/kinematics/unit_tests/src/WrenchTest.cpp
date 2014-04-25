@@ -91,6 +91,33 @@ TEST_F(WrenchTest, can_project_wrench_in_a_different_frame_and_change_reference_
 	ASSERT_SMALL_RELATIVE_ERROR(-22, wB.N, EPS);
 }
 
+TEST_F(WrenchTest, can_project_wrench_in_a_different_frame_but_keep_same_reference_point)
+{
+	const std::string frame_A = a.random<std::string>();
+	const std::string frame_B = a.random<std::string>();
+	const Point A(frame_A, 4,-2,9);
+	const Point B(frame_A, 0, 3, -9);
+	Wrench wA(A);
+	wA.X = 11;
+	wA.Y = -20;
+	wA.Z = 89;
+	wA.K = 1;
+	wA.M = 2;
+	wA.N = 3;
+
+	const double beta = a.random<double>().between(-PI,PI);
+	const RotationMatrix R = kinematics::rot(0,0,1, beta);
+	const kinematics::Transform T(B, R, frame_B);
+	const Wrench wB = wA.change_frame_but_keep_ref_point(T);
+
+	ASSERT_SMALL_RELATIVE_ERROR(11*cos(beta)+20*sin(beta), wB.X, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(11*sin(beta)-20*cos(beta), wB.Y, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(89, wB.Z, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(cos(beta)-2*sin(beta), wB.K, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(sin(beta)+2*cos(beta), wB.M, EPS);
+	ASSERT_SMALL_RELATIVE_ERROR(3, wB.N, EPS);
+}
+
 TEST_F(WrenchTest, cannot_project_wrench_if_frames_dont_match)
 {
 	for (size_t i = 0 ; i < 20 ; ++i)
@@ -98,6 +125,7 @@ TEST_F(WrenchTest, cannot_project_wrench_if_frames_dont_match)
 		const Wrench w(random_point(a));
 		const kinematics::Transform T = random_transform(a, a.random<std::string>(), a.random<std::string>());
 		ASSERT_THROW(w.change_ref_point_then_change_frame(T), KinematicsException);
+		ASSERT_THROW(w.change_frame_but_keep_ref_point(T), KinematicsException);
 	}
 }
 
