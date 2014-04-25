@@ -18,7 +18,8 @@ class DataSourceBuilder
         DataSource build_ds();
 
     private:
-        void add_initial_conditions(const YamlBody& body) ;
+        void add_initial_conditions(const YamlBody& body);
+        void add_initial_quaternions(const YamlBody& body);
         YamlSimulatorInput input;
         DataSource ds;
 };

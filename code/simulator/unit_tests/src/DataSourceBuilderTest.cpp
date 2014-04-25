@@ -46,3 +46,14 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_initial_states)
 	ASSERT_DOUBLE_EQ(7,ds.get<double>("q(body 1)"));
 	ASSERT_DOUBLE_EQ(6,ds.get<double>("r(body 1)"));
 }
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_initial_quaternions)
+{
+	const EulerAngles expected(13,14,15);
+	const Eigen::Quaternion<double> q(kinematics::rotation_matrix<kinematics::INTRINSIC, kinematics::ORDERED_BY_ANGLE, kinematics::CARDAN, 3, 2, 1>(expected));
+
+	ASSERT_DOUBLE_EQ(q.w(),ds.get<double>("qr(body 1)"));
+	ASSERT_DOUBLE_EQ(q.x(),ds.get<double>("qi(body 1)"));
+	ASSERT_DOUBLE_EQ(q.y(),ds.get<double>("qj(body 1)"));
+	ASSERT_DOUBLE_EQ(q.z(),ds.get<double>("qk(body 1)"));
+}
