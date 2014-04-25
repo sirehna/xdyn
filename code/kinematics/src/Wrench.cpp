@@ -19,6 +19,12 @@ bool equal(const Point& P, const Point& Q)
 	                                    return true;
 }
 
+Eigen::Vector3d transport(const Eigen::Vector3d& Ma, const Point& a, const Point& b, const Eigen::Vector3d& f);
+Eigen::Vector3d transport(const Eigen::Vector3d& Ma, const Point& a, const Point& b, const Eigen::Vector3d& f)
+{
+	return Ma + (a-b).cross(f);
+}
+
 
 Wrench::Wrench(const Point& P_) : force(Eigen::Vector3d()),
 		                          torque(Eigen::Vector3d()),
@@ -98,5 +104,18 @@ Wrench Wrench::operator-(const Wrench& rhs) const
 		THROW(__PRETTY_FUNCTION__, KinematicsException, ss.str());
 	}
 	return Wrench(P, force - rhs.force, torque - rhs.torque);
+}
+
+Wrench Wrench::change_point_of_application(const Point& Q) const
+{
+	if (P.get_frame() != Q.get_frame())
+	{
+		std::stringstream ss;
+		ss << "Points of application are not expressed in the same frame: this is in "
+		   << P.get_frame()
+		   << ", whereas Q is in " << Q.get_frame();
+		THROW(__PRETTY_FUNCTION__, KinematicsException, ss.str());
+	}
+	return Wrench(Q, force, transport(torque,P, Q, force));
 }
 

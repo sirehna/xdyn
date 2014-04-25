@@ -31,6 +31,36 @@ void WrenchTest::TearDown()
 {
 }
 
+TEST_F(WrenchTest, can_change_reference_point)
+{
+	const std::string frame = a.random<std::string>();
+	const Point A(frame,4,-2,9);
+	Wrench wA(A);
+	wA.X = 11;
+	wA.Y = -20;
+	wA.Z = 89;
+	wA.K = 1;
+	wA.M = 2;
+	wA.N = 3;
+	const Point B(frame, 0, 3, -9);
+	const Wrench wB = wA.change_point_of_application(B);
+	ASSERT_DOUBLE_EQ(wA.X, wB.X);
+	ASSERT_DOUBLE_EQ(wA.Y, wB.Y);
+	ASSERT_DOUBLE_EQ(wA.Z, wB.Z);
+	ASSERT_DOUBLE_EQ(-84, wB.K);
+	ASSERT_DOUBLE_EQ(-156,wB.M);
+	ASSERT_DOUBLE_EQ(-22, wB.N);
+}
+
+TEST_F(WrenchTest, cannot_change_reference_point_if_ref_frames_dont_match)
+{
+	for (size_t i = 0 ; i < 20 ; ++i)
+	{
+		Wrench w(random_point(a));
+		ASSERT_THROW(w.change_point_of_application(random_point(a)), KinematicsException);
+	}
+}
+
 TEST_F(WrenchTest, can_add_two_wrenches)
 {
 	for (size_t i = 0 ; i < 20 ; ++i)

@@ -39,6 +39,16 @@ class Wrench
         Wrench operator+(const Wrench& rhs) const;
         Wrench operator-(const Wrench& rhs) const;
 
+        /**  \author cec
+		  *  \date Apr 25, 2014, 9:34:06 AM
+		  *  \brief Transports the wrench to a new point in the same frame.
+		  *  \details Only translation, no rotation involved.
+		  *  \returns Wrench at new point.
+		  *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest change_point_of_application_example
+		  */
+        Wrench change_point_of_application(const Point& Q //!< New point of application
+        		                          ) const;
+
 
     private:
         Wrench(); // Disabled because we must specify a frame for the coordinates
