@@ -2,6 +2,7 @@
 set(MODULE_UNDER_TEST simulator)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/DataSourceBuilderTest.cpp
+              src/KinematicsModuleTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
