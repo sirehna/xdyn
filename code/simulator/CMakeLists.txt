@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.8)
 project(simulator)
 
 set(SRC src/DataSourceBuilder.cpp
+        src/KinematicsModule.cpp
         )
 
 

@@ -7,6 +7,7 @@
 
 #include "DataSourceBuilder.hpp"
 #include "EulerAngles.hpp"
+#include "KinematicsModule.hpp"
 
 #include <Eigen/Geometry>
 
@@ -53,5 +54,12 @@ DataSource DataSourceBuilder::build_ds()
 {
 	FOR_EACH(input.bodies, add_initial_conditions);
 	FOR_EACH(input.bodies, add_initial_quaternions);
+	std::vector<std::string> bodies;
+	for (size_t i = 0 ; i < input.bodies.size() ; ++i)
+	{
+		bodies.push_back(input.bodies[i].name);
+	}
+
+	ds.add(KinematicsModule(&ds, bodies, "kinematics"));
     return ds;
 }
