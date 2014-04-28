@@ -27,6 +27,7 @@ namespace kinematics
 class Wrench
 {
     public:
+        Wrench();
         Wrench(const Point& P);
         Wrench(const Point& P, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);
         Wrench(const Wrench& rhs);
@@ -76,7 +77,6 @@ class Wrench
                                    ) const;
 
     private:
-        Wrench(); // Disabled because we must specify a frame for the coordinates
         Point P; // Point of application
 };
 
