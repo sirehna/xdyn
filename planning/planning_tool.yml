@@ -375,7 +375,7 @@ stories:
       type: kernel
       size: 4
       backlog: 22/4/2014
-      started:
+      started: 25/4/2014
       assigned to: cec
     - task: Gravity module (DS API, check input was set by DSBuilder, test output values)
       type: model
