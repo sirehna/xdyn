@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.8)
 project(simulator_yaml_parser)
 
 set(SRC src/SimulatorYamlParser.cpp
+        src/force_parsers.cpp
         src/parse_unit_value.cpp
         )
 

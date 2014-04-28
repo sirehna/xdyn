@@ -2,6 +2,7 @@
 set(MODULE_UNDER_TEST simulator_yaml_parser)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/SimulatorYamlParserTest.cpp
+              src/force_parsersTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
