@@ -165,3 +165,13 @@ TEST_F(KinematicsTests, can_compute_identity)
     const auto aTa = k.get("A", "A");
     ASSERT_TRUE(double_equal(kinematics::identity("A"), aTa, EPS));
 }
+
+TEST_F(KinematicsTests, can_add_same_transform_several_times)
+{
+    Kinematics k;
+    const auto bTa = random_transform(a, "A", "B");
+    k.add(bTa);
+    k.add(bTa);
+    k.add(bTa);
+    k.add(bTa);
+}
