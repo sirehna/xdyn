@@ -38,30 +38,31 @@ void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f);
 
 double decode(const UV& uv);
 
-SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data), node(new YAML::Node())
+SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
 {
-    convert_stream_to_yaml_node(contents, *node);
-    if (node->size() == 0)
-    {
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Something is wrong with the YAML data: no YAML nodes were detected by the YAML parser.");
-    }
 }
 
 YamlSimulatorInput SimulatorYamlParser::parse() const
 {
+	YAML::Node node;
+	convert_stream_to_yaml_node(contents, node);
+	if (node.size() == 0)
+	{
+		THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Something is wrong with the YAML data: no YAML nodes were detected by the YAML parser.");
+	}
     YamlSimulatorInput ret;
-    (*node)["bodies"] >> ret.bodies;
-    (*node)["rotations"] >> ret.rotations;
-    (*node)["environment"] >> ret.environment;
-    (*node)["points"] >> ret.points;
-    (*node)["blocked degrees of freedom body/NED->body"] >> ret.blocked_degrees_of_freedom;
-    (*node)["outputs"]["positions"] >> ret.position_output;
-    (*node)["outputs"]["angles"] >> ret.angles_output;
-    (*node)["outputs"]["linear velocities"] >> ret.linear_velocities_output;
-    (*node)["outputs"]["angular velocities"] >> ret.angular_velocities_output;
-    (*node)["outputs"]["linear accelerations"] >> ret.linear_accelerations_output;
-    (*node)["outputs"]["angular accelerations"] >> ret.angular_accelerations_output;
-    (*node)["outputs"]["forces and torques"] >> ret.forces_and_torques_output;
+    node["bodies"] >> ret.bodies;
+    node["rotations"] >> ret.rotations;
+    node["environment"] >> ret.environment;
+    node["points"] >> ret.points;
+    node["blocked degrees of freedom body/NED->body"] >> ret.blocked_degrees_of_freedom;
+    node["outputs"]["positions"] >> ret.position_output;
+    node["outputs"]["angles"] >> ret.angles_output;
+    node["outputs"]["linear velocities"] >> ret.linear_velocities_output;
+    node["outputs"]["angular velocities"] >> ret.angular_velocities_output;
+    node["outputs"]["linear accelerations"] >> ret.linear_accelerations_output;
+    node["outputs"]["angular accelerations"] >> ret.angular_accelerations_output;
+    node["outputs"]["forces and torques"] >> ret.forces_and_torques_output;
     return ret;
 }
 
