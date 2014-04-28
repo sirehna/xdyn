@@ -29,4 +29,11 @@ DataSourceModule* GravityModule::clone(DataSource* const data_source) const
 
 void GravityModule::update() const
 {
+    const double m = ds->get<double>(std::string("m(")+body+")");
+    const double g = ds->get<double>("g");
+    const Point G(body);
+    const Eigen::Vector3d force(0,0,m*g);
+    const Eigen::Vector3d torque(0,0,0);
+    const Wrench F(G, force, torque);
+    ds->set<Wrench>(std::string("gravity(")+body+")", F);
 }
