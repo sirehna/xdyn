@@ -8,6 +8,7 @@ FILE(GLOB SRC src/KinematicsTests.cpp
               src/random_kinematics.cpp
               src/KinematicTreeTest.cpp
               src/WrenchTest.cpp
+              src/transform_double_equal.cpp
               )
 # ------8<---------------------------------------------->8-----
 
