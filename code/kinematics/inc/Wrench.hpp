@@ -10,7 +10,10 @@
 
 #include "Point.hpp"
 
-namespace kinematics{class Transform;}
+namespace kinematics
+{
+    class Transform;
+}
 
 /** \author cec
  *  \date 24 avr. 2014, 12:35:30
