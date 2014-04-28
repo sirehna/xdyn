@@ -46,35 +46,35 @@ class Wrench
         Wrench operator-(const Wrench& rhs) const;
 
         /**  \author cec
-		  *  \date Apr 25, 2014, 9:34:06 AM
-		  *  \brief Transports the wrench to a new point in the same frame.
-		  *  \details Only translation, no rotation involved.
-		  *  \returns Wrench at new point.
-		  *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest change_point_of_application_example
-		  */
+         *  \date Apr 25, 2014, 9:34:06 AM
+         *  \brief Transports the wrench to a new point in the same frame.
+         *  \details Only translation, no rotation involved.
+         *  \returns Wrench at new point.
+         *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest change_point_of_application_example
+         */
         Wrench change_point_of_application(const Point& Q //!< New point of application
-        		                          ) const;
+                ) const;
 
         /**  \author cec
-		  *  \date Apr 25, 2014, 9:34:06 AM
-		  *  \brief Expresses the wrench in a new frame, without changing the point of application
-		  *  \details Only rotation, no translation involved.
-		  *  \returns Wrench at same point, but expressed in a new frame.
-		  *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest change_point_of_application_example
-		  */
+         *  \date Apr 25, 2014, 9:34:06 AM
+         *  \brief Expresses the wrench in a new frame, without changing the point of application
+         *  \details Only rotation, no translation involved.
+         *  \returns Wrench at same point, but expressed in a new frame.
+         *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest change_point_of_application_example
+         */
         Wrench change_frame_but_keep_ref_point(const kinematics::Transform& T //!< Transform from current frame to new frame
-        		                   ) const;
+                ) const;
 
         /**  \author cec
-		  *  \date Apr 25, 2014, 11:01:49 AM
-		  *  \brief Expresses the wrench in a new frame, using the new origin as point of application
-		  *  \details Rotation + translation. Please note that the order is not important, as
-		  *  RT + AB x RF = RT + RF x BA = R (T + F x BA) = R (T + AB x F)
-		  *  \returns Wrench expressed in a new frame & moved to a new point.
-		  *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest project_and_change_ref_example
-		  */
+         *  \date Apr 25, 2014, 11:01:49 AM
+         *  \brief Expresses the wrench in a new frame, using the new origin as point of application
+         *  \details Rotation + translation. Please note that the order is not important, as
+         *  RT + AB x RF = RT + RF x BA = R (T + F x BA) = R (T + AB x F)
+         *  \returns Wrench expressed in a new frame & moved to a new point.
+         *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest project_and_change_ref_example
+         */
         Wrench change_ref_point_then_change_frame(const kinematics::Transform& T //!< Transform from current frame to new frame
-                                   ) const;
+                ) const;
 
     private:
         Point P; // Point of application
