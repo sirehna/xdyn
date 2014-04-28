@@ -12,6 +12,7 @@
 #include "yaml_data.hpp"
 #include "EulerAngles.hpp"
 #include "rotation_matrix_builders.hpp"
+#include "Wrench.hpp"
 
 #include <Eigen/Geometry>
 
@@ -61,4 +62,20 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_initial_quaternions)
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_right_number_of_states)
 {
 	ASSERT_EQ(13, ds.get_state_names().size());
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_constant)
+{
+    ASSERT_DOUBLE_EQ(9.81, ds.get<double>("g"));
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_force_of_each_body)
+{
+    const Wrench Fg = ds.get<Wrench>("gravity(body 1)");
+    ASSERT_DOUBLE_EQ(0,Fg.X);
+    ASSERT_DOUBLE_EQ(0,Fg.Y);
+    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z);
+    ASSERT_DOUBLE_EQ(0,Fg.K);
+    ASSERT_DOUBLE_EQ(0,Fg.M);
+    ASSERT_DOUBLE_EQ(0,Fg.N);
 }

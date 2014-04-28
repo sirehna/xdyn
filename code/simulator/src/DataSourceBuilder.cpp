@@ -8,6 +8,8 @@
 #include "DataSourceBuilder.hpp"
 #include "EulerAngles.hpp"
 #include "KinematicsModule.hpp"
+#include "GravityModule.hpp"
+#include "force_parsers.hpp"
 
 #include <Eigen/Geometry>
 
@@ -67,11 +69,29 @@ void DataSourceBuilder::add_states(const YamlBody& body)
 	ds.define_derivative(std::string("qk(")+body.name+")", std::string("dqk/dt(")+body.name+")");
 }
 
+void DataSourceBuilder::add_forces(const YamlBody& body)
+{
+    std::vector<YamlModel>::const_iterator that_model = body.external_forces.begin();
+    for (;that_model!=body.external_forces.end();++that_model)
+    {
+        if (that_model->model == "gravity") add_gravity(body.name, that_model->yaml, body.dynamics.mass);
+    }
+}
+
+void DataSourceBuilder::add_gravity(const std::string& body_name, const std::string& yaml, const double mass)
+{
+    GravityModule g(&ds, "gravity", body_name);
+    ds.add(g);
+    ds.set<double>(std::string("m(") + body_name + ")", mass);
+    ds.set<double>("g", parse_gravity(yaml).g);
+}
+
 DataSource DataSourceBuilder::build_ds()
 {
 	FOR_EACH(input.bodies, add_initial_conditions);
 	FOR_EACH(input.bodies, add_initial_quaternions);
 	FOR_EACH(input.bodies, add_states);
+	FOR_EACH(input.bodies, add_forces);
 	std::vector<std::string> bodies;
 	for (size_t i = 0 ; i < input.bodies.size() ; ++i)
 	{

@@ -21,6 +21,8 @@ class DataSourceBuilder
         void add_initial_conditions(const YamlBody& body);
         void add_initial_quaternions(const YamlBody& body);
         void add_states(const YamlBody& body);
+        void add_forces(const YamlBody& body);
+        void add_gravity(const std::string& body_name, const std::string& yaml, const double mass);
 
         YamlSimulatorInput input;
         DataSource ds;
