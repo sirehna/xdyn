@@ -21,6 +21,7 @@ set(SRC src/YamlRotation.cpp
         src/YamlAnglesOutput.cpp
         src/YamlForcesAndTorquesOutput.cpp
         src/YamlSimulatorInput.cpp
+        src/YamlForces.cpp
         )
 
 
