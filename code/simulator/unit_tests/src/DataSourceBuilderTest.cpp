@@ -57,3 +57,8 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_initial_quaternions)
 	ASSERT_DOUBLE_EQ(q.y(),ds.get<double>("qj(body 1)"));
 	ASSERT_DOUBLE_EQ(q.z(),ds.get<double>("qk(body 1)"));
 }
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_right_number_of_states)
+{
+	ASSERT_EQ(13, ds.get_state_names().size());
+}

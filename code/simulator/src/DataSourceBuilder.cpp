@@ -50,10 +50,28 @@ void DataSourceBuilder::add_initial_quaternions(const YamlBody& body)
 	ds.set(std::string("qk(")+body.name+")", q.z());
 }
 
+void DataSourceBuilder::add_states(const YamlBody& body)
+{
+	ds.define_derivative(std::string("x(")+body.name+")", std::string("dx/dt(")+body.name+")");
+	ds.define_derivative(std::string("y(")+body.name+")", std::string("dy/dt(")+body.name+")");
+	ds.define_derivative(std::string("z(")+body.name+")", std::string("dz/dt(")+body.name+")");
+	ds.define_derivative(std::string("u(")+body.name+")", std::string("du/dt(")+body.name+")");
+	ds.define_derivative(std::string("v(")+body.name+")", std::string("dv/dt(")+body.name+")");
+	ds.define_derivative(std::string("w(")+body.name+")", std::string("dw/dt(")+body.name+")");
+	ds.define_derivative(std::string("p(")+body.name+")", std::string("dp/dt(")+body.name+")");
+	ds.define_derivative(std::string("q(")+body.name+")", std::string("dq/dt(")+body.name+")");
+	ds.define_derivative(std::string("r(")+body.name+")", std::string("dr/dt(")+body.name+")");
+	ds.define_derivative(std::string("qr(")+body.name+")", std::string("dqr/dt(")+body.name+")");
+	ds.define_derivative(std::string("qi(")+body.name+")", std::string("dqi/dt(")+body.name+")");
+	ds.define_derivative(std::string("qj(")+body.name+")", std::string("dqj/dt(")+body.name+")");
+	ds.define_derivative(std::string("qk(")+body.name+")", std::string("dqk/dt(")+body.name+")");
+}
+
 DataSource DataSourceBuilder::build_ds()
 {
 	FOR_EACH(input.bodies, add_initial_conditions);
 	FOR_EACH(input.bodies, add_initial_quaternions);
+	FOR_EACH(input.bodies, add_states);
 	std::vector<std::string> bodies;
 	for (size_t i = 0 ; i < input.bodies.size() ; ++i)
 	{
