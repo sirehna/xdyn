@@ -7,18 +7,10 @@
 
 #include "SimulatorYamlParser.hpp"
 #include "yaml.h"
-#include "DecodeUnit.h"
 #include "SimulatorYamlParserException.hpp"
-
-struct UV
-{
-    UV() : value(0), unit("") {}
-    double value;
-    std::string unit;
-};
+#include "parse_unit_value.hpp"
 
 void operator >> (const YAML::Node& node, YamlRotation& g);
-void operator >> (const YAML::Node& node, UV& g);
 void operator >> (const YAML::Node& node, YamlBody& b);
 void operator >> (const YAML::Node& node, YamlModel& m);
 void operator >> (const YAML::Node& node, YamlPosition& m);
@@ -28,15 +20,12 @@ void operator >> (const YAML::Node& node, YamlSpeed& s);
 void operator >> (const YAML::Node& node, YamlDynamics& d);
 void operator >> (const YAML::Node& node, YamlPoint& p);
 void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::string& name);
-void parse_uv(const YAML::Node& node, double& d);
 void operator >> (const YAML::Node& node, YamlInertiaMatrix& m);
 void operator >> (const YAML::Node& node, YamlBlockedDegreesOfFreedom& m);
 void operator >> (const YAML::Node& node, YamlOutput& p);
 void operator >> (const YAML::Node& node, YamlPositionOutput& p);
 void operator >> (const YAML::Node& node, YamlAnglesOutput& p);
 void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f);
-
-double decode(const UV& uv);
 
 SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
 {
@@ -70,17 +59,6 @@ void operator >> (const YAML::Node& node, YamlRotation& g)
 {
     node["convention"] >> g.convention;
     node["order by"] >> g.order_by;
-}
-
-void operator >> (const YAML::Node& node, UV& g)
-{
-    node["unit"] >> g.unit;
-    node["value"] >> g.value;
-}
-
-double decode(const UV& uv)
-{
-    return uv.value * DecodeUnit::decodeUnit(uv.unit);
 }
 
 void operator >> (const YAML::Node& node, YamlBody& b)
@@ -157,12 +135,7 @@ void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::stri
     p.name = name;
 }
 
-void parse_uv(const YAML::Node& node, double& d)
-{
-    UV uv;
-    node >> uv;
-    d = decode(uv);
-}
+
 
 void operator >> (const YAML::Node& node, YamlInertiaMatrix& m)
 {
