@@ -62,7 +62,7 @@ bool TriMeshBuilder::evaluate_unit_normal(const Point3dTriplet& tri, Eigen::Vect
 	const double norm = normal.norm();
 	if (norm<1000*std::numeric_limits<double>::epsilon())
 	{
-		std::cerr << "WARNING: in " << __PRETTY_FUNCTION__<< ": input triangle is degenerated" << std::endl;
+		std::cout << "WARNING: in " << __PRETTY_FUNCTION__<< ": input triangle is degenerated" << std::endl;
 		return false;
 	}
 	unit_normal  = normal/norm;
