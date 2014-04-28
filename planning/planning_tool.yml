@@ -321,6 +321,8 @@ stories:
       type: kernel
       size: 8
       backlog: 14/4/2014
+      started: 18/4/2014
+      done: 22/4/2014
       assigned to: cec
       started: 18/4/2014
     - task: Classify facets by number of immerged nodes
@@ -331,19 +333,49 @@ stories:
       started: 18/4/2014
     - task: Create dummy wave module & interface
       type: model
-      size: 8
+      size: 2
       backlog: 14/4/2014
       assigned to: cec
-      started: 18/4/2014
+      started: 17/4/2014
+      done: 24/4/2014
+    - task: Bug fixes for Transform class
+      backlog: 22/4/2014
+      assigned to: cec
+      size: 1
+      started: 22/4/2014
+      done: 22/4/2014
+    - task: Implement KinematicsTree & Kinematics class (with DataSource & boost::graph)
+      size: 4
+      assigned to: cec
+      backlog: 22/4/2014
+      started: 22/4/2014
+      done: 23/4/2014
     - task: Wrench class + change its reference frame
       type: kernel
       size: 4
       backlog: 22/4/2014
+      started: 24/4/2014
+      done: 25/4/2014
       assigned to: cec
+    - task: Update planning
+      type: dev
+      size: 1
+      assigned to: cec
+      backlog: 22/4/2014
+      started: 22/4/2014
+      done: 22/4/2014
+    - task: Update planning
+      type: dev
+      size: 1
+      assigned to: cec
+      backlog: 28/4/2014
+      started: 28/4/2014
+      done: 28/4/2014
     - task: Kinematics module (fills Kinematics objet according to states)
       type: kernel
       size: 4
       backlog: 22/4/2014
+      started:
       assigned to: cec
     - task: Gravity module (DS API, check input was set by DSBuilder, test output values)
       type: model
