@@ -162,3 +162,13 @@ Wrench Wrench::change_ref_point_then_change_frame(const kinematics::Transform& T
 	const RotationMatrix R = T.get_rot();
 	return Wrench(Q, R*force, R*transport(torque,P, Q, force));
 }
+
+Point Wrench::get_point() const
+{
+	return P;
+}
+
+std::string Wrench::get_frame() const
+{
+	return P.get_frame();
+}

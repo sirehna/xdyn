@@ -33,6 +33,18 @@ class Wrench
         Wrench(const Wrench& rhs);
         Wrench& operator=(const Wrench& rhs);
 
+        /**  \author cec
+         *  \date Apr 28, 2014, 3:40:27 PM
+         *  \returns The Point at which the Wrench is expressed
+         */
+        Point get_point() const;
+
+        /**  \author cec
+         *  \date Apr 28, 2014, 3:40:27 PM
+         *  \returns The reference frame in which the Wrench coordinates are expressed
+         */
+        std::string get_frame() const;
+
         Eigen::Vector3d force;
         Eigen::Vector3d torque;
         double& X;
