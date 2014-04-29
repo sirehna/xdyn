@@ -39,11 +39,6 @@ class TriMeshBuilder
 		Eigen::Matrix<double,3,Eigen::Dynamic> nodes;
 		std::vector<Facet> facets;
 
-		Eigen::Vector3d normal(const std::vector<Eigen::Vector3d>& tri) const;
-		Eigen::Vector3d unit_normal(const std::vector<Eigen::Vector3d>& tri) const;
-		Eigen::Vector3d barycenter(const std::vector<Eigen::Vector3d>& tri) const;
-		double area(const std::vector<Eigen::Vector3d>& tri) const;
-
 		size_t build_one_point(const Eigen::Vector3d& xyz);
 		bool point_is_in_map(const Eigen::Vector3d& xyz);
 		bool add_point_if_missing(const Eigen::Vector3d& xyz);

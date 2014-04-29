@@ -2,7 +2,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(mesh)
 
 SET(SRC src/TriMesh.cpp
-        src/TriMeshBuilder.cpp)
+        src/TriMeshBuilder.cpp
+        src/mesh_manipulations.cpp)
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})

@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <iostream>
+
 #include "TriMeshBuilder.hpp"
-#include "MeshException.hpp"
+#include "mesh_manipulations.hpp"
 
 Eigen::Matrix<double,3,Eigen::Dynamic> TriMeshBuilder::get_nodes() const
 {
@@ -46,51 +47,6 @@ void TriMeshBuilder::operator()(const std::vector<Eigen::Vector3d>& tri)
     facet.index[1] = build_one_point(tri[1]);
     facet.index[2] = build_one_point(tri[2]);
     facets.push_back(facet);
-}
-
-Eigen::Vector3d TriMeshBuilder::barycenter(const std::vector<Eigen::Vector3d>& tri) const
-{
-	Eigen::Vector3d xyz;
-	xyz = (tri[0]+tri[1]+tri[2])/3.0;
-	return xyz;
-}
-
-Eigen::Vector3d TriMeshBuilder::unit_normal(const std::vector<Eigen::Vector3d>& tri) const
-{
-	const Eigen::Vector3d n = normal(tri);
-	const double norm = n.norm();
-	if (norm<1000*std::numeric_limits<double>::epsilon())
-	{
-	    std::stringstream ss;
-	    ss << "Input is degenerated: cannot compute unit normal vector. The polygon is:" << std::endl;
-	    for (size_t i = 0 ; i < tri.size() ; ++i)
-	    {
-	      ss << "p[" << i << "] = " << tri[i].transpose() << std::endl;
-	    }
-	    THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
-	}
-	return n/norm;
-}
-
-Eigen::Vector3d TriMeshBuilder::normal(const std::vector<Eigen::Vector3d>& tri) const
-{
-    if (tri.size() < 3)
-    {
-        std::stringstream ss;
-        ss << "Need at least three points to define a surface: cannot compute normal vector. Input has "
-           << tri.size() << " points.";
-       THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
-    }
-	const Eigen::Vector3d n1(tri[1]-tri[0]);
-	const Eigen::Vector3d n2(tri[2]-tri[0]);
-	return n1.cross(n2);
-}
-
-double TriMeshBuilder::area(const std::vector<Eigen::Vector3d>& tri) const
-{
-	const Eigen::Vector3d n1(tri[1]-tri[0]);
-	const Eigen::Vector3d n2(tri[2]-tri[0]);
-	return 0.5*fabs((n1.cross(n2)).norm());
 }
 
 size_t TriMeshBuilder::build_one_point(const Eigen::Vector3d& xyz)
