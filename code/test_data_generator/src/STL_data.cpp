@@ -1,7 +1,7 @@
 #include <sstream>
 #include "STL_data.hpp"
 
-std::string stl_single_facet()
+std::string test_data::single_facet()
 {
     std::stringstream data;
     data << "solid MYSOLID\n"
@@ -16,7 +16,7 @@ std::string stl_single_facet()
     return data.str();
 }
 
-std::string stl_three_facets()
+std::string test_data::three_facets()
 {
     std::stringstream data;
     data << "solid MYSOLID\n"
@@ -46,7 +46,7 @@ std::string stl_three_facets()
     return data.str();
 }
 
-std::string stl_cube()
+std::string test_data::cube()
 {
     std::stringstream data;
     data << "solid MYSOLID\n"

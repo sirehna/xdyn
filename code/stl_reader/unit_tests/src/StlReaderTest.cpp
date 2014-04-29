@@ -5,19 +5,19 @@
 
 TEST_F(StlReaderTest, number_of_facets_should_be_correct_for_a_single_facet_file)
 {
-	const VectorOfPoint3dTriplet facets = read_stl(stl_single_facet());
+	const VectorOfPoint3dTriplet facets = read_stl(test_data::single_facet());
 	ASSERT_EQ(1, facets.size());
 }
 
 TEST_F(StlReaderTest, number_of_facets_should_be_correct_for_a_three_facet_file)
 {
-	const VectorOfPoint3dTriplet facets = read_stl(stl_three_facets());
+	const VectorOfPoint3dTriplet facets = read_stl(test_data::three_facets());
 	ASSERT_EQ(3, facets.size());
 }
 
 TEST_F(StlReaderTest, should_be_able_to_read_a_single_facet_properly)
 {
-	const VectorOfPoint3dTriplet facets = read_stl(stl_single_facet());
+	const VectorOfPoint3dTriplet facets = read_stl(test_data::single_facet());
 	ASSERT_EQ(1, facets.size());
 	ASSERT_DOUBLE_EQ(1.0, facets.at(0).p1(0));
 	ASSERT_DOUBLE_EQ(2.1, facets.at(0).p1(1));
@@ -32,7 +32,7 @@ TEST_F(StlReaderTest, should_be_able_to_read_a_single_facet_properly)
 
 TEST_F(StlReaderTest, should_be_able_to_read_several_facets_properly)
 {
-	const VectorOfPoint3dTriplet facets = read_stl(stl_three_facets());
+	const VectorOfPoint3dTriplet facets = read_stl(test_data::three_facets());
 	ASSERT_EQ(3, facets.size());
 	ASSERT_DOUBLE_EQ(-0.50, facets.at(0).p1(0));
 	ASSERT_DOUBLE_EQ(-0.50, facets.at(0).p1(1));
