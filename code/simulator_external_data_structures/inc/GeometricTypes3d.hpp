@@ -1,10 +1,10 @@
 #ifndef GEOMETRICTYPES3D_HPP_
 #define GEOMETRICTYPES3D_HPP_
 
-#include <stddef.h>
+#include <cstddef>
 #include <vector>
-#include <Eigen/Dense>
 
+#include <Eigen/Dense>
 
 typedef std::vector<Eigen::Vector3d> VectorOfPoints;
 typedef std::vector<VectorOfPoints> VectorOfVectorOfPoints;
