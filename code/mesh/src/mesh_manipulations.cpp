@@ -8,7 +8,12 @@
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
 
+#include <boost/geometry.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
+
+using namespace boost::geometry;
+
+BOOST_GEOMETRY_REGISTER_POINT_3D(EPoint, double, cs::cartesian, x, y, z)
 
 double area(const VectorOfPoints& polygon)
 {
