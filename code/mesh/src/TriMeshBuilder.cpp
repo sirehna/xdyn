@@ -37,7 +37,7 @@ TriMesh TriMeshBuilder::build()
 	return TriMesh(nodes, facets);
 }
 
-void TriMeshBuilder::operator()(const std::vector<Eigen::Vector3d>& tri)
+void TriMeshBuilder::operator()(const VectorOfPoints& tri)
 {
 	Facet facet;
     facet.unit_normal = unit_normal(tri);
@@ -49,7 +49,7 @@ void TriMeshBuilder::operator()(const std::vector<Eigen::Vector3d>& tri)
     facets.push_back(facet);
 }
 
-size_t TriMeshBuilder::build_one_point(const Eigen::Vector3d& xyz)
+size_t TriMeshBuilder::build_one_point(const EPoint& xyz)
 {
 	const bool point_has_been_added = add_point_if_missing(xyz);
 	const size_t ret = index;
@@ -57,7 +57,7 @@ size_t TriMeshBuilder::build_one_point(const Eigen::Vector3d& xyz)
 	return ret;
 }
 
-bool TriMeshBuilder::add_point_if_missing(const Eigen::Vector3d& xyz)
+bool TriMeshBuilder::add_point_if_missing(const EPoint& xyz)
 {
 	bool point_has_been_added = false;
 	if (not(point_is_in_map(xyz)))
@@ -69,7 +69,7 @@ bool TriMeshBuilder::add_point_if_missing(const Eigen::Vector3d& xyz)
 	return point_has_been_added;
 }
 
-bool TriMeshBuilder::point_is_in_map(const Eigen::Vector3d& xyz)
+bool TriMeshBuilder::point_is_in_map(const EPoint& xyz)
 {
 	const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
 	return itMap != xyzMap.end();

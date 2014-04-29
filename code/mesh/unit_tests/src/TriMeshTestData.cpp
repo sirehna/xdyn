@@ -3,7 +3,7 @@
 VectorOfPoints one_triangle()
 {
     VectorOfPoints P;
-    Eigen::Vector3d p1, p2, p3;
+    EPoint p1, p2, p3;
 	p1(0) = 1.0;
 	p1(1) = 2.1;
 	p1(2) = 3.2;
@@ -22,7 +22,7 @@ VectorOfPoints one_triangle()
 VectorOfPoints degenerated_triangle()
 {
     VectorOfPoints P;
-    Eigen::Vector3d p1, p2, p3;
+    EPoint p1, p2, p3;
 	p1(0) = 1.0;
 	p1(1) = 2.1;
 	p1(2) = 3.2;
@@ -42,7 +42,7 @@ VectorOfVectorOfPoints unit_cube()
 {
 	VectorOfVectorOfPoints V;
 	VectorOfPoints P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12;
-    Eigen::Vector3d p1, p2, p3;
+	EPoint p1, p2, p3;
 	p1(0)=-0.5; p1(1)=-0.5; p1(2)=+0.5;
 	p2(0)=+0.5; p2(1)=-0.5; p2(2)=+0.5;
 	p3(0)=+0.5; p3(1)=+0.5; p3(2)=+0.5;

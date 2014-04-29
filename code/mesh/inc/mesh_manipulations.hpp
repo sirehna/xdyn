@@ -8,13 +8,12 @@
 #ifndef MESH_MANIPULATIONS_HPP_
 #define MESH_MANIPULATIONS_HPP_
 
-#include <Eigen/Dense>
-#include <vector>
+#include "GeometricTypes3d.hpp"
 
-Eigen::Vector3d normal(const std::vector<Eigen::Vector3d>& polygon);
-Eigen::Vector3d unit_normal(const std::vector<Eigen::Vector3d>& polygon);
-Eigen::Vector3d barycenter(const std::vector<Eigen::Vector3d>& polygon);
-double area(const std::vector<Eigen::Vector3d>& polygon);
+Eigen::Vector3d normal(const VectorOfPoints& polygon);
+Eigen::Vector3d unit_normal(const VectorOfPoints& polygon);
+Eigen::Vector3d barycenter(const VectorOfPoints& polygon);
+double area(const VectorOfPoints& polygon);
 
 
 #endif /* MESH_MANIPULATIONS_HPP_ */

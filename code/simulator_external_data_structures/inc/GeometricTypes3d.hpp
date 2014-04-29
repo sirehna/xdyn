@@ -39,7 +39,7 @@ struct EPoint : public Eigen::Vector3d
     double& z;
 };
 
-typedef std::vector<Eigen::Vector3d> VectorOfPoints;
+typedef std::vector<EPoint> VectorOfPoints;
 typedef std::vector<VectorOfPoints> VectorOfVectorOfPoints;
 
 struct Facet

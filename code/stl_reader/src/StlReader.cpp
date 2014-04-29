@@ -12,7 +12,7 @@ const char TOKEN_normal[] = "normal";
 
 struct ParserState;
 char* skipWhiteSpace(char *input);
-Eigen::Vector3d readVertex(char *line, ParserState& state);
+EPoint readVertex(char *line, ParserState& state);
 void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state);
 VectorOfVectorOfPoints readAsciiStl(std::istream& input_stream, ParserState &state);
 
@@ -47,9 +47,9 @@ char* skipWhiteSpace(char *input){
 /**
  * \brief reads a vertex from a line
  */
-Eigen::Vector3d readVertex(char *line, ParserState& state)
+EPoint readVertex(char *line, ParserState& state)
 {
-    Eigen::Vector3d ret;
+    EPoint ret;
     int width;
     char token[20];
     //char *str = skipWhiteSpace(line);
@@ -113,7 +113,7 @@ VectorOfVectorOfPoints readAsciiStl(
         // FACET
         VectorOfPoints facet;
         if (!strcmp(token, "facet")){
-            std::vector<Eigen::Vector3d> facet;
+            VectorOfPoints facet;
             // Get the XYZ coordinates of the normal vector to the face.
             readNormal(next, normal, state);
             state.getLine(input);

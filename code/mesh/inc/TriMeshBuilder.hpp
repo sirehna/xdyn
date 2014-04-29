@@ -8,7 +8,7 @@
 
 struct Vector3dComparator
 {
-    bool operator() (const Eigen::Vector3d& lhs, const Eigen::Vector3d& rhs)
+    bool operator() (const EPoint& lhs, const EPoint& rhs)
     {
         if (MESH_LT(lhs(0),rhs(0))) {return true;}
         if (MESH_EQ(lhs(0),rhs(0)))
@@ -20,7 +20,7 @@ struct Vector3dComparator
     }
 };
 
-typedef std::map< Eigen::Vector3d , size_t, Vector3dComparator > Vector3dMap;
+typedef std::map<EPoint, size_t, Vector3dComparator> Vector3dMap;
 
 class TriMeshBuilder
 {
@@ -28,7 +28,7 @@ class TriMeshBuilder
 		TriMeshBuilder(const VectorOfVectorOfPoints& v_);
 		TriMeshBuilder(const VectorOfPoints& tri);
 		TriMesh build();
-		void operator()(const std::vector<Eigen::Vector3d>& Tri);
+		void operator()(const VectorOfPoints& Tri);
 		Eigen::Matrix<double,3,Eigen::Dynamic> get_nodes() const;
 		std::vector<Facet> get_facets() const;
 
@@ -39,9 +39,9 @@ class TriMeshBuilder
 		Eigen::Matrix<double,3,Eigen::Dynamic> nodes;
 		std::vector<Facet> facets;
 
-		size_t build_one_point(const Eigen::Vector3d& xyz);
-		bool point_is_in_map(const Eigen::Vector3d& xyz);
-		bool add_point_if_missing(const Eigen::Vector3d& xyz);
+		size_t build_one_point(const EPoint& xyz);
+		bool point_is_in_map(const EPoint& xyz);
+		bool add_point_if_missing(const EPoint& xyz);
 };
 
 #endif

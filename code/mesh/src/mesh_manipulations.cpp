@@ -10,21 +10,21 @@
 
 #include <boost/geometry/geometries/register/point.hpp>
 
-double area(const std::vector<Eigen::Vector3d>& polygon)
+double area(const VectorOfPoints& polygon)
 {
     const Eigen::Vector3d n1(polygon[1]-polygon[0]);
     const Eigen::Vector3d n2(polygon[2]-polygon[0]);
     return 0.5*fabs((n1.cross(n2)).norm());
 }
 
-Eigen::Vector3d barycenter(const std::vector<Eigen::Vector3d>& polygon)
+Eigen::Vector3d barycenter(const VectorOfPoints& polygon)
 {
     Eigen::Vector3d xyz;
     xyz = (polygon[0]+polygon[1]+polygon[2])/3.0;
     return xyz;
 }
 
-Eigen::Vector3d unit_normal(const std::vector<Eigen::Vector3d>& polygon)
+Eigen::Vector3d unit_normal(const VectorOfPoints& polygon)
 {
     const Eigen::Vector3d n = normal(polygon);
     const double norm = n.norm();
@@ -41,7 +41,7 @@ Eigen::Vector3d unit_normal(const std::vector<Eigen::Vector3d>& polygon)
     return n/norm;
 }
 
-Eigen::Vector3d normal(const std::vector<Eigen::Vector3d>& polygon)
+Eigen::Vector3d normal(const VectorOfPoints& polygon)
 {
     if (polygon.size() < 3)
     {
