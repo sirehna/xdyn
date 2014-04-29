@@ -86,18 +86,24 @@ void DataSourceBuilder::add_gravity(const std::string& body_name, const std::str
     ds.set<double>("g", parse_gravity(yaml).g);
 }
 
+void DataSourceBuilder::add_kinematics(const std::vector<YamlBody>& bodies)
+{
+    std::vector<std::string> body_names;
+    for (size_t i = 0 ; i < bodies.size() ; ++i)
+    {
+        body_names.push_back(bodies[i].name);
+    }
+
+    ds.add(KinematicsModule(&ds, body_names, "kinematics"));
+}
+
 DataSource DataSourceBuilder::build_ds()
 {
 	FOR_EACH(input.bodies, add_initial_conditions);
 	FOR_EACH(input.bodies, add_initial_quaternions);
 	FOR_EACH(input.bodies, add_states);
 	FOR_EACH(input.bodies, add_forces);
-	std::vector<std::string> bodies;
-	for (size_t i = 0 ; i < input.bodies.size() ; ++i)
-	{
-		bodies.push_back(input.bodies[i].name);
-	}
+	add_kinematics(input.bodies);
 
-	ds.add(KinematicsModule(&ds, bodies, "kinematics"));
     return ds;
 }
