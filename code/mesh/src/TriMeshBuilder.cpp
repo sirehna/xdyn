@@ -38,10 +38,10 @@ TriMesh TriMeshBuilder::build()
 void TriMeshBuilder::operator()(const Point3dTriplet& tri)
 {
 	Facet facet;
-	if (evaluate_unit_normal(tri,facet.unit_normal))
+	if (unit_normal(tri,facet.unit_normal))
 	{
-		facet.area = evaluate_area(tri);
-		facet.barycenter = evaluate_barycenter(tri);
+		facet.area = area(tri);
+		facet.barycenter = barycenter(tri);
 		facet.index[0] = build_one_point(tri.p1);
 		facet.index[1] = build_one_point(tri.p2);
 		facet.index[2] = build_one_point(tri.p3);
@@ -49,34 +49,34 @@ void TriMeshBuilder::operator()(const Point3dTriplet& tri)
 	}
 }
 
-Eigen::Vector3d TriMeshBuilder::evaluate_barycenter(const Point3dTriplet& tri) const
+Eigen::Vector3d TriMeshBuilder::barycenter(const Point3dTriplet& tri) const
 {
 	Eigen::Vector3d xyz;
 	xyz = (tri.p1+tri.p2+tri.p3)/3.0;
 	return xyz;
 }
 
-bool TriMeshBuilder::evaluate_unit_normal(const Point3dTriplet& tri, Eigen::Vector3d& unit_normal) const
+bool TriMeshBuilder::unit_normal(const Point3dTriplet& tri, Eigen::Vector3d& unit_normal) const
 {
-	const Eigen::Vector3d normal = evaluate_normal(tri);
-	const double norm = normal.norm();
+	const Eigen::Vector3d n = normal(tri);
+	const double norm = n.norm();
 	if (norm<1000*std::numeric_limits<double>::epsilon())
 	{
 		std::cout << "WARNING: in " << __PRETTY_FUNCTION__<< ": input triangle is degenerated" << std::endl;
 		return false;
 	}
-	unit_normal  = normal/norm;
+	unit_normal  = n/norm;
 	return true;
 }
 
-Eigen::Vector3d TriMeshBuilder::evaluate_normal(const Point3dTriplet& tri) const
+Eigen::Vector3d TriMeshBuilder::normal(const Point3dTriplet& tri) const
 {
 	const Eigen::Vector3d n1(tri.p2-tri.p1);
 	const Eigen::Vector3d n2(tri.p3-tri.p1);
 	return n1.cross(n2);
 }
 
-double TriMeshBuilder::evaluate_area(const Point3dTriplet& tri) const
+double TriMeshBuilder::area(const Point3dTriplet& tri) const
 {
 	const Eigen::Vector3d n1(tri.p2-tri.p1);
 	const Eigen::Vector3d n2(tri.p3-tri.p1);
