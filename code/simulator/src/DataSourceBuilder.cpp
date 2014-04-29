@@ -10,6 +10,9 @@
 #include "KinematicsModule.hpp"
 #include "GravityModule.hpp"
 #include "force_parsers.hpp"
+#include "TriMeshBuilder.hpp"
+#include "TextFileReader.hpp"
+#include "StlReader.hpp"
 
 #include <Eigen/Geometry>
 
@@ -86,6 +89,14 @@ void DataSourceBuilder::add_gravity(const std::string& body_name, const std::str
     ds.set<double>("g", parse_gravity(yaml).g);
 }
 
+void DataSourceBuilder::add_mesh(const YamlBody& body)
+{
+    const TextFileReader reader(std::vector<std::string>(1, body.mesh));
+    const VectorOfPoint3dTriplet data = read_stl(reader.get_contents());
+    TriMeshBuilder builder(data);
+    ds.set<TriMesh>(body.name, builder.build());
+}
+
 void DataSourceBuilder::add_kinematics(const std::vector<YamlBody>& bodies)
 {
     std::vector<std::string> body_names;
@@ -103,6 +114,8 @@ DataSource DataSourceBuilder::build_ds()
 	FOR_EACH(input.bodies, add_initial_quaternions);
 	FOR_EACH(input.bodies, add_states);
 	FOR_EACH(input.bodies, add_forces);
+	FOR_EACH(input.bodies, add_mesh);
+
 	add_kinematics(input.bodies);
 
     return ds;

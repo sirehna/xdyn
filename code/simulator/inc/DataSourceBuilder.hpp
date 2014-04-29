@@ -22,6 +22,7 @@ class DataSourceBuilder
         void add_initial_quaternions(const YamlBody& body);
         void add_states(const YamlBody& body);
         void add_forces(const YamlBody& body);
+        void add_mesh(const YamlBody& body);
         void add_gravity(const std::string& body_name, const std::string& yaml, const double mass);
         void add_kinematics(const std::vector<YamlBody>& bodies);
 

@@ -10,9 +10,11 @@
 #include "DataSourceBuilder.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
+#include "STL_data.hpp"
 #include "EulerAngles.hpp"
 #include "rotation_matrix_builders.hpp"
 #include "Wrench.hpp"
+#include "TriMesh.hpp"
 
 #include <fstream>
 #include <Eigen/Geometry>
@@ -87,4 +89,11 @@ void DataSourceBuilderTest::make_stl_file(const std::string& data, const std::st
     file.open(filename.c_str());
     file << data;
     file.close();
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_mesh_of_each_body)
+{
+    make_stl_file(test_data::three_facets(), "anthineas.stl");
+    const TriMesh m = ds.get<TriMesh>("body 1");
+    ASSERT_EQ(3, m.facets.size());
 }
