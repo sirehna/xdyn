@@ -8,6 +8,8 @@
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
 
+#include <boost/geometry/geometries/register/point.hpp>
+
 double area(const std::vector<Eigen::Vector3d>& polygon)
 {
     const Eigen::Vector3d n1(polygon[1]-polygon[0]);
