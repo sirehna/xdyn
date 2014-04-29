@@ -8,13 +8,6 @@
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
 
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/register/point.hpp>
-
-using namespace boost::geometry;
-
-BOOST_GEOMETRY_REGISTER_POINT_3D(EPoint, double, cs::cartesian, x, y, z)
-
 double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C);
 double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C)
 {
@@ -32,11 +25,24 @@ double area(const VectorOfPoints& points)
     return a;
 }
 
+Eigen::Vector3d sum(const VectorOfPoints& points)
+{
+    VectorOfPoints::const_iterator it = points.begin();
+    Eigen::Vector3d compensation(0,0,0);
+    Eigen::Vector3d sum(0,0,0);
+    for (;it!=points.end() ; ++it)
+    {
+        const Eigen::Vector3d myTmp1 = *it - compensation;
+        const Eigen::Vector3d myTmp2 = sum + myTmp1;
+        compensation = (myTmp2 - sum) - myTmp1;
+        sum = myTmp2;
+    }
+    return sum;
+}
+
 Eigen::Vector3d barycenter(const VectorOfPoints& points)
 {
-    Eigen::Vector3d xyz;
-    xyz = (points[0]+points[1]+points[2])/3.0;
-    return xyz;
+    return sum(points)/points.size();
 }
 
 Eigen::Vector3d unit_normal(const VectorOfPoints& points)
