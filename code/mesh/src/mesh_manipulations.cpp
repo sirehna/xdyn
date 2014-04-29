@@ -15,11 +15,21 @@ using namespace boost::geometry;
 
 BOOST_GEOMETRY_REGISTER_POINT_3D(EPoint, double, cs::cartesian, x, y, z)
 
-double area(const VectorOfPoints& polygon)
+double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C);
+double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C)
 {
-    const Eigen::Vector3d n1(polygon[1]-polygon[0]);
-    const Eigen::Vector3d n2(polygon[2]-polygon[0]);
-    return 0.5*fabs((n1.cross(n2)).norm());
+    return 0.5*fabs(((B-A).cross(C-A)).norm());
+}
+
+double area(const VectorOfPoints& points)
+{
+    const size_t n = points.size();
+    double a = 0;
+    for (size_t i = 2 ; i < n ; ++i)
+    {
+        a += triangle_area(points.front(), points[i-1], points[i]);
+    }
+    return a;
 }
 
 Eigen::Vector3d barycenter(const VectorOfPoints& polygon)
