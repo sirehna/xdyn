@@ -13,7 +13,7 @@ std::vector<Facet> TriMeshBuilder::get_facets() const
 	return facets;
 }
 
-TriMeshBuilder::TriMeshBuilder(const VectorOfPoint3dTriplet& v_) : v(v_),
+TriMeshBuilder::TriMeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    index(0),
                                                                    nodes(Eigen::Matrix<double,3,Eigen::Dynamic>(Eigen::MatrixXd::Zero(3,3*v.size()))),
@@ -21,7 +21,7 @@ TriMeshBuilder::TriMeshBuilder(const VectorOfPoint3dTriplet& v_) : v(v_),
 {
 }
 
-TriMeshBuilder::TriMeshBuilder(const Point3dTriplet& tri) : v(VectorOfPoint3dTriplet(1,tri)),
+TriMeshBuilder::TriMeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1,tri)),
                                                             xyzMap(Vector3dMap()),
                                                             index(0),
                                                             nodes(Eigen::Matrix<double,3,Eigen::Dynamic>(Eigen::MatrixXd::Zero(3,3))),
@@ -36,52 +36,60 @@ TriMesh TriMeshBuilder::build()
 	return TriMesh(nodes, facets);
 }
 
-void TriMeshBuilder::operator()(const Point3dTriplet& tri)
+void TriMeshBuilder::operator()(const std::vector<Eigen::Vector3d>& tri)
 {
 	Facet facet;
     facet.unit_normal = unit_normal(tri);
     facet.area = area(tri);
     facet.barycenter = barycenter(tri);
-    facet.index[0] = build_one_point(tri.p1);
-    facet.index[1] = build_one_point(tri.p2);
-    facet.index[2] = build_one_point(tri.p3);
+    facet.index[0] = build_one_point(tri[0]);
+    facet.index[1] = build_one_point(tri[1]);
+    facet.index[2] = build_one_point(tri[2]);
     facets.push_back(facet);
 }
 
-Eigen::Vector3d TriMeshBuilder::barycenter(const Point3dTriplet& tri) const
+Eigen::Vector3d TriMeshBuilder::barycenter(const std::vector<Eigen::Vector3d>& tri) const
 {
 	Eigen::Vector3d xyz;
-	xyz = (tri.p1+tri.p2+tri.p3)/3.0;
+	xyz = (tri[0]+tri[1]+tri[2])/3.0;
 	return xyz;
 }
 
-Eigen::Vector3d TriMeshBuilder::unit_normal(const Point3dTriplet& tri) const
+Eigen::Vector3d TriMeshBuilder::unit_normal(const std::vector<Eigen::Vector3d>& tri) const
 {
 	const Eigen::Vector3d n = normal(tri);
 	const double norm = n.norm();
 	if (norm<1000*std::numeric_limits<double>::epsilon())
 	{
 	    std::stringstream ss;
-	    ss << "Input triangle is degenerated: cannot compute unit normal vector. The triangle is:" << std::endl
-	       << "p1 = " << tri.p1.transpose() << std::endl
-	       << "p2 = " << tri.p2.transpose() << std::endl
-	       << "p3 = " << tri.p3.transpose() << std::endl;
+	    ss << "Input is degenerated: cannot compute unit normal vector. The polygon is:" << std::endl;
+	    for (size_t i = 0 ; i < tri.size() ; ++i)
+	    {
+	      ss << "p[" << i << "] = " << tri[i].transpose() << std::endl;
+	    }
 	    THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
 	}
 	return n/norm;
 }
 
-Eigen::Vector3d TriMeshBuilder::normal(const Point3dTriplet& tri) const
+Eigen::Vector3d TriMeshBuilder::normal(const std::vector<Eigen::Vector3d>& tri) const
 {
-	const Eigen::Vector3d n1(tri.p2-tri.p1);
-	const Eigen::Vector3d n2(tri.p3-tri.p1);
+    if (tri.size() < 3)
+    {
+        std::stringstream ss;
+        ss << "Need at least three points to define a surface: cannot compute normal vector. Input has "
+           << tri.size() << " points.";
+       THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
+    }
+	const Eigen::Vector3d n1(tri[1]-tri[0]);
+	const Eigen::Vector3d n2(tri[2]-tri[0]);
 	return n1.cross(n2);
 }
 
-double TriMeshBuilder::area(const Point3dTriplet& tri) const
+double TriMeshBuilder::area(const std::vector<Eigen::Vector3d>& tri) const
 {
-	const Eigen::Vector3d n1(tri.p2-tri.p1);
-	const Eigen::Vector3d n2(tri.p3-tri.p1);
+	const Eigen::Vector3d n1(tri[1]-tri[0]);
+	const Eigen::Vector3d n2(tri[2]-tri[0]);
 	return 0.5*fabs((n1.cross(n2)).norm());
 }
 

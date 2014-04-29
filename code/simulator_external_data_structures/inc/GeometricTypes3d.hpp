@@ -5,17 +5,9 @@
 #include <vector>
 #include <Eigen/Dense>
 
-typedef std::vector<Eigen::Vector3d> VectorOfVector3d;
 
-struct Point3dTriplet
-{
-    Point3dTriplet():p1(Eigen::Vector3d()),p2(Eigen::Vector3d()),p3(Eigen::Vector3d()){}
-    Eigen::Vector3d p1;
-    Eigen::Vector3d p2;
-    Eigen::Vector3d p3;
-};
-
-typedef std::vector<Point3dTriplet> VectorOfPoint3dTriplet;
+typedef std::vector<Eigen::Vector3d> VectorOfPoints;
+typedef std::vector<VectorOfPoints> VectorOfVectorOfPoints;
 
 struct Facet
 {

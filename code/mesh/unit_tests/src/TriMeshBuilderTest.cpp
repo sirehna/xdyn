@@ -15,7 +15,7 @@ TEST_F(TriMeshBuilderTest, should_be_able_to_build_a_mesh_from_a_single_triangle
 
 TEST_F(TriMeshBuilderTest, adding_twice_a_triangle_should_not_change_the_number_of_nodes)
 {
-	VectorOfPoint3dTriplet triangles;
+	VectorOfVectorOfPoints triangles;
 	triangles.push_back(one_triangle());
 	triangles.push_back(one_triangle());
 	TriMesh m = TriMeshBuilder(triangles).build();

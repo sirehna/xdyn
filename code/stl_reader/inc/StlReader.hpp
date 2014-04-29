@@ -36,4 +36,4 @@
  *    Stereolithography Interface Specification,
  *    October 1989.
  */
-VectorOfPoint3dTriplet read_stl(const std::string& input);
+VectorOfVectorOfPoints read_stl(const std::string& input);

@@ -12,12 +12,9 @@ const char TOKEN_normal[] = "normal";
 
 struct ParserState;
 char* skipWhiteSpace(char *input);
-void readVertex(char *line, Eigen::Vector3d& vertices, ParserState& state);
+Eigen::Vector3d readVertex(char *line, ParserState& state);
 void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state);
-void readAsciiStl(
-    std::istream& input_stream,
-    VectorOfPoint3dTriplet& result,
-    ParserState &state);
+VectorOfVectorOfPoints readAsciiStl(std::istream& input_stream, ParserState &state);
 
 struct ParserState {
     ParserState(std::istream& istream):
@@ -50,16 +47,19 @@ char* skipWhiteSpace(char *input){
 /**
  * \brief reads a vertex from a line
  */
-void readVertex(char *line, Eigen::Vector3d& vertices, ParserState& state)
+Eigen::Vector3d readVertex(char *line, ParserState& state)
 {
+    Eigen::Vector3d ret;
     int width;
     char token[20];
     //char *str = skipWhiteSpace(line);
     /*int res = */sscanf(line, "%s%n", token, &width);
-    if (strcmp(token, TOKEN_vertex)){
+    if (strcmp(token, TOKEN_vertex))
+    {
         THROW(__PRETTY_FUNCTION__, StlReaderException, state.parseErrorString(TOKEN_vertex));
     }
-    sscanf(line+width,"%lf %lf %lf",&vertices(0),&vertices(1),&vertices(2));
+    sscanf(line+width,"%lf %lf %lf",&ret(0),&ret(1),&ret(2));
+    return ret;
 }
 
 void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state){
@@ -76,11 +76,11 @@ void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state){
 /**
  * \brief reads the ASCII file from a char input stream
  */
-void readAsciiStl(
+VectorOfVectorOfPoints readAsciiStl(
     std::istream& input_stream, //!<
-    VectorOfPoint3dTriplet& result,
     ParserState &state)
 {
+    VectorOfVectorOfPoints result;
     //Start by storing the current locale. This is retrieved by passing NULL to
     // setlocale
     std::string locale = setlocale(LC_ALL, NULL);
@@ -111,26 +111,27 @@ void readAsciiStl(
         // Set NEXT to point to just after this token.
         next = next + width;
         // FACET
-        Point3dTriplet face;
+        VectorOfPoints facet;
         if (!strcmp(token, "facet")){
+            std::vector<Eigen::Vector3d> facet;
             // Get the XYZ coordinates of the normal vector to the face.
             readNormal(next, normal, state);
             state.getLine(input);
             // Get the XYZ coordinates of the vertex1 vector
             state.getLine(input);
-            readVertex(input,face.p1, state);
+            facet.push_back(readVertex(input, state));
             // Get the XYZ coordinates of the vertex2 vector
             state.getLine(input);
-            readVertex(input,face.p2, state);
+            facet.push_back(readVertex(input, state));
             // Get the XYZ coordinates of the vertex3 vector
             state.getLine(input);
-            readVertex(input,face.p3, state);
+            facet.push_back(readVertex(input, state));
             // closeloop
             state.getLine(input);
             // endfacet
             state.getLine(input);
-            // save the facet in the vector
-            result.push_back(face);
+            //
+            result.push_back(facet);
         } else if (!strcmp(token, "color")) { // COLOR
             sscanf(next, "%*s %lf %lf %lf %lf", &r1, &r2, &r3, &r4);
         } else if (!strcmp(token, "solid")) { // SOLID
@@ -149,14 +150,12 @@ void readAsciiStl(
                  "A binary STL file must not have 'solid' keyword in header.");
     }
     setlocale(LC_ALL, locale.c_str());
-    return;
+    return result;
 }
 
-VectorOfPoint3dTriplet read_stl(const std::string& input)
+VectorOfVectorOfPoints read_stl(const std::string& input)
 {
     std::istringstream inputStream(input);
     ParserState state(inputStream);
-    VectorOfPoint3dTriplet result;
-    readAsciiStl(inputStream, result,state);
-    return result;
+    return readAsciiStl(inputStream, state);
 }

@@ -92,7 +92,7 @@ void DataSourceBuilder::add_gravity(const std::string& body_name, const std::str
 void DataSourceBuilder::add_mesh(const YamlBody& body)
 {
     const TextFileReader reader(std::vector<std::string>(1, body.mesh));
-    const VectorOfPoint3dTriplet data = read_stl(reader.get_contents());
+    const VectorOfVectorOfPoints data = read_stl(reader.get_contents());
     TriMeshBuilder builder(data);
     ds.set<TriMesh>(body.name, builder.build());
 }

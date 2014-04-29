@@ -3,8 +3,8 @@
 
 #include "GeometricTypes3d.hpp"
 
-Point3dTriplet one_triangle();
-Point3dTriplet degenerated_triangle();
-VectorOfPoint3dTriplet unit_cube();
+VectorOfPoints one_triangle();
+VectorOfPoints degenerated_triangle();
+VectorOfVectorOfPoints unit_cube();
 
 #endif
