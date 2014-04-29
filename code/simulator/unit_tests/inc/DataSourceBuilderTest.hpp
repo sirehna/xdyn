@@ -12,6 +12,8 @@ class DataSourceBuilderTest : public ::testing::Test
 	    virtual ~DataSourceBuilderTest();
         virtual void SetUp();
         virtual void TearDown();
+        void make_stl_file(const std::string& data, const std::string& filename) const;
+
 		DataGenerator a;
 		DataSource ds;
 };

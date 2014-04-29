@@ -14,6 +14,7 @@
 #include "rotation_matrix_builders.hpp"
 #include "Wrench.hpp"
 
+#include <fstream>
 #include <Eigen/Geometry>
 
 DataSourceBuilderTest::DataSourceBuilderTest() : a(DataGenerator(12)), ds(DataSource())
@@ -78,4 +79,12 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_force_of_eac
     ASSERT_DOUBLE_EQ(0,Fg.K);
     ASSERT_DOUBLE_EQ(0,Fg.M);
     ASSERT_DOUBLE_EQ(0,Fg.N);
+}
+
+void DataSourceBuilderTest::make_stl_file(const std::string& data, const std::string& filename) const
+{
+    std::ofstream file;
+    file.open(filename.c_str());
+    file << data;
+    file.close();
 }
