@@ -40,7 +40,7 @@ class TriMeshBuilder
 		std::vector<Facet> facets;
 
 		Eigen::Vector3d normal(const Point3dTriplet& tri) const;
-		bool unit_normal(const Point3dTriplet& tri, Eigen::Vector3d& unit_normal) const;
+		Eigen::Vector3d unit_normal(const Point3dTriplet& tri) const;
 		Eigen::Vector3d barycenter(const Point3dTriplet& tri) const;
 		double area(const Point3dTriplet& tri) const;
 		size_t build_one_point(const Eigen::Vector3d& xyz);

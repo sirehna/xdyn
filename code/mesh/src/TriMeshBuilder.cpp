@@ -39,15 +39,13 @@ TriMesh TriMeshBuilder::build()
 void TriMeshBuilder::operator()(const Point3dTriplet& tri)
 {
 	Facet facet;
-	if (unit_normal(tri,facet.unit_normal))
-	{
-		facet.area = area(tri);
-		facet.barycenter = barycenter(tri);
-		facet.index[0] = build_one_point(tri.p1);
-		facet.index[1] = build_one_point(tri.p2);
-		facet.index[2] = build_one_point(tri.p3);
-		facets.push_back(facet);
-	}
+    facet.unit_normal = unit_normal(tri);
+    facet.area = area(tri);
+    facet.barycenter = barycenter(tri);
+    facet.index[0] = build_one_point(tri.p1);
+    facet.index[1] = build_one_point(tri.p2);
+    facet.index[2] = build_one_point(tri.p3);
+    facets.push_back(facet);
 }
 
 Eigen::Vector3d TriMeshBuilder::barycenter(const Point3dTriplet& tri) const
@@ -57,7 +55,7 @@ Eigen::Vector3d TriMeshBuilder::barycenter(const Point3dTriplet& tri) const
 	return xyz;
 }
 
-bool TriMeshBuilder::unit_normal(const Point3dTriplet& tri, Eigen::Vector3d& unit_normal) const
+Eigen::Vector3d TriMeshBuilder::unit_normal(const Point3dTriplet& tri) const
 {
 	const Eigen::Vector3d n = normal(tri);
 	const double norm = n.norm();
@@ -69,10 +67,8 @@ bool TriMeshBuilder::unit_normal(const Point3dTriplet& tri, Eigen::Vector3d& uni
 	       << "p2 = " << tri.p2.transpose() << std::endl
 	       << "p3 = " << tri.p3.transpose() << std::endl;
 	    THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
-		return false;
 	}
-	unit_normal  = n/norm;
-	return true;
+	return n/norm;
 }
 
 Eigen::Vector3d TriMeshBuilder::normal(const Point3dTriplet& tri) const
