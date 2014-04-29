@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include "TriMeshBuilder.hpp"
+#include "MeshException.hpp"
 
 Eigen::Matrix<double,3,Eigen::Dynamic> TriMeshBuilder::get_nodes() const
 {
@@ -62,7 +63,12 @@ bool TriMeshBuilder::unit_normal(const Point3dTriplet& tri, Eigen::Vector3d& uni
 	const double norm = n.norm();
 	if (norm<1000*std::numeric_limits<double>::epsilon())
 	{
-		std::cout << "WARNING: in " << __PRETTY_FUNCTION__<< ": input triangle is degenerated" << std::endl;
+	    std::stringstream ss;
+	    ss << "Input triangle is degenerated: cannot compute unit normal vector. The triangle is:" << std::endl
+	       << "p1 = " << tri.p1.transpose() << std::endl
+	       << "p2 = " << tri.p2.transpose() << std::endl
+	       << "p3 = " << tri.p3.transpose() << std::endl;
+	    THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
 		return false;
 	}
 	unit_normal  = n/norm;

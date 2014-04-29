@@ -51,11 +51,10 @@ TEST_F(TriMeshBuilderTest, should_be_able_to_evaluate_the_area_of_a_single_trian
 	ASSERT_DOUBLE_EQ(0.5*sqrt(v(0)*v(0)+v(1)*v(1)+v(2)*v(2)),m.facets.at(0).area);
 }
 
-TEST_F(TriMeshBuilderTest, should_not_add_degenerated_triangles_to_mesh)
+TEST_F(TriMeshBuilderTest, should_throw_if_a_triangle_is_degenerated)
 {
-	const TriMesh m = TriMeshBuilder(degenerated_triangle()).build();
-	ASSERT_TRUE(m.facets.empty());
-	ASSERT_EQ(0, m.nodes.size());
+    TriMeshBuilder builder(degenerated_triangle());
+    ASSERT_THROW(builder.build(), MeshException);
 }
 
 TEST_F(TriMeshBuilderTest, should_be_able_to_evaluate_the_normal_of_a_single_triangle)
