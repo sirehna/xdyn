@@ -6,6 +6,39 @@
 
 #include <Eigen/Dense>
 
+struct EPoint : public Eigen::Vector3d
+{
+    EPoint() : Eigen::Vector3d(), x((*this)[0]), y((*this)[1]), z((*this)[2])
+    {
+    }
+
+    EPoint(const double x_, const double y_, const double z_) : Eigen::Vector3d(x_,y_,z_), x((*this)[0]), y((*this)[1]), z((*this)[2])
+    {
+    }
+
+    EPoint(const EPoint& rhs) : Eigen::Vector3d(rhs), x((*this)[0]), y((*this)[1]), z((*this)[2])
+    {
+    }
+
+    EPoint& operator=(const EPoint& rhs)
+    {
+        if (&rhs != this)
+        {
+            (*this)[0] = rhs[0];
+            (*this)[1] = rhs[1];
+            (*this)[2] = rhs[2];
+            x = (*this)[0];
+            y = (*this)[1];
+            z = (*this)[2];
+        }
+        return *this;
+    }
+
+    double& x;
+    double& y;
+    double& z;
+};
+
 typedef std::vector<Eigen::Vector3d> VectorOfPoints;
 typedef std::vector<VectorOfPoints> VectorOfVectorOfPoints;
 
