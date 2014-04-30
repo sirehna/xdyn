@@ -3,6 +3,7 @@ PROJECT(hydro_models)
 
 SET(SRC src/DefaultWaveModel.cpp
         src/WaveModelInterface.cpp
+        src/hydrostatic.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
