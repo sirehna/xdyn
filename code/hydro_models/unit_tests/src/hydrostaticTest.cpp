@@ -34,3 +34,12 @@ TEST_F(hydrostaticTest, can_tell_if_three_points_are_totally_immerged_or_not)
     ASSERT_FALSE(totally_immerged(index, v));
 //! [hydrostaticTest totally_immerged_example]
 }
+
+TEST_F(hydrostaticTest, can_compute_average_immersion)
+{
+//! [hydrostaticTest average_immersion_example]
+    size_t index[3]; index[0] = 0; index[1] = 1; index[2] = 2;
+    const std::vector<double> v({-1,2,5});
+    ASSERT_DOUBLE_EQ(2, average_immersion(index, v));
+//! [hydrostaticTest average_immersion_example]
+}

@@ -23,6 +23,17 @@ namespace hydrostatic
     bool totally_immerged(const size_t idx[3], //!< Indices to check
                           const std::vector<double>& delta_z //!< Vector of relative wave heights (positive if point is immerged)
                           );
+
+    /**  \author cec
+      *  \date Apr 30, 2014, 10:10:40 AM
+      *  \brief Comptues average relative immersion of three points
+      *  \details Needs the indices of those points & a vector of relative heights.
+      *  \returns Average relative immersion
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest average_immersion_example
+      */
+    double average_immersion(const size_t idx[3], //!< Indices of the points
+                             const std::vector<double>& delta_z //!< Vector of relative wave heights (positive if point is immerged)
+                            );
 }
 
 #endif /* HYDROSTATIC_HPP_ */
