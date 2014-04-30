@@ -15,6 +15,7 @@
 #include "rotation_matrix_builders.hpp"
 #include "Wrench.hpp"
 #include "TriMesh.hpp"
+#include "PointMatrix.hpp"
 
 #include <fstream>
 #include <Eigen/Geometry>
@@ -82,13 +83,22 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_force_of_eac
     ASSERT_DOUBLE_EQ(0,Fg.M);
     ASSERT_DOUBLE_EQ(0,Fg.N);
 }
+#include <sys/stat.h>
+inline bool file_exists(const std::string& name);
+inline bool file_exists(const std::string& name)
+{
+    struct stat buffer;
+    return (stat (name.c_str(), &buffer) == 0);
+}
 
 void DataSourceBuilderTest::make_stl_file(const std::string& data, const std::string& filename) const
 {
-    std::ofstream file;
-    file.open(filename.c_str());
-    file << data;
-    file.close();
+    if (not(file_exists(filename)))
+    {
+        std::ofstream file;
+        file.open(filename.c_str());
+        file << data;
+    }
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_mesh_of_each_body)
@@ -96,4 +106,13 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_mesh_of_each_body)
     make_stl_file(test_data::three_facets(), "anthineas.stl");
     const TriMesh m = ds.get<TriMesh>("body 1");
     ASSERT_EQ(3, m.facets.size());
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_PointMatrix_for_each_body)
+{
+    make_stl_file(test_data::three_facets(), "anthineas.stl");
+    const PointMatrix P = ds.get<PointMatrix>("body 1");
+    ASSERT_EQ(3, P.m.rows());
+    ASSERT_EQ(7, P.m.cols());
+    ASSERT_EQ("body 1", P.get_frame());
 }

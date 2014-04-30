@@ -26,6 +26,11 @@ using namespace kinematics;
 			                         v.end(),\
 			                         boost::bind(&DataSourceBuilder::f, boost::ref(*this), _1));
 
+MODULE(PointMatrixBuilder, const std::string name = get_name();\
+                           const TriMesh T = ds->get<TriMesh>(name);\
+                           ds->set<PointMatrix>(name, PointMatrix(T.nodes,name));
+      )
+
 DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in), ds(DataSource())
 {
 }
@@ -95,6 +100,7 @@ void DataSourceBuilder::add_mesh(const YamlBody& body)
     const VectorOfVectorOfPoints data = read_stl(reader.get_contents());
     TriMeshBuilder builder(data);
     ds.set<TriMesh>(body.name, builder.build());
+    ds.add<PointMatrixBuilder>(body.name);
 }
 
 void DataSourceBuilder::add_kinematics(const std::vector<YamlBody>& bodies)
