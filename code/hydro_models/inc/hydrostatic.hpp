@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <cstddef> //size_t
+#include <utility> //std::pair
 #include <Eigen/Dense>
 
 namespace hydrostatic
@@ -45,6 +46,16 @@ namespace hydrostatic
                                                                   const size_t idx[3], //!< Indices of the points
                                                                   const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
                                                                   );
+
+    /**  \author cec
+      *  \date Apr 30, 2014, 11:41:54 AM
+      *  \brief Computes the index of the first & the last positive values in a vector
+      *  \details This is just a wrapper for std::find_first_of & std::find_last_of but the semantics are clearer in this context if we create a function
+      *  \returns Pair of indexes: first is index of first emerged point & second is index of last emerged point.
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest first_and_last_emerged_points_example
+      */
+    std::pair<size_t,size_t> first_and_last_emerged_points(const std::vector<double>& z //!< List of immersions
+                                                          );
 
 }
 

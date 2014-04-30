@@ -45,6 +45,18 @@ TEST_F(hydrostaticTest, can_compute_average_immersion)
 //! [hydrostaticTest average_immersion_example]
 }
 
+TEST_F(hydrostaticTest, can_find_index_of_first_and_last_emerged_points)
+{
+    const std::vector<double> v1({1,2,-3,4,-5,6,7,-8});
+    const std::vector<double> v2({-1,-2,3,4,-5,6,-7,8});
+    const std::pair<size_t,size_t> idx1 = first_and_last_emerged_points(v1);
+    const std::pair<size_t,size_t> idx2 = first_and_last_emerged_points(v2);
+    ASSERT_EQ(2,idx1.first);
+    ASSERT_EQ(2,idx1.second);
+    ASSERT_EQ(0,idx2.first);
+    ASSERT_EQ(1,idx2.second);
+}
+
 TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_all_points_are_immerged)
 {
     Eigen::Matrix<double,3,3> M;

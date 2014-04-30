@@ -10,6 +10,7 @@
 #include "HydrostaticException.hpp"
 
 #include <algorithm> // std::count_if
+#include <iterator>  // std::distance
 
 using namespace hydrostatic;
 
@@ -25,7 +26,26 @@ double hydrostatic::average_immersion(const size_t idx[3], const std::vector<dou
 }
 
 bool positive (const double x);
-bool positive (const double x) { return x>0; }
+bool positive (const double x) { return x>=0; }
+bool negative (const double x);
+bool negative (const double x) { return x<0; }
+
+std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::vector<double>& z)
+{
+    if (z.empty())
+    {
+        THROW(__PRETTY_FUNCTION__, HydrostaticException, "z is empty");
+    }
+    std::vector<double>::const_iterator it = std::find_if(z.begin(), z.end(), negative);
+    if (it == z.end())
+    {
+        THROW(__PRETTY_FUNCTION__, HydrostaticException, "All points are immerged");
+    }
+    const size_t first = std::distance(z.begin(),it);
+    it  = std::find_if(it, z.end(), positive);
+    const size_t last = it==z.end() ? z.size() : std::distance(z.begin(),it);
+    return std::make_pair(first,last-1);
+}
 
 void make_sure_some_points_are_immerged_and_some_are_not(const size_t idx[3], const std::vector<double>& v);
 void make_sure_some_points_are_immerged_and_some_are_not(const size_t idx[3], const std::vector<double>& v)
