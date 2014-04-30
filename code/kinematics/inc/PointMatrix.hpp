@@ -10,6 +10,7 @@ class Point;
 class PointMatrix
 {
     public:
+        PointMatrix();
         PointMatrix(const std::string& frame, const size_t nb_of_columns);
         PointMatrix(const Matrix3Xd& m,const std::string& frame);
         Matrix3Xd m;
@@ -17,7 +18,6 @@ class PointMatrix
         PointMatrix operator+(const Point& P) const;
 
     private:
-        PointMatrix();
         std::string frame;
 };
 

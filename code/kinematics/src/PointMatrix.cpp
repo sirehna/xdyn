@@ -1,6 +1,10 @@
 #include "PointMatrix.hpp"
 #include "Point.hpp"
 
+PointMatrix::PointMatrix() : m(Matrix3Xd()), frame("")
+{
+}
+
 PointMatrix::PointMatrix(const std::string& frame_, const size_t nb_of_columns) : m(Matrix3Xd()), frame(frame_)
 {
     m.resize(3,nb_of_columns);
