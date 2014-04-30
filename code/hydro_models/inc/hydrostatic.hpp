@@ -25,5 +25,4 @@ namespace hydrostatic
                           );
 }
 
-
 #endif /* HYDROSTATIC_HPP_ */

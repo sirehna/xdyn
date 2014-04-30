@@ -26,16 +26,11 @@ void hydrostaticTest::TearDown()
 
 using namespace hydrostatic;
 
-TEST_F(hydrostaticTest, should_be_able_to_compute_type_of_immersion)
+TEST_F(hydrostaticTest, can_tell_if_three_points_are_totally_immerged_or_not)
 {
-//! [hydrostaticTest type_of_immersion]
+//! [hydrostaticTest totally_immerged_example]
     size_t index[3]; index[0] = 0; index[1] = 1; index[2] = 2;
     const std::vector<double> v({-1,2,3});
-//! [hydrostaticTest type_of_immersion]
-//! [hydrostaticTest type_of_immersion output]
     ASSERT_FALSE(totally_immerged(index, v));
-//! [hydrostaticTest type_of_immersion output]
+//! [hydrostaticTest totally_immerged_example]
 }
-
-
-
