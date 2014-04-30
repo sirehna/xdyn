@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <cstddef> //size_t
+#include <Eigen/Dense>
 
 namespace hydrostatic
 {
@@ -34,6 +35,17 @@ namespace hydrostatic
     double average_immersion(const size_t idx[3], //!< Indices of the points
                              const std::vector<double>& delta_z //!< Vector of relative wave heights (positive if point is immerged)
                             );
+    /**  \author cec
+      *  \date Apr 30, 2014, 11:03:52 AM
+      *  \brief Computes the immerged polygon from a facet
+      *  \returns Coordinate matrix (one point per column)
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest immerged_polygon_example
+      */
+    Eigen::Matrix<double,3,Eigen::Dynamic> immerged_polygon(const Eigen::Matrix<double,3,Eigen::Dynamic>& M, //!< Matrix containing all the points in the mesh
+                                                                  const size_t idx[3], //!< Indices of the points
+                                                                  const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
+                                                                  );
+
 }
 
 #endif /* HYDROSTATIC_HPP_ */
