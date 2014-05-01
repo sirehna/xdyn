@@ -74,14 +74,42 @@ Eigen::Matrix<double,3,Eigen::Dynamic> hydrostatic::immerged_polygon(const Eigen
                                                                      const std::vector<double>& v)
 {
     make_sure_some_points_are_immerged_and_some_are_not(idx, v);
-    return M;
+    const size_t n = 3;
+    std::vector<double> dz(n,0);
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        dz[i] = v.at(idx[i]);
+    }
+    const std::vector<size_t> idx_(idx,idx+3);
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points(dz);
+    const size_t idxA = first_and_last.first;
+    const size_t idxB = first_and_last.second;
+    const size_t idxA1 = next(idx_, idxA);
+    const size_t idxB1 = next(idx_, idxB);
+    const EPoint A = M.col(idxA);
+    const EPoint A1 = M.col(idxA1);
+    const EPoint B = M.col(idxB);
+    const EPoint B1 = M.col(idxB1);
+    const EPoint P = intersection(A,v[idxA],A1,v[idxA1]);
+    const EPoint Q = intersection(B,v[idxB],B1,v[idxB1]);
+    Eigen::Matrix<double,3,Eigen::Dynamic> ret;
+    ret.resize(3,n-(idxB-idxA+1));
+    size_t k = 0;
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        if (i < idxA) ret.col(k++) = M.col(i);
+        if (i == idxA) ret.col(k++) = P;
+        if (i == idxB) ret.col(k++) = Q;
+        if (i > idxB) ret.col(k++) = M.col(i);
+    }
+    return ret;
 }
 
 EPoint hydrostatic::intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB)
 {
     if (dzA*dzB>=0)
     {
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, "zB & zA must have different sizes");
+        THROW(__PRETTY_FUNCTION__, HydrostaticException, "zB & zA must have different signs");
     }
     const double xA = A(0);
     const double xB = B(0);
