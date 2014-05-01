@@ -73,6 +73,17 @@ namespace hydrostatic
                         const double dzB  //<! Relative immersion of second point
                            );
 
+    /**  \author cec
+      *  \date May 1, 2014, 2:04:40 PM
+      *  \brief Computes the successor index in an array of available indices.
+      *  \details Throws if i0 is not in idx.
+      *  \returns The index immediately after, or the first index if received the last one
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest next_example
+      */
+    size_t next(const std::vector<size_t>& idx, //!< Available indices, in order
+                const size_t i0 //!< Index to look for in 'idx'.
+                           );
+
 }
 
 #endif /* HYDROSTATIC_HPP_ */
