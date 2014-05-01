@@ -55,6 +55,15 @@ TEST_F(hydrostaticTest, can_find_the_next_point)
     ASSERT_EQ(1, next(idx,8));
 }
 
+TEST_F(hydrostaticTest, can_find_the_previous_point)
+{
+    const std::vector<size_t> idx({1,3,8});
+    ASSERT_THROW(previous(idx, 2), HydrostaticException);
+    ASSERT_EQ(8, previous(idx,1));
+    ASSERT_EQ(1, previous(idx,3));
+    ASSERT_EQ(3, previous(idx,8));
+}
+
 TEST_F(hydrostaticTest, can_find_index_of_first_and_last_emerged_points)
 {
     const std::vector<double> v1({1,2,-3,4,-5,6,7,-8});

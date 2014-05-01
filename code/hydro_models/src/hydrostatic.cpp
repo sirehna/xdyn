@@ -141,3 +141,20 @@ size_t hydrostatic::next(const std::vector<size_t>& idx, const size_t i0)
     THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
     return 0;
 }
+
+size_t hydrostatic::previous(const std::vector<size_t>& idx, const size_t i0)
+{
+    const size_t n = idx.size();
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        if (i0 == idx[i])
+        {
+            if (i== 0) return idx[n-1];
+            else       return idx[i-1];
+        }
+    }
+    std::stringstream ss;
+    ss << "Unable to find index " << i0 << " in list.";
+    THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
+    return 0;
+}

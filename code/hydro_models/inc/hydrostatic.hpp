@@ -84,6 +84,17 @@ namespace hydrostatic
                 const size_t i0 //!< Index to look for in 'idx'.
                            );
 
+    /**  \author cec
+      *  \date May 1, 2014, 2:56:02 PM
+      *  \brief Computes the predecessor index in an array of available indices.
+      *  \details Throws if i0 is not in idx.
+      *  \returns The index immediately before, or the last index if received the first one
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest previous_example
+      */
+    size_t previous(const std::vector<size_t>& idx, //!< Available indices, in order
+                    const size_t i0 //!< Index to look for in 'idx'.
+                       );
+
 }
 
 #endif /* HYDROSTATIC_HPP_ */
