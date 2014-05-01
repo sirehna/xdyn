@@ -10,6 +10,7 @@ INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${exception_handling_INCLUDE_DIRS})
 include_directories(${kinematics_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
+include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME}_static STATIC ${SRC})
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")

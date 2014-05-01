@@ -13,6 +13,8 @@
 #include <utility> //std::pair
 #include <Eigen/Dense>
 
+#include "GeometricTypes3d.hpp"
+
 namespace hydrostatic
 {
     /**  \author cec
@@ -56,6 +58,20 @@ namespace hydrostatic
       */
     std::pair<size_t,size_t> first_and_last_emerged_points(const std::vector<double>& z //!< List of immersions
                                                           );
+
+    /**  \author cec
+      *  \date Apr 30, 2014, 12:40:15 PM
+      *  \brief Given two points A, B & their relative immersions, give intersection with free surface
+      *  \details The points must not both be emerged or immerged.
+      *           This function assumes that the surface is a plane.
+      *  \returns A point intersecting (AB) and the free surface
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest intersection_example
+      */
+    EPoint intersection(const EPoint& A,  //<! First point
+                        const double dzA, //<! Relative immersion of first point
+                        const EPoint& B,  //<! Second point
+                        const double dzB  //<! Relative immersion of second point
+                           );
 
 }
 

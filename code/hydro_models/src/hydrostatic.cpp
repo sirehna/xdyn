@@ -76,3 +76,23 @@ Eigen::Matrix<double,3,Eigen::Dynamic> hydrostatic::immerged_polygon(const Eigen
     make_sure_some_points_are_immerged_and_some_are_not(idx, v);
     return M;
 }
+
+EPoint hydrostatic::intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB)
+{
+    if (dzA*dzB>=0)
+    {
+        THROW(__PRETTY_FUNCTION__, HydrostaticException, "zB & zA must have different sizes");
+    }
+    const double xA = A(0);
+    const double xB = B(0);
+    const double yA = A(1);
+    const double yB = B(1);
+    const double zA = A(2);
+    const double zB = B(2);
+    const double k = dzA/(dzA-dzB);
+    return EPoint(xA + k*(xB-xA),
+                  yA + k*(yB-yA),
+                  zA + k*(zB-zA)
+                  );
+
+}

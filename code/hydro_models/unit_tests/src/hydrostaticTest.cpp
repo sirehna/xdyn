@@ -75,6 +75,42 @@ TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_all_points_are_immerged
     ASSERT_THROW(immerged_polygon(M, index, v), HydrostaticException);
 }
 
+TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface)
+{
+    const EPoint A(1,5,9);
+    const EPoint B(98,2,0);
+    const double dzA = 77;
+    const double dzB = -1;
+    const EPoint I = intersection(A, dzA, B, dzB);
+    ASSERT_DOUBLE_EQ(77./78.*97+1, I(0));
+    ASSERT_DOUBLE_EQ(5-77./78.*3, I(1));
+    ASSERT_DOUBLE_EQ(9-77./78.*9, I(2));
+}
+
+TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface_second_test)
+{
+    const EPoint A(-98,-2,9);
+    const EPoint B(98,2,-9);
+    const double dzA = 9;
+    const double dzB = -9;
+    const EPoint I = intersection(A, dzA, B, dzB);
+    ASSERT_DOUBLE_EQ(0, I(0));
+    ASSERT_DOUBLE_EQ(0, I(1));
+    ASSERT_DOUBLE_EQ(0, I(2));
+}
+
+TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface_third_test)
+{
+    const EPoint A(-1,-2,10);
+    const EPoint B(99,2,-10);
+    const double dzA = 1;
+    const double dzB = -3;
+    const EPoint I = intersection(A, dzA, B, dzB);
+    ASSERT_DOUBLE_EQ(24, I(0));
+    ASSERT_DOUBLE_EQ(-1, I(1));
+    ASSERT_DOUBLE_EQ(5, I(2));
+}
+
 TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_no_points_are_immerged)
 {
     Eigen::Matrix<double,3,3> M;
