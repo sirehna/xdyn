@@ -84,7 +84,7 @@ Eigen::Matrix<double,3,Eigen::Dynamic> hydrostatic::immerged_polygon(const Eigen
     const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points(dz);
     const size_t idxA = first_and_last.first;
     const size_t idxB = first_and_last.second;
-    const size_t idxA1 = next(idx_, idxA);
+    const size_t idxA1 = previous(idx_, idxA);
     const size_t idxB1 = next(idx_, idxB);
     const EPoint A = M.col(idxA);
     const EPoint A1 = M.col(idxA1);
@@ -92,15 +92,32 @@ Eigen::Matrix<double,3,Eigen::Dynamic> hydrostatic::immerged_polygon(const Eigen
     const EPoint B1 = M.col(idxB1);
     const EPoint P = intersection(A,v[idxA],A1,v[idxA1]);
     const EPoint Q = intersection(B,v[idxB],B1,v[idxB1]);
+    const size_t N = (idxB>=idxA) ? n-(idxB-idxA-1) : idxA-idxB+2;
     Eigen::Matrix<double,3,Eigen::Dynamic> ret;
-    ret.resize(3,n-(idxB-idxA+1));
+    ret.resize(3,N);
     size_t k = 0;
-    for (size_t i = 0 ; i < n ; ++i)
+
+    if (idxA<idxB)
     {
-        if (i < idxA) ret.col(k++) = M.col(i);
-        if (i == idxA) ret.col(k++) = P;
-        if (i == idxB) ret.col(k++) = Q;
-        if (i > idxB) ret.col(k++) = M.col(i);
+        for (size_t i = 0 ; i < idxA ; ++i)
+        {
+            ret.col(k++) = M.col(i);
+        }
+        ret.col(k++) = P;
+        ret.col(k++) = Q;
+        for (size_t i = idxB+1 ; i < n ; ++i)
+        {
+            ret.col(k++) = M.col(i);
+        }
+    }
+    else
+    {
+        ret.col(k++) = Q;
+        for (size_t i = idxB1 ; i <= idxA1 ; ++i)
+        {
+            ret.col(k++) = M.col(i);
+        }
+        ret.col(k++) = P;
     }
     return ret;
 }
