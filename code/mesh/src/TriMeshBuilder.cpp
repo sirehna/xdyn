@@ -43,9 +43,10 @@ void TriMeshBuilder::operator()(const VectorOfPoints& tri)
     facet.unit_normal = unit_normal(tri);
     facet.area = area(tri);
     facet.barycenter = barycenter(tri);
-    facet.index[0] = build_one_point(tri[0]);
-    facet.index[1] = build_one_point(tri[1]);
-    facet.index[2] = build_one_point(tri[2]);
+    for (VectorOfPoints::const_iterator it = tri.begin() ; it != tri.end() ; ++it)
+    {
+        facet.index.push_back(build_one_point(*it));
+    }
     facets.push_back(facet);
 }
 

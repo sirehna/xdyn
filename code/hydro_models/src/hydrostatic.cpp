@@ -15,14 +15,23 @@
 using namespace hydrostatic;
 
 
-bool hydrostatic::totally_immerged(const size_t idx[3], const std::vector<double>& delta_z)
+bool hydrostatic::totally_immerged(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
-    return (delta_z.at(idx[0]) > 0) and (delta_z.at(idx[1]) > 0) and (delta_z.at(idx[2]) > 0);
+    for (size_t i = 0 ; i < idx.size() ; ++i)
+    {
+        if (delta_z.at(idx[i]) < 0) return false;
+    }
+    return true;
 }
 
-double hydrostatic::average_immersion(const size_t idx[3], const std::vector<double>& delta_z)
+double hydrostatic::average_immersion(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
-    return (delta_z.at(idx[0]) + delta_z.at(idx[1]) + delta_z.at(idx[2]))/3.;
+    double average = 0;
+    for (size_t i = 0 ; i < idx.size() ; ++i)
+    {
+        average += delta_z.at(idx[i]);
+    }
+    return average/idx.size();
 }
 
 bool positive (const double x);
@@ -47,10 +56,10 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
     return std::make_pair(first,last-1);
 }
 
-void make_sure_some_points_are_immerged_and_some_are_not(const size_t idx[3], const std::vector<double>& v);
-void make_sure_some_points_are_immerged_and_some_are_not(const size_t idx[3], const std::vector<double>& v)
+void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_t>& idx, const std::vector<double>& v);
+void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_t>& idx, const std::vector<double>& v)
 {
-    const size_t n = 3;
+    const size_t n = idx.size();
     std::vector<double> z(n,0);
     for (size_t i = 0 ; i < n ; ++i)
     {
@@ -70,22 +79,21 @@ void make_sure_some_points_are_immerged_and_some_are_not(const size_t idx[3], co
 }
 
 Eigen::Matrix<double,3,Eigen::Dynamic> hydrostatic::immerged_polygon(const Eigen::Matrix<double,3,Eigen::Dynamic>& M,
-                                                                     const size_t idx[3],
+                                                                     const std::vector<size_t>& idx,
                                                                      const std::vector<double>& v)
 {
     make_sure_some_points_are_immerged_and_some_are_not(idx, v);
-    const size_t n = 3;
+    const size_t n = idx.size();
     std::vector<double> dz(n,0);
     for (size_t i = 0 ; i < n ; ++i)
     {
         dz[i] = v.at(idx[i]);
     }
-    const std::vector<size_t> idx_(idx,idx+3);
     const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points(dz);
     const size_t idxA = first_and_last.first;
     const size_t idxB = first_and_last.second;
-    const size_t idxA1 = previous(idx_, idxA);
-    const size_t idxB1 = next(idx_, idxB);
+    const size_t idxA1 = previous(idx, idxA);
+    const size_t idxB1 = next(idx, idxB);
     const EPoint A = M.col(idxA);
     const EPoint A1 = M.col(idxA1);
     const EPoint B = M.col(idxB);

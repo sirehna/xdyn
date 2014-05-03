@@ -12,8 +12,8 @@ typedef std::vector<VectorOfPoints> VectorOfVectorOfPoints;
 
 struct Facet
 {
-    Facet():index(),unit_normal(Eigen::Vector3d()),barycenter(Eigen::Vector3d()),area(0.0){}
-    size_t index[3];
+    Facet():index(std::vector<size_t>()),unit_normal(Eigen::Vector3d()),barycenter(Eigen::Vector3d()),area(0.0){}
+    std::vector<size_t> index;
     Eigen::Vector3d unit_normal;
     Eigen::Vector3d barycenter;
     double area;

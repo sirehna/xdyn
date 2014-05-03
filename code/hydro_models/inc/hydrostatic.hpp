@@ -24,7 +24,7 @@ namespace hydrostatic
       *  \returns True if all three points are immerged, false otherwise.
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest totally_immerged_example
       */
-    bool totally_immerged(const size_t idx[3], //!< Indices to check
+    bool totally_immerged(const std::vector<size_t>& idx, //!< Indices to check
                           const std::vector<double>& delta_z //!< Vector of relative wave heights (positive if point is immerged)
                           );
 
@@ -35,7 +35,7 @@ namespace hydrostatic
       *  \returns Average relative immersion
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest average_immersion_example
       */
-    double average_immersion(const size_t idx[3], //!< Indices of the points
+    double average_immersion(const std::vector<size_t>& idx, //!< Indices of the points
                              const std::vector<double>& delta_z //!< Vector of relative wave heights (positive if point is immerged)
                             );
     /**  \author cec
@@ -45,8 +45,8 @@ namespace hydrostatic
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest immerged_polygon_example
       */
     Eigen::Matrix<double,3,Eigen::Dynamic> immerged_polygon(const Eigen::Matrix<double,3,Eigen::Dynamic>& M, //!< Matrix containing all the points in the mesh
-                                                                  const size_t idx[3], //!< Indices of the points
-                                                                  const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
+                                                            const std::vector<size_t>& idx, //!< Indices of the points
+                                                            const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
                                                                   );
 
     /**  \author cec
