@@ -51,7 +51,7 @@ EPoint readVertex(char *line, ParserState& state)
 {
     EPoint ret;
     int width;
-    char token[20];
+    char token[20] = "";
     //char *str = skipWhiteSpace(line);
     /*int res = */sscanf(line, "%s%n", token, &width);
     if (strcmp(token, TOKEN_vertex))
