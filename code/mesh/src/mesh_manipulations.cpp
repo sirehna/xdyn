@@ -25,21 +25,6 @@ double area(const VectorOfPoints& points)
     return a;
 }
 
-Eigen::Vector3d sum(const VectorOfPoints& points)
-{
-    VectorOfPoints::const_iterator it = points.begin();
-    Eigen::Vector3d compensation(0,0,0);
-    Eigen::Vector3d sum(0,0,0);
-    for (;it!=points.end() ; ++it)
-    {
-        const Eigen::Vector3d myTmp1 = *it - compensation;
-        const Eigen::Vector3d myTmp2 = sum + myTmp1;
-        compensation = (myTmp2 - sum) - myTmp1;
-        sum = myTmp2;
-    }
-    return sum;
-}
-
 Eigen::Vector3d barycenter(const VectorOfPoints& points)
 {
     return sum(points)/points.size();
