@@ -127,34 +127,84 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_two_immerged_node)
     ASSERT_DOUBLE_EQ(6,polygon(2,3));
 //! [hydrostaticTest immerged_polygon_example_2]
 }
-/*
-TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_immerged_nodes_are_the_first_nodes)
-{
-//! [hydrostaticTest immerged_polygon_example_2]
-    Eigen::Matrix<double,3,5> M;
-    M(0,0) = 1; M(0,1) = 2; M(0,2) = 4; M(0,3) = 5; M(0,4) = 7;
-    M(1,0) = 1; M(1,1) = 3; M(1,2) = 4; M(1,3) = 6; M(1,4) = 7;
-    M(2,0) = 2; M(2,1) = 3; M(2,2) = 5; M(2,3) = 6; M(2,4) = 8;
 
-    size_t index[];
-    index[0] = 0; index[1] = 1; index[2] = 2;
-    const std::vector<double> v({-1,1,1});
+TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_first_nodes)
+{
+    Eigen::Matrix<double,3,5> M;
+    M(0,0) = 1; M(0,1) = 2; M(0,2) = 4; M(0,3) = 5; M(0,4) = 9;
+    M(1,0) = 1; M(1,1) = 3; M(1,2) = 4; M(1,3) = 6; M(1,4) = 9;
+    M(2,0) = 2; M(2,1) = 3; M(2,2) = 5; M(2,3) = 6; M(2,4) = 11;
+
+    std::vector<size_t> index(5);
+    index[0] = 0; index[1] = 1; index[2] = 2; index[3] = 3; index[4] = 4;
+    const std::vector<double> v({-1,-1,-1,1,1});
     const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v);
     ASSERT_EQ(4, polygon.cols());
-    ASSERT_DOUBLE_EQ(2.5,polygon(0,0));
-    ASSERT_DOUBLE_EQ(3.5,polygon(1,0));
-    ASSERT_DOUBLE_EQ(4.5,polygon(2,0));
-    ASSERT_DOUBLE_EQ(4,polygon(0,1));
-    ASSERT_DOUBLE_EQ(6,polygon(1,1));
-    ASSERT_DOUBLE_EQ(6,polygon(2,1));
+    ASSERT_DOUBLE_EQ(5,polygon(0,0));
+    ASSERT_DOUBLE_EQ(5,polygon(1,0));
+    ASSERT_DOUBLE_EQ(6.5,polygon(2,0));
+    ASSERT_DOUBLE_EQ(4.5,polygon(0,1));
+    ASSERT_DOUBLE_EQ(5,polygon(1,1));
+    ASSERT_DOUBLE_EQ(5.5,polygon(2,1));
+    ASSERT_DOUBLE_EQ(5,polygon(0,2));
+    ASSERT_DOUBLE_EQ(6,polygon(1,2));
+    ASSERT_DOUBLE_EQ(6,polygon(2,2));
+    ASSERT_DOUBLE_EQ(9,polygon(0,3));
+    ASSERT_DOUBLE_EQ(9,polygon(1,3));
+    ASSERT_DOUBLE_EQ(11,polygon(2,3));
+}
+
+TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_last_nodes)
+{
+    Eigen::Matrix<double,3,5> M;
+    M(0,0) = 1; M(0,1) = 2; M(0,2) = 4; M(0,3) = 5; M(0,4) = 9;
+    M(1,0) = 1; M(1,1) = 3; M(1,2) = 4; M(1,3) = 6; M(1,4) = 9;
+    M(2,0) = 2; M(2,1) = 3; M(2,2) = 5; M(2,3) = 6; M(2,4) = 11;
+
+    std::vector<size_t> index(5);
+    index[0] = 0; index[1] = 1; index[2] = 2; index[3] = 3; index[4] = 4;
+    const std::vector<double> v({1,1,-1,-1,-1});
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v);
+    ASSERT_EQ(4, polygon.cols());
+    ASSERT_DOUBLE_EQ(1,polygon(0,0));
+    ASSERT_DOUBLE_EQ(1,polygon(1,0));
+    ASSERT_DOUBLE_EQ(2,polygon(2,0));
+    ASSERT_DOUBLE_EQ(2,polygon(0,1));
+    ASSERT_DOUBLE_EQ(3,polygon(1,1));
+    ASSERT_DOUBLE_EQ(3,polygon(2,1));
+    ASSERT_DOUBLE_EQ(3,polygon(0,2));
+    ASSERT_DOUBLE_EQ(3.5,polygon(1,2));
+    ASSERT_DOUBLE_EQ(4,polygon(2,2));
+    ASSERT_DOUBLE_EQ(5,polygon(0,3));
+    ASSERT_DOUBLE_EQ(5,polygon(1,3));
+    ASSERT_DOUBLE_EQ(6.5 ,polygon(2,3));
+}
+
+TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_in_the_middle)
+{
+    Eigen::Matrix<double,3,5> M;
+    M(0,0) = 1; M(0,1) = 2; M(0,2) = 4; M(0,3) = 5; M(0,4) = 9;
+    M(1,0) = 1; M(1,1) = 3; M(1,2) = 4; M(1,3) = 6; M(1,4) = 9;
+    M(2,0) = 2; M(2,1) = 3; M(2,2) = 5; M(2,3) = 6; M(2,4) = 11;
+
+    std::vector<size_t> index(5);
+    index[0] = 0; index[1] = 1; index[2] = 2; index[3] = 3; index[4] = 4;
+    const std::vector<double> v({1,-1,-1,-1,1});
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v);
+    ASSERT_EQ(4, polygon.cols());
+    ASSERT_DOUBLE_EQ(1,polygon(0,0));
+    ASSERT_DOUBLE_EQ(1,polygon(1,0));
+    ASSERT_DOUBLE_EQ(2,polygon(2,0));
+    ASSERT_DOUBLE_EQ(1.5,polygon(0,1));
+    ASSERT_DOUBLE_EQ(2,polygon(1,1));
+    ASSERT_DOUBLE_EQ(2.5,polygon(2,1));
     ASSERT_DOUBLE_EQ(7,polygon(0,2));
-    ASSERT_DOUBLE_EQ(8,polygon(1,2));
-    ASSERT_DOUBLE_EQ(9,polygon(2,2));
-    ASSERT_DOUBLE_EQ(4,polygon(0,3));
-    ASSERT_DOUBLE_EQ(4.5,polygon(1,3));
-    ASSERT_DOUBLE_EQ(6,polygon(2,3));
-//! [hydrostaticTest immerged_polygon_example_2]
-}*/
+    ASSERT_DOUBLE_EQ(7.5,polygon(1,2));
+    ASSERT_DOUBLE_EQ(8.5,polygon(2,2));
+    ASSERT_DOUBLE_EQ(9,polygon(0,3));
+    ASSERT_DOUBLE_EQ(9,polygon(1,3));
+    ASSERT_DOUBLE_EQ(11 ,polygon(2,3));
+}
 
 TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_all_points_are_immerged)
 {
