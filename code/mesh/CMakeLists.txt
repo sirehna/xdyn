@@ -1,8 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(mesh)
 
-SET(SRC src/TriMesh.cpp
-        src/TriMeshBuilder.cpp
+SET(SRC src/Mesh.cpp
+        src/MeshBuilder.cpp
         src/mesh_manipulations.cpp)
 
 INCLUDE_DIRECTORIES(inc)

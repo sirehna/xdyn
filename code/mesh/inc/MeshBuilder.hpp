@@ -1,10 +1,10 @@
-#ifndef TRIMESHBUILDER_HPP
-#define TRIMESHBUILDER_HPP
+#ifndef MESHBUILDER_HPP
+#define MESHBUILDER_HPP
 
 #include <map>
 #include "GeometricTypes3d.hpp"
 #include "MeshNumeric.hpp"
-#include "TriMesh.hpp"
+#include "Mesh.hpp"
 
 struct Vector3dComparator
 {
@@ -22,12 +22,12 @@ struct Vector3dComparator
 
 typedef std::map<EPoint, size_t, Vector3dComparator> Vector3dMap;
 
-class TriMeshBuilder
+class MeshBuilder
 {
 	public:
-		TriMeshBuilder(const VectorOfVectorOfPoints& v_);
-		TriMeshBuilder(const VectorOfPoints& tri);
-		TriMesh build();
+		MeshBuilder(const VectorOfVectorOfPoints& v_);
+		MeshBuilder(const VectorOfPoints& tri);
+		Mesh build();
 		void operator()(const VectorOfPoints& Tri);
 		Eigen::Matrix<double,3,Eigen::Dynamic> get_nodes() const;
 		std::vector<Facet> get_facets() const;

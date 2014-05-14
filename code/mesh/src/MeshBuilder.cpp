@@ -1,20 +1,20 @@
 #include <algorithm>
 #include <iostream>
 
-#include "TriMeshBuilder.hpp"
+#include "MeshBuilder.hpp"
 #include "mesh_manipulations.hpp"
 
-Eigen::Matrix<double,3,Eigen::Dynamic> TriMeshBuilder::get_nodes() const
+Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::get_nodes() const
 {
 	return nodes;
 }
 
-std::vector<Facet> TriMeshBuilder::get_facets() const
+std::vector<Facet> MeshBuilder::get_facets() const
 {
 	return facets;
 }
 
-TriMeshBuilder::TriMeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
+MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    index(0),
                                                                    nodes(Eigen::Matrix<double,3,Eigen::Dynamic>(Eigen::MatrixXd::Zero(3,3*v.size()))),
@@ -22,7 +22,7 @@ TriMeshBuilder::TriMeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
 {
 }
 
-TriMeshBuilder::TriMeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1,tri)),
+MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1,tri)),
                                                             xyzMap(Vector3dMap()),
                                                             index(0),
                                                             nodes(Eigen::Matrix<double,3,Eigen::Dynamic>(Eigen::MatrixXd::Zero(3,3))),
@@ -30,14 +30,14 @@ TriMeshBuilder::TriMeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPo
 {
 }
 
-TriMesh TriMeshBuilder::build()
+Mesh MeshBuilder::build()
 {
 	*this = std::for_each(v.begin(), v.end(), *this);
 	nodes.resize(3, index);
-	return TriMesh(nodes, facets);
+	return Mesh(nodes, facets);
 }
 
-void TriMeshBuilder::operator()(const VectorOfPoints& tri)
+void MeshBuilder::operator()(const VectorOfPoints& tri)
 {
 	Facet facet;
     facet.unit_normal = unit_normal(tri);
@@ -50,7 +50,7 @@ void TriMeshBuilder::operator()(const VectorOfPoints& tri)
     facets.push_back(facet);
 }
 
-size_t TriMeshBuilder::build_one_point(const EPoint& xyz)
+size_t MeshBuilder::build_one_point(const EPoint& xyz)
 {
 	const bool point_has_been_added = add_point_if_missing(xyz);
 	const size_t ret = index;
@@ -58,7 +58,7 @@ size_t TriMeshBuilder::build_one_point(const EPoint& xyz)
 	return ret;
 }
 
-bool TriMeshBuilder::add_point_if_missing(const EPoint& xyz)
+bool MeshBuilder::add_point_if_missing(const EPoint& xyz)
 {
 	bool point_has_been_added = false;
 	if (not(point_is_in_map(xyz)))
@@ -70,7 +70,7 @@ bool TriMeshBuilder::add_point_if_missing(const EPoint& xyz)
 	return point_has_been_added;
 }
 
-bool TriMeshBuilder::point_is_in_map(const EPoint& xyz)
+bool MeshBuilder::point_is_in_map(const EPoint& xyz)
 {
 	const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
 	return itMap != xyzMap.end();

@@ -2,7 +2,7 @@
 SET(MODULE_UNDER_TEST mesh)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC
-        src/TriMeshBuilderTest.cpp
+        src/MeshBuilderTest.cpp
         src/TriMeshTestData.cpp)
 # ------8<---------------------------------------------->8-----
 

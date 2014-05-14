@@ -10,7 +10,7 @@
 #include "KinematicsModule.hpp"
 #include "GravityModule.hpp"
 #include "force_parsers.hpp"
-#include "TriMeshBuilder.hpp"
+#include "MeshBuilder.hpp"
 #include "TextFileReader.hpp"
 #include "StlReader.hpp"
 
@@ -27,7 +27,7 @@ using namespace kinematics;
 			                         boost::bind(&DataSourceBuilder::f, boost::ref(*this), _1));
 
 MODULE(PointMatrixBuilder, const std::string name = get_name();\
-                           const TriMesh T = ds->get<TriMesh>(name);\
+                           const Mesh T = ds->get<Mesh>(name);\
                            ds->set<PointMatrix>(name, PointMatrix(T.nodes,name));
       )
 
@@ -98,8 +98,8 @@ void DataSourceBuilder::add_mesh(const YamlBody& body)
 {
     const TextFileReader reader(std::vector<std::string>(1, body.mesh));
     const VectorOfVectorOfPoints data = read_stl(reader.get_contents());
-    TriMeshBuilder builder(data);
-    ds.set<TriMesh>(body.name, builder.build());
+    MeshBuilder builder(data);
+    ds.set<Mesh>(body.name, builder.build());
     ds.add<PointMatrixBuilder>(body.name);
 }
 
