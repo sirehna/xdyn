@@ -277,4 +277,3 @@ TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_no_points_are_immerged)
     const std::vector<double> v({-1,-2,-5});
     ASSERT_THROW(immerged_polygon(M, index, v), HydrostaticException);
 }
-

@@ -8,6 +8,7 @@
 
 #include "hydrostatic.hpp"
 #include "HydrostaticException.hpp"
+#include "kahan_sum.hpp"
 
 #include <algorithm> // std::count_if
 #include <iterator>  // std::distance
@@ -26,12 +27,7 @@ bool hydrostatic::totally_immerged(const std::vector<size_t>& idx, const std::ve
 
 double hydrostatic::average_immersion(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
-    double average = 0;
-    for (size_t i = 0 ; i < idx.size() ; ++i)
-    {
-        average += delta_z.at(idx[i]);
-    }
-    return average/idx.size();
+    return kahan_sum(idx,delta_z)/idx.size();
 }
 
 bool positive (const double x);
