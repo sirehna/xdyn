@@ -284,7 +284,10 @@ TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
     const Point O(frame, 1,2,4);
     const Point C(frame, 78,-4,6);
     const Eigen::Vector3d dS(0,3,4);
-    const Wrench Fhs = dF(O,C,1024, 10, 3, dS);
+    const double rho = 1024;
+    const double g = 10;
+    const double dz = 3;
+    const UnsafeWrench Fhs = dF(O, C, rho, g, dz, dS);
 
     ASSERT_EQ(frame, Fhs.get_frame());
 
