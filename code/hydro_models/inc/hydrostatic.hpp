@@ -14,7 +14,7 @@
 #include <Eigen/Dense>
 
 #include "GeometricTypes3d.hpp"
-#include "Wrench.hpp"
+#include "UnsafeWrench.hpp"
 
 namespace hydrostatic
 {
@@ -103,12 +103,12 @@ namespace hydrostatic
       *           also the frame of reference of the calculated Wrench object.
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest dF_example
       */
-    Wrench dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-              const Point& C,           //!< Point where the force is applied (barycentre of the facet)
-              const double rho,         //!< Density of the fluid (in kg/m^3)
-              const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-              const double immersion,   //!< Relative immersion (in metres)
-              const Eigen::Vector3d& dS //!< Unit normal vector multiplied by the surface of the facet
+    UnsafeWrench dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                    const Point& C,           //!< Point where the force is applied (barycentre of the facet)
+                    const double rho,         //!< Density of the fluid (in kg/m^3)
+                    const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                    const double immersion,   //!< Relative immersion (in metres)
+                    const Eigen::Vector3d& dS //!< Unit normal vector multiplied by the surface of the facet
                            );
 }
 

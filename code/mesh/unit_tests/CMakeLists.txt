@@ -2,14 +2,14 @@
 SET(MODULE_UNDER_TEST mesh)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC
-        src/MeshBuilderTest.cpp
-        src/TriMeshTestData.cpp)
+        src/MeshBuilderTest.cpp)
 # ------8<---------------------------------------------->8-----
 
 # Include directories
 iNCLUDE_DIRECTORIES(inc)
 iNCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 iNCLUDE_DIRECTORIES(${random_data_generator_INCLUDE_DIRS})
+iNCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
 iNCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
