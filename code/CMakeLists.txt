@@ -147,6 +147,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
         $<TARGET_OBJECTS:stl_reader_tests>
         $<TARGET_OBJECTS:simulator_tests>
+        $<TARGET_OBJECTS:numeric_tests>
         )
 TARGET_LINK_LIBRARIES(${TEST_EXE} internal_solver_validation)
 

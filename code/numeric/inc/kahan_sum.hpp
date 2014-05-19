@@ -50,7 +50,7 @@ template <typename Iterator, typename T>  T kahan_sum(const Iterator& begin, con
 {
     return kahan_sum<typename boost::counting_iterator<size_t>,
                      Iterator,
-                     T>(boost::counting_iterator<size_t>(0),boost::counting_iterator<size_t>(std::distance(begin,end))+1, begin);
+                     T>(boost::counting_iterator<size_t>(0),boost::counting_iterator<size_t>(std::distance(begin,end)), begin);
 }
 
 template <typename T>  T kahan_sum(const std::vector<T>& points)
