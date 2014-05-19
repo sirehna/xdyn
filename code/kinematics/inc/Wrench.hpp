@@ -28,9 +28,11 @@ class Wrench
 {
     public:
         Wrench();
+        virtual ~Wrench() {}
         Wrench(const Point& P);
         Wrench(const Point& P, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);
         Wrench(const Wrench& rhs);
+
         Wrench& operator=(const Wrench& rhs);
 
         /**  \author cec
@@ -88,7 +90,7 @@ class Wrench
         Wrench change_ref_point_then_change_frame(const kinematics::Transform& T //!< Transform from current frame to new frame
                 ) const;
 
-    private:
+    protected:
         Point P; // Point of application
 };
 
