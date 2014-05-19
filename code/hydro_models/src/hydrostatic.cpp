@@ -179,3 +179,15 @@ size_t hydrostatic::previous(const std::vector<size_t>& idx, const size_t i0)
     THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
     return 0;
 }
+
+Wrench hydrostatic::dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+              const Point& C,           //!< Point where the force is applied (barycentre of the facet)
+              const double rho,         //!< Density of the fluid (in kg/m^3)
+              const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+              const double z,   //!< Relative immersion (in metres)
+              const Eigen::Vector3d& dS //!< Unit normal vector multiplied by the surface of the facet
+                           )
+{
+    const Eigen::Vector3d F = rho*g*z*dS;
+    return Wrench(O.get_frame(), F, (C-O).cross(F));
+}

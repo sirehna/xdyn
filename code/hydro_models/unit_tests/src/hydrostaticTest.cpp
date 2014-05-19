@@ -277,3 +277,21 @@ TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_no_points_are_immerged)
     const std::vector<double> v({-1,-2,-5});
     ASSERT_THROW(immerged_polygon(M, index, v), HydrostaticException);
 }
+
+TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
+{
+    const std::string frame = a.random<std::string>();
+    const Point O(frame, 1,2,4);
+    const Point C(frame, 78,-4,6);
+    const Eigen::Vector3d dS(0,3,4);
+    const Wrench Fhs = dF(O,C,1024, 10, 3, dS);
+
+    ASSERT_EQ(frame, Fhs.get_frame());
+
+    ASSERT_DOUBLE_EQ(0, Fhs.X);
+    ASSERT_DOUBLE_EQ(1024*10*3*3, Fhs.Y);
+    ASSERT_DOUBLE_EQ(1024*10*3*4, Fhs.Z);
+    ASSERT_DOUBLE_EQ(-6*Fhs.Z-2*Fhs.Y, Fhs.K);
+    ASSERT_DOUBLE_EQ(-77*Fhs.Z, Fhs.M);
+    ASSERT_DOUBLE_EQ(77*Fhs.Y, Fhs.N);
+}

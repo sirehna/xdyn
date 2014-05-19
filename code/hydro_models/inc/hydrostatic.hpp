@@ -14,6 +14,7 @@
 #include <Eigen/Dense>
 
 #include "GeometricTypes3d.hpp"
+#include "Wrench.hpp"
 
 namespace hydrostatic
 {
@@ -95,6 +96,20 @@ namespace hydrostatic
                     const size_t i0 //!< Index to look for in 'idx'.
                        );
 
+    /**  \author cec
+      *  \date May 19, 2014, 10:30:33 AM
+      *  \brief Hydrostatic force & torque acting on a single facet of the mesh
+      *  \details Points O & C are assumed to be in the same frame of reference, which is
+      *           also the frame of reference of the calculated Wrench object.
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest dF_example
+      */
+    Wrench dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+              const Point& C,           //!< Point where the force is applied (barycentre of the facet)
+              const double rho,         //!< Density of the fluid (in kg/m^3)
+              const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+              const double immersion,   //!< Relative immersion (in metres)
+              const Eigen::Vector3d& dS //!< Unit normal vector multiplied by the surface of the facet
+                           );
 }
 
 #endif /* HYDROSTATIC_HPP_ */
