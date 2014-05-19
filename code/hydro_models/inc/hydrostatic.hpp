@@ -45,10 +45,10 @@ namespace hydrostatic
       *  \returns Coordinate matrix (one point per column)
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest immerged_polygon_example
       */
-    Eigen::Matrix<double,3,Eigen::Dynamic> immerged_polygon(const Eigen::Matrix<double,3,Eigen::Dynamic>& M, //!< Matrix containing all the points in the mesh
-                                                            const std::vector<size_t>& idx, //!< Indices of the points
-                                                            const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
-                                                                  );
+    Matrix3x immerged_polygon(const Matrix3x& M, //!< Matrix containing all the points in the mesh
+                              const std::vector<size_t>& idx, //!< Indices of the points
+                              const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
+                                 );
 
     /**  \author cec
       *  \date Apr 30, 2014, 11:41:54 AM

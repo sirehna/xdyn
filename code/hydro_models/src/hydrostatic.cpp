@@ -74,9 +74,9 @@ void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_
     }
 }
 
-Eigen::Matrix<double,3,Eigen::Dynamic> hydrostatic::immerged_polygon(const Eigen::Matrix<double,3,Eigen::Dynamic>& M,
-                                                                     const std::vector<size_t>& idx,
-                                                                     const std::vector<double>& v)
+Matrix3x hydrostatic::immerged_polygon(const Matrix3x& M,
+                                       const std::vector<size_t>& idx,
+                                       const std::vector<double>& v)
 {
     make_sure_some_points_are_immerged_and_some_are_not(idx, v);
     const size_t n = idx.size();
