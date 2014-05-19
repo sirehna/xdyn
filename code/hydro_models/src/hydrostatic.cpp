@@ -27,7 +27,7 @@ bool hydrostatic::totally_immerged(const std::vector<size_t>& idx, const std::ve
 
 double hydrostatic::average_immersion(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
-    return kahan_sum(idx,delta_z)/idx.size();
+    return sum::kahan(idx,delta_z)/idx.size();
 }
 
 bool positive (const double x);

@@ -28,7 +28,7 @@ double area(const VectorOfPoints& points)
 
 Eigen::Vector3d barycenter(const VectorOfPoints& points)
 {
-    return kahan_sum(points)/points.size();
+    return sum::kahan(points)/points.size();
 }
 
 Eigen::Vector3d unit_normal(const VectorOfPoints& points)
