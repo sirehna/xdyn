@@ -42,6 +42,7 @@ class MeshBuilder
 		size_t build_one_point(const EPoint& xyz);
 		bool point_is_in_map(const EPoint& xyz);
 		bool add_point_if_missing(const EPoint& xyz);
+		Matrix3x convert(const VectorOfPoints& v) const;
 };
 
 #endif

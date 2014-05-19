@@ -40,9 +40,9 @@ Mesh MeshBuilder::build()
 void MeshBuilder::operator()(const VectorOfPoints& tri)
 {
 	Facet facet;
-    facet.unit_normal = unit_normal(tri);
-    facet.area = area(tri);
-    facet.barycenter = barycenter(tri);
+    facet.unit_normal = unit_normal(convert(tri));
+    facet.area = area(convert(tri));
+    facet.barycenter = barycenter(convert(tri));
     for (VectorOfPoints::const_iterator it = tri.begin() ; it != tri.end() ; ++it)
     {
         facet.index.push_back(build_one_point(*it));
@@ -74,4 +74,14 @@ bool MeshBuilder::point_is_in_map(const EPoint& xyz)
 {
 	const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
 	return itMap != xyzMap.end();
+}
+
+Matrix3x MeshBuilder::convert(const VectorOfPoints& v) const
+{
+    Matrix3x ret(3,v.size());
+    for (size_t j = 0 ; j < v.size() ; ++j)
+    {
+        ret.col(j) = v[j];
+    }
+    return ret;
 }

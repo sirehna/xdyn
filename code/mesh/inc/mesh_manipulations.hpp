@@ -10,11 +10,11 @@
 
 #include "GeometricTypes3d.hpp"
 
-Eigen::Vector3d normal(const VectorOfPoints& polygon);
-Eigen::Vector3d unit_normal(const VectorOfPoints& polygon);
+Eigen::Vector3d normal(const Matrix3x& polygon);
+Eigen::Vector3d unit_normal(const Matrix3x& polygon);
 
-Eigen::Vector3d barycenter(const VectorOfPoints& points);
-double area(const VectorOfPoints& polygon);
+Eigen::Vector3d barycenter(const Matrix3x& points);
+double area(const Matrix3x& polygon);
 
 
 #endif /* MESH_MANIPULATIONS_HPP_ */
