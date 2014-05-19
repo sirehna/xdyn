@@ -7,6 +7,7 @@
 
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
+#include "kahan_sum.hpp"
 
 double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C);
 double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C)
@@ -27,7 +28,7 @@ double area(const VectorOfPoints& points)
 
 Eigen::Vector3d barycenter(const VectorOfPoints& points)
 {
-    return sum(points)/points.size();
+    return kahan_sum(points)/points.size();
 }
 
 Eigen::Vector3d unit_normal(const VectorOfPoints& points)
