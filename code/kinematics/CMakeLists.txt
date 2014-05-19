@@ -10,6 +10,7 @@ set(SRC src/Velocity.cpp
         src/Transform.cpp
         src/KinematicTree.cpp
         src/Wrench.cpp
+        src/UnsafeWrench.cpp
         )
 
 include_directories(inc)
