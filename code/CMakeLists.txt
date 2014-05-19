@@ -69,6 +69,7 @@ ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
 ADD_SUBDIRECTORY(macros)
+ADD_SUBDIRECTORY(numeric)
 ADD_SUBDIRECTORY(simulator_external_data_structures)
 ADD_SUBDIRECTORY(test_data_generator)
 ADD_SUBDIRECTORY(random_data_generator)
