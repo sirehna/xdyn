@@ -39,5 +39,13 @@ Eigen::Vector3d barycenter(const Matrix3x& points //!< List of points
 double area(const Matrix3x& polygon //!< Polygon for which the area is computed
         );
 
+/**  \author cec
+  *  \date May 20, 2014, 10:55:32 AM
+  *  \brief Computes the position of the centre of gravity of a polygon
+  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest centre_of_gravity_example
+  */
+Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
+                                 );
+
 
 #endif /* MESH_MANIPULATIONS_HPP_ */

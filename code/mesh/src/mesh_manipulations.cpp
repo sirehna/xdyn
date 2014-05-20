@@ -8,6 +8,7 @@
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
 #include "kahan_sum.hpp"
+#include "pairwise_sum.hpp"
 
 double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C);
 double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C)
@@ -60,4 +61,18 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
         THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
     return n/norm;
+}
+
+Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
+                                 )
+{
+    const size_t n = polygon.cols();
+    std::vector<Eigen::Vector3d> areas_times_points;
+    std::vector<double> areas;
+    for (size_t i = 2 ; i < n ; ++i)
+    {
+        areas.push_back(triangle_area(polygon.col(0), polygon.col(i-1), polygon.col(i)));
+        areas_times_points.push_back(areas.back()*(polygon.col(0)+polygon.col(i-1)+polygon.col(i))/3.);
+    }
+    return sum::pairwise(areas_times_points)/sum::pairwise(areas);
 }
