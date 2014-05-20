@@ -107,7 +107,7 @@ namespace hydrostatic
                     const Eigen::Vector3d& C, //!< Point where the force is applied (barycentre of the facet)
                     const double rho,         //!< Density of the fluid (in kg/m^3)
                     const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-                    const double immersion,   //!< Relative immersion (in metres)
+                    const double immersion,   //!< Relative immersion of the barycentre (in metres)
                     const Eigen::Vector3d& dS //!< Unit normal vector multiplied by the surface of the facet
                            );
 }
