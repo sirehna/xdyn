@@ -77,3 +77,35 @@ TEST_F(MeshBuilderTest, should_be_able_to_represent_a_cube)
 		ASSERT_DOUBLE_EQ(0.5,m.facets.at(i).area)<<i;
 }
 
+TEST_F(MeshBuilderTest, two_triangles)
+{
+    const Mesh m = MeshBuilder(two_triangles()).build();
+    ASSERT_EQ(2, m.facets.size());
+    ASSERT_EQ(4, m.nodes.cols());
+    // Check first point
+    ASSERT_DOUBLE_EQ(0, m.nodes(0,0));
+    ASSERT_DOUBLE_EQ(0, m.nodes(1,0));
+    ASSERT_DOUBLE_EQ(0, m.nodes(2,0));
+    // Check second point
+    ASSERT_DOUBLE_EQ(4, m.nodes(0,1));
+    ASSERT_DOUBLE_EQ(0, m.nodes(1,1));
+    ASSERT_DOUBLE_EQ(0, m.nodes(2,1));
+    // Check third point
+    ASSERT_DOUBLE_EQ(2, m.nodes(0,2));
+    ASSERT_DOUBLE_EQ(2, m.nodes(1,2));
+    ASSERT_DOUBLE_EQ(0, m.nodes(2,2));
+    // Check fourth point
+    ASSERT_DOUBLE_EQ(2, m.nodes(0,3));
+    ASSERT_DOUBLE_EQ(-1, m.nodes(1,3));
+    ASSERT_DOUBLE_EQ(0, m.nodes(2,3));
+    // Check first facet
+    ASSERT_EQ(3,m.facets.at(0).index.size());
+    ASSERT_EQ(0,m.facets.at(0).index.at(0));
+    ASSERT_EQ(1,m.facets.at(0).index.at(1));
+    ASSERT_EQ(2,m.facets.at(0).index.at(2));
+    // Check second facet
+    ASSERT_EQ(3,m.facets.at(1).index.size());
+    ASSERT_EQ(0,m.facets.at(1).index.at(0));
+    ASSERT_EQ(3,m.facets.at(1).index.at(1));
+    ASSERT_EQ(1,m.facets.at(1).index.at(2));
+}

@@ -62,9 +62,8 @@ void MeshBuilder::operator()(const VectorOfPoints& tri)
 size_t MeshBuilder::build_one_point(const EPoint& xyz)
 {
 	const bool point_has_been_added = add_point_if_missing(xyz);
-	const size_t ret = index;
 	if (point_has_been_added) index++;
-	return ret;
+	return xyzMap[xyz];
 }
 
 bool MeshBuilder::add_point_if_missing(const EPoint& xyz)
