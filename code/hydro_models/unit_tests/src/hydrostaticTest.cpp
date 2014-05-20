@@ -282,7 +282,7 @@ TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
 {
     const std::string frame = a.random<std::string>();
     const Point O(frame, 1,2,4);
-    const Point C(frame, 78,-4,6);
+    const Eigen::Vector3d C(78,-4,6);
     const Eigen::Vector3d dS(0,3,4);
     const double rho = 1024;
     const double g = 10;
