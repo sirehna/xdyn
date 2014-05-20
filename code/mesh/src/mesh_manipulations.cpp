@@ -38,7 +38,16 @@ Eigen::Vector3d barycenter(const Matrix3x& p)
 
 Eigen::Vector3d unit_normal(const Matrix3x& points)
 {
-    const Eigen::Vector3d n = normal(points);
+    if (points.cols() < 3)
+    {
+        std::stringstream ss;
+        ss << "Need at least three points to define a surface: cannot compute normal vector. Input has "
+           << points.cols() << " points.";
+       THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
+    }
+    const Eigen::Vector3d n1(points.col(1)-points.col(0));
+    const Eigen::Vector3d n2(points.col(2)-points.col(0));
+    const Eigen::Vector3d n = n1.cross(n2);
     const double norm = n.norm();
     if (norm<1000*std::numeric_limits<double>::epsilon())
     {
@@ -51,18 +60,4 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
         THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
     return n/norm;
-}
-
-Eigen::Vector3d normal(const Matrix3x& points)
-{
-    if (points.cols() < 3)
-    {
-        std::stringstream ss;
-        ss << "Need at least three points to define a surface: cannot compute normal vector. Input has "
-           << points.cols() << " points.";
-       THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
-    }
-    const Eigen::Vector3d n1(points.col(1)-points.col(0));
-    const Eigen::Vector3d n2(points.col(2)-points.col(0));
-    return n1.cross(n2);
 }
