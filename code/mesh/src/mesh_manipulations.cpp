@@ -34,7 +34,7 @@ Eigen::Vector3d barycenter(const Matrix3x& p)
     {
         points.push_back(p.col(j));
     }
-    return sum::kahan(points)/points.size();
+    return sum::pairwise(points)/points.size();
 }
 
 Eigen::Vector3d unit_normal(const Matrix3x& points)
