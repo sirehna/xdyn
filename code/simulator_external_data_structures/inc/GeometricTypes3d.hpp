@@ -13,7 +13,7 @@ typedef Eigen::Matrix<double,3,Eigen::Dynamic> Matrix3x;
 
 struct Facet
 {
-    Facet():index(std::vector<size_t>()),unit_normal(Eigen::Vector3d()),barycenter(Eigen::Vector3d()),area(0.0){}
+    Facet():index(std::vector<size_t>()),unit_normal(Eigen::MatrixXd::Zero(3,1)),barycenter(Eigen::MatrixXd::Zero(3,1)),area(0){}
     std::vector<size_t> index;
     Eigen::Vector3d unit_normal;
     Eigen::Vector3d barycenter;
