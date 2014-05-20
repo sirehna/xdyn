@@ -30,11 +30,20 @@ MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1
 {
 }
 
+Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::resize(const Eigen::Matrix<double,3,Eigen::Dynamic>& M) const
+{
+    Eigen::Matrix<double,3,Eigen::Dynamic> resized(Eigen::MatrixXd::Zero(3,index));
+    for (size_t j = 0 ; j < index ; ++j)
+    {
+        resized.col(j) = M.col(j);
+    }
+    return resized;
+}
+
 Mesh MeshBuilder::build()
 {
 	*this = std::for_each(v.begin(), v.end(), *this);
-	nodes.resize(3, index);
-	return Mesh(nodes, facets);
+	return Mesh(resize(nodes), facets);
 }
 
 void MeshBuilder::operator()(const VectorOfPoints& tri)

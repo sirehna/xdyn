@@ -39,6 +39,7 @@ class MeshBuilder
 		Eigen::Matrix<double,3,Eigen::Dynamic> nodes;
 		std::vector<Facet> facets;
 
+		Eigen::Matrix<double,3,Eigen::Dynamic> resize(const Eigen::Matrix<double,3,Eigen::Dynamic>& M) const;
 		size_t build_one_point(const EPoint& xyz);
 		bool point_is_in_map(const EPoint& xyz);
 		bool add_point_if_missing(const EPoint& xyz);
