@@ -140,3 +140,21 @@ VectorOfVectorOfPoints unit_cube()
     V.push_back(P12);
 	return V;
 }
+
+VectorOfVectorOfPoints two_triangles()
+{
+    VectorOfVectorOfPoints mesh;
+    VectorOfPoints facet_1, facet_2;
+    facet_1.push_back(EPoint(0,0,0));
+    facet_1.push_back(EPoint(4,0,0));
+    facet_1.push_back(EPoint(2,2,0));
+
+    facet_2.push_back(EPoint(0,0,0));
+    facet_2.push_back(EPoint(2,-1,0));
+    facet_2.push_back(EPoint(4,0,0));
+
+    mesh.push_back(facet_1);
+    mesh.push_back(facet_2);
+
+    return mesh;
+}
