@@ -27,12 +27,17 @@ void hydrostaticTest::TearDown()
 
 using namespace hydrostatic;
 
-TEST_F(hydrostaticTest, can_tell_if_three_points_are_totally_immerged_or_not)
+TEST_F(hydrostaticTest, can_tell_if_three_points_are_partially_immerged_or_not)
 {
 //! [hydrostaticTest totally_immerged_example]
-    std::vector<size_t> index(3); index[0] = 0; index[1] = 1; index[2] = 2;
+    std::vector<size_t> index(3);
     const std::vector<double> v({-1,2,3});
-    ASSERT_FALSE(totally_immerged(index, v));
+    index[0] = 0; index[1] = 1; index[2] = 2;
+    ASSERT_TRUE(partially_immerged(index, v));
+    index[1] = 0; index[2] = 0;
+    ASSERT_FALSE(partially_immerged(index, v));
+    index[0] = 1; index[1] = 1; index[2] = 2;
+    ASSERT_FALSE(partially_immerged(index, v));
 //! [hydrostaticTest totally_immerged_example]
 }
 

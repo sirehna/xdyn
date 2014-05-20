@@ -20,14 +20,14 @@ namespace hydrostatic
 {
     /**  \author cec
       *  \date Apr 30, 2014, 8:17:17 AM
-      *  \brief Checks if three points are totally immerged or not
+      *  \brief Checks if three points are partially immerged or not
       *  \details Needs the indices of those points & a vector of relative heights.
-      *  \returns True if all three points are immerged, false otherwise.
+      *  \returns True if all three points are immerged or emerged, false otherwise.
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest totally_immerged_example
       */
-    bool totally_immerged(const std::vector<size_t>& idx, //!< Indices to check
-                          const std::vector<double>& delta_z //!< Vector of relative wave heights (positive if point is immerged)
-                          );
+    bool partially_immerged(const std::vector<size_t>& idx, //!< Indices to check
+                            const std::vector<double>& delta_z //!< Vector of relative wave heights (positive if point is immerged)
+                           );
 
     /**  \author cec
       *  \date Apr 30, 2014, 10:10:40 AM

@@ -15,25 +15,32 @@
 
 using namespace hydrostatic;
 
-
-bool hydrostatic::totally_immerged(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
+bool negative (const double x);
+bool negative (const double x) { return x<0; }
+bool positive (const double x);
+bool positive (const double x) { return not(negative(x)); }
+size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vector<double>& delta_z);
+size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
-    for (size_t i = 0 ; i < idx.size() ; ++i)
+    const size_t n = idx.size();
+    size_t nb_of_immerged_points = 0;
+    for (size_t i = 0 ; i < n ; ++i)
     {
-        if (delta_z.at(idx[i]) < 0) return false;
+        if (delta_z.at(idx[i]) >= 0) nb_of_immerged_points++;
     }
-    return true;
+    return nb_of_immerged_points;
+}
+
+bool hydrostatic::partially_immerged(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
+{
+    const size_t nb_of_immerged_points = get_nb_of_immerged_points(idx,delta_z);
+    return (nb_of_immerged_points!=idx.size()) and (nb_of_immerged_points != 0);
 }
 
 double hydrostatic::average_immersion(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
     return sum::kahan(idx,delta_z)/idx.size();
 }
-
-bool positive (const double x);
-bool positive (const double x) { return x>=0; }
-bool negative (const double x);
-bool negative (const double x) { return x<0; }
 
 std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::vector<double>& z)
 {
@@ -56,13 +63,7 @@ void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_
 void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_t>& idx, const std::vector<double>& v)
 {
     const size_t n = idx.size();
-    std::vector<double> z(n,0);
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        z.push_back(v.at(idx[i]));
-    }
-
-    const size_t number_of_immerged_nodes = std::count_if(z.begin(), z.end(), positive);
+    const size_t number_of_immerged_nodes = get_nb_of_immerged_points(idx, v);
 
     if (number_of_immerged_nodes == 0)
     {
