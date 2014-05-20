@@ -8,6 +8,8 @@
 #include "hydrostaticTest.hpp"
 #include "hydrostatic.hpp"
 #include "HydrostaticException.hpp"
+#include "TriMeshTestData.hpp"
+#include "MeshBuilder.hpp"
 
 hydrostaticTest::hydrostaticTest() : a(DataGenerator(2))
 {
@@ -290,6 +292,32 @@ TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
     ASSERT_DOUBLE_EQ(-6*Fhs.Z-2*Fhs.Y, Fhs.K);
     ASSERT_DOUBLE_EQ(-77*Fhs.Z, Fhs.M);
     ASSERT_DOUBLE_EQ(77*Fhs.Y, Fhs.N);
+}
+
+TEST_F(hydrostaticTest, bug_in_immerged_polygon)
+{
+    const Mesh mesh = MeshBuilder(two_triangles()).build();
+    const std::vector<double> z = {-1,-1,-2,1};
+    ASSERT_NO_THROW(immerged_polygon(mesh.nodes, mesh.facets.at(1).index, z));
+}
+
+TEST_F(hydrostaticTest, another_bug_in_immerged_polygon)
+{
+    const Mesh mesh = MeshBuilder(two_triangles()).build();
+    const std::vector<double> z = {-1,-1,-2,1};
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(mesh.nodes, mesh.facets.at(1).index, z);
+
+    ASSERT_DOUBLE_EQ(1, polygon(0,0));
+    ASSERT_DOUBLE_EQ(-0.5, polygon(1,0));
+    ASSERT_DOUBLE_EQ(0, polygon(2,0));
+
+    ASSERT_DOUBLE_EQ(2, polygon(0,1));
+    ASSERT_DOUBLE_EQ(-1, polygon(1,1));
+    ASSERT_DOUBLE_EQ(0, polygon(2,1));
+
+    ASSERT_DOUBLE_EQ(3, polygon(0,2));
+    ASSERT_DOUBLE_EQ(-0.5, polygon(1,2));
+    ASSERT_DOUBLE_EQ(0, polygon(2,2));
 }
 
 TEST_F(hydrostaticTest, bug_in_first_and_last_emerged_points)

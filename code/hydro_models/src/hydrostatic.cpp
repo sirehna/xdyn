@@ -111,8 +111,8 @@ Matrix3x hydrostatic::immerged_polygon(const Matrix3x& M,
         dz[i] = v.at(idx[i]);
     }
     const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points(dz);
-    const size_t idxA = first_and_last.first;
-    const size_t idxB = first_and_last.second;
+    const size_t idxA = idx[first_and_last.first];
+    const size_t idxB = idx[first_and_last.second];
     const size_t idxA1 = previous(idx, idxA);
     const size_t idxB1 = next(idx, idxB);
     const EPoint A = M.col(idxA);
