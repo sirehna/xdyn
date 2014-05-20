@@ -16,7 +16,7 @@ namespace sum
 {
     template <typename T> T pairwise(typename std::vector<T> x)
     {
-        if (x.empty()) return 0;
+        if (x.empty()) return T()-T();
         if (x.size() == 1) return x.front();
         size_t n = x.size();
         const size_t p = floor(n/2.+0.5);
@@ -29,7 +29,7 @@ namespace sum
                 n = (n+1)/2;
                 for (size_t i = 0 ; i < n-1 ; ++i)
                 {
-                    x[i] += x[last-i];
+                    x[i] = x[i] + x[last-i];
                 }
             }
             else
@@ -37,7 +37,7 @@ namespace sum
                 n = n/2;
                 for (size_t i = 0 ; i < n ; ++i)
                 {
-                    x[i] += x[last-i];
+                    x[i] = x[i] + x[last-i];
                 }
             }
         }
