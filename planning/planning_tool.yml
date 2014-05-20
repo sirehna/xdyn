@@ -376,11 +376,14 @@ stories:
       size: 4
       backlog: 22/4/2014
       started: 25/4/2014
+      done: 28/4/2014
       assigned to: cec
     - task: Gravity module (DS API, check input was set by DSBuilder, test output values)
       type: model
       size: 2
       backlog: 22/4/2014
+      started: 28/4/2014
+      done: 28/4/2014
       assigned to: cec
     - task: Intersection between facet & free surface
       type: model
@@ -391,6 +394,8 @@ stories:
       type: model
       size: 1
       backlog: 22/4/2014
+      started: 30/4/2014
+      done: 30/4/2014
       assigned to: cec
     - task: Compute area of immerged triangle + position of centre of inertia
       type: model

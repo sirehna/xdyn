@@ -43,6 +43,12 @@ projects:
       - week ending on: 18/4/2014
         cec: 5
         gj: 4
+        # Week 17
+      - week ending on: 25/4/2014
+        cec: 4
+        # Week 18
+      - week ending on: 2/5/2014
+        cec: 2.5
   - name: R&D autofinancée
     budget: 50000
     prices:
