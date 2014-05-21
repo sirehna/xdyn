@@ -42,7 +42,9 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
     {
         std::stringstream ss;
         ss << "Need at least three points to define a surface: cannot compute normal vector. Input has "
-           << points.cols() << " points.";
+           << points.cols() << " point";
+        if (points.cols()>1) ss << "s";
+        ss << ".";
        THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
     const Eigen::Vector3d n1(points.col(1)-points.col(0));
