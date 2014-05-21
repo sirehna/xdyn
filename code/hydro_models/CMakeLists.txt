@@ -13,6 +13,7 @@ include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${numeric_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME}_static STATIC ${SRC})
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")

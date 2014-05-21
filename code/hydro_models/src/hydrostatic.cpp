@@ -9,6 +9,8 @@
 #include "hydrostatic.hpp"
 #include "HydrostaticException.hpp"
 #include "kahan_sum.hpp"
+#include "pairwise_sum.hpp"
+#include "mesh_manipulations.hpp"
 
 #include <algorithm> // std::count_if
 #include <iterator>  // std::distance
@@ -27,9 +29,43 @@ size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vect
     return nb_of_immerged_points;
 }
 
-double hydrostatic::average_immersion(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
+double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Coordinates of all nodes
+                                      const std::vector<size_t>& idx,    //!< Indices of the points
+                                      const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+                            )
 {
-    return sum::kahan(idx,delta_z)/idx.size();
+    const size_t n = idx.size();
+    std::vector<Eigen::Vector3d> areas_times_points;
+    std::vector<double> areas;
+    const size_t iA = idx[0];
+    for (size_t i = 2 ; i < n ; ++i)
+    {
+        const size_t iB = idx[i-1];
+        const size_t iC = idx[i];
+        const EPoint A = nodes.col(iA);
+        const EPoint B = nodes.col(iB);
+        const EPoint C = nodes.col(iC);
+        const Eigen::Vector3d centre_of_gravity((A(0)+B(0)+C(0))/3.,
+                                                (A(1)+B(1)+C(1))/3.,
+                                                (delta_z.at(idx[0])+delta_z.at(idx[i-1])+delta_z.at(idx[i]))/3.);
+        areas.push_back(triangle_area(A, B, C));
+        areas_times_points.push_back(areas.back()*centre_of_gravity);
+    }
+    return (sum::pairwise(areas_times_points)/sum::pairwise(areas))(2,0);
+}
+
+double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Coordinates of used nodes
+                                      const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+                                     )
+{
+    const size_t n = nodes.cols();
+    if (n != delta_z.size())
+    {
+        THROW(__PRETTY_FUNCTION__, HydrostaticException, "Number of nodes should be equal to size of delta_z");
+    }
+    std::vector<size_t> idx;
+    for (size_t i = 0 ; i < n ; ++i) idx.push_back(i);
+    return average_immersion(nodes, idx, delta_z);
 }
 
 std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::vector<double>& z)

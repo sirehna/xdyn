@@ -32,10 +32,32 @@ using namespace hydrostatic;
 TEST_F(hydrostaticTest, can_compute_average_immersion)
 {
 //! [hydrostaticTest average_immersion_example]
-    std::vector<size_t> index(3); index[0] = 0; index[1] = 1; index[2] = 2;
-    const std::vector<double> v({-1,2,5});
-    ASSERT_DOUBLE_EQ(2, average_immersion(index, v));
+    const Mesh mesh = MeshBuilder(trapezium()).build();
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double h = a.random<double>();
+        ASSERT_DOUBLE_EQ(5*h/12., average_immersion(mesh.nodes, mesh.facets.front().index, {0,0,h,h}));
+    }
 //! [hydrostaticTest average_immersion_example]
+}
+
+TEST_F(hydrostaticTest, can_compute_average_immersion_even_when_all_nodes_are_used)
+{
+    const Mesh mesh = MeshBuilder(one_triangle()).build();
+    ASSERT_DOUBLE_EQ(5, average_immersion(mesh.nodes, {4,5,6}));
+}
+
+TEST_F(hydrostaticTest, average_immersion_should_throw_if_index_does_not_have_the_right_size)
+{
+    const Mesh mesh = MeshBuilder(one_triangle()).build();
+    ASSERT_THROW(average_immersion(mesh.nodes, {4,5}), HydrostaticException);
+    ASSERT_THROW(average_immersion(mesh.nodes, {4,5,6,7}), HydrostaticException);
+}
+
+TEST_F(hydrostaticTest, can_compute_average_immersion_even_when_not_all_nodes_are_used)
+{
+    const Mesh mesh = MeshBuilder(two_triangles()).build();
+    ASSERT_DOUBLE_EQ(7/3., average_immersion(mesh.nodes, mesh.facets.back().index, {1,2,3,4}));
 }
 
 TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_one_immerged_node)

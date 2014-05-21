@@ -14,20 +14,33 @@
 #include <Eigen/Dense>
 
 #include "GeometricTypes3d.hpp"
+#include "Mesh.hpp"
 #include "UnsafeWrench.hpp"
 
 namespace hydrostatic
 {
     /**  \author cec
       *  \date Apr 30, 2014, 10:10:40 AM
-      *  \brief Comptues average relative immersion of three points
+      *  \brief Computes average relative immersion of three points
       *  \details Needs the indices of those points & a vector of relative heights.
       *  \returns Average relative immersion
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest average_immersion_example
       */
-    double average_immersion(const std::vector<size_t>& idx, //!< Indices of the points
-                             const std::vector<double>& delta_z //!< Vector of relative wave heights (positive if point is immerged)
+    double average_immersion(const Matrix3x& nodes,              //!< Coordinates of all nodes
+                             const std::vector<size_t>& idx,     //!< Indices of the points
+                             const std::vector<double>& delta_z  //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                             );
+
+    /**  \author cec
+      *  \date May 21, 2014, 12:27:34 PM
+      *  \brief
+      *  \details nodes should have the same number of columns as the size of delta_z
+      *  \returns
+      */
+    double average_immersion(const Matrix3x& nodes,             //!< Coordinates of used nodes
+                             const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+                            );
+
     /**  \author cec
       *  \date Apr 30, 2014, 11:03:52 AM
       *  \brief Computes the immerged polygon from a facet
