@@ -46,17 +46,21 @@ Mesh MeshBuilder::build()
 	return Mesh(resize(nodes), facets);
 }
 
-void MeshBuilder::operator()(const VectorOfPoints& tri)
+void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
 {
-	Facet facet;
-    facet.unit_normal = unit_normal(convert(tri));
-    facet.area = area(convert(tri));
-    facet.barycenter = barycenter(convert(tri));
-    for (VectorOfPoints::const_iterator it = tri.begin() ; it != tri.end() ; ++it)
+    if (not(list_of_points.empty()))
     {
-        facet.index.push_back(build_one_point(*it));
+        Facet facet;
+        const Matrix3x M = convert(list_of_points);
+        facet.unit_normal = unit_normal(M);
+        facet.area = area(M);
+        facet.barycenter = barycenter(M);
+        for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ; ++it)
+        {
+            facet.index.push_back(build_one_point(*it));
+        }
+        facets.push_back(facet);
     }
-    facets.push_back(facet);
 }
 
 size_t MeshBuilder::build_one_point(const EPoint& xyz)

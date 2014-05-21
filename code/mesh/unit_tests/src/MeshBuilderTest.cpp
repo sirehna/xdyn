@@ -115,3 +115,9 @@ TEST_F(MeshBuilderTest, cannot_build_mesh_if_facets_have_one_or_two_points)
     ASSERT_THROW(MeshBuilder(n_gone(1)).build(),MeshException);
     ASSERT_THROW(MeshBuilder(n_gone(2)).build(),MeshException);
 }
+
+TEST_F(MeshBuilderTest, can_build_empty_mesh)
+{
+    ASSERT_NO_THROW(MeshBuilder(VectorOfVectorOfPoints()).build());
+    ASSERT_NO_THROW(MeshBuilder(VectorOfPoints()).build());
+}
