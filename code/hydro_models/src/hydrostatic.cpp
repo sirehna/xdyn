@@ -158,22 +158,29 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
         for (size_t i = 0 ; i < idxA ; ++i)
         {
             ret.col(k++) = M.col(i);
+            delta_z.push_back(v.at(i));
         }
         ret.col(k++) = P;
+        delta_z.push_back(0);
         ret.col(k++) = Q;
+        delta_z.push_back(0);
         for (size_t i = idxB+1 ; i < n ; ++i)
         {
             ret.col(k++) = M.col(i);
+            delta_z.push_back(v.at(i));
         }
     }
     else
     {
         ret.col(k++) = Q;
+        delta_z.push_back(0);
         for (size_t i = idxB1 ; i <= idxA1 ; ++i)
         {
             ret.col(k++) = M.col(i);
+            delta_z.push_back(v.at(i));
         }
         ret.col(k++) = P;
+        delta_z.push_back(0);
     }
     return std::make_pair(ret,delta_z);
 }

@@ -83,6 +83,10 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_one_immerged_node)
     ASSERT_DOUBLE_EQ(7,polygon(0,2));
     ASSERT_DOUBLE_EQ(8,polygon(1,2));
     ASSERT_DOUBLE_EQ(9,polygon(2,2));
+    ASSERT_EQ(3, polygon_and_immersions.second.size());
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(0));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(1));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(2));
 //! [hydrostaticTest immerged_polygon_example_1]
 }
 
@@ -130,6 +134,11 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_two_immerged_node)
     ASSERT_DOUBLE_EQ(4,polygon(0,3));
     ASSERT_DOUBLE_EQ(4.5,polygon(1,3));
     ASSERT_DOUBLE_EQ(6,polygon(2,3));
+    ASSERT_EQ(4, polygon_and_immersions.second.size());
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(0));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(1));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(2));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(3));
 //! [hydrostaticTest immerged_polygon_example_2]
 }
 
@@ -158,6 +167,11 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_
     ASSERT_DOUBLE_EQ(9,polygon(0,3));
     ASSERT_DOUBLE_EQ(9,polygon(1,3));
     ASSERT_DOUBLE_EQ(11,polygon(2,3));
+    ASSERT_EQ(4, polygon_and_immersions.second.size());
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(0));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(1));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(2));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(3));
 }
 
 TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_last_nodes)
@@ -185,6 +199,11 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_
     ASSERT_DOUBLE_EQ(5,polygon(0,3));
     ASSERT_DOUBLE_EQ(5,polygon(1,3));
     ASSERT_DOUBLE_EQ(6.5 ,polygon(2,3));
+    ASSERT_EQ(4, polygon_and_immersions.second.size());
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(0));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(1));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(2));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(3));
 }
 
 TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_in_the_middle)
@@ -212,6 +231,11 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_in_t
     ASSERT_DOUBLE_EQ(9,polygon(0,3));
     ASSERT_DOUBLE_EQ(9,polygon(1,3));
     ASSERT_DOUBLE_EQ(11 ,polygon(2,3));
+    ASSERT_EQ(4, polygon_and_immersions.second.size());
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(0));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(1));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(2));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(3));
 }
 
 TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_all_points_are_immerged)
@@ -332,6 +356,11 @@ TEST_F(hydrostaticTest, another_bug_in_immerged_polygon)
     ASSERT_DOUBLE_EQ(3, polygon(0,2));
     ASSERT_DOUBLE_EQ(-0.5, polygon(1,2));
     ASSERT_DOUBLE_EQ(0, polygon(2,2));
+
+    ASSERT_EQ(3, polygon_and_immersions.second.size());
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(0));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(1));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(2));
 }
 
 TEST_F(hydrostaticTest, bug_in_first_and_last_emerged_points)
