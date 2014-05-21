@@ -1,4 +1,5 @@
 #include "TriMeshTestData.hpp"
+#include <cmath>
 
 VectorOfPoints one_triangle()
 {
@@ -168,5 +169,18 @@ VectorOfVectorOfPoints trapezium()
     facet.push_back(EPoint(2,1,0));
     facet.push_back(EPoint(1,1,0));
     mesh.push_back(facet);
+    return mesh;
+}
+
+VectorOfVectorOfPoints n_gone(const size_t n)
+{
+    const double two_pi = 8.*atan(1.);
+    VectorOfVectorOfPoints mesh;
+    VectorOfPoints facet;
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        facet.push_back(EPoint(cos(i*two_pi/n),sin(i*two_pi/n),0));
+    }
+    if (n) mesh.push_back(facet);
     return mesh;
 }
