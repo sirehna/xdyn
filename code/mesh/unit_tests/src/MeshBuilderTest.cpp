@@ -121,3 +121,13 @@ TEST_F(MeshBuilderTest, can_build_empty_mesh)
     ASSERT_NO_THROW(MeshBuilder(VectorOfVectorOfPoints()).build());
     ASSERT_NO_THROW(MeshBuilder(VectorOfPoints()).build());
 }
+
+TEST_F(MeshBuilderTest, can_build_n_gone)
+{
+    ASSERT_NO_THROW(MeshBuilder(n_gone(1000)).build());
+}
+
+TEST_F(MeshBuilderTest, bug_when_building_trapezium)
+{
+    ASSERT_NO_THROW(MeshBuilder(trapezium()).build());
+}

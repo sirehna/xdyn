@@ -17,17 +17,19 @@ std::vector<Facet> MeshBuilder::get_facets() const
 MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    index(0),
-                                                                   nodes(Eigen::Matrix<double,3,Eigen::Dynamic>(Eigen::MatrixXd::Zero(3,3*v.size()))),
+                                                                   nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
                                                                    facets(std::vector<Facet>())
 {
+    if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,v.size()*v.front().size());
 }
 
 MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1,tri)),
                                                             xyzMap(Vector3dMap()),
                                                             index(0),
-                                                            nodes(Eigen::Matrix<double,3,Eigen::Dynamic>(Eigen::MatrixXd::Zero(3,3))),
+                                                            nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
                                                             facets(std::vector<Facet>())
 {
+    if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,v.size()*v.front().size());
 }
 
 Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::resize(const Eigen::Matrix<double,3,Eigen::Dynamic>& M) const
