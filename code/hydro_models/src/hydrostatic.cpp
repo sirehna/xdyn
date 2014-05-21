@@ -60,11 +60,19 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
         {
             if (z[i-1]>=0)
             {
+                if (first_was_assigned)
+                {
+                    THROW(__PRETTY_FUNCTION__, HydrostaticException, "Set of emerged points is not convex.");
+                }
                 first = i;
                 first_was_assigned=true;
             }
             if (z[i+1]>=0)
             {
+                if (last_was_assigned)
+                {
+                    THROW(__PRETTY_FUNCTION__, HydrostaticException, "Set of emerged points is not convex.");
+                }
                 last = i;
                 last_was_assigned=true;
             }

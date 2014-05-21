@@ -368,3 +368,11 @@ TEST_F(hydrostaticTest, first_and_last_emerged_points_T10)
     ASSERT_EQ(2,first_and_last.first);
     ASSERT_EQ(2,first_and_last.second);
 }
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_should_throw_if_set_of_emerged_points_is_not_convex)
+{
+    ASSERT_THROW(first_and_last_emerged_points({1,1,-1,-1,1,-1,-1}), HydrostaticException);
+    ASSERT_THROW(first_and_last_emerged_points({1,1,-1,-1,1,-1,-1,1}), HydrostaticException);
+    ASSERT_THROW(first_and_last_emerged_points({-1,-1,1,-1,-1,1}), HydrostaticException);
+    ASSERT_THROW(first_and_last_emerged_points({1,-1,-1,1,-1,-1}), HydrostaticException);
+}
