@@ -15,10 +15,6 @@
 
 using namespace hydrostatic;
 
-bool negative (const double x);
-bool negative (const double x) { return x<0; }
-bool positive (const double x);
-bool positive (const double x) { return not(negative(x)); }
 size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vector<double>& delta_z);
 size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
