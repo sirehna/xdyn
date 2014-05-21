@@ -35,7 +35,7 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
                             )
 {
     const size_t n = idx.size();
-    std::vector<Eigen::Vector3d> areas_times_points;
+    std::vector<EPoint> areas_times_points;
     std::vector<double> areas;
     const size_t iA = idx[0];
     for (size_t i = 2 ; i < n ; ++i)
@@ -45,7 +45,7 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
         const EPoint A = nodes.col(iA);
         const EPoint B = nodes.col(iB);
         const EPoint C = nodes.col(iC);
-        const Eigen::Vector3d centre_of_gravity((A(0)+B(0)+C(0))/3.,
+        const EPoint centre_of_gravity((A(0)+B(0)+C(0))/3.,
                                                 (A(1)+B(1)+C(1))/3.,
                                                 (delta_z.at(idx[0])+delta_z.at(idx[i-1])+delta_z.at(idx[i]))/3.);
         areas.push_back(triangle_area(A, B, C));
@@ -232,13 +232,13 @@ size_t hydrostatic::previous(const std::vector<size_t>& idx, const size_t i0)
 }
 
 UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                             const Eigen::Vector3d& C, //!< Point where the force is applied (barycentre of the facet)
+                             const EPoint& C, //!< Point where the force is applied (barycentre of the facet)
                              const double rho,         //!< Density of the fluid (in kg/m^3)
                              const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                              const double z,           //!< Relative immersion (in metres)
-                             const Eigen::Vector3d& dS //!< Unit normal vector multiplied by the surface of the facet
+                             const EPoint& dS //!< Unit normal vector multiplied by the surface of the facet
                            )
 {
-    const Eigen::Vector3d F = rho*g*z*dS;
+    const EPoint F = rho*g*z*dS;
     return UnsafeWrench(O.get_frame(), F, (C-O.v).cross(F));
 }
