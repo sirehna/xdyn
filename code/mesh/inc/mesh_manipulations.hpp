@@ -40,6 +40,16 @@ double area(const Matrix3x& polygon //!< Polygon for which the area is computed
         );
 
 /**  \author cec
+  *  \date May 21, 2014, 10:39:36 AM
+  *  \brief Calculates the area of a triangle
+  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest triangle_area_example
+  */
+double triangle_area(const EPoint& A, //!< First point in triangle
+                     const EPoint& B, //!< Second point in triangle
+                     const EPoint& C  //!< Third point in triangle
+                     );
+
+/**  \author cec
   *  \date May 20, 2014, 10:55:32 AM
   *  \brief Computes the position of the centre of gravity of a polygon
   *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest centre_of_gravity_example

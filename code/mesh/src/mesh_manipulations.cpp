@@ -10,7 +10,6 @@
 #include "kahan_sum.hpp"
 #include "pairwise_sum.hpp"
 
-double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C);
 double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C)
 {
     return 0.5*fabs(((B-A).cross(C-A)).norm());
