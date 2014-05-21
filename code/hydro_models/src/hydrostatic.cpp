@@ -44,19 +44,35 @@ double hydrostatic::average_immersion(const std::vector<size_t>& idx, const std:
 
 std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::vector<double>& z)
 {
-    if (z.empty())
+    const size_t n = z.size();
+    if (n<3)
     {
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, "z is empty");
+        THROW(__PRETTY_FUNCTION__, HydrostaticException, "Need at least 3 points in z");
     }
-    std::vector<double>::const_iterator it = std::find_if(z.begin(), z.end(), negative);
-    if (it == z.end())
+    size_t first = 0;
+    size_t last = 0;
+    bool first_was_assigned = false;
+    bool last_was_assigned = false;
+    if ((z[0]<0) and (z[1]>=0)) {last_was_assigned=true;}
+    for (size_t i = 1 ; i < n-1 ; ++i)
     {
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, "All points are immerged");
+        if (z[i]<0)
+        {
+            if (z[i-1]>=0)
+            {
+                first = i;
+                first_was_assigned=true;
+            }
+            if (z[i+1]>=0)
+            {
+                last = i;
+                last_was_assigned=true;
+            }
+        }
     }
-    const size_t first = std::distance(z.begin(),it);
-    it  = std::find_if(it, z.end(), positive);
-    const size_t last = it==z.end() ? z.size() : std::distance(z.begin(),it);
-    return std::make_pair(first,last-1);
+    if ((z[n-1]<0) and not(first_was_assigned)) first = n-1;
+    if ((z[n-1]<0) and not(last_was_assigned))  last = n-1;
+    return std::make_pair(first,last);
 }
 
 void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_t>& idx, const std::vector<double>& v);

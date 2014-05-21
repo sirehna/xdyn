@@ -93,18 +93,6 @@ TEST_F(hydrostaticTest, can_find_the_previous_point)
     ASSERT_EQ(3, previous(idx,8));
 }
 
-TEST_F(hydrostaticTest, can_find_index_of_first_and_last_emerged_points)
-{
-    const std::vector<double> v1({1,2,-3,4,-5,6,7,-8});
-    const std::vector<double> v2({-1,-2,3,4,-5,6,-7,8});
-    const std::pair<size_t,size_t> idx1 = first_and_last_emerged_points(v1);
-    const std::pair<size_t,size_t> idx2 = first_and_last_emerged_points(v2);
-    ASSERT_EQ(2,idx1.first);
-    ASSERT_EQ(2,idx1.second);
-    ASSERT_EQ(0,idx2.first);
-    ASSERT_EQ(1,idx2.second);
-}
-
 TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_two_immerged_node)
 {
 //! [hydrostaticTest immerged_polygon_example_2]
@@ -302,4 +290,81 @@ TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
     ASSERT_DOUBLE_EQ(-6*Fhs.Z-2*Fhs.Y, Fhs.K);
     ASSERT_DOUBLE_EQ(-77*Fhs.Z, Fhs.M);
     ASSERT_DOUBLE_EQ(77*Fhs.Y, Fhs.N);
+}
+
+TEST_F(hydrostaticTest, bug_in_first_and_last_emerged_points)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({-1,1,-1});
+    ASSERT_EQ(2,first_and_last.first);
+    ASSERT_EQ(0,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T01)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({-1,-1,-1,1,1,1,-1,-1,-1});
+    ASSERT_EQ(6,first_and_last.first);
+    ASSERT_EQ(2,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T02)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({1,1,1,-1,-1,1,1});
+    ASSERT_EQ(3,first_and_last.first);
+    ASSERT_EQ(4,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T03)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({-1,-1,-1,1,1,1});
+    ASSERT_EQ(0,first_and_last.first);
+    ASSERT_EQ(2,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T04)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({1,1,1,-1,-1,-1});
+    ASSERT_EQ(3,first_and_last.first);
+    ASSERT_EQ(5,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T05)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({-1,-1,-1,1});
+    ASSERT_EQ(0,first_and_last.first);
+    ASSERT_EQ(2,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T06)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({-1,-1,1,-1});
+    ASSERT_EQ(3,first_and_last.first);
+    ASSERT_EQ(1,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T07)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({-1,1,-1,-1});
+    ASSERT_EQ(2,first_and_last.first);
+    ASSERT_EQ(0,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T08)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({-1,1,1,1});
+    ASSERT_EQ(0,first_and_last.first);
+    ASSERT_EQ(0,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T09)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({1,1,1,-1});
+    ASSERT_EQ(3,first_and_last.first);
+    ASSERT_EQ(3,first_and_last.second);
+}
+
+TEST_F(hydrostaticTest, first_and_last_emerged_points_T10)
+{
+    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points({1,1,-1,1});
+    ASSERT_EQ(2,first_and_last.first);
+    ASSERT_EQ(2,first_and_last.second);
 }
