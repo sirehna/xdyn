@@ -125,7 +125,7 @@ void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_
     }
 }
 
-Matrix3x hydrostatic::immerged_polygon(const Matrix3x& M,
+std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Matrix3x& M,
                                        const std::vector<size_t>& idx,
                                        const std::vector<double>& v)
 {
@@ -149,6 +149,7 @@ Matrix3x hydrostatic::immerged_polygon(const Matrix3x& M,
     const EPoint Q = intersection(B,v[idxB],B1,v[idxB1]);
     const size_t N = (idxB>=idxA) ? n-(idxB-idxA-1) : idxA-idxB+2;
     Eigen::Matrix<double,3,Eigen::Dynamic> ret;
+    std::vector<double> delta_z;
     ret.resize(3,N);
     size_t k = 0;
 
@@ -174,7 +175,7 @@ Matrix3x hydrostatic::immerged_polygon(const Matrix3x& M,
         }
         ret.col(k++) = P;
     }
-    return ret;
+    return std::make_pair(ret,delta_z);
 }
 
 EPoint hydrostatic::intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB)

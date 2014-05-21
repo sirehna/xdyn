@@ -71,7 +71,7 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_one_immerged_node)
     std::vector<size_t> index(3);
     index[0] = 0; index[1] = 1; index[2] = 2;
     const std::vector<double> v({-1,-1,1});
-    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v);
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v).first;
     ASSERT_EQ(3, polygon.cols());
     ASSERT_DOUBLE_EQ(4,polygon(0,0));
     ASSERT_DOUBLE_EQ(4.5,polygon(1,0));
@@ -114,7 +114,7 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_two_immerged_node)
     std::vector<size_t> index(3);
     index[0] = 0; index[1] = 1; index[2] = 2;
     const std::vector<double> v({-1,1,1});
-    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v);
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v).first;
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(2.5,polygon(0,0));
     ASSERT_DOUBLE_EQ(3.5,polygon(1,0));
@@ -141,7 +141,7 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_
     std::vector<size_t> index(5);
     index[0] = 0; index[1] = 1; index[2] = 2; index[3] = 3; index[4] = 4;
     const std::vector<double> v({-1,-1,-1,1,1});
-    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v);
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v).first;
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(5,polygon(0,0));
     ASSERT_DOUBLE_EQ(5,polygon(1,0));
@@ -167,7 +167,7 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_
     std::vector<size_t> index(5);
     index[0] = 0; index[1] = 1; index[2] = 2; index[3] = 3; index[4] = 4;
     const std::vector<double> v({1,1,-1,-1,-1});
-    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v);
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v).first;
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(1,polygon(0,0));
     ASSERT_DOUBLE_EQ(1,polygon(1,0));
@@ -193,7 +193,7 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_in_t
     std::vector<size_t> index(5);
     index[0] = 0; index[1] = 1; index[2] = 2; index[3] = 3; index[4] = 4;
     const std::vector<double> v({1,-1,-1,-1,1});
-    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v);
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(M, index, v).first;
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(1,polygon(0,0));
     ASSERT_DOUBLE_EQ(1,polygon(1,0));
@@ -313,7 +313,7 @@ TEST_F(hydrostaticTest, another_bug_in_immerged_polygon)
 {
     const Mesh mesh = MeshBuilder(two_triangles()).build();
     const std::vector<double> z = {-1,-1,-2,1};
-    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(mesh.nodes, mesh.facets.at(1).index, z);
+    const Eigen::Matrix<double,3,Eigen::Dynamic> polygon = immerged_polygon(mesh.nodes, mesh.facets.at(1).index, z).first;
 
     ASSERT_DOUBLE_EQ(1, polygon(0,0));
     ASSERT_DOUBLE_EQ(-0.5, polygon(1,0));

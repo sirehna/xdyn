@@ -44,12 +44,12 @@ namespace hydrostatic
     /**  \author cec
       *  \date Apr 30, 2014, 11:03:52 AM
       *  \brief Computes the immerged polygon from a facet
-      *  \returns Coordinate matrix (one point per column)
+      *  \returns Coordinate matrix (one point per column) & corresponding relative immersion
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest immerged_polygon_example
       */
-    Matrix3x immerged_polygon(const Matrix3x& M, //!< Matrix containing all the points in the mesh
-                              const std::vector<size_t>& idx, //!< Indices of the points
-                              const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
+    std::pair<Matrix3x,std::vector<double> > immerged_polygon(const Matrix3x& M, //!< Matrix containing all the points in the mesh
+                                                              const std::vector<size_t>& idx, //!< Indices of the points
+                                                              const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
                                  );
 
     /**  \author cec
