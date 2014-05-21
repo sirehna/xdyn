@@ -31,12 +31,6 @@ size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vect
     return nb_of_immerged_points;
 }
 
-bool hydrostatic::partially_immerged(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
-{
-    const size_t nb_of_immerged_points = get_nb_of_immerged_points(idx,delta_z);
-    return (nb_of_immerged_points!=idx.size()) and (nb_of_immerged_points != 0);
-}
-
 double hydrostatic::average_immersion(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
     return sum::kahan(idx,delta_z)/idx.size();
