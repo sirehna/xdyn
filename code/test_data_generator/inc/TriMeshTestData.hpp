@@ -7,5 +7,6 @@ VectorOfPoints one_triangle();
 VectorOfPoints degenerated_triangle();
 VectorOfVectorOfPoints unit_cube();
 VectorOfVectorOfPoints two_triangles();
+VectorOfVectorOfPoints trapezium();
 
 #endif

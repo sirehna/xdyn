@@ -158,3 +158,15 @@ VectorOfVectorOfPoints two_triangles()
 
     return mesh;
 }
+
+VectorOfVectorOfPoints trapezium()
+{
+    VectorOfVectorOfPoints mesh;
+    VectorOfPoints facet;
+    facet.push_back(EPoint(0,0,0));
+    facet.push_back(EPoint(3,0,0));
+    facet.push_back(EPoint(2,1,0));
+    facet.push_back(EPoint(1,1,0));
+    mesh.push_back(facet);
+    return mesh;
+}
