@@ -184,3 +184,89 @@ VectorOfVectorOfPoints n_gone(const size_t n)
     if (n) mesh.push_back(facet);
     return mesh;
 }
+
+VectorOfVectorOfPoints cube(const double a, const double x0, const double y0, const double z0)
+{
+    VectorOfVectorOfPoints mesh;
+    VectorOfPoints facet_1, facet_2, facet_3, facet_4, facet_5, facet_6;
+
+    const EPoint P1(x0-a/2,y0+a/2,z0-a/2);
+    const EPoint P2(x0+a/2,y0+a/2,z0-a/2);
+    const EPoint P3(x0+a/2,y0-a/2,z0-a/2);
+    const EPoint P4(x0-a/2,y0-a/2,z0-a/2);
+
+    const EPoint P5(x0-a/2,y0+a/2,z0+a/2);
+    const EPoint P6(x0+a/2,y0+a/2,z0+a/2);
+    const EPoint P7(x0+a/2,y0-a/2,z0+a/2);
+    const EPoint P8(x0-a/2,y0-a/2,z0+a/2);
+
+    facet_1.push_back(P1);
+    facet_1.push_back(P2);
+    facet_1.push_back(P3);
+    facet_1.push_back(P4);
+    mesh.push_back(facet_1);
+
+    facet_2.push_back(P1);
+    facet_2.push_back(P5);
+    facet_2.push_back(P6);
+    facet_2.push_back(P2);
+    mesh.push_back(facet_2);
+
+    facet_3.push_back(P2);
+    facet_3.push_back(P6);
+    facet_3.push_back(P7);
+    facet_3.push_back(P3);
+    mesh.push_back(facet_3);
+
+    facet_4.push_back(P3);
+    facet_4.push_back(P7);
+    facet_4.push_back(P8);
+    facet_4.push_back(P4);
+    mesh.push_back(facet_4);
+
+    facet_5.push_back(P4);
+    facet_5.push_back(P8);
+    facet_5.push_back(P5);
+    facet_5.push_back(P1);
+    mesh.push_back(facet_5);
+
+    facet_6.push_back(P5);
+    facet_6.push_back(P8);
+    facet_6.push_back(P7);
+    facet_6.push_back(P6);
+    mesh.push_back(facet_6);
+
+    return mesh;
+}
+
+VectorOfVectorOfPoints tetrahedron(const double a, const double x, const double y, const double z)
+{
+    VectorOfVectorOfPoints mesh;
+    VectorOfPoints facet_1, facet_2, facet_3, facet_4;
+    const EPoint P1(x, y, z);
+    const EPoint P2(-sqrt(3)*a/6 + x, -a/2 + y, sqrt(6)*a/3 + z);
+    const EPoint P3(-sqrt(3)*a/6 + x, a/2 + y,  sqrt(6)*a/3 + z);
+    const EPoint P4(sqrt(3)*a/3 + x , y,        sqrt(6)*a/3 + z);
+
+    facet_1.push_back(P1);
+    facet_1.push_back(P2);
+    facet_1.push_back(P3);
+    mesh.push_back(facet_1);
+
+    facet_2.push_back(P1);
+    facet_2.push_back(P3);
+    facet_2.push_back(P4);
+    mesh.push_back(facet_2);
+
+    facet_3.push_back(P1);
+    facet_3.push_back(P4);
+    facet_3.push_back(P2);
+    mesh.push_back(facet_3);
+
+    facet_4.push_back(P3);
+    facet_4.push_back(P2);
+    facet_4.push_back(P4);
+    mesh.push_back(facet_4);
+
+    return mesh;
+}
