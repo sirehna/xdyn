@@ -46,8 +46,8 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
         const EPoint B = nodes.col(iB);
         const EPoint C = nodes.col(iC);
         const EPoint centre_of_gravity((A(0)+B(0)+C(0))/3.,
-                                                (A(1)+B(1)+C(1))/3.,
-                                                (delta_z.at(idx[0])+delta_z.at(idx[i-1])+delta_z.at(idx[i]))/3.);
+                                       (A(1)+B(1)+C(1))/3.,
+                                       (delta_z.at(idx[0])+delta_z.at(idx[i-1])+delta_z.at(idx[i]))/3.);
         areas.push_back(triangle_area(A, B, C));
         areas_times_points.push_back(areas.back()*centre_of_gravity);
     }

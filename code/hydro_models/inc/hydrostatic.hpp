@@ -34,7 +34,7 @@ namespace hydrostatic
     /**  \author cec
       *  \date May 21, 2014, 12:27:34 PM
       *  \brief
-      *  \details nodes should have the same number of columns as the size of delta_z
+      *  \details Nodes should have the same number of columns as the size of delta_z
       *  \returns
       */
     double average_immersion(const Matrix3x& nodes,             //!< Coordinates of used nodes
@@ -47,9 +47,9 @@ namespace hydrostatic
       *  \returns Coordinate matrix (one point per column) & corresponding relative immersion
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest immerged_polygon_example
       */
-    std::pair<Matrix3x,std::vector<double> > immerged_polygon(const Matrix3x& M, //!< Matrix containing all the points in the mesh
+    std::pair<Matrix3x,std::vector<double> > immerged_polygon(const Matrix3x& M,              //!< Matrix containing all the points in the mesh
                                                               const std::vector<size_t>& idx, //!< Indices of the points
-                                                              const std::vector<double>& v //!< Vector of relative wave heights (positive if point is immerged)
+                                                              const std::vector<double>& v    //!< Vector of relative wave heights (positive if point is immerged)
                                  );
 
     /**  \author cec
@@ -84,7 +84,7 @@ namespace hydrostatic
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest next_example
       */
     size_t next(const std::vector<size_t>& idx, //!< Available indices, in order
-                const size_t i0 //!< Index to look for in 'idx'.
+                const size_t i0                 //!< Index to look for in 'idx'.
                            );
 
     /**  \author cec
@@ -95,7 +95,7 @@ namespace hydrostatic
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest previous_example
       */
     size_t previous(const std::vector<size_t>& idx, //!< Available indices, in order
-                    const size_t i0 //!< Index to look for in 'idx'.
+                    const size_t i0                 //!< Index to look for in 'idx'.
                        );
 
     /**  \author cec
