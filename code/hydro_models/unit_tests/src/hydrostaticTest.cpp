@@ -44,14 +44,14 @@ TEST_F(hydrostaticTest, can_compute_average_immersion)
 TEST_F(hydrostaticTest, can_compute_average_immersion_even_when_all_nodes_are_used)
 {
     const Mesh mesh = MeshBuilder(one_triangle()).build();
-    ASSERT_DOUBLE_EQ(5, average_immersion(mesh.nodes, {4,5,6}));
+    ASSERT_DOUBLE_EQ(5, average_immersion(std::make_pair(mesh.nodes, std::vector<double>({4,5,6}))));
 }
 
 TEST_F(hydrostaticTest, average_immersion_should_throw_if_index_does_not_have_the_right_size)
 {
     const Mesh mesh = MeshBuilder(one_triangle()).build();
-    ASSERT_THROW(average_immersion(mesh.nodes, {4,5}), HydrostaticException);
-    ASSERT_THROW(average_immersion(mesh.nodes, {4,5,6,7}), HydrostaticException);
+    ASSERT_THROW(average_immersion(std::make_pair(mesh.nodes, std::vector<double>({4,5}))), HydrostaticException);
+    ASSERT_THROW(average_immersion(std::make_pair(mesh.nodes, std::vector<double>({4,5,6,7}))), HydrostaticException);
 }
 
 TEST_F(hydrostaticTest, can_compute_average_immersion_even_when_not_all_nodes_are_used)

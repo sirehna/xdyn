@@ -37,8 +37,7 @@ namespace hydrostatic
       *  \details Nodes should have the same number of columns as the size of delta_z
       *  \returns
       */
-    double average_immersion(const Matrix3x& nodes,             //!< Coordinates of used nodes
-                             const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+    double average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                             );
 
     /**  \author cec

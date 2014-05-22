@@ -54,18 +54,17 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
     return (sum::pairwise(areas_times_points)/sum::pairwise(areas))(2,0);
 }
 
-double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Coordinates of used nodes
-                                      const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes             //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                                      )
 {
-    const size_t n = nodes.cols();
-    if (n != delta_z.size())
+    const size_t n = nodes.first.cols();
+    if (n != nodes.second.size())
     {
         THROW(__PRETTY_FUNCTION__, HydrostaticException, "Number of nodes should be equal to size of delta_z");
     }
     std::vector<size_t> idx;
     for (size_t i = 0 ; i < n ; ++i) idx.push_back(i);
-    return average_immersion(nodes, idx, delta_z);
+    return average_immersion(nodes.first, idx, nodes.second);
 }
 
 std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::vector<double>& z)
