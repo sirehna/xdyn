@@ -246,6 +246,6 @@ UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the W
                              const EPoint& dS //!< Unit normal vector multiplied by the surface of the facet
                            )
 {
-    const EPoint F = rho*g*z*dS;
+    const EPoint F = -rho*g*z*dS; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
     return UnsafeWrench(O.get_frame(), F, (C-O.v).cross(F));
 }

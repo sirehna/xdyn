@@ -324,8 +324,8 @@ TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
     ASSERT_EQ(frame, Fhs.get_frame());
 
     ASSERT_DOUBLE_EQ(0, Fhs.X);
-    ASSERT_DOUBLE_EQ(1024*10*3*3, Fhs.Y);
-    ASSERT_DOUBLE_EQ(1024*10*3*4, Fhs.Z);
+    ASSERT_DOUBLE_EQ(-1024*10*3*3, Fhs.Y);
+    ASSERT_DOUBLE_EQ(-1024*10*3*4, Fhs.Z);
     ASSERT_DOUBLE_EQ(-6*Fhs.Z-2*Fhs.Y, Fhs.K);
     ASSERT_DOUBLE_EQ(-77*Fhs.Z, Fhs.M);
     ASSERT_DOUBLE_EQ(77*Fhs.Y, Fhs.N);
