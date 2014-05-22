@@ -249,3 +249,45 @@ UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the W
     const EPoint F = -rho*g*z*dS; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
     return UnsafeWrench(O.get_frame(), F, (C-O.v).cross(F));
 }
+
+UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                             const Facet& f,           //!< Point where the force is applied (barycentre of the facet)
+                             const double rho,         //!< Density of the fluid (in kg/m^3)
+                             const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                             const double immersion    //!< Relative immersion of the barycentre (in metres)
+                       )
+{
+    const EPoint F = -rho*g*immersion*f.area*f.unit_normal; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
+    return UnsafeWrench(O.get_frame(), F, (f.barycenter-O.v).cross(F));
+}
+
+Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                          const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                          const double rho,                       //!< Density of the fluid (in kg/m^3)
+                          const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                          const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
+                )
+{
+    std::vector<Facet>::const_iterator that_facet = mesh.facets.begin();
+    std::vector<UnsafeWrench> elementary_forces;
+    for (;that_facet != mesh.facets.end() ; ++that_facet)
+    {
+        const size_t nb_of_immerged_points = get_nb_of_immerged_points(that_facet->index, immersions);
+        const bool totally_immerged = nb_of_immerged_points == that_facet->index.size();
+        const bool partially_immerged = nb_of_immerged_points > 0;
+        if (totally_immerged)
+        {
+            const double zG = average_immersion(mesh.nodes, that_facet->index, immersions);
+            elementary_forces.push_back(dF(O, *that_facet, rho, g, zG));
+        }
+        else if (partially_immerged)
+        {
+            const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh.nodes,that_facet->index,immersions);
+            const double zG = average_immersion(polygon_and_immersions);
+            const EPoint dS = area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
+            elementary_forces.push_back(dF(O,barycenter(polygon_and_immersions.first),rho,g,zG,dS));
+        }
+    }
+    const UnsafeWrench F = sum::pairwise(elementary_forces);
+    return F;
+}

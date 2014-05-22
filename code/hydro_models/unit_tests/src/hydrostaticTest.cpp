@@ -10,6 +10,9 @@
 #include "HydrostaticException.hpp"
 #include "TriMeshTestData.hpp"
 #include "MeshBuilder.hpp"
+#include "extra_test_assertions.hpp"
+
+#define EPS 1E-6
 
 hydrostaticTest::hydrostaticTest() : a(DataGenerator(2))
 {
@@ -446,4 +449,66 @@ TEST_F(hydrostaticTest, first_and_last_emerged_points_should_throw_if_set_of_eme
     ASSERT_THROW(first_and_last_emerged_points({1,1,-1,-1,1,-1,-1,1}), HydrostaticException);
     ASSERT_THROW(first_and_last_emerged_points({-1,-1,1,-1,-1,1}), HydrostaticException);
     ASSERT_THROW(first_and_last_emerged_points({1,-1,-1,1,-1,-1}), HydrostaticException);
+}
+
+TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
+{
+    const Mesh mesh = MeshBuilder(two_triangles()).build();
+    const double rho = 1024;
+    const double g = 10;
+    const Point G(a.random<std::string>(), 1,2,4);
+    const std::vector<double> z = {-0.5,-0.5,-2.5,0.5};
+    const Wrench Fhs = force(mesh, G, rho, g, z);
+    ASSERT_DOUBLE_EQ(0, Fhs.X);
+    ASSERT_DOUBLE_EQ(0, Fhs.Y);
+    const double dz = 0.5/3;
+    const double dS = 0.5;
+    ASSERT_DOUBLE_EQ(0, Fhs.X);
+    ASSERT_DOUBLE_EQ(0, Fhs.Y);
+    ASSERT_DOUBLE_EQ(-rho*g*dz*dS, Fhs.Z);
+    ASSERT_DOUBLE_EQ(-8/3.*Fhs.Z, Fhs.K);
+    ASSERT_DOUBLE_EQ(-Fhs.Z, Fhs.M);
+    ASSERT_DOUBLE_EQ(0, Fhs.N);
+}
+
+TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
+{
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double L = a.random<double>().between(0,10);
+        const double x0 = a.random<double>().between(-1000,1000);
+        const double y0 = a.random<double>().between(-1000,1000);
+        const double z0 = L/2;
+        const Point G(a.random<std::string>(), 0, 0, 0);
+        const Mesh mesh = MeshBuilder(cube(L,x0,y0,z0)).build();
+        const std::vector<double> dz = {z0-L/2,z0-L/2,z0-L/2,z0-L/2,z0+L/2,z0+L/2,z0+L/2,z0+L/2};
+        const double rho = 1000;
+        const double g = 9.81;
+        const Wrench Fhs = force(mesh, G, rho, g, dz);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X, EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y, EPS);
+        const double V = L*L*L;
+        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z, EPS);
+    }
+}
+
+TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
+{
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double L = a.random<double>().between(0,10);
+        const double x0 = a.random<double>().between(-1000,1000);
+        const double y0 = a.random<double>().between(-1000,1000);
+        const double z0 = a.random<double>().between(0,1000);
+        const Point G(a.random<std::string>(), 0, 0, 0);
+        const Mesh mesh = MeshBuilder(tetrahedron(L,x0,y0,z0)).build();
+        const std::vector<double> dz = {z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0};
+        const double rho = 1000;
+        const double g = 9.81;
+        const Wrench Fhs = force(mesh, G, rho, g, dz);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X, EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y, EPS);
+        const double V = L*L*L/(6.*sqrt(2));
+        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z, EPS);
+    }
 }

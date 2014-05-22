@@ -104,13 +104,40 @@ namespace hydrostatic
       *           also the frame of reference of the calculated Wrench object.
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest dF_example
       */
+    UnsafeWrench dF(const Point& O,         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                    const EPoint& C,        //!< Point where the force is applied (barycentre of the facet)
+                    const double rho,       //!< Density of the fluid (in kg/m^3)
+                    const double g,         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                    const double immersion, //!< Relative immersion of the barycentre (in metres)
+                    const EPoint& dS        //!< Unit normal vector multiplied by the surface of the facet
+                           );
+
+    /**  \author cec
+      *  \date May 19, 2014, 3:54:16 PM
+      *  \brief Hydrostatic force & torque acting on a single facet of the mesh
+      *  \details For completely immerged facets
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest dF_example
+      */
     UnsafeWrench dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                    const EPoint& C, //!< Point where the force is applied (barycentre of the facet)
+                    const Facet& f,           //!< Point where the force is applied (barycentre of the facet)
                     const double rho,         //!< Density of the fluid (in kg/m^3)
                     const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-                    const double immersion,   //!< Relative immersion of the barycentre (in metres)
-                    const EPoint& dS //!< Unit normal vector multiplied by the surface of the facet
+                    const double immersion    //!< Relative immersion of the barycentre (in metres)
                            );
+
+    /**  \author cec
+      *  \date May 19, 2014, 3:19:19 PM
+      *  \brief Computes the hydrostatic force acting on a body
+      *  \details
+      *  \returns
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
+      */
+    Wrench force(const Mesh& mesh,                       //!< Coordinates of all the points
+                 const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                 const double rho,                       //!< Density of the fluid (in kg/m^3)
+                 const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                 const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
+                );
 }
 
 #endif /* HYDROSTATIC_HPP_ */
