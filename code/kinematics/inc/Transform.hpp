@@ -16,13 +16,13 @@
 #include <ostream>
 
 /** \author cec
- *  \brief
+ *  \brief Can express positions, speeds & wrenches in a different frame of reference.
  *  \details
- *  \ingroup
+ *  \ingroup kinematics
  *  \section ex1 Example
- *  \snippet _________/unit_tests/src/TransformTest.cpp TransformTest example
+ *  \snippet kinematics/unit_tests/src/TransformTest.cpp TransformTest example
  *  \section ex2 Expected output
- *  \snippet _________/unit_tests/src/TransformTest.cpp TransformTest expected output
+ *  \snippet kinematics/unit_tests/src/TransformTest.cpp TransformTest expected output
  */
 namespace kinematics
 {
