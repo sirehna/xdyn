@@ -27,8 +27,9 @@ using namespace kinematics;
 			                         boost::bind(&DataSourceBuilder::f, boost::ref(*this), _1));
 
 MODULE(PointMatrixBuilder, const std::string name = get_name();\
-                           const Mesh T = ds->get<Mesh>(name);\
-                           ds->set<PointMatrix>(name, PointMatrix(T.nodes,name));
+                           const std::tr1::shared_ptr<Mesh> T = ds->get<std::tr1::shared_ptr<Mesh> >(name);\
+                           const std::tr1::shared_ptr<PointMatrix> pm = ds->read_only() ? std::tr1::shared_ptr<PointMatrix>() : std::tr1::shared_ptr<PointMatrix>(new PointMatrix(T->nodes,name));\
+                           ds->set<std::tr1::shared_ptr<PointMatrix> >(name, pm);
       )
 
 DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in), ds(DataSource())
@@ -97,9 +98,9 @@ void DataSourceBuilder::add_gravity(const std::string& body_name, const std::str
 void DataSourceBuilder::add_mesh(const YamlBody& body)
 {
     const TextFileReader reader(std::vector<std::string>(1, body.mesh));
-    const VectorOfVectorOfPoints data = read_stl(reader.get_contents());
-    MeshBuilder builder(data);
-    ds.set<Mesh>(body.name, builder.build());
+    MeshBuilder builder(read_stl(reader.get_contents()));
+    std::tr1::shared_ptr<Mesh> mesh(new Mesh(builder.build()));
+    ds.set<std::tr1::shared_ptr<Mesh> >(body.name, mesh);
     ds.add<PointMatrixBuilder>(body.name);
 }
 

@@ -104,15 +104,15 @@ void DataSourceBuilderTest::make_stl_file(const std::string& data, const std::st
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_mesh_of_each_body)
 {
     make_stl_file(test_data::three_facets(), "anthineas.stl");
-    const Mesh m = ds.get<Mesh>("body 1");
-    ASSERT_EQ(3, m.facets.size());
+    const std::tr1::shared_ptr<Mesh> m = ds.get<std::tr1::shared_ptr<Mesh> >("body 1");
+    ASSERT_EQ(3, m->facets.size());
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_PointMatrix_for_each_body)
 {
     make_stl_file(test_data::three_facets(), "anthineas.stl");
-    const PointMatrix P = ds.get<PointMatrix>("body 1");
-    ASSERT_EQ(3, P.m.rows());
-    ASSERT_EQ(7, P.m.cols());
-    ASSERT_EQ("body 1", P.get_frame());
+    const std::tr1::shared_ptr<PointMatrix> P = ds.get<std::tr1::shared_ptr<PointMatrix> >("body 1");
+    ASSERT_EQ(3, P->m.rows());
+    ASSERT_EQ(7, P->m.cols());
+    ASSERT_EQ("body 1", P->get_frame());
 }
