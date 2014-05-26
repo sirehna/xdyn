@@ -4,6 +4,8 @@ project(simulator)
 set(SRC src/DataSourceBuilder.cpp
         src/KinematicsModule.cpp
         src/GravityModule.cpp
+        src/HydrostaticModule.cpp
+        src/WaveModule.cpp
         src/SimulatorModuleInterface.cpp
         )
 
@@ -19,6 +21,7 @@ include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${text_file_reader_INCLUDE_DIRS})
 include_directories(${stl_reader_INCLUDE_DIRS})
+include_directories(${hydro_models_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME}_static STATIC ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")

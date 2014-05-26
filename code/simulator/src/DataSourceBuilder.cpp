@@ -14,6 +14,9 @@
 #include "MeshBuilder.hpp"
 #include "TextFileReader.hpp"
 #include "StlReader.hpp"
+#include "WaveModule.hpp"
+#include "environment_parsers.hpp"
+#include "DefaultWaveModel.hpp"
 
 #include <Eigen/Geometry>
 
@@ -153,6 +156,22 @@ void DataSourceBuilder::add_centre_of_gravity(const YamlBody& body)
     ds.set(std::string("G(")+body.name+")", G);
 }
 
+void DataSourceBuilder::add_wave_height_module(const YamlBody& body)
+{
+    ds.add(WaveModule(&ds, std::string("wave module(") + body.name + ")", body.name));
+}
+
+void DataSourceBuilder::add_default_wave_model(const std::string& yaml)
+{
+    const double zwave = parse_default_wave_model(yaml);
+    ds.set<std::tr1::shared_ptr<WaveModelInterface> >("wave model", std::tr1::shared_ptr<WaveModelInterface>(new DefaultWaveModel(zwave)));
+}
+
+void DataSourceBuilder::add_environment_model(const YamlModel& model)
+{
+    if (model.model=="no waves") add_default_wave_model(model.yaml);
+}
+
 DataSource DataSourceBuilder::build_ds()
 {
     FOR_EACH(input.bodies, add_initial_conditions);
@@ -160,7 +179,9 @@ DataSource DataSourceBuilder::build_ds()
     FOR_EACH(input.bodies, add_states);
     FOR_EACH(input.bodies, add_forces);
     FOR_EACH(input.bodies, add_centre_of_gravity);
+    FOR_EACH(input.environment, add_environment_model);
     FOR_EACH(input.bodies, add_mesh);
+    FOR_EACH(input.bodies, add_wave_height_module);
 
 	add_kinematics(input.bodies);
 

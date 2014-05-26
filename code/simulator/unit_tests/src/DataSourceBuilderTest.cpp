@@ -16,6 +16,8 @@
 #include "Wrench.hpp"
 #include "Mesh.hpp"
 #include "PointMatrix.hpp"
+#include "WaveModelInterface.hpp"
+#include "Kinematics.hpp"
 
 #include <fstream>
 #include <Eigen/Geometry>
@@ -124,4 +126,18 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_centre_of_gravity_of_eac
     ASSERT_DOUBLE_EQ(4, G.x);
     ASSERT_DOUBLE_EQ(7, G.y);
     ASSERT_DOUBLE_EQ(-10, G.z);
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_wave_model)
+{
+    const std::tr1::shared_ptr<WaveModelInterface> wave_model = ds.get<std::tr1::shared_ptr<WaveModelInterface> >("wave model");
+    const std::tr1::shared_ptr<Kinematics> k = ds.get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double z0 = a.random<double>();
+        const Point P("NED",a.random<double>(),a.random<double>(),z0);
+        const Point Q("body 1",a.random<double>(),a.random<double>(),z0);
+        ASSERT_DOUBLE_EQ(12-z0, wave_model->get_relative_wave_height(P,k));
+        ASSERT_NO_THROW(wave_model->get_relative_wave_height(Q,k));
+    }
 }

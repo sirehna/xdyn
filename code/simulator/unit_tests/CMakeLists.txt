@@ -4,6 +4,7 @@ project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/DataSourceBuilderTest.cpp
               src/KinematicsModuleTest.cpp
               src/GravityModuleTest.cpp
+              src/WaveModuleTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
