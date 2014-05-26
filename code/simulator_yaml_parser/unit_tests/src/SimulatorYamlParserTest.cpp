@@ -43,7 +43,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_environment)
     const std::vector<YamlModel> env = yaml.environment;
     ASSERT_EQ("no waves", env.at(0).model);
     ASSERT_EQ("no wind", env.at(1).model);
-    ASSERT_EQ("frame: NED\nmodel: no waves\nz:\n  unit: m\n  value: 12", env.at(0).yaml);
+    ASSERT_EQ("constant wave height in NED frame:\n  unit: m\n  value: 12\nmodel: no waves", env.at(0).yaml);
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_external_forces)
