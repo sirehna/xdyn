@@ -4,6 +4,7 @@ project(simulator)
 set(SRC src/DataSourceBuilder.cpp
         src/KinematicsModule.cpp
         src/GravityModule.cpp
+        src/SimulatorModuleInterface.cpp
         )
 
 
