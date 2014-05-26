@@ -9,11 +9,11 @@
 #include "Wrench.hpp"
 #include "DataSource.hpp"
 
-GravityModule::GravityModule(DataSource* const data_source, const std::string& module_name, const std::string& body_) : DataSourceModule(data_source, module_name), body(body_)
+GravityModule::GravityModule(DataSource* const data_source, const std::string& module_name, const std::string& body) : SimulatorModuleInterface(data_source, module_name, body)
 {
 }
 
-GravityModule::GravityModule(const GravityModule& rhs, DataSource* const data_source) : DataSourceModule(rhs, data_source), body(rhs.body)
+GravityModule::GravityModule(const GravityModule& rhs, DataSource* const data_source) : SimulatorModuleInterface(rhs,data_source)
 {
 }
 
@@ -29,11 +29,11 @@ DataSourceModule* GravityModule::clone(DataSource* const data_source) const
 
 void GravityModule::update() const
 {
-    const double m = ds->get<double>(std::string("m(")+body+")");
+    const double m = ds->get<double>(customize("m"));
     const double g = ds->get<double>("g");
     const Point G(body);
     const Eigen::Vector3d force(0,0,m*g);
     const Eigen::Vector3d torque(0,0,0);
     const Wrench F(G, force, torque);
-    ds->set<Wrench>(std::string("gravity(")+body+")", F);
+    ds->set<Wrench>(customize("gravity"), F);
 }

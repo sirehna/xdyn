@@ -8,7 +8,7 @@
 #ifndef GRAVITYMODULE_HPP_
 #define GRAVITYMODULE_HPP_
 
-#include "DataSourceModule.hpp"
+#include "SimulatorModuleInterface.hpp"
 
 /** \author cec
  *  \date Apr 28, 2014, 3:19:15 PM
@@ -20,17 +20,14 @@
  *  \section ex2 Expected output
  *  \snippet simulator/unit_tests/src/GravityModuleTest.cpp GravityModuleTest expected output
  */
-class GravityModule : public DataSourceModule
+class GravityModule : public SimulatorModuleInterface
 {
 	public:
-		GravityModule(DataSource* const data_source, const std::string& module_name, const std::string& body);
-		GravityModule(const GravityModule& rhs, DataSource* const data_source);
+        GravityModule(DataSource* const data_source, const std::string& module_name, const std::string& body);
+        GravityModule(const GravityModule& rhs, DataSource* const data_source);
 		DataSourceModule* clone() const;
 		DataSourceModule* clone(DataSource* const data_source) const;
 		void update() const;
-
-	private:
-		std::string body;
 };
 
 
