@@ -117,6 +117,10 @@ size_t get_input_data(int argc, char **argv, InputData& input_data)
 int main(int argc, char** argv)
 {
     InputData input_data;
-    const size_t error_code = get_input_data(argc, argv, input_data);
-    return error_code;
+    const size_t error = get_input_data(argc, argv, input_data);
+    if (not(error))
+    {
+
+    }
+    return error;
 }
