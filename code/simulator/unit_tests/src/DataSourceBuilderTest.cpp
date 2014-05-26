@@ -18,6 +18,7 @@
 #include "PointMatrix.hpp"
 #include "WaveModelInterface.hpp"
 #include "Kinematics.hpp"
+#include "Transform.hpp"
 
 #include <fstream>
 #include <Eigen/Geometry>
@@ -126,6 +127,27 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_centre_of_gravity_of_eac
     ASSERT_DOUBLE_EQ(4, G.x);
     ASSERT_DOUBLE_EQ(7, G.y);
     ASSERT_DOUBLE_EQ(-10, G.z);
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_Kinematics_object)
+{
+    std::tr1::shared_ptr<Kinematics> k = ds.get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+    kinematics::Transform T = k->get("NED", "body 1");
+    Point P = T*Point("NED",0,0,0);
+    ASSERT_EQ("body 1", P.get_frame());
+    ASSERT_DOUBLE_EQ(4, P.x);
+    ASSERT_DOUBLE_EQ(8, P.y);
+    ASSERT_DOUBLE_EQ(12, P.z);
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double x = a.random<double>();
+        ds.set<double>("x(body 1)",x);
+        k = ds.get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+        T = k->get("NED", "body 1");
+        P = T*Point("NED",0,0,0);
+        ASSERT_EQ("body 1", P.get_frame());
+        ASSERT_DOUBLE_EQ(x, P.x);
+    }
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_wave_model)
