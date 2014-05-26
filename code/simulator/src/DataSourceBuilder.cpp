@@ -115,13 +115,23 @@ void DataSourceBuilder::add_kinematics(const std::vector<YamlBody>& bodies)
     ds.add(KinematicsModule(&ds, body_names, "kinematics"));
 }
 
+void DataSourceBuilder::add_centre_of_gravity(const YamlBody& body)
+{
+    const Point G(body.dynamics.centre_of_inertia.frame,
+                  body.dynamics.centre_of_inertia.x,
+                  body.dynamics.centre_of_inertia.y,
+                  body.dynamics.centre_of_inertia.z);
+    ds.set(std::string("G(")+body.name+")", G);
+}
+
 DataSource DataSourceBuilder::build_ds()
 {
-	FOR_EACH(input.bodies, add_initial_conditions);
-	FOR_EACH(input.bodies, add_initial_quaternions);
-	FOR_EACH(input.bodies, add_states);
-	FOR_EACH(input.bodies, add_forces);
-	FOR_EACH(input.bodies, add_mesh);
+    FOR_EACH(input.bodies, add_initial_conditions);
+    FOR_EACH(input.bodies, add_initial_quaternions);
+    FOR_EACH(input.bodies, add_states);
+    FOR_EACH(input.bodies, add_forces);
+    FOR_EACH(input.bodies, add_centre_of_gravity);
+    FOR_EACH(input.bodies, add_mesh);
 
 	add_kinematics(input.bodies);
 

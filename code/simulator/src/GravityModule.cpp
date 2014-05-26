@@ -31,7 +31,7 @@ void GravityModule::update() const
 {
     const double m = ds->get<double>(customize("m"));
     const double g = ds->get<double>("g");
-    const Point G(body);
+    const Point G = ds->get<Point>(customize("G"));
     const Eigen::Vector3d force(0,0,m*g);
     const Eigen::Vector3d torque(0,0,0);
     const Wrench F(G, force, torque);
