@@ -12,6 +12,6 @@
 #include <string>
 
 GravityParameters parse_gravity(const std::string& yaml);
-
+double parse_hydrostatic(const std::string& yaml);
 
 #endif /* FORCES_PARSERS_HPP_ */
