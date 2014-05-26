@@ -27,6 +27,7 @@ class DataSourceBuilder
         void add_forces(const YamlBody& body);
         void add_mesh(const YamlBody& body);
         void add_gravity(const std::string& body_name, const std::string& yaml, const double mass);
+        void add_hydrostatic(const std::string& body_name, const std::string& yaml);
         void add_kinematics(const std::vector<YamlBody>& bodies);
         void add_centre_of_gravity(const YamlBody& body);
         void add_wave_height_module(const YamlBody& body);

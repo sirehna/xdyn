@@ -14,6 +14,7 @@
 #include "MeshBuilder.hpp"
 #include "TextFileReader.hpp"
 #include "StlReader.hpp"
+#include "HydrostaticModule.hpp"
 #include "WaveModule.hpp"
 #include "environment_parsers.hpp"
 #include "DefaultWaveModel.hpp"
@@ -116,6 +117,7 @@ void DataSourceBuilder::add_forces(const YamlBody& body)
     for (;that_model!=body.external_forces.end();++that_model)
     {
         if (that_model->model == "gravity") add_gravity(body.name, that_model->yaml, body.dynamics.mass);
+        if (that_model->model == "non-linear hydrostatic") add_hydrostatic(body.name, that_model->yaml);
     }
 }
 
@@ -125,6 +127,13 @@ void DataSourceBuilder::add_gravity(const std::string& body_name, const std::str
     ds.add(g);
     ds.set<double>(std::string("m(") + body_name + ")", mass);
     ds.set<double>("g", parse_gravity(yaml).g);
+}
+
+void DataSourceBuilder::add_hydrostatic(const std::string& body_name, const std::string& yaml)
+{
+    HydrostaticModule hs(&ds, "hydrostatic", body_name);
+    ds.set<double>("rho", parse_hydrostatic(yaml));
+    ds.add(hs);
 }
 
 void DataSourceBuilder::add_mesh(const YamlBody& body)

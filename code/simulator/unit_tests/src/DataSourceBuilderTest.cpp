@@ -141,3 +141,8 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_wave_model)
         ASSERT_NO_THROW(wave_model->get_relative_wave_height(Q,k));
     }
 }
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_hydrostatic_forces_for_each_body)
+{
+    const Wrench Fhs = ds.get<Wrench>("hydrostatic(body 1)");
+}
