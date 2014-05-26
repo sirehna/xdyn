@@ -155,6 +155,14 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_Kinematics_object)
     }
 }
 
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_position_of_body_relative_to_mesh)
+{
+    ASSERT_NO_THROW(ds.get<double>("x(body 1/mesh)"));
+    ASSERT_NO_THROW(ds.get<double>("y(body 1/mesh)"));
+    ASSERT_NO_THROW(ds.get<double>("z(body 1/mesh)"));
+    ASSERT_NO_THROW(ds.get<RotationMatrix>("body 1/mesh"));
+}
+
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_wave_model)
 {
     const std::tr1::shared_ptr<WaveModelInterface> wave_model = ds.get<std::tr1::shared_ptr<WaveModelInterface> >("wave model");
