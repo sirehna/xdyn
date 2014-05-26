@@ -49,6 +49,9 @@ projects:
         # Week 18
       - week ending on: 2/5/2014
         cec: 2.5
+        # Week 21
+      - week ending on: 23/5/2014
+        cec: 5
   - name: R&D autofinancée
     budget: 50000
     prices:

@@ -331,6 +331,7 @@ stories:
       backlog: 14/4/2014
       assigned to: cec
       started: 18/4/2014
+      done: 23/5/2014
     - task: Create dummy wave module & interface
       type: model
       size: 2
@@ -389,6 +390,8 @@ stories:
       type: model
       size: 2
       backlog: 22/4/2014
+      started: 19/5/2014
+      done: 23/5/2014
       assigned to: cec
     - task: Classify facets by type (number of immerged nodes)
       type: model
@@ -401,11 +404,15 @@ stories:
       type: model
       size: 4
       backlog: 22/4/2014
+      started: 19/5/2014
+      done: 23/5/2014
       assigned to: cec
     - task: Create vector of immerged triangles (only pushback useful ones)
       type: model
       size: 1
       backlog: 22/4/2014
+      started: 19/5/2014
+      done: 23/5/2014
       assigned to: cec
     - task: Calculate elementary force from area & position of centre of inertia
       type: model
@@ -416,11 +423,15 @@ stories:
       type: model
       size: 1
       backlog: 22/4/2014
+      started: 19/5/2014
+      done: 23/5/2014
       assigned to: cec
     - task: Create hydrostatic force module (DS API, check module was added & input was set by DSBuilder, test output values)
       type: model
       size: 4
       backlog: 22/4/2014
+      started: 23/5/2014
+      done: 26/5/2014
       assigned to: cec
     - task: Sum of forces module (DS API, check module was added & input was set by DSBuilder, test output values)
       type: model
