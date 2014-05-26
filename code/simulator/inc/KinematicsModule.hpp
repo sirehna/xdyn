@@ -35,8 +35,10 @@ class KinematicsModule : public DataSourceModule
 
 	private:
 		kinematics::Transform get_transform_from_ned_to(const std::string& body) const;
+		kinematics::Transform get_transform_from_mesh_to(const std::string& body) const;
 		Point get_origin(const std::string& body) const;
 		RotationMatrix get_rot_from_ned_to(const std::string& body) const;
+		Point get_position_of_body_relative_to_mesh(const std::string& body) const;
 
 		std::vector<std::string> bodies;
 		std::tr1::shared_ptr<Kinematics> kinematics;

@@ -42,6 +42,7 @@ void KinematicsModule::update() const
 	for (;that_body!=bodies.end() ; ++that_body)
 	{
 		kinematics->add(get_transform_from_ned_to(*that_body));
+		kinematics->add(get_transform_from_mesh_to(*that_body));
 	}
 	ds->set("kinematics", kinematics);
 }
@@ -63,8 +64,19 @@ RotationMatrix KinematicsModule::get_rot_from_ned_to(const std::string& body) co
 	return q.matrix();
 }
 
+kinematics::Transform KinematicsModule::get_transform_from_mesh_to(const std::string& body) const
+{
+    return kinematics::Transform(get_position_of_body_relative_to_mesh(body), ds->get<RotationMatrix>(body + "/mesh"), body);
+}
+
+Point KinematicsModule::get_position_of_body_relative_to_mesh(const std::string& body) const
+{
+    return Point(std::string("mesh(")+body+")", ds->get<double>(std::string("x(")+body+"/mesh)"),
+                                                ds->get<double>(std::string("y(")+body+"/mesh)"),
+                                                ds->get<double>(std::string("z(")+body+"/mesh)"));
+}
+
 kinematics::Transform KinematicsModule::get_transform_from_ned_to(const std::string& body) const
 {
-	kinematics::Transform ret;
 	return kinematics::Transform(get_origin(body), get_rot_from_ned_to(body), body);
 }

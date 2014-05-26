@@ -48,6 +48,11 @@ void DataSourceBuilder::add_initial_conditions(const YamlBody& body)
 	ds.set(std::string("p(")+body.name+")", body.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p);
 	ds.set(std::string("q(")+body.name+")", body.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q);
 	ds.set(std::string("r(")+body.name+")", body.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r);
+	ds.set(std::string("x(")+body.name+"/mesh)", body.position_of_body_frame_relative_to_mesh.coordinates.x);
+	ds.set(std::string("y(")+body.name+"/mesh)", body.position_of_body_frame_relative_to_mesh.coordinates.y);
+	ds.set(std::string("z(")+body.name+"/mesh)", body.position_of_body_frame_relative_to_mesh.coordinates.z);
+	const EulerAngles a(body.position_of_body_frame_relative_to_mesh.angle.phi, body.position_of_body_frame_relative_to_mesh.angle.theta, body.position_of_body_frame_relative_to_mesh.angle.psi);
+	ds.set(body.name+"/mesh", angle2matrix(a));
 }
 
 bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third);

@@ -42,6 +42,9 @@ TEST_F(KinematicsModuleTest, example)
 
 	const kinematics::Transform T1 = k->get("body 1", "NED");
 	const kinematics::Transform T2 = k->get("NED", "body 1");
+	ASSERT_NO_THROW(k->get("NED", "mesh(body 1)"));
+	ASSERT_NO_THROW(k->get("body 1", "mesh(body 1)"));
+	ASSERT_NO_THROW(k->get("mesh(body 1)", "body 1"));
 
 	ASSERT_TRUE(double_equal(kinematics::identity("body 1"), T2*T1, 1E-10));
 	ASSERT_TRUE(double_equal(kinematics::identity("NED"), T1*T2, 1E-10));
