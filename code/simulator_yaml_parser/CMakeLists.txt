@@ -4,6 +4,7 @@ project(simulator_yaml_parser)
 set(SRC src/SimulatorYamlParser.cpp
         src/force_parsers.cpp
         src/parse_unit_value.cpp
+        src/environment_parsers.cpp
         src/check_input_yaml.cpp
         )
 
