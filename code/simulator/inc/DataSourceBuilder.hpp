@@ -20,6 +20,7 @@ class DataSourceBuilder
         DataSource build_ds();
 
     private:
+        DataSourceBuilder();
         void add_initial_conditions(const YamlBody& body);
         void add_initial_quaternions(const YamlBody& body);
         void add_states(const YamlBody& body);
