@@ -6,6 +6,7 @@
  */
 
 #include "DataSourceBuilder.hpp"
+#include "DataSourceBuilderException.hpp"
 #include "EulerAngles.hpp"
 #include "KinematicsModule.hpp"
 #include "GravityModule.hpp"
@@ -32,7 +33,7 @@ MODULE(PointMatrixBuilder, const std::string name = get_name();\
                            ds->set<std::tr1::shared_ptr<PointMatrix> >(name, pm);
       )
 
-DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in), ds(DataSource())
+DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in), ds(DataSource()), rotations(in.rotations)
 {
 }
 
@@ -49,11 +50,34 @@ void DataSourceBuilder::add_initial_conditions(const YamlBody& body)
 	ds.set(std::string("r(")+body.name+")", body.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r);
 }
 
+bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third);
+bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third)
+{
+    return (convention.at(0) == first) and (convention.at(1) == second) and (convention.at(2) == third);
+}
+
+RotationMatrix DataSourceBuilder::angle2matrix(const EulerAngles& a) const
+{
+    if (rotations.order_by == "angle")
+    {
+        if (match(rotations.convention, "x", "y'", "z''"))
+            return rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(a);
+        std::stringstream ss;
+        ss << "Rotation convention '" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "' is not currently supported.";
+        THROW(__PRETTY_FUNCTION__, DataSourceBuilderException, ss.str());
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, DataSourceBuilderException, std::string("Ordering rotations by '") + rotations.order_by + "' is not currently supported");
+    }
+    return RotationMatrix();
+}
+
 void DataSourceBuilder::add_initial_quaternions(const YamlBody& body)
 {
 	const YamlAngle angle = body.initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle;
 	const EulerAngles a(angle.phi, angle.theta, angle.psi);
-	const RotationMatrix R = rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(a);
+	const RotationMatrix R = angle2matrix(a);
 	const Eigen::Quaternion<double> q(R);
 	ds.set(std::string("qr(")+body.name+")", q.w());
 	ds.set(std::string("qi(")+body.name+")", q.x());
