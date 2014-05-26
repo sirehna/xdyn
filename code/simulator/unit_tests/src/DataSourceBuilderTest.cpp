@@ -104,6 +104,11 @@ void DataSourceBuilderTest::make_stl_file(const std::string& data, const std::st
     }
 }
 
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_mass_of_each_body)
+{
+    ASSERT_DOUBLE_EQ(1E6, ds.get<double>("m(body 1)"));
+}
+
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_mesh_of_each_body)
 {
     make_stl_file(test_data::three_facets(), "anthineas.stl");
