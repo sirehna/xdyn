@@ -27,7 +27,7 @@
 class DefaultWaveModel : public WaveModelInterface
 {
     public:
-        DefaultWaveModel(const double wave_height, const std::tr1::shared_ptr<Kinematics>& k);
+        DefaultWaveModel(const double wave_height);
 
     private:
         DefaultWaveModel(); // Disabled

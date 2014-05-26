@@ -7,7 +7,7 @@
 
 #include "DefaultWaveModel.hpp"
 
-DefaultWaveModel::DefaultWaveModel(const double wave_height_, const std::tr1::shared_ptr<Kinematics>& k_) : WaveModelInterface(k_), zwave(wave_height_)
+DefaultWaveModel::DefaultWaveModel(const double wave_height_) : WaveModelInterface(), zwave(wave_height_)
 {
 }
 

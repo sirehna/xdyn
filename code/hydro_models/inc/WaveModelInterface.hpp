@@ -28,8 +28,7 @@ class PointMatrix;
 class WaveModelInterface
 {
     public:
-        WaveModelInterface(const std::tr1::shared_ptr<Kinematics>& k //!< Object used to compute the transforms to the NED frame
-                          );
+        WaveModelInterface();
 
         virtual ~WaveModelInterface();
 
@@ -42,7 +41,8 @@ class WaveModelInterface
           *  \returns zwave - z
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
-        double get_relative_wave_height(const Point& P //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
+        double get_relative_wave_height(const Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
+                                        const std::tr1::shared_ptr<Kinematics>& k //!< Object used to compute the transforms to the NED frame
                                        ) const;
 
         /**  \author cec
@@ -51,12 +51,11 @@ class WaveModelInterface
           *  \returns zwave - z for each point.
           *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
           */
-        std::vector<double> get_relative_wave_height(const PointMatrix& P //!< Points for which to compute the relative wave height
+        std::vector<double> get_relative_wave_height(const PointMatrix& P,                     //!< Points for which to compute the relative wave height
+                                                     const std::tr1::shared_ptr<Kinematics>& k //!< Object used to compute the transforms to the NED frame
                                                     ) const;
 
     private:
-        WaveModelInterface(); // Disabled because we must have a Kinematics object to do anything
-
         /**  \author cec
           *  \date 24 avr. 2014, 10:29:58
           *  \brief Wave model interface.
@@ -68,8 +67,6 @@ class WaveModelInterface
                                    double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                                    double z  //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                                    ) const = 0;
-
-        const std::tr1::shared_ptr<Kinematics>& k;
 };
 
 #endif /* WAVEMODELINTERFACE_HPP_ */

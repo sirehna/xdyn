@@ -30,11 +30,11 @@ TEST_F(DefaultWaveModelTest, example)
 {
 //! [DefaultWaveModelTest example]
     std::tr1::shared_ptr<Kinematics> k(new Kinematics());
-    const DefaultWaveModel w(10, k);
+    const DefaultWaveModel w(10);
     const Point P("NED", 0, 0, -20);
 //! [DefaultWaveModelTest example]
 //! [DefaultWaveModelTest expected output]
-    ASSERT_DOUBLE_EQ(30, w.get_relative_wave_height(P));
+    ASSERT_DOUBLE_EQ(30, w.get_relative_wave_height(P, k));
 //! [DefaultWaveModelTest expected output]
 }
 
@@ -43,12 +43,12 @@ TEST_F(DefaultWaveModelTest, more_interesting_example)
     std::tr1::shared_ptr<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 0);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultWaveModel w(7, k);
+    const DefaultWaveModel w(7);
 
     const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(-2, w.get_relative_wave_height(P));
-    ASSERT_DOUBLE_EQ(-1788, w.get_relative_wave_height(Q));
+    ASSERT_DOUBLE_EQ(-2, w.get_relative_wave_height(P,k));
+    ASSERT_DOUBLE_EQ(-1788, w.get_relative_wave_height(Q,k));
 }
 
 TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
@@ -72,11 +72,11 @@ TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
     M.m(2,4) = -91;
 
     std::tr1::shared_ptr<Kinematics> k(new Kinematics());
-    const DefaultWaveModel w(888, k);
+    const DefaultWaveModel w(888);
     const kinematics::Transform T(Point("NED", 1, 20, 300), "body");
     k->add(T);
 
-    const std::vector<double> delta = w.get_relative_wave_height(M);
+    const std::vector<double> delta = w.get_relative_wave_height(M,k);
     //! [DefaultWaveModelTest example]
     //! [DefaultWaveModelTest expected output]
     ASSERT_EQ(5, delta.size());
