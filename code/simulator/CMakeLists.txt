@@ -7,6 +7,7 @@ set(SRC src/DataSourceBuilder.cpp
         src/HydrostaticModule.cpp
         src/WaveModule.cpp
         src/SimulatorModuleInterface.cpp
+        src/StateDerivativesModule.cpp
         )
 
 
