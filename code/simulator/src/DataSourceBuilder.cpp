@@ -18,6 +18,7 @@
 #include "WaveModule.hpp"
 #include "environment_parsers.hpp"
 #include "DefaultWaveModel.hpp"
+#include "StateDerivativesModule.hpp"
 
 #include <Eigen/Geometry>
 
@@ -170,6 +171,17 @@ void DataSourceBuilder::add_wave_height_module(const YamlBody& body)
     ds.add(WaveModule(&ds, std::string("wave module(") + body.name + ")", body.name));
 }
 
+void DataSourceBuilder::add_sum_of_forces_module(const YamlBody& body)
+{
+    std::vector<YamlModel>::const_iterator it = body.external_forces.begin();
+    std::vector<std::string> forces;
+    for (;it!=body.external_forces.end() ; ++it)
+    {
+        forces.push_back(it->model);
+    }
+    ds.add(StateDerivativesModule(&ds, body.name, forces));
+}
+
 void DataSourceBuilder::add_default_wave_model(const std::string& yaml)
 {
     const double zwave = parse_default_wave_model(yaml);
@@ -191,6 +203,7 @@ DataSource DataSourceBuilder::build_ds()
     FOR_EACH(input.environment, add_environment_model);
     FOR_EACH(input.bodies, add_mesh);
     FOR_EACH(input.bodies, add_wave_height_module);
+    FOR_EACH(input.bodies, add_sum_of_forces_module);
 
     add_kinematics(input.bodies);
 

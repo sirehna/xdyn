@@ -163,3 +163,8 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_hydrostatic_forces_for_e
 {
     ASSERT_NO_THROW(ds.get<Wrench>("non-linear hydrostatic(body 1)"));
 }
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_sum_of_forces_for_each_body)
+{
+    ASSERT_NO_THROW(ds.get<Wrench>("sum of forces(body 1)"));
+}

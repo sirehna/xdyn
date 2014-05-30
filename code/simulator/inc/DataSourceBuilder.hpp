@@ -31,6 +31,7 @@ class DataSourceBuilder
         void add_kinematics(const std::vector<YamlBody>& bodies);
         void add_centre_of_gravity(const YamlBody& body);
         void add_wave_height_module(const YamlBody& body);
+        void add_sum_of_forces_module(const YamlBody& body);
         void add_default_wave_model(const std::string& yaml);
         void add_environment_model(const YamlModel& model);
         RotationMatrix angle2matrix(const EulerAngles& angle) const;
