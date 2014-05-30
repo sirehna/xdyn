@@ -39,7 +39,7 @@ TEST_F(HydrostaticModuleTest, example)
     ds.set<std::vector<double> >("wave heights(body 1)", std::vector<double>({-0.5,-0.5,-2.5,0.5}));
     const HydrostaticModule hs(&ds, "hydrostatic module", "body 1");
     ds.add(hs);
-    const Wrench Fhs = ds.get<Wrench>("hydrostatic(body 1)");
+    const Wrench Fhs = ds.get<Wrench>("non-linear hydrostatic(body 1)");
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
     ASSERT_DOUBLE_EQ(0, Fhs.X);

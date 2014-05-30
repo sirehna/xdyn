@@ -161,5 +161,5 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_wave_model)
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_hydrostatic_forces_for_each_body)
 {
-    ASSERT_NO_THROW(ds.get<Wrench>("hydrostatic(body 1)"));
+    ASSERT_NO_THROW(ds.get<Wrench>("non-linear hydrostatic(body 1)"));
 }
