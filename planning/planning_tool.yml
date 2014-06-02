@@ -176,11 +176,6 @@ stories:
       backlog: 17/2/2014
       started: 17/4/2014
       done: 18/4/2014
-    - task: Add YAML test data to installer
-      type: interface
-      size: 4
-      assigned to: cec
-      backlog: 17/2/2014
     - task: CSS for dev guide
       type: internal
       size: 4
@@ -433,13 +428,70 @@ stories:
       started: 23/5/2014
       done: 26/5/2014
       assigned to: cec
+  - story: Week 23
     - task: Sum of forces module (DS API, check module was added & input was set by DSBuilder, test output values)
       type: model
       size: 2
       backlog: 22/4/2014
       assigned to: cec
-    - task: Newton's second law of motion module
+    - task: Newton's second law of motion module (with Coriolis & centripetal forces)
       type: model
       size: 4
       backlog: 22/4/2014
       assigned to: cec
+    - task: Document YAML input format
+      type: interface
+      size: 2
+      backlog: 2/6/2014
+      assigned to: gj
+    - task: Document reference frames
+      type: model
+      size: 2
+      backlog: 2/6/2014
+      assigned to: gj
+    - task: Document dynamic problem resolution (how internal & external forces are calculated)
+      type: model
+      size: 4
+      backlog: 2/6/2014
+      assigned to: gj
+    - task: Steppers + solver overview
+      type: model
+      size: 2
+      backlog: 2/6/2014
+      assigned to: gj
+    - task: Detailed solver documentation
+      type: model
+      size: 4
+      backlog: 2/6/2014
+      assigned to: cec
+    - task: Add YAML test data to installer
+      type: interface
+      size: 2
+      assigned to: gj
+      backlog: 17/2/2014
+    - task: Integration test validator executable (using same code as unit tests)
+      type: internal
+      size: 2
+      assigned to: cec
+      backlog: 2/6/2014
+    - task: Falling ball test (input yaml, batch script, add to build)
+      type: interface
+      size: 2
+      assigned to: gj
+      backlog: 2/6/2014
+    - task: DSBuilder accepting mesh as input data
+      type: internal
+      size: 2
+      assigned to: cec
+      backlog: 2/6/2014
+    - task: Balanced cube (hydrostatic integration test)
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 2/6/2014
+    - task: Oscillating cube (hydrostatic integration test)
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 2/6/2014
+
