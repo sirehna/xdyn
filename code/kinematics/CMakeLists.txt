@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(kinematics)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(kinematics)
 
-set(SRC src/Velocity.cpp
+SET(SRC src/Velocity.cpp
         src/rotation_matrix_builders.cpp
         src/EulerAngles.cpp
         src/Kinematics.cpp
@@ -13,14 +13,14 @@ set(SRC src/Velocity.cpp
         src/UnsafeWrench.cpp
         )
 
-include_directories(inc)
-include_directories(${exception_handling_INCLUDE_DIRS})
-include_directories(${test_macros_INCLUDE_DIRS})
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
-include_directories(${data_source_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(inc)
+INCLUDE_DIRECTORIES(${exception_handling_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${test_macros_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${data_source_INCLUDE_DIRS})
 
-add_library (${PROJECT_NAME}_static STATIC ${SRC})
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+ADD_LIBRARY(${PROJECT_NAME}_static STATIC ${SRC})
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-add_subdirectory(unit_tests)
+ADD_SUBDIRECTORY(unit_tests)

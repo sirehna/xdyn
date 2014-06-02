@@ -8,9 +8,9 @@ SET(SRC src/DefaultWaveModel.cpp
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${exception_handling_INCLUDE_DIRS})
-include_directories(${kinematics_INCLUDE_DIRS})
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
-include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${kinematics_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${numeric_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
