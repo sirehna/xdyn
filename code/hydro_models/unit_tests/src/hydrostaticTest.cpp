@@ -536,3 +536,21 @@ TEST_F(hydrostaticTest, bug_discovered_when_implementing_sum_of_forces)
     force(mesh, G, a.random<double>(), a.random<double>(), dz);
     ASSERT_NO_THROW(force(mesh, G, a.random<double>(), a.random<double>(), dz));
 }
+
+TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
+{
+    const double L = a.random<double>().between(0,10);
+    const double x0 = 1;
+    const double y0 = 2;
+    const double z0 = 3;
+    const Point G(a.random<std::string>(), a.random<double>(), a.random<double>(), a.random<double>());
+    const Mesh mesh = MeshBuilder(tetrahedron(L,x0,y0,z0)).build();
+    const std::vector<double> dz = a.random_vector_of<double>().of_size(4);
+    const Wrench Fhs = force(mesh, G, a.random<double>(), a.random<double>(), dz);
+
+    ASSERT_EQ(G.get_frame(), Fhs.get_point().get_frame());
+    ASSERT_EQ(G.get_frame(), Fhs.get_frame());
+    ASSERT_DOUBLE_EQ(G.x, Fhs.get_point().x);
+    ASSERT_DOUBLE_EQ(G.y, Fhs.get_point().y);
+    ASSERT_DOUBLE_EQ(G.z, Fhs.get_point().z);
+}

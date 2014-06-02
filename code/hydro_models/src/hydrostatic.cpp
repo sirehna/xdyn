@@ -248,7 +248,7 @@ UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the W
                            )
 {
     const EPoint F = -rho*g*z*dS; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
-    return UnsafeWrench(O.get_frame(), F, (C-O.v).cross(F));
+    return UnsafeWrench(O, F, (C-O.v).cross(F));
 }
 
 UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
