@@ -270,6 +270,12 @@ Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at 
                           const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
                 )
 {
+    if (immersions.size() != (size_t)mesh.nodes.cols())
+    {
+        std::stringstream ss;
+        ss << "Should have as many nodes as immersions: have " << mesh.nodes.cols() << " nodes but " << immersions.size() << " immersions.";
+        THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
+    }
     std::vector<Facet>::const_iterator that_facet = mesh.facets.begin();
     std::vector<UnsafeWrench> elementary_forces;
     for (;that_facet != mesh.facets.end() ; ++that_facet)
