@@ -16,6 +16,6 @@ namespace kinematics
         const RotationMatrix Rx_phi   = rot(1,0,0, angles.phi);
         const RotationMatrix Ry_theta = rot(0,1,0, angles.theta);
         const RotationMatrix Rz_psi   = rot(0,0,1, angles.psi);
-        return Rz_psi*Ry_theta*Rx_phi;
+        return RotationMatrix(Rz_psi*Ry_theta*Rx_phi);
     }
 }

@@ -19,7 +19,7 @@ namespace sum
         if (x.empty()) return T()-T();
         if (x.size() == 1) return x.front();
         size_t n = x.size();
-        const size_t p = floor(n/2.+0.5);
+        const size_t p = (size_t)floor(n/2.+0.5);
         size_t last = 0;
         for (size_t i = 0 ; i < p ; ++i)
         {

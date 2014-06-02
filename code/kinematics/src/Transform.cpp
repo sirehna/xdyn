@@ -34,7 +34,7 @@ PointMatrix Transform::operator*(const PointMatrix& P) const
     {
         THROW(__PRETTY_FUNCTION__, KinematicsException, std::string("Frames don't match: transform goes from ") + get_from_frame() + " to " + to_frame + ", but point lies in " + P.get_frame());
     }
-    Matrix3Xd m = r*P.m;
+    Matrix3Xd m(r*P.m);
     m.colwise() += t.v;
     return PointMatrix(m,to_frame);
 }
