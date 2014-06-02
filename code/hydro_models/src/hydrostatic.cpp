@@ -148,27 +148,26 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
     const EPoint B1 = M.col(idxB1);
     const EPoint P = intersection(A,v[idxA],A1,v[idxA1]);
     const EPoint Q = intersection(B,v[idxB],B1,v[idxB1]);
-    const size_t N = (idxB>=idxA) ? n-(idxB-idxA-1) : idxA-idxB+2;
+    const size_t N = (first_and_last.second>=first_and_last.first) ? n-(first_and_last.second-first_and_last.first-1) : first_and_last.second+first_and_last.first+1;
     Eigen::Matrix<double,3,Eigen::Dynamic> ret;
     std::vector<double> delta_z;
     ret.resize(3,N);
     size_t k = 0;
-
-    if (idxA<idxB)
+    if (first_and_last.first<=first_and_last.second)
     {
-        for (size_t i = 0 ; i < idxA ; ++i)
+        for (size_t i = 0 ; i < first_and_last.first ; ++i)
         {
-            ret.col(k++) = M.col(i);
-            delta_z.push_back(v.at(i));
+            ret.col(k++) = M.col(idx[i]);
+            delta_z.push_back(v.at(idx[i]));
         }
         ret.col(k++) = P;
         delta_z.push_back(0);
         ret.col(k++) = Q;
         delta_z.push_back(0);
-        for (size_t i = idxB+1 ; i < n ; ++i)
+        for (size_t i = first_and_last.second+1 ; i < n ; ++i)
         {
-            ret.col(k++) = M.col(i);
-            delta_z.push_back(v.at(i));
+            ret.col(k++) = M.col(idx[i]);
+            delta_z.push_back(v.at(idx[i]));
         }
     }
     else

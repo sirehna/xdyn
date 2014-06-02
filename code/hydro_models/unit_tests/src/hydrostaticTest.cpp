@@ -125,23 +125,23 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_two_immerged_node)
     const auto polygon_and_immersions = immerged_polygon(M, index, v);
     const auto polygon = polygon_and_immersions.first;
     ASSERT_EQ(4, polygon.cols());
-    ASSERT_DOUBLE_EQ(2.5,polygon(0,0));
-    ASSERT_DOUBLE_EQ(3.5,polygon(1,0));
-    ASSERT_DOUBLE_EQ(4.5,polygon(2,0));
-    ASSERT_DOUBLE_EQ(4,polygon(0,1));
-    ASSERT_DOUBLE_EQ(6,polygon(1,1));
-    ASSERT_DOUBLE_EQ(6,polygon(2,1));
-    ASSERT_DOUBLE_EQ(7,polygon(0,2));
-    ASSERT_DOUBLE_EQ(8,polygon(1,2));
-    ASSERT_DOUBLE_EQ(9,polygon(2,2));
-    ASSERT_DOUBLE_EQ(4,polygon(0,3));
-    ASSERT_DOUBLE_EQ(4.5,polygon(1,3));
-    ASSERT_DOUBLE_EQ(6,polygon(2,3));
+    ASSERT_DOUBLE_EQ(4,polygon(0,0));
+    ASSERT_DOUBLE_EQ(4.5,polygon(1,0));
+    ASSERT_DOUBLE_EQ(6,polygon(2,0));
+    ASSERT_DOUBLE_EQ(2.5,polygon(0,1));
+    ASSERT_DOUBLE_EQ(3.5,polygon(1,1));
+    ASSERT_DOUBLE_EQ(4.5,polygon(2,1));
+    ASSERT_DOUBLE_EQ(4,polygon(0,2));
+    ASSERT_DOUBLE_EQ(6,polygon(1,2));
+    ASSERT_DOUBLE_EQ(6,polygon(2,2));
+    ASSERT_DOUBLE_EQ(7,polygon(0,3));
+    ASSERT_DOUBLE_EQ(8,polygon(1,3));
+    ASSERT_DOUBLE_EQ(9,polygon(2,3));
     ASSERT_EQ(4, polygon_and_immersions.second.size());
     ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(0));
-    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(1));
+    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(1));
     ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(2));
-    ASSERT_DOUBLE_EQ(0,polygon_and_immersions.second.at(3));
+    ASSERT_DOUBLE_EQ(1,polygon_and_immersions.second.at(3));
 //! [hydrostaticTest immerged_polygon_example_2]
 }
 
@@ -511,4 +511,28 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
         const double V = L*L*L/(6.*sqrt(2));
         ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z, EPS);
     }
+}
+
+TEST_F(hydrostaticTest, bug_discovered_when_implementing_sum_of_forces)
+{
+    Eigen::Matrix<double,3,4> M;
+    M(0,0) = 1; M(0,1) = -1.879706489;M(0,2) = -1.879706489;M(0,3) = 6.759412979;
+    M(1,0) = 2; M(1,1) = -2.98779795; M(1,2) = 6.98779795;  M(1,3) = 2;
+    M(2,0) = 3; M(2,1) = 11.14503995; M(2,2) = 11.14503995; M(2,3) = 11.14503995;
+
+    const std::vector<double> v = {-204294e4,953171e4,38521e5,-990113e4};
+    const std::vector<size_t> idx = {2,1,3};
+
+    immerged_polygon(M, idx, v);
+    ASSERT_NO_THROW(immerged_polygon(M, idx, v));
+
+    const double L = a.random<double>().between(0,10);
+    const double x0 = 1;
+    const double y0 = 2;
+    const double z0 = 3;
+    const Point G(a.random<std::string>(), -3.63075e+09, -7.71511e+09,  9.07162e+09);
+    const Mesh mesh = MeshBuilder(tetrahedron(L,x0,y0,z0)).build();
+    const std::vector<double> dz = {-2.04294e+09, 9.53171e+09, 3.8521e+09, -9.90113e+09};
+    force(mesh, G, a.random<double>(), a.random<double>(), dz);
+    ASSERT_NO_THROW(force(mesh, G, a.random<double>(), a.random<double>(), dz));
 }
