@@ -19,12 +19,13 @@
 #include "WaveModelInterface.hpp"
 #include "Kinematics.hpp"
 #include "Transform.hpp"
+#include "make_stl_file_on_the_fly.hpp"
 
-#include <fstream>
 #include <Eigen/Geometry>
 
 DataSourceBuilderTest::DataSourceBuilderTest() : a(DataGenerator(12)), ds(DataSource())
 {
+    make_stl_file(test_data::three_facets(), "anthineas.stl");
 	const SimulatorYamlParser parser(test_data::full_example());
 	DataSourceBuilder builder(parser.parse());
 	ds = builder.build_ds();
@@ -86,23 +87,6 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_force_of_eac
     ASSERT_DOUBLE_EQ(0,Fg.M);
     ASSERT_DOUBLE_EQ(0,Fg.N);
 }
-#include <sys/stat.h>
-inline bool file_exists(const std::string& name);
-inline bool file_exists(const std::string& name)
-{
-    struct stat buffer;
-    return (stat (name.c_str(), &buffer) == 0);
-}
-
-void DataSourceBuilderTest::make_stl_file(const std::string& data, const std::string& filename) const
-{
-    if (not(file_exists(filename)))
-    {
-        std::ofstream file;
-        file.open(filename.c_str());
-        file << data;
-    }
-}
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_mass_of_each_body)
 {
@@ -111,14 +95,12 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_mass_of_each_body)
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_mesh_of_each_body)
 {
-    make_stl_file(test_data::three_facets(), "anthineas.stl");
     const std::tr1::shared_ptr<Mesh> m = ds.get<std::tr1::shared_ptr<Mesh> >("body 1");
     ASSERT_EQ(3, m->facets.size());
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_PointMatrix_for_each_body)
 {
-    make_stl_file(test_data::three_facets(), "anthineas.stl");
     const std::tr1::shared_ptr<PointMatrix> P = ds.get<std::tr1::shared_ptr<PointMatrix> >("body 1");
     ASSERT_EQ(3, P->m.rows());
     ASSERT_EQ(7, P->m.cols());

@@ -6,6 +6,7 @@ FILE(GLOB SRC src/DataSourceBuilderTest.cpp
               src/GravityModuleTest.cpp
               src/HydrostaticModuleTest.cpp
               src/WaveModuleTest.cpp
+              src/make_stl_file_on_the_fly.cpp
               )
 # ------8<---------------------------------------------->8-----
 
@@ -22,6 +23,7 @@ include_directories(${kinematics_INCLUDE_DIRS})
 include_directories(${kinematics_INCLUDE_DIRS}/../unit_tests/inc)
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
+include_directories(${test_macros_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 
