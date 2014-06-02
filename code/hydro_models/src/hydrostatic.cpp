@@ -60,7 +60,9 @@ double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<doubl
     const size_t n = nodes.first.cols();
     if (n != nodes.second.size())
     {
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, "Number of nodes should be equal to size of delta_z");
+        std::stringstream ss;
+        ss << "Mesh contains " << n << " nodes but delta_z contains " << nodes.second.size() << " values: they should be the same size.";
+        THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
     }
     std::vector<size_t> idx;
     for (size_t i = 0 ; i < n ; ++i) idx.push_back(i);
