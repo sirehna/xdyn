@@ -83,7 +83,6 @@ ADD_SUBDIRECTORY(yaml_parser)
 ADD_SUBDIRECTORY(simulator_yaml_parser)
 ADD_SUBDIRECTORY(solver)
 ADD_SUBDIRECTORY(ds_integration)
-ADD_SUBDIRECTORY(internal_solver_validation)
 ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(mesh)
 ADD_SUBDIRECTORY(hydro_models)
@@ -102,16 +101,16 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         data_source_static          # static
         lapack                      # static
         gfortran                    # static
-        yaml_parser_static
-        decode_unit_static
         data_source_serializers_static
         ds_integration_static
         hydro_models_static
         kinematics_static
-        yaml-cpp
         stl_reader_static
         mesh_static
         simulator_yaml_parser_static
+        yaml_parser_static
+        yaml-cpp
+        decode_unit_static
         simulator_external_data_structures_static
         simulator_static
         hydro_models_static
@@ -141,7 +140,6 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:interpolation_object>
         $<TARGET_OBJECTS:hydro_models_tests>
         $<TARGET_OBJECTS:ds_integration_tests>
-        $<TARGET_OBJECTS:integration_tests>
         $<TARGET_OBJECTS:kinematics_tests>
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
@@ -149,7 +147,6 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:simulator_tests>
         $<TARGET_OBJECTS:numeric_tests>
         )
-TARGET_LINK_LIBRARIES(${TEST_EXE} internal_solver_validation)
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
 
@@ -178,9 +175,3 @@ ENDIF()
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
 
-SET_TARGET_PROPERTIES(parse PROPERTIES EXCLUDE_FROM_ALL TRUE)
-SET_TARGET_PROPERTIES(make_test_data PROPERTIES EXCLUDE_FROM_ALL TRUE)
-SET_TARGET_PROPERTIES(test_utilities_object PROPERTIES EXCLUDE_FROM_ALL TRUE)
-SET_TARGET_PROPERTIES(parser_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
-SET_TARGET_PROPERTIES(dynamho_interface_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
-SET_TARGET_PROPERTIES(physical_models_tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
