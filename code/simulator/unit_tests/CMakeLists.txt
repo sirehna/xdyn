@@ -8,6 +8,7 @@ FILE(GLOB SRC src/DataSourceBuilderTest.cpp
               src/WaveModuleTest.cpp
               src/make_stl_file_on_the_fly.cpp
               src/StateDerivativesModuleTest.cpp
+              src/coriolis_and_centripetalTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
