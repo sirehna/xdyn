@@ -172,3 +172,9 @@ std::string Wrench::get_frame() const
 {
 	return P.get_frame();
 }
+
+std::ostream& operator<<(std::ostream& os, const Wrench& w)
+{
+    os << "force: [" << w.force.transpose() << "], torque: [" << w.torque.transpose() << "], point: " << w.get_point();
+    return os;
+}

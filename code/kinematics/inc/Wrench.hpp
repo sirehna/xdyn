@@ -94,4 +94,6 @@ class Wrench
         Point P; // Point of application
 };
 
+std::ostream& operator<<(std::ostream& os, const Wrench& w);
+
 #endif /* WRENCH_HPP_ */
