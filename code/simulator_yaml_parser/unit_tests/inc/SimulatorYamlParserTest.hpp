@@ -9,11 +9,11 @@ class SimulatorYamlParserTest : public ::testing::Test
 {
     protected:
         SimulatorYamlParserTest();
-	    virtual ~SimulatorYamlParserTest();
+        virtual ~SimulatorYamlParserTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
-		YamlSimulatorInput yaml;
+        DataGenerator a;
+        YamlSimulatorInput yaml;
 
 };
 
