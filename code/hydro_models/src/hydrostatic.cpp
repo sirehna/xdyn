@@ -259,7 +259,7 @@ UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the W
                        )
 {
     const EPoint F = -rho*g*immersion*f.area*f.unit_normal; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
-    return UnsafeWrench(O.get_frame(), F, (f.barycenter-O.v).cross(F));
+    return UnsafeWrench(O, F, (f.barycenter-O.v).cross(F));
 }
 
 Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
@@ -295,6 +295,6 @@ Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at 
             elementary_forces.push_back(dF(O,barycenter(polygon_and_immersions.first),rho,g,zG,dS));
         }
     }
-    const UnsafeWrench F = sum::pairwise(elementary_forces);
-    return F;
+    if (elementary_forces.empty()) return Wrench(O);
+                                   return Wrench(sum::pairwise(elementary_forces));
 }

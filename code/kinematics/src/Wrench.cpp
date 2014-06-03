@@ -29,8 +29,8 @@ Eigen::Vector3d transport(const Eigen::Vector3d& Ma, const Point& a, const Point
 }
 
 
-Wrench::Wrench(const Point& P_) : force(Eigen::Vector3d()),
-		                          torque(Eigen::Vector3d()),
+Wrench::Wrench(const Point& P_) : force(Eigen::Vector3d(0,0,0)),
+		                          torque(Eigen::Vector3d(0,0,0)),
                                   X(force[0]),
                                   Y(force[1]),
                                   Z(force[2]),
