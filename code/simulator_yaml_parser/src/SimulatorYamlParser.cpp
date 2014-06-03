@@ -33,12 +33,12 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
 
 YamlSimulatorInput SimulatorYamlParser::parse() const
 {
-	YAML::Node node;
-	convert_stream_to_yaml_node(contents, node);
-	if (node.size() == 0)
-	{
-		THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Something is wrong with the YAML data: no YAML nodes were detected by the YAML parser.");
-	}
+    YAML::Node node;
+    convert_stream_to_yaml_node(contents, node);
+    if (node.size() == 0)
+    {
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Something is wrong with the YAML data: no YAML nodes were detected by the YAML parser.");
+    }
     YamlSimulatorInput ret;
     node["bodies"] >> ret.bodies;
     node["rotations"] >> ret.rotations;
