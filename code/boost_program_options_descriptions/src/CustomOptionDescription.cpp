@@ -68,7 +68,7 @@ namespace rad
   {
     for (size_t i = 0; i < positionalDesc.max_total_count(); ++i)
     {
-      if (optionID_ == positionalDesc.name_for_position(i))
+      if (optionID_ == positionalDesc.name_for_position((unsigned int)(i)))
       {
         boost::algorithm::erase_all(optionDisplayName_, "-");
         isPositional_ = true;

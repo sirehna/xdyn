@@ -56,7 +56,7 @@ TEST_F(ODEintTests, linear)
     for (size_t i = 0 ; i <= 10 ; ++i)
     {
         ASSERT_EQ(i, v.at(i).first);
-        ASSERT_DOUBLE_EQ(2*i, v.at(i).second);
+        ASSERT_DOUBLE_EQ(2*double(i), v.at(i).second);
     }
 //! [ODEintTests expected output]
 }
@@ -75,7 +75,7 @@ TEST_F(ODEintTests, linear_with_adaptive_RK_Cash_Karp)
     for (size_t i = 0 ; i <= 10 ; ++i)
     {
         ASSERT_EQ(i, v.at(i).first);
-        ASSERT_DOUBLE_EQ(2*i, v.at(i).second);
+        ASSERT_DOUBLE_EQ(2*double(i), v.at(i).second);
     }
 }
 
@@ -94,7 +94,7 @@ TEST_F(ODEintTests, quadratic_with_euler)
     for (size_t i = 0 ; i <= N ; ++i)
     {
         ASSERT_EQ(i, v.at(i).first);
-        ASSERT_DOUBLE_EQ(i*(i-1), v.at(i).second);
+        ASSERT_DOUBLE_EQ(double(i)*(double(i)-1), v.at(i).second);
     }
 }
 
@@ -113,7 +113,7 @@ TEST_F(ODEintTests, quadratic_with_RK4)
     for (size_t i = 0 ; i <= N ; ++i)
     {
         ASSERT_EQ(i, v.at(i).first);
-        ASSERT_DOUBLE_EQ(i*i, v.at(i).second);
+        ASSERT_DOUBLE_EQ(double(i*i), v.at(i).second);
     }
 }
 

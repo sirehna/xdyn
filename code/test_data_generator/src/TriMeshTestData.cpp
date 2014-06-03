@@ -179,7 +179,8 @@ VectorOfVectorOfPoints n_gone(const size_t n)
     VectorOfPoints facet;
     for (size_t i = 0 ; i < n ; ++i)
     {
-        facet.push_back(EPoint(cos(i*two_pi/n),sin(i*two_pi/n),0));
+        facet.push_back(EPoint(cos(double(i)*two_pi/double(n)),
+                               sin(double(i)*two_pi/double(n)),0));
     }
     if (n) mesh.push_back(facet);
     return mesh;
