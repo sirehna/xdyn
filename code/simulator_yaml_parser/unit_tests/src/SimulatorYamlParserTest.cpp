@@ -32,9 +32,9 @@ TEST_F(SimulatorYamlParserTest, can_parse_rotations)
     const YamlRotation rot = yaml.rotations;
     ASSERT_EQ("angle", rot.order_by);
     ASSERT_EQ(3, rot.convention.size());
-    ASSERT_EQ("x", rot.convention.at(0));
+    ASSERT_EQ("z", rot.convention.at(0));
     ASSERT_EQ("y'", rot.convention.at(1));
-    ASSERT_EQ("z''", rot.convention.at(2));
+    ASSERT_EQ("x''", rot.convention.at(2));
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_environment)

@@ -69,8 +69,8 @@ RotationMatrix DataSourceBuilder::angle2matrix(const EulerAngles& a) const
 {
     if (rotations.order_by == "angle")
     {
-        if (match(rotations.convention, "x", "y'", "z''"))
-            return rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(a);
+        if (match(rotations.convention, "z", "y'", "x''"))
+            return rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 3, 2, 1>(a);
         std::stringstream ss;
         ss << "Rotation convention '" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "' is not currently supported.";
         THROW(__PRETTY_FUNCTION__, DataSourceBuilderException, ss.str());

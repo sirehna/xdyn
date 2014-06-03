@@ -13,7 +13,7 @@ std::string test_data::hydrostatic_test()
     std::stringstream ss;
     ss << "rotations:\n"
        << "    order by: angle\n"
-       << "    convention: [x,y',z'']\n"
+       << "    convention: [z,y',x'']\n"
        << "\n"
        << "environment:\n"
        << "  - model: no waves\n"
@@ -141,7 +141,7 @@ std::string test_data::full_example()
     std::stringstream ss;
     ss << "rotations:\n"
        << "    order by: angle\n"
-       << "    convention: [x,y',z'']\n"
+       << "    convention: [z,y',x'']\n"
        << "\n"
        << "environment:\n"
        << "  - model: no waves\n"

@@ -11,11 +11,28 @@ RotationMatrix kinematics::rot(const double lambda1, const double lambda2, const
 
 namespace kinematics
 {
-    template <> RotationMatrix rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(const EulerAngles& angles)
+
+    template <> RotationMatrix rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 1, 2, 3>(const EulerAngles& angles)
+    {
+        const RotationMatrix Rx_phi   = rot(1,0,0, angles.phi);
+        const RotationMatrix Ry_theta = rot(0,1,0, angles.theta);
+        const RotationMatrix Rz_psi   = rot(0,0,1, angles.psi);
+        return RotationMatrix(Rx_phi*Ry_theta*Rz_psi);
+    }
+
+    template <> RotationMatrix rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 3, 2, 1>(const EulerAngles& angles)
     {
         const RotationMatrix Rx_phi   = rot(1,0,0, angles.phi);
         const RotationMatrix Ry_theta = rot(0,1,0, angles.theta);
         const RotationMatrix Rz_psi   = rot(0,0,1, angles.psi);
         return RotationMatrix(Rz_psi*Ry_theta*Rx_phi);
+    }
+
+    template <> RotationMatrix rotation_matrix<EXTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 3, 2, 1>(const EulerAngles& angles)
+    {
+        const RotationMatrix Rx_phi   = rot(1,0,0, angles.phi);
+        const RotationMatrix Ry_theta = rot(0,1,0, angles.theta);
+        const RotationMatrix Rz_psi   = rot(0,0,1, angles.psi);
+        return RotationMatrix(Rx_phi*Ry_theta*Rz_psi);
     }
 }

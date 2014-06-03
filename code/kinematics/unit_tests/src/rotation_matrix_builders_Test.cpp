@@ -80,7 +80,7 @@ TEST_F(rotation_matrix_builders_Test, example)
     using namespace kinematics;
     const EulerAngles angles(PI/3, PI/4, PI/6);
     //const EulerAngles angles(PI/2,0,0);
-    const RotationMatrix R = rotation_matrix<INTRINSIC, ORDERED_BY_ANGLE, CARDAN, 3, 2, 1>(angles);
+    const RotationMatrix R = rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 3, 2, 1>(angles);
 //! [rotation_matrix_builders_Test example]
 //! [rotation_matrix_builders_Test expected output]
     ASSERT_DOUBLE_EQ(sqrt(6)/4, R(0,0));
