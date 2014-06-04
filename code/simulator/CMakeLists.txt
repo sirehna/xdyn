@@ -24,6 +24,7 @@ include_directories(${text_file_reader_INCLUDE_DIRS})
 include_directories(${stl_reader_INCLUDE_DIRS})
 include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${numeric_INCLUDE_DIRS})
+include_directories(${test_macros_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME}_static STATIC ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
