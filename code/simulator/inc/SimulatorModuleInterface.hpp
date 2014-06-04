@@ -17,16 +17,16 @@
  */
 class SimulatorModuleInterface : public DataSourceModule
 {
-	public:
+    public:
         SimulatorModuleInterface(DataSource* const data_source, const std::string& module_name, const std::string& body);
         SimulatorModuleInterface(const SimulatorModuleInterface& rhs, DataSource* const data_source);
-		virtual DataSourceModule* clone() const = 0;
-		virtual DataSourceModule* clone(DataSource* const data_source) const = 0;
-		virtual void update() const = 0;
+        virtual DataSourceModule* clone() const = 0;
+        virtual DataSourceModule* clone(DataSource* const data_source) const = 0;
+        virtual void update() const = 0;
 
-	protected:
-		std::string customize(const std::string& name) const;
-		std::string body;
+    protected:
+        std::string customize(const std::string& name) const;
+        std::string body;
 };
 
 

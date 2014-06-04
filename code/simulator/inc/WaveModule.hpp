@@ -1,5 +1,5 @@
 /*
- * GravityModule.hpp
+ * WaveModule.hpp
  *
  *  Created on: May 22, 2014
  *      Author: cady
@@ -22,13 +22,12 @@
  */
 class WaveModule : public SimulatorModuleInterface
 {
-	public:
+    public:
         WaveModule(DataSource* const data_source, const std::string& module_name, const std::string& body);
         WaveModule(const WaveModule& rhs, DataSource* const data_source);
-		DataSourceModule* clone() const;
-		DataSourceModule* clone(DataSource* const data_source) const;
-		void update() const;
+        DataSourceModule* clone() const;
+        DataSourceModule* clone(DataSource* const data_source) const;
+        void update() const;
 };
-
 
 #endif /* WAVEMODULE_HPP_ */

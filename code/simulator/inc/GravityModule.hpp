@@ -22,12 +22,12 @@
  */
 class GravityModule : public SimulatorModuleInterface
 {
-	public:
+    public:
         GravityModule(DataSource* const data_source, const std::string& module_name, const std::string& body);
         GravityModule(const GravityModule& rhs, DataSource* const data_source);
-		DataSourceModule* clone() const;
-		DataSourceModule* clone(DataSource* const data_source) const;
-		void update() const;
+        DataSourceModule* clone() const;
+        DataSourceModule* clone(DataSource* const data_source) const;
+        void update() const;
 };
 
 

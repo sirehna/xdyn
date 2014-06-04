@@ -1,5 +1,5 @@
 /*
- * GravityModule.hpp
+ * HydrostaticModule.hpp
  *
  *  Created on: May 22, 2014
  *      Author: cady
@@ -22,12 +22,12 @@
  */
 class HydrostaticModule : public SimulatorModuleInterface
 {
-	public:
+    public:
         HydrostaticModule(DataSource* const data_source, const std::string& module_name, const std::string& body);
         HydrostaticModule(const HydrostaticModule& rhs, DataSource* const data_source);
-		DataSourceModule* clone() const;
-		DataSourceModule* clone(DataSource* const data_source) const;
-		void update() const;
+        DataSourceModule* clone() const;
+        DataSourceModule* clone(DataSource* const data_source) const;
+        void update() const;
 };
 
 

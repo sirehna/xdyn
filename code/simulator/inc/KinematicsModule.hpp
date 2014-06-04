@@ -26,22 +26,22 @@ class Kinematics;
  */
 class KinematicsModule : public DataSourceModule
 {
-	public:
-	    KinematicsModule(DataSource* const data_source, const std::vector<std::string>& bodies_, const std::string& module_name);
-	    KinematicsModule(const KinematicsModule& rhs, DataSource* const data_source);
-		DataSourceModule* clone() const;
-		DataSourceModule* clone(DataSource* const data_source) const;
-		void update() const;
+    public:
+        KinematicsModule(DataSource* const data_source, const std::vector<std::string>& bodies_, const std::string& module_name);
+        KinematicsModule(const KinematicsModule& rhs, DataSource* const data_source);
+        DataSourceModule* clone() const;
+        DataSourceModule* clone(DataSource* const data_source) const;
+        void update() const;
 
-	private:
-		kinematics::Transform get_transform_from_ned_to(const std::string& body) const;
-		kinematics::Transform get_transform_from_mesh_to(const std::string& body) const;
-		Point get_origin(const std::string& body) const;
-		RotationMatrix get_rot_from_ned_to(const std::string& body) const;
-		Point get_position_of_body_relative_to_mesh(const std::string& body) const;
+    private:
+        kinematics::Transform get_transform_from_ned_to(const std::string& body) const;
+        kinematics::Transform get_transform_from_mesh_to(const std::string& body) const;
+        Point get_origin(const std::string& body) const;
+        RotationMatrix get_rot_from_ned_to(const std::string& body) const;
+        Point get_position_of_body_relative_to_mesh(const std::string& body) const;
 
-		std::vector<std::string> bodies;
-		std::tr1::shared_ptr<Kinematics> kinematics;
+        std::vector<std::string> bodies;
+        std::tr1::shared_ptr<Kinematics> kinematics;
 };
 
 #endif /* KINEMATICSMODULE_HPP_ */

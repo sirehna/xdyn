@@ -20,48 +20,48 @@ KinematicsModule::KinematicsModule(DataSource* const data_source, const std::vec
 }
 
 KinematicsModule::KinematicsModule(const KinematicsModule& rhs, DataSource* const data_source) :
-	    DataSourceModule(rhs, data_source),
-	    bodies(rhs.bodies),
-	    kinematics(rhs.kinematics)
+        DataSourceModule(rhs, data_source),
+        bodies(rhs.bodies),
+        kinematics(rhs.kinematics)
 {
 }
 
 DataSourceModule* KinematicsModule::clone() const
 {
-	return new KinematicsModule(*this);
+    return new KinematicsModule(*this);
 }
 
 DataSourceModule* KinematicsModule::clone(DataSource* const data_source) const
 {
-	return new KinematicsModule(*this, data_source);
+    return new KinematicsModule(*this, data_source);
 }
 
 void KinematicsModule::update() const
 {
-	std::vector<std::string>::const_iterator that_body = bodies.begin();
-	for (;that_body!=bodies.end() ; ++that_body)
-	{
-		kinematics->add(get_transform_from_ned_to(*that_body));
-		kinematics->add(get_transform_from_mesh_to(*that_body));
-	}
-	ds->set("kinematics", kinematics);
+    std::vector<std::string>::const_iterator that_body = bodies.begin();
+    for (;that_body!=bodies.end() ; ++that_body)
+    {
+        kinematics->add(get_transform_from_ned_to(*that_body));
+        kinematics->add(get_transform_from_mesh_to(*that_body));
+    }
+    ds->set("kinematics", kinematics);
 }
 
 Point KinematicsModule::get_origin(const std::string& body) const
 {
-	return Point("NED", ds->get<double>(std::string("x(")+body+")"),
+    return Point("NED", ds->get<double>(std::string("x(")+body+")"),
                         ds->get<double>(std::string("y(")+body+")"),
                         ds->get<double>(std::string("z(")+body+")"));
 }
 
 RotationMatrix KinematicsModule::get_rot_from_ned_to(const std::string& body) const
 {
-	const Eigen::Quaternion<double> q(ds->get<double>(std::string("qr(")+body+")"),
-				                      ds->get<double>(std::string("qi(")+body+")"),
-				                      ds->get<double>(std::string("qj(")+body+")"),
-				                      ds->get<double>(std::string("qk(")+body+")")
-				                      );
-	return q.matrix();
+    const Eigen::Quaternion<double> q(ds->get<double>(std::string("qr(")+body+")"),
+                                      ds->get<double>(std::string("qi(")+body+")"),
+                                      ds->get<double>(std::string("qj(")+body+")"),
+                                      ds->get<double>(std::string("qk(")+body+")")
+                                      );
+    return q.matrix();
 }
 
 kinematics::Transform KinematicsModule::get_transform_from_mesh_to(const std::string& body) const
@@ -78,5 +78,5 @@ Point KinematicsModule::get_position_of_body_relative_to_mesh(const std::string&
 
 kinematics::Transform KinematicsModule::get_transform_from_ned_to(const std::string& body) const
 {
-	return kinematics::Transform(get_origin(body), get_rot_from_ned_to(body), body);
+    return kinematics::Transform(get_origin(body), get_rot_from_ned_to(body), body);
 }
