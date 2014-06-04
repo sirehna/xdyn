@@ -23,6 +23,8 @@
 
 #include <Eigen/Geometry>
 
+typedef Eigen::Matrix<double,6,6> Matrix6x6;
+
 DataSourceBuilderTest::DataSourceBuilderTest() : a(DataGenerator(12)), ds(DataSource())
 {
     make_stl_file(test_data::three_facets(), "anthineas.stl");
@@ -162,6 +164,33 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_wave_model)
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_hydrostatic_forces_for_each_body)
 {
     ASSERT_NO_THROW(ds.get<Wrench>("non-linear hydrostatic(body 1)"));
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_total_inertia_matrix_of_each_body)
+{
+    ASSERT_NO_THROW(ds.get<Matrix6x6>("total inertia(body 1)"));
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_added_mass_matrix_of_each_body)
+{
+    ASSERT_NO_THROW(ds.get<Matrix6x6>("solid body inertia(body 1)"));
+}
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_inverse_of_the_total_inertia_matrix)
+{
+    const Matrix6x6 M = ds.get<Matrix6x6>("total inertia(body 1)");
+    const Matrix6x6 M_inv = ds.get<Matrix6x6>("inverse of the total inertia(body 1)");
+    const Matrix6x6 I1(M*M_inv);
+    const Matrix6x6 I2(M_inv*M);
+
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        for (size_t j = 0 ; j < 6 ; ++j)
+        {
+            ASSERT_NEAR(i==j ? 1 : 0, (double)I1(i,j),1E-10);
+            ASSERT_NEAR(i==j ? 1 : 0, (double)I2(i,j),1E-10);
+        }
+    }
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_sum_of_forces_for_each_body)

@@ -28,6 +28,8 @@
 #include "rotation_matrix_builders.hpp"
 using namespace kinematics;
 
+typedef Eigen::Matrix<double,6,6> Matrix6x6;
+
 #define FOR_EACH(v,f)  std::for_each(v.begin(),\
                                      v.end(),\
                                      boost::bind(&DataSourceBuilder::f, boost::ref(*this), _1));
@@ -122,6 +124,45 @@ void DataSourceBuilder::add_forces(const YamlBody& body)
     }
 }
 
+Matrix6x6 convert(const YamlInertiaMatrix& M);
+Matrix6x6 convert(const YamlInertiaMatrix& M)
+{
+    Matrix6x6 ret;
+    for (size_t j = 0 ; j < 6 ; ++j)
+    {
+        ret(0,j) = M.row_1.at(j);
+        ret(1,j) = M.row_2.at(j);
+        ret(2,j) = M.row_3.at(j);
+        ret(3,j) = M.row_4.at(j);
+        ret(4,j) = M.row_5.at(j);
+        ret(5,j) = M.row_6.at(j);
+    }
+    return ret;
+}
+
+void DataSourceBuilder::add_inertia(const YamlBody& body)
+{
+    Matrix6x6 Mrb = convert(body.dynamics.rigid_body_inertia);
+    Matrix6x6 Ma = convert(body.dynamics.added_mass);
+    if (fabs((Mrb+Ma).determinant())<1E-10)
+    {
+        std::stringstream ss;
+        ss << "Unable to compute the inverse of the total inertia matrix (rigid body inertia + added mass): " << std::endl
+           << "Mrb = " << std::endl
+           << Mrb << std::endl
+           << "Ma = " << std::endl
+           << Ma << std::endl
+           << "Mrb+Ma = " << std::endl
+           << Mrb+Ma << std::endl;
+        THROW(__PRETTY_FUNCTION__, DataSourceBuilderException, ss.str());
+    }
+    Matrix6x6 M_inv = (Mrb+Ma).inverse();
+
+    ds.set<Matrix6x6>("total inertia(body 1)", Ma+Mrb);
+    ds.set<Matrix6x6>("solid body inertia(body 1)", Mrb);
+    ds.set<Matrix6x6>("inverse of the total inertia(body 1)", M_inv);
+}
+
 void DataSourceBuilder::add_gravity(const std::string& body_name, const std::string& yaml, const double mass)
 {
     GravityModule g(&ds, "gravity", body_name);
@@ -204,6 +245,7 @@ DataSource DataSourceBuilder::build_ds()
     FOR_EACH(input.bodies, add_mesh);
     FOR_EACH(input.bodies, add_wave_height_module);
     FOR_EACH(input.bodies, add_sum_of_forces_module);
+    FOR_EACH(input.bodies, add_inertia);
 
     add_kinematics(input.bodies);
 
