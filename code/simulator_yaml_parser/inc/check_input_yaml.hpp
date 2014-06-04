@@ -1,12 +1,12 @@
 /*
- * SimulatorYamlParser.hpp
+ * check_input_yaml.hpp
  *
  *  Created on: 15 avr. 2014
  *      Author: cady
  */
 
-#ifndef SIMULATORYAMLPARSER_HPP_
-#define SIMULATORYAMLPARSER_HPP_
+#ifndef CHECK_INPUT_YAML_HPP_
+#define CHECK_INPUT_YAML_HPP_
 
 #include "YamlSimulatorInput.hpp"
 
@@ -23,4 +23,4 @@ class YamlCheckerException: public Exception
 
 YamlSimulatorInput check_input_yaml(const YamlSimulatorInput& input);
 
-#endif /* SIMULATORYAMLPARSER_HPP_ */
+#endif /* CHECK_INPUT_YAML_HPP_ */
