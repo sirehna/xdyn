@@ -9,6 +9,7 @@ FILE(GLOB SRC src/KinematicsTests.cpp
               src/KinematicTreeTest.cpp
               src/WrenchTest.cpp
               src/transform_double_equal.cpp
+              src/coriolis_and_centripetalTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

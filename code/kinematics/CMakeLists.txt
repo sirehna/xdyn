@@ -11,6 +11,7 @@ SET(SRC src/Velocity.cpp
         src/KinematicTree.cpp
         src/Wrench.cpp
         src/UnsafeWrench.cpp
+        src/coriolis_and_centripetal.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
