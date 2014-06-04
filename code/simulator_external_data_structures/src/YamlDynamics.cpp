@@ -10,7 +10,8 @@
 YamlDynamics::YamlDynamics() :
     centre_of_inertia(YamlPoint()),
     mass(0),
-    rigid_body_inertia(YamlInertiaMatrix())
+    rigid_body_inertia(YamlInertiaMatrix()),
+    added_mass(YamlInertiaMatrix())
 {
 
 }

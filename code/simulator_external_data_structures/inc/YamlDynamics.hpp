@@ -17,6 +17,7 @@ struct YamlDynamics
     YamlPoint centre_of_inertia;
     double mass;
     YamlInertiaMatrix rigid_body_inertia;
+    YamlInertiaMatrix added_mass;
 };
 
 #endif /* YAMLDYNAMICS_HPP_ */

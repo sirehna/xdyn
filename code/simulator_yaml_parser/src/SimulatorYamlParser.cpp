@@ -117,6 +117,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
     parse_uv(node["mass"], d.mass);
     node["rigid body inertia matrix at the center of buoyancy projected in the body frame"] >> d.rigid_body_inertia;
+    node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
 }
 
 void operator >> (const YAML::Node& node, YamlPoint& p)
