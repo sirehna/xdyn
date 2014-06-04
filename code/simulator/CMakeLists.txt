@@ -28,8 +28,10 @@ include_directories(${numeric_INCLUDE_DIRS})
 include_directories(${test_macros_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${data_source_INCLUDE_DIRS})
+include_directories(${ds_integration_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}_static STATIC ${SRC} $<TARGET_OBJECTS:exception_handling_object>)
+
 target_link_libraries(${PROJECT_NAME}_static simulator_yaml_parser_static)
 target_link_libraries(${PROJECT_NAME}_static yaml_parser_static)
 target_link_libraries(${PROJECT_NAME}_static simulator_external_data_structures_static)

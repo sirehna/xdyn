@@ -11,9 +11,12 @@
 #include "TextFileReader.hpp"
 #include "DataSource.hpp"
 #include "SimulatorAPI.hpp"
+#include "DsCsvObserver.hpp"
+#include "DsSolve.hpp"
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 namespace po = boost::program_options;
 
@@ -113,9 +116,9 @@ int get_input_data(int argc, char **argv, InputData& input_data)
     if (invalid(input_data) || input_data.help)
     {
         print_usage(std::cout, desc);
-        return 1;
+        return EXIT_FAILURE;
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 int main(int argc, char** argv)
@@ -126,8 +129,8 @@ int main(int argc, char** argv)
     {
         const TextFileReader yaml_reader(input_data.yaml_filenames);
         DataSource ds = make_ds(yaml_reader.get_contents());
-        //DsCsvObserver ds.observer(std::cout);
-        //integrate(ds, 0, 10, observer);
+        DsCsvObserver observer(std::cout);
+        integrate(ds, 0, 10, observer);
     }
     return error;
 }
