@@ -197,3 +197,13 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_sum_of_forces_for_each_b
 {
     ASSERT_NO_THROW(ds.get<Wrench>("sum of forces(body 1)"));
 }
+
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_coriolis_and_centripetal_forces_for_each_body)
+{
+    const Wrench F = ds.get<Wrench>("coriolis and centripetal forces(body 1)");
+    const Point C = ds.get<Point>("G(body 1)");
+    ASSERT_EQ(C.get_frame(), F.get_frame());
+    ASSERT_EQ(C.x, F.get_point().x);
+    ASSERT_EQ(C.y, F.get_point().y);
+    ASSERT_EQ(C.z, F.get_point().z);
+}
