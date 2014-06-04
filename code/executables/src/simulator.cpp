@@ -8,6 +8,10 @@
 #include "boost/program_options.hpp"
 #include "OptionPrinter.hpp"
 
+#include "TextFileReader.hpp"
+#include "DataSource.hpp"
+#include "SimulatorAPI.hpp"
+
 #include <iostream>
 #include <string>
 
@@ -98,8 +102,8 @@ po::options_description get_options_description(InputData& input_data)
     return desc;
 }
 
-size_t get_input_data(int argc, char **argv, InputData& input_data);
-size_t get_input_data(int argc, char **argv, InputData& input_data)
+int get_input_data(int argc, char **argv, InputData& input_data);
+int get_input_data(int argc, char **argv, InputData& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     po::variables_map vm;
@@ -117,10 +121,13 @@ size_t get_input_data(int argc, char **argv, InputData& input_data)
 int main(int argc, char** argv)
 {
     InputData input_data;
-    const size_t error = get_input_data(argc, argv, input_data);
+    const int error = get_input_data(argc, argv, input_data);
     if (not(error))
     {
-
+        const TextFileReader yaml_reader(input_data.yaml_filenames);
+        DataSource ds = make_ds(yaml_reader.get_contents());
+        //DsCsvObserver ds.observer(std::cout);
+        //integrate(ds, 0, 10, observer);
     }
-    return (int(error));
+    return error;
 }
