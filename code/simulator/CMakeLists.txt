@@ -27,7 +27,6 @@ include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${numeric_INCLUDE_DIRS})
 include_directories(${test_macros_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
-include_directories(${data_source_INCLUDE_DIRS})
 include_directories(${ds_integration_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}_static STATIC ${SRC})
