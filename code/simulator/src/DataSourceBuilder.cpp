@@ -198,8 +198,7 @@ void DataSourceBuilder::add_hydrostatic(const std::string& body_name, const std:
 
 void DataSourceBuilder::add_mesh(const YamlBody& body)
 {
-    const TextFileReader reader(std::vector<std::string>(1, body.mesh));
-    MeshBuilder builder(read_stl(reader.get_contents()));
+    MeshBuilder builder(mesh_data[body.name]);
     std::tr1::shared_ptr<Mesh> mesh(new Mesh(builder.build()));
     ds.set<std::tr1::shared_ptr<Mesh> >(body.name, mesh);
     ds.add<PointMatrixBuilder>(body.name);

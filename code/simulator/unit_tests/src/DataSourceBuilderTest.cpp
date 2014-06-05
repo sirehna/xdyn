@@ -5,7 +5,6 @@
  *      Author: cady
  */
 
-
 #include "DataSourceBuilderTest.hpp"
 #include "DataSourceBuilder.hpp"
 #include "SimulatorYamlParser.hpp"
