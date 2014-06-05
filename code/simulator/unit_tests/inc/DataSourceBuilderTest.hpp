@@ -14,9 +14,9 @@ class DataSourceBuilderTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
 
-		DataGenerator a;
-		DataSource ds;
-		VectorOfVectorOfPoints mesh_data;
+        DataGenerator a;
+        DataSource ds;
+        VectorOfVectorOfPoints mesh_data;
 };
 
 #endif  /* DATASOURCEBUILDERTEST_HPP_ */
