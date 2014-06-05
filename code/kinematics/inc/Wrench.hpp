@@ -98,10 +98,20 @@ class Wrench
           */
         Eigen::Matrix<double, 6, 1> to_vector() const;
 
+        /**  \author cec
+          *  \date Jun 5, 2014, 12:29:21 PM
+          *  \brief Multiply all components by a scalar
+          *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest operator*_example
+          */
+        Wrench operator*(const double lambda //!< Scalar with which we wish to multiply
+                               ) const;
+
     protected:
         Point P; // Point of application
 };
 
 std::ostream& operator<<(std::ostream& os, const Wrench& w);
+
+Wrench operator*(const double lambda, const Wrench& w);
 
 #endif /* WRENCH_HPP_ */
