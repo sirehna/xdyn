@@ -88,8 +88,8 @@ ADD_SUBDIRECTORY(mesh)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
-ADD_SUBDIRECTORY(executables)
 ADD_SUBDIRECTORY(simulator)
+ADD_SUBDIRECTORY(executables)
 
 INCLUDE(CMakeLapackDouble)
 
