@@ -26,6 +26,14 @@ MESSAGE(STATUS "CMAKE_INSTALL_PREFIX :${CMAKE_INSTALL_PREFIX}")
 #############################################################################
 # Compilation configuration
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+#############################################################################
+# GIT SHA
+INCLUDE(GetGitRevisionDescription)
+GET_GIT_HEAD_REVISION(GIT_REFSPEC GIT_SHA1)
+MESSAGE(STATUS "GIT_SHA1 : ${GIT_SHA1}")
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
+               "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt" @ONLY)
+#############################################################################
 INCLUDE(CMakeGMock)
 
 INCLUDE(CMakeOutputDirectories)
