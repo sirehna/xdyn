@@ -47,6 +47,15 @@ DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in),
 {
 }
 
+DataSourceBuilder::DataSourceBuilder(
+        const YamlSimulatorInput& input_yaml,
+        const std::map<std::string, VectorOfVectorOfPoints>& input_meshes): input(input_yaml),
+                                                                            ds(DataSource()),
+                                                                            rotations(input_yaml.rotations),
+                                                                            mesh_data(input_meshes)
+{
+}
+
 void DataSourceBuilder::add_initial_conditions(const YamlBody& body)
 {
     ds.set(std::string("x(")+body.name+")", body.initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.x);

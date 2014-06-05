@@ -18,7 +18,7 @@ class DataSourceBuilder
 {
     public:
         DataSourceBuilder(const YamlSimulatorInput& input);
-        DataSourceBuilder(const YamlSimulatorInput& input_yaml, const std::map<std::string,VectorOfVectorOfPoints>& input_meshes);
+        DataSourceBuilder(const YamlSimulatorInput& input_yaml, const std::map<std::string, VectorOfVectorOfPoints>& input_meshes);
         DataSource build_ds();
 
     private:
