@@ -64,7 +64,7 @@ IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
 ENDIF()
 
-ADD_SUBDIRECTORY(yaml-cpp)
+ADD_SUBDIRECTORY(yaml-cpp EXCLUDE_FROM_ALL)
 SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include/yaml-cpp)
