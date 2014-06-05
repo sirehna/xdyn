@@ -1,1 +1,3 @@
 ﻿Le programme SimulateurIrtJV a été développé par DCNS Research.
+
+ID : @GIT_SHA1@
