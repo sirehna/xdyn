@@ -2,7 +2,7 @@
 #include "Observers.hpp"
 #include "DsSystem.hpp"
 
-DsCsvObserver::DsCsvObserver(std::ostream& os_) : DsObserver(os_), initialized(false)
+DsCsvObserver::DsCsvObserver(std::ostream& os_) : DsObserver(), os(os_), initialized(false)
 {}
 
 void DsCsvObserver::observe(const DSSystem& sys, const double t)

@@ -23,12 +23,9 @@ class DSSystem;
 class DsObserver
 {
     public:
-        DsObserver(std::ostream& os);
+        DsObserver();
         virtual ~DsObserver();
         virtual void observe(const DSSystem& sys, const double t) = 0;
-
-    protected:
-        std::ostream& os;
 };
 
 #endif /* DSOBSERVER_HPP_ */

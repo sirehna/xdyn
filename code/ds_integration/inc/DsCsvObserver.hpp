@@ -30,6 +30,7 @@ class DsCsvObserver : public DsObserver
         void observe(const DSSystem& sys, const double t);
 
     private:
+        std::ostream& os;
         bool initialized;
 };
 
