@@ -4,6 +4,7 @@
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
 #include "DataSource.hpp"
+#include "GeometricTypes3d.hpp"
 
 class DataSourceBuilderTest : public ::testing::Test
 {
@@ -15,6 +16,7 @@ class DataSourceBuilderTest : public ::testing::Test
 
 		DataGenerator a;
 		DataSource ds;
+		VectorOfVectorOfPoints mesh_data;
 };
 
 #endif  /* DATASOURCEBUILDERTEST_HPP_ */

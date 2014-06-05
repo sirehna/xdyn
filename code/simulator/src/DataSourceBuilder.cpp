@@ -40,7 +40,10 @@ MODULE(PointMatrixBuilder, const std::string name = get_name();\
                            ds->set<std::tr1::shared_ptr<PointMatrix> >(name, pm);
       )
 
-DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in), ds(DataSource()), rotations(in.rotations)
+DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in),
+                                                                     ds(DataSource()),
+                                                                     rotations(in.rotations),
+                                                                     mesh_data(std::map<std::string,VectorOfVectorOfPoints>())
 {
 }
 

@@ -11,12 +11,14 @@
 #include "DataSource.hpp"
 #include "YamlSimulatorInput.hpp"
 #include "RotationMatrix.hpp"
+#include "GeometricTypes3d.hpp"
 
 class EulerAngles;
 class DataSourceBuilder
 {
     public:
         DataSourceBuilder(const YamlSimulatorInput& input);
+        DataSourceBuilder(const YamlSimulatorInput& input_yaml, const std::map<std::string,VectorOfVectorOfPoints>& input_meshes);
         DataSource build_ds();
 
     private:
@@ -40,6 +42,7 @@ class DataSourceBuilder
         YamlSimulatorInput input;
         DataSource ds;
         YamlRotation rotations;
+        std::map<std::string,VectorOfVectorOfPoints> mesh_data;
 };
 
 #endif /* DATASOURCEBUILDER_HPP_ */
