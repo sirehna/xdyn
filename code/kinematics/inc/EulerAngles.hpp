@@ -9,9 +9,9 @@
 #define EULERANGLES_HPP_
 
 /** \author cec
- *  \brief 
- *  \details 
- *  \ingroup 
+ *  \brief
+ *  \details
+ *  \ingroup
  *  \section ex1 Example
  *  \snippet kinematics/unit_tests/src/EulerAnglesTest.cpp EulerAnglesTest example
  *  \section ex2 Expected output

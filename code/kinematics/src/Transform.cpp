@@ -77,12 +77,12 @@ Transform Transform::inverse() const
 
 Point Transform::get_point() const
 {
-	return t;
+    return t;
 }
 
 RotationMatrix Transform::get_rot() const
 {
-	return r;
+    return r;
 }
 
 std::ostream& kinematics::operator<<(std::ostream& os, const Transform& T)

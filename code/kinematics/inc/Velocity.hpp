@@ -15,8 +15,8 @@ typedef Point TranslationVelocityVector;
 
 
 /** \author cec
- *  \brief 
- *  \details 
+ *  \brief
+ *  \details
  *  \ingroup kinematics
  */
 class Velocity
