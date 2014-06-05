@@ -5,6 +5,7 @@ set(SRC src/DsSystem.cpp
         src/DsSolve.cpp
         src/DsCsvObserver.cpp
         src/DsObserver.cpp
+        src/DsMapObserver.cpp
         )
 
 
