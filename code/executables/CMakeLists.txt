@@ -23,5 +23,17 @@ ADD_EXECUTABLE(generate_yaml_example src/generate_yaml_examples.cpp)
 
 TARGET_LINK_LIBRARIES(generate_yaml_example test_data_generator_static)
 
+################################################################################
 INSTALL(TARGETS sim
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
+
+ADD_CUSTOM_COMMAND(TARGET generate_yaml_example
+                   POST_BUILD
+                   COMMAND generate_yaml_example
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                   COMMENT "Generate YAML simulation input data files")
+
+INSTALL(
+    CODE "FILE( GLOB _Yml \"${CMAKE_CURRENT_BINARY_DIR}/*.yml\" )"
+    CODE "FILE( INSTALL \${_Yml} DESTINATION ${CMAKE_INSTALL_PREFIX}/${RUNTIME_OUTPUT_DIRECTORY})"
+)
