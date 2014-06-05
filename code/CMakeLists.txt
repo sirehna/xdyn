@@ -98,22 +98,21 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:exception_handling_object>
                                    $<TARGET_OBJECTS:text_file_reader_static>)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
-        data_source_static          # static
-        lapack                      # static
-        gfortran                    # static
         data_source_serializers_static
         ds_integration_static
+        simulator_static
+        mesh_static
+        stl_reader_static
         hydro_models_static
         kinematics_static
-        stl_reader_static
-        mesh_static
         simulator_yaml_parser_static
         yaml_parser_static
+        simulator_external_data_structures_static
         yaml-cpp
         decode_unit_static
-        simulator_external_data_structures_static
-        simulator_static
-        hydro_models_static
+        data_source_static
+        lapack                      # static
+        gfortran                    # static
         )
 
 INSTALL(TARGETS ${PROJECT_NAME}
