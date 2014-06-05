@@ -206,3 +206,17 @@ TEST_F(WrenchTest, cannot_substract_two_wrenches_if_the_reference_points_dont_ma
 		ASSERT_THROW(w1-w2, KinematicsException);
 	}
 }
+
+TEST_F(WrenchTest, can_convert_wrench_to_vector)
+{
+    const Wrench w(Point(), Eigen::Vector3d(1,2,3), Eigen::Vector3d(4,5,6));
+    const Eigen::Matrix<double, 6, 1> v = w.to_vector();
+    ASSERT_DOUBLE_EQ(1, (double)v(0));
+    ASSERT_DOUBLE_EQ(2, (double)v(1));
+    ASSERT_DOUBLE_EQ(3, (double)v(2));
+    ASSERT_DOUBLE_EQ(4, (double)v(3));
+    ASSERT_DOUBLE_EQ(5, (double)v(4));
+    ASSERT_DOUBLE_EQ(6, (double)v(5));
+
+}
+

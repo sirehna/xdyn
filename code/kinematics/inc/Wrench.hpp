@@ -90,6 +90,14 @@ class Wrench
         Wrench change_ref_point_then_change_frame(const kinematics::Transform& T //!< Transform from current frame to new frame
                 ) const;
 
+        /**  \author cec
+          *  \date Jun 4, 2014, 9:20:37 PM
+          *  \brief Converts to an Eigen::Vector6d
+          *  \details Order is: [X,Y,Z,K,M,N]
+          *  \snippet kinematics/unit_tests/src/WrenchTest.cpp WrenchTest to_vector_example
+          */
+        Eigen::Matrix<double, 6, 1> to_vector() const;
+
     protected:
         Point P; // Point of application
 };

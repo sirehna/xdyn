@@ -173,8 +173,30 @@ std::string Wrench::get_frame() const
 	return P.get_frame();
 }
 
+Wrench Wrench::operator*(const double lambda) const
+{
+    return Wrench(P, lambda*force, lambda*torque);
+}
+
+Wrench operator*(const double lambda, const Wrench& w)
+{
+    return w*lambda;
+}
+
 std::ostream& operator<<(std::ostream& os, const Wrench& w)
 {
     os << "force: [" << w.force.transpose() << "], torque: [" << w.torque.transpose() << "], point: " << w.get_point();
     return os;
+}
+
+Eigen::Matrix<double, 6, 1> Wrench::to_vector() const
+{
+    Eigen::Matrix<double, 6, 1> ret;
+    ret(0) = X;
+    ret(1) = Y;
+    ret(2) = Z;
+    ret(3) = K;
+    ret(4) = M;
+    ret(5) = N;
+    return ret;
 }
