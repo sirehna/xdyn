@@ -74,6 +74,7 @@ ADD_SUBDIRECTORY(numeric)
 ADD_SUBDIRECTORY(simulator_external_data_structures)
 ADD_SUBDIRECTORY(test_data_generator)
 ADD_SUBDIRECTORY(exception_handling)
+ADD_SUBDIRECTORY(csv_file_reader)
 ADD_SUBDIRECTORY(text_file_reader)
 ADD_SUBDIRECTORY(decode_unit)
 ADD_SUBDIRECTORY(data_source)
@@ -95,6 +96,7 @@ INCLUDE(CMakeLapackDouble)
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:exception_handling_object>
                                    $<TARGET_OBJECTS:interpolation_object>
+                                   $<TARGET_OBJECTS:csv_file_reader_object>
                                    $<TARGET_OBJECTS:text_file_reader_static>)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
