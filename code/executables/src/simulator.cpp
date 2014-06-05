@@ -130,7 +130,7 @@ int main(int argc, char** argv)
         const TextFileReader yaml_reader(input_data.yaml_filenames);
         DataSource ds = make_ds(yaml_reader.get_contents());
         DsCsvObserver observer(std::cout);
-        integrate(ds, 0, 10, observer);
+        integrate(ds, input_data.tstart, input_data.tend, observer);
     }
     return error;
 }
