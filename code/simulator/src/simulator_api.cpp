@@ -1,7 +1,7 @@
 #include "SimulatorYamlParser.hpp"
 #include "DataSourceBuilder.hpp"
 #include "check_input_yaml.hpp"
-#include "SimulatorAPI.hpp"
+#include "simulator_api.hpp"
 
 DataSource make_ds(const std::string& data)
 {

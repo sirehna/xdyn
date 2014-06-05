@@ -8,7 +8,7 @@ set(SRC src/DataSourceBuilder.cpp
         src/WaveModule.cpp
         src/SimulatorModuleInterface.cpp
         src/StateDerivativesModule.cpp
-        src/SimulatorAPI.cpp
+        src/simulator_api.cpp
         )
 
 

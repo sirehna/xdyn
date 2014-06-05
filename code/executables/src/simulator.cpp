@@ -10,7 +10,7 @@
 
 #include "TextFileReader.hpp"
 #include "DataSource.hpp"
-#include "SimulatorAPI.hpp"
+#include "simulator_api.hpp"
 #include "DsCsvObserver.hpp"
 #include "DsSolve.hpp"
 #include "DsSystemMacros.hpp"
