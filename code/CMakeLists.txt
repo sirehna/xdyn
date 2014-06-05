@@ -165,9 +165,6 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         ${PROJECT_NAME}
         )
 
-INSTALL(TARGETS sim
-        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-
 ADD_TEST(NAME ${PROJECT_NAME}_TEST_001
          WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
          COMMAND ${TEST_EXE} --gtest_also_run_disabled_tests --gtest_output=xml:test_output.xml)
