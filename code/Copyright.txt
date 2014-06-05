@@ -1,4 +1,1 @@
-Le programme DyNaMHo a été développé par DCNS et DCNS Research.
-
-C'est un simulateur 6 degrés de liberté.
-Il est basé sur le formalisme DYSCO et a été adpaté pour prendre en compte les spécifités associées aux éjections d'armes sous-marines.
+ï»¿Le programme SimulateurIrtJV a Ã©tÃ© dÃ©veloppÃ© par DCNS Research.
