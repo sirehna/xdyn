@@ -6,12 +6,12 @@
 
 Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::get_nodes() const
 {
-	return nodes;
+    return nodes;
 }
 
 std::vector<Facet> MeshBuilder::get_facets() const
 {
-	return facets;
+    return facets;
 }
 
 MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
@@ -44,8 +44,8 @@ Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::resize(const Eigen::Matrix<d
 
 Mesh MeshBuilder::build()
 {
-	*this = std::for_each(v.begin(), v.end(), *this);
-	return Mesh(resize(nodes), facets);
+    *this = std::for_each(v.begin(), v.end(), *this);
+    return Mesh(resize(nodes), facets);
 }
 
 void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
@@ -67,27 +67,27 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
 
 size_t MeshBuilder::build_one_point(const EPoint& xyz)
 {
-	const bool point_has_been_added = add_point_if_missing(xyz);
-	if (point_has_been_added) index++;
-	return xyzMap[xyz];
+    const bool point_has_been_added = add_point_if_missing(xyz);
+    if (point_has_been_added) index++;
+    return xyzMap[xyz];
 }
 
 bool MeshBuilder::add_point_if_missing(const EPoint& xyz)
 {
-	bool point_has_been_added = false;
-	if (not(point_is_in_map(xyz)))
-	{
-		xyzMap.insert(std::make_pair(xyz,index));
-		nodes.col(index) = xyz;
-		point_has_been_added = true;
-	}
-	return point_has_been_added;
+    bool point_has_been_added = false;
+    if (not(point_is_in_map(xyz)))
+    {
+        xyzMap.insert(std::make_pair(xyz,index));
+        nodes.col(index) = xyz;
+        point_has_been_added = true;
+    }
+    return point_has_been_added;
 }
 
 bool MeshBuilder::point_is_in_map(const EPoint& xyz)
 {
-	const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
-	return itMap != xyzMap.end();
+    const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
+    return itMap != xyzMap.end();
 }
 
 Matrix3x MeshBuilder::convert(const VectorOfPoints& v) const
