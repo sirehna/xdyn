@@ -290,7 +290,6 @@ std::string test_data::falling_ball_example()
        << "\n"
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: ball\n"
-       << "    mesh: anthineas.stl\n"
        << "    position of body frame relative to mesh:\n"
        << "        frame: mesh\n"
        << "        x: {value: 0, unit: m}\n"

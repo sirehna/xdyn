@@ -27,6 +27,12 @@ void operator >> (const YAML::Node& node, YamlPositionOutput& p);
 void operator >> (const YAML::Node& node, YamlAnglesOutput& p);
 void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f);
 
+template <typename T> void try_to_parse(const YAML::Node& node, const std::string& key, T& value)
+{
+    const YAML::Node * n = node.FindValue(key);
+    if (n) (*n) >> value;
+}
+
 SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
 {
 }
@@ -64,7 +70,7 @@ void operator >> (const YAML::Node& node, YamlRotation& g)
 void operator >> (const YAML::Node& node, YamlBody& b)
 {
     node["name"] >> b.name;
-    node["mesh"] >> b.mesh;
+    try_to_parse(node, "mesh", b.mesh);
     node["external forces"] >> b.external_forces;
     node["position of body frame relative to mesh"] >> b.position_of_body_frame_relative_to_mesh;
     node["initial position of body frame relative to NED"] >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
