@@ -1,23 +1,25 @@
-﻿# Guide utilisateur
+# Guide utilisateur
 
-Le simulateur léger de comportement de navires a été développé par DCNS Research pour l'IRT Jules Verne.
+Le simulateur léger de comportement de navires a été développé par DCNS Research
+pour l'IRT Jules Verne.
 
-Ce simulateur permet de réaliser de nombreuses simulations au stade d'avant-projet,
-permettant d'appréhender le comportement à la mer du navire muni de ses actionneurs,
-en incluant certains aspects non-linéaires de ce comportement,
-et intégrant des fonctionnalités de manœuvrabilité.
+Ce simulateur permet de réaliser de nombreuses simulations au stade
+d'avant-projet, permettant d'appréhender le comportement à la mer du navire muni
+de ses  actionneurs, en incluant certains aspects non-linéaires de ce
+comportement, et intégrant des fonctionnalités de manœuvrabilité.
 
 # Documentations des données d'entrées du simulateur
 
-Les données d'entrées du simulateur se base sur un format de fichiers [YAML](http://www.yaml.org/)
+Les données d'entrées du simulateur se basent sur un format
+de fichiers [YAML](http://www.yaml.org/)
 
-Ce format présente l'avantage d'être facilement lisible et éditable par 
+Ce format présente l'avantage d'être facilement lisible et éditable par
 l'homme et facilement interprétable par la machine.
 
 ## Repère
 
-Afin de connaître et décrire l'attitude d'un ou plusieurs corps dans l'espace, il est
-nécessaire de les placer par rapport à un repère de référence.
+Afin de connaître et décrire l'attitude d'un ou plusieurs corps dans l'espace,
+il est nécessaire de les placer par rapport à un repère de référence.
 
 ### Repère de référence
 
@@ -28,7 +30,8 @@ Il sert à exprimer les déplacements des corps de la simulation.
 ### Repère navire
 
 Le repère navire correspond au repère attaché au navire lors de la simulation.
-Le point de référence de ce repère correspond généralement au centre de carène du navire.
+Le point de référence de ce repère correspond généralement au centre de carène
+du navire.
 Les axes du repère navire sont les suivants
 - $X$ vers l'avant
 - $Y$ sur tribord
@@ -38,10 +41,11 @@ Les axes du repère navire sont les suivants
 
 ## Attitude navire
 
-L'attitude d'un corps permet de connaître sa position et son orientation par rapport à un repère.
-La position est donnée par le triplet $\left(X,Y,Z\right)$ et l'orientation
-par un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
-Cette dernière peut être exprimée de manière différente notamment avec des quaternions.
+L'attitude d'un corps permet de connaître sa position et son orientation par
+rapport à un repère. La position est donnée par le triplet $\left(X,Y,Z\right)$
+et l'orientation ar un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
+Cette dernière peut être exprimée de manière différente notamment avec des
+quaternions.
 Une attitude sera décrite de la manière suivante, avec les champs
 
 - `frame` le nom du repère dans laquelle l'attitude est exprimée,
@@ -96,10 +100,10 @@ respectivement une rotation autour d'un axe $X$, $Y$ ou $Z$.
 Les axes ne peuvent être répetés.
 Il est possible de définir 6 conventions d'angles, qui correspondent à
 la permutation des trois axes: $XYZ$ ,$XZY$ ,$YXZ$ ,$YZX$ ,$ZXY$ ,$ZYX$.
-Par exemple la rotation $R_{YZX}$ appliquée au triplet $\left(\phi,\theta,\psi\right)$
-s'interprétera comme une rotation de $R_{Y}\left(\theta\right)$,
-suivie de la rotation $R_{Z}\left(\psi\right)$, et terminée par la
-rotation $R_{X}\left(\phi\right)$.
+Par exemple la rotation $R_{YZX}$ appliquée au triplet
+$\left(\phi,\theta,\psi\right)$ s'interprétera comme une rotation de
+$R_{Y}\left(\theta\right)$, suivie de la rotation $R_{Z}\left(\psi\right)$,
+et terminée par la rotation $R_{X}\left(\phi\right)$.
 
 Si on choisit une convention d'axes, alors on modifie l'ordre des axes
 sur lesquels appliquer successivement les rotations.
@@ -107,29 +111,31 @@ Des répétitions des axes sont alors possibles, si elles ne se suivent pas.
 Par exempe, $XYX$ sera valide, mais pas $XXY$.
 Par exemple, une convention ZXY définit une composition de rotations
 Il est possible de définir 12 conventions d'axes:
-$XYX$, $XYZ$, $XZX$, $XZY$, $YXY$, $YXZ$, $YZX$, $YZY$, $ZXY$, $ZXZ$, $ZYX$, $ZYZ$
-Par exemple la rotation $R_{YZX}$ appliquée au triplet $\left(\phi,\theta,\psi\right)$
-s'interprétera comme une rotation de $R_{Y}\left(\phi\right)$,
-suivie de la rotation $R_{Z}\left(\theta\right)$, et terminée par la
-rotation $R_{X}\left(\psi\right)$.
+$XYX$, $XYZ$, $XZX$, $XZY$, $YXY$, $YXZ$,
+$YZX$, $YZY$, $ZXY$, $ZXZ$, $ZYX$, $ZYZ$.
+Par exemple la rotation $R_{YZX}$ appliquée au triplet
+$\left(\phi,\theta,\psi\right)$ s'interprétera comme une rotation de
+$R_{Y}\left(\phi\right)$, suivie de la rotation $R_{Z}\left(\theta\right)$, et
+terminée par la rotation $R_{X}\left(\psi\right)$.
 
 Avec ces conventions d'angles et d'axes, il existe déjà 18 combinaisons.
 Ce nombre est doublé du fait que la composition de rotations peut être interne
 (intrinsic) ou externe(extrinsic).
-Si les rotations sont composées par rapport au repère fixe, on parle de composition externe.
-Si les rotations sont composées par rapport aux repères nouvellement créés, on parle de composition interne.
-C'est cette dernière qui est utilisée dans la majorité des cas.
-Au total, ce sont ainsi 36 conventions qu'il est possible définir.
+Si les rotations sont composées par rapport au repère fixe, on parle de
+composition externe. Si les rotations sont composées par rapport aux repères
+nouvellement créés, on parle de composition interne. C'est cette dernière qui
+est utilisée dans la majorité des cas. Au total, ce sont ainsi 36 conventions
+qu'il est possible définir.
 
-L'information de convention d'angles ou d'axes est stockée dans la variable `order by`.
-Les informations de composition interne/externe et d'ordre des rotations
-sont stockées dans la variable `convention`.
+L'information de convention d'angles ou d'axes est stockée dans la variable
+`order by`. Les informations de composition interne/externe et d'ordre des
+rotations sont stockées dans la variable `convention`.
 Des apostrophes sont utilisés pour indiquer des compositions de rotations
 par rapport au nouveau système d'axes, et donc une composition interne.
-Ainsi $X Y' Z''$ désignera une rotation autour X, suivie d'une rotation autour du
-nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z, appelé Z''.
-La double apostrophe fait référence au deuxième repère utilisé pour la composition
-de rotation.
+Ainsi $X Y' Z''$ désignera une rotation autour X, suivie d'une rotation autour
+du  nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z,
+appelé Z''. La double apostrophe fait référence au deuxième repère utilisée
+pour la composition de rotation.
 
 Le tableau suivant présente ces 36 conventions:
 
@@ -194,10 +200,12 @@ $R_Z \left( \alpha \right) = \left[\begin{array}{ccc}
 
 ### Conventions couramment utilisées
 
-Parmi l'ensemble des conventions possibles, certaines sont plus utilisées que d'autres.
+Parmi l'ensemble des conventions possibles, certaines sont plus utilisées que
+d'autres.
 
 La convention des angles aéronautiques (convention de type 2 de la norme AFNOR)
-exprimée par le triplet (Roulis, Tangage, Lacet) régulièrement utilisée s'écrit (id=12)
+exprimée par le triplet (Roulis, Tangage, Lacet) régulièrement utilisée s'écrit
+(id=12)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     rotations:
@@ -233,15 +241,16 @@ La convention d'orientation utilisée dans le logiciel
         convention: [z,x',y'']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cette composition de rotation se comprend comme une rotation $\psi$ autour de l'axe $Z$,
-suivie d'une rotation $\theta$ autour du nouvel axe $X'$ et finalement d'une rotation $\phi$
-autour du nouvel axe $Y''$.
+Cette composition de rotation se comprend comme une rotation $\psi$ autour de
+l'axe $Z$, suivie d'une rotation $\theta$ autour du nouvel axe $X'$ et
+finalement d'une rotation $\phi$ autour du nouvel axe $Y''$.
 
 ## Environnement
 
-La section `environment` définit les modèles d'environnement pour la simulation à effectuer.
-Elle permet de prendre en compte des modèles de houle et de vent.
-En l'absence de ces modèles, les champs `model: no waves` et `model: no wind` pourront être utilisés.
+La section `environment` définit les modèles d'environnement pour la simulation
+à effectuer. Elle permet de prendre en compte des modèles de houle et de vent.
+En l'absence de ces modèles, les champs `model: no waves` et `model: no wind`
+pourront être utilisés.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     environment:
@@ -253,11 +262,13 @@ En l'absence de ces modèles, les champs `model: no waves` et `model: no wind` p
 
 ## Définition d'un maillage de navire
 
-Deux champs sont nécessaires pour définir un maillage servant à l'évaluation des efforts hydrostatiques nonlinéaires
+Deux champs sont nécessaires pour définir un maillage servant à l'évaluation des
+efforts hydrostatiques nonlinéaires.
 
-- `mesh` qui contient le nom du fichier [STL](http://fr.wikipedia.org/wiki/Fichier_de_st%C3%A9r%C3%A9olithographie)
+- `mesh` qui contient le nom du fichier
+   [STL](http://fr.wikipedia.org/wiki/Fichier_de_st%C3%A9r%C3%A9olithographie)
    contenant le maillage surfacique du navire au format ASCII
-- `position of body frame relative to mesh` qui définit l'attitude relative du centre
+- `position of body frame relative to mesh` qui définit l'attitude
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     mesh: anthineas.stl
@@ -273,22 +284,47 @@ Deux champs sont nécessaires pour définir un maillage servant à l'évaluation
 
 ## Définition des objets à simuler
 
-La section `bodies` permet de définir l'ensemble des caractéristiques du corps dont on souhaite simuler le comportement.
+La section `bodies` permet de définir l'ensemble des caractéristiques du corps
+dont on souhaite simuler le comportement.
 Il faut au moins un élément dans cette section pour effectuer une simulation.
 Pour chacun de ces éléments, différents champs sont à renseigner
 
 - `name` le nom du corps
 - `mesh` le nom du fichier de maillage surfacique
-- `position of body frame relative to mesh` l'attitude exprimée dans le repère NED
-- `initial position of body frame relative to NED` l'attitude initiale exprimée dans le repère NED
-- `initial velocity of body frame relative to NED` les vitesses initiales exprimées dans le repère NED
+- `position of body frame relative to mesh` l'attitude exprimée dans le repère
+   NED
+- `initial position of body frame relative to NED` l'attitude initiale exprimée
+   dans le repère NED
+- `initial velocity of body frame relative to NED` les vitesses initiales
+   exprimées dans le repère NED
 - `dynamics` l'ensemble des éléments dynamiques décrivant le corps
 - `external forces` l'ensemble des torseurs d'efforts s'appliquant sur le corps
 
 ### Champs `dynamics`
-- `centre of inertia` 
+
+Le champs `dynamics` est composé de trois éléments:
+
+- `centre of inertia`
 - `mass` contenant la masse du corps considéré
 - `inertia matrix divided by total mass at the center of gravity projected in the body frame`
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+    dynamics:
+        centre of inertia:
+            frame: body 1
+            x: {value: 0, unit: m}
+            y: {value: 0, unit: m}
+            z: {value: 0, unit: m}
+        mass: {value: 1000, unit: tonne}
+        inertia matrix divided by total mass at the center of gravity projected in the body frame:
+            frame: body 1
+            row 1: [1,0,0,0,0,0]
+            row 2: [0,1,0,0,0,0]
+            row 3: [0,0,1,0,0,0]
+            row 4: [0,0,0,1,0,0]
+            row 5: [0,0,0,0,1,0]
+            row 6: [0,0,0,0,0,1]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Gestion des degrés de libertés
 
@@ -297,10 +333,11 @@ de gérer les degrés de liberté lors de la simuation.
 
 ## Gestion des données exportées
 
-Le simulateur permet d'exporter l'ensemble des grandeurs manipulées lors de la simulation, à savoir
+Le simulateur permet d'exporter l'ensemble des grandeurs manipulées lors de la
+simulation, à savoir:
 
-- `positions`: les positions 
-- `angles`: les angles 
+- `positions`: les positions
+- `angles`: les angles
 - `linear velocities`: les vitesses linéaires de points
 - `angular velocities`: les vitesses angulaires
 - `linear accelerations`: les accélérations linéaires de points
