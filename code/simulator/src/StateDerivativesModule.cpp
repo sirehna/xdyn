@@ -60,15 +60,15 @@ void StateDerivativesModule::update() const
     Eigen::Matrix<double,6,1> dstates_dt = ds->read_only() ? Eigen::Matrix<double,6,1>::Constant(0) : Eigen::Matrix<double,6,1>(Minv*sum.to_vector());
     const RotationMatrix R = ds->read_only() ? Eigen::Matrix<double, 3, 3>::Identity() : k->get(body, "NED").get_rot();
     const Eigen::Vector3d uvw_in_ned_frame(R*Point(body,uvw_in_body_frame).v);
-    ds->set<double>(customize("dx_dt"), (double)uvw_in_ned_frame(0));
-    ds->set<double>(customize("dy_dt"), (double)uvw_in_ned_frame(1));
-    ds->set<double>(customize("dz_dt"), (double)uvw_in_ned_frame(2));
-    ds->set<double>(customize("du_dt"), (double)dstates_dt(0));
-    ds->set<double>(customize("dv_dt"), (double)dstates_dt(1));
-    ds->set<double>(customize("dw_dt"), (double)dstates_dt(2));
-    ds->set<double>(customize("dp_dt"), (double)dstates_dt(3));
-    ds->set<double>(customize("dq_dt"), (double)dstates_dt(4));
-    ds->set<double>(customize("dr_dt"), (double)dstates_dt(5));
+    ds->set<double>(customize("dx/dt"), (double)uvw_in_ned_frame(0));
+    ds->set<double>(customize("dy/dt"), (double)uvw_in_ned_frame(1));
+    ds->set<double>(customize("dz/dt"), (double)uvw_in_ned_frame(2));
+    ds->set<double>(customize("du/dt"), (double)dstates_dt(0));
+    ds->set<double>(customize("dv/dt"), (double)dstates_dt(1));
+    ds->set<double>(customize("dw/dt"), (double)dstates_dt(2));
+    ds->set<double>(customize("dp/dt"), (double)dstates_dt(3));
+    ds->set<double>(customize("dq/dt"), (double)dstates_dt(4));
+    ds->set<double>(customize("dr/dt"), (double)dstates_dt(5));
     const Eigen::Quaternion<double> q1(ds->get<double>(customize("qr")),
                                        ds->get<double>(customize("qi")),
                                        ds->get<double>(customize("qj")),
@@ -76,8 +76,8 @@ void StateDerivativesModule::update() const
                         );
     const Eigen::Quaternion<double> q2(0,pqr(0),pqr(1),pqr(2));
     const Eigen::Quaternion<double> dq_dt(Eigen::Quaternion<double>(q1*q2));
-    ds->set<double>(customize("dqr_dt"), 0.5*(double)dq_dt.w());
-    ds->set<double>(customize("dqi_dt"), 0.5*(double)dq_dt.x());
-    ds->set<double>(customize("dqj_dt"), 0.5*(double)dq_dt.y());
-    ds->set<double>(customize("dqk_dt"), 0.5*(double)dq_dt.z());
+    ds->set<double>(customize("dqr/dt"), 0.5*(double)dq_dt.w());
+    ds->set<double>(customize("dqi/dt"), 0.5*(double)dq_dt.x());
+    ds->set<double>(customize("dqj/dt"), 0.5*(double)dq_dt.y());
+    ds->set<double>(customize("dqk/dt"), 0.5*(double)dq_dt.z());
 }

@@ -78,19 +78,19 @@ TEST_F(StateDerivativesModuleTest, example)
     ASSERT_DOUBLE_EQ(-8, F.K);
     ASSERT_DOUBLE_EQ(-11, F.M);
     ASSERT_DOUBLE_EQ(-424, F.N);
-    ASSERT_DOUBLE_EQ(79, ds.get<double>("dx_dt(foo)"));
-    ASSERT_DOUBLE_EQ(358.6461709275205294, ds.get<double>("dy_dt(foo)"));
-    ASSERT_DOUBLE_EQ(-765.19338998649732275, ds.get<double>("dz_dt(foo)"));
-    ASSERT_DOUBLE_EQ(-4418, ds.get<double>("du_dt(foo)"));
-    ASSERT_DOUBLE_EQ(8758, ds.get<double>("dv_dt(foo)"));
-    ASSERT_DOUBLE_EQ(97859, ds.get<double>("dw_dt(foo)"));
-    ASSERT_DOUBLE_EQ(-8, ds.get<double>("dp_dt(foo)"));
-    ASSERT_DOUBLE_EQ(-11, ds.get<double>("dq_dt(foo)"));
-    ASSERT_DOUBLE_EQ(-424, ds.get<double>("dr_dt(foo)"));
-    ASSERT_DOUBLE_EQ(-130.5, ds.get<double>("dqr_dt(foo)"));
-    ASSERT_DOUBLE_EQ(59.5, ds.get<double>("dqi_dt(foo)"));
-    ASSERT_DOUBLE_EQ(228.5, ds.get<double>("dqj_dt(foo)"));
-    ASSERT_DOUBLE_EQ(-168.5, ds.get<double>("dqk_dt(foo)"));
+    ASSERT_DOUBLE_EQ(79, ds.get<double>("dx/dt(foo)"));
+    ASSERT_DOUBLE_EQ(358.6461709275205294, ds.get<double>("dy/dt(foo)"));
+    ASSERT_DOUBLE_EQ(-765.19338998649732275, ds.get<double>("dz/dt(foo)"));
+    ASSERT_DOUBLE_EQ(-4418, ds.get<double>("du/dt(foo)"));
+    ASSERT_DOUBLE_EQ(8758, ds.get<double>("dv/dt(foo)"));
+    ASSERT_DOUBLE_EQ(97859, ds.get<double>("dw/dt(foo)"));
+    ASSERT_DOUBLE_EQ(-8, ds.get<double>("dp/dt(foo)"));
+    ASSERT_DOUBLE_EQ(-11, ds.get<double>("dq/dt(foo)"));
+    ASSERT_DOUBLE_EQ(-424, ds.get<double>("dr/dt(foo)"));
+    ASSERT_DOUBLE_EQ(-130.5, ds.get<double>("dqr/dt(foo)"));
+    ASSERT_DOUBLE_EQ(59.5, ds.get<double>("dqi/dt(foo)"));
+    ASSERT_DOUBLE_EQ(228.5, ds.get<double>("dqj/dt(foo)"));
+    ASSERT_DOUBLE_EQ(-168.5, ds.get<double>("dqk/dt(foo)"));
 //! [StateDerivativesModule expected output]
 }
 
