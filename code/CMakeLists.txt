@@ -102,8 +102,7 @@ ADD_SUBDIRECTORY(executables)
 
 INCLUDE(CMakeLapackDouble)
 
-ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:exception_handling_object>
-                                   $<TARGET_OBJECTS:interpolation_object>
+ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:interpolation_object>
                                    $<TARGET_OBJECTS:text_file_reader_static>)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
@@ -120,6 +119,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         yaml-cpp
         decode_unit_static
         data_source_static
+        exception_handling_static
         lapack                      # static
         gfortran                    # static
         )
