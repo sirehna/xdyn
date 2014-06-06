@@ -125,27 +125,6 @@ int get_input_data(int argc, char **argv, InputData& input_data)
     return EXIT_SUCCESS;
 }
 
-void set_data_source_solver(DataSource& ds,const std::string& solver);
-void set_data_source_solver(DataSource& ds,const std::string& solver)
-{
-    if (solver=="euler")
-    {
-        SET(ds, simulator_base::stepper, solver::EULER);
-    }
-    else if (solver=="rk4")
-    {
-        SET(ds, simulator_base::stepper, solver::RK4);
-    }
-    else if (solver=="rkck")
-    {
-        SET(ds, simulator_base::stepper, solver::RKCK54);
-    }
-    else
-    {
-        SET(ds, simulator_base::stepper, solver::EULER);
-    }
-}
-
 int main(int argc, char** argv)
 {
     InputData input_data;
@@ -153,10 +132,8 @@ int main(int argc, char** argv)
     if (not(error))
     {
         const TextFileReader yaml_reader(input_data.yaml_filenames);
-        DataSource ds = make_ds(yaml_reader.get_contents());
+        DataSource ds = make_ds(yaml_reader.get_contents(),input_data.initial_timestep,input_data.solver);
         DsCsvObserver observer(std::cout);
-        set_data_source_solver(ds,input_data.solver);
-        SET(ds, simulator_base::initial_time_step, input_data.initial_timestep);
         integrate(ds, input_data.tstart, input_data.tend, observer);
     }
     return error;
