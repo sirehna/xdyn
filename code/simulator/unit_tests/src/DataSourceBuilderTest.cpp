@@ -18,7 +18,6 @@
 #include "WaveModelInterface.hpp"
 #include "Kinematics.hpp"
 #include "Transform.hpp"
-#include "make_stl_file_on_the_fly.hpp"
 #include "StlReader.hpp"
 
 #include <Eigen/Geometry>
@@ -27,9 +26,9 @@ typedef Eigen::Matrix<double,6,6> Matrix6x6;
 
 DataSourceBuilderTest::DataSourceBuilderTest() : a(DataGenerator(12)), ds(DataSource()), mesh_data(read_stl(test_data::three_facets()))
 {
-    make_stl_file(test_data::three_facets(), "anthineas.stl");
+    const std::map<std::string, VectorOfVectorOfPoints> m = { {"body 1", mesh_data} };
     const SimulatorYamlParser parser(test_data::full_example());
-    DataSourceBuilder builder(parser.parse());
+    DataSourceBuilder builder(parser.parse(), m);
     ds = builder.build_ds();
 }
 
