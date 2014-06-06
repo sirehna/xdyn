@@ -16,7 +16,8 @@
 #include "DsSystemMacros.hpp"
 #include "DataSource.hpp"
 
-#include <iostream>
+#include <iostream> // std::cout
+#include <fstream>
 #include <string>
 #include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
 
@@ -70,11 +71,6 @@ struct InputData
 bool invalid(const InputData& input);
 bool invalid(const InputData& input)
 {
-    if (input.output_csv.empty())
-    {
-        std::cerr << "Error: no output CSV file defined." << std::endl;
-        return true;
-    }
     if (input.yaml_filenames.empty())
     {
         std::cerr << "Error: no input YAML files defined: need at least one." << std::endl;
@@ -133,8 +129,17 @@ int main(int argc, char** argv)
     {
         const TextFileReader yaml_reader(input_data.yaml_filenames);
         DataSource ds = make_ds(yaml_reader.get_contents(),input_data.initial_timestep,input_data.solver);
-        DsCsvObserver observer(std::cout);
-        integrate(ds, input_data.tstart, input_data.tend, observer);
+        if (input_data.output_csv.empty())
+        {
+            DsCsvObserver observer(std::cout);
+            integrate(ds, input_data.tstart, input_data.tend, observer);
+        }
+        else
+        {
+            std::ofstream os(input_data.output_csv.c_str());
+            DsCsvObserver observer(os);
+            integrate(ds, input_data.tstart, input_data.tend, observer);
+        }
     }
     return error;
 }
