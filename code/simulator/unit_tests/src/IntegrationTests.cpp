@@ -55,7 +55,7 @@ TEST_F(IntegrationTests, can_simulate_falling_ball)
     const double g = ds.get<double>("g");
     for (size_t i = 0 ; i < N+1 ; ++i)
     {
-        const double t(i);
+        const double t = (double) i;
         ASSERT_EQ(1+13, res.at(i).size())          << "Time step: i=" << i;
         ASSERT_DOUBLE_EQ(t, res.at(i)["t"])        << "Time step: i=" << i;
         ASSERT_NEAR(4+1.*t, res.at(i)["x(ball)"], EPS)  << "Time step: i=" << i;
