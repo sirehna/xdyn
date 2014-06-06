@@ -1,2 +1,8 @@
-user_guide_fr.html
-
+*.jpg
+*.png
+*.aux
+*.docx
+*.html
+*.pdf
+*.log
+*.out
