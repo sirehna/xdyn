@@ -45,6 +45,12 @@ DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in),
                                                                      rotations(in.rotations),
                                                                      mesh_data(std::map<std::string,VectorOfVectorOfPoints>())
 {
+    std::vector<YamlBody>::const_iterator that_body = in.bodies.begin();
+    for (;that_body!=in.bodies.end() ; ++that_body)
+    {
+        const TextFileReader reader(std::vector<std::string>(1, that_body->mesh));
+        mesh_data[that_body->name] = read_stl(reader.get_contents());
+    }
 }
 
 DataSourceBuilder::DataSourceBuilder(
