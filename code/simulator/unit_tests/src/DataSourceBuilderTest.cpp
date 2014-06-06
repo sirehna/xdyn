@@ -175,6 +175,16 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_added_mass_matrix_of_eac
     ASSERT_NO_THROW(ds.get<Matrix6x6>("solid body inertia(body 1)"));
 }
 
+TEST_F(DataSourceBuilderTest, DataSource_should_contain_inertia_even_when_body_is_not_named_body_1)
+{
+    const SimulatorYamlParser parser(test_data::falling_ball_example());
+    DataSourceBuilder b(parser.parse());
+    DataSource d = b.build_ds();
+    ASSERT_NO_THROW(d.get<Matrix6x6>("total inertia(ball)"));
+    ASSERT_NO_THROW(d.get<Matrix6x6>("solid body inertia(ball)"));
+    ASSERT_NO_THROW(d.get<Matrix6x6>("inverse of the total inertia(ball)"));
+}
+
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_inverse_of_the_total_inertia_matrix)
 {
     const Matrix6x6 M = ds.get<Matrix6x6>("total inertia(body 1)");

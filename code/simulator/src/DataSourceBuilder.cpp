@@ -179,9 +179,9 @@ void DataSourceBuilder::add_inertia(const YamlBody& body)
     }
     Matrix6x6 M_inv = (Mrb+Ma).inverse();
 
-    ds.set<Matrix6x6>("total inertia(body 1)", Ma+Mrb);
-    ds.set<Matrix6x6>("solid body inertia(body 1)", Mrb);
-    ds.set<Matrix6x6>("inverse of the total inertia(body 1)", M_inv);
+    ds.set<Matrix6x6>(std::string("total inertia(") + body.name + ")", Ma+Mrb);
+    ds.set<Matrix6x6>(std::string("solid body inertia(") + body.name + ")", Mrb);
+    ds.set<Matrix6x6>(std::string("inverse of the total inertia(") + body.name + ")", M_inv);
 }
 
 void DataSourceBuilder::add_gravity(const std::string& body_name, const std::string& yaml, const double mass)
