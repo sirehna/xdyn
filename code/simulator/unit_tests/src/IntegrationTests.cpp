@@ -6,9 +6,10 @@
  */
 
 #include "IntegrationTests.hpp"
-
-
-#include "test_macros.hpp"
+#include "yaml_data.hpp"
+#include "DsMapObserver.hpp"
+#include "SimulatorYamlParser.hpp"
+#include "check_input_yaml.hpp"
 
 IntegrationTests::IntegrationTests() : a(DataGenerator(1212))
 {
@@ -26,13 +27,7 @@ void IntegrationTests::TearDown()
 {
 }
 
-TEST_F(IntegrationTests, example)
+TEST_F(IntegrationTests, yaml_data_for_falling_ball_should_be_valid)
 {
-//! [IntegrationTests example]
-//! [IntegrationTests example]
-//! [IntegrationTests expected output]
-//! [IntegrationTests expected output]
+    check_input_yaml(SimulatorYamlParser(test_data::falling_ball_example()).parse());
 }
-
-
-
