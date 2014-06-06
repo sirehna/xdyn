@@ -13,7 +13,7 @@
 #include "Kinematics.hpp"
 #include "transform_double_equal.hpp"
 #include "STL_data.hpp"
-#include "make_stl_file_on_the_fly.hpp"
+#include "StlReader.hpp"
 
 KinematicsModuleTest::KinematicsModuleTest() : a(DataGenerator(18914214))
 {
@@ -34,9 +34,9 @@ void KinematicsModuleTest::TearDown()
 TEST_F(KinematicsModuleTest, example)
 {
 //! [KinematicsModuleTest example]
-    make_stl_file(test_data::three_facets(), "anthineas.stl");
+    const std::map<std::string, VectorOfVectorOfPoints> m = { {"body 1", read_stl(test_data::three_facets())}};
 	const SimulatorYamlParser parser(test_data::full_example());
-	DataSourceBuilder builder(parser.parse());
+	DataSourceBuilder builder(parser.parse(), m);
 	DataSource ds = builder.build_ds();
 //! [KinematicsModuleTest example]
 //! [KinematicsModuleTest expected output]
