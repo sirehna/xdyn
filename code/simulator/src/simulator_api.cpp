@@ -25,14 +25,21 @@ void set_data_source_solver(DataSource& ds,const std::string& solver)
     }
 }
 
-DataSource make_ds(const std::string& data, const double dt, const std::string& solver_type)
+DataSource build(DataSourceBuilder& builder, const double dt, const std::string& solver_type);
+
+DataSource build(DataSourceBuilder& builder, const double dt, const std::string& solver_type)
 {
-    SimulatorYamlParser parser(data);
-    DataSourceBuilder builder(check_input_yaml(parser.parse()));
     DataSource ds = builder.build_ds();
     ds.set<double>("simulator_base_initial_time_step",dt);
     set_data_source_solver(ds, solver_type);
     return ds;
+}
+
+
+DataSource make_ds(const std::string& data, const double dt, const std::string& solver_type)
+{
+    DataSourceBuilder builder(check_input_yaml(SimulatorYamlParser(data).parse()));
+    return build(builder, dt, solver_type);
 }
 
 DataSource make_ds(const std::string& data,
@@ -40,10 +47,6 @@ DataSource make_ds(const std::string& data,
                    const double dt,
                    const std::string& solver_type)
 {
-    SimulatorYamlParser parser(data);
-    DataSourceBuilder builder(check_input_yaml(parser.parse()), input_meshes);
-    DataSource ds = builder.build_ds();
-    ds.set<double>("simulator_base_initial_time_step",dt);
-    set_data_source_solver(ds, solver_type);
-    return ds;
+    DataSourceBuilder builder(check_input_yaml(SimulatorYamlParser(data).parse()), input_meshes);
+    return build(builder, dt, solver_type);
 }
