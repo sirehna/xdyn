@@ -42,9 +42,6 @@ projects:
       - week ending on: 28/3/2014
         cec: 4.5
         gj: 5
-        # Week 15
-      - week ending on: 11/4/2014
-        cec: 4
         # Week 16
       - week ending on: 18/4/2014
         cec: 5
@@ -75,5 +72,7 @@ projects:
         gj: 0
       - week ending on: 4/4/2014
         cec: 4
-        gj: 0
+        # Week 15
+      - week ending on: 11/4/2014
+        cec: 4
 
