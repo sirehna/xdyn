@@ -13,6 +13,12 @@ projects:
         c2: 488.5
         c3: 391.8
     resource usage:
+        # Week 05
+      - week ending on: 31/1/2014
+        cec: 2
+        # Week 06
+      - week ending on: 7/2/2014
+        cec: 3
         # Week 07
       - week ending on: 14/2/2014
         cec: 5
