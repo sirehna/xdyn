@@ -620,7 +620,7 @@ function progress_bars(stories)
 
 window.onload = function(started)
 {
-    var yaml_data = YAML.load("kanban.yml");
+    var yaml_data = YAML.load("planning_tool.yml");
     var resource_usage = YAML.load("resource_usage.yml");
     var T0 = make_date(yaml_data.start);
     var all_dates = get_all_dates(yaml_data, resource_usage, T0);
