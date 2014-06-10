@@ -5,7 +5,7 @@
     nc: c1
 
 projects:
-  - name: Bassin numérique
+  - name: ETF-120095 & ETF-140075
     budget: 100000
     T0: 1/2/2014
     prices:
@@ -59,7 +59,7 @@ projects:
       - week ending on: 6/6/2014
         cec: 5
         gj: 4.5
-  - name: R&D autofinancée
+  - name: ETI-140043
     budget: 50000
     prices:
         c1: 687.0
