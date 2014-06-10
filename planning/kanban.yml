@@ -413,6 +413,8 @@ stories:
       type: model
       size: 1
       backlog: 22/4/2014
+      started: 19/5/2014
+      done: 23/5/2014
       assigned to: cec
     - task: Integrate elementary hydrostatic forces
       type: model
@@ -428,28 +430,33 @@ stories:
       started: 23/5/2014
       done: 26/5/2014
       assigned to: cec
-  - story: Week 23
-    due by: 11/6/2014
-    tasks:
     - task: Sum of forces module (DS API, check module was added & input was set by DSBuilder, test output values)
       type: model
       size: 2
       backlog: 22/4/2014
+      started: 30/5/2014
+      done: 3/6/2014
       assigned to: cec
     - task: Newton's second law of motion module (with Coriolis & centripetal forces)
       type: model
       size: 4
       backlog: 22/4/2014
+      started: 3/6/2014
+      done: 5/6/2014
       assigned to: cec
     - task: Document YAML input format
       type: interface
       size: 2
       backlog: 2/6/2014
+      started: 2/6/2014
+      done: 4/6/2014
       assigned to: gj
     - task: Document reference frames
       type: model
-      size: 2
-      backlog: 2/6/2014
+      size: 4
+      backlog: 24/3/2014
+      started: 30/5/2014
+      done: 4/6/2014
       assigned to: gj
     - task: Document dynamic problem resolution (how internal & external forces are calculated)
       type: model
@@ -470,22 +477,38 @@ stories:
       type: interface
       size: 2
       assigned to: gj
+      started: 30/5/2014
+      done: 6/6/2014
       backlog: 17/2/2014
-    - task: Integration test validator executable (using same code as unit tests)
-      type: internal
-      size: 2
-      assigned to: cec
-      backlog: 2/6/2014
     - task: Falling ball test (input yaml, batch script, add to build)
       type: interface
       size: 2
       assigned to: gj
       backlog: 2/6/2014
+      started: 4/6/2014
+      done: 6/6/2014
     - task: DSBuilder accepting mesh as input data
       type: internal
       size: 2
       assigned to: cec
+      backlog: 26/5/2014
+      started: 5/6/2014
+      done: 6/6/2014
+    - task: Fix Jenkins
+      type: internal
+      size: 1
+      assigned to: cec
       backlog: 2/6/2014
+      started: 2/6/2014
+      done: 4/6/2014
+    - task: Write main executable
+      type: interface
+      size: 2
+      assigned to: cec
+      backlog: 26/5/2014
+      started: 4/6/2014
+      done: 5/6/2014
+    # Not started
     - task: Balanced cube (hydrostatic integration test)
       type: internal
       size: 4

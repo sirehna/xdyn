@@ -26,7 +26,7 @@ projects:
         nc: 1
         # Week 08
       - week ending on: 21/2/2014
-        cec: 4
+        cec: 5
         nc: 1
         # Week 09
       - week ending on: 28/2/2014
@@ -48,13 +48,13 @@ projects:
         gj: 4
         # Week 17
       - week ending on: 25/4/2014
-        gj: 4
+        gj: 1
         # Week 18
       - week ending on: 2/5/2014
         cec: 2.5
         # Week 21
       - week ending on: 23/5/2014
-        cec: 5
+        cec: 3
         # Week 23
       - week ending on: 6/6/2014
         cec: 5
