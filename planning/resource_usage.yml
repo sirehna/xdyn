@@ -48,7 +48,7 @@ projects:
         gj: 4
         # Week 17
       - week ending on: 25/4/2014
-        cec: 4
+        gj: 4
         # Week 18
       - week ending on: 2/5/2014
         cec: 2.5
@@ -67,12 +67,13 @@ projects:
         c3: 391.8
     T0: 1/2/2014
     resource usage:
-      - week ending on: 14/2/2014
-        cec: 0
-        gj: 0
+        # Week 14
       - week ending on: 4/4/2014
         cec: 4
         # Week 15
       - week ending on: 11/4/2014
+        cec: 4
+        # Week 17
+      - week ending on: 25/4/2014
         cec: 4
 
