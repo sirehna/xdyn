@@ -113,7 +113,7 @@ TEST_F(IntegrationTests, can_simulate_oscillating_cube)
     const double z0 = L/2;
     for (size_t i = 0 ; i < N ; ++i)
     {
-        const double t = i*dt;
+        const double t = double(i)*dt;
         ASSERT_EQ(1+13, res.at(i).size())          << "Time step: i=" << i;
         ASSERT_DOUBLE_EQ(t, res.at(i)["t"])        << "Time step: i=" << i;
         ASSERT_NEAR(0, res.at(i)["x(cube)"], eps)  << "Time step: i=" << i;
