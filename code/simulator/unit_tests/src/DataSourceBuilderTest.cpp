@@ -155,7 +155,7 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_wave_model)
         const double z0 = a.random<double>();
         const Point P("NED",a.random<double>(),a.random<double>(),z0);
         const Point Q("body 1",a.random<double>(),a.random<double>(),z0);
-        ASSERT_DOUBLE_EQ(12-z0, wave_model->get_relative_wave_height(P,k));
+        ASSERT_DOUBLE_EQ(z0-12, wave_model->get_relative_wave_height(P,k));
         ASSERT_NO_THROW(wave_model->get_relative_wave_height(Q,k));
     }
 }

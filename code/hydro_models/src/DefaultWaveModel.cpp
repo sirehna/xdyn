@@ -13,5 +13,5 @@ DefaultWaveModel::DefaultWaveModel(const double wave_height_) : WaveModelInterfa
 
 double DefaultWaveModel::wave_height(double , double , double z) const
 {
-    return zwave - z;
+    return z - zwave ;
 }

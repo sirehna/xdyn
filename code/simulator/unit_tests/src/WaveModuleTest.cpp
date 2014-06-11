@@ -50,8 +50,8 @@ TEST_F(WaveModuleTest, example)
 //! [WaveModuleTest expected output]
     const std::vector<double> dz = ds.get<std::vector<double> >("wave heights(body 1)");
     ASSERT_EQ(mesh->nodes.cols(), dz.size());
-    ASSERT_DOUBLE_EQ(6.8, dz.at(0));
-    ASSERT_DOUBLE_EQ(5.5, dz.at(1));
-    ASSERT_DOUBLE_EQ(3.3, dz.at(2));
+    ASSERT_DOUBLE_EQ(-6.8, dz.at(0));
+    ASSERT_DOUBLE_EQ(-5.5, dz.at(1));
+    ASSERT_DOUBLE_EQ(-3.3, dz.at(2));
 //! [WaveModuleTest expected output]
 }

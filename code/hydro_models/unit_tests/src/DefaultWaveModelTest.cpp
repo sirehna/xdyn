@@ -34,7 +34,7 @@ TEST_F(DefaultWaveModelTest, example)
     const Point P("NED", 0, 0, -20);
 //! [DefaultWaveModelTest example]
 //! [DefaultWaveModelTest expected output]
-    ASSERT_DOUBLE_EQ(30, w.get_relative_wave_height(P, k));
+    ASSERT_DOUBLE_EQ(-30, w.get_relative_wave_height(P, k));
 //! [DefaultWaveModelTest expected output]
 }
 
@@ -47,8 +47,8 @@ TEST_F(DefaultWaveModelTest, more_interesting_example)
 
     const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(-2, w.get_relative_wave_height(P,k));
-    ASSERT_DOUBLE_EQ(-1788, w.get_relative_wave_height(Q,k));
+    ASSERT_DOUBLE_EQ(2, w.get_relative_wave_height(P,k));
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
 }
 
 TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
@@ -80,10 +80,10 @@ TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
     //! [DefaultWaveModelTest example]
     //! [DefaultWaveModelTest expected output]
     ASSERT_EQ(5, delta.size());
-    ASSERT_DOUBLE_EQ(888-300-10, delta.at(0));
-    ASSERT_DOUBLE_EQ(888-300-71, delta.at(1));
-    ASSERT_DOUBLE_EQ(888-300-14, delta.at(2));
-    ASSERT_DOUBLE_EQ(888-300+11, delta.at(3));
-    ASSERT_DOUBLE_EQ(888-300+91, delta.at(4));
+    ASSERT_DOUBLE_EQ(-888+300+10, delta.at(0));
+    ASSERT_DOUBLE_EQ(-888+300+71, delta.at(1));
+    ASSERT_DOUBLE_EQ(-888+300+14, delta.at(2));
+    ASSERT_DOUBLE_EQ(-888+300-11, delta.at(3));
+    ASSERT_DOUBLE_EQ(-888+300-91, delta.at(4));
     //! [DefaultWaveModelTest expected output]
 }
