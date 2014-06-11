@@ -82,3 +82,12 @@ TEST_F(IntegrationTests, yaml_data_for_oscillating_cube_should_be_valid)
     check_input_yaml(SimulatorYamlParser(test_data::oscillating_cube_example()).parse());
 }
 
+TEST_F(IntegrationTests, simulator_does_not_crash_for_oscillating_cube)
+{
+    const VectorOfVectorOfPoints mesh_cube(read_stl(test_data::cube()));
+    const std::map<std::string, VectorOfVectorOfPoints> input_meshes = { {"cube", mesh_cube} };
+    DataSource ds = make_ds(test_data::oscillating_cube_example(),input_meshes, 1,"euler");
+    DsMapObserver observer;
+    integrate(ds, 0, 10, observer);
+}
+
