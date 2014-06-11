@@ -12,8 +12,9 @@ DSSystem::DSSystem(DataSource& ds_) : ds(ds_), state(ds.get_states())
 {
 }
 
-void DSSystem::operator()(const std::vector<double>& x, std::vector<double>& dx_dt, double )
+void DSSystem::operator()(const std::vector<double>& x, std::vector<double>& dx_dt, double t)
 {
+    ds.set<double>("t", t);
     ds.set_states(x);
     ds.get_derivatives(dx_dt);
 }
