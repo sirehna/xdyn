@@ -138,6 +138,19 @@ namespace hydrostatic
                  const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                  const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
                 );
+
+    typedef enum {PARTIALLY_EMERGED, TOTALLY_EMERGED, TOTALLY_IMMERGED} ImmersionStatus;
+
+    /**  \author cec
+      *  \date Jun 10, 2014, 3:07:32 PM
+      *  \details Given a vector of immersions and indexes of points in that vector,
+      *  return the type of immersion (not taking zero immersion into account).
+      *  \returns ImmersionStatus
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vector<double>& delta_z);_example
+      */
+    ImmersionStatus get_immersion_type(const std::vector<size_t>& idx, //!< Vector of indexes in delta_z
+                                       const std::vector<double>& delta_z //!< Vector of immersions
+                           );
 }
 
 #endif /* HYDROSTATIC_HPP_ */

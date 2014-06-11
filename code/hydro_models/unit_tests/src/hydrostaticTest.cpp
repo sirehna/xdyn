@@ -11,6 +11,8 @@
 #include "TriMeshTestData.hpp"
 #include "MeshBuilder.hpp"
 #include "extra_test_assertions.hpp"
+#include "STL_data.hpp"
+#include "StlReader.hpp"
 
 #define EPS 1E-6
 
@@ -295,6 +297,18 @@ TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface_third_test)
     ASSERT_DOUBLE_EQ(5, I(2));
 }
 
+TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface_bug_detected_in_integration_test)
+{
+    const EPoint A(-1,-2,10);
+    const EPoint B(99,2,-10);
+    const double dzA = 1;
+    const double dzB = -3;
+    const EPoint I = intersection(A, dzA, B, dzB);
+    ASSERT_DOUBLE_EQ(24, I(0));
+    ASSERT_DOUBLE_EQ(-1, I(1));
+    ASSERT_DOUBLE_EQ(5, I(2));
+}
+
 TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_no_points_are_immerged)
 {
     Eigen::Matrix<double,3,3> M;
@@ -491,6 +505,18 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
         ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z, EPS);
     }
 }
+
+TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
+{
+    const VectorOfVectorOfPoints mesh_cube(read_stl(test_data::cube()));
+    const Mesh mesh = MeshBuilder(mesh_cube).build();
+    const std::vector<double> dz = {-1,-1,-1,-1,0,0,0,0};
+    const Point G(a.random<std::string>(), 0, 0, 0);
+    const double rho = 1000;
+    const double g = 9.81;
+    const Wrench Fhs = force(mesh, G, rho, g, dz);
+}
+
 
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
 {

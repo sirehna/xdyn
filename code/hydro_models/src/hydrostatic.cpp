@@ -17,16 +17,20 @@
 
 using namespace hydrostatic;
 
-size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vector<double>& delta_z);
-size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
+ImmersionStatus hydrostatic::get_immersion_type(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
 {
     const size_t n = idx.size();
-    size_t nb_of_immerged_points = 0;
+    bool some_points_are_immerged = false;
+    bool some_points_are_emerged = false;
     for (size_t i = 0 ; i < n ; ++i)
     {
-        if (delta_z.at(idx[i]) >= 0) nb_of_immerged_points++;
+        const double dz = delta_z.at(idx[i]);
+        if (dz > 0) some_points_are_immerged = true;
+        if (dz < 0) some_points_are_emerged = true;
     }
-    return nb_of_immerged_points;
+    if (some_points_are_immerged and not(some_points_are_emerged)) return TOTALLY_IMMERGED;
+    if (not(some_points_are_immerged))                             return TOTALLY_EMERGED;
+                                                                   return PARTIALLY_EMERGED;
 }
 
 double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Coordinates of all nodes
@@ -113,16 +117,20 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
 void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_t>& idx, const std::vector<double>& v);
 void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_t>& idx, const std::vector<double>& v)
 {
-    const size_t n = idx.size();
-    const size_t number_of_immerged_nodes = get_nb_of_immerged_points(idx, v);
-
-    if (number_of_immerged_nodes == 0)
+    switch(get_immersion_type(idx, v))
     {
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, "None of the points are immerged.");
-    }
-    if (number_of_immerged_nodes == n)
-    {
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, "All the points are immerged.");
+        case TOTALLY_EMERGED:
+        {
+            THROW(__PRETTY_FUNCTION__, HydrostaticException, "None of the points are immerged.");
+            break;
+        }
+        case TOTALLY_IMMERGED:
+        {
+            THROW(__PRETTY_FUNCTION__, HydrostaticException, "All the points are immerged.");
+            break;
+        }
+        default:
+            break;
     }
 }
 
@@ -130,7 +138,6 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
                                        const std::vector<size_t>& idx,
                                        const std::vector<double>& v)
 {
-    make_sure_some_points_are_immerged_and_some_are_not(idx, v);
     const size_t n = idx.size();
     std::vector<double> dz(n,0);
     for (size_t i = 0 ; i < n ; ++i)
@@ -146,8 +153,8 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
     const EPoint A1 = M.col(idxA1);
     const EPoint B = M.col(idxB);
     const EPoint B1 = M.col(idxB1);
-    const EPoint P = intersection(A,v[idxA],A1,v[idxA1]);
-    const EPoint Q = intersection(B,v[idxB],B1,v[idxB1]);
+    const EPoint P = intersection(A,v.at(idxA),A1,v.at(idxA1));
+    const EPoint Q = intersection(B,v.at(idxB),B1,v.at(idxB1));
     const size_t N = (first_and_last.second>=first_and_last.first) ? n-(first_and_last.second-first_and_last.first-1) : first_and_last.second+first_and_last.first+1;
     Eigen::Matrix<double,3,Eigen::Dynamic> ret;
     std::vector<double> delta_z;
@@ -157,8 +164,8 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
     {
         for (size_t i = 0 ; i < first_and_last.first ; ++i)
         {
-            ret.col(k++) = M.col(idx[i]);
-            delta_z.push_back(v.at(idx[i]));
+            ret.col(k++) = M.col(idx.at(i));
+            delta_z.push_back(v.at(idx.at(i)));
         }
         ret.col(k++) = P;
         delta_z.push_back(0);
@@ -166,8 +173,8 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
         delta_z.push_back(0);
         for (size_t i = first_and_last.second+1 ; i < n ; ++i)
         {
-            ret.col(k++) = M.col(idx[i]);
-            delta_z.push_back(v.at(idx[i]));
+            ret.col(k++) = M.col(idx.at(i));
+            delta_z.push_back(v.at(idx.at(i)));
         }
     }
     else
@@ -279,20 +286,26 @@ Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at 
     std::vector<UnsafeWrench> elementary_forces;
     for (;that_facet != mesh.facets.end() ; ++that_facet)
     {
-        const size_t nb_of_immerged_points = get_nb_of_immerged_points(that_facet->index, immersions);
-        const bool totally_immerged = nb_of_immerged_points == that_facet->index.size();
-        const bool partially_immerged = nb_of_immerged_points > 0;
-        if (totally_immerged)
+        switch (get_immersion_type(that_facet->index, immersions))
         {
-            const double zG = average_immersion(mesh.nodes, that_facet->index, immersions);
-            elementary_forces.push_back(dF(O, *that_facet, rho, g, zG));
-        }
-        else if (partially_immerged)
-        {
-            const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh.nodes,that_facet->index,immersions);
-            const double zG = average_immersion(polygon_and_immersions);
-            const EPoint dS = area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
-            elementary_forces.push_back(dF(O,barycenter(polygon_and_immersions.first),rho,g,zG,dS));
+            case TOTALLY_IMMERGED:
+            {
+                const double zG = average_immersion(mesh.nodes, that_facet->index, immersions);
+                elementary_forces.push_back(dF(O, *that_facet, rho, g, zG));
+                break;
+            }
+            case PARTIALLY_EMERGED:
+            {
+                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh.nodes,that_facet->index,immersions);
+                const double zG = average_immersion(polygon_and_immersions);
+                const EPoint dS = area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
+                elementary_forces.push_back(dF(O,barycenter(polygon_and_immersions.first),rho,g,zG,dS));
+                break;
+            }
+            case TOTALLY_EMERGED:
+            {
+                break;
+            }
         }
     }
     if (elementary_forces.empty()) return Wrench(O);

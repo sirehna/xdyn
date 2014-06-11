@@ -16,6 +16,7 @@ include_directories(${kinematics_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${test_macros_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 
