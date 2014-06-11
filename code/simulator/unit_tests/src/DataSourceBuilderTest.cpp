@@ -105,7 +105,7 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_PointMatrix_for_each_b
     const std::tr1::shared_ptr<PointMatrix> P = ds.get<std::tr1::shared_ptr<PointMatrix> >("body 1");
     ASSERT_EQ(3, P->m.rows());
     ASSERT_EQ(7, P->m.cols());
-    ASSERT_EQ("body 1", P->get_frame());
+    ASSERT_EQ("mesh(body 1)", P->get_frame());
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_centre_of_gravity_of_each_body)

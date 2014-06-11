@@ -36,7 +36,7 @@ typedef Eigen::Matrix<double,6,6> Matrix6x6;
 
 MODULE(PointMatrixBuilder, const std::string name = get_name();\
                            const std::tr1::shared_ptr<Mesh> T = ds->get<std::tr1::shared_ptr<Mesh> >(name);\
-                           const std::tr1::shared_ptr<PointMatrix> pm = ds->read_only() ? std::tr1::shared_ptr<PointMatrix>() : std::tr1::shared_ptr<PointMatrix>(new PointMatrix(T->nodes,name));\
+                           const std::tr1::shared_ptr<PointMatrix> pm = ds->read_only() ? std::tr1::shared_ptr<PointMatrix>() : std::tr1::shared_ptr<PointMatrix>(new PointMatrix(T->nodes,std::string("mesh(")+name+")"));\
                            ds->set<std::tr1::shared_ptr<PointMatrix> >(name, pm);
       )
 
