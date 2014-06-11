@@ -13,6 +13,9 @@
 #include "simulator_api.hpp"
 #include "DsSystem.hpp"
 #include "DsSolve.hpp"
+#include "GeometricTypes3d.hpp"
+#include "STL_data.hpp"
+#include "StlReader.hpp"
 
 #define EPS (1E-10)
 
@@ -73,3 +76,9 @@ TEST_F(IntegrationTests, can_simulate_falling_ball)
         ASSERT_NEAR(0, res.at(i)["qk(ball)"], EPS) << "Time step: i=" << i;
     }
 }
+
+TEST_F(IntegrationTests, yaml_data_for_oscillating_cube_should_be_valid)
+{
+    check_input_yaml(SimulatorYamlParser(test_data::oscillating_cube_example()).parse());
+}
+
