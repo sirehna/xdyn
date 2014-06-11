@@ -91,3 +91,43 @@ TEST_F(IntegrationTests, simulator_does_not_crash_for_oscillating_cube)
     integrate(ds, 0, 10, observer);
 }
 
+TEST_F(IntegrationTests, can_simulate_oscillating_cube)
+{
+    const double dt = 0.1;
+    const double tend = 2;
+    const double eps = 1E-3;
+    const VectorOfVectorOfPoints mesh_cube(read_stl(test_data::cube()));
+    const std::map<std::string, VectorOfVectorOfPoints> input_meshes = { {"cube", mesh_cube} };
+    DataSource ds = make_ds(test_data::oscillating_cube_example(),input_meshes, dt,"rk4");
+    DsMapObserver observer;
+    const size_t N = (size_t)(floor(tend/dt+0.5))+1;
+    integrate(ds, 0, tend, observer);
+    auto res = observer.get();
+    ASSERT_EQ(N, res.size());
+    const double g = ds.get<double>("g");
+    const double rho = ds.get<double>("rho");
+    const double L = 1;
+    const double m = ds.get<double>("m(cube)");
+    const double omega = L*sqrt(rho*g/m);
+    const double A = m/(rho*L*L)*(1-rho*L*L*L/(2*m));
+    const double z0 = L/2;
+    for (size_t i = 0 ; i < N ; ++i)
+    {
+        const double t = i*dt;
+        ASSERT_EQ(1+13, res.at(i).size())          << "Time step: i=" << i;
+        ASSERT_DOUBLE_EQ(t, res.at(i)["t"])        << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["x(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["y(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR((z0-A)*cos(omega*t)+A, res.at(i)["z(cube)"], eps) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["u(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["v(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(omega*(A-z0)*sin(omega*t), res.at(i)["w(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["p(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["q(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["r(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(1, res.at(i)["qr(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qi(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qj(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qk(cube)"], EPS) << "Time step: i=" << i;
+    }
+}
