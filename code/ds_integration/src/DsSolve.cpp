@@ -49,6 +49,7 @@ struct Pendulum
 
 void integrate(DataSource& ds, const double tstart, const double tend, DsObserver& observer)
 {
+    ds.check_in(__PRETTY_FUNCTION__);
     DSSystem sys(ds);
     std::vector<double> x0(2,0);
     double dt = GET(ds, simulator_base::initial_time_step);
@@ -67,10 +68,13 @@ void integrate(DataSource& ds, const double tstart, const double tend, DsObserve
         default:
             break;
     }
+    ds.check_out();
 }
 
 void integrate(DataSource& ds, const double tstart, const double tend)
 {
+    ds.check_in(__PRETTY_FUNCTION__);
     NoObservation observer;
     integrate(ds, tstart, tend, observer);
+    ds.check_out();
 }
