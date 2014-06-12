@@ -7,6 +7,5 @@ http://130.66.124.6/svn/maroff/Product/Cpp/Tools text_file_reader
 http://130.66.124.6/svn/dev_pilotage/simulator_sdk/trunk data_source
 http://130.66.124.6/svn/tools/ThirdParty gmock 1.7.0
 http://130.66.124.6/svn/tools/ThirdParty eigen 3.2.0
-http://130.66.124.6/svn/tools/ThirdParty lapack 3.5.0
 http://130.66.124.6/svn/tools/ThirdParty yaml-cpp 0.3.0
 http://130.66.124.6/svn/maroff/Product/Cpp/Tools decode_unit
