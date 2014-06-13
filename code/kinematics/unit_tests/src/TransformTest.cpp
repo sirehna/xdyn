@@ -36,7 +36,7 @@ void TransformTest::TearDown()
 TEST_F(TransformTest, can_translate_a_point)
 {
 //! [TransformTest example]
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const Point P1 = random_point(a);
         const Point P2 = random_point_in_frame(a, P1.get_frame());
@@ -54,7 +54,7 @@ TEST_F(TransformTest, can_translate_a_point)
 
 TEST_F(TransformTest, can_compose_two_translations)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const std::string middle_frame = a.random<std::string>();
         const Point P1 = random_point(a);
@@ -71,7 +71,7 @@ TEST_F(TransformTest, can_compose_two_translations)
 
 TEST_F(TransformTest, can_compose_two_translations_for_a_point_matrix)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const std::string middle_frame = a.random<std::string>();
         const Point P1 = random_point(a);
@@ -95,7 +95,7 @@ TEST_F(TransformTest, can_compose_two_translations_for_a_point_matrix)
 TEST_F(TransformTest, can_compose_two_translations_and_two_rotations)
 {
     const double beta = PI/3;
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const std::string A = a.random<std::string>();
         const std::string B = a.random<std::string>();
@@ -117,7 +117,7 @@ TEST_F(TransformTest, can_compose_two_translations_and_two_rotations)
 
 TEST_F(TransformTest, can_rotate_a_point)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const double beta = a.random<double>().between(-PI,PI);
         const RotationMatrix R = kinematics::rot(0,0,1, beta);
@@ -133,7 +133,7 @@ TEST_F(TransformTest, can_rotate_a_point)
 
 TEST_F(TransformTest, can_compose_two_rotations)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const double beta1 = a.random<double>().between(-PI,PI);
         const double beta2 = a.random<double>().between(-PI,PI);
@@ -153,7 +153,7 @@ TEST_F(TransformTest, can_compose_two_rotations)
 
 TEST_F(TransformTest, can_rotate_and_translate_a_point)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const Point O = random_point(a);
         const Point P = random_point_in_frame(a, O.get_frame());
@@ -170,7 +170,7 @@ TEST_F(TransformTest, can_rotate_and_translate_a_point)
 
 TEST_F(TransformTest, should_throw_if_applying_transform_to_a_point_in_wrong_frame)
 {
-    for (size_t i = 0 ; i<1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const std::string F1 = a.random<std::string>();
         const std::string F2 = a.random<std::string>();
@@ -188,7 +188,7 @@ TEST_F(TransformTest, should_throw_if_applying_transform_to_a_point_in_wrong_fra
 
 TEST_F(TransformTest, should_throw_if_composing_transforms_in_wrong_frame)
 {
-    for (size_t i = 0 ; i<1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const std::string F1 = a.random<std::string>();
         const std::string F2 = a.random<std::string>();
@@ -206,7 +206,7 @@ TEST_F(TransformTest, should_throw_if_composing_transforms_in_wrong_frame)
 
 TEST_F(TransformTest, should_throw_if_transforming_velocity_from_wrong_frame)
 {
-    for (size_t i = 0 ; i<1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const std::string F1 = a.random<std::string>();
         const std::string F2 = a.random<std::string>();
@@ -246,7 +246,7 @@ TEST_F(TransformTest, can_project_velocity_in_another_frame)
 
 TEST_F(TransformTest, can_compute_the_inverse_transform)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 20 ; ++i)
     {
         const std::string frame_a = a.random<std::string>();
         const std::string frame_b = a.random<std::string>();
