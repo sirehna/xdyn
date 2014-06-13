@@ -279,7 +279,7 @@ Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at 
     if (immersions.size() != (size_t)mesh.nodes.cols())
     {
         std::stringstream ss;
-        ss << "Should have as many nodes as immersions: have " << mesh.nodes.cols() << " nodes but " << immersions.size() << " immersions.";
+        ss << "Should have as many nodes as immersions: received " << mesh.nodes.cols() << " nodes but " << immersions.size() << " immersions.";
         THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
     }
     std::vector<Facet>::const_iterator that_facet = mesh.facets.begin();
