@@ -46,9 +46,9 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
     {
         const size_t iB = idx[i-1];
         const size_t iC = idx[i];
-        const EPoint A = nodes.col(iA);
-        const EPoint B = nodes.col(iB);
-        const EPoint C = nodes.col(iC);
+        const EPoint A = nodes.col((int)iA);
+        const EPoint B = nodes.col((int)iB);
+        const EPoint C = nodes.col((int)iC);
         const EPoint centre_of_gravity((A(0)+B(0)+C(0))/3.,
                                        (A(1)+B(1)+C(1))/3.,
                                        (delta_z.at(idx[0])+delta_z.at(idx[i-1])+delta_z.at(idx[i]))/3.);
@@ -61,7 +61,7 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
 double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes             //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                                      )
 {
-    const size_t n = nodes.first.cols();
+    const size_t n = (size_t)nodes.first.cols();
     if (n != nodes.second.size())
     {
         std::stringstream ss;
@@ -149,22 +149,22 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
     const size_t idxB = idx[first_and_last.second];
     const size_t idxA1 = previous(idx, idxA);
     const size_t idxB1 = next(idx, idxB);
-    const EPoint A = M.col(idxA);
-    const EPoint A1 = M.col(idxA1);
-    const EPoint B = M.col(idxB);
-    const EPoint B1 = M.col(idxB1);
+    const EPoint A = M.col((int)idxA);
+    const EPoint A1 = M.col((int)idxA1);
+    const EPoint B = M.col((int)idxB);
+    const EPoint B1 = M.col((int)idxB1);
     const EPoint P = intersection(A,v.at(idxA),A1,v.at(idxA1));
     const EPoint Q = intersection(B,v.at(idxB),B1,v.at(idxB1));
     const size_t N = (first_and_last.second>=first_and_last.first) ? n-(first_and_last.second-first_and_last.first-1) : first_and_last.second+first_and_last.first+1;
     Eigen::Matrix<double,3,Eigen::Dynamic> ret;
     std::vector<double> delta_z;
-    ret.resize(3,N);
-    size_t k = 0;
+    ret.resize(3,(int)N);
+    int k = 0;
     if (first_and_last.first<=first_and_last.second)
     {
         for (size_t i = 0 ; i < first_and_last.first ; ++i)
         {
-            ret.col(k++) = M.col(idx.at(i));
+            ret.col(k++) = M.col((int)idx.at(i));
             delta_z.push_back(v.at(idx.at(i)));
         }
         ret.col(k++) = P;
@@ -173,7 +173,7 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
         delta_z.push_back(0);
         for (size_t i = first_and_last.second+1 ; i < n ; ++i)
         {
-            ret.col(k++) = M.col(idx.at(i));
+            ret.col(k++) = M.col((int)idx.at(i));
             delta_z.push_back(v.at(idx.at(i)));
         }
     }
@@ -183,7 +183,7 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
         delta_z.push_back(0);
         for (size_t i = idxB1 ; i <= idxA1 ; ++i)
         {
-            ret.col(k++) = M.col(i);
+            ret.col(k++) = M.col((int)i);
             delta_z.push_back(v.at(i));
         }
         ret.col(k++) = P;

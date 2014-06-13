@@ -159,12 +159,12 @@ Matrix6x6 convert(const YamlInertiaMatrix& M)
     Matrix6x6 ret;
     for (size_t j = 0 ; j < 6 ; ++j)
     {
-        ret(0,j) = M.row_1.at(j);
-        ret(1,j) = M.row_2.at(j);
-        ret(2,j) = M.row_3.at(j);
-        ret(3,j) = M.row_4.at(j);
-        ret(4,j) = M.row_5.at(j);
-        ret(5,j) = M.row_6.at(j);
+        ret(0,(int)j) = M.row_1.at(j);
+        ret(1,(int)j) = M.row_2.at(j);
+        ret(2,(int)j) = M.row_3.at(j);
+        ret(3,(int)j) = M.row_4.at(j);
+        ret(4,(int)j) = M.row_5.at(j);
+        ret(5,(int)j) = M.row_6.at(j);
     }
     return ret;
 }

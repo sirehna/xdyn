@@ -20,7 +20,7 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
                                                                    facets(std::vector<Facet>())
 {
-    if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,v.size()*v.front().size());
+    if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
 
 MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1,tri)),
@@ -29,15 +29,15 @@ MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1
                                                             nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
                                                             facets(std::vector<Facet>())
 {
-    if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,v.size()*v.front().size());
+    if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
 
 Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::resize(const Eigen::Matrix<double,3,Eigen::Dynamic>& M) const
 {
-    Eigen::Matrix<double,3,Eigen::Dynamic> resized(Eigen::MatrixXd::Zero(3,index));
+    Eigen::Matrix<double,3,Eigen::Dynamic> resized(Eigen::MatrixXd::Zero(3,(int)index));
     for (size_t j = 0 ; j < index ; ++j)
     {
-        resized.col(j) = M.col(j);
+        resized.col((int)j) = M.col((int)j);
     }
     return resized;
 }
@@ -78,7 +78,7 @@ bool MeshBuilder::add_point_if_missing(const EPoint& xyz)
     if (not(point_is_in_map(xyz)))
     {
         xyzMap.insert(std::make_pair(xyz,index));
-        nodes.col(index) = xyz;
+        nodes.col((int)index) = xyz;
         point_has_been_added = true;
     }
     return point_has_been_added;
@@ -95,7 +95,7 @@ Matrix3x MeshBuilder::convert(const VectorOfPoints& v) const
     Matrix3x ret(3,v.size());
     for (size_t j = 0 ; j < v.size() ; ++j)
     {
-        ret.col(j) = v[j];
+        ret.col((int)j) = v[j];
     }
     return ret;
 }
