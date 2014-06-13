@@ -283,7 +283,7 @@ Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at 
         THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
     }
     std::vector<Facet>::const_iterator that_facet = mesh.facets.begin();
-    std::vector<UnsafeWrench> elementary_forces;
+    UnsafeWrench F(O);
     for (;that_facet != mesh.facets.end() ; ++that_facet)
     {
         switch (get_immersion_type(that_facet->index, immersions))
@@ -291,7 +291,7 @@ Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at 
             case TOTALLY_IMMERGED:
             {
                 const double zG = average_immersion(mesh.nodes, that_facet->index, immersions);
-                elementary_forces.push_back(dF(O, *that_facet, rho, g, zG));
+                F += dF(O, *that_facet, rho, g, zG);
                 break;
             }
             case PARTIALLY_EMERGED:
@@ -299,7 +299,7 @@ Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at 
                 const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh.nodes,that_facet->index,immersions);
                 const double zG = average_immersion(polygon_and_immersions);
                 const EPoint dS = area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
-                elementary_forces.push_back(dF(O,barycenter(polygon_and_immersions.first),rho,g,zG,dS));
+                F += dF(O,barycenter(polygon_and_immersions.first),rho,g,zG,dS);
                 break;
             }
             case TOTALLY_EMERGED:
@@ -308,6 +308,5 @@ Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at 
             }
         }
     }
-    if (elementary_forces.empty()) return Wrench(O);
-                                   return Wrench(sum::pairwise(elementary_forces));
+    return (Wrench)F;
 }
