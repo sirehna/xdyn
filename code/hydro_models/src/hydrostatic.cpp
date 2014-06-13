@@ -41,16 +41,12 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
     const size_t n = idx.size();
     double areas_times_points = 0;
     double areas = 0;
-    const EPoint A = nodes.col((int)idx[0]);
+    const int idxA = idx[0];
     for (size_t i = 2 ; i < n ; ++i)
     {
-        const size_t iB = idx[i-1];
-        const size_t iC = idx[i];
-        const EPoint B = nodes.col((int)iB);
-        const EPoint C = nodes.col((int)iC);
-        const double area = triangle_area(A, B, C);
-        areas += area;
-        areas_times_points += area*(delta_z[idx[0]]+delta_z[idx[i-1]]+delta_z[idx[i]])/3.;
+        const double S = area(nodes, idxA, (int)idx[i-1], (int)idx[i]);
+        areas += S;
+        areas_times_points += S*(delta_z[idx[0]]+delta_z[idx[i-1]]+delta_z[idx[i]])/3.;
     }
     return areas_times_points/areas;
 }
