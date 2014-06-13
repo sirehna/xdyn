@@ -2,7 +2,7 @@
  * Point.hpp
  *
  *  Created on: 7 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef POINT_HPP_

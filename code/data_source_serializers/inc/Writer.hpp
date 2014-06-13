@@ -2,7 +2,7 @@
  * Writer.hpp
  *
  *  Created on: 3 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef WRITER_HPP_

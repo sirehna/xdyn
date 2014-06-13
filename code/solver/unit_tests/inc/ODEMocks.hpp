@@ -2,7 +2,7 @@
  * ODEMocks.hpp
  *
  *  Created on: 19 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef ODEMOCKS_HPP_

@@ -2,7 +2,7 @@
  * DsSolve.hpp
  *
  *  Created on: 25 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef DSSOLVE_HPP_

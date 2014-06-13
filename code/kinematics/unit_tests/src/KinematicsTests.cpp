@@ -2,7 +2,7 @@
  * KinematicsTests.cpp
  *
  *  Created on: 1 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "KinematicsTests.hpp"

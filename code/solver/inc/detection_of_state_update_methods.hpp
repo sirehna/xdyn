@@ -2,7 +2,7 @@
  * detection_of_state_update_methods.hpp
  *
  *  Created on: 21 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef DETECTION_OF_STATE_UPDATE_METHODS_HPP_

@@ -2,7 +2,7 @@
  * rotation_matrix_builders.hpp
  *
  *  Created on: 7 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef ROTATION_MATRIX_BUILDERS_HPP_

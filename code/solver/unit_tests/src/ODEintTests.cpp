@@ -2,7 +2,7 @@
  * ODEintTests.cpp
  *
  *  Created on: 7 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "ODEintTests.hpp"

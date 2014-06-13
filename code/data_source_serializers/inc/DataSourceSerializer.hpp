@@ -1,8 +1,8 @@
 /*
  * DataSourceSerializer.hpp
  *
- *  Created on: 26 févr. 2014
- *      Author: maroff
+ *  Created on: 26 feb. 2014
+ *      Author: cec
  */
 
 #ifndef DATASOURCESERIALIZER_HPP_
@@ -10,14 +10,15 @@
 
 #include <ostream>
 #include <string>
-#include <tr1/memory>
-#include <tr1/unordered_map>
+#include "tr1_macros.hpp"
+#include TR1INC(unordered_map)
+#include TR1INC(memory)
 #include <vector>
 
 #include "DataSource.hpp"
 #include "TypeWriter.hpp"
 
-typedef std::tr1::unordered_map<std::string, std::tr1::shared_ptr<Writer> > Writers;
+typedef TR1(unordered_map)<std::string, TR1(shared_ptr)<Writer> > Writers;
 
 template <typename Target> class DataSourceSerializer
 {
@@ -36,12 +37,12 @@ template <typename Target> class DataSourceSerializer
         template <typename Type> void can_serialize()
         {
             const std::string type = typeid(Type).name();
-            std::tr1::shared_ptr<DataSourceSerializer<Target> > c = this->clone();
+            TR1(shared_ptr)<DataSourceSerializer<Target> > c = this->clone();
             TypeWriter<Target,Type> type_writer(c);
             writers.insert(std::make_pair(type, type_writer.clone()));
         }
 
-        virtual std::tr1::shared_ptr<DataSourceSerializer<Target> > clone() = 0;
+        virtual TR1(shared_ptr)<DataSourceSerializer<Target> > clone() = 0;
 
         virtual void serialize_module(const std::string& module_name, const std::string& module_type) = 0;
 

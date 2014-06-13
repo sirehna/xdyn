@@ -2,7 +2,7 @@
  * Kinematics.hpp
  *
  *  Created on: 7 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef KINEMATICS_HPP_

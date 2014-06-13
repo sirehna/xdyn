@@ -2,7 +2,7 @@
  * constant_step_stepper_arcitecture_tests.cpp
  *
  *  Created on: 21 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "constant_step_stepper_architecture_tests.hpp"

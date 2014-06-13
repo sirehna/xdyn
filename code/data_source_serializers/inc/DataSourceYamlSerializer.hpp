@@ -1,8 +1,8 @@
 /*
  * DataSourceYamlSerializer.hpp
  *
- *  Created on: 26 févr. 2014
- *      Author: maroff
+ *  Created on: 26 feb 2014
+ *      Author: cec
  */
 
 #ifndef DATASOURCEYAMLSERIALIZER_HPP_

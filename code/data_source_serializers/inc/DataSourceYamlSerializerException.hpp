@@ -1,8 +1,8 @@
 /*
  * DataSourceYamlSerializerException.hpp
  *
- *  Created on: 28 févr. 2014
- *      Author: maroff
+ *  Created on: 28 feb 2014
+ *      Author: cec
  */
 
 #ifndef DATASOURCEYAMLSERIALIZEREXCEPTION_HPP_

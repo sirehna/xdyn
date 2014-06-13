@@ -2,7 +2,7 @@
  * DsSystem.cpp
  *
  *  Created on: 25 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "DsSystem.hpp"

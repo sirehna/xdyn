@@ -2,7 +2,7 @@
  * KinematicsException.hpp
  *
  *  Created on: 7 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef KINEMATICSEXCEPTION_HPP_

@@ -2,7 +2,7 @@
  * DsSystemTests.cpp
  *
  *  Created on: 25 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "DsSystemTests.hpp"

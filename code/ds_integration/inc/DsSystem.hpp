@@ -2,7 +2,7 @@
  * DsSystem.hpp
  *
  *  Created on: 25 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef DSSYSTEM_HPP_

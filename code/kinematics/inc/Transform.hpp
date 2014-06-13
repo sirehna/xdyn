@@ -2,7 +2,7 @@
  * Transform.hpp
  *
  *  Created on: 8 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef TRANSFORM_HPP_

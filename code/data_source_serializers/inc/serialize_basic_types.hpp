@@ -1,8 +1,8 @@
 /*
  * serialize_basic_types.hpp
  *
- *  Created on: 28 févr. 2014
- *      Author: maroff
+ *  Created on: 28 feb 2014
+ *      Author: cec
  */
 
 #ifndef SERIALIZE_BASIC_TYPES_HPP_

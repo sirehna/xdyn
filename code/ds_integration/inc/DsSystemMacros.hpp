@@ -2,7 +2,7 @@
  * DsSystemMacros.hpp
  *
  *  Created on: 25 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef DSSYSTEMMACROS_HPP_

@@ -2,7 +2,7 @@
  * Observers.hpp
  *
  *  Created on: 21 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef OBSERVERS_HPP_

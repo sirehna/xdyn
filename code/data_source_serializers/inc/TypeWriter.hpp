@@ -2,7 +2,7 @@
  * TypeWriter.hpp
  *
  *  Created on: 3 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef TYPEWRITER_HPP_

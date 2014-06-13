@@ -1,8 +1,8 @@
 /*
  * DataSourceYamlSerializer.cpp
  *
- *  Created on: 26 févr. 2014
- *      Author: maroff
+ *  Created on: 26 fï¿½vr. 2014
+ *      Author: cec
  */
 
 #include "DataSourceYamlSerializer.hpp"

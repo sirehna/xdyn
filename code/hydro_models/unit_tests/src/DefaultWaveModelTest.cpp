@@ -2,7 +2,7 @@
  * HydrostaticForceTest.cpp
  *
  *  Created on: 31 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "DefaultWaveModelTest.hpp"
