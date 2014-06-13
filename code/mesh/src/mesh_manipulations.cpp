@@ -56,10 +56,17 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
         ss << ".";
        THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
-    const Eigen::Vector3d n1(points.col(1)-points.col(0));
-    const Eigen::Vector3d n2(points.col(2)-points.col(0));
-    const Eigen::Vector3d n = n1.cross(n2);
-    const double norm = n.norm();
+    const double x1 = points(0,1)-points(0,0);
+    const double x2 = points(1,1)-points(1,0);
+    const double x3 = points(2,1)-points(2,0);
+    const double y1 = points(0,2)-points(0,0);
+    const double y2 = points(1,2)-points(1,0);
+    const double y3 = points(2,2)-points(2,0);
+    const double A = x2*y3-x3*y2;
+    const double B = x3*y1-x1*y3;
+    const double C = x1*y2-x2*y1;
+
+    const double norm = sqrt(A*A+B*B+C*C);
     if (norm<1000*std::numeric_limits<double>::epsilon())
     {
         std::stringstream ss;
@@ -70,7 +77,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
         }
         THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
-    return n/norm;
+    return Eigen::Vector3d(A/norm,B/norm,C/norm);
 }
 
 Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
