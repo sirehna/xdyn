@@ -32,3 +32,10 @@ UnsafeWrench UnsafeWrench::operator-(const UnsafeWrench& rhs) const
 {
     return UnsafeWrench(P, force - rhs.force, torque - rhs.torque);
 }
+
+UnsafeWrench& UnsafeWrench::operator+=(const UnsafeWrench& rhs)
+{
+    force += rhs.force;
+    torque += rhs.torque;
+    return *this;
+}

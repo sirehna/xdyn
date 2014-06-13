@@ -29,6 +29,7 @@ class UnsafeWrench : public Wrench
 
         UnsafeWrench operator+(const UnsafeWrench& rhs) const;
         UnsafeWrench operator-(const UnsafeWrench& rhs) const;
+        UnsafeWrench& operator+=(const UnsafeWrench& rhs);
 };
 
 #endif /* UNSAFEWRENCH_HPP_ */
