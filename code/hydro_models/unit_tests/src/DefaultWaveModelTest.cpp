@@ -29,7 +29,7 @@ void DefaultWaveModelTest::TearDown()
 TEST_F(DefaultWaveModelTest, example)
 {
 //! [DefaultWaveModelTest example]
-    std::tr1::shared_ptr<Kinematics> k(new Kinematics());
+    TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const DefaultWaveModel w(10);
     const Point P("NED", 0, 0, -20);
 //! [DefaultWaveModelTest example]
@@ -40,7 +40,7 @@ TEST_F(DefaultWaveModelTest, example)
 
 TEST_F(DefaultWaveModelTest, more_interesting_example)
 {
-    std::tr1::shared_ptr<Kinematics> k(new Kinematics());
+    TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 0);
     const Point Q("NED", 7, -100, 1795);
     const DefaultWaveModel w(7);
@@ -71,7 +71,7 @@ TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
     M.m(1,4) = -81;
     M.m(2,4) = -91;
 
-    std::tr1::shared_ptr<Kinematics> k(new Kinematics());
+    TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const DefaultWaveModel w(888);
     const kinematics::Transform T(Point("NED", 1, 20, 300), "body");
     k->add(T);

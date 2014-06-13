@@ -35,7 +35,7 @@ TEST_F(HydrostaticModuleTest, example)
     ds.set<double>("g", 10);
     ds.set<Point>("G(body 1)", Point("body 1", 1,2,4));
     ds.set<double>("rho", 1024);
-    ds.set<std::tr1::shared_ptr<Mesh> >("body 1", std::tr1::shared_ptr<Mesh>(new Mesh(MeshBuilder(two_triangles()).build())));
+    ds.set<TR1(shared_ptr)<Mesh> >("body 1", TR1(shared_ptr)<Mesh>(new Mesh(MeshBuilder(two_triangles()).build())));
     ds.set<std::vector<double> >("wave heights(body 1)", std::vector<double>({-0.5,-0.5,-2.5,0.5}));
     const HydrostaticModule hs(&ds, "hydrostatic module", "body 1");
     ds.add(hs);

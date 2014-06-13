@@ -19,8 +19,8 @@ class DataSourceYamlSerializer : public DataSourceSerializer<DataSourceYamlSeria
     public:
         DataSourceYamlSerializer(std::ostream& rhs);
         void serialize_module(const std::string& module_name, const std::string& module_type);
-        std::tr1::shared_ptr<DataSourceSerializer<DataSourceYamlSerializer> > clone();
-        std::tr1::shared_ptr<YAML::Emitter> out;
+        TR1(shared_ptr)<DataSourceSerializer<DataSourceYamlSerializer> > clone();
+        TR1(shared_ptr)<YAML::Emitter> out;
 
     private:
         DataSourceYamlSerializer();

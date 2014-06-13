@@ -9,7 +9,8 @@
 #define KINEMATICTREE_HPP_
 
 #include <string>
-#include <tr1/memory>
+#include "tr1_macros.hpp"
+#include TR1INC(memory)
 #include <vector>
 #include <utility> // std::pair
 
@@ -51,7 +52,7 @@ class KinematicTree
 
     private:
         class Impl;
-        std::tr1::shared_ptr<Impl> pimpl;
+        TR1(shared_ptr<Impl>) pimpl;
 };
 
 #endif /* KINEMATICTREE_HPP_ */

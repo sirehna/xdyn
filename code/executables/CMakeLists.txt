@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(${data_source_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ds_integration_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS})
+include_directories(${test_macros_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/simulator.cpp "${CMAKE_CURRENT_BINARY_DIR}/simulator.cpp" @ONLY)
 ADD_EXECUTABLE(sim ${CMAKE_CURRENT_BINARY_DIR}/simulator.cpp)

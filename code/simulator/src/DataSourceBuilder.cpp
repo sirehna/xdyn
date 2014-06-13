@@ -35,9 +35,9 @@ typedef Eigen::Matrix<double,6,6> Matrix6x6;
                                      boost::bind(&DataSourceBuilder::f, boost::ref(*this), _1));
 
 MODULE(PointMatrixBuilder, const std::string name = get_name();\
-                           const std::tr1::shared_ptr<Mesh> T = ds->get<std::tr1::shared_ptr<Mesh> >(name);\
-                           const std::tr1::shared_ptr<PointMatrix> pm = ds->read_only() ? std::tr1::shared_ptr<PointMatrix>() : std::tr1::shared_ptr<PointMatrix>(new PointMatrix(T->nodes,std::string("mesh(")+name+")"));\
-                           ds->set<std::tr1::shared_ptr<PointMatrix> >(name, pm);
+                           const TR1(shared_ptr)<Mesh> T = ds->get<TR1(shared_ptr)<Mesh> >(name);\
+                           const TR1(shared_ptr)<PointMatrix> pm = ds->read_only() ? TR1(shared_ptr)<PointMatrix>() : TR1(shared_ptr)<PointMatrix>(new PointMatrix(T->nodes,std::string("mesh(")+name+")"));\
+                           ds->set<TR1(shared_ptr)<PointMatrix> >(name, pm);
       )
 
 DataSourceBuilder::DataSourceBuilder(const YamlSimulatorInput& in) : input(in),
@@ -216,8 +216,8 @@ void DataSourceBuilder::add_mesh(const YamlBody& body)
 {
     ds.check_in(__PRETTY_FUNCTION__);
     MeshBuilder builder(mesh_data[body.name]);
-    std::tr1::shared_ptr<Mesh> mesh(new Mesh(builder.build()));
-    ds.set<std::tr1::shared_ptr<Mesh> >(body.name, mesh);
+    TR1(shared_ptr)<Mesh> mesh(new Mesh(builder.build()));
+    ds.set<TR1(shared_ptr)<Mesh> >(body.name, mesh);
     ds.add<PointMatrixBuilder>(body.name);
     ds.check_out();
 }
@@ -270,7 +270,7 @@ void DataSourceBuilder::add_default_wave_model(const std::string& yaml)
 {
     ds.check_in(__PRETTY_FUNCTION__);
     const double zwave = parse_default_wave_model(yaml);
-    ds.set<std::tr1::shared_ptr<WaveModelInterface> >("wave model", std::tr1::shared_ptr<WaveModelInterface>(new DefaultWaveModel(zwave)));
+    ds.set<TR1(shared_ptr)<WaveModelInterface> >("wave model", TR1(shared_ptr)<WaveModelInterface>(new DefaultWaveModel(zwave)));
     ds.check_out();
 }
 

@@ -37,14 +37,14 @@ TEST_F(WaveModuleTest, example)
     DataSource ds;
     WaveModule g(&ds, "waves", "body 1");
     ds.add(g);
-    std::tr1::shared_ptr<Kinematics> k(new Kinematics());
-    std::tr1::shared_ptr<WaveModelInterface> wave(new DefaultWaveModel(10));
-    ds.set<std::tr1::shared_ptr<WaveModelInterface> >("wave model", wave);
-    ds.set<std::tr1::shared_ptr<Kinematics> >("kinematics", k);
+    TR1(shared_ptr)<Kinematics> k(new Kinematics());
+    TR1(shared_ptr)<WaveModelInterface> wave(new DefaultWaveModel(10));
+    ds.set<TR1(shared_ptr)<WaveModelInterface> >("wave model", wave);
+    ds.set<TR1(shared_ptr)<Kinematics> >("kinematics", k);
     k->add(kinematics::Transform(Point("NED",0,0,0),"mesh(body 1)"));
-    const std::tr1::shared_ptr<Mesh> mesh(new Mesh(MeshBuilder(one_triangle()).build()));
-    ds.set<std::tr1::shared_ptr<Mesh> >("body 1", mesh);
-    ds.set<std::tr1::shared_ptr<PointMatrix> >("body 1", std::tr1::shared_ptr<PointMatrix>(new PointMatrix(mesh->nodes,"mesh(body 1)")));
+    const TR1(shared_ptr)<Mesh> mesh(new Mesh(MeshBuilder(one_triangle()).build()));
+    ds.set<TR1(shared_ptr)<Mesh> >("body 1", mesh);
+    ds.set<TR1(shared_ptr)<PointMatrix> >("body 1", TR1(shared_ptr)<PointMatrix>(new PointMatrix(mesh->nodes,"mesh(body 1)")));
 
 //! [WaveModuleTest example]
 //! [WaveModuleTest expected output]

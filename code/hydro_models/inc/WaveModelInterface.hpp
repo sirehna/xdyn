@@ -8,7 +8,8 @@
 #ifndef WAVEMODELINTERFACE_HPP_
 #define WAVEMODELINTERFACE_HPP_
 
-#include <tr1/memory>
+#include "tr1_macros.hpp"
+#include TR1INC(memory)
 #include <vector>
 
 class Point;
@@ -42,7 +43,7 @@ class WaveModelInterface
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
         double get_relative_wave_height(const Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
-                                        const std::tr1::shared_ptr<Kinematics>& k //!< Object used to compute the transforms to the NED frame
+                                        const TR1(shared_ptr)<Kinematics>& k //!< Object used to compute the transforms to the NED frame
                                        ) const;
 
         /**  \author cec
@@ -52,7 +53,7 @@ class WaveModelInterface
           *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
           */
         std::vector<double> get_relative_wave_height(const PointMatrix& P,                     //!< Points for which to compute the relative wave height
-                                                     const std::tr1::shared_ptr<Kinematics>& k //!< Object used to compute the transforms to the NED frame
+                                                     const TR1(shared_ptr)<Kinematics>& k //!< Object used to compute the transforms to the NED frame
                                                     ) const;
 
     private:

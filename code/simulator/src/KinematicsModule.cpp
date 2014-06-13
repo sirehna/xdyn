@@ -15,7 +15,7 @@ using namespace kinematics;
 KinematicsModule::KinematicsModule(DataSource* const data_source, const std::vector<std::string>& bodies_, const std::string& module_name) :
         DataSourceModule(data_source, module_name),
         bodies(bodies_),
-        kinematics(std::tr1::shared_ptr<Kinematics>(new Kinematics()))
+        kinematics(TR1(shared_ptr)<Kinematics>(new Kinematics()))
 {
 }
 

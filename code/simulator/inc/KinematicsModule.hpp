@@ -10,6 +10,8 @@
 
 #include "DataSourceModule.hpp"
 #include "Transform.hpp"
+#include "tr1_macros.hpp"
+#include TR1INC(memory)
 #include <vector>
 
 class Kinematics;
@@ -41,7 +43,7 @@ class KinematicsModule : public DataSourceModule
         Point get_position_of_body_relative_to_mesh(const std::string& body) const;
 
         std::vector<std::string> bodies;
-        std::tr1::shared_ptr<Kinematics> kinematics;
+        TR1(shared_ptr)<Kinematics> kinematics;
 };
 
 #endif /* KINEMATICSMODULE_HPP_ */

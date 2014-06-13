@@ -17,7 +17,7 @@ class Writer
     public:
         Writer() {};
         virtual ~Writer() {};
-        virtual std::tr1::shared_ptr<Writer> clone() const = 0;
+        virtual TR1(shared_ptr)<Writer> clone() const = 0;
         virtual bool write(const std::string& type, const boost::any& value) = 0;
 };
 
