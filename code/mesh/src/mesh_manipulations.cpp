@@ -84,12 +84,13 @@ Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish t
                                  )
 {
     const int n = polygon.cols();
-    std::vector<Eigen::Vector3d> areas_times_points;
-    std::vector<double> areas;
+    Eigen::Vector3d areas_times_points(0,0,0);
+    double areas = 0;
     for (int i = 2 ; i < n ; ++i)
     {
-        areas.push_back(area(polygon, 0, i-1, i));
-        areas_times_points.push_back(areas.back()*(polygon.col(0)+polygon.col(i-1)+polygon.col(i))/3.);
+        const double S = area(polygon, 0, i-1, i);
+        areas += S;
+        areas_times_points += S*(polygon.col(0)+polygon.col(i-1)+polygon.col(i))/3.;
     }
-    return sum::pairwise(areas_times_points)/sum::pairwise(areas);
+    return areas_times_points/areas;
 }
