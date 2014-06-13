@@ -39,23 +39,20 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
                             )
 {
     const size_t n = idx.size();
-    std::vector<EPoint> areas_times_points;
-    std::vector<double> areas;
-    const size_t iA = idx[0];
+    double areas_times_points = 0;
+    double areas = 0;
+    const EPoint A = nodes.col((int)idx[0]);
     for (size_t i = 2 ; i < n ; ++i)
     {
         const size_t iB = idx[i-1];
         const size_t iC = idx[i];
-        const EPoint A = nodes.col((int)iA);
         const EPoint B = nodes.col((int)iB);
         const EPoint C = nodes.col((int)iC);
-        const EPoint centre_of_gravity((A(0)+B(0)+C(0))/3.,
-                                       (A(1)+B(1)+C(1))/3.,
-                                       (delta_z.at(idx[0])+delta_z.at(idx[i-1])+delta_z.at(idx[i]))/3.);
-        areas.push_back(triangle_area(A, B, C));
-        areas_times_points.push_back(areas.back()*centre_of_gravity);
+        const double area = triangle_area(A, B, C);
+        areas += area;
+        areas_times_points += area*(delta_z[idx[0]]+delta_z[idx[i-1]]+delta_z[idx[i]])/3.;
     }
-    return (sum::pairwise(areas_times_points)/sum::pairwise(areas))(2,0);
+    return areas_times_points/areas;
 }
 
 double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes             //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
