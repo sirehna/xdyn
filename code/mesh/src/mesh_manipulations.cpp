@@ -42,12 +42,7 @@ double area(const Matrix3x& points)
 
 Eigen::Vector3d barycenter(const Matrix3x& p)
 {
-    std::vector<Eigen::Vector3d> points;
-    for (int j = 0 ; j < p.cols() ; ++j)
-    {
-        points.push_back(p.col(j));
-    }
-    return sum::pairwise(points)/double(points.size());
+    return p.rowwise().sum().array()/double(p.cols());
 }
 
 Eigen::Vector3d unit_normal(const Matrix3x& points)
