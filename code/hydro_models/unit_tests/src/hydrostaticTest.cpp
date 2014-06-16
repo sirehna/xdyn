@@ -467,7 +467,7 @@ TEST_F(hydrostaticTest, first_and_last_emerged_points_should_throw_if_set_of_eme
 
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
 {
-    const Mesh mesh = MeshBuilder(two_triangles()).build();
+    const MeshPtr mesh(new Mesh(MeshBuilder(two_triangles()).build()));
     const double rho = 1024;
     const double g = 10;
     const Point G(a.random<std::string>(), 1,2,4);
@@ -494,7 +494,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
         const double y0 = a.random<double>().between(-1000,1000);
         const double z0 = L/2;
         const Point G(a.random<std::string>(), 0, 0, 0);
-        const Mesh mesh = MeshBuilder(cube(L,x0,y0,z0)).build();
+        const MeshPtr mesh(new Mesh(MeshBuilder(cube(L,x0,y0,z0)).build()));
         const std::vector<double> dz = {z0-L/2,z0-L/2,z0-L/2,z0-L/2,z0+L/2,z0+L/2,z0+L/2,z0+L/2};
         const double rho = 1000;
         const double g = 9.81;
@@ -509,7 +509,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
 {
     const VectorOfVectorOfPoints mesh_cube(read_stl(test_data::cube()));
-    const Mesh mesh = MeshBuilder(mesh_cube).build();
+    const MeshPtr mesh(new Mesh(MeshBuilder(mesh_cube).build()));
     const std::vector<double> dz = {-1,-1,-1,-1,0,0,0,0};
     const Point G(a.random<std::string>(), 0, 0, 0);
     const double rho = 1000;
@@ -527,7 +527,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
         const double y0 = a.random<double>().between(-1000,1000);
         const double z0 = a.random<double>().between(0,1000);
         const Point G(a.random<std::string>(), 0, 0, 0);
-        const Mesh mesh = MeshBuilder(tetrahedron(L,x0,y0,z0)).build();
+        const MeshPtr mesh(new Mesh(MeshBuilder(tetrahedron(L,x0,y0,z0)).build()));
         const std::vector<double> dz = {z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0};
         const double rho = 1000;
         const double g = 9.81;
@@ -557,7 +557,7 @@ TEST_F(hydrostaticTest, bug_discovered_when_implementing_sum_of_forces)
     const double y0 = 2;
     const double z0 = 3;
     const Point G(a.random<std::string>(), -3.63075e+09, -7.71511e+09,  9.07162e+09);
-    const Mesh mesh = MeshBuilder(tetrahedron(L,x0,y0,z0)).build();
+    const MeshPtr mesh(new Mesh(MeshBuilder(tetrahedron(L,x0,y0,z0)).build()));
     const std::vector<double> dz = {-2.04294e+09, 9.53171e+09, 3.8521e+09, -9.90113e+09};
     force(mesh, G, a.random<double>(), a.random<double>(), dz);
     ASSERT_NO_THROW(force(mesh, G, a.random<double>(), a.random<double>(), dz));
@@ -570,7 +570,7 @@ TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
     const double y0 = 2;
     const double z0 = 3;
     const Point G(a.random<std::string>(), a.random<double>(), a.random<double>(), a.random<double>());
-    const Mesh mesh = MeshBuilder(tetrahedron(L,x0,y0,z0)).build();
+    const MeshPtr mesh(new Mesh(MeshBuilder(tetrahedron(L,x0,y0,z0)).build()));
     const std::vector<double> dz = a.random_vector_of<double>().of_size(4);
     const Wrench Fhs = force(mesh, G, a.random<double>(), a.random<double>(), dz);
 

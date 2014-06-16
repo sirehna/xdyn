@@ -11,6 +11,7 @@
 #include "kahan_sum.hpp"
 #include "pairwise_sum.hpp"
 #include "mesh_manipulations.hpp"
+#include "Mesh.hpp"
 
 #include <algorithm> // std::count_if
 #include <iterator>  // std::distance
@@ -263,34 +264,34 @@ UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the W
     return UnsafeWrench(O, F, (f.barycenter-O.v).cross(F));
 }
 
-Wrench hydrostatic::force(const Mesh& mesh,                       //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+Wrench hydrostatic::force(const MeshPtr& mesh,                       //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                           const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                           const double rho,                       //!< Density of the fluid (in kg/m^3)
                           const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                           const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
                 )
 {
-    if (immersions.size() != (size_t)mesh.nodes.cols())
+    if (immersions.size() != (size_t)mesh->nodes.cols())
     {
         std::stringstream ss;
-        ss << "Should have as many nodes as immersions: received " << mesh.nodes.cols() << " nodes but " << immersions.size() << " immersions.";
+        ss << "Should have as many nodes as immersions: received " << mesh->nodes.cols() << " nodes but " << immersions.size() << " immersions.";
         THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
     }
-    std::vector<Facet>::const_iterator that_facet = mesh.facets.begin();
+    std::vector<Facet>::const_iterator that_facet = mesh->facets.begin();
     UnsafeWrench F(O);
-    for (;that_facet != mesh.facets.end() ; ++that_facet)
+    for (;that_facet != mesh->facets.end() ; ++that_facet)
     {
         switch (get_immersion_type(that_facet->index, immersions))
         {
             case TOTALLY_IMMERGED:
             {
-                const double zG = average_immersion(mesh.nodes, that_facet->index, immersions);
+                const double zG = average_immersion(mesh->nodes, that_facet->index, immersions);
                 F += dF(O, *that_facet, rho, g, zG);
                 break;
             }
             case PARTIALLY_EMERGED:
             {
-                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh.nodes,that_facet->index,immersions);
+                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh->nodes,that_facet->index,immersions);
                 const double zG = average_immersion(polygon_and_immersions);
                 const EPoint dS = area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
                 F += dF(O,barycenter(polygon_and_immersions.first),rho,g,zG,dS);

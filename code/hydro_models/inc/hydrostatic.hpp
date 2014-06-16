@@ -13,8 +13,12 @@
 #include <utility> //std::pair
 #include <Eigen/Dense>
 
+#include "tr1_macros.hpp"
+#include TR1INC(memory)
+class Mesh;
+typedef TR1(shared_ptr)<Mesh> MeshPtr;
+
 #include "GeometricTypes3d.hpp"
-#include "Mesh.hpp"
 #include "UnsafeWrench.hpp"
 
 namespace hydrostatic
@@ -132,7 +136,7 @@ namespace hydrostatic
       *  \returns
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
       */
-    Wrench force(const Mesh& mesh,                       //!< Coordinates of all the points
+    Wrench force(const MeshPtr& mesh,                       //!< Coordinates of all the points
                  const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                  const double rho,                       //!< Density of the fluid (in kg/m^3)
                  const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
