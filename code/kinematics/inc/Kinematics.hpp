@@ -2,14 +2,15 @@
  * Kinematics.hpp
  *
  *  Created on: 7 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef KINEMATICS_HPP_
 #define KINEMATICS_HPP_
 
 #include <string>
-#include <tr1/memory>
+#include "tr1_macros.hpp"
+#include TR1INC(memory)
 
 namespace kinematics
 {
@@ -57,7 +58,7 @@ class Kinematics
 
     private:
         class Impl;
-        std::tr1::shared_ptr<Impl> pimpl;
+        TR1(shared_ptr)<Impl> pimpl;
 };
 
 #endif /* KINEMATICS_HPP_ */

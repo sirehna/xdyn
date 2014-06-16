@@ -73,6 +73,7 @@ SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
 SET(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
 ADD_DEFINITIONS(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
 ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
+#ADD_DEFINITIONS(-DEIGEN_NO_DEBUG)
 
 #############################################################################
 # Compilation part
@@ -87,7 +88,6 @@ ADD_SUBDIRECTORY(text_file_reader)
 ADD_SUBDIRECTORY(decode_unit)
 ADD_SUBDIRECTORY(data_source)
 ADD_SUBDIRECTORY(data_source_serializers)
-ADD_SUBDIRECTORY(interpolation)
 ADD_SUBDIRECTORY(yaml_parser)
 ADD_SUBDIRECTORY(simulator_yaml_parser)
 ADD_SUBDIRECTORY(solver)
@@ -100,10 +100,7 @@ ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(simulator)
 ADD_SUBDIRECTORY(executables)
 
-INCLUDE(CMakeLapackDouble)
-
-ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:interpolation_object>
-                                   $<TARGET_OBJECTS:text_file_reader_static>)
+ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:text_file_reader_static>)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         data_source_serializers_static
@@ -120,7 +117,6 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         decode_unit_static
         data_source_static
         exception_handling_static
-        lapack                      # static
         gfortran                    # static
         )
 
@@ -142,10 +138,8 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:data_source_tests>
         $<TARGET_OBJECTS:solver_tests>
         $<TARGET_OBJECTS:data_source_serializers_tests>
-        $<TARGET_OBJECTS:interpolation_tests>
         $<TARGET_OBJECTS:random_data_generator_tests>
         $<TARGET_OBJECTS:text_file_reader_tests>
-        $<TARGET_OBJECTS:interpolation_object>
         $<TARGET_OBJECTS:hydro_models_tests>
         $<TARGET_OBJECTS:ds_integration_tests>
         $<TARGET_OBJECTS:kinematics_tests>

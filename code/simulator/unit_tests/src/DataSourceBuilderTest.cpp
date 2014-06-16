@@ -96,13 +96,13 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_mass_of_each_body)
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_mesh_of_each_body)
 {
-    const std::tr1::shared_ptr<Mesh> m = ds.get<std::tr1::shared_ptr<Mesh> >("body 1");
+    const TR1(shared_ptr)<Mesh> m = ds.get<TR1(shared_ptr)<Mesh> >("body 1");
     ASSERT_EQ(3, m->facets.size());
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_PointMatrix_for_each_body)
 {
-    const std::tr1::shared_ptr<PointMatrix> P = ds.get<std::tr1::shared_ptr<PointMatrix> >("body 1");
+    const TR1(shared_ptr)<PointMatrix> P = ds.get<TR1(shared_ptr)<PointMatrix> >("body 1");
     ASSERT_EQ(3, P->m.rows());
     ASSERT_EQ(7, P->m.cols());
     ASSERT_EQ("mesh(body 1)", P->get_frame());
@@ -119,7 +119,7 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_centre_of_gravity_of_eac
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_Kinematics_object)
 {
-    std::tr1::shared_ptr<Kinematics> k = ds.get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+    TR1(shared_ptr)<Kinematics> k = ds.get<TR1(shared_ptr)<Kinematics> >("kinematics");
     kinematics::Transform T = k->get("NED", "body 1");
     Point P = T*Point("NED",0,0,0);
     ASSERT_EQ("body 1", P.get_frame());
@@ -130,7 +130,7 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_Kinematics_object)
     {
         const double x = a.random<double>();
         ds.set<double>("x(body 1)",x);
-        k = ds.get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+        k = ds.get<TR1(shared_ptr)<Kinematics> >("kinematics");
         T = k->get("NED", "body 1");
         P = T*Point("NED",0,0,0);
         ASSERT_EQ("body 1", P.get_frame());
@@ -148,8 +148,8 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_position_of_body_relativ
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_wave_model)
 {
-    const std::tr1::shared_ptr<WaveModelInterface> wave_model = ds.get<std::tr1::shared_ptr<WaveModelInterface> >("wave model");
-    const std::tr1::shared_ptr<Kinematics> k = ds.get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+    const TR1(shared_ptr)<WaveModelInterface> wave_model = ds.get<TR1(shared_ptr)<WaveModelInterface> >("wave model");
+    const TR1(shared_ptr)<Kinematics> k = ds.get<TR1(shared_ptr)<Kinematics> >("kinematics");
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double z0 = a.random<double>();

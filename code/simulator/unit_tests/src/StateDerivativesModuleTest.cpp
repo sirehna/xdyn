@@ -39,8 +39,8 @@ TEST_F(StateDerivativesModuleTest, example)
     DataSource ds;
     const StateDerivativesModule module(&ds, body, forces);
     ds.add(module);
-    std::tr1::shared_ptr<Kinematics> k(new Kinematics());
-    ds.set<std::tr1::shared_ptr<Kinematics> >("kinematics", k);
+    TR1(shared_ptr)<Kinematics> k(new Kinematics());
+    ds.set<TR1(shared_ptr)<Kinematics> >("kinematics", k);
     const RotationMatrix R = kinematics::rot(1,0,0, PI/3.);
 
     k->add(kinematics::Transform(Point("NED",4,-98,100),R,"foo"));

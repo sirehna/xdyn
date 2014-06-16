@@ -2,7 +2,7 @@
  * serialize_basic_types.cpp
  *
  *  Created on: 3 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "serialize_basic_types.hpp"

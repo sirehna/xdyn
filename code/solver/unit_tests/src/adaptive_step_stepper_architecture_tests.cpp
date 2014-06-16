@@ -2,7 +2,7 @@
  * adaptive_step_stepper_architecture_tests.cpp
  *
  *  Created on: 21 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "adaptive_step_stepper_architecture_tests.hpp"

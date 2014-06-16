@@ -13,6 +13,8 @@
 #include "Kinematics.hpp"
 #include "Transform.hpp"
 #include <Eigen/Geometry> // For Eigen::Quaternion
+#include "tr1_macros.hpp"
+#include TR1INC(memory)
 
 StateDerivativesModule::StateDerivativesModule(DataSource* const data_source, const std::string& body, const std::vector<std::string>& forces_) : SimulatorModuleInterface(data_source, "sum of forces", body), forces(forces_)
 {
@@ -41,7 +43,7 @@ void StateDerivativesModule::update() const
     const Matrix6x6 Mrb = ds->get<Matrix6x6>(customize("solid body inertia"));
     const Matrix6x6 Minv = ds->get<Matrix6x6>(customize("inverse of the total inertia"));
     const Point P = ds->get<Point>(customize("G"));
-    const std::tr1::shared_ptr<Kinematics> k = ds->get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+    const TR1(shared_ptr)<Kinematics> k = ds->get<TR1(shared_ptr)<Kinematics> >("kinematics");
     const Eigen::Vector3d uvw_in_body_frame(ds->get<double>(customize("u")),
                                             ds->get<double>(customize("v")),
                                             ds->get<double>(customize("w")));

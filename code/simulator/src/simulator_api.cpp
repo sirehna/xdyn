@@ -30,8 +30,10 @@ DataSource build(DataSourceBuilder& builder, const double dt, const std::string&
 DataSource build(DataSourceBuilder& builder, const double dt, const std::string& solver_type)
 {
     DataSource ds = builder.build_ds();
+    ds.check_in(__PRETTY_FUNCTION__);
     ds.set<double>("simulator_base_initial_time_step",dt);
     set_data_source_solver(ds, solver_type);
+    ds.check_out();
     return ds;
 }
 

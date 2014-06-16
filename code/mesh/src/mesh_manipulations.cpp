@@ -17,9 +17,9 @@ double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C)
 
 double area(const Matrix3x& points)
 {
-    const size_t n = points.cols();
+    const int n = points.cols();
     double a = 0;
-    for (size_t i = 2 ; i < n ; ++i)
+    for (int i = 2 ; i < n ; ++i)
     {
         a += triangle_area(points.col(0), points.col(i-1), points.col(i));
     }
@@ -67,10 +67,10 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
 Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
                                  )
 {
-    const size_t n = polygon.cols();
+    const int n = polygon.cols();
     std::vector<Eigen::Vector3d> areas_times_points;
     std::vector<double> areas;
-    for (size_t i = 2 ; i < n ; ++i)
+    for (int i = 2 ; i < n ; ++i)
     {
         areas.push_back(triangle_area(polygon.col(0), polygon.col(i-1), polygon.col(i)));
         areas_times_points.push_back(areas.back()*(polygon.col(0)+polygon.col(i-1)+polygon.col(i))/3.);

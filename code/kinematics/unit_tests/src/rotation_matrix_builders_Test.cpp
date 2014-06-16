@@ -2,7 +2,7 @@
  * rotation_matrix_builders_Test.cpp
  *
  *  Created on: 7 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "rotation_matrix_builders_Test.hpp"

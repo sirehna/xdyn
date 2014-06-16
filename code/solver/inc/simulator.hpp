@@ -2,7 +2,7 @@
  * simulator_interface.hpp
  *
  *  Created on: 4 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef SIMULATOR_INTERFACE_HPP_

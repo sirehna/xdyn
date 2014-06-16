@@ -1,8 +1,8 @@
 /*
  * DataSourceYamlSerializer.cpp
  *
- *  Created on: 26 févr. 2014
- *      Author: maroff
+ *  Created on: 26 fï¿½vr. 2014
+ *      Author: cec
  */
 
 #include "DataSourceYamlSerializer.hpp"
@@ -12,14 +12,14 @@
 
 #include "test_macros.hpp"
 
-DataSourceYamlSerializer::DataSourceYamlSerializer(std::ostream& rhs) : DataSourceSerializer(rhs), out(std::tr1::shared_ptr<YAML::Emitter>(new YAML::Emitter))
+DataSourceYamlSerializer::DataSourceYamlSerializer(std::ostream& rhs) : DataSourceSerializer(rhs), out(TR1(shared_ptr)<YAML::Emitter>(new YAML::Emitter))
 {
     out->SetIndent(4);
 }
 
-std::tr1::shared_ptr<DataSourceSerializer<DataSourceYamlSerializer> > DataSourceYamlSerializer::clone()
+TR1(shared_ptr)<DataSourceSerializer<DataSourceYamlSerializer> > DataSourceYamlSerializer::clone()
 {
-    return std::tr1::shared_ptr<DataSourceSerializer<DataSourceYamlSerializer> >(new DataSourceYamlSerializer(*this));
+    return TR1(shared_ptr)<DataSourceSerializer<DataSourceYamlSerializer> >(new DataSourceYamlSerializer(*this));
 }
 
 void DataSourceYamlSerializer::serialize_module(const std::string& module_name, const std::string& module_type)

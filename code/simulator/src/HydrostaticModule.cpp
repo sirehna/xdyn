@@ -34,7 +34,7 @@ void HydrostaticModule::update() const
     const double g = ds->get<double>("g");
     const Point G = ds->get<Point>(customize("G"));
     const double rho =  ds->get<double>("rho");
-    const std::tr1::shared_ptr<Mesh> mesh = ds->get<std::tr1::shared_ptr<Mesh> >(body);
+    const TR1(shared_ptr)<Mesh> mesh = ds->get<TR1(shared_ptr)<Mesh> >(body);
     const std::vector<double> dz = ds->get<std::vector<double> >(customize("wave heights"));
     const Wrench F = ds->read_only() ? Wrench(G) : hydrostatic::force(*mesh, G, rho, g, dz);
     ds->set<Wrench>(customize("non-linear hydrostatic"), F);

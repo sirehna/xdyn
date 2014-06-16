@@ -32,10 +32,10 @@ DataSourceModule* WaveModule::clone(DataSource* const data_source) const
 
 void WaveModule::update() const
 {
-    const std::tr1::shared_ptr<WaveModelInterface> wave_model = ds->get<std::tr1::shared_ptr<WaveModelInterface> >("wave model");
-    const std::tr1::shared_ptr<Kinematics> k = ds->get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+    const TR1(shared_ptr)<WaveModelInterface> wave_model = ds->get<TR1(shared_ptr)<WaveModelInterface> >("wave model");
+    const TR1(shared_ptr)<Kinematics> k = ds->get<TR1(shared_ptr)<Kinematics> >("kinematics");
     const std::vector<double> dz = ds->read_only() ?
                                                      std::vector<double>()
-                                                   : wave_model->get_relative_wave_height(*ds->get<std::tr1::shared_ptr<PointMatrix> >(body),k);
+                                                   : wave_model->get_relative_wave_height(*ds->get<TR1(shared_ptr)<PointMatrix> >(body),k);
     ds->set<std::vector<double> >(customize("wave heights"), dz);
 }

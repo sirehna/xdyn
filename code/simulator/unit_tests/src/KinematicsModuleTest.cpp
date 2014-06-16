@@ -40,7 +40,7 @@ TEST_F(KinematicsModuleTest, example)
 	DataSource ds = builder.build_ds();
 //! [KinematicsModuleTest example]
 //! [KinematicsModuleTest expected output]
-	const std::tr1::shared_ptr<Kinematics> k = ds.get<std::tr1::shared_ptr<Kinematics> >("kinematics");
+	const TR1(shared_ptr)<Kinematics> k = ds.get<TR1(shared_ptr)<Kinematics> >("kinematics");
 
 	const kinematics::Transform T1 = k->get("body 1", "NED");
 	const kinematics::Transform T2 = k->get("NED", "body 1");

@@ -2,7 +2,7 @@
  * TransformTest.cpp
  *
  *  Created on: 8 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "TransformTest.hpp"

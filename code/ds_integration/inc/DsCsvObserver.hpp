@@ -2,7 +2,7 @@
  * DsCsvObserver.hpp
  *
  *  Created on: 26 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef DSCSVOBSERVER_HPP_

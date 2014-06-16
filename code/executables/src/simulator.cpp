@@ -129,6 +129,7 @@ int main(int argc, char** argv)
     {
         const TextFileReader yaml_reader(input_data.yaml_filenames);
         DataSource ds = make_ds(yaml_reader.get_contents(),input_data.initial_timestep,input_data.solver);
+        ds.check_in(__PRETTY_FUNCTION__);
         if (input_data.output_csv.empty())
         {
             DsCsvObserver observer(std::cout);
@@ -140,6 +141,7 @@ int main(int argc, char** argv)
             DsCsvObserver observer(os);
             integrate(ds, input_data.tstart, input_data.tend, observer);
         }
+        ds.check_out();
     }
     return error;
 }

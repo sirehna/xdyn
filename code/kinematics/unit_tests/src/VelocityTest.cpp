@@ -2,7 +2,7 @@
  * VelocityTest.cpp
  *
  *  Created on: 9 avr. 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #include "VelocityTest.hpp"

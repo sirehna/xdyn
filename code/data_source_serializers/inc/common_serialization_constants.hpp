@@ -2,7 +2,7 @@
  * common_serialization_constants.hpp
  *
  *  Created on: 3 mars 2014
- *      Author: maroff
+ *      Author: cec
  */
 
 #ifndef COMMON_SERIALIZATION_CONSTANTS_HPP_
