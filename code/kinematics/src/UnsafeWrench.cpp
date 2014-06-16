@@ -23,6 +23,10 @@ UnsafeWrench::UnsafeWrench(const UnsafeWrench& rhs)  : Wrench(rhs)
 {
 }
 
+UnsafeWrench::UnsafeWrench(const Wrench& rhs) : Wrench(rhs)
+{
+}
+
 UnsafeWrench UnsafeWrench::operator+(const UnsafeWrench& rhs) const
 {
     return UnsafeWrench(P, force + rhs.force, torque + rhs.torque);
@@ -37,5 +41,26 @@ UnsafeWrench& UnsafeWrench::operator+=(const UnsafeWrench& rhs)
 {
     force += rhs.force;
     torque += rhs.torque;
+    return *this;
+}
+
+UnsafeWrench& UnsafeWrench::operator-=(const UnsafeWrench& rhs)
+{
+    force -= rhs.force;
+    torque -= rhs.torque;
+    return *this;
+}
+
+UnsafeWrench& UnsafeWrench::operator+=(const Wrench& rhs)
+{
+    force += rhs.force;
+    torque += rhs.torque;
+    return *this;
+}
+
+UnsafeWrench& UnsafeWrench::operator-=(const Wrench& rhs)
+{
+    force -= rhs.force;
+    torque -= rhs.torque;
     return *this;
 }
