@@ -98,3 +98,19 @@ Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlInertiaMatrix& M) const
     }
     return ret;
 }
+
+Body BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& mesh) const
+{
+    YamlBody input;
+    input.name = name;
+    input.dynamics.centre_of_inertia.frame = name;
+    input.dynamics.rigid_body_inertia.frame = name;
+    input.dynamics.rigid_body_inertia.row_1 = {1,0,0,0,0,0};
+    input.dynamics.rigid_body_inertia.row_2 = {0,1,0,0,0,0};
+    input.dynamics.rigid_body_inertia.row_3 = {0,0,1,0,0,0};
+    input.dynamics.rigid_body_inertia.row_4 = {0,0,0,1,0,0};
+    input.dynamics.rigid_body_inertia.row_5 = {0,0,0,0,1,0};
+    input.dynamics.rigid_body_inertia.row_6 = {0,0,0,0,0,1};
+    input.dynamics.added_mass = input.dynamics.rigid_body_inertia;
+    return build(input, mesh);
+}

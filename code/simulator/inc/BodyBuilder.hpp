@@ -29,6 +29,7 @@ class BodyBuilder
     public:
         BodyBuilder(const YamlRotation& convention);
         Body build(const YamlBody& input, const VectorOfVectorOfPoints& mesh) const;
+        Body build(const std::string& name, const VectorOfVectorOfPoints& mesh) const;
 
     private:
         BodyBuilder();

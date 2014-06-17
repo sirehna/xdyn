@@ -9,6 +9,7 @@ FILE(GLOB SRC src/DataSourceBuilderTest.cpp
               src/StateDerivativesModuleTest.cpp
               src/IntegrationTests.cpp
               src/BodyBuilderTest.cpp
+              src/generate_body_for_tests.cpp
               )
 # ------8<---------------------------------------------->8-----
 
