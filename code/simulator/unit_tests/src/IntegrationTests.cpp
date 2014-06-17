@@ -93,11 +93,10 @@ TEST_F(IntegrationTests, simulator_does_not_crash_for_oscillating_cube)
 
 TEST_F(IntegrationTests, can_simulate_oscillating_cube)
 {
-    const double dt = 1E-2;
+    const double dt = 1E-1;
     const VectorOfVectorOfPoints mesh_cube(read_stl(test_data::cube()));
     const std::map<std::string, VectorOfVectorOfPoints> input_meshes = { {"cube", mesh_cube} };
     DataSource ds = make_ds(test_data::oscillating_cube_example(),input_meshes, dt,"rk4");
-    std::cout << ds.draw() << std::endl;
     DsMapObserver observer;
     const double tend = 10;
     integrate(ds, 0, tend, observer);
