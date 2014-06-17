@@ -12,6 +12,7 @@ SET(SRC src/Velocity.cpp
         src/Wrench.cpp
         src/UnsafeWrench.cpp
         src/coriolis_and_centripetal.cpp
+        src/EnvironmentAndFrames.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
