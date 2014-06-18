@@ -8,6 +8,7 @@
 #include "update_kinematics.hpp"
 #include "update_kinematicsTests.hpp"
 #include "BodyBuilderTest.hpp"
+#include "Kinematics.hpp"
 
 update_kinematicsTests::update_kinematicsTests() : a(DataGenerator(121))
 {
@@ -88,6 +89,33 @@ TEST_F(update_kinematicsTests, can_get_transform_from_NED_to_body_from_states)
     body.name = a.random<std::string>();
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     const kinematics::Transform T = get_transform_from_ned_to(x, body, 1);
+    ASSERT_EQ("NED", T.get_from_frame());
+    ASSERT_EQ(body.name, T.get_to_frame());
+    ASSERT_EQ("NED", T.get_point().get_frame());
+    ASSERT_DOUBLE_EQ(1, T.get_point().x);
+    ASSERT_DOUBLE_EQ(2, T.get_point().y);
+    ASSERT_DOUBLE_EQ(3, T.get_point().z);
+
+    ASSERT_DOUBLE_EQ(1-2*7*7-2*13*13, (double)T.get_rot()(0,0));
+    ASSERT_DOUBLE_EQ(2*5*7+2*13*3,    (double)T.get_rot()(1,0));
+    ASSERT_DOUBLE_EQ(2*5*13-2*7*3,    (double)T.get_rot()(2,0));
+
+    ASSERT_DOUBLE_EQ(2*5*7-2*13*3,    (double)T.get_rot()(0,1));
+    ASSERT_DOUBLE_EQ(1-2*5*5-2*13*13, (double)T.get_rot()(1,1));
+    ASSERT_DOUBLE_EQ(2*7*13+2*5*3,    (double)T.get_rot()(2,1));
+
+    ASSERT_DOUBLE_EQ(2*5*13+2*7*3,    (double)T.get_rot()(0,2));
+    ASSERT_DOUBLE_EQ(2*7*13-2*5*3,    (double)T.get_rot()(1,2));
+    ASSERT_DOUBLE_EQ(1-2*5*5-2*7*7,   (double)T.get_rot()(2,2));
+}
+
+TEST_F(update_kinematicsTests, can_update_Kinematics_object_from_states)
+{
+    KinematicsPtr k(new Kinematics());
+    const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
+    const Body body = BodyBuilderTest::build_body();
+    update_kinematics(x, body, 1, k);
+    const auto T = k->get("NED", body.name);
     ASSERT_EQ("NED", T.get_from_frame());
     ASSERT_EQ(body.name, T.get_to_frame());
     ASSERT_EQ("NED", T.get_point().get_frame());

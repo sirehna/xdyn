@@ -7,6 +7,7 @@
 
 #include "update_kinematics.hpp"
 #include "Body.hpp"
+#include "Kinematics.hpp"
 
 Point get_origin(const StateType& x, const size_t i)
 {
@@ -40,4 +41,9 @@ kinematics::Transform get_transform_from_mesh_to(const Body& body)
 kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& body, const size_t idx)
 {
     return kinematics::Transform(get_origin(x, idx), get_rot_from_ned_to(x, idx), body.name);
+}
+
+void update_kinematics(const StateType& x, const Body& body, const size_t idx, const KinematicsPtr& k)
+{
+    k->add(get_transform_from_ned_to(x,body,idx));
 }
