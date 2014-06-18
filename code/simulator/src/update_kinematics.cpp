@@ -31,3 +31,8 @@ Point get_position_of_body_relative_to_mesh(const Body& body)
                                                      body.y_relative_to_mesh,
                                                      body.z_relative_to_mesh);
 }
+
+kinematics::Transform get_transform_from_mesh_to(const Body& body)
+{
+    return kinematics::Transform(get_position_of_body_relative_to_mesh(body), body.mesh_to_body, body.name);
+}

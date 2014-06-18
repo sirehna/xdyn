@@ -57,3 +57,27 @@ TEST_F(update_kinematicsTests, can_return_position_of_body_mesh_from_Body_object
     ASSERT_DOUBLE_EQ(0.21,P.y);
     ASSERT_DOUBLE_EQ(33E3,P.z);
 }
+
+TEST_F(update_kinematicsTests, can_compute_transform_from_mesh_to_body_from_Body_object)
+{
+    const Body body = BodyBuilderTest::build_body();
+    kinematics::Transform T = get_transform_from_mesh_to(body);
+    ASSERT_EQ("mesh(body 1)", T.get_from_frame());
+    ASSERT_EQ("body 1", T.get_to_frame());
+    ASSERT_EQ("mesh(body 1)", T.get_point().get_frame());
+    ASSERT_DOUBLE_EQ(10, T.get_point().x);
+    ASSERT_DOUBLE_EQ(0.21, T.get_point().y);
+    ASSERT_DOUBLE_EQ(33E3, T.get_point().z);
+
+    ASSERT_DOUBLE_EQ(cos(2)*cos(3),(double)T.get_rot()(0,0));
+    ASSERT_DOUBLE_EQ(sin(2)*cos(3),(double)T.get_rot()(1,0));
+    ASSERT_DOUBLE_EQ(-sin(3),      (double)T.get_rot()(2,0));
+
+    ASSERT_DOUBLE_EQ(-sin(2)*cos(1)+cos(2)*sin(3)*sin(1),(double)T.get_rot()(0,1));
+    ASSERT_DOUBLE_EQ(cos(2)*cos(1)+sin(2)*sin(3)*sin(1), (double)T.get_rot()(1,1));
+    ASSERT_DOUBLE_EQ(cos(3)*sin(1),                      (double)T.get_rot()(2,1));
+
+    ASSERT_DOUBLE_EQ(sin(2)*sin(1)+cos(2)*cos(1)*sin(3), (double)T.get_rot()(0,2));
+    ASSERT_DOUBLE_EQ(-cos(2)*sin(1)+sin(3)*sin(2)*cos(1),(double)T.get_rot()(1,2));
+    ASSERT_DOUBLE_EQ(cos(3)*cos(1),                      (double)T.get_rot()(2,2));
+}
