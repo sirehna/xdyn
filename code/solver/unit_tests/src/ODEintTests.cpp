@@ -52,11 +52,13 @@ TEST_F(ODEintTests, linear)
 
 //! [ODEintTests expected output]
     const std::vector<std::pair<double,double> > v = observer.get();
-    ASSERT_EQ(11,v.size());
-    for (size_t i = 0 ; i <= 10 ; ++i)
+    const size_t N = (size_t)floor((tend-t0)/dt+0.5)+1;
+    ASSERT_EQ(N,v.size());
+    for (size_t i = 0 ; i < N ; ++i)
     {
-        ASSERT_EQ(i, v.at(i).first);
-        ASSERT_DOUBLE_EQ(2*double(i), v.at(i).second);
+        const double t = t0 + dt*((double)i);
+        ASSERT_EQ(t, v.at(i).first);
+        ASSERT_DOUBLE_EQ(2*t, v.at(i).second);
     }
 //! [ODEintTests expected output]
 }

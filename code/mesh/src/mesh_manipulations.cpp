@@ -10,9 +10,23 @@
 #include "kahan_sum.hpp"
 #include "pairwise_sum.hpp"
 
-double triangle_area(const EPoint& A, const EPoint& B, const EPoint& C)
+
+double area(const Matrix3x& M, //!< Matrix containing (amongst others), the points of interest
+            const int idxA,         //!< Index of the column containing the first point
+            const int idxB,         //!< Index of the column containing the second point
+            const int idxC          //!< Index of the column containing the third point
+            )
 {
-    return 0.5*fabs(((B-A).cross(C-A)).norm());
+    const double x1 = M(0,idxB)-M(0,idxA);
+    const double x2 = M(1,idxB)-M(1,idxA);
+    const double x3 = M(2,idxB)-M(2,idxA);
+    const double y1 = M(0,idxC)-M(0,idxA);
+    const double y2 = M(1,idxC)-M(1,idxA);
+    const double y3 = M(2,idxC)-M(2,idxA);
+    const double A = x2*y3-x3*y2;
+    const double B = x3*y1-x1*y3;
+    const double C = x1*y2-x2*y1;
+    return 0.5*sqrt(A*A+B*B+C*C);
 }
 
 double area(const Matrix3x& points)
@@ -21,19 +35,14 @@ double area(const Matrix3x& points)
     double a = 0;
     for (int i = 2 ; i < n ; ++i)
     {
-        a += triangle_area(points.col(0), points.col(i-1), points.col(i));
+        a += area(points, 0, i-1, i);
     }
     return a;
 }
 
 Eigen::Vector3d barycenter(const Matrix3x& p)
 {
-    std::vector<Eigen::Vector3d> points;
-    for (int j = 0 ; j < p.cols() ; ++j)
-    {
-        points.push_back(p.col(j));
-    }
-    return sum::pairwise(points)/double(points.size());
+    return p.rowwise().sum().array()/double(p.cols());
 }
 
 Eigen::Vector3d unit_normal(const Matrix3x& points)
@@ -47,10 +56,17 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
         ss << ".";
        THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
-    const Eigen::Vector3d n1(points.col(1)-points.col(0));
-    const Eigen::Vector3d n2(points.col(2)-points.col(0));
-    const Eigen::Vector3d n = n1.cross(n2);
-    const double norm = n.norm();
+    const double x1 = points(0,1)-points(0,0);
+    const double x2 = points(1,1)-points(1,0);
+    const double x3 = points(2,1)-points(2,0);
+    const double y1 = points(0,2)-points(0,0);
+    const double y2 = points(1,2)-points(1,0);
+    const double y3 = points(2,2)-points(2,0);
+    const double A = x2*y3-x3*y2;
+    const double B = x3*y1-x1*y3;
+    const double C = x1*y2-x2*y1;
+
+    const double norm = sqrt(A*A+B*B+C*C);
     if (norm<1000*std::numeric_limits<double>::epsilon())
     {
         std::stringstream ss;
@@ -61,19 +77,20 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
         }
         THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
-    return n/norm;
+    return Eigen::Vector3d(A/norm,B/norm,C/norm);
 }
 
 Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
                                  )
 {
     const int n = polygon.cols();
-    std::vector<Eigen::Vector3d> areas_times_points;
-    std::vector<double> areas;
+    Eigen::Vector3d areas_times_points(0,0,0);
+    double areas = 0;
     for (int i = 2 ; i < n ; ++i)
     {
-        areas.push_back(triangle_area(polygon.col(0), polygon.col(i-1), polygon.col(i)));
-        areas_times_points.push_back(areas.back()*(polygon.col(0)+polygon.col(i-1)+polygon.col(i))/3.);
+        const double S = area(polygon, 0, i-1, i);
+        areas += S;
+        areas_times_points += S*(polygon.col(0)+polygon.col(i-1)+polygon.col(i))/3.;
     }
-    return sum::pairwise(areas_times_points)/sum::pairwise(areas);
+    return areas_times_points/areas;
 }

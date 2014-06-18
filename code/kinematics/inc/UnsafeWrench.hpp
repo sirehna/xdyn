@@ -26,9 +26,14 @@ class UnsafeWrench : public Wrench
         UnsafeWrench(const Point& P);
         UnsafeWrench(const Point& P, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);
         UnsafeWrench(const UnsafeWrench& rhs);
+        UnsafeWrench(const Wrench& rhs);
 
         UnsafeWrench operator+(const UnsafeWrench& rhs) const;
         UnsafeWrench operator-(const UnsafeWrench& rhs) const;
+        UnsafeWrench& operator+=(const UnsafeWrench& rhs);
+        UnsafeWrench& operator-=(const UnsafeWrench& rhs);
+        UnsafeWrench& operator+=(const Wrench& rhs);
+        UnsafeWrench& operator-=(const Wrench& rhs);
 };
 
 #endif /* UNSAFEWRENCH_HPP_ */
