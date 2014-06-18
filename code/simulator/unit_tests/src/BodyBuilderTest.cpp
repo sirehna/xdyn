@@ -49,3 +49,9 @@ TEST_F(BodyBuilderTest, centre_of_gravity_should_be_computed_properly)
     ASSERT_DOUBLE_EQ(7, G.y);
     ASSERT_DOUBLE_EQ(-10, G.z);
 }
+
+TEST_F(BodyBuilderTest, mass_should_be_correct)
+{
+    const auto body = build_body();
+    ASSERT_DOUBLE_EQ(1E6, body.m);
+}

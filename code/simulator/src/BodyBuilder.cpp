@@ -20,5 +20,6 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& ) c
                   input.dynamics.centre_of_inertia.x,
                   input.dynamics.centre_of_inertia.y,
                   input.dynamics.centre_of_inertia.z);
+    ret.m = input.dynamics.mass;
     return ret;
 }
