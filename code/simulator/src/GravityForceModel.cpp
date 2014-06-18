@@ -11,15 +11,7 @@
 #include "hydrostatic.hpp"
 #include "EnvironmentAndFrames.hpp"
 
-GravityForceModel::Input::Input() : g(0)
-{
-}
-
-GravityForceModel::Input::Input(const EnvironmentAndFrames& env) : g(env.g)
-{
-}
-
-GravityForceModel::GravityForceModel(const Input& in) : g(in.g)
+GravityForceModel::GravityForceModel(const double g_) : g(g_)
 {}
 
 Wrench GravityForceModel::operator()(const Body& body) const

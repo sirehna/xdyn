@@ -30,9 +30,7 @@ void GravityForceModelTest::TearDown()
 TEST_F(GravityForceModelTest, example)
 {
 //! [GravityForceModelTest example]
-    GravityForceModel::Input in;
-    in.g = 9.81;
-    GravityForceModel F(in);
+    GravityForceModel F(9.81);
     Body b = get_body(BODY);
     b.m = 100;
     const Wrench f = F(b);
@@ -47,6 +45,4 @@ TEST_F(GravityForceModelTest, example)
     ASSERT_DOUBLE_EQ(981, f.Z);
 //! [GravityForceModelTest expected output]
 }
-
-
 

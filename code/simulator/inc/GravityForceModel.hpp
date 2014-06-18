@@ -16,14 +16,7 @@ class EnvironmentAndFrames;
 class GravityForceModel : public ForceModel
 {
     public:
-        struct Input
-        {
-            Input();
-            Input(const EnvironmentAndFrames& env);
-            double g;
-        };
-
-        GravityForceModel(const Input& input);
+        GravityForceModel(const double g);
         Wrench operator()(const Body& body) const;
 
     private:
