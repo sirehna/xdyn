@@ -113,3 +113,10 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const Enviro
         THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
     }
 }
+
+Sim SimulatorBuilder::build(const MeshMap& meshes) const
+{
+    const auto bodies = get_bodies(meshes);
+    const auto env = get_environment_and_frames(bodies);
+    return Sim(bodies, get_forces(env), env.k);
+}

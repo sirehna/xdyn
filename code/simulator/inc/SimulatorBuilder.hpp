@@ -15,6 +15,7 @@
 
 #include "BodyBuilder.hpp"
 #include "ForceBuilder.hpp"
+#include "Sim.hpp"
 #include "WaveBuilder.hpp"
 #include "YamlSimulatorInput.hpp"
 
@@ -54,7 +55,7 @@ class SimulatorBuilder
         YamlSimulatorInput input;
         BodyBuilder builder;
         std::vector<ForceBuilderPtr> force_parsers;
-        std::vector<WaveBuilderPtr> wave_parsers;
+        //std::vector<WaveBuilderPtr> wave_parsers;
 };
 
 
