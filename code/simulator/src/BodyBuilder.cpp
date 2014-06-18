@@ -16,5 +16,9 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& ) c
 {
     Body ret;
     ret.name = input.name;
+    ret.G = Point(input.dynamics.centre_of_inertia.frame,
+                  input.dynamics.centre_of_inertia.x,
+                  input.dynamics.centre_of_inertia.y,
+                  input.dynamics.centre_of_inertia.z);
     return ret;
 }
