@@ -8,6 +8,7 @@ FILE(GLOB SRC src/DataSourceBuilderTest.cpp
               src/WaveModuleTest.cpp
               src/StateDerivativesModuleTest.cpp
               src/IntegrationTests.cpp
+              src/BodyBuilderTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
