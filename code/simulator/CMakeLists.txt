@@ -11,6 +11,7 @@ set(SRC src/DataSourceBuilder.cpp
         src/simulator_api.cpp
         src/update_kinematics.cpp
         src/HydrostaticForceModel.cpp
+        src/SimulatorBuilder.cpp
         src/Body.cpp
         src/ForceBuilder.cpp
         src/DefaultWaveBuilder.cpp
