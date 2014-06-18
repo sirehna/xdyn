@@ -7,6 +7,7 @@
 
 #include "BodyBuilder.hpp"
 #include "BodyBuilderTest.hpp"
+#include "Mesh.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "STL_data.hpp"
 #include "StlReader.hpp"
@@ -61,4 +62,21 @@ TEST_F(BodyBuilderTest, relative_position_should_be_correct)
     ASSERT_DOUBLE_EQ(10,body.x_relative_to_mesh);
     ASSERT_DOUBLE_EQ(0.21,body.y_relative_to_mesh);
     ASSERT_DOUBLE_EQ(33E3,body.z_relative_to_mesh);
+}
+
+TEST_F(BodyBuilderTest, mesh_is_correct)
+{
+    ASSERT_EQ(12,body.mesh->facets.size());
+    for (size_t i = 0 ; i < 12 ; ++i)
+    {
+        ASSERT_DOUBLE_EQ(0.5,body.mesh->facets.at(i).area);
+    }
+    ASSERT_DOUBLE_EQ(0,(double)body.mesh->facets.at(0).unit_normal(0));
+    ASSERT_DOUBLE_EQ(0,(double)body.mesh->facets.at(0).unit_normal(1));
+    ASSERT_DOUBLE_EQ(1,(double)body.mesh->facets.at(0).unit_normal(2));
+    ASSERT_EQ(8,body.mesh->nodes.cols());
+    ASSERT_EQ(3,body.mesh->nodes.rows());
+    ASSERT_EQ(-0.5,(double)body.mesh->nodes.col(0)(0));
+    ASSERT_EQ(-0.5,(double)body.mesh->nodes.col(0)(1));
+    ASSERT_EQ(1,(double)body.mesh->nodes.col(0)(2));
 }

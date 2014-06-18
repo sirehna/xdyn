@@ -6,13 +6,14 @@
  */
 
 #include "BodyBuilder.hpp"
+#include "MeshBuilder.hpp"
 #include "YamlBody.hpp"
 
 BodyBuilder::BodyBuilder(const YamlRotation& convention) : rotations(convention)
 {
 }
 
-Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& ) const
+Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh) const
 {
     Body ret;
     ret.name = input.name;
@@ -24,5 +25,6 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& ) c
     ret.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
     ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
     ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
+    ret.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
     return ret;
 }
