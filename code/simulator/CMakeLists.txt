@@ -11,6 +11,7 @@ set(SRC src/DataSourceBuilder.cpp
         src/simulator_api.cpp
         src/Body.cpp
         src/ForceBuilder.cpp
+        src/GravityForceModel.cpp
         src/BodyBuilder.cpp
         )
 

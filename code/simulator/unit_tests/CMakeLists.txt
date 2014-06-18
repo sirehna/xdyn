@@ -10,6 +10,7 @@ FILE(GLOB SRC src/DataSourceBuilderTest.cpp
               src/IntegrationTests.cpp
               src/BodyBuilderTest.cpp
               src/generate_body_for_tests.cpp
+              src/GravityForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
