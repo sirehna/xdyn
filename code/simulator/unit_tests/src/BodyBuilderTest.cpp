@@ -35,3 +35,9 @@ Body BodyBuilderTest::build_body() const
     BodyBuilder builder(yaml.rotations);
     return builder.build(yaml.bodies.front(), mesh);
 }
+
+TEST_F(BodyBuilderTest, name_should_be_correct)
+{
+    const auto body = build_body();
+    ASSERT_EQ("body 1", body.name);
+}
