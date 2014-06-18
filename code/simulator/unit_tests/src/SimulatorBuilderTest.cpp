@@ -15,6 +15,8 @@
 #include "Kinematics.hpp"
 #include "Transform.hpp"
 #include "DefaultWaveModel.hpp"
+#include "GravityForceModel.hpp"
+#include "HydrostaticForceModel.hpp"
 
 SimulatorBuilderTest::SimulatorBuilderTest() : a(DataGenerator(1212))
 {
@@ -135,4 +137,41 @@ TEST_F(SimulatorBuilderTest, can_get_waves)
     ASSERT_TRUE(env.w.get() != NULL);
     const Point P("NED",1,2,3);
     ASSERT_DOUBLE_EQ(3-12, env.w->get_relative_wave_height(P,env.k));
+}
+
+TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
+{
+    const auto input = SimulatorYamlParser(test_data::full_example()).parse();
+    SimulatorBuilder builder(input);
+    builder.can_parse<DefaultWaveModel>();
+    MeshMap m;
+    const std::string name = input.bodies.front().name;
+    m[name] = two_triangles();
+    const auto bodies = builder.get_bodies(m);
+    const auto env = builder.get_environment_and_frames(bodies);
+    ASSERT_THROW(builder.get_forces(env), SimulatorBuilderException);
+}
+
+TEST_F(SimulatorBuilderTest, can_get_forces)
+{
+    const auto input = SimulatorYamlParser(test_data::full_example()).parse();
+    SimulatorBuilder builder(input);
+    builder.can_parse<DefaultWaveModel>()
+           .can_parse<GravityForceModel>()
+           .can_parse<HydrostaticForceModel>();
+    MeshMap m;
+    const std::string name = input.bodies.front().name;
+    m[name] = two_triangles();
+    const auto bodies = builder.get_bodies(m);
+    const auto env = builder.get_environment_and_frames(bodies);
+    std::vector<ListOfForces> forces = builder.get_forces(env);
+    ASSERT_EQ(1,forces.size());
+    ASSERT_EQ(2,forces.front().size());
+    const auto Fg = forces.front().at(0)->operator()(bodies.front());
+    ASSERT_DOUBLE_EQ(0,Fg.X);
+    ASSERT_DOUBLE_EQ(0,Fg.Y);
+    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z);
+    ASSERT_DOUBLE_EQ(0,Fg.K);
+    ASSERT_DOUBLE_EQ(0,Fg.M);
+    ASSERT_DOUBLE_EQ(0,Fg.N);
 }

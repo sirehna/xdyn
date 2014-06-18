@@ -43,10 +43,13 @@ class SimulatorBuilder
 
         std::vector<Body> get_bodies(const MeshMap& meshes) const;
         EnvironmentAndFrames get_environment_and_frames(const std::vector<Body>& bodies) const;
+        std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
 
     private:
         SimulatorBuilder();
         WavePtr get_wave() const;
+        ListOfForces forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
+        void add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const;
 
         YamlSimulatorInput input;
         BodyBuilder builder;

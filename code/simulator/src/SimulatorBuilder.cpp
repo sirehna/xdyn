@@ -76,3 +76,40 @@ WavePtr SimulatorBuilder::get_wave() const
     }
     return ret;
 }
+
+std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
+{
+    std::vector<ListOfForces> forces;
+    for (const auto body:input.bodies)
+    {
+        forces.push_back(forces_from(body, env));
+    }
+    return forces;
+}
+
+ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
+{
+    ListOfForces ret;
+    for (auto force_model:body.external_forces) add(force_model, ret, env);
+    return ret;
+}
+
+void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const
+{
+    bool parsed = false;
+    for (auto parser:force_parsers)
+    {
+        boost::optional<ForcePtr> f = parser->try_to_parse(model.model, model.yaml, env);
+        if (f)
+        {
+            L.push_back(f.get());
+            parsed = true;
+        }
+    }
+    if (not(parsed))
+    {
+        std::stringstream ss;
+        ss << "Unable to find a parser to parse model '" << model.model;
+        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
+    }
+}
