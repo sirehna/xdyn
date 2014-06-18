@@ -55,3 +55,10 @@ TEST_F(BodyBuilderTest, mass_should_be_correct)
     const auto body = build_body();
     ASSERT_DOUBLE_EQ(1E6, body.m);
 }
+
+TEST_F(BodyBuilderTest, relative_position_should_be_correct)
+{
+    ASSERT_DOUBLE_EQ(10,body.x_relative_to_mesh);
+    ASSERT_DOUBLE_EQ(0.21,body.y_relative_to_mesh);
+    ASSERT_DOUBLE_EQ(33E3,body.z_relative_to_mesh);
+}

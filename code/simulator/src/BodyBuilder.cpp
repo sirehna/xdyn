@@ -21,5 +21,8 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& ) c
                   input.dynamics.centre_of_inertia.y,
                   input.dynamics.centre_of_inertia.z);
     ret.m = input.dynamics.mass;
+    ret.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
+    ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
+    ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
     return ret;
 }
