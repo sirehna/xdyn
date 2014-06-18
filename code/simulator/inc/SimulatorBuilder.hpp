@@ -35,6 +35,7 @@ class SimulatorBuilder
         }
 
         std::vector<Body> get_bodies(const MeshMap& meshes) const;
+        EnvironmentAndFrames get_environment_and_frames(const std::vector<Body>& bodies) const;
 
     private:
         SimulatorBuilder();

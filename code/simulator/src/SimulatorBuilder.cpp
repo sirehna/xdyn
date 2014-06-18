@@ -33,3 +33,11 @@ std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
     }
     return ret;
 }
+
+EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vector<Body>& ) const
+{
+    EnvironmentAndFrames env;
+    env.g = input.environmental_constants.g;
+    env.rho = input.environmental_constants.rho;
+    return env;
+}

@@ -11,6 +11,9 @@
 #include "SimulatorBuilderException.hpp"
 #include "TriMeshTestData.hpp"
 #include "yaml_data.hpp"
+#include "generate_body_for_tests.hpp"
+#include "Kinematics.hpp"
+#include "Transform.hpp"
 
 SimulatorBuilderTest::SimulatorBuilderTest() : a(DataGenerator(1212))
 {
@@ -54,5 +57,11 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
     }
 }
 
-
-
+TEST_F(SimulatorBuilderTest, can_get_rho_and_g)
+{
+    const auto input = SimulatorYamlParser(test_data::full_example()).parse();
+    SimulatorBuilder builder(input);
+    const auto env = builder.get_environment_and_frames(std::vector<Body>());
+    ASSERT_DOUBLE_EQ(9.81,env.g);
+    ASSERT_DOUBLE_EQ(1000,env.rho);
+}
