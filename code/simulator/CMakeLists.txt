@@ -14,6 +14,7 @@ set(SRC src/DataSourceBuilder.cpp
         src/HydrostaticForceModel.cpp
         src/SimulatorBuilder.cpp
         src/Body.cpp
+        src/SimObserver.cpp
         src/ForceBuilder.cpp
         src/DefaultWaveBuilder.cpp
         src/GravityForceBuilder.cpp
