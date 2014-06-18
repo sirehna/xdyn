@@ -80,3 +80,16 @@ TEST_F(BodyBuilderTest, mesh_is_correct)
     ASSERT_EQ(-0.5,(double)body.mesh->nodes.col(0)(1));
     ASSERT_EQ(1,(double)body.mesh->nodes.col(0)(2));
 }
+
+TEST_F(BodyBuilderTest, mesh_to_body_is_correct)
+{
+    ASSERT_DOUBLE_EQ(0.41198224566568298,     (double)body.mesh_to_body(0,0));
+    ASSERT_DOUBLE_EQ(-0.90019762973551742391, (double)body.mesh_to_body(1,0));
+    ASSERT_DOUBLE_EQ(-0.14112000805986721352, (double)body.mesh_to_body(2,0));
+    ASSERT_DOUBLE_EQ(-0.54071226417559081767, (double)body.mesh_to_body(0,1));
+    ASSERT_DOUBLE_EQ(-0.11686748793698308047, (double)body.mesh_to_body(1,1));
+    ASSERT_DOUBLE_EQ(-0.83304996106680495593, (double)body.mesh_to_body(2,1));
+    ASSERT_DOUBLE_EQ(0.73341725956399950181,  (double)body.mesh_to_body(0,2));
+    ASSERT_DOUBLE_EQ(0.41950711279054053726,  (double)body.mesh_to_body(1,2));
+    ASSERT_DOUBLE_EQ(-0.53489522870537720145, (double)body.mesh_to_body(2,2));
+}

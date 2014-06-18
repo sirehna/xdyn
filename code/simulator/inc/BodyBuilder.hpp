@@ -32,6 +32,8 @@ class BodyBuilder
 
     private:
         BodyBuilder();
+        RotationMatrix angle2matrix(const YamlAngle& a) const;
+        bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third) const;
 
         YamlRotation rotations;
 };
