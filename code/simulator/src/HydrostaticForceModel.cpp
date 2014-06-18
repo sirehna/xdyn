@@ -18,8 +18,8 @@ HydrostaticForceModel::Input::Input() : rho(0),
 {
 }
 
-HydrostaticForceModel::Input::Input(const EnvironmentAndFrames& env) : rho(0),
-                                                                       g(0),
+HydrostaticForceModel::Input::Input(const EnvironmentAndFrames& env) : rho(env.rho),
+                                                                       g(env.g),
                                                                        w(env.w),
                                                                        k(env.k)
 {

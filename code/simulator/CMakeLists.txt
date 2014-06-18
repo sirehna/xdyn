@@ -15,8 +15,10 @@ set(SRC src/DataSourceBuilder.cpp
         src/Body.cpp
         src/ForceBuilder.cpp
         src/DefaultWaveBuilder.cpp
+        src/GravityForceBuilder.cpp
         src/GravityForceModel.cpp
         src/BodyBuilder.cpp
+        src/HydrostaticForceBuilder.cpp
         )
 
 
