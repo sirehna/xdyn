@@ -36,3 +36,8 @@ kinematics::Transform get_transform_from_mesh_to(const Body& body)
 {
     return kinematics::Transform(get_position_of_body_relative_to_mesh(body), body.mesh_to_body, body.name);
 }
+
+kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& body, const size_t idx)
+{
+    return kinematics::Transform(get_origin(x, idx), get_rot_from_ned_to(x, idx), body.name);
+}
