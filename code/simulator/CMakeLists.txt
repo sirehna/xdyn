@@ -9,6 +9,7 @@ set(SRC src/DataSourceBuilder.cpp
         src/SimulatorModuleInterface.cpp
         src/StateDerivativesModule.cpp
         src/simulator_api.cpp
+        src/update_kinematics.cpp
         src/HydrostaticForceModel.cpp
         src/Body.cpp
         src/ForceBuilder.cpp

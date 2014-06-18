@@ -12,6 +12,7 @@ FILE(GLOB SRC src/DataSourceBuilderTest.cpp
               src/generate_body_for_tests.cpp
               src/GravityForceModelTest.cpp
               src/HydrostaticForceModelTest.cpp
+              src/update_kinematicsTests.cpp
               )
 # ------8<---------------------------------------------->8-----
 
