@@ -13,6 +13,7 @@ set(SRC src/DataSourceBuilder.cpp
         src/HydrostaticForceModel.cpp
         src/Body.cpp
         src/ForceBuilder.cpp
+        src/DefaultWaveBuilder.cpp
         src/GravityForceModel.cpp
         src/BodyBuilder.cpp
         )
