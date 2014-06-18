@@ -69,7 +69,7 @@ TEST_F(BodyBuilderTest, mesh_is_correct)
     ASSERT_EQ(12,body.mesh->facets.size());
     for (size_t i = 0 ; i < 12 ; ++i)
     {
-        ASSERT_DOUBLE_EQ(0.5,body.mesh->facets.at(i).area);
+        ASSERT_DOUBLE_EQ(0.5,body.mesh->facets.at(i).area) << std::endl << "Facet: " << i << " (starting at 0)";
     }
     ASSERT_DOUBLE_EQ(0,(double)body.mesh->facets.at(0).unit_normal(0));
     ASSERT_DOUBLE_EQ(0,(double)body.mesh->facets.at(0).unit_normal(1));
@@ -92,4 +92,48 @@ TEST_F(BodyBuilderTest, mesh_to_body_is_correct)
     ASSERT_DOUBLE_EQ(0.73341725956399950181,  (double)body.mesh_to_body(0,2));
     ASSERT_DOUBLE_EQ(0.41950711279054053726,  (double)body.mesh_to_body(1,2));
     ASSERT_DOUBLE_EQ(-0.53489522870537720145, (double)body.mesh_to_body(2,2));
+}
+
+TEST_F(BodyBuilderTest, rigid_body_inertia_is_correct)
+{
+    ASSERT_DOUBLE_EQ(1,(double)body.solid_body_inertia->operator()(0,0));
+    ASSERT_DOUBLE_EQ(2,(double)body.solid_body_inertia->operator()(0,1));
+    ASSERT_DOUBLE_EQ(3,(double)body.solid_body_inertia->operator()(0,2));
+    ASSERT_DOUBLE_EQ(4,(double)body.solid_body_inertia->operator()(0,3));
+    ASSERT_DOUBLE_EQ(5,(double)body.solid_body_inertia->operator()(0,4));
+    ASSERT_DOUBLE_EQ(6,(double)body.solid_body_inertia->operator()(0,5));
+    ASSERT_DOUBLE_EQ(7,(double)body.solid_body_inertia->operator()(1,0));
+    ASSERT_DOUBLE_EQ(2,(double)body.solid_body_inertia->operator()(1,1));
+    ASSERT_DOUBLE_EQ(1,(double)body.solid_body_inertia->operator()(1,2));
+    ASSERT_DOUBLE_EQ(2,(double)body.solid_body_inertia->operator()(1,3));
+    ASSERT_DOUBLE_EQ(11,(double)body.solid_body_inertia->operator()(1,4));
+    ASSERT_DOUBLE_EQ(13,(double)body.solid_body_inertia->operator()(1,5));
+    ASSERT_DOUBLE_EQ(20,(double)body.solid_body_inertia->operator()(2,0));
+    ASSERT_DOUBLE_EQ(30,(double)body.solid_body_inertia->operator()(2,1));
+    ASSERT_DOUBLE_EQ(3,(double)body.solid_body_inertia->operator()(2,2));
+    ASSERT_DOUBLE_EQ(80,(double)body.solid_body_inertia->operator()(2,3));
+    ASSERT_DOUBLE_EQ(0.9,(double)body.solid_body_inertia->operator()(2,4));
+    ASSERT_DOUBLE_EQ(0.1,(double)body.solid_body_inertia->operator()(2,5));
+}
+
+TEST_F(BodyBuilderTest, total_inertia_is_correct)
+{
+    ASSERT_DOUBLE_EQ(2,(double)body.total_inertia->operator()(0,0));
+    ASSERT_DOUBLE_EQ(4,(double)body.total_inertia->operator()(0,1));
+    ASSERT_DOUBLE_EQ(6,(double)body.total_inertia->operator()(0,2));
+    ASSERT_DOUBLE_EQ(8,(double)body.total_inertia->operator()(0,3));
+    ASSERT_DOUBLE_EQ(10,(double)body.total_inertia->operator()(0,4));
+    ASSERT_DOUBLE_EQ(12,(double)body.total_inertia->operator()(0,5));
+    ASSERT_DOUBLE_EQ(0,(double)body.total_inertia->operator()(1,0));
+    ASSERT_DOUBLE_EQ(4,(double)body.total_inertia->operator()(1,1));
+    ASSERT_DOUBLE_EQ(2,(double)body.total_inertia->operator()(1,2));
+    ASSERT_DOUBLE_EQ(4,(double)body.total_inertia->operator()(1,3));
+    ASSERT_DOUBLE_EQ(22,(double)body.total_inertia->operator()(1,4));
+    ASSERT_DOUBLE_EQ(26,(double)body.total_inertia->operator()(1,5));
+    ASSERT_DOUBLE_EQ(0,(double)body.total_inertia->operator()(2,0));
+    ASSERT_DOUBLE_EQ(60,(double)body.total_inertia->operator()(2,1));
+    ASSERT_DOUBLE_EQ(6,(double)body.total_inertia->operator()(2,2));
+    ASSERT_DOUBLE_EQ(160,(double)body.total_inertia->operator()(2,3));
+    ASSERT_DOUBLE_EQ(1.8,(double)body.total_inertia->operator()(2,4));
+    ASSERT_DOUBLE_EQ(0.2,(double)body.total_inertia->operator()(2,5));
 }
