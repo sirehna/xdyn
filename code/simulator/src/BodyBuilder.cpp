@@ -7,6 +7,7 @@
 
 #include "BodyBuilder.hpp"
 #include "MeshBuilder.hpp"
+#include "PointMatrix.hpp"
 #include "YamlBody.hpp"
 
 BodyBuilder::BodyBuilder(const YamlRotation& convention) : rotations(convention)
@@ -26,5 +27,6 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
     ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
     ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
     ret.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
+    ret.M = PointMatrixPtr(new PointMatrix(ret.mesh->nodes, ret.name));
     return ret;
 }
