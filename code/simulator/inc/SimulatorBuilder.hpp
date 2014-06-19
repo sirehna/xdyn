@@ -34,6 +34,13 @@ class SimulatorBuilder
             return *this;
         }
 
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<ForceModel,T> >::type* dummy = 0)
+        {
+            (void)dummy;
+            force_parsers.push_back(ForceBuilderPtr(new ForceBuilder<T>()));
+            return *this;
+        }
+
         std::vector<Body> get_bodies(const MeshMap& meshes) const;
         EnvironmentAndFrames get_environment_and_frames(const std::vector<Body>& bodies) const;
 
