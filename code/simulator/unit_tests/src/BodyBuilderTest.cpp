@@ -29,7 +29,7 @@ void BodyBuilderTest::TearDown()
 {
 }
 
-Body BodyBuilderTest::build_body() const
+Body BodyBuilderTest::build_body()
 {
     const auto yaml = SimulatorYamlParser(test_data::full_example()).parse();
     const auto mesh = read_stl(test_data::cube());

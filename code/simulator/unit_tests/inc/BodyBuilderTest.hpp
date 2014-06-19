@@ -14,13 +14,15 @@
 
 class BodyBuilderTest : public ::testing::Test
 {
+    public:
+        static Body build_body();
+
     protected:
         BodyBuilderTest();
 	    virtual ~BodyBuilderTest();
         virtual void SetUp();
         virtual void TearDown();
 		DataGenerator a;
-		Body build_body() const;
 		Body body;
 };
 
