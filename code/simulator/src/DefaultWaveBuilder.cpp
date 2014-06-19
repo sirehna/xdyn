@@ -9,10 +9,15 @@
 #include "WaveBuilder.hpp"
 #include "DefaultWaveModel.hpp"
 #include "environment_parsers.hpp"
+#include "SimulatorBuilderException.hpp"
 
 TR1(shared_ptr)<WaveModelInterface> build_default_wave_model(const std::string& yaml);
 TR1(shared_ptr)<WaveModelInterface> build_default_wave_model(const std::string& yaml)
 {
+    if (yaml.empty())
+    {
+        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No yaml data detected for default wave model (expected 'constant wave height in NED frame: {value: xx, unit: yy})'");
+    }
     return TR1(shared_ptr)<WaveModelInterface>(new DefaultWaveModel(parse_default_wave_model(yaml)));
 }
 
