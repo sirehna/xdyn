@@ -65,3 +65,22 @@ TEST_F(SimulatorBuilderTest, can_get_rho_and_g)
     ASSERT_DOUBLE_EQ(9.81,env.g);
     ASSERT_DOUBLE_EQ(1000,env.rho);
 }
+
+std::string SimulatorBuilderTest::customize(const std::string& body_name, const std::string& something) const
+{
+    return something + "(" + body_name + ")";
+}
+
+TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
+{
+    const auto input = SimulatorYamlParser(test_data::full_example()).parse();
+    SimulatorBuilder builder(input);
+    std::vector<Body> bodies;
+    for (size_t i = 0 ; i < 10 ; ++i) bodies.push_back(get_body(a.random<std::string>()));
+    const auto env = builder.get_environment_and_frames(bodies);
+    ASSERT_TRUE(env.k.get() != NULL);
+    for (const auto body:bodies)
+    {
+        ASSERT_NO_THROW(env.k->get(body.name, customize(body.name, "mesh")));
+    }
+}

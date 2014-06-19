@@ -18,7 +18,9 @@ class SimulatorBuilderTest : public ::testing::Test
 	    virtual ~SimulatorBuilderTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
+        std::string customize(const std::string& body_name, const std::string& something) const;
+
+        DataGenerator a;
 
 };
 
