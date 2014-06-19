@@ -46,12 +46,17 @@ TEST_F(SimulatorYamlParserTest, can_parse_environment)
     ASSERT_EQ("constant wave height in NED frame:\n  unit: m\n  value: 12\nmodel: no waves", env.at(0).yaml);
 }
 
+TEST_F(SimulatorYamlParserTest, can_parse_environmental_constants)
+{
+    ASSERT_DOUBLE_EQ(9.81, yaml.environmental_constants.g);
+    ASSERT_DOUBLE_EQ(1000, yaml.environmental_constants.rho);
+}
+
 TEST_F(SimulatorYamlParserTest, can_parse_external_forces)
 {
     ASSERT_EQ(2, yaml.bodies.at(0).external_forces.size());
     const YamlModel external_forces = yaml.bodies.at(0).external_forces.at(0);
     ASSERT_EQ("gravity", external_forces.model);
-    ASSERT_EQ("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity", external_forces.yaml);
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_bodies)

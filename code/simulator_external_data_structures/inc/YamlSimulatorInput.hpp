@@ -16,11 +16,13 @@
 #include "YamlPositionOutput.hpp"
 #include "YamlAnglesOutput.hpp"
 #include "YamlForcesAndTorquesOutput.hpp"
+#include "YamlEnvironmentalConstants.hpp"
 
 struct YamlSimulatorInput
 {
     YamlSimulatorInput();
     YamlRotation rotations;
+    YamlEnvironmentalConstants environmental_constants;
     std::vector<YamlModel> environment;
     std::vector<YamlBody> bodies;
     std::vector<YamlPoint> points;

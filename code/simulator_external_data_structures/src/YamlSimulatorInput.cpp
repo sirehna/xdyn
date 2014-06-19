@@ -8,6 +8,7 @@
 #include "YamlSimulatorInput.hpp"
 
 YamlSimulatorInput::YamlSimulatorInput() : rotations(YamlRotation()),
+                                           environmental_constants(YamlEnvironmentalConstants()),
                                            environment(std::vector<YamlModel>()),
                                            bodies(std::vector<YamlBody>()),
                                            points(std::vector<YamlPoint>()),
@@ -20,5 +21,4 @@ YamlSimulatorInput::YamlSimulatorInput() : rotations(YamlRotation()),
                                            angular_accelerations_output(std::vector<YamlAnglesOutput>()),
                                            forces_and_torques_output(std::vector<YamlForcesAndTorquesOutput>())
 {
-
 }
