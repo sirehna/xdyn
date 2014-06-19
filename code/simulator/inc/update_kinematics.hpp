@@ -12,6 +12,8 @@
 #include "RotationMatrix.hpp"
 #include "StateMacros.hpp"
 
+class Body;
+
 #include "tr1_macros.hpp"
 #include TR1INC(memory)
 
@@ -20,5 +22,6 @@ typedef TR1(shared_ptr)<Kinematics> KinematicsPtr;
 
 Point get_origin(const StateType& x, const size_t i);
 RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t body);
+Point get_position_of_body_relative_to_mesh(const Body& body);
 
 #endif /* UPDATE_KINEMATICS_HPP_ */

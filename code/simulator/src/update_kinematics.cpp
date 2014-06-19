@@ -6,6 +6,7 @@
  */
 
 #include "update_kinematics.hpp"
+#include "Body.hpp"
 
 Point get_origin(const StateType& x, const size_t i)
 {
@@ -22,4 +23,11 @@ RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t i)
                                       *_QJ(x,i),
                                       *_QK(x,i));
     return q.matrix();
+}
+
+Point get_position_of_body_relative_to_mesh(const Body& body)
+{
+    return Point(std::string("mesh(")+body.name+")", body.x_relative_to_mesh,
+                                                     body.y_relative_to_mesh,
+                                                     body.z_relative_to_mesh);
 }

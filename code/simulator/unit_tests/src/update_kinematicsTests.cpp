@@ -7,6 +7,7 @@
 
 #include "update_kinematics.hpp"
 #include "update_kinematicsTests.hpp"
+#include "BodyBuilderTest.hpp"
 
 update_kinematicsTests::update_kinematicsTests() : a(DataGenerator(121))
 {
@@ -45,4 +46,14 @@ TEST_F(update_kinematicsTests, can_build_rotation_matrix_from_states)
     ASSERT_DOUBLE_EQ(2*5*13+2*7*3,    (double)R(0,2));
     ASSERT_DOUBLE_EQ(2*7*13-2*5*3,    (double)R(1,2));
     ASSERT_DOUBLE_EQ(1-2*5*5-2*7*7,   (double)R(2,2));
+}
+
+TEST_F(update_kinematicsTests, can_return_position_of_body_mesh_from_Body_object)
+{
+    const Body body = BodyBuilderTest::build_body();
+    const Point P = get_position_of_body_relative_to_mesh(body);
+    ASSERT_EQ("mesh(body 1)", P.get_frame());
+    ASSERT_DOUBLE_EQ(10,P.x);
+    ASSERT_DOUBLE_EQ(0.21,P.y);
+    ASSERT_DOUBLE_EQ(33E3,P.z);
 }
