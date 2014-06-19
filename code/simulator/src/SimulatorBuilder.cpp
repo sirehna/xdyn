@@ -9,6 +9,8 @@
 #include "SimulatorBuilder.hpp"
 #include "SimulatorBuilderException.hpp"
 #include "update_kinematics.hpp"
+#include "StlReader.hpp"
+#include "TextFileReader.hpp"
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
                                         input(input_),
@@ -119,4 +121,30 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
     const auto bodies = get_bodies(meshes);
     const auto env = get_environment_and_frames(bodies);
     return Sim(bodies, get_forces(env), env.k);
+}
+
+Sim SimulatorBuilder::build() const
+{
+    return build(make_mesh_map());
+}
+
+MeshMap SimulatorBuilder::make_mesh_map() const
+{
+    MeshMap ret;
+    for (const auto body:input.bodies)
+    {
+        ret[body.name] = get_mesh(body);
+    }
+    return ret;
+}
+
+VectorOfVectorOfPoints SimulatorBuilder::get_mesh(const YamlBody& body) const
+{
+    if (not(body.mesh.empty()))
+    {
+        const TextFileReader reader(std::vector<std::string>(1, body.mesh));
+        return read_stl(reader.get_contents());
+    }
+    THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("No mesh data found for body '") + body.name + "'");
+    return VectorOfVectorOfPoints();
 }
