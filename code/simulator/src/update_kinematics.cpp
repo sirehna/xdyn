@@ -7,7 +7,11 @@
 
 #include "update_kinematics.hpp"
 #include "Body.hpp"
+#include "BodyBuilder.hpp"
 #include "Kinematics.hpp"
+#include "StateMacros.hpp"
+#include "YamlAngle.hpp"
+#include "YamlBody.hpp"
 
 Point get_origin(const StateType& x, const size_t i)
 {
@@ -46,4 +50,30 @@ kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& 
 void update_kinematics(const StateType& x, const Body& body, const size_t idx, const KinematicsPtr& k)
 {
     k->add(get_transform_from_ned_to(x,body,idx));
+}
+
+StateType get_initial_states(const YamlRotation& convention, const std::vector<YamlBody>& bodies)
+{
+    StateType ret(13*bodies.size(),0);
+    BodyBuilder builder(convention);
+    for (size_t i = 0 ; i < bodies.size() ; ++i)
+    {
+        const YamlAngle angle = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle;
+        const RotationMatrix R = builder.angle2matrix(angle);
+        const Eigen::Quaternion<double> q(R);
+        *_X(ret,i) = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.x;
+        *_Y(ret,i) = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.y;
+        *_Z(ret,i) = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.z;
+        *_U(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u;
+        *_V(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.v;
+        *_W(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.w;
+        *_P(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p;
+        *_Q(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q;
+        *_R(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
+        *_QR(ret,i) = q.w();
+        *_QI(ret,i) = q.x();
+        *_QJ(ret,i) = q.y();
+        *_QK(ret,i) = q.z();
+    }
+    return ret;
 }

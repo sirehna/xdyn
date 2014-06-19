@@ -9,6 +9,8 @@
 #include "update_kinematicsTests.hpp"
 #include "BodyBuilderTest.hpp"
 #include "Kinematics.hpp"
+#include "SimulatorYamlParser.hpp"
+#include "yaml_data.hpp"
 
 update_kinematicsTests::update_kinematicsTests() : a(DataGenerator(121))
 {
@@ -134,4 +136,25 @@ TEST_F(update_kinematicsTests, can_update_Kinematics_object_from_states)
     ASSERT_DOUBLE_EQ(2*5*13+2*7*3,    (double)T.get_rot()(0,2));
     ASSERT_DOUBLE_EQ(2*7*13-2*5*3,    (double)T.get_rot()(1,2));
     ASSERT_DOUBLE_EQ(1-2*5*5-2*7*7,   (double)T.get_rot()(2,2));
+}
+
+TEST_F(update_kinematicsTests, can_get_initial_states)
+{
+    const auto yaml = SimulatorYamlParser(test_data::full_example()).parse();
+    const StateType x = get_initial_states(yaml.rotations, yaml.bodies);
+    ASSERT_EQ(13, x.size());
+    ASSERT_DOUBLE_EQ(4, x.at(0));
+    ASSERT_DOUBLE_EQ(8, x.at(1));
+    ASSERT_DOUBLE_EQ(12, x.at(2));
+    ASSERT_DOUBLE_EQ(-8, x.at(3));
+    ASSERT_DOUBLE_EQ(-9, x.at(4));
+    ASSERT_DOUBLE_EQ(14, x.at(5));
+    ASSERT_DOUBLE_EQ(56, x.at(6));
+    ASSERT_DOUBLE_EQ(7, x.at(7));
+    ASSERT_DOUBLE_EQ(6, x.at(8));
+
+    ASSERT_DOUBLE_EQ(cos(13./2)*cos(14/2)*cos(15./2)+sin(13./2)*sin(14/2)*sin(15./2), x.at(9));
+    ASSERT_DOUBLE_EQ(sin(13./2)*cos(14/2)*cos(15./2)-cos(13./2)*sin(14/2)*sin(15./2), x.at(10));
+    ASSERT_DOUBLE_EQ(cos(13./2)*sin(14/2)*cos(15./2)+sin(13./2)*cos(14/2)*sin(15./2), x.at(11));
+    ASSERT_DOUBLE_EQ(cos(13./2)*cos(14/2)*sin(15./2)-sin(13./2)*sin(14/2)*cos(15./2), x.at(12));
 }
