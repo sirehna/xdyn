@@ -10,6 +10,9 @@
 
 #include <map>
 
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_base_of.hpp>
+
 #include "BodyBuilder.hpp"
 #include "ForceBuilder.hpp"
 #include "WaveBuilder.hpp"
@@ -23,6 +26,14 @@ class SimulatorBuilder
 {
     public:
         SimulatorBuilder(const YamlSimulatorInput& input);
+
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<WaveModelInterface,T> >::type* dummy = 0)
+        {
+            (void)dummy;
+            wave_parsers.push_back(WaveBuilderPtr(new WaveBuilder<T>()));
+            return *this;
+        }
+
         std::vector<Body> get_bodies(const MeshMap& meshes) const;
 
     private:
