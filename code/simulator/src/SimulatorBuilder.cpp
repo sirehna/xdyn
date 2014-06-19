@@ -48,5 +48,31 @@ EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vec
         env.k->add(get_transform_from_mesh_to(bodies.at(i)));
         env.k->add(get_transform_from_ned_to(x, bodies.at(i), i));
     }
+    env.w = get_wave();
     return env;
+}
+
+WavePtr SimulatorBuilder::get_wave() const
+{
+    if (wave_parsers.empty())
+    {
+        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No wave parser defined: use SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
+    }
+    WavePtr ret;
+    for (const auto model:input.environment)
+    {
+        for (const auto parser:wave_parsers)
+        {
+            boost::optional<WavePtr> w = parser->try_to_parse(model.model, model.yaml);
+            if (w)
+            {
+                if (ret.use_count())
+                {
+                    THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "More than one wave model was defined.");
+                }
+                ret = w.get();
+            }
+        }
+    }
+    return ret;
 }

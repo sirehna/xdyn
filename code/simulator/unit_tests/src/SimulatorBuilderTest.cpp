@@ -14,6 +14,7 @@
 #include "generate_body_for_tests.hpp"
 #include "Kinematics.hpp"
 #include "Transform.hpp"
+#include "DefaultWaveModel.hpp"
 
 SimulatorBuilderTest::SimulatorBuilderTest() : a(DataGenerator(1212))
 {
@@ -61,6 +62,7 @@ TEST_F(SimulatorBuilderTest, can_get_rho_and_g)
 {
     const auto input = SimulatorYamlParser(test_data::full_example()).parse();
     SimulatorBuilder builder(input);
+    builder.can_parse<DefaultWaveModel>();
     const auto env = builder.get_environment_and_frames(std::vector<Body>());
     ASSERT_DOUBLE_EQ(9.81,env.g);
     ASSERT_DOUBLE_EQ(1000,env.rho);
@@ -75,6 +77,7 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
 {
     const auto input = SimulatorYamlParser(test_data::full_example()).parse();
     SimulatorBuilder builder(input);
+    builder.can_parse<DefaultWaveModel>();
     std::vector<Body> bodies;
     for (size_t i = 0 ; i < 10 ; ++i) bodies.push_back(get_body(a.random<std::string>()));
     const auto env = builder.get_environment_and_frames(bodies);
@@ -89,6 +92,7 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 {
     const auto input = SimulatorYamlParser(test_data::full_example()).parse();
     SimulatorBuilder builder(input);
+    builder.can_parse<DefaultWaveModel>();
     std::vector<Body> bodies;
     for (size_t i = 0 ; i < 10 ; ++i) bodies.push_back(get_body(a.random<std::string>()));
     const auto env = builder.get_environment_and_frames(bodies);
@@ -97,4 +101,38 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
     {
         ASSERT_NO_THROW(env.k->get("NED", body.name));
     }
+}
+
+TEST_F(SimulatorBuilderTest, should_throw_if_no_wave_parser_defined)
+{
+    const auto input = SimulatorYamlParser(test_data::full_example()).parse();
+    SimulatorBuilder builder(input);
+    ASSERT_THROW(builder.get_environment_and_frames(std::vector<Body>()), SimulatorBuilderException);
+}
+
+TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twice)
+{
+    auto input = SimulatorYamlParser(test_data::full_example()).parse();
+    YamlModel model;
+    model.model = "no waves";
+    model.yaml = "constant wave height in NED frame:\n   unit: m\n   value: 12";
+    input.environment.push_back(model);
+    SimulatorBuilder builder(input);
+    builder.can_parse<DefaultWaveModel>();
+    ASSERT_THROW(builder.get_environment_and_frames(std::vector<Body>()), SimulatorBuilderException);
+}
+
+TEST_F(SimulatorBuilderTest, can_get_waves)
+{
+    const auto input = SimulatorYamlParser(test_data::full_example()).parse();
+    SimulatorBuilder builder(input);
+    builder.can_parse<DefaultWaveModel>();
+    MeshMap m;
+    const std::string name = input.bodies.front().name;
+    m[name] = two_triangles();
+    const auto bodies = builder.get_bodies(m);
+    const auto env = builder.get_environment_and_frames(bodies);
+    ASSERT_TRUE(env.w.get() != NULL);
+    const Point P("NED",1,2,3);
+    ASSERT_DOUBLE_EQ(3-12, env.w->get_relative_wave_height(P,env.k));
 }

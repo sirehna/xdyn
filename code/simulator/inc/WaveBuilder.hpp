@@ -30,6 +30,7 @@ class WaveBuilder : public WaveBuilderInterface
 
 
 typedef TR1(shared_ptr)<WaveBuilderInterface> WaveBuilderPtr;
+typedef TR1(shared_ptr)<WaveModelInterface> WavePtr;
 
 
 #endif /* WAVEBUILDER_HPP_ */

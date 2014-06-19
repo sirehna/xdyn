@@ -39,6 +39,7 @@ class SimulatorBuilder
 
     private:
         SimulatorBuilder();
+        WavePtr get_wave() const;
 
         YamlSimulatorInput input;
         BodyBuilder builder;
