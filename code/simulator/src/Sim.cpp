@@ -23,7 +23,6 @@ Sim::Sim(const std::vector<Body>& bodies_,
          state(x), bodies(bodies_), forces(forces_), k(k_),
          _dx_dt(StateType(x.size(),0))
 {
-    for (auto body : bodies) k->add(get_transform_from_mesh_to(body));
 }
 
 void Sim::operator()(const StateType& x, StateType& dx_dt, double )
