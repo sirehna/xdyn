@@ -30,8 +30,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double )
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
         update_kinematics(x, bodies[i], i, k);
-        const Wrench F = sum_of_forces(x, i);
-        calculate_state_derivatives(F, bodies[i].inverse_of_the_total_inertia, x, dx_dt, i);
+        calculate_state_derivatives(sum_of_forces(x, i), bodies[i].inverse_of_the_total_inertia, x, dx_dt, i);
     }
 }
 
