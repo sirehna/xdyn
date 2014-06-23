@@ -30,7 +30,7 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
     ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
     ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
     ret.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
-    ret.M = PointMatrixPtr(new PointMatrix(ret.mesh->nodes, ret.name));
+    ret.M = PointMatrixPtr(new PointMatrix(ret.mesh->nodes, std::string("mesh(")+ret.name+")"));
     ret.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle);
     add_inertia(ret, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
     return ret;
