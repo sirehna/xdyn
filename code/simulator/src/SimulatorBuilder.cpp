@@ -44,7 +44,7 @@ EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vec
     env.g = input.environmental_constants.g;
     env.rho = input.environmental_constants.rho;
     env.k = KinematicsPtr(new Kinematics());
-    const StateType x = get_initial_states(input.rotations, input.bodies);
+    const StateType x = ::get_initial_states(input.rotations, input.bodies);
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
         env.k->add(get_transform_from_mesh_to(bodies.at(i)));
@@ -111,7 +111,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const Enviro
     if (not(parsed))
     {
         std::stringstream ss;
-        ss << "Unable to find a parser to parse model '" << model.model;
+        ss << "Unable to find a parser to parse model '" << model.model << "'";
         THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
     }
 }
@@ -121,6 +121,11 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
     const auto bodies = get_bodies(meshes);
     const auto env = get_environment_and_frames(bodies);
     return Sim(bodies, get_forces(env), env.k);
+}
+
+StateType SimulatorBuilder::get_initial_states() const
+{
+    return ::get_initial_states(input.rotations, input.bodies);
 }
 
 Sim SimulatorBuilder::build() const
@@ -145,6 +150,5 @@ VectorOfVectorOfPoints SimulatorBuilder::get_mesh(const YamlBody& body) const
         const TextFileReader reader(std::vector<std::string>(1, body.mesh));
         return read_stl(reader.get_contents());
     }
-    THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("No mesh data found for body '") + body.name + "'");
     return VectorOfVectorOfPoints();
 }

@@ -45,6 +45,7 @@ class SimulatorBuilder
         std::vector<Body> get_bodies(const MeshMap& meshes) const;
         EnvironmentAndFrames get_environment_and_frames(const std::vector<Body>& bodies) const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
+        StateType get_initial_states() const;
         Sim build(const MeshMap& input_meshes) const;
         Sim build() const;
 
