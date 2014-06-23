@@ -19,11 +19,16 @@ class Sim
     public:
         Sim(const std::vector<Body>& bodies,
             const std::vector<ListOfForces>& forces,
-            const KinematicsPtr& k);
+            const KinematicsPtr& k,
+            const StateType& x);
         void operator()(const StateType& x, StateType& dxdt, double t);
 
         void update_discrete_states();
         void update_continuous_states();
+        StateType get_state_derivatives() const;
+        std::vector<std::string> get_names_of_bodies() const;
+
+        StateType state;
 
     private:
         UnsafeWrench sum_of_forces(const StateType& x, const size_t body_index) const;
@@ -36,6 +41,7 @@ class Sim
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;
         KinematicsPtr k;
+        StateType _dx_dt;
 };
 
 #endif /* SIM_HPP_ */

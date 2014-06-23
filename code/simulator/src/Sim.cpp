@@ -18,7 +18,10 @@
 
 Sim::Sim(const std::vector<Body>& bodies_,
          const std::vector<ListOfForces>& forces_,
-         const KinematicsPtr& k_) : bodies(bodies_), forces(forces_), k(k_)
+         const KinematicsPtr& k_,
+         const StateType& x) :
+         state(x), bodies(bodies_), forces(forces_), k(k_),
+         _dx_dt(StateType(x.size(),0))
 {
     for (auto body : bodies) k->add(get_transform_from_mesh_to(body));
 }
@@ -39,6 +42,18 @@ void Sim::update_discrete_states()
 
 void Sim::update_continuous_states()
 {
+}
+
+StateType Sim::get_state_derivatives() const
+{
+    return _dx_dt;
+}
+
+std::vector<std::string> Sim::get_names_of_bodies() const
+{
+    std::vector<std::string> ret;
+    for (const auto body:bodies) ret.push_back(body.name);
+    return ret;
 }
 
 UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body) const
