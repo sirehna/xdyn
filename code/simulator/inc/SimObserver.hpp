@@ -8,7 +8,9 @@
 #ifndef SIMOBSERVER_HPP_
 #define SIMOBSERVER_HPP_
 
+#include <map>
 #include <string>
+#include <vector>
 
 class Sim;
 
@@ -25,7 +27,7 @@ class Sim;
 class SimObserver
 {
     public:
-        SimObserver();
+        SimObserver(const std::vector<std::string>& bodies);
         void observe(const Sim& sys, const double t);
         SimObserver& watch_angle(const std::string& frame,
                                  const std::string& relative_to_frame,
@@ -37,7 +39,12 @@ class SimObserver
                                  const std::string& projected_in_frame,
                                  const std::string& axis
                                  );
+        std::vector<std::map<std::string,double> > get() const;
+
     private:
+        std::vector<std::string> bodies;
+        std::string customize(const std::string& body, const std::string anything) const;
+        std::vector<std::map<std::string,double> > res;
 };
 
 #endif /* SIMOBSERVER_HPP_ */

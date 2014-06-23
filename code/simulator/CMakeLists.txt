@@ -21,6 +21,8 @@ set(SRC src/DataSourceBuilder.cpp
         src/GravityForceModel.cpp
         src/BodyBuilder.cpp
         src/HydrostaticForceBuilder.cpp
+        src/SimCsvObserver.cpp
+        src/SimNoObserver.cpp
         )
 
 

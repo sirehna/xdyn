@@ -39,7 +39,7 @@ TEST_F(SimTest, example)
     builder.can_parse<HydrostaticForceModel>()
            .can_parse<DefaultWaveModel>();
     Sim sim = builder.build(mesh);
-    SimObserver observer;
+    SimObserver observer(sim.get_names_of_bodies());
 
     std::vector<double> x(13,0), dx_dt(13,0);
 
