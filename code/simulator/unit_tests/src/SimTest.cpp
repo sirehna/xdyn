@@ -6,12 +6,30 @@
  */
 
 #include "DefaultWaveModel.hpp"
-#include "HydrostaticForceModel.hpp"
+#include "GravityForceModel.hpp"
 #include "SimObserver.hpp"
 #include "Sim.hpp"
 #include "SimTest.hpp"
 #include "SimulatorBuilder.hpp"
 #include "YamlSimulatorInput.hpp"
+#include "solve.hpp"
+#include "yaml_data.hpp"
+#include "SimulatorYamlParser.hpp"
+#include "HydrostaticForceModel.hpp"
+#include "STL_data.hpp"
+#include "StlReader.hpp"
+#include "SimCsvObserver.hpp"
+#include "SimNoObserver.hpp"
+
+#include <boost/numeric/odeint/stepper/euler.hpp>
+#include <boost/numeric/odeint/stepper/runge_kutta4.hpp>
+#include <boost/numeric/odeint/stepper/runge_kutta_cash_karp54.hpp>
+
+typedef boost::numeric::odeint::euler<StateType> EulerStepper;
+typedef boost::numeric::odeint::runge_kutta4<StateType> RK4Stepper;
+typedef boost::numeric::odeint::runge_kutta_cash_karp54<StateType> RKCK;
+
+#define EPS (1E-10)
 
 SimTest::SimTest() : a(DataGenerator(42222))
 {
@@ -36,8 +54,7 @@ TEST_F(SimTest, example)
     SimulatorBuilder builder(input);
     std::map<std::string, VectorOfVectorOfPoints> mesh;
 
-    builder.can_parse<HydrostaticForceModel>()
-           .can_parse<DefaultWaveModel>();
+    builder.can_parse<DefaultWaveModel>();
     Sim sim = builder.build(mesh);
     SimObserver observer(sim.get_names_of_bodies());
 
@@ -47,4 +64,86 @@ TEST_F(SimTest, example)
 //! [SimTest example]
 //! [SimTest expected output]
 //! [SimTest expected output]
+}
+
+TEST_F(SimTest, can_simulate_falling_ball)
+{
+    SimulatorBuilder builder(SimulatorYamlParser(test_data::falling_ball_example()).parse());
+    builder.can_parse<GravityForceModel>()
+           .can_parse<DefaultWaveModel>();
+    Sim sys = builder.build();
+    SimObserver observer(sys.get_names_of_bodies());
+    const size_t N = 10;
+    quicksolve<EulerStepper>(sys, 0, N, 1, observer);
+    auto res = observer.get();
+    ASSERT_EQ(N+1, res.size());
+    const double g = 9.81;
+    for (size_t i = 0 ; i < N+1 ; ++i)
+    {
+        const double t = (double) i;
+        ASSERT_EQ(1+13, res.at(i).size())          << "Time step: i=" << i;
+        ASSERT_DOUBLE_EQ(t, res.at(i)["t"])        << "Time step: i=" << i;
+        ASSERT_NEAR(4+1.*t, res.at(i)["x(ball)"], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(8, res.at(i)["y(ball)"], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(12+g*t*(t-1)/2., res.at(i)["z(ball)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(1, res.at(i)["u(ball)"], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["v(ball)"], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(g*t, res.at(i)["w(ball)"], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["p(ball)"], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["q(ball)"], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["r(ball)"], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(1, res.at(i)["qr(ball)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qi(ball)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qj(ball)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qk(ball)"], EPS) << "Time step: i=" << i;
+    }
+}
+
+TEST_F(SimTest, can_simulate_oscillating_cube)
+{
+    SimulatorBuilder builder(SimulatorYamlParser(test_data::oscillating_cube_example()).parse());
+    builder.can_parse<GravityForceModel>()
+           .can_parse<DefaultWaveModel>()
+           .can_parse<HydrostaticForceModel>();
+
+    MeshMap mesh;
+    mesh["cube"] = read_stl(test_data::cube());
+    Sim sys = builder.build(mesh);
+
+    const double dt = 1E-3;
+
+    SimObserver observer(sys.get_names_of_bodies());
+    const double tend = 10;
+    const size_t N = (size_t)(floor(tend/dt+0.5))+1;
+    quicksolve<RK4Stepper>(sys, 0, tend, dt, observer);
+    auto res = observer.get();
+
+    const double g = 9.81;
+    const double rho = 1026;
+    const double L = 1;
+    const double m = 1e3;
+    const double omega = L*sqrt(rho*g/m);
+    const double A = m/(rho*L*L)*(1-rho*L*L*L/(2*m));
+    const double z0 = L/2;
+    const double eps = 1E-3;
+    ASSERT_EQ(N, res.size());
+    for (size_t i = 0 ; i < N ; ++i)
+    {
+        const double t = i*dt;
+        ASSERT_EQ(1+13, res.at(i).size())          << "Time step: i=" << i;
+        ASSERT_DOUBLE_EQ(t, res.at(i)["t"])        << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["x(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["y(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR((z0-A)*cos(omega*t)+A, res.at(i)["z(cube)"], eps) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["u(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["v(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(omega*(A-z0)*sin(omega*t), res.at(i)["w(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["p(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["q(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["r(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(1, res.at(i)["qr(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qi(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qj(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qk(cube)"], EPS) << "Time step: i=" << i;
+    }
 }

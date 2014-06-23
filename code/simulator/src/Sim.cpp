@@ -32,6 +32,8 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double )
         update_kinematics(x, bodies[i], i, k);
         calculate_state_derivatives(sum_of_forces(x, i), bodies[i].inverse_of_the_total_inertia, x, dx_dt, i);
     }
+    state = x;
+    _dx_dt = dx_dt;
 }
 
 void Sim::update_discrete_states()
@@ -74,6 +76,13 @@ void Sim::calculate_state_derivatives(const Wrench& sum_of_forces,
     // du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt
     Eigen::Matrix<double,6,1> dXdt = Eigen::Matrix<double,6,1>::Map(_U(dx_dt,i));
     dXdt = inverse_of_the_total_inertia->operator*(sum_of_forces.to_vector());
+
+    *_U(dx_dt,i) = dXdt(0);
+    *_V(dx_dt,i) = dXdt(1);
+    *_W(dx_dt,i) = dXdt(2);
+    *_P(dx_dt,i) = dXdt(3);
+    *_Q(dx_dt,i) = dXdt(4);
+    *_R(dx_dt,i) = dXdt(5);
 
     // dx/dt, dy/dt, dz/dt
     const RotationMatrix R = k->get(bodies[i].name, "NED").get_rot();
