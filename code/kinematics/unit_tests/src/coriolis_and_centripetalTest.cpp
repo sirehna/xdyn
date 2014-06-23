@@ -33,7 +33,7 @@ TEST_F(coriolis_and_centripetalTest, if_omega_is_zero_force_should_be_zero)
         const Matrix6x6 M = Matrix6x6::Random();
         const Eigen::Vector3d uvw = Eigen::Vector3d::Random();
         const Eigen::Vector3d pqr = Eigen::Vector3d::Constant(0);
-        const Wrench F = coriolis_and_centripetal(a.random<Point>(), M, uvw, pqr);
+        const Wrench F = coriolis_and_centripetal(a.random<Point>(), &M, uvw, pqr);
         ASSERT_NEAR(0.,(double)F.force(0),EPS);
         ASSERT_NEAR(0.,(double)F.force(1),EPS);
         ASSERT_NEAR(0.,(double)F.force(2),EPS);
@@ -47,7 +47,7 @@ TEST_F(coriolis_and_centripetalTest, if_M_is_identity_torque_should_be_zero)
         const Matrix6x6 M = Matrix6x6::Identity();
         const Eigen::Vector3d uvw = Eigen::Vector3d::Random();
         const Eigen::Vector3d pqr = Eigen::Vector3d::Constant(0);
-        const Wrench F = coriolis_and_centripetal(a.random<Point>(), M, uvw, pqr);
+        const Wrench F = coriolis_and_centripetal(a.random<Point>(), &M, uvw, pqr);
         ASSERT_NEAR(0.,(double)F.torque(0),EPS);
         ASSERT_NEAR(0.,(double)F.torque(1),EPS);
         ASSERT_NEAR(0.,(double)F.torque(2),EPS);
@@ -61,7 +61,7 @@ TEST_F(coriolis_and_centripetalTest, if_M_is_just_ones_force_and_torque_have_sim
         const Matrix6x6 M = Matrix6x6::Constant(1);
         const Eigen::Vector3d uvw = Eigen::Vector3d::Random();
         const Eigen::Vector3d pqr = Eigen::Vector3d::Random();
-        const Wrench F = coriolis_and_centripetal(a.random<Point>(), M, uvw, pqr);
+        const Wrench F = coriolis_and_centripetal(a.random<Point>(), &M, uvw, pqr);
         const double u = uvw(0);
         const double v = uvw(1);
         const double w = uvw(2);

@@ -36,7 +36,7 @@ class Point;
   *  \snippet kinematics/unit_tests/src/coriolis_and_centripetalTest.cpp coriolis_and_centripetalTest coriolis_and_centripetal_example
   */
 Wrench coriolis_and_centripetal(const Point& P,              //!< Point & frame of expression of the resulting Coriolis wrench
-                                const Matrix6x6& inertia,    //!< Rigid-body inertia matrix, given at P, in P's frame of reference
+                                const Matrix6x6 *inertia,    //!< Rigid-body inertia matrix, given at P, in P's frame of reference
                                 const Eigen::Vector3d& v,    //!< Translation speed of point P relative to the (Gallilean) NED (Nort-East-Down) Earth frame [u,v,w]
                                 const Eigen::Vector3d& omega //!< Rotation vector of the (non-Gallilean) body frame, relative to the NED frame [p,q,r]
                                 );

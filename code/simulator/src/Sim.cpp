@@ -45,10 +45,10 @@ UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body) const
 {
     const Eigen::Vector3d uvw_in_body_frame = Eigen::Vector3d::Map(_U(x,body));
     const Eigen::Vector3d pqr = Eigen::Vector3d::Map(_P(x,body));
-    Eigen::Matrix<double,6,6> M = *(bodies[body].solid_body_inertia);
-    UnsafeWrench S(coriolis_and_centripetal(bodies[body].G,M,uvw_in_body_frame, pqr));
-    for (auto F:forces[body])
+    UnsafeWrench S(coriolis_and_centripetal(bodies[body].G,bodies[body].solid_body_inertia.get(),uvw_in_body_frame, pqr));
+    for (auto F:forces[body]){
         S += (*F)(bodies[body]);
+    }
     return S;
 }
 
