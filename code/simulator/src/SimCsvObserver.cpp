@@ -8,7 +8,7 @@
 #include "SimCsvObserver.hpp"
 #include "Sim.hpp"
 
-SimCsvObserver::SimCsvObserver(const std::vector<std::string>& bodies_, std::ostream& os_) : os(os_), initialized(false), bodies(bodies_)
+SimCsvObserver::SimCsvObserver(std::ostream& os_) : os(os_), initialized(false), bodies(std::vector<std::string>())
 {
 }
 
@@ -20,7 +20,7 @@ std::string SimCsvObserver::customize(const std::string& body, const std::string
 
 void SimCsvObserver::observe(const Sim& s, const double t)
 {
-    if (not(initialized)) initialize_title();
+    if (not(initialized)) initialize(s);
     initialized = true;
     const size_t n = bodies.size();
     os << t;
@@ -56,6 +56,12 @@ void SimCsvObserver::observe(const Sim& s, const double t)
             os << ',';
         }
     }
+}
+
+void SimCsvObserver::initialize(const Sim& sys)
+{
+    bodies = sys.get_names_of_bodies();
+    initialize_title();
 }
 
 void SimCsvObserver::initialize_title()

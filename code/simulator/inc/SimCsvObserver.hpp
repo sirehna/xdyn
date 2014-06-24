@@ -28,10 +28,11 @@ class Sim;
 class SimCsvObserver
 {
     public:
-        SimCsvObserver(const std::vector<std::string>& bodies, std::ostream& os);
+        SimCsvObserver(std::ostream& os);
         void observe(const Sim& sys, const double t);
 
     private:
+        void initialize(const Sim& sys);
         void initialize_title();
         std::ostream& os;
         bool initialized;
