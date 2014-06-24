@@ -47,25 +47,6 @@ void SimTest::TearDown()
 {
 }
 
-TEST_F(SimTest, example)
-{
-//! [SimTest example]
-    YamlSimulatorInput input;
-    SimulatorBuilder builder(input);
-    std::map<std::string, VectorOfVectorOfPoints> mesh;
-
-    builder.can_parse<DefaultWaveModel>();
-    Sim sim = builder.build(mesh);
-    SimObserver observer(sim.get_names_of_bodies());
-
-    std::vector<double> x(13,0), dx_dt(13,0);
-
-    sim(x,dx_dt,10);
-//! [SimTest example]
-//! [SimTest expected output]
-//! [SimTest expected output]
-}
-
 TEST_F(SimTest, can_simulate_falling_ball)
 {
     SimulatorBuilder builder(SimulatorYamlParser(test_data::falling_ball_example()).parse());
