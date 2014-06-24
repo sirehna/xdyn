@@ -28,6 +28,8 @@ void update_kinematicsTests::TearDown()
 {
 }
 
+const Body update_kinematicsTests::body = BodyBuilderTest::build_body();
+
 TEST_F(update_kinematicsTests, frame_of_origin_point_is_correct)
 {
     const Point O = get_origin(a.random_vector_of<double>().of_size(1000), 46);
@@ -53,7 +55,6 @@ TEST_F(update_kinematicsTests, can_build_rotation_matrix_from_states)
 
 TEST_F(update_kinematicsTests, can_return_position_of_body_mesh_from_Body_object)
 {
-    const Body body = BodyBuilderTest::build_body();
     const Point P = get_position_of_body_relative_to_mesh(body);
     ASSERT_EQ("mesh(body 1)", P.get_frame());
     ASSERT_DOUBLE_EQ(10,P.x);
@@ -63,7 +64,6 @@ TEST_F(update_kinematicsTests, can_return_position_of_body_mesh_from_Body_object
 
 TEST_F(update_kinematicsTests, can_compute_transform_from_mesh_to_body_from_Body_object)
 {
-    const Body body = BodyBuilderTest::build_body();
     kinematics::Transform T = get_transform_from_mesh_to(body);
     ASSERT_EQ("mesh(body 1)", T.get_from_frame());
     ASSERT_EQ("body 1", T.get_to_frame());
@@ -115,7 +115,6 @@ TEST_F(update_kinematicsTests, can_update_Kinematics_object_from_states)
 {
     KinematicsPtr k(new Kinematics());
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
-    const Body body = BodyBuilderTest::build_body();
     update_kinematics(x, body, 1, k);
     const auto T = k->get("NED", body.name);
     ASSERT_EQ("NED", T.get_from_frame());

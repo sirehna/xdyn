@@ -23,7 +23,7 @@ class BodyBuilderTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
 		DataGenerator a;
-		Body body;
+		static const Body body;
 };
 
 #endif  /* BODYBUILDERTEST_HPP_ */

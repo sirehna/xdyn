@@ -10,8 +10,9 @@
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
 
-SimulatorYamlParserTest::SimulatorYamlParserTest() : a(DataGenerator(1212)),
-                                                     yaml(SimulatorYamlParser(test_data::full_example()).parse())
+const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example()).parse();
+
+SimulatorYamlParserTest::SimulatorYamlParserTest() : a(DataGenerator(1212))
 {
 }
 

@@ -19,6 +19,7 @@ class update_kinematicsTests : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
 		DataGenerator a;
+		static const Body body;
 
 };
 

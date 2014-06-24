@@ -98,7 +98,7 @@ TEST_F(IntegrationTests, can_simulate_oscillating_cube)
     const std::map<std::string, VectorOfVectorOfPoints> input_meshes = { {"cube", mesh_cube} };
     DataSource ds = make_ds(test_data::oscillating_cube_example(),input_meshes, dt,"rk4");
     DsMapObserver observer;
-    const double tend = 10;
+    const double tend = 1;
     integrate(ds, 0, tend, observer);
     auto res = observer.get();
     const double g = ds.get<double>("g");

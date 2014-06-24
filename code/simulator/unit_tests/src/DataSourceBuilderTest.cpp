@@ -24,11 +24,14 @@
 
 typedef Eigen::Matrix<double,6,6> Matrix6x6;
 
-DataSourceBuilderTest::DataSourceBuilderTest() : a(DataGenerator(12)), ds(DataSource()), mesh_data(read_stl(test_data::three_facets()))
+const YamlSimulatorInput DataSourceBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
+
+const VectorOfVectorOfPoints DataSourceBuilderTest::mesh_data = read_stl(test_data::three_facets());
+
+DataSourceBuilderTest::DataSourceBuilderTest() : a(DataGenerator(12)), ds(DataSource())
 {
     const std::map<std::string, VectorOfVectorOfPoints> m = { {"body 1", mesh_data} };
-    const SimulatorYamlParser parser(test_data::full_example());
-    DataSourceBuilder builder(parser.parse(), m);
+    DataSourceBuilder builder(input, m);
     ds = builder.build_ds();
 }
 

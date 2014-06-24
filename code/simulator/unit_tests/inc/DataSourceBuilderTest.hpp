@@ -5,6 +5,7 @@
 #include "DataGenerator.hpp"
 #include "DataSource.hpp"
 #include "GeometricTypes3d.hpp"
+#include "YamlSimulatorInput.hpp"
 
 class DataSourceBuilderTest : public ::testing::Test
 {
@@ -14,9 +15,13 @@ class DataSourceBuilderTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
 
+        static const YamlSimulatorInput input;
+        static const VectorOfVectorOfPoints mesh_data;
+
+        static DataSource build_ds();
+
         DataGenerator a;
         DataSource ds;
-        VectorOfVectorOfPoints mesh_data;
 };
 
 #endif  /* DATASOURCEBUILDERTEST_HPP_ */

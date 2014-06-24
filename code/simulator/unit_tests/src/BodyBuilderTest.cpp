@@ -14,7 +14,9 @@
 #include "yaml_data.hpp"
 #include "PointMatrix.hpp"
 
-BodyBuilderTest::BodyBuilderTest() : a(DataGenerator(1218221)), body(build_body())
+const Body BodyBuilderTest::body = BodyBuilderTest::build_body();
+
+BodyBuilderTest::BodyBuilderTest() : a(DataGenerator(1218221))
 {
 }
 

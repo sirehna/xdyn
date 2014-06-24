@@ -23,7 +23,7 @@ class SimulatorBuilderTest : public ::testing::Test
         std::string customize(const std::string& body_name, const std::string& something) const;
 
         DataGenerator a;
-        YamlSimulatorInput input;
+        static const YamlSimulatorInput input;
         SimulatorBuilder builder;
 
 };

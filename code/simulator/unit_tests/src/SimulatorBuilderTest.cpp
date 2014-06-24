@@ -7,19 +7,21 @@
 
 #include "SimulatorBuilderTest.hpp"
 #include "SimulatorBuilder.hpp"
-#include "SimulatorYamlParser.hpp"
 #include "SimulatorBuilderException.hpp"
 #include "TriMeshTestData.hpp"
-#include "yaml_data.hpp"
 #include "generate_body_for_tests.hpp"
 #include "Kinematics.hpp"
 #include "Transform.hpp"
 #include "DefaultWaveModel.hpp"
 #include "GravityForceModel.hpp"
 #include "HydrostaticForceModel.hpp"
+#include "SimulatorYamlParser.hpp"
+#include "yaml_data.hpp"
+
+const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
+
 
 SimulatorBuilderTest::SimulatorBuilderTest() : a(DataGenerator(1212)),
-                                               input(SimulatorYamlParser(test_data::full_example()).parse()),
                                                builder(SimulatorBuilder(input))
 {
 }
@@ -107,8 +109,9 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     YamlModel model;
     model.model = "no waves";
     model.yaml = "constant wave height in NED frame:\n   unit: m\n   value: 12";
-    input.environment.push_back(model);
-    SimulatorBuilder builder2(input);
+    auto input2 = input;
+    input2.environment.push_back(model);
+    SimulatorBuilder builder2(input2);
     builder2.can_parse<DefaultWaveModel>();
     ASSERT_THROW(builder2.get_environment_and_frames(std::vector<Body>()), SimulatorBuilderException);
 }

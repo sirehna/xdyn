@@ -110,7 +110,7 @@ TEST_F(SimTest, can_simulate_oscillating_cube)
     mesh["cube"] = read_stl(test_data::cube());
     Sim sys = builder.build(mesh);
 
-    const double dt = 1E-3;
+    const double dt = 1E-1;
 
     SimObserver observer(sys.get_names_of_bodies());
     const double tend = 10;
