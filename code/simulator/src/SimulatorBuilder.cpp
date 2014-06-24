@@ -11,10 +11,11 @@
 #include "update_kinematics.hpp"
 #include "StlReader.hpp"
 #include "TextFileReader.hpp"
+#include "BodyBuilder.hpp"
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
                                         input(input_),
-                                        builder(BodyBuilder(input.rotations)),
+                                        builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
                                         force_parsers(std::vector<ForceBuilderPtr>()),
                                         wave_parsers(std::vector<WaveBuilderPtr>())
 {
@@ -28,7 +29,7 @@ std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
         const auto that_mesh = meshes.find(body.name);
         if (that_mesh != meshes.end())
         {
-            ret.push_back(builder.build(body, that_mesh->second));
+            ret.push_back(builder->build(body, that_mesh->second));
         }
         else
         {

@@ -13,14 +13,14 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
-#include "BodyBuilder.hpp"
 #include "ForceBuilder.hpp"
-#include "Sim.hpp"
 #include "WaveBuilder.hpp"
+
+#include "Sim.hpp"
 #include "YamlSimulatorInput.hpp"
 
 class EnvironmentAndFrames;
-
+class BodyBuilder;
 typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 
 class SimulatorBuilder
@@ -58,7 +58,7 @@ class SimulatorBuilder
         VectorOfVectorOfPoints get_mesh(const YamlBody& body) const;
 
         YamlSimulatorInput input;
-        BodyBuilder builder;
+        TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceBuilderPtr> force_parsers;
         std::vector<WaveBuilderPtr> wave_parsers;
 };
