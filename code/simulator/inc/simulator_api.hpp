@@ -6,6 +6,7 @@
 
 #include "GeometricTypes3d.hpp"
 #include "DataSource.hpp"
+#include "Sim.hpp"
 
 /**  \author cec
   *  \date Jun 6, 2014, 10:36:46 AM
@@ -33,5 +34,9 @@ DataSource make_ds(const std::string& data, //!< YAML data
                    const double dt, //!< Initial time step (for adaptive steppers) or value of the time step (for constant-step steppers) (in seconds)
                    const std::string& solver_type //!< Name of the solver: euler,rk4,rkck for Euler, Runge-Kutta 4 & Runge-Kutta-Cash-Karp respectively
                    );
+
+Sim get_system(const std::string& yaml);
+Sim get_system(const std::string& yaml, const std::string& mesh);
+Sim get_system(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes);
 
 #endif
