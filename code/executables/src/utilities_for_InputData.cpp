@@ -91,10 +91,9 @@ void copy_stream(const std::ostream& from_stream, std::ostream& to_stream)
     to_stream.basic_ios<char>::rdbuf(from_stream.rdbuf());           //3
 }
 
-void initialize_stream(std::ostream& os, const InputData& input)
+void initialize_stream(std::ofstream& os, const InputData& input)
 {
     if (input.output_csv.empty()) copy_stream(std::cout, os);
-    else copy_stream(std::ofstream(input.output_csv.c_str()), os);
 }
 
 TR1(shared_ptr)<DsObserver> build_observer(const InputData& input)

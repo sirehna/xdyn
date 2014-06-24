@@ -6,16 +6,24 @@
  */
 
 #include "TextFileReader.hpp"
-#include "DataSource.hpp"
-#include "simulator_api.hpp"
-#include "DsSolve.hpp"
-#include "DsSystemMacros.hpp"
-#include "DataSource.hpp"
 #include "InputData.hpp"
 #include "utilities_for_InputData.hpp"
 
+#include "simulator_api.hpp"
+#include "SimCsvObserver.hpp"
+#include "solve.hpp"
+
 #include <string>
 #include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
+#include <fstream>
+
+#include <boost/numeric/odeint/stepper/euler.hpp>
+#include <boost/numeric/odeint/stepper/runge_kutta4.hpp>
+#include <boost/numeric/odeint/stepper/runge_kutta_cash_karp54.hpp>
+
+typedef boost::numeric::odeint::euler<StateType> EulerStepper;
+typedef boost::numeric::odeint::runge_kutta4<StateType> RK4Stepper;
+typedef boost::numeric::odeint::runge_kutta_cash_karp54<StateType> RKCK;
 
 int main(int argc, char** argv)
 {
@@ -24,11 +32,26 @@ int main(int argc, char** argv)
     if (not(error))
     {
         const TextFileReader yaml_reader(input_data.yaml_filenames);
-        DataSource ds = make_ds(yaml_reader.get_contents(),input_data.initial_timestep,input_data.solver);
-        ds.check_in(__PRETTY_FUNCTION__);
-        TR1(shared_ptr)<DsObserver> observer = build_observer(input_data);
-        integrate(ds, input_data.tstart, input_data.tend, *observer);
-        ds.check_out();
+        auto sys = get_system(yaml_reader.get_contents());
+        std::ofstream os(input_data.output_csv.c_str());
+        initialize_stream(os, input_data);
+        SimCsvObserver observer(os);
+        if (input_data.solver=="euler")
+        {
+            quicksolve<EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        }
+        else if (input_data.solver=="rk4")
+        {
+            quicksolve<RK4Stepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        }
+        else if (input_data.solver=="rkck")
+        {
+            quicksolve<RKCK>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        }
+        else
+        {
+            quicksolve<EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        }
     }
     return error;
 }

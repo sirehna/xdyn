@@ -8,7 +8,7 @@
 #ifndef UTILITIES_FOR_INPUTDATA_HPP_
 #define UTILITIES_FOR_INPUTDATA_HPP_
 
-#include <iostream> // std::cout
+#include <fstream> // std::cout
 
 #include "DsObserver.hpp"
 
@@ -26,6 +26,6 @@ int get_input_data(int argc, char **argv, InputData& input_data);
 std::string description();
 TR1(shared_ptr)<DsObserver> build_observer(const InputData& input);
 void copy_stream(const std::ostream& from_stream, std::ostream& to_stream);
-void initialize_stream(std::ostream& os, const InputData& input);
+void initialize_stream(std::ofstream& os, const InputData& input);
 
 #endif /* UTILITIES_FOR_INPUTDATA_HPP_ */
