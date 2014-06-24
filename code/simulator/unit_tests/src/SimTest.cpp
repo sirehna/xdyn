@@ -5,19 +5,15 @@
  *      Author: cady
  */
 
-#include "DefaultWaveModel.hpp"
-#include "GravityForceModel.hpp"
 #include "SimObserver.hpp"
 #include "Sim.hpp"
 #include "SimTest.hpp"
-#include "SimulatorBuilder.hpp"
 #include "YamlSimulatorInput.hpp"
 #include "solve.hpp"
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
-#include "HydrostaticForceModel.hpp"
 #include "STL_data.hpp"
-#include "StlReader.hpp"
+#include "simulator_api.hpp"
 #include "SimCsvObserver.hpp"
 #include "SimNoObserver.hpp"
 
@@ -49,10 +45,7 @@ void SimTest::TearDown()
 
 TEST_F(SimTest, can_simulate_falling_ball)
 {
-    SimulatorBuilder builder(SimulatorYamlParser(test_data::falling_ball_example()).parse());
-    builder.can_parse<GravityForceModel>()
-           .can_parse<DefaultWaveModel>();
-    Sim sys = builder.build();
+    auto sys = get_system(test_data::falling_ball_example());
     SimObserver observer(sys.get_names_of_bodies());
     const size_t N = 10;
     quicksolve<EulerStepper>(sys, 0, N, 1, observer);
@@ -82,14 +75,8 @@ TEST_F(SimTest, can_simulate_falling_ball)
 
 TEST_F(SimTest, can_simulate_oscillating_cube)
 {
-    SimulatorBuilder builder(SimulatorYamlParser(test_data::oscillating_cube_example()).parse());
-    builder.can_parse<GravityForceModel>()
-           .can_parse<DefaultWaveModel>()
-           .can_parse<HydrostaticForceModel>();
-
-    MeshMap mesh;
-    mesh["cube"] = read_stl(test_data::cube());
-    Sim sys = builder.build(mesh);
+    auto sys = get_system(test_data::oscillating_cube_example(),
+                          test_data::cube());
 
     const double dt = 1E-1;
 
