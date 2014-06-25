@@ -24,7 +24,7 @@ class Velocity
     public:
         Velocity(const Point& p, const AngularVelocityVector& w);
         Velocity(const Point& p, const TranslationVelocityVector& t, const AngularVelocityVector& w);
-        Velocity& operator=(const Velocity& rhs);
+        Velocity& operator=(Velocity rhs);
         Velocity(const Velocity& rhs);
         std::string get_frame() const;
         Point get_point() const;
@@ -45,11 +45,15 @@ class Velocity
         inline double q() const {return omega.y();}
         inline double r() const {return omega.z();}
 
+        void swap(Velocity& other);
+
     private:
         Velocity();
         Point P;
         TranslationVelocityVector vP;
         AngularVelocityVector omega;
 };
+
+void swap(Velocity& a, Velocity& b); // provide non-member for ADL
 
 #endif // VELOCITY_HPP_
