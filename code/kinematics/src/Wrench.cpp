@@ -16,9 +16,9 @@ bool equal(const Point& P, const Point& Q);
 bool equal(const Point& P, const Point& Q)
 {
     if (P.get_frame() != Q.get_frame()) return false;
-    if (not(almost_equal(P.x, Q.x)))    return false;
-    if (not(almost_equal(P.y, Q.y)))    return false;
-    if (not(almost_equal(P.z, Q.z)))    return false;
+    if (not(almost_equal(P.x(), Q.x())))    return false;
+    if (not(almost_equal(P.y(), Q.y())))    return false;
+    if (not(almost_equal(P.z(), Q.z())))    return false;
                                         return true;
 }
 

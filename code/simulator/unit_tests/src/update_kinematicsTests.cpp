@@ -57,9 +57,9 @@ TEST_F(update_kinematicsTests, can_return_position_of_body_mesh_from_Body_object
 {
     const Point P = get_position_of_body_relative_to_mesh(body);
     ASSERT_EQ("mesh(body 1)", P.get_frame());
-    ASSERT_DOUBLE_EQ(10,P.x);
-    ASSERT_DOUBLE_EQ(0.21,P.y);
-    ASSERT_DOUBLE_EQ(33E3,P.z);
+    ASSERT_DOUBLE_EQ(10,P.x());
+    ASSERT_DOUBLE_EQ(0.21,P.y());
+    ASSERT_DOUBLE_EQ(33E3,P.z());
 }
 
 TEST_F(update_kinematicsTests, can_compute_transform_from_mesh_to_body_from_Body_object)
@@ -68,9 +68,9 @@ TEST_F(update_kinematicsTests, can_compute_transform_from_mesh_to_body_from_Body
     ASSERT_EQ("mesh(body 1)", T.get_from_frame());
     ASSERT_EQ("body 1", T.get_to_frame());
     ASSERT_EQ("mesh(body 1)", T.get_point().get_frame());
-    ASSERT_DOUBLE_EQ(10, T.get_point().x);
-    ASSERT_DOUBLE_EQ(0.21, T.get_point().y);
-    ASSERT_DOUBLE_EQ(33E3, T.get_point().z);
+    ASSERT_DOUBLE_EQ(10, T.get_point().x());
+    ASSERT_DOUBLE_EQ(0.21, T.get_point().y());
+    ASSERT_DOUBLE_EQ(33E3, T.get_point().z());
 
     ASSERT_DOUBLE_EQ(cos(2)*cos(3),(double)T.get_rot()(0,0));
     ASSERT_DOUBLE_EQ(sin(2)*cos(3),(double)T.get_rot()(1,0));
@@ -94,9 +94,9 @@ TEST_F(update_kinematicsTests, can_get_transform_from_NED_to_body_from_states)
     ASSERT_EQ("NED", T.get_from_frame());
     ASSERT_EQ(body.name, T.get_to_frame());
     ASSERT_EQ("NED", T.get_point().get_frame());
-    ASSERT_DOUBLE_EQ(1, T.get_point().x);
-    ASSERT_DOUBLE_EQ(2, T.get_point().y);
-    ASSERT_DOUBLE_EQ(3, T.get_point().z);
+    ASSERT_DOUBLE_EQ(1, T.get_point().x());
+    ASSERT_DOUBLE_EQ(2, T.get_point().y());
+    ASSERT_DOUBLE_EQ(3, T.get_point().z());
 
     ASSERT_DOUBLE_EQ(1-2*7*7-2*13*13, (double)T.get_rot()(0,0));
     ASSERT_DOUBLE_EQ(2*5*7+2*13*3,    (double)T.get_rot()(1,0));
@@ -120,9 +120,9 @@ TEST_F(update_kinematicsTests, can_update_Kinematics_object_from_states)
     ASSERT_EQ("NED", T.get_from_frame());
     ASSERT_EQ(body.name, T.get_to_frame());
     ASSERT_EQ("NED", T.get_point().get_frame());
-    ASSERT_DOUBLE_EQ(1, T.get_point().x);
-    ASSERT_DOUBLE_EQ(2, T.get_point().y);
-    ASSERT_DOUBLE_EQ(3, T.get_point().z);
+    ASSERT_DOUBLE_EQ(1, T.get_point().x());
+    ASSERT_DOUBLE_EQ(2, T.get_point().y());
+    ASSERT_DOUBLE_EQ(3, T.get_point().z());
 
     ASSERT_DOUBLE_EQ(1-2*7*7-2*13*13, (double)T.get_rot()(0,0));
     ASSERT_DOUBLE_EQ(2*5*7+2*13*3,    (double)T.get_rot()(1,0));

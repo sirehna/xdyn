@@ -225,9 +225,9 @@ TEST_F(WrenchTest, can_multiply_wrench_by_constant)
     const Wrench w(Point("foo", 9,8,5), Eigen::Vector3d(1,2,3), Eigen::Vector3d(4,5,6));
     const Wrench v = 2*w;
     ASSERT_EQ("foo", v.get_frame());
-    ASSERT_DOUBLE_EQ(9, v.get_point().x);
-    ASSERT_DOUBLE_EQ(8, v.get_point().y);
-    ASSERT_DOUBLE_EQ(5, v.get_point().z);
+    ASSERT_DOUBLE_EQ(9, v.get_point().x());
+    ASSERT_DOUBLE_EQ(8, v.get_point().y());
+    ASSERT_DOUBLE_EQ(5, v.get_point().z());
     ASSERT_DOUBLE_EQ(2, v.X());
     ASSERT_DOUBLE_EQ(4, v.Y());
     ASSERT_DOUBLE_EQ(6, v.Z());

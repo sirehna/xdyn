@@ -576,7 +576,7 @@ TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
 
     ASSERT_EQ(G.get_frame(), Fhs.get_point().get_frame());
     ASSERT_EQ(G.get_frame(), Fhs.get_frame());
-    ASSERT_DOUBLE_EQ(G.x, Fhs.get_point().x);
-    ASSERT_DOUBLE_EQ(G.y, Fhs.get_point().y);
-    ASSERT_DOUBLE_EQ(G.z, Fhs.get_point().z);
+    ASSERT_DOUBLE_EQ(G.x(), Fhs.get_point().x());
+    ASSERT_DOUBLE_EQ(G.y(), Fhs.get_point().y());
+    ASSERT_DOUBLE_EQ(G.z(), Fhs.get_point().z());
 }

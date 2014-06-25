@@ -48,9 +48,9 @@ TEST_F(BodyBuilderTest, centre_of_gravity_should_be_computed_properly)
 {
     const auto G = body.G;
     ASSERT_EQ("body 1", G.get_frame());
-    ASSERT_DOUBLE_EQ(4, G.x);
-    ASSERT_DOUBLE_EQ(7, G.y);
-    ASSERT_DOUBLE_EQ(-10, G.z);
+    ASSERT_DOUBLE_EQ(4, G.x());
+    ASSERT_DOUBLE_EQ(7, G.y());
+    ASSERT_DOUBLE_EQ(-10, G.z());
 }
 
 TEST_F(BodyBuilderTest, mass_should_be_correct)

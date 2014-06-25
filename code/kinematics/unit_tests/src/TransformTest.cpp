@@ -43,9 +43,9 @@ TEST_F(TransformTest, can_translate_a_point)
         const kinematics::Transform T(P1, a.random<std::string>());
         const Point Q = T*P2;
 
-        ASSERT_SMALL_RELATIVE_ERROR(P1.x+P2.x,Q.x,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(P1.y+P2.y,Q.y,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(P1.z+P2.z,Q.z,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(P1.x()+P2.x(),Q.x(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(P1.y()+P2.y(),Q.y(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(P1.z()+P2.z(),Q.z(),EPS);
     }
 //! [TransformTest example]
 //! [TransformTest expected output]
@@ -63,9 +63,9 @@ TEST_F(TransformTest, can_compose_two_translations)
         const kinematics::Transform T2(P2,a.random<std::string>());
         const Point Q = T2*T1*P1;
 
-        ASSERT_SMALL_RELATIVE_ERROR(2*P1.x+P2.x,Q.x,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(2*P1.y+P2.y,Q.y,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(2*P1.z+P2.z,Q.z,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(2*P1.x()+P2.x(),Q.x(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(2*P1.y()+P2.y(),Q.y(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(2*P1.z()+P2.z(),Q.z(),EPS);
     }
 }
 
@@ -85,9 +85,9 @@ TEST_F(TransformTest, can_compose_two_translations_for_a_point_matrix)
         ASSERT_EQ(PC1.m.cols(),Q.m.cols());
         for (size_t i=0;i<(size_t)(Q.m.cols());++i)
         {
-            ASSERT_SMALL_RELATIVE_ERROR(P1.x+P2.x+PC1.m(0,i),Q.m(0,i),EPS);
-            ASSERT_SMALL_RELATIVE_ERROR(P1.y+P2.y+PC1.m(1,i),Q.m(1,i),EPS);
-            ASSERT_SMALL_RELATIVE_ERROR(P1.z+P2.z+PC1.m(2,i),Q.m(2,i),EPS);
+            ASSERT_SMALL_RELATIVE_ERROR(P1.x()+P2.x()+PC1.m(0,i),Q.m(0,i),EPS);
+            ASSERT_SMALL_RELATIVE_ERROR(P1.y()+P2.y()+PC1.m(1,i),Q.m(1,i),EPS);
+            ASSERT_SMALL_RELATIVE_ERROR(P1.z()+P2.z()+PC1.m(2,i),Q.m(2,i),EPS);
         }
     }
 }
@@ -109,9 +109,9 @@ TEST_F(TransformTest, can_compose_two_translations_and_two_rotations)
         const kinematics::Transform cTb(tb,Rb,C);
         const Point Pc = cTb*bTa*P;
         ASSERT_EQ(C, Pc.get_frame());
-        ASSERT_SMALL_RELATIVE_ERROR((P.x+ta.x)/2.0+(3.0*P.y+sqrt(3.0)*P.z)/4.0+sqrt(3.0)*ta.z/2.0+tb.x,Pc.x,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR((P.y-sqrt(3.0)*P.z)/2.0+ta.y+tb.y,Pc.y,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR((P.y*sqrt(3.0)+P.z)/4.0+ta.z/2.0-(sqrt(3.0)/2.0)*(P.x+ta.x)+tb.z,Pc.z,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR((P.x()+ta.x())/2.0+(3.0*P.y()+sqrt(3.0)*P.z())/4.0+sqrt(3.0)*ta.z()/2.0+tb.x(),Pc.x(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR((P.y()-sqrt(3.0)*P.z())/2.0+ta.y()+tb.y(),Pc.y(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR((P.y()*sqrt(3.0)+P.z())/4.0+ta.z()/2.0-(sqrt(3.0)/2.0)*(P.x()+ta.x())+tb.z(),Pc.z(),EPS);
     }
 }
 
@@ -125,9 +125,9 @@ TEST_F(TransformTest, can_rotate_a_point)
         const kinematics::Transform T(R, P.get_frame(), a.random<std::string>());
         const Point Q = T*P;
 
-        ASSERT_SMALL_RELATIVE_ERROR(cos(beta)*P.x-sin(beta)*P.y,Q.x,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(sin(beta)*P.x+cos(beta)*P.y,Q.y,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(P.z,Q.z,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(cos(beta)*P.x()-sin(beta)*P.y(),Q.x(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(sin(beta)*P.x()+cos(beta)*P.y(),Q.y(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(P.z(),Q.z(),EPS);
     }
 }
 
@@ -145,9 +145,9 @@ TEST_F(TransformTest, can_compose_two_rotations)
         const kinematics::Transform T2(R2, middle_frame, a.random<std::string>());
         const Point Q = T2*T1*P;
 
-        ASSERT_SMALL_RELATIVE_ERROR(cos(beta1+beta2)*P.x-sin(beta1+beta2)*P.y,Q.x,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(sin(beta1+beta2)*P.x+cos(beta1+beta2)*P.y,Q.y,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(P.z,Q.z,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(cos(beta1+beta2)*P.x()-sin(beta1+beta2)*P.y(),Q.x(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(sin(beta1+beta2)*P.x()+cos(beta1+beta2)*P.y(),Q.y(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(P.z(),Q.z(),EPS);
     }
 }
 
@@ -162,9 +162,9 @@ TEST_F(TransformTest, can_rotate_and_translate_a_point)
         const kinematics::Transform T(O,R,a.random<std::string>());
         const Point Q = T*P;
 
-        ASSERT_SMALL_RELATIVE_ERROR(O.x+cos(beta)*P.x-sin(beta)*P.y,Q.x,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(O.y+sin(beta)*P.x+cos(beta)*P.y,Q.y,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(O.z+P.z,Q.z,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(O.x()+cos(beta)*P.x()-sin(beta)*P.y(),Q.x(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(O.y()+sin(beta)*P.x()+cos(beta)*P.y(),Q.y(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(O.z()+P.z(),Q.z(),EPS);
     }
 }
 
@@ -236,12 +236,12 @@ TEST_F(TransformTest, can_project_velocity_in_another_frame)
     const Velocity V1(P, t, w);
     const Velocity V2 = T*V1;
 
-    ASSERT_SMALL_RELATIVE_ERROR(Q.x+V1.u, V2.u, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.y+cos(beta)*V1.v-sin(beta)*V1.w, V2.v, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.z+sin(beta)*V1.v+cos(beta)*V1.w, V2.w, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.x+V1.p, V2.p, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.y+cos(beta)*V1.q-sin(beta)*V1.r, V2.q, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.z+sin(beta)*V1.q+cos(beta)*V1.r, V2.r, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.x()+V1.u, V2.u, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.y()+cos(beta)*V1.v-sin(beta)*V1.w, V2.v, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.z()+sin(beta)*V1.v+cos(beta)*V1.w, V2.w, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.x()+V1.p, V2.p, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.y()+cos(beta)*V1.q-sin(beta)*V1.r, V2.q, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.z()+sin(beta)*V1.q+cos(beta)*V1.r, V2.r, EPS);
 }
 
 TEST_F(TransformTest, can_compute_the_inverse_transform)
@@ -254,11 +254,11 @@ TEST_F(TransformTest, can_compute_the_inverse_transform)
         const Point Pb = random_point_in_frame(a, frame_b);
         const auto bTa = random_transform(a, frame_a, frame_b);
         const kinematics::Transform aTb = bTa.inverse();
-        ASSERT_SMALL_RELATIVE_ERROR(Pa.x,((aTb*bTa)*Pa).x,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(Pa.y,((aTb*bTa)*Pa).y,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(Pa.z,((aTb*bTa)*Pa).z,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(Pb.x,((bTa*aTb)*Pb).x,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(Pb.y,((bTa*aTb)*Pb).y,EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(Pb.z,((bTa*aTb)*Pb).z,EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pa.x(),((aTb*bTa)*Pa).x(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pa.y(),((aTb*bTa)*Pa).y(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pa.z(),((aTb*bTa)*Pa).z(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pb.x(),((bTa*aTb)*Pb).x(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pb.y(),((bTa*aTb)*Pb).y(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(Pb.z(),((bTa*aTb)*Pb).z(),EPS);
     }
 }
