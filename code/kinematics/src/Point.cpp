@@ -21,13 +21,21 @@ Point::Point(const std::string& frame_, const double x_, const double y_, const 
 {
 }
 
-Point& Point::operator=(const Point& rhs)
+void Point::swap(Point& other)
 {
-    if (&rhs != this)
-    {
-        v = rhs.v;
-        frame = rhs.frame;
-    }
+    using std::swap; // Allow argument-dependent lookup
+    v.swap(other.v);
+    swap(frame, other.frame);
+}
+
+void swap(Point& a, Point& b)
+{
+    a.swap(b);
+}
+
+Point& Point::operator=(Point rhs)
+{
+    if (&rhs != this) swap(rhs);
     return *this;
 }
 
