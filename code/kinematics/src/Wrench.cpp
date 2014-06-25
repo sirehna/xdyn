@@ -54,14 +54,17 @@ Wrench::Wrench(const Wrench& rhs) : force(rhs.force),
 {
 }
 
-Wrench& Wrench::operator=(const Wrench& rhs)
+void Wrench::swap(Wrench& other)
 {
-    if (this != &rhs)
-    {
-        force = rhs.force;
-        torque = rhs.torque;
-        P = rhs.P;
-    }
+    using std::swap; // Allow argument-dependent lookup
+    force.swap(other.force);
+    torque.swap(other.torque);
+    swap(P,other.P);
+}
+
+Wrench& Wrench::operator=(Wrench rhs)
+{
+    swap(rhs);
     return *this;
 }
 

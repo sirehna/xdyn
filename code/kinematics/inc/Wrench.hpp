@@ -33,7 +33,8 @@ class Wrench
         Wrench(const Point& P, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);
         Wrench(const Wrench& rhs);
 
-        Wrench& operator=(const Wrench& rhs);
+        Wrench& operator=(Wrench rhs);
+        void swap(Wrench& other);
 
         /**  \author cec
          *  \date Apr 28, 2014, 3:40:27 PM
