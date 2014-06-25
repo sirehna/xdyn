@@ -154,10 +154,10 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     ASSERT_EQ(1,forces.size());
     ASSERT_EQ(2,forces.front().size());
     const auto Fg = forces.front().at(0)->operator()(bodies.front());
-    ASSERT_DOUBLE_EQ(0,Fg.X);
-    ASSERT_DOUBLE_EQ(0,Fg.Y);
-    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z);
-    ASSERT_DOUBLE_EQ(0,Fg.K);
-    ASSERT_DOUBLE_EQ(0,Fg.M);
-    ASSERT_DOUBLE_EQ(0,Fg.N);
+    ASSERT_DOUBLE_EQ(0,Fg.X());
+    ASSERT_DOUBLE_EQ(0,Fg.Y());
+    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z());
+    ASSERT_DOUBLE_EQ(0,Fg.K());
+    ASSERT_DOUBLE_EQ(0,Fg.M());
+    ASSERT_DOUBLE_EQ(0,Fg.N());
 }

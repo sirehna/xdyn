@@ -84,12 +84,12 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_constant)
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_force_of_each_body)
 {
     const Wrench Fg = ds.get<Wrench>("gravity(body 1)");
-    ASSERT_DOUBLE_EQ(0,Fg.X);
-    ASSERT_DOUBLE_EQ(0,Fg.Y);
-    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z);
-    ASSERT_DOUBLE_EQ(0,Fg.K);
-    ASSERT_DOUBLE_EQ(0,Fg.M);
-    ASSERT_DOUBLE_EQ(0,Fg.N);
+    ASSERT_DOUBLE_EQ(0,Fg.X());
+    ASSERT_DOUBLE_EQ(0,Fg.Y());
+    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z());
+    ASSERT_DOUBLE_EQ(0,Fg.K());
+    ASSERT_DOUBLE_EQ(0,Fg.M());
+    ASSERT_DOUBLE_EQ(0,Fg.N());
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_mass_of_each_body)

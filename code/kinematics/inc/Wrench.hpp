@@ -49,12 +49,18 @@ class Wrench
 
         Eigen::Vector3d force;
         Eigen::Vector3d torque;
-        double& X;
-        double& Y;
-        double& Z;
-        double& K;
-        double& M;
-        double& N;
+        inline double& X() {return force[0];}
+        inline double& Y() {return force[1];}
+        inline double& Z() {return force[2];}
+        inline double& K() {return torque[0];}
+        inline double& M() {return torque[1];}
+        inline double& N() {return torque[2];}
+        inline double X() const {return force[0];}
+        inline double Y() const {return force[1];}
+        inline double Z() const {return force[2];}
+        inline double K() const {return torque[0];}
+        inline double M() const {return torque[1];}
+        inline double N() const {return torque[2];}
 
         Wrench operator+(const Wrench& rhs) const;
         Wrench operator-(const Wrench& rhs) const;

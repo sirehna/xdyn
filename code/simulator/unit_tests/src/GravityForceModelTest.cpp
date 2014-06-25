@@ -37,12 +37,12 @@ TEST_F(GravityForceModelTest, example)
 //! [GravityForceModelTest example]
 //! [GravityForceModelTest expected output]
     ASSERT_EQ(BODY, f.get_frame());
-    ASSERT_DOUBLE_EQ(0, f.K);
-    ASSERT_DOUBLE_EQ(0, f.M);
-    ASSERT_DOUBLE_EQ(0, f.N);
-    ASSERT_DOUBLE_EQ(0, f.X);
-    ASSERT_DOUBLE_EQ(0, f.Y);
-    ASSERT_DOUBLE_EQ(981, f.Z);
+    ASSERT_DOUBLE_EQ(0, f.K());
+    ASSERT_DOUBLE_EQ(0, f.M());
+    ASSERT_DOUBLE_EQ(0, f.N());
+    ASSERT_DOUBLE_EQ(0, f.X());
+    ASSERT_DOUBLE_EQ(0, f.Y());
+    ASSERT_DOUBLE_EQ(981, f.Z());
 //! [GravityForceModelTest expected output]
 }
 

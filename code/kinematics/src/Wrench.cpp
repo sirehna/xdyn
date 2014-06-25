@@ -31,36 +31,18 @@ Eigen::Vector3d transport(const Eigen::Vector3d& Ma, const Point& a, const Point
 
 Wrench::Wrench(const Point& P_) : force(Eigen::Vector3d(0,0,0)),
                                   torque(Eigen::Vector3d(0,0,0)),
-                                  X(force[0]),
-                                  Y(force[1]),
-                                  Z(force[2]),
-                                  K(torque[0]),
-                                  M(torque[1]),
-                                  N(torque[2]),
                                   P(P_)
 {
 }
 
 Wrench::Wrench() : force(Eigen::Vector3d()),
                    torque(Eigen::Vector3d()),
-                   X(force[0]),
-                   Y(force[1]),
-                   Z(force[2]),
-                   K(torque[0]),
-                   M(torque[1]),
-                   N(torque[2]),
                    P(Point())
 {
 }
 
 Wrench::Wrench(const Point& P_, const Eigen::Vector3d& force_, const Eigen::Vector3d& torque_) : force(force_),
                                                                                                  torque(torque_),
-                                                                                                 X(force[0]),
-                                                                                                 Y(force[1]),
-                                                                                                 Z(force[2]),
-                                                                                                 K(torque[0]),
-                                                                                                 M(torque[1]),
-                                                                                                 N(torque[2]),
                                                                                                  P(P_)
 {
 }
@@ -68,12 +50,6 @@ Wrench::Wrench(const Point& P_, const Eigen::Vector3d& force_, const Eigen::Vect
 
 Wrench::Wrench(const Wrench& rhs) : force(rhs.force),
                                   torque(rhs.torque),
-                                  X(force[0]),
-                                  Y(force[1]),
-                                  Z(force[2]),
-                                  K(torque[0]),
-                                  M(torque[1]),
-                                  N(torque[2]),
                                   P(rhs.P)
 {
 }
@@ -84,12 +60,6 @@ Wrench& Wrench::operator=(const Wrench& rhs)
     {
         force = rhs.force;
         torque = rhs.torque;
-        X = force[0];
-        Y = force[1];
-        Z = force[2];
-        K = torque[0];
-        M = torque[1];
-        N = torque[2];
         P = rhs.P;
     }
     return *this;
@@ -191,12 +161,6 @@ std::ostream& operator<<(std::ostream& os, const Wrench& w)
 
 Eigen::Matrix<double, 6, 1> Wrench::to_vector() const
 {
-    Eigen::Matrix<double, 6, 1> ret;
-    ret(0) = X;
-    ret(1) = Y;
-    ret(2) = Z;
-    ret(3) = K;
-    ret(4) = M;
-    ret(5) = N;
-    return ret;
+    double v[6] = {X(),Y(),Z(),K(),M(),N()};
+    return Eigen::Map<Eigen::Matrix<double, 6, 1> >(v);
 }
