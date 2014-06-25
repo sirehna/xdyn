@@ -30,25 +30,26 @@ class Velocity
         Point get_point() const;
         AngularVelocityVector get_angular_velocity() const;
         TranslationVelocityVector get_translation_velocity() const;
-
-    private:
-        Point P;
-        TranslationVelocityVector vP;
-        AngularVelocityVector omega;
-
-    public:
-        double& u;
-        double& v;
-        double& w;
-        double& p;
-        double& q;
-        double& r;
-
         Velocity change_point(const Point& P) const;
 
+        inline double& u() {return vP.x();}
+        inline double& v() {return vP.y();}
+        inline double& w() {return vP.z();}
+        inline double& p() {return omega.x();}
+        inline double& q() {return omega.y();}
+        inline double& r() {return omega.z();}
+        inline double u() const {return vP.x();}
+        inline double v() const {return vP.y();}
+        inline double w() const {return vP.z();}
+        inline double p() const {return omega.x();}
+        inline double q() const {return omega.y();}
+        inline double r() const {return omega.z();}
 
     private:
         Velocity();
+        Point P;
+        TranslationVelocityVector vP;
+        AngularVelocityVector omega;
 };
 
 #endif // VELOCITY_HPP_

@@ -236,12 +236,12 @@ TEST_F(TransformTest, can_project_velocity_in_another_frame)
     const Velocity V1(P, t, w);
     const Velocity V2 = T*V1;
 
-    ASSERT_SMALL_RELATIVE_ERROR(Q.x()+V1.u, V2.u, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.y()+cos(beta)*V1.v-sin(beta)*V1.w, V2.v, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.z()+sin(beta)*V1.v+cos(beta)*V1.w, V2.w, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.x()+V1.p, V2.p, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.y()+cos(beta)*V1.q-sin(beta)*V1.r, V2.q, EPS);
-    ASSERT_SMALL_RELATIVE_ERROR(Q.z()+sin(beta)*V1.q+cos(beta)*V1.r, V2.r, EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.x()+V1.u(), V2.u(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.y()+cos(beta)*V1.v()-sin(beta)*V1.w(), V2.v(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.z()+sin(beta)*V1.v()+cos(beta)*V1.w(), V2.w(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.x()+V1.p(), V2.p(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.y()+cos(beta)*V1.q()-sin(beta)*V1.r(), V2.q(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Q.z()+sin(beta)*V1.q()+cos(beta)*V1.r(), V2.r(), EPS);
 }
 
 TEST_F(TransformTest, can_compute_the_inverse_transform)
