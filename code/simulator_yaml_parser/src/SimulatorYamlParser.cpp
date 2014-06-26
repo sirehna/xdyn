@@ -26,6 +26,7 @@ void operator >> (const YAML::Node& node, YamlOutput& p);
 void operator >> (const YAML::Node& node, YamlPositionOutput& p);
 void operator >> (const YAML::Node& node, YamlAnglesOutput& p);
 void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f);
+void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f);
 
 template <typename T> void try_to_parse(const YAML::Node& node, const std::string& key, T& value)
 {
@@ -46,9 +47,10 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Something is wrong with the YAML data: no YAML nodes were detected by the YAML parser.");
     }
     YamlSimulatorInput ret;
+    node["environmental constants"] >> ret.environmental_constants;
     node["bodies"] >> ret.bodies;
     node["rotations"] >> ret.rotations;
-    node["environment"] >> ret.environment;
+    node["environment models"] >> ret.environment;
     node["points"] >> ret.points;
     node["blocked degrees of freedom body/NED->body"] >> ret.blocked_degrees_of_freedom;
     node["outputs"]["positions"] >> ret.position_output;
@@ -192,4 +194,10 @@ void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f)
     node["point name"] >> f.point_name;
     node["projected in frame"] >> f.projected_in_frame;
     node["type"] >> f.type;
+}
+
+void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f)
+{
+    parse_uv(node["g"], f.g);
+    parse_uv(node["rho"], f.rho);
 }

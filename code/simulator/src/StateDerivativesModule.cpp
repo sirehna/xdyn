@@ -50,7 +50,7 @@ void StateDerivativesModule::update() const
     const Eigen::Vector3d pqr(ds->get<double>(customize("p")),
                               ds->get<double>(customize("q")),
                               ds->get<double>(customize("r")));
-    std::vector<Wrench> f(1, (-1.)*coriolis_and_centripetal(P,Mrb,uvw_in_body_frame, pqr));
+    std::vector<Wrench> f(1, (-1.)*coriolis_and_centripetal(P,&Mrb,uvw_in_body_frame, pqr));
     ds->set<Wrench>(customize("coriolis and centripetal forces"), f.front());
     if (not(ds->read_only()))
     {

@@ -147,8 +147,8 @@ void DataSourceBuilder::add_forces(const YamlBody& body)
     std::vector<YamlModel>::const_iterator that_model = body.external_forces.begin();
     for (;that_model!=body.external_forces.end();++that_model)
     {
-        if (that_model->model == "gravity") add_gravity(body.name, that_model->yaml, body.dynamics.mass);
-        if (that_model->model == "non-linear hydrostatic") add_hydrostatic(body.name, that_model->yaml);
+        if (that_model->model == "gravity") add_gravity(body.name, body.dynamics.mass);
+        if (that_model->model == "non-linear hydrostatic") add_hydrostatic(body.name);
     }
     ds.check_out();
 }
@@ -193,21 +193,21 @@ void DataSourceBuilder::add_inertia(const YamlBody& body)
     ds.check_out();
 }
 
-void DataSourceBuilder::add_gravity(const std::string& body_name, const std::string& yaml, const double mass)
+void DataSourceBuilder::add_gravity(const std::string& body_name, const double mass)
 {
     GravityModule g(&ds, "gravity", body_name);
     ds.check_in(__PRETTY_FUNCTION__);
     ds.add(g);
     ds.set<double>(std::string("m(") + body_name + ")", mass);
-    ds.set<double>("g", parse_gravity(yaml).g);
+    ds.set<double>("g", input.environmental_constants.g);
     ds.check_out();
 }
 
-void DataSourceBuilder::add_hydrostatic(const std::string& body_name, const std::string& yaml)
+void DataSourceBuilder::add_hydrostatic(const std::string& body_name)
 {
     ds.check_in(__PRETTY_FUNCTION__);
     HydrostaticModule hs(&ds, "hydrostatic", body_name);
-    ds.set<double>("rho", parse_hydrostatic(yaml));
+    ds.set<double>("rho", input.environmental_constants.rho);
     ds.add(hs);
     ds.check_out();
 }

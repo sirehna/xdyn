@@ -24,11 +24,14 @@
 
 typedef Eigen::Matrix<double,6,6> Matrix6x6;
 
-DataSourceBuilderTest::DataSourceBuilderTest() : a(DataGenerator(12)), ds(DataSource()), mesh_data(read_stl(test_data::three_facets()))
+const YamlSimulatorInput DataSourceBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
+
+const VectorOfVectorOfPoints DataSourceBuilderTest::mesh_data = read_stl(test_data::three_facets());
+
+DataSourceBuilderTest::DataSourceBuilderTest() : a(DataGenerator(12)), ds(DataSource())
 {
     const std::map<std::string, VectorOfVectorOfPoints> m = { {"body 1", mesh_data} };
-    const SimulatorYamlParser parser(test_data::full_example());
-    DataSourceBuilder builder(parser.parse(), m);
+    DataSourceBuilder builder(input, m);
     ds = builder.build_ds();
 }
 
@@ -81,12 +84,12 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_constant)
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_gravity_force_of_each_body)
 {
     const Wrench Fg = ds.get<Wrench>("gravity(body 1)");
-    ASSERT_DOUBLE_EQ(0,Fg.X);
-    ASSERT_DOUBLE_EQ(0,Fg.Y);
-    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z);
-    ASSERT_DOUBLE_EQ(0,Fg.K);
-    ASSERT_DOUBLE_EQ(0,Fg.M);
-    ASSERT_DOUBLE_EQ(0,Fg.N);
+    ASSERT_DOUBLE_EQ(0,Fg.X());
+    ASSERT_DOUBLE_EQ(0,Fg.Y());
+    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z());
+    ASSERT_DOUBLE_EQ(0,Fg.K());
+    ASSERT_DOUBLE_EQ(0,Fg.M());
+    ASSERT_DOUBLE_EQ(0,Fg.N());
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_the_mass_of_each_body)
@@ -112,9 +115,9 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_centre_of_gravity_of_eac
 {
     const Point G = ds.get<Point>("G(body 1)");
     ASSERT_EQ("body 1", G.get_frame());
-    ASSERT_DOUBLE_EQ(4, G.x);
-    ASSERT_DOUBLE_EQ(7, G.y);
-    ASSERT_DOUBLE_EQ(-10, G.z);
+    ASSERT_DOUBLE_EQ(4, G.x());
+    ASSERT_DOUBLE_EQ(7, G.y());
+    ASSERT_DOUBLE_EQ(-10, G.z());
 }
 
 TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_Kinematics_object)
@@ -123,9 +126,9 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_Kinematics_object)
     kinematics::Transform T = k->get("NED", "body 1");
     Point P = T*Point("NED",0,0,0);
     ASSERT_EQ("body 1", P.get_frame());
-    ASSERT_DOUBLE_EQ(4, P.x);
-    ASSERT_DOUBLE_EQ(8, P.y);
-    ASSERT_DOUBLE_EQ(12, P.z);
+    ASSERT_DOUBLE_EQ(4, P.x());
+    ASSERT_DOUBLE_EQ(8, P.y());
+    ASSERT_DOUBLE_EQ(12, P.z());
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double x = a.random<double>();
@@ -134,7 +137,7 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_a_Kinematics_object)
         T = k->get("NED", "body 1");
         P = T*Point("NED",0,0,0);
         ASSERT_EQ("body 1", P.get_frame());
-        ASSERT_DOUBLE_EQ(x, P.x);
+        ASSERT_DOUBLE_EQ(x, P.x());
     }
 }
 
@@ -212,7 +215,7 @@ TEST_F(DataSourceBuilderTest, DataSource_should_contain_coriolis_and_centripetal
     const Wrench F = ds.get<Wrench>("coriolis and centripetal forces(body 1)");
     const Point C = ds.get<Point>("G(body 1)");
     ASSERT_EQ(C.get_frame(), F.get_frame());
-    ASSERT_EQ(C.x, F.get_point().x);
-    ASSERT_EQ(C.y, F.get_point().y);
-    ASSERT_EQ(C.z, F.get_point().z);
+    ASSERT_EQ(C.x(), F.get_point().x());
+    ASSERT_EQ(C.y(), F.get_point().y());
+    ASSERT_EQ(C.z(), F.get_point().z());
 }

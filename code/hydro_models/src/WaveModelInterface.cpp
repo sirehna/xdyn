@@ -34,7 +34,7 @@ WaveModelInterface::~WaveModelInterface()
 double WaveModelInterface::get_relative_wave_height(const Point& P, const TR1(shared_ptr)<Kinematics>& k) const
 {
     const Point OP = compute_relative_position(P, k);
-    return wave_height(OP.x,OP.y,OP.z);
+    return wave_height(OP.x(),OP.y(),OP.z());
 }
 
 std::vector<double> WaveModelInterface::get_relative_wave_height(const PointMatrix& P, const TR1(shared_ptr)<Kinematics>& k) const

@@ -4,6 +4,12 @@
 #include "simulator_api.hpp"
 #include "DsSystemMacros.hpp"
 
+#include "GravityForceModel.hpp"
+#include "DefaultWaveModel.hpp"
+#include "HydrostaticForceModel.hpp"
+#include "StlReader.hpp"
+#include "SimulatorBuilder.hpp"
+
 void set_data_source_solver(DataSource& ds,const std::string& solver);
 void set_data_source_solver(DataSource& ds,const std::string& solver)
 {
@@ -51,4 +57,33 @@ DataSource make_ds(const std::string& data,
 {
     DataSourceBuilder builder(check_input_yaml(SimulatorYamlParser(data).parse()), input_meshes);
     return build(builder, dt, solver_type);
+}
+
+SimulatorBuilder get_builder(const std::string& yaml);
+SimulatorBuilder get_builder(const std::string& yaml)
+{
+    SimulatorBuilder builder(SimulatorYamlParser(yaml).parse());
+    builder.can_parse<GravityForceModel>()
+           .can_parse<DefaultWaveModel>()
+           .can_parse<HydrostaticForceModel>();
+    return builder;
+}
+
+Sim get_system(const std::string& yaml)
+{
+    return get_builder(yaml).build();
+}
+
+Sim get_system(const std::string& yaml, const std::string& mesh)
+{
+    const auto input = SimulatorYamlParser(yaml).parse();
+    const auto name = input.bodies.front().name;
+    MeshMap meshes;
+    meshes[name] = read_stl(mesh);
+    return get_system(yaml, meshes);
+}
+
+Sim get_system(const std::string& yaml, const MeshMap& meshes)
+{
+    return get_builder(yaml).build(meshes);
 }

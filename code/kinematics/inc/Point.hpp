@@ -29,19 +29,27 @@ class Point
         Point(const Point& P);
         Point(const std::string& frame, const Eigen::Vector3d& v);
         Point(const std::string& frame, const double x, const double y, const double z);
-        Point& operator=(const Point& rhs);
+        Point& operator=(Point rhs);
         Eigen::Vector3d operator-(const Point& P) const;
         Point operator+(const Point& P) const;
 
         Eigen::Vector3d v;
-        double& x;
-        double& y;
-        double& z;
+        inline double& x() {return v[0];}
+        inline double& y() {return v[1];}
+        inline double& z() {return v[2];}
+        inline double x() const {return v[0];}
+        inline double y() const {return v[1];}
+        inline double z() const {return v[2];}
         std::string get_frame() const;
+
+        void swap(Point& other);
 
     private:
         std::string frame;
 };
 
 std::ostream& operator<<(std::ostream& os, const Point& P);
+
+void swap(Point& a, Point& b); // provide non-member for ADL
+
 #endif /* POINT_HPP_ */

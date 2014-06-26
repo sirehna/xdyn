@@ -39,12 +39,12 @@ bool double_equal(const kinematics::Transform& t1, const kinematics::Transform& 
     const Point u22 = t2*u2;
     const Point u23 = t2*u3;
 
-    const std::vector<double> std_u11(&u11.x, &u11.x + 3);
-    const std::vector<double> std_u12(&u12.x, &u12.x + 3);
-    const std::vector<double> std_u13(&u13.x, &u13.x + 3);
-    const std::vector<double> std_u21(&u21.x, &u21.x + 3);
-    const std::vector<double> std_u22(&u22.x, &u22.x + 3);
-    const std::vector<double> std_u23(&u23.x, &u23.x + 3);
+    const std::vector<double> std_u11(&u11.v[0], &u11.v[0] + 3);
+    const std::vector<double> std_u12(&u12.v[0], &u12.v[0] + 3);
+    const std::vector<double> std_u13(&u13.v[0], &u13.v[0] + 3);
+    const std::vector<double> std_u21(&u21.v[0], &u21.v[0] + 3);
+    const std::vector<double> std_u22(&u22.v[0], &u22.v[0] + 3);
+    const std::vector<double> std_u23(&u23.v[0], &u23.v[0] + 3);
 
     if (not(almost_equal(std_u11, std_u21, eps)))
     {

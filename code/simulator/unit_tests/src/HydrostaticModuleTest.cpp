@@ -42,15 +42,15 @@ TEST_F(HydrostaticModuleTest, example)
     const Wrench Fhs = ds.get<Wrench>("non-linear hydrostatic(body 1)");
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
-    ASSERT_DOUBLE_EQ(0, Fhs.X);
-    ASSERT_DOUBLE_EQ(0, Fhs.Y);
+    ASSERT_DOUBLE_EQ(0, Fhs.X());
+    ASSERT_DOUBLE_EQ(0, Fhs.Y());
     const double dz = 0.5/3;
     const double dS = 0.5;
-    ASSERT_DOUBLE_EQ(0, Fhs.X);
-    ASSERT_DOUBLE_EQ(0, Fhs.Y);
-    ASSERT_DOUBLE_EQ(-1024*10*dz*dS, Fhs.Z);
-    ASSERT_DOUBLE_EQ(-8/3.*Fhs.Z, Fhs.K);
-    ASSERT_DOUBLE_EQ(-Fhs.Z, Fhs.M);
-    ASSERT_DOUBLE_EQ(0, Fhs.N);
+    ASSERT_DOUBLE_EQ(0, Fhs.X());
+    ASSERT_DOUBLE_EQ(0, Fhs.Y());
+    ASSERT_DOUBLE_EQ(-1024*10*dz*dS, Fhs.Z());
+    ASSERT_DOUBLE_EQ(-8/3.*Fhs.Z(), Fhs.K());
+    ASSERT_DOUBLE_EQ(-Fhs.Z(), Fhs.M());
+    ASSERT_DOUBLE_EQ(0, Fhs.N());
 //! [HydrostaticModuleTest expected output]
 }

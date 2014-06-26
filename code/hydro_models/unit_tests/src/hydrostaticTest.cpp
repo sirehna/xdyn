@@ -340,12 +340,12 @@ TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
 
     ASSERT_EQ(frame, Fhs.get_frame());
 
-    ASSERT_DOUBLE_EQ(0, Fhs.X);
-    ASSERT_DOUBLE_EQ(-1024*10*3*3, Fhs.Y);
-    ASSERT_DOUBLE_EQ(-1024*10*3*4, Fhs.Z);
-    ASSERT_DOUBLE_EQ(-6*Fhs.Z-2*Fhs.Y, Fhs.K);
-    ASSERT_DOUBLE_EQ(-77*Fhs.Z, Fhs.M);
-    ASSERT_DOUBLE_EQ(77*Fhs.Y, Fhs.N);
+    ASSERT_DOUBLE_EQ(0, Fhs.X());
+    ASSERT_DOUBLE_EQ(-1024*10*3*3, Fhs.Y());
+    ASSERT_DOUBLE_EQ(-1024*10*3*4, Fhs.Z());
+    ASSERT_DOUBLE_EQ(-6*Fhs.Z()-2*Fhs.Y(), Fhs.K());
+    ASSERT_DOUBLE_EQ(-77*Fhs.Z(), Fhs.M());
+    ASSERT_DOUBLE_EQ(77*Fhs.Y(), Fhs.N());
 }
 
 TEST_F(hydrostaticTest, bug_in_immerged_polygon)
@@ -473,16 +473,16 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     const Point G(a.random<std::string>(), 1,2,4);
     const std::vector<double> z = {-0.5,-0.5,-2.5,0.5};
     const Wrench Fhs = force(mesh, G, rho, g, z);
-    ASSERT_DOUBLE_EQ(0, Fhs.X);
-    ASSERT_DOUBLE_EQ(0, Fhs.Y);
+    ASSERT_DOUBLE_EQ(0, Fhs.X());
+    ASSERT_DOUBLE_EQ(0, Fhs.Y());
     const double dz = 0.5/3;
     const double dS = 0.5;
-    ASSERT_DOUBLE_EQ(0, Fhs.X);
-    ASSERT_DOUBLE_EQ(0, Fhs.Y);
-    ASSERT_DOUBLE_EQ(-rho*g*dz*dS, Fhs.Z);
-    ASSERT_DOUBLE_EQ(-8/3.*Fhs.Z, Fhs.K);
-    ASSERT_DOUBLE_EQ(-Fhs.Z, Fhs.M);
-    ASSERT_DOUBLE_EQ(0, Fhs.N);
+    ASSERT_DOUBLE_EQ(0, Fhs.X());
+    ASSERT_DOUBLE_EQ(0, Fhs.Y());
+    ASSERT_DOUBLE_EQ(-rho*g*dz*dS, Fhs.Z());
+    ASSERT_DOUBLE_EQ(-8/3.*Fhs.Z(), Fhs.K());
+    ASSERT_DOUBLE_EQ(-Fhs.Z(), Fhs.M());
+    ASSERT_DOUBLE_EQ(0, Fhs.N());
 }
 
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
@@ -499,10 +499,10 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
         const double rho = 1000;
         const double g = 9.81;
         const Wrench Fhs = force(mesh, G, rho, g, dz);
-        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X, EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y, EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L;
-        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z, EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z(), EPS);
     }
 }
 
@@ -532,10 +532,10 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
         const double rho = 1000;
         const double g = 9.81;
         const Wrench Fhs = force(mesh, G, rho, g, dz);
-        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X, EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y, EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L/(6.*sqrt(2));
-        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z, EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z(), EPS);
     }
 }
 
@@ -576,7 +576,7 @@ TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
 
     ASSERT_EQ(G.get_frame(), Fhs.get_point().get_frame());
     ASSERT_EQ(G.get_frame(), Fhs.get_frame());
-    ASSERT_DOUBLE_EQ(G.x, Fhs.get_point().x);
-    ASSERT_DOUBLE_EQ(G.y, Fhs.get_point().y);
-    ASSERT_DOUBLE_EQ(G.z, Fhs.get_point().z);
+    ASSERT_DOUBLE_EQ(G.x(), Fhs.get_point().x());
+    ASSERT_DOUBLE_EQ(G.y(), Fhs.get_point().y());
+    ASSERT_DOUBLE_EQ(G.z(), Fhs.get_point().z());
 }

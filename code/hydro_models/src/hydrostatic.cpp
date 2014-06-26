@@ -303,5 +303,5 @@ Wrench hydrostatic::force(const MeshPtr& mesh,                       //!< Point 
             }
         }
     }
-    return (Wrench)F;
+    return F;
 }

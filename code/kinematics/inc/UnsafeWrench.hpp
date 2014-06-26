@@ -33,6 +33,7 @@ class UnsafeWrench : public Wrench
         UnsafeWrench& operator+=(const UnsafeWrench& rhs);
         UnsafeWrench& operator-=(const UnsafeWrench& rhs);
         UnsafeWrench& operator+=(const Wrench& rhs);
+        UnsafeWrench& operator+=(const Wrench&& rhs);
         UnsafeWrench& operator-=(const Wrench& rhs);
 };
 

@@ -8,6 +8,14 @@ FILE(GLOB SRC src/DataSourceBuilderTest.cpp
               src/WaveModuleTest.cpp
               src/StateDerivativesModuleTest.cpp
               src/IntegrationTests.cpp
+              src/BodyBuilderTest.cpp
+              src/generate_body_for_tests.cpp
+              src/GravityForceModelTest.cpp
+              src/SimTest.cpp
+              src/SimulatorBuilderTest.cpp
+              src/HydrostaticForceModelTest.cpp
+              src/update_kinematicsTests.cpp
+              src/SimulatorBuilderTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
@@ -25,6 +33,7 @@ include_directories(${kinematics_INCLUDE_DIRS}/../unit_tests/inc)
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${test_macros_INCLUDE_DIRS})
+include_directories(${solver_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 

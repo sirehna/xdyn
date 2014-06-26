@@ -22,6 +22,7 @@ set(SRC src/YamlRotation.cpp
         src/YamlForcesAndTorquesOutput.cpp
         src/YamlSimulatorInput.cpp
         src/YamlForces.cpp
+        src/YamlEnvironmentalConstants.cpp
         )
 
 

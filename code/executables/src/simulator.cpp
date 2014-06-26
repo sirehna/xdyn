@@ -5,121 +5,25 @@
  *      Author: cady
  */
 
-#include "boost/program_options.hpp"
-#include "OptionPrinter.hpp"
-
 #include "TextFileReader.hpp"
-#include "DataSource.hpp"
-#include "simulator_api.hpp"
-#include "DsCsvObserver.hpp"
-#include "DsSolve.hpp"
-#include "DsSystemMacros.hpp"
-#include "DataSource.hpp"
+#include "InputData.hpp"
+#include "utilities_for_InputData.hpp"
 
-#include <iostream> // std::cout
-#include <fstream>
+#include "simulator_api.hpp"
+#include "SimCsvObserver.hpp"
+#include "solve.hpp"
+
 #include <string>
 #include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
+#include <fstream>
 
-namespace po = boost::program_options;
+#include <boost/numeric/odeint/stepper/euler.hpp>
+#include <boost/numeric/odeint/stepper/runge_kutta4.hpp>
+#include <boost/numeric/odeint/stepper/runge_kutta_cash_karp54.hpp>
 
-std::string description();
-std::string description()
-{
-    std::stringstream ss;
-    ss << "This is the simulator created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
-       << "(c) SIREHNA 2014." << std::endl
-       << std::endl
-       << "ID : @GIT_SHA1@" << std::endl
-       << std::endl;
-    return ss.str();
-}
-
-void print_usage(std::ostream& os, const po::options_description& desc);
-void print_usage(std::ostream& os, const po::options_description& desc)
-{
-    po::positional_options_description positionalOptions;
-    os << description() << std::endl;
-    rad::OptionPrinter::printStandardAppDesc("sim",
-                                             os,
-                                             desc,
-                                             &positionalOptions);
-    os << desc << std::endl
-       << std::endl;
-}
-
-struct InputData
-{
-    InputData() :   yaml_filenames(std::vector<std::string>()),
-                    output_csv(std::string()),
-                    solver(std::string()),
-                    initial_timestep(0),
-                    tstart(0),
-                    tend(0),
-                    help(false)
-    {
-    }
-    std::vector<std::string> yaml_filenames;
-    std::string output_csv;
-    std::string solver;
-    double initial_timestep;
-    double tstart;
-    double tend;
-    bool help;
-};
-
-bool invalid(const InputData& input);
-bool invalid(const InputData& input)
-{
-    if (input.yaml_filenames.empty())
-    {
-        std::cerr << "Error: no input YAML files defined: need at least one." << std::endl;
-        return true;
-    }
-    if (input.solver.empty())
-    {
-        std::cerr << "Error: no solver defined." << std::endl;
-        return true;
-    }
-    if (input.initial_timestep<=0)
-    {
-        std::cerr << "Error: initial time step is negative or zero." << std::endl;
-        return true;
-    }
-    return false;
-}
-
-po::options_description get_options_description(InputData& input_data);
-po::options_description get_options_description(InputData& input_data)
-{
-    po::options_description desc("Options");
-    desc.add_options()
-        ("help,h",                                                                     "Show this help message")
-        ("yml,y",    po::value<std::vector<std::string> >(&input_data.yaml_filenames), "Name(s) of the YAML file(s)")
-        ("csv,c",    po::value<std::string>(&input_data.output_csv),                   "Name of the generated CSV file")
-        ("solver,s", po::value<std::string>(&input_data.solver),                       "Name of the solver: euler,rk4,rkck for Euler, Runge-Kutta 4 & Runge-Kutta-Cash-Karp respectively.")
-        ("dt",       po::value<double>(&input_data.initial_timestep),                  "Initial time step (or value of the fixed time step for fixed step solvers)")
-        ("tstart",   po::value<double>(&input_data.tstart),                            "Date corresponding to the beginning of the simulation (in seconds)")
-        ("tend",     po::value<double>(&input_data.tend),                              "Last time step")
-    ;
-    return desc;
-}
-
-int get_input_data(int argc, char **argv, InputData& input_data);
-int get_input_data(int argc, char **argv, InputData& input_data)
-{
-    const po::options_description desc = get_options_description(input_data);
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-    input_data.help = vm.count("help");
-    if (invalid(input_data) || input_data.help)
-    {
-        print_usage(std::cout, desc);
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
-}
+typedef boost::numeric::odeint::euler<StateType> EulerStepper;
+typedef boost::numeric::odeint::runge_kutta4<StateType> RK4Stepper;
+typedef boost::numeric::odeint::runge_kutta_cash_karp54<StateType> RKCK;
 
 int main(int argc, char** argv)
 {
@@ -128,20 +32,26 @@ int main(int argc, char** argv)
     if (not(error))
     {
         const TextFileReader yaml_reader(input_data.yaml_filenames);
-        DataSource ds = make_ds(yaml_reader.get_contents(),input_data.initial_timestep,input_data.solver);
-        ds.check_in(__PRETTY_FUNCTION__);
-        if (input_data.output_csv.empty())
+        auto sys = get_system(yaml_reader.get_contents());
+        std::ofstream os(input_data.output_csv.c_str());
+        initialize_stream(os, input_data);
+        SimCsvObserver observer(os);
+        if (input_data.solver=="euler")
         {
-            DsCsvObserver observer(std::cout);
-            integrate(ds, input_data.tstart, input_data.tend, observer);
+            quicksolve<EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        }
+        else if (input_data.solver=="rk4")
+        {
+            quicksolve<RK4Stepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        }
+        else if (input_data.solver=="rkck")
+        {
+            quicksolve<RKCK>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
         }
         else
         {
-            std::ofstream os(input_data.output_csv.c_str());
-            DsCsvObserver observer(os);
-            integrate(ds, input_data.tstart, input_data.tend, observer);
+            quicksolve<EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
         }
-        ds.check_out();
     }
     return error;
 }
