@@ -1,14 +1,7 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST simulator)
 project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/DataSourceBuilderTest.cpp
-              src/KinematicsModuleTest.cpp
-              src/GravityModuleTest.cpp
-              src/HydrostaticModuleTest.cpp
-              src/WaveModuleTest.cpp
-              src/StateDerivativesModuleTest.cpp
-              src/IntegrationTests.cpp
-              src/BodyBuilderTest.cpp
+FILE(GLOB SRC src/BodyBuilderTest.cpp
               src/generate_body_for_tests.cpp
               src/GravityForceModelTest.cpp
               src/SimTest.cpp
