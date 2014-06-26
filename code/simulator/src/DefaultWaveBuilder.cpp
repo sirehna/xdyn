@@ -22,10 +22,6 @@ TR1(shared_ptr)<WaveModelInterface> build_default_wave_model(const std::string& 
 }
 
 
-WaveBuilder<DefaultWaveModel>::WaveBuilder() : WaveBuilderInterface()
-{
-}
-
 boost::optional<TR1(shared_ptr)<WaveModelInterface> > WaveBuilder<DefaultWaveModel>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<WaveModelInterface> > ret;

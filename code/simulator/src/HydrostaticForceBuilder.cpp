@@ -10,8 +10,6 @@
 #include "EnvironmentAndFrames.hpp"
 #include "HydrostaticForceModel.hpp"
 
-ForceBuilder<HydrostaticForceModel>::ForceBuilder(){}
-
 boost::optional<ForcePtr> ForceBuilder<HydrostaticForceModel>::try_to_parse(const std::string& model, const std::string&, const EnvironmentAndFrames& env) const
 {
     boost::optional<ForcePtr> ret;
