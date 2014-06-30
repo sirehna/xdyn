@@ -16,6 +16,7 @@ set(SRC src/simulator_api.cpp
         src/HydrostaticForceBuilder.cpp
         src/SimCsvObserver.cpp
         src/SimNoObserver.cpp
+        src/OutputGenerator.cpp
         )
 
 

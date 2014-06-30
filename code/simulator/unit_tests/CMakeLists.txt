@@ -9,6 +9,7 @@ FILE(GLOB SRC src/BodyBuilderTest.cpp
               src/HydrostaticForceModelTest.cpp
               src/update_kinematicsTests.cpp
               src/SimulatorBuilderTest.cpp
+              src/OutputGeneratorTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
