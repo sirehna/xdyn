@@ -9,7 +9,6 @@
 #include "Sim.hpp"
 #include "SimTest.hpp"
 #include "YamlSimulatorInput.hpp"
-#include "solve.hpp"
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "STL_data.hpp"
@@ -38,10 +37,8 @@ void SimTest::TearDown()
 
 TEST_F(SimTest, can_simulate_falling_ball)
 {
-    auto sys = get_system(test_data::falling_ball_example());
-    SimObserver observer(sys);
     const size_t N = 10;
-    quicksolve<EulerStepper>(sys, 0, N, 1, observer);
+    auto observer = simulate<SimObserver,EulerStepper>(test_data::falling_ball_example(), 0, N, 1);
     auto res = observer.get();
     ASSERT_EQ(N+1, res.size());
     const double g = 9.81;
@@ -68,15 +65,9 @@ TEST_F(SimTest, can_simulate_falling_ball)
 
 TEST_F(SimTest, can_simulate_oscillating_cube)
 {
-    auto sys = get_system(test_data::oscillating_cube_example(),
-                          test_data::cube());
-
     const double dt = 1E-1;
-
-    SimObserver observer(sys);
     const double tend = 10;
-    const size_t N = (size_t)(floor(tend/dt+0.5))+1;
-    quicksolve<RK4Stepper>(sys, 0, tend, dt, observer);
+    auto observer = simulate<SimObserver,RK4Stepper>(test_data::oscillating_cube_example(), test_data::cube(), 0, tend, dt);
     auto res = observer.get();
 
     const double g = 9.81;
@@ -87,6 +78,7 @@ TEST_F(SimTest, can_simulate_oscillating_cube)
     const double A = m/(rho*L*L)*(1-rho*L*L*L/(2*m));
     const double z0 = L/2;
     const double eps = 1E-3;
+    const size_t N = (size_t)(floor(tend/dt+0.5))+1;
     ASSERT_EQ(N, res.size());
     for (size_t i = 0 ; i < N ; ++i)
     {
