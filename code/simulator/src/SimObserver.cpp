@@ -8,10 +8,12 @@
 #include "SimObserver.hpp"
 #include "StateMacros.hpp"
 #include "Sim.hpp"
+#include "YamlSimulatorInput.hpp"
 
-SimObserver::SimObserver(const Sim& sim) : bodies(sim.get_names_of_bodies()),
+SimObserver::SimObserver(const YamlSimulatorInput& input) : bodies(std::vector<std::string>()),
 res(std::vector<std::map<std::string,double> >())
 {
+    for (const auto body:input.bodies) bodies.push_back(body.name);
 }
 
 void SimObserver::observe(const Sim& s, const double t)

@@ -13,6 +13,7 @@
 #include <vector>
 
 class Sim;
+class YamlSimulatorInput;
 
 /** \author cec
  *  \date Jun 17, 2014, 8:23:16 AM
@@ -27,7 +28,7 @@ class Sim;
 class SimObserver
 {
     public:
-        SimObserver(const Sim& bodies);
+        SimObserver(const YamlSimulatorInput& bodies);
         void observe(const Sim& sys, const double t);
         std::vector<std::map<std::string,double> > get() const;
 
