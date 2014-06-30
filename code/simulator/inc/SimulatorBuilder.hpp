@@ -48,6 +48,7 @@ class SimulatorBuilder
         StateType get_initial_states() const;
         Sim build(const MeshMap& input_meshes) const;
         Sim build() const;
+        YamlSimulatorInput get_parsed_yaml() const;
 
     private:
         SimulatorBuilder();
