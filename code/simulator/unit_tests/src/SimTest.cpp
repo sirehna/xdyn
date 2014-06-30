@@ -16,14 +16,7 @@
 #include "simulator_api.hpp"
 #include "SimCsvObserver.hpp"
 #include "SimNoObserver.hpp"
-
-#include <boost/numeric/odeint/stepper/euler.hpp>
-#include <boost/numeric/odeint/stepper/runge_kutta4.hpp>
-#include <boost/numeric/odeint/stepper/runge_kutta_cash_karp54.hpp>
-
-typedef boost::numeric::odeint::euler<StateType> EulerStepper;
-typedef boost::numeric::odeint::runge_kutta4<StateType> RK4Stepper;
-typedef boost::numeric::odeint::runge_kutta_cash_karp54<StateType> RKCK;
+#include "steppers.hpp"
 
 #define EPS (1E-10)
 
