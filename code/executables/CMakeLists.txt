@@ -36,25 +36,18 @@ TARGET_LINK_LIBRARIES(generate_stl_examples test_data_generator_static)
 ################################################################################
 INSTALL(TARGETS sim
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-
+FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
 ADD_CUSTOM_COMMAND(TARGET generate_yaml_example
                    POST_BUILD
-                   COMMAND generate_yaml_example
+                   COMMAND generate_yaml_example demos
                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                    COMMENT "Generate YAML simulation input data files")
 
 ADD_CUSTOM_COMMAND(TARGET generate_stl_examples
                    POST_BUILD
-                   COMMAND generate_stl_examples
+                   COMMAND generate_stl_examples demos
                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                    COMMENT "Generate STL mesh input data files")
 
-INSTALL(
-    CODE "FILE( GLOB _Yml \"${CMAKE_CURRENT_BINARY_DIR}/*.yml\" )"
-    CODE "FILE( INSTALL \${_Yml} DESTINATION ${CMAKE_INSTALL_PREFIX}/demos)"
-)
-
-INSTALL(
-    CODE "FILE( GLOB _Stl \"${CMAKE_CURRENT_BINARY_DIR}/*.stl\" )"
-    CODE "FILE( INSTALL \${_Stl} DESTINATION ${CMAKE_INSTALL_PREFIX}/demos)"
-)
+INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/demos
+        DESTINATION ${CMAKE_INSTALL_PREFIX})

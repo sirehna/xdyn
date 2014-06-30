@@ -268,9 +268,9 @@ TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface)
     const double dzA = 77;
     const double dzB = -1;
     const EPoint I = intersection(A, dzA, B, dzB);
-    ASSERT_DOUBLE_EQ(77./78.*97+1, I(0));
-    ASSERT_DOUBLE_EQ(5-77./78.*3, I(1));
-    ASSERT_DOUBLE_EQ(9-77./78.*9, I(2));
+    ASSERT_NEAR(77./78.*97+1, (double)I(0),EPS*EPS);
+    ASSERT_NEAR(5-77./78.*3, (double)I(1),EPS*EPS);
+    ASSERT_NEAR(9-77./78.*9, (double)I(2),EPS*EPS);
 }
 
 TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface_second_test)
