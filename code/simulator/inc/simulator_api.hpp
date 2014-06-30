@@ -29,6 +29,8 @@ template <typename ObserverType,
     return simulate<ObserverType,StepperType>(sys, tstart, tend, dt);
 }
 
+MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh);
+
 template <typename ObserverType,
           typename StepperType> ObserverType simulate(const std::string& yaml, const std::string& mesh, const double tstart, const double tend, const double dt)
 {

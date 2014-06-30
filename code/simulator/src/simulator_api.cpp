@@ -35,3 +35,11 @@ Sim get_system(const std::string& yaml, const MeshMap& meshes)
 {
     return get_builder(yaml).build(meshes);
 }
+
+MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh)
+{
+    const auto name = yaml.bodies.front().name;
+    MeshMap meshes;
+    meshes[name] = read_stl(mesh);
+    return meshes;
+}
