@@ -8,7 +8,6 @@
 #include "StlReader.hpp"
 #include "SimulatorBuilder.hpp"
 
-SimulatorBuilder get_builder(const std::string& yaml);
 SimulatorBuilder get_builder(const std::string& yaml)
 {
     SimulatorBuilder builder(SimulatorYamlParser(yaml).parse());

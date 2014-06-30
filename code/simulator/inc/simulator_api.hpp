@@ -6,8 +6,10 @@
 
 #include "GeometricTypes3d.hpp"
 #include "Sim.hpp"
+#include "SimulatorBuilder.hpp"
 #include "solve.hpp"
 
+SimulatorBuilder get_builder(const std::string& yaml);
 Sim get_system(const std::string& yaml);
 Sim get_system(const std::string& yaml, const std::string& mesh);
 Sim get_system(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes);
