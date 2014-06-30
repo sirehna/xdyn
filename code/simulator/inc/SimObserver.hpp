@@ -27,7 +27,7 @@ class Sim;
 class SimObserver
 {
     public:
-        SimObserver(const std::vector<std::string>& bodies);
+        SimObserver(const Sim& bodies);
         void observe(const Sim& sys, const double t);
         SimObserver& watch_angle(const std::string& frame,
                                  const std::string& relative_to_frame,

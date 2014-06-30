@@ -39,7 +39,7 @@ void SimTest::TearDown()
 TEST_F(SimTest, can_simulate_falling_ball)
 {
     auto sys = get_system(test_data::falling_ball_example());
-    SimObserver observer(sys.get_names_of_bodies());
+    SimObserver observer(sys);
     const size_t N = 10;
     quicksolve<EulerStepper>(sys, 0, N, 1, observer);
     auto res = observer.get();
@@ -73,7 +73,7 @@ TEST_F(SimTest, can_simulate_oscillating_cube)
 
     const double dt = 1E-1;
 
-    SimObserver observer(sys.get_names_of_bodies());
+    SimObserver observer(sys);
     const double tend = 10;
     const size_t N = (size_t)(floor(tend/dt+0.5))+1;
     quicksolve<RK4Stepper>(sys, 0, tend, dt, observer);

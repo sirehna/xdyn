@@ -9,7 +9,7 @@
 #include "StateMacros.hpp"
 #include "Sim.hpp"
 
-SimObserver::SimObserver(const std::vector<std::string>& bodies_) : bodies(bodies_),
+SimObserver::SimObserver(const Sim& sim) : bodies(sim.get_names_of_bodies()),
 res(std::vector<std::map<std::string,double> >())
 {
 }
