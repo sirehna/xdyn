@@ -29,16 +29,6 @@ class SimObserver
     public:
         SimObserver(const Sim& bodies);
         void observe(const Sim& sys, const double t);
-        SimObserver& watch_angle(const std::string& frame,
-                                 const std::string& relative_to_frame,
-                                 const std::string& projected_in_frame,
-                                 const std::string& axis
-                                 );
-        SimObserver& watch_point(const std::string& point,
-                                 const std::string& relative_to_frame,
-                                 const std::string& projected_in_frame,
-                                 const std::string& axis
-                                 );
         std::vector<std::map<std::string,double> > get() const;
 
     private:
