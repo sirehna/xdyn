@@ -9,12 +9,12 @@
 
 #include "STL_data.hpp"
 
-int main(int , const char* argv[])
+int main(int argc, const char* argv[])
 {
-    (void) argv;
-    std::ofstream file1("single_facet.stl"),
-                  file2("three_facets.stl"),
-                  file3("cube.stl");
+    const std::string path = argc ? std::string(argv[1])+"/" : "";
+    std::ofstream file1(path+"single_facet.stl"),
+                  file2(path+"three_facets.stl"),
+                  file3(path+"cube.stl");
 
     file1 << test_data::single_facet();
     file2 << test_data::three_facets();

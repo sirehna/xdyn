@@ -9,13 +9,13 @@
 
 #include "yaml_data.hpp"
 
-int main(int , const char* argv[])
+int main(int argc, const char* argv[])
 {
-    (void) argv;
-    std::ofstream file1("complete_example.yml"),
-                  file2("hydrostatic_integration_test.yml"),
-                  file3("falling_ball_test.yml"),
-                  file4("oscillating_cube_test.yml");
+    const std::string path = argc ? std::string(argv[1])+"/" : "";
+    std::ofstream file1(path+"complete_example.yml"),
+                  file2(path+"hydrostatic_integration_test.yml"),
+                  file3(path+"falling_ball_test.yml"),
+                  file4(path+"oscillating_cube_test.yml");
 
     file1 << test_data::full_example();
     file1.close();
