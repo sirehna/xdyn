@@ -46,7 +46,7 @@ void SimCsvObserver::observe(const Sim& s, const double t)
            << *_QR(s.state,i) << ','
            << *_QI(s.state,i) << ','
            << *_QJ(s.state,i) << ','
-           << *_QK(s.state,i) << ',';
+           << *_QK(s.state,i);
         if (i == n-1)
         {
             os << std::endl;

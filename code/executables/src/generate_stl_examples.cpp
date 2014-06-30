@@ -11,7 +11,7 @@
 
 int main(int argc, const char* argv[])
 {
-    const std::string path = argc ? std::string(argv[1])+"/" : "";
+    const std::string path = argc>1 ? std::string(argv[1])+"/" : "";
     std::ofstream file1(path+"single_facet.stl"),
                   file2(path+"three_facets.stl"),
                   file3(path+"cube.stl");

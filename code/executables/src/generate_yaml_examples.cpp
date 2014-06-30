@@ -11,7 +11,7 @@
 
 int main(int argc, const char* argv[])
 {
-    const std::string path = argc ? std::string(argv[1])+"/" : "";
+    const std::string path = argc>1 ? std::string(argv[1])+"/" : "";
     std::ofstream file1(path+"complete_example.yml"),
                   file2(path+"hydrostatic_integration_test.yml"),
                   file3(path+"falling_ball_test.yml"),
