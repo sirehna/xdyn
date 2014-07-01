@@ -10,10 +10,15 @@
 #include "SimObserver.hpp"
 #include "solve.hpp"
 
-SimulatorBuilder get_builder(const std::string& yaml);
+class YamlSimulatorInput;
+
+SimulatorBuilder get_builder(const YamlSimulatorInput& yaml);
 Sim get_system(const std::string& yaml);
 Sim get_system(const std::string& yaml, const std::string& mesh);
 Sim get_system(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes);
+Sim get_system(const YamlSimulatorInput& yaml);
+Sim get_system(const YamlSimulatorInput& yaml, const std::string& mesh);
+Sim get_system(const YamlSimulatorInput& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes);
 
 template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)
 {
@@ -37,6 +42,18 @@ template <typename StepperType> std::vector<Res> simulate(const std::string& yam
 }
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double tstart, const double tend, const double dt)
+{
+    Sim sys = get_system(yaml, meshes);
+    return simulate<StepperType>(sys, tstart, tend, dt);
+}
+
+template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& yaml, const double tstart, const double tend, const double dt)
+{
+    Sim sys = get_system(yaml);
+    return simulate<StepperType>(sys, tstart, tend, dt);
+}
+
+template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double tstart, const double tend, const double dt)
 {
     Sim sys = get_system(yaml, meshes);
     return simulate<StepperType>(sys, tstart, tend, dt);
