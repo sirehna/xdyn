@@ -20,8 +20,10 @@ lapack
 macros
 navire.dat
 parser
+profile
 physical_models
 random_data_generator
+release
 resultats.Res
 robwork
 scenario.dat
@@ -29,5 +31,6 @@ simulation
 simulation.dat
 test_utilities
 text_file_reader
+threadpool11
 yaml-cpp
 yaml_parser
