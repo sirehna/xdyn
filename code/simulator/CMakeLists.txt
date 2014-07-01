@@ -17,6 +17,7 @@ set(SRC src/simulator_api.cpp
         src/SimCsvObserver.cpp
         src/SimNoObserver.cpp
         src/OutputTransformer.cpp
+        src/Res.cpp
         )
 
 
