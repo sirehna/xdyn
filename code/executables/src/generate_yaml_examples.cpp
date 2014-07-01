@@ -15,7 +15,8 @@ int main(int argc, const char* argv[])
     std::ofstream file1(path+"complete_example.yml"),
                   file2(path+"hydrostatic_integration_test.yml"),
                   file3(path+"falling_ball_test.yml"),
-                  file4(path+"oscillating_cube_test.yml");
+                  file4(path+"oscillating_cube_test.yml"),
+                  file5(path+"stable_cube_test.yml");
 
     file1 << test_data::full_example();
     file1.close();
@@ -28,6 +29,9 @@ int main(int argc, const char* argv[])
 
     file4 << test_data::oscillating_cube_example();
     file4.close();
+
+    file5 << test_data::stable_cube_example();
+    file5.close();
 
     return 0;
 }
