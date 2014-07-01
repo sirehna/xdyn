@@ -35,23 +35,22 @@ IF(DOXYGEN_FOUND)
     ENDIF()
 
     IF (WIN32)
-    ADD_CUSTOM_TARGET(doc_dev
-        ${DOXYGEN_EXECUTABLE} Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM
-        DEPENDS functionalities
-    )
+        ADD_CUSTOM_TARGET(doc_dev
+            ${DOXYGEN_EXECUTABLE} Doxyfile
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen" VERBATIM
+            DEPENDS functionalities
+            )
     ELSE()
-    ADD_CUSTOM_TARGET(doc_dev
-        ${DOXYGEN_EXECUTABLE} Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen" VERBATIM
-    )
+        ADD_CUSTOM_TARGET(doc_dev
+            ${DOXYGEN_EXECUTABLE} Doxyfile
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen" VERBATIM
+            )
     ENDIF()
     IF(NOT PANDOC-NOTFOUND)
         ADD_DEPENDENCIES(doc_dev doc_dev_guide)
     ENDIF()
-
 
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/../images_for_documentation/*.svg")
     FOREACH(f ${files})
