@@ -50,7 +50,7 @@ ADD_CUSTOM_COMMAND(TARGET generate_stl_examples
                    COMMENT "Generate STL mesh input data files")
 
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/plot.py
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/demos)
+        DESTINATION demos)
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/demos
-        DESTINATION ${CMAKE_INSTALL_PREFIX})
+        DESTINATION ".")
