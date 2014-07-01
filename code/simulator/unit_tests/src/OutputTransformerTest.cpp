@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "OutputGeneratorTest.hpp"
-#include "OutputGenerator.hpp"
+#include "OutputTransformerTest.hpp"
+#include "OutputTransformer.hpp"
 #include "Kinematics.hpp"
 #include "SimObserver.hpp"
 #include "Sim.hpp"
@@ -16,23 +16,23 @@
 
 #define PI (4.*atan(1.))
 
-OutputGeneratorTest::OutputGeneratorTest() : a(DataGenerator(42022))
+OutputTransformerTest::OutputTransformerTest() : a(DataGenerator(42022))
 {
 }
 
-OutputGeneratorTest::~OutputGeneratorTest()
+OutputTransformerTest::~OutputTransformerTest()
 {
 }
 
-void OutputGeneratorTest::SetUp()
+void OutputTransformerTest::SetUp()
 {
 }
 
-void OutputGeneratorTest::TearDown()
+void OutputTransformerTest::TearDown()
 {
 }
 
-TEST_F(OutputGeneratorTest, DISABLED_acceptance_test)
+TEST_F(OutputTransformerTest, DISABLED_acceptance_test)
 {
     auto observer = simulate<SimObserver,EulerStepper>(test_data::falling_ball_example(), 0, 2, 1);
     auto res = observer.get();
