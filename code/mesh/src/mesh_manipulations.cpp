@@ -31,7 +31,7 @@ double area(const Matrix3x& M, //!< Matrix containing (amongst others), the poin
 
 double area(const Matrix3x& points)
 {
-    const int n = points.cols();
+    const int n = (int)points.cols();
     double a = 0;
     for (int i = 2 ; i < n ; ++i)
     {
@@ -83,7 +83,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
 Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
                                  )
 {
-    const int n = polygon.cols();
+    const int n = (int)polygon.cols();
     Eigen::Vector3d areas_times_points(0,0,0);
     double areas = 0;
     for (int i = 2 ; i < n ; ++i)
