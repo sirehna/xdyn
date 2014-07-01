@@ -115,3 +115,44 @@ TEST_F(SimTest, can_simulate_oscillating_cube)
         ASSERT_NEAR(0, res.at(i)["qk(cube)"], EPS) << "Time step: i=" << i;
     }
 }
+
+TEST_F(SimTest, can_simulate_stable_cube)
+{
+    auto sys = get_system(test_data::stable_cube_example(),
+                          test_data::cube());
+
+    const double dt = 1E-1;
+
+    SimObserver observer(sys.get_names_of_bodies());
+    const double tend = 10;
+    const size_t N = (size_t)(floor(tend/dt+0.5))+1;
+    quicksolve<RK4Stepper>(sys, 0, tend, dt, observer);
+    auto res = observer.get();
+
+    const double rho = 1026;
+    const double L = 1;
+    const double m = 1e3;
+    const double z0 = m/rho-L/2;
+    const double eps = 1E-3;
+    ASSERT_EQ(N, res.size());
+    for (size_t i = 0 ; i < N ; ++i)
+    {
+        const double t = (double)i*dt;
+        ASSERT_EQ(1+13, res.at(i).size())          << "Time step: i=" << i;
+        ASSERT_DOUBLE_EQ(t, res.at(i)["t"])        << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["x(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["y(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(z0, res.at(i)["z(cube)"], eps) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["u(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["v(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["w(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["p(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["q(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["r(cube)"], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(1, res.at(i)["qr(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qi(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qj(cube)"], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0, res.at(i)["qk(cube)"], EPS) << "Time step: i=" << i;
+    }
+}
+
