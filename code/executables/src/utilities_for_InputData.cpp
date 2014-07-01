@@ -15,7 +15,8 @@
 
 std::string description()
 {
-    std::stringstream ss;    ss << "This is the simulator created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
+    std::stringstream ss;
+    ss << "This is the simulator created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
        << "(c) SIREHNA 2014." << std::endl
        << std::endl
        << "ID : @GIT_SHA1@" << std::endl
