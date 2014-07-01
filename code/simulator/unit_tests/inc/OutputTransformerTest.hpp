@@ -8,17 +8,25 @@
 #ifndef OUTPUTTRANSFORMERRTEST_HPP_
 #define OUTPUTTRANSFORMERRTEST_HPP_
 
+#include <map>
+
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
+#include "YamlSimulatorInput.hpp"
 
 class OutputTransformerTest : public ::testing::Test
 {
     protected:
-    OutputTransformerTest();
+        OutputTransformerTest();
         virtual ~OutputTransformerTest();
         virtual void SetUp();
         virtual void TearDown();
+        static YamlSimulatorInput get_yaml();
+
+        static const YamlSimulatorInput yaml;
+
         DataGenerator a;
+        std::vector<std::map<std::string,double> > out;
 
 };
 

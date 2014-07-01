@@ -7,17 +7,25 @@
 
 #include "OutputTransformerTest.hpp"
 #include "OutputTransformer.hpp"
-#include "Kinematics.hpp"
-#include "SimObserver.hpp"
-#include "Sim.hpp"
 #include "yaml_data.hpp"
 #include "simulator_api.hpp"
 #include "steppers.hpp"
-
+#include "SimulatorYamlParser.hpp"
+#include "test_macros.hpp"
 #define PI (4.*atan(1.))
 
-OutputTransformerTest::OutputTransformerTest() : a(DataGenerator(42022))
+const YamlSimulatorInput OutputTransformerTest::yaml = OutputTransformerTest::get_yaml();
+
+YamlSimulatorInput OutputTransformerTest::get_yaml()
 {
+    return SimulatorYamlParser(test_data::falling_ball_example()).parse();
+}
+
+OutputTransformerTest::OutputTransformerTest() : a(DataGenerator(42022)), out(std::vector<std::map<std::string,double> >())
+{
+    auto res = simulate<EulerStepper>(yaml, 0, 2, 1);
+    const OutputTransformer transform(yaml);
+    for (const auto r:res) out.push_back(transform(r));
 }
 
 OutputTransformerTest::~OutputTransformerTest()
@@ -32,16 +40,16 @@ void OutputTransformerTest::TearDown()
 {
 }
 
-TEST_F(OutputTransformerTest, DISABLED_acceptance_test)
+TEST_F(OutputTransformerTest, can_compute_positions)
 {
-    auto res = simulate<EulerStepper>(test_data::falling_ball_example(), 0, 2, 1);
-    const OutputTransformer transform;
-    std::vector<std::map<std::string,double> > out;
-    for (const auto r:res) out.push_back(transform(r));
     ASSERT_EQ(3, out.size());
     ASSERT_EQ(3, out[0].size());
-    ASSERT_DOUBLE_EQ(14, out[0]["O/NED->ball(x)"]);
-    ASSERT_DOUBLE_EQ(32, out[0]["O/NED->ball(z)"]);
-    ASSERT_DOUBLE_EQ(14+2, out[2]["O/NED->ball(x)"]);
-    ASSERT_DOUBLE_EQ(32+9.81, out[2]["O/NED->ball(z)"]);
+    const auto x0 = out.at(0)["x(O in NED / ball -> ball)"];
+    const auto z0 = out.at(0)["z(O in NED / ball -> ball)"];
+    const auto x2 = out.at(2)["x(O in NED / ball -> ball)"];
+    const auto z2 = out.at(2)["z(O in NED / ball -> ball)"];
+    ASSERT_DOUBLE_EQ(-4, x0) << "t = 0";
+    ASSERT_DOUBLE_EQ(-12, z0) << "t = 0";
+    ASSERT_DOUBLE_EQ(-(4+2), x2) << "t = 2";
+    ASSERT_DOUBLE_EQ(-(12+9.81), z2) << "t = 2";
 }
