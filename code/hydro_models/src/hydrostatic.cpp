@@ -42,7 +42,7 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
     const size_t n = idx.size();
     double areas_times_points = 0;
     double areas = 0;
-    const int idxA = idx[0];
+    const int idxA = (int)idx[0];
     const double dz0 = delta_z[idx[0]];
     for (size_t i = 2 ; i < n ; ++i)
     {
