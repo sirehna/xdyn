@@ -15,12 +15,11 @@ template <typename PointType> PointType compute_relative_position(const PointTyp
 {
     // Transform from NED to P's frame of reference
     const kinematics::Transform T = k->get("NED", P.get_frame());
-    // O is the origin of the NED frame
-    const Point O("NED");
-    // O1 is the origin of P's frame
-    const Point OO1 = T*O;
-    // Return coordinates of P in the NED frame
-    return OO1 + P;
+    // Create the equivalent transformation just by swapping frame names
+    // Need to create a method kinematics::Transform void swap();
+    const Point RR(P.get_frame(),T.get_point().v);
+    const kinematics::Transform TR(RR, T.get_rot(), "NED");
+    return TR*P;
 }
 
 WaveModelInterface::WaveModelInterface()
