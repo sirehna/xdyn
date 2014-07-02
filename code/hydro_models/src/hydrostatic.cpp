@@ -264,7 +264,7 @@ UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the W
     return UnsafeWrench(O, F, (f.barycenter-O.v).cross(F));
 }
 
-Wrench hydrostatic::force(const MeshPtr& mesh,                       //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+Wrench hydrostatic::force(const MeshPtr& mesh,                    //!< Mesh
                           const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                           const double rho,                       //!< Density of the fluid (in kg/m^3)
                           const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
