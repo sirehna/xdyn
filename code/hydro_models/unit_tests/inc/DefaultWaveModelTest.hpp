@@ -8,10 +8,10 @@ class DefaultWaveModelTest : public ::testing::Test
 {
     protected:
         DefaultWaveModelTest();
-	    virtual ~DefaultWaveModelTest();
+        virtual ~DefaultWaveModelTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
+        DataGenerator a;
 
 };
 
