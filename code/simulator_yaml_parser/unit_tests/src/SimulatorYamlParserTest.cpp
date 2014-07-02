@@ -344,6 +344,5 @@ TEST_F(SimulatorYamlParserTest, can_parse_output_forces_and_torques)
 
 TEST_F(SimulatorYamlParserTest, should_not_throw_even_if_no_mesh_is_defined)
 {
-    SimulatorYamlParser(test_data::falling_ball_example()).parse();
     ASSERT_NO_THROW(SimulatorYamlParser(test_data::falling_ball_example()).parse());
 }
