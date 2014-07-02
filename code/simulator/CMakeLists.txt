@@ -16,6 +16,8 @@ set(SRC src/simulator_api.cpp
         src/HydrostaticForceBuilder.cpp
         src/SimCsvObserver.cpp
         src/SimNoObserver.cpp
+        src/OutputTransformer.cpp
+        src/Res.cpp
         )
 
 
@@ -33,6 +35,7 @@ include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${test_macros_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${ds_integration_INCLUDE_DIRS})
+include_directories(${solver_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}_static STATIC ${SRC})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")

@@ -144,6 +144,11 @@ Sim SimulatorBuilder::build() const
     return build(make_mesh_map());
 }
 
+YamlSimulatorInput SimulatorBuilder::get_parsed_yaml() const
+{
+    return input;
+}
+
 MeshMap SimulatorBuilder::make_mesh_map() const
 {
     MeshMap ret;

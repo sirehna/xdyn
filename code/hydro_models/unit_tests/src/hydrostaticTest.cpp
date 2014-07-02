@@ -487,7 +487,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
 
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
 {
-    for (size_t i = 0 ; i < 100 ; ++i)
+    for (size_t i = 0 ; i < 10 ; ++i)
     {
         const double L = a.random<double>().between(0,10);
         const double x0 = a.random<double>().between(-1000,1000);
@@ -520,7 +520,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
 
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
 {
-    for (size_t i = 0 ; i < 100 ; ++i)
+    for (size_t i = 0 ; i < 10 ; ++i)
     {
         const double L = a.random<double>().between(0,10);
         const double x0 = a.random<double>().between(-1000,1000);
