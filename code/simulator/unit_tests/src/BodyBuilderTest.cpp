@@ -139,38 +139,70 @@ TEST_F(BodyBuilderTest, total_inertia_is_correct)
     ASSERT_DOUBLE_EQ(0.2,(double)body.total_inertia->operator()(2,5));
 }
 
+/**
+ * \brief Unit test where instructions where generated with MatLab
+ * \code
+    % Data
+    raw_mesh_points = ...
+    [[-0.5, 0.5, 0.5,-0.5, 0.5, -0.5, -0.5, 0.5];
+     [-0.5,-0.5, 0.5, 0.5,-0.5, -0.5,  0.5, 0.5];
+     [   1,   1,   1,   1,   0,    0,    0,   0]];
+    translation = [10,21e-2,33e3]';
+    euler = [1 3 2];
+    % Begin of computations
+    cc=cos(euler);
+    ss=sin(euler);
+    cphi=cc(1);cteta=cc(2);cpsi=cc(3);
+    sphi=ss(1);steta=ss(2);spsi=ss(3);
+    ctm = [cteta*cpsi                , cteta*spsi                , -steta    ;
+           sphi*steta*cpsi-cphi*spsi , sphi*steta*spsi+cphi*cpsi , sphi*cteta;
+           cphi*steta*cpsi+sphi*spsi , cphi*steta*spsi-sphi*cpsi , cphi*cteta];
+
+
+    n = size(raw_mesh_points,2);
+    body_mesh_points = ctm * raw_mesh_points -repmat(ctm*translation,1,n);
+
+    for i=1:n
+        fprintf('ASSERT_NEAR(%18.12f,(double)body.M->m(0,%d),EPS);\n',body_mesh_points(1,i),i-1);
+        fprintf('ASSERT_NEAR(%18.12f,(double)body.M->m(1,%d),EPS);\n',body_mesh_points(2,i),i-1);
+        fprintf('ASSERT_NEAR(%18.12f,(double)body.M->m(2,%d),EPS);\n',body_mesh_points(3,i),i-1);
+        fprintf('\n');
+    end
+   \endcode
+ */
 TEST_F(BodyBuilderTest, mesh_should_be_correct)
 {
-    ASSERT_EQ("mesh(body 1)", body.M->get_frame());
-    ASSERT_DOUBLE_EQ(-0.5, (double)body.M->m(0,0));
-    ASSERT_DOUBLE_EQ(-0.5, (double)body.M->m(1,0));
-    ASSERT_DOUBLE_EQ(   1, (double)body.M->m(2,0));
+    const double EPS = 1E-11;
+    ASSERT_EQ("body 1", body.M->get_frame());
+    ASSERT_NEAR( 4653.132472705181,(double)body.M->m(0,0),EPS);
+    ASSERT_NEAR(27495.576119933776,(double)body.M->m(1,0),EPS);
+    ASSERT_NEAR(17643.008920773238,(double)body.M->m(2,0),EPS);
 
-    ASSERT_DOUBLE_EQ( 0.5, (double)body.M->m(0,1));
-    ASSERT_DOUBLE_EQ(-0.5, (double)body.M->m(1,1));
-    ASSERT_DOUBLE_EQ(   1, (double)body.M->m(2,1));
+    ASSERT_NEAR( 4653.544454950847,(double)body.M->m(0,1),EPS);
+    ASSERT_NEAR(27495.035407669598,(double)body.M->m(1,1),EPS);
+    ASSERT_NEAR(17643.742338032804,(double)body.M->m(2,1),EPS);
 
-    ASSERT_DOUBLE_EQ( 0.5, (double)body.M->m(0,2));
-    ASSERT_DOUBLE_EQ( 0.5, (double)body.M->m(1,2));
-    ASSERT_DOUBLE_EQ(   1, (double)body.M->m(2,2));
+    ASSERT_NEAR( 4652.644257321111,(double)body.M->m(0,2),EPS);
+    ASSERT_NEAR(27494.918540181661,(double)body.M->m(1,2),EPS);
+    ASSERT_NEAR(17644.161845145594,(double)body.M->m(2,2),EPS);
 
-    ASSERT_DOUBLE_EQ(-0.5, (double)body.M->m(0,3));
-    ASSERT_DOUBLE_EQ( 0.5, (double)body.M->m(1,3));
-    ASSERT_DOUBLE_EQ(   1, (double)body.M->m(2,3));
+    ASSERT_NEAR( 4652.232275075446,(double)body.M->m(0,3),EPS);
+    ASSERT_NEAR(27495.459252445839,(double)body.M->m(1,3),EPS);
+    ASSERT_NEAR(17643.428427886029,(double)body.M->m(2,3),EPS);
 
-    ASSERT_DOUBLE_EQ( 0.5, (double)body.M->m(0,4));
-    ASSERT_DOUBLE_EQ(-0.5, (double)body.M->m(1,4));
-    ASSERT_DOUBLE_EQ(   0, (double)body.M->m(2,4));
+    ASSERT_NEAR( 4653.685574958907,(double)body.M->m(0,4),EPS);
+    ASSERT_NEAR(27495.868457630666,(double)body.M->m(1,4),EPS);
+    ASSERT_NEAR(17644.277233261510,(double)body.M->m(2,4),EPS);
 
-    ASSERT_DOUBLE_EQ(-0.5, (double)body.M->m(0,5));
-    ASSERT_DOUBLE_EQ(-0.5, (double)body.M->m(1,5));
-    ASSERT_DOUBLE_EQ(   0, (double)body.M->m(2,5));
+    ASSERT_NEAR( 4653.273592713241,(double)body.M->m(0,5),EPS);
+    ASSERT_NEAR(27496.409169894843,(double)body.M->m(1,5),EPS);
+    ASSERT_NEAR(17643.543816001944,(double)body.M->m(2,5),EPS);
 
-    ASSERT_DOUBLE_EQ(-0.5, (double)body.M->m(0,6));
-    ASSERT_DOUBLE_EQ( 0.5, (double)body.M->m(1,6));
-    ASSERT_DOUBLE_EQ(   0, (double)body.M->m(2,6));
+    ASSERT_NEAR( 4652.373395083505,(double)body.M->m(0,6),EPS);
+    ASSERT_NEAR(27496.292302406906,(double)body.M->m(1,6),EPS);
+    ASSERT_NEAR(17643.963323114735,(double)body.M->m(2,6),EPS);
 
-    ASSERT_DOUBLE_EQ( 0.5, (double)body.M->m(0,7));
-    ASSERT_DOUBLE_EQ( 0.5, (double)body.M->m(1,7));
-    ASSERT_DOUBLE_EQ(   0, (double)body.M->m(2,7));
+    ASSERT_NEAR( 4652.785377329171,(double)body.M->m(0,7),EPS);
+    ASSERT_NEAR(27495.751590142729,(double)body.M->m(1,7),EPS);
+    ASSERT_NEAR(17644.696740374300,(double)body.M->m(2,7),EPS);
 }

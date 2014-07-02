@@ -10,6 +10,7 @@
 #include "EulerAngles.hpp"
 #include "MeshBuilder.hpp"
 #include "PointMatrix.hpp"
+#include "Transform.hpp"
 #include "rotation_matrix_builders.hpp"
 #include "YamlBody.hpp"
 
@@ -26,12 +27,17 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
                   input.dynamics.centre_of_inertia.y,
                   input.dynamics.centre_of_inertia.z);
     ret.m = input.dynamics.mass;
+
     ret.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
     ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
     ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
-    ret.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
-    ret.M = PointMatrixPtr(new PointMatrix(ret.mesh->nodes, std::string("mesh(")+ret.name+")"));
     ret.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle);
+
+    Point translation(ret.name, ret.x_relative_to_mesh, ret.y_relative_to_mesh, ret.z_relative_to_mesh);
+    kinematics::Transform transform(translation, ret.mesh_to_body, "mesh("+ret.name+")");
+    ret.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
+    PointMatrix mesh_points_expressed_in_mesh_frame(ret.mesh->nodes, "mesh("+ret.name+")");
+    ret.M = PointMatrixPtr(new PointMatrix(transform.inverse()*mesh_points_expressed_in_mesh_frame));
     add_inertia(ret, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
     return ret;
 }
