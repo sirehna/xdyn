@@ -45,6 +45,16 @@ EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vec
     env.g = input.environmental_constants.g;
     env.rho = input.environmental_constants.rho;
     env.k = KinematicsPtr(new Kinematics());
+    if (bodies.size() != input.bodies.size())
+    {
+        std::stringstream ss;
+        ss << "YAML data contains " << input.bodies.size() << " bod";
+        if (input.bodies.size()>1) ss << "ies";
+        else                       ss << "y";
+        ss << ", but method received " << bodies.size() << " Body object";
+        if (bodies.size()>1) ss << "s";
+        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
+    }
     const StateType x = ::get_initial_states(input.rotations, input.bodies);
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
