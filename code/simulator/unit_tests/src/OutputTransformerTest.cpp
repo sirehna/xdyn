@@ -40,10 +40,13 @@ void OutputTransformerTest::TearDown()
 {
 }
 
-TEST_F(OutputTransformerTest, can_compute_positions)
+TEST_F(OutputTransformerTest, processed_output_should_have_the_right_size)
 {
     ASSERT_EQ(3, out.size());
-    ASSERT_EQ(3, out[0].size());
+}
+
+TEST_F(OutputTransformerTest, can_compute_positions)
+{
     const auto x0 = out.at(0)["x(O in NED / ball -> ball)"];
     const auto z0 = out.at(0)["z(O in NED / ball -> ball)"];
     const auto x2 = out.at(2)["x(O in NED / ball -> ball)"];
