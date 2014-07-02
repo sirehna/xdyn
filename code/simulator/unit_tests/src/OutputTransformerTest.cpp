@@ -57,6 +57,12 @@ TEST_F(OutputTransformerTest, processed_output_should_have_the_right_size)
     ASSERT_EQ(3, out2.size());
 }
 
+TEST_F(OutputTransformerTest, position_outputs_should_exist_in_map)
+{
+    ASSERT_NE(out1.at(0).end(), out1.at(0).find("x(O in NED / ball -> ball)"));
+    ASSERT_NE(out1.at(0).end(), out1.at(0).find("z(O in NED / ball -> ball)"));
+}
+
 TEST_F(OutputTransformerTest, can_compute_positions)
 {
     const auto x0 = out1.at(0)["x(O in NED / ball -> ball)"];
