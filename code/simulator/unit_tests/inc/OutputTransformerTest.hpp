@@ -21,12 +21,15 @@ class OutputTransformerTest : public ::testing::Test
         virtual ~OutputTransformerTest();
         virtual void SetUp();
         virtual void TearDown();
-        static YamlSimulatorInput get_yaml();
+        static YamlSimulatorInput get_yaml1();
+        static YamlSimulatorInput get_yaml2();
 
-        static const YamlSimulatorInput yaml;
+        static const YamlSimulatorInput yaml1;
+        static const YamlSimulatorInput yaml2;
 
         DataGenerator a;
-        std::vector<std::map<std::string,double> > out;
+        std::vector<std::map<std::string,double> > out1;
+        std::vector<std::map<std::string,double> > out2;
 
 };
 
