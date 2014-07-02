@@ -8,6 +8,8 @@
 #ifndef SIMOBSERVER_HPP_
 #define SIMOBSERVER_HPP_
 
+#include "Res.hpp"
+
 #include <map>
 #include <string>
 #include <vector>
@@ -28,14 +30,12 @@ class YamlSimulatorInput;
 class SimObserver
 {
     public:
-        SimObserver(const YamlSimulatorInput& bodies);
+        SimObserver();
         void observe(const Sim& sys, const double t);
-        std::vector<std::map<std::string,double> > get() const;
+        std::vector<Res> get() const;
 
     private:
-        std::vector<std::string> bodies;
-        std::string customize(const std::string& body, const std::string anything) const;
-        std::vector<std::map<std::string,double> > res;
+        std::vector<Res> res;
 };
 
 #endif /* SIMOBSERVER_HPP_ */

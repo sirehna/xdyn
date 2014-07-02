@@ -34,12 +34,14 @@ void OutputTransformerTest::TearDown()
 
 TEST_F(OutputTransformerTest, DISABLED_acceptance_test)
 {
-    auto observer = simulate<SimObserver,EulerStepper>(test_data::falling_ball_example(), 0, 2, 1);
-    auto res = observer.get();
-    ASSERT_EQ(3, res.size());
-    ASSERT_EQ(3, res[0].size());
-    ASSERT_DOUBLE_EQ(14, res[0]["O/NED->ball(x)"]);
-    ASSERT_DOUBLE_EQ(32, res[0]["O/NED->ball(z)"]);
-    ASSERT_DOUBLE_EQ(14+2, res[2]["O/NED->ball(x)"]);
-    ASSERT_DOUBLE_EQ(32+9.81, res[2]["O/NED->ball(z)"]);
+    auto res = simulate<EulerStepper>(test_data::falling_ball_example(), 0, 2, 1);
+    const OutputTransformer transform;
+    std::vector<std::map<std::string,double> > out;
+    for (const auto r:res) out.push_back(transform(r));
+    ASSERT_EQ(3, out.size());
+    ASSERT_EQ(3, out[0].size());
+    ASSERT_DOUBLE_EQ(14, out[0]["O/NED->ball(x)"]);
+    ASSERT_DOUBLE_EQ(32, out[0]["O/NED->ball(z)"]);
+    ASSERT_DOUBLE_EQ(14+2, out[2]["O/NED->ball(x)"]);
+    ASSERT_DOUBLE_EQ(32+9.81, out[2]["O/NED->ball(z)"]);
 }

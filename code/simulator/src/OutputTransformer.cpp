@@ -8,3 +8,11 @@
 #include "OutputTransformer.hpp"
 
 
+OutputTransformer::OutputTransformer()
+{
+}
+
+std::map<std::string,double> OutputTransformer::operator()(const Res& ) const
+{
+    return std::map<std::string,double>();
+}

@@ -7,6 +7,7 @@
 #include "GeometricTypes3d.hpp"
 #include "Sim.hpp"
 #include "SimulatorBuilder.hpp"
+#include "SimObserver.hpp"
 #include "solve.hpp"
 
 SimulatorBuilder get_builder(const std::string& yaml);
@@ -14,42 +15,31 @@ Sim get_system(const std::string& yaml);
 Sim get_system(const std::string& yaml, const std::string& mesh);
 Sim get_system(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes);
 
-template <typename ObserverType,
-          typename StepperType> ObserverType simulate(Sim& sys, const YamlSimulatorInput& yaml, const double tstart, const double tend, const double dt)
+template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)
 {
-    ObserverType observer(yaml);
+    SimObserver observer;
     quicksolve<StepperType>(sys, tstart, tend, dt, observer);
-    return observer;
+    return observer.get();
 }
 
-template <typename ObserverType,
-          typename StepperType> ObserverType simulate(const std::string& yaml, const double tstart, const double tend, const double dt)
+template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const double tstart, const double tend, const double dt)
 {
-    auto builder = get_builder(yaml);
-    const auto parsed_yaml = builder.get_parsed_yaml();
-    Sim sys = builder.build();
-    return simulate<ObserverType,StepperType>(sys, parsed_yaml, tstart, tend, dt);
+    Sim sys = get_system(yaml);
+    return simulate<StepperType>(sys, tstart, tend, dt);
 }
 
 MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh);
 
-template <typename ObserverType,
-          typename StepperType> ObserverType simulate(const std::string& yaml, const std::string& mesh, const double tstart, const double tend, const double dt)
+template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const std::string& mesh, const double tstart, const double tend, const double dt)
 {
-    auto builder = get_builder(yaml);
-    const auto parsed_yaml = builder.get_parsed_yaml();
-    const auto meshes = make_mesh_map(parsed_yaml, mesh);
-    Sim sys = builder.build(meshes);
-    return simulate<ObserverType,StepperType>(sys, parsed_yaml, tstart, tend, dt);
+    Sim sys = get_system(yaml, mesh);
+    return simulate<StepperType>(sys, tstart, tend, dt);
 }
 
-template <typename ObserverType,
-          typename StepperType> ObserverType simulate(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double tstart, const double tend, const double dt)
+template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double tstart, const double tend, const double dt)
 {
-    auto builder = get_builder(yaml);
-    const auto parsed_yaml = builder.get_parsed_yaml();
-    Sim sys = builder.build(meshes);
-    return simulate<ObserverType,StepperType>(sys, parsed_yaml, tstart, tend, dt);
+    Sim sys = get_system(yaml, meshes);
+    return simulate<StepperType>(sys, tstart, tend, dt);
 }
 
 #endif
