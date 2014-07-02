@@ -16,8 +16,7 @@ class YamlAngle;
 
 /** \author cec
  *  \date Jun 17, 2014, 12:39:59 PM
- *  \brief
- *  \details
+ *  \brief Builds a Body object from the YAML describing it
  *  \ingroup simulator
  *  \section ex1 Example
  *  \snippet simulator/unit_tests/src/BodyBuilderTest.cpp BodyBuilderTest example

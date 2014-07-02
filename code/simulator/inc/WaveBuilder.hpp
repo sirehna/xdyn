@@ -10,7 +10,7 @@
 
 #include <boost/optional/optional.hpp>
 
-#include "WaveModelInterface.hpp"
+class WaveModelInterface;
 
 class WaveBuilderInterface
 {

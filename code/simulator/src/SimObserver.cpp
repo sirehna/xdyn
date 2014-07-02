@@ -8,41 +8,21 @@
 #include "SimObserver.hpp"
 #include "StateMacros.hpp"
 #include "Sim.hpp"
+#include "YamlSimulatorInput.hpp"
 
-SimObserver::SimObserver(const std::vector<std::string>& bodies_) : bodies(bodies_),
-res(std::vector<std::map<std::string,double> >())
+SimObserver::SimObserver() : res(std::vector<Res>())
 {
 }
 
 void SimObserver::observe(const Sim& s, const double t)
 {
-    std::map<std::string,double> m;
-    m["t"] = t;
-    for (size_t i = 0 ; i < bodies.size() ; ++i)
-    {
-        m[customize(bodies[i],"x")] = *_X(s.state,i);
-        m[customize(bodies[i],"y")] = *_Y(s.state,i);
-        m[customize(bodies[i],"z")] = *_Z(s.state,i);
-        m[customize(bodies[i],"u")] = *_U(s.state,i);
-        m[customize(bodies[i],"v")] = *_V(s.state,i);
-        m[customize(bodies[i],"w")] = *_W(s.state,i);
-        m[customize(bodies[i],"p")] = *_P(s.state,i);
-        m[customize(bodies[i],"q")] = *_Q(s.state,i);
-        m[customize(bodies[i],"r")] = *_R(s.state,i);
-        m[customize(bodies[i],"qr")] = *_QR(s.state,i);
-        m[customize(bodies[i],"qi")] = *_QI(s.state,i);
-        m[customize(bodies[i],"qj")] = *_QJ(s.state,i);
-        m[customize(bodies[i],"qk")] = *_QK(s.state,i);
-    }
-    res.push_back(m);
+    Res r;
+    r.t = t;
+    r.x = s.state;
+    res.push_back(r);
 }
 
-std::string SimObserver::customize(const std::string& body, const std::string anything) const
-{
-    return anything + "(" + body + ")";
-}
-
-std::vector<std::map<std::string,double> > SimObserver::get() const
+std::vector<Res> SimObserver::get() const
 {
     return res;
 }

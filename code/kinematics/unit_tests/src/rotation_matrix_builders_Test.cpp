@@ -11,6 +11,8 @@
 #include "test_macros.hpp"
 #include <cmath>
 
+#define EPS (1E-10)
+
 rotation_matrix_builders_Test::rotation_matrix_builders_Test() : a(DataGenerator(545))
 {
 }
@@ -87,4 +89,21 @@ TEST_F(rotation_matrix_builders_Test, example)
     ASSERT_DOUBLE_EQ(sqrt(3)/4+sqrt(6)/8, R(1,1));
     ASSERT_DOUBLE_EQ(sqrt(2)/4, R(2,2));
 //! [rotation_matrix_builders_Test expected output]
+}
+
+TEST_F(rotation_matrix_builders_Test, matrix_to_euler)
+{
+    using namespace kinematics;
+    for (size_t i = 0 ; i < 10 ; ++i)
+    {
+        const double phi = a.random<double>().between(-PI,PI);
+        const double theta = a.random<double>().between(-PI/2,PI/2);
+        const double psi = a.random<double>().between(-PI,PI);
+        const EulerAngles input(phi, theta, psi);
+        const RotationMatrix R = rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 3, 2, 1>(input);
+        const EulerAngles output = euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 3, 2, 1>(R);
+        ASSERT_NEAR(phi,   output.phi,   EPS);
+        ASSERT_NEAR(theta, output.theta, EPS);
+        ASSERT_NEAR(psi,   output.psi,   EPS);
+    }
 }

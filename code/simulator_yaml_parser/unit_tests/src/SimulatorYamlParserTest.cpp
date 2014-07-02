@@ -85,9 +85,9 @@ TEST_F(SimulatorYamlParserTest, can_parse_initial_position_of_body_frame_relativ
     ASSERT_DOUBLE_EQ(4,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.x);
     ASSERT_DOUBLE_EQ(8,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.y);
     ASSERT_DOUBLE_EQ(12,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.z);
-    ASSERT_DOUBLE_EQ(13,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.phi);
-    ASSERT_DOUBLE_EQ(14,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.theta);
-    ASSERT_DOUBLE_EQ(15,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.psi);
+    ASSERT_DOUBLE_EQ(1.3,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.phi);
+    ASSERT_DOUBLE_EQ(1.4,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.theta);
+    ASSERT_DOUBLE_EQ(1.5,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.psi);
 }
 
 
@@ -344,6 +344,5 @@ TEST_F(SimulatorYamlParserTest, can_parse_output_forces_and_torques)
 
 TEST_F(SimulatorYamlParserTest, should_not_throw_even_if_no_mesh_is_defined)
 {
-    SimulatorYamlParser(test_data::falling_ball_example()).parse();
     ASSERT_NO_THROW(SimulatorYamlParser(test_data::falling_ball_example()).parse());
 }
