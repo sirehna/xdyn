@@ -12,6 +12,8 @@
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
 
+#define EPS (1E-10)
+
 update_kinematicsTests::update_kinematicsTests() : a(DataGenerator(121))
 {
 }
@@ -152,8 +154,8 @@ TEST_F(update_kinematicsTests, can_get_initial_states)
     ASSERT_DOUBLE_EQ(7, x.at(7));
     ASSERT_DOUBLE_EQ(6, x.at(8));
 
-    ASSERT_DOUBLE_EQ(cos(13./2)*cos(14/2)*cos(15./2)+sin(13./2)*sin(14/2)*sin(15./2), x.at(9));
-    ASSERT_DOUBLE_EQ(sin(13./2)*cos(14/2)*cos(15./2)-cos(13./2)*sin(14/2)*sin(15./2), x.at(10));
-    ASSERT_DOUBLE_EQ(cos(13./2)*sin(14/2)*cos(15./2)+sin(13./2)*cos(14/2)*sin(15./2), x.at(11));
-    ASSERT_DOUBLE_EQ(cos(13./2)*cos(14/2)*sin(15./2)-sin(13./2)*sin(14/2)*cos(15./2), x.at(12));
+    ASSERT_NEAR(cos(1.3/2)*cos(1.4/2)*cos(1.5/2)+sin(1.3/2)*sin(1.4/2)*sin(1.5/2), x.at(9), EPS);
+    ASSERT_NEAR(sin(1.3/2)*cos(1.4/2)*cos(1.5/2)-cos(1.3/2)*sin(1.4/2)*sin(1.5/2), x.at(10), EPS);
+    ASSERT_NEAR(cos(1.3/2)*sin(1.4/2)*cos(1.5/2)+sin(1.3/2)*cos(1.4/2)*sin(1.5/2), x.at(11), EPS);
+    ASSERT_NEAR(cos(1.3/2)*cos(1.4/2)*sin(1.5/2)-sin(1.3/2)*sin(1.4/2)*cos(1.5/2), x.at(12), EPS);
 }
