@@ -44,21 +44,21 @@ TEST_F(SimTest, can_simulate_falling_ball)
     for (size_t i = 0 ; i < N+1 ; ++i)
     {
         const double t = (double) i;
-        ASSERT_EQ(13, res.at(i).x.size())          << "Time step: i=" << i;
-        ASSERT_DOUBLE_EQ(t, res.at(i).t)        << "Time step: i=" << i;
-        ASSERT_NEAR(4+1.*t, res.at(i).x[XIDX(0)], EPS)  << "Time step: i=" << i;
-        ASSERT_NEAR(8, res.at(i).x[YIDX(0)], EPS)  << "Time step: i=" << i;
-        ASSERT_NEAR(12+g*t*(t-1)/2., res.at(i).x[ZIDX(0)], EPS) << "Time step: i=" << i;
-        ASSERT_NEAR(1, res.at(i).x[UIDX(0)], EPS)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[VIDX(0)], EPS)  << "Time step: i=" << i;
-        ASSERT_NEAR(g*t, res.at(i).x[WIDX(0)], EPS)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[PIDX(0)], EPS)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[QIDX(0)], EPS)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[RIDX(0)], EPS)  << "Time step: i=" << i;
-        ASSERT_NEAR(1, res.at(i).x[QRIDX(0)], EPS) << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[QIIDX(0)], EPS) << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[QJIDX(0)], EPS) << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[QKIDX(0)], EPS) << "Time step: i=" << i;
+        ASSERT_EQ(13, res.at(i).x.size())                             << "Time step: i=" << i;
+        ASSERT_DOUBLE_EQ(t,          res.at(i).t)                << "Time step: i=" << i;
+        ASSERT_NEAR(4+1.*t,          res.at(i).x[XIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(8,               res.at(i).x[YIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(12+g*t*(t-1)/2., res.at(i).x[ZIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(1,               res.at(i).x[UIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[VIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(g*t,             res.at(i).x[WIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[PIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[QIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[RIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(1,               res.at(i).x[QRIDX(0)], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[QIIDX(0)], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[QJIDX(0)], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[QKIDX(0)], EPS) << "Time step: i=" << i;
     }
 }
 
@@ -81,20 +81,20 @@ TEST_F(SimTest, can_simulate_oscillating_cube)
     for (size_t i = 0 ; i < N ; ++i)
     {
         const double t = i*dt;
-        ASSERT_EQ(13, res.at(i).x.size())          << "Time step: i=" << i;
-        ASSERT_DOUBLE_EQ(t, res.at(i).t)        << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[XIDX(0)], eps)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[YIDX(0)], eps)  << "Time step: i=" << i;
-        ASSERT_NEAR((z0-A)*cos(omega*t)+A, res.at(i).x[ZIDX(0)], eps) << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[UIDX(0)], eps)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[VIDX(0)], eps)  << "Time step: i=" << i;
+        ASSERT_EQ(13,                          res.at(i).x.size())         << "Time step: i=" << i;
+        ASSERT_DOUBLE_EQ(t,                    res.at(i).t)                << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[XIDX(0)], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[YIDX(0)], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR((z0-A)*cos(omega*t)+A,     res.at(i).x[ZIDX(0)], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[UIDX(0)], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[VIDX(0)], eps)  << "Time step: i=" << i;
         ASSERT_NEAR(omega*(A-z0)*sin(omega*t), res.at(i).x[WIDX(0)], eps)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[PIDX(0)], eps)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[QIDX(0)], eps)  << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[RIDX(0)], eps)  << "Time step: i=" << i;
-        ASSERT_NEAR(1, res.at(i).x[QRIDX(0)], EPS) << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[QIIDX(0)], EPS) << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[QJIDX(0)], EPS) << "Time step: i=" << i;
-        ASSERT_NEAR(0, res.at(i).x[QKIDX(0)], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[PIDX(0)], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[QIDX(0)], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[RIDX(0)], eps)  << "Time step: i=" << i;
+        ASSERT_NEAR(1,                         res.at(i).x[QRIDX(0)], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[QIIDX(0)], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[QJIDX(0)], EPS) << "Time step: i=" << i;
+        ASSERT_NEAR(0,                         res.at(i).x[QKIDX(0)], EPS) << "Time step: i=" << i;
     }
 }
