@@ -67,6 +67,7 @@ TEST_F(BodyBuilderTest, relative_position_should_be_correct)
 
 TEST_F(BodyBuilderTest, mesh_is_correct)
 {
+    const double EPS = 1E-11;
     ASSERT_EQ(12,body.mesh->facets.size());
     for (size_t i = 0 ; i < 12 ; ++i)
     {
@@ -77,9 +78,9 @@ TEST_F(BodyBuilderTest, mesh_is_correct)
     ASSERT_DOUBLE_EQ(1,(double)body.mesh->facets.at(0).unit_normal(2));
     ASSERT_EQ(8,body.mesh->nodes.cols());
     ASSERT_EQ(3,body.mesh->nodes.rows());
-    ASSERT_EQ(-0.5,(double)body.mesh->nodes.col(0)(0));
-    ASSERT_EQ(-0.5,(double)body.mesh->nodes.col(0)(1));
-    ASSERT_EQ(1,(double)body.mesh->nodes.col(0)(2));
+    ASSERT_NEAR( 4653.132472705181,(double)body.mesh->nodes.col(0)(0),EPS);
+    ASSERT_NEAR(27495.576119933776,(double)body.mesh->nodes.col(0)(1),EPS);
+    ASSERT_NEAR(17643.008920773238,(double)body.mesh->nodes.col(0)(2),EPS);
 }
 
 TEST_F(BodyBuilderTest, mesh_to_body_is_correct)

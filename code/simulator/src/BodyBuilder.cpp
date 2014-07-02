@@ -36,8 +36,8 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
     Point translation(ret.name, ret.x_relative_to_mesh, ret.y_relative_to_mesh, ret.z_relative_to_mesh);
     kinematics::Transform transform(translation, ret.mesh_to_body, "mesh("+ret.name+")");
     ret.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
-    PointMatrix mesh_points_expressed_in_mesh_frame(ret.mesh->nodes, "mesh("+ret.name+")");
-    ret.M = PointMatrixPtr(new PointMatrix(transform.inverse()*mesh_points_expressed_in_mesh_frame));
+    ret.mesh->nodes = (transform.inverse()*PointMatrix(ret.mesh->nodes, "mesh("+ret.name+")")).m;
+    ret.M = PointMatrixPtr(new PointMatrix(ret.mesh->nodes, ret.name));
     add_inertia(ret, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
     return ret;
 }
