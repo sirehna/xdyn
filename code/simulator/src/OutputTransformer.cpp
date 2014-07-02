@@ -11,6 +11,7 @@
 #include "SimulatorBuilder.hpp"
 #include "Transform.hpp"
 #include "OutputTransformerException.hpp"
+#include "rotation_matrix_builders.hpp"
 
 OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(builder.get_parsed_yaml()), bodies(std::vector<Body>()), points(std::map<std::string,Point>()), k(TR1(shared_ptr)<Kinematics>(new Kinematics()))
 {
@@ -34,6 +35,23 @@ template <typename T> double get_axis_value(const T& P, const std::string& axis)
     if (axis=="y") return P.y();
     if (axis=="z") return P.z();
                    return 0;
+}
+
+template <> double get_axis_value<EulerAngles>(const EulerAngles& P, const std::string& axis)
+{
+    if (axis=="x") return P.phi;
+    if (axis=="y") return P.theta;
+    if (axis=="z") return P.psi;
+                   return 0;
+}
+
+std::string angle_name(const std::string& axis);
+std::string angle_name(const std::string& axis)
+{
+    if (axis=="x") return "phi";
+    if (axis=="y") return "theta";
+    if (axis=="z") return "psi";
+                   return "";
 }
 
 void OutputTransformer::fill(std::map<std::string,double>& out, const YamlPositionOutput& position) const
@@ -61,12 +79,56 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlPositi
     }
 }
 
+bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third);
+bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third)
+{
+    return (convention.at(0) == first) and (convention.at(1) == second) and (convention.at(2) == third);
+}
+
+EulerAngles OutputTransformer::convert(const RotationMatrix& R) const
+{
+    using namespace kinematics;
+    if (input.rotations.order_by == "angle")
+    {
+        if (match(input.rotations.convention, "z", "y'", "x''"))
+            return euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 3, 2, 1>(R);
+        std::stringstream ss;
+        ss << "Rotation convention '" << input.rotations.convention.at(0) << "," << input.rotations.convention.at(1) << "," << input.rotations.convention.at(2) << "' is not currently supported.";
+        THROW(__PRETTY_FUNCTION__, OutputTransformerException, ss.str());
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, OutputTransformerException, std::string("Ordering rotations by '") + input.rotations.order_by + "' is not currently supported");
+    }
+    return EulerAngles();
+}
+
+void OutputTransformer::fill(std::map<std::string,double>& out, const YamlAnglesOutput& angle) const
+{
+    using namespace kinematics;
+    const auto b1 = angle.frame;
+    const auto b2 = angle.relative_to_frame;
+    const auto b3 = angle.projected_in_frame;
+    const auto R13 = k->get(b1, b3).get_rot();
+    const auto R12 = k->get(b1, b2).get_rot();
+    RotationMatrix R12_projected_in_3 = R13.transpose();
+    R12_projected_in_3 *= R12.transpose();
+    R12_projected_in_3 *= R13;
+    const EulerAngles a = convert(R12_projected_in_3);
+    for (auto axis:angle.axes)
+    {
+        const auto varname = angle_name(axis) + "(" + b1 + " / " + b2 + " -> " + b3 + ")";
+        out[varname] = get_axis_value(a, axis);
+    }
+}
+
 std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
 {
     std::map<std::string,double> out;
     out["t"] = res.t;
     update_kinematics(res.x);
     for (const auto position:input.position_output) fill(out, position);
+    for (const auto angle:input.angles_output) fill(out, angle);
 
     return out;
 }

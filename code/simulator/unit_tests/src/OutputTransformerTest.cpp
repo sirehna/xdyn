@@ -63,6 +63,13 @@ TEST_F(OutputTransformerTest, position_outputs_should_exist_in_map)
     ASSERT_NE(out1.at(0).end(), out1.at(0).find("z(O in NED / ball -> ball)"));
 }
 
+TEST_F(OutputTransformerTest, angle_outputs_should_exist_in_map)
+{
+    ASSERT_NE(out2.at(0).end(), out2.at(0).find("phi(body 1 / NED -> body 1)"));
+    ASSERT_NE(out2.at(0).end(), out2.at(0).find("theta(body 1 / NED -> body 1)"));
+    ASSERT_NE(out2.at(0).end(), out2.at(0).find("psi(body 1 / NED -> body 1)"));
+}
+
 TEST_F(OutputTransformerTest, can_compute_positions)
 {
     const auto x0 = out1.at(0)["x(O in NED / ball -> ball)"];
@@ -73,4 +80,14 @@ TEST_F(OutputTransformerTest, can_compute_positions)
     ASSERT_DOUBLE_EQ(-12,        z0) << "t = 0";
     ASSERT_DOUBLE_EQ(-(4+2),     x2) << "t = 2";
     ASSERT_DOUBLE_EQ(-(12+9.81), z2) << "t = 2";
+}
+
+TEST_F(OutputTransformerTest, can_compute_angles)
+{
+    const auto phi   = out2.at(0)["phi(body 1 / NED -> body 1)"];
+    const auto theta = out2.at(0)["theta(body 1 / NED -> body 1)"];
+    const auto psi   = out2.at(0)["psi(body 1 / NED -> body 1)"];
+    EXPECT_DOUBLE_EQ(1.3, phi);
+    EXPECT_DOUBLE_EQ(1.4, theta);
+    EXPECT_DOUBLE_EQ(1.5, psi);
 }

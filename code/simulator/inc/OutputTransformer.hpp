@@ -12,6 +12,7 @@
 #include <string>
 
 #include "Body.hpp"
+#include "EulerAngles.hpp"
 #include "Point.hpp"
 #include "Res.hpp"
 #include "StateMacros.hpp"
@@ -43,6 +44,8 @@ class OutputTransformer
     private:
         void update_kinematics(const StateType& x) const;
         void fill(std::map<std::string,double>& out, const YamlPositionOutput& position) const;
+        void fill(std::map<std::string,double>& out, const YamlAnglesOutput& angle) const;
+        EulerAngles convert(const RotationMatrix& R) const;
 
         YamlSimulatorInput input;
         std::vector<Body> bodies;
