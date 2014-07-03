@@ -583,3 +583,11 @@ TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
     ASSERT_DOUBLE_EQ(G.y(), Fhs.get_point().y());
     ASSERT_DOUBLE_EQ(G.z(), Fhs.get_point().z());
 }
+
+TEST_F(hydrostaticTest, immerged_polygon_should_not_throw_an_exception_one)
+{
+    Matrix3x M;
+    const std::vector<size_t>idx = {0,1,2,3};
+    const std::vector<double> v = {-1.0,0.0,1.0,0.0};
+    ASSERT_NO_THROW(immerged_polygon(M,idx,v));
+}
