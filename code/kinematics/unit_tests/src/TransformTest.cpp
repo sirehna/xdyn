@@ -262,3 +262,36 @@ TEST_F(TransformTest, can_compute_the_inverse_transform)
         ASSERT_SMALL_RELATIVE_ERROR(Pb.z(),((bTa*aTb)*Pb).z(),EPS);
     }
 }
+
+TEST_F(TransformTest, can_swap_the_from_and_to_frames_of_a_transform)
+{
+    for (size_t i = 0 ; i < 20 ; ++i)
+    {
+        //! [TransformTest swap_example]
+        const std::string frame_a = a.random<std::string>();
+        const std::string frame_b = a.random<std::string>();
+        auto bTa = random_transform(a, frame_a, frame_b);
+        ASSERT_EQ(frame_a, bTa.get_from_frame());
+        ASSERT_EQ(frame_b, bTa.get_to_frame());
+        const auto P1 = bTa.get_point();
+        const auto M1 = bTa.get_rot();
+        bTa.swap();
+        ASSERT_EQ(frame_b, bTa.get_from_frame());
+        ASSERT_EQ(frame_a, bTa.get_to_frame());
+        const auto P2 = bTa.get_point();
+        const auto M2 = bTa.get_rot();
+        ASSERT_DOUBLE_EQ(P1.x(), P2.x());
+        ASSERT_DOUBLE_EQ(P1.y(), P2.y());
+        ASSERT_DOUBLE_EQ(P1.z(), P2.z());
+        ASSERT_DOUBLE_EQ((double)M1(0,0), (double)M2(0,0));
+        ASSERT_DOUBLE_EQ((double)M1(0,1), (double)M2(0,1));
+        ASSERT_DOUBLE_EQ((double)M1(0,2), (double)M2(0,2));
+        ASSERT_DOUBLE_EQ((double)M1(1,0), (double)M2(1,0));
+        ASSERT_DOUBLE_EQ((double)M1(1,1), (double)M2(1,1));
+        ASSERT_DOUBLE_EQ((double)M1(1,2), (double)M2(1,2));
+        ASSERT_DOUBLE_EQ((double)M1(2,0), (double)M2(2,0));
+        ASSERT_DOUBLE_EQ((double)M1(2,1), (double)M2(2,1));
+        ASSERT_DOUBLE_EQ((double)M1(2,2), (double)M2(2,2));
+        //! [TransformTest swap_example]
+    }
+}

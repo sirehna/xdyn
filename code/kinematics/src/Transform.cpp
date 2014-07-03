@@ -97,3 +97,10 @@ kinematics::Transform kinematics::identity(const std::string& frame)
 {
     return kinematics::Transform(Point(frame,0,0,0), frame);
 }
+
+void kinematics::Transform::swap()
+{
+    const auto from_frame = t.get_frame();
+    t = Point(to_frame, t.x(), t.y(), t.z());
+    to_frame = from_frame;
+}
