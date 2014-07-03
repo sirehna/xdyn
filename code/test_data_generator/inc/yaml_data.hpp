@@ -17,6 +17,7 @@ namespace test_data
     std::string falling_ball_example();
     std::string oscillating_cube_example();
     std::string stable_cube_example();
+    std::string stable_rolling_cube_test();
 }
 
 #endif /* YAML_DATA_HPP_ */

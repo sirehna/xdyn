@@ -5,7 +5,6 @@
  *      Author: cady
  */
 
-
 #include "hydrostatic.hpp"
 #include "HydrostaticException.hpp"
 #include "kahan_sum.hpp"
@@ -53,7 +52,7 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
     return areas_times_points/areas;
 }
 
-double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes             //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                                      )
 {
     const size_t n = (size_t)nodes.first.cols();
@@ -79,7 +78,7 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
     size_t last = 0;
     bool first_was_assigned = false;
     bool last_was_assigned = false;
-    if ((z[0]<0) and (z[1]>=0)) {last_was_assigned=true;}
+    if ((z[0]<0) and (z[1]>=0)) {last_was_assigned = true;}
     for (size_t i = 1 ; i < n-1 ; ++i)
     {
         if (z[i]<0)
@@ -91,7 +90,7 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
                     THROW(__PRETTY_FUNCTION__, HydrostaticException, "Set of emerged points is not convex.");
                 }
                 first = i;
-                first_was_assigned=true;
+                first_was_assigned = true;
             }
             if (z[i+1]>=0)
             {
@@ -100,7 +99,7 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
                     THROW(__PRETTY_FUNCTION__, HydrostaticException, "Set of emerged points is not convex.");
                 }
                 last = i;
-                last_was_assigned=true;
+                last_was_assigned = true;
             }
         }
     }
@@ -144,13 +143,17 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
     const size_t idxB = idx[first_and_last.second];
     const size_t idxA1 = previous(idx, idxA);
     const size_t idxB1 = next(idx, idxB);
+    const bool A1_is_on_surface = v.at(idxA1)==0;
+    const bool B1_is_on_surface = v.at(idxB1)==0;
     const EPoint A = M.col((int)idxA);
     const EPoint A1 = M.col((int)idxA1);
     const EPoint B = M.col((int)idxB);
     const EPoint B1 = M.col((int)idxB1);
     const EPoint P = intersection(A,v.at(idxA),A1,v.at(idxA1));
     const EPoint Q = intersection(B,v.at(idxB),B1,v.at(idxB1));
-    const size_t N = (first_and_last.second>=first_and_last.first) ? n-(first_and_last.second-first_and_last.first-1) : first_and_last.second+first_and_last.first+1;
+    size_t N = (first_and_last.second>=first_and_last.first) ? n-(first_and_last.second-first_and_last.first-1) : first_and_last.second+first_and_last.first+1;
+    if (A1_is_on_surface) N--;
+    if (B1_is_on_surface) N--;
     Eigen::Matrix<double,3,Eigen::Dynamic> ret;
     std::vector<double> delta_z;
     ret.resize(3,(int)N);
@@ -166,7 +169,9 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
         delta_z.push_back(0);
         ret.col(k++) = Q;
         delta_z.push_back(0);
-        for (size_t i = first_and_last.second+1 ; i < n ; ++i)
+        const size_t start = A1_is_on_surface ? first_and_last.second+2 : first_and_last.second+1;
+        const size_t stop = B1_is_on_surface ? n-1 : n;
+        for (size_t i = start ; i < stop ; ++i)
         {
             ret.col(k++) = M.col((int)idx.at(i));
             delta_z.push_back(v.at(idx.at(i)));
@@ -189,7 +194,7 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
 
 EPoint hydrostatic::intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB)
 {
-    if (dzA*dzB>=0)
+    if (dzA*dzB>0)
     {
         THROW(__PRETTY_FUNCTION__, HydrostaticException, "zB & zA must have different signs");
     }
@@ -241,13 +246,13 @@ size_t hydrostatic::previous(const std::vector<size_t>& idx, const size_t i0)
     return 0;
 }
 
-UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                             const EPoint& C, //!< Point where the force is applied (barycentre of the facet)
-                             const double rho,         //!< Density of the fluid (in kg/m^3)
-                             const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-                             const double z,           //!< Relative immersion (in metres)
-                             const EPoint& dS //!< Unit normal vector multiplied by the surface of the facet
-                           )
+UnsafeWrench hydrostatic::dF(const Point& O,    //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                             const EPoint& C,   //!< Point where the force is applied (barycentre of the facet)
+                             const double rho,  //!< Density of the fluid (in kg/m^3)
+                             const double g,    //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                             const double z,    //!< Relative immersion (in metres)
+                             const EPoint& dS   //!< Unit normal vector multiplied by the surface of the facet
+                            )
 {
     const EPoint F = -rho*g*z*dS; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
     return UnsafeWrench(O, F, (C-O.v).cross(F));
@@ -258,7 +263,7 @@ UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the W
                              const double rho,         //!< Density of the fluid (in kg/m^3)
                              const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                              const double immersion    //!< Relative immersion of the barycentre (in metres)
-                       )
+                            )
 {
     const EPoint F = -rho*g*immersion*f.area*f.unit_normal; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
     return UnsafeWrench(O, F, (f.barycenter-O.v).cross(F));
@@ -269,7 +274,7 @@ Wrench hydrostatic::force(const MeshPtr& mesh,                    //!< Mesh
                           const double rho,                       //!< Density of the fluid (in kg/m^3)
                           const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                           const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
-                )
+                         )
 {
     if (immersions.size() != (size_t)mesh->nodes.cols())
     {

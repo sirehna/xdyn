@@ -12,14 +12,11 @@
 int main(int argc, const char* argv[])
 {
     const std::string path = argc>1 ? std::string(argv[1])+"/" : "";
-    std::ofstream file1(path+"complete_example.yml"),
-                  file2(path+"hydrostatic_integration_test.yml"),
+    std::ofstream file2(path+"hydrostatic_integration_test.yml"),
                   file3(path+"falling_ball_test.yml"),
                   file4(path+"oscillating_cube_test.yml"),
-                  file5(path+"stable_cube_test.yml");
-
-    file1 << test_data::full_example();
-    file1.close();
+                  file5(path+"stable_cube_test.yml"),
+                  file6(path+"stable_rolling_cube_test.yml");
 
     file2 << test_data::hydrostatic_test();
     file2.close();
@@ -33,5 +30,7 @@ int main(int argc, const char* argv[])
     file5 << test_data::stable_cube_example();
     file5.close();
 
+    file6 << test_data::stable_rolling_cube_test();
+    file6.close();
     return 0;
 }

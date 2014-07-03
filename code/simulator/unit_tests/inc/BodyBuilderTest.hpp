@@ -19,11 +19,11 @@ class BodyBuilderTest : public ::testing::Test
 
     protected:
         BodyBuilderTest();
-	    virtual ~BodyBuilderTest();
+        virtual ~BodyBuilderTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
-		static const Body body;
+        DataGenerator a;
+        static const Body body;
 };
 
 #endif  /* BODYBUILDERTEST_HPP_ */
