@@ -78,7 +78,7 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
     size_t last = 0;
     bool first_was_assigned = false;
     bool last_was_assigned = false;
-    if ((z[0]<0) and (z[1]>=0)) {last_was_assigned=true;}
+    if ((z[0]<0) and (z[1]>=0)) {last_was_assigned = true;}
     for (size_t i = 1 ; i < n-1 ; ++i)
     {
         if (z[i]<0)
@@ -99,7 +99,7 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
                     THROW(__PRETTY_FUNCTION__, HydrostaticException, "Set of emerged points is not convex.");
                 }
                 last = i;
-                last_was_assigned=true;
+                last_was_assigned = true;
             }
         }
     }
