@@ -61,4 +61,6 @@ class Kinematics
         TR1(shared_ptr)<Impl> pimpl;
 };
 
+typedef TR1(shared_ptr)<Kinematics> KinematicsPtr;
+
 #endif /* KINEMATICS_HPP_ */
