@@ -13,6 +13,7 @@
 #include "Transform.hpp"
 #include "generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"
+#include "Mesh.hpp"
 
 #define BODY "body 1"
 #include "test_macros.hpp"
@@ -72,7 +73,6 @@ TEST_F(HydrostaticForceModelTest, example)
     ASSERT_DOUBLE_EQ(0, Fhs.N());
 }
 
-#include "Mesh.hpp"
 /**
  * \note Test of a fully immerged rectangle plane with points [P1,P2,P3,P4]
  * P1 = [-2,+4,+6]
@@ -109,7 +109,6 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     input.w = WaveModelPtr(new DefaultWaveModel(0));
 
     const auto points = two_triangles_immerged();
-
     Body body = get_body(BODY, points);
     body.G = G;
 
