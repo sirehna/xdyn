@@ -5,7 +5,6 @@
  *      Author: cady
  */
 
-
 #include "hydrostatic.hpp"
 #include "HydrostaticException.hpp"
 #include "kahan_sum.hpp"
@@ -53,7 +52,7 @@ double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Co
     return areas_times_points/areas;
 }
 
-double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes             //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                                      )
 {
     const size_t n = (size_t)nodes.first.cols();
@@ -91,7 +90,7 @@ std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::v
                     THROW(__PRETTY_FUNCTION__, HydrostaticException, "Set of emerged points is not convex.");
                 }
                 first = i;
-                first_was_assigned=true;
+                first_was_assigned = true;
             }
             if (z[i+1]>=0)
             {
@@ -241,13 +240,13 @@ size_t hydrostatic::previous(const std::vector<size_t>& idx, const size_t i0)
     return 0;
 }
 
-UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                             const EPoint& C, //!< Point where the force is applied (barycentre of the facet)
-                             const double rho,         //!< Density of the fluid (in kg/m^3)
-                             const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-                             const double z,           //!< Relative immersion (in metres)
-                             const EPoint& dS //!< Unit normal vector multiplied by the surface of the facet
-                           )
+UnsafeWrench hydrostatic::dF(const Point& O,    //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                             const EPoint& C,   //!< Point where the force is applied (barycentre of the facet)
+                             const double rho,  //!< Density of the fluid (in kg/m^3)
+                             const double g,    //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                             const double z,    //!< Relative immersion (in metres)
+                             const EPoint& dS   //!< Unit normal vector multiplied by the surface of the facet
+                            )
 {
     const EPoint F = -rho*g*z*dS; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
     return UnsafeWrench(O, F, (C-O.v).cross(F));
@@ -258,7 +257,7 @@ UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the W
                              const double rho,         //!< Density of the fluid (in kg/m^3)
                              const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                              const double immersion    //!< Relative immersion of the barycentre (in metres)
-                       )
+                            )
 {
     const EPoint F = -rho*g*immersion*f.area*f.unit_normal; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
     return UnsafeWrench(O, F, (f.barycenter-O.v).cross(F));
@@ -269,7 +268,7 @@ Wrench hydrostatic::force(const MeshPtr& mesh,                    //!< Mesh
                           const double rho,                       //!< Density of the fluid (in kg/m^3)
                           const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                           const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
-                )
+                         )
 {
     if (immersions.size() != (size_t)mesh->nodes.cols())
     {

@@ -53,7 +53,7 @@ namespace hydrostatic
     std::pair<Matrix3x,std::vector<double> > immerged_polygon(const Matrix3x& M,              //!< Matrix containing all the points in the mesh
                                                               const std::vector<size_t>& idx, //!< Indices of the points
                                                               const std::vector<double>& v    //!< Vector of relative wave heights (positive if point is immerged)
-                                 );
+                                                             );
 
     /**  \author cec
       *  \date Apr 30, 2014, 11:41:54 AM
@@ -73,11 +73,11 @@ namespace hydrostatic
       *  \returns A point intersecting (AB) and the free surface
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest intersection_example
       */
-    EPoint intersection(const EPoint& A,  //<! First point
-                        const double dzA, //<! Relative immersion of first point
-                        const EPoint& B,  //<! Second point
-                        const double dzB  //<! Relative immersion of second point
-                           );
+    EPoint intersection(const EPoint& A,  //!< First point
+                        const double dzA, //!< Relative immersion of first point
+                        const EPoint& B,  //!< Second point
+                        const double dzB  //!< Relative immersion of second point
+                       );
 
     /**  \author cec
       *  \date May 1, 2014, 2:04:40 PM
@@ -88,7 +88,7 @@ namespace hydrostatic
       */
     size_t next(const std::vector<size_t>& idx, //!< Available indices, in order
                 const size_t i0                 //!< Index to look for in 'idx'.
-                           );
+               );
 
     /**  \author cec
       *  \date May 1, 2014, 2:56:02 PM
@@ -99,7 +99,7 @@ namespace hydrostatic
       */
     size_t previous(const std::vector<size_t>& idx, //!< Available indices, in order
                     const size_t i0                 //!< Index to look for in 'idx'.
-                       );
+                   );
 
     /**  \author cec
       *  \date May 19, 2014, 10:30:33 AM
@@ -114,7 +114,7 @@ namespace hydrostatic
                     const double g,         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                     const double immersion, //!< Relative immersion of the barycentre (in metres)
                     const EPoint& dS        //!< Unit normal vector multiplied by the surface of the facet
-                           );
+                   );
 
     /**  \author cec
       *  \date May 19, 2014, 3:54:16 PM
@@ -127,7 +127,7 @@ namespace hydrostatic
                     const double rho,         //!< Density of the fluid (in kg/m^3)
                     const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
                     const double immersion    //!< Relative immersion of the barycentre (in metres)
-                           );
+                   );
 
     /**  \author cec
       *  \date May 19, 2014, 3:19:19 PM
@@ -136,7 +136,7 @@ namespace hydrostatic
       *  \returns
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
       */
-    Wrench force(const MeshPtr& mesh,                       //!< Coordinates of all the points
+    Wrench force(const MeshPtr& mesh,                    //!< Coordinates of all the points
                  const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                  const double rho,                       //!< Density of the fluid (in kg/m^3)
                  const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
@@ -154,7 +154,7 @@ namespace hydrostatic
       */
     ImmersionStatus get_immersion_type(const std::vector<size_t>& idx, //!< Vector of indexes in delta_z
                                        const std::vector<double>& delta_z //!< Vector of immersions
-                           );
+                                      );
 }
 
 #endif /* HYDROSTATIC_HPP_ */
