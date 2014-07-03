@@ -584,10 +584,64 @@ TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
     ASSERT_DOUBLE_EQ(G.z(), Fhs.get_point().z());
 }
 
-TEST_F(hydrostaticTest, immerged_polygon_should_not_throw_an_exception_one)
+TEST_F(hydrostaticTest, should_be_able_to_compute_intersection_even_if_one_of_the_points_isexactly_on_the_surface)
 {
-    Matrix3x M;
+    const EPoint A(1,2,3);
+    const EPoint B(4,5,6);
+    const EPoint C(7,8,9);
+    const EPoint D(11,12,13);
+    const EPoint P = intersection(A,0,B,-1);
+    const EPoint Q = intersection(C,0,D,-1);
+
+    ASSERT_DOUBLE_EQ((double)A(0), (double)P(0));
+    ASSERT_DOUBLE_EQ((double)A(1), (double)P(1));
+    ASSERT_DOUBLE_EQ((double)A(2), (double)P(2));
+
+    ASSERT_DOUBLE_EQ((double)Q(0), (double)C(0));
+    ASSERT_DOUBLE_EQ((double)Q(1), (double)C(1));
+    ASSERT_DOUBLE_EQ((double)Q(2), (double)C(2));
+}
+
+TEST_F(hydrostaticTest, immerged_polygon_should_not_throw_an_exception_if_two_points_are_exactly_on_the_surface)
+{
+    Eigen::Matrix<double,3,4> M;
+    M <<  0,-1,0,1,
+          0, 0,0,0,
+         -1, 0,1,0;
     const std::vector<size_t>idx = {0,1,2,3};
-    const std::vector<double> v = {-1.0,0.0,1.0,0.0};
+    const std::vector<double> v = {-1,0,1,0};
+    immerged_polygon(M,idx,v);
     ASSERT_NO_THROW(immerged_polygon(M,idx,v));
+}
+
+TEST_F(hydrostaticTest, correct_immerged_polygon_when_two_points_are_exactly_on_the_surface)
+{
+    Eigen::Matrix<double,3,4> M;
+    M <<  0,-1,0,1,
+          0, 0,0,0,
+         -1, 0,1,0;
+    const std::vector<size_t>idx = {0,1,2,3};
+    const std::vector<double> v = {-1,0,1,0};
+    const std::pair<Matrix3x,std::vector<double> > P = immerged_polygon(M,idx,v);
+
+    const auto p = P.first;
+
+    ASSERT_EQ(3, p.cols());
+
+    ASSERT_DOUBLE_EQ(1,(double)p(0,0));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,0));
+    ASSERT_DOUBLE_EQ(0,(double)p(2,0));
+
+    ASSERT_DOUBLE_EQ(-1,(double)p(0,1));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,1));
+    ASSERT_DOUBLE_EQ(0,(double)p(2,1));
+
+    ASSERT_DOUBLE_EQ(0,(double)p(0,2));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,2));
+    ASSERT_DOUBLE_EQ(1,(double)p(2,2));
+
+    ASSERT_EQ(3, P.second.size());
+    ASSERT_DOUBLE_EQ(0, P.second[0]);
+    ASSERT_DOUBLE_EQ(0, P.second[1]);
+    ASSERT_DOUBLE_EQ(1, P.second[2]);
 }
