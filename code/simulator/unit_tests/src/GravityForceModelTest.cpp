@@ -74,7 +74,7 @@ TEST_F(GravityForceModelTest, example)
 TEST_F(GravityForceModelTest, example_with_an_orientation)
 {
     using namespace kinematics;
-    const double EPS = 1e-13;
+    const double EPS = 1e-11;
     const double cPhi   = 0.0;
     const double cTheta = 0.5*sqrt(3);
     const double cPsi   = 0.5;
