@@ -42,7 +42,15 @@ namespace kinematics
             Transform inverse() const;
             Point get_point() const;
             RotationMatrix get_rot() const;
-
+            /**  \author cec
+              *  \date Jul 3, 2014, 9:33:16 AM
+              *  \brief Swaps the "to" and "from" frames
+              *  \details This quickfix is done because we need to distinguish
+              *  between reference frame change (same object expressed in a different
+              *  frame) and transform (or mover) (different object in same reference frame)
+              *  \snippet kinematics/unit_tests/src/TransformTest.cpp TransformTest swap_example
+              */
+            void swap();
 
             friend std::ostream& operator<<(std::ostream& os, const Transform& T);
 

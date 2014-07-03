@@ -51,6 +51,72 @@ TEST_F(DefaultWaveModelTest, more_interesting_example)
     ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
 }
 
+TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_180p_around_Y)
+{
+    TR1(shared_ptr)<Kinematics> k(new Kinematics());
+    const Point P("body", 0, 0, 1);
+    const Point Q("NED", 7, -100, 1795);
+    const DefaultWaveModel w(7);
+    RotationMatrix rot;
+    rot(0,0)=-1.0;
+    rot(0,1)=0.0;
+    rot(0,2)=0.0;
+    rot(1,0)=0.0;
+    rot(1,1)=1.0;
+    rot(1,2)=0.0;
+    rot(2,0)=0.0;
+    rot(2,1)=0.0;
+    rot(2,2)=-1.0;
+    const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), rot, "body");
+    k->add(bodyTned);
+    ASSERT_DOUBLE_EQ(1, w.get_relative_wave_height(P,k));
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
+}
+
+TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_with_rotation_090p_around_Y)
+{
+    TR1(shared_ptr)<Kinematics> k(new Kinematics());
+    const Point P("body", 0, 0, 1);
+    const Point Q("NED", 7, -100, 1795);
+    const DefaultWaveModel w(7);
+    RotationMatrix rot;
+    rot(0,0)= 0.0;
+    rot(0,1)= 0.0;
+    rot(0,2)= 1.0;
+    rot(1,0)= 0.0;
+    rot(1,1)= 1.0;
+    rot(1,2)= 0.0;
+    rot(2,0)=-1.0;
+    rot(2,1)= 0.0;
+    rot(2,2)= 0.0;
+    const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), rot, "body");
+    k->add(bodyTned);
+    ASSERT_DOUBLE_EQ(2, w.get_relative_wave_height(P,k));
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
+}
+
+TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation)
+{
+    TR1(shared_ptr)<Kinematics> k(new Kinematics());
+    const Point P("body", 0, 0, 1);
+    const Point Q("NED", 7, -100, 1795);
+    const DefaultWaveModel w(7);
+    RotationMatrix rot;
+    rot(0,0)=-1.0;
+    rot(0,1)=0.0;
+    rot(0,2)=0.0;
+    rot(1,0)=0.0;
+    rot(1,1)=1.0;
+    rot(1,2)=0.0;
+    rot(2,0)=0.0;
+    rot(2,1)=0.0;
+    rot(2,2)=-1.0;
+    const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), rot, "body");
+    k->add(bodyTned);
+    ASSERT_DOUBLE_EQ(1, w.get_relative_wave_height(P,k));
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
+}
+
 TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
 {
     //! [DefaultWaveModelTest example]
