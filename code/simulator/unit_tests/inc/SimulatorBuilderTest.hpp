@@ -17,7 +17,7 @@ class SimulatorBuilderTest : public ::testing::Test
 {
     protected:
         SimulatorBuilderTest();
-	    virtual ~SimulatorBuilderTest();
+        virtual ~SimulatorBuilderTest();
         virtual void SetUp();
         virtual void TearDown();
         std::string customize(const std::string& body_name, const std::string& something) const;
@@ -25,7 +25,6 @@ class SimulatorBuilderTest : public ::testing::Test
         DataGenerator a;
         static const YamlSimulatorInput input;
         SimulatorBuilder builder;
-
 };
 
 #endif  /* SIMULATORBUILDERTEST_HPP_ */

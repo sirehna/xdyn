@@ -73,5 +73,3 @@ TEST_F(HydrostaticForceModelTest, example)
     ASSERT_DOUBLE_EQ(0, Fhs.N());
 }
 
-
-
