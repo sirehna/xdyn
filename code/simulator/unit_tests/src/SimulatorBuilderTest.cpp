@@ -140,6 +140,7 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
 
 TEST_F(SimulatorBuilderTest, can_get_forces)
 {
+    const double EPS = 1e-8;
     builder.can_parse<DefaultWaveModel>()
            .can_parse<GravityForceModel>()
            .can_parse<HydrostaticForceModel>();
@@ -149,12 +150,25 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     const auto bodies = builder.get_bodies(m);
     const auto env = builder.get_environment_and_frames(bodies);
     std::vector<ListOfForces> forces = builder.get_forces(env);
+    const double cPhi   = cos(1.3);
+    const double cTheta = cos(1.4);
+    const double cPsi   = cos(1.5);
+    const double sPhi   = sin(1.3);
+    const double sTheta = sin(1.4);
+    const double sPsi   = sin(1.5);
+    RotationMatrix ctm;
+    Eigen::Vector3d F,FF;
+    ctm << cTheta*cPsi,                cTheta*sPsi,                -sTheta,
+           sPhi*sTheta*cPsi-cPhi*sPsi, sPhi*sTheta*sPsi+cPhi*cPsi, sPhi*cTheta,
+           cPhi*sTheta*cPsi+sPhi*sPsi, cPhi*sTheta*sPsi-sPhi*cPsi, cPhi*cTheta;
+    F << 0.0, 0.0, 9.81E6;
+    FF = ctm*F;
     ASSERT_EQ(1,forces.size());
     ASSERT_EQ(2,forces.front().size());
     const auto Fg = forces.front().at(0)->operator()(bodies.front());
-    ASSERT_DOUBLE_EQ(0,Fg.X());
-    ASSERT_DOUBLE_EQ(0,Fg.Y());
-    ASSERT_DOUBLE_EQ(9.81E6,Fg.Z());
+    ASSERT_NEAR(FF(0),Fg.X(),EPS);
+    ASSERT_NEAR(FF(1),Fg.Y(),EPS);
+    ASSERT_NEAR(FF(2),Fg.Z(),EPS);
     ASSERT_DOUBLE_EQ(0,Fg.K());
     ASSERT_DOUBLE_EQ(0,Fg.M());
     ASSERT_DOUBLE_EQ(0,Fg.N());
