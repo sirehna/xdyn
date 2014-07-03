@@ -503,6 +503,9 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L;
         ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V*y0, Fhs.K(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(+rho*g*V*x0, Fhs.M(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.N(), EPS);
     }
 }
 
