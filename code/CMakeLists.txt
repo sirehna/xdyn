@@ -98,9 +98,11 @@ ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(simulator)
+ADD_SUBDIRECTORY(csv_file_reader)
 ADD_SUBDIRECTORY(executables)
 
-ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:text_file_reader_static>)
+ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:text_file_reader_static>
+                                   $<TARGET_OBJECTS:csv_file_reader_object>)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         data_source_serializers_static
@@ -148,6 +150,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:stl_reader_tests>
         $<TARGET_OBJECTS:simulator_tests>
         $<TARGET_OBJECTS:numeric_tests>
+        $<TARGET_OBJECTS:csv_file_reader_tests>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
