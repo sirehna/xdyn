@@ -28,12 +28,11 @@ class GravityForceModel : public ForceModel
         Wrench operator()(const Body& body) const;
 
     private:
+        GravityForceModel();
         GravityForceModel(const double g);
         GravityForceModel(const double g, KinematicsPtr k);
-        GravityForceModel();
         double g;
         KinematicsPtr k;
 };
-
 
 #endif /* GRAVITYFORCEMODEL_HPP_ */
