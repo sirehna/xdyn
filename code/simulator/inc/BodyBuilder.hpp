@@ -36,6 +36,7 @@ class BodyBuilder
         bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third) const;
         void add_inertia(Body& body, const YamlInertiaMatrix& rigid_body_inertia, const YamlInertiaMatrix& added_mass) const;
         Eigen::Matrix<double,6,6> convert(const YamlInertiaMatrix& M) const;
+        void change_mesh_ref_frame(Body& body, const VectorOfVectorOfPoints& mesh) const;
 
         YamlRotation rotations;
 };
