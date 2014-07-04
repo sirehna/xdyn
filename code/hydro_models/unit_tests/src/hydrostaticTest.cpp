@@ -669,3 +669,17 @@ TEST_F(hydrostaticTest, correct_immerged_polygon_when_two_points_are_exactly_on_
     ASSERT_DOUBLE_EQ(0, P.second[1]);
     ASSERT_DOUBLE_EQ(1, P.second[2]);
 }
+
+TEST_F(hydrostaticTest, bug3_in_immerged_polygon)
+{
+    Eigen::Matrix<double,3,3> M;
+    M <<  0.5,   0.5,   0.5,
+          0.375, 0.5, 0.375,
+         -0.25, -0.5,  0.25;
+    const std::vector<size_t> idx = {0,1,2};
+    const std::vector<double> v = {0,-0.25,0.5};
+    const std::pair<Matrix3x,std::vector<double> > P = immerged_polygon(M,idx,v);
+    ASSERT_LT(0, (P.first.col(0)-P.first.col(1)).norm());
+    ASSERT_LT(0, (P.first.col(0)-P.first.col(2)).norm());
+    ASSERT_LT(0, (P.first.col(1)-P.first.col(2)).norm());
+}
