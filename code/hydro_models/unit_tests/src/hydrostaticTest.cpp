@@ -524,8 +524,6 @@ TEST_F(hydrostaticTest, DISABLED_can_compute_the_hydrostatic_force_on_a_rotated_
         const double rho = 1000;
         const double g = 9.81;
         const Wrench Fhs = force(mesh, G, rho, g, dz);
-        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L;
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
