@@ -75,16 +75,16 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
 {
     using namespace kinematics;
     const double EPS = 1e-11;
-    const double cPhi   = 0.0;
-    const double cTheta = 0.5*sqrt(3);
-    const double cPsi   = 0.5;
-    const double sPhi   = 1.0;
-    const double sTheta = 0.5;
-    const double sPsi   = 0.5*sqrt(3);
+    const double cosPhi   = 0.0;
+    const double cosTheta = 0.5*sqrt(3);
+    const double cosPsi   = 0.5;
+    const double sinPhi   = 1.0;
+    const double sinTheta = 0.5;
+    const double sinPsi   = 0.5*sqrt(3);
     RotationMatrix rot;
-    rot << cTheta*cPsi, sPhi*sTheta*cPsi-cPhi*sPsi, cPhi*sTheta*cPsi+sPhi*sPsi,
-           cTheta*sPsi, sPhi*sTheta*sPsi+cPhi*cPsi, cPhi*sTheta*sPsi-sPhi*cPsi,
-           -sTheta,     sPhi*cTheta,                cPhi*cTheta;
+    rot << cosTheta*cosPsi, sinPhi*sinTheta*cosPsi-cosPhi*sinPsi, cosPhi*sinTheta*cosPsi+sinPhi*sinPsi,
+           cosTheta*sinPsi, sinPhi*sinTheta*sinPsi+cosPhi*cosPsi, cosPhi*sinTheta*sinPsi-sinPhi*cosPsi,
+           -sinTheta,       sinPhi*cosTheta,                      cosPhi*cosTheta;
     GravityForceModel::Input input;
     input.g = 9.81;
     input.k = KinematicsPtr(new Kinematics());
