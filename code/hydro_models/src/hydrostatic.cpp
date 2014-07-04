@@ -149,8 +149,7 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
     const EPoint A1 = M.col((int)idxA1);
     const EPoint B = M.col((int)idxB);
     const EPoint B1 = M.col((int)idxB1);
-    const EPoint P = intersection(A,v.at(idxA),A1,v.at(idxA1));
-    const EPoint Q = intersection(B,v.at(idxB),B1,v.at(idxB1));
+
     size_t N = (first_and_last.second>=first_and_last.first) ? n-(first_and_last.second-first_and_last.first-1) : first_and_last.second+first_and_last.first+1;
     if (A1_is_on_surface) N--;
     if (B1_is_on_surface) N--;
@@ -158,17 +157,42 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
     std::vector<double> delta_z;
     ret.resize(3,(int)N);
     int k = 0;
+    bool A1_inserted = false;
+    bool B1_inserted = false;
     if (first_and_last.first<=first_and_last.second)
     {
         for (size_t i = 0 ; i < first_and_last.first ; ++i)
         {
             ret.col(k++) = M.col((int)idx.at(i));
             delta_z.push_back(v.at(idx.at(i)));
+            A1_inserted = A1_inserted or (idx.at(i)==idxA1);
+            B1_inserted = B1_inserted or (idx.at(i)==idxB1);
         }
-        ret.col(k++) = P;
-        delta_z.push_back(0);
-        ret.col(k++) = Q;
-        delta_z.push_back(0);
+
+        if (not(A1_is_on_surface))
+        {
+            const EPoint P = intersection(A,v.at(idxA),A1,v.at(idxA1));
+            ret.col(k++) = P;
+            delta_z.push_back(0);
+        }
+        else if (not(A1_inserted))
+        {
+            ret.col(k++) = M.col((int)idxA1);
+            delta_z.push_back(v.at(idxA1));
+        }
+
+        if (not(B1_is_on_surface))
+        {
+            const EPoint Q = intersection(B,v.at(idxB),B1,v.at(idxB1));
+            ret.col(k++) = Q;
+            delta_z.push_back(0);
+        }
+        else if (not(B1_inserted))
+        {
+            ret.col(k++) = M.col((int)idxB1);
+            delta_z.push_back(v.at(idxB1));
+        }
+
         const size_t start = A1_is_on_surface ? first_and_last.second+2 : first_and_last.second+1;
         const size_t stop = B1_is_on_surface ? n-1 : n;
         for (size_t i = start ; i < stop ; ++i)
@@ -179,6 +203,8 @@ std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Mat
     }
     else
     {
+        const EPoint P = intersection(A,v.at(idxA),A1,v.at(idxA1));
+        const EPoint Q = intersection(B,v.at(idxB),B1,v.at(idxB1));
         ret.col(k++) = Q;
         delta_z.push_back(0);
         for (size_t i = idxB1 ; i <= idxA1 ; ++i)

@@ -527,6 +527,8 @@ TEST_F(hydrostaticTest, DISABLED_can_compute_the_hydrostatic_force_on_a_rotated_
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L;
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(-0.5*rho*g*V, Fhs.Z(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(-0.5*rho*g*V*y0, Fhs.K(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(+0.5*rho*g*V*x0, Fhs.M(), EPS);
@@ -641,9 +643,9 @@ TEST_F(hydrostaticTest, immerged_polygon_should_not_throw_an_exception_if_two_po
 TEST_F(hydrostaticTest, correct_immerged_polygon_when_two_points_are_exactly_on_the_surface)
 {
     Eigen::Matrix<double,3,4> M;
-    M <<  0,-1,0,1,
-          0, 0,0,0,
-         -1, 0,1,0;
+    M <<  0, -1, 0, 1,
+          0,  0, 0, 0,
+         -1,  0, 1, 0;
     const std::vector<size_t>idx = {0,1,2,3};
     const std::vector<double> v = {-1,0,1,0};
     const std::pair<Matrix3x,std::vector<double> > P = immerged_polygon(M,idx,v);
@@ -668,6 +670,38 @@ TEST_F(hydrostaticTest, correct_immerged_polygon_when_two_points_are_exactly_on_
     ASSERT_DOUBLE_EQ(0, P.second[0]);
     ASSERT_DOUBLE_EQ(0, P.second[1]);
     ASSERT_DOUBLE_EQ(1, P.second[2]);
+}
+
+TEST_F(hydrostaticTest, bug2_in_immerged_polygon)
+{
+    Eigen::Matrix<double,3,4> M;
+    M <<  -1, 0, 1,  0,
+           0, 0, 0,  0,
+           0, 1, 0, -1;
+    const std::vector<size_t>idx = {0,1,2,3};
+    const std::vector<double> v = {0,1,0,-1};
+    const std::pair<Matrix3x,std::vector<double> > P = immerged_polygon(M,idx,v);
+
+    const auto p = P.first;
+
+    ASSERT_EQ(3, p.cols());
+
+    ASSERT_DOUBLE_EQ(-1,(double)p(0,0));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,0));
+    ASSERT_DOUBLE_EQ(0,(double)p(2,0));
+
+    ASSERT_DOUBLE_EQ(0,(double)p(0,1));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,1));
+    ASSERT_DOUBLE_EQ(1,(double)p(2,1));
+
+    ASSERT_DOUBLE_EQ(1,(double)p(0,2));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,2));
+    ASSERT_DOUBLE_EQ(0,(double)p(2,2));
+
+    ASSERT_EQ(3, P.second.size());
+    ASSERT_DOUBLE_EQ(0, P.second[0]);
+    ASSERT_DOUBLE_EQ(1, P.second[1]);
+    ASSERT_DOUBLE_EQ(0, P.second[2]);
 }
 
 TEST_F(hydrostaticTest, bug3_in_immerged_polygon)
