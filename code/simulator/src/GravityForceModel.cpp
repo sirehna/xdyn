@@ -26,9 +26,9 @@ GravityForceModel::GravityForceModel(const Input& in) : g(in.g), k(in.k)
 
 Wrench GravityForceModel::operator()(const Body& body) const
 {
-    const kinematics::Transform T = k->get(body.name, "NED");
+    const RotationMatrix& ctm = k->get(body.name, "NED").get_rot();
     return Wrench(body.G,
-                  T.get_rot()*Eigen::Vector3d(0,0,body.m*g),
+                  ctm * Eigen::Vector3d(0,0,body.m*g),
                   Eigen::Vector3d(0,0,0));
 }
 
