@@ -12,7 +12,9 @@
 #include "steppers.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "test_macros.hpp"
+
 #define PI (4.*atan(1.))
+#define EPS (1E-10)
 
 const YamlSimulatorInput OutputTransformerTest::yaml1 = OutputTransformerTest::get_yaml1();
 const YamlSimulatorInput OutputTransformerTest::yaml2 = OutputTransformerTest::get_yaml2();
@@ -87,7 +89,7 @@ TEST_F(OutputTransformerTest, can_compute_angles)
     const auto phi   = out2.at(0)["phi(body 1 / NED -> body 1)"];
     const auto theta = out2.at(0)["theta(body 1 / NED -> body 1)"];
     const auto psi   = out2.at(0)["psi(body 1 / NED -> body 1)"];
-    EXPECT_DOUBLE_EQ(1.3, phi);
-    EXPECT_DOUBLE_EQ(1.4, theta);
-    EXPECT_DOUBLE_EQ(1.5, psi);
+    EXPECT_NEAR(1.3, phi, EPS);
+    EXPECT_NEAR(1.4, theta, EPS);
+    EXPECT_NEAR(1.5, psi, EPS);
 }

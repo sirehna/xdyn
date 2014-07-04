@@ -13,6 +13,8 @@
 #include "YamlAngle.hpp"
 #include "YamlBody.hpp"
 
+#define SQUARE(x) ((x)*(x))
+
 Point get_origin(const StateType& x, const size_t i)
 {
     return Point("NED", *_X(x,i),
@@ -47,7 +49,7 @@ kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& 
     return kinematics::Transform(get_origin(x, idx), get_rot_from_ned_to(x, idx), body.name);
 }
 
-void update_kinematics(const StateType& x, const Body& body, const size_t idx, const KinematicsPtr& k)
+void update_kinematics(StateType x, const Body& body, const size_t idx, const KinematicsPtr& k)
 {
     k->add(get_transform_from_ned_to(x,body,idx));
 }
@@ -70,10 +72,11 @@ StateType get_initial_states(const YamlRotation& convention, const std::vector<Y
         *_P(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p;
         *_Q(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q;
         *_R(ret,i) = bodies[i].initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
-        *_QR(ret,i) = q.w();
-        *_QI(ret,i) = q.x();
-        *_QJ(ret,i) = q.y();
-        *_QK(ret,i) = q.z();
+        const auto norm = sqrt((double)SQUARE(q.w())+(double)SQUARE(q.x())+(double)SQUARE(q.y())+(double)SQUARE(q.z()));
+        *_QR(ret,i) = q.w()/norm;
+        *_QI(ret,i) = q.x()/norm;
+        *_QJ(ret,i) = q.y()/norm;
+        *_QK(ret,i) = q.z()/norm;
     }
     return ret;
 }
