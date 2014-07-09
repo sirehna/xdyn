@@ -50,9 +50,9 @@ void write_title(std::ostream& os, const std::map<std::string,double>& res)
 {
     const size_t n = res.size();
     size_t i = 0;
-    for (const auto var:res)
+    for (auto that_var=res.begin() ; that_var != res.end() ; ++that_var)
     {
-        write_val(os, i==n-1, var.first);
+        write_val(os, i==n-1, that_var->first);
         i++;
     }
     if (i) os << std::endl;
@@ -63,9 +63,9 @@ void write_line(std::ostream& os, const std::map<std::string,double>& res)
 {
     const size_t n = res.size();
     size_t i = 0;
-    for (const auto var:res)
+    for (auto that_var=res.begin() ; that_var != res.end() ; ++that_var)
     {
-        write_val(os, i==n-1, var.second);
+        write_val(os, i==n-1, that_var->second);
         i++;
     }
     if (i) os << std::endl;
@@ -77,7 +77,7 @@ void write(std::ostream& os, const std::vector<std::map<std::string,double> >& r
     if (not(res.empty()))
     {
         write_title(os, res.front());
-        for (const auto line:res) write_line(os, line);
+        for (auto that_line=res.begin() ; that_line != res.end() ; ++that_line) write_line(os, *that_line);
     }
 }
 
@@ -85,11 +85,11 @@ std::vector<std::map<std::string,double> > transpose(const std::map<std::string,
 std::vector<std::map<std::string,double> > transpose(const std::map<std::string,std::vector<double> >& r)
 {
     std::vector<std::map<std::string,double> > ret(r.begin()->second.size(), std::map<std::string,double>());
-    for (const auto e:r)
+    for (auto e=r.begin() ; e != r.end() ; ++e)
     {
-        for (size_t i = 0 ; i < e.second.size() ; ++i)
+        for (size_t i = 0 ; i < e->second.size() ; ++i)
         {
-            ret[i][e.first] = e.second[i];
+            ret[i][e->first] = e->second[i];
         }
     }
     return ret;
@@ -98,7 +98,7 @@ std::vector<std::map<std::string,double> > transpose(const std::map<std::string,
 void append(std::map<std::string,double>& to, const std::map<std::string,double>& from);
 void append(std::map<std::string,double>& to, const std::map<std::string,double>& from)
 {
-    for (const auto m:from) to[m.first] = m.second;
+    for (auto m=from.begin() ; m != from.end() ; ++m) to[m->first] = m->second;
 }
 
 std::vector<std::map<std::string,double> > build_output(CSVFileReader& csv_file, const OutputTransformer& transform);

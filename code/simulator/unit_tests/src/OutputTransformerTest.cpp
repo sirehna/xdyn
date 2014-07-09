@@ -33,10 +33,10 @@ OutputTransformerTest::OutputTransformerTest() : a(DataGenerator(42022)), out1(s
 {
     auto res1 = simulate<EulerStepper>(yaml1, 0, 2, 1);
     const OutputTransformer transform1(yaml1);
-    for (const auto r:res1) out1.push_back(transform1(r));
+    for (auto r=res1.begin() ; r != res1.end() ; ++r) out1.push_back(transform1(*r));
     auto res2 = simulate<EulerStepper>(yaml2, 0, 2, 1);
     const OutputTransformer transform2(yaml2);
-    for (const auto r:res2) out2.push_back(transform2(r));
+    for (auto r=res2.begin() ; r != res2.end() ; ++r) out2.push_back(transform2(*r));
 }
 
 OutputTransformerTest::~OutputTransformerTest()

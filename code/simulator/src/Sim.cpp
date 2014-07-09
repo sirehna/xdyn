@@ -6,7 +6,6 @@
  */
 
 #include "coriolis_and_centripetal.hpp"
-//#include "DataSource.hpp"
 #include "hydrostatic.hpp"
 #include "Kinematics.hpp"
 #include "Mesh.hpp"
@@ -52,7 +51,10 @@ StateType Sim::get_state_derivatives() const
 std::vector<std::string> Sim::get_names_of_bodies() const
 {
     std::vector<std::string> ret;
-    for (const auto body:bodies) ret.push_back(body.name);
+    for (auto that_body=bodies.begin() ; that_body != bodies.end() ; ++that_body)
+    {
+        ret.push_back(that_body->name);
+    }
     return ret;
 }
 
@@ -61,8 +63,9 @@ UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body) const
     const Eigen::Vector3d& uvw_in_body_frame = Eigen::Vector3d::Map(_U(x,body));
     const Eigen::Vector3d& pqr = Eigen::Vector3d::Map(_P(x,body));
     UnsafeWrench S(coriolis_and_centripetal(bodies[body].G,bodies[body].solid_body_inertia.get(),uvw_in_body_frame, pqr));
-    for (auto F:forces[body]){
-        S += (*F)(bodies[body]);
+    for (auto that_force=forces[body].begin() ; that_force != forces[body].end() ; ++that_force)
+    {
+        S += (**that_force)(bodies[body]);
     }
     return S;
 }

@@ -16,12 +16,15 @@
 OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(builder.get_parsed_yaml()), bodies(std::vector<Body>()), points(std::map<std::string,Point>()), k(TR1(shared_ptr)<Kinematics>(new Kinematics()))
 {
     MeshMap m;
-    for (const auto body:input.bodies)
+    for (auto that_body = input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
     {
-        m[body.name] = VectorOfVectorOfPoints();
+        m[that_body->name] = VectorOfVectorOfPoints();
     }
     bodies = builder.get_bodies(m);
-    for (const auto point:input.points) points[point.name] = Point(point.frame,point.x,point.y,point.z);
+    for (auto that_point = input.points.begin() ; that_point != input.points.end() ; ++that_point)
+    {
+        points[that_point->name] = Point(that_point->frame,that_point->x,that_point->y,that_point->z);
+    }
 }
 
 void OutputTransformer::update_kinematics(const StateType& x) const
@@ -67,10 +70,10 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlPositi
         const auto T12 = k->get(b1, b2);
         const Point O1O2 = T12.get_point();
         const Point P = Point(b3,T13.get_rot()*(O1P - O1O2));
-        for (auto axis:position.axes)
+        for (auto that_axis=position.axes.begin() ; that_axis != position.axes.end() ; ++that_axis)
         {
-            const auto varname = axis + "(" + that_point->first + " in " + b1 + " / " + b2 + " -> " + b3 + ")";
-            out[varname] = get_axis_value(P, axis);
+            const auto varname = *that_axis + "(" + that_point->first + " in " + b1 + " / " + b2 + " -> " + b3 + ")";
+            out[varname] = get_axis_value(P, *that_axis);
         }
     }
     else
@@ -115,10 +118,10 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlAngles
     R12_projected_in_3 *= R12.transpose();
     R12_projected_in_3 *= R13;
     const EulerAngles a = convert(R12_projected_in_3);
-    for (auto axis:angle.axes)
+    for (auto that_axis=angle.axes.begin() ; that_axis != angle.axes.end() ; ++that_axis)
     {
-        const auto varname = angle_name(axis) + "(" + b1 + " / " + b2 + " -> " + b3 + ")";
-        out[varname] = get_axis_value(a, axis);
+        const auto varname = angle_name(*that_axis) + "(" + b1 + " / " + b2 + " -> " + b3 + ")";
+        out[varname] = get_axis_value(a, *that_axis);
     }
 }
 
@@ -127,8 +130,14 @@ std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
     std::map<std::string,double> out;
     out["t"] = res.t;
     update_kinematics(res.x);
-    for (const auto position:input.position_output) fill(out, position);
-    for (const auto angle:input.angles_output) fill(out, angle);
+    for (auto that_position = input.position_output.begin() ; that_position != input.position_output.end() ; ++that_position)
+    {
+        fill(out, *that_position);
+    }
+    for (auto that_angle = input.angles_output.begin() ; that_angle != input.angles_output.end() ; ++that_angle)
+    {
+        fill(out, *that_angle);
+    }
 
     return out;
 }

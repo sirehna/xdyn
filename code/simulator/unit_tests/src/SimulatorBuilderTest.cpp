@@ -79,9 +79,9 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
     const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
     const auto env = builder.get_environment_and_frames(bodies);
     ASSERT_TRUE(env.k.get() != NULL);
-    for (const auto body:bodies)
+    for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        ASSERT_NO_THROW(env.k->get(body.name, customize(body.name, "mesh")));
+        ASSERT_NO_THROW(env.k->get(that_body->name, customize(that_body->name, "mesh")));
     }
 }
 
@@ -91,9 +91,9 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
     const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
     const auto env = builder.get_environment_and_frames(bodies);
     ASSERT_TRUE(env.k.get() != NULL);
-    for (const auto body:bodies)
+    for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        ASSERT_NO_THROW(env.k->get("NED", body.name));
+        ASSERT_NO_THROW(env.k->get("NED", that_body->name));
     }
 }
 
