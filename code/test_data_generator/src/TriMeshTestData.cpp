@@ -160,6 +160,24 @@ VectorOfVectorOfPoints two_triangles()
     return mesh;
 }
 
+VectorOfVectorOfPoints two_triangles_immerged()
+{
+    VectorOfVectorOfPoints mesh;
+    VectorOfPoints facet_1, facet_2;
+    facet_1.push_back(EPoint(-2,+4,+6));
+    facet_1.push_back(EPoint(-2,-4,+6));
+    facet_1.push_back(EPoint(+2,+4,+4));
+
+    facet_2.push_back(EPoint(+2,+4,+4));
+    facet_2.push_back(EPoint(-2,-4,+6));
+    facet_2.push_back(EPoint(+2,-4,+4));
+
+    mesh.push_back(facet_1);
+    mesh.push_back(facet_2);
+
+    return mesh;
+}
+
 VectorOfVectorOfPoints trapezium()
 {
     VectorOfVectorOfPoints mesh;
