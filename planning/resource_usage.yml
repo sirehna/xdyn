@@ -59,6 +59,16 @@ projects:
       - week ending on: 6/6/2014
         cec: 5
         gj: 4.5
+        # Week 24
+      - week ending on: 13/6/2014
+        cec: 4
+        # Week 27
+      - week ending on: 4/7/2014
+        cec: 5
+        gj: 4
+        # Week 31
+      - week ending on: 1/8/2014
+        cec: 5
   - name: ETI-140043
     budget: 50000
     prices:
@@ -75,5 +85,11 @@ projects:
         cec: 4
         # Week 17
       - week ending on: 25/4/2014
+        cec: 4
+        # Week 25
+      - week ending on: 20/6/2014
+        cec: 4
+        # Week 26
+      - week ending on: 27/6/2014
         cec: 4
 
