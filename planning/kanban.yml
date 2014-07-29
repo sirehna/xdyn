@@ -579,3 +579,50 @@ stories:
       backlog: 30/6/2014
       started: 30/6/2014
       done: 30/6/2014
+  - story: Modèles de houle irrégulière linéaire (Airy)
+    due by: 1/8/2014
+    tasks:
+    - task: Import wave spectra from Dysco ASM
+      type: model
+      backlog: 29/7/2014
+      size: 1
+    - task: Import Airy module from Dysco ASM
+      type: model
+      backlog: 29/7/2014
+      size: 1
+    - task: Create & document YAML for Airy
+      type: interface
+      backlog: 29/7/2014
+      size: 1
+    - task: Create WaveModelFromSpectrum
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+    - task: Create WaveModelFromSpectrumBuilder
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+  - story: Excitation non-linéaire due à la houle (efforts de diffraction de Froude-Krylov)
+    due by: 1/8/2014
+    tasks:
+    - task: Abstract away pressure in hydrostatic
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+    - task: Create & use IntegratePressureOnMesh
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+    - task: Compute dynamic pressure
+      type: model
+      backlog: 29/7/2014
+      size: 1
+    - task: Create & document YAML for Froude-Krylov
+      type: interface
+      backlog: 29/7/2014
+      size: 1
+    - task: Create FroudeKrylovForceBuilder
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+
