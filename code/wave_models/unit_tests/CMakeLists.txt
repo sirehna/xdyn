@@ -1,7 +1,7 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST wave_models)
 project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/Test.cpp
+FILE(GLOB SRC src/JonswapSpectrumTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

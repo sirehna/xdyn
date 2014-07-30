@@ -91,6 +91,7 @@ ADD_SUBDIRECTORY(binary_stl_data)
 ADD_SUBDIRECTORY(mesh)
 ADD_SUBDIRECTORY(text_file_reader)
 ADD_SUBDIRECTORY(decode_unit)
+ADD_SUBDIRECTORY(wave_models)
 ADD_SUBDIRECTORY(data_source)
 ADD_SUBDIRECTORY(data_source_serializers)
 ADD_SUBDIRECTORY(yaml_parser)
@@ -112,6 +113,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         ds_integration_static
         simulator_static
         mesh_static
+        wave_models_static
         stl_reader_static
         stl_writer_static
         hydro_models_static
@@ -156,6 +158,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:simulator_tests>
         $<TARGET_OBJECTS:numeric_tests>
         $<TARGET_OBJECTS:csv_file_reader_tests>
+        $<TARGET_OBJECTS:wave_models_tests>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
