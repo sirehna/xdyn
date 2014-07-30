@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 2.8.8)
 project(wave_models)
 
 set(SRC src/WaveSpectrum.cpp
-        src/JonswapSpectrum.cpp)
+        src/JonswapSpectrum.cpp
+        src/PiersonMoskowitzSpectrum.cpp
+        )
 
 
 include_directories(inc)
