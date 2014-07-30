@@ -44,6 +44,8 @@ class JonswapSpectrum : public WaveSpectrum
 
 
     private:
+        JonswapSpectrum(); // Disabled
+
         double Hs2;
         double Tp;
         double gamma;
