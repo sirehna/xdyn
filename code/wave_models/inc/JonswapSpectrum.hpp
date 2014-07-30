@@ -47,9 +47,13 @@ class JonswapSpectrum : public WaveSpectrum
 
 
     private:
-        double Hs;
+        double Hs2;
         double Tp;
         double gamma;
+        double omega0;
+        double sigma_a;
+        double sigma_b;
+        double coeff;
 };
 
 #endif /* JONSWAPSPECTRUM_HPP_ */
