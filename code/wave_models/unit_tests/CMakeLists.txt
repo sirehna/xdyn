@@ -3,6 +3,7 @@ set(MODULE_UNDER_TEST wave_models)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/JonswapSpectrumTest.cpp
               src/PiersonMoskowitzSpectrumTest.cpp
+              src/BretschneiderSpectrumTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

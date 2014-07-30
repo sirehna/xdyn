@@ -4,6 +4,7 @@ project(wave_models)
 set(SRC src/WaveSpectrum.cpp
         src/JonswapSpectrum.cpp
         src/PiersonMoskowitzSpectrum.cpp
+        src/BretschneiderSpectrum.cpp
         )
 
 
