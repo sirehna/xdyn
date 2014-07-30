@@ -9,22 +9,19 @@
 
 #include "BretschneiderSpectrum.hpp"
 
-#define WSPI acos(-1.0)
-#define WSPOW2(x) ((x)*(x))
-#define WSPOW4(x) (WSPOW2(WSPOW2(x)))
+#define POW2(x) ((x)*(x))
+#define POW4(x) (POW2(POW2(x)))
 
 BretschneiderSpectrum::BretschneiderSpectrum(const double Hs_,   //!< Significant wave height (in meters)
                                              const double Tp_    //!< Mean wave period (in seconds)
-                        ) : Hs(Hs_), Tp(Tp_)
+                                             ) : Hs2(Hs_*Hs_), Tp(Tp_), omega0(2.*acos(-1.)/Tp)
 {
 
 }
 
-double BretschneiderSpectrum::operator()(const double W) const
+double BretschneiderSpectrum::operator()(const double omega) const
 {
-    const double W0 = 2.0*WSPI/Tp;
-    const double alpha = WSPOW4(W0/W);
-    const double psd = 0.3125 * (alpha/W) * (Hs*Hs) * exp(-1.25*alpha);
-    return psd;
+    const double alpha = POW4(omega0/omega);
+    return 0.3125 * (alpha/omega) * Hs2 * exp(-1.25*alpha);
 }
 

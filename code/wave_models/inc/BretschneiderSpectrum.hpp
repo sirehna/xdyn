@@ -42,8 +42,9 @@ class BretschneiderSpectrum : public WaveSpectrum
 
     private:
         BretschneiderSpectrum(); // Disabled
-        double Hs;
+        double Hs2;
         double Tp;
+        double omega0;
 };
 
 #endif /* BRETSCHNEIDERSPECTRUM_HPP_ */
