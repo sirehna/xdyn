@@ -25,3 +25,8 @@ double BretschneiderSpectrum::operator()(const double omega) const
     return 0.3125 * (alpha/omega) * Hs2 * exp(-1.25*alpha);
 }
 
+
+WaveSpectralDensity* BretschneiderSpectrum::clone() const
+{
+    return new BretschneiderSpectrum(*this);
+}

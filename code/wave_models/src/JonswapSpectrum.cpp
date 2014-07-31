@@ -30,3 +30,7 @@ double JonswapSpectrum::operator()(const double omega) const
     return coeff*Awm5*exp(-Bwm4)*pow(gamma,r);
 }
 
+WaveSpectralDensity* JonswapSpectrum::clone() const
+{
+    return new JonswapSpectrum(*this);
+}

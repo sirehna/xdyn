@@ -39,6 +39,8 @@ class BretschneiderSpectrum : public WaveSpectralDensity
         double operator()(const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
                          ) const;
 
+        WaveSpectralDensity* clone() const;
+
 
     private:
         BretschneiderSpectrum(); // Disabled
