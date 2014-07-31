@@ -4,6 +4,7 @@ project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/JonswapSpectrumTest.cpp
               src/PiersonMoskowitzSpectrumTest.cpp
               src/BretschneiderSpectrumTest.cpp
+              src/DiracDirectionalSpreadingTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

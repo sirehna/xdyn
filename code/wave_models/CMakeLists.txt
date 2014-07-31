@@ -6,6 +6,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/PiersonMoskowitzSpectrum.cpp
         src/BretschneiderSpectrum.cpp
         src/WaveDirectionalSpreading.cpp
+        src/DiracDirectionalSpreading.cpp
         )
 
 
