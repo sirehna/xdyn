@@ -24,3 +24,7 @@ WaveDirectionalSpreading* DiracDirectionalSpreading::clone() const
     return new DiracDirectionalSpreading(*this);
 }
 
+std::vector<double> DiracDirectionalSpreading::get_directions(const size_t) const
+{
+    return std::vector<double>(1, psi0);
+}

@@ -8,6 +8,9 @@
 #ifndef WAVEDIRECTIONALSPREADING_HPP_
 #define WAVEDIRECTIONALSPREADING_HPP_
 
+#include <cstdlib>
+#include <vector>
+
 /** \author cec
  *  \date Jul 31, 2014, 11:59:52 AM
  *  \brief Distribution of the wave height by direction.
@@ -43,6 +46,14 @@ class WaveDirectionalSpreading
                                  ) const = 0;
 
         virtual WaveDirectionalSpreading* clone() const = 0;
+
+        /**  \author cec
+          *  \date Jul 31, 2014, 12:03:19 PM
+          *  \details Returns n directions between 0 (included) and 2 pi (excluded)
+          *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
+          */
+        virtual std::vector<double> get_directions(const size_t n          //!< Number of angles to return
+                                                   ) const;
 
     protected:
         double psi0; //!< Primary wave direction (NED, "coming from") in radians

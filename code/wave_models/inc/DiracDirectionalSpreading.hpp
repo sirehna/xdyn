@@ -36,6 +36,14 @@ class DiracDirectionalSpreading : public WaveDirectionalSpreading
 
         WaveDirectionalSpreading* clone() const;
 
+        /**  \author cec
+          *  \date Jul 31, 2014, 12:20:52 PM
+          *  \details Returns a vector containing only psi0
+          *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
+          */
+        std::vector<double> get_directions(const size_t n          //!< Ignored
+                                                   ) const;
+
     private:
         DiracDirectionalSpreading(); // Disabled
 };
