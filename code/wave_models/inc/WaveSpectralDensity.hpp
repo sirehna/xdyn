@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#ifndef WAVESPECTRUM_HPP_
-#define WAVESPECTRUM_HPP_
+#ifndef WAVESPECTRALDENSITY_HPP_
+#define WAVESPECTRALDENSITY_HPP_
 
 /** \author cec
  *  \date Jul 30, 2014, 9:39:20 AM
@@ -18,11 +18,11 @@
  *  \section ex2 Expected output
  *  \snippet wave_models/unit_tests/src/WaveSpectrumTest.cpp WaveSpectrumTest expected output
  */
-class WaveSpectrum
+class WaveSpectralDensity
 {
     public:
-        WaveSpectrum();
-        virtual ~WaveSpectrum();
+        WaveSpectralDensity();
+        virtual ~WaveSpectralDensity();
         /**  \author cec
           *  \date Jul 30, 2014, 9:40:33 AM
           *  \brief Computes the amplitude of the power spectrum at a given angular frequency
@@ -33,4 +33,4 @@ class WaveSpectrum
                           ) const= 0;
 };
 
-#endif /* WAVESPECTRUM_HPP_ */
+#endif /* WAVESPECTRALDENSITY_HPP_ */

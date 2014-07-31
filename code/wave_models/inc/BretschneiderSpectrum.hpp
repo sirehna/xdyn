@@ -8,7 +8,7 @@
 #ifndef BRETSCHNEIDERSPECTRUM_HPP_
 #define BRETSCHNEIDERSPECTRUM_HPP_
 
-#include "WaveSpectrum.hpp"
+#include "WaveSpectralDensity.hpp"
 
 /** \author cec
  *  \date Jul 30, 2014, 2:25:11 PM
@@ -18,7 +18,7 @@
  *  \section ex2 Expected output
  *  \snippet wave_models/unit_tests/src/BretschneiderSpectrumTest.cpp BretschneiderSpectrumTest expected output
  */
-class BretschneiderSpectrum : public WaveSpectrum
+class BretschneiderSpectrum : public WaveSpectralDensity
 {
     public:
         /**  \author cec

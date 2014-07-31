@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.8)
 project(wave_models)
 
-set(SRC src/WaveSpectrum.cpp
+set(SRC src/WaveSpectralDensity.cpp
         src/JonswapSpectrum.cpp
         src/PiersonMoskowitzSpectrum.cpp
         src/BretschneiderSpectrum.cpp

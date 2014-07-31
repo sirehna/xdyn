@@ -8,7 +8,7 @@
 #ifndef JONSWAPSPECTRUM_HPP_
 #define JONSWAPSPECTRUM_HPP_
 
-#include "WaveSpectrum.hpp"
+#include "WaveSpectralDensity.hpp"
 
 /** \author cec
  *  \date Jul 30, 2014, 10:03:54 AM
@@ -20,7 +20,7 @@
  *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 49
  *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 43
  */
-class JonswapSpectrum : public WaveSpectrum
+class JonswapSpectrum : public WaveSpectralDensity
 {
     public:
         /**  \author cec
