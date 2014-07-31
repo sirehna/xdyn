@@ -8,6 +8,9 @@
 #ifndef WAVESPECTRALDENSITY_HPP_
 #define WAVESPECTRALDENSITY_HPP_
 
+#include <vector>
+#include <cstdlib>
+
 /** \author cec
  *  \date Jul 30, 2014, 9:39:20 AM
  *  \brief Interface for wave spectral densities (distribution of the wave height by frequency).
@@ -34,6 +37,16 @@ class WaveSpectralDensity
 
         virtual WaveSpectralDensity* clone() const = 0;
 
+        /**  \author cec
+          *  \date Jul 31, 2014, 2:41:16 PM
+          *  \brief Returns n angular frequencies between omega_min (included)
+          *         and omega_max (also included)
+          *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
+          */
+        virtual std::vector<double> get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
+                                                            const double omega_max, //!< Minimum angular frequency (in rad/s)
+                                                            const size_t n          //!< Number of angular frequencies to return
+                                                            ) const;
 };
 
 #endif /* WAVESPECTRALDENSITY_HPP_ */
