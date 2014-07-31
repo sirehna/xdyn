@@ -8,6 +8,7 @@ FILE(GLOB SRC src/JonswapSpectrumTest.cpp
               src/Cos2sDirectionalSpreadingTest.cpp
               src/DirectionalWaveSpectrumTest.cpp
               src/DiracSpectralDensityTest.cpp
+              src/WaveNumberFunctorTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
