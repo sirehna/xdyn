@@ -53,6 +53,10 @@ class WaveSpectralDensity
           *  \brief Compute wave number, in infinite depth.
           *  \returns \f$\\frac{omega^2}{g}$\f
           *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_wave_number_example
+          *  *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 51
+          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, equation 3.22, page 67
+          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 107
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
           */
         double get_wave_number(const double omega //!< Angular frequency (in radians)
                              ) const;
