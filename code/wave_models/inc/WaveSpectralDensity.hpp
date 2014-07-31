@@ -10,8 +10,8 @@
 
 /** \author cec
  *  \date Jul 30, 2014, 9:39:20 AM
- *  \brief Interface for wave spectra.
- *  \details Defines what a wave spectrum should do.
+ *  \brief Interface for wave spectral densities (distribution of the wave height by frequency).
+ *  \details Used with WaveDirectionalSpreading to construct a DirectionalWaveSpectrum
  *  \ingroup wave_models
  *  \section ex1 Example
  *  \snippet wave_models/unit_tests/src/WaveSpectrumTest.cpp WaveSpectrumTest example
