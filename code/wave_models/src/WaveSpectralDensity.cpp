@@ -30,3 +30,8 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
     return omega;
 }
 
+double WaveSpectralDensity::get_wave_number(const double omega //!< Angular frequency (in radians)
+                                           ) const
+{
+    return omega*omega/9.81;
+}

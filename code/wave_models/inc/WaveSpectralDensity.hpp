@@ -47,6 +47,15 @@ class WaveSpectralDensity
                                                             const double omega_max, //!< Minimum angular frequency (in rad/s)
                                                             const size_t n          //!< Number of angular frequencies to return
                                                             ) const;
+
+        /**  \author cec
+          *  \date Jul 31, 2014, 5:15:22 PM
+          *  \brief Compute wave number, in infinite depth.
+          *  \returns \f$\\frac{omega^2}{g}$\f
+          *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_wave_number_example
+          */
+        double get_wave_number(const double omega //!< Angular frequency (in radians)
+                             ) const;
 };
 
 #endif /* WAVESPECTRALDENSITY_HPP_ */

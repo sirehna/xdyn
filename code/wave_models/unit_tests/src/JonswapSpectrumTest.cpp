@@ -70,3 +70,16 @@ TEST_F(JonswapSpectrumTest, spectrum_looks_like_the_one_in_DNV_RPC_C205_fig_3_9)
     }
 }
 
+TEST_F(JonswapSpectrumTest, can_compute_the_wave_number_for_infinite_depth)
+{
+    const double Tp = a.random<double>();
+    const double Hs = a.random<double>();
+    const double gamma = a.random<double>();
+    const JonswapSpectrum S(Hs, Tp, gamma);
+    for (size_t i = 0 ; i < 10 ; ++i)
+    {
+        const double omega = a.random<double>();
+        ASSERT_DOUBLE_EQ(omega*omega/9.81, S.get_wave_number(omega));
+    }
+
+}
