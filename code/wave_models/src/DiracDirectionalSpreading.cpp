@@ -9,7 +9,7 @@
 
 #include "DiracDirectionalSpreading.hpp"
 
-DiracDirectionalSpreading::DiracDirectionalSpreading(const double psi0_) : psi0(psi0_)
+DiracDirectionalSpreading::DiracDirectionalSpreading(const double psi0_) : WaveDirectionalSpreading(psi0_)
 {
 }
 

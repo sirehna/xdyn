@@ -22,7 +22,8 @@
 class DiracDirectionalSpreading : public WaveDirectionalSpreading
 {
     public:
-        DiracDirectionalSpreading(const double psi0);
+        DiracDirectionalSpreading(const double psi0 //!< Primary wave direction (NED, "coming from") in radians
+                                 );
 
         /**  \author cec
           *  \date Jul 31, 2014, 12:20:52 PM
@@ -35,7 +36,6 @@ class DiracDirectionalSpreading : public WaveDirectionalSpreading
 
     private:
         DiracDirectionalSpreading(); // Disabled
-        double psi0;
 };
 
 #endif /* DIRACDIRECTIONALSPREADING_HPP_ */

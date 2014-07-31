@@ -7,7 +7,7 @@
 
 #include "WaveDirectionalSpreading.hpp"
 
-WaveDirectionalSpreading::WaveDirectionalSpreading()
+WaveDirectionalSpreading::WaveDirectionalSpreading(const double psi0_) : psi0(psi0_)
 {
 }
 

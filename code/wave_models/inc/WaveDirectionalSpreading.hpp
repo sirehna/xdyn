@@ -25,7 +25,8 @@
 class WaveDirectionalSpreading
 {
     public:
-        WaveDirectionalSpreading();
+        WaveDirectionalSpreading(const double psi0 //!< Primary wave direction (NED, "coming from") in radians
+                                );
         virtual ~WaveDirectionalSpreading();
 
         /**  \author cec
@@ -41,7 +42,11 @@ class WaveDirectionalSpreading
         virtual double operator()(const double psi //!< Primary wave direction in radians.
                                  ) const = 0;
 
+    protected:
+        double psi0; //!< Primary wave direction (NED, "coming from") in radians
+
     private:
+        WaveDirectionalSpreading();
 };
 
 #endif /* WAVEDIRECTIONALSPREADING_HPP_ */
