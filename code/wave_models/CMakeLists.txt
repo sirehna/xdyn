@@ -7,6 +7,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/BretschneiderSpectrum.cpp
         src/WaveDirectionalSpreading.cpp
         src/DiracDirectionalSpreading.cpp
+        src/Cos2sDirectionalSpreading.cpp
         )
 
 

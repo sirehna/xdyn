@@ -5,6 +5,7 @@ FILE(GLOB SRC src/JonswapSpectrumTest.cpp
               src/PiersonMoskowitzSpectrumTest.cpp
               src/BretschneiderSpectrumTest.cpp
               src/DiracDirectionalSpreadingTest.cpp
+              src/Cos2sDirectionalSpreadingTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
