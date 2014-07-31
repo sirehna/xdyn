@@ -60,6 +60,20 @@ class WaveSpectralDensity
           */
         double get_wave_number(const double omega //!< Angular frequency (in radians)
                              ) const;
+
+        /**  \author cec
+          *  \date Jul 31, 2014, 5:15:22 PM
+          *  \brief Compute wave number, in finite depth.
+          *  \returns Solution of \f$omega^2=g\cdot k\cdot \tanh{kh}$\f
+          *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_wave_number_example
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 51
+          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, equation 3.20, page 67
+          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.18, page 107
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+          */
+        double get_wave_number(const double omega, //!< Angular frequency (in radians)
+                               const double h      //!< Depth (in meters)
+                             ) const;
 };
 
 #endif /* WAVESPECTRALDENSITY_HPP_ */

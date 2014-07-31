@@ -6,6 +6,7 @@
  */
 
 #include "WaveSpectralDensity.hpp"
+#include "WaveNumberFunctor.hpp"
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
@@ -34,4 +35,16 @@ double WaveSpectralDensity::get_wave_number(const double omega //!< Angular freq
                                            ) const
 {
     return omega*omega/9.81;
+}
+
+double WaveSpectralDensity::get_wave_number(const double omega, //!< Angular frequency (in radians)
+                                            const double h      //!< Depth (in meters)
+                                           ) const
+{
+    WaveNumberFunctor f(h, omega);
+    const double guess = get_wave_number(omega);
+    const double min = 0;
+    const double max = 5*guess;
+    int digits = std::numeric_limits<double>::digits / 2;
+    return boost::math::tools::halley_iterate(f, guess, min, max, digits);
 }
