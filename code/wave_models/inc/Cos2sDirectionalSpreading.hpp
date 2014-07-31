@@ -34,6 +34,8 @@ class Cos2sDirectionalSpreading : public WaveDirectionalSpreading
         double operator()(const double psi //!< Primary wave direction in radians.
                          ) const;
 
+        WaveDirectionalSpreading* clone() const;
+
 
     private:
         double s;

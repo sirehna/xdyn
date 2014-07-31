@@ -34,6 +34,8 @@ class DiracDirectionalSpreading : public WaveDirectionalSpreading
         double operator()(const double psi //!< Primary wave direction in radians.
                          ) const;
 
+        WaveDirectionalSpreading* clone() const;
+
     private:
         DiracDirectionalSpreading(); // Disabled
 };

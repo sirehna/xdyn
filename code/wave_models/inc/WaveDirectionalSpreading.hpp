@@ -42,6 +42,8 @@ class WaveDirectionalSpreading
         virtual double operator()(const double psi //!< Primary wave direction in radians.
                                  ) const = 0;
 
+        virtual WaveDirectionalSpreading* clone() const = 0;
+
     protected:
         double psi0; //!< Primary wave direction (NED, "coming from") in radians
 

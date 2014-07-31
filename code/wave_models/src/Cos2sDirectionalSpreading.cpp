@@ -23,3 +23,8 @@ double Cos2sDirectionalSpreading::operator()(const double psi //!< Primary wave 
 {
     return Fs*pow(cos((psi-psi0)/2),2*s);
 }
+
+WaveDirectionalSpreading* Cos2sDirectionalSpreading::clone() const
+{
+    return new Cos2sDirectionalSpreading(*this);
+}
