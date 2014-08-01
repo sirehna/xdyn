@@ -4,9 +4,11 @@
  *  Created on: Jul 30, 2014
  *      Author: cady
  */
+#include <sstream>
 
 #include "WaveSpectralDensity.hpp"
 #include "WaveNumberFunctor.hpp"
+#include "WaveModelException.hpp"
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
@@ -22,6 +24,55 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
                                                                  const size_t n          //!< Number of angular frequencies to return
                                                                 ) const
 {
+    if (omega_min<=0)
+    {
+        std::stringstream ss;
+        ss << "omega_min = " << omega_min << ": should be positive.";
+        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+    }
+    if (omega_max<=0)
+    {
+        std::stringstream ss;
+        ss << "omega_max = " << omega_max << ": should be positive.";
+        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+    }
+    if (omega_max<omega_min)
+    {
+        std::stringstream ss;
+        ss << "omega_max (=" << omega_max << ") < omega_min (=" << omega_min;
+        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+    }
+    if (omega_max<omega_min)
+    {
+        std::stringstream ss;
+        ss << "omega_max (=" << omega_max << ") < omega_min (=" << omega_min;
+        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+    }
+    if (n==0)
+    {
+        std::stringstream ss;
+        THROW(__PRETTY_FUNCTION__, WaveModelException, "nfreq == 0");
+    }
+    if (n==1)
+    {
+        if (omega_min != omega_max)
+        {
+            std::stringstream ss;
+            ss << "Asked for a single frequency (nfreq = 1), but omega_min (=" << omega_min
+               << ") != omega_max (=" << omega_max << ")";
+            THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        }
+    }
+    if (omega_min==omega_max)
+    {
+        if (n != 1)
+        {
+            std::stringstream ss;
+            ss << "omega_min = omega_max (=" << omega_min
+               << ") but nfreq != 1";
+            THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        }
+    }
     std::vector<double> omega(n, 0);
     const double Domega = omega_max - omega_min;
     for (size_t i = 1 ; i <= n ; ++i)
