@@ -89,10 +89,9 @@ TEST_F(JonswapSpectrumTest, can_compute_the_wave_number_for_finite_depth)
     const double Hs = a.random<double>().between(1,80);
     const double gamma = a.random<double>();
     const JonswapSpectrum S(Hs, Tp, gamma);
-    for (size_t i = 0 ; i < 10 ; ++i)
+    for (double h = 1 ; h < 1000 ; h=h+1)
     {
         const double omega = a.random<double>().between(1,2);
-        const double h = a.random<double>().between(1,20);
         const double k = S.get_wave_number(omega, h);
         ASSERT_DOUBLE_EQ(omega*omega, 9.81*k*tanh(k*h));
     }
