@@ -53,6 +53,7 @@ class WaveModel
                                                  const double t                                   //!< Current time instant (in seconds)
                                                 ) const = 0;
 
+    protected:
         std::vector<DiscreteDirectionalWaveSpectrum> spectra;
 };
 
