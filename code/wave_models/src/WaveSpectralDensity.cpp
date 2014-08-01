@@ -42,9 +42,9 @@ double WaveSpectralDensity::get_wave_number(const double omega, //!< Angular fre
                                            ) const
 {
     WaveNumberFunctor f(h, omega);
-    const double guess = get_wave_number(omega);
-    const double min = 0;
-    const double max = 5*guess;
+    const double guess = get_wave_number(omega); // Tried Guo's formula (2002) as initial guess, but it slows things down by almost 100%
+    const double min = guess;
+    const double max = 3.5*guess;
     int digits = std::numeric_limits<double>::digits / 2;
     return boost::math::tools::halley_iterate(f, guess, min, max, digits);
 }
