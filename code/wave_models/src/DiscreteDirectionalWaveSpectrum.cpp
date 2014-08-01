@@ -13,9 +13,10 @@ DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :
                     omega(std::vector<double>()),
                     psi(std::vector<double>()),
                     k(std::vector<double>()),
+                    phase(std::vector<std::vector<double> >()),
                     domega(1),
                     dpsi(1)
-{
 
+{
 }
 

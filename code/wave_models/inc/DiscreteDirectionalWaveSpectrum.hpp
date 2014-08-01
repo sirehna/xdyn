@@ -34,6 +34,7 @@ struct DiscreteDirectionalWaveSpectrum
     std::vector<double> omega;
     std::vector<double> psi;
     std::vector<double> k;
+    std::vector<std::vector<double> > phase;
     double domega;
     double dpsi;
 };
