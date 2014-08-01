@@ -4,6 +4,7 @@
  *  Created on: Jul 31, 2014
  *      Author: cady
  */
+
 #include <boost/foreach.hpp>
 
 #include "DirectionalWaveSpectrum.hpp"

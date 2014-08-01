@@ -10,12 +10,22 @@
 #include <cmath>
 #define PI M_PI
 
+#include <sstream>
+
 #include "Cos2sDirectionalSpreading.hpp"
+#include "WaveModelException.hpp"
 
 Cos2sDirectionalSpreading::Cos2sDirectionalSpreading(const double psi0, const double s_) : WaveDirectionalSpreading(psi0),
 s(s_),
-Fs(pow(2,2*s-1.)/PI*pow(boost::math::tgamma(s+1.),2)/boost::math::tgamma(2*s+1.))
+Fs(0)
 {
+    if (s<0)
+    {
+        std::stringstream ss;
+        ss << "s = " << s << ": should be non-negative.";
+        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+    }
+    Fs = pow(2,2*s-1.)/PI*pow(boost::math::tgamma(s+1.),2)/boost::math::tgamma(2*s+1.);
 }
 
 double Cos2sDirectionalSpreading::operator()(const double psi //!< Primary wave direction in radians.

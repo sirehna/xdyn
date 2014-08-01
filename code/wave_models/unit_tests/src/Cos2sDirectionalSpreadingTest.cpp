@@ -5,11 +5,15 @@
  *      Author: cady
  */
 
-#include "Cos2sDirectionalSpreadingTest.hpp"
-#include "Cos2sDirectionalSpreading.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
+
+#include "Cos2sDirectionalSpreadingTest.hpp"
+#include "Cos2sDirectionalSpreading.hpp"
+#include "WaveModelException.hpp"
+
+#define NB_TRIALS 10
 
 Cos2sDirectionalSpreadingTest::Cos2sDirectionalSpreadingTest() : a(DataGenerator(8))
 {
@@ -52,3 +56,18 @@ TEST_F(Cos2sDirectionalSpreadingTest, example)
 //! [Cos2sDirectionalSpreadingTest expected output]
 }
 
+TEST_F(Cos2sDirectionalSpreadingTest, should_throw_if_s_is_negative)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        ASSERT_THROW(Cos2sDirectionalSpreading(a.random<double>(), a.random<double>().no().greater_than(0)), WaveModelException);
+    }
+}
+
+TEST_F(Cos2sDirectionalSpreadingTest, should_not_throw_if_s_is_zero)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        ASSERT_NO_THROW(Cos2sDirectionalSpreading(a.random<double>(), 0));
+    }
+}
