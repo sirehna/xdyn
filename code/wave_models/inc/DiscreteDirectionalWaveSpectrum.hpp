@@ -1,12 +1,12 @@
 /*
- * DirectionalWaveSpectrum.hpp
+ * DiscreteDirectionalWaveSpectrum.hpp
  *
  *  Created on: Jul 31, 2014
  *      Author: cady
  */
 
-#ifndef DIRECTIONALWAVESPECTRUM_HPP_
-#define DIRECTIONALWAVESPECTRUM_HPP_
+#ifndef DISCRETEDIRECTIONALWAVESPECTRUM_HPP_
+#define DISCRETEDIRECTIONALWAVESPECTRUM_HPP_
 
 #include "tr1_macros.hpp"
 #include TR1INC(memory)
@@ -27,10 +27,10 @@ class WaveDirectionalSpreading;
  *  \section ex2 Expected output
  *  \snippet wave_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
  */
-class DirectionalWaveSpectrum
+class DiscreteDirectionalWaveSpectrum
 {
     public:
-        DirectionalWaveSpectrum(const WaveSpectralDensity& S, const WaveDirectionalSpreading& D, const double omega_min, const double omega_max, const size_t nfreq);
+        DiscreteDirectionalWaveSpectrum(const WaveSpectralDensity& S, const WaveDirectionalSpreading& D, const double omega_min, const double omega_max, const size_t nfreq);
 
         struct Output
         {
@@ -57,4 +57,4 @@ class DirectionalWaveSpectrum
         double dpsi;
 };
 
-#endif /* DIRECTIONALWAVESPECTRUM_HPP_ */
+#endif /* DISCRETEDIRECTIONALWAVESPECTRUM_HPP_ */

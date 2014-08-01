@@ -8,9 +8,9 @@
 
 #include "WaveModel.hpp"
 
-WaveModel::WaveModel(const std::vector<DirectionalWaveSpectrum>& spectra_) : spectra(std::vector<DirectionalWaveSpectrum::Output>())
+WaveModel::WaveModel(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra_) : spectra(std::vector<DiscreteDirectionalWaveSpectrum::Output>())
 {
-    BOOST_FOREACH(DirectionalWaveSpectrum s, spectra_) spectra.push_back(s.get_spectrum());
+    BOOST_FOREACH(DiscreteDirectionalWaveSpectrum s, spectra_) spectra.push_back(s.get_spectrum());
 }
 
 
@@ -24,6 +24,6 @@ double WaveModel::elevation(const double x,//!< x-position in the NED frame (in 
                            ) const
 {
     double zeta = 0;
-    BOOST_FOREACH(DirectionalWaveSpectrum::Output spectrum, spectra) zeta += elevation_single_spectrum(spectrum, x, y, t);
+    BOOST_FOREACH(DiscreteDirectionalWaveSpectrum::Output spectrum, spectra) zeta += elevation_single_spectrum(spectrum, x, y, t);
     return zeta;
 }

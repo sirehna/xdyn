@@ -1,5 +1,5 @@
 /*
- * DirectionalWaveSpectrum.cpp
+ * DiscreteDirectionalWaveSpectrum.cpp
  *
  *  Created on: Jul 31, 2014
  *      Author: cady
@@ -7,11 +7,11 @@
 
 #include <boost/foreach.hpp>
 
-#include "DirectionalWaveSpectrum.hpp"
+#include "DiscreteDirectionalWaveSpectrum.hpp"
 #include "WaveDirectionalSpreading.hpp"
 #include "WaveSpectralDensity.hpp"
 
-DirectionalWaveSpectrum::DirectionalWaveSpectrum(const WaveSpectralDensity& S_, const WaveDirectionalSpreading& D_, const double omega_min, const double omega_max, const size_t nfreq) :
+DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum(const WaveSpectralDensity& S_, const WaveDirectionalSpreading& D_, const double omega_min, const double omega_max, const size_t nfreq) :
           S(S_.clone()),
           D(D_.clone()),
           omega(S->get_angular_frequencies(omega_min, omega_max, nfreq)),
@@ -22,14 +22,14 @@ DirectionalWaveSpectrum::DirectionalWaveSpectrum(const WaveSpectralDensity& S_, 
 
 }
 
-DirectionalWaveSpectrum::Output::Output() : Si(std::vector<double>()),
+DiscreteDirectionalWaveSpectrum::Output::Output() : Si(std::vector<double>()),
                                             Dj(std::vector<double>()),
                                             dw(0),
                                             dpsi(0)
 {
 }
 
-DirectionalWaveSpectrum::Output DirectionalWaveSpectrum::get_spectrum() const
+DiscreteDirectionalWaveSpectrum::Output DiscreteDirectionalWaveSpectrum::get_spectrum() const
 {
     Output out;
     BOOST_FOREACH(double w, omega) out.Si.push_back(S->operator ()(w));
@@ -37,22 +37,22 @@ DirectionalWaveSpectrum::Output DirectionalWaveSpectrum::get_spectrum() const
     return out;
 }
 
-std::vector<double> DirectionalWaveSpectrum::get_angular_frequencies() const
+std::vector<double> DiscreteDirectionalWaveSpectrum::get_angular_frequencies() const
 {
     return omega;
 }
 
-std::vector<double> DirectionalWaveSpectrum::get_directions() const
+std::vector<double> DiscreteDirectionalWaveSpectrum::get_directions() const
 {
     return psi;
 }
 
-double DirectionalWaveSpectrum::get_domega() const
+double DiscreteDirectionalWaveSpectrum::get_domega() const
 {
     return domega;
 }
 
-double DirectionalWaveSpectrum::get_dpsi() const
+double DiscreteDirectionalWaveSpectrum::get_dpsi() const
 {
     return dpsi;
 }

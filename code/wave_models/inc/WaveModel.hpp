@@ -8,7 +8,7 @@
 #ifndef WAVEMODEL_HPP_
 #define WAVEMODEL_HPP_
 
-#include "DirectionalWaveSpectrum.hpp"
+#include "DiscreteDirectionalWaveSpectrum.hpp"
 
 
 /** \author cec
@@ -24,7 +24,7 @@
 class WaveModel
 {
     public:
-        WaveModel(const std::vector<DirectionalWaveSpectrum>& spectra);
+        WaveModel(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra);
         virtual ~WaveModel();
 
         /**  \author cec
@@ -47,13 +47,13 @@ class WaveModel
           *  \returns Elevation due to one directional spectrum
           *  \snippet wave_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
           */
-        virtual double elevation_single_spectrum(const DirectionalWaveSpectrum::Output& spectrum, //!< Discrete spectrum under consideration
+        virtual double elevation_single_spectrum(const DiscreteDirectionalWaveSpectrum::Output& spectrum, //!< Discrete spectrum under consideration
                                                  const double x,                                  //!< x-position in the NED frame (in meters)
                                                  const double y,                                  //!< y-position in the NED frame (in meters)
                                                  const double t                                   //!< Current time instant (in seconds)
                                                 ) const = 0;
 
-        std::vector<DirectionalWaveSpectrum::Output> spectra;
+        std::vector<DiscreteDirectionalWaveSpectrum::Output> spectra;
 };
 
 #endif /* WAVEMODEL_HPP_ */
