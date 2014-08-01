@@ -11,6 +11,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/DiscreteDirectionalWaveSpectrum.cpp
         src/DiracSpectralDensity.cpp
         src/WaveNumberFunctor.cpp
+        src/Airy.cpp
         src/WaveModel.cpp
         src/discretize.cpp
         )
