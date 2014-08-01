@@ -16,8 +16,8 @@ DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum(const WaveSpect
                     Dj(std::vector<double>()),
                     omega(S.get_angular_frequencies(omega_min, omega_max, nfreq)),
                     psi(D.get_directions(nfreq)),
-                    domega(0),
-                    dpsi(0)
+                    domega(1),
+                    dpsi(1)
 {
     if (omega.size()>1) domega = omega[1]-omega[0];
     if (psi.size()>1)   dpsi = psi[1]-psi[0];
