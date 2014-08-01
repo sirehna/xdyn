@@ -18,6 +18,7 @@ exception_handling
 external_data_structures
 gmock
 interpolation
+kiss_fft130
 lapack
 macros
 navire.dat

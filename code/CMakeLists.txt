@@ -70,6 +70,8 @@ SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include/yaml-cpp)
 
+ADD_SUBDIRECTORY(kiss_fft130)
+
 SET(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
 ADD_DEFINITIONS(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
 ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
@@ -159,6 +161,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:numeric_tests>
         $<TARGET_OBJECTS:csv_file_reader_tests>
         $<TARGET_OBJECTS:wave_models_tests>
+        $<TARGET_OBJECTS:kissfft_static>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
