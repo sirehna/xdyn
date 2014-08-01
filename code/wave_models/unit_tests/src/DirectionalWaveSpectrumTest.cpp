@@ -42,7 +42,7 @@ TEST_F(DirectionalWaveSpectrumTest, example)
     const JonswapSpectrum S(Hs, Tp, gamma);
     const Cos2sDirectionalSpreading D(PI/4, 2);
     const DirectionalWaveSpectrum A(S, D, 0.01, 3, 1000);
-    const DirectionalWaveSpectrum::Output out = A.get_spectra();
+    const DirectionalWaveSpectrum::Output out = A.get_spectrum();
 //! [DirectionalWaveSpectrumTest example]
 //! [DirectionalWaveSpectrumTest expected output]
     ASSERT_EQ(1000, out.Dj.size());
@@ -59,7 +59,7 @@ TEST_F(DirectionalWaveSpectrumTest, Dirac_in_frequency)
     const DiracSpectralDensity S(omega0, Hs);
     const Cos2sDirectionalSpreading D(PI/4, 2);
     const DirectionalWaveSpectrum A(S, D, 0.01, 3, 1000);
-    const DirectionalWaveSpectrum::Output out = A.get_spectra();
+    const DirectionalWaveSpectrum::Output out = A.get_spectrum();
     ASSERT_EQ(1000, out.Dj.size());
     ASSERT_EQ(1, out.Si.size());
     ASSERT_DOUBLE_EQ(1, A.get_domega());
@@ -75,7 +75,7 @@ TEST_F(DirectionalWaveSpectrumTest, Dirac_in_direction)
     const JonswapSpectrum S(Hs, Tp, gamma);
     const DiracDirectionalSpreading D(PI/4);
     const DirectionalWaveSpectrum A(S, D, 0.01, 3, 1000);
-    const DirectionalWaveSpectrum::Output out = A.get_spectra();
+    const DirectionalWaveSpectrum::Output out = A.get_spectrum();
     ASSERT_EQ(1, out.Dj.size());
     ASSERT_EQ(1000, out.Si.size());
     ASSERT_DOUBLE_EQ(2.99/999, A.get_domega());

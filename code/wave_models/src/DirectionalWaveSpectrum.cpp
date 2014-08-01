@@ -29,7 +29,7 @@ DirectionalWaveSpectrum::Output::Output() : Si(std::vector<double>()),
 {
 }
 
-DirectionalWaveSpectrum::Output DirectionalWaveSpectrum::get_spectra() const
+DirectionalWaveSpectrum::Output DirectionalWaveSpectrum::get_spectrum() const
 {
     Output out;
     BOOST_FOREACH(double w, omega) out.Si.push_back(S->operator ()(w));

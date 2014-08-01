@@ -41,7 +41,7 @@ class DirectionalWaveSpectrum
             double dpsi;
         };
 
-        Output get_spectra() const;
+        Output get_spectrum() const;
 
         std::vector<double> get_angular_frequencies() const;
         std::vector<double> get_directions() const;
