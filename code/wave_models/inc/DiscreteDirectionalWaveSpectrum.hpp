@@ -32,25 +32,8 @@ class DiscreteDirectionalWaveSpectrum
     public:
         DiscreteDirectionalWaveSpectrum(const WaveSpectralDensity& S, const WaveDirectionalSpreading& D, const double omega_min, const double omega_max, const size_t nfreq);
 
-        struct Output
-        {
-            Output();
-            std::vector<double> Si;
-            std::vector<double> Dj;
-            double dw;
-            double dpsi;
-        };
-
-        Output get_spectrum() const;
-
-        std::vector<double> get_angular_frequencies() const;
-        std::vector<double> get_directions() const;
-        double get_domega() const;
-        double get_dpsi() const;
-
-    private:
-        TR1(shared_ptr)<WaveSpectralDensity> S;
-        TR1(shared_ptr)<WaveDirectionalSpreading> D;
+        std::vector<double> Si;
+        std::vector<double> Dj;
         std::vector<double> omega;
         std::vector<double> psi;
         double domega;

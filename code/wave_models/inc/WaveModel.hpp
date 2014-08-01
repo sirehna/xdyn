@@ -47,13 +47,13 @@ class WaveModel
           *  \returns Elevation due to one directional spectrum
           *  \snippet wave_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
           */
-        virtual double elevation_single_spectrum(const DiscreteDirectionalWaveSpectrum::Output& spectrum, //!< Discrete spectrum under consideration
+        virtual double elevation_single_spectrum(const DiscreteDirectionalWaveSpectrum& spectrum, //!< Discrete spectrum under consideration
                                                  const double x,                                  //!< x-position in the NED frame (in meters)
                                                  const double y,                                  //!< y-position in the NED frame (in meters)
                                                  const double t                                   //!< Current time instant (in seconds)
                                                 ) const = 0;
 
-        std::vector<DiscreteDirectionalWaveSpectrum::Output> spectra;
+        std::vector<DiscreteDirectionalWaveSpectrum> spectra;
 };
 
 #endif /* WAVEMODEL_HPP_ */

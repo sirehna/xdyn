@@ -42,13 +42,12 @@ TEST_F(DiscreteDirectionalWaveSpectrumTest, example)
     const JonswapSpectrum S(Hs, Tp, gamma);
     const Cos2sDirectionalSpreading D(PI/4, 2);
     const DiscreteDirectionalWaveSpectrum A(S, D, 0.01, 3, 1000);
-    const DiscreteDirectionalWaveSpectrum::Output out = A.get_spectrum();
 //! [DiscreteDirectionalWaveSpectrumTest example]
 //! [DiscreteDirectionalWaveSpectrumTest expected output]
-    ASSERT_EQ(1000, out.Dj.size());
-    ASSERT_EQ(1000, out.Si.size());
-    ASSERT_DOUBLE_EQ(2.99/999., A.get_domega());
-    ASSERT_DOUBLE_EQ(0.002*PI, A.get_dpsi());
+    ASSERT_EQ(1000, A.Dj.size());
+    ASSERT_EQ(1000, A.Si.size());
+    ASSERT_DOUBLE_EQ(2.99/999., A.domega);
+    ASSERT_DOUBLE_EQ(0.002*PI, A.dpsi);
 //! [DiscreteDirectionalWaveSpectrumTest expected output]
 }
 
@@ -59,12 +58,11 @@ TEST_F(DiscreteDirectionalWaveSpectrumTest, Dirac_in_frequency)
     const DiracSpectralDensity S(omega0, Hs);
     const Cos2sDirectionalSpreading D(PI/4, 2);
     const DiscreteDirectionalWaveSpectrum A(S, D, 0.01, 3, 1000);
-    const DiscreteDirectionalWaveSpectrum::Output out = A.get_spectrum();
-    ASSERT_EQ(1000, out.Dj.size());
-    ASSERT_EQ(1, out.Si.size());
-    ASSERT_DOUBLE_EQ(1, A.get_domega());
-    ASSERT_DOUBLE_EQ(0.002*PI, A.get_dpsi());
-    ASSERT_DOUBLE_EQ(Hs, out.Si.front());
+    ASSERT_EQ(1000, A.Dj.size());
+    ASSERT_EQ(1, A.Si.size());
+    ASSERT_DOUBLE_EQ(1, A.domega);
+    ASSERT_DOUBLE_EQ(0.002*PI, A.dpsi);
+    ASSERT_DOUBLE_EQ(Hs, A.Si.front());
 }
 
 TEST_F(DiscreteDirectionalWaveSpectrumTest, Dirac_in_direction)
@@ -75,12 +73,11 @@ TEST_F(DiscreteDirectionalWaveSpectrumTest, Dirac_in_direction)
     const JonswapSpectrum S(Hs, Tp, gamma);
     const DiracDirectionalSpreading D(PI/4);
     const DiscreteDirectionalWaveSpectrum A(S, D, 0.01, 3, 1000);
-    const DiscreteDirectionalWaveSpectrum::Output out = A.get_spectrum();
-    ASSERT_EQ(1, out.Dj.size());
-    ASSERT_EQ(1000, out.Si.size());
-    ASSERT_DOUBLE_EQ(2.99/999, A.get_domega());
-    ASSERT_DOUBLE_EQ(1, A.get_dpsi());
-    ASSERT_DOUBLE_EQ(1, out.Dj.front());
+    ASSERT_EQ(1, A.Dj.size());
+    ASSERT_EQ(1000, A.Si.size());
+    ASSERT_DOUBLE_EQ(2.99/999, A.domega);
+    ASSERT_DOUBLE_EQ(1, A.dpsi);
+    ASSERT_DOUBLE_EQ(1, A.Dj.front());
 }
 
 TEST_F(DiscreteDirectionalWaveSpectrumTest, should_throw_if_omega_min_is_negative)
