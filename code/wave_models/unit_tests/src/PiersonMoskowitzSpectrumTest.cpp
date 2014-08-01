@@ -5,10 +5,15 @@
  *      Author: cady
  */
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include "PiersonMoskowitzSpectrumTest.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
+#include "WaveModelException.hpp"
 
-#define PI (4.*atan(1.))
+#define NB_TRIALS 10
 
 PiersonMoskowitzSpectrumTest::PiersonMoskowitzSpectrumTest() : a(DataGenerator(84212))
 {
@@ -45,9 +50,69 @@ TEST_F(PiersonMoskowitzSpectrumTest, Jonswap_reduces_to_Pierson_Moskowitz_for_ga
 {
     JonswapSpectrum Sjonswap(4, 8, 1);
     const PiersonMoskowitzSpectrum Spierson_moskowitz(4, 8);
-    for (size_t i = 0 ; i < 100 ; ++i)
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
         const double omega = a.random<double>().between(0.01,3);
         ASSERT_DOUBLE_EQ(Sjonswap(omega), Spierson_moskowitz(omega));
     }
+}
+
+TEST_F(PiersonMoskowitzSpectrumTest, should_throw_if_Hs_is_negative)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = a.random<double>().no().greater_than(0);
+        const double Tp = a.random<double>().greater_than(0);
+        ASSERT_THROW(PiersonMoskowitzSpectrum(Hs, Tp),WaveModelException);
+    }
+}
+
+TEST_F(PiersonMoskowitzSpectrumTest, should_throw_if_Tp_is_negative)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = a.random<double>().greater_than(0);
+        const double Tp = a.random<double>().no().greater_than(0);
+        ASSERT_THROW(PiersonMoskowitzSpectrum(Hs, Tp),WaveModelException);
+    }
+}
+
+TEST_F(PiersonMoskowitzSpectrumTest, should_throw_if_Tp_is_zero)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = a.random<double>().greater_than(0);
+        const double Tp = 0;
+        ASSERT_THROW(PiersonMoskowitzSpectrum(Hs, Tp),WaveModelException);
+    }
+}
+
+TEST_F(PiersonMoskowitzSpectrumTest, should_not_throw_if_Hs_is_zero)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = 0;
+        const double Tp = a.random<double>().greater_than(0);
+        ASSERT_NO_THROW(PiersonMoskowitzSpectrum(Hs, Tp));
+    }
+}
+
+TEST_F(PiersonMoskowitzSpectrumTest, should_throw_if_omega_is_negative)
+{
+    const double Hs = a.random<double>().greater_than(0);
+    const double Tp = a.random<double>().greater_than(0);
+    const PiersonMoskowitzSpectrum S(Hs, Tp);
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double omega = a.random<double>().no().greater_than(0);
+        ASSERT_THROW(S(omega),WaveModelException);
+    }
+}
+
+TEST_F(PiersonMoskowitzSpectrumTest, should_throw_if_omega_is_zero)
+{
+    const double Hs = a.random<double>().greater_than(0);
+    const double Tp = a.random<double>().greater_than(0);
+    const PiersonMoskowitzSpectrum S(Hs, Tp);
+    ASSERT_THROW(S(0),WaveModelException);
 }

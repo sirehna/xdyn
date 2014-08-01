@@ -7,8 +7,13 @@
 
 #include "JonswapSpectrumTest.hpp"
 #include "JonswapSpectrum.hpp"
+#include "WaveModelException.hpp"
 
-#define PI (4*atan(1.))
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
+#define NB_TRIALS 10
 
 JonswapSpectrumTest::JonswapSpectrumTest() : a(DataGenerator(92224))
 {
@@ -72,13 +77,13 @@ TEST_F(JonswapSpectrumTest, spectrum_looks_like_the_one_in_DNV_RPC_C205_fig_3_9)
 
 TEST_F(JonswapSpectrumTest, can_compute_the_wave_number_for_infinite_depth)
 {
-    const double Tp = a.random<double>();
-    const double Hs = a.random<double>();
-    const double gamma = a.random<double>();
+    const double Tp = a.random<double>().greater_than(0);
+    const double Hs = a.random<double>().greater_than(0);
+    const double gamma = a.random<double>().greater_than(0);
     const JonswapSpectrum S(Hs, Tp, gamma);
     for (size_t i = 0 ; i < 10 ; ++i)
     {
-        const double omega = a.random<double>();
+        const double omega = a.random<double>().greater_than(0);
         ASSERT_DOUBLE_EQ(omega*omega/9.81, S.get_wave_number(omega));
     }
 }
@@ -87,7 +92,7 @@ TEST_F(JonswapSpectrumTest, can_compute_the_wave_number_for_finite_depth)
 {
     const double Tp = a.random<double>().between(1,100);
     const double Hs = a.random<double>().between(1,80);
-    const double gamma = a.random<double>();
+    const double gamma = a.random<double>().greater_than(0);
     const JonswapSpectrum S(Hs, Tp, gamma);
     for (double h = 1 ; h < 1000 ; h=h+1)
     {
@@ -95,4 +100,92 @@ TEST_F(JonswapSpectrumTest, can_compute_the_wave_number_for_finite_depth)
         const double k = S.get_wave_number(omega, h);
         ASSERT_DOUBLE_EQ(omega*omega, 9.81*k*tanh(k*h));
     }
+}
+
+TEST_F(JonswapSpectrumTest, should_throw_if_gamma_is_negative)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = a.random<double>().greater_than(0);
+        const double Tp = a.random<double>().greater_than(0);
+        const double gamma = a.random<double>().no().greater_than(0);
+        ASSERT_THROW(JonswapSpectrum(Hs, Tp, gamma),WaveModelException);
+    }
+}
+
+TEST_F(JonswapSpectrumTest, should_throw_if_gamma_is_zero)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = a.random<double>().no().greater_than(0);
+        const double Tp = a.random<double>().greater_than(0);
+        const double gamma = 0;
+        ASSERT_THROW(JonswapSpectrum(Hs, Tp, gamma),WaveModelException);
+    }
+}
+
+TEST_F(JonswapSpectrumTest, should_throw_if_Hs_is_negative)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = a.random<double>().no().greater_than(0);
+        const double Tp = a.random<double>().greater_than(0);
+        const double gamma = a.random<double>().greater_than(0);
+        ASSERT_THROW(JonswapSpectrum(Hs, Tp, gamma),WaveModelException);
+    }
+}
+
+TEST_F(JonswapSpectrumTest, should_throw_if_Tp_is_negative)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = a.random<double>().greater_than(0);
+        const double Tp = a.random<double>().no().greater_than(0);
+        const double gamma = a.random<double>().greater_than(0);
+        ASSERT_THROW(JonswapSpectrum(Hs, Tp, gamma),WaveModelException);
+    }
+}
+
+TEST_F(JonswapSpectrumTest, should_throw_if_Tp_is_zero)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = a.random<double>().greater_than(0);
+        const double Tp = 0;
+        const double gamma = a.random<double>().greater_than(0);
+        ASSERT_THROW(JonswapSpectrum(Hs, Tp, gamma),WaveModelException);
+    }
+}
+
+TEST_F(JonswapSpectrumTest, should_not_throw_if_Hs_is_zero)
+{
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double Hs = 0;
+        const double Tp = a.random<double>().greater_than(0);
+        const double gamma = a.random<double>().greater_than(0);
+        ASSERT_NO_THROW(JonswapSpectrum(Hs, Tp, gamma));
+    }
+}
+
+TEST_F(JonswapSpectrumTest, should_throw_if_omega_is_negative)
+{
+    const double Hs = a.random<double>().greater_than(0);
+    const double Tp = a.random<double>().greater_than(0);
+    const double gamma = a.random<double>().greater_than(0);
+    const JonswapSpectrum S(Hs, Tp, gamma);
+    for (size_t i = 0 ; i < NB_TRIALS ; ++i)
+    {
+        const double omega = a.random<double>().no().greater_than(0);
+        ASSERT_THROW(S(omega),WaveModelException);
+    }
+}
+
+TEST_F(JonswapSpectrumTest, should_throw_if_omega_is_zero)
+{
+    const double Hs = a.random<double>().greater_than(0);
+    const double Tp = a.random<double>().greater_than(0);
+    const double gamma = a.random<double>().greater_than(0);
+    const JonswapSpectrum S(Hs, Tp, gamma);
+    ASSERT_THROW(S(0),WaveModelException);
 }

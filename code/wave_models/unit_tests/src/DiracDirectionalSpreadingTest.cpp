@@ -40,5 +40,3 @@ TEST_F(DiracDirectionalSpreadingTest, example)
 //! [DiracDirectionalSpreadingTest expected output]
 }
 
-
-
