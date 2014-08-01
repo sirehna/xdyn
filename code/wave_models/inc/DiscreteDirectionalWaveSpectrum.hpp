@@ -16,28 +16,26 @@
 class WaveSpectralDensity;
 class WaveDirectionalSpreading;
 
-
 /** \author cec
  *  \date Jul 31, 2014, 1:08:15 PM
- *  \brief Used by the wave models (eg. Airy, Stokes, etc.) to
- *  \details
+ *  \brief Used by the wave models (eg. Airy, Stokes, etc.)
  *  \ingroup wave_models
  *  \section ex1 Example
  *  \snippet wave_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
  *  \section ex2 Expected output
  *  \snippet wave_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
  */
-class DiscreteDirectionalWaveSpectrum
+struct DiscreteDirectionalWaveSpectrum
 {
-    public:
-        DiscreteDirectionalWaveSpectrum(const WaveSpectralDensity& S, const WaveDirectionalSpreading& D, const double omega_min, const double omega_max, const size_t nfreq);
+    DiscreteDirectionalWaveSpectrum();
 
-        std::vector<double> Si;
-        std::vector<double> Dj;
-        std::vector<double> omega;
-        std::vector<double> psi;
-        double domega;
-        double dpsi;
+    std::vector<double> Si;
+    std::vector<double> Dj;
+    std::vector<double> omega;
+    std::vector<double> psi;
+    std::vector<double> k;
+    double domega;
+    double dpsi;
 };
 
 #endif /* DISCRETEDIRECTIONALWAVESPECTRUM_HPP_ */

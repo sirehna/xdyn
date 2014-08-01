@@ -12,6 +12,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/DiracSpectralDensity.cpp
         src/WaveNumberFunctor.cpp
         src/WaveModel.cpp
+        src/discretize.cpp
         )
 
 
