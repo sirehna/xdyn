@@ -24,7 +24,7 @@
 class WaveModel
 {
     public:
-        WaveModel(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra);
+        WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum);
         virtual ~WaveModel();
 
         /**  \author cec
@@ -33,28 +33,16 @@ class WaveModel
           *  \returns Elevation of a point at a given instant, in meters.
           *  \snippet wave_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
           */
-        double elevation(const double x,//!< x-position in the NED frame (in meters)
+        virtual double elevation(const double x,//!< x-position in the NED frame (in meters)
                          const double y,//!< y-position in the NED frame (in meters)
                          const double t //!< Current time instant (in seconds)
-                         ) const;
+                         ) const = 0;
 
     private:
         WaveModel(); // Disabled
 
-        /**  \author cec
-          *  \date Aug 1, 2014, 3:46:02 PM
-          *  \brief Will be called by the public elevation method for each spectrum.
-          *  \returns Elevation due to one directional spectrum
-          *  \snippet wave_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
-          */
-        virtual double elevation_single_spectrum(const DiscreteDirectionalWaveSpectrum& spectrum, //!< Discrete spectrum under consideration
-                                                 const double x,                                  //!< x-position in the NED frame (in meters)
-                                                 const double y,                                  //!< y-position in the NED frame (in meters)
-                                                 const double t                                   //!< Current time instant (in seconds)
-                                                ) const = 0;
-
     protected:
-        std::vector<DiscreteDirectionalWaveSpectrum> spectra;
+        DiscreteDirectionalWaveSpectrum spectrum;
 };
 
 #endif /* WAVEMODEL_HPP_ */

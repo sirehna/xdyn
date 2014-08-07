@@ -28,10 +28,7 @@
 class Airy : public WaveModel
 {
     public:
-        Airy(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra, const int random_number_generator_seed);
-
-    private:
-        Airy(); // Disabled
+        Airy(const DiscreteDirectionalWaveSpectrum& spectrum, const int random_number_generator_seed);
 
         /**  \author cec
           *  \date Aug 1, 2014, 3:24:45 PM
@@ -43,15 +40,16 @@ class Airy : public WaveModel
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
           *  \snippet wave_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
           */
-            double elevation_single_spectrum(const DiscreteDirectionalWaveSpectrum& spectrum, //!< Discrete spectrum under consideration
-                                             const double x,                                  //!< x-position in the NED frame (in meters)
-                                             const double y,                                  //!< y-position in the NED frame (in meters)
-                                             const double t                                   //!< Current time instant (in seconds)
-                                             ) const;
+        double elevation(const double x,                                  //!< x-position in the NED frame (in meters)
+                         const double y,                                  //!< y-position in the NED frame (in meters)
+                         const double t                                   //!< Current time instant (in seconds)
+                         ) const;
 
-            std::vector<std::vector<double> > phase;
-            boost::mt19937 rng;
-            boost::uniform_01<double> generate_random_phase;
+    private:
+        Airy(); // Disabled
+        std::vector<std::vector<double> > phase;
+        boost::mt19937 rng;
+        boost::uniform_01<double> generate_random_phase;
 };
 
 #endif /* AIRY_HPP_ */
