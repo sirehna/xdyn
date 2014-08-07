@@ -29,7 +29,7 @@ class WaveModelFromSpectra : public WaveModelInterface
     private:
         WaveModelFromSpectra(); // Disabled
 
-         /*  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest wave_height_example
+         /*  \snippet hydro_models/unit_tests/src/WaveModelFromSpectraTest.cpp WaveModelFromSpectraTest example
           */
         double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                            const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
