@@ -15,6 +15,8 @@
 
 #include "ForceBuilder.hpp"
 #include "WaveBuilder.hpp"
+#include "DirectionalSpreadingBuilder.hpp"
+#include "SpectrumBuilder.hpp"
 
 #include "Sim.hpp"
 #include "YamlSimulatorInput.hpp"
@@ -24,9 +26,7 @@ class BodyBuilder;
 typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 
 
-/** \author cec
- *  \date Aug 7, 2014, 2:05:46 PM
- *  \brief Builds a Sim object which can be used with quicksolve
+/*  \brief Builds a Sim object which can be used with quicksolve
  *  \details This class is used to configure the Sim object for simulation.
  *           You have to tell the simulator builder how to parse the force &
  *           environmental models by using the can_parse methods.
@@ -41,27 +41,21 @@ class SimulatorBuilder
     public:
         SimulatorBuilder(const YamlSimulatorInput& input);
 
-        /**  \author cec
-          *  \date Aug 7, 2014, 2:55:16 PM
-          *  \brief Builds a Sim object using the supplied mesh map (one mesh per body)
+        /**  \brief Builds a Sim object using the supplied mesh map (one mesh per body)
           *  \details This function is mainly used in the integration tests.
           *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest build_example
           */
         Sim build(const MeshMap& input_meshes //!< Map containing a mesh for each body
                  ) const;
 
-        /**  \author cec
-          *  \date Aug 7, 2014, 2:55:16 PM
-          *  \brief Builds a Sim object reading the meshes from files
+        /**  \brief Builds a Sim object reading the meshes from files
           *  \details Reads the STL data from an STL file & call the version of
           *           the build method that accepts a MeshMap as input.
           *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest build_example
           */
         Sim build() const;
 
-        /**  \author cec
-          *  \date Aug 7, 2014, 2:09:04 PM
-          *  \brief Add the capacity to parse certain YAML inputs for waves
+        /**  \brief Add the capacity to parse certain YAML inputs for waves
           *  \details This method must not be called with any parameters: the
           *  default parameter is only there so we can use boost::enable_if. This
           *  allows us to use can_parse for several types derived from a few
@@ -77,9 +71,7 @@ class SimulatorBuilder
             return *this;
         }
 
-        /**  \author cec
-          *  \date Aug 7, 2014, 2:09:04 PM
-          *  \brief Add the capacity to parse certain YAML inputs for forces
+        /**  \brief Add the capacity to parse certain YAML inputs for forces
           *  \details This method must not be called with any parameters: the
           *  default parameter is only there so we can use boost::enable_if. This
           *  allows us to use can_parse for several types derived from a few
@@ -92,6 +84,38 @@ class SimulatorBuilder
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
             force_parsers.push_back(ForceBuilderPtr(new ForceBuilder<T>()));
+            return *this;
+        }
+
+        /**  \brief Add the capacity to parse certain YAML inputs for wave directional spreadings (eg. cos2s)
+          *  \details This method must not be called with any parameters: the
+          *  default parameter is only there so we can use boost::enable_if. This
+          *  allows us to use can_parse for several types derived from a few
+          *  base classes (WaveModelInterface, ForceModel...) & the compiler will
+          *  automagically choose the right version of can_parse.
+          *  \returns *this (so we can chain calls to can_parse)
+          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
+          */
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<DirectionalSpreadingBuilderInterface,T> >::type* dummy = 0)
+        {
+            (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+            directional_spreading_parsers.push_back(DirectionalSpreadingBuilderPtr(new DirectionalSpreadingBuilder<T>()));
+            return *this;
+        }
+
+        /**  \brief Add the capacity to parse certain YAML inputs for wave spectra (eg. Jonswap)
+          *  \details This method must not be called with any parameters: the
+          *  default parameter is only there so we can use boost::enable_if. This
+          *  allows us to use can_parse for several types derived from a few
+          *  base classes (WaveModelInterface, ForceModel...) & the compiler will
+          *  automagically choose the right version of can_parse.
+          *  \returns *this (so we can chain calls to can_parse)
+          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
+          */
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<SpectrumBuilderInterface,T> >::type* dummy = 0)
+        {
+            (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+            directional_spreading_parsers.push_back(SpectrumBuilderPtr(new SpectrumBuilder<T>()));
             return *this;
         }
 
@@ -113,6 +137,8 @@ class SimulatorBuilder
         TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceBuilderPtr> force_parsers;
         std::vector<WaveBuilderPtr> wave_parsers;
+        std::vector<DirectionalSpreadingBuilderPtr> directional_spreading_parsers;
+        std::vector<SpectrumBuilderPtr> spectrum_parsers;
 };
 
 
