@@ -31,9 +31,7 @@ class DefaultWaveModel : public WaveModelInterface
     private:
         DefaultWaveModel(); // Disabled
 
-        /**  \author cec
-          *  \date 24 avr. 2014, 10:57:09
-          *  \brief Flat sea surface model.
+        /**  \brief Flat sea surface model.
           *  \returns zwave - z;
           *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest wave_height_example
           */
