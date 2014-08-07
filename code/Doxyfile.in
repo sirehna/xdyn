@@ -661,12 +661,30 @@ WARN_LOGFILE           = doxygen_errors.txt
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = "@CMAKE_CURRENT_SOURCE_DIR@/data_source" \
+INPUT                  = "@CMAKE_CURRENT_SOURCE_DIR@/DoxygenMainPage.txt" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/csv_file_reader" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/data_source" \
                          "@CMAKE_CURRENT_SOURCE_DIR@/data_source/module_documentation.txt" \
-                         "@CMAKE_CURRENT_SOURCE_DIR@/simulation" \
-                         "@CMAKE_CURRENT_SOURCE_DIR@/simulation/module_documentation.txt" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/decode_unit" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/ds_integration" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/exception_handling" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/hydro_models" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/interpolation" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/kinematics" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/mesh" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/numeric" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/random_data_generator" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/simulator" \
                          "@CMAKE_CURRENT_SOURCE_DIR@/simulator/concepts.txt" \
-                         "@CMAKE_CURRENT_SOURCE_DIR@/DoxygenMainPage.txt"
+                         "@CMAKE_CURRENT_SOURCE_DIR@/simulator_external_data_structures" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/simulator_yaml_parser" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/solver" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/stl_reader" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/test_data_generator" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/test_utilities" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/text_file_reader" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/wave_models" \
+                         "@CMAKE_CURRENT_SOURCE_DIR@/yaml_parser" 
 
 
 # This tag can be used to specify the character encoding of the source files
