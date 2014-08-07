@@ -21,7 +21,7 @@ class ForceModel
     public:
         struct Input{};
         virtual ~ForceModel(){}
-        virtual Wrench operator()(const Body& body) const = 0;
+        virtual Wrench operator()(const Body& body, const double t) const = 0;
 };
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
 typedef std::vector<ForcePtr> ListOfForces;

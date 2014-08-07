@@ -43,7 +43,8 @@ class WaveModelInterface
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
         double get_relative_wave_height(const Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
-                                        const TR1(shared_ptr)<Kinematics>& k //!< Object used to compute the transforms to the NED frame
+                                        const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                                        const double t //!< Current instant (in seconds)
                                        ) const;
 
         /**  \author cec
@@ -53,7 +54,8 @@ class WaveModelInterface
           *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
           */
         std::vector<double> get_relative_wave_height(const PointMatrix& P,                     //!< Points for which to compute the relative wave height
-                                                     const TR1(shared_ptr)<Kinematics>& k //!< Object used to compute the transforms to the NED frame
+                                                     const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                                                     const double t //!< Current instant (in seconds)
                                                     ) const;
 
     private:
@@ -64,9 +66,10 @@ class WaveModelInterface
           *  \returns zwave - z
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest wave_height_example
           */
-        virtual double wave_height(double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                   double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                   double z  //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+        virtual double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                                   const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                                   const double z, //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                                   const double t //!< Current instant (in seconds)
                                    ) const = 0;
 };
 

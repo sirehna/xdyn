@@ -37,9 +37,10 @@ class DefaultWaveModel : public WaveModelInterface
           *  \returns zwave - z;
           *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest wave_height_example
           */
-        double wave_height(double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           double z  //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+        double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                           const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                           const double z, //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                           const double t //!< Current instant (in seconds)
                            ) const;
 
         double zwave;

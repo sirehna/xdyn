@@ -28,9 +28,9 @@ HydrostaticForceModel::Input::Input(const EnvironmentAndFrames& env) : rho(env.r
 HydrostaticForceModel::HydrostaticForceModel(const Input& in) : rho(in.rho), g(in.g), w(in.w), k(in.k)
 {}
 
-Wrench HydrostaticForceModel::operator()(const Body& body) const
+Wrench HydrostaticForceModel::operator()(const Body& body, const double t) const
 {
-    const std::vector<double> dz = w->get_relative_wave_height(*body.M,k);
+    const std::vector<double> dz = w->get_relative_wave_height(*body.M,k,t);
     const auto F = hydrostatic::force(body.mesh, body.G, rho, g, dz);
     return F;
 }

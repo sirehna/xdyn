@@ -31,7 +31,7 @@ class Sim
         StateType state;
 
     private:
-        UnsafeWrench sum_of_forces(const StateType& x, const size_t body_index) const;
+        UnsafeWrench sum_of_forces(const StateType& x, const size_t body_index, const double t) const;
         void calculate_state_derivatives(const Wrench& sum_of_forces,
                                          const MatrixPtr& inverse_of_the_total_inertia,
                                          const StateType& x,

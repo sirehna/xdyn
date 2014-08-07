@@ -24,7 +24,7 @@ GravityForceModel::Input::Input(const EnvironmentAndFrames& env) : g(env.g),
 GravityForceModel::GravityForceModel(const Input& in) : g(in.g), k(in.k)
 {}
 
-Wrench GravityForceModel::operator()(const Body& body) const
+Wrench GravityForceModel::operator()(const Body& body, const double) const
 {
     const kinematics::Transform T = k->get(body.name, "NED");
     return Wrench(body.G,

@@ -40,7 +40,7 @@ TEST_F(GravityForceModelTest, example)
     GravityForceModel F(input);
     Body b = get_body(BODY);
     b.m = 100;
-    const Wrench f = F(b);
+    const Wrench f = F(b, a.random<double>());
 //! [GravityForceModelTest example]
 //! [GravityForceModelTest expected output]
     ASSERT_EQ(BODY, f.get_frame());
@@ -92,7 +92,7 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     GravityForceModel F(input);
     Body b = get_body(BODY);
     b.m = 100;
-    const Wrench f = F(b);
+    const Wrench f = F(b,a.random<double>());
     ASSERT_EQ(BODY, f.get_frame());
     ASSERT_NEAR(0, f.K(),EPS);
     ASSERT_NEAR(0, f.M(),EPS);

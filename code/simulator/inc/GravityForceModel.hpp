@@ -25,7 +25,7 @@ class GravityForceModel : public ForceModel
             KinematicsPtr k;
         };
         GravityForceModel(const Input& in);
-        Wrench operator()(const Body& body) const;
+        Wrench operator()(const Body& body, const double t) const;
 
     private:
         GravityForceModel();

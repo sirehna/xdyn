@@ -26,7 +26,7 @@ Sim::Sim(const std::vector<Body>& bodies_,
 {
 }
 
-void Sim::operator()(const StateType& x, StateType& dx_dt, double )
+void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto y = x;
     for (size_t i = 0 ; i < bodies.size() ; ++i)
@@ -37,7 +37,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double )
         *_QJ(y,i) /= norm;
         *_QK(y,i) /= norm;
         update_kinematics(y, bodies[i], i, k);
-        calculate_state_derivatives(sum_of_forces(y, i), bodies[i].inverse_of_the_total_inertia, y, dx_dt, i);
+        calculate_state_derivatives(sum_of_forces(y, i, t), bodies[i].inverse_of_the_total_inertia, y, dx_dt, i);
     }
     state = x;
     _dx_dt = dx_dt;
@@ -66,14 +66,14 @@ std::vector<std::string> Sim::get_names_of_bodies() const
     return ret;
 }
 
-UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body) const
+UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body, const double t) const
 {
     const Eigen::Vector3d& uvw_in_body_frame = Eigen::Vector3d::Map(_U(x,body));
     const Eigen::Vector3d& pqr = Eigen::Vector3d::Map(_P(x,body));
     UnsafeWrench S(coriolis_and_centripetal(bodies[body].G,bodies[body].solid_body_inertia.get(),uvw_in_body_frame, pqr));
     for (auto that_force=forces[body].begin() ; that_force != forces[body].end() ; ++that_force)
     {
-        S += (**that_force)(bodies[body]);
+        S += (**that_force)(bodies[body], t);
     }
     return S;
 }

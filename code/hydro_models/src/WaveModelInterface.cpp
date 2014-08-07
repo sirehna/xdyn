@@ -27,20 +27,20 @@ WaveModelInterface::~WaveModelInterface()
 {
 }
 
-double WaveModelInterface::get_relative_wave_height(const Point& P, const TR1(shared_ptr)<Kinematics>& k) const
+double WaveModelInterface::get_relative_wave_height(const Point& P, const TR1(shared_ptr)<Kinematics>& k, const double t) const
 {
     const Point OP = compute_relative_position(P, k);
-    return wave_height(OP.x(),OP.y(),OP.z());
+    return wave_height(OP.x(),OP.y(),OP.z(),t);
 }
 
-std::vector<double> WaveModelInterface::get_relative_wave_height(const PointMatrix& P, const TR1(shared_ptr)<Kinematics>& k) const
+std::vector<double> WaveModelInterface::get_relative_wave_height(const PointMatrix& P, const TR1(shared_ptr)<Kinematics>& k, const double t) const
 {
     const PointMatrix OP = compute_relative_position(P, k);
     const int n = (int)P.m.cols();
     std::vector<double> ret;
     for (int i = 0 ; i < n ; ++i)
     {
-        ret.push_back(wave_height(OP.m(0,i),OP.m(1,i),OP.m(2,i)));
+        ret.push_back(wave_height((double)OP.m(0,i),(double)OP.m(1,i),(double)OP.m(2,i),t));
     }
     return ret;
 }

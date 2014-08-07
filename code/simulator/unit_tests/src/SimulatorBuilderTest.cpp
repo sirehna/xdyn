@@ -124,7 +124,7 @@ TEST_F(SimulatorBuilderTest, can_get_waves)
     const auto env = builder.get_environment_and_frames(bodies);
     ASSERT_TRUE(env.w.get() != NULL);
     const Point P("NED",1,2,3);
-    ASSERT_DOUBLE_EQ(3-12, env.w->get_relative_wave_height(P,env.k));
+    ASSERT_DOUBLE_EQ(3-12, env.w->get_relative_wave_height(P,env.k,a.random<double>()));
 }
 
 TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
@@ -165,7 +165,7 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     FF = ctm*F;
     ASSERT_EQ(1,forces.size());
     ASSERT_EQ(2,forces.front().size());
-    const auto Fg = forces.front().at(0)->operator()(bodies.front());
+    const auto Fg = forces.front().at(0)->operator()(bodies.front(),a.random<double>());
     ASSERT_NEAR(FF(0),Fg.X(),EPS);
     ASSERT_NEAR(FF(1),Fg.Y(),EPS);
     ASSERT_NEAR(FF(2),Fg.Z(),EPS);

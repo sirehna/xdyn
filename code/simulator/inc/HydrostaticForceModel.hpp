@@ -31,7 +31,7 @@ class HydrostaticForceModel : public ForceModel
         };
 
         HydrostaticForceModel(const Input& input);
-        Wrench operator()(const Body& body) const;
+        Wrench operator()(const Body& body, const double t) const;
 
     private:
         HydrostaticForceModel();

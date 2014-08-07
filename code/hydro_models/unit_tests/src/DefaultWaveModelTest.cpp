@@ -34,7 +34,7 @@ TEST_F(DefaultWaveModelTest, example)
     const Point P("NED", 0, 0, -20);
 //! [DefaultWaveModelTest example]
 //! [DefaultWaveModelTest expected output]
-    ASSERT_DOUBLE_EQ(-30, w.get_relative_wave_height(P, k));
+    ASSERT_DOUBLE_EQ(-30, w.get_relative_wave_height(P, k, a.random<double>()));
 //! [DefaultWaveModelTest expected output]
 }
 
@@ -47,8 +47,8 @@ TEST_F(DefaultWaveModelTest, more_interesting_example)
 
     const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(2, w.get_relative_wave_height(P,k));
-    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
+    ASSERT_DOUBLE_EQ(2, w.get_relative_wave_height(P,k, a.random<double>()));
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
 }
 
 TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_180p_around_Y)
@@ -69,8 +69,8 @@ TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_180p_around_
     rot(2,2)=-1.0;
     const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), rot, "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(1, w.get_relative_wave_height(P,k));
-    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
+    ASSERT_DOUBLE_EQ(1, w.get_relative_wave_height(P,k, a.random<double>()));
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
 }
 
 TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_with_rotation_090p_around_Y)
@@ -91,8 +91,8 @@ TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_with_rotatio
     rot(2,2)= 0.0;
     const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), rot, "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(2, w.get_relative_wave_height(P,k));
-    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
+    ASSERT_DOUBLE_EQ(2, w.get_relative_wave_height(P,k, a.random<double>()));
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
 }
 
 TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation)
@@ -113,8 +113,8 @@ TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation)
     rot(2,2)=-1.0;
     const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), rot, "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(1, w.get_relative_wave_height(P,k));
-    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k));
+    ASSERT_DOUBLE_EQ(1, w.get_relative_wave_height(P,k, a.random<double>()));
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
 }
 
 TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
@@ -142,7 +142,7 @@ TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
     const kinematics::Transform T(Point("NED", 1, 20, 300), "body");
     k->add(T);
 
-    const std::vector<double> delta = w.get_relative_wave_height(M,k);
+    const std::vector<double> delta = w.get_relative_wave_height(M,k, a.random<double>());
     //! [DefaultWaveModelTest example]
     //! [DefaultWaveModelTest expected output]
     ASSERT_EQ(5, delta.size());

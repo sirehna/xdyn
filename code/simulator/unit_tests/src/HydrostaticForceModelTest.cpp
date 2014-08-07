@@ -60,7 +60,7 @@ TEST_F(HydrostaticForceModelTest, example)
     body.G = G;
 
     HydrostaticForceModel F(input);
-    const Wrench Fhs = F(body);
+    const Wrench Fhs = F(body, a.random<double>());
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
     const double dz = 2./3;
@@ -126,7 +126,7 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     ASSERT_DOUBLE_EQ(0.0, body.mesh_to_body(2,1));
 
     HydrostaticForceModel F(input);
-    const Wrench Fhs = F(body);
+    const Wrench Fhs = F(body,a.random<double>());
 
     ASSERT_EQ(3,(size_t)body.mesh->nodes.rows());
     ASSERT_EQ(4,(size_t)body.mesh->nodes.cols());
