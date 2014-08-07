@@ -23,6 +23,7 @@ set(SRC src/YamlRotation.cpp
         src/YamlSimulatorInput.cpp
         src/YamlForces.cpp
         src/YamlEnvironmentalConstants.cpp
+        src/YamlWaveModelInput.cpp
         )
 
 

@@ -15,6 +15,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/WaveModel.cpp
         src/discretize.cpp
         src/ListOfWaveModels.cpp
+        src/YamlSpectraInput.cpp
         )
 
 
