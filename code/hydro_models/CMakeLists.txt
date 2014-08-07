@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 SET(SRC src/DefaultWaveModel.cpp
         src/WaveModelInterface.cpp
         src/hydrostatic.cpp
+        src/WaveModelFromSpectra.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
@@ -17,6 +18,7 @@ INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${numeric_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${test_macros_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${wave_models_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME}_static STATIC ${SRC})
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
