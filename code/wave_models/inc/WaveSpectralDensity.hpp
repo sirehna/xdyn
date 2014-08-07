@@ -11,10 +11,9 @@
 #include <vector>
 #include <cstdlib>
 
-/** \author cec
- *  \date Jul 30, 2014, 9:39:20 AM
- *  \brief Interface for wave spectral densities (distribution of the wave height by frequency).
+/** \brief Interface for wave spectral densities (distribution of the wave height by frequency).
  *  \details Used with WaveDirectionalSpreading to construct a DirectionalWaveSpectrum
+ *  \addtogroup wave_models
  *  \ingroup wave_models
  *  \section ex1 Example
  *  \snippet wave_models/unit_tests/src/WaveSpectrumTest.cpp WaveSpectrumTest example
@@ -26,9 +25,7 @@ class WaveSpectralDensity
     public:
         WaveSpectralDensity();
         virtual ~WaveSpectralDensity();
-        /**  \author cec
-          *  \date Jul 30, 2014, 9:40:33 AM
-          *  \brief Computes the amplitude of the power spectrum at a given angular frequency
+        /**  \brief Computes the amplitude of the power spectrum at a given angular frequency
           *  \returns Amplitude of the power spectrum (in m^2 s)
           *  \snippet wave_models/unit_tests/src/WaveSpectrumTest.cpp WaveSpectrumTest get_example
           */
@@ -37,9 +34,7 @@ class WaveSpectralDensity
 
         virtual WaveSpectralDensity* clone() const = 0;
 
-        /**  \author cec
-          *  \date Jul 31, 2014, 2:41:16 PM
-          *  \brief Returns n angular frequencies between omega_min (included)
+        /**  \brief Returns n angular frequencies between omega_min (included)
           *         and omega_max (also included)
           *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
           */
@@ -48,10 +43,8 @@ class WaveSpectralDensity
                                                             const size_t n          //!< Number of angular frequencies to return
                                                             ) const;
 
-        /**  \author cec
-          *  \date Jul 31, 2014, 5:15:22 PM
-          *  \brief Compute wave number, in infinite depth.
-          *  \returns \f$\\frac{omega^2}{g}$\f
+        /**  \brief Compute wave number, in infinite depth.
+          *  \returns \f$\frac{omega^2}{g}\f$
           *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_wave_number_example
           *  *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 51
           *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, equation 3.22, page 67
@@ -61,9 +54,7 @@ class WaveSpectralDensity
         double get_wave_number(const double omega //!< Angular frequency (in radians)
                              ) const;
 
-        /**  \author cec
-          *  \date Jul 31, 2014, 5:15:22 PM
-          *  \brief Compute wave number, in finite depth.
+        /**  \brief Compute wave number, in finite depth.
           *  \returns Solution of \f$omega^2=g\cdot k\cdot \tanh{kh}$\f
           *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_wave_number_example
           *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 51

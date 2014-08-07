@@ -10,9 +10,7 @@
 
 #include "WaveDirectionalSpreading.hpp"
 
-/** \author cec
- *  \date Jul 31, 2014, 12:20:52 PM
- *  \brief No directional spreading: 1 in a particular direction theta0 & zero elsewhere?
+/** \brief No directional spreading: 1 in a particular direction theta0 & zero elsewhere?
  *  \ingroup wave_models
  *  \section ex1 Example
  *  \snippet wave_models/unit_tests/src/DiracDirectionalSpreadingTest.cpp DiracDirectionalSpreadingTest example

@@ -36,6 +36,7 @@ void AiryTest::TearDown()
 
 TEST_F(AiryTest, single_frequency_single_direction_at_one_point)
 {
+    //! [AiryTest example]
     const double psi0 = PI/4;
     const double Hs = 3;
     const double Tp = 10;
@@ -51,8 +52,11 @@ TEST_F(AiryTest, single_frequency_single_direction_at_one_point)
     const double y = a.random<double>();
     const double phi = 0.54881350230425596237;
     const double k = 4.*PI*PI/Tp/Tp/9.81;
+    //! [AiryTest example]
+    //! [AiryTest expected output]
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
         ASSERT_NEAR(sqrt(2*Hs)*cos(k*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.elevation(x,y,t), 1E-6);
     }
+    //! [AiryTest expected output]
 }

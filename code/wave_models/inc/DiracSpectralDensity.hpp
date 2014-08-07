@@ -23,7 +23,9 @@
 class DiracSpectralDensity : public WaveSpectralDensity
 {
     public:
-        DiracSpectralDensity(const double omega0, const double Hs);
+        DiracSpectralDensity(const double omega0, //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
+                             const double Hs      //!< Significant wave height (in meters)
+                             );
 
         /**  \author cec
           *  \date Jul 31, 2014, 2:30:28 PM
