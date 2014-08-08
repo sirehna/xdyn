@@ -701,7 +701,7 @@ std::string test_data::waves()
     ss << "discretization:\n"
        << "   n: 128\n"
        << "   omega min: {value: 0.1, unit: rad/s}\n"
-       << "   omega max: {value: 6, unit: rad/s}\n"
+       << "   omega max: {value: 6, unit: deg/s}\n"
        << "spectra:\n"
        << "  - model: airy\n"
        << "    seed of the random data generator: 0\n"

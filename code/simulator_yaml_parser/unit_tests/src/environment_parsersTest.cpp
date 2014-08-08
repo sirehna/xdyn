@@ -11,6 +11,11 @@
 #include "environment_parsers.hpp"
 #include "yaml_data.hpp"
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+#define DEG (180./PI)
+
 const YamlWaveModel environment_parsersTest::yaml = parse_waves(test_data::waves());
 
 environment_parsersTest::environment_parsersTest() : a(DataGenerator(1212))
@@ -39,11 +44,11 @@ TEST_F(environment_parsersTest, default_wave_model)
 //! [environment_parsersTest expected output]
 }
 
-TEST_F(environment_parsersTest, DISABLED_can_parse_wave_discretization)
+TEST_F(environment_parsersTest, can_parse_wave_discretization)
 {
     ASSERT_EQ(128,yaml.discretization.n);
-    ASSERT_EQ(128,yaml.discretization.omega_max);
-    ASSERT_EQ(128,yaml.discretization.omega_min);
+    ASSERT_DOUBLE_EQ(0.1,yaml.discretization.omega_min);
+    ASSERT_DOUBLE_EQ(6./DEG,yaml.discretization.omega_max);
 }
 
 TEST_F(environment_parsersTest, DISABLED_can_parse_wave_spreading_and_spectral_data)
