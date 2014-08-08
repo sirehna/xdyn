@@ -15,6 +15,7 @@
 
 #include "ForceBuilder.hpp"
 #include "WaveBuilder.hpp"
+#include "WaveModel.hpp"
 #include "DirectionalSpreadingBuilder.hpp"
 #include "SpectrumBuilder.hpp"
 
@@ -55,7 +56,7 @@ class SimulatorBuilder
           */
         Sim build() const;
 
-        /**  \brief Add the capacity to parse certain YAML inputs for waves
+        /**  \brief Add the capacity to parse the default wave model
           *  \details This method must not be called with any parameters: the
           *  default parameter is only there so we can use boost::enable_if. This
           *  allows us to use can_parse for several types derived from a few
@@ -67,7 +68,23 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<WaveModelInterface,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            wave_parsers.push_back(WaveBuilderPtr(new WaveBuilder<T>()));
+            wave_parsers.push_back(WaveBuilderPtr(new WaveBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
+            return *this;
+        }
+
+        /**  \brief Add the capacity to parse the wave models defined in the wave_models module
+          *  \details This method must not be called with any parameters: the
+          *  default parameter is only there so we can use boost::enable_if. This
+          *  allows us to use can_parse for several types derived from a few
+          *  base classes (WaveModelInterface, ForceModel...) & the compiler will
+          *  automagically choose the right version of can_parse.
+          *  \returns *this (so we can chain calls to can_parse)
+          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
+          */
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<WaveModel,T> >::type* dummy = 0)
+        {
+            (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+            wave_parsers.push_back(WaveBuilderPtr(new WaveBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
             return *this;
         }
 
@@ -99,7 +116,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<DirectionalSpreadingBuilderInterface,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            directional_spreading_parsers.push_back(DirectionalSpreadingBuilderPtr(new DirectionalSpreadingBuilder<T>()));
+            directional_spreading_parsers->push_back(DirectionalSpreadingBuilderPtr(new DirectionalSpreadingBuilder<T>()));
             return *this;
         }
 
@@ -115,7 +132,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<SpectrumBuilderInterface,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            directional_spreading_parsers.push_back(SpectrumBuilderPtr(new SpectrumBuilder<T>()));
+            spectrum_parsers->push_back(SpectrumBuilderPtr(new SpectrumBuilder<T>()));
             return *this;
         }
 
@@ -137,8 +154,8 @@ class SimulatorBuilder
         TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceBuilderPtr> force_parsers;
         std::vector<WaveBuilderPtr> wave_parsers;
-        std::vector<DirectionalSpreadingBuilderPtr> directional_spreading_parsers;
-        std::vector<SpectrumBuilderPtr> spectrum_parsers;
+        TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
+        TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
 };
 
 

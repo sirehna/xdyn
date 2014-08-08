@@ -88,7 +88,7 @@ TEST_F(WaveModelFromSpectraTest, example)
         const double x = P.x();
         const double y = P.y();
         const double z = P.z();
-        ASSERT_NEAR(z-sqrt(2*Hs)*cos(k_*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.get_relative_wave_height(P, k, t), 1E-6);
+        ASSERT_NEAR(z-sqrt(2*Hs)*cos(k_*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.get_relative_wave_height(P, k, t), 1E-5);
     }
 //! [WaveModelFromSpectraTest expected output]
 }

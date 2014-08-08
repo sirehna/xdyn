@@ -18,8 +18,8 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
                                         builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
                                         force_parsers(std::vector<ForceBuilderPtr>()),
                                         wave_parsers(std::vector<WaveBuilderPtr>()),
-                                        directional_spreading_parsers(std::vector<DirectionalSpreadingBuilderPtr>()),
-                                        spectrum_parsers(std::vector<SpectrumBuilderPtr>())
+                                        directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
+                                        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>()))
 {
 }
 

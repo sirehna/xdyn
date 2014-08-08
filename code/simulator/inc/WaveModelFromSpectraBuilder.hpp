@@ -1,25 +1,27 @@
 /*
- * DefaultWaveBuilder.hpp
+ * WaveModelFromSpectraBuilder.hpp
  *
- *  Created on: Jun 17, 2014
+ *  Created on: Aug 7, 2014
  *      Author: cady
  */
 
-#ifndef DEFAULTWAVEBUILDER_HPP_
-#define DEFAULTWAVEBUILDER_HPP_
+#ifndef WAVEMODELFROMSPECTRABUILDER_HPP_
+#define WAVEMODELFROMSPECTRABUILDER_HPP_
 
+#include "Airy.hpp"
 #include "DefaultWaveModel.hpp"
 #include "WaveBuilder.hpp"
 
 template <>
-class WaveBuilder<DefaultWaveModel> : public WaveBuilderInterface
+class WaveBuilder<Airy> : public WaveBuilderInterface
 {
     public:
         WaveBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
                     const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
         boost::optional<TR1(shared_ptr)<WaveModelInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
+
+    private:
+        WaveBuilder();
 };
 
-
-
-#endif /* DEFAULTWAVEBUILDER_HPP_ */
+#endif /* WAVEMODELFROMSPECTRABUILDER_HPP_ */
