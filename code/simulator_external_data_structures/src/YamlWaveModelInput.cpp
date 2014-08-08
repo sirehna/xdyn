@@ -18,8 +18,14 @@ spectral_density_type(std::string()),
 spectral_density_yaml(std::string())
 {}
 
+YamlWaveOutput::YamlWaveOutput() : full_filename(""), format(""), frame_of_reference(""), x(std::vector<double>()), y(std::vector<double>())
+{
+
+}
+
 YamlWaveModel::YamlWaveModel():
 discretization(YamlDiscretization()),
-spectra(std::vector<YamlSpectra>())
+spectra(std::vector<YamlSpectra>()),
+output(YamlWaveOutput())
 {}
 

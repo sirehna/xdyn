@@ -31,11 +31,22 @@ struct YamlSpectra
     std::string spectral_density_yaml;      //!< Spectral model parameters in YAML format
 };
 
+struct YamlWaveOutput
+{
+    YamlWaveOutput();
+    std::string full_filename;       //!< Output file name, complete with path & file extension
+    std::string format;              //!< Format of the output (eg. YAML, OBJ, HDF5...)
+    std::string frame_of_reference;  //!< Name of the frame of reference the x & y coordinates are expressed in
+    std::vector<double> x;           //!< x-coordinate of the points we wish to observe (in frame 'frame_of_reference')
+    std::vector<double> y;           //!< y-coordinate of the points we wish to observe (in frame 'frame_of_reference')
+};
+
 struct YamlWaveModel
 {
     YamlWaveModel();
     YamlDiscretization discretization; //!< Spectral discretization parameters
     std::vector<YamlSpectra> spectra;  //!< Wave spectra to generate
+    YamlWaveOutput output;             //!< Defines what wave data is outputted during the simulation & how it is generated
 };
 
 #endif /* YAMLWAVEMODELINPUT_HPP_ */
