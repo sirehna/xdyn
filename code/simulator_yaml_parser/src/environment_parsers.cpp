@@ -112,3 +112,138 @@ void operator >> (const YAML::Node& node, YamlWaveOutput& g)
     BOOST_FOREACH(double& x, g.x) x *= factor;
     BOOST_FOREACH(double& y, g.y) y *= factor;
 }
+
+
+YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
+{
+    YamlDiracDirection ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing dirac directional spreading ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+return ret;
+}
+
+YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml)
+{
+    YamlDiracSpectrum ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing Dirac spectrum parameters ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    return ret;
+}
+
+YamlJonswap          parse_jonswap(const std::string& yaml)
+{
+    YamlJonswap ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing JONSWAP wave spectrum parameters ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    return ret;
+}
+
+YamlPiersonMoskowitz parse_pierson_moskowitz(const std::string& yaml)
+{
+    YamlPiersonMoskowitz ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing Pierson-Moskowitz spectrum parameters ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    return ret;
+}
+
+YamlBretschneider    parse_bretschneider(const std::string& yaml)
+{
+    YamlBretschneider ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing Bretschneider spectrum parameters ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    return ret;
+}
+
+YamlCos2s            parse_cos2s(const std::string& yaml)
+{
+    YamlCos2s ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing cos2s directional spreading parameters ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    return ret;
+}
+
+int                  parse_airy(const std::string& yaml)
+{
+    int ret = 0;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing Airy wave model parameters ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    return ret;
+}
+
