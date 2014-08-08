@@ -4,6 +4,7 @@
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
 #include "YamlSimulatorInput.hpp"
+#include "YamlWaveModelInput.hpp"
 
 class SimulatorYamlParserTest : public ::testing::Test
 {
@@ -14,7 +15,6 @@ class SimulatorYamlParserTest : public ::testing::Test
         virtual void TearDown();
         DataGenerator a;
         static const YamlSimulatorInput yaml;
-
 };
 
 #endif  /* SIMULATORYAMLPARSERTEST_HPP_ */

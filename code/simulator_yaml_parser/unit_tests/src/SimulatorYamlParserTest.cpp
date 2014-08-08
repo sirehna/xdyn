@@ -345,3 +345,4 @@ TEST_F(SimulatorYamlParserTest, should_not_throw_even_if_no_mesh_is_defined)
 {
     ASSERT_NO_THROW(SimulatorYamlParser(test_data::falling_ball_example()).parse());
 }
+

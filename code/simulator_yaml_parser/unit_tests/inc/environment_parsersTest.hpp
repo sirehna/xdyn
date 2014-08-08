@@ -11,6 +11,8 @@
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
 
+#include "YamlWaveModelInput.hpp"
+
 class environment_parsersTest : public ::testing::Test
 {
     protected:
@@ -19,7 +21,7 @@ class environment_parsersTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
 		DataGenerator a;
-
+		static const YamlWaveModel yaml;
 };
 
 #endif  /* ENVIRONMENT_PARSERSTEST_HPP_ */

@@ -19,3 +19,13 @@ double parse_default_wave_model(const std::string& yaml)
     parse_uv(node["constant sea elevation in NED frame"], ret);
     return ret;
 }
+
+YamlWaveModel parse_waves(const std::string& yaml)
+{
+    YamlWaveModel ret;
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    return ret;
+}
