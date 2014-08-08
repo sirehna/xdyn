@@ -116,57 +116,38 @@ TEST_F(environment_parsersTest, can_parse_dirac_spectrum)
     ASSERT_DOUBLE_EQ(15, y.omega0);
 }
 
-TEST_F(environment_parsersTest, DISABLED_can_parse_pierson_moskowitz_spectrum)
+TEST_F(environment_parsersTest, can_parse_pierson_moskowitz_spectrum)
 {
-    ASSERT_TRUE(false);
+    const YamlPiersonMoskowitz y = parse_pierson_moskowitz("Hs: {value: 5, unit: m}\n"
+                                                           "Tp: {value: 15, unit: m}\n");
+    ASSERT_DOUBLE_EQ(5, y.Hs);
+    ASSERT_DOUBLE_EQ(15, y.Tp);
 }
 
-TEST_F(environment_parsersTest, DISABLED_can_parse_bretschneider_spectrum)
+TEST_F(environment_parsersTest, can_parse_bretschneider_spectrum)
 {
-    ASSERT_TRUE(false);
+    const YamlBretschneider y = parse_bretschneider("Hs: {value: 5, unit: m}\n"
+                                                    "Tp: {value: 15, unit: m}\n");
+    ASSERT_DOUBLE_EQ(5, y.Hs);
+    ASSERT_DOUBLE_EQ(15, y.Tp);
 }
 
-TEST_F(environment_parsersTest, DISABLED_can_parse_dirac_spreading)
+TEST_F(environment_parsersTest, can_parse_dirac_spreading)
 {
-    ASSERT_TRUE(false);
+    const YamlDiracDirection y = parse_wave_dirac_direction("psi0: {value: 5, unit: deg}\n");
+    ASSERT_DOUBLE_EQ(5*PI/180, y.psi0);
 }
 
-TEST_F(environment_parsersTest, DISABLED_can_parse_cos2s_spreading)
+TEST_F(environment_parsersTest, can_parse_cos2s_spreading)
 {
-    ASSERT_TRUE(false);
+    const YamlCos2s y = parse_cos2s("s: 2\n"
+                                    "waves coming from: {value: 90, unit: deg}\n");
+    ASSERT_DOUBLE_EQ(PI/2., y.psi0);
+    ASSERT_DOUBLE_EQ(2, y.s);
 }
 
-TEST_F(environment_parsersTest, DISABLED_airy_wave_model)
+TEST_F(environment_parsersTest, airy_wave_model)
 {
-    std::stringstream yaml;
-    yaml << "discretization:"                                  << std::endl
-         << "   n: 128"                                        << std::endl
-         << "   omega min: {value: 0.1, unit: rad/s}"          << std::endl
-         << "   omega max: {value: 6, unit: rad/s}"            << std::endl
-         << "spectra:"                                         << std::endl
-         << "  - model: airy"                                  << std::endl
-         << "    directional spreading:"                       << std::endl
-         << "       type: dirac"                               << std::endl
-         << "       waves coming from: {value: 90, unit: deg}" << std::endl
-         << "    spectral density:"                            << std::endl
-         << "       type: jonswap"                             << std::endl
-         << "       Hs: {value: 5, unit: m}"                   << std::endl
-         << "       Tp: {value: 15, unit: m}"                  << std::endl
-         << "       gamma: 1.2"                                << std::endl
-         << "  - model: airy"                                  << std::endl
-         << "    directional spreading:"                       << std::endl
-         << "       type: cos2s"                               << std::endl
-         << "       s: 2"                                      << std::endl
-         << "       waves coming from: {value: 90, unit: deg}" << std::endl
-         << "    spectral density:"                            << std::endl
-         << "       type: dirac"                               << std::endl
-         << "       Hs: {value: 5, unit: m}"                   << std::endl
-         << "       Tp: {value: 15, unit: m}"                  << std::endl
-         << "output:"                                          << std::endl
-         << "   format: yaml"                                  << std::endl
-         << "   frame of reference: ball"                      << std::endl
-         << "   mesh:"                                         << std::endl
-         << "      unit: m"                                    << std::endl
-         << "      x: [1,2,3,4,5,1,2,3,4]"                     << std::endl
-         << "      x: [1,1,1,1,1,2,2,2,2]"                     << std::endl;
+    const int seed = parse_airy("seed of the random data generator: 1234\n");
+    ASSERT_EQ(1234, seed);
 }

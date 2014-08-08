@@ -123,6 +123,7 @@ YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
+        parse_uv(node["psi0"], ret.psi0);
     }
     catch(std::exception& e)
     {
@@ -185,6 +186,8 @@ YamlPiersonMoskowitz parse_pierson_moskowitz(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
+        parse_uv(node["Hs"], ret.Hs);
+        parse_uv(node["Tp"], ret.Tp);
     }
     catch(std::exception& e)
     {
@@ -204,6 +207,8 @@ YamlBretschneider    parse_bretschneider(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
+        parse_uv(node["Hs"], ret.Hs);
+        parse_uv(node["Tp"], ret.Tp);
     }
     catch(std::exception& e)
     {
@@ -223,6 +228,8 @@ YamlCos2s            parse_cos2s(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
+        parse_uv(node["waves coming from"], ret.psi0);
+        node["s"] >> ret.s;
     }
     catch(std::exception& e)
     {
@@ -242,6 +249,7 @@ int                  parse_airy(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
+        node["seed of the random data generator"] >> ret;
     }
     catch(std::exception& e)
     {
