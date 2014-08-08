@@ -20,6 +20,7 @@ namespace test_data
     std::string stable_rolling_cube_test();
     std::string anthineas_hydrostatic_test();
     std::string anthineas_post_processing();
+    std::string outputs();
 }
 
 #endif /* YAML_DATA_HPP_ */

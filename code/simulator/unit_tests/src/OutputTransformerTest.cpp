@@ -21,7 +21,7 @@ const YamlSimulatorInput OutputTransformerTest::yaml2 = OutputTransformerTest::g
 
 YamlSimulatorInput OutputTransformerTest::get_yaml1()
 {
-    return SimulatorYamlParser(test_data::falling_ball_example()).parse();
+    return SimulatorYamlParser(test_data::falling_ball_example()+test_data::outputs()).parse();
 }
 
 YamlSimulatorInput OutputTransformerTest::get_yaml2()
