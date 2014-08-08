@@ -38,6 +38,24 @@ SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(d
 {
 }
 
+#define PARSE_OPTIONAL_KEY(key, dest) \
+if(const YAML::Node *parameter = node.FindValue(key))\
+    {\
+        *parameter >> dest;\
+    }
+
+void parse_outputs(const YAML::Node& node, YamlSimulatorInput& ret);
+void parse_outputs(const YAML::Node& node, YamlSimulatorInput& ret)
+{
+    node["positions"]             >> ret.position_output;
+    node["angles"]                >> ret.angles_output;
+    node["linear velocities"]     >> ret.linear_velocities_output;
+    node["angular velocities"]    >> ret.angular_velocities_output;
+    node["linear accelerations"]  >> ret.linear_accelerations_output;
+    node["angular accelerations"] >> ret.angular_accelerations_output;
+    node["forces and torques"]    >> ret.forces_and_torques_output;
+}
+
 YamlSimulatorInput SimulatorYamlParser::parse() const
 {
     YAML::Node node;
@@ -51,15 +69,18 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
     node["bodies"] >> ret.bodies;
     node["rotations"] >> ret.rotations;
     node["environment models"] >> ret.environment;
-    node["points"] >> ret.points;
-    node["blocked degrees of freedom body/NED->body"] >> ret.blocked_degrees_of_freedom;
-    node["outputs"]["positions"] >> ret.position_output;
-    node["outputs"]["angles"] >> ret.angles_output;
-    node["outputs"]["linear velocities"] >> ret.linear_velocities_output;
-    node["outputs"]["angular velocities"] >> ret.angular_velocities_output;
-    node["outputs"]["linear accelerations"] >> ret.linear_accelerations_output;
-    node["outputs"]["angular accelerations"] >> ret.angular_accelerations_output;
-    node["outputs"]["forces and torques"] >> ret.forces_and_torques_output;
+    PARSE_OPTIONAL_KEY("points", ret.points)
+    PARSE_OPTIONAL_KEY("blocked degrees of freedom body/NED->body", ret.blocked_degrees_of_freedom)
+
+    PARSE_OPTIONAL_KEY("points", ret.points)
+    PARSE_OPTIONAL_KEY("points", ret.points)
+    PARSE_OPTIONAL_KEY("points", ret.points)
+    PARSE_OPTIONAL_KEY("points", ret.points)
+    PARSE_OPTIONAL_KEY("points", ret.points)
+    if(const YAML::Node *parameter = node.FindValue("outputs"))
+    {
+        parse_outputs(*parameter, ret);
+    }
     return ret;
 }
 
