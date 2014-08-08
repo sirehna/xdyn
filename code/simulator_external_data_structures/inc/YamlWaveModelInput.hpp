@@ -49,4 +49,46 @@ struct YamlWaveModel
     YamlWaveOutput output;             //!< Defines what wave data is outputted during the simulation & how it is generated
 };
 
+struct YamlJonswap
+{
+    YamlJonswap();
+    double Hs;    //!< Significant wave height (in meters)
+    double Tp;    //!< Mean wave period (in seconds)
+    double gamma; //!< Non-dimensional peak shape parameter
+};
+
+struct YamlBretschneider
+{
+    YamlBretschneider();
+    double Hs;    //!< Significant wave height (in meters)
+    double Tp;    //!< Mean wave period (in seconds)
+};
+
+struct YamlCos2s
+{
+    YamlCos2s();
+    double psi0; //!< Primary wave direction in radians.
+    double s;    //!< Exponent
+};
+
+struct YamlDiracDirection
+{
+    YamlDiracDirection();
+    double psi0; //!< Primary wave direction in radians.
+};
+
+struct YamlDiracSpectrum
+{
+    YamlDiracSpectrum();
+    double omega0; //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
+    double Hs;     //!< Significant wave height (in meters)
+};
+
+struct YamlPiersonMoskowitz
+{
+    YamlPiersonMoskowitz();
+    double Hs;     //!< Significant wave height (in meters)
+    double Tp;    //!< Mean wave period (in seconds)
+};
+
 #endif /* YAMLWAVEMODELINPUT_HPP_ */

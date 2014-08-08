@@ -7,7 +7,8 @@
 
 #include "YamlWaveModelInput.hpp"
 
-YamlDiscretization::YamlDiscretization() : n(0), omega_min(0), omega_max(0){}
+YamlDiscretization::YamlDiscretization() : n(0), omega_min(0), omega_max(0)
+{}
 
 YamlSpectra::YamlSpectra():
 model(std::string()),
@@ -19,9 +20,7 @@ spectral_density_yaml(std::string())
 {}
 
 YamlWaveOutput::YamlWaveOutput() : full_filename(""), format(""), frame_of_reference(""), x(std::vector<double>()), y(std::vector<double>())
-{
-
-}
+{}
 
 YamlWaveModel::YamlWaveModel():
 discretization(YamlDiscretization()),
@@ -29,3 +28,32 @@ spectra(std::vector<YamlSpectra>()),
 output(YamlWaveOutput())
 {}
 
+YamlJonswap::YamlJonswap():
+    Hs(0),
+    Tp(0),
+    gamma(0)
+{}
+
+YamlBretschneider::YamlBretschneider():
+    Hs(0),
+    Tp(0)
+{}
+
+YamlCos2s::YamlCos2s():
+    psi0(0),
+   s(0)
+{}
+
+YamlDiracDirection::YamlDiracDirection():
+    psi0(0) //!< Primary wave direction in radians.
+{}
+
+YamlDiracSpectrum::YamlDiracSpectrum():
+    omega0(0), //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
+    Hs(0)     //!< Significant wave height (in meters)
+{}
+
+YamlPiersonMoskowitz::YamlPiersonMoskowitz() :
+    Hs(0),     //!< Significant wave height (in meters)
+    Tp(0)    //!< Mean wave period (in seconds)
+{}
