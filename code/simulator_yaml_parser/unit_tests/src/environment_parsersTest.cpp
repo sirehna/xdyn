@@ -24,10 +24,10 @@ void environment_parsersTest::TearDown()
 {
 }
 
-TEST_F(environment_parsersTest, example)
+TEST_F(environment_parsersTest, default_wave_model)
 {
 //! [environment_parsersTest example]
-    const double zwave = parse_default_wave_model("constant wave height in NED frame: {value: 1234, unit: m}");
+    const double zwave = parse_default_wave_model("constant sea elevation in NED frame: {value: 1234, unit: m}");
 //! [environment_parsersTest example]
 //! [environment_parsersTest expected output]
     ASSERT_DOUBLE_EQ(1234,zwave);
