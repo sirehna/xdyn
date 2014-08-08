@@ -40,10 +40,9 @@ TEST_F(SimulatorYamlParserTest, can_parse_rotations)
 
 TEST_F(SimulatorYamlParserTest, can_parse_environment)
 {
-    ASSERT_EQ(2, yaml.environment.size());
+    ASSERT_EQ(1, yaml.environment.size());
     const std::vector<YamlModel> env = yaml.environment;
     ASSERT_EQ("no waves", env.at(0).model);
-    ASSERT_EQ("no wind", env.at(1).model);
     ASSERT_EQ("constant wave height in NED frame:\n  unit: m\n  value: 12\nmodel: no waves", env.at(0).yaml);
 }
 
