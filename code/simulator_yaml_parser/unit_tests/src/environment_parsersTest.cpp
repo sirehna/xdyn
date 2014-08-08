@@ -108,9 +108,12 @@ TEST_F(environment_parsersTest, can_parse_jonswap_spectrum)
     ASSERT_DOUBLE_EQ(1.2, y.gamma);
 }
 
-TEST_F(environment_parsersTest, DISABLED_can_parse_dirac_spectrum)
+TEST_F(environment_parsersTest, can_parse_dirac_spectrum)
 {
-    ASSERT_TRUE(false);
+    const YamlDiracSpectrum y = parse_wave_dirac_spectrum("Hs: {value: 5, unit: m}\n"
+                                                          "omega0: {value: 15, unit: rad/s}\n");
+    ASSERT_DOUBLE_EQ(5, y.Hs);
+    ASSERT_DOUBLE_EQ(15, y.omega0);
 }
 
 TEST_F(environment_parsersTest, DISABLED_can_parse_pierson_moskowitz_spectrum)

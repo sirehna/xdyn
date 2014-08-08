@@ -142,6 +142,8 @@ YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
+        parse_uv(node["Hs"], ret.Hs);
+        parse_uv(node["omega0"], ret.omega0);
     }
     catch(std::exception& e)
     {
@@ -151,13 +153,12 @@ YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml)
     }
     return ret;
 }
-#include "test_macros.hpp"
+
 YamlJonswap          parse_jonswap(const std::string& yaml)
 {
     YamlJonswap ret;
     try
     {
-        COUT(yaml);
         std::stringstream stream(yaml);
         YAML::Parser parser(stream);
         YAML::Node node;
