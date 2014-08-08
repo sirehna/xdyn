@@ -98,9 +98,14 @@ TEST_F(environment_parsersTest, can_parse_wave_outputs)
 }
 
 
-TEST_F(environment_parsersTest, DISABLED_can_parse_jonswap_spectrum)
+TEST_F(environment_parsersTest, can_parse_jonswap_spectrum)
 {
-    ASSERT_TRUE(false);
+    const YamlJonswap y = parse_jonswap("Hs: {value: 5, unit: m}\n"
+                                        "Tp: {value: 15, unit: m}\n"
+                                        "gamma: 1.2\n");
+    ASSERT_DOUBLE_EQ(5, y.Hs);
+    ASSERT_DOUBLE_EQ(15, y.Tp);
+    ASSERT_DOUBLE_EQ(1.2, y.gamma);
 }
 
 TEST_F(environment_parsersTest, DISABLED_can_parse_dirac_spectrum)
