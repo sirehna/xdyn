@@ -18,7 +18,8 @@ int main(int argc, const char* argv[])
                   file5(path+"stable_cube_test.yml"),
                   file6(path+"stable_rolling_cube_test.yml"),
                   file7(path+"anthineas_equilibre.yml"),
-                  file8(path+"postprocessing.yml");
+                  file8(path+"postprocessing.yml"),
+                  file9(path+"cube_in_waves.yml");
 
     file2 << test_data::hydrostatic_test();
     file2.close();
@@ -40,5 +41,8 @@ int main(int argc, const char* argv[])
 
     file8 << test_data::outputs();
     file8.close();
+
+    file9 << test_data::cube_in_waves();
+    file9.close();
     return 0;
 }

@@ -21,6 +21,8 @@ namespace test_data
     std::string anthineas_hydrostatic_test();
     std::string anthineas_post_processing();
     std::string outputs();
+    std::string cube_in_waves();
+    std::string waves();
 }
 
 #endif /* YAML_DATA_HPP_ */
