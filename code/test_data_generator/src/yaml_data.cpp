@@ -726,10 +726,11 @@ std::string test_data::waves()
        << "output:\n"
        << "    format: yaml\n"
        << "    frame of reference: ball\n"
+       << "    full filename: waves_out.yaml\n"
        << "    mesh:\n"
-       << "       unit: m\n"
+       << "       unit: km\n"
        << "       x: [1,2,3,4,5,1,2,3,4]\n"
-       << "       x: [1,1,1,1,1,2,2,2,2]\n";
+       << "       y: [1,1,1,1,1,2,2,2,2]\n";
     return ss.str();
 }
 
@@ -774,7 +775,7 @@ std::string test_data::cube_in_waves()
            << "        mesh:\n"
            << "           unit: m\n"
            << "           x: [1,2,3,4,5,1,2,3,4]\n"
-           << "           x: [1,1,1,1,1,2,2,2,2]\n"
+           << "           y: [1,1,1,1,1,2,2,2,2]\n"
            << "\n"
            << "bodies: # All bodies have NED as parent frame\n"
            << "  - name: cube\n"

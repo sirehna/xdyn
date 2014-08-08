@@ -70,31 +70,31 @@ TEST_F(environment_parsersTest, can_parse_wave_spreading_and_spectral_data)
     ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: m\n  value: 15\ntype: dirac",yaml.spectra.at(1).spectral_density_yaml);
 }
 
-TEST_F(environment_parsersTest, DISABLED_can_parse_wave_outputs)
+TEST_F(environment_parsersTest, can_parse_wave_outputs)
 {
     ASSERT_EQ("yaml",yaml.output.format);
-    ASSERT_EQ("body1",yaml.output.frame_of_reference);
-    ASSERT_EQ("bla",yaml.output.full_filename);
+    ASSERT_EQ("ball",yaml.output.frame_of_reference);
+    ASSERT_EQ("waves_out.yaml",yaml.output.full_filename);
     ASSERT_DOUBLE_EQ(9,yaml.output.x.size());
-    ASSERT_DOUBLE_EQ(1,yaml.output.x.at(0));
-    ASSERT_DOUBLE_EQ(2,yaml.output.x.at(1));
-    ASSERT_DOUBLE_EQ(3,yaml.output.x.at(2));
-    ASSERT_DOUBLE_EQ(4,yaml.output.x.at(3));
-    ASSERT_DOUBLE_EQ(5,yaml.output.x.at(4));
-    ASSERT_DOUBLE_EQ(1,yaml.output.x.at(5));
-    ASSERT_DOUBLE_EQ(2,yaml.output.x.at(6));
-    ASSERT_DOUBLE_EQ(3,yaml.output.x.at(7));
-    ASSERT_DOUBLE_EQ(4,yaml.output.x.at(8));
+    ASSERT_DOUBLE_EQ(1E3,yaml.output.x.at(0));
+    ASSERT_DOUBLE_EQ(2E3,yaml.output.x.at(1));
+    ASSERT_DOUBLE_EQ(3E3,yaml.output.x.at(2));
+    ASSERT_DOUBLE_EQ(4E3,yaml.output.x.at(3));
+    ASSERT_DOUBLE_EQ(5E3,yaml.output.x.at(4));
+    ASSERT_DOUBLE_EQ(1E3,yaml.output.x.at(5));
+    ASSERT_DOUBLE_EQ(2E3,yaml.output.x.at(6));
+    ASSERT_DOUBLE_EQ(3E3,yaml.output.x.at(7));
+    ASSERT_DOUBLE_EQ(4E3,yaml.output.x.at(8));
     ASSERT_EQ(9,yaml.output.y.size());
-    ASSERT_DOUBLE_EQ(1,yaml.output.y.at(0));
-    ASSERT_DOUBLE_EQ(1,yaml.output.y.at(1));
-    ASSERT_DOUBLE_EQ(1,yaml.output.y.at(2));
-    ASSERT_DOUBLE_EQ(1,yaml.output.y.at(3));
-    ASSERT_DOUBLE_EQ(1,yaml.output.y.at(4));
-    ASSERT_DOUBLE_EQ(2,yaml.output.y.at(5));
-    ASSERT_DOUBLE_EQ(2,yaml.output.y.at(6));
-    ASSERT_DOUBLE_EQ(2,yaml.output.y.at(7));
-    ASSERT_DOUBLE_EQ(2,yaml.output.y.at(8));
+    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(0));
+    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(1));
+    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(2));
+    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(3));
+    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(4));
+    ASSERT_DOUBLE_EQ(2E3,yaml.output.y.at(5));
+    ASSERT_DOUBLE_EQ(2E3,yaml.output.y.at(6));
+    ASSERT_DOUBLE_EQ(2E3,yaml.output.y.at(7));
+    ASSERT_DOUBLE_EQ(2E3,yaml.output.y.at(8));
 }
 
 

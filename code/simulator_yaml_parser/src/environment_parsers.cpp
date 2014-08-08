@@ -5,12 +5,19 @@
  *      Author: cady
  */
 
+#include <sstream>
+
+#include <boost/foreach.hpp>
+
 #include "environment_parsers.hpp"
 #include "yaml.h"
 #include "parse_unit_value.hpp"
+#include "SimulatorYamlParserException.hpp"
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g);
 void operator >> (const YAML::Node& node, YamlSpectra& g);
+void operator >> (const YAML::Node& node, YamlWaveOutput& g);
+
 void get_yaml(const YAML::Node& node, std::string& out);
 
 double parse_default_wave_model(const std::string& yaml)
@@ -32,8 +39,36 @@ YamlWaveModel parse_waves(const std::string& yaml)
     YAML::Node node;
     parser.GetNextDocument(node);
 
-    node["discretization"] >> ret.discretization;
-    node["spectra"]        >> ret.spectra;
+    try
+    {
+        node["discretization"] >> ret.discretization;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing section wave/discretization: " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    try
+    {
+        node["spectra"]        >> ret.spectra;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing section wave/spectra: " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    try
+    {
+        node["output"]         >> ret.output;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing section wave/output: " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
     return ret;
 }
 
@@ -62,4 +97,18 @@ void operator >> (const YAML::Node& node, YamlSpectra& g)
 
     node["spectral density"]["type"] >> g.spectral_density_type;
     get_yaml(node["spectral density"], g.spectral_density_yaml);
+}
+
+void operator >> (const YAML::Node& node, YamlWaveOutput& g)
+{
+    node["format"]             >> g.format;
+    node["frame of reference"] >> g.frame_of_reference;
+    node["full filename"]      >> g.full_filename;
+    std::string unit;
+    node["mesh"]["unit"] >> unit;
+    const double factor = decode(UV(1,unit));
+    node["mesh"]["x"]                  >> g.x;
+    node["mesh"]["y"]                  >> g.y;
+    BOOST_FOREACH(double& x, g.x) x *= factor;
+    BOOST_FOREACH(double& y, g.y) y *= factor;
 }

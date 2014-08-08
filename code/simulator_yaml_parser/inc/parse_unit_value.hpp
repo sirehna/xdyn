@@ -13,6 +13,7 @@
 struct UV
 {
     UV() : value(0), unit("") {}
+    UV(const double v, const std::string& u) : value(v), unit(u) {}
     double value;
     std::string unit;
 };
