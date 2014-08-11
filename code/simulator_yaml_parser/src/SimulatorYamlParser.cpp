@@ -72,11 +72,6 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
     PARSE_OPTIONAL_KEY("points", ret.points)
     PARSE_OPTIONAL_KEY("blocked degrees of freedom body/NED->body", ret.blocked_degrees_of_freedom)
 
-    PARSE_OPTIONAL_KEY("points", ret.points)
-    PARSE_OPTIONAL_KEY("points", ret.points)
-    PARSE_OPTIONAL_KEY("points", ret.points)
-    PARSE_OPTIONAL_KEY("points", ret.points)
-    PARSE_OPTIONAL_KEY("points", ret.points)
     if(const YAML::Node *parameter = node.FindValue("outputs"))
     {
         parse_outputs(*parameter, ret);
