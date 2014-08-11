@@ -32,6 +32,8 @@ class SimCsvObserver
         void observe(const Sim& sys, const double t);
 
     private:
+        void observe_states(const Sim& sys, const double t);
+        void observe_waves(const Sim& sys, const double t);
         void initialize(const Sim& sys);
         void initialize_title();
         std::ostream& os;

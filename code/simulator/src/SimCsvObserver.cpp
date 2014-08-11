@@ -17,8 +17,18 @@ std::string SimCsvObserver::customize(const std::string& body, const std::string
     return anything + "(" + body + ")";
 }
 
+void SimCsvObserver::observe(const Sim& sys, const double t)
+{
+    observe_states(sys, t);
+    observe_waves(sys, t);
+}
 
-void SimCsvObserver::observe(const Sim& s, const double t)
+void SimCsvObserver::observe_waves(const Sim& , const double )
+{
+
+}
+
+void SimCsvObserver::observe_states(const Sim& s, const double t)
 {
     if (not(initialized)) initialize(s);
     initialized = true;
