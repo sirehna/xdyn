@@ -19,9 +19,9 @@
 
 Sim::Sim(const std::vector<Body>& bodies_,
          const std::vector<ListOfForces>& forces_,
-         const KinematicsPtr& k_,
+         const EnvironmentAndFrames& env_,
          const StateType& x) :
-         state(x), bodies(bodies_), forces(forces_), k(k_),
+         state(x), bodies(bodies_), forces(forces_), env(env_),
          _dx_dt(StateType(x.size(),0))
 {
 }
@@ -36,7 +36,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
         *_QI(y,i) /= norm;
         *_QJ(y,i) /= norm;
         *_QK(y,i) /= norm;
-        update_kinematics(y, bodies[i], i, k);
+        update_kinematics(y, bodies[i], i, env.k);
         calculate_state_derivatives(sum_of_forces(y, i, t), bodies[i].inverse_of_the_total_inertia, y, dx_dt, i);
     }
     state = x;
