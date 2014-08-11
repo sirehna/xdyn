@@ -698,7 +698,10 @@ std::string test_data::anthineas_post_processing()
 std::string test_data::waves()
 {
     std::stringstream ss;
-    ss << "discretization:\n"
+    ss << "rotations:\n"
+       << "    order by: angle\n"
+       << "    convention: [z,y',x'']\n"
+       << "discretization:\n"
        << "   n: 128\n"
        << "   omega min: {value: 0.1, unit: rad/s}\n"
        << "   omega max: {value: 6, unit: deg/s}\n"

@@ -65,10 +65,10 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Something is wrong with the YAML data: no YAML nodes were detected by the YAML parser.");
     }
     YamlSimulatorInput ret;
-    node["environmental constants"] >> ret.environmental_constants;
-    node["bodies"] >> ret.bodies;
+    PARSE_OPTIONAL_KEY("environmental constants", ret.environmental_constants);
+    PARSE_OPTIONAL_KEY("bodies", ret.bodies);
     node["rotations"] >> ret.rotations;
-    node["environment models"] >> ret.environment;
+    PARSE_OPTIONAL_KEY("environment models", ret.environment);
     PARSE_OPTIONAL_KEY("points", ret.points)
     PARSE_OPTIONAL_KEY("blocked degrees of freedom body/NED->body", ret.blocked_degrees_of_freedom)
 

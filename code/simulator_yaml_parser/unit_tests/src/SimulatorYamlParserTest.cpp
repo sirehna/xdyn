@@ -346,3 +346,8 @@ TEST_F(SimulatorYamlParserTest, should_not_throw_even_if_no_mesh_is_defined)
     ASSERT_NO_THROW(SimulatorYamlParser(test_data::falling_ball_example()).parse());
 }
 
+TEST_F(SimulatorYamlParserTest, can_have_test_data_with_just_waves)
+{
+    SimulatorYamlParser(test_data::waves()).parse();
+    //ASSERT_NO_THROW(SimulatorYamlParser(test_data::waves()).parse());
+}
