@@ -73,7 +73,7 @@ TEST_F(environment_parsersTest, can_parse_wave_spreading_and_spectral_data)
 TEST_F(environment_parsersTest, can_parse_wave_outputs)
 {
     ASSERT_EQ("yaml",yaml.output.format);
-    ASSERT_EQ("ball",yaml.output.frame_of_reference);
+    ASSERT_EQ("NED",yaml.output.frame_of_reference);
     ASSERT_EQ("waves_out.yaml",yaml.output.full_filename);
     ASSERT_DOUBLE_EQ(9,yaml.output.x.size());
     ASSERT_DOUBLE_EQ(1E3,yaml.output.x.at(0));
