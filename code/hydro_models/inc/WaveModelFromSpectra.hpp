@@ -25,6 +25,7 @@ class WaveModel;
 class WaveModelFromSpectra : public WaveModelInterface
 {
     public:
+        WaveModelFromSpectra(const std::vector<TR1(shared_ptr)<WaveModel> >& models, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
         WaveModelFromSpectra(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
 
     private:
@@ -38,6 +39,6 @@ class WaveModelFromSpectra : public WaveModelInterface
                            const double t  //!< Current instant (in seconds)
                            ) const;
 
-        TR1(shared_ptr)<WaveModel> model;
+        std::vector<TR1(shared_ptr)<WaveModel> > models;
 };
 #endif /* WAVEMODELFROMSPECTRA_HPP_ */
