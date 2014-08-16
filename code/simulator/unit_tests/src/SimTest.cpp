@@ -187,3 +187,11 @@ TEST_F(SimTest, hydrostatic_test_on_anthineas)
         ASSERT_NEAR(0, fabs(res[i].x[YIDX(0)]), 1E-2) << " i = " << i;
     }
 }
+
+TEST_F(SimTest, can_generate_wave_height_on_mesh)
+{
+    //const double t = a.random<double>();
+    const Sim sys = get_system(test_data::waves());
+    //const std::vector<double> w = sys.get_waves(t);
+    //ASSERT_EQ(9, w.size());
+}

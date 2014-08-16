@@ -90,7 +90,7 @@ void Sim::calculate_state_derivatives(const Wrench& sum_of_forces,
     dXdt = inverse_of_the_total_inertia->operator*(sum_of_forces.to_vector());
 
     // dx/dt, dy/dt, dz/dt
-    const RotationMatrix& R = k->get("NED", bodies[i].name).get_rot();
+    const RotationMatrix& R = env.k->get("NED", bodies[i].name).get_rot();
     const Eigen::Map<const Eigen::Vector3d> uvw_in_body_frame(_U(x,i));
     const Eigen::Vector3d uvw_in_ned_frame(R*uvw_in_body_frame);
     *_X(dx_dt,i) = uvw_in_ned_frame(0);
