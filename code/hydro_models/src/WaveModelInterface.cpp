@@ -44,3 +44,10 @@ std::vector<double> WaveModelInterface::get_relative_wave_height(const PointMatr
     }
     return ret;
 }
+
+std::vector<double> WaveModelInterface::get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& , //!< Object used to compute the transforms to the NED frame
+                                              const double  //<! Current instant (in seconds)
+                                             ) const
+{
+    return std::vector<double>();//get_relative_wave_height(*output_mesh, k, t);
+}
