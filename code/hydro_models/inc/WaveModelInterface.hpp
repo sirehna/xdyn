@@ -29,7 +29,7 @@ class PointMatrix;
 class WaveModelInterface
 {
     public:
-        WaveModelInterface();
+        WaveModelInterface(const TR1(shared_ptr)<PointMatrix>& output_mesh);
 
         virtual ~WaveModelInterface();
 
@@ -79,6 +79,8 @@ class WaveModelInterface
                                    const double z, //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                                    const double t //!< Current instant (in seconds)
                                    ) const = 0;
+
+        TR1(shared_ptr)<PointMatrix> output_mesh; //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant
 };
 
 #endif /* WAVEMODELINTERFACE_HPP_ */

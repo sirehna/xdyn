@@ -7,7 +7,7 @@
 
 #include "DefaultWaveModel.hpp"
 
-DefaultWaveModel::DefaultWaveModel(const double wave_height_) : WaveModelInterface(), zwave(wave_height_)
+DefaultWaveModel::DefaultWaveModel(const double wave_height_, const TR1(shared_ptr)<PointMatrix>& output_mesh_) : WaveModelInterface(output_mesh_), zwave(wave_height_)
 {
 }
 

@@ -8,6 +8,7 @@
 #ifndef WAVEMODELFROMSPECTRA_HPP_
 #define WAVEMODELFROMSPECTRA_HPP_
 
+#include "PointMatrix.hpp"
 #include "WaveModelInterface.hpp"
 
 class WaveModel;
@@ -24,7 +25,7 @@ class WaveModel;
 class WaveModelFromSpectra : public WaveModelInterface
 {
     public:
-        WaveModelFromSpectra(const TR1(shared_ptr)<WaveModel>& model);
+        WaveModelFromSpectra(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
 
     private:
         WaveModelFromSpectra(); // Disabled

@@ -8,6 +8,7 @@
 #ifndef DEFAULTWAVEMODEL_HPP_
 #define DEFAULTWAVEMODEL_HPP_
 
+#include "PointMatrix.hpp"
 #include "WaveModelInterface.hpp"
 
 /** \brief Flat sea surface.
@@ -26,7 +27,7 @@
 class DefaultWaveModel : public WaveModelInterface
 {
     public:
-        DefaultWaveModel(const double wave_height);
+        DefaultWaveModel(const double wave_height, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
 
     private:
         DefaultWaveModel(); // Disabled

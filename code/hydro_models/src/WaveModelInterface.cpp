@@ -19,7 +19,7 @@ template <typename PointType> PointType compute_relative_position(const PointTyp
     return T*P;
 }
 
-WaveModelInterface::WaveModelInterface()
+WaveModelInterface::WaveModelInterface(const TR1(shared_ptr)<PointMatrix>& output_mesh_) : output_mesh(output_mesh_)
 {
 }
 

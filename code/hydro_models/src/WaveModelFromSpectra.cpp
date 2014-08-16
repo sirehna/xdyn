@@ -5,10 +5,12 @@
  *      Author: cady
  */
 
+#include <boost/foreach.hpp>
+
 #include "WaveModel.hpp"
 #include "WaveModelFromSpectra.hpp"
 
-WaveModelFromSpectra::WaveModelFromSpectra(const TR1(shared_ptr)<WaveModel>& model_) : model(model_)
+WaveModelFromSpectra::WaveModelFromSpectra(const TR1(shared_ptr)<WaveModel>& model_, const TR1(shared_ptr)<PointMatrix>& output_mesh_) : WaveModelInterface(output_mesh_), model(model_)
 {
 }
 
