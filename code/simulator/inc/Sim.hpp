@@ -28,6 +28,17 @@ class Sim
         StateType get_state_derivatives() const;
         std::vector<std::string> get_names_of_bodies() const;
 
+        /**  \brief Serialize wave data on mesh
+          *  \details Called by SimCsvObserver at each time step. The aim is to
+          *  calculate the wave data on a mesh expressed in a particular frame of
+          *  reference (eg. NED or body). For example we might want to calculate the
+          *  wave data on a mesh surrounding the ship for visualization purposes.
+          *  \returns Vector of wave heights (in meters)
+          *  \snippet simulator/unit_tests/src/SimTest.cpp SimTest get_waves_example
+          */
+        std::vector<double> get_waves(const double t            //!< Current instant
+                                     ) const;
+
         StateType state;
 
     private:

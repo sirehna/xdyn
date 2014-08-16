@@ -109,3 +109,9 @@ void Sim::calculate_state_derivatives(const Wrench& sum_of_forces,
     *_QJ(dx_dt,i) = 0.5*(double)dq_dt.y();
     *_QK(dx_dt,i) = 0.5*(double)dq_dt.z();
 }
+
+std::vector<double> Sim::get_waves(const double t//!< Current instant
+                                  ) const
+{
+    return env.w->get_waves_on_mesh(env.k, t);
+}
