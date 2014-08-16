@@ -23,9 +23,9 @@ void SimCsvObserver::observe(const Sim& sys, const double t)
     observe_waves(sys, t);
 }
 
-void SimCsvObserver::observe_waves(const Sim& , const double )
+void SimCsvObserver::observe_waves(const Sim& sys, const double t)
 {
-
+    sys.get_waves(t);
 }
 
 void SimCsvObserver::observe_states(const Sim& s, const double t)
