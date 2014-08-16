@@ -17,8 +17,9 @@
 #include "DirectionalSpreadingBuilder.hpp"
 #include "SpectrumBuilder.hpp"
 
-
 class WaveModelInterface;
+class PointMatrix;
+struct YamlWaveOutput;
 
 class WaveBuilderInterface
 {
@@ -29,6 +30,7 @@ class WaveBuilderInterface
                              spectrum_parsers(spectrum_parsers_)
         {}
         virtual ~WaveBuilderInterface();
+        TR1(shared_ptr)<PointMatrix> make_wave_mesh(const YamlWaveOutput& output) const;
         virtual boost::optional<TR1(shared_ptr)<WaveModelInterface> > try_to_parse(const std::string& model, const std::string& yaml) const = 0;
 
     private:
