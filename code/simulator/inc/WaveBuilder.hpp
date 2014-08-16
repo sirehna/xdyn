@@ -28,7 +28,7 @@ class WaveBuilderInterface
                              directional_spreading_parsers(directional_spreading_parsers_),
                              spectrum_parsers(spectrum_parsers_)
         {}
-        virtual ~WaveBuilderInterface(){}
+        virtual ~WaveBuilderInterface();
         virtual boost::optional<TR1(shared_ptr)<WaveModelInterface> > try_to_parse(const std::string& model, const std::string& yaml) const = 0;
 
     private:
