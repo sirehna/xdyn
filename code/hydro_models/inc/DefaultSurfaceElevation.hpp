@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#ifndef DEFAULTWAVEMODEL_HPP_
-#define DEFAULTWAVEMODEL_HPP_
+#ifndef DEFAULTSURFACELEVATION_HPP_
+#define DEFAULTSURFACELEVATION_HPP_
 
 #include "PointMatrix.hpp"
 #include "WaveModelInterface.hpp"
@@ -24,13 +24,13 @@
  *  \section ex2 Expected output
  *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
  */
-class DefaultWaveModel : public WaveModelInterface
+class DefaultSurfaceElevation : public WaveModelInterface
 {
     public:
-        DefaultWaveModel(const double wave_height, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
+        DefaultSurfaceElevation(const double wave_height, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
 
     private:
-        DefaultWaveModel(); // Disabled
+        DefaultSurfaceElevation(); // Disabled
 
         /**  \brief Flat sea surface model.
           *  \returns zwave - z;
@@ -45,4 +45,4 @@ class DefaultWaveModel : public WaveModelInterface
         double zwave;
 };
 
-#endif /* DEFAULTWAVEMODEL_HPP_ */
+#endif /* DEFAULTSURFACELEVATION_HPP_ */

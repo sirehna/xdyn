@@ -12,7 +12,7 @@
 #include "generate_body_for_tests.hpp"
 #include "Kinematics.hpp"
 #include "Transform.hpp"
-#include "DefaultWaveModel.hpp"
+#include "DefaultSurfaceElevation.hpp"
 #include "GravityForceModel.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
@@ -62,7 +62,7 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
 
 TEST_F(SimulatorBuilderTest, can_get_rho_and_g)
 {
-    builder.can_parse<DefaultWaveModel>();
+    builder.can_parse<DefaultSurfaceElevation>();
     const auto env = builder.get_environment_and_frames(std::vector<Body>(1,get_body(a.random<std::string>())));
     ASSERT_DOUBLE_EQ(9.81,env.g);
     ASSERT_DOUBLE_EQ(1000,env.rho);
@@ -75,7 +75,7 @@ std::string SimulatorBuilderTest::customize(const std::string& body_name, const 
 
 TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
 {
-    builder.can_parse<DefaultWaveModel>();
+    builder.can_parse<DefaultSurfaceElevation>();
     const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
     const auto env = builder.get_environment_and_frames(bodies);
     ASSERT_TRUE(env.k.get() != NULL);
@@ -87,7 +87,7 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
 
 TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 {
-    builder.can_parse<DefaultWaveModel>();
+    builder.can_parse<DefaultSurfaceElevation>();
     const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
     const auto env = builder.get_environment_and_frames(bodies);
     ASSERT_TRUE(env.k.get() != NULL);
@@ -110,13 +110,13 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     auto input2 = input;
     input2.environment.push_back(model);
     SimulatorBuilder builder2(input2);
-    builder2.can_parse<DefaultWaveModel>();
+    builder2.can_parse<DefaultSurfaceElevation>();
     ASSERT_THROW(builder2.get_environment_and_frames(std::vector<Body>()), SimulatorBuilderException);
 }
 
 TEST_F(SimulatorBuilderTest, can_get_waves)
 {
-    builder.can_parse<DefaultWaveModel>();
+    builder.can_parse<DefaultSurfaceElevation>();
     MeshMap m;
     const std::string name = input.bodies.front().name;
     m[name] = two_triangles();
@@ -129,7 +129,7 @@ TEST_F(SimulatorBuilderTest, can_get_waves)
 
 TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
 {
-    builder.can_parse<DefaultWaveModel>();
+    builder.can_parse<DefaultSurfaceElevation>();
     MeshMap m;
     const std::string name = input.bodies.front().name;
     m[name] = two_triangles();
@@ -141,7 +141,7 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
 TEST_F(SimulatorBuilderTest, can_get_forces)
 {
     const double EPS = 1e-8;
-    builder.can_parse<DefaultWaveModel>()
+    builder.can_parse<DefaultSurfaceElevation>()
            .can_parse<GravityForceModel>()
            .can_parse<HydrostaticForceModel>();
     MeshMap m;

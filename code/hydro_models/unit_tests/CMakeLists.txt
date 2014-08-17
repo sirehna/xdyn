@@ -1,7 +1,7 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST hydro_models)
 project (${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/DefaultWaveModelTest.cpp
+FILE(GLOB SRC src/DefaultSurfaceElevationTest.cpp
               src/hydrostaticTest.cpp
               src/WaveModelFromSpectraTest.cpp
               )

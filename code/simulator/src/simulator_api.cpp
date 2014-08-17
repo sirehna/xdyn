@@ -3,7 +3,7 @@
 #include "simulator_api.hpp"
 
 #include "GravityForceModel.hpp"
-#include "DefaultWaveModel.hpp"
+#include "DefaultSurfaceElevation.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "StlReader.hpp"
 #include "SimulatorBuilder.hpp"
@@ -12,7 +12,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
 {
     SimulatorBuilder builder(yaml);
     builder.can_parse<GravityForceModel>()
-           .can_parse<DefaultWaveModel>()
+           .can_parse<DefaultSurfaceElevation>()
            .can_parse<HydrostaticForceModel>();
     return builder;
 }

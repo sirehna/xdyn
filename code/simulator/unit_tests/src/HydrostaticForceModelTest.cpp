@@ -6,7 +6,7 @@
  */
 
 #include "Body.hpp"
-#include "DefaultWaveModel.hpp"
+#include "DefaultSurfaceElevation.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "HydrostaticForceModelTest.hpp"
 #include "Kinematics.hpp"
@@ -42,7 +42,7 @@ TEST_F(HydrostaticForceModelTest, example)
     const Point G("NED",0,2,2./3.);
     input.k->add(kinematics::Transform(Point("NED"), "mesh(" BODY ")"));
     input.k->add(kinematics::Transform(Point("NED"), BODY));
-    input.w = WaveModelPtr(new DefaultWaveModel(0));
+    input.w = WaveModelPtr(new DefaultSurfaceElevation(0));
 
     auto points = two_triangles();
     for (size_t i = 0 ; i < 2 ; ++i)
@@ -106,7 +106,7 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     const Point G("NED",0,0,0);
     input.k->add(kinematics::Transform(Point("NED"), "mesh(" BODY ")"));
     input.k->add(kinematics::Transform(Point("NED"), BODY));
-    input.w = WaveModelPtr(new DefaultWaveModel(0));
+    input.w = WaveModelPtr(new DefaultSurfaceElevation(0));
 
     const auto points = two_triangles_immerged();
     Body body = get_body(BODY, points);

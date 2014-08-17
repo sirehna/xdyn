@@ -8,11 +8,11 @@
 #ifndef DEFAULTWAVEBUILDER_HPP_
 #define DEFAULTWAVEBUILDER_HPP_
 
-#include "DefaultWaveModel.hpp"
+#include "DefaultSurfaceElevation.hpp"
 #include "WaveBuilder.hpp"
 
 template <>
-class WaveBuilder<DefaultWaveModel> : public WaveBuilderInterface
+class WaveBuilder<DefaultSurfaceElevation> : public WaveBuilderInterface
 {
     public:
         WaveBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,

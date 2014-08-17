@@ -5,32 +5,32 @@
  *      Author: cec
  */
 
-#include "DefaultWaveModelTest.hpp"
-#include "DefaultWaveModel.hpp"
+#include "DefaultSurfaceElevationTest.hpp"
+#include "DefaultSurfaceElevation.hpp"
 #include "Kinematics.hpp"
 #include "Transform.hpp"
 
-DefaultWaveModelTest::DefaultWaveModelTest() : a(DataGenerator(5466123))
+DefaultSurfaceElevationTest::DefaultSurfaceElevationTest() : a(DataGenerator(5466123))
 {
 }
 
-DefaultWaveModelTest::~DefaultWaveModelTest()
+DefaultSurfaceElevationTest::~DefaultSurfaceElevationTest()
 {
 }
 
-void DefaultWaveModelTest::SetUp()
+void DefaultSurfaceElevationTest::SetUp()
 {
 }
 
-void DefaultWaveModelTest::TearDown()
+void DefaultSurfaceElevationTest::TearDown()
 {
 }
 
-TEST_F(DefaultWaveModelTest, example)
+TEST_F(DefaultSurfaceElevationTest, example)
 {
 //! [DefaultWaveModelTest example]
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
-    const DefaultWaveModel w(10);
+    const DefaultSurfaceElevation w(10);
     const Point P("NED", 0, 0, -20);
 //! [DefaultWaveModelTest example]
 //! [DefaultWaveModelTest expected output]
@@ -38,12 +38,12 @@ TEST_F(DefaultWaveModelTest, example)
 //! [DefaultWaveModelTest expected output]
 }
 
-TEST_F(DefaultWaveModelTest, more_interesting_example)
+TEST_F(DefaultSurfaceElevationTest, more_interesting_example)
 {
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 0);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultWaveModel w(7);
+    const DefaultSurfaceElevation w(7);
 
     const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), "body");
     k->add(bodyTned);
@@ -51,12 +51,12 @@ TEST_F(DefaultWaveModelTest, more_interesting_example)
     ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
 }
 
-TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_180p_around_Y)
+TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_180p_around_Y)
 {
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 1);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultWaveModel w(7);
+    const DefaultSurfaceElevation w(7);
     RotationMatrix rot;
     rot(0,0)=-1.0;
     rot(0,1)=0.0;
@@ -73,12 +73,12 @@ TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_180p_around_
     ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
 }
 
-TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_with_rotation_090p_around_Y)
+TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_with_rotation_090p_around_Y)
 {
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 1);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultWaveModel w(7);
+    const DefaultSurfaceElevation w(7);
     RotationMatrix rot;
     rot(0,0)= 0.0;
     rot(0,1)= 0.0;
@@ -95,12 +95,12 @@ TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation_with_rotatio
     ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
 }
 
-TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation)
+TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation)
 {
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 1);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultWaveModel w(7);
+    const DefaultSurfaceElevation w(7);
     RotationMatrix rot;
     rot(0,0)=-1.0;
     rot(0,1)=0.0;
@@ -117,7 +117,7 @@ TEST_F(DefaultWaveModelTest, more_interesting_example_with_rotation)
     ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
 }
 
-TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
+TEST_F(DefaultSurfaceElevationTest, can_compute_relative_wave_height_for_PointMatrix)
 {
     //! [DefaultWaveModelTest example]
     PointMatrix M("body", 5);
@@ -138,7 +138,7 @@ TEST_F(DefaultWaveModelTest, can_compute_relative_wave_height_for_PointMatrix)
     M.m(2,4) = -91;
 
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
-    const DefaultWaveModel w(888);
+    const DefaultSurfaceElevation w(888);
     const kinematics::Transform T(Point("NED", 1, 20, 300), "body");
     k->add(T);
 
