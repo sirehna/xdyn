@@ -53,8 +53,8 @@ class SurfaceElevationBuilder : public SurfaceElevationBuilderInterface
 };
 
 
-typedef TR1(shared_ptr)<SurfaceElevationBuilderInterface> WaveBuilderPtr;
-typedef TR1(shared_ptr)<SurfaceElevationInterface> WavePtr;
+typedef TR1(shared_ptr)<SurfaceElevationBuilderInterface> SurfaceElevationBuilderPtr;
+typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 
 
 #endif /* SURFACEELEVATIONBUILDER_HPP_ */
