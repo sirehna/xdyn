@@ -17,7 +17,7 @@ class WaveBuilder<DefaultSurfaceElevation> : public WaveBuilderInterface
     public:
         WaveBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
                     const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
-        boost::optional<TR1(shared_ptr)<WaveModelInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
 };
 
 

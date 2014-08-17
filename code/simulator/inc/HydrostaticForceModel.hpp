@@ -11,8 +11,8 @@
 #include "ForceModel.hpp"
 #include "Kinematics.hpp"
 
-class WaveModelInterface;
-typedef TR1(shared_ptr)<WaveModelInterface> WaveModelPtr;
+class SurfaceElevationInterface;
+typedef TR1(shared_ptr)<SurfaceElevationInterface> WaveModelPtr;
 
 class Body;
 class EnvironmentAndFrames;

@@ -1,12 +1,12 @@
 /*
- * WaveModelInterface.hpp
+ * SurfaceElevationInterface.hpp
  *
  *  Created on: 22 avr. 2014
  *      Author: cady
  */
 
-#ifndef WAVEMODELINTERFACE_HPP_
-#define WAVEMODELINTERFACE_HPP_
+#ifndef SURFACELEVATIONINTERFACE_HPP_
+#define SURFACELEVATIONINTERFACE_HPP_
 
 #include "tr1_macros.hpp"
 #include TR1INC(memory)
@@ -26,12 +26,12 @@ class PointMatrix;
  *  \section ex2 Expected output
  *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest expected output
  */
-class WaveModelInterface
+class SurfaceElevationInterface
 {
     public:
-        WaveModelInterface(const TR1(shared_ptr)<PointMatrix>& output_mesh);
+        SurfaceElevationInterface(const TR1(shared_ptr)<PointMatrix>& output_mesh);
 
-        virtual ~WaveModelInterface();
+        virtual ~SurfaceElevationInterface();
 
         /**  \author cec
           *  \date 24 avr. 2014, 10:32:29
@@ -83,4 +83,4 @@ class WaveModelInterface
         TR1(shared_ptr)<PointMatrix> output_mesh; //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant
 };
 
-#endif /* WAVEMODELINTERFACE_HPP_ */
+#endif /* SURFACELEVATIONINTERFACE_HPP_ */

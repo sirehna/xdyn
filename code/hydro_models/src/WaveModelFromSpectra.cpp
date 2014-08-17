@@ -10,11 +10,11 @@
 #include "WaveModel.hpp"
 #include "WaveModelFromSpectra.hpp"
 
-WaveModelFromSpectra::WaveModelFromSpectra(const std::vector<TR1(shared_ptr)<WaveModel> >& models_, const TR1(shared_ptr)<PointMatrix>& output_mesh_) : WaveModelInterface(output_mesh_), models(models_)
+WaveModelFromSpectra::WaveModelFromSpectra(const std::vector<TR1(shared_ptr)<WaveModel> >& models_, const TR1(shared_ptr)<PointMatrix>& output_mesh_) : SurfaceElevationInterface(output_mesh_), models(models_)
 {
 }
 
-WaveModelFromSpectra::WaveModelFromSpectra(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<PointMatrix>& output_mesh_) : WaveModelInterface(output_mesh_), models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model))
+WaveModelFromSpectra::WaveModelFromSpectra(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<PointMatrix>& output_mesh_) : SurfaceElevationInterface(output_mesh_), models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model))
 {
 }
 

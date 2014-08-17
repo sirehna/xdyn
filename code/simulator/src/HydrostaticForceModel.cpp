@@ -6,7 +6,7 @@
  */
 
 #include "HydrostaticForceModel.hpp"
-#include "WaveModelInterface.hpp"
+#include "SurfaceElevationInterface.hpp"
 #include "Body.hpp"
 #include "hydrostatic.hpp"
 #include "EnvironmentAndFrames.hpp"

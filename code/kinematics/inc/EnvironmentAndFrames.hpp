@@ -13,8 +13,8 @@
 
 class Kinematics;
 typedef TR1(shared_ptr)<Kinematics> KinematicsPtr;
-class WaveModelInterface;
-typedef TR1(shared_ptr)<WaveModelInterface> WaveModelPtr;
+class SurfaceElevationInterface;
+typedef TR1(shared_ptr)<SurfaceElevationInterface> WaveModelPtr;
 
 struct EnvironmentAndFrames
 {

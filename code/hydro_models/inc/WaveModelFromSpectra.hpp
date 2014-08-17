@@ -9,7 +9,7 @@
 #define WAVEMODELFROMSPECTRA_HPP_
 
 #include "PointMatrix.hpp"
-#include "WaveModelInterface.hpp"
+#include "SurfaceElevationInterface.hpp"
 
 class WaveModel;
 
@@ -22,7 +22,7 @@ class WaveModel;
  *  \section ex2 Expected output
  *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
  */
-class WaveModelFromSpectra : public WaveModelInterface
+class WaveModelFromSpectra : public SurfaceElevationInterface
 {
     public:
         WaveModelFromSpectra(const std::vector<TR1(shared_ptr)<WaveModel> >& models, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));

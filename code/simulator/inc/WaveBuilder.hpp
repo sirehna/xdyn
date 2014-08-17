@@ -17,7 +17,7 @@
 #include "DirectionalSpreadingBuilder.hpp"
 #include "SpectrumBuilder.hpp"
 
-class WaveModelInterface;
+class SurfaceElevationInterface;
 class PointMatrix;
 struct YamlWaveOutput;
 
@@ -31,7 +31,7 @@ class WaveBuilderInterface
         {}
         virtual ~WaveBuilderInterface();
         TR1(shared_ptr)<PointMatrix> make_wave_mesh(const YamlWaveOutput& output) const;
-        virtual boost::optional<TR1(shared_ptr)<WaveModelInterface> > try_to_parse(const std::string& model, const std::string& yaml) const = 0;
+        virtual boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const = 0;
 
     private:
         WaveBuilderInterface();
@@ -46,7 +46,7 @@ class WaveBuilder : public WaveBuilderInterface
         WaveBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
                     const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_) : WaveBuilderInterface(directional_spreading_parsers_,spectrum_parsers_)
         {}
-        boost::optional<TR1(shared_ptr)<WaveModelInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
 
     private:
         WaveBuilder(); // Disabled
@@ -54,7 +54,7 @@ class WaveBuilder : public WaveBuilderInterface
 
 
 typedef TR1(shared_ptr)<WaveBuilderInterface> WaveBuilderPtr;
-typedef TR1(shared_ptr)<WaveModelInterface> WavePtr;
+typedef TR1(shared_ptr)<SurfaceElevationInterface> WavePtr;
 
 
 #endif /* WAVEBUILDER_HPP_ */

@@ -6,6 +6,7 @@
  */
 
 #include "GravityForceModel.hpp"
+#include "SurfaceElevationInterface.hpp"
 #include "Body.hpp"
 #include "hydrostatic.hpp"
 #include "EnvironmentAndFrames.hpp"

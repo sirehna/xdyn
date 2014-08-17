@@ -4,7 +4,7 @@ PROJECT(hydro_models)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 
 SET(SRC src/DefaultSurfaceElevation.cpp
-        src/WaveModelInterface.cpp
+        src/SurfaceElevationInterface.cpp
         src/hydrostatic.cpp
         src/WaveModelFromSpectra.cpp
         )

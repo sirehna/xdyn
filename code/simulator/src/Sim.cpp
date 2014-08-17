@@ -13,7 +13,8 @@
 #include "Sim.hpp"
 #include "Transform.hpp"
 #include "update_kinematics.hpp"
-#include "WaveModelInterface.hpp"
+#include "SurfaceElevationInterface.hpp"
+#include "YamlWaveModelInput.hpp"
 
 #define SQUARE(x) ((x)*(x))
 

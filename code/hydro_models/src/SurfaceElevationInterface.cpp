@@ -1,11 +1,11 @@
 /*
- * WaveModelInterface.cpp
+ * SurfaceElevationInterface.cpp
  *
  *  Created on: 22 avr. 2014
  *      Author: cady
  */
 
-#include "WaveModelInterface.hpp"
+#include "SurfaceElevationInterface.hpp"
 #include "Kinematics.hpp"
 #include "Point.hpp"
 #include "Transform.hpp"
@@ -19,21 +19,21 @@ template <typename PointType> PointType compute_relative_position(const PointTyp
     return T*P;
 }
 
-WaveModelInterface::WaveModelInterface(const TR1(shared_ptr)<PointMatrix>& output_mesh_) : output_mesh(output_mesh_)
+SurfaceElevationInterface::SurfaceElevationInterface(const TR1(shared_ptr)<PointMatrix>& output_mesh_) : output_mesh(output_mesh_)
 {
 }
 
-WaveModelInterface::~WaveModelInterface()
+SurfaceElevationInterface::~SurfaceElevationInterface()
 {
 }
 
-double WaveModelInterface::get_relative_wave_height(const Point& P, const TR1(shared_ptr)<Kinematics>& k, const double t) const
+double SurfaceElevationInterface::get_relative_wave_height(const Point& P, const TR1(shared_ptr)<Kinematics>& k, const double t) const
 {
     const Point OP = compute_relative_position(P, k);
     return wave_height(OP.x(),OP.y(),OP.z(),t);
 }
 
-std::vector<double> WaveModelInterface::get_relative_wave_height(const PointMatrix& P, const TR1(shared_ptr)<Kinematics>& k, const double t) const
+std::vector<double> SurfaceElevationInterface::get_relative_wave_height(const PointMatrix& P, const TR1(shared_ptr)<Kinematics>& k, const double t) const
 {
     const PointMatrix OP = compute_relative_position(P, k);
     const int n = (int)P.m.cols();
@@ -45,7 +45,7 @@ std::vector<double> WaveModelInterface::get_relative_wave_height(const PointMatr
     return ret;
 }
 
-std::vector<double> WaveModelInterface::get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+std::vector<double> SurfaceElevationInterface::get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
                                               const double t //<! Current instant (in seconds)
                                              ) const
 {

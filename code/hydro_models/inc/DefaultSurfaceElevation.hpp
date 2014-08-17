@@ -9,7 +9,7 @@
 #define DEFAULTSURFACELEVATION_HPP_
 
 #include "PointMatrix.hpp"
-#include "WaveModelInterface.hpp"
+#include "SurfaceElevationInterface.hpp"
 
 /** \brief Flat sea surface.
  *  \details The relative height is zwave-z, so a negative
@@ -24,7 +24,7 @@
  *  \section ex2 Expected output
  *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
  */
-class DefaultSurfaceElevation : public WaveModelInterface
+class DefaultSurfaceElevation : public SurfaceElevationInterface
 {
     public:
         DefaultSurfaceElevation(const double wave_height, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
