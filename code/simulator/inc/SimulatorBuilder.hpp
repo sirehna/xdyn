@@ -14,7 +14,7 @@
 #include <boost/type_traits/is_base_of.hpp>
 
 #include "ForceBuilder.hpp"
-#include "WaveBuilder.hpp"
+#include "SurfaceElevationBuilder.hpp"
 #include "WaveModel.hpp"
 #include "WaveDirectionalSpreading.hpp"
 #include "WaveSpectralDensity.hpp"
@@ -70,7 +70,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<SurfaceElevationInterface,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            wave_parsers.push_back(WaveBuilderPtr(new WaveBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
+            wave_parsers.push_back(WaveBuilderPtr(new SurfaceElevationBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
             return *this;
         }
 
@@ -86,7 +86,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<WaveModel,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            wave_parsers.push_back(WaveBuilderPtr(new WaveBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
+            wave_parsers.push_back(WaveBuilderPtr(new SurfaceElevationBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
             return *this;
         }
 

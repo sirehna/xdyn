@@ -9,13 +9,13 @@
 #define DEFAULTWAVEBUILDER_HPP_
 
 #include "DefaultSurfaceElevation.hpp"
-#include "WaveBuilder.hpp"
+#include "SurfaceElevationBuilder.hpp"
 
 template <>
-class WaveBuilder<DefaultSurfaceElevation> : public WaveBuilderInterface
+class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface
 {
     public:
-        WaveBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
+        SurfaceElevationBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
                     const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
         boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
 };

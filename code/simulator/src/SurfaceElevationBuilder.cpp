@@ -6,14 +6,14 @@
  */
 
 #include "PointMatrix.hpp"
-#include "WaveBuilder.hpp"
+#include "SurfaceElevationBuilder.hpp"
 #include "YamlWaveModelInput.hpp"
 
-WaveBuilderInterface::~WaveBuilderInterface()
+SurfaceElevationBuilderInterface::~SurfaceElevationBuilderInterface()
 {
 }
 
-TR1(shared_ptr)<PointMatrix> WaveBuilderInterface::make_wave_mesh(const YamlWaveOutput& output) const
+TR1(shared_ptr)<PointMatrix> SurfaceElevationBuilderInterface::make_wave_mesh(const YamlWaveOutput& output) const
 {
     const size_t p = output.x.size();
     PointMatrix M(output.frame_of_reference, p);

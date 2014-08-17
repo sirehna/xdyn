@@ -6,7 +6,7 @@
  */
 
 #include "DefaultWaveBuilder.hpp"
-#include "WaveBuilder.hpp"
+#include "SurfaceElevationBuilder.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "environment_parsers.hpp"
 #include "SimulatorBuilderException.hpp"
@@ -22,7 +22,7 @@ TR1(shared_ptr)<SurfaceElevationInterface> build_default_wave_model(const std::s
 }
 
 
-boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > WaveBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
+boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > ret;
     if (model == "no waves") ret.reset(build_default_wave_model(yaml));

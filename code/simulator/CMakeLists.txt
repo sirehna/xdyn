@@ -18,7 +18,7 @@ set(SRC src/simulator_api.cpp
         src/SimNoObserver.cpp
         src/OutputTransformer.cpp
         src/Res.cpp
-        src/WaveBuilder.cpp
+        src/SurfaceElevationBuilder.cpp
         )
 
 

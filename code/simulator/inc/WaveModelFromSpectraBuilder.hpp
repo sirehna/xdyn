@@ -13,7 +13,7 @@
 #include "WaveBuilder.hpp"
 
 template <>
-class WaveBuilder<Airy> : public WaveBuilderInterface
+class SurfaceElevationBuilder<Airy> : public SurfaceElevationBuilderInterface
 {
     public:
         WaveBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
