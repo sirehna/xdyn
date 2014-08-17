@@ -17,7 +17,7 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
                                         input(input_),
                                         builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
                                         force_parsers(std::vector<ForceBuilderPtr>()),
-                                        wave_parsers(std::vector<SurfaceElevationBuilderPtr>()),
+                                        surface_elevation_parsers(std::vector<SurfaceElevationBuilderPtr>()),
                                         directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
                                         spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>()))
 {
@@ -69,14 +69,14 @@ EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vec
 
 SurfaceElevationPtr SimulatorBuilder::get_wave() const
 {
-    if (wave_parsers.empty())
+    if (surface_elevation_parsers.empty())
     {
         THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No wave parser defined: use SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
     }
     SurfaceElevationPtr ret;
     for (auto that_model=input.environment.begin() ; that_model != input.environment.end() ; ++that_model)
     {
-        for (auto that_parser=wave_parsers.begin() ; that_parser != wave_parsers.end() ; ++that_parser)
+        for (auto that_parser=surface_elevation_parsers.begin() ; that_parser != surface_elevation_parsers.end() ; ++that_parser)
         {
             boost::optional<SurfaceElevationPtr> w = (*that_parser)->try_to_parse(that_model->model, that_model->yaml);
             if (w)

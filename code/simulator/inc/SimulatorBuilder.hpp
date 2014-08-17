@@ -70,7 +70,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<SurfaceElevationInterface,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            wave_parsers.push_back(SurfaceElevationBuilderPtr(new SurfaceElevationBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
+            surface_elevation_parsers.push_back(SurfaceElevationBuilderPtr(new SurfaceElevationBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
             return *this;
         }
 
@@ -86,7 +86,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<WaveModel,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            wave_parsers.push_back(SurfaceElevationBuilderPtr(new SurfaceElevationBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
+            surface_elevation_parsers.push_back(SurfaceElevationBuilderPtr(new SurfaceElevationBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
             return *this;
         }
 
@@ -155,7 +155,7 @@ class SimulatorBuilder
         YamlSimulatorInput input;
         TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceBuilderPtr> force_parsers;
-        std::vector<SurfaceElevationBuilderPtr> wave_parsers;
+        std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
         TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
 };
