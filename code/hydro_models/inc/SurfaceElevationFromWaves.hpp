@@ -1,12 +1,12 @@
 /*
- * WaveModelFromSpectra.hpp
+ * SurfaceElevationFromWaves.hpp
  *
  *  Created on: Aug 7, 2014
  *      Author: cady
  */
 
-#ifndef WAVEMODELFROMSPECTRA_HPP_
-#define WAVEMODELFROMSPECTRA_HPP_
+#ifndef SURFACEELEVATIONFROMWAVES_HPP_
+#define SURFACEELEVATIONFROMWAVES_HPP_
 
 #include "PointMatrix.hpp"
 #include "SurfaceElevationInterface.hpp"
@@ -22,14 +22,14 @@ class WaveModel;
  *  \section ex2 Expected output
  *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
  */
-class WaveModelFromSpectra : public SurfaceElevationInterface
+class SurfaceElevationFromWaves : public SurfaceElevationInterface
 {
     public:
-        WaveModelFromSpectra(const std::vector<TR1(shared_ptr)<WaveModel> >& models, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
-        WaveModelFromSpectra(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
+        SurfaceElevationFromWaves(const std::vector<TR1(shared_ptr)<WaveModel> >& models, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
+        SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
 
     private:
-        WaveModelFromSpectra(); // Disabled
+        SurfaceElevationFromWaves(); // Disabled
 
          /*  \snippet hydro_models/unit_tests/src/WaveModelFromSpectraTest.cpp WaveModelFromSpectraTest example
           */
@@ -41,4 +41,4 @@ class WaveModelFromSpectra : public SurfaceElevationInterface
 
         std::vector<TR1(shared_ptr)<WaveModel> > models;
 };
-#endif /* WAVEMODELFROMSPECTRA_HPP_ */
+#endif /* SURFACEELEVATIONFROMWAVES_HPP_ */

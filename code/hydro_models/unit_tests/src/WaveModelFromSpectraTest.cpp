@@ -11,7 +11,7 @@
 #include "Kinematics.hpp"
 #include "Point.hpp"
 #include "WaveModelFromSpectraTest.hpp"
-#include "WaveModelFromSpectra.hpp"
+#include "SurfaceElevationFromWaves.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -78,7 +78,7 @@ TEST_F(WaveModelFromSpectraTest, example)
     const double Tp = 10;
     const double k_ = 4.*PI*PI/Tp/Tp/9.81;
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
-    WaveModelFromSpectra wave(get_model());
+    SurfaceElevationFromWaves wave(get_model());
     const double phi = 0.54881350230425596237;
 //! [WaveModelFromSpectraTest example]
 //! [WaveModelFromSpectraTest expected output]
