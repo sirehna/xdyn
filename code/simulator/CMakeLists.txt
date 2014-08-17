@@ -9,7 +9,7 @@ set(SRC src/simulator_api.cpp
         src/Body.cpp
         src/SimObserver.cpp
         src/ForceBuilder.cpp
-        src/DefaultWaveBuilder.cpp
+        src/DefaultSurfaceElevationBuilder.cpp
         src/GravityForceBuilder.cpp
         src/GravityForceModel.cpp
         src/BodyBuilder.cpp

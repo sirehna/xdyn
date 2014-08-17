@@ -1,12 +1,5 @@
-/*
- * DefaultWaveBuilder.hpp
- *
- *  Created on: Jun 17, 2014
- *      Author: cady
- */
-
-#ifndef DEFAULTWAVEBUILDER_HPP_
-#define DEFAULTWAVEBUILDER_HPP_
+#ifndef DEFAULTSURFACEELEVATIONBUILDER_HPP_
+#define DEFAULTSURFACEELEVATIONBUILDER_HPP_
 
 #include "DefaultSurfaceElevation.hpp"
 #include "SurfaceElevationBuilder.hpp"
@@ -22,4 +15,4 @@ class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevation
 
 
 
-#endif /* DEFAULTWAVEBUILDER_HPP_ */
+#endif /* DEFAULTSURFACEELEVATIONBUILDER_HPP_ */

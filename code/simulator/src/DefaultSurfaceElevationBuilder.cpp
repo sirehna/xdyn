@@ -1,11 +1,4 @@
-/*
- * DefaultWaveBuilder.cpp
- *
- *  Created on: Jun 17, 2014
- *      Author: cady
- */
-
-#include "DefaultWaveBuilder.hpp"
+#include "DefaultSurfaceElevationBuilder.hpp"
 #include "SurfaceElevationBuilder.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "environment_parsers.hpp"
