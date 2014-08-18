@@ -97,6 +97,8 @@ void operator >> (const YAML::Node& node, YamlSpectra& g)
 
     node["spectral density"]["type"] >> g.spectral_density_type;
     get_yaml(node["spectral density"], g.spectral_density_yaml);
+
+    parse_uv(node["depth"], g.depth);
 }
 
 void operator >> (const YAML::Node& node, YamlWaveOutput& g)

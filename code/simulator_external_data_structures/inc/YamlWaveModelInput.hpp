@@ -29,6 +29,7 @@ struct YamlSpectra
     std::string directional_spreading_yaml; //!< Model data in YAML format
     std::string spectral_density_type;      //!< Type of spectrum (eg. jonswap)
     std::string spectral_density_yaml;      //!< Spectral model parameters in YAML format
+    double depth;                           //!< Water depth (in meters): 0 for infinite depth
 };
 
 struct YamlWaveOutput
