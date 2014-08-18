@@ -13,7 +13,7 @@
 
 HydrostaticForceModel::Input::Input() : rho(0),
                                         g(0),
-                                        w(WaveModelPtr()),
+                                        w(SurfaceElevationPtr()),
                                         k(KinematicsPtr())
 {
 }

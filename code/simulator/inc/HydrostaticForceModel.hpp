@@ -12,7 +12,7 @@
 #include "Kinematics.hpp"
 
 class SurfaceElevationInterface;
-typedef TR1(shared_ptr)<SurfaceElevationInterface> WaveModelPtr;
+typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 
 class Body;
 class EnvironmentAndFrames;
@@ -26,7 +26,7 @@ class HydrostaticForceModel : public ForceModel
             Input(const EnvironmentAndFrames& env);
             double rho;
             double g;
-            WaveModelPtr w;
+            SurfaceElevationPtr w;
             KinematicsPtr k;
         };
 
@@ -37,7 +37,7 @@ class HydrostaticForceModel : public ForceModel
         HydrostaticForceModel();
         double rho;
         double g;
-        WaveModelPtr w;
+        SurfaceElevationPtr w;
         KinematicsPtr k;
 };
 

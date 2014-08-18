@@ -14,6 +14,7 @@
 #include "generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"
 #include "Mesh.hpp"
+#include "EnvironmentAndFrames.hpp"
 
 #define BODY "body 1"
 #include "test_macros.hpp"
@@ -109,6 +110,7 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     input.w = WaveModelPtr(new DefaultSurfaceElevation(0));
 
     const auto points = two_triangles_immerged();
+
     Body body = get_body(BODY, points);
     body.G = G;
 
