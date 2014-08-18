@@ -30,14 +30,34 @@ boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBui
     if (model == "no waves") ret.reset(build_default_wave_model(yaml));
     return ret;
 }
-/*
+
 boost::optional<ForcePtr> ForceBuilder<GravityForceModel>::try_to_parse(const std::string& model, const std::string& , const EnvironmentAndFrames& env) const
 {
     boost::optional<ForcePtr> ret;
     if (model == "gravity")
     {
-        ret.reset(ForcePtr(new GravityForceModel(env.g)));
+        GravityForceModel::Input input(env);
+        ret.reset(ForcePtr(new GravityForceModel(input)));
     }
     return ret;
 }
-*/
+
+boost::optional<ForcePtr> ForceBuilder<HydrostaticForceModel>::try_to_parse(const std::string& model, const std::string&, const EnvironmentAndFrames& env) const
+{
+    boost::optional<ForcePtr> ret;
+    if (model == "non-linear hydrostatic")
+    {
+        HydrostaticForceModel::Input input(env);
+        ret.reset(ForcePtr(new HydrostaticForceModel(input)));
+    }
+    return ret;
+}
+
+boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<Airy>::try_to_parse(const std::string& model, const std::string& ) const
+{
+    boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > ret;
+    if (model == "waves") // The "model" key is always "wave", except for the default wave model "no waves"
+    {
+    }
+    return ret;
+}

@@ -13,7 +13,7 @@
 #include "ForceBuilder.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "GravityForceModel.hpp"
-
+#include "Airy.hpp"
 
 template <>
 class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface
@@ -25,7 +25,6 @@ class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevation
 };
 
 
-/*
 template <>
 class ForceBuilder<GravityForceModel> : public ForceBuilderInterface
 {
@@ -35,7 +34,6 @@ class ForceBuilder<GravityForceModel> : public ForceBuilderInterface
 };
 
 
-
 template <>
 class ForceBuilder<HydrostaticForceModel> : public ForceBuilderInterface
 {
@@ -43,5 +41,17 @@ class ForceBuilder<HydrostaticForceModel> : public ForceBuilderInterface
         ForceBuilder();
         boost::optional<ForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
 };
-*/
+
+template <>
+class SurfaceElevationBuilder<Airy> : public SurfaceElevationBuilderInterface
+{
+    public:
+        SurfaceElevationBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
+                    const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
+        boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
+
+    private:
+        SurfaceElevationBuilder();
+};
+
 #endif /* BUILDERS_HPP_ */
