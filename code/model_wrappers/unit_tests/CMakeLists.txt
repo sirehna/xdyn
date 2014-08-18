@@ -1,5 +1,5 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-set(MODULE_UNDER_TEST module_wrappers)
+set(MODULE_UNDER_TEST model_wrappers)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/Test.cpp
               )

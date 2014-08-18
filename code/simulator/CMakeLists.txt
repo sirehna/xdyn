@@ -44,6 +44,7 @@ include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${ds_integration_INCLUDE_DIRS})
 include_directories(${solver_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
+include_directories(${model_wrappers_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}_static STATIC ${SRC})
 
