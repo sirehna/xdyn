@@ -16,6 +16,7 @@
 
 #include "DirectionalSpreadingBuilder.hpp"
 #include "SpectrumBuilder.hpp"
+#include "WaveModelBuilder.hpp"
 
 class SurfaceElevationInterface;
 class PointMatrix;
@@ -24,8 +25,10 @@ struct YamlWaveOutput;
 class SurfaceElevationBuilderInterface
 {
     public:
-        SurfaceElevationBuilderInterface(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
-                             const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_) :
+        SurfaceElevationBuilderInterface(const TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >& wave_parsers_,
+                                         const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
+                                         const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_) :
+                             wave_parsers(wave_parsers_),
                              directional_spreading_parsers(directional_spreading_parsers_),
                              spectrum_parsers(spectrum_parsers_)
         {}
@@ -33,8 +36,9 @@ class SurfaceElevationBuilderInterface
         TR1(shared_ptr)<PointMatrix> make_wave_mesh(const YamlWaveOutput& output) const;
         virtual boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const = 0;
 
-    private:
+    protected:
         SurfaceElevationBuilderInterface();
+        TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
         TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
 };
@@ -43,8 +47,9 @@ template <typename T>
 class SurfaceElevationBuilder : public SurfaceElevationBuilderInterface
 {
     public:
-        SurfaceElevationBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
-                    const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_) : SurfaceElevationBuilderInterface(directional_spreading_parsers_,spectrum_parsers_)
+        SurfaceElevationBuilder(const TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >& wave_parsers_,
+                                const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
+                                const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_) : SurfaceElevationBuilderInterface(wave_parsers_,directional_spreading_parsers_,spectrum_parsers_)
         {}
         boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
 

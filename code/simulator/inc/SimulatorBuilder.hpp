@@ -71,7 +71,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<SurfaceElevationInterface,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            surface_elevation_parsers.push_back(SurfaceElevationBuilderPtr(new SurfaceElevationBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
+            surface_elevation_parsers.push_back(SurfaceElevationBuilderPtr(new SurfaceElevationBuilder<T>(wave_parsers, directional_spreading_parsers,spectrum_parsers)));
             return *this;
         }
 
