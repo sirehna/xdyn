@@ -16,6 +16,7 @@
 #include TR1INC(memory)
 
 class WaveModel;
+class DiscreteDirectionalWaveSpectrum;
 
 /** \brief Interface to all WaveModelBuilder<T>. Used to build, eg. Airy
  *  \details Allows us to store WaveModelBuilders with different template
@@ -26,8 +27,8 @@ class WaveModel;
 class WaveModelBuilderInterface
 {
     public:
-        WaveModelBuilderInterface();
-        virtual ~WaveModelBuilderInterface();
+        WaveModelBuilderInterface() {}
+        virtual ~WaveModelBuilderInterface() {}
         virtual boost::optional<TR1(shared_ptr)<WaveModel> > try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const = 0;
 
 };
