@@ -13,6 +13,8 @@
 #include "ForceBuilder.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "GravityForceModel.hpp"
+#include "DiscreteDirectionalWaveSpectrum.hpp"
+#include "SurfaceElevationFromWaves.hpp"
 #include "Airy.hpp"
 
 template <>
@@ -42,8 +44,11 @@ class ForceBuilder<HydrostaticForceModel> : public ForceBuilderInterface
         boost::optional<ForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
 };
 
+struct YamlDiscretization;
+struct YamlSpectra;
+
 template <>
-class SurfaceElevationBuilder<Airy> : public SurfaceElevationBuilderInterface
+class SurfaceElevationBuilder<SurfaceElevationFromWaves> : public SurfaceElevationBuilderInterface
 {
     public:
         SurfaceElevationBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
@@ -52,6 +57,18 @@ class SurfaceElevationBuilder<Airy> : public SurfaceElevationBuilderInterface
 
     private:
         SurfaceElevationBuilder();
+        TR1(shared_ptr)<WaveModel> parse_wave_model(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const;
+        DiscreteDirectionalWaveSpectrum parse_directional_spectrum(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const;
+        TR1(shared_ptr)<WaveSpectralDensity> parse_spectral_density(const YamlSpectra& spectrum) const;
+        TR1(shared_ptr)<WaveDirectionalSpreading> parse_directional_spreading(const YamlSpectra& spectrum) const;
+};
+
+template <>
+class WaveModelBuilder<Airy> : public WaveModelBuilderInterface
+{
+    public:
+        WaveModelBuilder();
+        boost::optional<TR1(shared_ptr)<WaveModel> > try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const;
 };
 
 #endif /* BUILDERS_HPP_ */
