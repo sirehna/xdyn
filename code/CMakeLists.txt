@@ -104,6 +104,7 @@ ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(simulator)
+ADD_SUBDIRECTORY(parser_extensions)
 ADD_SUBDIRECTORY(csv_file_reader)
 ADD_SUBDIRECTORY(executables)
 
@@ -114,6 +115,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         data_source_serializers_static
         ds_integration_static
         simulator_static
+        parser_extensions_static
         mesh_static
         wave_models_static
         stl_reader_static
