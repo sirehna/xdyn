@@ -166,6 +166,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:csv_file_reader_tests>
         $<TARGET_OBJECTS:wave_models_tests>
         $<TARGET_OBJECTS:kissfft_static>
+        $<TARGET_OBJECTS:parser_extensions_tests>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")

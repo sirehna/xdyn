@@ -10,7 +10,6 @@ set(SRC src/simulator_api.cpp
         src/ForceBuilder.cpp
         src/GravityForceBuilder.cpp
         src/GravityForceModel.cpp
-        src/BodyBuilder.cpp
         src/HydrostaticForceBuilder.cpp
         src/SimCsvObserver.cpp
         src/SimNoObserver.cpp
@@ -44,6 +43,7 @@ include_directories(${ds_integration_INCLUDE_DIRS})
 include_directories(${solver_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
 include_directories(${model_wrappers_INCLUDE_DIRS})
+include_directories(${parser_extensions_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}_static STATIC ${SRC})
 

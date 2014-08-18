@@ -29,6 +29,7 @@ include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${test_macros_INCLUDE_DIRS})
 include_directories(${solver_INCLUDE_DIRS})
 include_directories(${binary_stl_data_INCLUDE_DIRS})
+include_directories(${parser_extensions_INCLUDE_DIRS}/../unit_tests/inc)
 
 # Using C++ 2011
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
