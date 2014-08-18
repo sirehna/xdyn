@@ -20,6 +20,7 @@
 #include "WaveSpectralDensity.hpp"
 #include "DirectionalSpreadingBuilder.hpp"
 #include "SpectrumBuilder.hpp"
+#include "WaveModelBuilder.hpp"
 
 #include "Sim.hpp"
 #include "YamlSimulatorInput.hpp"
@@ -156,6 +157,7 @@ class SimulatorBuilder
         TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceBuilderPtr> force_parsers;
         std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
+        TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
         TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
 };
