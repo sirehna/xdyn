@@ -6,7 +6,6 @@ set(SRC src/simulator_api.cpp
         src/Sim.cpp
         src/HydrostaticForceModel.cpp
         src/SimulatorBuilder.cpp
-        src/Body.cpp
         src/SimObserver.cpp
         src/ForceBuilder.cpp
         src/GravityForceBuilder.cpp

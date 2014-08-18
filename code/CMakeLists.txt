@@ -126,6 +126,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         simulator_yaml_parser_static
         yaml_parser_static
         simulator_external_data_structures_static
+        model_wrappers_static
         yaml-cpp
         decode_unit_static
         data_source_static
