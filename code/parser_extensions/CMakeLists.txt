@@ -20,6 +20,7 @@ include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
 include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
 include_directories(${kinematics_INCLUDE_DIRS})
+include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 
