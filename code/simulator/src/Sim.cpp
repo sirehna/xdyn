@@ -15,6 +15,8 @@
 #include "update_kinematics.hpp"
 #include "WaveModelInterface.hpp"
 
+#define SQUARE(x) ((x)*(x))
+
 Sim::Sim(const std::vector<Body>& bodies_,
          const std::vector<ListOfForces>& forces_,
          const KinematicsPtr& k_,
@@ -26,10 +28,16 @@ Sim::Sim(const std::vector<Body>& bodies_,
 
 void Sim::operator()(const StateType& x, StateType& dx_dt, double )
 {
+    auto y = x;
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
-        update_kinematics(x, bodies[i], i, k);
-        calculate_state_derivatives(sum_of_forces(x, i), bodies[i].inverse_of_the_total_inertia, x, dx_dt, i);
+        const auto norm = sqrt((double)SQUARE(*_QR(y,i))+(double)SQUARE(*_QI(y,i))+(double)SQUARE(*_QJ(y,i))+(double)SQUARE(*_QK(y,i)));
+        *_QR(y,i) /= norm;
+        *_QI(y,i) /= norm;
+        *_QJ(y,i) /= norm;
+        *_QK(y,i) /= norm;
+        update_kinematics(y, bodies[i], i, k);
+        calculate_state_derivatives(sum_of_forces(y, i), bodies[i].inverse_of_the_total_inertia, y, dx_dt, i);
     }
     state = x;
     _dx_dt = dx_dt;
