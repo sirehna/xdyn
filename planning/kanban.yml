@@ -1,6 +1,6 @@
 ﻿start: 1/2/2014
 stories:
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1688>Finish administrativia</a>
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1688>Tâches administratives</a>
     due by: 10/3/2014
     tasks:
     - task: Rédaction fiche de travaux
@@ -191,7 +191,7 @@ stories:
       backlog: 17/2/2014
       started: 27/3/2014
       done: 28/3/2014
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1779>Follow-up on first steering committee</a>
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1779>Amélioration outil reporting</a>
     due by: 17/4/2014
     tasks:
     - task: Show velocity on planning
@@ -267,11 +267,6 @@ stories:
       backlog: 14/4/2014
       started: 16/4/2014
       done: 17/4/2014
-    - task: Hydrostatic integration test on Anthineas
-      type: model
-      size: 8
-      backlog: 22/4/2014
-      assigned to: cec
     - task: Create DataSourceBuilder (to set initial conditions & add modules)
       type: kernel
       size: 8
@@ -383,7 +378,9 @@ stories:
       backlog: 26/5/2014
       started: 4/6/2014
       done: 5/6/2014
-    # Not started
+  - story: Hydrostatic integration tests
+    due by: 4/9/2014
+    tasks:
     - task: Balanced cube (hydrostatic integration test)
       type: model
       size: 4
@@ -404,6 +401,11 @@ stories:
       assigned to: cec
       backlog: 2/6/2014
       started: 30/6/2014
+    - task: Hydrostatic integration test on Anthineas
+      type: model
+      size: 8
+      backlog: 22/4/2014
+      assigned to: cec
   - story: Efforts de gravité
     due by: 28/4/2014
     tasks:
@@ -625,4 +627,24 @@ stories:
       type: internal
       backlog: 29/7/2014
       size: 1
-
+  - story: Amélioration des performances
+    due by: 26/6/2014
+    tasks:
+    - task: Profiling using gcov
+      type: internal
+      backlog: 23/6/2014
+      started: 23/6/2014
+      done: 26/6/2014
+      size: 4
+    - task: Improve mesh algorithms
+      type: internal
+      backlog: 23/6/2014
+      started: 23/6/2014
+      done: 26/6/2014
+      size: 4
+    - task: Use DataSource for interfaces only
+      type: internal
+      backlog: 1/7/2014
+      started: 1/7/2014
+      done: 4/7/2014
+      size: 16
