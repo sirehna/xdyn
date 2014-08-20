@@ -131,3 +131,11 @@ TEST_F(MeshBuilderTest, bug_when_building_trapezium)
 {
     ASSERT_NO_THROW(MeshBuilder(trapezium()).build());
 }
+
+TEST_F(MeshBuilderTest, convert_stl_files_to_code)
+{
+    Mesh mesh = MeshBuilder(generated_stl()).build();
+    ASSERT_EQ(12, mesh.facets.size());
+    ASSERT_EQ(8, mesh.nodes.cols());
+    ASSERT_EQ(3, mesh.nodes.rows());
+}

@@ -20,21 +20,27 @@ INCLUDE_DIRECTORIES(${solver_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${csv_file_reader_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_yaml_parser_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/utilities_for_InputData.cpp "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
 CONFIGURE_FILE(src/postprocessing.cpp "${CMAKE_CURRENT_BINARY_DIR}/postprocessing.cpp" @ONLY)
+CONFIGURE_FILE(src/convert_stl_files_to_code.cpp "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
 ADD_EXECUTABLE(sim ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
                    src/InputData.cpp
                    src/simulator.cpp)
 
 ADD_EXECUTABLE(postprocessing ${CMAKE_CURRENT_BINARY_DIR}/postprocessing.cpp)
 TARGET_LINK_LIBRARIES(postprocessing simulatorIrtJv)
-TARGET_LINK_LIBRARIES(sim ${Boost_PROGRAM_OPTIONS_LIBRARY})
-TARGET_LINK_LIBRARIES(sim boost_program_options_descriptions_static)
 
 TARGET_LINK_LIBRARIES(sim simulatorIrtJv)
 TARGET_LINK_LIBRARIES(sim ${Boost_PROGRAM_OPTIONS_LIBRARY})
 TARGET_LINK_LIBRARIES(sim boost_program_options_descriptions_static)
+
+ADD_EXECUTABLE(convert_stl_files_to_code ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp)
+TARGET_LINK_LIBRARIES(convert_stl_files_to_code simulatorIrtJv)
+TARGET_LINK_LIBRARIES(convert_stl_files_to_code ${Boost_PROGRAM_OPTIONS_LIBRARY})
+TARGET_LINK_LIBRARIES(convert_stl_files_to_code boost_program_options_descriptions_static)
+
 
 ADD_EXECUTABLE(generate_yaml_example src/generate_yaml_examples.cpp)
 ADD_EXECUTABLE(generate_stl_examples src/generate_stl_examples.cpp)
@@ -46,6 +52,8 @@ TARGET_LINK_LIBRARIES(generate_stl_examples test_data_generator_static)
 INSTALL(TARGETS sim
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 INSTALL(TARGETS postprocessing
+        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
+INSTALL(TARGETS convert_stl_files_to_code
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
 ADD_CUSTOM_COMMAND(TARGET generate_yaml_example
