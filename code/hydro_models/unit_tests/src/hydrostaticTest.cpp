@@ -509,6 +509,31 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
     }
 }
 
+TEST_F(hydrostaticTest, DISABLED_can_compute_the_hydrostatic_force_on_a_rotated_cube)
+{
+    for (size_t i = 0 ; i < 10 ; ++i)
+    {
+        const double L = a.random<double>().between(0,10);
+        const double x0 = a.random<double>().between(-1000,1000);
+        const double y0 = a.random<double>().between(-1000,1000);
+        const double z0 = 0.0;
+        const double h = 0.5*sqrt(2.0)*L;
+        const Point G(a.random<std::string>(), 0, 0, 0);
+        const MeshPtr mesh(new Mesh(MeshBuilder(cube(L,x0,y0,z0)).build()));
+        const std::vector<double> dz = {-h,0,0,-h,0,h,h,0};
+        const double rho = 1000;
+        const double g = 9.81;
+        const Wrench Fhs = force(mesh, G, rho, g, dz);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
+        const double V = L*L*L;
+        ASSERT_SMALL_RELATIVE_ERROR(-0.5*rho*g*V, Fhs.Z(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(-0.5*rho*g*V*y0, Fhs.K(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(+0.5*rho*g*V*x0, Fhs.M(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.N(), EPS);
+    }
+}
+
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
 {
     const VectorOfVectorOfPoints mesh_cube(read_stl(test_data::cube()));
