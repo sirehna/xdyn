@@ -165,7 +165,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
 
 ADD_TEST(NAME ${PROJECT_NAME}_TEST_001
          WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-         COMMAND ${TEST_EXE} --gtest_also_run_disabled_tests --gtest_output=xml:test_output.xml)
+         COMMAND ${TEST_EXE} --gtest_output=xml:test_output.xml)
 
 IF(CMAKE_BUILD_TYPE_UPPER MATCHES COVERAGE)
     ENABLE_COVERAGE_REPORT(TARGETS ${TEST_EXE}
