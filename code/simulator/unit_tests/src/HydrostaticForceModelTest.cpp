@@ -79,7 +79,7 @@ TEST_F(HydrostaticForceModelTest, example)
  * P2 = [-2,-4,+6]
  * P3 = [+2,+4,+4]
  * P4 = [+2,-4,+4]
- * The rectangle is divided in two triangles
+ * The rectangle is divided into two triangles
  * T1 = [P1,P2,P3]
  * T2 = [P3,P2,P4]
  *
@@ -92,12 +92,12 @@ TEST_F(HydrostaticForceModelTest, example)
  * \f$200*\rho*g\f$.
  *
  * The resulting force evaluated at the origin point O in the global frame (NED)
- * should have no effort along axis Y
+ * should have no component along axis Y
  *
- * The resulting moment evaluated at the origin point O in the global frame (NED)
+ * The resulting torque evaluated at the origin point O in the global frame (NED)
  * should have no component around X and Z.
  */
-TEST_F(HydrostaticForceModelTest, DISABLED_Oriented_fully_immerged_rectangle)
+TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
 {
     HydrostaticForceModel::Input input;
     input.g = 9.81;
