@@ -18,6 +18,8 @@
 #include "steppers.hpp"
 
 #define EPS (1E-10)
+#define SQUARE(x) ((x)*(x))
+#define DEG (atan(1.)/45.)
 
 SimTest::SimTest() : a(DataGenerator(42222))
 {
@@ -133,3 +135,30 @@ TEST_F(SimTest, can_simulate_stable_cube)
     }
 }
 
+TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
+{
+    const size_t N = 3;
+    auto yaml = SimulatorYamlParser(test_data::falling_ball_example()).parse();
+    yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.theta = 45*DEG;
+    yaml.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u = 0;
+    auto res = simulate<EulerStepper>(yaml, 0, N, 1);
+    ASSERT_EQ(N+1, res.size());
+    const double g = 9.81;
+    for (size_t i = 0 ; i < N+1 ; ++i)
+    {
+        const double t = (double) i;
+        const auto quaternion_norm = SQUARE(res.at(i).x[QRIDX(0)])
+                                   + SQUARE(res.at(i).x[QIIDX(0)])
+                                   + SQUARE(res.at(i).x[QJIDX(0)])
+                                   + SQUARE(res.at(i).x[QKIDX(0)]);
+        ASSERT_EQ(13, res.at(i).x.size())                        << "Time step: i=" << i;
+        ASSERT_DOUBLE_EQ(t,          res.at(i).t)                << "Time step: i=" << i;
+        ASSERT_NEAR(4,               res.at(i).x[XIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(8,               res.at(i).x[YIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(12+g*t*(t-1)/2., res.at(i).x[ZIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[PIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[QIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(0,               res.at(i).x[RIDX(0)], EPS)  << "Time step: i=" << i;
+        ASSERT_NEAR(1,               quaternion_norm, EPS)       << "Time step: i=" << i;
+    }
+}
