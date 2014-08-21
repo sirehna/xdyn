@@ -78,6 +78,7 @@ ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
+ADD_SUBDIRECTORY(base91x)
 ADD_SUBDIRECTORY(macros)
 ADD_SUBDIRECTORY(random_data_generator)
 ADD_SUBDIRECTORY(numeric)
@@ -160,6 +161,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gmock gmock_main                 # static
         random_data_generator_static     # static
         test_data_generator_static       # static
+        base91x_static
         ${PROJECT_NAME}
         )
 
