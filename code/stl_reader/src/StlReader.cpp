@@ -159,3 +159,81 @@ VectorOfVectorOfPoints read_stl(const std::string& input)
     ParserState state(inputStream);
     return readAsciiStl(inputStream, state);
 }
+
+VectorOfVectorOfPoints read_binary_stl(std::istream& stream) // Shamelessly copied from http://ravehgonen.wordpress.com/tag/stl-file-format/
+{
+    char buffer[4];
+    VectorOfVectorOfPoints ret;
+    typedef unsigned short uint16;
+
+    stream.ignore(80);
+    stream.read(buffer, sizeof buffer);
+    unsigned int nFaces = 0;
+    memcpy((void*)&nFaces, (void*)&buffer, sizeof(buffer));
+
+    float v[12]; // normal=3 + vertices=3*3 = 12
+
+    // Every Face is 50 Bytes: Normal(3*float), Vertices(9*float), 2 Bytes Spacer
+    for (size_t i=0; i<nFaces; ++i)
+    {
+        if (stream.good())
+        {
+            stream.ignore(12); // Ignore the normal (MeshBuilder recalculates it anyway)
+            for (size_t j=0; j<9; ++j)
+            {
+                // As per http://stackoverflow.com/a/12861635
+                for (size_t k = 0 ; k < sizeof buffer ; ++k)
+                {
+                    char c;
+                    stream.get(c);
+                    *(((char*)&(v[j])) + k) = c;//fgetc(buffer);
+                }
+            }
+            stream.ignore(2); // Ignore separator
+        }
+
+       VectorOfPoints t;
+       t.push_back(EPoint(v[0], v[1], v[2]));
+       t.push_back(EPoint(v[3], v[4], v[5]));
+       t.push_back(EPoint(v[6], v[7], v[8]));
+       ret.push_back(t);
+    }
+    return ret;
+}
+
+VectorOfVectorOfPoints read_binary_stl(const std::string& input)
+{
+    std::stringstream ss(input);
+    return read_binary_stl(ss);
+}
+
+std::string escape_backslashes(const std::string& s)
+{
+    return replace('\\', "\\\\", s);
+}
+
+std::string replace(char c, const std::string& replacement, const std::string& s)
+{
+    std::string result;
+    size_t searchStartPos = 0;
+
+    std::string chars = std::string("\\") + c;
+    size_t pos = s.find_first_of(chars);
+    while (pos != std::string::npos)
+    {
+        result += s.substr(searchStartPos, pos - searchStartPos);
+        if (s[pos] == '\\')
+        {
+            result += std::string("\\") + c;
+            searchStartPos = pos + 2;
+        }
+        else if (s[pos] == c)
+        {
+            result += replacement;
+            searchStartPos = pos + 1;
+        }
+
+        pos = s.find_first_of(chars, searchStartPos);
+    }
+    return result;
+}

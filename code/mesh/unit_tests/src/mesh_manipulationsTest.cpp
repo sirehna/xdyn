@@ -8,6 +8,8 @@
 #include "mesh_manipulationsTest.hpp"
 #include "GeometricTypes3d.hpp"
 #include "mesh_manipulations.hpp"
+#include "StlReader.hpp"
+#include "TriMeshTestData.hpp"
 
 #include "test_macros.hpp"
 
@@ -86,3 +88,25 @@ TEST_F(mesh_manipulationsTest, centre_of_gravity_2)
     ASSERT_DOUBLE_EQ(0.5,G(1));
     ASSERT_DOUBLE_EQ(0,G(2));
 }
+
+TEST_F(mesh_manipulationsTest, can_read_and_write_binary_stl)
+{
+    const VectorOfVectorOfPoints mesh = unit_cube();
+    std::stringstream ss;
+
+    write_binary_stl(mesh, ss);
+    const VectorOfVectorOfPoints parsed_mesh = read_binary_stl(ss);
+
+    ASSERT_EQ(mesh.size(), parsed_mesh.size());
+    for (size_t i = 0 ; i < mesh.size() ; ++i)
+    {
+        ASSERT_EQ(mesh[i].size(), parsed_mesh[i].size()) << " (for i = " << i << ")";
+        for (size_t j = 0 ; j < mesh[i].size() ; ++j)
+        {
+            ASSERT_DOUBLE_EQ((double)mesh[i][j](0), (double)parsed_mesh[i][j](0)) << " (for i = " << i << " and j = " << j << ", x-coordinate)";
+            ASSERT_DOUBLE_EQ((double)mesh[i][j](1), (double)parsed_mesh[i][j](1)) << " (for i = " << i << " and j = " << j << ", y-coordinate)";
+            ASSERT_DOUBLE_EQ((double)mesh[i][j](2), (double)parsed_mesh[i][j](2)) << " (for i = " << i << " and j = " << j << ", z-coordinate)";
+        }
+    }
+}
+
