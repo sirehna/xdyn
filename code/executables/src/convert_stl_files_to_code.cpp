@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
 
+#include "mesh_manipulations.hpp"
 #include "StlReader.hpp"
 #include "TextFileReader.hpp"
+#include "base91x.hpp"
 
 std::string description();
 std::string description()
@@ -50,6 +52,14 @@ std::string write_cpp(const VectorOfVectorOfPoints& points)
     return ss.str();
 }
 
+std::string write_binary_cpp(const VectorOfVectorOfPoints& points);
+std::string write_binary_cpp(const VectorOfVectorOfPoints& points)
+{
+    std::stringstream ss;
+    write_binary_stl(points, ss);
+    return base<91>::encode(ss.str());
+}
+
 int main(int argc, char** argv)
 {
     if (argc != 2)
@@ -61,6 +71,6 @@ int main(int argc, char** argv)
     const TextFileReader stl_file(std::vector<std::string>(1, std::string(argv[argc-1])));
     const VectorOfVectorOfPoints points = read_stl(stl_file.get_contents());
 
-    std::cout << write_cpp(points);
+    std::cout << "const std::string s = \"" << write_binary_cpp(points) << "\";\n";
     return 0;
 }
