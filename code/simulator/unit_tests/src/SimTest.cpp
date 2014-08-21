@@ -40,7 +40,7 @@ void SimTest::TearDown()
 TEST_F(SimTest, can_simulate_falling_ball)
 {
     const size_t N = 10;
-    auto res = simulate<EulerStepper>(test_data::falling_ball_example(), 0, N, 1);
+    const auto res = simulate<EulerStepper>(test_data::falling_ball_example(), 0, N, 1);
     ASSERT_EQ(N+1, res.size());
     const double g = 9.81;
     for (size_t i = 0 ; i < N+1 ; ++i)
@@ -68,7 +68,7 @@ TEST_F(SimTest, can_simulate_oscillating_cube)
 {
     const double dt = 1E-1;
     const double tend = 10;
-    auto res = simulate<RK4Stepper>(test_data::oscillating_cube_example(), test_data::cube(), 0, tend, dt);
+    const auto res = simulate<RK4Stepper>(test_data::oscillating_cube_example(), test_data::cube(), 0, tend, dt);
 
     const double g = 9.81;
     const double rho = 1026;
@@ -105,7 +105,7 @@ TEST_F(SimTest, can_simulate_stable_cube)
 {
     const double dt = 1E-1;
     const double tend = 10;
-    auto res = simulate<RK4Stepper>(test_data::stable_cube_example(), test_data::cube(), 0, tend, dt);
+    const auto res = simulate<RK4Stepper>(test_data::stable_cube_example(), test_data::cube(), 0, tend, dt);
 
     const size_t N = (size_t)(floor(tend/dt+0.5))+1;
     const double rho = 1026;
@@ -141,7 +141,7 @@ TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
     auto yaml = SimulatorYamlParser(test_data::falling_ball_example()).parse();
     yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.theta = 45*DEG;
     yaml.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u = 0;
-    auto res = simulate<EulerStepper>(yaml, 0, N, 1);
+    const auto res = simulate<EulerStepper>(yaml, 0, N, 1);
     ASSERT_EQ(N+1, res.size());
     const double g = 9.81;
     for (size_t i = 0 ; i < N+1 ; ++i)
