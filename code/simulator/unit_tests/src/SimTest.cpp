@@ -16,10 +16,13 @@
 #include "SimCsvObserver.hpp"
 #include "SimNoObserver.hpp"
 #include "steppers.hpp"
+#include "TriMeshTestData.hpp"
 
 #define EPS (1E-10)
 #define SQUARE(x) ((x)*(x))
 #define DEG (atan(1.)/45.)
+
+const VectorOfVectorOfPoints SimTest::anthineas_stl = anthineas();
 
 SimTest::SimTest() : a(DataGenerator(42222))
 {
