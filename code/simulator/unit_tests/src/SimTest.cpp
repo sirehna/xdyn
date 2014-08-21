@@ -165,3 +165,9 @@ TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
         ASSERT_NEAR(1,               quaternion_norm, EPS)       << "Time step: i=" << i;
     }
 }
+
+TEST_F(SimTest, hydrostatic_test_on_anthineas)
+{
+    const auto yaml = SimulatorYamlParser(test_data::anthineas_hydrostatic_test()).parse();
+    const auto res = simulate<EulerStepper>(yaml, anthineas_stl, 0, 1, 0.1);
+}
