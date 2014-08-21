@@ -15,11 +15,10 @@ class SimTest : public ::testing::Test
 {
     protected:
         SimTest();
-	    virtual ~SimTest();
+        virtual ~SimTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
-
+        DataGenerator a;
 };
 
 #endif  /* SIMTEST_HPP_ */
