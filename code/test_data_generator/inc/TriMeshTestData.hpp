@@ -13,5 +13,6 @@ VectorOfVectorOfPoints n_gone(const size_t n);
 VectorOfVectorOfPoints cube(const double a, const double x0, const double y0, const double z0);
 VectorOfVectorOfPoints tetrahedron(const double a, const double x0, const double y0, const double z0);
 VectorOfVectorOfPoints generated_stl();
+VectorOfVectorOfPoints anthineas();
 
 #endif
