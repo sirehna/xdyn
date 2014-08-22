@@ -6,6 +6,7 @@ set(SRC src/Body.cpp
         src/GravityForceModel.cpp
         src/HydrostaticForceModel.cpp
         src/SurfaceElevationFromWaves.cpp
+        src/SurfaceElevationInterface.cpp
         )
 
 # Using C++ 2011
