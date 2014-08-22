@@ -10,7 +10,7 @@
 #include "DiracSpectralDensity.hpp"
 #include "Kinematics.hpp"
 #include "Point.hpp"
-#include "WaveModelFromSpectraTest.hpp"
+#include "SurfaceElevationFromWavesTest.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 
 #define _USE_MATH_DEFINE
