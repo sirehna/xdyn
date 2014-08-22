@@ -1,11 +1,4 @@
-/*
- * WaveModelFromSpectraBuilder.cpp
- *
- *  Created on: Aug 7, 2014
- *      Author: cady
- */
-
-#include "WaveModelFromSpectraBuilder.hpp"
+#include "SurfaceElevationFromWavesBuilder.hpp"
 #include "YamlWaveModelInput.hpp"
 
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<Airy>::try_to_parse(const std::string& model, const std::string& ) const

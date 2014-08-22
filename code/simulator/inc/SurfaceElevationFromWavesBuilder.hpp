@@ -1,27 +1,19 @@
-/*
- * WaveModelFromSpectraBuilder.hpp
- *
- *  Created on: Aug 7, 2014
- *      Author: cady
- */
-
-#ifndef WAVEMODELFROMSPECTRABUILDER_HPP_
-#define WAVEMODELFROMSPECTRABUILDER_HPP_
+#ifndef SURFACEELEVATIONFROMWAVESBUILDER_HPP_
+#define SURFACEELEVATIONFROMWAVESBUILDER_HPP_
 
 #include "Airy.hpp"
-#include "DefaultWaveModel.hpp"
-#include "WaveBuilder.hpp"
+#include "SurfaceElevationBuilder.hpp"
 
 template <>
 class SurfaceElevationBuilder<Airy> : public SurfaceElevationBuilderInterface
 {
     public:
-        WaveBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
-                    const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
+        SurfaceElevationBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
+                                const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
         boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
 
     private:
-        WaveBuilder();
+        SurfaceElevationBuilder();
 };
 
-#endif /* WAVEMODELFROMSPECTRABUILDER_HPP_ */
+#endif /* SURFACEELEVATIONFROMWAVESBUILDER_HPP_ */
