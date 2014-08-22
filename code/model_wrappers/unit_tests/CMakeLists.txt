@@ -2,6 +2,7 @@
 set(MODULE_UNDER_TEST model_wrappers)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/DefaultSurfaceElevationTest.cpp
+              src/GravityForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
@@ -13,5 +14,6 @@ include_directories(${test_macros_SOURCE_DIR})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
+include_directories(${simulator_INCLUDE_DIRS}/../unit_tests/inc)
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})

@@ -9,7 +9,6 @@ set(SRC src/simulator_api.cpp
         src/SimObserver.cpp
         src/ForceBuilder.cpp
         src/GravityForceBuilder.cpp
-        src/GravityForceModel.cpp
         src/HydrostaticForceBuilder.cpp
         src/SimCsvObserver.cpp
         src/SimNoObserver.cpp
