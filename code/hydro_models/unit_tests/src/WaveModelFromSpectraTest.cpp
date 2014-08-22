@@ -17,23 +17,23 @@
 #include <cmath>
 #define PI M_PI
 
-WaveModelFromSpectraTest::WaveModelFromSpectraTest() : a(DataGenerator(45454))
+SurfaceElevationFromWavesTest::SurfaceElevationFromWavesTest() : a(DataGenerator(45454))
 {
 }
 
-WaveModelFromSpectraTest::~WaveModelFromSpectraTest()
+SurfaceElevationFromWavesTest::~SurfaceElevationFromWavesTest()
 {
 }
 
-void WaveModelFromSpectraTest::SetUp()
+void SurfaceElevationFromWavesTest::SetUp()
 {
 }
 
-void WaveModelFromSpectraTest::TearDown()
+void SurfaceElevationFromWavesTest::TearDown()
 {
 }
 
-TR1(shared_ptr)<WaveModel> WaveModelFromSpectraTest::get_model() const
+TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model() const
 {
     const double psi0 = PI/4;
     const double Hs = 3;
@@ -70,9 +70,9 @@ TR1(shared_ptr)<WaveModel> WaveModelFromSpectraTest::get_model() const
 
  */
 
-TEST_F(WaveModelFromSpectraTest, example)
+TEST_F(SurfaceElevationFromWavesTest, example)
 {
-//! [WaveModelFromSpectraTest example]
+//! [SurfaceElevationFromWavesTest example]
     const double psi0 = PI/4;
     const double Hs = 3;
     const double Tp = 10;
@@ -80,8 +80,8 @@ TEST_F(WaveModelFromSpectraTest, example)
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     SurfaceElevationFromWaves wave(get_model());
     const double phi = 0.54881350230425596237;
-//! [WaveModelFromSpectraTest example]
-//! [WaveModelFromSpectraTest expected output]
+//! [SurfaceElevationFromWavesTest example]
+//! [SurfaceElevationFromWavesTest expected output]
     for (double t = 0 ; t < 30 ; t+=0.1)
     {
         const Point P("NED", a.random<double>(), a.random<double>(), a.random<double>());
@@ -90,7 +90,7 @@ TEST_F(WaveModelFromSpectraTest, example)
         const double z = P.z();
         ASSERT_NEAR(z-sqrt(2*Hs)*cos(k_*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.get_relative_wave_height(P, k, t), 1E-5);
     }
-//! [WaveModelFromSpectraTest expected output]
+//! [SurfaceElevationFromWavesTest expected output]
 }
 
 
