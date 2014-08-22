@@ -9,7 +9,7 @@ IF (NOT(MSVC))
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
-SET(SRC src/DefaultSurfaceElevation.cpp
+SET(SRC 
         src/SurfaceElevationInterface.cpp
         src/hydrostatic.cpp
         src/SurfaceElevationFromWaves.cpp
