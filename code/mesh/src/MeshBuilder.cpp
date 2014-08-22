@@ -89,13 +89,3 @@ bool MeshBuilder::point_is_in_map(const EPoint& xyz)
     const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
     return itMap != xyzMap.end();
 }
-
-Matrix3x MeshBuilder::convert(const VectorOfPoints& v) const
-{
-    Matrix3x ret(3,v.size());
-    for (size_t j = 0 ; j < v.size() ; ++j)
-    {
-        ret.col((int)j) = v[j];
-    }
-    return ret;
-}

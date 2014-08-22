@@ -132,3 +132,13 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
         os.write(reinterpret_cast<const char*>(&spacer), 2);
     }
 }
+
+Matrix3x convert(const VectorOfPoints& v)
+{
+    Matrix3x ret(3,v.size());
+    for (size_t j = 0 ; j < v.size() ; ++j)
+    {
+        ret.col((int)j) = v[j];
+    }
+    return ret;
+}
