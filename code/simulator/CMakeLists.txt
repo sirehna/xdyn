@@ -12,7 +12,6 @@ set(SRC src/simulator_api.cpp
         src/OutputTransformer.cpp
         src/Res.cpp
         src/SurfaceElevationBuilder.cpp
-        src/SurfaceElevationFromWavesBuilder.cpp
         )
 
 # Using C++ 2011

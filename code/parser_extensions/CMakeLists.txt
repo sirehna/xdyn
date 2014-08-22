@@ -4,6 +4,7 @@ project(parser_extensions)
 set(SRC src/builders.cpp
         src/GravityForceBuilder.cpp
         src/HydrostaticForceBuilder.cpp
+        src/SurfaceElevationFromWavesBuilder.cpp
         )
 
 # Using C++ 2011
