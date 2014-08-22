@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.8)
 project(parser_extensions)
 
 set(SRC src/builders.cpp
+        src/GravityForceBuilder.cpp
         )
 
 # Using C++ 2011
