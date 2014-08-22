@@ -6,7 +6,6 @@ FILE(GLOB SRC src/BodyBuilderTest.cpp
               src/GravityForceModelTest.cpp
               src/SimTest.cpp
               src/SimulatorBuilderTest.cpp
-              src/HydrostaticForceModelTest.cpp
               src/update_kinematicsTests.cpp
               src/SimulatorBuilderTest.cpp
               src/OutputTransformerTest.cpp

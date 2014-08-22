@@ -4,7 +4,6 @@ project(simulator)
 set(SRC src/simulator_api.cpp
         src/update_kinematics.cpp
         src/Sim.cpp
-        src/HydrostaticForceModel.cpp
         src/SimulatorBuilder.cpp
         src/SimObserver.cpp
         src/ForceBuilder.cpp

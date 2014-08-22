@@ -3,6 +3,7 @@ set(MODULE_UNDER_TEST model_wrappers)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/DefaultSurfaceElevationTest.cpp
               src/GravityForceModelTest.cpp
+              src/HydrostaticForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

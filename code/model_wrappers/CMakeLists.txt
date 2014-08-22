@@ -4,6 +4,7 @@ project(model_wrappers)
 set(SRC src/Body.cpp
         src/DefaultSurfaceElevation.cpp
         src/GravityForceModel.cpp
+        src/HydrostaticForceModel.cpp
         )
 
 # Using C++ 2011
