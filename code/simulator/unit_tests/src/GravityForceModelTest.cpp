@@ -94,10 +94,10 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     b.m = 100;
     const Wrench f = F(b);
     ASSERT_EQ(BODY, f.get_frame());
-    ASSERT_DOUBLE_EQ(0, f.K());
-    ASSERT_DOUBLE_EQ(0, f.M());
-    ASSERT_DOUBLE_EQ(0, f.N());
+    ASSERT_NEAR(0, f.K(),EPS);
+    ASSERT_NEAR(0, f.M(),EPS);
+    ASSERT_NEAR(0, f.N(),EPS);
     ASSERT_NEAR(-0.5*981, f.X(),EPS);
     ASSERT_NEAR(+0.5*sqrt(3.0)*981, f.Y(),EPS);
-    ASSERT_DOUBLE_EQ(0.0, f.Z());
+    ASSERT_NEAR(0.0, f.Z(),EPS);
 }
