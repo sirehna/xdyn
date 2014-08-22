@@ -3,7 +3,9 @@ SET(MODULE_UNDER_TEST mesh)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC
         src/MeshBuilderTest.cpp
-        src/mesh_manipulationsTest.cpp)
+        src/mesh_manipulationsTest.cpp
+        src/RandomEPointGenerator.cpp
+        )
 # ------8<---------------------------------------------->8-----
 
 # Include directories
