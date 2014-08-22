@@ -23,6 +23,26 @@ VectorOfPoints one_triangle()
 	return P;
 }
 
+VectorOfPoints one_triangle_clockwise()
+{
+    VectorOfPoints P;
+    EPoint p1, p2, p3;
+    p1(0) = 1.0;
+    p1(1) = 2.1;
+    p1(2) = 3.2;
+    p2(0) = 2.1;
+    p2(1) = 3.7;
+    p2(2) = 4.5;
+    p3(0) = 3.1;
+    p3(1) = 4.5;
+    p3(2) = 6.7;
+    P.push_back(p1);
+    P.push_back(p3);
+    P.push_back(p2);
+    return P;
+}
+
+
 VectorOfPoints degenerated_triangle()
 {
     VectorOfPoints P;

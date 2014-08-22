@@ -4,6 +4,7 @@
 #include "GeometricTypes3d.hpp"
 
 VectorOfPoints one_triangle();
+VectorOfPoints one_triangle_clockwise();
 VectorOfPoints degenerated_triangle();
 VectorOfVectorOfPoints unit_cube();
 VectorOfVectorOfPoints two_triangles();
