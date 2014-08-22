@@ -3,7 +3,6 @@ set(MODULE_UNDER_TEST hydro_models)
 project (${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/DefaultSurfaceElevationTest.cpp
               src/hydrostaticTest.cpp
-              src/SurfaceElevationFromWavesTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

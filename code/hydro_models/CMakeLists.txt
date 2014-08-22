@@ -12,7 +12,6 @@ ENDIF()
 SET(SRC 
         src/SurfaceElevationInterface.cpp
         src/hydrostatic.cpp
-        src/SurfaceElevationFromWaves.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)

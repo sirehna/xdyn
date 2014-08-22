@@ -4,6 +4,7 @@ project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/DefaultSurfaceElevationTest.cpp
               src/GravityForceModelTest.cpp
               src/HydrostaticForceModelTest.cpp
+              src/SurfaceElevationFromWavesTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
