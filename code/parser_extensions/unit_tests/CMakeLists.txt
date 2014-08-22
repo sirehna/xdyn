@@ -1,7 +1,7 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST parser_extensions)
 project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/BodyBuilderTest.cpp
+FILE(GLOB SRC src/.cpp
               )
 # ------8<---------------------------------------------->8-----
 

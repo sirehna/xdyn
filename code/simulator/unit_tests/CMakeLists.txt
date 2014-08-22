@@ -1,10 +1,7 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST simulator)
 project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/BodyBuilderTest.cpp
-              src/generate_body_for_tests.cpp
-              src/GravityForceModelTest.cpp
-              src/SimTest.cpp
+FILE(GLOB SRC src/SimTest.cpp
               src/SimulatorBuilderTest.cpp
               src/update_kinematicsTests.cpp
               src/SimulatorBuilderTest.cpp
@@ -28,6 +25,7 @@ include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${test_macros_INCLUDE_DIRS})
 include_directories(${solver_INCLUDE_DIRS})
 include_directories(${binary_stl_data_INCLUDE_DIRS})
+include_directories(${model_wrappers_INCLUDE_DIRS}/../unit_tests/inc)
 include_directories(${parser_extensions_INCLUDE_DIRS}/../unit_tests/inc)
 
 # Using C++ 2011

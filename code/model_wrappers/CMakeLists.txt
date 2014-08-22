@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.8)
 project(model_wrappers)
 
 set(SRC src/Body.cpp
+        src/BodyBuilder.cpp
         src/DefaultSurfaceElevation.cpp
         src/GravityForceModel.cpp
         src/HydrostaticForceModel.cpp
@@ -25,6 +26,10 @@ include_directories(${kinematics_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hydro_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${wave_models_INCLUDE_DIRS})
+include_directories(${mesh_INCLUDE_DIRS})
+include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
+include_directories(${yaml_parser_INCLUDE_DIRS})
+include_directories(${stl_reader_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME}_static STATIC ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")

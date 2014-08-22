@@ -1,7 +1,9 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST model_wrappers)
 project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/DefaultSurfaceElevationTest.cpp
+FILE(GLOB SRC src/generate_body_for_tests.cpp
+              src/BodyBuilderTest.cpp
+              src/DefaultSurfaceElevationTest.cpp
               src/GravityForceModelTest.cpp
               src/HydrostaticForceModelTest.cpp
               src/SurfaceElevationFromWavesTest.cpp
