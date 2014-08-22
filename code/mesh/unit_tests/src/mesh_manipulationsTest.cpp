@@ -37,9 +37,9 @@ TEST_F(mesh_manipulationsTest, unit_normal)
     const Matrix3x M = Eigen::MatrixXd::Identity(3,3);
     const Eigen::Vector3d n = unit_normal(M);
     ASSERT_DOUBLE_EQ(1, n.norm());
-    ASSERT_DOUBLE_EQ(1/sqrt(3.), n(0));
-    ASSERT_DOUBLE_EQ(1/sqrt(3.), n(1));
-    ASSERT_DOUBLE_EQ(1/sqrt(3.), n(2));
+    ASSERT_DOUBLE_EQ(1/sqrt(3.), (double)n(0));
+    ASSERT_DOUBLE_EQ(1/sqrt(3.), (double)n(1));
+    ASSERT_DOUBLE_EQ(1/sqrt(3.), (double)n(2));
 //! [mesh_manipulationsTest unit_normal_example]
 }
 
@@ -48,9 +48,9 @@ TEST_F(mesh_manipulationsTest, barycenter)
 //! [mesh_manipulationsTest barycentre_example]
     const Matrix3x M = Eigen::MatrixXd::Identity(3,3);
     const Eigen::Vector3d G = barycenter(M);
-    ASSERT_DOUBLE_EQ(1/3., G(0));
-    ASSERT_DOUBLE_EQ(1/3., G(1));
-    ASSERT_DOUBLE_EQ(1/3., G(2));
+    ASSERT_DOUBLE_EQ(1/3., (double)G(0));
+    ASSERT_DOUBLE_EQ(1/3., (double)G(1));
+    ASSERT_DOUBLE_EQ(1/3., (double)G(2));
 //! [mesh_manipulationsTest barycentre_example]
 }
 
@@ -73,9 +73,9 @@ TEST_F(mesh_manipulationsTest, centre_of_gravity)
     M(1,0) = 0; M(1,1) = 0; M(1,2) = 1; M(1,3) = 1;
     M(2,0) = 0; M(2,1) = 0; M(2,2) = 0; M(2,3) = 0;
     const Eigen::Vector3d G = centre_of_gravity(M);
-    ASSERT_DOUBLE_EQ(2,G(0));
-    ASSERT_DOUBLE_EQ(4./9.,G(1));
-    ASSERT_DOUBLE_EQ(0,G(2));
+    ASSERT_DOUBLE_EQ(2,(double)G(0));
+    ASSERT_DOUBLE_EQ(4./9.,(double)G(1));
+    ASSERT_DOUBLE_EQ(0,(double)G(2));
 //! [mesh_manipulationsTest centre_of_gravity_example]
 }
 
@@ -86,9 +86,9 @@ TEST_F(mesh_manipulationsTest, centre_of_gravity_2)
     M(1,0) = 0; M(1,1) = 0; M(1,2) = 1; M(1,3) = 1;
     M(2,0) = 0; M(2,1) = 0; M(2,2) = 0; M(2,3) = 0;
     const Eigen::Vector3d G = centre_of_gravity(M);
-    ASSERT_DOUBLE_EQ(0.5,G(0));
-    ASSERT_DOUBLE_EQ(0.5,G(1));
-    ASSERT_DOUBLE_EQ(0,G(2));
+    ASSERT_DOUBLE_EQ(0.5,(double)G(0));
+    ASSERT_DOUBLE_EQ(0.5,(double)G(1));
+    ASSERT_DOUBLE_EQ(0,(double)G(2));
 }
 
 TEST_F(mesh_manipulationsTest, can_read_and_write_binary_stl)
@@ -130,4 +130,3 @@ TEST_F(mesh_manipulationsTest, can_read_binary_stl_from_string)
         }
     }
 }
-
