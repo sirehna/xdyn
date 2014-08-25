@@ -6,7 +6,7 @@
 class MeshBuilderTest : public ::testing::Test
 {
     protected:
-        MeshBuilderTest(){}
+        MeshBuilderTest();
         virtual void SetUp(){}
         virtual void TearDown(){}
 };

@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <boost/foreach.hpp>
+
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
 #include "kahan_sum.hpp"
@@ -45,8 +47,31 @@ Eigen::Vector3d barycenter(const Matrix3x& p)
     return p.rowwise().sum().array()/double(p.cols());
 }
 
+Eigen::Vector3d barycenter(const VectorOfVectorOfPoints& points //!< List of points
+                          )
+{
+    double x = 0;
+    double y = 0;
+    double z = 0;
+    size_t N = 0;
+    const size_t n = points.size();
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        const size_t p = points[i].size();
+        for (size_t j = 0 ; j < p ; ++j)
+        {
+            x += points[i][j](0);
+            y += points[i][j](1);
+            z += points[i][j](2);
+            ++N;
+        }
+    }
+    return Eigen::Vector3d(x/double(N),y/double(N),z/double(N));
+}
+
 Eigen::Vector3d unit_normal(const Matrix3x& points)
 {
+    //const double sign = oriented_clockwise ? -1 : 1;
     if (points.cols() < 3)
     {
         std::stringstream ss;
@@ -67,16 +92,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
     const double C = x1*y2-x2*y1;
 
     const double norm = sqrt(A*A+B*B+C*C);
-    if (norm<1000*std::numeric_limits<double>::epsilon())
-    {
-        std::stringstream ss;
-        ss << "Input is degenerated: cannot compute unit normal vector. The polygon is:" << std::endl;
-        for (int j = 0 ; j < points.cols() ; ++j)
-        {
-          ss << "p[" << j << "] = " << points.col(j).transpose() << std::endl;
-        }
-        THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
-    }
+    if (norm<1000*std::numeric_limits<double>::epsilon()) return Eigen::Vector3d(0,0,0);
     return Eigen::Vector3d(A/norm,B/norm,C/norm);
 }
 
@@ -141,4 +157,39 @@ Matrix3x convert(const VectorOfPoints& v)
         ret.col((int)j) = v[j];
     }
     return ret;
+}
+#include "test_macros.hpp"
+bool oriented_clockwise(const VectorOfVectorOfPoints& v, const EPoint& O)
+{
+    if (v.size() < 2) return true;
+
+    size_t nb_of_clockwise = 0;
+    size_t nb_of_anticlockwise = 0;
+    bool first_facet_is_oriented_clockwise = oriented_clockwise(v.front(),O);
+    if (first_facet_is_oriented_clockwise) nb_of_clockwise++;
+    else nb_of_anticlockwise++;
+    for (size_t i = 1 ; i < v.size() ; ++i)
+    {
+        const bool facet_i_is_oriented_clockwise = oriented_clockwise(v[i],O);
+        if (facet_i_is_oriented_clockwise) nb_of_clockwise++;
+        else nb_of_anticlockwise++;
+    }
+    if (nb_of_clockwise > 10*nb_of_anticlockwise) return true;
+    if (nb_of_anticlockwise > 10*nb_of_clockwise) return false;
+    std::stringstream ss;
+    ss << "Not all facets have the same orientation: " << nb_of_clockwise << " facets seem to be oriented clockwise, but "
+       << nb_of_anticlockwise << " facets seem to be oriented anticlockwise.";
+    THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
+    return first_facet_is_oriented_clockwise;
+}
+
+bool oriented_clockwise(const VectorOfPoints& facet, //!< Points to convert
+                        const EPoint& G //!< Point inside the volume (eg. its centre of gravity)
+        )
+{
+    if (facet.size() < 3) return true;
+    const Matrix3x M = convert(facet);
+    const Eigen::Vector3d C = barycenter(M);
+    const Eigen::Vector3d n = unit_normal(M);
+    return n.dot(C-G)<=0;
 }

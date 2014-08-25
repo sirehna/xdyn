@@ -14,7 +14,7 @@
   *  \date May 20, 2014, 8:47:20 AM
   *  \brief Returns the polygon's unit normal vector
   *  \details Assumes the points are in the same plane & are given in direct order (right-hand rule)
-  *  \returns A unit vector orthogonal to the plane in which the polygon lies, & oriented by the right-hand rule
+  *  \returns A unit vector orthogonal to the plane in which the polygon lies, & oriented by the right-hand rule (if oriented_clockwise==false)
   *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest unit_normal_example
   */
 Eigen::Vector3d unit_normal(const Matrix3x& polygon //!< Polygon for which the unit normal vector is computed
@@ -27,6 +27,13 @@ Eigen::Vector3d unit_normal(const Matrix3x& polygon //!< Polygon for which the u
   *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest barycenter_example
   */
 Eigen::Vector3d barycenter(const Matrix3x& points //!< List of points
+                          );
+
+/**  \brief Computes the iso-braycenter of a list of points
+  *  \returns The iso-barycenter of the points
+  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest barycenter_example
+  */
+Eigen::Vector3d barycenter(const VectorOfVectorOfPoints& points //!< List of points
                           );
 
 /**  \author cec
@@ -69,5 +76,20 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os);
   */
 Matrix3x convert(const VectorOfPoints& v //!< Points to convert
                 );
+
+/**  \brief Determines if the points in the facet are oriented by the right-hand rule
+  *  \returns True if the points in the mesh are oriented by the right-hand rule, false otherwise
+  */
+bool oriented_clockwise(const VectorOfPoints& v, //!< Points in mesh
+                        const EPoint& O //!< Point inside the volume (eg. its centre of gravity)
+        );
+
+/**  \brief Determines for each facet if the points in the mesh are oriented by the right-hand rule
+  *  \returns True all facets in the mesh are oriented by the right-hand rule (anti-clockwise),
+  *           false if all facets are oriented clockwise, throws otherwise.
+  */
+bool oriented_clockwise(const VectorOfVectorOfPoints& v, //!< Points in mesh
+                        const EPoint& O //!< Point inside the volume (eg. its centre of gravity)
+        );
 
 #endif /* MESH_MANIPULATIONS_HPP_ */

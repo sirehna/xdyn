@@ -12,10 +12,12 @@
 #include "StlReader.hpp"
 #include "TriMeshTestData.hpp"
 #include "STL_data.hpp"
+#include "MeshException.hpp"
+#include "stl_writer.hpp"
 
 #include "test_macros.hpp"
 
-mesh_manipulationsTest::mesh_manipulationsTest()
+mesh_manipulationsTest::mesh_manipulationsTest() : a(DataGenerator(321))
 {
 }
 
@@ -130,3 +132,48 @@ TEST_F(mesh_manipulationsTest, can_read_binary_stl_from_string)
         }
     }
 }
+
+TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_single_point)
+{
+    const VectorOfPoints single_point(1,a.random<EPoint>());
+    // Doesn't much matter because there is no surface
+    ASSERT_TRUE(oriented_clockwise(single_point, a.random<EPoint>()));
+}
+
+TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_segment)
+{
+    VectorOfPoints segment;
+    segment.push_back(a.random<EPoint>());
+    segment.push_back(a.random<EPoint>());
+    // Doesn't much matter because there is no surface
+    ASSERT_TRUE(oriented_clockwise(segment, a.random<EPoint>()));
+}
+
+TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_degenerated_triangle)
+{
+    // Doesn't much matter because there is no surface (so we don't know what "inside" means)
+    ASSERT_TRUE(oriented_clockwise(degenerated_triangle(), a.random<EPoint>()));
+}
+
+TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_triangle)
+{
+    ASSERT_TRUE(oriented_clockwise(one_triangle(), EPoint(1,2,3)));
+}
+
+TEST_F(mesh_manipulationsTest, throws_if_not_all_facets_have_the_same_orientation)
+{
+    ASSERT_THROW(oriented_clockwise(unit_cube_with_incorrect_orientation(), a.random<EPoint>()), MeshException);
+}
+
+TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_tetrahedron)
+{
+    ASSERT_FALSE(oriented_clockwise(tetrahedron(1,4,5,6), EPoint(4,5,6+sqrt(6.)/4.)));
+    ASSERT_TRUE(oriented_clockwise(tetrahedron_clockwise(1,2,3,4), EPoint(2,3,4+sqrt(6.)/4.)));
+}
+
+TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_cube)
+{
+    ASSERT_FALSE(oriented_clockwise(unit_cube(), EPoint(0,0,0)));
+    ASSERT_TRUE(oriented_clockwise(unit_cube_clockwise(), EPoint(0,0,0)));
+}
+

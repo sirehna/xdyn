@@ -65,7 +65,7 @@ TEST_F(HydrostaticForceModelTest, example)
 //! [HydrostaticModuleTest expected output]
     const double dz = 2./3;
     const double dS = 4;
-    ASSERT_DOUBLE_EQ(-input.rho*input.g*dz*dS, Fhs.X());
+    ASSERT_DOUBLE_EQ(input.rho*input.g*dz*dS, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
     ASSERT_DOUBLE_EQ(0, Fhs.Z());
     ASSERT_DOUBLE_EQ(0, Fhs.K());

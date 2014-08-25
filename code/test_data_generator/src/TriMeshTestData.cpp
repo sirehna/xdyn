@@ -37,8 +37,8 @@ VectorOfPoints one_triangle_clockwise()
     p3(1) = 4.5;
     p3(2) = 6.7;
     P.push_back(p1);
-    P.push_back(p3);
     P.push_back(p2);
+    P.push_back(p3);
     return P;
 }
 
@@ -389,6 +389,8 @@ VectorOfVectorOfPoints two_triangles()
     return mesh;
 }
 
+
+
 VectorOfVectorOfPoints two_triangles_immerged()
 {
     VectorOfVectorOfPoints mesh;
@@ -514,6 +516,38 @@ VectorOfVectorOfPoints tetrahedron(const double a, const double x, const double 
     facet_4.push_back(P3);
     facet_4.push_back(P2);
     facet_4.push_back(P4);
+    mesh.push_back(facet_4);
+
+    return mesh;
+}
+
+VectorOfVectorOfPoints tetrahedron_clockwise(const double a, const double x, const double y, const double z)
+{
+    VectorOfVectorOfPoints mesh;
+    VectorOfPoints facet_1, facet_2, facet_3, facet_4;
+    const EPoint P1(x, y, z);
+    const EPoint P2(-sqrt(3)*a/6 + x, -a/2 + y, sqrt(6)*a/3 + z);
+    const EPoint P3(-sqrt(3)*a/6 + x, a/2 + y,  sqrt(6)*a/3 + z);
+    const EPoint P4(sqrt(3)*a/3 + x , y,        sqrt(6)*a/3 + z);
+
+    facet_1.push_back(P1);
+    facet_1.push_back(P3);
+    facet_1.push_back(P2);
+    mesh.push_back(facet_1);
+
+    facet_2.push_back(P1);
+    facet_2.push_back(P4);
+    facet_2.push_back(P3);
+    mesh.push_back(facet_2);
+
+    facet_3.push_back(P1);
+    facet_3.push_back(P2);
+    facet_3.push_back(P4);
+    mesh.push_back(facet_3);
+
+    facet_4.push_back(P3);
+    facet_4.push_back(P4);
+    facet_4.push_back(P2);
     mesh.push_back(facet_4);
 
     return mesh;

@@ -6,6 +6,7 @@
 
 #include "GeometricTypes3d.hpp"
 
+std::string write_stl(const VectorOfPoints& mesh);
 std::string write_stl(const VectorOfVectorOfPoints& mesh);
 ::std::ostream& operator<<(::std::ostream& os, const VectorOfVectorOfPoints& mesh);
 

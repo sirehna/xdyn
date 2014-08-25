@@ -42,3 +42,8 @@ std::string write_stl(const VectorOfVectorOfPoints& mesh)
     os << write_stl(mesh);
     return os;
 }
+
+std::string write_stl(const VectorOfPoints& mesh)
+{
+    return write_stl(VectorOfVectorOfPoints(1,mesh));
+}

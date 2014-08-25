@@ -18,7 +18,8 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    index(0),
                                                                    nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
-                                                                   facets(std::vector<Facet>())
+                                                                   facets(std::vector<Facet>()),
+                                                                   clockwise(oriented_clockwise(v,barycenter(v)))
 {
     if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
@@ -27,7 +28,8 @@ MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1
                                                             xyzMap(Vector3dMap()),
                                                             index(0),
                                                             nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
-                                                            facets(std::vector<Facet>())
+                                                            facets(std::vector<Facet>()),
+                                                            clockwise(false)
 {
     if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
@@ -55,6 +57,7 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
         Facet facet;
         const Matrix3x M = convert(list_of_points);
         facet.unit_normal = unit_normal(M);
+        if (clockwise) facet.unit_normal *= -1;
         facet.area = area(M);
         facet.barycenter = barycenter(M);
         for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ; ++it)

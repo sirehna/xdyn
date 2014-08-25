@@ -10,6 +10,8 @@
 
 #include "gtest/gtest.h"
 
+#include "DataGenerator.hpp"
+
 class mesh_manipulationsTest : public ::testing::Test
 {
     protected:
@@ -17,7 +19,7 @@ class mesh_manipulationsTest : public ::testing::Test
 	    virtual ~mesh_manipulationsTest();
         virtual void SetUp();
         virtual void TearDown();
-
+        DataGenerator a;
 };
 
 #endif  /* MESH_MANIPULATIONSTEST_HPP_ */
