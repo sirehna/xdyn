@@ -47,7 +47,7 @@ Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::resize(const Eigen::Matrix<d
 Mesh MeshBuilder::build()
 {
     *this = std::for_each(v.begin(), v.end(), *this);
-    return Mesh(resize(nodes), facets);
+    return Mesh(resize(nodes), facets, clockwise);
 }
 
 void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
@@ -57,7 +57,6 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
         Facet facet;
         const Matrix3x M = convert(list_of_points);
         facet.unit_normal = unit_normal(M);
-        if (clockwise) facet.unit_normal *= -1;
         facet.area = area(M);
         facet.barycenter = barycenter(M);
         for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ; ++it)

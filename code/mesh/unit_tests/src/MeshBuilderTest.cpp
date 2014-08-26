@@ -137,17 +137,3 @@ TEST_F(MeshBuilderTest, convert_stl_files_to_code)
     ASSERT_EQ(8, mesh.nodes.cols());
     ASSERT_EQ(3, mesh.nodes.rows());
 }
-
-TEST_F(MeshBuilderTest, normal_vector_should_be_independent_from_facet_orientation_for_tetrahedron)
-{
-    const Mesh anticlockwise_mesh = MeshBuilder(tetrahedron(1,4,5,6)).build();
-    const Mesh clockwise_mesh = MeshBuilder(tetrahedron_clockwise(1,4,5,6)).build();
-
-    ASSERT_EQ(anticlockwise_mesh.facets.size(), clockwise_mesh.facets.size());
-    for (size_t i = 0 ; i < anticlockwise_mesh.facets.size() ; ++i)
-    {
-        ASSERT_DOUBLE_EQ((double)clockwise_mesh.facets[i].unit_normal(0),(double)anticlockwise_mesh.facets[i].unit_normal(0));
-        ASSERT_DOUBLE_EQ((double)clockwise_mesh.facets[i].unit_normal(1),(double)anticlockwise_mesh.facets[i].unit_normal(1));
-        ASSERT_DOUBLE_EQ((double)clockwise_mesh.facets[i].unit_normal(2),(double)anticlockwise_mesh.facets[i].unit_normal(2));
-    }
-}

@@ -479,7 +479,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     const double dS = 0.5;
     ASSERT_DOUBLE_EQ(0, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
-    ASSERT_DOUBLE_EQ(-rho*g*dz*dS, Fhs.Z());
+    ASSERT_DOUBLE_EQ(rho*g*dz*dS, Fhs.Z());
     ASSERT_DOUBLE_EQ(-8/3.*Fhs.Z(), Fhs.K());
     ASSERT_DOUBLE_EQ(-Fhs.Z(), Fhs.M());
     ASSERT_DOUBLE_EQ(0, Fhs.N());
