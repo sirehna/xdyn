@@ -164,7 +164,6 @@ VectorOfVectorOfPoints read_binary_stl(std::istream& stream) // Shamelessly copi
 {
     char buffer[4];
     VectorOfVectorOfPoints ret;
-    typedef unsigned short uint16;
 
     stream.ignore(80);
     stream.read(buffer, sizeof buffer);
