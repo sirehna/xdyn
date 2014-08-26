@@ -6,6 +6,7 @@
 #include "GravityForceModel.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "HydrostaticForceModel.hpp"
+#include "JonswapSpectrum.hpp"
 #include "StlReader.hpp"
 #include "SimulatorBuilder.hpp"
 
@@ -15,7 +16,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
     builder.can_parse<GravityForceModel>()
            .can_parse<DefaultSurfaceElevation>()
            .can_parse<HydrostaticForceModel>()
-           .can_parse<BretschneiderSpectrum>();
+           .can_parse<BretschneiderSpectrum>()
+           .can_parse<JonswapSpectrum>();
     return builder;
 }
 

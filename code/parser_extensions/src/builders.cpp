@@ -143,3 +143,14 @@ boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<Bretschne
     }
     return ret;
 }
+
+boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<JonswapSpectrum>::try_to_parse(const std::string& model, const std::string& yaml) const
+{
+    boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > ret;
+    if (model == "jonswap")
+    {
+        const YamlJonswap data = parse_jonswap(yaml);
+        ret.reset(TR1(shared_ptr)<WaveSpectralDensity>(new JonswapSpectrum(data.Hs, data.Tp, data.gamma)));
+    }
+    return ret;
+}
