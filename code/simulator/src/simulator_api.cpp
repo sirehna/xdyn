@@ -3,6 +3,7 @@
 #include "simulator_api.hpp"
 
 #include "BretschneiderSpectrum.hpp"
+#include "DiracSpectralDensity.hpp"
 #include "GravityForceModel.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "HydrostaticForceModel.hpp"
@@ -19,7 +20,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
            .can_parse<HydrostaticForceModel>()
            .can_parse<BretschneiderSpectrum>()
            .can_parse<JonswapSpectrum>()
-           .can_parse<PiersonMoskowitzSpectrum>();
+           .can_parse<PiersonMoskowitzSpectrum>()
+           .can_parse<DiracSpectralDensity>();
     return builder;
 }
 
