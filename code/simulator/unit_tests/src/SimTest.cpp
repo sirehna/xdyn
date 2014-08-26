@@ -169,5 +169,20 @@ TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
 TEST_F(SimTest, hydrostatic_test_on_anthineas)
 {
     const auto yaml = SimulatorYamlParser(test_data::anthineas_hydrostatic_test()).parse();
-    const auto res = simulate<EulerStepper>(yaml, anthineas_stl, 0, 1, 0.1);
+    const auto res = simulate<RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
+    ASSERT_EQ(11, res.size());
+    ASSERT_NEAR(0, res[0].x[XIDX(0)], EPS);
+    ASSERT_NEAR(0, res[0].x[YIDX(0)], EPS);
+    ASSERT_NEAR(-5, res[0].x[ZIDX(0)], EPS);
+
+    for (size_t i = 0 ; i < 5 ; ++i)
+    {
+        ASSERT_NEAR(res[i].x[ZIDX(0)],res[10-i].x[ZIDX(0)], 0.1) << " i = " << i;
+    }
+    ASSERT_NEAR(3.84, res[5].x[ZIDX(0)], 1E-2);
+    for (size_t i = 0 ; i < 11 ; ++i)
+    {
+        ASSERT_NEAR(0, fabs(res[i].x[XIDX(0)]), 0.2) << " i = " << i;
+        ASSERT_NEAR(0, fabs(res[i].x[YIDX(0)]), 1E-2) << " i = " << i;
+    }
 }
