@@ -18,6 +18,7 @@
 #include "Airy.hpp"
 #include "BretschneiderSpectrum.hpp"
 #include "JonswapSpectrum.hpp"
+#include "PiersonMoskowitzSpectrum.hpp"
 
 template <>
 class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface
@@ -83,6 +84,14 @@ class SpectrumBuilder<BretschneiderSpectrum> : public SpectrumBuilderInterface
 
 template <>
 class SpectrumBuilder<JonswapSpectrum> : public SpectrumBuilderInterface
+{
+    public:
+        SpectrumBuilder();
+        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > try_to_parse(const std::string& model, const std::string& yaml) const;
+};
+
+template <>
+class SpectrumBuilder<PiersonMoskowitzSpectrum> : public SpectrumBuilderInterface
 {
     public:
         SpectrumBuilder();
