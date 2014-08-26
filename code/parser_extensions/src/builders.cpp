@@ -187,3 +187,14 @@ boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > DirectionalSpreading
     }
     return ret;
 }
+
+boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > DirectionalSpreadingBuilder<Cos2sDirectionalSpreading>::try_to_parse(const std::string& model, const std::string& yaml) const
+{
+    boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > ret;
+    if (model == "cos2s")
+    {
+        const YamlCos2s data = parse_cos2s(yaml);
+        ret.reset(TR1(shared_ptr)<WaveDirectionalSpreading>(new Cos2sDirectionalSpreading(data.psi0, data.s)));
+    }
+    return ret;
+}

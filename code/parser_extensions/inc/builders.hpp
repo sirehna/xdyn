@@ -18,6 +18,7 @@
 #include "SurfaceElevationFromWaves.hpp"
 #include "Airy.hpp"
 #include "BretschneiderSpectrum.hpp"
+#include "Cos2sDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
@@ -110,6 +111,14 @@ class SpectrumBuilder<DiracSpectralDensity> : public SpectrumBuilderInterface
 
 template <>
 class DirectionalSpreadingBuilder<DiracDirectionalSpreading> : public DirectionalSpreadingBuilderInterface
+{
+    public:
+        DirectionalSpreadingBuilder() : DirectionalSpreadingBuilderInterface(){}
+        boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > try_to_parse(const std::string& model, const std::string& yaml) const;
+};
+
+template <>
+class DirectionalSpreadingBuilder<Cos2sDirectionalSpreading> : public DirectionalSpreadingBuilderInterface
 {
     public:
         DirectionalSpreadingBuilder() : DirectionalSpreadingBuilderInterface(){}
