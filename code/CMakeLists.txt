@@ -84,9 +84,11 @@ ADD_SUBDIRECTORY(macros)
 ADD_SUBDIRECTORY(random_data_generator)
 ADD_SUBDIRECTORY(numeric)
 ADD_SUBDIRECTORY(simulator_external_data_structures)
-ADD_SUBDIRECTORY(mesh)
-ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(test_data_generator)
+ADD_SUBDIRECTORY(stl_reader)
+ADD_SUBDIRECTORY(stl_writer)
+ADD_SUBDIRECTORY(binary_stl_data)
+ADD_SUBDIRECTORY(mesh)
 ADD_SUBDIRECTORY(text_file_reader)
 ADD_SUBDIRECTORY(decode_unit)
 ADD_SUBDIRECTORY(data_source)
@@ -111,6 +113,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         simulator_static
         mesh_static
         stl_reader_static
+        stl_writer_static
         hydro_models_static
         kinematics_static
         simulator_yaml_parser_static
@@ -149,6 +152,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
         $<TARGET_OBJECTS:stl_reader_tests>
+        $<TARGET_OBJECTS:stl_writer_tests>
         $<TARGET_OBJECTS:simulator_tests>
         $<TARGET_OBJECTS:numeric_tests>
         $<TARGET_OBJECTS:csv_file_reader_tests>
@@ -162,6 +166,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         random_data_generator_static     # static
         test_data_generator_static       # static
         base91x_static
+        binary_stl_data_static
         ${PROJECT_NAME}
         )
 

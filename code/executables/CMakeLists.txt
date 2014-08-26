@@ -27,8 +27,10 @@ INCLUDE_DIRECTORIES(${csv_file_reader_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_yaml_parser_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${stl_writer_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${base91x_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/utilities_for_InputData.cpp "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
 CONFIGURE_FILE(src/postprocessing.cpp "${CMAKE_CURRENT_BINARY_DIR}/postprocessing.cpp" @ONLY)
@@ -54,7 +56,10 @@ ADD_EXECUTABLE(generate_yaml_example src/generate_yaml_examples.cpp)
 ADD_EXECUTABLE(generate_stl_examples src/generate_stl_examples.cpp)
 
 TARGET_LINK_LIBRARIES(generate_yaml_example test_data_generator_static)
-TARGET_LINK_LIBRARIES(generate_stl_examples test_data_generator_static)
+TARGET_LINK_LIBRARIES(generate_stl_examples test_data_generator_static
+                                            binary_stl_data_static
+                                            base91x_static)
+TARGET_LINK_LIBRARIES(generate_stl_examples simulatorIrtJv)
 
 ################################################################################
 INSTALL(TARGETS sim

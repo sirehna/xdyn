@@ -116,7 +116,7 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
     //const std::string header(80, ' ');
     //os.write(header.c_str(), 80);
     for (size_t i = 0 ; i < 80 ; ++i) os.put(1);
-    const unsigned int nFaces = stl.size();
+    const size_t nFaces = stl.size();
     os.write(reinterpret_cast<const char*>(&nFaces), sizeof(nFaces));
 
     typedef unsigned short uint16;

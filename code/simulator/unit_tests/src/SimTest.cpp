@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "generate_anthineas.hpp"
 #include "SimObserver.hpp"
 #include "Sim.hpp"
 #include "SimTest.hpp"
