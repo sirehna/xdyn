@@ -10,16 +10,17 @@
 
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
+#include "GeometricTypes3d.hpp"
 
 class SimTest : public ::testing::Test
 {
     protected:
         SimTest();
-	    virtual ~SimTest();
+        virtual ~SimTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
-
+        DataGenerator a;
+        static const VectorOfVectorOfPoints anthineas_stl;
 };
 
 #endif  /* SIMTEST_HPP_ */

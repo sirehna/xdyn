@@ -15,11 +15,10 @@ class GravityForceModelTest : public ::testing::Test
 {
     protected:
         GravityForceModelTest();
-	    virtual ~GravityForceModelTest();
+        virtual ~GravityForceModelTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
-
+        DataGenerator a;
 };
 
 #endif  /* GRAVITYFORCEMODELTEST_HPP_ */

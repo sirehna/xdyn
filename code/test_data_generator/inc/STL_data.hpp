@@ -8,6 +8,7 @@ namespace test_data
     std::string single_facet();
     std::string three_facets();
     std::string cube();
+    std::string big_cube();
 }
 
 #endif

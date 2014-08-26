@@ -1,6 +1,6 @@
 ﻿start: 1/2/2014
 stories:
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1688>Finish administrativia</a>
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1688>Tâches administratives</a>
     due by: 10/3/2014
     tasks:
     - task: Rédaction fiche de travaux
@@ -24,7 +24,21 @@ stories:
       started: 10/2/2014
       done: 11/2/2014
       assigned to: gj
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1687>Création dépôt Git</a>
+    - task: GitLab access for everyone
+      type: kernel
+      size: 2
+      assigned to: cec
+      backlog: 17/2/2014
+      started: 17/2/2014
+      done: 24/3/2014
+    - task: Send mail to Thierry Gautheret concerning intellectial property
+      type: kernel
+      size: 2
+      assigned to: cec
+      backlog: 24/3/2014
+      started: 24/3/2014
+      done: 24/3/2014
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1691>Mise en place outils de développement</a>
     due by: 10/3/2014
     tasks:
     - task: Droits sur dev_pilotage pour GJ + git externals
@@ -34,9 +48,6 @@ stories:
       started: 11/2/2014
       assigned to: cec
       done: 11/2/2014
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1691>Setup Jenkins</a>
-    due by: 10/3/2014
-    tasks:
     - task: Create CMakeLists.txt for project
       type: internal
       size: 4
@@ -44,13 +55,6 @@ stories:
       backlog: 11/02/2014
       started: 11/02/2014
       done: 11/02/2014
-    - task: Initialisation Jenkins sur PC EONAV (Windows + Linux)
-      type: internal
-      size: 4
-      assigned to: cec
-      backlog: 10/2/2014
-      started: 12/2/2014
-      done: 13/2/2014
     - task: Setup Doxygen on Jenkins
       type: internal
       size: 1
@@ -93,6 +97,41 @@ stories:
       assigned to: gj
       started: 12/02/2014
       done: 14/02/2014
+    - task: Configure permissions (Jenkins access)
+      type: internal
+      size: 2
+      started: 20/2/2014
+      assigned to: cec
+      backlog: 17/2/2014
+      done: 20/2/2014
+    - task: Link planning tool to Jenkins
+      type: internal
+      size: 2
+      assigned to: cec
+      backlog: 17/2/2014
+      started: 17/2/2014
+      done: 17/2/2014
+    - task: Add main executable to build
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 17/2/2014
+      started: 17/4/2014
+      done: 18/4/2014
+    - task: CSS for dev guide
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 17/2/2014
+      started: 19/2/2014
+      done: 19/2/2014
+    - task: Git under Jenkins
+      type: kernel
+      size: 8
+      started: 18/2/2014
+      assigned to: cec
+      backlog: 17/2/2014
+      done: 21/2/2014
   - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1692>Dérisquage intégration équa diff </a>
     due by: 10/3/2014
     tasks:
@@ -152,77 +191,10 @@ stories:
       backlog: 17/2/2014
       started: 27/3/2014
       done: 28/3/2014
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1719>Finish configuring Jenkins</a>
-    due by: 10/3/2014
-    tasks:
-    - task: Configure permissions (Jenkins access)
-      type: internal
-      size: 2
-      started: 20/2/2014
-      assigned to: cec
-      backlog: 17/2/2014
-      done: 20/2/2014
-    - task: Link planning tool to Jenkins
-      type: internal
-      size: 2
-      assigned to: cec
-      backlog: 17/2/2014
-      started: 17/2/2014
-      done: 17/2/2014
-    - task: Add main executable to build
-      type: internal
-      size: 4
-      assigned to: cec
-      backlog: 17/2/2014
-      started: 17/4/2014
-      done: 18/4/2014
-    - task: CSS for dev guide
-      type: internal
-      size: 4
-      assigned to: cec
-      backlog: 17/2/2014
-      started: 19/2/2014
-      done: 19/2/2014
-    - task: Links between Windows & Linux Jenkins
-      type: internal
-      size: 2
-      assigned to: cec
-      backlog: 17/2/2014
-      started: 24/3/2014
-      done: 25/3/2014
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1720>Finish configuring Git</a>
-    due by: 10/3/2014
-    tasks:
-    - task: Git under Jenkins
-      type: kernel
-      size: 8
-      started: 18/2/2014
-      assigned to: cec
-      backlog: 17/2/2014
-      done: 21/2/2014
-    - task: GitLab access for everyone
-      type: kernel
-      size: 2
-      assigned to: cec
-      backlog: 17/2/2014
-      started: 17/2/2014
-      done: 24/3/2014
-    - task: Send mail to Thierry Gautheret concerning intellectial property
-      type: kernel
-      size: 2
-      assigned to: cec
-      backlog: 24/3/2014
-      started: 24/3/2014
-      done: 24/3/2014
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1779>Follow-up on first steering committee</a>
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1779>Amélioration outil reporting</a>
     due by: 17/4/2014
     tasks:
     - task: Show velocity on planning
-      type: internal
-      size: 4
-      assigned to: cec
-      backlog: 17/3/2014
-    - task: Document dynamic problem resolution
       type: internal
       size: 4
       assigned to: cec
@@ -233,7 +205,7 @@ stories:
       backlog: 24/3/2014
       started: 24/3/2014
       done: 24/3/2014
-  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1813>Read input YAML files</a>
+  - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1813>Paramétrage du simulateur</a>
     due by: 11/6/2014
     tasks:
     - task: Define input format
@@ -257,23 +229,16 @@ stories:
       backlog: 14/4/2014
       started: 16/4/2014
       done: 17/4/2014
-    - task: Output definition in YAML + CsvDsObserver
+    - task: Document YAML input format
       type: interface
-      size: 4
-      assigned to: cec
-      backlog: 24/3/2014
-      started: 24/3/2014
-      done: 10/4/2014
+      size: 2
+      backlog: 2/6/2014
+      started: 2/6/2014
+      done: 4/6/2014
+      assigned to: gj
   - story: <a href=http://sir6/bugzilla/show_bug.cgi?id=1693>Non-linear hydrostatic</a>
     due by: 11/6/2014
     tasks:
-    - task: Read STL files
-      type: interface
-      size: 4
-      assigned to: gj
-      backlog: 24/3/2014
-      started: 24/3/2014
-      done: 14/4/2014
     - task: STL assign node to facet
       type: model
       size: 2
@@ -302,16 +267,6 @@ stories:
       backlog: 14/4/2014
       started: 16/4/2014
       done: 17/4/2014
-    - task: Hydrostatic integration test on Anthineas
-      type: model
-      size: 8
-      backlog: 22/4/2014
-      assigned to: cec
-    - task: Hydrostatic analytical test case on cube
-      type: model
-      size: 4
-      backlog: 22/4/2014
-      assigned to: cec
     - task: Create DataSourceBuilder (to set initial conditions & add modules)
       type: kernel
       size: 8
@@ -320,13 +275,6 @@ stories:
       done: 22/4/2014
       assigned to: cec
       started: 18/4/2014
-    - task: Classify facets by number of immerged nodes
-      type: model
-      size: 1
-      backlog: 14/4/2014
-      assigned to: cec
-      started: 18/4/2014
-      done: 23/5/2014
     - task: Create dummy wave module & interface
       type: model
       size: 2
@@ -374,41 +322,6 @@ stories:
       started: 25/4/2014
       done: 28/4/2014
       assigned to: cec
-    - task: Gravity module (DS API, check input was set by DSBuilder, test output values)
-      type: model
-      size: 2
-      backlog: 22/4/2014
-      started: 28/4/2014
-      done: 28/4/2014
-      assigned to: cec
-    - task: Intersection between facet & free surface
-      type: model
-      size: 2
-      backlog: 22/4/2014
-      started: 19/5/2014
-      done: 23/5/2014
-      assigned to: cec
-    - task: Classify facets by type (number of immerged nodes)
-      type: model
-      size: 1
-      backlog: 22/4/2014
-      started: 30/4/2014
-      done: 30/4/2014
-      assigned to: cec
-    - task: Compute area of immerged triangle + position of centre of inertia
-      type: model
-      size: 4
-      backlog: 22/4/2014
-      started: 19/5/2014
-      done: 23/5/2014
-      assigned to: cec
-    - task: Create vector of immerged triangles (only pushback useful ones)
-      type: model
-      size: 1
-      backlog: 22/4/2014
-      started: 19/5/2014
-      done: 23/5/2014
-      assigned to: cec
     - task: Calculate elementary force from area & position of centre of inertia
       type: model
       size: 1
@@ -437,42 +350,6 @@ stories:
       started: 30/5/2014
       done: 3/6/2014
       assigned to: cec
-    - task: Newton's second law of motion module (with Coriolis & centripetal forces)
-      type: model
-      size: 4
-      backlog: 22/4/2014
-      started: 3/6/2014
-      done: 5/6/2014
-      assigned to: cec
-    - task: Document YAML input format
-      type: interface
-      size: 2
-      backlog: 2/6/2014
-      started: 2/6/2014
-      done: 4/6/2014
-      assigned to: gj
-    - task: Document reference frames
-      type: model
-      size: 4
-      backlog: 24/3/2014
-      started: 30/5/2014
-      done: 4/6/2014
-      assigned to: gj
-    - task: Document dynamic problem resolution (how internal & external forces are calculated)
-      type: model
-      size: 4
-      backlog: 2/6/2014
-      assigned to: gj
-    - task: Steppers + solver overview
-      type: model
-      size: 2
-      backlog: 2/6/2014
-      assigned to: gj
-    - task: Detailed solver documentation
-      type: model
-      size: 4
-      backlog: 2/6/2014
-      assigned to: cec
     - task: Add YAML test data to installer
       type: interface
       size: 2
@@ -486,13 +363,6 @@ stories:
       assigned to: gj
       backlog: 2/6/2014
       started: 4/6/2014
-      done: 6/6/2014
-    - task: DSBuilder accepting mesh as input data
-      type: internal
-      size: 2
-      assigned to: cec
-      backlog: 26/5/2014
-      started: 5/6/2014
       done: 6/6/2014
     - task: Fix Jenkins
       type: internal
@@ -508,15 +378,273 @@ stories:
       backlog: 26/5/2014
       started: 4/6/2014
       done: 5/6/2014
-    # Not started
+  - story: Hydrostatic integration tests
+    due by: 4/9/2014
+    tasks:
     - task: Balanced cube (hydrostatic integration test)
-      type: internal
+      type: model
       size: 4
       assigned to: cec
       backlog: 2/6/2014
-    - task: Oscillating cube (hydrostatic integration test)
-      type: internal
+      started: 30/6/2014
+      done: 4/7/2014
+    - task: Vertically oscillating cube (hydrostatic integration test)
+      type: model
       size: 4
       assigned to: cec
       backlog: 2/6/2014
-
+      started: 30/6/2014
+      done: 4/7/2014
+    - task: Roll-oscillating cube (hydrostatic integration test)
+      type: model
+      size: 4
+      assigned to: cec
+      backlog: 2/6/2014
+      started: 30/6/2014
+    - task: Hydrostatic integration test on Anthineas
+      type: model
+      size: 8
+      backlog: 22/4/2014
+      assigned to: cec
+  - story: Efforts de gravité
+    due by: 28/4/2014
+    tasks:
+    - task: Gravity module (DS API, check input was set by DSBuilder, test output values)
+      type: model
+      size: 2
+      backlog: 22/4/2014
+      started: 28/4/2014
+      done: 28/4/2014
+      assigned to: cec
+  - story: Calcul des accélérations (module 6DOF)
+    due by: 28/4/2014
+    tasks:
+    - task: Newton's second law of motion module (with Coriolis & centripetal forces)
+      type: model
+      size: 4
+      backlog: 22/4/2014
+      started: 3/6/2014
+      done: 5/6/2014
+      assigned to: cec
+  - story: Lecture maillage
+    due by: 28/4/2014
+    tasks:
+    - task: DSBuilder accepting mesh as input data
+      type: internal
+      size: 2
+      assigned to: cec
+      backlog: 26/5/2014
+      started: 5/6/2014
+      done: 6/6/2014
+  - story: Intersection maillage/surface libre
+    due by: 28/4/2014
+    tasks:
+    - task: Intersection between facet & free surface
+      type: model
+      size: 2
+      backlog: 22/4/2014
+      started: 19/5/2014
+      done: 23/5/2014
+      assigned to: cec
+    - task: Classify facets by type (number of immerged nodes)
+      type: model
+      size: 1
+      backlog: 22/4/2014
+      started: 30/4/2014
+      done: 30/4/2014
+      assigned to: cec
+    - task: Compute area of immerged triangle + position of centre of inertia
+      type: model
+      size: 4
+      backlog: 22/4/2014
+      started: 19/5/2014
+      done: 23/5/2014
+      assigned to: cec
+    - task: Create vector of immerged triangles (only pushback useful ones)
+      type: model
+      size: 1
+      backlog: 22/4/2014
+      started: 19/5/2014
+      done: 23/5/2014
+      assigned to: cec
+  - story: Définition de la carène
+    due by: 28/4/2014
+    tasks:
+    - task: Read STL files
+      type: interface
+      size: 4
+      assigned to: gj
+      backlog: 24/3/2014
+      started: 24/3/2014
+      done: 14/4/2014
+  - story: Compilation sous Linux
+    due by: 10/3/2014
+    tasks:
+    - task: Initialisation Jenkins sur PC EONAV (Windows + Linux)
+      type: internal
+      size: 4
+      assigned to: cec
+      backlog: 10/2/2014
+      started: 12/2/2014
+      done: 13/2/2014
+    - task: Links between Windows & Linux Jenkins
+      type: internal
+      size: 2
+      assigned to: cec
+      backlog: 17/2/2014
+      started: 24/3/2014
+      done: 25/3/2014
+  - story: Manuel utilisateur
+    due by: 31/12/2014
+    tasks:
+    - task: Document reference frames
+      type: model
+      size: 4
+      backlog: 24/3/2014
+      started: 30/5/2014
+      done: 4/6/2014
+      assigned to: gj
+    - task: Document dynamic problem resolution (how internal & external forces are calculated)
+      type: model
+      size: 4
+      backlog: 17/3/2014
+      assigned to: gj
+    - task: Detailed solver documentation
+      type: model
+      size: 4
+      backlog: 2/6/2014
+      assigned to: cec
+    - task: Steppers + solver overview
+      type: model
+      size: 2
+      backlog: 2/6/2014
+      assigned to: gj
+  - story: Ecriture format CSV
+    due by: 28/4/2014
+    tasks:
+    - task: Output definition in YAML + CsvDsObserver
+      type: interface
+      size: 4
+      assigned to: cec
+      backlog: 24/3/2014
+      started: 24/3/2014
+      done: 10/4/2014
+    - task: Output definition in YAML + CsvDsObserver
+      type: interface
+      size: 4
+      assigned to: cec
+      backlog: 24/3/2014
+      started: 24/3/2014
+      done: 10/4/2014
+    - task: Create OutputGenerator class
+      type: interface
+      size: 4
+      assigned to: cec
+      backlog: 30/6/2014
+      started: 30/6/2014
+      done: 4/7/2014
+    - task: Configure OutputGenerator from YAML
+      type: interface
+      size: 1
+      assigned to: cec
+      backlog: 30/6/2014
+      started: 30/6/2014
+      done: 4/7/2014
+    - task: Create separate executable to post-process results
+      type: interface
+      size: 1
+      assigned to: cec
+      backlog: 30/6/2014
+      started: 30/6/2014
+      done: 4/7/2014
+  - story: Build problems
+    due by: 31/12/2014
+    tasks:
+    - task: Cast errors in Linux 64 bits
+      type: internal
+      size: 1
+      assigned to: cec
+      backlog: 30/6/2014
+      started: 30/6/2014
+      done: 30/6/2014
+    - task: Examples not packaged under Windows
+      type: interface
+      size: 1
+      assigned to: cec
+      backlog: 30/6/2014
+      started: 30/6/2014
+      done: 30/6/2014
+    - task: Release in debug to avoid crash
+      type: internal
+      size: 1
+      assigned to: cec
+      backlog: 30/6/2014
+      started: 30/6/2014
+      done: 30/6/2014
+  - story: Modèles de houle irrégulière linéaire (Airy)
+    due by: 1/8/2014
+    tasks:
+    - task: Import wave spectra from Dysco ASM
+      type: model
+      backlog: 29/7/2014
+      size: 1
+    - task: Import Airy module from Dysco ASM
+      type: model
+      backlog: 29/7/2014
+      size: 1
+    - task: Create & document YAML for Airy
+      type: interface
+      backlog: 29/7/2014
+      size: 1
+    - task: Create WaveModelFromSpectrum
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+    - task: Create WaveModelFromSpectrumBuilder
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+  - story: Excitation non-linéaire due à la houle (efforts de diffraction de Froude-Krylov)
+    due by: 1/8/2014
+    tasks:
+    - task: Abstract away pressure in hydrostatic
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+    - task: Create & use IntegratePressureOnMesh
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+    - task: Compute dynamic pressure
+      type: model
+      backlog: 29/7/2014
+      size: 1
+    - task: Create & document YAML for Froude-Krylov
+      type: interface
+      backlog: 29/7/2014
+      size: 1
+    - task: Create FroudeKrylovForceBuilder
+      type: internal
+      backlog: 29/7/2014
+      size: 1
+  - story: Amélioration des performances
+    due by: 26/6/2014
+    tasks:
+    - task: Profiling using gcov
+      type: internal
+      backlog: 23/6/2014
+      started: 23/6/2014
+      done: 26/6/2014
+      size: 4
+    - task: Improve mesh algorithms
+      type: internal
+      backlog: 23/6/2014
+      started: 23/6/2014
+      done: 26/6/2014
+      size: 4
+    - task: Use DataSource for interfaces only
+      type: internal
+      backlog: 1/7/2014
+      started: 1/7/2014
+      done: 4/7/2014
+      size: 16

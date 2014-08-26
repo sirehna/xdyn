@@ -18,7 +18,8 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    index(0),
                                                                    nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
-                                                                   facets(std::vector<Facet>())
+                                                                   facets(std::vector<Facet>()),
+                                                                   clockwise(oriented_clockwise(v,barycenter(v)))
 {
     if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
@@ -27,7 +28,8 @@ MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1
                                                             xyzMap(Vector3dMap()),
                                                             index(0),
                                                             nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
-                                                            facets(std::vector<Facet>())
+                                                            facets(std::vector<Facet>()),
+                                                            clockwise(false)
 {
     if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
@@ -45,7 +47,7 @@ Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::resize(const Eigen::Matrix<d
 Mesh MeshBuilder::build()
 {
     *this = std::for_each(v.begin(), v.end(), *this);
-    return Mesh(resize(nodes), facets);
+    return Mesh(resize(nodes), facets, clockwise);
 }
 
 void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
@@ -88,14 +90,4 @@ bool MeshBuilder::point_is_in_map(const EPoint& xyz)
 {
     const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
     return itMap != xyzMap.end();
-}
-
-Matrix3x MeshBuilder::convert(const VectorOfPoints& v) const
-{
-    Matrix3x ret(3,v.size());
-    for (size_t j = 0 ; j < v.size() ; ++j)
-    {
-        ret.col((int)j) = v[j];
-    }
-    return ret;
 }

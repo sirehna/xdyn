@@ -12,7 +12,9 @@
 #include "steppers.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "test_macros.hpp"
+
 #define PI (4.*atan(1.))
+#define EPS (1E-10)
 
 const YamlSimulatorInput OutputTransformerTest::yaml1 = OutputTransformerTest::get_yaml1();
 const YamlSimulatorInput OutputTransformerTest::yaml2 = OutputTransformerTest::get_yaml2();
@@ -33,10 +35,10 @@ OutputTransformerTest::OutputTransformerTest() : a(DataGenerator(42022)), out1(s
 {
     auto res1 = simulate<EulerStepper>(yaml1, 0, 2, 1);
     const OutputTransformer transform1(yaml1);
-    for (const auto r:res1) out1.push_back(transform1(r));
+    for (auto r=res1.begin() ; r != res1.end() ; ++r) out1.push_back(transform1(*r));
     auto res2 = simulate<EulerStepper>(yaml2, 0, 2, 1);
     const OutputTransformer transform2(yaml2);
-    for (const auto r:res2) out2.push_back(transform2(r));
+    for (auto r=res2.begin() ; r != res2.end() ; ++r) out2.push_back(transform2(*r));
 }
 
 OutputTransformerTest::~OutputTransformerTest()
@@ -87,7 +89,7 @@ TEST_F(OutputTransformerTest, can_compute_angles)
     const auto phi   = out2.at(0)["phi(body 1 / NED -> body 1)"];
     const auto theta = out2.at(0)["theta(body 1 / NED -> body 1)"];
     const auto psi   = out2.at(0)["psi(body 1 / NED -> body 1)"];
-    EXPECT_DOUBLE_EQ(1.3, phi);
-    EXPECT_DOUBLE_EQ(1.4, theta);
-    EXPECT_DOUBLE_EQ(1.5, psi);
+    EXPECT_NEAR(1.3, phi, EPS);
+    EXPECT_NEAR(1.4, theta, EPS);
+    EXPECT_NEAR(1.5, psi, EPS);
 }

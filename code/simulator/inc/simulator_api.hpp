@@ -59,4 +59,11 @@ template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInp
     return simulate<StepperType>(sys, tstart, tend, dt);
 }
 
+template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& yaml, const VectorOfVectorOfPoints& mesh, const double tstart, const double tend, const double dt)
+{
+    std::map<std::string, VectorOfVectorOfPoints> meshes;
+    meshes[yaml.bodies.front().name] = mesh;
+    return simulate<StepperType>(yaml, meshes, tstart, tend, dt);
+}
+
 #endif

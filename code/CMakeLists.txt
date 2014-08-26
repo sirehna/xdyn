@@ -78,12 +78,15 @@ ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
+ADD_SUBDIRECTORY(exception_handling)
+ADD_SUBDIRECTORY(base91x)
 ADD_SUBDIRECTORY(macros)
 ADD_SUBDIRECTORY(random_data_generator)
 ADD_SUBDIRECTORY(numeric)
 ADD_SUBDIRECTORY(simulator_external_data_structures)
+ADD_SUBDIRECTORY(mesh)
+ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(test_data_generator)
-ADD_SUBDIRECTORY(exception_handling)
 ADD_SUBDIRECTORY(text_file_reader)
 ADD_SUBDIRECTORY(decode_unit)
 ADD_SUBDIRECTORY(data_source)
@@ -93,8 +96,6 @@ ADD_SUBDIRECTORY(simulator_yaml_parser)
 ADD_SUBDIRECTORY(solver)
 ADD_SUBDIRECTORY(ds_integration)
 ADD_SUBDIRECTORY(kinematics)
-ADD_SUBDIRECTORY(mesh)
-ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(simulator)
@@ -160,12 +161,13 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gmock gmock_main                 # static
         random_data_generator_static     # static
         test_data_generator_static       # static
+        base91x_static
         ${PROJECT_NAME}
         )
 
 ADD_TEST(NAME ${PROJECT_NAME}_TEST_001
          WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-         COMMAND ${TEST_EXE} --gtest_also_run_disabled_tests --gtest_output=xml:test_output.xml)
+         COMMAND ${TEST_EXE} --gtest_output=xml:test_output.xml)
 
 IF(CMAKE_BUILD_TYPE_UPPER MATCHES COVERAGE)
     ENABLE_COVERAGE_REPORT(TARGETS ${TEST_EXE}

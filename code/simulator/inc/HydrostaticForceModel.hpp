@@ -9,12 +9,10 @@
 #define HYDROSTATICFORCEMODEL_HPP_
 
 #include "ForceModel.hpp"
+#include "Kinematics.hpp"
 
 class WaveModelInterface;
 typedef TR1(shared_ptr)<WaveModelInterface> WaveModelPtr;
-
-class Kinematics;
-typedef TR1(shared_ptr)<Kinematics> KinematicsPtr;
 
 class Body;
 class EnvironmentAndFrames;

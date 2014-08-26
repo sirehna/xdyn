@@ -1,7 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(stl_reader)
 
-SET(SRC src/StlReader.cpp)
+SET(SRC src/StlReader.cpp
+        src/stl_writer.cpp
+        )
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})

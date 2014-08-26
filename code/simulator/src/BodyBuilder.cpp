@@ -18,6 +18,21 @@ BodyBuilder::BodyBuilder(const YamlRotation& convention) : rotations(convention)
 {
 }
 
+void BodyBuilder::change_mesh_ref_frame(Body& body, const VectorOfVectorOfPoints& mesh) const
+{
+    Point translation(body.name, body.x_relative_to_mesh, body.y_relative_to_mesh, body.z_relative_to_mesh);
+    kinematics::Transform transform(translation, body.mesh_to_body, "mesh("+body.name+")");
+    body.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
+    const auto T = transform.inverse();
+    body.mesh->nodes = (T*PointMatrix(body.mesh->nodes, "mesh("+body.name+")")).m;
+    for (size_t i = 0 ; i < body.mesh->facets.size() ; ++i)
+    {
+        body.mesh->facets[i].barycenter = T*body.mesh->facets[i].barycenter;
+        body.mesh->facets[i].unit_normal = T.get_rot()*body.mesh->facets[i].unit_normal;
+    }
+    body.M = PointMatrixPtr(new PointMatrix(body.mesh->nodes, body.name));
+}
+
 Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh) const
 {
     Body ret;
@@ -32,12 +47,7 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
     ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
     ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
     ret.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle);
-
-    Point translation(ret.name, ret.x_relative_to_mesh, ret.y_relative_to_mesh, ret.z_relative_to_mesh);
-    kinematics::Transform transform(translation, ret.mesh_to_body, "mesh("+ret.name+")");
-    ret.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
-    ret.mesh->nodes = (transform.inverse()*PointMatrix(ret.mesh->nodes, "mesh("+ret.name+")")).m;
-    ret.M = PointMatrixPtr(new PointMatrix(ret.mesh->nodes, ret.name));
+    change_mesh_ref_frame(ret, mesh);
     add_inertia(ret, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
     return ret;
 }

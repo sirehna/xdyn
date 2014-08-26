@@ -6,7 +6,7 @@ IF(DOXYGEN_FOUND)
     FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev")
     FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html")
     ADD_CUSTOM_TARGET(test_results
-        COMMAND ./${TEST_EXE} --gtest_also_run_disabled_tests --gtest_output=xml:test_output.xml
+        COMMAND ./${TEST_EXE} --gtest_output=xml:test_output.xml
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Running all tests" VERBATIM
         DEPENDS ${TEST_EXE}

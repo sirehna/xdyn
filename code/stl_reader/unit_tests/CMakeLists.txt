@@ -1,7 +1,8 @@
 SET(MODULE_UNDER_TEST stl_reader)
 PROJECT(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC
-        src/StlReaderTest.cpp)
+FILE(GLOB SRC src/StlReaderTest.cpp
+              src/stl_writerTest.cpp
+        )
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})

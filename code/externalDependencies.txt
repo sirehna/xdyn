@@ -10,3 +10,4 @@ http://130.66.124.6/svn/tools/ThirdParty eigen 3.2.0
 http://130.66.124.6/svn/tools/ThirdParty yaml-cpp 0.3.0
 http://130.66.124.6/svn/maroff/Product/Cpp/Tools decode_unit
 http://130.66.124.6/svn/maroff/Product/Cpp/Tools csv_file_reader
+http://130.66.124.6/svn/tools/ThirdParty base91x

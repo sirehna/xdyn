@@ -24,16 +24,16 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
 std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
 {
     std::vector<Body> ret;
-    for (const auto body:input.bodies)
+    for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
     {
-        const auto that_mesh = meshes.find(body.name);
+        const auto that_mesh = meshes.find(that_body->name);
         if (that_mesh != meshes.end())
         {
-            ret.push_back(builder->build(body, that_mesh->second));
+            ret.push_back(builder->build(*that_body, that_mesh->second));
         }
         else
         {
-            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("Unable to find mesh for '") + body.name + "' in map");
+            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("Unable to find mesh for '") + that_body->name + "' in map");
         }
     }
     return ret;
@@ -72,11 +72,11 @@ WavePtr SimulatorBuilder::get_wave() const
         THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No wave parser defined: use SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
     }
     WavePtr ret;
-    for (const auto model:input.environment)
+    for (auto that_model=input.environment.begin() ; that_model != input.environment.end() ; ++that_model)
     {
-        for (const auto parser:wave_parsers)
+        for (auto that_parser=wave_parsers.begin() ; that_parser != wave_parsers.end() ; ++that_parser)
         {
-            boost::optional<WavePtr> w = parser->try_to_parse(model.model, model.yaml);
+            boost::optional<WavePtr> w = (*that_parser)->try_to_parse(that_model->model, that_model->yaml);
             if (w)
             {
                 if (ret.use_count())
@@ -93,9 +93,9 @@ WavePtr SimulatorBuilder::get_wave() const
 std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
 {
     std::vector<ListOfForces> forces;
-    for (const auto body:input.bodies)
+    for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
     {
-        forces.push_back(forces_from(body, env));
+        forces.push_back(forces_from(*that_body, env));
     }
     return forces;
 }
@@ -103,16 +103,19 @@ std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrame
 ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
 {
     ListOfForces ret;
-    for (auto force_model:body.external_forces) add(force_model, ret, env);
+    for (auto that_force_model = body.external_forces.begin() ; that_force_model!= body.external_forces.end() ; ++that_force_model)
+    {
+        add(*that_force_model, ret, env);
+    }
     return ret;
 }
 
 void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
-    for (auto parser:force_parsers)
+    for (auto that_parser = force_parsers.begin() ; that_parser != force_parsers.end() ; ++that_parser)
     {
-        boost::optional<ForcePtr> f = parser->try_to_parse(model.model, model.yaml, env);
+        boost::optional<ForcePtr> f = (*that_parser)->try_to_parse(model.model, model.yaml, env);
         if (f)
         {
             L.push_back(f.get());
@@ -152,9 +155,9 @@ YamlSimulatorInput SimulatorBuilder::get_parsed_yaml() const
 MeshMap SimulatorBuilder::make_mesh_map() const
 {
     MeshMap ret;
-    for (const auto body:input.bodies)
+    for (auto that_body = input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
     {
-        ret[body.name] = get_mesh(body);
+        ret[that_body->name] = get_mesh(*that_body);
     }
     return ret;
 }

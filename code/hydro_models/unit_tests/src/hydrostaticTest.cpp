@@ -479,7 +479,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     const double dS = 0.5;
     ASSERT_DOUBLE_EQ(0, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
-    ASSERT_DOUBLE_EQ(-rho*g*dz*dS, Fhs.Z());
+    ASSERT_DOUBLE_EQ(rho*g*dz*dS, Fhs.Z());
     ASSERT_DOUBLE_EQ(-8/3.*Fhs.Z(), Fhs.K());
     ASSERT_DOUBLE_EQ(-Fhs.Z(), Fhs.M());
     ASSERT_DOUBLE_EQ(0, Fhs.N());
@@ -509,6 +509,24 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
     }
 }
 
+TEST_F(hydrostaticTest, should_not_crash)
+{
+    for (size_t i = 0 ; i < 10 ; ++i)
+    {
+        const double L = a.random<double>().between(0,10);
+        const double x0 = a.random<double>().between(-1000,1000);
+        const double y0 = a.random<double>().between(-1000,1000);
+        const double z0 = 0.0;
+        const double h = 0.5*sqrt(2.0)*L;
+        const Point G(a.random<std::string>(), 0, 0, 0);
+        const MeshPtr mesh(new Mesh(MeshBuilder(cube(L,x0,y0,z0)).build()));
+        const std::vector<double> dz = {-h,0,0,-h,0,h,h,0};
+        const double rho = 1000;
+        const double g = 9.81;
+        force(mesh, G, rho, g, dz);
+    }
+}
+
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
 {
     const VectorOfVectorOfPoints mesh_cube(read_stl(test_data::cube()));
@@ -519,7 +537,6 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
     const double g = 9.81;
     const Wrench Fhs = force(mesh, G, rho, g, dz);
 }
-
 
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
 {
@@ -617,9 +634,9 @@ TEST_F(hydrostaticTest, immerged_polygon_should_not_throw_an_exception_if_two_po
 TEST_F(hydrostaticTest, correct_immerged_polygon_when_two_points_are_exactly_on_the_surface)
 {
     Eigen::Matrix<double,3,4> M;
-    M <<  0,-1,0,1,
-          0, 0,0,0,
-         -1, 0,1,0;
+    M <<  0, -1, 0, 1,
+          0,  0, 0, 0,
+         -1,  0, 1, 0;
     const std::vector<size_t>idx = {0,1,2,3};
     const std::vector<double> v = {-1,0,1,0};
     const std::pair<Matrix3x,std::vector<double> > P = immerged_polygon(M,idx,v);
@@ -644,4 +661,50 @@ TEST_F(hydrostaticTest, correct_immerged_polygon_when_two_points_are_exactly_on_
     ASSERT_DOUBLE_EQ(0, P.second[0]);
     ASSERT_DOUBLE_EQ(0, P.second[1]);
     ASSERT_DOUBLE_EQ(1, P.second[2]);
+}
+
+TEST_F(hydrostaticTest, bug2_in_immerged_polygon)
+{
+    Eigen::Matrix<double,3,4> M;
+    M <<  -1, 0, 1,  0,
+           0, 0, 0,  0,
+           0, 1, 0, -1;
+    const std::vector<size_t>idx = {0,1,2,3};
+    const std::vector<double> v = {0,1,0,-1};
+    const std::pair<Matrix3x,std::vector<double> > P = immerged_polygon(M,idx,v);
+
+    const auto p = P.first;
+
+    ASSERT_EQ(3, p.cols());
+
+    ASSERT_DOUBLE_EQ(-1,(double)p(0,0));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,0));
+    ASSERT_DOUBLE_EQ(0,(double)p(2,0));
+
+    ASSERT_DOUBLE_EQ(0,(double)p(0,1));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,1));
+    ASSERT_DOUBLE_EQ(1,(double)p(2,1));
+
+    ASSERT_DOUBLE_EQ(1,(double)p(0,2));
+    ASSERT_DOUBLE_EQ(0,(double)p(1,2));
+    ASSERT_DOUBLE_EQ(0,(double)p(2,2));
+
+    ASSERT_EQ(3, P.second.size());
+    ASSERT_DOUBLE_EQ(0, P.second[0]);
+    ASSERT_DOUBLE_EQ(1, P.second[1]);
+    ASSERT_DOUBLE_EQ(0, P.second[2]);
+}
+
+TEST_F(hydrostaticTest, bug3_in_immerged_polygon)
+{
+    Eigen::Matrix<double,3,3> M;
+    M <<  0.5,   0.5,   0.5,
+          0.375, 0.5, 0.375,
+         -0.25, -0.5,  0.25;
+    const std::vector<size_t> idx = {0,1,2};
+    const std::vector<double> v = {0,-0.25,0.5};
+    const std::pair<Matrix3x,std::vector<double> > P = immerged_polygon(M,idx,v);
+    ASSERT_LT(0, (P.first.col(0)-P.first.col(1)).norm());
+    ASSERT_LT(0, (P.first.col(0)-P.first.col(2)).norm());
+    ASSERT_LT(0, (P.first.col(1)-P.first.col(2)).norm());
 }
