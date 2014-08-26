@@ -132,3 +132,14 @@ boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBui
     }
     return ret;
 }
+
+boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<BretschneiderSpectrum>::try_to_parse(const std::string& model, const std::string& yaml) const
+{
+    boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > ret;
+    if (model == "bretschneider")
+    {
+        const YamlBretschneider data = parse_bretschneider(yaml);
+        ret.reset(TR1(shared_ptr)<WaveSpectralDensity>(new BretschneiderSpectrum(data.Hs, data.Tp)));
+    }
+    return ret;
+}

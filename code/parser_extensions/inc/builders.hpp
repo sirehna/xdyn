@@ -16,6 +16,7 @@
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 #include "Airy.hpp"
+#include "BretschneiderSpectrum.hpp"
 
 template <>
 class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface
@@ -69,6 +70,14 @@ class WaveModelBuilder<Airy> : public WaveModelBuilderInterface
     public:
         WaveModelBuilder();
         boost::optional<TR1(shared_ptr)<WaveModel> > try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const;
+};
+
+template <>
+class SpectrumBuilder<BretschneiderSpectrum> : public SpectrumBuilderInterface
+{
+    public:
+        SpectrumBuilder();
+        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > try_to_parse(const std::string& model, const std::string& yaml) const;
 };
 
 #endif /* BUILDERS_HPP_ */
