@@ -28,6 +28,7 @@ include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${test_macros_INCLUDE_DIRS})
 include_directories(${solver_INCLUDE_DIRS})
+include_directories(${binary_stl_data_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 

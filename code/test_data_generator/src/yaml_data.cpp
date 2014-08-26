@@ -797,7 +797,7 @@ std::string test_data::anthineas_hydrostatic_test()
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: Anthineas\n"
-       << "    mesh: Anthineas.stl\n"
+       << "    mesh: anthineas.stl\n"
        << "    position of body frame relative to mesh:\n"
        << "        frame: mesh\n"
        << "        x: {value: 9.355, unit: m}\n"

@@ -13,7 +13,7 @@
 #include "TriMeshTestData.hpp"
 #include "STL_data.hpp"
 #include "MeshException.hpp"
-#include "stl_writer.hpp"
+//#include "stl_writer.hpp"
 
 #include "test_macros.hpp"
 

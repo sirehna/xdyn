@@ -1,7 +1,6 @@
 SET(MODULE_UNDER_TEST stl_reader)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/StlReaderTest.cpp
-              src/stl_writerTest.cpp
         )
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})

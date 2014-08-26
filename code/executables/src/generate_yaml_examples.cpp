@@ -16,7 +16,8 @@ int main(int argc, const char* argv[])
                   file3(path+"falling_ball_test.yml"),
                   file4(path+"oscillating_cube_test.yml"),
                   file5(path+"stable_cube_test.yml"),
-                  file6(path+"stable_rolling_cube_test.yml");
+                  file6(path+"stable_rolling_cube_test.yml"),
+                  file7(path+"anthineas_equilibre.yml");
 
     file2 << test_data::hydrostatic_test();
     file2.close();
@@ -32,5 +33,8 @@ int main(int argc, const char* argv[])
 
     file6 << test_data::stable_rolling_cube_test();
     file6.close();
+
+    file7 << test_data::anthineas_hydrostatic_test();
+    file7.close();
     return 0;
 }
