@@ -5,7 +5,6 @@
  *      Author: cady
  */
 
-#include "generate_anthineas.hpp"
 #include "SimObserver.hpp"
 #include "Sim.hpp"
 #include "SimTest.hpp"
@@ -18,6 +17,7 @@
 #include "SimNoObserver.hpp"
 #include "steppers.hpp"
 #include "TriMeshTestData.hpp"
+#include "generate_anthineas.hpp"
 
 #define EPS (1E-10)
 #define SQUARE(x) ((x)*(x))
