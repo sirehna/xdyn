@@ -3,6 +3,7 @@
 #include "simulator_api.hpp"
 
 #include "BretschneiderSpectrum.hpp"
+#include "DiracDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "GravityForceModel.hpp"
 #include "DefaultSurfaceElevation.hpp"
@@ -21,7 +22,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
            .can_parse<BretschneiderSpectrum>()
            .can_parse<JonswapSpectrum>()
            .can_parse<PiersonMoskowitzSpectrum>()
-           .can_parse<DiracSpectralDensity>();
+           .can_parse<DiracSpectralDensity>()
+           .can_parse<DiracDirectionalSpreading>();
     return builder;
 }
 

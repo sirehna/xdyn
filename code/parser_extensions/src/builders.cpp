@@ -169,10 +169,21 @@ boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<PiersonMo
 boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<DiracSpectralDensity>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > ret;
-    if (model == "jonswap")
+    if (model == "dirac")
     {
         const YamlDiracSpectrum data = parse_wave_dirac_spectrum(yaml);
         ret.reset(TR1(shared_ptr)<WaveSpectralDensity>(new DiracSpectralDensity(data.omega0, data.Hs)));
+    }
+    return ret;
+}
+
+boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > DirectionalSpreadingBuilder<DiracDirectionalSpreading>::try_to_parse(const std::string& model, const std::string& yaml) const
+{
+    boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > ret;
+    if (model == "dirac")
+    {
+        const YamlDiracDirection data = parse_wave_dirac_direction(yaml);
+        ret.reset(TR1(shared_ptr)<WaveDirectionalSpreading>(new DiracDirectionalSpreading(data.psi0)));
     }
     return ret;
 }

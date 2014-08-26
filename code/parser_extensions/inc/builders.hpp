@@ -13,6 +13,7 @@
 #include "ForceBuilder.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "GravityForceModel.hpp"
+#include "DiracDirectionalSpreading.hpp"
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 #include "Airy.hpp"
@@ -105,6 +106,14 @@ class SpectrumBuilder<DiracSpectralDensity> : public SpectrumBuilderInterface
     public:
         SpectrumBuilder();
         boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > try_to_parse(const std::string& model, const std::string& yaml) const;
+};
+
+template <>
+class DirectionalSpreadingBuilder<DiracDirectionalSpreading> : public DirectionalSpreadingBuilderInterface
+{
+    public:
+        DirectionalSpreadingBuilder() : DirectionalSpreadingBuilderInterface(){}
+        boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > try_to_parse(const std::string& model, const std::string& yaml) const;
 };
 
 #endif /* BUILDERS_HPP_ */
