@@ -788,7 +788,6 @@ std::string test_data::waves_for_parser_validation_only()
        << "output:\n"
        << "    format: yaml\n"
        << "    frame of reference: NED\n"
-       << "    full filename: waves_out.yaml\n"
        << "    mesh:\n"
        << "       unit: km\n"
        << "       x: [1,2,3,4,5,1,2,3,4]\n"
