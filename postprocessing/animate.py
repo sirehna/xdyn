@@ -4,6 +4,13 @@
 #
 # Use a mencoder command to create a video
 # mencoder "mf://Im*.png" -mf fps=10:type=png -ovc lavc -lavcopts vcodec=mpeg4 -o Video.avi
+#
+# Requires:
+# - A 3D mesh given as a VTK or a STL file
+# - A CSV result file containing the displacement of the mobile to represent
+# - A set of XYZ CSV files to represent wave elevation for each time steps. No
+#   header are required
+# 
 try: paraview.simple
 except: from paraview.simple import *
 paraview.simple._DisableFirstRenderCameraReset()
