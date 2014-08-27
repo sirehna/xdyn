@@ -43,9 +43,9 @@ TEST_F(PolygonTest, example)
 
 //! [PolygonTest example]
 //! [PolygonTest expected output]
-    ASSERT_EQ(side*side, polygon_from_mesh.get_area());
+    ASSERT_DOUBLE_EQ(side*side, polygon_from_mesh.get_area());
 
-    ASSERT_EQ(side*side, polygon_from_matrix.get_area());
+    ASSERT_DOUBLE_EQ(side*side, polygon_from_matrix.get_area());
 //! [PolygonTest expected output]
 }
 
