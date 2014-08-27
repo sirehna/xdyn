@@ -13,12 +13,8 @@
 #include <utility> //std::pair
 #include <Eigen/Dense>
 
-#include "tr1_macros.hpp"
-#include TR1INC(memory)
-class Mesh;
-typedef TR1(shared_ptr)<Mesh> MeshPtr;
-
 #include "GeometricTypes3d.hpp"
+#include "Polygon.hpp"
 #include "UnsafeWrench.hpp"
 
 namespace hydrostatic
