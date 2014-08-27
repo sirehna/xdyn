@@ -348,6 +348,7 @@ TEST_F(SimulatorYamlParserTest, should_not_throw_even_if_no_mesh_is_defined)
 
 TEST_F(SimulatorYamlParserTest, can_have_test_data_with_just_waves)
 {
-    SimulatorYamlParser(test_data::waves()).parse();
-    //ASSERT_NO_THROW(SimulatorYamlParser(test_data::waves()).parse());
+    const YamlSimulatorInput input = SimulatorYamlParser(test_data::waves()).parse();
+    ASSERT_EQ(1,input.environment.size());
+    ASSERT_EQ("waves",input.environment[0].model);
 }
