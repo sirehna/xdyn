@@ -5,6 +5,7 @@ FILE(GLOB SRC
         src/MeshBuilderTest.cpp
         src/mesh_manipulationsTest.cpp
         src/RandomEPointGenerator.cpp
+        src/PolygonTest.cpp
         )
 # ------8<---------------------------------------------->8-----
 

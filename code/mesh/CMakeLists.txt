@@ -3,7 +3,9 @@ PROJECT(mesh)
 
 SET(SRC src/Mesh.cpp
         src/MeshBuilder.cpp
-        src/mesh_manipulations.cpp)
+        src/mesh_manipulations.cpp
+        src/Polygon.cpp
+        )
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
