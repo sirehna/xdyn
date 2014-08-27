@@ -43,12 +43,18 @@ class Polygon
           */
         EPoint get_unit_normal() const;
 
+        /**  \returns Barycenter of the polygon
+          *  \snippet mesh/unit_tests/src/PolygonTest.cpp PolygonTest unit_normal_example
+          */
+        EPoint get_barycenter() const;
+
     private:
         Polygon(); // Disabled
         MeshPtr mesh;
         size_t facet_idx;
         double area;
         EPoint unit_normal;
+        EPoint barycenter;
 };
 
 #endif /* POLYGON_HPP_ */
