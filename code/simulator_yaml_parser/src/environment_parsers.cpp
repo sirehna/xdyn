@@ -105,7 +105,6 @@ void operator >> (const YAML::Node& node, YamlWaveOutput& g)
 {
     node["format"]             >> g.format;
     node["frame of reference"] >> g.frame_of_reference;
-    node["full filename"]      >> g.full_filename;
     std::string unit;
     node["mesh"]["unit"] >> unit;
     const double factor = decode(UV(1,unit));
@@ -125,12 +124,12 @@ YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["psi0"], ret.psi0);
+        parse_uv(node["waves coming from"], ret.psi0);
     }
     catch(std::exception& e)
     {
         std::stringstream ss;
-        ss << "Error parsing dirac directional spreading ('wave' section in the YAML file): " << e.what();
+        ss << "Error parsing Dirac directional spreading parameters ('environment models/model/spectra/directional spreading' section in the YAML file): " << e.what();
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
     }
 return ret;
@@ -151,7 +150,7 @@ YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml)
     catch(std::exception& e)
     {
         std::stringstream ss;
-        ss << "Error parsing Dirac spectrum parameters ('wave' section in the YAML file): " << e.what();
+        ss << "Error parsing Dirac spectrum parameters ('environment models/model/spectra/directional spreading' section in the YAML file): " << e.what();
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
     }
     return ret;

@@ -16,7 +16,7 @@
 #define PI M_PI
 #define DEG (180./PI)
 
-const YamlWaveModel environment_parsersTest::yaml = parse_waves(test_data::waves());
+const YamlWaveModel environment_parsersTest::yaml = parse_waves(test_data::waves_for_parser_validation_only());
 
 environment_parsersTest::environment_parsersTest() : a(DataGenerator(1212))
 {
@@ -74,7 +74,6 @@ TEST_F(environment_parsersTest, can_parse_wave_outputs)
 {
     ASSERT_EQ("yaml",yaml.output.format);
     ASSERT_EQ("NED",yaml.output.frame_of_reference);
-    ASSERT_EQ("waves_out.yaml",yaml.output.full_filename);
     ASSERT_DOUBLE_EQ(9,yaml.output.x.size());
     ASSERT_DOUBLE_EQ(1E3,yaml.output.x.at(0));
     ASSERT_DOUBLE_EQ(2E3,yaml.output.x.at(1));
@@ -134,7 +133,7 @@ TEST_F(environment_parsersTest, can_parse_bretschneider_spectrum)
 
 TEST_F(environment_parsersTest, can_parse_dirac_spreading)
 {
-    const YamlDiracDirection y = parse_wave_dirac_direction("psi0: {value: 5, unit: deg}\n");
+    const YamlDiracDirection y = parse_wave_dirac_direction("waves coming from: {value: 5, unit: deg}\n");
     ASSERT_DOUBLE_EQ(5*PI/180, y.psi0);
 }
 

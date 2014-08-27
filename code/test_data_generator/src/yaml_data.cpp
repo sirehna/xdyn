@@ -501,6 +501,13 @@ std::string test_data::stable_rolling_cube_test()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
+       << "    output:\n"
+       << "        format: yaml\n"
+       << "        frame of reference: cube\n"
+       << "        mesh:\n"
+       << "           unit: m\n"
+       << "           x: [1,2,3,4,5,1,2,3,4]\n"
+       << "           y: [1,1,1,1,1,2,2,2,2]\n"
        << "\n"
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: cube\n"
@@ -695,7 +702,57 @@ std::string test_data::anthineas_post_processing()
        << "        axes: [X, Z, K, N]\n";
     return ss.str();
 }
+
 std::string test_data::waves()
+{
+    std::stringstream ss;
+    ss << "rotations:\n"
+       << "    order by: angle\n"
+       << "    convention: [z,y',x'']\n"
+       << "\n"
+       << "environmental constants:\n"
+       << "    g: {value: 9.81, unit: m/s^2}\n"
+       << "    rho: {value: 1026, unit: kg/m^3}\n"
+       << "environment models:\n"
+       << "  - model: waves\n"
+       << "    discretization:\n"
+       << "       n: 128\n"
+       << "       omega min: {value: 0.1, unit: rad/s}\n"
+       << "       omega max: {value: 6, unit: rad/s}\n"
+       << "    spectra:\n"
+       << "      - model: airy\n"
+       << "        depth: {value: 100, unit: m}\n"
+       << "        seed of the random data generator: 0\n"
+       << "        directional spreading:\n"
+       << "           type: dirac\n"
+       << "           waves coming from: {value: 90, unit: deg}\n"
+       << "        spectral density:\n"
+       << "           type: jonswap\n"
+       << "           Hs: {value: 5, unit: m}\n"
+       << "           Tp: {value: 15, unit: m}\n"
+       << "           gamma: 1.2\n"
+       << "      - model: airy\n"
+       << "        depth: {value: 100, unit: m}\n"
+       << "        seed of the random data generator: 10\n"
+       << "        directional spreading:\n"
+       << "           type: cos2s\n"
+       << "           s: 2\n"
+       << "           waves coming from: {value: 90, unit: deg}\n"
+       << "        spectral density:\n"
+       << "           type: dirac\n"
+       << "           omega0: {value: 0.05, unit: rad/s}\n"
+       << "           Hs: {value: 15, unit: m}\n"
+       << "    output:\n"
+       << "        format: yaml\n"
+       << "        frame of reference: NED\n"
+       << "        mesh:\n"
+       << "           unit: m\n"
+       << "           x: [1,2,3,4,5,1,2,3,4]\n"
+       << "           y: [1,1,1,1,1,2,2,2,2]\n";
+    return ss.str();
+}
+
+std::string test_data::waves_for_parser_validation_only()
 {
     std::stringstream ss;
     ss << "rotations:\n"
