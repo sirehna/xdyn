@@ -5,11 +5,14 @@
  *      Author: cady
  */
 
+#include <boost/algorithm/string.hpp> // replace in string
+
 #include "SimObserver.hpp"
 #include "Sim.hpp"
 #include "SimTest.hpp"
 #include "YamlSimulatorInput.hpp"
 #include "yaml_data.hpp"
+#include "SimException.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "STL_data.hpp"
 #include "simulator_api.hpp"
@@ -186,6 +189,14 @@ TEST_F(SimTest, hydrostatic_test_on_anthineas)
         ASSERT_NEAR(0, fabs(res[i].x[XIDX(0)]), 0.2) << " i = " << i;
         ASSERT_NEAR(0, fabs(res[i].x[YIDX(0)]), 1E-2) << " i = " << i;
     }
+}
+
+TEST_F(SimTest, should_throw_if_wave_output_mesh_does_not_exist)
+{
+    auto input = SimulatorYamlParser(test_data::waves()).parse();
+    boost::replace_all(input.environment[0].yaml, "frame of reference: NED", "frame of reference: foo");
+    const Sim sys = get_system(input);
+    ASSERT_THROW(sys.get_waves(a.random<double>()),SimException);
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh)

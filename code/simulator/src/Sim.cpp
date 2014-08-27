@@ -7,12 +7,14 @@
 
 #include "coriolis_and_centripetal.hpp"
 #include "Kinematics.hpp"
+#include "KinematicsException.hpp"
 #include "RotationMatrix.hpp"
 #include "Sim.hpp"
 #include "Transform.hpp"
 #include "update_kinematics.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "YamlWaveModelInput.hpp"
+#include "SimException.hpp"
 
 #define SQUARE(x) ((x)*(x))
 
@@ -112,5 +114,15 @@ void Sim::calculate_state_derivatives(const Wrench& sum_of_forces,
 std::vector<double> Sim::get_waves(const double t//!< Current instant
                                   ) const
 {
-    return env.w->get_waves_on_mesh(env.k, t);
+    try
+    {
+        if (env.w.get()) return env.w->get_waves_on_mesh(env.k, t);
+                         return std::vector<double>();
+    }
+    catch (const KinematicsException& e)
+    {
+        std::stringstream ss;
+        ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
+        THROW(__PRETTY_FUNCTION__, SimException, ss.str());
+    }
 }
