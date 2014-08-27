@@ -284,16 +284,6 @@ UnsafeWrench hydrostatic::dF(const Point& O,    //!< Point at which the Wrench w
     return UnsafeWrench(O, F, (C-O.v).cross(F));
 }
 
-UnsafeWrench hydrostatic::dF(const Point& O,           //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                             const Facet& f,           //!< Point where the force is applied (barycentre of the facet)
-                             const double rho,         //!< Density of the fluid (in kg/m^3)
-                             const double g,           //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-                             const double immersion    //!< Relative immersion of the barycentre (in metres)
-                            )
-{
-    const EPoint F = -rho*g*immersion*f.area*f.unit_normal; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
-    return UnsafeWrench(O, F, (f.barycenter-O.v).cross(F));
-}
 
 Wrench hydrostatic::force(const MeshPtr& mesh,                    //!< Mesh
                           const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
@@ -318,7 +308,8 @@ Wrench hydrostatic::force(const MeshPtr& mesh,                    //!< Mesh
             case TOTALLY_IMMERGED:
             {
                 const double zG = average_immersion(mesh->nodes, that_facet->index, immersions);
-                F += orientation_factor*dF(O, *that_facet, rho, g, zG);
+                const EPoint dS = that_facet->area*that_facet->unit_normal;
+                F += orientation_factor*dF(O, that_facet->barycenter, rho, g, zG , dS);
                 break;
             }
             case PARTIALLY_EMERGED:
