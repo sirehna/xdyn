@@ -4,7 +4,7 @@
 #include "MeshBuilder.hpp"
 #include "mesh_manipulations.hpp"
 
-Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::get_nodes() const
+Matrix3x MeshBuilder::get_nodes() const
 {
     return nodes;
 }
@@ -17,7 +17,7 @@ std::vector<Facet> MeshBuilder::get_facets() const
 MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    index(0),
-                                                                   nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
+                                                                   nodes(Matrix3x()),
                                                                    facets(std::vector<Facet>()),
                                                                    clockwise(oriented_clockwise(v,barycenter(v)))
 {
@@ -27,16 +27,16 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
 MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1,tri)),
                                                             xyzMap(Vector3dMap()),
                                                             index(0),
-                                                            nodes(Eigen::Matrix<double,3,Eigen::Dynamic>()),
+                                                            nodes(Matrix3x()),
                                                             facets(std::vector<Facet>()),
                                                             clockwise(false)
 {
     if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
 
-Eigen::Matrix<double,3,Eigen::Dynamic> MeshBuilder::resize(const Eigen::Matrix<double,3,Eigen::Dynamic>& M) const
+Matrix3x MeshBuilder::resize(const Matrix3x& M) const
 {
-    Eigen::Matrix<double,3,Eigen::Dynamic> resized(Eigen::MatrixXd::Zero(3,(int)index));
+    Matrix3x resized(Eigen::MatrixXd::Zero(3,(int)index));
     for (size_t j = 0 ; j < index ; ++j)
     {
         resized.col((int)j) = M.col((int)j);
