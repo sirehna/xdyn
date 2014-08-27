@@ -20,14 +20,21 @@ void operator >> (const YAML::Node& node, YamlWaveOutput& g);
 
 void get_yaml(const YAML::Node& node, std::string& out);
 
-double parse_default_wave_model(const std::string& yaml)
+YamlDefaultWaveModel parse_default_wave_model(const std::string& yaml)
 {
-    double ret = 0;
+    YamlDefaultWaveModel ret;
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    parse_uv(node["constant sea elevation in NED frame"], ret);
+    parse_uv(node["constant sea elevation in NED frame"], ret.zwave);
+    try
+    {
+        node["output"]         >> ret.output;
+    }
+    catch(std::exception& ) // Nothing to do: 'output' section is not mandatory
+    {
+    }
     return ret;
 }
 

@@ -16,22 +16,20 @@
 #include "GravityForceModel.hpp"
 #include "discretize.hpp"
 
-TR1(shared_ptr)<SurfaceElevationInterface> build_default_wave_model(const std::string& yaml);
-TR1(shared_ptr)<SurfaceElevationInterface> build_default_wave_model(const std::string& yaml)
-{
-    if (yaml.empty())
-    {
-        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No yaml data detected for default wave model (expected 'constant wave height in NED frame: {value: xx, unit: yy})'");
-    }
-    TR1(shared_ptr)<PointMatrix> output_mesh;
-    return TR1(shared_ptr)<SurfaceElevationInterface>(new DefaultSurfaceElevation(parse_default_wave_model(yaml),output_mesh));
-}
-
-
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > ret;
-    if (model == "no waves") ret.reset(build_default_wave_model(yaml));
+    if (model == "no waves")
+    {
+        if (yaml.empty())
+        {
+            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No yaml data detected for default wave model (expected 'constant wave height in NED frame: {value: xx, unit: yy})'");
+        }
+        YamlDefaultWaveModel input = parse_default_wave_model(yaml);
+        const auto output_mesh = make_wave_mesh(input.output);
+        TR1(shared_ptr)<SurfaceElevationInterface> p(new DefaultSurfaceElevation(input.zwave, output_mesh));
+        ret.reset(p);
+    }
     return ret;
 }
 

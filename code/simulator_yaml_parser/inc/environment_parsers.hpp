@@ -12,7 +12,7 @@
 
 #include <string>
 
-double               parse_default_wave_model(const std::string& yaml);
+YamlDefaultWaveModel parse_default_wave_model(const std::string& yaml);
 YamlWaveModel        parse_waves(const std::string& yaml);
 YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml);
 YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml);

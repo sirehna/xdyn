@@ -37,10 +37,39 @@ void environment_parsersTest::TearDown()
 TEST_F(environment_parsersTest, default_wave_model)
 {
 //! [environment_parsersTest example]
-    const double zwave = parse_default_wave_model("constant sea elevation in NED frame: {value: 1234, unit: m}");
+    const YamlDefaultWaveModel input = parse_default_wave_model("constant sea elevation in NED frame: {value: 1234, unit: m}\n"
+                                                                "output:\n"
+                                                                "    format: yaml\n"
+                                                                "    frame of reference: NED\n"
+                                                                "    mesh:\n"
+                                                                "       unit: km\n"
+                                                                "       x: [1,2,3,4,5,1,2,3,4]\n"
+                                                                "       y: [1,1,1,1,1,2,2,2,2]\n");
 //! [environment_parsersTest example]
 //! [environment_parsersTest expected output]
-    ASSERT_DOUBLE_EQ(1234,zwave);
+    ASSERT_DOUBLE_EQ(1234,input.zwave);
+    ASSERT_EQ("yaml", input.output.format);
+    ASSERT_EQ("NED", input.output.frame_of_reference);
+    ASSERT_EQ(9,input.output.x.size());
+    ASSERT_DOUBLE_EQ(1E3, input.output.x[0]);
+    ASSERT_DOUBLE_EQ(2E3, input.output.x[1]);
+    ASSERT_DOUBLE_EQ(3E3, input.output.x[2]);
+    ASSERT_DOUBLE_EQ(4E3, input.output.x[3]);
+    ASSERT_DOUBLE_EQ(5E3, input.output.x[4]);
+    ASSERT_DOUBLE_EQ(1E3, input.output.x[5]);
+    ASSERT_DOUBLE_EQ(2E3, input.output.x[6]);
+    ASSERT_DOUBLE_EQ(3E3, input.output.x[7]);
+    ASSERT_DOUBLE_EQ(4E3, input.output.x[8]);
+    ASSERT_EQ(9,input.output.y.size());
+    ASSERT_DOUBLE_EQ(1E3, input.output.y[0]);
+    ASSERT_DOUBLE_EQ(1E3, input.output.y[1]);
+    ASSERT_DOUBLE_EQ(1E3, input.output.y[2]);
+    ASSERT_DOUBLE_EQ(1E3, input.output.y[3]);
+    ASSERT_DOUBLE_EQ(1E3, input.output.y[4]);
+    ASSERT_DOUBLE_EQ(2E3, input.output.y[5]);
+    ASSERT_DOUBLE_EQ(2E3, input.output.y[6]);
+    ASSERT_DOUBLE_EQ(2E3, input.output.y[7]);
+    ASSERT_DOUBLE_EQ(2E3, input.output.y[8]);
 //! [environment_parsersTest expected output]
 }
 
