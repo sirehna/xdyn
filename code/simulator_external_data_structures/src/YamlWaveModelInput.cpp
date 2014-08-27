@@ -20,7 +20,7 @@ spectral_density_yaml(std::string()),
 depth(0)
 {}
 
-YamlWaveOutput::YamlWaveOutput() : full_filename(""), format(""), frame_of_reference(""), x(std::vector<double>()), y(std::vector<double>())
+YamlWaveOutput::YamlWaveOutput() : format(""), frame_of_reference(""), x(std::vector<double>()), y(std::vector<double>())
 {}
 
 YamlWaveModel::YamlWaveModel():
@@ -57,4 +57,9 @@ YamlDiracSpectrum::YamlDiracSpectrum():
 YamlPiersonMoskowitz::YamlPiersonMoskowitz() :
     Hs(0),     //!< Significant wave height (in meters)
     Tp(0)    //!< Mean wave period (in seconds)
+{}
+
+YamlDefaultWaveModel::YamlDefaultWaveModel():
+    zwave(0),          //!< Constant free surface elevation (in meters)
+    output(YamlWaveOutput())
 {}
