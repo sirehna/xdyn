@@ -27,6 +27,7 @@ class MeshBuilder
     public:
         MeshBuilder(const VectorOfVectorOfPoints& v_);
         MeshBuilder(const VectorOfPoints& tri);
+        MeshBuilder(const Matrix3x& tri);
         Mesh build();
         void operator()(const VectorOfPoints& Tri);
         Matrix3x get_nodes() const;

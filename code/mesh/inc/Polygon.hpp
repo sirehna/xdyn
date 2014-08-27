@@ -1,10 +1,14 @@
 #ifndef POLYGON_HPP_
 #define POLYGON_HPP_
 
+#include <cstdlib> //For size_t
+
 #include "tr1_macros.hpp"
 #include TR1INC(memory)
 class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
+
+#include "GeometricTypes3d.hpp"
 
 /** \brief Created to treat operations on emerged & partially immersed facets homogeneously.
  *  \details When implementing the hydrostatic force's exact point of application
@@ -23,9 +27,22 @@ typedef TR1(shared_ptr)<Mesh> MeshPtr;
 class Polygon
 {
     public:
+        Polygon(const Matrix3x& mesh //!< Mesh given as a matrix (one point per column, all columns are used)
+                );
+        Polygon(const MeshPtr& mesh,   //!< Points & facets (not all points are used)
+                const size_t facet_idx //!< Index of the facet used to define the polygon
+                );
+
+        /**  \returns Area of the polygon
+          *  \snippet mesh/unit_tests/src/PolygonTest.cpp PolygonTest example
+          */
+        double get_area() const;
 
     private:
         Polygon(); // Disabled
+        MeshPtr mesh;
+        size_t facet_idx;
+        double area;
 };
 
 #endif /* POLYGON_HPP_ */

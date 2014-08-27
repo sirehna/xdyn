@@ -91,3 +91,20 @@ bool MeshBuilder::point_is_in_map(const EPoint& xyz)
     const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
     return itMap != xyzMap.end();
 }
+
+MeshBuilder::MeshBuilder(const Matrix3x& tri) : v(VectorOfVectorOfPoints()),
+                                                xyzMap(Vector3dMap()),
+                                                index(0),
+                                                nodes(Matrix3x()),
+                                                facets(std::vector<Facet>()),
+                                                clockwise(false)
+{
+    VectorOfPoints vv;
+    for (size_t i = 0 ; i < (size_t)tri.cols() ; ++i)
+    {
+        vv.push_back(tri.col(i));
+    }
+    v.push_back(vv);
+    clockwise = oriented_clockwise(v,barycenter(v));
+    if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
+}
