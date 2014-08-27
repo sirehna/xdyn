@@ -23,7 +23,8 @@ TR1(shared_ptr)<SurfaceElevationInterface> build_default_wave_model(const std::s
     {
         THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No yaml data detected for default wave model (expected 'constant wave height in NED frame: {value: xx, unit: yy})'");
     }
-    return TR1(shared_ptr)<SurfaceElevationInterface>(new DefaultSurfaceElevation(parse_default_wave_model(yaml)));
+    TR1(shared_ptr)<PointMatrix> output_mesh;
+    return TR1(shared_ptr)<SurfaceElevationInterface>(new DefaultSurfaceElevation(parse_default_wave_model(yaml),output_mesh));
 }
 
 

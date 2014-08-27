@@ -27,7 +27,7 @@
 class DefaultSurfaceElevation : public SurfaceElevationInterface
 {
     public:
-        DefaultSurfaceElevation(const double wave_height, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
+        DefaultSurfaceElevation(const double wave_height, const TR1(shared_ptr)<PointMatrix>& output_mesh);
 
     private:
         DefaultSurfaceElevation(); // Disabled

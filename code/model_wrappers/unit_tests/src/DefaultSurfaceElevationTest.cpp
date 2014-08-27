@@ -30,7 +30,8 @@ TEST_F(DefaultSurfaceElevationTest, example)
 {
 //! [DefaultWaveModelTest example]
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
-    const DefaultSurfaceElevation w(10);
+    TR1(shared_ptr)<PointMatrix> mesh;
+    const DefaultSurfaceElevation w(10, mesh);
     const Point P("NED", 0, 0, -20);
 //! [DefaultWaveModelTest example]
 //! [DefaultWaveModelTest expected output]
@@ -43,7 +44,8 @@ TEST_F(DefaultSurfaceElevationTest, more_interesting_example)
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 0);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultSurfaceElevation w(7);
+    TR1(shared_ptr)<PointMatrix> mesh;
+    const DefaultSurfaceElevation w(7, mesh);
 
     const kinematics::Transform bodyTned(Point("NED", 4, 5, 9), "body");
     k->add(bodyTned);
@@ -56,7 +58,8 @@ TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_180p_
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 1);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultSurfaceElevation w(7);
+    TR1(shared_ptr)<PointMatrix> mesh;
+    const DefaultSurfaceElevation w(7, mesh);
     RotationMatrix rot;
     rot(0,0)=-1.0;
     rot(0,1)=0.0;
@@ -78,7 +81,8 @@ TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_with_
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 1);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultSurfaceElevation w(7);
+    TR1(shared_ptr)<PointMatrix> mesh;
+    const DefaultSurfaceElevation w(7, mesh);
     RotationMatrix rot;
     rot(0,0)= 0.0;
     rot(0,1)= 0.0;
@@ -100,7 +104,8 @@ TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation)
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     const Point P("body", 0, 0, 1);
     const Point Q("NED", 7, -100, 1795);
-    const DefaultSurfaceElevation w(7);
+    TR1(shared_ptr)<PointMatrix> mesh;
+    const DefaultSurfaceElevation w(7, mesh);
     RotationMatrix rot;
     rot(0,0)=-1.0;
     rot(0,1)=0.0;
@@ -138,7 +143,8 @@ TEST_F(DefaultSurfaceElevationTest, can_compute_relative_wave_height_for_PointMa
     M.m(2,4) = -91;
 
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
-    const DefaultSurfaceElevation w(888);
+    TR1(shared_ptr)<PointMatrix> mesh;
+    const DefaultSurfaceElevation w(888, mesh);
     const kinematics::Transform T(Point("NED", 1, 20, 300), "body");
     k->add(T);
 

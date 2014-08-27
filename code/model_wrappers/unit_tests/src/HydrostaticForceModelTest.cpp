@@ -43,7 +43,8 @@ TEST_F(HydrostaticForceModelTest, example)
     const Point G("NED",0,2,2./3.);
     input.k->add(kinematics::Transform(Point("NED"), "mesh(" BODY ")"));
     input.k->add(kinematics::Transform(Point("NED"), BODY));
-    input.w = WaveModelPtr(new DefaultSurfaceElevation(0));
+    TR1(shared_ptr)<PointMatrix> mesh;
+    input.w = WaveModelPtr(new DefaultSurfaceElevation(0, mesh));
 
     auto points = two_triangles();
     for (size_t i = 0 ; i < 2 ; ++i)
@@ -107,7 +108,8 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     const Point G("NED",0,0,0);
     input.k->add(kinematics::Transform(Point("NED"), "mesh(" BODY ")"));
     input.k->add(kinematics::Transform(Point("NED"), BODY));
-    input.w = WaveModelPtr(new DefaultSurfaceElevation(0));
+    TR1(shared_ptr)<PointMatrix> mesh;
+    input.w = WaveModelPtr(new DefaultSurfaceElevation(0, mesh));
 
     const auto points = two_triangles_immerged();
 
