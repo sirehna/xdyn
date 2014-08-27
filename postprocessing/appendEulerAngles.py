@@ -52,7 +52,7 @@ if __name__ == '__main__':
                         nargs = '*',
                         default = [r'cube'])
     parser.add_argument("-o", "--output",
-                        help = "Name of the file to process",
+                        help = "Name of the file to output",
                         nargs = '*',
                         default = '')
     args = parser.parse_args()
