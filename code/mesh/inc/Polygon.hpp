@@ -38,11 +38,17 @@ class Polygon
           */
         double get_area() const;
 
+        /**  \returns Unit normal to the the polygon
+          *  \snippet mesh/unit_tests/src/PolygonTest.cpp PolygonTest unit_normal_example
+          */
+        EPoint get_unit_normal() const;
+
     private:
         Polygon(); // Disabled
         MeshPtr mesh;
         size_t facet_idx;
         double area;
+        EPoint unit_normal;
 };
 
 #endif /* POLYGON_HPP_ */
