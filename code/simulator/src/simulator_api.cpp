@@ -2,6 +2,7 @@
 #include "check_input_yaml.hpp"
 #include "simulator_api.hpp"
 
+#include "Airy.hpp"
 #include "BretschneiderSpectrum.hpp"
 #include "Cos2sDirectionalSpreading.hpp"
 #include "DiracDirectionalSpreading.hpp"
@@ -13,6 +14,7 @@
 #include "PiersonMoskowitzSpectrum.hpp"
 #include "StlReader.hpp"
 #include "SimulatorBuilder.hpp"
+#include "SurfaceElevationFromWaves.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
 {
@@ -25,7 +27,9 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
            .can_parse<PiersonMoskowitzSpectrum>()
            .can_parse<DiracSpectralDensity>()
            .can_parse<DiracDirectionalSpreading>()
-           .can_parse<Cos2sDirectionalSpreading>();
+           .can_parse<Cos2sDirectionalSpreading>()
+           .can_parse<SurfaceElevationFromWaves>()
+           .can_parse<Airy>();
     return builder;
 }
 

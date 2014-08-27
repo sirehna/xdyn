@@ -29,7 +29,6 @@ class EnvironmentAndFrames;
 class BodyBuilder;
 typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 
-
 /*  \brief Builds a Sim object which can be used with quicksolve
  *  \details This class is used to configure the Sim object for simulation.
  *           You have to tell the simulator builder how to parse the force &
@@ -87,7 +86,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<WaveModel,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            surface_elevation_parsers.push_back(SurfaceElevationBuilderPtr(new SurfaceElevationBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
+            wave_parsers->push_back(WaveModelBuilderPtr(new WaveModelBuilder<T>(directional_spreading_parsers,spectrum_parsers)));
             return *this;
         }
 
