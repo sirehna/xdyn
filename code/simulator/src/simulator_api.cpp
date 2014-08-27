@@ -59,13 +59,13 @@ Sim get_system(const std::string& yaml)
 Sim get_system(const std::string& yaml, const std::string& mesh)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
-    return get_system(input, mesh);
+    return get_system(check_input_yaml(input), mesh);
 }
 
 Sim get_system(const std::string& yaml, const MeshMap& meshes)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
-    return get_system(input, meshes);
+    return get_system(check_input_yaml(input), meshes);
 }
 
 MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh)
