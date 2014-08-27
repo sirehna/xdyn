@@ -84,6 +84,7 @@ ADD_CUSTOM_COMMAND(TARGET generate_stl_examples
                    COMMENT "Generate STL mesh input data files")
 
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/plot.py
+              ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/animate.py
         DESTINATION demos)
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/demos
