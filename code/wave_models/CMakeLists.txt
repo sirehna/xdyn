@@ -22,9 +22,9 @@ set(SRC src/WaveSpectralDensity.cpp
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
-IF (NOT(MSVC))
+if(NOT(MSVC))
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-ENDIF()
+endif()
 
 include_directories(inc)
 include_directories(${exception_handling_INCLUDE_DIRS})
