@@ -70,6 +70,15 @@ class SurfaceElevationInterface
                                               const double t //<! Current instant (in seconds)
                                              ) const;
 
+        /**  \brief Computes the wave heights on a mesh. Used by get_waves_on_mesh
+          *  \returns Vector of coordinates on the free surface (in the NED frame),
+          *           the z coordinate being the wave height (in meters), for each
+          *           point in P
+          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
+          */
+        std::vector<EPoint> get_points_on_free_surface(const double t                        //<! Current instant (in seconds)
+                                                       ) const;
+
     private:
         /**  \author cec
           *  \date 24 avr. 2014, 10:29:58
@@ -83,6 +92,11 @@ class SurfaceElevationInterface
                                    const double z, //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                                    const double t //!< Current instant (in seconds)
                                    ) const = 0;
+
+        /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
+          */
+        void update_output_mesh_if_necessary(const TR1(shared_ptr)<Kinematics>& k //!< Object used to compute the transforms to the NED frame
+                                            ) const;
 
         TR1(shared_ptr)<PointMatrix> output_mesh; //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant
 };

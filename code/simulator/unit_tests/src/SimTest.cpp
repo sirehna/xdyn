@@ -205,6 +205,41 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh)
     const double t = 9951191801.8523445;//a.random<double>();
     const std::vector<EPoint> w = sys.get_waves(t);
     ASSERT_EQ(9, w.size());
+    ASSERT_DOUBLE_EQ(1, (double)w[0](0));
+    ASSERT_DOUBLE_EQ(1, (double)w[0](1));
+    ASSERT_NEAR(-23.180900790763086, (double)w[0](2), EPS);
+
+    ASSERT_DOUBLE_EQ(2, (double)w[1](0));
+    ASSERT_DOUBLE_EQ(1, (double)w[1](1));
+    ASSERT_NEAR(-23.180874012509221, (double)w[1](2), EPS);
+
+    ASSERT_DOUBLE_EQ(3, (double)w[2](0));
+    ASSERT_DOUBLE_EQ(1, (double)w[2](1));
+    ASSERT_NEAR(-23.180846368173889, (double)w[2](2), EPS);
+
+    ASSERT_DOUBLE_EQ(4, (double)w[3](0));
+    ASSERT_DOUBLE_EQ(1, (double)w[3](1));
+    ASSERT_NEAR(-23.1808178639421, (double)w[3](2), EPS);
+
+    ASSERT_DOUBLE_EQ(5, (double)w[4](0));
+    ASSERT_DOUBLE_EQ(1, (double)w[4](1));
+    ASSERT_NEAR(-23.1807888028812, (double)w[4](2), EPS);
+
+    ASSERT_DOUBLE_EQ(1, (double)w[5](0));
+    ASSERT_DOUBLE_EQ(2, (double)w[5](1));
+    ASSERT_NEAR(-23.2121733088151, (double)w[5](2), EPS);
+
+    ASSERT_DOUBLE_EQ(2, (double)w[6](0));
+    ASSERT_DOUBLE_EQ(2, (double)w[6](1));
+    ASSERT_NEAR(-23.2121465379194, (double)w[6](2), EPS);
+
+    ASSERT_DOUBLE_EQ(3, (double)w[7](0));
+    ASSERT_DOUBLE_EQ(2, (double)w[7](1));
+    ASSERT_NEAR(-23.2121188534555, (double)w[7](2), EPS);
+
+    ASSERT_DOUBLE_EQ(4, (double)w[8](0));
+    ASSERT_DOUBLE_EQ(2, (double)w[8](1));
+    ASSERT_NEAR(-23.2120903012885, (double)w[8](2), EPS);
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
@@ -212,4 +247,8 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
     const Sim sys = get_system(test_data::stable_rolling_cube_test(), test_data::cube());
     const std::vector<EPoint> w = sys.get_waves(a.random<double>());
     ASSERT_EQ(9, w.size());
+    for (size_t i = 0 ; i < 9 ; ++i)
+    {
+        ASSERT_DOUBLE_EQ(0, (double)w[i](2));
+    }
 }

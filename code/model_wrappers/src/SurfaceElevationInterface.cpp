@@ -27,6 +27,16 @@ SurfaceElevationInterface::~SurfaceElevationInterface()
 {
 }
 
+std::vector<EPoint> SurfaceElevationInterface::get_points_on_free_surface(const double t) const
+{
+    std::vector<EPoint> ret;
+    for (int i = 0 ; i < output_mesh->m.cols() ; ++i)
+    {
+        ret.push_back(EPoint(output_mesh->m(0,i),output_mesh->m(1,i),wave_height((double)output_mesh->m(0,i),(double)output_mesh->m(1,i),0,t)));
+    }
+    return ret;
+}
+
 double SurfaceElevationInterface::get_relative_wave_height(const Point& P, const TR1(shared_ptr)<Kinematics>& k, const double t) const
 {
     const Point OP = compute_relative_position(P, k);
@@ -45,10 +55,18 @@ std::vector<double> SurfaceElevationInterface::get_relative_wave_height(const Po
     return ret;
 }
 
+void SurfaceElevationInterface::update_output_mesh_if_necessary(const TR1(shared_ptr)<Kinematics>& k) const
+{
+    if (output_mesh->get_frame() != "NED")
+    {
+        *output_mesh = k->get(output_mesh->get_frame(),"NED")*(*output_mesh);
+    }
+}
+
 std::vector<EPoint> SurfaceElevationInterface::get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                              const double  //<! Current instant (in seconds)
+                                              const double t //<! Current instant (in seconds)
                                              ) const
 {
-    k->get(output_mesh->get_frame(), "NED");
-    return std::vector<EPoint>(output_mesh->m.cols(), EPoint());
+    update_output_mesh_if_necessary(k);
+    return get_points_on_free_surface(t);
 }
