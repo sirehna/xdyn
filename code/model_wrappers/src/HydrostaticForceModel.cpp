@@ -33,8 +33,8 @@ Wrench HydrostaticForceModel::operator()(const Body& body, const double t) const
 {
     const std::vector<double> dz = w->get_relative_wave_height(*body.M,k,t);
     const Point g_in_NED("NED", 0, 0, g);
-    const kinematics::Transform T = k->get("NED", std::string("mesh(") + body.name + ")");
+    const RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + body.name + ")").get_rot();
 
-    const auto F = hydrostatic::force(body.mesh, body.G, rho, T.get_rot()*g_in_NED.v, dz);
+    const auto F = hydrostatic::force(body.mesh, body.G, rho, ned2mesh*g_in_NED.v, dz);
     return F;
 }
