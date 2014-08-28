@@ -24,6 +24,8 @@ int main(int argc, const char* argv[])
     yaml["anthineas_equilibre.yml"]          = test_data::anthineas_hydrostatic_test();
     yaml["postprocessing.yml"]               = test_data::outputs();
     yaml["cube_in_waves.yml"]                = test_data::cube_in_waves();
+    yaml["anthineas_in_waves.yml"]           = test_data::anthineas_waves_test();
+
 
     write_files(path, yaml);
 
