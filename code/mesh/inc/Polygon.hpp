@@ -53,6 +53,14 @@ class Polygon
         			const Eigen::Matrix3d R20 //!< coordinates of inertia frame vectors versus mesh frame
         		) const;
 
+		/**  \details Compute the projection of a polygon on free surface knowing vertical direction and immersions of each vertex
+		  *  the inertia frame is specified thru a coordinate transform matrix versus mesh frame R0 (from mesh frame R0 to inertia frame R2);
+		  *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
+          */
+        Polygon projected_on_free_surface(
+        		const std::vector<double>& immersions    ,  //!< relative immersion of each vertex
+        		const EPoint&              down_direction   //!< local down direction expressed in mesh frame
+        ) const;
     private:
         Polygon(); // Disabled
         MeshPtr mesh;

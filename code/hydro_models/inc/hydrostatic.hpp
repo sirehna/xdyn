@@ -14,8 +14,10 @@
 #include <Eigen/Dense>
 
 #include "GeometricTypes3d.hpp"
-#include "Polygon.hpp"
+#include "Mesh.hpp"
 #include "UnsafeWrench.hpp"
+
+class Polygon;
 
 namespace hydrostatic
 {
@@ -138,6 +140,74 @@ namespace hydrostatic
     ImmersionStatus get_immersion_type(const std::vector<size_t>& idx, //!< Vector of indexes in delta_z
                                        const std::vector<double>& delta_z //!< Vector of immersions
                                       );
+
+    /**  \brief Computes the hydrostatic force acting on a body (fast but inexact)
+      *  \details
+      *  \returns
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
+      */
+    Wrench fast_force(const MeshPtr& mesh,                    //!< Coordinates of all the points
+                 const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                 const double rho,                       //!< Density of the fluid (in kg/m^3)
+                 const EPoint& g,                        //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+                 const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
+                );
+
+    /**  \brief Computes the hydrostatic force acting on a body applied at exact application point
+      *  \details
+      *  \returns
+      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
+      */
+    Wrench exact_force(const MeshPtr& mesh,                    //!< Mesh
+			 	 	   const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+					   const double rho,                       //!< Density of the fluid (in kg/m^3)
+					   const EPoint& g,                        //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+					   const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
+					 );
+
+    /**  \brief Compute the application point of hydrostatic force for a triangular facet, fastly but inexactly
+      * \ details
+      *  \returns application point coordinates expressed in same frame as barycentre
+      */
+    EPoint fast_application_point(
+    		const Polygon& polygon    //!< vertices of the facet
+    );
+
+
+    /** \details Compute normal to free surface, oriented downward, knowing the facet vertex, immersion of each vertex and down direction (all in mesh frame)
+      *  If ever the facet is vertical, this function doesn't have access to normal of free surface, but down_direction can be used instead
+      *  \see Hydrostatic Force on a plane Surface p. 61-64, Ref ???
+      */
+    EPoint normal_to_free_surface(
+            const Polygon& polygon,                 //!< vertices of the facet
+            const EPoint&  down_direction,          //!< local down direction expressed in mesh frame
+            const std::vector<double>& immersions   //!< relative immersion of each vertex
+            );
+
+    /** \details Compute a trihedron R2 of the facet convenient for computation of hydrostatic application point:
+      * - first axis i2 is parallel to the facet and to the free surface
+      * - second axis j2 is parallel to the facet and oriented downward
+      * - third axis k2 is normal to the facet
+      *  \returns the coordinate transform matrix of R2 w.r.t. the mesh frame R0 (I.O.W. from R0 to R2), or a null matrix if facet is parallel to free surface
+      *  \see Hydrostatic Force on a plane Surface p. 61-64, Ref ???
+      */
+    Eigen::Matrix3d facet_trihedron(
+            const Polygon& polygon,     //!< vertices of the facet
+            const EPoint&  ns           //!< normal to free surface, oriented downward (in mesh frame)
+            );
+
+    /**  \brief Compute the application point of hydrostatic force for a triangular facet, slowly but exactly
+      * \ details
+      *  \returns application point coordinates expressed in same frame as barycentre
+      *  \see Hydrostatic Force on a plane Surface p. 61-64, Ref ???
+      */
+    EPoint exact_application_point(
+    		const Polygon& polygon,                 //!< vertices of the facet
+    		const EPoint&  down_direction,          //!< local down direction expressed in mesh frame
+    		const std::vector<double>& immersions,  //!< relative immersion of each vertex
+            const double  zG                        //!< Relative immersion of facet barycentre (in metres)
+    );
+
 }
 
 #endif /* HYDROSTATIC_HPP_ */

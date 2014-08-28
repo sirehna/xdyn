@@ -43,3 +43,16 @@ Eigen::Matrix3d Polygon::get_inertia_wrt(
 
 	return inertia_of_polygon( verticesInR2 );
 }
+
+Polygon Polygon::projected_on_free_surface(
+		const std::vector<double>& immersions    ,  //!< relative immersion of each vertex
+		const EPoint&              down_direction   //!< local down direction expressed in mesh frame
+		) const
+{
+	size_t nVertices = mesh->facets[facet_idx].index.size();
+	Matrix3x newVertices(3,nVertices);
+	for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
+		newVertices.col((int)iVertex) = mesh->nodes.col((int)mesh->facets[facet_idx].index[iVertex]) - immersions[iVertex]*down_direction;
+	}
+	return Polygon(newVertices);
+}
