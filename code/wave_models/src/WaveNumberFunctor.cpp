@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <math.h>
+
 #include "WaveNumberFunctor.hpp"
 
 WaveNumberFunctor::WaveNumberFunctor(const double h_,    //!< Water depth (in meters)
