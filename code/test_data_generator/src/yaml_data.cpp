@@ -752,6 +752,43 @@ std::string test_data::waves()
     return ss.str();
 }
 
+std::string test_data::simple_waves()
+{
+    std::stringstream ss;
+    ss << "rotations:\n"
+       << "    order by: angle\n"
+       << "    convention: [z,y',x'']\n"
+       << "\n"
+       << "environmental constants:\n"
+       << "    g: {value: 9.81, unit: m/s^2}\n"
+       << "    rho: {value: 1026, unit: kg/m^3}\n"
+       << "environment models:\n"
+       << "  - model: waves\n"
+       << "    discretization:\n"
+       << "       n: 128\n"
+       << "       omega min: {value: 0.1, unit: rad/s}\n"
+       << "       omega max: {value: 6, unit: rad/s}\n"
+       << "    spectra:\n"
+       << "      - model: airy\n"
+       << "        depth: {value: 100, unit: m}\n"
+       << "        seed of the random data generator: 0\n"
+       << "        directional spreading:\n"
+       << "           type: dirac\n"
+       << "           waves coming from: {value: 90, unit: deg}\n"
+       << "        spectral density:\n"
+       << "           type: dirac\n"
+       << "           omega0: {value: 0.05, unit: rad/s}\n"
+       << "           Hs: {value: 15, unit: m}\n"
+       << "    output:\n"
+       << "        format: yaml\n"
+       << "        frame of reference: NED\n"
+       << "        mesh:\n"
+       << "           unit: m\n"
+       << "           x: [1,2,3,4,5,1,2,3,4]\n"
+       << "           y: [1,1,1,1,1,2,2,2,2]\n";
+    return ss.str();
+}
+
 std::string test_data::waves_for_parser_validation_only()
 {
     std::stringstream ss;

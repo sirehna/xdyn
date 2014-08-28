@@ -22,6 +22,7 @@ namespace test_data
     std::string anthineas_post_processing();
     std::string outputs();
     std::string waves();
+    std::string simple_waves();
     std::string cube_in_waves();
     std::string waves_for_parser_validation_only();
 }
