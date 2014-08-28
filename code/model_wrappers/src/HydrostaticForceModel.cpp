@@ -10,6 +10,7 @@
 #include "Body.hpp"
 #include "hydrostatic.hpp"
 #include "EnvironmentAndFrames.hpp"
+#include "Transform.hpp"
 
 HydrostaticForceModel::Input::Input() : rho(0),
                                         g(0),
@@ -31,6 +32,9 @@ HydrostaticForceModel::HydrostaticForceModel(const Input& in) : rho(in.rho), g(i
 Wrench HydrostaticForceModel::operator()(const Body& body, const double t) const
 {
     const std::vector<double> dz = w->get_relative_wave_height(*body.M,k,t);
-    const auto F = hydrostatic::force(body.mesh, body.G, rho, g, dz);
+    const Point g_in_NED("NED", 0, 0, g);
+    const kinematics::Transform T = k->get("NED", std::string("mesh(") + body.name + ")");
+
+    const auto F = hydrostatic::force(body.mesh, body.G, rho, T.get_rot()*g_in_NED.v, dz);
     return F;
 }

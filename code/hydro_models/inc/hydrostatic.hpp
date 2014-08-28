@@ -122,7 +122,7 @@ namespace hydrostatic
     Wrench force(const MeshPtr& mesh,                    //!< Coordinates of all the points
                  const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                  const double rho,                       //!< Density of the fluid (in kg/m^3)
-                 const double g,                         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                 const EPoint& g,                        //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                  const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
                 );
 

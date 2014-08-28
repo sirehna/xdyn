@@ -469,7 +469,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
 {
     const MeshPtr mesh(new Mesh(MeshBuilder(two_triangles()).build()));
     const double rho = 1024;
-    const double g = 10;
+    const EPoint g(0, 0, 10);
     const Point G(a.random<std::string>(), 1,2,4);
     const std::vector<double> z = {-0.5,-0.5,-2.5,0.5};
     const Wrench Fhs = force(mesh, G, rho, g, z);
@@ -479,7 +479,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     const double dS = 0.5;
     ASSERT_DOUBLE_EQ(0, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
-    ASSERT_DOUBLE_EQ(rho*g*dz*dS, Fhs.Z());
+    ASSERT_DOUBLE_EQ(rho*10*dz*dS, Fhs.Z());
     ASSERT_DOUBLE_EQ(-8/3.*Fhs.Z(), Fhs.K());
     ASSERT_DOUBLE_EQ(-Fhs.Z(), Fhs.M());
     ASSERT_DOUBLE_EQ(0, Fhs.N());
@@ -497,14 +497,14 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
         const MeshPtr mesh(new Mesh(MeshBuilder(cube(L,x0,y0,z0)).build()));
         const std::vector<double> dz = {z0-L/2,z0-L/2,z0-L/2,z0-L/2,z0+L/2,z0+L/2,z0+L/2,z0+L/2};
         const double rho = 1000;
-        const double g = 9.81;
+        const EPoint g(0, 0, 9.81);
         const Wrench Fhs = force(mesh, G, rho, g, dz);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L;
-        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z(), EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V*y0, Fhs.K(), EPS);
-        ASSERT_SMALL_RELATIVE_ERROR(+rho*g*V*x0, Fhs.M(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(-rho*9.81*V, Fhs.Z(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(-rho*9.81*V*y0, Fhs.K(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(+rho*9.81*V*x0, Fhs.M(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.N(), EPS);
     }
 }
@@ -522,7 +522,7 @@ TEST_F(hydrostaticTest, should_not_crash)
         const MeshPtr mesh(new Mesh(MeshBuilder(cube(L,x0,y0,z0)).build()));
         const std::vector<double> dz = {-h,0,0,-h,0,h,h,0};
         const double rho = 1000;
-        const double g = 9.81;
+        const EPoint g(0, 0, 9.81);
         force(mesh, G, rho, g, dz);
     }
 }
@@ -534,7 +534,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
     const std::vector<double> dz = {-1,-1,-1,-1,0,0,0,0};
     const Point G(a.random<std::string>(), 0, 0, 0);
     const double rho = 1000;
-    const double g = 9.81;
+    const EPoint g(0, 0, 9.81);
     const Wrench Fhs = force(mesh, G, rho, g, dz);
 }
 
@@ -550,12 +550,12 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
         const MeshPtr mesh(new Mesh(MeshBuilder(tetrahedron(L,x0,y0,z0)).build()));
         const std::vector<double> dz = {z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0};
         const double rho = 1000;
-        const double g = 9.81;
+        const EPoint g(0, 0, 9.81);
         const Wrench Fhs = force(mesh, G, rho, g, dz);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L/(6.*sqrt(2));
-        ASSERT_SMALL_RELATIVE_ERROR(-rho*g*V, Fhs.Z(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(-rho*9.81*V, Fhs.Z(), EPS);
     }
 }
 
@@ -579,8 +579,8 @@ TEST_F(hydrostaticTest, bug_discovered_when_implementing_sum_of_forces)
     const Point G(a.random<std::string>(), -3.63075e+09, -7.71511e+09,  9.07162e+09);
     const MeshPtr mesh(new Mesh(MeshBuilder(tetrahedron(L,x0,y0,z0)).build()));
     const std::vector<double> dz = {-2.04294e+09, 9.53171e+09, 3.8521e+09, -9.90113e+09};
-    force(mesh, G, a.random<double>(), a.random<double>(), dz);
-    ASSERT_NO_THROW(force(mesh, G, a.random<double>(), a.random<double>(), dz));
+    force(mesh, G, a.random<double>(), a.random<EPoint>(), dz);
+    ASSERT_NO_THROW(force(mesh, G, a.random<double>(), a.random<EPoint>(), dz));
 }
 
 TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
@@ -592,7 +592,7 @@ TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
     const Point G(a.random<std::string>(), a.random<double>(), a.random<double>(), a.random<double>());
     const MeshPtr mesh(new Mesh(MeshBuilder(tetrahedron(L,x0,y0,z0)).build()));
     const std::vector<double> dz = a.random_vector_of<double>().of_size(4);
-    const Wrench Fhs = force(mesh, G, a.random<double>(), a.random<double>(), dz);
+    const Wrench Fhs = force(mesh, G, a.random<double>(), a.random<EPoint>(), dz);
 
     ASSERT_EQ(G.get_frame(), Fhs.get_point().get_frame());
     ASSERT_EQ(G.get_frame(), Fhs.get_frame());
