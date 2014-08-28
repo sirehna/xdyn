@@ -118,11 +118,11 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         simulator_static
         parser_extensions_static
         model_wrappers_static
-        mesh_static
         wave_models_static
         stl_reader_static
         stl_writer_static
         hydro_models_static
+        mesh_static
         kinematics_static
         simulator_yaml_parser_static
         yaml_parser_static
