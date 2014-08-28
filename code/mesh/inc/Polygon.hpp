@@ -48,6 +48,14 @@ class Polygon
           */
         EPoint get_barycenter() const;
 
+		/**  \details Compute the inertia matrix of the polygon w.r.t; provided inertia frame R2;
+		  *  the inertia frame is specified thru a coordinate transform matrix versus mesh frame R0 (from mesh frame R0 to inertia frame R2);
+		  *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
+          */
+        Eigen::Matrix3d get_inertia_wrt(
+        			const Eigen::Matrix3d R20 //!< coordinates of inertia frame vectors versus mesh frame
+        		) const;
+
     private:
         Polygon(); // Disabled
         MeshPtr mesh;

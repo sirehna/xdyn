@@ -92,4 +92,25 @@ bool oriented_clockwise(const VectorOfVectorOfPoints& v, //!< Points in mesh
                         const EPoint& O //!< Point inside the volume (eg. its centre of gravity)
         );
 
+
+/**  \details Compute the inertia matrix for a triangular facet versus an inertia frame, divided by triangle area;
+  *  the return inertia is w.r.t. frame orientation in which vertices are expressed;
+  *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
+  *  The inertia of the triangle is same as if 1/3 of area was concentrated on each side mid point.
+  *  \see Remarques sur la géométrie du triangle, E Cesaro, Nouvelles annales de mathématiques 3e série, tome 6 (1887), p. 215-242
+  *  <http://www.numdam.org/item?id=NAM_1887_3_6__215_1>
+  */
+Eigen::Matrix3d inertia_of_triangle(
+		const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
+		const EPoint vertex2,  //!< second vertex of triangle
+		const EPoint vertex3   //!< third vertex of triangle
+		);
+
+/**  \details Compute the inertia matrix for a planar facet versus an inertia frame, divided by total area
+  *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
+  */
+Eigen::Matrix3d inertia_of_polygon(
+		const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
+		);
+
 #endif /* MESH_MANIPULATIONS_HPP_ */

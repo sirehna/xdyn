@@ -193,3 +193,46 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
         os.write(reinterpret_cast<const char*>(&spacer), 2);
     }
 }
+
+
+Eigen::Matrix3d inertia_of_triangle(
+		const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
+		const EPoint vertex2,  //!< second vertex of triangle
+		const EPoint vertex3   //!< third vertex of triangle
+		)
+{
+	Eigen::Matrix3d JR1;
+    JR1.fill(0);
+	double x12 = vertex1[0] + vertex2[0];
+	double x13 = vertex1[0] + vertex3[0];
+	double x23 = vertex2[0] + vertex3[0];
+	double y12 = vertex1[1] + vertex2[1];
+	double y13 = vertex1[1] + vertex3[1];
+	double y23 = vertex2[1] + vertex3[1];
+	JR1(0,0) = (1.0/12.0) * ( x12*x12 + x13*x13 + x23*x23 );
+	JR1(0,1) = (1.0/12.0) * ( x12*y12 + x13*y13 + x23*y23 );
+	JR1(1,0) = (1.0/12.0) * ( x12*y12 + x13*y13 + x23*y23 );
+	JR1(1,1) = (1.0/12.0) * ( y12*y12 + y13*y13 + y23*y23 );
+	return JR1;
+}
+
+Eigen::Matrix3d inertia_of_polygon(
+		const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
+		)
+{
+	const int nVertices = verticesInR1.cols();
+	if (nVertices < 3) return Eigen::Matrix3d();
+
+    Eigen::Matrix3d total_inertia;
+    total_inertia.fill(0);
+    double total_area = 0;
+    for (int i = 2 ; i < nVertices ; ++i)
+    {
+        const double S = area(verticesInR1, 0, i-1, i);
+        EPoint G = (verticesInR1.col(0)+verticesInR1.col(i-1)+verticesInR1.col(i))/3.;
+        Eigen::Matrix3d JR1 = inertia_of_triangle(verticesInR1.col(0),verticesInR1.col(i-1),verticesInR1.col(i));
+        total_inertia += JR1*S ;
+        total_area    += S;
+    }
+    return total_inertia/total_area;
+}

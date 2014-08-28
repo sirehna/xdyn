@@ -26,3 +26,20 @@ EPoint Polygon::get_barycenter() const
 {
     return barycenter;
 }
+
+Eigen::Matrix3d Polygon::get_inertia_wrt(
+			const Eigen::Matrix3d R20 //!< coordinates of inertia frame vectors versus mesh frame
+		) const
+{
+	// Compute the coordinates of facet vertices in R2
+	EPoint G=get_barycenter();
+	size_t nVertices = mesh->facets[facet_idx].index.size();
+	Matrix3x verticesInR0(3,nVertices);
+	for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
+		verticesInR0.col((int)iVertex) = mesh->nodes.col((int)mesh->facets[facet_idx].index[iVertex]) - G;
+	}
+	Matrix3x verticesInR2(3,nVertices);
+	verticesInR2 = R20 * verticesInR0;
+
+	return inertia_of_polygon( verticesInR2 );
+}

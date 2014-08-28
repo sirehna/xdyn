@@ -98,3 +98,24 @@ TEST_F(PolygonTest, barycenter)
     ASSERT_DOUBLE_EQ(z0-side/2., (double)barycenter_of_polygon_from_mesh(2));
     //! [PolygonTest unit_normal_example]
 }
+
+
+TEST_F(PolygonTest, inertia)
+{
+	Matrix3x square_vertices(3,4);
+	square_vertices <<
+			-2 , +2 , +2 , -2 ,
+			-2 , -2 , +2 , +2 ,
+			 0 ,  0 ,  0 ,  0 ;
+	const Polygon square(square_vertices);
+	const Eigen::Matrix3d J=square.get_inertia_wrt(Eigen::MatrixXd::Identity(3,3));
+	Eigen::Matrix3d expected;
+	double side = 4;
+	double Jx = std::pow(side,4) / 12.0;
+	double area = std::pow(side,2);
+	expected <<
+			 Jx ,  0 ,  0  ,
+			 0  , Jx ,  0  ,
+			 0  ,  0 ,  0  ;
+	ASSERT_LT((expected/area - J).array().abs().maxCoeff(),1.0e-10);
+}
