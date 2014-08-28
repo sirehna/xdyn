@@ -252,3 +252,13 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
         ASSERT_DOUBLE_EQ(0, (double)w[i](2));
     }
 }
+
+TEST_F(SimTest, waves_test_on_anthineas)
+{
+    const auto yaml = SimulatorYamlParser(test_data::anthineas_waves_test()).parse();
+    const auto res = simulate<RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
+    ASSERT_EQ(11, res.size());
+    ASSERT_NEAR(0, res[0].x[XIDX(0)], EPS);
+    ASSERT_NEAR(0, res[0].x[YIDX(0)], EPS);
+    ASSERT_NEAR(-5, res[0].x[ZIDX(0)], EPS);
+}
