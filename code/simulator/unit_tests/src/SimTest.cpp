@@ -202,13 +202,14 @@ TEST_F(SimTest, should_throw_if_wave_output_mesh_does_not_exist)
 TEST_F(SimTest, can_generate_wave_height_on_mesh)
 {
     const Sim sys = get_system(test_data::waves());
-    const std::vector<double> w = sys.get_waves(a.random<double>());
+    const double t = 9951191801.8523445;//a.random<double>();
+    const std::vector<EPoint> w = sys.get_waves(t);
     ASSERT_EQ(9, w.size());
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
 {
     const Sim sys = get_system(test_data::stable_rolling_cube_test(), test_data::cube());
-    const std::vector<double> w = sys.get_waves(a.random<double>());
+    const std::vector<EPoint> w = sys.get_waves(a.random<double>());
     ASSERT_EQ(9, w.size());
 }

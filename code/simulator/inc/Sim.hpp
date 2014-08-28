@@ -33,10 +33,11 @@ class Sim
           *  calculate the wave data on a mesh expressed in a particular frame of
           *  reference (eg. NED or body). For example we might want to calculate the
           *  wave data on a mesh surrounding the ship for visualization purposes.
-          *  \returns Vector of wave heights (in meters)
+          *  \returns Vector of coordinates on the free surface (in the NED frame),
+          *           the z coordinate being the wave height (in meters)
           *  \snippet simulator/unit_tests/src/SimTest.cpp SimTest get_waves_example
           */
-        std::vector<double> get_waves(const double t            //!< Current instant
+        std::vector<EPoint> get_waves(const double t            //!< Current instant
                                      ) const;
 
         StateType state;

@@ -111,13 +111,12 @@ void Sim::calculate_state_derivatives(const Wrench& sum_of_forces,
     *_QK(dx_dt,i) = 0.5*(double)dq_dt.z();
 }
 
-std::vector<double> Sim::get_waves(const double t//!< Current instant
+std::vector<EPoint> Sim::get_waves(const double t//!< Current instant
                                   ) const
 {
     try
     {
         if (env.w.get()) return env.w->get_waves_on_mesh(env.k, t);
-                         return std::vector<double>();
     }
     catch (const KinematicsException& e)
     {
@@ -125,4 +124,5 @@ std::vector<double> Sim::get_waves(const double t//!< Current instant
         ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
         THROW(__PRETTY_FUNCTION__, SimException, ss.str());
     }
+    return std::vector<EPoint>();
 }

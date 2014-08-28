@@ -45,9 +45,10 @@ std::vector<double> SurfaceElevationInterface::get_relative_wave_height(const Po
     return ret;
 }
 
-std::vector<double> SurfaceElevationInterface::get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                              const double t //<! Current instant (in seconds)
+std::vector<EPoint> SurfaceElevationInterface::get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                                              const double  //<! Current instant (in seconds)
                                              ) const
 {
-    return get_relative_wave_height(*output_mesh, k, t);
+    k->get(output_mesh->get_frame(), "NED");
+    return std::vector<EPoint>(output_mesh->m.cols(), EPoint());
 }

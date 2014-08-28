@@ -12,6 +12,8 @@
 #include TR1INC(memory)
 #include <vector>
 
+#include "GeometricTypes3d.hpp"
+
 class Point;
 class Kinematics;
 class PointMatrix;
@@ -59,10 +61,12 @@ class SurfaceElevationInterface
                                                     ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
-          *  \returns Vector of wave heights (in meters) for each point in output_mesh
+          *  \returns Vector of coordinates on the free surface (in the NED frame),
+          *           the z coordinate being the wave height (in meters), for each
+          *           point in output_mesh
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
-        std::vector<double> get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+        std::vector<EPoint> get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
                                               const double t //<! Current instant (in seconds)
                                              ) const;
 
