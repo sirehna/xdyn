@@ -31,6 +31,10 @@ include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${stl_reader_INCLUDE_DIRS})
 
+if(WIN32)
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+endif()
+
 add_library (${PROJECT_NAME}_static STATIC ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
