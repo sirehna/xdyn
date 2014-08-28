@@ -37,7 +37,7 @@ void ListOfWaveModelsTest::TearDown()
 
 std::pair<std::vector<double>,std::vector<double> > ListOfWaveModelsTest::spectrum(const std::vector<double>& x, const double fs) const
 {
-    kissfft<double> fft(x.size(),false);
+    kissfft<double> fft((int)x.size(),false);
     std::vector<std::complex<double> > in(x.size());
     std::vector<std::complex<double> > out(x.size());
     for (size_t i = 0 ; i < x.size() ; ++i)
@@ -48,7 +48,7 @@ std::pair<std::vector<double>,std::vector<double> > ListOfWaveModelsTest::spectr
     fft.transform( &in[0] , &out[0]);
     for (size_t i = 0 ; i < x.size() ; ++i)
     {
-        f[i] = (i+1)*fs/x.size();
+        f[i] = ((double)(i+1))*fs/((double)x.size());
         S[i] = abs(out[i]);
     }
     return std::make_pair(f, S);
@@ -64,7 +64,7 @@ TEST_F(ListOfWaveModelsTest, test_kissfft)
     std::vector<double> x(N);
     for (size_t i = 0 ; i < N ; ++i)
     {
-        const double ti = i*dt;
+        const double ti = (double)i*dt;
         x[i] = cos(omega*ti);
     }
 

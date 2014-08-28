@@ -103,7 +103,7 @@ TEST_F(environment_parsersTest, can_parse_wave_outputs)
 {
     ASSERT_EQ("yaml",yaml.output.format);
     ASSERT_EQ("NED",yaml.output.frame_of_reference);
-    ASSERT_DOUBLE_EQ(9,yaml.output.x.size());
+    ASSERT_EQ(9,yaml.output.x.size());
     ASSERT_DOUBLE_EQ(1E3,yaml.output.x.at(0));
     ASSERT_DOUBLE_EQ(2E3,yaml.output.x.at(1));
     ASSERT_DOUBLE_EQ(3E3,yaml.output.x.at(2));
