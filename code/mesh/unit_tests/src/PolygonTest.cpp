@@ -100,22 +100,45 @@ TEST_F(PolygonTest, barycenter)
 }
 
 
-TEST_F(PolygonTest, inertia)
+TEST_F(PolygonTest, inertia_of_rectangle)
 {
-	Matrix3x square_vertices(3,4);
-	square_vertices <<
-			-2 , +2 , +2 , -2 ,
-			-2 , -2 , +2 , +2 ,
-			 0 ,  0 ,  0 ,  0 ;
-	const Polygon square(square_vertices);
-	const Eigen::Matrix3d J=square.get_inertia_wrt(Eigen::MatrixXd::Identity(3,3));
+	Matrix3x rectangle_vertices(3,4);
+	const double w = a.random<double>().between(-2,2);
+	const double h = a.random<double>().between(-2,2);
+	rectangle_vertices <<
+			-w/2 , +w/2 , +w/2 , -w/2 ,
+			-h/2 , -h/2 , +h/2 , +h/2 ,
+			 0   ,  0   ,  0   ,  0   ;
+	const Polygon rectangle(rectangle_vertices);
+	const Eigen::Matrix3d J0=rectangle.get_inertia_wrt(Eigen::MatrixXd::Identity(3,3));
 	Eigen::Matrix3d expected;
-	double side = 4;
-	double Jx = std::pow(side,4) / 12.0;
-	double area = std::pow(side,2);
+	double Jx = h*std::pow(w,3) / 12.0;
+	double Jy = w*std::pow(h,3) / 12.0;
+	double area = w*h;
 	expected <<
 			 Jx ,  0 ,  0  ,
-			 0  , Jx ,  0  ,
+			 0  , Jy ,  0  ,
 			 0  ,  0 ,  0  ;
-	ASSERT_LT((expected/area - J).array().abs().maxCoeff(),1.0e-10);
+	ASSERT_LT((expected/area - J0).array().abs().maxCoeff(),1.0e-10);
+
+	const double theta = a.random<double>().between(0,2*std::acos(1.0));
+	const double c = std::cos(theta);
+	const double s = std::sin(theta);
+	Eigen::Matrix3d R10;
+	R10 <<
+			 c , s , 0 ,
+			-s , c , 0 ,
+			 0 , 0 , 1 ;
+	Eigen::Matrix3d R01 = R10.transpose();
+	const Eigen::Matrix3d J1=rectangle.get_inertia_wrt(R10);
+
+	Matrix3x rotated_vertices(3,4);
+	rotated_vertices = R10*rectangle_vertices;
+	const Polygon rotated_rectangle(rotated_vertices);
+	const Eigen::Matrix3d J1b=rotated_rectangle.get_inertia_wrt(Eigen::MatrixXd::Identity(3,3));
+	ASSERT_LT((J1 - J1b).array().abs().maxCoeff(),1.0e-10);
+
+	expected = R10*J0*R01;
+	ASSERT_LT((expected - J1).array().abs().maxCoeff(),1.0e-10);
+
 }
