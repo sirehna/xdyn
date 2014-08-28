@@ -5,6 +5,9 @@
  *      Author: cady
  */
 #include <sstream>
+#include <limits>
+
+#include <boost/math/tools/roots.hpp>
 
 #include "WaveSpectralDensity.hpp"
 #include "WaveNumberFunctor.hpp"
@@ -12,7 +15,6 @@
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
-
 }
 
 WaveSpectralDensity::~WaveSpectralDensity()

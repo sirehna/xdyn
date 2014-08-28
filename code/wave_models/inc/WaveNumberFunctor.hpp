@@ -8,7 +8,7 @@
 #ifndef WAVENUMBERFUNCTOR_HPP_
 #define WAVENUMBERFUNCTOR_HPP_
 
-#include <boost/math/tools/roots.hpp>
+#include <boost/math/tools/tuple.hpp>
 
 /** \author cec
  *  \date Jul 31, 2014, 4:25:23 PM
