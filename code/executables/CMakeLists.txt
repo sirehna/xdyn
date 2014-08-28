@@ -54,8 +54,8 @@ TARGET_LINK_LIBRARIES(convert_stl_files_to_code ${Boost_PROGRAM_OPTIONS_LIBRARY}
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code boost_program_options_descriptions_static base91x_static)
 
 
-ADD_EXECUTABLE(generate_yaml_example src/generate_yaml_examples.cpp)
-ADD_EXECUTABLE(generate_stl_examples src/generate_stl_examples.cpp)
+ADD_EXECUTABLE(generate_yaml_example src/generate_yaml_examples.cpp src/file_writer.cpp)
+ADD_EXECUTABLE(generate_stl_examples src/generate_stl_examples.cpp src/file_writer.cpp)
 
 TARGET_LINK_LIBRARIES(generate_yaml_example test_data_generator_static)
 TARGET_LINK_LIBRARIES(generate_stl_examples test_data_generator_static
