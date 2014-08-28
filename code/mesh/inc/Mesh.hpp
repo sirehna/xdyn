@@ -4,6 +4,9 @@
 #include <vector>
 #include "GeometricTypes3d.hpp"
 
+#include "tr1_macros.hpp"
+#include TR1INC(memory)
+
 /**
  * \author gj
  * \brief Contains a triangular mesh
@@ -18,5 +21,7 @@ struct Mesh
     std::vector<Facet> facets; //!< For each facet, the indexes of its nodes, unit normal, barycenter & area
     double orientation_factor; // -1 if the facet is orientation clockwise, +1 otherwise
 };
+
+typedef TR1(shared_ptr)<Mesh> MeshPtr;
 
 #endif //MESH_HPP

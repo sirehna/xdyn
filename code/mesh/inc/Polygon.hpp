@@ -3,10 +3,7 @@
 
 #include <cstdlib> //For size_t
 
-#include "tr1_macros.hpp"
-#include TR1INC(memory)
-class Mesh;
-typedef TR1(shared_ptr)<Mesh> MeshPtr;
+#include "Mesh.hpp"
 
 #include "GeometricTypes3d.hpp"
 
