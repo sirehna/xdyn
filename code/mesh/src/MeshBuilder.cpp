@@ -9,6 +9,11 @@ Matrix3x MeshBuilder::get_nodes() const
     return nodes;
 }
 
+std::vector<Edge> MeshBuilder::get_edges() const
+{
+    return edges;
+}
+
 std::vector<Facet> MeshBuilder::get_facets() const
 {
     return facets;
@@ -16,8 +21,10 @@ std::vector<Facet> MeshBuilder::get_facets() const
 
 MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
+                                                                   edgeMap(EdgeMap()),
                                                                    index(0),
                                                                    nodes(Matrix3x()),
+                                                                   edges(std::vector<Edge>()),
                                                                    facets(std::vector<Facet>()),
                                                                    clockwise(oriented_clockwise(v,barycenter(v)))
 {
@@ -26,8 +33,10 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
 
 MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1,tri)),
                                                             xyzMap(Vector3dMap()),
+                                                            edgeMap(EdgeMap()),
                                                             index(0),
                                                             nodes(Matrix3x()),
+                                                            edges(std::vector<Edge>()),
                                                             facets(std::vector<Facet>()),
                                                             clockwise(false)
 {
@@ -47,7 +56,7 @@ Matrix3x MeshBuilder::resize(const Matrix3x& M) const
 Mesh MeshBuilder::build()
 {
     *this = std::for_each(v.begin(), v.end(), *this);
-    return Mesh(resize(nodes), facets, clockwise);
+    return Mesh(resize(nodes), edges , facets, clockwise);
 }
 
 void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
@@ -59,9 +68,15 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
         facet.unit_normal = unit_normal(M);
         facet.area = area(M);
         facet.barycenter = barycenter(M);
-        for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ; ++it)
+        for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ;)
         {
-            facet.index.push_back(build_one_point(*it));
+            size_t vertex_index = build_one_point(*it);
+            facet.index.push_back(vertex_index);
+            ++it;
+            if(it != list_of_points.end())
+                add_edge_if_missing(Edge(vertex_index,build_one_point(*it)));
+            else
+                add_edge_if_missing(Edge(vertex_index,build_one_point(*(list_of_points.begin()))));
         }
         facets.push_back(facet);
     }
@@ -72,6 +87,18 @@ size_t MeshBuilder::build_one_point(const EPoint& xyz)
     const bool point_has_been_added = add_point_if_missing(xyz);
     if (point_has_been_added) index++;
     return xyzMap[xyz];
+}
+
+bool MeshBuilder::add_edge_if_missing(const Edge& e)
+{
+    bool edge_has_been_added = false;
+    if (not(edge_is_in_map(e)))
+    {
+        edgeMap.insert(std::make_pair(e,index));
+        edges.push_back(e);
+        edge_has_been_added = true;
+    }
+    return edge_has_been_added;
 }
 
 bool MeshBuilder::add_point_if_missing(const EPoint& xyz)
@@ -86,6 +113,12 @@ bool MeshBuilder::add_point_if_missing(const EPoint& xyz)
     return point_has_been_added;
 }
 
+bool MeshBuilder::edge_is_in_map(const Edge& e)
+{
+    const EdgeMap::const_iterator itMap = edgeMap.find(e);
+    return itMap != edgeMap.end();
+}
+
 bool MeshBuilder::point_is_in_map(const EPoint& xyz)
 {
     const Vector3dMap::const_iterator itMap = xyzMap.find(xyz);
@@ -94,8 +127,10 @@ bool MeshBuilder::point_is_in_map(const EPoint& xyz)
 
 MeshBuilder::MeshBuilder(const Matrix3x& tri) : v(VectorOfVectorOfPoints()),
                                                 xyzMap(Vector3dMap()),
+                                                edgeMap(EdgeMap()),
                                                 index(0),
                                                 nodes(Matrix3x()),
+                                                edges(std::vector<Edge>()),
                                                 facets(std::vector<Facet>()),
                                                 clockwise(false)
 {
