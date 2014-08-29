@@ -6,6 +6,7 @@ FILE(GLOB SRC src/SimTest.cpp
               src/update_kinematicsTests.cpp
               src/SimulatorBuilderTest.cpp
               src/OutputTransformerTest.cpp
+              src/SimCsvObserverTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

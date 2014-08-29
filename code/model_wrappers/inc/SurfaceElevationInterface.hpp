@@ -66,7 +66,7 @@ class SurfaceElevationInterface
           *           point in output_mesh
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
-        std::vector<EPoint> get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+        std::vector<Point> get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
                                               const double t //<! Current instant (in seconds)
                                              ) const;
 
@@ -76,7 +76,8 @@ class SurfaceElevationInterface
           *           point in P
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
-        std::vector<EPoint> get_points_on_free_surface(const double t                        //<! Current instant (in seconds)
+        std::vector<Point> get_points_on_free_surface(const double t,                          //<! Current instant (in seconds)
+                                                      const TR1(shared_ptr)<PointMatrix>& Mned //!< Output mesh in NED frame
                                                        ) const;
 
     private:
@@ -95,7 +96,7 @@ class SurfaceElevationInterface
 
         /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
           */
-        void update_output_mesh_if_necessary(const TR1(shared_ptr)<Kinematics>& k //!< Object used to compute the transforms to the NED frame
+        TR1(shared_ptr)<PointMatrix> get_output_mesh_in_NED_frame(const TR1(shared_ptr)<Kinematics>& k //!< Object used to compute the transforms to the NED frame
                                             ) const;
 
         TR1(shared_ptr)<PointMatrix> output_mesh; //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant

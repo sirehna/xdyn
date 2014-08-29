@@ -27,12 +27,20 @@ SurfaceElevationInterface::~SurfaceElevationInterface()
 {
 }
 
-std::vector<EPoint> SurfaceElevationInterface::get_points_on_free_surface(const double t) const
+std::vector<Point> SurfaceElevationInterface::get_points_on_free_surface(const double t, const TR1(shared_ptr)<PointMatrix>& Mned) const
 {
-    std::vector<EPoint> ret;
+    std::vector<Point> ret;
     for (int i = 0 ; i < output_mesh->m.cols() ; ++i)
     {
-        ret.push_back(EPoint(output_mesh->m(0,i),output_mesh->m(1,i),wave_height((double)output_mesh->m(0,i),(double)output_mesh->m(1,i),0,t)));
+        // Ugly & dangerous hack: the points are in fact expressed in the NED frame
+        // but we use output_mesh->get_frame() so that the observer can decide
+        // whether to write the x & y coordinates at each time step (if the
+        // output_mesh frame moves wrt NED) or once & for all at the beginning
+        // of the YAML wave output (if output_mesh is expressed in the NED frame)
+        const double x = Mned->m(0,i);
+        const double y = Mned->m(1,i);
+        const double z = wave_height(x,y,0,t);
+        ret.push_back(Point(output_mesh->get_frame(),x,y,z));
     }
     return ret;
 }
@@ -55,18 +63,19 @@ std::vector<double> SurfaceElevationInterface::get_relative_wave_height(const Po
     return ret;
 }
 
-void SurfaceElevationInterface::update_output_mesh_if_necessary(const TR1(shared_ptr)<Kinematics>& k) const
+TR1(shared_ptr)<PointMatrix> SurfaceElevationInterface::get_output_mesh_in_NED_frame(const TR1(shared_ptr)<Kinematics>& k) const
 {
     if (output_mesh->get_frame() != "NED")
     {
-        *output_mesh = k->get(output_mesh->get_frame(),"NED")*(*output_mesh);
+        return TR1(shared_ptr)<PointMatrix>(new PointMatrix(k->get(output_mesh->get_frame(),"NED")*(*output_mesh)));
     }
+    return output_mesh;
 }
 
-std::vector<EPoint> SurfaceElevationInterface::get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+std::vector<Point> SurfaceElevationInterface::get_waves_on_mesh(const TR1(shared_ptr)<Kinematics>& k, //!< Object used to compute the transforms to the NED frame
                                               const double t //<! Current instant (in seconds)
                                              ) const
 {
-    update_output_mesh_if_necessary(k);
-    return get_points_on_free_surface(t);
+    if (output_mesh->m.cols()==0) return std::vector<Point>();
+    return get_points_on_free_surface(t, get_output_mesh_in_NED_frame(k));
 }

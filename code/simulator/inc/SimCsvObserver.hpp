@@ -8,12 +8,15 @@
 #ifndef SIMCSVOBSERVER_HPP_
 #define SIMCSVOBSERVER_HPP_
 
+#include "Point.hpp"
+
 #include <ostream>
 #include <string>
 #include <vector>
 
 
 class Sim;
+extern std::ostream dev_null_buffer; // Litter goes there
 
 /** \author cec
  *  \date Jun 19, 2014, 5:29:09 PM
@@ -28,15 +31,24 @@ class Sim;
 class SimCsvObserver
 {
     public:
-        SimCsvObserver(std::ostream& os);
+        SimCsvObserver(std::ostream& simulation_stream, //!< All simulation results will be outputted to this stream
+                       std::ostream& wave_stream //!< Wave heights calculated on output mesh will be outputted to this stream
+                      );
+        SimCsvObserver(std::ostream& simulation_stream //!< All simulation results will be outputted to this stream
+                      );
         void observe(const Sim& sys, const double t);
 
     private:
+        SimCsvObserver(); // Disabled
+
         void observe_states(const Sim& sys, const double t);
         void observe_waves(const Sim& sys, const double t);
-        void initialize(const Sim& sys);
+        void initialize_simulation_output_stream(const Sim& sys);
         void initialize_title();
-        std::ostream& os;
+        void initialize_wave_output_stream(const std::vector<Point>& free_surface);
+
+        std::ostream& simulation_stream;
+        std::ostream& wave_stream;
         bool initialized;
         std::vector<std::string> bodies;
         std::string customize(const std::string& body, const std::string anything) const;
