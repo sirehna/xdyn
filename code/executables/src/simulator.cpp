@@ -15,7 +15,6 @@
 #include "steppers.hpp"
 
 #include <string>
-#include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
 #include <fstream>
 
 int main(int argc, char** argv)
@@ -27,8 +26,10 @@ int main(int argc, char** argv)
         const TextFileReader yaml_reader(input_data.yaml_filenames);
         auto sys = get_system(yaml_reader.get_contents());
         std::ofstream os(input_data.output_csv.c_str());
+        std::ofstream ws(input_data.wave_output.c_str());
         initialize_stream(os, input_data);
-        SimCsvObserver observer(os);
+        if (input_data.wave_output.empty()) copy_stream(dev_null_buffer, ws);
+        SimCsvObserver observer(os, ws);
         if (input_data.solver=="euler")
         {
             quicksolve<EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);

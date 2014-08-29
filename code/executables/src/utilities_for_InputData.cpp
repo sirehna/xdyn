@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
 
 #include "utilities_for_InputData.hpp"
 #include "InputData.hpp"
@@ -50,11 +51,12 @@ po::options_description get_options_description(InputData& input_data)
     desc.add_options()
         ("help,h",                                                                     "Show this help message")
         ("yml,y",    po::value<std::vector<std::string> >(&input_data.yaml_filenames), "Name(s) of the YAML file(s)")
-        ("csv,c",    po::value<std::string>(&input_data.output_csv),                   "Name of the generated CSV file")
-        ("solver,s", po::value<std::string>(&input_data.solver),                       "Name of the solver: euler,rk4,rkck for Euler, Runge-Kutta 4 & Runge-Kutta-Cash-Karp respectively.")
+        ("out,o",    po::value<std::string>(&input_data.output_csv),                   "Name of the generated CSV file. If none given, simulator writes CSV to standard output")
+        ("solver,s", po::value<std::string>(&input_data.solver)->default_value("rk4"), "Name of the solver: euler,rk4,rkck for Euler, Runge-Kutta 4 & Runge-Kutta-Cash-Karp respectively.")
         ("dt",       po::value<double>(&input_data.initial_timestep),                  "Initial time step (or value of the fixed time step for fixed step solvers)")
-        ("tstart",   po::value<double>(&input_data.tstart),                            "Date corresponding to the beginning of the simulation (in seconds)")
+        ("tstart",   po::value<double>(&input_data.tstart)->default_value(0),          "Date corresponding to the beginning of the simulation (in seconds)")
         ("tend",     po::value<double>(&input_data.tend),                              "Last time step")
+        ("waves,w",  po::value<std::string>(&input_data.wave_output),                  "Name of the YAML output file where the wave heights will be stored ('output' section of the YAML file)")
     ;
     return desc;
 }
@@ -62,8 +64,12 @@ po::options_description get_options_description(InputData& input_data)
 int get_input_data(int argc, char **argv, InputData& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
+    po::positional_options_description p;
+    p.add("yml", -1);
     po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::store(po::command_line_parser(argc, argv).options(desc)
+                                                 .positional(p)
+                                                 .run(), vm);
     po::notify(vm);
     input_data.help = vm.count("help");
     if (invalid(input_data) || input_data.help)
@@ -78,7 +84,7 @@ void print_usage(std::ostream& os, const po::options_description& desc)
 {
     po::positional_options_description positionalOptions;
     os << description() << std::endl;
-    rad::OptionPrinter::printStandardAppDesc("sim",
+    rad::OptionPrinter::printStandardAppDesc("sim <yaml file>",
                                              os,
                                              desc,
                                              &positionalOptions);
