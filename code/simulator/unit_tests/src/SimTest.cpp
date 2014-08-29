@@ -207,39 +207,39 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh)
     ASSERT_EQ(9, w.size());
     ASSERT_DOUBLE_EQ(1, (double)w[0].x());
     ASSERT_DOUBLE_EQ(1, (double)w[0].y());
-    ASSERT_NEAR(-23.180900790763086, (double)w[0].z(), EPS);
+    ASSERT_NEAR(-23.180900790763086, (double)w[0].z(), 1E-5);
 
     ASSERT_DOUBLE_EQ(2, (double)w[1].x());
     ASSERT_DOUBLE_EQ(1, (double)w[1].y());
-    ASSERT_NEAR(-23.180874012509221, (double)w[1].z(), EPS);
+    ASSERT_NEAR(-23.180874012509221, (double)w[1].z(), 1E-5);
 
     ASSERT_DOUBLE_EQ(3, (double)w[2].x());
     ASSERT_DOUBLE_EQ(1, (double)w[2].y());
-    ASSERT_NEAR(-23.180846368173889, (double)w[2].z(), EPS);
+    ASSERT_NEAR(-23.180846368173889, (double)w[2].z(), 1E-5);
 
     ASSERT_DOUBLE_EQ(4, (double)w[3].x());
     ASSERT_DOUBLE_EQ(1, (double)w[3].y());
-    ASSERT_NEAR(-23.1808178639421, (double)w[3].z(), EPS);
+    ASSERT_NEAR(-23.1808178639421, (double)w[3].z(), 1E-5);
 
     ASSERT_DOUBLE_EQ(5, (double)w[4].x());
     ASSERT_DOUBLE_EQ(1, (double)w[4].y());
-    ASSERT_NEAR(-23.1807888028812, (double)w[4].z(), EPS);
+    ASSERT_NEAR(-23.1807888028812, (double)w[4].z(), 1E-5);
 
     ASSERT_DOUBLE_EQ(1, (double)w[5].x());
     ASSERT_DOUBLE_EQ(2, (double)w[5].y());
-    ASSERT_NEAR(-23.2121733088151, (double)w[5].z(), EPS);
+    ASSERT_NEAR(-23.2121733088151, (double)w[5].z(), 1E-5);
 
     ASSERT_DOUBLE_EQ(2, (double)w[6].x());
     ASSERT_DOUBLE_EQ(2, (double)w[6].y());
-    ASSERT_NEAR(-23.2121465379194, (double)w[6].z(), EPS);
+    ASSERT_NEAR(-23.2121465379194, (double)w[6].z(), 1E-5);
 
     ASSERT_DOUBLE_EQ(3, (double)w[7].x());
     ASSERT_DOUBLE_EQ(2, (double)w[7].y());
-    ASSERT_NEAR(-23.2121188534555, (double)w[7].z(), EPS);
+    ASSERT_NEAR(-23.2121188534555, (double)w[7].z(), 1E-5);
 
     ASSERT_DOUBLE_EQ(4, (double)w[8].x());
     ASSERT_DOUBLE_EQ(2, (double)w[8].y());
-    ASSERT_NEAR(-23.2120903012885, (double)w[8].z(), EPS);
+    ASSERT_NEAR(-23.2120903012885, (double)w[8].z(), 1E-5);
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
