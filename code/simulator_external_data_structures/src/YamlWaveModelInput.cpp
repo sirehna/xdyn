@@ -20,7 +20,7 @@ spectral_density_yaml(std::string()),
 depth(0)
 {}
 
-YamlWaveOutput::YamlWaveOutput() : format(""), frame_of_reference(""), x(std::vector<double>()), y(std::vector<double>())
+YamlWaveOutput::YamlWaveOutput() : frame_of_reference(""), x(std::vector<double>()), y(std::vector<double>())
 {}
 
 YamlWaveModel::YamlWaveModel():

@@ -110,7 +110,6 @@ void operator >> (const YAML::Node& node, YamlSpectra& g)
 
 void operator >> (const YAML::Node& node, YamlWaveOutput& g)
 {
-    node["format"]             >> g.format;
     node["frame of reference"] >> g.frame_of_reference;
     std::string unit;
     node["mesh"]["unit"] >> unit;

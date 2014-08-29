@@ -35,7 +35,6 @@ struct YamlSpectra
 struct YamlWaveOutput
 {
     YamlWaveOutput();
-    std::string format;              //!< Format of the output (eg. YAML, OBJ, HDF5...)
     std::string frame_of_reference;  //!< Name of the frame of reference the x & y coordinates are expressed in
     std::vector<double> x;           //!< x-coordinate of the points we wish to observe (in frame 'frame_of_reference')
     std::vector<double> y;           //!< y-coordinate of the points we wish to observe (in frame 'frame_of_reference')

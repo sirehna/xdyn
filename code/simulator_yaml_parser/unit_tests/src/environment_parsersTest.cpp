@@ -48,7 +48,6 @@ TEST_F(environment_parsersTest, default_wave_model)
 //! [environment_parsersTest example]
 //! [environment_parsersTest expected output]
     ASSERT_DOUBLE_EQ(1234,input.zwave);
-    ASSERT_EQ("yaml", input.output.format);
     ASSERT_EQ("NED", input.output.frame_of_reference);
     ASSERT_EQ(9,input.output.x.size());
     ASSERT_DOUBLE_EQ(1E3, input.output.x[0]);
@@ -101,7 +100,6 @@ TEST_F(environment_parsersTest, can_parse_wave_spreading_and_spectral_data)
 
 TEST_F(environment_parsersTest, can_parse_wave_outputs)
 {
-    ASSERT_EQ("yaml",yaml.output.format);
     ASSERT_EQ("NED",yaml.output.frame_of_reference);
     ASSERT_EQ(9,yaml.output.x.size());
     ASSERT_DOUBLE_EQ(1E3,yaml.output.x.at(0));
