@@ -16,6 +16,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml);
 Sim get_system(const std::string& yaml);
 Sim get_system(const std::string& yaml, const std::string& mesh);
 Sim get_system(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes);
+Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh);
 Sim get_system(const YamlSimulatorInput& yaml);
 Sim get_system(const YamlSimulatorInput& yaml, const std::string& mesh);
 Sim get_system(const YamlSimulatorInput& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes);
