@@ -2,6 +2,9 @@
 #
 # To be run directly from ParaView or with program pvpython from cli
 #
+# Remember to change the current working directory before running the script.
+# To do so, use command os.chdir('') form package os.
+#
 # Use a mencoder command to create a video
 # mencoder "mf://Im*.png" -mf fps=10:type=png -ovc lavc -lavcopts vcodec=mpeg4 -o Video.avi
 #
@@ -10,7 +13,7 @@
 # - A CSV result file containing the displacement of the mobile to represent
 # - A set of XYZ CSV files to represent wave elevation for each time steps. No
 #   header are required
-# 
+#
 try: paraview.simple
 except: from paraview.simple import *
 paraview.simple._DisableFirstRenderCameraReset()
@@ -168,10 +171,10 @@ renderView.CameraFocalPoint = [-4.0, 14.0, -7.7]
 renderView.CameraParallelScale = 49
 renderView.CameraClippingRange = [34.0, 610.0]
 
-AnimationScene1 = GetAnimationScene()
-AnimationScene1.EndTime = len(waveFiles)
-AnimationScene1.PlayMode = 'Snap To TimeSteps'
-AnimationScene1.ViewModules = renderView
+animationScene = GetAnimationScene()
+animationScene.EndTime = len(waveFiles)
+animationScene.PlayMode = 'Snap To TimeSteps'
+animationScene.ViewModules = renderView
 
 nResultFiles = len(mobileSimulationCsvFiles)
 rowResults = []
@@ -198,6 +201,13 @@ for i, rowResult in enumerate(rowResults):
     tf = max(tf, rowResult.GetArray(resultsLabelsDict[i]['t']).GetRange()[1])
     N = max(N, rowResult.GetArray(resultsLabelsDict[i]['t']).GetSize())
 print('Tstart {0:+06.2f} - Tend {1:+06.2f} - N =  {2}'.format(t0, tf, N))
+animationScene.AnimationTime = t0
+animationScene.StartTime = t0
+animationScene.EndTime = tf
+animationScene.NumberOfFrames = N
+animationDuration = tf - t0
+
+
 
 Mobiles = []
 Transform1 = []
@@ -222,9 +232,11 @@ for i, rowResult in enumerate(rowResults):
     Transform1[-1].Transform.Scale = [mobile3DScale, mobile3DScale, mobile3DScale]
     Transform1[-1].Transform.Translate = mobile3DTranslate
     active_objects.source.SMProxy.InvokeEvent('UserEvent', 'HideWidget')
+    RenameSource("Mobile_offset"+str(i), Transform1[-1])
     Transform2.append(Transform(Transform = "Transform"))
     Transform2[-1].Transform = "Transform"
     active_objects.source.SMProxy.InvokeEvent('UserEvent', 'HideWidget')
+    RenameSource("Mobile_tr"+str(i), Transform2[-1])
     SM_tr_repr = Show()
     if nResultFiles > 1:
         SM_tr_repr.DiffuseColor = defaultColor[i]
@@ -233,21 +245,74 @@ for i, rowResult in enumerate(rowResults):
     RenderView = GetRenderView()
     Mobiles.append(Mobile)
 
-for i in range(N):
-    AnimationScene1.AnimationTime = i
-    for j, (transform2, rowResult) in enumerate(zip(Transform2, rowResults)):
-        col = getResultColumnNames(mobileSimulationObjectNames[0])
-        xyz = [rowResult.GetArray(resultsLabelsDict[j][col[0]]).GetTuple(i)[0], \
-               rowResult.GetArray(resultsLabelsDict[j][col[1]]).GetTuple(i)[0], \
-               rowResult.GetArray(resultsLabelsDict[j][col[2]]).GetTuple(i)[0]]
-        quat = [rowResult.GetArray(resultsLabelsDict[j][col[3]]).GetTuple(i)[0], \
-                rowResult.GetArray(resultsLabelsDict[j][col[4]]).GetTuple(i)[0], \
-                rowResult.GetArray(resultsLabelsDict[j][col[5]]).GetTuple(i)[0], \
-                rowResult.GetArray(resultsLabelsDict[j][col[6]]).GetTuple(i)[0]]
-        par = quat2ParaviewAngle(quat)
-        transform2.Transform.Translate = xyz
-        transform2.Transform.Rotate = par
-        transform2.UpdatePipeline()
+
+timeLabel = AnnotateTimeFilter()
+timeLabel_repr = Show()
+timeLabel.Format = 'Time: %04.2f'
+timeLabel_repr.FontSize = 14
+timeLabel_repr.WindowLocation = 'UpperRightCorner'
+
+makeOnlyImages = True
+if makeOnlyImages:
+    for i in range(N):
+        animationScene.AnimationTime = i
+        for j, (transform2, rowResult) in enumerate(zip(Transform2, rowResults)):
+            col = getResultColumnNames(mobileSimulationObjectNames[0])
+            xyz = [rowResult.GetArray(resultsLabelsDict[j][col[0]]).GetTuple(i)[0], \
+                   rowResult.GetArray(resultsLabelsDict[j][col[1]]).GetTuple(i)[0], \
+                   rowResult.GetArray(resultsLabelsDict[j][col[2]]).GetTuple(i)[0]]
+            quat = [rowResult.GetArray(resultsLabelsDict[j][col[3]]).GetTuple(i)[0], \
+                    rowResult.GetArray(resultsLabelsDict[j][col[4]]).GetTuple(i)[0], \
+                    rowResult.GetArray(resultsLabelsDict[j][col[5]]).GetTuple(i)[0], \
+                    rowResult.GetArray(resultsLabelsDict[j][col[6]]).GetTuple(i)[0]]
+            par = quat2ParaviewAngle(quat)
+            transform2.Transform.Translate = xyz
+            transform2.Transform.Rotate = par
+            transform2.UpdatePipeline()
+        Render()
+        paraviewSaveImage(imageFilename = os.path.join(resultDirectory, r'Im_{0:05d}.png'.format(i)), \
+                          writeImageMagnification = 3)
+else:
+    ASMs_KF_x_Cue     = [GetAnimationTrack( 'Position', 0, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
+    ASMs_KF_y_Cue     = [GetAnimationTrack( 'Position', 1, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
+    ASMs_KF_z_Cue     = [GetAnimationTrack( 'Position', 2, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
+    ASMs_KF_phi_Cue   = [GetAnimationTrack( 'Rotation', 0, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
+    ASMs_KF_theta_Cue = [GetAnimationTrack( 'Rotation', 1, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
+    ASMs_KF_psi_Cue   = [GetAnimationTrack( 'Rotation', 2, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
+
+    ASMs_KF_x         = [[] for ASM_tr in Transform2]
+    ASMs_KF_y         = [[] for ASM_tr in Transform2]
+    ASMs_KF_z         = [[] for ASM_tr in Transform2]
+    ASMs_KF_phi       = [[] for ASM_tr in Transform2]
+    ASMs_KF_theta     = [[] for ASM_tr in Transform2]
+    ASMs_KF_psi       = [[] for ASM_tr in Transform2]
+
+    for j,rowResult in enumerate(rowResults):
+        N = rowResult.GetNumberOfTuples()
+        for i in range(0,N):
+            animationScene.AnimationTime = i
+            keytime = (rowResult.GetArray(resultsLabelsDict[j]['t']).GetTuple(i)[0]-t0)/animationDuration
+
+            col = getResultColumnNames(mobileSimulationObjectNames[0])
+            xyz = [rowResult.GetArray(resultsLabelsDict[j][col[0]]).GetTuple(i)[0], \
+                   rowResult.GetArray(resultsLabelsDict[j][col[1]]).GetTuple(i)[0], \
+                   rowResult.GetArray(resultsLabelsDict[j][col[2]]).GetTuple(i)[0]]
+            quat = [rowResult.GetArray(resultsLabelsDict[j][col[3]]).GetTuple(i)[0], \
+                    rowResult.GetArray(resultsLabelsDict[j][col[4]]).GetTuple(i)[0], \
+                    rowResult.GetArray(resultsLabelsDict[j][col[5]]).GetTuple(i)[0], \
+                    rowResult.GetArray(resultsLabelsDict[j][col[6]]).GetTuple(i)[0]]
+            par = quat2ParaviewAngle(quat)
+            ASMs_KF_x[j].append(    CompositeKeyFrame( KeyTime=keytime, KeyValues=[xyz[0]]))
+            ASMs_KF_y[j].append(    CompositeKeyFrame( KeyTime=keytime, KeyValues=[xyz[1]]))
+            ASMs_KF_z[j].append(    CompositeKeyFrame( KeyTime=keytime, KeyValues=[xyz[2]]))
+            ASMs_KF_phi[j].append(  CompositeKeyFrame( KeyTime=keytime, KeyValues=[par[0]]))
+            ASMs_KF_theta[j].append(CompositeKeyFrame( KeyTime=keytime, KeyValues=[par[1]]))
+            ASMs_KF_psi[j].append(  CompositeKeyFrame( KeyTime=keytime, KeyValues=[par[2]]))
+    for j in range(nResultFiles):
+        ASMs_KF_x_Cue[j].KeyFrames     = ASMs_KF_x[j]
+        ASMs_KF_y_Cue[j].KeyFrames     = ASMs_KF_y[j]
+        ASMs_KF_z_Cue[j].KeyFrames     = ASMs_KF_z[j]
+        ASMs_KF_phi_Cue[j].KeyFrames   = ASMs_KF_phi[j]
+        ASMs_KF_theta_Cue[j].KeyFrames = ASMs_KF_theta[j]
+        ASMs_KF_psi_Cue[j].KeyFrames   = ASMs_KF_psi[j]
     Render()
-    paraviewSaveImage(imageFilename = os.path.join(resultDirectory, r'Im_{0:05d}.png'.format(i)), \
-                      writeImageMagnification = 3)
