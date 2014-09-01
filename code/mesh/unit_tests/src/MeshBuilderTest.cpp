@@ -97,15 +97,15 @@ TEST_F(MeshBuilderTest, two_triangles)
     ASSERT_DOUBLE_EQ(-1, (double)m.nodes(1,3));
     ASSERT_DOUBLE_EQ(0, (double)m.nodes(2,3));
     // Check first facet
-    ASSERT_EQ(3,m.facets.at(0).index.size());
-    ASSERT_EQ(0,m.facets.at(0).index.at(0));
-    ASSERT_EQ(1,m.facets.at(0).index.at(1));
-    ASSERT_EQ(2,m.facets.at(0).index.at(2));
+    ASSERT_EQ(3,m.facets.at(0).vertex_index.size());
+    ASSERT_EQ(0,m.facets.at(0).vertex_index.at(0));
+    ASSERT_EQ(1,m.facets.at(0).vertex_index.at(1));
+    ASSERT_EQ(2,m.facets.at(0).vertex_index.at(2));
     // Check second facet
-    ASSERT_EQ(3,m.facets.at(1).index.size());
-    ASSERT_EQ(0,m.facets.at(1).index.at(0));
-    ASSERT_EQ(3,m.facets.at(1).index.at(1));
-    ASSERT_EQ(1,m.facets.at(1).index.at(2));
+    ASSERT_EQ(3,m.facets.at(1).vertex_index.size());
+    ASSERT_EQ(0,m.facets.at(1).vertex_index.at(0));
+    ASSERT_EQ(3,m.facets.at(1).vertex_index.at(1));
+    ASSERT_EQ(1,m.facets.at(1).vertex_index.at(2));
 }
 
 TEST_F(MeshBuilderTest, cannot_build_mesh_if_facets_have_one_or_two_points)

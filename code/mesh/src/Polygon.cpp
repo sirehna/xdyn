@@ -33,10 +33,10 @@ Eigen::Matrix3d Polygon::get_inertia_wrt(
 {
 	// Compute the coordinates of facet vertices in R2
 	EPoint G=get_barycenter();
-	size_t nVertices = mesh->facets[facet_idx].index.size();
+	size_t nVertices = mesh->facets[facet_idx].vertex_index.size();
 	Matrix3x verticesInR0(3,nVertices);
 	for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
-		verticesInR0.col((int)iVertex) = mesh->nodes.col((int)mesh->facets[facet_idx].index[iVertex]) - G;
+		verticesInR0.col((int)iVertex) = mesh->nodes.col((int)mesh->facets[facet_idx].vertex_index[iVertex]) - G;
 	}
 	Matrix3x verticesInR2(3,nVertices);
 	verticesInR2 = R20 * verticesInR0;
@@ -49,10 +49,10 @@ Polygon Polygon::projected_on_free_surface(
 		const EPoint&              down_direction   //!< local down direction expressed in mesh frame
 		) const
 {
-	size_t nVertices = mesh->facets[facet_idx].index.size();
+	size_t nVertices = mesh->facets[facet_idx].vertex_index.size();
 	Matrix3x newVertices(3,nVertices);
 	for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
-		newVertices.col((int)iVertex) = mesh->nodes.col((int)mesh->facets[facet_idx].index[iVertex]) - immersions[iVertex]*down_direction;
+		newVertices.col((int)iVertex) = mesh->nodes.col((int)mesh->facets[facet_idx].vertex_index[iVertex]) - immersions[iVertex]*down_direction;
 	}
 	return Polygon(newVertices);
 }

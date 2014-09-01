@@ -314,11 +314,11 @@ Wrench hydrostatic::fast_force(const MeshPtr& mesh,               //!< Mesh
     const double g_norm = g.norm();
     for (size_t facet_index=0;that_facet != mesh->facets.end() ; ++that_facet , ++facet_index)
     {
-        switch (get_immersion_type(that_facet->index, immersions))
+        switch (get_immersion_type(that_facet->vertex_index, immersions))
         {
             case TOTALLY_IMMERGED:
             {
-                const double zG = average_immersion(mesh->nodes, that_facet->index, immersions);
+                const double zG = average_immersion(mesh->nodes, that_facet->vertex_index, immersions);
                 const EPoint dS = that_facet->area*that_facet->unit_normal;
                 const EPoint ap = fast_application_point(Polygon(mesh,facet_index));
                 F += orientation_factor*dF(O, ap , rho, g_norm, zG , dS);
@@ -326,7 +326,7 @@ Wrench hydrostatic::fast_force(const MeshPtr& mesh,               //!< Mesh
             }
             case PARTIALLY_EMERGED:
             {
-                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh->nodes,that_facet->index,immersions);
+                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh->nodes,that_facet->vertex_index,immersions);
                 const double zG = average_immersion(polygon_and_immersions);
                 const EPoint dS = area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
                 const EPoint ap = fast_application_point(Polygon(polygon_and_immersions.first));
@@ -362,11 +362,11 @@ Wrench hydrostatic::exact_force(const MeshPtr& mesh,                    //!< Mes
     const EPoint down_direction = g / g_norm;
     for (size_t facet_index=0;that_facet != mesh->facets.end() ; ++that_facet , ++facet_index)
     {
-        switch (get_immersion_type(that_facet->index, immersions))
+        switch (get_immersion_type(that_facet->vertex_index, immersions))
         {
             case TOTALLY_IMMERGED:
             {
-                const double zG = average_immersion(mesh->nodes, that_facet->index, immersions);
+                const double zG = average_immersion(mesh->nodes, that_facet->vertex_index, immersions);
                 const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
                 const EPoint ap = exact_application_point(Polygon(mesh,facet_index),down_direction,immersions,zG);
                 F += dF(O, ap , rho, g_norm, zG , dS);
@@ -374,7 +374,7 @@ Wrench hydrostatic::exact_force(const MeshPtr& mesh,                    //!< Mes
             }
             case PARTIALLY_EMERGED:
             {
-                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh->nodes,that_facet->index,immersions);
+                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh->nodes,that_facet->vertex_index,immersions);
                 const double zG = average_immersion(polygon_and_immersions);
                 const EPoint dS = orientation_factor*area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
                 const EPoint ap = exact_application_point(Polygon(polygon_and_immersions.first),down_direction,polygon_and_immersions.second,zG);

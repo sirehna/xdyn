@@ -41,7 +41,7 @@ TEST_F(hydrostaticTest, can_compute_average_immersion)
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double h = a.random<double>();
-        ASSERT_DOUBLE_EQ(5*h/12., average_immersion(mesh.nodes, mesh.facets.front().index, {0,0,h,h}));
+        ASSERT_DOUBLE_EQ(5*h/12., average_immersion(mesh.nodes, mesh.facets.front().vertex_index, {0,0,h,h}));
     }
 //! [hydrostaticTest average_immersion_example]
 }
@@ -62,7 +62,7 @@ TEST_F(hydrostaticTest, average_immersion_should_throw_if_index_does_not_have_th
 TEST_F(hydrostaticTest, can_compute_average_immersion_even_when_not_all_nodes_are_used)
 {
     const Mesh mesh = MeshBuilder(two_triangles()).build();
-    ASSERT_DOUBLE_EQ(7/3., average_immersion(mesh.nodes, mesh.facets.back().index, {1,2,3,4}));
+    ASSERT_DOUBLE_EQ(7/3., average_immersion(mesh.nodes, mesh.facets.back().vertex_index, {1,2,3,4}));
 }
 
 TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_one_immerged_node)
@@ -352,14 +352,14 @@ TEST_F(hydrostaticTest, bug_in_immerged_polygon)
 {
     const Mesh mesh = MeshBuilder(two_triangles()).build();
     const std::vector<double> z = {-1,-1,-2,1};
-    ASSERT_NO_THROW(immerged_polygon(mesh.nodes, mesh.facets.at(1).index, z));
+    ASSERT_NO_THROW(immerged_polygon(mesh.nodes, mesh.facets.at(1).vertex_index, z));
 }
 
 TEST_F(hydrostaticTest, another_bug_in_immerged_polygon)
 {
     const Mesh mesh = MeshBuilder(two_triangles()).build();
     const std::vector<double> z = {-1,-1,-2,1};
-    const auto polygon_and_immersions = immerged_polygon(mesh.nodes, mesh.facets.at(1).index, z);
+    const auto polygon_and_immersions = immerged_polygon(mesh.nodes, mesh.facets.at(1).vertex_index, z);
     const auto polygon = polygon_and_immersions.first;
 
     ASSERT_DOUBLE_EQ(1, polygon(0,0));

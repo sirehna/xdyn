@@ -73,7 +73,7 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
         for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ;)
         {
             size_t vertex_index = build_one_point(*it);
-            facet.index.push_back(vertex_index);
+            facet.vertex_index.push_back(vertex_index);
             ++it;
             if(it != list_of_points.end())
                 build_one_edge(Edge(vertex_index,build_one_point(*it)));
