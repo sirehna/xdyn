@@ -39,36 +39,24 @@ TEST_F(environment_parsersTest, default_wave_model)
 //! [environment_parsersTest example]
     const YamlDefaultWaveModel input = parse_default_wave_model("constant sea elevation in NED frame: {value: 1234, unit: m}\n"
                                                                 "output:\n"
-                                                                "    format: yaml\n"
                                                                 "    frame of reference: NED\n"
                                                                 "    mesh:\n"
-                                                                "       unit: km\n"
-                                                                "       x: [1,2,3,4,5,1,2,3,4]\n"
-                                                                "       y: [1,1,1,1,1,2,2,2,2]\n");
+                                                                "       xmin: {value: -10, unit: m}\n"
+                                                                "       xmax: {value: 1, unit: km}\n"
+                                                                "       nx: 10\n"
+                                                                "       ymin: {value: -20, unit: m}\n"
+                                                                "       ymax: {value: 3, unit: km}\n"
+                                                                "       ny: 20\n");
 //! [environment_parsersTest example]
 //! [environment_parsersTest expected output]
     ASSERT_DOUBLE_EQ(1234,input.zwave);
     ASSERT_EQ("NED", input.output.frame_of_reference);
-    ASSERT_EQ(9,input.output.x.size());
-    ASSERT_DOUBLE_EQ(1E3, input.output.x[0]);
-    ASSERT_DOUBLE_EQ(2E3, input.output.x[1]);
-    ASSERT_DOUBLE_EQ(3E3, input.output.x[2]);
-    ASSERT_DOUBLE_EQ(4E3, input.output.x[3]);
-    ASSERT_DOUBLE_EQ(5E3, input.output.x[4]);
-    ASSERT_DOUBLE_EQ(1E3, input.output.x[5]);
-    ASSERT_DOUBLE_EQ(2E3, input.output.x[6]);
-    ASSERT_DOUBLE_EQ(3E3, input.output.x[7]);
-    ASSERT_DOUBLE_EQ(4E3, input.output.x[8]);
-    ASSERT_EQ(9,input.output.y.size());
-    ASSERT_DOUBLE_EQ(1E3, input.output.y[0]);
-    ASSERT_DOUBLE_EQ(1E3, input.output.y[1]);
-    ASSERT_DOUBLE_EQ(1E3, input.output.y[2]);
-    ASSERT_DOUBLE_EQ(1E3, input.output.y[3]);
-    ASSERT_DOUBLE_EQ(1E3, input.output.y[4]);
-    ASSERT_DOUBLE_EQ(2E3, input.output.y[5]);
-    ASSERT_DOUBLE_EQ(2E3, input.output.y[6]);
-    ASSERT_DOUBLE_EQ(2E3, input.output.y[7]);
-    ASSERT_DOUBLE_EQ(2E3, input.output.y[8]);
+    ASSERT_DOUBLE_EQ(-10, input.output.xmin);
+    ASSERT_DOUBLE_EQ(1000, input.output.xmax);
+    ASSERT_EQ(10, input.output.nx);
+    ASSERT_DOUBLE_EQ(-20, input.output.ymin);
+    ASSERT_DOUBLE_EQ(3000, input.output.ymax);
+    ASSERT_EQ(20, input.output.ny);
 //! [environment_parsersTest expected output]
 }
 
@@ -100,27 +88,13 @@ TEST_F(environment_parsersTest, can_parse_wave_spreading_and_spectral_data)
 
 TEST_F(environment_parsersTest, can_parse_wave_outputs)
 {
-    ASSERT_EQ("NED",yaml.output.frame_of_reference);
-    ASSERT_EQ(9,yaml.output.x.size());
-    ASSERT_DOUBLE_EQ(1E3,yaml.output.x.at(0));
-    ASSERT_DOUBLE_EQ(2E3,yaml.output.x.at(1));
-    ASSERT_DOUBLE_EQ(3E3,yaml.output.x.at(2));
-    ASSERT_DOUBLE_EQ(4E3,yaml.output.x.at(3));
-    ASSERT_DOUBLE_EQ(5E3,yaml.output.x.at(4));
-    ASSERT_DOUBLE_EQ(1E3,yaml.output.x.at(5));
-    ASSERT_DOUBLE_EQ(2E3,yaml.output.x.at(6));
-    ASSERT_DOUBLE_EQ(3E3,yaml.output.x.at(7));
-    ASSERT_DOUBLE_EQ(4E3,yaml.output.x.at(8));
-    ASSERT_EQ(9,yaml.output.y.size());
-    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(0));
-    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(1));
-    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(2));
-    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(3));
-    ASSERT_DOUBLE_EQ(1E3,yaml.output.y.at(4));
-    ASSERT_DOUBLE_EQ(2E3,yaml.output.y.at(5));
-    ASSERT_DOUBLE_EQ(2E3,yaml.output.y.at(6));
-    ASSERT_DOUBLE_EQ(2E3,yaml.output.y.at(7));
-    ASSERT_DOUBLE_EQ(2E3,yaml.output.y.at(8));
+    ASSERT_EQ("NED", yaml.output.frame_of_reference);
+    ASSERT_DOUBLE_EQ(-10, yaml.output.xmin);
+    ASSERT_DOUBLE_EQ(1000, yaml.output.xmax);
+    ASSERT_EQ(10, yaml.output.nx);
+    ASSERT_DOUBLE_EQ(-20, yaml.output.ymin);
+    ASSERT_DOUBLE_EQ(3000, yaml.output.ymax);
+    ASSERT_EQ(20, yaml.output.ny);
 }
 
 

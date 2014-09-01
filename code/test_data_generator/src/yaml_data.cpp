@@ -504,9 +504,12 @@ std::string test_data::stable_rolling_cube_test()
        << "    output:\n"
        << "        frame of reference: cube\n"
        << "        mesh:\n"
-       << "           unit: m\n"
-       << "           x: [1,2,3,4,5,1,2,3,4]\n"
-       << "           y: [1,1,1,1,1,2,2,2,2]\n"
+       << "            xmin: {value: -10, unit: m}\n"
+       << "            xmax: {value: 1, unit: km}\n"
+       << "            nx: 10\n"
+       << "            ymin: {value: -20, unit: m}\n"
+       << "            ymax: {value: 3, unit: km}\n"
+       << "            ny: 20\n"
        << "\n"
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: cube\n"
@@ -884,9 +887,12 @@ std::string test_data::simple_waves()
        << "    output:\n"
        << "        frame of reference: NED\n"
        << "        mesh:\n"
-       << "           unit: m\n"
-       << "           x: [1,2,3,4,5,1,2,3,4]\n"
-       << "           y: [1,1,1,1,1,2,2,2,2]\n";
+       << "            xmin: {value: -10, unit: m}\n"
+       << "            xmax: {value: 1, unit: km}\n"
+       << "            nx: 10\n"
+       << "            ymin: {value: -20, unit: m}\n"
+       << "            ymax: {value: 3, unit: km}\n"
+       << "            ny: 20\n";
     return ss.str();
 }
 
@@ -926,9 +932,12 @@ std::string test_data::waves_for_parser_validation_only()
        << "output:\n"
        << "    frame of reference: NED\n"
        << "    mesh:\n"
-       << "       unit: km\n"
-       << "       x: [1,2,3,4,5,1,2,3,4]\n"
-       << "       y: [1,1,1,1,1,2,2,2,2]\n";
+       << "       xmin: {value: -10, unit: m}\n"
+       << "       xmax: {value: 1, unit: km}\n"
+       << "       nx: 10\n"
+       << "       ymin: {value: -20, unit: m}\n"
+       << "       ymax: {value: 3, unit: km}\n"
+       << "       ny: 20\n";
     return ss.str();
 }
 

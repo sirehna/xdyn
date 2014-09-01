@@ -111,13 +111,12 @@ void operator >> (const YAML::Node& node, YamlSpectra& g)
 void operator >> (const YAML::Node& node, YamlWaveOutput& g)
 {
     node["frame of reference"] >> g.frame_of_reference;
-    std::string unit;
-    node["mesh"]["unit"] >> unit;
-    const double factor = decode(UV(1,unit));
-    node["mesh"]["x"]                  >> g.x;
-    node["mesh"]["y"]                  >> g.y;
-    BOOST_FOREACH(double& x, g.x) x *= factor;
-    BOOST_FOREACH(double& y, g.y) y *= factor;
+    parse_uv(node["mesh"]["xmin"], g.xmin);
+    parse_uv(node["mesh"]["xmax"], g.xmax);
+    node["mesh"]["nx"]                    >> g.nx;
+    parse_uv(node["mesh"]["ymin"], g.ymin);
+    parse_uv(node["mesh"]["ymax"], g.ymax);
+    node["mesh"]["ny"]                    >> g.ny;
 }
 
 
