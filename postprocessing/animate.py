@@ -21,15 +21,16 @@ import math
 import numpy as np
 
 ################################################################################
+workingDirectory = os.getcwd()
 mobile3DFileName = 'anthineas.stl'
 mobile3DScale = 1
 mobile3DTranslate = [-9.355, 0, +3.21]
-mobileSimulationCsvFiles = ['D:\\V\\anthineas_equilibre.csv']
+mobileSimulationCsvFiles = [r'anthineas_in_wavesBret.csv']
 mobileSimulationObjectNames = ['Anthineas']
 
-wavePathPattern = 'D:\\V\\WaveElevation\\Res*.csv'
+wavePathPattern = 'anthineas_in_wavesBret_computed\waves*.csv'
 waveColor = [0.3333333333333333, 0.6666666666666666, 1.0]
-waveFiles = glob.glob(wavePathPattern)
+waveFiles = glob.glob(os.path.join(workingDirectory,wavePathPattern))
 
 resultDirectory = r'Results'
 
@@ -175,6 +176,8 @@ AnimationScene1.ViewModules = renderView
 nResultFiles = len(mobileSimulationCsvFiles)
 rowResults = []
 for csvFile in mobileSimulationCsvFiles:
+    if not os.path.isabs(csvFile):
+        csvFile = os.path.join(workingDirectory,csvFile)
     rr = CSVReader(FileName = [csvFile])
     rowResults.append(servermanager.Fetch(rr, 0).GetRowData())
 resultsLabelsDict = []
@@ -201,10 +204,14 @@ Transform1 = []
 Transform2 = []
 for i, rowResult in enumerate(rowResults):
     ext = os.path.splitext(mobile3DFileName[i])[1]
+    if os.path.isabs(mobile3DFileName[i]):
+        currentMobile3DFileName = mobile3DFileName[i]
+    else:
+        currentMobile3DFileName = os.path.join(workingDirectory,mobile3DFileName[i])
     if ext == '.vtk':
-        Mobile = LegacyVTKReader(FileNames = [mobile3DFileName[i]])
+        Mobile = LegacyVTKReader(FileNames = [currentMobile3DFileName])
     elif ext == '.stl':
-        Mobile = STLReader(FileNames = [mobile3DFileName[i]])
+        Mobile = STLReader(FileNames = [currentMobile3DFileName])
     else:
         pass
     RenameSource("Mobile_" + str(i), Mobile)
