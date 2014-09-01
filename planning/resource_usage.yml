@@ -5,7 +5,7 @@
     nc: c1
 
 projects:
-  - name: ETF-120095 & ETF-140075
+  - name: ETF-120095 & MAD-140075
     budget: 100000
     T0: 1/2/2014
     prices:
@@ -69,6 +69,15 @@ projects:
         # Week 31
       - week ending on: 1/8/2014
         cec: 5
+        # Week 34
+      - week ending on: 22/8/2014
+        cec: 2
+        # Week 35
+      - week ending on: 29/8/2014
+        cec: 3
+        # Week 36
+      - week ending on: 5/9/2014
+        cec: 5
   - name: ETI-140043
     budget: 50000
     prices:
@@ -92,4 +101,12 @@ projects:
         # Week 26
       - week ending on: 27/6/2014
         cec: 4
+        # Week 34
+      - week ending on: 22/8/2014
+        cec: 2
+        # Week 35
+      - week ending on: 29/8/2014
+        cec: 2
+        nc: 4.5
+        gj: 4
 
