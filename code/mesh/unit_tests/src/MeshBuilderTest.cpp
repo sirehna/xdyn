@@ -78,6 +78,22 @@ TEST_F(MeshBuilderTest, should_be_able_to_represent_a_cube)
 		ASSERT_DOUBLE_EQ(0.5,m.facets.at(i).area)<<i;
 }
 
+TEST_F(MeshBuilderTest, can_enumerate_vertices_of_facets_in_same_order_than_edges)
+{
+    const Mesh m = MeshBuilder(unit_cube()).build();
+    for(size_t facet_index=0 ; facet_index < m.facets.size() ; ++facet_index) {
+        Facet f = m.facets.at(facet_index);
+        for(size_t iv=0 ; iv < f.vertex_index.size() ; ++iv ) {
+            Edge e = m.edges.at( m.edgesPerFacet.at(facet_index).at(iv) );
+            ASSERT_EQ( f.vertex_index[iv] ,
+                       e.first_vertex(m.edgesRunningDirection.at(facet_index).at(iv)?1:0));
+            size_t iv_next = (iv+1) % f.vertex_index.size();
+            ASSERT_EQ( f.vertex_index[iv_next] ,
+                       e.second_vertex(m.edgesRunningDirection.at(facet_index).at(iv)?1:0));
+        }
+    }
+}
+
 TEST_F(MeshBuilderTest, two_triangles)
 {
     const Mesh m = MeshBuilder(two_triangles()).build();
