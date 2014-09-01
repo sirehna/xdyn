@@ -7,6 +7,17 @@ Edge::Edge(size_t v1,size_t v2)
     vertex_index[1]=v2;
 }
 
+size_t Edge::first_edge(int direction) const
+{
+    return vertex_index[direction];
+}
+
+size_t Edge::last_edge(int direction) const
+{
+    return vertex_index[1-direction];
+}
+
+
 Mesh::Mesh():nodes(Matrix3x()),edges(std::vector<Edge>()),facets(std::vector<Facet>()), orientation_factor(1)
 {
 }

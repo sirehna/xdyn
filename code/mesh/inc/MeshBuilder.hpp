@@ -58,11 +58,13 @@ class MeshBuilder
         Vector3dMap xyzMap;
         EdgeMap edgeMap;
         size_t index;
+        size_t edgeIndex;
         Matrix3x nodes;
         std::vector<Edge> edges;
         std::vector<Facet> facets;
 
         Matrix3x resize(const Matrix3x& M) const;
+        size_t build_one_edge(const Edge& e);
         size_t build_one_point(const EPoint& xyz);
         bool edge_is_in_map(const Edge& e);
         bool point_is_in_map(const EPoint& xyz);

@@ -15,7 +15,9 @@ struct Edge
 {
 public:
     Edge(size_t v1,size_t v2);
-    size_t vertex_index[2];  //!< The index ot the two vertices in the mesh
+    size_t first_edge(int direction) const;
+    size_t last_edge(int direction) const;
+    size_t vertex_index[2];  //!< The index of the two vertices in the mesh
 };
 
 /**

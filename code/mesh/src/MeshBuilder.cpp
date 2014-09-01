@@ -23,6 +23,7 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    edgeMap(EdgeMap()),
                                                                    index(0),
+                                                                   edgeIndex(0),
                                                                    nodes(Matrix3x()),
                                                                    edges(std::vector<Edge>()),
                                                                    facets(std::vector<Facet>()),
@@ -35,6 +36,7 @@ MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1
                                                             xyzMap(Vector3dMap()),
                                                             edgeMap(EdgeMap()),
                                                             index(0),
+                                                            edgeIndex(0),
                                                             nodes(Matrix3x()),
                                                             edges(std::vector<Edge>()),
                                                             facets(std::vector<Facet>()),
@@ -74,12 +76,19 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
             facet.index.push_back(vertex_index);
             ++it;
             if(it != list_of_points.end())
-                add_edge_if_missing(Edge(vertex_index,build_one_point(*it)));
+                build_one_edge(Edge(vertex_index,build_one_point(*it)));
             else
-                add_edge_if_missing(Edge(vertex_index,build_one_point(*(list_of_points.begin()))));
+                build_one_edge(Edge(vertex_index,build_one_point(*(list_of_points.begin()))));
         }
         facets.push_back(facet);
     }
+}
+
+size_t MeshBuilder::build_one_edge(const Edge& e)
+{
+    const bool edge_has_been_added = add_edge_if_missing(e);
+    if (edge_has_been_added) edgeIndex++;
+    return edgeMap[e];
 }
 
 size_t MeshBuilder::build_one_point(const EPoint& xyz)
@@ -94,7 +103,7 @@ bool MeshBuilder::add_edge_if_missing(const Edge& e)
     bool edge_has_been_added = false;
     if (not(edge_is_in_map(e)))
     {
-        edgeMap.insert(std::make_pair(e,index));
+        edgeMap.insert(std::make_pair(e,edgeIndex));
         edges.push_back(e);
         edge_has_been_added = true;
     }
@@ -129,6 +138,7 @@ MeshBuilder::MeshBuilder(const Matrix3x& tri) : v(VectorOfVectorOfPoints()),
                                                 xyzMap(Vector3dMap()),
                                                 edgeMap(EdgeMap()),
                                                 index(0),
+                                                edgeIndex(0),
                                                 nodes(Matrix3x()),
                                                 edges(std::vector<Edge>()),
                                                 facets(std::vector<Facet>()),
