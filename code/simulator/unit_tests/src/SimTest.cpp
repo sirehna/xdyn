@@ -204,7 +204,7 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh)
     const Sim sys = get_system(test_data::waves());
     const double t = 9951191801.8523445;
     const std::vector<Point> w = sys.get_waves(t);
-    ASSERT_EQ(200, w.size());
+    ASSERT_EQ(10, w.size());
     ASSERT_DOUBLE_EQ(1, (double)w[0].x());
     ASSERT_DOUBLE_EQ(1, (double)w[0].y());
     ASSERT_NEAR(-23.180900790763086, (double)w[0].z(), 1E-5);
@@ -247,7 +247,7 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
     const Sim sys = get_system(test_data::stable_rolling_cube_test(), test_data::cube());
     const std::vector<Point> w = sys.get_waves(a.random<double>());
     ASSERT_EQ(200, w.size());
-    for (size_t i = 0 ; i < 9 ; ++i)
+    for (size_t i = 0 ; i < 200 ; ++i)
     {
         ASSERT_DOUBLE_EQ(0, (double)w[i].z());
     }
