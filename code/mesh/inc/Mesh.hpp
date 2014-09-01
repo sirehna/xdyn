@@ -20,6 +20,22 @@ public:
     size_t vertex_index[2];  //!< The index of the two vertices in the mesh
 };
 
+
+/**
+ * \brief Contains a facet of a mesh
+ * \ingroup mesh
+ */
+struct Facet
+{
+    Facet():index(std::vector<size_t>()),unit_normal(Eigen::MatrixXd::Zero(3,1)),barycenter(Eigen::MatrixXd::Zero(3,1)),area(0) {}
+    std::vector<size_t> index;
+    Eigen::Vector3d unit_normal;
+    Eigen::Vector3d barycenter;
+    double area;
+};
+
+typedef std::vector<Facet> VectorOfFacet;
+
 /**
  * \author gj
  * \brief Contains a triangular mesh
