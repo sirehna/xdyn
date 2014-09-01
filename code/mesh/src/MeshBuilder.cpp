@@ -58,36 +58,47 @@ Matrix3x MeshBuilder::resize(const Matrix3x& M) const
 Mesh MeshBuilder::build()
 {
     *this = std::for_each(v.begin(), v.end(), *this);
-    return Mesh(resize(nodes), edges , facets, clockwise);
+    return Mesh(resize(nodes), edges , facets, facetsPerEdge , edgesPerFacet , edgesRunningDirection , clockwise);
 }
 
 void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
 {
     if (not(list_of_points.empty()))
     {
+        size_t facet_index=facets.size();
+        std::vector<size_t> edges_of_this_facet;
+        std::vector<bool> running_directions;
         Facet facet;
         const Matrix3x M = convert(list_of_points);
         facet.unit_normal = unit_normal(M);
         facet.area = area(M);
         facet.barycenter = barycenter(M);
-        for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ;)
+        for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ; )
         {
             size_t vertex_index = build_one_point(*it);
             facet.vertex_index.push_back(vertex_index);
             ++it;
-            if(it != list_of_points.end())
-                build_one_edge(Edge(vertex_index,build_one_point(*it)));
-            else
-                build_one_edge(Edge(vertex_index,build_one_point(*(list_of_points.begin()))));
+            size_t edge_index = (it != list_of_points.end())
+                ? build_one_edge(Edge(vertex_index,build_one_point(*it)))
+                : build_one_edge(Edge(vertex_index,build_one_point(*(list_of_points.begin()))));
+            edges_of_this_facet.push_back(edge_index);
+            facetsPerEdge.at(edge_index).push_back(facet_index);
+            running_directions.push_back( edges.at(edge_index).first_vertex(0) == vertex_index);
         }
         facets.push_back(facet);
+        edgesPerFacet.push_back(edges_of_this_facet);
+        edgesRunningDirection.push_back(running_directions);
     }
 }
 
 size_t MeshBuilder::build_one_edge(const Edge& e)
 {
     const bool edge_has_been_added = add_edge_if_missing(e);
-    if (edge_has_been_added) edgeIndex++;
+    if (edge_has_been_added) {
+        std::vector<size_t> listOfFacets;
+        facetsPerEdge.push_back(listOfFacets);
+        edgeIndex++;
+    }
     return edgeMap[e];
 }
 

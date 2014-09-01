@@ -15,9 +15,10 @@ TEST_F(MeshBuilderTest, should_be_able_to_build_a_mesh_from_a_single_triangle)
 	const Mesh m = MeshBuilder(one_triangle()).build();
 	ASSERT_EQ(1,m.facets.size());
 	ASSERT_EQ(3,m.nodes.cols());
+    ASSERT_EQ(3,m.edges.size());
 }
 
-TEST_F(MeshBuilderTest, adding_twice_a_triangle_should_not_change_the_number_of_nodes)
+TEST_F(MeshBuilderTest, adding_twice_a_triangle_should_not_change_the_number_of_nodes_nor_edges)
 {
 	VectorOfVectorOfPoints triangles;
 	triangles.push_back(one_triangle());
@@ -25,6 +26,7 @@ TEST_F(MeshBuilderTest, adding_twice_a_triangle_should_not_change_the_number_of_
 	Mesh m = MeshBuilder(triangles).build();
 	ASSERT_EQ(2,m.facets.size());
 	ASSERT_EQ(3,m.nodes.cols());
+    ASSERT_EQ(3,m.edges.size());
 }
 
 TEST_F(MeshBuilderTest, should_be_able_to_evaluate_the_barycenter_of_a_single_triangle)
@@ -71,6 +73,7 @@ TEST_F(MeshBuilderTest, should_be_able_to_represent_a_cube)
 	const Mesh m = MeshBuilder(unit_cube()).build();
 	ASSERT_EQ(12,m.facets.size());
 	ASSERT_EQ(8,m.nodes.cols());
+    ASSERT_EQ(18,m.edges.size());
 	for (size_t i=0;i<12;++i)
 		ASSERT_DOUBLE_EQ(0.5,m.facets.at(i).area)<<i;
 }
@@ -80,6 +83,7 @@ TEST_F(MeshBuilderTest, two_triangles)
     const Mesh m = MeshBuilder(two_triangles()).build();
     ASSERT_EQ(2, m.facets.size());
     ASSERT_EQ(4, m.nodes.cols());
+    ASSERT_EQ(5, m.edges.size());
     // Check first point
     ASSERT_DOUBLE_EQ(0, (double)m.nodes(0,0));
     ASSERT_DOUBLE_EQ(0, (double)m.nodes(1,0));

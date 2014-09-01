@@ -62,6 +62,9 @@ class MeshBuilder
         Matrix3x nodes;
         std::vector<Edge> edges;
         std::vector<Facet> facets;
+        std::vector<std::vector<size_t> > facetsPerEdge; //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
+        std::vector<std::vector<size_t> > edgesPerFacet; //!< for each Facet (index), the list of Edges (indices) composing the facet
+        std::vector<std::vector<bool> > edgesRunningDirection; //!< for each Facet (index), the running direction of each edge
 
         Matrix3x resize(const Matrix3x& M) const;
         size_t build_one_edge(const Edge& e);
