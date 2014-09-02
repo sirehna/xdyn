@@ -28,7 +28,7 @@ struct Edge
 
     /* \brief answer whether this edge crosses the free surface
      */
-    bool potentially_crosses_free_surface() const;
+    bool touches_free_surface() const;
 
     /* \brief answer whether this edge is totally emerged
      */

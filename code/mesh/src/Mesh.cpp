@@ -19,7 +19,7 @@ size_t Edge::second_vertex(int direction) const
 {
     return vertex_index[1-direction];
 }
-bool Edge::potentially_crosses_free_surface() const
+bool Edge::touches_free_surface() const
 {
     return (((status & 1) != 0) xor ((status & 2) != 0)) or ((status & 4) != 0);
 }
@@ -99,7 +99,7 @@ void Mesh::update_intersection_with_free_surface(
     for( size_t edge_index=0 ; edge_index < static_edges ; ++edge_index ) {
         std::vector<Edge>::iterator edge = edges.begin() + edge_index; // use a new iterator, since edges is modified in the loop
         edge->update_intersection_with_free_surface(relative_immersions);
-        if (edge->potentially_crosses_free_surface()) {
+        if (edge->touches_free_surface()) {
             set_of_facets_crossing_free_surface.insert(facetsPerEdge[edge_index].begin(),facetsPerEdge[edge_index].end());
             added_edges[edge_index] = split_partially_immersed_edge(*edge);
         }
