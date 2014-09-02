@@ -29,13 +29,13 @@ import argparse
 import os
 import re
 import numpy as np
-import yaml
 
 def generateCsvWaveFilesFromYamlOutputWaveFile(
         yamlWave = 'wave.yml',
         CsvFormat = '%.18e',
         useYamlParser = False):
     def generateCsvWaveFilesFromYamlOutputWaveFileWithYamlParser():
+        import yaml
         waves = yaml.load(open(yamlWave, 'r'))
         waves = waves['waves']
         has_x_and_y_field_for_each_t = True
