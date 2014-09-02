@@ -117,7 +117,7 @@ public:
     EPoint edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB) const;
 
     /* \brief split an edge into an emerged and an immerged part */
-    size_t split_partially_immerged_edge(Edge &edge);
+    size_t split_partially_immerged_edge(const Edge &edge);
 
     /* \brief split a Facet into an emerged and an immerged part */
     void split_partially_immerged_facet(
@@ -126,7 +126,7 @@ public:
 
     /* \brief create a new facet dynamically
      * \return the facet index in facets vector */
-    size_t create_facet_from_edges(const std::vector<OrientedEdge> edge_list);
+    size_t create_facet_from_edges(const std::vector<OrientedEdge>& edge_list);
 
     Matrix3x nodes;            //!< Coordinates of static vertices in mesh
     std::vector<Edge> edges;   //!< All edges in mesh

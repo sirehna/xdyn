@@ -21,7 +21,7 @@ size_t Edge::second_vertex(int direction) const
 }
 bool Edge::crosses_free_surface() const
 {
-    return status == 1 || status == 2;
+    return status == 1 or status == 2;
 }
 bool Edge::is_emerged() const
 {
@@ -38,8 +38,8 @@ void Edge::update_intersection_with_free_surface(
 {
     double z_0 = relative_immersions[vertex_index[0]];
     double z_1 = relative_immersions[vertex_index[1]];
-    bool first_is_immerged  = z_0 < 0 or (z_0 == 0 and z_1 < 0);
-    bool second_is_immerged = z_1 < 0 or (z_1 == 0 and z_0 < 0);
+    bool first_is_immerged  = z_0 > 0 or (z_0 == 0 and z_1 > 0);
+    bool second_is_immerged = z_1 > 0 or (z_1 == 0 and z_0 > 0);
     status = (unsigned char)((first_is_immerged?1:0) | (second_is_immerged?2:0));
 }
 
@@ -95,8 +95,8 @@ void Mesh::update_intersection_with_free_surface(
     std::map<size_t,size_t > added_edges;
 
     // iterate on each edge to find intersection with free surface
-    std::vector<Edge>::iterator edge = edges.begin();
-    for( size_t edge_index=0 ; edge_index < static_edges ; ++edge , ++edge_index ) {
+    for( size_t edge_index=0 ; edge_index < static_edges ; ++edge_index ) {
+        std::vector<Edge>::iterator edge = edges.begin() + edge_index; // use a new iterator, since edges is modified in the loop
         edge->update_intersection_with_free_surface(relative_immersions);
         if (edge->crosses_free_surface()) {
             set_of_facets_crossing_free_surface.insert(facetsPerEdge[edge_index].begin(),facetsPerEdge[edge_index].end());
@@ -178,7 +178,7 @@ void Mesh::split_partially_immerged_facet(
             }
         }
     }
-    if(emerged_edges.size() == 1 or immerged_edges.size() == 1) return; // degenerated case...
+    if(emerged_edges.size() == 1 or immerged_edges.size() == 1) return; // degenerated case, the facet is tangent to free surface
 
     // insert the closing edge
     size_t closing_edge_index = edges.size();
@@ -194,13 +194,13 @@ void Mesh::split_partially_immerged_facet(
     list_of_facets_immerged.push_back(create_facet_from_edges(immerged_edges));
 }
 
-size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge> edge_list)
+size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list)
 {
     Facet added_facet;
     std::vector<size_t> vertex_list;
     Matrix3x coords(3,edge_list.size());
     for( size_t ei=0;ei<edge_list.size();ei++) {
-        vertex_list.push_back(edges[edge_list[ei].edge_index].first_vertex(edge_list[ei].direction));
+        vertex_list.push_back(edges[edge_list[ei].edge_index].second_vertex(edge_list[ei].direction)); // Note: use second vertex rather than first for compatibility with existing tests
         coords.col(ei)=all_nodes.col(ei);
     }
     added_facet.vertex_index = vertex_list;
@@ -212,7 +212,7 @@ size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge> edge_list)
     return facet_index;
 }
 
-size_t Mesh::split_partially_immerged_edge(Edge &edge)
+size_t Mesh::split_partially_immerged_edge(const Edge &edge)
 {
     EPoint A=nodes.col(edge.vertex_index[0]);
     EPoint B=nodes.col(edge.vertex_index[1]);
