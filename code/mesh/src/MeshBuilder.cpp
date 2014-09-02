@@ -4,21 +4,6 @@
 #include "MeshBuilder.hpp"
 #include "mesh_manipulations.hpp"
 
-Matrix3x MeshBuilder::get_nodes() const
-{
-    return nodes;
-}
-
-std::vector<Edge> MeshBuilder::get_edges() const
-{
-    return edges;
-}
-
-std::vector<Facet> MeshBuilder::get_facets() const
-{
-    return facets;
-}
-
 MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    edgeMap(EdgeMap()),

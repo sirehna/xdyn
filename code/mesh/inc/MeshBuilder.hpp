@@ -49,9 +49,6 @@ class MeshBuilder
         MeshBuilder(const Matrix3x& tri);
         Mesh build();
         void operator()(const VectorOfPoints& Tri);
-        Matrix3x get_nodes() const;
-        std::vector<Edge> get_edges() const;
-        std::vector<Facet> get_facets() const;
 
     private:
         VectorOfVectorOfPoints v;
