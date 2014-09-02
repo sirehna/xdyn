@@ -7,6 +7,10 @@
 
 #include <boost/foreach.hpp>
 
+#include <cmath> //std::sqrt
+#include <list>
+#include <utility> //std::pair
+
 #include "discretize.hpp"
 #include "WaveDirectionalSpreading.hpp"
 #include "WaveSpectralDensity.hpp"
@@ -64,4 +68,54 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
     return ret;
 }
+#include "test_macros.hpp"
+typedef std::pair<double,size_t> ValIdx;
+bool comparator ( const ValIdx& l, const ValIdx& r);
+bool comparator ( const ValIdx& l, const ValIdx& r)
+   { return l.first > r.first; }
 
+FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to flatten
+                                            const double ratio //!< Between 0 & 1: where should we cut off the spectra?
+                                            )
+{
+    FlatDiscreteDirectionalWaveSpectrum ret;
+    ret.domega = spectrum.domega;
+    ret.dpsi = spectrum.dpsi;
+    double S = 0;
+    std::list<ValIdx> SiDj;
+    size_t k = 0;
+    std::vector<size_t> i_idx;
+    std::vector<size_t> j_idx;
+    for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
+    {
+        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
+        {
+            const double s = spectrum.Si[i]*spectrum.Dj[j];
+            S += s;
+            SiDj.push_back(std::make_pair(s,k++));
+            i_idx.push_back(i);
+            j_idx.push_back(j);
+        }
+    }
+    SiDj.sort(comparator);
+
+    double cumsum = 0;
+    const double max_energy = ratio*S;
+    const size_t n = SiDj.size();
+    for (size_t k = 0 ; k < n ; ++k)
+    {
+        const ValIdx sidj = SiDj.front();
+        SiDj.pop_front();
+        cumsum += sidj.first;
+        if (cumsum>max_energy) return ret;
+        DiscreteDirectionalWaveDensity x;
+        const size_t i = i_idx[sidj.second];
+        const size_t j = j_idx[sidj.second];
+        x.k = spectrum.k[i];
+        x.omega = spectrum.omega[i];
+        x.psi = spectrum.psi[j];
+        x.sqrt_2_SiDj = sqrt(2*sidj.first);
+        ret.spectrum.push_back(x);
+    }
+    return ret;
+}
