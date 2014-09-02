@@ -14,6 +14,9 @@
 # - A set of XYZ CSV files to represent wave elevation for each time steps. No
 #   header are required
 #
+# Limitations:
+# - All simulations should have the same time basis
+
 try: paraview.simple
 except: from paraview.simple import *
 paraview.simple._DisableFirstRenderCameraReset()
@@ -22,21 +25,6 @@ import glob
 import os
 import math
 import numpy as np
-
-################################################################################
-workingDirectory = os.getcwd()
-mobile3DFileName = 'anthineas.stl'
-mobile3DScale = 1
-mobile3DTranslate = [-9.355, 0, +3.21]
-mobileSimulationCsvFiles = [r'anthineas_in_wavesBret.csv']
-mobileSimulationObjectNames = ['Anthineas']
-
-wavePathPattern = 'anthineas_in_wavesBret_computed\waves*.csv'
-waveColor = [0.3333333333333333, 0.6666666666666666, 1.0]
-waveFiles = glob.glob(os.path.join(workingDirectory,wavePathPattern))
-
-resultDirectory = r'Results'
-
 ################################################################################
 defaultColor = [[1.00, 0.00, 0.00],
                 [0.00, 1.00, 0.00],
@@ -120,7 +108,7 @@ def paraviewSaveImage(\
     Render()
 
 def globalViewSettings(rv):
-    rv.ViewSize = [1200, 800]
+    rv.ViewSize = [1600, 900]
     rv.OrientationAxesVisibility = 0
     rv.CenterAxesVisibility = 0
     rv.LightIntensity = 0.15
@@ -130,189 +118,282 @@ def globalViewSettings(rv):
     rv.UseLight = 1
     rv.CameraParallelProjection = 1
 
-if not os.path.isabs(resultDirectory):
-    resultDirectory = os.path.join(os.getcwd(),resultDirectory)
-if not os.path.isdir(resultDirectory):
-    os.mkdir(resultDirectory)
-
-if (type(mobile3DFileName) == str or type(mobile3DFileName) == unicode):
-    mobile3DFileName = [mobile3DFileName] * len(mobileSimulationCsvFiles)
-
-listOfColumns = ['t']
-for objName in mobileSimulationObjectNames:
-    listOfColumns.extend(getResultColumnNames(objName))
-
-Res = CSVReader(FileName = waveFiles)
-Res.HaveHeaders = 0
-TableToPoints1 = TableToPoints()
-TableToPoints1.XColumn = 'Field 0'
-TableToPoints1.YColumn = 'Field 1'
-TableToPoints1.ZColumn = 'Field 2'
-delaunay2D = Delaunay2D()
-delaunay2DRepresentation = Show()
-delaunay2DRepresentation.ScaleFactor = 10.0
-delaunay2DRepresentation.EdgeColor = [0.0, 0.0, 0.5]
-delaunay2DRepresentation.DiffuseColor = waveColor
-
-renderView = GetRenderView()
-renderView.CompressorConfig = 'vtkSquirtCompressor 0 3'
-renderView.UseLight = 1
-renderView.LightSwitch = 0
-renderView.OrientationAxesInteractivity = 1
-renderView.OrientationAxesOutlineColor = [0.0, 1.0, 1.0]
-renderView.RemoteRenderThreshold = 3.0
-renderView.Background = [0.34, 0.34, 0.43]
-renderView.CenterAxesVisibility = 0
-renderView.CenterOfRotation = [50.0, 50.0, 0.07]
-renderView.CameraParallelProjection = 1
-renderView.CameraViewUp = [0.03, -0.45, -0.89]
-renderView.CameraPosition = [-130, 230, -130]
-renderView.CameraFocalPoint = [-4.0, 14.0, -7.7]
-renderView.CameraParallelScale = 49
-renderView.CameraClippingRange = [34.0, 610.0]
-
-animationScene = GetAnimationScene()
-animationScene.EndTime = len(waveFiles)
-animationScene.PlayMode = 'Snap To TimeSteps'
-animationScene.ViewModules = renderView
-
-nResultFiles = len(mobileSimulationCsvFiles)
-rowResults = []
-for csvFile in mobileSimulationCsvFiles:
-    if not os.path.isabs(csvFile):
-        csvFile = os.path.join(workingDirectory,csvFile)
-    rr = CSVReader(FileName = [csvFile])
-    rowResults.append(servermanager.Fetch(rr, 0).GetRowData())
-resultsLabelsDict = []
-for rowResult in rowResults:
-    resultLabelsDict = {}
-    for ar in range(rowResult.GetNumberOfArrays()):
-        name = rowResult.GetArrayName(ar)
-        if name in listOfColumns:
-            resultLabelsDict[name] = ar
-    resultsLabelsDict.append(resultLabelsDict)
-
-# Determine t0, tf, and number of frames from result files
-t0 = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetRange()[0]
-tf = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetRange()[1]
-N = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetSize()
-for i, rowResult in enumerate(rowResults):
-    t0 = min(t0, rowResult.GetArray(resultsLabelsDict[i]['t']).GetRange()[0])
-    tf = max(tf, rowResult.GetArray(resultsLabelsDict[i]['t']).GetRange()[1])
-    N = max(N, rowResult.GetArray(resultsLabelsDict[i]['t']).GetSize())
-print('Tstart {0:+06.2f} - Tend {1:+06.2f} - N =  {2}'.format(t0, tf, N))
-animationScene.AnimationTime = t0
-animationScene.StartTime = t0
-animationScene.EndTime = tf
-animationScene.NumberOfFrames = N
-animationDuration = tf - t0
+    rv.CompressorConfig = 'vtkSquirtCompressor 0 3'
+    rv.UseLight = 1
+    rv.LightSwitch = 0
+    rv.OrientationAxesInteractivity = 1
+    rv.OrientationAxesOutlineColor = [0.0, 1.0, 1.0]
+    rv.RemoteRenderThreshold = 3.0
+    rv.Background = [0.34, 0.34, 0.43]
+    rv.CenterAxesVisibility = 0
+    rv.CenterOfRotation = [50.0, 50.0, 0.07]
+    rv.CameraViewUp = [0.03, -0.45, -0.89]
+    rv.CameraPosition = [-130, 230, -130]
+    rv.CameraFocalPoint = [-4.0, 14.0, -7.7]
+    rv.CameraParallelScale = 49
+    rv.CameraClippingRange = [34.0, 610.0]
 
 
+def main(mobile, wave, resultDirectory = r'Results', \
+    saveImages = False, makeOnlyImages = False):
+    if makeOnlyImages:
+        saveImages = True
+    workingDirectory = os.getcwd()
+    mobile3DFileName = mobile['3DFileName']
+    mobile3DScale = mobile['3DScale']
+    mobile3DTranslate = mobile['3DTranslate']
+    mobileSimulationCsvFiles = mobile['SimulationCsvFiles']
+    mobileSimulationObjectNames = mobile['SimulationObjectNames']
 
-Mobiles = []
-Transform1 = []
-Transform2 = []
-for i, rowResult in enumerate(rowResults):
-    ext = os.path.splitext(mobile3DFileName[i])[1]
-    if os.path.isabs(mobile3DFileName[i]):
-        currentMobile3DFileName = mobile3DFileName[i]
+    wavePathPattern = wave['PathPattern']
+    waveColor = wave['Color']
+    waveFiles = wave['Files']
+
+    if not os.path.isabs(resultDirectory):
+        resultDirectory = os.path.join(os.getcwd(), resultDirectory)
+    if not os.path.isdir(resultDirectory):
+        os.mkdir(resultDirectory)
+
+    if (type(mobile3DFileName) == str or type(mobile3DFileName) == unicode):
+        mobile3DFileName = [mobile3DFileName] * len(mobileSimulationCsvFiles)
+
+    listOfColumns = ['t']
+    for objName in mobileSimulationObjectNames:
+        listOfColumns.extend(getResultColumnNames(objName))
+
+    Res = CSVReader(FileName = waveFiles)
+    Res.HaveHeaders = 0
+    TableToPoints1 = TableToPoints()
+    TableToPoints1.XColumn = 'Field 0'
+    TableToPoints1.YColumn = 'Field 1'
+    TableToPoints1.ZColumn = 'Field 2'
+    delaunay2D = Delaunay2D()
+    delaunay2DRepresentation = Show()
+    delaunay2DRepresentation.ScaleFactor = 10.0
+    delaunay2DRepresentation.EdgeColor = [0.0, 0.0, 0.5]
+    delaunay2DRepresentation.DiffuseColor = waveColor
+
+    renderView = GetRenderView()
+    globalViewSettings(renderView)
+
+    animationScene = GetAnimationScene()
+    animationScene.EndTime = len(waveFiles)
+    animationScene.PlayMode = 'Snap To TimeSteps'
+    # animationScene.PlayMode = 'Sequence'
+    animationScene.ViewModules = renderView
+
+    nResultFiles = len(mobileSimulationCsvFiles)
+    rowResults = []
+    for csvFile in mobileSimulationCsvFiles:
+        if not os.path.isabs(csvFile):
+            csvFile = os.path.join(workingDirectory, csvFile)
+        rr = CSVReader(FileName = [csvFile])
+        rowResults.append(servermanager.Fetch(rr, 0).GetRowData())
+    resultsLabelsDict = []
+    for rowResult in rowResults:
+        resultLabelsDict = {}
+        for ar in range(rowResult.GetNumberOfArrays()):
+            name = rowResult.GetArrayName(ar)
+            if name in listOfColumns:
+                resultLabelsDict[name] = ar
+        resultsLabelsDict.append(resultLabelsDict)
+
+    # Determine t0, tf, and number of frames from result files
+    t0 = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetRange()[0]
+    tf = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetRange()[1]
+    N = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetSize()
+    for i, rowResult in enumerate(rowResults):
+        t0 = min(t0, rowResult.GetArray(resultsLabelsDict[i]['t']).GetRange()[0])
+        tf = max(tf, rowResult.GetArray(resultsLabelsDict[i]['t']).GetRange()[1])
+        N = max(N, rowResult.GetArray(resultsLabelsDict[i]['t']).GetSize())
+    print('Tstart {0:+06.2f} - Tend {1:+06.2f} - N =  {2}'.format(t0, tf, N))
+    if animationScene.PlayMode == 'Snap To TimeSteps':
+        animationScene.AnimationTime = 0
+        animationScene.StartTime = 0
+        animationScene.EndTime = N - 1
     else:
-        currentMobile3DFileName = os.path.join(workingDirectory,mobile3DFileName[i])
-    if ext == '.vtk':
-        Mobile = LegacyVTKReader(FileNames = [currentMobile3DFileName])
-    elif ext == '.stl':
-        Mobile = STLReader(FileNames = [currentMobile3DFileName])
-    else:
-        pass
-    RenameSource("Mobile_" + str(i), Mobile)
-    Mobile.UpdatePipeline()
-    active_objects.source.SMProxy.InvokeEvent('UserEvent', 'HideWidget')
-    Transform1.append(Transform(Transform = "Transform"))
-    Transform1[-1].Transform = "Transform"
-    Transform1[-1].Transform.Scale = [mobile3DScale, mobile3DScale, mobile3DScale]
-    Transform1[-1].Transform.Translate = mobile3DTranslate
-    active_objects.source.SMProxy.InvokeEvent('UserEvent', 'HideWidget')
-    RenameSource("Mobile_offset"+str(i), Transform1[-1])
-    Transform2.append(Transform(Transform = "Transform"))
-    Transform2[-1].Transform = "Transform"
-    active_objects.source.SMProxy.InvokeEvent('UserEvent', 'HideWidget')
-    RenameSource("Mobile_tr"+str(i), Transform2[-1])
-    SM_tr_repr = Show()
-    if nResultFiles > 1:
-        SM_tr_repr.DiffuseColor = defaultColor[i]
-    Show()
-    Render()
-    RenderView = GetRenderView()
-    Mobiles.append(Mobile)
+        animationScene.AnimationTime = t0
+        animationScene.StartTime = t0
+        animationScene.EndTime = tf
+    animationScene.NumberOfFrames = N
+    animationDuration = tf - t0
 
-
-timeLabel = AnnotateTimeFilter()
-timeLabel_repr = Show()
-timeLabel.Format = 'Time: %04.2f'
-timeLabel_repr.FontSize = 14
-timeLabel_repr.WindowLocation = 'UpperRightCorner'
-
-makeOnlyImages = True
-if makeOnlyImages:
-    for i in range(N):
-        animationScene.AnimationTime = i
-        for j, (transform2, rowResult) in enumerate(zip(Transform2, rowResults)):
-            col = getResultColumnNames(mobileSimulationObjectNames[0])
-            xyz = [rowResult.GetArray(resultsLabelsDict[j][col[0]]).GetTuple(i)[0], \
-                   rowResult.GetArray(resultsLabelsDict[j][col[1]]).GetTuple(i)[0], \
-                   rowResult.GetArray(resultsLabelsDict[j][col[2]]).GetTuple(i)[0]]
-            quat = [rowResult.GetArray(resultsLabelsDict[j][col[3]]).GetTuple(i)[0], \
-                    rowResult.GetArray(resultsLabelsDict[j][col[4]]).GetTuple(i)[0], \
-                    rowResult.GetArray(resultsLabelsDict[j][col[5]]).GetTuple(i)[0], \
-                    rowResult.GetArray(resultsLabelsDict[j][col[6]]).GetTuple(i)[0]]
-            par = quat2ParaviewAngle(quat)
-            transform2.Transform.Translate = xyz
-            transform2.Transform.Rotate = par
-            transform2.UpdatePipeline()
+    Mobiles = []
+    Mobile_offset = []
+    Mobile_tr = []
+    for i, rowResult in enumerate(rowResults):
+        ext = os.path.splitext(mobile3DFileName[i])[1]
+        if os.path.isabs(mobile3DFileName[i]):
+            currentMobile3DFileName = mobile3DFileName[i]
+        else:
+            currentMobile3DFileName = os.path.join(workingDirectory, mobile3DFileName[i])
+        if ext == '.vtk':
+            Mobile = LegacyVTKReader(FileNames = [currentMobile3DFileName])
+        elif ext == '.stl':
+            Mobile = STLReader(FileNames = [currentMobile3DFileName])
+        else:
+            pass
+        RenameSource("Mobile_" + str(i), Mobile)
+        Mobile.UpdatePipeline()
+        active_objects.source.SMProxy.InvokeEvent('UserEvent', 'HideWidget')
+        Mobile_offset.append(Transform(Transform = "Transform"))
+        Mobile_offset[-1].Transform = "Transform"
+        Mobile_offset[-1].Transform.Scale = [mobile3DScale[i]] * 3
+        Mobile_offset[-1].Transform.Translate = mobile3DTranslate[i]
+        active_objects.source.SMProxy.InvokeEvent('UserEvent', 'HideWidget')
+        RenameSource("Mobile_offset" + str(i), Mobile_offset[-1])
+        Mobile_tr.append(Transform(Transform = "Transform"))
+        Mobile_tr[-1].Transform = "Transform"
+        active_objects.source.SMProxy.InvokeEvent('UserEvent', 'HideWidget')
+        RenameSource("Mobile_tr" + str(i), Mobile_tr[-1])
+        SM_tr_repr = Show()
+        if nResultFiles > 1:
+            SM_tr_repr.DiffuseColor = defaultColor[i]
+        Show()
         Render()
-        paraviewSaveImage(imageFilename = os.path.join(resultDirectory, r'Im_{0:05d}.png'.format(i)), \
-                          writeImageMagnification = 3)
-else:
-    ASMs_KF_x_Cue     = [GetAnimationTrack( 'Position', 0, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
-    ASMs_KF_y_Cue     = [GetAnimationTrack( 'Position', 1, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
-    ASMs_KF_z_Cue     = [GetAnimationTrack( 'Position', 2, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
-    ASMs_KF_phi_Cue   = [GetAnimationTrack( 'Rotation', 0, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
-    ASMs_KF_theta_Cue = [GetAnimationTrack( 'Rotation', 1, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
-    ASMs_KF_psi_Cue   = [GetAnimationTrack( 'Rotation', 2, proxy=ASM_tr.Transform ) for ASM_tr in Transform2]
+        RenderView = GetRenderView()
+        Mobiles.append(Mobile)
 
-    ASMs_KF_x         = [[] for ASM_tr in Transform2]
-    ASMs_KF_y         = [[] for ASM_tr in Transform2]
-    ASMs_KF_z         = [[] for ASM_tr in Transform2]
-    ASMs_KF_phi       = [[] for ASM_tr in Transform2]
-    ASMs_KF_theta     = [[] for ASM_tr in Transform2]
-    ASMs_KF_psi       = [[] for ASM_tr in Transform2]
+    timeLabel = AnnotateTimeFilter()
+    timeLabel_repr = Show()
+    timeLabel.Format = 'Time: %06.2fs'
+    timeLabel.Scale = animationDuration / float(N - 1)
+    timeLabel_repr.FontSize = 14
+    timeLabel_repr.Color = [0.0, 0.0, 0.0]
+    timeLabel_repr.WindowLocation = 'UpperRightCorner'
 
-    for j,rowResult in enumerate(rowResults):
-        N = rowResult.GetNumberOfTuples()
-        for i in range(0,N):
+    if makeOnlyImages:
+        for i in range(N):
             animationScene.AnimationTime = i
-            keytime = (rowResult.GetArray(resultsLabelsDict[j]['t']).GetTuple(i)[0]-t0)/animationDuration
+            for j, (mobile_tr, rowResult) in enumerate(zip(Mobile_tr, rowResults)):
+                col = getResultColumnNames(mobileSimulationObjectNames[0])
+                xyz = [rowResult.GetArray(resultsLabelsDict[j][col[0]]).GetTuple(i)[0], \
+                       rowResult.GetArray(resultsLabelsDict[j][col[1]]).GetTuple(i)[0], \
+                       rowResult.GetArray(resultsLabelsDict[j][col[2]]).GetTuple(i)[0]]
+                quat = [rowResult.GetArray(resultsLabelsDict[j][col[3]]).GetTuple(i)[0], \
+                        rowResult.GetArray(resultsLabelsDict[j][col[4]]).GetTuple(i)[0], \
+                        rowResult.GetArray(resultsLabelsDict[j][col[5]]).GetTuple(i)[0], \
+                        rowResult.GetArray(resultsLabelsDict[j][col[6]]).GetTuple(i)[0]]
+                par = quat2ParaviewAngle(quat)
+                mobile_tr.Transform.Translate = xyz
+                mobile_tr.Transform.Rotate = par
+                mobile_tr.UpdatePipeline()
+            Render()
+            paraviewSaveImage(imageFilename = os.path.join(resultDirectory, r'Im_{0:05d}.png'.format(i)), \
+                              writeImageMagnification = 3)
+    else:
+        Mobile_KF_Tx_Cue = [GetAnimationTrack('Position', 0, proxy = mobile_tr.Transform) for mobile_tr in Mobile_tr]
+        Mobile_KF_Ty_Cue = [GetAnimationTrack('Position', 1, proxy = mobile_tr.Transform) for mobile_tr in Mobile_tr]
+        Mobile_KF_Tz_Cue = [GetAnimationTrack('Position', 2, proxy = mobile_tr.Transform) for mobile_tr in Mobile_tr]
+        Mobile_KF_Rx_Cue = [GetAnimationTrack('Rotation', 0, proxy = mobile_tr.Transform) for mobile_tr in Mobile_tr]
+        Mobile_KF_Ry_Cue = [GetAnimationTrack('Rotation', 1, proxy = mobile_tr.Transform) for mobile_tr in Mobile_tr]
+        Mobile_KF_Rz_Cue = [GetAnimationTrack('Rotation', 2, proxy = mobile_tr.Transform) for mobile_tr in Mobile_tr]
 
-            col = getResultColumnNames(mobileSimulationObjectNames[0])
-            xyz = [rowResult.GetArray(resultsLabelsDict[j][col[0]]).GetTuple(i)[0], \
-                   rowResult.GetArray(resultsLabelsDict[j][col[1]]).GetTuple(i)[0], \
-                   rowResult.GetArray(resultsLabelsDict[j][col[2]]).GetTuple(i)[0]]
-            quat = [rowResult.GetArray(resultsLabelsDict[j][col[3]]).GetTuple(i)[0], \
-                    rowResult.GetArray(resultsLabelsDict[j][col[4]]).GetTuple(i)[0], \
-                    rowResult.GetArray(resultsLabelsDict[j][col[5]]).GetTuple(i)[0], \
-                    rowResult.GetArray(resultsLabelsDict[j][col[6]]).GetTuple(i)[0]]
-            par = quat2ParaviewAngle(quat)
-            ASMs_KF_x[j].append(    CompositeKeyFrame( KeyTime=keytime, KeyValues=[xyz[0]]))
-            ASMs_KF_y[j].append(    CompositeKeyFrame( KeyTime=keytime, KeyValues=[xyz[1]]))
-            ASMs_KF_z[j].append(    CompositeKeyFrame( KeyTime=keytime, KeyValues=[xyz[2]]))
-            ASMs_KF_phi[j].append(  CompositeKeyFrame( KeyTime=keytime, KeyValues=[par[0]]))
-            ASMs_KF_theta[j].append(CompositeKeyFrame( KeyTime=keytime, KeyValues=[par[1]]))
-            ASMs_KF_psi[j].append(  CompositeKeyFrame( KeyTime=keytime, KeyValues=[par[2]]))
-    for j in range(nResultFiles):
-        ASMs_KF_x_Cue[j].KeyFrames     = ASMs_KF_x[j]
-        ASMs_KF_y_Cue[j].KeyFrames     = ASMs_KF_y[j]
-        ASMs_KF_z_Cue[j].KeyFrames     = ASMs_KF_z[j]
-        ASMs_KF_phi_Cue[j].KeyFrames   = ASMs_KF_phi[j]
-        ASMs_KF_theta_Cue[j].KeyFrames = ASMs_KF_theta[j]
-        ASMs_KF_psi_Cue[j].KeyFrames   = ASMs_KF_psi[j]
-    Render()
+        Mobile_KF_Tx = [[] for mobile_tr in Mobile_tr]
+        Mobile_KF_Ty = [[] for mobile_tr in Mobile_tr]
+        Mobile_KF_Tz = [[] for mobile_tr in Mobile_tr]
+        Mobile_KF_Rx = [[] for mobile_tr in Mobile_tr]
+        Mobile_KF_Ry = [[] for mobile_tr in Mobile_tr]
+        Mobile_KF_Rz = [[] for mobile_tr in Mobile_tr]
+
+        for j, rowResult in enumerate(rowResults):
+            for i in range(0, N):
+                if animationScene.PlayMode == 'Snap To TimeSteps':
+                    keytime = float(i) / float(N)
+                else:
+                    keytime = (rowResult.GetArray(resultsLabelsDict[j]['t']).GetTuple(i)[0] - t0) / animationDuration
+                col = getResultColumnNames(mobileSimulationObjectNames[j])
+                xyz = [rowResult.GetArray(resultsLabelsDict[j][col[0]]).GetTuple(i)[0], \
+                       rowResult.GetArray(resultsLabelsDict[j][col[1]]).GetTuple(i)[0], \
+                       rowResult.GetArray(resultsLabelsDict[j][col[2]]).GetTuple(i)[0]]
+                quat = [rowResult.GetArray(resultsLabelsDict[j][col[3]]).GetTuple(i)[0], \
+                        rowResult.GetArray(resultsLabelsDict[j][col[4]]).GetTuple(i)[0], \
+                        rowResult.GetArray(resultsLabelsDict[j][col[5]]).GetTuple(i)[0], \
+                        rowResult.GetArray(resultsLabelsDict[j][col[6]]).GetTuple(i)[0]]
+                par = quat2ParaviewAngle(quat)
+                Mobile_KF_Tx[j].append(CompositeKeyFrame(KeyTime = keytime, KeyValues = [xyz[0]]))
+                Mobile_KF_Ty[j].append(CompositeKeyFrame(KeyTime = keytime, KeyValues = [xyz[1]]))
+                Mobile_KF_Tz[j].append(CompositeKeyFrame(KeyTime = keytime, KeyValues = [xyz[2]]))
+                Mobile_KF_Rx[j].append(CompositeKeyFrame(KeyTime = keytime, KeyValues = [par[0]]))
+                Mobile_KF_Ry[j].append(CompositeKeyFrame(KeyTime = keytime, KeyValues = [par[1]]))
+                Mobile_KF_Rz[j].append(CompositeKeyFrame(KeyTime = keytime, KeyValues = [par[2]]))
+        for j in range(nResultFiles):
+            Mobile_KF_Tx_Cue[j].KeyFrames = Mobile_KF_Tx[j]
+            Mobile_KF_Ty_Cue[j].KeyFrames = Mobile_KF_Ty[j]
+            Mobile_KF_Tz_Cue[j].KeyFrames = Mobile_KF_Tz[j]
+            Mobile_KF_Rx_Cue[j].KeyFrames = Mobile_KF_Rx[j]
+            Mobile_KF_Ry_Cue[j].KeyFrames = Mobile_KF_Ry[j]
+            Mobile_KF_Rz_Cue[j].KeyFrames = Mobile_KF_Rz[j]
+        Render()
+        if saveImages:
+            for i in range(N):
+                animationScene.AnimationTime = i
+                Render()
+                paraviewSaveImage(\
+                        imageFilename = \
+                        os.path.join(resultDirectory, r'Im_{0:05d}.png'.format(i)), \
+                        writeImageMagnification = 3)
+
+
+def defaultParameters01():
+    # Default data to represent one ship on waves
+    workingDirectory = os.getcwd()
+    mobile = {}
+    mobile['3DFileName'] = ['anthineas.stl']
+    mobile['3DScale'] = [1]
+    mobile['3DTranslate'] = [[-9.355, 0, +3.21]]
+    mobile['SimulationCsvFiles'] = [r'anthineas.csv']
+    mobile['SimulationObjectNames'] = ['Anthineas']
+
+    wave = {}
+    wave['PathPattern'] = 'waves\waves*.csv'
+    wave['Color'] = [1.0 / 3.0, 2.0 / 3.0, 1.0]
+    wave['Files'] = glob.glob(os.path.join(workingDirectory, wave['PathPattern']))
+
+    resultDirectory = r'Results'
+
+    saveImages = True
+    return mobile, wave, resultDirectory, saveImages
+
+def defaultParameters02():
+    # Default data to represent several ships on waves
+    workingDirectory = os.getcwd()
+    mobile = {}
+    mobile['3DFileName'] = ['anthineas.stl'] * 2
+    mobile['3DScale'] = [1] * 2
+    mobile['3DTranslate'] = [[-9.355, 0, +3.21]] * 2
+    mobile['SimulationCsvFiles'] = [r'anthineas_1.csv', r'anthineas_2.csv']
+    mobile['SimulationObjectNames'] = ['Anthineas'] * 2
+
+    wave = {}
+    wave['PathPattern'] = 'waves\waves*.csv'
+    wave['Color'] = [1.0 / 3.0, 2.0 / 3.0, 1.0]
+    wave['Files'] = glob.glob(os.path.join(workingDirectory, wave['PathPattern']))
+
+    resultDirectory = r'Results'
+
+    saveImages = True
+    return mobile, wave, resultDirectory, saveImages
+
+mobile, wave, resultDirectory, saveImages = defaultParameters01()
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description = 'Loads in Paraview a set of CSV wave elevation files')
+    parser.add_argument("-w", "--waves",
+                        help = "Directory containing CSV wave elevation files. Default is {0}".format(wave['PathPattern']),
+                        nargs = 1,
+                        default = [wave['PathPattern']])
+    parser.add_argument("-s", "--saveImages",
+                        action = "store_true",
+                        default = True,
+                        help = "Option used to save images")
+    parser.add_argument("-o", "--outputDirectory", type = str,
+                        default = 'Results',
+                        help = "Name of the directory that will contain result images")
+    args = parser.parse_args()
+    wave['PathPattern'] = args.waves[0]
+    saveImages = args.saveImages
+    outputDirectory = args.outputDirectory
+    main(mobile, wave, resultDirectory = outputDirectory, saveImages = saveImages)
+elif __name__ == "__vtkconsole__":
+    main(mobile, wave, resultDirectory, saveImages)
