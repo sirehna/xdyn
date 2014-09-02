@@ -62,7 +62,7 @@ struct Edge
  */
 struct OrientedEdge
 {
-    OrientedEdge(size_t edge_index_,bool dir):edge_index(edge_index_),direction(dir?1:0) {}
+    OrientedEdge(size_t edge_index_,bool reverse_direction):edge_index(edge_index_),direction(reverse_direction?1:0) {}
     size_t edge_index;
     int    direction;
 };
