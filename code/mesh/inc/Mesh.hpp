@@ -34,9 +34,9 @@ struct Edge
      */
     bool is_emerged() const;
 
-    /* \brief answer whether this edge is totally immerged
+    /* \brief answer whether this edge is totally immersed
      */
-    bool is_immerged() const;
+    bool is_immersed() const;
 
     /* \brief reset the status of the edge w.r.t. free surface
      * \return true if this edge crosses the free surface
@@ -46,7 +46,7 @@ struct Edge
              );
 
     size_t vertex_index[2];  //!< The index of the two vertices in the mesh
-    unsigned char status;    //!< 2 bits of immersion status: 00=totally emerged, 01=second emerged,first immerged, 10=first emerged,second immerged, 11=totally immerged
+    unsigned char status;    //!< 2 bits of immersion status: 00=totally emerged, 01=second emerged,first immersed, 10=first emerged,second immersed, 11=totally immersed
 };
 
 
@@ -113,14 +113,14 @@ public:
     std::vector<double> immersions_of_facet(size_t facet_index) const;
 
     /* \brief Compute the point of intersection with free surface between two vertices
-     * \details One of the vertices must be emerged and the other immerged */
+     * \details One of the vertices must be emerged and the other immersed */
     EPoint edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB) const;
 
-    /* \brief split an edge into an emerged and an immerged part */
-    size_t split_partially_immerged_edge(const Edge &edge);
+    /* \brief split an edge into an emerged and an immersed part */
+    size_t split_partially_immersed_edge(const Edge &edge);
 
-    /* \brief split a Facet into an emerged and an immerged part */
-    void split_partially_immerged_facet(
+    /* \brief split a Facet into an emerged and an immersed part */
+    void split_partially_immersed_facet(
             size_t facet_index,
             const std::map<size_t,size_t >& added_edges);
 
@@ -142,9 +142,9 @@ public:
     double orientation_factor; //!< -1 if the facet is orientation clockwise, +1 otherwise
 
     std::vector<double> all_immersions; //<! the immersions of all nodes (including the dynamically added ones)
-    std::set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immerged parts
+    std::set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immersed parts
     std::vector<size_t> list_of_facets_emerged;  //!< list of all emerged facets (included the dynamically ones created by split)
-    std::vector<size_t> list_of_facets_immerged; //!< list of all immerged facets (included the dynamically ones created by split)
+    std::vector<size_t> list_of_facets_immersed; //!< list of all immersed facets (included the dynamically ones created by split)
 };
 
 #endif //MESH_HPP
