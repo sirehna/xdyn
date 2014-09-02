@@ -181,11 +181,11 @@ void Mesh::split_partially_immersed_facet(
     }
 
     // handle the degenerated cases, when the facet is tangent to free surface
-    if(emerged_edges.size() == 1) {
+    if(emerged_edges.size() <= 1) {
         list_of_facets_immersed.push_back(facet_index);
         return;
     }
-    if(immersed_edges.size() == 1) {
+    if(immersed_edges.size() <= 1) {
         list_of_facets_emerged.push_back(facet_index);
         return;
     }
@@ -210,8 +210,9 @@ size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list)
     std::vector<size_t> vertex_list;
     Matrix3x coords(3,edge_list.size());
     for( size_t ei=0;ei<edge_list.size();ei++) {
-        vertex_list.push_back(edges[edge_list[ei].edge_index].second_vertex(edge_list[ei].direction)); // Note: use second vertex rather than first for compatibility with existing tests
-        coords.col(ei)=all_nodes.col(ei);
+        size_t vertex_index = edges[edge_list[ei].edge_index].second_vertex(edge_list[ei].direction); // Note: use second vertex rather than first for compatibility with existing tests
+        vertex_list.push_back(vertex_index);
+        coords.col(ei)=all_nodes.col(vertex_index);
     }
     added_facet.vertex_index = vertex_list;
     added_facet.area         = ::area(coords);

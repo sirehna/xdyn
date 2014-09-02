@@ -63,9 +63,6 @@ struct OrientedEdge
     int    direction;
 };
 
-class Mesh;
-typedef TR1(shared_ptr)<Mesh> MeshPtr;
-
 /**
  * \brief Contains a facet of a mesh
  * \details a Facet is holding the indices of the vertices in the mesh rather than duplicating the coordinates
@@ -147,5 +144,8 @@ public:
     std::vector<size_t> list_of_facets_emerged;  //!< list of all emerged facets (included the dynamically ones created by split)
     std::vector<size_t> list_of_facets_immersed; //!< list of all immersed facets (included the dynamically ones created by split)
 };
+
+typedef TR1(shared_ptr)<Mesh> MeshPtr;
+typedef TR1(shared_ptr)<const Mesh> const_MeshPtr;
 
 #endif //MESH_HPP
