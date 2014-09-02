@@ -44,8 +44,8 @@ void Edge::update_intersection_with_free_surface(
     double z_1 = relative_immersions[vertex_index[1]];
     bool first_is_immersed  = z_0 > 0 or (z_0 == 0 and z_1 > 0);
     bool second_is_immersed = z_1 > 0 or (z_1 == 0 and z_0 > 0);
-    bool potentially_crosses = z_0 == 0 or z_1 == 0;
-    status = (unsigned char)((first_is_immersed?1:0) | (second_is_immersed?2:0) | (potentially_crosses?4:0));
+    bool just_touches = z_0 == 0 or z_1 == 0;
+    status = (unsigned char)((first_is_immersed?1:0) | (second_is_immersed?2:0) | (just_touches?4:0));
 }
 
 Mesh::Mesh():nodes(Matrix3x()),edges(std::vector<Edge>()),facets(std::vector<Facet>()), orientation_factor(1)
@@ -155,7 +155,7 @@ void Mesh::split_partially_immersed_facet(
 
     for( std::vector<OrientedEdge>::const_iterator edge=edges_of_this_facet.begin(); edge != edges_of_this_facet.end() ; ++edge) {
         size_t edge_index=edge->edge_index;
-        bool dir=edge->direction == 1;
+        bool reverse_direction=edge->direction == 1;
         if(edges[edge_index].is_emerged()) {
             if(status==3) first_emerged = emerged_edges.size();
             emerged_edges.push_back(*edge);
@@ -167,18 +167,18 @@ void Mesh::split_partially_immersed_facet(
         } else {
             size_t edge1 = added_edges.at(edge_index);
             size_t edge2 = edge1 + 1; // because edges are always added by pair...
-            if(dir) {
+            if(reverse_direction) {
                 std::swap(edge1,edge2);
             }
             if(edges[edge1].is_emerged()) {
-                emerged_edges.push_back(OrientedEdge(edge1,dir));
+                emerged_edges.push_back(OrientedEdge(edge1,reverse_direction));
                 first_immersed = immersed_edges.size();
-                immersed_edges.push_back(OrientedEdge(edge2,dir));
+                immersed_edges.push_back(OrientedEdge(edge2,reverse_direction));
                 status = 3;
             } else {
-                immersed_edges.push_back(OrientedEdge(edge1,dir));
+                immersed_edges.push_back(OrientedEdge(edge1,reverse_direction));
                 first_emerged = emerged_edges.size();
-                emerged_edges.push_back(OrientedEdge(edge2,dir));
+                emerged_edges.push_back(OrientedEdge(edge2,reverse_direction));
                 status = 0;
             }
         }

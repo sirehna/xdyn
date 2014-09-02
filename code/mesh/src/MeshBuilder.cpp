@@ -65,8 +65,8 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
             size_t edge_index = (it != list_of_points.end())
                 ? build_one_edge(Edge(vertex_index,build_one_point(*it)))
                 : build_one_edge(Edge(vertex_index,build_one_point(*(list_of_points.begin()))));
-            bool running_direction = edges.at(edge_index).first_vertex(1) == vertex_index;
-            edges_of_this_facet.push_back(OrientedEdge(edge_index,running_direction));
+            bool reverse_direction = edges.at(edge_index).vertex_index[1] == vertex_index;
+            edges_of_this_facet.push_back(OrientedEdge(edge_index,reverse_direction));
             facetsPerEdge.at(edge_index).push_back(facet_index);
         }
         facets.push_back(facet);
