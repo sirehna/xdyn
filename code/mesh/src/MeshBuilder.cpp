@@ -58,7 +58,7 @@ Matrix3x MeshBuilder::resize(const Matrix3x& M) const
 Mesh MeshBuilder::build()
 {
     *this = std::for_each(v.begin(), v.end(), *this);
-    return Mesh(resize(nodes), edges , facets, facetsPerEdge , edgesPerFacet , edgesRunningDirection , clockwise);
+    return Mesh(resize(nodes), edges , facets, facetsPerEdge , edgesPerFacet , clockwise);
 }
 
 void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
@@ -66,8 +66,7 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
     if (not(list_of_points.empty()))
     {
         size_t facet_index=facets.size();
-        std::vector<size_t> edges_of_this_facet;
-        std::vector<bool> running_directions;
+        std::vector<OrientedEdge> edges_of_this_facet;
         Facet facet;
         const Matrix3x M = convert(list_of_points);
         facet.unit_normal = unit_normal(M);
@@ -81,13 +80,12 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
             size_t edge_index = (it != list_of_points.end())
                 ? build_one_edge(Edge(vertex_index,build_one_point(*it)))
                 : build_one_edge(Edge(vertex_index,build_one_point(*(list_of_points.begin()))));
-            edges_of_this_facet.push_back(edge_index);
-            running_directions.push_back( edges.at(edge_index).first_vertex(1) == vertex_index);
+            bool running_direction = edges.at(edge_index).first_vertex(1) == vertex_index;
+            edges_of_this_facet.push_back(OrientedEdge(edge_index,running_direction));
             facetsPerEdge.at(edge_index).push_back(facet_index);
         }
         facets.push_back(facet);
         edgesPerFacet.push_back(edges_of_this_facet);
-        edgesRunningDirection.push_back(running_directions);
     }
 }
 

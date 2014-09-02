@@ -51,6 +51,21 @@ struct Edge
 
 
 /**
+ * \brief Reference to an edge, with a running direction.
+ * \details Usefull to describe the edges of a facet.
+ * \ingroup mesh
+ */
+struct OrientedEdge
+{
+    OrientedEdge(size_t edge_index_,bool dir):edge_index(edge_index_),direction(dir?1:0) {}
+    size_t edge_index;
+    int    direction;
+};
+
+class Mesh;
+typedef TR1(shared_ptr)<Mesh> MeshPtr;
+
+/**
  * \brief Contains a facet of a mesh
  * \details a Facet is holding the indices of the vertices in the mesh rather than duplicating the coordinates
  * \ingroup mesh
@@ -71,15 +86,15 @@ typedef std::vector<Facet> VectorOfFacet;
  * \brief Contains a triangular mesh
  * \ingroup mesh
  */
-struct Mesh
+class Mesh
 {
     Mesh();
+public:
     Mesh(const Matrix3x& nodes_,
             const std::vector<Edge>& edges_,
             const std::vector<Facet>& facets_,
             const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
-            const std::vector<std::vector<size_t> >& edgesPerFacet_,  //!< for each Facet (index), the list of Edges (indices) composing the facet
-            const std::vector<std::vector<bool> >& edgesRunningDirection_, //!< for each Facet (index), the running direction of each edge
+            const std::vector<std::vector<OrientedEdge> >& edgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
             const bool clockwise);
 
     /* \brief Reset the dynamic data related to the mesh intersection with free surface */
@@ -91,12 +106,18 @@ struct Mesh
             const std::vector<double>& relative_immersions //!< the relative immersion of each static vertex of the mesh
             );
 
+    /* \brief Extract the coordinates of a specific facet */
+    Matrix3x coordinates_of_facet(size_t facet_index) const;
+
+    /* \brief Extract the relative immersions of a specific facet */
+    std::vector<double> immersions_of_facet(size_t facet_index) const;
+
     /* \brief Compute the point of intersection with free surface between two vertices
      * \details One of the vertices must be emerged and the other immerged */
     EPoint edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB) const;
 
     /* \brief split an edge into an emerged and an immerged part */
-    size_t split_partially_immerged_edge(Edge &edge,std::vector<double>& all_immersions);
+    size_t split_partially_immerged_edge(Edge &edge);
 
     /* \brief split a Facet into an emerged and an immerged part */
     void split_partially_immerged_facet(
@@ -105,14 +126,14 @@ struct Mesh
 
     /* \brief create a new facet dynamically
      * \return the facet index in facets vector */
-    size_t create_facet_from_edges(const std::vector<size_t> edge_list,const std::vector<bool> dirs);
+    size_t create_facet_from_edges(const std::vector<OrientedEdge> edge_list);
 
     Matrix3x nodes;            //!< Coordinates of static vertices in mesh
     std::vector<Edge> edges;   //!< All edges in mesh
     std::vector<Facet> facets; //!< For each facet, the indexes of its nodes, unit normal, barycenter & area
     std::vector<std::vector<size_t> > facetsPerEdge; //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
-    std::vector<std::vector<size_t> > edgesPerFacet; //!< for each Facet (index), the list of Edges (indices) composing the facet
-    std::vector<std::vector<bool> > edgesRunningDirection; //!< for each Facet (index), the running direction of each edge
+    std::vector<std::vector<OrientedEdge> > edgesPerFacet; //!< for each Facet (index), the list of Edges composing the facet and running direction of each edge
+
     size_t static_nodes;       //!< Number of static nodes
     size_t static_edges;       //!< Number of static edges
     size_t static_facets;      //!< Number of static facets
@@ -122,10 +143,8 @@ struct Mesh
 
     std::vector<double> all_immersions; //<! the immersions of all nodes (including the dynamically added ones)
     std::set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immerged parts
-    std::set<size_t> set_of_facets_emerged;  //!< list of all emerged facets (included the dynamically ones created by split)
-    std::set<size_t> set_of_facets_immerged; //!< list of all immerged facets (included the dynamically ones created by split)
+    std::vector<size_t> list_of_facets_emerged;  //!< list of all emerged facets (included the dynamically ones created by split)
+    std::vector<size_t> list_of_facets_immerged; //!< list of all immerged facets (included the dynamically ones created by split)
 };
-
-typedef TR1(shared_ptr)<Mesh> MeshPtr;
 
 #endif //MESH_HPP
