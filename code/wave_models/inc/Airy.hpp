@@ -11,7 +11,8 @@
 #include "tr1_macros.hpp"
 #include TR1INC(memory)
 #include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_01.hpp>
+#include <boost/random/uniform_real_distribution.hpp>
+
 
 #include "WaveModel.hpp"
 
@@ -44,7 +45,7 @@ class Airy : public WaveModel
         Airy(); // Disabled
         std::vector<std::vector<double> > phase;
         boost::mt19937 rng;
-        boost::uniform_01<double> generate_random_phase;
+        boost::random::uniform_real_distribution<double> generate_random_phase;
 };
 
 #endif /* AIRY_HPP_ */

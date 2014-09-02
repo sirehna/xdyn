@@ -6,13 +6,16 @@
  */
 
 #include <boost/foreach.hpp>
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 #include "Airy.hpp"
 
 Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(spectrum_),
 phase(std::vector<std::vector<double> >()),
 rng(boost::mt19937(random_number_generator_seed)),
-generate_random_phase(boost::uniform_01<double>())
+generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 
 {
     for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)

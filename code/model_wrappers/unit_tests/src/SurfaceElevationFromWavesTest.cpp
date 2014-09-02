@@ -79,7 +79,7 @@ TEST_F(SurfaceElevationFromWavesTest, example)
     const double k_ = 4.*PI*PI/Tp/Tp/9.81;
     TR1(shared_ptr)<Kinematics> k(new Kinematics());
     SurfaceElevationFromWaves wave(get_model());
-    const double phi = 0.54881350230425596237;
+    const double phi = 3.4482969340598712549;
 //! [SurfaceElevationFromWavesTest example]
 //! [SurfaceElevationFromWavesTest expected output]
     for (double t = 0 ; t < 30 ; t+=0.1)
