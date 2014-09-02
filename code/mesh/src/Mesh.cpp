@@ -19,9 +19,9 @@ size_t Edge::second_vertex(int direction) const
 {
     return vertex_index[1-direction];
 }
-bool Edge::touches_free_surface() const
+bool Edge::crosses_free_surface() const
 {
-    return (((status & 1) != 0) xor ((status & 2) != 0)) or ((status & 4) != 0);
+    return ((status & 1) != 0) xor ((status & 2) != 0);
 }
 bool Edge::is_emerged() const
 {
@@ -30,6 +30,10 @@ bool Edge::is_emerged() const
 bool Edge::is_immersed() const
 {
     return (status & 3) == 3;
+}
+bool Edge::touches_free_surface() const
+{
+    return crosses_free_surface() or ((status & 4) != 0);
 }
 
 void Edge::update_intersection_with_free_surface(
@@ -99,10 +103,10 @@ void Mesh::update_intersection_with_free_surface(
     for( size_t edge_index=0 ; edge_index < static_edges ; ++edge_index ) {
         std::vector<Edge>::iterator edge = edges.begin() + edge_index; // use a new iterator, since edges is modified in the loop
         edge->update_intersection_with_free_surface(relative_immersions);
-        if (edge->touches_free_surface()) {
+        if (edge->touches_free_surface())
             set_of_facets_crossing_free_surface.insert(facetsPerEdge[edge_index].begin(),facetsPerEdge[edge_index].end());
+        if (edge->crosses_free_surface())
             added_edges[edge_index] = split_partially_immersed_edge(*edge);
-        }
     }
 
     // iterate on each facet to classify and/or split

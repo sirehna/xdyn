@@ -28,7 +28,7 @@ struct Edge
 
     /* \brief answer whether this edge crosses the free surface
      */
-    bool touches_free_surface() const;
+    bool crosses_free_surface() const;
 
     /* \brief answer whether this edge is totally emerged
      */
@@ -37,6 +37,10 @@ struct Edge
     /* \brief answer whether this edge is totally immersed
      */
     bool is_immersed() const;
+
+    /* \brief answer whether this edge touches the free surface
+     */
+    bool touches_free_surface() const;
 
     /* \brief reset the status of the edge w.r.t. free surface
      * \return true if this edge crosses the free surface
