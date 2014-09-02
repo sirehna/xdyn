@@ -28,7 +28,7 @@ struct Edge
 
     /* \brief answer whether this edge crosses the free surface
      */
-    bool crosses_free_surface() const;
+    bool potentially_crosses_free_surface() const;
 
     /* \brief answer whether this edge is totally emerged
      */
@@ -47,6 +47,7 @@ struct Edge
 
     size_t vertex_index[2];  //!< The index of the two vertices in the mesh
     unsigned char status;    //!< 2 bits of immersion status: 00=totally emerged, 01=second emerged,first immersed, 10=first emerged,second immersed, 11=totally immersed
+                             // + third bit = 1 for potentially crossing (if any of the vertices is exactly on free surface)
 };
 
 

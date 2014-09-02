@@ -19,17 +19,17 @@ size_t Edge::second_vertex(int direction) const
 {
     return vertex_index[1-direction];
 }
-bool Edge::crosses_free_surface() const
+bool Edge::potentially_crosses_free_surface() const
 {
-    return status == 1 or status == 2;
+    return (((status & 1) != 0) xor ((status & 2) != 0)) or ((status & 4) != 0);
 }
 bool Edge::is_emerged() const
 {
-    return status == 0;
+    return (status & 3) == 0;
 }
 bool Edge::is_immersed() const
 {
-    return status == 3;
+    return (status & 3) == 3;
 }
 
 void Edge::update_intersection_with_free_surface(
@@ -40,7 +40,8 @@ void Edge::update_intersection_with_free_surface(
     double z_1 = relative_immersions[vertex_index[1]];
     bool first_is_immersed  = z_0 > 0 or (z_0 == 0 and z_1 > 0);
     bool second_is_immersed = z_1 > 0 or (z_1 == 0 and z_0 > 0);
-    status = (unsigned char)((first_is_immersed?1:0) | (second_is_immersed?2:0));
+    bool potentially_crosses = z_0 == 0 or z_1 == 0;
+    status = (unsigned char)((first_is_immersed?1:0) | (second_is_immersed?2:0) | (potentially_crosses?4:0));
 }
 
 Mesh::Mesh():nodes(Matrix3x()),edges(std::vector<Edge>()),facets(std::vector<Facet>()), orientation_factor(1)
@@ -98,7 +99,7 @@ void Mesh::update_intersection_with_free_surface(
     for( size_t edge_index=0 ; edge_index < static_edges ; ++edge_index ) {
         std::vector<Edge>::iterator edge = edges.begin() + edge_index; // use a new iterator, since edges is modified in the loop
         edge->update_intersection_with_free_surface(relative_immersions);
-        if (edge->crosses_free_surface()) {
+        if (edge->potentially_crosses_free_surface()) {
             set_of_facets_crossing_free_surface.insert(facetsPerEdge[edge_index].begin(),facetsPerEdge[edge_index].end());
             added_edges[edge_index] = split_partially_immersed_edge(*edge);
         }
@@ -178,7 +179,16 @@ void Mesh::split_partially_immersed_facet(
             }
         }
     }
-    if(emerged_edges.size() == 1 or immersed_edges.size() == 1) return; // degenerated case, the facet is tangent to free surface
+
+    // handle the degenerated cases, when the facet is tangent to free surface
+    if(emerged_edges.size() == 1) {
+        list_of_facets_immersed.push_back(facet_index);
+        return;
+    }
+    if(immersed_edges.size() == 1) {
+        list_of_facets_emerged.push_back(facet_index);
+        return;
+    }
 
     // insert the closing edge
     size_t closing_edge_index = edges.size();
