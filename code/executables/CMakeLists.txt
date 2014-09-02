@@ -85,6 +85,7 @@ ADD_CUSTOM_COMMAND(TARGET generate_stl_examples
 
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/plot.py
               ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/animate.py
+              ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/waveYamlToCsv.py
         DESTINATION demos)
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/demos
