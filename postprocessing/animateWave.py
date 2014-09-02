@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# To be run directly from ParaView or with program pvpython from cli
+# To be run directly from ParaView or with program pvpython (Windows) or
+# pvbatch (Linux) from cli
 #
 # Remember to change the current working directory before running the script.
 # To do so, use command os.chdir('') form package os.
@@ -9,8 +10,6 @@
 # mencoder "mf://Im*.png" -mf fps=10:type=png -ovc lavc -lavcopts vcodec=mpeg4 -o Video.avi
 #
 # Requires:
-# - A 3D mesh given as a VTK or a STL file
-# - A CSV result file containing the displacement of the mobile to represent
 # - A set of XYZ CSV files to represent wave elevation for each time steps. No
 #   header are required
 #
