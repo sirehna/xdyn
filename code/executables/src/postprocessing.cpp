@@ -119,13 +119,13 @@ std::vector<std::map<std::string,double> > build_output(CSVFileReader& csv_file,
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc < 3)
     {
-        std::cout << description() << std::endl << "Usage: " << argv[0] << " <csv file> <yaml file>" << std::endl;
+        std::cout << description() << std::endl << "Usage: " << argv[0] << " <csv file> <yaml files>" << std::endl;
         return 1;
     }
 
-    const TextFileReader yaml_file(std::vector<std::string>(1, std::string(argv[2])));
+    const TextFileReader yaml_file(std::vector<std::string>(argv+2, argv+argc));
     const auto yaml = SimulatorYamlParser(yaml_file.get_contents()).parse();
 
     const size_t nb_of_columns = 1+yaml.bodies.size()*13;
