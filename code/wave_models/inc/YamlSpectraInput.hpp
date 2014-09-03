@@ -7,21 +7,6 @@ struct YamlAiry
     int seed; // Random generator ssed (to generate the random phases)
 };
 
-struct YamlJonswap
-{
-    YamlJonswap();
-    double Hs;    //!< Significant wave height (in meters)
-    double Tp;    //!< Mean wave period (in seconds)
-    double gamma; //!< Non-dimensional peak shape parameter
-};
-
-struct YamlBretschneider
-{
-    YamlBretschneider();
-    double Hs;    //!< Significant wave height (in meters)
-    double Tp;    //!< Mean wave period (in seconds)
-};
-
 struct YamlDiracDirectionalSpreading
 {
     YamlDiracDirectionalSpreading();
