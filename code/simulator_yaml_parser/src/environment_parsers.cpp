@@ -84,6 +84,7 @@ void operator >> (const YAML::Node& node, YamlDiscretization& g)
     node["n"] >> g.n;
     parse_uv(node["omega min"], g.omega_min);
     parse_uv(node["omega max"], g.omega_max);
+    node["energy fraction"] >> g.energy_fraction;
 }
 
 

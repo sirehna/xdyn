@@ -65,6 +65,7 @@ TEST_F(environment_parsersTest, can_parse_wave_discretization)
     ASSERT_EQ(128,yaml.discretization.n);
     ASSERT_DOUBLE_EQ(0.1,yaml.discretization.omega_min);
     ASSERT_DOUBLE_EQ(6./DEG,yaml.discretization.omega_max);
+    ASSERT_DOUBLE_EQ(0.123,yaml.discretization.energy_fraction);
 }
 
 TEST_F(environment_parsersTest, can_parse_wave_spreading_and_spectral_data)
