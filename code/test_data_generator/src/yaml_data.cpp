@@ -21,7 +21,7 @@ std::string test_data::hydrostatic_test()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    frame: NED\n"
-       << "    z: {value: 0, unit: m}\n"
+       << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
        << "    \n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
