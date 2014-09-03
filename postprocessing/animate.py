@@ -107,32 +107,28 @@ def paraviewSaveImage(\
     rv.Background = [0.32941176470588235, 0.34901960784313724, 0.42745098039215684]
     Render()
 
-def globalViewSettings(rv):
+def globalViewSettings(rv, offscreenRendering = False):
     rv.ViewSize = [1600, 900]
     rv.OrientationAxesVisibility = 0
     rv.CenterAxesVisibility = 0
     rv.LightIntensity = 0.15
     rv.LightSwitch = 0
-    rv.UseOffscreenRendering = 1
-    rv.UseOffscreenRenderingForScreenshots = 1
+    if offscreenRendering:
+        rv.UseOffscreenRendering = 1
+        rv.UseOffscreenRenderingForScreenshots = 1
     rv.UseLight = 1
     rv.CameraParallelProjection = 1
-
     rv.CompressorConfig = 'vtkSquirtCompressor 0 3'
-    rv.UseLight = 1
-    rv.LightSwitch = 0
     rv.OrientationAxesInteractivity = 1
     rv.OrientationAxesOutlineColor = [0.0, 1.0, 1.0]
     rv.RemoteRenderThreshold = 3.0
     rv.Background = [0.34, 0.34, 0.43]
-    rv.CenterAxesVisibility = 0
     rv.CenterOfRotation = [50.0, 50.0, 0.07]
     rv.CameraViewUp = [0.03, -0.45, -0.89]
     rv.CameraPosition = [-130, 230, -130]
     rv.CameraFocalPoint = [-4.0, 14.0, -7.7]
     rv.CameraParallelScale = 49
     rv.CameraClippingRange = [34.0, 610.0]
-
 
 def main(mobile, wave, resultDirectory = r'Results', \
     saveImages = False, makeOnlyImages = False):
