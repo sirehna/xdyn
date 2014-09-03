@@ -68,7 +68,6 @@ TEST_F(AiryTest, single_frequency_single_direction_at_one_point)
 
 TEST_F(AiryTest, two_frequencies_single_direction_at_one_point)
 {
-    //! [AiryTest example]
     const double psi0 = PI/4;
     const double Hs = 3;
     const double Tp = 10;
@@ -92,7 +91,6 @@ TEST_F(AiryTest, two_frequencies_single_direction_at_one_point)
 
 TEST_F(AiryTest, one_frequency_two_directions_at_one_point)
 {
-    //! [AiryTest example]
     const double psi0 = PI/4;
     const double Hs = 3;
     const double Tp = 10;
@@ -119,7 +117,6 @@ TEST_F(AiryTest, bug)
     const double psi0 = PI;
     const double Hs = 2;
     const double Tp = 7;
-    //const double omega0 = 2;
     const double s = 1;
     const double omega_min = 0.1;
     const double omega_max = 6;
