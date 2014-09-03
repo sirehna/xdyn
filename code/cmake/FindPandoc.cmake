@@ -9,10 +9,10 @@
 # PANDOC_ROOT - root to search for the program
 
 IF(WIN32)
-    FIND_PROGRAM(PANDOC NAMES  pandoc HINTS ${PANDOC_ROOT} "C:/Program\ Files/Pandoc"
+    FIND_PROGRAM(PANDOC NAMES pandoc HINTS ${PANDOC_ROOT} "C:/Program\ Files/Pandoc"
                                                             "C:/Programmes/Pandoc")
 ELSE()
-    FIND_PROGRAM(PANDOC NAMES  pandoc)
+    FIND_PROGRAM(PANDOC NAMES pandoc)
 ENDIF()
 
 IF(PANDOC)

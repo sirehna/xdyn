@@ -34,7 +34,7 @@ IF(DOXYGEN_FOUND)
 
     IF(PANDOC)
         ADD_CUSTOM_TARGET(doc_dev_guide
-            ${PANDOC_EXECUTABLE} dev_guide.md -o html/dev_guide.html
+            ${PANDOC} dev_guide.md -o html/dev_guide.html
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev
             COMMENT "Generating the developper guide" VERBATIM
         )
