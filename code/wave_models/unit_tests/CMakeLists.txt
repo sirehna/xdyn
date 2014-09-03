@@ -11,7 +11,6 @@ FILE(GLOB SRC src/JonswapSpectrumTest.cpp
               src/WaveNumberFunctorTest.cpp
               src/AiryTest.cpp
               src/discretizeTest.cpp
-              src/ListOfWaveModelsTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
