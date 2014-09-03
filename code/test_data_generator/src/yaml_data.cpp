@@ -581,7 +581,6 @@ std::string test_data::anthineas_hydrostatic_test()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
-       << "  - model: no wind\n"
        << "    \n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
