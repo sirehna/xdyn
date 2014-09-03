@@ -88,7 +88,7 @@ FUNCTION(ENABLE_COVERAGE_REPORT)
             MESSAGE(STATUS "Enabling HTML coverage report")
             # set up coverage target
             ADD_CUSTOM_COMMAND(OUTPUT ${COVERAGE_RAW_FILE}
-                               COMMAND ${LCOV_EXECUTABLE} -c -d ${CMAKE_BINARY_DIR_UNIX} -o ${COVERAGE_RAW_FILE}
+                               COMMAND ${LCOV_EXECUTABLE} -c -d ${CMAKE_BINARY_DIR_UNIX} --ignore-errors gcov -o ${COVERAGE_RAW_FILE}
                                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                                COMMENT "Collecting coverage data in ${CMAKE_BINARY_DIR_UNIX} : Output expected ${COVERAGE_RAW_FILE}"
                                DEPENDS ${ARG_TARGETS} ${ARG_TESTS}
