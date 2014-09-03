@@ -74,6 +74,14 @@ bool comparator ( const ValIdx& l, const ValIdx& r);
 bool comparator ( const ValIdx& l, const ValIdx& r)
    { return l.first > r.first; }
 
+
+/**  \brief Only select the most important spectrum components & create single vector
+  *  \details No need to loop on all frequencies & all directions: we only select
+  *  the most important ones (i.e. those representing a given ratio of the total
+  *  energy in the spectrum.
+  *  \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
+  *  \snippet wave_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
+  */
 FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to flatten
                                             const double ratio //!< Between 0 & 1: where should we cut off the spectra?
                                             )
