@@ -51,6 +51,7 @@ struct YamlWaveModel
     YamlDiscretization discretization; //!< Spectral discretization parameters
     std::vector<YamlSpectra> spectra;  //!< Wave spectra to generate
     YamlWaveOutput output;             //!< Defines what wave data is outputted during the simulation & how it is generated
+    bool compute_froude_krylov;        //!< Should the Froude-Krylov force be computed?
 };
 
 struct YamlJonswap
