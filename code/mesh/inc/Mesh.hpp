@@ -116,7 +116,7 @@ public:
 
     /* \brief Compute the point of intersection with free surface between two vertices
      * \details One of the vertices must be emerged and the other immersed */
-    EPoint edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB) const;
+    static EPoint edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB);
 
     /* \brief split an edge into an emerged and an immersed part */
     size_t split_partially_immersed_edge(const Edge &edge);

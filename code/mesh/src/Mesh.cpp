@@ -246,7 +246,7 @@ size_t Mesh::split_partially_immersed_edge(const Edge &edge)
     return edges.size()-2; // that is the index of first_sub_edge
 }
 
-EPoint Mesh::edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB) const
+EPoint Mesh::edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB)
 {
     const double xA = A(0);
     const double xB = B(0);
