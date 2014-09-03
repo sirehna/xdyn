@@ -128,7 +128,10 @@ public:
 
     /* \brief create a new facet dynamically
      * \return the facet index in facets vector */
-    size_t create_facet_from_edges(const std::vector<OrientedEdge>& edge_list);
+    size_t create_facet_from_edges(
+            const std::vector<OrientedEdge>& edge_list, //!< The list of edges and running direction composing the facet
+            const EPoint &unit_normal                   //!< The unit_normal is shared in case of facet split, let's not recompute it
+            );
 
     Matrix3x nodes;            //!< Coordinates of static vertices in mesh
     std::vector<Edge> edges;   //!< All edges in mesh

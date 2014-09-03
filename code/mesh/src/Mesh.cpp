@@ -204,11 +204,12 @@ void Mesh::split_partially_immersed_facet(
      emerged_edges.insert( emerged_edges.begin()+ first_emerged,OrientedEdge(closing_edge_index,false));
 
     // create the Facets
-    list_of_facets_emerged.push_back(create_facet_from_edges(emerged_edges));
-    list_of_facets_immersed.push_back(create_facet_from_edges(immersed_edges));
+    std::vector<Facet>::const_iterator that_facet=facets.begin()+facet_index;
+    list_of_facets_emerged.push_back(create_facet_from_edges(emerged_edges,that_facet->unit_normal));
+    list_of_facets_immersed.push_back(create_facet_from_edges(immersed_edges,that_facet->unit_normal));
 }
 
-size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list)
+size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list,const EPoint &unit_normal)
 {
     Facet added_facet;
     std::vector<size_t> vertex_list;
@@ -220,7 +221,7 @@ size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list)
     }
     added_facet.vertex_index = vertex_list;
     added_facet.area         = ::area(coords);
-    added_facet.unit_normal  = ::unit_normal(coords);
+    added_facet.unit_normal  = unit_normal;
     added_facet.barycenter   = ::barycenter(coords);
     size_t facet_index = facets.size();
     facets.push_back(added_facet);
