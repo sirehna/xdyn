@@ -156,5 +156,4 @@ TEST_F(AiryTest, dynamic_pressure)
         const double eta = a.random<double>().between(-100,100);
         ASSERT_NEAR(sqrt(2*Hs)*exp(-k*(z-eta)*cos(k*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi)), wave.dynamic_pressure(x,y,z,t,eta), 1E-6);
     }
-
 }
