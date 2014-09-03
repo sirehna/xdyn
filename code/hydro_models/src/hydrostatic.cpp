@@ -98,9 +98,9 @@ Wrench hydrostatic::fast_force(const const_MeshPtr& mesh,               //!< Mes
         size_t facet_index = mesh->list_of_facets_immersed[i];
         std::vector<Facet>::const_iterator that_facet = first_facet + facet_index;
         const double zG = average_immersion(mesh->all_nodes, that_facet->vertex_index, mesh->all_immersions);
-        const EPoint dS = that_facet->area*that_facet->unit_normal;
+        const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
         const EPoint ap = that_facet->barycenter;
-        F += orientation_factor*dF(O, ap , rho, g_norm, zG , dS);
+        F += dF(O, ap , rho, g_norm, zG , dS);
     }
     return F;
 }
@@ -120,9 +120,6 @@ Wrench hydrostatic::exact_force(const const_MeshPtr& mesh,                    //
     {
         size_t facet_index = mesh->list_of_facets_immersed[i];
         std::vector<Facet>::const_iterator that_facet = first_facet + facet_index;
-
-        //Matrix3x            facet_coords     = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-        //std::vector<double> facet_immersions = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
 
         const double zG = average_immersion(mesh->all_nodes, that_facet->vertex_index, mesh->all_immersions);
         const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
