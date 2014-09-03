@@ -83,6 +83,45 @@ struct Facet
 
 typedef std::vector<Facet> VectorOfFacet;
 
+class FacetIterator
+{
+    public:
+        FacetIterator(const VectorOfFacet::const_iterator& begin_, const std::vector<size_t>& list_of_facets_, const size_t p) : begin(begin_), list_of_facets(list_of_facets_), pos(p)
+        {
+        }
+
+        size_t index() const
+        {
+            return list_of_facets[pos];
+        }
+
+        const Facet& operator*() const
+        {
+            return *(begin+list_of_facets[pos]);
+        }
+
+        const FacetIterator& operator++()
+        {
+            pos++;
+            return *this;
+        }
+
+        const Facet* operator->() const
+        {
+            return (begin+list_of_facets[pos]).operator ->();
+        }
+
+        bool operator!=(const FacetIterator& rhs) const
+        {
+            return (begin!=rhs.begin) or (pos != rhs.pos);
+        }
+
+    private:
+        VectorOfFacet::const_iterator begin;
+        std::vector<size_t> list_of_facets;
+        size_t pos;
+};
+
 /**
  * \author gj
  * \brief Contains a triangular mesh
@@ -98,6 +137,26 @@ public:
             const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
             const std::vector<std::vector<OrientedEdge> >& edgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
             const bool clockwise);
+
+    FacetIterator begin_immersed() const
+    {
+        return FacetIterator(facets.begin(), list_of_facets_immersed, 0);
+    }
+
+    FacetIterator end_immersed() const
+    {
+        return FacetIterator(facets.begin(), list_of_facets_immersed, list_of_facets_immersed.size());
+    }
+
+    FacetIterator begin_emerged() const
+    {
+        return FacetIterator(facets.begin(), list_of_facets_emerged, 0);
+    }
+
+    FacetIterator end_emerged() const
+    {
+        return FacetIterator(facets.begin(), list_of_facets_emerged, list_of_facets_emerged.size());
+    }
 
     /* \brief Reset the dynamic data related to the mesh intersection with free surface */
     void reset_dynamic_data();
@@ -150,7 +209,12 @@ public:
     std::set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immersed parts
     std::vector<size_t> list_of_facets_emerged;  //!< list of all emerged facets (included the dynamically ones created by split)
     std::vector<size_t> list_of_facets_immersed; //!< list of all immersed facets (included the dynamically ones created by split)
+
+    friend class ImmersedFacetIterator;
+    friend class EmergedFacetIterator;
 };
+
+
 
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
 typedef TR1(shared_ptr)<const Mesh> const_MeshPtr;

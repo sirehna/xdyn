@@ -89,14 +89,11 @@ Wrench hydrostatic::fast_force(const const_MeshPtr& mesh,               //!< Mes
                           const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                          )
 {
-    std::vector<Facet>::const_iterator first_facet = mesh->facets.begin();
     UnsafeWrench F(O);
     const double orientation_factor = mesh->orientation_factor;
     const double g_norm = g.norm();
-    for (size_t i=0;i < mesh->list_of_facets_immersed.size() ; ++i)
+    for (auto that_facet = mesh->begin_immersed() ; that_facet != mesh->end_immersed() ; ++that_facet)
     {
-        size_t facet_index = mesh->list_of_facets_immersed[i];
-        std::vector<Facet>::const_iterator that_facet = first_facet + facet_index;
         const double zG = average_immersion(mesh->all_nodes, that_facet->vertex_index, mesh->all_immersions);
         const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
         const EPoint ap = that_facet->barycenter;
@@ -111,16 +108,13 @@ Wrench hydrostatic::exact_force(const const_MeshPtr& mesh,                    //
                                 const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                                 )
 {
-    std::vector<Facet>::const_iterator first_facet = mesh->facets.begin();
     UnsafeWrench F(O);
     const double orientation_factor = mesh->orientation_factor;
     const double g_norm = g.norm();
     const EPoint down_direction = g / g_norm;
-    for (size_t i=0;i < mesh->list_of_facets_immersed.size() ; ++i)
+    for (auto that_facet = mesh->begin_immersed() ; that_facet != mesh->end_immersed() ; ++that_facet)
     {
-        size_t facet_index = mesh->list_of_facets_immersed[i];
-        std::vector<Facet>::const_iterator that_facet = first_facet + facet_index;
-
+        size_t facet_index = that_facet.index();
         const double zG = average_immersion(mesh->all_nodes, that_facet->vertex_index, mesh->all_immersions);
         const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
         const EPoint ap = exact_application_point(Polygon(mesh,facet_index),down_direction,zG);
