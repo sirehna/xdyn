@@ -91,7 +91,7 @@ IF(PANDOC)
     FOREACH(f fr)
         ADD_CUSTOM_COMMAND(
             OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/user_guide_${f}.html
-            COMMAND ${PANDOC_EXECUTABLE} -s user_guide_${f}.md -o user_guide_${f}.html
+            COMMAND ${PANDOC} -s user_guide_${f}.md -o user_guide_${f}.html
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user)
         LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/user_guide_${f}.html)
     ENDFOREACH()
