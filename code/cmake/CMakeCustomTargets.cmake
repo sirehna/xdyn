@@ -1,5 +1,14 @@
 # Add a target to generate API documentation with Doxygen
 FIND_PACKAGE(Doxygen)
+FIND_PACKAGE(Pandoc)
+
+MESSAGE(STATUS "PANDOC : ${PANDOC}")
+IF(PANDOC)
+    MESSAGE(STATUS "Program PANDOC found -> Documentation will be generated")
+ELSE()
+    MESSAGE(STATUS "Program PANDOC NOT found -> Documentation will be uncomplete")
+ENDIF()
+
 IF(DOXYGEN_FOUND)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLayout.in ${CMAKE_CURRENT_BINARY_DIR}/DoxygenLayout.xml @ONLY)
@@ -23,15 +32,14 @@ IF(DOXYGEN_FOUND)
     )
     ENDIF()
 
-    FIND_PACKAGE(Pandoc)
-    IF(PANDOC_EXECUTABLE-NOTFOUND)
-        MESSAGE(STATUS "Program PANDOC not found -> Developer documentation will be uncomplete")
-    ELSE()
+    IF(PANDOC)
         ADD_CUSTOM_TARGET(doc_dev_guide
             ${PANDOC_EXECUTABLE} dev_guide.md -o html/dev_guide.html
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev
             COMMENT "Generating the developper guide" VERBATIM
         )
+    ELSE()
+        MESSAGE(STATUS "Program PANDOC not found -> Developer documentation will be uncomplete")
     ENDIF()
 
     IF (WIN32)
@@ -48,7 +56,7 @@ IF(DOXYGEN_FOUND)
             COMMENT "Generating API documentation with Doxygen" VERBATIM
             )
     ENDIF()
-    IF(NOT PANDOC-NOTFOUND)
+    IF(PANDOC)
         ADD_DEPENDENCIES(doc_dev doc_dev_guide)
     ENDIF()
 
@@ -77,12 +85,9 @@ IF(DOXYGEN_FOUND)
     ENDIF()
 ELSE()
     MESSAGE("Doxygen not found.")
-ENDIF(DOXYGEN_FOUND)
+ENDIF()
 
-FIND_PACKAGE(Pandoc)
-IF(PANDOC_EXECUTABLE-NOTFOUND)
-    MESSAGE(STATUS "Program PANDOC not found -> No user documentation will be generated")
-ELSE()
+IF(PANDOC)
     FOREACH(f fr)
         ADD_CUSTOM_COMMAND(
             OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/user_guide_${f}.html
@@ -97,6 +102,8 @@ ELSE()
     FOREACH(f ${files})
         INSTALL(FILES ${f} DESTINATION doc/images)
     ENDFOREACH()
+ELSE()
+    MESSAGE(STATUS "Program PANDOC not found -> No user documentation will be generated")
 ENDIF()
 
 ADD_CUSTOM_TARGET(
