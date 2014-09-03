@@ -26,7 +26,7 @@ class Polygon
     public:
         Polygon(const Matrix3x& mesh //!< Mesh given as a matrix (one point per column, all columns are used)
                 );
-        Polygon(const MeshPtr& mesh,   //!< Points & facets (not all points are used)
+        Polygon(const const_MeshPtr& mesh,   //!< Points & facets (not all points are used)
                 const size_t facet_idx //!< Index of the facet used to define the polygon
                 );
 
@@ -58,12 +58,11 @@ class Polygon
 		  *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
           */
         Polygon projected_on_free_surface(
-        		const std::vector<double>& immersions    ,  //!< relative immersion of each vertex
         		const EPoint&              down_direction   //!< local down direction expressed in mesh frame
         ) const;
     private:
         Polygon(); // Disabled
-        MeshPtr mesh;
+        const_MeshPtr mesh;
         size_t facet_idx;
         double area;
         EPoint unit_normal;

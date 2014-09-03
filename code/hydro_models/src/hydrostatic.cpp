@@ -16,21 +16,6 @@
 
 using namespace hydrostatic;
 
-ImmersionStatus hydrostatic::get_immersion_type(const std::vector<size_t>& idx, const std::vector<double>& delta_z)
-{
-    const size_t n = idx.size();
-    bool some_points_are_immerged = false;
-    bool some_points_are_emerged = false;
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        const double dz = delta_z.at(idx[i]);
-        if (dz > 0) some_points_are_immerged = true;
-        if (dz < 0) some_points_are_emerged = true;
-    }
-    if (some_points_are_immerged and not(some_points_are_emerged)) return TOTALLY_IMMERGED;
-    if (not(some_points_are_immerged))                             return TOTALLY_EMERGED;
-                                                                   return PARTIALLY_EMERGED;
-}
 
 double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Coordinates of all nodes
                                       const std::vector<size_t>& idx,    //!< Indices of the points
@@ -66,210 +51,6 @@ double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<doubl
     return average_immersion(nodes.first, idx, nodes.second);
 }
 
-std::pair<size_t,size_t> hydrostatic::first_and_last_emerged_points(const std::vector<double>& z)
-{
-    const size_t n = z.size();
-    if (n<3)
-    {
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, "Need at least 3 points in z");
-    }
-    size_t first = 0;
-    size_t last = 0;
-    bool first_was_assigned = false;
-    bool last_was_assigned = false;
-    if ((z[0]<0) and (z[1]>=0)) {last_was_assigned = true;}
-    for (size_t i = 1 ; i < n-1 ; ++i)
-    {
-        if (z[i]<0)
-        {
-            if (z[i-1]>=0)
-            {
-                if (first_was_assigned)
-                {
-                    THROW(__PRETTY_FUNCTION__, HydrostaticException, "Set of emerged points is not convex.");
-                }
-                first = i;
-                first_was_assigned = true;
-            }
-            if (z[i+1]>=0)
-            {
-                if (last_was_assigned)
-                {
-                    THROW(__PRETTY_FUNCTION__, HydrostaticException, "Set of emerged points is not convex.");
-                }
-                last = i;
-                last_was_assigned = true;
-            }
-        }
-    }
-    if ((z[n-1]<0) and not(first_was_assigned)) first = n-1;
-    if ((z[n-1]<0) and not(last_was_assigned))  last = n-1;
-    return std::make_pair(first,last);
-}
-
-void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_t>& idx, const std::vector<double>& v);
-void make_sure_some_points_are_immerged_and_some_are_not(const std::vector<size_t>& idx, const std::vector<double>& v)
-{
-    switch(get_immersion_type(idx, v))
-    {
-        case TOTALLY_EMERGED:
-        {
-            THROW(__PRETTY_FUNCTION__, HydrostaticException, "None of the points are immerged.");
-            break;
-        }
-        case TOTALLY_IMMERGED:
-        {
-            THROW(__PRETTY_FUNCTION__, HydrostaticException, "All the points are immerged.");
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-std::pair<Matrix3x,std::vector<double> > hydrostatic::immerged_polygon(const Matrix3x& M,
-                                       const std::vector<size_t>& idx,
-                                       const std::vector<double>& v)
-{
-    const size_t n = idx.size();
-    std::vector<double> dz(n,0);
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        dz[i] = v.at(idx[i]);
-    }
-    const std::pair<size_t,size_t> first_and_last = first_and_last_emerged_points(dz);
-    const size_t idxA = idx[first_and_last.first];
-    const size_t idxB = idx[first_and_last.second];
-    const size_t idxA1 = previous(idx, idxA);
-    const size_t idxB1 = next(idx, idxB);
-    const bool A1_is_on_surface = v.at(idxA1)==0;
-    const bool B1_is_on_surface = v.at(idxB1)==0;
-    const EPoint A = M.col((int)idxA);
-    const EPoint A1 = M.col((int)idxA1);
-    const EPoint B = M.col((int)idxB);
-    const EPoint B1 = M.col((int)idxB1);
-
-    size_t N = (first_and_last.second>=first_and_last.first) ? n-(first_and_last.second-first_and_last.first-1) : first_and_last.second+first_and_last.first+1;
-    if (A1_is_on_surface) N--;
-    if (B1_is_on_surface) N--;
-    Eigen::Matrix<double,3,Eigen::Dynamic> ret;
-    std::vector<double> delta_z;
-    ret.resize(3,(int)N);
-    int k = 0;
-    bool A1_inserted = false;
-    bool B1_inserted = false;
-    if (first_and_last.first<=first_and_last.second)
-    {
-        for (size_t i = 0 ; i < first_and_last.first ; ++i)
-        {
-            ret.col(k++) = M.col((int)idx.at(i));
-            delta_z.push_back(v.at(idx.at(i)));
-            A1_inserted = A1_inserted or (idx.at(i)==idxA1);
-            B1_inserted = B1_inserted or (idx.at(i)==idxB1);
-        }
-
-        if (not(A1_is_on_surface))
-        {
-            const EPoint P = intersection(A,v.at(idxA),A1,v.at(idxA1));
-            ret.col(k++) = P;
-            delta_z.push_back(0);
-        }
-        else if (not(A1_inserted))
-        {
-            ret.col(k++) = M.col((int)idxA1);
-            delta_z.push_back(v.at(idxA1));
-        }
-
-        if (not(B1_is_on_surface))
-        {
-            const EPoint Q = intersection(B,v.at(idxB),B1,v.at(idxB1));
-            ret.col(k++) = Q;
-            delta_z.push_back(0);
-        }
-        else if (not(B1_inserted))
-        {
-            ret.col(k++) = M.col((int)idxB1);
-            delta_z.push_back(v.at(idxB1));
-        }
-
-        const size_t start = A1_is_on_surface ? first_and_last.second+2 : first_and_last.second+1;
-        const size_t stop = B1_is_on_surface ? n-1 : n;
-        for (size_t i = start ; i < stop ; ++i)
-        {
-            ret.col(k++) = M.col((int)idx.at(i));
-            delta_z.push_back(v.at(idx.at(i)));
-        }
-    }
-    else
-    {
-        const EPoint P = intersection(A,v.at(idxA),A1,v.at(idxA1));
-        const EPoint Q = intersection(B,v.at(idxB),B1,v.at(idxB1));
-        ret.col(k++) = Q;
-        delta_z.push_back(0);
-        for (size_t i = idxB1 ; i <= idxA1 ; ++i)
-        {
-            ret.col(k++) = M.col((int)i);
-            delta_z.push_back(v.at(i));
-        }
-        ret.col(k++) = P;
-        delta_z.push_back(0);
-    }
-    return std::make_pair(ret,delta_z);
-}
-
-EPoint hydrostatic::intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB)
-{
-    if (dzA*dzB>0)
-    {
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, "zB & zA must have different signs");
-    }
-    const double xA = A(0);
-    const double xB = B(0);
-    const double yA = A(1);
-    const double yB = B(1);
-    const double zA = A(2);
-    const double zB = B(2);
-    const double k = dzA/(dzA-dzB);
-    return EPoint(xA + k*(xB-xA),
-                  yA + k*(yB-yA),
-                  zA + k*(zB-zA)
-                  );
-
-}
-
-size_t hydrostatic::next(const std::vector<size_t>& idx, const size_t i0)
-{
-    const size_t n = idx.size();
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        if (i0 == idx[i])
-        {
-            if (i== n-1) return idx[0];
-            else         return idx[i+1];
-        }
-    }
-    std::stringstream ss;
-    ss << "Unable to find index " << i0 << " in list.";
-    THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
-    return 0;
-}
-
-size_t hydrostatic::previous(const std::vector<size_t>& idx, const size_t i0)
-{
-    const size_t n = idx.size();
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        if (i0 == idx[i])
-        {
-            if (i== 0) return idx[n-1];
-            else       return idx[i-1];
-        }
-    }
-    std::stringstream ss;
-    ss << "Unable to find index " << i0 << " in list.";
-    THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
-    return 0;
-}
 
 UnsafeWrench hydrostatic::dF(const Point& O,    //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                              const EPoint& C,   //!< Point where the force is applied (barycentre of the facet)
@@ -290,121 +71,74 @@ Wrench hydrostatic::force(const MeshPtr& mesh,               //!< Mesh
                           const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
                          )
 {
-    // QUICK AND DIRTY HACK : choose either solution
-    return fast_force(mesh,O,rho,g,immersions);
-    // return exact_force(mesh,O,rho,g,immersions);
-}
-
-Wrench hydrostatic::fast_force(const MeshPtr& mesh,               //!< Mesh
-                          const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                          const double rho,                       //!< Density of the fluid (in kg/m^3)
-                          const EPoint& g,                        //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
-                          const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
-                         )
-{
     if (immersions.size() != (size_t)mesh->nodes.cols())
     {
         std::stringstream ss;
         ss << "Should have as many nodes as immersions: received " << mesh->nodes.cols() << " nodes but " << immersions.size() << " immersions.";
         THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
     }
-    std::vector<Facet>::const_iterator that_facet = mesh->facets.begin();
+    mesh->update_intersection_with_free_surface(immersions);
+    // QUICK AND DIRTY HACK : choose either solution
+    return fast_force((const_MeshPtr)mesh,O,rho,g);
+    // return exact_force(mesh,O,rho,g);
+}
+
+Wrench hydrostatic::fast_force(const const_MeshPtr& mesh,               //!< Mesh
+                          const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                          const double rho,                       //!< Density of the fluid (in kg/m^3)
+                          const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+                         )
+{
+    std::vector<Facet>::const_iterator first_facet = mesh->facets.begin();
     UnsafeWrench F(O);
     const double orientation_factor = mesh->orientation_factor;
     const double g_norm = g.norm();
-    for (size_t facet_index=0;that_facet != mesh->facets.end() ; ++that_facet , ++facet_index)
+    for (size_t i=0;i < mesh->list_of_facets_immersed.size() ; ++i)
     {
-        switch (get_immersion_type(that_facet->vertex_index, immersions))
-        {
-            case TOTALLY_IMMERGED:
-            {
-                const double zG = average_immersion(mesh->nodes, that_facet->vertex_index, immersions);
-                const EPoint dS = that_facet->area*that_facet->unit_normal;
-                const EPoint ap = fast_application_point(Polygon(mesh,facet_index));
-                F += orientation_factor*dF(O, ap , rho, g_norm, zG , dS);
-                break;
-            }
-            case PARTIALLY_EMERGED:
-            {
-                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh->nodes,that_facet->vertex_index,immersions);
-                const double zG = average_immersion(polygon_and_immersions);
-                const EPoint dS = area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
-                const EPoint ap = fast_application_point(Polygon(polygon_and_immersions.first));
-                F += orientation_factor*dF(O,ap,rho,g_norm,zG,dS);
-                break;
-            }
-            case TOTALLY_EMERGED:
-            {
-                break;
-            }
-        }
+        size_t facet_index = mesh->list_of_facets_immersed[i];
+        std::vector<Facet>::const_iterator that_facet = first_facet + facet_index;
+        const double zG = average_immersion(mesh->all_nodes, that_facet->vertex_index, mesh->all_immersions);
+        const EPoint dS = that_facet->area*that_facet->unit_normal;
+        const EPoint ap = that_facet->barycenter;
+        F += orientation_factor*dF(O, ap , rho, g_norm, zG , dS);
     }
     return F;
 }
 
-Wrench hydrostatic::exact_force(const MeshPtr& mesh,                    //!< Mesh
+Wrench hydrostatic::exact_force(const const_MeshPtr& mesh,                    //!< Mesh
                                 const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                                 const double rho,                       //!< Density of the fluid (in kg/m^3)
-                                const EPoint& g,                        //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
-                                const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
+                                const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                                 )
 {
-    if (immersions.size() != (size_t)mesh->nodes.cols())
-    {
-        std::stringstream ss;
-        ss << "Should have as many nodes as immersions: received " << mesh->nodes.cols() << " nodes but " << immersions.size() << " immersions.";
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
-    }
-    std::vector<Facet>::const_iterator that_facet = mesh->facets.begin();
+    std::vector<Facet>::const_iterator first_facet = mesh->facets.begin();
     UnsafeWrench F(O);
     const double orientation_factor = mesh->orientation_factor;
     const double g_norm = g.norm();
     const EPoint down_direction = g / g_norm;
-    for (size_t facet_index=0;that_facet != mesh->facets.end() ; ++that_facet , ++facet_index)
+    for (size_t i=0;i < mesh->list_of_facets_immersed.size() ; ++i)
     {
-        switch (get_immersion_type(that_facet->vertex_index, immersions))
-        {
-            case TOTALLY_IMMERGED:
-            {
-                const double zG = average_immersion(mesh->nodes, that_facet->vertex_index, immersions);
-                const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
-                const EPoint ap = exact_application_point(Polygon(mesh,facet_index),down_direction,immersions,zG);
-                F += dF(O, ap , rho, g_norm, zG , dS);
-                break;
-            }
-            case PARTIALLY_EMERGED:
-            {
-                const std::pair<Matrix3x,std::vector<double> > polygon_and_immersions = immerged_polygon(mesh->nodes,that_facet->vertex_index,immersions);
-                const double zG = average_immersion(polygon_and_immersions);
-                const EPoint dS = orientation_factor*area(polygon_and_immersions.first)*unit_normal(polygon_and_immersions.first);
-                const EPoint ap = exact_application_point(Polygon(polygon_and_immersions.first),down_direction,polygon_and_immersions.second,zG);
-                F += dF(O,ap,rho,g_norm,zG,dS);
-                break;
-            }
-            case TOTALLY_EMERGED:
-            {
-                break;
-            }
-        }
+        size_t facet_index = mesh->list_of_facets_immersed[i];
+        std::vector<Facet>::const_iterator that_facet = first_facet + facet_index;
+
+        //Matrix3x            facet_coords     = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
+        //std::vector<double> facet_immersions = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+
+        const double zG = average_immersion(mesh->all_nodes, that_facet->vertex_index, mesh->all_immersions);
+        const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
+        const EPoint ap = exact_application_point(Polygon(mesh,facet_index),down_direction,zG);
+        F += dF(O, ap , rho, g_norm, zG , dS);
     }
     return F;
 }
 
-EPoint hydrostatic::fast_application_point(
-		const Polygon& polygon                //!< vertices of the facet
-		)
-{
-	return polygon.get_barycenter();
-}
-
 EPoint hydrostatic::normal_to_free_surface(
         const Polygon& polygon,                 //!< vertices of the facet
-        const EPoint&  down_direction,          //!< local down direction expressed in mesh frame
-        const std::vector<double>& immersions   //!< relative immersion of each vertex
+        const EPoint&  down_direction           //!< local down direction expressed in mesh frame
         )
 {
     // Compute normal to free surface, oriented downward
-    const Polygon free_surface = polygon.projected_on_free_surface(immersions,down_direction);
+    const Polygon free_surface = polygon.projected_on_free_surface(down_direction);
     const EPoint ns = free_surface.get_unit_normal();
 
     if(ns.norm() < 0.5 ) // the facet is vertical, we can't access the normal to free surface, but we don't need it
@@ -446,11 +180,10 @@ Eigen::Matrix3d hydrostatic::facet_trihedron(
 EPoint hydrostatic::exact_application_point(
 		const Polygon& polygon,                 //!< vertices of the facet
 		const EPoint&  down_direction,          //!< local down direction expressed in mesh frame
-		const std::vector<double>& immersions,  //!< relative immersion of each vertex
         const double  zG                        //!< Relative immersion of facet barycentre (in metres)
 		)
 {
-    EPoint ns=hydrostatic::normal_to_free_surface(polygon,down_direction,immersions);
+    EPoint ns=hydrostatic::normal_to_free_surface(polygon,down_direction);
 	Eigen::Matrix3d R20 = facet_trihedron(polygon,ns);
 	if(R20.col(0).norm() < 0.5 ) // quick test : facet is parallel to the free surface
 	    return polygon.get_barycenter();
@@ -465,4 +198,3 @@ EPoint hydrostatic::exact_application_point(
 	EPoint offset2( xR , yR , 0);
 	return polygon.get_barycenter() + R02 * offset2;
 }
-

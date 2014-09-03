@@ -2,7 +2,7 @@
 #include "MeshBuilder.hpp"
 #include "Polygon.hpp"
 
-Polygon::Polygon(const MeshPtr& mesh_, const size_t facet_idx_) : mesh(mesh_), facet_idx(facet_idx_),
+Polygon::Polygon(const const_MeshPtr& mesh_, const size_t facet_idx_) : mesh(mesh_), facet_idx(facet_idx_),
 area(mesh->facets.at(facet_idx).area), unit_normal(mesh->facets.at(facet_idx).unit_normal), barycenter(mesh->facets.at(facet_idx).barycenter)
 {
 }
@@ -36,7 +36,7 @@ Eigen::Matrix3d Polygon::get_inertia_wrt(
 	size_t nVertices = mesh->facets[facet_idx].vertex_index.size();
 	Matrix3x verticesInR0(3,nVertices);
 	for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
-		verticesInR0.col((int)iVertex) = mesh->nodes.col((int)mesh->facets[facet_idx].vertex_index[iVertex]) - G;
+		verticesInR0.col((int)iVertex) = mesh->all_nodes.col((int)mesh->facets[facet_idx].vertex_index[iVertex]) - G;
 	}
 	Matrix3x verticesInR2(3,nVertices);
 	verticesInR2 = R20 * verticesInR0;
@@ -45,14 +45,13 @@ Eigen::Matrix3d Polygon::get_inertia_wrt(
 }
 
 Polygon Polygon::projected_on_free_surface(
-		const std::vector<double>& immersions    ,  //!< relative immersion of each vertex
 		const EPoint&              down_direction   //!< local down direction expressed in mesh frame
 		) const
 {
 	size_t nVertices = mesh->facets[facet_idx].vertex_index.size();
 	Matrix3x newVertices(3,nVertices);
 	for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
-		newVertices.col((int)iVertex) = mesh->nodes.col((int)mesh->facets[facet_idx].vertex_index[iVertex]) - immersions[iVertex]*down_direction;
+		newVertices.col((int)iVertex) = mesh->all_nodes.col((int)mesh->facets[facet_idx].vertex_index[iVertex]) - mesh->all_immersions[iVertex]*down_direction;
 	}
 	return Polygon(newVertices);
 }

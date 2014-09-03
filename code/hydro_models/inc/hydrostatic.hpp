@@ -42,62 +42,6 @@ namespace hydrostatic
     double average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                             );
 
-    /**  \author cec
-      *  \date Apr 30, 2014, 11:03:52 AM
-      *  \brief Computes the immerged polygon from a facet
-      *  \returns Coordinate matrix (one point per column) & corresponding relative immersion
-      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest immerged_polygon_example
-      */
-    std::pair<Matrix3x,std::vector<double> > immerged_polygon(const Matrix3x& M,              //!< Matrix containing all the points in the mesh
-                                                              const std::vector<size_t>& idx, //!< Indices of the points
-                                                              const std::vector<double>& v    //!< Vector of relative wave heights (positive if point is immerged)
-                                                             );
-
-    /**  \author cec
-      *  \date Apr 30, 2014, 11:41:54 AM
-      *  \brief Computes the index of the first & the last positive values in a vector
-      *  \details This is just a wrapper for std::find_first_of & std::find_last_of but the semantics are clearer in this context if we create a function
-      *  \returns Pair of indexes: first is index of first emerged point & second is index of last emerged point.
-      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest first_and_last_emerged_points_example
-      */
-    std::pair<size_t,size_t> first_and_last_emerged_points(const std::vector<double>& z //!< List of immersions
-                                                          );
-
-    /**  \author cec
-      *  \date Apr 30, 2014, 12:40:15 PM
-      *  \brief Given two points A, B & their relative immersions, give intersection with free surface
-      *  \details The points must not both be emerged or immerged.
-      *           This function assumes that the surface is a plane.
-      *  \returns A point intersecting (AB) and the free surface
-      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest intersection_example
-      */
-    EPoint intersection(const EPoint& A,  //!< First point
-                        const double dzA, //!< Relative immersion of first point
-                        const EPoint& B,  //!< Second point
-                        const double dzB  //!< Relative immersion of second point
-                       );
-
-    /**  \author cec
-      *  \date May 1, 2014, 2:04:40 PM
-      *  \brief Computes the successor index in an array of available indices.
-      *  \details Throws if i0 is not in idx.
-      *  \returns The index immediately after, or the first index if received the last one
-      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest next_example
-      */
-    size_t next(const std::vector<size_t>& idx, //!< Available indices, in order
-                const size_t i0                 //!< Index to look for in 'idx'.
-               );
-
-    /**  \author cec
-      *  \date May 1, 2014, 2:56:02 PM
-      *  \brief Computes the predecessor index in an array of available indices.
-      *  \details Throws if i0 is not in idx.
-      *  \returns The index immediately before, or the last index if received the first one
-      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest previous_example
-      */
-    size_t previous(const std::vector<size_t>& idx, //!< Available indices, in order
-                    const size_t i0                 //!< Index to look for in 'idx'.
-                   );
 
     /**  \author cec
       *  \date May 19, 2014, 10:30:33 AM
@@ -128,50 +72,27 @@ namespace hydrostatic
                  const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
                 );
 
-    typedef enum {PARTIALLY_EMERGED, TOTALLY_EMERGED, TOTALLY_IMMERGED} ImmersionStatus;
-
-    /**  \author cec
-      *  \date Jun 10, 2014, 3:07:32 PM
-      *  \details Given a vector of immersions and indexes of points in that vector,
-      *  return the type of immersion (not taking zero immersion into account).
-      *  \returns ImmersionStatus
-      *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest size_t get_nb_of_immerged_points(const std::vector<size_t>& idx, const std::vector<double>& delta_z);_example
-      */
-    ImmersionStatus get_immersion_type(const std::vector<size_t>& idx, //!< Vector of indexes in delta_z
-                                       const std::vector<double>& delta_z //!< Vector of immersions
-                                      );
-
     /**  \brief Computes the hydrostatic force acting on a body (fast but inexact)
       *  \details
       *  \returns
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
       */
-    Wrench fast_force(const MeshPtr& mesh,                    //!< Coordinates of all the points
+    Wrench fast_force(const const_MeshPtr& mesh,                    //!< Coordinates of all the points
                  const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
                  const double rho,                       //!< Density of the fluid (in kg/m^3)
-                 const EPoint& g,                        //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
-                 const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
-                );
+                 const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+                 );
 
     /**  \brief Computes the hydrostatic force acting on a body applied at exact application point
       *  \details
       *  \returns
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
       */
-    Wrench exact_force(const MeshPtr& mesh,                    //!< Mesh
+    Wrench exact_force(const const_MeshPtr& mesh,                    //!< Mesh
 			 	 	   const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
 					   const double rho,                       //!< Density of the fluid (in kg/m^3)
-					   const EPoint& g,                        //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
-					   const std::vector<double>& immersions   //!< Relative immersion of each point in mesh (in metres)
+					   const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
 					 );
-
-    /**  \brief Compute the application point of hydrostatic force for a triangular facet, fastly but inexactly
-      * \ details
-      *  \returns application point coordinates expressed in same frame as barycentre
-      */
-    EPoint fast_application_point(
-    		const Polygon& polygon    //!< vertices of the facet
-    );
 
 
     /** \details Compute normal to free surface, oriented downward, knowing the facet vertex, immersion of each vertex and down direction (all in mesh frame)
@@ -180,8 +101,7 @@ namespace hydrostatic
       */
     EPoint normal_to_free_surface(
             const Polygon& polygon,                 //!< vertices of the facet
-            const EPoint&  down_direction,          //!< local down direction expressed in mesh frame
-            const std::vector<double>& immersions   //!< relative immersion of each vertex
+            const EPoint&  down_direction           //!< local down direction expressed in mesh frame
             );
 
     /** \details Compute a trihedron R2 of the facet convenient for computation of hydrostatic application point:
@@ -204,7 +124,6 @@ namespace hydrostatic
     EPoint exact_application_point(
     		const Polygon& polygon,                 //!< vertices of the facet
     		const EPoint&  down_direction,          //!< local down direction expressed in mesh frame
-    		const std::vector<double>& immersions,  //!< relative immersion of each vertex
             const double  zG                        //!< Relative immersion of facet barycentre (in metres)
     );
 
