@@ -1,6 +1,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <iostream>
 #include "Mesh.hpp"
 #include "mesh_manipulations.hpp"
 
@@ -74,7 +75,7 @@ Mesh::Mesh(const Matrix3x& nodes_,
 ,list_of_facets_emerged()
 ,list_of_facets_immersed()
 {
-    Matrix3x room_for_dynamic_vertices(3,static_edges);
+    Matrix3x room_for_dynamic_vertices(3,all_nodes.cols()-nodes.cols());
     room_for_dynamic_vertices.fill(0);
     all_nodes << nodes , room_for_dynamic_vertices;
 }
@@ -106,7 +107,7 @@ void Mesh::update_intersection_with_free_surface(
         if (edge->touches_free_surface())
             set_of_facets_crossing_free_surface.insert(facetsPerEdge[edge_index].begin(),facetsPerEdge[edge_index].end());
         if (edge->crosses_free_surface())
-            added_edges[edge_index] = split_partially_immersed_edge(*edge);
+            added_edges[edge_index] = split_partially_immersed_edge(edge->vertex_index[0],edge->vertex_index[1]);
     }
 
     // iterate on each facet to classify and/or split
@@ -204,9 +205,9 @@ void Mesh::split_partially_immersed_facet(
      emerged_edges.insert( emerged_edges.begin()+ first_emerged,OrientedEdge(closing_edge_index,false));
 
     // create the Facets
-    std::vector<Facet>::const_iterator that_facet=facets.begin()+facet_index;
-    list_of_facets_emerged.push_back(create_facet_from_edges(emerged_edges,that_facet->unit_normal));
-    list_of_facets_immersed.push_back(create_facet_from_edges(immersed_edges,that_facet->unit_normal));
+    EPoint unit_normal=(facets.begin()+facet_index)->unit_normal;
+    list_of_facets_emerged.push_back(create_facet_from_edges(emerged_edges,unit_normal));
+    list_of_facets_immersed.push_back(create_facet_from_edges(immersed_edges,unit_normal));
 }
 
 size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list,const EPoint &unit_normal)
@@ -228,18 +229,18 @@ size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list,
     return facet_index;
 }
 
-size_t Mesh::split_partially_immersed_edge(const Edge &edge)
+size_t Mesh::split_partially_immersed_edge(const size_t first_vertex_index,const size_t last_vertex_index)
 {
-    EPoint A=nodes.col(edge.vertex_index[0]);
-    EPoint B=nodes.col(edge.vertex_index[1]);
-    double zA=all_immersions[edge.vertex_index[0]];
-    double zB=all_immersions[edge.vertex_index[1]];
+    EPoint A=all_nodes.col(first_vertex_index);
+    EPoint B=all_nodes.col(last_vertex_index);
+    double zA=all_immersions[first_vertex_index];
+    double zB=all_immersions[last_vertex_index];
     size_t node_index = node_count;
     all_nodes.col(node_index) = edge_intersection(A,zA,B,zB);
     all_immersions.push_back(0);
     ++node_count;
-    Edge first_sub_edge(edge.vertex_index[0],node_index);
-    Edge second_sub_edge(node_index,edge.vertex_index[1]);
+    Edge first_sub_edge(first_vertex_index,node_index);
+    Edge second_sub_edge(node_index,last_vertex_index);
     first_sub_edge.update_intersection_with_free_surface(all_immersions);
     second_sub_edge.update_intersection_with_free_surface(all_immersions);
     edges.push_back(first_sub_edge);

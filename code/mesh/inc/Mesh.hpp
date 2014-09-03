@@ -119,7 +119,7 @@ public:
     static EPoint edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB);
 
     /* \brief split an edge into an emerged and an immersed part */
-    size_t split_partially_immersed_edge(const Edge &edge);
+    size_t split_partially_immersed_edge(const size_t first_vertex_index,const size_t last_vertex_index);
 
     /* \brief split a Facet into an emerged and an immersed part */
     void split_partially_immersed_facet(
