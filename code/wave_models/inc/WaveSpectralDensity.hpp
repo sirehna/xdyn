@@ -11,6 +11,8 @@
 #include <vector>
 #include <cstdlib>
 
+class SumOfWaveSpectralDensities;
+
 /** \brief Interface for wave spectral densities (distribution of the wave height by frequency).
  *  \details Used with WaveDirectionalSpreading to construct a DirectionalWaveSpectrum
  *  \addtogroup wave_models
@@ -33,6 +35,9 @@ class WaveSpectralDensity
                           ) const= 0;
 
         virtual WaveSpectralDensity* clone() const = 0;
+
+
+        SumOfWaveSpectralDensities operator+(const WaveSpectralDensity& w) const;
 
         /**  \brief Returns n angular frequencies between omega_min (included)
           *         and omega_max (also included)

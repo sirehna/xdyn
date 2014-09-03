@@ -9,12 +9,18 @@
 
 #include <boost/math/tools/roots.hpp>
 
+#include "SumOfWaveSpectralDensities.hpp"
 #include "WaveSpectralDensity.hpp"
 #include "WaveNumberFunctor.hpp"
 #include "WaveModelException.hpp"
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
+}
+
+SumOfWaveSpectralDensities WaveSpectralDensity::operator+(const WaveSpectralDensity& w) const
+{
+    return SumOfWaveSpectralDensities(*this, w);
 }
 
 WaveSpectralDensity::~WaveSpectralDensity()
