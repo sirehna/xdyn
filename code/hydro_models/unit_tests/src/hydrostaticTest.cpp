@@ -76,10 +76,12 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_one_immerged_node)
 
     const std::vector<double> v({-1,-1,1});
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+
+    const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
+    const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(3, polygon.cols());
     ASSERT_DOUBLE_EQ(4  ,polygon(0,2));
@@ -107,10 +109,12 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_two_immerged_node)
 
     const std::vector<double> v({-1,1,1});
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+
+    const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
+    const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(4  ,polygon(0,3));
@@ -141,10 +145,12 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_
 
     const std::vector<double> v({-1,-1,-1,1,1});
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+
+    const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
+    const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(5  ,polygon(0,3));
@@ -175,10 +181,12 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_
 
     const std::vector<double> v({1,1,-1,-1,-1});
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+
+    const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
+    const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(1  ,polygon(0,3));
@@ -209,10 +217,12 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_in_t
 
     const std::vector<double> v({1,-1,-1,-1,1});
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+
+    const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
+    const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(1  ,polygon(0,3));
@@ -244,10 +254,12 @@ TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_all_points_are_immerged
     std::vector<size_t> index(3);
     const std::vector<double> v({1,2,5});
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    ASSERT_EQ(0,mesh.index_of_emerged_facets.size());
-    ASSERT_EQ(0,mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+
+    ASSERT_EQ(0,intersector.index_of_emerged_facets.size());
+    ASSERT_EQ(0,intersector.index_of_immersed_facets.at(0));
 }
 
 TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface)
@@ -256,7 +268,7 @@ TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface)
     const EPoint B(98,2,0);
     const double dzA = 77;
     const double dzB = -1;
-    const EPoint I = Mesh::edge_intersection(A, dzA, B, dzB);
+    const EPoint I = MeshIntersector::edge_intersection(A, dzA, B, dzB);
     ASSERT_NEAR(77./78.*97+1, (double)I(0),EPS*EPS);
     ASSERT_NEAR(5-77./78.*3, (double)I(1),EPS*EPS);
     ASSERT_NEAR(9-77./78.*9, (double)I(2),EPS*EPS);
@@ -268,7 +280,7 @@ TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface_second_test)
     const EPoint B(98,2,-9);
     const double dzA = 9;
     const double dzB = -9;
-    const EPoint I = Mesh::edge_intersection(A, dzA, B, dzB);
+    const EPoint I = MeshIntersector::edge_intersection(A, dzA, B, dzB);
     ASSERT_DOUBLE_EQ(0, I(0));
     ASSERT_DOUBLE_EQ(0, I(1));
     ASSERT_DOUBLE_EQ(0, I(2));
@@ -280,7 +292,7 @@ TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface_third_test)
     const EPoint B(99,2,-10);
     const double dzA = 1;
     const double dzB = -3;
-    const EPoint I = Mesh::edge_intersection(A, dzA, B, dzB);
+    const EPoint I = MeshIntersector::edge_intersection(A, dzA, B, dzB);
     ASSERT_DOUBLE_EQ(24, I(0));
     ASSERT_DOUBLE_EQ(-1, I(1));
     ASSERT_DOUBLE_EQ(5, I(2));
@@ -292,7 +304,7 @@ TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface_bug_detected_i
     const EPoint B(99,2,-10);
     const double dzA = 1;
     const double dzB = -3;
-    const EPoint I = Mesh::edge_intersection(A, dzA, B, dzB);
+    const EPoint I = MeshIntersector::edge_intersection(A, dzA, B, dzB);
     ASSERT_DOUBLE_EQ(24, I(0));
     ASSERT_DOUBLE_EQ(-1, I(1));
     ASSERT_DOUBLE_EQ(5, I(2));
@@ -307,10 +319,12 @@ TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_no_points_are_immerged)
         3 , 6 , 9 ;
     const std::vector<double> v({-1,-2,-5});
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    ASSERT_EQ(0,mesh.index_of_immersed_facets.size());
-    ASSERT_EQ(0,mesh.index_of_emerged_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+
+    ASSERT_EQ(0,intersector.index_of_immersed_facets.size());
+    ASSERT_EQ(0,intersector.index_of_emerged_facets.at(0));
 }
 
 TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
@@ -336,12 +350,14 @@ TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
 
 TEST_F(hydrostaticTest, another_bug_in_immerged_polygon)
 {
-    Mesh mesh = MeshBuilder(two_triangles()).build();
-    const std::vector<double> z = {-1,-1,-2,1};
+    MeshPtr mesh(new Mesh(MeshBuilder(two_triangles()).build()));
+    const std::vector<double> v = {-1,-1,-2,1};
 
-    mesh.update_intersection_with_free_surface(z);
-    const auto polygon = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+
+    const auto polygon = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
+    const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_DOUBLE_EQ( 1  , polygon(0,0));
     ASSERT_DOUBLE_EQ(-0.5, polygon(1,0));
@@ -368,12 +384,14 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     const EPoint g(0, 0, 10);
     const Point G(a.random<std::string>(), 1,2,4);
     const std::vector<double> z = {-0.5,-0.5,-2.5,0.5};
-    const Wrench Fhs = force(mesh, G, rho, g, z);
+    MeshIntersector intersector(mesh,z);
+    intersector.update_intersection_with_free_surface();
+    const Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
 
-    ASSERT_EQ(1,mesh->index_of_immersed_facets.size());
-    ASSERT_DOUBLE_EQ(0.5,::area(mesh->coordinates_of_facet(mesh->index_of_immersed_facets.at(0))));
-    ASSERT_DOUBLE_EQ(0.5,mesh->facets[mesh->index_of_immersed_facets.at(0)].area);
-    ASSERT_DOUBLE_EQ(0.5/3,hydrostatic::average_immersion(mesh->all_nodes, mesh->facets[mesh->index_of_immersed_facets.at(0)].vertex_index, mesh->all_immersions));
+    ASSERT_EQ(1,intersector.index_of_immersed_facets.size());
+    ASSERT_DOUBLE_EQ(0.5,::area(intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0))));
+    ASSERT_DOUBLE_EQ(0.5,mesh->facets[intersector.index_of_immersed_facets.at(0)].area);
+    ASSERT_DOUBLE_EQ(0.5/3,hydrostatic::average_immersion(mesh->all_nodes, mesh->facets[intersector.index_of_immersed_facets.at(0)].vertex_index, intersector.all_immersions));
 
     ASSERT_DOUBLE_EQ(0, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
@@ -400,7 +418,9 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
         const std::vector<double> dz = {z0-L/2,z0-L/2,z0-L/2,z0-L/2,z0+L/2,z0+L/2,z0+L/2,z0+L/2};
         const double rho = 1000;
         const EPoint g(0, 0, 9.81);
-        const Wrench Fhs = force(mesh, G, rho, g, dz);
+        MeshIntersector intersector(mesh,dz);
+        intersector.update_intersection_with_free_surface();
+        const Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L;
@@ -425,7 +445,9 @@ TEST_F(hydrostaticTest, should_not_crash)
         const std::vector<double> dz = {-h,0,0,-h,0,h,h,0};
         const double rho = 1000;
         const EPoint g(0, 0, 9.81);
-        force(mesh, G, rho, g, dz);
+        MeshIntersector intersector(mesh,dz);
+        intersector.update_intersection_with_free_surface();
+        force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
     }
 }
 
@@ -437,7 +459,9 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
     const Point G(a.random<std::string>(), 0, 0, 0);
     const double rho = 1000;
     const EPoint g(0, 0, 9.81);
-    const Wrench Fhs = force(mesh, G, rho, g, dz);
+    MeshIntersector intersector(mesh,dz);
+    intersector.update_intersection_with_free_surface();
+    const Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
 }
 
 TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
@@ -453,7 +477,9 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
         const std::vector<double> dz = {z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0};
         const double rho = 1000;
         const EPoint g(0, 0, 9.81);
-        const Wrench Fhs = force(mesh, G, rho, g, dz);
+        MeshIntersector intersector(mesh,dz);
+        intersector.update_intersection_with_free_surface();
+        const Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
         const double V = L*L*L/(6.*sqrt(2));
@@ -494,7 +520,9 @@ TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
     const Point G(a.random<std::string>(), a.random<double>(), a.random<double>(), a.random<double>());
     const MeshPtr mesh(new Mesh(MeshBuilder(tetrahedron(L,x0,y0,z0)).build()));
     const std::vector<double> dz = a.random_vector_of<double>().of_size(4);
-    const Wrench Fhs = force(mesh, G, a.random<double>(), a.random<EPoint>(), dz);
+    MeshIntersector intersector(mesh,dz);
+    intersector.update_intersection_with_free_surface();
+    const Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, a.random<double>(), a.random<EPoint>());
 
     ASSERT_EQ(G.get_frame(), Fhs.get_point().get_frame());
     ASSERT_EQ(G.get_frame(), Fhs.get_frame());
@@ -509,8 +537,8 @@ TEST_F(hydrostaticTest, should_be_able_to_compute_intersection_even_if_one_of_th
     const EPoint B(4,5,6);
     const EPoint C(7,8,9);
     const EPoint D(11,12,13);
-    const EPoint P = Mesh::edge_intersection(A,0,B,-1);
-    const EPoint Q = Mesh::edge_intersection(C,0,D,-1);
+    const EPoint P = MeshIntersector::edge_intersection(A,0,B,-1);
+    const EPoint Q = MeshIntersector::edge_intersection(C,0,D,-1);
 
     ASSERT_DOUBLE_EQ((double)A(0), (double)P(0));
     ASSERT_DOUBLE_EQ((double)A(1), (double)P(1));
@@ -529,10 +557,11 @@ TEST_F(hydrostaticTest, correct_immerged_polygon_when_two_points_are_exactly_on_
          -1,  0, 1, 0;
     const std::vector<double> v = {-1,0,1,0};
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    const auto p = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
-    const auto i = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+    const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
+    const auto i = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(3, p.cols());
 
@@ -562,10 +591,11 @@ TEST_F(hydrostaticTest, bug2_in_immerged_polygon)
            0, 1, 0, -1;
     const std::vector<double> v = {0,1,0,-1};
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    const auto p = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
-    const auto i = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+    const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
+    const auto i = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
     ASSERT_EQ(3, p.cols());
 
     ASSERT_DOUBLE_EQ(-1,(double)p(0,0));
@@ -594,9 +624,10 @@ TEST_F(hydrostaticTest, bug3_in_immerged_polygon)
          -0.25, -0.5,  0.25;
     const std::vector<double> v = {0,-0.25,0.5};
 
-    Mesh mesh(MeshBuilder(M).build());
-    mesh.update_intersection_with_free_surface(v);
-    const auto p = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
+    MeshIntersector intersector(mesh,v);
+    intersector.update_intersection_with_free_surface();
+    const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_LT(0, (p.col(0)-p.col(1)).norm());
     ASSERT_LT(0, (p.col(0)-p.col(2)).norm());

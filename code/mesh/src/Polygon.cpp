@@ -45,13 +45,14 @@ Eigen::Matrix3d Polygon::get_inertia_wrt(
 }
 
 Polygon Polygon::projected_on_free_surface(
-		const EPoint&              down_direction   //!< local down direction expressed in mesh frame
+		const EPoint&              down_direction,   //!< local down direction expressed in mesh frame
+		const std::vector<double> &all_immersions    //!< relative immersions for all point of the mesh
 		) const
 {
 	size_t nVertices = mesh->facets[facet_idx].vertex_index.size();
 	Matrix3x newVertices(3,nVertices);
 	for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
-		newVertices.col((int)iVertex) = mesh->all_nodes.col((int)mesh->facets[facet_idx].vertex_index[iVertex]) - mesh->all_immersions[iVertex]*down_direction;
+		newVertices.col((int)iVertex) = mesh->all_nodes.col((int)mesh->facets[facet_idx].vertex_index[iVertex]) - all_immersions[iVertex]*down_direction;
 	}
 	return Polygon(newVertices);
 }

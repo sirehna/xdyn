@@ -26,6 +26,20 @@ struct Edge
      */
     size_t second_vertex(int direction) const;
 
+    size_t vertex_index[2];  //!< The index of the two vertices in the mesh
+};
+
+class EdgeImmersionStatus
+{
+    EdgeImmersionStatus():status(0) {}
+public:
+    EdgeImmersionStatus(unsigned char status_):status(status_) {}
+
+    EdgeImmersionStatus(
+             const double z0, //!< the relative immersion of first vertex
+             const double z1  //!< the relative immersion of second vertex
+             );
+
     /* \brief answer whether this edge crosses the free surface
      */
     bool crosses_free_surface() const;
@@ -42,16 +56,8 @@ struct Edge
      */
     bool touches_free_surface() const;
 
-    /* \brief reset the status of the edge w.r.t. free surface
-     * \return true if this edge crosses the free surface
-     */
-    void update_intersection_with_free_surface(
-             const std::vector<double>& relative_immersions //!< the relative immersion of each static vertex of the mesh
-             );
-
-    size_t vertex_index[2];  //!< The index of the two vertices in the mesh
-    unsigned char status;    //!< 2 bits of immersion status: 00=totally emerged, 01=second emerged,first immersed, 10=first emerged,second immersed, 11=totally immersed
-                             // + third bit = 1 for potentially crossing (if any of the vertices is exactly on free surface)
+    unsigned char status; //!< 2 bits of immersion status: 00=totally emerged, 01=second emerged,first immersed, 10=first emerged,second immersed, 11=totally immersed
+                          // + third bit = 1 for potentially crossing (if any of the vertices is exactly on free surface)
 };
 
 
@@ -138,52 +144,17 @@ public:
             const std::vector<std::vector<OrientedEdge> >& edgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
             const bool clockwise);
 
-    FacetIterator begin_immersed() const
-    {
-        return FacetIterator(facets.begin(), index_of_immersed_facets, 0);
-    }
-
-    FacetIterator end_immersed() const
-    {
-        return FacetIterator(facets.begin(), index_of_immersed_facets, index_of_immersed_facets.size());
-    }
-
-    FacetIterator begin_emerged() const
-    {
-        return FacetIterator(facets.begin(), index_of_emerged_facets, 0);
-    }
-
-    FacetIterator end_emerged() const
-    {
-        return FacetIterator(facets.begin(), index_of_emerged_facets, index_of_emerged_facets.size());
-    }
 
     /* \brief Reset the dynamic data related to the mesh intersection with free surface */
     void reset_dynamic_data();
 
-    /* \brief Update the intersection of the mesh with free surface
-     * \details the intersection requires new Vertices/Edges/Facets stored as dynamic data in the end of container members */
-    void update_intersection_with_free_surface(
-            const std::vector<double>& relative_immersions //!< the relative immersion of each static vertex of the mesh
-            );
+    /* \brief add an edge
+     * \return the edge index */
+    size_t add_edge(const size_t first_vertex_index,const size_t last_vertex_index);
 
-    /* \brief Extract the coordinates of a specific facet */
-    Matrix3x coordinates_of_facet(size_t facet_index) const;
-
-    /* \brief Extract the relative immersions of a specific facet */
-    std::vector<double> immersions_of_facet(size_t facet_index) const;
-
-    /* \brief Compute the point of intersection with free surface between two vertices
-     * \details One of the vertices must be emerged and the other immersed */
-    static EPoint edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB);
-
-    /* \brief split an edge into an emerged and an immersed part */
-    size_t split_partially_immersed_edge(const size_t first_vertex_index,const size_t last_vertex_index);
-
-    /* \brief split a Facet into an emerged and an immersed part */
-    void split_partially_immersed_facet(
-            size_t facet_index,
-            const std::map<size_t,size_t >& added_edges);
+    /* \brief add an vertex
+     * \return the vertex index */
+    size_t add_vertex(const EPoint &vertex_coords);
 
     /* \brief create a new facet dynamically
      * \return the facet index in facets vector */
@@ -204,9 +175,68 @@ public:
     Matrix3x all_nodes;        //!< Coordinates of all vertices in mesh, including dynamic ones added for free surface intersection
     size_t node_count;         //!< Total number of nodes used, including dynamic ones
     double orientation_factor; //!< -1 if the facet is orientation clockwise, +1 otherwise
+};
+
+typedef TR1(shared_ptr)<Mesh> MeshPtr;
+typedef TR1(shared_ptr)<const Mesh> const_MeshPtr;
+
+struct MeshIntersector
+{
+    MeshIntersector(
+            const MeshPtr mesh_,                  //!< the mesh to intersect
+            const std::vector<double> &immersions //!< the relative immersion of each static vertex of the mesh
+            );
+
+    /* \brief Update the intersection of the mesh with free surface
+     * \details the intersection requires new Vertices/Edges/Facets stored as dynamic data in the end of container members */
+    void update_intersection_with_free_surface();
+
+    FacetIterator begin_immersed() const
+    {
+        return FacetIterator(mesh->facets.begin(), index_of_immersed_facets, 0);
+    }
+
+    FacetIterator end_immersed() const
+    {
+        return FacetIterator(mesh->facets.begin(), index_of_immersed_facets, index_of_immersed_facets.size());
+    }
+
+    FacetIterator begin_emerged() const
+    {
+        return FacetIterator(mesh->facets.begin(), index_of_emerged_facets, 0);
+    }
+
+    FacetIterator end_emerged() const
+    {
+        return FacetIterator(mesh->facets.begin(), index_of_emerged_facets, index_of_emerged_facets.size());
+    }
+
+    /* \brief Compute the point of intersection with free surface between two vertices
+     * \details One of the vertices must be emerged and the other immersed */
+    static EPoint edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB);
+
+    /* \brief split an edge into an emerged and an immersed part */
+    size_t split_partially_immersed_edge(
+            const size_t edge_index ,                                //!< the index of edge to be split
+            std::vector<EdgeImmersionStatus> &edges_immersion_status //!< the immersion status of each edge
+            );
+
+    /* \brief split a Facet into an emerged and an immersed part */
+    void split_partially_immersed_facet(
+            size_t facet_index,                                             //!< the index of facet to be split
+            const std::vector<EdgeImmersionStatus> &edges_immersion_status, //!< the immersion status of each edge
+            const std::map<size_t,size_t >& added_edges                     //!< the map of split edges
+            );
+
+    /* \brief Extract the coordinates of a specific facet */
+    Matrix3x coordinates_of_facet(size_t facet_index) const;
+
+    /* \brief Extract the relative immersions of a specific facet */
+    std::vector<double> immersions_of_facet(size_t facet_index) const;
+
+    MeshPtr mesh;
 
     std::vector<double> all_immersions; //<! the immersions of all nodes (including the dynamically added ones)
-    std::set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immersed parts
     std::vector<size_t> index_of_emerged_facets;  //!< list of all emerged facets (included the dynamically ones created by split)
     std::vector<size_t> index_of_immersed_facets; //!< list of all immersed facets (included the dynamically ones created by split)
 
@@ -214,9 +244,7 @@ public:
     friend class EmergedFacetIterator;
 };
 
-
-
-typedef TR1(shared_ptr)<Mesh> MeshPtr;
-typedef TR1(shared_ptr)<const Mesh> const_MeshPtr;
+typedef TR1(shared_ptr)<MeshIntersector> MeshIntersectorPtr;
+typedef TR1(shared_ptr)<const MeshIntersector> const_MeshIntersectorPtr;
 
 #endif //MESH_HPP

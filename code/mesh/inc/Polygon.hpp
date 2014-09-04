@@ -58,7 +58,8 @@ class Polygon
 		  *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
           */
         Polygon projected_on_free_surface(
-        		const EPoint&              down_direction   //!< local down direction expressed in mesh frame
+        		const EPoint&              down_direction,   //!< local down direction expressed in mesh frame
+                const std::vector<double> &all_immersions    //!< relative immersions for all point of the mesh
         ) const;
     private:
         Polygon(); // Disabled
