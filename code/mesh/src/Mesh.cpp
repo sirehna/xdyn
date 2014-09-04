@@ -11,14 +11,14 @@ Edge::Edge(size_t v1,size_t v2)
     vertex_index[1]=v2;
 }
 
-size_t Edge::first_vertex(int direction) const
+size_t Edge::first_vertex(bool reverse_direction) const
 {
-    return vertex_index[direction];
+    return vertex_index[reverse_direction];
 }
 
-size_t Edge::second_vertex(int direction) const
+size_t Edge::second_vertex(bool reverse_direction) const
 {
-    return vertex_index[1-direction];
+    return vertex_index[1-reverse_direction];
 }
 
 bool EdgeImmersionStatus::crosses_free_surface() const
@@ -166,7 +166,7 @@ void MeshIntersector::split_partially_immersed_facet(
 
     for( std::vector<OrientedEdge>::const_iterator edge=edges_of_this_facet.begin(); edge != edges_of_this_facet.end() ; ++edge) {
         size_t edge_index=edge->edge_index;
-        bool reverse_direction=edge->direction == 1;
+        bool reverse_direction=edge->reverse_direction;
         if(edges_immersion_status[edge_index].is_emerged()) {
             if(status==3) first_emerged = emerged_edges.size();
             emerged_edges.push_back(*edge);
@@ -207,8 +207,8 @@ void MeshIntersector::split_partially_immersed_facet(
 
     // insert the closing edge
     size_t closing_edge_index = mesh->add_edge(
-            mesh->edges[immersed_edges[first_immersed].edge_index].first_vertex(immersed_edges[first_immersed].direction),
-            mesh->edges[ emerged_edges[ first_emerged].edge_index].first_vertex( emerged_edges [first_emerged].direction));
+            mesh->edges[immersed_edges[first_immersed].edge_index].first_vertex(immersed_edges[first_immersed].reverse_direction),
+            mesh->edges[ emerged_edges[ first_emerged].edge_index].first_vertex( emerged_edges [first_emerged].reverse_direction));
     immersed_edges.insert(immersed_edges.begin()+first_immersed,OrientedEdge(closing_edge_index,true));
      emerged_edges.insert( emerged_edges.begin()+ first_emerged,OrientedEdge(closing_edge_index,false));
 
@@ -224,7 +224,7 @@ size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list,
     std::vector<size_t> vertex_list;
     Matrix3x coords(3,edge_list.size());
     for( size_t ei=0;ei<edge_list.size();ei++) {
-        size_t vertex_index = edges[edge_list[ei].edge_index].second_vertex(edge_list[ei].direction); // Note: use second vertex rather than first for compatibility with existing tests
+        size_t vertex_index = edges[edge_list[ei].edge_index].second_vertex(edge_list[ei].reverse_direction); // Note: use second vertex rather than first for compatibility with existing tests
         vertex_list.push_back(vertex_index);
         coords.col(ei)=all_nodes.col(vertex_index);
     }

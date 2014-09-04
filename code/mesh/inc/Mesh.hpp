@@ -20,11 +20,11 @@ struct Edge
 
     /* \brief answer the (index of) first vertex encountered when running the edge in a given direction (0 or 1)
      */
-    size_t first_vertex(int direction) const;
+    size_t first_vertex(bool reverse_direction) const;
 
     /* \brief answer the (index of) second vertex encountered when running the edge in a given direction (0 or 1)
      */
-    size_t second_vertex(int direction) const;
+    size_t second_vertex(bool reverse_direction) const;
 
     size_t vertex_index[2];  //!< The index of the two vertices in the mesh
 };
@@ -68,9 +68,9 @@ public:
  */
 struct OrientedEdge
 {
-    OrientedEdge(size_t edge_index_,bool reverse_direction):edge_index(edge_index_),direction(reverse_direction?1:0) {}
+    OrientedEdge(size_t edge_index_,bool reverse_direction_):edge_index(edge_index_),reverse_direction(reverse_direction_) {}
     size_t edge_index;
-    int    direction;
+    bool   reverse_direction;
 };
 
 /**

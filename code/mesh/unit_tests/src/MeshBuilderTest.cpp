@@ -94,10 +94,10 @@ TEST_F(MeshBuilderTest, can_enumerate_vertices_of_facets_in_same_order_than_edge
         for(size_t iv=0 ; iv < f.vertex_index.size() ; ++iv ) {
             Edge e = m.edges.at( m.edgesPerFacet.at(facet_index).at(iv).edge_index );
             ASSERT_EQ( f.vertex_index[iv] ,
-                       e.first_vertex( m.edgesPerFacet.at(facet_index).at(iv).direction ));
+                       e.first_vertex( m.edgesPerFacet.at(facet_index).at(iv).reverse_direction ));
             size_t iv_next = (iv+1) % f.vertex_index.size();
             ASSERT_EQ( f.vertex_index[iv_next] ,
-                       e.second_vertex( m.edgesPerFacet.at(facet_index).at(iv).direction ));
+                       e.second_vertex( m.edgesPerFacet.at(facet_index).at(iv).reverse_direction ));
         }
     }
 }
