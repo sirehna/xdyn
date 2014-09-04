@@ -3,37 +3,6 @@
 
 #include "Mesh.hpp"
 
-class EdgeImmersionStatus
-{
-    EdgeImmersionStatus():status(0) {}
-public:
-    EdgeImmersionStatus(int status_):status(status_) {}
-
-    EdgeImmersionStatus(
-             const double z0, //!< the relative immersion of first vertex
-             const double z1  //!< the relative immersion of second vertex
-             );
-
-    /* \brief answer whether this edge crosses the free surface
-     */
-    bool crosses_free_surface() const;
-
-    /* \brief answer whether this edge is totally emerged
-     */
-    bool is_emerged() const;
-
-    /* \brief answer whether this edge is totally immersed
-     */
-    bool is_immersed() const;
-
-    /* \brief answer whether this edge touches the free surface
-     */
-    bool touches_free_surface() const;
-
-    int status; //!< 2 bits of immersion status: 00=totally emerged, 01=second emerged,first immersed, 10=first emerged,second immersed, 11=totally immersed
-                // + third bit = 1 for potentially crossing (if any of the vertices is exactly on free surface)
-};
-
 class FacetIterator
 {
     public:
@@ -111,15 +80,15 @@ public:
 
     /* \brief split an edge into an emerged and an immersed part */
     size_t split_partially_immersed_edge(
-            const size_t edge_index ,                                //!< the index of edge to be split
-            std::vector<EdgeImmersionStatus> &edges_immersion_status //!< the immersion status of each edge
+            const size_t edge_index ,                //!< the index of edge to be split
+            std::vector<int> &edges_immersion_status //!< the immersion status of each edge
             );
 
     /* \brief split a Facet into an emerged and an immersed part */
     void split_partially_immersed_facet(
-            size_t facet_index,                                             //!< the index of facet to be split
-            const std::vector<EdgeImmersionStatus> &edges_immersion_status, //!< the immersion status of each edge
-            const std::map<size_t,size_t >& added_edges                     //!< the map of split edges
+            size_t facet_index,                             //!< the index of facet to be split
+            const std::vector<int> &edges_immersion_status, //!< the immersion status of each edge
+            const std::map<size_t,size_t >& added_edges     //!< the map of split edges
             );
 
     /* \brief Extract the coordinates of a specific facet */
@@ -127,6 +96,42 @@ public:
 
     /* \brief Extract the relative immersions of a specific facet */
     std::vector<double> immersions_of_facet(size_t facet_index) const;
+
+    /* \brief Answer the immersion status corresponding to an edge, knowing relative immersion of its vertices
+     * \details The immersion status is composed of three bits
+     * - the low bit (status & 1) is immersion status of first vertex (0=emerged, 1=immersed)
+     * - the second bit (status & 2) is immersion status of second vertex (0=emerged, 2=immersed)
+     * - the high bit (status & 4) is indicating if the edge just touches the free surface (0=not touching 4=touching)
+     *
+     * The case of totally emerged is thus two low bits = 00
+     * The case of totally immersed is when two low bits == 11
+     * The other cases 01 or 10 indicate that the edge is crossing the free surface.
+     * If an Edge crosses the free surface, then the facets containing this edge do crosse the free surface.
+     *
+     * The edge just touches the free surface if at least one of its vertex has exactly 0 as relative immersion
+     * If the edge touches the free surface, it does not crosses the free surface;
+     * but the facets containing this edge may cross the free surface (if free surface crosses exactly by 2 non consecutive vertices)
+     */
+    static int get_edge_immersion_status(
+             const double z0, //!< the relative immersion of first vertex
+             const double z1  //!< the relative immersion of second vertex
+             );
+
+    /* \brief answer whether this edge crosses the free surface
+     */
+    static bool crosses_free_surface(int status);
+
+    /* \brief answer whether this edge is totally emerged
+     */
+    static bool is_emerged(int status);
+
+    /* \brief answer whether this edge is totally immersed
+     */
+    static bool is_immersed(int status);
+
+    /* \brief answer whether this edge touches the free surface
+     */
+    static bool touches_free_surface(int status);
 
     MeshPtr mesh;
 
