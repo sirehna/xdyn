@@ -38,7 +38,7 @@ void MeshIntersector::update_intersection_with_free_surface()
         if( set_of_facets_crossing_free_surface.find(facet_index) != set_of_facets_crossing_free_surface.end()) {
             split_partially_immersed_facet(facet_index,edges_immersion_status,added_edges);
         } else {
-            if(is_emerged(edges_immersion_status[mesh->edgesPerFacet[facet_index][0].edge_index]))
+            if(is_emerged(edges_immersion_status[mesh->orientedEdgesPerFacet[facet_index][0] >> 1]))
                 index_of_emerged_facets.push_back(facet_index);
             else
                 index_of_immersed_facets.push_back(facet_index);
@@ -52,23 +52,24 @@ void MeshIntersector::split_partially_immersed_facet(
         const std::map<size_t,size_t >& added_edges     //!< the map of split edges
         )
 {
-    std::vector<OrientedEdge> edges_of_this_facet = mesh->edgesPerFacet[facet_index];
-    std::vector<OrientedEdge> emerged_edges;
-    std::vector<OrientedEdge> immersed_edges;
+    const std::vector<size_t> oriented_edges_of_this_facet = mesh->orientedEdgesPerFacet[facet_index];
+    std::vector<size_t> emerged_edges;
+    std::vector<size_t> immersed_edges;
     int status=-1;
     size_t first_emerged  = 0;
     size_t first_immersed = 0;
 
-    for( std::vector<OrientedEdge>::const_iterator edge=edges_of_this_facet.begin(); edge != edges_of_this_facet.end() ; ++edge) {
-        size_t edge_index=edge->edge_index;
-        bool reverse_direction=edge->reverse_direction;
+    for( size_t i=0;i < oriented_edges_of_this_facet.size() ; ++i) {
+        size_t oriented_edge = oriented_edges_of_this_facet[i];
+        size_t edge_index=oriented_edge >> 1;
+        bool reverse_direction=(oriented_edge & 1) != 0;
         if(is_emerged(edges_immersion_status[edge_index])) {
             if(status==3) first_emerged = emerged_edges.size();
-            emerged_edges.push_back(*edge);
+            emerged_edges.push_back(oriented_edge);
             status = 0;
         } else if(is_immersed(edges_immersion_status[edge_index])) {
             if(status==0) first_immersed = immersed_edges.size();
-            immersed_edges.push_back(*edge);
+            immersed_edges.push_back(oriented_edge);
             status = 3;
         } else {
             size_t edge1 = added_edges.at(edge_index);
@@ -77,14 +78,14 @@ void MeshIntersector::split_partially_immersed_facet(
                 std::swap(edge1,edge2);
             }
             if(is_emerged(edges_immersion_status[edge1])) {
-                emerged_edges.push_back(OrientedEdge(edge1,reverse_direction));
+                emerged_edges.push_back(Mesh::make_oriented_edge(edge1,reverse_direction));
                 first_immersed = immersed_edges.size();
-                immersed_edges.push_back(OrientedEdge(edge2,reverse_direction));
+                immersed_edges.push_back(Mesh::make_oriented_edge(edge2,reverse_direction));
                 status = 3;
             } else {
-                immersed_edges.push_back(OrientedEdge(edge1,reverse_direction));
+                immersed_edges.push_back(Mesh::make_oriented_edge(edge1,reverse_direction));
                 first_emerged = emerged_edges.size();
-                emerged_edges.push_back(OrientedEdge(edge2,reverse_direction));
+                emerged_edges.push_back(Mesh::make_oriented_edge(edge2,reverse_direction));
                 status = 0;
             }
         }
@@ -102,10 +103,10 @@ void MeshIntersector::split_partially_immersed_facet(
 
     // insert the closing edge
     size_t closing_edge_index = mesh->add_edge(
-            mesh->edges[immersed_edges[first_immersed].edge_index].first_vertex(immersed_edges[first_immersed].reverse_direction),
-            mesh->edges[ emerged_edges[ first_emerged].edge_index].first_vertex( emerged_edges [first_emerged].reverse_direction));
-    immersed_edges.insert(immersed_edges.begin()+first_immersed,OrientedEdge(closing_edge_index,true));
-     emerged_edges.insert( emerged_edges.begin()+ first_emerged,OrientedEdge(closing_edge_index,false));
+            mesh->first_vertex_of_oriented_edge(immersed_edges[first_immersed]),
+            mesh->first_vertex_of_oriented_edge( emerged_edges[ first_emerged]));
+    immersed_edges.insert(immersed_edges.begin()+first_immersed,Mesh::make_oriented_edge(closing_edge_index,true));
+     emerged_edges.insert( emerged_edges.begin()+ first_emerged,Mesh::make_oriented_edge(closing_edge_index,false));
 
     // create the Facets
     EPoint unit_normal=(mesh->facets.begin()+facet_index)->unit_normal;

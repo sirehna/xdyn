@@ -7,9 +7,9 @@
 #include "TriMeshTestData.hpp"
 #include "MeshBuilder.hpp"
 
-size_t get_oriented_edge_index(const OrientedEdge &e)
+size_t get_oriented_edge_index(const size_t &e)
 {
-    return e.edge_index;
+    return e >> 1;
 }
 
 MeshBuilderTest::MeshBuilderTest()
@@ -87,17 +87,16 @@ TEST_F(MeshBuilderTest, should_be_able_to_represent_a_cube)
 TEST_F(MeshBuilderTest, can_enumerate_vertices_of_facets_in_same_order_than_edges)
 {
     const Mesh m = MeshBuilder(unit_cube()).build();
-    ASSERT_EQ( m.facets.size() , m.edgesPerFacet.size() ); // The tables per facet have consistent size
+    ASSERT_EQ( m.facets.size() , m.orientedEdgesPerFacet.size() ); // The tables per facet have consistent size
     for(size_t facet_index=0 ; facet_index < m.facets.size() ; ++facet_index) {
         Facet f = m.facets.at(facet_index);
-        ASSERT_EQ( f.vertex_index.size() , m.edgesPerFacet.at(facet_index).size() ); // the facet has as many edges as vertices
+        ASSERT_EQ( f.vertex_index.size() , m.orientedEdgesPerFacet.at(facet_index).size() ); // the facet has as many edges as vertices
         for(size_t iv=0 ; iv < f.vertex_index.size() ; ++iv ) {
-            Edge e = m.edges.at( m.edgesPerFacet.at(facet_index).at(iv).edge_index );
             ASSERT_EQ( f.vertex_index[iv] ,
-                       e.first_vertex( m.edgesPerFacet.at(facet_index).at(iv).reverse_direction ));
+                       m.first_vertex_of_oriented_edge( m.orientedEdgesPerFacet.at(facet_index).at(iv) ));
             size_t iv_next = (iv+1) % f.vertex_index.size();
             ASSERT_EQ( f.vertex_index[iv_next] ,
-                       e.second_vertex( m.edgesPerFacet.at(facet_index).at(iv).reverse_direction ));
+                       m.second_vertex_of_oriented_edge( m.orientedEdgesPerFacet.at(facet_index).at(iv) ));
         }
     }
 }
@@ -109,15 +108,15 @@ TEST_F(MeshBuilderTest, the_facets_of_an_edge_and_the_edges_of_a_facet)
     for(size_t edge_index=0 ; edge_index < m.facetsPerEdge.size() ; ++edge_index) {
         for(size_t fi=0 ; fi < m.facetsPerEdge.at(edge_index).size() ; ++fi ) {
             size_t facet_index = m.facetsPerEdge.at(edge_index).at(fi);
-            auto oriented_edges_of_this_facet = m.edgesPerFacet.at( facet_index );
+            auto oriented_edges_of_this_facet = m.orientedEdgesPerFacet.at( facet_index );
             std::vector<size_t> edges_of_this_facet;
             std::transform(oriented_edges_of_this_facet.begin(),oriented_edges_of_this_facet.end(),std::back_inserter(edges_of_this_facet),get_oriented_edge_index);
             ASSERT_EQ( 1,  std::count( edges_of_this_facet.begin(),edges_of_this_facet.end() , edge_index )) << "edge_index = " << edge_index;
         }
     }
-    for(size_t facet_index=0 ; facet_index < m.edgesPerFacet.size() ; ++facet_index) {
-        for(size_t ie=0 ; ie < m.edgesPerFacet.at(facet_index).size() ; ++ie ) {
-            size_t edge_index = m.edgesPerFacet.at(facet_index).at(ie).edge_index;
+    for(size_t facet_index=0 ; facet_index < m.orientedEdgesPerFacet.size() ; ++facet_index) {
+        for(size_t ie=0 ; ie < m.orientedEdgesPerFacet.at(facet_index).size() ; ++ie ) {
+            size_t edge_index = m.orientedEdgesPerFacet.at(facet_index).at(ie) >> 1;
             auto facets_of_this_edge = m.facetsPerEdge.at( edge_index );
             ASSERT_EQ( 1,  std::count( facets_of_this_edge.begin(),facets_of_this_edge.end() , facet_index )) << "facet_index = " << facet_index;
         }

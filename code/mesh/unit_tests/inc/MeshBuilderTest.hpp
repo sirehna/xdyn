@@ -12,6 +12,6 @@ class MeshBuilderTest : public ::testing::Test
         virtual void TearDown(){}
 };
 
-size_t get_oriented_edge_index(const OrientedEdge &e);
+size_t get_oriented_edge_index(const size_t &e);
 
 #endif

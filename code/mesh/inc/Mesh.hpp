@@ -16,29 +16,13 @@
  */
 struct Edge
 {
-    Edge(size_t v1,size_t v2);
-
-    /* \brief answer the (index of) first vertex encountered when running the edge in a given direction (0 or 1)
-     */
-    size_t first_vertex(bool reverse_direction) const;
-
-    /* \brief answer the (index of) second vertex encountered when running the edge in a given direction (0 or 1)
-     */
-    size_t second_vertex(bool reverse_direction) const;
+    Edge(size_t v1,size_t v2)
+    {
+        vertex_index[0]=v1;
+        vertex_index[1]=v2;
+    }
 
     size_t vertex_index[2];  //!< The index of the two vertices in the mesh
-};
-
-/**
- * \brief Reference to an edge, with a running direction.
- * \details Usefull to describe the edges of a facet.
- * \ingroup mesh
- */
-struct OrientedEdge
-{
-    OrientedEdge(size_t edge_index_,bool reverse_direction_):edge_index(edge_index_),reverse_direction(reverse_direction_) {}
-    size_t edge_index;
-    bool   reverse_direction;
 };
 
 /**
@@ -71,7 +55,7 @@ public:
             const std::vector<Edge>& edges_,
             const std::vector<Facet>& facets_,
             const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
-            const std::vector<std::vector<OrientedEdge> >& edgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
+            const std::vector<std::vector<size_t> >& orientedEdgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
             const bool clockwise);
 
 
@@ -89,15 +73,26 @@ public:
     /* \brief create a new facet dynamically
      * \return the facet index in facets vector */
     size_t create_facet_from_edges(
-            const std::vector<OrientedEdge>& edge_list, //!< The list of edges and running direction composing the facet
-            const EPoint &unit_normal                   //!< The unit_normal is shared in case of facet split, let's not recompute it
+            const std::vector<size_t>& oriented_edge_list, //!< The list of edges and running direction composing the facet
+            const EPoint &unit_normal                      //!< The unit_normal is shared in case of facet split, let's not recompute it
             );
+
+    /* an oriented edge is composed of an edge_index (left shifted) and a boolean indicating if the order of vertices must be reversed (coded on low bit) */
+    static size_t make_oriented_edge(size_t edge_index_,bool reverse_direction_);
+
+    /* \brief return the index of first vertex of an oriented edge
+     */
+    size_t first_vertex_of_oriented_edge(size_t oriented_edge) const;
+
+    /* \brief return the index of second vertex of an oriented edge
+     */
+    size_t second_vertex_of_oriented_edge(size_t oriented_edge) const;
 
     Matrix3x nodes;            //!< Coordinates of static vertices in mesh
     std::vector<Edge> edges;   //!< All edges in mesh
     std::vector<Facet> facets; //!< For each facet, the indexes of its nodes, unit normal, barycenter & area
     std::vector<std::vector<size_t> > facetsPerEdge; //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
-    std::vector<std::vector<OrientedEdge> > edgesPerFacet; //!< for each Facet (index), the list of Edges composing the facet and running direction of each edge
+    std::vector<std::vector<size_t> > orientedEdgesPerFacet; //!< for each Facet (index), the list of Edges composing the facet and running direction of each edge
 
     size_t static_nodes;       //!< Number of static nodes
     size_t static_edges;       //!< Number of static edges
