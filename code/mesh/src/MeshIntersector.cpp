@@ -61,8 +61,7 @@ void MeshIntersector::split_partially_immersed_facet(
 
     for( size_t i=0;i < oriented_edges_of_this_facet.size() ; ++i) {
         size_t oriented_edge = oriented_edges_of_this_facet[i];
-        size_t edge_index=oriented_edge >> 1;
-        bool reverse_direction=(oriented_edge & 1) != 0;
+        size_t edge_index=Mesh::get_oriented_edge_index(oriented_edge);
         if(is_emerged(edges_immersion_status[edge_index])) {
             if(status==3) first_emerged = emerged_edges.size();
             emerged_edges.push_back(oriented_edge);
@@ -72,6 +71,7 @@ void MeshIntersector::split_partially_immersed_facet(
             immersed_edges.push_back(oriented_edge);
             status = 3;
         } else {
+            bool reverse_direction=Mesh::get_oriented_edge_direction(oriented_edge);
             size_t edge1 = added_edges.at(edge_index);
             size_t edge2 = edge1 + 1; // because edges are always added by pair...
             if(reverse_direction) {

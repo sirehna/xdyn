@@ -77,8 +77,12 @@ public:
             const EPoint &unit_normal                      //!< The unit_normal is shared in case of facet split, let's not recompute it
             );
 
-    /* an oriented edge is composed of an edge_index (left shifted) and a boolean indicating if the order of vertices must be reversed (coded on low bit) */
+    /* \brief make an oriented edge
+     * \details an oriented edge is composed of an edge_index and a boolean indicating if the order of vertices must be reversed
+     * For avoiding ctors/dtors, this is encoded in a single int, index being left shifted, and direction encoded on low bit */
     static size_t make_oriented_edge(size_t edge_index_,bool reverse_direction_);
+    static size_t get_oriented_edge_index(size_t oriented_edge);
+    static bool get_oriented_edge_direction(size_t oriented_edge);
 
     /* \brief return the index of first vertex of an oriented edge
      */

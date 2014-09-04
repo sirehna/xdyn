@@ -74,6 +74,16 @@ size_t Mesh::make_oriented_edge(size_t edge_index,bool reverse_direction)
     return (edge_index<<1) | (reverse_direction?1:0);
 }
 
+size_t Mesh::get_oriented_edge_index(size_t oriented_edge)
+{
+    return oriented_edge >> 1;
+}
+
+bool Mesh::get_oriented_edge_direction(size_t oriented_edge)
+{
+    return (oriented_edge & 1) != 0;
+}
+
 /* \brief return the first vertex of an oriented edge
  */
 size_t Mesh::first_vertex_of_oriented_edge(size_t oriented_edge) const
