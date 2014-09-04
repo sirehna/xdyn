@@ -3,6 +3,7 @@ SET(MODULE_UNDER_TEST mesh)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC
         src/MeshBuilderTest.cpp
+        src/MeshIntersectorTest.cpp
         src/mesh_manipulationsTest.cpp
         src/RandomEPointGenerator.cpp
         src/PolygonTest.cpp

@@ -11,7 +11,7 @@
 #include "hydrostatic.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "Transform.hpp"
-#include "Mesh.hpp"
+#include "MeshIntersector.hpp"
 
 HydrostaticForceModel::Input::Input() : rho(0),
                                         g(0),

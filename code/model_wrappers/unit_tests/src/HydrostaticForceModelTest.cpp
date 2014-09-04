@@ -13,7 +13,7 @@
 #include "Transform.hpp"
 #include "generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"
-#include "Mesh.hpp"
+#include "MeshIntersector.hpp"
 #include "EnvironmentAndFrames.hpp"
 
 #define BODY "body 1"

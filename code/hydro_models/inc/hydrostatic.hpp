@@ -14,7 +14,7 @@
 #include <Eigen/Dense>
 
 #include "GeometricTypes3d.hpp"
-#include "Mesh.hpp"
+#include "MeshIntersector.hpp"
 #include "UnsafeWrench.hpp"
 
 class Polygon;
