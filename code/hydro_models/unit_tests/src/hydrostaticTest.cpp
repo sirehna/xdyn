@@ -78,8 +78,8 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_one_immerged_node)
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(3, polygon.cols());
     ASSERT_DOUBLE_EQ(4  ,polygon(0,2));
@@ -109,8 +109,8 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_for_two_immerged_node)
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(4  ,polygon(0,3));
@@ -143,8 +143,8 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(5  ,polygon(0,3));
@@ -177,8 +177,8 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(1  ,polygon(0,3));
@@ -211,8 +211,8 @@ TEST_F(hydrostaticTest, can_compute_immerged_polygon_when_emerged_nodes_are_in_t
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    const auto polygon    = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto polygon    = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(4, polygon.cols());
     ASSERT_DOUBLE_EQ(1  ,polygon(0,3));
@@ -246,8 +246,8 @@ TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_all_points_are_immerged
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    ASSERT_EQ(0,mesh.list_of_facets_emerged.size());
-    ASSERT_EQ(0,mesh.list_of_facets_immersed.at(0));
+    ASSERT_EQ(0,mesh.index_of_emerged_facets.size());
+    ASSERT_EQ(0,mesh.index_of_immersed_facets.at(0));
 }
 
 TEST_F(hydrostaticTest, can_compute_intersection_with_the_surface)
@@ -309,8 +309,8 @@ TEST_F(hydrostaticTest, immerged_polygon_should_throw_if_no_points_are_immerged)
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    ASSERT_EQ(0,mesh.list_of_facets_immersed.size());
-    ASSERT_EQ(0,mesh.list_of_facets_emerged.at(0));
+    ASSERT_EQ(0,mesh.index_of_immersed_facets.size());
+    ASSERT_EQ(0,mesh.index_of_emerged_facets.at(0));
 }
 
 TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
@@ -340,8 +340,8 @@ TEST_F(hydrostaticTest, another_bug_in_immerged_polygon)
     const std::vector<double> z = {-1,-1,-2,1};
 
     mesh.update_intersection_with_free_surface(z);
-    const auto polygon = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-    const auto immersions = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto polygon = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    const auto immersions = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
 
     ASSERT_DOUBLE_EQ( 1  , polygon(0,0));
     ASSERT_DOUBLE_EQ(-0.5, polygon(1,0));
@@ -370,10 +370,10 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     const std::vector<double> z = {-0.5,-0.5,-2.5,0.5};
     const Wrench Fhs = force(mesh, G, rho, g, z);
 
-    ASSERT_EQ(1,mesh->list_of_facets_immersed.size());
-    ASSERT_DOUBLE_EQ(0.5,::area(mesh->coordinates_of_facet(mesh->list_of_facets_immersed.at(0))));
-    ASSERT_DOUBLE_EQ(0.5,mesh->facets[mesh->list_of_facets_immersed.at(0)].area);
-    ASSERT_DOUBLE_EQ(0.5/3,hydrostatic::average_immersion(mesh->all_nodes, mesh->facets[mesh->list_of_facets_immersed.at(0)].vertex_index, mesh->all_immersions));
+    ASSERT_EQ(1,mesh->index_of_immersed_facets.size());
+    ASSERT_DOUBLE_EQ(0.5,::area(mesh->coordinates_of_facet(mesh->index_of_immersed_facets.at(0))));
+    ASSERT_DOUBLE_EQ(0.5,mesh->facets[mesh->index_of_immersed_facets.at(0)].area);
+    ASSERT_DOUBLE_EQ(0.5/3,hydrostatic::average_immersion(mesh->all_nodes, mesh->facets[mesh->index_of_immersed_facets.at(0)].vertex_index, mesh->all_immersions));
 
     ASSERT_DOUBLE_EQ(0, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
@@ -531,8 +531,8 @@ TEST_F(hydrostaticTest, correct_immerged_polygon_when_two_points_are_exactly_on_
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    const auto p = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-    const auto i = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto p = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    const auto i = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
 
     ASSERT_EQ(3, p.cols());
 
@@ -564,8 +564,8 @@ TEST_F(hydrostaticTest, bug2_in_immerged_polygon)
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    const auto p = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
-    const auto i = mesh.immersions_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto p = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
+    const auto i = mesh.immersions_of_facet(mesh.index_of_immersed_facets.at(0));
     ASSERT_EQ(3, p.cols());
 
     ASSERT_DOUBLE_EQ(-1,(double)p(0,0));
@@ -596,7 +596,7 @@ TEST_F(hydrostaticTest, bug3_in_immerged_polygon)
 
     Mesh mesh(MeshBuilder(M).build());
     mesh.update_intersection_with_free_surface(v);
-    const auto p = mesh.coordinates_of_facet(mesh.list_of_facets_immersed.at(0));
+    const auto p = mesh.coordinates_of_facet(mesh.index_of_immersed_facets.at(0));
 
     ASSERT_LT(0, (p.col(0)-p.col(1)).norm());
     ASSERT_LT(0, (p.col(0)-p.col(2)).norm());

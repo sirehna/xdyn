@@ -140,22 +140,22 @@ public:
 
     FacetIterator begin_immersed() const
     {
-        return FacetIterator(facets.begin(), list_of_facets_immersed, 0);
+        return FacetIterator(facets.begin(), index_of_immersed_facets, 0);
     }
 
     FacetIterator end_immersed() const
     {
-        return FacetIterator(facets.begin(), list_of_facets_immersed, list_of_facets_immersed.size());
+        return FacetIterator(facets.begin(), index_of_immersed_facets, index_of_immersed_facets.size());
     }
 
     FacetIterator begin_emerged() const
     {
-        return FacetIterator(facets.begin(), list_of_facets_emerged, 0);
+        return FacetIterator(facets.begin(), index_of_emerged_facets, 0);
     }
 
     FacetIterator end_emerged() const
     {
-        return FacetIterator(facets.begin(), list_of_facets_emerged, list_of_facets_emerged.size());
+        return FacetIterator(facets.begin(), index_of_emerged_facets, index_of_emerged_facets.size());
     }
 
     /* \brief Reset the dynamic data related to the mesh intersection with free surface */
@@ -207,8 +207,8 @@ public:
 
     std::vector<double> all_immersions; //<! the immersions of all nodes (including the dynamically added ones)
     std::set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immersed parts
-    std::vector<size_t> list_of_facets_emerged;  //!< list of all emerged facets (included the dynamically ones created by split)
-    std::vector<size_t> list_of_facets_immersed; //!< list of all immersed facets (included the dynamically ones created by split)
+    std::vector<size_t> index_of_emerged_facets;  //!< list of all emerged facets (included the dynamically ones created by split)
+    std::vector<size_t> index_of_immersed_facets; //!< list of all immersed facets (included the dynamically ones created by split)
 
     friend class ImmersedFacetIterator;
     friend class EmergedFacetIterator;

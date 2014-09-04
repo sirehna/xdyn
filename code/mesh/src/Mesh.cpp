@@ -72,8 +72,8 @@ Mesh::Mesh(const Matrix3x& nodes_,
 ,orientation_factor(clockwise ? -1 : 1)
 ,all_immersions()
 ,set_of_facets_crossing_free_surface()
-,list_of_facets_emerged()
-,list_of_facets_immersed()
+,index_of_emerged_facets()
+,index_of_immersed_facets()
 {
     Matrix3x room_for_dynamic_vertices(3,all_nodes.cols()-nodes.cols());
     room_for_dynamic_vertices.fill(0);
@@ -87,8 +87,8 @@ void Mesh::reset_dynamic_data()
     facets.erase( facets.begin() + static_facets , facets.end());
 
     set_of_facets_crossing_free_surface.clear();
-    list_of_facets_emerged.clear();
-    list_of_facets_immersed.clear();
+    index_of_emerged_facets.clear();
+    index_of_immersed_facets.clear();
 }
 
 void Mesh::update_intersection_with_free_surface(
@@ -116,9 +116,9 @@ void Mesh::update_intersection_with_free_surface(
             split_partially_immersed_facet(facet_index,added_edges);
         } else {
             if(edges[edgesPerFacet[facet_index][0].edge_index].is_emerged())
-                list_of_facets_emerged.push_back(facet_index);
+                index_of_emerged_facets.push_back(facet_index);
             else
-                list_of_facets_immersed.push_back(facet_index);
+                index_of_immersed_facets.push_back(facet_index);
         }
     }
 }
@@ -187,11 +187,11 @@ void Mesh::split_partially_immersed_facet(
 
     // handle the degenerated cases, when the facet is tangent to free surface
     if(emerged_edges.size() <= 1) {
-        list_of_facets_immersed.push_back(facet_index);
+        index_of_immersed_facets.push_back(facet_index);
         return;
     }
     if(immersed_edges.size() <= 1) {
-        list_of_facets_emerged.push_back(facet_index);
+        index_of_emerged_facets.push_back(facet_index);
         return;
     }
 
@@ -206,8 +206,8 @@ void Mesh::split_partially_immersed_facet(
 
     // create the Facets
     EPoint unit_normal=(facets.begin()+facet_index)->unit_normal;
-    list_of_facets_emerged.push_back(create_facet_from_edges(emerged_edges,unit_normal));
-    list_of_facets_immersed.push_back(create_facet_from_edges(immersed_edges,unit_normal));
+    index_of_emerged_facets.push_back(create_facet_from_edges(emerged_edges,unit_normal));
+    index_of_immersed_facets.push_back(create_facet_from_edges(immersed_edges,unit_normal));
 }
 
 size_t Mesh::create_facet_from_edges(const std::vector<OrientedEdge>& edge_list,const EPoint &unit_normal)
