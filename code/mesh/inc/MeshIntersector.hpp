@@ -6,40 +6,39 @@
 class FacetIterator
 {
     public:
-        FacetIterator(const VectorOfFacet::const_iterator& begin_, const std::vector<size_t>& list_of_facets_, const size_t p) : begin(begin_), list_of_facets(list_of_facets_), pos(p)
+        FacetIterator(const VectorOfFacet::const_iterator &begin_, std::vector<size_t>::const_iterator &here_) : begin(begin_), here(here_)
         {
         }
 
         size_t index() const
         {
-            return list_of_facets[pos];
+            return *here;
         }
 
         const Facet& operator*() const
         {
-            return *(begin+list_of_facets[pos]);
+            return *(begin+*here);
         }
 
         const FacetIterator& operator++()
         {
-            pos++;
+            here++;
             return *this;
         }
 
         const Facet* operator->() const
         {
-            return (begin+list_of_facets[pos]).operator ->();
+            return (begin+*here).operator ->();
         }
 
         bool operator!=(const FacetIterator& rhs) const
         {
-            return (begin!=rhs.begin) or (pos != rhs.pos);
+            return (begin != rhs.begin) or (here != rhs.here);
         }
 
     private:
         VectorOfFacet::const_iterator begin;
-        std::vector<size_t> list_of_facets;
-        size_t pos;
+        std::vector<size_t>::const_iterator here;
 };
 
 class MeshIntersector
@@ -56,22 +55,30 @@ public:
 
     FacetIterator begin_immersed() const
     {
-        return FacetIterator(mesh->facets.begin(), index_of_immersed_facets, 0);
+        const std::vector<Facet>::const_iterator target=mesh->facets.begin();
+        std::vector<size_t>::const_iterator here = index_of_immersed_facets.begin();
+        return FacetIterator(target, here);
     }
 
     FacetIterator end_immersed() const
     {
-        return FacetIterator(mesh->facets.begin(), index_of_immersed_facets, index_of_immersed_facets.size());
+        const std::vector<Facet>::const_iterator target=mesh->facets.begin();
+        std::vector<size_t>::const_iterator here = index_of_immersed_facets.end();
+        return FacetIterator(target, here);
     }
 
     FacetIterator begin_emerged() const
     {
-        return FacetIterator(mesh->facets.begin(), index_of_emerged_facets, 0);
+        std::vector<Facet>::const_iterator target=mesh->facets.begin();
+        std::vector<size_t>::const_iterator here = index_of_emerged_facets.begin();
+        return FacetIterator(target, here);
     }
 
     FacetIterator end_emerged() const
     {
-        return FacetIterator(mesh->facets.begin(), index_of_emerged_facets, index_of_emerged_facets.size());
+        std::vector<Facet>::const_iterator target=mesh->facets.begin();
+        std::vector<size_t>::const_iterator here = index_of_emerged_facets.end();
+        return FacetIterator(target, here);
     }
 
     /* \brief Compute the point of intersection with free surface between two vertices
