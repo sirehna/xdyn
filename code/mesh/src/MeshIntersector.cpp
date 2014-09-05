@@ -16,6 +16,8 @@ void MeshIntersector::update_intersection_with_free_surface()
     mesh->reset_dynamic_data();
     index_of_emerged_facets.clear();
     index_of_immersed_facets.clear();
+    index_of_emerged_facets.reserve(mesh->facets.size());
+    index_of_immersed_facets.reserve(mesh->facets.size());
 
     std::map<size_t,size_t > added_edges;
     std::set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immersed parts
@@ -148,9 +150,9 @@ std::vector<double> MeshIntersector::immersions_of_facet(size_t facet_index) con
 {
     std::vector<Facet>::const_iterator facet=mesh->facets.begin()+facet_index;
     size_t n = facet->vertex_index.size();
-    std::vector<double> z;
+    std::vector<double> z(n,0.0);
     for(size_t i=0;i<n;++i)
-        z.push_back( all_immersions[facet->vertex_index[i]]);
+        z[i] = all_immersions[facet->vertex_index[i]];
     return z;
 }
 

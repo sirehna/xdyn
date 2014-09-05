@@ -32,7 +32,12 @@ struct Edge
  */
 struct Facet
 {
-    Facet():vertex_index(std::vector<size_t>()),unit_normal(Eigen::MatrixXd::Zero(3,1)),barycenter(Eigen::MatrixXd::Zero(3,1)),area(0) {}
+    Facet():vertex_index(),unit_normal(Eigen::MatrixXd::Zero(3,1)),barycenter(Eigen::MatrixXd::Zero(3,1)),area(0) {}
+    Facet(const std::vector<size_t> &vertex_index_,const Eigen::Vector3d &unit_normal_,const Eigen::Vector3d &barycenter_,double area_)
+    :vertex_index(vertex_index_)
+    ,unit_normal(unit_normal_)
+    ,barycenter(barycenter_)
+    ,area(area_) {}
     std::vector<size_t> vertex_index;
     Eigen::Vector3d unit_normal;
     Eigen::Vector3d barycenter;
