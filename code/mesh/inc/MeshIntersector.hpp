@@ -145,6 +145,7 @@ public:
     std::vector<double> all_immersions; //<! the immersions of all nodes (including the dynamically added ones)
     std::vector<size_t> index_of_emerged_facets;  //!< list of all emerged facets (included the dynamically ones created by split)
     std::vector<size_t> index_of_immersed_facets; //!< list of all immersed facets (included the dynamically ones created by split)
+    std::vector<size_t > split_edges;  //!< a table indicating the index of replacing edge for each edge that is split (there are two consecutive edges per split edge, the table only gives the first one)
 
     friend class ImmersedFacetIterator;
     friend class EmergedFacetIterator;

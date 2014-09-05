@@ -7,6 +7,7 @@ MeshIntersector::MeshIntersector(const MeshPtr mesh_,const std::vector<double> &
 ,all_immersions(immersions)
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
+,split_edges(mesh->static_edges,0)
 {}
 
 void MeshIntersector::update_intersection_with_free_surface()
@@ -17,7 +18,6 @@ void MeshIntersector::update_intersection_with_free_surface()
     index_of_emerged_facets.reserve(mesh->facets.size());
     index_of_immersed_facets.reserve(mesh->facets.size());
 
-    std::vector<size_t > split_edges(mesh->static_edges,0);  // a replacement edge index for those edges that are split
     std::vector<bool> is_facet_crossing_free_surface(mesh->static_facets,false);
     std::vector<int> edges_immersion_status(mesh->static_edges,0); // the immersion status of each edge
 
