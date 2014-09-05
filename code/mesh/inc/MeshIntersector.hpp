@@ -113,11 +113,11 @@ public:
      * The case of totally emerged is thus two low bits = 00
      * The case of totally immersed is when two low bits == 11
      * The other cases 01 or 10 indicate that the edge is crossing the free surface.
-     * If an Edge crosses the free surface, then the facets containing this edge do crosse the free surface.
+     * If an Edge crosses the free surface, then the facets containing this edge do cross the free surface.
      *
      * The edge just touches the free surface if at least one of its vertex has exactly 0 as relative immersion
-     * If the edge touches the free surface, it does not crosses the free surface;
-     * but the facets containing this edge may cross the free surface (if free surface crosses exactly by 2 non consecutive vertices)
+     * If the edge touches the free surface, it does not cross the free surface;
+     * but the facets containing this edge may cross the free surface (if free surface crosses exactly 2 non consecutive vertices)
      */
     static int get_edge_immersion_status(
              const double z0, //!< the relative immersion of first vertex
