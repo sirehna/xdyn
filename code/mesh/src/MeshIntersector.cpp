@@ -1,6 +1,5 @@
 
-#include <map>
-#include <set>
+#include <tr1/unordered_set>
 #include "MeshIntersector.hpp"
 
 
@@ -19,8 +18,8 @@ void MeshIntersector::update_intersection_with_free_surface()
     index_of_emerged_facets.reserve(mesh->facets.size());
     index_of_immersed_facets.reserve(mesh->facets.size());
 
-    std::map<size_t,size_t > added_edges;
-    std::set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immersed parts
+    std::vector<size_t > split_edges(mesh->static_edges,0);
+    std::tr1::unordered_set<size_t> set_of_facets_crossing_free_surface; //!< list of facets to be split into an emerged and immersed parts
     std::vector<int> edges_immersion_status(mesh->static_edges,0); //!< the immersion status of each edge
 
     // iterate on each edge to find intersection with free surface
@@ -32,13 +31,13 @@ void MeshIntersector::update_intersection_with_free_surface()
         if (touches_free_surface(status))
             set_of_facets_crossing_free_surface.insert(mesh->facetsPerEdge[edge_index].begin(),mesh->facetsPerEdge[edge_index].end());
         if (crosses_free_surface(status))
-            added_edges[edge_index] = split_partially_immersed_edge(edge_index,edges_immersion_status);
+            split_edges[edge_index] = split_partially_immersed_edge(edge_index,edges_immersion_status);
     }
 
     // iterate on each facet to classify and/or split
     for(size_t facet_index = 0 ; facet_index < mesh->static_facets ; ++facet_index) {
         if( set_of_facets_crossing_free_surface.find(facet_index) != set_of_facets_crossing_free_surface.end()) {
-            split_partially_immersed_facet(facet_index,edges_immersion_status,added_edges);
+            split_partially_immersed_facet(facet_index,edges_immersion_status,split_edges);
         } else {
             if(is_emerged(edges_immersion_status[mesh->orientedEdgesPerFacet[facet_index][0] >> 1]))
                 index_of_emerged_facets.push_back(facet_index);
@@ -51,7 +50,7 @@ void MeshIntersector::update_intersection_with_free_surface()
 void MeshIntersector::split_partially_immersed_facet(
         size_t facet_index,                             //!< the index of facet to be split
         const std::vector<int> &edges_immersion_status, //!< the immersion status of each edge
-        const std::map<size_t,size_t >& added_edges     //!< the map of split edges
+        const std::vector<size_t> &split_edges          //!< the replacement map for split edges
         )
 {
     const std::vector<size_t> oriented_edges_of_this_facet = mesh->orientedEdgesPerFacet[facet_index];
@@ -74,7 +73,7 @@ void MeshIntersector::split_partially_immersed_facet(
             status = 3;
         } else {
             bool reverse_direction=Mesh::get_oriented_edge_direction(oriented_edge);
-            size_t edge1 = added_edges.at(edge_index);
+            size_t edge1 = split_edges[edge_index];
             size_t edge2 = edge1 + 1; // because edges are always added by pair...
             if(reverse_direction) {
                 std::swap(edge1,edge2);

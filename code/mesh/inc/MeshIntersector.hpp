@@ -95,7 +95,7 @@ public:
     void split_partially_immersed_facet(
             size_t facet_index,                             //!< the index of facet to be split
             const std::vector<int> &edges_immersion_status, //!< the immersion status of each edge
-            const std::map<size_t,size_t >& added_edges     //!< the map of split edges
+            const std::vector<size_t> &split_edges          //!< the replacement map for split edges
             );
 
     /* \brief Extract the coordinates of a specific facet */
