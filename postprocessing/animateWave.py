@@ -137,7 +137,7 @@ if __name__ == "__main__":
                         default = False,
                         help = "Option used to debug")
     args = parser.parse_args()
-    main(args.csv[0], resultDirectory = r'Results', saveImages = args.saveImages, debug = args.debug)
+    main(args.csv[0],resultDirectory = r'Results', saveImages = args.saveImages, debug = args.debug)
 elif __name__ == "__vtkconsole__":
     main(defaultPath, resultDirectory = r'Results', saveImages = False)
 
