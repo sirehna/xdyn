@@ -43,7 +43,7 @@ TEST_F(hydrostaticTest, can_compute_average_immersion)
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double h = a.random<double>();
-        ASSERT_DOUBLE_EQ(5*h/12., average_immersion(mesh.nodes, mesh.facets.front().vertex_index, {0,0,h,h}));
+        ASSERT_DOUBLE_EQ(h/2., average_immersion(mesh.facets.front().vertex_index, {0,0,h,h}));
     }
 //! [hydrostaticTest average_immersion_example]
 }
@@ -51,22 +51,8 @@ TEST_F(hydrostaticTest, can_compute_average_immersion)
 TEST_F(hydrostaticTest, can_compute_average_immersion_even_when_all_nodes_are_used)
 {
     const Mesh mesh = MeshBuilder(one_triangle()).build();
-    ASSERT_DOUBLE_EQ(5, average_immersion(std::make_pair(mesh.nodes, std::vector<double>({4,5,6}))));
+    ASSERT_DOUBLE_EQ(5, average_immersion(std::vector<double>({4,5,6})));
 }
-
-TEST_F(hydrostaticTest, average_immersion_should_throw_if_index_does_not_have_the_right_size)
-{
-    const Mesh mesh = MeshBuilder(one_triangle()).build();
-    ASSERT_THROW(average_immersion(std::make_pair(mesh.nodes, std::vector<double>({4,5}))), HydrostaticException);
-    ASSERT_THROW(average_immersion(std::make_pair(mesh.nodes, std::vector<double>({4,5,6,7}))), HydrostaticException);
-}
-
-TEST_F(hydrostaticTest, can_compute_average_immersion_even_when_not_all_nodes_are_used)
-{
-    const Mesh mesh = MeshBuilder(two_triangles()).build();
-    ASSERT_DOUBLE_EQ(7/3., average_immersion(mesh.nodes, mesh.facets.back().vertex_index, {1,2,3,4}));
-}
-
 
 TEST_F(hydrostaticTest, can_compute_the_elementary_hydrostatic_force)
 {
@@ -104,7 +90,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     ASSERT_EQ(1,intersector.index_of_immersed_facets.size());
     ASSERT_DOUBLE_EQ(0.5,::area(intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0))));
     ASSERT_DOUBLE_EQ(0.5,mesh->facets[intersector.index_of_immersed_facets.at(0)].area);
-    ASSERT_DOUBLE_EQ(0.5/3,hydrostatic::average_immersion(mesh->all_nodes, mesh->facets[intersector.index_of_immersed_facets.at(0)].vertex_index, intersector.all_immersions));
+    ASSERT_DOUBLE_EQ(0.5/3,hydrostatic::average_immersion(mesh->facets[intersector.index_of_immersed_facets.at(0)].vertex_index, intersector.all_immersions));
 
     ASSERT_DOUBLE_EQ(0, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());

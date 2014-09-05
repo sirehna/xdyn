@@ -17,38 +17,31 @@
 using namespace hydrostatic;
 
 
-double hydrostatic::average_immersion(const Matrix3x& nodes,             //!< Coordinates of all nodes
-                                      const std::vector<size_t>& idx,    //!< Indices of the points
+double hydrostatic::average_immersion(const std::vector<size_t>& idx,    //!< Indices of the points
                                       const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                             )
 {
     const size_t n = idx.size();
-    double areas_times_points = 0;
-    double areas = 0;
-    const int idxA = (int)idx[0];
-    const double dz0 = delta_z[idx[0]];
-    for (size_t i = 2 ; i < n ; ++i)
+    double average = 0;
+    for (size_t i = 0 ; i < n ; ++i)
     {
-        const double S = area(nodes, idxA, (int)idx[i-1], (int)idx[i]);
-        areas += S;
-        areas_times_points += S*(dz0+delta_z[idx[i-1]]+delta_z[idx[i]])/3.;
+        average += delta_z[idx[i]];
     }
-    return areas_times_points/areas;
+    if (n) average /= (double)n;
+    return average;
 }
 
-double hydrostatic::average_immersion(const std::pair<Matrix3x,std::vector<double> >& nodes //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+double hydrostatic::average_immersion(const std::vector<double>& nodes //!< Coordinates of used nodes & vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
                                      )
 {
-    const size_t n = (size_t)nodes.first.cols();
-    if (n != nodes.second.size())
+    const size_t n = nodes.size();
+    double average = 0;
+    for (size_t i = 0 ; i < n ; ++i)
     {
-        std::stringstream ss;
-        ss << "Mesh contains " << n << " nodes but delta_z contains " << nodes.second.size() << " values: they should be the same size.";
-        THROW(__PRETTY_FUNCTION__, HydrostaticException, ss.str());
+        average += nodes[i];
     }
-    std::vector<size_t> idx;
-    for (size_t i = 0 ; i < n ; ++i) idx.push_back(i);
-    return average_immersion(nodes.first, idx, nodes.second);
+    if (n) average /= (double)n;
+    return average;
 }
 
 
@@ -86,7 +79,7 @@ Wrench hydrostatic::fast_force(const const_MeshIntersectorPtr& intersector,   //
     const double g_norm = g.norm();
     for (auto that_facet = intersector->begin_immersed() ; that_facet != intersector->end_immersed() ; ++that_facet)
     {
-        const double zG = average_immersion(intersector->mesh->all_nodes, that_facet->vertex_index, intersector->all_immersions);
+        const double zG = average_immersion(that_facet->vertex_index, intersector->all_immersions);
         const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
         const EPoint ap = that_facet->barycenter;
         F += dF(O, ap , rho, g_norm, zG , dS);
@@ -107,7 +100,7 @@ Wrench hydrostatic::exact_force(const const_MeshIntersectorPtr& intersector,   /
     for (auto that_facet = intersector->begin_immersed() ; that_facet != intersector->end_immersed() ; ++that_facet)
     {
         size_t facet_index = that_facet.index();
-        const double zG = average_immersion(intersector->mesh->all_nodes, that_facet->vertex_index, intersector->all_immersions);
+        const double zG = average_immersion(that_facet->vertex_index, intersector->all_immersions);
         const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
         const EPoint ap = exact_application_point(Polygon(intersector->mesh,facet_index),down_direction,zG,intersector->all_immersions);
         F += dF(O, ap , rho, g_norm, zG , dS);
