@@ -1,29 +1,14 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
+#include <array>
 #include <vector>
-#include <set>
-#include <map>
 #include "GeometricTypes3d.hpp"
 
 #include "tr1_macros.hpp"
 #include TR1INC(memory)
 
-/**
- * \brief Contains an edge of a mesh
- * \details an Edge is holding the indices of the vertices in the mesh rather than duplicating the coordinates.
- * \ingroup mesh
- */
-struct Edge
-{
-    Edge(size_t v1,size_t v2)
-    {
-        vertex_index[0]=v1;
-        vertex_index[1]=v2;
-    }
-
-    size_t vertex_index[2];  //!< The index of the two vertices in the mesh
-};
+typedef std::array<std::vector<size_t>,2> ArrayOfEdges;
 
 /**
  * \brief Contains a facet of a mesh
@@ -57,7 +42,7 @@ class Mesh
     Mesh();
 public:
     Mesh(const Matrix3x& nodes_,
-            const std::vector<Edge>& edges_,
+            const ArrayOfEdges& edges_,
             const std::vector<Facet>& facets_,
             const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
             const std::vector<std::vector<size_t> >& orientedEdgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
@@ -98,7 +83,7 @@ public:
     size_t second_vertex_of_oriented_edge(size_t oriented_edge) const;
 
     Matrix3x nodes;            //!< Coordinates of static vertices in mesh
-    std::vector<Edge> edges;   //!< All edges in mesh
+    std::array<std::vector<size_t>,2> edges; //!< All edges in mesh
     std::vector<Facet> facets; //!< For each facet, the indexes of its nodes, unit normal, barycenter & area
     std::vector<std::vector<size_t> > facetsPerEdge; //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
     std::vector<std::vector<size_t> > orientedEdgesPerFacet; //!< for each Facet (index), the list of Edges composing the facet and running direction of each edge

@@ -24,8 +24,8 @@ void MeshIntersector::update_intersection_with_free_surface()
 
     // iterate on each edge to find intersection with free surface
     for( size_t edge_index=0 ; edge_index < mesh->static_edges ; ++edge_index ) {
-        double z0 = all_immersions[mesh->edges[edge_index].vertex_index[0]];
-        double z1 = all_immersions[mesh->edges[edge_index].vertex_index[1]];
+        double z0 = all_immersions[mesh->edges[0][edge_index]];
+        double z1 = all_immersions[mesh->edges[1][edge_index]];
         int status = get_edge_immersion_status(z0,z1);
         edges_immersion_status[edge_index]=status;
         if (touches_free_surface(status))
@@ -120,8 +120,8 @@ size_t MeshIntersector::split_partially_immersed_edge(
         std::vector<int> &edges_immersion_status //!< the immersion status of each edge
         )
 {
-    size_t first_vertex_index = mesh->edges[edge_index].vertex_index[0];
-    size_t last_vertex_index  = mesh->edges[edge_index].vertex_index[1];
+    size_t first_vertex_index = mesh->edges[0][edge_index];
+    size_t last_vertex_index  = mesh->edges[1][edge_index];
     EPoint A=mesh->all_nodes.col(first_vertex_index);
     EPoint B=mesh->all_nodes.col(last_vertex_index);
     double zA=all_immersions[first_vertex_index];
