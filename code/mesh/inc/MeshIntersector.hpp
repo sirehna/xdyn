@@ -138,7 +138,7 @@ public:
 
     /* \brief answer whether this edge touches the free surface
      */
-    static bool touches_free_surface(int status);
+    static bool just_touches_free_surface(int status);
 
     MeshPtr mesh;
 
