@@ -14,6 +14,16 @@
 # - A set of XYZ CSV files to represent wave elevation for each time steps. No
 #   header are required
 #
+# For each video, view settings should be tuned. Among parameters, these are the
+# most important
+#   rv = GetRenderView()
+#   rv.CenterOfRotation
+#   rv.CameraPosition
+#   rv.CameraViewUp
+#   rv.CameraFocalPoint
+#   rv.CameraParallelScale
+#   rv.CameraClippingRange
+#
 # Limitations:
 # - All simulations should have the same time basis
 
@@ -107,7 +117,7 @@ def paraviewSaveImage(\
     rv.Background = [0.32941176470588235, 0.34901960784313724, 0.42745098039215684]
     Render()
 
-def globalViewSettings(rv, offscreenRendering = False):
+def globalViewSettings(rv = GetRenderView(), offscreenRendering = False):
     rv.ViewSize = [1600, 900]
     rv.OrientationAxesVisibility = 0
     rv.CenterAxesVisibility = 0
@@ -123,12 +133,14 @@ def globalViewSettings(rv, offscreenRendering = False):
     rv.OrientationAxesOutlineColor = [0.0, 1.0, 1.0]
     rv.RemoteRenderThreshold = 3.0
     rv.Background = [0.34, 0.34, 0.43]
+    # Option to update
     rv.CenterOfRotation = [50.0, 50.0, 0.07]
-    rv.CameraViewUp = [0.03, -0.45, -0.89]
-    rv.CameraPosition = [-130, 230, -130]
-    rv.CameraFocalPoint = [-4.0, 14.0, -7.7]
-    rv.CameraParallelScale = 49
-    rv.CameraClippingRange = [34.0, 610.0]
+    rv.CameraPosition = [-41.0, 103.0, -49.5]
+    rv.CameraViewUp = [0.10, -0.4, -0.9]
+    rv.CameraFocalPoint = [0.69, -0.11, 0.37]
+    rv.CameraParallelScale = 18
+    rv.CameraClippingRange = [81.0, 173.0]
+    return rv
 
 def main(mobile, wave, resultDirectory = r'Results', \
     saveImages = False, makeOnlyImages = False):
@@ -159,18 +171,17 @@ def main(mobile, wave, resultDirectory = r'Results', \
 
     Res = CSVReader(FileName = waveFiles)
     Res.HaveHeaders = 0
-    TableToPoints1 = TableToPoints()
-    TableToPoints1.XColumn = 'Field 0'
-    TableToPoints1.YColumn = 'Field 1'
-    TableToPoints1.ZColumn = 'Field 2'
+    tableToPoints = TableToPoints()
+    tableToPoints.XColumn = 'Field 0'
+    tableToPoints.YColumn = 'Field 1'
+    tableToPoints.ZColumn = 'Field 2'
     delaunay2D = Delaunay2D()
     delaunay2DRepresentation = Show()
     delaunay2DRepresentation.ScaleFactor = 10.0
     delaunay2DRepresentation.EdgeColor = [0.0, 0.0, 0.5]
     delaunay2DRepresentation.DiffuseColor = waveColor
 
-    renderView = GetRenderView()
-    globalViewSettings(renderView)
+    renderView = globalViewSettings()
 
     animationScene = GetAnimationScene()
     animationScene.EndTime = len(waveFiles)
@@ -344,7 +355,7 @@ def defaultParameters01():
     wave = {}
     wave['PathPattern'] = 'waves\waves*.csv'
     wave['Color'] = [1.0 / 3.0, 2.0 / 3.0, 1.0]
-    wave['Files'] = glob.glob(os.path.join(workingDirectory, wave['PathPattern']))
+    wave['Files'] = sorted(glob.glob(os.path.join(workingDirectory, wave['PathPattern'])))
 
     resultDirectory = r'Results'
 
@@ -364,7 +375,7 @@ def defaultParameters02():
     wave = {}
     wave['PathPattern'] = 'waves\waves*.csv'
     wave['Color'] = [1.0 / 3.0, 2.0 / 3.0, 1.0]
-    wave['Files'] = glob.glob(os.path.join(workingDirectory, wave['PathPattern']))
+    wave['Files'] = sorted(glob.glob(os.path.join(workingDirectory, wave['PathPattern'])))
 
     resultDirectory = r'Results'
 
