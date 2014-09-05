@@ -42,9 +42,35 @@ double area(const Matrix3x& points)
     return a;
 }
 
+double area(const Matrix3x& points,std::vector<size_t> &vertex_index)
+{
+    const size_t n = vertex_index.size();
+    double a = 0;
+    for (size_t i = 2 ; i < n ; ++i)
+    {
+        a += area(points, vertex_index[0], vertex_index[i-1], vertex_index[i]);
+    }
+    return a;
+}
+
 Eigen::Vector3d barycenter(const Matrix3x& p)
 {
     return p.rowwise().sum().array()/double(p.cols());
+}
+
+Eigen::Vector3d barycenter(const Matrix3x& p,std::vector<size_t> &vertex_index)
+{
+    double x = 0;
+    double y = 0;
+    double z = 0;
+    const size_t n = vertex_index.size();
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        x += p(0,vertex_index[i]);
+        y += p(1,vertex_index[i]);
+        z += p(2,vertex_index[i]);
+    }
+    return Eigen::Vector3d(x/double(n),y/double(n),z/double(n));
 }
 
 Eigen::Vector3d barycenter(const VectorOfVectorOfPoints& points //!< List of points

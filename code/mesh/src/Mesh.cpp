@@ -38,15 +38,15 @@ void Mesh::reset_dynamic_data()
 
 size_t Mesh::create_facet_from_edges(const std::vector<size_t>& oriented_edge_list,const EPoint &unit_normal)
 {
-    std::vector<size_t> vertex_list(oriented_edge_list.size(),0);
-    Matrix3x coords(3,oriented_edge_list.size());
+    size_t n=oriented_edge_list.size();
+    std::vector<size_t> vertex_list(n,0);
+    Matrix3x coords(3,n);
     for( size_t ei=0;ei<oriented_edge_list.size();ei++) {
         size_t vertex_index = second_vertex_of_oriented_edge(oriented_edge_list[ei]); // Note: use second vertex rather than first for compatibility with existing tests
         vertex_list[ei]=vertex_index;
-        coords.col(ei)=all_nodes.col(vertex_index);
     }
     size_t facet_index = facets.size();
-    facets.push_back(Facet(vertex_list,unit_normal,::barycenter(coords),::area(coords)));
+    facets.push_back(Facet(vertex_list,unit_normal,::barycenter(all_nodes,vertex_list),::area(all_nodes,vertex_list)));
     return facet_index;
 }
 
