@@ -10,11 +10,6 @@ class FacetIterator
         {
         }
 
-        size_t index() const
-        {
-            return *here;
-        }
-
         const Facet& operator*() const
         {
             return *(begin+*here);

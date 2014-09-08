@@ -5,7 +5,6 @@ SET(SRC src/Mesh.cpp
         src/MeshBuilder.cpp
         src/MeshIntersector.cpp
         src/mesh_manipulations.cpp
-        src/Polygon.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)

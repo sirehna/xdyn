@@ -9,7 +9,6 @@
 #include "HydrostaticException.hpp"
 #include "pairwise_sum.hpp"
 #include "mesh_manipulations.hpp"
-#include "Polygon.hpp"
 
 #include <algorithm> // std::count_if
 #include <iterator>  // std::distance
@@ -99,24 +98,25 @@ Wrench hydrostatic::exact_force(const const_MeshIntersectorPtr& intersector,   /
     const EPoint down_direction = g / g_norm;
     for (auto that_facet = intersector->begin_immersed() ; that_facet != intersector->end_immersed() ; ++that_facet)
     {
-        size_t facet_index = that_facet.index();
         const double zG = average_immersion(that_facet->vertex_index, intersector->all_immersions);
         const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
-        const EPoint ap = exact_application_point(Polygon(intersector->mesh,facet_index),down_direction,zG,intersector->all_immersions);
+        const EPoint ap = exact_application_point(*that_facet,down_direction,zG,intersector->mesh->all_nodes,intersector->all_immersions);
         F += dF(O, ap , rho, g_norm, zG , dS);
     }
     return F;
 }
 
 EPoint hydrostatic::normal_to_free_surface(
-        const Polygon& polygon,                 //!< vertices of the facet
-        const EPoint&  down_direction,           //!< local down direction expressed in mesh frame
-        const std::vector<double> &all_immersions    //!< relative immersions for all point of the mesh
+            const Facet&               facet,           //!< the facet of interest
+            const EPoint&              down_direction,  //!< local down direction expressed in mesh frame
+            const Matrix3x&            all_nodes,       //!< the nodes of the mesh
+            const std::vector<double>& all_immersions   //!< the immersions for all nodes of the mesh
+
         )
 {
     // Compute normal to free surface, oriented downward
-    const Polygon free_surface = polygon.projected_on_free_surface(down_direction,all_immersions);
-    const EPoint ns = free_surface.get_unit_normal();
+    const Matrix3x vertices = project_facet_on_free_surface(facet,down_direction,all_nodes,all_immersions);
+    const EPoint ns = ::unit_normal(vertices);
 
     if(ns.norm() < 0.5 ) // the facet is vertical, we can't access the normal to free surface, but we don't need it
         return down_direction;
@@ -127,13 +127,13 @@ EPoint hydrostatic::normal_to_free_surface(
 }
 
 Eigen::Matrix3d hydrostatic::facet_trihedron(
-        const Polygon& polygon,     //!< vertices of the facet
-        const EPoint&  ns           //!< normal to free surface, oriented downward (in mesh frame)
+        const EPoint&  n ,  //!< the normal to the facet
+        const EPoint&  ns   //!< the normal to free surface, oriented downward (in mesh frame)
         )
 {
     // Compute the immersion trihedron G,i2,j2,k2
     Eigen::Matrix3d R20;
-    const EPoint k20 = polygon.get_unit_normal();
+    const EPoint k20 = n;
     EPoint i20 = ns.cross(k20);
     double tolerance = 1000*std::numeric_limits<double>::epsilon();
     if( i20.norm() < tolerance ) {
@@ -155,24 +155,61 @@ Eigen::Matrix3d hydrostatic::facet_trihedron(
 }
 
 EPoint hydrostatic::exact_application_point(
-		const Polygon& polygon,                 //!< vertices of the facet
-		const EPoint&  down_direction,          //!< local down direction expressed in mesh frame
-        const double  zG,                       //!< Relative immersion of facet barycentre (in metres)
-        const std::vector<double> &all_immersions    //!< relative immersions for all point of the mesh
+            const Facet&               facet,          //!< the facet of interest
+            const EPoint&              down_direction, //!< local down direction expressed in mesh frame
+            const double               zG,             //!< Relative immersion of facet barycentre (in metres)
+            const Matrix3x&            all_nodes,      //!< the nodes of the mesh
+            const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
 		)
 {
-    EPoint ns=hydrostatic::normal_to_free_surface(polygon,down_direction,all_immersions);
-	Eigen::Matrix3d R20 = facet_trihedron(polygon,ns);
+    const EPoint n=facet.unit_normal;
+    const EPoint ns=normal_to_free_surface(facet,down_direction,all_nodes,all_immersions);
+	const Eigen::Matrix3d R20 = facet_trihedron(n,ns);
 	if(R20.col(0).norm() < 0.5 ) // quick test : facet is parallel to the free surface
-	    return polygon.get_barycenter();
+	    return facet.barycenter;
 
-	Eigen::Matrix3d JR2=polygon.get_inertia_wrt( R20 );
-    Eigen::Matrix3d R02 = R20.transpose();
-    EPoint j20 = R02.col(1);
+	const Eigen::Matrix3d JR2=get_inertia_of_polygon_wrt( facet,R20,all_nodes );
+    const Eigen::Matrix3d R02 = R20.transpose();
+    const EPoint j20 = R02.col(1);
 
-	double yG = zG * ns.dot(down_direction) / (ns.dot(j20));
-	double xR = JR2(0,1)/yG;
-	double yR = JR2(0,0)/yG;
-	EPoint offset2( xR , yR , 0);
-	return polygon.get_barycenter() + R02 * offset2;
+	const double yG = zG * ns.dot(down_direction) / (ns.dot(j20));
+	const double xR = JR2(0,1)/yG;
+	const double yR = JR2(0,0)/yG;
+	const EPoint offset2( xR , yR , 0);
+	return facet.barycenter + R02 * offset2;
+}
+
+Matrix3x hydrostatic::project_facet_on_free_surface(
+            const Facet&               facet,          //!< the facet of interest
+            const EPoint&              down_direction, //!< local down direction expressed in mesh frame
+            const Matrix3x&            all_nodes,      //!< the nodes of the mesh
+            const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
+        )
+{
+    const size_t nVertices = facet.vertex_index.size();
+    Matrix3x newVertices(3,nVertices);
+    for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
+        size_t vertex_index = facet.vertex_index[iVertex];
+        newVertices.col((int)iVertex) = all_nodes.col((int)vertex_index) - all_immersions[vertex_index]*down_direction;
+    }
+    return newVertices;
+}
+
+Eigen::Matrix3d hydrostatic::get_inertia_of_polygon_wrt(
+            const Facet&          facet,     //!< the facet of interest
+            const Eigen::Matrix3d R20,       //!< coordinates of inertia frame vectors versus mesh frame
+            const Matrix3x&       all_nodes  //!< the nodes of the mesh
+        )
+{
+    // Compute the coordinates of facet vertices in R2
+    const EPoint G=facet.barycenter;
+    const size_t nVertices = facet.vertex_index.size();
+    Matrix3x verticesInR0(3,nVertices);
+    for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {
+        verticesInR0.col((int)iVertex) = all_nodes.col((int)facet.vertex_index[iVertex]) - G;
+    }
+    Matrix3x verticesInR2(3,nVertices);
+    verticesInR2 = R20 * verticesInR0;
+
+    return inertia_of_polygon( verticesInR2 );
 }
