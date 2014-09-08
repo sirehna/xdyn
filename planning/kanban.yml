@@ -508,21 +508,6 @@ stories:
       started: 30/5/2014
       done: 4/6/2014
       assigned to: gj
-    - task: Document dynamic problem resolution (how internal & external forces are calculated)
-      type: model
-      size: 4
-      backlog: 17/3/2014
-      assigned to: gj
-    - task: Detailed solver documentation
-      type: model
-      size: 4
-      backlog: 2/6/2014
-      assigned to: cec
-    - task: Steppers + solver overview
-      type: model
-      size: 2
-      backlog: 2/6/2014
-      assigned to: gj
   - story: Ecriture format CSV
     due by: 28/4/2014
     tasks:
@@ -586,7 +571,7 @@ stories:
       started: 30/6/2014
       done: 30/6/2014
   - story: Modèles de houle irrégulière linéaire (Airy)
-    due by: 1/8/2014
+    due by: 4/9/2014
     tasks:
     - task: Import wave spectra from Dysco ASM
       type: model
@@ -602,9 +587,11 @@ stories:
       assigned to: cec
       started: 1/8/2014
       done: 1/8/2014
-    - task: Create & document YAML for Airy
+    - task: Create YAML for Airy
       type: interface
       backlog: 29/7/2014
+      started: 8/8/2014
+      done: 8/8/2014
       size: 1
       assigned to: cec
     - task: Create WaveModelFromSpectrum
@@ -622,23 +609,29 @@ stories:
       size: 1
       assigned to: cec
   - story: Excitation non-linéaire due à la houle (efforts de diffraction de Froude-Krylov)
-    due by: 1/8/2014
+    due by: 4/9/2014
     tasks:
     - task: Refactor hydrostatic (mesh iterators)
       type: internal
       backlog: 29/7/2014
       size: 4
       assigned to: nc
+      started: 25/8/2014
+      done: 5/9/2014
     - task: Compute dynamic pressure
       type: model
       backlog: 29/7/2014
       size: 1
       assigned to: cec
+      started: 2/9/2014
+      done: 4/9/2014
     - task: Create & document YAML for Froude-Krylov
       type: interface
       backlog: 29/7/2014
       size: 1
       assigned to: cec
+      started:
+      done:
     - task: Create FroudeKrylovForceBuilder
       type: internal
       backlog: 29/7/2014
@@ -665,3 +658,75 @@ stories:
       started: 1/7/2014
       done: 4/7/2014
       size: 16
+  - story: Finish refactoring
+    due by: 1/11/2014
+    tasks:
+    - task: Refactoring (IntegrateOnSurface)
+      type: internal
+      backlog: 5/9/2014
+      size: 4
+      assigned to: cec
+    - task: Separate exact/fast hydrostatic forces
+      type: model
+      backlog: 5/9/2014
+      size: 2
+      assigned to: cec
+    - task: Check wave computation
+      type: model
+      backlog: 5/9/2014
+      size: 2
+      assigned to: cec
+  - story: Documentation
+    due by: 1/11/2014
+    tasks:
+    - task: Document dynamic problem resolution (how internal & external forces are calculated)
+      type: model
+      size: 4
+      backlog: 17/3/2014
+      assigned to: cec
+    - task: Detailed solver documentation (Steppers, Schedulers, EventHandlers, Observer, System)
+      type: model
+      size: 4
+      backlog: 2/6/2014
+      assigned to: cec
+    - task: Steppers (RK4, RKCK, Euler)
+      type: model
+      size: 1
+      backlog: 2/6/2014
+      assigned to: cec
+  - story: Release IRT
+    due by: 1/11/2014
+    tasks:
+    - task: Identify sources to give to IRT
+      type: internal
+      size: 1
+      assigned to: cec
+      backlog: 2/6/2014
+    - task: Make build script for IRT
+      type: internal
+      size: 2
+      assigned to: cec
+      backlog: 2/6/2014
+    - task: Upload to GitLab & notify (build pipeline)
+      type: internal
+      size: 1
+      assigned to: cec
+      backlog: 2/6/2014
+  - story: Damping forces
+    due by: 1/11/2014
+    tasks: []
+  - story: Import damping coefficients
+    due by: 1/11/2014
+    tasks: []
+  - story: Propulsion
+    due by: 1/11/2014
+    tasks: []
+  - story: Hollenbach
+    due by: 1/11/2014
+    tasks: []
+  - story: Interpolate resistance curves
+    due by: 1/11/2014
+    tasks: []
+  - story: Radiation forces
+    due by: 1/11/2014
+    tasks: []
