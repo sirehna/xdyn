@@ -2,6 +2,7 @@
 #define MESHBUILDER_TEST_HPP
 
 #include "gtest/gtest.h"
+#include "Mesh.hpp"
 
 class MeshBuilderTest : public ::testing::Test
 {
@@ -10,5 +11,7 @@ class MeshBuilderTest : public ::testing::Test
         virtual void SetUp(){}
         virtual void TearDown(){}
 };
+
+size_t get_oriented_edge_index(const size_t &e);
 
 #endif

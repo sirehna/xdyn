@@ -10,6 +10,7 @@
 
 #include "gtest/gtest.h"
 #include "DataGenerator.hpp"
+#include "GeometricTypes3d.hpp"
 
 class hydrostaticTest : public ::testing::Test
 {
@@ -18,6 +19,7 @@ class hydrostaticTest : public ::testing::Test
 	    virtual ~hydrostaticTest();
         virtual void SetUp();
         virtual void TearDown();
+        Matrix3x get_rectangle(const double w, const double h) const;
 		DataGenerator a;
 
 };
