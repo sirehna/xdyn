@@ -16,10 +16,7 @@ include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
 include_directories(${decode_unit_INCLUDE_DIRS})
 include_directories(${exception_handling_INCLUDE_DIRS})
-
-if(WIN32)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-endif()
 
 add_library(${PROJECT_NAME}_static STATIC ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
