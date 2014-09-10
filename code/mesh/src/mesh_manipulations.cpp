@@ -12,11 +12,10 @@
 #include "kahan_sum.hpp"
 #include "pairwise_sum.hpp"
 
-
 double area(const Matrix3x& M, //!< Matrix containing (amongst others), the points of interest
-            const int idxA,         //!< Index of the column containing the first point
-            const int idxB,         //!< Index of the column containing the second point
-            const int idxC          //!< Index of the column containing the third point
+            const int idxA,    //!< Index of the column containing the first point
+            const int idxB,    //!< Index of the column containing the second point
+            const int idxC     //!< Index of the column containing the third point
             )
 {
     const double x1 = M(0,idxB)-M(0,idxA);
@@ -42,9 +41,37 @@ double area(const Matrix3x& points)
     return a;
 }
 
+double area(const Matrix3x& points,std::vector<size_t> &vertex_index)
+{
+    const size_t n = vertex_index.size();
+    double a = 0;
+    for (size_t i = 2 ; i < n ; ++i)
+    {
+        a += area(points, (int)vertex_index[0],
+                          (int)vertex_index[i-1],
+                          (int)vertex_index[i]);
+    }
+    return a;
+}
+
 Eigen::Vector3d barycenter(const Matrix3x& p)
 {
     return p.rowwise().sum().array()/double(p.cols());
+}
+
+Eigen::Vector3d barycenter(const Matrix3x& p,std::vector<size_t> &vertex_index)
+{
+    double x = 0;
+    double y = 0;
+    double z = 0;
+    const size_t n = vertex_index.size();
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        x += p(0, vertex_index[i]);
+        y += p(1, vertex_index[i]);
+        z += p(2, vertex_index[i]);
+    }
+    return Eigen::Vector3d(x/double(n),y/double(n),z/double(n));
 }
 
 Eigen::Vector3d barycenter(const VectorOfVectorOfPoints& points //!< List of points
@@ -124,7 +151,6 @@ Matrix3x convert(const VectorOfPoints& v)
 bool oriented_clockwise(const VectorOfVectorOfPoints& v, const EPoint& O)
 {
     if (v.size() < 2) return true;
-
     size_t nb_of_clockwise = 0;
     size_t nb_of_anticlockwise = 0;
     bool first_facet_is_oriented_clockwise = oriented_clockwise(v.front(),O);
@@ -192,4 +218,46 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
         }
         os.write(reinterpret_cast<const char*>(&spacer), 2);
     }
+}
+
+Eigen::Matrix3d inertia_of_triangle(
+        const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
+        const EPoint vertex2,  //!< second vertex of triangle
+        const EPoint vertex3   //!< third vertex of triangle
+        )
+{
+    Eigen::Matrix3d JR1;
+    JR1.fill(0);
+    double x12 = vertex1[0] + vertex2[0];
+    double x13 = vertex1[0] + vertex3[0];
+    double x23 = vertex2[0] + vertex3[0];
+    double y12 = vertex1[1] + vertex2[1];
+    double y13 = vertex1[1] + vertex3[1];
+    double y23 = vertex2[1] + vertex3[1];
+    JR1(0,0) = (1.0/12.0) * ( x12*x12 + x13*x13 + x23*x23 );
+    JR1(0,1) = (1.0/12.0) * ( x12*y12 + x13*y13 + x23*y23 );
+    JR1(1,0) = (1.0/12.0) * ( x12*y12 + x13*y13 + x23*y23 );
+    JR1(1,1) = (1.0/12.0) * ( y12*y12 + y13*y13 + y23*y23 );
+    return JR1;
+}
+
+Eigen::Matrix3d inertia_of_polygon(
+        const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
+        )
+{
+    const int nVertices = (int)verticesInR1.cols();
+    if (nVertices < 3) return Eigen::Matrix3d();
+
+    Eigen::Matrix3d total_inertia;
+    total_inertia.fill(0);
+    double total_area = 0;
+    for (int i = 2 ; i < nVertices ; ++i)
+    {
+        const double S = area(verticesInR1, 0, i-1, i);
+        EPoint G = (verticesInR1.col(0)+verticesInR1.col(i-1)+verticesInR1.col(i))/3.;
+        Eigen::Matrix3d JR1 = inertia_of_triangle(verticesInR1.col(0),verticesInR1.col(i-1),verticesInR1.col(i));
+        total_inertia += JR1*S;
+        total_area    += S;
+    }
+    return total_inertia/total_area;
 }

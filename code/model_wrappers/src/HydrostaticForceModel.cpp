@@ -11,6 +11,7 @@
 #include "hydrostatic.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "Transform.hpp"
+#include "MeshIntersector.hpp"
 
 HydrostaticForceModel::Input::Input() : rho(0),
                                         g(0),
@@ -35,6 +36,9 @@ Wrench HydrostaticForceModel::operator()(const Body& body, const double t) const
     const Point g_in_NED("NED", 0, 0, g);
     const RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + body.name + ")").get_rot();
 
-    const auto F = hydrostatic::force(body.mesh, body.G, rho, ned2mesh*g_in_NED.v, dz);
+    MeshIntersectorPtr intersector(new MeshIntersector(body.mesh,dz));
+    intersector->update_intersection_with_free_surface();
+
+    const auto F = hydrostatic::force((const_MeshIntersectorPtr) intersector, body.G, rho, ned2mesh*g_in_NED.v);
     return F;
 }

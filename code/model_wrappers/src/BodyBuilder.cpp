@@ -25,6 +25,7 @@ void BodyBuilder::change_mesh_ref_frame(Body& body, const VectorOfVectorOfPoints
     body.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
     const auto T = transform.inverse();
     body.mesh->nodes = (T*PointMatrix(body.mesh->nodes, "mesh("+body.name+")")).m;
+    body.mesh->all_nodes = (T*PointMatrix(body.mesh->all_nodes, "mesh("+body.name+")")).m;
     for (size_t i = 0 ; i < body.mesh->facets.size() ; ++i)
     {
         body.mesh->facets[i].barycenter = T*body.mesh->facets[i].barycenter;
