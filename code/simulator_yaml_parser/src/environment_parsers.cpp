@@ -76,6 +76,13 @@ YamlWaveModel parse_waves(const std::string& yaml)
         ss << "Error parsing section wave/output: " << e.what();
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
     }
+    try
+    {
+        node["compute Froude-Krylov force"]         >> ret.compute_froude_krylov;
+    }
+    catch(std::exception& ) // Nothing to do: 'output' section is not mandatory
+    {
+    }
     return ret;
 }
 
@@ -84,6 +91,7 @@ void operator >> (const YAML::Node& node, YamlDiscretization& g)
     node["n"] >> g.n;
     parse_uv(node["omega min"], g.omega_min);
     parse_uv(node["omega max"], g.omega_max);
+    node["energy fraction"] >> g.energy_fraction;
 }
 
 

@@ -47,13 +47,13 @@ if(const YAML::Node *parameter = node.FindValue(key))\
 void parse_outputs(const YAML::Node& node, YamlSimulatorInput& ret);
 void parse_outputs(const YAML::Node& node, YamlSimulatorInput& ret)
 {
-    node["positions"]             >> ret.position_output;
-    node["angles"]                >> ret.angles_output;
-    node["linear velocities"]     >> ret.linear_velocities_output;
-    node["angular velocities"]    >> ret.angular_velocities_output;
-    node["linear accelerations"]  >> ret.linear_accelerations_output;
-    node["angular accelerations"] >> ret.angular_accelerations_output;
-    node["forces and torques"]    >> ret.forces_and_torques_output;
+    PARSE_OPTIONAL_KEY("positions"             , ret.position_output)
+    PARSE_OPTIONAL_KEY("angles"                , ret.angles_output)
+    PARSE_OPTIONAL_KEY("linear velocities"     , ret.linear_velocities_output)
+    PARSE_OPTIONAL_KEY("angular velocities"    , ret.angular_velocities_output)
+    PARSE_OPTIONAL_KEY("linear accelerations"  , ret.linear_accelerations_output)
+    PARSE_OPTIONAL_KEY("angular accelerations" , ret.angular_accelerations_output)
+    PARSE_OPTIONAL_KEY("forces and torques"    , ret.forces_and_torques_output)
 }
 
 YamlSimulatorInput SimulatorYamlParser::parse() const

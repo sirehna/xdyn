@@ -7,6 +7,24 @@
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 
+
+DiscreteDirectionalWaveDensity::DiscreteDirectionalWaveDensity() :
+    sqrt_2_SiDj(0),
+    omega(0),
+    psi(0),
+    k(0),
+    phase(0)
+{
+}
+
+FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
+    spectrum(std::vector<DiscreteDirectionalWaveDensity>()),
+    domega(0),
+    dpsi(0)
+{
+
+}
+
 DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :
                     Si(std::vector<double>()),
                     Dj(std::vector<double>()),

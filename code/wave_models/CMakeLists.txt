@@ -14,8 +14,10 @@ set(SRC src/WaveSpectralDensity.cpp
         src/Airy.cpp
         src/WaveModel.cpp
         src/discretize.cpp
-        src/ListOfWaveModels.cpp
         src/YamlSpectraInput.cpp
+        src/SumOfWaveSpectralDensities.cpp
+        src/SumOfWaveDirectionalSpreadings.cpp
+        src/WaveDirectionalSpreading.cpp
         )
 
 # Using C++ 2011

@@ -11,6 +11,8 @@
 #include <cstdlib>
 #include <vector>
 
+class SumOfWaveDirectionalSpreadings;
+
 /** \author cec
  *  \date Jul 31, 2014, 11:59:52 AM
  *  \brief Distribution of the wave height by direction.
@@ -28,6 +30,7 @@
 class WaveDirectionalSpreading
 {
     public:
+        WaveDirectionalSpreading();
         WaveDirectionalSpreading(const double psi0 //!< Primary wave direction (NED, "coming from") in radians
                                 );
         virtual ~WaveDirectionalSpreading();
@@ -55,11 +58,10 @@ class WaveDirectionalSpreading
         virtual std::vector<double> get_directions(const size_t n          //!< Number of angles to return
                                                    ) const;
 
+        SumOfWaveDirectionalSpreadings operator+(const WaveDirectionalSpreading& w) const;
+
     protected:
         double psi0; //!< Primary wave direction (NED, "coming from") in radians
-
-    private:
-        WaveDirectionalSpreading();
 };
 
 #endif /* WAVEDIRECTIONALSPREADING_HPP_ */

@@ -8,7 +8,12 @@
 #include <cmath>
 #define PI M_PI
 
+#include "SumOfWaveDirectionalSpreadings.hpp"
 #include "WaveDirectionalSpreading.hpp"
+
+WaveDirectionalSpreading::WaveDirectionalSpreading() : psi0(0)
+{
+}
 
 WaveDirectionalSpreading::WaveDirectionalSpreading(const double psi0_) : psi0(psi0_)
 {
@@ -28,4 +33,9 @@ std::vector<double> WaveDirectionalSpreading::get_directions(const size_t n     
         psi[i] = double(i)/double(n)*two_pi;
     }
     return psi;
+}
+
+SumOfWaveDirectionalSpreadings WaveDirectionalSpreading::operator+(const WaveDirectionalSpreading& w) const
+{
+    return SumOfWaveDirectionalSpreadings(*this, w);
 }
