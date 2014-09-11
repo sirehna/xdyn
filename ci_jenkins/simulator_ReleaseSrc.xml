@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>&lt;h2&gt;&lt;a href=&quot;ws/planning/planning.html&quot;&gt;Avancement technique, utilisation des ressources&lt;/a&gt;&lt;/h2&gt;&#xd;
+&lt;h2&gt;&lt;a href=&quot;http://130.66.124.197:8081/job/Simulator/&quot;&gt;Serveur d&apos;intégration continue sous Linux&lt;/a&gt;&lt;/h2&gt;</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.2.5">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>ssh://git_simulateur@130.66.124.7/home/public/DOP/EtudesEnCours/ETI140043/simulator.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <jenkins.triggers.ReverseBuildTrigger>
+      <spec></spec>
+      <upstreamProjects>IrtJvSimulator_Release, </upstreamProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </jenkins.triggers.ReverseBuildTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>git status &amp;&amp; git branch &amp;&amp; git checkout master &amp;&amp; git pull origin master</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>mkdir IrtJvSimulateur_Src &amp;&amp; git archive --format=tar HEAD | (cd IrtJvSimulateur_Src &amp;&amp; tar xf -) &amp;&amp; cd IrtJvSimulateur_Src &amp;&amp; cd code &amp;&amp; ./foreach.sh externalDependencies.txt svn_export.sh gj jacqueno &amp;&amp; cd .. &amp;&amp; cd .. &amp;&amp; tar -czf IrtJvSimulateur_Src_`git rev-parse HEAD`.tgz IrtJvSimulateur_Src &amp;&amp; rm -rf IrtJvSimulateur_Src</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>IrtJvSimulateur_Src*tgz</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+    </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.Mailer plugin="mailer@1.11">
+      <recipients>charles-edouard.cady@sirehna.com guillaume.jacquenot@sirehna.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers/>
+</project>
