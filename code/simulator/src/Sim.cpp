@@ -27,16 +27,22 @@ Sim::Sim(const std::vector<Body>& bodies_,
 {
 }
 
+void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies in the system
+                                   const size_t i         //!< Index of the body under consideration
+                               )
+{
+    const auto norm = sqrt((double)SQUARE(*_QR(all_states,i))+(double)SQUARE(*_QI(all_states,i))+(double)SQUARE(*_QJ(all_states,i))+(double)SQUARE(*_QK(all_states,i)));
+    *_QR(all_states,i) /= norm;
+    *_QI(all_states,i) /= norm;
+    *_QJ(all_states,i) /= norm;
+    *_QK(all_states,i) /= norm;
+}
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto x_with_normalized_quaternions = x;
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
-        const auto norm = sqrt((double)SQUARE(*_QR(x_with_normalized_quaternions,i))+(double)SQUARE(*_QI(x_with_normalized_quaternions,i))+(double)SQUARE(*_QJ(x_with_normalized_quaternions,i))+(double)SQUARE(*_QK(x_with_normalized_quaternions,i)));
-        *_QR(x_with_normalized_quaternions,i) /= norm;
-        *_QI(x_with_normalized_quaternions,i) /= norm;
-        *_QJ(x_with_normalized_quaternions,i) /= norm;
-        *_QK(x_with_normalized_quaternions,i) /= norm;
+        normalize_quaternions(x_with_normalized_quaternions, i);
         update_kinematics(x_with_normalized_quaternions, bodies[i], i, env.k);
         calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), bodies[i].inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
     }
