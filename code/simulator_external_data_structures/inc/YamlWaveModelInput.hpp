@@ -15,9 +15,10 @@
 struct YamlDiscretization
 {
     YamlDiscretization();
-    size_t n;         //!< Nb of frequencies in the discretization
-    double omega_min; //!< First angular frequency (in rad/s)
-    double omega_max; //!< Last angular frequency (in rad/s)
+    size_t n;               //!< Nb of frequencies in the discretization
+    double omega_min;       //!< First angular frequency (in rad/s)
+    double omega_max;       //!< Last angular frequency (in rad/s)
+    double energy_fraction; //!< Between 0 and 1: sum(S(omega[i]).S(psi[j]),taken into account)/sum(S(omega[i]).S(psi[j]),total)
 };
 
 struct YamlSpectra
@@ -50,6 +51,7 @@ struct YamlWaveModel
     YamlDiscretization discretization; //!< Spectral discretization parameters
     std::vector<YamlSpectra> spectra;  //!< Wave spectra to generate
     YamlWaveOutput output;             //!< Defines what wave data is outputted during the simulation & how it is generated
+    bool compute_froude_krylov;        //!< Should the Froude-Krylov force be computed?
 };
 
 struct YamlJonswap

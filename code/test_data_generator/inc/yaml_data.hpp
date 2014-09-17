@@ -26,6 +26,7 @@ namespace test_data
     std::string simple_waves();
     std::string cube_in_waves();
     std::string waves_for_parser_validation_only();
+    std::string anthineas_froude_krylov();
 }
 
 #endif /* YAML_DATA_HPP_ */

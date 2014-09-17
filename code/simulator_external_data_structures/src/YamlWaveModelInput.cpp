@@ -7,7 +7,7 @@
 
 #include "YamlWaveModelInput.hpp"
 
-YamlDiscretization::YamlDiscretization() : n(0), omega_min(0), omega_max(0)
+YamlDiscretization::YamlDiscretization() : n(0), omega_min(0), omega_max(0), energy_fraction(0)
 {}
 
 YamlSpectra::YamlSpectra():
@@ -32,7 +32,8 @@ YamlWaveOutput::YamlWaveOutput() : frame_of_reference(""),
 YamlWaveModel::YamlWaveModel():
 discretization(YamlDiscretization()),
 spectra(std::vector<YamlSpectra>()),
-output(YamlWaveOutput())
+output(YamlWaveOutput()),
+compute_froude_krylov(false)
 {}
 
 YamlJonswap::YamlJonswap():
