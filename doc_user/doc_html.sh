@@ -5,4 +5,4 @@ then
 else
     f=user_guide_fr
 fi
-pandoc ${f}.md -s --highlight-style pygments -o ${f}.html
+pandoc -s --mathml ${f}.md --highlight-style pygments -o ${f}.html -c stylesheet.css
