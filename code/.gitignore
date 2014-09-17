@@ -7,6 +7,7 @@ base91x
 boost
 csv_file_reader
 data_source
+debug
 decode_unit
 dynamic_model
 eigen

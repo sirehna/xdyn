@@ -50,6 +50,15 @@ class Sim
                                          StateType& dx_dt,
                                          const size_t index_of_first_state) const;
 
+        /**  \brief Make sure quaternions can be converted to Euler angles
+          *  \details Normalization takes place at each time step, which is not
+          *  ideal because it means the model does not see the state values set
+          *  by the stepper.
+          */
+        void normalize_quaternions(StateType& all_states, //!< States of all bodies in the system
+                                   const size_t i         //!< Index of the body under consideration
+                               );
+
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;
         EnvironmentAndFrames env;
