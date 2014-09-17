@@ -48,10 +48,10 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
    \Psi_P\right](x,y,0,t) = 0$$
 3. Le potentiel étant indéterminé si l'on n'impose pas une condition sur le sens
    de propagation de l'énergie, on imposera la condition de rayonnement de
-   Sommerfeld (phénomène divergent ; l'énergie s'éloigne de l'obstacle) : $\sqrt{r}\left|\frac{\partial
-   \Psi_P}{\partial r} - i |k|\Psi_P\right| \rightarrow 0$
-   quand $r=\sqrt{x^2 + y^2}\rightarrow \infty$ (condition de rayonnement à
-   l'infini). Cette condition exprime que, au loin, les ondes de
+   Sommerfeld (phénomène divergent ; l'énergie s'éloigne de l'obstacle) :
+   $\sqrt{r}\lvert{\partial \Psi_P}{\partial r} - i \lvert k\rvert\Psi_P\rvert
+   \rightarrow 0$ quand $r=\sqrt{x^2 + y^2}\rightarrow \infty$ (condition de
+   rayonnement à l'infini). Cette condition exprime que, au loin, les ondes de
    diffraction-radiation ont pour nombre d'onde $k$, se propagent dans la
    direction radiale et leur amplitude décroît comme $1/\sqrt{r}$.
 4. Le fond étant imperméable, la composante suivant $z$ de la vitesse y est
@@ -116,8 +116,14 @@ $$F_{\mbox{hd}} = F_E + F_R$$
 ## Calcul des efforts d'excitation
 
 Les efforts de Froude-Krylov sont calculés en intégrant la pression dynamique
-sur la carène. Les efforts de diffraction sont interpolés à partir de tables
-calculées par des logiciels de calculs hydrodynamiques tels qu'M_Aqua+.
+sur la carène et en supposant que le corps ne perturbe pas la houle. En
+pratique, ils peuvent être négligés dès que le corps est à plus d'une-demi
+longueur d'onde de profondeur.
+
+Les efforts de diffraction sont interpolés à partir de tables
+calculées par des logiciels de calculs hydrodynamiques basés sur des méthodes
+potentielles, tels qu'Aqua+. Ils sont paramétrés en pulsation, incidence et
+vitesse d'avance (RAO d'efforts).
 
 
 
@@ -170,9 +176,9 @@ $$ F_{\mbox{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
 
 On pose :
 
-$$M_A_{jk}(\omega) = -\rho \int_C \Psi_j^R \frac{\partial \Psi_k^R}{\partial n} dS$$ (en
+$${M_A}_{jk}(\omega) = -\rho \int_C \Psi_j^R \frac{\partial \Psi_k^R}{\partial n} dS$$ (en
 kg)
-$$B_r_{jk}(\omega) = -\rho \omega \int_C \Psi_j^I \frac{\partial \Psi_k^R}{\partial n} dS$$ (en
+$${B_r}_{jk}(\omega) = -\rho \omega \int_C \Psi_j^I \frac{\partial \Psi_k^R}{\partial n} dS$$ (en
 kg/s)
 
 On appelle $M_A$ matrice des masses ajoutées (qui vient de ce que le solide
@@ -182,8 +188,8 @@ dispersion d'énergie par les vagues générées par le solide).
 
 On a alors :
 
-$$F_{\mbox{R}_k} = -\left(\sum_j U_j B_r_{jk}(\omega) + \sum_j \frac{dU_j}{dt}
-M_A_{jk}(\omega)\right)$$
+$$F_{\mbox{R}_k} = -\left(\sum_j U_j {B_r}_{jk}(\omega) + \sum_j \frac{dU_j}{dt}
+{M_A}_{jk}(\omega)\right)$$
 
 En prenant $U=d\eta/dt$, on obtient une formulation vectorielle des efforts dans
 le domaine fréquentiel :
@@ -203,7 +209,7 @@ de l'évaluation de l'énergie cinétique du fluide :
 
 $$2Ec = \rho\int_{\omega} (\nabla \Phi)^2 dV = \rho \int_{\partial \Omega} \Phi
 \frac{\partial \Phi}{\partial n} dS = \rho f_k f_l \int_{\partial \Omega}\Phi_k
-\frac{\partial \Phi_l}{\partial n} dS = \rho M_A_{kl} f_k f_l$$
+\frac{\partial \Phi_l}{\partial n} dS = \rho {M_A}_{kl} f_k f_l$$
 
 
 ## Ecriture en temporel
@@ -232,7 +238,7 @@ décompose en deux composantes :
   vitesse $v_j$) de l'écoulement durant une excitation impulsionnelle
   (Dirac) d'amplitude $v_j$ sur l'axe $j$,
 - d'autre part, $\phi_{j}(t)$ le potentiel de vitesse (normalisé par le
-  déplacement $\Delta_x_j$) de l'écoulement à la suite du Dirac sur l'axe $j$.
+  déplacement ${\Delta_x}_j$) de l'écoulement à la suite du Dirac sur l'axe $j$.
 
 On a donc, pour une excitation impulsionnelle de l'axe $j$ :
 
@@ -273,7 +279,7 @@ On a alors :
 $$-F_{jk} = \ddot{x_j}A_{jk} + \int_{-\infty}^t K(t-\tau)\dot{x_j}(\tau)
 d\tau$$
 
-## Relation entre l'écriture temporelle et l'écriture fréquentielle
+## Relation entre les formulations temporelle et fréquentielle
 
 La formulation fréquentielle s'écrit :
 
@@ -291,7 +297,7 @@ des matrices $A$ et $K$ utilisées par la formulation temporelle ?
 Deux ans après Cummins, en 1964, Ogilvie propose une méthode pour déterminer
 les matrices $A$ et $K$ en fonction des matrices $M_A$ et $B_r$.
 Pour ce faire, il considère que le mouvement du solide est oscillant de période
-\omega :
+$\omega$ :
 
 $X(t) = \cos(\omega t)$
 
@@ -307,7 +313,7 @@ $F_R = \omega^2 A \cos(\omega t) + \omega \int_{-\infty}^t K(t-\tau)
 
 En effectuant le changement de variable $\tau\leftarrow t-\tau$ on a :
 
-$F_R = \omega^2 A \cos(\omega t) + \omega \int_0^{+\infty}^t K(\tau)
+$F_R = \omega^2 A \cos(\omega t) + \omega \int_0^{+\infty} K(\tau)
 \sin(\omega(t-\tau))d\tau$
 
 En développant $\sin(\omega(t-\tau)$ on obtient :
