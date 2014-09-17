@@ -18,9 +18,10 @@ YAML :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 bodies:
-  external forces:
-   - model: gravity
-   - model: non-linear hydrostatic
+  - name: ship
+    external forces:
+     - model: gravity
+     - model: non-linear hydrostatic
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Efforts de gravité
@@ -62,7 +63,18 @@ de Froude-Krylov et les efforts de diffraction.
 
 #### Efforts de Froude-Krylov
 
+$$F_{\mbox{FK}}=\rho \int_{C} \frac{d\Phi_I}{dt} dS $$
+
+$\Phi_I$ est le potentiel des vitesses de la houle incidente
+
+En pratique, comme il s'agit d'un effort surfacique, il est traité de la même
+manière que les efforts hydrostatiques : 
+
 #### Efforts de diffraction
+
+Les efforts de diffraction sont interpolés à partir des RAO d'efforts (réponse
+impulsionnelle) obtenus sous forme de fichiers HDB par des codes potentiels
+tels que Dyodore.
 
 ### Efforts de radiation
 
@@ -71,20 +83,46 @@ de radiation.
 
 #### Masses ajoutées
 
-$F_{mbox{MA}} = M_A 
+$$F_{mbox{MA}} = M_A(\infty)\frac{d\nu}{dt}$$ 
+
+La matrice de masse ajoutées à pulsation infinie $M_A(\infty)$ est, là encore,
+calculée par un code potentiel type Dyodore ou Aqua+. Elle est supposée
+constante au cours du temps et est renseignée dans la section bodies/dynamics:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+bodies:
+  - name: ship
+    dynamics:
+        added mass matrix at the center of buoyancy projected in the body frame:
+            frame: ship
+            row 1: [3.519e4,0,0,0,0,0]
+            row 2: [0,3.023e5,0,0,0,0]
+            row 3: [0,0,1.980e5,0,0,0]
+            row 4: [0,0,0,3.189e5,0,0]
+            row 5: [0,0,0,0,8.866e6,0]
+            row 6: [0,0,0,0,0,6.676e6]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Elle est exprimée au centre de flottaison projeté dans le repère body et chaque
+coefficient est en kg.
 
 #### Amortissement non-visqueux de radiation
 
+$$F_R = - \int_{-\infty}^tK(t-\tau)\frac{d\nu}{dt}(\tau)d\tau$$
+
+La matrice $K$ des fonctions de retard est fournie. On utilise la base de
+données Diodore. En pratique, on se limite à 25 secondes pour le produit de
+convolution.
 
 ## Efforts de Coriolis
-
-### Expression
 
 Afin de ne pas réaliser de changement de repère intempestif sur des quantités
 complexes telles que les masses ajoutées, le bilan des efforts est écrit dans le
 repère navire, qui n'est pas galliléen. Par conséquent, il faut tenir compte des
 termes d'inertie d'entraînement (accélération de Coriolis) dus aux mouvements du
 référentiel navire par rapport au repère NED, considéré comme galliléen.
+
+### Expression
 
 $$F_{\mbox{coriolis}} = C(\nu)\nu$$
 
