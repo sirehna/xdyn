@@ -10,8 +10,6 @@
 
 #include <fstream> // std::cout
 
-#include "DsObserver.hpp"
-
 #include "tr1_macros.hpp"
 #include TR1INC(memory)
 
@@ -24,7 +22,6 @@ bool invalid(const InputData& input);
 po::options_description get_options_description(InputData& input_data);
 int get_input_data(int argc, char **argv, InputData& input_data);
 std::string description();
-TR1(shared_ptr)<DsObserver> build_observer(const InputData& input);
 void copy_stream(const std::ostream& from_stream, std::ostream& to_stream);
 void initialize_stream(std::ofstream& os, const InputData& input);
 
