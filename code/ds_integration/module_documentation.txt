@@ -1,7 +1,0 @@
-/**
-@defgroup ds_integration DS ntegration
-\brief The purpose of this module is to allow usage of a DataSource as simulated
-system (as defined by the simulation module).
-
-
-*/
