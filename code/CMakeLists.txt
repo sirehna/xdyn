@@ -95,11 +95,9 @@ ADD_SUBDIRECTORY(text_file_reader)
 ADD_SUBDIRECTORY(decode_unit)
 ADD_SUBDIRECTORY(wave_models)
 ADD_SUBDIRECTORY(data_source)
-ADD_SUBDIRECTORY(data_source_serializers)
 ADD_SUBDIRECTORY(yaml_parser)
 ADD_SUBDIRECTORY(simulator_yaml_parser)
 ADD_SUBDIRECTORY(solver)
-ADD_SUBDIRECTORY(ds_integration)
 ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
@@ -113,8 +111,6 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:text_file_reader_static>
                                    $<TARGET_OBJECTS:csv_file_reader_object>)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
-        data_source_serializers_static
-        ds_integration_static
         simulator_static
         parser_extensions_static
         model_wrappers_static
@@ -151,11 +147,9 @@ SET(TEST_EXE run_all_tests)
 ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:data_source_tests>
         $<TARGET_OBJECTS:solver_tests>
-        $<TARGET_OBJECTS:data_source_serializers_tests>
         $<TARGET_OBJECTS:random_data_generator_tests>
         $<TARGET_OBJECTS:text_file_reader_tests>
         $<TARGET_OBJECTS:hydro_models_tests>
-        $<TARGET_OBJECTS:ds_integration_tests>
         $<TARGET_OBJECTS:kinematics_tests>
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
