@@ -56,6 +56,8 @@ D'après la section "expression des efforts hydrodynamiques", les efforts
 hydrodynamiques se décomposent en efforts d'excitation d'une part, et en efforts
 de radiation d'autre part.
 
+![](images/efforts_hydros.svg "Catégories de modèles d'efforts hydrodynamiques")
+
 ### Efforts d'excitation dus à la houle
 
 Les efforts d'excitation sont à leur tour la somme de deux efforts : les efforts
