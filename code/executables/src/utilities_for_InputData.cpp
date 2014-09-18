@@ -12,7 +12,6 @@
 #include "utilities_for_InputData.hpp"
 #include "InputData.hpp"
 #include "OptionPrinter.hpp"
-#include "DsCsvObserver.hpp"
 
 std::string description()
 {
@@ -104,9 +103,3 @@ void initialize_stream(std::ofstream& os, const InputData& input)
     if (input.output_csv.empty()) copy_stream(std::cout, os);
 }
 
-TR1(shared_ptr)<DsObserver> build_observer(const InputData& input)
-{
-    std::ofstream os;
-    initialize_stream(os, input);
-    return TR1(shared_ptr)<DsObserver>(new DsCsvObserver(os));
-}
