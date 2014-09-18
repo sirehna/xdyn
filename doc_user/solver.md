@@ -68,7 +68,7 @@ $$k_1 = f(X, t, U, P),$$
 $$k_2 = f\left(X+\frac{dt}{2}\cdot k_1, t + \frac{dt}{2}, U, P\right)$$
 $$k_2 = f\left(X+\frac{dt}{2}\cdot k_2, t + \frac{dt}{2}, U, P\right)$$
 $$k_4 = f\left(X+dt\cdot k_3, t+dt, U, P\right)$$
- 
+
 C'est un stepper très utilisé dans l'ingénierie.
 
 ![](images/runge_kutta_4_stability.svg "Domaine de stabilité de la méthode Runge-Kutta
