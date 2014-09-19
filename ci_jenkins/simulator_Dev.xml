@@ -8,7 +8,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://git_simulateur@130.66.124.6:/home/git_projets/simulator.git</url>
+        <url>ssh://git_simulateur@130.66.124.6/home/git_projets/simulator.git</url>
         <credentialsId>ff1eeca5-f706-43db-9832-beed196dcef7</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
