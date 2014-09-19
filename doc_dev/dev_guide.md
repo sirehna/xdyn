@@ -130,12 +130,13 @@ GCC 4.6 is used on the Linux platform (Ubuntu) because:
 | [Notepad++](http://www.notepad-plus-plus.org)     | Open source code editor                   |
 
 ## Thirdparty libraries
-| Library                                           | Description                               |
-| :-------------------------                        | :---------------------------------------- |
-| [GTest](http://www.code.google.com/p/googletest)  | MIT Open-source unit testing library      |
-| [Yaml-CPP](http://www.code.google.com/p/yaml-cpp) | MIT Open-source input/output file library |
-| [Lapack](http://www.netlib.org/lapack)            | BSD Open-source C/Fortran algebra library |
-| [Eigen](http://www.eigen.tuxfamily.org/index.php) | MPL2 Open-source C++ algebra library      |
+| Library                                           | Description                                                    |
+| :------------------------------------------------ | :------------------------------------------------------------- |
+| [Boost](http://www.boost.org/)                    | MIT|BSD Open-source peer-reviewed portable C++ source libraries|
+| [GTest](http://www.code.google.com/p/googletest)  | MIT Open-source unit testing library                           |
+| [Yaml-CPP](http://www.code.google.com/p/yaml-cpp) | MIT Open-source input/output file library                      |
+| [Lapack](http://www.netlib.org/lapack)            | BSD Open-source C/Fortran algebra library                      |
+| [Eigen](http://www.eigen.tuxfamily.org/index.php) | MPL2 Open-source C++ algebra library                           |
 
 
 # Development policy and coding rules
@@ -208,7 +209,7 @@ Below are the typical commands to run to compile the simulator:
 * ``cd simulator``
 * ``mkdir build``
 * ``cd build``
-* ``cmake -G "MSYS Makefiles" ..``
+* ``cmake -G "MSYS Makefiles" ../code``
 * ``make``
 * ``make doc``
 * ``make install``
