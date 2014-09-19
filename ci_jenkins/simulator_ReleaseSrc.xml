@@ -9,7 +9,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://git_simulateur@130.66.124.7/home/public/DOP/EtudesEnCours/ETI140043/simulator.git</url>
+        <url>ssh://git_simulateur@130.66.124.6:/home/git_projets/simulator.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
