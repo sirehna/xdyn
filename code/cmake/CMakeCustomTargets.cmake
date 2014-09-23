@@ -21,15 +21,17 @@ IF(DOXYGEN_FOUND)
         DEPENDS ${TEST_EXE}
     )
 
-    IF (WIN32)
-    FIND_PACKAGE(XmlTransform)
-    ADD_CUSTOM_TARGET(functionalities
-        COMMAND ${XMLTRANSFORM_EXECUTABLE} -s:test_output.xml -xsl:${CMAKE_CURRENT_SOURCE_DIR}/get_specifications.xml -o:list_of_functionalities.html
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/list_of_functionalities.html ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating list of functionalities from GTest's output XML" VERBATIM
-        DEPENDS test_results
-    )
+    IF(WIN32)
+		FIND_PACKAGE(XmlTransform)
+		IF(XMLTRANSFORM_FOUND)
+			ADD_CUSTOM_TARGET(functionalities
+				COMMAND ${XMLTRANSFORM_EXECUTABLE} -s:test_output.xml -xsl:${CMAKE_CURRENT_SOURCE_DIR}/get_specifications.xml -o:list_of_functionalities.html
+				COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/list_of_functionalities.html ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html
+				WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+				COMMENT "Generating list of functionalities from GTest's output XML" VERBATIM
+				DEPENDS test_results
+			)
+		ENDIF()
     ENDIF()
 
     IF(PANDOC)
@@ -42,7 +44,8 @@ IF(DOXYGEN_FOUND)
         MESSAGE(STATUS "Program PANDOC not found -> Developer documentation will be uncomplete")
     ENDIF()
 
-    IF (WIN32)
+    IF(WIN32 AND XMLTRANSFORM_FOUND)
+		MESSAGE(STATUS "Adding doc_dev target WITH dependency on target functionalities")
         ADD_CUSTOM_TARGET(doc_dev
             ${DOXYGEN_EXECUTABLE} Doxyfile
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -50,6 +53,7 @@ IF(DOXYGEN_FOUND)
             DEPENDS functionalities
             )
     ELSE()
+		MESSAGE(STATUS "Adding doc_dev target WITHOUT dependency on target functionalities (No XML transform was found)")
         ADD_CUSTOM_TARGET(doc_dev
             ${DOXYGEN_EXECUTABLE} Doxyfile
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
