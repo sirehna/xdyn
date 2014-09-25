@@ -15,9 +15,9 @@
 #include "MeshException.hpp"
 //#include "stl_writer.hpp"
 
-#include "test_macros.hpp"
+#include <ssc/macros.hpp>
 
-mesh_manipulationsTest::mesh_manipulationsTest() : a(DataGenerator(321))
+mesh_manipulationsTest::mesh_manipulationsTest() : a(ssc::random_data_generator::DataGenerator(321))
 {
 }
 

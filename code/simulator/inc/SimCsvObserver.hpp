@@ -8,7 +8,7 @@
 #ifndef SIMCSVOBSERVER_HPP_
 #define SIMCSVOBSERVER_HPP_
 
-#include "Point.hpp"
+#include <ssc/kinematics.hpp>
 
 #include <ostream>
 #include <string>
@@ -45,7 +45,7 @@ class SimCsvObserver
         void observe_waves(const Sim& sys, const double t);
         void initialize_simulation_output_stream(const Sim& sys);
         void initialize_title();
-        void initialize_wave_output_stream(const std::vector<Point>& free_surface);
+        void initialize_wave_output_stream(const std::vector<ssc::kinematics::Point>& free_surface);
 
         std::ostream& simulation_stream;
         std::ostream& wave_stream;

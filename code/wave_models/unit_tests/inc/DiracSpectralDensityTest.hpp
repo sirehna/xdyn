@@ -9,7 +9,7 @@
 #define DIRACSPECTRALDENSITYTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 class DiracSpectralDensityTest : public ::testing::Test
 {
@@ -18,7 +18,7 @@ class DiracSpectralDensityTest : public ::testing::Test
         virtual ~DiracSpectralDensityTest();
         virtual void SetUp();
         virtual void TearDown();
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
 
 };
 

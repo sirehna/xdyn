@@ -8,7 +8,7 @@
 #include "Sim.hpp"
 #include "SimulatorBuilder.hpp"
 #include "SimObserver.hpp"
-#include "solve.hpp"
+#include <ssc/solver.hpp>
 
 class YamlSimulatorInput;
 
@@ -24,7 +24,7 @@ Sim get_system(const YamlSimulatorInput& yaml, const std::map<std::string, Vecto
 template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)
 {
     SimObserver observer;
-    quicksolve<StepperType>(sys, tstart, tend, dt, observer);
+    ssc::solver::quicksolve<StepperType>(sys, tstart, tend, dt, observer);
     return observer.get();
 }
 

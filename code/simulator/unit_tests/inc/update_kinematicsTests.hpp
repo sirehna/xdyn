@@ -9,17 +9,17 @@
 #define UPDATE_KINEMATICSTESTS_HPP_
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 class update_kinematicsTests : public ::testing::Test
 {
     protected:
         update_kinematicsTests();
-	    virtual ~update_kinematicsTests();
+        virtual ~update_kinematicsTests();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
-		static const Body body;
+        ssc::random_data_generator::DataGenerator a;
+        static const Body body;
 
 };
 

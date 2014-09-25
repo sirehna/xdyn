@@ -9,7 +9,7 @@
 #define SIMULATORBUILDERTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 #include "YamlSimulatorInput.hpp"
 #include "SimulatorBuilder.hpp"
 
@@ -22,7 +22,7 @@ class SimulatorBuilderTest : public ::testing::Test
         virtual void TearDown();
         std::string customize(const std::string& body_name, const std::string& something) const;
 
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
         static const YamlSimulatorInput input;
         SimulatorBuilder builder;
 };

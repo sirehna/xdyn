@@ -10,7 +10,7 @@
 
 #include "YamlSimulatorInput.hpp"
 
-#include "Exception.hpp"
+#include <ssc/exception_handling.hpp>
 
 class YamlCheckerException: public Exception
 {

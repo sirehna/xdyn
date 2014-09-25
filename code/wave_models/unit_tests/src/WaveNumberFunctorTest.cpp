@@ -10,7 +10,7 @@
 #include "WaveNumberFunctorTest.hpp"
 #include "WaveNumberFunctor.hpp"
 
-WaveNumberFunctorTest::WaveNumberFunctorTest() : a(DataGenerator(54545))
+WaveNumberFunctorTest::WaveNumberFunctorTest() : a(ssc::random_data_generator::DataGenerator(54545))
 {
 }
 

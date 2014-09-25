@@ -15,7 +15,7 @@
 
 #define NB_TRIALS 10
 
-PiersonMoskowitzSpectrumTest::PiersonMoskowitzSpectrumTest() : a(DataGenerator(84212))
+PiersonMoskowitzSpectrumTest::PiersonMoskowitzSpectrumTest() : a(ssc::random_data_generator::DataGenerator(84212))
 {
 }
 

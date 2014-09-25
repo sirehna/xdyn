@@ -68,7 +68,7 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
     return ret;
 }
-#include "test_macros.hpp"
+
 typedef std::pair<double,size_t> ValIdx;
 bool comparator ( const ValIdx& l, const ValIdx& r);
 bool comparator ( const ValIdx& l, const ValIdx& r)

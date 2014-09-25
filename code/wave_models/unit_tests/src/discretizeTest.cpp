@@ -17,7 +17,7 @@
 #include "DiracDirectionalSpreading.hpp"
 #include "WaveModelException.hpp"
 
-discretizeTest::discretizeTest() : a(DataGenerator(8421))
+discretizeTest::discretizeTest() : a(ssc::random_data_generator::DataGenerator(8421))
 {
 }
 

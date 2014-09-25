@@ -3,7 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "MeshIntersector.hpp"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 class MeshIntersectorTest : public ::testing::Test
 {
@@ -12,7 +12,7 @@ class MeshIntersectorTest : public ::testing::Test
         virtual ~MeshIntersectorTest();
         virtual void SetUp();
         virtual void TearDown();
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
 };
 
 #endif

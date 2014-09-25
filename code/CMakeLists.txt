@@ -38,6 +38,11 @@ INCLUDE(CMakeGMock)
 
 INCLUDE(CMakeOutputDirectories)
 
+FIND_PACKAGE(ssc REQUIRED COMPONENTS random_data_generator numeric)
+if (ssc_FOUND)
+    message("ssc_INCLUDE_DIRS = ${ssc_INCLUDE_DIRS}")
+    message("ssc_VERSION = ${ssc_VERSION}")
+endif()
 #############################################################################
 # Third party libraries
 # Boost
@@ -78,54 +83,45 @@ ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
-ADD_SUBDIRECTORY(exception_handling)
 ADD_SUBDIRECTORY(base91x)
-ADD_SUBDIRECTORY(macros)
-ADD_SUBDIRECTORY(random_data_generator)
-ADD_SUBDIRECTORY(numeric)
 ADD_SUBDIRECTORY(simulator_external_data_structures)
 ADD_SUBDIRECTORY(test_data_generator)
 ADD_SUBDIRECTORY(stl_reader)
 ADD_SUBDIRECTORY(stl_writer)
 ADD_SUBDIRECTORY(binary_stl_data)
 ADD_SUBDIRECTORY(mesh)
-ADD_SUBDIRECTORY(text_file_reader)
-ADD_SUBDIRECTORY(decode_unit)
 ADD_SUBDIRECTORY(wave_models)
-ADD_SUBDIRECTORY(data_source)
-ADD_SUBDIRECTORY(yaml_parser)
 ADD_SUBDIRECTORY(simulator_yaml_parser)
-ADD_SUBDIRECTORY(solver)
-ADD_SUBDIRECTORY(kinematics)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(model_wrappers)
 ADD_SUBDIRECTORY(simulator)
 ADD_SUBDIRECTORY(parser_extensions)
-ADD_SUBDIRECTORY(csv_file_reader)
 ADD_SUBDIRECTORY(executables)
 
-ADD_LIBRARY(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:text_file_reader_static>
-                                   $<TARGET_OBJECTS:csv_file_reader_object>)
+ADD_LIBRARY(${PROJECT_NAME} SHARED
+        $<TARGET_OBJECTS:simulator>
+        $<TARGET_OBJECTS:parser_extensions>
+        $<TARGET_OBJECTS:model_wrappers>
+        $<TARGET_OBJECTS:wave_models>
+        $<TARGET_OBJECTS:stl_reader>
+        $<TARGET_OBJECTS:stl_writer>
+        $<TARGET_OBJECTS:hydro_models>
+        $<TARGET_OBJECTS:mesh>
+        $<TARGET_OBJECTS:simulator_yaml_parser>
+        $<TARGET_OBJECTS:simulator_external_data_structures>
+        )
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
-        simulator_static
-        parser_extensions_static
-        model_wrappers_static
-        wave_models_static
-        stl_reader_static
-        stl_writer_static
-        hydro_models_static
-        mesh_static
-        kinematics_static
-        simulator_yaml_parser_static
-        yaml_parser_static
-        simulator_external_data_structures_static
         yaml-cpp
-        decode_unit_static
-        data_source_static
-        exception_handling_static
-        gfortran                    # static
+        gfortran
+        numeric_shared
+        kinematics_shared
+        data_source_shared
+        yaml_parser_shared
+        text_file_reader_shared
+        decode_unit_shared
+        csv_file_reader_shared
         )
 
 INSTALL(TARGETS ${PROJECT_NAME}
@@ -143,22 +139,16 @@ ENDIF(BUILD_TESTING)
 SET(TEST_EXE run_all_tests)
 
 ADD_EXECUTABLE(${TEST_EXE}
-        $<TARGET_OBJECTS:data_source_tests>
-        $<TARGET_OBJECTS:solver_tests>
-        $<TARGET_OBJECTS:random_data_generator_tests>
-        $<TARGET_OBJECTS:text_file_reader_tests>
         $<TARGET_OBJECTS:hydro_models_tests>
-        $<TARGET_OBJECTS:kinematics_tests>
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
         $<TARGET_OBJECTS:stl_reader_tests>
         $<TARGET_OBJECTS:stl_writer_tests>
         $<TARGET_OBJECTS:simulator_tests>
-        $<TARGET_OBJECTS:numeric_tests>
-        $<TARGET_OBJECTS:csv_file_reader_tests>
         $<TARGET_OBJECTS:wave_models_tests>
         $<TARGET_OBJECTS:kissfft_static>
         $<TARGET_OBJECTS:model_wrappers_tests>
+        $<TARGET_OBJECTS:test_data_generator>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
@@ -166,11 +156,10 @@ SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
 TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest gtest_main                 # static
         gmock gmock_main                 # static
-        random_data_generator_static     # static
-        test_data_generator_static       # static
         base91x_static
         binary_stl_data_static
         ${PROJECT_NAME}
+        random_data_generator_shared
         )
 
 ADD_TEST(NAME ${PROJECT_NAME}_TEST_001

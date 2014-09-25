@@ -12,17 +12,15 @@
 #include <string>
 
 #include "Body.hpp"
-#include "EulerAngles.hpp"
-#include "Point.hpp"
+#include <ssc/kinematics.hpp>
 #include "Res.hpp"
 #include "StateMacros.hpp"
 #include "YamlSimulatorInput.hpp"
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 class SimulatorBuilder;
-class Kinematics;
 
 /** \author cec
  *  \date Jul 1, 2014, 9:52:49 AM
@@ -45,12 +43,12 @@ class OutputTransformer
         void update_kinematics(const StateType& x) const;
         void fill(std::map<std::string,double>& out, const YamlPositionOutput& position) const;
         void fill(std::map<std::string,double>& out, const YamlAnglesOutput& angle) const;
-        EulerAngles convert(const RotationMatrix& R) const;
+        ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R) const;
 
         YamlSimulatorInput input;
         std::vector<Body> bodies;
-        std::map<std::string,Point> points;
-        TR1(shared_ptr)<Kinematics> k;
+        std::map<std::string,ssc::kinematics::Point> points;
+        TR1(shared_ptr)<ssc::kinematics::Kinematics> k;
 };
 
 #endif /* OUTPUTTRANSFORMER_HPP_ */

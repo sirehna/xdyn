@@ -12,11 +12,11 @@
 #include "STL_data.hpp"
 #include "StlReader.hpp"
 #include "yaml_data.hpp"
-#include "PointMatrix.hpp"
+#include <ssc/kinematics.hpp>
 
 const Body BodyBuilderTest::body = BodyBuilderTest::build_body();
 
-BodyBuilderTest::BodyBuilderTest() : a(DataGenerator(1218221))
+BodyBuilderTest::BodyBuilderTest() : a(ssc::random_data_generator::DataGenerator(1218221))
 {
 }
 

@@ -1,7 +1,7 @@
 #ifndef STLREADEREXCEPTION_HPP_
 #define STLREADEREXCEPTION_HPP_
 
-#include "Exception.hpp"
+#include <ssc/exception_handling.hpp>
 
 class StlReaderException : public Exception
 {

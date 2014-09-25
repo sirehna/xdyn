@@ -8,7 +8,7 @@
 #include "force_parsersTest.hpp"
 #include "force_parsers.hpp"
 
-force_parsersTest::force_parsersTest() : a(DataGenerator(86556))
+force_parsersTest::force_parsersTest() : a(ssc::random_data_generator::DataGenerator(86556))
 {
 }
 

@@ -8,11 +8,12 @@
 #ifndef ENVIRONMENTANDFRAMES_HPP_
 #define ENVIRONMENTANDFRAMES_HPP_
 
-#include "tr1_macros.hpp"
+#include <ssc/macros/tr1_macros.hpp>
 #include TR1INC(memory)
 
-class Kinematics;
-typedef TR1(shared_ptr)<Kinematics> KinematicsPtr;
+#include <ssc/kinematics.hpp>
+
+typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
 class SurfaceElevationInterface;
 typedef TR1(shared_ptr)<SurfaceElevationInterface> WaveModelPtr;
 

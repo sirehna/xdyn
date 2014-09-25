@@ -8,13 +8,12 @@
 #include "GravityForceModel.hpp"
 #include "GravityForceModelTest.hpp"
 #include "generate_body_for_tests.hpp"
-#include "Transform.hpp"
-#include "RotationMatrix.hpp"
+#include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
 #define PI (4.0*atan(1.0))
 
-GravityForceModelTest::GravityForceModelTest() : a(DataGenerator(45454))
+GravityForceModelTest::GravityForceModelTest() : a(ssc::random_data_generator::DataGenerator(45454))
 {
 }
 
@@ -35,12 +34,12 @@ TEST_F(GravityForceModelTest, example)
 //! [GravityForceModelTest example]
     GravityForceModel::Input input;
     input.g = 9.81;
-    input.k = KinematicsPtr(new Kinematics());
-    input.k->add(kinematics::Transform(Point("NED"), BODY));
+    input.k = KinematicsPtr(new ssc::kinematics::Kinematics());
+    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     GravityForceModel F(input);
     Body b = get_body(BODY);
     b.m = 100;
-    const Wrench f = F(b, a.random<double>());
+    const ssc::kinematics::Wrench f = F(b, a.random<double>());
 //! [GravityForceModelTest example]
 //! [GravityForceModelTest expected output]
     ASSERT_EQ(BODY, f.get_frame());
@@ -73,7 +72,7 @@ TEST_F(GravityForceModelTest, example)
  */
 TEST_F(GravityForceModelTest, example_with_an_orientation)
 {
-    using namespace kinematics;
+    using namespace ssc::kinematics;
     const double EPS = 1e-11;
     const double cosPhi   = 0.0;
     const double cosTheta = 0.5*sqrt(3);
@@ -88,7 +87,7 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     GravityForceModel::Input input;
     input.g = 9.81;
     input.k = KinematicsPtr(new Kinematics());
-    input.k->add(kinematics::Transform(rot, "NED", BODY));
+    input.k->add(Transform(rot, "NED", BODY));
     GravityForceModel F(input);
     Body b = get_body(BODY);
     b.m = 100;

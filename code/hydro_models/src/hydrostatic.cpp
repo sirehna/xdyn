@@ -7,7 +7,7 @@
 
 #include "hydrostatic.hpp"
 #include "HydrostaticException.hpp"
-#include "pairwise_sum.hpp"
+#include <ssc/numeric.hpp>
 #include "mesh_manipulations.hpp"
 
 #include <algorithm> // std::count_if
@@ -44,22 +44,22 @@ double hydrostatic::average_immersion(const std::vector<double>& nodes //!< Coor
 }
 
 
-UnsafeWrench hydrostatic::dF(const Point& O,    //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                             const EPoint& C,   //!< Point where the force is applied (barycentre of the facet)
-                             const double rho,  //!< Density of the fluid (in kg/m^3)
-                             const double g,    //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-                             const double z,    //!< Relative immersion (in metres)
-                             const EPoint& dS   //!< Unit normal vector multiplied by the surface of the facet
+ssc::kinematics::UnsafeWrench hydrostatic::dF(const ssc::kinematics::Point& O,    //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                              const EPoint& C,                    //!< Point where the force is applied (barycentre of the facet)
+                                              const double rho,                   //!< Density of the fluid (in kg/m^3)
+                                              const double g,                     //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                                              const double z,                     //!< Relative immersion (in metres)
+                                              const EPoint& dS                    //!< Unit normal vector multiplied by the surface of the facet
                             )
 {
     const EPoint F = -rho*g*z*dS; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
-    return UnsafeWrench(O, F, (C-O.v).cross(F));
+    return ssc::kinematics::UnsafeWrench(O, F, (C-O.v).cross(F));
 }
 
-Wrench hydrostatic::force(const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-                          const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                          const double rho,                       //!< Density of the fluid (in kg/m^3)
-                          const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+ssc::kinematics::Wrench hydrostatic::force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                                           const ssc::kinematics::Point& O,             //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                           const double rho,                            //!< Density of the fluid (in kg/m^3)
+                                           const EPoint& g                              //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                          )
 {
     // QUICK AND DIRTY HACK : choose either solution
@@ -67,13 +67,13 @@ Wrench hydrostatic::force(const const_MeshIntersectorPtr& intersector,   //!< Me
     // return exact_force(intersector,O,rho,g);
 }
 
-Wrench hydrostatic::fast_force(const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-                          const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                          const double rho,                       //!< Density of the fluid (in kg/m^3)
-                          const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+ssc::kinematics::Wrench hydrostatic::fast_force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                          const ssc::kinematics::Point& O,                                   //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                          const double rho,                                                  //!< Density of the fluid (in kg/m^3)
+                          const EPoint& g                                                    //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                          )
 {
-    UnsafeWrench F(O);
+    ssc::kinematics::UnsafeWrench F(O);
     const double orientation_factor = intersector->mesh->orientation_factor;
     const double g_norm = g.norm();
     for (auto that_facet = intersector->begin_immersed() ; that_facet != intersector->end_immersed() ; ++that_facet)
@@ -86,13 +86,13 @@ Wrench hydrostatic::fast_force(const const_MeshIntersectorPtr& intersector,   //
     return F;
 }
 
-Wrench hydrostatic::exact_force(const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-                                const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                                const double rho,                       //!< Density of the fluid (in kg/m^3)
-                                const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+ssc::kinematics::Wrench hydrostatic::exact_force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                                                 const ssc::kinematics::Point& O,             //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                                 const double rho,                            //!< Density of the fluid (in kg/m^3)
+                                                 const EPoint& g                              //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                                 )
 {
-    UnsafeWrench F(O);
+    ssc::kinematics::UnsafeWrench F(O);
     const double orientation_factor = intersector->mesh->orientation_factor;
     const double g_norm = g.norm();
     const EPoint down_direction = g / g_norm;

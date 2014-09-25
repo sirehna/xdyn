@@ -9,7 +9,7 @@
 #define SIMTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 #include "GeometricTypes3d.hpp"
 
 class SimTest : public ::testing::Test
@@ -19,7 +19,7 @@ class SimTest : public ::testing::Test
         virtual ~SimTest();
         virtual void SetUp();
         virtual void TearDown();
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
         static const VectorOfVectorOfPoints anthineas_stl;
 };
 

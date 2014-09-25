@@ -9,13 +9,11 @@ FILE(GLOB SRC src/DefaultSurfaceElevationTest.cpp
 # Include directories
 include_directories(inc)
 include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
-include_directories(${random_data_generator_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
-include_directories(${kinematics_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${test_macros_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
 
 # Using C++ 2011

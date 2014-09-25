@@ -5,12 +5,8 @@
  *      Author: cady
  */
 
-#include "coriolis_and_centripetal.hpp"
-#include "Kinematics.hpp"
-#include "KinematicsException.hpp"
-#include "RotationMatrix.hpp"
+#include <ssc/kinematics.hpp>
 #include "Sim.hpp"
-#include "Transform.hpp"
 #include "update_kinematics.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "YamlWaveModelInput.hpp"
@@ -73,11 +69,11 @@ std::vector<std::string> Sim::get_names_of_bodies() const
     return ret;
 }
 
-UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body, const double t) const
+ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body, const double t) const
 {
     const Eigen::Vector3d& uvw_in_body_frame = Eigen::Vector3d::Map(_U(x,body));
     const Eigen::Vector3d& pqr = Eigen::Vector3d::Map(_P(x,body));
-    UnsafeWrench S(coriolis_and_centripetal(bodies[body].G,bodies[body].solid_body_inertia.get(),uvw_in_body_frame, pqr));
+    ssc::kinematics::UnsafeWrench S(coriolis_and_centripetal(bodies[body].G,bodies[body].solid_body_inertia.get(),uvw_in_body_frame, pqr));
     for (auto that_force=forces[body].begin() ; that_force != forces[body].end() ; ++that_force)
     {
         S += (**that_force)(bodies[body], t);
@@ -85,7 +81,7 @@ UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body, const dou
     return S;
 }
 
-void Sim::calculate_state_derivatives(const Wrench& sum_of_forces,
+void Sim::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                       const MatrixPtr& inverse_of_the_total_inertia,
                                       const StateType& x,
                                       StateType& dx_dt,
@@ -97,7 +93,7 @@ void Sim::calculate_state_derivatives(const Wrench& sum_of_forces,
     dXdt = inverse_of_the_total_inertia->operator*(sum_of_forces.to_vector());
 
     // dx/dt, dy/dt, dz/dt
-    const RotationMatrix& R = env.k->get("NED", bodies[i].name).get_rot();
+    const ssc::kinematics::RotationMatrix& R = env.k->get("NED", bodies[i].name).get_rot();
     const Eigen::Map<const Eigen::Vector3d> uvw_in_body_frame(_U(x,i));
     const Eigen::Vector3d uvw_in_ned_frame(R*uvw_in_body_frame);
     *_X(dx_dt,i) = uvw_in_ned_frame(0);
@@ -117,7 +113,7 @@ void Sim::calculate_state_derivatives(const Wrench& sum_of_forces,
     *_QK(dx_dt,i) = 0.5*(double)dq_dt.z();
 }
 
-std::vector<Point> Sim::get_waves(const double t//!< Current instant
+std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current instant
                                   ) const
 {
     try
@@ -131,11 +127,11 @@ std::vector<Point> Sim::get_waves(const double t//!< Current instant
             return env.w->get_waves_on_mesh(env.k, t);
         }
     }
-    catch (const KinematicsException& e)
+    catch (const ssc::kinematics::KinematicsException& e)
     {
         std::stringstream ss;
         ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
         THROW(__PRETTY_FUNCTION__, SimException, ss.str());
     }
-    return std::vector<Point>();
+    return std::vector<ssc::kinematics::Point>();
 }

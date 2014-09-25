@@ -8,22 +8,22 @@
 #include "update_kinematics.hpp"
 #include "Body.hpp"
 #include "BodyBuilder.hpp"
-#include "Kinematics.hpp"
+#include <ssc/kinematics.hpp>
 #include "StateMacros.hpp"
 #include "YamlAngle.hpp"
 #include "YamlBody.hpp"
 
 #define SQUARE(x) ((x)*(x))
 
-Point get_origin(const StateType& x, const size_t i)
+ssc::kinematics::Point get_origin(const StateType& x, const size_t i)
 {
-    return Point("NED", *_X(x,i),
+    return ssc::kinematics::Point("NED", *_X(x,i),
                         *_Y(x,i),
                         *_Z(x,i));
 }
 
 
-RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t i)
+ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t i)
 {
     const Eigen::Quaternion<double> q(*_QR(x,i),
                                       *_QI(x,i),
@@ -32,21 +32,21 @@ RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t i)
     return q.matrix();
 }
 
-Point get_position_of_body_relative_to_mesh(const Body& body)
+ssc::kinematics::Point get_position_of_body_relative_to_mesh(const Body& body)
 {
-    return Point(std::string("mesh(")+body.name+")", body.x_relative_to_mesh,
+    return ssc::kinematics::Point(std::string("mesh(")+body.name+")", body.x_relative_to_mesh,
                                                      body.y_relative_to_mesh,
                                                      body.z_relative_to_mesh);
 }
 
-kinematics::Transform get_transform_from_mesh_to(const Body& body)
+ssc::kinematics::Transform get_transform_from_mesh_to(const Body& body)
 {
-    return kinematics::Transform(get_position_of_body_relative_to_mesh(body), body.mesh_to_body, body.name);
+    return ssc::kinematics::Transform(get_position_of_body_relative_to_mesh(body), body.mesh_to_body, body.name);
 }
 
-kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& body, const size_t idx)
+ssc::kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& body, const size_t idx)
 {
-    return kinematics::Transform(get_origin(x, idx), get_rot_from_ned_to(x, idx), body.name);
+    return ssc::kinematics::Transform(get_origin(x, idx), get_rot_from_ned_to(x, idx), body.name);
 }
 
 void update_kinematics(StateType x, const Body& body, const size_t idx, const KinematicsPtr& k)
@@ -61,7 +61,7 @@ StateType get_initial_states(const YamlRotation& convention, const std::vector<Y
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
         const YamlAngle angle = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle;
-        const RotationMatrix R = builder.angle2matrix(angle);
+        const ssc::kinematics::RotationMatrix R = builder.angle2matrix(angle);
         const Eigen::Quaternion<double> q(R);
         *_X(ret,i) = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.x;
         *_Y(ret,i) = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.y;

@@ -10,7 +10,7 @@
 
 #include "gtest/gtest.h"
 #include "Body.hpp"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 class BodyBuilderTest : public ::testing::Test
 {
@@ -22,7 +22,7 @@ class BodyBuilderTest : public ::testing::Test
         virtual ~BodyBuilderTest();
         virtual void SetUp();
         virtual void TearDown();
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
         static const Body body;
 };
 

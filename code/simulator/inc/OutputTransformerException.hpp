@@ -8,7 +8,7 @@
 #ifndef OUTPUTTRANSFORMEREXCEPTION_HPP_
 #define OUTPUTTRANSFORMEREXCEPTION_HPP_
 
-#include "Exception.hpp"
+#include <ssc/exception_handling.hpp>
 
 class OutputTransformerException: public Exception
 {

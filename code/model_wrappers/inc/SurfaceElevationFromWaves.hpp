@@ -8,7 +8,7 @@
 #ifndef SURFACEELEVATIONFROMWAVES_HPP_
 #define SURFACEELEVATIONFROMWAVES_HPP_
 
-#include "PointMatrix.hpp"
+#include <ssc/kinematics.hpp>
 #include "SurfaceElevationInterface.hpp"
 
 class WaveModel;
@@ -25,8 +25,8 @@ class WaveModel;
 class SurfaceElevationFromWaves : public SurfaceElevationInterface
 {
     public:
-        SurfaceElevationFromWaves(const std::vector<TR1(shared_ptr)<WaveModel> >& models, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
-        SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<PointMatrix>& output_mesh = TR1(shared_ptr)<PointMatrix>(new PointMatrix("NED", 0)));
+        SurfaceElevationFromWaves(const std::vector<TR1(shared_ptr)<WaveModel> >& models, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh = TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix("NED", 0)));
+        SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh = TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix("NED", 0)));
 
     private:
         SurfaceElevationFromWaves(); // Disabled

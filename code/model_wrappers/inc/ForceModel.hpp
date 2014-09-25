@@ -8,11 +8,11 @@
 #ifndef FORCEMODEL_HPP_
 #define FORCEMODEL_HPP_
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 #include <vector>
-#include "Wrench.hpp"
+#include <ssc/kinematics.hpp>
 
 class Body;
 
@@ -21,7 +21,7 @@ class ForceModel
     public:
         struct Input{};
         virtual ~ForceModel(){}
-        virtual Wrench operator()(const Body& body, const double t) const = 0;
+        virtual ssc::kinematics::Wrench operator()(const Body& body, const double t) const = 0;
 };
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
 typedef std::vector<ForcePtr> ListOfForces;

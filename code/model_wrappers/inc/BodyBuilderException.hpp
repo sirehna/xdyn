@@ -8,7 +8,7 @@
 #ifndef BODYBUILDEREXCEPTION_HPP_
 #define BODYBUILDEREXCEPTION_HPP_
 
-#include "Exception.hpp"
+#include <ssc/exception_handling.hpp>
 
 class BodyBuilderException: public Exception
 {

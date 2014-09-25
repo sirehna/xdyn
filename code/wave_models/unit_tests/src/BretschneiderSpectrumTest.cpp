@@ -11,7 +11,7 @@
 
 #define NB_TRIALS 10
 
-BretschneiderSpectrumTest::BretschneiderSpectrumTest() : a(DataGenerator(7779))
+BretschneiderSpectrumTest::BretschneiderSpectrumTest() : a(ssc::random_data_generator::DataGenerator(7779))
 {
 }
 

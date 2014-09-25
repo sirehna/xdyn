@@ -47,7 +47,7 @@ class BodyBuilder
         /**  \details Converts (phi,theta,psi) to a rotation matrix, taking the
          *            rotation convention into account
           */
-        RotationMatrix angle2matrix(const YamlAngle& a) const;
+        ssc::kinematics::RotationMatrix angle2matrix(const YamlAngle& a) const;
 
     private:
         BodyBuilder(); //Disabled

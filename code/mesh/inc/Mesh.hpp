@@ -5,7 +5,7 @@
 #include <vector>
 #include "GeometricTypes3d.hpp"
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 typedef std::array<std::vector<size_t>,2> ArrayOfEdges;

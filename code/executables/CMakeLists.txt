@@ -12,19 +12,11 @@ ENDIF()
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${boost_program_options_descriptions_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${exception_handling_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${text_file_reader_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${data_source_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${ds_integration_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${test_macros_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${kinematics_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${solver_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${csv_file_reader_INCLUDE_DIRS})
-include_directories(${yaml_parser_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_yaml_parser_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${stl_writer_INCLUDE_DIRS})
@@ -33,6 +25,7 @@ INCLUDE_DIRECTORIES(${base91x_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${wave_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
 include_directories(${model_wrappers_INCLUDE_DIRS})
+include_directories(${hydro_models_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/utilities_for_InputData.cpp "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
 CONFIGURE_FILE(src/postprocessing.cpp "${CMAKE_CURRENT_BINARY_DIR}/postprocessing.cpp" @ONLY)
@@ -54,12 +47,12 @@ TARGET_LINK_LIBRARIES(convert_stl_files_to_code ${Boost_PROGRAM_OPTIONS_LIBRARY}
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code boost_program_options_descriptions_static base91x_static)
 
 
-ADD_EXECUTABLE(generate_yaml_example src/generate_yaml_examples.cpp src/file_writer.cpp)
-ADD_EXECUTABLE(generate_stl_examples src/generate_stl_examples.cpp src/file_writer.cpp)
+ADD_EXECUTABLE(generate_yaml_example src/generate_yaml_examples.cpp src/file_writer.cpp
+                                     $<TARGET_OBJECTS:test_data_generator>)
+ADD_EXECUTABLE(generate_stl_examples src/generate_stl_examples.cpp src/file_writer.cpp
+                                     $<TARGET_OBJECTS:test_data_generator>)
 
-TARGET_LINK_LIBRARIES(generate_yaml_example test_data_generator_static)
-TARGET_LINK_LIBRARIES(generate_stl_examples test_data_generator_static
-                                            binary_stl_data_static
+TARGET_LINK_LIBRARIES(generate_stl_examples binary_stl_data_static
                                             base91x_static)
 TARGET_LINK_LIBRARIES(generate_stl_examples simulatorIrtJv)
 

@@ -34,7 +34,7 @@ void SimCsvObserver::observe(const Sim& sys, const double t)
 
 void SimCsvObserver::observe_waves(const Sim& sys, const double t)
 {
-    const std::vector<Point> free_surface = sys.get_waves(t);
+    const std::vector<ssc::kinematics::Point> free_surface = sys.get_waves(t);
     if (not(initialized)) initialize_wave_output_stream(free_surface);
     if (not(free_surface.empty()))
     {
@@ -108,7 +108,7 @@ void SimCsvObserver::initialize_simulation_output_stream(const Sim& sys)
     initialize_title();
 }
 
-void SimCsvObserver::initialize_wave_output_stream(const std::vector<Point>& free_surface)
+void SimCsvObserver::initialize_wave_output_stream(const std::vector<ssc::kinematics::Point>& free_surface)
 {
     if (not(free_surface.empty()))
     {

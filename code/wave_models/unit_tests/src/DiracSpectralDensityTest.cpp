@@ -11,7 +11,7 @@
 
 #define NB_TRIALS 10
 
-DiracSpectralDensityTest::DiracSpectralDensityTest() : a(DataGenerator(2))
+DiracSpectralDensityTest::DiracSpectralDensityTest() : a(ssc::random_data_generator::DataGenerator(2))
 {
 }
 

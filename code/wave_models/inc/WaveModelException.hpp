@@ -8,7 +8,7 @@
 #ifndef WAVEMODELEXCEPTION_HPP_
 #define WAVEMODELEXCEPTION_HPP_
 
-#include "Exception.hpp"
+#include <ssc/exception_handling.hpp>
 
 class WaveModelException: public Exception
 {

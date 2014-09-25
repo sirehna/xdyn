@@ -8,7 +8,7 @@
 #ifndef SIMULATORYAMLPARSEREXCEPTION_HPP_
 #define SIMULATORYAMLPARSEREXCEPTION_HPP_
 
-#include "Exception.hpp"
+#include <ssc/exception_handling.hpp>
 
 class SimulatorYamlParserException : public Exception
 {

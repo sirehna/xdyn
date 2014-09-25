@@ -28,8 +28,7 @@ set(SRC src/YamlRotation.cpp
 
 
 include_directories(inc)
-include_directories(${exception_handling_INCLUDE_DIRS})
-include_directories(${test_macros_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME}_static STATIC ${SRC})
+add_library(${PROJECT_NAME} OBJECT ${SRC})
 

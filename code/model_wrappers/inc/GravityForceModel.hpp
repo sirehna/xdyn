@@ -9,11 +9,11 @@
 #define GRAVITYFORCEMODEL_HPP_
 
 #include "ForceModel.hpp"
-#include "Kinematics.hpp"
+#include <ssc/kinematics.hpp>
 
 class Body;
 class EnvironmentAndFrames;
-
+typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
 class GravityForceModel : public ForceModel
 {
     public:
@@ -25,7 +25,7 @@ class GravityForceModel : public ForceModel
             KinematicsPtr k;
         };
         GravityForceModel(const Input& in);
-        Wrench operator()(const Body& body, const double t) const;
+        ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
 
     private:
         GravityForceModel();

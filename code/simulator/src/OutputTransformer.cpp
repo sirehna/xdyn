@@ -6,14 +6,12 @@
  */
 
 #include "OutputTransformer.hpp"
-#include "Kinematics.hpp"
 #include "update_kinematics.hpp"
 #include "SimulatorBuilder.hpp"
-#include "Transform.hpp"
 #include "OutputTransformerException.hpp"
-#include "rotation_matrix_builders.hpp"
+#include <ssc/kinematics.hpp>
 
-OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(builder.get_parsed_yaml()), bodies(std::vector<Body>()), points(std::map<std::string,Point>()), k(TR1(shared_ptr)<Kinematics>(new Kinematics()))
+OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(builder.get_parsed_yaml()), bodies(std::vector<Body>()), points(std::map<std::string,ssc::kinematics::Point>()), k(TR1(shared_ptr)<ssc::kinematics::Kinematics>(new ssc::kinematics::Kinematics()))
 {
     MeshMap m;
     for (auto that_body = input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
@@ -23,7 +21,7 @@ OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(bu
     bodies = builder.get_bodies(m);
     for (auto that_point = input.points.begin() ; that_point != input.points.end() ; ++that_point)
     {
-        points[that_point->name] = Point(that_point->frame,that_point->x,that_point->y,that_point->z);
+        points[that_point->name] = ssc::kinematics::Point(that_point->frame,that_point->x,that_point->y,that_point->z);
     }
 }
 
@@ -40,7 +38,7 @@ template <typename T> double get_axis_value(const T& P, const std::string& axis)
                    return 0;
 }
 
-template <> double get_axis_value<EulerAngles>(const EulerAngles& P, const std::string& axis)
+template <> double get_axis_value<ssc::kinematics::EulerAngles>(const ssc::kinematics::EulerAngles& P, const std::string& axis)
 {
     if (axis=="x") return P.phi;
     if (axis=="y") return P.theta;
@@ -62,14 +60,14 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlPositi
     const auto that_point = points.find(position.point);
     if (that_point != points.end())
     {
-        const Point O1P = that_point->second;
+        const ssc::kinematics::Point O1P = that_point->second;
         const auto b1 = O1P.get_frame();
         const auto b2 = position.relative_to_frame;
         const auto b3 = position.projected_in_frame;
-        const kinematics::Transform T13 = k->get(b1, b3);
+        const ssc::kinematics::Transform T13 = k->get(b1, b3);
         const auto T12 = k->get(b1, b2);
-        const Point O1O2 = T12.get_point();
-        const Point P = Point(b3,T13.get_rot()*(O1P - O1O2));
+        const ssc::kinematics::Point O1O2 = T12.get_point();
+        const ssc::kinematics::Point P = ssc::kinematics::Point(b3,T13.get_rot()*(O1P - O1O2));
         for (auto that_axis=position.axes.begin() ; that_axis != position.axes.end() ; ++that_axis)
         {
             const auto varname = *that_axis + "(" + that_point->first + " in " + b1 + " / " + b2 + " -> " + b3 + ")";
@@ -88,9 +86,9 @@ bool match(const std::vector<std::string>& convention, const std::string& first,
     return (convention.at(0) == first) and (convention.at(1) == second) and (convention.at(2) == third);
 }
 
-EulerAngles OutputTransformer::convert(const RotationMatrix& R) const
+ssc::kinematics::EulerAngles OutputTransformer::convert(const ssc::kinematics::RotationMatrix& R) const
 {
-    using namespace kinematics;
+    using namespace ssc::kinematics;
     if (input.rotations.order_by == "angle")
     {
         if (match(input.rotations.convention, "z", "y'", "x''"))
@@ -108,7 +106,7 @@ EulerAngles OutputTransformer::convert(const RotationMatrix& R) const
 
 void OutputTransformer::fill(std::map<std::string,double>& out, const YamlAnglesOutput& angle) const
 {
-    using namespace kinematics;
+    using namespace ssc::kinematics;
     const auto b1 = angle.frame;
     const auto b2 = angle.relative_to_frame;
     const auto b3 = angle.projected_in_frame;

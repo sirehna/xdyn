@@ -8,13 +8,13 @@
 #include "update_kinematics.hpp"
 #include "update_kinematicsTests.hpp"
 #include "BodyBuilderTest.hpp"
-#include "Kinematics.hpp"
+#include <ssc/kinematics.hpp>
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
 
 #define EPS (1E-10)
 
-update_kinematicsTests::update_kinematicsTests() : a(DataGenerator(121))
+update_kinematicsTests::update_kinematicsTests() : a(ssc::random_data_generator::DataGenerator(121))
 {
 }
 
@@ -34,14 +34,14 @@ const Body update_kinematicsTests::body = BodyBuilderTest::build_body();
 
 TEST_F(update_kinematicsTests, frame_of_origin_point_is_correct)
 {
-    const Point O = get_origin(a.random_vector_of<double>().of_size(1000), 46);
+    const ssc::kinematics::Point O = get_origin(a.random_vector_of<double>().of_size(1000), 46);
     ASSERT_EQ("NED", O.get_frame());
 }
 
 TEST_F(update_kinematicsTests, can_build_rotation_matrix_from_states)
 {
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
-    const RotationMatrix R = get_rot_from_ned_to(x, 1);
+    const ssc::kinematics::RotationMatrix R = get_rot_from_ned_to(x, 1);
     ASSERT_DOUBLE_EQ(1-2*7*7-2*13*13, (double)R(0,0));
     ASSERT_DOUBLE_EQ(2*5*7+2*13*3,    (double)R(1,0));
     ASSERT_DOUBLE_EQ(2*5*13-2*7*3,    (double)R(2,0));
@@ -57,7 +57,7 @@ TEST_F(update_kinematicsTests, can_build_rotation_matrix_from_states)
 
 TEST_F(update_kinematicsTests, can_return_position_of_body_mesh_from_Body_object)
 {
-    const Point P = get_position_of_body_relative_to_mesh(body);
+    const ssc::kinematics::Point P = get_position_of_body_relative_to_mesh(body);
     ASSERT_EQ("mesh(body 1)", P.get_frame());
     ASSERT_DOUBLE_EQ(10,P.x());
     ASSERT_DOUBLE_EQ(0.21,P.y());
@@ -66,7 +66,7 @@ TEST_F(update_kinematicsTests, can_return_position_of_body_mesh_from_Body_object
 
 TEST_F(update_kinematicsTests, can_compute_transform_from_mesh_to_body_from_Body_object)
 {
-    kinematics::Transform T = get_transform_from_mesh_to(body);
+    ssc::kinematics::Transform T = get_transform_from_mesh_to(body);
     ASSERT_EQ("mesh(body 1)", T.get_from_frame());
     ASSERT_EQ("body 1", T.get_to_frame());
     ASSERT_EQ("mesh(body 1)", T.get_point().get_frame());
@@ -92,7 +92,7 @@ TEST_F(update_kinematicsTests, can_get_transform_from_NED_to_body_from_states)
     Body body;
     body.name = a.random<std::string>();
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
-    const kinematics::Transform T = get_transform_from_ned_to(x, body, 1);
+    const ssc::kinematics::Transform T = get_transform_from_ned_to(x, body, 1);
     ASSERT_EQ("NED", T.get_from_frame());
     ASSERT_EQ(body.name, T.get_to_frame());
     ASSERT_EQ("NED", T.get_point().get_frame());
@@ -115,7 +115,7 @@ TEST_F(update_kinematicsTests, can_get_transform_from_NED_to_body_from_states)
 
 TEST_F(update_kinematicsTests, can_update_Kinematics_object_from_states)
 {
-    KinematicsPtr k(new Kinematics());
+    KinematicsPtr k(new ssc::kinematics::Kinematics());
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     update_kinematics(x, body, 1, k);
     const auto T = k->get("NED", body.name);

@@ -15,7 +15,7 @@
 
 #include "GeometricTypes3d.hpp"
 #include "MeshIntersector.hpp"
-#include "UnsafeWrench.hpp"
+#include <ssc/kinematics.hpp>
 
 class Polygon;
 
@@ -49,12 +49,12 @@ namespace hydrostatic
       *           also the frame of reference of the calculated Wrench object.
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest dF_example
       */
-    UnsafeWrench dF(const Point& O,         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                    const EPoint& C,        //!< Point where the force is applied (barycentre of the facet)
-                    const double rho,       //!< Density of the fluid (in kg/m^3)
-                    const double g,         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-                    const double immersion, //!< Relative immersion of the barycentre (in metres)
-                    const EPoint& dS        //!< Unit normal vector multiplied by the surface of the facet
+    ssc::kinematics::UnsafeWrench dF(const ssc::kinematics::Point& O,         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                     const EPoint& C,        //!< Point where the force is applied (barycentre of the facet)
+                                     const double rho,       //!< Density of the fluid (in kg/m^3)
+                                     const double g,         //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                                     const double immersion, //!< Relative immersion of the barycentre (in metres)
+                                     const EPoint& dS        //!< Unit normal vector multiplied by the surface of the facet
         );
 
     /**  \author cec
@@ -64,10 +64,10 @@ namespace hydrostatic
       *  \returns
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
       */
-    Wrench force(const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-                 const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                 const double rho,                       //!< Density of the fluid (in kg/m^3)
-                 const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+    ssc::kinematics::Wrench force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                                  const ssc::kinematics::Point& O,             //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                  const double rho,                            //!< Density of the fluid (in kg/m^3)
+                                  const EPoint& g                              //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
         );
 
     /**  \brief Computes the hydrostatic force acting on a body (fast but inexact)
@@ -75,24 +75,22 @@ namespace hydrostatic
       *  \returns
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
       */
-    Wrench fast_force(
-            const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-            const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-            const double rho,                       //!< Density of the fluid (in kg/m^3)
-            const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
-        );
+    ssc::kinematics::Wrench fast_force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                                       const ssc::kinematics::Point& O,             //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                       const double rho,                            //!< Density of the fluid (in kg/m^3)
+                                       const EPoint& g                              //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+                                      );
 
     /**  \brief Computes the hydrostatic force acting on a body applied at exact application point
       *  \details
       *  \returns
       *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest force_example
       */
-    Wrench exact_force(
-            const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-            const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-            const double rho,                       //!< Density of the fluid (in kg/m^3)
-            const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
-        );
+    ssc::kinematics::Wrench exact_force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                                        const ssc::kinematics::Point& O,             //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                        const double rho,                            //!< Density of the fluid (in kg/m^3)
+                                        const EPoint& g                              //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+                                        );
 
 
     /** \details Compute normal to free surface, oriented downward, knowing the facet vertex, immersion of each vertex and down direction (all in mesh frame)

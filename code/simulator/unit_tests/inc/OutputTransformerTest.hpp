@@ -11,7 +11,7 @@
 #include <map>
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 #include "YamlSimulatorInput.hpp"
 
 class OutputTransformerTest : public ::testing::Test
@@ -27,7 +27,7 @@ class OutputTransformerTest : public ::testing::Test
         static const YamlSimulatorInput yaml1;
         static const YamlSimulatorInput yaml2;
 
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
         std::vector<std::map<std::string,double> > out1;
         std::vector<std::map<std::string,double> > out2;
 
