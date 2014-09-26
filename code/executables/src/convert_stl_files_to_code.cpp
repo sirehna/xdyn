@@ -3,7 +3,7 @@
 
 #include "mesh_manipulations.hpp"
 #include "StlReader.hpp"
-#include "TextFileReader.hpp"
+#include <ssc/text_file_reader.hpp>
 #include "base91x.hpp"
 
 std::string description();
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    const TextFileReader stl_file(std::vector<std::string>(1, std::string(argv[argc-1])));
+    const ssc::text_file_reader::TextFileReader stl_file(std::vector<std::string>(1, std::string(argv[argc-1])));
     const VectorOfVectorOfPoints points = read_stl(stl_file.get_contents());
 
     std::cout << "const std::string s = \"" << write_binary_cpp(points) << "\";\n";
