@@ -115,18 +115,24 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
         yaml-cpp
         gfortran
-        numeric_shared
-        kinematics_shared
-        data_source_shared
-        yaml_parser_shared
-        text_file_reader_shared
-        decode_unit_shared
-        csv_file_reader_shared
-        )
+)
 
 INSTALL(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
         LIBRARY DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
+
+MACRO(add_imported_lib libname)
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${libname})
+    get_target_property(MYLIB_LOCATION ${libname} LOCATION)
+    install(FILES ${MYLIB_LOCATION} DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
+ENDMACRO()
+add_imported_lib(numeric_shared)
+add_imported_lib(kinematics_shared)
+add_imported_lib(data_source_shared)
+add_imported_lib(yaml_parser_shared)
+add_imported_lib(text_file_reader_shared)
+add_imported_lib(decode_unit_shared)
+add_imported_lib(csv_file_reader_shared)
 
 #############################################################################
 # Testing part

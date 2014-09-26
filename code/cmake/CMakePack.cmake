@@ -46,10 +46,10 @@ IF(UNIX OR MSYS)
         SET(CPACK_STRIP_FILES "./simulateurIrtJv_installer")
         SET(CPACK_SOURCE_STRIP_FILES "")
         SET(CPACK_PACKAGE_EXECUTABLES "" "")
-        #SET(CPACK_GENERATOR "DEB")
-        #SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Charles-Edouard Cady")
+        SET(CPACK_GENERATOR "DEB")
+        SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Charles-Edouard Cady")
         ##CPACK_PACKAGING_INSTALL_PREFIX : Sets the default root that the generated package installs into, '/usr' is the default for the debian and redhat generators
-        SET(CPACK_GENERATOR "RPM")
+        #SET(CPACK_GENERATOR "RPM")
         SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}")
         SET(CPACK_PACKAGING_INSTALL_PREFIX "$HOME/simulateurIrtJv")
         ##To generate a RPM file, one needs program rpmbuild that can be
