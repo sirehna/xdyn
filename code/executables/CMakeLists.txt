@@ -42,19 +42,23 @@ TARGET_LINK_LIBRARIES(sim ${Boost_PROGRAM_OPTIONS_LIBRARY})
 TARGET_LINK_LIBRARIES(sim boost_program_options_descriptions_static)
 
 ADD_EXECUTABLE(convert_stl_files_to_code ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp)
-TARGET_LINK_LIBRARIES(convert_stl_files_to_code simulatorIrtJv)
-TARGET_LINK_LIBRARIES(convert_stl_files_to_code ${Boost_PROGRAM_OPTIONS_LIBRARY})
-TARGET_LINK_LIBRARIES(convert_stl_files_to_code boost_program_options_descriptions_static base91x_static)
+TARGET_LINK_LIBRARIES(convert_stl_files_to_code
+                      simulatorIrtJv
+                      ${Boost_PROGRAM_OPTIONS_LIBRARY}
+                      boost_program_options_descriptions_static
+                      base91x_static)
 
+ADD_EXECUTABLE(generate_yaml_example
+               src/generate_yaml_examples.cpp src/file_writer.cpp
+               $<TARGET_OBJECTS:test_data_generator>)
 
-ADD_EXECUTABLE(generate_yaml_example src/generate_yaml_examples.cpp src/file_writer.cpp
-                                     $<TARGET_OBJECTS:test_data_generator>)
-ADD_EXECUTABLE(generate_stl_examples src/generate_stl_examples.cpp src/file_writer.cpp
-                                     $<TARGET_OBJECTS:test_data_generator>)
-
-TARGET_LINK_LIBRARIES(generate_stl_examples binary_stl_data_static
-                                            base91x_static)
-TARGET_LINK_LIBRARIES(generate_stl_examples simulatorIrtJv)
+ADD_EXECUTABLE(generate_stl_examples
+               src/generate_stl_examples.cpp src/file_writer.cpp
+               $<TARGET_OBJECTS:test_data_generator>)
+TARGET_LINK_LIBRARIES(generate_stl_examples
+                      binary_stl_data_static
+                      base91x_static
+                      simulatorIrtJv)
 
 ################################################################################
 INSTALL(TARGETS sim
