@@ -44,8 +44,8 @@ is [Jenkins](http://www.jenkins-ci.org).
 It is used on a Windows OS (Windows XP) and a POSIX OS (Ubuntu).
 
 # File repositories
-Because of the nature of the project, two GIT file
-repositories hosted on [Sir6](http://130.66.124.6/public/DOP/EtudesEnCours/ETI140043/) are be used :
+Because of the nature of the project, two GIT
+repositories hosted on [Sir6](ssh://git_simulateur@130.66.124.6/home/git_projets/simulator.git) are  used :
 
 * One that contains all developments performed during the project.
   It contains all the source code of
@@ -158,10 +158,11 @@ Development will follow the Git branching model described [here](http://nvie.com
 * Namespaces & variables are lower case, separated by underscores
 * No m_ in front of member variables (need for such a convention is a sign
   classes have too many members)
-* Use RAI objects (such as std::tr1::shared_ptr) for memory management
+* Use RAII objects (such as std::tr1::shared_ptr) for memory management
 * In general, there should not be more than half a dozen members & half a dozen
   methods per class
-* Use forward-declarations (if practical) to split compilation units
+* Use forward-declarations (if practical) to split compilation units but don't
+  forward-declare the STL for heaven's sake!
 * Heavy use of STL & external, proven libraries (such as boost, Lapack, Blas, Eigen...)
   (do not reinvent the wheel)
 * For more informations, check the [wiki](http://sir6:8080/xwiki/bin/view/Espace+de+travail+commun/Checklist+de+Revue+de+code).
@@ -178,7 +179,7 @@ Development will follow the Git branching model described [here](http://nvie.com
 * Test the setup is correct by running ``ssh git_simulateur@sir7`` from a MinGW
   terminal. If a prompt appears, setup is correct. If a password is requested,
   the RSA key was not found.
-* You can then run ``git clone ssh://git_simulateur@130.66.124.7/home/public/DOP/EtudesEnCours/ETI140043/simulator.git``
+* You can then run ``git clone ssh://git_simulateur@130.66.124.6/home/git_projets/simulator.git``
   which will retrieve the source code.
 
 ## Instructions for Eclipse
