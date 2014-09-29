@@ -68,16 +68,31 @@ INSTALL(TARGETS postprocessing
 INSTALL(TARGETS convert_stl_files_to_code
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
+
+IF(WIN32)
+    ADD_CUSTOM_TARGET(copy_library_to_run_executables
+                      POST_BUILD
+                      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
+                      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                      DEPENDS simulatorIrtJv
+                      COMMENT "Perform library copy")
+ELSE()
+    ADD_CUSTOM_TARGET(copy_library_to_run_executables
+                      POST_BUILD
+                      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                      COMMENT "")
+ENDIF()
 ADD_CUSTOM_COMMAND(TARGET generate_yaml_example
                    POST_BUILD
                    COMMAND generate_yaml_example demos
                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                   DEPENDS copy_library_to_run_executables
                    COMMENT "Generate YAML simulation input data files")
-
 ADD_CUSTOM_COMMAND(TARGET generate_stl_examples
                    POST_BUILD
                    COMMAND generate_stl_examples demos
                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                   DEPENDS copy_library_to_run_executables
                    COMMENT "Generate STL mesh input data files")
 
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/plot.py
