@@ -167,6 +167,134 @@ Development will follow the Git branching model described [here](http://nvie.com
   (do not reinvent the wheel)
 * For more informations, check the [wiki](http://sir6:8080/xwiki/bin/view/Espace+de+travail+commun/Checklist+de+Revue+de+code).
 
+## How to add a force model
+
+When adding a force model, we must:
+
+- Write the code, of course, and perhaps a wrapper if we want the code to be
+  reusable outside this project (or if we're using external code)
+- Tell the program how to parse the corresponding YAML
+
+### Coding the force model
+
+The only class the simulator understands in terms of force models is the
+ForceModel class. We can either subclass it directly (as in GravityForceModel
+for example) or we first create the model independently from the simulator &
+then wrap it with a ForceModel (as in HydrostaticForceModel). The choice
+depends essentially on whether the code is likely to be used outside the
+simulator & the volume of model code with respect to the amount of boiler
+plate code to wrap it. Whatever the situation is, a class needs to be created
+in the model_wrappers module. The model's parameters are embedded in a Input
+structure (as in GravityForceModel::Input). Appart from its parameters, a force
+model has access to the environement (wind & waves) the current instant $t$ and
+the body's parameters (inertia, mass...) & states (rotation matrix, position
+relative to mesh). The force model also has access to a Kinematics object to
+change reference frames.
+
+### Coding the parser
+
+First we must decide on the YAML that will configure the force model. For
+instance, for a 'foo' model:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+bodies:
+  - name: ship
+    external forces:
+     - model: foo
+       bar: [1,2,3]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then, we write the corresponding external data structure in the
+simulator_external_data_structures module:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+struct YamlFoo
+{
+    YamlFoo();
+    std::vector<int> bar;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once we've done that, we write the parser in simulator_yaml_parser:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+YamlDiracDirection parse_foo(const std::string& yaml)
+{
+    YamlFoo ret;
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    try
+    {
+        node["bar"] >> ret.bar;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing section foo/bar: " << e.what();
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    return ret;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The final step is letting the simulator know that there is a parser for this
+model. To do that, we add a parser extension which will build the internal data
+structure from the external YAML we just defined. In the module
+parser_extensions, we add a builder in builder.hpp like this:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+template <>
+class ForceBuilder<FooForceModel> : public ForceBuilderInterface
+{
+    public:
+        ForceBuilder();
+        boost::optional<ForcePtr> try_to_parse(const std::string& model, const
+std::string& yaml, const EnvironmentAndFrames& env) const;
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+which we implement in builders.cpp:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+boost::optional<ForcePtr> ForceBuilder<FooForceModel>::try_to_parse(const std::string& model, const std::string& , const EnvironmentAndFrames& env) const
+{
+    boost::optional<ForcePtr> ret;
+    if (model == "foo")
+    {
+        const YamlFoo yaml_data = parse_foo(yaml);
+        FooForceModel::Input input(yaml_data);
+        ret.reset(ForcePtr(new FooForceModel(input)));
+    }
+    return ret;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then letting the simulator know about it is just a matter of modifiying
+get_builder from the simulator_api.cpp file in the simulator module:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
+{
+    SimulatorBuilder builder(yaml);
+    builder.can_parse<GravityForceModel>()
+           .can_parse<DefaultSurfaceElevation>()
+           .can_parse<HydrostaticForceModel>()
+           .can_parse<BretschneiderSpectrum>()
+           .can_parse<JonswapSpectrum>()
+           .can_parse<PiersonMoskowitzSpectrum>()
+           .can_parse<DiracSpectralDensity>()
+           .can_parse<DiracDirectionalSpreading>()
+           .can_parse<Cos2sDirectionalSpreading>()
+           .can_parse<SurfaceElevationFromWaves>()
+           .can_parse<Airy>()
+           .can_parse<FooForceModel>();
+    return builder;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 # Instructions to setup the development environment
 
 ## Get the source code
