@@ -39,10 +39,10 @@ INCLUDE(CMakeGMock)
 INCLUDE(CMakeOutputDirectories)
 
 FIND_PACKAGE(ssc REQUIRED COMPONENTS random_data_generator numeric)
-if (ssc_FOUND)
-    message("ssc_INCLUDE_DIRS = ${ssc_INCLUDE_DIRS}")
-    message("ssc_VERSION = ${ssc_VERSION}")
-endif()
+IF(ssc_FOUND)
+    MESSAGE(STATUS "SSC : ssc_INCLUDE_DIRS = ${ssc_INCLUDE_DIRS}")
+    MESSAGE(STATUS "SSC : ssc_VERSION = ${ssc_VERSION}")
+ENDIF()
 #############################################################################
 # Third party libraries
 # Boost
