@@ -6,7 +6,7 @@ PROJECT(executables)
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
 IF (NOT(MSVC))
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
 INCLUDE_DIRECTORIES(inc)
@@ -24,8 +24,8 @@ INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${base91x_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${wave_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
-include_directories(${model_wrappers_INCLUDE_DIRS})
-include_directories(${hydro_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${hydro_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${model_wrappers_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/utilities_for_InputData.cpp "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
 CONFIGURE_FILE(src/postprocessing.cpp "${CMAKE_CURRENT_BINARY_DIR}/postprocessing.cpp" @ONLY)
