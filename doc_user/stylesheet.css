@@ -1,0 +1,35 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f1e9dd;
+  -webkit-font-smoothing: antialiased;
+  /* prevent subpixel antialiasing, which thickens the text */
+  /* text-rendering: optimizeLegibility; */
+  /* turned off ligatures due to bug 5945455 */ }
+
+body {
+  color: #222;
+  line-height: 1.4;
+  font-family: "Liberation Sans","proxima-nova-1","proxima-nova-2","Helvetica Neue",Calibri,Arial,Helvetica,sans-serif;
+  font-weight: 100;
+  letter-spacing:.1;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding:0 10px; }
+
+
+h2 {
+    color:#333;
+    font-size: 20px;
+    margin: 20px 0 20px;
+    padding:0;
+    border-bottom: 1px solid #999999;
+}
+
+h3{
+    display: inline
+    background-image: none;
+}
