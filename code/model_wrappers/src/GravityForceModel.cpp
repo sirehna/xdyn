@@ -13,7 +13,7 @@
 #include <ssc/kinematics.hpp>
 
 GravityForceModel::Input::Input() : g(0),
-                                    k(KinematicsPtr())
+                                    k(ssc::kinematics::KinematicsPtr())
 {
 }
 

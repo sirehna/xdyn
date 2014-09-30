@@ -13,7 +13,7 @@
 
 class Body;
 class EnvironmentAndFrames;
-typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
+
 class GravityForceModel : public ForceModel
 {
     public:
@@ -22,7 +22,7 @@ class GravityForceModel : public ForceModel
             Input();
             Input(const EnvironmentAndFrames& env);
             double g;
-            KinematicsPtr k;
+            ssc::kinematics::KinematicsPtr k;
         };
         GravityForceModel(const Input& in);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
@@ -30,9 +30,9 @@ class GravityForceModel : public ForceModel
     private:
         GravityForceModel();
         GravityForceModel(const double g);
-        GravityForceModel(const double g, KinematicsPtr k);
+        GravityForceModel(const double g, ssc::kinematics::KinematicsPtr k);
         double g;
-        KinematicsPtr k;
+        ssc::kinematics::KinematicsPtr k;
 };
 
 #endif /* GRAVITYFORCEMODEL_HPP_ */

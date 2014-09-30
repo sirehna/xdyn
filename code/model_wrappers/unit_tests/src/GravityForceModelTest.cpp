@@ -34,7 +34,7 @@ TEST_F(GravityForceModelTest, example)
 //! [GravityForceModelTest example]
     GravityForceModel::Input input;
     input.g = 9.81;
-    input.k = KinematicsPtr(new ssc::kinematics::Kinematics());
+    input.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     GravityForceModel F(input);
     Body b = get_body(BODY);
@@ -86,7 +86,7 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
            -sinTheta,       sinPhi*cosTheta,                      cosPhi*cosTheta;
     GravityForceModel::Input input;
     input.g = 9.81;
-    input.k = KinematicsPtr(new Kinematics());
+    input.k = ssc::kinematics::KinematicsPtr(new Kinematics());
     input.k->add(Transform(rot, "NED", BODY));
     GravityForceModel F(input);
     Body b = get_body(BODY);
