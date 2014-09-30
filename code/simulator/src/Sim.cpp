@@ -40,6 +40,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     {
         normalize_quaternions(x_with_normalized_quaternions, i);
         update_kinematics(x_with_normalized_quaternions, bodies[i], i, env.k);
+        update_body_states(x_with_normalized_quaternions, bodies[i], i);
         calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), bodies[i].inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
     }
     state = x_with_normalized_quaternions;

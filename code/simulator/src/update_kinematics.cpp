@@ -80,3 +80,13 @@ StateType get_initial_states(const YamlRotation& convention, const std::vector<Y
     }
     return ret;
 }
+
+void update_body_states(const StateType& x, Body& body, const size_t i)
+{
+    body.u = *_U(x,i);
+    body.v = *_V(x,i);
+    body.w = *_W(x,i);
+    body.p = *_P(x,i);
+    body.q = *_Q(x,i);
+    body.r = *_R(x,i);
+}

@@ -47,6 +47,12 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
     ret.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle);
     change_mesh_ref_frame(ret, mesh);
     add_inertia(ret, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
+    ret.u = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u;
+    ret.v = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.v;
+    ret.w = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.w;
+    ret.p = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p;
+    ret.q = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q;
+    ret.r = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
     return ret;
 }
 

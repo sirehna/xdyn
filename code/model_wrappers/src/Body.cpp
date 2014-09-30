@@ -19,7 +19,13 @@ x_relative_to_mesh(0),
 y_relative_to_mesh(0),
 z_relative_to_mesh(0),
 mesh_to_body(ssc::kinematics::RotationMatrix()),
-M(PointMatrixPtr ())
+M(PointMatrixPtr ()),
+u(0),
+v(0),
+w(0),
+p(0),
+q(0),
+r(0)
 {
 
 }

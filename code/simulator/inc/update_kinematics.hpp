@@ -27,5 +27,6 @@ ssc::kinematics::Transform get_transform_from_mesh_to(const Body& body);
 ssc::kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& body, const size_t idx);
 void update_kinematics(StateType x, const Body& body, const size_t idx, const KinematicsPtr& k);
 StateType get_initial_states(const YamlRotation& convention, const std::vector<YamlBody>& bodies);
+void update_body_states(const StateType& x, Body& body, const size_t idx);
 
 #endif /* UPDATE_KINEMATICS_HPP_ */
