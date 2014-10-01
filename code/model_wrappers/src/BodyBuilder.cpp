@@ -53,6 +53,7 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
     ret.p = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p;
     ret.q = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q;
     ret.r = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
+    ret.intersector = MeshIntersectorPtr(new MeshIntersector(ret.mesh));
     return ret;
 }
 
