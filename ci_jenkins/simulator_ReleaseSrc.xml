@@ -43,7 +43,7 @@
       <command>git status &amp;&amp; git branch &amp;&amp; git checkout master &amp;&amp; git pull origin master</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>mkdir IrtJvSimulateur_Src &amp;&amp; git archive --format=tar HEAD | (cd IrtJvSimulateur_Src &amp;&amp; tar xf -) &amp;&amp; cd IrtJvSimulateur_Src &amp;&amp; cd code &amp;&amp; ./foreach.sh externalDependencies.txt svn_export.sh gj jacqueno &amp;&amp; cd .. &amp;&amp; cd .. &amp;&amp; tar -czf IrtJvSimulateur_Src_`git rev-parse HEAD`.tgz IrtJvSimulateur_Src &amp;&amp; rm -rf IrtJvSimulateur_Src</command>
+      <command>mkdir IrtJvSimulateur_Src &amp;&amp; git archive --format=tar HEAD | (cd IrtJvSimulateur_Src &amp;&amp; tar xf -) &amp;&amp; cd IrtJvSimulateur_Src &amp;&amp; cd code &amp;&amp; ./foreach.sh externalDependencies.txt svn_export.sh jenkins KnsJn2705 &amp;&amp; cd .. &amp;&amp; cd .. &amp;&amp; tar -czf IrtJvSimulateur_Src_`git rev-parse HEAD`.tgz IrtJvSimulateur_Src &amp;&amp; rm -rf IrtJvSimulateur_Src</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

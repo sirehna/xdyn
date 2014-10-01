@@ -32,7 +32,7 @@
     <hudson.tasks.Shell>
       <command># Retrieve the external dependencies
 cd code
-./foreach.sh externalDependencies.txt svn_export.sh cec charles</command>
+./foreach.sh externalDependencies.txt svn_export.sh jenkins KnsJn2705</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command># Configure
