@@ -14,8 +14,6 @@
 #include <Eigen/Dense>
 
 #include <ssc/kinematics.hpp>
-#include "ForceModel.hpp"
-#include "GeometricTypes3d.hpp"
 
 class Mesh;
 class PointMatrix;

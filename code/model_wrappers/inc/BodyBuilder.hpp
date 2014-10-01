@@ -10,6 +10,7 @@
 
 #include "Body.hpp"
 #include "YamlRotation.hpp"
+#include "GeometricTypes3d.hpp"
 
 class YamlInertiaMatrix;
 class YamlAngle;
@@ -26,35 +27,35 @@ class YamlAngle;
 class BodyBuilder
 {
     public:
-        /**  \details It makes no sense to build a 'Body' object without knowing
-         *            the rotation conventions, which is why this is the only
-         *            constructor available.
-          */
+        /** \details It makes no sense to build a 'Body' object without knowing
+         *           the rotation conventions, which is why this is the only
+         *           constructor available.
+         */
         BodyBuilder(const YamlRotation& convention);
 
-        /**  \brief Build a 'Body' object from YAML & STL data
-          *  \returns New Body object
-          */
+        /** \brief Build a 'Body' object from YAML & STL data
+         *  \returns New Body object
+         */
         Body build(const YamlBody& input, const VectorOfVectorOfPoints& mesh) const;
 
-        /**  \details Only used for testing purposes when we don't want to go
-         *            through the hassle of defining the inertia matrix & initial
-         *            positions
-          *  \returns New Body object
-          */
+        /** \details Only used for testing purposes when we don't want to go
+         *           through the hassle of defining the inertia matrix & initial
+         *           positions
+         *  \returns New Body object
+         */
         Body build(const std::string& name, const VectorOfVectorOfPoints& mesh) const;
 
-        /**  \details Converts (phi,theta,psi) to a rotation matrix, taking the
-         *            rotation convention into account
-          */
+        /** \details Converts (phi,theta,psi) to a rotation matrix, taking the
+         *           rotation convention into account
+         */
         ssc::kinematics::RotationMatrix angle2matrix(const YamlAngle& a) const;
 
     private:
         BodyBuilder(); //Disabled
 
-        /**  \brief Utility function used by angle2matrix
-         *   \returns True if 'convention' == [first,second,third]
-          */
+        /** \brief Utility function used by angle2matrix
+         *  \returns True if 'convention' == [first,second,third]
+         */
         bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third) const;
 
         void add_inertia(Body& body, const YamlInertiaMatrix& rigid_body_inertia, const YamlInertiaMatrix& added_mass) const;
@@ -64,9 +65,9 @@ class BodyBuilder
           */
         Eigen::Matrix<double,6,6> convert(const YamlInertiaMatrix& M) const;
 
-        /**  \brief Puts the mesh in the body frame
-          *  \details Uses the body frame's initial position relative to the mesh
-          */
+        /** \brief Puts the mesh in the body frame
+         *  \details Uses the body frame's initial position relative to the mesh
+         */
         void change_mesh_ref_frame(Body& body, const VectorOfVectorOfPoints& mesh) const;
 
         YamlRotation rotations; //!< Rotation convention (describes how we can build a rotation matrix from three angles)

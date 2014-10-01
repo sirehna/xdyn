@@ -23,8 +23,8 @@ class ForceModel
         virtual ~ForceModel(){}
         virtual ssc::kinematics::Wrench operator()(const Body& body, const double t) const = 0;
 };
+
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
 typedef std::vector<ForcePtr> ListOfForces;
-
 
 #endif /* FORCEMODEL_HPP_ */

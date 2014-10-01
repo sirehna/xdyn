@@ -27,7 +27,8 @@ void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies
                                    const size_t i         //!< Index of the body under consideration
                                )
 {
-    const auto norm = sqrt((double)SQUARE(*_QR(all_states,i))+(double)SQUARE(*_QI(all_states,i))+(double)SQUARE(*_QJ(all_states,i))+(double)SQUARE(*_QK(all_states,i)));
+    const auto norm = sqrt((double)SQUARE(*_QR(all_states,i))+(double)SQUARE(*_QI(all_states,i))
+                          +(double)SQUARE(*_QJ(all_states,i))+(double)SQUARE(*_QK(all_states,i)));
     *_QR(all_states,i) /= norm;
     *_QI(all_states,i) /= norm;
     *_QJ(all_states,i) /= norm;
@@ -115,7 +116,7 @@ void Sim::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forc
 }
 
 std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current instant
-                                  ) const
+                                                  ) const
 {
     try
     {

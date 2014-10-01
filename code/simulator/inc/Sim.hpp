@@ -9,10 +9,11 @@
 #define SIM_HPP_
 
 #include <vector>
+#include <ssc/kinematics.hpp>
 #include "Body.hpp"
 #include "StateMacros.hpp"
-#include <ssc/kinematics.hpp>
 #include "EnvironmentAndFrames.hpp"
+#include "ForceModel.hpp"
 
 class Sim
 {
@@ -38,7 +39,7 @@ class Sim
           *  \snippet simulator/unit_tests/src/SimTest.cpp SimTest get_waves_example
           */
         std::vector<ssc::kinematics::Point> get_waves(const double t            //!< Current instant
-                                     ) const;
+                                                     ) const;
 
         StateType state;
 
@@ -57,7 +58,7 @@ class Sim
           */
         void normalize_quaternions(StateType& all_states, //!< States of all bodies in the system
                                    const size_t i         //!< Index of the body under consideration
-                               );
+                                   );
 
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;

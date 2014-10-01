@@ -26,6 +26,7 @@
 #include "YamlSimulatorInput.hpp"
 
 #include "EnvironmentAndFrames.hpp"
+#include "GeometricTypes3d.hpp"
 class BodyBuilder;
 typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 

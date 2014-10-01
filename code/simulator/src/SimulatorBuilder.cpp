@@ -6,11 +6,11 @@
  */
 
 #include <ssc/kinematics.hpp>
+#include <ssc/text_file_reader.hpp>
 #include "SimulatorBuilder.hpp"
 #include "SimulatorBuilderException.hpp"
 #include "update_kinematics.hpp"
 #include "StlReader.hpp"
-#include <ssc/text_file_reader.hpp>
 #include "BodyBuilder.hpp"
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
