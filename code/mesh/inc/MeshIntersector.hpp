@@ -40,13 +40,13 @@ class MeshIntersector
 {
     public:
         MeshIntersector(
-                const MeshPtr mesh_,                  //!< the mesh to intersect
-                const std::vector<double> &immersions //!< the relative immersion of each static vertex of the mesh
+                const MeshPtr mesh_                  //!< the mesh to intersect
                 );
 
         /* \brief Update the intersection of the mesh with free surface
          * \details the intersection requires new Vertices/Edges/Facets stored as dynamic data in the end of container members */
-        void update_intersection_with_free_surface();
+        void update_intersection_with_free_surface(const std::vector<double> &immersions //!< the relative immersion of each static vertex of the mesh
+                                                   );
 
         FacetIterator begin_immersed() const
         {

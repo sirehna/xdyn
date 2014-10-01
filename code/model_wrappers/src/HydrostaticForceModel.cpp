@@ -36,8 +36,8 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const Body& body, cons
     const ssc::kinematics::Point g_in_NED("NED", 0, 0, g);
     const ssc::kinematics::RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + body.name + ")").get_rot();
 
-    MeshIntersectorPtr intersector(new MeshIntersector(body.mesh,dz));
-    intersector->update_intersection_with_free_surface();
+    MeshIntersectorPtr intersector(new MeshIntersector(body.mesh));
+    intersector->update_intersection_with_free_surface(dz);
 
     const auto F = hydrostatic::force((const_MeshIntersectorPtr) intersector, body.G, rho, ned2mesh*g_in_NED.v);
     return F;

@@ -2,9 +2,9 @@
 #include "MeshIntersector.hpp"
 
 
-MeshIntersector::MeshIntersector(const MeshPtr mesh_,const std::vector<double> &immersions)
+MeshIntersector::MeshIntersector(const MeshPtr mesh_)
 :mesh(mesh_)
-,all_immersions(immersions)
+,all_immersions()
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
 {}
@@ -71,8 +71,9 @@ void MeshIntersector::reset_dynamic_members()
     index_of_immersed_facets.reserve(mesh->facets.size());
 }
 
-void MeshIntersector::update_intersection_with_free_surface()
+void MeshIntersector::update_intersection_with_free_surface(const std::vector<double>& immersions)
 {
+    all_immersions = immersions;
     reset_dynamic_members();
     std::vector<bool> facet_crosses_free_surface(mesh->static_facets,false);
     std::vector<int> edges_immersion_status(mesh->static_edges,0); // the immersion status of each edge

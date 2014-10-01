@@ -39,8 +39,8 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_for_one_immerged_node)
     const std::vector<double> v({-1,-1,1});
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -72,8 +72,8 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_for_two_immerged_node)
     const std::vector<double> v({-1,1,1});
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -108,8 +108,8 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
     const std::vector<double> v({-1,-1,-1,1,1});
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -144,8 +144,8 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
     const std::vector<double> v({1,1,-1,-1,-1});
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -180,8 +180,8 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
     const std::vector<double> v({1,-1,-1,-1,1});
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -217,8 +217,8 @@ TEST_F(MeshIntersectorTest, immerged_polygon_should_throw_if_all_points_are_imme
     const std::vector<double> v({1,2,5});
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
 
     ASSERT_EQ(0,intersector.index_of_emerged_facets.size());
     ASSERT_EQ(0,intersector.index_of_immersed_facets.at(0));
@@ -282,8 +282,8 @@ TEST_F(MeshIntersectorTest, immerged_polygon_should_throw_if_no_points_are_immer
     const std::vector<double> v({-1,-2,-5});
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
 
     ASSERT_EQ(0,intersector.index_of_immersed_facets.size());
     ASSERT_EQ(0,intersector.index_of_emerged_facets.at(0));
@@ -294,8 +294,8 @@ TEST_F(MeshIntersectorTest, another_bug_in_immerged_polygon)
     MeshPtr mesh(new Mesh(MeshBuilder(two_triangles()).build()));
     const std::vector<double> v = {-1,-1,-2,1};
 
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
 
     const auto polygon = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -346,8 +346,8 @@ TEST_F(MeshIntersectorTest, correct_immerged_polygon_when_two_points_are_exactly
     const std::vector<double> v = {-1,0,1,0};
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
     const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto i = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
@@ -380,8 +380,8 @@ TEST_F(MeshIntersectorTest, bug2_in_immerged_polygon)
     const std::vector<double> v = {0,1,0,-1};
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
     const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto i = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
     ASSERT_EQ(3, p.cols());
@@ -413,8 +413,8 @@ TEST_F(MeshIntersectorTest, bug3_in_immerged_polygon)
     const std::vector<double> v = {0,-0.25,0.5};
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
-    MeshIntersector intersector(mesh,v);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(v);
     const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_LT(0, (p.col(0)-p.col(1)).norm());

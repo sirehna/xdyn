@@ -93,8 +93,8 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     const EPoint g(0, 0, 10);
     const ssc::kinematics::Point G(a.random<std::string>(), 1,2,4);
     const std::vector<double> z = {-0.5,-0.5,-2.5,0.5};
-    MeshIntersector intersector(mesh,z);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(z);
     const ssc::kinematics::Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
 
     ASSERT_EQ(1,intersector.index_of_immersed_facets.size());
@@ -127,8 +127,8 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_cube)
         const std::vector<double> dz = {z0-L/2,z0-L/2,z0-L/2,z0-L/2,z0+L/2,z0+L/2,z0+L/2,z0+L/2};
         const double rho = 1000;
         const EPoint g(0, 0, 9.81);
-        MeshIntersector intersector(mesh,dz);
-        intersector.update_intersection_with_free_surface();
+        MeshIntersector intersector(mesh);
+        intersector.update_intersection_with_free_surface(dz);
         const ssc::kinematics::Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
@@ -154,8 +154,8 @@ TEST_F(hydrostaticTest, should_not_crash)
         const std::vector<double> dz = {-h,0,0,-h,0,h,h,0};
         const double rho = 1000;
         const EPoint g(0, 0, 9.81);
-        MeshIntersector intersector(mesh,dz);
-        intersector.update_intersection_with_free_surface();
+        MeshIntersector intersector(mesh);
+        intersector.update_intersection_with_free_surface(dz);
         force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
     }
 }
@@ -168,8 +168,8 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_stl_cube)
     const ssc::kinematics::Point G(a.random<std::string>(), 0, 0, 0);
     const double rho = 1000;
     const EPoint g(0, 0, 9.81);
-    MeshIntersector intersector(mesh,dz);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(dz);
     const ssc::kinematics::Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
 }
 
@@ -186,8 +186,8 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_a_tetrahedron)
         const std::vector<double> dz = {z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0, sqrt(6)*L/3 + z0};
         const double rho = 1000;
         const EPoint g(0, 0, 9.81);
-        MeshIntersector intersector(mesh,dz);
-        intersector.update_intersection_with_free_surface();
+        MeshIntersector intersector(mesh);
+        intersector.update_intersection_with_free_surface(dz);
         const ssc::kinematics::Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, rho, g);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.X(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(0, Fhs.Y(), EPS);
@@ -229,8 +229,8 @@ TEST_F(hydrostaticTest, hydrostatic_force_should_be_computed_at_the_right_point)
     const ssc::kinematics::Point G(a.random<std::string>(), a.random<double>(), a.random<double>(), a.random<double>());
     const MeshPtr mesh(new Mesh(MeshBuilder(tetrahedron(L,x0,y0,z0)).build()));
     const std::vector<double> dz = a.random_vector_of<double>().of_size(4);
-    MeshIntersector intersector(mesh,dz);
-    intersector.update_intersection_with_free_surface();
+    MeshIntersector intersector(mesh);
+    intersector.update_intersection_with_free_surface(dz);
     const ssc::kinematics::Wrench Fhs = force(const_MeshIntersectorPtr(new MeshIntersector(intersector)), G, a.random<double>(), a.random<EPoint>());
 
     ASSERT_EQ(G.get_frame(), Fhs.get_point().get_frame());
