@@ -28,7 +28,7 @@ void BodyBuilder::change_mesh_ref_frame(Body& body, const VectorOfVectorOfPoints
         body.mesh->facets[i].barycenter = T*body.mesh->facets[i].barycenter;
         body.mesh->facets[i].unit_normal = T.get_rot()*body.mesh->facets[i].unit_normal;
     }
-    body.M = PointMatrixPtr(new ssc::kinematics::PointMatrix(body.mesh->nodes, body.name));
+    body.M = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(body.mesh->nodes, body.name));
 }
 
 Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh) const
