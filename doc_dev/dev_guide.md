@@ -1,5 +1,5 @@
 ﻿% IRT JV Simulator - Developer Guide
-% Guillaume Jacquenot, Charles-Edouard CADY
+% Guillaume Jacquenot, Charles-Edouard Cady
 
 This page is guide for the development of the lightweight temporal ship simulator.
 To generate this document, run:
@@ -9,7 +9,7 @@ This simulator is composed of a *kernel* that contains the core of the simulator
 a set of modules that represent the physical models implemented in the simulator.
 
 The kernel relies on previous developments and is thus the property of DCNS Research.
-The modules are developped within the context of the project and are the property
+The modules are developed within the context of the project and are the property
 of IRT Jules Verne.
 
 This simulator is written in C++ and relies on:
@@ -65,7 +65,7 @@ The DVCS used is Git. The repository was initially created on a shared folder
 on ``pc-maroff``. It was then cloned on ``pc-gj`` while waiting for a git server
 on sir6. However, the installation of a Git server on sir6 proved unnecessary
 because the repository could be treated as a normal folder by Samba. The downside
-is a possible performance lag (compared to using ssh or the ``git`` protocol).
+is a possible performance lag (compared to using SSH or the ``git`` protocol).
 The reference repository is now located at:
 
 [http://130.66.124.6/public/DOP/EtudesEnCours/ETI140043/simulator.git](http://130.66.124.6/public/DOP/EtudesEnCours/ETI140043/simulator.git)
@@ -185,8 +185,8 @@ depends essentially on whether the code is likely to be used outside the
 simulator & the volume of model code with respect to the amount of boiler
 plate code to wrap it. Whatever the situation is, a class needs to be created
 in the model_wrappers module. The model's parameters are embedded in a Input
-structure (as in GravityForceModel::Input). Appart from its parameters, a force
-model has access to the environement (wind & waves) the current instant $t$ and
+structure (as in GravityForceModel::Input). Apart from its parameters, a force
+model has access to the environment (wind & waves) the current instant $t$ and
 the body's parameters (inertia, mass...) & states (rotation matrix, position
 relative to mesh). The force model also has access to a Kinematics object to
 change reference frames.
@@ -352,7 +352,7 @@ methodology.
 
 ## Artefacts
 
-Progress is made visible to the developpers, users & product owner by a physical
+Progress is made visible to the developers, users & product owner by a physical
 kanban board & an HTML planning tool, homemade by CEC & which will be visible on
 the project's Jenkins page.
 
@@ -365,7 +365,7 @@ of various sizes & colors with the following conventions:
 - Dev stories (non-functional requirements): big orange post-it
 - Interface tasks: small green post-it
 - Kernel tasks: small purple post-it
-- Physical models tasks: small yellow post-it  
+- Physical models tasks: small yellow post-it
 - Dev tasks: small pink post-it
 
 ### Planning tool
