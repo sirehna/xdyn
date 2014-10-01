@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "DecodeUnit.h"
+#include <ssc/decode_unit.hpp>
 #include "parse_unit_value.hpp"
 
 void parse_uv(const YAML::Node& node, double& d)
@@ -23,5 +23,5 @@ void operator >> (const YAML::Node& node, UV& g)
 
 double decode(const UV& uv)
 {
-    return uv.value * DecodeUnit::decodeUnit(uv.unit);
+    return uv.value * ssc::decode_unit::decodeUnit(uv.unit);
 }

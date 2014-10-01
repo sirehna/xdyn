@@ -9,9 +9,8 @@
 #include "OutputTransformer.hpp"
 #include "yaml_data.hpp"
 #include "simulator_api.hpp"
-#include "steppers.hpp"
+#include <ssc/solver.hpp>
 #include "SimulatorYamlParser.hpp"
-#include "test_macros.hpp"
 
 #define PI (4.*atan(1.))
 #define EPS (1E-10)
@@ -31,12 +30,12 @@ YamlSimulatorInput OutputTransformerTest::get_yaml2()
     return ret;
 }
 
-OutputTransformerTest::OutputTransformerTest() : a(DataGenerator(42022)), out1(std::vector<std::map<std::string,double> >()), out2(std::vector<std::map<std::string,double> >())
+OutputTransformerTest::OutputTransformerTest() : a(ssc::random_data_generator::DataGenerator(42022)), out1(std::vector<std::map<std::string,double> >()), out2(std::vector<std::map<std::string,double> >())
 {
-    auto res1 = simulate<EulerStepper>(yaml1, 0, 2, 1);
+    auto res1 = simulate<ssc::solver::EulerStepper>(yaml1, 0, 2, 1);
     const OutputTransformer transform1(yaml1);
     for (auto r=res1.begin() ; r != res1.end() ; ++r) out1.push_back(transform1(*r));
-    auto res2 = simulate<EulerStepper>(yaml2, 0, 2, 1);
+    auto res2 = simulate<ssc::solver::EulerStepper>(yaml2, 0, 2, 1);
     const OutputTransformer transform2(yaml2);
     for (auto r=res2.begin() ; r != res2.end() ; ++r) out2.push_back(transform2(*r));
 }

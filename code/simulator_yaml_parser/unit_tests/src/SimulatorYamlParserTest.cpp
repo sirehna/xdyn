@@ -12,7 +12,7 @@
 
 const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example()).parse();
 
-SimulatorYamlParserTest::SimulatorYamlParserTest() : a(DataGenerator(1212))
+SimulatorYamlParserTest::SimulatorYamlParserTest() : a(ssc::random_data_generator::DataGenerator(1212))
 {
 }
 

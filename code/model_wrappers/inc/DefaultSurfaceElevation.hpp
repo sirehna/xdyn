@@ -8,7 +8,7 @@
 #ifndef DEFAULTSURFACELEVATION_HPP_
 #define DEFAULTSURFACELEVATION_HPP_
 
-#include "PointMatrix.hpp"
+#include <ssc/kinematics.hpp>
 #include "SurfaceElevationInterface.hpp"
 
 /** \brief Flat sea surface.
@@ -27,7 +27,7 @@
 class DefaultSurfaceElevation : public SurfaceElevationInterface
 {
     public:
-        DefaultSurfaceElevation(const double wave_height, const TR1(shared_ptr)<PointMatrix>& output_mesh);
+        DefaultSurfaceElevation(const double wave_height, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh);
 
     private:
         DefaultSurfaceElevation(); // Disabled

@@ -8,10 +8,9 @@ file(GLOB SRC src/stl_writerTest.cpp
 # Include directories
 include_directories(inc)
 include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
-include_directories(${random_data_generator_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
 include_directories(${stl_reader_INCLUDE_DIRS})
-include_directories(${test_macros_SOURCE_DIR})
 include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})

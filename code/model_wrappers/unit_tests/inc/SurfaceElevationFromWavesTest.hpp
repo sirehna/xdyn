@@ -3,9 +3,9 @@
 
 #include "gtest/gtest.h"
 #include "Airy.hpp"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
+#include <ssc/macros.hpp>
 
-#include "tr1_macros.hpp"
 #include TR1INC(memory)
 
 class SurfaceElevationFromWavesTest : public ::testing::Test
@@ -16,7 +16,7 @@ class SurfaceElevationFromWavesTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         TR1(shared_ptr)<WaveModel> get_model() const;
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
 };
 
 #endif  /* SURFACEELEVATIONFROMWAVESTEST_HPP_ */

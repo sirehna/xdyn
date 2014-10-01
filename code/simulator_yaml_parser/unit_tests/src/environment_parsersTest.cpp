@@ -18,7 +18,7 @@
 
 const YamlWaveModel environment_parsersTest::yaml = parse_waves(test_data::waves_for_parser_validation_only());
 
-environment_parsersTest::environment_parsersTest() : a(DataGenerator(1212))
+environment_parsersTest::environment_parsersTest() : a(ssc::random_data_generator::DataGenerator(1212))
 {
 }
 

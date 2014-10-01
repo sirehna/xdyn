@@ -5,13 +5,19 @@
  *      Author: cady
  */
 
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 #include "GeometricTypes3d.hpp"
 
-template <>
-EPoint TypedScalarDataGenerator<EPoint>::get() const
+namespace ssc
 {
-    return EPoint(random<double>(),random<double>(),random<double>());
+    namespace random_data_generator
+    {
+        template <>
+        EPoint TypedScalarDataGenerator<EPoint>::get() const
+        {
+            return EPoint(random<double>(),random<double>(),random<double>());
+        }
+    }
 }
 
 

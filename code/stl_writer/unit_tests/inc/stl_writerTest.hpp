@@ -9,7 +9,7 @@
 #define STL_WRITERTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 class stl_writerTest : public ::testing::Test
 {
@@ -18,7 +18,7 @@ class stl_writerTest : public ::testing::Test
         virtual ~stl_writerTest();
         virtual void SetUp();
         virtual void TearDown();
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
 
 };
 

@@ -12,7 +12,7 @@
 
 #include <boost/optional/optional.hpp>
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 class WaveModel;

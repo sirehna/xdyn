@@ -9,9 +9,9 @@
 #define SIMULATORYAMLPARSER_HPP_
 
 #include "YamlSimulatorInput.hpp"
-#include "YamlParser.hpp"
+#include <ssc/yaml_parser.hpp>
 
-class SimulatorYamlParser : public YamlParser
+class SimulatorYamlParser : public ssc::yaml_parser::YamlParser
 {
     public:
         SimulatorYamlParser(const std::string& data);

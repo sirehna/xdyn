@@ -10,11 +10,11 @@
 #include "WaveModel.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 
-SurfaceElevationFromWaves::SurfaceElevationFromWaves(const std::vector<TR1(shared_ptr)<WaveModel> >& models_, const TR1(shared_ptr)<PointMatrix>& output_mesh_) : SurfaceElevationInterface(output_mesh_), models(models_)
+SurfaceElevationFromWaves::SurfaceElevationFromWaves(const std::vector<TR1(shared_ptr)<WaveModel> >& models_, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) : SurfaceElevationInterface(output_mesh_), models(models_)
 {
 }
 
-SurfaceElevationFromWaves::SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<PointMatrix>& output_mesh_) : SurfaceElevationInterface(output_mesh_), models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model))
+SurfaceElevationFromWaves::SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) : SurfaceElevationInterface(output_mesh_), models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model))
 {
 }
 

@@ -20,7 +20,7 @@
 #include <cmath>
 #define PI M_PI
 
-AiryTest::AiryTest() : a(DataGenerator(54200))
+AiryTest::AiryTest() : a(ssc::random_data_generator::DataGenerator(54200))
 {
 }
 

@@ -9,10 +9,11 @@
 #define SIM_HPP_
 
 #include <vector>
+#include <ssc/kinematics.hpp>
 #include "Body.hpp"
-#include "EnvironmentAndFrames.hpp"
 #include "StateMacros.hpp"
-#include "UnsafeWrench.hpp"
+#include "EnvironmentAndFrames.hpp"
+#include "ForceModel.hpp"
 
 class Sim
 {
@@ -37,14 +38,14 @@ class Sim
           *           the z coordinate being the wave height (in meters)
           *  \snippet simulator/unit_tests/src/SimTest.cpp SimTest get_waves_example
           */
-        std::vector<Point> get_waves(const double t            //!< Current instant
-                                     ) const;
+        std::vector<ssc::kinematics::Point> get_waves(const double t            //!< Current instant
+                                                     ) const;
 
         StateType state;
 
     private:
-        UnsafeWrench sum_of_forces(const StateType& x, const size_t body_index, const double t) const;
-        void calculate_state_derivatives(const Wrench& sum_of_forces,
+        ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const size_t body_index, const double t) const;
+        void calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                          const MatrixPtr& inverse_of_the_total_inertia,
                                          const StateType& x,
                                          StateType& dx_dt,
@@ -57,7 +58,7 @@ class Sim
           */
         void normalize_quaternions(StateType& all_states, //!< States of all bodies in the system
                                    const size_t i         //!< Index of the body under consideration
-                               );
+                                   );
 
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;

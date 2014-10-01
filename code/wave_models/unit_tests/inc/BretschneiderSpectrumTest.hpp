@@ -9,7 +9,7 @@
 #define BRETSCHNEIDERSPECTRUMTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 class BretschneiderSpectrumTest : public ::testing::Test
 {
@@ -18,7 +18,7 @@ class BretschneiderSpectrumTest : public ::testing::Test
         virtual ~BretschneiderSpectrumTest();
         virtual void SetUp();
         virtual void TearDown();
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
 
 };
 

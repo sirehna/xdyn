@@ -8,7 +8,7 @@
 #ifndef SUMOFWAVESPECTRALDENSITIES_HPP_
 #define SUMOFWAVESPECTRALDENSITIES_HPP_
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 #include "WaveSpectralDensity.hpp"

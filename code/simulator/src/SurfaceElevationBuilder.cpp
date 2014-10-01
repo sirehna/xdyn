@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "PointMatrix.hpp"
+#include <ssc/kinematics.hpp>
 #include "SurfaceElevationBuilder.hpp"
 #include "YamlWaveModelInput.hpp"
 
@@ -13,13 +13,13 @@ SurfaceElevationBuilderInterface::~SurfaceElevationBuilderInterface()
 {
 }
 
-TR1(shared_ptr)<PointMatrix> SurfaceElevationBuilderInterface::make_wave_mesh(const YamlWaveOutput& output) const
+TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationBuilderInterface::make_wave_mesh(const YamlWaveOutput& output) const
 {
     const double dx = (output.xmax-output.xmin)/(double)(output.nx > 1 ? output.nx-1 : 1);
     const double dy = (output.ymax-output.ymin)/(double)(output.ny > 1 ? output.ny-1 : 1);
     const size_t nx = (dx==0 and output.nx) ? 1 : output.nx;
     const size_t ny = (dy==0 and output.ny) ? 1 : output.ny;
-    PointMatrix M(output.frame_of_reference, nx*ny);
+    ssc::kinematics::PointMatrix M(output.frame_of_reference, nx*ny);
     size_t k = 0;
     for (size_t j = 0 ; j < ny ; ++j)
     {
@@ -31,5 +31,5 @@ TR1(shared_ptr)<PointMatrix> SurfaceElevationBuilderInterface::make_wave_mesh(co
             ++k;
         }
     }
-    return TR1(shared_ptr)<PointMatrix>(new PointMatrix(M));
+    return TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix(M));
 }

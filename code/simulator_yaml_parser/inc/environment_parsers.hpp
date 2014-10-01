@@ -9,6 +9,7 @@
 #define ENVIRONMENT_PARSERS_HPP_
 
 #include "YamlWaveModelInput.hpp"
+#include "YamlSpectraInput.hpp"
 
 #include <string>
 

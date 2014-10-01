@@ -15,7 +15,7 @@
 
 #define NB_TRIALS 10
 
-Cos2sDirectionalSpreadingTest::Cos2sDirectionalSpreadingTest() : a(DataGenerator(8))
+Cos2sDirectionalSpreadingTest::Cos2sDirectionalSpreadingTest() : a(ssc::random_data_generator::DataGenerator(8))
 {
 }
 

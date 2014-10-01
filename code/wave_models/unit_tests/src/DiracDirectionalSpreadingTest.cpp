@@ -8,7 +8,7 @@
 #include "DiracDirectionalSpreadingTest.hpp"
 #include "DiracDirectionalSpreading.hpp"
 
-DiracDirectionalSpreadingTest::DiracDirectionalSpreadingTest() : a(DataGenerator(58212))
+DiracDirectionalSpreadingTest::DiracDirectionalSpreadingTest() : a(ssc::random_data_generator::DataGenerator(58212))
 {
 }
 

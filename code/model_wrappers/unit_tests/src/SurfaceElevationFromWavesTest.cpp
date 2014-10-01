@@ -8,8 +8,7 @@
 #include "discretize.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
-#include "Kinematics.hpp"
-#include "Point.hpp"
+#include <ssc/kinematics.hpp>
 #include "SurfaceElevationFromWavesTest.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 
@@ -17,7 +16,7 @@
 #include <cmath>
 #define PI M_PI
 
-SurfaceElevationFromWavesTest::SurfaceElevationFromWavesTest() : a(DataGenerator(45454))
+SurfaceElevationFromWavesTest::SurfaceElevationFromWavesTest() : a(ssc::random_data_generator::DataGenerator(45454))
 {
 }
 
@@ -77,14 +76,14 @@ TEST_F(SurfaceElevationFromWavesTest, example)
     const double Hs = 3;
     const double Tp = 10;
     const double k_ = 4.*PI*PI/Tp/Tp/9.81;
-    TR1(shared_ptr)<Kinematics> k(new Kinematics());
+    TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
     SurfaceElevationFromWaves wave(get_model());
     const double phi = 3.4482969340598712549;
 //! [SurfaceElevationFromWavesTest example]
 //! [SurfaceElevationFromWavesTest expected output]
     for (double t = 0 ; t < 30 ; t+=0.1)
     {
-        const Point P("NED", a.random<double>(), a.random<double>(), a.random<double>());
+        const ssc::kinematics::Point P("NED", a.random<double>(), a.random<double>(), a.random<double>());
         const double x = P.x();
         const double y = P.y();
         const double z = P.z();

@@ -29,12 +29,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 endif()
 
 include_directories(inc)
-include_directories(${exception_handling_INCLUDE_DIRS})
-include_directories(${test_macros_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
-add_library (${PROJECT_NAME}_static STATIC ${SRC})
+add_library (${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
 add_subdirectory(unit_tests)

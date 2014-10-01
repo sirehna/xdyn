@@ -8,7 +8,7 @@
 #ifndef DISCRETEDIRECTIONALWAVESPECTRUM_HPP_
 #define DISCRETEDIRECTIONALWAVESPECTRUM_HPP_
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 #include <vector>

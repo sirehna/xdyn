@@ -10,8 +10,7 @@
 #include "SimulatorBuilderException.hpp"
 #include "TriMeshTestData.hpp"
 #include "generate_body_for_tests.hpp"
-#include "Kinematics.hpp"
-#include "Transform.hpp"
+#include <ssc/kinematics.hpp>
 #include "DefaultSurfaceElevation.hpp"
 #include "GravityForceModel.hpp"
 #include "HydrostaticForceModel.hpp"
@@ -21,7 +20,7 @@
 const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
 
 
-SimulatorBuilderTest::SimulatorBuilderTest() : a(DataGenerator(1212)),
+SimulatorBuilderTest::SimulatorBuilderTest() : a(ssc::random_data_generator::DataGenerator(1212)),
                                                builder(SimulatorBuilder(input))
 {
 }
@@ -123,7 +122,7 @@ TEST_F(SimulatorBuilderTest, can_get_waves)
     const auto bodies = builder.get_bodies(m);
     const auto env = builder.get_environment_and_frames(bodies);
     ASSERT_TRUE(env.w.get() != NULL);
-    const Point P("NED",1,2,3);
+    const ssc::kinematics::Point P("NED",1,2,3);
     ASSERT_DOUBLE_EQ(3-12, env.w->get_relative_wave_height(P,env.k,a.random<double>()));
 }
 
@@ -156,7 +155,7 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     const double sPhi   = sin(1.3);
     const double sTheta = sin(1.4);
     const double sPsi   = sin(1.5);
-    RotationMatrix ctm;
+    ssc::kinematics::RotationMatrix ctm;
     Eigen::Vector3d F,FF;
     ctm << cTheta*cPsi,                cTheta*sPsi,                -sTheta,
            sPhi*sTheta*cPsi-cPhi*sPsi, sPhi*sTheta*sPsi+cPhi*cPsi, sPhi*cTheta,

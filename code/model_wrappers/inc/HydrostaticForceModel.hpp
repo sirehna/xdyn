@@ -9,14 +9,14 @@
 #define HYDROSTATICFORCEMODEL_HPP_
 
 #include "ForceModel.hpp"
-#include "Kinematics.hpp"
+#include <ssc/kinematics.hpp>
+#include "EnvironmentAndFrames.hpp"
 
 class SurfaceElevationInterface;
 typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 
 class Body;
-class EnvironmentAndFrames;
-
+typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
 class HydrostaticForceModel : public ForceModel
 {
     public:
@@ -31,7 +31,7 @@ class HydrostaticForceModel : public ForceModel
         };
 
         HydrostaticForceModel(const Input& input);
-        Wrench operator()(const Body& body, const double t) const;
+        ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
 
     private:
         HydrostaticForceModel();

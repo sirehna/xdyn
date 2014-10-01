@@ -15,7 +15,7 @@
 
 #define NB_TRIALS 10
 
-JonswapSpectrumTest::JonswapSpectrumTest() : a(DataGenerator(92224))
+JonswapSpectrumTest::JonswapSpectrumTest() : a(ssc::random_data_generator::DataGenerator(92224))
 {
 }
 

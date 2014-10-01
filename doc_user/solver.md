@@ -1,5 +1,5 @@
 # Fonctionnement du solveur
-Au coeur du simulateur, le solveur réalise l'intégration temporel des équations
+Au coeur du simulateur, le solveur réalise l'intégration temporelle des équations
 différentielles ordinaires.
 
 ## Formulation du problème
@@ -57,14 +57,14 @@ $y'=k y$, alors la solution numérique est instable lorsque le produit $h k$
 est en-dehors de la région $\left\{z\in\mathbf{C} : \left\|z+1\right\| \leq
 1\right\}$.
 En pratique, il n'est utilisé que pour des tests car les autres steppers
-montrent de meilleurs performances.
+montrent de meilleures performances.
 
 ![](images/euler_stability.svg "Domaine de stabilité de la méthode d'Euler")
 
 ### Runge-Kutta 4
 $$\hat{X}(t+dt) = X(t) + \frac{dt}{6}\left(k_1 + 2k_2 + 2k_3 + k_4\right)$$
 avec
-$$k_1 = f(X, t, U, P),$$
+$$k_1 = f(X, t, U, P)$$
 $$k_2 = f\left(X+\frac{dt}{2}\cdot k_1, t + \frac{dt}{2}, U, P\right)$$
 $$k_2 = f\left(X+\frac{dt}{2}\cdot k_2, t + \frac{dt}{2}, U, P\right)$$
 $$k_4 = f\left(X+dt\cdot k_3, t+dt, U, P\right)$$

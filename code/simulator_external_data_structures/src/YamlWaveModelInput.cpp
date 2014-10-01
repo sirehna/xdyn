@@ -36,17 +36,6 @@ output(YamlWaveOutput()),
 compute_froude_krylov(false)
 {}
 
-YamlJonswap::YamlJonswap():
-    Hs(0),
-    Tp(0),
-    gamma(0)
-{}
-
-YamlBretschneider::YamlBretschneider():
-    Hs(0),
-    Tp(0)
-{}
-
 YamlCos2s::YamlCos2s():
     psi0(0),
    s(0)

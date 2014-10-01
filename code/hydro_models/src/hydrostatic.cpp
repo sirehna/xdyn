@@ -7,7 +7,7 @@
 
 #include "hydrostatic.hpp"
 #include "HydrostaticException.hpp"
-#include "pairwise_sum.hpp"
+#include <ssc/numeric.hpp>
 #include "mesh_manipulations.hpp"
 
 #include <algorithm> // std::count_if
@@ -15,10 +15,9 @@
 
 using namespace hydrostatic;
 
-
 double hydrostatic::average_immersion(const std::vector<size_t>& idx,    //!< Indices of the points
                                       const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
-                            )
+                                      )
 {
     const size_t n = idx.size();
     double average = 0;
@@ -43,23 +42,22 @@ double hydrostatic::average_immersion(const std::vector<double>& nodes //!< Coor
     return average;
 }
 
-
-UnsafeWrench hydrostatic::dF(const Point& O,    //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                             const EPoint& C,   //!< Point where the force is applied (barycentre of the facet)
-                             const double rho,  //!< Density of the fluid (in kg/m^3)
-                             const double g,    //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
-                             const double z,    //!< Relative immersion (in metres)
-                             const EPoint& dS   //!< Unit normal vector multiplied by the surface of the facet
+ssc::kinematics::UnsafeWrench hydrostatic::dF(const ssc::kinematics::Point& O,    //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                              const EPoint& C,                    //!< Point where the force is applied (barycentre of the facet)
+                                              const double rho,                   //!< Density of the fluid (in kg/m^3)
+                                              const double g,                     //!< Earth's standard acceleration due to gravity (eg. 9.80665 m/s^2)
+                                              const double z,                     //!< Relative immersion (in metres)
+                                              const EPoint& dS                    //!< Unit normal vector multiplied by the surface of the facet
                             )
 {
     const EPoint F = -rho*g*z*dS; // Negative sign because the force is oriented towards the inside of the mesh but dS is oriented towards the outside of the mesh
-    return UnsafeWrench(O, F, (C-O.v).cross(F));
+    return ssc::kinematics::UnsafeWrench(O, F, (C-O.v).cross(F));
 }
 
-Wrench hydrostatic::force(const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-                          const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                          const double rho,                       //!< Density of the fluid (in kg/m^3)
-                          const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+ssc::kinematics::Wrench hydrostatic::force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                                           const ssc::kinematics::Point& O,             //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                           const double rho,                            //!< Density of the fluid (in kg/m^3)
+                                           const EPoint& g                              //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                          )
 {
     // QUICK AND DIRTY HACK : choose either solution
@@ -67,13 +65,13 @@ Wrench hydrostatic::force(const const_MeshIntersectorPtr& intersector,   //!< Me
     // return exact_force(intersector,O,rho,g);
 }
 
-Wrench hydrostatic::fast_force(const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-                          const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                          const double rho,                       //!< Density of the fluid (in kg/m^3)
-                          const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+ssc::kinematics::Wrench hydrostatic::fast_force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                          const ssc::kinematics::Point& O,                                   //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                          const double rho,                                                  //!< Density of the fluid (in kg/m^3)
+                          const EPoint& g                                                    //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
                          )
 {
-    UnsafeWrench F(O);
+    ssc::kinematics::UnsafeWrench F(O);
     const double orientation_factor = intersector->mesh->orientation_factor;
     const double g_norm = g.norm();
     for (auto that_facet = intersector->begin_immersed() ; that_facet != intersector->end_immersed() ; ++that_facet)
@@ -86,13 +84,13 @@ Wrench hydrostatic::fast_force(const const_MeshIntersectorPtr& intersector,   //
     return F;
 }
 
-Wrench hydrostatic::exact_force(const const_MeshIntersectorPtr& intersector,   //!< Mesh intersected with free surface
-                                const Point& O,                         //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
-                                const double rho,                       //!< Density of the fluid (in kg/m^3)
-                                const EPoint& g                         //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
-                                )
+ssc::kinematics::Wrench hydrostatic::exact_force(const const_MeshIntersectorPtr& intersector, //!< Mesh intersected with free surface
+                                                 const ssc::kinematics::Point& O,             //!< Point at which the Wrench will be given (eg. the body's centre of gravity)
+                                                 const double rho,                            //!< Density of the fluid (in kg/m^3)
+                                                 const EPoint& g                              //!< Earth's standard acceleration vector due to gravity (eg. 9.80665 m/s^2) (in the body's mesh frame)
+                                                 )
 {
-    UnsafeWrench F(O);
+    ssc::kinematics::UnsafeWrench F(O);
     const double orientation_factor = intersector->mesh->orientation_factor;
     const double g_norm = g.norm();
     const EPoint down_direction = g / g_norm;
@@ -111,8 +109,7 @@ EPoint hydrostatic::normal_to_free_surface(
             const EPoint&              down_direction,  //!< local down direction expressed in mesh frame
             const Matrix3x&            all_nodes,       //!< the nodes of the mesh
             const std::vector<double>& all_immersions   //!< the immersions for all nodes of the mesh
-
-        )
+            )
 {
     // Compute normal to free surface, oriented downward
     const Matrix3x vertices = project_facet_on_free_surface(facet,down_direction,all_nodes,all_immersions);
@@ -123,7 +120,6 @@ EPoint hydrostatic::normal_to_free_surface(
     if(ns.dot(down_direction) < 0) // make sure that ns is oriented downward
         return -ns;
     return ns;
-
 }
 
 Eigen::Matrix3d hydrostatic::facet_trihedron(
@@ -135,7 +131,7 @@ Eigen::Matrix3d hydrostatic::facet_trihedron(
     Eigen::Matrix3d R20;
     const EPoint k20 = n;
     EPoint i20 = ns.cross(k20);
-    double tolerance = 1000*std::numeric_limits<double>::epsilon();
+    const double tolerance = 1000*std::numeric_limits<double>::epsilon();
     if( i20.norm() < tolerance ) {
         R20.Zero();
         return R20; // quick test : facet is parallel to the free surface
@@ -160,23 +156,23 @@ EPoint hydrostatic::exact_application_point(
             const double               zG,             //!< Relative immersion of facet barycentre (in metres)
             const Matrix3x&            all_nodes,      //!< the nodes of the mesh
             const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
-		)
+            )
 {
     const EPoint n=facet.unit_normal;
     const EPoint ns=normal_to_free_surface(facet,down_direction,all_nodes,all_immersions);
-	const Eigen::Matrix3d R20 = facet_trihedron(n,ns);
-	if(R20.col(0).norm() < 0.5 ) // quick test : facet is parallel to the free surface
-	    return facet.barycenter;
+    const Eigen::Matrix3d R20 = facet_trihedron(n,ns);
+    if(R20.col(0).norm() < 0.5) // quick test : facet is parallel to the free surface
+        return facet.barycenter;
 
-	const Eigen::Matrix3d JR2=get_inertia_of_polygon_wrt( facet,R20,all_nodes );
+    const Eigen::Matrix3d JR2=get_inertia_of_polygon_wrt( facet,R20,all_nodes );
     const Eigen::Matrix3d R02 = R20.transpose();
     const EPoint j20 = R02.col(1);
 
-	const double yG = zG * ns.dot(down_direction) / (ns.dot(j20));
-	const double xR = JR2(0,1)/yG;
-	const double yR = JR2(0,0)/yG;
-	const EPoint offset2( xR , yR , 0);
-	return facet.barycenter + R02 * offset2;
+    const double yG = zG * ns.dot(down_direction) / (ns.dot(j20));
+    const double xR = JR2(0,1)/yG;
+    const double yR = JR2(0,0)/yG;
+    const EPoint offset2( xR , yR , 0);
+    return facet.barycenter + R02 * offset2;
 }
 
 Matrix3x hydrostatic::project_facet_on_free_surface(
@@ -184,7 +180,7 @@ Matrix3x hydrostatic::project_facet_on_free_surface(
             const EPoint&              down_direction, //!< local down direction expressed in mesh frame
             const Matrix3x&            all_nodes,      //!< the nodes of the mesh
             const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
-        )
+            )
 {
     const size_t nVertices = facet.vertex_index.size();
     Matrix3x newVertices(3,nVertices);
@@ -199,7 +195,7 @@ Eigen::Matrix3d hydrostatic::get_inertia_of_polygon_wrt(
             const Facet&          facet,     //!< the facet of interest
             const Eigen::Matrix3d R20,       //!< coordinates of inertia frame vectors versus mesh frame
             const Matrix3x&       all_nodes  //!< the nodes of the mesh
-        )
+            )
 {
     // Compute the coordinates of facet vertices in R2
     const EPoint G=facet.barycenter;
@@ -211,5 +207,5 @@ Eigen::Matrix3d hydrostatic::get_inertia_of_polygon_wrt(
     Matrix3x verticesInR2(3,nVertices);
     verticesInR2 = R20 * verticesInR0;
 
-    return inertia_of_polygon( verticesInR2 );
+    return inertia_of_polygon(verticesInR2);
 }

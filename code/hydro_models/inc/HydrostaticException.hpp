@@ -8,7 +8,7 @@
 #ifndef HYDROSTATICEXCEPTION_HPP_
 #define HYDROSTATICEXCEPTION_HPP_
 
-#include "Exception.hpp"
+#include <ssc/exception_handling.hpp>
 
 class HydrostaticException: public Exception
 {

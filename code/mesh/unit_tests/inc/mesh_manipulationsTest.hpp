@@ -10,7 +10,7 @@
 
 #include "gtest/gtest.h"
 
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 class mesh_manipulationsTest : public ::testing::Test
 {
@@ -19,7 +19,7 @@ class mesh_manipulationsTest : public ::testing::Test
 	    virtual ~mesh_manipulationsTest();
         virtual void SetUp();
         virtual void TearDown();
-        DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
 };
 
 #endif  /* MESH_MANIPULATIONSTEST_HPP_ */

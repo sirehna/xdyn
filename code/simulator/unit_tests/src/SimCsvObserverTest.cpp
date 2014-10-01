@@ -9,11 +9,11 @@
 #include "SimCsvObserver.hpp"
 #include "simulator_api.hpp"
 #include "StateMacros.hpp" // For StateType
-#include "steppers.hpp"
+#include <ssc/solver.hpp>
 #include "TriMeshTestData.hpp"
 #include "yaml_data.hpp"
 
-SimCsvObserverTest::SimCsvObserverTest() : a(DataGenerator(546545))
+SimCsvObserverTest::SimCsvObserverTest() : a(ssc::random_data_generator::DataGenerator(546545))
 {
 }
 
@@ -37,7 +37,7 @@ TEST_F(SimCsvObserverTest, can_simulate_system_with_no_environment)
     std::stringstream wave_stream;
     SimCsvObserver observer(simulation_stream, wave_stream);
     auto sys = get_system(test_data::falling_ball_example());
-    quicksolve<EulerStepper>(sys, 0, tend, dt, observer);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
 }
 
 TEST_F(SimCsvObserverTest, can_simulate_system_with_no_wave_output)
@@ -48,7 +48,7 @@ TEST_F(SimCsvObserverTest, can_simulate_system_with_no_wave_output)
     std::stringstream wave_stream;
     SimCsvObserver observer(simulation_stream, wave_stream);
     auto sys = get_system(test_data::anthineas_hydrostatic_test(), unit_cube());
-    quicksolve<EulerStepper>(sys, 0, tend, dt, observer);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
 }
 
 TEST_F(SimCsvObserverTest, can_simulate_environment_with_no_system)
@@ -59,7 +59,7 @@ TEST_F(SimCsvObserverTest, can_simulate_environment_with_no_system)
     std::stringstream wave_stream;
     SimCsvObserver observer(simulation_stream, wave_stream);
     auto sys = get_system(test_data::waves());
-    quicksolve<EulerStepper>(sys, 0, tend, dt, observer);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
     std::stringstream expected;
 
     expected << "waves:\n"
@@ -81,7 +81,7 @@ TEST_F(SimCsvObserverTest, can_simulate_both_environment_and_system)
     std::stringstream wave_stream;
     SimCsvObserver observer(simulation_stream, wave_stream);
     auto sys = get_system(test_data::cube_in_waves(), unit_cube());
-    quicksolve<EulerStepper>(sys, 0, tend, dt, observer);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
     std::stringstream expected;
 
     expected << "waves:\n"

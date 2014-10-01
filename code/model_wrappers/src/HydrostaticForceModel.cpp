@@ -9,8 +9,8 @@
 #include "SurfaceElevationInterface.hpp"
 #include "Body.hpp"
 #include "hydrostatic.hpp"
+#include <ssc/kinematics.hpp>
 #include "EnvironmentAndFrames.hpp"
-#include "Transform.hpp"
 #include "MeshIntersector.hpp"
 
 HydrostaticForceModel::Input::Input() : rho(0),
@@ -30,11 +30,11 @@ HydrostaticForceModel::Input::Input(const EnvironmentAndFrames& env) : rho(env.r
 HydrostaticForceModel::HydrostaticForceModel(const Input& in) : rho(in.rho), g(in.g), w(in.w), k(in.k)
 {}
 
-Wrench HydrostaticForceModel::operator()(const Body& body, const double t) const
+ssc::kinematics::Wrench HydrostaticForceModel::operator()(const Body& body, const double t) const
 {
     const std::vector<double> dz = w->get_relative_wave_height(*body.M,k,t);
-    const Point g_in_NED("NED", 0, 0, g);
-    const RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + body.name + ")").get_rot();
+    const ssc::kinematics::Point g_in_NED("NED", 0, 0, g);
+    const ssc::kinematics::RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + body.name + ")").get_rot();
 
     MeshIntersectorPtr intersector(new MeshIntersector(body.mesh,dz));
     intersector->update_intersection_with_free_surface();

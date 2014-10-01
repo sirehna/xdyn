@@ -9,16 +9,16 @@
 #define FORCE_PARSERSTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 class force_parsersTest : public ::testing::Test
 {
     protected:
         force_parsersTest();
-	    virtual ~force_parsersTest();
+        virtual ~force_parsersTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
+        ssc::random_data_generator::DataGenerator a;
 
 };
 

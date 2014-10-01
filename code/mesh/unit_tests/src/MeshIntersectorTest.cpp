@@ -6,13 +6,13 @@
 #include "MeshBuilder.hpp"
 #include "MeshIntersectorTest.hpp"
 #include "mesh_manipulations.hpp"
-#include "extra_test_assertions.hpp"
+#include <ssc/macros.hpp>
 #include "STL_data.hpp"
 #include "StlReader.hpp"
 
 #define EPS 1E-6
 
-MeshIntersectorTest::MeshIntersectorTest() : a(DataGenerator(2))
+MeshIntersectorTest::MeshIntersectorTest() : a(ssc::random_data_generator::DataGenerator(2))
 {
 }
 

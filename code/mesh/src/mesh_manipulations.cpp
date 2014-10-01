@@ -9,8 +9,7 @@
 
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
-#include "kahan_sum.hpp"
-#include "pairwise_sum.hpp"
+#include <ssc/numeric.hpp>
 
 double area(const Matrix3x& M, //!< Matrix containing (amongst others), the points of interest
             const int idxA,    //!< Index of the column containing the first point
@@ -147,7 +146,7 @@ Matrix3x convert(const VectorOfPoints& v)
     }
     return ret;
 }
-#include "test_macros.hpp"
+#include <ssc/macros.hpp>
 bool oriented_clockwise(const VectorOfVectorOfPoints& v, const EPoint& O)
 {
     if (v.size() < 2) return true;

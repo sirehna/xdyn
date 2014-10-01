@@ -5,12 +5,12 @@
  *      Author: cady
  */
 
-#include "Kinematics.hpp"
+#include <ssc/kinematics.hpp>
+#include <ssc/text_file_reader.hpp>
 #include "SimulatorBuilder.hpp"
 #include "SimulatorBuilderException.hpp"
 #include "update_kinematics.hpp"
 #include "StlReader.hpp"
-#include "TextFileReader.hpp"
 #include "BodyBuilder.hpp"
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
@@ -47,7 +47,7 @@ EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vec
     EnvironmentAndFrames env;
     env.g = input.environmental_constants.g;
     env.rho = input.environmental_constants.rho;
-    env.k = KinematicsPtr(new Kinematics());
+    env.k = KinematicsPtr(new ssc::kinematics::Kinematics());
     if (bodies.size() != input.bodies.size())
     {
         std::stringstream ss;
@@ -132,11 +132,13 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const Enviro
         THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
     }
 }
-
+#include <ssc/macros.hpp>
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     const auto bodies = get_bodies(meshes);
     const auto env = get_environment_and_frames(bodies);
+    get_forces(env);
+    get_initial_states();
     return Sim(bodies, get_forces(env), env, get_initial_states());
 }
 
@@ -169,7 +171,7 @@ VectorOfVectorOfPoints SimulatorBuilder::get_mesh(const YamlBody& body) const
 {
     if (not(body.mesh.empty()))
     {
-        const TextFileReader reader(std::vector<std::string>(1, body.mesh));
+        const ssc::text_file_reader::TextFileReader reader(std::vector<std::string>(1, body.mesh));
         return read_stl(reader.get_contents());
     }
     return VectorOfVectorOfPoints();

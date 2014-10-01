@@ -8,7 +8,7 @@
 #ifndef AIRY_HPP_
 #define AIRY_HPP_
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real_distribution.hpp>

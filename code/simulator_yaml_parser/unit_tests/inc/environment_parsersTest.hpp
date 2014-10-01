@@ -9,7 +9,7 @@
 #define ENVIRONMENT_PARSERSTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "DataGenerator.hpp"
+#include <ssc/random_data_generator.hpp>
 
 #include "YamlWaveModelInput.hpp"
 
@@ -17,11 +17,11 @@ class environment_parsersTest : public ::testing::Test
 {
     protected:
         environment_parsersTest();
-	    virtual ~environment_parsersTest();
+        virtual ~environment_parsersTest();
         virtual void SetUp();
         virtual void TearDown();
-		DataGenerator a;
-		static const YamlWaveModel yaml;
+        ssc::random_data_generator::DataGenerator a;
+        static const YamlWaveModel yaml;
 };
 
 #endif  /* ENVIRONMENT_PARSERSTEST_HPP_ */

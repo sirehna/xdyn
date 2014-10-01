@@ -8,11 +8,9 @@ FILE(GLOB SRC src/.cpp
 # Include directories
 include_directories(inc)
 include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
-include_directories(${random_data_generator_INCLUDE_DIRS})
-include_directories(${test_macros_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
-include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(${stl_reader_INCLUDE_DIRS})
 

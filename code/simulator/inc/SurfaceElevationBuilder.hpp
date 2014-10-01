@@ -11,7 +11,7 @@
 #include <vector>
 
 #include <boost/optional/optional.hpp>
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 #include "DirectionalSpreadingBuilder.hpp"
@@ -33,7 +33,7 @@ class SurfaceElevationBuilderInterface
                              spectrum_parsers(spectrum_parsers_)
         {}
         virtual ~SurfaceElevationBuilderInterface();
-        TR1(shared_ptr)<PointMatrix> make_wave_mesh(const YamlWaveOutput& output) const;
+        TR1(shared_ptr)<ssc::kinematics::PointMatrix> make_wave_mesh(const YamlWaveOutput& output) const;
         virtual boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const = 0;
 
     protected:

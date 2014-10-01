@@ -8,11 +8,11 @@
 #include <iostream>
 #include <string>
 
-#include "CSVFileReader.hpp"
+#include <ssc/csv_file_reader.hpp>
 #include "OutputTransformer.hpp"
 #include "SimulatorBuilder.hpp"
 #include "SimulatorYamlParser.hpp"
-#include "TextFileReader.hpp"
+#include <ssc/text_file_reader.hpp>
 
 std::string description();
 std::string description()
@@ -101,8 +101,8 @@ void append(std::map<std::string,double>& to, const std::map<std::string,double>
     for (auto m=from.begin() ; m != from.end() ; ++m) to[m->first] = m->second;
 }
 
-std::vector<std::map<std::string,double> > build_output(CSVFileReader& csv_file, const OutputTransformer& transform);
-std::vector<std::map<std::string,double> > build_output(CSVFileReader& csv_file, const OutputTransformer& transform)
+std::vector<std::map<std::string,double> > build_output(ssc::csv_file_reader::CSVFileReader& csv_file, const OutputTransformer& transform);
+std::vector<std::map<std::string,double> > build_output(ssc::csv_file_reader::CSVFileReader& csv_file, const OutputTransformer& transform)
 {
     const auto csv = transpose(csv_file.get_map());
     std::vector<std::map<std::string,double> > res;
@@ -125,11 +125,11 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    const TextFileReader yaml_file(std::vector<std::string>(argv+2, argv+argc));
+    const ssc::text_file_reader::TextFileReader yaml_file(std::vector<std::string>(argv+2, argv+argc));
     const auto yaml = SimulatorYamlParser(yaml_file.get_contents()).parse();
 
     const size_t nb_of_columns = 1+yaml.bodies.size()*13;
-    CSVFileReader csv(argv[1],nb_of_columns);
+    ssc::csv_file_reader::CSVFileReader csv(argv[1],nb_of_columns);
     SimulatorBuilder builder(yaml);
     const OutputTransformer transform(builder);
 

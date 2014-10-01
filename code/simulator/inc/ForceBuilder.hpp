@@ -10,11 +10,13 @@
 
 #include <boost/optional/optional.hpp>
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "EnvironmentAndFrames.hpp"
+#include <ssc/kinematics.hpp>
 #include "ForceModel.hpp"
+
+class EnvironmentAndFrames;
 
 class ForceBuilderInterface
 {

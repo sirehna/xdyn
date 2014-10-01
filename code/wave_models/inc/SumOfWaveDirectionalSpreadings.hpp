@@ -8,7 +8,7 @@
 #ifndef SUMOFWAVEDIRECTIONALSPREADINGS_HPP_
 #define SUMOFWAVEDIRECTIONALSPREADINGS_HPP_
 
-#include "tr1_macros.hpp"
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 #include "WaveDirectionalSpreading.hpp"

@@ -5,14 +5,13 @@
  *      Author: cady
  */
 
-#include "TextFileReader.hpp"
+#include <ssc/text_file_reader.hpp>
 #include "InputData.hpp"
 #include "utilities_for_InputData.hpp"
 
 #include "simulator_api.hpp"
 #include "SimCsvObserver.hpp"
-#include "solve.hpp"
-#include "steppers.hpp"
+#include <ssc/solver.hpp>
 
 #include <string>
 #include <fstream>
@@ -23,7 +22,7 @@ int main(int argc, char** argv)
     const int error = get_input_data(argc, argv, input_data);
     if (not(error))
     {
-        const TextFileReader yaml_reader(input_data.yaml_filenames);
+        const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
         auto sys = get_system(yaml_reader.get_contents());
         std::ofstream os(input_data.output_csv.c_str());
         std::ofstream ws(input_data.wave_output.c_str());
@@ -32,19 +31,19 @@ int main(int argc, char** argv)
         SimCsvObserver observer(os, ws);
         if (input_data.solver=="euler")
         {
-            quicksolve<EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+            ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
         }
         else if (input_data.solver=="rk4")
         {
-            quicksolve<RK4Stepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+            ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
         }
         else if (input_data.solver=="rkck")
         {
-            quicksolve<RKCK>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+            ssc::solver::quicksolve<ssc::solver::RKCK>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
         }
         else
         {
-            quicksolve<EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+            ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
         }
     }
     return error;

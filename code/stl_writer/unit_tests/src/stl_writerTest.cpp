@@ -10,7 +10,7 @@
 #include "stl_writer.hpp"
 #include "STL_data.hpp"
 
-stl_writerTest::stl_writerTest() : a(DataGenerator(542))
+stl_writerTest::stl_writerTest() : a(ssc::random_data_generator::DataGenerator(542))
 {
 }
 

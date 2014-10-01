@@ -9,16 +9,14 @@
 #include "DefaultSurfaceElevation.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "HydrostaticForceModelTest.hpp"
-#include "Kinematics.hpp"
-#include "Transform.hpp"
 #include "generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"
 #include "MeshIntersector.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
-#include "test_macros.hpp"
-HydrostaticForceModelTest::HydrostaticForceModelTest() : a(DataGenerator(212154))
+
+HydrostaticForceModelTest::HydrostaticForceModelTest() : a(ssc::random_data_generator::DataGenerator(212154))
 {
 }
 
@@ -39,12 +37,12 @@ TEST_F(HydrostaticForceModelTest, example)
     HydrostaticForceModel::Input input;
     input.g = 9.81;
     input.rho = 1024;
-    input.k = KinematicsPtr(new Kinematics());
-    const Point G("NED",0,2,2./3.);
-    input.k->add(kinematics::Transform(Point("NED"), "mesh(" BODY ")"));
-    input.k->add(kinematics::Transform(Point("NED"), BODY));
-    TR1(shared_ptr)<PointMatrix> mesh;
-    input.w = WaveModelPtr(new DefaultSurfaceElevation(0, mesh));
+    input.k = KinematicsPtr(new ssc::kinematics::Kinematics());
+    const ssc::kinematics::Point G("NED",0,2,2./3.);
+    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
+    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    input.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
     auto points = two_triangles();
     for (size_t i = 0 ; i < 2 ; ++i)
@@ -62,7 +60,7 @@ TEST_F(HydrostaticForceModelTest, example)
     body.G = G;
 
     HydrostaticForceModel F(input);
-    const Wrench Fhs = F(body, a.random<double>());
+    const ssc::kinematics::Wrench Fhs = F(body, a.random<double>());
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
     const double dz = 2./3;
@@ -104,12 +102,12 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     HydrostaticForceModel::Input input;
     input.g = 9.81;
     input.rho = 1024;
-    input.k = KinematicsPtr(new Kinematics());
-    const Point G("NED",0,0,0);
-    input.k->add(kinematics::Transform(Point("NED"), "mesh(" BODY ")"));
-    input.k->add(kinematics::Transform(Point("NED"), BODY));
-    TR1(shared_ptr)<PointMatrix> mesh;
-    input.w = WaveModelPtr(new DefaultSurfaceElevation(0, mesh));
+    input.k = KinematicsPtr(new ssc::kinematics::Kinematics());
+    const ssc::kinematics::Point G("NED",0,0,0);
+    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
+    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    input.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
     const auto points = two_triangles_immerged();
 
@@ -130,7 +128,7 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     ASSERT_DOUBLE_EQ(0.0, body.mesh_to_body(2,1));
 
     HydrostaticForceModel F(input);
-    const Wrench Fhs = F(body,a.random<double>());
+    const ssc::kinematics::Wrench Fhs = F(body,a.random<double>());
 
     ASSERT_EQ(3,(size_t)body.mesh->nodes.rows());
     ASSERT_EQ(4,(size_t)body.mesh->nodes.cols());
