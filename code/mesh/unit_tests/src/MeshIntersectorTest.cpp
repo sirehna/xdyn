@@ -319,7 +319,7 @@ TEST_F(MeshIntersectorTest, another_bug_in_immerged_polygon)
 }
 
 
-TEST_F(MeshIntersectorTest, should_be_able_to_compute_intersection_even_if_one_of_the_points_isexactly_on_the_surface)
+TEST_F(MeshIntersectorTest, should_be_able_to_compute_intersection_even_if_one_of_the_points_is_exactly_on_the_surface)
 {
     const EPoint A(1,2,3);
     const EPoint B(4,5,6);
