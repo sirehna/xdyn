@@ -10,48 +10,73 @@ MeshIntersector::MeshIntersector(const MeshPtr mesh_,const std::vector<double> &
 ,split_edges(mesh->static_edges,0)
 {}
 
-void MeshIntersector::update_intersection_with_free_surface()
+void MeshIntersector::find_intersection_with_free_surface(
+        std::vector<int>& edges_immersion_status,
+        std::vector<bool>& facet_crosses_free_surface)
+{
+    // iterate on each edge to find intersection with free surface
+    for (size_t edge_index = 0; edge_index < mesh->static_edges;
+            ++edge_index)
+    {
+        double z0 = all_immersions[mesh->edges[0][edge_index]];
+        double z1 = all_immersions[mesh->edges[1][edge_index]];
+        int status = get_edge_immersion_status(z0, z1);
+        edges_immersion_status[edge_index] = status;
+        if (crosses_free_surface(status))
+            split_edges[edge_index] = split_partially_immersed_edge(edge_index,
+                    edges_immersion_status);
+
+        if (crosses_free_surface(status) || just_touches_free_surface(status))
+            for (std::vector<size_t>::const_iterator that_facet =
+                    mesh->facetsPerEdge[edge_index].begin();
+                    that_facet != mesh->facetsPerEdge[edge_index].end();
+                    ++that_facet)
+                facet_crosses_free_surface[*that_facet] = true;
+    }
+}
+
+void MeshIntersector::classify_or_split(
+        std::vector<bool>& facet_crosses_free_surface,
+        std::vector<int>& edges_immersion_status)
+{
+    // iterate on each facet to classify and/or split
+    for (size_t facet_index = 0; facet_index < mesh->static_facets;
+            ++facet_index)
+    {
+        if (facet_crosses_free_surface[facet_index])
+        {
+            split_partially_immersed_facet(facet_index, edges_immersion_status,
+                    split_edges);
+        }
+        else
+        {
+            if (is_emerged(
+                    edges_immersion_status[mesh->orientedEdgesPerFacet[facet_index][0]
+                            >> 1]))
+                index_of_emerged_facets.push_back(facet_index);
+            else
+                index_of_immersed_facets.push_back(facet_index);
+        }
+    }
+
+}
+
+void MeshIntersector::reset_dynamic_members()
 {
     mesh->reset_dynamic_data();
     index_of_emerged_facets.clear();
     index_of_immersed_facets.clear();
     index_of_emerged_facets.reserve(mesh->facets.size());
     index_of_immersed_facets.reserve(mesh->facets.size());
+}
 
+void MeshIntersector::update_intersection_with_free_surface()
+{
+    reset_dynamic_members();
     std::vector<bool> facet_crosses_free_surface(mesh->static_facets,false);
     std::vector<int> edges_immersion_status(mesh->static_edges,0); // the immersion status of each edge
-
-    // iterate on each edge to find intersection with free surface
-    for (size_t edge_index=0 ; edge_index < mesh->static_edges ; ++edge_index)
-    {
-        double z0 = all_immersions[mesh->edges[0][edge_index]];
-        double z1 = all_immersions[mesh->edges[1][edge_index]];
-        int status = get_edge_immersion_status(z0,z1);
-        edges_immersion_status[edge_index]=status;
-        if (crosses_free_surface(status))
-            split_edges[edge_index] = split_partially_immersed_edge(edge_index,edges_immersion_status);
-        if (crosses_free_surface(status) or just_touches_free_surface(status))
-            for(std::vector<size_t>::const_iterator
-                        that_facet  = mesh->facetsPerEdge[edge_index].begin();
-                        that_facet != mesh->facetsPerEdge[edge_index].end(); ++that_facet)
-                facet_crosses_free_surface[*that_facet]=true;
-    }
-
-    // iterate on each facet to classify and/or split
-    for (size_t facet_index = 0 ; facet_index < mesh->static_facets ; ++facet_index)
-    {
-        if (facet_crosses_free_surface[facet_index])
-        {
-            split_partially_immersed_facet(facet_index,edges_immersion_status,split_edges);
-        }
-        else
-        {
-            if (is_emerged(edges_immersion_status[mesh->orientedEdgesPerFacet[facet_index][0] >> 1]))
-                index_of_emerged_facets.push_back(facet_index);
-            else
-                index_of_immersed_facets.push_back(facet_index);
-        }
-    }
+    find_intersection_with_free_surface(edges_immersion_status, facet_crosses_free_surface);
+    classify_or_split(facet_crosses_free_surface, edges_immersion_status);
 }
 
 void MeshIntersector::split_partially_immersed_facet(
