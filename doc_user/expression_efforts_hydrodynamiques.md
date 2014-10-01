@@ -34,7 +34,7 @@ potentiel qui nous intéresse ici puisque c'est la seule indéterminée.
 On contraint $\Phi_P$ à être une fonction harmonique du temps de pulsation
 $\omega$ :
 
-$$\Phi_P(x,y,z,t) = \Re{\Psi_P e^{-i\omega t}}$$ 
+$$\Phi_P(x,y,z,t) = \Re{\Psi_P e^{-i\omega t}}$$
 
 
 ## Conditions satisfaites par le potentiel d'interaction entre la houle et l'obstacle
@@ -55,7 +55,7 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
    diffraction-radiation ont pour nombre d'onde $k$, se propagent dans la
    direction radiale et leur amplitude décroît comme $1/\sqrt{r}$.
 4. Le fond étant imperméable, la composante suivant $z$ de la vitesse y est
-   nulle : $V_z(x,y,h,t) =  \frac{\partial Phi_P}{\partial z}(x,y,h,t) = 0$ et
+   nulle : $V_z(x,y,h,t) = \frac{\partial Phi_P}{\partial z}(x,y,h,t) = 0$ et
    par là même : $\frac{\partial Psi_P}{\partial z}(x,y,h) = 0$.
 5. L'obstacle étant imperméable, $(\mbox{grad} \Psi_P) \cdot n = \frac{\partial
 \Psi_P}{\partial n} = -(\mbox{grad}
@@ -68,7 +68,7 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
 
 Si l'on suppose l'obstacle fixe, la condition (5) s'écrit :
 $$ \frac{\partial \Psi_P}{\partial n} = - \frac{\partial \Psi_I}{\partial n}$$
-Cette condition traduit la réfexion (ou diffraction) de la houle incidente sur
+Cette condition traduit la réflexion (ou diffraction) de la houle incidente sur
 l'obstacle fixe. Un potentiel $\Psi_{\mbox{PD}}$ vérifiant les conditions (1) à
 (4) et la condition de diffraction est appelé potentiel de diffraction.
 
@@ -204,7 +204,7 @@ $$F_{\mbox{R}}(t) = -\left(M_A(\omega)\frac{d^2\eta(t)}{dt^2} + B_r(\omega)
 On peut montrer en utilisant la deuxième identité de Green, que les matrices
 $M_A$ et $B_r$ obtenues précédemment sont symétriques et que la matrices $M_A$
 est définie positive : on peut donc considérer $M_A$ comme une matrice d'inertie
-que l'on appelle "inertie ajoutée".  On peut aussi retrouver l'expression de $M_A$
+que l'on appelle "inertie ajoutée". On peut aussi retrouver l'expression de $M_A$
 de l'évaluation de l'énergie cinétique du fluide :
 
 $$2Ec = \rho\int_{\omega} (\nabla \Phi)^2 dV = \rho \int_{\partial \Omega} \Phi
@@ -290,7 +290,7 @@ La formulation temporelle est :
 $$-F_R = A\frac{d^2X}{dt^2} + \int_{-\infty}^t
 K(t-\tau)\frac{dX}{dt}(\tau)d\tau$$
 
-Les codes potentiels tels qu'Aqua+ ou Dyodore fournissent les matrices
+Les codes potentiels tels qu'Aqua+ ou Diodore fournissent les matrices
 $M_A(\omega)$ et $B_r(\omega)$ à n'importe quelle fréquence, mais qu'en est-il
 des matrices $A$ et $K$ utilisées par la formulation temporelle ?
 

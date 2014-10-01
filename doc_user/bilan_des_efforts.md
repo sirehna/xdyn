@@ -70,7 +70,7 @@ $$F_{\mbox{FK}}=\rho \int_{C} \frac{d\Phi_I}{dt} dS $$
 $\Phi_I$ est le potentiel des vitesses de la houle incidente
 
 En pratique, comme il s'agit d'un effort surfacique, il est traité de la même
-manière que les efforts hydrostatiques : 
+manière que les efforts hydrostatiques :
 
 #### Efforts de diffraction
 
@@ -85,7 +85,7 @@ de radiation.
 
 #### Masses ajoutées
 
-$$F_{mbox{MA}} = M_A(\infty)\frac{d\nu}{dt}$$ 
+$$F_{mbox{MA}} = M_A(\infty)\frac{d\nu}{dt}$$
 
 La matrice de masse ajoutées à pulsation infinie $M_A(\infty)$ est, là encore,
 calculée par un code potentiel type Dyodore ou Aqua+. Elle est supposée
