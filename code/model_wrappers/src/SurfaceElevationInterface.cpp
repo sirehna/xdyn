@@ -16,6 +16,14 @@ template <typename PointType> PointType compute_relative_position(const PointTyp
     return T*P;
 }
 
+template <typename PointType> PointType compute_relative_position(const TR1(shared_ptr)<PointType>& P, const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k)
+{
+    ssc::kinematics::Transform T = k->get("NED", P->get_frame());
+    // Create the equivalent transformation just by swapping frame names
+    T.swap();
+    return T*P;
+}
+
 SurfaceElevationInterface::SurfaceElevationInterface(const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) : output_mesh(output_mesh_)
 {
 }
@@ -48,10 +56,10 @@ double SurfaceElevationInterface::get_relative_wave_height(const ssc::kinematics
     return wave_height(OP.x(),OP.y(),OP.z(),t);
 }
 
-std::vector<double> SurfaceElevationInterface::get_relative_wave_height(const ssc::kinematics::PointMatrix& P, const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, const double t) const
+std::vector<double> SurfaceElevationInterface::get_relative_wave_height(const ssc::kinematics::PointMatrixPtr& P, const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, const double t) const
 {
     const ssc::kinematics::PointMatrix OP = compute_relative_position(P, k);
-    const int n = (int)P.m.cols();
+    const int n = (int)P->m.cols();
     std::vector<double> ret;
     for (int i = 0 ; i < n ; ++i)
     {

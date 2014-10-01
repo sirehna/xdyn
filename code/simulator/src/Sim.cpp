@@ -37,7 +37,7 @@ void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies
 
 void Sim::update_intersection_with_free_surface(Body& body, const double t) const
 {
-    const std::vector<double> dz = env.w->get_relative_wave_height(*body.M,env.k,t);
+    const std::vector<double> dz = env.w->get_relative_wave_height(body.M,env.k,t);
     body.intersector->update_intersection_with_free_surface(dz);
 }
 

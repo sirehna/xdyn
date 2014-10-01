@@ -52,7 +52,7 @@ class SurfaceElevationInterface
           *  \returns zwave - z for each point.
           *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
           */
-        std::vector<double> get_relative_wave_height(const ssc::kinematics::PointMatrix& P,                     //!< Points for which to compute the relative wave height
+        std::vector<double> get_relative_wave_height(const ssc::kinematics::PointMatrixPtr& P,                     //!< Points for which to compute the relative wave height
                                                      const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
                                                      const double t //!< Current instant (in seconds)
                                                     ) const;

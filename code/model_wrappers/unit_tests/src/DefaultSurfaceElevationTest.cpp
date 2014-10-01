@@ -146,8 +146,8 @@ TEST_F(DefaultSurfaceElevationTest, can_compute_relative_wave_height_for_PointMa
     const DefaultSurfaceElevation w(888, mesh);
     const ssc::kinematics::Transform T(ssc::kinematics::Point("NED", 1, 20, 300), "body");
     k->add(T);
-
-    const std::vector<double> delta = w.get_relative_wave_height(M,k, a.random<double>());
+    ssc::kinematics::PointMatrixPtr Mptr(new ssc::kinematics::PointMatrix(M));
+    const std::vector<double> delta = w.get_relative_wave_height(Mptr, k, a.random<double>());
     //! [DefaultWaveModelTest example]
     //! [DefaultWaveModelTest expected output]
     ASSERT_EQ(5, delta.size());
