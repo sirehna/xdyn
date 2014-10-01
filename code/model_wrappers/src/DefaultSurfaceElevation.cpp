@@ -13,5 +13,5 @@ DefaultSurfaceElevation::DefaultSurfaceElevation(const double wave_height_, cons
 
 double DefaultSurfaceElevation::wave_height(const double , const double , const double z, const double ) const
 {
-    return z - zwave ;
+    return z - zwave;
 }
