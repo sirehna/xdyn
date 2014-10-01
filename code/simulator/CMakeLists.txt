@@ -23,7 +23,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
 include_directories(inc)
-INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+include_directories(${ssc_INCLUDE_DIRS})
 include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
@@ -34,6 +34,7 @@ include_directories(${wave_models_INCLUDE_DIRS})
 include_directories(${model_wrappers_INCLUDE_DIRS})
 include_directories(${parser_extensions_INCLUDE_DIRS})
 include_directories(${hydro_models_INCLUDE_DIRS})
+include_directories(${mesh_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
 

@@ -1,7 +1,7 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
-PROJECT(model_wrappers)
+cmake_minimum_required(VERSION 2.8.8)
+project(model_wrappers)
 
-SET(SRC src/Body.cpp
+set(SRC src/Body.cpp
         src/BodyBuilder.cpp
         src/DefaultSurfaceElevation.cpp
         src/GravityForceModel.cpp
@@ -14,22 +14,22 @@ SET(SRC src/Body.cpp
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
-IF(NOT(MSVC))
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+IF (NOT(MSVC))
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
-INCLUDE_DIRECTORIES(inc)
-INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${hydro_models_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${wave_models_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${simulator_yaml_parser_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+include_directories(inc)
+include_directories(${ssc_INCLUDE_DIRS})
+include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
+include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
+include_directories(${hydro_models_INCLUDE_DIRS})
+include_directories(${wave_models_INCLUDE_DIRS})
+include_directories(${mesh_INCLUDE_DIRS})
+include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
+include_directories(${stl_reader_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
-ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
-SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+add_library (${PROJECT_NAME} OBJECT ${SRC})
+set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-ADD_SUBDIRECTORY(unit_tests)
+add_subdirectory(unit_tests)

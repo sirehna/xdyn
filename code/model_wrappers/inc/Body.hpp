@@ -14,6 +14,9 @@
 #include <Eigen/Dense>
 
 #include <ssc/kinematics.hpp>
+#include "ForceModel.hpp"
+#include "GeometricTypes3d.hpp"
+#include "MeshIntersector.hpp"
 
 class Mesh;
 class PointMatrix;
@@ -44,6 +47,7 @@ struct Body
     double p;                                     //!< Projection of the body's rotational speed (relative to NED) along the body's X-axis (in rad/s)
     double q;                                     //!< Projection of the body's rotational speed (relative to NED) along the body's Y-axis (in rad/s)
     double r;                                     //!< Projection of the body's rotational speed (relative to NED) along the body's Z-axis (in rad/s)
+    MeshIntersectorPtr intersector;         //!< Allows us to iterate on all emerged or immersed facets
 };
 
 #endif /* BODY_HPP_ */

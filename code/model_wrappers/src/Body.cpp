@@ -8,24 +8,25 @@
 #include "Body.hpp"
 #include "YamlBody.hpp"
 
-Body::Body() : name(""),
-G(ssc::kinematics::Point()),
-m(0),
-mesh(MeshPtr()),
-total_inertia(MatrixPtr()),
-solid_body_inertia(MatrixPtr()),
-inverse_of_the_total_inertia(MatrixPtr()),
-x_relative_to_mesh(0),
-y_relative_to_mesh(0),
-z_relative_to_mesh(0),
-mesh_to_body(ssc::kinematics::RotationMatrix()),
-M(PointMatrixPtr ()),
-u(0),
-v(0),
-w(0),
-p(0),
-q(0),
-r(0)
+Body::Body() : name(),
+G(),
+m(),
+mesh(),
+total_inertia(),
+solid_body_inertia(),
+inverse_of_the_total_inertia(),
+x_relative_to_mesh(),
+y_relative_to_mesh(),
+z_relative_to_mesh(),
+mesh_to_body(),
+M(),
+u(),
+v(),
+w(),
+p(),
+q(),
+r(),
+intersector()
 {
 
 }
