@@ -34,6 +34,13 @@ void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies
     *_QJ(all_states,i) /= norm;
     *_QK(all_states,i) /= norm;
 }
+
+void Sim::update_intersection_with_free_surface(Body& body, const double t) const
+{
+    const std::vector<double> dz = env.w->get_relative_wave_height(*body.M,env.k,t);
+    body.intersector->update_intersection_with_free_surface(dz);
+}
+
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto x_with_normalized_quaternions = x;
@@ -42,6 +49,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
         normalize_quaternions(x_with_normalized_quaternions, i);
         update_kinematics(x_with_normalized_quaternions, bodies[i], i, env.k);
         update_body_states(x_with_normalized_quaternions, bodies[i], i);
+        update_intersection_with_free_surface(bodies[i], t);
         calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), bodies[i].inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
     }
     state = x_with_normalized_quaternions;

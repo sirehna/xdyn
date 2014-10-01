@@ -60,11 +60,15 @@ TEST_F(HydrostaticForceModelTest, example)
     body.G = G;
 
     HydrostaticForceModel F(input);
-    const ssc::kinematics::Wrench Fhs = F(body, a.random<double>());
+    const double t = a.random<double>();
+    const std::vector<double> vz = input.w->get_relative_wave_height(*body.M,input.k,t);
+    body.intersector->update_intersection_with_free_surface(vz);
+    const ssc::kinematics::Wrench Fhs = F(body, t);
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
     const double dz = 2./3;
     const double dS = 4;
+
     ASSERT_DOUBLE_EQ(input.rho*input.g*dz*dS, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
     ASSERT_DOUBLE_EQ(0, Fhs.Z());

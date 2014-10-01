@@ -30,13 +30,10 @@ HydrostaticForceModel::Input::Input(const EnvironmentAndFrames& env) : rho(env.r
 HydrostaticForceModel::HydrostaticForceModel(const Input& in) : rho(in.rho), g(in.g), w(in.w), k(in.k)
 {}
 
-ssc::kinematics::Wrench HydrostaticForceModel::operator()(const Body& body, const double t) const
+ssc::kinematics::Wrench HydrostaticForceModel::operator()(const Body& body, const double ) const
 {
-    const std::vector<double> dz = w->get_relative_wave_height(*body.M,k,t);
     const ssc::kinematics::Point g_in_NED("NED", 0, 0, g);
     const ssc::kinematics::RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + body.name + ")").get_rot();
-
-    body.intersector->update_intersection_with_free_surface(dz);
 
     const auto F = hydrostatic::force((const_MeshIntersectorPtr) body.intersector, body.G, rho, ned2mesh*g_in_NED.v);
     return F;

@@ -60,6 +60,12 @@ class Sim
                                    const size_t i         //!< Index of the body under consideration
                                    );
 
+        /**  \brief Compute relative immersions & update intersector
+         */
+        void update_intersection_with_free_surface(Body& body,    //!< Body we wish to update
+                                                   const double t //!< Current instant
+                                                   ) const;
+
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;
         EnvironmentAndFrames env;
