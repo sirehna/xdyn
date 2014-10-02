@@ -85,9 +85,10 @@ bool BodyBuilder::match(const std::vector<std::string>& convention, const std::s
 
 void BodyBuilder::add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
 {
-    Eigen::Matrix<double,6,6> Mrb = convert(rigid_body_inertia);
-    Eigen::Matrix<double,6,6> Ma = convert(added_mass);
-    if (fabs((Mrb+Ma).determinant())<1E-10)
+    const Eigen::Matrix<double,6,6> Mrb = convert(rigid_body_inertia);
+    const Eigen::Matrix<double,6,6> Ma = convert(added_mass);
+    const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
+    if (fabs(Mt.determinant())<1E-10)
     {
         std::stringstream ss;
         ss << "Unable to compute the inverse of the total inertia matrix (rigid body inertia + added mass): " << std::endl
@@ -96,13 +97,13 @@ void BodyBuilder::add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_bod
            << "Ma = " << std::endl
            << Ma << std::endl
            << "Mrb+Ma = " << std::endl
-           << Mrb+Ma << std::endl;
+           << Mt << std::endl;
         THROW(__PRETTY_FUNCTION__, BodyBuilderException, ss.str());
     }
-    Eigen::Matrix<double,6,6> M_inv = (Mrb+Ma).inverse();
+    Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
     body.inverse_of_the_total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(M_inv));
     body.solid_body_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mrb));
-    body.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mrb+Ma));
+    body.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mt));
 }
 
 Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) const
