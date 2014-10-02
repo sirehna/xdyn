@@ -1,8 +1,8 @@
 /*
  * DampingForceModelTest.cpp
  *
- *  Created on: Jun 17, 2014
- *      Author: cady
+ *  Created on: Oct 2, 2014
+ *      Author: jacquenot
  */
 
 #include "DampingForceModel.hpp"
@@ -28,7 +28,7 @@ void DampingForceModelTest::TearDown()
 {
 }
 
-TEST_F(DampingForceModelTest, example)
+TEST_F(DampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
     DampingForceModel F;
@@ -45,45 +45,71 @@ TEST_F(DampingForceModelTest, example)
     ASSERT_DOUBLE_EQ(0, f.Z());
 //! [DampingForceModelTest expected output]
 }
-/*
-TEST_F(DampingForceModelTest, example_with_an_orientation)
+
+TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identity_damping_matrix)
 {
-    using namespace ssc::kinematics;
     const double EPS = 1e-11;
-
-
-    Eigen::Matrix<double,6,6> Mrb = convert(rigid_body_inertia);
-    Eigen::Matrix<double,6,6> Ma = convert(added_mass);
-    if (fabs((Mrb+Ma).determinant())<1E-10)
-    {
-        std::stringstream ss;
-        ss << "Unable to compute the inverse of the total inertia matrix (rigid body inertia + added mass): " << std::endl
-           << "Mrb = " << std::endl
-           << Mrb << std::endl
-           << "Ma = " << std::endl
-           << Ma << std::endl
-           << "Mrb+Ma = " << std::endl
-           << Mrb+Ma << std::endl;
-        THROW(__PRETTY_FUNCTION__, BodyBuilderException, ss.str());
-    }
-    Eigen::Matrix<double,6,6> M_inv = (Mrb+Ma).inverse();
-    body.inverse_of_the_total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(M_inv));
-    body.solid_body_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mrb));
-    body.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mrb+Ma));
-
-    input.g = 9.81;
-    input.k = ssc::kinematics::KinematicsPtr(new Kinematics());
-    input.k->add(Transform(rot, "NED", BODY));
-    DampingForceModel F(input);
+    DampingForceModel F;
+    double u,v,w,p,q,r;
     Body b = get_body(BODY);
-    b.m = 100;
-    const Wrench f = F(b,a.random<double>());
-    ASSERT_EQ(BODY, f.get_frame());
-    ASSERT_NEAR(0, f.K(),EPS);
-    ASSERT_NEAR(0, f.M(),EPS);
-    ASSERT_NEAR(0, f.N(),EPS);
-    ASSERT_NEAR(-0.5*981, f.X(),EPS);
-    ASSERT_NEAR(+0.5*sqrt(3.0)*981, f.Y(),EPS);
-    ASSERT_NEAR(0.0, f.Z(),EPS);
+    b.m = a.random<double>();
+    for (size_t i=0;i<100;++i)
+    {
+        b.u = u = a.random<double>().greater_than(0.0);
+        b.v = v = a.random<double>().greater_than(0.0);
+        b.w = w = a.random<double>().greater_than(0.0);
+        b.p = p = a.random<double>().greater_than(0.0);
+        b.q = q = a.random<double>().greater_than(0.0);
+        b.r = r = a.random<double>().greater_than(0.0);
+        const ssc::kinematics::Wrench f = F(b,a.random<double>());
+        ASSERT_EQ(BODY, f.get_frame());
+        ASSERT_NEAR(u*u, f.X(),EPS);
+        ASSERT_NEAR(v*v, f.Y(),EPS);
+        ASSERT_NEAR(w*w, f.Z(),EPS);
+        ASSERT_NEAR(p*p, f.K(),EPS);
+        ASSERT_NEAR(q*q, f.M(),EPS);
+        ASSERT_NEAR(r*r, f.N(),EPS);
+    }
 }
-*/
+
+TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
+{
+    const double EPS = 1e-11;
+    Eigen::Matrix<double,6,6> d;
+    DampingForceModel F;
+    double u,v,w,p,q,r;
+    double uu,vv,ww,pp,qq,rr;
+    Body b = get_body(BODY);
+    b.m = a.random<double>();
+    d<<  2,   3,   5,   7,  11,  13,
+        17,  19,  23,  29,  31,  37,
+        41,  43,  47,  53,  59,  61,
+        67,  71,  73,  79,  83,  89,
+        97, 101, 103, 107, 109, 113,
+       127, 131, 137, 139, 149, 151;
+    b.damping = MatrixPtr(new Eigen::Matrix<double,6,6>(d));
+    for (size_t i=0;i<100;++i)
+    {
+        b.u = u = a.random<double>().between(-100.0,+100.0);
+        b.v = v = a.random<double>().between(-100.0,+100.0);
+        b.w = w = a.random<double>().between(-100.0,+100.0);
+        b.p = p = a.random<double>().between(-100.0,+100.0);
+        b.q = q = a.random<double>().between(-100.0,+100.0);
+        b.r = r = a.random<double>().between(-100.0,+100.0);
+        uu = fabs(u)*u;
+        vv = fabs(v)*v;
+        ww = fabs(w)*w;
+        pp = fabs(p)*p;
+        qq = fabs(q)*q;
+        rr = fabs(r)*r;
+        const ssc::kinematics::Wrench f = F(b,a.random<double>());
+        ASSERT_EQ(BODY, f.get_frame());
+        for (size_t j=0;j<3;++j)
+        {
+            const size_t k = j+3;
+            ASSERT_NEAR(d(j,0)*uu+d(j,1)*vv+d(j,2)*ww+d(j,3)*pp+d(j,4)*qq+d(j,5)*rr,f.force[j],EPS)<<"test:"<<i << " row:"<<j;
+            ASSERT_NEAR(d(k,0)*uu+d(k,1)*vv+d(k,2)*ww+d(k,3)*pp+d(k,4)*qq+d(k,5)*rr,f.torque[j],EPS)<<"test:"<<i << " row:"<<k;
+        }
+    }
+}
+

@@ -19,7 +19,7 @@ ssc::kinematics::Wrench DampingForceModel::operator()(const Body& body, const do
         body.p,
         body.q,
         body.r;
-    W = (W.array().abs() * W.array());
+    W = (W.cwiseAbs().array() * W.array());
     W = (*body.damping) * W;
     return ssc::kinematics::Wrench(body.G,
                                    Eigen::Vector3d(W(0,0),W(1,0),W(2,0)),
