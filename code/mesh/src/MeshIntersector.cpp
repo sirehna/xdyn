@@ -7,14 +7,13 @@ MeshIntersector::MeshIntersector(const MeshPtr mesh_,const std::vector<double> &
 ,all_immersions(immersions)
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
-,split_edges(mesh->static_edges,0)
 {}
 
-void MeshIntersector::find_intersection_with_free_surface(
+std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
+        std::vector<size_t>& split_edges,
         std::vector<int>& edges_immersion_status,
         std::vector<bool>& facet_crosses_free_surface)
 {
-    // iterate on each edge to find intersection with free surface
     for (size_t edge_index = 0; edge_index < mesh->static_edges;
             ++edge_index)
     {
@@ -33,9 +32,11 @@ void MeshIntersector::find_intersection_with_free_surface(
                     ++that_facet)
                 facet_crosses_free_surface[*that_facet] = true;
     }
+    return split_edges;
 }
 
 void MeshIntersector::classify_or_split(
+        const std::vector<size_t>& split_edges,
         std::vector<bool>& facet_crosses_free_surface,
         std::vector<int>& edges_immersion_status)
 {
@@ -75,8 +76,9 @@ void MeshIntersector::update_intersection_with_free_surface()
     reset_dynamic_members();
     std::vector<bool> facet_crosses_free_surface(mesh->static_facets,false);
     std::vector<int> edges_immersion_status(mesh->static_edges,0); // the immersion status of each edge
-    find_intersection_with_free_surface(edges_immersion_status, facet_crosses_free_surface);
-    classify_or_split(facet_crosses_free_surface, edges_immersion_status);
+    std::vector<size_t > split_edges(mesh->static_edges,0);  //!< a table indicating the index of replacing edge for each edge that is split (there are two consecutive edges per split edge, the table only gives the first one)
+    find_intersection_with_free_surface(split_edges, edges_immersion_status, facet_crosses_free_surface);
+    classify_or_split(split_edges, facet_crosses_free_surface, edges_immersion_status);
 }
 
 void MeshIntersector::split_partially_immersed_facet(
