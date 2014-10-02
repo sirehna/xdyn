@@ -22,6 +22,7 @@ class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
 
     private:
         FastHydrostaticForceModel();
+        virtual EPoint get_application_point(const FacetIterator& that_facet, const Body& body, const double zG) const;
 };
 
 #endif /* FASTHYDROSTATICFORCEMODEL_HPP_ */

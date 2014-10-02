@@ -17,7 +17,11 @@ SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_fa
 {
     const double zG = hydrostatic::average_immersion(that_facet->vertex_index, body.intersector->all_immersions);
     const EPoint dS = that_facet->area*that_facet->unit_normal;
-    const EPoint C = that_facet->barycenter;
+    const EPoint C = get_application_point(that_facet, body, zG);
     return DF(-env.rho*env.g*zG*dS,C);
 }
 
+EPoint FastHydrostaticForceModel::get_application_point(const FacetIterator& that_facet, const Body&, const double) const
+{
+    return that_facet->barycenter;
+}
