@@ -26,7 +26,8 @@ w(),
 p(),
 q(),
 r(),
-intersector()
+intersector(),
+down_direction_in_mesh_frame()
 {
 
 }

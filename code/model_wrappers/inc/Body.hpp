@@ -46,6 +46,7 @@ struct Body
     double q;                               //!< Projection of the body's rotational speed (relative to NED) along the body's Y-axis (in rad/s)
     double r;                               //!< Projection of the body's rotational speed (relative to NED) along the body's Z-axis (in rad/s)
     MeshIntersectorPtr intersector;         //!< Allows us to iterate on all emerged or immersed facets
+    EPoint down_direction_in_mesh_frame;    //!< Unit vertical vector, expressed in the body's mesh frame
 };
 
 #endif /* BODY_HPP_ */
