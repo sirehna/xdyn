@@ -41,6 +41,13 @@ void Sim::update_intersection_with_free_surface(Body& body, const double t) cons
     body.intersector->update_intersection_with_free_surface(dz);
 }
 
+void Sim::update_body(Body& body, const size_t i, const StateType& x, const double t) const
+{
+    update_body_states(x, body, i);
+    update_intersection_with_free_surface(body, t);
+    update_projection_of_z_in_mesh_frame(body);
+}
+
 void Sim::update_projection_of_z_in_mesh_frame(Body& body         //!< Body we wish to update
                                               ) const
 {
@@ -56,8 +63,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     {
         normalize_quaternions(x_with_normalized_quaternions, i);
         update_kinematics(x_with_normalized_quaternions, bodies[i], i, env.k);
-        update_body_states(x_with_normalized_quaternions, bodies[i], i);
-        update_intersection_with_free_surface(bodies[i], t);
+        update_body(bodies[i], i, x_with_normalized_quaternions, t);
         calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), bodies[i].inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
     }
     state = x_with_normalized_quaternions;

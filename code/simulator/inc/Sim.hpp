@@ -66,6 +66,14 @@ class Sim
                                                    const double t //!< Current instant
                                                    ) const;
 
+        /**  \brief Update Body structure taking the new coordinates & wave heights into account
+         */
+        void update_body(Body& body,         //!< Body we wish to update
+                         const size_t i,     //!< Index of the body (to retrieve its states from 'x')
+                         const StateType& x, //!< State vector containing all states of all bodies
+                         const double t      //!< Current instant
+                         ) const;
+
         /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
          */
         void update_projection_of_z_in_mesh_frame(Body& body         //!< Body we wish to update
