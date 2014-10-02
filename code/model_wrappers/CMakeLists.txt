@@ -11,6 +11,7 @@ set(SRC src/Body.cpp
         src/SurfaceForceModel.cpp
         src/ImmersedSurfaceForceModel.cpp
         src/EmergedSurfaceForceModel.cpp
+        src/ExactHydrostaticForceModel.cpp
         )
 
 # Using C++ 2011
