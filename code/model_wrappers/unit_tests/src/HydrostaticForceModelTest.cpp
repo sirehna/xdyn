@@ -34,15 +34,15 @@ void HydrostaticForceModelTest::TearDown()
 
 TEST_F(HydrostaticForceModelTest, example)
 {
-    HydrostaticForceModel::Input input;
-    input.g = 9.81;
-    input.rho = 1024;
-    input.k = KinematicsPtr(new ssc::kinematics::Kinematics());
+    EnvironmentAndFrames env;
+    env.g = 9.81;
+    env.rho = 1024;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     const ssc::kinematics::Point G("NED",0,2,2./3.);
-    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
-    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    input.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
+    env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
     auto points = two_triangles();
     for (size_t i = 0 ; i < 2 ; ++i)
@@ -59,9 +59,9 @@ TEST_F(HydrostaticForceModelTest, example)
     Body body = get_body(BODY, points);
     body.G = G;
 
-    HydrostaticForceModel F(input);
+    FastHydrostaticForceModel F(env);
     const double t = a.random<double>();
-    const std::vector<double> vz = input.w->get_relative_wave_height(body.M,input.k,t);
+    const std::vector<double> vz = env.w->get_relative_wave_height(body.M,env.k,t);
     body.intersector->update_intersection_with_free_surface(vz);
     const ssc::kinematics::Wrench Fhs = F(body, t);
 //! [HydrostaticModuleTest example]
@@ -69,7 +69,7 @@ TEST_F(HydrostaticForceModelTest, example)
     const double dz = 2./3;
     const double dS = 4;
 
-    ASSERT_DOUBLE_EQ(input.rho*input.g*dz*dS, Fhs.X());
+    ASSERT_DOUBLE_EQ(env.rho*env.g*dz*dS, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
     ASSERT_DOUBLE_EQ(0, Fhs.Z());
     ASSERT_DOUBLE_EQ(0, Fhs.K());
@@ -103,15 +103,15 @@ TEST_F(HydrostaticForceModelTest, example)
  */
 TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
 {
-    HydrostaticForceModel::Input input;
-    input.g = 9.81;
-    input.rho = 1024;
-    input.k = KinematicsPtr(new ssc::kinematics::Kinematics());
+    EnvironmentAndFrames env;
+    env.g = 9.81;
+    env.rho = 1024;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     const ssc::kinematics::Point G("NED",0,0,0);
-    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
-    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    input.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
+    env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
     const auto points = two_triangles_immerged();
 
@@ -131,7 +131,7 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     ASSERT_DOUBLE_EQ(0.0, body.mesh_to_body(2,0));
     ASSERT_DOUBLE_EQ(0.0, body.mesh_to_body(2,1));
 
-    HydrostaticForceModel F(input);
+    FastHydrostaticForceModel F(env);
     const ssc::kinematics::Wrench Fhs = F(body,a.random<double>());
 
     ASSERT_EQ(3,(size_t)body.mesh->nodes.rows());
@@ -177,11 +177,11 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
 
     // What is expected with the correct evaluation of application point force
     // All these tests fail.
-    EXPECT_DOUBLE_EQ(input.rho*input.g*200.0, sqrt(Fhs.X()*Fhs.X()+Fhs.Z()*Fhs.Z()));
+    EXPECT_DOUBLE_EQ(env.rho*env.g*200.0, sqrt(Fhs.X()*Fhs.X()+Fhs.Z()*Fhs.Z()));
     ASSERT_DOUBLE_EQ(0.0, Fhs.Y());
-    EXPECT_DOUBLE_EQ(-input.rho*input.g*200.0*sin(atan(0.5)), Fhs.X());
-    EXPECT_DOUBLE_EQ(-input.rho*input.g*200.0*cos(atan(0.5)), Fhs.Z());
+    EXPECT_DOUBLE_EQ(-env.rho*env.g*200.0*sin(atan(0.5)), Fhs.X());
+    EXPECT_DOUBLE_EQ(-env.rho*env.g*200.0*cos(atan(0.5)), Fhs.Z());
     ASSERT_DOUBLE_EQ(0, Fhs.K());
-    ASSERT_DOUBLE_EQ(input.rho*input.g*200.0 * (5.0*sin(atan(0.5))+sqrt(5.0)/3.0), Fhs.M());
+    ASSERT_DOUBLE_EQ(env.rho*env.g*200.0 * (5.0*sin(atan(0.5))+sqrt(5.0)/3.0), Fhs.M());
     ASSERT_DOUBLE_EQ(0, Fhs.N());
 }

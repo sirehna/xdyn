@@ -6,35 +6,17 @@
  */
 
 #include "HydrostaticForceModel.hpp"
-#include "SurfaceElevationInterface.hpp"
-#include "Body.hpp"
 #include "hydrostatic.hpp"
-#include <ssc/kinematics.hpp>
-#include "EnvironmentAndFrames.hpp"
-#include "MeshIntersector.hpp"
 
-HydrostaticForceModel::Input::Input() : rho(0),
-                                        g(0),
-                                        w(SurfaceElevationPtr()),
-                                        k(KinematicsPtr())
+FastHydrostaticForceModel::FastHydrostaticForceModel(const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(env_)
 {
 }
 
-HydrostaticForceModel::Input::Input(const EnvironmentAndFrames& env) : rho(env.rho),
-                                                                       g(env.g),
-                                                                       w(env.w),
-                                                                       k(env.k)
+SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const MeshIntersectorPtr& intersector, const EnvironmentAndFrames& env, const Body&, const double) const
 {
+    const double zG = hydrostatic::average_immersion(that_facet->vertex_index, intersector->all_immersions);
+    const EPoint dS = that_facet->area*that_facet->unit_normal;
+    const EPoint C = that_facet->barycenter;
+    return DF(-env.rho*env.g*zG*dS,C);
 }
 
-HydrostaticForceModel::HydrostaticForceModel(const Input& in) : rho(in.rho), g(in.g), w(in.w), k(in.k)
-{}
-
-ssc::kinematics::Wrench HydrostaticForceModel::operator()(const Body& body, const double ) const
-{
-    const ssc::kinematics::Point g_in_NED("NED", 0, 0, g);
-    const ssc::kinematics::RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + body.name + ")").get_rot();
-
-    const auto F = hydrostatic::force((const_MeshIntersectorPtr) body.intersector, body.G, rho, ned2mesh*g_in_NED.v);
-    return F;
-}

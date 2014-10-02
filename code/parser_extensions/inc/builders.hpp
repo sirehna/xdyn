@@ -43,7 +43,7 @@ class ForceBuilder<GravityForceModel> : public ForceBuilderInterface
 
 
 template <>
-class ForceBuilder<HydrostaticForceModel> : public ForceBuilderInterface
+class ForceBuilder<FastHydrostaticForceModel> : public ForceBuilderInterface
 {
     public:
         ForceBuilder();

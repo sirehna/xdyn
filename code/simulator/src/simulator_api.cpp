@@ -21,7 +21,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
     SimulatorBuilder builder(yaml);
     builder.can_parse<GravityForceModel>()
            .can_parse<DefaultSurfaceElevation>()
-           .can_parse<HydrostaticForceModel>()
+           .can_parse<FastHydrostaticForceModel>()
            .can_parse<BretschneiderSpectrum>()
            .can_parse<JonswapSpectrum>()
            .can_parse<PiersonMoskowitzSpectrum>()

@@ -14,12 +14,12 @@
 #include <ssc/kinematics.hpp>
 
 class SurfaceElevationInterface;
-typedef TR1(shared_ptr)<SurfaceElevationInterface> WaveModelPtr;
+typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 
 struct EnvironmentAndFrames
 {
     EnvironmentAndFrames();
-    WaveModelPtr w;
+    SurfaceElevationPtr w;
     ssc::kinematics::KinematicsPtr k;
     double rho;
     double g;

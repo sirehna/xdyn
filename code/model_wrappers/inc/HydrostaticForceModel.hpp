@@ -5,40 +5,24 @@
  *      Author: cady
  */
 
-#ifndef HYDROSTATICFORCEMODEL_HPP_
-#define HYDROSTATICFORCEMODEL_HPP_
+#ifndef FASTHYDROSTATICFORCEMODEL_HPP_
+#define FASTHYDROSTATICFORCEMODEL_HPP_
 
-#include "ForceModel.hpp"
-#include <ssc/kinematics.hpp>
-#include "EnvironmentAndFrames.hpp"
+#include "ImmersedSurfaceForceModel.hpp"
 
-class SurfaceElevationInterface;
-typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
-
-class Body;
-typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
-class HydrostaticForceModel : public ForceModel
+class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
 {
     public:
-        struct Input
-        {
-            Input();
-            Input(const EnvironmentAndFrames& env);
-            double rho;
-            double g;
-            SurfaceElevationPtr w;
-            KinematicsPtr k;
-        };
-
-        HydrostaticForceModel(const Input& input);
-        ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
+        FastHydrostaticForceModel(const EnvironmentAndFrames& env);
+        DF dF(const FacetIterator& that_facet,
+              const MeshIntersectorPtr& intersector,
+              const EnvironmentAndFrames& env,
+              const Body& body,
+              const double t
+              ) const;
 
     private:
-        HydrostaticForceModel();
-        double rho;
-        double g;
-        SurfaceElevationPtr w;
-        KinematicsPtr k;
+        FastHydrostaticForceModel();
 };
 
-#endif /* HYDROSTATICFORCEMODEL_HPP_ */
+#endif /* FASTHYDROSTATICFORCEMODEL_HPP_ */

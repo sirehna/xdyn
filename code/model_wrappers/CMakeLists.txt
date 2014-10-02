@@ -8,6 +8,9 @@ set(SRC src/Body.cpp
         src/HydrostaticForceModel.cpp
         src/SurfaceElevationFromWaves.cpp
         src/SurfaceElevationInterface.cpp
+        src/SurfaceForceModel.cpp
+        src/ImmersedSurfaceForceModel.cpp
+        src/EmergedSurfaceForceModel.cpp
         )
 
 # Using C++ 2011

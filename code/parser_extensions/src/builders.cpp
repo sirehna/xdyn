@@ -44,13 +44,12 @@ boost::optional<ForcePtr> ForceBuilder<GravityForceModel>::try_to_parse(const st
     return ret;
 }
 
-boost::optional<ForcePtr> ForceBuilder<HydrostaticForceModel>::try_to_parse(const std::string& model, const std::string&, const EnvironmentAndFrames& env) const
+boost::optional<ForcePtr> ForceBuilder<FastHydrostaticForceModel>::try_to_parse(const std::string& model, const std::string&, const EnvironmentAndFrames& env) const
 {
     boost::optional<ForcePtr> ret;
     if (model == "non-linear hydrostatic")
     {
-        HydrostaticForceModel::Input input(env);
-        ret.reset(ForcePtr(new HydrostaticForceModel(input)));
+        ret.reset(ForcePtr(new FastHydrostaticForceModel(env)));
     }
     return ret;
 }

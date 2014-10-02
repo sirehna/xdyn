@@ -142,7 +142,7 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     const double EPS = 1e-8;
     builder.can_parse<DefaultSurfaceElevation>()
            .can_parse<GravityForceModel>()
-           .can_parse<HydrostaticForceModel>();
+           .can_parse<FastHydrostaticForceModel>();
     MeshMap m;
     const std::string name = input.bodies.front().name;
     m[name] = two_triangles();
