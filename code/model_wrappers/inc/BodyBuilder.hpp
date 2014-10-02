@@ -60,9 +60,11 @@ class BodyBuilder
 
         void add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const;
 
+        void add_damping(Body& body, const YamlDynamics6x6Matrix& damping) const;
+
         /**  \details Converts the external YAML data structure (several std::vectors)
          *            to an Eigen::Matrix used for calculations
-          */
+         */
         Eigen::Matrix<double,6,6> convert(const YamlDynamics6x6Matrix& M) const;
 
         /** \brief Puts the mesh in the body frame

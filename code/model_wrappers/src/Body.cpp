@@ -17,6 +17,7 @@ mesh(),
 total_inertia(),
 solid_body_inertia(),
 inverse_of_the_total_inertia(),
+damping(),
 x_relative_to_mesh(),
 y_relative_to_mesh(),
 z_relative_to_mesh(),
@@ -44,3 +45,4 @@ void Body::update_intersection_with_free_surface(const EnvironmentAndFrames& env
                                                            env.w->get_surface_elevation());
     }
 }
+
