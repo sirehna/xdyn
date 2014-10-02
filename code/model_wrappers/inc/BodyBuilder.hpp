@@ -12,7 +12,7 @@
 #include "YamlRotation.hpp"
 #include "GeometricTypes3d.hpp"
 
-class YamlInertiaMatrix;
+class YamlDynamics6x6Matrix;
 class YamlAngle;
 
 /** \author cec
@@ -58,12 +58,12 @@ class BodyBuilder
          */
         bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third) const;
 
-        void add_inertia(Body& body, const YamlInertiaMatrix& rigid_body_inertia, const YamlInertiaMatrix& added_mass) const;
+        void add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const;
 
         /**  \details Converts the external YAML data structure (several std::vectors)
          *            to an Eigen::Matrix used for calculations
           */
-        Eigen::Matrix<double,6,6> convert(const YamlInertiaMatrix& M) const;
+        Eigen::Matrix<double,6,6> convert(const YamlDynamics6x6Matrix& M) const;
 
         /** \brief Puts the mesh in the body frame
          *  \details Uses the body frame's initial position relative to the mesh

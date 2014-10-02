@@ -1,19 +1,19 @@
 /*
- * YamlInertiaMatrix.hpp
+ * YamlDynamics6x6Matrix.hpp
  *
  *  Created on: 16 avr. 2014
  *      Author: cady
  */
 
-#ifndef YAMLINERTIAMATRIX_HPP_
-#define YAMLINERTIAMATRIX_HPP_
+#ifndef YAMLDYNAMICS6X6MATRIX_HPP_
+#define YAMLDYNAMICS6X6MATRIX_HPP_
 
 #include <string>
 #include <vector>
 
-struct YamlInertiaMatrix
+struct YamlDynamics6x6Matrix
 {
-    YamlInertiaMatrix();
+    YamlDynamics6x6Matrix();
     std::string frame;
     std::vector<double> row_1;
     std::vector<double> row_2;
@@ -23,4 +23,4 @@ struct YamlInertiaMatrix
     std::vector<double> row_6;
 };
 
-#endif /* YAMLINERTIAMATRIX_HPP_ */
+#endif /* YAMLDYNAMICS6X6MATRIX_HPP_ */

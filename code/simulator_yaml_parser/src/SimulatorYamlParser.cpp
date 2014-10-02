@@ -20,7 +20,7 @@ void operator >> (const YAML::Node& node, YamlSpeed& s);
 void operator >> (const YAML::Node& node, YamlDynamics& d);
 void operator >> (const YAML::Node& node, YamlPoint& p);
 void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::string& name);
-void operator >> (const YAML::Node& node, YamlInertiaMatrix& m);
+void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m);
 void operator >> (const YAML::Node& node, YamlBlockedDegreesOfFreedom& m);
 void operator >> (const YAML::Node& node, YamlOutput& p);
 void operator >> (const YAML::Node& node, YamlPositionOutput& p);
@@ -142,6 +142,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
     parse_uv(node["mass"], d.mass);
     node["rigid body inertia matrix at the center of buoyancy projected in the body frame"] >> d.rigid_body_inertia;
     node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
+    node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.damping;
 }
 
 void operator >> (const YAML::Node& node, YamlPoint& p)
@@ -162,7 +163,7 @@ void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::stri
 
 
 
-void operator >> (const YAML::Node& node, YamlInertiaMatrix& m)
+void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
 {
     node["frame"] >> m.frame;
     node["row 1"] >> m.row_1;

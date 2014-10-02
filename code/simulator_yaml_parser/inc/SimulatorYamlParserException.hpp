@@ -19,6 +19,4 @@ class SimulatorYamlParserException : public Exception
         }
 };
 
-
-
 #endif /* SIMULATORYAMLPARSEREXCEPTION_HPP_ */

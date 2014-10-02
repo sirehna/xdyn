@@ -116,7 +116,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_mass)
 
 TEST_F(SimulatorYamlParserTest, can_parse_inertia_matrix)
 {
-    const YamlInertiaMatrix M =  yaml.bodies.front().dynamics.rigid_body_inertia;
+    const YamlDynamics6x6Matrix M =  yaml.bodies.front().dynamics.rigid_body_inertia;
     ASSERT_EQ("body 1", M.frame);
     ASSERT_EQ(6, M.row_1.size());
     ASSERT_EQ(6, M.row_2.size());
@@ -164,7 +164,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_inertia_matrix)
 
 TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix)
 {
-    const YamlInertiaMatrix M =  yaml.bodies.front().dynamics.added_mass;
+    const YamlDynamics6x6Matrix M =  yaml.bodies.front().dynamics.added_mass;
     ASSERT_EQ("body 1", M.frame);
     ASSERT_EQ(6, M.row_1.size());
     ASSERT_EQ(6, M.row_2.size());
