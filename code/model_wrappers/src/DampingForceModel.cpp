@@ -9,6 +9,12 @@
 #include <ssc/kinematics.hpp>
 #include "Body.hpp"
 #include "DampingForceModel.hpp"
+#include "YamlDynamics6x6Matrix.hpp"
+
+
+DampingForceModel::DampingForceModel(const Eigen::Matrix<double,6,6>& D_) : D(D_)
+{
+}
 
 ssc::kinematics::Wrench DampingForceModel::operator()(const Body& body, const double) const
 {
@@ -20,9 +26,7 @@ ssc::kinematics::Wrench DampingForceModel::operator()(const Body& body, const do
         body.q,
         body.r;
     W = (W.cwiseAbs().array() * W.array());
-    W = (*body.damping) * W;
-    return ssc::kinematics::Wrench(body.G,
-                                   Eigen::Vector3d(W(0,0),W(1,0),W(2,0)),
-                                   Eigen::Vector3d(W(3,0),W(4,0),W(5,0)));
+    W = D * W;
+    return ssc::kinematics::Wrench(body.G, W);
 }
 

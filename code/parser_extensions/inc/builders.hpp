@@ -24,6 +24,7 @@
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
 #include "FroudeKrylovForceModel.hpp"
+#include "DampingForceModel.hpp"
 
 template <>
 class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface
@@ -61,6 +62,14 @@ class ForceBuilder<FastHydrostaticForceModel> : public ForceBuilderInterface
 
 template <>
 class ForceBuilder<ExactHydrostaticForceModel> : public ForceBuilderInterface
+{
+    public:
+        ForceBuilder();
+        boost::optional<ForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
+};
+
+template <>
+class ForceBuilder<DampingForceModel> : public ForceBuilderInterface
 {
     public:
         ForceBuilder();

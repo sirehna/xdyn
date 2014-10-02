@@ -18,7 +18,6 @@ struct YamlDynamics
     double mass;
     YamlDynamics6x6Matrix rigid_body_inertia;
     YamlDynamics6x6Matrix added_mass;
-    YamlDynamics6x6Matrix damping;
 };
 
 #endif /* YAMLDYNAMICS_HPP_ */

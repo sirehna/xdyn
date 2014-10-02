@@ -53,9 +53,10 @@ TEST_F(SimulatorYamlParserTest, can_parse_environmental_constants)
 
 TEST_F(SimulatorYamlParserTest, can_parse_external_forces)
 {
-    ASSERT_EQ(2, yaml.bodies.at(0).external_forces.size());
-    const YamlModel external_forces = yaml.bodies.at(0).external_forces.at(0);
-    ASSERT_EQ("gravity", external_forces.model);
+    ASSERT_EQ(3, yaml.bodies.at(0).external_forces.size());
+    ASSERT_EQ("gravity", yaml.bodies.at(0).external_forces.at(0).model);
+    ASSERT_EQ("non-linear hydrostatic (fast)", yaml.bodies.at(0).external_forces.at(1).model);
+    ASSERT_EQ("quadratic damping", yaml.bodies.at(0).external_forces.at(2).model);
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_bodies)
@@ -206,54 +207,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix)
     ASSERT_DOUBLE_EQ(0, M.row_6.at(3));
     ASSERT_DOUBLE_EQ(0, M.row_6.at(4));
     ASSERT_DOUBLE_EQ(6.3, M.row_6.at(5));
-}
-
-TEST_F(SimulatorYamlParserTest, can_parse_damping_matrix)
-{
-    const YamlDynamics6x6Matrix M =  yaml.bodies.front().dynamics.damping;
-    ASSERT_EQ("body 1", M.frame);
-    ASSERT_EQ(6, M.row_1.size());
-    ASSERT_EQ(6, M.row_2.size());
-    ASSERT_EQ(6, M.row_3.size());
-    ASSERT_EQ(6, M.row_4.size());
-    ASSERT_EQ(6, M.row_5.size());
-    ASSERT_EQ(6, M.row_6.size());
-    ASSERT_DOUBLE_EQ(  2,M.row_1.at(0));
-    ASSERT_DOUBLE_EQ(  3,M.row_1.at(1));
-    ASSERT_DOUBLE_EQ(  5,M.row_1.at(2));
-    ASSERT_DOUBLE_EQ(  7,M.row_1.at(3));
-    ASSERT_DOUBLE_EQ( 11,M.row_1.at(4));
-    ASSERT_DOUBLE_EQ( 13,M.row_1.at(5));
-    ASSERT_DOUBLE_EQ( 17,M.row_2.at(0));
-    ASSERT_DOUBLE_EQ( 19,M.row_2.at(1));
-    ASSERT_DOUBLE_EQ( 23,M.row_2.at(2));
-    ASSERT_DOUBLE_EQ( 29,M.row_2.at(3));
-    ASSERT_DOUBLE_EQ( 31,M.row_2.at(4));
-    ASSERT_DOUBLE_EQ( 37,M.row_2.at(5));
-    ASSERT_DOUBLE_EQ( 41,M.row_3.at(0));
-    ASSERT_DOUBLE_EQ( 43,M.row_3.at(1));
-    ASSERT_DOUBLE_EQ( 47,M.row_3.at(2));
-    ASSERT_DOUBLE_EQ( 53,M.row_3.at(3));
-    ASSERT_DOUBLE_EQ( 59,M.row_3.at(4));
-    ASSERT_DOUBLE_EQ( 61,M.row_3.at(5));
-    ASSERT_DOUBLE_EQ( 67,M.row_4.at(0));
-    ASSERT_DOUBLE_EQ( 71,M.row_4.at(1));
-    ASSERT_DOUBLE_EQ( 73,M.row_4.at(2));
-    ASSERT_DOUBLE_EQ( 79,M.row_4.at(3));
-    ASSERT_DOUBLE_EQ( 83,M.row_4.at(4));
-    ASSERT_DOUBLE_EQ( 89,M.row_4.at(5));
-    ASSERT_DOUBLE_EQ( 97,M.row_5.at(0));
-    ASSERT_DOUBLE_EQ(101,M.row_5.at(1));
-    ASSERT_DOUBLE_EQ(103,M.row_5.at(2));
-    ASSERT_DOUBLE_EQ(107,M.row_5.at(3));
-    ASSERT_DOUBLE_EQ(109,M.row_5.at(4));
-    ASSERT_DOUBLE_EQ(113,M.row_5.at(5));
-    ASSERT_DOUBLE_EQ(127,M.row_6.at(0));
-    ASSERT_DOUBLE_EQ(131,M.row_6.at(1));
-    ASSERT_DOUBLE_EQ(137,M.row_6.at(2));
-    ASSERT_DOUBLE_EQ(139,M.row_6.at(3));
-    ASSERT_DOUBLE_EQ(149,M.row_6.at(4));
-    ASSERT_DOUBLE_EQ(151,M.row_6.at(5));
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_points)

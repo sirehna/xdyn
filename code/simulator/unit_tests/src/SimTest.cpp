@@ -276,3 +276,10 @@ TEST_F(SimTest, froude_krylov)
     const auto yaml = SimulatorYamlParser(test_data::anthineas_froude_krylov()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
 }
+
+TEST_F(SimTest, anthineas_damping)
+{
+    const auto yaml = SimulatorYamlParser(test_data::anthineas_damping()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
+    ASSERT_EQ(11, res.size());
+}

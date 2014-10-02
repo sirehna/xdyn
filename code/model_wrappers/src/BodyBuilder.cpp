@@ -47,7 +47,6 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
     ret.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle);
     change_mesh_ref_frame(ret, mesh);
     add_inertia(ret, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
-    add_damping(ret, input.dynamics.damping);
     ret.u = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u;
     ret.v = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.v;
     ret.w = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.w;
@@ -107,12 +106,6 @@ void BodyBuilder::add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_bod
     body.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mt));
 }
 
-void BodyBuilder::add_damping(Body& body, const YamlDynamics6x6Matrix& damping) const
-{
-    const Eigen::Matrix<double,6,6> Md = convert(damping);
-    body.damping = MatrixPtr(new Eigen::Matrix<double,6,6>(Md));
-}
-
 Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) const
 {
     Eigen::Matrix<double,6,6> ret;
@@ -141,6 +134,5 @@ Body BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& m
     input.dynamics.rigid_body_inertia.row_5 = {0,0,0,0,1,0};
     input.dynamics.rigid_body_inertia.row_6 = {0,0,0,0,0,1};
     input.dynamics.added_mass = input.dynamics.rigid_body_inertia;
-    input.dynamics.damping = input.dynamics.rigid_body_inertia;
     return build(input, mesh);
 }

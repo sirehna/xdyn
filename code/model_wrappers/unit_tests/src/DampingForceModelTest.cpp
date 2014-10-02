@@ -28,12 +28,32 @@ void DampingForceModelTest::TearDown()
 {
 }
 
+namespace ssc
+{
+    namespace random_data_generator
+    {
+        template <> Eigen::Matrix<double,6,6> TypedScalarDataGenerator<Eigen::Matrix<double,6,6> >::get() const
+        {
+            Eigen::Matrix<double,6,6> ret;
+            for (size_t i = 0 ; i < 6 ; ++i)
+            {
+                for (size_t j = 0 ; j < 6 ; ++j)
+                {
+                    ret(i,j) = random<double>();
+                }
+            }
+            return ret;
+        }
+    }
+}
+
 TEST_F(DampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
-    DampingForceModel F;
+    const DampingForceModel F(a.random<Eigen::Matrix<double,6,6> >());
     Body b = get_body(BODY);
-    const ssc::kinematics::Wrench f = F(b,0.0);
+    const double t = a.random<double>();
+    const ssc::kinematics::Wrench f = F(b,t);
 //! [DampingForceModelTest example]
 //! [DampingForceModelTest expected output]
     ASSERT_EQ(BODY, f.get_frame());
@@ -49,10 +69,10 @@ TEST_F(DampingForceModelTest, example_with_null_velocities)
 TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identity_damping_matrix)
 {
     const double EPS = 1e-11;
-    DampingForceModel F;
+    const Eigen::Matrix<double,6,6> D = Eigen::Matrix<double,6,6>::Identity();
+    DampingForceModel F(D);
     double u,v,w,p,q,r;
     Body b = get_body(BODY);
-    b.m = a.random<double>();
     for (size_t i=0;i<100;++i)
     {
         b.u = u = a.random<double>().greater_than(0.0);
@@ -75,19 +95,17 @@ TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identi
 TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
 {
     const double EPS = 1e-11;
-    Eigen::Matrix<double,6,6> d;
-    DampingForceModel F;
+    Eigen::Matrix<double,6,6> D;
     double u,v,w,p,q,r;
     double uu,vv,ww,pp,qq,rr;
     Body b = get_body(BODY);
-    b.m = a.random<double>();
-    d<<  2,   3,   5,   7,  11,  13,
-        17,  19,  23,  29,  31,  37,
-        41,  43,  47,  53,  59,  61,
-        67,  71,  73,  79,  83,  89,
-        97, 101, 103, 107, 109, 113,
-       127, 131, 137, 139, 149, 151;
-    b.damping = MatrixPtr(new Eigen::Matrix<double,6,6>(d));
+    D <<  2,   3,   5,   7,  11,  13,
+         17,  19,  23,  29,  31,  37,
+         41,  43,  47,  53,  59,  61,
+         67,  71,  73,  79,  83,  89,
+         97, 101, 103, 107, 109, 113,
+        127, 131, 137, 139, 149, 151;
+    DampingForceModel F(D);
     for (size_t i=0;i<100;++i)
     {
         b.u = u = a.random<double>().between(-100.0,+100.0);
@@ -107,8 +125,8 @@ TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
         for (size_t j=0;j<3;++j)
         {
             const size_t k = j+3;
-            ASSERT_NEAR(d(j,0)*uu+d(j,1)*vv+d(j,2)*ww+d(j,3)*pp+d(j,4)*qq+d(j,5)*rr,f.force[j],EPS)<<"test:"<<i << " row:"<<j;
-            ASSERT_NEAR(d(k,0)*uu+d(k,1)*vv+d(k,2)*ww+d(k,3)*pp+d(k,4)*qq+d(k,5)*rr,f.torque[j],EPS)<<"test:"<<i << " row:"<<k;
+            ASSERT_NEAR(D(j,0)*uu+D(j,1)*vv+D(j,2)*ww+D(j,3)*pp+D(j,4)*qq+D(j,5)*rr,f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
+            ASSERT_NEAR(D(k,0)*uu+D(k,1)*vv+D(k,2)*ww+D(k,3)*pp+D(k,4)*qq+D(k,5)*rr,f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
         }
     }
 }

@@ -8,10 +8,9 @@
 #include "YamlDynamics.hpp"
 
 YamlDynamics::YamlDynamics() :
-    centre_of_inertia(YamlPoint()),
+    centre_of_inertia(),
     mass(0),
-    rigid_body_inertia(YamlDynamics6x6Matrix()),
-    added_mass(YamlDynamics6x6Matrix()),
-    damping(YamlDynamics6x6Matrix())
+    rigid_body_inertia(),
+    added_mass()
 {
 }
