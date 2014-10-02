@@ -271,7 +271,7 @@ boost::optional<ForcePtr> ForceBuilder<FooForceModel>::try_to_parse(const std::s
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Then letting the simulator know about it is just a matter of modifiying
+Then letting the simulator know about it is just a matter of modifying
 get_builder from the simulator_api.cpp file in the simulator module:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
