@@ -172,7 +172,7 @@ TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
 
 TEST_F(SimTest, hydrostatic_test_on_anthineas)
 {
-    const auto yaml = SimulatorYamlParser(test_data::anthineas_hydrostatic_test()).parse();
+    const auto yaml = SimulatorYamlParser(test_data::anthineas_fast_hydrostatic_test()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
     ASSERT_EQ(11, res.size());
     ASSERT_NEAR(0, res[0].x[XIDX(0)], EPS);
@@ -189,6 +189,12 @@ TEST_F(SimTest, hydrostatic_test_on_anthineas)
         ASSERT_NEAR(0, fabs(res[i].x[XIDX(0)]), 0.2) << " i = " << i;
         ASSERT_NEAR(0, fabs(res[i].x[YIDX(0)]), 1E-2) << " i = " << i;
     }
+}
+
+TEST_F(SimTest, exact_hydrostatic_test_on_anthineas)
+{
+    const auto yaml = SimulatorYamlParser(test_data::anthineas_exact_hydrostatic_test()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 0.4);
 }
 
 TEST_F(SimTest, should_throw_if_wave_output_mesh_does_not_exist)

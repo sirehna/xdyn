@@ -47,7 +47,7 @@ TEST_F(SimCsvObserverTest, can_simulate_system_with_no_wave_output)
     std::stringstream simulation_stream;
     std::stringstream wave_stream;
     SimCsvObserver observer(simulation_stream, wave_stream);
-    auto sys = get_system(test_data::anthineas_hydrostatic_test(), unit_cube());
+    auto sys = get_system(test_data::anthineas_fast_hydrostatic_test(), unit_cube());
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
 }
 

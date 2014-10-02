@@ -18,7 +18,9 @@ namespace test_data
     std::string oscillating_cube_example();
     std::string stable_cube_example();
     std::string stable_rolling_cube_test();
-    std::string anthineas_hydrostatic_test();
+    std::string anthineas_hydrostatic_test(const std::string& type);
+    std::string anthineas_exact_hydrostatic_test();
+    std::string anthineas_fast_hydrostatic_test();
     std::string anthineas_waves_test();
     std::string anthineas_post_processing();
     std::string outputs();

@@ -568,7 +568,7 @@ std::string test_data::stable_rolling_cube_test()
     return ss.str();
 }
 
-std::string test_data::anthineas_hydrostatic_test()
+std::string test_data::anthineas_hydrostatic_test(const std::string& type)
 {
     std::stringstream ss;
     ss << "rotations:\n"
@@ -635,9 +635,19 @@ std::string test_data::anthineas_hydrostatic_test()
        << "            row 6: [0,0,0,0,0,6.676e6]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic (fast)\n"
+       << "      - model: non-linear hydrostatic (" << type << ")\n"
        << "    \n";
     return ss.str();
+}
+
+std::string test_data::anthineas_fast_hydrostatic_test()
+{
+    return anthineas_hydrostatic_test("fast");
+}
+
+std::string test_data::anthineas_exact_hydrostatic_test()
+{
+    return anthineas_hydrostatic_test("exact");
 }
 
 std::string test_data::anthineas_waves_test()
