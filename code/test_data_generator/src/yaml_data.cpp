@@ -76,7 +76,7 @@ std::string test_data::hydrostatic_test()
        << "            row 6: [0,0,0,0,0,1]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic\n"
+       << "      - model: non-linear hydrostatic (fast)\n"
        << "    \n"
        << "\n";
     return ss.str();
@@ -149,7 +149,7 @@ std::string test_data::full_example()
        << "            row 6: [0,0,0,0,0,6.3]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic\n"
+       << "      - model: non-linear hydrostatic (fast)\n"
        << "    \n"
        << "\n"
        << "points:\n"
@@ -414,7 +414,7 @@ std::string test_data::oscillating_cube_example()
        << "            row 6: [0,0,0,0,0,0]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic\n";
+       << "      - model: non-linear hydrostatic (fast)\n";
     return ss.str();
 }
 
@@ -484,7 +484,7 @@ std::string test_data::stable_cube_example()
        << "            row 6: [0,0,0,0,0,0]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic\n";
+       << "      - model: non-linear hydrostatic (fast)\n";
     return ss.str();
 }
 
@@ -563,7 +563,7 @@ std::string test_data::stable_rolling_cube_test()
        << "            row 6: [0,0,0,0,0,0]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic\n"
+       << "      - model: non-linear hydrostatic (fast)\n"
        << "\n";
     return ss.str();
 }
@@ -635,7 +635,7 @@ std::string test_data::anthineas_hydrostatic_test()
        << "            row 6: [0,0,0,0,0,6.676e6]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic\n"
+       << "      - model: non-linear hydrostatic (fast)\n"
        << "    \n";
     return ss.str();
 }
@@ -742,7 +742,7 @@ std::string test_data::anthineas_waves_test()
        << "            row 6: [0,0,0,0,0,6.676e6]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic\n"
+       << "      - model: non-linear hydrostatic (fast)\n"
        << "    \n";
     return ss.str();
 }
@@ -1053,7 +1053,7 @@ std::string test_data::cube_in_waves()
            << "            row 6: [0,0,0,0,0,0]\n"
            << "    external forces:\n"
            << "      - model: gravity\n"
-           << "      - model: non-linear hydrostatic\n";
+           << "      - model: non-linear hydrostatic (fast)\n";
         return ss.str();
 }
 
@@ -1160,7 +1160,7 @@ std::string test_data::anthineas_froude_krylov()
        << "            row 6: [0,0,0,0,0,6.676e6]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic\n"
+       << "      - model: non-linear hydrostatic (fast)\n"
        << "    \n";
     return ss.str();
 }
