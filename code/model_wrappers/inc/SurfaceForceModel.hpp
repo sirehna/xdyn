@@ -39,7 +39,6 @@ class SurfaceForceModel : public ForceModel
         virtual ~SurfaceForceModel();
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
         virtual DF dF(const FacetIterator& that_facet,
-                      const MeshIntersectorPtr& intersector,
                       const EnvironmentAndFrames& env,
                       const Body& body,
                       const double t

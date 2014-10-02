@@ -15,7 +15,6 @@ class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
     public:
         FastHydrostaticForceModel(const EnvironmentAndFrames& env);
         DF dF(const FacetIterator& that_facet,
-              const MeshIntersectorPtr& intersector,
               const EnvironmentAndFrames& env,
               const Body& body,
               const double t
