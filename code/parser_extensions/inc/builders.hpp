@@ -12,6 +12,7 @@
 #include "SurfaceElevationBuilder.hpp"
 #include "ForceBuilder.hpp"
 #include "FastHydrostaticForceModel.hpp"
+#include "ExactHydrostaticForceModel.hpp"
 #include "GravityForceModel.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "DiscreteDirectionalWaveSpectrum.hpp"
@@ -44,6 +45,14 @@ class ForceBuilder<GravityForceModel> : public ForceBuilderInterface
 
 template <>
 class ForceBuilder<FastHydrostaticForceModel> : public ForceBuilderInterface
+{
+    public:
+        ForceBuilder();
+        boost::optional<ForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
+};
+
+template <>
+class ForceBuilder<ExactHydrostaticForceModel> : public ForceBuilderInterface
 {
     public:
         ForceBuilder();

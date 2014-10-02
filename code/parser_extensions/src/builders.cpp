@@ -54,6 +54,16 @@ boost::optional<ForcePtr> ForceBuilder<FastHydrostaticForceModel>::try_to_parse(
     return ret;
 }
 
+boost::optional<ForcePtr> ForceBuilder<ExactHydrostaticForceModel>::try_to_parse(const std::string& model, const std::string&, const EnvironmentAndFrames& env) const
+{
+    boost::optional<ForcePtr> ret;
+    if (model == "non-linear hydrostatic (exact)")
+    {
+        ret.reset(ForcePtr(new ExactHydrostaticForceModel(env)));
+    }
+    return ret;
+}
+
 boost::optional<TR1(shared_ptr)<WaveModel> > WaveModelBuilder<Airy>::try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<WaveModel> > ret;

@@ -9,6 +9,7 @@
 #include "DiracSpectralDensity.hpp"
 #include "GravityForceModel.hpp"
 #include "DefaultSurfaceElevation.hpp"
+#include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
@@ -21,6 +22,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
     SimulatorBuilder builder(yaml);
     builder.can_parse<GravityForceModel>()
            .can_parse<DefaultSurfaceElevation>()
+           .can_parse<ExactHydrostaticForceModel>()
            .can_parse<FastHydrostaticForceModel>()
            .can_parse<BretschneiderSpectrum>()
            .can_parse<JonswapSpectrum>()
