@@ -41,6 +41,14 @@ void Sim::update_intersection_with_free_surface(Body& body, const double t) cons
     body.intersector->update_intersection_with_free_surface(dz);
 }
 
+void Sim::update_projection_of_z_in_mesh_frame(Body& body         //!< Body we wish to update
+                                              ) const
+{
+    const ssc::kinematics::Point g_in_NED("NED", 0, 0, env.g);
+    const ssc::kinematics::RotationMatrix ned2mesh = env.k->get("NED", std::string("mesh(") + body.name + ")").get_rot();
+    body.down_direction_in_mesh_frame = ned2mesh*g_in_NED.v;
+}
+
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto x_with_normalized_quaternions = x;

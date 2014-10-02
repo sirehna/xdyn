@@ -66,6 +66,11 @@ class Sim
                                                    const double t //!< Current instant
                                                    ) const;
 
+        /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
+         */
+        void update_projection_of_z_in_mesh_frame(Body& body         //!< Body we wish to update
+                                                 ) const;
+
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;
         EnvironmentAndFrames env;
