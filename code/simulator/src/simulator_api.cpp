@@ -9,7 +9,7 @@
 #include "DiracSpectralDensity.hpp"
 #include "GravityForceModel.hpp"
 #include "DefaultSurfaceElevation.hpp"
-#include "HydrostaticForceModel.hpp"
+#include "FastHydrostaticForceModel.hpp"
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
 #include "StlReader.hpp"

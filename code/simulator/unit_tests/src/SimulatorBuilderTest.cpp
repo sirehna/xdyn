@@ -13,7 +13,7 @@
 #include <ssc/kinematics.hpp>
 #include "DefaultSurfaceElevation.hpp"
 #include "GravityForceModel.hpp"
-#include "HydrostaticForceModel.hpp"
+#include "FastHydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
 

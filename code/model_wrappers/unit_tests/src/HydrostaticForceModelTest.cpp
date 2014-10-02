@@ -7,7 +7,7 @@
 
 #include "Body.hpp"
 #include "DefaultSurfaceElevation.hpp"
-#include "HydrostaticForceModel.hpp"
+#include "FastHydrostaticForceModel.hpp"
 #include "HydrostaticForceModelTest.hpp"
 #include "generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"

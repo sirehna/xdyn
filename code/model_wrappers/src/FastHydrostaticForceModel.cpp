@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "HydrostaticForceModel.hpp"
+#include "FastHydrostaticForceModel.hpp"
 #include "hydrostatic.hpp"
 
 FastHydrostaticForceModel::FastHydrostaticForceModel(const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(env_)

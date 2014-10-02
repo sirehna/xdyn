@@ -11,7 +11,7 @@
 #include "DefaultSurfaceElevation.hpp"
 #include "SurfaceElevationBuilder.hpp"
 #include "ForceBuilder.hpp"
-#include "HydrostaticForceModel.hpp"
+#include "FastHydrostaticForceModel.hpp"
 #include "GravityForceModel.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "DiscreteDirectionalWaveSpectrum.hpp"
