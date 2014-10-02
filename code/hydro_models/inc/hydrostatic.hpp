@@ -98,7 +98,7 @@ namespace hydrostatic
       *  \see Hydrostatic Force on a plane Surface p. 61-64, Ref ???
       */
     EPoint normal_to_free_surface(
-            const Facet&               facet,           //!< the facet of interest
+            const FacetIterator&       that_facet,      //!< the facet of interest
             const EPoint&              down_direction,  //!< local down direction expressed in mesh frame
             const Matrix3x&            all_nodes,       //!< the nodes of the mesh
             const std::vector<double>& all_immersions   //!< the immersions for all nodes of the mesh
@@ -122,7 +122,7 @@ namespace hydrostatic
       *  \see Hydrostatic Force on a plane Surface p. 61-64, Ref ???
       */
     EPoint exact_application_point(
-            const Facet&               facet,          //!< the facet of interest
+            const FacetIterator&       that_facet,     //!< the facet of interest
             const EPoint&              down_direction, //!< local down direction expressed in mesh frame
             const double               zG,             //!< Relative immersion of facet barycentre (in metres)
             const Matrix3x&            all_nodes,      //!< the nodes of the mesh
@@ -132,7 +132,7 @@ namespace hydrostatic
     /**  \details Compute the projection of a facet on free surface knowing vertical direction and immersions of each vertex
       */
     Matrix3x project_facet_on_free_surface(
-            const Facet&               facet,          //!< the facet of interest
+            const FacetIterator&       that_facet,     //!< the facet of interest
             const EPoint&              down_direction, //!< local down direction expressed in mesh frame
             const Matrix3x&            all_nodes,      //!< the nodes of the mesh
             const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
@@ -143,9 +143,9 @@ namespace hydrostatic
       *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
       */
     Eigen::Matrix3d get_inertia_of_polygon_wrt(
-            const Facet&          facet,     //!< the facet of interest
-            const Eigen::Matrix3d R20,       //!< coordinates of inertia frame vectors versus mesh frame
-            const Matrix3x&       all_nodes  //!< the nodes of the mesh
+            const FacetIterator&  that_facet,  //!< the facet of interest
+            const Eigen::Matrix3d R20,         //!< coordinates of inertia frame vectors versus mesh frame
+            const Matrix3x&       all_nodes    //!< the nodes of the mesh
         );
 
 }
