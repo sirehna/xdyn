@@ -42,7 +42,7 @@ class Airy : public WaveModel
                          ) const;
 
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
-          *  \details Also called "subsurface pressure" (DNV), "unsteady pressure" (Faltinsen) or constant pressure contour (Lloyd)
+          *  \details Also called "subsurface pressure" (by DNV), "unsteady pressure" (by Faltinsen) or constant pressure contour (by Lloyd)
           *           The dynamic pressure is in fact one of the terms of Bernoulli's equation, which can be derived from the conservation
           *           of energy for a fluid in motion.
           *           \f[\int_C \frac{\partial \Phi_I(x,y,z,t)}{\partial t}\f]
