@@ -64,7 +64,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_bodies)
     ASSERT_EQ(1, yaml.bodies.size());
     ASSERT_EQ("body 1", yaml.bodies.at(0).name);
     ASSERT_EQ("anthineas.stl", yaml.bodies.at(0).mesh);
-    ASSERT_EQ(2, yaml.bodies.at(0).external_forces.size());
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_position_of_body_frame_relative_to_mesh)
