@@ -11,8 +11,7 @@
 typedef std::array<std::vector<size_t>,2> ArrayOfEdges;
 
 /**
- * \brief Contains a facet of a mesh
- * \details a Facet is holding the indices of the vertices in the mesh rather than duplicating the coordinates
+ * \details Holds the indices of the vertices in the mesh rather than duplicating the coordinates
  * \ingroup mesh
  */
 struct Facet
@@ -42,11 +41,11 @@ class Mesh
     Mesh();
 public:
     Mesh(const Matrix3x& nodes_,
-            const ArrayOfEdges& edges_,
-            const std::vector<Facet>& facets_,
-            const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
-            const std::vector<std::vector<size_t> >& orientedEdgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
-            const bool clockwise);
+         const ArrayOfEdges& edges_,
+         const std::vector<Facet>& facets_,
+         const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
+         const std::vector<std::vector<size_t> >& orientedEdgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
+         const bool clockwise);
 
 
     /* \brief Reset the dynamic data related to the mesh intersection with free surface */
