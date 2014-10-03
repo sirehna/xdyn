@@ -6,6 +6,7 @@ set(SRC src/SimulatorYamlParser.cpp
         src/parse_unit_value.cpp
         src/environment_parsers.cpp
         src/check_input_yaml.cpp
+        src/external_data_structures_parsers.cpp
         )
 
 include_directories(inc)
