@@ -32,8 +32,7 @@ YamlWaveOutput::YamlWaveOutput() : frame_of_reference(""),
 YamlWaveModel::YamlWaveModel():
 discretization(YamlDiscretization()),
 spectra(std::vector<YamlSpectra>()),
-output(YamlWaveOutput()),
-compute_froude_krylov(false)
+output(YamlWaveOutput())
 {}
 
 YamlJonswap::YamlJonswap():
