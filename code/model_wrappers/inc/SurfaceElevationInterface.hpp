@@ -67,17 +67,6 @@ class SurfaceElevationInterface
                                     const double t  //!< Current instant (in seconds)
                                     ) const;
 
-        /**  \brief Computes the dynamic pressure for a matrix of Points.
-          *  \returns Pdyn for each point.
-          *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
-          */
-        std::vector<double> get_dynamic_pressure(const double rho, // Water density (in kg/m^3)
-                                                 const double g, //!< Gravity (in m/s^2)
-                                                 const ssc::kinematics::PointMatrixPtr& P,                     //!< Points for which to compute the relative wave height
-                                                 const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                                 const double t //!< Current instant (in seconds)
-                                                 ) const;
-
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
           *  \returns Vector of coordinates on the free surface (in the NED frame),
           *           the z coordinate being the wave height (in meters), for each

@@ -79,23 +79,6 @@ double SurfaceElevationInterface::get_dynamic_pressure(const double rho, // Wate
     return dynamic_pressure(rho, g, OP.x(),OP.y(),OP.z(),t);
 }
 
-std::vector<double> SurfaceElevationInterface::get_dynamic_pressure(const double rho, // Water density (in kg/m^3)
-                                                                    const double g, //!< Gravity (in m/s^2)
-                                                                    const ssc::kinematics::PointMatrixPtr& P,                     //!< Points for which to compute the relative wave height
-                                                                    const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                                                    const double t //!< Current instant (in seconds)
-                                         ) const
-{
-    const ssc::kinematics::PointMatrix OP = compute_relative_position(P, k);
-    const int n = (int)P->m.cols();
-    std::vector<double> ret;
-    for (int i = 0 ; i < n ; ++i)
-    {
-        ret.push_back(dynamic_pressure(rho, g, (double)OP.m(0,i),(double)OP.m(1,i),(double)OP.m(2,i),t));
-    }
-    return ret;
-}
-
 TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationInterface::get_output_mesh_in_NED_frame(const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k) const
 {
     if (output_mesh->get_frame() != "NED")
