@@ -10,6 +10,8 @@
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
+#include "EnvironmentAndFrames.hpp"
+#include "GeometricTypes3d.hpp"
 
 class HydrostaticForceModelTest : public ::testing::Test
 {
@@ -18,6 +20,8 @@ class HydrostaticForceModelTest : public ::testing::Test
         virtual ~HydrostaticForceModelTest();
         virtual void SetUp();
         virtual void TearDown();
+        EnvironmentAndFrames get_environment_and_frames() const;
+        VectorOfVectorOfPoints get_points() const;
         ssc::random_data_generator::DataGenerator a;
 };
 
