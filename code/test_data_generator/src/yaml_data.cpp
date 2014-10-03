@@ -1308,6 +1308,7 @@ std::string test_data::anthineas_froude_krylov()
        << "    external forces:\n"
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"
+       << "      - model: non-linear Froude-Krylov\n"
        << "    \n";
     return ss.str();
 }

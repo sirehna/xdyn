@@ -268,3 +268,10 @@ TEST_F(SimTest, waves_test_on_anthineas)
     ASSERT_NEAR(0, res[0].x[YIDX(0)], EPS);
     ASSERT_NEAR(-5, res[0].x[ZIDX(0)], EPS);
 }
+
+
+TEST_F(SimTest, froude_krylov)
+{
+    const auto yaml = SimulatorYamlParser(test_data::anthineas_froude_krylov()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
+}

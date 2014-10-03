@@ -23,6 +23,7 @@
 #include "DiracSpectralDensity.hpp"
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
+#include "FroudeKrylovForceModel.hpp"
 
 template <>
 class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface
@@ -42,6 +43,13 @@ class ForceBuilder<GravityForceModel> : public ForceBuilderInterface
         boost::optional<ForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
 };
 
+template <>
+class ForceBuilder<FroudeKrylovForceModel> : public ForceBuilderInterface
+{
+    public:
+        ForceBuilder();
+        boost::optional<ForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
+};
 
 template <>
 class ForceBuilder<FastHydrostaticForceModel> : public ForceBuilderInterface
