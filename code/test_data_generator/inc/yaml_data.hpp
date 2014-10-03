@@ -31,6 +31,7 @@ namespace test_data
     std::string anthineas_froude_krylov();
     std::string falling_cube();
     std::string rolling_cube();
+    std::string anthineas_damping();
 }
 
 #endif /* YAML_DATA_HPP_ */
