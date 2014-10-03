@@ -54,11 +54,12 @@ class Airy : public WaveModel
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 68
           *  \snippet wave_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
-        double dynamic_pressure(const double x,   //!< x-position in the NED frame (in meters)
+        double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
+                                const double g,   //!< gravity (in m/s^2)
+                                const double x,   //!< x-position in the NED frame (in meters)
                                 const double y,   //!< y-position in the NED frame (in meters)
                                 const double z,   //!< z-position in the NED frame (in meters)
-                                const double t,   //!< Current time instant (in seconds)
-                                const double eta  //!< Sea elevation at (x,y), given eg. by the 'elevation' method
+                                const double t    //!< Current time instant (in seconds)
                                 ) const;
 
 

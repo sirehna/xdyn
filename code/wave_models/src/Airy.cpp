@@ -54,11 +54,12 @@ double Airy::elevation(const double x,                                  //!< x-p
 }
 
 
-double Airy::dynamic_pressure(const double x,   //!< x-position in the NED frame (in meters)
+double Airy::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
+                              const double g,   //!< gravity (in m/s^2)
+                              const double x,   //!< x-position in the NED frame (in meters)
                               const double y,   //!< y-position in the NED frame (in meters)
                               const double z,   //!< z-position in the NED frame (in meters)
-                              const double t,   //!< Current time instant (in seconds)
-                              const double eta  //!< Sea elevation at (x,y), given eg. by the 'elevation' method
+                              const double t    //!< Current time instant (in seconds)
                              ) const
 {
     double p = 0;
@@ -72,9 +73,9 @@ double Airy::dynamic_pressure(const double x,   //!< x-position in the NED frame
             const double Dj = sqrt(spectrum.Dj[j]);
             const double psi = spectrum.psi[j];
             const double theta = spectrum.phase[i][j];
-            p += Ai*Dj*exp(-k*(z-eta)*cos(k*(x*cos(psi)+y*sin(psi))-omega*t+theta));
+            p += Ai*Dj*spectrum.pdyn_factor(k,z)*cos(k*(x*cos(psi)+y*sin(psi))-omega*t+theta);
         }
     }
-    p *= sqrt(2*spectrum.domega*spectrum.dpsi);
+    p *= rho*g*sqrt(2*spectrum.domega*spectrum.dpsi);
     return p;
 }

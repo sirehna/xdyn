@@ -150,10 +150,12 @@ TEST_F(AiryTest, dynamic_pressure)
     const double y = a.random<double>().between(-100,100);
     const double z = a.random<double>().between(0,100);
     const double phi = 3.4482969340598712549;
-    const double k = 4.*PI*PI/Tp/Tp/9.81;
+    const double rho = 1024;
+    const double g = 9.81;
+    const double k = 4.*PI*PI/Tp/Tp/g;
+
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
-        const double eta = a.random<double>().between(-100,100);
-        ASSERT_NEAR(sqrt(2*Hs)*exp(-k*(z-eta)*cos(k*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi)), wave.dynamic_pressure(x,y,z,t,eta), 1E-6);
+        ASSERT_NEAR(sqrt(2*Hs)*rho*g*exp(-k*z)*cos(k*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.dynamic_pressure(rho,g,x,y,z,t), 1E-6);
     }
 }
