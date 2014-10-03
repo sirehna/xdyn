@@ -47,6 +47,7 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega));
+    ret.pdyn_factor = [](const double k, const double z){return dynamic_pressure_factor(k,z);};
     return ret;
 }
 
@@ -66,6 +67,7 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
+    ret.pdyn_factor = [h](const double k, const double z){return dynamic_pressure_factor(k,z,h);};
     return ret;
 }
 
