@@ -290,3 +290,13 @@ TEST_F(discretizeTest, flatten)
     ASSERT_DOUBLE_EQ(1, s.spectrum[11].omega);
     ASSERT_DOUBLE_EQ(10, s.spectrum[11].psi);
 }
+
+TEST_F(discretizeTest, dynamic_pressure_factor)
+{
+    //! [discretizeTest dynamic_pressure_factor example]
+    ASSERT_DOUBLE_EQ(exp(-2), dynamic_pressure_factor(1,2));
+    ASSERT_DOUBLE_EQ(exp(-8), dynamic_pressure_factor(2,4));
+    ASSERT_DOUBLE_EQ((exp(5)+exp(-5))/(exp(3)+exp(-3)), dynamic_pressure_factor(1,-2,3));
+    ASSERT_DOUBLE_EQ((exp(0.14)+exp(-0.14))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4));
+    //! [discretizeTest dynamic_pressure_factor example]
+}

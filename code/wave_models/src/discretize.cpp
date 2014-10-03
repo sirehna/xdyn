@@ -127,3 +127,18 @@ FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectru
     }
     return ret;
 }
+
+double dynamic_pressure_factor(const double k, //!< Wave number (in 1/m)
+                               const double z  //!< z-position in the NED frame (in meters)
+                              )
+{
+    return exp(-k*z);
+}
+
+double dynamic_pressure_factor(const double k, //!< Wave number (in 1/m)
+                               const double z, //!< z-position in the NED frame (in meters)
+                               const double h  //!< Average water depth (in meters)
+                              )
+{
+    return cosh(k*(h-z))/cosh(k*h);
+}
