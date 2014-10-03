@@ -15,6 +15,7 @@ include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
+include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")

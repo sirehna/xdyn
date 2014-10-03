@@ -9,6 +9,7 @@
 #include "force_parsers.hpp"
 #include "yaml.h"
 #include "parse_unit_value.hpp"
+#include "external_data_structures_parsers.hpp"
 
 GravityParameters parse_gravity(const std::string& yaml)
 {
@@ -30,4 +31,22 @@ double parse_hydrostatic(const std::string& yaml)
     double rho = 0;
     parse_uv(node["rho"], rho);
     return rho;
+}
+
+Eigen::Matrix<double,6,6> parse_quadratic_damping(const std::string& yaml)
+{
+    Eigen::Matrix<double,6,6> ret;
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlDynamics6x6Matrix M;
+    node["damping matrix at the center of gravity projected in the body frame"] >> M;
+    for (size_t j = 0 ; j < 6 ; ++j) ret(0,j) = M.row_1[j];
+    for (size_t j = 0 ; j < 6 ; ++j) ret(1,j) = M.row_2[j];
+    for (size_t j = 0 ; j < 6 ; ++j) ret(2,j) = M.row_3[j];
+    for (size_t j = 0 ; j < 6 ; ++j) ret(3,j) = M.row_4[j];
+    for (size_t j = 0 ; j < 6 ; ++j) ret(4,j) = M.row_5[j];
+    for (size_t j = 0 ; j < 6 ; ++j) ret(5,j) = M.row_6[j];
+    return ret;
 }
