@@ -83,7 +83,7 @@ $$\hat{X}(t+dt) = X(t) + \frac{2825}{27648}\cdot k_1 + \frac{18575}{48384}\cdot 
 k_6$$
 
 avec
-$$k_1 = dt\cdot\left(X, t, U, P\right),$$
+$$k_1 = dt\cdot f\left(X, t, U, P\right),$$
 $$k_2 = dt\cdot f\left(X + \frac{1}{5}\cdot k_1, t+\frac{1}{5}\cdot dt, U, P\right),$$
 $$k_3 = dt\cdot f\left(X + \frac{3}{40}\cdot k_1 + \frac{9}{40}\cdot k_2, t+\frac{3}{10}\cdot dt, U, P\right),$$
 $$k_4 = dt\cdot f\left(X + \frac{3}{10}\cdot k_1 + \frac{-9}{10}\cdot k_2 + \frac{6}{5}\cdot k_3, t+\frac{3}{5}\cdot dt, U, P\right),$$
@@ -91,4 +91,3 @@ $$k_5 = dt\cdot f\left(X + \frac{-11}{54}\cdot k_1 + \frac{5}{2}\cdot k_2 +\frac
 $$k_6 = dt\cdot f\left(X + \frac{1631}{55296}\cdot k_1 + \frac{175}{512}\cdot k_2 + \frac{575}{13824}\cdot k_3 + \frac{44275}{110592}\cdot k_4  + \frac{253}{4096}\cdot k_5, t+\frac{7}{8}\cdot dt, U, P\right),$$
 
 ![](images/runge_kutta_cash_karp_stability.svg "Domaine de stabilité de la méthode de Runge-Kutta Cash-Karp")
-
