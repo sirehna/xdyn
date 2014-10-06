@@ -13,7 +13,7 @@
 
 #include "WaveSpectralDensity.hpp"
 
-/** \brief Class returned when summing to WaveSpectralDensity objects
+/** \brief Class returned when summing two WaveSpectralDensity objects
  *  \details
  *  \addtogroup waves
  *  \ingroup waves
