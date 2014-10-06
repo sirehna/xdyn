@@ -9,6 +9,8 @@
 #include <iostream>
 #include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
 
+#include <ssc/check_ssc_version.hpp>
+
 #include "utilities_for_InputData.hpp"
 #include "InputData.hpp"
 #include "OptionPrinter.hpp"
@@ -19,7 +21,8 @@ std::string description()
     ss << "This is the simulator created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
        << "(c) SIREHNA 2014." << std::endl
        << std::endl
-       << "ID : @GIT_SHA1@" << std::endl
+       << "ID: @GIT_SHA1@" << std::endl
+       << "SHA of the SSC used: " << LONG_SSC_GIT_SHA << std::endl
        << std::endl;
     return ss.str();
 }
