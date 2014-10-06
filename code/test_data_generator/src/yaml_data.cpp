@@ -85,7 +85,6 @@ std::string test_data::hydrostatic_test()
        << "    external forces:\n"
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"
-       << "    \n"
        << "\n";
     return ss.str();
 }
