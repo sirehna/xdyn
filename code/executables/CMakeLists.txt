@@ -41,6 +41,32 @@ TARGET_LINK_LIBRARIES(sim simulatorIrtJv)
 TARGET_LINK_LIBRARIES(sim ${Boost_PROGRAM_OPTIONS_LIBRARY})
 TARGET_LINK_LIBRARIES(sim boost_program_options_descriptions_static)
 
+ADD_EXECUTABLE(test_hs src/test_hs.cpp $<TARGET_OBJECTS:test_data_generator>
+$<TARGET_OBJECTS:simulator>
+        $<TARGET_OBJECTS:parser_extensions>
+        $<TARGET_OBJECTS:model_wrappers>
+        $<TARGET_OBJECTS:wave_models>
+        $<TARGET_OBJECTS:stl_reader>
+        $<TARGET_OBJECTS:stl_writer>
+        $<TARGET_OBJECTS:hydro_models>
+        $<TARGET_OBJECTS:mesh>
+        $<TARGET_OBJECTS:simulator_yaml_parser>
+        $<TARGET_OBJECTS:simulator_external_data_structures>)
+TARGET_LINK_LIBRARIES(test_hs simulatorIrtJv binary_stl_data_static base91x_static
+)
+        
+TARGET_LINK_LIBRARIES(test_hs yaml-cpp
+        gfortran)
+        
+TARGET_LINK_LIBRARIES(test_hs numeric_shared
+kinematics_shared
+data_source_shared
+yaml_parser_shared
+text_file_reader_shared
+decode_unit_shared
+csv_file_reader_shared)
+
+
 ADD_EXECUTABLE(convert_stl_files_to_code ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp)
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code
                       simulatorIrtJv
