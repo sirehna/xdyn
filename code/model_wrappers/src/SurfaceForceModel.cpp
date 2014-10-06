@@ -26,7 +26,15 @@ ssc::kinematics::Wrench SurfaceForceModel::operator()(const Body& body, const do
     for (auto that_facet = begin(body.intersector) ; that_facet != e ; ++that_facet)
     {
         const DF f = dF(that_facet, env, body, t);
-        F+= ssc::kinematics::UnsafeWrench(body.G, orientation_factor*f.dF, orientation_factor*(f.C-body.G.v).cross(f.dF));
+        const double x = (f.C(0)-body.G.v(0));
+        const double y = (f.C(1)-body.G.v(1));
+        const double z = (f.C(2)-body.G.v(2));
+        F.X() += orientation_factor*f.dF(0);
+        F.Y() += orientation_factor*f.dF(1);
+        F.Z() += orientation_factor*f.dF(2);
+        F.K() += orientation_factor*(y*f.dF(2)-z*f.dF(1));
+        F.M() += orientation_factor*(z*f.dF(0)-x*f.dF(2));
+        F.N() += orientation_factor*(x*f.dF(1)-y*f.dF(0));
     }
     return F;
 }
