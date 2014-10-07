@@ -12,9 +12,11 @@
 #include "simulator_api.hpp"
 #include "SimCsvObserver.hpp"
 #include <ssc/solver.hpp>
-
+#include <ssc/check_ssc_version.hpp>
 #include <string>
 #include <fstream>
+
+CHECK_SSC_VERSION(0x09de0d9ad8639ab9)
 
 int main(int argc, char** argv)
 {
