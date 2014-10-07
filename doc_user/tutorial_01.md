@@ -210,7 +210,7 @@ On peut choisir le solveur :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-La liste de toutes les options est disponibles en exécutant :
+La liste de toutes les options est disponible en exécutant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./sim
