@@ -14,7 +14,7 @@ pesanteur.
 Le fichier d'entrée du simulateur est au format [YAML](http://www.yaml.org) (une extension du format
 JSON).
 
-On commence par définir les conventions de rotation :
+On commence par définir les conventions de rotation (décrite [ici](reperes_et_conventions.html#param%C3%A9trisation-des-convention-dans-le-fichier-yaml)):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rotations:
