@@ -101,7 +101,7 @@ IF(PANDOC)
         ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/./generate_images_for_tutorials.sh ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/executables
         COMMENT "Generating tutorial SVG images" VERBATIM
-        DEPENDS move_stl
+        DEPENDS move_stl sim
         )
     
     ADD_CUSTOM_COMMAND(
