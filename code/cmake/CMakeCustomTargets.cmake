@@ -92,6 +92,30 @@ ELSE()
 ENDIF()
 
 IF(PANDOC)
+    ADD_CUSTOM_TARGET(move_stl
+        ${CMAKE_COMMAND} -E copy_directory executables/demos executables
+        COMMENT "Move generated files so the tutorial_svg target can find them"
+        DEPENDS generate_yaml_example generate_stl_examples
+        )
+    ADD_CUSTOM_TARGET(tutorial_svg
+        ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/./generate_images_for_tutorials.sh ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/executables
+        COMMENT "Generating tutorial SVG images" VERBATIM
+        DEPENDS move_stl
+        )
+    
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
+        COMMAND ${PANDOC} -s --toc --mathml -f markdown tutorial*.md -t html --highlight-style pygments -o tutorials.html -c stylesheet.css
+        DEPENDS tutorial_svg
+        )
+    ADD_CUSTOM_TARGET(tutorial ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html)
+    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html DESTINATION doc)
+    FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images/*.svg")
+    FOREACH(f ${files})
+        INSTALL(FILES ${f} DESTINATION doc/images)
+    ENDFOREACH()
     FOREACH(f fr)
         ADD_CUSTOM_COMMAND(
             OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/user_guide_${f}.html
