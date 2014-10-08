@@ -92,6 +92,8 @@ ELSE()
 ENDIF()
 
 IF(PANDOC)
+    FILE(GLOB plot_py "${CMAKE_CURRENT_SOURCE_DIR}/../postprocessing/plot.py")
+    FILE(COPY ${plot_py} DESTINATION executables)
     ADD_CUSTOM_TARGET(move_stl
         ${CMAKE_COMMAND} -E copy_directory executables/demos executables
         COMMENT "Move generated files so the tutorial_svg target can find them"
