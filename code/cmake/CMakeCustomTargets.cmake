@@ -98,7 +98,7 @@ IF(PANDOC)
         DEPENDS generate_yaml_example generate_stl_examples
         )
     ADD_CUSTOM_TARGET(tutorial_svg
-        ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/./generate_images_for_tutorials.sh ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images
+        ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/./generate_images_for_tutorials.sh "${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/executables
         COMMENT "Generating tutorial SVG images" VERBATIM
         DEPENDS move_stl sim
