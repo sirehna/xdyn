@@ -112,18 +112,16 @@ IF(PANDOC)
         DEPENDS tutorial_svg
         )
     ADD_CUSTOM_TARGET(tutorial ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html)
-    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html DESTINATION doc)
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images/*.svg")
     FOREACH(f ${files})
         INSTALL(FILES ${f} DESTINATION doc/images)
     ENDFOREACH()
-    FOREACH(f fr)
-        ADD_CUSTOM_COMMAND(
-            OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/user_guide_${f}.html
-            COMMAND ${PANDOC} -s user_guide_${f}.md -o user_guide_${f}.html
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user)
-        LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/user_guide_${f}.html)
-    ENDFOREACH()
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/documentation_yaml.html
+        COMMAND ${PANDOC} -s documentation_yaml.md -o documentation_yaml.html
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user)
+    LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/documentation_yaml.html)
+    LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html)
     ADD_CUSTOM_TARGET(doc_user ALL DEPENDS ${DOC_USER_INSTALL_FILES})
     INSTALL(FILES ${DOC_USER_INSTALL_FILES} DESTINATION doc)
 ELSE()
