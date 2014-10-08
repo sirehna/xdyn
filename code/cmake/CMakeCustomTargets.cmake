@@ -92,10 +92,8 @@ ELSE()
 ENDIF()
 
 IF(PANDOC)
-    ADD_CUSTOM_TARGET(move_plot_py
-        ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/../postprocessing/plot.py" executables
-        COMMENT "Move plot.py so the script generate_images_for_tutorials.sh can find them"
-        )
+    FILE(GLOB plot_py "${CMAKE_CURRENT_SOURCE_DIR}/../postprocessing/plot.py")
+    FILE(COPY ${plot_py} DESTINATION executables)
     ADD_CUSTOM_TARGET(move_stl
         ${CMAKE_COMMAND} -E copy_directory executables/demos executables
         COMMENT "Move generated files so the tutorial_svg target can find them"
@@ -105,7 +103,7 @@ IF(PANDOC)
         ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/./generate_images_for_tutorials.sh "${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/executables
         COMMENT "Generating tutorial SVG images" VERBATIM
-        DEPENDS move_stl sim move_plot_py
+        DEPENDS move_stl sim
         )
     ADD_CUSTOM_COMMAND(
         OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html
