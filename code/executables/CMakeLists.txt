@@ -5,8 +5,8 @@ PROJECT(executables)
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
-IF (NOT(MSVC))
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+IF(NOT(MSVC))
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
 INCLUDE_DIRECTORIES(inc)
@@ -54,10 +54,10 @@ $<TARGET_OBJECTS:simulator>
         $<TARGET_OBJECTS:simulator_external_data_structures>)
 TARGET_LINK_LIBRARIES(test_hs simulatorIrtJv binary_stl_data_static base91x_static
 )
-        
+
 TARGET_LINK_LIBRARIES(test_hs yaml-cpp
         gfortran)
-        
+
 TARGET_LINK_LIBRARIES(test_hs numeric_shared
 kinematics_shared
 data_source_shared
@@ -65,7 +65,6 @@ yaml_parser_shared
 text_file_reader_shared
 decode_unit_shared
 csv_file_reader_shared)
-
 
 ADD_EXECUTABLE(convert_stl_files_to_code ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp)
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code
