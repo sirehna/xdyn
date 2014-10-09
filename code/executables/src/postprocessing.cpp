@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <iterator>     // std::istream_iterator
 
 #include <ssc/csv_file_reader.hpp>
 #include "OutputTransformer.hpp"
@@ -117,19 +118,35 @@ std::vector<std::map<std::string,double> > build_output(ssc::csv_file_reader::CS
     return res;
 }
 
+std::string get_contents_from_stdin();
+std::string get_contents_from_stdin()
+{
+    std::cin.sync_with_stdio(false); // As per http://stackoverflow.com/questions/9371238/why-is-reading-lines-from-stdin-much-slower-in-c-than-python
+    std::cin >> std::noskipws; // Don't skip the whitespace while reading
+
+    // Use stream iterators to copy the stream to a string
+    std::istream_iterator<char> it(std::cin);
+    std::istream_iterator<char> end;
+    return std::string(it, end);
+}
+
 int main(int argc, char** argv)
 {
-    if (argc < 3)
+    if (argc < 2)
     {
-        std::cout << description() << std::endl << "Usage: " << argv[0] << " <csv file> <yaml files>" << std::endl;
+        std::cout << description() << std::endl << "Usage: " << argv[0] << " <yaml files>" << std::endl
+                  << "The yaml files need to have an 'output' section in them." << std::endl
+                  << "The CSV file is read from the standard output& corresponds to the output of the simulator so the executables can be piped." << std::endl;
         return 1;
     }
 
-    const ssc::text_file_reader::TextFileReader yaml_file(std::vector<std::string>(argv+2, argv+argc));
+    const ssc::text_file_reader::TextFileReader yaml_file(std::vector<std::string>(argv+1, argv+argc));
     const auto yaml = SimulatorYamlParser(yaml_file.get_contents()).parse();
 
-    const size_t nb_of_columns = 1+yaml.bodies.size()*13;
-    ssc::csv_file_reader::CSVFileReader csv(argv[1],nb_of_columns);
+    //const size_t nb_of_columns = 1+yaml.bodies.size()*13;
+
+
+    ssc::csv_file_reader::CSVFileReader csv(get_contents_from_stdin());
     SimulatorBuilder builder(yaml);
     const OutputTransformer transform(builder);
 
