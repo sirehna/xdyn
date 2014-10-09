@@ -109,10 +109,11 @@ IF(PANDOC)
     ADD_CUSTOM_COMMAND(
         OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
-        COMMAND ${PANDOC} -s --toc --mathml -f markdown tutorial_01.md tutorial_02.md -t html --highlight-style pygments -o tutorials.html -c stylesheet.css
+        COMMAND ${PANDOC} -s --toc --mathml -f markdown tutorial_01.md tutorial_02.md tutorial_03.md -t html --highlight-style pygments -o tutorials.html -c stylesheet.css
         COMMENT "Creating tutorials.html" VERBATIM
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
                 ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
+                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
                 ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images/tutorial_01.svg
         )
     ADD_CUSTOM_TARGET(tutorial ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html)
