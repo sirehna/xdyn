@@ -27,7 +27,10 @@ OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(bu
 
 void OutputTransformer::update_kinematics(const StateType& x) const
 {
-    for (size_t i = 0 ; i < bodies.size() ; ++i) ::update_kinematics(x, bodies[i], i, k);
+    for (size_t i = 0 ; i < bodies.size() ; ++i)
+    {
+        ::update_kinematics(x, bodies[i], i, k);
+    }
 }
 
 template <typename T> double get_axis_value(const T& P, const std::string& axis)
@@ -125,6 +128,10 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlAngles
 
 std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
 {
+    if (bodies.empty())
+    {
+        THROW(__PRETTY_FUNCTION__, OutputTransformerException, "No bodies defined");
+    }
     std::map<std::string,double> out;
     out["t"] = res.t;
     update_kinematics(res.x);
