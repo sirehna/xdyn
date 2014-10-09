@@ -274,17 +274,23 @@ d'angle adoptée.
 
 ## Modèles de houle
 
-Les modèles de houle interviennent pour le calcul des efforts hydrostatiques
+Les modèles de houle interviennent pour le calcul des [efforts
+hydrostatiques](modeles_reperes_et_conventions.html#efforts-hydrostatiques-non-lin%C3%A9aires)
 (par truchement de l'élévation de la surface libre),
-d'une part, et les efforts de Froude-Krylov d'autre part (par le biais de la
+d'une part, et les [efforts de
+Froude-Krylov](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation) d'autre part (par le biais de la
 pression dynamique).
 
 ### Conventions
 
 On note $\psi$ la direction de propagation de la houle (les vagues "vont vers"
 $\psi$) dans le repère NED (en d'autres termes, $\psi=0$ correspond aux vagues
-allant vers le Nord, $\psi = 90\circ$ à des vagues allant vers l'Est).  On
-appelle $\omega\mapsto S(\omega)$ la densité spectrale de puissance de la
+allant vers le Nord, $\psi = 90^\circ$ à des vagues allant vers l'Est). Cette
+convention peut être illustrée par la figure suivante :
+
+![](images/convention_houle.svg)
+
+On appelle $\omega\mapsto S(\omega)$ la densité spectrale de puissance de la
 houle, $\psi\mapsto D(\psi)$ l'étalement directionnel de la houle et $A(\omega,
 \psi) = S(\omega)\cdot D(\psi)$ le spectre directionnel de la houle.
 
@@ -334,8 +340,10 @@ $$\zeta(x,y,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 + y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j}$$
 
 ainsi que l'expression de la pression dynamique, utilisée par le modèle de
-[Froude-Krylov](modeles_reperes_et_conventions.html#)
-$$p_{\mbox{dyn}} = $$
+[Froude-Krylov](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)
+:
+
+$$p_{\mbox{dyn}} = \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
 
 #### Discrétisation des spectres et des étalements
 
@@ -671,7 +679,10 @@ $$F_{\mbox{hd}} = F_E + F_R$$
 Les efforts de Froude-Krylov sont calculés en intégrant la pression dynamique
 sur la carène et en supposant que le corps ne perturbe pas la houle. En
 pratique, ils peuvent être négligés dès que le corps est à plus d'une-demi
-longueur d'onde de profondeur.
+longueur d'onde de profondeur :
+
+$$\mathbf{F}_{\mbox{FK}}(t)=\int_{P=(x,y,z)\in S}
+p_{\mbox{\dyn}}(x,y,z,t)dS(P)$$
 
 Les efforts de diffraction sont interpolés à partir de tables
 calculées par des logiciels de calculs hydrodynamiques basés sur des méthodes
