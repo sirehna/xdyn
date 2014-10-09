@@ -17,9 +17,9 @@ int main(int argc, const char* argv[])
     std::map<std::string,std::string> yaml;
 
     yaml["tutorial_01_falling_ball.yml"]      = test_data::falling_ball_example();
-    yaml["tutorial_02_hydrostatic.yml"]       = test_data::anthineas_fast_hydrostatic_test();
-    yaml["tutorial_03_exact_hydrostatic.yml"] = test_data::anthineas_exact_hydrostatic_test();
-    yaml["tutorial_04_waves.yml"]             = test_data::waves();
+    yaml["tutorial_02_fast_hydrostatic.yml"]  = test_data::anthineas_fast_hydrostatic_test();
+    yaml["tutorial_02_exact_hydrostatic.yml"] = test_data::anthineas_exact_hydrostatic_test();
+    yaml["tutorial_03_waves.yml"]             = test_data::waves();
     yaml["oscillating_cube_test.yml"]         = test_data::oscillating_cube_example();
     yaml["stable_cube_test.yml"]              = test_data::stable_cube_example();
     yaml["stable_rolling_cube_test.yml"]      = test_data::stable_rolling_cube_test();

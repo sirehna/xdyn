@@ -14,7 +14,8 @@ pesanteur.
 Le fichier d'entrée du simulateur est au format [YAML](http://www.yaml.org) (une extension du format
 JSON).
 
-On commence par définir les conventions de rotation (décrite [ici](reperes_et_conventions.html#param%C3%A9trisation-des-convention-dans-le-fichier-yaml)):
+On commence par définir les conventions de rotation (décrite
+[ici](documentation_yaml.html#rotations)):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rotations:
@@ -22,7 +23,8 @@ rotations:
     convention: [z,y',x'']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Puis l'on donne des constantes environnementales :
+Puis l'on donne des [constantes
+environnementales](documentation_yaml.html#constantes-environnementales) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 environmental constants:
@@ -105,7 +107,6 @@ Seule la gravité agit sur le solide :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     external forces:
       - model: gravity
-        g: {value: 9.81, unit: m/s^2}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 En définitive, on obtient le fichier suivant :
@@ -171,7 +172,6 @@ bodies: # All bodies have NED as parent frame
             row 6: [0,0,0,0,0,0]
     external forces:
       - model: gravity
-        g: {value: 9.81, unit: m/s^2}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Lancement de la simulation
