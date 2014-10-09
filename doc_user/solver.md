@@ -75,12 +75,18 @@ C'est un stepper très utilisé dans l'ingénierie.
 4")
 
 ### Runge-Kutta Cash-Karp
-C'est une méthode à pas adaptatif (c'est-à-dire que le pas d'intégration peut
-changer en fonction de l'estimation de l'erreur d'intégration).
+C'est une méthode à pas adaptatif qui permet d'estimer l'erreur d'intégration.
+L'estimation de l'erreur est utilisée pour contrôler le pas d'intégration du schéma.
 
-$$\hat{X}(t+dt) = X(t) + \frac{2825}{27648}\cdot k_1 + \frac{18575}{48384}\cdot k_3 +
-\frac{13525}{55296}\cdot k_4 + \frac{277}{14336}\cdot k_5 + \frac{1}{4}\cdot
-k_6$$
+$$\hat{X}(t+dt) = X(t) + \frac{37}{378}\cdot k_1 + \frac{250}{621}\cdot k_3 +
+\frac{125}{594}\cdot k_4 + \frac{512}{1771}\cdot k_6$$
+
+L'erreur commise est approchée par la relation suivante
+$$e(t+dt) = \left(\frac{37}{378} - \frac{2825}{27648}\right)\cdot k_1 +
+            \left(\frac{250}{621} - \frac{18575}{48384}\right)\cdot k_3 +
+            \left(\frac{125}{594} - \frac{13525}{55296}\right)\cdot k_4 +
+            \left(- \frac{277}{14336}\right)\cdot k_5 +
+            \left(\frac{512}{1771} - \frac{1}{4}\right)\cdot k_6$$
 
 avec
 $$k_1 = dt\cdot f\left(X, t, U, P\right),$$
