@@ -4,6 +4,6 @@
 ./sim tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_exact_hydrostatic_z" 0 3
 ./sim tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_fast_hydrostatic_y" 0 2
 ./sim tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_exact_hydrostatic_y" 0 2
-./sim tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_04_results.yml
+./sim tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.yml
 
 mv *.svg "$1"
