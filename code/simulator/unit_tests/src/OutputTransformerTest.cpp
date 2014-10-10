@@ -12,7 +12,10 @@
 #include <ssc/solver.hpp>
 #include "SimulatorYamlParser.hpp"
 
-#define PI (4.*atan(1.))
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #define EPS (1E-10)
 
 const YamlSimulatorInput OutputTransformerTest::falling_ball_yaml = OutputTransformerTest::get_falling_ball_yaml();
