@@ -138,3 +138,29 @@ TEST_F(OutputTransformerTest, output_should_contain_mechanical_energy)
     ASSERT_NO_THROW(get(rolling_cube, 0, "Em(cube)"));
     ASSERT_NO_THROW(get(falling_cube, 0, "Em(cube)"));
 }
+
+TEST_F(OutputTransformerTest, mechanical_energy_should_be_the_sum_of_potential_plus_kinetic_energy)
+{
+    for (size_t i = 0 ; i < 2 ; ++i)
+    {
+        const auto Ec_full = get(full_example, i, "Ec(body 1)");
+        const auto Ep_full = get(full_example, i, "Ep(body 1)");
+        const auto Em_full = get(full_example, i, "Em(body 1)");
+        ASSERT_DOUBLE_EQ(Em_full, Ec_full+Ep_full);
+
+        const auto Ec_falling_ball = get(falling_ball, i, "Ec(ball)");
+        const auto Ep_falling_ball = get(falling_ball, i, "Ep(ball)");
+        const auto Em_falling_ball = get(falling_ball, i, "Em(ball)");
+        ASSERT_DOUBLE_EQ(Em_falling_ball, Ec_falling_ball+Ep_falling_ball);
+
+        const auto Ec_falling_cube = get(falling_cube, i, "Ec(cube)");
+        const auto Ep_falling_cube = get(falling_cube, i, "Ep(cube)");
+        const auto Em_falling_cube = get(falling_cube, i, "Em(cube)");
+        ASSERT_DOUBLE_EQ(Em_falling_cube, Ec_falling_cube+Ep_falling_cube);
+
+        const auto Ec_rolling_cube = get(rolling_cube, i, "Ec(cube)");
+        const auto Ep_rolling_cube = get(rolling_cube, i, "Ep(cube)");
+        const auto Em_rolling_cube = get(rolling_cube, i, "Em(cube)");
+        ASSERT_DOUBLE_EQ(Em_rolling_cube, Ec_rolling_cube+Ep_rolling_cube);
+    }
+}
