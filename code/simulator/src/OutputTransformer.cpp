@@ -129,6 +129,7 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlAngles
 void OutputTransformer::fill_energy(std::map<std::string,double>& out, const Body& body) const
 {
     out[std::string("Ec(")+body.name+")"] = 0;
+    out[std::string("Ep(")+body.name+")"] = 0;
 }
 
 std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
