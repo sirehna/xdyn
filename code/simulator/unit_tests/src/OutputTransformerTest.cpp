@@ -15,15 +15,15 @@
 #define PI (4.*atan(1.))
 #define EPS (1E-10)
 
-const YamlSimulatorInput OutputTransformerTest::yaml1 = OutputTransformerTest::get_yaml1();
-const YamlSimulatorInput OutputTransformerTest::yaml2 = OutputTransformerTest::get_yaml2();
+const YamlSimulatorInput OutputTransformerTest::falling_ball_yaml = OutputTransformerTest::get_falling_ball_yaml();
+const YamlSimulatorInput OutputTransformerTest::full_example_yaml = OutputTransformerTest::get_full_example_yaml();
 
-YamlSimulatorInput OutputTransformerTest::get_yaml1()
+YamlSimulatorInput OutputTransformerTest::get_falling_ball_yaml()
 {
     return SimulatorYamlParser(test_data::falling_ball_example()+test_data::outputs()).parse();
 }
 
-YamlSimulatorInput OutputTransformerTest::get_yaml2()
+YamlSimulatorInput OutputTransformerTest::get_full_example_yaml()
 {
     YamlSimulatorInput ret = SimulatorYamlParser(test_data::full_example()).parse();
     ret.bodies.front().mesh = "";
@@ -32,11 +32,11 @@ YamlSimulatorInput OutputTransformerTest::get_yaml2()
 
 OutputTransformerTest::OutputTransformerTest() : a(ssc::random_data_generator::DataGenerator(42022)), out1(std::vector<std::map<std::string,double> >()), out2(std::vector<std::map<std::string,double> >())
 {
-    auto res1 = simulate<ssc::solver::EulerStepper>(yaml1, 0, 2, 1);
-    const OutputTransformer transform1(yaml1);
+    auto res1 = simulate<ssc::solver::EulerStepper>(falling_ball_yaml, 0, 2, 1);
+    const OutputTransformer transform1(falling_ball_yaml);
     for (auto r=res1.begin() ; r != res1.end() ; ++r) out1.push_back(transform1(*r));
-    auto res2 = simulate<ssc::solver::EulerStepper>(yaml2, 0, 2, 1);
-    const OutputTransformer transform2(yaml2);
+    auto res2 = simulate<ssc::solver::EulerStepper>(full_example_yaml, 0, 2, 1);
+    const OutputTransformer transform2(full_example_yaml);
     for (auto r=res2.begin() ; r != res2.end() ; ++r) out2.push_back(transform2(*r));
 }
 

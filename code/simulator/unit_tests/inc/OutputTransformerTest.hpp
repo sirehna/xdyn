@@ -21,11 +21,11 @@ class OutputTransformerTest : public ::testing::Test
         virtual ~OutputTransformerTest();
         virtual void SetUp();
         virtual void TearDown();
-        static YamlSimulatorInput get_yaml1();
-        static YamlSimulatorInput get_yaml2();
+        static YamlSimulatorInput get_falling_ball_yaml();
+        static YamlSimulatorInput get_full_example_yaml();
 
-        static const YamlSimulatorInput yaml1;
-        static const YamlSimulatorInput yaml2;
+        static const YamlSimulatorInput falling_ball_yaml;
+        static const YamlSimulatorInput full_example_yaml;
 
         ssc::random_data_generator::DataGenerator a;
         std::vector<std::map<std::string,double> > out1;
