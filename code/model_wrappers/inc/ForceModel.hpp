@@ -15,6 +15,7 @@
 #include <ssc/kinematics.hpp>
 
 class Body;
+class EnvironmentAndFrames;
 
 class ForceModel
 {
@@ -22,6 +23,7 @@ class ForceModel
         struct Input{};
         virtual ~ForceModel(){}
         virtual ssc::kinematics::Wrench operator()(const Body& body, const double t) const = 0;
+        virtual double potential_energy(const Body& body, const std::vector<double>& x) const {(void)body;(void)x;return 0;}
 };
 
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
