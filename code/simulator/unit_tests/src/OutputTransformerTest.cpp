@@ -20,6 +20,8 @@
 
 #include <ssc/exception_handling.hpp>
 
+#define N 2
+
 class OutputTransformerTestException: public Exception
 {
     public:
@@ -34,7 +36,7 @@ std::vector<std::map<std::string,double> > OutputTransformerTest::get_results(co
     std::vector<std::map<std::string,double> > ret;
     YamlSimulatorInput parsed_yaml = SimulatorYamlParser(yaml).parse();
     parsed_yaml.bodies.front().mesh = mesh_file;
-    auto res = simulate<ssc::solver::EulerStepper>(parsed_yaml, 0, 2, 1);
+    auto res = simulate<ssc::solver::EulerStepper>(parsed_yaml, 0, N, 1);
     const OutputTransformer transform(parsed_yaml);
     for (auto r=res.begin() ; r != res.end() ; ++r) ret.push_back(transform(*r));
     return ret;
@@ -74,10 +76,10 @@ void OutputTransformerTest::TearDown()
 
 TEST_F(OutputTransformerTest, processed_output_should_have_the_right_size)
 {
-    ASSERT_EQ(3, falling_ball.size());
-    ASSERT_EQ(3, full_example.size());
-    ASSERT_EQ(3, rolling_cube.size());
-    ASSERT_EQ(3, falling_cube.size());
+    ASSERT_EQ(N+1, falling_ball.size());
+    ASSERT_EQ(N+1, full_example.size());
+    ASSERT_EQ(N+1, rolling_cube.size());
+    ASSERT_EQ(N+1, falling_cube.size());
 }
 
 TEST_F(OutputTransformerTest, position_outputs_should_exist_in_map)
@@ -97,12 +99,12 @@ TEST_F(OutputTransformerTest, can_compute_positions)
 {
     const auto x0 = get(falling_ball, 0, "x(O in NED / ball -> ball)");
     const auto z0 = get(falling_ball, 0, "z(O in NED / ball -> ball)");
-    const auto x2 = get(falling_ball, 2, "x(O in NED / ball -> ball)");;
-    const auto z2 = get(falling_ball, 2, "z(O in NED / ball -> ball)");
+    const auto x2 = get(falling_ball, N, "x(O in NED / ball -> ball)");;
+    const auto z2 = get(falling_ball, N, "z(O in NED / ball -> ball)");
     ASSERT_DOUBLE_EQ(-4,         x0) << "t = 0";
     ASSERT_DOUBLE_EQ(-12,        z0) << "t = 0";
-    ASSERT_DOUBLE_EQ(-(4+2),     x2) << "t = 2";
-    ASSERT_DOUBLE_EQ(-(12+9.81), z2) << "t = 2";
+    ASSERT_DOUBLE_EQ(-(4+N),     x2) << "t = 2";
+    ASSERT_DOUBLE_EQ(-(12+9.81*(N-1)), z2) << "t = 2";
 }
 
 TEST_F(OutputTransformerTest, can_compute_angles)
@@ -141,7 +143,7 @@ TEST_F(OutputTransformerTest, output_should_contain_mechanical_energy)
 
 TEST_F(OutputTransformerTest, mechanical_energy_should_be_the_sum_of_potential_plus_kinetic_energy)
 {
-    for (size_t i = 0 ; i < 2 ; ++i)
+    for (size_t i = 0 ; i < N ; ++i)
     {
         const auto Ec_full = get(full_example, i, "Ec(body 1)");
         const auto Ep_full = get(full_example, i, "Ep(body 1)");
