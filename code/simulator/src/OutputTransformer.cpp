@@ -130,6 +130,7 @@ void OutputTransformer::fill_energy(std::map<std::string,double>& out, const Bod
 {
     out[std::string("Ec(")+body.name+")"] = 0;
     out[std::string("Ep(")+body.name+")"] = 0;
+    out[std::string("Em(")+body.name+")"] = 0;
 }
 
 std::map<std::string,double> OutputTransformer::operator()(const Res& res) const

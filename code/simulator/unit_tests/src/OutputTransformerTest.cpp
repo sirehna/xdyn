@@ -130,3 +130,11 @@ TEST_F(OutputTransformerTest, output_should_contain_potential_energy)
     ASSERT_NO_THROW(get(rolling_cube, 0, "Ep(cube)"));
     ASSERT_NO_THROW(get(falling_cube, 0, "Ep(cube)"));
 }
+
+TEST_F(OutputTransformerTest, output_should_contain_mechanical_energy)
+{
+    ASSERT_NO_THROW(get(falling_ball, 0, "Em(ball)"));
+    ASSERT_NO_THROW(get(full_example, 0, "Em(body 1)"));
+    ASSERT_NO_THROW(get(rolling_cube, 0, "Em(cube)"));
+    ASSERT_NO_THROW(get(falling_cube, 0, "Em(cube)"));
+}
