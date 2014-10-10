@@ -12,6 +12,8 @@
 #include <ssc/solver.hpp>
 #include "SimulatorYamlParser.hpp"
 
+#include <ssc/macros.hpp>
+
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
@@ -145,11 +147,6 @@ TEST_F(OutputTransformerTest, mechanical_energy_should_be_the_sum_of_potential_p
 {
     for (size_t i = 0 ; i < N ; ++i)
     {
-        const auto Ec_full = get(full_example, i, "Ec(body 1)");
-        const auto Ep_full = get(full_example, i, "Ep(body 1)");
-        const auto Em_full = get(full_example, i, "Em(body 1)");
-        ASSERT_DOUBLE_EQ(Em_full, Ec_full+Ep_full);
-
         const auto Ec_falling_ball = get(falling_ball, i, "Ec(ball)");
         const auto Ep_falling_ball = get(falling_ball, i, "Ep(ball)");
         const auto Em_falling_ball = get(falling_ball, i, "Em(ball)");
@@ -164,5 +161,17 @@ TEST_F(OutputTransformerTest, mechanical_energy_should_be_the_sum_of_potential_p
         const auto Ep_rolling_cube = get(rolling_cube, i, "Ep(cube)");
         const auto Em_rolling_cube = get(rolling_cube, i, "Em(cube)");
         ASSERT_DOUBLE_EQ(Em_rolling_cube, Ec_rolling_cube+Ep_rolling_cube);
+    }
+}
+
+TEST_F(OutputTransformerTest, can_retrieve_kinetic_energy_of_falling_ball)
+{
+    ASSERT_NEAR(1E6/2, get(falling_ball, 0, "Ec(ball)"), EPS);
+    for (size_t i = 1 ; i < N ; ++i)
+    {
+        const double m = 1E6;
+        const double u = 1;
+        const double w = 9.81*i;
+        EXPECT_SMALL_RELATIVE_ERROR(0.5*m*(u*u+w*w), get(falling_ball, i, "Ec(ball)"), EPS) << " (i = " << i << ")";
     }
 }

@@ -43,8 +43,9 @@ class OutputTransformer
         void update_kinematics(const StateType& x) const;
         void fill(std::map<std::string,double>& out, const YamlPositionOutput& position) const;
         void fill(std::map<std::string,double>& out, const YamlAnglesOutput& angle) const;
-        void fill_energy(std::map<std::string,double>& out, const Body& body) const;
+        void fill_energy(std::map<std::string,double>& out, const size_t i, const StateType& x) const;
         ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R) const;
+        double compute_kinetic_energy(const size_t i, const StateType& x) const;
 
         YamlSimulatorInput input;
         std::vector<Body> bodies;

@@ -126,11 +126,28 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlAngles
     }
 }
 
-void OutputTransformer::fill_energy(std::map<std::string,double>& out, const Body& body) const
+double OutputTransformer::compute_kinetic_energy(const size_t i, const StateType& x) const
 {
-    out[std::string("Ec(")+body.name+")"] = 0;
-    out[std::string("Ep(")+body.name+")"] = 0;
-    out[std::string("Em(")+body.name+")"] = 0;
+    Eigen::VectorXd V(6);
+
+    V(0) = *_U(x,i);
+    V(1) = *_V(x,i);
+    V(2) = *_W(x,i);
+    V(3) = *_P(x,i);
+    V(4) = *_Q(x,i);
+    V(5) = *_R(x,i);
+
+    const auto IV = bodies.at(i).solid_body_inertia->operator*(V);
+
+    return 0.5*(V.transpose()*IV)(0,0);
+}
+
+void OutputTransformer::fill_energy(std::map<std::string,double>& out, const size_t i, const StateType& res) const
+{
+    const double Ec = compute_kinetic_energy(i, res);
+    out[std::string("Ec(")+bodies.at(i).name+")"] = Ec;
+    out[std::string("Ep(")+bodies.at(i).name+")"] = 0;
+    out[std::string("Em(")+bodies.at(i).name+")"] = Ec;
 }
 
 std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
@@ -150,9 +167,9 @@ std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
     {
         fill(out, *that_angle);
     }
-    for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
+    for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
-        fill_energy(out, *that_body);
+        fill_energy(out, i, res.x);
     }
 
     return out;
