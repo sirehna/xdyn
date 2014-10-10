@@ -51,6 +51,7 @@ class OutputTransformer
         std::vector<Body> bodies;
         std::map<std::string,ssc::kinematics::Point> points;
         TR1(shared_ptr)<ssc::kinematics::Kinematics> k;
+        std::vector<ListOfForces> forces;
 };
 
 #endif /* OUTPUTTRANSFORMER_HPP_ */

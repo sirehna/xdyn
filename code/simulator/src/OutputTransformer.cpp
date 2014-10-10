@@ -11,7 +11,12 @@
 #include "OutputTransformerException.hpp"
 #include <ssc/kinematics.hpp>
 
-OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(builder.get_parsed_yaml()), bodies(std::vector<Body>()), points(std::map<std::string,ssc::kinematics::Point>()), k(TR1(shared_ptr)<ssc::kinematics::Kinematics>(new ssc::kinematics::Kinematics()))
+OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) :
+            input(builder.get_parsed_yaml()),
+            bodies(std::vector<Body>()),
+            points(std::map<std::string,ssc::kinematics::Point>()),
+            k(TR1(shared_ptr)<ssc::kinematics::Kinematics>(new ssc::kinematics::Kinematics())),
+            forces()
 {
     MeshMap m;
     for (auto that_body = input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
@@ -19,6 +24,7 @@ OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(bu
         m[that_body->name] = VectorOfVectorOfPoints();
     }
     bodies = builder.get_bodies(m);
+    forces = builder.get_forces(builder.get_environment_and_frames(bodies));
     for (auto that_point = input.points.begin() ; that_point != input.points.end() ; ++that_point)
     {
         points[that_point->name] = ssc::kinematics::Point(that_point->frame,that_point->x,that_point->y,that_point->z);

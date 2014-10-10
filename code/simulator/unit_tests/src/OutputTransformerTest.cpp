@@ -22,6 +22,8 @@
 
 #include <ssc/exception_handling.hpp>
 
+#include "simulator_api.hpp"
+
 #define N 40
 
 class OutputTransformerTestException: public Exception
@@ -39,7 +41,7 @@ std::vector<std::map<std::string,double> > OutputTransformerTest::get_results(co
     YamlSimulatorInput parsed_yaml = SimulatorYamlParser(yaml).parse();
     parsed_yaml.bodies.front().mesh = mesh_file;
     auto res = simulate<ssc::solver::EulerStepper>(parsed_yaml, 0, N, 1);
-    const OutputTransformer transform(parsed_yaml);
+    const OutputTransformer transform(get_builder(parsed_yaml));
     for (auto r=res.begin() ; r != res.end() ; ++r) ret.push_back(transform(*r));
     return ret;
 }
