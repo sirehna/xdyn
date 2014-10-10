@@ -16,11 +16,11 @@
 #include <cmath>
 #define PI M_PI
 
-#define EPS (1E-10)
+#define EPS (1E-8)
 
 #include <ssc/exception_handling.hpp>
 
-#define N 2
+#define N 40
 
 class OutputTransformerTestException: public Exception
 {
@@ -103,8 +103,8 @@ TEST_F(OutputTransformerTest, can_compute_positions)
     const auto z2 = get(falling_ball, N, "z(O in NED / ball -> ball)");
     ASSERT_DOUBLE_EQ(-4,         x0) << "t = 0";
     ASSERT_DOUBLE_EQ(-12,        z0) << "t = 0";
-    ASSERT_DOUBLE_EQ(-(4+N),     x2) << "t = 2";
-    ASSERT_DOUBLE_EQ(-(12+9.81*(N-1)), z2) << "t = 2";
+    ASSERT_NEAR(-(4+N),     x2, EPS) << "t = 2";
+    ASSERT_NEAR(-(12+0.5*9.81*N*(N-1)), z2, EPS) << "t = 2";
 }
 
 TEST_F(OutputTransformerTest, can_compute_angles)
