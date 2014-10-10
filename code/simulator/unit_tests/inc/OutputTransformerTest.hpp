@@ -28,8 +28,8 @@ class OutputTransformerTest : public ::testing::Test
         static const YamlSimulatorInput full_example_yaml;
 
         ssc::random_data_generator::DataGenerator a;
-        std::vector<std::map<std::string,double> > out1;
-        std::vector<std::map<std::string,double> > out2;
+        std::vector<std::map<std::string,double> > falling_ball;
+        std::vector<std::map<std::string,double> > full_example;
 
 };
 

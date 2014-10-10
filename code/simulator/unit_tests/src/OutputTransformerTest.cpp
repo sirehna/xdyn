@@ -30,14 +30,18 @@ YamlSimulatorInput OutputTransformerTest::get_full_example_yaml()
     return ret;
 }
 
-OutputTransformerTest::OutputTransformerTest() : a(ssc::random_data_generator::DataGenerator(42022)), out1(std::vector<std::map<std::string,double> >()), out2(std::vector<std::map<std::string,double> >())
+OutputTransformerTest::OutputTransformerTest() :
+                a(ssc::random_data_generator::DataGenerator(42022)),
+                falling_ball(std::vector<std::map<std::string,double> >()),
+                full_example(std::vector<std::map<std::string,double> >())
 {
     auto res1 = simulate<ssc::solver::EulerStepper>(falling_ball_yaml, 0, 2, 1);
     const OutputTransformer transform1(falling_ball_yaml);
-    for (auto r=res1.begin() ; r != res1.end() ; ++r) out1.push_back(transform1(*r));
+    for (auto r=res1.begin() ; r != res1.end() ; ++r) falling_ball.push_back(transform1(*r));
+
     auto res2 = simulate<ssc::solver::EulerStepper>(full_example_yaml, 0, 2, 1);
     const OutputTransformer transform2(full_example_yaml);
-    for (auto r=res2.begin() ; r != res2.end() ; ++r) out2.push_back(transform2(*r));
+    for (auto r=res2.begin() ; r != res2.end() ; ++r) full_example.push_back(transform2(*r));
 }
 
 OutputTransformerTest::~OutputTransformerTest()
@@ -54,29 +58,31 @@ void OutputTransformerTest::TearDown()
 
 TEST_F(OutputTransformerTest, processed_output_should_have_the_right_size)
 {
-    ASSERT_EQ(3, out1.size());
-    ASSERT_EQ(3, out2.size());
+    ASSERT_EQ(3, falling_ball.size());
+    ASSERT_EQ(3, full_example.size());
+    ASSERT_EQ(3, rolling_cube.size());
+    ASSERT_EQ(3, falling_cube.size());
 }
 
 TEST_F(OutputTransformerTest, position_outputs_should_exist_in_map)
 {
-    ASSERT_NE(out1.at(0).end(), out1.at(0).find("x(O in NED / ball -> ball)"));
-    ASSERT_NE(out1.at(0).end(), out1.at(0).find("z(O in NED / ball -> ball)"));
+    ASSERT_NE(falling_ball.at(0).end(), falling_ball.at(0).find("x(O in NED / ball -> ball)"));
+    ASSERT_NE(falling_ball.at(0).end(), falling_ball.at(0).find("z(O in NED / ball -> ball)"));
 }
 
 TEST_F(OutputTransformerTest, angle_outputs_should_exist_in_map)
 {
-    ASSERT_NE(out2.at(0).end(), out2.at(0).find("phi(body 1 / NED -> body 1)"));
-    ASSERT_NE(out2.at(0).end(), out2.at(0).find("theta(body 1 / NED -> body 1)"));
-    ASSERT_NE(out2.at(0).end(), out2.at(0).find("psi(body 1 / NED -> body 1)"));
+    ASSERT_NE(full_example.at(0).end(), full_example.at(0).find("phi(body 1 / NED -> body 1)"));
+    ASSERT_NE(full_example.at(0).end(), full_example.at(0).find("theta(body 1 / NED -> body 1)"));
+    ASSERT_NE(full_example.at(0).end(), full_example.at(0).find("psi(body 1 / NED -> body 1)"));
 }
 
 TEST_F(OutputTransformerTest, can_compute_positions)
 {
-    const auto x0 = out1.at(0)["x(O in NED / ball -> ball)"];
-    const auto z0 = out1.at(0)["z(O in NED / ball -> ball)"];
-    const auto x2 = out1.at(2)["x(O in NED / ball -> ball)"];
-    const auto z2 = out1.at(2)["z(O in NED / ball -> ball)"];
+    const auto x0 = falling_ball.at(0)["x(O in NED / ball -> ball)"];
+    const auto z0 = falling_ball.at(0)["z(O in NED / ball -> ball)"];
+    const auto x2 = falling_ball.at(2)["x(O in NED / ball -> ball)"];
+    const auto z2 = falling_ball.at(2)["z(O in NED / ball -> ball)"];
     ASSERT_DOUBLE_EQ(-4,         x0) << "t = 0";
     ASSERT_DOUBLE_EQ(-12,        z0) << "t = 0";
     ASSERT_DOUBLE_EQ(-(4+2),     x2) << "t = 2";
@@ -85,9 +91,9 @@ TEST_F(OutputTransformerTest, can_compute_positions)
 
 TEST_F(OutputTransformerTest, can_compute_angles)
 {
-    const auto phi   = out2.at(0)["phi(body 1 / NED -> body 1)"];
-    const auto theta = out2.at(0)["theta(body 1 / NED -> body 1)"];
-    const auto psi   = out2.at(0)["psi(body 1 / NED -> body 1)"];
+    const auto phi   = full_example.at(0)["phi(body 1 / NED -> body 1)"];
+    const auto theta = full_example.at(0)["theta(body 1 / NED -> body 1)"];
+    const auto psi   = full_example.at(0)["psi(body 1 / NED -> body 1)"];
     EXPECT_NEAR(1.3, phi, EPS);
     EXPECT_NEAR(1.4, theta, EPS);
     EXPECT_NEAR(1.5, psi, EPS);
