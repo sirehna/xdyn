@@ -83,12 +83,12 @@ TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identi
         b.r = r = a.random<double>().greater_than(0.0);
         const ssc::kinematics::Wrench f = F(b,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
-        ASSERT_NEAR(u*u, f.X(),EPS);
-        ASSERT_NEAR(v*v, f.Y(),EPS);
-        ASSERT_NEAR(w*w, f.Z(),EPS);
-        ASSERT_NEAR(p*p, f.K(),EPS);
-        ASSERT_NEAR(q*q, f.M(),EPS);
-        ASSERT_NEAR(r*r, f.N(),EPS);
+        ASSERT_NEAR(-u*u, f.X(),EPS);
+        ASSERT_NEAR(-v*v, f.Y(),EPS);
+        ASSERT_NEAR(-w*w, f.Z(),EPS);
+        ASSERT_NEAR(-p*p, f.K(),EPS);
+        ASSERT_NEAR(-q*q, f.M(),EPS);
+        ASSERT_NEAR(-r*r, f.N(),EPS);
     }
 }
 
@@ -125,8 +125,8 @@ TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
         for (size_t j=0;j<3;++j)
         {
             const size_t k = j+3;
-            ASSERT_NEAR(D(j,0)*uu+D(j,1)*vv+D(j,2)*ww+D(j,3)*pp+D(j,4)*qq+D(j,5)*rr,f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
-            ASSERT_NEAR(D(k,0)*uu+D(k,1)*vv+D(k,2)*ww+D(k,3)*pp+D(k,4)*qq+D(k,5)*rr,f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
+            ASSERT_NEAR(D(j,0)*uu+D(j,1)*vv+D(j,2)*ww+D(j,3)*pp+D(j,4)*qq+D(j,5)*rr,-f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
+            ASSERT_NEAR(D(k,0)*uu+D(k,1)*vv+D(k,2)*ww+D(k,3)*pp+D(k,4)*qq+D(k,5)*rr,-f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
         }
     }
 }

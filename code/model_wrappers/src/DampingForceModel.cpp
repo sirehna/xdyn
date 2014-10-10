@@ -26,7 +26,7 @@ ssc::kinematics::Wrench DampingForceModel::operator()(const Body& body, const do
         body.q,
         body.r;
     W = (W.cwiseAbs().array() * W.array());
-    W = D * W;
+    W = -D * W;
     return ssc::kinematics::Wrench(body.G, W);
 }
 

@@ -4,6 +4,7 @@
  *  Created on: Jun 16, 2014
  *      Author: cady
  */
+#include <math.h> // isnan
 
 #include <boost/algorithm/string.hpp> // replace in string
 
@@ -279,7 +280,10 @@ TEST_F(SimTest, froude_krylov)
 
 TEST_F(SimTest, anthineas_damping)
 {
+    std::cout.precision(40);
     const auto yaml = SimulatorYamlParser(test_data::anthineas_damping()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
-    ASSERT_EQ(11, res.size());
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 20, 1);
+    ASSERT_EQ(21, res.size());
+    ASSERT_FALSE(isnan(res.back().x[ZIDX(0)]));
+    ASSERT_EQ(res.back().x[ZIDX(0)],res.back().x[ZIDX(0)]); // Check if nan
 }
