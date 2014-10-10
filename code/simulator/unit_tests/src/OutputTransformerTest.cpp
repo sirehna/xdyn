@@ -24,7 +24,7 @@
 
 #include "simulator_api.hpp"
 
-#define N 40
+#define N 80
 
 class OutputTransformerTestException: public Exception
 {
@@ -35,21 +35,23 @@ class OutputTransformerTestException: public Exception
         }
 };
 
-std::vector<std::map<std::string,double> > OutputTransformerTest::get_results(const std::string& yaml, const std::string& mesh_file)
+template <typename SolverType>
+std::vector<std::map<std::string,double> > get_results(const std::string& yaml, const double dt, const std::string& mesh_file = "")
 {
     std::vector<std::map<std::string,double> > ret;
     YamlSimulatorInput parsed_yaml = SimulatorYamlParser(yaml).parse();
     parsed_yaml.bodies.front().mesh = mesh_file;
-    auto res = simulate<ssc::solver::EulerStepper>(parsed_yaml, 0, N, 1);
+    auto res = simulate<SolverType>(parsed_yaml, 0, N*dt, dt);
     const OutputTransformer transform(get_builder(parsed_yaml));
     for (auto r=res.begin() ; r != res.end() ; ++r) ret.push_back(transform(*r));
     return ret;
 }
 
-const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_ball = OutputTransformerTest::get_results(test_data::falling_ball_example()+test_data::outputs());
-const std::vector<std::map<std::string,double> > OutputTransformerTest::full_example = OutputTransformerTest::get_results(test_data::full_example());
-const std::vector<std::map<std::string,double> > OutputTransformerTest::rolling_cube = OutputTransformerTest::get_results(test_data::rolling_cube());
-const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_cube = OutputTransformerTest::get_results(test_data::falling_cube());
+const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_ball_euler = get_results<ssc::solver::EulerStepper>(test_data::falling_ball_example()+test_data::outputs(),1);
+const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_ball_rk = get_results<ssc::solver::RK4Stepper>(test_data::falling_ball_example()+test_data::outputs(),0.01);
+const std::vector<std::map<std::string,double> > OutputTransformerTest::full_example = get_results<ssc::solver::EulerStepper>(test_data::full_example(),1);
+const std::vector<std::map<std::string,double> > OutputTransformerTest::rolling_cube = get_results<ssc::solver::EulerStepper>(test_data::rolling_cube(),1);
+const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_cube = get_results<ssc::solver::EulerStepper>(test_data::falling_cube(),1);
 
 double OutputTransformerTest::get(const std::vector<std::map<std::string,double> >& results, const size_t body_idx, const std::string& variable_name) const
 {
@@ -80,7 +82,7 @@ void OutputTransformerTest::TearDown()
 
 TEST_F(OutputTransformerTest, processed_output_should_have_the_right_size)
 {
-    ASSERT_EQ(N+1, falling_ball.size());
+    ASSERT_EQ(N+1, falling_ball_euler.size());
     ASSERT_EQ(N+1, full_example.size());
     ASSERT_EQ(N+1, rolling_cube.size());
     ASSERT_EQ(N+1, falling_cube.size());
@@ -88,8 +90,8 @@ TEST_F(OutputTransformerTest, processed_output_should_have_the_right_size)
 
 TEST_F(OutputTransformerTest, position_outputs_should_exist_in_map)
 {
-    ASSERT_NO_THROW(get(falling_ball, 0, "x(O in NED / ball -> ball)"));
-    ASSERT_NO_THROW(get(falling_ball, 0, "z(O in NED / ball -> ball)"));
+    ASSERT_NO_THROW(get(falling_ball_euler, 0, "x(O in NED / ball -> ball)"));
+    ASSERT_NO_THROW(get(falling_ball_euler, 0, "z(O in NED / ball -> ball)"));
 }
 
 TEST_F(OutputTransformerTest, angle_outputs_should_exist_in_map)
@@ -101,14 +103,14 @@ TEST_F(OutputTransformerTest, angle_outputs_should_exist_in_map)
 
 TEST_F(OutputTransformerTest, can_compute_positions)
 {
-    const auto x0 = get(falling_ball, 0, "x(O in NED / ball -> ball)");
-    const auto z0 = get(falling_ball, 0, "z(O in NED / ball -> ball)");
-    const auto x2 = get(falling_ball, N, "x(O in NED / ball -> ball)");;
-    const auto z2 = get(falling_ball, N, "z(O in NED / ball -> ball)");
+    const auto x0 = get(falling_ball_euler, 0, "x(O in NED / ball -> ball)");
+    const auto z0 = get(falling_ball_euler, 0, "z(O in NED / ball -> ball)");
+    const auto x2 = get(falling_ball_euler, N, "x(O in NED / ball -> ball)");;
+    const auto z2 = get(falling_ball_euler, N, "z(O in NED / ball -> ball)");
     ASSERT_DOUBLE_EQ(-4,         x0) << "t = 0";
     ASSERT_DOUBLE_EQ(-12,        z0) << "t = 0";
-    ASSERT_NEAR(-(4+N),     x2, EPS) << "t = 2";
-    ASSERT_NEAR(-(12+0.5*9.81*N*(N-1)), z2, EPS) << "t = 2";
+    ASSERT_SMALL_RELATIVE_ERROR(-(4+N),     x2, EPS) << "t = 2";
+    ASSERT_SMALL_RELATIVE_ERROR(-(12+0.5*9.81*N*(N-1)), z2, EPS) << "t = 2";
 }
 
 TEST_F(OutputTransformerTest, can_compute_angles)
@@ -123,7 +125,7 @@ TEST_F(OutputTransformerTest, can_compute_angles)
 
 TEST_F(OutputTransformerTest, output_should_contain_kinetic_energy)
 {
-    ASSERT_NO_THROW(get(falling_ball, 0, "Ec(ball)"));
+    ASSERT_NO_THROW(get(falling_ball_euler, 0, "Ec(ball)"));
     ASSERT_NO_THROW(get(full_example, 0, "Ec(body 1)"));
     ASSERT_NO_THROW(get(rolling_cube, 0, "Ec(cube)"));
     ASSERT_NO_THROW(get(falling_cube, 0, "Ec(cube)"));
@@ -131,7 +133,7 @@ TEST_F(OutputTransformerTest, output_should_contain_kinetic_energy)
 
 TEST_F(OutputTransformerTest, output_should_contain_potential_energy)
 {
-    ASSERT_NO_THROW(get(falling_ball, 0, "Ep(ball)"));
+    ASSERT_NO_THROW(get(falling_ball_euler, 0, "Ep(ball)"));
     ASSERT_NO_THROW(get(full_example, 0, "Ep(body 1)"));
     ASSERT_NO_THROW(get(rolling_cube, 0, "Ep(cube)"));
     ASSERT_NO_THROW(get(falling_cube, 0, "Ep(cube)"));
@@ -139,7 +141,7 @@ TEST_F(OutputTransformerTest, output_should_contain_potential_energy)
 
 TEST_F(OutputTransformerTest, output_should_contain_mechanical_energy)
 {
-    ASSERT_NO_THROW(get(falling_ball, 0, "Em(ball)"));
+    ASSERT_NO_THROW(get(falling_ball_euler, 0, "Em(ball)"));
     ASSERT_NO_THROW(get(full_example, 0, "Em(body 1)"));
     ASSERT_NO_THROW(get(rolling_cube, 0, "Em(cube)"));
     ASSERT_NO_THROW(get(falling_cube, 0, "Em(cube)"));
@@ -149,9 +151,9 @@ TEST_F(OutputTransformerTest, mechanical_energy_should_be_the_sum_of_potential_p
 {
     for (size_t i = 0 ; i < N ; ++i)
     {
-        const auto Ec_falling_ball = get(falling_ball, i, "Ec(ball)");
-        const auto Ep_falling_ball = get(falling_ball, i, "Ep(ball)");
-        const auto Em_falling_ball = get(falling_ball, i, "Em(ball)");
+        const auto Ec_falling_ball = get(falling_ball_euler, i, "Ec(ball)");
+        const auto Ep_falling_ball = get(falling_ball_euler, i, "Ep(ball)");
+        const auto Em_falling_ball = get(falling_ball_euler, i, "Em(ball)");
         ASSERT_DOUBLE_EQ(Em_falling_ball, Ec_falling_ball+Ep_falling_ball);
 
         const auto Ec_falling_cube = get(falling_cube, i, "Ec(cube)");
@@ -168,24 +170,24 @@ TEST_F(OutputTransformerTest, mechanical_energy_should_be_the_sum_of_potential_p
 
 TEST_F(OutputTransformerTest, can_retrieve_kinetic_energy_of_falling_ball)
 {
-    ASSERT_NEAR(1E6/2, get(falling_ball, 0, "Ec(ball)"), EPS);
+    ASSERT_NEAR(1E6/2, get(falling_ball_euler, 0, "Ec(ball)"), EPS);
     for (size_t i = 1 ; i < N ; ++i)
     {
         const double m = 1E6;
         const double u = 1;
         const double w = 9.81*i;
-        ASSERT_SMALL_RELATIVE_ERROR(0.5*m*(u*u+w*w), get(falling_ball, i, "Ec(ball)"), EPS) << " (i = " << i << ")";
+        ASSERT_SMALL_RELATIVE_ERROR(0.5*m*(u*u+w*w), get(falling_ball_euler, i, "Ec(ball)"), EPS) << " (i = " << i << ")";
     }
 }
 
 TEST_F(OutputTransformerTest, can_retrieve_potential_energy_of_falling_ball)
 {
-    ASSERT_NEAR(-12*9.81*1E6, get(falling_ball, 0, "Ep(ball)"), EPS);
+    ASSERT_NEAR(-12*9.81*1E6, get(falling_ball_euler, 0, "Ep(ball)"), EPS);
     for (size_t i = 1 ; i < N ; ++i)
     {
         const double m = 1E6;
         const double g = 9.81;
         const double h = -12-0.5*g*(i-1)*i;
-        ASSERT_SMALL_RELATIVE_ERROR(m*g*h, get(falling_ball, i, "Ep(ball)"), EPS) << " (i = " << i << ")";
+        ASSERT_SMALL_RELATIVE_ERROR(m*g*h, get(falling_ball_euler, i, "Ep(ball)"), EPS) << " (i = " << i << ")";
     }
 }
