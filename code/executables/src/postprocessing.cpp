@@ -1,3 +1,4 @@
+
 /*
  * postprocessing.cpp
  *
@@ -136,15 +137,12 @@ int main(int argc, char** argv)
     {
         std::cout << description() << std::endl << "Usage: " << argv[0] << " <yaml files>" << std::endl
                   << "The yaml files need to have an 'output' section in them." << std::endl
-                  << "The CSV file is read from the standard output& corresponds to the output of the simulator so the executables can be piped." << std::endl;
+                  << "The CSV file is read from the standard output & corresponds to the output of the simulator so the executables can be piped." << std::endl;
         return 1;
     }
 
     const ssc::text_file_reader::TextFileReader yaml_file(std::vector<std::string>(argv+1, argv+argc));
     const auto yaml = SimulatorYamlParser(yaml_file.get_contents()).parse();
-
-    //const size_t nb_of_columns = 1+yaml.bodies.size()*13;
-
 
     ssc::csv_file_reader::CSVFileReader csv(get_contents_from_stdin());
     SimulatorBuilder builder(yaml);
