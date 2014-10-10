@@ -50,8 +50,8 @@ std::vector<std::map<std::string,double> > get_results(const std::string& yaml, 
 const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_ball_euler = get_results<ssc::solver::EulerStepper>(test_data::falling_ball_example()+test_data::outputs(),1);
 const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_ball_rk = get_results<ssc::solver::RK4Stepper>(test_data::falling_ball_example()+test_data::outputs(),0.01);
 const std::vector<std::map<std::string,double> > OutputTransformerTest::full_example = get_results<ssc::solver::EulerStepper>(test_data::full_example(),1);
-const std::vector<std::map<std::string,double> > OutputTransformerTest::rolling_cube = get_results<ssc::solver::EulerStepper>(test_data::rolling_cube(),1);
-const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_cube = get_results<ssc::solver::EulerStepper>(test_data::falling_cube(),1);
+const std::vector<std::map<std::string,double> > OutputTransformerTest::rolling_cube = get_results<ssc::solver::RK4Stepper>(test_data::rolling_cube(),1);
+const std::vector<std::map<std::string,double> > OutputTransformerTest::falling_cube = get_results<ssc::solver::RK4Stepper>(test_data::falling_cube(),1);
 
 double OutputTransformerTest::get(const std::vector<std::map<std::string,double> >& results, const size_t body_idx, const std::string& variable_name) const
 {
