@@ -191,3 +191,12 @@ TEST_F(OutputTransformerTest, can_retrieve_potential_energy_of_falling_ball)
         ASSERT_SMALL_RELATIVE_ERROR(m*g*h, get(falling_ball_euler, i, "Ep(ball)"), EPS) << " (i = " << i << ")";
     }
 }
+
+TEST_F(OutputTransformerTest, mechanical_energy_of_falling_ball_should_be_constant)
+{
+    const double Em = get(falling_ball_rk, 0, "Em(ball)");
+    for (size_t i = 1 ; i < N ; ++i)
+    {
+        ASSERT_SMALL_RELATIVE_ERROR(Em, get(falling_ball_rk, i, "Em(ball)"), EPS) << " (i = " << i << ")";
+    }
+}
