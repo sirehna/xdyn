@@ -16,6 +16,8 @@
 #include "SimulatorYamlParser.hpp"
 #include <ssc/text_file_reader.hpp>
 
+#include "simulator_api.hpp"
+
 std::string description();
 std::string description()
 {
@@ -145,8 +147,7 @@ int main(int argc, char** argv)
     const auto yaml = SimulatorYamlParser(yaml_file.get_contents()).parse();
 
     ssc::csv_file_reader::CSVFileReader csv(get_contents_from_stdin());
-    SimulatorBuilder builder(yaml);
-    const OutputTransformer transform(builder);
+    const OutputTransformer transform(get_builder(yaml));
 
     write(std::cout, build_output(csv, transform));
     return 0;
