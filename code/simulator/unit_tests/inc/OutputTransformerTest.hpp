@@ -21,21 +21,16 @@ class OutputTransformerTest : public ::testing::Test
         virtual ~OutputTransformerTest();
         virtual void SetUp();
         virtual void TearDown();
-        static YamlSimulatorInput get_falling_ball_yaml();
-        static YamlSimulatorInput get_full_example_yaml();
-        static YamlSimulatorInput get_rolling_cube_yaml();
-        static YamlSimulatorInput get_falling_cube_yaml();
 
-        static const YamlSimulatorInput falling_ball_yaml;
-        static const YamlSimulatorInput full_example_yaml;
-        static const YamlSimulatorInput rolling_cube_yaml;
-        static const YamlSimulatorInput falling_cube_yaml;
+        double get(const std::vector<std::map<std::string,double> >& results, const size_t body_idx, const std::string& variable_name) const;
+
+        static std::vector<std::map<std::string,double> > get_results(const std::string& yaml, const std::string& mesh_file="");
 
         ssc::random_data_generator::DataGenerator a;
-        std::vector<std::map<std::string,double> > falling_ball;
-        std::vector<std::map<std::string,double> > full_example;
-        std::vector<std::map<std::string,double> > rolling_cube;
-        std::vector<std::map<std::string,double> > falling_cube;
+        static const std::vector<std::map<std::string,double> > falling_ball;
+        static const std::vector<std::map<std::string,double> > full_example;
+        static const std::vector<std::map<std::string,double> > rolling_cube;
+        static const std::vector<std::map<std::string,double> > falling_cube;
 
 };
 
