@@ -100,3 +100,30 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     ASSERT_NEAR(+0.5*sqrt(3.0)*981, f.Y(),EPS);
     ASSERT_NEAR(0.0, f.Z(),EPS);
 }
+
+TEST_F(GravityForceModelTest, potential_energy)
+{
+    std::vector<double> x(3,0);
+    using namespace ssc::kinematics;
+    const double cosPhi   = 0.0;
+    const double cosTheta = 0.5*sqrt(3);
+    const double cosPsi   = 0.5;
+    const double sinPhi   = 1.0;
+    const double sinTheta = 0.5;
+    const double sinPsi   = 0.5*sqrt(3);
+    RotationMatrix rot;
+    rot << cosTheta*cosPsi, sinPhi*sinTheta*cosPsi-cosPhi*sinPsi, cosPhi*sinTheta*cosPsi+sinPhi*sinPsi,
+           cosTheta*sinPsi, sinPhi*sinTheta*sinPsi+cosPhi*cosPsi, cosPhi*sinTheta*sinPsi-sinPhi*cosPsi,
+           -sinTheta,       sinPhi*cosTheta,                      cosPhi*cosTheta;
+    GravityForceModel::Input input;
+    input.g = 9.81;
+    input.k = ssc::kinematics::KinematicsPtr(new Kinematics());
+    input.k->add(Transform(rot, "NED", BODY));
+    GravityForceModel F(input);
+    Body b = get_body(BODY);
+    b.m = 100;
+
+    ASSERT_DOUBLE_EQ(0, F.potential_energy(b, x));
+    x[2] = 123.;
+    ASSERT_DOUBLE_EQ(-120663., F.potential_energy(b, x));
+}

@@ -26,6 +26,7 @@ class GravityForceModel : public ForceModel
         };
         GravityForceModel(const Input& in);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
+        double potential_energy(const Body& body, const std::vector<double>& x) const;
 
     private:
         GravityForceModel();
