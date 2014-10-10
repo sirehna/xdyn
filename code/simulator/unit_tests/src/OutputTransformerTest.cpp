@@ -114,3 +114,11 @@ TEST_F(OutputTransformerTest, can_compute_angles)
     EXPECT_NEAR(1.4, theta, EPS);
     EXPECT_NEAR(1.5, psi, EPS);
 }
+
+TEST_F(OutputTransformerTest, output_should_contain_kinetic_energy)
+{
+    ASSERT_NO_THROW(get(falling_ball, 0, "Ec(ball)"));
+    ASSERT_NO_THROW(get(full_example, 0, "Ec(body 1)"));
+    ASSERT_NO_THROW(get(rolling_cube, 0, "Ec(cube)"));
+    ASSERT_NO_THROW(get(falling_cube, 0, "Ec(cube)"));
+}

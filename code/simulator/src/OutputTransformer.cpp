@@ -126,6 +126,11 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlAngles
     }
 }
 
+void OutputTransformer::fill_energy(std::map<std::string,double>& out, const Body& body) const
+{
+    out[std::string("Ec(")+body.name+")"] = 0;
+}
+
 std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
 {
     if (bodies.empty())
@@ -142,6 +147,10 @@ std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
     for (auto that_angle = input.angles_output.begin() ; that_angle != input.angles_output.end() ; ++that_angle)
     {
         fill(out, *that_angle);
+    }
+    for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
+    {
+        fill_energy(out, *that_body);
     }
 
     return out;
