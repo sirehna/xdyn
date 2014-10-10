@@ -177,3 +177,15 @@ TEST_F(OutputTransformerTest, can_retrieve_kinetic_energy_of_falling_ball)
         ASSERT_SMALL_RELATIVE_ERROR(0.5*m*(u*u+w*w), get(falling_ball, i, "Ec(ball)"), EPS) << " (i = " << i << ")";
     }
 }
+
+TEST_F(OutputTransformerTest, can_retrieve_potential_energy_of_falling_ball)
+{
+    ASSERT_NEAR(-12*9.81*1E6, get(falling_ball, 0, "Ep(ball)"), EPS);
+    for (size_t i = 1 ; i < N ; ++i)
+    {
+        const double m = 1E6;
+        const double g = 9.81;
+        const double h = -12-0.5*g*(i-1)*i;
+        ASSERT_SMALL_RELATIVE_ERROR(m*g*h, get(falling_ball, i, "Ep(ball)"), EPS) << " (i = " << i << ")";
+    }
+}

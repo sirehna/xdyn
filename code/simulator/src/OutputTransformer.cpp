@@ -148,12 +148,23 @@ double OutputTransformer::compute_kinetic_energy(const size_t i, const StateType
     return 0.5*(V.transpose()*IV)(0,0);
 }
 
+double OutputTransformer::compute_potential_energy(const size_t i, const StateType& x) const
+{
+    double Ep = 0;
+    for (auto that_force = forces.at(i).begin() ; that_force != forces.at(i).end() ; ++that_force)
+    {
+        Ep += (*that_force)->potential_energy(bodies.at(i),std::vector<double>(x.begin()+i*13,x.begin()+(i+1)*13-1));
+    }
+    return Ep;
+}
+
 void OutputTransformer::fill_energy(std::map<std::string,double>& out, const size_t i, const StateType& res) const
 {
     const double Ec = compute_kinetic_energy(i, res);
+    const double Ep = compute_potential_energy(i, res);
     out[std::string("Ec(")+bodies.at(i).name+")"] = Ec;
-    out[std::string("Ep(")+bodies.at(i).name+")"] = 0;
-    out[std::string("Em(")+bodies.at(i).name+")"] = Ec;
+    out[std::string("Ep(")+bodies.at(i).name+")"] = Ep;
+    out[std::string("Em(")+bodies.at(i).name+")"] = Ec+Ep;
 }
 
 std::map<std::string,double> OutputTransformer::operator()(const Res& res) const

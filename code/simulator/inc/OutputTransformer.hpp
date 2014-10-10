@@ -46,6 +46,7 @@ class OutputTransformer
         void fill_energy(std::map<std::string,double>& out, const size_t i, const StateType& x) const;
         ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R) const;
         double compute_kinetic_energy(const size_t i, const StateType& x) const;
+        double compute_potential_energy(const size_t i, const StateType& x) const;
 
         YamlSimulatorInput input;
         std::vector<Body> bodies;
