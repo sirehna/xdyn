@@ -17,6 +17,8 @@
 
 const YamlSimulatorInput OutputTransformerTest::falling_ball_yaml = OutputTransformerTest::get_falling_ball_yaml();
 const YamlSimulatorInput OutputTransformerTest::full_example_yaml = OutputTransformerTest::get_full_example_yaml();
+const YamlSimulatorInput OutputTransformerTest::rolling_cube_yaml = OutputTransformerTest::get_rolling_cube_yaml();
+const YamlSimulatorInput OutputTransformerTest::falling_cube_yaml = OutputTransformerTest::get_falling_cube_yaml();
 
 YamlSimulatorInput OutputTransformerTest::get_falling_ball_yaml()
 {
@@ -30,10 +32,26 @@ YamlSimulatorInput OutputTransformerTest::get_full_example_yaml()
     return ret;
 }
 
+YamlSimulatorInput OutputTransformerTest::get_rolling_cube_yaml()
+{
+    YamlSimulatorInput ret = SimulatorYamlParser(test_data::rolling_cube()).parse();
+    ret.bodies.front().mesh = "";
+    return ret;
+}
+
+YamlSimulatorInput OutputTransformerTest::get_falling_cube_yaml()
+{
+    YamlSimulatorInput ret = SimulatorYamlParser(test_data::falling_cube()).parse();
+    ret.bodies.front().mesh = "";
+    return ret;
+}
+
 OutputTransformerTest::OutputTransformerTest() :
                 a(ssc::random_data_generator::DataGenerator(42022)),
                 falling_ball(std::vector<std::map<std::string,double> >()),
-                full_example(std::vector<std::map<std::string,double> >())
+                full_example(std::vector<std::map<std::string,double> >()),
+                rolling_cube(std::vector<std::map<std::string,double> >()),
+                falling_cube(std::vector<std::map<std::string,double> >())
 {
     auto res1 = simulate<ssc::solver::EulerStepper>(falling_ball_yaml, 0, 2, 1);
     const OutputTransformer transform1(falling_ball_yaml);
@@ -42,6 +60,14 @@ OutputTransformerTest::OutputTransformerTest() :
     auto res2 = simulate<ssc::solver::EulerStepper>(full_example_yaml, 0, 2, 1);
     const OutputTransformer transform2(full_example_yaml);
     for (auto r=res2.begin() ; r != res2.end() ; ++r) full_example.push_back(transform2(*r));
+
+    auto res3 = simulate<ssc::solver::EulerStepper>(rolling_cube_yaml, 0, 2, 1);
+    const OutputTransformer transform3(rolling_cube_yaml);
+    for (auto r=res2.begin() ; r != res2.end() ; ++r) rolling_cube.push_back(transform2(*r));
+
+    auto res4 = simulate<ssc::solver::EulerStepper>(falling_cube_yaml, 0, 2, 1);
+    const OutputTransformer transform4(falling_cube_yaml);
+    for (auto r=res2.begin() ; r != res2.end() ; ++r) falling_cube.push_back(transform2(*r));
 }
 
 OutputTransformerTest::~OutputTransformerTest()
