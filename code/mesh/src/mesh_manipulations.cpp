@@ -122,6 +122,34 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
     return Eigen::Vector3d(A/norm,B/norm,C/norm);
 }
 
+Eigen::Vector3d unit_normal(const Matrix3x& points, //!< Polygon for which the unit normal vector is computed
+                            const std::vector<size_t> &vertex_index
+                           )
+{
+    if (vertex_index.size() < 3)
+    {
+        std::stringstream ss;
+        ss << "Need at least three points to define a surface: cannot compute normal vector. Input has "
+           << vertex_index.size() << " point";
+        if (vertex_index.size()>1) ss << "s";
+        ss << ".";
+       THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
+    }
+    const double x1 = points(0,vertex_index[1])-points(0,vertex_index[0]);
+    const double x2 = points(1,vertex_index[1])-points(1,vertex_index[0]);
+    const double x3 = points(2,vertex_index[1])-points(2,vertex_index[0]);
+    const double y1 = points(0,vertex_index[2])-points(0,vertex_index[0]);
+    const double y2 = points(1,vertex_index[2])-points(1,vertex_index[0]);
+    const double y3 = points(2,vertex_index[2])-points(2,vertex_index[0]);
+    const double A = x2*y3-x3*y2;
+    const double B = x3*y1-x1*y3;
+    const double C = x1*y2-x2*y1;
+
+    const double norm = sqrt(A*A+B*B+C*C);
+    if (norm<1000*std::numeric_limits<double>::epsilon()) return Eigen::Vector3d(0,0,0);
+    return Eigen::Vector3d(A/norm,B/norm,C/norm);
+}
+
 Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
                                  )
 {
