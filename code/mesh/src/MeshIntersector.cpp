@@ -273,7 +273,6 @@ Facet MeshIntersector::compute_closing_facet() const
         A = area(mesh->all_nodes, vertex_index);
         n = unit_normal(mesh->all_nodes, vertex_index);
     }
-    //Facet(const std::vector<size_t> &vertex_index_,
     return Facet(vertex_index, n, bar, A);
 }
 
