@@ -31,6 +31,11 @@ class FacetIterator
             return (begin != rhs.begin) or (here != rhs.here);
         }
 
+        bool operator==(const FacetIterator& rhs) const
+        {
+            return not(rhs != *this);
+        }
+
     private:
         VectorOfFacet::const_iterator begin;
         std::vector<size_t>::const_iterator here;
