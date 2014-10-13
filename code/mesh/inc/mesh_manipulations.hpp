@@ -9,6 +9,8 @@
 #define MESH_MANIPULATIONS_HPP_
 
 #include "GeometricTypes3d.hpp"
+#include "MeshIntersector.hpp"
+
 
 /**  \author cec
   *  \date May 20, 2014, 8:47:20 AM
@@ -123,5 +125,24 @@ Eigen::Matrix3d inertia_of_triangle(
 Eigen::Matrix3d inertia_of_polygon(
 		const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
 		);
+
+/**  \brief Computes the volume inside a closed mesh.
+  *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
+  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+  *  \see admesh-0.95
+  *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
+  */
+double volume(const VectorOfVectorOfPoints& mesh //!< Mesh we want to calculate the volume of
+              );
+
+/**  \brief Computes the volume inside a closed mesh defined by a list of facets
+  *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
+  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+  *  \see admesh-0.95
+  *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
+  */
+double volume(const FacetIterator& begin, //!< Iterator to the beginning of the list of the facets defining the mesh
+              const FacetIterator& end //!< Iterator to one-past the last facet in the list of the facets defining the mesh
+              );
 
 #endif /* MESH_MANIPULATIONS_HPP_ */

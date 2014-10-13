@@ -260,3 +260,22 @@ Eigen::Matrix3d inertia_of_polygon(
     }
     return total_inertia/total_area;
 }
+
+double volume(const VectorOfVectorOfPoints&  //!< Mesh we want to calculate the volume of
+              )
+{
+    return 0;
+}
+
+/**  \brief Computes the volume inside a closed mesh defined by a list of facets
+  *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
+  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+  *  \see admesh-0.95
+  *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
+  */
+double volume(const FacetIterator& , //!< Iterator to the beginning of the list of the facets defining the mesh
+              const FacetIterator&  //!< Iterator to one-past the last facet in the list of the facets defining the mesh
+              )
+{
+    return 0;
+}
