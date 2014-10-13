@@ -468,7 +468,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_cube_with_lots_of_irregu
     ASSERT_SMALL_RELATIVE_ERROR(1, intersector.immersed_volume() + intersector.emerged_volume(), EPS);
 }
 
-TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_an_immersed_cube)
+TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_immersed_cube)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
@@ -482,11 +482,11 @@ TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_an_immersed_cube)
         all_immersed[5] = 1+l;
         all_immersed[6] = 1+l;
         all_immersed[7] = 1+l;
-        MeshIntersector intersector(cube(l, a.random<double>(), a.random<double>(), a.random<double>()));
+        MeshIntersector intersector(cube(l, a.random<double>().between(-100,100), a.random<double>().between(-100,100), a.random<double>().between(-100,100)));
 
         intersector.update_intersection_with_free_surface(all_immersed);
         ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
-        ASSERT_DOUBLE_EQ(l*l*l, intersector.immersed_volume());
+        ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.immersed_volume(), EPS);
     }
 }
 
