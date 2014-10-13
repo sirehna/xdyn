@@ -250,14 +250,14 @@ bool MeshIntersector::just_touches_free_surface(int status)
 {
     return ((status & 4) != 0);
 }
-#include <ssc/macros.hpp>
-double MeshIntersector::immersed_volume() const
+
+double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& end) const
 {
     double volume = 0;
-    if (begin_immersed()==end_immersed()) return volume;
+    if (begin==end) return volume;
     // Choose a point (any point) as the reference
-    const auto P0 = mesh->all_nodes.col(begin_immersed()->vertex_index.front());
-    for (auto that_facet = begin_immersed() ; that_facet != end_immersed() ; ++that_facet)
+    const auto P0 = mesh->all_nodes.col(begin->vertex_index.front());
+    for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
         const auto P = mesh->all_nodes.col(that_facet->vertex_index.front());
         const auto dP = P-P0;
@@ -268,19 +268,12 @@ double MeshIntersector::immersed_volume() const
     return volume;
 }
 
+double MeshIntersector::immersed_volume() const
+{
+    return volume(begin_immersed(), end_immersed());
+}
+
 double MeshIntersector::emerged_volume() const
 {
-    double volume = 0;
-    if (begin_emerged()==end_emerged()) return volume;
-    // Choose a point (any point) as the reference
-    const auto P0 = mesh->all_nodes.col(begin_emerged()->vertex_index.front());
-    for (auto that_facet = begin_emerged() ; that_facet != end_emerged() ; ++that_facet)
-    {
-        const auto P = mesh->all_nodes.col(that_facet->vertex_index.front());
-        const auto dP = P-P0;
-        // Dot product to get distance from point to plane
-        const double height = that_facet->unit_normal.dot(dP);
-        volume += (that_facet->area * height) / 3.0;
-    }
-    return volume;
+    return volume(begin_emerged(), end_emerged());
 }

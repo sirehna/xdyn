@@ -179,6 +179,8 @@ class MeshIntersector
                                std::vector<bool>& facet_crosses_free_surface,
                                std::vector<int>& edges_immersion_status);
         void reset_dynamic_members();
+
+        double volume(const FacetIterator& begin, const FacetIterator& end) const;
 };
 
 typedef TR1(shared_ptr)<MeshIntersector> MeshIntersectorPtr;
