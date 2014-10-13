@@ -165,7 +165,7 @@ class MeshIntersector
           *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
           */
         double emerged_volume() const;
-
+        EPoint barycenter(const FacetIterator& begin, const FacetIterator& end) const;
     private:
     /**  \brief Iterate on each edge to find intersection with free surface
       */

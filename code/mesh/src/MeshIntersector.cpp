@@ -251,6 +251,18 @@ bool MeshIntersector::just_touches_free_surface(int status)
     return ((status & 4) != 0);
 }
 
+EPoint MeshIntersector::barycenter(const FacetIterator& begin, const FacetIterator& end) const
+{
+    EPoint ret(0,0,0);
+    size_t n = 0;
+    for (auto that_facet = begin ; that_facet != end ; ++that_facet)
+    {
+        ret += that_facet->barycenter;
+    }
+    ret /= double(std::max(n, size_t(1)));
+    return ret;
+}
+
 double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& end) const
 {
     double volume = 0;
