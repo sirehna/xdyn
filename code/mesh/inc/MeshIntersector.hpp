@@ -175,6 +175,14 @@ class MeshIntersector
           *  \snippet mesh/unit_tests/src/MeshIntersectorTest.cpp MeshIntersectorTest compute_closing_facet_example
           */
         Facet compute_closing_facet() const;
+
+        /**  \brief Detect if a facet already exists in mesh.
+          *  \details Only compares the indices (not the barycenter or unit normal or area).
+          *  \returns True if facet exists, 0 otherwise.
+          *  \snippet mesh/unit_tests/src/MeshIntersectorTest.cpp MeshIntersectorTest has_example
+          */
+        bool has(const Facet& f //!< Facet to check
+                 );
     private:
     /**  \brief Iterate on each edge to find intersection with free surface
       */

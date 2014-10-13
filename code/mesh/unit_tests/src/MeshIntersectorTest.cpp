@@ -551,6 +551,32 @@ TEST_F(MeshIntersectorTest, can_compute_closing_facet)
     ASSERT_DOUBLE_EQ(0, (double)P4(2));
 }
 
+TEST_F(MeshIntersectorTest, can_detect_if_facet_is_already_included)
+{
+    const MeshPtr mesh(new Mesh(MeshBuilder(cube(1, 0, 0, 0, false)).build()));
+    MeshIntersector intersector(mesh);
+    std::vector<double> dz(8);
+    dz[0] = 0;
+    dz[1] = 0;
+    dz[2] = 0;
+    dz[3] = 0;
+    dz[4] = 1;
+    dz[5] = 1;
+    dz[6] = 1;
+    dz[7] = 1;
+    intersector.update_intersection_with_free_surface(dz);
+    Facet f;
+    f.vertex_index.push_back(0);
+    f.vertex_index.push_back(1);
+    f.vertex_index.push_back(2);
+    f.vertex_index.push_back(3);
+    ASSERT_TRUE(intersector.has(f));
+    f.vertex_index.back() = 4;
+    ASSERT_FALSE(intersector.has(f));
+    const Facet zero = intersector.compute_closing_facet();
+    ASSERT_TRUE(intersector.has(zero));
+}
+
 TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_a_partially_immersed_cube)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)

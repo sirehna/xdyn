@@ -1,3 +1,4 @@
+#include <set>
 
 #include "MeshBuilder.hpp"
 #include "MeshIntersector.hpp"
@@ -274,6 +275,24 @@ Facet MeshIntersector::compute_closing_facet() const
         n = unit_normal(mesh->all_nodes, vertex_index);
     }
     return Facet(vertex_index, n, bar, A);
+}
+
+bool MeshIntersector::has(const Facet& f //!< Facet to check
+                         )
+{
+    if (f.vertex_index.empty()) return false;
+    std::set<size_t> s(f.vertex_index.begin(), f.vertex_index.end());
+    for (auto that_facet = begin_immersed() ; that_facet != end_immersed() ; ++that_facet)
+    {
+        std::set<size_t> s_(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
+        if (s==s_) return true;
+    }
+    for (auto that_facet = begin_emerged() ; that_facet != end_emerged() ; ++that_facet)
+    {
+        std::set<size_t> s_(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
+        if (s==s_) return true;
+    }
+    return false;
 }
 
 EPoint MeshIntersector::barycenter(const FacetIterator& begin, const FacetIterator& end) const
