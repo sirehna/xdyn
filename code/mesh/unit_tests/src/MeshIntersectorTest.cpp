@@ -434,16 +434,16 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_single_facet)
     ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
 }
 
-TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_a_tetrahedron)
+TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_tetrahedron)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double l = a.random<double>().between(0,1000);
-        const double z = a.random<double>();
+        const double z = a.random<double>().between(-100,100);
         const std::vector<double> v = {z,z+l*sqrt(6)/6,z+l*sqrt(6)/6,z+l*sqrt(6)/6};
-        MeshIntersector intersector(tetrahedron(l,a.random<double>(),a.random<double>(),z));
+        MeshIntersector intersector(tetrahedron(l,a.random<double>().between(-100,100),a.random<double>().between(-100,100),z));
         intersector.update_intersection_with_free_surface(v);
-        ASSERT_DOUBLE_EQ(l*l*l/6./sqrt(2.), intersector.immersed_volume() + intersector.emerged_volume());
+        ASSERT_NEAR(l*l*l/6./sqrt(2.), intersector.immersed_volume() + intersector.emerged_volume(), 1E-2);
     }
 }
 
