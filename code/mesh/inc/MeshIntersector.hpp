@@ -166,6 +166,15 @@ class MeshIntersector
           */
         double emerged_volume() const;
         EPoint barycenter(const FacetIterator& begin, const FacetIterator& end) const;
+
+        /**  \brief used by the 'volume' method to close the mesh.
+          *  \details When computing the intersection with free surface, the
+          *           algorithm does not close the two resulting meshes (emerged
+          *           & immersed mesh).
+          *  \returns Facet on free surface & closing the mesh
+          *  \snippet mesh/unit_tests/src/MeshIntersectorTest.cpp MeshIntersectorTest compute_closing_facet_example
+          */
+        Facet compute_closing_facet() const;
     private:
     /**  \brief Iterate on each edge to find intersection with free surface
       */

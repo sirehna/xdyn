@@ -1,6 +1,7 @@
 
 #include "MeshBuilder.hpp"
 #include "MeshIntersector.hpp"
+#include "mesh_manipulations.hpp"
 
 MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_).build())))
 ,all_immersions()
@@ -249,6 +250,31 @@ bool MeshIntersector::is_immersed(int status)
 bool MeshIntersector::just_touches_free_surface(int status)
 {
     return ((status & 4) != 0);
+}
+
+Facet MeshIntersector::compute_closing_facet() const
+{
+    Facet ret;
+    std::vector<size_t> vertex_index;
+    vertex_index.reserve(mesh->node_count);
+    EPoint bar(0,0,0);
+    double A = 0;
+    Eigen::Vector3d n(0,0,0);
+    for (size_t i = 0 ; i < mesh->node_count ; ++i)
+    {
+        if (all_immersions[i] == 0)
+        {
+            vertex_index.push_back(i);
+        }
+    }
+    if (vertex_index.size() > 2)
+    {
+        bar = ::barycenter(mesh->all_nodes, vertex_index);
+        A = area(mesh->all_nodes, vertex_index);
+        n = unit_normal(mesh->all_nodes, vertex_index);
+    }
+    //Facet(const std::vector<size_t> &vertex_index_,
+    return Facet(vertex_index, n, bar, A);
 }
 
 EPoint MeshIntersector::barycenter(const FacetIterator& begin, const FacetIterator& end) const
