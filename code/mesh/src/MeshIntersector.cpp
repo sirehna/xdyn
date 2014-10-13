@@ -266,9 +266,9 @@ EPoint MeshIntersector::barycenter(const FacetIterator& begin, const FacetIterat
 double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& end) const
 {
     double volume = 0;
-    if (begin==end) return volume;
     // Choose a point (any point) as the reference
-    const auto P0 = mesh->all_nodes.col(begin->vertex_index.front());
+    const EPoint P0(0,0,0);// = begin->barycenter;//mesh->all_nodes.col(begin->vertex_index.front());
+    size_t n = 0;
     for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
         const auto P = mesh->all_nodes.col(that_facet->vertex_index.front());
@@ -276,7 +276,9 @@ double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& 
         // Dot product to get distance from point to plane
         const double height = that_facet->unit_normal.dot(dP);
         volume += (that_facet->area * height) / 3.0;
+        ++n;
     }
+    if (n < 3) return 0;
     return volume;
 }
 

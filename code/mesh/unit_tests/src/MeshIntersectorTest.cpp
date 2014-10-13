@@ -447,16 +447,16 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_tetrahedron)
     }
 }
 
-TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_a_cube)
+TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_cube)
 {
-    ASSERT_DOUBLE_EQ(1, MeshIntersector(unit_cube_clockwise()).immersed_volume()+MeshIntersector(unit_cube_clockwise()).emerged_volume());
-    ASSERT_DOUBLE_EQ(1, MeshIntersector(unit_cube()).immersed_volume()+MeshIntersector(unit_cube()).emerged_volume());
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double l = a.random<double>().between(0, 10000);
-        const double z = a.random<double>();
-        MeshIntersector intersector(cube(l, a.random<double>(), a.random<double>(), z));
-        ASSERT_DOUBLE_EQ(l*l*l, intersector.immersed_volume() + intersector.emerged_volume());
+        const double z = a.random<double>().between(-100,100);
+        MeshIntersector intersector(cube(l, a.random<double>().between(-100,100), a.random<double>().between(-100,100), z));
+        const std::vector<double> dz = {z-l/2,z-l/2,z-l/2,z-l/2,z+l/2,z+l/2,z+l/2,z+l/2};
+        intersector.update_intersection_with_free_surface(dz);
+        ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.immersed_volume() + intersector.emerged_volume(), 1E-6) << " i = " << i;
     }
 }
 
