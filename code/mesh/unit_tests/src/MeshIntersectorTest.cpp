@@ -490,24 +490,24 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_immersed_cube)
     }
 }
 
-TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_an_emerged_cube)
+TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_emerged_cube)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         const double l = a.random<double>().between(0, 10000);
         std::vector<double> all_emerged(8);
-        all_emerged[0] = 1;
-        all_emerged[1] = 1;
-        all_emerged[2] = 1;
-        all_emerged[3] = 1;
-        all_emerged[4] = 1+l;
-        all_emerged[5] = 1+l;
-        all_emerged[6] = 1+l;
-        all_emerged[7] = 1+l;
-        MeshIntersector intersector(cube(l, a.random<double>(), a.random<double>(), a.random<double>()));
+        all_emerged[0] = -1;
+        all_emerged[1] = -1;
+        all_emerged[2] = -1;
+        all_emerged[3] = -1;
+        all_emerged[4] = -1-l;
+        all_emerged[5] = -1-l;
+        all_emerged[6] = -1-l;
+        all_emerged[7] = -1-l;
+        MeshIntersector intersector(cube(l, a.random<double>().between(-100,100), a.random<double>().between(-100,100), a.random<double>().between(-100,100)));
 
         intersector.update_intersection_with_free_surface(all_emerged);
-        ASSERT_DOUBLE_EQ(l*l*l, intersector.emerged_volume());
+        ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.emerged_volume(), EPS);
         ASSERT_DOUBLE_EQ(0, intersector.immersed_volume());
     }
 }
