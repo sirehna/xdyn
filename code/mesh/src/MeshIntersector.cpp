@@ -1,6 +1,12 @@
 
+#include "MeshBuilder.hpp"
 #include "MeshIntersector.hpp"
 
+MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_).build())))
+,all_immersions()
+,index_of_emerged_facets()
+,index_of_immersed_facets()
+{}
 
 MeshIntersector::MeshIntersector(const MeshPtr mesh_)
 :mesh(mesh_)
@@ -245,3 +251,12 @@ bool MeshIntersector::just_touches_free_surface(int status)
     return ((status & 4) != 0);
 }
 
+double MeshIntersector::immersed_volume() const
+{
+    return 0;
+}
+
+double MeshIntersector::emerged_volume() const
+{
+    return 0;
+}

@@ -114,35 +114,16 @@ bool oriented_clockwise(const VectorOfVectorOfPoints& v, //!< Points in mesh
   *  <http://www.numdam.org/item?id=NAM_1887_3_6__215_1>
   */
 Eigen::Matrix3d inertia_of_triangle(
-		const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
-		const EPoint vertex2,  //!< second vertex of triangle
-		const EPoint vertex3   //!< third vertex of triangle
-		);
+        const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
+        const EPoint vertex2,  //!< second vertex of triangle
+        const EPoint vertex3   //!< third vertex of triangle
+        );
 
 /**  \details Compute the inertia matrix for a planar facet versus an inertia frame, divided by total area
   *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
   */
 Eigen::Matrix3d inertia_of_polygon(
-		const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
-		);
-
-/**  \brief Computes the volume inside a closed mesh.
-  *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
-  *  \see admesh-0.95
-  *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
-  */
-double volume(const VectorOfVectorOfPoints& mesh //!< Mesh we want to calculate the volume of
-              );
-
-/**  \brief Computes the volume inside a closed mesh defined by a list of facets
-  *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
-  *  \see admesh-0.95
-  *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
-  */
-double volume(const FacetIterator& begin, //!< Iterator to the beginning of the list of the facets defining the mesh
-              const FacetIterator& end //!< Iterator to one-past the last facet in the list of the facets defining the mesh
-              );
+        const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
+        );
 
 #endif /* MESH_MANIPULATIONS_HPP_ */

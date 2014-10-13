@@ -39,6 +39,7 @@ class FacetIterator
 class MeshIntersector
 {
     public:
+        MeshIntersector(const VectorOfVectorOfPoints& mesh);
         MeshIntersector(
                 const MeshPtr mesh_                  //!< the mesh to intersect
                 );
@@ -143,6 +144,22 @@ class MeshIntersector
 
         friend class ImmersedFacetIterator;
         friend class EmergedFacetIterator;
+
+        /**  \brief Computes the volume inside a closed mesh, for the points under the free surface.
+          *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
+          *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+          *  \see admesh-0.95
+          *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
+          */
+        double immersed_volume() const;
+
+        /**  \brief Computes the volume inside a closed mesh, for the points above the free surface.
+          *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
+          *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+          *  \see admesh-0.95
+          *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
+          */
+        double emerged_volume() const;
 
     private:
     /**  \brief Iterate on each edge to find intersection with free surface

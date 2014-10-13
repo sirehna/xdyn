@@ -9,6 +9,8 @@
 #include <ssc/macros.hpp>
 #include "STL_data.hpp"
 #include "StlReader.hpp"
+#include "MeshIntersector.hpp"
+#include "generate_anthineas.hpp"
 
 #define EPS 1E-6
 
@@ -420,4 +422,120 @@ TEST_F(MeshIntersectorTest, bug3_in_immerged_polygon)
     ASSERT_LT(0, (p.col(0)-p.col(1)).norm());
     ASSERT_LT(0, (p.col(0)-p.col(2)).norm());
     ASSERT_LT(0, (p.col(1)-p.col(2)).norm());
+}
+
+
+TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_single_facet)
+{
+    MeshIntersector intersector(VectorOfVectorOfPoints(1, one_triangle()));
+    const std::vector<double> v = {0,-0.25,0.5};
+    intersector.update_intersection_with_free_surface(v);
+    ASSERT_DOUBLE_EQ(0, intersector.immersed_volume());
+    ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
+}
+
+TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_a_tetrahedron)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double l = a.random<double>().between(0,1000);
+        const double z = a.random<double>();
+        const std::vector<double> v = {z,z+l*sqrt(6)/6,z+l*sqrt(6)/6,z+l*sqrt(6)/6};
+        MeshIntersector intersector(tetrahedron(l,a.random<double>(),a.random<double>(),z));
+        intersector.update_intersection_with_free_surface(v);
+        ASSERT_DOUBLE_EQ(l*l*l/6./sqrt(2.), intersector.immersed_volume() + intersector.emerged_volume());
+    }
+}
+
+TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_a_cube)
+{
+    ASSERT_DOUBLE_EQ(1, MeshIntersector(unit_cube_clockwise()).immersed_volume()+MeshIntersector(unit_cube_clockwise()).emerged_volume());
+    ASSERT_DOUBLE_EQ(1, MeshIntersector(unit_cube()).immersed_volume()+MeshIntersector(unit_cube()).emerged_volume());
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double l = a.random<double>().between(0, 10000);
+        const double z = a.random<double>();
+        MeshIntersector intersector(cube(l, a.random<double>(), a.random<double>(), z));
+        ASSERT_DOUBLE_EQ(l*l*l, intersector.immersed_volume() + intersector.emerged_volume());
+    }
+}
+
+TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_a_cube_with_lots_of_irregular_facets)
+{
+    MeshIntersector intersector(read_stl(test_data::big_cube()));
+    ASSERT_DOUBLE_EQ(1, intersector.immersed_volume() + intersector.emerged_volume());
+}
+
+TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_an_immersed_cube)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double l = a.random<double>().between(0, 10000);
+        std::vector<double> all_immersed(8);
+        all_immersed[0] = 1;
+        all_immersed[1] = 1;
+        all_immersed[2] = 1;
+        all_immersed[3] = 1;
+        all_immersed[4] = 1+l;
+        all_immersed[5] = 1+l;
+        all_immersed[6] = 1+l;
+        all_immersed[7] = 1+l;
+        MeshIntersector intersector(cube(l, a.random<double>(), a.random<double>(), a.random<double>()));
+
+        intersector.update_intersection_with_free_surface(all_immersed);
+        ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
+        ASSERT_DOUBLE_EQ(l*l*l, intersector.immersed_volume());
+    }
+}
+
+TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_an_emerged_cube)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double l = a.random<double>().between(0, 10000);
+        std::vector<double> all_emerged(8);
+        all_emerged[0] = 1;
+        all_emerged[1] = 1;
+        all_emerged[2] = 1;
+        all_emerged[3] = 1;
+        all_emerged[4] = 1+l;
+        all_emerged[5] = 1+l;
+        all_emerged[6] = 1+l;
+        all_emerged[7] = 1+l;
+        MeshIntersector intersector(cube(l, a.random<double>(), a.random<double>(), a.random<double>()));
+
+        intersector.update_intersection_with_free_surface(all_emerged);
+        ASSERT_DOUBLE_EQ(l*l*l, intersector.emerged_volume());
+        ASSERT_DOUBLE_EQ(0, intersector.immersed_volume());
+    }
+}
+
+TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_a_partially_immersed_cube)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double l = a.random<double>().between(0, 10000);
+        const double immersed_ratio = a.random<double>().between(0,1);
+        std::vector<double> half_immersed(8);
+        half_immersed[0] = -l*immersed_ratio;
+        half_immersed[1] = -l*immersed_ratio;
+        half_immersed[2] = -l*immersed_ratio;
+        half_immersed[3] = -l*immersed_ratio;
+        half_immersed[4] = l*(1-immersed_ratio);
+        half_immersed[5] = l*(1-immersed_ratio);
+        half_immersed[6] = l*(1-immersed_ratio);
+        half_immersed[7] = l*(1-immersed_ratio);
+
+        MeshIntersector intersector(cube(l, a.random<double>(), a.random<double>(), a.random<double>()));
+
+        intersector.update_intersection_with_free_surface(half_immersed);
+        ASSERT_DOUBLE_EQ(l*l*l*(1-immersed_ratio), intersector.emerged_volume());
+        ASSERT_DOUBLE_EQ(l*l*l*immersed_ratio, intersector.immersed_volume());
+    }
+}
+
+TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_the_anthineas)
+{
+    MeshIntersector intersector(anthineas());
+    ASSERT_NEAR(601.726, intersector.emerged_volume()+intersector.immersed_volume(), 1E-3);
 }
