@@ -433,10 +433,10 @@ VectorOfVectorOfPoints n_gone(const size_t n)
     return mesh;
 }
 
-VectorOfVectorOfPoints cube(const double a, const double x0, const double y0, const double z0)
+VectorOfVectorOfPoints cube(const double a, const double x0, const double y0, const double z0, const bool close)
 {
     VectorOfVectorOfPoints mesh;
-    VectorOfPoints facet_1, facet_2, facet_3, facet_4, facet_5, facet_6;
+    VectorOfPoints facet_1, facet_2, facet_3, facet_4, facet_5;
 
     const EPoint P1(x0-a/2,y0+a/2,z0-a/2);
     const EPoint P2(x0+a/2,y0+a/2,z0-a/2);
@@ -478,11 +478,15 @@ VectorOfVectorOfPoints cube(const double a, const double x0, const double y0, co
     facet_5.push_back(P1);
     mesh.push_back(facet_5);
 
-    facet_6.push_back(P5);
-    facet_6.push_back(P8);
-    facet_6.push_back(P7);
-    facet_6.push_back(P6);
-    mesh.push_back(facet_6);
+    if (close)
+    {
+        VectorOfPoints facet_6;
+        facet_6.push_back(P5);
+        facet_6.push_back(P8);
+        facet_6.push_back(P7);
+        facet_6.push_back(P6);
+        mesh.push_back(facet_6);
+    }
 
     return mesh;
 }
