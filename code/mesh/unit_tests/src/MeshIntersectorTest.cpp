@@ -456,7 +456,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_cube)
         MeshIntersector intersector(cube(l, a.random<double>().between(-100,100), a.random<double>().between(-100,100), z));
         const std::vector<double> dz = {z-l/2,z-l/2,z-l/2,z-l/2,z+l/2,z+l/2,z+l/2,z+l/2};
         intersector.update_intersection_with_free_surface(dz);
-        ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.immersed_volume() + intersector.emerged_volume(), 1E-6) << " i = " << i;
+        ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.immersed_volume() + intersector.emerged_volume(), EPS) << " i = " << i;
     }
 }
 
