@@ -11,7 +11,10 @@
 #include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
-#define PI (4.0*atan(1.0))
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 GravityForceModelTest::GravityForceModelTest() : a(ssc::random_data_generator::DataGenerator(45454))
 {
