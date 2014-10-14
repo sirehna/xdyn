@@ -278,7 +278,7 @@ Facet MeshIntersector::compute_closing_facet() const
 }
 
 bool MeshIntersector::has(const Facet& f //!< Facet to check
-                         )
+                         ) const
 {
     if (f.vertex_index.empty()) return false;
     std::set<size_t> s(f.vertex_index.begin(), f.vertex_index.end());

@@ -182,7 +182,7 @@ class MeshIntersector
           *  \snippet mesh/unit_tests/src/MeshIntersectorTest.cpp MeshIntersectorTest has_example
           */
         bool has(const Facet& f //!< Facet to check
-                 );
+                 ) const;
     private:
     /**  \brief Iterate on each edge to find intersection with free surface
       */
