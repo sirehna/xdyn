@@ -175,7 +175,7 @@ TEST_F(OutputTransformerTest, can_retrieve_kinetic_energy_of_falling_ball)
     {
         const double m = 1E6;
         const double u = 1;
-        const double w = 9.81*i;
+        const double w = 9.81*double(i);
         ASSERT_SMALL_RELATIVE_ERROR(0.5*m*(u*u+w*w), get(falling_ball_euler, i, "Ec(ball)"), EPS) << " (i = " << i << ")";
     }
 }
@@ -187,7 +187,7 @@ TEST_F(OutputTransformerTest, can_retrieve_potential_energy_of_falling_ball)
     {
         const double m = 1E6;
         const double g = 9.81;
-        const double h = -12-0.5*g*(i-1)*i;
+        const double h = -12-0.5*g*double(i-1)*double(i);
         ASSERT_SMALL_RELATIVE_ERROR(m*g*h, get(falling_ball_euler, i, "Ep(ball)"), EPS) << " (i = " << i << ")";
     }
 }
