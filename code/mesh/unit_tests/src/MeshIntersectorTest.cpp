@@ -532,7 +532,7 @@ TEST_F(MeshIntersectorTest, can_compute_closing_facet)
     ASSERT_DOUBLE_EQ( 0, (double)f.unit_normal(1));
     ASSERT_DOUBLE_EQ(-1, (double)f.unit_normal(2));
     ASSERT_DOUBLE_EQ(0, f.barycenter.norm());
-    ASSERT_DOUBLE_EQ(4, f.vertex_index.size());
+    ASSERT_EQ(4, f.vertex_index.size());
     const auto P1 = mesh->all_nodes.col(f.vertex_index[0]);
     const auto P2 = mesh->all_nodes.col(f.vertex_index[1]);
     const auto P3 = mesh->all_nodes.col(f.vertex_index[2]);
