@@ -300,16 +300,65 @@ bool MeshIntersector::has(const Facet& f //!< Facet to check
     if (has(f, begin_emerged(), end_emerged()))   return true;
                                                   return false;
 }
-EPoint MeshIntersector::barycenter(const FacetIterator& begin, const FacetIterator& end) const
+
+CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end) const
 {
-    EPoint ret(0,0,0);
-    size_t n = 0;
+    CenterOfMass ret(EPoint(0,0,0), 0);
     for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
-        ret += that_facet->barycenter;
+        ret += center_of_mass(*that_facet);
     }
-    ret /= double(std::max(n, size_t(1)));
+    if (ret.volume) ret.G /= ret.volume;
     return ret;
+}
+
+CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end, const Facet& closing_facet) const
+{
+    CenterOfMass ret = center_of_mass(begin, end);
+    ret.G *= ret.volume;
+    if (not(has(closing_facet, begin, end)))
+    {
+        ret += center_of_mass(closing_facet);
+    }
+    if (ret.volume) ret.G /= ret.volume;
+    return ret;
+}
+
+Eigen::MatrixXd MeshIntersector::convert(const Facet& f) const
+{
+    Eigen::MatrixXd ret(3, f.vertex_index.size());
+    for (size_t j = 0 ; j < f.vertex_index.size() ; ++j)
+    {
+        ret.col(j) = mesh->all_nodes.col(f.vertex_index[j]);
+    }
+    return ret;
+}
+
+Facet MeshIntersector::make(const Facet& f, const size_t i1, const size_t i2, const size_t i3) const
+{
+    Facet f_;
+    f_.vertex_index.push_back(i1);
+    f_.vertex_index.push_back(i2);
+    f_.vertex_index.push_back(i3);
+    f_.unit_normal = f.unit_normal;
+    const auto M = convert(f_);
+    f_.area = area(M);
+    f_.barycenter = barycenter(M);
+    return f_;
+}
+
+CenterOfMass MeshIntersector::center_of_mass(const Facet& f) const
+{
+    if (f.vertex_index.size()<2) return CenterOfMass(EPoint(0,0,0), 0);
+    EPoint bary = mesh->all_nodes.col(f.vertex_index.at(0));
+    bary += mesh->all_nodes.col(f.vertex_index.at(1));
+    double vol = 0;
+    for (size_t i = 2 ; i < f.vertex_index.size() ; ++i)
+    {
+        bary += mesh->all_nodes.col(f.vertex_index.at(i));
+        vol += facet_volume(make(f, 0, i-1, i));
+    }
+    return CenterOfMass(bary/((double)f.vertex_index.size()), fabs(vol));
 }
 
 double MeshIntersector::facet_volume(const Facet& f) const

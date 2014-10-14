@@ -1,6 +1,7 @@
 #ifndef MESH_INTERSECTOR_HPP
 #define MESH_INTERSECTOR_HPP
 
+#include "CenterOfMass.hpp"
 #include "Mesh.hpp"
 
 class FacetIterator
@@ -165,7 +166,9 @@ class MeshIntersector
           *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
           */
         double emerged_volume() const;
-        EPoint barycenter(const FacetIterator& begin, const FacetIterator& end) const;
+        CenterOfMass center_of_mass(const FacetIterator& begin, const FacetIterator& end, const Facet& closing_facet) const;
+        CenterOfMass center_of_mass(const FacetIterator& begin, const FacetIterator& end) const;
+        CenterOfMass center_of_mass(const Facet& f) const;
 
         /**  \brief used by the 'volume' method to close the mesh.
           *  \details When computing the intersection with free surface, the
@@ -188,6 +191,7 @@ class MeshIntersector
                                   const FacetIterator& end
                                  ) const;
 
+        Eigen::MatrixXd convert(const Facet& f) const;
     private:
     /**  \brief Iterate on each edge to find intersection with free surface
       */
@@ -204,6 +208,7 @@ class MeshIntersector
 
         double volume(const FacetIterator& begin, const FacetIterator& end) const;
         double facet_volume(const Facet& f) const;
+        Facet make(const Facet& f, const size_t i1, const size_t i2, const size_t i3) const;
 };
 
 typedef TR1(shared_ptr)<MeshIntersector> MeshIntersectorPtr;
