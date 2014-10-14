@@ -470,7 +470,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_cube_with_lots_of_irregu
 
 TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_immersed_cube)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 10 ; ++i)
     {
         const double l = a.random<double>().between(0, 10000);
         std::vector<double> all_immersed(8);
@@ -492,7 +492,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_immersed_cube)
 
 TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_emerged_cube)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 10 ; ++i)
     {
         const double l = a.random<double>().between(0, 10000);
         std::vector<double> all_emerged(8);
