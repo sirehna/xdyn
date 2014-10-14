@@ -2,6 +2,7 @@
 
 #include "MeshBuilder.hpp"
 #include "MeshIntersector.hpp"
+#include "MeshIntersectorException.hpp"
 #include "mesh_manipulations.hpp"
 
 MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_).build())))
@@ -261,6 +262,13 @@ Facet MeshIntersector::compute_closing_facet() const
     EPoint bar(0,0,0);
     double A = 0;
     Eigen::Vector3d n(0,0,0);
+    if (all_immersions.size() != mesh->node_count)
+    {
+        std::stringstream ss;
+        ss << "Need as many immersions as there are nodes. There are "
+           << mesh->node_count << " nodes, but " << all_immersions.size() << " immersions.";
+        THROW(__PRETTY_FUNCTION__, MeshIntersectorException, ss.str());
+    }
     for (size_t i = 0 ; i < mesh->node_count ; ++i)
     {
         if (all_immersions[i] == 0)
