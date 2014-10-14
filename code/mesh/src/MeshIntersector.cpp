@@ -1,6 +1,14 @@
+#include <set>
 
+#include "MeshBuilder.hpp"
 #include "MeshIntersector.hpp"
+#include "mesh_manipulations.hpp"
 
+MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_).build())))
+,all_immersions()
+,index_of_emerged_facets()
+,index_of_immersed_facets()
+{}
 
 MeshIntersector::MeshIntersector(const MeshPtr mesh_)
 :mesh(mesh_)
@@ -245,3 +253,102 @@ bool MeshIntersector::just_touches_free_surface(int status)
     return ((status & 4) != 0);
 }
 
+Facet MeshIntersector::compute_closing_facet() const
+{
+    Facet ret;
+    std::vector<size_t> vertex_index;
+    vertex_index.reserve(mesh->node_count);
+    EPoint bar(0,0,0);
+    double A = 0;
+    Eigen::Vector3d n(0,0,0);
+    for (size_t i = 0 ; i < mesh->node_count ; ++i)
+    {
+        if (all_immersions[i] == 0)
+        {
+            vertex_index.push_back(i);
+        }
+    }
+    if (vertex_index.size() > 2)
+    {
+        bar = ::barycenter(mesh->all_nodes, vertex_index);
+        A = area(mesh->all_nodes, vertex_index);
+        n = unit_normal(mesh->all_nodes, vertex_index);
+    }
+    return Facet(vertex_index, n, bar, A);
+}
+
+bool MeshIntersector::has(const Facet& f //!< Facet to check
+                         ) const
+{
+    if (f.vertex_index.empty()) return false;
+    std::set<size_t> s(f.vertex_index.begin(), f.vertex_index.end());
+    for (auto that_facet = begin_immersed() ; that_facet != end_immersed() ; ++that_facet)
+    {
+        std::set<size_t> s_(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
+        if (s==s_) return true;
+    }
+    for (auto that_facet = begin_emerged() ; that_facet != end_emerged() ; ++that_facet)
+    {
+        std::set<size_t> s_(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
+        if (s==s_) return true;
+    }
+    return false;
+}
+
+EPoint MeshIntersector::barycenter(const FacetIterator& begin, const FacetIterator& end) const
+{
+    EPoint ret(0,0,0);
+    size_t n = 0;
+    for (auto that_facet = begin ; that_facet != end ; ++that_facet)
+    {
+        ret += that_facet->barycenter;
+    }
+    ret /= double(std::max(n, size_t(1)));
+    return ret;
+}
+
+double MeshIntersector::facet_volume(const Facet& f) const
+{
+    if (f.vertex_index.empty()) return 0;
+    const auto P = mesh->all_nodes.col(f.vertex_index.front());
+    // Dot product to get distance from point to plane
+    const double height = f.unit_normal.dot(P);
+    return (f.area * height) / 3.0;
+}
+
+double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& end) const
+{
+    double volume = 0;
+    size_t n = 0;
+    for (auto that_facet = begin ; that_facet != end ; ++that_facet)
+    {
+        volume += facet_volume(*that_facet);
+        ++n;
+    }
+    if (n < 3) return 0;
+    return volume;
+}
+
+double MeshIntersector::immersed_volume() const
+{
+    double V = volume(begin_immersed(), end_immersed());
+    const Facet closing_facet = compute_closing_facet();
+    if (not(has(closing_facet)))
+    {
+        const double closing_facet_volume = facet_volume(closing_facet);
+        V -= closing_facet_volume;
+    }
+    return fabs(V);
+}
+
+double MeshIntersector::emerged_volume() const
+{
+    double V = volume(begin_emerged(), end_emerged());
+    const Facet closing_facet = compute_closing_facet();
+    if (not(has(closing_facet)))
+    {
+        const double closing_facet_volume = facet_volume(closing_facet);
+        V += closing_facet_volume;
+    }
+    return fabs(V);
+}

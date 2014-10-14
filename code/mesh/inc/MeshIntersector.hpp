@@ -31,6 +31,11 @@ class FacetIterator
             return (begin != rhs.begin) or (here != rhs.here);
         }
 
+        bool operator==(const FacetIterator& rhs) const
+        {
+            return not(rhs != *this);
+        }
+
     private:
         VectorOfFacet::const_iterator begin;
         std::vector<size_t>::const_iterator here;
@@ -39,6 +44,7 @@ class FacetIterator
 class MeshIntersector
 {
     public:
+        MeshIntersector(const VectorOfVectorOfPoints& mesh);
         MeshIntersector(
                 const MeshPtr mesh_                  //!< the mesh to intersect
                 );
@@ -144,6 +150,39 @@ class MeshIntersector
         friend class ImmersedFacetIterator;
         friend class EmergedFacetIterator;
 
+        /**  \brief Computes the volume inside a closed mesh, for the points under the free surface.
+          *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
+          *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+          *  \see admesh-0.95
+          *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
+          */
+        double immersed_volume() const;
+
+        /**  \brief Computes the volume inside a closed mesh, for the points above the free surface.
+          *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
+          *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+          *  \see admesh-0.95
+          *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
+          */
+        double emerged_volume() const;
+        EPoint barycenter(const FacetIterator& begin, const FacetIterator& end) const;
+
+        /**  \brief used by the 'volume' method to close the mesh.
+          *  \details When computing the intersection with free surface, the
+          *           algorithm does not close the two resulting meshes (emerged
+          *           & immersed mesh).
+          *  \returns Facet on free surface & closing the mesh
+          *  \snippet mesh/unit_tests/src/MeshIntersectorTest.cpp MeshIntersectorTest compute_closing_facet_example
+          */
+        Facet compute_closing_facet() const;
+
+        /**  \brief Detect if a facet already exists in mesh.
+          *  \details Only compares the indices (not the barycenter or unit normal or area).
+          *  \returns True if facet exists, 0 otherwise.
+          *  \snippet mesh/unit_tests/src/MeshIntersectorTest.cpp MeshIntersectorTest has_example
+          */
+        bool has(const Facet& f //!< Facet to check
+                 ) const;
     private:
     /**  \brief Iterate on each edge to find intersection with free surface
       */
@@ -157,6 +196,9 @@ class MeshIntersector
                                std::vector<bool>& facet_crosses_free_surface,
                                std::vector<int>& edges_immersion_status);
         void reset_dynamic_members();
+
+        double volume(const FacetIterator& begin, const FacetIterator& end) const;
+        double facet_volume(const Facet& f) const;
 };
 
 typedef TR1(shared_ptr)<MeshIntersector> MeshIntersectorPtr;

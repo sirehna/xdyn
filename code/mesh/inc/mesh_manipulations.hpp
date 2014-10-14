@@ -9,6 +9,8 @@
 #define MESH_MANIPULATIONS_HPP_
 
 #include "GeometricTypes3d.hpp"
+#include "MeshIntersector.hpp"
+
 
 /**  \author cec
   *  \date May 20, 2014, 8:47:20 AM
@@ -18,6 +20,17 @@
   *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest unit_normal_example
   */
 Eigen::Vector3d unit_normal(const Matrix3x& polygon //!< Polygon for which the unit normal vector is computed
+                           );
+
+/**  \author cec
+  *  \date May 20, 2014, 8:47:20 AM
+  *  \brief Returns the polygon's unit normal vector
+  *  \details Assumes the points are in the same plane & are given in direct order (right-hand rule)
+  *  \returns A unit vector orthogonal to the plane in which the polygon lies, & oriented by the right-hand rule (if oriented_clockwise==false)
+  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest unit_normal_example
+  */
+Eigen::Vector3d unit_normal(const Matrix3x& polygon, //!< Polygon for which the unit normal vector is computed
+                            const std::vector<size_t> &vertex_index
                            );
 
 /**  \author cec
@@ -112,16 +125,16 @@ bool oriented_clockwise(const VectorOfVectorOfPoints& v, //!< Points in mesh
   *  <http://www.numdam.org/item?id=NAM_1887_3_6__215_1>
   */
 Eigen::Matrix3d inertia_of_triangle(
-		const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
-		const EPoint vertex2,  //!< second vertex of triangle
-		const EPoint vertex3   //!< third vertex of triangle
-		);
+        const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
+        const EPoint vertex2,  //!< second vertex of triangle
+        const EPoint vertex3   //!< third vertex of triangle
+        );
 
 /**  \details Compute the inertia matrix for a planar facet versus an inertia frame, divided by total area
   *  assume that first 2 axis of inertia frame are parallel to the facet, and that 3rd axis is orthogonal to the facet
   */
 Eigen::Matrix3d inertia_of_polygon(
-		const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
-		);
+        const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
+        );
 
 #endif /* MESH_MANIPULATIONS_HPP_ */

@@ -13,7 +13,6 @@
 #include "TriMeshTestData.hpp"
 #include "STL_data.hpp"
 #include "MeshException.hpp"
-//#include "stl_writer.hpp"
 
 #include <ssc/macros.hpp>
 
@@ -176,4 +175,3 @@ TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_cu
     ASSERT_FALSE(oriented_clockwise(unit_cube(), EPoint(0,0,0)));
     ASSERT_TRUE(oriented_clockwise(unit_cube_clockwise(), EPoint(0,0,0)));
 }
-
