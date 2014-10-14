@@ -331,10 +331,24 @@ double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& 
 
 double MeshIntersector::immersed_volume() const
 {
-    return volume(begin_immersed(), end_immersed());
+    double V = volume(begin_immersed(), end_immersed());
+    const Facet closing_facet = compute_closing_facet();
+    if (not(has(closing_facet)))
+    {
+        const double closing_facet_volume = facet_volume(closing_facet);
+        V -= closing_facet_volume;
+    }
+    return V;
 }
 
 double MeshIntersector::emerged_volume() const
 {
-    return volume(begin_emerged(), end_emerged());
+    double V = volume(begin_emerged(), end_emerged());
+    const Facet closing_facet = compute_closing_facet();
+    if (not(has(closing_facet)))
+    {
+        const double closing_facet_volume = facet_volume(closing_facet);
+        V += closing_facet_volume;
+    }
+    return V;
 }

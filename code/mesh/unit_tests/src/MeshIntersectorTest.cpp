@@ -577,27 +577,32 @@ TEST_F(MeshIntersectorTest, can_detect_if_facet_is_already_included)
     ASSERT_TRUE(intersector.has(zero));
 }
 
-TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_a_partially_immersed_cube)
+TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_partially_immersed_cube)
 {
-    for (size_t i = 0 ; i < 1000 ; ++i)
+    for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double l = a.random<double>().between(0, 10000);
         const double immersed_ratio = a.random<double>().between(0,1);
         std::vector<double> half_immersed(8);
-        half_immersed[0] = -l*immersed_ratio;
-        half_immersed[1] = -l*immersed_ratio;
-        half_immersed[2] = -l*immersed_ratio;
-        half_immersed[3] = -l*immersed_ratio;
-        half_immersed[4] = l*(1-immersed_ratio);
-        half_immersed[5] = l*(1-immersed_ratio);
-        half_immersed[6] = l*(1-immersed_ratio);
-        half_immersed[7] = l*(1-immersed_ratio);
+        const double z0 = l*(immersed_ratio-0.5);
+        half_immersed[0] = z0+l/2;
+        half_immersed[1] = z0+l/2;
+        half_immersed[2] = z0+l/2;
+        half_immersed[3] = z0+l/2;
+        half_immersed[4] = z0-l/2;
+        half_immersed[5] = z0-l/2;
+        half_immersed[6] = z0-l/2;
+        half_immersed[7] = z0-l/2;
 
-        MeshIntersector intersector(cube(l, a.random<double>(), a.random<double>(), a.random<double>()));
+        const double x0 = a.random<double>().between(-100,100);
+        const double y0 = a.random<double>().between(-100,100);
+
+        MeshIntersector intersector(cube(l, x0, y0, z0));
 
         intersector.update_intersection_with_free_surface(half_immersed);
-        ASSERT_DOUBLE_EQ(l*l*l*(1-immersed_ratio), intersector.emerged_volume());
-        ASSERT_DOUBLE_EQ(l*l*l*immersed_ratio, intersector.immersed_volume());
+        ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.immersed_volume()+intersector.emerged_volume(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(l*l*l*(1-immersed_ratio), intersector.emerged_volume(), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(l*l*l*immersed_ratio, intersector.immersed_volume(), EPS);
     }
 }
 
