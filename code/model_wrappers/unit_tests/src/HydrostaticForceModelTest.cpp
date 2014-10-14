@@ -78,7 +78,7 @@ TEST_F(HydrostaticForceModelTest, example)
 }
 
 /**
- * \note Test of a fully immerged rectangle plane with points [P1,P2,P3,P4]
+ * \note Test of a fully immersed rectangle plane with points [P1,P2,P3,P4]
  * P1 = [-2,+4,+6]
  * P2 = [-2,-4,+6]
  * P3 = [+2,+4,+4]
@@ -92,7 +92,7 @@ TEST_F(HydrostaticForceModelTest, example)
  * The triangles have the same unit normal:
  * \f$[\sin(\atan(0.5)),0,\cos(\atan(0.5))]\f$
  *
- * The immerged volume is 200m3, the norm of the resulting effort should be
+ * The immersed volume is 200m3, the norm of the resulting effort should be
  * \f$200*\rho*g\f$.
  *
  * The resulting force evaluated at the origin point O in the global frame (NED)
