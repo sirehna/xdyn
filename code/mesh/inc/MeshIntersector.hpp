@@ -198,7 +198,7 @@ class MeshIntersector
         void reset_dynamic_members();
 
         double volume(const FacetIterator& begin, const FacetIterator& end) const;
-        double facet_volume(const Facet& f, const EPoint& P0) const;
+        double facet_volume(const Facet& f) const;
 };
 
 typedef TR1(shared_ptr)<MeshIntersector> MeshIntersectorPtr;
