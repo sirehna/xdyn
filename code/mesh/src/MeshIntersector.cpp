@@ -338,7 +338,7 @@ double MeshIntersector::immersed_volume() const
         const double closing_facet_volume = facet_volume(closing_facet);
         V -= closing_facet_volume;
     }
-    return V;
+    return fabs(V);
 }
 
 double MeshIntersector::emerged_volume() const
@@ -350,5 +350,5 @@ double MeshIntersector::emerged_volume() const
         const double closing_facet_volume = facet_volume(closing_facet);
         V += closing_facet_volume;
     }
-    return V;
+    return fabs(V);
 }

@@ -606,8 +606,10 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_partially_immersed_cube)
     }
 }
 
-TEST_F(MeshIntersectorTest, DISABLED_can_compute_the_volume_of_the_anthineas)
+TEST_F(MeshIntersectorTest, can_compute_the_volume_of_the_anthineas)
 {
     MeshIntersector intersector(anthineas());
+    const std::vector<double> dz(intersector.mesh->all_nodes.cols(),1);
+    intersector.update_intersection_with_free_surface(dz);
     ASSERT_NEAR(601.726, intersector.emerged_volume()+intersector.immersed_volume(), 1E-3);
 }
