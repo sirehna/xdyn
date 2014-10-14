@@ -463,7 +463,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_cube)
 TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_cube_with_lots_of_irregular_facets)
 {
     MeshIntersector intersector(read_stl(test_data::big_cube()));
-    const std::vector<double> dz(1,0);
+    const std::vector<double> dz(intersector.mesh->all_nodes.cols(),1);
     intersector.update_intersection_with_free_surface(dz);
     ASSERT_SMALL_RELATIVE_ERROR(1, intersector.immersed_volume() + intersector.emerged_volume(), EPS);
 }
