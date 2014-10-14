@@ -277,17 +277,14 @@ Facet MeshIntersector::compute_closing_facet() const
     return Facet(vertex_index, n, bar, A);
 }
 
-bool MeshIntersector::has(const Facet& f //!< Facet to check
+bool MeshIntersector::has(const Facet& f, //!< Facet to check
+                          const FacetIterator& begin,
+                          const FacetIterator& end
                          ) const
 {
     if (f.vertex_index.empty()) return false;
     std::set<size_t> s(f.vertex_index.begin(), f.vertex_index.end());
-    for (auto that_facet = begin_immersed() ; that_facet != end_immersed() ; ++that_facet)
-    {
-        std::set<size_t> s_(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
-        if (s==s_) return true;
-    }
-    for (auto that_facet = begin_emerged() ; that_facet != end_emerged() ; ++that_facet)
+    for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
         std::set<size_t> s_(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
         if (s==s_) return true;
@@ -295,6 +292,14 @@ bool MeshIntersector::has(const Facet& f //!< Facet to check
     return false;
 }
 
+bool MeshIntersector::has(const Facet& f //!< Facet to check
+                         ) const
+{
+    if (f.vertex_index.empty())                   return false;
+    if (has(f, begin_immersed(), end_immersed())) return true;
+    if (has(f, begin_emerged(), end_emerged()))   return true;
+                                                  return false;
+}
 EPoint MeshIntersector::barycenter(const FacetIterator& begin, const FacetIterator& end) const
 {
     EPoint ret(0,0,0);

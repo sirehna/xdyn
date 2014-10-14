@@ -183,6 +183,11 @@ class MeshIntersector
           */
         bool has(const Facet& f //!< Facet to check
                  ) const;
+        bool has(const Facet& f, //!< Facet to check
+                                  const FacetIterator& begin,
+                                  const FacetIterator& end
+                                 ) const;
+
     private:
     /**  \brief Iterate on each edge to find intersection with free surface
       */
