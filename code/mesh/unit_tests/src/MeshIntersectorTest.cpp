@@ -643,11 +643,11 @@ TEST_F(MeshIntersectorTest, can_compute_the_barycenter_of_a_partially_immersed_c
         const EPoint G_emerged = intersector.center_of_mass(intersector.begin_emerged(), intersector.end_emerged(), closing_facet).G;
         const EPoint G_immersed = intersector.center_of_mass(intersector.begin_immersed(), intersector.end_immersed(), closing_facet).G;
 
-        ASSERT_DOUBLE_EQ(x0, (double)G_emerged(0));
-        ASSERT_DOUBLE_EQ(y0, (double)G_emerged(1));
+        ASSERT_NEAR(x0, (double)G_emerged(0),EPS);
+        ASSERT_NEAR(y0, (double)G_emerged(1),EPS);
         ASSERT_NEAR(l*(immersed_ratio-1)/2, (double)G_emerged(2),EPS);
-        ASSERT_DOUBLE_EQ(x0, (double)G_immersed(0));
-        ASSERT_DOUBLE_EQ(y0, (double)G_immersed(1));
+        ASSERT_NEAR(x0, (double)G_immersed(0),EPS);
+        ASSERT_NEAR(y0, (double)G_immersed(1),EPS);
         ASSERT_NEAR(l*immersed_ratio/2, (double)G_immersed(2),EPS);
     }
 }
@@ -658,4 +658,36 @@ TEST_F(MeshIntersectorTest, bug_in_facet_volume)
     const std::vector<double> dz(8, 2);
     intersector.update_intersection_with_free_surface(dz);
     ASSERT_DOUBLE_EQ(1./6.,intersector.facet_volume(*(intersector.begin_immersed())));
+}
+
+TEST_F(MeshIntersectorTest, bug_detected_in_potential_energy)
+{
+    //for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double l = 1;//a.random<double>().between(0, 10);
+        const double immersed_ratio = 0.5;//a.random<double>().between(0,1);
+        std::vector<double> half_immersed(8);
+        const double z0 = l*(immersed_ratio-0.5);
+        half_immersed[0] = z0-l/2;
+        half_immersed[1] = z0-l/2;
+        half_immersed[2] = z0-l/2;
+        half_immersed[3] = z0-l/2;
+        half_immersed[4] = z0+l/2;
+        half_immersed[5] = z0+l/2;
+        half_immersed[6] = z0+l/2;
+        half_immersed[7] = z0+l/2;
+
+        const double x0 = 0;//a.random<double>().between(-100,100);
+        const double y0 = 0;//a.random<double>().between(-100,100);
+
+        MeshIntersector intersector(cube(l, x0, y0, z0));
+
+        intersector.update_intersection_with_free_surface(half_immersed);
+
+        const Facet closing_facet = intersector.compute_closing_facet();
+
+        const EPoint G_immersed = intersector.center_of_mass(intersector.begin_immersed(), intersector.end_immersed(), closing_facet).G;
+
+        ASSERT_NEAR(0.25, (double)G_immersed(2),EPS);
+    }
 }

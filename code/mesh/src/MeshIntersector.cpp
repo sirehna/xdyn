@@ -312,6 +312,7 @@ bool MeshIntersector::has(const Facet& f //!< Facet to check
 CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end) const
 {
     CenterOfMass ret(EPoint(0,0,0), 0);
+
     for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
         ret += center_of_mass(*that_facet);
@@ -357,16 +358,21 @@ Facet MeshIntersector::make(const Facet& f, const size_t i1, const size_t i2, co
 
 CenterOfMass MeshIntersector::center_of_mass(const Facet& f) const
 {
-    if (f.vertex_index.size()<2) return CenterOfMass(EPoint(0,0,0), 0);
-    EPoint bary = mesh->all_nodes.col(f.vertex_index.at(0));
-    bary += mesh->all_nodes.col(f.vertex_index.at(1));
-    double vol = 0;
-    for (size_t i = 2 ; i < f.vertex_index.size() ; ++i)
+    double totalVolume = 0, currentVolume;
+    double xCenter = 0, yCenter = 0, zCenter = 0;
+
+    const EPoint P1 = mesh->all_nodes.col(f.vertex_index.at(0));
+    for (size_t i = 2; i < f.vertex_index.size() ; i++)
     {
-        bary += mesh->all_nodes.col(f.vertex_index.at(i));
-        vol += facet_volume(make(f, 0, i-1, i));
+        const EPoint P2 = mesh->all_nodes.col(f.vertex_index.at(i-1));
+        const EPoint P3 = mesh->all_nodes.col(f.vertex_index.at(i));
+        totalVolume += currentVolume = (P1(0)*P2(1)*P3(2) - P1(0)*P3(1)*P2(2) - P2(0)*P1(1)*P3(2) + P2(0)*P3(1)*P1(2) + P3(0)*P1(1)*P2(2) - P3(0)*P2(1)*P1(2)) / 6;
+        xCenter += ((P1(0) + P2(0) + P3(0)) / 4) * currentVolume;
+        yCenter += ((P1(1) + P2(1) + P3(1)) / 4) * currentVolume;
+        zCenter += ((P1(2) + P2(2) + P3(2)) / 4) * currentVolume;
     }
-    return CenterOfMass(bary/((double)f.vertex_index.size()), fabs(vol));
+    if (totalVolume) return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
+                     return CenterOfMass(EPoint(0,0,0), 0);
 }
 
 double MeshIntersector::facet_volume(const Facet& f) const
