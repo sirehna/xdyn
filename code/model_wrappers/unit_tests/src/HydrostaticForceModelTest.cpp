@@ -185,3 +185,25 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     ASSERT_DOUBLE_EQ(env.rho*env.g*200.0 * (5.0*sin(atan(0.5))+sqrt(5.0)/3.0), Fhs.M());
     ASSERT_DOUBLE_EQ(0, Fhs.N());
 }
+
+TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_fast)
+{
+    EnvironmentAndFrames env;
+    env.g = 9.81;
+    env.rho = 1024;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
+
+    Body body = get_body(BODY, unit_cube());
+    std::vector<double> x(13,0);
+    std::vector<double> dz;
+    for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(0.5);
+    for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(-0.5);
+    FastHydrostaticForceModel F(env);
+    body.intersector->update_intersection_with_free_surface(dz);
+    const double Ep = F.potential_energy(body, x);
+    ASSERT_DOUBLE_EQ(1024*0.5*9.81*0.25, Ep);
+}

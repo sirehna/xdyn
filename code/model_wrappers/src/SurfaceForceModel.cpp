@@ -38,3 +38,8 @@ ssc::kinematics::Wrench SurfaceForceModel::operator()(const Body& body, const do
     }
     return F;
 }
+
+double SurfaceForceModel::potential_energy(const Body& body, const std::vector<double>& x) const
+{
+    return pe(body, x, env);
+}
