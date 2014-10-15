@@ -192,6 +192,7 @@ class MeshIntersector
                                  ) const;
 
         Eigen::MatrixXd convert(const Facet& f) const;
+        double facet_volume(const Facet& f) const;
     private:
     /**  \brief Iterate on each edge to find intersection with free surface
       */
@@ -207,7 +208,6 @@ class MeshIntersector
         void reset_dynamic_members();
 
         double volume(const FacetIterator& begin, const FacetIterator& end) const;
-        double facet_volume(const Facet& f) const;
         Facet make(const Facet& f, const size_t i1, const size_t i2, const size_t i3) const;
 };
 
