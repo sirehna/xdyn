@@ -651,3 +651,11 @@ TEST_F(MeshIntersectorTest, can_compute_the_barycenter_of_a_partially_immersed_c
         ASSERT_NEAR(l*immersed_ratio/2, (double)G_immersed(2),EPS);
     }
 }
+
+TEST_F(MeshIntersectorTest, bug_in_facet_volume)
+{
+    MeshIntersector intersector(cube(1, 0, 0, 0));
+    const std::vector<double> dz(8, 2);
+    intersector.update_intersection_with_free_surface(dz);
+    ASSERT_DOUBLE_EQ(1./6.,intersector.facet_volume(*(intersector.begin_immersed())));
+}
