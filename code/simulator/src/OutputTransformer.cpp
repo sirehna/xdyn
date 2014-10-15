@@ -4,27 +4,25 @@
  *  Created on: Jun 30, 2014
  *      Author: cady
  */
+#include <ssc/kinematics.hpp>
 
+#include "SurfaceElevationInterface.hpp"
 #include "OutputTransformer.hpp"
 #include "update_kinematics.hpp"
 #include "SimulatorBuilder.hpp"
 #include "OutputTransformerException.hpp"
-#include <ssc/kinematics.hpp>
 
 OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) :
             input(builder.get_parsed_yaml()),
             bodies(std::vector<Body>()),
             points(std::map<std::string,ssc::kinematics::Point>()),
             k(TR1(shared_ptr)<ssc::kinematics::Kinematics>(new ssc::kinematics::Kinematics())),
-            forces()
+            forces(),
+            env()
 {
-    MeshMap m;
-    for (auto that_body = input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
-    {
-        m[that_body->name] = VectorOfVectorOfPoints();
-    }
-    bodies = builder.get_bodies(m);
-    forces = builder.get_forces(builder.get_environment_and_frames(bodies));
+    bodies = builder.get_bodies(builder.make_mesh_map());
+    env = builder.get_environment_and_frames(bodies);
+    forces = builder.get_forces(env);
     for (auto that_point = input.points.begin() ; that_point != input.points.end() ; ++that_point)
     {
         points[that_point->name] = ssc::kinematics::Point(that_point->frame,that_point->x,that_point->y,that_point->z);
@@ -36,6 +34,7 @@ void OutputTransformer::update_kinematics(const StateType& x) const
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
         ::update_kinematics(x, bodies[i], i, k);
+        ::update_kinematics(x, bodies[i], i, env.k);
     }
 }
 
@@ -153,7 +152,8 @@ double OutputTransformer::compute_potential_energy(const size_t i, const StateTy
     double Ep = 0;
     for (auto that_force = forces.at(i).begin() ; that_force != forces.at(i).end() ; ++that_force)
     {
-        Ep += (*that_force)->potential_energy(bodies.at(i),std::vector<double>(x.begin()+i*13,x.begin()+(i+1)*13-1));
+        const double ep = (*that_force)->potential_energy(bodies.at(i),std::vector<double>(x.begin()+i*13,x.begin()+(i+1)*13-1));
+        Ep += ep;
     }
     return Ep;
 }
@@ -176,6 +176,11 @@ std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
     std::map<std::string,double> out;
     out["t"] = res.t;
     update_kinematics(res.x);
+    for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
+    {
+        const std::vector<double> dz = env.w->get_relative_wave_height(that_body->M,env.k,res.t);
+        that_body->intersector->update_intersection_with_free_surface(dz);
+    }
     for (auto that_position = input.position_output.begin() ; that_position != input.position_output.end() ; ++that_position)
     {
         fill(out, *that_position);

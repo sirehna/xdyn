@@ -11,14 +11,15 @@
 #include <map>
 #include <string>
 
-#include "Body.hpp"
 #include <ssc/kinematics.hpp>
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
+
+#include "EnvironmentAndFrames.hpp"
+#include "Body.hpp"
 #include "Res.hpp"
 #include "StateMacros.hpp"
 #include "YamlSimulatorInput.hpp"
-
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
 
 class SimulatorBuilder;
 
@@ -53,6 +54,7 @@ class OutputTransformer
         std::map<std::string,ssc::kinematics::Point> points;
         TR1(shared_ptr)<ssc::kinematics::Kinematics> k;
         std::vector<ListOfForces> forces;
+        EnvironmentAndFrames env;
 };
 
 #endif /* OUTPUTTRANSFORMER_HPP_ */
