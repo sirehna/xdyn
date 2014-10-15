@@ -144,13 +144,13 @@ class SimulatorBuilder
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
         StateType get_initial_states() const;
         YamlSimulatorInput get_parsed_yaml() const;
+        MeshMap make_mesh_map() const;
 
     private:
         SimulatorBuilder(); // Disabled
         SurfaceElevationPtr get_wave() const;
         ListOfForces forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
         void add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const;
-        MeshMap make_mesh_map() const;
         VectorOfVectorOfPoints get_mesh(const YamlBody& body) const;
 
         YamlSimulatorInput input;
