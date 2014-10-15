@@ -613,3 +613,41 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_the_anthineas)
     intersector.update_intersection_with_free_surface(dz);
     ASSERT_NEAR(601.726, intersector.emerged_volume()+intersector.immersed_volume(), 1E-3);
 }
+
+TEST_F(MeshIntersectorTest, can_compute_the_barycenter_of_a_partially_immersed_cube)
+{
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double l = a.random<double>().between(0, 10);
+        const double immersed_ratio = a.random<double>().between(0,1);
+        std::vector<double> half_immersed(8);
+        const double z0 = l*(immersed_ratio-0.5);
+        half_immersed[0] = z0-l/2;
+        half_immersed[1] = z0-l/2;
+        half_immersed[2] = z0-l/2;
+        half_immersed[3] = z0-l/2;
+        half_immersed[4] = z0+l/2;
+        half_immersed[5] = z0+l/2;
+        half_immersed[6] = z0+l/2;
+        half_immersed[7] = z0+l/2;
+
+        const double x0 = a.random<double>().between(-100,100);
+        const double y0 = a.random<double>().between(-100,100);
+
+        MeshIntersector intersector(cube(l, x0, y0, z0));
+
+        intersector.update_intersection_with_free_surface(half_immersed);
+
+        const Facet closing_facet = intersector.compute_closing_facet();
+
+        const EPoint G_emerged = intersector.center_of_mass(intersector.begin_emerged(), intersector.end_emerged(), closing_facet).G;
+        const EPoint G_immersed = intersector.center_of_mass(intersector.begin_immersed(), intersector.end_immersed(), closing_facet).G;
+
+        ASSERT_DOUBLE_EQ(x0, (double)G_emerged(0));
+        ASSERT_DOUBLE_EQ(y0, (double)G_emerged(1));
+        ASSERT_NEAR(l*(immersed_ratio-1)/2, (double)G_emerged(2),EPS);
+        ASSERT_DOUBLE_EQ(x0, (double)G_immersed(0));
+        ASSERT_DOUBLE_EQ(y0, (double)G_immersed(1));
+        ASSERT_NEAR(l*immersed_ratio/2, (double)G_immersed(2),EPS);
+    }
+}
