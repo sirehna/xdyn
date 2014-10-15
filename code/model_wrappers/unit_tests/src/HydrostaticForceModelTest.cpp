@@ -207,7 +207,7 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_fast)
     FastHydrostaticForceModel F(env);
     body.intersector->update_intersection_with_free_surface(dz);
     const double Ep = F.potential_energy(body, x);
-    ASSERT_DOUBLE_EQ(1024*0.5*9.81*0.25, Ep);
+    ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
 }
 
 TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_exact)
@@ -231,5 +231,5 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_exact)
 
     ExactHydrostaticForceModel F(env);
     const double Ep = F.potential_energy(body, x);
-    ASSERT_DOUBLE_EQ(1024*0.5*9.81*0.25, Ep);
+    ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
 }

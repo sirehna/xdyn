@@ -33,6 +33,6 @@ double FastHydrostaticForceModel::pe(const Body& body, const std::vector<double>
     const auto G = body.intersector->center_of_mass(b, e);
     const double zC = G.G(2);
     const double Vim = body.intersector->immersed_volume();
-    return env.rho*env.g*Vim*zC;
+    return -env.rho*env.g*Vim*zC;
 }
 
