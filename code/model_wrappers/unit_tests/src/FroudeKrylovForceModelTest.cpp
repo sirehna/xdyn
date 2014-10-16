@@ -55,7 +55,7 @@ TR1(shared_ptr)<WaveModel> FroudeKrylovForceModelTest::get_wave_model() const
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
 }
 
-EnvironmentAndFrames FroudeKrylovForceModelTest::get_environment_and_frames() const
+EnvironmentAndFrames FroudeKrylovForceModelTest::get_environment_and_frames(const TR1(shared_ptr)<WaveModel>& wave_model) const
 {
     EnvironmentAndFrames env;
     env.g = 9.81;
@@ -64,7 +64,7 @@ EnvironmentAndFrames FroudeKrylovForceModelTest::get_environment_and_frames() co
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    env.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(get_wave_model()));
+    env.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(wave_model));
     return env;
 }
 
@@ -87,7 +87,7 @@ VectorOfVectorOfPoints FroudeKrylovForceModelTest::get_points() const
 TEST_F(FroudeKrylovForceModelTest, example)
 {
 //! [FroudeKrylovForceModelTest example]
-    const EnvironmentAndFrames env = get_environment_and_frames();
+    const EnvironmentAndFrames env = get_environment_and_frames(get_wave_model());
     const auto points = get_points();
 
     Body body = get_body(BODY, points);

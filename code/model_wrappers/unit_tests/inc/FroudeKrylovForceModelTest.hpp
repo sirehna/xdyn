@@ -23,7 +23,7 @@ class FroudeKrylovForceModelTest : public ::testing::Test
         virtual ~FroudeKrylovForceModelTest();
         virtual void SetUp();
         virtual void TearDown();
-        EnvironmentAndFrames get_environment_and_frames() const;
+        EnvironmentAndFrames get_environment_and_frames(const TR1(shared_ptr)<WaveModel>& wave_model) const;
         VectorOfVectorOfPoints get_points() const;
         TR1(shared_ptr)<WaveModel> get_wave_model() const;
         ssc::random_data_generator::DataGenerator a;
