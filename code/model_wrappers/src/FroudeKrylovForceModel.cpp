@@ -16,7 +16,7 @@ FroudeKrylovForceModel::FroudeKrylovForceModel(const EnvironmentAndFrames& env_)
 SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const Body& body, const double t) const
 {
     const EPoint dS = that_facet->area*that_facet->unit_normal;
-    const ssc::kinematics::Point C(body.M->get_frame(), that_facet->barycenter);//get_application_point(that_facet, body, zG);
+    const ssc::kinematics::Point C(body.M->get_frame(), that_facet->barycenter);
     double eta = 0;
     for (auto it = that_facet->vertex_index.begin() ; it != that_facet->vertex_index.end() ; ++it)
     {
