@@ -37,6 +37,7 @@ void AiryTest::TearDown()
 }
 
 #define EPS 1E-10
+#define BIG_EPS 1E-4
 
 
 TEST_F(AiryTest, single_frequency_single_direction_at_one_point)
@@ -158,6 +159,29 @@ TEST_F(AiryTest, dynamic_pressure)
     {
         ASSERT_NEAR(sqrt(2*Hs)*rho*g*exp(-k*z)*cos(k*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.dynamic_pressure(rho,g,x,y,z,t), 1E-6);
     }
+}
+
+TEST_F(AiryTest, validate_formula_against_results_from_sos)
+{
+    const double Hs = 0.1;
+    const double Tp = 5;
+    const double omega0 = 2*PI/Tp;
+    double psi = 0;
+    double phi = 5.8268;
+    double t = 0;
+    const double g = 9.81;
+    const double k = omega0*omega0/g;
+
+    double x=-0.1; double y=0;
+    ASSERT_NEAR(0.045232, Hs/2*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
+    x=0.1;y=0;
+    ASSERT_NEAR(0.044522, Hs/2*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
+    x=0;y=-0.1;
+    ASSERT_NEAR(0.044883, Hs/2*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
+    x=0;y=0.1;
+    ASSERT_NEAR(0.044883, Hs/2*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
+    x=0;y=0;
+    ASSERT_NEAR(0.044883, Hs/2*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
 }
 
 TEST_F(AiryTest, dynamic_pressure_compare_with_sos_stab)
