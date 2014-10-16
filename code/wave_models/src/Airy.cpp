@@ -91,7 +91,6 @@ double Airy::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
             const double Dj = sqrt(spectrum.Dj[j]);
             const double psi = spectrum.psi[j];
             const double theta = spectrum.phase[i][j];
-            //Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi)
             p += Ai*Dj*spectrum.pdyn_factor(k,z,eta)*cos(omega*t-k*(x*cos(psi)+y*sin(psi))+theta);
         }
     }
