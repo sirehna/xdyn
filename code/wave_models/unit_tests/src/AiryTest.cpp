@@ -161,7 +161,7 @@ TEST_F(AiryTest, dynamic_pressure)
     }
 }
 
-TEST_F(AiryTest, validate_formula_against_results_from_sos)
+TEST_F(AiryTest, validate_elevation_formula_against_results_from_sos)
 {
     const double Hs = 0.1;
     const double Tp = 5;
@@ -191,8 +191,6 @@ TEST_F(AiryTest, should_be_able_to_reproduce_results_from_sos_stab)
     double psi = 0;
     double phi = 5.8268;
     double t = 0;
-    //const double g = 9.81;
-    //const double k = omega0*omega0/g;
 
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
