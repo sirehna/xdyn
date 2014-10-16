@@ -42,7 +42,7 @@ std::vector<std::map<std::string,double> > get_results(const std::string& yaml, 
     YamlSimulatorInput parsed_yaml = SimulatorYamlParser(yaml).parse();
     parsed_yaml.bodies.front().mesh = mesh_file;
     auto res = simulate<SolverType>(parsed_yaml, 0, N*dt, dt);
-    const OutputTransformer transform(get_builder(parsed_yaml));
+    OutputTransformer transform(get_builder(parsed_yaml));
     for (auto r=res.begin() ; r != res.end() ; ++r) ret.push_back(transform(*r));
     return ret;
 }

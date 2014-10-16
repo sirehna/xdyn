@@ -7,6 +7,7 @@
 
 MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_).build())))
 ,all_relative_immersions()
+,all_absolute_wave_elevations()
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
 {}
@@ -14,6 +15,7 @@ MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(Mes
 MeshIntersector::MeshIntersector(const MeshPtr mesh_)
 :mesh(mesh_)
 ,all_relative_immersions()
+,all_absolute_wave_elevations()
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
 {}
@@ -80,9 +82,12 @@ void MeshIntersector::reset_dynamic_members()
     index_of_immersed_facets.reserve(mesh->facets.size());
 }
 
-void MeshIntersector::update_intersection_with_free_surface(const std::vector<double>& immersions)
+void MeshIntersector::update_intersection_with_free_surface(const std::vector<double>& relative_immersions,
+        const std::vector<double>& absolute_wave_elevations  //!< z coordinate in NED frame of the free surface for each point in mesh
+        )
 {
-    all_relative_immersions = immersions;
+    all_relative_immersions = relative_immersions;
+    all_absolute_wave_elevations = absolute_wave_elevations;
     reset_dynamic_members();
     std::vector<bool> facet_crosses_free_surface(mesh->static_facets,false);
     std::vector<int> edges_immersion_status(mesh->static_edges,0); // the immersion status of each edge
@@ -177,10 +182,14 @@ size_t MeshIntersector::split_partially_immersed_edge(
     size_t last_vertex_index  = mesh->edges[1][edge_index];
     EPoint A=mesh->all_nodes.col(first_vertex_index);
     EPoint B=mesh->all_nodes.col(last_vertex_index);
-    double zA=all_relative_immersions[first_vertex_index];
-    double zB=all_relative_immersions[last_vertex_index];
-    size_t mid_vertex_index = mesh->add_vertex(edge_intersection(A,zA,B,zB));
+    const double dzA=all_relative_immersions[first_vertex_index];
+    const double dzB=all_relative_immersions[last_vertex_index];
+    const double zA = all_absolute_wave_elevations[first_vertex_index];
+    const double zB = all_absolute_wave_elevations[last_vertex_index];
+    size_t mid_vertex_index = mesh->add_vertex(edge_intersection(A,dzA,B,dzB));
     all_relative_immersions.push_back(0);
+    const double k = dzA/(dzA-dzB);
+    all_absolute_wave_elevations.push_back(zA+k*(zB-zA));
     size_t first_sub_edge_index = mesh->add_edge(first_vertex_index,mid_vertex_index);
     /* second_sub_edge_index = */ mesh->add_edge(mid_vertex_index,last_vertex_index);
     edges_immersion_status.push_back(((edges_immersion_status[edge_index] & 1)  *3) | 4);

@@ -29,8 +29,7 @@ p(),
 q(),
 r(),
 intersector(),
-down_direction_in_mesh_frame(),
-absolute_surface_elevation()
+down_direction_in_mesh_frame()
 {
 }
 
@@ -41,7 +40,7 @@ void Body::update_intersection_with_free_surface(const EnvironmentAndFrames& env
     {
         env.w->update_surface_elevation(M, env.k,t);
         const std::vector<double> dz = env.w->get_relative_wave_height();
-        intersector->update_intersection_with_free_surface(dz);
-        absolute_surface_elevation = env.w->get_surface_elevation();
+        intersector->update_intersection_with_free_surface(env.w->get_relative_wave_height(),
+                                                           env.w->get_surface_elevation());
     }
 }

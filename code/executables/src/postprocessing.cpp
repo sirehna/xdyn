@@ -105,8 +105,8 @@ void append(std::map<std::string,double>& to, const std::map<std::string,double>
     for (auto m=from.begin() ; m != from.end() ; ++m) to[m->first] = m->second;
 }
 
-std::vector<std::map<std::string,double> > build_output(ssc::csv_file_reader::CSVFileReader& csv_file, const OutputTransformer& transform);
-std::vector<std::map<std::string,double> > build_output(ssc::csv_file_reader::CSVFileReader& csv_file, const OutputTransformer& transform)
+std::vector<std::map<std::string,double> > build_output(ssc::csv_file_reader::CSVFileReader& csv_file, OutputTransformer& transform);
+std::vector<std::map<std::string,double> > build_output(ssc::csv_file_reader::CSVFileReader& csv_file, OutputTransformer& transform)
 {
     const auto csv = transpose(csv_file.get_map());
     std::vector<std::map<std::string,double> > res;
@@ -147,7 +147,7 @@ int main(int argc, char** argv)
     const auto yaml = SimulatorYamlParser(yaml_file.get_contents()).parse();
 
     ssc::csv_file_reader::CSVFileReader csv(get_contents_from_stdin());
-    const OutputTransformer transform(get_builder(yaml));
+    OutputTransformer transform(get_builder(yaml));
 
     write(std::cout, build_output(csv, transform));
     return 0;

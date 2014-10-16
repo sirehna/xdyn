@@ -42,7 +42,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_for_one_immerged_node)
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -75,7 +75,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_for_two_immerged_node)
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -111,7 +111,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -147,7 +147,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -183,7 +183,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
 
     const auto polygon    = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -220,7 +220,7 @@ TEST_F(MeshIntersectorTest, immerged_polygon_should_throw_if_all_points_are_imme
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
 
     ASSERT_EQ(0,intersector.index_of_emerged_facets.size());
     ASSERT_EQ(0,intersector.index_of_immersed_facets.at(0));
@@ -285,7 +285,7 @@ TEST_F(MeshIntersectorTest, immerged_polygon_should_throw_if_no_points_are_immer
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
 
     ASSERT_EQ(0,intersector.index_of_immersed_facets.size());
     ASSERT_EQ(0,intersector.index_of_emerged_facets.at(0));
@@ -297,7 +297,7 @@ TEST_F(MeshIntersectorTest, another_bug_in_immerged_polygon)
     const std::vector<double> v = {-1,-1,-2,1};
 
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
 
     const auto polygon = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto immersions = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
@@ -349,7 +349,7 @@ TEST_F(MeshIntersectorTest, correct_immerged_polygon_when_two_points_are_exactly
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
     const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto i = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
 
@@ -383,7 +383,7 @@ TEST_F(MeshIntersectorTest, bug2_in_immerged_polygon)
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
     const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
     const auto i = intersector.immersions_of_facet(intersector.index_of_immersed_facets.at(0));
     ASSERT_EQ(3, p.cols());
@@ -416,7 +416,7 @@ TEST_F(MeshIntersectorTest, bug3_in_immerged_polygon)
 
     MeshPtr mesh(new Mesh(MeshBuilder(M).build()));
     MeshIntersector intersector(mesh);
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
     const auto p = intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0));
 
     ASSERT_LT(0, (p.col(0)-p.col(1)).norm());
@@ -429,7 +429,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_single_facet)
 {
     MeshIntersector intersector(VectorOfVectorOfPoints(1, one_triangle()));
     const std::vector<double> v = {0,-0.25,0.5};
-    intersector.update_intersection_with_free_surface(v);
+    intersector.update_intersection_with_free_surface(v,v);
     ASSERT_DOUBLE_EQ(0, intersector.immersed_volume());
     ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
 }
@@ -442,7 +442,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_tetrahedron)
         const double z = a.random<double>().between(-100,100);
         const std::vector<double> v = {z,z+l*sqrt(6)/6,z+l*sqrt(6)/6,z+l*sqrt(6)/6};
         MeshIntersector intersector(tetrahedron(l,a.random<double>().between(-100,100),a.random<double>().between(-100,100),z));
-        intersector.update_intersection_with_free_surface(v);
+        intersector.update_intersection_with_free_surface(v,v);
         ASSERT_NEAR(l*l*l/6./sqrt(2.), intersector.immersed_volume() + intersector.emerged_volume(), 1E-2);
     }
 }
@@ -455,7 +455,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_cube)
         const double z = a.random<double>().between(-100,100);
         MeshIntersector intersector(cube(l, a.random<double>().between(-100,100), a.random<double>().between(-100,100), z));
         const std::vector<double> dz = {z-l/2,z-l/2,z-l/2,z-l/2,z+l/2,z+l/2,z+l/2,z+l/2};
-        intersector.update_intersection_with_free_surface(dz);
+        intersector.update_intersection_with_free_surface(dz,dz);
         ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.immersed_volume() + intersector.emerged_volume(), EPS);
     }
 }
@@ -464,7 +464,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_cube_with_lots_of_irregu
 {
     MeshIntersector intersector(read_stl(test_data::big_cube()));
     const std::vector<double> dz(intersector.mesh->node_count,1);
-    intersector.update_intersection_with_free_surface(dz);
+    intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_SMALL_RELATIVE_ERROR(1, intersector.immersed_volume() + intersector.emerged_volume(), EPS);
 }
 
@@ -484,7 +484,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_immersed_cube)
         all_immersed[7] = 1+l;
         MeshIntersector intersector(cube(l, a.random<double>().between(-100,100), a.random<double>().between(-100,100), a.random<double>().between(-100,100)));
 
-        intersector.update_intersection_with_free_surface(all_immersed);
+        intersector.update_intersection_with_free_surface(all_immersed,all_immersed);
         ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
         ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.immersed_volume(), EPS);
     }
@@ -506,7 +506,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_emerged_cube)
         all_emerged[7] = -1-l;
         MeshIntersector intersector(cube(l, a.random<double>().between(-100,100), a.random<double>().between(-100,100), a.random<double>().between(-100,100)));
 
-        intersector.update_intersection_with_free_surface(all_emerged);
+        intersector.update_intersection_with_free_surface(all_emerged,all_emerged);
         ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.emerged_volume(), EPS);
         ASSERT_DOUBLE_EQ(0, intersector.immersed_volume());
     }
@@ -525,7 +525,7 @@ TEST_F(MeshIntersectorTest, can_compute_closing_facet)
     dz[5] = 1;
     dz[6] = 1;
     dz[7] = 1;
-    intersector.update_intersection_with_free_surface(dz);
+    intersector.update_intersection_with_free_surface(dz,dz);
     const Facet f = intersector.compute_closing_facet();
     ASSERT_DOUBLE_EQ(1, f.area);
     ASSERT_DOUBLE_EQ( 0, (double)f.unit_normal(0));
@@ -564,7 +564,7 @@ TEST_F(MeshIntersectorTest, can_detect_if_facet_is_already_included)
     dz[5] = 1;
     dz[6] = 1;
     dz[7] = 1;
-    intersector.update_intersection_with_free_surface(dz);
+    intersector.update_intersection_with_free_surface(dz,dz);
     Facet f;
     f.vertex_index.push_back(0);
     f.vertex_index.push_back(1);
@@ -599,7 +599,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_partially_immersed_cube)
 
         MeshIntersector intersector(cube(l, x0, y0, z0));
 
-        intersector.update_intersection_with_free_surface(half_immersed);
+        intersector.update_intersection_with_free_surface(half_immersed,half_immersed);
         ASSERT_SMALL_RELATIVE_ERROR(l*l*l, intersector.immersed_volume()+intersector.emerged_volume(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(l*l*l*(1-immersed_ratio), intersector.emerged_volume(), EPS);
         ASSERT_SMALL_RELATIVE_ERROR(l*l*l*immersed_ratio, intersector.immersed_volume(), EPS);
@@ -610,7 +610,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_the_anthineas)
 {
     MeshIntersector intersector(anthineas());
     const std::vector<double> dz(intersector.mesh->node_count,1);
-    intersector.update_intersection_with_free_surface(dz);
+    intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_NEAR(601.726, intersector.emerged_volume()+intersector.immersed_volume(), 1E-3);
 }
 
@@ -636,7 +636,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_barycenter_of_a_partially_immersed_c
 
         MeshIntersector intersector(cube(l, x0, y0, z0));
 
-        intersector.update_intersection_with_free_surface(half_immersed);
+        intersector.update_intersection_with_free_surface(half_immersed,half_immersed);
 
         const Facet closing_facet = intersector.compute_closing_facet();
 
@@ -656,7 +656,7 @@ TEST_F(MeshIntersectorTest, bug_in_facet_volume)
 {
     MeshIntersector intersector(cube(1, 0, 0, 0));
     const std::vector<double> dz(8, 2);
-    intersector.update_intersection_with_free_surface(dz);
+    intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_DOUBLE_EQ(1./6.,intersector.facet_volume(*(intersector.begin_immersed())));
 }
 
@@ -682,7 +682,7 @@ TEST_F(MeshIntersectorTest, bug_detected_in_potential_energy)
 
         MeshIntersector intersector(cube(l, x0, y0, z0));
 
-        intersector.update_intersection_with_free_surface(half_immersed);
+        intersector.update_intersection_with_free_surface(half_immersed,half_immersed);
 
         const Facet closing_facet = intersector.compute_closing_facet();
 

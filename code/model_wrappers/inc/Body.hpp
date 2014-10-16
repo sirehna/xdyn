@@ -54,7 +54,6 @@ class Body
         double r;                                                //!< Projection of the body's rotational speed (relative to NED) along the body's Z-axis (in rad/s)
         MeshIntersectorPtr intersector;                          //!< Allows us to iterate on all emerged or immersed facets
         EPoint down_direction_in_mesh_frame;                     //!< Unit vertical vector, expressed in the body's mesh frame
-        std::vector<double> absolute_surface_elevation;          //!< Surface elevation (in NED frame) for each point in the body's mesh
 };
 
 #endif /* BODY_HPP_ */
