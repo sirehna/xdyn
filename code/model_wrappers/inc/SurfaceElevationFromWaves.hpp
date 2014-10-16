@@ -28,9 +28,6 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
         SurfaceElevationFromWaves(const std::vector<TR1(shared_ptr)<WaveModel> >& models, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh = TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix("NED", 0)));
         SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh = TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix("NED", 0)));
 
-    private:
-        SurfaceElevationFromWaves(); // Disabled
-
         /**
          *  \section ex1 Example
          *  \snippet model_wrappers/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height example
@@ -39,9 +36,11 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
          *  */
         double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                            const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double z, //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                            const double t  //!< Current instant (in seconds)
                            ) const;
+
+    private:
+        SurfaceElevationFromWaves(); // Disabled
 
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (by DNV), "unsteady pressure" (by Faltinsen) or constant pressure contour (by Lloyd)

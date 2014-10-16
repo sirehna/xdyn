@@ -20,13 +20,12 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveM
 
 double SurfaceElevationFromWaves::wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                                               const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                              const double z, //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                                               const double t  //!< Current instant (in seconds)
                                          ) const
 {
     double zwave = 0;
     BOOST_FOREACH(const TR1(shared_ptr)<WaveModel> model, models) zwave += model->elevation(x,y,t);
-    return z - zwave;
+    return zwave;
 }
 
 double SurfaceElevationFromWaves::dynamic_pressure(const double rho, //!< water density (in kg/m^3)

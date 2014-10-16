@@ -29,27 +29,27 @@ TEST_F(DefaultSurfaceElevationTest, example)
 {
 //! [DefaultWaveModelTest example]
     TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    const DefaultSurfaceElevation w(10, mesh);
     const ssc::kinematics::Point P("NED", 0, 0, -20);
+    ssc::kinematics::PointMatrixPtr mesh(new ssc::kinematics::PointMatrix(P.v,"NED"));
+    DefaultSurfaceElevation w(10, mesh);
 //! [DefaultWaveModelTest example]
 //! [DefaultWaveModelTest expected output]
-    ASSERT_DOUBLE_EQ(-30, w.get_relative_wave_height(P, k, a.random<double>()));
+    w.update_surface_elevation(mesh, k, a.random<double>());
+    ASSERT_DOUBLE_EQ(-30, w.get_relative_wave_height().front());
 //! [DefaultWaveModelTest expected output]
 }
 
 TEST_F(DefaultSurfaceElevationTest, more_interesting_example)
 {
     TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
-    const ssc::kinematics::Point P("body", 0, 0, 0);
-    const ssc::kinematics::Point Q("NED", 7, -100, 1795);
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    const DefaultSurfaceElevation w(7, mesh);
+    const ssc::kinematics::Point P("NED", 7, -100, 1795);
+    ssc::kinematics::PointMatrixPtr mesh(new ssc::kinematics::PointMatrix(P.v,"NED"));
+    DefaultSurfaceElevation w(7, mesh);
 
     const ssc::kinematics::Transform bodyTned(ssc::kinematics::Point("NED", 4, 5, 9), "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(2, w.get_relative_wave_height(P,k, a.random<double>()));
-    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
+    w.update_surface_elevation(mesh,k, a.random<double>());
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height().front());
 }
 
 TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_180p_around_Y)
@@ -57,8 +57,8 @@ TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_180p_
     TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
     const ssc::kinematics::Point P("body", 0, 0, 1);
     const ssc::kinematics::Point Q("NED", 7, -100, 1795);
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    const DefaultSurfaceElevation w(7, mesh);
+    ssc::kinematics::PointMatrixPtr mesh(new ssc::kinematics::PointMatrix(Q.v,"NED"));
+    DefaultSurfaceElevation w(7, mesh);
     ssc::kinematics::RotationMatrix rot;
     rot(0,0)=-1.0;
     rot(0,1)=0.0;
@@ -71,17 +71,16 @@ TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_180p_
     rot(2,2)=-1.0;
     const ssc::kinematics::Transform bodyTned(ssc::kinematics::Point("NED", 4, 5, 9), rot, "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(1, w.get_relative_wave_height(P,k, a.random<double>()));
-    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
+    w.update_surface_elevation(mesh,k, a.random<double>());
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height().front());
 }
 
 TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_with_rotation_090p_around_Y)
 {
     TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
-    const ssc::kinematics::Point P("body", 0, 0, 1);
     const ssc::kinematics::Point Q("NED", 7, -100, 1795);
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    const DefaultSurfaceElevation w(7, mesh);
+    ssc::kinematics::PointMatrixPtr mesh(new ssc::kinematics::PointMatrix(Q.v,"NED"));
+    DefaultSurfaceElevation w(7, mesh);
     ssc::kinematics::RotationMatrix rot;
     rot(0,0)= 0.0;
     rot(0,1)= 0.0;
@@ -94,17 +93,16 @@ TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation_with_
     rot(2,2)= 0.0;
     const ssc::kinematics::Transform bodyTned(ssc::kinematics::Point("NED", 4, 5, 9), rot, "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(2, w.get_relative_wave_height(P,k, a.random<double>()));
-    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
+    w.update_surface_elevation(mesh,k, a.random<double>());
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height().front());
 }
 
 TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation)
 {
     TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
-    const ssc::kinematics::Point P("body", 0, 0, 1);
     const ssc::kinematics::Point Q("NED", 7, -100, 1795);
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    const DefaultSurfaceElevation w(7, mesh);
+    ssc::kinematics::PointMatrixPtr mesh(new ssc::kinematics::PointMatrix(Q.v,"NED"));
+    DefaultSurfaceElevation w(7, mesh);
     ssc::kinematics::RotationMatrix rot;
     rot(0,0)=-1.0;
     rot(0,1)=0.0;
@@ -117,8 +115,8 @@ TEST_F(DefaultSurfaceElevationTest, more_interesting_example_with_rotation)
     rot(2,2)=-1.0;
     const ssc::kinematics::Transform bodyTned(ssc::kinematics::Point("NED", 4, 5, 9), rot, "body");
     k->add(bodyTned);
-    ASSERT_DOUBLE_EQ(1, w.get_relative_wave_height(P,k, a.random<double>()));
-    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height(Q,k, a.random<double>()));
+    w.update_surface_elevation(mesh,k, a.random<double>());
+    ASSERT_DOUBLE_EQ(1788, w.get_relative_wave_height().front());
 }
 
 TEST_F(DefaultSurfaceElevationTest, can_compute_relative_wave_height_for_PointMatrix)
@@ -143,11 +141,12 @@ TEST_F(DefaultSurfaceElevationTest, can_compute_relative_wave_height_for_PointMa
 
     TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
     TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    const DefaultSurfaceElevation w(888, mesh);
+    DefaultSurfaceElevation w(888, mesh);
     const ssc::kinematics::Transform T(ssc::kinematics::Point("NED", 1, 20, 300), "body");
     k->add(T);
     ssc::kinematics::PointMatrixPtr Mptr(new ssc::kinematics::PointMatrix(M));
-    const std::vector<double> delta = w.get_relative_wave_height(Mptr, k, a.random<double>());
+    w.update_surface_elevation(Mptr, k, a.random<double>());
+    const std::vector<double> delta = w.get_relative_wave_height();
     //! [DefaultWaveModelTest example]
     //! [DefaultWaveModelTest expected output]
     ASSERT_EQ(5, delta.size());

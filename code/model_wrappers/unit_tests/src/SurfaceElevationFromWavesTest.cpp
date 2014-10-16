@@ -63,8 +63,7 @@ TEST_F(SurfaceElevationFromWavesTest, relative_wave_height)
         const ssc::kinematics::Point P("NED", a.random<double>(), a.random<double>(), a.random<double>());
         const double x = P.x();
         const double y = P.y();
-        const double z = P.z();
-        ASSERT_NEAR(z-Hs/2*cos(2*PI/Tp*t - k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_relative_wave_height(P, k, t), 1E-5);
+        ASSERT_NEAR(Hs/2*cos(2*PI/Tp*t - k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.wave_height(x, y, t), 1E-5);
     }
 //! [SurfaceElevationFromWavesTest relative_wave_height expected output]
 }

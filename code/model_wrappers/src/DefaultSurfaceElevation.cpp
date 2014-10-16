@@ -11,9 +11,9 @@ DefaultSurfaceElevation::DefaultSurfaceElevation(const double wave_height_, cons
 {
 }
 
-double DefaultSurfaceElevation::wave_height(const double , const double , const double z, const double ) const
+double DefaultSurfaceElevation::wave_height(const double , const double , const double ) const
 {
-    return z - zwave;
+    return zwave;
 }
 
 double DefaultSurfaceElevation::dynamic_pressure(const double ,   //!< water density (in kg/m^3)
