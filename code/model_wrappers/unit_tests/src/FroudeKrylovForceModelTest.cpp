@@ -108,6 +108,3 @@ TEST_F(FroudeKrylovForceModelTest, example)
     ASSERT_DOUBLE_EQ(0, Fhs.N());
 //! [FroudeKrylovForceModelTest expected output]
 }
-
-
-
