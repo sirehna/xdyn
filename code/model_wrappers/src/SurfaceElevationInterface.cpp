@@ -87,33 +87,14 @@ void SurfaceElevationInterface::update_surface_elevation(const ssc::kinematics::
     if (n>0)
     {
         const ssc::kinematics::PointMatrix OP = compute_relative_position(P, k);
-        common_update_for_surface_elevation(OP,n,t);
-    }
-}
-
-void SurfaceElevationInterface::common_update_for_surface_elevation(const ssc::kinematics::PointMatrix& OP, const int n, const double t)
-{
-    relative_wave_height_for_each_point_in_mesh.resize(n);
-    surface_elevation_for_each_point_in_mesh.resize(n);
-    std::vector<double> ret;
-    for (int i = 0 ; i < n ; ++i)
-    {
-        surface_elevation_for_each_point_in_mesh[i] = wave_height((double)OP.m(0,i),(double)OP.m(1,i),t);
-        relative_wave_height_for_each_point_in_mesh[i] = (double)OP.m(2,i) - surface_elevation_for_each_point_in_mesh[i];
-    }
-}
-
-void SurfaceElevationInterface::update_surface_elevation(const Matrix3x& M,                                     //!< Points for which to compute the relative wave height
-                                                         const std::string& frame,                              //!< Name of the reference frame in which the coordinates in M are expressed
-                                                         const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                                         const double t                                         //!< Current instant (in seconds)
-                             )
-{
-    const int n = (int)M.cols();
-    if (n>0)
-    {
-        const ssc::kinematics::PointMatrix OP = compute_relative_position(M, frame, k);
-        common_update_for_surface_elevation(OP,n,t);
+        relative_wave_height_for_each_point_in_mesh.resize(n);
+        surface_elevation_for_each_point_in_mesh.resize(n);
+        std::vector<double> ret;
+        for (int i = 0 ; i < n ; ++i)
+        {
+            surface_elevation_for_each_point_in_mesh[i] = wave_height((double)OP.m(0,i),(double)OP.m(1,i),t);
+            relative_wave_height_for_each_point_in_mesh[i] = (double)OP.m(2,i) - surface_elevation_for_each_point_in_mesh[i];
+        }
     }
 }
 
