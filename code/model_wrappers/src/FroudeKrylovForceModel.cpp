@@ -20,7 +20,7 @@ SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet
     double eta = 0;
     for (auto it = that_facet->vertex_index.begin() ; it != that_facet->vertex_index.end() ; ++it)
     {
-        eta += body.intersector->all_immersions.at(*it);
+        eta += body.intersector->all_relative_immersions.at(*it);
     }
     if (not(that_facet->vertex_index.empty())) eta /= (double)that_facet->vertex_index.size();
 

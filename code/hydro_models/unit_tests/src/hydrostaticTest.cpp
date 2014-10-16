@@ -100,7 +100,7 @@ TEST_F(hydrostaticTest, can_compute_the_hydrostatic_force_on_two_triangles)
     ASSERT_EQ(1,intersector.index_of_immersed_facets.size());
     ASSERT_DOUBLE_EQ(0.5,::area(intersector.coordinates_of_facet(intersector.index_of_immersed_facets.at(0))));
     ASSERT_DOUBLE_EQ(0.5,mesh->facets[intersector.index_of_immersed_facets.at(0)].area);
-    ASSERT_DOUBLE_EQ(0.5/3,hydrostatic::average_immersion(mesh->facets[intersector.index_of_immersed_facets.at(0)].vertex_index, intersector.all_immersions));
+    ASSERT_DOUBLE_EQ(0.5/3,hydrostatic::average_immersion(mesh->facets[intersector.index_of_immersed_facets.at(0)].vertex_index, intersector.all_relative_immersions));
 
     ASSERT_DOUBLE_EQ(0, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
