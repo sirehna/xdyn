@@ -12,6 +12,8 @@
 #include "generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"
 #include "MeshIntersector.hpp"
+#include "ExactHydrostaticForceModel.hpp"
+
 #include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
@@ -78,7 +80,7 @@ TEST_F(HydrostaticForceModelTest, example)
 }
 
 /**
- * \note Test of a fully immerged rectangle plane with points [P1,P2,P3,P4]
+ * \note Test of a fully immersed rectangle plane with points [P1,P2,P3,P4]
  * P1 = [-2,+4,+6]
  * P2 = [-2,-4,+6]
  * P3 = [+2,+4,+4]
@@ -92,7 +94,7 @@ TEST_F(HydrostaticForceModelTest, example)
  * The triangles have the same unit normal:
  * \f$[\sin(\atan(0.5)),0,\cos(\atan(0.5))]\f$
  *
- * The immerged volume is 200m3, the norm of the resulting effort should be
+ * The immersed volume is 200m3, the norm of the resulting effort should be
  * \f$200*\rho*g\f$.
  *
  * The resulting force evaluated at the origin point O in the global frame (NED)
@@ -177,11 +179,57 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
 
     // What is expected with the correct evaluation of application point force
     // All these tests fail.
-    EXPECT_DOUBLE_EQ(env.rho*env.g*200.0, sqrt(Fhs.X()*Fhs.X()+Fhs.Z()*Fhs.Z()));
+    ASSERT_DOUBLE_EQ(env.rho*env.g*200.0, sqrt(Fhs.X()*Fhs.X()+Fhs.Z()*Fhs.Z()));
     ASSERT_DOUBLE_EQ(0.0, Fhs.Y());
-    EXPECT_DOUBLE_EQ(-env.rho*env.g*200.0*sin(atan(0.5)), Fhs.X());
-    EXPECT_DOUBLE_EQ(-env.rho*env.g*200.0*cos(atan(0.5)), Fhs.Z());
+    ASSERT_DOUBLE_EQ(-env.rho*env.g*200.0*sin(atan(0.5)), Fhs.X());
+    ASSERT_DOUBLE_EQ(-env.rho*env.g*200.0*cos(atan(0.5)), Fhs.Z());
     ASSERT_DOUBLE_EQ(0, Fhs.K());
     ASSERT_DOUBLE_EQ(env.rho*env.g*200.0 * (5.0*sin(atan(0.5))+sqrt(5.0)/3.0), Fhs.M());
     ASSERT_DOUBLE_EQ(0, Fhs.N());
+}
+
+TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_fast)
+{
+    EnvironmentAndFrames env;
+    env.g = 9.81;
+    env.rho = 1024;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
+
+    Body body = get_body(BODY, unit_cube());
+    std::vector<double> x(13,0);
+    std::vector<double> dz;
+    for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(0.5);
+    for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(-0.5);
+    FastHydrostaticForceModel F(env);
+    body.intersector->update_intersection_with_free_surface(dz);
+    const double Ep = F.potential_energy(body, x);
+    ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
+}
+
+TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_exact)
+{
+    EnvironmentAndFrames env;
+    env.g = 9.81;
+    env.rho = 1024;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
+    const ssc::kinematics::Point G("NED",0,2,2./3.);
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
+
+    Body body = get_body(BODY, unit_cube());
+    std::vector<double> x(13,0);
+    std::vector<double> dz;
+    for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(0.5);
+    for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(-0.5);
+    body.intersector->update_intersection_with_free_surface(dz);
+
+    ExactHydrostaticForceModel F(env);
+    const double Ep = F.potential_energy(body, x);
+    ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
 }

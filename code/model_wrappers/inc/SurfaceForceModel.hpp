@@ -44,10 +44,16 @@ class SurfaceForceModel : public ForceModel
                       const double t
                       ) const = 0;
 
+    /**  \brief Compute potential energy of the hydrostatic force model
+      */
+        double potential_energy(const Body& body, const std::vector<double>& x) const;
+
+
     private:
         SurfaceForceModel();
         virtual FacetIterator begin(const MeshIntersectorPtr& intersector) const = 0;
         virtual FacetIterator end(const MeshIntersectorPtr& intersector) const = 0;
+        virtual double pe(const Body& body, const std::vector<double>& x, const EnvironmentAndFrames& env) const = 0;
         EnvironmentAndFrames env;
         ssc::kinematics::Point g_in_NED;
 };

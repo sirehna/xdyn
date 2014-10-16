@@ -11,14 +11,15 @@
 #include <map>
 #include <string>
 
-#include "Body.hpp"
 #include <ssc/kinematics.hpp>
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
+
+#include "EnvironmentAndFrames.hpp"
+#include "Body.hpp"
 #include "Res.hpp"
 #include "StateMacros.hpp"
 #include "YamlSimulatorInput.hpp"
-
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
 
 class SimulatorBuilder;
 
@@ -43,12 +44,17 @@ class OutputTransformer
         void update_kinematics(const StateType& x) const;
         void fill(std::map<std::string,double>& out, const YamlPositionOutput& position) const;
         void fill(std::map<std::string,double>& out, const YamlAnglesOutput& angle) const;
+        void fill_energy(std::map<std::string,double>& out, const size_t i, const StateType& x) const;
         ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R) const;
+        double compute_kinetic_energy(const size_t i, const StateType& x) const;
+        double compute_potential_energy(const size_t i, const StateType& x) const;
 
         YamlSimulatorInput input;
         std::vector<Body> bodies;
         std::map<std::string,ssc::kinematics::Point> points;
         TR1(shared_ptr)<ssc::kinematics::Kinematics> k;
+        std::vector<ListOfForces> forces;
+        EnvironmentAndFrames env;
 };
 
 #endif /* OUTPUTTRANSFORMER_HPP_ */

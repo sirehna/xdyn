@@ -4,21 +4,25 @@
  *  Created on: Jun 30, 2014
  *      Author: cady
  */
+#include <ssc/kinematics.hpp>
 
+#include "SurfaceElevationInterface.hpp"
 #include "OutputTransformer.hpp"
 #include "update_kinematics.hpp"
 #include "SimulatorBuilder.hpp"
 #include "OutputTransformerException.hpp"
-#include <ssc/kinematics.hpp>
 
-OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) : input(builder.get_parsed_yaml()), bodies(std::vector<Body>()), points(std::map<std::string,ssc::kinematics::Point>()), k(TR1(shared_ptr)<ssc::kinematics::Kinematics>(new ssc::kinematics::Kinematics()))
+OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) :
+            input(builder.get_parsed_yaml()),
+            bodies(std::vector<Body>()),
+            points(std::map<std::string,ssc::kinematics::Point>()),
+            k(TR1(shared_ptr)<ssc::kinematics::Kinematics>(new ssc::kinematics::Kinematics())),
+            forces(),
+            env()
 {
-    MeshMap m;
-    for (auto that_body = input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
-    {
-        m[that_body->name] = VectorOfVectorOfPoints();
-    }
-    bodies = builder.get_bodies(m);
+    bodies = builder.get_bodies(builder.make_mesh_map());
+    env = builder.get_environment_and_frames(bodies);
+    forces = builder.get_forces(env);
     for (auto that_point = input.points.begin() ; that_point != input.points.end() ; ++that_point)
     {
         points[that_point->name] = ssc::kinematics::Point(that_point->frame,that_point->x,that_point->y,that_point->z);
@@ -30,6 +34,7 @@ void OutputTransformer::update_kinematics(const StateType& x) const
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
         ::update_kinematics(x, bodies[i], i, k);
+        ::update_kinematics(x, bodies[i], i, env.k);
     }
 }
 
@@ -126,6 +131,42 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlAngles
     }
 }
 
+double OutputTransformer::compute_kinetic_energy(const size_t i, const StateType& x) const
+{
+    Eigen::VectorXd V(6);
+
+    V(0) = *_U(x,i);
+    V(1) = *_V(x,i);
+    V(2) = *_W(x,i);
+    V(3) = *_P(x,i);
+    V(4) = *_Q(x,i);
+    V(5) = *_R(x,i);
+
+    const auto IV = bodies.at(i).solid_body_inertia->operator*(V);
+
+    return 0.5*(V.transpose()*IV)(0,0);
+}
+
+double OutputTransformer::compute_potential_energy(const size_t i, const StateType& x) const
+{
+    double Ep = 0;
+    for (auto that_force = forces.at(i).begin() ; that_force != forces.at(i).end() ; ++that_force)
+    {
+        const double ep = (*that_force)->potential_energy(bodies.at(i),std::vector<double>(x.begin()+i*13,x.begin()+(i+1)*13-1));
+        Ep += ep;
+    }
+    return Ep;
+}
+
+void OutputTransformer::fill_energy(std::map<std::string,double>& out, const size_t i, const StateType& res) const
+{
+    const double Ec = compute_kinetic_energy(i, res);
+    const double Ep = compute_potential_energy(i, res);
+    out[std::string("Ec(")+bodies.at(i).name+")"] = Ec;
+    out[std::string("Ep(")+bodies.at(i).name+")"] = Ep;
+    out[std::string("Em(")+bodies.at(i).name+")"] = Ec+Ep;
+}
+
 std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
 {
     if (bodies.empty())
@@ -135,6 +176,11 @@ std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
     std::map<std::string,double> out;
     out["t"] = res.t;
     update_kinematics(res.x);
+    for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
+    {
+        const std::vector<double> dz = env.w->get_relative_wave_height(that_body->M,env.k,res.t);
+        that_body->intersector->update_intersection_with_free_surface(dz);
+    }
     for (auto that_position = input.position_output.begin() ; that_position != input.position_output.end() ; ++that_position)
     {
         fill(out, *that_position);
@@ -142,6 +188,10 @@ std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
     for (auto that_angle = input.angles_output.begin() ; that_angle != input.angles_output.end() ; ++that_angle)
     {
         fill(out, *that_angle);
+    }
+    for (size_t i = 0 ; i < bodies.size() ; ++i)
+    {
+        fill_energy(out, i, res.x);
     }
 
     return out;
