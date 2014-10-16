@@ -39,7 +39,7 @@ void Body::update_intersection_with_free_surface(const EnvironmentAndFrames& env
 {
     if (env.w.use_count())
     {
-        env.w->update_surface_elevation(intersector->mesh->all_nodes,std::string("mesh(") + name + ")", env.k,t);
+        env.w->update_surface_elevation(M, env.k,t);
         const std::vector<double> dz = env.w->get_relative_wave_height();
         intersector->update_intersection_with_free_surface(dz);
         absolute_surface_elevation = env.w->get_surface_elevation();
