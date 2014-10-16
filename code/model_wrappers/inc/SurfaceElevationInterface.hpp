@@ -40,6 +40,15 @@ class SurfaceElevationInterface
                                       const double t //!< Current instant (in seconds)
                                      );
 
+        /**  \brief Computes surface elevation for each point on mesh (matrix version).
+          *  \details Updates the absolute surface elevation & the relative wave height.
+          */
+        void update_surface_elevation(const Matrix3x& M,                                     //!< Points for which to compute the relative wave height
+                                      const std::string& frame,                              //!< Name of the reference frame in which the coordinates in M are expressed
+                                      const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                                      const double t                                         //!< Current instant (in seconds)
+                                     );
+
         /**  \brief Returns the relative wave height computed by update_surface_elevation
           *  \returns zwave - z for each point in mesh.
           *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
@@ -124,6 +133,10 @@ class SurfaceElevationInterface
           */
         TR1(shared_ptr)<ssc::kinematics::PointMatrix> get_output_mesh_in_NED_frame(const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k //!< Object used to compute the transforms to the NED frame
                                             ) const;
+
+        /** \brief Exists because the two versions of update_surface_elevation share code
+         */
+        void common_update_for_surface_elevation(const ssc::kinematics::PointMatrix& OP, const int n, const double t);
 
         TR1(shared_ptr)<ssc::kinematics::PointMatrix> output_mesh; //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant
         std::vector<double> relative_wave_height_for_each_point_in_mesh;
