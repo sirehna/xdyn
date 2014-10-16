@@ -25,6 +25,7 @@
 
 #define BODY "body 1"
 
+#define EPS 1E-8
 #define BIG_EPS 1E-3
 
 FroudeKrylovForceModelTest::FroudeKrylovForceModelTest() : a(ssc::random_data_generator::DataGenerator(8511545))
@@ -101,11 +102,11 @@ TEST_F(FroudeKrylovForceModelTest, example)
     const ssc::kinematics::Wrench Ffk = F(body, t);
 //! [FroudeKrylovForceModelTest example]
 //! [FroudeKrylovForceModelTest expected output]
-    ASSERT_DOUBLE_EQ(-92873.963376349013, Ffk.X());
+    ASSERT_DOUBLE_EQ(81544.906276859518, Ffk.X());
     ASSERT_DOUBLE_EQ(0, Ffk.Y());
     ASSERT_DOUBLE_EQ(0, Ffk.Z());
     ASSERT_DOUBLE_EQ(0, Ffk.K());
-    ASSERT_DOUBLE_EQ(30957.987792116335, Ffk.M());
+    ASSERT_DOUBLE_EQ(-27915.707583147494, Ffk.M());
     ASSERT_DOUBLE_EQ(0, Ffk.N());
 //! [FroudeKrylovForceModelTest expected output]
 }
@@ -149,4 +150,35 @@ TEST_F(FroudeKrylovForceModelTest, validate_formula_against_sos_stab)
     EXPECT_NEAR(-0.28057, Fx, BIG_EPS);
     EXPECT_NEAR(0, Fy, BIG_EPS);
     EXPECT_NEAR(-0.56744, Fz, BIG_EPS);
+}
+
+TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
+{
+    const double Hs = 0.1;
+    const double Tp = 5;
+    const double omega0 = 2*PI/Tp;
+    double psi = 0;
+    double phi = 5.8268;
+    double t = 0;
+
+    const double omega_min = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
+    const size_t nfreq = a.random<size_t>().between(2,100);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq);
+
+    const EnvironmentAndFrames env = get_environment_and_frames(TR1(shared_ptr)<WaveModel>(new Airy(A, phi)));
+
+
+    Body body = get_body(BODY, cube(0.2,0,0,0.2));
+    body.G = ssc::kinematics::Point("NED",0,0,0.2);
+
+    FroudeKrylovForceModel F(env);
+    body.update_intersection_with_free_surface(env, t);
+    const ssc::kinematics::Wrench Ffk = F(body, t);
+    ASSERT_NEAR(-0.28002164687919873, Ffk.X(), EPS);
+    ASSERT_NEAR(0, Ffk.Y(), EPS);
+    ASSERT_NEAR(-0.56631957463955374, Ffk.Z(), EPS);
+    ASSERT_NEAR(0, Ffk.K(), EPS);
+    ASSERT_NEAR(0, Ffk.M(), EPS);
+    ASSERT_NEAR(0, Ffk.N(), EPS);
 }
