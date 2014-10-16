@@ -25,6 +25,8 @@
 
 #define BODY "body 1"
 
+#define BIG_EPS 1E-3
+
 FroudeKrylovForceModelTest::FroudeKrylovForceModelTest() : a(ssc::random_data_generator::DataGenerator(8511545))
 {
 }
@@ -107,4 +109,45 @@ TEST_F(FroudeKrylovForceModelTest, example)
     ASSERT_DOUBLE_EQ(30957.987792116335, Ffk.M());
     ASSERT_DOUBLE_EQ(0, Ffk.N());
 //! [FroudeKrylovForceModelTest expected output]
+}
+
+TEST_F(FroudeKrylovForceModelTest, validate_formula_against_sos_stab)
+{
+    const double Hs = 0.1;
+    const double Tp = 5;
+    const double omega0 = 2*PI/Tp;
+    double psi = 0;
+    double phi = 5.8268;
+    double t = 0;
+    const double g = 9.81;
+    const double k = omega0*omega0/g;
+    const double dS = 0.2*0.2;
+    const double rho = 1025;
+
+    const double omega_min = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
+    const size_t nfreq = a.random<size_t>().between(2,100);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq);
+    const Airy wave(A, phi);
+
+    double x=-0.1; double y=0; double z=0.2;
+    const double F1 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi);
+    x=0.1;y=0;z=0.2;
+    const double F2 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi);
+    x=0;y=-0.1;z=0.2;
+    const double F3 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi);
+    x=0;y=0.1;z=0.2;
+    const double F4 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi);
+    x=0;y=0;z=0.1;
+    const double F5 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi);
+    x=0;y=0;z=0.3;
+    const double F6 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi);
+
+    const double Fx = F2 - F1;
+    const double Fy = F4 - F3;
+    const double Fz = F6 - F5;
+
+    EXPECT_NEAR(-0.28057, Fx, BIG_EPS);
+    EXPECT_NEAR(0, Fy, BIG_EPS);
+    EXPECT_NEAR(-0.56744, Fz, BIG_EPS);
 }
