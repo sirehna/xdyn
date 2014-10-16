@@ -8,6 +8,7 @@
 MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_).build())))
 ,all_relative_immersions()
 ,all_absolute_wave_elevations()
+,all_absolute_immersions()
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
 {}
@@ -16,6 +17,7 @@ MeshIntersector::MeshIntersector(const MeshPtr mesh_)
 :mesh(mesh_)
 ,all_relative_immersions()
 ,all_absolute_wave_elevations()
+,all_absolute_immersions()
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
 {}
@@ -94,6 +96,11 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
     std::vector<size_t > split_edges(mesh->static_edges,0);  //!< a table indicating the index of replacing edge for each edge that is split (there are two consecutive edges per split edge, the table only gives the first one)
     find_intersection_with_free_surface(split_edges, edges_immersion_status, facet_crosses_free_surface);
     classify_or_split(split_edges, facet_crosses_free_surface, edges_immersion_status);
+    all_absolute_immersions.resize(all_absolute_wave_elevations.size());
+    for (size_t i = 0 ; i < all_absolute_wave_elevations.size() ; ++i)
+    {
+        all_absolute_immersions[i] = all_relative_immersions[i] + all_absolute_wave_elevations[i];
+    }
 }
 
 void MeshIntersector::split_partially_immersed_facet(

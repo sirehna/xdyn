@@ -147,6 +147,7 @@ class MeshIntersector
 
         std::vector<double> all_relative_immersions; //<! the relative immersions (z-zwave) of all nodes (including the dynamically added ones)
         std::vector<double> all_absolute_wave_elevations; //<! the absolute wave elevation (z coordinate in NED frame) of all nodes (including the dynamically added ones)
+        std::vector<double> all_absolute_immersions; //<! the absolute immersion (z coordinate in NED frame) of all nodes (including the dynamically added ones)
         std::vector<size_t> index_of_emerged_facets;  //!< list of all emerged facets (included the dynamically ones created by split)
         std::vector<size_t> index_of_immersed_facets; //!< list of all immersed facets (included the dynamically ones created by split)
 
