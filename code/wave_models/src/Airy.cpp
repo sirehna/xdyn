@@ -12,11 +12,28 @@
 
 #include "Airy.hpp"
 
+Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(spectrum_),
+phase(std::vector<std::vector<double> >()),
+rng(),
+generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
+{
+    for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
+    {
+        std::vector<double> p;
+        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
+        {
+            p.push_back(constant_random_phase);
+
+        }
+        spectrum.phase.push_back(p);
+    }
+}
+
+
 Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(spectrum_),
 phase(std::vector<std::vector<double> >()),
 rng(boost::mt19937(random_number_generator_seed)),
 generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
-
 {
     for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
     {

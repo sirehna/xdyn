@@ -26,6 +26,7 @@
 class Airy : public WaveModel
 {
     public:
+        Airy(const DiscreteDirectionalWaveSpectrum& spectrum, const double constant_random_phase); // For tests
         Airy(const DiscreteDirectionalWaveSpectrum& spectrum, const int random_number_generator_seed);
 
         /**  \brief Surface elevation
