@@ -27,7 +27,8 @@ p(),
 q(),
 r(),
 intersector(),
-down_direction_in_mesh_frame()
+down_direction_in_mesh_frame(),
+absolute_surface_elevation()
 {
 
 }
