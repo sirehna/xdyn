@@ -100,11 +100,11 @@ TEST_F(FroudeKrylovForceModelTest, example)
     const ssc::kinematics::Wrench Fhs = F(body, t);
 //! [FroudeKrylovForceModelTest example]
 //! [FroudeKrylovForceModelTest expected output]
-    ASSERT_DOUBLE_EQ(-136170.20578538425616, Fhs.X());
+    ASSERT_DOUBLE_EQ(-83386.88058599332, Fhs.X());
     ASSERT_DOUBLE_EQ(0, Fhs.Y());
     ASSERT_DOUBLE_EQ(0, Fhs.Z());
     ASSERT_DOUBLE_EQ(0, Fhs.K());
-    ASSERT_DOUBLE_EQ(46615.880988761644403, Fhs.M());
+    ASSERT_DOUBLE_EQ(28546.280583193246, Fhs.M());
     ASSERT_DOUBLE_EQ(0, Fhs.N());
 //! [FroudeKrylovForceModelTest expected output]
 }

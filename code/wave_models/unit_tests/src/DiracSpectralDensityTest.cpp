@@ -30,12 +30,12 @@ void DiracSpectralDensityTest::TearDown()
 TEST_F(DiracSpectralDensityTest, example)
 {
 //! [DiracSpectralDensityTest example]
-    const double omega0 = a.random<double>().greater_than(0);
-    const double Hs = a.random<double>().greater_than(0);
+    const double omega0 = a.random<double>().between(0,200);
+    const double Hs = a.random<double>().between(0,100);
     const DiracSpectralDensity D(omega0,Hs);
 //! [DiracSpectralDensityTest example]
 //! [DiracSpectralDensityTest expected output]
-    ASSERT_DOUBLE_EQ(Hs, D(omega0));
+    ASSERT_DOUBLE_EQ(Hs*Hs/8, D(omega0));
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
         const double omega = a.random<double>().greater_than(0).but_not(omega0);

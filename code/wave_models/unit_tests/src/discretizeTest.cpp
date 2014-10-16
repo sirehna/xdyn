@@ -62,7 +62,7 @@ TEST_F(discretizeTest, Dirac_in_frequency)
     ASSERT_EQ(1, A.Si.size());
     ASSERT_DOUBLE_EQ(1, A.domega);
     ASSERT_DOUBLE_EQ(0.002*PI, A.dpsi);
-    ASSERT_DOUBLE_EQ(Hs, A.Si.front());
+    ASSERT_DOUBLE_EQ(Hs*Hs/8, A.Si.front());
 }
 
 TEST_F(discretizeTest, Dirac_in_direction)

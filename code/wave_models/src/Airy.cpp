@@ -63,7 +63,7 @@ double Airy::elevation(const double x,                                  //!< x-p
             const double Dj = sqrt(spectrum.Dj[j]);
             const double psi = spectrum.psi[j];
             const double theta = spectrum.phase[i][j];
-            zeta += Ai*Dj*cos(k*(x*cos(psi)+y*sin(psi))-omega*t+theta);
+            zeta += Ai*Dj*cos(omega*t - k*(x*cos(psi)+y*sin(psi)) + theta);
         }
     }
     zeta *= sqrt(2*spectrum.domega*spectrum.dpsi);
