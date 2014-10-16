@@ -73,9 +73,7 @@ TEST_F(HydrostaticForceModelTest, example)
 
     FastHydrostaticForceModel F(env);
     const double t = a.random<double>();
-    env.w->update_surface_elevation(body.M,env.k,t);
-    const std::vector<double> vz = env.w->get_relative_wave_height();
-    body.intersector->update_intersection_with_free_surface(vz,vz);
+    body.update_intersection_with_free_surface(env, t);
     const ssc::kinematics::Wrench Fhs = F(body, t);
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
