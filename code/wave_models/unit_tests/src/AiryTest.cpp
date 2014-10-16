@@ -159,3 +159,54 @@ TEST_F(AiryTest, dynamic_pressure)
         ASSERT_NEAR(sqrt(2*Hs)*rho*g*exp(-k*z)*cos(k*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.dynamic_pressure(rho,g,x,y,z,t), 1E-6);
     }
 }
+
+TEST_F(AiryTest, dynamic_pressure_compare_with_sos_stab)
+{
+    const double psi0 = PI;
+    const double Hs = 0.1;
+    const double Tp = 5;
+    const double omega0 = 2*PI/Tp;
+    const double omega_min = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
+    const size_t nfreq = a.random<size_t>().between(2,100);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq);
+    int random_seed = 0;
+    const Airy wave(A, random_seed);
+
+    double x = -0.1;
+    double y = 0;
+    double z = 0.2;
+    const double rho = 1024;
+    const double g = 9.81;
+
+    const double k = omega0*omega0/g;
+
+    double psi = 0;
+    double phi = 5.8268;
+    //double t = 0;
+
+    COUT(sqrt(2*Hs)*cos(omega0*0-k*(x*cos(psi)+y*sin(psi))+phi));
+    COUT(sqrt(2*Hs)*cos(omega0*0.2-k*(x*cos(psi)+y*sin(psi))+phi));
+    COUT(sqrt(2*Hs)*cos(omega0*0.4-k*(x*cos(psi)+y*sin(psi))+phi));
+
+
+    x=0.1;y=0;z=0.2;
+    COUT(sqrt(2*Hs)*cos(omega0*0-k*(x*cos(psi)+y*sin(psi))+phi));
+    COUT(sqrt(2*Hs)*cos(omega0*0.2-k*(x*cos(psi)+y*sin(psi))+phi));
+    COUT(sqrt(2*Hs)*cos(omega0*0.4-k*(x*cos(psi)+y*sin(psi))+phi));
+
+    (void) z;
+    (void) rho;
+/*
+    double theta= 1.46948;//omega0*t-k*(x*cos(psi)+y*sin(psi))+phi;
+    const double zeta = 0.045232;//sqrt(2*Hs)*sin(theta);
+    COUT(theta);
+    COUT(zeta);
+    const double dS = 0.2*0.2;
+    COUT(rho*g*(z-zeta)*dS);
+    COUT(dS*rho*g*sqrt(2*Hs)*exp(-k*(z-zeta))*cos(theta));
+    //ASSERT_NEAR(0.045232, zeta, 1E-6);
+    // Facet facing negative x
+    //ASSERT_NEAR(-0.044118, 0.2*0.2*0.2*wave.dynamic_pressure(rho,g,x,y,z,t), 1E-6);
+*/
+}
