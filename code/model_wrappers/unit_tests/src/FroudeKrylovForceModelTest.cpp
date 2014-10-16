@@ -97,9 +97,7 @@ TEST_F(FroudeKrylovForceModelTest, example)
 
     FroudeKrylovForceModel F(env);
     const double t = 0;
-    env.w->update_surface_elevation(body.M,env.k,t);
-    const std::vector<double> vz = env.w->get_relative_wave_height();
-    body.intersector->update_intersection_with_free_surface(vz);
+    body.update_intersection_with_free_surface(env, t);
     const ssc::kinematics::Wrench Ffk = F(body, t);
 //! [FroudeKrylovForceModelTest example]
 //! [FroudeKrylovForceModelTest expected output]

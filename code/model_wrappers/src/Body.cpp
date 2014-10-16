@@ -6,6 +6,8 @@
  */
 
 #include "Body.hpp"
+#include "EnvironmentAndFrames.hpp"
+#include "SurfaceElevationInterface.hpp"
 #include "YamlBody.hpp"
 
 Body::Body() : name(),
@@ -30,5 +32,16 @@ intersector(),
 down_direction_in_mesh_frame(),
 absolute_surface_elevation()
 {
+}
 
+void Body::update_intersection_with_free_surface(const EnvironmentAndFrames& env,
+                                    const double t)
+{
+    if (env.w.use_count())
+    {
+        env.w->update_surface_elevation(intersector->mesh->all_nodes,std::string("mesh(") + name + ")", env.k,t);
+        const std::vector<double> dz = env.w->get_relative_wave_height();
+        intersector->update_intersection_with_free_surface(dz);
+        absolute_surface_elevation = env.w->get_surface_elevation();
+    }
 }

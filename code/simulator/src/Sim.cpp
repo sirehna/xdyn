@@ -35,20 +35,10 @@ void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies
     *_QK(all_states,i) /= norm;
 }
 
-void Sim::update_intersection_with_free_surface(Body& body, const double t) const
-{
-    if (env.w.use_count())
-    {
-        env.w->update_surface_elevation(body.M,env.k,t);
-        const std::vector<double> dz = env.w->get_relative_wave_height();
-        body.intersector->update_intersection_with_free_surface(dz);
-    }
-}
-
 void Sim::update_body(Body& body, const size_t i, const StateType& x, const double t) const
 {
     update_body_states(x, body, i);
-    update_intersection_with_free_surface(body, t);
+    body.update_intersection_with_free_surface(env, t);
     update_projection_of_z_in_mesh_frame(body);
 }
 

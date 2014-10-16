@@ -60,12 +60,6 @@ class Sim
                                    const size_t i         //!< Index of the body under consideration
                                    );
 
-        /**  \brief Compute relative immersions & update intersector
-         */
-        void update_intersection_with_free_surface(Body& body,    //!< Body we wish to update
-                                                   const double t //!< Current instant
-                                                   ) const;
-
         /**  \brief Update Body structure taking the new coordinates & wave heights into account
          */
         void update_body(Body& body,         //!< Body we wish to update

@@ -84,9 +84,7 @@ void test(const ForceModel& F, const EnvironmentAndFrames& env, size_t n)
 {
     Body body = get_body(BODY, anthineas());
     const double t = 0;
-    env.w->update_surface_elevation(body.M,env.k,t);
-    const std::vector<double> dz = env.w->get_relative_wave_height();
-    body.intersector->update_intersection_with_free_surface(dz);
+    body.update_intersection_with_free_surface(env, t);
     ssc::kinematics::Wrench Fhs;
     for (size_t i = 0 ; i < n ; ++i) F(body, t);
 }
