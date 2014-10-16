@@ -97,14 +97,14 @@ TEST_F(FroudeKrylovForceModelTest, example)
     const double t = 0;
     const std::vector<double> vz = env.w->get_relative_wave_height(body.M,env.k,t);
     body.intersector->update_intersection_with_free_surface(vz);
-    const ssc::kinematics::Wrench Fhs = F(body, t);
+    const ssc::kinematics::Wrench Ffk = F(body, t);
 //! [FroudeKrylovForceModelTest example]
 //! [FroudeKrylovForceModelTest expected output]
-    ASSERT_DOUBLE_EQ(-92873.963376349013, Fhs.X());
-    ASSERT_DOUBLE_EQ(0, Fhs.Y());
-    ASSERT_DOUBLE_EQ(0, Fhs.Z());
-    ASSERT_DOUBLE_EQ(0, Fhs.K());
-    ASSERT_DOUBLE_EQ(30957.987792116335, Fhs.M());
-    ASSERT_DOUBLE_EQ(0, Fhs.N());
+    ASSERT_DOUBLE_EQ(-92873.963376349013, Ffk.X());
+    ASSERT_DOUBLE_EQ(0, Ffk.Y());
+    ASSERT_DOUBLE_EQ(0, Ffk.Z());
+    ASSERT_DOUBLE_EQ(0, Ffk.K());
+    ASSERT_DOUBLE_EQ(30957.987792116335, Ffk.M());
+    ASSERT_DOUBLE_EQ(0, Ffk.N());
 //! [FroudeKrylovForceModelTest expected output]
 }
