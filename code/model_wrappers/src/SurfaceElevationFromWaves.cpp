@@ -34,10 +34,11 @@ double SurfaceElevationFromWaves::dynamic_pressure(const double rho, //!< water 
                                                    const double x,   //!< x-position in the NED frame (in meters)
                                                    const double y,   //!< y-position in the NED frame (in meters)
                                                    const double z,   //!< z-position in the NED frame (in meters)
+                                                   const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
                                                    const double t    //!< Current time instant (in seconds)
                                                    ) const
 {
     double pdyn = 0;
-    BOOST_FOREACH(const TR1(shared_ptr)<WaveModel> model, models) pdyn += model->dynamic_pressure(rho,g,x,y,z,t);
+    BOOST_FOREACH(const TR1(shared_ptr)<WaveModel> model, models) pdyn += model->dynamic_pressure(rho,g,x,y,z,eta,t);
     return pdyn;
 }

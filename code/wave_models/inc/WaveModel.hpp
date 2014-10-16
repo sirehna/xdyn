@@ -50,6 +50,7 @@ class WaveModel
                                         const double x,   //!< x-position in the NED frame (in meters)
                                         const double y,   //!< y-position in the NED frame (in meters)
                                         const double z,   //!< z-position in the NED frame (in meters)
+                                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
                                         const double t    //!< Current time instant (in seconds)
                                         ) const = 0;
 

@@ -76,6 +76,7 @@ double Airy::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
                               const double x,   //!< x-position in the NED frame (in meters)
                               const double y,   //!< y-position in the NED frame (in meters)
                               const double z,   //!< z-position in the NED frame (in meters)
+                              const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
                               const double t    //!< Current time instant (in seconds)
                              ) const
 {
@@ -90,7 +91,8 @@ double Airy::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
             const double Dj = sqrt(spectrum.Dj[j]);
             const double psi = spectrum.psi[j];
             const double theta = spectrum.phase[i][j];
-            p += Ai*Dj*spectrum.pdyn_factor(k,z)*cos(k*(x*cos(psi)+y*sin(psi))-omega*t+theta);
+            //Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi)
+            p += Ai*Dj*spectrum.pdyn_factor(k,z,eta)*cos(omega*t-k*(x*cos(psi)+y*sin(psi))+theta);
         }
     }
     p *= rho*g*sqrt(2*spectrum.domega*spectrum.dpsi);

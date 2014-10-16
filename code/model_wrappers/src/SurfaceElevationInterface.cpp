@@ -72,11 +72,12 @@ double SurfaceElevationInterface::get_dynamic_pressure(const double rho, // Wate
                                                        const double g, //!< Gravity (in m/s^2)
                                                        const ssc::kinematics::Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
                                                        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                                                       const double eta, //!< Wave elevation at P in the NED frame (in meters)
                                                        const double t //!< Current instant (in seconds)
                                     ) const
 {
     const ssc::kinematics::Point OP = compute_relative_position(P, k);
-    return dynamic_pressure(rho, g, OP.x(),OP.y(),OP.z(),t);
+    return dynamic_pressure(rho, g, OP.x(),OP.y(),OP.z(),eta,t);
 }
 
 TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationInterface::get_output_mesh_in_NED_frame(const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k) const

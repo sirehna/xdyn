@@ -17,7 +17,14 @@ SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet
 {
     const EPoint dS = that_facet->area*that_facet->unit_normal;
     const ssc::kinematics::Point C(body.M->get_frame(), that_facet->barycenter);//get_application_point(that_facet, body, zG);
-    const double pdyn = env.w->get_dynamic_pressure(env.rho,env.g,C,env.k,t);
+    double eta = 0;
+    for (auto it = that_facet->vertex_index.begin() ; it != that_facet->vertex_index.end() ; ++it)
+    {
+        eta += body.intersector->all_immersions.at(*it);
+    }
+    if (not(that_facet->vertex_index.empty())) eta /= that_facet->vertex_index.size();
+
+    const double pdyn = env.w->get_dynamic_pressure(env.rho,env.g,C,env.k,eta,t);
     return DF(-pdyn*dS,C.v);
 }
 

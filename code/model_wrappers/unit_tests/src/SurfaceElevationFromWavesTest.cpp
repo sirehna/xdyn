@@ -89,7 +89,7 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
         const double x = P.x();
         const double y = P.y();
         const double z = P.z();
-        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*cos(k_*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.get_dynamic_pressure(rho, g, P, k, t), 1E-6);
+        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*cos(2*PI/Tp*t - k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, 0, t), 1E-6);
     }
 //! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
 }

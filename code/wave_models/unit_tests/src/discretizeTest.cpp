@@ -294,9 +294,9 @@ TEST_F(discretizeTest, flatten)
 TEST_F(discretizeTest, dynamic_pressure_factor)
 {
     //! [discretizeTest dynamic_pressure_factor example]
-    ASSERT_DOUBLE_EQ(exp(-2), dynamic_pressure_factor(1,2));
-    ASSERT_DOUBLE_EQ(exp(-8), dynamic_pressure_factor(2,4));
-    ASSERT_DOUBLE_EQ((exp(5)+exp(-5))/(exp(3)+exp(-3)), dynamic_pressure_factor(1,-2,3));
-    ASSERT_DOUBLE_EQ((exp(0.14)+exp(-0.14))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4));
+    ASSERT_DOUBLE_EQ(exp(1), dynamic_pressure_factor(1,2,3));
+    ASSERT_DOUBLE_EQ(exp(2), dynamic_pressure_factor(2,4,5));
+    ASSERT_DOUBLE_EQ((exp(9)+exp(-9))/(exp(3)+exp(-3)), dynamic_pressure_factor(1,-2,3,4));
+    ASSERT_DOUBLE_EQ((exp(0.24)+exp(-0.24))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4,0.5));
     //! [discretizeTest dynamic_pressure_factor example]
 }

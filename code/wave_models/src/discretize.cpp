@@ -47,7 +47,7 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega));
-    ret.pdyn_factor = [](const double k, const double z){return dynamic_pressure_factor(k,z);};
+    ret.pdyn_factor = [](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta);};
     return ret;
 }
 
@@ -67,7 +67,7 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
-    ret.pdyn_factor = [h](const double k, const double z){return dynamic_pressure_factor(k,z,h);};
+    ret.pdyn_factor = [h](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,h,eta);};
     return ret;
 }
 
@@ -130,17 +130,19 @@ FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectru
     return ret;
 }
 
-double dynamic_pressure_factor(const double k, //!< Wave number (in 1/m)
-                               const double z  //!< z-position in the NED frame (in meters)
+double dynamic_pressure_factor(const double k,  //!< Wave number (in 1/m)
+                               const double z,  //!< z-position in the NED frame (in meters)
+                               const double eta //!< Wave elevation at (x,y) in the NED frame (in meters)
                               )
 {
-    return exp(-k*z);
+    return exp(-k*(z-eta));
 }
 
-double dynamic_pressure_factor(const double k, //!< Wave number (in 1/m)
-                               const double z, //!< z-position in the NED frame (in meters)
-                               const double h  //!< Average water depth (in meters)
+double dynamic_pressure_factor(const double k,  //!< Wave number (in 1/m)
+                               const double z,  //!< z-position in the NED frame (in meters)
+                               const double h,  //!< Average water depth (in meters)
+                               const double eta //!< Wave elevation at (x,y) in the NED frame (in meters)
                               )
 {
-    return cosh(k*(h-z))/cosh(k*h);
+    return cosh(k*(h-z+eta))/cosh(k*h);
 }

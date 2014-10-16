@@ -64,6 +64,7 @@ class SurfaceElevationInterface
                                     const double g, //!< Gravity (in m/s^2)
                                     const ssc::kinematics::Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
                                     const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                                    const double eta, //!< Wave elevation at P in the NED frame (in meters)
                                     const double t  //!< Current instant (in seconds)
                                     ) const;
 
@@ -119,6 +120,7 @@ class SurfaceElevationInterface
                                         const double x,   //!< x-position in the NED frame (in meters)
                                         const double y,   //!< y-position in the NED frame (in meters)
                                         const double z,   //!< z-position in the NED frame (in meters)
+                                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
                                         const double t    //!< Current time instant (in seconds)
                                         ) const = 0;
 
