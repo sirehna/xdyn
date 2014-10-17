@@ -46,32 +46,9 @@ TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model() const
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
 }
 
-/*
- * TR1(shared_ptr)<Kinematics> k(new Kinematics());
-    const DefaultWaveModel w(10);
-    const Point P("NED", 0, 0, -20);
-//! [DefaultWaveModelTest example]
-//! [DefaultWaveModelTest expected output]
-    ASSERT_DOUBLE_EQ(-30, w.get_relative_wave_height(P, k, a.random<double>()));
-
-
-
-    const double x = a.random<double>();
-    const double y = a.random<double>();
-    const double phi = 0.54881350230425596237;
-    const double k = 4.*PI*PI/Tp/Tp/9.81;
-    //! [AiryTest example]
-    //! [AiryTest expected output]
-    for (double t = 0 ; t < 3*Tp ; t+=0.1)
-    {
-        ASSERT_NEAR(sqrt(2*Hs)*cos(k*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.elevation(x,y,t), 1E-6);
-    }
-
- */
-
-TEST_F(SurfaceElevationFromWavesTest, example)
+TEST_F(SurfaceElevationFromWavesTest, relative_wave_height)
 {
-//! [SurfaceElevationFromWavesTest example]
+//! [SurfaceElevationFromWavesTest relative_wave_height example]
     const double psi0 = PI/4;
     const double Hs = 3;
     const double Tp = 10;
@@ -79,18 +56,40 @@ TEST_F(SurfaceElevationFromWavesTest, example)
     TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
     SurfaceElevationFromWaves wave(get_model());
     const double phi = 3.4482969340598712549;
-//! [SurfaceElevationFromWavesTest example]
-//! [SurfaceElevationFromWavesTest expected output]
+//! [SurfaceElevationFromWavesTest relative_wave_height example]
+//! [SurfaceElevationFromWavesTest relative_wave_height expected output]
     for (double t = 0 ; t < 30 ; t+=0.1)
     {
         const ssc::kinematics::Point P("NED", a.random<double>(), a.random<double>(), a.random<double>());
         const double x = P.x();
         const double y = P.y();
-        const double z = P.z();
-        ASSERT_NEAR(z-sqrt(2*Hs)*cos(k_*(x*cos(psi0)+y*sin(psi0))-2*PI/Tp*t +phi), wave.get_relative_wave_height(P, k, t), 1E-5);
+        ASSERT_NEAR(Hs/2*cos(2*PI/Tp*t - k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.wave_height(x, y, t), 1E-5);
     }
-//! [SurfaceElevationFromWavesTest expected output]
+//! [SurfaceElevationFromWavesTest relative_wave_height expected output]
 }
 
-
+TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
+{
+//! [SurfaceElevationFromWavesTest dynamic_pressure example]
+    const double psi0 = PI/4;
+    const double Hs = 3;
+    const double Tp = 10;
+    const double k_ = 4.*PI*PI/Tp/Tp/9.81;
+    TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
+    SurfaceElevationFromWaves wave(get_model());
+    const double phi = 3.4482969340598712549;
+//! [SurfaceElevationFromWavesTest dynamic_pressure example]
+//! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
+    for (double t = 0 ; t < 30 ; t+=0.1)
+    {
+        const ssc::kinematics::Point P("NED", a.random<double>().between(-100,100), a.random<double>().between(-100,100), a.random<double>().between(-100,100));
+        const double rho = a.random<double>().between(0,100);
+        const double g = a.random<double>().between(0,10);
+        const double x = P.x();
+        const double y = P.y();
+        const double z = P.z();
+        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*cos(2*PI/Tp*t - k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, 0, t), 1E-6);
+    }
+//! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
+}
 

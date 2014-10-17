@@ -167,7 +167,7 @@ void OutputTransformer::fill_energy(std::map<std::string,double>& out, const siz
     out[std::string("Em(")+bodies.at(i).name+")"] = Ec+Ep;
 }
 
-std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
+std::map<std::string,double> OutputTransformer::operator()(const Res& res)
 {
     if (bodies.empty())
     {
@@ -178,8 +178,7 @@ std::map<std::string,double> OutputTransformer::operator()(const Res& res) const
     update_kinematics(res.x);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        const std::vector<double> dz = env.w->get_relative_wave_height(that_body->M,env.k,res.t);
-        that_body->intersector->update_intersection_with_free_surface(dz);
+        that_body->update_intersection_with_free_surface(env, res.t);
     }
     for (auto that_position = input.position_output.begin() ; that_position != input.position_output.end() ; ++that_position)
     {

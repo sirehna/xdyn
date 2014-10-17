@@ -45,11 +45,13 @@ class WaveModel
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
           *  \snippet wave_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
-        virtual double dynamic_pressure(const double x,   //!< x-position in the NED frame (in meters)
+        virtual double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
+                                        const double g,   //!< gravity (in m/s^2)
+                                        const double x,   //!< x-position in the NED frame (in meters)
                                         const double y,   //!< y-position in the NED frame (in meters)
                                         const double z,   //!< z-position in the NED frame (in meters)
-                                        const double t,   //!< Current time instant (in seconds)
-                                        const double eta  //!< Sea elevation at (x,y), given eg. by the 'elevation' method
+                                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
+                                        const double t    //!< Current time instant (in seconds)
                                         ) const = 0;
 
     private:

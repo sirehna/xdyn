@@ -10,17 +10,6 @@ YamlAiry::YamlAiry() :
 seed(0)
 {}
 
-YamlJonswap::YamlJonswap():
-Hs(0),
-Tp(0),
-gamma(0)
-{}
-
-YamlBretschneider::YamlBretschneider():
-Hs(0),
-Tp(0)
-{}
-
 YamlDiracDirectionalSpreading::YamlDiracDirectionalSpreading():
 psi0(0)
 {}

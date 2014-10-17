@@ -7,6 +7,7 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/GravityForceModelTest.cpp
               src/HydrostaticForceModelTest.cpp
               src/SurfaceElevationFromWavesTest.cpp
+              src/FroudeKrylovForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

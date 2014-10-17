@@ -18,7 +18,7 @@ DiscreteDirectionalWaveDensity::DiscreteDirectionalWaveDensity() :
 }
 
 FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
-    spectrum(std::vector<DiscreteDirectionalWaveDensity>()),
+    spectrum(),
     domega(0),
     dpsi(0)
 {
@@ -26,14 +26,15 @@ FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
 }
 
 DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :
-                    Si(std::vector<double>()),
-                    Dj(std::vector<double>()),
-                    omega(std::vector<double>()),
-                    psi(std::vector<double>()),
-                    k(std::vector<double>()),
-                    phase(std::vector<std::vector<double> >()),
+                    Si(),
+                    Dj(),
+                    omega(),
+                    psi(),
+                    k(),
+                    phase(),
                     domega(1),
-                    dpsi(1)
+                    dpsi(1),
+                    pdyn_factor()
 
 {
 }

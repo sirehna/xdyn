@@ -34,18 +34,21 @@ void HydrostaticForceModelTest::TearDown()
 {
 }
 
-TEST_F(HydrostaticForceModelTest, example)
+EnvironmentAndFrames HydrostaticForceModelTest::get_environment_and_frames() const
 {
     EnvironmentAndFrames env;
     env.g = 9.81;
     env.rho = 1024;
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
-    const ssc::kinematics::Point G("NED",0,2,2./3.);
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
     env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
+    return env;
+}
 
+VectorOfVectorOfPoints HydrostaticForceModelTest::get_points() const
+{
     auto points = two_triangles();
     for (size_t i = 0 ; i < 2 ; ++i)
     {
@@ -57,14 +60,20 @@ TEST_F(HydrostaticForceModelTest, example)
             points[i][j][1] = x;
         }
     }
+    return points;
+}
+
+TEST_F(HydrostaticForceModelTest, example)
+{
+    const EnvironmentAndFrames env = get_environment_and_frames();
+    const auto points = get_points();
 
     Body body = get_body(BODY, points);
-    body.G = G;
+    body.G = ssc::kinematics::Point("NED",0,2,2./3.);
 
     FastHydrostaticForceModel F(env);
     const double t = a.random<double>();
-    const std::vector<double> vz = env.w->get_relative_wave_height(body.M,env.k,t);
-    body.intersector->update_intersection_with_free_surface(vz);
+    body.update_intersection_with_free_surface(env, t);
     const ssc::kinematics::Wrench Fhs = F(body, t);
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
@@ -205,7 +214,7 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_fast)
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(0.5);
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(-0.5);
     FastHydrostaticForceModel F(env);
-    body.intersector->update_intersection_with_free_surface(dz);
+    body.intersector->update_intersection_with_free_surface(dz,dz);
     const double Ep = F.potential_energy(body, x);
     ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
 }
@@ -227,7 +236,7 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_exact)
     std::vector<double> dz;
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(0.5);
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(-0.5);
-    body.intersector->update_intersection_with_free_surface(dz);
+    body.intersector->update_intersection_with_free_surface(dz,dz);
 
     ExactHydrostaticForceModel F(env);
     const double Ep = F.potential_energy(body, x);

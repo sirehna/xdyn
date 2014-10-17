@@ -38,7 +38,7 @@ class OutputTransformer
 {
     public:
         OutputTransformer(const SimulatorBuilder& input);
-        std::map<std::string,double> operator()(const Res& r) const;
+        std::map<std::string,double> operator()(const Res& r);
 
     private:
         void update_kinematics(const StateType& x) const;

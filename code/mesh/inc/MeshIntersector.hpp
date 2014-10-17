@@ -52,7 +52,8 @@ class MeshIntersector
 
         /* \brief Update the intersection of the mesh with free surface
          * \details the intersection requires new Vertices/Edges/Facets stored as dynamic data in the end of container members */
-        void update_intersection_with_free_surface(const std::vector<double> &immersions //!< the relative immersion of each static vertex of the mesh
+        void update_intersection_with_free_surface(const std::vector<double>& relative_immersions, //!< the relative immersion of each static vertex of the mesh
+                                                   const std::vector<double>& absolute_wave_elevations  //!< z coordinate in NED frame of each point in mesh
                                                    );
 
         FacetIterator begin_immersed() const
@@ -144,7 +145,9 @@ class MeshIntersector
 
         MeshPtr mesh;
 
-        std::vector<double> all_immersions; //<! the immersions of all nodes (including the dynamically added ones)
+        std::vector<double> all_relative_immersions; //<! the relative immersions (z-zwave) of all nodes (including the dynamically added ones)
+        std::vector<double> all_absolute_wave_elevations; //<! the absolute wave elevation (z coordinate in NED frame) of all nodes (including the dynamically added ones)
+        std::vector<double> all_absolute_immersions; //<! the absolute immersion (z coordinate in NED frame) of all nodes (including the dynamically added ones)
         std::vector<size_t> index_of_emerged_facets;  //!< list of all emerged facets (included the dynamically ones created by split)
         std::vector<size_t> index_of_immersed_facets; //!< list of all immersed facets (included the dynamically ones created by split)
 

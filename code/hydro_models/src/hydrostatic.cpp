@@ -76,7 +76,7 @@ ssc::kinematics::Wrench hydrostatic::fast_force(const const_MeshIntersectorPtr& 
     const double g_norm = g.norm();
     for (auto that_facet = intersector->begin_immersed() ; that_facet != intersector->end_immersed() ; ++that_facet)
     {
-        const double zG = average_immersion(that_facet->vertex_index, intersector->all_immersions);
+        const double zG = average_immersion(that_facet->vertex_index, intersector->all_relative_immersions);
         const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
         const EPoint ap = that_facet->barycenter;
         F += dF(O, ap , rho, g_norm, zG , dS);
@@ -96,9 +96,9 @@ ssc::kinematics::Wrench hydrostatic::exact_force(const const_MeshIntersectorPtr&
     const EPoint down_direction = g / g_norm;
     for (auto that_facet = intersector->begin_immersed() ; that_facet != intersector->end_immersed() ; ++that_facet)
     {
-        const double zG = average_immersion(that_facet->vertex_index, intersector->all_immersions);
+        const double zG = average_immersion(that_facet->vertex_index, intersector->all_relative_immersions);
         const EPoint dS = orientation_factor*that_facet->area*that_facet->unit_normal;
-        const EPoint ap = exact_application_point(that_facet,down_direction,zG,intersector->mesh->all_nodes,intersector->all_immersions);
+        const EPoint ap = exact_application_point(that_facet,down_direction,zG,intersector->mesh->all_nodes,intersector->all_relative_immersions);
         F += dF(O, ap , rho, g_norm, zG , dS);
     }
     return F;

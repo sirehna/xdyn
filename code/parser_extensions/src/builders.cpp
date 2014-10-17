@@ -44,6 +44,16 @@ boost::optional<ForcePtr> ForceBuilder<GravityForceModel>::try_to_parse(const st
     return ret;
 }
 
+boost::optional<ForcePtr> ForceBuilder<FroudeKrylovForceModel>::try_to_parse(const std::string& model, const std::string& , const EnvironmentAndFrames& env) const
+{
+    boost::optional<ForcePtr> ret;
+    if (model == "non-linear Froude-Krylov")
+    {
+        ret.reset(ForcePtr(new FroudeKrylovForceModel(env)));
+    }
+    return ret;
+}
+
 boost::optional<ForcePtr> ForceBuilder<FastHydrostaticForceModel>::try_to_parse(const std::string& model, const std::string&, const EnvironmentAndFrames& env) const
 {
     boost::optional<ForcePtr> ret;

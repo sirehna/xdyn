@@ -6,14 +6,18 @@
 #include "mesh_manipulations.hpp"
 
 MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_).build())))
-,all_immersions()
+,all_relative_immersions()
+,all_absolute_wave_elevations()
+,all_absolute_immersions()
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
 {}
 
 MeshIntersector::MeshIntersector(const MeshPtr mesh_)
 :mesh(mesh_)
-,all_immersions()
+,all_relative_immersions()
+,all_absolute_wave_elevations()
+,all_absolute_immersions()
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
 {}
@@ -26,8 +30,8 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
     for (size_t edge_index = 0; edge_index < mesh->static_edges;
             ++edge_index)
     {
-        double z0 = all_immersions[mesh->edges[0][edge_index]];
-        double z1 = all_immersions[mesh->edges[1][edge_index]];
+        double z0 = all_relative_immersions[mesh->edges[0][edge_index]];
+        double z1 = all_relative_immersions[mesh->edges[1][edge_index]];
         int status = get_edge_immersion_status(z0, z1);
         edges_immersion_status[edge_index] = status;
         if (crosses_free_surface(status))
@@ -80,15 +84,23 @@ void MeshIntersector::reset_dynamic_members()
     index_of_immersed_facets.reserve(mesh->facets.size());
 }
 
-void MeshIntersector::update_intersection_with_free_surface(const std::vector<double>& immersions)
+void MeshIntersector::update_intersection_with_free_surface(const std::vector<double>& relative_immersions,
+        const std::vector<double>& absolute_wave_elevations  //!< z coordinate in NED frame of the free surface for each point in mesh
+        )
 {
-    all_immersions = immersions;
+    all_relative_immersions = relative_immersions;
+    all_absolute_wave_elevations = absolute_wave_elevations;
     reset_dynamic_members();
     std::vector<bool> facet_crosses_free_surface(mesh->static_facets,false);
     std::vector<int> edges_immersion_status(mesh->static_edges,0); // the immersion status of each edge
     std::vector<size_t > split_edges(mesh->static_edges,0);  //!< a table indicating the index of replacing edge for each edge that is split (there are two consecutive edges per split edge, the table only gives the first one)
     find_intersection_with_free_surface(split_edges, edges_immersion_status, facet_crosses_free_surface);
     classify_or_split(split_edges, facet_crosses_free_surface, edges_immersion_status);
+    all_absolute_immersions.resize(all_absolute_wave_elevations.size());
+    for (size_t i = 0 ; i < all_absolute_wave_elevations.size() ; ++i)
+    {
+        all_absolute_immersions[i] = all_relative_immersions[i] + all_absolute_wave_elevations[i];
+    }
 }
 
 void MeshIntersector::split_partially_immersed_facet(
@@ -177,10 +189,14 @@ size_t MeshIntersector::split_partially_immersed_edge(
     size_t last_vertex_index  = mesh->edges[1][edge_index];
     EPoint A=mesh->all_nodes.col(first_vertex_index);
     EPoint B=mesh->all_nodes.col(last_vertex_index);
-    double zA=all_immersions[first_vertex_index];
-    double zB=all_immersions[last_vertex_index];
-    size_t mid_vertex_index = mesh->add_vertex(edge_intersection(A,zA,B,zB));
-    all_immersions.push_back(0);
+    const double dzA=all_relative_immersions[first_vertex_index];
+    const double dzB=all_relative_immersions[last_vertex_index];
+    const double zA = all_absolute_wave_elevations[first_vertex_index];
+    const double zB = all_absolute_wave_elevations[last_vertex_index];
+    size_t mid_vertex_index = mesh->add_vertex(edge_intersection(A,dzA,B,dzB));
+    all_relative_immersions.push_back(0);
+    const double k = dzA/(dzA-dzB);
+    all_absolute_wave_elevations.push_back(zA+k*(zB-zA));
     size_t first_sub_edge_index = mesh->add_edge(first_vertex_index,mid_vertex_index);
     /* second_sub_edge_index = */ mesh->add_edge(mid_vertex_index,last_vertex_index);
     edges_immersion_status.push_back(((edges_immersion_status[edge_index] & 1)  *3) | 4);
@@ -204,7 +220,7 @@ std::vector<double> MeshIntersector::immersions_of_facet(size_t facet_index) con
     size_t n = facet->vertex_index.size();
     std::vector<double> z(n,0.0);
     for(size_t i=0;i<n;++i)
-        z[i] = all_immersions[facet->vertex_index[i]];
+        z[i] = all_relative_immersions[facet->vertex_index[i]];
     return z;
 }
 
@@ -262,16 +278,16 @@ Facet MeshIntersector::compute_closing_facet() const
     EPoint bar(0,0,0);
     double A = 0;
     Eigen::Vector3d n(0,0,0);
-    if (all_immersions.size() != mesh->node_count)
+    if (all_relative_immersions.size() != mesh->node_count)
     {
         std::stringstream ss;
         ss << "Need as many immersions as there are nodes. There are "
-           << mesh->node_count << " nodes, but " << all_immersions.size() << " immersions.";
+           << mesh->node_count << " nodes, but " << all_relative_immersions.size() << " immersions.";
         THROW(__PRETTY_FUNCTION__, MeshIntersectorException, ss.str());
     }
     for (size_t i = 0 ; i < mesh->node_count ; ++i)
     {
-        if (all_immersions[i] == 0)
+        if (all_relative_immersions[i] == 0)
         {
             vertex_index.push_back(i);
         }

@@ -35,7 +35,7 @@ double DiracSpectralDensity::operator()(const double omega) const
         ss << "omega should be greater than 0: got " << omega;
         THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
     }
-    if (fabs(omega-omega0)<1E-15) return Hs;
+    if (fabs(omega-omega0)<1E-15) return Hs*Hs/8;
                                   return 0;
 }
 

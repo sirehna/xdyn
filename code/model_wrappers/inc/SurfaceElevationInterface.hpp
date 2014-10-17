@@ -32,30 +32,39 @@ class SurfaceElevationInterface
 
         virtual ~SurfaceElevationInterface();
 
-        /**  \author cec
-          *  \date 24 avr. 2014, 10:32:29
-          *  \brief Computes the relative wave height at a given point.
+        /**  \brief Computes surface elevation for each point on mesh.
+          *  \details Updates the absolute surface elevation & the relative wave height.
+          */
+        void update_surface_elevation(const ssc::kinematics::PointMatrixPtr& M,                     //!< Points for which to compute the relative wave height
+                                      const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                                      const double t //!< Current instant (in seconds)
+                                     );
+
+        /**  \brief Returns the relative wave height computed by update_surface_elevation
+          *  \returns zwave - z for each point in mesh.
+          *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
+          */
+        std::vector<double> get_relative_wave_height() const;
+
+        /**  \brief Returns the absolute wave height (z coordinate in NED frame) computed by update_surface_elevation
+          *  \returns zwave for each point (x,y) in mesh.
+          */
+        std::vector<double> get_surface_elevation() const;
+
+        /**  \brief Computes the dynamic pressure at a given point.
           *  \details The input point P can be projected into any reference
           *           frame: this method will request a transform from a
           *           Kinematics object to express it in the NED frame.
-          *  \returns zwave - z
+          *  \returns Pdyn (in Pascal)
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
-        double get_relative_wave_height(const ssc::kinematics::Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
-                                        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                        const double t //!< Current instant (in seconds)
-                                       ) const;
-
-        /**  \author cec
-          *  \date 24 avr. 2014, 13:00:47
-          *  \brief Computes the relative wave height for a matrix of Points.
-          *  \returns zwave - z for each point.
-          *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
-          */
-        std::vector<double> get_relative_wave_height(const ssc::kinematics::PointMatrixPtr& P,                     //!< Points for which to compute the relative wave height
-                                                     const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                                     const double t //!< Current instant (in seconds)
-                                                    ) const;
+        double get_dynamic_pressure(const double rho, // Water density (in kg/m^3)
+                                    const double g, //!< Gravity (in m/s^2)
+                                    const ssc::kinematics::Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
+                                    const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                                    const double eta, //!< Wave elevation at P in the NED frame (in meters)
+                                    const double t  //!< Current instant (in seconds)
+                                    ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
           *  \returns Vector of coordinates on the free surface (in the NED frame),
@@ -74,22 +83,42 @@ class SurfaceElevationInterface
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
         std::vector<ssc::kinematics::Point> get_points_on_free_surface(const double t,                          //<! Current instant (in seconds)
-                                                      const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& Mned //!< Output mesh in NED frame
-                                                       ) const;
+                                                                       const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& Mned //!< Output mesh in NED frame
+                                                                       ) const;
 
+        /**  \brief Surface elevation
+              *  \returns Surface elevation of a point at a given instant, in meters.
+              *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+              *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
+              *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 29
+              *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
+              *  \returns zwave - z
+              */
+            virtual double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                                       const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                                       const double t //!< Current instant (in seconds)
+                                       ) const = 0;
     private:
-        /**  \author cec
-          *  \date 24 avr. 2014, 10:29:58
-          *  \brief Wave model interface.
-          *  \details This method will be called by the public get_relative_wave_height method.
-          *  \returns zwave - z
-          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest wave_height_example
+        /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
+          *  \details Also called "subsurface pressure" (DNV), "unsteady pressure" (Faltinsen) or constant pressure contour (Lloyd)
+          *           The dynamic pressure is in fact one of the terms of Bernoulli's equation, which can be derived from the conservation
+          *           of energy for a fluid in motion.
+          *           \f[\int_C \frac{\partial \Phi_I(x,y,z,t)}{\partial t}\f]
+          *  \returns Dynamic pressure in Pascal
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
+          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
+          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation VI.34, page 183
+          *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 68
           */
-        virtual double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                   const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                   const double z, //!< z-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                   const double t //!< Current instant (in seconds)
-                                   ) const = 0;
+        virtual double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
+                                        const double g,   //!< gravity (in m/s^2)
+                                        const double x,   //!< x-position in the NED frame (in meters)
+                                        const double y,   //!< y-position in the NED frame (in meters)
+                                        const double z,   //!< z-position in the NED frame (in meters)
+                                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
+                                        const double t    //!< Current time instant (in seconds)
+                                        ) const = 0;
 
         /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
           */
@@ -97,6 +126,8 @@ class SurfaceElevationInterface
                                             ) const;
 
         TR1(shared_ptr)<ssc::kinematics::PointMatrix> output_mesh; //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant
+        std::vector<double> relative_wave_height_for_each_point_in_mesh;
+        std::vector<double> surface_elevation_for_each_point_in_mesh;
 };
 
 #endif /* SURFACELEVATIONINTERFACE_HPP_ */

@@ -62,7 +62,7 @@ TEST_F(discretizeTest, Dirac_in_frequency)
     ASSERT_EQ(1, A.Si.size());
     ASSERT_DOUBLE_EQ(1, A.domega);
     ASSERT_DOUBLE_EQ(0.002*PI, A.dpsi);
-    ASSERT_DOUBLE_EQ(Hs, A.Si.front());
+    ASSERT_DOUBLE_EQ(Hs*Hs/8, A.Si.front());
 }
 
 TEST_F(discretizeTest, Dirac_in_direction)
@@ -289,4 +289,14 @@ TEST_F(discretizeTest, flatten)
     ASSERT_DOUBLE_EQ(sqrt(4), s.spectrum[11].sqrt_2_SiDj);
     ASSERT_DOUBLE_EQ(1, s.spectrum[11].omega);
     ASSERT_DOUBLE_EQ(10, s.spectrum[11].psi);
+}
+
+TEST_F(discretizeTest, dynamic_pressure_factor)
+{
+    //! [discretizeTest dynamic_pressure_factor example]
+    ASSERT_DOUBLE_EQ(exp(1), dynamic_pressure_factor(1,2,3));
+    ASSERT_DOUBLE_EQ(exp(2), dynamic_pressure_factor(2,4,5));
+    ASSERT_DOUBLE_EQ((exp(9)+exp(-9))/(exp(3)+exp(-3)), dynamic_pressure_factor(1,-2,3,4));
+    ASSERT_DOUBLE_EQ((exp(0.24)+exp(-0.24))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4,0.5));
+    //! [discretizeTest dynamic_pressure_factor example]
 }

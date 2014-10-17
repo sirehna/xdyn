@@ -113,18 +113,18 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     ASSERT_THROW(builder2.get_environment_and_frames(std::vector<Body>()), SimulatorBuilderException);
 }
 
-TEST_F(SimulatorBuilderTest, can_get_waves)
-{
-    builder.can_parse<DefaultSurfaceElevation>();
-    MeshMap m;
-    const std::string name = input.bodies.front().name;
-    m[name] = two_triangles();
-    const auto bodies = builder.get_bodies(m);
-    const auto env = builder.get_environment_and_frames(bodies);
-    ASSERT_TRUE(env.w.get() != NULL);
-    const ssc::kinematics::Point P("NED",1,2,3);
-    ASSERT_DOUBLE_EQ(3-12, env.w->get_relative_wave_height(P,env.k,a.random<double>()));
-}
+//TEST_F(SimulatorBuilderTest, can_get_waves)
+//{
+//    builder.can_parse<DefaultSurfaceElevation>();
+//    MeshMap m;
+//    const std::string name = input.bodies.front().name;
+//    m[name] = two_triangles();
+//    const auto bodies = builder.get_bodies(m);
+//    const auto env = builder.get_environment_and_frames(bodies);
+//    ASSERT_TRUE(env.w.get() != NULL);
+//    const ssc::kinematics::Point P("NED",1,2,3);
+//    ASSERT_DOUBLE_EQ(3-12, env.w->get_relative_wave_height(P,env.k,a.random<double>()));
+//}
 
 TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
 {

@@ -15,7 +15,7 @@ FastHydrostaticForceModel::FastHydrostaticForceModel(const EnvironmentAndFrames&
 
 SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const Body& body, const double) const
 {
-    const double zG = hydrostatic::average_immersion(that_facet->vertex_index, body.intersector->all_immersions);
+    const double zG = hydrostatic::average_immersion(that_facet->vertex_index, body.intersector->all_absolute_immersions);
     const EPoint dS = that_facet->area*that_facet->unit_normal;
     const EPoint C = get_application_point(that_facet, body, zG);
     return DF(-env.rho*env.g*zG*dS,C);
