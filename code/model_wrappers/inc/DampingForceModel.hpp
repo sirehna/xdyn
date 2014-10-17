@@ -14,6 +14,10 @@
 
 class Body;
 
+/** \brief Provides an interface to QuadraticDampingForceModel & LinearDampingForceModel
+ *  \addtogroup model_wrappers
+ *  \ingroup model_wrappers
+ */
 class DampingForceModel : public ForceModel
 {
     public:
