@@ -9,7 +9,6 @@
 #include <ssc/kinematics.hpp>
 #include "Body.hpp"
 #include "QuadraticDampingForceModel.hpp"
-#include "YamlDynamics6x6Matrix.hpp"
 
 
 QuadraticDampingForceModel::QuadraticDampingForceModel(const Eigen::Matrix<double,6,6>& D_) : D(D_)
