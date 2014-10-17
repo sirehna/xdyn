@@ -284,6 +284,6 @@ TEST_F(SimTest, anthineas_damping)
     const auto yaml = SimulatorYamlParser(test_data::anthineas_damping()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 20, 1);
     ASSERT_EQ(21, res.size());
-    ASSERT_FALSE(isnan(res.back().x[ZIDX(0)]));
+    ASSERT_FALSE(std::isnan(res.back().x[ZIDX(0)]));
     ASSERT_EQ(res.back().x[ZIDX(0)],res.back().x[ZIDX(0)]); // Check if nan
 }
