@@ -1,12 +1,12 @@
 /*
  * DampingForceModel.hpp
  *
- *  Created on: Oct 2, 2014
- *      Author: jacquenot
+ *  Created on: Oct 17, 2014
+ *      Author: cady
  */
 
-#ifndef DampingForceModel_HPP_
-#define DampingForceModel_HPP_
+#ifndef DAMPINGFORCEMODEL_HPP_
+#define DAMPINGFORCEMODEL_HPP_
 
 #include "ForceModel.hpp"
 #include <Eigen/Dense>
@@ -14,6 +14,10 @@
 
 class Body;
 
+/** \brief Provides an interface to QuadraticDampingForceModel & LinearDampingForceModel
+ *  \addtogroup model_wrappers
+ *  \ingroup model_wrappers
+ */
 class DampingForceModel : public ForceModel
 {
     public:
@@ -21,8 +25,9 @@ class DampingForceModel : public ForceModel
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
 
     private:
+        virtual Eigen::Matrix<double, 6, 1> get_force_and_torque(const Eigen::Matrix<double,6,6>& D, const Eigen::Matrix<double, 6, 1>& W) const = 0;
         DampingForceModel();
         Eigen::Matrix<double,6,6> D; //!< 6x6 matrix corresponding to the quadratic damping matrix expressed in the body frame
 };
 
-#endif /* DampingForceModel_HPP_ */
+#endif /* DAMPINGFORCEMODEL_HPP_ */

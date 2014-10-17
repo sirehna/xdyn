@@ -3,12 +3,13 @@ SET(MODULE_UNDER_TEST model_wrappers)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/BodyBuilderTest.cpp
-              src/DampingForceModelTest.cpp
+              src/QuadraticDampingForceModelTest.cpp
               src/DefaultSurfaceElevationTest.cpp
               src/GravityForceModelTest.cpp
               src/HydrostaticForceModelTest.cpp
               src/SurfaceElevationFromWavesTest.cpp
               src/FroudeKrylovForceModelTest.cpp
+              src/LinearDampingForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

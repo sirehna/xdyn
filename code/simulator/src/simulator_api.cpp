@@ -17,7 +17,8 @@
 #include "SimulatorBuilder.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 #include "FroudeKrylovForceModel.hpp"
-#include "DampingForceModel.hpp"
+#include "QuadraticDampingForceModel.hpp"
+#include "LinearDampingForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
 {
@@ -35,7 +36,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
            .can_parse<SurfaceElevationFromWaves>()
            .can_parse<Airy>()
            .can_parse<FroudeKrylovForceModel>()
-           .can_parse<DampingForceModel>();
+           .can_parse<QuadraticDampingForceModel>()
+           .can_parse<LinearDampingForceModel>();
     return builder;
 }
 

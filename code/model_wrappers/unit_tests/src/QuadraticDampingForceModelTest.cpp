@@ -5,26 +5,26 @@
  *      Author: jacquenot
  */
 
-#include "DampingForceModel.hpp"
-#include "DampingForceModelTest.hpp"
+#include "QuadraticDampingForceModel.hpp"
+#include "QuadraticDampingForceModelTest.hpp"
 #include "generate_body_for_tests.hpp"
 #include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
 
-DampingForceModelTest::DampingForceModelTest() : a(ssc::random_data_generator::DataGenerator(666))
+QuadraticDampingForceModelTest::QuadraticDampingForceModelTest() : a(ssc::random_data_generator::DataGenerator(666))
 {
 }
 
-DampingForceModelTest::~DampingForceModelTest()
+QuadraticDampingForceModelTest::~QuadraticDampingForceModelTest()
 {
 }
 
-void DampingForceModelTest::SetUp()
+void QuadraticDampingForceModelTest::SetUp()
 {
 }
 
-void DampingForceModelTest::TearDown()
+void QuadraticDampingForceModelTest::TearDown()
 {
 }
 
@@ -47,10 +47,10 @@ namespace ssc
     }
 }
 
-TEST_F(DampingForceModelTest, example_with_null_velocities)
+TEST_F(QuadraticDampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
-    const DampingForceModel F(a.random<Eigen::Matrix<double,6,6> >());
+    const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >());
     Body b = get_body(BODY);
     const double t = a.random<double>();
     const ssc::kinematics::Wrench f = F(b,t);
@@ -66,11 +66,11 @@ TEST_F(DampingForceModelTest, example_with_null_velocities)
 //! [DampingForceModelTest expected output]
 }
 
-TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identity_damping_matrix)
+TEST_F(QuadraticDampingForceModelTest, example_with_random_positive_velocities_and_identity_damping_matrix)
 {
     const double EPS = 1e-11;
     const Eigen::Matrix<double,6,6> D = Eigen::Matrix<double,6,6>::Identity();
-    DampingForceModel F(D);
+    QuadraticDampingForceModel F(D);
     double u,v,w,p,q,r;
     Body b = get_body(BODY);
     for (size_t i=0;i<100;++i)
@@ -92,7 +92,7 @@ TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identi
     }
 }
 
-TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
+TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
 {
     const double EPS = 1e-9;
     Eigen::Matrix<double,6,6> D;
@@ -105,7 +105,7 @@ TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
          67,  71,  73,  79,  83,  89,
          97, 101, 103, 107, 109, 113,
         127, 131, 137, 139, 149, 151;
-    DampingForceModel F(D);
+    QuadraticDampingForceModel F(D);
     for (size_t i=0;i<100;++i)
     {
         b.u = u = a.random<double>().between(-10.0,+10.0);

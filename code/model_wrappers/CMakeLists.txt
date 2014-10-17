@@ -3,7 +3,7 @@ project(model_wrappers)
 
 set(SRC src/Body.cpp
         src/BodyBuilder.cpp
-        src/DampingForceModel.cpp
+        src/QuadraticDampingForceModel.cpp
         src/DefaultSurfaceElevation.cpp
         src/GravityForceModel.cpp
         src/FastHydrostaticForceModel.cpp
@@ -14,6 +14,8 @@ set(SRC src/Body.cpp
         src/EmergedSurfaceForceModel.cpp
         src/ExactHydrostaticForceModel.cpp
         src/FroudeKrylovForceModel.cpp
+        src/DampingForceModel.cpp
+        src/LinearDampingForceModel.cpp
         )
 
 # Using C++ 2011

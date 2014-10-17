@@ -16,7 +16,7 @@
 #include "FastHydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
-#include "DampingForceModel.hpp"
+#include "QuadraticDampingForceModel.hpp"
 
 const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
 
@@ -143,7 +143,7 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     const double EPS = 1e-8;
     builder.can_parse<DefaultSurfaceElevation>()
            .can_parse<GravityForceModel>()
-           .can_parse<DampingForceModel>()
+           .can_parse<QuadraticDampingForceModel>()
            .can_parse<FastHydrostaticForceModel>();
     MeshMap m;
     const std::string name = input.bodies.front().name;

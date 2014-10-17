@@ -1,15 +1,16 @@
 /*
  * DampingForceModel.cpp
  *
- *  Created on: Oct 2, 2014
- *      Author: jacquenot
+ *  Created on: Oct 17, 2014
+ *      Author: cady
  */
+
+#include "DampingForceModel.hpp"
 
 #include <Eigen/Dense>
 #include <ssc/kinematics.hpp>
 #include "Body.hpp"
-#include "DampingForceModel.hpp"
-#include "YamlDynamics6x6Matrix.hpp"
+#include "QuadraticDampingForceModel.hpp"
 
 
 DampingForceModel::DampingForceModel(const Eigen::Matrix<double,6,6>& D_) : D(D_)
@@ -25,8 +26,6 @@ ssc::kinematics::Wrench DampingForceModel::operator()(const Body& body, const do
         body.p,
         body.q,
         body.r;
-    W = (W.cwiseAbs().array() * W.array());
-    W = -D * W;
-    return ssc::kinematics::Wrench(body.G, W);
+    return ssc::kinematics::Wrench(body.G, get_force_and_torque(D, W));
 }
 

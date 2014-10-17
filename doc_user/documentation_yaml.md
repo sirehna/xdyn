@@ -535,3 +535,45 @@ Un exemple de simulation de solide soumis aux efforts hydrostatiques
 
 La documentation du modèle figure
 [ici](modeles_reperes_et_conventions.html#efforts-hydrostatiques-non-lin%C3%A9aires).
+
+### Efforts d'excitation de Froude-Krylov
+
+La dérivation des [efforts d'excitation de Froude-Krylov](modeles_reperes_et_conventions.html#houle-dairy) est décrite (ici)[(modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation].
+
+Pour l'utiliser, on insère la ligne suivante dans la section `external forces` :
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: non-linear Froude-Krylov
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Amortissement linéaire
+
+La paramétrisation des efforts d'amortissement linéaires est faite par une matrice renseignée de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: linear damping
+  damping matrix at the center of gravity projected in the body frame:
+      frame: body 1
+      row 1: [ 0, 0,     0,      0,      0, 0]
+      row 2: [ 0, 0,     0,      0,      0, 0]
+      row 3: [ 0, 0, 1.9e5,      0,      0, 0]
+      row 4: [ 0, 0,     0, 1.74e4,      0, 0]
+      row 5: [ 0, 0,     0,      0, 4.67e6, 0]
+      row 6: [ 0, 0,     0,      0,      0, 0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Amortissement quadratique
+
+La paramétrisation des efforts d'amortissement quadratiques est faite par une matrice renseignée de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: quadratic damping
+  damping matrix at the center of gravity projected in the body frame:
+      frame: body 1
+      row 1: [ 0, 0,     0,      0,      0, 0]
+      row 2: [ 0, 0,     0,      0,      0, 0]
+      row 3: [ 0, 0, 1.9e5,      0,      0, 0]
+      row 4: [ 0, 0,     0, 1.74e4,      0, 0]
+      row 5: [ 0, 0,     0,      0, 4.67e6, 0]
+      row 6: [ 0, 0,     0,      0,      0, 0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
