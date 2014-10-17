@@ -1,12 +1,12 @@
 /*
- * DampingForceModelTest.hpp
+ * QuadraticDampingForceModelTest.hpp
  *
  *  Created on: Oct 2, 2014
  *      Author: jacquenot
  */
 
-#ifndef DAMPINGFORCEMODELTEST_HPP_
-#define DAMPINGFORCEMODELTEST_HPP_
+#ifndef QUADRATICDAMPINGFORCEMODELTEST_HPP_
+#define QUADRATICDAMPINGFORCEMODELTEST_HPP_
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
@@ -21,4 +21,4 @@ class QuadraticDampingForceModelTest : public ::testing::Test
         ssc::random_data_generator::DataGenerator a;
 };
 
-#endif  /* DAMPINGFORCEMODELTEST_HPP_ */
+#endif  /* QUADRATICDAMPINGFORCEMODELTEST_HPP_ */
