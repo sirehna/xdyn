@@ -12,11 +12,11 @@
 #include "YamlDynamics6x6Matrix.hpp"
 
 
-DampingForceModel::DampingForceModel(const Eigen::Matrix<double,6,6>& D_) : D(D_)
+QuadraticDampingForceModel::QuadraticDampingForceModel(const Eigen::Matrix<double,6,6>& D_) : D(D_)
 {
 }
 
-ssc::kinematics::Wrench DampingForceModel::operator()(const Body& body, const double) const
+ssc::kinematics::Wrench QuadraticDampingForceModel::operator()(const Body& body, const double) const
 {
     Eigen::Matrix<double, 6, 1> W;
     W <<body.u,

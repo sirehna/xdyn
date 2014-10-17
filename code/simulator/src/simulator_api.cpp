@@ -35,7 +35,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
            .can_parse<SurfaceElevationFromWaves>()
            .can_parse<Airy>()
            .can_parse<FroudeKrylovForceModel>()
-           .can_parse<DampingForceModel>();
+           .can_parse<QuadraticDampingForceModel>();
     return builder;
 }
 

@@ -14,14 +14,14 @@
 
 class Body;
 
-class DampingForceModel : public ForceModel
+class QuadraticDampingForceModel : public ForceModel
 {
     public:
-        DampingForceModel(const Eigen::Matrix<double,6,6>& D);
+        QuadraticDampingForceModel(const Eigen::Matrix<double,6,6>& D);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
 
     private:
-        DampingForceModel();
+        QuadraticDampingForceModel();
         Eigen::Matrix<double,6,6> D; //!< 6x6 matrix corresponding to the quadratic damping matrix expressed in the body frame
 };
 

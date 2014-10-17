@@ -50,7 +50,7 @@ namespace ssc
 TEST_F(DampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
-    const DampingForceModel F(a.random<Eigen::Matrix<double,6,6> >());
+    const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >());
     Body b = get_body(BODY);
     const double t = a.random<double>();
     const ssc::kinematics::Wrench f = F(b,t);
@@ -70,7 +70,7 @@ TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identi
 {
     const double EPS = 1e-11;
     const Eigen::Matrix<double,6,6> D = Eigen::Matrix<double,6,6>::Identity();
-    DampingForceModel F(D);
+    QuadraticDampingForceModel F(D);
     double u,v,w,p,q,r;
     Body b = get_body(BODY);
     for (size_t i=0;i<100;++i)
@@ -105,7 +105,7 @@ TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
          67,  71,  73,  79,  83,  89,
          97, 101, 103, 107, 109, 113,
         127, 131, 137, 139, 149, 151;
-    DampingForceModel F(D);
+    QuadraticDampingForceModel F(D);
     for (size_t i=0;i<100;++i)
     {
         b.u = u = a.random<double>().between(-10.0,+10.0);

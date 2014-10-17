@@ -69,7 +69,7 @@ class ForceBuilder<ExactHydrostaticForceModel> : public ForceBuilderInterface
 };
 
 template <>
-class ForceBuilder<DampingForceModel> : public ForceBuilderInterface
+class ForceBuilder<QuadraticDampingForceModel> : public ForceBuilderInterface
 {
     public:
         ForceBuilder();
