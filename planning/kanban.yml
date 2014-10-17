@@ -630,13 +630,15 @@ stories:
       backlog: 29/7/2014
       size: 1
       assigned to: cec
-      started:
-      done:
+      started: 2/9/2014
+      done: 4/9/2014
     - task: Create FroudeKrylovForceBuilder
       type: internal
       backlog: 29/7/2014
       size: 1
       assigned to: cec
+      started: 2/9/2014
+      done: 4/9/2014
   - story: Amélioration des performances
     due by: 26/6/2014
     tasks:
@@ -664,6 +666,8 @@ stories:
     - task: Refactoring (IntegrateOnSurface)
       type: internal
       backlog: 5/9/2014
+      started: 29/9/2014
+      done: 3/10/2014
       size: 4
       assigned to: cec
     - task: Separate exact/fast hydrostatic forces
@@ -671,11 +675,15 @@ stories:
       backlog: 5/9/2014
       size: 2
       assigned to: cec
+      started: 29/9/2014
+      done: 3/10/2014
     - task: Check wave computation
       type: model
       backlog: 5/9/2014
       size: 2
       assigned to: cec
+      started: 29/9/2014
+      done: 3/10/2014
   - story: Documentation
     due by: 1/11/2014
     tasks:
@@ -684,16 +692,22 @@ stories:
       size: 4
       backlog: 17/3/2014
       assigned to: cec
+      started: 15/9/2014 
+      done: 19/9/2014
     - task: Detailed solver documentation (Steppers, Schedulers, EventHandlers, Observer, System)
       type: model
       size: 4
       backlog: 2/6/2014
       assigned to: cec
+      started: 8/9/2014
+      done: 12/9/2014
     - task: Steppers (RK4, RKCK, Euler)
       type: model
       size: 1
       backlog: 2/6/2014
       assigned to: cec
+      started: 8/9/2014
+      done: 12/9/2014
   - story: Release IRT
     due by: 1/11/2014
     tasks:
@@ -702,6 +716,8 @@ stories:
       size: 1
       assigned to: cec
       backlog: 2/6/2014
+      started: 15/9/2014
+      done: 19/9/2014
     - task: Make build script for IRT
       type: internal
       size: 2
@@ -714,19 +730,45 @@ stories:
       backlog: 2/6/2014
   - story: Damping forces
     due by: 1/11/2014
-    tasks: []
-  - story: Import damping coefficients
-    due by: 1/11/2014
-    tasks: []
-  - story: Propulsion
-    due by: 1/11/2014
-    tasks: []
-  - story: Hollenbach
-    due by: 1/11/2014
-    tasks: []
-  - story: Interpolate resistance curves
-    due by: 1/11/2014
-    tasks: []
-  - story: Radiation forces
-    due by: 1/11/2014
-    tasks: []
+    tasks:
+    - task: Create YAML format
+      type: interface
+      size: 1
+      assigned to: gj
+      backlog: 29/9/2014
+      started: 29/9/2014
+      done: 3/9/2014
+    - task: Write parser
+      type: interface
+      size: 1
+      assigned to: gj
+      backlog: 29/9/2014
+      started: 29/9/2014
+      done: 3/9/2014
+    - task: Write model
+      type: model
+      size: 1
+      assigned to: gj
+      backlog: 29/9/2014
+      started: 29/9/2014
+      done: 3/9/2014
+    - task: Document
+      type: interface
+      size: 2
+      assigned to: cec
+#  - story: Import radiation damping coefficients
+#    due by: 1/11/2014
+#    tasks: []
+#  - story: Propulsion (fixed pitch propeller)
+#    due by: 1/11/2014
+#    tasks: []
+#  - story: Hollenbach
+#    due by: 1/11/2014
+#    tasks: []
+#  - story: Interpolate resistance curves
+#    due by: 1/11/2014
+#    tasks: []
+#  - story: Radiation forces (from RAO)
+#    due by: 1/11/2014
+#    tasks: []
+#
