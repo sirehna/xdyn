@@ -6,7 +6,7 @@
  */
 
 #include "QuadraticDampingForceModel.hpp"
-#include "DampingForceModelTest.hpp"
+#include "QuadraticDampingForceModelTest.hpp"
 #include "generate_body_for_tests.hpp"
 #include <ssc/kinematics.hpp>
 
