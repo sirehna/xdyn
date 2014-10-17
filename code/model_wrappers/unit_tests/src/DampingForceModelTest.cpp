@@ -108,12 +108,12 @@ TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
     DampingForceModel F(D);
     for (size_t i=0;i<100;++i)
     {
-        b.u = u = a.random<double>().between(-100.0,+100.0);
-        b.v = v = a.random<double>().between(-100.0,+100.0);
-        b.w = w = a.random<double>().between(-100.0,+100.0);
-        b.p = p = a.random<double>().between(-100.0,+100.0);
-        b.q = q = a.random<double>().between(-100.0,+100.0);
-        b.r = r = a.random<double>().between(-100.0,+100.0);
+        b.u = u = a.random<double>().between(-10.0,+10.0);
+        b.v = v = a.random<double>().between(-10.0,+10.0);
+        b.w = w = a.random<double>().between(-10.0,+10.0);
+        b.p = p = a.random<double>().between(-10.0,+10.0);
+        b.q = q = a.random<double>().between(-10.0,+10.0);
+        b.r = r = a.random<double>().between(-10.0,+10.0);
         uu = fabs(u)*u;
         vv = fabs(v)*v;
         ww = fabs(w)*w;
