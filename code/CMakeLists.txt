@@ -133,6 +133,7 @@ add_imported_lib(yaml_parser_shared)
 add_imported_lib(text_file_reader_shared)
 add_imported_lib(decode_unit_shared)
 add_imported_lib(csv_file_reader_shared)
+add_imported_lib(exception_handling_shared)
 
 #############################################################################
 # Testing part
