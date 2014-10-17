@@ -12,19 +12,19 @@
 
 #define BODY "body 1"
 
-DampingForceModelTest::DampingForceModelTest() : a(ssc::random_data_generator::DataGenerator(666))
+QuadraticDampingForceModelTest::QuadraticDampingForceModelTest() : a(ssc::random_data_generator::DataGenerator(666))
 {
 }
 
-DampingForceModelTest::~DampingForceModelTest()
+QuadraticDampingForceModelTest::~QuadraticDampingForceModelTest()
 {
 }
 
-void DampingForceModelTest::SetUp()
+void QuadraticDampingForceModelTest::SetUp()
 {
 }
 
-void DampingForceModelTest::TearDown()
+void QuadraticDampingForceModelTest::TearDown()
 {
 }
 
@@ -47,7 +47,7 @@ namespace ssc
     }
 }
 
-TEST_F(DampingForceModelTest, example_with_null_velocities)
+TEST_F(QuadraticDampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
     const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >());
@@ -66,7 +66,7 @@ TEST_F(DampingForceModelTest, example_with_null_velocities)
 //! [DampingForceModelTest expected output]
 }
 
-TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identity_damping_matrix)
+TEST_F(QuadraticDampingForceModelTest, example_with_random_positive_velocities_and_identity_damping_matrix)
 {
     const double EPS = 1e-11;
     const Eigen::Matrix<double,6,6> D = Eigen::Matrix<double,6,6>::Identity();
@@ -92,7 +92,7 @@ TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identi
     }
 }
 
-TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
+TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
 {
     const double EPS = 1e-9;
     Eigen::Matrix<double,6,6> D;

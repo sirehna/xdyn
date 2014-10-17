@@ -11,11 +11,11 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
 
-class DampingForceModelTest : public ::testing::Test
+class QuadraticDampingForceModelTest : public ::testing::Test
 {
     protected:
-    DampingForceModelTest();
-        virtual ~DampingForceModelTest();
+    QuadraticDampingForceModelTest();
+        virtual ~QuadraticDampingForceModelTest();
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
