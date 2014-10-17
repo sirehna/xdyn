@@ -11,21 +11,11 @@
 #include "QuadraticDampingForceModel.hpp"
 
 
-QuadraticDampingForceModel::QuadraticDampingForceModel(const Eigen::Matrix<double,6,6>& D_) : D(D_)
+QuadraticDampingForceModel::QuadraticDampingForceModel(const Eigen::Matrix<double,6,6>& D_) : DampingForceModel(D_)
 {
 }
 
-ssc::kinematics::Wrench QuadraticDampingForceModel::operator()(const Body& body, const double) const
+Eigen::Matrix<double, 6, 1> QuadraticDampingForceModel::get_force_and_torque(const Eigen::Matrix<double,6,6>& D, const Eigen::Matrix<double, 6, 1>& W) const
 {
-    Eigen::Matrix<double, 6, 1> W;
-    W <<body.u,
-        body.v,
-        body.w,
-        body.p,
-        body.q,
-        body.r;
-    W = (W.cwiseAbs().array() * W.array());
-    W = -D * W;
-    return ssc::kinematics::Wrench(body.G, W);
+    return (Eigen::Matrix<double, 6, 1>)(-D * (Eigen::Matrix<double, 6, 1>)(W.cwiseAbs().array() * W.array()));
 }
-
