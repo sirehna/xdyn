@@ -5,7 +5,6 @@
  *      Author: cady
  */
 
-
 #include "SimulatorYamlParserTest.hpp"
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
@@ -54,9 +53,10 @@ TEST_F(SimulatorYamlParserTest, can_parse_environmental_constants)
 
 TEST_F(SimulatorYamlParserTest, can_parse_external_forces)
 {
-    ASSERT_EQ(2, yaml.bodies.at(0).external_forces.size());
-    const YamlModel external_forces = yaml.bodies.at(0).external_forces.at(0);
-    ASSERT_EQ("gravity", external_forces.model);
+    ASSERT_EQ(3, yaml.bodies.at(0).external_forces.size());
+    ASSERT_EQ("gravity", yaml.bodies.at(0).external_forces.at(0).model);
+    ASSERT_EQ("non-linear hydrostatic (fast)", yaml.bodies.at(0).external_forces.at(1).model);
+    ASSERT_EQ("quadratic damping", yaml.bodies.at(0).external_forces.at(2).model);
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_bodies)
@@ -64,7 +64,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_bodies)
     ASSERT_EQ(1, yaml.bodies.size());
     ASSERT_EQ("body 1", yaml.bodies.at(0).name);
     ASSERT_EQ("anthineas.stl", yaml.bodies.at(0).mesh);
-    ASSERT_EQ(2, yaml.bodies.at(0).external_forces.size());
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_position_of_body_frame_relative_to_mesh)
@@ -88,7 +87,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_initial_position_of_body_frame_relativ
     ASSERT_DOUBLE_EQ(1.4,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.theta);
     ASSERT_DOUBLE_EQ(1.5,yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.psi);
 }
-
 
 TEST_F(SimulatorYamlParserTest, can_parse_initial_velocity_of_body_frame_relative_to_NED)
 {
@@ -117,7 +115,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_mass)
 
 TEST_F(SimulatorYamlParserTest, can_parse_inertia_matrix)
 {
-    const YamlInertiaMatrix M =  yaml.bodies.front().dynamics.rigid_body_inertia;
+    const YamlDynamics6x6Matrix M = yaml.bodies.front().dynamics.rigid_body_inertia;
     ASSERT_EQ("body 1", M.frame);
     ASSERT_EQ(6, M.row_1.size());
     ASSERT_EQ(6, M.row_2.size());
@@ -165,7 +163,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_inertia_matrix)
 
 TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix)
 {
-    const YamlInertiaMatrix M =  yaml.bodies.front().dynamics.added_mass;
+    const YamlDynamics6x6Matrix M =  yaml.bodies.front().dynamics.added_mass;
     ASSERT_EQ("body 1", M.frame);
     ASSERT_EQ(6, M.row_1.size());
     ASSERT_EQ(6, M.row_2.size());

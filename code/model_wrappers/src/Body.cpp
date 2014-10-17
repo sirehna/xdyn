@@ -44,3 +44,4 @@ void Body::update_intersection_with_free_surface(const EnvironmentAndFrames& env
                                                            env.w->get_surface_elevation());
     }
 }
+

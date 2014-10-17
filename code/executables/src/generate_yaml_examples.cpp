@@ -20,6 +20,7 @@ int main(int argc, const char* argv[])
     yaml["tutorial_02_fast_hydrostatic.yml"]  = test_data::anthineas_fast_hydrostatic_test();
     yaml["tutorial_02_exact_hydrostatic.yml"] = test_data::anthineas_exact_hydrostatic_test();
     yaml["tutorial_03_waves.yml"]             = test_data::waves();
+    yaml["tutorial_04_damping.yml"]           = test_data::anthineas_damping();
     yaml["tutorial_05_froude_krylov.yml"]     = test_data::anthineas_froude_krylov();
     yaml["oscillating_cube_test.yml"]         = test_data::oscillating_cube_example();
     yaml["stable_cube_test.yml"]              = test_data::stable_cube_example();

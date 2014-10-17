@@ -40,7 +40,7 @@ class Body
         MeshPtr mesh;                                            //!< Vertices & edges of the body's mesh
         MatrixPtr total_inertia;                                 //!< 6x6 matrix corresponding to the sum of the rigid body inertia + added mass expressed in the body frame
         MatrixPtr solid_body_inertia;                            //!< 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame
-        MatrixPtr inverse_of_the_total_inertia;                  //!< 6x6 matrix corresponding to the inverse of the sum of the rigid body inertia + added mass expressed in the body frame
+        MatrixPtr inverse_of_the_total_inertia;
         double x_relative_to_mesh;                               //!< Position of the body frame relative to the mesh frame, along the x-axis, in meters
         double y_relative_to_mesh;                               //!< Position of the body frame relative to the mesh frame, along the y-axis, in meters
         double z_relative_to_mesh;                               //!< Position of the body frame relative to the mesh frame, along the z-axis, in meters

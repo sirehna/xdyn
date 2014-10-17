@@ -3,6 +3,7 @@ project(model_wrappers)
 
 set(SRC src/Body.cpp
         src/BodyBuilder.cpp
+        src/DampingForceModel.cpp
         src/DefaultSurfaceElevation.cpp
         src/GravityForceModel.cpp
         src/FastHydrostaticForceModel.cpp

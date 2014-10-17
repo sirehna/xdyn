@@ -16,6 +16,7 @@
 #include "FastHydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
+#include "DampingForceModel.hpp"
 
 const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
 
@@ -142,6 +143,7 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     const double EPS = 1e-8;
     builder.can_parse<DefaultSurfaceElevation>()
            .can_parse<GravityForceModel>()
+           .can_parse<DampingForceModel>()
            .can_parse<FastHydrostaticForceModel>();
     MeshMap m;
     const std::string name = input.bodies.front().name;
@@ -163,7 +165,7 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     F << 0.0, 0.0, 9.81E6;
     FF = ctm*F;
     ASSERT_EQ(1,forces.size());
-    ASSERT_EQ(2,forces.front().size());
+    ASSERT_EQ(3,forces.front().size());
     const auto Fg = forces.front().at(0)->operator()(bodies.front(),a.random<double>());
     ASSERT_NEAR(FF(0),Fg.X(),EPS);
     ASSERT_NEAR(FF(1),Fg.Y(),EPS);

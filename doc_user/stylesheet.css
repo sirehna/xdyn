@@ -2,16 +2,33 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #f1e9dd;
+  background-color: #ffffff;/*#f1e9dd;*/
   -webkit-font-smoothing: antialiased;
   /* prevent subpixel antialiasing, which thickens the text */
   /* text-rendering: optimizeLegibility; */
-  /* turned off ligatures due to bug 5945455 */ }
+  /* turned off ligatures due to bug 5945455 */
 
-body {
-  color: #222;
+}
+  /* unvisited link */
+a {
+color: #000000;}
+  a:link {
+      color: #000000;
+  }
+  
+  /* visited link */
+  a:visited {
+      color: #000000;
+  }
+  
+  /* mouse over link */
+  a:hover {
+      color: #0066FF;
+  }
+body{
   line-height: 1.4;
-  font-family: "Liberation Sans","proxima-nova-1","proxima-nova-2","Helvetica Neue",Calibri,Arial,Helvetica,sans-serif;
+  /*font-family: "Liberation Sans","proxima-nova-1","proxima-nova-2","Helvetica Neue",Calibri,Arial,Helvetica,sans-serif;*/
+  font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
   font-weight: 100;
   letter-spacing:.1;
   width: 80%;
@@ -22,7 +39,6 @@ body {
 
 
 h2 {
-    color:#333;
     font-size: 20px;
     margin: 20px 0 20px;
     padding:0;

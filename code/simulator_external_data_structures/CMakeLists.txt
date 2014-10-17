@@ -5,30 +5,29 @@ INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-set(SRC src/YamlRotation.cpp
-        src/YamlModel.cpp
-        src/YamlCoordinates.cpp
-        src/YamlAngle.cpp
-        src/YamlPosition.cpp
-        src/YamlPoint.cpp
-        src/YamlSpeed.cpp
-        src/YamlInertiaMatrix.cpp
-        src/YamlDynamics.cpp
-        src/YamlBody.cpp
-        src/YamlBlockedDegreesOfFreedom.cpp
-        src/YamlOutput.cpp
-        src/YamlPositionOutput.cpp
+SET(SRC src/YamlAngle.cpp
         src/YamlAnglesOutput.cpp
-        src/YamlForcesAndTorquesOutput.cpp
-        src/YamlSimulatorInput.cpp
-        src/YamlForces.cpp
+        src/YamlBlockedDegreesOfFreedom.cpp
+        src/YamlBody.cpp
+        src/YamlCoordinates.cpp
+        src/YamlDynamics.cpp
+        src/YamlDynamics6x6Matrix.cpp
         src/YamlEnvironmentalConstants.cpp
+        src/YamlForces.cpp
+        src/YamlForcesAndTorquesOutput.cpp
+        src/YamlModel.cpp
+        src/YamlOutput.cpp
+        src/YamlPoint.cpp
+        src/YamlPosition.cpp
+        src/YamlPositionOutput.cpp
+        src/YamlRotation.cpp
+        src/YamlSimulatorInput.cpp
+        src/YamlSpeed.cpp
         src/YamlWaveModelInput.cpp
         )
 
-
-include_directories(inc)
+INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} OBJECT ${SRC})
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 

@@ -159,8 +159,3 @@ TEST_F(environment_parsersTest, can_parse_depth_for_wave_models)
     ASSERT_DOUBLE_EQ(1700, yaml.spectra[0].depth);
     ASSERT_DOUBLE_EQ(12, yaml.spectra[1].depth);
 }
-
-TEST_F(environment_parsersTest, can_parse_froude_krylov)
-{
-    ASSERT_TRUE(yaml.compute_froude_krylov);
-}

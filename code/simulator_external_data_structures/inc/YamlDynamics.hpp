@@ -9,15 +9,15 @@
 #define YAMLDYNAMICS_HPP_
 
 #include "YamlPoint.hpp"
-#include "YamlInertiaMatrix.hpp"
+#include "YamlDynamics6x6Matrix.hpp"
 
 struct YamlDynamics
 {
     YamlDynamics();
     YamlPoint centre_of_inertia;
     double mass;
-    YamlInertiaMatrix rigid_body_inertia;
-    YamlInertiaMatrix added_mass;
+    YamlDynamics6x6Matrix rigid_body_inertia;
+    YamlDynamics6x6Matrix added_mass;
 };
 
 #endif /* YAMLDYNAMICS_HPP_ */
