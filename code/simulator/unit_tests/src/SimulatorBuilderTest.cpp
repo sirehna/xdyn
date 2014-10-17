@@ -16,7 +16,7 @@
 #include "FastHydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
-#include "DampingForceModel.hpp"
+#include "QuadraticDampingForceModel.hpp"
 
 const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
 

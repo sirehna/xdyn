@@ -17,7 +17,7 @@
 #include "SimulatorBuilder.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 #include "FroudeKrylovForceModel.hpp"
-#include "DampingForceModel.hpp"
+#include "QuadraticDampingForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
 {

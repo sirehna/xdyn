@@ -24,7 +24,7 @@
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
 #include "FroudeKrylovForceModel.hpp"
-#include "DampingForceModel.hpp"
+#include "QuadraticDampingForceModel.hpp"
 
 template <>
 class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface

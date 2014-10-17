@@ -8,7 +8,7 @@
 #include <Eigen/Dense>
 #include <ssc/kinematics.hpp>
 #include "Body.hpp"
-#include "DampingForceModel.hpp"
+#include "QuadraticDampingForceModel.hpp"
 #include "YamlDynamics6x6Matrix.hpp"
 
 
