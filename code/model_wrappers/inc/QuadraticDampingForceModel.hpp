@@ -1,12 +1,12 @@
 /*
- * DampingForceModel.hpp
+ * QuadraticDampingForceModel.hpp
  *
  *  Created on: Oct 2, 2014
  *      Author: jacquenot
  */
 
-#ifndef DampingForceModel_HPP_
-#define DampingForceModel_HPP_
+#ifndef QuadraticDampingForceModel_HPP_
+#define QuadraticDampingForceModel_HPP_
 
 #include "ForceModel.hpp"
 #include <Eigen/Dense>
@@ -25,4 +25,4 @@ class QuadraticDampingForceModel : public ForceModel
         Eigen::Matrix<double,6,6> D; //!< 6x6 matrix corresponding to the quadratic damping matrix expressed in the body frame
 };
 
-#endif /* DampingForceModel_HPP_ */
+#endif /* QuadraticDampingForceModel_HPP_ */
