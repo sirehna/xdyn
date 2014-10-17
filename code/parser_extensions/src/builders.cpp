@@ -84,6 +84,16 @@ boost::optional<ForcePtr> ForceBuilder<QuadraticDampingForceModel>::try_to_parse
     return ret;
 }
 
+boost::optional<ForcePtr> ForceBuilder<LinearDampingForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& ) const
+{
+    boost::optional<ForcePtr> ret;
+    if (model == "linear damping")
+    {
+        ret.reset(ForcePtr(new LinearDampingForceModel(parse_quadratic_damping(yaml))));
+    }
+    return ret;
+}
+
 boost::optional<TR1(shared_ptr)<WaveModel> > WaveModelBuilder<Airy>::try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<WaveModel> > ret;
