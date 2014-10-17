@@ -94,7 +94,7 @@ TEST_F(DampingForceModelTest, example_with_random_positive_velocities_and_identi
 
 TEST_F(DampingForceModelTest, example_with_dense_damping_matrix)
 {
-    const double EPS = 1e-11;
+    const double EPS = 1e-10;
     Eigen::Matrix<double,6,6> D;
     double u,v,w,p,q,r;
     double uu,vv,ww,pp,qq,rr;
