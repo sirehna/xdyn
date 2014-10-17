@@ -479,9 +479,9 @@ force élémentaire qui se situe en général en-dessous du centroïde de la fac
 (sauf si le gradient de pression est uniforme, auquel cas ces deux points sont
 confondus).
 On peut soit calculer exactement ce point d'application (on obtient alors le
-**modèle `non-linear hydrostatic (exact)`**), soit faire l'approximation que le
+modèle **`non-linear hydrostatic (exact)`**), soit faire l'approximation que le
 point d'application est confondu avec le centre de gravité (donnant ainsi le
-**modèle `non-linear hydrostatic (fast)`**).
+modèle **`non-linear hydrostatic (fast)`**).
 
 Pour calculer le point d'application, on définit les notations suivantes :
 
