@@ -2,7 +2,8 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #ffffff;/*#f1e9dd;*/
+  /*background-color: #ffffff;/*#f1e9dd;*/
+  background-color:#F9F9F9;
   -webkit-font-smoothing: antialiased;
   /* prevent subpixel antialiasing, which thickens the text */
   /* text-rendering: optimizeLegibility; */
@@ -27,8 +28,9 @@ color: #000000;}
   }
 body{
   line-height: 1.4;
-  /*font-family: "Liberation Sans","proxima-nova-1","proxima-nova-2","Helvetica Neue",Calibri,Arial,Helvetica,sans-serif;*/
-  font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  /*font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;*/
+  color: #222;
+  font: 15px/19px Roboto, sans-serif;
   font-weight: 100;
   letter-spacing:.1;
   width: 80%;
