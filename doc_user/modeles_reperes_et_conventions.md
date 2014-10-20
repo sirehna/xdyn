@@ -354,21 +354,47 @@ $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) = \left\{\beg
 
 #### Houle d'Airy
 
-Le potentiel de vitesse s'exprime :
+Pour une houle monochromatique et monodirectionnele, Le potentiel de vitesse s'exprime :
 
-$$\phi(x,y,t) = $$
+$$\phi(x,y,t) = \frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\cos(k\cdot(x\cdot
+\cos(\psi)+ y\cdot \sin(\psi))-\omega_i\cdot t+\phi)$$
 
-On en déduit l'élévation de la surface libre :
+$h$ est la profondeur du fluide (hauteur du sol à la surface libre)
+$x,y,z$ sont les coordonnées du point considéré, exprimées dans le repère NED
+$k$ est le nombre d'onde, traduisant la périodicité spatiale et vérifie la
+relation de dispersion :
 
-$$\zeta(x,y,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+$$\omega^2 = g\cdot k \cdot \tanh(k\cdot h)$$
+
+On peut généraliser et dériver cette expression pour obtenir l'élévation d'une houle polychromatique et multi-directionnelle :
+
+$$\eta(x,y,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 \sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\cos(k\cdot(x\cdot \cos(\psi_j)
-+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j}$$
++ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 ainsi que l'expression de la pression dynamique, utilisée par le modèle de
 [Froude-Krylov](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)
 :
 
 $$p_{\mbox{dyn}} = \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
+
+soit
+
+$$p_{\mbox{dyn}} = \rho\cdot g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\frac{\cosh(k\cdot(z-\eta+h))}{\cosh(k\cdot
+h)}\cos(k\cdot(x\cdot
+\cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+$g$ désigne l'accélération de la pesanteur (9.81 m/s²)
+$\rho$ est la densité volumique du fluide (en kg/m^3)
+
+Lorsque la profondeur $h$ est très grande devant $z$, on obtient :
+
+$$p_{\mbox{dyn}} = \rho\cdot g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}e^{-k\cdot
+(z-\eta(x,y,t))}\cos(k\cdot(x\cdot\cos(\psi_j)+ y\cdot
+\sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+
 
 #### Discrétisation des spectres et des étalements
 
