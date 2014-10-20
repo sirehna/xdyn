@@ -319,6 +319,10 @@ bodies: # All bodies have NED as parent frame
         q: {value: 0, unit: rad/s}
         r: {value: 0, unit: rad/s}
     dynamics:
+        hydrodynamic forces calculation point in body frame:
+            x: {value: 0.696, unit: m}
+            y: {value: 0, unit: m}
+            z: {value: 1.418, unit: m}
         centre of inertia:
             frame: body 1
             x: {value: 0.258, unit: m}
@@ -402,14 +406,26 @@ position of body frame relative to mesh:
 ### Champs `dynamics`
 
 La section `dynamics` permet de décrire l'inertie du solide. Elle est composée
-de quatre sous-sections :
+de cinq sous-sections :
 
+- `hydrodynamic forces calculation point in body frame` est le [point de calcul des efforts hydrodynamiques](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique)
 - `centre of inertia` (si le repère "body" n'est pas au centre de masse)
 - `mass` contenant la masse du corps considéré
 - `rigid body inertia matrix at the center of buoyancy projected in the body
   frame` définissant la matrice d'inertie
 - `added mass matrix at the center of buoyancy projected in the body frame`
   pour les masses ajoutées.
+
+#### Point de calcul des efforts hydrodynamiques
+
+Cette section contient simplement les [coordonnées du point de calcul des efforts hydrodynamiques](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique), exprimées dans le repère body :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+hydrodynamic forces calculation point in body frame:
+    x: {value: 0.696, unit: m}
+    y: {value: 0, unit: m}
+    z: {value: 1.418, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### Position du centre d'inertie
 
