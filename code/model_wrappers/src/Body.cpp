@@ -29,7 +29,8 @@ p(),
 q(),
 r(),
 intersector(),
-down_direction_in_mesh_frame()
+down_direction_in_mesh_frame(),
+hydrodynamic_forces_calculation_point()
 {
 }
 
