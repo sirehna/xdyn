@@ -41,6 +41,11 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
                                    input.dynamics.centre_of_inertia.z);
     ret.m = input.dynamics.mass;
 
+    ret.hydrodynamic_forces_calculation_point = ssc::kinematics::Point(input.name,
+            input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame.x,
+            input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame.y,
+            input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame.z);
+
     ret.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
     ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
     ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;

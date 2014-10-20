@@ -18,6 +18,7 @@ struct YamlDynamics
     double mass;
     YamlDynamics6x6Matrix rigid_body_inertia;
     YamlDynamics6x6Matrix added_mass;
+    YamlCoordinates hydrodynamic_forces_calculation_point_in_body_frame;
 };
 
 #endif /* YAMLDYNAMICS_HPP_ */

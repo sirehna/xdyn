@@ -350,3 +350,11 @@ TEST_F(SimulatorYamlParserTest, can_have_test_data_with_just_waves)
     ASSERT_EQ(1,input.environment.size());
     ASSERT_EQ("waves",input.environment[0].model);
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_hydrodynamic_calculation_point)
+{
+    const YamlCoordinates P = yaml.bodies.front().dynamics.hydrodynamic_forces_calculation_point_in_body_frame;
+    ASSERT_DOUBLE_EQ(0.696, P.x);
+    ASSERT_DOUBLE_EQ(0, P.y);
+    ASSERT_DOUBLE_EQ(1.418, P.z);
+}

@@ -287,6 +287,8 @@ du maillage sur le plan $(x,z)$
 du maillage sur le plan $(x,y)$
 
 Ce point est, en général, distinct du centre de gravité et du centre de volume.
+Il est défini dans la section `dynamics/hydrodynamic forces calculation point
+in body frame` du [fichier YAML](documentation_yaml.html#champs-dynamics).
 
 On note ${}^\mbox{local}T_\mbox{body}$ la transformation permettant de
 convertir des coordonnées dans le repère body en coordonnées du même point

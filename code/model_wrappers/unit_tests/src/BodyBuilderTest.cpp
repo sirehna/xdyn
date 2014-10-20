@@ -396,3 +396,12 @@ TEST_F(BodyBuilderTest, mesh_should_be_correct)
     ASSERT_NEAR(27495.751590142729,(double)body.M->m(1,7),EPS);
     ASSERT_NEAR(17644.696740374300,(double)body.M->m(2,7),EPS);
 }
+
+TEST_F(BodyBuilderTest, hydrodynamic_forces_calculation_point_in_body_frame)
+{
+    const auto P = body.hydrodynamic_forces_calculation_point;
+    ASSERT_EQ("body 1", P.get_frame());
+    ASSERT_DOUBLE_EQ(0.696, P.x());
+    ASSERT_DOUBLE_EQ(0, P.y());
+    ASSERT_DOUBLE_EQ(1.418, P.z());
+}
