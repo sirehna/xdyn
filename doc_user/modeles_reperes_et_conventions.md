@@ -995,4 +995,88 @@ limites.
 
 ## Efforts d'amortissement visqueux
 
+### Description
 
+Les mouvements d'un solide évoluant dans un fluide sont amortis du fait de
+l'énergie que ce solide communique au fluide. Ces efforts dissipatifs
+proviennent d'une part des vagues générées par les mouvements du fluide (et qui
+correspondent aux [amortissements de
+radiation](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)), et d'autre part des
+amortissements visqueux dus au frottement du fluide sur la coque. Ce sont ces
+derniers qui nous intéressent dans cette section.
+
+Les amortissements non-visqueux (radiation) sont, par nature, linéaires par
+rapport à la vitesse. En ce qui concerne les amortissements visqueux, on
+distingue les **amortissements linéaires** (par rapport à la vitesse) qui
+surviennent lorsque sa vitesse est suffisamment faible pour que l'écoulement
+soit laminaire (nombre de Reynolds inférieur à 2000), et les termes dus à
+l'apparition d'un sillage tourbillonnaire ou turbulent qui dissipe l'énergie de
+manière purement mécanique (**amortissement quadratique**, présent
+essentiellement sur l'axe roulis ($\phi$)). Suivant les axes, certains termes
+prédominent par rapport aux autres. Ainsi, en roulis, l'amortissement
+quadratique est prépondérant par rapport à l'amortissement linéaire, tandis
+qu'en tangage c'est l'inverse.
+
+Outre leur signification physique, les termes amortissements ont également une
+incidence sur la simulation dans la mesure où ils ont tendance à stabiliser les
+schémas d'intégration numériques explicites (type Runge-Kutta par exemple).
+
+Lorsque l'on utilise conjointement les modèles d'amortissement en cavalement et
+de résistance à l'avancement, il convient de prendre des précautions
+supplémentaires afin de ne pas modéliser deux fois le même phénomène physique.
+On décompose donc la vitesse longitudinale en une composante basse fréquence
+(utilisée par le modèle de résistance à l'avancement) et une composante haute
+fréquence (pour le modèle d'amortissement).
+
+### Modélisation
+
+Pour une description des notations adoptées icion pourra se référer à [la
+description du repère de calcul
+hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique).
+
+La vitesse du courant (intégrale de la vitesse de la surface du fluide par
+rapport au sol), projetée dans le repère NED, est notée :
+
+$$V_\mbox{eau/sol} =
+\left[\begin{array}{c}U_\mbox{courant}\\V_\mbox{courant}\\0\end{array}\right]$$
+
+On définit :
+
+$$\nu_\mbox{local} = {}^\mbox{local}T_\mbox{body} \nu_b -
+{}^\mbox{local}T_\mbox{NED}V_\mbox{eau/sol}$$
+
+$$\omega_\mbox{local} = {}^\mbox{local}T_\mbox{body}\omega_{nb}^b$$
+
+Pour les amortissements linéaires :
+
+
+$$F_{\mbox{al}}=-D_l\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]$$
+
+où $D_l$ est la matrice d'amortissement linéaire lue depuis [le fichier de
+paramètres]().
+
+Pour les amortissements quadratiques :
+
+$$F_{\mbox{aq}}=-D_q(\nu_{\mbox{local}})\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]$$
+
+où
+
+$$D_q(\nu_{\mbox{local}}) = \left[
+\begin{array}{ccc}
+d_{11}\cdot|u_{\mbox{local}}| & d_{12}\cdot |v_{\mbox{local}}| & d_{13}\cdot |w_{\mbox{local}}| & d_{14}\cdot |p_{\mbox{local}}| & d_{15}\cdot |q_{\mbox{local}}| & d_{16}\cdot |r_{\mbox{local}}|\\ 
+d_{21}\cdot|u_{\mbox{local}}| & d_{22}\cdot |v_{\mbox{local}}| & d_{23}\cdot |w_{\mbox{local}}| & d_{24}\cdot |p_{\mbox{local}}| & d_{25}\cdot |q_{\mbox{local}}| & d_{26}\cdot |r_{\mbox{local}}|\\ 
+d_{31}\cdot|u_{\mbox{local}}| & d_{32}\cdot |v_{\mbox{local}}| & d_{33}\cdot |w_{\mbox{local}}| & d_{34}\cdot |p_{\mbox{local}}| & d_{35}\cdot |q_{\mbox{local}}| & d_{36}\cdot |r_{\mbox{local}}|\\ 
+d_{41}\cdot|u_{\mbox{local}}| & d_{42}\cdot |v_{\mbox{local}}| & d_{43}\cdot |w_{\mbox{local}}| & d_{44}\cdot |p_{\mbox{local}}| & d_{45}\cdot |q_{\mbox{local}}| & d_{46}\cdot |r_{\mbox{local}}|\\ 
+d_{51}\cdot|u_{\mbox{local}}| & d_{52}\cdot |v_{\mbox{local}}| & d_{53}\cdot |w_{\mbox{local}}| & d_{54}\cdot |p_{\mbox{local}}| & d_{55}\cdot |q_{\mbox{local}}| & d_{56}\cdot |r_{\mbox{local}}|\\ 
+d_{61}\cdot|u_{\mbox{local}}| & d_{62}\cdot |v_{\mbox{local}}| & d_{63}\cdot |w_{\mbox{local}}| & d_{64}\cdot |p_{\mbox{local}}| & d_{65}\cdot |q_{\mbox{local}}| & d_{66}\cdot |r_{\mbox{local}}|\\ 
+\end{array}\right]$$
+
+les $((d_{ij}))$ étant les coefficients de la matrice d'amortissement
+quadratique lue depuis [le fichier de paramètres]().
+
+### Références
+- "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions
+TECHNIP, ISBN 2-7108-0815-3, page 276
+- "Sea Loads on Ships An Offshore Structures", 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, page 223
+- "Seakeeping: Ship Behaviour in Rough Weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
+- "Marine Control Systems: Guidance, Navigation and Control of Ships, Rigs and Underwater Vehicles", 2002, THor I. Fossen, Marine Cybernetics, ISBN 82-92356-00-2, page 71
