@@ -35,11 +35,11 @@ void operator >> (const YAML::Node& node, YamlBody& b)
 {
     node["name"] >> b.name;
     try_to_parse(node, "mesh", b.mesh);
-    node["external forces"] >> b.external_forces;
-    node["position of body frame relative to mesh"] >> b.position_of_body_frame_relative_to_mesh;
-    node["initial position of body frame relative to NED"] >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
-    node["initial velocity of body frame relative to NED"] >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
-    node["dynamics"] >> b.dynamics;
+    node["external forces"]                                     >> b.external_forces;
+    node["position of body frame relative to mesh"]             >> b.position_of_body_frame_relative_to_mesh;
+    node["initial position of body frame relative to NED"]      >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
+    node["initial velocity of body frame relative to NED"]      >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
+    node["dynamics"]                                            >> b.dynamics;
 }
 
 void operator >> (const YAML::Node& node, YamlModel& m)
@@ -88,6 +88,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
     parse_uv(node["mass"], d.mass);
     node["rigid body inertia matrix at the center of buoyancy projected in the body frame"] >> d.rigid_body_inertia;
     node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
+    node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
 }
 
 void operator >> (const YAML::Node& node, YamlPoint& p)
