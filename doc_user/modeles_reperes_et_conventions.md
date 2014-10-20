@@ -270,6 +270,31 @@ d'angle adoptée.
 - Les moments appliqués au navire et projetés dans le repère navire sont notés :
   $m^b = [K,M,N]^T$.
 
+## Repère de calcul hydrodynamique
+
+Les efforts d'amortissement (de [radiation](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation) et
+[visqueux](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux)), de [résistance à
+l'avancement]() et de
+[diffraction](modeles_reperes_et_conventions.html#expression-des-efforts-hydrodynamiques) sont calculés dans un repère appelé **repère de
+calcul hydrodynamique**, qui est un repère translaté par rapport au repère
+body. Le centre de ce repère est un point défini (dans le repère body) de la
+façon suivante :
+
+- Son abscisse $x$ est celle du centre de la surface résultant de la projection
+du maillage sur le plan $(x,z)$
+- Son ordonnée $y$ vaut zéro
+- Son altitude $z$ est celle du centre de la surface résultant de la projection
+du maillage sur le plan $(x,y)$
+
+Ce point est, en général, distinct du centre de gravité et du centre de volume.
+
+On note ${}^\mbox{local}T_\mbox{body}$ la transformation permettant de
+convertir des coordonnées dans le repère body en coordonnées du même point
+exprimées dans le repère de calcul hydrodynamique.
+${}^\mbox{local}T_\mbox{NED}$ est celle permettant de convertir des coordonnées
+dans le repère NED  en coordonnées du même point exprimées dans le repère de
+calcul hydrodynamique.
+
 # Modèles environnementaux
 
 ## Modèles de houle
