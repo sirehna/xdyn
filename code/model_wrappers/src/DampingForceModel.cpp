@@ -26,6 +26,6 @@ ssc::kinematics::Wrench DampingForceModel::operator()(const Body& body, const do
         body.p,
         body.q,
         body.r;
-    return ssc::kinematics::Wrench(body.G, get_force_and_torque(D, W));
+    return ssc::kinematics::Wrench(body.hydrodynamic_forces_calculation_point, get_force_and_torque(D, W));
 }
 
