@@ -1108,15 +1108,16 @@ En 1975, Oosterveld et Ossannen utilisèrent une régression statistique pour
 On adopte les notations suivantes :
 
 - $T$ est la poussée de l'hélice en eau libre (en N), c'est-à-dire la norme des
-efforts générés par l'hélice (sans tenir compte de la succion de la coque),
-- $Q$ est le couple généré par lh'élice en eau libre autour de son axe. Il
-  s'exprime en N.m. L'hélice génère donc en général un couple suivant les axes
-  $x$, $y$ et $z$.
+efforts générés par l'hélice suivant son axe (sans tenir compte de la succion de la coque),
+- $Q$ est le couple généré par l'hélice en eau libre autour de son axe. Il
+  s'exprime en N.m.
 - $n$ est le nombre de tours que l'hélice fait par seconde (en Hz)
-- $D$ est le diamètre de l'hélice (le maximum de distance entre les extrémités deux pales)
+- $D$ est le diamètre de l'hélice
 - $rho$ est la densité volumique de l'eau
-- $V_a$ est la vitesse d'avance, c'est-à-dire la vitesse de l'eau par rapport à
-  l'hélice juste en amont de celle-ci.
+- $V_a$ est la vitesse d'avance, c'est-à-dire la vitesse de l'écoulement non
+perturbé (à l'infini). Il s'agit d'une vitesse théorique : on se place dans le
+cas où l'hélice est complètement isolée dans un environnement infini (eau
+libre) qui bouge à la vitesse $V_a$ par rapport au sol.
 
 Le modèle en eau libre est sujet aux hypothèses suivantes :
 
@@ -1131,7 +1132,8 @@ Le modèle en eau libre est sujet aux hypothèses suivantes :
 L'intérêt de ce modèle est qu'il est paramétrique et permet de représenter les
 performances de l'hélice sous forme adimensionnelle. On peut ainsi appliquer le
 même modèle (à un coefficient d'échelle $D$ près) à des hélices homothétiques.
-Une limitation supplémentaire de ce modèle est qu'il n'est valable qu'en marche
+Une limitation supplémentaire du modèle polynomial en eau libre est que,
+contrairement au modèle quatre quadrant, il n'est valable qu'en marche
 avant (c'est-à-dire pour $n$ positif ou nul).
 
 ### Dérivation du modèle en eau libre
@@ -1142,7 +1144,7 @@ hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
 dépende :
 
 - Du diamètre $D$ de celle-ci
-- De la vitesse $V_a$ du fluide en amont de l'hélice
+- De la vitesse $V_a$ d'avance du fluide
 - De la vitesse de rotation $n$ de l'hélice
 - De la densité $\rho$ du fluide
 - De la viscosité $\mu$ du fluide
@@ -1150,22 +1152,20 @@ dépende :
 
 On aurait donc :
 
-$$T \propto \rho^a\cdot D^b\cdot V_a^c \cdot n^d \cdot \mu^f\cdot(p_0-e)^g$$
+$$T_0 \propto \rho^a\cdot D^b\cdot V_a^c \cdot n^d \cdot \mu^f\cdot(p_0-e)^g$$
 
 En effectuant l'analyse dimensionnelle pour exprimer $a$, $b$ et $d$ en
 fonction des autres coefficients, on trouve :
 
-$$T \propto \rho^{1-f-g}\cdot D^{4-c-2f-g}\cdot V_a^c \cdot n^{2-c-f-2g} \cdot \mu^f\cdot(p_0-e)^g$$
+$$T_0 \propto \rho^{1-f-g}\cdot D^{4-c-2f-g}\cdot V_a^c \cdot n^{2-c-f-2g} \cdot \mu^f\cdot(p_0-e)^g$$
 
 Soit, en regroupant les termes de même puissance :
 
-$$T \propto \rho\cdot n^2\cdot D^4\cdot \left(\frac{V_a}{n\cdot D}\right)^c \cdot\left(\frac{\mu}{\rho\cdot n\cdot D^2}\right)^f$$
-
-$$\cdot\left(\frac{p_0-e}{\rho\cdot n^2\cdot D^2}\right)^g$$
+$$T_0 \propto \rho\cdot n^2\cdot D^4\cdot \left(\frac{V_a}{n\cdot D}\right)^c \cdot\left(\frac{\mu}{\rho\cdot n\cdot D^2}\right)^f\cdot\left(\frac{p_0-e}{\rho\cdot n^2\cdot D^2}\right)^g$$
 
 On définit le coefficient de poussée :
 
-$$K_T = \frac{T}{\rho\cdot n^2\cdot D^4}$$
+$$K_T = \frac{T_0}{\rho\cdot n^2\cdot D^4}$$
 
 Le coefficient d'avance $J$ est défini par :
 
@@ -1185,7 +1185,7 @@ $$K_T = f(J,R_n,\sigma_0)$$
 
 De même, pour le couple $Q$, on définit le coefficient de couple $K_Q$ par :
 
-$$K_Q = \frac{Q}{\rho\cdot n^2\cdot D^5}$$
+$$K_Q = \frac{Q_0}{\rho\cdot n^2\cdot D^5}$$
 
 Le modèle en eau libre consiste à expliciter les fonctions $K_T$ et $K_Q$, dont
 on peut ensuite dériver la poussée et le couple.
@@ -1202,7 +1202,8 @@ anglais) tel que :
 $$w=1-\frac{V_a}{V_s}$$
 
 $w$ est constant en régime permanent, lorsque l'hélice opère dans les
-conditions nominales.
+conditions nominales. Des ordres de grandeurs de ce coefficient sont donnés par
+exemple dans Carlton, pages 70,72,73 et 74.
 
 En outre, l'hélice accroît la résistance à l'avancement du navire : en effet,
 elle diminue la pression à l'arrière du navire, ce qui augmente la poussée
@@ -1211,26 +1212,26 @@ introduit le coefficient de succion $t$ tel que :
 
 $$t = 1 - \frac{R_v}{T_p}$$
 
-où $R_v$ est la résistance à l'avancement (en N) à une vitesse $u$, sans
-hélice, et $T_p$ la résistance à l'avancement (également en N) lorsque le
-navire va à la vitesse $u$ en utilisant l'hélice.
+où $R_v$ est la résistance à l'avancement (en N) à une vitesse $V_S$, sans
+hélice, et $T_p$ est la somme des poussées de tous les actionneurs (également
+en N) lorsque le navire va à la vitesse $V_S$ en utilisant l'hélice.
 
-La poussée réelle $P$ est alors définie par :
+La poussée réelle $T_b$ est alors définie par :
 
-$$P = (1-t)\cdot T = (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)$$
+$$T_b = (1-t)\cdot T_0 = (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)$$
 
 et le couple réel est
 
-$$M = (1-t)\cdot Q = (1-t)\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J, R_n,\sigma_0)$$
+$$Q_b = \eta_R\cdot Q_0 = \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J, R_n,\sigma_0)$$
 
-avec
+où $\eta_R$ est appelé **rendement d'adaptation**
 
 $$J = \frac{V_a}{n\cdot D} = \frac{(1-w)\cdot V_s}{n\cdot D}$$
 
 ### Expression des coefficients $K_T$ et $K_Q$
 
 Afin de rendre les coefficients indépendants de la taille de l'hélice, on
-définit le rapport d'aire de l'hélice $A_E/A_0$, où $A_E$ désigne l'aire des
+définit la fraction de surface de l'hélice $A_E/A_0$, où $A_E$ désigne l'aire des
 pales (en m^2) et $A_0= \frac{\pi\cdot D^2}{4}$ est l'aire du disque
 circonscrit à l'hélice. Les séries sont valables pour $0.30\leq A_E/A_0\leq
 1.05$.
@@ -1242,12 +1243,12 @@ séries B de Wageningen utilisent le pas **de face**, mais il existe d'autres
 conventions. Les séries sont paramétrés en $P/D$ et l'on suppose que $0.5\leq
 P/D\leq 1.4$.
 
-On note $2\leq Z\leq 7$ le nombre de lames de l'hélice.
+On note $2\leq Z\leq 7$ le nombre de pales de l'hélice.
 
 Les coefficients des polynômes pour $K_T$ et $K_Q$ sont notés $C_k^T$
-et $C_k^Q$ respectivement, où $k$ est un entier tel que $1\leq k\leq 47.
+et $C_k^Q$ respectivement, où $k$ est un entier tel que $1 \leq k \leq 47$.
 $s(k)$, $s'(k)$, $t(k)$, $t'(k)$, $u(k)$, $u'(k)$, $v(k)$ et $v'(k)$ sont des
-exposants entre 1 et 6.
+exposants entre 0 et 6.
 
 $$K_T(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^T \cdot J^{s(k)}\cdot
 (P/D)^{t(k)}\cdot (A_E/A_0)^{u(k)}\cdot Z^{v(k)}$$
@@ -1271,3 +1272,4 @@ K_Q(J, P/D, A_E/A_0, Z, R_n)$$
 - __KT, KQ and Efficiency Curves for the Wageningen B-series Propellers__, 1981, Bernitsas, Ray, Kinley, University of Michigan
 - __Offshore Hydromechanics__, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 4-40
 - __Thrust Estimation and Control of Marine Propellers in Four-Quadrant Operations__, 2008, Luca Pivano, NTNU, ISBN 978-82-471-6258-3, page 30, 31
+- __The Wageningen Propeller Series__, 1992, Gert Kuiper, Marin publication 92-001
