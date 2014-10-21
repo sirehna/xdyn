@@ -291,10 +291,10 @@ Ce point est, en général, distinct du centre de gravité et du centre de volum
 Il est défini dans la section `dynamics/hydrodynamic forces calculation point
 in body frame` du [fichier YAML](documentation_yaml.html#champs-dynamics).
 
-On note ${}^\mbox{local}T_\mbox{body}$ la transformation permettant de
+On note ${}^{\mbox{local}}T_{\mbox{body}}$ la transformation permettant de
 convertir des coordonnées dans le repère body en coordonnées du même point
 exprimées dans le repère de calcul hydrodynamique.
-${}^\mbox{local}T_\mbox{NED}$ est celle permettant de convertir des coordonnées
+${}^{\mbox{local}}T_{\mbox{NED}}$ est celle permettant de convertir des coordonnées
 dans le repère NED  en coordonnées du même point exprimées dans le repère de
 calcul hydrodynamique.
 
@@ -634,8 +634,8 @@ rien car elle ne décrit que les mouvements en régime établi sinusoïdal : cet
 équation n'est qu'une représentation de la réponse fréquentielle du navire.
 
 Cette constatation a été faite en 1962 par W. E. Cummins, alors employé par le
-David Taylor Model Basin de l'armée américaine ("The Impulse Response & Ship
-Motions", Report 1661, October 1962).
+David Taylor Model Basin de l'armée américaine (__The Impulse Response & Ship
+Motions__, Report 1661, October 1962).
 
 Dans ce document, Cummins entreprend d'expliciter les efforts hydrodynamiques
 dans le domaine temporel. Pour ce faire, il fait l'hypothèse que les mouvements
@@ -748,7 +748,7 @@ $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
 
-# Modèles d'efforts
+# Modèles d'efforts non-commandés
 
 Le navire est soumis aux efforts suivants :
 
@@ -759,11 +759,8 @@ Le navire est soumis aux efforts suivants :
   et d'autre par des phénomènes de radiation/diffraction,
 - Les efforts d'amortissement visqueux, dûs aux frottements de l'eau sur la
   coque et aux tourbillons,
-- Les efforts commandés. On classe dans cette catégorie les efforts de
-  propulsion (hélices, tunnels, azimutaux, Voith...) mais aussi les safrans et
-  ailerons.
 
-Les efforts sont renseignés dans la section
+Les efforts non-commandés sont renseignés dans la section
 [`bodies/external`](documentation_yaml.html#efforts-extérieurs) du fichier
 YAML.
 
@@ -974,11 +971,11 @@ dans la situation suivante :
 
 ### Références
 
-- "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-- "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 185
-- "Sea Loads on Ships An Offshore Structures", 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 16, 39, 59
-- "Seakeeping: Ship Behaviour in Rough Weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 67-68
-- "Offshore Hydromechanics", 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
+- __Environmental Conditions and Environmental Loads__, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+- __Hydrodynamique des Structures Offshore__, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 185
+- __Sea Loads on Ships An Offshore Structures__, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 16, 39, 59
+- __Seakeeping: Ship Behaviour in Rough Weather__, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 67-68
+- __Offshore Hydromechanics__, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
 
 ## Efforts de diffraction
 
@@ -1079,8 +1076,198 @@ les $((d_{ij}))$ étant les coefficients de la matrice d'amortissement
 quadratique lue depuis [le fichier de paramètres]().
 
 ### Références
-- "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions
-TECHNIP, ISBN 2-7108-0815-3, page 276
-- "Sea Loads on Ships An Offshore Structures", 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, page 223
-- "Seakeeping: Ship Behaviour in Rough Weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
-- "Marine Control Systems: Guidance, Navigation and Control of Ships, Rigs and Underwater Vehicles", 2002, THor I. Fossen, Marine Cybernetics, ISBN 82-92356-00-2, page 71
+- __Hydrodynamique des Structures Offshore__, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 276
+- __Sea Loads on Ships An Offshore Structures__, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, page 223
+- __Seakeeping: Ship Behaviour in Rough Weather__, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
+- __Marine Control Systems: Guidance, Navigation and Control of Ships, Rigs and Underwater Vehicles__, 2002, THor I. Fossen, Marine Cybernetics, ISBN 82-92356-00-2, page 71
+
+# Efforts commandés
+
+On classe dans cette catégorie les efforts de propulsion (hélices, tunnels,
+azimutaux, Voith...) mais aussi les safrans et ailerons. Ils sont paramétrés
+dans la section [`efforts commandés`](documentation_yaml.html#efforts-command%C3%A9s)
+du fichier YAML.
+
+## Hélices Wageningen série B
+
+### Description
+
+En 1937, l'ingénieur néerlandais L. Troost, alors employé du Maritime Research
+Institue Netherlands (MARIN) basé à Wageningen (Pays-Bas), créa les hélices
+Wageningen série B dont la forme est simple et les performances bonnes.  Afin
+d'établir une base pour la conception d'hélices, il publia en 1938 puis en 1940
+une série de tests systématiques en eau libre de 120 hélices "série B", qui
+sont, à ce jour, les séries de test en eau libre les plus connus, bien que
+d'autres instituts de recherche en aient réalisés d'autres par la suite.
+
+En 1975, Oosterveld et Ossannen utilisèrent une régression statistique pour
+établir le modèle polynomial des hélices Wageningen présenté ici.
+
+### Hypothèses du modèle en eau libre
+
+On adopte les notations suivantes :
+
+- $T$ est la poussée de l'hélice en eau libre (en N), c'est-à-dire la norme des
+efforts générés par l'hélice (sans tenir compte de la succion de la coque),
+- $Q$ est le couple généré par lh'élice en eau libre autour de son axe. Il
+  s'exprime en N.m. L'hélice génère donc en général un couple suivant les axes
+  $x$, $y$ et $z$.
+- $n$ est le nombre de tours que l'hélice fait par seconde (en Hz)
+- $D$ est le diamètre de l'hélice (le maximum de distance entre les extrémités deux pales)
+- $rho$ est la densité volumique de l'eau
+- $V_a$ est la vitesse d'avance, c'est-à-dire la vitesse de l'eau par rapport à
+  l'hélice juste en amont de celle-ci.
+
+Le modèle en eau libre est sujet aux hypothèses suivantes :
+
+- on néglige les effets de la houle (notamment sa vitesse orbitale et le champs
+  de pression qu'elle génère) et des courants océaniques,
+- on ne tient pas compte des interactions entre l'hélice et la coque
+  (perturbation du fluide en amont de l'hélice) et entre l'hélice et la surface
+  libre. On suppose ainsi que l'hélice ne crée pas de vagues, donc qu'elle ne
+  dissipe pas d'énergie à la
+  surface).
+
+L'intérêt de ce modèle est qu'il est paramétrique et permet de représenter les
+performances de l'hélice sous forme adimensionnelle. On peut ainsi appliquer le
+même modèle (à un coefficient d'échelle $D$ près) à des hélices homothétiques.
+Une limitation supplémentaire de ce modèle est qu'il n'est valable qu'en marche
+avant (c'est-à-dire pour $n$ positif ou nul).
+
+### Dérivation du modèle en eau libre
+
+Le modèle en eau libre est un modèle empirique dans la mesure où il ne dérive
+pas des équations de Navier-Stokes. Le postulat est, qu'étant données les
+hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
+dépende :
+
+- Du diamètre $D$ de celle-ci
+- De la vitesse $V_a$ du fluide en amont de l'hélice
+- De la vitesse de rotation $n$ de l'hélice
+- De la densité $\rho$ du fluide
+- De la viscosité $\mu$ du fluide
+- De la pression statique du fluide $p_0-e$ au niveau de l'hélice
+
+On aurait donc :
+
+$$T \propto \rho^a\cdot D^b\cdot V_a^c \cdot n^d \cdot \mu^f\cdot(p_0-e)^g$$
+
+En effectuant l'analyse dimensionnelle pour exprimer $a$, $b$ et $d$ en
+fonction des autres coefficients, on trouve :
+
+$$T \propto \rho^{1-f-g}\cdot D^{4-c-2f-g}\cdot V_a^c \cdot n^{2-c-f-2g} \cdot \mu^f\cdot(p_0-e)^g$$
+
+Soit, en regroupant les termes de même puissance :
+
+$$T \propto \rho\cdot n^2\cdot D^4\cdot \left(\frac{V_a}{n\cdot D}\right)^c \cdot\left(\frac{\mu}{\rho\cdot n\cdot D^2}\right)^f$$
+
+$$\cdot\left(\frac{p_0-e}{\rho\cdot n^2\cdot D^2}\right)^g$$
+
+On définit le coefficient de poussée :
+
+$$K_T = \frac{T}{\rho\cdot n^2\cdot D^4}$$
+
+Le coefficient d'avance $J$ est défini par :
+
+$$J=\frac{V_a}{n\cdot D}$$
+
+Le nombre de Reynolds $R_n$ s'exprime ici :
+
+$$R_n = \frac{\rho \cdot n\cdot D^2}{\mu}$$
+
+et le nombre de cavitation $\sigma_0$ est :
+
+$$\sigma_0=\frac{p_0-e}{\frac{1}{2}\rho\cdot n^2\cdot D^2}$$
+
+donc il existe une fonction $f$ telle que
+
+$$K_T = f(J,R_n,\sigma_0)$$
+
+De même, pour le couple $Q$, on définit le coefficient de couple $K_Q$ par :
+
+$$K_Q = \frac{Q}{\rho\cdot n^2\cdot D^5}$$
+
+Le modèle en eau libre consiste à expliciter les fonctions $K_T$ et $K_Q$, dont
+on peut ensuite dériver la poussée et le couple.
+
+### Prise en compte des effets de la coque et du sillage
+
+Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque,
+l'hélice ne se déplace pas (par rapport à l'eau) à la vitesse du navire $V_s$,
+autrement dit $V_a\neq V_s$. La vitesse d'avance $V_a$ est, en général, très
+difficile à mesurer et l'on suppose qu'elle est proportionnelle à la vitesse du
+navire. On définit donc un coefficient $w$ (pour "wake", soit "sillage" en
+anglais) tel que :
+
+$$w=1-\frac{V_a}{V_s}$$
+
+$w$ est constant en régime permanent, lorsque l'hélice opère dans les
+conditions nominales.
+
+En outre, l'hélice accroît la résistance à l'avancement du navire : en effet,
+elle diminue la pression à l'arrière du navire, ce qui augmente la poussée
+nécessaire pour la propulsion. Pour prendre en compte ce phénomène, on
+introduit le coefficient de succion $t$ tel que :
+
+$$t = 1 - \frac{R_v}{T_p}$$
+
+où $R_v$ est la résistance à l'avancement (en N) à une vitesse $u$, sans
+hélice, et $T_p$ la résistance à l'avancement (également en N) lorsque le
+navire va à la vitesse $u$ en utilisant l'hélice.
+
+La poussée réelle $P$ est alors définie par :
+
+$$P = (1-t)\cdot T = (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)$$
+
+et le couple réel est
+
+$$M = (1-t)\cdot Q = (1-t)\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J, R_n,\sigma_0)$$
+
+avec
+
+$$J = \frac{V_a}{n\cdot D} = \frac{(1-w)\cdot V_s}{n\cdot D}$$
+
+### Expression des coefficients $K_T$ et $K_Q$
+
+Afin de rendre les coefficients indépendants de la taille de l'hélice, on
+définit le rapport d'aire de l'hélice $A_E/A_0$, où $A_E$ désigne l'aire des
+pales (en m^2) et $A_0= \frac{\pi\cdot D^2}{4}$ est l'aire du disque
+circonscrit à l'hélice. Les séries sont valables pour $0.30\leq A_E/A_0\leq
+1.05$.
+
+On définit également le pas $P$ de l'hélice, un paramètre géométrique qui
+traduit la distance théorique parcourue par l'hélice en une révolution. Cette
+distance varie en fonction de la ligne de référence que l'on choisit. Les
+séries B de Wageningen utilisent le pas **de face**, mais il existe d'autres
+conventions. Les séries sont paramétrés en $P/D$ et l'on suppose que $0.5\leq
+P/D\leq 1.4$.
+
+On note $2\leq Z\leq 7$ le nombre de lames de l'hélice.
+
+Les coefficients des polynômes pour $K_T$ et $K_Q$ sont notés $C_k^T$
+et $C_k^Q$ respectivement, où $k$ est un entier tel que $1\leq k\leq 47.
+$s(k)$, $s'(k)$, $t(k)$, $t'(k)$, $u(k)$, $u'(k)$, $v(k)$ et $v'(k)$ sont des
+exposants entre 1 et 6.
+
+$$K_T(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^T \cdot J^{s(k)}\cdot
+(P/D)^{t(k)}\cdot (A_E/A_0)^{u(k)}\cdot Z^{v(k)}$$
+$$K_Q(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^Q \cdot J^{s'(k)}\cdot
+(P/D)^{t'(k)}\cdot (A_E/A_0)^{u'(k)}\cdot Z^{v'(k)}$$
+
+Les coefficients $C_k^T$ et $C_k^Q$ sont définis pour un nombre de Reynolds
+$R_n=2\times 10^6$, mais le modèle a été étendu pour des nombres de Reynolds
+entre $2\times 10^6$ et $2\times 10^9$ en introduisant des termes $\Delta K_T$
+et $\Delta K_Q$ supplémentaires :
+
+$$K_T(J, P/D, A_E/A_0, Z, R_n) = K_T(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
+K_T(J, P/D, A_E/A_0, Z, R_n)$$
+$$K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
+K_Q(J, P/D, A_E/A_0, Z, R_n)$$
+
+### Références
+
+- __Marine Propellers and Propulsion__, 2007, John Carlton, Butterworth-Heinermann, ISBN 978-07506-8150-6, page 89, 103
+- __Seakeeping: Ship Behaviour in Rough Weather__, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 404
+- __KT, KQ and Efficiency Curves for the Wageningen B-series Propellers__, 1981, Bernitsas, Ray, Kinley, University of Michigan
+- __Offshore Hydromechanics__, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 4-40
+- __Thrust Estimation and Control of Marine Propellers in Four-Quadrant Operations__, 2008, Luca Pivano, NTNU, ISBN 978-82-471-6258-3, page 30, 31
