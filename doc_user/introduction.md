@@ -74,6 +74,8 @@ Options:
 
 Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
 des modèles](documentation_yaml.html#waves).
+Le paramètre `-c` ne sera pas décrit ici mais dans [le fichier de description
+des modèles](documentation_yaml.html#efforts-commandés).
 
 ## Exemples
 
