@@ -284,9 +284,9 @@ Chaque corps comprend :
  - la position du repère body par rapport au maillage (section `position of
    body frame relative to mesh`)
  - ses conditions initiales (sections `initial position of body frame relative
-   to NED` et `initial velocity of body frame relative to NED`) des données
-   définissant son comportement dynamique (section `dynamics`) et la liste des
-   efforts auxquels il est soumis (section `external forces`).
+   to NED` et `initial velocity of body frame relative to NED`)
+ - des données définissant son comportement dynamique (section `dynamics`)
+ - la liste des efforts auxquels il est soumis (sections `external forces` et `controlled forces`).
 
 ### Exemple complet
 
@@ -600,4 +600,153 @@ La paramétrisation des efforts d'amortissement quadratiques est faite par une m
 Cette matrice est la matrice $((d_{ij}))$ décrit dans [la
 documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux).
 
+## Efforts commandés
+
+Les efforts contrôlés correspondent aux efforts de propulsion, de safran et de
+foil. Ils sont décrits dans la section `controlled forces`.
+
+La provenance des commandes (où le simulateur lit-il les commandes à chaque pas
+de temps) doit être spécifiée lors de l'appel de l'exécutable en
+utilisant le flag `--commands` décrit dans la [documentation de l'interface
+utilisateur](introduction.html#liste-des-arguments). Les commandes ne sont pas
+directement renseignées dans le fichier YAML pour laisser la possibilité à
+l'utilisateur de les fournir par un autre biais : il est ainsi prévu de les
+lire directement depuis un socket afin de pouvoir s'interfacer avec une
+interface graphique ou un pilote.
+
+Voici un exemple de section `efforts commandés` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controlled forces:
+  - name: port side propeller
+    model: wageningen B-series
+    propeller frame relative to mesh frame:
+        x: {value: -4, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: -1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency eta: 1
+    thrust deduction factor t: 0.7
+    rotation: clockwise
+    number of blades: 3
+    blade area ratio AE/A0: 0.5
+  - name: starboard propeller
+    model: wageningen B-series
+    propeller frame relative to mesh frame:
+        x: {value: -4, unit: m}
+        y: {value: 2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: 1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency eta: 1
+    thrust deduction factor t: 0.7
+    rotation: anti-clockwise
+    number of blades: 3
+    blade area ratio AE/A0: 0.5
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Syntaxe du fichier de commande
+
+Le fichier de commande spécifie de manière statique les commandes reçues par
+les modèles d'efforts commandés. Il est statique, c'est-à-dire que les
+commandes à chaque instant sont connues lors du lancement de la simulation. Son
+nom est passé à l'exécutable de simulation en utilisant le flag `-c` (ou
+`--commands`).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- name: port side propeller
+   t: [0,1,3,10]
+   rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+   P/D: [0.7,0.7,0.7,0.7]
+- name: starboard propeller
+   t: [0,1,3,10]
+   rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+   P/D: [0.7,0.7,0.7,0.7]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pour chaque effort contrôlé (identifié par `name`), on donne une liste
+d'instants (en secondes) puis, pour chaque commande, les valeurs à ces
+instants. Il doit donc y avoir, pour chaque commande, autant de valeurs qu'il y
+a d'instants. Entre deux instants, les valeurs des commandes sont interpolées
+linéairement.
+
+### Wageningen B-series
+
+Voici un exemple d'utilisation d'hélice Wageningen :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controlled forces:
+  - name: port side propeller
+    model: wageningen B-series
+    propeller frame relative to mesh frame:
+        x: {value: -4, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: -1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency eta: 1
+    thrust deduction factor t: 0.7
+    rotation: clockwise
+    number of blades: 3
+    blade area ratio AE/A0: 0.5
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
+celui renseigné dans le fichier de [commandes
+attendues](documentation_yaml.html#syntaxe-du-fichier-de-commande).
+- `model` : Nom du modèle. Doit être `wageningen B-series` pour utiliser ce
+modèle.
+- `propeller frame relative to mesh frame` : Définition du [repère de
+l'hélice](modeles_reperes_et_conventions.html#rep%C3%A8re-dexpression-des-efforts).
+- `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par rapport au centre du repère attaché au maillage et projeté sur ce dernier.
+- `phi`,`theta`,`psi` : Définition de la rotation permettant de passer du
+repère attaché au maillage au [repère attaché à
+l'hélice](modeles_reperes_et_conventions.html#expression-des-efforts), en suivant la
+[convention d'angle choisie](documentation_yaml.html#rotations).
+- `wake coefficient` : [coefficient de
+sillage](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et
+1.
+- `relative rotative efficiency` : [rendement
+d'adaptation](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+- `thrust deduction factor t` : [coefficient de
+succion](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+- `rotation` définition du sens de rotation pour générer une poussée positive.
+Utilisé pour calculer le signe du moment généré par l'hélice sur le navire. Les
+valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
+`clockwise`, l'hélice tournera dans le sens horaire (en se plaçant à l'arrière
+du navire et en regardant vers la proue) et génèrera un moment dans le sens
+trigonométrique, soit, si les axes des repères body et hélice sont colinéaires,
+un moment négatif sur le navire (dans le repère body). Voir [la
+documentation](file:///home/cady/simulator/doc_user/modeles_reperes_et_conventions.html#expression-des-efforts).
+- `number of blades` : nombre de pales de l'hélice.
+- `blade area ratio AE/A0` : [fraction de
+surface](modeles_reperes_et_conventions.html#expression-des-coefficients-k_t-et-k_q) de l'hélice.
+
+La documentation de ce modèle figure
+[ici](modeles_reperes_et_conventions.html#hélices-wageningen-série-b).
+
+Les [commandes
+attendues](documentation_yaml.html#syntaxe-du-fichier-de-commande) pour ce
+modèle sont :
+
+- La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
+par `rpm`.
+- Le ratio "pas sur diamètre", entre 0 et 1, défini par `P/D`.
+
+Voici un exemple de fichier de commande :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- name: port side propeller
+   t: [0,1,3,10]
+   rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+   P/D: [0.7,0.7,0.7,0.7]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
