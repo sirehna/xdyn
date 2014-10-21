@@ -54,21 +54,22 @@ ajouts de fonctionnalités).
 USAGE: sim <yaml file> [-h] [-y ARG] [-o ARG] [-s ARG] [dt ARG] [--tstart ARG]
 [--tend ARG] [-w ARG]
 Options:
-  -h [ --help ]              Show this help message
-  -y [ --yml ] arg           Name(s) of the YAML file(s)
-  -o [ --out ] arg           Name of the generated CSV file. If none given,
-                             simulator writes CSV to standard output
-  -s [ --solver ] arg (=rk4) Name of the solver: euler,rk4,rkck for Euler,
-                             Runge-Kutta 4 & Runge-Kutta-Cash-Karp
-                             respectively.
-  --dt arg                   Initial time step (or value of the fixed time step
-                             for fixed step solvers)
-  --tstart arg (=0)          Date corresponding to the beginning of the
-                             simulation (in seconds)
-  --tend arg                 Last time step
-  -w [ --waves ] arg         Name of the YAML output file where the wave
-                             heights will be stored ('output' section of the
-                             YAML file)
+  -h [ --help ]              Afficher le message d'aide (en anglais)
+  -y [ --yml ] arg           Nom du (ou des) fichier(s) YAML (le flag est facultatif)
+  -s [ --solver ] arg (=rk4) Nom du solveur : euler,rk4,rkck for Euler,
+                             Runge-Kutta 4 et Runge-Kutta-Cash-Karp
+                             respectivement.
+  --dt arg                   Pas de temps initial (pour les solveurs à pas
+                             variable) ou pas de temps fixe (pour les solveurs
+                             à pas fixe)
+  --tstart arg (=0)          Date correspondant au début de la simulation
+                             (en secondes)
+  --tend arg                 Dernier instant calculé
+  -w [ --waves ] arg         Nom du fichier YAML de sortie pour la houle (le
+                             cas échéant). Cf. section 'output' du fichier YAML
+                             d'entrée
+  -c [ --commands ] arg      Nom du fichier contenant les commandes à appliquer
+                             à chaque instant. Cf. section 'Efforts commandés'
 ~~~~~~~~~~~~~~~~~~~~
 
 Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
