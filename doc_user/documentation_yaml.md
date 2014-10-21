@@ -557,6 +557,7 @@ La documentation du modèle figure
 La dérivation des [efforts d'excitation de Froude-Krylov](modeles_reperes_et_conventions.html#houle-dairy) est décrite (ici)[(modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation].
 
 Pour l'utiliser, on insère la ligne suivante dans la section `external forces` :
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: non-linear Froude-Krylov
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -577,6 +578,9 @@ La paramétrisation des efforts d'amortissement linéaires est faite par une mat
       row 6: [ 0, 0,     0,      0,      0, 0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Cette matrice est la matrice $D_l$ décrit dans [la
+documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux).
+
 ### Amortissement quadratique
 
 La paramétrisation des efforts d'amortissement quadratiques est faite par une matrice renseignée de la façon suivante :
@@ -592,4 +596,8 @@ La paramétrisation des efforts d'amortissement quadratiques est faite par une m
       row 5: [ 0, 0,     0,      0, 4.67e6, 0]
       row 6: [ 0, 0,     0,      0,      0, 0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cette matrice est la matrice $((d_{ij}))$ décrit dans [la
+documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux).
+
 
