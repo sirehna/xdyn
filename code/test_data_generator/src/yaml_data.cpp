@@ -1450,3 +1450,13 @@ std::string test_data::anthineas_damping()
        << "    \n";
     return ss.str();
 }
+
+std::string test_data::controlled_forces()
+{
+    std::stringstream ss;
+    ss << "- name: port side propeller\n"
+          "  t: [0,1,3,10]\n"
+          "  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}\n"
+          "  P/D: [0.7,0.7,0.7,0.7]\n";
+    return ss.str();
+}
