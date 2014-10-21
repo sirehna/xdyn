@@ -660,13 +660,13 @@ nom est passé à l'exécutable de simulation en utilisant le flag `-c` (ou
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - name: port side propeller
-   t: [0,1,3,10]
-   rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
-   P/D: [0.7,0.7,0.7,0.7]
+  t: [0,1,3,10]
+  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.7,0.7]
 - name: starboard propeller
-   t: [0,1,3,10]
-   rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
-   P/D: [0.7,0.7,0.7,0.7]
+  t: [0,1,3,10]
+  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pour chaque effort contrôlé (identifié par `name`), on donne une liste
@@ -745,8 +745,8 @@ Voici un exemple de fichier de commande :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - name: port side propeller
-   t: [0,1,3,10]
-   rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
-   P/D: [0.7,0.7,0.7,0.7]
+  t: [0,1,3,10]
+  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
