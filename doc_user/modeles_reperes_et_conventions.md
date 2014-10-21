@@ -1263,7 +1263,62 @@ et $\Delta K_Q$ supplémentaires :
 $$K_T(J, P/D, A_E/A_0, Z, R_n) = K_T(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
 K_T(J, P/D, A_E/A_0, Z, R_n)$$
 $$K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
-K_Q(J, P/D, A_E/A_0, Z, R_n)$$
+K_Q(J, P/D, A_E/A_0, Z, R_n)$$ 
+
+### Expression des efforts
+
+Les efforts générés par l'hélice sont calculés dans un repère fixe par rapport
+au maillage. Ce repère est renseigné dans la section [`propeller frame relative
+to mesh frame`](documentation_yaml.html#wageningen-b-series) du fichier YAML.
+L'axe de rotation de l'hélice est l'axe $x$ de ce repère et la poussée est
+faite dans la direction des $x$ négatifs (afin de faciliter la définition du
+repère hélice par rapport au repère maillage, l'axe $x$ de ce dernier étant
+souvent orienté vers l'avant du navire).
+
+![](images/reperes_helices.svg)
+
+Le torseur des efforts, calculé dans le repère de l'hélice, est :
+
+$$\tau = \left[\begin{array}{c}
+X\\
+Y\\
+Z\\
+K\\
+M\\
+N
+\end{array}\right]$$
+
+$$= \left[\begin{array}{c}
+           -T_b\\
+           0\\
+           0\\
+           \kappa Q_b\\
+           0\\
+           0
+\end{array}\right]$$
+$$= \left[\begin{array}{c}
+           -(1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)\\
+           0\\
+           0\\
+           \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J,
+R_n,\sigma_0)\\
+           0\\
+           0\end{array}\right]
+$$
+
+$\kappa$ vaut -1 si l'hélice tourne dans le sens horaire (en se plaçant
+derrière l'hélice et en regardant vers l'avant du navire) et +1 si elle tourne
+dans le sens trigronométrique : en effet, si l'hélice tourne dans le sens
+horaire, alors elle génère un couple sur le navire orienté dans le sens
+trigonométrique quand on regarde vers l'avant du navire, autrement dit autour
+de $x$ et de $z$ vers $y$ soit dans le sens **horaire** dans le repère
+de l'hélice), donc le signe du moment est négatif.
+
+![](images/rotation_helices.svg)
+
+Ce torseur est ensuite déplacé (changement de point d'application et changement
+de coordonnées) dans le repère body afin d'être sommé avec les autres lors du
+bilan des efforts.
 
 ### Références
 
