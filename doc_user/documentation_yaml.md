@@ -675,6 +675,10 @@ instants. Il doit donc y avoir, pour chaque commande, autant de valeurs qu'il y
 a d'instants. Entre deux instants, les valeurs des commandes sont interpolées
 linéairement.
 
+Au-delà de la dernière valeur de temps renseignée, la dernière valeur de chaque
+commande est maintenue. Pour l'exemple présenté ci-dessus, pour toute valeur de
+$t\geq 10$, alors rpm=4000.
+
 ### Wageningen B-series
 
 Voici un exemple d'utilisation d'hélice Wageningen :
