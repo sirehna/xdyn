@@ -1271,10 +1271,9 @@ K_Q(J, P/D, A_E/A_0, Z, R_n)$$
 ### Expression des efforts
 
 Les efforts générés par l'hélice sont calculés dans un repère spécifique
-renseigné dans la section [`propeller frame relative to mesh
-frame`](documentation_yaml.html#wageningen-b-series) du fichier YAML. La
+renseigné dans la section [`position of propeller frame`](documentation_yaml.html#wageningen-b-series) du fichier YAML. La
 poussée (c'est-à-dire l'effort généré par l'hélice sur le navire) est faite
-dans le sens des $x$ négatifs.
+dans le sens des $x$ positifs.
 
 ![](images/reperes_helices.svg)
 

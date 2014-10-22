@@ -714,8 +714,9 @@ celui renseigné dans le fichier de [commandes
 attendues](documentation_yaml.html#syntaxe-du-fichier-de-commande).
 - `model` : Nom du modèle. Doit être `wageningen B-series` pour utiliser ce
 modèle.
-- `propeller frame relative to mesh frame` : Définition du [repère de
-l'hélice](modeles_reperes_et_conventions.html#rep%C3%A8re-dexpression-des-efforts).
+- `position of propeller frame` : Définition du [repère de
+l'hélice](modeles_reperes_et_conventions.html#expression-des-efforts).
+- `relative to` : repère dans lequel sont exprimés `x`,`y`,`z`,`phi`,`theta` et `psi`.
 - `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par rapport au centre du repère attaché au maillage et projeté sur ce dernier.
 - `phi`,`theta`,`psi` : Définition de la rotation permettant de passer du
 repère attaché au maillage au [repère attaché à
@@ -733,9 +734,7 @@ succion](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-co
 Utilisé pour calculer le signe du moment généré par l'hélice sur le navire. Les
 valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
 `clockwise`, l'hélice tournera dans le sens horaire (en se plaçant à l'arrière
-du navire et en regardant vers la proue) et génèrera un moment dans le sens
-trigonométrique, soit, si les axes des repères body et hélice sont colinéaires,
-un moment négatif sur le navire (dans le repère body). Voir [la
+du navire et en regardant vers la proue) et génèrera un moment négatif sur le navire (dans le repère de l'hélice). Voir [la
 documentation](file:///home/cady/simulator/doc_user/modeles_reperes_et_conventions.html#expression-des-efforts).
 - `number of blades` : nombre de pales de l'hélice.
 - `blade area ratio AE/A0` : [fraction de
