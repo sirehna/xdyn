@@ -7,7 +7,7 @@ de vague afin de tester des algorithmes de prédiction de mouvement sur houle.
 Ce tutoriel explique comment utiliser le simulateur pour ce type de simulation.
 
 ## Description du problème
-Dans cet example, nous simulerons une houle d'Airy constituée de la somme de
+Dans cet exemple, nous simulerons une houle d'Airy constituée de la somme de
 deux spectres directionnels :
 
 - l'un de densité spectrale JONSWAP et mono-directionnel

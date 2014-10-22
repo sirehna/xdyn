@@ -36,7 +36,7 @@ La documentation "utilisateur" du simulateur est composée de cinq parties :
 - [Une documentation du fichier d'entrée](documentation_yaml.html) donnant le
   paramétrage de tous les modèles connus par le simulateur,
 - [Une documentation des modèles physiques](modeles_reperes_et_conventions.html) avec des références vers la
-  documentation du fchier d'entrée, pour la définition des phénomènes physiques
+  documentation du fichier d'entrée, pour la définition des phénomènes physiques
   modélisés,
 - [Une documentation du solveur](solver.html) qui détaille l'algorithme
   d'intégration numérique utilisé.
@@ -52,22 +52,22 @@ ajouts de fonctionnalités).
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 USAGE: sim <yaml file> [-h] [-y ARG] [-o ARG] [-s ARG] [dt ARG] [--tstart ARG]
-[--tend ARG] [-w ARG] 
+[--tend ARG] [-w ARG]
 Options:
   -h [ --help ]              Show this help message
   -y [ --yml ] arg           Name(s) of the YAML file(s)
-  -o [ --out ] arg           Name of the generated CSV file. If none given, 
+  -o [ --out ] arg           Name of the generated CSV file. If none given,
                              simulator writes CSV to standard output
-  -s [ --solver ] arg (=rk4) Name of the solver: euler,rk4,rkck for Euler, 
-                             Runge-Kutta 4 & Runge-Kutta-Cash-Karp 
+  -s [ --solver ] arg (=rk4) Name of the solver: euler,rk4,rkck for Euler,
+                             Runge-Kutta 4 & Runge-Kutta-Cash-Karp
                              respectively.
   --dt arg                   Initial time step (or value of the fixed time step
                              for fixed step solvers)
-  --tstart arg (=0)          Date corresponding to the beginning of the 
+  --tstart arg (=0)          Date corresponding to the beginning of the
                              simulation (in seconds)
   --tend arg                 Last time step
-  -w [ --waves ] arg         Name of the YAML output file where the wave 
-                             heights will be stored ('output' section of the 
+  -w [ --waves ] arg         Name of the YAML output file where the wave
+                             heights will be stored ('output' section of the
                              YAML file)
 ~~~~~~~~~~~~~~~~~~~~
 

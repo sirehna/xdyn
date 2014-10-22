@@ -81,7 +81,7 @@ mouvement oscillatoire élémentaire de l'obstacle.
 
 En définitive, la solution complète $\Phi_D$ du problème de
 diffraction-rayonnement obtenue par superposition de la solution "obstacle
-fixe" et des solutions ocillatoires élémentaires peut s'écrire :
+fixe" et des solutions oscillatoires élémentaires peut s'écrire :
 
 $$ \Phi_D = \Re\left[\Psi_{\mbox{PD}}e^{-i\omega t} + \sum_{j=1}^6
 f_j\Psi_{\mbox{PR}_j} e^{-i\omega t}\right]$$
