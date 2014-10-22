@@ -8,9 +8,13 @@
 #ifndef CONTROLLABLEFORCEMODEL_HPP_
 #define CONTROLLABLEFORCEMODEL_HPP_
 
-#include <ssc/kinematics.hpp>
-namespace ssc { namespace data_source { class DataSource;}}
+#include <map>
 
+#include <ssc/kinematics.hpp>
+
+#include "YamlPosition.hpp"
+
+namespace ssc { namespace data_source { class DataSource;}}
 class Body;
 
 /** \brief These force models read commands from a DataSource.
