@@ -10,11 +10,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class BodyBuilderException: public Exception
+class BodyBuilderException: public ::ssc::exception_handling::Exception
 {
     public:
         BodyBuilderException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

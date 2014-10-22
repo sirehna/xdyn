@@ -10,11 +10,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class SimulatorYamlParserException : public Exception
+class SimulatorYamlParserException : public ::ssc::exception_handling::Exception
 {
     public:
         SimulatorYamlParserException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

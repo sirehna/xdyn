@@ -26,7 +26,7 @@
 
 #define N 80
 
-class OutputTransformerTestException: public Exception
+class OutputTransformerTestException: public ::ssc::exception_handling::Exception
 {
     public:
         OutputTransformerTestException(const char* s) :

@@ -10,11 +10,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class HydrostaticException: public Exception
+class HydrostaticException: public ::ssc::exception_handling::Exception
 {
     public:
         HydrostaticException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

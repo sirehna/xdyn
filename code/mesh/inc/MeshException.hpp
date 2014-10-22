@@ -3,11 +3,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class MeshException : public Exception
+class MeshException : public ::ssc::exception_handling::Exception
 {
     public:
         MeshException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

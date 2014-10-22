@@ -12,11 +12,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class YamlCheckerException: public Exception
+class YamlCheckerException: public ::ssc::exception_handling::Exception
 {
     public:
         YamlCheckerException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };
