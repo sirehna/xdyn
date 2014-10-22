@@ -603,7 +603,10 @@ documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visque
 ## Efforts commandés
 
 Les efforts contrôlés correspondent aux efforts de propulsion, de safran et de
-foil. Ils sont décrits dans la section `controlled forces`.
+foil. Ils sont décrits dans la section `controlled forces`. Les seules clefs
+YAML communes à tous les efforts commandés sont `name` (qui est un identifiant
+choisi par l'utilisateur) et `model` (qui est une chaîne servant à identifier
+le type de modèle utilisé).
 
 La provenance des commandes (où le simulateur lit-il les commandes à chaque pas
 de temps) doit être spécifiée lors de l'appel de l'exécutable en
@@ -635,7 +638,8 @@ controlled forces:
     blade area ratio AE/A0: 0.5
   - name: starboard propeller
     model: wageningen B-series
-    propeller frame relative to mesh frame:
+    position of propeller frame:
+        relative to: mesh(body 1)
         x: {value: -4, unit: m}
         y: {value: 2, unit: m}
         z: {value: 2, unit: m}
@@ -669,11 +673,13 @@ nom est passé à l'exécutable de simulation en utilisant le flag `-c` (ou
   P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Pour chaque effort contrôlé (identifié par `name`), on donne une liste
-d'instants (en secondes) puis, pour chaque commande, les valeurs à ces
-instants. Il doit donc y avoir, pour chaque commande, autant de valeurs qu'il y
-a d'instants. Entre deux instants, les valeurs des commandes sont interpolées
-linéairement.
+La valeur renseigné dans `name` doit correspondre à l'identifiant utilisé dans
+la section `controlled forces`. Pour chaque effort contrôlé (identifié par
+`name`), on donne une liste d'instants (en secondes) puis, pour chaque
+commande, les valeurs à ces instants. Il doit donc y avoir, pour chaque
+commande, autant de valeurs qu'il y a d'instants. Entre deux instants, les
+valeurs des commandes sont interpolées linéairement. On peut définir autant de
+clef qu'on le souhaite : les clefs inutilisées sont simplement ignorées.
 
 Au-delà de la dernière valeur de temps renseignée, la dernière valeur de chaque
 commande est maintenue. Pour l'exemple présenté ci-dessus, pour toute valeur de
@@ -687,7 +693,8 @@ Voici un exemple d'utilisation d'hélice Wageningen :
 controlled forces:
   - name: port side propeller
     model: wageningen B-series
-    propeller frame relative to mesh frame:
+    position of propeller frame:
+        relative to: mesh(body 1)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
