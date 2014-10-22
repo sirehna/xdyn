@@ -9,8 +9,9 @@
 
 #include "ControllableForceModel.hpp"
 #include "ControllableForceModelException.hpp"
+#include "yaml2eigen.hpp"
 
-ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_) : name(name_), commands(commands_)
+ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& position_of_frame_) : name(name_), commands(commands_), position_of_frame(position_of_frame_)
 {
 }
 
@@ -31,6 +32,11 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
 ssc::kinematics::Wrench ControllableForceModel::operator()(const Body& body, const double t, ssc::data_source::DataSource& command_listener) const
 {
     return get_force(body, t, get_commands(command_listener));
+}
+
+void ControllableForceModel::add_reference_frame(const std::string& body_name, const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const
+{
+    k->add(make_transform(position_of_frame, body_name, rotations));
 }
 
 double ControllableForceModel::get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener) const
