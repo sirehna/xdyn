@@ -50,3 +50,23 @@ Eigen::Matrix<double,6,6> parse_quadratic_damping(const std::string& yaml)
     for (size_t j = 0 ; j < 6 ; ++j) ret(5,j) = M.row_6[j];
     return ret;
 }
+
+YamlWageningen parse_wageningen(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlWageningen ret;
+    std::string rot;
+    node["rotation"] >> rot;
+    ret.rotating_clockwise = (rot == "clockwise");
+    node["thrust deduction factor t"]        >> ret.thrust_deduction_factor;
+    node["wake coefficient w"]               >> ret.wake_coefficient;
+    node["name"]                             >> ret.name;
+    node["blade area ratio AE/A0"]           >> ret.blade_area_ratio;
+    node["number of blades"]                 >> ret.number_of_blades;
+    node["position of propeller frame"]      >> ret.position_of_propeller_frame;
+    node["relative rotative efficiency eta"] >> ret.relative_rotative_efficiency;
+    return ret;
+}
