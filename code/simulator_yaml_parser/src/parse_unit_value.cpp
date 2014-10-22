@@ -8,6 +8,25 @@
 #include <ssc/decode_unit.hpp>
 #include "parse_unit_value.hpp"
 
+void parse_uv(const YAML::Node& node, std::vector<double>& d)
+{
+    if(node.FindValue("unit"))
+    {
+        std::string unit = "";
+        node["unit"] >> unit;
+        const double factor = ssc::decode_unit::decodeUnit(unit);
+        node["values"] >> d;
+        for (std::vector<double>::iterator it = d.begin() ; it != d.end() ; ++it)
+        {
+            *it *= factor;
+        }
+    }
+    else
+    {
+        node >> d;
+    }
+}
+
 void parse_uv(const YAML::Node& node, double& d)
 {
     UV uv;
