@@ -18,6 +18,7 @@ set(SRC src/Body.cpp
         src/LinearDampingForceModel.cpp
         src/ControllableForceModel.cpp
         src/yaml2eigen.cpp
+        src/WageningenControlledForceModel.cpp
         )
 
 # Using C++ 2011
