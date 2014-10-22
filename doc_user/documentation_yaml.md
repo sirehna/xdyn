@@ -716,7 +716,7 @@ attendues](documentation_yaml.html#syntaxe-du-fichier-de-commande).
 modèle.
 - `position of propeller frame` : Définition du [repère de
 l'hélice](modeles_reperes_et_conventions.html#expression-des-efforts).
-- `relative to` : repère dans lequel sont exprimés `x`,`y`,`z`,`phi`,`theta` et `psi`.
+- `frame` : repère dans lequel sont exprimés `x`,`y`,`z`,`phi`,`theta` et `psi`.
 - `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par rapport au centre du repère attaché au maillage et projeté sur ce dernier.
 - `phi`,`theta`,`psi` : Définition de la rotation permettant de passer du
 repère attaché au maillage au [repère attaché à
