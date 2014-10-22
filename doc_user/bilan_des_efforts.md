@@ -76,7 +76,7 @@ manière que les efforts hydrostatiques :
 
 Les efforts de diffraction sont interpolés à partir des RAO d'efforts (réponse
 impulsionnelle) obtenus sous forme de fichiers HDB par des codes potentiels
-tels que Dyodore.
+tels que Diodore.
 
 ### Efforts de radiation
 
@@ -88,7 +88,7 @@ de radiation.
 $$F_{mbox{MA}} = M_A(\infty)\frac{d\nu}{dt}$$
 
 La matrice de masse ajoutées à pulsation infinie $M_A(\infty)$ est, là encore,
-calculée par un code potentiel type Dyodore ou Aqua+. Elle est supposée
+calculée par un code potentiel type Diodore ou Aqua+. Elle est supposée
 constante au cours du temps et est renseignée dans la section bodies/dynamics:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -120,9 +120,9 @@ convolution.
 
 Afin de ne pas réaliser de changement de repère intempestif sur des quantités
 complexes telles que les masses ajoutées, le bilan des efforts est écrit dans le
-repère navire, qui n'est pas galliléen. Par conséquent, il faut tenir compte des
+repère navire, qui n'est pas galiléen. Par conséquent, il faut tenir compte des
 termes d'inertie d'entraînement (accélération de Coriolis) dus aux mouvements du
-référentiel navire par rapport au repère NED, considéré comme galliléen.
+référentiel navire par rapport au repère NED, considéré comme galiléen.
 
 ### Expression
 

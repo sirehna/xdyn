@@ -452,7 +452,7 @@ modèle de gravité :
 mass: {value: 1000, unit: tonne}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Attention : si l'on spécifie `ton`, le système utilisear la tonne britanique
+Attention : si l'on spécifie `ton`, le système utilisera la tonne britannique
 qui vaut 907.185 kg.
 
 #### Matrice d'inertie
@@ -489,10 +489,10 @@ added mass matrix at the center of buoyancy projected in the body frame:
 Elle figure dans la section `dynamics` et non dans la section `external forces`
 (bien qu'il s'agisse d'un modèle effort, proportionnel à l'accélération)
 parce que ce modèle d'effort fait l'objet d'un traitement particulier : il
-figure dans le member de gauche de l'équation fondamentale de la dynamique
+figure dans le membre de gauche de l'équation fondamentale de la dynamique
 $$M\ddot{X} = \sum F_i$$ pour des raisons de stabilité numérique (l'effort
 dépend des accélérations qui doivent justement être calculées par la résolution
-de l'équation fondamentale de la dyunamique).
+de l'équation fondamentale de la dynamique).
 
 ## Efforts extérieurs
 

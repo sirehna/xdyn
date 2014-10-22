@@ -59,14 +59,14 @@ plusieurs éléments doivent être définis:
   système d'axes fixes ou alors par rapport au système d'axes
   nouvellement modifiés.
 - un ordre dans lequel est appliqué les rotations.
-  Il permet de définir complétement la composition de rotations.
+  Il permet de définir complètement la composition de rotations.
 
 
 ### Enumération des conventions possibles
 
 Si on choisit une convention d'angles, alors chaque angle du triplet définit
 respectivement une rotation autour d'un axe $X$, $Y$ ou $Z$.
-Les axes ne peuvent être répetés.
+Les axes ne peuvent être répétés.
 Il est possible de définir 6 conventions d'angles, qui correspondent à
 la permutation des trois axes: $XYZ$ ,$XZY$ ,$YXZ$ ,$YZX$ ,$ZXY$ ,$ZYX$.
 Par exemple la rotation $R_{YZX}$ appliquée au triplet
@@ -77,7 +77,7 @@ et terminée par la rotation $R_{X}\left(\phi\right)$.
 Si on choisit une convention d'axes, alors on modifie l'ordre des axes
 sur lesquels appliquer successivement les rotations.
 Des répétitions des axes sont alors possibles, si elles ne se suivent pas.
-Par exempe, $XYX$ sera valide, mais pas $XXY$.
+Par exemple, $XYX$ sera valide, mais pas $XXY$.
 Par exemple, une convention ZXY définit une composition de rotations
 Il est possible de définir 12 conventions d'axes:
 $XYX$, $XYZ$, $XZX$, $XZY$, $YXY$, $YXZ$,
@@ -105,7 +105,7 @@ Le tableau suivant présente les 36 conventions possibles :
 +====+=======+=============+===============+===================================+========================+
 |  1 | angle |  x y z      |    Extrinsic  | $R_Z(\psi).R_Y(\theta).R_X(\phi)$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  2 | angle |  x z y      |    Extrinsic  | $R_Y(\theta).R_Z(\psi).R_X(\phi)$ | 	                    |
+|  2 | angle |  x z y      |    Extrinsic  | $R_Y(\theta).R_Z(\psi).R_X(\phi)$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
 |  3 | angle |  y x z      |    Extrinsic  | $R_Z(\psi).R_X(\phi).R_Y(\theta)$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
@@ -243,13 +243,13 @@ L'utilisation des angles d'Euler pose deux problèmes principaux :
 
 - Le blocage de Cardan, d'une part, qui se manifeste par la perte d'un degré de
   liberté lorsque les axes de deux des trois rotations définissant la
-  transformation du repèr NED au repère navire sont confondus,
+  transformation du repère NED au repère navire sont confondus,
 - La périodicité des angles, d'autre part, qui introduit des discontinuités dans
   les états.
 
 Une manière usuelle de contourner ces problèmes est d'utiliser des quaternions
 qui, au prix de l'ajout d'un état supplémentaire permettent de définir les
-rotations sans ambiguité et de façon unique, quelle que soit la convention
+rotations sans ambiguïté et de façon unique, quelle que soit la convention
 d'angle adoptée.
 
 ## Etats navires
@@ -264,11 +264,12 @@ d'angle adoptée.
 - La vitesse de translation du navire par rapport au repère fixe NED, projetée
   dans le repère navire est notée $v^b = [u,v,w]^T$ et s'exprime en m/s.
 - Le vecteur vitesse de rotation du repère navire par rapport au repère NED,
-  projeté dans le repère navire, est noté $\omega_{nb}^b = [p,q,r]^T$.
+  projeté dans le repère navire, est noté $\omega_{nb}^b = [p,q,r]^T$
+  et s'exprime en rad/s.
 - Les efforts appliqués au navire et projetés dans le repère navire sont notés :
-  $f^b = [X,Y,Z]^T$.
+  $f^b = [X,Y,Z]^T$. Ils s'expriment en N.
 - Les moments appliqués au navire et projetés dans le repère navire sont notés :
-  $m^b = [K,M,N]^T$.
+  $m^b = [K,M,N]^T$. Ils s'expriment en N.m.
 
 ## Repère de calcul hydrodynamique
 
@@ -356,7 +357,7 @@ $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) = \left\{\beg
 
 #### Houle d'Airy
 
-Pour une houle monochromatique et monodirectionnele, Le potentiel de vitesse s'exprime :
+Pour une houle monochromatique et monodirectionnelle, le potentiel de vitesse s'exprime :
 
 $$\phi(x,y,t) = \frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\cos(k\cdot(x\cdot
 \cos(\psi)+ y\cdot \sin(\psi))-\omega_i\cdot t+\phi)$$
@@ -368,7 +369,8 @@ relation de dispersion :
 
 $$\omega^2 = g\cdot k \cdot \tanh(k\cdot h)$$
 
-On peut généraliser et dériver cette expression pour obtenir l'élévation d'une houle polychromatique et multi-directionnelle :
+On peut généraliser et dériver cette expression pour obtenir l'élévation d'une
+houle polychromatique et multi-directionnelle :
 
 $$\eta(x,y,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 \sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\cos(k\cdot(x\cdot \cos(\psi_j)
@@ -510,7 +512,7 @@ mouvement oscillatoire élémentaire de l'obstacle.
 
 En définitive, la solution complète $\Phi_D$ du problème de
 diffraction-rayonnement obtenue par superposition de la solution "obstacle
-fixe" et des solutions ocillatoires élémentaires peut s'écrire :
+fixe" et des solutions oscillatoires élémentaires peut s'écrire :
 
 $$ \Phi_D = \Re\left[\Psi_{\mbox{PD}}e^{-i\omega t} + \sum_{j=1}^6
 f_j\Psi_{\mbox{PR}_j} e^{-i\omega t}\right]$$
@@ -795,7 +797,7 @@ Lev Landau et Evgueni Lifchits, Physique théorique, éd. MIR, Moscou
 
 Les efforts hydrostatiques non-linéaires sont dus à la pression statique
 (c'est-à-dire indépendante de la vitesse du fluide) s'exerçant sur la carène.
-l'hypothèse principale est ici la staticité, c'est-à-dire qu'on considère la
+L'hypothèse principale est ici la staticité, c'est-à-dire qu'on considère la
 carène au repos et une surface libre plane. Si cette dernière hypothèse n'est
 pas vérifiée, il faut ajouter un terme correctif, qui correspond aux efforts
 d'excitation de Froude-Krylov. En d'autres termes, pour le modèle
@@ -937,7 +939,7 @@ parasites suivant $y$ qui n'apparaissent pas avec le modèle `exact`.
 Néanmoins, le modèle `exact` impliquant le calcul des matrices d'inertie de
 chaque maille (en particulier des mailles générées dynamiquement en calculant
 l'intersection de la carène et de la surface libre), il est très coûteux en
-temps de calcul (on peut constater un ordre de gradeur par rapport au modèle
+temps de calcul (on peut constater un ordre de grandeur par rapport au modèle
 `fast`.
 
 ### Références
@@ -1065,12 +1067,12 @@ où
 
 $$D_q(\nu_{\mbox{local}}) = \left[
 \begin{array}{ccc}
-d_{11}\cdot|u_{\mbox{local}}| & d_{12}\cdot |v_{\mbox{local}}| & d_{13}\cdot |w_{\mbox{local}}| & d_{14}\cdot |p_{\mbox{local}}| & d_{15}\cdot |q_{\mbox{local}}| & d_{16}\cdot |r_{\mbox{local}}|\\ 
-d_{21}\cdot|u_{\mbox{local}}| & d_{22}\cdot |v_{\mbox{local}}| & d_{23}\cdot |w_{\mbox{local}}| & d_{24}\cdot |p_{\mbox{local}}| & d_{25}\cdot |q_{\mbox{local}}| & d_{26}\cdot |r_{\mbox{local}}|\\ 
-d_{31}\cdot|u_{\mbox{local}}| & d_{32}\cdot |v_{\mbox{local}}| & d_{33}\cdot |w_{\mbox{local}}| & d_{34}\cdot |p_{\mbox{local}}| & d_{35}\cdot |q_{\mbox{local}}| & d_{36}\cdot |r_{\mbox{local}}|\\ 
-d_{41}\cdot|u_{\mbox{local}}| & d_{42}\cdot |v_{\mbox{local}}| & d_{43}\cdot |w_{\mbox{local}}| & d_{44}\cdot |p_{\mbox{local}}| & d_{45}\cdot |q_{\mbox{local}}| & d_{46}\cdot |r_{\mbox{local}}|\\ 
-d_{51}\cdot|u_{\mbox{local}}| & d_{52}\cdot |v_{\mbox{local}}| & d_{53}\cdot |w_{\mbox{local}}| & d_{54}\cdot |p_{\mbox{local}}| & d_{55}\cdot |q_{\mbox{local}}| & d_{56}\cdot |r_{\mbox{local}}|\\ 
-d_{61}\cdot|u_{\mbox{local}}| & d_{62}\cdot |v_{\mbox{local}}| & d_{63}\cdot |w_{\mbox{local}}| & d_{64}\cdot |p_{\mbox{local}}| & d_{65}\cdot |q_{\mbox{local}}| & d_{66}\cdot |r_{\mbox{local}}|\\ 
+d_{11}\cdot|u_{\mbox{local}}| & d_{12}\cdot |v_{\mbox{local}}| & d_{13}\cdot |w_{\mbox{local}}| & d_{14}\cdot |p_{\mbox{local}}| & d_{15}\cdot |q_{\mbox{local}}| & d_{16}\cdot |r_{\mbox{local}}|\\
+d_{21}\cdot|u_{\mbox{local}}| & d_{22}\cdot |v_{\mbox{local}}| & d_{23}\cdot |w_{\mbox{local}}| & d_{24}\cdot |p_{\mbox{local}}| & d_{25}\cdot |q_{\mbox{local}}| & d_{26}\cdot |r_{\mbox{local}}|\\
+d_{31}\cdot|u_{\mbox{local}}| & d_{32}\cdot |v_{\mbox{local}}| & d_{33}\cdot |w_{\mbox{local}}| & d_{34}\cdot |p_{\mbox{local}}| & d_{35}\cdot |q_{\mbox{local}}| & d_{36}\cdot |r_{\mbox{local}}|\\
+d_{41}\cdot|u_{\mbox{local}}| & d_{42}\cdot |v_{\mbox{local}}| & d_{43}\cdot |w_{\mbox{local}}| & d_{44}\cdot |p_{\mbox{local}}| & d_{45}\cdot |q_{\mbox{local}}| & d_{46}\cdot |r_{\mbox{local}}|\\
+d_{51}\cdot|u_{\mbox{local}}| & d_{52}\cdot |v_{\mbox{local}}| & d_{53}\cdot |w_{\mbox{local}}| & d_{54}\cdot |p_{\mbox{local}}| & d_{55}\cdot |q_{\mbox{local}}| & d_{56}\cdot |r_{\mbox{local}}|\\
+d_{61}\cdot|u_{\mbox{local}}| & d_{62}\cdot |v_{\mbox{local}}| & d_{63}\cdot |w_{\mbox{local}}| & d_{64}\cdot |p_{\mbox{local}}| & d_{65}\cdot |q_{\mbox{local}}| & d_{66}\cdot |r_{\mbox{local}}|\\
 \end{array}\right]$$
 
 les $((d_{ij}))$ étant les coefficients de la matrice d'amortissement
