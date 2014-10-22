@@ -33,6 +33,7 @@ namespace test_data
     std::string rolling_cube();
     std::string anthineas_damping();
     std::string controlled_forces();
+    std::string wageningen();
 }
 
 #endif /* YAML_DATA_HPP_ */

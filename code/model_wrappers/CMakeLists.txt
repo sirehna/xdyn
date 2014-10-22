@@ -17,7 +17,6 @@ set(SRC src/Body.cpp
         src/DampingForceModel.cpp
         src/LinearDampingForceModel.cpp
         src/ControllableForceModel.cpp
-        src/WageningenControlledForceModel.cpp
         src/yaml2eigen.cpp
         )
 
