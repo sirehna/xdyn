@@ -4,12 +4,13 @@
  *  Created on: Jun 16, 2014
  *      Author: cady
  */
+#include <ssc/kinematics.hpp>
 
-#include "update_kinematics.hpp"
 #include "Body.hpp"
 #include "BodyBuilder.hpp"
-#include <ssc/kinematics.hpp>
 #include "StateMacros.hpp"
+#include "update_kinematics.hpp"
+#include "yaml2eigen.hpp"
 #include "YamlAngle.hpp"
 #include "YamlBody.hpp"
 
@@ -61,7 +62,7 @@ StateType get_initial_states(const YamlRotation& convention, const std::vector<Y
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
         const YamlAngle angle = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle;
-        const ssc::kinematics::RotationMatrix R = builder.angle2matrix(angle);
+        const ssc::kinematics::RotationMatrix R = angle2matrix(angle, convention);
         const Eigen::Quaternion<double> q(R);
         *_X(ret,i) = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.x;
         *_Y(ret,i) = bodies[i].initial_position_of_body_frame_relative_to_NED_projected_in_NED.coordinates.y;

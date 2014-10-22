@@ -10,6 +10,7 @@
 #include "BodyBuilderException.hpp"
 #include "MeshBuilder.hpp"
 #include "YamlBody.hpp"
+#include "yaml2eigen.hpp"
 
 BodyBuilder::BodyBuilder(const YamlRotation& convention) : rotations(convention)
 {
@@ -35,21 +36,15 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
 {
     Body ret;
     ret.name = input.name;
-    ret.G = ssc::kinematics::Point(input.dynamics.centre_of_inertia.frame,
-                                   input.dynamics.centre_of_inertia.x,
-                                   input.dynamics.centre_of_inertia.y,
-                                   input.dynamics.centre_of_inertia.z);
+    ret.G = make_point(input.dynamics.centre_of_inertia);
     ret.m = input.dynamics.mass;
 
-    ret.hydrodynamic_forces_calculation_point = ssc::kinematics::Point(input.name,
-            input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame.x,
-            input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame.y,
-            input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame.z);
+    ret.hydrodynamic_forces_calculation_point = make_point(input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame, input.name);
 
     ret.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
     ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
     ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
-    ret.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle);
+    ret.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle, rotations);
     change_mesh_ref_frame(ret, mesh);
     add_inertia(ret, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
     ret.u = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u;
@@ -60,32 +55,6 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
     ret.r = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
     ret.intersector = MeshIntersectorPtr(new MeshIntersector(ret.mesh));
     return ret;
-}
-
-ssc::kinematics::RotationMatrix BodyBuilder::angle2matrix(const YamlAngle& a) const
-{
-    const ssc::kinematics::EulerAngles e(a.phi, a.theta, a.psi);
-
-    if (rotations.order_by == "angle")
-    {
-        if (match(rotations.convention, "z", "y'", "x''"))
-            return ssc::kinematics::rotation_matrix<ssc::kinematics::INTRINSIC,
-                                                    ssc::kinematics::CHANGING_ANGLE_ORDER,
-                                                    ssc::kinematics::CARDAN, 3, 2, 1>(e);
-        std::stringstream ss;
-        ss << "Rotation convention '" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "' is not currently supported.";
-        THROW(__PRETTY_FUNCTION__, BodyBuilderException, ss.str());
-    }
-    else
-    {
-        THROW(__PRETTY_FUNCTION__, BodyBuilderException, std::string("Ordering rotations by '") + rotations.order_by + "' is not currently supported");
-    }
-    return ssc::kinematics::RotationMatrix();
-}
-
-bool BodyBuilder::match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third) const
-{
-    return (convention.at(0) == first) and (convention.at(1) == second) and (convention.at(2) == third);
 }
 
 void BodyBuilder::add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const

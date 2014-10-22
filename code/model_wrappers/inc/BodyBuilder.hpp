@@ -45,18 +45,8 @@ class BodyBuilder
          */
         Body build(const std::string& name, const VectorOfVectorOfPoints& mesh) const;
 
-        /** \details Converts (phi,theta,psi) to a rotation matrix, taking the
-         *           rotation convention into account
-         */
-        ssc::kinematics::RotationMatrix angle2matrix(const YamlAngle& a) const;
-
     private:
         BodyBuilder(); //Disabled
-
-        /** \brief Utility function used by angle2matrix
-         *  \returns True if 'convention' == [first,second,third]
-         */
-        bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third) const;
 
         void add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const;
 
