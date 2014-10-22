@@ -16,6 +16,7 @@ set(SRC src/Body.cpp
         src/FroudeKrylovForceModel.cpp
         src/DampingForceModel.cpp
         src/LinearDampingForceModel.cpp
+        src/ControllableForceModel.cpp
         )
 
 # Using C++ 2011
