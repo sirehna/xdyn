@@ -10,11 +10,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class WaveModelException: public Exception
+class WaveModelException: public ::ssc::exception_handling::Exception
 {
     public:
         WaveModelException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

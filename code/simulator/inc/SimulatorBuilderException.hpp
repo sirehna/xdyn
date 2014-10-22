@@ -10,11 +10,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class SimulatorBuilderException: public Exception
+class SimulatorBuilderException: public ::ssc::exception_handling::Exception
 {
     public:
         SimulatorBuilderException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

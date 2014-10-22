@@ -3,11 +3,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class StlReaderException : public Exception
+class StlReaderException : public ::ssc::exception_handling::Exception
 {
     public:
         StlReaderException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

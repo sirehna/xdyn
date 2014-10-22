@@ -10,11 +10,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class MeshIntersectorException: public Exception
+class MeshIntersectorException: public ::ssc::exception_handling::Exception
 {
     public:
         MeshIntersectorException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

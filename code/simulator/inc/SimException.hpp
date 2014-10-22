@@ -3,11 +3,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class SimException: public Exception
+class SimException: public ::ssc::exception_handling::Exception
 {
     public:
         SimException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };

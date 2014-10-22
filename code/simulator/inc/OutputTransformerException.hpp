@@ -10,11 +10,11 @@
 
 #include <ssc/exception_handling.hpp>
 
-class OutputTransformerException: public Exception
+class OutputTransformerException: public ::ssc::exception_handling::Exception
 {
     public:
         OutputTransformerException(const char* s) :
-                Exception(s)
+            ::ssc::exception_handling::Exception(s)
         {
         }
 };
