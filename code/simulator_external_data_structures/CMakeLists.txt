@@ -25,6 +25,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlSimulatorInput.cpp
         src/YamlSpeed.cpp
         src/YamlWaveModelInput.cpp
+        src/YamlWageningen.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
