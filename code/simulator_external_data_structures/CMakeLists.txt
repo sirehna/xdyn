@@ -9,6 +9,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlAnglesOutput.cpp
         src/YamlBlockedDegreesOfFreedom.cpp
         src/YamlBody.cpp
+        src/YamlCommands.cpp
         src/YamlCoordinates.cpp
         src/YamlDynamics.cpp
         src/YamlDynamics6x6Matrix.cpp
