@@ -636,6 +636,7 @@ controlled forces:
     rotation: clockwise
     number of blades: 3
     blade area ratio AE/A0: 0.5
+    diameter: {value: 2, unit: m}
   - name: starboard propeller
     model: wageningen B-series
     position of propeller frame:
@@ -652,6 +653,7 @@ controlled forces:
     rotation: anti-clockwise
     number of blades: 3
     blade area ratio AE/A0: 0.5
+    diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Syntaxe du fichier de commande
