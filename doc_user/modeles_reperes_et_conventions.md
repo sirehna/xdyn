@@ -1248,15 +1248,15 @@ P/D\leq 1.4$.
 
 On note $2\leq Z\leq 7$ le nombre de pales de l'hélice.
 
-Les coefficients des polynômes pour $K_T$ et $K_Q$ sont notés $C_k^T$
-et $C_k^Q$ respectivement, où $k$ est un entier tel que $1 \leq k \leq 47$.
-$s(k)$, $s'(k)$, $t(k)$, $t'(k)$, $u(k)$, $u'(k)$, $v(k)$ et $v'(k)$ sont des
+Les coefficients des polynômes pour $K_T$ et $K_Q$ sont notés $C_i^T$
+et $C_i^Q$ respectivement, où $i$ est un entier tel que $1 \leq i \leq 47$.
+$s(i)$, $s'(i)$, $t(i)$, $t'(i)$, $u(i)$, $u'(i)$, $v(i)$ et $v'(i)$ sont des
 exposants entre 0 et 6.
 
-$$K_T(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^T \cdot J^{s(k)}\cdot
-(P/D)^{t(k)}\cdot (A_E/A_0)^{u(k)}\cdot Z^{v(k)}$$
-$$K_Q(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^Q \cdot J^{s'(k)}\cdot
-(P/D)^{t'(k)}\cdot (A_E/A_0)^{u'(k)}\cdot Z^{v'(k)}$$
+$$K_T(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^T \cdot J^{s(i)}\cdot
+(P/D)^{t(i)}\cdot (A_E/A_0)^{u(i)}\cdot Z^{v(i)}$$
+$$K_Q(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^Q \cdot J^{s'(i)}\cdot
+(P/D)^{t'(i)}\cdot (A_E/A_0)^{u'(i)}\cdot Z^{v'(i)}$$
 
 Les coefficients $C_k^T$ et $C_k^Q$ sont définis pour un nombre de Reynolds
 $R_n=2\times 10^6$, mais le modèle a été étendu pour des nombres de Reynolds
