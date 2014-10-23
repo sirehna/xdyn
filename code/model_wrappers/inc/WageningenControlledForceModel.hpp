@@ -31,6 +31,7 @@ class WageningenControlledForceModel : public ControllableForceModel
         ssc::kinematics::Wrench get_force(const Body& body, const double t, std::map<std::string,double> commands) const;
         double Kt(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double Kq(const size_t Z, const double AE_A0, const double P_D, const double J) const;
+        double advance_ratio(const Body& body, std::map<std::string,double>& commands) const;
 
     private:
         WageningenControlledForceModel();
@@ -41,6 +42,7 @@ class WageningenControlledForceModel : public ControllableForceModel
         double kappa;
         size_t Z;
         double AE_A0;
+        double D;
 
         const double ct[NB_COEFF_KT]; //!< Interpolation coefficient for Kt for the Wageningen B-series
         const size_t st[NB_COEFF_KT]; //!< Exponents for the advance ratio for Kt for the Wageningen B-series

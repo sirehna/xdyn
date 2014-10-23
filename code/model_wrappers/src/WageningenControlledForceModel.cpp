@@ -7,6 +7,7 @@
 
 #include <cmath>
 
+#include "Body.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelException.hpp"
 #include "YamlWageningen.hpp"
@@ -18,6 +19,7 @@ WageningenControlledForceModel::WageningenControlledForceModel(const YamlWagenin
             kappa(input.rotating_clockwise ? -1 : 1),
             Z(input.number_of_blades),
             AE_A0(input.blade_area_ratio),
+            D(input.diameter),
             ct{0.00880496,-0.204554,0.166351,0.158114,-0.147581,-0.481497,0.415437,0.0144043,-0.0530054,0.0143481,0.0606826,-0.0125894,0.0109689,-0.133698,0.00638407,-0.00132718,0.168496,-0.0507214,0.0854559,-0.0504475,0.010465,-0.00648272,-0.00841728,0.0168424,-0.00102296,-0.0317791,0.018604,-0.00410798,-0.000606848,-0.0049819,0.0025983,-0.000560528,-0.00163652,-0.000328787,0.000116502,0.000690904,0.00421749,0.0000565229,-0.00146564},
             st{0,1,0,0,2,1,0,0,2,0,1,0,1,0,0,2,3,0,2,3,1,2,0,1,3,0,1,0,0,1,2,3,1,1,2,0,0,3,0},
             tt{0,0,1,2,0,1,2,0,0,1,1,0,0,3,6,6,0,0,0,0,6,6,3,3,3,3,0,2,0,0,0,0,2,6,6,0,3,6,3},
@@ -83,4 +85,11 @@ double WageningenControlledForceModel::Kq(const size_t Z, const double AE_A0_, c
         kq += cq[i]*std::pow(J, sq[i])*std::pow(P_D, tq[i])*std::pow(AE_A0_, uq[i])*std::pow(Z,vq[i]);
     }
     return kq;
+}
+
+double WageningenControlledForceModel::advance_ratio(const Body& body, std::map<std::string,double>& commands) const
+{
+    const double Va = sqrt(body.u*body.u + body.v*body.v + body.w*body.w);
+    const double n = commands["rpm"];
+    return Va/n/D;
 }

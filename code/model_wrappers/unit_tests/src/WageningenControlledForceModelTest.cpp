@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "Body.hpp"
 #include "force_parsers.hpp"
 #include "yaml_data.hpp"
 #include "WageningenControlledForceModel.hpp"
@@ -262,4 +263,16 @@ TEST_F(WageningenControlledForceModelTest, KQ)
     EXPECT_NEAR(0.125396067, 10*w.Kq(Z=3, AE_A0=0.4, P_D=0.5, J=0.2), EPS);
     EXPECT_NEAR(0.105448718, 10*w.Kq(Z=3, AE_A0=0.4, P_D=0.5, J=0.3), EPS);
 //! [WageningenControlledForceModelTest KQ_example]
+}
+
+TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
+{
+    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()));
+    Body b;
+    b.u = 3;
+    b.v = 4;
+    b.w = 5;
+    std::map<std::string,double> commands;
+    commands["rpm"] = 20;
+    ASSERT_DOUBLE_EQ(sqrt(50)/40, w.advance_ratio(b, commands));
 }
