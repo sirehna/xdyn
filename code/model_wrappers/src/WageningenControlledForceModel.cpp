@@ -44,9 +44,9 @@ WageningenControlledForceModel::WageningenControlledForceModel(const YamlWagenin
     }
 }
 
-ssc::kinematics::Wrench WageningenControlledForceModel::get_force(const Body& , const double , std::map<std::string,double> ) const
+ssc::kinematics::Vector6d WageningenControlledForceModel::get_force(const Body& , const double , std::map<std::string,double> ) const
 {
-    return ssc::kinematics::Wrench();
+    return ssc::kinematics::Vector6d();
 }
 
 void WageningenControlledForceModel::check(const double P_D, const double J) const

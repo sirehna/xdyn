@@ -12,7 +12,7 @@
 #include "yaml2eigen.hpp"
 
 ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& position_of_frame_, const EnvironmentAndFrames& env_) :
-    env(env_), name(name_), commands(commands_), position_of_frame(position_of_frame_)
+    env(env_), name(name_), commands(commands_), position_of_frame(position_of_frame_), point_of_application(make_point(position_of_frame.coordinates, position_of_frame.frame))
 {
 }
 
@@ -32,7 +32,7 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
 
 ssc::kinematics::Wrench ControllableForceModel::operator()(const Body& body, const double t, ssc::data_source::DataSource& command_listener) const
 {
-    return get_force(body, t, get_commands(command_listener));
+    return ssc::kinematics::Wrench(point_of_application, get_force(body, t, get_commands(command_listener)));
 }
 
 void ControllableForceModel::add_reference_frame(const std::string& body_name, const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const
