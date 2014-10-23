@@ -134,6 +134,26 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const Enviro
     }
 }
 
+void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, const EnvironmentAndFrames& env) const
+{
+    bool parsed = false;
+    for (auto that_parser = controlled_force_parsers.begin() ; that_parser != controlled_force_parsers.end() ; ++that_parser)
+    {
+        boost::optional<ControlledForcePtr> f = (*that_parser)->try_to_parse(model.model, model.yaml, env);
+        if (f)
+        {
+            L.push_back(f.get());
+            parsed = true;
+        }
+    }
+    if (not(parsed))
+    {
+        std::stringstream ss;
+        ss << "Unable to find a parser to parse model '" << model.model << "'";
+        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
+    }
+}
+
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     const auto bodies = get_bodies(meshes);
