@@ -104,6 +104,16 @@ std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrame
     return forces;
 }
 
+std::vector<ListOfControlledForces> SimulatorBuilder::get_controlled_forces(const EnvironmentAndFrames& env) const
+{
+    std::vector<ListOfControlledForces> forces;
+    for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
+    {
+        forces.push_back(controlled_forces_from(*that_body, env));
+    }
+    return forces;
+}
+
 ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
 {
     ListOfForces ret;

@@ -159,6 +159,7 @@ class SimulatorBuilder
         std::vector<Body> get_bodies(const MeshMap& meshes) const;
         EnvironmentAndFrames get_environment_and_frames(const std::vector<Body>& bodies) const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
+        std::vector<ListOfControlledForces> get_controlled_forces(const EnvironmentAndFrames& env) const;
         StateType get_initial_states() const;
         YamlSimulatorInput get_parsed_yaml() const;
         MeshMap make_mesh_map() const;
