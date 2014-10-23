@@ -21,6 +21,7 @@ struct YamlWageningen
     bool rotating_clockwise;
     size_t number_of_blades;
     double blade_area_ratio;
+    double diameter;
 };
 
 #endif /* YAMLWAGENINGEN_HPP_ */

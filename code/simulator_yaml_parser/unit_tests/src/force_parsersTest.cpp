@@ -109,4 +109,5 @@ TEST_F(force_parsersTest, wageningen)
     ASSERT_TRUE(w.rotating_clockwise);
     ASSERT_DOUBLE_EQ(0.7, w.thrust_deduction_factor);
     ASSERT_DOUBLE_EQ(0.9, w.wake_coefficient);
+    ASSERT_DOUBLE_EQ(2, w.diameter);
 }

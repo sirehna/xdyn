@@ -1479,6 +1479,7 @@ std::string test_data::wageningen()
           "thrust deduction factor t: 0.7\n"
           "rotation: clockwise\n"
           "number of blades: 3\n"
-          "blade area ratio AE/A0: 0.5\n";
+          "blade area ratio AE/A0: 0.5\n"
+          "diameter: {value: 2, unit: m}";
     return ss.str();
 }

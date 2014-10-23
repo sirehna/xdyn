@@ -15,7 +15,7 @@ YamlWageningen::YamlWageningen():
     thrust_deduction_factor(),
     rotating_clockwise(),
     number_of_blades(),
-    blade_area_ratio()
+    blade_area_ratio(),
+    diameter()
 {
-
 }

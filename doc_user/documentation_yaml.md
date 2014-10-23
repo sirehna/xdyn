@@ -707,6 +707,7 @@ controlled forces:
     rotation: clockwise
     number of blades: 3
     blade area ratio AE/A0: 0.5
+    diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
@@ -739,6 +740,7 @@ documentation](file:///home/cady/simulator/doc_user/modeles_reperes_et_conventio
 - `number of blades` : nombre de pales de l'hélice.
 - `blade area ratio AE/A0` : [fraction de
 surface](modeles_reperes_et_conventions.html#expression-des-coefficients-k_t-et-k_q) de l'hélice.
+- `diameter` : diamètre de l'hélice
 
 La documentation de ce modèle figure
 [ici](modeles_reperes_et_conventions.html#hélices-wageningen-série-b).
