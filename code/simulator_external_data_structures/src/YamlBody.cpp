@@ -14,6 +14,7 @@ YamlBody::YamlBody() :
     initial_position_of_body_frame_relative_to_NED_projected_in_NED(),
     initial_velocity_of_body_frame_relative_to_NED_projected_in_body(),
     dynamics(),
-    external_forces()
+    external_forces(),
+    controlled_forces()
 {
 }
