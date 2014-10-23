@@ -133,7 +133,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const Enviro
         THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
     }
 }
-#include <ssc/macros.hpp>
+
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     const auto bodies = get_bodies(meshes);
