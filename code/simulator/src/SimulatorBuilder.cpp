@@ -114,6 +114,16 @@ ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const Environme
     return ret;
 }
 
+ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
+{
+    ListOfControlledForces ret;
+    for (auto that_force_model = body.controlled_forces.begin() ; that_force_model!= body.controlled_forces.end() ; ++that_force_model)
+    {
+        add(*that_force_model, ret, env);
+    }
+    return ret;
+}
+
 void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
