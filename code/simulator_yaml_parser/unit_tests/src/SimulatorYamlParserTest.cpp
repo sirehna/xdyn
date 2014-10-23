@@ -59,6 +59,13 @@ TEST_F(SimulatorYamlParserTest, can_parse_external_forces)
     ASSERT_EQ("quadratic damping", yaml.bodies.at(0).external_forces.at(2).model);
 }
 
+TEST_F(SimulatorYamlParserTest, can_parse_controlled_forces)
+{
+    ASSERT_EQ(2, yaml.bodies.at(0).controlled_forces.size());
+    ASSERT_EQ("wageningen B-series", yaml.bodies.at(0).controlled_forces.at(0).model);
+    ASSERT_EQ("wageningen B-series", yaml.bodies.at(0).controlled_forces.at(1).model);
+}
+
 TEST_F(SimulatorYamlParserTest, can_parse_bodies)
 {
     ASSERT_EQ(1, yaml.bodies.size());

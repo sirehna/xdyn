@@ -35,7 +35,8 @@ void operator >> (const YAML::Node& node, YamlBody& b)
 {
     node["name"] >> b.name;
     try_to_parse(node, "mesh", b.mesh);
-    node["external forces"]                                     >> b.external_forces;
+    try_to_parse(node, "external forces", b.external_forces);
+    try_to_parse(node, "controlled forces", b.controlled_forces);
     node["position of body frame relative to mesh"]             >> b.position_of_body_frame_relative_to_mesh;
     node["initial position of body frame relative to NED"]      >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
     node["initial velocity of body frame relative to NED"]      >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
