@@ -19,6 +19,7 @@
 #include "FroudeKrylovForceModel.hpp"
 #include "QuadraticDampingForceModel.hpp"
 #include "LinearDampingForceModel.hpp"
+#include "WageningenControlledForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
 {
@@ -37,7 +38,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
            .can_parse<Airy>()
            .can_parse<FroudeKrylovForceModel>()
            .can_parse<QuadraticDampingForceModel>()
-           .can_parse<LinearDampingForceModel>();
+           .can_parse<LinearDampingForceModel>()
+           .can_parse<WageningenControlledForceModel>();
     return builder;
 }
 

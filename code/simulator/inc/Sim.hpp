@@ -14,12 +14,14 @@
 #include "StateMacros.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 
 class Sim
 {
     public:
         Sim(const std::vector<Body>& bodies,
             const std::vector<ListOfForces>& forces,
+            const std::vector<ListOfControlledForces>& controllable_forces,
             const EnvironmentAndFrames& env,
             const StateType& x);
         void operator()(const StateType& x, StateType& dxdt, double t);
@@ -75,6 +77,7 @@ class Sim
 
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;
+        std::vector<ListOfControlledForces> controlled_forces;
         EnvironmentAndFrames env;
         StateType _dx_dt;
 };

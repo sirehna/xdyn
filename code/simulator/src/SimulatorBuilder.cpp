@@ -178,9 +178,7 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     const auto bodies = get_bodies(meshes);
     const auto env = get_environment_and_frames(bodies);
-    get_forces(env);
-    get_initial_states();
-    return Sim(bodies, get_forces(env), env, get_initial_states());
+    return Sim(bodies, get_forces(env), get_controlled_forces(env), env, get_initial_states());
 }
 
 StateType SimulatorBuilder::get_initial_states() const
