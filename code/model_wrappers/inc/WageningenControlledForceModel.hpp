@@ -43,6 +43,8 @@ class WageningenControlledForceModel : public ControllableForceModel
         size_t Z;
         double AE_A0;
         double D;
+        double D4;
+        double D5;
 
         const double ct[NB_COEFF_KT]; //!< Interpolation coefficient for Kt for the Wageningen B-series
         const size_t st[NB_COEFF_KT]; //!< Exponents for the advance ratio for Kt for the Wageningen B-series

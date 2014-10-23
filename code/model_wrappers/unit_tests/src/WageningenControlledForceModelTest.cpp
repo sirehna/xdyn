@@ -274,3 +274,60 @@ TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
     commands["rpm"] = 20;
     ASSERT_DOUBLE_EQ(3./40., w.advance_ratio(b, commands));
 }
+
+TEST_F(WageningenControlledForceModelTest, force)
+{
+    auto input = parse_wageningen(test_data::wageningen());
+    input.blade_area_ratio = 0.4;
+    EnvironmentAndFrames env;
+    env.rho = 1024;
+    const WageningenControlledForceModel w(input, env);
+    Body b;
+    b.u = 1;
+
+    std::map<std::string,double> commands;
+    commands["rpm"] = 5;
+    commands["P/D"] = 0.5;
+
+    ASSERT_NEAR(0.3*1024*25*16*0.163443634, w.get_force(b, a.random<double>(),commands)(0), EPS);
+    ASSERT_EQ(0, w.get_force(b, a.random<double>(),commands)(1));
+    ASSERT_EQ(0, w.get_force(b, a.random<double>(),commands)(2));
+    ASSERT_EQ(0, w.get_force(b, a.random<double>(),commands)(4));
+    ASSERT_EQ(0, w.get_force(b, a.random<double>(),commands)(5));
+}
+
+TEST_F(WageningenControlledForceModelTest, torque)
+{
+    auto input = parse_wageningen(test_data::wageningen());
+    input.blade_area_ratio = 0.4;
+    EnvironmentAndFrames env;
+    env.rho = 1024;
+    const WageningenControlledForceModel w(input, env);
+    Body b;
+    b.u = 1;
+
+    std::map<std::string,double> commands;
+    commands["rpm"] = 5;
+    commands["P/D"] = 0.5;
+
+    ASSERT_NEAR(-1024*25*32*0.0143676942, w.get_force(b, a.random<double>(),commands)(3), EPS);
+}
+
+TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding_to_rotation)
+{
+    auto input = parse_wageningen(test_data::wageningen());
+    Body b;
+    b.u = a.random<double>().greater_than(0);
+    EnvironmentAndFrames env;
+    env.rho = a.random<double>().greater_than(0);
+
+    const WageningenControlledForceModel w_clockwise(input, env);
+    input.rotating_clockwise = false;
+    const WageningenControlledForceModel w_anti_clockwise(input, env);
+
+    std::map<std::string,double> commands;
+    commands["rpm"] = a.random<double>().between(b.u,2*b.u);
+    commands["P/D"] = a.random<double>().between(0.5,1.4);
+    ASSERT_GT(0, w_clockwise.get_force(b, a.random<double>(),commands)(3));
+    ASSERT_LT(0, w_anti_clockwise.get_force(b, a.random<double>(),commands)(3));
+}

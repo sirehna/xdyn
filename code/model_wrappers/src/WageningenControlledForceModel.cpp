@@ -20,6 +20,8 @@ WageningenControlledForceModel::WageningenControlledForceModel(const YamlWagenin
             Z(input.number_of_blades),
             AE_A0(input.blade_area_ratio),
             D(input.diameter),
+            D4(D*D*D*D),
+            D5(D4*D),
             ct{0.00880496,-0.204554,0.166351,0.158114,-0.147581,-0.481497,0.415437,0.0144043,-0.0530054,0.0143481,0.0606826,-0.0125894,0.0109689,-0.133698,0.00638407,-0.00132718,0.168496,-0.0507214,0.0854559,-0.0504475,0.010465,-0.00648272,-0.00841728,0.0168424,-0.00102296,-0.0317791,0.018604,-0.00410798,-0.000606848,-0.0049819,0.0025983,-0.000560528,-0.00163652,-0.000328787,0.000116502,0.000690904,0.00421749,0.0000565229,-0.00146564},
             st{0,1,0,0,2,1,0,0,2,0,1,0,1,0,0,2,3,0,2,3,1,2,0,1,3,0,1,0,0,1,2,3,1,1,2,0,0,3,0},
             tt{0,0,1,2,0,1,2,0,0,1,1,0,0,3,6,6,0,0,0,0,6,6,3,3,3,3,0,2,0,0,0,0,2,6,6,0,3,6,3},
@@ -44,9 +46,15 @@ WageningenControlledForceModel::WageningenControlledForceModel(const YamlWagenin
     }
 }
 
-ssc::kinematics::Vector6d WageningenControlledForceModel::get_force(const Body& , const double , std::map<std::string,double> ) const
+ssc::kinematics::Vector6d WageningenControlledForceModel::get_force(const Body& body, const double , std::map<std::string,double> commands) const
 {
-    return ssc::kinematics::Vector6d();
+    ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
+    const double n2 = commands["rpm"]*commands["rpm"];
+    const double P_D = commands["P/D"];
+    const double J = advance_ratio(body, commands);
+    tau(0) = (1-t)*env.rho*n2*D4*Kt(Z, AE_A0, P_D, J);
+    tau(3) = kappa*eta_R*env.rho*n2*D5*Kq(Z, AE_A0, P_D, J);
+    return tau;
 }
 
 void WageningenControlledForceModel::check(const double P_D, const double J) const
