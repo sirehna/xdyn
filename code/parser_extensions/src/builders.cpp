@@ -15,6 +15,7 @@
 #include "EnvironmentAndFrames.hpp"
 #include "GravityForceModel.hpp"
 #include "discretize.hpp"
+#include "YamlWageningen.hpp"
 
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
@@ -233,6 +234,17 @@ boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > DirectionalSpreading
     {
         const YamlCos2s data = parse_cos2s(yaml);
         ret.reset(TR1(shared_ptr)<WaveDirectionalSpreading>(new Cos2sDirectionalSpreading(data.psi0, data.s)));
+    }
+    return ret;
+}
+
+boost::optional<TR1(shared_ptr)<ControllableForceModel> > ControlledForceBuilder<WageningenControlledForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const
+{
+    boost::optional<TR1(shared_ptr)<ControllableForceModel> > ret;
+    if (model == "wageningen B-series")
+    {
+        const YamlWageningen data = parse_wageningen(yaml);
+        ret.reset(TR1(shared_ptr)<ControllableForceModel>(new WageningenControlledForceModel(data, env)));
     }
     return ret;
 }

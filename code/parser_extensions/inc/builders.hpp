@@ -8,6 +8,7 @@
 #ifndef BUILDERS_HPP_
 #define BUILDERS_HPP_
 
+#include "ControlledForceBuilder.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "SurfaceElevationBuilder.hpp"
 #include "ForceBuilder.hpp"
@@ -26,6 +27,8 @@
 #include "FroudeKrylovForceModel.hpp"
 #include "QuadraticDampingForceModel.hpp"
 #include "LinearDampingForceModel.hpp"
+#include "WageningenControlledForceModel.hpp"
+
 
 template <>
 class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface
@@ -158,6 +161,14 @@ class DirectionalSpreadingBuilder<Cos2sDirectionalSpreading> : public Directiona
     public:
         DirectionalSpreadingBuilder() : DirectionalSpreadingBuilderInterface(){}
         boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > try_to_parse(const std::string& model, const std::string& yaml) const;
+};
+
+template <>
+class ControlledForceBuilder<WageningenControlledForceModel> : public ControlledForceBuilderInterface
+{
+    public:
+        ControlledForceBuilder() : ControlledForceBuilderInterface(){}
+        boost::optional<TR1(shared_ptr)<ControllableForceModel> > try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
 };
 
 #endif /* BUILDERS_HPP_ */
