@@ -6,7 +6,6 @@ set(SRC src/simulator_api.cpp
         src/Sim.cpp
         src/SimulatorBuilder.cpp
         src/SimObserver.cpp
-        src/ForceBuilder.cpp
         src/SimCsvObserver.cpp
         src/SimNoObserver.cpp
         src/OutputTransformer.cpp
