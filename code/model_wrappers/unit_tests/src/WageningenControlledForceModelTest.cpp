@@ -270,9 +270,7 @@ TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
     const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
     Body b;
     b.u = 3;
-    b.v = 4;
-    b.w = 5;
     std::map<std::string,double> commands;
     commands["rpm"] = 20;
-    ASSERT_DOUBLE_EQ(sqrt(50)/40, w.advance_ratio(b, commands));
+    ASSERT_DOUBLE_EQ(3./40., w.advance_ratio(b, commands));
 }

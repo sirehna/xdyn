@@ -89,7 +89,7 @@ double WageningenControlledForceModel::Kq(const size_t Z, const double AE_A0_, c
 
 double WageningenControlledForceModel::advance_ratio(const Body& body, std::map<std::string,double>& commands) const
 {
-    const double Va = sqrt(body.u*body.u + body.v*body.v + body.w*body.w);
+    const double Va = fabs(body.u);
     const double n = commands["rpm"];
     return Va/n/D;
 }
