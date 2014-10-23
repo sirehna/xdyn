@@ -164,5 +164,42 @@ TEST_F(WageningenControlledForceModelTest, KT)
 //! [WageningenControlledForceModelTest KT_example]
 }
 
+TEST_F(WageningenControlledForceModelTest, KQ)
+{
+    //! [WageningenControlledForceModelTest KQ_example]
+    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()));
+    size_t Z;
+    double AE_A0, P_D, J;
 
+    EXPECT_NEAR(0.47,    10*w.Kq(Z=2, AE_A0=0.30, P_D=1.4, J=0.8), 1E-2);
+    EXPECT_NEAR(0.51,    10*w.Kq(Z=3, AE_A0=0.65, P_D=1.2, J=0.7), 1E-2);
+    EXPECT_NEAR(0.31,    10*w.Kq(Z=3, AE_A0=0.65, P_D=0.8, J=0.3), 1E-2);
+    EXPECT_NEAR(0.51,    10*w.Kq(Z=6, AE_A0=0.65, P_D=1.2, J=0.8), 1E-2);
+    EXPECT_NEAR(0.99,    10*w.Kq(Z=6, AE_A0=0.65, P_D=1.4, J=0.5), 1E-2);
+    EXPECT_NEAR(0.20,    10*w.Kq(Z=2, AE_A0=0.30, P_D=1.2, J=1), 1E-2);
 
+    // B6-65 (cf. The Wageningen Propeller Series, 1992, Gert Kuiper, Marin publication 92-001 page 128
+    EXPECT_NEAR(1.209493726, 10*w.Kq(Z=6, AE_A0=0.65, P_D=1.4, J=0), EPS);
+    EXPECT_NEAR(1.1769086,   10*w.Kq(Z=6, AE_A0=0.65, P_D=1.4, J=0.1), EPS);
+    EXPECT_NEAR(1.138594465, 10*w.Kq(Z=6, AE_A0=0.65, P_D=1.4, J=0.2), EPS);
+    EXPECT_NEAR(1.094459956, 10*w.Kq(Z=6, AE_A0=0.65, P_D=1.4, J=0.3), EPS);
+    EXPECT_NEAR(0.420257329, 10*w.Kq(Z=6, AE_A0=0.65, P_D=1.4, J=1.2), EPS);
+    EXPECT_NEAR(0.312894007, 10*w.Kq(Z=6, AE_A0=0.65, P_D=1.4, J=1.3), EPS);
+    EXPECT_NEAR(0.198705297, 10*w.Kq(Z=6, AE_A0=0.65, P_D=1.4, J=1.4), EPS);
+
+    // B2-30 (cf. The Wageningen Propeller Series, 1992, Gert Kuiper, Marin publication 92-001 page 111
+    EXPECT_NEAR(0.654180539, 10*w.Kq(Z=2, AE_A0=0.30, P_D=1.2, J=0), EPS);
+    EXPECT_NEAR(0.618341564, 10*w.Kq(Z=2, AE_A0=0.30, P_D=1.2, J=0.1), EPS);
+    EXPECT_NEAR(0.580406412, 10*w.Kq(Z=2, AE_A0=0.30, P_D=1.2, J=0.2), EPS);
+    EXPECT_NEAR(0.540388943, 10*w.Kq(Z=2, AE_A0=0.30, P_D=1.2, J=0.3), EPS);
+    EXPECT_NEAR(0.498303012, 10*w.Kq(Z=2, AE_A0=0.30, P_D=1.2, J=0.4), EPS);
+    EXPECT_NEAR(0.454162477, 10*w.Kq(Z=2, AE_A0=0.30, P_D=1.2, J=0.5), EPS);
+    EXPECT_NEAR(0.407981197, 10*w.Kq(Z=2, AE_A0=0.30, P_D=1.2, J=0.6), EPS);
+
+    // B3-40
+    EXPECT_NEAR(0.160531235, 10*w.Kq(Z=3, AE_A0=0.4, P_D=0.5, J=0.0), EPS);
+    EXPECT_NEAR(0.143676942, 10*w.Kq(Z=3, AE_A0=0.4, P_D=0.5, J=0.1), EPS);
+    EXPECT_NEAR(0.125396067, 10*w.Kq(Z=3, AE_A0=0.4, P_D=0.5, J=0.2), EPS);
+    EXPECT_NEAR(0.105448718, 10*w.Kq(Z=3, AE_A0=0.4, P_D=0.5, J=0.3), EPS);
+//! [WageningenControlledForceModelTest KQ_example]
+}
