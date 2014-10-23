@@ -13,6 +13,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
+#include "ControlledForceBuilder.hpp"
 #include "ForceBuilder.hpp"
 #include "SurfaceElevationBuilder.hpp"
 #include "WaveModel.hpp"
@@ -123,6 +124,22 @@ class SimulatorBuilder
             return *this;
         }
 
+        /**  \brief Add the capacity to parse certain YAML inputs for controlled forces (eg. Wageningen propellers)
+          *  \details This method must not be called with any parameters: the
+          *  default parameter is only there so we can use boost::enable_if. This
+          *  allows us to use can_parse for several types derived from a few
+          *  base classes (WaveModelInterface, ForceModel...) & the compiler will
+          *  automagically choose the right version of can_parse.
+          *  \returns *this (so we can chain calls to can_parse)
+          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
+          */
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<ControllableForceModel,T> >::type* dummy = 0)
+        {
+            (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+            controlled_force_parsers.push_back(ControlledForceBuilderPtr(new ControlledForceBuilder<T>()));
+            return *this;
+        }
+
         /**  \brief Add the capacity to parse certain YAML inputs for wave spectra (eg. Jonswap)
           *  \details This method must not be called with any parameters: the
           *  default parameter is only there so we can use boost::enable_if. This
@@ -156,6 +173,7 @@ class SimulatorBuilder
         YamlSimulatorInput input;
         TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceBuilderPtr> force_parsers;
+        std::vector<ControlledForceBuilderPtr> controlled_force_parsers;
         std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;

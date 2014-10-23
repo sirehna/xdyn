@@ -17,6 +17,7 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
                                         input(input_),
                                         builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
                                         force_parsers(std::vector<ForceBuilderPtr>()),
+                                        controlled_force_parsers(std::vector<ControlledForceBuilderPtr>()),
                                         surface_elevation_parsers(std::vector<SurfaceElevationBuilderPtr>()),
                                         wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
                                         directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
