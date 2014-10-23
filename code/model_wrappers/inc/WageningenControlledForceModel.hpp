@@ -33,6 +33,7 @@ class WageningenControlledForceModel : public ControllableForceModel
 
     private:
         WageningenControlledForceModel();
+        void check(const double P_D, const double J) const;
         double w;
         double eta_R;
         double t;

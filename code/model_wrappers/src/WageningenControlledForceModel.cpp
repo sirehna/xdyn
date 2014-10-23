@@ -42,7 +42,7 @@ ssc::kinematics::Wrench WageningenControlledForceModel::get_force(const Body& , 
     return ssc::kinematics::Wrench();
 }
 
-double WageningenControlledForceModel::Kt(const size_t Z, const double AE_A0_, const double P_D, const double J) const
+void WageningenControlledForceModel::check(const double P_D, const double J) const
 {
     if ((P_D<0.5) or (P_D>1.4))
     {
@@ -56,6 +56,11 @@ double WageningenControlledForceModel::Kt(const size_t Z, const double AE_A0_, c
         ss << "Invalid advance ratio J received: expected 0 <= J <= 1.5 but got J=" << J;
         THROW(__PRETTY_FUNCTION__, WageningenControlledForceModelException, ss.str());
     }
+}
+
+double WageningenControlledForceModel::Kt(const size_t Z, const double AE_A0_, const double P_D, const double J) const
+{
+    check(P_D, J);
     double kt = 0;
     for (size_t i = 0 ; i < NB_COEFF_KT ; ++i)
     {
