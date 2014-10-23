@@ -27,7 +27,7 @@ class YamlWageningen;
 class WageningenControlledForceModel : public ControllableForceModel
 {
     public:
-        WageningenControlledForceModel(const YamlWageningen& input);
+        WageningenControlledForceModel(const YamlWageningen& input, const EnvironmentAndFrames& env);
         ssc::kinematics::Wrench get_force(const Body& body, const double t, std::map<std::string,double> commands) const;
         double Kt(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double Kq(const size_t Z, const double AE_A0, const double P_D, const double J) const;

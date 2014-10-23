@@ -12,7 +12,7 @@
 #include "WageningenControlledForceModelException.hpp"
 #include "YamlWageningen.hpp"
 
-WageningenControlledForceModel::WageningenControlledForceModel(const YamlWageningen& input) : ControllableForceModel(input.name,{"rpm","P/D"},input.position_of_propeller_frame),
+WageningenControlledForceModel::WageningenControlledForceModel(const YamlWageningen& input, const EnvironmentAndFrames& env_) : ControllableForceModel(input.name,{"rpm","P/D"},input.position_of_propeller_frame, env_),
             w(input.wake_coefficient),
             eta_R(input.relative_rotative_efficiency),
             t(input.thrust_deduction_factor),
