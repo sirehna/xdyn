@@ -623,7 +623,8 @@ Voici un exemple de section `efforts commandés` :
 controlled forces:
   - name: port side propeller
     model: wageningen B-series
-    propeller frame relative to mesh frame:
+    position of propeller frame:
+        frame: mesh(body 1)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
@@ -640,7 +641,7 @@ controlled forces:
   - name: starboard propeller
     model: wageningen B-series
     position of propeller frame:
-        relative to: mesh(body 1)
+        frame: mesh(body 1)
         x: {value: -4, unit: m}
         y: {value: 2, unit: m}
         z: {value: 2, unit: m}
