@@ -13,6 +13,8 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
+#include <ssc/data_source.hpp>
+
 #include "ControlledForceBuilder.hpp"
 #include "ForceBuilder.hpp"
 #include "SurfaceElevationBuilder.hpp"
@@ -44,7 +46,7 @@ typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 class SimulatorBuilder
 {
     public:
-        SimulatorBuilder(const YamlSimulatorInput& input);
+        SimulatorBuilder(const YamlSimulatorInput& input, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 
         /**  \brief Builds a Sim object using the supplied mesh map (one mesh per body)
           *  \details This function is mainly used in the integration tests.
@@ -181,6 +183,7 @@ class SimulatorBuilder
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
         TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
+        ssc::data_source::DataSource command_listener;
 };
 
 

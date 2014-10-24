@@ -13,7 +13,7 @@
 #include "StlReader.hpp"
 #include "BodyBuilder.hpp"
 
-SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
+SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const ssc::data_source::DataSource& command_listener_) :
                                         input(input_),
                                         builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
                                         force_parsers(std::vector<ForceBuilderPtr>()),
@@ -21,7 +21,8 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_) :
                                         surface_elevation_parsers(std::vector<SurfaceElevationBuilderPtr>()),
                                         wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
                                         directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
-                                        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>()))
+                                        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
+                                        command_listener(command_listener_)
 {
 }
 
