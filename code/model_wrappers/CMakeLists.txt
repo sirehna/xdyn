@@ -19,6 +19,7 @@ set(SRC src/Body.cpp
         src/ControllableForceModel.cpp
         src/yaml2eigen.cpp
         src/WageningenControlledForceModel.cpp
+        src/ResistanceCurveForceModel.cpp
         )
 
 # Using C++ 2011
