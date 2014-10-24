@@ -1085,7 +1085,7 @@ std::string test_data::anthineas_propulsion()
        << "            row 5: [ 0, 0,     0,      0, 4.67e6, 0]\n"
        << "            row 6: [ 0, 0,     0,      0,      0, 0]\n"
        << "    controlled forces:\n"
-       << "      - name: port side propeller\n"
+       << "      - name: propeller\n"
        << "        model: wageningen B-series\n"
        << "        position of propeller frame:\n"
        << "            frame: mesh(body 1)\n"
@@ -1740,7 +1740,7 @@ std::string test_data::anthineas_damping()
 std::string test_data::controlled_forces()
 {
     std::stringstream ss;
-    ss << "- name: port side propeller\n"
+    ss << "- name: propeller\n"
           "  t: [0,1,3,10]\n"
           "  rpm: {unit: rad/s, values: [3, 30, 30, 40]}\n"
           "  P/D: [0.7,0.7,0.7,0.7]\n";

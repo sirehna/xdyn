@@ -30,7 +30,7 @@ TEST_F(parse_commandsTest, example)
 //! [parse_commandsTest example]
     std::vector<YamlCommands> commands = parse_command_yaml(test_data::controlled_forces());
     ASSERT_EQ(1, commands.size());
-    ASSERT_EQ("port side propeller", commands[0].name);
+    ASSERT_EQ("propeller", commands[0].name);
     ASSERT_EQ(4, commands[0].t.size());
     ASSERT_DOUBLE_EQ(0, commands[0].t[0]);
     ASSERT_DOUBLE_EQ(1, commands[0].t[1]);
