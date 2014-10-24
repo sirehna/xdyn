@@ -103,7 +103,16 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
     ssc::kinematics::UnsafeWrench S(coriolis_and_centripetal(bodies[body].G,bodies[body].solid_body_inertia.get(),uvw_in_body_frame, pqr));
     for (auto that_force=forces[body].begin() ; that_force != forces[body].end() ; ++that_force)
     {
-        S += (**that_force)(bodies[body], t);
+        const ssc::kinematics::Wrench tau = (**that_force)(bodies[body], t);
+        if (tau.get_frame() != bodies[body].name)
+        {
+            const ssc::kinematics::Transform T = env.k->get(tau.get_frame(), bodies[body].name);
+            S += tau.change_ref_point_then_change_frame(T);
+        }
+        else
+        {
+            S += tau;
+        }
     }
     for (auto that_force=controlled_forces[body].begin() ; that_force != controlled_forces[body].end() ; ++that_force)
     {
