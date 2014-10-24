@@ -275,10 +275,11 @@ d'angle adoptée.
 
 Les efforts d'[amortissement
 visqueux](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux))
-et de [résistance à l'avancement]() sont calculés dans un repère appelé **repère de
-calcul hydrodynamique**, qui est un repère translaté par rapport au repère
-body. Le centre de ce repère est un point défini (dans le repère body) de la
-façon suivante :
+et de [résistance à
+l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
+sont calculés dans un repère appelé **repère de calcul hydrodynamique**, qui
+est un repère translaté par rapport au repère body. Le centre de ce repère est
+un point défini (dans le repère body) de la façon suivante :
 
 - Son abscisse $x$ est celle du centre de la surface résultant de la projection
 du maillage sur le plan $(x,z)$
@@ -750,6 +751,8 @@ $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 
 $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
+## Références
+
 
 # Modèles d'efforts non-commandés
 
@@ -786,9 +789,8 @@ où $m$ désigne la masse du navire (en kg), $g$ l'accélération de la pesanteu
 repère dans lequel on veut projeter la force.
 
 ### Références
-Halliday, David; Robert Resnick; Kenneth S. Krane (2001). Physics v. 1. New
-York: John Wiley & Sons. ISBN 0-471-32057-9.
-Lev Landau et Evgueni Lifchits, Physique théorique, éd. MIR, Moscou
+- *Physics v. 1*, 2001, D. Halliday, R. Resnick and K. S. Krane, John Wiley and Sons, ISBN 0-471-32057-9
+- *Physique théorique*, Lev Landau et Evgueni Lifchits, éd. MIR, Moscou
 
 
 ## Efforts hydrostatiques non-linéaires
@@ -982,7 +984,7 @@ dans la situation suivante :
 
 ## Efforts de diffraction
 
-## Description
+### Description
 
 Les efforts de diffraction sont dus à la modification du champs de pression du
 fait de la présence du navire. Ils sont interpolés à partir de tables
@@ -995,7 +997,48 @@ vitesse d'avance (RAO d'efforts). La principale différence entre les efforts de
 radiation et les efforts de diffraction est l'écriture de la condition aux
 limites.
 
+## Résistance à l'avancement
 
+### Description
+
+
+### Hypothèses
+
+On suppose la propulsion rectiligne, uniforme et directe, c'est-à-dire
+d'intensité et de direction constantes et située dans le plan ($x$,$y$).
+
+On suppose également qu'il n'y a pas de houle, que l'assiette du navire est
+constante et que sa gite est nulle.
+
+On suppose enfin que la résistance à l'avancement est colinéaire à la force
+propulsive.
+
+Etant données ces hypothèses, on parle de __résistance de remorquage**.
+
+### Modélisation
+
+Le paradoxe de d'Alembert est que lorsque l'on remorque un objet partiellement
+immergé dans un fluide supposé parfait, sa résistance est nulle.
+Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique
+que :
+
+- l'eau n'est pas un fluide parfait : elle possède une viscosité qui freine
+l'objet
+- la surface libre n'est pas à l'équilibre et s'oppose au mouvement du solide.
+
+On décompose donc la résistance de remorquage en deux composantes :
+
+- la résistance visqueuse, liée au frottement de l'eau sur la carène ;
+- la résistance de vagues, due à la création d'un champs de vague par le
+navire.
+
+### Références
+
+- *Dynamique du Navire*, 1986, P. Devauchelle, Bibliothèque de L'Institut
+Français d'Aide à la Formation Professionnelle Maritime, ISBN 2-225-80669-1,
+pages 58, 81 et 97
+- *Hydrodynamique navale : théorie et modèles*, 2009, A. Bovis, Presses de
+l'ENSTA, page 205 et 337
 
 ## Efforts d'amortissement visqueux
 
@@ -1027,8 +1070,9 @@ Lorsque l'on utilise conjointement les modèles d'amortissement en cavalement et
 de résistance à l'avancement, il convient de prendre des précautions
 supplémentaires afin de ne pas modéliser deux fois le même phénomène physique.
 On décompose donc la vitesse longitudinale en une composante basse fréquence
-(utilisée par le modèle de résistance à l'avancement) et une composante haute
-fréquence (pour le modèle d'amortissement).
+(utilisée par le modèle de [résistance à
+l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement))
+et une composante haute fréquence (pour le modèle d'amortissement).
 
 ### Modélisation
 
@@ -1211,9 +1255,10 @@ $w$ est constant en régime permanent, lorsque l'hélice opère dans les
 conditions nominales. Des ordres de grandeurs de ce coefficient sont donnés par
 exemple dans Carlton, pages 70,72,73 et 74.
 
-En outre, l'hélice accroît la résistance à l'avancement du navire : en effet,
-elle diminue la pression à l'arrière du navire, ce qui augmente la poussée
-nécessaire pour la propulsion. Pour prendre en compte ce phénomène, on
+En outre, l'hélice accroît la [résistance à
+l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
+: en effet, elle diminue la pression à l'arrière du navire, ce qui augmente la
+poussée nécessaire pour la propulsion. Pour prendre en compte ce phénomène, on
 introduit le coefficient de succion $t$ tel que :
 
 $$t = 1 - \frac{R_v}{T_p}$$
@@ -1338,3 +1383,4 @@ bilan des efforts.
 - *Offshore Hydromechanics*, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 4-40
 - *Thrust Estimation and Control of Marine Propellers in Four-Quadrant Operations*, 2008, Luca Pivano, NTNU, ISBN 978-82-471-6258-3, page 30, 31
 - *The Wageningen Propeller Series*, 1992, Gert Kuiper, Marin publication 92-001
+

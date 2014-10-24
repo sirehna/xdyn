@@ -600,6 +600,18 @@ La paramétrisation des efforts d'amortissement quadratiques est faite par une m
 Cette matrice est la matrice $((d_{ij}))$ décrit dans [la
 documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux).
 
+### Résistance à l'avancement
+
+Les efforts de résistance à l'avancement est renseignée en fonction de la
+vitesse d'avance (axe longitudinal uniquement). L'interpolation est faite en
+utilisant des splines cubiques.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: resistance curve
+  speed: {unit: knot, values: [0,1,2,3,4,5,15,20]}
+  resistance: {unit: MN, values: [0,1,4,9,16,25,225,400]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Efforts commandés
 
 Les efforts contrôlés correspondent aux efforts de propulsion, de safran et de
