@@ -690,14 +690,16 @@ $t\geq 10$, alors rpm=4000.
 
 ### Wageningen B-series
 
-Voici un exemple d'utilisation d'hélice Wageningen :
+L'utilisation de ce modèle est présentée dans [la section
+tutoriels](tutorials.html#tutoriel-6-propulsion).
+Voici un exemple de configuration possible :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 controlled forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
-        relative to: mesh(body 1)
+        frame: mesh(body 1)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}

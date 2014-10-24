@@ -15,7 +15,7 @@ non-amorties en immersion.
 ## Ecriture du fichier de configuration du simulateur.
 
 Nous documentons ici uniquement les changements par rapport au
-[tutoriel 1](tutoriels.html#tutoriel-1-balle-en-chute-libre).
+[tutoriel 1](tutorials.html#tutoriel-1-balle-en-chute-libre).
 
 L'environnement est défini de la façon suivante :
 

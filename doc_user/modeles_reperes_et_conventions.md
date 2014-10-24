@@ -1106,6 +1106,9 @@ d'autres instituts de recherche en aient réalisés d'autres par la suite.
 En 1975, Oosterveld et Ossannen utilisèrent une régression statistique pour
 établir le modèle polynomial des hélices Wageningen présenté ici.
 
+Un [tutoriel](tutorials.html#tutoriel-6-propulsion) présente l'utilisation de
+ce modèle dans le simulateur.
+
 ### Hypothèses du modèle en eau libre
 
 On adopte les notations suivantes :
