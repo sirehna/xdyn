@@ -22,12 +22,14 @@ int main(int argc, const char* argv[])
     yaml["tutorial_03_waves.yml"]             = test_data::waves();
     yaml["tutorial_04_damping.yml"]           = test_data::anthineas_damping();
     yaml["tutorial_05_froude_krylov.yml"]     = test_data::anthineas_froude_krylov();
+    yaml["tutorial_06_propulsion.yml"]        = test_data::anthineas_propulsion();
     yaml["oscillating_cube_test.yml"]         = test_data::oscillating_cube_example();
     yaml["stable_cube_test.yml"]              = test_data::stable_cube_example();
     yaml["stable_rolling_cube_test.yml"]      = test_data::stable_rolling_cube_test();
     yaml["postprocessing.yml"]                = test_data::outputs();
     yaml["cube_in_waves.yml"]                 = test_data::cube_in_waves();
     yaml["anthineas_in_waves.yml"]            = test_data::anthineas_waves_test();
+    yaml["controlled_forces_commands.yml"]    = test_data::controlled_forces();
 
 
     write_files(path, yaml);
