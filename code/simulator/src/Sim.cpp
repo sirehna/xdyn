@@ -107,7 +107,9 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
     }
     for (auto that_force=controlled_forces[body].begin() ; that_force != controlled_forces[body].end() ; ++that_force)
     {
-        S += (**that_force)(bodies[body], t, command_listener);
+        const ssc::kinematics::Wrench tau = (**that_force)(bodies[body], t, command_listener);
+        const ssc::kinematics::Transform T = env.k->get(tau.get_frame(), bodies[body].name);
+        S += tau.change_ref_point_then_change_frame(T);
     }
     return S;
 }
