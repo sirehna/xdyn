@@ -45,7 +45,9 @@ double ControllableForceModel::get_command(const std::string& command_name, ssc:
     double ret = 0;
     try
     {
+        command_listener.check_in(__PRETTY_FUNCTION__);
         ret = command_listener.get<double>(name + "(" + command_name + ")");
+        command_listener.check_out();
     }
     catch (const ssc::data_source::DataSourceException& e)
     {
