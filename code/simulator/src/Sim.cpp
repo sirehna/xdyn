@@ -23,6 +23,13 @@ Sim::Sim(const std::vector<Body>& bodies_,
          state(x), bodies(bodies_), forces(forces_), controlled_forces(controlled_forces_), env(env_),
          _dx_dt(StateType(x.size(),0)), command_listener(command_listener_)
 {
+    for (size_t i = 0 ; i < controlled_forces.size() ; ++i)
+    {
+        for (auto that_force = controlled_forces[i].begin() ; that_force != controlled_forces[i].end() ; ++that_force)
+        {
+            (*that_force)->add_reference_frame(bodies.at(i).name, env.k, env.rot);
+        }
+    }
 }
 
 void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies in the system
