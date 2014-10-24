@@ -42,8 +42,8 @@ class ControllableForceModel
 
     private:
         ControllableForceModel(); // Deactivated
-        double get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener) const;
-        std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener) const;
+        double get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const;
+        std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener, const double t) const;
 
         std::string name;
         std::vector<std::string> commands;
