@@ -14,6 +14,7 @@ namespace test_data
 {
     std::string hydrostatic_test();
     std::string full_example();
+    std::string full_example_with_propulsion();
     std::string falling_ball_example();
     std::string oscillating_cube_example();
     std::string stable_cube_example();

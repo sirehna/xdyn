@@ -9,7 +9,7 @@
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
 
-const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example()).parse();
+const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
 
 SimulatorYamlParserTest::SimulatorYamlParserTest() : a(ssc::random_data_generator::DataGenerator(1212))
 {
