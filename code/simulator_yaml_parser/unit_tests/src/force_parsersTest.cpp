@@ -111,3 +111,30 @@ TEST_F(force_parsersTest, wageningen)
     ASSERT_DOUBLE_EQ(0.9, w.wake_coefficient);
     ASSERT_DOUBLE_EQ(2, w.diameter);
 }
+
+TEST_F(force_parsersTest, resistance_curves)
+{
+    const YamlResistanceCurve r = parse_resistance_curve(test_data::resistance_curve());
+    ASSERT_EQ(8, r.R.size());
+    ASSERT_EQ(8, r.Va.size());
+
+    const double knot = 0.51444444444444444;
+    ASSERT_DOUBLE_EQ(0, r.Va[0]);
+    ASSERT_DOUBLE_EQ(1*knot, r.Va[1]);
+    ASSERT_DOUBLE_EQ(2*knot, r.Va[2]);
+    ASSERT_DOUBLE_EQ(3*knot, r.Va[3]);
+    ASSERT_DOUBLE_EQ(4*knot, r.Va[4]);
+    ASSERT_DOUBLE_EQ(5*knot, r.Va[5]);
+    ASSERT_DOUBLE_EQ(15*knot, r.Va[6]);
+    ASSERT_DOUBLE_EQ(20*knot, r.Va[7]);
+
+    ASSERT_DOUBLE_EQ(0, r.R[0]);
+    ASSERT_DOUBLE_EQ(1E6, r.R[1]);
+    ASSERT_DOUBLE_EQ(4E6, r.R[2]);
+    ASSERT_DOUBLE_EQ(9E6, r.R[3]);
+    ASSERT_DOUBLE_EQ(16E6, r.R[4]);
+    ASSERT_DOUBLE_EQ(25E6, r.R[5]);
+    ASSERT_DOUBLE_EQ(225E6, r.R[6]);
+    ASSERT_DOUBLE_EQ(400E6, r.R[7]);
+}
+

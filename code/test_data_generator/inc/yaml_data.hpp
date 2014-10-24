@@ -36,6 +36,7 @@ namespace test_data
     std::string anthineas_damping();
     std::string controlled_forces();
     std::string wageningen();
+    std::string resistance_curve();
 }
 
 #endif /* YAML_DATA_HPP_ */

@@ -1769,3 +1769,11 @@ std::string test_data::wageningen()
           "diameter: {value: 2, unit: m}";
     return ss.str();
 }
+
+std::string test_data::resistance_curve()
+{
+    std::stringstream ss;
+    ss << "speed: {unit: knot, values: [0,1,2,3,4,5,15,20]}\n"
+       << "resistance: {unit: MN, values: [0,1,4,9,16,25,225,400]}";
+    return ss.str();
+}

@@ -21,6 +21,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlPoint.cpp
         src/YamlPosition.cpp
         src/YamlPositionOutput.cpp
+        src/YamlResistanceCurve.cpp
         src/YamlRotation.cpp
         src/YamlSimulatorInput.cpp
         src/YamlSpeed.cpp
