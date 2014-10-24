@@ -48,6 +48,7 @@ EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vec
     EnvironmentAndFrames env;
     env.g = input.environmental_constants.g;
     env.rho = input.environmental_constants.rho;
+    env.rot = input.rotations;
     env.k = KinematicsPtr(new ssc::kinematics::Kinematics());
     if (bodies.size() != input.bodies.size())
     {

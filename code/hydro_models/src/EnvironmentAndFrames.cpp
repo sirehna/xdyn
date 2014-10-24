@@ -13,6 +13,7 @@ using namespace ssc::kinematics;
 EnvironmentAndFrames::EnvironmentAndFrames() : w(SurfaceElevationPtr()),
                                                k(KinematicsPtr(new Kinematics())),
                                                rho(0),
-                                               g(0)
+                                               g(0),
+                                               rot()
 {
 }
