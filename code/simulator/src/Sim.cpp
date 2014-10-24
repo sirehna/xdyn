@@ -18,9 +18,10 @@ Sim::Sim(const std::vector<Body>& bodies_,
          const std::vector<ListOfForces>& forces_,
          const std::vector<ListOfControlledForces>& controlled_forces_,
          const EnvironmentAndFrames& env_,
-         const StateType& x) :
+         const StateType& x,
+         const ssc::data_source::DataSource& command_listener_) :
          state(x), bodies(bodies_), forces(forces_), controlled_forces(controlled_forces_), env(env_),
-         _dx_dt(StateType(x.size(),0))
+         _dx_dt(StateType(x.size(),0)), command_listener(command_listener_)
 {
 }
 

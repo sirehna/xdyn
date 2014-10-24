@@ -9,6 +9,7 @@
 #define SIM_HPP_
 
 #include <vector>
+#include <ssc/data_source.hpp>
 #include <ssc/kinematics.hpp>
 #include "Body.hpp"
 #include "StateMacros.hpp"
@@ -23,7 +24,8 @@ class Sim
             const std::vector<ListOfForces>& forces,
             const std::vector<ListOfControlledForces>& controllable_forces,
             const EnvironmentAndFrames& env,
-            const StateType& x);
+            const StateType& x,
+            const ssc::data_source::DataSource& command_listener);
         void operator()(const StateType& x, StateType& dxdt, double t);
 
         void update_discrete_states();
@@ -80,6 +82,7 @@ class Sim
         std::vector<ListOfControlledForces> controlled_forces;
         EnvironmentAndFrames env;
         StateType _dx_dt;
+        ssc::data_source::DataSource command_listener;
 };
 
 #endif /* SIM_HPP_ */
