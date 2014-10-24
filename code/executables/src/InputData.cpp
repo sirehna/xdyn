@@ -7,10 +7,11 @@
 
 #include "InputData.hpp"
 
-InputData::InputData() : yaml_filenames(std::vector<std::string>()),
-                         output_csv(std::string()),
-                         solver(std::string()),
-                         wave_output(std::string()),
+InputData::InputData() : yaml_filenames(),
+                         output_csv(),
+                         solver(),
+                         wave_output(),
+                         command_file(),
                          initial_timestep(0),
                          tstart(0),
                          tend(0),

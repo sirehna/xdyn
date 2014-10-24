@@ -51,14 +51,15 @@ po::options_description get_options_description(InputData& input_data)
 {
     po::options_description desc("Options");
     desc.add_options()
-        ("help,h",                                                                     "Show this help message")
-        ("yml,y",    po::value<std::vector<std::string> >(&input_data.yaml_filenames), "Name(s) of the YAML file(s)")
-        ("out,o",    po::value<std::string>(&input_data.output_csv),                   "Name of the generated CSV file. If none given, simulator writes CSV to standard output")
-        ("solver,s", po::value<std::string>(&input_data.solver)->default_value("rk4"), "Name of the solver: euler,rk4,rkck for Euler, Runge-Kutta 4 & Runge-Kutta-Cash-Karp respectively.")
-        ("dt",       po::value<double>(&input_data.initial_timestep),                  "Initial time step (or value of the fixed time step for fixed step solvers)")
-        ("tstart",   po::value<double>(&input_data.tstart)->default_value(0),          "Date corresponding to the beginning of the simulation (in seconds)")
-        ("tend",     po::value<double>(&input_data.tend),                              "Last time step")
-        ("waves,w",  po::value<std::string>(&input_data.wave_output),                  "Name of the YAML output file where the wave heights will be stored ('output' section of the YAML file)")
+        ("help,h",                                                                       "Show this help message")
+        ("yml,y",      po::value<std::vector<std::string> >(&input_data.yaml_filenames), "Name(s) of the YAML file(s)")
+        ("out,o",      po::value<std::string>(&input_data.output_csv),                   "Name of the generated CSV file. If none given, simulator writes CSV to standard output")
+        ("solver,s",   po::value<std::string>(&input_data.solver)->default_value("rk4"), "Name of the solver: euler,rk4,rkck for Euler, Runge-Kutta 4 & Runge-Kutta-Cash-Karp respectively.")
+        ("dt",         po::value<double>(&input_data.initial_timestep),                  "Initial time step (or value of the fixed time step for fixed step solvers)")
+        ("tstart",     po::value<double>(&input_data.tstart)->default_value(0),          "Date corresponding to the beginning of the simulation (in seconds)")
+        ("tend",       po::value<double>(&input_data.tend),                              "Last time step")
+        ("waves,w",    po::value<std::string>(&input_data.wave_output),                  "Name of the YAML output file where the wave heights will be stored ('output' section of the YAML file)")
+        ("commands,c", po::value<std::string>(&input_data.command_file),                 "Name of the YAML file storing the commands for controlled forces")
     ;
     return desc;
 }

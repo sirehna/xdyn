@@ -18,6 +18,7 @@ struct InputData
     std::string output_csv;
     std::string solver;
     std::string wave_output;
+    std::string command_file;
     double initial_timestep;
     double tstart;
     double tend;
