@@ -96,7 +96,7 @@ std::vector<std::string> Sim::get_names_of_bodies() const
     return ret;
 }
 
-ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body, const double t) const
+ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body, const double t)
 {
     const Eigen::Vector3d& uvw_in_body_frame = Eigen::Vector3d::Map(_U(x,body));
     const Eigen::Vector3d& pqr = Eigen::Vector3d::Map(_P(x,body));
@@ -104,6 +104,10 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
     for (auto that_force=forces[body].begin() ; that_force != forces[body].end() ; ++that_force)
     {
         S += (**that_force)(bodies[body], t);
+    }
+    for (auto that_force=controlled_forces[body].begin() ; that_force != controlled_forces[body].end() ; ++that_force)
+    {
+        S += (**that_force)(bodies[body], t, command_listener);
     }
     return S;
 }
