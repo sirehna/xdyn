@@ -28,7 +28,7 @@ class ResistanceCurveForceModel::Impl
         ssc::interpolation::SplineVariableStep S;
 };
 
-ResistanceCurveForceModel::ResistanceCurveForceModel(const YamlResistanceCurve& data) : pimpl(new Impl(data))
+ResistanceCurveForceModel::ResistanceCurveForceModel(const YamlResistanceCurve& data) : ForceModel("resistance curve"), pimpl(new Impl(data))
 {
 }
 

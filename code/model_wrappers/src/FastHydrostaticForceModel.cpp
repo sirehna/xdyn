@@ -9,7 +9,7 @@
 #include "FastHydrostaticForceModel.hpp"
 #include "hydrostatic.hpp"
 
-FastHydrostaticForceModel::FastHydrostaticForceModel(const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(env_)
+FastHydrostaticForceModel::FastHydrostaticForceModel(const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel("fast hydrostatic", env_)
 {
 }
 

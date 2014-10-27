@@ -10,7 +10,7 @@
 #include "Body.hpp"
 #include "LinearDampingForceModel.hpp"
 
-LinearDampingForceModel::LinearDampingForceModel(const Eigen::Matrix<double,6,6>& D_) : DampingForceModel(D_)
+LinearDampingForceModel::LinearDampingForceModel(const Eigen::Matrix<double,6,6>& D_) : DampingForceModel("linear damping", D_)
 {
 }
 

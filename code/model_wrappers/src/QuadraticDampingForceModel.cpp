@@ -11,7 +11,7 @@
 #include "QuadraticDampingForceModel.hpp"
 
 
-QuadraticDampingForceModel::QuadraticDampingForceModel(const Eigen::Matrix<double,6,6>& D_) : DampingForceModel(D_)
+QuadraticDampingForceModel::QuadraticDampingForceModel(const Eigen::Matrix<double,6,6>& D_) : DampingForceModel("quadratic damping", D_)
 {
 }
 

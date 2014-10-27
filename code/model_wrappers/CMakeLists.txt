@@ -5,6 +5,7 @@ set(SRC src/Body.cpp
         src/BodyBuilder.cpp
         src/QuadraticDampingForceModel.cpp
         src/DefaultSurfaceElevation.cpp
+        src/ForceModel.cpp
         src/GravityForceModel.cpp
         src/FastHydrostaticForceModel.cpp
         src/SurfaceElevationFromWaves.cpp

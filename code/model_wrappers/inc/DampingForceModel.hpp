@@ -21,7 +21,7 @@ class Body;
 class DampingForceModel : public ForceModel
 {
     public:
-        DampingForceModel(const Eigen::Matrix<double,6,6>& D);
+        DampingForceModel(const std::string& name, const Eigen::Matrix<double,6,6>& D);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
 
     private:
