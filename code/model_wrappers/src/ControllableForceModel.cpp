@@ -20,6 +20,11 @@ ControllableForceModel::~ControllableForceModel()
 {
 }
 
+std::string ControllableForceModel::get_name() const
+{
+    return name;
+}
+
 std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_source::DataSource& command_listener, const double t) const
 {
     std::map<std::string,double> ret;
