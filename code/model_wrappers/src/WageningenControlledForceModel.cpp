@@ -99,5 +99,5 @@ double WageningenControlledForceModel::advance_ratio(const Body& body, std::map<
 {
     const double Va = fabs(body.u);
     const double n = commands["rpm"];
-    return Va/n/D;
+    return (1-w)*Va/n/D;
 }

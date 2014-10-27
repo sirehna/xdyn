@@ -272,7 +272,7 @@ TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
     b.u = 3;
     std::map<std::string,double> commands;
     commands["rpm"] = 20;
-    ASSERT_DOUBLE_EQ(3./40., w.advance_ratio(b, commands));
+    ASSERT_DOUBLE_EQ(3./400., w.advance_ratio(b, commands));
 }
 
 TEST_F(WageningenControlledForceModelTest, force)
@@ -289,7 +289,7 @@ TEST_F(WageningenControlledForceModelTest, force)
     commands["rpm"] = 5;
     commands["P/D"] = 0.5;
 
-    ASSERT_NEAR(0.3*1024*25*16*0.163443634, w.get_force(b, a.random<double>(),commands)(0), EPS);
+    ASSERT_NEAR(0.3*1024*25*16*0.18587823151195928539, w.get_force(b, a.random<double>(),commands)(0), EPS);
     ASSERT_EQ(0, w.get_force(b, a.random<double>(),commands)(1));
     ASSERT_EQ(0, w.get_force(b, a.random<double>(),commands)(2));
     ASSERT_EQ(0, w.get_force(b, a.random<double>(),commands)(4));
@@ -310,7 +310,7 @@ TEST_F(WageningenControlledForceModelTest, torque)
     commands["rpm"] = 5;
     commands["P/D"] = 0.5;
 
-    ASSERT_NEAR(-1024*25*32*0.0143676942, w.get_force(b, a.random<double>(),commands)(3), EPS);
+    ASSERT_NEAR(-1024*25*32*0.015890316523410611543, w.get_force(b, a.random<double>(),commands)(3), EPS);
 }
 
 TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding_to_rotation)
