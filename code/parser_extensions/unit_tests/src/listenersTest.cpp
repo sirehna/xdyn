@@ -32,21 +32,21 @@ TEST_F(listenersTest, example)
     ds.check_in("listenersTest (example)");
     ds.set<double>("t", 0);
     ASSERT_DOUBLE_EQ(3, ds.get<double>("propeller(rpm)"));
-    ASSERT_DOUBLE_EQ(0.7, ds.get<double>("propeller(P/D)"));
+    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)"));
 
     ds.set<double>("t", 0.5);
     ASSERT_DOUBLE_EQ(16.5, ds.get<double>("propeller(rpm)"));
-    ASSERT_DOUBLE_EQ(0.7, ds.get<double>("propeller(P/D)"));
+    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)"));
 
     ds.set<double>("t", 1);
     ASSERT_DOUBLE_EQ(30, ds.get<double>("propeller(rpm)"));
-    ASSERT_DOUBLE_EQ(0.7, ds.get<double>("propeller(P/D)"));
+    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)"));
 
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         ds.set<double>("t", a.random<double>().greater_than(10));
         ASSERT_DOUBLE_EQ(40, ds.get<double>("propeller(rpm)"));
-        ASSERT_DOUBLE_EQ(0.7, ds.get<double>("propeller(P/D)"));
+        ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)"));
     }
     ds.check_out();
     //! [listenersTest listen_to_file_example]

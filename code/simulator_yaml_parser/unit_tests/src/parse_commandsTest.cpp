@@ -43,10 +43,10 @@ TEST_F(parse_commandsTest, example)
     ASSERT_DOUBLE_EQ(30, commands[0].commands["rpm"][2]);
     ASSERT_DOUBLE_EQ(40, commands[0].commands["rpm"][3]);
     ASSERT_EQ(4, commands[0].commands["P/D"].size());
-    ASSERT_DOUBLE_EQ(0.7, commands[0].commands["P/D"][0]);
-    ASSERT_DOUBLE_EQ(0.7, commands[0].commands["P/D"][1]);
-    ASSERT_DOUBLE_EQ(0.7, commands[0].commands["P/D"][2]);
-    ASSERT_DOUBLE_EQ(0.7, commands[0].commands["P/D"][3]);
+    ASSERT_DOUBLE_EQ(1.064935, commands[0].commands["P/D"][0]);
+    ASSERT_DOUBLE_EQ(1.064935, commands[0].commands["P/D"][1]);
+    ASSERT_DOUBLE_EQ(1.064935, commands[0].commands["P/D"][2]);
+    ASSERT_DOUBLE_EQ(1.064935, commands[0].commands["P/D"][3]);
 //! [parse_commandsTest example]
 }
 

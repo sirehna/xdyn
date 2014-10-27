@@ -1089,19 +1089,19 @@ std::string test_data::anthineas_propulsion()
        << "        model: wageningen B-series\n"
        << "        position of propeller frame:\n"
        << "            frame: Anthineas\n"
-       << "            x: {value: -4, unit: m}\n"
+       << "            x: {value: -8.4, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 2, unit: m}\n"
+       << "            z: {value: 2.5, unit: m}\n"
        << "            phi: {value: 0, unit: rad}\n"
-       << "            theta: {value: -10, unit: deg}\n"
+       << "            theta: {value: 3, unit: deg}\n"
        << "            psi: {value: 0, unit: deg}\n"
-       << "        wake coefficient w: 0.9\n"
+       << "        wake coefficient w: 0\n"
        << "        relative rotative efficiency eta: 1\n"
-       << "        thrust deduction factor t: 0.7\n"
+       << "        thrust deduction factor t: 0\n"
        << "        rotation: clockwise\n"
-       << "        number of blades: 3\n"
-       << "        blade area ratio AE/A0: 0.5\n"
-       << "        diameter: {value: 2, unit: m}\n"
+       << "        number of blades: 4\n"
+       << "        blade area ratio AE/A0: 0.55\n"
+       << "        diameter: {value: 1.925, unit: m}\n"
        << "    \n";
     return ss.str();
 }
@@ -1743,7 +1743,7 @@ std::string test_data::controlled_forces()
     ss << "- name: propeller\n"
           "  t: [0,1,3,10]\n"
           "  rpm: {unit: rad/s, values: [3, 30, 30, 40]}\n"
-          "  P/D: [0.7,0.7,0.7,0.7]\n";
+          "  P/D: [1.064935,1.064935,1.064935,1.064935]\n";
     return ss.str();
 }
 
