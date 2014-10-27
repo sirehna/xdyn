@@ -20,7 +20,6 @@ class EnvironmentAndFrames;
 class ForceModel
 {
     public:
-        struct Input{};
         virtual ~ForceModel(){}
         virtual ssc::kinematics::Wrench operator()(const Body& body, const double t) const = 0;
         virtual double potential_energy(const Body& body, const std::vector<double>& x) const {(void)body;(void)x;return 0;}
