@@ -27,7 +27,7 @@ Sim::Sim(const std::vector<Body>& bodies_,
     {
         for (auto that_force = controlled_forces[i].begin() ; that_force != controlled_forces[i].end() ; ++that_force)
         {
-            (*that_force)->add_reference_frame(bodies.at(i).name, env.k, env.rot);
+            (*that_force)->add_reference_frame(env.k, env.rot);
         }
     }
 }

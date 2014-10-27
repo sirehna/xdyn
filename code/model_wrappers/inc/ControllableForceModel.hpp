@@ -34,7 +34,7 @@ class ControllableForceModel
         ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& position_of_frame, const EnvironmentAndFrames& env);
         virtual ~ControllableForceModel();
         ssc::kinematics::Wrench operator()(const Body& body, const double t, ssc::data_source::DataSource& command_listener) const;
-        void add_reference_frame(const std::string& body_name, const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const;
+        void add_reference_frame(const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const;
         virtual ssc::kinematics::Vector6d get_force(const Body& body, const double t, std::map<std::string,double> commands) const = 0;
 
     protected:
