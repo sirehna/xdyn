@@ -20,6 +20,7 @@
 #include "QuadraticDampingForceModel.hpp"
 #include "LinearDampingForceModel.hpp"
 #include "WageningenControlledForceModel.hpp"
+#include "ResistanceCurveForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_source::DataSource& command_listener)
 {
@@ -39,7 +40,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_sou
            .can_parse<FroudeKrylovForceModel>()
            .can_parse<QuadraticDampingForceModel>()
            .can_parse<LinearDampingForceModel>()
-           .can_parse<WageningenControlledForceModel>();
+           .can_parse<WageningenControlledForceModel>()
+           .can_parse<ResistanceCurveForceModel>();
     return builder;
 }
 
