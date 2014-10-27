@@ -14,7 +14,7 @@
 class ResistanceCurveForceModel::Impl
 {
     public:
-        Impl(const YamlResistanceCurve& data) : S(data.Va, data.R)
+        Impl(const YamlResistanceCurve& data) : S(data.Va, data.R, /*allow queries outside bounds*/ true)
         {
         }
 
