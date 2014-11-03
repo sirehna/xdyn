@@ -200,7 +200,7 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     const auto bodies = get_bodies(meshes);
     const auto env = get_environment_and_frames(bodies);
-    return Sim(bodies, get_forces(env), get_controlled_forces(env), env, get_initial_states(), command_listener);
+    return Sim(bodies, get_forces(env), get_controlled_forces(env), env, get_initial_states(), command_listener, detected_surface_forces());
 }
 
 StateType SimulatorBuilder::get_initial_states() const

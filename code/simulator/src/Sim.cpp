@@ -19,9 +19,10 @@ Sim::Sim(const std::vector<Body>& bodies_,
          const std::vector<ListOfControlledForces>& controlled_forces_,
          const EnvironmentAndFrames& env_,
          const StateType& x,
-         const ssc::data_source::DataSource& command_listener_) :
+         const ssc::data_source::DataSource& command_listener_,
+         const bool there_are_surface_forces_) :
          state(x), bodies(bodies_), forces(forces_), controlled_forces(controlled_forces_), env(env_),
-         _dx_dt(StateType(x.size(),0)), command_listener(command_listener_)
+         _dx_dt(StateType(x.size(),0)), command_listener(command_listener_), there_are_surface_forces(there_are_surface_forces_)
 {
     for (size_t i = 0 ; i < controlled_forces.size() ; ++i)
     {
@@ -47,7 +48,7 @@ void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies
 void Sim::update_body(Body& body, const size_t i, const StateType& x, const double t) const
 {
     update_body_states(x, body, i);
-    body.update_intersection_with_free_surface(env, t);
+    if (there_are_surface_forces) body.update_intersection_with_free_surface(env, t);
     update_projection_of_z_in_mesh_frame(body);
 }
 
