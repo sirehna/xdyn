@@ -276,7 +276,6 @@ stories:
       started: 18/4/2014
       done: 22/4/2014
       assigned to: cec
-      started: 18/4/2014
     - task: Create dummy wave module & interface
       type: model
       size: 2
@@ -772,3 +771,4 @@ stories:
 #    due by: 1/11/2014
 #    tasks: []
 #
+
