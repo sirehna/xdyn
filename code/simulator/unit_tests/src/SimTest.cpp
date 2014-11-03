@@ -6,7 +6,13 @@
  */
 #include <math.h> // isnan
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include <boost/algorithm/string.hpp> // replace in string
+
+#include <ssc/data_source.hpp>
 
 #include "SimObserver.hpp"
 #include "Sim.hpp"
@@ -280,10 +286,33 @@ TEST_F(SimTest, froude_krylov)
 
 TEST_F(SimTest, anthineas_damping)
 {
-    std::cout.precision(40);
     const auto yaml = SimulatorYamlParser(test_data::anthineas_damping()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 20, 1);
     ASSERT_EQ(21, res.size());
     ASSERT_FALSE(std::isnan(res.back().x[ZIDX(0)]));
     ASSERT_EQ(res.back().x[ZIDX(0)],res.back().x[ZIDX(0)]); // Check if nan
+}
+
+TEST_F(SimTest, propulsion_and_resistance)
+{
+    const auto yaml = SimulatorYamlParser(test_data::propulsion_and_resistance()).parse();
+    ssc::data_source::DataSource commands;
+    commands.set<double>("propeller(rpm)", 100*(2*PI)/60.);
+    commands.set<double>("propeller(P/D)", 1.064935);
+    const size_t N = 250;
+    const auto res = simulate<ssc::solver::EulerStepper>(yaml, anthineas_stl, 0, N, 1, commands);
+    ASSERT_EQ(N+1, res.size());
+    for (size_t i = 0 ; i <= N ; ++i)
+    {
+        const double t = res.at(i).t;
+        ASSERT_LE(2.79963*(t-40), res.at(i).x[XIDX(0)]);
+        ASSERT_DOUBLE_EQ(0, res.at(i).x[YIDX(0)]);
+        ASSERT_DOUBLE_EQ(1, res.at(i).x[ZIDX(0)]);
+        ASSERT_LE(2.79963*(1-exp(-0.012*t)), res.at(i).x[UIDX(0)]) << i;
+        ASSERT_DOUBLE_EQ(0, res.at(i).x[VIDX(0)]);
+        ASSERT_DOUBLE_EQ(0, res.at(i).x[WIDX(0)]);
+        ASSERT_NEAR(-0.00109667*t, res.at(i).x[PIDX(0)], 8E-2);
+        ASSERT_DOUBLE_EQ(0, res.at(i).x[QIDX(0)]);
+        ASSERT_DOUBLE_EQ(0, res.at(i).x[RIDX(0)]);
+    }
 }

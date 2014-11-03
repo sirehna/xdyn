@@ -108,7 +108,9 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
         if (tau.get_frame() != bodies[body].name)
         {
             const ssc::kinematics::Transform T = env.k->get(tau.get_frame(), bodies[body].name);
-            S += tau.change_ref_point_then_change_frame(T);
+            const auto t = tau.change_frame_but_keep_ref_point(T);
+            const ssc::kinematics::UnsafeWrench tau_body(bodies[body].G, t.force, t.torque + (t.get_point()-bodies[body].G).cross(t.force));
+            S += tau_body;
         }
         else
         {
@@ -119,7 +121,9 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
     {
         const ssc::kinematics::Wrench tau = (**that_force)(bodies[body], t, command_listener);
         const ssc::kinematics::Transform T = env.k->get(tau.get_frame(), bodies[body].name);
-        S += tau.change_ref_point_then_change_frame(T);
+        const auto t = tau.change_frame_but_keep_ref_point(T);
+        const ssc::kinematics::UnsafeWrench tau_body(bodies[body].G, t.force, t.torque + (t.get_point()-bodies[body].G).cross(t.force));
+        S += tau_body;
     }
     return S;
 }
