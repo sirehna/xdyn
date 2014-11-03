@@ -5,7 +5,9 @@
  *      Author: cady
  */
 
+#define _USE_MATH_DEFINE
 #include <cmath>
+#define PI M_PI
 
 #include "Body.hpp"
 #include "WageningenControlledForceModel.hpp"
@@ -49,7 +51,7 @@ WageningenControlledForceModel::WageningenControlledForceModel(const YamlWagenin
 ssc::kinematics::Vector6d WageningenControlledForceModel::get_force(const Body& body, const double , std::map<std::string,double> commands) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
-    const double n2 = commands["rpm"]*commands["rpm"];
+    const double n2 = commands["rpm"]*commands["rpm"]/(4*PI*PI); // In turns per second (Hz)
     const double P_D = commands["P/D"];
     const double J = advance_ratio(body, commands);
     tau(0) = (1-t)*env.rho*n2*D4*Kt(Z, AE_A0, P_D, J);
@@ -98,6 +100,6 @@ double WageningenControlledForceModel::Kq(const size_t Z, const double AE_A0_, c
 double WageningenControlledForceModel::advance_ratio(const Body& body, std::map<std::string,double>& commands) const
 {
     const double Va = fabs(body.u);
-    const double n = commands["rpm"];
+    const double n = commands["rpm"]/(2*PI);
     return (1-w)*Va/n/D;
 }

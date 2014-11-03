@@ -1118,9 +1118,9 @@ efforts générés par l'hélice suivant son axe (sans tenir compte de la succio
 - $Q$ est le couple généré par l'hélice en eau libre autour de son axe. Il
   s'exprime en N.m.
 - $n$ est le nombre de tours que l'hélice fait par seconde (en Hz)
-- $D$ est le diamètre de l'hélice
-- $rho$ est la densité volumique de l'eau
-- $V_a$ est la vitesse d'avance, c'est-à-dire la vitesse de l'écoulement non
+- $D$ est le diamètre de l'hélice (en m)
+- $rho$ est la densité volumique de l'eau (en kg/m^3)
+- $V_a$ est la vitesse d'avance (en m/s), c'est-à-dire la vitesse de l'écoulement non
 perturbé (à l'infini). Il s'agit d'une vitesse théorique : on se place dans le
 cas où l'hélice est complètement isolée dans un environnement infini (eau
 libre) qui bouge à la vitesse $V_a$ par rapport au sol.
@@ -1137,7 +1137,7 @@ Le modèle en eau libre est sujet aux hypothèses suivantes :
 
 L'intérêt de ce modèle est qu'il est paramétrique et permet de représenter les
 performances de l'hélice sous forme adimensionnelle. On peut ainsi appliquer le
-même modèle (à un coefficient d'échelle $D$ près) à des hélices homothétiques.
+même modèle (à un coefficient d'échelle près) à des hélices homothétiques.
 Une limitation supplémentaire du modèle polynomial en eau libre est que,
 contrairement au modèle quatre quadrant, il n'est valable qu'en marche
 avant (c'est-à-dire pour $n$ positif ou nul).
@@ -1149,10 +1149,10 @@ pas des équations de Navier-Stokes. Le postulat est, qu'étant données les
 hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
 dépende :
 
-- Du diamètre $D$ de celle-ci
-- De la vitesse $V_a$ d'avance du fluide
-- De la vitesse de rotation $n$ de l'hélice
-- De la densité $\rho$ du fluide
+- Du diamètre $D$ (en m) de celle-ci
+- De la vitesse $V_a$ d'avance du fluide (en m/s)
+- De la vitesse de rotation $n$ de l'hélice (en Hz)
+- De la densité $\rho$ du fluide (en kg/m^3)
 - De la viscosité $\mu$ du fluide
 - De la pression statique du fluide $p_0-e$ au niveau de l'hélice
 

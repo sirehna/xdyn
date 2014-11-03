@@ -5,6 +5,10 @@
  *      Author: cady
  */
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include "Body.hpp"
 #include "force_parsers.hpp"
 #include "yaml_data.hpp"
@@ -271,7 +275,7 @@ TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
     Body b;
     b.u = 3;
     std::map<std::string,double> commands;
-    commands["rpm"] = 20;
+    commands["rpm"] = 20*2*PI;
     ASSERT_DOUBLE_EQ(3./400., w.advance_ratio(b, commands));
 }
 
@@ -286,7 +290,7 @@ TEST_F(WageningenControlledForceModelTest, force)
     b.u = 1;
 
     std::map<std::string,double> commands;
-    commands["rpm"] = 5;
+    commands["rpm"] = 5*(2*PI);
     commands["P/D"] = 0.5;
 
     ASSERT_NEAR(0.3*1024*25*16*0.18587823151195928539, w.get_force(b, a.random<double>(),commands)(0), EPS);
@@ -307,7 +311,7 @@ TEST_F(WageningenControlledForceModelTest, torque)
     b.u = 1;
 
     std::map<std::string,double> commands;
-    commands["rpm"] = 5;
+    commands["rpm"] = 5*(2*PI);
     commands["P/D"] = 0.5;
 
     ASSERT_NEAR(-1024*25*32*0.015890316523410611543, w.get_force(b, a.random<double>(),commands)(3), EPS);
