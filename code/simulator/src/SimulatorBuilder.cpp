@@ -26,6 +26,26 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const ssc::
 {
 }
 
+bool SimulatorBuilder::detected_surface_forces() const
+{
+    bool surface_forces_detected = false;
+    for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
+    {
+        for (auto that_force_model = that_body->external_forces.begin() ; that_force_model!= that_body->external_forces.end() ; ++that_force_model)
+        {
+            for (auto that_parser = force_parsers.begin() ; that_parser != force_parsers.end() ; ++that_parser)
+            {
+                boost::optional<ForcePtr> f = (*that_parser)->try_to_parse(that_force_model->model, that_force_model->yaml, EnvironmentAndFrames());
+                if (f)
+                {
+                    surface_forces_detected |= f.get()->is_a_surface_force_model();
+                }
+            }
+        }
+    }
+    return surface_forces_detected;
+}
+
 std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
 {
     std::vector<Body> ret;

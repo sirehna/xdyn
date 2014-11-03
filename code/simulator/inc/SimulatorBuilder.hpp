@@ -158,6 +158,14 @@ class SimulatorBuilder
             return *this;
         }
 
+        /**  \brief Were surface forces (eg. hydrostatic or Froude-Krylov) forces detected in the YAML?
+          *  \details We need this so Sim doesn't update the intersection with
+          *  the free surface if it isn't needed.
+          *  \returns True if surface forces were detected, false otherwise.
+          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest detected_surface_forces_example
+          */
+        bool detected_surface_forces() const;
+
         std::vector<Body> get_bodies(const MeshMap& meshes) const;
         EnvironmentAndFrames get_environment_and_frames(const std::vector<Body>& bodies) const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;

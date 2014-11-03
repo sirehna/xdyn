@@ -11,6 +11,11 @@ ForceModel::ForceModel(const std::string& name_) : name(name_)
 {
 }
 
+bool ForceModel::is_a_surface_force_model() const
+{
+    return false;
+}
+
 std::string ForceModel::get_name() const
 {
     return name;

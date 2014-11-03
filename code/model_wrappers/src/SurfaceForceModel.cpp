@@ -44,3 +44,8 @@ double SurfaceForceModel::potential_energy(const Body& body, const std::vector<d
 {
     return pe(body, x, env);
 }
+
+bool SurfaceForceModel::is_a_surface_force_model() const
+{
+    return true;
+}

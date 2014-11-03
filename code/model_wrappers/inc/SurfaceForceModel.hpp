@@ -48,6 +48,7 @@ class SurfaceForceModel : public ForceModel
       */
         double potential_energy(const Body& body, const std::vector<double>& x) const;
 
+        bool is_a_surface_force_model() const;
 
     private:
         SurfaceForceModel();
