@@ -23,6 +23,7 @@ int main(int argc, const char* argv[])
     yaml["tutorial_04_damping.yml"]           = test_data::anthineas_damping();
     yaml["tutorial_05_froude_krylov.yml"]     = test_data::anthineas_froude_krylov();
     yaml["tutorial_06_propulsion.yml"]        = test_data::anthineas_propulsion();
+    yaml["tutorial_06_1D_propulsion.yml"]     = test_data::propulsion_and_resistance();
     yaml["oscillating_cube_test.yml"]         = test_data::oscillating_cube_example();
     yaml["stable_cube_test.yml"]              = test_data::stable_cube_example();
     yaml["stable_rolling_cube_test.yml"]      = test_data::stable_rolling_cube_test();

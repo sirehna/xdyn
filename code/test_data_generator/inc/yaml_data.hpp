@@ -37,6 +37,7 @@ namespace test_data
     std::string controlled_forces();
     std::string wageningen();
     std::string resistance_curve();
+    std::string propulsion_and_resistance();
 }
 
 #endif /* YAML_DATA_HPP_ */
