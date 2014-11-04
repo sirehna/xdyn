@@ -238,7 +238,7 @@ du système international.
 
 La section `environment` définit les modèles d'environnement pour la simulation
 à effectuer. Elle permet de prendre en compte des modèles de houle et de vent.
-Elle peut être vide (voir [l'exemple de la chute libre](tutorials.html#Tutoriel 1: balle en chute libre)).
+Elle peut être vide (voir [l'exemple de la chute libre](tutorials.html#tutoriel-1-balle-en-chute-libre)).
 
 ### Modèles de houle
 
