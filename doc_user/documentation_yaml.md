@@ -418,6 +418,48 @@ Dans l'exemple précédent, les coordonnées sont données dans le repère NED. 
 maillage comporte 10 points :
 (1,1),(1,2),(2,1),(2,2),(3,1),(3,2),(4,1),(4,2),(5,1),(5,2).
 
+Les sorties sont écrites dans le fichier spécifié après le flag `-w` en
+argument de l'exécutable `sim`.
+
+On obtient deux résultats différents, suivant que le repère dans lequel ils
+sont exprimés est mobile ou fixe par rapport au repère NED. En effet, si le
+repère est fixe, il est inutile de répéter les coordonnées `x` et `y`.
+
+Dans le cas d'un repère fixe, on obtient une sortie de la forme :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+waves:
+  x: [1,2,3,4,5,1,2,3,4,5]
+  y: [1,1,1,1,1,2,2,2,2,2]
+  timesteps:
+    - t: 0
+    - z: [-4.60386,-4.60388,-4.6039,-4.60392,-4.60393,-4.6553,-4.65531,-4.65533,-4.65535,-4.65537]
+    - t: 1
+    - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`x` et `y` désignent les coordonnées (exprimée en mètres) dans le repère choisi
+(ici il s'agit du NED) des points du maillage.
+`t` désigne l'instant auquel les hauteurs de houle ont été calculées.
+`z` est la hauteur de houle, c'est-à-dire la distance entre un point de
+coordonnées (x,y,0) et le même point situé sur la surface libre. Une valeur
+positive dénote une houle en-dessous de z=0 (creux) et une valeur négative une
+valeur au-dessus de z=0 (bosse).
+
+Si le repère de sortie est mobile, on obtient plutôt un résultat de la forme :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+waves:
+  timesteps:
+    - t: 0
+      x: [1,2,3,4,5,1,2,3,4,5]
+      y: [1,1,1,1,1,2,2,2,2,2]
+    - z: [-4.60386,-4.60388,-4.6039,-4.60392,-4.60393,-4.6553,-4.65531,-4.65533,-4.65535,-4.65537]
+    - t: 1
+      x: [2,4,5,6,7,2,4,5,6,7]
+      y: [1,1,1,1,1,2,2,2,2,2]
+    - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Définition des corps simulés
 

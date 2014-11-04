@@ -201,6 +201,8 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+La description de ce fichier est faite [dans la documentation des fichiers YAML](documentation_yaml.html#sorties).
+
 On peut aussi simuler les vagues dans un autre référentiel que le référentiel
 NED (par exemple le référentiel associé à un solide) et l'on obtient alors des
 coordonnées changeantes au cours du temps (et donc des valeurs `x` et `y` à
