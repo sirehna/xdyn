@@ -5,7 +5,7 @@ comparer succinctement les modèles `non-linear hydrostatic (exact)` et
 `non-linear hydrostatic (fast)`.
 
 ## Description du problème
-Dans cet example, nous considérons un navire,
+Dans cet exemple, nous considérons un navire,
 (l'Anthineas)[http://www.marinetraffic.com/en/ais/details/ships/228367000/vessel:ANTHINEAS],
 soumis uniquement à la pesanteur et aux efforts hydrostatiques, sans
 amortissement. Le navire est lâché sans vitesse initiale au-dessus de la
