@@ -255,6 +255,170 @@ Pour simuler une surface libre parfaitement horizontale, on opère de la façon 
 `constant sea elevation in NED frame` représente l'élévation de la surface
 libre dans le repère NED.
 
+#### Houle
+
+On peut définir une houle comme étant une somme de plusieurs spectres
+directionnels, c'est-à-dire un spectre de puissance et une dispersion spatiale.
+Ces spectres doivent être discrétisés. Actuellement, la discrétisation spatiale
+est la même que la discrétisation fréquentielle.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+discretization:
+   n: 128
+   omega min: {value: 0.1, unit: rad/s}
+   omega max: {value: 6, unit: rad/s}
+   energy fraction: 0.999
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `n` : nombre de points (nombre de fréquences ou nombr de directions)
+- `omega min` : pulsation minimale (incluse)
+- `omega max` : pulsation maximale (incluse)
+- `energy fraction` : les produits de spectre de puissance et d'étalement
+directionnel $S_i\cdot D_j$ sont classés par ordre décroissant. On calcule la
+somme cumulative et l'on s'arrête lorsque l'énergie accumulée vaut `energy
+fraction` de l'énergie totale.
+
+Les spectres directionnels sont définis de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: airy
+  depth: {value: 100, unit: m}
+  seed of the random data generator: 0
+  directional spreading:
+     type: dirac
+     waves coming from: {value: 90, unit: deg}
+  spectral density:
+     type: jonswap
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: m}
+     gamma: 1.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `model` : actuellement, ne peut valoir qu'`airy`.
+- `depth` : profondeur (distance entre le fond et la surface). 0 pour
+l'approximation "profondeur infinie". Utilisé pour le calcul du nombre d'onde.
+- `seed of the random data generator` : germe utilisé pour la génération des
+phases aléatoires.
+- `directional spreading` : étalement directionnel. Cf. infra.
+- `spectral density` : densité spectrale de puissance. Cf. infra.
+
+#### Etalements directionnels
+
+##### Dirac
+
+Lorsque cet étalement est choisi, la houle est mono-directionnelle.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+directional spreading:
+     type: dirac
+     waves coming from: {value: 90, unit: deg}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La direction de propagation est donnée par `waves coming from`.
+Cet étalement est documenté [ici](modeles_reperes_et_conventions.html#dirac-1).
+
+##### cos2s
+
+L'étalement est donné par :
+$$\psi\mapsto \cos^{2s}{\psi-\psi_0}$$
+
+où $\psi_0$ est la direction de propagation.
+
+Cet étalement est paramétré de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+directional spreading:
+   type: cos2s
+   s: 2
+   waves coming from: {value: 90, unit: deg}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`waves coming from` donne la direction de propagation $\psi_0$.
+
+Cet étalement est documenté [ici](modeles_reperes_et_conventions.html#cos2s).
+
+#### Spectres de puissance
+
+##### Dirac
+
+Lorsque ce spectre est choisi, on obtient une houle monochromatique.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+   type: dirac
+   Hs: {value: 5, unit: m}\n"
+   omega0: {value: 15, unit: rad/s}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
+Ce spectre est documenté [ici](modeles_reperes_et_conventions.html#dirac).
+
+##### JONSWAP
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+     type: jonswap
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: m}
+     gamma: 1.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce spectre est documenté [ici](modeles_reperes_et_conventions.html#jonswap).
+
+##### Bretschneider
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+     type: bretschneider
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce spectre est documenté
+[ici](modeles_reperes_et_conventions.html#bretschneider).
+
+##### Pierson-Moskowitz
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+     type: pierson-moskowitz
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce spectre est documenté
+[ici](modeles_reperes_et_conventions.html#pierson-moskowitz).
+
+#### Sorties
+
+On peut sortir les hauteurs de houle calculées sur un maillage (défini dans un
+repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
+simulation de houle, sans corps, tel que décrit dans le [tutoriel 3](tutorials.html#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
+
+On définit un maillage (cartésien) sur lequel sera calculé la houle. Par exemple :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+    frame of reference: NED
+    mesh:
+        xmin: {value: 1, unit: m}
+        xmax: {value: 5, unit: m}
+        nx: 5
+        ymin: {value: 1, unit: m}
+        ymax: {value: 2, unit: m}
+        ny: 2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `frame of reference` : nom du repère dans lequel sont exprimées les coordonnées des points du maillage.
+- `xmin`, `xmax`, `nx` : définition de la discrétisation de l'axe x. Les
+  valeurs vont de `xmin` (inclus) à `xmax` (inclus) et il y a `nx` valeurs au
+  total.
+- `ymin`, `ymax`, `ny` : comme pour x.
+
+Dans l'exemple précédent, les coordonnées sont données dans le repère NED. Le
+maillage comporte 10 points :
+(1,1),(1,2),(2,1),(2,2),(3,1),(3,2),(4,1),(4,2),(5,1),(5,2).
+
+
 ## Définition des corps simulés
 
 Le simulateur est multi-corps en ce sens que plusieurs corps peuvent être
