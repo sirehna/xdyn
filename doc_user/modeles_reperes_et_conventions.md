@@ -334,19 +334,35 @@ monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
 $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) = \left\{\begin{array}0, \mbox{si }\omega\neq \omega_0\\1, \mbox{si
 } \omega=\omega_0\end{array}\right\}$$
 
-
+Le paramétrage de ce spectre est documenté
+[ici](documentation_yaml.html#dirac-1).
 
 #### JONSWAP
 
+Le paramétrage de ce spectre est documenté
+[ici](documentation_yaml.html#jonswap).
+
 #### Pierson-Moskowitz
 
-#### Bretschenider
+Le paramétrage de ce spectre est documenté
+[ici](documentation_yaml.html#pierson-moskowitz).
+
+#### Bretschneider
+
+Le paramétrage de ce spectre est documenté
+[ici](documentation_yaml.html#bretschneider).
 
 ### Etalements directionnels
 
 #### Dirac
 
+Le paramétrage de cet étalement directionnel est documenté
+[ici](documentation_yaml.html#dirac).
+
 #### Cos2s
+
+Le paramétrage de cet étalement directionnel est documenté
+[ici](documentation_yaml.html#cos2s).
 
 ### Modèles de houle
 

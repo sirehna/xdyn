@@ -69,7 +69,7 @@ Pour le second spectre, on écrit :
      waves coming from: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On définit les sorties de la façon suivante :
+On définit les sorties de la façon suivante (décrites dans la [documentation du fichier YAML](documentation_yaml.html#sorties):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
