@@ -12,7 +12,7 @@ parsers YAML existent pour de nombreux langages de programmation.
 
 Le fichier YAML comprend quatre sections de haut niveau :
 
-- La section `rotations` définit la convention d'angles utilisée,
+- La section `rotations convention` définit la convention d'angles utilisée,
 - `environmental constants` donne les valeurs de la gravité et la densité de l'eau,
 - Les modèles environnementaux figurent dans `environment models`
 - `bodies` décrit les corps simulés.
@@ -38,9 +38,7 @@ et obtenir exactement le même résultat.
 ### Exemple complet
 
 ~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi,theta',phi'']
 
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
@@ -144,57 +142,54 @@ bodies: # All bodies have NED as parent frame
 
 ### Rotations
 
-La convention de rotation utilisée est décrite dans la section `rotations` :
+La convention de rotation permet de retrouver la matrice de rotation d'un
+repère par rapport à un autre, étant donné un triplet $(\phi, \theta, \psi)$.
+La convention utilisée est décrite dans la section `rotations` :
 
 ~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi,theta',phi'']
 ~~~~~~~~~~~~~~
 
-L'information de convention d'angles ou d'axes est stockée dans la variable
-`order by`. Les informations de composition interne/externe et d'ordre des
-rotations sont stockées dans la variable `convention`.
-`order by` peut prendre les valeurs `angle` ou `axis`. Si l'on choisit `angle`,
-alors `x`, `y`, `z` correspondent aux angles autour des axes $x$, $y$ et $z$
-respectivement.
+Cette ligne s'interprète de la façon suivante : étant donné un triplet $(\phi,
+\theta, \psi)$, on construit les matrices de rotation en effectuant d'abord une
+rotation d'angle $\psi$ autour de l'axe Z, ensuite une rotation d'angle
+$\theta$ autour de l'axe Y du repère précédemment transformé, puis une rotation
+d'angle $\phi$ autour de l'axe X du repère ainsi obtenu.
+
+Si l'on avait noté :
+
+~~~~~~~~~~~~~~ {.yaml}
+rotations convention: [z,y',x'']
+~~~~~~~~~~~~~~
+
+on aurait d'abord une rotation d'angle $\phi$ autour de l'axe Z, puis une
+rotation d'angle $\theta$ autour du nouvel axe Y, puis une rotation $\psi$
+autour du nouvel axe X.
+
 Des apostrophes sont utilisés pour indiquer des compositions de rotations
 par rapport au nouveau système d'axes, et donc une composition interne.
-Ainsi $X Y' Z''$ désignera une rotation autour X, suivie d'une rotation autour
+Ainsi `[x,y',z'']` désignera une rotation autour X, suivie d'une rotation autour
 du  nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z,
 appelé Z''. La double apostrophe fait référence au deuxième repère utilisée
 pour la composition de rotation.
 
-La liste `convention` comporte toujours trois éléments. Le deuxième élément est
+La liste `rotations convention` comporte toujours trois éléments. Le deuxième élément est
 toujours différent du premier. Le troisième est soit différent des deux autres,
 soit égal au premier.
 
 La convention des angles aéronautiques, fréquemment (et abusivement) dénotée
-"angles d'Euler", se définit de la façon suivante :
+"angles d'Euler" (lacet $\psi$, tangage $\theta$, roulis $\phi$), se définit de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    rotations:
-        order by: angle
-        convention: [z,y',x'']
+rotations convention: [psi, theta', phi'']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-Si l'on souhaite exprimer ce triplet par (Lacet, Roulis, Tangage),
-on utilise :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    rotations:
-        order by: axis
-        convention: [z,y',x'']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La convention d'orientation utilisée dans le logiciel
 [Paraview](http://www.paraview.org) est donnée par :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    rotations:
-        order by: angle
-        convention: [z,x',y'']
+rotations convention: [psi,phi',theta'']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pour plus de détails sur les conventions d'angles et d'axes, se référer à [la
@@ -205,8 +200,8 @@ Une attitude sera décrite de la manière suivante, avec les champs
 - `frame` le nom du repère dans laquelle l'attitude est exprimée,
 - `x` ,`y` ,`z`: le triplet de position où chaque position est
    définie par le dictionnaire des clés `value` et `unit`,
-- `phi` ,`theta` ,`psi`, le triplet d'orientation où chaque angle
-  est défini par le dictionnaire des clés `value` et `unit`,
+- `phi` ,`theta` ,`psi`, le triplet d'orientation dont l'interprétation en
+termes de matrices de rotations dépend de la convention d'orientation choisie
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     frame: NED

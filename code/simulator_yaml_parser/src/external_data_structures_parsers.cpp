@@ -25,10 +25,60 @@ void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::stri
     p.name = name;
 }
 
+void inline search_and_replace(std::string& source, const std::string& find, const std::string& replace)
+{
+    const size_t fLen = find.size();
+    const size_t rLen = replace.size();
+    for (size_t pos=0; (pos=source.find(find, pos))!=std::string::npos; pos+=rLen)
+    {
+        source.replace(pos, fLen, replace);
+    }
+}
+
 void operator >> (const YAML::Node& node, YamlRotation& g)
 {
-    node["convention"] >> g.convention;
-    node["order by"] >> g.order_by;
+    std::vector<std::string> s;
+    node >> s;
+    if (s.size() != 3)
+    {
+        std::stringstream ss;
+        ss << "Could not parse rotations: there should be exactly three elements in the 'rotations convention' list, but " << s.size() << " were detected.";
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    bool detected_axis = false;
+    bool detected_angle = false;
+    std::vector<std::string> ret;
+    for (size_t i = 0 ; i < 3 ; ++i)
+    {
+        std::string si = s.at(i);
+        if (si.size() > 7)
+        {
+            std::stringstream ss;
+            ss << "Could not parse rotations: element nb " << i << " (starting from 0) in vector was " << si;
+            THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        }
+        const std::string si_with_no_apostrophs = si.substr(0,si.find_first_of('\''));
+        if ((si_with_no_apostrophs == "x") or (si_with_no_apostrophs == "y") or (si_with_no_apostrophs == "z"))
+        {
+            detected_axis = true;
+        }
+        if ((si_with_no_apostrophs == "phi") or (si_with_no_apostrophs == "theta") or (si_with_no_apostrophs == "psi"))
+        {
+            detected_angle = true;
+            search_and_replace(si, "phi", "x");
+            search_and_replace(si, "theta", "y");
+            search_and_replace(si, "psi", "z");
+        }
+        if (not(detected_axis or detected_angle))
+        {
+            std::stringstream ss;
+            ss << "Could not parse rotations: could not detect convention for element nb " << i << " (starting from 0) in vector, which was " << si;
+            THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        }
+        g.convention.push_back(si);
+    }
+    if (detected_axis) g.order_by = "axis";
+    if (detected_angle) g.order_by = "angle";
 }
 
 void operator >> (const YAML::Node& node, YamlBody& b)

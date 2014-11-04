@@ -130,9 +130,7 @@ environment models:
 Comme on ne simule pas de corps, le fichier d'entrée se réduit à :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi, theta', phi'']
 
 environmental constants:
     g: {value: 9.81, unit: m/s^2}

@@ -57,9 +57,7 @@ commandes](documentation_yaml.html#syntaxe-du-fichier-de-commande) est défini d
 En définitive, le fichier d'entrée est :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi, theta', phi'']
 
 environmental constants:
     g: {value: 9.81, unit: m/s^2}

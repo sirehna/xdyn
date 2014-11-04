@@ -11,9 +11,7 @@
 std::string test_data::hydrostatic_test()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -88,9 +86,7 @@ std::string test_data::hydrostatic_test()
 std::string test_data::full_example()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -235,9 +231,7 @@ std::string test_data::full_example()
 std::string test_data::full_example_with_propulsion()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -418,9 +412,7 @@ std::string test_data::full_example_with_propulsion()
 std::string test_data::falling_ball_example()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -553,9 +545,7 @@ std::string test_data::outputs()
 std::string test_data::falling_cube()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -624,9 +614,7 @@ std::string test_data::falling_cube()
 std::string test_data::rolling_cube()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -698,9 +686,7 @@ std::string test_data::rolling_cube()
 std::string test_data::oscillating_cube_example()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -772,9 +758,7 @@ std::string test_data::oscillating_cube_example()
 std::string test_data::stable_cube_example()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -846,9 +830,7 @@ std::string test_data::stable_cube_example()
 std::string test_data::stable_rolling_cube_test()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -930,9 +912,7 @@ std::string test_data::stable_rolling_cube_test()
 std::string test_data::anthineas_hydrostatic_test(const std::string& type)
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1006,9 +986,7 @@ std::string test_data::anthineas_hydrostatic_test(const std::string& type)
 std::string test_data::anthineas_propulsion()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1122,9 +1100,7 @@ std::string test_data::anthineas_exact_hydrostatic_test()
 std::string test_data::anthineas_waves_test()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1297,9 +1273,7 @@ std::string test_data::anthineas_post_processing()
 std::string test_data::waves()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1349,9 +1323,7 @@ std::string test_data::waves()
 std::string test_data::simple_waves()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1389,9 +1361,7 @@ std::string test_data::simple_waves()
 std::string test_data::waves_for_parser_validation_only()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "discretization:\n"
        << "   n: 128\n"
        << "   omega min: {value: 0.1, unit: rad/s}\n"
@@ -1435,9 +1405,7 @@ std::string test_data::waves_for_parser_validation_only()
 std::string test_data::cube_in_waves()
 {
     std::stringstream ss;
-        ss << "rotations:\n"
-           << "    order by: angle\n"
-           << "    convention: [z,y',x'']\n"
+        ss << "rotations convention: [psi, theta', phi'']\n"
            << "\n"
            << "environmental constants:\n"
            << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1545,9 +1513,7 @@ std::string test_data::cube_in_waves()
 std::string test_data::anthineas_froude_krylov()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1657,9 +1623,7 @@ std::string test_data::anthineas_froude_krylov()
 std::string test_data::anthineas_damping()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1784,9 +1748,7 @@ std::string test_data::resistance_curve()
 std::string test_data::propulsion_and_resistance()
 {
     std::stringstream ss;
-    ss << "rotations:\n"
-       << "    order by: angle\n"
-       << "    convention: [z,y',x'']\n"
+    ss << "rotations convention: [psi, theta', phi'']\n"
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"

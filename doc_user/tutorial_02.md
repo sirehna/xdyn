@@ -114,9 +114,7 @@ external forces:
 En définitive, on obtient le fichier suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi, theta', phi'']
 
 environmental constants:
     g: {value: 9.81, unit: m/s^2}

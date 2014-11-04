@@ -27,22 +27,15 @@ Les axes du repère navire sont les suivants
 
 L'attitude d'un corps permet de connaître sa position et son orientation par
 rapport à un repère. La position est donnée par le triplet $\left(X,Y,Z\right)$
-et l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
-Cette dernière peut être exprimée de manière différente notamment avec des
-quaternions.
+et l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$. L'interprétation de ce triplet en termes de rotations autour des axes $x$,$y$,$z$ dépend de la convention d'orientation choisie.
+L'orientation peut également être exprimée de manière différente notamment avec des
+quaternions (c'est d'ailleurs ainsi qu'elle est exprimée dans le code du simulateur).
 
 ## Conventions d'orientations
 
 Cette section présente les notations utilisées pour définir l'orientation
-d'un élément dans l'espace à partir d'un triplet de trois angles.
+d'un élément dans l'espace à partir d'un triplet de trois angles $(\phi,$\theta$,\psi$)$.
 
-
-### Convention par défaut
-
-Si on souhaite utiliser classiquement la convention des angles aéronautiques
-exprimée par le triplet (Roulis, Tangage, Lacet) alors on utilisera
-les entrées suivantes. Si on souhaite paramétrer cette convention, il
-est conseillé de lire la section complète.
 
 ### Définition d'une orientation
 
