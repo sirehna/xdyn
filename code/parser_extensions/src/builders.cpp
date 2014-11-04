@@ -207,7 +207,7 @@ boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<JonswapSp
 boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<PiersonMoskowitzSpectrum>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > ret;
-    if (model == "jonswap")
+    if (model == "pierson-moskowitz")
     {
         const YamlPiersonMoskowitz data = parse_pierson_moskowitz(yaml);
         ret.reset(TR1(shared_ptr)<WaveSpectralDensity>(new PiersonMoskowitzSpectrum(data.Hs, data.Tp)));
