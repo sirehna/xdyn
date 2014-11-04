@@ -804,14 +804,19 @@ documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visque
 ### Résistance à l'avancement
 
 Les efforts de résistance à l'avancement est renseignée en fonction de la
-vitesse d'avance (axe longitudinal uniquement). L'interpolation est faite en
-utilisant des splines cubiques.
+vitesse d'avance (axe longitudinal uniquement), c'est-à-dire la projection
+suivant l'axe $x$ du repère body de la vitesse du navire par rapport au repère
+NED. L'interpolation est faite en utilisant des splines cubiques.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: resistance curve
   speed: {unit: knot, values: [0,1,2,3,4,5,15,20]}
   resistance: {unit: MN, values: [0,1,4,9,16,25,225,400]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cet effort est orienté suivant l'axe $-x$ du repère body.
+Le modèle est décrit
+[ici](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement).
 
 ## Efforts commandés
 

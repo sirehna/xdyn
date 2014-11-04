@@ -1008,21 +1008,20 @@ limites.
 
 ## Résistance à l'avancement
 
-### Description
-
-
 ### Hypothèses
 
 On suppose la propulsion rectiligne, uniforme et directe, c'est-à-dire
 d'intensité et de direction constantes et située dans le plan ($x$,$y$).
 
-On suppose également qu'il n'y a pas de houle, que l'assiette du navire est
+On suppose également qu'il n'y a pas de houle (eau calme), que l'assiette du navire est
 constante et que sa gite est nulle.
 
-On suppose enfin que la résistance à l'avancement est colinéaire à la force
-propulsive.
+On suppose enfin que la résistance à l'avancement est colinéaire à la
+projection sur le plan horizontal de la force propulsive.
 
-Etant données ces hypothèses, on parle de __résistance de remorquage**.
+Etant données ces hypothèses, on parle de __résistance de remorquage__ à une
+vitesse donnée et on note $R_T$ la force nécessaire pour remorquer le navire à
+cette vitesse en eau calme.
 
 ### Modélisation
 
@@ -1033,13 +1032,16 @@ que :
 
 - l'eau n'est pas un fluide parfait : elle possède une viscosité qui freine
 l'objet
-- la surface libre n'est pas à l'équilibre et s'oppose au mouvement du solide.
+- et/ou la surface libre n'est pas à l'équilibre et s'oppose au mouvement du solide.
 
 On décompose donc la résistance de remorquage en deux composantes :
 
 - la résistance visqueuse, liée au frottement de l'eau sur la carène ;
 - la résistance de vagues, due à la création d'un champs de vague par le
 navire.
+
+Ce modèle est accessible par la clef [`resistance
+curve`](documentation_yaml.html#r%C3%A9sistance-%C3%A0-lavancement).
 
 ### Références
 
