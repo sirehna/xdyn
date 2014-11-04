@@ -53,7 +53,6 @@ po::options_description get_options_description(InputData& input_data)
     desc.add_options()
         ("help,h",                                                                       "Show this help message")
         ("yml,y",      po::value<std::vector<std::string> >(&input_data.yaml_filenames), "Name(s) of the YAML file(s)")
-        ("out,o",      po::value<std::string>(&input_data.output_csv),                   "Name of the generated CSV file. If none given, simulator writes CSV to standard output")
         ("solver,s",   po::value<std::string>(&input_data.solver)->default_value("rk4"), "Name of the solver: euler,rk4,rkck for Euler, Runge-Kutta 4 & Runge-Kutta-Cash-Karp respectively.")
         ("dt",         po::value<double>(&input_data.initial_timestep),                  "Initial time step (or value of the fixed time step for fixed step solvers)")
         ("tstart",     po::value<double>(&input_data.tstart)->default_value(0),          "Date corresponding to the beginning of the simulation (in seconds)")
@@ -100,10 +99,5 @@ void copy_stream(const std::ostream& from_stream, std::ostream& to_stream)
     to_stream.copyfmt(from_stream);                                  //1
     to_stream.clear(from_stream.rdstate());                          //2
     to_stream.basic_ios<char>::rdbuf(from_stream.rdbuf());           //3
-}
-
-void initialize_stream(std::ofstream& os, const InputData& input)
-{
-    if (input.output_csv.empty()) copy_stream(std::cout, os);
 }
 

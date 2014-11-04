@@ -8,7 +8,6 @@
 #include "InputData.hpp"
 
 InputData::InputData() : yaml_filenames(),
-                         output_csv(),
                          solver(),
                          wave_output(),
                          command_file(),
