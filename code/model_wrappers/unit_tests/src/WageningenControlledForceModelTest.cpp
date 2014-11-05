@@ -79,34 +79,43 @@ TEST_F(WageningenControlledForceModelTest, should_throw_if_number_of_blades_is_o
     }
 }
 
-TEST_F(WageningenControlledForceModelTest, Kt_should_throw_if_P_D_is_outside_bounds)
+TEST_F(WageningenControlledForceModelTest, Kt_should_issue_a_warning_if_P_D_is_outside_bounds)
 {
     auto input  = parse_wageningen(test_data::wageningen());
     const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
+
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
-        ASSERT_THROW(w.Kt(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(0,0.5),
-                          J = a.random<double>().between(0,1.5))
-                , WageningenControlledForceModelException);
-        ASSERT_THROW(w.Kt(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(1.4,10),
-                          J = a.random<double>().between(0,1.5))
-                , WageningenControlledForceModelException);
-        ASSERT_THROW(w.Kt(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().outside(0.5,1.4),
-                          J = a.random<double>().between(0,1.5))
-                , WageningenControlledForceModelException);
-        ASSERT_NO_THROW(w.Kt(Z=a.random<size_t>().between(2,7),
-                             AE_A0=a.random<double>().between(0.3,1.05),
-                             P_D=a.random<double>().between(0.5,1.4),
-                             J = a.random<double>().between(0,1.5)));
+        w.Kt(Z=a.random<size_t>().between(2,7),
+               AE_A0=a.random<double>().between(0.3,1.05),
+               P_D=a.random<double>().between(0,0.5),
+               J = a.random<double>().between(0,1.5));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kt(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(1.4,10),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kt(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().outside(0.5,1.4),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kt(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_TRUE(error.str().empty());
     }
+    std::cerr.rdbuf(orig);
 }
 
 TEST_F(WageningenControlledForceModelTest, Kt_should_throw_if_J_is_outside_bounds)
@@ -115,28 +124,36 @@ TEST_F(WageningenControlledForceModelTest, Kt_should_throw_if_J_is_outside_bound
     const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
-        ASSERT_THROW(w.Kt(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(0.5,1.4),
-                          J = a.random<double>().no().greater_than(0))
-                , WageningenControlledForceModelException);
-        ASSERT_THROW(w.Kt(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(0.5,1.4),
-                          J = a.random<double>().between(1.5,15))
-                , WageningenControlledForceModelException);
-        ASSERT_THROW(w.Kt(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(0.5,1.4),
-                          J = a.random<double>().greater_than(1.5))
-                , WageningenControlledForceModelException);
-        ASSERT_NO_THROW(w.Kt(Z=a.random<size_t>().between(2,7),
-                             AE_A0=a.random<double>().between(0.3,1.05),
-                             P_D=a.random<double>().between(0.5,1.4),
-                             J = a.random<double>().between(0,1.5)));
+        w.Kt(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().no().greater_than(0));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kt(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().between(1.5,15));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kt(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().greater_than(1.5));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kt(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_TRUE(error.str().empty());
     }
+    std::cerr.rdbuf(orig);
 }
 
 TEST_F(WageningenControlledForceModelTest, Kq_should_throw_if_P_D_is_outside_bounds)
@@ -145,28 +162,36 @@ TEST_F(WageningenControlledForceModelTest, Kq_should_throw_if_P_D_is_outside_bou
     const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
-        ASSERT_THROW(w.Kq(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(0,0.5),
-                          J = a.random<double>().between(0,1.5))
-                , WageningenControlledForceModelException);
-        ASSERT_THROW(w.Kq(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(1.4,10),
-                          J = a.random<double>().between(0,1.5))
-                , WageningenControlledForceModelException);
-        ASSERT_THROW(w.Kq(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().outside(0.5,1.4),
-                          J = a.random<double>().between(0,1.5))
-                , WageningenControlledForceModelException);
-        ASSERT_NO_THROW(w.Kq(Z=a.random<size_t>().between(2,7),
-                             AE_A0=a.random<double>().between(0.3,1.05),
-                             P_D=a.random<double>().between(0.5,1.4),
-                             J = a.random<double>().between(0,1.5)));
+        w.Kq(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0,0.5),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kq(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(1.4,10),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kq(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().outside(0.5,1.4),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kq(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_TRUE(error.str().empty());
     }
+    std::cerr.rdbuf(orig);
 }
 
 TEST_F(WageningenControlledForceModelTest, Kq_should_throw_if_J_is_outside_bounds)
@@ -175,28 +200,36 @@ TEST_F(WageningenControlledForceModelTest, Kq_should_throw_if_J_is_outside_bound
     const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
-        ASSERT_THROW(w.Kq(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(0.5,1.4),
-                          J = a.random<double>().no().greater_than(0))
-                , WageningenControlledForceModelException);
-        ASSERT_THROW(w.Kq(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(0.5,1.4),
-                          J = a.random<double>().between(1.5,15))
-                , WageningenControlledForceModelException);
-        ASSERT_THROW(w.Kq(Z=a.random<size_t>().between(2,7),
-                          AE_A0=a.random<double>().between(0.3,1.05),
-                          P_D=a.random<double>().between(0.5,1.4),
-                          J = a.random<double>().greater_than(1.5))
-                , WageningenControlledForceModelException);
-        ASSERT_NO_THROW(w.Kq(Z=a.random<size_t>().between(2,7),
-                             AE_A0=a.random<double>().between(0.3,1.05),
-                             P_D=a.random<double>().between(0.5,1.4),
-                             J = a.random<double>().between(0,1.5)));
+        w.Kq(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().no().greater_than(0));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kq(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().between(1.5,15));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kq(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().greater_than(1.5));
+        EXPECT_FALSE(error.str().empty());
+        error.str("");
+        w.Kq(Z=a.random<size_t>().between(2,7),
+             AE_A0=a.random<double>().between(0.3,1.05),
+             P_D=a.random<double>().between(0.5,1.4),
+             J = a.random<double>().between(0,1.5));
+        EXPECT_TRUE(error.str().empty());
     }
+    std::cerr.rdbuf(orig);
 }
 
 TEST_F(WageningenControlledForceModelTest, KT)

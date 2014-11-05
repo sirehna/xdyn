@@ -63,15 +63,11 @@ void WageningenControlledForceModel::check(const double P_D, const double J) con
 {
     if ((P_D<0.5) or (P_D>1.4))
     {
-        std::stringstream ss;
-        ss << "Invalid pitch/diameter ratio P/D received: expected 0.5 <= P/D <= 1.4 but got P_D=" << P_D;
-        THROW(__PRETTY_FUNCTION__, WageningenControlledForceModelException, ss.str());
+        std::cerr << "Invalid pitch/diameter ratio P/D received: expected 0.5 <= P/D <= 1.4 but got P_D=" << P_D;
     }
     if ((J<0) or (J>1.5))
     {
-        std::stringstream ss;
-        ss << "Invalid advance ratio J received: expected 0 <= J <= 1.5 but got J=" << J;
-        THROW(__PRETTY_FUNCTION__, WageningenControlledForceModelException, ss.str());
+        std::cerr << "Invalid advance ratio J received: expected 0 <= J <= 1.5 but got J=" << J;
     }
 }
 
