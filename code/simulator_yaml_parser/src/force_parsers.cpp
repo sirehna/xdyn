@@ -67,7 +67,7 @@ YamlWageningen parse_wageningen(const std::string& yaml)
     node["blade area ratio AE/A0"]           >> ret.blade_area_ratio;
     node["number of blades"]                 >> ret.number_of_blades;
     node["position of propeller frame"]      >> ret.position_of_propeller_frame;
-    node["relative rotative efficiency eta"] >> ret.relative_rotative_efficiency;
+    node["relative rotative efficiency etaR"]>> ret.relative_rotative_efficiency;
     parse_uv(node["diameter"], ret.diameter);
     return ret;
 }
