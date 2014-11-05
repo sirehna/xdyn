@@ -1,4 +1,4 @@
-SET(MODULE_UNDER_TEST stl_reader)
+SET(MODULE_UNDER_TEST external_file_formats)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/StlReaderTest.cpp
         )

@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
-PROJECT(stl_reader)
+PROJECT(external_file_formats)
 
 SET(SRC src/StlReader.cpp
         )

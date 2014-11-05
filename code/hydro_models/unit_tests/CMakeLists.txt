@@ -14,7 +14,7 @@ include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
+include_directories(${external_file_formats_INCLUDE_DIRS})
 
 # Using C++ 2011
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
