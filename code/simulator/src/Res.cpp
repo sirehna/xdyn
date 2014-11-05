@@ -7,6 +7,6 @@
 
 #include "Res.hpp"
 
-Res::Res() : t(0), x(StateType())
+Res::Res() : t(0), x()
 {
 }
