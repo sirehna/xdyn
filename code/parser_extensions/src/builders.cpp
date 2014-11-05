@@ -15,6 +15,7 @@
 #include "EnvironmentAndFrames.hpp"
 #include "GravityForceModel.hpp"
 #include "discretize.hpp"
+#include "YamlWageningen.hpp"
 
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
@@ -90,6 +91,16 @@ boost::optional<ForcePtr> ForceBuilder<LinearDampingForceModel>::try_to_parse(co
     if (model == "linear damping")
     {
         ret.reset(ForcePtr(new LinearDampingForceModel(parse_quadratic_damping(yaml))));
+    }
+    return ret;
+}
+
+boost::optional<ForcePtr> ForceBuilder<ResistanceCurveForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& ) const
+{
+    boost::optional<ForcePtr> ret;
+    if (model == "resistance curve")
+    {
+        ret.reset(ForcePtr(new ResistanceCurveForceModel(parse_resistance_curve(yaml))));
     }
     return ret;
 }
@@ -196,7 +207,7 @@ boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<JonswapSp
 boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<PiersonMoskowitzSpectrum>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > ret;
-    if (model == "jonswap")
+    if (model == "pierson-moskowitz")
     {
         const YamlPiersonMoskowitz data = parse_pierson_moskowitz(yaml);
         ret.reset(TR1(shared_ptr)<WaveSpectralDensity>(new PiersonMoskowitzSpectrum(data.Hs, data.Tp)));
@@ -233,6 +244,17 @@ boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > DirectionalSpreading
     {
         const YamlCos2s data = parse_cos2s(yaml);
         ret.reset(TR1(shared_ptr)<WaveDirectionalSpreading>(new Cos2sDirectionalSpreading(data.psi0, data.s)));
+    }
+    return ret;
+}
+
+boost::optional<TR1(shared_ptr)<ControllableForceModel> > ControlledForceBuilder<WageningenControlledForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const
+{
+    boost::optional<TR1(shared_ptr)<ControllableForceModel> > ret;
+    if (model == "wageningen B-series")
+    {
+        const YamlWageningen data = parse_wageningen(yaml);
+        ret.reset(TR1(shared_ptr)<ControllableForceModel>(new WageningenControlledForceModel(data, env)));
     }
     return ret;
 }

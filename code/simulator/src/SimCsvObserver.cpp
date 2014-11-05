@@ -11,12 +11,12 @@
 std::ostream dev_null_buffer(0);
 
 SimCsvObserver::SimCsvObserver(std::ostream& simulation_stream_, std::ostream& wave_stream_) : simulation_stream(simulation_stream_),
-wave_stream(wave_stream_), initialized(false), bodies(std::vector<std::string>())
+wave_stream(wave_stream_), initialized(false), bodies(), forces()
 {
 }
 
 SimCsvObserver::SimCsvObserver(std::ostream& simulation_stream_) : simulation_stream(simulation_stream_),
-wave_stream(dev_null_buffer), initialized(false), bodies(std::vector<std::string>())
+wave_stream(dev_null_buffer), initialized(false), bodies(), forces()
 {
 }
 
@@ -27,7 +27,10 @@ std::string SimCsvObserver::customize(const std::string& body, const std::string
 
 void SimCsvObserver::observe(const Sim& sys, const double t)
 {
+    if (not(initialized)) initialize_simulation_output_stream(sys);
     observe_states(sys, t);
+    observe_forces(sys);
+    simulation_stream << std::endl;
     observe_waves(sys, t);
     initialized = true;
 }
@@ -63,18 +66,27 @@ void SimCsvObserver::observe_waves(const Sim& sys, const double t)
     }
 }
 
+void SimCsvObserver::observe_forces(const Sim& sys)
+{
+    const auto f = sys.get_forces();
+    if (not(f.empty())) simulation_stream << ',';
+    const size_t n = f.size();
+    size_t i = 0;
+    for (auto it = f.begin() ; it != f.end() ; ++it)
+    {
+        simulation_stream << it->second;
+        if (i < n-1) simulation_stream << ",";
+        ++i;
+    }
+}
+
 void SimCsvObserver::observe_states(const Sim& s, const double t)
 {
-    if (not(initialized)) initialize_simulation_output_stream(s);
     const size_t n = bodies.size();
     simulation_stream << t;
     if (n)
     {
         simulation_stream << ',';
-    }
-    else
-    {
-        simulation_stream << std::endl;
     }
     for (size_t i = 0 ; i < n ; ++i)
     {
@@ -91,11 +103,7 @@ void SimCsvObserver::observe_states(const Sim& s, const double t)
                           << *_QI(s.state,i) << ','
                           << *_QJ(s.state,i) << ','
                           << *_QK(s.state,i);
-        if (i == n-1)
-        {
-            simulation_stream << std::endl;
-        }
-        else
+        if (i != n-1)
         {
             simulation_stream << ',';
         }
@@ -105,6 +113,7 @@ void SimCsvObserver::observe_states(const Sim& s, const double t)
 void SimCsvObserver::initialize_simulation_output_stream(const Sim& sys)
 {
     bodies = sys.get_names_of_bodies();
+    forces = sys.get_force_names();
     initialize_title();
 }
 
@@ -159,13 +168,19 @@ void SimCsvObserver::initialize_title()
                           << customize(bodies[i],"qi") << ','
                           << customize(bodies[i],"qj") << ','
                           << customize(bodies[i],"qk");
-        if (i == n-1)
-        {
-            simulation_stream << std::endl;
-        }
-        else
+        if (i != n-1)
         {
             simulation_stream << ',';
         }
     }
+    if (not(forces.empty())) simulation_stream << ',';
+    for (size_t i = 0 ; i < forces.size() ; ++i)
+    {
+        simulation_stream << forces[i];
+        if (i != forces.size()-1)
+        {
+            simulation_stream << ',';
+        }
+    }
+    simulation_stream << std::endl;
 }

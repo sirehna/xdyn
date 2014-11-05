@@ -7,7 +7,7 @@
 
 #include "ImmersedSurfaceForceModel.hpp"
 
-ImmersedSurfaceForceModel::ImmersedSurfaceForceModel(const EnvironmentAndFrames& env) : SurfaceForceModel(env)
+ImmersedSurfaceForceModel::ImmersedSurfaceForceModel(const std::string& name_, const EnvironmentAndFrames& env) : SurfaceForceModel(name_, env)
 {
 }
 

@@ -42,6 +42,7 @@ class SimCsvObserver
         SimCsvObserver(); // Disabled
 
         void observe_states(const Sim& sys, const double t);
+        void observe_forces(const Sim& sys);
         void observe_waves(const Sim& sys, const double t);
         void initialize_simulation_output_stream(const Sim& sys);
         void initialize_title();
@@ -51,6 +52,7 @@ class SimCsvObserver
         std::ostream& wave_stream;
         bool initialized;
         std::vector<std::string> bodies;
+        std::vector<std::string> forces;
         std::string customize(const std::string& body, const std::string anything) const;
 };
 

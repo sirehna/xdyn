@@ -11,6 +11,7 @@
 #include "update_kinematics.hpp"
 #include "SimulatorBuilder.hpp"
 #include "OutputTransformerException.hpp"
+#include "yaml2eigen.hpp"
 
 OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) :
             input(builder.get_parsed_yaml()),
@@ -86,12 +87,6 @@ void OutputTransformer::fill(std::map<std::string,double>& out, const YamlPositi
     {
         THROW(__PRETTY_FUNCTION__, OutputTransformerException, std::string("Unable to find point '") + position.point + "' in input data");
     }
-}
-
-bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third);
-bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third)
-{
-    return (convention.at(0) == first) and (convention.at(1) == second) and (convention.at(2) == third);
 }
 
 ssc::kinematics::EulerAngles OutputTransformer::convert(const ssc::kinematics::RotationMatrix& R) const

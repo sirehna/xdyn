@@ -9,6 +9,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlAnglesOutput.cpp
         src/YamlBlockedDegreesOfFreedom.cpp
         src/YamlBody.cpp
+        src/YamlCommands.cpp
         src/YamlCoordinates.cpp
         src/YamlDynamics.cpp
         src/YamlDynamics6x6Matrix.cpp
@@ -20,10 +21,12 @@ SET(SRC src/YamlAngle.cpp
         src/YamlPoint.cpp
         src/YamlPosition.cpp
         src/YamlPositionOutput.cpp
+        src/YamlResistanceCurve.cpp
         src/YamlRotation.cpp
         src/YamlSimulatorInput.cpp
         src/YamlSpeed.cpp
         src/YamlWaveModelInput.cpp
+        src/YamlWageningen.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)

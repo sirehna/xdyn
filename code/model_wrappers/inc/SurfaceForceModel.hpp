@@ -35,7 +35,7 @@ class SurfaceForceModel : public ForceModel
             EPoint C; //!< Point of application (used to calculate the torque)
         };
 
-        SurfaceForceModel(const EnvironmentAndFrames& env);
+        SurfaceForceModel(const std::string& name, const EnvironmentAndFrames& env);
         virtual ~SurfaceForceModel();
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
         virtual DF dF(const FacetIterator& that_facet,
@@ -48,6 +48,7 @@ class SurfaceForceModel : public ForceModel
       */
         double potential_energy(const Body& body, const std::vector<double>& x) const;
 
+        bool is_a_surface_force_model() const;
 
     private:
         SurfaceForceModel();

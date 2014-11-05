@@ -134,6 +134,8 @@ add_imported_lib(text_file_reader_shared)
 add_imported_lib(decode_unit_shared)
 add_imported_lib(csv_file_reader_shared)
 add_imported_lib(exception_handling_shared)
+add_imported_lib(data_source_shared)
+add_imported_lib(interpolation_shared)
 
 #############################################################################
 # Testing part
@@ -155,6 +157,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:wave_models_tests>
         $<TARGET_OBJECTS:kissfft_static>
         $<TARGET_OBJECTS:model_wrappers_tests>
+        $<TARGET_OBJECTS:parser_extensions_tests>
         $<TARGET_OBJECTS:test_data_generator>
         )
 

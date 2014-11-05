@@ -51,28 +51,35 @@ ajouts de fonctionnalités).
 ## Liste des arguments
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-USAGE: sim <yaml file> [-h] [-y ARG] [-o ARG] [-s ARG] [dt ARG] [--tstart ARG]
+APPEL: sim <yaml file> [-h] [-y ARG] [-s ARG] [dt ARG] [--tstart ARG]
 [--tend ARG] [-w ARG]
 Options:
-  -h [ --help ]              Show this help message
-  -y [ --yml ] arg           Name(s) of the YAML file(s)
-  -o [ --out ] arg           Name of the generated CSV file. If none given,
-                             simulator writes CSV to standard output
-  -s [ --solver ] arg (=rk4) Name of the solver: euler,rk4,rkck for Euler,
-                             Runge-Kutta 4 & Runge-Kutta-Cash-Karp
-                             respectively.
-  --dt arg                   Initial time step (or value of the fixed time step
-                             for fixed step solvers)
-  --tstart arg (=0)          Date corresponding to the beginning of the
-                             simulation (in seconds)
-  --tend arg                 Last time step
-  -w [ --waves ] arg         Name of the YAML output file where the wave
-                             heights will be stored ('output' section of the
-                             YAML file)
+  -h [ --help ]              Afficher le message d'aide (en anglais)
+  -y [ --yml ] arg           Nom du (ou des) fichier(s) YAML (le flag est facultatif)
+  -s [ --solver ] arg (=rk4) Nom du solveur : euler,rk4,rkck for Euler,
+                             Runge-Kutta 4 et Runge-Kutta-Cash-Karp
+                             respectivement.
+  --dt arg                   Pas de temps initial (pour les solveurs à pas
+                             variable) ou pas de temps fixe (pour les solveurs
+                             à pas fixe)
+  --tstart arg (=0)          Date correspondant au début de la simulation
+                             (en secondes)
+  --tend arg                 Dernier instant calculé
+  -w [ --waves ] arg         Nom du fichier YAML de sortie pour la houle (le
+                             cas échéant). Cf. section 'output' du fichier YAML
+                             d'entrée
+  -c [ --commands ] arg      Nom du fichier contenant les commandes à appliquer
+                             à chaque instant. Cf. section 'Efforts commandés'
 ~~~~~~~~~~~~~~~~~~~~
+
+Les résultats sont écrits (au format CSV) vers la sortie standard. On peut les
+rediriger vers un fichier en utilisant le caractère `>` (sous MS-DOS, MinGW et
+Linux) comme décrit dans la section ci-dessous.
 
 Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
 des modèles](documentation_yaml.html#waves).
+Le paramètre `-c` ne sera pas décrit ici mais dans [le fichier de description
+des modèles](documentation_yaml.html#efforts-commandés).
 
 ## Exemples
 
@@ -96,12 +103,6 @@ On peut bien sûr choisir de rediriger les sorties vers un fichier :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./sim tutorial_01_falling_ball.yml --dt 0.1 --tend 1 > out.csv
-~~~~~~~~~~~~~~~~~~~~
-
-ou alors spécifier directement en tant que paramètre de la ligne de commande :
-
-~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o out.csv
 ~~~~~~~~~~~~~~~~~~~~
 
 ### Simulation avec un solveur Euler en commençant à t=1

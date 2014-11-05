@@ -10,6 +10,8 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/SurfaceElevationFromWavesTest.cpp
               src/FroudeKrylovForceModelTest.cpp
               src/LinearDampingForceModelTest.cpp
+              src/WageningenControlledForceModelTest.cpp
+              src/ResistanceCurveForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

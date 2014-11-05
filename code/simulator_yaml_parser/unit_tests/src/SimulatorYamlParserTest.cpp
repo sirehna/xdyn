@@ -9,7 +9,7 @@
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
 
-const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example()).parse();
+const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
 
 SimulatorYamlParserTest::SimulatorYamlParserTest() : a(ssc::random_data_generator::DataGenerator(1212))
 {
@@ -57,6 +57,13 @@ TEST_F(SimulatorYamlParserTest, can_parse_external_forces)
     ASSERT_EQ("gravity", yaml.bodies.at(0).external_forces.at(0).model);
     ASSERT_EQ("non-linear hydrostatic (fast)", yaml.bodies.at(0).external_forces.at(1).model);
     ASSERT_EQ("quadratic damping", yaml.bodies.at(0).external_forces.at(2).model);
+}
+
+TEST_F(SimulatorYamlParserTest, can_parse_controlled_forces)
+{
+    ASSERT_EQ(2, yaml.bodies.at(0).controlled_forces.size());
+    ASSERT_EQ("wageningen B-series", yaml.bodies.at(0).controlled_forces.at(0).model);
+    ASSERT_EQ("wageningen B-series", yaml.bodies.at(0).controlled_forces.at(1).model);
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_bodies)

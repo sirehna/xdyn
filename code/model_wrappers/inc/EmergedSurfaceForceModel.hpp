@@ -21,7 +21,7 @@
 class EmergedSurfaceForceModel : public SurfaceForceModel
 {
     public:
-        EmergedSurfaceForceModel(const EnvironmentAndFrames& env);
+        EmergedSurfaceForceModel(const std::string& name, const EnvironmentAndFrames& env);
         virtual ~EmergedSurfaceForceModel();
 
     private:

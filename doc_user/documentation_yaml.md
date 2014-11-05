@@ -12,7 +12,7 @@ parsers YAML existent pour de nombreux langages de programmation.
 
 Le fichier YAML comprend quatre sections de haut niveau :
 
-- La section `rotations` définit la convention d'angles utilisée,
+- La section `rotations convention` définit la convention d'angles utilisée,
 - `environmental constants` donne les valeurs de la gravité et la densité de l'eau,
 - Les modèles environnementaux figurent dans `environment models`
 - `bodies` décrit les corps simulés.
@@ -38,9 +38,7 @@ et obtenir exactement le même résultat.
 ### Exemple complet
 
 ~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi,theta',phi'']
 
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
@@ -144,57 +142,54 @@ bodies: # All bodies have NED as parent frame
 
 ### Rotations
 
-La convention de rotation utilisée est décrite dans la section `rotations` :
+La convention de rotation permet de retrouver la matrice de rotation d'un
+repère par rapport à un autre, étant donné un triplet $(\phi, \theta, \psi)$.
+La convention utilisée est décrite dans la section `rotations` :
 
 ~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi,theta',phi'']
 ~~~~~~~~~~~~~~
 
-L'information de convention d'angles ou d'axes est stockée dans la variable
-`order by`. Les informations de composition interne/externe et d'ordre des
-rotations sont stockées dans la variable `convention`.
-`order by` peut prendre les valeurs `angle` ou `axis`. Si l'on choisit `angle`,
-alors `x`, `y`, `z` correspondent aux angles autour des axes $x$, $y$ et $z$
-respectivement.
+Cette ligne s'interprète de la façon suivante : étant donné un triplet $(\phi,
+\theta, \psi)$, on construit les matrices de rotation en effectuant d'abord une
+rotation d'angle $\psi$ autour de l'axe Z, ensuite une rotation d'angle
+$\theta$ autour de l'axe Y du repère précédemment transformé, puis une rotation
+d'angle $\phi$ autour de l'axe X du repère ainsi obtenu.
+
+Si l'on avait noté :
+
+~~~~~~~~~~~~~~ {.yaml}
+rotations convention: [z,y',x'']
+~~~~~~~~~~~~~~
+
+on aurait d'abord une rotation d'angle $\phi$ autour de l'axe Z, puis une
+rotation d'angle $\theta$ autour du nouvel axe Y, puis une rotation $\psi$
+autour du nouvel axe X.
+
 Des apostrophes sont utilisés pour indiquer des compositions de rotations
 par rapport au nouveau système d'axes, et donc une composition interne.
-Ainsi $X Y' Z''$ désignera une rotation autour X, suivie d'une rotation autour
+Ainsi `[x,y',z'']` désignera une rotation autour X, suivie d'une rotation autour
 du  nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z,
 appelé Z''. La double apostrophe fait référence au deuxième repère utilisée
 pour la composition de rotation.
 
-La liste `convention` comporte toujours trois éléments. Le deuxième élément est
+La liste `rotations convention` comporte toujours trois éléments. Le deuxième élément est
 toujours différent du premier. Le troisième est soit différent des deux autres,
 soit égal au premier.
 
 La convention des angles aéronautiques, fréquemment (et abusivement) dénotée
-"angles d'Euler", se définit de la façon suivante :
+"angles d'Euler" (lacet $\psi$, tangage $\theta$, roulis $\phi$), se définit de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    rotations:
-        order by: angle
-        convention: [z,y',x'']
+rotations convention: [psi, theta', phi'']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-Si l'on souhaite exprimer ce triplet par (Lacet, Roulis, Tangage),
-on utilise :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    rotations:
-        order by: axis
-        convention: [z,y',x'']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La convention d'orientation utilisée dans le logiciel
 [Paraview](http://www.paraview.org) est donnée par :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    rotations:
-        order by: angle
-        convention: [z,x',y'']
+rotations convention: [psi,phi',theta'']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pour plus de détails sur les conventions d'angles et d'axes, se référer à [la
@@ -205,8 +200,8 @@ Une attitude sera décrite de la manière suivante, avec les champs
 - `frame` le nom du repère dans laquelle l'attitude est exprimée,
 - `x` ,`y` ,`z`: le triplet de position où chaque position est
    définie par le dictionnaire des clés `value` et `unit`,
-- `phi` ,`theta` ,`psi`, le triplet d'orientation où chaque angle
-  est défini par le dictionnaire des clés `value` et `unit`,
+- `phi` ,`theta` ,`psi`, le triplet d'orientation dont l'interprétation en
+termes de matrices de rotations dépend de la convention d'orientation choisie
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     frame: NED
@@ -243,7 +238,7 @@ du système international.
 
 La section `environment` définit les modèles d'environnement pour la simulation
 à effectuer. Elle permet de prendre en compte des modèles de houle et de vent.
-Elle peut être vide (voir [l'exemple de la chute libre](tutorials.html#Tutoriel 1: balle en chute libre)).
+Elle peut être vide (voir [l'exemple de la chute libre](tutorials.html#tutoriel-1-balle-en-chute-libre)).
 
 ### Modèles de houle
 
@@ -259,6 +254,212 @@ Pour simuler une surface libre parfaitement horizontale, on opère de la façon 
 `model: no waves` indique que l'on souhaite une surface libre horizontale et
 `constant sea elevation in NED frame` représente l'élévation de la surface
 libre dans le repère NED.
+
+#### Houle
+
+On peut définir une houle comme étant une somme de plusieurs spectres
+directionnels, c'est-à-dire un spectre de puissance et une dispersion spatiale.
+Ces spectres doivent être discrétisés. Actuellement, la discrétisation spatiale
+est la même que la discrétisation fréquentielle.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+discretization:
+   n: 128
+   omega min: {value: 0.1, unit: rad/s}
+   omega max: {value: 6, unit: rad/s}
+   energy fraction: 0.999
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `n` : nombre de points (nombre de fréquences ou nombr de directions)
+- `omega min` : pulsation minimale (incluse)
+- `omega max` : pulsation maximale (incluse)
+- `energy fraction` : les produits de spectre de puissance et d'étalement
+directionnel $S_i\cdot D_j$ sont classés par ordre décroissant. On calcule la
+somme cumulative et l'on s'arrête lorsque l'énergie accumulée vaut `energy
+fraction` de l'énergie totale.
+
+Les spectres directionnels sont définis de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: airy
+  depth: {value: 100, unit: m}
+  seed of the random data generator: 0
+  directional spreading:
+     type: dirac
+     waves coming from: {value: 90, unit: deg}
+  spectral density:
+     type: jonswap
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: m}
+     gamma: 1.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `model` : actuellement, ne peut valoir qu'`airy`.
+- `depth` : profondeur (distance entre le fond et la surface). 0 pour
+l'approximation "profondeur infinie". Utilisé pour le calcul du nombre d'onde.
+- `seed of the random data generator` : germe utilisé pour la génération des
+phases aléatoires.
+- `directional spreading` : étalement directionnel. Cf. infra.
+- `spectral density` : densité spectrale de puissance. Cf. infra.
+
+#### Etalements directionnels
+
+##### Dirac
+
+Lorsque cet étalement est choisi, la houle est mono-directionnelle.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+directional spreading:
+     type: dirac
+     waves coming from: {value: 90, unit: deg}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La direction de propagation est donnée par `waves coming from`.
+Cet étalement est documenté [ici](modeles_reperes_et_conventions.html#dirac-1).
+
+##### cos2s
+
+L'étalement est donné par :
+$$\psi\mapsto \cos^{2s}{\psi-\psi_0}$$
+
+où $\psi_0$ est la direction de propagation.
+
+Cet étalement est paramétré de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+directional spreading:
+   type: cos2s
+   s: 2
+   waves coming from: {value: 90, unit: deg}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`waves coming from` donne la direction de propagation $\psi_0$.
+
+Cet étalement est documenté [ici](modeles_reperes_et_conventions.html#cos2s).
+
+#### Spectres de puissance
+
+##### Dirac
+
+Lorsque ce spectre est choisi, on obtient une houle monochromatique.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+   type: dirac
+   Hs: {value: 5, unit: m}\n"
+   omega0: {value: 15, unit: rad/s}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
+Ce spectre est documenté [ici](modeles_reperes_et_conventions.html#dirac).
+
+##### JONSWAP
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+     type: jonswap
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: m}
+     gamma: 1.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce spectre est documenté [ici](modeles_reperes_et_conventions.html#jonswap).
+
+##### Bretschneider
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+     type: bretschneider
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce spectre est documenté
+[ici](modeles_reperes_et_conventions.html#bretschneider).
+
+##### Pierson-Moskowitz
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+     type: pierson-moskowitz
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ce spectre est documenté
+[ici](modeles_reperes_et_conventions.html#pierson-moskowitz).
+
+#### Sorties
+
+On peut sortir les hauteurs de houle calculées sur un maillage (défini dans un
+repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
+simulation de houle, sans corps, tel que décrit dans le [tutoriel 3](tutorials.html#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
+
+On définit un maillage (cartésien) sur lequel sera calculé la houle. Par exemple :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+    frame of reference: NED
+    mesh:
+        xmin: {value: 1, unit: m}
+        xmax: {value: 5, unit: m}
+        nx: 5
+        ymin: {value: 1, unit: m}
+        ymax: {value: 2, unit: m}
+        ny: 2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `frame of reference` : nom du repère dans lequel sont exprimées les coordonnées des points du maillage.
+- `xmin`, `xmax`, `nx` : définition de la discrétisation de l'axe x. Les
+  valeurs vont de `xmin` (inclus) à `xmax` (inclus) et il y a `nx` valeurs au
+  total.
+- `ymin`, `ymax`, `ny` : comme pour x.
+
+Dans l'exemple précédent, les coordonnées sont données dans le repère NED. Le
+maillage comporte 10 points :
+(1,1),(1,2),(2,1),(2,2),(3,1),(3,2),(4,1),(4,2),(5,1),(5,2).
+
+Les sorties sont écrites dans le fichier spécifié après le flag `-w` en
+argument de l'exécutable `sim`.
+
+On obtient deux résultats différents, suivant que le repère dans lequel ils
+sont exprimés est mobile ou fixe par rapport au repère NED. En effet, si le
+repère est fixe, il est inutile de répéter les coordonnées `x` et `y`.
+
+Dans le cas d'un repère fixe, on obtient une sortie de la forme :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+waves:
+  x: [1,2,3,4,5,1,2,3,4,5]
+  y: [1,1,1,1,1,2,2,2,2,2]
+  timesteps:
+    - t: 0
+    - z: [-4.60386,-4.60388,-4.6039,-4.60392,-4.60393,-4.6553,-4.65531,-4.65533,-4.65535,-4.65537]
+    - t: 1
+    - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`x` et `y` désignent les coordonnées (exprimée en mètres) dans le repère choisi
+(ici il s'agit du NED) des points du maillage.
+`t` désigne l'instant auquel les hauteurs de houle ont été calculées.
+`z` est la hauteur de houle, c'est-à-dire la distance entre un point de
+coordonnées (x,y,0) et le même point situé sur la surface libre. Une valeur
+positive dénote une houle en-dessous de z=0 (creux) et une valeur négative une
+valeur au-dessus de z=0 (bosse).
+
+Si le repère de sortie est mobile, on obtient plutôt un résultat de la forme :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+waves:
+  timesteps:
+    - t: 0
+      x: [1,2,3,4,5,1,2,3,4,5]
+      y: [1,1,1,1,1,2,2,2,2,2]
+    - z: [-4.60386,-4.60388,-4.6039,-4.60392,-4.60393,-4.6553,-4.65531,-4.65533,-4.65535,-4.65537]
+    - t: 1
+      x: [2,4,5,6,7,2,4,5,6,7]
+      y: [1,1,1,1,1,2,2,2,2,2]
+    - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Définition des corps simulés
 
@@ -284,9 +485,9 @@ Chaque corps comprend :
  - la position du repère body par rapport au maillage (section `position of
    body frame relative to mesh`)
  - ses conditions initiales (sections `initial position of body frame relative
-   to NED` et `initial velocity of body frame relative to NED`) des données
-   définissant son comportement dynamique (section `dynamics`) et la liste des
-   efforts auxquels il est soumis (section `external forces`).
+   to NED` et `initial velocity of body frame relative to NED`)
+ - des données définissant son comportement dynamique (section `dynamics`)
+ - la liste des efforts auxquels il est soumis (sections `external forces` et `controlled forces`).
 
 ### Exemple complet
 
@@ -557,6 +758,7 @@ La documentation du modèle figure
 La dérivation des [efforts d'excitation de Froude-Krylov](modeles_reperes_et_conventions.html#houle-dairy) est décrite (ici)[(modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation].
 
 Pour l'utiliser, on insère la ligne suivante dans la section `external forces` :
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: non-linear Froude-Krylov
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -577,6 +779,9 @@ La paramétrisation des efforts d'amortissement linéaires est faite par une mat
       row 6: [ 0, 0,     0,      0,      0, 0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Cette matrice est la matrice $D_l$ décrit dans [la
+documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux).
+
 ### Amortissement quadratique
 
 La paramétrisation des efforts d'amortissement quadratiques est faite par une matrice renseignée de la façon suivante :
@@ -591,5 +796,192 @@ La paramétrisation des efforts d'amortissement quadratiques est faite par une m
       row 4: [ 0, 0,     0, 1.74e4,      0, 0]
       row 5: [ 0, 0,     0,      0, 4.67e6, 0]
       row 6: [ 0, 0,     0,      0,      0, 0]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cette matrice est la matrice $((d_{ij}))$ décrit dans [la
+documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux).
+
+### Résistance à l'avancement
+
+Les efforts de résistance à l'avancement est renseignée en fonction de la
+vitesse d'avance (axe longitudinal uniquement), c'est-à-dire la projection
+suivant l'axe $x$ du repère body de la vitesse du navire par rapport au repère
+NED. L'interpolation est faite en utilisant des splines cubiques.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: resistance curve
+  speed: {unit: knot, values: [0,1,2,3,4,5,15,20]}
+  resistance: {unit: MN, values: [0,1,4,9,16,25,225,400]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cet effort est orienté suivant l'axe $-x$ du repère body.
+Le modèle est décrit
+[ici](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement).
+
+## Efforts commandés
+
+Les efforts contrôlés correspondent aux efforts de propulsion, de safran et de
+foil. Ils sont décrits dans la section `controlled forces`. Les seules clefs
+YAML communes à tous les efforts commandés sont `name` (qui est un identifiant
+choisi par l'utilisateur) et `model` (qui est une chaîne servant à identifier
+le type de modèle utilisé).
+
+La provenance des commandes (où le simulateur lit-il les commandes à chaque pas
+de temps) doit être spécifiée lors de l'appel de l'exécutable en
+utilisant le flag `--commands` décrit dans la [documentation de l'interface
+utilisateur](introduction.html#liste-des-arguments). Les commandes ne sont pas
+directement renseignées dans le fichier YAML pour laisser la possibilité à
+l'utilisateur de les fournir par un autre biais : il est ainsi prévu de les
+lire directement depuis un socket afin de pouvoir s'interfacer avec une
+interface graphique ou un pilote.
+
+Voici un exemple de section `efforts commandés` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controlled forces:
+  - name: port side propeller
+    model: wageningen B-series
+    position of propeller frame:
+        frame: mesh(body 1)
+        x: {value: -4, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: -1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency eta: 1
+    thrust deduction factor t: 0.7
+    rotation: clockwise
+    number of blades: 3
+    blade area ratio AE/A0: 0.5
+    diameter: {value: 2, unit: m}
+  - name: starboard propeller
+    model: wageningen B-series
+    position of propeller frame:
+        frame: mesh(body 1)
+        x: {value: -4, unit: m}
+        y: {value: 2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: 1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency eta: 1
+    thrust deduction factor t: 0.7
+    rotation: anti-clockwise
+    number of blades: 3
+    blade area ratio AE/A0: 0.5
+    diameter: {value: 2, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Syntaxe du fichier de commande
+
+Le fichier de commande spécifie de manière statique les commandes reçues par
+les modèles d'efforts commandés. Il est statique, c'est-à-dire que les
+commandes à chaque instant sont connues lors du lancement de la simulation. Son
+nom est passé à l'exécutable de simulation en utilisant le flag `-c` (ou
+`--commands`).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- name: port side propeller
+  t: [0,1,3,10]
+  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.7,0.7]
+- name: starboard propeller
+  t: [0,1,3,10]
+  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.7,0.7]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La valeur renseigné dans `name` doit correspondre à l'identifiant utilisé dans
+la section `controlled forces`. Pour chaque effort contrôlé (identifié par
+`name`), on donne une liste d'instants (en secondes) puis, pour chaque
+commande, les valeurs à ces instants. Il doit donc y avoir, pour chaque
+commande, autant de valeurs qu'il y a d'instants. Entre deux instants, les
+valeurs des commandes sont interpolées linéairement. On peut définir autant de
+clef qu'on le souhaite : les clefs inutilisées sont simplement ignorées.
+
+Au-delà de la dernière valeur de temps renseignée, la dernière valeur de chaque
+commande est maintenue. Pour l'exemple présenté ci-dessus, pour toute valeur de
+$t\geq 10$, alors rpm=4000.
+
+### Wageningen B-series
+
+L'utilisation de ce modèle est présentée dans [la section
+tutoriels](tutorials.html#tutoriel-6-propulsion).
+Voici un exemple de configuration possible :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controlled forces:
+  - name: port side propeller
+    model: wageningen B-series
+    position of propeller frame:
+        frame: mesh(body 1)
+        x: {value: -4, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: -1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency eta: 1
+    thrust deduction factor t: 0.7
+    rotation: clockwise
+    number of blades: 3
+    blade area ratio AE/A0: 0.5
+    diameter: {value: 2, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
+celui renseigné dans le fichier de [commandes
+attendues](documentation_yaml.html#syntaxe-du-fichier-de-commande).
+- `model` : Nom du modèle. Doit être `wageningen B-series` pour utiliser ce
+modèle.
+- `position of propeller frame` : Définition du [repère de
+l'hélice](modeles_reperes_et_conventions.html#expression-des-efforts).
+- `frame` : repère dans lequel sont exprimés `x`,`y`,`z`,`phi`,`theta` et `psi`.
+- `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par rapport au centre du repère attaché au maillage et projeté sur ce dernier.
+- `phi`,`theta`,`psi` : Définition de la rotation permettant de passer du
+repère attaché au maillage au [repère attaché à
+l'hélice](modeles_reperes_et_conventions.html#expression-des-efforts), en suivant la
+[convention d'angle choisie](documentation_yaml.html#rotations).
+- `wake coefficient` : [coefficient de
+sillage](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et
+1.
+- `relative rotative efficiency` : [rendement
+d'adaptation](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+- `thrust deduction factor t` : [coefficient de
+succion](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+- `rotation` définition du sens de rotation pour générer une poussée positive.
+Utilisé pour calculer le signe du moment généré par l'hélice sur le navire. Les
+valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
+`clockwise`, l'hélice tournera dans le sens horaire (en se plaçant à l'arrière
+du navire et en regardant vers la proue) et génèrera un moment négatif sur le navire (dans le repère de l'hélice). Voir [la
+documentation](file:///home/cady/simulator/doc_user/modeles_reperes_et_conventions.html#expression-des-efforts).
+- `number of blades` : nombre de pales de l'hélice.
+- `blade area ratio AE/A0` : [fraction de
+surface](modeles_reperes_et_conventions.html#expression-des-coefficients-k_t-et-k_q) de l'hélice.
+- `diameter` : diamètre de l'hélice
+
+La documentation de ce modèle figure
+[ici](modeles_reperes_et_conventions.html#hélices-wageningen-série-b).
+
+Les [commandes
+attendues](documentation_yaml.html#syntaxe-du-fichier-de-commande) pour ce
+modèle sont :
+
+- La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
+par `rpm`.
+- Le ratio "pas sur diamètre", entre 0 et 1, défini par `P/D`.
+
+Voici un exemple de fichier de commande :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- name: port side propeller
+  t: [0,1,3,10]
+  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

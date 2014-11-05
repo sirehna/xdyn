@@ -15,9 +15,9 @@ struct InputData
 {
     InputData();
     std::vector<std::string> yaml_filenames;
-    std::string output_csv;
     std::string solver;
     std::string wave_output;
+    std::string command_file;
     double initial_timestep;
     double tstart;
     double tend;

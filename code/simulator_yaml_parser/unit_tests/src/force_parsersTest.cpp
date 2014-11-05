@@ -7,6 +7,13 @@
 
 #include "force_parsersTest.hpp"
 #include "force_parsers.hpp"
+#include "yaml_data.hpp"
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
+#define DEG2RAD (PI/180.)
 
 force_parsersTest::force_parsersTest() : a(ssc::random_data_generator::DataGenerator(86556))
 {
@@ -84,3 +91,50 @@ TEST_F(force_parsersTest, damping)
     ASSERT_DOUBLE_EQ(149.,(double)D(5,4));
     ASSERT_DOUBLE_EQ(151.,(double)D(5,5));
 }
+
+TEST_F(force_parsersTest, wageningen)
+{
+    const YamlWageningen w = parse_wageningen(test_data::wageningen());
+    ASSERT_DOUBLE_EQ(0.5, w.blade_area_ratio);
+    ASSERT_EQ("port side propeller", w.name);
+    ASSERT_EQ(3, w.number_of_blades);
+    ASSERT_DOUBLE_EQ(0, w.position_of_propeller_frame.angle.phi);
+    ASSERT_DOUBLE_EQ(-10*DEG2RAD, w.position_of_propeller_frame.angle.theta);
+    ASSERT_DOUBLE_EQ(-1*DEG2RAD, w.position_of_propeller_frame.angle.psi);
+    ASSERT_DOUBLE_EQ(-4, w.position_of_propeller_frame.coordinates.x);
+    ASSERT_DOUBLE_EQ(-2, w.position_of_propeller_frame.coordinates.y);
+    ASSERT_DOUBLE_EQ(2, w.position_of_propeller_frame.coordinates.z);
+    ASSERT_EQ("mesh(body 1)", w.position_of_propeller_frame.frame);
+    ASSERT_DOUBLE_EQ(1, w.relative_rotative_efficiency);
+    ASSERT_TRUE(w.rotating_clockwise);
+    ASSERT_DOUBLE_EQ(0.7, w.thrust_deduction_factor);
+    ASSERT_DOUBLE_EQ(0.9, w.wake_coefficient);
+    ASSERT_DOUBLE_EQ(2, w.diameter);
+}
+
+TEST_F(force_parsersTest, resistance_curves)
+{
+    const YamlResistanceCurve r = parse_resistance_curve(test_data::resistance_curve());
+    ASSERT_EQ(8, r.R.size());
+    ASSERT_EQ(8, r.Va.size());
+
+    const double knot = 0.51444444444444444;
+    ASSERT_DOUBLE_EQ(0, r.Va[0]);
+    ASSERT_DOUBLE_EQ(1*knot, r.Va[1]);
+    ASSERT_DOUBLE_EQ(2*knot, r.Va[2]);
+    ASSERT_DOUBLE_EQ(3*knot, r.Va[3]);
+    ASSERT_DOUBLE_EQ(4*knot, r.Va[4]);
+    ASSERT_DOUBLE_EQ(5*knot, r.Va[5]);
+    ASSERT_DOUBLE_EQ(15*knot, r.Va[6]);
+    ASSERT_DOUBLE_EQ(20*knot, r.Va[7]);
+
+    ASSERT_DOUBLE_EQ(0, r.R[0]);
+    ASSERT_DOUBLE_EQ(1E6, r.R[1]);
+    ASSERT_DOUBLE_EQ(4E6, r.R[2]);
+    ASSERT_DOUBLE_EQ(9E6, r.R[3]);
+    ASSERT_DOUBLE_EQ(16E6, r.R[4]);
+    ASSERT_DOUBLE_EQ(25E6, r.R[5]);
+    ASSERT_DOUBLE_EQ(225E6, r.R[6]);
+    ASSERT_DOUBLE_EQ(400E6, r.R[7]);
+}
+

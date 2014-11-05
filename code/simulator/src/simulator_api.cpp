@@ -19,10 +19,12 @@
 #include "FroudeKrylovForceModel.hpp"
 #include "QuadraticDampingForceModel.hpp"
 #include "LinearDampingForceModel.hpp"
+#include "WageningenControlledForceModel.hpp"
+#include "ResistanceCurveForceModel.hpp"
 
-SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
+SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_source::DataSource& command_listener)
 {
-    SimulatorBuilder builder(yaml);
+    SimulatorBuilder builder(yaml, command_listener);
     builder.can_parse<GravityForceModel>()
            .can_parse<DefaultSurfaceElevation>()
            .can_parse<ExactHydrostaticForceModel>()
@@ -37,52 +39,54 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml)
            .can_parse<Airy>()
            .can_parse<FroudeKrylovForceModel>()
            .can_parse<QuadraticDampingForceModel>()
-           .can_parse<LinearDampingForceModel>();
+           .can_parse<LinearDampingForceModel>()
+           .can_parse<WageningenControlledForceModel>()
+           .can_parse<ResistanceCurveForceModel>();
     return builder;
 }
 
-Sim get_system(const YamlSimulatorInput& yaml)
+Sim get_system(const YamlSimulatorInput& yaml, const ssc::data_source::DataSource& command_listener)
 {
-    return get_builder(yaml).build();
+    return get_builder(yaml, command_listener).build();
 }
 
-Sim get_system(const YamlSimulatorInput& input, const std::string& mesh)
+Sim get_system(const YamlSimulatorInput& input, const std::string& mesh, const ssc::data_source::DataSource& command_listener)
 {
     const auto name = input.bodies.front().name;
     MeshMap meshes;
     meshes[name] = read_stl(mesh);
-    return get_system(input, meshes);
+    return get_system(input, meshes, command_listener);
 }
 
-Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh)
+Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, const ssc::data_source::DataSource& command_listener)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
     const auto name = input.bodies.empty() ? "" : input.bodies.front().name;
     MeshMap meshes;
     meshes[name] = mesh;
-    return get_system(input, meshes);
+    return get_system(input, meshes, command_listener);
 }
 
-Sim get_system(const YamlSimulatorInput& yaml, const MeshMap& meshes)
+Sim get_system(const YamlSimulatorInput& yaml, const MeshMap& meshes, const ssc::data_source::DataSource& command_listener)
 {
-    return get_builder(yaml).build(meshes);
+    return get_builder(yaml, command_listener).build(meshes);
 }
 
-Sim get_system(const std::string& yaml)
+Sim get_system(const std::string& yaml, const ssc::data_source::DataSource& command_listener)
 {
-    return get_system(SimulatorYamlParser(yaml).parse());
+    return get_system(SimulatorYamlParser(yaml).parse(), command_listener);
 }
 
-Sim get_system(const std::string& yaml, const std::string& mesh)
-{
-    const auto input = SimulatorYamlParser(yaml).parse();
-    return get_system(check_input_yaml(input), mesh);
-}
-
-Sim get_system(const std::string& yaml, const MeshMap& meshes)
+Sim get_system(const std::string& yaml, const std::string& mesh, const ssc::data_source::DataSource& command_listener)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
-    return get_system(check_input_yaml(input), meshes);
+    return get_system(check_input_yaml(input), mesh, command_listener);
+}
+
+Sim get_system(const std::string& yaml, const MeshMap& meshes, const ssc::data_source::DataSource& command_listener)
+{
+    const auto input = SimulatorYamlParser(yaml).parse();
+    return get_system(check_input_yaml(input), meshes, command_listener);
 }
 
 MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh)

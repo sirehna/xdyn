@@ -5,7 +5,7 @@ comparer succinctement les modèles `non-linear hydrostatic (exact)` et
 `non-linear hydrostatic (fast)`.
 
 ## Description du problème
-Dans cet example, nous considérons un navire,
+Dans cet exemple, nous considérons un navire,
 (l'Anthineas)[http://www.marinetraffic.com/en/ais/details/ships/228367000/vessel:ANTHINEAS],
 soumis uniquement à la pesanteur et aux efforts hydrostatiques, sans
 amortissement. Le navire est lâché sans vitesse initiale au-dessus de la
@@ -15,7 +15,7 @@ non-amorties en immersion.
 ## Ecriture du fichier de configuration du simulateur.
 
 Nous documentons ici uniquement les changements par rapport au
-[tutoriel 1](tutoriels.html#tutoriel-1-balle-en-chute-libre).
+[tutoriel 1](tutorials.html#tutoriel-1-balle-en-chute-libre).
 
 L'environnement est défini de la façon suivante :
 
@@ -114,9 +114,7 @@ external forces:
 En définitive, on obtient le fichier suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi, theta', phi'']
 
 environmental constants:
     g: {value: 9.81, unit: m/s^2}

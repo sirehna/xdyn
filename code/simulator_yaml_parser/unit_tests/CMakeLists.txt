@@ -4,6 +4,7 @@ project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/SimulatorYamlParserTest.cpp
               src/force_parsersTest.cpp
               src/environment_parsersTest.cpp
+              src/parse_commandsTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

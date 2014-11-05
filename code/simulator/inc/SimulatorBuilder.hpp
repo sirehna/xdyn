@@ -13,6 +13,9 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
+#include <ssc/data_source.hpp>
+
+#include "ControlledForceBuilder.hpp"
 #include "ForceBuilder.hpp"
 #include "SurfaceElevationBuilder.hpp"
 #include "WaveModel.hpp"
@@ -43,7 +46,7 @@ typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 class SimulatorBuilder
 {
     public:
-        SimulatorBuilder(const YamlSimulatorInput& input);
+        SimulatorBuilder(const YamlSimulatorInput& input, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 
         /**  \brief Builds a Sim object using the supplied mesh map (one mesh per body)
           *  \details This function is mainly used in the integration tests.
@@ -123,6 +126,22 @@ class SimulatorBuilder
             return *this;
         }
 
+        /**  \brief Add the capacity to parse certain YAML inputs for controlled forces (eg. Wageningen propellers)
+          *  \details This method must not be called with any parameters: the
+          *  default parameter is only there so we can use boost::enable_if. This
+          *  allows us to use can_parse for several types derived from a few
+          *  base classes (WaveModelInterface, ForceModel...) & the compiler will
+          *  automagically choose the right version of can_parse.
+          *  \returns *this (so we can chain calls to can_parse)
+          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
+          */
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<ControllableForceModel,T> >::type* dummy = 0)
+        {
+            (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+            controlled_force_parsers.push_back(ControlledForceBuilderPtr(new ControlledForceBuilder<T>()));
+            return *this;
+        }
+
         /**  \brief Add the capacity to parse certain YAML inputs for wave spectra (eg. Jonswap)
           *  \details This method must not be called with any parameters: the
           *  default parameter is only there so we can use boost::enable_if. This
@@ -139,9 +158,18 @@ class SimulatorBuilder
             return *this;
         }
 
+        /**  \brief Were surface forces (eg. hydrostatic or Froude-Krylov) forces detected in the YAML?
+          *  \details We need this so Sim doesn't update the intersection with
+          *  the free surface if it isn't needed.
+          *  \returns True if surface forces were detected, false otherwise.
+          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest detected_surface_forces_example
+          */
+        bool detected_surface_forces() const;
+
         std::vector<Body> get_bodies(const MeshMap& meshes) const;
         EnvironmentAndFrames get_environment_and_frames(const std::vector<Body>& bodies) const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
+        std::vector<ListOfControlledForces> get_controlled_forces(const EnvironmentAndFrames& env) const;
         StateType get_initial_states() const;
         YamlSimulatorInput get_parsed_yaml() const;
         MeshMap make_mesh_map() const;
@@ -150,16 +178,20 @@ class SimulatorBuilder
         SimulatorBuilder(); // Disabled
         SurfaceElevationPtr get_wave() const;
         ListOfForces forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
+        ListOfControlledForces controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
         void add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const;
+        void add(const YamlModel& model, ListOfControlledForces& L, const EnvironmentAndFrames& env) const;
         VectorOfVectorOfPoints get_mesh(const YamlBody& body) const;
 
         YamlSimulatorInput input;
         TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceBuilderPtr> force_parsers;
+        std::vector<ControlledForceBuilderPtr> controlled_force_parsers;
         std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
         TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
+        ssc::data_source::DataSource command_listener;
 };
 
 

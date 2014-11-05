@@ -69,7 +69,7 @@ Pour le second spectre, on écrit :
      waves coming from: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On définit les sorties de la façon suivante :
+On définit les sorties de la façon suivante (décrites dans la [documentation du fichier YAML](documentation_yaml.html#sorties):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
@@ -130,9 +130,7 @@ environment models:
 Comme on ne simule pas de corps, le fichier d'entrée se réduit à :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations:
-    order by: angle
-    convention: [z,y',x'']
+rotations convention: [psi, theta', phi'']
 
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
@@ -192,16 +190,18 @@ Le fichier de résultat est `tutorial_03_results.yml`.
 
 On obtient le fichier suivant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 waves:
   x: [1,2,3,4,5,1,2,3,4,5]
   y: [1,1,1,1,1,2,2,2,2,2]
   timesteps:
     - t: 0
-      z: [3.7318,3.73178,3.73177,3.73176,3.73174,3.64687,3.64686,3.64684,3.64683,3.64682]
-     - t: 1
-       z: [4.20712,4.20709,4.20706,4.20703,4.207,4.25937,4.25934,4.25931,4.25928,4.25925]
+    - z: [-4.60386,-4.60388,-4.6039,-4.60392,-4.60393,-4.6553,-4.65531,-4.65533,-4.65535,-4.65537]
+    - t: 1
+    - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La description de ce fichier est faite [dans la documentation des fichiers YAML](documentation_yaml.html#sorties).
 
 On peut aussi simuler les vagues dans un autre référentiel que le référentiel
 NED (par exemple le référentiel associé à un solide) et l'on obtient alors des

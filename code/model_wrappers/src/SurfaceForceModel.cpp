@@ -8,7 +8,7 @@
 #include "Body.hpp"
 #include "SurfaceForceModel.hpp"
 
-SurfaceForceModel::SurfaceForceModel(const EnvironmentAndFrames& env_) :
+SurfaceForceModel::SurfaceForceModel(const std::string& name_, const EnvironmentAndFrames& env_) : ForceModel(name_),
         env(env_),
         g_in_NED(ssc::kinematics::Point("NED", 0, 0, env.g))
 {
@@ -43,4 +43,9 @@ ssc::kinematics::Wrench SurfaceForceModel::operator()(const Body& body, const do
 double SurfaceForceModel::potential_energy(const Body& body, const std::vector<double>& x) const
 {
     return pe(body, x, env);
+}
+
+bool SurfaceForceModel::is_a_surface_force_model() const
+{
+    return true;
 }

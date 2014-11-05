@@ -5,6 +5,7 @@ set(SRC src/Body.cpp
         src/BodyBuilder.cpp
         src/QuadraticDampingForceModel.cpp
         src/DefaultSurfaceElevation.cpp
+        src/ForceModel.cpp
         src/GravityForceModel.cpp
         src/FastHydrostaticForceModel.cpp
         src/SurfaceElevationFromWaves.cpp
@@ -16,6 +17,10 @@ set(SRC src/Body.cpp
         src/FroudeKrylovForceModel.cpp
         src/DampingForceModel.cpp
         src/LinearDampingForceModel.cpp
+        src/ControllableForceModel.cpp
+        src/yaml2eigen.cpp
+        src/WageningenControlledForceModel.cpp
+        src/ResistanceCurveForceModel.cpp
         )
 
 # Using C++ 2011

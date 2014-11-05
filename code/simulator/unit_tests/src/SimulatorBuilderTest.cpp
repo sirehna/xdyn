@@ -174,3 +174,22 @@ TEST_F(SimulatorBuilderTest, can_get_forces)
     ASSERT_DOUBLE_EQ(0,Fg.M());
     ASSERT_DOUBLE_EQ(0,Fg.N());
 }
+
+TEST_F(SimulatorBuilderTest, knows_if_there_are_any_surface_forces)
+{
+    builder.can_parse<DefaultSurfaceElevation>()
+           .can_parse<GravityForceModel>()
+           .can_parse<QuadraticDampingForceModel>()
+           .can_parse<FastHydrostaticForceModel>();
+    SimulatorBuilder builder_with_no_surface_forces(SimulatorYamlParser(test_data::falling_cube()).parse());
+    builder_with_no_surface_forces.can_parse<DefaultSurfaceElevation>()
+                                  .can_parse<GravityForceModel>()
+                                  .can_parse<QuadraticDampingForceModel>()
+                                  .can_parse<FastHydrostaticForceModel>();
+
+    builder.get_forces(EnvironmentAndFrames());
+    builder_with_no_surface_forces.get_forces(EnvironmentAndFrames());
+
+    ASSERT_TRUE(builder.detected_surface_forces());
+    ASSERT_FALSE(builder_with_no_surface_forces.detected_surface_forces());
+}

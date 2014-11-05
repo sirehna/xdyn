@@ -7,7 +7,7 @@
 
 #include "EmergedSurfaceForceModel.hpp"
 
-EmergedSurfaceForceModel::EmergedSurfaceForceModel(const EnvironmentAndFrames& env) : SurfaceForceModel(env)
+EmergedSurfaceForceModel::EmergedSurfaceForceModel(const std::string& name_, const EnvironmentAndFrames& env) : SurfaceForceModel(name_, env)
 {
 }
 

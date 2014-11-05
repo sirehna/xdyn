@@ -20,6 +20,7 @@ struct UV
 
 void operator >> (const YAML::Node& node, UV& g);
 void parse_uv(const YAML::Node& node, double& d);
+void parse_uv(const YAML::Node& node, std::vector<double>& d);
 double decode(const UV& uv);
 
 #endif /* PARSE_UNIT_VALUE_HPP_ */

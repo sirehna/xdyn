@@ -27,22 +27,15 @@ Les axes du repère navire sont les suivants
 
 L'attitude d'un corps permet de connaître sa position et son orientation par
 rapport à un repère. La position est donnée par le triplet $\left(X,Y,Z\right)$
-et l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
-Cette dernière peut être exprimée de manière différente notamment avec des
-quaternions.
+et l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$. L'interprétation de ce triplet en termes de rotations autour des axes $x$,$y$,$z$ dépend de la convention d'orientation choisie.
+L'orientation peut également être exprimée de manière différente notamment avec des
+quaternions (c'est d'ailleurs ainsi qu'elle est exprimée dans le code du simulateur).
 
 ## Conventions d'orientations
 
 Cette section présente les notations utilisées pour définir l'orientation
-d'un élément dans l'espace à partir d'un triplet de trois angles.
+d'un élément dans l'espace à partir d'un triplet de trois angles $(\phi,$\theta$,\psi$)$.
 
-
-### Convention par défaut
-
-Si on souhaite utiliser classiquement la convention des angles aéronautiques
-exprimée par le triplet (Roulis, Tangage, Lacet) alors on utilisera
-les entrées suivantes. Si on souhaite paramétrer cette convention, il
-est conseillé de lire la section complète.
 
 ### Définition d'une orientation
 
@@ -273,13 +266,13 @@ d'angle adoptée.
 
 ## Repère de calcul hydrodynamique
 
-Les efforts d'amortissement (de [radiation](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation) et
-[visqueux](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux)), de [résistance à
-l'avancement]() et de
-[diffraction](modeles_reperes_et_conventions.html#expression-des-efforts-hydrodynamiques) sont calculés dans un repère appelé **repère de
-calcul hydrodynamique**, qui est un repère translaté par rapport au repère
-body. Le centre de ce repère est un point défini (dans le repère body) de la
-façon suivante :
+Les efforts d'[amortissement
+visqueux](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux))
+et de [résistance à
+l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
+sont calculés dans un repère appelé **repère de calcul hydrodynamique**, qui
+est un repère translaté par rapport au repère body. Le centre de ce repère est
+un point défini (dans le repère body) de la façon suivante :
 
 - Son abscisse $x$ est celle du centre de la surface résultant de la projection
 du maillage sur le plan $(x,z)$
@@ -291,12 +284,16 @@ Ce point est, en général, distinct du centre de gravité et du centre de volum
 Il est défini dans la section `dynamics/hydrodynamic forces calculation point
 in body frame` du [fichier YAML](documentation_yaml.html#champs-dynamics).
 
-On note ${}^\mbox{local}T_\mbox{body}$ la transformation permettant de
+On note ${}^{\mbox{local}}T_{\mbox{body}}$ la transformation permettant de
 convertir des coordonnées dans le repère body en coordonnées du même point
 exprimées dans le repère de calcul hydrodynamique.
-${}^\mbox{local}T_\mbox{NED}$ est celle permettant de convertir des coordonnées
+${}^{\mbox{local}}T_{\mbox{NED}}$ est celle permettant de convertir des coordonnées
 dans le repère NED  en coordonnées du même point exprimées dans le repère de
 calcul hydrodynamique.
+
+Il convient de distinguer ce repère de celui utilisé dans la base de données
+hydrodynamiques (fichiers HDB de Diodore), utilisé pour l'expression des
+matrices d'amortissement de radiation, les RAO d'effort et les masses ajoutées.
 
 # Modèles environnementaux
 
@@ -337,19 +334,35 @@ monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
 $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) = \left\{\begin{array}0, \mbox{si }\omega\neq \omega_0\\1, \mbox{si
 } \omega=\omega_0\end{array}\right\}$$
 
-
+Le paramétrage de ce spectre est documenté
+[ici](documentation_yaml.html#dirac-1).
 
 #### JONSWAP
 
+Le paramétrage de ce spectre est documenté
+[ici](documentation_yaml.html#jonswap).
+
 #### Pierson-Moskowitz
 
-#### Bretschenider
+Le paramétrage de ce spectre est documenté
+[ici](documentation_yaml.html#pierson-moskowitz).
+
+#### Bretschneider
+
+Le paramétrage de ce spectre est documenté
+[ici](documentation_yaml.html#bretschneider).
 
 ### Etalements directionnels
 
 #### Dirac
 
+Le paramétrage de cet étalement directionnel est documenté
+[ici](documentation_yaml.html#dirac).
+
 #### Cos2s
+
+Le paramétrage de cet étalement directionnel est documenté
+[ici](documentation_yaml.html#cos2s).
 
 ### Modèles de houle
 
@@ -634,8 +647,8 @@ rien car elle ne décrit que les mouvements en régime établi sinusoïdal : cet
 équation n'est qu'une représentation de la réponse fréquentielle du navire.
 
 Cette constatation a été faite en 1962 par W. E. Cummins, alors employé par le
-David Taylor Model Basin de l'armée américaine ("The Impulse Response & Ship
-Motions", Report 1661, October 1962).
+David Taylor Model Basin de l'armée américaine (*The Impulse Response & Ship
+Motions*, Report 1661, October 1962).
 
 Dans ce document, Cummins entreprend d'expliciter les efforts hydrodynamiques
 dans le domaine temporel. Pour ce faire, il fait l'hypothèse que les mouvements
@@ -747,8 +760,10 @@ $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 
 $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
+## Références
 
-# Modèles d'efforts
+
+# Modèles d'efforts non-commandés
 
 Le navire est soumis aux efforts suivants :
 
@@ -759,11 +774,8 @@ Le navire est soumis aux efforts suivants :
   et d'autre par des phénomènes de radiation/diffraction,
 - Les efforts d'amortissement visqueux, dûs aux frottements de l'eau sur la
   coque et aux tourbillons,
-- Les efforts commandés. On classe dans cette catégorie les efforts de
-  propulsion (hélices, tunnels, azimutaux, Voith...) mais aussi les safrans et
-  ailerons.
 
-Les efforts sont renseignés dans la section
+Les efforts non-commandés sont renseignés dans la section
 [`bodies/external`](documentation_yaml.html#efforts-extérieurs) du fichier
 YAML.
 
@@ -786,9 +798,8 @@ où $m$ désigne la masse du navire (en kg), $g$ l'accélération de la pesanteu
 repère dans lequel on veut projeter la force.
 
 ### Références
-Halliday, David; Robert Resnick; Kenneth S. Krane (2001). Physics v. 1. New
-York: John Wiley & Sons. ISBN 0-471-32057-9.
-Lev Landau et Evgueni Lifchits, Physique théorique, éd. MIR, Moscou
+- *Physics v. 1*, 2001, D. Halliday, R. Resnick and K. S. Krane, John Wiley and Sons, ISBN 0-471-32057-9
+- *Physique théorique*, Lev Landau et Evgueni Lifchits, éd. MIR, Moscou
 
 
 ## Efforts hydrostatiques non-linéaires
@@ -974,15 +985,15 @@ dans la situation suivante :
 
 ### Références
 
-- "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-- "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 185
-- "Sea Loads on Ships An Offshore Structures", 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 16, 39, 59
-- "Seakeeping: Ship Behaviour in Rough Weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 67-68
-- "Offshore Hydromechanics", 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
+- *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+- *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 185
+- *Sea Loads on Ships An Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 16, 39, 59
+- *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 67-68
+- *Offshore Hydromechanics*, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
 
 ## Efforts de diffraction
 
-## Description
+### Description
 
 Les efforts de diffraction sont dus à la modification du champs de pression du
 fait de la présence du navire. Ils sont interpolés à partir de tables
@@ -995,7 +1006,60 @@ vitesse d'avance (RAO d'efforts). La principale différence entre les efforts de
 radiation et les efforts de diffraction est l'écriture de la condition aux
 limites.
 
+## Résistance à l'avancement
 
+### Hypothèses
+
+On suppose la propulsion rectiligne, uniforme et directe, c'est-à-dire
+d'intensité et de direction constantes et située dans le plan ($x$,$y$).
+
+On suppose également qu'il n'y a pas de houle (eau calme), que l'assiette du navire est
+constante et que sa gite est nulle.
+
+On suppose enfin que la résistance à l'avancement est colinéaire à la
+projection sur le plan horizontal de la force propulsive.
+
+Etant données ces hypothèses, on parle de __résistance de remorquage__ à une
+vitesse donnée et on note $R_T$ la force nécessaire pour remorquer le navire à
+cette vitesse en eau calme.
+
+### Modélisation
+
+Le paradoxe de d'Alembert est que lorsque l'on remorque un objet partiellement
+immergé dans un fluide supposé parfait, sa résistance est nulle.
+Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique
+que :
+
+- l'eau n'est pas un fluide parfait : elle possède une viscosité qui freine
+l'objet
+- et/ou la surface libre n'est pas à l'équilibre et s'oppose au mouvement du solide.
+
+On décompose donc la résistance de remorquage en deux composantes :
+
+- la résistance visqueuse, liée au frottement de l'eau sur la carène ;
+- la résistance de vagues, due à la création d'un champs de vague par le
+navire.
+
+En pratique, on effectue une interpolation par spline cubique de la résistance
+à l'avancement en fonction de la vitesse du solide par rapport au repère NED
+projetée sur l'axe X du repère body (que l'on note $u$). Si $f:u\mapsto R=f(u)$
+désigne la fonction d'interpolation, le torseur des efforts, exprimé au [point
+de calcul
+hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique),
+est :
+
+$$\tau_\mbox{res} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
+
+Ce modèle est accessible par la clef [`resistance
+curve`](documentation_yaml.html#r%C3%A9sistance-%C3%A0-lavancement).
+
+### Références
+
+- *Dynamique du Navire*, 1986, P. Devauchelle, Bibliothèque de L'Institut
+Français d'Aide à la Formation Professionnelle Maritime, ISBN 2-225-80669-1,
+pages 58, 81 et 97
+- *Hydrodynamique navale : théorie et modèles*, 2009, A. Bovis, Presses de
+l'ENSTA, page 205 et 337
 
 ## Efforts d'amortissement visqueux
 
@@ -1005,21 +1069,19 @@ Les mouvements d'un solide évoluant dans un fluide sont amortis du fait de
 l'énergie que ce solide communique au fluide. Ces efforts dissipatifs
 proviennent d'une part des vagues générées par les mouvements du fluide (et qui
 correspondent aux [amortissements de
-radiation](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)), et d'autre part des
-amortissements visqueux dus au frottement du fluide sur la coque. Ce sont ces
-derniers qui nous intéressent dans cette section.
+radiation](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)),
+et d'autre part des amortissements visqueux dus au frottement du fluide sur la
+coque (apparition d'un sillage tourbillonaire ou turbulent qui dissipe de
+l'énergie de manière purement mécanique, essentiellement sur l'axe roulis). Ce
+sont ces derniers qui nous intéressent dans cette section.
 
 Les amortissements non-visqueux (radiation) sont, par nature, linéaires par
-rapport à la vitesse. En ce qui concerne les amortissements visqueux, on
-distingue les **amortissements linéaires** (par rapport à la vitesse) qui
-surviennent lorsque sa vitesse est suffisamment faible pour que l'écoulement
-soit laminaire (nombre de Reynolds inférieur à 2000), et les termes dus à
-l'apparition d'un sillage tourbillonnaire ou turbulent qui dissipe l'énergie de
-manière purement mécanique (**amortissement quadratique**, présent
-essentiellement sur l'axe roulis ($\phi$)). Suivant les axes, certains termes
-prédominent par rapport aux autres. Ainsi, en roulis, l'amortissement
-quadratique est prépondérant par rapport à l'amortissement linéaire, tandis
-qu'en tangage c'est l'inverse.
+rapport à la vitesse. Les amortissements visqueux sont, eux, quadratiques. Le
+modèle d'amortissement linéaire ne doit être utilisé que pour prendre en compte
+les efforts dissipatifs de radiations, si ceux-ci ne sont pas modélisés par
+ailleurs. Suivant les axes, certains termes prédominent par rapport aux autres.
+Ainsi, en roulis, l'amortissement quadratique est prépondérant par rapport à
+l'amortissement linéaire, tandis qu'en tangage c'est l'inverse.
 
 Outre leur signification physique, les termes amortissements ont également une
 incidence sur la simulation dans la mesure où ils ont tendance à stabiliser les
@@ -1029,17 +1091,18 @@ Lorsque l'on utilise conjointement les modèles d'amortissement en cavalement et
 de résistance à l'avancement, il convient de prendre des précautions
 supplémentaires afin de ne pas modéliser deux fois le même phénomène physique.
 On décompose donc la vitesse longitudinale en une composante basse fréquence
-(utilisée par le modèle de résistance à l'avancement) et une composante haute
-fréquence (pour le modèle d'amortissement).
+(utilisée par le modèle de [résistance à
+l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement))
+et une composante haute fréquence (pour le modèle d'amortissement).
 
 ### Modélisation
 
-Pour une description des notations adoptées icion pourra se référer à [la
+Pour une description des notations adoptées ici on pourra se référer à [la
 description du repère de calcul
 hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique).
 
-La vitesse du courant (intégrale de la vitesse de la surface du fluide par
-rapport au sol), projetée dans le repère NED, est notée :
+La vitesse du courant (vitesse de l'eau par rapport au repère NED, projetée
+dans le repère NED) est notée :
 
 $$V_\mbox{eau/sol} =
 \left[\begin{array}{c}U_\mbox{courant}\\V_\mbox{courant}\\0\end{array}\right]$$
@@ -1051,17 +1114,18 @@ $$\nu_\mbox{local} = {}^\mbox{local}T_\mbox{body} \nu_b -
 
 $$\omega_\mbox{local} = {}^\mbox{local}T_\mbox{body}\omega_{nb}^b$$
 
-Pour les amortissements linéaires :
+Si les efforts de radiation ne sont par modélisés par ailleurs, les
+amortissements linéaires s'écrivent (dans le [repère de calcul
+hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique)) :
 
-
-$$F_{\mbox{al}}=-D_l\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]$$
+$$F_{\mbox{al}}=-D_l\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_\mbox{local}$$
 
 où $D_l$ est la matrice d'amortissement linéaire lue depuis [le fichier de
-paramètres]().
+paramètres](documentation_yaml.html#amortissement-linéaire).
 
 Pour les amortissements quadratiques :
 
-$$F_{\mbox{aq}}=-D_q(\nu_{\mbox{local}})\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]$$
+$$F_{\mbox{aq}}=-D_q(\nu_{\mbox{local}})\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_\mbox{local}$$
 
 où
 
@@ -1076,11 +1140,268 @@ d_{61}\cdot|u_{\mbox{local}}| & d_{62}\cdot |v_{\mbox{local}}| & d_{63}\cdot |w_
 \end{array}\right]$$
 
 les $((d_{ij}))$ étant les coefficients de la matrice d'amortissement
-quadratique lue depuis [le fichier de paramètres]().
+quadratique lue depuis [le fichier de
+paramètres](documentation_yaml.html#amortissement-quadratique).
 
 ### Références
-- "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions
-TECHNIP, ISBN 2-7108-0815-3, page 276
-- "Sea Loads on Ships An Offshore Structures", 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, page 223
-- "Seakeeping: Ship Behaviour in Rough Weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
-- "Marine Control Systems: Guidance, Navigation and Control of Ships, Rigs and Underwater Vehicles", 2002, THor I. Fossen, Marine Cybernetics, ISBN 82-92356-00-2, page 71
+- *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 276
+- *Sea Loads on Ships An Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, page 223
+- *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
+- *Marine Control Systems: Guidance, Navigation and Control of Ships, Rigs and Underwater Vehicles*, 2002, THor I. Fossen, Marine Cybernetics, ISBN 82-92356-00-2, page 71
+
+# Efforts commandés
+
+On classe dans cette catégorie les efforts de propulsion (hélices, tunnels,
+azimutaux, Voith...) mais aussi les safrans et ailerons. Ils sont paramétrés
+dans la section [`efforts commandés`](documentation_yaml.html#efforts-command%C3%A9s)
+du fichier YAML.
+
+## Hélices Wageningen série B
+
+### Description
+
+En 1937, l'ingénieur néerlandais L. Troost, alors employé du Maritime Research
+Institue Netherlands (MARIN) basé à Wageningen (Pays-Bas), créa les hélices
+Wageningen série B dont la forme est simple et les performances bonnes.  Afin
+d'établir une base pour la conception d'hélices, il publia en 1938 puis en 1940
+une série de tests systématiques en eau libre de 120 hélices "série B", qui
+sont, à ce jour, les séries de test en eau libre les plus connus, bien que
+d'autres instituts de recherche en aient réalisés d'autres par la suite.
+
+En 1975, Oosterveld et Ossannen utilisèrent une régression statistique pour
+établir le modèle polynomial des hélices Wageningen présenté ici.
+
+Un [tutoriel](tutorials.html#tutoriel-6-propulsion) présente l'utilisation de
+ce modèle dans le simulateur.
+
+### Hypothèses du modèle en eau libre
+
+On adopte les notations suivantes :
+
+- $T$ est la poussée de l'hélice en eau libre (en N), c'est-à-dire la norme des
+efforts générés par l'hélice suivant son axe (sans tenir compte de la succion de la coque),
+- $Q$ est le couple généré par l'hélice en eau libre autour de son axe. Il
+  s'exprime en N.m.
+- $n$ est le nombre de tours que l'hélice fait par seconde (en Hz)
+- $D$ est le diamètre de l'hélice (en m)
+- $rho$ est la densité volumique de l'eau (en kg/m^3)
+- $V_a$ est la vitesse d'avance (en m/s), c'est-à-dire la vitesse de l'écoulement non
+perturbé (à l'infini). Il s'agit d'une vitesse théorique : on se place dans le
+cas où l'hélice est complètement isolée dans un environnement infini (eau
+libre) qui bouge à la vitesse $V_a$ par rapport au sol.
+
+Le modèle en eau libre est sujet aux hypothèses suivantes :
+
+- on néglige les effets de la houle (notamment sa vitesse orbitale et le champs
+  de pression qu'elle génère) et des courants océaniques,
+- on ne tient pas compte des interactions entre l'hélice et la coque
+  (perturbation du fluide en amont de l'hélice) et entre l'hélice et la surface
+  libre. On suppose ainsi que l'hélice ne crée pas de vagues, donc qu'elle ne
+  dissipe pas d'énergie à la
+  surface).
+
+L'intérêt de ce modèle est qu'il est paramétrique et permet de représenter les
+performances de l'hélice sous forme adimensionnelle. On peut ainsi appliquer le
+même modèle (à un coefficient d'échelle près) à des hélices homothétiques.
+Une limitation supplémentaire du modèle polynomial en eau libre est que,
+contrairement au modèle quatre quadrant, il n'est valable qu'en marche
+avant (c'est-à-dire pour $n$ positif ou nul).
+
+### Dérivation du modèle en eau libre
+
+Le modèle en eau libre est un modèle empirique dans la mesure où il ne dérive
+pas des équations de Navier-Stokes. Le postulat est, qu'étant données les
+hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
+dépende :
+
+- Du diamètre $D$ (en m) de celle-ci
+- De la vitesse $V_a$ d'avance du fluide (en m/s)
+- De la vitesse de rotation $n$ de l'hélice (en Hz)
+- De la densité $\rho$ du fluide (en kg/m^3)
+- De la viscosité $\mu$ du fluide
+- De la pression statique du fluide $p_0-e$ au niveau de l'hélice
+
+On aurait donc :
+
+$$T_0 \propto \rho^a\cdot D^b\cdot V_a^c \cdot n^d \cdot \mu^f\cdot(p_0-e)^g$$
+
+En effectuant l'analyse dimensionnelle pour exprimer $a$, $b$ et $d$ en
+fonction des autres coefficients, on trouve :
+
+$$T_0 \propto \rho^{1-f-g}\cdot D^{4-c-2f-g}\cdot V_a^c \cdot n^{2-c-f-2g} \cdot \mu^f\cdot(p_0-e)^g$$
+
+Soit, en regroupant les termes de même puissance :
+
+$$T_0 \propto \rho\cdot n^2\cdot D^4\cdot \left(\frac{V_a}{n\cdot D}\right)^c \cdot\left(\frac{\mu}{\rho\cdot n\cdot D^2}\right)^f\cdot\left(\frac{p_0-e}{\rho\cdot n^2\cdot D^2}\right)^g$$
+
+On définit le coefficient de poussée :
+
+$$K_T = \frac{T_0}{\rho\cdot n^2\cdot D^4}$$
+
+Le coefficient d'avance $J$ est défini par :
+
+$$J=\frac{V_a}{n\cdot D}$$
+
+Le nombre de Reynolds $R_n$ s'exprime ici :
+
+$$R_n = \frac{\rho \cdot n\cdot D^2}{\mu}$$
+
+et le nombre de cavitation $\sigma_0$ est :
+
+$$\sigma_0=\frac{p_0-e}{\frac{1}{2}\rho\cdot n^2\cdot D^2}$$
+
+donc il existe une fonction $f$ telle que
+
+$$K_T = f(J,R_n,\sigma_0)$$
+
+De même, pour le couple $Q$, on définit le coefficient de couple $K_Q$ par :
+
+$$K_Q = \frac{Q_0}{\rho\cdot n^2\cdot D^5}$$
+
+Le modèle en eau libre consiste à expliciter les fonctions $K_T$ et $K_Q$, dont
+on peut ensuite dériver la poussée et le couple.
+
+### Prise en compte des effets de la coque et du sillage
+
+Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque,
+l'hélice ne se déplace pas (par rapport à l'eau) à la vitesse du navire $V_s$,
+autrement dit $V_a\neq V_s$. La vitesse d'avance $V_a$ est, en général, très
+difficile à mesurer et l'on suppose qu'elle est proportionnelle à la vitesse du
+navire. On définit donc un coefficient $w$ (pour "wake", soit "sillage" en
+anglais) tel que :
+
+$$w=1-\frac{V_a}{V_s}$$
+
+$w$ est constant en régime permanent, lorsque l'hélice opère dans les
+conditions nominales. Des ordres de grandeurs de ce coefficient sont donnés par
+exemple dans Carlton, pages 70,72,73 et 74.
+
+En outre, l'hélice accroît la [résistance à
+l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
+: en effet, elle diminue la pression à l'arrière du navire, ce qui augmente la
+poussée nécessaire pour la propulsion. Pour prendre en compte ce phénomène, on
+introduit le coefficient de succion $t$ tel que :
+
+$$t = 1 - \frac{R_v}{T_p}$$
+
+où $R_v$ est la résistance à l'avancement (en N) à une vitesse $V_S$, sans
+hélice, et $T_p$ est la somme des poussées de tous les actionneurs (également
+en N) lorsque le navire va à la vitesse $V_S$ en utilisant l'hélice.
+
+La poussée réelle $T_b$ est alors définie par :
+
+$$T_b = (1-t)\cdot T_0 = (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)$$
+
+et le couple réel est
+
+$$Q_b = \eta_R\cdot Q_0 = \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J, R_n,\sigma_0)$$
+
+où $\eta_R$ est appelé **rendement d'adaptation**
+
+$$J = \frac{V_a}{n\cdot D} = \frac{(1-w)\cdot V_s}{n\cdot D}$$
+
+### Expression des coefficients $K_T$ et $K_Q$
+
+Afin de rendre les coefficients indépendants de la taille de l'hélice, on
+définit la fraction de surface de l'hélice $A_E/A_0$, où $A_E$ désigne l'aire des
+pales (en m^2) et $A_0= \frac{\pi\cdot D^2}{4}$ est l'aire du disque
+circonscrit à l'hélice. Les séries sont valables pour $0.30\leq A_E/A_0\leq
+1.05$.
+
+On définit également le pas $P$ de l'hélice, un paramètre géométrique qui
+traduit la distance théorique parcourue par l'hélice en une révolution. Cette
+distance varie en fonction de la ligne de référence que l'on choisit. Les
+séries B de Wageningen utilisent le pas **de face**, mais il existe d'autres
+conventions. Les séries sont paramétrés en $P/D$ et l'on suppose que $0.5\leq
+P/D\leq 1.4$.
+
+On note $2\leq Z\leq 7$ le nombre de pales de l'hélice.
+
+Les coefficients des polynômes pour $K_T$ et $K_Q$ sont notés $C_i^T$
+et $C_i^Q$ respectivement, où $i$ est un entier tel que $1 \leq i \leq 47$.
+$s(i)$, $s'(i)$, $t(i)$, $t'(i)$, $u(i)$, $u'(i)$, $v(i)$ et $v'(i)$ sont des
+exposants entre 0 et 6.
+
+$$K_T(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^T \cdot J^{s(i)}\cdot
+(P/D)^{t(i)}\cdot (A_E/A_0)^{u(i)}\cdot Z^{v(i)}$$
+$$K_Q(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^Q \cdot J^{s'(i)}\cdot
+(P/D)^{t'(i)}\cdot (A_E/A_0)^{u'(i)}\cdot Z^{v'(i)}$$
+
+Les coefficients $C_k^T$ et $C_k^Q$ sont définis pour un nombre de Reynolds
+$R_n=2\times 10^6$, mais le modèle a été étendu pour des nombres de Reynolds
+entre $2\times 10^6$ et $2\times 10^9$ en introduisant des termes $\Delta K_T$
+et $\Delta K_Q$ supplémentaires :
+
+$$K_T(J, P/D, A_E/A_0, Z, R_n) = K_T(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
+K_T(J, P/D, A_E/A_0, Z, R_n)$$
+$$K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
+K_Q(J, P/D, A_E/A_0, Z, R_n)$$ 
+
+### Expression des efforts
+
+Les efforts générés par l'hélice sont calculés dans un repère spécifique
+renseigné dans la section [`position of propeller frame`](documentation_yaml.html#wageningen-b-series) du fichier YAML. La
+poussée (c'est-à-dire l'effort généré par l'hélice sur le navire) est faite
+dans le sens des $x$ positifs.
+
+![](images/reperes_helices.svg)
+
+Le sens de rotation de l'hélice doit également être spécifié parce qu'il
+détermine le signe du couple généré par l'hélice sur le navire. On définit ce
+sens de rotation en se plaçant face à l'hélice, en regardant dans la direction
+des $x_\mbox{hélice}$ positifs (donc vers l'avant du navire). Autrement dit, l'axe de
+rotation de l'hélice est non pas $x_\mbox{hélice}$ mais $-x_\mbox{hélice}$.
+Lorsque l'hélice tourne dans le sens **horaire**, elle génère un couple dans le
+sens trigonométrique, soit un couple de signe **négatif** lorsqu'il est exprimé
+dans le repère de l'hélice :
+
+![](images/rotation_helices.svg)
+
+Le torseur des efforts générés par l'hélice et subit par le navire
+(apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
+exprimé dans le repère de l'hélice, est donc :
+
+$$\tau_\mbox{hélice} = \left[\begin{array}{c}
+X\\
+Y\\
+Z\\
+K\\
+M\\
+N
+\end{array}\right]_\mbox{hélice}$$
+
+$$= \left[\begin{array}{c}
+           T_b\\
+           0\\
+           0\\
+           \kappa Q_b\\
+           0\\
+           0
+\end{array}\right]_\mbox{hélice}$$
+$$= \left[\begin{array}{c}
+           (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)\\
+           0\\
+           0\\
+           \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J,
+R_n,\sigma_0)\\
+           0\\
+           0\end{array}\right]_\mbox{hélice}
+$$
+
+$\kappa$ vaut -1 si l'hélice tourne dans le sens horaire (en se plaçant
+derrière l'hélice et en regardant vers l'avant du navire) et +1 si elle tourne
+dans le sens trigronométrique.
+
+Ce torseur est ensuite déplacé (changement de point d'application et changement
+de coordonnées) dans le repère body afin d'être sommé avec les autres lors du
+bilan des efforts.
+
+### Références
+
+- *Marine Propellers and Propulsion*, 2007, John Carlton, Butterworth-Heinermann, ISBN 978-07506-8150-6, page 89, 103
+- *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 404
+- *KT, KQ and Efficiency Curves for the Wageningen B-series Propellers*, 1981, Bernitsas, Ray, Kinley, University of Michigan
+- *Offshore Hydromechanics*, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 4-40
+- *Thrust Estimation and Control of Marine Propellers in Four-Quadrant Operations*, 2008, Luca Pivano, NTNU, ISBN 978-82-471-6258-3, page 30, 31
+- *The Wageningen Propeller Series*, 1992, Gert Kuiper, Marin publication 92-001
+

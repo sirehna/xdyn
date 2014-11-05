@@ -9,25 +9,32 @@
 #define SIM_HPP_
 
 #include <vector>
+#include <ssc/data_source.hpp>
 #include <ssc/kinematics.hpp>
 #include "Body.hpp"
 #include "StateMacros.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 
 class Sim
 {
     public:
         Sim(const std::vector<Body>& bodies,
             const std::vector<ListOfForces>& forces,
+            const std::vector<ListOfControlledForces>& controllable_forces,
             const EnvironmentAndFrames& env,
-            const StateType& x);
+            const StateType& x,
+            const ssc::data_source::DataSource& command_listener,
+            const bool there_are_surface_forces);
         void operator()(const StateType& x, StateType& dxdt, double t);
 
         void update_discrete_states();
         void update_continuous_states();
         StateType get_state_derivatives() const;
         std::vector<std::string> get_names_of_bodies() const;
+        std::vector<std::string> get_force_names() const;
+        std::map<std::string,double> get_forces() const;
 
         /**  \brief Serialize wave data on mesh
           *  \details Called by SimCsvObserver at each time step. The aim is to
@@ -44,7 +51,7 @@ class Sim
         StateType state;
 
     private:
-        ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const size_t body_index, const double t) const;
+        ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const size_t body_index, const double t);
         void calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                          const MatrixPtr& inverse_of_the_total_inertia,
                                          const StateType& x,
@@ -73,10 +80,17 @@ class Sim
         void update_projection_of_z_in_mesh_frame(Body& body         //!< Body we wish to update
                                                  ) const;
 
+        void fill_force(TR1(shared_ptr)<std::map<std::string,double> >& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
+        void fill_force_map_with_zeros(TR1(shared_ptr)<std::map<std::string,double> >& m) const;
+
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;
+        std::vector<ListOfControlledForces> controlled_forces;
         EnvironmentAndFrames env;
         StateType _dx_dt;
+        ssc::data_source::DataSource command_listener;
+        bool there_are_surface_forces;
+        TR1(shared_ptr)<std::map<std::string,double> > outputted_forces;
 };
 
 #endif /* SIM_HPP_ */

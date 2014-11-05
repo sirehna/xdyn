@@ -22,7 +22,7 @@ GravityForceModel::Input::Input(const EnvironmentAndFrames& env) : g(env.g),
 {
 }
 
-GravityForceModel::GravityForceModel(const Input& in) : g(in.g), k(in.k)
+GravityForceModel::GravityForceModel(const Input& in) : ForceModel("gravity"), g(in.g), k(in.k)
 {}
 
 ssc::kinematics::Wrench GravityForceModel::operator()(const Body& body, const double) const

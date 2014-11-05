@@ -23,9 +23,8 @@
 struct Res
 {
     Res();
-    double t; //<! Instant to which the states correspond
+    double t; //<! Instant at which the states correspond
     StateType x; //!< Values of the states of the system
-
 };
 
 #endif /* RES_HPP_ */

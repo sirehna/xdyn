@@ -14,6 +14,7 @@ namespace test_data
 {
     std::string hydrostatic_test();
     std::string full_example();
+    std::string full_example_with_propulsion();
     std::string falling_ball_example();
     std::string oscillating_cube_example();
     std::string stable_cube_example();
@@ -21,6 +22,7 @@ namespace test_data
     std::string anthineas_hydrostatic_test(const std::string& type);
     std::string anthineas_exact_hydrostatic_test();
     std::string anthineas_fast_hydrostatic_test();
+    std::string anthineas_propulsion();
     std::string anthineas_waves_test();
     std::string anthineas_post_processing();
     std::string outputs();
@@ -32,6 +34,10 @@ namespace test_data
     std::string falling_cube();
     std::string rolling_cube();
     std::string anthineas_damping();
+    std::string controlled_forces();
+    std::string wageningen();
+    std::string resistance_curve();
+    std::string propulsion_and_resistance();
 }
 
 #endif /* YAML_DATA_HPP_ */

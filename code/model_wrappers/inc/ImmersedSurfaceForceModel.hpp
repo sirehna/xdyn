@@ -21,7 +21,7 @@
 class ImmersedSurfaceForceModel : public SurfaceForceModel
 {
     public:
-        ImmersedSurfaceForceModel(const EnvironmentAndFrames& env);
+        ImmersedSurfaceForceModel(const std::string& name, const EnvironmentAndFrames& env);
         virtual ~ImmersedSurfaceForceModel();
 
     private:

@@ -23,6 +23,5 @@ po::options_description get_options_description(InputData& input_data);
 int get_input_data(int argc, char **argv, InputData& input_data);
 std::string description();
 void copy_stream(const std::ostream& from_stream, std::ostream& to_stream);
-void initialize_stream(std::ofstream& os, const InputData& input);
 
 #endif /* UTILITIES_FOR_INPUTDATA_HPP_ */

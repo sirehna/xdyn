@@ -13,6 +13,8 @@
 
 #include <ssc/kinematics.hpp>
 
+#include "YamlRotation.hpp"
+
 class SurfaceElevationInterface;
 typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 
@@ -23,6 +25,7 @@ struct EnvironmentAndFrames
     ssc::kinematics::KinematicsPtr k;
     double rho;
     double g;
+    YamlRotation rot;
 };
 
 #endif /* ENVIRONMENTANDFRAMES_HPP_ */
