@@ -22,7 +22,8 @@ Sim::Sim(const std::vector<Body>& bodies_,
          const ssc::data_source::DataSource& command_listener_,
          const bool there_are_surface_forces_) :
          state(x), bodies(bodies_), forces(forces_), controlled_forces(controlled_forces_), env(env_),
-         _dx_dt(StateType(x.size(),0)), command_listener(command_listener_), there_are_surface_forces(there_are_surface_forces_)
+         _dx_dt(StateType(x.size(),0)), command_listener(command_listener_), there_are_surface_forces(there_are_surface_forces_),
+         outputted_forces(new std::map<std::string,double>())
 {
     for (size_t i = 0 ; i < controlled_forces.size() ; ++i)
     {
@@ -31,6 +32,7 @@ Sim::Sim(const std::vector<Body>& bodies_,
             (*that_force)->add_reference_frame(env.k, env.rot);
         }
     }
+    fill_force_map_with_zeros(outputted_forces);
 }
 
 void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies in the system
@@ -97,6 +99,54 @@ std::vector<std::string> Sim::get_names_of_bodies() const
     return ret;
 }
 
+std::map<std::string,double> Sim::get_forces() const
+{
+    return *outputted_forces;
+}
+
+void Sim::fill_force_map_with_zeros(TR1(shared_ptr)<std::map<std::string,double> >& m) const
+{
+    for (size_t i = 0 ; i < bodies.size() ; ++i)
+    {
+        for (auto that_force=forces[i].begin() ; that_force != forces[i].end() ; ++that_force)
+        {
+            fill_force(m, bodies[i].name, (*that_force)->get_name(), ssc::kinematics::Wrench(ssc::kinematics::Point(), ssc::kinematics::Vector6d::Zero()));
+        }
+        for (auto that_force=controlled_forces[i].begin() ; that_force != controlled_forces[i].end() ; ++that_force)
+        {
+            fill_force(m, bodies[i].name, (*that_force)->get_name(), ssc::kinematics::Wrench(ssc::kinematics::Point(), ssc::kinematics::Vector6d::Zero()));
+        }
+    }
+}
+
+std::vector<std::string> Sim::get_force_names() const
+{
+    std::vector<std::string> ret;
+    TR1(shared_ptr)<std::map<std::string,double> > m(new std::map<std::string,double>());
+    fill_force_map_with_zeros(m);
+    for (auto it = m->begin() ; it != m->end() ; ++it)
+    {
+        ret.push_back(it->first);
+    }
+    return ret;
+}
+
+void Sim::fill_force(TR1(shared_ptr)<std::map<std::string,double> >& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const
+{
+    const std::string fx = "Fx(" + force_name + " acting on " + body_name + ")";
+    const std::string fy = "Fy(" + force_name + " acting on " + body_name + ")";
+    const std::string fz = "Fz(" + force_name + " acting on " + body_name + ")";
+    const std::string mx = "Mx(" + force_name + " acting on " + body_name + ")";
+    const std::string my = "My(" + force_name + " acting on " + body_name + ")";
+    const std::string mz = "Mz(" + force_name + " acting on " + body_name + ")";
+    (*ret)[fx] = tau.X();
+    (*ret)[fy] = tau.Y();
+    (*ret)[fz] = tau.Z();
+    (*ret)[mx] = tau.K();
+    (*ret)[my] = tau.M();
+    (*ret)[mz] = tau.N();
+}
+
 ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body, const double t)
 {
     const Eigen::Vector3d& uvw_in_body_frame = Eigen::Vector3d::Map(_U(x,body));
@@ -110,10 +160,12 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
             const ssc::kinematics::Transform T = env.k->get(tau.get_frame(), bodies[body].name);
             const auto t = tau.change_frame_but_keep_ref_point(T);
             const ssc::kinematics::UnsafeWrench tau_body(bodies[body].G, t.force, t.torque + (t.get_point()-bodies[body].G).cross(t.force));
+            fill_force(outputted_forces,bodies[body].name, (*that_force)->get_name(), tau_body);
             S += tau_body;
         }
         else
         {
+            fill_force(outputted_forces,bodies[body].name, (*that_force)->get_name(), tau);
             S += tau;
         }
     }
@@ -123,6 +175,7 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
         const ssc::kinematics::Transform T = env.k->get(tau.get_frame(), bodies[body].name);
         const auto t = tau.change_frame_but_keep_ref_point(T);
         const ssc::kinematics::UnsafeWrench tau_body(bodies[body].G, t.force, t.torque + (t.get_point()-bodies[body].G).cross(t.force));
+        fill_force(outputted_forces,bodies[body].name, (*that_force)->get_name(), tau_body);
         S += tau_body;
     }
     return S;

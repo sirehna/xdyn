@@ -33,6 +33,8 @@ class Sim
         void update_continuous_states();
         StateType get_state_derivatives() const;
         std::vector<std::string> get_names_of_bodies() const;
+        std::vector<std::string> get_force_names() const;
+        std::map<std::string,double> get_forces() const;
 
         /**  \brief Serialize wave data on mesh
           *  \details Called by SimCsvObserver at each time step. The aim is to
@@ -78,6 +80,9 @@ class Sim
         void update_projection_of_z_in_mesh_frame(Body& body         //!< Body we wish to update
                                                  ) const;
 
+        void fill_force(TR1(shared_ptr)<std::map<std::string,double> >& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
+        void fill_force_map_with_zeros(TR1(shared_ptr)<std::map<std::string,double> >& m) const;
+
         std::vector<Body> bodies;
         std::vector<ListOfForces> forces;
         std::vector<ListOfControlledForces> controlled_forces;
@@ -85,6 +90,7 @@ class Sim
         StateType _dx_dt;
         ssc::data_source::DataSource command_listener;
         bool there_are_surface_forces;
+        TR1(shared_ptr)<std::map<std::string,double> > outputted_forces;
 };
 
 #endif /* SIM_HPP_ */
