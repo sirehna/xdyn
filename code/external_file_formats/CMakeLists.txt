@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(external_file_formats)
 
 SET(SRC src/StlReader.cpp
+        src/stl_writer.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
