@@ -1040,6 +1040,16 @@ On décompose donc la résistance de remorquage en deux composantes :
 - la résistance de vagues, due à la création d'un champs de vague par le
 navire.
 
+En pratique, on effectue une interpolation par spline cubique de la résistance
+à l'avancement en fonction de la vitesse du solide par rapport au repère NED
+projetée sur l'axe X du repère body (que l'on note $u$). Si $f:u\mapsto R=f(u)$
+désigne la fonction d'interpolation, le torseur des efforts, exprimé au [point
+de calcul
+hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique),
+est :
+
+$$\tau_\mbox{res} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
+
 Ce modèle est accessible par la clef [`resistance
 curve`](documentation_yaml.html#r%C3%A9sistance-%C3%A0-lavancement).
 
