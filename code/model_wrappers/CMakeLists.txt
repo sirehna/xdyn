@@ -39,7 +39,6 @@ include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
-include_directories(${stl_reader_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME} OBJECT ${SRC})
