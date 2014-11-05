@@ -1,7 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(test_data_generator)
 
-SET(SRC src/STL_data.cpp
+SET(SRC src/hdb_data.cpp
+        src/STL_data.cpp
         src/yaml_data.cpp
         src/TriMeshTestData.cpp
     )
