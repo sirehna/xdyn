@@ -5,15 +5,13 @@
  *      Author: cady
  */
 
-#include <ssc/interpolation.hpp>
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
-
 #include "InterpolationModule.hpp"
 #include "listeners.hpp"
 #include "YamlCommands.hpp"
 #include "parse_commands.hpp"
 
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
 
 void add_interpolation_table(const std::string& x_name, const std::vector<double>& x, const std::string& y_name, const std::vector<double>& y, ssc::data_source::DataSource& ds);
 void add_interpolation_table(const std::string& x_name, const std::vector<double>& x, const std::string& y_name, const std::vector<double>& y, ssc::data_source::DataSource& ds)
