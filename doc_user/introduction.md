@@ -30,7 +30,7 @@ entrées et sorties du simulateur :
 La documentation "utilisateur" du simulateur est composée de cinq parties :
 
 - Le présent fichier, qui donne une vue d'ensemble du simulateur ainsi que la
-  documentation de l'exécutable,
+  documentation des exécutables `sim` et `postprocessing`,
 - [Des tutoriels](tutorials.html) permettant d'appréhender le fonctionnement de
   l'outil sur des cas concrets,
 - [Une documentation du fichier d'entrée](documentation_yaml.html) donnant le
@@ -109,5 +109,63 @@ On peut bien sûr choisir de rediriger les sorties vers un fichier :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./sim tutorial_01_falling_ball.yml -s euler --dt 0.1 --tstart 1 --tend 1.2
+~~~~~~~~~~~~~~~~~~~~
+
+# Outil de post-traitement
+
+Les données CSV générées par le simulateur ne contiennent que les états et les
+efforts, c'est-à-dire le minimum d'information pour reconstituer toute la
+simulation. Comme le simulateur n'utilise que des quaternions en interne, ce ne
+sont que les quaternions qui figurent dans les sorties.
+
+Comme il est plus facile de raisonner physiquement sur des angles, on peut
+utiliser l'outil `postprocessing` pour effectuer la transformation.
+
+Cet outil a besoin des données YAML fournies au simulateur (afin de reconstituer les
+matrices de changement de base), d'une description des données souhaitées (au
+format YAML) et du CSV généré par le simulateur.
+Les fichiers YAML sont passés en ligne de commande mais le CSV est lu depuis
+l'entrée standard, ce qui permet de chaîner le post-traitement avec la
+simulation en utilisant un pipe `|`.
+
+L'outil de post-traitement écrit des données CSV sur la sortie standard (ce
+qui, une nouvelle fois, permet de chaîner les traitements). Ces sorties
+comprennent toutes celles du simulateur plus celles décrites dans la section
+`outputs` qui n'est utilisée que par l'outil `postprocessing`. Voici un exemple
+d'une telle section :
+
+~~~~~~~~~~~~~~~~~~~~ {.yaml}
+outputs:
+    angles:
+      - frame: Anthineas
+        relative to frame: NED
+        projected in frame: Anthineas
+        axes: [x,y,z]
+~~~~~~~~~~~~~~~~~~~~
+
+Le repère indiqué dans `frame` doit être décrit dans le fichier YAML.
+
+On lance ensuite :
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+./postprocessing f1.yml f2.yml < out.csv
+~~~~~~~~~~~~~~~~~~~~
+
+ou bien, ce qui revient au même,
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+cat out.csv | ./postprocessing f1.yml f2.yml
+~~~~~~~~~~~~~~~~~~~~
+
+voire carrément :
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+./sim f1.yml --dt 0.1 --tend 20 | ./postprocessing f1.yml f2.yml > out.csv
+~~~~~~~~~~~~~~~~~~~~
+
+On peut même réaliser des graphiques en une seule étape :
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+./sim f1.yml --dt 0.1 --tend 20 | ./postprocessing f1.yml f2.yml | python postprocessing.py "test" 0 10
 ~~~~~~~~~~~~~~~~~~~~
 

@@ -4,6 +4,11 @@
  *  Created on: Jun 30, 2014
  *      Author: cady
  */
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include <ssc/kinematics.hpp>
 
 #include "SurfaceElevationInterface.hpp"
@@ -49,9 +54,9 @@ template <typename T> double get_axis_value(const T& P, const std::string& axis)
 
 template <> double get_axis_value<ssc::kinematics::EulerAngles>(const ssc::kinematics::EulerAngles& P, const std::string& axis)
 {
-    if (axis=="x") return P.phi;
-    if (axis=="y") return P.theta;
-    if (axis=="z") return P.psi;
+    if (axis=="x") return P.phi*180./PI;
+    if (axis=="y") return P.theta*180./PI;
+    if (axis=="z") return P.psi*180./PI;
                    return 0;
 }
 
