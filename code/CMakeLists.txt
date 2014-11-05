@@ -134,7 +134,6 @@ ADD_SUBDIRECTORY(base91x)
 ADD_SUBDIRECTORY(simulator_external_data_structures)
 ADD_SUBDIRECTORY(test_data_generator)
 ADD_SUBDIRECTORY(external_file_formats)
-ADD_SUBDIRECTORY(stl_writer)
 ADD_SUBDIRECTORY(binary_stl_data)
 ADD_SUBDIRECTORY(mesh)
 ADD_SUBDIRECTORY(wave_models)
@@ -152,7 +151,6 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:model_wrappers>
         $<TARGET_OBJECTS:wave_models>
         $<TARGET_OBJECTS:external_file_formats>
-        $<TARGET_OBJECTS:stl_writer>
         $<TARGET_OBJECTS:hydro_models>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:simulator_yaml_parser>
@@ -199,7 +197,6 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>
-        $<TARGET_OBJECTS:stl_writer_tests>
         $<TARGET_OBJECTS:simulator_tests>
         $<TARGET_OBJECTS:wave_models_tests>
         $<TARGET_OBJECTS:kissfft_static>
