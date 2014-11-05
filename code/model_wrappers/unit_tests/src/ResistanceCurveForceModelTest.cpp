@@ -64,5 +64,34 @@ TEST_F(ResistanceCurveForceModelTest, example)
 //! [ResistanceCurveForceModelTest expected output]
 }
 
+TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower_than_min_speed_specified_in_resistance_curve_table)
+{
+    ResistanceCurveForceModel F(parse_resistance_curve(test_data::resistance_curve()));
+    Body b;
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
+    ASSERT_TRUE(error.str().empty());
+    // Call the resistance curve model
+    b.u = -1;
+    F(b, a.random<double>());
+    ASSERT_FALSE(error.str().empty());
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
+}
 
-
+TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_greater_than_max_speed_specified_in_resistance_curve_table)
+{
+    ResistanceCurveForceModel F(parse_resistance_curve(test_data::resistance_curve()));
+    Body b;
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
+    ASSERT_TRUE(error.str().empty());
+    // Call the resistance curve model
+    b.u = 20*0.514444444444444444 + 1E-10;
+    F(b, a.random<double>());
+    ASSERT_FALSE(error.str().empty());
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
+}
