@@ -80,17 +80,12 @@ class Sim
         void update_projection_of_z_in_mesh_frame(Body& body         //!< Body we wish to update
                                                  ) const;
 
-        void fill_force(TR1(shared_ptr)<std::map<std::string,double> >& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
-        void fill_force_map_with_zeros(TR1(shared_ptr)<std::map<std::string,double> >& m) const;
+        void fill_force(std::map<std::string,double>& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
+        void fill_force_map_with_zeros(std::map<std::string,double>& m) const;
 
-        std::vector<Body> bodies;
-        std::vector<ListOfForces> forces;
-        std::vector<ListOfControlledForces> controlled_forces;
-        EnvironmentAndFrames env;
-        StateType _dx_dt;
-        ssc::data_source::DataSource command_listener;
-        bool there_are_surface_forces;
-        TR1(shared_ptr)<std::map<std::string,double> > outputted_forces;
+
+        class Impl;
+        TR1(shared_ptr)<Impl> pimpl;
 };
 
 #endif /* SIM_HPP_ */
