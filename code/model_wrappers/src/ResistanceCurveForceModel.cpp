@@ -5,11 +5,11 @@
  *      Author: cady
  */
 
-#include <ssc/interpolation.hpp>
-
 #include "Body.hpp"
 #include "ResistanceCurveForceModel.hpp"
 #include "YamlResistanceCurve.hpp"
+
+#include <ssc/interpolation.hpp>
 
 class ResistanceCurveForceModel::Impl
 {
