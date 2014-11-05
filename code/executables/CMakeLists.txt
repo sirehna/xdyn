@@ -18,7 +18,7 @@ INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_yaml_parser_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${stl_reader_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${stl_writer_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${base91x_INCLUDE_DIRS})
@@ -47,7 +47,7 @@ $<TARGET_OBJECTS:simulator>
         $<TARGET_OBJECTS:parser_extensions>
         $<TARGET_OBJECTS:model_wrappers>
         $<TARGET_OBJECTS:wave_models>
-        $<TARGET_OBJECTS:stl_reader>
+        $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:stl_writer>
         $<TARGET_OBJECTS:hydro_models>
         $<TARGET_OBJECTS:mesh>
