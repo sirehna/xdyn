@@ -65,5 +65,12 @@ std::ostream& operator<<(std::ostream& os, const hdb::AST& f)
     return os;
 }
 
+TEST_F(HDBParserTest, can_parse_string_key)
+{
+    const hdb::AST hdb_file = hdb::parse("[test this] string");
+    ASSERT_EQ(1,hdb_file.string_keys.size());
+    ASSERT_EQ("test this",hdb_file.string_keys.at(0).header);
+    ASSERT_EQ("string",hdb_file.string_keys.at(0).value);
+}
 
 
