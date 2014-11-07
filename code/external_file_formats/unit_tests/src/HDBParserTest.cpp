@@ -131,3 +131,35 @@ TEST_F(HDBParserTest, can_parse_section)
     ASSERT_DOUBLE_EQ(3.8, section.values.at(4));
     ASSERT_DOUBLE_EQ(4,   section.values.at(5));
 }
+
+
+TEST_F(HDBParserTest, can_parse_two_sections)
+{
+    hdb::grammar g;
+    const std::string s = " [List_calculated_periods]\n"
+                          "   1.00\n"
+                          "   2.00\n"
+                          "   3.00\n"
+                          "   3.50\n"
+                          "   3.80\n"
+                          "   4.00\n"
+                          " [List_calculated_headings]\n"
+                          "   0.000000    \n"
+                          "   15.00000    \n"
+                          "   30.00000    \n"
+                          "   45.00000    \n"
+                          "   60.00000    \n"
+                          "   75.00000    \n"
+                          "   90.00000    \n"
+                          "   105.0000    \n"
+                          "   120.0000    \n"
+                          "   135.0000    \n"
+                          "   150.0000    \n"
+                          "   165.0000    \n"
+                          "   180.0000    \n";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::vector<hdb::Section> sections;
+    qi::phrase_parse(b, e, *(g.section),space,sections);
+    ASSERT_EQ(2,sections.size());
+    ASSERT_DOUBLE_EQ(75,sections.at(1).values.at(5));
+}
