@@ -102,6 +102,32 @@ TEST_F(HDBParserTest, can_parse_key)
     const std::string s = "[sdgf sdfgsdgf sdfgsdg]";
     std::string::const_iterator b = s.begin(), e = s.end();
     std::string actual;
-    const bool match = qi::phrase_parse(b, e, g.header,space,actual);
+    qi::phrase_parse(b, e, g.header,space,actual);
     ASSERT_EQ("sdgf sdfgsdgf sdfgsdg",actual);
+}
+
+
+TEST_F(HDBParserTest, can_parse_section)
+{
+    hdb::grammar g;
+    using boost::spirit::ascii::space;
+    const std::string s = " [List_calculated_periods]\n"
+                          "   1.00\n"
+                          "   2.00\n"
+                          "   3.00\n"
+                          "   3.50\n"
+                          "   3.80\n"
+                          "   4.00\n";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    hdb::Section section;
+    qi::phrase_parse(b, e, g.section,space,section);
+
+    ASSERT_EQ("List_calculated_periods", section.header);
+    ASSERT_EQ(6,section.values.size());
+    ASSERT_DOUBLE_EQ(1,   section.values.at(0));
+    ASSERT_DOUBLE_EQ(2,   section.values.at(1));
+    ASSERT_DOUBLE_EQ(3,   section.values.at(2));
+    ASSERT_DOUBLE_EQ(3.5, section.values.at(3));
+    ASSERT_DOUBLE_EQ(3.8, section.values.at(4));
+    ASSERT_DOUBLE_EQ(4,   section.values.at(5));
 }
