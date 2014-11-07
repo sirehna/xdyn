@@ -58,9 +58,9 @@ namespace hdb
         std::vector<SectionWithId> sections_with_id;
     };
 
-    struct File
+    struct AST
     {
-        File() : string_keys(), value_keys(), sections(), sections_with_id(), list_of_sections(), list_of_sections_with_id() {}
+        AST() : string_keys(), value_keys(), sections(), sections_with_id(), list_of_sections(), list_of_sections_with_id() {}
 
         std::vector<Key<std::string> >    string_keys;
         std::vector<Key<double> >         value_keys;
