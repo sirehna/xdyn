@@ -10,6 +10,7 @@
 #include "hdb_data.hpp"
 #include "hdb_to_ast.hpp"
 #include "hdb_parser_internal_data_structures.hpp"
+#include "hdb_grammar.hpp"
 
 HDBParserTest::HDBParserTest() : a(ssc::random_data_generator::DataGenerator(212))
 {
@@ -81,3 +82,15 @@ TEST_F(HDBParserTest, can_parse_value_key)
     ASSERT_EQ(1.23,hdb_file.value_keys.at(0).value);
 }
 
+TEST_F(HDBParserTest, can_parse_list_of_doubles)
+{
+    hdb::grammar g;
+    using boost::spirit::ascii::space;
+    const std::string s = "12.1 12.3456789";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::vector<double> d;
+    const bool match = qi::phrase_parse(b, e, g.values,space,d);
+    ASSERT_EQ(2,d.size());
+    ASSERT_DOUBLE_EQ(12.1,d.front());
+    ASSERT_DOUBLE_EQ(12.3456789,d.back());
+}
