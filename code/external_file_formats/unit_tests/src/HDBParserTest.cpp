@@ -12,6 +12,8 @@
 #include "hdb_parser_internal_data_structures.hpp"
 #include "hdb_grammar.hpp"
 
+using boost::spirit::ascii::space;
+
 HDBParserTest::HDBParserTest() : a(ssc::random_data_generator::DataGenerator(212))
 {
 }
@@ -98,7 +100,6 @@ TEST_F(HDBParserTest, can_parse_list_of_doubles)
 TEST_F(HDBParserTest, can_parse_key)
 {
     hdb::grammar g;
-    using boost::spirit::ascii::space;
     const std::string s = "[sdgf sdfgsdgf sdfgsdg]";
     std::string::const_iterator b = s.begin(), e = s.end();
     std::string actual;
@@ -110,7 +111,6 @@ TEST_F(HDBParserTest, can_parse_key)
 TEST_F(HDBParserTest, can_parse_section)
 {
     hdb::grammar g;
-    using boost::spirit::ascii::space;
     const std::string s = " [List_calculated_periods]\n"
                           "   1.00\n"
                           "   2.00\n"
