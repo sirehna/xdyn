@@ -94,3 +94,14 @@ TEST_F(HDBParserTest, can_parse_list_of_doubles)
     ASSERT_DOUBLE_EQ(12.1,d.front());
     ASSERT_DOUBLE_EQ(12.3456789,d.back());
 }
+
+TEST_F(HDBParserTest, can_parse_key)
+{
+    hdb::grammar g;
+    using boost::spirit::ascii::space;
+    const std::string s = "[sdgf sdfgsdgf sdfgsdg]";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::string actual;
+    const bool match = qi::phrase_parse(b, e, g.header,space,actual);
+    ASSERT_EQ("sdgf sdfgsdgf sdfgsdg",actual);
+}
