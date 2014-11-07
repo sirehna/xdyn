@@ -5,7 +5,10 @@ SET(SRC src/HDBFile.cpp
         src/HDBParser.cpp
         src/StlReader.cpp
         src/stl_writer.cpp
+        src/hdb_to_ast.cpp
         )
+
+SET(CMAKE_CXX_FLAGS " -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros -std=gnu++0x")
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
