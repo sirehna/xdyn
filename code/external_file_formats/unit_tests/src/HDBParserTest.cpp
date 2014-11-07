@@ -73,4 +73,11 @@ TEST_F(HDBParserTest, can_parse_string_key)
     ASSERT_EQ("string",hdb_file.string_keys.at(0).value);
 }
 
+TEST_F(HDBParserTest, can_parse_value_key)
+{
+    const hdb::AST hdb_file = hdb::parse("[FORWARD SPEED]   1.23");
+    ASSERT_EQ(1,hdb_file.value_keys.size());
+    ASSERT_EQ("FORWARD SPEED",hdb_file.value_keys.at(0).header);
+    ASSERT_EQ(1.23,hdb_file.value_keys.at(0).value);
+}
 
