@@ -16,6 +16,7 @@ namespace hdb
     typedef std::string        Header;
     typedef double             Value;
     typedef std::vector<Value> Values;
+    typedef std::vector<Values> ListOfValues;
 
     template <typename T> struct Key
     {
@@ -25,12 +26,20 @@ namespace hdb
         T      value;
     };
 
-    struct Section
+    struct VectorSection
     {
-        Section() : header(), values() {}
+            VectorSection() : header(), values() {}
 
         Header header;
         Values values;
+    };
+
+    struct MatrixSection
+    {
+            MatrixSection() : header(), values() {}
+
+        Header header;
+        ListOfValues values;
     };
 
     struct SectionWithId
@@ -39,7 +48,7 @@ namespace hdb
 
         Header header;
         Value  id;
-        Values values;
+        ListOfValues values;
     };
 
     struct ListOfSections
@@ -47,7 +56,7 @@ namespace hdb
         ListOfSections() : header(), sections() {}
 
         Header               header;
-        std::vector<Section> sections;
+        std::vector<MatrixSection> sections;
     };
 
     struct ListOfSectionsWithId
@@ -60,11 +69,12 @@ namespace hdb
 
     struct AST
     {
-        AST() : string_keys(), value_keys(), sections(), sections_with_id(), list_of_sections(), list_of_sections_with_id() {}
+        AST() : string_keys(), value_keys(), vector_sections(), matrix_sections(), sections_with_id(), list_of_sections(), list_of_sections_with_id() {}
 
         std::vector<Key<std::string> >    string_keys;
         std::vector<Key<double> >         value_keys;
-        std::vector<Section>              sections;
+        std::vector<VectorSection>        vector_sections;
+        std::vector<MatrixSection>        matrix_sections;
         std::vector<SectionWithId>        sections_with_id;
         std::vector<ListOfSections>       list_of_sections;
         std::vector<ListOfSectionsWithId> list_of_sections_with_id;

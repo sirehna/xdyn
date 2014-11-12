@@ -14,22 +14,28 @@
 // We need to tell fusion about our structures
 // to make them a first-class fusion citizen.
 BOOST_FUSION_ADAPT_STRUCT(
-    hdb::Section,
-    (hdb::Header,    header)
-    (hdb::Values,    values)
+    hdb::VectorSection,
+    (hdb::Header, header)
+    (hdb::Values, values)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+    hdb::MatrixSection,
+    (hdb::Header,       header)
+    (hdb::ListOfValues, values)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
     hdb::SectionWithId,
-    (hdb::Header,    header)
-    (hdb::Value,     id)
-    (hdb::Values,    values)
+    (hdb::Header,       header)
+    (hdb::Value,        id)
+    (hdb::ListOfValues, values)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
     hdb::ListOfSections,
     (hdb::Header,               header)
-    (std::vector<hdb::Section>, sections)
+    (std::vector<hdb::MatrixSection>, sections)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -59,7 +65,8 @@ namespace boost { namespace spirit { namespace traits {
              typedef boost::variant<
                      hdb::Key<std::string>
                     ,hdb::Key<double>
-                    ,hdb::Section
+                    ,hdb::VectorSection
+                    ,hdb::MatrixSection
                     ,hdb::SectionWithId
                     ,hdb::ListOfSections
                     ,hdb::ListOfSectionsWithId
@@ -81,9 +88,16 @@ namespace boost { namespace spirit { namespace traits {
                 }
             };
     template <>
-                struct push_back_container<hdb::AST, hdb::Section, void> {
-                    static bool call(hdb::AST& f, const hdb::Section& val) {
-                        f.sections.push_back(val);
+                struct push_back_container<hdb::AST, hdb::VectorSection, void> {
+                    static bool call(hdb::AST& f, const hdb::VectorSection& val) {
+                        f.vector_sections.push_back(val);
+                        return true;
+                    }
+                };
+    template <>
+                struct push_back_container<hdb::AST, hdb::MatrixSection, void> {
+                    static bool call(hdb::AST& f, const hdb::MatrixSection& val) {
+                        f.matrix_sections.push_back(val);
                         return true;
                     }
                 };

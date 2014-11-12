@@ -17,15 +17,16 @@ namespace hdb
     {
         hdb_grammar() : hdb_grammar::base_type(ast)
         {
-            ast                      %= string_key | value_key | section | section_with_id | list_of_sections | list_of_sections_with_id;
+            ast                      %= string_key | value_key | vector_section | matrix_section | section_with_id | list_of_sections | list_of_sections_with_id;
             str   %= qi::lexeme[qi::char_("_a-zA-Z") >> +(qi::char_("-_a-zA-Z0-9+")) >> *(qi::hold[+(qi::char_(' ')) >> +(qi::char_("-_a-zA-Z0-9+"))])]; // 'hold' parses space only if next token matches word;
 
             header                   %= lit('[') >> str >> lit(']');
             string_key               %= header >> str;
             value_key                %= header >> double_;
             values                   %= +(double_);
-            section                  %= header >> +(double_ % (qi::no_skip[qi::eol] | ' '));
-            list_of_sections         %= header >> +(eol >> section);
+            vector_section           %= header >> +(double_ % qi::eol);
+            matrix_section           %= header >> +((double_ >> +double_) % qi::eol);
+            list_of_sections         %= header >> (matrix_section % qi::eol);
             section_with_id          %= header >> double_ >> +(eol >> values);
             list_of_sections_with_id %= header >> +(eol >> section_with_id);
         }
@@ -37,7 +38,8 @@ namespace hdb
         qi::rule<Iterator, hdb::Key<std::string>(), ascii::space_type>     string_key;
         qi::rule<Iterator, hdb::ListOfSections(), ascii::space_type>       list_of_sections;
         qi::rule<Iterator, hdb::ListOfSectionsWithId(), ascii::space_type> list_of_sections_with_id;
-        qi::rule<Iterator, hdb::Section(), ascii::space_type>              section;
+        qi::rule<Iterator, hdb::VectorSection(), ascii::space_type>        vector_section;
+        qi::rule<Iterator, hdb::MatrixSection(), ascii::space_type>        matrix_section;
         qi::rule<Iterator, hdb::SectionWithId(), ascii::space_type>        section_with_id;
         qi::rule<Iterator, hdb::Values(), ascii::space_type>               values;
     };
