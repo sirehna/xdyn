@@ -43,27 +43,35 @@ std::ostream& operator<<(std::ostream& os, const hdb::AST& f)
     {
         os << "[" << it->header << "] = " << it->value << std::endl;
     }
-    if (not(f.sections.empty())) os << "Sections:\n";
-    for (auto it = f.sections.begin() ; it != f.sections.end() ; ++it)
+    if (not(f.matrix_sections.empty())) os << "Sections:\n";
+    for (auto it = f.matrix_sections.begin() ; it != f.matrix_sections.end() ; ++it)
     {
-        os << "[" << it->header << "] = [";
+        os << "[" << it->header << "] = ";
         for (size_t i = 0 ; i < it->values.size() ; ++i)
         {
-            os << it->values.at(i);
-            if (i < it->values.size()-1) os << ",";
+            os << "[";
+            for (size_t j = 0 ; j < it->values.at(i).size() ; ++j)
+            {
+                os << it->values.at(i).at(j);
+                if (i < it->values.at(i).size()-1) os << ",";
+            }
+            os << "]" << std::endl;
         }
-        os << "]" << std::endl;
     }
     if (not(f.sections_with_id.empty())) os << "Sections with ID:\n";
     for (auto it = f.sections_with_id.begin() ; it != f.sections_with_id.end() ; ++it)
     {
-        os << "[" << it->header << "] [" << it->id << "] = [";
+        os << "[" << it->header << "] = ";
         for (size_t i = 0 ; i < it->values.size() ; ++i)
         {
-            os << it->values.at(i);
-            if (i < it->values.size()-1) os << ",";
+            os << "[";
+            for (size_t j = 0 ; j < it->values.at(i).size() ; ++j)
+            {
+                os << it->values.at(i).at(j);
+                if (i < it->values.at(i).size()-1) os << ",";
+            }
+            os << "]" << std::endl;
         }
-        os << "]" << std::endl;
     }
     return os;
 }
@@ -119,8 +127,8 @@ TEST_F(HDBParserTest, can_parse_section)
                           "   3.80\n"
                           "   4.00\n";
     std::string::const_iterator b = s.begin(), e = s.end();
-    hdb::Section section;
-    qi::phrase_parse(b, e, g.section,space,section);
+    hdb::VectorSection section;
+    qi::phrase_parse(b, e, g.vector_section,space,section);
 
     ASSERT_EQ("List_calculated_periods", section.header);
     ASSERT_EQ(6,section.values.size());
@@ -131,7 +139,6 @@ TEST_F(HDBParserTest, can_parse_section)
     ASSERT_DOUBLE_EQ(3.8, section.values.at(4));
     ASSERT_DOUBLE_EQ(4,   section.values.at(5));
 }
-
 
 TEST_F(HDBParserTest, can_parse_two_sections)
 {
@@ -158,11 +165,13 @@ TEST_F(HDBParserTest, can_parse_two_sections)
                           "   165.0000    \n"
                           "   180.0000    \n";
     std::string::const_iterator b = s.begin(), e = s.end();
-    std::vector<hdb::Section> sections;
-    qi::phrase_parse(b, e, *(g.section),space,sections);
+    std::vector<hdb::VectorSection> sections;
+    qi::phrase_parse(b, e, *(g.vector_section),space,sections);
     ASSERT_EQ(2,sections.size());
     ASSERT_EQ("List_calculated_periods", sections.at(0).header);
     ASSERT_EQ("List_calculated_headings", sections.at(1).header);
+    ASSERT_EQ(6,sections.at(0).values.size());
+    ASSERT_EQ(13,sections.at(1).values.size());
     ASSERT_DOUBLE_EQ(75,sections.at(1).values.at(5));
 }
 
