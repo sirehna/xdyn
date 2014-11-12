@@ -18,9 +18,10 @@ namespace hdb
         hdb_grammar() : hdb_grammar::base_type(ast)
         {
             ast                      %= string_key | value_key | section | section_with_id | list_of_sections | list_of_sections_with_id;
-            str = char_("a-zA-Z") >> *char_("a-zA-Z_0-9");
+            str   %= qi::lexeme[qi::char_("_a-zA-Z") >> +(qi::char_("-_a-zA-Z0-9+")) >> *(qi::hold[+(qi::char_(' ')) >> +(qi::char_("-_a-zA-Z0-9+"))])]; // 'hold' parses space only if next token matches word;
+
             header                   %= lexeme['[' >> +(char_ - '[' - ']') >> ']'];
-            string_key               %= header >> str >> *char_;
+            string_key               %= header >> str;
             value_key                %= header >> double_;
             values                   %= +(double_);
             section                  %= header >> +(double_ % (qi::no_skip[qi::eol] | ' '));

@@ -163,3 +163,13 @@ TEST_F(HDBParserTest, can_parse_two_sections)
     ASSERT_EQ(2,sections.size());
     ASSERT_DOUBLE_EQ(75,sections.at(1).values.at(5));
 }
+
+TEST_F(HDBParserTest, can_parse_string)
+{
+    hdb::grammar g;
+    const std::string s = " sdfgsdfg 456ggf 4ggffs  ";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::string string;
+    qi::phrase_parse(b, e, g.str,space,string);
+    ASSERT_EQ("sdfgsdfg 456ggf 4ggffs", string);
+}
