@@ -33,8 +33,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    hdb::ListOfSections,
-    (hdb::Header,               header)
+    hdb::ListOfMatrixSections,
+    (hdb::Header,                     header)
     (std::vector<hdb::MatrixSection>, sections)
 )
 
@@ -68,7 +68,7 @@ namespace boost { namespace spirit { namespace traits {
                     ,hdb::VectorSection
                     ,hdb::MatrixSection
                     ,hdb::SectionWithId
-                    ,hdb::ListOfSections
+                    ,hdb::ListOfMatrixSections
                     ,hdb::ListOfSectionsWithId
              > type;
         };
@@ -109,16 +109,16 @@ namespace boost { namespace spirit { namespace traits {
                         }
                     };
     template <>
-                    struct push_back_container<hdb::AST, hdb::ListOfSections, void> {
-                        static bool call(hdb::AST& f, const hdb::ListOfSections& val) {
-                            f.list_of_sections.push_back(val);
+                    struct push_back_container<hdb::AST, hdb::ListOfSectionsWithId, void> {
+                        static bool call(hdb::AST& f, const hdb::ListOfSectionsWithId& val) {
+                            f.lists_of_sections_with_id.push_back(val);
                             return true;
                         }
                     };
     template <>
-                    struct push_back_container<hdb::AST, hdb::ListOfSectionsWithId, void> {
-                        static bool call(hdb::AST& f, const hdb::ListOfSectionsWithId& val) {
-                            f.list_of_sections_with_id.push_back(val);
+                    struct push_back_container<hdb::AST, hdb::ListOfMatrixSections, void> {
+                        static bool call(hdb::AST& f, const hdb::ListOfMatrixSections& val) {
+                            f.lists_of_matrix_sections.push_back(val);
                             return true;
                         }
                     };
