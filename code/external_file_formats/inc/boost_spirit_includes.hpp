@@ -33,6 +33,7 @@ using qi::on_error;
 using qi::fail;
 using ascii::char_;
 using ascii::alpha;
+using ascii::alnum;
 using ascii::string;
 using namespace qi::labels;
 
