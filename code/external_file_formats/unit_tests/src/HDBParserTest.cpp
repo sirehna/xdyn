@@ -175,3 +175,15 @@ TEST_F(HDBParserTest, can_parse_string)
     qi::phrase_parse(b, e, g.str,space,string);
     ASSERT_EQ("sdfgsdfg 456ggf 4ggffs", string);
 }
+
+TEST_F(HDBParserTest, can_parse_one_string_keys)
+{
+    hdb::grammar g;
+    const std::string s = "[key 1] value 1\n";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::vector<hdb::Key<std::string> > string_keys;
+    qi::phrase_parse(b, e, *(g.string_key),space,string_keys);
+    ASSERT_EQ(1,string_keys.size());
+    ASSERT_EQ("key 1",string_keys.at(0).header);
+    ASSERT_EQ("value 1",string_keys.at(0).value);
+}
