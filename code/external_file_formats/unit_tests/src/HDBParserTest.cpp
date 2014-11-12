@@ -161,6 +161,8 @@ TEST_F(HDBParserTest, can_parse_two_sections)
     std::vector<hdb::Section> sections;
     qi::phrase_parse(b, e, *(g.section),space,sections);
     ASSERT_EQ(2,sections.size());
+    ASSERT_EQ("List_calculated_periods", sections.at(0).header);
+    ASSERT_EQ("List_calculated_headings", sections.at(1).header);
     ASSERT_DOUBLE_EQ(75,sections.at(1).values.at(5));
 }
 
