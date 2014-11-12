@@ -23,9 +23,9 @@ namespace hdb
             header                   %= lit('[') >> str >> lit(']');
             string_key               %= header >> str;
             value_key                %= header >> double_;
-            values                   %= +(double_);
+            values                   %= double_ >> double_ >> double_ >> double_ >> double_ >> double_ >> double_;
             vector_section           %= header >> +(double_ % qi::eol);
-            matrix_section           %= header >> +((double_ >> +double_) % qi::eol);
+            matrix_section           %= header >> +(values % qi::eol);
             list_of_sections         %= header >> (matrix_section % qi::eol);
             section_with_id          %= header >> double_ >> +(eol >> values);
             list_of_sections_with_id %= header >> +(eol >> section_with_id);
