@@ -20,7 +20,7 @@ namespace hdb
             ast                      %= string_key | value_key | section | section_with_id | list_of_sections | list_of_sections_with_id;
             str   %= qi::lexeme[qi::char_("_a-zA-Z") >> +(qi::char_("-_a-zA-Z0-9+")) >> *(qi::hold[+(qi::char_(' ')) >> +(qi::char_("-_a-zA-Z0-9+"))])]; // 'hold' parses space only if next token matches word;
 
-            header                   %= lexeme['[' >> +(char_ - '[' - ']') >> ']'];
+            header                   %= lit('[') >> str >> lit(']');
             string_key               %= header >> str;
             value_key                %= header >> double_;
             values                   %= +(double_);
