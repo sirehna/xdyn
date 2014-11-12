@@ -109,9 +109,8 @@ TEST_F(HDBParserTest, can_parse_key)
 {
     hdb::grammar g;
     const std::string s = "[sdgf sdfgsdgf sdfgsdg]";
-    std::string::const_iterator b = s.begin(), e = s.end();
     std::string actual;
-    qi::phrase_parse(b, e, g.header,space,actual);
+    qi::phrase_parse(s.begin(), s.end(), g.header,space,actual);
     ASSERT_EQ("sdgf sdfgsdgf sdfgsdg",actual);
 }
 
@@ -126,9 +125,8 @@ TEST_F(HDBParserTest, can_parse_section)
                           "   3.50\n"
                           "   3.80\n"
                           "   4.00\n";
-    std::string::const_iterator b = s.begin(), e = s.end();
     hdb::VectorSection section;
-    qi::phrase_parse(b, e, g.vector_section,space,section);
+    qi::phrase_parse(s.begin(), s.end(), g.vector_section,space,section);
 
     ASSERT_EQ("List_calculated_periods", section.header);
     ASSERT_EQ(6,section.values.size());
@@ -164,9 +162,8 @@ TEST_F(HDBParserTest, can_parse_two_sections)
                           "   150.0000    \n"
                           "   165.0000    \n"
                           "   180.0000    \n";
-    std::string::const_iterator b = s.begin(), e = s.end();
     std::vector<hdb::VectorSection> sections;
-    qi::phrase_parse(b, e, *(g.vector_section),space,sections);
+    qi::phrase_parse(s.begin(), s.end(), *(g.vector_section),space,sections);
     ASSERT_EQ(2,sections.size());
     ASSERT_EQ("List_calculated_periods", sections.at(0).header);
     ASSERT_EQ("List_calculated_headings", sections.at(1).header);
@@ -189,9 +186,8 @@ TEST_F(HDBParserTest, can_parse_one_string_keys)
 {
     hdb::grammar g;
     const std::string s = "[key 1] value 1\n";
-    std::string::const_iterator b = s.begin(), e = s.end();
     std::vector<hdb::Key<std::string> > string_keys;
-    qi::phrase_parse(b, e, *(g.string_key),space,string_keys);
+    qi::phrase_parse(s.begin(), s.end(), *(g.string_key),space,string_keys);
     ASSERT_EQ(1,string_keys.size());
     ASSERT_EQ("key 1",string_keys.at(0).header);
     ASSERT_EQ("value 1",string_keys.at(0).value);
@@ -202,9 +198,8 @@ TEST_F(HDBParserTest, can_parse_several_string_keys)
     hdb::grammar g;
     const std::string s = "[   key 1 ]     value 1\n"
                           "[  key 2     ]   value 2    \n";
-    std::string::const_iterator b = s.begin(), e = s.end();
     std::vector<hdb::Key<std::string> > string_keys;
-    qi::phrase_parse(b, e, *(g.string_key),space,string_keys);
+    qi::phrase_parse(s.begin(), s.end(), *(g.string_key),space,string_keys);
     ASSERT_EQ(2,string_keys.size());
     ASSERT_EQ("key 1",string_keys.at(0).header);
     ASSERT_EQ("value 1",string_keys.at(0).value);
@@ -259,9 +254,8 @@ TEST_F(HDBParserTest, can_parse_a_list_of_matrix_sections)
                           "    3.50  4.355995E+00  1.434086E+05  1.251381E+00  9.963283E+03  2.165019E+02  1.510785E+05\n"
                           "    3.80  2.883454E+00  1.810525E+05 -1.780741E+01  4.558459E+02  1.719431E+02  1.801648E+05\n"
                           "    4.00  2.647226E+00  2.104009E+05 -2.568808E+01 -8.096014E+03  1.758119E+02  2.022041E+05\n";
-    std::string::const_iterator b = s.begin(), e = s.end();
     std::vector<hdb::ListOfMatrixSections> lists_of_sections;
-    qi::phrase_parse(b, e, g.list_of_matrix_sections,space,lists_of_sections);
+    qi::phrase_parse(s.begin(), s.end(), g.list_of_matrix_sections,space,lists_of_sections);
     ASSERT_EQ(1, lists_of_sections.size());
     ASSERT_EQ("Added_mass_Radiation_Damping", lists_of_sections.at(0).header);
     ASSERT_EQ(2, lists_of_sections.at(0).sections.size());
