@@ -240,3 +240,53 @@ TEST_F(HDBParserTest, can_parse_a_matrix_section)
     ASSERT_DOUBLE_EQ(1.887115E+05, m.values.at(0).at(5));
     ASSERT_DOUBLE_EQ(9.087353E+00, m.values.at(0).at(6));
 }
+
+TEST_F(HDBParserTest, can_parse_a_list_of_matrix_sections)
+{
+    hdb::grammar g;
+    const std::string s = " [Added_mass_Radiation_Damping]\n"
+                          " [ADDED_MASS_LINE_1]\n"
+                          "    1.00  1.097184E+04 -4.534383E+01  1.489058E+04 -6.476872E+01  1.887115E+05  9.087353E+00\n"
+                          "    2.00  9.377615E+03 -8.511539E+01  1.576359E+04  3.108509E+00  1.619423E+05  3.926564E+02\n"
+                          "    3.00  1.426635E+04 -1.940786E+01  1.841663E+04 -3.755692E+01  1.900012E+05  3.589405E+02\n"
+                          "    3.50  1.765988E+04 -2.229278E+01  1.878402E+04 -4.122345E+01  2.292613E+05  3.676993E+02\n"
+                          "    3.80  2.066126E+04 -2.218779E+01  1.939457E+04 -4.426564E+01  2.686258E+05  3.974906E+02\n"
+                          "    4.00  2.287093E+04 -2.404940E+01  1.989585E+04 -4.781980E+01  2.971014E+05  4.187755E+02\n"
+                          " [ADDED_MASS_LINE_2]\n"
+                          "    1.00  5.372426E+00  1.039658E+05 -1.038983E+01  1.798326E+04  1.127642E+02  6.116315E+04\n"
+                          "    2.00 -2.935182E+01  7.581280E+04  1.907894E+01  2.102286E+04 -2.443126E+02  2.305457E+04\n"
+                          "    3.00  8.574823E+00  1.019513E+05  1.553684E+01  2.051240E+04  2.377617E+02  1.078476E+05\n"
+                          "    3.50  4.355995E+00  1.434086E+05  1.251381E+00  9.963283E+03  2.165019E+02  1.510785E+05\n"
+                          "    3.80  2.883454E+00  1.810525E+05 -1.780741E+01  4.558459E+02  1.719431E+02  1.801648E+05\n"
+                          "    4.00  2.647226E+00  2.104009E+05 -2.568808E+01 -8.096014E+03  1.758119E+02  2.022041E+05\n";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::vector<hdb::ListOfMatrixSections> lists_of_sections;
+    qi::phrase_parse(b, e, g.list_of_matrix_sections,space,lists_of_sections);
+    ASSERT_EQ(1, lists_of_sections.size());
+    ASSERT_EQ("Added_mass_Radiation_Damping", lists_of_sections.at(0).header);
+    ASSERT_EQ(2, lists_of_sections.at(0).sections.size());
+    ASSERT_EQ("ADDED_MASS_LINE_1", lists_of_sections.at(0).sections.at(0).header);
+    ASSERT_EQ("ADDED_MASS_LINE_2", lists_of_sections.at(0).sections.at(1).header);
+    ASSERT_EQ(6, lists_of_sections.at(0).sections.at(0).values.size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(0).values.at(0).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(0).values.at(1).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(0).values.at(2).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(0).values.at(3).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(0).values.at(4).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(0).values.at(5).size());
+    ASSERT_EQ(6, lists_of_sections.at(0).sections.at(1).values.size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(1).values.at(0).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(1).values.at(1).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(1).values.at(2).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(1).values.at(3).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(1).values.at(4).size());
+    ASSERT_EQ(7, lists_of_sections.at(0).sections.at(1).values.at(5).size());
+
+    ASSERT_DOUBLE_EQ(3.50, lists_of_sections.at(0).sections.at(1).values.at(3).at(0));
+    ASSERT_DOUBLE_EQ(4.355995, lists_of_sections.at(0).sections.at(1).values.at(3).at(1));
+    ASSERT_DOUBLE_EQ(1.434086E+05, lists_of_sections.at(0).sections.at(1).values.at(3).at(2));
+    ASSERT_DOUBLE_EQ(1.251381, lists_of_sections.at(0).sections.at(1).values.at(3).at(3));
+    ASSERT_DOUBLE_EQ(9.963283E+03, lists_of_sections.at(0).sections.at(1).values.at(3).at(4));
+    ASSERT_DOUBLE_EQ(2.165019E+02, lists_of_sections.at(0).sections.at(1).values.at(3).at(5));
+    ASSERT_DOUBLE_EQ(1.510785E+05, lists_of_sections.at(0).sections.at(1).values.at(3).at(6));
+}
