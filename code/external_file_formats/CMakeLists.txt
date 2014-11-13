@@ -6,6 +6,7 @@ SET(SRC src/HDBFile.cpp
         src/StlReader.cpp
         src/stl_writer.cpp
         src/hdb_to_ast.cpp
+        src/pretty_print_hdb.cpp
         )
 
 SET(CMAKE_CXX_FLAGS " -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros -std=gnu++0x")
