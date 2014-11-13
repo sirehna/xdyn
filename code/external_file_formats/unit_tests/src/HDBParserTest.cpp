@@ -5,7 +5,6 @@
  *      Author: cady
  */
 
-#include "HDBParser.hpp"
 #include "HDBParserTest.hpp"
 #include "hdb_data.hpp"
 #include "hdb_to_ast.hpp"

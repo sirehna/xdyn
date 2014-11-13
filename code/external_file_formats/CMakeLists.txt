@@ -1,9 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(external_file_formats)
 
-SET(SRC src/HDBFile.cpp
-        src/HDBParser.cpp
-        src/StlReader.cpp
+SET(SRC src/StlReader.cpp
         src/stl_writer.cpp
         src/hdb_to_ast.cpp
         src/pretty_print_hdb.cpp
