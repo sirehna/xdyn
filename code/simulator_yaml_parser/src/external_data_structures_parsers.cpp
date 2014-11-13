@@ -152,13 +152,31 @@ void operator >> (const YAML::Node& node, YamlPoint& p)
 
 void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
 {
-    node["frame"] >> m.frame;
-    node["row 1"] >> m.row_1;
-    node["row 2"] >> m.row_2;
-    node["row 3"] >> m.row_3;
-    node["row 4"] >> m.row_4;
-    node["row 5"] >> m.row_5;
-    node["row 6"] >> m.row_6;
+    if (const YAML::Node *parameter = node.FindValue("from hdb file"))
+    {
+        if (   node.FindValue("frame")
+            or node.FindValue("row 1")
+            or node.FindValue("row 2")
+            or node.FindValue("row 3")
+            or node.FindValue("row 4")
+            or node.FindValue("row 5")
+            or node.FindValue("row 6"))
+        {
+            THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': cannot specify both an HDB filename & a matrix.");
+        }
+        m.read_from_file = true;
+        *parameter >> m.hdb_filename;
+    }
+    else
+    {
+        node["frame"] >> m.frame;
+        node["row 1"] >> m.row_1;
+        node["row 2"] >> m.row_2;
+        node["row 3"] >> m.row_3;
+        node["row 4"] >> m.row_4;
+        node["row 5"] >> m.row_5;
+        node["row 6"] >> m.row_6;
+    }
 }
 
 void operator >> (const YAML::Node& node, YamlBlockedDegreesOfFreedom& m)

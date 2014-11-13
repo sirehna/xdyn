@@ -216,6 +216,14 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix)
     ASSERT_DOUBLE_EQ(6.3, M.row_6.at(5));
 }
 
+TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_from_hdb_file)
+{
+    const YamlDynamics6x6Matrix M =  yaml.bodies.front().dynamics.added_mass;
+    const YamlSimulatorInput input = SimulatorYamlParser(test_data::added_mass_from_file()).parse();
+    ASSERT_TRUE(input.bodies.front().dynamics.added_mass.read_from_file);
+    ASSERT_EQ("anthineas.hdb", input.bodies.front().dynamics.added_mass.hdb_filename);
+}
+
 TEST_F(SimulatorYamlParserTest, can_parse_points)
 {
     const std::vector<YamlPoint> points = yaml.points;
