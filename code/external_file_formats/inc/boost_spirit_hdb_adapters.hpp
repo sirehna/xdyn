@@ -39,7 +39,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    hdb::ListOfSectionsWithId,
+    hdb::ListOfMatrixSectionsWithId,
     (hdb::Header,                     header)
     (std::vector<hdb::SectionWithId>, sections_with_id)
 )
@@ -56,21 +56,25 @@ BOOST_FUSION_ADAPT_STRUCT(
     (double, value)
 )
 
+namespace hdb
+{
+    typedef boost::variant<
+                         hdb::Key<std::string>
+                        ,hdb::Key<double>
+                        ,hdb::VectorSection
+                        ,hdb::MatrixSection
+                        ,hdb::ListOfMatrixSections
+                        ,hdb::ListOfMatrixSectionsWithId
+                 > Ast;
+}
+
 namespace boost { namespace spirit { namespace traits {
 
     template<>
         struct is_container<hdb::AST, void> : mpl::true_ { };
     template<>
         struct container_value<hdb::AST, void> {
-             typedef boost::variant<
-                     hdb::Key<std::string>
-                    ,hdb::Key<double>
-                    ,hdb::VectorSection
-                    ,hdb::MatrixSection
-                    ,hdb::SectionWithId
-                    ,hdb::ListOfMatrixSections
-                    ,hdb::ListOfSectionsWithId
-             > type;
+             typedef hdb::Ast type;
         };
 
     template <>
@@ -102,16 +106,9 @@ namespace boost { namespace spirit { namespace traits {
                     }
                 };
     template <>
-                    struct push_back_container<hdb::AST, hdb::SectionWithId, void> {
-                        static bool call(hdb::AST& f, const hdb::SectionWithId& val) {
-                            f.sections_with_id.push_back(val);
-                            return true;
-                        }
-                    };
-    template <>
-                    struct push_back_container<hdb::AST, hdb::ListOfSectionsWithId, void> {
-                        static bool call(hdb::AST& f, const hdb::ListOfSectionsWithId& val) {
-                            f.lists_of_sections_with_id.push_back(val);
+                    struct push_back_container<hdb::AST, hdb::ListOfMatrixSectionsWithId, void> {
+                        static bool call(hdb::AST& f, const hdb::ListOfMatrixSectionsWithId& val) {
+                            f.lists_of_matrix_sections_with_id.push_back(val);
                             return true;
                         }
                     };
