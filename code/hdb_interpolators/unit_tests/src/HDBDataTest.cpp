@@ -5,7 +5,10 @@
  *      Author: cady
  */
 
+#include "HDBBuilder.hpp"
+#include "HDBData.hpp"
 #include "HDBDataTest.hpp"
+#include "hdb_data.hpp"
 
 HDBDataTest::HDBDataTest() : a(ssc::random_data_generator::DataGenerator(822243))
 {
@@ -23,13 +26,34 @@ void HDBDataTest::TearDown()
 {
 }
 
-TEST_F(HDBDataTest, example)
+TEST_F(HDBDataTest, can_retrieve_initial_values)
 {
 //! [HDBDataTest example]
-//! [HDBDataTest example]
-//! [HDBDataTest expected output]
+    const HDBBuilder builder(test_data::anthineas_hdb());
+    HDBData data(builder.get_added_mass());
+    //! [HDBDataTest example]
+
+    //! [HDBDataTest expected output]
+    const auto M1 = data.get_added_mass(1);
+    ASSERT_EQ(6, M1.cols());
+    ASSERT_EQ(6, M1.rows());
+    ASSERT_DOUBLE_EQ(1.503212E+04, (double)M1(2,0));
+    ASSERT_DOUBLE_EQ(-1.618101E+02, (double)M1(2,1));
+    ASSERT_DOUBLE_EQ(1.781351E+05, (double)M1(2,2));
+    ASSERT_DOUBLE_EQ(-1.053934E+02, (double)M1(2,3));
+    ASSERT_DOUBLE_EQ(3.267841E+05, (double)M1(2,4));
+    ASSERT_DOUBLE_EQ(6.774041E+02, (double)M1(2,5));
+
+    const auto M2 = data.get_added_mass(2);
+    ASSERT_EQ(6, M2.cols());
+    ASSERT_EQ(6, M2.rows());
+    ASSERT_DOUBLE_EQ(3.032333E+01, (double)M2(3,0));
+    ASSERT_DOUBLE_EQ(2.332197E+04, (double)M2(3,1));
+    ASSERT_DOUBLE_EQ(-5.924372E+01, (double)M2(3,2));
+    ASSERT_DOUBLE_EQ(2.132689E+05, (double)M2(3,3));
+    ASSERT_DOUBLE_EQ(2.994200E+02, (double)M2(3,4));
+    ASSERT_DOUBLE_EQ(3.943479E+04, (double)M2(3,5));
 //! [HDBDataTest expected output]
 }
-
 
 
