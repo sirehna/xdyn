@@ -7,11 +7,13 @@
 
 #include "YamlDynamics6x6Matrix.hpp"
 
-YamlDynamics6x6Matrix::YamlDynamics6x6Matrix() : frame(""),
-                                                 row_1(std::vector<double>()),
-                                                 row_2(std::vector<double>()),
-                                                 row_3(std::vector<double>()),
-                                                 row_4(std::vector<double>()),
-                                                 row_5(std::vector<double>()),
-                                                 row_6(std::vector<double>())
+YamlDynamics6x6Matrix::YamlDynamics6x6Matrix() : read_from_file(false),
+                                                 hdb_filename(),
+                                                 frame(),
+                                                 row_1(),
+                                                 row_2(),
+                                                 row_3(),
+                                                 row_4(),
+                                                 row_5(),
+                                                 row_6()
 {}
