@@ -10,6 +10,8 @@
 #include "HDBDataTest.hpp"
 #include "hdb_data.hpp"
 
+#include <ssc/macros.hpp>
+
 HDBDataTest::HDBDataTest() : a(ssc::random_data_generator::DataGenerator(822243))
 {
 }
@@ -56,4 +58,17 @@ TEST_F(HDBDataTest, can_retrieve_initial_values)
 //! [HDBDataTest expected output]
 }
 
-
+TEST_F(HDBDataTest, can_retrieve_added_mass_at_Tp_0)
+{
+    const HDBBuilder builder(test_data::anthineas_hdb());
+    HDBData data(builder.get_added_mass());
+    const auto M = data.get_added_mass();
+    ASSERT_EQ(6, M.cols());
+    ASSERT_EQ(6, M.rows());
+    ASSERT_DOUBLE_EQ(1.503212E+04, (double)M(2,0));
+    ASSERT_DOUBLE_EQ(-1.618101E+02, (double)M(2,1));
+    ASSERT_DOUBLE_EQ(1.781351E+05, (double)M(2,2));
+    ASSERT_DOUBLE_EQ(-1.053934E+02, (double)M(2,3));
+    ASSERT_DOUBLE_EQ(3.267841E+05, (double)M(2,4));
+    ASSERT_DOUBLE_EQ(6.774041E+02, (double)M(2,5));
+}
