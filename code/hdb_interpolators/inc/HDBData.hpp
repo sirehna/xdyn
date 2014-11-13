@@ -28,6 +28,7 @@ class HDBData
 {
     public:
         HDBData(const TimestampedMatrices& Ma);
+        Eigen::Matrix<double,6,6> get_added_mass() const;
         Eigen::Matrix<double,6,6> get_added_mass(const double Tp //!< Period at which to interpolate the added mass
                                                 ) const; // const doesn't really mean anything here as the members are hidden inside a pimpl
     private:
