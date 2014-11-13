@@ -9,39 +9,46 @@
 #define HDB_GRAMMAR_HPP_
 
 #include "boost_spirit_hdb_adapters.hpp"
+#include <boost/spirit/include/phoenix_core.hpp>
+
+typedef ascii::blank_type SpaceType;
 
 namespace hdb
 {
     template <typename Iterator>
-    struct hdb_grammar : qi::grammar<Iterator, hdb::AST(), ascii::space_type>
+    struct hdb_grammar : qi::grammar<Iterator, hdb::Ast(), SpaceType>
     {
         hdb_grammar() : hdb_grammar::base_type(ast)
         {
-            ast                      %= string_key | value_key | vector_section | matrix_section | section_with_id | list_of_matrix_sections | list_of_sections_with_id;
-            str   %= qi::lexeme[qi::char_("_a-zA-Z") >> +(qi::char_("-_a-zA-Z0-9+")) >> *(qi::hold[+(qi::char_(' ')) >> +(qi::char_("-_a-zA-Z0-9+"))])]; // 'hold' parses space only if next token matches word;
-
-            header                   %= lit('[') >> str >> lit(']');
-            string_key               %= header >> str;
-            value_key                %= header >> double_;
-            values                   %= double_ >> double_ >> double_ >> double_ >> double_ >> double_ >> double_;
-            vector_section           %= header >> +(double_ % qi::eol);
-            matrix_section           %= header >> +(values % qi::eol);
-            list_of_matrix_sections  %= header >> +matrix_section;// % qi::eol);
-            section_with_id          %= header >> double_ >> +(eol >> values);
-            list_of_sections_with_id %= header >> +(eol >> section_with_id);
+            ast                             = string_key
+                                            | value_key
+                                            | vector_section
+                                            | matrix_section
+                                            | list_of_matrix_sections
+                                            | list_of_matrix_sections_with_id;
+            str                             %= qi::lexeme[qi::char_("_a-zA-Z") >> +(qi::char_("-_a-zA-Z0-9+")) >> *(qi::hold[+(qi::char_(' ')) >> +(qi::char_("-_a-zA-Z0-9+"))])]; // 'hold' parses space only if next token matches word;
+            header                          %= lit('[') >> str > lit(']');
+            string_key                      %= header >> str >> -eol;
+            value_key                       %= header >> double_ >> -eol;
+            values                          %= double_ >> +double_ >> -eol;
+            vector_section                  %= header >> eol >> +(double_ >> eol) >> -eol;
+            matrix_section                  %= header >> eol >> +(values % eol) >> -eol;
+            list_of_matrix_sections         %= header >> eol >> +matrix_section >> -eol;
+            section_with_id                 %= header >> double_ >> eol >> (values % eol) >> -eol;
+            list_of_matrix_sections_with_id %= header >> eol >> +(header >> double_ >> eol >> +(values % eol));
         }
 
-        qi::rule<Iterator, hdb::AST(), ascii::space_type>                  ast;
-        qi::rule<Iterator, hdb::Header(), ascii::space_type>               header;
-        qi::rule<Iterator, std::string(), ascii::space_type>               str;
-        qi::rule<Iterator, hdb::Key<double>(), ascii::space_type>          value_key;
-        qi::rule<Iterator, hdb::Key<std::string>(), ascii::space_type>     string_key;
-        qi::rule<Iterator, hdb::ListOfMatrixSections(), ascii::space_type> list_of_matrix_sections;
-        qi::rule<Iterator, hdb::ListOfSectionsWithId(), ascii::space_type> list_of_sections_with_id;
-        qi::rule<Iterator, hdb::VectorSection(), ascii::space_type>        vector_section;
-        qi::rule<Iterator, hdb::MatrixSection(), ascii::space_type>        matrix_section;
-        qi::rule<Iterator, hdb::SectionWithId(), ascii::space_type>        section_with_id;
-        qi::rule<Iterator, hdb::Values(), ascii::space_type>               values;
+        qi::rule<Iterator, hdb::Ast(), SpaceType>                        ast;
+        qi::rule<Iterator, hdb::Header(), SpaceType>                     header;
+        qi::rule<Iterator, std::string(), SpaceType>                     str;
+        qi::rule<Iterator, hdb::Key<double>(), SpaceType>                value_key;
+        qi::rule<Iterator, hdb::Key<std::string>(), SpaceType>           string_key;
+        qi::rule<Iterator, hdb::ListOfMatrixSections(), SpaceType>       list_of_matrix_sections;
+        qi::rule<Iterator, hdb::ListOfMatrixSectionsWithId(), SpaceType> list_of_matrix_sections_with_id;
+        qi::rule<Iterator, hdb::VectorSection(), SpaceType>              vector_section;
+        qi::rule<Iterator, hdb::MatrixSection(), SpaceType>              matrix_section;
+        qi::rule<Iterator, hdb::SectionWithId(), SpaceType>              section_with_id;
+        qi::rule<Iterator, hdb::Values(), SpaceType>                     values;
     };
 
     typedef hdb_grammar<std::string::const_iterator> grammar;

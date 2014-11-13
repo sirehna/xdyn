@@ -59,9 +59,9 @@ namespace hdb
         std::vector<MatrixSection> sections;
     };
 
-    struct ListOfSectionsWithId
+    struct ListOfMatrixSectionsWithId
     {
-        ListOfSectionsWithId() : header(), sections_with_id() {}
+            ListOfMatrixSectionsWithId() : header(), sections_with_id() {}
 
         Header                     header;
         std::vector<SectionWithId> sections_with_id;
@@ -69,15 +69,14 @@ namespace hdb
 
     struct AST
     {
-        AST() : string_keys(), value_keys(), vector_sections(), matrix_sections(), sections_with_id(), lists_of_matrix_sections(), lists_of_sections_with_id() {}
+        AST() : string_keys(), value_keys(), vector_sections(), matrix_sections(), lists_of_matrix_sections(), lists_of_matrix_sections_with_id() {}
 
         std::vector<Key<std::string> >    string_keys;
         std::vector<Key<double> >         value_keys;
         std::vector<VectorSection>        vector_sections;
         std::vector<MatrixSection>        matrix_sections;
-        std::vector<SectionWithId>        sections_with_id;
         std::vector<ListOfMatrixSections> lists_of_matrix_sections;
-        std::vector<ListOfSectionsWithId> lists_of_sections_with_id;
+        std::vector<ListOfMatrixSectionsWithId> lists_of_matrix_sections_with_id;
     };
 }
 
