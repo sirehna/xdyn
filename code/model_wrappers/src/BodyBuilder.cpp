@@ -6,8 +6,12 @@
  */
 
 #include <ssc/kinematics.hpp>
+#include <ssc/text_file_reader.hpp>
+
 #include "BodyBuilder.hpp"
 #include "BodyBuilderException.hpp"
+#include "HDBBuilder.hpp"
+#include "HDBData.hpp"
 #include "MeshBuilder.hpp"
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
@@ -60,7 +64,16 @@ Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mes
 void BodyBuilder::add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
 {
     const Eigen::Matrix<double,6,6> Mrb = convert(rigid_body_inertia);
-    const Eigen::Matrix<double,6,6> Ma = convert(added_mass);
+    Eigen::Matrix<double,6,6> Ma;
+    if (added_mass.read_from_file)
+    {
+        const std::string hdb = ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,added_mass.hdb_filename)).get_contents();
+        Ma = HDBData(HDBBuilder(hdb).get_added_mass()).get_added_mass();
+    }
+    else
+    {
+        Ma = convert(added_mass);
+    }
     const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
     if (fabs(Mt.determinant())<1E-10)
     {
