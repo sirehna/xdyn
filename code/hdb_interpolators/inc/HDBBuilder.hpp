@@ -8,7 +8,9 @@
 #ifndef HDBBUILDER_HPP_
 #define HDBBUILDER_HPP_
 
-#include "hdb_parser_internal_data_structures.hpp"
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
+
 #include "TimestampedMatrix.hpp"
 
 /** \brief
@@ -28,9 +30,8 @@ class HDBBuilder
 
     private:
         HDBBuilder();
-
-        void fill(TimestampedMatrices& ret, const size_t i, const hdb::ListOfValues& M) const;
-        hdb::AST tree;
+        class Impl;
+        TR1(shared_ptr)<Impl> pimpl;
 };
 
 #endif /* HDBBUILDER_HPP_ */
