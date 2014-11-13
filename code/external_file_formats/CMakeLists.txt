@@ -9,7 +9,7 @@ SET(SRC src/HDBFile.cpp
         src/pretty_print_hdb.cpp
         )
 
-SET(CMAKE_CXX_FLAGS " -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros -std=gnu++0x")
+SET(CMAKE_CXX_FLAGS " -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros -std=gnu++0x -fPIC")
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
