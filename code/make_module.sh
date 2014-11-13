@@ -11,8 +11,7 @@ echo "        )" >> $1/CMakeLists.txt
 echo "" >> $1/CMakeLists.txt
 echo "" >> $1/CMakeLists.txt
 echo "include_directories(inc)" >> $1/CMakeLists.txt
-echo "include_directories(\${exception_handling_INCLUDE_DIRS})" >> $1/CMakeLists.txt
-echo "include_directories(\${test_macros_INCLUDE_DIRS})" >> $1/CMakeLists.txt
+echo "include_directories(\${ssc_INCLUDE_DIRS})" >> $1/CMakeLists.txt
 echo "" >> $1/CMakeLists.txt
 echo "add_library (\${PROJECT_NAME}_static STATIC \${SRC})" >> $1/CMakeLists.txt
 echo "set(\${PROJECT_NAME}_INCLUDE_DIRS \${\${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH \"Path to \${PROJECT_NAME}'s include directory\")" >> $1/CMakeLists.txt
@@ -28,8 +27,7 @@ echo "" >> $1/unit_tests/CMakeLists.txt
 echo "# Include directories" >> $1/unit_tests/CMakeLists.txt
 echo "include_directories(inc)" >> $1/unit_tests/CMakeLists.txt
 echo "include_directories(\${\${MODULE_UNDER_TEST}_INCLUDE_DIRS})" >> $1/unit_tests/CMakeLists.txt
-echo "include_directories(\${random_data_generator_INCLUDE_DIRS})" >> $1/unit_tests/CMakeLists.txt
-echo "include_directories(\${test_macros_SOURCE_DIR})" >> $1/unit_tests/CMakeLists.txt
+echo "include_directories(\${ssc_INCLUDE_DIRS})" >> $1/unit_tests/CMakeLists.txt
 echo "include_directories(SYSTEM \${GTEST_INCLUDE_DIRS})" >> $1/unit_tests/CMakeLists.txt
 echo "" >> $1/unit_tests/CMakeLists.txt
 echo "add_library(\${PROJECT_NAME} OBJECT \${SRC})" >> $1/unit_tests/CMakeLists.txt
