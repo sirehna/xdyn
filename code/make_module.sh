@@ -13,7 +13,7 @@ echo "" >> $1/CMakeLists.txt
 echo "include_directories(inc)" >> $1/CMakeLists.txt
 echo "include_directories(\${ssc_INCLUDE_DIRS})" >> $1/CMakeLists.txt
 echo "" >> $1/CMakeLists.txt
-echo "add_library (\${PROJECT_NAME}_static STATIC \${SRC})" >> $1/CMakeLists.txt
+echo "ADD_LIBRARY(\${PROJECT_NAME} OBJECT \${SRC})"  >> $1/CMakeLists.txt
 echo "set(\${PROJECT_NAME}_INCLUDE_DIRS \${\${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH \"Path to \${PROJECT_NAME}'s include directory\")" >> $1/CMakeLists.txt
 echo "" >> $1/CMakeLists.txt
 echo "add_subdirectory(unit_tests)" >> $1/CMakeLists.txt
