@@ -685,7 +685,7 @@ added mass matrix at the center of buoyancy projected in the body frame:
     row 4: [0,0,0,3.189e5,0,0]
     row 5: [0,0,0,0,8.866e6,0]
     row 6: [0,0,0,0,0,6.676e6]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Elle figure dans la section `dynamics` et non dans la section `external forces`
 (bien qu'il s'agisse d'un modèle effort, proportionnel à l'accélération)
@@ -694,6 +694,20 @@ figure dans le membre de gauche de l'équation fondamentale de la dynamique
 $$M\ddot{X} = \sum F_i$$ pour des raisons de stabilité numérique (l'effort
 dépend des accélérations qui doivent justement être calculées par la résolution
 de l'équation fondamentale de la dynamique).
+
+Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
+à partir d'un fichier HDB. Pour cela, on écrit (pour lire depuis le fichier
+`anthineas.hdb`) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+added mass matrix at the center of buoyancy projected in the body frame:
+    from hdb file: anthineas.hdb
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dans ce cas, il ne faut pas spécifier les clefs `frame` et `row` (le programme
+lance une exception si on le fait).
+Comme le fichier STL, le chemin du fichier HDB est relatif à l'endroit d'où on
+lance l'exécutable.
 
 ## Efforts extérieurs
 

@@ -760,6 +760,19 @@ $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 
 $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
+## Calcul des matrices de masse ajoutée
+
+Dans le simulateur, la matrice de masses ajoutées est soit lue directement
+depuis le fichier YAML, soit calculée à partir d'un fichier DIODORE (extension
+HDB). Les fichiers HDB contenant les masses ajoutées à plusieurs périodes, on
+choisit la première, c'est-à-dire la matrice correspondant à la période la plus
+faible. On ne fait pas d'interpolation en zéro car une telle interpolation ne
+garantit pas la symmétrie et le caractère positif et défini de la matrice (les
+coefficients ont tendance à osciller fortement au voisinage de $T=0$). On
+suppose que les mailles utilisées pour le calcul des masses ajoutées
+(résolution du potentiel) sont suffisament fines pour que le résultat ait un
+sens.
+
 ## Références
 
 
@@ -997,14 +1010,13 @@ dans la situation suivante :
 
 Les efforts de diffraction sont dus à la modification du champs de pression du
 fait de la présence du navire. Ils sont interpolés à partir de tables
-hydrodynamiques. Comme les efforts de
-radiation et les efforts de masse ajoutée, ces tables sont calculées en résolvant un
-problème de condition aux limites pour le potentiel de vitesse : on utilise
-donc des codes basés sur des méthodes
-potentielles, tels qu'Aqua+. Les tables sont paramétrées en pulsation, incidence et
-vitesse d'avance (RAO d'efforts). La principale différence entre les efforts de
-radiation et les efforts de diffraction est l'écriture de la condition aux
-limites.
+hydrodynamiques. Comme les efforts de radiation et les efforts de masse
+ajoutée, ces tables sont calculées en résolvant un problème de condition aux
+limites pour le potentiel de vitesse : on utilise donc des codes basés sur des
+méthodes potentielles, tels qu'Aqua+. Les tables sont paramétrées en pulsation,
+incidence et vitesse d'avance (RAO d'efforts). La principale différence entre
+les efforts de radiation et les efforts de diffraction est l'écriture de la
+condition aux limites.
 
 ## Résistance à l'avancement
 
