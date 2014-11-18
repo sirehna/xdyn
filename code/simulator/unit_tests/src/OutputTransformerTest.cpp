@@ -118,9 +118,9 @@ TEST_F(OutputTransformerTest, can_compute_angles)
     const auto phi   = get(full_example, 0, "phi(body 1 / NED -> body 1)");
     const auto theta = get(full_example, 0, "theta(body 1 / NED -> body 1)");
     const auto psi   = get(full_example, 0, "psi(body 1 / NED -> body 1)");
-    EXPECT_NEAR(1.3, phi, EPS);
-    EXPECT_NEAR(1.4, theta, EPS);
-    EXPECT_NEAR(1.5, psi, EPS);
+    EXPECT_NEAR(1.3*180/PI, phi, EPS);
+    EXPECT_NEAR(1.4*180/PI, theta, EPS);
+    EXPECT_NEAR(1.5*180/PI, psi, EPS);
 }
 
 TEST_F(OutputTransformerTest, output_should_contain_kinetic_energy)
