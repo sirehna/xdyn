@@ -107,7 +107,6 @@ function(git_describe _var)
 	execute_process(COMMAND
 		"${GIT_EXECUTABLE}"
 		describe
-		${hash}
 		${ARGN}
 		WORKING_DIRECTORY
 		"${CMAKE_SOURCE_DIR}"
@@ -118,7 +117,7 @@ function(git_describe _var)
 		ERROR_QUIET
 		OUTPUT_STRIP_TRAILING_WHITESPACE)
 	if(NOT res EQUAL 0)
-		set(out "${out}-${res}-NOTFOUND")
+		set(out "GIT_UNTAGGED_REVISION")
 	endif()
 
 	set(${_var} "${out}" PARENT_SCOPE)
@@ -128,3 +127,32 @@ function(git_get_exact_tag _var)
 	git_describe(out --exact-match ${ARGN})
 	set(${_var} "${out}" PARENT_SCOPE)
 endfunction()
+
+FUNCTION(git_is_dirty _var)
+    IF(NOT GIT_FOUND)
+        FIND_PACKAGE(Git QUIET)
+    ENDIF()
+
+    # Run diff-index to check whether the tree is clean or not.
+    EXECUTE_PROCESS(
+        COMMAND ${GIT} diff-index --name-only HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        RESULT_VARIABLE GIT_DIFF_INDEX_RESULT
+        OUTPUT_VARIABLE GIT_DIFF_INDEX_OUTPUT
+        ERROR_VARIABLE GIT_DIFF_INDEX_ERROR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    # Check if the tree is clean.
+    IF(NOT GIT_DIFF_INDEX_RESULT AND NOT GIT_DIFF_INDEX_OUTPUT)
+        SET(PROJECT_DIRTY False)
+    ELSE()
+        SET(PROJECT_DIRTY True)
+    ENDIF()
+    SET(${_var} "${PROJECT_DIRTY}" PARENT_SCOPE)
+ENDFUNCTION()
+
+FUNCTION(get_short_git_hash _hash)
+    get_git_head_revision(_refspecvar, _hashvar)
+    STRING(REGEX REPLACE "(................).*" "\\1" short_hash ${_hashvar})
+    set(${_hash} ${short_hash} PARENT_SCOPE)
+ENDFUNCTION()
