@@ -34,7 +34,7 @@ class HDBData::Impl
             {
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
-                    ret(i,j) = M[i][j].f(Tp);
+                    ret((int)i,(int)j) = M[i][j].f(Tp);
                 }
             }
             return ret;
