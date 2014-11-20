@@ -50,9 +50,9 @@ TEST_F(LinearDampingForceModelTest, example)
         b.r = r = a.random<double>().between(-10.0,+10.0);
         const ssc::kinematics::Wrench f = F(b,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
-        for (size_t j=0;j<3;++j)
+        for (int j=0;j<3;++j)
         {
-            const size_t k = j+3;
+            const int k = j+3;
             ASSERT_NEAR(D(j,0)*b.u+D(j,1)*b.v+D(j,2)*b.w+D(j,3)*b.p+D(j,4)*b.q+D(j,5)*b.r,-f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
             ASSERT_NEAR(D(k,0)*b.u+D(k,1)*b.v+D(k,2)*b.w+D(k,3)*b.p+D(k,4)*b.q+D(k,5)*b.r,-f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
         }

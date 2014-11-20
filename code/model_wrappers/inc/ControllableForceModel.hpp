@@ -17,7 +17,7 @@
 
 namespace ssc { namespace data_source { class DataSource;}}
 class Body;
-class YamlRotation;
+struct YamlRotation;
 
 /** \brief These force models read commands from a DataSource.
  *  \details Provides facilities to the derived classes to retrieve the commands

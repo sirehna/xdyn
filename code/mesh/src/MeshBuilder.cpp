@@ -146,7 +146,7 @@ MeshBuilder::MeshBuilder(const Matrix3x& tri) : v(VectorOfVectorOfPoints()),
                                                 clockwise(false)
 {
     VectorOfPoints vv;
-    for (size_t i = 0 ; i < (size_t)tri.cols() ; ++i)
+    for (int i = 0 ; i < tri.cols() ; ++i)
     {
         vv.push_back(tri.col(i));
     }

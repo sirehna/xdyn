@@ -152,7 +152,7 @@ double OutputTransformer::compute_potential_energy(const size_t i, const StateTy
     double Ep = 0;
     for (auto that_force = forces.at(i).begin() ; that_force != forces.at(i).end() ; ++that_force)
     {
-        const double ep = (*that_force)->potential_energy(bodies.at(i),std::vector<double>(x.begin()+i*13,x.begin()+(i+1)*13-1));
+        const double ep = (*that_force)->potential_energy(bodies.at(i),std::vector<double>(x.begin()+(long)i*13,x.begin()+(long)(i+1)*13-1));
         Ep += ep;
     }
     return Ep;

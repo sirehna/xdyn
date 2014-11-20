@@ -12,7 +12,7 @@
 
 #include "ForceModel.hpp"
 
-class YamlResistanceCurve;
+struct YamlResistanceCurve;
 
 /** \brief Resistance curve given by interpolation table
  *  \details

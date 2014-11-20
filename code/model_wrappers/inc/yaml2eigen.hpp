@@ -13,11 +13,11 @@
 
 #include <ssc/kinematics.hpp>
 
-class YamlAngle;
-class YamlCoordinates;
-class YamlPoint;
-class YamlPosition;
-class YamlRotation;
+struct YamlAngle;
+struct YamlCoordinates;
+struct YamlPoint;
+struct YamlPosition;
+struct YamlRotation;
 
 /** \details Converts (phi,theta,psi) to a rotation matrix, taking the
  *           rotation convention into account

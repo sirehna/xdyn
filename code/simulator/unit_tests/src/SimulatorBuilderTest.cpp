@@ -51,9 +51,9 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
     ASSERT_EQ(1, bodies.size());
     ASSERT_EQ(input.bodies.front().name, bodies.front().name);
     const auto Id = (*bodies.front().inverse_of_the_total_inertia)*(*bodies.front().total_inertia);
-    for (size_t i = 0 ; i < 6 ; ++i)
+    for (int i = 0 ; i < 6 ; ++i)
     {
-        for (size_t j = 0 ; j < 6 ; ++j)
+        for (int j = 0 ; j < 6 ; ++j)
         {
             ASSERT_NEAR(Id(i,j), i==j, 1E-14) << "i = " << i << ", j = " << j;
         }

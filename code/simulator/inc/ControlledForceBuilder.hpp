@@ -16,7 +16,7 @@
 #include <ssc/kinematics.hpp>
 #include "ControllableForceModel.hpp"
 
-class EnvironmentAndFrames;
+struct EnvironmentAndFrames;
 
 class ControlledForceBuilderInterface
 {
