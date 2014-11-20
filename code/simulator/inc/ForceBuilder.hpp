@@ -16,7 +16,7 @@
 #include <ssc/kinematics.hpp>
 #include "ForceModel.hpp"
 
-class EnvironmentAndFrames;
+struct EnvironmentAndFrames;
 
 class ForceBuilderInterface
 {

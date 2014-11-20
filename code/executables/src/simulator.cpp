@@ -18,7 +18,7 @@
 #include <fstream>
 
 
-CHECK_SSC_VERSION(0x1b9c9e4bb06ea4d5)
+CHECK_SSC_VERSION(0x1cd11408c2e89c69)
 
 int main(int argc, char** argv)
 {

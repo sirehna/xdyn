@@ -4,6 +4,11 @@ project(binary_stl_data)
 set(SRC src/generate_anthineas.cpp
         )
 
+IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") # Otherwise CLang generates fatal error: string literal of length 253876 exceeds maximum length 65536 that C++ compilers are required to support 
+    # using Clang
+    SET(CMAKE_C_FLAGS "-Werror -Wextra -Wall -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 -Wpointer-arith -Wmissing-declarations -Wmissing-format-attribute -Wsign-compare -Wstrict-aliasing=2 -Wundef -Wconversion")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Woverloaded-virtual -Weffc++ -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros")
+ENDIF()
 
 include_directories(inc)
 include_directories(${exception_handling_INCLUDE_DIRS})

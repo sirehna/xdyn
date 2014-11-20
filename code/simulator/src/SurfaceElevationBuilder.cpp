@@ -20,10 +20,10 @@ TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationBuilderInterface::
     const size_t nx = (dx==0 and output.nx) ? 1 : output.nx;
     const size_t ny = (dy==0 and output.ny) ? 1 : output.ny;
     ssc::kinematics::PointMatrix M(output.frame_of_reference, nx*ny);
-    size_t k = 0;
-    for (size_t j = 0 ; j < ny ; ++j)
+    int k = 0;
+    for (int j = 0 ; j < (int)ny ; ++j)
     {
-        for (size_t i = 0 ; i < nx ; ++i)
+        for (int i = 0 ; i < (int)nx ; ++i)
         {
             M.m(0,k) = output.xmin + (double)i*dx;
             M.m(1,k) = output.ymin + (double)j*dy;

@@ -13,7 +13,7 @@ class FacetIterator
 
         const Facet& operator*() const
         {
-            return *(begin+*here);
+            return *(begin+(long)(*here));
         }
 
         const FacetIterator& operator++()
@@ -24,7 +24,7 @@ class FacetIterator
 
         const Facet* operator->() const
         {
-            return (begin+*here).operator ->();
+            return (begin+(long)(*here)).operator ->();
         }
 
         bool operator!=(const FacetIterator& rhs) const

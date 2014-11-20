@@ -15,7 +15,7 @@
 #include <ssc/kinematics.hpp>
 
 class Body;
-class EnvironmentAndFrames;
+struct EnvironmentAndFrames;
 
 class ForceModel
 {

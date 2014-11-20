@@ -91,7 +91,7 @@ void test(const ForceModel& F, const EnvironmentAndFrames& env, size_t n)
 
 int main(int argc, char* argv[])
 {
-    const size_t n = argc>1 ? atoi(argv[1]) : N;
+    const size_t n = argc>1 ? (size_t)atoi(argv[1]) : N;
     auto env = get_env();
     test(FroudeKrylovForceModel(env), env, n);
     //test(FastHydrostaticForceModel(env), env, N);

@@ -171,11 +171,11 @@ void MeshIntersector::split_partially_immersed_facet(
     size_t closing_edge_index = mesh->add_edge(
             mesh->first_vertex_of_oriented_edge(immersed_edges[first_immersed]),
             mesh->first_vertex_of_oriented_edge( emerged_edges[ first_emerged]));
-    immersed_edges.insert(immersed_edges.begin()+first_immersed,Mesh::make_oriented_edge(closing_edge_index,true));
-    emerged_edges.insert( emerged_edges.begin()+ first_emerged,Mesh::make_oriented_edge(closing_edge_index,false));
+    immersed_edges.insert(immersed_edges.begin()+(long)first_immersed,Mesh::make_oriented_edge(closing_edge_index,true));
+    emerged_edges.insert( emerged_edges.begin()+ (long)first_emerged,Mesh::make_oriented_edge(closing_edge_index,false));
 
     // create the Facets
-    EPoint unit_normal=(mesh->facets.begin()+facet_index)->unit_normal;
+    EPoint unit_normal=(mesh->facets.begin()+(long)facet_index)->unit_normal;
     index_of_emerged_facets.push_back(mesh->create_facet_from_edges(emerged_edges,unit_normal));
     index_of_immersed_facets.push_back(mesh->create_facet_from_edges(immersed_edges,unit_normal));
 }
@@ -187,8 +187,8 @@ size_t MeshIntersector::split_partially_immersed_edge(
 {
     size_t first_vertex_index = mesh->edges[0][edge_index];
     size_t last_vertex_index  = mesh->edges[1][edge_index];
-    EPoint A=mesh->all_nodes.col(first_vertex_index);
-    EPoint B=mesh->all_nodes.col(last_vertex_index);
+    EPoint A=mesh->all_nodes.col((int)first_vertex_index);
+    EPoint B=mesh->all_nodes.col((int)last_vertex_index);
     const double dzA=all_relative_immersions[first_vertex_index];
     const double dzB=all_relative_immersions[last_vertex_index];
     const double zA = all_absolute_wave_elevations[first_vertex_index];
@@ -206,17 +206,17 @@ size_t MeshIntersector::split_partially_immersed_edge(
 
 Matrix3x MeshIntersector::coordinates_of_facet(size_t facet_index) const
 {
-    std::vector<Facet>::const_iterator facet=mesh->facets.begin()+facet_index;
+    std::vector<Facet>::const_iterator facet=mesh->facets.begin()+(long)facet_index;
     size_t n = facet->vertex_index.size();
     Matrix3x coord(3,n);
     for(size_t i=0;i<n;++i)
-        coord.col(i) = mesh->all_nodes.col(facet->vertex_index[i]);
+        coord.col((int)i) = mesh->all_nodes.col((int)facet->vertex_index[i]);
     return coord;
 }
 
 std::vector<double> MeshIntersector::immersions_of_facet(size_t facet_index) const
 {
-    std::vector<Facet>::const_iterator facet=mesh->facets.begin()+facet_index;
+    std::vector<Facet>::const_iterator facet=mesh->facets.begin()+(int)facet_index;
     size_t n = facet->vertex_index.size();
     std::vector<double> z(n,0.0);
     for(size_t i=0;i<n;++i)
@@ -333,7 +333,7 @@ CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const F
     {
         ret += center_of_mass(*that_facet);
     }
-    if (ret.volume) ret.G /= ret.volume;
+    if (ret.volume>0) ret.G /= ret.volume;
     return ret;
 }
 
@@ -345,7 +345,7 @@ CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const F
     {
         ret += center_of_mass(closing_facet);
     }
-    if (ret.volume) ret.G /= ret.volume;
+    if (ret.volume>0) ret.G /= ret.volume;
     return ret;
 }
 
@@ -354,7 +354,7 @@ Eigen::MatrixXd MeshIntersector::convert(const Facet& f) const
     Eigen::MatrixXd ret(3, f.vertex_index.size());
     for (size_t j = 0 ; j < f.vertex_index.size() ; ++j)
     {
-        ret.col(j) = mesh->all_nodes.col(f.vertex_index[j]);
+        ret.col((int)j) = mesh->all_nodes.col((int)f.vertex_index[j]);
     }
     return ret;
 }
@@ -377,24 +377,24 @@ CenterOfMass MeshIntersector::center_of_mass(const Facet& f) const
     double totalVolume = 0, currentVolume;
     double xCenter = 0, yCenter = 0, zCenter = 0;
 
-    const EPoint P1 = mesh->all_nodes.col(f.vertex_index.at(0));
+    const EPoint P1 = mesh->all_nodes.col((int)f.vertex_index.at(0));
     for (size_t i = 2; i < f.vertex_index.size() ; i++)
     {
-        const EPoint P2 = mesh->all_nodes.col(f.vertex_index.at(i-1));
-        const EPoint P3 = mesh->all_nodes.col(f.vertex_index.at(i));
+        const EPoint P2 = mesh->all_nodes.col((int)f.vertex_index.at(i-1));
+        const EPoint P3 = mesh->all_nodes.col((int)f.vertex_index.at(i));
         totalVolume += currentVolume = (P1(0)*P2(1)*P3(2) - P1(0)*P3(1)*P2(2) - P2(0)*P1(1)*P3(2) + P2(0)*P3(1)*P1(2) + P3(0)*P1(1)*P2(2) - P3(0)*P2(1)*P1(2)) / 6;
         xCenter += ((P1(0) + P2(0) + P3(0)) / 4) * currentVolume;
         yCenter += ((P1(1) + P2(1) + P3(1)) / 4) * currentVolume;
         zCenter += ((P1(2) + P2(2) + P3(2)) / 4) * currentVolume;
     }
-    if (totalVolume) return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
-                     return CenterOfMass(EPoint(0,0,0), 0);
+    if (totalVolume!=0) return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
+                       return CenterOfMass(EPoint(0,0,0), 0);
 }
 
 double MeshIntersector::facet_volume(const Facet& f) const
 {
     if (f.vertex_index.empty()) return 0;
-    const auto P = mesh->all_nodes.col(f.vertex_index.front());
+    const auto P = mesh->all_nodes.col((int)f.vertex_index.front());
     // Dot product to get distance from point to plane
     const double height = f.unit_normal.dot(P);
     return (f.area * height) / 3.0;

@@ -15,7 +15,7 @@
 #include <vector>
 
 class Sim;
-class YamlSimulatorInput;
+struct YamlSimulatorInput;
 
 /** \author cec
  *  \date Jun 17, 2014, 8:23:16 AM

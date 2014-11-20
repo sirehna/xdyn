@@ -12,8 +12,8 @@
 #include "YamlRotation.hpp"
 #include "GeometricTypes3d.hpp"
 
-class YamlDynamics6x6Matrix;
-class YamlAngle;
+struct YamlDynamics6x6Matrix;
+struct YamlAngle;
 
 /** \author cec
  *  \date Jun 17, 2014, 12:39:59 PM
