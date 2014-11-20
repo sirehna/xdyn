@@ -11,5 +11,8 @@ cd code
 cd ..
 cd ..
 rm -rf ${archiveDir}_`git rev-parse HEAD`.tgz
-tar -czf ${archiveDir}_`git rev-parse HEAD`.tgz ${archiveDir}
+cd ${archiveDir}
+tar -czf ${archiveDir}_`git rev-parse HEAD`.tgz code postprocessing doc_user doc_dev
+mv *.tgz ..
+cd ..
 rm -rf ${archiveDir}
