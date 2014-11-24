@@ -12,6 +12,5 @@ INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
-include_directories(${stl_reader_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})

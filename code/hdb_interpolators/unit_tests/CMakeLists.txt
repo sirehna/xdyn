@@ -1,18 +1,18 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-set(MODULE_UNDER_TEST stl_writer)
+set(MODULE_UNDER_TEST hdb_interpolators)
 project(${MODULE_UNDER_TEST}_tests)
-file(GLOB SRC src/stl_writerTest.cpp
+FILE(GLOB SRC src/HDBBuilderTest.cpp
+              src/HDBDataTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
 # Include directories
 include_directories(inc)
 include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
-include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
-include_directories(${stl_reader_INCLUDE_DIRS})
+include_directories(${ssc_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})

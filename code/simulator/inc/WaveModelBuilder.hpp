@@ -16,7 +16,7 @@
 #include TR1INC(memory)
 
 class WaveModel;
-class DiscreteDirectionalWaveSpectrum;
+struct DiscreteDirectionalWaveSpectrum;
 
 /** \brief Interface to all WaveModelBuilder<T>. Used to build, eg. Airy
  *  \details Allows us to store WaveModelBuilders with different template

@@ -17,7 +17,7 @@ Mesh::Mesh(const Matrix3x& nodes_,
 ,facets(facets_)
 ,facetsPerEdge(facetsPerEdge_)
 ,orientedEdgesPerFacet(orientedEdgesPerFacet_)
-,static_nodes(nodes_.cols())
+,static_nodes((size_t)nodes_.cols())
 ,static_edges(edges_[0].size())
 ,static_facets(facets_.size())
 ,all_nodes(3,static_nodes+static_edges)
@@ -32,9 +32,9 @@ Mesh::Mesh(const Matrix3x& nodes_,
 void Mesh::reset_dynamic_data()
 {
     node_count = static_nodes;
-    edges[0].erase( edges[0].begin() + static_edges , edges[0].end());
-    edges[1].erase( edges[1].begin() + static_edges , edges[1].end());
-    facets.erase( facets.begin() + static_facets , facets.end());
+    edges[0].erase( edges[0].begin() + (int)static_edges , edges[0].end());
+    edges[1].erase( edges[1].begin() + (int)static_edges , edges[1].end());
+    facets.erase( facets.begin() + (int)static_facets , facets.end());
 }
 
 size_t Mesh::create_facet_from_edges(const std::vector<size_t>& oriented_edge_list,const EPoint &unit_normal)
@@ -61,7 +61,7 @@ size_t Mesh::add_edge(const size_t first_vertex_index,const size_t last_vertex_i
 size_t Mesh::add_vertex(const EPoint &vertex_coords)
 {
     size_t node_index = node_count;
-    all_nodes.col(node_index) = vertex_coords;
+    all_nodes.col((int)node_index) = vertex_coords;
     ++node_count;
     return node_index;
 }

@@ -9,6 +9,7 @@
 
 #include "file_writer.hpp"
 #include "generate_anthineas.hpp"
+#include "hdb_data.hpp"
 #include "STL_data.hpp"
 #include "stl_writer.hpp"
 
@@ -22,6 +23,7 @@ int main(int argc, const char* argv[])
     stl["cube.stl"]         = test_data::cube();
     stl["big_cube.stl"]     = test_data::big_cube();
     stl["anthineas.stl"]    = write_stl(anthineas());
+    stl["anthineas.hdb"]    = test_data::anthineas_hdb();
 
     write_files(path, stl);
     return 0;

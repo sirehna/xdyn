@@ -12,8 +12,8 @@
 #include "StateMacros.hpp"
 
 class Body;
-class YamlBody;
-class YamlRotation;
+struct YamlBody;
+struct YamlRotation;
 
 #include <ssc/kinematics.hpp>
 #include TR1INC(memory)

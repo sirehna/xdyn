@@ -133,14 +133,14 @@ INCLUDE(CMakeCompilationOptions)
 ADD_SUBDIRECTORY(base91x)
 ADD_SUBDIRECTORY(simulator_external_data_structures)
 ADD_SUBDIRECTORY(test_data_generator)
-ADD_SUBDIRECTORY(stl_reader)
-ADD_SUBDIRECTORY(stl_writer)
+ADD_SUBDIRECTORY(external_file_formats)
 ADD_SUBDIRECTORY(binary_stl_data)
 ADD_SUBDIRECTORY(mesh)
 ADD_SUBDIRECTORY(wave_models)
 ADD_SUBDIRECTORY(simulator_yaml_parser)
 ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
+ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(model_wrappers)
 ADD_SUBDIRECTORY(simulator)
 ADD_SUBDIRECTORY(parser_extensions)
@@ -151,12 +151,12 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:parser_extensions>
         $<TARGET_OBJECTS:model_wrappers>
         $<TARGET_OBJECTS:wave_models>
-        $<TARGET_OBJECTS:stl_reader>
-        $<TARGET_OBJECTS:stl_writer>
+        $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:hydro_models>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:simulator_yaml_parser>
         $<TARGET_OBJECTS:simulator_external_data_structures>
+        $<TARGET_OBJECTS:hdb_interpolators>
         )
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}
@@ -198,14 +198,14 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:hydro_models_tests>
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
-        $<TARGET_OBJECTS:stl_reader_tests>
-        $<TARGET_OBJECTS:stl_writer_tests>
+        $<TARGET_OBJECTS:external_file_formats_tests>
         $<TARGET_OBJECTS:simulator_tests>
         $<TARGET_OBJECTS:wave_models_tests>
         $<TARGET_OBJECTS:kissfft_static>
         $<TARGET_OBJECTS:model_wrappers_tests>
         $<TARGET_OBJECTS:parser_extensions_tests>
         $<TARGET_OBJECTS:test_data_generator>
+        $<TARGET_OBJECTS:hdb_interpolators_tests>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")

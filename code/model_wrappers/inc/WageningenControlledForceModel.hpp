@@ -13,7 +13,7 @@
 #define NB_COEFF_KT 39
 #define NB_COEFF_KQ 47
 
-class YamlWageningen;
+struct YamlWageningen;
 
 /** \brief
  *  \details

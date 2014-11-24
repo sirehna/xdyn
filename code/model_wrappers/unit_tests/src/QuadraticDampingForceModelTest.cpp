@@ -35,9 +35,9 @@ namespace ssc
         template <> Eigen::Matrix<double,6,6> TypedScalarDataGenerator<Eigen::Matrix<double,6,6> >::get() const
         {
             Eigen::Matrix<double,6,6> ret;
-            for (size_t i = 0 ; i < 6 ; ++i)
+            for (int i = 0 ; i < 6 ; ++i)
             {
-                for (size_t j = 0 ; j < 6 ; ++j)
+                for (int j = 0 ; j < 6 ; ++j)
                 {
                     ret(i,j) = random<double>();
                 }
@@ -106,7 +106,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
          97, 101, 103, 107, 109, 113,
         127, 131, 137, 139, 149, 151;
     QuadraticDampingForceModel F(D);
-    for (size_t i=0;i<100;++i)
+    for (int i=0;i<100;++i)
     {
         b.u = u = a.random<double>().between(-10.0,+10.0);
         b.v = v = a.random<double>().between(-10.0,+10.0);
@@ -122,9 +122,9 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
         rr = fabs(r)*r;
         const ssc::kinematics::Wrench f = F(b,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
-        for (size_t j=0;j<3;++j)
+        for (int j=0;j<3;++j)
         {
-            const size_t k = j+3;
+            const int k = j+3;
             ASSERT_NEAR(D(j,0)*uu+D(j,1)*vv+D(j,2)*ww+D(j,3)*pp+D(j,4)*qq+D(j,5)*rr,-f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
             ASSERT_NEAR(D(k,0)*uu+D(k,1)*vv+D(k,2)*ww+D(k,3)*pp+D(k,4)*qq+D(k,5)*rr,-f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
         }

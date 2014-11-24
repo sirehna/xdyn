@@ -22,7 +22,7 @@ class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
 typedef TR1(shared_ptr)<Eigen::Matrix<double,6,6> > MatrixPtr;
 
-class YamlBody;
+struct YamlBody;
 
 class Body
 {

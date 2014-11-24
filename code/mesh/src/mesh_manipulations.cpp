@@ -66,9 +66,9 @@ Eigen::Vector3d barycenter(const Matrix3x& p,std::vector<size_t> &vertex_index)
     const size_t n = vertex_index.size();
     for (size_t i = 0 ; i < n ; ++i)
     {
-        x += p(0, vertex_index[i]);
-        y += p(1, vertex_index[i]);
-        z += p(2, vertex_index[i]);
+        x += p(0, (int)vertex_index[i]);
+        y += p(1, (int)vertex_index[i]);
+        z += p(2, (int)vertex_index[i]);
     }
     return Eigen::Vector3d(x/double(n),y/double(n),z/double(n));
 }
@@ -135,12 +135,12 @@ Eigen::Vector3d unit_normal(const Matrix3x& points, //!< Polygon for which the u
         ss << ".";
        THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
-    const double x1 = points(0,vertex_index[1])-points(0,vertex_index[0]);
-    const double x2 = points(1,vertex_index[1])-points(1,vertex_index[0]);
-    const double x3 = points(2,vertex_index[1])-points(2,vertex_index[0]);
-    const double y1 = points(0,vertex_index[2])-points(0,vertex_index[0]);
-    const double y2 = points(1,vertex_index[2])-points(1,vertex_index[0]);
-    const double y3 = points(2,vertex_index[2])-points(2,vertex_index[0]);
+    const double x1 = points(0,(int)vertex_index[1])-points(0,(int)vertex_index[0]);
+    const double x2 = points(1,(int)vertex_index[1])-points(1,(int)vertex_index[0]);
+    const double x3 = points(2,(int)vertex_index[1])-points(2,(int)vertex_index[0]);
+    const double y1 = points(0,(int)vertex_index[2])-points(0,(int)vertex_index[0]);
+    const double y2 = points(1,(int)vertex_index[2])-points(1,(int)vertex_index[0]);
+    const double y3 = points(2,(int)vertex_index[2])-points(2,(int)vertex_index[0]);
     const double A = x2*y3-x3*y2;
     const double B = x3*y1-x1*y3;
     const double C = x1*y2-x2*y1;
@@ -225,7 +225,7 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
         Eigen::Matrix3d M;
         for (size_t j = 0 ; j < 3 ; ++j)
         {
-            for (size_t k = 0 ; k < 3 ; ++k) M(k,j) = stl[i][j](k);
+            for (size_t k = 0 ; k < 3 ; ++k) M((int)k,(int)j) = stl[i][j]((int)k);
         }
         const Eigen::Vector3d normal = unit_normal(M);
         float x = (float)normal(0);
@@ -234,7 +234,7 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
         os.write(reinterpret_cast<const char*>(&x), 4);
         os.write(reinterpret_cast<const char*>(&y), sizeof(float));
         os.write(reinterpret_cast<const char*>(&z), sizeof(float));
-        for (size_t j = 0 ; j < 3 ; ++j)
+        for (int j = 0 ; j < 3 ; ++j)
         {
             float x = (float)M(0,j);
             float y = (float)M(1,j);

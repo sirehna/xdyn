@@ -14,6 +14,8 @@
 struct YamlDynamics6x6Matrix
 {
     YamlDynamics6x6Matrix();
+    bool read_from_file;
+    std::string hdb_filename;
     std::string frame;
     std::vector<double> row_1;
     std::vector<double> row_2;

@@ -13,7 +13,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-class InputData;
+struct InputData;
 #include "boost/program_options.hpp"
 namespace po = boost::program_options;
 

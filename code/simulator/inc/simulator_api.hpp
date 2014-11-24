@@ -10,7 +10,7 @@
 #include "SimObserver.hpp"
 #include <ssc/solver.hpp>
 
-class YamlSimulatorInput;
+struct YamlSimulatorInput;
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 Sim get_system(const std::string& yaml, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
