@@ -5,10 +5,8 @@
  *      Author: cady
  */
 
-#include <ssc/interpolation.hpp>
-
 #include "HDBData.hpp"
-
+#include <ssc/interpolation.hpp>
 
 class HDBData::Impl
 {
