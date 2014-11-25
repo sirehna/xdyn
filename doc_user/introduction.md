@@ -1,10 +1,11 @@
+% Simulateur M-ocean
+% Charles-Edouard CADY, SIREHNA
+
 # Description
 
 Le présent programme est un simulateur de corps solides indéformables dans un
 environnement fluide. Il s'agit d'un outil en ligne de commande, c'est-à-dire
 qu'on le lance depuis un terminal (ou une invite de commande MS DOS).
-
-## Entrées et sorties
 
 Le simulateur a été construit pour permettre une utilisation modulaire en ligne
 de commande. Pour ce faire, les différents domaines à configurer sont séparés :
@@ -25,23 +26,7 @@ entrées et sorties du simulateur :
 
 ![](images/simulator_overview.svg)
 
-## Structure de la documentation
-
-La documentation "utilisateur" du simulateur est composée de cinq parties :
-
-- Le présent fichier, qui donne une vue d'ensemble du simulateur ainsi que la
-  documentation des exécutables `sim` et `postprocessing`,
-- [Des tutoriels](tutorials.html) permettant d'appréhender le fonctionnement de
-  l'outil sur des cas concrets,
-- [Une documentation du fichier d'entrée](documentation_yaml.html) donnant le
-  paramétrage de tous les modèles connus par le simulateur,
-- [Une documentation des modèles physiques](modeles_reperes_et_conventions.html) avec des références vers la
-  documentation du fichier d'entrée, pour la définition des phénomènes physiques
-  modélisés,
-- [Une documentation du solveur](solver.html) qui détaille l'algorithme
-  d'intégration numérique utilisé.
-
-Parallèlement à cette documentation utilisateur, il existe également une
+Parallèlement à la présente documentation utilisateur, il existe également une
 documentation d'implémentation décrivant l'architecture logicielle et
 détaillant les API pour faciliter la maintenance du code (correctifs et
 ajouts de fonctionnalités).
@@ -77,9 +62,9 @@ rediriger vers un fichier en utilisant le caractère `>` (sous MS-DOS, MinGW et
 Linux) comme décrit dans la section ci-dessous.
 
 Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
-des modèles](documentation_yaml.html#waves).
+des modèles](#waves).
 Le paramètre `-c` ne sera pas décrit ici mais dans [le fichier de description
-des modèles](documentation_yaml.html#efforts-commandés).
+des modèles](#efforts-commandés).
 
 ## Exemples
 

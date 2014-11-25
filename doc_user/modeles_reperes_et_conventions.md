@@ -267,9 +267,9 @@ d'angle adoptée.
 ## Repère de calcul hydrodynamique
 
 Les efforts d'[amortissement
-visqueux](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux))
+visqueux](#efforts-damortissement-visqueux))
 et de [résistance à
-l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
+l'avancement](#r%C3%A9sistance-%C3%A0-lavancement)
 sont calculés dans un repère appelé **repère de calcul hydrodynamique**, qui
 est un repère translaté par rapport au repère body. Le centre de ce repère est
 un point défini (dans le repère body) de la façon suivante :
@@ -282,7 +282,7 @@ du maillage sur le plan $(x,y)$
 
 Ce point est, en général, distinct du centre de gravité et du centre de volume.
 Il est défini dans la section `dynamics/hydrodynamic forces calculation point
-in body frame` du [fichier YAML](documentation_yaml.html#champs-dynamics).
+in body frame` du [fichier YAML](#champs-dynamics).
 
 On note ${}^{\mbox{local}}T_{\mbox{body}}$ la transformation permettant de
 convertir des coordonnées dans le repère body en coordonnées du même point
@@ -300,10 +300,10 @@ matrices d'amortissement de radiation, les RAO d'effort et les masses ajoutées.
 ## Modèles de houle
 
 Les modèles de houle interviennent pour le calcul des [efforts
-hydrostatiques](modeles_reperes_et_conventions.html#efforts-hydrostatiques-non-lin%C3%A9aires)
+hydrostatiques](#efforts-hydrostatiques-non-lin%C3%A9aires)
 (par truchement de l'élévation de la surface libre),
 d'une part, et les [efforts de
-Froude-Krylov](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation) d'autre part (par le biais de la
+Froude-Krylov](#calcul-des-efforts-dexcitation) d'autre part (par le biais de la
 pression dynamique).
 
 ### Conventions
@@ -335,34 +335,34 @@ $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) = \left\{\beg
 } \omega=\omega_0\end{array}\right\}$$
 
 Le paramétrage de ce spectre est documenté
-[ici](documentation_yaml.html#dirac-1).
+[ici](#dirac-1).
 
 #### JONSWAP
 
 Le paramétrage de ce spectre est documenté
-[ici](documentation_yaml.html#jonswap).
+[ici](#jonswap).
 
 #### Pierson-Moskowitz
 
 Le paramétrage de ce spectre est documenté
-[ici](documentation_yaml.html#pierson-moskowitz).
+[ici](#pierson-moskowitz).
 
 #### Bretschneider
 
 Le paramétrage de ce spectre est documenté
-[ici](documentation_yaml.html#bretschneider).
+[ici](#bretschneider).
 
 ### Etalements directionnels
 
 #### Dirac
 
 Le paramétrage de cet étalement directionnel est documenté
-[ici](documentation_yaml.html#dirac).
+[ici](#dirac).
 
 #### Cos2s
 
 Le paramétrage de cet étalement directionnel est documenté
-[ici](documentation_yaml.html#cos2s).
+[ici](#cos2s).
 
 ### Modèles de houle
 
@@ -390,7 +390,7 @@ $$\eta(x,y,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 + y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 ainsi que l'expression de la pression dynamique, utilisée par le modèle de
-[Froude-Krylov](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)
+[Froude-Krylov](#calcul-des-efforts-dexcitation)
 :
 
 $$p_{\mbox{dyn}} = \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
@@ -807,16 +807,16 @@ Le navire est soumis aux efforts suivants :
   coque et aux tourbillons,
 
 Les efforts non-commandés sont renseignés dans la section
-[`bodies/external`](documentation_yaml.html#efforts-extérieurs) du fichier
+[`bodies/external`](#efforts-extérieurs) du fichier
 YAML.
 
 ## Efforts de gravité
 
 La description de la paramétrisation des efforts de gravité figure dans
-[la documentation du fichier d'entrée](documentation_yaml.html#gravité).
+[la documentation du fichier d'entrée](#gravité).
 
 Un exemple de simulation de solide soumis uniquement à la gravité (chute libre)
-est disponible dans les [tutoriels](tutorials.html#tutoriel-1-balle-en-chute-libre).
+est disponible dans les [tutoriels](#tutoriel-1-balle-en-chute-libre).
 
 ### Description
 
@@ -853,16 +853,16 @@ la surface immergée totale :
 $$\textbf{F}_{\mbox{HS}} = \int_{S}p_{\mbox{HS}}(z)\cdot \textbf{n} dS $$
 
 Le paramétrage des efforts hydrostatiques non-linéaires dans le simulateur est
-décrit [ici](documentation_yaml.html#).
+décrit [ici](#).
 
 Un exemple d'utilisation est présenté dans les
-[tutoriels](tutorials.html#tutoriel-2-oscillations-en-immersion).
+[tutoriels](#tutoriel-2-oscillations-en-immersion).
 
 ### Calcul de la résultante
 
 Pour évaluer numériquement cette intégrale, il faut discrétiser la carène au
 moyen d'un maillage surfacique. La définition de ce maillage est faite
-[ici](documentation_yaml.html#utilisation-dun-maillage).
+[ici](#utilisation-dun-maillage).
 
 Les facettes du maillage peuvent alors être réparties en trois catégories :
 
@@ -1004,7 +1004,7 @@ p_{\mbox{dyn}}(x,y,z,t)dS(P)$$
 
 L'expression de la pression dynamique dépend du modèle de houle utilisé et est
 décrite (ici pour la houle d'Airy)
-[ici](modeles_reperes_et_conventions.html#modèles-de-houle-1).
+[ici](#modèles-de-houle-1).
 
 La pression totale dans le fluide, en un point donné, est la somme de la
 pression hydrostatique et de la pression dynamique. Lorsque l'on utilise
@@ -1075,13 +1075,13 @@ En pratique, on effectue une interpolation par spline cubique de la résistance
 projetée sur l'axe X du repère body (que l'on note $u$). Si $f:u\mapsto R=f(u)$
 désigne la fonction d'interpolation, le torseur des efforts, exprimé au [point
 de calcul
-hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique),
+hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
 est :
 
 $$\tau_\mbox{res} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
 
 Ce modèle est accessible par la clef [`resistance
-curve`](documentation_yaml.html#r%C3%A9sistance-%C3%A0-lavancement).
+curve`](#r%C3%A9sistance-%C3%A0-lavancement).
 
 ### Références
 
@@ -1099,7 +1099,7 @@ Les mouvements d'un solide évoluant dans un fluide sont amortis du fait de
 l'énergie que ce solide communique au fluide. Ces efforts dissipatifs
 proviennent d'une part des vagues générées par les mouvements du fluide (et qui
 correspondent aux [amortissements de
-radiation](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)),
+radiation](#calcul-des-efforts-dexcitation)),
 et d'autre part des amortissements visqueux dus au frottement du fluide sur la
 coque (apparition d'un sillage tourbillonaire ou turbulent qui dissipe de
 l'énergie de manière purement mécanique, essentiellement sur l'axe roulis). Ce
@@ -1122,14 +1122,14 @@ de résistance à l'avancement, il convient de prendre des précautions
 supplémentaires afin de ne pas modéliser deux fois le même phénomène physique.
 On décompose donc la vitesse longitudinale en une composante basse fréquence
 (utilisée par le modèle de [résistance à
-l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement))
+l'avancement](#r%C3%A9sistance-%C3%A0-lavancement))
 et une composante haute fréquence (pour le modèle d'amortissement).
 
 ### Modélisation
 
 Pour une description des notations adoptées ici on pourra se référer à [la
 description du repère de calcul
-hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique).
+hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique).
 
 La vitesse du courant (vitesse de l'eau par rapport au repère NED, projetée
 dans le repère NED) est notée :
@@ -1146,12 +1146,12 @@ $$\omega_\mbox{local} = {}^\mbox{local}T_\mbox{body}\omega_{nb}^b$$
 
 Si les efforts de radiation ne sont par modélisés par ailleurs, les
 amortissements linéaires s'écrivent (dans le [repère de calcul
-hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique)) :
+hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique)) :
 
 $$F_{\mbox{al}}=-D_l\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_\mbox{local}$$
 
 où $D_l$ est la matrice d'amortissement linéaire lue depuis [le fichier de
-paramètres](documentation_yaml.html#amortissement-linéaire).
+paramètres](#amortissement-linéaire).
 
 Pour les amortissements quadratiques :
 
@@ -1171,7 +1171,7 @@ d_{61}\cdot|u_{\mbox{local}}| & d_{62}\cdot |v_{\mbox{local}}| & d_{63}\cdot |w_
 
 les $((d_{ij}))$ étant les coefficients de la matrice d'amortissement
 quadratique lue depuis [le fichier de
-paramètres](documentation_yaml.html#amortissement-quadratique).
+paramètres](#amortissement-quadratique).
 
 ### Références
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 276
@@ -1183,7 +1183,7 @@ paramètres](documentation_yaml.html#amortissement-quadratique).
 
 On classe dans cette catégorie les efforts de propulsion (hélices, tunnels,
 azimutaux, Voith...) mais aussi les safrans et ailerons. Ils sont paramétrés
-dans la section [`efforts commandés`](documentation_yaml.html#efforts-command%C3%A9s)
+dans la section [`efforts commandés`](#efforts-command%C3%A9s)
 du fichier YAML.
 
 ## Hélices Wageningen série B
@@ -1201,7 +1201,7 @@ d'autres instituts de recherche en aient réalisés d'autres par la suite.
 En 1975, Oosterveld et Ossannen utilisèrent une régression statistique pour
 établir le modèle polynomial des hélices Wageningen présenté ici.
 
-Un [tutoriel](tutorials.html#tutoriel-6-propulsion) présente l'utilisation de
+Un [tutoriel](#tutoriel-6-propulsion) présente l'utilisation de
 ce modèle dans le simulateur.
 
 ### Hypothèses du modèle en eau libre
@@ -1308,7 +1308,7 @@ conditions nominales. Des ordres de grandeurs de ce coefficient sont donnés par
 exemple dans Carlton, pages 70,72,73 et 74.
 
 En outre, l'hélice accroît la [résistance à
-l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
+l'avancement](#r%C3%A9sistance-%C3%A0-lavancement)
 : en effet, elle diminue la pression à l'arrière du navire, ce qui augmente la
 poussée nécessaire pour la propulsion. L'helice accélérant le fluide, il existe
 des frottements supplémentaires sur la coque. Pour prendre en compte ces
@@ -1372,7 +1372,7 @@ K_Q(J, P/D, A_E/A_0, Z, R_n)$$
 ### Expression des efforts
 
 Les efforts générés par l'hélice sont calculés dans un repère spécifique
-renseigné dans la section [`position of propeller frame`](documentation_yaml.html#wageningen-b-series) du fichier YAML. La
+renseigné dans la section [`position of propeller frame`](#wageningen-b-series) du fichier YAML. La
 poussée (c'est-à-dire l'effort généré par l'hélice sur le navire) est faite
 dans le sens des $x$ positifs.
 
