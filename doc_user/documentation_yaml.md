@@ -834,9 +834,39 @@ Le modèle est décrit
 
 ### Amortissement de radiation
 
+Pour utiliser ce modèle, on écrit `model: radiation damping`.
 Les matrices d'amortissement de radiation sont lues depuis un fichier HDB
 (format Diodore). Ce fichier contient les matrices $B_r$ pour différentes
-périodes. 
+périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
+suivantes sont réalisées :
+
+- Lecture du fichier HDB : son chemin est renseigné dans la clef `hdb`.
+- Interpolation des matrices : les types d'interpolation connus sont :
+  `piecewise constant`, `linear` et `spline` (splines naturelles, c'est-à-dire
+  dont la dérivée seconde est nulle aux extrémités). Ce type doit être
+  renseigné dans la clef `interpolation`.
+- Intégration numérique : renseigné dans `quadrature`. Les types d'intégration
+  connus sont : `rectangle`, `trapezoidal`, `simpson` et `gauss-kronrod`. On
+  doit en outre spécifier une valeur pour l'erreur maximale (critère d'arrêt) :
+  `eps` (par exemple, pour l'interpolation rectangle ou trapèze,
+  $\varepsilon=\frac{1}{n}$). Les bornes de l'intégration sont
+  $\omega_{\mbox{min}}$ et $\omega_{\mbox{max}}$ lues dans le fichier HDB.
+- Interpolation des fonctions de retard : on utilise le même type
+  d'interpolation que pour les matrices. Le nombre de points à partir duquel
+  est réalisée cette interpolation (le nombre de fois qu'on calcule l'intégrale
+  $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
+  est donné par `nb of points for retardation function`.
+- Interpolation des états : on utilise le même type d'interpolation que pour
+  les matrices.
+- Convolution : sa durée est $\frac{2\pi}{\omega_{\mbox{min}}}$
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: radiation damping
+  hdb: anthineas.hdb
+  interpolation: linear
+  quadrature: rectangle
+  nb of points for retardation function: 30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Efforts commandés
 
