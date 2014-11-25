@@ -760,6 +760,22 @@ $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 
 $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
+## Implémentation
+
+En pratique, on utilise en entrée du simulateur les fichiers HDB de Diodore,
+qui contiennent les matrices d'amortissement de radiation à différentes
+pulsations. Ces fichiers sont utilisés dans une table d'interpolation (soit une
+interpolation linéaire par morceaux, soit des splines) puis on évalue
+l'intégrale suivante pour différentes valeurs de $\tau$ :
+
+$$K_{i,j}(\tau) =
+\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$$
+
+Cette intégrale est calculé à l'aide d'un schéma d'intégration numérique
+(méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
+
+![](images/radiation_damping_doc.png "Calcul de l'amortissement de radiation")
+
 ## Calcul des matrices de masse ajoutée
 
 Dans le simulateur, la matrice de masses ajoutées est soit lue directement
@@ -774,7 +790,9 @@ suppose que les mailles utilisées pour le calcul des masses ajoutées
 sens.
 
 ## Références
-
+- *Practical Source Code for Ship Motions Time Domain Numerical Analysis and
+  Its Mobile Device Application*, 2011, Zayar Thein, Department of Shipping and
+Marine Technology, CHALMERS UNIVERSITY OF TECHNOLOGY, Göteborg, Sweden, page 18
 
 # Modèles d'efforts non-commandés
 
