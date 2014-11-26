@@ -5,9 +5,25 @@
  *      Author: cady
  */
 
-#include "History.hpp"
+#include <sstream>
 
-History::History()
+#include "History.hpp"
+#include "HistoryException.hpp"
+
+
+
+History::History(const double Tmax_) : Tmax(Tmax_)
 {
 }
 
+double History::get(double tau //!< How far back in history do we need to go (in seconds)?
+                               ) const
+{
+    if (tau>Tmax)
+    {
+        std::stringstream ss;
+        ss << "Requesting value too far in the past: asked for t-" << tau << ", but history only goes back to t-" << Tmax;
+        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+    }
+    return tau;
+}

@@ -20,9 +20,19 @@
 class History
 {
     public:
-        History();
+        History(const double Tmax //!< Maximum duration to store in history (in seconds)
+               );
+
+        /**  \brief Returns the value at t-tau, t being the current instant
+          *  \returns Value at t-tau in history
+          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
+          */
+        double get(double tau //!< How far back in history do we need to go (in seconds)?
+                               ) const;
 
     private:
+        History(); // Disabled
+        double Tmax;
 };
 
 
