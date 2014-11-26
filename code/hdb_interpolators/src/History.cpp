@@ -14,6 +14,12 @@
 
 History::History(const double Tmax_) : Tmax(Tmax_)
 {
+    if (Tmax<=0)
+    {
+        std::stringstream ss;
+        ss << "Tmax should be greater than 0: received " << Tmax;
+        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+    }
 }
 
 double History::get(double tau //!< How far back in history do we need to go (in seconds)?

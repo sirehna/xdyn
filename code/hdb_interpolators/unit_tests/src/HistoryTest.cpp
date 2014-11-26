@@ -45,3 +45,11 @@ TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
     ASSERT_THROW(h.get(t_greater_than_Tmax), HistoryException);
 }
 
+TEST_F(HistoryTest, constructor_should_throw_if_Tmax_is_negative)
+{
+    const double positive_Tmax = a.random<double>().greater_than(0);
+    ASSERT_NO_THROW(History h(positive_Tmax));
+    const double negative_Tmax = a.random<double>().no().greater_than(0);
+    ASSERT_THROW(History h(negative_Tmax), HistoryException);
+    ASSERT_THROW(History h(0), HistoryException);
+}
