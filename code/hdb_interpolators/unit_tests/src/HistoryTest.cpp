@@ -42,6 +42,7 @@ TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
     const double t_greater_than_Tmax = a.random<double>().greater_than(Tmax);
     const History h(Tmax);
     ASSERT_NO_THROW(h.get(t_lower_than_Tmax));
+    ASSERT_NO_THROW(h.get(Tmax));
     ASSERT_THROW(h.get(t_greater_than_Tmax), HistoryException);
 }
 
