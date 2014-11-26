@@ -33,8 +33,32 @@ double History::get(double tau //!< How far back in history do we need to go (in
         ss << "Requesting value too far in the past: asked for t-" << tau << ", but history only goes back to t-" << Tmax;
         THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
     }
+    if (tau<0)
+    {
+        std::stringstream ss;
+        ss << "Requesting value in the future: asked for t-tau with tau = " << tau;
+        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+    }
+    if (L.empty())
+    {
+        THROW(__PRETTY_FUNCTION__, HistoryException, "Cannot retrieve anything from history because it is empty");
+    }
+    const double t = L.back().first;
+    const auto it = find_braketing_position(t-tau);
+    return get_value(it, t-tau);
+}
 
-    return tau;
+double History::get_value(const Container::const_iterator& it, const double t) const
+{
+    if (it == L.end())
+    {
+        THROW(__PRETTY_FUNCTION__, HistoryException, "Something is very wrong: first bracketing value is last value in list.");
+    }
+    const double tA = it->first;
+    const double tB = (it+1)->first;
+    const double yA = it->second;
+    const double yB = (it+1)->second;
+    return (t-tA)/(tB-tA)*(yB-yA) + yA;
 }
 
 void History::throw_if_already_added(const Container::const_iterator& it, const double t) const

@@ -47,6 +47,7 @@ class History
         History(); // Disabled
         void throw_if_already_added(const Container::const_iterator& it, const double t) const;
         Container::const_iterator find_braketing_position(const double t) const;
+        double get_value(const Container::const_iterator& it, const double t) const;
 
         double Tmax;
         Container L;

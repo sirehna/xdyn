@@ -38,9 +38,11 @@ TEST_F(HistoryTest, example)
 TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
 {
     const double Tmax = a.random<double>().greater_than(0);
-    const double t_lower_than_Tmax = a.random<double>().no().greater_than(Tmax);
+    const double t_lower_than_Tmax = a.random<double>().between(0,Tmax);
     const double t_greater_than_Tmax = a.random<double>().greater_than(Tmax);
-    const History h(Tmax);
+    History h(Tmax);
+    h.record(a.random<double>(), a.random<double>());
+    h.get(t_lower_than_Tmax);
     ASSERT_NO_THROW(h.get(t_lower_than_Tmax));
     ASSERT_NO_THROW(h.get(Tmax));
     ASSERT_THROW(h.get(t_greater_than_Tmax), HistoryException);
@@ -65,6 +67,12 @@ TEST_F(HistoryTest, should_throw_if_recording_the_same_instant_twice)
     ASSERT_THROW(h.record(t+1, a.random<double>()), HistoryException);
 }
 
+TEST_F(HistoryTest, cannot_retrieve_anything_if_history_is_empty)
+{
+    History h(a.random<double>().greater_than(0));
+    ASSERT_THROW(History h(0), HistoryException);
+}
+
 TEST_F(HistoryTest, can_retrieve_initial_values)
 {
     History h(3);
@@ -72,4 +80,18 @@ TEST_F(HistoryTest, can_retrieve_initial_values)
     h.record(t0-2, 1);
     h.record(t0-1, 2);
     h.record(t0, 3);
+
+    ASSERT_DOUBLE_EQ(3, h.get(0));
+    ASSERT_DOUBLE_EQ(2, h.get(1));
+    ASSERT_DOUBLE_EQ(1, h.get(2));
+}
+
+TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
+{
+    History h(3);
+    const double t0 = a.random<double>();
+    h.record(t0-2, 1);
+    h.record(t0-1, 2);
+    h.record(t0, 3);
+    ASSERT_THROW(h.get(-1), HistoryException);
 }
