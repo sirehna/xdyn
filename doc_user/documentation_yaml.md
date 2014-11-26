@@ -885,26 +885,28 @@ nom est passé à l'exécutable de simulation en utilisant le flag `-c` (ou
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - name: port side propeller
-  t: [0,1,3,10]
-  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
-  P/D: [0.7,0.7,0.7,0.7]
+  t: [1,3,10]
+  rpm: {unit: rpm, values: [3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.8]
 - name: starboard propeller
-  t: [0,1,3,10]
-  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
-  P/D: [0.7,0.7,0.7,0.7]
+  t: [1,3,10]
+  rpm: {unit: rpm, values: [3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.8]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La valeur renseigné dans `name` doit correspondre à l'identifiant utilisé dans
 la section `controlled forces`. Pour chaque effort contrôlé (identifié par
 `name`), on donne une liste d'instants (en secondes) puis, pour chaque
 commande, les valeurs à ces instants. Il doit donc y avoir, pour chaque
-commande, autant de valeurs qu'il y a d'instants. Entre deux instants, les
-valeurs des commandes sont interpolées linéairement. On peut définir autant de
-clef qu'on le souhaite : les clefs inutilisées sont simplement ignorées.
+commande, autant de valeurs qu'il y a d'instants et il faut spécifier au moins
+deux instants distincts. Entre deux instants, les valeurs des commandes sont
+interpolées linéairement. On peut définir autant de clef qu'on le souhaite :
+les clefs inutilisées sont simplement ignorées.
 
 Au-delà de la dernière valeur de temps renseignée, la dernière valeur de chaque
-commande est maintenue. Pour l'exemple présenté ci-dessus, pour toute valeur de
-$t\geq 10$, alors rpm=4000.
+commande est maintenue. Avant la première valeur de temps, on utilise la première
+valeur de chaque commande. Ainsi, pour l'exemple présenté ci-dessus, pour toute
+valeur de $t\geq 10$, alors rpm=4000. Pour $t\leq 1$, rpm=3000
 
 ### Wageningen B-series
 
@@ -974,7 +976,7 @@ modèle sont :
 
 - La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
 par `rpm`.
-- Le ratio "pas sur diamètre", entre 0 et 1, défini par `P/D`.
+- Le ratio "pas sur diamètre", défini par `P/D`.
 
 Voici un exemple de fichier de commande :
 
