@@ -42,7 +42,10 @@ class History
 
     private:
         typedef std::pair<double,double> TimeValue;
+
         History(); // Disabled
+        void throw_if_already_added(const std::list<TimeValue>::const_iterator& it, const double t) const;
+
         double Tmax;
         std::list<TimeValue> L;
 };
