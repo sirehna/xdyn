@@ -760,7 +760,7 @@ $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 
 $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
-## Implémentation
+## Calcul numérique des amortissements de radiation
 
 En pratique, on utilise en entrée du simulateur les fichiers HDB de Diodore,
 qui contiennent les matrices d'amortissement de radiation à différentes
@@ -775,6 +775,136 @@ Cette intégrale est calculé à l'aide d'un schéma d'intégration numérique
 (méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
 
 ![](images/radiation_damping_doc.png "Calcul de l'amortissement de radiation")
+
+### Méthode des rectangles
+
+C’est la méthode la plus simple qui consiste à interpoler la fonction
+$f$ à intégrer par une fonction constante (polynôme de degré 0).
+
+Si $x_i$ est le point d’interpolation, la formule est la suivante :
+:$$I(f) = (b-a) f(x_i)$$
+
+Le choix de $x_i$ influence l’erreur $E(f) = I - I(f)$
+:
+- Si $x_i = a$ ou $x_i = b$, l’erreur est donnée
+  par $$E(f) = \frac{(b-a)^2}{2} f'(\eta), \quad \eta \in
+  [a,b]$$ C’est la ''méthode du rectangle'' qui est d’ordre
+  0.
+- Si $\xi = (a+b)/2\,$, l’erreur est donnée par $$E(f) =
+  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]$$ Il s’agit
+  de la méthode du point médian qui est d’ordre 1.
+
+Ainsi, le choix du point milieu améliore l’ordre de la méthode : celle du
+rectangle est exacte (c’est-à-dire $E(f) = 0$) pour les fonctions
+constantes alors que celle du point milieu est exacte pour les polynômes de
+degré 1. Ceci s’explique par le fait que l’écart d’intégration de la méthode du
+point milieu donne lieu à deux erreurs d’évaluation, de valeurs absolues
+environ égales et de signes opposés.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formules_du_rectangle_et_du_point_milieu)
+
+![](images/integration_num_rectangles.svg)
+
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_rectangles.svg?uselang=fr)
+
+
+### Méthode des trapèzes
+
+En interpolant $f$ par un polynôme de degré 1, les deux points
+d'interpolation $(a, f(a))$ et $(b, f(b))$ suffisent
+à tracer un segment dont l’intégrale correspond à l’aire d’un trapèze,
+justifiant le nom de méthode des trapèzes qui est d’ordre 1 :
+:$I(f) = (b-a) \frac{f(a) + f(b)}{2}$
+
+L’erreur est donnée par
+:$E(f) = - \frac{(b-a)^3}{12} f''(\eta), \quad \eta \in [a,b]$
+
+Conformément aux expressions de l’erreur, la méthode des trapèzes est souvent
+moins performante que celle du point milieu.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formule_du_trap.C3.A8ze)
+
+![](images/integration_num_trapezes.svg)
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_trap%C3%A8zes.svg)
+
+### Règle de Simpson
+
+En interpolant $f$ par un polynôme de degré 2 (3 degrés de liberté),
+3 points (ou conditions) sont nécessaires pour le caractériser : les valeurs
+aux extrémités $a$, $b$, et celle choisie en leur milieu
+$x_{1/2} = (a + b) / 2$. La méthode de Simpson est basée sur un
+polynôme de degré 2 (intégrale d’une parabole), tout en restant exacte pour des
+polynômes de degré 3 ; elle est donc d’ordre 3 :
+:$I(f) = \frac{(b-a)}{6} [ f(a) + 4 f(x_{1/2}) + f(b) ]$
+
+L’erreur globale est donnée par
+:$E(f) = - \frac{(b-a)^5}{2880} f^{(4)}(\eta), \quad \eta \in [a,b]$
+
+Remarque : comme la méthode du point médian qui caractérise un polynôme de
+degré 0 et qui reste exacte pour tout polynôme de degré 1, la méthode de
+Simpson caractérise un polynôme de degré 2 et reste exacte pour tout polynôme
+de degré 3. Il s’agit d’une sorte d’"anomalie" où se produisent des
+compensations bénéfiques à l’ordre de la méthode.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formule_de_Simpson)
+
+![](images/integration_num_simpson.svg)
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_Simpson.svg)
+
+### Quadrature de Gauss-Kronrod
+La formule de quadrature de Gauss-Kronrod est une extension de la quadrature de
+Gauss. Lorsque l'on calcule une quadrature de Gauss sur un intervalle et que
+l'on divise cet intervalle en deux partie, on ne peut réutiliser aucun des
+points (sauf le point médian dans le cas d'un nombre de points impairs).
+La formule de Gauss-Kronrod, créée dans les années 60 par Alexander Kronrod,
+permet de transformer un schéma d'ordre $n$ en schéma d'ordre $3n+1$ en
+ajoutant aux $n$ points de la quadrature de Gauss $n+1$ zéros des polylônmes de
+Stieltjes-Wigert. Les polynômes de Stieltjes-Wigert sont des polynômes
+orthogonaux pour la fonction de poids :
+
+$$w(x)=\pi^{-1/2}\cdot k\cdot x^{k^2\log(x)},x\in\mathbf{R}_+^*, k>0$$
+
+On pose $$q_k=e^{-\frac{1}{2k^2}}$$
+
+Les polynômes de Stieltjes-Wigert s'écrivent alors :
+
+$$p_0(x)=q^{1/4}$$
+et
+$$p_{n,k}(x) = \frac{(-1)^n q_k^{\frac{n}{2} +
+\frac{1}{4}}}{\sqrt{(q_k;q_k)_n}}\sum{\nu=0}^n\left[\begin{array}{c}n\\\nu\end{array}\right]q_k^{\nu^2}(-\sqrt{q_k}x)^\nu$$
+
+où
+$$k\in[1,n]$$
+$$\left[\begin{array}{c}n\\\nu\end{array}\right]=\prod_{i=0}^{\nu-1}\frac{1-q^{n-i}}{1-q^{i+1}}$$
+($q$-symbole de Pochhammer)
+$$(q;a)_n=\left\{\begin{array}{c}
+          \prod_{j=0}^{n-1}(1-qa^j),n>0\\
+          1,n=0\\
+          \prod_{j=0}^{|n|}(1-qa^j),n<0\\
+          \prod_{j=0}^{\infty}(1-qa^j),n=\infty
+          \end{array}\right.$$ (coefficient $q$-binomial)
+
+Afin d'accélérer davantage la convergence, on utilise l'intégration de
+Gauss-Kronrod de manière répétée (puisque cette méthode offre l'avantage de
+pouvoir réutiliser les points de calcul de l'itération précédente) et l'on
+applique l'$\varepsilon$-algorithme de Wynn.
+
+Les formules de Gauss-Kronrod sont implémentées dans des bibliothèques
+numériques standard telles que celles de Netlib (QUADPACK).
+
+- [Weisstein, Eric W. "Stieltjes-Wigert Polynomial." From
+MathWorld--A Wolfram Web
+Resource.](http://mathworld.wolfram.com/Stieltjes-WigertPolynomial.html)
+- Szegö, G., **Orthogonal Polynomials**, 4th ed. Providence, RI: Amer. Math. Soc.,
+p. 33, 1975. 
+- R. Piessens, E. deDoncker–Kapenga, C. Uberhuber, D. Kahaner (1983) **Quadpack: a
+Subroutine Package for Automatic Integration**; Springer Verlag. 
 
 ## Calcul des matrices de masse ajoutée
 
