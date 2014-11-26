@@ -1182,7 +1182,7 @@ On adopte les notations suivantes :
 efforts générés par l'hélice suivant son axe (sans tenir compte de la succion de la coque),
 - $Q$ est le couple généré par l'hélice en eau libre autour de son axe. Il
   s'exprime en N.m.
-- $n$ est le nombre de tours que l'hélice fait par seconde (en Hz)
+- $n$ est le nombre de tours que l'hélice fait par seconde (en tr/s)
 - $D$ est le diamètre de l'hélice (en m)
 - $rho$ est la densité volumique de l'eau (en kg/m^3)
 - $V_a$ est la vitesse d'avance (en m/s), c'est-à-dire la vitesse de l'écoulement non
@@ -1263,9 +1263,10 @@ on peut ensuite dériver la poussée et le couple.
 
 ### Prise en compte des effets de la coque et du sillage
 
-Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque,
-l'hélice ne se déplace pas (par rapport à l'eau) à la vitesse du navire $V_s$,
-autrement dit $V_a\neq V_s$. La vitesse d'avance $V_a$ est, en général, très
+Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque, la
+vitesse du fluide au niveau de l'hélice $V_a n'est pas égale (en valeur absolue) à
+la vitesse du navire par rapport à l'eau $V_s$, autrement dit $V_a\neq V_s$.
+La vitesse d'avance $V_a$ est, en général, très
 difficile à mesurer et l'on suppose qu'elle est proportionnelle à la vitesse du
 navire. On définit donc un coefficient $w$ (pour "wake", soit "sillage" en
 anglais) tel que :
@@ -1279,8 +1280,9 @@ exemple dans Carlton, pages 70,72,73 et 74.
 En outre, l'hélice accroît la [résistance à
 l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
 : en effet, elle diminue la pression à l'arrière du navire, ce qui augmente la
-poussée nécessaire pour la propulsion. Pour prendre en compte ce phénomène, on
-introduit le coefficient de succion $t$ tel que :
+poussée nécessaire pour la propulsion. L'helice accélérant le fluide, il existe
+des frottements supplémentaires sur la coque. Pour prendre en compte ces
+phénomènes, on introduit le coefficient de succion $t$ tel que :
 
 $$t = 1 - \frac{R_v}{T_p}$$
 
