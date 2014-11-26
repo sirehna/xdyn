@@ -8,7 +8,7 @@
 #ifndef HISTORY_HPP_
 #define HISTORY_HPP_
 
-#include <list>
+#include <vector>
 
 /** \brief
  *  \details
@@ -42,12 +42,14 @@ class History
 
     private:
         typedef std::pair<double,double> TimeValue;
+        typedef std::vector<TimeValue> Container;
 
         History(); // Disabled
-        void throw_if_already_added(const std::list<TimeValue>::const_iterator& it, const double t) const;
+        void throw_if_already_added(const Container::const_iterator& it, const double t) const;
+        Container::const_iterator find_braketing_position(const double t) const;
 
         double Tmax;
-        std::list<TimeValue> L;
+        Container L;
 };
 
 
