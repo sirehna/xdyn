@@ -61,6 +61,8 @@ TEST_F(HistoryTest, should_throw_if_recording_the_same_instant_twice)
     const double t = a.random<double>().greater_than(0);
     ASSERT_NO_THROW(h.record(t, a.random<double>()));
     ASSERT_THROW(h.record(t, a.random<double>()), HistoryException);
+    ASSERT_NO_THROW(h.record(t+1, a.random<double>()));
+    ASSERT_THROW(h.record(t+1, a.random<double>()), HistoryException);
 }
 
 TEST_F(HistoryTest, can_retrieve_initial_values)
