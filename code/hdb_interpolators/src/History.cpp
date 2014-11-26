@@ -50,14 +50,19 @@ double History::get(double tau //!< How far back in history do we need to go (in
 
 double History::get_value(const Container::const_iterator& it, const double t) const
 {
+    if (it == L.begin())
+    {
+        return it->second;
+    }
     if (it == L.end())
     {
         THROW(__PRETTY_FUNCTION__, HistoryException, "Something is very wrong: first bracketing value is last value in list.");
     }
-    const double tA = it->first;
-    const double tB = (it+1)->first;
-    const double yA = it->second;
-    const double yB = (it+1)->second;
+    const double tA = (it-1)->first;
+    const double tB = it->first;
+    const double yA = (it-1)->second;
+    const double yB = it->second;
+
     return (t-tA)/(tB-tA)*(yB-yA) + yA;
 }
 
@@ -73,9 +78,9 @@ void History::throw_if_already_added(const Container::const_iterator& it, const 
 
 History::Container::const_iterator History::find_braketing_position(const double t) const
 {
-    if (L.empty())     return L.end();
+    if (L.empty())           return L.end();
     if (L.back().first < t)  return L.end();
-    if (L.front().first > t) return L.begin();
+    if (L.front().first >= t) return L.begin();
     size_t idx_lower = 0;
     size_t idx_greater = L.size()-1;
     while (true)
@@ -84,7 +89,7 @@ History::Container::const_iterator History::find_braketing_position(const double
         const auto greater = L.begin()+(long)idx_greater;
         if (t==lower->first) return lower;
         if (t==greater->first) return greater;
-        if (idx_greater==idx_lower+1) return L.begin()+(long)idx_lower;
+        if (idx_greater<=idx_lower+1) return L.begin()+(long)idx_greater;
         const size_t idx_middle = (size_t)std::floor(((double)idx_lower+(double)idx_greater)/2.);
         const auto middle = L.begin()+(long)idx_middle;
         if (t==middle->first) return middle;

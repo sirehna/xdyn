@@ -95,3 +95,24 @@ TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
     h.record(t0, 3);
     ASSERT_THROW(h.get(-1), HistoryException);
 }
+
+TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
+{
+    History h(516);
+    h.record(421, 1);
+    h.record(216, 277);
+    h.record(420, 73);
+    h.record(540, 239);
+    h.record(24, 1);
+
+    ASSERT_DOUBLE_EQ(1,  h.get(516));
+    ASSERT_DOUBLE_EQ(73, h.get(120));
+    ASSERT_DOUBLE_EQ(1,  h.get(119));
+    ASSERT_DOUBLE_EQ(239,h.get(0));
+
+    ASSERT_DOUBLE_EQ(277,h.get(324));
+    ASSERT_DOUBLE_EQ(24, h.get(500));
+    ASSERT_DOUBLE_EQ(193,h.get(240));
+    ASSERT_DOUBLE_EQ(37, h.get(119.5));
+    ASSERT_DOUBLE_EQ(3,  h.get(118));
+}
