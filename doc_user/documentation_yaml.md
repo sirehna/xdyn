@@ -843,29 +843,33 @@ suivantes sont réalisées :
 - Lecture du fichier HDB : son chemin est renseigné dans la clef `hdb`.
 - Interpolation des matrices : les types d'interpolation connus sont :
   `piecewise constant`, `linear` et `spline` (splines naturelles, c'est-à-dire
-  dont la dérivée seconde est nulle aux extrémités). Ce type doit être
-  renseigné dans la clef `interpolation`.
-- Intégration numérique : renseigné dans `quadrature`. Les types d'intégration
-  connus sont : `rectangle`, `trapezoidal`, `simpson` et `gauss-kronrod`. On
+  dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
+  qui se prolongent par des droites aux extrémités du domaine). Le type
+  d'interpolation doit être renseigné dans la clef `interpolation`.
+- Intégration numérique : renseigné dans `quadrature type`. Les types d'intégration
+  connus sont : [`rectangle`](#m%C3%A9thode-des-rectangles), [`trapezoidal`](#m%C3%A9thode-des-trap%C3%A8zes),
+  [`simpson`](#r%C3%A8gle-de-simpson) et [`gauss-kronrod`](#quadrature-de-gauss-kronrod). On
   doit en outre spécifier une valeur pour l'erreur maximale (critère d'arrêt) :
-  `eps` (par exemple, pour l'interpolation rectangle ou trapèze,
+  `quadrature tolerance` (par exemple, pour l'interpolation rectangle ou trapèze,
   $\varepsilon=\frac{1}{n}$). Les bornes de l'intégration sont
   $\omega_{\mbox{min}}$ et $\omega_{\mbox{max}}$ lues dans le fichier HDB.
-- Interpolation des fonctions de retard : on utilise le même type
+- Interpolation des fonctions de retard lors de la convolution : on utilise le même type
   d'interpolation que pour les matrices. Le nombre de points à partir duquel
   est réalisée cette interpolation (le nombre de fois qu'on calcule l'intégrale
   $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
-  est donné par `nb of points for retardation function`.
-- Interpolation des états : on utilise le même type d'interpolation que pour
-  les matrices.
-- Convolution : sa durée est $\frac{2\pi}{\omega_{\mbox{min}}}$
+  est donné par `nb of points in convolution`.
+- Interpolation des états : dans l'implémentation actuelle, seule une
+  interpolation linéaire est disponible.
+- Convolution : sa durée est $\frac{2\pi}{\omega_{\mbox{min}}}$ : on ne dépasse
+  jamais cette valeur afin d'éviter les phénomènes de repliement de spectre.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
   hdb: anthineas.hdb
-  interpolation: linear
-  quadrature: rectangle
-  nb of points for retardation function: 30
+  interpolation: splines
+  quadrature type: gauss-kronrod
+  quadrature tolerance: 0.01
+  nb of points in convolution: 30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Efforts commandés
