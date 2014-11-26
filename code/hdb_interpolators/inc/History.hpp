@@ -8,6 +8,8 @@
 #ifndef HISTORY_HPP_
 #define HISTORY_HPP_
 
+#include <list>
+
 /** \brief
  *  \details
  *  \addtogroup hdb_interpolators
@@ -28,11 +30,21 @@ class History
           *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
           */
         double get(double tau //!< How far back in history do we need to go (in seconds)?
-                               ) const;
+                   ) const;
+
+        /**  \brief Adds a value to history
+          *  \details
+          *  \snippet hdb_interpolators/unit_tests/src/HistoryTest.cpp HistoryTest record_example
+          */
+        void record(const double t, //!< Instant corresponding to the value being added
+                    const double val //!< Value to add
+                    );
 
     private:
+        typedef std::pair<double,double> TimeValue;
         History(); // Disabled
         double Tmax;
+        std::list<TimeValue> L;
 };
 
 
