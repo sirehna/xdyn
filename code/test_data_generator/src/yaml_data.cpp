@@ -1913,7 +1913,7 @@ std::string test_data::radiation_damping()
     ss << "model: radiation damping\n"
        << "hdb: anthineas.hdb\n"
        << "interpolation: splines\n"
-       << "quadrature type: gauss-kronrod\n"
+       << "quadrature: gauss-kronrod\n"
        << "quadrature tolerance: 0.01\n"
        << "nb of points in convolution: 30\n";
     return ss.str();

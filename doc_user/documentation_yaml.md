@@ -867,7 +867,7 @@ suivantes sont réalisées :
 - model: radiation damping
   hdb: anthineas.hdb
   interpolation: splines
-  quadrature type: gauss-kronrod
+  quadrature: gauss-kronrod
   quadrature tolerance: 0.01
   nb of points in convolution: 30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
