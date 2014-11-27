@@ -12,7 +12,7 @@
 
 #include <Eigen/Dense>
 
-#include "YamlForces.hpp"
+#include "YamlGravity.hpp"
 #include "YamlWageningen.hpp"
 #include "YamlResistanceCurve.hpp"
 

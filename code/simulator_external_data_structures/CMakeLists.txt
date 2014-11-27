@@ -14,7 +14,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlDynamics.cpp
         src/YamlDynamics6x6Matrix.cpp
         src/YamlEnvironmentalConstants.cpp
-        src/YamlForces.cpp
+        src/YamlGravity.cpp
         src/YamlForcesAndTorquesOutput.cpp
         src/YamlModel.cpp
         src/YamlOutput.cpp

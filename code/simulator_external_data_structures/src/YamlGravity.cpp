@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlForces.hpp"
+#include "YamlGravity.hpp"
 
 
 YamlGravity::YamlGravity() : g(0)
