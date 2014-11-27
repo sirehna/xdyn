@@ -26,15 +26,6 @@ void HistoryTest::TearDown()
 {
 }
 
-TEST_F(HistoryTest, example)
-{
-//! [HistoryTest example]
-    History h(a.random<double>());
-//! [HistoryTest example]
-//! [HistoryTest expected output]
-//! [HistoryTest expected output]
-}
-
 TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
 {
     const double Tmax = a.random<double>().greater_than(0);
@@ -98,18 +89,20 @@ TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
 
 TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
 {
+    //! [HistoryTest example]
     History h(516);
     h.record(421, 1);
     h.record(216, 277);
     h.record(420, 73);
     h.record(540, 239);
     h.record(24, 1);
-
+    //! [HistoryTest example]
+    //! [HistoryTest expected output]
     ASSERT_DOUBLE_EQ(1,  h.get(516));
     ASSERT_DOUBLE_EQ(73, h.get(120));
     ASSERT_DOUBLE_EQ(1,  h.get(119));
     ASSERT_DOUBLE_EQ(239,h.get(0));
-
+    //! [HistoryTest expected output]
     ASSERT_DOUBLE_EQ(277,h.get(324));
     ASSERT_DOUBLE_EQ(24, h.get(500));
     ASSERT_DOUBLE_EQ(193,h.get(240));
