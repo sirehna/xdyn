@@ -5,6 +5,10 @@
  *      Author: cady
  */
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include "HDBBuilder.hpp"
 #include "HDBData.hpp"
 #include "HDBDataTest.hpp"
@@ -71,17 +75,17 @@ TEST_F(HDBDataTest, can_retrieve_added_mass_at_Tp_0)
     ASSERT_DOUBLE_EQ(6.774041E+02, (double)M(2,5));
 }
 
-TEST_F(HDBDataTest, can_retrieve_periods_for_radiation_damping)
+TEST_F(HDBDataTest, can_retrieve_angular_frequencies_for_radiation_damping)
 {
     HDBData data((HDBBuilder(test_data::anthineas_hdb())));
-    const auto periods = data.get_radiation_damping_periods();
-    ASSERT_EQ(6, periods.size());
-    ASSERT_EQ(1,   periods.at(0));
-    ASSERT_EQ(2,   periods.at(1));
-    ASSERT_EQ(3,   periods.at(2));
-    ASSERT_EQ(3.5, periods.at(3));
-    ASSERT_EQ(3.8, periods.at(4));
-    ASSERT_EQ(4,   periods.at(5));
+    const auto angular_frequencies = data.get_radiation_damping_angular_frequencies();
+    ASSERT_EQ(6,        angular_frequencies.size());
+    ASSERT_EQ(2*PI/1.,  angular_frequencies.at(5));
+    ASSERT_EQ(2*PI/2.,  angular_frequencies.at(4));
+    ASSERT_EQ(2*PI/3.,  angular_frequencies.at(3));
+    ASSERT_EQ(2*PI/3.5, angular_frequencies.at(2));
+    ASSERT_EQ(2*PI/3.8, angular_frequencies.at(1));
+    ASSERT_EQ(2*PI/4.,  angular_frequencies.at(0));
 }
 
 TEST_F(HDBDataTest, can_retrieve_vectors_for_each_element_in_radiation_damping_matrix)

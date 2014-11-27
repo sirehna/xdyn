@@ -5,14 +5,21 @@
  *      Author: cady
  */
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include "HDBBuilder.hpp"
+#include "HDBBuilderException.hpp"
 #include "HDBData.hpp"
 #include <ssc/interpolation.hpp>
+
+#include <ssc/macros.hpp>
 
 class HDBData::Impl
 {
     public:
-        Impl(const HDBBuilder& builder) : T_rad(), M(), Br(), Tmin(0)
+        Impl(const HDBBuilder& builder) : omega_rad(), M(), Br(), Tmin(0)
         {
             bool allow_queries_outside_bounds;
             const TimestampedMatrices Ma = builder.get_added_mass();
@@ -29,7 +36,15 @@ class HDBData::Impl
             }
 
 
-            T_rad = get_Tp(B_r);
+            auto v = get_Tp(B_r);
+            for (auto it = v.rbegin(); it != v.rend() ; ++it)
+            {
+                if(*it==0)
+                {
+                    THROW(__PRETTY_FUNCTION__, HDBBuilderException, "Zero period detected: cannot compute angular frequency. Check Added_mass_Radiation_Damping section of the HDB file.");
+                }
+                omega_rad.push_back(2*PI/ *it);
+            }
         }
 
         Eigen::Matrix<double,6,6> get_added_mass(const double Tp)
@@ -55,7 +70,7 @@ class HDBData::Impl
             return Br[i][j];
         }
 
-        std::vector<double> T_rad;
+        std::vector<double> omega_rad;
 
     private:
         std::vector<double> get_Tp(const TimestampedMatrices& M)
@@ -93,9 +108,9 @@ Eigen::Matrix<double,6,6> HDBData::get_added_mass(const double Tp //!< Period at
     return pimpl->get_added_mass(Tp);
 }
 
-std::vector<double> HDBData::get_radiation_damping_periods() const
+std::vector<double> HDBData::get_radiation_damping_angular_frequencies() const
 {
-    return pimpl->T_rad;
+    return pimpl->omega_rad;
 
 }
 
