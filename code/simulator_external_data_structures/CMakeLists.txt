@@ -21,6 +21,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlPoint.cpp
         src/YamlPosition.cpp
         src/YamlPositionOutput.cpp
+        src/YamlRadiationDamping.cpp
         src/YamlResistanceCurve.cpp
         src/YamlRotation.cpp
         src/YamlSimulatorInput.cpp
@@ -28,6 +29,14 @@ SET(SRC src/YamlAngle.cpp
         src/YamlWaveModelInput.cpp
         src/YamlWageningen.cpp
         )
+
+# Using C++ 2011
+# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
+# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
+# Use -std=gnu++0x instead.
+if(NOT(MSVC))
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+endif()
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
