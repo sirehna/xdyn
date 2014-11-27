@@ -1,12 +1,12 @@
 /*
- * Forces.hpp
+ * YamlGravity.hpp
  *
  *  Created on: Apr 28, 2014
  *      Author: cady
  */
 
-#ifndef YAMLFORCES_HPP_
-#define YAMLFORCES_HPP_
+#ifndef YAMLGRAVITY_HPP_
+#define YAMLGRAVITY_HPP_
 
 struct YamlGravity
 {
@@ -15,4 +15,4 @@ struct YamlGravity
 };
 
 
-#endif /* YAMLFORCES_HPP_ */
+#endif /* YAMLGRAVITY_HPP_ */
