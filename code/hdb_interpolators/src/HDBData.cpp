@@ -5,15 +5,17 @@
  *      Author: cady
  */
 
+#include "HDBBuilder.hpp"
 #include "HDBData.hpp"
 #include <ssc/interpolation.hpp>
 
 class HDBData::Impl
 {
     public:
-        Impl(const TimestampedMatrices& Ma) : M(), Tmin(0)
+        Impl(const HDBBuilder& builder) : M(), Tmin(0)
         {
             bool allow_queries_outside_bounds;
+            const TimestampedMatrices Ma = builder.get_added_mass();
             const auto x = get_Tp(Ma);
             Tmin = x.front();
             for (size_t i = 0 ; i < 6 ; ++i)
@@ -63,7 +65,7 @@ class HDBData::Impl
 };
 
 
-HDBData::HDBData(const TimestampedMatrices& Ma) : pimpl(new HDBData::Impl(Ma))
+HDBData::HDBData(const HDBBuilder& builder) : pimpl(new HDBData::Impl(builder))
 {
 }
 

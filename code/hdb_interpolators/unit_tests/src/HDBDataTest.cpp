@@ -32,7 +32,7 @@ TEST_F(HDBDataTest, can_retrieve_initial_values)
 {
 //! [HDBDataTest example]
     const HDBBuilder builder(test_data::anthineas_hdb());
-    HDBData data(builder.get_added_mass());
+    HDBData data(builder);
     //! [HDBDataTest example]
 
     //! [HDBDataTest expected output]
@@ -61,7 +61,7 @@ TEST_F(HDBDataTest, can_retrieve_initial_values)
 TEST_F(HDBDataTest, can_retrieve_added_mass_at_Tp_0)
 {
     const HDBBuilder builder(test_data::anthineas_hdb());
-    HDBData data(builder.get_added_mass());
+    HDBData data(builder);
     const auto M = data.get_added_mass();
     ASSERT_EQ(6, M.cols());
     ASSERT_EQ(6, M.rows());
