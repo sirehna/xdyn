@@ -115,6 +115,15 @@ void History::record(const double t, //!< Instant corresponding to the value bei
     const size_t t_idx = find_braketing_position(t);
     throw_if_already_added(t_idx, t);
     L.insert(L.begin()+(long)t_idx,std::make_pair(t,val));
+
+    const double tmin = get_current_time() - Tmax;
+    const size_t t_minus_tau_idx = find_braketing_position(tmin);
+    if (t_minus_tau_idx)
+    {
+        const double vmin = get_value(t_minus_tau_idx, tmin);
+        L.erase(L.begin(), L.begin()+ (long)t_minus_tau_idx);
+        if (L.front().first != tmin) L.insert(L.begin(), std::make_pair(tmin, vmin));
+    }
 }
 
 size_t History::size() const

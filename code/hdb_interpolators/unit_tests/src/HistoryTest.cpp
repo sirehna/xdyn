@@ -124,3 +124,49 @@ TEST_F(HistoryTest, can_get_size_of_history)
     for (size_t i = 0 ; i < N ; ++i) h.record((double)i, a.random<double>());
     ASSERT_EQ(N, h.size());
 }
+
+TEST_F(HistoryTest, should_erase_old_elements)
+{
+    const size_t N = a.random<size_t>().between(2,1000);
+    History h((double)N);
+    for (size_t i = 0 ; i < N ; ++i) h.record((double)i, a.random<double>());
+    for (size_t i = N ; i < 2*N ; ++i)
+    {
+        h.record((double)i, a.random<double>());
+        ASSERT_EQ(N+1, h.size());
+    }
+}
+
+TEST_F(HistoryTest, should_shift_history)
+{
+    History h(13.5);
+    h.record(10, 10);
+    ASSERT_EQ(1, h.size());
+
+    h.record(15, 20);
+    ASSERT_EQ(2, h.size());
+
+    h.record(20, 12);
+    ASSERT_EQ(3, h.size());
+
+    h.record(21, 14);
+    ASSERT_EQ(4, h.size());
+
+    h.record(22, 13);
+    ASSERT_EQ(5, h.size());
+
+    h.record(24, 16);
+    ASSERT_EQ(6, h.size());
+    ASSERT_DOUBLE_EQ(11, h.get(13.5));
+
+    h.record(30, 25);
+    ASSERT_EQ(6, h.size());
+
+    h.record(31, 26);
+    ASSERT_EQ(7, h.size());
+    ASSERT_DOUBLE_EQ(16, h.get(13.5));
+
+    h.record(33, 27);
+    ASSERT_EQ(8, h.size());
+    ASSERT_DOUBLE_EQ(12.8, h.get(13.5));
+}
