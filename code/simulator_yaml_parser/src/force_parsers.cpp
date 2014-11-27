@@ -10,6 +10,7 @@
 #include "yaml.h"
 #include "parse_unit_value.hpp"
 #include "external_data_structures_parsers.hpp"
+#include "SimulatorYamlParserException.hpp"
 
 YamlGravity parse_gravity(const std::string& yaml)
 {
@@ -81,5 +82,46 @@ YamlResistanceCurve parse_resistance_curve(const std::string& yaml)
     YamlResistanceCurve ret;
     parse_uv(node["speed"], ret.Va);
     parse_uv(node["resistance"], ret.R);
+    return ret;
+}
+
+YamlRadiationDamping parse_radiation_damping(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    std::stringstream ss;
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlRadiationDamping ret;
+    node["hdb"] >> ret.hdb_filename;
+    std::string s;
+    node["interpolation"] >> s;
+    if      (s == "splines")            ret.interpolation = TypeOfInterpolation::SPLINES;
+    else if (s == "piecewise constant") ret.interpolation = TypeOfInterpolation::PIECEWISE_CONSTANT;
+    else if (s == "linear")             ret.interpolation = TypeOfInterpolation::LINEAR;
+    else
+    {
+        ss << "Unkown interpolation type: " << s << ". Should be one of 'splines', 'piecewise constant' or 'linear'.";
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    node["nb of points in convolution"] >> ret.nb_of_points_in_convolution;
+    node["quadrature"] >> s;
+    if      (s == "gauss-kronrod") ret.quadrature = TypeOfQuadrature::GAUSS_KRONROD;
+    else if (s == "rectangle")     ret.quadrature = TypeOfQuadrature::RECTANGLE;
+    else if (s == "simpson")       ret.quadrature = TypeOfQuadrature::SIMPSON;
+    else if (s == "trapezoidal")   ret.quadrature = TypeOfQuadrature::TRAPEZOIDAL;
+    else
+    {
+        ss.clear();
+        ss << "Unkown quadrature type: " << s << ". Should be one of 'gauss-kronrod', 'rectangle', ' simpson' or 'trapezoidal'.";
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+    node["quadrature tolerance"] >> ret.quadrature_tolerance;
+    if ((ret.quadrature_tolerance>1) or (ret.quadrature_tolerance<0))
+    {
+        ss.clear();
+        ss << "Invalid quadrature tolerance: " << s << ". Should be between 0 and 1.";
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
     return ret;
 }
