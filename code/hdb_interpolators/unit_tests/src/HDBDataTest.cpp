@@ -70,3 +70,16 @@ TEST_F(HDBDataTest, can_retrieve_added_mass_at_Tp_0)
     ASSERT_DOUBLE_EQ(3.267841E+05, (double)M(2,4));
     ASSERT_DOUBLE_EQ(6.774041E+02, (double)M(2,5));
 }
+
+TEST_F(HDBDataTest, can_retrieve_periods_for_radiation_damping)
+{
+    HDBData data((HDBBuilder(test_data::anthineas_hdb())));
+    const auto periods = data.get_radiation_damping_periods();
+    ASSERT_EQ(6, periods.size());
+    ASSERT_EQ(1,   periods.at(0));
+    ASSERT_EQ(2,   periods.at(1));
+    ASSERT_EQ(3,   periods.at(2));
+    ASSERT_EQ(3.5, periods.at(3));
+    ASSERT_EQ(3.8, periods.at(4));
+    ASSERT_EQ(4,   periods.at(5));
+}

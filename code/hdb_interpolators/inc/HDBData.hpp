@@ -11,6 +11,8 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
+#include <array>
+
 #include <Eigen/Dense>
 
 #include "TimestampedMatrix.hpp"
@@ -33,6 +35,8 @@ class HDBData
         Eigen::Matrix<double,6,6> get_added_mass() const;
         Eigen::Matrix<double,6,6> get_added_mass(const double Tp //!< Period at which to interpolate the added mass
                                                 ) const; // const doesn't really mean anything here as the members are hidden inside a pimpl
+        std::vector<double> get_radiation_damping_periods() const;
+
     private:
         HDBData();
         class Impl;

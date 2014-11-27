@@ -25,6 +25,9 @@ class HDBData::Impl
                     M[i][j] = ssc::interpolation::SplineVariableStep(x, get_Mij_for_each_Tp(Ma,i,j), allow_queries_outside_bounds=true);
                 }
             }
+
+            const TimestampedMatrices Br = builder.get_radiation_damping();
+            T_rad = get_Tp(Br);
         }
 
         Eigen::Matrix<double,6,6> get_added_mass(const double Tp)
@@ -44,6 +47,8 @@ class HDBData::Impl
         {
             return get_added_mass(Tmin);
         }
+
+        std::vector<double> T_rad;
 
     private:
         std::vector<double> get_Tp(const TimestampedMatrices& M)
@@ -78,4 +83,10 @@ Eigen::Matrix<double,6,6> HDBData::get_added_mass(const double Tp //!< Period at
                                                  ) const
 {
     return pimpl->get_added_mass(Tp);
+}
+
+std::vector<double> HDBData::get_radiation_damping_periods() const
+{
+    return pimpl->T_rad;
+
 }
