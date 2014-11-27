@@ -67,7 +67,8 @@ class HDBData::Impl
 
         std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const
         {
-            return Br[i][j];
+            const auto v = Br[i][j];
+            return std::vector<double>(v.rbegin(), v.rend());
         }
 
         std::vector<double> omega_rad;

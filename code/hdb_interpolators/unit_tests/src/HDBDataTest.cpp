@@ -99,10 +99,10 @@ TEST_F(HDBDataTest, can_retrieve_vectors_for_each_element_in_radiation_damping_m
         }
     }
     const auto v = data.get_radiation_damping_coeff(1,2);
-    ASSERT_DOUBLE_EQ(-1.590935E+02, v.at(0));
-    ASSERT_DOUBLE_EQ( 2.595528E+02, v.at(1));
-    ASSERT_DOUBLE_EQ(-1.614637E+02, v.at(2));
-    ASSERT_DOUBLE_EQ(-1.376756E+02, v.at(3));
-    ASSERT_DOUBLE_EQ(-1.215545E+02, v.at(4));
-    ASSERT_DOUBLE_EQ(-1.083372E+02, v.at(5));
+    ASSERT_DOUBLE_EQ(-1.590935E+02, v.at(5));
+    ASSERT_DOUBLE_EQ( 2.595528E+02, v.at(4));
+    ASSERT_DOUBLE_EQ(-1.614637E+02, v.at(3));
+    ASSERT_DOUBLE_EQ(-1.376756E+02, v.at(2));
+    ASSERT_DOUBLE_EQ(-1.215545E+02, v.at(1));
+    ASSERT_DOUBLE_EQ(-1.083372E+02, v.at(0));
 }
