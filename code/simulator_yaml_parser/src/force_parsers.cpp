@@ -11,9 +11,9 @@
 #include "parse_unit_value.hpp"
 #include "external_data_structures_parsers.hpp"
 
-GravityParameters parse_gravity(const std::string& yaml)
+YamlGravity parse_gravity(const std::string& yaml)
 {
-    GravityParameters ret;
+    YamlGravity ret;
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;

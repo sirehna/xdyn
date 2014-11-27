@@ -8,9 +8,9 @@
 #ifndef YAMLFORCES_HPP_
 #define YAMLFORCES_HPP_
 
-struct GravityParameters
+struct YamlGravity
 {
-    GravityParameters();
+    YamlGravity();
     double g;
 };
 

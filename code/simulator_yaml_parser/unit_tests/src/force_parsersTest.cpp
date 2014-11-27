@@ -33,7 +33,7 @@ void force_parsersTest::TearDown()
 
 TEST_F(force_parsersTest, gravity)
 {
-    const GravityParameters p = parse_gravity("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity");
+    const YamlGravity p = parse_gravity("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity");
     ASSERT_DOUBLE_EQ(9.81, p.g);
 }
 
