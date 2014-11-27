@@ -44,31 +44,31 @@ double History::get(double tau //!< How far back in history do we need to go (in
         THROW(__PRETTY_FUNCTION__, HistoryException, "Cannot retrieve anything from history because it is empty");
     }
     const double t = L.back().first;
-    const auto it = find_braketing_position(t-tau);
-    return get_value(it, t-tau);
+    const auto idx = find_braketing_position(t-tau);
+    return get_value(idx, t-tau);
 }
 
-double History::get_value(const Container::const_iterator& it, const double t) const
+double History::get_value(const size_t idx, const double t) const
 {
-    if (it == L.begin())
+    if (idx == 0)
     {
-        return it->second;
+        return L[idx].second;
     }
-    if (it == L.end())
+    if (idx == L.size())
     {
         THROW(__PRETTY_FUNCTION__, HistoryException, "Something is very wrong: first bracketing value is last value in list.");
     }
-    const double tA = (it-1)->first;
-    const double tB = it->first;
-    const double yA = (it-1)->second;
-    const double yB = it->second;
+    const double tA = L[idx-1].first;
+    const double tB = L[idx].first;
+    const double yA = L[idx-1].second;
+    const double yB = L[idx].second;
 
     return (t-tA)/(tB-tA)*(yB-yA) + yA;
 }
 
-void History::throw_if_already_added(const Container::const_iterator& it, const double t) const
+void History::throw_if_already_added(const size_t idx, const double t) const
 {
-    if ((it != L.end()) and (it->first == t))
+    if ((idx != L.size()) and (L[idx].first == t))
     {
         std::stringstream ss;
         ss << "Attempting to insert the same instant in History: t = " << t << " already exists.";
@@ -76,24 +76,22 @@ void History::throw_if_already_added(const Container::const_iterator& it, const 
     }
 }
 
-History::Container::const_iterator History::find_braketing_position(const double t) const
+size_t History::find_braketing_position(const double t) const
 {
-    if (L.empty())           return L.end();
-    if (L.back().first < t)  return L.end();
-    if (L.front().first >= t) return L.begin();
+    if (L.empty())            return L.size();
+    if (L.back().first < t)   return L.size();
+    if (L.front().first >= t) return 0;
     size_t idx_lower = 0;
     size_t idx_greater = L.size()-1;
     while (true)
     {
-        const auto lower = L.begin()+(long)idx_lower;
-        const auto greater = L.begin()+(long)idx_greater;
-        if (t==lower->first) return lower;
-        if (t==greater->first) return greater;
-        if (idx_greater<=idx_lower+1) return L.begin()+(long)idx_greater;
+        if (t==L[idx_lower].first) return idx_lower;
+        if (t==L[idx_greater].first) return idx_greater;
+        if (idx_greater<=idx_lower+1) return idx_greater;
         const size_t idx_middle = (size_t)std::floor(((double)idx_lower+(double)idx_greater)/2.);
-        const auto middle = L.begin()+(long)idx_middle;
-        if (t==middle->first) return middle;
-        if (t < middle->first)
+        const auto middle = L[idx_middle];
+        if (t==middle.first) return idx_middle;
+        if (t < middle.first)
         {
             idx_greater = idx_middle;
         }
@@ -102,17 +100,16 @@ History::Container::const_iterator History::find_braketing_position(const double
             idx_lower = idx_middle;
         }
     }
-    return L.end();
+    return L.size();
 }
 
 void History::record(const double t, //!< Instant corresponding to the value being added
                      const double val //!< Value to add
                     )
 {
-    Container::const_iterator it = find_braketing_position(t);
-    throw_if_already_added(it, t);
-    const long d = it-L.begin();
-    L.insert(L.begin()+d,std::make_pair(t,val));
+    const size_t t_idx = find_braketing_position(t);
+    throw_if_already_added(t_idx, t);
+    L.insert(L.begin()+(long)t_idx,std::make_pair(t,val));
 }
 
 size_t History::size() const
