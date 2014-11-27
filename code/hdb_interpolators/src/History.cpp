@@ -114,3 +114,8 @@ void History::record(const double t, //!< Instant corresponding to the value bei
     const long d = it-L.begin();
     L.insert(L.begin()+d,std::make_pair(t,val));
 }
+
+size_t History::size() const
+{
+    return L.size();
+}

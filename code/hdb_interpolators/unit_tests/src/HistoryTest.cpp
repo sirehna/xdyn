@@ -116,3 +116,11 @@ TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
     ASSERT_DOUBLE_EQ(37, h.get(119.5));
     ASSERT_DOUBLE_EQ(3,  h.get(118));
 }
+
+TEST_F(HistoryTest, can_get_size_of_history)
+{
+    const size_t N = a.random<size_t>().between(2,1000);
+    History h((double)N);
+    for (size_t i = 0 ; i < N ; ++i) h.record((double)i, a.random<double>());
+    ASSERT_EQ(N, h.size());
+}

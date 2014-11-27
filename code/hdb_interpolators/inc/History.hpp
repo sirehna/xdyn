@@ -8,6 +8,7 @@
 #ifndef HISTORY_HPP_
 #define HISTORY_HPP_
 
+#include <cstdlib> //size_t
 #include <vector>
 
 /** \brief
@@ -39,6 +40,11 @@ class History
         void record(const double t, //!< Instant corresponding to the value being added
                     const double val //!< Value to add
                     );
+
+        /**  \brief Number of points in history
+          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest size_example
+          */
+        size_t size() const;
 
     private:
         typedef std::pair<double,double> TimeValue;
