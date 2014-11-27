@@ -3,7 +3,6 @@ project(hdb_interpolators)
 
 set(SRC src/HDBData.cpp
         src/HDBBuilder.cpp
-        src/History.cpp
         )
 
 # Using C++ 2011
