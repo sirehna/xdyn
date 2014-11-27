@@ -43,9 +43,14 @@ double History::get(double tau //!< How far back in history do we need to go (in
     {
         THROW(__PRETTY_FUNCTION__, HistoryException, "Cannot retrieve anything from history because it is empty");
     }
-    const double t = L.back().first;
+    const double t = get_current_time();
     const auto idx = find_braketing_position(t-tau);
     return get_value(idx, t-tau);
+}
+
+double History::get_current_time() const
+{
+    return L.back().first;
 }
 
 double History::get_value(const size_t idx, const double t) const
