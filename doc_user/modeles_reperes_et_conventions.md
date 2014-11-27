@@ -776,6 +776,11 @@ Cette intégrale est calculé à l'aide d'un schéma d'intégration numérique
 
 ![](images/radiation_damping_doc.png "Calcul de l'amortissement de radiation")
 
+On calcule ensuite les efforts d'amortissement de radiation en prenant en
+compte l'historique sur une période $T$ :
+
+$$F_{\mbox{rad}}(t)\sim\int_0^{T}\dot{X}(t-\tau)K_r(\tau)d\tau$$
+
 ### Méthode des rectangles
 
 C’est la méthode la plus simple qui consiste à interpoler la fonction
