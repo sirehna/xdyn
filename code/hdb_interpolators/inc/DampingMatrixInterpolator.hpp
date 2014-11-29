@@ -8,12 +8,8 @@
 #ifndef DAMPINGMATRIXINTERPOLATOR_HPP_
 #define DAMPINGMATRIXINTERPOLATOR_HPP_
 
-#include <ssc/macros/tr1_macros.hpp>
-#include TR1INC(memory)
 
-#include <ssc/interpolation.hpp>
-
-typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
+#include <functional>
 
 #include "YamlRadiationDamping.hpp"
 
@@ -30,7 +26,7 @@ class DampingMatrixInterpolator
 {
     public:
         DampingMatrixInterpolator();
-        InterpolatorPtr build_interpolator(const std::vector<double>& x, const std::vector<double>& y, const TypeOfInterpolation& type) const;
+        std::function<double(double)> build_interpolator(const std::vector<double>& x, const std::vector<double>& y, const TypeOfInterpolation& type) const;
 };
 
 #endif /* DAMPINGMATRIXINTERPOLATOR_HPP_ */

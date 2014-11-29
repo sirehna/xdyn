@@ -52,9 +52,9 @@ TEST_F(DampingMatrixInterpolatorTest, all_types_of_interpolator_can_retrieve_ori
 
     for (size_t i = 0 ; i < N ; ++i)
     {
-        ASSERT_NEAR(B.at(i), f1->f(omega.at(i)), 1E-10) << "i = " << i;
-        ASSERT_NEAR(B.at(i), f2->f(omega.at(i)), 1E-10) << "i = " << i;
-        ASSERT_NEAR(B.at(i), f3->f(omega.at(i)), 1E-10) << "i = " << i;
+        ASSERT_NEAR(B.at(i), f1(omega.at(i)), 1E-10) << "i = " << i;
+        ASSERT_NEAR(B.at(i), f2(omega.at(i)), 1E-10) << "i = " << i;
+        ASSERT_NEAR(B.at(i), f3(omega.at(i)), 1E-10) << "i = " << i;
     }
 }
 

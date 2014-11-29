@@ -5,6 +5,12 @@
  *      Author: cady
  */
 
+#include <ssc/macros/tr1_macros.hpp>
+#include TR1INC(memory)
+
+#include <ssc/interpolation.hpp>
+typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
+
 #include "DampingMatrixInterpolator.hpp"
 #include "DampingMatrixInterpolatorException.hpp"
 
@@ -12,23 +18,24 @@ DampingMatrixInterpolator::DampingMatrixInterpolator()
 {
 }
 
-InterpolatorPtr DampingMatrixInterpolator::build_interpolator(const std::vector<double>& x, const std::vector<double>& y, const TypeOfInterpolation& type) const
+std::function<double(double)> DampingMatrixInterpolator::build_interpolator(const std::vector<double>& x, const std::vector<double>& y, const TypeOfInterpolation& type) const
 {
-    InterpolatorPtr ret;
+    InterpolatorPtr i;
     switch(type)
     {
         case TypeOfInterpolation::LINEAR:
-            ret.reset(new ssc::interpolation::LinearInterpolationVariableStep(x, y));
+            i.reset(new ssc::interpolation::LinearInterpolationVariableStep(x, y));
             break;
         case TypeOfInterpolation::PIECEWISE_CONSTANT:
-            ret.reset(new ssc::interpolation::PiecewiseConstantVariableStep<double>(x, y));
+            i.reset(new ssc::interpolation::PiecewiseConstantVariableStep<double>(x, y));
             break;
         case TypeOfInterpolation::SPLINES:
-            ret.reset(new ssc::interpolation::SplineVariableStep(x, y));
+            i.reset(new ssc::interpolation::SplineVariableStep(x, y));
             break;
         default:
             THROW(__PRETTY_FUNCTION__, DampingMatrixInterpolatorException, "Unknown type of interpolation.");
             break;
     }
+    std::function<double(double)> ret = [i](const double x){return i->f(x);};
     return ret;
 }
