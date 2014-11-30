@@ -770,7 +770,7 @@ interpolation linéaire par morceaux, soit des splines) puis on évalue
 l'intégrale suivante pour différentes valeurs de $\tau$ :
 
 $$K_{i,j}(\tau) =
-\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$$
+\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega$$
 
 Cette intégrale est calculé à l'aide d'un schéma d'intégration numérique
 (méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
