@@ -11,6 +11,10 @@
 
 #include <ssc/macros.hpp>
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 DampingMatrixInterpolatorTest::DampingMatrixInterpolatorTest() : a(ssc::random_data_generator::DataGenerator(212))
 {
 }
@@ -58,3 +62,14 @@ TEST_F(DampingMatrixInterpolatorTest, all_types_of_interpolator_can_retrieve_ori
     }
 }
 
+TEST_F(DampingMatrixInterpolatorTest, can_calculate_cosine_transform)
+{
+    const auto B = [](const double ){return 1;};
+    DampingMatrixInterpolator factory;
+    const double omega_min = 2*PI/10;
+    const double omega_max = 2*PI/1;
+    const size_t n = 10;
+    const auto K = factory.make_retardation_function(B, omega_min, omega_max, n, TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    double tau = 3;
+    ASSERT_NEAR(2./PI*(sin(omega_max*tau)/tau-sin(omega_min*tau)/tau), K(tau), 1E-10);
+}
