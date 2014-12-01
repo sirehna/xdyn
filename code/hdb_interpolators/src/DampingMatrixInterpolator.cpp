@@ -20,14 +20,14 @@ typedef TR1(shared_ptr)<ssc::integrate::Integrator> IntegratorPtr;
 #include "DampingMatrixInterpolator.hpp"
 #include "DampingMatrixInterpolatorException.hpp"
 
-DampingMatrixInterpolator::DampingMatrixInterpolator()
+DampingMatrixInterpolator::DampingMatrixInterpolator(const TypeOfInterpolation& type_of_interpolation_, const TypeOfQuadrature& type_of_quadrature_) : type_of_interpolation(type_of_interpolation_), type_of_quadrature(type_of_quadrature_)
 {
 }
 
-std::function<double(double)> DampingMatrixInterpolator::build_interpolator(const std::vector<double>& x, const std::vector<double>& y, const TypeOfInterpolation& type) const
+std::function<double(double)> DampingMatrixInterpolator::build_interpolator(const std::vector<double>& x, const std::vector<double>& y) const
 {
     InterpolatorPtr i;
-    switch(type)
+    switch(type_of_interpolation)
     {
         case TypeOfInterpolation::LINEAR:
             i.reset(new ssc::interpolation::LinearInterpolationVariableStep(x, y));
@@ -46,7 +46,7 @@ std::function<double(double)> DampingMatrixInterpolator::build_interpolator(cons
     return ret;
 }
 
-double DampingMatrixInterpolator::integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max, const TypeOfQuadrature& type_of_quadrature) const
+double DampingMatrixInterpolator::integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const
 {
     IntegratorPtr i;
     const auto f = [&Br,tau](const double omega){return Br(omega)*cos(omega*tau);};
@@ -71,7 +71,7 @@ double DampingMatrixInterpolator::integrate(const std::function<double(double)>&
     return 2./PI*i->integrate_f(omega_min, omega_max);
 }
 
-std::function<double(double)> DampingMatrixInterpolator::make_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n, const TypeOfInterpolation& type_of_interpolation, const TypeOfQuadrature& type_of_quadrature) const
+std::function<double(double)> DampingMatrixInterpolator::make_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const
 {
     std::vector<double> x(n,0), y(n, 0);
     const double tau_min = 2*PI/omega_max;
@@ -80,7 +80,7 @@ std::function<double(double)> DampingMatrixInterpolator::make_retardation_functi
     {
         const double tau = tau_min + (tau_max - tau_min)*(double)i/((double)n-1.);
         x[i] = tau;
-        y[i] = integrate(Br, tau, omega_min, omega_max, type_of_quadrature);
+        y[i] = integrate(Br, tau, omega_min, omega_max);
     }
-    return build_interpolator(x, y, type_of_interpolation);
+    return build_interpolator(x, y);
 }
