@@ -12,6 +12,7 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/LinearDampingForceModelTest.cpp
               src/WageningenControlledForceModelTest.cpp
               src/ResistanceCurveForceModelTest.cpp
+              src/RadiationDampingForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
@@ -25,5 +26,6 @@ INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS}/../unit_tests/inc)
 include_directories(${external_file_formats_INCLUDE_DIRS})
+include_directories(${hdb_interpolators_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
