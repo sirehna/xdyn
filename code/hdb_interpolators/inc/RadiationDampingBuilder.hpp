@@ -1,12 +1,12 @@
 /*
- * DampingMatrixInterpolator.hpp
+ * RadiationDampingBuilder.hpp
  *
  *  Created on: Nov 27, 2014
  *      Author: cady
  */
 
-#ifndef DAMPINGMATRIXINTERPOLATOR_HPP_
-#define DAMPINGMATRIXINTERPOLATOR_HPP_
+#ifndef RADIATIONDAMPINGBUILDER_HPP_
+#define RADIATIONDAMPINGBUILDER_HPP_
 
 
 #include <functional>
@@ -37,4 +37,4 @@ class RadiationDampingBuilder
         TypeOfQuadrature type_of_quadrature;
 };
 
-#endif /* DAMPINGMATRIXINTERPOLATOR_HPP_ */
+#endif /* RADIATIONDAMPINGBUILDER_HPP_ */
