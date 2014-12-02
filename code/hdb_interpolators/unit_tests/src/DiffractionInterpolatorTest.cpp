@@ -11,7 +11,7 @@
 #include <cmath>
 #define PI M_PI
 
-#include "HDBBuilder.hpp"
+#include "HDBParser.hpp"
 #include "HDBData.hpp"
 #include "DiffractionInterpolatorTest.hpp"
 #include "hdb_data.hpp"

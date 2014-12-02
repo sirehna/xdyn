@@ -16,7 +16,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include "hdb_parser_internal_data_structures.hpp"
-#include "HDBBuilder.hpp"
+#include "HDBParser.hpp"
 #include "HDBBuilderException.hpp"
 #include "hdb_to_ast.hpp"
 

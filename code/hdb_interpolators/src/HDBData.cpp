@@ -9,7 +9,7 @@
 #include <cmath>
 #define PI M_PI
 
-#include "HDBBuilder.hpp"
+#include "HDBParser.hpp"
 #include "HDBBuilderException.hpp"
 #include "HDBData.hpp"
 #include <ssc/interpolation.hpp>

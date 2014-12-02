@@ -15,7 +15,7 @@
 #include "DiffractionForceModel.hpp"
 #include "DiffractionForceModelException.hpp"
 #include "DiffractionInterpolator.hpp"
-#include "HDBBuilder.hpp"
+#include "HDBParser.hpp"
 #include "HDBData.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "YamlDiffraction.hpp"

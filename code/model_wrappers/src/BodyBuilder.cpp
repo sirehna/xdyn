@@ -10,7 +10,7 @@
 
 #include "BodyBuilder.hpp"
 #include "BodyBuilderException.hpp"
-#include "HDBBuilder.hpp"
+#include "HDBParser.hpp"
 #include "HDBData.hpp"
 #include "MeshBuilder.hpp"
 #include "YamlBody.hpp"
