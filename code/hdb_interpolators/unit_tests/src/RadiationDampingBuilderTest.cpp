@@ -49,12 +49,12 @@ TEST_F(RadiationDampingBuilderTest, all_types_of_interpolator_can_retrieve_origi
         B.push_back(f(omega.back()));
     }
 
-    RadiationDampingBuilder factory1(TypeOfInterpolation::LINEAR, TypeOfQuadrature::GAUSS_KRONROD);
-    RadiationDampingBuilder factory2(TypeOfInterpolation::PIECEWISE_CONSTANT, TypeOfQuadrature::GAUSS_KRONROD);
-    RadiationDampingBuilder factory3(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
-    auto f1 = factory1.build_interpolator(omega, B);
-    auto f2 = factory2.build_interpolator(omega, B);
-    auto f3 = factory3.build_interpolator(omega, B);
+    RadiationDampingBuilder builder1(TypeOfInterpolation::LINEAR, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder builder2(TypeOfInterpolation::PIECEWISE_CONSTANT, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder builder3(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    auto f1 = builder1.build_interpolator(omega, B);
+    auto f2 = builder2.build_interpolator(omega, B);
+    auto f3 = builder3.build_interpolator(omega, B);
 
     for (size_t i = 0 ; i < N ; ++i)
     {
@@ -67,11 +67,11 @@ TEST_F(RadiationDampingBuilderTest, all_types_of_interpolator_can_retrieve_origi
 TEST_F(RadiationDampingBuilderTest, can_calculate_cosine_transform)
 {
     const auto B = [](const double ){return 1;};
-    RadiationDampingBuilder factory(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
     const double omega_min = 2*PI/10;
     const double omega_max = 2*PI/1;
     const size_t n = 10;
-    const auto K = factory.build_retardation_function(B, omega_min, omega_max, n);
+    const auto K = builder.build_retardation_function(B, omega_min, omega_max, n);
     double tau = 3;
     ASSERT_NEAR(2./PI*(sin(omega_max*tau)/tau-sin(omega_min*tau)/tau), K(tau), 1E-10);
 }
