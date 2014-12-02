@@ -82,7 +82,7 @@ TEST_F(HDBParserTest, can_retrieve_radiation_damping)
 TEST_F(HDBParserTest, can_retrieve_initial_values)
 {
 //! [HDBDataTest example]
-    HDBParser data(test_data::anthineas_hdb());
+    const HDBParser data(test_data::anthineas_hdb());
     //! [HDBDataTest example]
 
     //! [HDBDataTest expected output]
@@ -110,7 +110,7 @@ TEST_F(HDBParserTest, can_retrieve_initial_values)
 
 TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
 {
-    HDBParser data(test_data::anthineas_hdb());
+    const HDBParser data(test_data::anthineas_hdb());
     const auto M = data.get_added_mass();
     ASSERT_EQ(6, M.cols());
     ASSERT_EQ(6, M.rows());
@@ -124,7 +124,7 @@ TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
 
 TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
 {
-    HDBParser data(test_data::anthineas_hdb());
+    const HDBParser data(test_data::anthineas_hdb());
     const auto angular_frequencies = data.get_radiation_damping_angular_frequencies();
     ASSERT_EQ(6,        angular_frequencies.size());
     ASSERT_EQ(2*PI/1.,  angular_frequencies.at(5));
@@ -137,7 +137,7 @@ TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
 
 TEST_F(HDBParserTest, can_retrieve_vectors_for_each_element_in_radiation_damping_matrix)
 {
-    HDBParser data(test_data::anthineas_hdb());
+    const HDBParser data(test_data::anthineas_hdb());
     for (size_t i = 0 ; i < 6 ; ++i)
     {
         for (size_t j = 0 ; j < 6 ; ++j)
