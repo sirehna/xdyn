@@ -17,7 +17,7 @@
 typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 typedef TR1(shared_ptr)<ssc::integrate::Integrator> IntegratorPtr;
 
-#include "DampingMatrixInterpolator.hpp"
+#include "RadiationDampingBuilder.hpp"
 #include "DampingMatrixInterpolatorException.hpp"
 
 RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfInterpolation& type_of_interpolation_, const TypeOfQuadrature& type_of_quadrature_) : type_of_interpolation(type_of_interpolation_), type_of_quadrature(type_of_quadrature_)
