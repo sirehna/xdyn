@@ -25,9 +25,31 @@
 class HDBParser::Impl
 {
     public:
-        Impl(const std::string& data) : tree(hdb::parse(data)), M(), Br(), Tmin(0)
+        Impl(const std::string& data) : omega_rad(), tree(hdb::parse(data)), M(), Br(), Tmin(0)
         {
-            (void)Tmin;
+            bool allow_queries_outside_bounds;
+            const TimestampedMatrices Ma = get_added_mass();
+            const TimestampedMatrices B_r = get_radiation_damping();
+            const auto x = get_Tp(Ma);
+            Tmin = x.front();
+            for (size_t i = 0 ; i < 6 ; ++i)
+            {
+                for (size_t j = 0 ; j < 6 ; ++j)
+                {
+                    M[i][j] = ssc::interpolation::SplineVariableStep(x, get_Mij_for_each_Tp(Ma,i,j), allow_queries_outside_bounds=true);
+                    Br[i][j] = get_Mij_for_each_Tp(B_r, i, j);
+                }
+            }
+
+            auto v = get_Tp(B_r);
+            for (auto it = v.rbegin(); it != v.rend() ; ++it)
+            {
+                if(*it==0)
+                {
+                    THROW(__PRETTY_FUNCTION__, HDBBuilderException, "Zero period detected: cannot compute angular frequency. Check Added_mass_Radiation_Damping section of the HDB file.");
+                }
+                omega_rad.push_back(2*PI/ *it);
+            }
         }
 
         void fill(TimestampedMatrices& ret, const size_t i, const hdb::ListOfValues& M) const
@@ -141,6 +163,8 @@ class HDBParser::Impl
         {
             return get_matrix("Added_mass_Radiation_Damping", "DAMPING_TERM");
         }
+
+        std::vector<double> omega_rad;
 
     private:
         std::vector<double> get_Tp(const TimestampedMatrices& M)
