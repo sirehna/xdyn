@@ -3,7 +3,7 @@ set(MODULE_UNDER_TEST hdb_interpolators)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/HDBParserTest.cpp
               src/HistoryTest.cpp
-              src/DampingMatrixInterpolatorTest.cpp
+              src/RadiationDampingBuilderTest.cpp
               src/DiffractionInterpolatorTest.cpp
               )
 # ------8<---------------------------------------------->8-----
