@@ -27,7 +27,7 @@ class RadiationDampingBuilder
     public:
         RadiationDampingBuilder(const TypeOfInterpolation& type_of_interpolation, const TypeOfQuadrature& type_of_quadrature);
         std::function<double(double)> build_interpolator(const std::vector<double>& x, const std::vector<double>& y) const;
-        std::function<double(double)> make_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const;
+        std::function<double(double)> build_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const;
 
     private:
         RadiationDampingBuilder();

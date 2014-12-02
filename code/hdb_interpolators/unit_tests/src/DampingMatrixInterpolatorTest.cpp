@@ -71,7 +71,7 @@ TEST_F(DampingMatrixInterpolatorTest, can_calculate_cosine_transform)
     const double omega_min = 2*PI/10;
     const double omega_max = 2*PI/1;
     const size_t n = 10;
-    const auto K = factory.make_retardation_function(B, omega_min, omega_max, n);
+    const auto K = factory.build_retardation_function(B, omega_min, omega_max, n);
     double tau = 3;
     ASSERT_NEAR(2./PI*(sin(omega_max*tau)/tau-sin(omega_min*tau)/tau), K(tau), 1E-10);
 }

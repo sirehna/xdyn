@@ -71,7 +71,7 @@ double RadiationDampingBuilder::integrate(const std::function<double(double)>& B
     return 2./PI*i->integrate_f(omega_min, omega_max);
 }
 
-std::function<double(double)> RadiationDampingBuilder::make_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const
+std::function<double(double)> RadiationDampingBuilder::build_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const
 {
     std::vector<double> x(n,0), y(n, 0);
     const double tau_min = 2*PI/omega_max;
