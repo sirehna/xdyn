@@ -6,7 +6,7 @@
  */
 
 
-#include "DampingMatrixInterpolatorTest.hpp"
+#include "RadiationDampingBuilderTest.hpp"
 #include "RadiationDampingBuilder.hpp"
 
 #include <ssc/macros.hpp>
