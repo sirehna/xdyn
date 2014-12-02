@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.8)
 project(hdb_interpolators)
 
 set(SRC src/HDBData.cpp
-        src/HDBBuilder.cpp
+        src/HDBParser.cpp
         src/DampingMatrixInterpolator.cpp
         src/DiffractionInterpolator.cpp
         )
