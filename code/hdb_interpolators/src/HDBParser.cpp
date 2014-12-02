@@ -132,6 +132,16 @@ class HDBParser::Impl
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
         }
 
+        TimestampedMatrices get_added_mass() const
+        {
+            return get_matrix("Added_mass_Radiation_Damping", "ADDED_MASS_LINE");
+        }
+
+        TimestampedMatrices get_radiation_damping() const
+        {
+            return get_matrix("Added_mass_Radiation_Damping", "DAMPING_TERM");
+        }
+
     private:
         std::vector<double> get_Tp(const TimestampedMatrices& M)
         {
@@ -160,12 +170,12 @@ HDBParser::HDBParser(const std::string& data) : pimpl(new Impl(data))
 
 TimestampedMatrices HDBParser::get_added_mass() const
 {
-    return pimpl->get_matrix("Added_mass_Radiation_Damping", "ADDED_MASS_LINE");
+    return pimpl->get_added_mass();
 }
 
 TimestampedMatrices HDBParser::get_radiation_damping() const
 {
-    return pimpl->get_matrix("Added_mass_Radiation_Damping", "DAMPING_TERM");
+    return pimpl->get_radiation_damping();
 }
 
 RAOData HDBParser::get_diffraction_module() const
