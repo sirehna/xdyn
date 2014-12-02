@@ -17,8 +17,9 @@
 typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 typedef TR1(shared_ptr)<ssc::integrate::Integrator> IntegratorPtr;
 
-#include "RadiationDampingBuilder.hpp"
 #include "DampingMatrixInterpolatorException.hpp"
+#include "History.hpp"
+#include "RadiationDampingBuilder.hpp"
 
 RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfInterpolation& type_of_interpolation_, const TypeOfQuadrature& type_of_quadrature_) : type_of_interpolation(type_of_interpolation_), type_of_quadrature(type_of_quadrature_)
 {
@@ -89,10 +90,11 @@ std::function<double(double)> RadiationDampingBuilder::build_retardation_functio
     return build_interpolator(x, y);
 }
 
-double RadiationDampingBuilder::convolution(const History& , //!< State history
-                           const std::function<double(double)>& , //!< Function to convolute with
-                           const double  //!< Length of the convolution
+double RadiationDampingBuilder::convolution(const History& h, //!< State history
+                           const std::function<double(double)>& f, //!< Function to convolute with
+                           const double T //!< Length of the convolution
                            ) const
 {
-    return 0;
+    const auto g = [&h, &f](const double tau){return h.get(tau)*f(tau);};
+    return integrate(g, 0, T);
 }
