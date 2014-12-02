@@ -12,11 +12,11 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
 
-class DampingMatrixInterpolatorTest : public ::testing::Test
+class RadiationDampingBuilderTest : public ::testing::Test
 {
     protected:
-        DampingMatrixInterpolatorTest();
-        virtual ~DampingMatrixInterpolatorTest();
+        RadiationDampingBuilderTest();
+        virtual ~RadiationDampingBuilderTest();
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;

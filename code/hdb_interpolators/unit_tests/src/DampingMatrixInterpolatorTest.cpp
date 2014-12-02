@@ -15,19 +15,19 @@
 #include <cmath>
 #define PI M_PI
 
-DampingMatrixInterpolatorTest::DampingMatrixInterpolatorTest() : a(ssc::random_data_generator::DataGenerator(212))
+RadiationDampingBuilderTest::RadiationDampingBuilderTest() : a(ssc::random_data_generator::DataGenerator(212))
 {
 }
 
-DampingMatrixInterpolatorTest::~DampingMatrixInterpolatorTest()
+RadiationDampingBuilderTest::~RadiationDampingBuilderTest()
 {
 }
 
-void DampingMatrixInterpolatorTest::SetUp()
+void RadiationDampingBuilderTest::SetUp()
 {
 }
 
-void DampingMatrixInterpolatorTest::TearDown()
+void RadiationDampingBuilderTest::TearDown()
 {
 }
 double f(const double omega);
@@ -36,7 +36,7 @@ double f(const double omega)
     return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));
 }
 
-TEST_F(DampingMatrixInterpolatorTest, all_types_of_interpolator_can_retrieve_original_values)
+TEST_F(RadiationDampingBuilderTest, all_types_of_interpolator_can_retrieve_original_values)
 {
     std::vector<double> omega;
     std::vector<double> B;
@@ -64,7 +64,7 @@ TEST_F(DampingMatrixInterpolatorTest, all_types_of_interpolator_can_retrieve_ori
     }
 }
 
-TEST_F(DampingMatrixInterpolatorTest, can_calculate_cosine_transform)
+TEST_F(RadiationDampingBuilderTest, can_calculate_cosine_transform)
 {
     const auto B = [](const double ){return 1;};
     RadiationDampingBuilder factory(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
