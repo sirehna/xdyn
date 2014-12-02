@@ -48,27 +48,31 @@ std::function<double(double)> RadiationDampingBuilder::build_interpolator(const 
 
 double RadiationDampingBuilder::integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const
 {
-    IntegratorPtr i;
     const auto f = [&Br,tau](const double omega){return Br(omega)*cos(omega*tau);};
+    return 2./PI*integrate(f, omega_min, omega_max);
+}
+
+double RadiationDampingBuilder::integrate(const std::function<double(double)>& f, const double a, const double b) const
+{
     switch (type_of_quadrature)
     {
         case TypeOfQuadrature::GAUSS_KRONROD:
-            i.reset(new ssc::integrate::GaussKronrod(f));
+            return ssc::integrate::GaussKronrod(f).integrate_f(a,b);
             break;
         case TypeOfQuadrature::RECTANGLE:
-            i.reset(new ssc::integrate::Rectangle(f));
+            return ssc::integrate::Rectangle(f).integrate_f(a, b);
             break;
         case TypeOfQuadrature::SIMPSON:
-            i.reset(new ssc::integrate::Simpson(f));
+            return ssc::integrate::Simpson(f).integrate_f(a, b);
             break;
         case TypeOfQuadrature::TRAPEZOIDAL:
-            i.reset(new ssc::integrate::TrapezoidalIntegration(f));
+            return ssc::integrate::TrapezoidalIntegration(f).integrate_f(a, b);
             break;
         default:
             THROW(__PRETTY_FUNCTION__, DampingMatrixInterpolatorException, "Unknown type of quadrature.");
             break;
     }
-    return 2./PI*i->integrate_f(omega_min, omega_max);
+    return 0;
 }
 
 std::function<double(double)> RadiationDampingBuilder::build_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const
@@ -83,4 +87,12 @@ std::function<double(double)> RadiationDampingBuilder::build_retardation_functio
         y[i] = integrate(Br, tau, omega_min, omega_max);
     }
     return build_interpolator(x, y);
+}
+
+double RadiationDampingBuilder::convolution(const History& , //!< State history
+                           const std::function<double(double)>& , //!< Function to convolute with
+                           const double  //!< Length of the convolution
+                           ) const
+{
+    return 0;
 }

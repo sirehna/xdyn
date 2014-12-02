@@ -6,6 +6,7 @@
  */
 
 
+#include "History.hpp"
 #include "RadiationDampingBuilderTest.hpp"
 #include "RadiationDampingBuilder.hpp"
 
@@ -74,4 +75,13 @@ TEST_F(RadiationDampingBuilderTest, can_calculate_cosine_transform)
     const auto K = builder.build_retardation_function(B, omega_min, omega_max, n);
     double tau = 3;
     ASSERT_NEAR(2./PI*(sin(omega_max*tau)/tau-sin(omega_min*tau)/tau), K(tau), 1E-10);
+}
+
+TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
+{
+    History h(1000);
+    h.record(0,1);
+    h.record(1000,1);
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    builder.convolution(h, [](const double t){return cos(2*t);}, 1000);
 }
