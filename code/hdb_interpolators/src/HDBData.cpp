@@ -19,7 +19,7 @@
 class HDBData::Impl
 {
     public:
-        Impl(const HDBBuilder& builder) : omega_rad(), M(), Br(), Tmin(0), diffraction_module(builder.get_diffraction_module()), diffraction_phase(builder.get_diffraction_phase())
+        Impl(const HDBParser& builder) : omega_rad(), M(), Br(), Tmin(0), diffraction_module(builder.get_diffraction_module()), diffraction_phase(builder.get_diffraction_phase())
         {
             bool allow_queries_outside_bounds;
             const TimestampedMatrices Ma = builder.get_added_mass();
@@ -126,7 +126,7 @@ class HDBData::Impl
 };
 
 
-HDBData::HDBData(const HDBBuilder& builder) : pimpl(new HDBData::Impl(builder))
+HDBData::HDBData(const HDBParser& builder) : pimpl(new HDBData::Impl(builder))
 {
 }
 

@@ -20,7 +20,7 @@
 #include "HDBBuilderException.hpp"
 #include "hdb_to_ast.hpp"
 
-class HDBBuilder::Impl
+class HDBParser::Impl
 {
     public:
         Impl(const std::string& data) : tree(hdb::parse(data))
@@ -133,26 +133,26 @@ class HDBBuilder::Impl
 };
 
 
-HDBBuilder::HDBBuilder(const std::string& data) : pimpl(new Impl(data))
+HDBParser::HDBParser(const std::string& data) : pimpl(new Impl(data))
 {
 }
 
-TimestampedMatrices HDBBuilder::get_added_mass() const
+TimestampedMatrices HDBParser::get_added_mass() const
 {
     return pimpl->get_matrix("Added_mass_Radiation_Damping", "ADDED_MASS_LINE");
 }
 
-TimestampedMatrices HDBBuilder::get_radiation_damping() const
+TimestampedMatrices HDBParser::get_radiation_damping() const
 {
     return pimpl->get_matrix("Added_mass_Radiation_Damping", "DAMPING_TERM");
 }
 
-RAOData HDBBuilder::get_diffraction_module() const
+RAOData HDBParser::get_diffraction_module() const
 {
     return pimpl->get_diffraction_module();
 }
 
-RAOData HDBBuilder::get_diffraction_phase() const
+RAOData HDBParser::get_diffraction_phase() const
 {
     return pimpl->get_diffraction_phase();
 }

@@ -22,17 +22,17 @@
  *  \section ex2 Expected output
  *  \snippet hdb_interpolators/unit_tests/src/HDBBuilderTest.cpp HDBBuilderTest expected output
  */
-class HDBBuilder
+class HDBParser
 {
     public:
-        HDBBuilder(const std::string& data);
+        HDBParser(const std::string& data);
         TimestampedMatrices get_added_mass() const;
         TimestampedMatrices get_radiation_damping() const;
         RAOData get_diffraction_module() const;
         RAOData get_diffraction_phase() const;
 
     private:
-        HDBBuilder();
+        HDBParser();
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;
 };

@@ -68,7 +68,7 @@ void BodyBuilder::add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_bod
     if (added_mass.read_from_file)
     {
         const std::string hdb = ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,added_mass.hdb_filename)).get_contents();
-        Ma = HDBData(HDBBuilder(hdb)).get_added_mass();
+        Ma = HDBData(HDBParser(hdb)).get_added_mass();
     }
     else
     {

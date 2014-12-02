@@ -38,7 +38,7 @@ class DiffractionForceModel::Impl
             if (env.w.use_count()>0)
             {
                 std::stringstream ss;
-                const HDBData hdb((HDBBuilder(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,data.hdb_filename)).get_contents())));
+                const HDBData hdb((HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,data.hdb_filename)).get_contents())));
                 const auto omegas = env.w->get_wave_angular_frequency_for_each_model();
                 const auto omegas_hdb = hdb.get_diffraction_module_omegas();
                 for (auto o:omegas)
