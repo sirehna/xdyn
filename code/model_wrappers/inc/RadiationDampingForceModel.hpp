@@ -9,12 +9,13 @@
 #define RadiationDampingForceModel_HPP_
 
 #include "ForceModel.hpp"
-#include "HDBData.hpp"
+
+class HDBParser;
 
 class RadiationDampingForceModel : public ForceModel
 {
     public:
-        RadiationDampingForceModel(const HDBData& hdb);
+        RadiationDampingForceModel(const HDBParser& hdb);
 
     private:
         RadiationDampingForceModel();

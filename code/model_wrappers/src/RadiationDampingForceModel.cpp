@@ -9,6 +9,6 @@
 #include "RadiationDampingForceModel.hpp"
 
 
-RadiationDampingForceModel::RadiationDampingForceModel(const HDBData& ) : ForceModel("radiation damping")
+RadiationDampingForceModel::RadiationDampingForceModel(const HDBParser& ) : ForceModel("radiation damping")
 {
 }
