@@ -15,6 +15,8 @@
 
 #include <boost/lexical_cast.hpp>
 
+#include <ssc/interpolation.hpp>
+
 #include "hdb_parser_internal_data_structures.hpp"
 #include "HDBParser.hpp"
 #include "HDBBuilderException.hpp"
@@ -23,8 +25,9 @@
 class HDBParser::Impl
 {
     public:
-        Impl(const std::string& data) : tree(hdb::parse(data))
+        Impl(const std::string& data) : tree(hdb::parse(data)), M(), Br(), Tmin(0)
         {
+            (void)Tmin;
         }
 
         void fill(TimestampedMatrices& ret, const size_t i, const hdb::ListOfValues& M) const
@@ -129,7 +132,25 @@ class HDBParser::Impl
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
         }
 
+    private:
+        std::vector<double> get_Tp(const TimestampedMatrices& M)
+        {
+            std::vector<double> ret;
+            for (size_t k = 0 ; k < M.size() ; ++k) ret.push_back(M.at(k).first);
+            return ret;
+        }
+
+        std::vector<double> get_Mij_for_each_Tp(const TimestampedMatrices& M, const size_t i, const size_t j)
+        {
+            std::vector<double> ret;
+            for (size_t k = 0 ; k < M.size() ; ++k) ret.push_back(M.at(k).second.at(i).at(j));
+            return ret;
+        }
+
         hdb::AST tree;
+        std::array<std::array<ssc::interpolation::SplineVariableStep,6>,6> M;
+        std::array<std::array<std::vector<double>,6>,6> Br;
+        double Tmin;
 };
 
 
