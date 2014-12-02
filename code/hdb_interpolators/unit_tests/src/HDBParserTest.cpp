@@ -1,5 +1,5 @@
 /*
- * HDBBuilderTest.cpp
+ * HDBParserTest.cpp
  *
  *  Created on: Nov 13, 2014
  *      Author: cady
@@ -9,23 +9,23 @@
 #include "HDBParserTest.hpp"
 #include "hdb_data.hpp"
 
-HDBBuilderTest::HDBBuilderTest() : a(ssc::random_data_generator::DataGenerator(833332))
+HDBParserTest::HDBParserTest() : a(ssc::random_data_generator::DataGenerator(833332))
 {
 }
 
-HDBBuilderTest::~HDBBuilderTest()
+HDBParserTest::~HDBParserTest()
 {
 }
 
-void HDBBuilderTest::SetUp()
+void HDBParserTest::SetUp()
 {
 }
 
-void HDBBuilderTest::TearDown()
+void HDBParserTest::TearDown()
 {
 }
 
-TEST_F(HDBBuilderTest, can_get_added_mass)
+TEST_F(HDBParserTest, can_get_added_mass)
 {
     const HDBParser builder(test_data::anthineas_hdb());
     const auto Ma = builder.get_added_mass();
@@ -55,7 +55,7 @@ TEST_F(HDBBuilderTest, can_get_added_mass)
     ASSERT_EQ(6,Ma.at(5).second.size());
 }
 
-TEST_F(HDBBuilderTest, can_retrieve_radiation_damping)
+TEST_F(HDBParserTest, can_retrieve_radiation_damping)
 {
     const HDBParser builder(test_data::anthineas_hdb());
     const auto Br = builder.get_radiation_damping();
