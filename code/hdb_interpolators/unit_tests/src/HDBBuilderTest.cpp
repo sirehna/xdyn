@@ -6,7 +6,7 @@
  */
 
 #include "HDBParser.hpp"
-#include "HDBBuilderTest.hpp"
+#include "HDBParserTest.hpp"
 #include "hdb_data.hpp"
 
 HDBBuilderTest::HDBBuilderTest() : a(ssc::random_data_generator::DataGenerator(833332))
