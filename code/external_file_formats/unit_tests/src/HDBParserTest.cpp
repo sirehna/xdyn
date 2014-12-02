@@ -14,23 +14,23 @@
 
 using boost::spirit::ascii::blank;
 
-HDBParserTest::HDBParserTest() : a(ssc::random_data_generator::DataGenerator(212))
+low_level_hdb_parserTest::low_level_hdb_parserTest() : a(ssc::random_data_generator::DataGenerator(212))
 {
 }
 
-HDBParserTest::~HDBParserTest()
+low_level_hdb_parserTest::~low_level_hdb_parserTest()
 {
 }
 
-void HDBParserTest::SetUp()
+void low_level_hdb_parserTest::SetUp()
 {
 }
 
-void HDBParserTest::TearDown()
+void low_level_hdb_parserTest::TearDown()
 {
 }
 
-TEST_F(HDBParserTest, can_parse_string_key)
+TEST_F(low_level_hdb_parserTest, can_parse_string_key)
 {
     const hdb::AST hdb_file = hdb::parse("[test this] string");
     ASSERT_EQ(1,hdb_file.string_keys.size());
@@ -38,7 +38,7 @@ TEST_F(HDBParserTest, can_parse_string_key)
     ASSERT_EQ("string",hdb_file.string_keys.at(0).value);
 }
 
-TEST_F(HDBParserTest, can_parse_value_key)
+TEST_F(low_level_hdb_parserTest, can_parse_value_key)
 {
     const hdb::AST hdb_file = hdb::parse("[FORWARD SPEED]   1.23");
     ASSERT_EQ(1,hdb_file.value_keys.size());
@@ -46,7 +46,7 @@ TEST_F(HDBParserTest, can_parse_value_key)
     ASSERT_EQ(1.23,hdb_file.value_keys.at(0).value);
 }
 
-TEST_F(HDBParserTest, can_parse_list_of_doubles)
+TEST_F(low_level_hdb_parserTest, can_parse_list_of_doubles)
 {
     hdb::grammar g;
     const std::string s = "12.1 12.3456789";
@@ -58,7 +58,7 @@ TEST_F(HDBParserTest, can_parse_list_of_doubles)
     ASSERT_DOUBLE_EQ(12.3456789,d.back());
 }
 
-TEST_F(HDBParserTest, can_parse_key)
+TEST_F(low_level_hdb_parserTest, can_parse_key)
 {
     hdb::grammar g;
     const std::string s = "[sdgf sdfgsdgf sdfgsdg]";
@@ -68,7 +68,7 @@ TEST_F(HDBParserTest, can_parse_key)
 }
 
 
-TEST_F(HDBParserTest, can_parse_section)
+TEST_F(low_level_hdb_parserTest, can_parse_section)
 {
     hdb::grammar g;
     const std::string s = " [List_calculated_periods]\n"
@@ -91,7 +91,7 @@ TEST_F(HDBParserTest, can_parse_section)
     ASSERT_DOUBLE_EQ(4,   section.values.at(5));
 }
 
-TEST_F(HDBParserTest, can_parse_two_sections)
+TEST_F(low_level_hdb_parserTest, can_parse_two_sections)
 {
     hdb::grammar g;
     const std::string s = " [List_calculated_periods]\n"
@@ -125,7 +125,7 @@ TEST_F(HDBParserTest, can_parse_two_sections)
     ASSERT_DOUBLE_EQ(75,sections.at(1).values.at(5));
 }
 
-TEST_F(HDBParserTest, can_parse_string)
+TEST_F(low_level_hdb_parserTest, can_parse_string)
 {
     hdb::grammar g;
     const std::string s = " sdfgsdfg 456ggf 4ggffs  ";
@@ -135,7 +135,7 @@ TEST_F(HDBParserTest, can_parse_string)
     ASSERT_EQ("sdfgsdfg 456ggf 4ggffs", string);
 }
 
-TEST_F(HDBParserTest, can_parse_one_string_keys)
+TEST_F(low_level_hdb_parserTest, can_parse_one_string_keys)
 {
     hdb::grammar g;
     const std::string s = "[key 1] value 1\n";
@@ -146,7 +146,7 @@ TEST_F(HDBParserTest, can_parse_one_string_keys)
     ASSERT_EQ("value 1",string_keys.at(0).value);
 }
 
-TEST_F(HDBParserTest, can_parse_several_string_keys)
+TEST_F(low_level_hdb_parserTest, can_parse_several_string_keys)
 {
     hdb::grammar g;
     const std::string s = "[   key 1 ]     value 1\n"
@@ -160,7 +160,7 @@ TEST_F(HDBParserTest, can_parse_several_string_keys)
     ASSERT_EQ("value 2",string_keys.at(1).value);
 }
 
-TEST_F(HDBParserTest, can_parse_a_matrix_section)
+TEST_F(low_level_hdb_parserTest, can_parse_a_matrix_section)
 {
     hdb::grammar g;
     const std::string s = " [ADDED_MASS_LINE_1]\n"
@@ -193,7 +193,7 @@ TEST_F(HDBParserTest, can_parse_a_matrix_section)
     ASSERT_EQ(1,tree.matrix_sections.size());
 }
 
-TEST_F(HDBParserTest, can_parse_a_list_of_matrix_sections)
+TEST_F(low_level_hdb_parserTest, can_parse_a_list_of_matrix_sections)
 {
     hdb::grammar g;
     const std::string s = " [Added_mass_Radiation_Damping]\n"
@@ -248,7 +248,7 @@ TEST_F(HDBParserTest, can_parse_a_list_of_matrix_sections)
     ASSERT_DOUBLE_EQ(1.510785E+05, lists_of_sections.at(0).sections.at(1).values.at(3).at(6));
 }
 
-TEST_F(HDBParserTest, can_parse_a_list_of_matrix_sections_with_just_one_matrix)
+TEST_F(low_level_hdb_parserTest, can_parse_a_list_of_matrix_sections_with_just_one_matrix)
 {
     hdb::grammar g;
     const std::string s = " [Added_mass_Radiation_Damping]\n"
@@ -267,7 +267,7 @@ TEST_F(HDBParserTest, can_parse_a_list_of_matrix_sections_with_just_one_matrix)
     ASSERT_EQ("ADDED_MASS_LINE_1",lists_of_sections.front().sections.front().header);
 }
 
-TEST_F(HDBParserTest, can_parse_a_list_of_matrix_sections_with_id)
+TEST_F(low_level_hdb_parserTest, can_parse_a_list_of_matrix_sections_with_id)
 {
     hdb::grammar g;
     const std::string s = " [FROUDE-KRYLOV_FORCES_AND_MOMENTS]\n"
@@ -307,7 +307,7 @@ TEST_F(HDBParserTest, can_parse_a_list_of_matrix_sections_with_id)
     EXPECT_DOUBLE_EQ(15, l.sections_with_id.at(1).id);
 }
 
-TEST_F(HDBParserTest, vector_rule_should_not_parse_value)
+TEST_F(low_level_hdb_parserTest, vector_rule_should_not_parse_value)
 {
     hdb::grammar g;
     const std::string s = "[FORWARD SPEED] 1.23";
@@ -317,7 +317,7 @@ TEST_F(HDBParserTest, vector_rule_should_not_parse_value)
     EXPECT_TRUE(qi::phrase_parse(b, e, g.value_key, blank));
 }
 
-TEST_F(HDBParserTest, vector_rule_should_not_parse_matrix)
+TEST_F(low_level_hdb_parserTest, vector_rule_should_not_parse_matrix)
 {
     hdb::grammar g;
     const std::string s =   " [Mass_Inertia_matrix]\n"
@@ -330,7 +330,7 @@ TEST_F(HDBParserTest, vector_rule_should_not_parse_matrix)
     EXPECT_FALSE(qi::phrase_parse(s.begin(), s.end(), g.vector_section, blank));
 }
 
-TEST_F(HDBParserTest, can_parse_file_to_internal_data_structure)
+TEST_F(low_level_hdb_parserTest, can_parse_file_to_internal_data_structure)
 {
     const hdb::AST hdb_file = hdb::parse(test_data::anthineas_hdb());
     ASSERT_EQ(1, hdb_file.string_keys.size());

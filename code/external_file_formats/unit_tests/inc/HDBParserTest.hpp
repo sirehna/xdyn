@@ -11,11 +11,11 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
 
-class HDBParserTest : public ::testing::Test
+class low_level_hdb_parserTest : public ::testing::Test
 {
     protected:
-        HDBParserTest();
-        virtual ~HDBParserTest();
+        low_level_hdb_parserTest();
+        virtual ~low_level_hdb_parserTest();
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
