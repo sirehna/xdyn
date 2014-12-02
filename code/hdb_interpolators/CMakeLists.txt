@@ -4,6 +4,7 @@ project(hdb_interpolators)
 set(SRC src/HDBParser.cpp
         src/RadiationDampingBuilder.cpp
         src/DiffractionInterpolator.cpp
+        src/History.cpp
         )
 
 # Using C++ 2011
