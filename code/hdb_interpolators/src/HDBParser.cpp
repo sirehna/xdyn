@@ -235,3 +235,25 @@ RAOData HDBParser::get_diffraction_phase() const
 {
     return pimpl->get_diffraction_phase();
 }
+
+Eigen::Matrix<double,6,6> HDBParser::get_added_mass() const
+{
+    return pimpl->get_added_mass();
+}
+
+Eigen::Matrix<double,6,6> HDBParser::get_added_mass(const double Tp //!< Period at which to interpolate the added mass
+                                                 ) const
+{
+    return pimpl->get_added_mass(Tp);
+}
+
+std::vector<double> HDBParser::get_radiation_damping_angular_frequencies() const
+{
+    return pimpl->omega_rad;
+
+}
+
+std::vector<double> HDBParser::get_radiation_damping_coeff(const size_t i, const size_t j) const
+{
+    return pimpl->get_radiation_damping_coeff(i, j);
+}
