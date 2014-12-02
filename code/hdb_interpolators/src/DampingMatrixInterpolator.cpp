@@ -20,11 +20,11 @@ typedef TR1(shared_ptr)<ssc::integrate::Integrator> IntegratorPtr;
 #include "DampingMatrixInterpolator.hpp"
 #include "DampingMatrixInterpolatorException.hpp"
 
-DampingMatrixInterpolator::DampingMatrixInterpolator(const TypeOfInterpolation& type_of_interpolation_, const TypeOfQuadrature& type_of_quadrature_) : type_of_interpolation(type_of_interpolation_), type_of_quadrature(type_of_quadrature_)
+RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfInterpolation& type_of_interpolation_, const TypeOfQuadrature& type_of_quadrature_) : type_of_interpolation(type_of_interpolation_), type_of_quadrature(type_of_quadrature_)
 {
 }
 
-std::function<double(double)> DampingMatrixInterpolator::build_interpolator(const std::vector<double>& x, const std::vector<double>& y) const
+std::function<double(double)> RadiationDampingBuilder::build_interpolator(const std::vector<double>& x, const std::vector<double>& y) const
 {
     InterpolatorPtr i;
     switch(type_of_interpolation)
@@ -46,7 +46,7 @@ std::function<double(double)> DampingMatrixInterpolator::build_interpolator(cons
     return ret;
 }
 
-double DampingMatrixInterpolator::integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const
+double RadiationDampingBuilder::integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const
 {
     IntegratorPtr i;
     const auto f = [&Br,tau](const double omega){return Br(omega)*cos(omega*tau);};
@@ -71,7 +71,7 @@ double DampingMatrixInterpolator::integrate(const std::function<double(double)>&
     return 2./PI*i->integrate_f(omega_min, omega_max);
 }
 
-std::function<double(double)> DampingMatrixInterpolator::make_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const
+std::function<double(double)> RadiationDampingBuilder::make_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const
 {
     std::vector<double> x(n,0), y(n, 0);
     const double tau_min = 2*PI/omega_max;

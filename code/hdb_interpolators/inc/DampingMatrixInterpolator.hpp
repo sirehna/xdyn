@@ -22,15 +22,15 @@
  *  \section ex2 Expected output
  *  \snippet hdb_interpolators/unit_tests/src/DampingMatrixInterpolatorTest.cpp DampingMatrixInterpolatorTest expected output
  */
-class DampingMatrixInterpolator
+class RadiationDampingBuilder
 {
     public:
-        DampingMatrixInterpolator(const TypeOfInterpolation& type_of_interpolation, const TypeOfQuadrature& type_of_quadrature);
+        RadiationDampingBuilder(const TypeOfInterpolation& type_of_interpolation, const TypeOfQuadrature& type_of_quadrature);
         std::function<double(double)> build_interpolator(const std::vector<double>& x, const std::vector<double>& y) const;
         std::function<double(double)> make_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const;
 
     private:
-        DampingMatrixInterpolator();
+        RadiationDampingBuilder();
         double integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const;
 
         TypeOfInterpolation type_of_interpolation;

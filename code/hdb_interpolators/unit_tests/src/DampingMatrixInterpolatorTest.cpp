@@ -49,9 +49,9 @@ TEST_F(DampingMatrixInterpolatorTest, all_types_of_interpolator_can_retrieve_ori
         B.push_back(f(omega.back()));
     }
 
-    DampingMatrixInterpolator factory1(TypeOfInterpolation::LINEAR, TypeOfQuadrature::GAUSS_KRONROD);
-    DampingMatrixInterpolator factory2(TypeOfInterpolation::PIECEWISE_CONSTANT, TypeOfQuadrature::GAUSS_KRONROD);
-    DampingMatrixInterpolator factory3(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder factory1(TypeOfInterpolation::LINEAR, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder factory2(TypeOfInterpolation::PIECEWISE_CONSTANT, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder factory3(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
     auto f1 = factory1.build_interpolator(omega, B);
     auto f2 = factory2.build_interpolator(omega, B);
     auto f3 = factory3.build_interpolator(omega, B);
@@ -67,7 +67,7 @@ TEST_F(DampingMatrixInterpolatorTest, all_types_of_interpolator_can_retrieve_ori
 TEST_F(DampingMatrixInterpolatorTest, can_calculate_cosine_transform)
 {
     const auto B = [](const double ){return 1;};
-    DampingMatrixInterpolator factory(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder factory(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
     const double omega_min = 2*PI/10;
     const double omega_max = 2*PI/1;
     const size_t n = 10;
