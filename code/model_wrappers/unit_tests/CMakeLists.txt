@@ -13,6 +13,7 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/WageningenControlledForceModelTest.cpp
               src/ResistanceCurveForceModelTest.cpp
               src/RadiationDampingForceModelTest.cpp
+              src/HDBParserForTests.cpp
               )
 # ------8<---------------------------------------------->8-----
 
