@@ -22,8 +22,8 @@ class HDBData::Impl
         Impl(const HDBParser& builder) : omega_rad(), M(), Br(), Tmin(0), diffraction_module(builder.get_diffraction_module()), diffraction_phase(builder.get_diffraction_phase())
         {
             bool allow_queries_outside_bounds;
-            const TimestampedMatrices Ma = builder.get_added_mass();
-            const TimestampedMatrices B_r = builder.get_radiation_damping();
+            const TimestampedMatrices Ma = builder.get_added_mass_array();
+            const TimestampedMatrices B_r = builder.get_radiation_damping_array();
             const auto x = get_Tp(Ma);
             Tmin = x.front();
             for (size_t i = 0 ; i < 6 ; ++i)

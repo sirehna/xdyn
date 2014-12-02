@@ -28,8 +28,8 @@ class HDBParser
 {
     public:
         HDBParser(const std::string& data);
-        TimestampedMatrices get_added_mass() const;
-        TimestampedMatrices get_radiation_damping() const;
+        TimestampedMatrices get_added_mass_array() const;
+        TimestampedMatrices get_radiation_damping_array() const;
         RAOData get_diffraction_module() const;
         RAOData get_diffraction_phase() const;
 

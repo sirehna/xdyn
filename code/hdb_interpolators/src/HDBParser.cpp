@@ -216,12 +216,12 @@ HDBParser::HDBParser(const std::string& data) : pimpl(new Impl(data))
 {
 }
 
-TimestampedMatrices HDBParser::get_added_mass() const
+TimestampedMatrices HDBParser::get_added_mass_array() const
 {
     return pimpl->get_added_mass_array();
 }
 
-TimestampedMatrices HDBParser::get_radiation_damping() const
+TimestampedMatrices HDBParser::get_radiation_damping_array() const
 {
     return pimpl->get_radiation_damping_array();
 }

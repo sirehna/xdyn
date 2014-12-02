@@ -33,7 +33,7 @@ void HDBParserTest::TearDown()
 TEST_F(HDBParserTest, can_get_added_mass)
 {
     const HDBParser builder(test_data::anthineas_hdb());
-    const auto Ma = builder.get_added_mass();
+    const auto Ma = builder.get_added_mass_array();
     ASSERT_EQ(6,Ma.size());
     ASSERT_DOUBLE_EQ(1,Ma.at(0).first);
     ASSERT_EQ(6,Ma.at(0).second.size());
@@ -63,7 +63,7 @@ TEST_F(HDBParserTest, can_get_added_mass)
 TEST_F(HDBParserTest, can_retrieve_radiation_damping)
 {
     const HDBParser builder(test_data::anthineas_hdb());
-    const auto Br = builder.get_radiation_damping();
+    const auto Br = builder.get_radiation_damping_array();
     ASSERT_EQ(6,Br.size());
     ASSERT_DOUBLE_EQ(1,  Br.at(0).first);
     ASSERT_DOUBLE_EQ(2,  Br.at(1).first);
