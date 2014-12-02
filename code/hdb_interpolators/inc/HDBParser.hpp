@@ -8,6 +8,8 @@
 #ifndef HDBBUILDER_HPP_
 #define HDBBUILDER_HPP_
 
+#include <Eigen/Dense>
+
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 

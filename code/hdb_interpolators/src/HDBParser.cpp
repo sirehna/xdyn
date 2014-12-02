@@ -28,8 +28,8 @@ class HDBParser::Impl
         Impl(const std::string& data) : omega_rad(), tree(hdb::parse(data)), M(), Br(), Tmin(0)
         {
             bool allow_queries_outside_bounds;
-            const TimestampedMatrices Ma = get_added_mass();
-            const TimestampedMatrices B_r = get_radiation_damping();
+            const TimestampedMatrices Ma = get_added_mass_array();
+            const TimestampedMatrices B_r = get_radiation_damping_array();
             const auto x = get_Tp(Ma);
             Tmin = x.front();
             for (size_t i = 0 ; i < 6 ; ++i)
@@ -154,14 +154,38 @@ class HDBParser::Impl
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
         }
 
-        TimestampedMatrices get_added_mass() const
+        TimestampedMatrices get_added_mass_array() const
         {
             return get_matrix("Added_mass_Radiation_Damping", "ADDED_MASS_LINE");
         }
 
-        TimestampedMatrices get_radiation_damping() const
+        TimestampedMatrices get_radiation_damping_array() const
         {
             return get_matrix("Added_mass_Radiation_Damping", "DAMPING_TERM");
+        }
+
+        Eigen::Matrix<double,6,6> get_added_mass(const double Tp)
+        {
+            Eigen::Matrix<double,6,6> ret;
+            for (size_t i = 0 ; i < 6 ; ++i)
+            {
+                for (size_t j = 0 ; j < 6 ; ++j)
+                {
+                    ret((int)i,(int)j) = M[i][j].f(Tp);
+                }
+            }
+            return ret;
+        }
+
+        Eigen::Matrix<double,6,6> get_added_mass()
+        {
+            return get_added_mass(Tmin);
+        }
+
+        std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const
+        {
+            const auto v = Br[i][j];
+            return std::vector<double>(v.rbegin(), v.rend());
         }
 
         std::vector<double> omega_rad;
@@ -194,12 +218,12 @@ HDBParser::HDBParser(const std::string& data) : pimpl(new Impl(data))
 
 TimestampedMatrices HDBParser::get_added_mass() const
 {
-    return pimpl->get_added_mass();
+    return pimpl->get_added_mass_array();
 }
 
 TimestampedMatrices HDBParser::get_radiation_damping() const
 {
-    return pimpl->get_radiation_damping();
+    return pimpl->get_radiation_damping_array();
 }
 
 RAOData HDBParser::get_diffraction_module() const
