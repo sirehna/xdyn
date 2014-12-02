@@ -1,7 +1,7 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST hdb_interpolators)
 project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/HDBBuilderTest.cpp
+FILE(GLOB SRC src/HDBParserTest.cpp
               src/HDBDataTest.cpp
               src/HistoryTest.cpp
               src/DampingMatrixInterpolatorTest.cpp
