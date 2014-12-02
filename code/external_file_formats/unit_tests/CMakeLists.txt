@@ -2,7 +2,7 @@ SET(MODULE_UNDER_TEST external_file_formats)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/StlReaderTest.cpp
               src/stl_writerTest.cpp
-              src/HDBParserTest.cpp
+              src/low_level_hdb_parserTest.cpp
         )
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
