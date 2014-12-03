@@ -71,12 +71,12 @@ double History::get_value(const size_t idx, const double t) const
     return (t-tA)/(tB-tA)*(yB-yA) + yA;
 }
 
-void History::throw_if_already_added(const size_t idx, const double t) const
+void History::throw_if_already_added(const size_t idx, const double t, const double val) const
 {
-    if ((idx != L.size()) and (L[idx].first == t))
+    if ((idx != L.size()) and (L[idx].first == t) and (val != L[idx].second))
     {
         std::stringstream ss;
-        ss << "Attempting to insert the same instant in History: t = " << t << " already exists.";
+        ss << "Attempting to insert the same instant in History with different value: t = " << t << " already exists.";
         THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
     }
 }
@@ -113,7 +113,7 @@ void History::record(const double t, //!< Instant corresponding to the value bei
                     )
 {
     const size_t t_idx = find_braketing_position(t);
-    throw_if_already_added(t_idx, t);
+    throw_if_already_added(t_idx, t, val);
     L.insert(L.begin()+(long)t_idx,std::make_pair(t,val));
 
     const double tmin = get_current_time() - Tmax;

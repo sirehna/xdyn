@@ -51,7 +51,7 @@ class History
         typedef std::vector<TimeValue> Container;
 
         History(); // Disabled
-        void throw_if_already_added(const size_t idx, const double t) const;
+        void throw_if_already_added(const size_t idx, const double t, const double val) const;
         size_t find_braketing_position(const double t) const;
         double get_value(const size_t idx, const double t) const;
         double get_current_time() const;
