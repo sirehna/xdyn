@@ -16,7 +16,8 @@ std::vector<double> HDBParserForTests::get_radiation_damping_angular_frequencies
     return omega;
 }
 
-std::vector<double> HDBParserForTests::get_radiation_damping_coeff(const size_t , const size_t ) const
+std::vector<double> HDBParserForTests::get_radiation_damping_coeff(const size_t i, const size_t j) const
 {
-    return Br;
+    if (i==j) return Br;
+              return std::vector<double>(Br.size(),0);
 }
