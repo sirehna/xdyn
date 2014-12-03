@@ -52,6 +52,13 @@ class History
           */
         double get_Tmax() const;
 
+        /**  \brief How far back in history can we currently go
+         *   \details Maximum value is Tmax, but during initialization it can be less.
+         *   \returns Difference between last & first instants in L.
+          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_length_example
+          */
+        double get_length() const;
+
     private:
         typedef std::pair<double,double> TimeValue;
         typedef std::vector<TimeValue> Container;
