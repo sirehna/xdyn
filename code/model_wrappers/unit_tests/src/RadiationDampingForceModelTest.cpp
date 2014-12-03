@@ -29,7 +29,7 @@ void RadiationDampingForceModelTest::TearDown()
 {
 }
 
-HDBParserForTests RadiationDampingForceModelTest::get_test_data() const
+HDBParserForTests RadiationDampingForceModelTest::get_hdb_data() const
 {
     std::vector<double> Tp, Br;
     const double Tpmin = 0;
@@ -43,6 +43,15 @@ HDBParserForTests RadiationDampingForceModelTest::get_test_data() const
         Br.push_back(0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega))));
     }
     return HDBParserForTests(Tp, Br);
+}
+
+YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data() const
+{
+    YamlRadiationDamping ret;
+    ret.interpolation = TypeOfInterpolation::SPLINES;
+    ret.nb_of_points_in_retardation_function = 50;
+    ret.quadrature = TypeOfQuadrature::GAUSS_KRONROD;
+    return ret;
 }
 
 TEST_F(RadiationDampingForceModelTest, example)

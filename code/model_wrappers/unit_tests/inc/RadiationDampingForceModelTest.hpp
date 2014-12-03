@@ -12,7 +12,9 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
 
+#include "Body.hpp"
 #include "HDBParserForTests.hpp"
+#include "YamlRadiationDamping.hpp"
 
 class RadiationDampingForceModelTest : public ::testing::Test
 {
@@ -21,7 +23,8 @@ class RadiationDampingForceModelTest : public ::testing::Test
         virtual ~RadiationDampingForceModelTest();
         virtual void SetUp();
         virtual void TearDown();
-        HDBParserForTests get_test_data() const;
+        HDBParserForTests get_hdb_data() const;
+        YamlRadiationDamping get_yaml_data() const;
 
         ssc::random_data_generator::DataGenerator a;
 };
