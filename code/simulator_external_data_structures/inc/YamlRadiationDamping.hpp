@@ -20,7 +20,7 @@ struct YamlRadiationDamping
     TypeOfInterpolation interpolation;
     TypeOfQuadrature    quadrature;
     double              quadrature_tolerance;
-    size_t              nb_of_points_in_convolution;
+    size_t              nb_of_points_in_retardation_function;
 };
 
 #endif /* YAMLRADIATIONDAMPING_HPP_ */

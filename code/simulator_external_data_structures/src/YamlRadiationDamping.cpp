@@ -11,6 +11,6 @@ YamlRadiationDamping::YamlRadiationDamping() : hdb_filename(),
                                                interpolation(),
                                                quadrature(),
                                                quadrature_tolerance(0),
-                                               nb_of_points_in_convolution(0)
+                                               nb_of_points_in_retardation_function(0)
 {
 }

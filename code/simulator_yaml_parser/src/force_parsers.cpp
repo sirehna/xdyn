@@ -104,7 +104,7 @@ YamlRadiationDamping parse_radiation_damping(const std::string& yaml)
         ss << "Unkown interpolation type: " << s << ". Should be one of 'splines', 'piecewise constant' or 'linear'.";
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
     }
-    node["nb of points in convolution"] >> ret.nb_of_points_in_convolution;
+    node["nb of points in retardation function"] >> ret.nb_of_points_in_retardation_function;
     node["quadrature"] >> s;
     if      (s == "gauss-kronrod") ret.quadrature = TypeOfQuadrature::GAUSS_KRONROD;
     else if (s == "rectangle")     ret.quadrature = TypeOfQuadrature::RECTANGLE;

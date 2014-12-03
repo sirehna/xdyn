@@ -857,7 +857,7 @@ suivantes sont réalisées :
   d'interpolation que pour les matrices. Le nombre de points à partir duquel
   est réalisée cette interpolation (le nombre de fois qu'on calcule l'intégrale
   $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
-  est donné par `nb of points in convolution`.
+  est donné par `nb of points in retardation function`.
 - Interpolation des états : dans l'implémentation actuelle, seule une
   interpolation linéaire est disponible.
 - Convolution : sa durée est $\frac{2\pi}{\omega_{\mbox{min}}}$ : on ne dépasse
@@ -869,7 +869,7 @@ suivantes sont réalisées :
   interpolation: splines
   quadrature: gauss-kronrod
   quadrature tolerance: 0.01
-  nb of points in convolution: 30
+  nb of points in retardation function: 30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Efforts de diffraction

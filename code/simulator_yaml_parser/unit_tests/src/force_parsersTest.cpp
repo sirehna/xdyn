@@ -143,7 +143,7 @@ TEST_F(force_parsersTest, radiation_damping)
     const YamlRadiationDamping r = parse_radiation_damping(test_data::radiation_damping());
     ASSERT_EQ(TypeOfInterpolation::SPLINES, r.interpolation);
     ASSERT_EQ("anthineas.hdb", r.hdb_filename);
-    ASSERT_EQ(30, r.nb_of_points_in_convolution);
+    ASSERT_EQ(30, r.nb_of_points_in_retardation_function);
     ASSERT_EQ(TypeOfQuadrature::GAUSS_KRONROD, r.quadrature);
     ASSERT_EQ(0.01, r.quadrature_tolerance);
 }

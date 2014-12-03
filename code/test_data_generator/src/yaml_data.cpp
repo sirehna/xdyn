@@ -2032,7 +2032,7 @@ std::string test_data::radiation_damping()
        << "interpolation: splines\n"
        << "quadrature: gauss-kronrod\n"
        << "quadrature tolerance: 0.01\n"
-       << "nb of points in convolution: 30\n";
+       << "nb of points in retardation function: 30\n";
     return ss.str();
 }
 
