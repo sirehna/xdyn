@@ -165,3 +165,14 @@ TEST_F(HistoryTest, should_shift_history)
     ASSERT_EQ(8, h.size());
     ASSERT_DOUBLE_EQ(12.8, h.get(13.5));
 }
+
+TEST_F(HistoryTest, can_get_history_max_length)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        //! [HistoryTest get_Tmax_example]
+        const double Tmax = a.random<double>().greater_than(0);
+        ASSERT_DOUBLE_EQ(Tmax, History(Tmax).get_Tmax());
+        //! [HistoryTest get_Tmax_example]
+    }
+}

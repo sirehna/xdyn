@@ -130,3 +130,8 @@ size_t History::size() const
 {
     return L.size();
 }
+
+double History::get_Tmax() const
+{
+    return Tmax;
+}

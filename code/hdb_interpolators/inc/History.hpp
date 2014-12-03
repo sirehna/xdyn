@@ -46,6 +46,12 @@ class History
           */
         size_t size() const;
 
+        /**  \brief Accessor for Tmax
+         *   \returns Tmax (in seconds)
+          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_Tmax_example
+          */
+        double get_Tmax() const;
+
     private:
         typedef std::pair<double,double> TimeValue;
         typedef std::vector<TimeValue> Container;
