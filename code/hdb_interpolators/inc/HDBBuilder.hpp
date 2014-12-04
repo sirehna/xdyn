@@ -27,6 +27,7 @@ class HDBBuilder
     public:
         HDBBuilder(const std::string& data);
         TimestampedMatrices get_added_mass() const;
+        TimestampedMatrices get_radiation_damping() const;
 
     private:
         HDBBuilder();

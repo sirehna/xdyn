@@ -193,7 +193,7 @@ rotations convention: [psi,phi',theta'']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pour plus de détails sur les conventions d'angles et d'axes, se référer à [la
-documentation détaillée](modeles_reperes_et_conventions.html#conventions-dorientations).
+documentation détaillée](#conventions-dorientations).
 
 Une attitude sera décrite de la manière suivante, avec les champs
 
@@ -230,7 +230,7 @@ environmental constants:
 ~~~~~~~~~~~~~~
 
 Comme expliqué dans [une section
-précédente](documentation_yaml.html#remarques-sur-les-unit%C3%A9s), les
+précédente](#remarques-sur-les-unit%C3%A9s), les
 dimensions physiques ne sont pas vérifiées et simplement converties en unités
 du système international.
 
@@ -238,7 +238,7 @@ du système international.
 
 La section `environment` définit les modèles d'environnement pour la simulation
 à effectuer. Elle permet de prendre en compte des modèles de houle et de vent.
-Elle peut être vide (voir [l'exemple de la chute libre](tutorials.html#tutoriel-1-balle-en-chute-libre)).
+Elle peut être vide (#tutoriel-1-balle-en-chute-libre)).
 
 ### Modèles de houle
 
@@ -315,7 +315,7 @@ directional spreading:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La direction de propagation est donnée par `waves coming from`.
-Cet étalement est documenté [ici](modeles_reperes_et_conventions.html#dirac-1).
+Cet étalement est documenté [ici](#dirac-1).
 
 ##### cos2s
 
@@ -335,7 +335,7 @@ directional spreading:
 
 `waves coming from` donne la direction de propagation $\psi_0$.
 
-Cet étalement est documenté [ici](modeles_reperes_et_conventions.html#cos2s).
+Cet étalement est documenté [ici](#cos2s).
 
 #### Spectres de puissance
 
@@ -351,7 +351,7 @@ spectral density:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
-Ce spectre est documenté [ici](modeles_reperes_et_conventions.html#dirac).
+Ce spectre est documenté [ici](#dirac).
 
 ##### JONSWAP
 
@@ -363,7 +363,7 @@ spectral density:
      gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Ce spectre est documenté [ici](modeles_reperes_et_conventions.html#jonswap).
+Ce spectre est documenté [ici](#jonswap).
 
 ##### Bretschneider
 
@@ -375,7 +375,7 @@ spectral density:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Ce spectre est documenté
-[ici](modeles_reperes_et_conventions.html#bretschneider).
+[ici](#bretschneider).
 
 ##### Pierson-Moskowitz
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -386,13 +386,13 @@ spectral density:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Ce spectre est documenté
-[ici](modeles_reperes_et_conventions.html#pierson-moskowitz).
+[ici](#pierson-moskowitz).
 
 #### Sorties
 
 On peut sortir les hauteurs de houle calculées sur un maillage (défini dans un
 repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
-simulation de houle, sans corps, tel que décrit dans le [tutoriel 3](tutorials.html#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
+simulation de houle, sans corps, tel que décrit dans le [tutoriel 3](#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
 
 On définit un maillage (cartésien) sur lequel sera calculé la houle. Par exemple :
 
@@ -555,7 +555,7 @@ bodies: # All bodies have NED as parent frame
 
 Le nom du solide a son importance puisqu'en définissant un solide, on définit
 implicitement le repère qui lui est attaché (le repère "body", cf.
-[documentation des repères](modeles_reperes_et_conventions.html#Repère navire
+[documentation des repères](#Repère navire
 (mobile ou "body"))).
 
 On peut ensuite y faire référence, notamment pour les post-traitements.
@@ -609,7 +609,7 @@ position of body frame relative to mesh:
 La section `dynamics` permet de décrire l'inertie du solide. Elle est composée
 de cinq sous-sections :
 
-- `hydrodynamic forces calculation point in body frame` est le [point de calcul des efforts hydrodynamiques](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique)
+- `hydrodynamic forces calculation point in body frame` est le [point de calcul des efforts hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique)
 - `centre of inertia` (si le repère "body" n'est pas au centre de masse)
 - `mass` contenant la masse du corps considéré
 - `rigid body inertia matrix at the center of buoyancy projected in the body
@@ -619,7 +619,7 @@ de cinq sous-sections :
 
 #### Point de calcul des efforts hydrodynamiques
 
-Cette section contient simplement les [coordonnées du point de calcul des efforts hydrodynamiques](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique), exprimées dans le repère body :
+Cette section contient simplement les [coordonnées du point de calcul des efforts hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique), exprimées dans le repère body :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 hydrodynamic forces calculation point in body frame:
@@ -685,7 +685,7 @@ added mass matrix at the center of buoyancy projected in the body frame:
     row 4: [0,0,0,3.189e5,0,0]
     row 5: [0,0,0,0,8.866e6,0]
     row 6: [0,0,0,0,0,6.676e6]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Elle figure dans la section `dynamics` et non dans la section `external forces`
 (bien qu'il s'agisse d'un modèle effort, proportionnel à l'accélération)
@@ -694,6 +694,20 @@ figure dans le membre de gauche de l'équation fondamentale de la dynamique
 $$M\ddot{X} = \sum F_i$$ pour des raisons de stabilité numérique (l'effort
 dépend des accélérations qui doivent justement être calculées par la résolution
 de l'équation fondamentale de la dynamique).
+
+Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
+à partir d'un fichier HDB. Pour cela, on écrit (pour lire depuis le fichier
+`anthineas.hdb`) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+added mass matrix at the center of buoyancy projected in the body frame:
+    from hdb file: anthineas.hdb
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dans ce cas, il ne faut pas spécifier les clefs `frame` et `row` (le programme
+lance une exception si on le fait).
+Comme le fichier STL, le chemin du fichier HDB est relatif à l'endroit d'où on
+lance l'exécutable.
 
 ## Efforts extérieurs
 
@@ -718,14 +732,14 @@ Pour soumettre un solide à la gravité, on écrit :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La valeur de $g$ utilisée est celle définie dans la section [`environmental
-constants`](documentation_yaml.html#constantes-environnementales) et la masse est celle figurant dans
-la section [`mass`](documentation_yaml.html#d%C3%A9finition-de-la-masse-du-solide).
+constants`](#constantes-environnementales) et la masse est celle figurant dans
+la section [`mass`](#d%C3%A9finition-de-la-masse-du-solide).
 
 Un exemple de simulation de solide soumis uniquement à la gravité (chute libre)
-est disponible dans les [tutoriels](tutorials.html#tutoriel-1-balle-en-chute-libre).
+est disponible dans les [tutoriels](#tutoriel-1-balle-en-chute-libre).
 
 La documentation du modèle figure
-[ici](modeles_reperes_et_conventions.html#efforts-de-gravit%C3%A9).
+[ici](#efforts-de-gravit%C3%A9).
 
 ### Hydrostatique non-linéaire
 
@@ -748,14 +762,14 @@ et pour le modèle précis :
 
 Un exemple de simulation de solide soumis aux efforts hydrostatiques
 (oscillations en immersion) est disponible dans les
-[tutoriels](tutorials.html#tutoriel-2-oscillations-en-immersion).
+[tutoriels](#tutoriel-2-oscillations-en-immersion).
 
 La documentation du modèle figure
-[ici](modeles_reperes_et_conventions.html#efforts-hydrostatiques-non-lin%C3%A9aires).
+[ici](#efforts-hydrostatiques-non-lin%C3%A9aires).
 
 ### Efforts d'excitation de Froude-Krylov
 
-La dérivation des [efforts d'excitation de Froude-Krylov](modeles_reperes_et_conventions.html#houle-dairy) est décrite (ici)[(modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation].
+La dérivation des [efforts d'excitation de Froude-Krylov](#calcul-des-efforts-dexcitation].
 
 Pour l'utiliser, on insère la ligne suivante dans la section `external forces` :
 
@@ -780,7 +794,7 @@ La paramétrisation des efforts d'amortissement linéaires est faite par une mat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Cette matrice est la matrice $D_l$ décrit dans [la
-documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux).
+documentation](#efforts-damortissement-visqueux).
 
 ### Amortissement quadratique
 
@@ -799,7 +813,7 @@ La paramétrisation des efforts d'amortissement quadratiques est faite par une m
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Cette matrice est la matrice $((d_{ij}))$ décrit dans [la
-documentation](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux).
+documentation](#efforts-damortissement-visqueux).
 
 ### Résistance à l'avancement
 
@@ -816,7 +830,47 @@ NED. L'interpolation est faite en utilisant des splines cubiques.
 
 Cet effort est orienté suivant l'axe $-x$ du repère body.
 Le modèle est décrit
-[ici](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement).
+[ici](#r%C3%A9sistance-%C3%A0-lavancement).
+
+### Amortissement de radiation
+
+Pour utiliser ce modèle, on écrit `model: radiation damping`.
+Les matrices d'amortissement de radiation sont lues depuis un fichier HDB
+(format Diodore). Ce fichier contient les matrices $B_r$ pour différentes
+périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
+suivantes sont réalisées :
+
+- Lecture du fichier HDB : son chemin est renseigné dans la clef `hdb`.
+- Interpolation des matrices : les types d'interpolation connus sont :
+  `piecewise constant`, `linear` et `spline` (splines naturelles, c'est-à-dire
+  dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
+  qui se prolongent par des droites aux extrémités du domaine). Le type
+  d'interpolation doit être renseigné dans la clef `interpolation`.
+- Intégration numérique : renseigné dans `quadrature type`. Les types d'intégration
+  connus sont : [`rectangle`](#m%C3%A9thode-des-rectangles), [`trapezoidal`](#m%C3%A9thode-des-trap%C3%A8zes),
+  [`simpson`](#r%C3%A8gle-de-simpson) et [`gauss-kronrod`](#quadrature-de-gauss-kronrod). On
+  doit en outre spécifier une valeur pour l'erreur maximale (critère d'arrêt) :
+  `quadrature tolerance` (par exemple, pour l'interpolation rectangle ou trapèze,
+  $\varepsilon=\frac{1}{n}$). Les bornes de l'intégration sont
+  $\omega_{\mbox{min}}$ et $\omega_{\mbox{max}}$ lues dans le fichier HDB.
+- Interpolation des fonctions de retard lors de la convolution : on utilise le même type
+  d'interpolation que pour les matrices. Le nombre de points à partir duquel
+  est réalisée cette interpolation (le nombre de fois qu'on calcule l'intégrale
+  $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
+  est donné par `nb of points in convolution`.
+- Interpolation des états : dans l'implémentation actuelle, seule une
+  interpolation linéaire est disponible.
+- Convolution : sa durée est $\frac{2\pi}{\omega_{\mbox{min}}}$ : on ne dépasse
+  jamais cette valeur afin d'éviter les phénomènes de repliement de spectre.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: radiation damping
+  hdb: anthineas.hdb
+  interpolation: splines
+  quadrature: gauss-kronrod
+  quadrature tolerance: 0.01
+  nb of points in convolution: 30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Efforts commandés
 
@@ -829,7 +883,7 @@ le type de modèle utilisé).
 La provenance des commandes (où le simulateur lit-il les commandes à chaque pas
 de temps) doit être spécifiée lors de l'appel de l'exécutable en
 utilisant le flag `--commands` décrit dans la [documentation de l'interface
-utilisateur](introduction.html#liste-des-arguments). Les commandes ne sont pas
+utilisateur](#liste-des-arguments). Les commandes ne sont pas
 directement renseignées dans le fichier YAML pour laisser la possibilité à
 l'utilisateur de les fournir par un autre biais : il est ainsi prévu de les
 lire directement depuis un socket afin de pouvoir s'interfacer avec une
@@ -911,7 +965,7 @@ valeur de $t\geq 10$, alors rpm=4000. Pour $t\leq 1$, rpm=3000
 ### Wageningen B-series
 
 L'utilisation de ce modèle est présentée dans [la section
-tutoriels](tutorials.html#tutoriel-6-propulsion).
+tutoriels](#tutoriel-6-propulsion).
 Voici un exemple de configuration possible :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -937,41 +991,41 @@ controlled forces:
 
 - `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
 celui renseigné dans le fichier de [commandes
-attendues](documentation_yaml.html#syntaxe-du-fichier-de-commande).
+attendues](#syntaxe-du-fichier-de-commande).
 - `model` : Nom du modèle. Doit être `wageningen B-series` pour utiliser ce
 modèle.
 - `position of propeller frame` : Définition du [repère de
-l'hélice](modeles_reperes_et_conventions.html#expression-des-efforts).
+l'hélice](#expression-des-efforts).
 - `frame` : repère dans lequel sont exprimés `x`,`y`,`z`,`phi`,`theta` et `psi`.
 - `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par rapport au centre du repère attaché au maillage et projeté sur ce dernier.
 - `phi`,`theta`,`psi` : Définition de la rotation permettant de passer du
 repère attaché au maillage au [repère attaché à
-l'hélice](modeles_reperes_et_conventions.html#expression-des-efforts), en suivant la
-[convention d'angle choisie](documentation_yaml.html#rotations).
+l'hélice](#expression-des-efforts), en suivant la
+[convention d'angle choisie](#rotations).
 - `wake coefficient` : [coefficient de
-sillage](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+sillage](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
 traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et
 1.
 - `relative rotative efficiency` : [rendement
-d'adaptation](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+d'adaptation](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
 - `thrust deduction factor t` : [coefficient de
-succion](modeles_reperes_et_conventions.html#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+succion](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
 - `rotation` définition du sens de rotation pour générer une poussée positive.
 Utilisé pour calculer le signe du moment généré par l'hélice sur le navire. Les
 valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
 `clockwise`, l'hélice tournera dans le sens horaire (en se plaçant à l'arrière
 du navire et en regardant vers la proue) et génèrera un moment négatif sur le navire (dans le repère de l'hélice). Voir [la
-documentation](file:///home/cady/simulator/doc_user/modeles_reperes_et_conventions.html#expression-des-efforts).
+documentation](#expression-des-efforts).
 - `number of blades` : nombre de pales de l'hélice.
 - `blade area ratio AE/A0` : [fraction de
-surface](modeles_reperes_et_conventions.html#expression-des-coefficients-k_t-et-k_q) de l'hélice.
+surface](#expression-des-coefficients-k_t-et-k_q) de l'hélice.
 - `diameter` : diamètre de l'hélice
 
 La documentation de ce modèle figure
-[ici](modeles_reperes_et_conventions.html#hélices-wageningen-série-b).
+[ici](#hélices-wageningen-série-b).
 
 Les [commandes
-attendues](documentation_yaml.html#syntaxe-du-fichier-de-commande) pour ce
+attendues](#syntaxe-du-fichier-de-commande) pour ce
 modèle sont :
 
 - La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie

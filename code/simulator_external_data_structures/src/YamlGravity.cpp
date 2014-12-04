@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "YamlForces.hpp"
+#include "YamlGravity.hpp"
 
 
-GravityParameters::GravityParameters() : g(0)
+YamlGravity::YamlGravity() : g(0)
 {
 }

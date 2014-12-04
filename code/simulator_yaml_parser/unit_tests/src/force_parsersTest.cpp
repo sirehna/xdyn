@@ -33,7 +33,7 @@ void force_parsersTest::TearDown()
 
 TEST_F(force_parsersTest, gravity)
 {
-    const GravityParameters p = parse_gravity("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity");
+    const YamlGravity p = parse_gravity("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity");
     ASSERT_DOUBLE_EQ(9.81, p.g);
 }
 
@@ -138,3 +138,12 @@ TEST_F(force_parsersTest, resistance_curves)
     ASSERT_DOUBLE_EQ(400E6, r.R[7]);
 }
 
+TEST_F(force_parsersTest, radiation_damping)
+{
+    const YamlRadiationDamping r = parse_radiation_damping(test_data::radiation_damping());
+    ASSERT_EQ(TypeOfInterpolation::SPLINES, r.interpolation);
+    ASSERT_EQ("anthineas.hdb", r.hdb_filename);
+    ASSERT_EQ(30, r.nb_of_points_in_convolution);
+    ASSERT_EQ(TypeOfQuadrature::GAUSS_KRONROD, r.quadrature);
+    ASSERT_EQ(0.01, r.quadrature_tolerance);
+}

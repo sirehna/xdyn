@@ -7,6 +7,8 @@
 
 #include <sstream>
 
+#include <boost/lexical_cast.hpp>
+
 #include "hdb_parser_internal_data_structures.hpp"
 #include "HDBBuilder.hpp"
 #include "HDBBuilderException.hpp"
@@ -41,6 +43,35 @@ class HDBBuilder::Impl
             }
         }
 
+        TimestampedMatrices get_matrix(const std::string& header, const std::string& matrix) const
+        {
+            TimestampedMatrices ret;
+            std::vector<bool> found_line(6,false);
+            for (auto M = tree.lists_of_matrix_sections.begin() ; M != tree.lists_of_matrix_sections.end() ; ++M)
+            {
+                if (M->header == header)
+                {
+                    for (auto that_section = M->sections.begin() ; that_section != M->sections.end() ; ++that_section)
+                    {
+                        for (size_t i = 0 ; i < 6 ; ++i)
+                        {
+                            if (that_section->header == matrix + "_" + boost::lexical_cast<std::string>(i+1)) fill(ret, i, that_section->values); found_line[i] = true;
+                        }
+                    }
+                }
+            }
+            for (size_t i = 0 ; i < 6 ; ++i)
+            {
+                if (not(found_line[i]))
+                {
+                    std::stringstream ss;
+                    ss << "Unable to find key '" << matrix << "_" << i+1 << "' in HDB file";
+                    THROW(__PRETTY_FUNCTION__, HDBBuilderException, ss.str());
+                }
+            }
+            return ret;
+        }
+
         hdb::AST tree;
 };
 
@@ -51,31 +82,10 @@ HDBBuilder::HDBBuilder(const std::string& data) : pimpl(new Impl(data))
 
 TimestampedMatrices HDBBuilder::get_added_mass() const
 {
-    TimestampedMatrices ret;
-    std::vector<bool> found_line(6,false);
-    for (auto M = pimpl->tree.lists_of_matrix_sections.begin() ; M != pimpl->tree.lists_of_matrix_sections.end() ; ++M)
-    {
-        if (M->header == "Added_mass_Radiation_Damping")
-        {
-            for (auto that_section = M->sections.begin() ; that_section != M->sections.end() ; ++that_section)
-            {
-                if (that_section->header == "ADDED_MASS_LINE_1") pimpl->fill(ret, 0, that_section->values); found_line[0] = true;
-                if (that_section->header == "ADDED_MASS_LINE_2") pimpl->fill(ret, 1, that_section->values); found_line[1] = true;
-                if (that_section->header == "ADDED_MASS_LINE_3") pimpl->fill(ret, 2, that_section->values); found_line[2] = true;
-                if (that_section->header == "ADDED_MASS_LINE_4") pimpl->fill(ret, 3, that_section->values); found_line[3] = true;
-                if (that_section->header == "ADDED_MASS_LINE_5") pimpl->fill(ret, 4, that_section->values); found_line[4] = true;
-                if (that_section->header == "ADDED_MASS_LINE_6") pimpl->fill(ret, 5, that_section->values); found_line[5] = true;
-            }
-        }
-    }
-    for (size_t i = 0 ; i < 6 ; ++i)
-    {
-        if (not(found_line[i]))
-        {
-            std::stringstream ss;
-            ss << "Unable to find key 'ADDED_MASS_LINE_" << i+1 << "' in HDB file";
-            THROW(__PRETTY_FUNCTION__, HDBBuilderException, "Unable to find key 'ADDED_MASS_LINE_1' in HDB file");
-        }
-    }
-    return ret;
+    return pimpl->get_matrix("Added_mass_Radiation_Damping", "ADDED_MASS_LINE");
+}
+
+TimestampedMatrices HDBBuilder::get_radiation_damping() const
+{
+    return pimpl->get_matrix("Added_mass_Radiation_Damping", "DAMPING_TERM");
 }

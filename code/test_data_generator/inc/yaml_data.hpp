@@ -39,6 +39,7 @@ namespace test_data
     std::string wageningen();
     std::string resistance_curve();
     std::string propulsion_and_resistance();
+    std::string radiation_damping();
 }
 
 #endif /* YAML_DATA_HPP_ */

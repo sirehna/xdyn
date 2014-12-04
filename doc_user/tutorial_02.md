@@ -1,10 +1,10 @@
-# Tutoriel 2 : oscillations en immersion
+## Tutoriel 2 : oscillations en immersion
 
 Ce tutoriel vise à illustrer l'utilisation des modèles hydrostatiques et à
 comparer succinctement les modèles `non-linear hydrostatic (exact)` et
 `non-linear hydrostatic (fast)`.
 
-## Description du problème
+### Description du problème
 Dans cet exemple, nous considérons un navire,
 (l'Anthineas)[http://www.marinetraffic.com/en/ais/details/ships/228367000/vessel:ANTHINEAS],
 soumis uniquement à la pesanteur et aux efforts hydrostatiques, sans
@@ -12,10 +12,10 @@ amortissement. Le navire est lâché sans vitesse initiale au-dessus de la
 surface libre (supposée plane) et va donc réaliser des oscillations
 non-amorties en immersion.
 
-## Ecriture du fichier de configuration du simulateur.
+### Ecriture du fichier de configuration du simulateur.
 
 Nous documentons ici uniquement les changements par rapport au
-[tutoriel 1](tutorials.html#tutoriel-1-balle-en-chute-libre).
+[tutoriel 1](##tutoriel-1-balle-en-chute-libre).
 
 L'environnement est défini de la façon suivante :
 
@@ -26,13 +26,13 @@ environment models:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Comme décrit dans le [documentation du fichier
-d'entrée](documentation_yaml.html#absence-de-houle), ceci signifie que la
+d'entrée](##absence-de-houle), ceci signifie que la
 surface libre est parfaitement plane et horizontale, à la hauteur $z=0$ dans le
 repère NED.
 
-Par rapport au [tutoriel 1](tutorials.html#tutoriel-1-balle-en-chute-libre), la
+Par rapport au [tutoriel 1](##tutoriel-1-balle-en-chute-libre), la
 position du repère "body" par rapport au maillage est ici importante puisque
-l'on [fournit un fichier STL](documentation_yaml.html#d%C3%A9finition-du-fichier-de-maillage) :
+l'on [fournit un fichier STL](##d%C3%A9finition-du-fichier-de-maillage) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - name: Anthineas
@@ -81,7 +81,7 @@ dynamics:
         x: {value: 0.258, unit: m}
         y: {value: 0, unit: m}
         z: {value: 0.432, unit: m}
-    mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
+    mass: {value: 253.31, unit: tonne} ## Caution: 'ton' is the british ton which is 907.185 kg
     rigid body inertia matrix at the center of buoyancy projected in the body frame:
         frame: body 1
         row 1: [253310,0,0,0,0,0]
@@ -101,9 +101,9 @@ dynamics:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On utilise dans un premier temps le [modèle hydrostatique
-approché](modeles_reperes_et_conventions.html#calcul-du-moment) dont la
+approché](##calcul-du-moment) dont la
 documentation est décrite
-[ici](documentation_yaml.html#hydrostatique-non-lin%C3%A9aire) :
+[ici](##hydrostatique-non-lin%C3%A9aire) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 external forces:
@@ -123,8 +123,8 @@ environment models:
   - model: no waves
     constant sea elevation in NED frame: {value: 0, unit: m}
 
-# Fixed frame: NED
-bodies: # All bodies have NED as parent frame
+## Fixed frame: NED
+bodies: ## All bodies have NED as parent frame
   - name: Anthineas
     mesh: anthineas.stl
     position of body frame relative to mesh:
@@ -157,7 +157,7 @@ bodies: # All bodies have NED as parent frame
             x: {value: 0.258, unit: m}
             y: {value: 0, unit: m}
             z: {value: 0.432, unit: m}
-        mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
+        mass: {value: 253.31, unit: tonne} ## Caution: 'ton' is the british ton which is 907.185 kg
         rigid body inertia matrix at the center of buoyancy projected in the body frame:
             frame: body 1
             row 1: [253310,0,0,0,0,0]
@@ -179,7 +179,7 @@ bodies: # All bodies have NED as parent frame
       - model: non-linear hydrostatic (fast)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Lancement de la simulation
+### Lancement de la simulation
 
 La simulation peut maintenant être lancée comme suit :
 
@@ -188,15 +188,15 @@ La simulation peut maintenant être lancée comme suit :
 ./sim tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_exact_hydrostatic_z" 0 3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Résultats
+### Résultats
 
 Voici les résultats avec le [modèle hydrostatique
-approché](modeles_reperes_et_conventions.html#calcul-du-moment) on obtient :
+approché](##calcul-du-moment) on obtient :
 
 ![Elévation au cours du temps](images/tutorial_02_fast_hydrostatic_z.svg)
 
 Pour utiliser le [modèle hydrostatique
-précis](modeles_reperes_et_conventions.html#calcul-du-moment), il suffit de
+précis](##calcul-du-moment), il suffit de
 modifier la section `external forces` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}

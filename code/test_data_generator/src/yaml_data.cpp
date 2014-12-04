@@ -1906,3 +1906,15 @@ std::string test_data::propulsion_and_resistance()
        << "    \n";
     return ss.str();
 }
+
+std::string test_data::radiation_damping()
+{
+    std::stringstream ss;
+    ss << "model: radiation damping\n"
+       << "hdb: anthineas.hdb\n"
+       << "interpolation: splines\n"
+       << "quadrature: gauss-kronrod\n"
+       << "quadrature tolerance: 0.01\n"
+       << "nb of points in convolution: 30\n";
+    return ss.str();
+}

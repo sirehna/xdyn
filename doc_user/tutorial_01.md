@@ -1,28 +1,30 @@
-# Tutoriel 1: balle en chute libre
+# Tutoriels
+
+## Tutoriel 1: balle en chute libre
 
 Ce tutoriel vise à illustrer le fonctionnement du simulateur. En premier lieu,
 nous décrirons le problème physique modélisé, puis sa traduction en YAML,
 l'exécution de la simulation, puis le tracé des résultats.
 
-## Description du problème
+### Description du problème
 Le problème physique considéré dans cet exemple est celui du calcul de
 l'élévation d'une masse ponctuelle soumise uniquement à l'accélération de la
 pesanteur.
 
-## Ecriture du fichier de configuration du simulateur.
+### Ecriture du fichier de configuration du simulateur.
 
 Le fichier d'entrée du simulateur est au format [YAML](http://www.yaml.org) (une extension du format
 JSON).
 
 On commence par définir les conventions de rotation (décrite
-[ici](documentation_yaml.html#rotations)):
+[ici](##rotations)):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rotations convention: [psi, theta', phi'']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Puis l'on donne des [constantes
-environnementales](documentation_yaml.html#constantes-environnementales) :
+environnementales](##constantes-environnementales) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 environmental constants:
@@ -117,7 +119,7 @@ environmental constants:
     rho: {value: 1000, unit: kg/m^3}
 environment models: []
 
-bodies: # All bodies have NED as parent frame
+bodies: ## All bodies have NED as parent frame
   - name: ball
     position of body frame relative to mesh:
         frame: mesh
@@ -170,7 +172,7 @@ bodies: # All bodies have NED as parent frame
       - model: gravity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Lancement de la simulation
+### Lancement de la simulation
 
 La simulation peut s'exécuter comme suit :
 
@@ -218,6 +220,6 @@ On peut chaîner les post-traitements (tracés) à la suite de la simulation :
 ./sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1 | python plot.py "tutorial_01" 0 3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Résultats
+### Résultats
 
 ![Elévation au cours du temps](images/tutorial_01.svg)

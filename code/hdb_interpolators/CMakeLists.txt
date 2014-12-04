@@ -3,6 +3,7 @@ project(hdb_interpolators)
 
 set(SRC src/HDBData.cpp
         src/HDBBuilder.cpp
+        src/DampingMatrixInterpolator.cpp
         )
 
 # Using C++ 2011
@@ -16,6 +17,7 @@ ENDIF()
 include_directories(inc)
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 

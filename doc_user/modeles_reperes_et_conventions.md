@@ -267,9 +267,9 @@ d'angle adoptée.
 ## Repère de calcul hydrodynamique
 
 Les efforts d'[amortissement
-visqueux](modeles_reperes_et_conventions.html#efforts-damortissement-visqueux))
+visqueux](#efforts-damortissement-visqueux))
 et de [résistance à
-l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
+l'avancement](#r%C3%A9sistance-%C3%A0-lavancement)
 sont calculés dans un repère appelé **repère de calcul hydrodynamique**, qui
 est un repère translaté par rapport au repère body. Le centre de ce repère est
 un point défini (dans le repère body) de la façon suivante :
@@ -282,7 +282,7 @@ du maillage sur le plan $(x,y)$
 
 Ce point est, en général, distinct du centre de gravité et du centre de volume.
 Il est défini dans la section `dynamics/hydrodynamic forces calculation point
-in body frame` du [fichier YAML](documentation_yaml.html#champs-dynamics).
+in body frame` du [fichier YAML](#champs-dynamics).
 
 On note ${}^{\mbox{local}}T_{\mbox{body}}$ la transformation permettant de
 convertir des coordonnées dans le repère body en coordonnées du même point
@@ -300,10 +300,10 @@ matrices d'amortissement de radiation, les RAO d'effort et les masses ajoutées.
 ## Modèles de houle
 
 Les modèles de houle interviennent pour le calcul des [efforts
-hydrostatiques](modeles_reperes_et_conventions.html#efforts-hydrostatiques-non-lin%C3%A9aires)
+hydrostatiques](#efforts-hydrostatiques-non-lin%C3%A9aires)
 (par truchement de l'élévation de la surface libre),
 d'une part, et les [efforts de
-Froude-Krylov](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation) d'autre part (par le biais de la
+Froude-Krylov](#calcul-des-efforts-dexcitation) d'autre part (par le biais de la
 pression dynamique).
 
 ### Conventions
@@ -335,34 +335,34 @@ $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) = \left\{\beg
 } \omega=\omega_0\end{array}\right\}$$
 
 Le paramétrage de ce spectre est documenté
-[ici](documentation_yaml.html#dirac-1).
+[ici](#dirac-1).
 
 #### JONSWAP
 
 Le paramétrage de ce spectre est documenté
-[ici](documentation_yaml.html#jonswap).
+[ici](#jonswap).
 
 #### Pierson-Moskowitz
 
 Le paramétrage de ce spectre est documenté
-[ici](documentation_yaml.html#pierson-moskowitz).
+[ici](#pierson-moskowitz).
 
 #### Bretschneider
 
 Le paramétrage de ce spectre est documenté
-[ici](documentation_yaml.html#bretschneider).
+[ici](#bretschneider).
 
 ### Etalements directionnels
 
 #### Dirac
 
 Le paramétrage de cet étalement directionnel est documenté
-[ici](documentation_yaml.html#dirac).
+[ici](#dirac).
 
 #### Cos2s
 
 Le paramétrage de cet étalement directionnel est documenté
-[ici](documentation_yaml.html#cos2s).
+[ici](#cos2s).
 
 ### Modèles de houle
 
@@ -390,7 +390,7 @@ $$\eta(x,y,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 + y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 ainsi que l'expression de la pression dynamique, utilisée par le modèle de
-[Froude-Krylov](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)
+[Froude-Krylov](#calcul-des-efforts-dexcitation)
 :
 
 $$p_{\mbox{dyn}} = \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
@@ -760,8 +760,174 @@ $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 
 $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
-## Références
+## Calcul numérique des amortissements de radiation
 
+En pratique, on utilise en entrée du simulateur les fichiers HDB de Diodore,
+qui contiennent les matrices d'amortissement de radiation à différentes
+pulsations. Ces fichiers sont utilisés dans une table d'interpolation (soit une
+interpolation linéaire par morceaux, soit des splines) puis on évalue
+l'intégrale suivante pour différentes valeurs de $\tau$ :
+
+$$K_{i,j}(\tau) =
+\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$$
+
+Cette intégrale est calculé à l'aide d'un schéma d'intégration numérique
+(méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
+
+![](images/radiation_damping_doc.png "Calcul de l'amortissement de radiation")
+
+On calcule ensuite les efforts d'amortissement de radiation en prenant en
+compte l'historique sur une période $T$ :
+
+$$F_{\mbox{rad}}(t)\sim\int_0^{T}\dot{X}(t-\tau)K_r(\tau)d\tau$$
+
+### Méthode des rectangles
+
+C’est la méthode la plus simple qui consiste à interpoler la fonction
+$f$ à intégrer par une fonction constante (polynôme de degré 0).
+
+Si $x_i$ est le point d’interpolation, la formule est la suivante :
+:$$I(f) = (b-a) f(x_i)$$
+
+Le choix de $x_i$ influence l’erreur $E(f) = I - I(f)$
+:
+- Si $x_i = a$ ou $x_i = b$, l’erreur est donnée
+  par $$E(f) = \frac{(b-a)^2}{2} f'(\eta), \quad \eta \in
+  [a,b]$$ C’est la ''méthode du rectangle'' qui est d’ordre
+  0.
+- Si $\xi = (a+b)/2\,$, l’erreur est donnée par $$E(f) =
+  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]$$ Il s’agit
+  de la méthode du point médian qui est d’ordre 1.
+
+Ainsi, le choix du point milieu améliore l’ordre de la méthode : celle du
+rectangle est exacte (c’est-à-dire $E(f) = 0$) pour les fonctions
+constantes alors que celle du point milieu est exacte pour les polynômes de
+degré 1. Ceci s’explique par le fait que l’écart d’intégration de la méthode du
+point milieu donne lieu à deux erreurs d’évaluation, de valeurs absolues
+environ égales et de signes opposés.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formules_du_rectangle_et_du_point_milieu)
+
+![](images/integration_num_rectangles.svg)
+
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_rectangles.svg?uselang=fr)
+
+
+### Méthode des trapèzes
+
+En interpolant $f$ par un polynôme de degré 1, les deux points
+d'interpolation $(a, f(a))$ et $(b, f(b))$ suffisent
+à tracer un segment dont l’intégrale correspond à l’aire d’un trapèze,
+justifiant le nom de méthode des trapèzes qui est d’ordre 1 :
+:$I(f) = (b-a) \frac{f(a) + f(b)}{2}$
+
+L’erreur est donnée par
+:$E(f) = - \frac{(b-a)^3}{12} f''(\eta), \quad \eta \in [a,b]$
+
+Conformément aux expressions de l’erreur, la méthode des trapèzes est souvent
+moins performante que celle du point milieu.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formule_du_trap.C3.A8ze)
+
+![](images/integration_num_trapezes.svg)
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_trap%C3%A8zes.svg)
+
+### Règle de Simpson
+
+En interpolant $f$ par un polynôme de degré 2 (3 degrés de liberté),
+3 points (ou conditions) sont nécessaires pour le caractériser : les valeurs
+aux extrémités $a$, $b$, et celle choisie en leur milieu
+$x_{1/2} = (a + b) / 2$. La méthode de Simpson est basée sur un
+polynôme de degré 2 (intégrale d’une parabole), tout en restant exacte pour des
+polynômes de degré 3 ; elle est donc d’ordre 3 :
+:$I(f) = \frac{(b-a)}{6} [ f(a) + 4 f(x_{1/2}) + f(b) ]$
+
+L’erreur globale est donnée par
+:$E(f) = - \frac{(b-a)^5}{2880} f^{(4)}(\eta), \quad \eta \in [a,b]$
+
+Remarque : comme la méthode du point médian qui caractérise un polynôme de
+degré 0 et qui reste exacte pour tout polynôme de degré 1, la méthode de
+Simpson caractérise un polynôme de degré 2 et reste exacte pour tout polynôme
+de degré 3. Il s’agit d’une sorte d’"anomalie" où se produisent des
+compensations bénéfiques à l’ordre de la méthode.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formule_de_Simpson)
+
+![](images/integration_num_simpson.svg)
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_Simpson.svg)
+
+### Quadrature de Gauss-Kronrod
+La formule de quadrature de Gauss-Kronrod est une extension de la quadrature de
+Gauss. Lorsque l'on calcule une quadrature de Gauss sur un intervalle et que
+l'on divise cet intervalle en deux partie, on ne peut réutiliser aucun des
+points (sauf le point médian dans le cas d'un nombre de points impairs).
+La formule de Gauss-Kronrod, créée dans les années 60 par Alexander Kronrod,
+permet de transformer un schéma d'ordre $n$ en schéma d'ordre $3n+1$ en
+ajoutant aux $n$ points de la quadrature de Gauss $n+1$ zéros des polylônmes de
+Stieltjes-Wigert. Les polynômes de Stieltjes-Wigert sont des polynômes
+orthogonaux pour la fonction de poids :
+
+$$w(x)=\pi^{-1/2}\cdot k\cdot x^{k^2\log(x)},x\in\mathbf{R}_+^*, k>0$$
+
+On pose $$q_k=e^{-\frac{1}{2k^2}}$$
+
+Les polynômes de Stieltjes-Wigert s'écrivent alors :
+
+$$p_0(x)=q^{1/4}$$
+et
+$$p_{n,k}(x) = \frac{(-1)^n q_k^{\frac{n}{2} +
+\frac{1}{4}}}{\sqrt{(q_k;q_k)_n}}\sum{\nu=0}^n\left[\begin{array}{c}n\\\nu\end{array}\right]q_k^{\nu^2}(-\sqrt{q_k}x)^\nu$$
+
+où
+$$k\in[1,n]$$
+$$\left[\begin{array}{c}n\\\nu\end{array}\right]=\prod_{i=0}^{\nu-1}\frac{1-q^{n-i}}{1-q^{i+1}}$$
+($q$-symbole de Pochhammer)
+$$(q;a)_n=\left\{\begin{array}{c}
+          \prod_{j=0}^{n-1}(1-qa^j),n>0\\
+          1,n=0\\
+          \prod_{j=0}^{|n|}(1-qa^j),n<0\\
+          \prod_{j=0}^{\infty}(1-qa^j),n=\infty
+          \end{array}\right.$$ (coefficient $q$-binomial)
+
+Afin d'accélérer davantage la convergence, on utilise l'intégration de
+Gauss-Kronrod de manière répétée (puisque cette méthode offre l'avantage de
+pouvoir réutiliser les points de calcul de l'itération précédente) et l'on
+applique l'$\varepsilon$-algorithme de Wynn.
+
+Les formules de Gauss-Kronrod sont implémentées dans des bibliothèques
+numériques standard telles que celles de Netlib (QUADPACK).
+
+- [Weisstein, Eric W. "Stieltjes-Wigert Polynomial." From
+MathWorld--A Wolfram Web
+Resource.](http://mathworld.wolfram.com/Stieltjes-WigertPolynomial.html)
+- Szegö, G., **Orthogonal Polynomials**, 4th ed. Providence, RI: Amer. Math. Soc.,
+p. 33, 1975. 
+- R. Piessens, E. deDoncker–Kapenga, C. Uberhuber, D. Kahaner (1983) **Quadpack: a
+Subroutine Package for Automatic Integration**; Springer Verlag. 
+
+## Calcul des matrices de masse ajoutée
+
+Dans le simulateur, la matrice de masses ajoutées est soit lue directement
+depuis le fichier YAML, soit calculée à partir d'un fichier DIODORE (extension
+HDB). Les fichiers HDB contenant les masses ajoutées à plusieurs périodes, on
+choisit la première, c'est-à-dire la matrice correspondant à la période la plus
+faible. On ne fait pas d'interpolation en zéro car une telle interpolation ne
+garantit pas la symmétrie et le caractère positif et défini de la matrice (les
+coefficients ont tendance à osciller fortement au voisinage de $T=0$). On
+suppose que les mailles utilisées pour le calcul des masses ajoutées
+(résolution du potentiel) sont suffisament fines pour que le résultat ait un
+sens.
+
+## Références
+- *Practical Source Code for Ship Motions Time Domain Numerical Analysis and
+  Its Mobile Device Application*, 2011, Zayar Thein, Department of Shipping and
+Marine Technology, CHALMERS UNIVERSITY OF TECHNOLOGY, Göteborg, Sweden, page 18
 
 # Modèles d'efforts non-commandés
 
@@ -776,16 +942,16 @@ Le navire est soumis aux efforts suivants :
   coque et aux tourbillons,
 
 Les efforts non-commandés sont renseignés dans la section
-[`bodies/external`](documentation_yaml.html#efforts-extérieurs) du fichier
+[`bodies/external`](#efforts-extérieurs) du fichier
 YAML.
 
 ## Efforts de gravité
 
 La description de la paramétrisation des efforts de gravité figure dans
-[la documentation du fichier d'entrée](documentation_yaml.html#gravité).
+[la documentation du fichier d'entrée](#gravité).
 
 Un exemple de simulation de solide soumis uniquement à la gravité (chute libre)
-est disponible dans les [tutoriels](tutorials.html#tutoriel-1-balle-en-chute-libre).
+est disponible dans les [tutoriels](#tutoriel-1-balle-en-chute-libre).
 
 ### Description
 
@@ -822,16 +988,16 @@ la surface immergée totale :
 $$\textbf{F}_{\mbox{HS}} = \int_{S}p_{\mbox{HS}}(z)\cdot \textbf{n} dS $$
 
 Le paramétrage des efforts hydrostatiques non-linéaires dans le simulateur est
-décrit [ici](documentation_yaml.html#).
+décrit [ici](#).
 
 Un exemple d'utilisation est présenté dans les
-[tutoriels](tutorials.html#tutoriel-2-oscillations-en-immersion).
+[tutoriels](#tutoriel-2-oscillations-en-immersion).
 
 ### Calcul de la résultante
 
 Pour évaluer numériquement cette intégrale, il faut discrétiser la carène au
 moyen d'un maillage surfacique. La définition de ce maillage est faite
-[ici](documentation_yaml.html#utilisation-dun-maillage).
+[ici](#utilisation-dun-maillage).
 
 Les facettes du maillage peuvent alors être réparties en trois catégories :
 
@@ -973,7 +1139,7 @@ p_{\mbox{dyn}}(x,y,z,t)dS(P)$$
 
 L'expression de la pression dynamique dépend du modèle de houle utilisé et est
 décrite (ici pour la houle d'Airy)
-[ici](modeles_reperes_et_conventions.html#modèles-de-houle-1).
+[ici](#modèles-de-houle-1).
 
 La pression totale dans le fluide, en un point donné, est la somme de la
 pression hydrostatique et de la pression dynamique. Lorsque l'on utilise
@@ -997,14 +1163,13 @@ dans la situation suivante :
 
 Les efforts de diffraction sont dus à la modification du champs de pression du
 fait de la présence du navire. Ils sont interpolés à partir de tables
-hydrodynamiques. Comme les efforts de
-radiation et les efforts de masse ajoutée, ces tables sont calculées en résolvant un
-problème de condition aux limites pour le potentiel de vitesse : on utilise
-donc des codes basés sur des méthodes
-potentielles, tels qu'Aqua+. Les tables sont paramétrées en pulsation, incidence et
-vitesse d'avance (RAO d'efforts). La principale différence entre les efforts de
-radiation et les efforts de diffraction est l'écriture de la condition aux
-limites.
+hydrodynamiques. Comme les efforts de radiation et les efforts de masse
+ajoutée, ces tables sont calculées en résolvant un problème de condition aux
+limites pour le potentiel de vitesse : on utilise donc des codes basés sur des
+méthodes potentielles, tels qu'Aqua+. Les tables sont paramétrées en pulsation,
+incidence et vitesse d'avance (RAO d'efforts). La principale différence entre
+les efforts de radiation et les efforts de diffraction est l'écriture de la
+condition aux limites.
 
 ## Résistance à l'avancement
 
@@ -1045,13 +1210,13 @@ En pratique, on effectue une interpolation par spline cubique de la résistance
 projetée sur l'axe X du repère body (que l'on note $u$). Si $f:u\mapsto R=f(u)$
 désigne la fonction d'interpolation, le torseur des efforts, exprimé au [point
 de calcul
-hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique),
+hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
 est :
 
 $$\tau_\mbox{res} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
 
 Ce modèle est accessible par la clef [`resistance
-curve`](documentation_yaml.html#r%C3%A9sistance-%C3%A0-lavancement).
+curve`](#r%C3%A9sistance-%C3%A0-lavancement).
 
 ### Références
 
@@ -1069,7 +1234,7 @@ Les mouvements d'un solide évoluant dans un fluide sont amortis du fait de
 l'énergie que ce solide communique au fluide. Ces efforts dissipatifs
 proviennent d'une part des vagues générées par les mouvements du fluide (et qui
 correspondent aux [amortissements de
-radiation](modeles_reperes_et_conventions.html#calcul-des-efforts-dexcitation)),
+radiation](#calcul-des-efforts-dexcitation)),
 et d'autre part des amortissements visqueux dus au frottement du fluide sur la
 coque (apparition d'un sillage tourbillonaire ou turbulent qui dissipe de
 l'énergie de manière purement mécanique, essentiellement sur l'axe roulis). Ce
@@ -1092,14 +1257,14 @@ de résistance à l'avancement, il convient de prendre des précautions
 supplémentaires afin de ne pas modéliser deux fois le même phénomène physique.
 On décompose donc la vitesse longitudinale en une composante basse fréquence
 (utilisée par le modèle de [résistance à
-l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement))
+l'avancement](#r%C3%A9sistance-%C3%A0-lavancement))
 et une composante haute fréquence (pour le modèle d'amortissement).
 
 ### Modélisation
 
 Pour une description des notations adoptées ici on pourra se référer à [la
 description du repère de calcul
-hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique).
+hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique).
 
 La vitesse du courant (vitesse de l'eau par rapport au repère NED, projetée
 dans le repère NED) est notée :
@@ -1116,12 +1281,12 @@ $$\omega_\mbox{local} = {}^\mbox{local}T_\mbox{body}\omega_{nb}^b$$
 
 Si les efforts de radiation ne sont par modélisés par ailleurs, les
 amortissements linéaires s'écrivent (dans le [repère de calcul
-hydrodynamique](modeles_reperes_et_conventions.html#rep%C3%A8re-de-calcul-hydrodynamique)) :
+hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique)) :
 
 $$F_{\mbox{al}}=-D_l\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_\mbox{local}$$
 
 où $D_l$ est la matrice d'amortissement linéaire lue depuis [le fichier de
-paramètres](documentation_yaml.html#amortissement-linéaire).
+paramètres](#amortissement-linéaire).
 
 Pour les amortissements quadratiques :
 
@@ -1141,7 +1306,7 @@ d_{61}\cdot|u_{\mbox{local}}| & d_{62}\cdot |v_{\mbox{local}}| & d_{63}\cdot |w_
 
 les $((d_{ij}))$ étant les coefficients de la matrice d'amortissement
 quadratique lue depuis [le fichier de
-paramètres](documentation_yaml.html#amortissement-quadratique).
+paramètres](#amortissement-quadratique).
 
 ### Références
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 276
@@ -1153,7 +1318,7 @@ paramètres](documentation_yaml.html#amortissement-quadratique).
 
 On classe dans cette catégorie les efforts de propulsion (hélices, tunnels,
 azimutaux, Voith...) mais aussi les safrans et ailerons. Ils sont paramétrés
-dans la section [`efforts commandés`](documentation_yaml.html#efforts-command%C3%A9s)
+dans la section [`efforts commandés`](#efforts-command%C3%A9s)
 du fichier YAML.
 
 ## Hélices Wageningen série B
@@ -1171,7 +1336,7 @@ d'autres instituts de recherche en aient réalisés d'autres par la suite.
 En 1975, Oosterveld et Ossannen utilisèrent une régression statistique pour
 établir le modèle polynomial des hélices Wageningen présenté ici.
 
-Un [tutoriel](tutorials.html#tutoriel-6-propulsion) présente l'utilisation de
+Un [tutoriel](#tutoriel-6-propulsion) présente l'utilisation de
 ce modèle dans le simulateur.
 
 ### Hypothèses du modèle en eau libre
@@ -1278,7 +1443,7 @@ conditions nominales. Des ordres de grandeurs de ce coefficient sont donnés par
 exemple dans Carlton, pages 70,72,73 et 74.
 
 En outre, l'hélice accroît la [résistance à
-l'avancement](modeles_reperes_et_conventions.html#r%C3%A9sistance-%C3%A0-lavancement)
+l'avancement](#r%C3%A9sistance-%C3%A0-lavancement)
 : en effet, elle diminue la pression à l'arrière du navire, ce qui augmente la
 poussée nécessaire pour la propulsion. L'helice accélérant le fluide, il existe
 des frottements supplémentaires sur la coque. Pour prendre en compte ces
@@ -1342,7 +1507,7 @@ K_Q(J, P/D, A_E/A_0, Z, R_n)$$
 ### Expression des efforts
 
 Les efforts générés par l'hélice sont calculés dans un repère spécifique
-renseigné dans la section [`position of propeller frame`](documentation_yaml.html#wageningen-b-series) du fichier YAML. La
+renseigné dans la section [`position of propeller frame`](#wageningen-b-series) du fichier YAML. La
 poussée (c'est-à-dire l'effort généré par l'hélice sur le navire) est faite
 dans le sens des $x$ positifs.
 

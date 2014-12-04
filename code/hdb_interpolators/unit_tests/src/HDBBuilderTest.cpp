@@ -55,5 +55,23 @@ TEST_F(HDBBuilderTest, can_get_added_mass)
     ASSERT_EQ(6,Ma.at(5).second.size());
 }
 
+TEST_F(HDBBuilderTest, can_retrieve_radiation_damping)
+{
+    const HDBBuilder builder(test_data::anthineas_hdb());
+    const auto Br = builder.get_radiation_damping();
+    ASSERT_EQ(6,Br.size());
+    ASSERT_DOUBLE_EQ(1,  Br.at(0).first);
+    ASSERT_DOUBLE_EQ(2,  Br.at(1).first);
+    ASSERT_DOUBLE_EQ(3,  Br.at(2).first);
+    ASSERT_DOUBLE_EQ(3.5,Br.at(3).first);
+    ASSERT_DOUBLE_EQ(3.8,Br.at(4).first);
+    ASSERT_DOUBLE_EQ(4,  Br.at(5).first);
 
+    ASSERT_DOUBLE_EQ(6.771553E+03, Br.at(0).second.at(0).at(0));
+    ASSERT_DOUBLE_EQ(2.194728E+05, Br.at(1).second.at(1).at(1));
+    ASSERT_DOUBLE_EQ(1.488785E+05, Br.at(2).second.at(2).at(2));
+    ASSERT_DOUBLE_EQ(8.694864E+04, Br.at(3).second.at(3).at(3));
+    ASSERT_DOUBLE_EQ(5.476829E+06, Br.at(4).second.at(4).at(4));
+    ASSERT_DOUBLE_EQ(4.374308E+06, Br.at(5).second.at(5).at(5));
+}
 

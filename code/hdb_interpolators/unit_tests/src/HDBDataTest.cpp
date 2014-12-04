@@ -5,6 +5,10 @@
  *      Author: cady
  */
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include "HDBBuilder.hpp"
 #include "HDBData.hpp"
 #include "HDBDataTest.hpp"
@@ -31,8 +35,7 @@ void HDBDataTest::TearDown()
 TEST_F(HDBDataTest, can_retrieve_initial_values)
 {
 //! [HDBDataTest example]
-    const HDBBuilder builder(test_data::anthineas_hdb());
-    HDBData data(builder.get_added_mass());
+    HDBData data((HDBBuilder(test_data::anthineas_hdb())));
     //! [HDBDataTest example]
 
     //! [HDBDataTest expected output]
@@ -60,8 +63,7 @@ TEST_F(HDBDataTest, can_retrieve_initial_values)
 
 TEST_F(HDBDataTest, can_retrieve_added_mass_at_Tp_0)
 {
-    const HDBBuilder builder(test_data::anthineas_hdb());
-    HDBData data(builder.get_added_mass());
+    HDBData data((HDBBuilder(test_data::anthineas_hdb())));
     const auto M = data.get_added_mass();
     ASSERT_EQ(6, M.cols());
     ASSERT_EQ(6, M.rows());
@@ -71,4 +73,36 @@ TEST_F(HDBDataTest, can_retrieve_added_mass_at_Tp_0)
     ASSERT_DOUBLE_EQ(-1.053934E+02, (double)M(2,3));
     ASSERT_DOUBLE_EQ(3.267841E+05, (double)M(2,4));
     ASSERT_DOUBLE_EQ(6.774041E+02, (double)M(2,5));
+}
+
+TEST_F(HDBDataTest, can_retrieve_angular_frequencies_for_radiation_damping)
+{
+    HDBData data((HDBBuilder(test_data::anthineas_hdb())));
+    const auto angular_frequencies = data.get_radiation_damping_angular_frequencies();
+    ASSERT_EQ(6,        angular_frequencies.size());
+    ASSERT_EQ(2*PI/1.,  angular_frequencies.at(5));
+    ASSERT_EQ(2*PI/2.,  angular_frequencies.at(4));
+    ASSERT_EQ(2*PI/3.,  angular_frequencies.at(3));
+    ASSERT_EQ(2*PI/3.5, angular_frequencies.at(2));
+    ASSERT_EQ(2*PI/3.8, angular_frequencies.at(1));
+    ASSERT_EQ(2*PI/4.,  angular_frequencies.at(0));
+}
+
+TEST_F(HDBDataTest, can_retrieve_vectors_for_each_element_in_radiation_damping_matrix)
+{
+    HDBData data((HDBBuilder(test_data::anthineas_hdb())));
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        for (size_t j = 0 ; j < 6 ; ++j)
+        {
+            ASSERT_EQ(6, data.get_radiation_damping_coeff(i,j).size());
+        }
+    }
+    const auto v = data.get_radiation_damping_coeff(1,2);
+    ASSERT_DOUBLE_EQ(-1.590935E+02, v.at(5));
+    ASSERT_DOUBLE_EQ( 2.595528E+02, v.at(4));
+    ASSERT_DOUBLE_EQ(-1.614637E+02, v.at(3));
+    ASSERT_DOUBLE_EQ(-1.376756E+02, v.at(2));
+    ASSERT_DOUBLE_EQ(-1.215545E+02, v.at(1));
+    ASSERT_DOUBLE_EQ(-1.083372E+02, v.at(0));
 }

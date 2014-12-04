@@ -1,4 +1,4 @@
-# Tutoriel 3 : génération de houle sur un maillage
+## Tutoriel 3 : génération de houle sur un maillage
 
 Le simulateur a vocation à représenter le comportement de solides dans un
 environnement fluide, mais il peut aussi servir à simuler un environnement,
@@ -6,7 +6,7 @@ sans aucun solide. Ce peut être intéressant par exemple pour générer des cha
 de vague afin de tester des algorithmes de prédiction de mouvement sur houle.
 Ce tutoriel explique comment utiliser le simulateur pour ce type de simulation.
 
-## Description du problème
+### Description du problème
 Dans cet exemple, nous simulerons une houle d'Airy constituée de la somme de
 deux spectres directionnels :
 
@@ -19,7 +19,7 @@ On se limite dans cet exemple à deux spectres, mais le simulateur permet d'en
 sommer autant qu'on le souhaite (on n'est limité que par la mémoire de la
 machine).
 
-## Ecriture du fichier de configuration du simulateur.
+### Ecriture du fichier de configuration du simulateur.
 
 La section `environment models` est nettement plus fournie que pour les
 tutoriels précédents.
@@ -69,7 +69,7 @@ Pour le second spectre, on écrit :
      waves coming from: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On définit les sorties de la façon suivante (décrites dans la [documentation du fichier YAML](documentation_yaml.html#sorties):
+On définit les sorties de la façon suivante ##sorties):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
@@ -176,7 +176,7 @@ environment models:
             ny: 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Lancement de la simulation
+### Lancement de la simulation
 
 La simulation peut maintenant être lancée comme suit :
 
@@ -186,7 +186,7 @@ La simulation peut maintenant être lancée comme suit :
 
 Le fichier de résultat est `tutorial_03_results.yml`.
 
-## Résultats
+### Résultats
 
 On obtient le fichier suivant :
 
@@ -201,7 +201,7 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La description de ce fichier est faite [dans la documentation des fichiers YAML](documentation_yaml.html#sorties).
+La description de ce fichier est faite [dans la documentation des fichiers YAML]##sorties).
 
 On peut aussi simuler les vagues dans un autre référentiel que le référentiel
 NED (par exemple le référentiel associé à un solide) et l'on obtient alors des

@@ -1,9 +1,9 @@
-# Tutoriel 6 : propulsion
+## Tutoriel 6 : propulsion
 
 Jusqu'ici nous n'avons simulé que des efforts environnementaux. Dans ce
 tutoriel, nous simulons un propulseur.
 
-## Description du problème
+### Description du problème
 
 Le navire évolue dans un environnement sans houle. Il est soumis aux quatre
 efforts suivants :
@@ -13,15 +13,15 @@ efforts suivants :
 - L'amortissement visqueux
 - Un effort de propulsion
 
-## Ecriture du fichier de configuration du simulateur.
+### Ecriture du fichier de configuration du simulateur.
 
 Les deux seuls changements par rapport au tutoriel 2 sont l'ajout d'une section
-[`controlled forces`](documentation_yaml.html#efforts-commandés) et un [fichier
+[`controlled forces`]##efforts-commandés) et un [fichier
 supplémentaire de
-commandes](documentation_yaml.html#syntaxe-du-fichier-de-commande) que l'on nomme `controlled_forces_commands.yml`.
+commandes]##syntaxe-du-fichier-de-commande) que l'on nomme `controlled_forces_commands.yml`.
 
 On commence par définir les [caractéristiques du
-propulseur](documentation_yaml.html#efforts-commandés) :
+propulseur]##efforts-commandés) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 controlled forces:
@@ -45,7 +45,7 @@ controlled forces:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Le [fichier de
-commandes](documentation_yaml.html#syntaxe-du-fichier-de-commande) est défini de la façon suivante :
+commandes]##syntaxe-du-fichier-de-commande) est défini de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - name: port side propeller
@@ -103,7 +103,7 @@ environment models:
             ny: 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Lancement de la simulation
+### Lancement de la simulation
 
 La simulation peut maintenant être lancée comme suit :
 
@@ -112,7 +112,7 @@ La simulation peut maintenant être lancée comme suit :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-## Résultats
+### Résultats
 ![Vitesse d'avance (axe x)](images/tutorial_06_propulsion_u.svg)
 
 
