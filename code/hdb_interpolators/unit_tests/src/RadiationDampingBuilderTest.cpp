@@ -10,6 +10,7 @@
 #include "RadiationDampingBuilderTest.hpp"
 #include "RadiationDampingBuilder.hpp"
 
+#include <ssc/integrate.hpp>
 #include <ssc/macros.hpp>
 
 #define _USE_MATH_DEFINE
@@ -84,4 +85,23 @@ TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
     h.record(1000,1);
     RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
     ASSERT_NEAR(sin(2000.)/2., builder.convolution(h, [](const double t){return cos(2*t);}, 1000), 1E-10);
+}
+
+TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
+{
+    const auto Br = [](const double omega){return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));};
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    const double omega_min = 0.01;//2*PI/10;
+    const double omega_max = 850;//00;//2*PI/1;
+    const size_t n = 10;
+    const auto K = builder.build_retardation_function(Br, omega_min, omega_max, n);
+    size_t N = n;
+    const double tau_min = 2*PI/omega_max;
+    const double tau_max = 2*PI/omega_min;
+    for (size_t i = 0 ; i < N ; ++i)
+    {
+        const double tau = tau_min + (tau_max-tau_min)*double(i)/double(N-1);
+        const double K_analytical = 2./PI*ssc::integrate::Simpson([tau,Br](const double t){return Br(t)*cos(tau*t);}).integrate_f(omega_min, omega_max);
+        ASSERT_NEAR(K_analytical, K(tau), 1e-10) << "for tau = " << tau;
+    }
 }
