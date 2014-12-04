@@ -29,20 +29,20 @@ void RadiationDampingForceModelTest::TearDown()
 {
 }
 
-HDBParserForTests RadiationDampingForceModelTest::get_hdb_data() const
+TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data() const
 {
-    std::vector<double> Tp, Br;
-    const double Tpmin = 0;
+    std::vector<double> omegas, Br;
+    const double Tpmin = 1;
     const double Tpmax = 10;
     const size_t N = 100;
-    for (size_t i = 0 ; i < N ; ++i)
+    for (int i = N-1 ; i>-1 ; --i)
     {
-        const double t = Tpmin + (double)i/((double)(N-1)*(Tpmax-Tpmin));
+        const double t = Tpmin + (double)i/((double)(N-1))*(Tpmax-Tpmin);
         const double omega = 2*PI/t;
-        Tp.push_back(t);
+        omegas.push_back(omega);
         Br.push_back(0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega))));
     }
-    return HDBParserForTests(Tp, Br);
+    return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Br));
 }
 
 YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data() const
