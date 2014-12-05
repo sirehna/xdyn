@@ -86,7 +86,7 @@ TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
     h.record(0,1);
     h.record(1000,1);
     RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
-    ASSERT_NEAR(sin(2000.)/2., builder.convolution(h, [](const double t){return cos(2*t);}, 1000), 1E-10);
+    ASSERT_NEAR(sin(2000.)/2., builder.convolution(h, [](const double t){return cos(2*t);}, 0, 1000), 1E-10);
 }
 
 TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)

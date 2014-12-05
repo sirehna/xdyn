@@ -50,7 +50,8 @@ class RadiationDampingBuilder
           */
         double convolution(const History& h, //!< State history
                            const std::function<double(double)>& f, //!< Function to convolute with
-                           const double T //!< Length of the convolution (in seconds)
+                           const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
+                           const double Tmax  //!< End of the convolution
                            ) const;
 
     private:
