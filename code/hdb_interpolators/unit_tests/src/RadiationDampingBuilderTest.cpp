@@ -131,6 +131,120 @@ TEST_F(RadiationDampingBuilderTest, can_create_linearly_spaced_intervals)
     }
 }
 
+TEST_F(RadiationDampingBuilderTest, can_create_exponentially_spaced_intervals)
+{
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    for (size_t k = 0 ; k < 10 ; ++k)
+    {
+        const double xmin = a.random<double>();
+        const double xmax = a.random<double>().greater_than(xmin);
+        const size_t n = a.random<size_t>().between(3,200);
+        const auto v = builder.build_exponential_intervals(xmin, xmax, n);
+        ASSERT_EQ(n, v.size());
+        ASSERT_SMALL_RELATIVE_ERROR(xmin, v.front(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(xmax, v.back(),EPS);
+        double delta = v[1]-v[0];
+        for (size_t i = 2 ; i < n ; ++i)
+        {
+            ASSERT_LT(std::abs(delta), std::abs(v[i]-v[i-1]));
+            delta = v[i]-v[i-1];
+        }
+    }
+}
+
+TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_with_negative_values)
+{
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    for (size_t k = 0 ; k < 10 ; ++k)
+    {
+        const double xmin = a.random<double>().no().greater_than(0);
+        const double xmax = a.random<double>().between(xmin,0);
+        const size_t n = a.random<size_t>().between(3,200);
+        const auto v = builder.build_exponential_intervals(xmin, xmax, n);
+        ASSERT_EQ(n, v.size());
+        ASSERT_SMALL_RELATIVE_ERROR(xmin, v.front(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(xmax, v.back(),EPS);
+        double delta = v[1]-v[0];
+        for (size_t i = 2 ; i < n ; ++i)
+        {
+            ASSERT_LT(std::abs(delta), std::abs(v[i]-v[i-1]));
+            delta = v[i]-v[i-1];
+        }
+    }
+}
+
+TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_in_reverse)
+{
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    for (size_t k = 0 ; k < 10 ; ++k)
+    {
+        const double xmin = a.random<double>();
+        const double xmax = a.random<double>().no().greater_than(xmin);
+        const size_t n = a.random<size_t>().between(3,200);
+        const auto v = builder.build_exponential_intervals(xmin, xmax, n);
+        ASSERT_EQ(n, v.size());
+        ASSERT_SMALL_RELATIVE_ERROR(xmin, v.front(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(xmax, v.back(),EPS);
+        double delta = v[1]-v[0];
+        for (size_t i = 2 ; i < n ; ++i)
+        {
+            ASSERT_LT(std::abs(delta), std::abs(v[i]-v[i-1]));
+            delta = v[i]-v[i-1];
+        }
+    }
+}
+
+TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_with_opposite_signs)
+{
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    for (size_t k = 0 ; k < 10 ; ++k)
+    {
+        const double xmin = a.random<double>().no().greater_than(0);
+        const double xmax = a.random<double>().greater_than(0);
+        const size_t n = a.random<size_t>().between(3,200);
+        const auto v = builder.build_exponential_intervals(xmin, xmax, n);
+        ASSERT_EQ(n, v.size());
+        ASSERT_SMALL_RELATIVE_ERROR(xmin, v.front(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(xmax, v.back(),EPS);
+        double delta = v[1]-v[0];
+        for (size_t i = 2 ; i < n ; ++i)
+        {
+            ASSERT_LT(std::abs(delta), std::abs(v[i]-v[i-1]));
+            delta = v[i]-v[i-1];
+        }
+    }
+}
+
+TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_if_first_is_zero)
+{
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    const auto v = builder.build_exponential_intervals(0, 10, 10);
+    ASSERT_EQ(10, v.size());
+    ASSERT_SMALL_RELATIVE_ERROR(0, v.front(),EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(10, v.back(),EPS);
+    double delta = v[1]-v[0];
+    for (size_t i = 2 ; i < 10 ; ++i)
+    {
+        ASSERT_LT(std::abs(delta), std::abs(v[i]-v[i-1]));
+        delta = v[i]-v[i-1];
+    }
+}
+
+TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_if_last_is_zero)
+{
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    const auto v = builder.build_exponential_intervals(-10, 0, 10);
+    ASSERT_EQ(10, v.size());
+    ASSERT_SMALL_RELATIVE_ERROR(-10, v.front(),EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(0, v.back(),EPS);
+    double delta = v[1]-v[0];
+    for (size_t i = 2 ; i < 10 ; ++i)
+    {
+        ASSERT_LT(std::abs(delta), std::abs(v[i]-v[i-1]));
+        delta = v[i]-v[i-1];
+    }
+}
+
 TEST_F(RadiationDampingBuilderTest, can_find_greatest_omega_for_which_integration_makes_sense)
 {
     const auto Br = [](const double omega){return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));};

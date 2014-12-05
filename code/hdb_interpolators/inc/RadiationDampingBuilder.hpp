@@ -57,9 +57,17 @@ class RadiationDampingBuilder
         /**  \brief Build a vector of n regularly incremented doubles from xmin to xmax. First value is xmin last is xmax.
           */
         std::vector<double> build_regular_intervals(const double first, //!< First value in vector
-                                                    const double last, //!< Last value in vector
-                                                    const size_t n //!< Number of values to return
+                                                    const double last,  //!< Last value in vector
+                                                    const size_t n      //!< Number of values to return
                                                     ) const;
+
+        /**  \brief Build a vector of n exponentially incremented doubles from xmin to xmax.
+          *  \details First value is xmin last is xmax. Spacing is small near xmin and large near xmax
+          */
+        std::vector<double> build_exponential_intervals(const double first, //!< First value in vector
+                                                        const double last,  //!< Last value in vector
+                                                        const size_t n      //!< Number of values to return
+                                                        ) const;
 
         /**  \brief Find bound representing a significant amount of the integral
           *  \details Uses TOMS Algorithm 748 to compute the minimum bound \omega_0 such that

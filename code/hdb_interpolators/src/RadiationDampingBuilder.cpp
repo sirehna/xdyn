@@ -110,6 +110,21 @@ std::vector<double> RadiationDampingBuilder::build_regular_intervals(const doubl
     return ret;
 }
 
+std::vector<double> RadiationDampingBuilder::build_exponential_intervals(const double first, //!< First value in vector
+                                                    const double last, //!< Last value in vector
+                                                    const size_t n //!< Number of values to return
+                                                    ) const
+{
+    std::vector<double> ret(n);
+    const double sgn = first < last ? 1 : -1;
+    const double L = std::abs(last-first);
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        ret[i] = first + sgn*(std::pow(L+1,(double)i/((double)n-1))-1);
+    }
+    return ret;
+}
+
 double RadiationDampingBuilder::find_integration_bound(const std::function<double(double)>& f, //!< Function to integrate
                                                        const double omega_min,                 //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
                                                        const double omega_max,                 //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
