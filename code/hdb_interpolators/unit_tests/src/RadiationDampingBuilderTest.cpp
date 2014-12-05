@@ -5,7 +5,6 @@
  *      Author: cady
  */
 
-
 #include "History.hpp"
 #include "RadiationDampingBuilderTest.hpp"
 #include "RadiationDampingBuilder.hpp"
@@ -130,4 +129,19 @@ TEST_F(RadiationDampingBuilderTest, can_create_linearly_spaced_intervals)
             ASSERT_SMALL_RELATIVE_ERROR(delta, v[i]-v[i-1],EPS);
         }
     }
+}
+
+TEST_F(RadiationDampingBuilderTest, can_find_greatest_omega_for_which_integration_makes_sense)
+{
+    const auto Br = [](const double omega){return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));};
+    const double omega_min = 0;
+    const double omega_max = 100;
+    size_t N = 10;
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    const auto omegas = builder.build_regular_intervals(omega_min, omega_max, N);
+    double I0 = builder.integrate(Br, omega_min, omega_max);
+    const double eps=1E-3;
+    const double omega0 = builder.find_integration_bound(Br, omega_min, omega_max, eps);
+
+    ASSERT_NEAR(eps,(builder.integrate(Br, omega_min, omega_max)-builder.integrate(Br, omega_min, omega0))/I0,EPS);
 }

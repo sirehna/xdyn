@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <boost/math/tools/roots.hpp>
+
 #include <ssc/macros/tr1_macros.hpp>
 #include <ssc/integrate.hpp>
 #include TR1INC(memory)
@@ -106,4 +108,17 @@ std::vector<double> RadiationDampingBuilder::build_regular_intervals(const doubl
         ret[i] = first + (last-first)*(double)(i)/((double)n-1);
     }
     return ret;
+}
+
+double RadiationDampingBuilder::find_integration_bound(const std::function<double(double)>& f, //!< Function to integrate
+                                                       const double omega_min,                 //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
+                                                       const double omega_max,                 //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
+                                                       const double eps                        //!< Integration error (compared to full integration from omega_min up to omega_max)
+                                                       ) const
+{
+    boost::math::tools::eps_tolerance<double> tol(30);
+    const double I0 = integrate(f, omega_min, omega_max);
+    const auto g = [&f,I0,this,eps,omega_min,omega_max](const double omega){return integrate(f, omega_min, omega)-(1-eps)*I0;};
+    boost::uintmax_t max_iter=20;
+    return boost::math::tools::toms748_solve(g, omega_min, omega_max, tol, max_iter).first;
 }

@@ -61,6 +61,18 @@ class RadiationDampingBuilder
                                                     const size_t n //!< Number of values to return
                                                     ) const;
 
+        /**  \brief Find bound representing a significant amount of the integral
+          *  \details Uses TOMS Algorithm 748 to compute the minimum bound \omega_0 such that
+          *  int_{\omega_{\mbox{min}}}^{\omega_0} f(\omega) d\omega = (1-eps) int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}
+          *  \returns Upper integration bound
+          *  \snippet hdb_interpolators/unit_tests/src/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest find_integration_bound_example
+          */
+        double find_integration_bound(const std::function<double(double)>& f, //!< Function to integrate
+                                      const double omega_min, //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
+                                      const double omega_max, //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
+                                      const double eps        //!< Integration error (compared to full integration from omega_min up to omega_max)
+                               ) const;
+
         double integrate(const std::function<double(double)>& f, const double a, const double b) const;
 
     private:
