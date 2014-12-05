@@ -17,6 +17,8 @@
 #include <cmath>
 #define PI M_PI
 
+#define EPS (1E-10)
+
 RadiationDampingBuilderTest::RadiationDampingBuilderTest() : a(ssc::random_data_generator::DataGenerator(212))
 {
 }
@@ -60,9 +62,9 @@ TEST_F(RadiationDampingBuilderTest, all_types_of_interpolator_can_retrieve_origi
 
     for (size_t i = 0 ; i < N ; ++i)
     {
-        ASSERT_NEAR(B.at(i), f1(omega.at(i)), 1E-10) << "i = " << i;
-        ASSERT_NEAR(B.at(i), f2(omega.at(i)), 1E-10) << "i = " << i;
-        ASSERT_NEAR(B.at(i), f3(omega.at(i)), 1E-10) << "i = " << i;
+        ASSERT_NEAR(B.at(i), f1(omega.at(i)), EPS) << "i = " << i;
+        ASSERT_NEAR(B.at(i), f2(omega.at(i)), EPS) << "i = " << i;
+        ASSERT_NEAR(B.at(i), f3(omega.at(i)), EPS) << "i = " << i;
     }
 }
 
@@ -77,7 +79,7 @@ TEST_F(RadiationDampingBuilderTest, can_calculate_cosine_transform)
     for (size_t i = 0 ; i < n ; ++i) taus.push_back(1+9*(double)i/((double)(n-1)));
     const auto K = builder.build_retardation_function(B, taus);
     double tau = 3;
-    ASSERT_NEAR(2./PI*(sin(omega_max*tau)/tau-sin(omega_min*tau)/tau), K(tau), 1E-10);
+    ASSERT_NEAR(2./PI*(sin(omega_max*tau)/tau-sin(omega_min*tau)/tau), K(tau), EPS);
 }
 
 TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
@@ -86,7 +88,7 @@ TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
     h.record(0,1);
     h.record(1000,1);
     RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
-    ASSERT_NEAR(sin(2000.)/2., builder.convolution(h, [](const double t){return cos(2*t);}, 0, 1000), 1E-10);
+    ASSERT_NEAR(sin(2000.)/2., builder.convolution(h, [](const double t){return cos(2*t);}, 0, 1000), EPS);
 }
 
 TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
@@ -106,6 +108,6 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
     {
         const double tau = tau_min + (tau_max-tau_min)*double(i)/double(N-1);
         const double K_analytical = 2./PI*ssc::integrate::Simpson([tau,Br](const double t){return Br(t)*cos(tau*t);}).integrate_f(omega_min, omega_max);
-        ASSERT_NEAR(K_analytical, K(tau), 1e-10) << "for tau = " << tau;
+        ASSERT_NEAR(K_analytical, K(tau), EPS) << "for tau = " << tau;
     }
 }
