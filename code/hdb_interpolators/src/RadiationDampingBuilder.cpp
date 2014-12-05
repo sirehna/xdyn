@@ -134,6 +134,6 @@ double RadiationDampingBuilder::find_integration_bound(const std::function<doubl
     boost::math::tools::eps_tolerance<double> tol(30);
     const double I0 = integrate(f, omega_min, omega_max);
     const auto g = [&f,I0,this,eps,omega_min,omega_max](const double omega){return integrate(f, omega_min, omega)-(1-eps)*I0;};
-    boost::uintmax_t max_iter=20;
+    boost::uintmax_t max_iter=100;
     return boost::math::tools::toms748_solve(g, omega_min, omega_max, tol, max_iter).first;
 }
