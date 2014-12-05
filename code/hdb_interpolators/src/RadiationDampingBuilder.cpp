@@ -76,18 +76,13 @@ double RadiationDampingBuilder::integrate(const std::function<double(double)>& f
     return 0;
 }
 
-std::function<double(double)> RadiationDampingBuilder::build_retardation_function(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const size_t n) const
+std::function<double(double)> RadiationDampingBuilder::build_retardation_function(const std::function<double(double)>& Br, const std::vector<double>& taus) const
 {
-    std::vector<double> x(n,0), y(n, 0);
-    const double tau_min = 2*PI/omega_max;
-    const double tau_max = 2*PI/omega_min;
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        const double tau = tau_min + (tau_max - tau_min)*(double)i/((double)n-1.);
-        x[i] = tau;
-        y[i] = integrate(Br, tau, omega_min, omega_max);
-    }
-    return build_interpolator(x, y);
+    const double omega_min = 2*PI/taus.back();
+    const double omega_max = 2*PI/taus.front();
+    std::vector<double> y;
+    for (auto tau:taus) y.push_back(integrate(Br, tau, omega_min, omega_max));
+    return build_interpolator(taus, y);;
 }
 
 double RadiationDampingBuilder::convolution(const History& h, //!< State history
