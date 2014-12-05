@@ -111,3 +111,23 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
         ASSERT_NEAR(K_analytical, K(tau), EPS) << "for tau = " << tau;
     }
 }
+
+TEST_F(RadiationDampingBuilderTest, can_create_linearly_spaced_intervals)
+{
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    for (size_t k = 0 ; k < 10 ; ++k)
+    {
+        const double xmin = a.random<double>();
+        const double xmax = a.random<double>().greater_than(xmin);
+        const size_t n = a.random<size_t>().between(3,200);
+        const auto v = builder.build_regular_intervals(xmin, xmax, n);
+        ASSERT_EQ(n, v.size());
+        ASSERT_SMALL_RELATIVE_ERROR(xmin, v.front(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(xmax, v.back(),EPS);
+        const double delta = v[1]-v[0];
+        for (size_t i = 2 ; i < n ; ++i)
+        {
+            ASSERT_SMALL_RELATIVE_ERROR(delta, v[i]-v[i-1],EPS);
+        }
+    }
+}

@@ -54,6 +54,13 @@ class RadiationDampingBuilder
                            const double Tmax  //!< End of the convolution
                            ) const;
 
+        /**  \brief Build a vector of n regularly incremented doubles from xmin to xmax. First value is xmin last is xmax.
+          */
+        std::vector<double> build_regular_intervals(const double first, //!< First value in vector
+                                                    const double last, //!< Last value in vector
+                                                    const size_t n //!< Number of values to return
+                                                    ) const;
+
     private:
         RadiationDampingBuilder();
         double integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const;

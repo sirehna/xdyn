@@ -94,3 +94,16 @@ double RadiationDampingBuilder::convolution(const History& h, //!< State history
     const auto g = [&h, &f](const double tau){return h.get(tau)*f(tau);};
     return integrate(g, Tmin, Tmax);
 }
+
+std::vector<double> RadiationDampingBuilder::build_regular_intervals(const double first, //!< First value in vector
+                                                    const double last, //!< Last value in vector
+                                                    const size_t n //!< Number of values to return
+                                                    ) const
+{
+    std::vector<double> ret(n);
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        ret[i] = first + (last-first)*(double)(i)/((double)n-1);
+    }
+    return ret;
+}
