@@ -74,8 +74,7 @@ TEST_F(RadiationDampingBuilderTest, can_calculate_cosine_transform)
     const double omega_min = 2*PI/10;
     const double omega_max = 2*PI/1;
     const size_t n = 10;
-    std::vector<double> taus;
-    for (size_t i = 0 ; i < n ; ++i) taus.push_back(1+9*(double)i/((double)(n-1)));
+    std::vector<double> taus = builder.build_regular_intervals(1, 10, n);
     const auto K = builder.build_retardation_function(B, taus);
     double tau = 3;
     ASSERT_NEAR(2./PI*(sin(omega_max*tau)/tau-sin(omega_min*tau)/tau), K(tau), EPS);
