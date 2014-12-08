@@ -33,8 +33,9 @@ void RadiationDampingBuilderTest::SetUp()
 void RadiationDampingBuilderTest::TearDown()
 {
 }
-double f(const double omega);
-double f(const double omega)
+
+double Br(const double omega);
+double Br(const double omega)
 {
     return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));
 }
@@ -49,7 +50,7 @@ TEST_F(RadiationDampingBuilderTest, all_types_of_interpolator_can_retrieve_origi
     for (size_t i = 0 ; i < N ; ++i)
     {
         omega.push_back(omega_min + (omega_max-omega_min)*((double)i)/((double)(N-1)));
-        B.push_back(f(omega.back()));
+        B.push_back(Br(omega.back()));
     }
 
     RadiationDampingBuilder builder1(TypeOfInterpolation::LINEAR, TypeOfQuadrature::GAUSS_KRONROD);
@@ -91,7 +92,6 @@ TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
 
 TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
 {
-    const auto Br = [](const double omega){return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));};
     RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
     const double omega_min = 0.01;//2*PI/10;
     const double omega_max = 850;//00;//2*PI/1;
@@ -105,7 +105,7 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
     for (size_t i = 0 ; i < N ; ++i)
     {
         const double tau = tau_min + (tau_max-tau_min)*double(i)/double(N-1);
-        const double K_analytical = 2./PI*ssc::integrate::Simpson([tau,Br](const double t){return Br(t)*cos(tau*t);}).integrate_f(omega_min, omega_max);
+        const double K_analytical = 2./PI*ssc::integrate::Simpson([tau](const double t){return Br(t)*cos(tau*t);}).integrate_f(omega_min, omega_max);
         ASSERT_NEAR(K_analytical, K(tau), EPS) << "for tau = " << tau;
     }
 }
@@ -246,7 +246,6 @@ TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_if_last_is
 
 TEST_F(RadiationDampingBuilderTest, can_find_greatest_omega_for_which_integration_makes_sense)
 {
-    const auto Br = [](const double omega){return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));};
     const double omega_min = 0;
     const double omega_max = 100;
     size_t N = 10;
@@ -261,7 +260,6 @@ TEST_F(RadiationDampingBuilderTest, can_find_greatest_omega_for_which_integratio
 
 TEST_F(RadiationDampingBuilderTest, bug_detected_in_RadiationDampingForceModel)
 {
-    const auto Br = [](const double omega){return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));};
     RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
     const double tau_min = 0.1;
     const double tau_max = 40;
