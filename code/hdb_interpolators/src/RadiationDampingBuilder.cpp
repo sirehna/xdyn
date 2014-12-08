@@ -86,7 +86,7 @@ std::function<double(double)> RadiationDampingBuilder::build_retardation_functio
     for (auto tau:taus) y.push_back(integrate(Br, tau, omega_min, omega_max));
     return build_interpolator(taus, y);
 }
-
+#include <ssc/macros.hpp>
 double RadiationDampingBuilder::convolution(const History& h, //!< State history
                            const std::function<double(double)>& f, //!< Function to convolute with
                            const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
@@ -132,8 +132,9 @@ double RadiationDampingBuilder::find_integration_bound(const std::function<doubl
                                                        ) const
 {
     boost::math::tools::eps_tolerance<double> tol(30);
-    const double I0 = integrate(f, omega_min, omega_max);
-    const auto g = [&f,I0,this,eps,omega_min,omega_max](const double omega){return integrate(f, omega_min, omega)-(1-eps)*I0;};
+    if (std::abs(f(omega_max))>eps) return omega_max;
+    if (std::abs(f(omega_min))<eps) return omega_min;
+    const auto g = [&f,eps](const double omega){return std::abs(f(omega))-eps;};
     boost::uintmax_t max_iter=100;
     return boost::math::tools::toms748_solve(g, omega_min, omega_max, tol, max_iter).first;
 }
