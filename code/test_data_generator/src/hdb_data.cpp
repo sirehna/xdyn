@@ -1,3 +1,4 @@
+#include <cmath>
 #include <sstream>
 
 #include "hdb_data.hpp"
@@ -597,4 +598,14 @@ std::string test_data::anthineas_hdb()
        << "    3.80 -1.371458E+04 -3.083248E+02 -6.912354E+02 -2.232421E+02  6.101291E+05  8.406668E+02\n"
        << "    4.00 -2.829986E+04 -3.998760E+02  4.380750E+04 -4.289895E+02  9.053923E+05  1.491807E+02\n";
     return ss.str();
+}
+
+double test_data::analytical_Br(const double omega)
+{
+    return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));
+}
+
+double test_data::analytical_K(const double tau)
+{
+    return exp(-0.1*tau)*cos(0.5*tau);
 }
