@@ -83,10 +83,10 @@ class RadiationDampingBuilder
                                ) const;
 
         double integrate(const std::function<double(double)>& f, const double a, const double b) const;
+        double integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const;
 
     private:
         RadiationDampingBuilder();
-        double integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const;
 
         TypeOfInterpolation type_of_interpolation;
         TypeOfQuadrature type_of_quadrature;
