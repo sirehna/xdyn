@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "hdb_data.hpp"
 #include "History.hpp"
 #include "RadiationDampingBuilderTest.hpp"
 #include "RadiationDampingBuilder.hpp"
@@ -34,12 +35,6 @@ void RadiationDampingBuilderTest::TearDown()
 {
 }
 
-double Br(const double omega);
-double Br(const double omega)
-{
-    return 0.5*(0.1/(0.01+(0.5-omega)*(0.5-omega))+0.1/(0.01+(0.5+omega)*(0.5+omega)));
-}
-
 TEST_F(RadiationDampingBuilderTest, all_types_of_interpolator_can_retrieve_original_values)
 {
     std::vector<double> omega;
@@ -50,7 +45,7 @@ TEST_F(RadiationDampingBuilderTest, all_types_of_interpolator_can_retrieve_origi
     for (size_t i = 0 ; i < N ; ++i)
     {
         omega.push_back(omega_min + (omega_max-omega_min)*((double)i)/((double)(N-1)));
-        B.push_back(Br(omega.back()));
+        B.push_back(test_data::analytical_Br(omega.back()));
     }
 
     RadiationDampingBuilder builder1(TypeOfInterpolation::LINEAR, TypeOfQuadrature::GAUSS_KRONROD);
@@ -98,14 +93,14 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
     const size_t n = 10;
     std::vector<double> taus;
     for (size_t i = 0 ; i < n ; ++i) taus.push_back(2*PI/omega_max+2*PI*(1./omega_min-1./omega_max)*(double)i/((double)(n-1)));
-    const auto K = builder.build_retardation_function(Br, taus, 0);
+    const auto K = builder.build_retardation_function(test_data::analytical_Br, taus, 0);
     size_t N = n;
     const double tau_min = 2*PI/omega_max;
     const double tau_max = 2*PI/omega_min;
     for (size_t i = 0 ; i < N ; ++i)
     {
         const double tau = tau_min + (tau_max-tau_min)*double(i)/double(N-1);
-        const double K_analytical = 2./PI*ssc::integrate::Simpson([tau](const double t){return Br(t)*cos(tau*t);}).integrate_f(omega_min, omega_max);
+        const double K_analytical = 2./PI*ssc::integrate::Simpson([tau](const double t){return test_data::analytical_Br(t)*cos(tau*t);}).integrate_f(omega_min, omega_max);
         ASSERT_NEAR(K_analytical, K(tau), EPS) << "for tau = " << tau;
     }
 }
@@ -251,11 +246,11 @@ TEST_F(RadiationDampingBuilderTest, can_find_greatest_omega_for_which_integratio
     size_t N = 10;
     RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
     const auto omegas = builder.build_regular_intervals(omega_min, omega_max, N);
-    double I0 = builder.integrate(Br, omega_min, omega_max);
+    double I0 = builder.integrate(test_data::analytical_Br, omega_min, omega_max);
     const double eps=1E-3;
-    const double omega0 = builder.find_integration_bound(Br, omega_min, omega_max, eps);
+    const double omega0 = builder.find_integration_bound(test_data::analytical_Br, omega_min, omega_max, eps);
 
-    ASSERT_NEAR(eps,(builder.integrate(Br, omega_min, omega_max)-builder.integrate(Br, omega_min, omega0))/I0,EPS);
+    ASSERT_NEAR(eps,(builder.integrate(test_data::analytical_Br, omega_min, omega_max)-builder.integrate(test_data::analytical_Br, omega_min, omega0))/I0,EPS);
 }
 
 TEST_F(RadiationDampingBuilderTest, bug_detected_in_RadiationDampingForceModel)
@@ -265,7 +260,7 @@ TEST_F(RadiationDampingBuilderTest, bug_detected_in_RadiationDampingForceModel)
     const double tau_max = 40;
     const size_t n = 100;
     std::vector<double> taus = builder.build_regular_intervals(tau_min,tau_max,n);
-    const auto K = builder.build_retardation_function(Br, taus, 1E-3);
+    const auto K = builder.build_retardation_function(test_data::analytical_Br, taus, 1E-3);
     size_t N = 100;
     for (size_t i = 0 ; i < N ; ++i)
     {
