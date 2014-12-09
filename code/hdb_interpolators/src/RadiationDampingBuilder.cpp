@@ -8,19 +8,16 @@
 #include <boost/math/tools/roots.hpp>
 
 #include <ssc/macros/tr1_macros.hpp>
+#include <ssc/interpolation.hpp>
 #include <ssc/integrate.hpp>
-#include TR1INC(memory)
+typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
-#include <ssc/interpolation.hpp>
-typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
-typedef TR1(shared_ptr)<ssc::integrate::Integrator> IntegratorPtr;
-
-#include "DampingMatrixInterpolatorException.hpp"
 #include "History.hpp"
+#include "DampingMatrixInterpolatorException.hpp"
 #include "RadiationDampingBuilder.hpp"
 
 RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfInterpolation& type_of_interpolation_, const TypeOfQuadrature& type_of_quadrature_) : type_of_interpolation(type_of_interpolation_), type_of_quadrature(type_of_quadrature_)
