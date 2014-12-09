@@ -9,6 +9,7 @@
 #define RADIATIONDAMPINGBUILDER_HPP_
 
 
+#include <vector>
 #include <functional>
 
 #include "YamlRadiationDamping.hpp"
