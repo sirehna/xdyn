@@ -11,7 +11,7 @@
 #include <string>
 
 enum class TypeOfInterpolation {PIECEWISE_CONSTANT, LINEAR, SPLINES};
-enum class TypeOfQuadrature {RECTANGLE, TRAPEZOIDAL, SIMPSON, GAUSS_KRONROD};
+enum class TypeOfQuadrature {RECTANGLE, TRAPEZOIDAL, SIMPSON, GAUSS_KRONROD, BURCHER, CLENSHAW_CURTIS, FILON};
 
 struct YamlRadiationDamping
 {

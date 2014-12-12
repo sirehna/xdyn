@@ -285,7 +285,7 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_an
     for (auto omega:omegas) vBr.push_back(test_data::analytical_Br(omega));
     const auto Br_ = builder.build_interpolator(omegas,vBr);
 
-    ASSERT_NEAR(test_data::analytical_K(0), builder.integrate(Br_, 0, omega_min, omega_max), 1E-2);
+    ASSERT_NEAR(test_data::analytical_K(0.01), builder.integrate(Br_, omega_min, omega_max, 0.01), 1E-2);
 }
 
 TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_analytical_results_2)

@@ -43,7 +43,7 @@ class RadiationDampingBuilder
           *  It then uses "build_interpolator" to build a function (lambda).
           */
         std::function<double(double)> build_retardation_function(const std::function<double(double)>& Br, //!< Radiation damping function
-                                                                 const std::vector<double>& taus, //!< Lower bound of the integration
+                                                                 const std::vector<double>& taus, //!<
                                                                  const double eps //!< When to truncate (0 for no truncation)
                                                                  ) const;
         /**  \brief Computes the convolution of a function with state history, over a certain time
@@ -83,8 +83,7 @@ class RadiationDampingBuilder
                                       const double eps        //!< Integration error (compared to full integration from omega_min up to omega_max)
                                ) const;
 
-        double integrate(const std::function<double(double)>& f, const double a, const double b) const;
-        double integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const;
+        double integrate(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const double tau) const;
 
     private:
         RadiationDampingBuilder();

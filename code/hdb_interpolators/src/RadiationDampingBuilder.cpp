@@ -46,27 +46,31 @@ std::function<double(double)> RadiationDampingBuilder::build_interpolator(const 
     return ret;
 }
 
-double RadiationDampingBuilder::integrate(const std::function<double(double)>& Br, const double tau, const double omega_min, const double omega_max) const
+double RadiationDampingBuilder::integrate(const std::function<double(double)>& Br, const double a, const double b, const double tau) const
 {
-    const auto f = [&Br,tau](const double omega){return Br(omega)*cos(omega*tau);};
-    return 2./PI*integrate(f, omega_min, omega_max);
-}
-
-double RadiationDampingBuilder::integrate(const std::function<double(double)>& f, const double a, const double b) const
-{
+    const auto f_cos = [Br,tau](const double omega){return Br(omega)*cos(omega*tau);};
     switch (type_of_quadrature)
     {
         case TypeOfQuadrature::GAUSS_KRONROD:
-            return ssc::integrate::GaussKronrod(f).integrate_f(a,b);
+            return 2./PI*ssc::integrate::GaussKronrod(f_cos).integrate_f(a,b);
             break;
         case TypeOfQuadrature::RECTANGLE:
-            return ssc::integrate::Rectangle(f).integrate_f(a, b);
+            return 2./PI*ssc::integrate::Rectangle(f_cos).integrate_f(a, b);
             break;
         case TypeOfQuadrature::SIMPSON:
-            return ssc::integrate::Simpson(f).integrate_f(a, b);
+            return 2./PI*ssc::integrate::Simpson(f_cos).integrate_f(a, b);
             break;
         case TypeOfQuadrature::TRAPEZOIDAL:
-            return ssc::integrate::TrapezoidalIntegration(f).integrate_f(a, b);
+            return 2./PI*ssc::integrate::TrapezoidalIntegration(f_cos).integrate_f(a, b);
+            break;
+        case TypeOfQuadrature::BURCHER:
+            return 2./PI*ssc::integrate::Burcher(Br,tau).integrate_f(a, b);
+            break;
+        case TypeOfQuadrature::CLENSHAW_CURTIS:
+            return 2./PI*ssc::integrate::ClenshawCurtisCosine(Br,tau).integrate_f(a, b);
+            break;
+        case TypeOfQuadrature::FILON:
+            return 2./PI*ssc::integrate::Filon(Br,tau).integrate_f(a, b);
             break;
         default:
             THROW(__PRETTY_FUNCTION__, DampingMatrixInterpolatorException, "Unknown type of quadrature.");
@@ -77,10 +81,14 @@ double RadiationDampingBuilder::integrate(const std::function<double(double)>& f
 
 std::function<double(double)> RadiationDampingBuilder::build_retardation_function(const std::function<double(double)>& Br, const std::vector<double>& taus, const double eps) const
 {
-    const double omega_min = 2*PI/taus.back();
-    const double omega_max = find_integration_bound(Br, omega_min, 2*PI/taus.front(), eps);
+     double omega_min = 2*PI/taus.back();
+     double omega_max = find_integration_bound(Br, omega_min, 2*PI/taus.front(), eps);
     std::vector<double> y;
-    for (auto tau:taus) y.push_back(integrate(Br, tau, omega_min, omega_max));
+
+    for (auto tau:taus)
+    {
+        y.push_back(integrate(Br, omega_min, omega_max, tau));
+    }
     return build_interpolator(taus, y);
 }
 #include <ssc/macros.hpp>
@@ -91,7 +99,7 @@ double RadiationDampingBuilder::convolution(const History& h, //!< State history
                            ) const
 {
     const auto g = [&h, &f](const double tau){return h.get(tau)*f(tau);};
-    return integrate(g, Tmin, Tmax);
+    return ssc::integrate::GaussKronrod(g).integrate_f(Tmin, Tmax);
 }
 
 std::vector<double> RadiationDampingBuilder::build_regular_intervals(const double first, //!< First value in vector
