@@ -23,6 +23,7 @@
 class History
 {
     public:
+        History();
         History(const double Tmax //!< Maximum duration to store in history (in seconds)
                );
 
@@ -63,7 +64,6 @@ class History
         typedef std::pair<double,double> TimeValue;
         typedef std::vector<TimeValue> Container;
 
-        History(); // Disabled
         void throw_if_already_added(const size_t idx, const double t, const double val) const;
         size_t find_braketing_position(const double t) const;
         double get_value(const size_t idx, const double t) const;

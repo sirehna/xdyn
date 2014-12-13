@@ -12,7 +12,9 @@
 #include "History.hpp"
 #include "HistoryException.hpp"
 
-
+History::History() : Tmax(), L()
+{
+}
 
 History::History(const double Tmax_) : Tmax(Tmax_), L()
 {

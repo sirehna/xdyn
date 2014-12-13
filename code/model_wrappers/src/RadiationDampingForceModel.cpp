@@ -25,7 +25,7 @@
 class RadiationDampingForceModel::Impl
 {
     public:
-        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, h{{History(1),History(1),History(1),History(1),History(1),History(1)}}, builder(RadiationDampingBuilder(yaml.interpolation, yaml.quadrature)), K(),
+        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, h(), builder(RadiationDampingBuilder(yaml.interpolation, yaml.quadrature)), K(),
         omega(parser->get_radiation_damping_angular_frequencies()), taus(), n(yaml.nb_of_points_in_retardation_function), Tmin(0), Tmax(0)
         {
             taus = builder.build_regular_intervals(2*PI/omega.back(),2*PI/omega.front(),n);
