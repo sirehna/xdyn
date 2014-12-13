@@ -154,3 +154,16 @@ double RadiationDampingBuilder::find_integration_bound(const std::function<doubl
     boost::uintmax_t max_iter=100;
     return boost::math::tools::toms748_solve(g, omega_min, omega_max, tol, max_iter).first;
 }
+
+double RadiationDampingBuilder::find_r_bound(const std::function<double(double)>& f, //!< Function to integrate
+                                                       const double omega_min,                 //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
+                                                       const double omega_max,                 //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
+                                                       const double r //!< How much of the total integral between omega_min & omega_max do we wish to represent?
+                                                       ) const
+{
+    boost::math::tools::eps_tolerance<double> tol(30);
+    const double I0 = integrate(f, omega_min, omega_max, 0);
+    const auto g = [&f,this,omega_min,I0,r](const double omega){return integrate(f,omega_min, omega, 0)-r*I0;};
+    boost::uintmax_t max_iter=100;
+    return boost::math::tools::toms748_solve(g, omega_min, omega_max, tol, max_iter).first;
+}
