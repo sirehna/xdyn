@@ -146,6 +146,27 @@ TEST_F(RadiationDampingBuilderTest, can_create_exponentially_spaced_intervals)
     }
 }
 
+TEST_F(RadiationDampingBuilderTest, can_create_exponentially_spaced_intervals_in_reverse)
+{
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    for (size_t k = 0 ; k < 10 ; ++k)
+    {
+        const double xmin = a.random<double>();
+        const double xmax = a.random<double>().greater_than(xmin);
+        const size_t n = a.random<size_t>().between(3,200);
+        const auto v = builder.build_exponential_intervals_reversed(xmin, xmax, n);
+        ASSERT_EQ(n, v.size());
+        ASSERT_SMALL_RELATIVE_ERROR(xmin, v.front(),EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(xmax, v.back(),EPS);
+        double delta = v[1]-v[0];
+        for (size_t i = 2 ; i < n ; ++i)
+        {
+            ASSERT_GT(std::abs(delta), std::abs(v[i]-v[i-1]));
+            delta = v[i]-v[i-1];
+        }
+    }
+}
+
 TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_with_negative_values)
 {
     RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);

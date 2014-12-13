@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <algorithm>    // std::reverse
+
 #include <boost/math/tools/roots.hpp>
 
 #include <ssc/macros/tr1_macros.hpp>
@@ -127,6 +129,16 @@ std::vector<double> RadiationDampingBuilder::build_exponential_intervals(const d
     {
         ret[i] = first + sgn*(std::pow(L+1,(double)i/((double)n-1))-1);
     }
+    return ret;
+}
+
+std::vector<double> RadiationDampingBuilder::build_exponential_intervals_reversed(const double first, //!< First value in vector
+                                                    const double last, //!< Last value in vector
+                                                    const size_t n //!< Number of values to return
+                                                    ) const
+{
+    std::vector<double> ret = build_exponential_intervals(last, first, n);
+    std::reverse(ret.begin(),ret.end());
     return ret;
 }
 
