@@ -353,7 +353,7 @@ TEST_F(RadiationDampingBuilderTest, can_compute_K)
     const auto Br_ = get_interpolated_Br();
 
 
-    auto taus = builder.build_regular_intervals(2*PI/omega_max,10,N);//2*PI/omegas.back(),2*PI/omegas.front(),N);
+    auto taus = builder.build_regular_intervals(2*PI/omega_max,10,N);
     const auto K  = builder.build_retardation_function(Br_,taus,eps,omega_min,omega_max);
     for (auto tau:taus) ASSERT_NEAR(test_data::analytical_K(tau), K(tau), 1E-4) << "tau = " << tau;
 }
