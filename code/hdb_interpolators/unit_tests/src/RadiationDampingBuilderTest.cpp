@@ -352,3 +352,17 @@ TEST_F(RadiationDampingBuilderTest, can_compute_K)
     const auto K  = get_interpolated_K();
     for (auto tau:taus) ASSERT_NEAR(test_data::analytical_K(tau), K(tau), 1E-4) << "tau = " << tau;
 }
+
+TEST_F(RadiationDampingBuilderTest, convolution_test)
+{
+    size_t N = 10;
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);//SIMPSON);
+
+    const auto Br = get_interpolated_Br();
+    auto taus = builder.build_regular_intervals(0.01,10,N);
+    const auto K  = get_interpolated_K();
+
+    const double Factual_gk = ssc::integrate::GaussKronrod(K).integrate_f(taus.front(), taus.back());
+    const double Fexpected_gk = ssc::integrate::GaussKronrod(test_data::analytical_K).integrate_f(taus.front(), taus.back());
+    ASSERT_NEAR(Fexpected_gk, Factual_gk, 1E-3);
+}
