@@ -342,3 +342,18 @@ TEST_F(RadiationDampingBuilderTest, can_interpolate_Br)
     const auto fine_omegas = builder.build_regular_intervals(omega_min, omega_max, 2*N);
     for (auto omega:fine_omegas) ASSERT_NEAR(test_data::analytical_Br(omega), Br_(omega), 1E-4) << "omega = " << omega;
 }
+
+TEST_F(RadiationDampingBuilderTest, can_compute_K)
+{
+    size_t N = 50;
+    const double omega_min = 0.;
+    const double omega_max = 30;
+    const double eps = 1E-8;
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::CLENSHAW_CURTIS);//SIMPSON);
+    const auto Br_ = get_interpolated_Br();
+
+
+    auto taus = builder.build_regular_intervals(2*PI/omega_max,10,N);//2*PI/omegas.back(),2*PI/omegas.front(),N);
+    const auto K  = builder.build_retardation_function(Br_,taus,eps,omega_min,omega_max);
+    for (auto tau:taus) ASSERT_NEAR(test_data::analytical_K(tau), K(tau), 1E-4) << "tau = " << tau;
+}
