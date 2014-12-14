@@ -5,7 +5,9 @@
  *      Author: cady
  */
 
+#define _USE_MATH_DEFINE
 #include <cmath>
+#define PI M_PI
 
 #include "hdb_data.hpp"
 #include "hdb_test.hpp"
@@ -29,4 +31,16 @@ std::function<double(double)> get_interpolated_Br()
     return builder.build_interpolator(omegas,vBr);
 }
 
+std::function<double(double)> get_interpolated_K()
+{
+    size_t N = 50;
+    const double omega_min = 0.;
+    const double omega_max = 30;
+    const double eps = 1E-8;
+    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::CLENSHAW_CURTIS);//SIMPSON);
+    const auto Br_ = get_interpolated_Br();
 
+
+    auto taus = builder.build_regular_intervals(2*PI/omega_max,10,N);
+    return builder.build_retardation_function(Br_,taus,eps,omega_min,omega_max);
+}

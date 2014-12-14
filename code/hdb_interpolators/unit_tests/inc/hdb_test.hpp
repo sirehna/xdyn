@@ -11,5 +11,6 @@
 #include <functional>
 
 std::function<double(double)> get_interpolated_Br();
+std::function<double(double)> get_interpolated_K();
 
 #endif /* HDB_TEST_HPP_ */
