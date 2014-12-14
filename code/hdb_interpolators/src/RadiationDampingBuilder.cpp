@@ -29,16 +29,17 @@ RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfInterpolation& type
 std::function<double(double)> RadiationDampingBuilder::build_interpolator(const std::vector<double>& x, const std::vector<double>& y) const
 {
     InterpolatorPtr i;
+    const bool allow_queries_outside_bounds = true;
     switch(type_of_interpolation)
     {
         case TypeOfInterpolation::LINEAR:
             i.reset(new ssc::interpolation::LinearInterpolationVariableStep(x, y));
             break;
         case TypeOfInterpolation::PIECEWISE_CONSTANT:
-            i.reset(new ssc::interpolation::PiecewiseConstantVariableStep<double>(x, y));
+            i.reset(new ssc::interpolation::PiecewiseConstantVariableStep<double>(x, y, allow_queries_outside_bounds));
             break;
         case TypeOfInterpolation::SPLINES:
-            i.reset(new ssc::interpolation::SplineVariableStep(x, y));
+            i.reset(new ssc::interpolation::SplineVariableStep(x, y, allow_queries_outside_bounds));
             break;
         default:
             THROW(__PRETTY_FUNCTION__, DampingMatrixInterpolatorException, "Unknown type of interpolation.");
