@@ -71,7 +71,7 @@ TEST_F(RadiationDampingBuilderTest, can_calculate_cosine_transform)
     const double omega_max = 2*PI/1;
     const size_t n = 10;
     std::vector<double> taus = builder.build_regular_intervals(1, 10, n);
-    const auto K = builder.build_retardation_function(B, taus, 0);
+    const auto K = builder.build_retardation_function(B, taus, 0, omega_min, omega_max);
     double tau = 3;
     ASSERT_NEAR(2./PI*(sin(omega_max*tau)/tau-sin(omega_min*tau)/tau), K(tau), EPS);
 }
@@ -93,7 +93,7 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
     const size_t n = 10;
     std::vector<double> taus;
     for (size_t i = 0 ; i < n ; ++i) taus.push_back(2*PI/omega_max+2*PI*(1./omega_min-1./omega_max)*(double)i/((double)(n-1)));
-    const auto K = builder.build_retardation_function(test_data::analytical_Br, taus, 0);
+    const auto K = builder.build_retardation_function(test_data::analytical_Br, taus, 0, omega_min, omega_max);
     size_t N = n;
     const double tau_min = 2*PI/omega_max;
     const double tau_max = 2*PI/omega_min;
@@ -284,7 +284,7 @@ TEST_F(RadiationDampingBuilderTest, bug_detected_in_RadiationDampingForceModel)
     const double tau_max = 40;
     const size_t n = 100;
     std::vector<double> taus = builder.build_regular_intervals(tau_min,tau_max,n);
-    const auto K = builder.build_retardation_function(test_data::analytical_Br, taus, 1E-3);
+    const auto K = builder.build_retardation_function(test_data::analytical_Br, taus, 1E-3, 2*PI/tau_max, 2*PI/tau_min);
     size_t N = 100;
     for (size_t i = 0 ; i < N ; ++i)
     {
@@ -323,7 +323,7 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_an
     const auto Br_ = builder.build_interpolator(omegas,vBr);
 
     auto taus = builder.build_exponential_intervals(2*PI/omegas.back(),2*PI/omegas.front(),N);
-    const auto K  = builder.build_retardation_function(Br_,taus,eps);
+    const auto K  = builder.build_retardation_function(Br_,taus,eps,omega_min,omega_max);
 
     for (auto tau:taus)
     {

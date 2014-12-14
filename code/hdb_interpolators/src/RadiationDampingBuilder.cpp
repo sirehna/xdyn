@@ -81,10 +81,9 @@ double RadiationDampingBuilder::integrate(const std::function<double(double)>& B
     return 0;
 }
 
-std::function<double(double)> RadiationDampingBuilder::build_retardation_function(const std::function<double(double)>& Br, const std::vector<double>& taus, const double eps) const
+std::function<double(double)> RadiationDampingBuilder::build_retardation_function(const std::function<double(double)>& Br, const std::vector<double>& taus, const double eps, const double omega_min, double omega_max) const
 {
-    const double omega_min = 2*PI/taus.back();
-    const double omega_max = find_integration_bound(Br, omega_min, 2*PI/taus.front(), eps);
+    omega_max = find_integration_bound(Br, omega_min, omega_max, eps);
     std::vector<double> y;
     for (auto tau:taus)
     {

@@ -68,7 +68,7 @@ TEST_F(RadiationDampingForceModelTest, DISABLED_convolution_test)
     for (auto omega:omegas) vBr.push_back(test_data::analytical_Br(omega));
     const auto Br_ = builder.build_interpolator(omegas,vBr);
     auto taus = builder.build_exponential_intervals(2*PI/omegas.back(),2*PI/omegas.front(),N);
-    const auto K  = builder.build_retardation_function(Br_,taus,eps);
+    const auto K  = builder.build_retardation_function(Br_,taus,eps,omega_min,omega_max);
     const double Factual_gk = ssc::integrate::GaussKronrod(K).integrate_f(0.031415926535897933936, 89.759790102565503389);
     const double Fexpected_gk = ssc::integrate::GaussKronrod(test_data::analytical_K).integrate_f(0.031415926535897933936, 89.759790102565503389);
 //    const double Factual_s = ssc::integrate::Simpson(K).integrate_f(0.031415926535897933936, 89.759790102565503389);

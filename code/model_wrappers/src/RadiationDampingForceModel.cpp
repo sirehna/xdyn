@@ -53,7 +53,7 @@ class RadiationDampingForceModel::Impl
         std::function<double(double)> get_K(const size_t i, const size_t j) const
         {
             const auto Br__ = builder.build_interpolator(omega,hdb->get_radiation_damping_coeff(i,j));
-            const auto K  = builder.build_retardation_function(Br__,taus,1E-3);
+            const auto K  = builder.build_retardation_function(Br__,taus,1E-3,omega.front(),omega.back());
             return K;
         }
 
