@@ -13,11 +13,12 @@
 
 #include "generate_body_for_tests.hpp"
 #include "hdb_data.hpp"
+#include "hdb_test.hpp"
 #include "RadiationDampingBuilder.hpp"
 #include "RadiationDampingForceModel.hpp"
 #include "RadiationDampingForceModelTest.hpp"
 
-#define EPS 1E-6
+#define EPS 5E-2
 
 RadiationDampingForceModelTest::RadiationDampingForceModelTest() : a(ssc::random_data_generator::DataGenerator(2121))
 {
@@ -60,10 +61,11 @@ YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data(const bool sh
     return ret;
 }
 
-TEST_F(RadiationDampingForceModelTest, DISABLED_example)
+TEST_F(RadiationDampingForceModelTest, example)
 {
 //! [RadiationDampingForceModelTest example]
-    RadiationDampingForceModel F(get_hdb_data(),get_yaml_data(false));
+    const auto yaml = get_yaml_data(false);
+    RadiationDampingForceModel F(get_hdb_data(),yaml);
     const std::string body_name = a.random<std::string>();
     Body b = get_body(body_name);
 //! [RadiationDampingForceModelTest example]
@@ -90,22 +92,17 @@ TEST_F(RadiationDampingForceModelTest, DISABLED_example)
     b.r = 1;
     Frad = F(b,100);
 
-    //const double Fexpected = 2./PI*ssc::integrate::QuadPack([](const double tau){return exp(-0.1*tau)*(1-tau/100.)*cos(0.5*tau);}).integrate_f(0, 100);
-
-    //const double Fexpected = 2./PI*ssc::integrate::QuadPack(test_data::analytical_K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-    const double Fexpected = ssc::integrate::GaussKronrod(test_data::analytical_K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-    COUT(Fexpected/Frad.X());
-    COUT(Frad.X()/Fexpected);
+    const double Fexpected = ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);
     ASSERT_DOUBLE_EQ(Frad.X(),Frad.Y());
     ASSERT_DOUBLE_EQ(Frad.X(),Frad.Z());
     ASSERT_DOUBLE_EQ(Frad.K(),Frad.M());
     ASSERT_DOUBLE_EQ(Frad.M(),Frad.N());
-    ASSERT_NEAR(Fexpected, Frad.X(), EPS);
-    ASSERT_NEAR(Fexpected, Frad.Y(), EPS);
-    ASSERT_NEAR(Fexpected, Frad.Z(), EPS);
-    ASSERT_NEAR(Fexpected, Frad.K(), EPS);
-    ASSERT_NEAR(Fexpected, Frad.M(), EPS);
-    ASSERT_NEAR(Fexpected, Frad.N(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Fexpected, Frad.X(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Fexpected, Frad.Y(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Fexpected, Frad.Z(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Fexpected, Frad.K(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Fexpected, Frad.M(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Fexpected, Frad.N(), EPS);
 //! [RadiationDampingForceModelTest expected output]
 }
 

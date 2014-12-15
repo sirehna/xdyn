@@ -28,5 +28,6 @@ INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS}/../unit_tests/inc)
 include_directories(${external_file_formats_INCLUDE_DIRS})
 include_directories(${hdb_interpolators_INCLUDE_DIRS})
+include_directories(${hdb_interpolators_INCLUDE_DIRS}/../unit_tests/inc)
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

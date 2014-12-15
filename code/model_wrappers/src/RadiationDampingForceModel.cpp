@@ -131,12 +131,6 @@ class RadiationDampingForceModel::Impl
                 if (h[k].get_length() >= Tmin)
                 {
                     // Integrate up to Tmax if possible, but never exceed the history length
-                    if (i==0)
-                    {
-                        std::cout.precision(20);
-                        COUT(Tmin);
-                        COUT(std::min(Tmax, h[k].get_length()));
-                    }
                     const double co = builder.convolution(h[k], K[i][k], Tmin, std::min(Tmax, h[k].get_length()));
                     K_X_dot += co;
                 }
