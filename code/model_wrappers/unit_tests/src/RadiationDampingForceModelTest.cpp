@@ -46,13 +46,13 @@ TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data() const
     return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Br));
 }
 
-YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data() const
+YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data(const bool show_debug) const
 {
     YamlRadiationDamping ret;
     ret.nb_of_points_for_retardation_function_discretization = 50;
     ret.omega_min = 0;
     ret.omega_max = 30;
-    ret.output_Br_and_K = true;
+    ret.output_Br_and_K = show_debug;
     ret.tau_min = 0.2094395;
     ret.tau_max = 10;
     ret.type_of_quadrature_for_convolution = TypeOfQuadrature::CLENSHAW_CURTIS;
@@ -63,7 +63,7 @@ YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data() const
 TEST_F(RadiationDampingForceModelTest, DISABLED_example)
 {
 //! [RadiationDampingForceModelTest example]
-    RadiationDampingForceModel F(get_hdb_data(),get_yaml_data());
+    RadiationDampingForceModel F(get_hdb_data(),get_yaml_data(false));
     const std::string body_name = a.random<std::string>();
     Body b = get_body(body_name);
 //! [RadiationDampingForceModelTest example]
