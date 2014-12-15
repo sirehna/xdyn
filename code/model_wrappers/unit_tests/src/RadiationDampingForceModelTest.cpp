@@ -109,5 +109,27 @@ TEST_F(RadiationDampingForceModelTest, DISABLED_example)
 //! [RadiationDampingForceModelTest expected output]
 }
 
+TEST_F(RadiationDampingForceModelTest, should_print_debugging_information_if_required_by_yaml_data)
+{
+    std::stringstream debug;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(debug.rdbuf());
+    ASSERT_TRUE(debug.str().empty());
+    // Call the radiation damping model
+    RadiationDampingForceModel F(get_hdb_data(),get_yaml_data(true));
+    ASSERT_FALSE(debug.str().empty());
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
+}
 
-
+TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if_not_required_by_yaml_data)
+{
+    std::stringstream debug;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(debug.rdbuf());
+    // Call the radiation damping model
+    RadiationDampingForceModel F(get_hdb_data(),get_yaml_data(false));
+    ASSERT_TRUE(debug.str().empty());
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
+}
