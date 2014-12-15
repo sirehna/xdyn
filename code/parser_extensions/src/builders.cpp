@@ -7,6 +7,8 @@
 
 #include <boost/foreach.hpp>
 
+#include "ssc/text_file_reader.hpp"
+
 #include "builders.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "environment_parsers.hpp"
@@ -16,6 +18,7 @@
 #include "GravityForceModel.hpp"
 #include "discretize.hpp"
 #include "YamlWageningen.hpp"
+#include "HDBParser.hpp"
 
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
@@ -101,6 +104,18 @@ boost::optional<ForcePtr> ForceBuilder<ResistanceCurveForceModel>::try_to_parse(
     if (model == "resistance curve")
     {
         ret.reset(ForcePtr(new ResistanceCurveForceModel(parse_resistance_curve(yaml))));
+    }
+    return ret;
+}
+
+boost::optional<ForcePtr> ForceBuilder<RadiationDampingForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& ) const
+{
+    boost::optional<ForcePtr> ret;
+    if (model == "radiation damping")
+    {
+        const auto input = parse_radiation_damping(yaml);
+        const TR1(shared_ptr)<HDBParser> hdb(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
+        ret.reset(ForcePtr(new RadiationDampingForceModel(hdb,input)));
     }
     return ret;
 }

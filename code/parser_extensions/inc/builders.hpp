@@ -30,6 +30,7 @@
 #include "WageningenControlledForceModel.hpp"
 #include "ResistanceCurveForceModel.hpp"
 #include "DiffractionForceModel.hpp"
+#include "RadiationDampingForceModel.hpp"
 
 
 template <>
@@ -100,6 +101,14 @@ class ForceBuilder<ResistanceCurveForceModel> : public ForceBuilderInterface
 
 template <>
 class ForceBuilder<DiffractionForceModel> : public ForceBuilderInterface
+{
+    public:
+        ForceBuilder();
+        boost::optional<ForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
+};
+
+template <>
+class ForceBuilder<RadiationDampingForceModel> : public ForceBuilderInterface
 {
     public:
         ForceBuilder();
