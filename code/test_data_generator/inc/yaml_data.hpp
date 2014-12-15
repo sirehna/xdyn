@@ -42,6 +42,7 @@ namespace test_data
     std::string propulsion_and_resistance();
     std::string radiation_damping();
     std::string diffraction();
+    std::string anthineas_radiation_damping();
 }
 
 #endif /* YAML_DATA_HPP_ */
