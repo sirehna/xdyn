@@ -85,6 +85,23 @@ YamlResistanceCurve parse_resistance_curve(const std::string& yaml)
     return ret;
 }
 
+TypeOfQuadrature parse_type_of_quadrature(const std::string& s)
+{
+    if      (s == "gauss-kronrod")   return TypeOfQuadrature::GAUSS_KRONROD;
+    else if (s == "rectangle")       return TypeOfQuadrature::RECTANGLE;
+    else if (s == "simpson")         return TypeOfQuadrature::SIMPSON;
+    else if (s == "trapezoidal")     return TypeOfQuadrature::TRAPEZOIDAL;
+    else if (s == "burcher")         return TypeOfQuadrature::BURCHER;
+    else if (s == "clenshaw-curtis") return TypeOfQuadrature::CLENSHAW_CURTIS;
+    else if (s == "filon")           return TypeOfQuadrature::FILON;
+    else
+    {
+        std::stringstream ss;
+        ss << "Unkown quadrature type: " << s << ". Should be one of 'gauss-kronrod', 'rectangle', ' simpson', 'trapezoidal', 'burcher', 'clenshaw-curtis' or 'filon'.";
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+    }
+}
+
 YamlRadiationDamping parse_radiation_damping(const std::string& yaml)
 {
     std::stringstream stream(yaml);
@@ -95,34 +112,16 @@ YamlRadiationDamping parse_radiation_damping(const std::string& yaml)
     YamlRadiationDamping ret;
     node["hdb"] >> ret.hdb_filename;
     std::string s;
-    node["interpolation"] >> s;
-    if      (s == "splines")            ret.interpolation = TypeOfInterpolation::SPLINES;
-    else if (s == "piecewise constant") ret.interpolation = TypeOfInterpolation::PIECEWISE_CONSTANT;
-    else if (s == "linear")             ret.interpolation = TypeOfInterpolation::LINEAR;
-    else
-    {
-        ss << "Unkown interpolation type: " << s << ". Should be one of 'splines', 'piecewise constant' or 'linear'.";
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
-    }
-    node["nb of points in retardation function"] >> ret.nb_of_points_in_retardation_function;
-    node["quadrature"] >> s;
-    if      (s == "gauss-kronrod") ret.quadrature = TypeOfQuadrature::GAUSS_KRONROD;
-    else if (s == "rectangle")     ret.quadrature = TypeOfQuadrature::RECTANGLE;
-    else if (s == "simpson")       ret.quadrature = TypeOfQuadrature::SIMPSON;
-    else if (s == "trapezoidal")   ret.quadrature = TypeOfQuadrature::TRAPEZOIDAL;
-    else
-    {
-        ss.clear();
-        ss << "Unkown quadrature type: " << s << ". Should be one of 'gauss-kronrod', 'rectangle', ' simpson' or 'trapezoidal'.";
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
-    }
-    node["quadrature tolerance"] >> ret.quadrature_tolerance;
-    if ((ret.quadrature_tolerance>1) or (ret.quadrature_tolerance<0))
-    {
-        ss.clear();
-        ss << "Invalid quadrature tolerance: " << s << ". Should be between 0 and 1.";
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
-    }
+    node["type of quadrature for cos transform"] >> s;
+    ret.type_of_quadrature_for_cos_transform = parse_type_of_quadrature(s);
+    node["type of quadrature for convolution"] >> s;
+    ret.type_of_quadrature_for_convolution = parse_type_of_quadrature(s);
+    node["nb of points for retardation function discretization"] >> ret.nb_of_points_for_retardation_function_discretization;
+    parse_uv(node["omega min"], ret.omega_min);
+    parse_uv(node["omega max"], ret.omega_max);
+    parse_uv(node["tau min"], ret.tau_min);
+    parse_uv(node["tau max"], ret.tau_max);
+    node["output Br and K"] >> ret.output_Br_and_K;
     return ret;
 }
 

@@ -841,35 +841,55 @@ périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
 suivantes sont réalisées :
 
 - Lecture du fichier HDB : son chemin est renseigné dans la clef `hdb`.
-- Interpolation des matrices : les types d'interpolation connus sont :
-  `piecewise constant`, `linear` et `spline` (splines naturelles, c'est-à-dire
+- Interpolation des matrices de fonction d'amortissement : on utilise des
+  splines dites "naturelles", c'est-à-dire
   dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
-  qui se prolongent par des droites aux extrémités du domaine). Le type
-  d'interpolation doit être renseigné dans la clef `interpolation`.
-- Intégration numérique : renseigné dans `quadrature type`. Les types d'intégration
+  qui se prolongent par des droites aux extrémités du domaine.
+- Calcul des fonctions retard par intégration numérique : on choisit
+  l'algorithme d'intégration en renseignant la clef `type of quadrature for cos
+  tranform`. Les types d'intégration
   connus sont : [`rectangle`](#m%C3%A9thode-des-rectangles), [`trapezoidal`](#m%C3%A9thode-des-trap%C3%A8zes),
-  [`simpson`](#r%C3%A8gle-de-simpson) et [`gauss-kronrod`](#quadrature-de-gauss-kronrod). On
-  doit en outre spécifier une valeur pour l'erreur maximale (critère d'arrêt) :
-  `quadrature tolerance` (par exemple, pour l'interpolation rectangle ou trapèze,
-  $\varepsilon=\frac{1}{n}$). Les bornes de l'intégration sont
-  $\omega_{\mbox{min}}$ et $\omega_{\mbox{max}}$ lues dans le fichier HDB.
-- Interpolation des fonctions de retard lors de la convolution : on utilise le même type
-  d'interpolation que pour les matrices. Le nombre de points à partir duquel
-  est réalisée cette interpolation (le nombre de fois qu'on calcule l'intégrale
+  [`simpson`](#r%C3%A8gle-de-simpson),
+  [`gauss-kronrod`](#quadrature-de-gauss-kronrod), [`clenshaw-curtis`](),
+  [`filon`]() et [`burcher`](). Les bornes d'intégration sont spécifiées par
+  `omega min` et `omega max`. Si ces bornes ne sont pas incluses dans
+  l'intervalle
+  $\left[\frac{2\pi}{\omega_{\mbox{max}}},\frac{2\pi}{\omega_{\mbox{min}}}\right]$,
+  un message d'avertissement s'affiche (car dans ce cas l'intégration se poursuit
+  hors du domaine de définition des fonctions de retard qui sont alors
+  extrapolées).
+- Interpolation des fonctions de retard lors de la convolution : comme pour les
+  fonctions d'amortissement, on utilise des splines naturelles.
+  Le nombre de points de discrétisation à partir duquel
+  est réalisée cette interpolation (le nombre de valeurs de $\tau$ pour
+  lesquelles qu'on calcule l'intégrale
   $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
-  est donné par `nb of points in retardation function`.
-- Interpolation des états : dans l'implémentation actuelle, seule une
-  interpolation linéaire est disponible.
-- Convolution : sa durée est $\frac{2\pi}{\omega_{\mbox{min}}}$ : on ne dépasse
-  jamais cette valeur afin d'éviter les phénomènes de repliement de spectre.
+  est donné par `nb of points for retardation function discretization`.
+- Interpolation des états : lors du calcul de l'intgrale de convolution, les
+  états sont interpolés linéairement entre deux instants
+- Calcul de la convolution : l'algorithme d'intégration est spécifié par `type
+  of quadrature for convolution`, qui peut prendre les mêmes valeurs que `type of
+  quadrature for cos transform`.
+- Verbosité : le calcul des efforts d'amortissement de radiation comprenant de
+  nombreuses étapes et étant extrêmement sensible aux bornes d'intégration et aux
+  types d'algorithmes utilisés, nous proposons l'affichage de résultats,
+  nommément les amortissements interpolés sur une grille plus fine que celle
+  fournie en entrée (afin de valider les erreurs dues à la discrétisation) et les
+  fonctions de retard (afin de valider les bornes d'intégration et l'algorithme
+  utilisés). Pour activer la verbosité, on met la clef `output Br and K` à
+  `true`. Sinon on la met à `false`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
   hdb: anthineas.hdb
-  interpolation: splines
-  quadrature: gauss-kronrod
-  quadrature tolerance: 0.01
-  nb of points in retardation function: 30
+  type of quadrature for cos transform: simpson
+  type of quadrature for convolution: clenshaw-curtis
+  nb of points for retardation function discretization: 50
+  omega min: {value: 0, unit: rad/s}
+  omega max: {value: 30, unit: rad/s}
+  tau min: {value: 0.2094395, unit: rad/s}
+  tau max: {value: 10, unit: s}
+  output Br and K: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Efforts de diffraction

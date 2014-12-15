@@ -2029,10 +2029,14 @@ std::string test_data::radiation_damping()
     std::stringstream ss;
     ss << "model: radiation damping\n"
        << "hdb: anthineas.hdb\n"
-       << "interpolation: splines\n"
-       << "quadrature: gauss-kronrod\n"
-       << "quadrature tolerance: 0.01\n"
-       << "nb of points in retardation function: 30\n";
+       << "type of quadrature for cos transform: simpson\n"
+       << "type of quadrature for convolution: clenshaw-curtis\n"
+       << "nb of points for retardation function discretization: 50\n"
+       << "omega min: {value: 0, unit: rad/s}\n"
+       << "omega max: {value: 30, unit: rad/s}\n"
+       << "tau min: {value: 0.2094395, unit: rad/s}\n"
+       << "tau max: {value: 10, unit: s}\n"
+       << "output Br and K: true\n";
     return ss.str();
 }
 

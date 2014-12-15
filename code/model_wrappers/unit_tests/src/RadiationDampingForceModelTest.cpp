@@ -38,10 +38,10 @@ void RadiationDampingForceModelTest::TearDown()
 TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data() const
 {
     std::vector<double> Br;
-    const double omega_min = 0.07;
-    const double omega_max = 200;
-    const size_t N = 100;
-    const auto omegas = RadiationDampingBuilder(TypeOfInterpolation::SPLINES,TypeOfQuadrature::GAUSS_KRONROD).build_exponential_intervals(omega_min, omega_max, N);
+    const double omega_min = 0.01;
+    const double omega_max = 40;
+    const size_t N = 460;
+    const auto omegas = RadiationDampingBuilder(TypeOfQuadrature::FILON,TypeOfQuadrature::GAUSS_KRONROD).build_exponential_intervals(omega_min, omega_max, N);
     for (auto omega:omegas) Br.push_back(test_data::analytical_Br(omega));
     return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Br));
 }
@@ -49,44 +49,15 @@ TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data() const
 YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data() const
 {
     YamlRadiationDamping ret;
-    ret.interpolation = TypeOfInterpolation::SPLINES;
-    ret.nb_of_points_in_retardation_function = 150;
-    ret.quadrature = TypeOfQuadrature::GAUSS_KRONROD;
+    ret.nb_of_points_for_retardation_function_discretization = 50;
+    ret.omega_min = 0;
+    ret.omega_max = 30;
+    ret.output_Br_and_K = true;
+    ret.tau_min = 0.2094395;
+    ret.tau_max = 10;
+    ret.type_of_quadrature_for_convolution = TypeOfQuadrature::CLENSHAW_CURTIS;
+    ret.type_of_quadrature_for_cos_transform = TypeOfQuadrature::SIMPSON;
     return ret;
-}
-
-TEST_F(RadiationDampingForceModelTest, DISABLED_convolution_test)
-{
-    std::vector<double> vBr;
-    size_t N = 100;
-    const double omega_min = 0.01;
-    const double omega_max = 200;
-    const double eps = 1E-8;
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);//SIMPSON);
-    const auto omegas = builder.build_exponential_intervals(omega_min, omega_max, N);
-
-    for (auto omega:omegas) vBr.push_back(test_data::analytical_Br(omega));
-    const auto Br_ = builder.build_interpolator(omegas,vBr);
-    auto taus = builder.build_exponential_intervals(2*PI/omegas.back(),2*PI/omegas.front(),N);
-    const auto K  = builder.build_retardation_function(Br_,taus,eps,omega_min,omega_max);
-    const double Factual_gk = ssc::integrate::GaussKronrod(K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-    const double Fexpected_gk = ssc::integrate::GaussKronrod(test_data::analytical_K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-//    const double Factual_s = ssc::integrate::Simpson(K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-//    const double Fexpected_s = ssc::integrate::Simpson(test_data::analytical_K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-//    const double Factual_r = ssc::integrate::Rectangle(K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-//    const double Fexpected_r = ssc::integrate::Rectangle(test_data::analytical_K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-//    const double Factual_t = ssc::integrate::TrapezoidalIntegration(K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-//    const double Fexpected_t = ssc::integrate::TrapezoidalIntegration(test_data::analytical_K).integrate_f(0.031415926535897933936, 89.759790102565503389);
-
-    ASSERT_NEAR(Fexpected_gk, Factual_gk, 1E-3);
-/*    COUT(Fexpected_gk);
-    COUT(Factual_gk);
-    COUT(Fexpected_s);
-    COUT(Factual_s);
-    COUT(Fexpected_r);
-    COUT(Factual_r);
-    COUT(Fexpected_t);
-    COUT(Factual_t);*/
 }
 
 TEST_F(RadiationDampingForceModelTest, DISABLED_example)

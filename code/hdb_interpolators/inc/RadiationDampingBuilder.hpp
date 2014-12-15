@@ -28,8 +28,8 @@ class History;
 class RadiationDampingBuilder
 {
     public:
-        RadiationDampingBuilder(const TypeOfInterpolation& type_of_interpolation, //!< Splines, piecewise constant or linear
-                                const TypeOfQuadrature& type_of_quadrature //!< Gauss-Kronrod, rectangle, Simpson or trapezoidal
+        RadiationDampingBuilder(const TypeOfQuadrature& type_of_quadrature_for_convolution, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
+                                const TypeOfQuadrature& type_of_quadrature_for_cos_transform //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
                                 );
 
         /**  \brief Build a continuous function from discrete (x,y) points (using interpolation type defined in constructor)
@@ -99,13 +99,13 @@ class RadiationDampingBuilder
                                                                const double r //!< How much of the total integral between omega_min & omega_max do we wish to represent?
                                                                ) const;
 
-        double integrate(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const double tau) const;
+        double cos_transform(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const double tau) const;
 
     private:
         RadiationDampingBuilder();
 
-        TypeOfInterpolation type_of_interpolation;
-        TypeOfQuadrature type_of_quadrature;
+        TypeOfQuadrature type_of_quadrature_for_convolution;
+        TypeOfQuadrature type_of_quadrature_for_cos_transform;
 };
 
 #endif /* RADIATIONDAMPINGBUILDER_HPP_ */

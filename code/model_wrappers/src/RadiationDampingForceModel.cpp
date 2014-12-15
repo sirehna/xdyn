@@ -25,21 +25,10 @@
 class RadiationDampingForceModel::Impl
 {
     public:
-        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, h(), builder(RadiationDampingBuilder(yaml.interpolation, yaml.quadrature)), K(),
-        omega(parser->get_radiation_damping_angular_frequencies()), taus(), n(yaml.nb_of_points_in_retardation_function), Tmin(0), Tmax(0)
+        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, h(), builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)), K(),
+        omega(parser->get_radiation_damping_angular_frequencies()), taus(), n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max)
         {
-            taus = builder.build_regular_intervals(2*PI/omega.back(),2*PI/omega.front(),n);
-            if (not(omega.empty()))
-            {
-                Tmin = 2*PI/omega.back();
-                Tmax = 2*PI/omega.front();
-                if (Tmin>Tmax)
-                {
-                    std::stringstream ss;
-                    ss << "Vector of angular frequencies is not in strictly increasing order: omega[0]="<<omega[0] << ", but omega[" << omega.size()-1 << "]=" << omega.back();
-                    THROW(__PRETTY_FUNCTION__, RadiationDampingForceModelException, ss.str());
-                }
-            }
+            taus = builder.build_regular_intervals(Tmin,Tmax,n);
             for (size_t i = 0 ; i < 6 ; ++i)
             {
                 for (size_t j = 0 ; j < 6 ; ++j)

@@ -36,38 +36,10 @@ void RadiationDampingBuilderTest::TearDown()
 {
 }
 
-TEST_F(RadiationDampingBuilderTest, all_types_of_interpolator_can_retrieve_original_values)
-{
-    std::vector<double> omega;
-    std::vector<double> B;
-    const double omega_min = 0;
-    const double omega_max = 4;
-    size_t N = 100;
-    for (size_t i = 0 ; i < N ; ++i)
-    {
-        omega.push_back(omega_min + (omega_max-omega_min)*((double)i)/((double)(N-1)));
-        B.push_back(test_data::analytical_Br(omega.back()));
-    }
-
-    RadiationDampingBuilder builder1(TypeOfInterpolation::LINEAR, TypeOfQuadrature::GAUSS_KRONROD);
-    RadiationDampingBuilder builder2(TypeOfInterpolation::PIECEWISE_CONSTANT, TypeOfQuadrature::GAUSS_KRONROD);
-    RadiationDampingBuilder builder3(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
-    auto f1 = builder1.build_interpolator(omega, B);
-    auto f2 = builder2.build_interpolator(omega, B);
-    auto f3 = builder3.build_interpolator(omega, B);
-
-    for (size_t i = 0 ; i < N ; ++i)
-    {
-        ASSERT_NEAR(B.at(i), f1(omega.at(i)), EPS) << "i = " << i;
-        ASSERT_NEAR(B.at(i), f2(omega.at(i)), EPS) << "i = " << i;
-        ASSERT_NEAR(B.at(i), f3(omega.at(i)), EPS) << "i = " << i;
-    }
-}
-
 TEST_F(RadiationDampingBuilderTest, can_calculate_cosine_transform)
 {
     const auto B = [](const double ){return 1;};
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder builder(TypeOfQuadrature::GAUSS_KRONROD, TypeOfQuadrature::GAUSS_KRONROD);
     const double omega_min = 2*PI/10;
     const double omega_max = 2*PI/1;
     const size_t n = 10;
@@ -82,13 +54,13 @@ TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
     History h(1000);
     h.record(0,1);
     h.record(1000,1);
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::FILON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::FILON, TypeOfQuadrature::FILON);
     ASSERT_NEAR(sin(2000.)/2., builder.convolution(h, [](const double t){return cos(2*t);}, 0, 1000), EPS);
 }
 
 TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     const double omega_min = 0.01;//2*PI/10;
     const double omega_max = 850;//00;//2*PI/1;
     const size_t n = 10;
@@ -108,7 +80,7 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_is_correct)
 
 TEST_F(RadiationDampingBuilderTest, can_create_linearly_spaced_intervals)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     for (size_t k = 0 ; k < 10 ; ++k)
     {
         const double xmin = a.random<double>();
@@ -128,7 +100,7 @@ TEST_F(RadiationDampingBuilderTest, can_create_linearly_spaced_intervals)
 
 TEST_F(RadiationDampingBuilderTest, can_create_exponentially_spaced_intervals)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     for (size_t k = 0 ; k < 10 ; ++k)
     {
         const double xmin = a.random<double>();
@@ -149,7 +121,7 @@ TEST_F(RadiationDampingBuilderTest, can_create_exponentially_spaced_intervals)
 
 TEST_F(RadiationDampingBuilderTest, can_create_exponentially_spaced_intervals_in_reverse)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     for (size_t k = 0 ; k < 10 ; ++k)
     {
         const double xmin = a.random<double>();
@@ -170,7 +142,7 @@ TEST_F(RadiationDampingBuilderTest, can_create_exponentially_spaced_intervals_in
 
 TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_with_negative_values)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     for (size_t k = 0 ; k < 10 ; ++k)
     {
         const double xmin = a.random<double>().no().greater_than(0);
@@ -191,7 +163,7 @@ TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_with_negat
 
 TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_in_reverse)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     for (size_t k = 0 ; k < 10 ; ++k)
     {
         const double xmin = a.random<double>();
@@ -212,7 +184,7 @@ TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_in_reverse
 
 TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_with_opposite_signs)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     for (size_t k = 0 ; k < 10 ; ++k)
     {
         const double xmin = a.random<double>().no().greater_than(0);
@@ -233,7 +205,7 @@ TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_with_oppos
 
 TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_if_first_is_zero)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     const auto v = builder.build_exponential_intervals(0, 10, 10);
     ASSERT_EQ(10, v.size());
     ASSERT_SMALL_RELATIVE_ERROR(0, v.front(),EPS);
@@ -248,7 +220,7 @@ TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_if_first_i
 
 TEST_F(RadiationDampingBuilderTest, build_exponential_intervals_works_if_last_is_zero)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     const auto v = builder.build_exponential_intervals(-10, 0, 10);
     ASSERT_EQ(10, v.size());
     ASSERT_SMALL_RELATIVE_ERROR(-10, v.front(),EPS);
@@ -266,7 +238,7 @@ TEST_F(RadiationDampingBuilderTest, can_find_greatest_omega_for_which_integratio
     const double omega_min = 0;
     const double omega_max = 100;
     size_t N = 10;
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);
+    RadiationDampingBuilder builder(TypeOfQuadrature::GAUSS_KRONROD, TypeOfQuadrature::GAUSS_KRONROD);
     const auto omegas = builder.build_regular_intervals(omega_min, omega_max, N);
     const double eps=1E-3;
     const double omega0 = builder.find_integration_bound(test_data::analytical_Br, omega_min, omega_max, eps);
@@ -280,7 +252,7 @@ TEST_F(RadiationDampingBuilderTest, can_find_greatest_omega_for_which_integratio
 
 TEST_F(RadiationDampingBuilderTest, bug_detected_in_RadiationDampingForceModel)
 {
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::FILON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::FILON, TypeOfQuadrature::FILON);
     const double tau_min = 0.1;
     const double tau_max = 40;
     const size_t n = 100;
@@ -301,13 +273,13 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_an
     size_t N = 100;
     const double omega_min = 0.01;
     const double omega_max = 200;
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::FILON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::FILON, TypeOfQuadrature::FILON);
     const auto omegas = builder.build_exponential_intervals(omega_min, omega_max, N);
 
     for (auto omega:omegas) vBr.push_back(test_data::analytical_Br(omega));
     const auto Br_ = builder.build_interpolator(omegas,vBr);
 
-    ASSERT_NEAR(test_data::analytical_K(0.01), builder.integrate(Br_, omega_min, omega_max, 0.01), 1E-2);
+    ASSERT_NEAR(test_data::analytical_K(0.01), builder.cos_transform(Br_, omega_min, omega_max, 0.01), 1E-2);
 }
 
 TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_analytical_results_2)
@@ -317,7 +289,7 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_an
     const double omega_min = 0.07;
     const double omega_max = 200;
     const double eps = 1E-8;
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::GAUSS_KRONROD);//SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::GAUSS_KRONROD, TypeOfQuadrature::GAUSS_KRONROD);
     const auto omegas = builder.build_exponential_intervals(omega_min, omega_max, N);
 
     for (auto omega:omegas) vBr.push_back(test_data::analytical_Br(omega));
@@ -338,7 +310,7 @@ TEST_F(RadiationDampingBuilderTest, can_interpolate_Br)
     size_t N = 460;
     const double omega_min = 0.01;
     const double omega_max = 40;
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);//SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     const auto fine_omegas = builder.build_regular_intervals(omega_min, omega_max, 2*N);
     for (auto omega:fine_omegas) ASSERT_NEAR(test_data::analytical_Br(omega), Br_(omega), 1E-4) << "omega = " << omega;
 }
@@ -347,7 +319,7 @@ TEST_F(RadiationDampingBuilderTest, can_compute_K)
 {
     size_t N = 50;
     const double omega_max = 30;
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::CLENSHAW_CURTIS);//SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::CLENSHAW_CURTIS, TypeOfQuadrature::CLENSHAW_CURTIS);//SIMPSON);
     auto taus = builder.build_regular_intervals(2*PI/omega_max,10,N);
     const auto K  = get_interpolated_K();
     for (auto tau:taus) ASSERT_NEAR(test_data::analytical_K(tau), K(tau), 1E-4) << "tau = " << tau;
@@ -356,7 +328,7 @@ TEST_F(RadiationDampingBuilderTest, can_compute_K)
 TEST_F(RadiationDampingBuilderTest, convolution_test)
 {
     size_t N = 10;
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);//SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
 
     const auto Br = get_interpolated_Br();
     auto taus = builder.build_regular_intervals(0.01,10,N);

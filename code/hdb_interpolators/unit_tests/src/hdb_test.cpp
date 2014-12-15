@@ -21,7 +21,7 @@ std::function<double(double)> get_interpolated_Br()
     const double omega_max = 40;
     // LINEAR does not work. Need reverse + direct exponential intervals arround omega_med. Need 260 points.
     // Have to be careful not to miss the peak
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     const double r = 0.5;
     const double omega_med = builder.find_r_bound(test_data::analytical_Br,omega_min,omega_max, r);
     auto omegas = builder.build_exponential_intervals_reversed(omega_min, omega_med, (size_t)std::floor((double)N*r+0.5));
@@ -37,7 +37,7 @@ std::function<double(double)> get_interpolated_K()
     const double omega_min = 0.;
     const double omega_max = 30;
     const double eps = 1E-8;
-    RadiationDampingBuilder builder(TypeOfInterpolation::SPLINES, TypeOfQuadrature::CLENSHAW_CURTIS);//SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::CLENSHAW_CURTIS, TypeOfQuadrature::CLENSHAW_CURTIS);
     const auto Br_ = get_interpolated_Br();
 
 

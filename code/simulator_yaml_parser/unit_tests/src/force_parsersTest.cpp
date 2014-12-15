@@ -141,11 +141,15 @@ TEST_F(force_parsersTest, resistance_curves)
 TEST_F(force_parsersTest, radiation_damping)
 {
     const YamlRadiationDamping r = parse_radiation_damping(test_data::radiation_damping());
-    ASSERT_EQ(TypeOfInterpolation::SPLINES, r.interpolation);
     ASSERT_EQ("anthineas.hdb", r.hdb_filename);
-    ASSERT_EQ(30, r.nb_of_points_in_retardation_function);
-    ASSERT_EQ(TypeOfQuadrature::GAUSS_KRONROD, r.quadrature);
-    ASSERT_EQ(0.01, r.quadrature_tolerance);
+    ASSERT_EQ(50, r.nb_of_points_for_retardation_function_discretization);
+    ASSERT_DOUBLE_EQ(30,r.omega_max);
+    ASSERT_EQ(0,r.omega_min);
+    ASSERT_TRUE(r.output_Br_and_K);
+    ASSERT_DOUBLE_EQ(10,r.tau_max);
+    ASSERT_DOUBLE_EQ(0.2094395,r.tau_min);
+    ASSERT_EQ(TypeOfQuadrature::CLENSHAW_CURTIS, r.type_of_quadrature_for_convolution);
+    ASSERT_EQ(TypeOfQuadrature::SIMPSON, r.type_of_quadrature_for_cos_transform);
 }
 
 TEST_F(force_parsersTest, diffraction)

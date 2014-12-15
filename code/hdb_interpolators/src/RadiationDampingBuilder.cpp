@@ -22,7 +22,10 @@ typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 #include "DampingMatrixInterpolatorException.hpp"
 #include "RadiationDampingBuilder.hpp"
 
-RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfInterpolation& type_of_interpolation_, const TypeOfQuadrature& type_of_quadrature_) : type_of_interpolation(type_of_interpolation_), type_of_quadrature(type_of_quadrature_)
+RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfQuadrature& type_of_quadrature_for_convolution_, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
+                                                 const TypeOfQuadrature& type_of_quadrature_for_cos_transform_ //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
+        ): type_of_quadrature_for_convolution(type_of_quadrature_for_convolution_),
+           type_of_quadrature_for_cos_transform(type_of_quadrature_for_cos_transform_)
 {
 }
 
@@ -30,29 +33,15 @@ std::function<double(double)> RadiationDampingBuilder::build_interpolator(const 
 {
     InterpolatorPtr i;
     const bool allow_queries_outside_bounds = true;
-    switch(type_of_interpolation)
-    {
-        case TypeOfInterpolation::LINEAR:
-            i.reset(new ssc::interpolation::LinearInterpolationVariableStep(x, y));
-            break;
-        case TypeOfInterpolation::PIECEWISE_CONSTANT:
-            i.reset(new ssc::interpolation::PiecewiseConstantVariableStep<double>(x, y, allow_queries_outside_bounds));
-            break;
-        case TypeOfInterpolation::SPLINES:
-            i.reset(new ssc::interpolation::SplineVariableStep(x, y, allow_queries_outside_bounds));
-            break;
-        default:
-            THROW(__PRETTY_FUNCTION__, DampingMatrixInterpolatorException, "Unknown type of interpolation.");
-            break;
-    }
+    i.reset(new ssc::interpolation::SplineVariableStep(x, y, allow_queries_outside_bounds));
     std::function<double(double)> ret = [i](const double x){return i->f(x);};
     return ret;
 }
 
-double RadiationDampingBuilder::integrate(const std::function<double(double)>& Br, const double a, const double b, const double tau) const
+double RadiationDampingBuilder::cos_transform(const std::function<double(double)>& Br, const double a, const double b, const double tau) const
 {
     const auto f_cos = [Br,tau](const double omega){return Br(omega)*cos(omega*tau);};
-    switch (type_of_quadrature)
+    switch (type_of_quadrature_for_cos_transform)
     {
         case TypeOfQuadrature::GAUSS_KRONROD:
             return 2./PI*ssc::integrate::GaussKronrod(f_cos).integrate_f(a,b);
@@ -88,7 +77,7 @@ std::function<double(double)> RadiationDampingBuilder::build_retardation_functio
     std::vector<double> y;
     for (auto tau:taus)
     {
-        y.push_back(integrate(Br, omega_min, omega_max, tau));
+        y.push_back(cos_transform(Br, omega_min, omega_max, tau));
     }
     return build_interpolator(taus, y);
 }
@@ -162,8 +151,8 @@ double RadiationDampingBuilder::find_r_bound(const std::function<double(double)>
                                                        ) const
 {
     boost::math::tools::eps_tolerance<double> tol(30);
-    const double I0 = integrate(f, omega_min, omega_max, 0);
-    const auto g = [&f,this,omega_min,I0,r](const double omega){return integrate(f,omega_min, omega, 0)-r*I0;};
+    const double I0 = cos_transform(f, omega_min, omega_max, 0);
+    const auto g = [&f,this,omega_min,I0,r](const double omega){return cos_transform(f,omega_min, omega, 0)-r*I0;};
     boost::uintmax_t max_iter=100;
     return boost::math::tools::toms748_solve(g, omega_min, omega_max, tol, max_iter).first;
 }
