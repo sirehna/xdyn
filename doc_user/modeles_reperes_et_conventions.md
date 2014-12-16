@@ -267,7 +267,7 @@ d'angle adoptée.
 ## Repère de calcul hydrodynamique
 
 Les efforts d'[amortissement
-visqueux](#efforts-damortissement-visqueux))
+visqueux](#efforts-damortissement-visqueux)
 et de [résistance à
 l'avancement](#r%C3%A9sistance-%C3%A0-lavancement)
 sont calculés dans un repère appelé **repère de calcul hydrodynamique**, qui
@@ -293,7 +293,8 @@ calcul hydrodynamique.
 
 Il convient de distinguer ce repère de celui utilisé dans la base de données
 hydrodynamiques (fichiers HDB de Diodore), utilisé pour l'expression des
-matrices d'amortissement de radiation, les RAO d'effort et les masses ajoutées.
+matrices d'amortissement de radiation, les RAO d'effort (diffraction) et les
+masses ajoutées.
 
 # Modèles environnementaux
 
