@@ -17,4 +17,11 @@ typedef std::array<line,6> Matrix;
 typedef std::pair<double,Matrix> TimestampedMatrix;
 typedef std::vector<TimestampedMatrix> TimestampedMatrices;
 
+struct RAOData
+{
+    RAOData() : omega(), psi(), values() {}
+    std::vector<double> omega;
+    std::vector<double> psi;
+    std::array<std::vector<std::vector<double> >, 6 > values;
+};
 #endif /* TIMESTAMPEDMATRIX_HPP_ */
