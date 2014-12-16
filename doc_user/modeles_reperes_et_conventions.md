@@ -1179,9 +1179,32 @@ hydrodynamiques. Comme les efforts de radiation et les efforts de masse
 ajoutée, ces tables sont calculées en résolvant un problème de condition aux
 limites pour le potentiel de vitesse : on utilise donc des codes basés sur des
 méthodes potentielles, tels qu'Aqua+. Les tables sont paramétrées en pulsation,
-incidence et vitesse d'avance (RAO d'efforts). La principale différence entre
-les efforts de radiation et les efforts de diffraction est l'écriture de la
-condition aux limites.
+incidence et vitesse d'avance (RAO d'efforts du premier ordre). La principale
+différence entre les efforts de radiation et les efforts de diffraction est
+l'écriture de la condition aux limites. La description de la paramétrisation
+est faite
+[ici](#efforts-de-diffraction).
+
+### Calcul numérique
+
+Les RAO d'efforts sont lues à partir d'un fichier HDB. Cette table donne, une
+fois interpolée, deux fonctions RAO par axe $k$
+
+$$(\omega,\psi)\mapsto {RAO^{k}}_{\mbox{module}}(\omega,\psi)$$
+$$(\omega,\psi)\mapsto {RAO^{k}}_{\mbox{phase}}(\omega,\psi)$$
+
+Pour calculer les efforts et les moments, on somme les RAO comme pour le calcul
+de l'élévation de la surface libre :
+
+$$F_k(x_H,y_H,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+{RAO^{k}}_{\mbox{module}}(\omega_i,\psi_j)\sqrt{\Delta\omega\Delta\psi}\cos(k\cdot(x\cdot \cos(\psi_j)
++ y\cdot \sin(\psi_j))-\omega_i\cdot t+{RAO^{k}}_{\mbox{phase}}(\omega_i,\psi_j))$$
+
+$x_H$ et $y_H$ désignent les coordonnées du [point de calcul des efforts
+hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique), $t$ est l'instant courant. Les $\omega_i$ et $\psi_j$
+correspondent à la discrétisation du spectre de houle.
+
+Le torseur calculé est ensuite déplacé au centre de gravité (repère body).
 
 ## Résistance à l'avancement
 

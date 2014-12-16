@@ -872,6 +872,17 @@ suivantes sont réalisées :
   nb of points in convolution: 30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+### Efforts de diffraction
+
+Pour utiliser ce modèle, on écrit `model: diffraction`. Le seul paramètre de ce
+modèle est le chemin vers le fichier HDB contenant les RAO d'effort du premier
+ordre. La documentation de ce modèle figure [ici](#efforts-de-diffraction-1).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: diffraction
+  hdb: anthineas.hdb
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Efforts commandés
 
 Les efforts contrôlés correspondent aux efforts de propulsion, de safran et de
