@@ -19,7 +19,7 @@
 class HDBData::Impl
 {
     public:
-        Impl(const HDBBuilder& builder) : omega_rad(), M(), Br(), Tmin(0)
+        Impl(const HDBBuilder& builder) : omega_rad(), M(), Br(), Tmin(0), module(builder.get_diffraction_module()), phase(builder.get_diffraction_phase())
         {
             bool allow_queries_outside_bounds;
             const TimestampedMatrices Ma = builder.get_added_mass();
@@ -45,6 +45,16 @@ class HDBData::Impl
                 }
                 omega_rad.push_back(2*PI/ *it);
             }
+        }
+
+        std::array<std::vector<std::vector<double> >,6 > get_diffraction_module_tables() const
+        {
+            return module.values;
+        }
+
+        std::array<std::vector<std::vector<double> >,6 > get_diffraction_phase_tables() const
+        {
+            return phase.values;
         }
 
         Eigen::Matrix<double,6,6> get_added_mass(const double Tp)
@@ -91,6 +101,8 @@ class HDBData::Impl
         std::array<std::array<ssc::interpolation::SplineVariableStep,6>,6> M;
         std::array<std::array<std::vector<double>,6>,6> Br;
         double Tmin;
+        RAOData module;
+        RAOData phase;
 };
 
 
@@ -118,4 +130,14 @@ std::vector<double> HDBData::get_radiation_damping_angular_frequencies() const
 std::vector<double> HDBData::get_radiation_damping_coeff(const size_t i, const size_t j) const
 {
     return pimpl->get_radiation_damping_coeff(i, j);
+}
+
+std::array<std::vector<std::vector<double> >,6 > HDBData::get_diffraction_module_tables() const
+{
+    return pimpl->get_diffraction_module_tables();
+}
+
+std::array<std::vector<std::vector<double> >,6 > HDBData::get_diffraction_phase_tables() const
+{
+    return pimpl->get_diffraction_phase_tables();
 }

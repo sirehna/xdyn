@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <list>
+#include <set>
 #include <sstream>
 
 #include <boost/lexical_cast.hpp>
@@ -72,6 +74,55 @@ class HDBBuilder::Impl
             return ret;
         }
 
+        RAOData get_rao(const std::string& section_name, const std::string& subsections) const
+        {
+            std::set<double> omegas, psi;
+            RAOData ret;
+            for (auto ms:tree.lists_of_matrix_sections_with_id)
+            {
+                if (ms.header == section_name)
+                {
+                    for (auto s:ms.sections_with_id)
+                    {
+                        if (s.header == subsections)
+                        {
+                            psi.insert(s.id);
+                            std::array<std::vector<double>,6> columns;
+                            for (auto v:s.values)
+                            {
+                                omegas.insert(v.front());
+                                for (size_t j = 0 ; j < 6 ; ++j)
+                                {
+                                    columns.at(j).push_back(v.at(j+1));
+                                }
+                            }
+                            for (size_t j = 0 ; j < 6 ; ++j)
+                            {
+                                ret.values.at(j).push_back(columns.at(j));
+                            }
+                        }
+                    }
+                }
+            }
+            std::list<double> omega_l(omegas.begin(), omegas.end());
+            omega_l.sort();
+            ret.omega.insert(ret.omega.begin(),omega_l.begin(), omega_l.end());
+            std::list<double> psi_l(psi.begin(), psi.end());
+            omega_l.sort();
+            ret.psi.insert(ret.psi.begin(),psi_l.begin(), psi_l.end());
+            return ret;
+        }
+
+        RAOData get_diffraction_module() const
+        {
+            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
+        }
+
+        RAOData get_diffraction_phase() const
+        {
+            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
+        }
+
         hdb::AST tree;
 };
 
@@ -88,4 +139,14 @@ TimestampedMatrices HDBBuilder::get_added_mass() const
 TimestampedMatrices HDBBuilder::get_radiation_damping() const
 {
     return pimpl->get_matrix("Added_mass_Radiation_Damping", "DAMPING_TERM");
+}
+
+RAOData HDBBuilder::get_diffraction_module() const
+{
+    return pimpl->get_diffraction_module();
+}
+
+RAOData HDBBuilder::get_diffraction_phase() const
+{
+    return pimpl->get_diffraction_phase();
 }

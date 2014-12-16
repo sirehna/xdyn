@@ -106,3 +106,33 @@ TEST_F(HDBDataTest, can_retrieve_vectors_for_each_element_in_radiation_damping_m
     ASSERT_DOUBLE_EQ(-1.215545E+02, v.at(1));
     ASSERT_DOUBLE_EQ(-1.083372E+02, v.at(0));
 }
+
+TEST_F(HDBDataTest, can_retrieve_vector_of_vectors_for_RAOs)
+{
+    const HDBData data((HDBBuilder(test_data::anthineas_hdb())));
+    const std::array<std::vector<std::vector<double> >,6 > module = data.get_diffraction_module_tables();
+    const std::array<std::vector<std::vector<double> >,6 > phase = data.get_diffraction_phase_tables();
+    ASSERT_EQ(13,std::get<0>(module).size());
+    ASSERT_EQ(13,std::get<1>(module).size());
+    ASSERT_EQ(13,std::get<2>(module).size());
+    ASSERT_EQ(13,std::get<3>(module).size());
+    ASSERT_EQ(13,std::get<4>(module).size());
+    ASSERT_EQ(13,std::get<5>(module).size());
+    ASSERT_EQ(13,std::get<0>(phase).size());
+    ASSERT_EQ(13,std::get<1>(phase).size());
+    ASSERT_EQ(13,std::get<2>(phase).size());    ASSERT_EQ(13,std::get<3>(phase).size());    ASSERT_EQ(13,std::get<4>(phase).size());    ASSERT_EQ(13,std::get<5>(phase).size());
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        for (size_t j = 0 ; j < 13 ; ++j)
+        {
+            ASSERT_EQ(6, module.at(i).at(j).size());
+            ASSERT_EQ(6, phase.at(i).at(j).size());
+        }
+    }
+    ASSERT_DOUBLE_EQ(3.098978E5,module.at(2).at(3).at(4));
+    ASSERT_DOUBLE_EQ(7.774210E4,module.at(1).at(2).at(3));
+    ASSERT_DOUBLE_EQ(1.459181E4,module.at(5).at(6).at(2));
+    ASSERT_DOUBLE_EQ(-2.004334,phase.at(2).at(3).at(4));
+    ASSERT_DOUBLE_EQ(3.041773,phase.at(1).at(2).at(3));
+    ASSERT_DOUBLE_EQ(8.036613E-3,phase.at(5).at(6).at(2));
+}
