@@ -136,3 +136,39 @@ TEST_F(HDBDataTest, can_retrieve_vector_of_vectors_for_RAOs)
     ASSERT_DOUBLE_EQ(3.041773,phase.at(1).at(2).at(3));
     ASSERT_DOUBLE_EQ(8.036613E-3,phase.at(5).at(6).at(2));
 }
+
+TEST_F(HDBDataTest, can_retrieve_omegas_for_RAOs)
+{
+    const HDBData data((HDBBuilder(test_data::anthineas_hdb())));
+    const std::vector<double> omegas1 = data.get_radiation_phase_omegas();
+    const std::vector<double> omegas2 = data.get_radiation_module_omegas();
+    ASSERT_EQ(6, omegas1.size());
+    ASSERT_EQ(6, omegas2.size());
+    ASSERT_DOUBLE_EQ(2.*PI/4., omegas1[0]);
+    ASSERT_DOUBLE_EQ(2.*PI/3.8, omegas1[1]);
+    ASSERT_DOUBLE_EQ(2.*PI/3.5, omegas1[2]);
+    ASSERT_DOUBLE_EQ(2.*PI/3., omegas1[3]);
+    ASSERT_DOUBLE_EQ(2.*PI/2., omegas1[4]);
+    ASSERT_DOUBLE_EQ(2.*PI/1., omegas1[5]);
+    ASSERT_DOUBLE_EQ(2.*PI/4., omegas2[0]);
+    ASSERT_DOUBLE_EQ(2.*PI/3.8, omegas2[1]);
+    ASSERT_DOUBLE_EQ(2.*PI/3.5, omegas2[2]);
+    ASSERT_DOUBLE_EQ(2.*PI/3., omegas2[3]);
+    ASSERT_DOUBLE_EQ(2.*PI/2., omegas2[4]);
+    ASSERT_DOUBLE_EQ(2.*PI/1., omegas2[5]);
+
+}
+
+TEST_F(HDBDataTest, can_retrieve_psis_for_RAOs)
+{
+    const HDBData data((HDBBuilder(test_data::anthineas_hdb())));
+    const std::vector<double> psi1 = data.get_radiation_phase_psis();
+    const std::vector<double> psi2 = data.get_radiation_module_psis();
+    ASSERT_EQ(13, psi1.size());
+    ASSERT_EQ(13, psi2.size());
+    for (size_t i = 0 ; i < 13 ; ++i)
+    {
+        ASSERT_DOUBLE_EQ(PI/180.*15.*(double)i, psi1[i]);
+        ASSERT_DOUBLE_EQ(PI/180.*15.*(double)i, psi2[i]);
+    }
+}

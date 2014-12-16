@@ -9,6 +9,10 @@
 #include <set>
 #include <sstream>
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include <boost/lexical_cast.hpp>
 
 #include "hdb_parser_internal_data_structures.hpp"
@@ -86,11 +90,11 @@ class HDBBuilder::Impl
                     {
                         if (s.header == subsections)
                         {
-                            psi.insert(s.id);
+                            psi.insert(s.id*PI/180.);
                             std::array<std::vector<double>,6> columns;
                             for (auto v:s.values)
                             {
-                                omegas.insert(v.front());
+                                omegas.insert(2*PI/v.front());
                                 for (size_t j = 0 ; j < 6 ; ++j)
                                 {
                                     columns.at(j).push_back(v.at(j+1));

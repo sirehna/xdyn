@@ -81,6 +81,26 @@ class HDBData::Impl
             return std::vector<double>(v.rbegin(), v.rend());
         }
 
+        std::vector<double> get_radiation_phase_psis() const
+        {
+            return phase.psi;
+        }
+
+        std::vector<double> get_radiation_phase_omegas() const
+        {
+            return phase.omega;
+        }
+
+        std::vector<double> get_radiation_module_psis() const
+        {
+            return module.psi;
+        }
+
+        std::vector<double> get_radiation_module_omegas() const
+        {
+            return module.omega;
+        }
+
         std::vector<double> omega_rad;
 
     private:
@@ -140,4 +160,24 @@ std::array<std::vector<std::vector<double> >,6 > HDBData::get_diffraction_module
 std::array<std::vector<std::vector<double> >,6 > HDBData::get_diffraction_phase_tables() const
 {
     return pimpl->get_diffraction_phase_tables();
+}
+
+std::vector<double> HDBData::get_radiation_phase_psis() const
+{
+    return pimpl->get_radiation_phase_psis();
+}
+
+std::vector<double> HDBData::get_radiation_phase_omegas() const
+{
+    return pimpl->get_radiation_phase_omegas();
+}
+
+std::vector<double> HDBData::get_radiation_module_psis() const
+{
+    return pimpl->get_radiation_module_psis();
+}
+
+std::vector<double> HDBData::get_radiation_module_omegas() const
+{
+    return pimpl->get_radiation_module_omegas();
 }
