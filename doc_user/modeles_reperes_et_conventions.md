@@ -906,7 +906,8 @@ pouvoir réutiliser les points de calcul de l'itération précédente) et l'on
 applique l'$\varepsilon$-algorithme de Wynn.
 
 Les formules de Gauss-Kronrod sont implémentées dans des bibliothèques
-numériques standard telles que celles de Netlib (QUADPACK).
+numériques standard telles que celles de Netlib (QUADPACK, en particulier la
+routine DQAGS).
 
 - [Weisstein, Eric W. "Stieltjes-Wigert Polynomial." From
 MathWorld--A Wolfram Web
@@ -915,6 +916,12 @@ Resource.](http://mathworld.wolfram.com/Stieltjes-WigertPolynomial.html)
 p. 33, 1975. 
 - R. Piessens, E. deDoncker–Kapenga, C. Uberhuber, D. Kahaner (1983) **Quadpack: a
 Subroutine Package for Automatic Integration**; Springer Verlag. 
+
+### Méthode de Filon
+
+### Méthode de Clenshaw-Curtis
+
+### Méthode de Burcher
 
 ## Calcul des matrices de masse ajoutée
 
