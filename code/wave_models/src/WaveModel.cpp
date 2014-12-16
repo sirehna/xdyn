@@ -16,3 +16,13 @@ WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_) : spectru
 WaveModel::~WaveModel()
 {
 }
+
+std::vector<double> WaveModel::get_omegas() const
+{
+    return spectrum.omega;
+}
+
+std::vector<double> WaveModel::get_psis() const
+{
+    return spectrum.psi;
+}

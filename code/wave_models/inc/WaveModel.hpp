@@ -54,6 +54,16 @@ class WaveModel
                                         const double t    //!< Current time instant (in seconds)
                                         ) const = 0;
 
+        /**  \returns List of angular frequencies for which the spectra will be calculated.
+          *  \details Needed by the RAOs (RadiationForceModel)
+          */
+        std::vector<double> get_omegas() const;
+
+        /**  \returns List of incidences for which the spectra will be calculated.
+          *  \details Needed by the RAOs (RadiationForceModel)
+          */
+        std::vector<double> get_psis() const;
+
     private:
         WaveModel(); // Disabled
 
