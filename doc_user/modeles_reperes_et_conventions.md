@@ -782,6 +782,10 @@ compte l'historique sur une période $T$ :
 
 $$F_{\mbox{rad}}(t)\sim\int_0^{T}\dot{X}(t-\tau)K_r(\tau)d\tau$$
 
+Il est important de noter que ces efforts sont exprimés dans le [repère de
+calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique) : un changement
+de repère est nécessaire pour les exprimer dans le repère "body".
+
 ### Méthode des rectangles
 
 C’est la méthode la plus simple qui consiste à interpoler la fonction
