@@ -6,7 +6,7 @@
  */
 
 #ifndef TIMESTAMPEDMATRIX_HPP_
-#define ADDEDMASS_HPP_
+#define TIMESTAMPEDMATRIX_HPP_
 
 #include <array>
 #include <utility> // std::pair
@@ -17,4 +17,4 @@ typedef std::array<line,6> Matrix;
 typedef std::pair<double,Matrix> TimestampedMatrix;
 typedef std::vector<TimestampedMatrix> TimestampedMatrices;
 
-#endif /* ADDEDMASS_HPP_ */
+#endif /* TIMESTAMPEDMATRIX_HPP_ */
