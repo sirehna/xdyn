@@ -86,24 +86,26 @@ class HDBBuilder::Impl
             {
                 if (ms.header == section_name)
                 {
+                    size_t psi_idx = 0;
                     for (auto s:ms.sections_with_id)
                     {
                         if (s.header == subsections)
                         {
                             psi.insert(s.id*PI/180.);
-                            std::array<std::vector<double>,6> columns;
+                            std::array<std::vector<double>,6> psi_for_each_axis;
+                            size_t omega_idx = 0;
                             for (auto v:s.values)
                             {
                                 omegas.insert(2*PI/v.front());
                                 for (size_t j = 0 ; j < 6 ; ++j)
                                 {
-                                    columns.at(j).push_back(v.at(j+1));
+                                    if (ret.values.at(j).size()<omega_idx+1) ret.values.at(j).push_back(std::vector<double>());
+                                    if (ret.values.at(j).at(omega_idx).size()<psi_idx+1) ret.values.at(j).at(omega_idx).resize(psi_idx+1);
+                                    ret.values.at(j).at(omega_idx).at(psi_idx) = v.at(j+1);
                                 }
+                                omega_idx++;
                             }
-                            for (size_t j = 0 ; j < 6 ; ++j)
-                            {
-                                ret.values.at(j).push_back(columns.at(j));
-                            }
+                            psi_idx++;
                         }
                     }
                 }
