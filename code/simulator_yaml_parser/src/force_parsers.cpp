@@ -125,3 +125,16 @@ YamlRadiationDamping parse_radiation_damping(const std::string& yaml)
     }
     return ret;
 }
+
+YamlDiffraction parse_diffraction(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlDiffraction ret;
+    node["hdb"]                             >> ret.hdb_filename;
+    node["calculation point in body frame"] >> ret.calculation_point;
+    node["mirror for 180 to 360"]           >> ret.mirror;
+    return ret;
+}

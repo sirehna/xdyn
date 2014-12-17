@@ -147,3 +147,13 @@ TEST_F(force_parsersTest, radiation_damping)
     ASSERT_EQ(TypeOfQuadrature::GAUSS_KRONROD, r.quadrature);
     ASSERT_EQ(0.01, r.quadrature_tolerance);
 }
+
+TEST_F(force_parsersTest, diffraction)
+{
+    const YamlDiffraction r = parse_diffraction(test_data::diffraction());
+    ASSERT_EQ("anthineas.hdb", r.hdb_filename);
+    ASSERT_EQ(0.696, r.calculation_point.x);
+    ASSERT_EQ(0, r.calculation_point.y);
+    ASSERT_EQ(1.418, r.calculation_point.z);
+    ASSERT_TRUE(r.mirror);
+}

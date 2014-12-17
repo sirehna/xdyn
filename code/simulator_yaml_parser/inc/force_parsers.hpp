@@ -12,6 +12,7 @@
 
 #include <Eigen/Dense>
 
+#include "YamlDiffraction.hpp"
 #include "YamlGravity.hpp"
 #include "YamlRadiationDamping.hpp"
 #include "YamlResistanceCurve.hpp"
@@ -23,5 +24,6 @@ Eigen::Matrix<double,6,6> parse_quadratic_damping(const std::string& yaml);
 YamlWageningen parse_wageningen(const std::string& yaml);
 YamlResistanceCurve parse_resistance_curve(const std::string& yaml);
 YamlRadiationDamping parse_radiation_damping(const std::string& yaml);
+YamlDiffraction parse_diffraction(const std::string& yaml);
 
 #endif /* FORCES_PARSERS_HPP_ */
