@@ -891,7 +891,7 @@ YAML communes à tous les efforts commandés sont `name` (qui est un identifiant
 choisi par l'utilisateur) et `model` (qui est une chaîne servant à identifier
 le type de modèle utilisé).
 
-La provenance des commandes (où le simulateur lit-il les commandes à chaque pas
+La provenance des commandes (où le simulateur lit les commandes à chaque pas
 de temps) doit être spécifiée lors de l'appel de l'exécutable en
 utilisant le flag `--commands` décrit dans la [documentation de l'interface
 utilisateur](#liste-des-arguments). Les commandes ne sont pas
