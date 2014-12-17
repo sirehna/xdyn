@@ -881,7 +881,19 @@ ordre. La documentation de ce modèle figure [ici](#efforts-de-diffraction-1).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: diffraction
   hdb: anthineas.hdb
+  calculation point in body frame:
+      x: {value: 0.696, unit: m}
+      y: {value: 0, unit: m}
+      z: {value: 1.418, unit: m}
+  mirror for 180 to 360: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Le point de calcul n'est pas nécessairement le centre de gravité. En revanche,
+il s'agit nécessairement d'un point fixe dans le repère du solide.
+
+Le paramètre `mirror for 180 to 360` sert à pouvoir ne spécifier que la partie
+de la RAO entre 0° et 180°, quitte à la symétriser pour obtenir les points entre
+180° et 360°.
 
 ## Efforts commandés
 
