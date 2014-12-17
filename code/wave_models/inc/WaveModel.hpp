@@ -27,6 +27,16 @@ class WaveModel
         WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum);
         virtual ~WaveModel();
 
+        /**  \brief Calculate radiation forces using first order force RAO
+          *  \returns Force (or torque), depending on the RAO
+          */
+        virtual double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+                                    const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+                                    const double t, //!< Current time instant (in seconds)
+                                    const std::vector<std::vector<double> >& rao_module, //<! Module of the RAO
+                                    const std::vector<std::vector<double> >& rao_phase //<! Phase of the RAO
+                                     ) const = 0;
+
         /**  \author cec
           *  \date Aug 1, 2014, 3:24:45 PM
           *  \brief Surface elevation

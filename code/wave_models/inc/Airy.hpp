@@ -29,6 +29,16 @@ class Airy : public WaveModel
         Airy(const DiscreteDirectionalWaveSpectrum& spectrum, const double constant_random_phase); // For tests
         Airy(const DiscreteDirectionalWaveSpectrum& spectrum, const int random_number_generator_seed);
 
+        /**  \brief Calculate radiation forces using first order force RAO
+          *  \returns Force (or torque), depending on the RAO
+          */
+        double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+                            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+                            const double t, //!< Current time instant (in seconds)
+                            const std::vector<std::vector<double> >& rao_module, //<! Module of the RAO
+                            const std::vector<std::vector<double> >& rao_phase //<! Phase of the RAO
+                             ) const;
+
         /**  \brief Surface elevation
           *  \returns Elevation of a point at a given instant, in meters.
           *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47

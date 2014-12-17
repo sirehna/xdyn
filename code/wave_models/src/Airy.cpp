@@ -47,6 +47,31 @@ generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
     }
 }
 
+double Airy::evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+                            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+                            const double t, //!< Current time instant (in seconds)
+                            const std::vector<std::vector<double> >& rao_module, //<! Module of the RAO
+                            const std::vector<std::vector<double> >& rao_phase //<! Phase of the RAO
+                             ) const
+{
+    double F = 0;
+    for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
+    {
+        const double k = spectrum.k[i];
+        const double omega = spectrum.omega[i];
+        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
+        {
+            const double Aij = rao_module[i][j];
+            const double Dj = sqrt(spectrum.Dj[j]);
+            const double psi = spectrum.psi[j];
+            const double theta = rao_phase[i][j];
+            F += Aij*Dj*cos(omega*t - k*(x*cos(psi)+y*sin(psi)) + theta);
+        }
+    }
+    F *= sqrt(2*spectrum.domega*spectrum.dpsi);
+    return F;
+}
+
 double Airy::elevation(const double x,                                  //!< x-position in the NED frame (in meters)
                        const double y,                                  //!< y-position in the NED frame (in meters)
                        const double t                                   //!< Current time instant (in seconds)
