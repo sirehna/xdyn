@@ -5,6 +5,7 @@
 #include "Airy.hpp"
 #include "BretschneiderSpectrum.hpp"
 #include "Cos2sDirectionalSpreading.hpp"
+#include "DiffractionForceModel.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "GravityForceModel.hpp"
@@ -41,7 +42,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_sou
            .can_parse<QuadraticDampingForceModel>()
            .can_parse<LinearDampingForceModel>()
            .can_parse<WageningenControlledForceModel>()
-           .can_parse<ResistanceCurveForceModel>();
+           .can_parse<ResistanceCurveForceModel>()
+           .can_parse<DiffractionForceModel>();
     return builder;
 }
 

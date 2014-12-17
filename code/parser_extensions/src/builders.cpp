@@ -105,6 +105,16 @@ boost::optional<ForcePtr> ForceBuilder<ResistanceCurveForceModel>::try_to_parse(
     return ret;
 }
 
+boost::optional<ForcePtr> ForceBuilder<DiffractionForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const
+{
+    boost::optional<ForcePtr> ret;
+    if (model == "resistance curve")
+    {
+        ret.reset(ForcePtr(new DiffractionForceModel(parse_diffraction(yaml), env)));
+    }
+    return ret;
+}
+
 boost::optional<TR1(shared_ptr)<WaveModel> > WaveModelBuilder<Airy>::try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<WaveModel> > ret;
