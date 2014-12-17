@@ -140,8 +140,8 @@ TEST_F(HDBDataTest, can_retrieve_vector_of_vectors_for_RAOs)
 TEST_F(HDBDataTest, can_retrieve_omegas_for_RAOs)
 {
     const HDBData data((HDBBuilder(test_data::anthineas_hdb())));
-    const std::vector<double> omegas1 = data.get_radiation_phase_omegas();
-    const std::vector<double> omegas2 = data.get_radiation_module_omegas();
+    const std::vector<double> omegas1 = data.get_diffraction_phase_omegas();
+    const std::vector<double> omegas2 = data.get_diffraction_module_omegas();
     ASSERT_EQ(6, omegas1.size());
     ASSERT_EQ(6, omegas2.size());
     ASSERT_DOUBLE_EQ(2.*PI/4., omegas1[0]);
@@ -162,8 +162,8 @@ TEST_F(HDBDataTest, can_retrieve_omegas_for_RAOs)
 TEST_F(HDBDataTest, can_retrieve_psis_for_RAOs)
 {
     const HDBData data((HDBBuilder(test_data::anthineas_hdb())));
-    const std::vector<double> psi1 = data.get_radiation_phase_psis();
-    const std::vector<double> psi2 = data.get_radiation_module_psis();
+    const std::vector<double> psi1 = data.get_diffraction_phase_psis();
+    const std::vector<double> psi2 = data.get_diffraction_module_psis();
     ASSERT_EQ(13, psi1.size());
     ASSERT_EQ(13, psi2.size());
     for (size_t i = 0 ; i < 13 ; ++i)
