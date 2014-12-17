@@ -98,6 +98,26 @@ void SurfaceElevationInterface::update_surface_elevation(const ssc::kinematics::
     }
 }
 
+double SurfaceElevationInterface::evaluate_rao(const double , //!< x-position of the RAO's calculation point in the NED frame (in meters)
+                            const double , //!< y-position of the RAO's calculation point in the NED frame (in meters)
+                            const double , //!< Current time instant (in seconds)
+                            const std::vector<std::vector<std::vector<double> > >& , //<! Module of the RAO
+                            const std::vector<std::vector<std::vector<double> > >&  //<! Phase of the RAO
+                             ) const
+{
+    return 0;
+}
+
+std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_directions_for_each_model() const
+{
+    return std::vector<std::vector<double> >();
+}
+
+std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_angular_frequency_for_each_model() const
+{
+    return std::vector<std::vector<double> >();
+}
+
 double SurfaceElevationInterface::get_dynamic_pressure(const double rho, // Water density (in kg/m^3)
                                                        const double g, //!< Gravity (in m/s^2)
                                                        const ssc::kinematics::Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame

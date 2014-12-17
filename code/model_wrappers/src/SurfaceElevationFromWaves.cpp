@@ -28,6 +28,41 @@ double SurfaceElevationFromWaves::wave_height(const double x, //!< x-coordinate 
     return zwave;
 }
 
+double SurfaceElevationFromWaves::evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+                    const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+                    const double t, //!< Current time instant (in seconds)
+                    const std::vector<std::vector<std::vector<double> > >& rao_module, //<! Module of the RAO
+                    const std::vector<std::vector<std::vector<double> > >& rao_phase //<! Phase of the RAO
+                     ) const
+{
+    double rao = 0;
+    for (size_t i = 0 ; i < models.size() ; ++i)
+    {
+        rao += models.at(i)->evaluate_rao(x,y,t,rao_module.at(i),rao_phase.at(i));
+    }
+    return rao;
+}
+
+std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions_for_each_model() const
+{
+    std::vector<std::vector<double> > ret;
+    for (auto model:models)
+    {
+        ret.push_back(model->get_psis());
+    }
+    return ret;
+}
+
+std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_angular_frequency_for_each_model() const
+{
+    std::vector<std::vector<double> > ret;
+    for (auto model:models)
+    {
+        ret.push_back(model->get_omegas());
+    }
+    return ret;
+}
+
 double SurfaceElevationFromWaves::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
                                                    const double g,   //!< gravity (in m/s^2)
                                                    const double x,   //!< x-position in the NED frame (in meters)
