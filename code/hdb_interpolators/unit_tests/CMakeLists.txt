@@ -5,6 +5,7 @@ FILE(GLOB SRC src/HDBBuilderTest.cpp
               src/HDBDataTest.cpp
               src/HistoryTest.cpp
               src/DampingMatrixInterpolatorTest.cpp
+              src/DiffractionInterpolatorTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
