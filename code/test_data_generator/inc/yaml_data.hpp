@@ -26,6 +26,7 @@ namespace test_data
     std::string anthineas_propulsion();
     std::string anthineas_waves_test();
     std::string anthineas_post_processing();
+    std::string anthineas_diffraction();
     std::string outputs();
     std::string waves();
     std::string simple_waves();
@@ -40,6 +41,7 @@ namespace test_data
     std::string resistance_curve();
     std::string propulsion_and_resistance();
     std::string radiation_damping();
+    std::string diffraction();
 }
 
 #endif /* YAML_DATA_HPP_ */
