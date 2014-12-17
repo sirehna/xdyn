@@ -31,9 +31,9 @@ class DiffractionInterpolator
 {
     public:
         DiffractionInterpolator(const HDBData& data, //<! Data read from the HDB file
-                              const std::vector<double>& omega, //<! Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
-                              const std::vector<double>& psi, //<! Wave directions (points at which to interpolate the HDB data)
-                              const bool mirror //<! Should the RAO for psi between 180° and 360° be calculated by mirroring the RAO between 0° and 180°?
+                                const std::vector<double>& omega, //<! Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
+                                const std::vector<double>& psi, //<! Wave directions (points at which to interpolate the HDB data)
+                                const bool mirror //<! Should the RAO for psi between 180° and 360° be calculated by mirroring the RAO between 0° and 180°?
         );
 
         /**  \brief Interpolates the RAO's module for the values of omega & psi in the wave spectrum
