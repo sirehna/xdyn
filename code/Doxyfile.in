@@ -758,6 +758,7 @@ INPUT = "@CMAKE_CURRENT_SOURCE_DIR@/DoxygenMainPage.txt" \
         "@CMAKE_CURRENT_SOURCE_DIR@/external_file_formats" \
         "@CMAKE_CURRENT_SOURCE_DIR@/hdb_interpolators" \
         "@CMAKE_CURRENT_SOURCE_DIR@/hydro_models" \
+        "@CMAKE_CURRENT_SOURCE_DIR@/interface_hdf5" \
         "@CMAKE_CURRENT_SOURCE_DIR@/mesh" \
         "@CMAKE_CURRENT_SOURCE_DIR@/model_wrappers" \
         "@CMAKE_CURRENT_SOURCE_DIR@/parser_extensions" \
