@@ -158,6 +158,23 @@ std::vector<std::string> Sim::get_force_names() const
     return ret;
 }
 
+VectorOfStringModelForEachBody Sim::get_vector_of_string_model_for_each_body() const
+{
+    VectorOfStringModelForEachBody ret;
+    OuputtedForces m;
+    fill_force_map_with_zeros(m);
+    for (auto it1 = m.begin() ; it1 != m.end() ; ++it1)
+    {
+        std::vector<std::string> bodyModel;
+        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
+        {
+            bodyModel.push_back(it2->first);
+        }
+        ret.push_back(std::make_pair(it1->first,bodyModel));
+    }
+    return ret;
+}
+
 void Sim::fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const
 {
     ssc::kinematics::Vector6d s;

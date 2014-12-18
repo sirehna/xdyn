@@ -18,6 +18,7 @@
 #include "ControllableForceModel.hpp"
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
+typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
 
 class Sim
 {
@@ -36,6 +37,7 @@ class Sim
         StateType get_state_derivatives() const;
         std::vector<std::string> get_names_of_bodies() const;
         std::vector<std::string> get_force_names() const;
+        VectorOfStringModelForEachBody get_vector_of_string_model_for_each_body() const;
         OuputtedForces get_forces() const;
 
         /**  \brief Serialize wave data on mesh
