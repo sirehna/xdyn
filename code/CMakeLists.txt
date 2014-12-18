@@ -176,6 +176,8 @@ ADD_DEFINITIONS(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-dev
 ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
 #ADD_DEFINITIONS(-DEIGEN_NO_DEBUG)
 
+INCLUDE(CMakeHdf5)
+
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
@@ -208,32 +210,29 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:hdb_interpolators>
         )
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME}
-        yaml-cpp
-        gfortran
-)
+MACRO(ADD_IMPORTED_LIB libname)
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC ${libname})
+    GET_TARGET_PROPERTY(MYLIB_LOCATION ${libname} LOCATION)
+    INSTALL(FILES ${MYLIB_LOCATION} DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
+ENDMACRO()
+ADD_IMPORTED_LIB(numeric_shared)
+ADD_IMPORTED_LIB(kinematics_shared)
+ADD_IMPORTED_LIB(data_source_shared)
+ADD_IMPORTED_LIB(yaml_parser_shared)
+ADD_IMPORTED_LIB(text_file_reader_shared)
+ADD_IMPORTED_LIB(decode_unit_shared)
+ADD_IMPORTED_LIB(csv_file_reader_shared)
+ADD_IMPORTED_LIB(exception_handling_shared)
+ADD_IMPORTED_LIB(data_source_shared)
+ADD_IMPORTED_LIB(interpolation_shared)
+
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE gfortran)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE hdf5_cpp hdf5)
 
 INSTALL(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
         LIBRARY DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
-
-MACRO(add_imported_lib libname)
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${libname})
-    get_target_property(MYLIB_LOCATION ${libname} LOCATION)
-    install(FILES ${MYLIB_LOCATION} DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
-ENDMACRO()
-add_imported_lib(numeric_shared)
-add_imported_lib(kinematics_shared)
-add_imported_lib(data_source_shared)
-add_imported_lib(yaml_parser_shared)
-add_imported_lib(integrate_shared)
-add_imported_lib(text_file_reader_shared)
-add_imported_lib(decode_unit_shared)
-add_imported_lib(csv_file_reader_shared)
-add_imported_lib(exception_handling_shared)
-add_imported_lib(data_source_shared)
-add_imported_lib(interpolation_shared)
-
 #############################################################################
 # Testing part
 ENABLE_TESTING()
