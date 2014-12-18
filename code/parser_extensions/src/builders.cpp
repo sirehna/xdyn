@@ -108,7 +108,7 @@ boost::optional<ForcePtr> ForceBuilder<ResistanceCurveForceModel>::try_to_parse(
 boost::optional<ForcePtr> ForceBuilder<DiffractionForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const
 {
     boost::optional<ForcePtr> ret;
-    if (model == "resistance curve")
+    if (model == "diffraction")
     {
         ret.reset(ForcePtr(new DiffractionForceModel(parse_diffraction(yaml), env)));
     }
