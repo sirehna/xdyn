@@ -754,14 +754,16 @@ WARN_LOGFILE           = doxygen_errors.txt
 # Note: If this tag is empty the current directory is searched.
 
 INPUT = "@CMAKE_CURRENT_SOURCE_DIR@/DoxygenMainPage.txt" \
+        "@CMAKE_CURRENT_SOURCE_DIR@/executables" \
+        "@CMAKE_CURRENT_SOURCE_DIR@/external_file_formats" \
+        "@CMAKE_CURRENT_SOURCE_DIR@/hdb_interpolators" \
         "@CMAKE_CURRENT_SOURCE_DIR@/hydro_models" \
-        "@CMAKE_CURRENT_SOURCE_DIR@/model_wrappers" \
         "@CMAKE_CURRENT_SOURCE_DIR@/mesh" \
+        "@CMAKE_CURRENT_SOURCE_DIR@/model_wrappers" \
         "@CMAKE_CURRENT_SOURCE_DIR@/parser_extensions" \
         "@CMAKE_CURRENT_SOURCE_DIR@/simulator" \
         "@CMAKE_CURRENT_SOURCE_DIR@/simulator_external_data_structures" \
         "@CMAKE_CURRENT_SOURCE_DIR@/simulator_yaml_parser" \
-        "@CMAKE_CURRENT_SOURCE_DIR@/stl_reader" \
         "@CMAKE_CURRENT_SOURCE_DIR@/test_data_generator" \
         "@CMAKE_CURRENT_SOURCE_DIR@/wave_models" \
 
