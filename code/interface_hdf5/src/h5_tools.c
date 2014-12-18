@@ -150,7 +150,7 @@ char * _h5_concatenatePaddedArrayOfStrings(
  * \param[in] dset Dataset
  * \param[in] attributeName Name to give to the attribute to add
  * \param[in] numberOfStringsToAdd Number of strings to add
- * \param[in] maxLengthStringsToAdd Maximu length of the strings to add
+ * \param[in] maxLengthStringsToAdd Maximum length of the strings to add
  * \param[in] rawStringsToWrite Concatenated padded strings to add
  * \return status HDF5 error code
  */
