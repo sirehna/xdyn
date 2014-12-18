@@ -148,27 +148,22 @@ std::vector<std::string> Sim::get_force_names() const
     std::vector<std::string> ret;
     OuputtedForces m;
     fill_force_map_with_zeros(m);
-    for (auto it = m.begin() ; it != m.end() ; ++it)
+    for (auto it1 = m.begin() ; it1 != m.end() ; ++it1)
     {
-        ret.push_back(it->first);
+        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
+        {
+            ret.push_back(it2->first + " acting on " + it1->first);
+        }
     }
     return ret;
 }
 
 void Sim::fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const
 {
-    const std::string fx = "Fx(" + force_name + " acting on " + body_name + ")";
-    const std::string fy = "Fy(" + force_name + " acting on " + body_name + ")";
-    const std::string fz = "Fz(" + force_name + " acting on " + body_name + ")";
-    const std::string mx = "Mx(" + force_name + " acting on " + body_name + ")";
-    const std::string my = "My(" + force_name + " acting on " + body_name + ")";
-    const std::string mz = "Mz(" + force_name + " acting on " + body_name + ")";
-    ret[fx] = tau.X();
-    ret[fy] = tau.Y();
-    ret[fz] = tau.Z();
-    ret[mx] = tau.K();
-    ret[my] = tau.M();
-    ret[mz] = tau.N();
+    ssc::kinematics::Vector6d s;
+    s<<tau.force,
+       tau.torque;
+    ret[body_name][force_name] = s;
 }
 
 ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_t body, const double t)

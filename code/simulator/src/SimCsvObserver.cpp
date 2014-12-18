@@ -66,17 +66,35 @@ void SimCsvObserver::observe_waves(const Sim& sys, const double t)
     }
 }
 
+std::ostream& operator<< (std::ostream& stream, const ssc::kinematics::Vector6d& m);
+std::ostream& operator<< (std::ostream& stream, const ssc::kinematics::Vector6d& m)
+{
+    for (size_t i=0;i<5;++i)
+        stream << m(i)<<",";
+    stream << m(5);
+    return stream;
+}
+
 void SimCsvObserver::observe_forces(const Sim& sys)
 {
     const auto f = sys.get_forces();
     if (not(f.empty())) simulation_stream << ',';
-    const size_t n = f.size();
-    size_t i = 0;
-    for (auto it = f.begin() ; it != f.end() ; ++it)
+    const size_t n1 = f.size();
+    size_t i1 = 0;
+    for (auto it1 = f.begin() ; it1 != f.end() ; ++it1)
     {
-        simulation_stream << it->second;
-        if (i < n-1) simulation_stream << ",";
-        ++i;
+        const size_t n2 = it1->second.size();
+        size_t i2 = 0;
+        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
+        {
+            simulation_stream << it2->second;
+            if ((i1 < (n1-1)) || (i2<(n2-1)))
+            {
+                simulation_stream << ",";
+            }
+            ++i2;
+        }
+        ++i1;
     }
 }
 
@@ -113,7 +131,16 @@ void SimCsvObserver::observe_states(const Sim& s, const double t)
 void SimCsvObserver::initialize_simulation_output_stream(const Sim& sys)
 {
     bodies = sys.get_names_of_bodies();
-    forces = sys.get_force_names();
+    auto force_names = sys.get_force_names();
+    for(auto it = force_names.begin();it != force_names.end();++it)
+    {
+        forces.push_back("Fx(" + *it + ")");
+        forces.push_back("Fy(" + *it + ")");
+        forces.push_back("Fz(" + *it + ")");
+        forces.push_back("Mx(" + *it + ")");
+        forces.push_back("My(" + *it + ")");
+        forces.push_back("Mz(" + *it + ")");
+    }
     initialize_title();
 }
 

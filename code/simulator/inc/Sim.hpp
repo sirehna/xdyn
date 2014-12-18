@@ -17,7 +17,7 @@
 #include "ForceModel.hpp"
 #include "ControllableForceModel.hpp"
 
-typedef std::map<std::string,double> OuputtedForces;
+typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 
 class Sim
 {
@@ -84,7 +84,6 @@ class Sim
 
         void fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
         void fill_force_map_with_zeros(OuputtedForces& m) const;
-
 
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;
