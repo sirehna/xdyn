@@ -38,7 +38,7 @@ class Sim::Impl
         StateType _dx_dt;
         ssc::data_source::DataSource command_listener;
         bool there_are_surface_forces;
-        std::map<std::string,double> outputted_forces;
+        OuputtedForces outputted_forces;
 };
 
 Sim::Sim(const std::vector<Body>& bodies,
@@ -123,12 +123,12 @@ std::vector<std::string> Sim::get_names_of_bodies() const
     return ret;
 }
 
-std::map<std::string,double> Sim::get_forces() const
+OuputtedForces Sim::get_forces() const
 {
     return pimpl->outputted_forces;
 }
 
-void Sim::fill_force_map_with_zeros(std::map<std::string,double>& m) const
+void Sim::fill_force_map_with_zeros(OuputtedForces& m) const
 {
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
     {
@@ -146,7 +146,7 @@ void Sim::fill_force_map_with_zeros(std::map<std::string,double>& m) const
 std::vector<std::string> Sim::get_force_names() const
 {
     std::vector<std::string> ret;
-    std::map<std::string,double> m;
+    OuputtedForces m;
     fill_force_map_with_zeros(m);
     for (auto it = m.begin() ; it != m.end() ; ++it)
     {
@@ -155,7 +155,7 @@ std::vector<std::string> Sim::get_force_names() const
     return ret;
 }
 
-void Sim::fill_force(std::map<std::string,double>& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const
+void Sim::fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const
 {
     const std::string fx = "Fx(" + force_name + " acting on " + body_name + ")";
     const std::string fy = "Fy(" + force_name + " acting on " + body_name + ")";

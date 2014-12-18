@@ -36,7 +36,7 @@ class Sim
         StateType get_state_derivatives() const;
         std::vector<std::string> get_names_of_bodies() const;
         std::vector<std::string> get_force_names() const;
-        std::map<std::string,double> get_forces() const;
+        OuputtedForces get_forces() const;
 
         /**  \brief Serialize wave data on mesh
           *  \details Called by SimCsvObserver at each time step. The aim is to
@@ -82,8 +82,8 @@ class Sim
         void update_projection_of_z_in_mesh_frame(Body& body         //!< Body we wish to update
                                                  ) const;
 
-        void fill_force(std::map<std::string,double>& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
-        void fill_force_map_with_zeros(std::map<std::string,double>& m) const;
+        void fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
+        void fill_force_map_with_zeros(OuputtedForces& m) const;
 
 
         class Impl;
