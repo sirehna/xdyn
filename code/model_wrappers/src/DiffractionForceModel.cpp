@@ -6,12 +6,14 @@
  */
 
 #include <array>
+#include <sstream>
 
 #include <ssc/interpolation.hpp>
 #include <ssc/text_file_reader.hpp>
 
 #include "Body.hpp"
 #include "DiffractionForceModel.hpp"
+#include "DiffractionForceModelException.hpp"
 #include "DiffractionInterpolator.hpp"
 #include "HDBBuilder.hpp"
 #include "HDBData.hpp"
@@ -33,17 +35,35 @@ class DiffractionForceModel::Impl
         rao_module(),
         rao_phase()
         {
-            const HDBData hdb((HDBBuilder(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,data.hdb_filename)).get_contents())));
-            const auto omegas = env.w->get_wave_angular_frequency_for_each_model();
-            const auto psis = env.w->get_wave_directions_for_each_model();
-            const size_t n = omegas.size();
-            for (size_t i = 0 ; i < n ; ++i)
+            if (env.w.use_count()>0)
             {
-                DiffractionInterpolator radiation(hdb,omegas.at(i),psis.at(i),data.mirror);
-                for (size_t k = 0 ; k < 6 ; ++k)
+                std::stringstream ss;
+                const HDBData hdb((HDBBuilder(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,data.hdb_filename)).get_contents())));
+                const auto omegas = env.w->get_wave_angular_frequency_for_each_model();
+                const auto omegas_hdb = hdb.get_diffraction_module_omegas();
+                for (auto o:omegas)
                 {
-                    rao_module.at(k).push_back(radiation.get_modules(k));
-                    rao_phase.at(k).push_back(radiation.get_phases(k));
+                    for (auto omega:o)
+                    {
+                        if ((omega<omegas_hdb.front()) or (omega>omegas_hdb.back()))
+                        {
+                            ss << "HDB only defines the RAO for angular frequencies omega within [" << omegas_hdb.front() << "," << omegas_hdb.back() << "] "
+                               << " Rad/s, but wave spectrum discretization contains omega=" << omega
+                               << " Rad/s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file";
+                            THROW(__PRETTY_FUNCTION__, DiffractionForceModelException, ss.str());
+                        }
+                    }
+                }
+                const auto psis = env.w->get_wave_directions_for_each_model();
+                const size_t n = omegas.size();
+                for (size_t i = 0 ; i < n ; ++i)
+                {
+                    DiffractionInterpolator radiation(hdb,omegas.at(i),psis.at(i),data.mirror);
+                    for (size_t k = 0 ; k < 6 ; ++k)
+                    {
+                        rao_module.at(k).push_back(radiation.get_modules(k));
+                        rao_phase.at(k).push_back(radiation.get_phases(k));
+                    }
                 }
             }
 
@@ -57,12 +77,15 @@ class DiffractionForceModel::Impl
             const ssc::kinematics::Point H = T*ssc::kinematics::Point(body_name,H0);
             for (size_t k = 0 ; k < 6 ; ++k)
             {
-                w((int)k) = env.w->evaluate_rao(H.x(),
-                                                H.y(),
-                                                t,
-                                                rao_module.at(k),
-                                                rao_phase.at(k)
-                         );
+                if (env.w.use_count()>0)
+                {
+                    w((int)k) = env.w->evaluate_rao(H.x(),
+                                                    H.y(),
+                                                    t,
+                                                    rao_module.at(k),
+                                                    rao_phase.at(k)
+                             );
+                }
             }
             return ssc::kinematics::Wrench(H, w);
         }
