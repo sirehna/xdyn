@@ -122,6 +122,7 @@ YamlRadiationDamping parse_radiation_damping(const std::string& yaml)
     parse_uv(node["tau min"], ret.tau_min);
     parse_uv(node["tau max"], ret.tau_max);
     node["output Br and K"] >> ret.output_Br_and_K;
+    node["calculation point in body frame"] >> ret.calculation_point_in_body_frame;
     return ret;
 }
 

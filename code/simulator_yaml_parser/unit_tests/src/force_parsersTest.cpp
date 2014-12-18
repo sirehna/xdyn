@@ -150,6 +150,9 @@ TEST_F(force_parsersTest, radiation_damping)
     ASSERT_DOUBLE_EQ(0.2094395,r.tau_min);
     ASSERT_EQ(TypeOfQuadrature::CLENSHAW_CURTIS, r.type_of_quadrature_for_convolution);
     ASSERT_EQ(TypeOfQuadrature::SIMPSON, r.type_of_quadrature_for_cos_transform);
+    ASSERT_DOUBLE_EQ(0.696, r.calculation_point_in_body_frame.x);
+    ASSERT_DOUBLE_EQ(0, r.calculation_point_in_body_frame.y);
+    ASSERT_DOUBLE_EQ(1.418, r.calculation_point_in_body_frame.z);
 }
 
 TEST_F(force_parsersTest, diffraction)

@@ -2036,7 +2036,11 @@ std::string test_data::radiation_damping()
        << "omega max: {value: 30, unit: rad/s}\n"
        << "tau min: {value: 0.2094395, unit: rad/s}\n"
        << "tau max: {value: 10, unit: s}\n"
-       << "output Br and K: true\n";
+       << "output Br and K: true\n"
+       << "calculation point in body frame:\n"
+       << "    x: {value: 0.696, unit: m}\n"
+       << "    y: {value: 0, unit: m}\n"
+       << "    z: {value: 1.418, unit: m}\n";
     return ss.str();
 }
 
@@ -2134,6 +2138,10 @@ std::string test_data::anthineas_radiation_damping()
        << "        tau min: {value: 0.2094395, unit: rad/s}\n"
        << "        tau max: {value: 10, unit: s}\n"
        << "        output Br and K: true\n"
+       << "        calculation point in body frame:\n"
+       << "            x: {value: 0.696, unit: m}\n"
+       << "            y: {value: 0, unit: m}\n"
+       << "            z: {value: 1.418, unit: m}\n"
        << "    controlled forces:\n"
        << "      - name: propeller\n"
        << "        model: wageningen B-series\n"
