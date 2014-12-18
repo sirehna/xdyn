@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "gitversion.h"
+#include "macrosId.h"
 #include "h5_tools.h"
 
 herr_t _h5_addRawStringsAsAnAttributeToADataSet(
