@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(interface_hdf5)
 
 SET(SRC
+        src/h5_interface.cpp
         src/h5_version.cpp
         src/h5_version.c
         src/h5_tools.c
@@ -15,3 +16,4 @@ INCLUDE_DIRECTORIES(SYSTEM ${HDF5_INCLUDE_DIR})
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
+ADD_SUBDIRECTORY(unit_tests)
