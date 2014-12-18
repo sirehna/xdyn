@@ -84,7 +84,8 @@ class RadiationDampingForceModel::Impl
 {
     public:
         Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, h(), builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)), K(),
-        omega(parser->get_radiation_damping_angular_frequencies()), taus(), n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max)
+        omega(parser->get_radiation_damping_angular_frequencies()), taus(), n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
+        H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y)
         {
             CSVWriter omega_writer(std::cerr, "omega", omega);
             taus = builder.build_regular_intervals(Tmin,Tmax,n);
@@ -141,14 +142,16 @@ class RadiationDampingForceModel::Impl
         ssc::kinematics::Wrench get_wrench(const Body& b, const double t)
         {
             save_state(b, t);
-            ssc::kinematics::Wrench ret(b.name);
-            ret.X() = get_convolution_for_axis(0);
-            ret.Y() = get_convolution_for_axis(1);
-            ret.Z() = get_convolution_for_axis(2);
-            ret.K() = get_convolution_for_axis(3);
-            ret.M() = get_convolution_for_axis(4);
-            ret.N() = get_convolution_for_axis(5);
-            return ret;
+            ssc::kinematics::Vector6d W;
+            const ssc::kinematics::Point H(b.name,H0);
+
+            W(0) = get_convolution_for_axis(0);
+            W(1) = get_convolution_for_axis(1);
+            W(2) = get_convolution_for_axis(2);
+            W(3) = get_convolution_for_axis(3);
+            W(4) = get_convolution_for_axis(4);
+            W(5) = get_convolution_for_axis(5);
+            return ssc::kinematics::Wrench(b.name,W);
         }
 
         void save_state(const Body& b, const double t)
@@ -172,6 +175,7 @@ class RadiationDampingForceModel::Impl
         size_t n;
         double Tmin;
         double Tmax;
+        Eigen::Vector3d H0;
 };
 
 
