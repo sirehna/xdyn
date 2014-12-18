@@ -100,6 +100,7 @@ SurfaceElevationPtr SimulatorBuilder::get_wave() const
     SurfaceElevationPtr ret;
     for (auto that_model=input.environment.begin() ; that_model != input.environment.end() ; ++that_model)
     {
+        bool wave_model_successfully_parsed = false;
         for (auto that_parser=surface_elevation_parsers.begin() ; that_parser != surface_elevation_parsers.end() ; ++that_parser)
         {
             boost::optional<SurfaceElevationPtr> w = (*that_parser)->try_to_parse(that_model->model, that_model->yaml);
@@ -110,7 +111,12 @@ SurfaceElevationPtr SimulatorBuilder::get_wave() const
                     THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "More than one wave model was defined.");
                 }
                 ret = w.get();
+                wave_model_successfully_parsed = true;
             }
+        }
+        if (not(wave_model_successfully_parsed))
+        {
+            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("Could not parse wave model '") + that_model->model + "'");
         }
     }
     return ret;
