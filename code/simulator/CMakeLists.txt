@@ -7,6 +7,7 @@ set(SRC src/simulator_api.cpp
         src/SimulatorBuilder.cpp
         src/SimObserver.cpp
         src/SimCsvObserver.cpp
+        src/SimHdf5Observer.cpp
         src/SimNoObserver.cpp
         src/OutputTransformer.cpp
         src/Res.cpp
@@ -34,6 +35,8 @@ include_directories(${model_wrappers_INCLUDE_DIRS})
 include_directories(${parser_extensions_INCLUDE_DIRS})
 include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
+include_directories(${interface_hdf5_INCLUDE_DIRS})
+include_directories(SYSTEM ${HDF5_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
 

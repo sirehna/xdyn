@@ -7,6 +7,7 @@ FILE(GLOB SRC src/SimTest.cpp
               src/SimulatorBuilderTest.cpp
               src/OutputTransformerTest.cpp
               src/SimCsvObserverTest.cpp
+              src/SimHdf5ObserverTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
