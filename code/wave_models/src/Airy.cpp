@@ -65,7 +65,7 @@ double Airy::evaluate_rao(const double x, //!< x-position of the RAO's calculati
             const double Dj = sqrt(spectrum.Dj[j]);
             const double psi = spectrum.psi[j];
             const double theta = rao_phase[i][j];
-            F += Aij*Dj*cos(omega*t - k*(x*cos(psi)+y*sin(psi)) + theta);
+            F += Aij*Dj*cos(omega*t - k*(x*cos(psi)+y*sin(psi)) + theta + spectrum.phase[i][j]);
         }
     }
     F *= sqrt(2*spectrum.domega*spectrum.dpsi);

@@ -1198,11 +1198,13 @@ de l'élévation de la surface libre :
 
 $$F_k(x_H,y_H,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 {RAO^{k}}_{\mbox{module}}(\omega_i,\psi_j)\sqrt{\Delta\omega\Delta\psi}\cos(k\cdot(x\cdot \cos(\psi_j)
-+ y\cdot \sin(\psi_j))-\omega_i\cdot t+{RAO^{k}}_{\mbox{phase}}(\omega_i,\psi_j))$$
++ y\cdot \sin(\psi_j))-\omega_i\cdot
+t+{RAO^{k}}_{\mbox{phase}}(\omega_i,\psi_j)+\phi_{ij})$$
 
 $x_H$ et $y_H$ désignent les coordonnées du [point de calcul des efforts
 hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique), $t$ est l'instant courant. Les $\omega_i$ et $\psi_j$
-correspondent à la discrétisation du spectre de houle.
+correspondent à la discrétisation du spectre de houle. $\phi_{ij}$ est une
+phase aléatoire (voir le [modèle de la houle d'Airy](#houle-dairy)).
 
 Le torseur calculé est ensuite déplacé au centre de gravité (repère body).
 
