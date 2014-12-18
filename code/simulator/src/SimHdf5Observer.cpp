@@ -17,6 +17,8 @@ H5::CompType H5_InterfaceResCreateId(const std::vector<std::string>& v);
 H5::CompType H5_InterfaceResCreateId(const std::size_t& n);
 H5::CompType H5_InterfaceResCreateId(const Sim& s);
 
+H5::CompType H5_InterfaceResCreateId(const VectorOfStringModelForEachBody& v);
+
 template<class T> std::string t_to_string(T i);
 template<class T> std::string t_to_string(T i)
 {
@@ -86,6 +88,45 @@ template <> void H5_Serialize<Res>::write(Res const * const data)
     memcpy(dataV+1,&data->x.at(0),data->x.size()*sizeof(double));
     dataset.write(dataV, this->get_type(), this->get_space(), fspace);
     delete dataV;
+}
+
+H5::CompType h5_createWrenchType();
+H5::CompType h5_createWrenchType()
+{
+    H5::CompType wrenchType = H5::CompType(6*sizeof(double));
+    wrenchType.insertMember("Fx", 0*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    wrenchType.insertMember("Fy", 1*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    wrenchType.insertMember("Fz", 2*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    wrenchType.insertMember("Mx", 3*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    wrenchType.insertMember("My", 4*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    wrenchType.insertMember("Mz", 5*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    return wrenchType;
+}
+
+H5::CompType H5_InterfaceResCreateId(const VectorOfStringModelForEachBody& v)
+{
+    size_t nModels = 0;
+    for (auto it = v.begin() ; it != v.end() ; ++it)
+    {
+        nModels += it->second.size();
+    }
+    H5::CompType mtype = H5::CompType(sizeof(double)+nModels*6*sizeof(double));
+    mtype.insertMember("t", 0, H5::PredType::NATIVE_DOUBLE);
+    size_t iGlobal = 0;
+    for (auto itBody = v.begin() ; itBody != v.end() ; ++itBody)
+    {
+        const auto body_name = itBody->first;
+        H5::CompType bodyType = H5::CompType(itBody->second.size()*6*sizeof(double));
+        size_t iModel = 0;
+        for (auto itModel = itBody->second.begin() ; itModel != itBody->second.end() ; ++itModel)
+        {
+            bodyType.insertMember(*itModel, iModel*6*sizeof(double), h5_createWrenchType());
+            ++iModel;
+            ++iGlobal;
+        }
+        mtype.insertMember(body_name, offsetof(Res, x)+iGlobal*6*sizeof(double), bodyType);
+    }
+    return mtype;
 }
 
 class SimHdf5Observer::Impl
