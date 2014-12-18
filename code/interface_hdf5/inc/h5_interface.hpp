@@ -32,17 +32,16 @@ template <typename T> class H5_Interface
                 h5Type(h5Type_)
         {
         }
+        virtual ~H5_Interface(){}
     protected:
         H5::CompType get_type() const
         {
             return h5Type;
         }
-
         H5::DataSpace get_space() const
         {
             return h5Space;
         }
-
     private:
         H5::CompType createId();
     protected:
