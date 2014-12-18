@@ -193,9 +193,9 @@ ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(model_wrappers)
+ADD_SUBDIRECTORY(interface_hdf5)
 ADD_SUBDIRECTORY(simulator)
 ADD_SUBDIRECTORY(parser_extensions)
-ADD_SUBDIRECTORY(interface_hdf5)
 ADD_SUBDIRECTORY(executables)
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED
