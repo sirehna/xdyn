@@ -23,6 +23,7 @@ class SimHdf5Observer
 {
     public:
 
+        SimHdf5Observer(const std::string& fileName, const Sim& s);
         SimHdf5Observer(const std::string& fileName, const std::string& baseName, const Sim& s);
         void observe(const Sim& sys, const double t);
         void observe(const Res& res);

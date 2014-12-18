@@ -93,13 +93,21 @@ class SimHdf5Observer::Impl
 {
     public:
         Impl(const std::string& fileName, const std::string& baseName, const Sim& s) :
-            sRes(fileName, baseName+"/states", H5_InterfaceResCreateId(s))
+            fileName_(fileName),h5File_(H5::H5File(fileName, H5F_ACC_TRUNC)),
+            sRes(h5File_, baseName.empty()?"states":baseName+"/states", H5_InterfaceResCreateId(s))
         {
         }
+
         void observe_states(const double t, const Sim& s);
         void observe_states(const Res& res);
+        std::string fileName_;
+        H5::H5File h5File_;
         H5_Serialize<Res> sRes;
 };
+
+SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const Sim& s) : pimpl(new Impl(fileName, "simu01", s))
+{
+}
 
 SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const std::string& baseName, const Sim& s) : pimpl(new Impl(fileName, baseName, s))
 {
