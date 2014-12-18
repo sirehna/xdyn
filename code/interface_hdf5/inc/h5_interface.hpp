@@ -152,7 +152,7 @@ template <typename T> class H5_Parse : public H5_Interface<T>
             }
             hsize_t nnz;
             dataspace.getSimpleExtentDims(&nnz);
-            std::vector<T> res(nnz);
+            std::vector<T> res((std::size_t)nnz);
             dataset.read(res.data(), this->get_type(), dataspace);
             return res;
         }
