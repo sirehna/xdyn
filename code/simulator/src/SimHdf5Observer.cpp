@@ -35,7 +35,6 @@ H5::CompType H5_InterfaceResCreateId(const std::vector<std::string>& v)
     mtype.insertMember("t", 0, H5::PredType::NATIVE_DOUBLE);
     for (size_t i=0;i<n;++i)
     {
-        const std::string str = v.at(i);
         H5::CompType statei = H5::CompType(NB_OF_STATES_PER_BODY*sizeof(double));
         statei.insertMember("X", XIDX(0)*sizeof(double), H5::PredType::NATIVE_DOUBLE);
         statei.insertMember("Y", YIDX(0)*sizeof(double), H5::PredType::NATIVE_DOUBLE);
@@ -52,7 +51,7 @@ H5::CompType H5_InterfaceResCreateId(const std::vector<std::string>& v)
         quaternionType.insertMember("Qj", 2*sizeof(double), H5::PredType::NATIVE_DOUBLE);
         quaternionType.insertMember("Qk", 3*sizeof(double), H5::PredType::NATIVE_DOUBLE);
         statei.insertMember("Quat",QRIDX(0)*sizeof(double), quaternionType);
-        mtype.insertMember("S"+str, offsetof(Res, x) + i*NB_OF_STATES_PER_BODY*sizeof(double), statei);
+        mtype.insertMember(v.at(i), offsetof(Res, x) + i*NB_OF_STATES_PER_BODY*sizeof(double), statei);
     }
     return mtype;
 }
