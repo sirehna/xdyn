@@ -17,6 +17,8 @@
 #include "ForceModel.hpp"
 #include "ControllableForceModel.hpp"
 
+typedef std::map<std::string,double> OuputtedForces;
+
 class Sim
 {
     public:
