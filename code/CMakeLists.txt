@@ -227,6 +227,7 @@ ADD_IMPORTED_LIB(csv_file_reader_shared)
 ADD_IMPORTED_LIB(exception_handling_shared)
 ADD_IMPORTED_LIB(data_source_shared)
 ADD_IMPORTED_LIB(interpolation_shared)
+ADD_IMPORTED_LIB(integrate_shared)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE gfortran)
