@@ -77,24 +77,18 @@ std::ostream& operator<< (std::ostream& stream, const ssc::kinematics::Vector6d&
 
 void SimCsvObserver::observe_forces(const Sim& sys)
 {
-    const auto f = sys.get_forces();
+    const auto f = sys.get_forces_as_a_vector_of_doubles();
     if (not(f.empty())) simulation_stream << ',';
-    const size_t n1 = f.size();
-    size_t i1 = 0;
-    for (auto it1 = f.begin() ; it1 != f.end() ; ++it1)
+    const size_t n = f.size();
+    size_t i = 0;
+    for (auto it = f.begin() ; it != f.end() ; ++it)
     {
-        const size_t n2 = it1->second.size();
-        size_t i2 = 0;
-        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
+        simulation_stream << *it;
+        if (i < (n-1))
         {
-            simulation_stream << it2->second;
-            if ((i1 < (n1-1)) || (i2<(n2-1)))
-            {
-                simulation_stream << ",";
-            }
-            ++i2;
+            simulation_stream << ",";
         }
-        ++i1;
+        ++i;
     }
 }
 
