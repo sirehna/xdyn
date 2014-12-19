@@ -12,7 +12,6 @@
 #include TR1INC(memory)
 #include <ssc/kinematics.hpp>
 
-#include <ostream>
 #include <string>
 #include <vector>
 
