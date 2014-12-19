@@ -12,7 +12,6 @@
 #define PI M_PI
 
 #include "HDBParser.hpp"
-#include "HDBData.hpp"
 #include "DiffractionInterpolatorTest.hpp"
 #include "hdb_data.hpp"
 
@@ -37,7 +36,7 @@ void DiffractionInterpolatorTest::TearDown()
 TEST_F(DiffractionInterpolatorTest, example)
 {
 //! [DiffractionInterpolatorTest example]
-    const HDBData data((HDBParser(test_data::anthineas_hdb())));
+    const HDBParser data(test_data::anthineas_hdb());
     std::vector<double> omegas = {1,2,3,3.5,3.8,4};
     std::vector<double> psis = {0,15,30,45,60,75,90,105,120,135,150,165,180,195};
     const bool mirror = true;

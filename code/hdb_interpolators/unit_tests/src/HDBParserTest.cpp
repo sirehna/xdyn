@@ -7,7 +7,6 @@
 
 #include "HDBParser.hpp"
 #include "HDBParserTest.hpp"
-#include "HDBData.hpp"
 #include "hdb_data.hpp"
 
 #define _USE_MATH_DEFINE
@@ -83,7 +82,7 @@ TEST_F(HDBParserTest, can_retrieve_radiation_damping)
 TEST_F(HDBParserTest, can_retrieve_initial_values)
 {
 //! [HDBDataTest example]
-    HDBData data((HDBParser(test_data::anthineas_hdb())));
+    HDBParser data(test_data::anthineas_hdb());
     //! [HDBDataTest example]
 
     //! [HDBDataTest expected output]
@@ -111,7 +110,7 @@ TEST_F(HDBParserTest, can_retrieve_initial_values)
 
 TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
 {
-    HDBData data((HDBParser(test_data::anthineas_hdb())));
+    HDBParser data(test_data::anthineas_hdb());
     const auto M = data.get_added_mass();
     ASSERT_EQ(6, M.cols());
     ASSERT_EQ(6, M.rows());
@@ -125,7 +124,7 @@ TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
 
 TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
 {
-    HDBData data((HDBParser(test_data::anthineas_hdb())));
+    HDBParser data(test_data::anthineas_hdb());
     const auto angular_frequencies = data.get_radiation_damping_angular_frequencies();
     ASSERT_EQ(6,        angular_frequencies.size());
     ASSERT_EQ(2*PI/1.,  angular_frequencies.at(5));
@@ -138,7 +137,7 @@ TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
 
 TEST_F(HDBParserTest, can_retrieve_vectors_for_each_element_in_radiation_damping_matrix)
 {
-    HDBData data((HDBParser(test_data::anthineas_hdb())));
+    HDBParser data(test_data::anthineas_hdb());
     for (size_t i = 0 ; i < 6 ; ++i)
     {
         for (size_t j = 0 ; j < 6 ; ++j)
@@ -157,7 +156,7 @@ TEST_F(HDBParserTest, can_retrieve_vectors_for_each_element_in_radiation_damping
 
 TEST_F(HDBParserTest, can_retrieve_vector_of_vectors_for_RAOs)
 {
-    const HDBData data((HDBParser(test_data::anthineas_hdb())));
+    HDBParser data(test_data::anthineas_hdb());
     const std::array<std::vector<std::vector<double> >,6 > module = data.get_diffraction_module_tables();
     const std::array<std::vector<std::vector<double> >,6 > phase = data.get_diffraction_phase_tables();
     ASSERT_EQ(6,std::get<0>(module).size());
@@ -190,7 +189,7 @@ TEST_F(HDBParserTest, can_retrieve_vector_of_vectors_for_RAOs)
 
 TEST_F(HDBParserTest, can_retrieve_omegas_for_RAOs)
 {
-    const HDBData data((HDBParser(test_data::anthineas_hdb())));
+    HDBParser data(test_data::anthineas_hdb());
     const std::vector<double> omegas1 = data.get_diffraction_phase_omegas();
     const std::vector<double> omegas2 = data.get_diffraction_module_omegas();
     ASSERT_EQ(6, omegas1.size());
@@ -212,7 +211,7 @@ TEST_F(HDBParserTest, can_retrieve_omegas_for_RAOs)
 
 TEST_F(HDBParserTest, can_retrieve_psis_for_RAOs)
 {
-    const HDBData data((HDBParser(test_data::anthineas_hdb())));
+    HDBParser data(test_data::anthineas_hdb());
     const std::vector<double> psi1 = data.get_diffraction_phase_psis();
     const std::vector<double> psi2 = data.get_diffraction_module_psis();
     ASSERT_EQ(13, psi1.size());

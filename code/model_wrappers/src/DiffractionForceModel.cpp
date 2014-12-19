@@ -16,7 +16,6 @@
 #include "DiffractionForceModelException.hpp"
 #include "DiffractionInterpolator.hpp"
 #include "HDBParser.hpp"
-#include "HDBData.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "YamlDiffraction.hpp"
 
@@ -38,7 +37,7 @@ class DiffractionForceModel::Impl
             if (env.w.use_count()>0)
             {
                 std::stringstream ss;
-                const HDBData hdb((HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,data.hdb_filename)).get_contents())));
+                const HDBParser hdb(ssc::text_file_reader::TextFileReader(data.hdb_filename).get_contents());
                 const auto omegas = env.w->get_wave_angular_frequency_for_each_model();
                 const auto omegas_hdb = hdb.get_diffraction_module_omegas();
                 for (auto o:omegas)

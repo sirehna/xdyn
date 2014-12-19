@@ -25,7 +25,7 @@
 class HDBParser::Impl
 {
     public:
-        Impl(const std::string& data) : omega_rad(), tree(hdb::parse(data)), M(), Br(), Tmin(0)
+        Impl(const std::string& data) : omega_rad(), tree(hdb::parse(data)), M(), Br(), Tmin(0), diffraction_module(get_diffraction_module()), diffraction_phase(get_diffraction_phase())
         {
             bool allow_queries_outside_bounds;
             const TimestampedMatrices Ma = get_added_mass_array();
@@ -154,6 +154,16 @@ class HDBParser::Impl
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
         }
 
+        std::array<std::vector<std::vector<double> >,6 > get_diffraction_module_tables() const
+        {
+            return diffraction_module.values;
+        }
+
+        std::array<std::vector<std::vector<double> >,6 > get_diffraction_phase_tables() const
+        {
+            return diffraction_phase.values;
+        }
+
         TimestampedMatrices get_added_mass_array() const
         {
             return get_matrix("Added_mass_Radiation_Damping", "ADDED_MASS_LINE");
@@ -188,6 +198,26 @@ class HDBParser::Impl
             return std::vector<double>(v.rbegin(), v.rend());
         }
 
+        std::vector<double> get_diffraction_phase_psis() const
+        {
+            return diffraction_phase.psi;
+        }
+
+        std::vector<double> get_diffraction_phase_omegas() const
+        {
+            return diffraction_phase.omega;
+        }
+
+        std::vector<double> get_diffraction_module_psis() const
+        {
+            return diffraction_module.psi;
+        }
+
+        std::vector<double> get_diffraction_module_omegas() const
+        {
+            return diffraction_module.omega;
+        }
+
         std::vector<double> omega_rad;
 
     private:
@@ -209,6 +239,8 @@ class HDBParser::Impl
         std::array<std::array<ssc::interpolation::SplineVariableStep,6>,6> M;
         std::array<std::array<std::vector<double>,6>,6> Br;
         double Tmin;
+        RAOData diffraction_module;
+        RAOData diffraction_phase;
 };
 
 
@@ -256,4 +288,34 @@ std::vector<double> HDBParser::get_radiation_damping_angular_frequencies() const
 std::vector<double> HDBParser::get_radiation_damping_coeff(const size_t i, const size_t j) const
 {
     return pimpl->get_radiation_damping_coeff(i, j);
+}
+
+std::array<std::vector<std::vector<double> >,6 > HDBParser::get_diffraction_module_tables() const
+{
+    return pimpl->get_diffraction_module_tables();
+}
+
+std::array<std::vector<std::vector<double> >,6 > HDBParser::get_diffraction_phase_tables() const
+{
+    return pimpl->get_diffraction_phase_tables();
+}
+
+std::vector<double> HDBParser::get_diffraction_phase_psis() const
+{
+    return pimpl->get_diffraction_phase_psis();
+}
+
+std::vector<double> HDBParser::get_diffraction_phase_omegas() const
+{
+    return pimpl->get_diffraction_phase_omegas();
+}
+
+std::vector<double> HDBParser::get_diffraction_module_psis() const
+{
+    return pimpl->get_diffraction_module_psis();
+}
+
+std::vector<double> HDBParser::get_diffraction_module_omegas() const
+{
+    return pimpl->get_diffraction_module_omegas();
 }
