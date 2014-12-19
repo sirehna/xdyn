@@ -332,3 +332,23 @@ TEST_F(SimTest, should_be_able_to_list_force_models_applying_on_each_body)
         }
     }
 }
+
+TEST_F(SimTest, should_be_able_to_return_the_forces_from_all_models_applying_on_each_body)
+{
+    const auto sys = get_system(test_data::falling_ball_example());
+    const auto m = sys.get_forces();
+    ASSERT_EQ(1,m.size());
+    for (auto it1 = m.begin() ; it1 != m.end() ; ++it1)
+    {
+        ASSERT_EQ("ball",it1->first);
+        ASSERT_EQ(1,it1->second.size());
+        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
+        {
+            ASSERT_EQ("gravity", it2->first);
+            for (size_t i=0;i<6;++i)
+            {
+                ASSERT_EQ(0.0, it2->second(i));
+            }
+        }
+    }
+}
