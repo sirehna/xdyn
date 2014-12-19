@@ -11,7 +11,6 @@
 #include "BodyBuilder.hpp"
 #include "BodyBuilderException.hpp"
 #include "HDBParser.hpp"
-#include "HDBParser.hpp"
 #include "MeshBuilder.hpp"
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
