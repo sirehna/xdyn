@@ -16,7 +16,6 @@
 #include <vector>
 
 class Sim;
-class Res;
 
 class SimHdf5Observer
 {
@@ -25,7 +24,9 @@ class SimHdf5Observer
         SimHdf5Observer(const std::string& fileName, const Sim& s);
         SimHdf5Observer(const std::string& fileName, const std::string& baseName, const Sim& s);
         void observe(const Sim& sys, const double t);
-        void observe(const Res& res);
+        void observe_states(const Sim& sys, const double t);
+        void observe_efforts(const Sim& sys, const double t);
+
 
     private:
         SimHdf5Observer(); // Disabled

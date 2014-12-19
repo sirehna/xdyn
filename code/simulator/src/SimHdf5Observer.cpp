@@ -10,14 +10,18 @@
 
 #include "SimHdf5Observer.hpp"
 #include "Sim.hpp"
-#include "Res.hpp"
 #include "h5_interface.hpp"
 
-H5::CompType H5_InterfaceResCreateId(const std::vector<std::string>& v);
-H5::CompType H5_InterfaceResCreateId(const std::size_t& n);
-H5::CompType H5_InterfaceResCreateId(const Sim& s);
+struct H5Res
+{
+    double t; //<! Instant at which the states correspond
+    std::vector<double> v; //<! Values of the states of the system
+    H5Res() : t(0), v(){}
+    H5Res(const double t_, const std::vector<double>& v_):t(t_),v(v_){}
+};
 
-H5::CompType H5_InterfaceResCreateId(const VectorOfStringModelForEachBody& v);
+H5::CompType H5_InterfaceH5ResCreateId(const std::vector<std::string>& v);
+H5::CompType H5_InterfaceH5ResCreateId(const VectorOfStringModelForEachBody& v);
 
 template<class T> std::string t_to_string(T i);
 template<class T> std::string t_to_string(T i)
@@ -30,7 +34,7 @@ template<class T> std::string t_to_string(T i)
 }
 template<size_t> std::string t_to_string(size_t x);
 
-H5::CompType H5_InterfaceResCreateId(const std::vector<std::string>& v)
+H5::CompType H5_InterfaceH5ResCreateId(const std::vector<std::string>& v)
 {
     const size_t n = v.size();
     H5::CompType mtype = H5::CompType(sizeof(double)+n*NB_OF_STATES_PER_BODY*sizeof(double));
@@ -53,30 +57,15 @@ H5::CompType H5_InterfaceResCreateId(const std::vector<std::string>& v)
         quaternionType.insertMember("Qj", 2*sizeof(double), H5::PredType::NATIVE_DOUBLE);
         quaternionType.insertMember("Qk", 3*sizeof(double), H5::PredType::NATIVE_DOUBLE);
         statei.insertMember("Quat",QRIDX(0)*sizeof(double), quaternionType);
-        mtype.insertMember(v.at(i), offsetof(Res, x) + i*NB_OF_STATES_PER_BODY*sizeof(double), statei);
+        mtype.insertMember(v.at(i), offsetof(H5Res, v) + i*NB_OF_STATES_PER_BODY*sizeof(double), statei);
     }
     return mtype;
 }
 
-H5::CompType H5_InterfaceResCreateId(const std::size_t& n)
-{
-    std::vector<std::string> v(n);
-    for (size_t i=0;i<n;++i)
-    {
-        v.at(i) = "body" + t_to_string(i);
-    }
-    return H5_InterfaceResCreateId(v);
-}
-
-H5::CompType H5_InterfaceResCreateId(const Sim& s)
-{
-    return H5_InterfaceResCreateId(s.get_names_of_bodies());
-}
-
-template <> void H5_Serialize<Res>::write(Res const * const data)
+template <> void H5_Serialize<H5Res>::write(H5Res const * const data)
 {
     const hsize_t dims[1] = {(hsize_t)1};
-    double * dataV = new double[1+data->x.size()];
+    double * dataV = new double[1+data->v.size()];
     hsize_t offset[1];
     hsize_t size[1];
     offset[0] = n;
@@ -85,7 +74,7 @@ template <> void H5_Serialize<Res>::write(Res const * const data)
     H5::DataSpace fspace = dataset.getSpace();
     fspace.selectHyperslab(H5S_SELECT_SET, dims, offset);
     dataV[0] = data->t;
-    memcpy(dataV+1,&data->x.at(0),data->x.size()*sizeof(double));
+    memcpy(dataV+1,&data->v.at(0),data->v.size()*sizeof(double));
     dataset.write(dataV, this->get_type(), this->get_space(), fspace);
     delete dataV;
 }
@@ -103,7 +92,7 @@ H5::CompType h5_createWrenchType()
     return wrenchType;
 }
 
-H5::CompType H5_InterfaceResCreateId(const VectorOfStringModelForEachBody& v)
+H5::CompType H5_InterfaceH5ResCreateId(const VectorOfStringModelForEachBody& v)
 {
     size_t nModels = 0;
     for (auto it = v.begin() ; it != v.end() ; ++it)
@@ -122,27 +111,31 @@ H5::CompType H5_InterfaceResCreateId(const VectorOfStringModelForEachBody& v)
         {
             bodyType.insertMember(*itModel, iModel*6*sizeof(double), h5_createWrenchType());
             ++iModel;
-            ++iGlobal;
         }
-        mtype.insertMember(body_name, offsetof(Res, x)+iGlobal*6*sizeof(double), bodyType);
+        mtype.insertMember(body_name, offsetof(H5Res, v)+iGlobal*6*sizeof(double), bodyType);
+        iGlobal += iModel;
     }
     return mtype;
 }
+
+typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 
 class SimHdf5Observer::Impl
 {
     public:
         Impl(const std::string& fileName, const std::string& baseName, const Sim& s) :
             fileName_(fileName),h5File_(H5::H5File(fileName, H5F_ACC_TRUNC)),
-            sRes(h5File_, baseName.empty()?"states":baseName+"/states", H5_InterfaceResCreateId(s))
+            sStates(h5File_, baseName.empty()?"states":baseName+"/states", H5_InterfaceH5ResCreateId(s.get_names_of_bodies())),
+            sEfforts(h5File_, baseName.empty()?"efforts":baseName+"/efforts", H5_InterfaceH5ResCreateId(s.get_vector_of_string_model_for_each_body()))
         {
         }
 
         void observe_states(const double t, const Sim& s);
-        void observe_states(const Res& res);
+        void observe_efforts(const double t, const Sim& s);
         std::string fileName_;
         H5::H5File h5File_;
-        H5_Serialize<Res> sRes;
+        H5_Serialize<H5Res> sStates;
+        H5_Serialize<H5Res> sEfforts;
 };
 
 SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const Sim& s) : pimpl(new Impl(fileName, "simu01", s))
@@ -155,21 +148,28 @@ SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const std::string&
 
 void SimHdf5Observer::Impl::observe_states(const double t, const Sim& s)
 {
-    const Res res(t, s.state);
-    sRes << res;
+    const H5Res res(t, s.state);
+    sStates << res;
 }
 
-void SimHdf5Observer::Impl::observe_states(const Res& res)
+void SimHdf5Observer::Impl::observe_efforts(const double t, const Sim& s)
 {
-    sRes << res;
-}
-
-void SimHdf5Observer::observe(const Res& res)
-{
-    pimpl->observe_states(res);
+    const H5Res res(t, s.get_forces_as_a_vector_of_doubles());
+    sEfforts << res;
 }
 
 void SimHdf5Observer::observe(const Sim& sys, const double t)
 {
     pimpl->observe_states(t, sys);
+    pimpl->observe_efforts(t, sys);
+}
+
+void SimHdf5Observer::observe_states(const Sim& sys, const double t)
+{
+    pimpl->observe_states(t, sys);
+}
+
+void SimHdf5Observer::observe_efforts(const Sim& sys, const double t)
+{
+    pimpl->observe_efforts(t, sys);
 }
