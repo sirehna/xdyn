@@ -14,7 +14,7 @@
 class SimHdf5ObserverTest : public ::testing::Test
 {
     protected:
-    SimHdf5ObserverTest();
+        SimHdf5ObserverTest();
         virtual ~SimHdf5ObserverTest();
         virtual void SetUp();
         virtual void TearDown();

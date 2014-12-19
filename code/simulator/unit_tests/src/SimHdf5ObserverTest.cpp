@@ -41,3 +41,4 @@ TEST_F(SimHdf5ObserverTest, can_simulate_system_with_no_environment)
     }
     EXPECT_EQ(0,remove(fileName.c_str()));
 }
+
