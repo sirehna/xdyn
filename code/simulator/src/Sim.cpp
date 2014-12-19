@@ -128,6 +128,21 @@ OuputtedForces Sim::get_forces() const
     return pimpl->outputted_forces;
 }
 
+std::vector<double> Sim::get_forces_as_a_vector_of_doubles() const
+{
+    std::vector<double> ret;
+    const auto m = pimpl->outputted_forces;
+    for (auto it1 = m.begin() ; it1 != m.end() ; ++it1)
+    {
+        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
+        {
+            const std::vector<double> mm(it2->second.data(),it2->second.data()+6);
+            ret.insert(ret.end(), mm.begin(), mm.end());
+        }
+    }
+    return ret;
+}
+
 void Sim::fill_force_map_with_zeros(OuputtedForces& m) const
 {
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
