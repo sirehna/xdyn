@@ -28,6 +28,7 @@ class HDBParser
 {
     public:
         HDBParser(const std::string& data);
+        virtual ~HDBParser();
         TimestampedMatrices get_added_mass_array() const;
         TimestampedMatrices get_radiation_damping_array() const;
         RAOData get_diffraction_module() const;
@@ -35,8 +36,8 @@ class HDBParser
         Eigen::Matrix<double,6,6> get_added_mass() const;
         Eigen::Matrix<double,6,6> get_added_mass(const double Tp //!< Period at which to interpolate the added mass
                                                 ) const; // const doesn't really mean anything here as the members are hidden inside a pimpl
-        std::vector<double> get_radiation_damping_angular_frequencies() const;
-        std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const;
+        virtual std::vector<double> get_radiation_damping_angular_frequencies() const;
+        virtual std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const;
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_module_tables() const;
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_phase_tables() const;
         std::vector<double> get_diffraction_phase_psis() const;
@@ -44,8 +45,10 @@ class HDBParser
         std::vector<double> get_diffraction_module_psis() const;
         std::vector<double> get_diffraction_module_omegas() const;
 
-    private:
+    protected:
         HDBParser();
+
+    private:
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;
 };

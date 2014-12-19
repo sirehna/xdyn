@@ -25,6 +25,10 @@
 class HDBParser::Impl
 {
     public:
+        Impl() : omega_rad(), tree(), M(), Br(), Tmin(0), diffraction_module(), diffraction_phase()
+        {
+        }
+
         Impl(const std::string& data) : omega_rad(), tree(hdb::parse(data)), M(), Br(), Tmin(0), diffraction_module(get_diffraction_module()), diffraction_phase(get_diffraction_phase())
         {
             bool allow_queries_outside_bounds;
@@ -245,6 +249,14 @@ class HDBParser::Impl
 
 
 HDBParser::HDBParser(const std::string& data) : pimpl(new Impl(data))
+{
+}
+
+HDBParser::HDBParser() : pimpl(new Impl())
+{
+}
+
+HDBParser::~HDBParser()
 {
 }
 
