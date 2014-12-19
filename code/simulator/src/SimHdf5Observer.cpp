@@ -20,21 +20,27 @@ struct H5Res
     H5Res(const double t_, const std::vector<double>& v_):t(t_),v(v_){}
 };
 
-H5::CompType H5_InterfaceH5ResCreateId(const std::vector<std::string>& v);
-H5::CompType H5_InterfaceH5ResCreateId(const VectorOfStringModelForEachBody& v);
+H5::CompType H5_CreateIdStates(const VectorOfStringModelForEachBody& v);
+H5::CompType H5_CreateIdEfforts(const VectorOfStringModelForEachBody& v);
 
-template<class T> std::string t_to_string(T i);
-template<class T> std::string t_to_string(T i)
+template <> void H5_Serialize<H5Res>::write(H5Res const * const data)
 {
-    std::ostringstream ss;
-    std::string s;
-    ss << i;
-    s = ss.str();
-    return s;
+    const hsize_t dims[1] = {(hsize_t)1};
+    double * dataV = new double[1+data->v.size()];
+    hsize_t offset[1];
+    hsize_t size[1];
+    offset[0] = n;
+    size[0] = ++n;
+    dataset.extend(size);
+    H5::DataSpace fspace = dataset.getSpace();
+    fspace.selectHyperslab(H5S_SELECT_SET, dims, offset);
+    dataV[0] = data->t;
+    memcpy(dataV+1,&data->v.at(0),data->v.size()*sizeof(double));
+    dataset.write(dataV, this->get_type(), this->get_space(), fspace);
+    delete dataV;
 }
-template<size_t> std::string t_to_string(size_t x);
 
-H5::CompType H5_InterfaceH5ResCreateId(const std::vector<std::string>& v)
+H5::CompType H5_CreateIdStates(const VectorOfStringModelForEachBody& v)
 {
     const size_t n = v.size();
     H5::CompType mtype = H5::CompType(sizeof(double)+n*NB_OF_STATES_PER_BODY*sizeof(double));
@@ -57,27 +63,11 @@ H5::CompType H5_InterfaceH5ResCreateId(const std::vector<std::string>& v)
         quaternionType.insertMember("Qj", 2*sizeof(double), H5::PredType::NATIVE_DOUBLE);
         quaternionType.insertMember("Qk", 3*sizeof(double), H5::PredType::NATIVE_DOUBLE);
         statei.insertMember("Quat",QRIDX(0)*sizeof(double), quaternionType);
-        mtype.insertMember(v.at(i), offsetof(H5Res, v) + i*NB_OF_STATES_PER_BODY*sizeof(double), statei);
+        mtype.insertMember(v.at(i).first, offsetof(H5Res, v) + i*NB_OF_STATES_PER_BODY*sizeof(double), statei);
     }
     return mtype;
 }
 
-template <> void H5_Serialize<H5Res>::write(H5Res const * const data)
-{
-    const hsize_t dims[1] = {(hsize_t)1};
-    double * dataV = new double[1+data->v.size()];
-    hsize_t offset[1];
-    hsize_t size[1];
-    offset[0] = n;
-    size[0] = ++n;
-    dataset.extend(size);
-    H5::DataSpace fspace = dataset.getSpace();
-    fspace.selectHyperslab(H5S_SELECT_SET, dims, offset);
-    dataV[0] = data->t;
-    memcpy(dataV+1,&data->v.at(0),data->v.size()*sizeof(double));
-    dataset.write(dataV, this->get_type(), this->get_space(), fspace);
-    delete dataV;
-}
 
 H5::CompType h5_createWrenchType();
 H5::CompType h5_createWrenchType()
@@ -92,7 +82,7 @@ H5::CompType h5_createWrenchType()
     return wrenchType;
 }
 
-H5::CompType H5_InterfaceH5ResCreateId(const VectorOfStringModelForEachBody& v)
+H5::CompType H5_CreateIdEfforts(const VectorOfStringModelForEachBody& v)
 {
     size_t nModels = 0;
     for (auto it = v.begin() ; it != v.end() ; ++it)
@@ -123,10 +113,10 @@ typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > 
 class SimHdf5Observer::Impl
 {
     public:
-        Impl(const std::string& fileName, const std::string& baseName, const Sim& s) :
+        Impl(const std::string& fileName, const std::string& baseName, const VectorOfStringModelForEachBody& s) :
             fileName_(fileName),h5File_(H5::H5File(fileName, H5F_ACC_TRUNC)),
-            sStates(h5File_, baseName.empty()?"states":baseName+"/states", H5_InterfaceH5ResCreateId(s.get_names_of_bodies())),
-            sEfforts(h5File_, baseName.empty()?"efforts":baseName+"/efforts", H5_InterfaceH5ResCreateId(s.get_vector_of_string_model_for_each_body()))
+            sStates(h5File_, baseName.empty()?"states":baseName+"/states", H5_CreateIdStates(s)),
+            sEfforts(h5File_, baseName.empty()?"efforts":baseName+"/efforts", H5_CreateIdEfforts(s))
         {
         }
 
@@ -136,13 +126,14 @@ class SimHdf5Observer::Impl
         H5::H5File h5File_;
         H5_Serialize<H5Res> sStates;
         H5_Serialize<H5Res> sEfforts;
+
 };
 
-SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const Sim& s) : pimpl(new Impl(fileName, "simu01", s))
+SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const Sim& s) : pimpl(new Impl(fileName, "simu01", s.get_vector_of_string_model_for_each_body()))
 {
 }
 
-SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const std::string& baseName, const Sim& s) : pimpl(new Impl(fileName, baseName, s))
+SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const std::string& baseName, const Sim& s) : pimpl(new Impl(fileName, baseName, s.get_vector_of_string_model_for_each_body()))
 {
 }
 
