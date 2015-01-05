@@ -189,7 +189,6 @@ ADD_SUBDIRECTORY(binary_stl_data)
 ADD_SUBDIRECTORY(mesh)
 ADD_SUBDIRECTORY(wave_models)
 ADD_SUBDIRECTORY(simulator_yaml_parser)
-ADD_SUBDIRECTORY(hydro_models)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(model_wrappers)
@@ -204,7 +203,6 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:model_wrappers>
         $<TARGET_OBJECTS:wave_models>
         $<TARGET_OBJECTS:external_file_formats>
-        $<TARGET_OBJECTS:hydro_models>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:simulator_yaml_parser>
         $<TARGET_OBJECTS:simulator_external_data_structures>
@@ -247,7 +245,6 @@ ENDIF(BUILD_TESTING)
 SET(TEST_EXE run_all_tests)
 
 ADD_EXECUTABLE(${TEST_EXE}
-        #$<TARGET_OBJECTS:hydro_models_tests>
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>

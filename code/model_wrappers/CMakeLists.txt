@@ -23,6 +23,7 @@ set(SRC src/Body.cpp
         src/ResistanceCurveForceModel.cpp
         src/DiffractionForceModel.cpp
         src/RadiationDampingForceModel.cpp
+        src/EnvironmentAndFrames.cpp
         )
 
 # Using C++ 2011
