@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.8)
-project(simulator)
+project(core)
 
 set(SRC src/simulator_api.cpp
         src/update_kinematics.cpp

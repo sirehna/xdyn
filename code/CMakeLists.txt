@@ -193,12 +193,12 @@ ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(model_wrappers)
 ADD_SUBDIRECTORY(interface_hdf5)
-ADD_SUBDIRECTORY(simulator)
+ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(parser_extensions)
 ADD_SUBDIRECTORY(executables)
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED
-        $<TARGET_OBJECTS:simulator>
+        $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:parser_extensions>
         $<TARGET_OBJECTS:model_wrappers>
         $<TARGET_OBJECTS:wave_models>
@@ -248,7 +248,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:simulator_yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>
-        $<TARGET_OBJECTS:simulator_tests>
+        $<TARGET_OBJECTS:core_tests>
         $<TARGET_OBJECTS:wave_models_tests>
         $<TARGET_OBJECTS:kissfft_static>
         $<TARGET_OBJECTS:model_wrappers_tests>

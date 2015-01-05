@@ -16,7 +16,7 @@ ENDIF()
 
 include_directories(inc)
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
-include_directories(${simulator_INCLUDE_DIRS})
+include_directories(${core_INCLUDE_DIRS})
 include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
 include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
