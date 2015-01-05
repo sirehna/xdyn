@@ -25,8 +25,12 @@ class WaveModel;
 class SurfaceElevationFromWaves : public SurfaceElevationInterface
 {
     public:
-        SurfaceElevationFromWaves(const std::vector<TR1(shared_ptr)<WaveModel> >& models, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh = TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix("NED", 0)));
-        SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh = TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix("NED", 0)));
+        SurfaceElevationFromWaves(
+                const std::vector<TR1(shared_ptr)<WaveModel> >& models,
+                const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh = TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix("NED", 0)));
+        SurfaceElevationFromWaves(
+                const TR1(shared_ptr)<WaveModel>& model,
+                const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh = TR1(shared_ptr)<ssc::kinematics::PointMatrix>(new ssc::kinematics::PointMatrix("NED", 0)));
 
         /**
          *  \section ex1 Example
