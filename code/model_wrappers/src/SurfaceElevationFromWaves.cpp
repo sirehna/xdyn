@@ -7,15 +7,33 @@
 
 #include <boost/foreach.hpp>
 
+#include <ssc/exception_handling.hpp>
+
 #include "WaveModel.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 
-SurfaceElevationFromWaves::SurfaceElevationFromWaves(const std::vector<TR1(shared_ptr)<WaveModel> >& models_, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) : SurfaceElevationInterface(output_mesh_), models(models_)
+SurfaceElevationFromWaves::SurfaceElevationFromWaves(
+        const std::vector<TR1(shared_ptr)<WaveModel> >& models_,
+        const std::pair<std::size_t,std::size_t> output_mesh_size_,
+        const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) :
+                SurfaceElevationInterface(output_mesh_), models(models_), output_mesh_size(output_mesh_size_)
 {
+    if(output_mesh_size.first*output_mesh_size.second != (std::size_t)output_mesh_->m.cols())
+    {
+        THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"Number of columns in PointMatrix input should match the product of Nx*Ny");
+    }
 }
 
-SurfaceElevationFromWaves::SurfaceElevationFromWaves(const TR1(shared_ptr)<WaveModel>& model, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) : SurfaceElevationInterface(output_mesh_), models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model))
+SurfaceElevationFromWaves::SurfaceElevationFromWaves(
+        const TR1(shared_ptr)<WaveModel>& model,
+        const std::pair<std::size_t,std::size_t> output_mesh_size_,
+        const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) :
+                SurfaceElevationInterface(output_mesh_), models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model)), output_mesh_size(output_mesh_size_)
 {
+    if(output_mesh_size.first*output_mesh_size.second != (std::size_t)output_mesh_->m.cols())
+    {
+        THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"Number of columns in PointMatrix input should match the product of Nx*Ny");
+    }
 }
 
 double SurfaceElevationFromWaves::wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame

@@ -202,7 +202,7 @@ boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBui
         const auto output_mesh = make_wave_mesh(input.output);
         std::vector<TR1(shared_ptr)<WaveModel> > models;
         BOOST_FOREACH(YamlSpectra spectrum, input.spectra) models.push_back(parse_wave_model(input.discretization, spectrum));
-        ret.reset(TR1(shared_ptr)<SurfaceElevationInterface>(new SurfaceElevationFromWaves(models,output_mesh)));
+        ret.reset(TR1(shared_ptr)<SurfaceElevationInterface>(new SurfaceElevationFromWaves(models,get_wave_mesh_size(input.output),output_mesh)));
     }
     return ret;
 }
