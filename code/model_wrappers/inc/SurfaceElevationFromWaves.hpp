@@ -49,8 +49,8 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
         double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
                             const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
                             const double t, //!< Current time instant (in seconds)
-                            const std::vector<std::vector<std::vector<double> > >& rao_module, //<! Module of the RAO
-                            const std::vector<std::vector<std::vector<double> > >& rao_phase //<! Phase of the RAO
+                            const std::vector<std::vector<std::vector<double> > >& rao_module, //!< Module of the RAO
+                            const std::vector<std::vector<std::vector<double> > >& rao_phase //!< Phase of the RAO
                              ) const;
 
         std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
