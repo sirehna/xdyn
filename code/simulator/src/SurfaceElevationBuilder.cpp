@@ -13,10 +13,27 @@ SurfaceElevationBuilderInterface::~SurfaceElevationBuilderInterface()
 {
 }
 
-TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationBuilderInterface::make_wave_mesh(const YamlWaveOutput& output) const
+std::pair<double,double> get_wave_mesh_step_size(const YamlWaveOutput& output);
+std::pair<double,double> get_wave_mesh_step_size(const YamlWaveOutput& output)
 {
     const double dx = (output.xmax-output.xmin)/(double)(output.nx > 1 ? output.nx-1 : 1);
     const double dy = (output.ymax-output.ymin)/(double)(output.ny > 1 ? output.ny-1 : 1);
+    return std::make_pair(dx,dy);
+}
+
+std::pair<std::size_t,std::size_t> SurfaceElevationBuilderInterface::get_wave_mesh_size(const YamlWaveOutput& output) const
+{
+    const std::pair<double,double> dxdy = get_wave_mesh_step_size(output);
+    const size_t nx = (dxdy.first==0 and output.nx) ? 1 : output.nx;
+    const size_t ny = (dxdy.second==0 and output.ny) ? 1 : output.ny;
+    return std::make_pair(nx,ny);
+}
+
+TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationBuilderInterface::make_wave_mesh(const YamlWaveOutput& output) const
+{
+    const std::pair<double,double> dxdy = get_wave_mesh_step_size(output);
+    const double dx = dxdy.first;
+    const double dy = dxdy.second;
     const size_t nx = (dx==0 and output.nx) ? 1 : output.nx;
     const size_t ny = (dy==0 and output.ny) ? 1 : output.ny;
     ssc::kinematics::PointMatrix M(output.frame_of_reference, nx*ny);
