@@ -5,6 +5,7 @@
 #include "StlReader.hpp"
 #include <ssc/text_file_reader.hpp>
 #include "base91x.hpp"
+#include "stl_writer.hpp"
 
 std::string description();
 std::string description()

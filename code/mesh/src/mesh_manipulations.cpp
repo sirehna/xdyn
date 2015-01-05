@@ -209,44 +209,6 @@ bool oriented_clockwise(const VectorOfPoints& facet, //!< Points to convert
     return n.dot(C-G)<=0;
 }
 
-void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
-{
-    //const std::string header(80, ' ');
-    //os.write(header.c_str(), 80);
-    for (size_t i = 0 ; i < 80 ; ++i) os.put(1);
-    const unsigned int nFaces = (unsigned int)stl.size();
-    os.write(reinterpret_cast<const char*>(&nFaces), sizeof(nFaces));
-
-    typedef unsigned short uint16;
-    const uint16 spacer = 0;
-    // Every Face is 50 Bytes: Normal(3*float), Vertices(9*float), 2 Bytes Spacer
-    for (size_t i=0; i<nFaces; ++i)
-    {
-        Eigen::Matrix3d M;
-        for (size_t j = 0 ; j < 3 ; ++j)
-        {
-            for (size_t k = 0 ; k < 3 ; ++k) M((int)k,(int)j) = stl[i][j]((int)k);
-        }
-        const Eigen::Vector3d normal = unit_normal(M);
-        float x = (float)normal(0);
-        float y = (float)normal(1);
-        float z = (float)normal(2);
-        os.write(reinterpret_cast<const char*>(&x), 4);
-        os.write(reinterpret_cast<const char*>(&y), sizeof(float));
-        os.write(reinterpret_cast<const char*>(&z), sizeof(float));
-        for (int j = 0 ; j < 3 ; ++j)
-        {
-            float x = (float)M(0,j);
-            float y = (float)M(1,j);
-            float z = (float)M(2,j);
-            os.write(reinterpret_cast<const char*>(&x), 4);
-            os.write(reinterpret_cast<const char*>(&y), 4);
-            os.write(reinterpret_cast<const char*>(&z), 4);
-        }
-        os.write(reinterpret_cast<const char*>(&spacer), 2);
-    }
-}
-
 Eigen::Matrix3d inertia_of_triangle(
         const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
         const EPoint vertex2,  //!< second vertex of triangle
