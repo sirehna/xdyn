@@ -6,7 +6,6 @@
  */
 
 #include "hydrostatic.hpp"
-#include "HydrostaticException.hpp"
 #include <ssc/numeric.hpp>
 #include "mesh_manipulations.hpp"
 

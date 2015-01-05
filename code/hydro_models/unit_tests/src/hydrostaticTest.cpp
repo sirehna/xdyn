@@ -7,7 +7,6 @@
 
 #include "hydrostaticTest.hpp"
 #include "hydrostatic.hpp"
-#include "HydrostaticException.hpp"
 #include "TriMeshTestData.hpp"
 #include "MeshBuilder.hpp"
 #include "MeshIntersector.hpp"
