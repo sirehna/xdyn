@@ -10,7 +10,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
 SET(SRC 
-        src/hydrostatic.cpp
         src/EnvironmentAndFrames.cpp
         )
 
@@ -24,5 +23,3 @@ INCLUDE_DIRECTORIES(${wave_models_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
-
-ADD_SUBDIRECTORY(unit_tests)
