@@ -9,7 +9,7 @@
 #include "GravityForceModel.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "Body.hpp"
-#include "hydrostatic.hpp"
+
 #include <ssc/kinematics.hpp>
 
 GravityForceModel::Input::Input() : g(0),
