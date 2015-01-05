@@ -41,7 +41,7 @@ include_directories(${external_data_structures_INCLUDE_DIRS})
 include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
-include_directories(${simulator_yaml_parser_INCLUDE_DIRS})
+include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${hdb_interpolators_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 

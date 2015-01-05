@@ -1,5 +1,5 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-set(MODULE_UNDER_TEST simulator_yaml_parser)
+set(MODULE_UNDER_TEST yaml_parser)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/SimulatorYamlParserTest.cpp
               src/force_parsersTest.cpp
