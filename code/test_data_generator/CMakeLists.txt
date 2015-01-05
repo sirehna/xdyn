@@ -8,7 +8,7 @@ SET(SRC src/hdb_data.cpp
     )
 
 INCLUDE_DIRECTORIES(inc)
-INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
-PROJECT(simulator_external_data_structures)
+PROJECT(external_data_structures)
 
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 

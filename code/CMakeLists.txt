@@ -182,7 +182,7 @@ INCLUDE(CMakeHdf5)
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
 ADD_SUBDIRECTORY(base91x)
-ADD_SUBDIRECTORY(simulator_external_data_structures)
+ADD_SUBDIRECTORY(external_data_structures)
 ADD_SUBDIRECTORY(test_data_generator)
 ADD_SUBDIRECTORY(external_file_formats)
 ADD_SUBDIRECTORY(binary_stl_data)
@@ -205,7 +205,7 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:simulator_yaml_parser>
-        $<TARGET_OBJECTS:simulator_external_data_structures>
+        $<TARGET_OBJECTS:external_data_structures>
         $<TARGET_OBJECTS:hdb_interpolators>
         $<TARGET_OBJECTS:interface_hdf5>
         )

@@ -24,7 +24,7 @@ ENDIF()
 
 include_directories(inc)
 include_directories(${ssc_INCLUDE_DIRS})
-include_directories(${simulator_external_data_structures_INCLUDE_DIRS})
+include_directories(${external_data_structures_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${external_file_formats_INCLUDE_DIRS})

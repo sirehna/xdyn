@@ -9,7 +9,7 @@ SET(SRC src/Mesh.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
-INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})

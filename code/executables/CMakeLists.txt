@@ -15,7 +15,7 @@ INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${boost_program_options_descriptions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${simulator_external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_yaml_parser_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
@@ -48,7 +48,7 @@ ADD_EXECUTABLE(test_hs src/test_hs.cpp $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:simulator_yaml_parser>
-        $<TARGET_OBJECTS:simulator_external_data_structures>)
+        $<TARGET_OBJECTS:external_data_structures>)
 TARGET_LINK_LIBRARIES(test_hs simulatorIrtJv binary_stl_data_static base91x_static
 )
 
