@@ -92,7 +92,8 @@ boost::optional<ForcePtr> ForceBuilder<LinearDampingForceModel>::try_to_parse(co
     boost::optional<ForcePtr> ret;
     if (model == "linear damping")
     {
-        ret.reset(ForcePtr(new LinearDampingForceModel(parse_quadratic_damping(yaml))));
+        EnvironmentAndFrames env;
+        ret.reset(ForcePtr(new LinearDampingForceModel(parse_quadratic_damping(yaml),env)));
     }
     return ret;
 }

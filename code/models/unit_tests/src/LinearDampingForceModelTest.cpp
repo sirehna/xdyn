@@ -7,6 +7,7 @@
 #include "generate_body_for_tests.hpp"
 #include "LinearDampingForceModelTest.hpp"
 #include "LinearDampingForceModel.hpp"
+#include "EnvironmentAndFrames.hpp"
 
 #define BODY "body 1"
 
@@ -32,6 +33,7 @@ TEST_F(LinearDampingForceModelTest, example)
     const double EPS = 1e-9;
     Eigen::Matrix<double,6,6> D;
     double u,v,w,p,q,r;
+    EnvironmentAndFrames env;
     Body b = get_body(BODY);
     D <<  2,   3,   5,   7,  11,  13,
          17,  19,  23,  29,  31,  37,
@@ -39,7 +41,7 @@ TEST_F(LinearDampingForceModelTest, example)
          67,  71,  73,  79,  83,  89,
          97, 101, 103, 107, 109, 113,
         127, 131, 137, 139, 149, 151;
-    LinearDampingForceModel F(D);
+    LinearDampingForceModel F(D,env);
     for (size_t i=0;i<100;++i)
     {
         b.u = u = a.random<double>().between(-10.0,+10.0);
@@ -59,6 +61,3 @@ TEST_F(LinearDampingForceModelTest, example)
     }
     //! [LinearDampingForceModelTest example]
 }
-
-
-

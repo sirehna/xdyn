@@ -8,6 +8,8 @@
 #ifndef LINEARDAMPINGFORCEMODEL_HPP_
 #define LINEARDAMPINGFORCEMODEL_HPP_
 
+class EnvironmentAndFrames;
+
 /** \brief
  *  \details
  *  \addtogroup model_wrappers
@@ -22,7 +24,10 @@
 class LinearDampingForceModel : public DampingForceModel
 {
     public:
-        LinearDampingForceModel(const Eigen::Matrix<double,6,6>& D);
+        typedef Eigen::Matrix<double,6,6> Input;
+        LinearDampingForceModel(const Input& D, const EnvironmentAndFrames& env);
+        static Input parse(const std::string& yaml);
+        static const std::string model_name;
 
     private:
         LinearDampingForceModel();

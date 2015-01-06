@@ -32,6 +32,7 @@ include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${hdb_interpolators_INCLUDE_DIRS})
 include_directories(${core_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
