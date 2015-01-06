@@ -6,6 +6,18 @@ set(SRC src/update_kinematics.cpp
         src/SimulatorBuilder.cpp
         src/Res.cpp
         src/SurfaceElevationBuilder.cpp
+        src/Body.cpp
+        src/BodyBuilder.cpp
+        src/EnvironmentAndFrames.cpp
+        src/ControllableForceModel.cpp
+        src/ForceModel.cpp
+        src/SurfaceElevationFromWaves.cpp
+        src/SurfaceElevationInterface.cpp
+        src/SurfaceForceModel.cpp
+        src/ImmersedSurfaceForceModel.cpp
+        src/EmergedSurfaceForceModel.cpp
+        src/yaml2eigen.cpp
+        src/DefaultSurfaceElevation.cpp
         )
 
 # Using C++ 2011
@@ -25,10 +37,10 @@ include_directories(${external_file_formats_INCLUDE_DIRS})
 include_directories(${ds_integration_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
-include_directories(${models_INCLUDE_DIRS})
+#include_directories(${models_INCLUDE_DIRS})
 include_directories(${parser_extensions_INCLUDE_DIRS})
-include_directories(${hydro_models_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
+include_directories(${hdb_interpolators_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
 

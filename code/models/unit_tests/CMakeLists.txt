@@ -1,13 +1,10 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 SET(MODULE_UNDER_TEST models)
 PROJECT(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/generate_body_for_tests.cpp
-              src/BodyBuilderTest.cpp
-              src/QuadraticDampingForceModelTest.cpp
+FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/DefaultSurfaceElevationTest.cpp
               src/GravityForceModelTest.cpp
               src/HydrostaticForceModelTest.cpp
-              src/SurfaceElevationFromWavesTest.cpp
               src/FroudeKrylovForceModelTest.cpp
               src/LinearDampingForceModelTest.cpp
               src/WageningenControlledForceModelTest.cpp
@@ -29,5 +26,6 @@ INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS}/../unit_tests/inc)
 include_directories(${external_file_formats_INCLUDE_DIRS})
 include_directories(${hdb_interpolators_INCLUDE_DIRS})
 include_directories(${hdb_interpolators_INCLUDE_DIRS}/../unit_tests/inc)
+include_directories(${core_INCLUDE_DIRS}/../unit_tests/inc)
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

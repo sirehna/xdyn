@@ -1,29 +1,17 @@
 cmake_minimum_required(VERSION 2.8.8)
 project(models)
 
-set(SRC src/Body.cpp
-        src/BodyBuilder.cpp
-        src/QuadraticDampingForceModel.cpp
-        src/DefaultSurfaceElevation.cpp
-        src/ForceModel.cpp
+set(SRC src/QuadraticDampingForceModel.cpp
         src/GravityForceModel.cpp
         src/FastHydrostaticForceModel.cpp
-        src/SurfaceElevationFromWaves.cpp
-        src/SurfaceElevationInterface.cpp
-        src/SurfaceForceModel.cpp
-        src/ImmersedSurfaceForceModel.cpp
-        src/EmergedSurfaceForceModel.cpp
         src/ExactHydrostaticForceModel.cpp
         src/FroudeKrylovForceModel.cpp
         src/DampingForceModel.cpp
         src/LinearDampingForceModel.cpp
-        src/ControllableForceModel.cpp
-        src/yaml2eigen.cpp
         src/WageningenControlledForceModel.cpp
         src/ResistanceCurveForceModel.cpp
         src/DiffractionForceModel.cpp
         src/RadiationDampingForceModel.cpp
-        src/EnvironmentAndFrames.cpp
         )
 
 # Using C++ 2011
@@ -42,6 +30,7 @@ include_directories(${wave_models_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${hdb_interpolators_INCLUDE_DIRS})
+include_directories(${core_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME} OBJECT ${SRC})

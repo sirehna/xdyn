@@ -12,11 +12,11 @@
 #include "generate_body_for_tests.hpp"
 #include <ssc/kinematics.hpp>
 #include "DefaultSurfaceElevation.hpp"
-#include "GravityForceModel.hpp"
-#include "FastHydrostaticForceModel.hpp"
+//#include "GravityForceModel.hpp"
+//#include "FastHydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
-#include "QuadraticDampingForceModel.hpp"
+//#include "QuadraticDampingForceModel.hpp"
 
 const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
 
@@ -114,19 +114,6 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     ASSERT_THROW(builder2.get_environment_and_frames(std::vector<Body>()), SimulatorBuilderException);
 }
 
-//TEST_F(SimulatorBuilderTest, can_get_waves)
-//{
-//    builder.can_parse<DefaultSurfaceElevation>();
-//    MeshMap m;
-//    const std::string name = input.bodies.front().name;
-//    m[name] = two_triangles();
-//    const auto bodies = builder.get_bodies(m);
-//    const auto env = builder.get_environment_and_frames(bodies);
-//    ASSERT_TRUE(env.w.get() != NULL);
-//    const ssc::kinematics::Point P("NED",1,2,3);
-//    ASSERT_DOUBLE_EQ(3-12, env.w->get_relative_wave_height(P,env.k,a.random<double>()));
-//}
-
 TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
 {
     builder.can_parse<DefaultSurfaceElevation>();
@@ -137,7 +124,7 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
     const auto env = builder.get_environment_and_frames(bodies);
     ASSERT_THROW(builder.get_forces(env), SimulatorBuilderException);
 }
-
+/*
 TEST_F(SimulatorBuilderTest, can_get_forces)
 {
     const double EPS = 1e-8;
@@ -193,3 +180,4 @@ TEST_F(SimulatorBuilderTest, knows_if_there_are_any_surface_forces)
     ASSERT_TRUE(builder.detected_surface_forces());
     ASSERT_FALSE(builder_with_no_surface_forces.detected_surface_forces());
 }
+*/
