@@ -58,10 +58,12 @@ TEST_F(SimHdf5WaveObserverTest, can_serialize_a_wave_field_elevation_in_time)
         waveElevationGrid.y(j) = (double)j;
     }
     waveElevationGrid.z = foo(waveElevationGrid.x,waveElevationGrid.y);
-    SimHdf5WaveObserver s(filename,"WaveElevation",nx,ny);
-    for (size_t i = 0;i<50;++i)
     {
-        s<<waveElevationGrid;
+        SimHdf5WaveObserver s(filename,"WaveElevation",nx,ny);
+        for (size_t i = 0;i<50;++i)
+        {
+            s<<waveElevationGrid;
+        }
     }
     EXPECT_EQ(0,remove(filename.c_str()));
 }
