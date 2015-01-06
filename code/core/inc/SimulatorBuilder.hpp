@@ -110,6 +110,22 @@ class SimulatorBuilder
             return *this;
         }
 
+        /**  \brief Add the capacity to parse certain YAML inputs for forces
+          *  \details This method must not be called with any parameters: the
+          *  default parameter is only there so we can use boost::enable_if. This
+          *  allows us to use can_parse for several types derived from a few
+          *  base classes (WaveModelInterface, ForceModel...) & the compiler will
+          *  automagically choose the right version of can_parse.
+          *  \returns *this (so we can chain calls to can_parse)
+          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
+          */
+        template <typename T> SimulatorBuilder& new_can_parse(typename boost::enable_if<boost::is_base_of<ForceModel,T> >::type* dummy = 0)
+        {
+            (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+            force_parsers.push_back(ForceBuilderPtr(new ForceBuilder<T>()));
+            return *this;
+        }
+
         /**  \brief Add the capacity to parse certain YAML inputs for wave directional spreadings (eg. cos2s)
           *  \details This method must not be called with any parameters: the
           *  default parameter is only there so we can use boost::enable_if. This
@@ -186,6 +202,7 @@ class SimulatorBuilder
         YamlSimulatorInput input;
         TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceBuilderPtr> force_parsers;
+        std::vector<ForceParser> new_force_parsers;
         std::vector<ControlledForceBuilderPtr> controlled_force_parsers;
         std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;

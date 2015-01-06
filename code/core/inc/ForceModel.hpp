@@ -22,6 +22,7 @@ struct EnvironmentAndFrames;
 class ForceModel;
 
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
+typedef std::function<boost::optional<ForcePtr>(const std::string&, const std::string, const EnvironmentAndFrames&)> ForceParser;
 
 class ForceModel
 {
@@ -34,7 +35,7 @@ class ForceModel
         virtual bool is_a_surface_force_model() const;
 
         template <typename ForceType>
-        std::function<boost::optional<ForcePtr>(const std::string&, const std::string, const EnvironmentAndFrames&)> build_parser()
+        ForceParser build_parser()
         {
             auto parser = [](const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
                           {
