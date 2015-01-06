@@ -18,5 +18,6 @@ include_directories(${models_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
+include_directories(${binary_stl_data_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
