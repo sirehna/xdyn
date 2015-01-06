@@ -17,14 +17,10 @@
 #include "DiffractionInterpolator.hpp"
 #include "HDBParser.hpp"
 #include "SurfaceElevationInterface.hpp"
-#include "YamlDiffraction.hpp"
+#include "yaml.h"
+#include "external_data_structures_parsers.hpp"
 
-/*
- *  bool initialized;
-        EnvironmentAndFrames env;
-        std::array<std::vector<std::vector<std::vector<double> > >,6> rao_module;
-        std::array<std::vector<std::vector<std::vector<double> > >,6> rao_phase;
- */
+const std::string DiffractionForceModel::model_name = "diffraction";
 
 class DiffractionForceModel::Impl
 {
@@ -107,4 +103,17 @@ ssc::kinematics::Wrench DiffractionForceModel::operator()(const Body& body, cons
 {
 
     return pimpl->evaluate(body.name, t);
+}
+
+DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlDiffraction ret;
+    node["hdb"]                             >> ret.hdb_filename;
+    node["calculation point in body frame"] >> ret.calculation_point;
+    node["mirror for 180 to 360"]           >> ret.mirror;
+    return ret;
 }

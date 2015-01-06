@@ -11,7 +11,7 @@
 #include "EnvironmentAndFrames.hpp"
 #include "ForceModel.hpp"
 
-struct YamlDiffraction;
+#include "YamlDiffraction.hpp"
 
 /** \brief Diffraction forces
  *  \details
@@ -25,8 +25,11 @@ struct YamlDiffraction;
 class DiffractionForceModel : public ForceModel
 {
     public:
-        DiffractionForceModel(const YamlDiffraction& data, const EnvironmentAndFrames& end);
+        typedef YamlDiffraction Input;
+        DiffractionForceModel(const Input& data, const EnvironmentAndFrames& end);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
+        static Input parse(const std::string& yaml);
+        static const std::string model_name;
 
     private:
         DiffractionForceModel();
