@@ -17,6 +17,7 @@
 #include "RadiationDampingBuilder.hpp"
 #include "RadiationDampingForceModel.hpp"
 #include "RadiationDampingForceModelTest.hpp"
+#include "EnvironmentAndFrames.hpp"
 
 #define EPS 5E-2
 
@@ -65,7 +66,10 @@ TEST_F(RadiationDampingForceModelTest, example)
 {
 //! [RadiationDampingForceModelTest example]
     const auto yaml = get_yaml_data(false);
-    RadiationDampingForceModel F(get_hdb_data(),yaml);
+    RadiationDampingForceModel::Input input;
+    input.hdb = get_hdb_data();
+    input.yaml = yaml;
+    RadiationDampingForceModel F(input, EnvironmentAndFrames());
     const std::string body_name = a.random<std::string>();
     Body b = get_body(body_name);
 //! [RadiationDampingForceModelTest example]
@@ -113,7 +117,10 @@ TEST_F(RadiationDampingForceModelTest, should_print_debugging_information_if_req
     std::streambuf* orig =std::cerr.rdbuf(debug.rdbuf());
     ASSERT_TRUE(debug.str().empty());
     // Call the radiation damping model
-    RadiationDampingForceModel F(get_hdb_data(),get_yaml_data(true));
+    RadiationDampingForceModel::Input input;
+    input.hdb = get_hdb_data();
+    input.yaml = get_yaml_data(true);
+    RadiationDampingForceModel F(input, EnvironmentAndFrames());
     ASSERT_FALSE(debug.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
@@ -125,7 +132,10 @@ TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if
     // Redirect cerr to our stringstream buffer or any other ostream
     std::streambuf* orig =std::cerr.rdbuf(debug.rdbuf());
     // Call the radiation damping model
-    RadiationDampingForceModel F(get_hdb_data(),get_yaml_data(false));
+    RadiationDampingForceModel::Input input;
+    input.hdb = get_hdb_data();
+    input.yaml = get_yaml_data(false);
+    RadiationDampingForceModel F(input, EnvironmentAndFrames());
     ASSERT_TRUE(debug.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);

@@ -108,14 +108,17 @@ boost::optional<ForcePtr> ForceBuilder<ResistanceCurveForceModel>::try_to_parse(
     return ret;
 }
 
-boost::optional<ForcePtr> ForceBuilder<RadiationDampingForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& ) const
+boost::optional<ForcePtr> ForceBuilder<RadiationDampingForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const
 {
     boost::optional<ForcePtr> ret;
     if (model == "radiation damping")
     {
         const auto input = parse_radiation_damping(yaml);
         const TR1(shared_ptr)<HDBParser> hdb(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
-        ret.reset(ForcePtr(new RadiationDampingForceModel(hdb,input)));
+        RadiationDampingForceModel::Input data;
+        data.hdb = hdb;
+        data.yaml = input;
+        ret.reset(ForcePtr(new RadiationDampingForceModel(data,env)));
     }
     return ret;
 }

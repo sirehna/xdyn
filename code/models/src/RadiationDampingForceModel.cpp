@@ -19,8 +19,15 @@
 #include "RadiationDampingForceModelException.hpp"
 
 #include <ssc/macros.hpp>
+#include <ssc/text_file_reader.hpp>
 #include <cassert>
 #include <sstream>
+
+#include "yaml.h"
+#include "external_data_structures_parsers.hpp"
+#include "parse_unit_value.hpp"
+
+const std::string RadiationDampingForceModel::model_name = "radiation damping";
 
 class CSVWriter
 {
@@ -179,12 +186,59 @@ class RadiationDampingForceModel::Impl
 };
 
 
-RadiationDampingForceModel::RadiationDampingForceModel(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : ForceModel("radiation damping"),
-pimpl(new Impl(parser, yaml))
+RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const EnvironmentAndFrames& ) : ForceModel("radiation damping"),
+pimpl(new Impl(input.hdb, input.yaml))
 {
 }
 
 ssc::kinematics::Wrench RadiationDampingForceModel::operator()(const Body& b, const double t) const
 {
     return pimpl->get_wrench(b, t);
+}
+
+TypeOfQuadrature parse_type_of_quadrature_(const std::string& s);
+TypeOfQuadrature parse_type_of_quadrature_(const std::string& s)
+{
+    if      (s == "gauss-kronrod")   return TypeOfQuadrature::GAUSS_KRONROD;
+    else if (s == "rectangle")       return TypeOfQuadrature::RECTANGLE;
+    else if (s == "simpson")         return TypeOfQuadrature::SIMPSON;
+    else if (s == "trapezoidal")     return TypeOfQuadrature::TRAPEZOIDAL;
+    else if (s == "burcher")         return TypeOfQuadrature::BURCHER;
+    else if (s == "clenshaw-curtis") return TypeOfQuadrature::CLENSHAW_CURTIS;
+    else if (s == "filon")           return TypeOfQuadrature::FILON;
+    else
+    {
+        std::stringstream ss;
+        ss << "Unkown quadrature type: " << s << ". Should be one of 'gauss-kronrod', 'rectangle', ' simpson', 'trapezoidal', 'burcher', 'clenshaw-curtis' or 'filon'.";
+        THROW(__PRETTY_FUNCTION__, RadiationDampingForceModelException, ss.str());
+    }
+    return TypeOfQuadrature::FILON;
+}
+
+RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    std::stringstream ss;
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlRadiationDamping input;
+    node["hdb"] >> input.hdb_filename;
+    std::string s;
+    node["type of quadrature for cos transform"] >> s;
+    input.type_of_quadrature_for_cos_transform = parse_type_of_quadrature_(s);
+    node["type of quadrature for convolution"] >> s;
+    input.type_of_quadrature_for_convolution = parse_type_of_quadrature_(s);
+    node["nb of points for retardation function discretization"] >> input.nb_of_points_for_retardation_function_discretization;
+    parse_uv(node["omega min"], input.omega_min);
+    parse_uv(node["omega max"], input.omega_max);
+    parse_uv(node["tau min"], input.tau_min);
+    parse_uv(node["tau max"], input.tau_max);
+    node["output Br and K"] >> input.output_Br_and_K;
+    node["calculation point in body frame"] >> input.calculation_point_in_body_frame;
+    const TR1(shared_ptr)<HDBParser> hdb(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
+    RadiationDampingForceModel::Input ret;
+    ret.hdb = hdb;
+    ret.yaml = input;
+    return ret;
 }

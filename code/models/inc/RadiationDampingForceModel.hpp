@@ -12,15 +12,25 @@
 #include TR1INC(memory)
 
 #include "ForceModel.hpp"
+#include "YamlRadiationDamping.hpp"
 
 class HDBParser;
-struct YamlRadiationDamping;
+
+class EnvironmentAndFrames;
 
 class RadiationDampingForceModel : public ForceModel
 {
     public:
-        RadiationDampingForceModel(const TR1(shared_ptr)<HDBParser>& hdb, const YamlRadiationDamping& yaml);
+        struct Input
+        {
+            Input() : hdb(), yaml(){}
+            TR1(shared_ptr)<HDBParser> hdb;
+            YamlRadiationDamping yaml;
+        };
+        RadiationDampingForceModel(const Input& input, const EnvironmentAndFrames& env);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
+        static Input parse(const std::string& yaml);
+        static const std::string model_name;
 
     private:
         RadiationDampingForceModel();
