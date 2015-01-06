@@ -1,5 +1,5 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-SET(MODULE_UNDER_TEST model_wrappers)
+SET(MODULE_UNDER_TEST models)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/BodyBuilderTest.cpp

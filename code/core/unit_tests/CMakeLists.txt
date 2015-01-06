@@ -11,12 +11,11 @@ FILE(GLOB SRC src/SimulatorBuilderTest.cpp
 include_directories(inc)
 include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
-#include_directories(${observers_and_api_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${binary_stl_data_INCLUDE_DIRS})
-include_directories(${model_wrappers_INCLUDE_DIRS}/../unit_tests/inc)
+include_directories(${models_INCLUDE_DIRS}/../unit_tests/inc)
 include_directories(${parser_extensions_INCLUDE_DIRS}/../unit_tests/inc)
 
 # Using C++ 2011

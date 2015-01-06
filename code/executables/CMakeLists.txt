@@ -23,7 +23,7 @@ INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${base91x_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${wave_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${model_wrappers_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS})
 include_directories(${observers_and_api_INCLUDE_DIRS})
 
@@ -44,7 +44,7 @@ TARGET_LINK_LIBRARIES(sim boost_program_options_descriptions_static)
 ADD_EXECUTABLE(test_hs src/test_hs.cpp $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:parser_extensions>
-        $<TARGET_OBJECTS:model_wrappers>
+        $<TARGET_OBJECTS:models>
         $<TARGET_OBJECTS:wave_models>
         $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:mesh>
