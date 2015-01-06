@@ -28,6 +28,7 @@ class FroudeKrylovForceModel : public ImmersedSurfaceForceModel
               const Body& body,
               const double t
               ) const;
+        static const std::string model_name;
 
     private:
         FroudeKrylovForceModel();

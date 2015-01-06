@@ -9,6 +9,8 @@
 #include "FroudeKrylovForceModel.hpp"
 #include "SurfaceElevationInterface.hpp"
 
+const std::string FroudeKrylovForceModel::model_name = "froude-krylov";
+
 FroudeKrylovForceModel::FroudeKrylovForceModel(const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel("froude-krylov", env_)
 {
 }

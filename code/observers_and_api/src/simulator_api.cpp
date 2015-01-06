@@ -48,7 +48,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_sou
            .can_parse<RadiationDampingForceModel>();
     builder.new_can_parse<GravityForceModel>()
            .new_can_parse<ExactHydrostaticForceModel>()
-           .new_can_parse<FastHydrostaticForceModel>();
+           .new_can_parse<FastHydrostaticForceModel>()
+           .new_can_parse<FroudeKrylovForceModel>();
     return builder;
 }
 
