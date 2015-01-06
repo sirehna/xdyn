@@ -1,5 +1,6 @@
 http://130.66.124.6/svn/tools/ThirdParty gmock 1.7.0
 http://130.66.124.6/svn/tools/ThirdParty eigen 3.2.0
+http://130.66.124.6/svn/tools/ThirdParty eigen3-hdf5 1.0.0
 http://130.66.124.6/svn/tools/ThirdParty yaml-cpp 0.3.0
 http://130.66.124.6/svn/tools/ThirdParty gcovr
 http://130.66.124.6/svn/tools/ThirdParty base91x
