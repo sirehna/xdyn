@@ -8,6 +8,8 @@
 #include "QuadraticDampingForceModel.hpp"
 #include "QuadraticDampingForceModelTest.hpp"
 #include "generate_body_for_tests.hpp"
+#include "EnvironmentAndFrames.hpp"
+
 #include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
@@ -50,7 +52,7 @@ namespace ssc
 TEST_F(QuadraticDampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
-    const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >());
+    const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >(), EnvironmentAndFrames());
     Body b = get_body(BODY);
     const double t = a.random<double>();
     const ssc::kinematics::Wrench f = F(b,t);
@@ -70,7 +72,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_random_positive_velocities_a
 {
     const double EPS = 1e-11;
     const Eigen::Matrix<double,6,6> D = Eigen::Matrix<double,6,6>::Identity();
-    QuadraticDampingForceModel F(D);
+    QuadraticDampingForceModel F(D, EnvironmentAndFrames());
     double u,v,w,p,q,r;
     Body b = get_body(BODY);
     for (size_t i=0;i<100;++i)
@@ -105,7 +107,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
          67,  71,  73,  79,  83,  89,
          97, 101, 103, 107, 109, 113,
         127, 131, 137, 139, 149, 151;
-    QuadraticDampingForceModel F(D);
+    QuadraticDampingForceModel F(D, EnvironmentAndFrames());
     for (int i=0;i<100;++i)
     {
         b.u = u = a.random<double>().between(-10.0,+10.0);

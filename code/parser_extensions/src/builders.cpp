@@ -77,12 +77,12 @@ boost::optional<ForcePtr> ForceBuilder<ExactHydrostaticForceModel>::try_to_parse
     return ret;
 }
 
-boost::optional<ForcePtr> ForceBuilder<QuadraticDampingForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& ) const
+boost::optional<ForcePtr> ForceBuilder<QuadraticDampingForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const
 {
     boost::optional<ForcePtr> ret;
     if (model == "quadratic damping")
     {
-        ret.reset(ForcePtr(new QuadraticDampingForceModel(parse_quadratic_damping(yaml))));
+        ret.reset(ForcePtr(new QuadraticDampingForceModel(parse_quadratic_damping(yaml), env)));
     }
     return ret;
 }

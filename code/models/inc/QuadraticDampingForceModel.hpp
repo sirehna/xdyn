@@ -8,12 +8,17 @@
 #ifndef QuadraticDampingForceModel_HPP_
 #define QuadraticDampingForceModel_HPP_
 
+class EnvironmentAndFrames;
+
 #include "DampingForceModel.hpp"
 
 class QuadraticDampingForceModel : public DampingForceModel
 {
     public:
-        QuadraticDampingForceModel(const Eigen::Matrix<double,6,6>& D);
+        typedef Eigen::Matrix<double,6,6> Input;
+        QuadraticDampingForceModel(const Input& D, const EnvironmentAndFrames& env);
+        static Input parse(const std::string& yaml);
+        static const std::string model_name;
 
     private:
         QuadraticDampingForceModel();
