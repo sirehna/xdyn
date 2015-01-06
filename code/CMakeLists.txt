@@ -195,10 +195,12 @@ ADD_SUBDIRECTORY(model_wrappers)
 ADD_SUBDIRECTORY(interface_hdf5)
 ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(parser_extensions)
+ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(executables)
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:core>
+        $<TARGET_OBJECTS:observers_and_api>
         $<TARGET_OBJECTS:parser_extensions>
         $<TARGET_OBJECTS:model_wrappers>
         $<TARGET_OBJECTS:wave_models>
@@ -256,6 +258,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:hdb_interpolators_tests>
         $<TARGET_OBJECTS:interface_hdf5_tests>
+        $<TARGET_OBJECTS:observers_and_api_tests>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")

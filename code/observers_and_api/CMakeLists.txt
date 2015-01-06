@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 2.8.8)
-project(core)
+project(observers_and_api)
 
-set(SRC src/update_kinematics.cpp
-        src/Sim.cpp
-        src/SimulatorBuilder.cpp
-        src/Res.cpp
-        src/SurfaceElevationBuilder.cpp
+set(SRC src/simulator_api.cpp
+        src/OutputTransformer.cpp
+        src/SimObserver.cpp
+        src/SimCsvObserver.cpp
+        src/SimHdf5Observer.cpp
+        src/SimNoObserver.cpp
         )
 
 # Using C++ 2011
@@ -17,21 +18,20 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
 include_directories(inc)
-include_directories(${ssc_INCLUDE_DIRS})
-include_directories(${external_data_structures_INCLUDE_DIRS})
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
-include_directories(${external_file_formats_INCLUDE_DIRS})
-include_directories(${ds_integration_INCLUDE_DIRS})
+include_directories(SYSTEM ${HDF5_INCLUDE_DIR})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+include_directories(${ssc_INCLUDE_DIRS})
+include_directories(${interface_hdf5_INCLUDE_DIRS})
+include_directories(${external_data_structures_INCLUDE_DIRS})
+include_directories(${core_INCLUDE_DIRS})
+include_directories(${model_wrappers_INCLUDE_DIRS})
+include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${wave_models_INCLUDE_DIRS})
-include_directories(${model_wrappers_INCLUDE_DIRS})
-include_directories(${parser_extensions_INCLUDE_DIRS})
-include_directories(${hydro_models_INCLUDE_DIRS})
-include_directories(${mesh_INCLUDE_DIRS})
+include_directories(${external_file_formats_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} OBJECT ${SRC})
-
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
 add_subdirectory(unit_tests)
