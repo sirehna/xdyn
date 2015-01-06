@@ -14,8 +14,8 @@
 
 struct H5Res
 {
-    double t; //<! Instant at which the states correspond
-    std::vector<double> v; //<! Values of the states of the system
+    double t; //!< Instant at which the states correspond
+    std::vector<double> v; //!< Values of the states of the system
     H5Res() : t(0), v(){}
     H5Res(const double t_, const std::vector<double>& v_):t(t_),v(v_){}
 };
@@ -126,7 +126,6 @@ class SimHdf5Observer::Impl
         H5::H5File h5File_;
         H5_Serialize<H5Res> sStates;
         H5_Serialize<H5Res> sEfforts;
-
 };
 
 SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const Sim& s) : pimpl(new Impl(fileName, "simu01", s.get_vector_of_string_model_for_each_body()))
