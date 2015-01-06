@@ -1,22 +1,12 @@
 #ifndef SIMHDF5WAVEOBSERVER_HPP_
 #define SIMHDF5WAVEOBSERVER_HPP_
 
+#include <string>
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include <ssc/kinematics.hpp>
 
-#include <string>
-
-#include <Eigen/Core>
-
-struct WaveElevationGrid
-{
-    double t;
-    Eigen::VectorXd x;
-    Eigen::VectorXd y;
-    Eigen::MatrixXd z;
-    WaveElevationGrid():t(0.0),x(),y(),z(){};
-};
+#include "SurfaceElevationGrid.hpp"
 
 class SimHdf5WaveObserver
 {
@@ -27,7 +17,7 @@ class SimHdf5WaveObserver
                 const size_t nx = 0,
                 const size_t ny = 0);
 
-        SimHdf5WaveObserver& operator<<(const WaveElevationGrid& waveElevationGrid);
+        SimHdf5WaveObserver& operator<<(const SurfaceElevationGrid& waveElevationGrid);
 
     private:
         SimHdf5WaveObserver(); // Disabled

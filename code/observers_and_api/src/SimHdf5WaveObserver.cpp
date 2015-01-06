@@ -5,7 +5,6 @@
 #include "H5Cpp.h"
 #include "eigen3-hdf5.hpp"
 
-
 class SimHdf5WaveObserver::Impl
 {
     public:
@@ -17,7 +16,7 @@ class SimHdf5WaveObserver::Impl
             h5ElementY(builder.get_h5ElementY()),
             h5ElementZ(builder.get_h5ElementZ()),
             n((hsize_t)0){}
-        void write(const WaveElevationGrid& waveElevationGrid);
+        void write(const SurfaceElevationGrid& waveElevationGrid);
     private:
         H5::H5File h5File;              /**< Hdf5 file pointer*/
         H5::Group group;                /**< Hdf5 group where all wave elevation data will be exported*/
@@ -28,13 +27,13 @@ class SimHdf5WaveObserver::Impl
         hsize_t n;                      /**< Counter for wave elevation field exported. This counter is used for offset purpose*/
 
         Impl();
-        void write_T(const WaveElevationGrid& waveElevationGrid) const;
-        void write_X(const WaveElevationGrid& waveElevationGrid) const;
-        void write_Y(const WaveElevationGrid& waveElevationGrid) const;
-        void write_Z(const WaveElevationGrid& waveElevationGrid) const;
+        void write_T(const SurfaceElevationGrid& waveElevationGrid) const;
+        void write_X(const SurfaceElevationGrid& waveElevationGrid) const;
+        void write_Y(const SurfaceElevationGrid& waveElevationGrid) const;
+        void write_Z(const SurfaceElevationGrid& waveElevationGrid) const;
 };
 
-void SimHdf5WaveObserver::Impl::write_T(const WaveElevationGrid& waveElevationGrid) const
+void SimHdf5WaveObserver::Impl::write_T(const SurfaceElevationGrid& waveElevationGrid) const
 {
     const hsize_t nt = n+1;
     hsize_t dims1[1] = {1};
@@ -53,7 +52,7 @@ void SimHdf5WaveObserver::Impl::write_T(const WaveElevationGrid& waveElevationGr
     h5ElementT.dataset.write(&waveElevationGrid.t, H5::PredType::NATIVE_DOUBLE, h5ElementT.dataspace, fspaceT);
 }
 
-void SimHdf5WaveObserver::Impl::write_X(const WaveElevationGrid& waveElevationGrid) const
+void SimHdf5WaveObserver::Impl::write_X(const SurfaceElevationGrid& waveElevationGrid) const
 {
     const hsize_t nt = n+1;
     hsize_t dims2[2] = {1, 1};
@@ -75,7 +74,7 @@ void SimHdf5WaveObserver::Impl::write_X(const WaveElevationGrid& waveElevationGr
     h5ElementX.dataset.write(waveElevationGrid.x.data(), H5::PredType::NATIVE_DOUBLE, h5ElementX.dataspace, fspaceX);
 }
 
-void SimHdf5WaveObserver::Impl::write_Y(const WaveElevationGrid& waveElevationGrid) const
+void SimHdf5WaveObserver::Impl::write_Y(const SurfaceElevationGrid& waveElevationGrid) const
 {
     const hsize_t nt = n+1;
     hsize_t dims2[2] = {1, 1};
@@ -97,7 +96,7 @@ void SimHdf5WaveObserver::Impl::write_Y(const WaveElevationGrid& waveElevationGr
     h5ElementY.dataset.write(waveElevationGrid.y.data(), H5::PredType::NATIVE_DOUBLE, h5ElementY.dataspace, fspaceY);
 }
 
-void SimHdf5WaveObserver::Impl::write_Z(const WaveElevationGrid& waveElevationGrid) const
+void SimHdf5WaveObserver::Impl::write_Z(const SurfaceElevationGrid& waveElevationGrid) const
 {
     const hsize_t nt = n+1;
     hsize_t dims3[3] = {1, 1, 1};
@@ -128,7 +127,7 @@ void SimHdf5WaveObserver::Impl::write_Z(const WaveElevationGrid& waveElevationGr
     }
 }
 
-void SimHdf5WaveObserver::Impl::write(const WaveElevationGrid& waveElevationGrid)
+void SimHdf5WaveObserver::Impl::write(const SurfaceElevationGrid& waveElevationGrid)
 {
     write_T(waveElevationGrid);
     write_X(waveElevationGrid);
@@ -151,7 +150,7 @@ SimHdf5WaveObserver::SimHdf5WaveObserver(
                         TR1(shared_ptr)<SimHdf5WaveObserver::Impl>(new SimHdf5WaveObserver::Impl(SimHdf5WaveObserverBuilder(fileName, datasetName, nx, ny))))
 {}
 
-SimHdf5WaveObserver& SimHdf5WaveObserver::operator<<(const WaveElevationGrid& waveElevationGrid)
+SimHdf5WaveObserver& SimHdf5WaveObserver::operator<<(const SurfaceElevationGrid& waveElevationGrid)
 {
     this->pimpl->write(waveElevationGrid);
     return *this;

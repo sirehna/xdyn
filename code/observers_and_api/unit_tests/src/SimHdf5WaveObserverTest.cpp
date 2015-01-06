@@ -45,7 +45,7 @@ TEST_F(SimHdf5WaveObserverTest, can_serialize_a_wave_field_elevation_in_time)
     const std::string filename("waveElevation.h5");
     const size_t nx = 100;
     const size_t ny = 150;
-    WaveElevationGrid waveElevationGrid;
+    SurfaceElevationGrid waveElevationGrid;
     waveElevationGrid.t = 10.0;
     waveElevationGrid.x = Eigen::VectorXd(nx);
     waveElevationGrid.y = Eigen::VectorXd(ny);
