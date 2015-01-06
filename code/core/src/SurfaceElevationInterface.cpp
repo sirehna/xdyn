@@ -101,8 +101,8 @@ void SurfaceElevationInterface::update_surface_elevation(const ssc::kinematics::
 double SurfaceElevationInterface::evaluate_rao(const double , //!< x-position of the RAO's calculation point in the NED frame (in meters)
                             const double , //!< y-position of the RAO's calculation point in the NED frame (in meters)
                             const double , //!< Current time instant (in seconds)
-                            const std::vector<std::vector<std::vector<double> > >& , //<! Module of the RAO
-                            const std::vector<std::vector<std::vector<double> > >&  //<! Phase of the RAO
+                            const std::vector<std::vector<std::vector<double> > >& , //!< Module of the RAO
+                            const std::vector<std::vector<std::vector<double> > >&  //!< Phase of the RAO
                              ) const
 {
     return 0;
@@ -140,7 +140,7 @@ TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationInterface::get_out
 }
 
 std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_waves_on_mesh(const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                              const double t //<! Current instant (in seconds)
+                                              const double t //!< Current instant (in seconds)
                                              ) const
 {
     if (output_mesh->m.cols()==0) return std::vector<ssc::kinematics::Point>();

@@ -57,8 +57,8 @@ class SurfaceElevationInterface
         virtual double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
                             const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
                             const double t, //!< Current time instant (in seconds)
-                            const std::vector<std::vector<std::vector<double> > >& rao_module, //<! Module of the RAO
-                            const std::vector<std::vector<std::vector<double> > >& rao_phase //<! Phase of the RAO
+                            const std::vector<std::vector<std::vector<double> > >& rao_module, //!< Module of the RAO
+                            const std::vector<std::vector<std::vector<double> > >& rao_phase //!< Phase of the RAO
                              ) const;
 
         virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
@@ -71,7 +71,7 @@ class SurfaceElevationInterface
           *  \returns Pdyn (in Pascal)
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
-        double get_dynamic_pressure(const double rho, // Water density (in kg/m^3)
+        double get_dynamic_pressure(const double rho, //!< Water density (in kg/m^3)
                                     const double g, //!< Gravity (in m/s^2)
                                     const ssc::kinematics::Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
                                     const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
