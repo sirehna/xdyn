@@ -6,6 +6,7 @@ set(SRC src/simulator_api.cpp
         src/SimObserver.cpp
         src/SimCsvObserver.cpp
         src/SimHdf5Observer.cpp
+        src/SimHdf5WaveObserver.cpp
         src/SimNoObserver.cpp
         )
 
@@ -18,8 +19,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
 include_directories(inc)
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(SYSTEM ${HDF5_INCLUDE_DIR})
+include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
+include_directories(SYSTEM ${eigen_hdf5_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(${ssc_INCLUDE_DIRS})
 include_directories(${interface_hdf5_INCLUDE_DIRS})
