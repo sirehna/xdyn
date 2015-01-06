@@ -3,6 +3,7 @@ set(MODULE_UNDER_TEST observers_and_api)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/SimCsvObserverTest.cpp
               src/SimHdf5ObserverTest.cpp
+              src/SimHdf5WaveObserverTest.cpp
               src/OutputTransformerTest.cpp
               src/SimTest.cpp
               )
