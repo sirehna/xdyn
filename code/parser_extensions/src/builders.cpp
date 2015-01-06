@@ -42,8 +42,7 @@ boost::optional<ForcePtr> ForceBuilder<GravityForceModel>::try_to_parse(const st
     boost::optional<ForcePtr> ret;
     if (model == "gravity")
     {
-        GravityForceModel::Input input(env);
-        ret.reset(ForcePtr(new GravityForceModel(input)));
+        ret.reset(ForcePtr(new GravityForceModel(env)));
     }
     return ret;
 }

@@ -17,21 +17,14 @@ struct EnvironmentAndFrames;
 class GravityForceModel : public ForceModel
 {
     public:
-        struct Input
-        {
-            Input();
-            Input(const EnvironmentAndFrames& env);
-            double g;
-            ssc::kinematics::KinematicsPtr k;
-        };
-        GravityForceModel(const Input& in);
+        GravityForceModel(const EnvironmentAndFrames& env);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
         double potential_energy(const Body& body, const std::vector<double>& x) const;
+        static const std::string model_name;
 
     private:
         GravityForceModel();
         GravityForceModel(const double g);
-        GravityForceModel(const double g, ssc::kinematics::KinematicsPtr k);
         double g;
         ssc::kinematics::KinematicsPtr k;
 };

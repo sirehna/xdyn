@@ -12,17 +12,9 @@
 
 #include <ssc/kinematics.hpp>
 
-GravityForceModel::Input::Input() : g(0),
-                                    k(ssc::kinematics::KinematicsPtr())
-{
-}
+const std::string GravityForceModel::model_name = "gravity";
 
-GravityForceModel::Input::Input(const EnvironmentAndFrames& env) : g(env.g),
-                                                                   k(env.k)
-{
-}
-
-GravityForceModel::GravityForceModel(const Input& in) : ForceModel("gravity"), g(in.g), k(in.k)
+GravityForceModel::GravityForceModel(const EnvironmentAndFrames& env) : ForceModel("gravity"), g(env.g), k(env.k)
 {}
 
 ssc::kinematics::Wrench GravityForceModel::operator()(const Body& body, const double) const

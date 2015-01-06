@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "EnvironmentAndFrames.hpp"
 #include "GravityForceModel.hpp"
 #include "GravityForceModelTest.hpp"
 #include "generate_body_for_tests.hpp"
@@ -35,11 +36,11 @@ void GravityForceModelTest::TearDown()
 TEST_F(GravityForceModelTest, example)
 {
 //! [GravityForceModelTest example]
-    GravityForceModel::Input input;
-    input.g = 9.81;
-    input.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
-    input.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
-    GravityForceModel F(input);
+    EnvironmentAndFrames env;
+    env.g = 9.81;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    GravityForceModel F(env);
     Body b = get_body(BODY);
     b.m = 100;
     const ssc::kinematics::Wrench f = F(b, a.random<double>());
@@ -87,11 +88,11 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     rot << cosTheta*cosPsi, sinPhi*sinTheta*cosPsi-cosPhi*sinPsi, cosPhi*sinTheta*cosPsi+sinPhi*sinPsi,
            cosTheta*sinPsi, sinPhi*sinTheta*sinPsi+cosPhi*cosPsi, cosPhi*sinTheta*sinPsi-sinPhi*cosPsi,
            -sinTheta,       sinPhi*cosTheta,                      cosPhi*cosTheta;
-    GravityForceModel::Input input;
-    input.g = 9.81;
-    input.k = ssc::kinematics::KinematicsPtr(new Kinematics());
-    input.k->add(Transform(rot, "NED", BODY));
-    GravityForceModel F(input);
+    EnvironmentAndFrames env;
+    env.g = 9.81;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
+    env.k->add(Transform(rot, "NED", BODY));
+    GravityForceModel F(env);
     Body b = get_body(BODY);
     b.m = 100;
     const Wrench f = F(b,a.random<double>());
@@ -118,11 +119,11 @@ TEST_F(GravityForceModelTest, potential_energy)
     rot << cosTheta*cosPsi, sinPhi*sinTheta*cosPsi-cosPhi*sinPsi, cosPhi*sinTheta*cosPsi+sinPhi*sinPsi,
            cosTheta*sinPsi, sinPhi*sinTheta*sinPsi+cosPhi*cosPsi, cosPhi*sinTheta*sinPsi-sinPhi*cosPsi,
            -sinTheta,       sinPhi*cosTheta,                      cosPhi*cosTheta;
-    GravityForceModel::Input input;
-    input.g = 9.81;
-    input.k = ssc::kinematics::KinematicsPtr(new Kinematics());
-    input.k->add(Transform(rot, "NED", BODY));
-    GravityForceModel F(input);
+    EnvironmentAndFrames env;
+    env.g = 9.81;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
+    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
+    GravityForceModel F(env);
     Body b = get_body(BODY);
     b.m = 100;
 

@@ -122,7 +122,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& new_can_parse(typename boost::enable_if<boost::is_base_of<ForceModel,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            force_parsers.push_back(ForceBuilderPtr(new ForceBuilder<T>()));
+            new_force_parsers.push_back(ForceModel::build_parser<T>());
             return *this;
         }
 
