@@ -8,14 +8,20 @@
 #ifndef FORCEMODEL_HPP_
 #define FORCEMODEL_HPP_
 
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
-
+#include <functional>
 #include <vector>
 #include <ssc/kinematics.hpp>
 
+#include <boost/optional/optional.hpp>
+
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
+
 class Body;
 struct EnvironmentAndFrames;
+class ForceModel;
+
+typedef TR1(shared_ptr)<ForceModel> ForcePtr;
 
 class ForceModel
 {
@@ -27,12 +33,26 @@ class ForceModel
         std::string get_name() const;
         virtual bool is_a_surface_force_model() const;
 
+        template <typename ForceType>
+        std::function<boost::optional<ForcePtr>(const std::string&, const std::string, const EnvironmentAndFrames&)> build_parser()
+        {
+            auto parser = [](const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
+                          {
+                              boost::optional<ForcePtr> ret;
+                              if (model == ForceType::name)
+                              {
+                                  ret.reset(ForcePtr(new ForceType(ForceType::parse(yaml), env)));
+                              }
+                              return ret;
+                          };
+            return parser;
+        }
+
     private:
         ForceModel(); // Disabled
         std::string name;
 };
 
-typedef TR1(shared_ptr)<ForceModel> ForcePtr;
 typedef std::vector<ForcePtr> ListOfForces;
 
 #endif /* FORCEMODEL_HPP_ */
