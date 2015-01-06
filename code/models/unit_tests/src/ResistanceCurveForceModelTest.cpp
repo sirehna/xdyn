@@ -11,6 +11,7 @@
 #include "ResistanceCurveForceModelTest.hpp"
 #include "yaml_data.hpp"
 #include "YamlResistanceCurve.hpp"
+#include "EnvironmentAndFrames.hpp"
 
 #define EPS 1E-6
 
@@ -33,7 +34,7 @@ void ResistanceCurveForceModelTest::TearDown()
 TEST_F(ResistanceCurveForceModelTest, example)
 {
 //! [ResistanceCurveForceModelTest example]
-    ResistanceCurveForceModel F(parse_resistance_curve(test_data::resistance_curve()));
+    ResistanceCurveForceModel F(parse_resistance_curve(test_data::resistance_curve()), EnvironmentAndFrames());
 //! [ResistanceCurveForceModelTest example]
 //! [ResistanceCurveForceModelTest expected output]
     Body b;
@@ -66,7 +67,7 @@ TEST_F(ResistanceCurveForceModelTest, example)
 
 TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower_than_min_speed_specified_in_resistance_curve_table)
 {
-    ResistanceCurveForceModel F(parse_resistance_curve(test_data::resistance_curve()));
+    ResistanceCurveForceModel F(parse_resistance_curve(test_data::resistance_curve()), EnvironmentAndFrames());
     Body b;
     std::stringstream error;
     // Redirect cerr to our stringstream buffer or any other ostream
@@ -82,7 +83,7 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower
 
 TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_greater_than_max_speed_specified_in_resistance_curve_table)
 {
-    ResistanceCurveForceModel F(parse_resistance_curve(test_data::resistance_curve()));
+    ResistanceCurveForceModel F(parse_resistance_curve(test_data::resistance_curve()), EnvironmentAndFrames());
     Body b;
     std::stringstream error;
     // Redirect cerr to our stringstream buffer or any other ostream

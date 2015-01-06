@@ -98,12 +98,12 @@ boost::optional<ForcePtr> ForceBuilder<LinearDampingForceModel>::try_to_parse(co
     return ret;
 }
 
-boost::optional<ForcePtr> ForceBuilder<ResistanceCurveForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& ) const
+boost::optional<ForcePtr> ForceBuilder<ResistanceCurveForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const
 {
     boost::optional<ForcePtr> ret;
     if (model == "resistance curve")
     {
-        ret.reset(ForcePtr(new ResistanceCurveForceModel(parse_resistance_curve(yaml))));
+        ret.reset(ForcePtr(new ResistanceCurveForceModel(parse_resistance_curve(yaml),env)));
     }
     return ret;
 }
