@@ -20,6 +20,8 @@ class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
               const double t
               ) const;
 
+        static const std::string model_name;
+
     private:
         FastHydrostaticForceModel();
         virtual EPoint get_application_point(const FacetIterator& that_facet, const Body& body, const double zG) const;

@@ -9,6 +9,8 @@
 #include "ExactHydrostaticForceModel.hpp"
 #include "mesh_manipulations.hpp"
 
+const std::string ExactHydrostaticForceModel::model_name = "exact hydrostatic";
+
 ExactHydrostaticForceModel::ExactHydrostaticForceModel(const EnvironmentAndFrames& env_) : FastHydrostaticForceModel(env_)
 {
 }
