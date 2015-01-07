@@ -9,6 +9,7 @@
 #include <string>
 
 #include "SimHdf5Observer.hpp"
+#include "SimHdf5WaveObserver.hpp"
 #include "Sim.hpp"
 #include "h5_interface.hpp"
 
@@ -113,28 +114,26 @@ typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > 
 class SimHdf5Observer::Impl
 {
     public:
-        Impl(const std::string& fileName, const std::string& baseName, const VectorOfStringModelForEachBody& s) :
-            fileName_(fileName),h5File_(H5::H5File(fileName, H5F_ACC_TRUNC)),
-            sStates(h5File_, baseName.empty()?"states":baseName+"/states", H5_CreateIdStates(s)),
-            sEfforts(h5File_, baseName.empty()?"efforts":baseName+"/efforts", H5_CreateIdEfforts(s))
+        Impl(const std::string& fileName_,
+             const std::string& baseName_,
+             const VectorOfStringModelForEachBody& s,
+             const std::pair<std::size_t,std::size_t>& waves_mesh_size) :
+            fileName(fileName_),h5File(H5::H5File(fileName_, H5F_ACC_TRUNC)),
+            sStates(h5File, baseName_.empty()?"states":baseName_+"/states", H5_CreateIdStates(s)),
+            sEfforts(h5File, baseName_.empty()?"efforts":baseName_+"/efforts", H5_CreateIdEfforts(s)),
+            sWaves(h5File, baseName_.empty()?"waveElevation":baseName_+"/waveElevation", waves_mesh_size.first, waves_mesh_size.second)
         {
         }
 
         void observe_states(const double t, const Sim& s);
         void observe_efforts(const double t, const Sim& s);
-        std::string fileName_;
-        H5::H5File h5File_;
+        void observe_waves(const double t, const Sim& s);
+        std::string fileName;
+        H5::H5File h5File;
         H5_Serialize<H5Res> sStates;
         H5_Serialize<H5Res> sEfforts;
+        SimHdf5WaveObserver sWaves;
 };
-
-SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const Sim& s) : pimpl(new Impl(fileName, "simu01", s.get_vector_of_string_model_for_each_body()))
-{
-}
-
-SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const std::string& baseName, const Sim& s) : pimpl(new Impl(fileName, baseName, s.get_vector_of_string_model_for_each_body()))
-{
-}
 
 void SimHdf5Observer::Impl::observe_states(const double t, const Sim& s)
 {
@@ -148,10 +147,30 @@ void SimHdf5Observer::Impl::observe_efforts(const double t, const Sim& s)
     sEfforts << res;
 }
 
+void SimHdf5Observer::Impl::observe_waves(const double t, const Sim& s)
+{
+    const auto w = s.get_waves_as_a_grid(t);
+    if(w.z.size()!=0)
+    {
+        sWaves << w;
+    }
+}
+
+SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const Sim& s) :
+        pimpl(new Impl(fileName, "simu01", s.get_vector_of_string_model_for_each_body(), s.get_waves_mesh_size()))
+{
+}
+
+SimHdf5Observer::SimHdf5Observer(const std::string& fileName, const std::string& baseName, const Sim& s) :
+        pimpl(new Impl(fileName, baseName, s.get_vector_of_string_model_for_each_body(), s.get_waves_mesh_size()))
+{
+}
+
 void SimHdf5Observer::observe(const Sim& sys, const double t)
 {
     pimpl->observe_states(t, sys);
     pimpl->observe_efforts(t, sys);
+    pimpl->observe_waves(t, sys);
 }
 
 void SimHdf5Observer::observe_states(const Sim& sys, const double t)
@@ -162,4 +181,9 @@ void SimHdf5Observer::observe_states(const Sim& sys, const double t)
 void SimHdf5Observer::observe_efforts(const Sim& sys, const double t)
 {
     pimpl->observe_efforts(t, sys);
+}
+
+void SimHdf5Observer::observe_waves(const Sim& sys, const double t)
+{
+    pimpl->observe_waves(t, sys);
 }

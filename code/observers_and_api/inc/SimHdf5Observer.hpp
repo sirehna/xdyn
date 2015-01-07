@@ -26,7 +26,7 @@ class SimHdf5Observer
         void observe(const Sim& sys, const double t);
         void observe_states(const Sim& sys, const double t);
         void observe_efforts(const Sim& sys, const double t);
-
+        void observe_waves(const Sim& sys, const double t);
 
     private:
         SimHdf5Observer(); // Disabled
