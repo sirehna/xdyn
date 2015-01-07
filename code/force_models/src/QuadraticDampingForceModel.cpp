@@ -1,5 +1,5 @@
 /*
- * DampingForceModel.cpp
+ * QuadraticDampingForceModel.cpp
  *
  *  Created on: Oct 2, 2014
  *      Author: jacquenot
