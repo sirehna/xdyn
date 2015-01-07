@@ -9,7 +9,7 @@
 #include "FastHydrostaticForceModel.hpp"
 #include "mesh_manipulations.hpp"
 
-const std::string FastHydrostaticForceModel::model_name = "fast hydrostatic";
+const std::string FastHydrostaticForceModel::model_name = "non-linear hydrostatic (fast)";
 
 FastHydrostaticForceModel::FastHydrostaticForceModel(const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel("fast hydrostatic", env_)
 {

@@ -27,10 +27,7 @@
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_source::DataSource& command_listener)
 {
     SimulatorBuilder builder(yaml, command_listener);
-    builder.can_parse<GravityForceModel>()
-           .can_parse<DefaultSurfaceElevation>()
-           .can_parse<ExactHydrostaticForceModel>()
-           .can_parse<FastHydrostaticForceModel>()
+    builder.can_parse<DefaultSurfaceElevation>()
            .can_parse<BretschneiderSpectrum>()
            .can_parse<JonswapSpectrum>()
            .can_parse<PiersonMoskowitzSpectrum>()
@@ -39,14 +36,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_sou
            .can_parse<Cos2sDirectionalSpreading>()
            .can_parse<SurfaceElevationFromWaves>()
            .can_parse<Airy>()
-           .can_parse<FroudeKrylovForceModel>()
-           .can_parse<QuadraticDampingForceModel>()
-           .can_parse<LinearDampingForceModel>()
            .can_parse<WageningenControlledForceModel>()
-           .can_parse<ResistanceCurveForceModel>()
-           .can_parse<DiffractionForceModel>()
-           .can_parse<RadiationDampingForceModel>();
-    builder.new_can_parse<GravityForceModel>()
+           .new_can_parse<GravityForceModel>()
            .new_can_parse<ExactHydrostaticForceModel>()
            .new_can_parse<FastHydrostaticForceModel>()
            .new_can_parse<FroudeKrylovForceModel>()

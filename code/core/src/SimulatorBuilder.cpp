@@ -34,9 +34,9 @@ bool SimulatorBuilder::detected_surface_forces() const
     {
         for (auto that_force_model = that_body->external_forces.begin() ; that_force_model!= that_body->external_forces.end() ; ++that_force_model)
         {
-            for (auto that_parser = force_parsers.begin() ; that_parser != force_parsers.end() ; ++that_parser)
+            for (auto try_to_parse:new_force_parsers)
             {
-                boost::optional<ForcePtr> f = (*that_parser)->try_to_parse(that_force_model->model, that_force_model->yaml, EnvironmentAndFrames());
+                boost::optional<ForcePtr> f = try_to_parse(that_force_model->model, that_force_model->yaml, EnvironmentAndFrames());
                 if (f)
                 {
                     surface_forces_detected |= f.get()->is_a_surface_force_model();
@@ -166,15 +166,16 @@ ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& 
 void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
-    for (auto that_parser = force_parsers.begin() ; that_parser != force_parsers.end() ; ++that_parser)
+    for (auto try_to_parse:new_force_parsers)
     {
-        boost::optional<ForcePtr> f = (*that_parser)->try_to_parse(model.model, model.yaml, env);
+        boost::optional<ForcePtr> f = try_to_parse(model.model, model.yaml, env);
         if (f)
         {
             L.push_back(f.get());
             parsed = true;
         }
     }
+
     if (not(parsed))
     {
         std::stringstream ss;
