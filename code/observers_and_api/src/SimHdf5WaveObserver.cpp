@@ -78,8 +78,8 @@ void SimHdf5WaveObserver::Impl::write_Y(const SurfaceElevationGrid& waveElevatio
 {
     const hsize_t nt = n+1;
     hsize_t dims2[2] = {1, 1};
-    hsize_t offsetY[2];
-    hsize_t sizeY[2];
+    hsize_t offsetY[2] = {0,0};
+    hsize_t sizeY[2] = {0,0};
     offsetY[0] = n;
     offsetY[1] = (hsize_t)0;
     sizeY[0] = nt;
