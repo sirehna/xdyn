@@ -5,17 +5,23 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include <ssc/kinematics.hpp>
-
+#include "H5Cpp.h"
 #include "SurfaceElevationGrid.hpp"
 
 class SimHdf5WaveObserver
 {
     public:
         SimHdf5WaveObserver(
+                const H5::H5File& h5File,
+                const std::string& datasetName = "WaveElevation",
+                const std::size_t nx = 0,
+                const std::size_t ny = 0);
+
+        SimHdf5WaveObserver(
                 const std::string& fileName,
                 const std::string& datasetName = "WaveElevation",
-                const size_t nx = 0,
-                const size_t ny = 0);
+                const std::size_t nx = 0,
+                const std::size_t ny = 0);
 
         SimHdf5WaveObserver& operator<<(const SurfaceElevationGrid& waveElevationGrid);
 

@@ -2,7 +2,6 @@
 #include "SimHdf5WaveObserverBuilder.hpp"
 
 #include <vector>
-#include "H5Cpp.h"
 #include "eigen3-hdf5.hpp"
 
 class SimHdf5WaveObserver::Impl
@@ -136,18 +135,15 @@ void SimHdf5WaveObserver::Impl::write(const SurfaceElevationGrid& waveElevationG
     n++;
 }
 
-/*
-SimHdf5WaveObserver::SimHdf5WaveObserver(
-        const H5::H5File& h5File, const std::string& datasetName, const size_t nx, const size_t ny);
 SimHdf5WaveObserver::SimHdf5WaveObserver(
         const H5::H5File& h5File, const std::string& datasetName, const size_t nx, const size_t ny):
-                pimpl(SimHdf5WaveObserverBuilder(h5File, datasetName, nx, ny).build())
+                pimpl(TR1(shared_ptr)<SimHdf5WaveObserver::Impl>(new SimHdf5WaveObserver::Impl(SimHdf5WaveObserverBuilder(h5File, datasetName, nx, ny))))
 {}
-*/
+
 SimHdf5WaveObserver::SimHdf5WaveObserver(
-        const std::string& fileName, const std::string& datasetName, const size_t nx, const size_t ny):
-                pimpl(
-                        TR1(shared_ptr)<SimHdf5WaveObserver::Impl>(new SimHdf5WaveObserver::Impl(SimHdf5WaveObserverBuilder(fileName, datasetName, nx, ny))))
+        const std::string& fileName, const std::string& datasetName,
+        const std::size_t nx, const std::size_t ny):
+                pimpl(TR1(shared_ptr)<SimHdf5WaveObserver::Impl>(new SimHdf5WaveObserver::Impl(SimHdf5WaveObserverBuilder(fileName, datasetName, nx, ny))))
 {}
 
 SimHdf5WaveObserver& SimHdf5WaveObserver::operator<<(const SurfaceElevationGrid& waveElevationGrid)
