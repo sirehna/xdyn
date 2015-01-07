@@ -30,14 +30,15 @@ class SurfaceElevationInterface
     public:
         SurfaceElevationInterface(
                 const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh,
-                const std::pair<std::size_t,std::size_t>& output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0));
+                const std::pair<std::size_t,std::size_t>& output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0)
+        );
 
         virtual ~SurfaceElevationInterface();
 
         /**  \brief Computes surface elevation for each point on mesh.
           *  \details Updates the absolute surface elevation & the relative wave height.
           */
-        void update_surface_elevation(const ssc::kinematics::PointMatrixPtr& M,                     //!< Points for which to compute the relative wave height
+        void update_surface_elevation(const ssc::kinematics::PointMatrixPtr& M,              //!< Points for which to compute the relative wave height
                                       const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
                                       const double t //!< Current instant (in seconds)
                                      );
@@ -95,9 +96,10 @@ class SurfaceElevationInterface
           *           point in output_mesh
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
-        std::vector<ssc::kinematics::Point> get_waves_on_mesh(const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                              const double t //<! Current instant (in seconds)
-                                             ) const;
+        std::vector<ssc::kinematics::Point> get_waves_on_mesh(
+                const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                const double t //!< Current instant (in seconds)
+                ) const;
 
         /**  \brief Computes the wave heights on a mesh. Used by get_waves_on_mesh
           *  \returns Vector of coordinates on the free surface (in the NED frame),
@@ -105,9 +107,10 @@ class SurfaceElevationInterface
           *           point in P
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
-        std::vector<ssc::kinematics::Point> get_points_on_free_surface(const double t,                          //<! Current instant (in seconds)
-                                                                       const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& Mned //!< Output mesh in NED frame
-                                                                       ) const;
+        std::vector<ssc::kinematics::Point> get_points_on_free_surface(
+                const double t,                                             //!< Current instant (in seconds)
+                const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& Mned   //!< Output mesh in NED frame
+                ) const;
 
         /**  \brief Surface elevation
               *  \returns Surface elevation of a point at a given instant, in meters.
