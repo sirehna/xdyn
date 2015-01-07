@@ -296,3 +296,21 @@ SurfaceElevationGrid Sim::get_waves_as_a_grid(
     }
     return SurfaceElevationGrid();
 }
+
+std::pair<std::size_t,std::size_t> Sim::get_waves_mesh_size() const
+{
+    try
+    {
+        if (pimpl->env.w.get())
+        {
+            return pimpl->env.w->get_output_mesh_size();
+        }
+    }
+    catch (const ssc::kinematics::KinematicsException& e)
+    {
+        std::stringstream ss;
+        ss << "Error when retrieving waves mesh size: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
+        THROW(__PRETTY_FUNCTION__, SimException, ss.str());
+    }
+    return std::make_pair((std::size_t)0,(std::size_t)0);
+}

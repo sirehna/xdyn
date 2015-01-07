@@ -56,7 +56,7 @@ class Sim
 
         SurfaceElevationGrid get_waves_as_a_grid(const double t//!< Current instant
                                                 ) const;
-
+        std::pair<std::size_t,std::size_t> get_waves_mesh_size() const;
         StateType state;
 
     private:
