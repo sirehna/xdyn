@@ -81,7 +81,7 @@ TEST_F(HDBParserTest, can_retrieve_radiation_damping)
 
 TEST_F(HDBParserTest, can_retrieve_initial_values)
 {
-//! [HDBDataTest example]
+    //! [HDBDataTest example]
     const HDBParser data(test_data::anthineas_hdb());
     //! [HDBDataTest example]
 
@@ -105,7 +105,7 @@ TEST_F(HDBParserTest, can_retrieve_initial_values)
     ASSERT_DOUBLE_EQ(2.132689E+05, (double)M2(3,3));
     ASSERT_DOUBLE_EQ(2.994200E+02, (double)M2(3,4));
     ASSERT_DOUBLE_EQ(3.943479E+04, (double)M2(3,5));
-//! [HDBDataTest expected output]
+    //! [HDBDataTest expected output]
 }
 
 TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)

@@ -20,17 +20,14 @@ class History;
  *  \details Used to create the retardation functions
  *  \addtogroup hdb_interpolators
  *  \ingroup hdb_interpolators
- *  \section ex1 Example
- *  \snippet hdb_interpolators/unit_tests/src/DampingMatrixInterpolatorTest.cpp DampingMatrixInterpolatorTest example
- *  \section ex2 Expected output
- *  \snippet hdb_interpolators/unit_tests/src/DampingMatrixInterpolatorTest.cpp DampingMatrixInterpolatorTest expected output
  */
 class RadiationDampingBuilder
 {
     public:
-        RadiationDampingBuilder(const TypeOfQuadrature& type_of_quadrature_for_convolution, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
-                                const TypeOfQuadrature& type_of_quadrature_for_cos_transform //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
-                                );
+        RadiationDampingBuilder(
+                const TypeOfQuadrature& type_of_quadrature_for_convolution, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
+                const TypeOfQuadrature& type_of_quadrature_for_cos_transform //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
+                );
 
         /**  \brief Build a continuous function from discrete (x,y) points (using interpolation type defined in constructor)
           */
@@ -38,18 +35,19 @@ class RadiationDampingBuilder
 
         /**  \brief Use radiation damping function to compute retardation function
           *  \details Radiation damping can come, eg. from the build_interpolator method. This method evaluates the
-          *  integral K(\tau) := \frac{2}{\pi} int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}} B_r(\omega)\cos(\omega\cdot \tau)d\tau
-          *  for n different values of \tau between \frac{2\pi}{\omega{\mbox{max}}} and \frac{2\pi}{\omega{\mbox{min}}}.
+          *  integral \f$K(\tau) := \frac{2}{\pi} int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}} B_r(\omega)\cos(\omega\cdot \tau)d\tau\f$
+          *  for n different values of \f$\tau\f$ between \f$\frac{2\pi}{\omega{\mbox{max}}} and \frac{2\pi}{\omega{\mbox{min}}}\f$.
           *  It then uses "build_interpolator" to build a function (lambda).
           */
-        std::function<double(double)> build_retardation_function(const std::function<double(double)>& Br, //!< Radiation damping function
-                                                                 const std::vector<double>& taus, //!<
-                                                                 const double eps, //!< When to truncate (0 for no truncation)
-                                                                 const double omega_min,
-                                                                 double omega_max
-                                                                 ) const;
+        std::function<double(double)> build_retardation_function(
+                const std::function<double(double)>& Br,    //!< Radiation damping function
+                const std::vector<double>& taus,            //!<
+                const double eps,                           //!< When to truncate (0 for no truncation)
+                const double omega_min,
+                double omega_max
+                ) const;
         /**  \brief Computes the convolution of a function with state history, over a certain time
-          *  \returns int_0^T h(t-tau)*f(tau) dtau
+          *  \returns \f$\int_0^T h(t-\tau)*f(\tau) d\tau\f$
           *  \snippet hdb_interpolators/unit_tests/src/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest method_example
           */
         double convolution(const History& h, //!< State history
@@ -60,44 +58,49 @@ class RadiationDampingBuilder
 
         /**  \brief Build a vector of n regularly incremented doubles from xmin to xmax. First value is xmin last is xmax.
           */
-        std::vector<double> build_regular_intervals(const double first, //!< First value in vector
-                                                    const double last,  //!< Last value in vector
-                                                    const size_t n      //!< Number of values to return
-                                                    ) const;
+        std::vector<double> build_regular_intervals(
+                const double first, //!< First value in vector
+                const double last,  //!< Last value in vector
+                const size_t n      //!< Number of values to return
+                ) const;
 
         /**  \brief Build a vector of n exponentially incremented doubles from xmin to xmax.
           *  \details First value is xmin last is xmax. Spacing is small near xmin and large near xmax
           */
-        std::vector<double> build_exponential_intervals(const double first, //!< First value in vector
-                                                        const double last,  //!< Last value in vector
-                                                        const size_t n      //!< Number of values to return
-                                                        ) const;
+        std::vector<double> build_exponential_intervals(
+                const double first, //!< First value in vector
+                const double last,  //!< Last value in vector
+                const size_t n      //!< Number of values to return
+                ) const;
 
         /**  \brief Build a vector of n exponentially incremented doubles from xmin to xmax.
           *  \details First value is xmin last is xmax. Spacing is large near xmin and small near xmax
           */
-        std::vector<double> build_exponential_intervals_reversed(const double first, //!< First value in vector
-                                                        const double last,  //!< Last value in vector
-                                                        const size_t n      //!< Number of values to return
-                                                        ) const;
+        std::vector<double> build_exponential_intervals_reversed(
+                const double first, //!< First value in vector
+                const double last,  //!< Last value in vector
+                const size_t n      //!< Number of values to return
+                ) const;
 
         /**  \brief Find bound representing a significant amount of the integral
-          *  \details Uses TOMS Algorithm 748 to compute the minimum bound \omega_0 such that
-          *  int_{\omega_{\mbox{min}}}^{\omega_0} f(\omega) d\omega = (1-eps) int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}
+          *  \details Uses TOMS Algorithm 748 to compute the minimum bound \f$\omega_0\f$ such that
+          *  \f$int_{\omega_{\mbox{min}}}^{\omega_0} f(\omega) d\omega = (1-eps) int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}\f$
           *  \returns Upper integration bound
           *  \snippet hdb_interpolators/unit_tests/src/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest find_integration_bound_example
           */
-        double find_integration_bound(const std::function<double(double)>& f, //!< Function to integrate
-                                      const double omega_min, //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
-                                      const double omega_max, //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
-                                      const double eps        //!< Integration error (compared to full integration from omega_min up to omega_max)
-                               ) const;
+        double find_integration_bound(
+                const std::function<double(double)>& f, //!< Function to integrate
+                const double omega_min, //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
+                const double omega_max, //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
+                const double eps        //!< Integration error (compared to full integration from omega_min up to omega_max)
+                ) const;
 
-        double find_r_bound(const std::function<double(double)>& f, //!< Function to integrate
-                                                               const double omega_min,                 //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
-                                                               const double omega_max,                 //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
-                                                               const double r //!< How much of the total integral between omega_min & omega_max do we wish to represent?
-                                                               ) const;
+        double find_r_bound(
+                const std::function<double(double)>& f, //!< Function to integrate
+                const double omega_min,                 //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
+                const double omega_max,                 //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
+                const double r                          //!< How much of the total integral between omega_min & omega_max do we wish to represent?
+                ) const;
 
         double cos_transform(const std::function<double(double)>& Br, const double omega_min, const double omega_max, const double tau) const;
 

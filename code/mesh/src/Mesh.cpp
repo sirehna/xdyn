@@ -81,7 +81,7 @@ bool Mesh::get_oriented_edge_direction(size_t oriented_edge)
     return (oriented_edge & 1) != 0;
 }
 
-/* \brief return the first vertex of an oriented edge
+/** \brief return the first vertex of an oriented edge
  */
 size_t Mesh::first_vertex_of_oriented_edge(size_t oriented_edge) const
 {
@@ -90,7 +90,7 @@ size_t Mesh::first_vertex_of_oriented_edge(size_t oriented_edge) const
     return edges[reverse_direction][edge_index];
 }
 
-/* \brief return the second vertex of an oriented edge
+/** \brief return the second vertex of an oriented edge
  */
 size_t Mesh::second_vertex_of_oriented_edge(size_t oriented_edge) const
 {

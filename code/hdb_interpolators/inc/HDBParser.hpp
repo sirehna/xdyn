@@ -20,9 +20,9 @@
  *  \addtogroup hdb_interpolators
  *  \ingroup hdb_interpolators
  *  \section ex1 Example
- *  \snippet hdb_interpolators/unit_tests/src/HDBBuilderTest.cpp HDBBuilderTest example
+ *  \snippet hdb_interpolators/unit_tests/src/HDBParserTest.cpp HDBDataTest example
  *  \section ex2 Expected output
- *  \snippet hdb_interpolators/unit_tests/src/HDBBuilderTest.cpp HDBBuilderTest expected output
+ *  \snippet hdb_interpolators/unit_tests/src/HDBParserTest.cpp HDBDataTest expected output
  */
 class HDBParser
 {

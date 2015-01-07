@@ -2,8 +2,8 @@
 #include "GeometricTypes3d.hpp"
 
 /**
- *\brief reads an ASCII STL (stereolithography) file.
- * \input[in] input String containing the STL data
+ * \brief reads an ASCII STL (stereolithography) file.
+ * \param[in] input String containing the STL data
  * \return Raw list of unmerged triangles
  * \note
  * An STL file describes a raw unstructured triangulated surface by the unit
