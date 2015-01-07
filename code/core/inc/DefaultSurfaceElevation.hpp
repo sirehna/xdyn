@@ -27,7 +27,9 @@
 class DefaultSurfaceElevation : public SurfaceElevationInterface
 {
     public:
-        DefaultSurfaceElevation(const double wave_height, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh);
+        DefaultSurfaceElevation(const double wave_height,
+                                const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh,
+                                const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0));
 
     private:
         DefaultSurfaceElevation(); // Disabled

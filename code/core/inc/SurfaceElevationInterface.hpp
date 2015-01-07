@@ -28,7 +28,9 @@
 class SurfaceElevationInterface
 {
     public:
-        SurfaceElevationInterface(const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh);
+        SurfaceElevationInterface(
+                const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh,
+                const std::pair<std::size_t,std::size_t>& output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0));
 
         virtual ~SurfaceElevationInterface();
 
@@ -50,6 +52,14 @@ class SurfaceElevationInterface
           *  \returns zwave for each point (x,y) in mesh.
           */
         std::vector<double> get_surface_elevation() const;
+
+        /**  \brief Returns the pair of number of points describing the surface elevation mesh
+          *  \returns pair (nx,ny)
+          */
+        std::pair<std::size_t,std::size_t> get_output_mesh_size() const
+        {
+            return output_mesh_size;
+        }
 
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force (or torque), depending on the RAO
@@ -139,6 +149,7 @@ class SurfaceElevationInterface
                                             ) const;
 
         TR1(shared_ptr)<ssc::kinematics::PointMatrix> output_mesh; //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant
+        std::pair<std::size_t,std::size_t> output_mesh_size; //!< Mesh size defined as a pair containing nx and ny
         std::vector<double> relative_wave_height_for_each_point_in_mesh;
         std::vector<double> surface_elevation_for_each_point_in_mesh;
 };

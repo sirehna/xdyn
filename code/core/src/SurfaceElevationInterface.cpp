@@ -40,9 +40,13 @@ template <typename PointType> PointType compute_relative_position(const TR1(shar
     return T*P;
 }
 
-SurfaceElevationInterface::SurfaceElevationInterface(const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) : output_mesh(output_mesh_),
-        relative_wave_height_for_each_point_in_mesh(),
-        surface_elevation_for_each_point_in_mesh()
+SurfaceElevationInterface::SurfaceElevationInterface(
+        const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_,
+        const std::pair<std::size_t,std::size_t>& output_mesh_size_) :
+                output_mesh(output_mesh_),
+                output_mesh_size(output_mesh_size_),
+                relative_wave_height_for_each_point_in_mesh(),
+                surface_elevation_for_each_point_in_mesh()
 {
 }
 
@@ -139,9 +143,10 @@ TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationInterface::get_out
     return output_mesh;
 }
 
-std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_waves_on_mesh(const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                              const double t //!< Current instant (in seconds)
-                                             ) const
+std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_waves_on_mesh(
+        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+        const double t //!< Current instant (in seconds)
+        ) const
 {
     if (output_mesh->m.cols()==0) return std::vector<ssc::kinematics::Point>();
     return get_points_on_free_surface(t, get_output_mesh_in_NED_frame(k));
