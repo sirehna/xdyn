@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "GeometricTypes3d.hpp"
+#include "SurfaceElevationGrid.hpp"
 #include <ssc/kinematics.hpp>
 
 /** \author cec
@@ -99,6 +100,19 @@ class SurfaceElevationInterface
         std::vector<ssc::kinematics::Point> get_waves_on_mesh(
                 const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
                 const double t //!< Current instant (in seconds)
+                ) const;
+
+        /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
+          *  \returns a structure containing vector \a x, vector \a y and
+          *           matrix \a z where
+          *           \li \a x gives the X-variation of the mesh
+          *           \li \a y gives the Y-variation of the mesh
+          *           \li \a z gives the associated free surface elevation in
+          *           the NED frame.
+          */
+        SurfaceElevationGrid get_waves_on_mesh_as_a_grid(
+                const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+                const double t                                         //!< Current instant (in seconds)
                 ) const;
 
         /**  \brief Computes the wave heights on a mesh. Used by get_waves_on_mesh

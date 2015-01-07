@@ -5,8 +5,10 @@
  *      Author: cady
  */
 
+
 #include "SurfaceElevationInterface.hpp"
 #include <ssc/kinematics.hpp>
+#include <ssc/exception_handling.hpp>
 
 template <typename PointType> PointType compute_relative_position(const PointType& P, const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k)
 {
@@ -150,4 +152,37 @@ std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_waves_on_mesh
 {
     if (output_mesh->m.cols()==0) return std::vector<ssc::kinematics::Point>();
     return get_points_on_free_surface(t, get_output_mesh_in_NED_frame(k));
+}
+
+SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
+        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
+        const double t //!< Current instant (in seconds)
+        ) const
+{
+    std::vector<ssc::kinematics::Point> res = get_waves_on_mesh(k,t);
+    if (res.empty()) return SurfaceElevationGrid(t);
+    const size_t nx = output_mesh_size.first;
+    const size_t ny = output_mesh_size.second;
+    if ((nx*ny)!=res.size())
+    {
+        THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"Problem");
+    }
+    SurfaceElevationGrid s(nx,ny,t);
+    for(size_t i=0;i<nx;++i)
+    {
+        s.x(i) = res.at(i).v(0);
+    }
+    for(size_t j=0; j<ny; ++j)
+    {
+        s.y(j) = res.at(j*nx).v(1);
+    }
+    for(size_t i = 0;i<nx;++i)
+    {
+        const size_t ii = i*ny;
+        for(size_t j=0;j<ny;++j)
+        {
+            s.z(i,j) = res.at(ii+j).v(2);
+        }
+    }
+    return s;
 }
