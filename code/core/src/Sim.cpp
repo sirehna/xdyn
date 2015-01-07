@@ -272,3 +272,27 @@ std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current in
     }
     return std::vector<ssc::kinematics::Point>();
 }
+
+SurfaceElevationGrid Sim::get_waves_as_a_grid(
+        const double t//!< Current instant
+        ) const
+{
+    try
+    {
+        if (pimpl->env.w.get())
+        {
+            for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
+            {
+                pimpl->bodies[i]->update_kinematics(state,pimpl->env.k);
+            }
+            return pimpl->env.w->get_waves_on_mesh_as_a_grid(pimpl->env.k, t);
+        }
+    }
+    catch (const ssc::kinematics::KinematicsException& e)
+    {
+        std::stringstream ss;
+        ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
+        THROW(__PRETTY_FUNCTION__, SimException, ss.str());
+    }
+    return SurfaceElevationGrid();
+}

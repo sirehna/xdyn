@@ -16,6 +16,7 @@
 #include "EnvironmentAndFrames.hpp"
 #include "ForceModel.hpp"
 #include "ControllableForceModel.hpp"
+#include "SurfaceElevationGrid.hpp"
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
@@ -52,6 +53,9 @@ class Sim
           */
         std::vector<ssc::kinematics::Point> get_waves(const double t            //!< Current instant
                                                      ) const;
+
+        SurfaceElevationGrid get_waves_as_a_grid(const double t//!< Current instant
+                                                ) const;
 
         StateType state;
 
