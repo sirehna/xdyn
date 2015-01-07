@@ -17,13 +17,13 @@ class SimHdf5WaveObserver::Impl
             n((hsize_t)0){}
         void write(const SurfaceElevationGrid& waveElevationGrid);
     private:
-        H5::H5File h5File;              /**< Hdf5 file pointer*/
-        H5::Group group;                /**< Hdf5 group where all wave elevation data will be exported*/
-        H5Element h5ElementT;           /**< Hdf5 dataspace and dataset for time values*/
-        H5Element h5ElementX;           /**< Hdf5 dataspace and dataset for X vector values*/
-        H5Element h5ElementY;           /**< Hdf5 dataspace and dataset for Y vector values*/
-        H5Element h5ElementZ;           /**< Hdf5 dataspace and dataset for Z matrice values*/
-        hsize_t n;                      /**< Counter for wave elevation field exported. This counter is used for offset purpose*/
+        H5::H5File h5File;      /**< Hdf5 file pointer*/
+        H5::Group group;        /**< Hdf5 group where all wave elevation data will be exported*/
+        H5Element h5ElementT;   /**< Hdf5 dataspace and dataset for time values*/
+        H5Element h5ElementX;   /**< Hdf5 dataspace and dataset for X vector values*/
+        H5Element h5ElementY;   /**< Hdf5 dataspace and dataset for Y vector values*/
+        H5Element h5ElementZ;   /**< Hdf5 dataspace and dataset for Z matrice values*/
+        hsize_t n;              /**< Counter for wave elevation field exported. This counter is used for offset purpose*/
 
         Impl();
         void write_T(const SurfaceElevationGrid& waveElevationGrid) const;
