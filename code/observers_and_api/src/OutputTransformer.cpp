@@ -100,7 +100,7 @@ ssc::kinematics::EulerAngles OutputTransformer::convert(const ssc::kinematics::R
     if (input.rotations.order_by == "angle")
     {
         if (match(input.rotations.convention, "z", "y'", "x''"))
-            return euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, CARDAN, 3, 2, 1>(R);
+            return euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R);
         std::stringstream ss;
         ss << "Rotation convention '" << input.rotations.convention.at(0) << "," << input.rotations.convention.at(1) << "," << input.rotations.convention.at(2) << "' is not currently supported.";
         THROW(__PRETTY_FUNCTION__, OutputTransformerException, ss.str());

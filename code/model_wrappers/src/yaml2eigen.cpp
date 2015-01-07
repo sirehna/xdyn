@@ -33,7 +33,7 @@ ssc::kinematics::RotationMatrix angle2matrix(const YamlAngle& a, const YamlRotat
         if (match(rotations.convention, "z", "y'", "x''"))
             return ssc::kinematics::rotation_matrix<ssc::kinematics::INTRINSIC,
                                                     ssc::kinematics::CHANGING_ANGLE_ORDER,
-                                                    ssc::kinematics::CARDAN, 3, 2, 1>(e);
+                                                    3, 2, 1>(e);
         std::stringstream ss;
         ss << "Rotation convention '" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "' is not currently supported.";
         THROW(__PRETTY_FUNCTION__, Yaml2EigenException, ss.str());
