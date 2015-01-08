@@ -57,3 +57,10 @@ TEST_F(SimHdf5ObserverTest, can_simulate_system_with_no_wave_output)
     //EXPECT_EQ(0,remove(fileName.c_str()));
 }
 
+TEST_F(SimHdf5ObserverTest, can_retrieve_the_output_wave_mesh_size)
+{
+    const auto ms = get_system(test_data::cube_in_waves(), unit_cube()).get_waves_mesh_size();
+    ASSERT_EQ(5,ms.first);
+    ASSERT_EQ(2,ms.second);
+}
+
