@@ -24,7 +24,7 @@ class ResistanceCurveForceModel::Impl
 
         double get_resistance(const double Va)
         {
-            if (Va<vmin) std::cerr << "Warning: resistance curve is tabulated up to " << vmin << " m/s, but received Va = " << Va << " m/s" << std::endl;
+            if (Va<vmin) std::cerr << "Warning: resistance curve is tabulated from " << vmin << " m/s, but received Va = " << Va << " m/s" << std::endl;
             if (Va>vmax) std::cerr << "Warning: resistance curve is tabulated up to " << vmax << " m/s, but received Va = " << Va << " m/s" << std::endl;
             return S.f(Va);
         }
