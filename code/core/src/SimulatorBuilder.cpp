@@ -85,8 +85,8 @@ EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vec
     const StateType x = ::get_initial_states(input.rotations, input.bodies);
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
-        env.k->add(get_transform_from_mesh_to(bodies.at(i)));
-        env.k->add(get_transform_from_ned_to(x, bodies.at(i), i));
+        env.k->add(bodies.at(i).get_transform_from_mesh_to());
+        env.k->add(bodies.at(i).get_transform_from_ned_to(x));
     }
     env.w = get_wave();
     return env;

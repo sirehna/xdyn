@@ -39,8 +39,8 @@ void OutputTransformer::update_kinematics(const StateType& x) const
 {
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
-        ::update_kinematics(x, bodies[i], i, k);
-        ::update_kinematics(x, bodies[i], i, env.k);
+        bodies[i].update_kinematics(x, k);
+        bodies[i].update_kinematics(x, env.k);
     }
 }
 

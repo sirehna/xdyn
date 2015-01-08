@@ -16,45 +16,6 @@
 
 #define SQUARE(x) ((x)*(x))
 
-ssc::kinematics::Point get_origin(const StateType& x, const size_t i)
-{
-    return ssc::kinematics::Point("NED", *_X(x,i),
-                        *_Y(x,i),
-                        *_Z(x,i));
-}
-
-
-ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t i)
-{
-    const Eigen::Quaternion<double> q(*_QR(x,i),
-                                      *_QI(x,i),
-                                      *_QJ(x,i),
-                                      *_QK(x,i));
-    return q.matrix();
-}
-
-ssc::kinematics::Point get_position_of_body_relative_to_mesh(const Body& body)
-{
-    return ssc::kinematics::Point(std::string("mesh(")+body.states.name+")", body.states.x_relative_to_mesh,
-                                                     body.states.y_relative_to_mesh,
-                                                     body.states.z_relative_to_mesh);
-}
-
-ssc::kinematics::Transform get_transform_from_mesh_to(const Body& body)
-{
-    return ssc::kinematics::Transform(get_position_of_body_relative_to_mesh(body), body.states.mesh_to_body, body.states.name);
-}
-
-ssc::kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& body, const size_t idx)
-{
-    return ssc::kinematics::Transform(get_origin(x, idx), get_rot_from_ned_to(x, idx), body.states.name);
-}
-
-void update_kinematics(StateType x, const Body& body, const size_t idx, const KinematicsPtr& k)
-{
-    k->add(get_transform_from_ned_to(x,body,idx));
-}
-
 StateType get_initial_states(const YamlRotation& convention, const std::vector<YamlBody>& bodies)
 {
     StateType ret(13*bodies.size(),0);
@@ -80,14 +41,4 @@ StateType get_initial_states(const YamlRotation& convention, const std::vector<Y
         *_QK(ret,i) = q.z()/norm;
     }
     return ret;
-}
-
-void update_body_states(const StateType& x, Body& body, const size_t i)
-{
-    body.states.u = *_U(x,i);
-    body.states.v = *_V(x,i);
-    body.states.w = *_W(x,i);
-    body.states.p = *_P(x,i);
-    body.states.q = *_Q(x,i);
-    body.states.r = *_R(x,i);
 }

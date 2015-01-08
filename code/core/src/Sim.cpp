@@ -71,9 +71,9 @@ void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies
     *_QK(all_states,i) /= norm;
 }
 
-void Sim::update_body(Body& body, const size_t i, const StateType& x, const double t) const
+void Sim::update_body(Body& body, const size_t , const StateType& x, const double t) const
 {
-    update_body_states(x, body, i);
+    body.update_body_states(x);
     if (pimpl->there_are_surface_forces) body.update_intersection_with_free_surface(pimpl->env, t);
     update_projection_of_z_in_mesh_frame(body.states);
 }
@@ -92,7 +92,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
     {
         normalize_quaternions(x_with_normalized_quaternions, i);
-        update_kinematics(x_with_normalized_quaternions, pimpl->bodies[i], i, pimpl->env.k);
+        pimpl->bodies[i].update_kinematics(x_with_normalized_quaternions,pimpl->env.k);
         update_body(pimpl->bodies[i], i, x_with_normalized_quaternions, t);
         calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), pimpl->bodies[i].states.inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
     }
@@ -273,7 +273,7 @@ std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current in
         {
             for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
             {
-                update_kinematics(state, pimpl->bodies[i], i, pimpl->env.k);
+                pimpl->bodies[i].update_kinematics(state,pimpl->env.k);
             }
             return pimpl->env.w->get_waves_on_mesh(pimpl->env.k, t);
         }
