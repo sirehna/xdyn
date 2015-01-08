@@ -18,8 +18,6 @@
 #include "YamlResistanceCurve.hpp"
 #include "YamlWageningen.hpp"
 
-YamlGravity parse_gravity(const std::string& yaml);
-double parse_hydrostatic(const std::string& yaml);
 Eigen::Matrix<double,6,6> parse_quadratic_damping(const std::string& yaml);
 YamlWageningen parse_wageningen(const std::string& yaml);
 YamlResistanceCurve parse_resistance_curve(const std::string& yaml);

@@ -31,18 +31,6 @@ void force_parsersTest::TearDown()
 {
 }
 
-TEST_F(force_parsersTest, gravity)
-{
-    const YamlGravity p = parse_gravity("g:\n  unit: m/s^2\n  value: 9.81\nmodel: gravity");
-    ASSERT_DOUBLE_EQ(9.81, p.g);
-}
-
-TEST_F(force_parsersTest, hydrostatic)
-{
-    const double rho = parse_hydrostatic("rho:\n  unit: kg/m^3\n  value: 1024\nmodel: hydrostatic");
-    ASSERT_DOUBLE_EQ(1024, rho);
-}
-
 TEST_F(force_parsersTest, damping)
 {
     const std::string yaml = "        damping matrix at the center of gravity projected in the body frame:\n"
