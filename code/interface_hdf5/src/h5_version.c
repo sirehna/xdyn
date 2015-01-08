@@ -1,5 +1,4 @@
 #include "macrosId.h"
-#include "hdf5.h"
 #include "h5_tools.h"
 #include "h5_version.h"
 
@@ -57,7 +56,16 @@ for i in range(len(description)):
 int h5_writeFileDescription(
         char const * const fileName)
 {
-    hid_t file = 0, root = 0, dataspace = 0, att = 0;
+    herr_t ret = 0;
+    hid_t file = h5_getFileId(fileName);
+    h5_writeFileDescriptionGivenAFileId(file);
+    ret = H5Fclose(file);
+    return (ret<0)?0:1;
+}
+
+int h5_writeFileDescriptionGivenAFileId(hid_t file)
+{
+    hid_t root = 0, dataspace = 0, att = 0;
     hid_t filetype = 0;
     hid_t type = 0;
     herr_t ret;
@@ -76,7 +84,6 @@ int h5_writeFileDescription(
     sprintf(string_att[4], "Unconventional compiler");
     #endif
 
-    file        = h5_getFileId(fileName);
     root        = H5Gopen(file, "/", H5P_DEFAULT);
     filetype    = H5Tcopy(H5T_FORTRAN_S1);
     ret         = H5Tset_size(filetype, MAXIMUM_ATTRIBUTE_LENGTH+1);
@@ -89,7 +96,5 @@ int h5_writeFileDescription(
     ret         = H5Gclose(root);
     ret         = H5Tclose(type);
     ret         = H5Sclose(dataspace);
-    ret         = H5Fclose(file);
     return (ret<0)?0:1;
 }
-
