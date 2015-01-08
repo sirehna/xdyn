@@ -32,6 +32,8 @@ class SimHdf5WaveObserverBuilder
         H5Element get_h5ElementX() const;
         H5Element get_h5ElementY() const;
         H5Element get_h5ElementZ() const;
+        size_t get_nx() const {return nx;};
+        size_t get_ny() const {return ny;};
     private:
         H5::H5File h5File;
         H5::Group group;
