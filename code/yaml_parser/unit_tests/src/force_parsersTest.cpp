@@ -50,13 +50,3 @@ TEST_F(force_parsersTest, wageningen)
     ASSERT_DOUBLE_EQ(0.9, w.wake_coefficient);
     ASSERT_DOUBLE_EQ(2, w.diameter);
 }
-
-TEST_F(force_parsersTest, diffraction)
-{
-    const YamlDiffraction r = parse_diffraction(test_data::diffraction());
-    ASSERT_EQ("anthineas.hdb", r.hdb_filename);
-    ASSERT_EQ(0.696, r.calculation_point.x);
-    ASSERT_EQ(0, r.calculation_point.y);
-    ASSERT_EQ(1.418, r.calculation_point.z);
-    ASSERT_TRUE(r.mirror);
-}

@@ -10,16 +10,8 @@
 
 #include <string>
 
-#include <Eigen/Dense>
-
-#include "YamlDiffraction.hpp"
-#include "YamlGravity.hpp"
-#include "YamlRadiationDamping.hpp"
-#include "YamlResistanceCurve.hpp"
 #include "YamlWageningen.hpp"
 
 YamlWageningen parse_wageningen(const std::string& yaml);
-TypeOfQuadrature parse_type_of_quadrature(const std::string& s);
-YamlDiffraction parse_diffraction(const std::string& yaml);
 
 #endif /* FORCES_PARSERS_HPP_ */

@@ -32,33 +32,3 @@ YamlWageningen parse_wageningen(const std::string& yaml)
     parse_uv(node["diameter"], ret.diameter);
     return ret;
 }
-
-TypeOfQuadrature parse_type_of_quadrature(const std::string& s)
-{
-    if      (s == "gauss-kronrod")   return TypeOfQuadrature::GAUSS_KRONROD;
-    else if (s == "rectangle")       return TypeOfQuadrature::RECTANGLE;
-    else if (s == "simpson")         return TypeOfQuadrature::SIMPSON;
-    else if (s == "trapezoidal")     return TypeOfQuadrature::TRAPEZOIDAL;
-    else if (s == "burcher")         return TypeOfQuadrature::BURCHER;
-    else if (s == "clenshaw-curtis") return TypeOfQuadrature::CLENSHAW_CURTIS;
-    else if (s == "filon")           return TypeOfQuadrature::FILON;
-    else
-    {
-        std::stringstream ss;
-        ss << "Unkown quadrature type: " << s << ". Should be one of 'gauss-kronrod', 'rectangle', ' simpson', 'trapezoidal', 'burcher', 'clenshaw-curtis' or 'filon'.";
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
-    }
-}
-
-YamlDiffraction parse_diffraction(const std::string& yaml)
-{
-    std::stringstream stream(yaml);
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
-    YamlDiffraction ret;
-    node["hdb"]                             >> ret.hdb_filename;
-    node["calculation point in body frame"] >> ret.calculation_point;
-    node["mirror for 180 to 360"]           >> ret.mirror;
-    return ret;
-}

@@ -11,6 +11,7 @@ FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/ResistanceCurveForceModelTest.cpp
               src/RadiationDampingForceModelTest.cpp
               src/HDBParserForTests.cpp
+              src/DiffractionForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
