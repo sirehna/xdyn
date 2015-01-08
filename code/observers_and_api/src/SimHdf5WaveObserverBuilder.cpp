@@ -1,11 +1,14 @@
 #include "SimHdf5WaveObserverBuilder.hpp"
 
-
 SimHdf5WaveObserverBuilder::SimHdf5WaveObserverBuilder(
     const std::string& fileName,
     const std::string& datasetName_,
     const size_t nx_,
-    const size_t ny_):h5File(H5::H5File(fileName,H5F_ACC_TRUNC)),group(h5File.createGroup("/"+datasetName_)),datasetName(datasetName_),nx(nx_),ny(ny_)
+    const size_t ny_):
+        h5File(H5::H5File(fileName,H5F_ACC_TRUNC)),
+        group(h5File.createGroup("/"+datasetName_)),
+        datasetName(datasetName_),
+        nx(nx_),ny(ny_)
 {
 }
 
@@ -13,7 +16,12 @@ SimHdf5WaveObserverBuilder::SimHdf5WaveObserverBuilder(
     const H5::H5File& h5File_,
     const std::string& datasetName_,
     const size_t nx_,
-    const size_t ny_):h5File(h5File_),group(h5File.createGroup("/"+datasetName_)),datasetName(datasetName_),nx(nx_),ny(ny_)
+    const size_t ny_):
+        h5File(h5File_),
+        group(h5File.createGroup("/"+datasetName_)),
+        datasetName(datasetName_),
+        nx(nx_),
+        ny(ny_)
 {
 }
 
@@ -21,6 +29,7 @@ H5::H5File SimHdf5WaveObserverBuilder::get_h5File() const
 {
     return h5File;
 }
+
 H5::Group SimHdf5WaveObserverBuilder::get_group() const
 {
     return group;
@@ -44,7 +53,7 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementX() const
     H5Element h5ElementX;
     hsize_t dimsX[2] = {1, 1};
     hsize_t maxdimsX[2] = {H5S_UNLIMITED, H5S_UNLIMITED};
-    const hsize_t chunk_dims2[2] = {1,10};
+    const hsize_t chunk_dims2[2] = {1, 10};
     H5::DSetCreatPropList cparms2;
     cparms2.setChunk(2, chunk_dims2);
     dimsX[1] = (hsize_t)nx;
