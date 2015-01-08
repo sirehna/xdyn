@@ -1,6 +1,11 @@
 #include "SimHdf5WaveObserverBuilder.hpp"
 #include "h5_interface.hpp"
 
+/** \def MIN(i1,i2) Define minimum of two scalar*/
+#define MIN(i1,i2) (i1 < i2 ? i1 : i2)
+
+/** \def CHUNK_SIZE Hdf5 chunk parameter used to buffer data before writing*/
+#define CHUNK_SIZE (hsize_t)10
 
 SimHdf5WaveObserverBuilder::SimHdf5WaveObserverBuilder(
     const std::string& fileName,
@@ -57,11 +62,11 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementX() const
     if ((nx*ny)==0) return h5ElementX;
     hsize_t dimsX[2] = {1, 1};
     hsize_t maxdimsX[2] = {H5S_UNLIMITED, H5S_UNLIMITED};
-    const hsize_t chunk_dims2[2] = {1, 10};
-    H5::DSetCreatPropList cparms2;
-    cparms2.setChunk(2, chunk_dims2);
     dimsX[1] = (hsize_t)nx;
     maxdimsX[1] = (hsize_t)nx;
+    const hsize_t chunk_dims2[2] = {1, MIN(CHUNK_SIZE,(hsize_t)nx)};
+    H5::DSetCreatPropList cparms2;
+    cparms2.setChunk(2, chunk_dims2);
     h5ElementX.dataspace = H5::DataSpace(2, dimsX, maxdimsX);
     h5ElementX.dataset = group.createDataSet(datasetName+"x",H5::PredType::NATIVE_DOUBLE, h5ElementX.dataspace, cparms2);
     return h5ElementX;
@@ -73,11 +78,11 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementY() const
     if ((nx*ny)==0) return h5ElementY;
     hsize_t dimsY[2] = {1, 1};
     hsize_t maxdimsY[2] = {H5S_UNLIMITED, H5S_UNLIMITED};
-    const hsize_t chunk_dims2[2] = {1,10};
-    H5::DSetCreatPropList cparms2;
-    cparms2.setChunk(2, chunk_dims2);
     dimsY[1] = (hsize_t)ny;
     maxdimsY[1] = (hsize_t)ny;
+    const hsize_t chunk_dims2[2] = {1, MIN(CHUNK_SIZE,(hsize_t)ny)};
+    H5::DSetCreatPropList cparms2;
+    cparms2.setChunk(2, chunk_dims2);
     h5ElementY.dataspace = H5::DataSpace(2, dimsY, maxdimsY);
     h5ElementY.dataset = group.createDataSet(datasetName+"y",H5::PredType::NATIVE_DOUBLE, h5ElementY.dataspace, cparms2);
     return h5ElementY;
@@ -89,13 +94,13 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementZ() const
     if ((nx*ny)==0) return h5ElementZ;
     hsize_t dimsZ[3] = {1, 1, 1};
     hsize_t maxdimsZ[3] = {H5S_UNLIMITED, H5S_UNLIMITED, H5S_UNLIMITED};
-    const hsize_t chunk_dims3[3] = {20,10,1};
-    H5::DSetCreatPropList cparms3;
-    cparms3.setChunk(3, chunk_dims3);
     dimsZ[0] = (hsize_t)nx;
     maxdimsZ[0] = (hsize_t)nx;
     dimsZ[1] = (hsize_t)ny;
     maxdimsZ[1] = (hsize_t)ny;
+    const hsize_t chunk_dims3[3] = {MIN(CHUNK_SIZE,(hsize_t)nx),MIN(CHUNK_SIZE,(hsize_t)ny),1};
+    H5::DSetCreatPropList cparms3;
+    cparms3.setChunk(3, chunk_dims3);
     h5ElementZ.dataspace = H5::DataSpace(3, dimsZ, maxdimsZ);
     h5ElementZ.dataset = group.createDataSet(datasetName+"z",H5::PredType::NATIVE_DOUBLE, h5ElementZ.dataspace, cparms3);
     return h5ElementZ;
