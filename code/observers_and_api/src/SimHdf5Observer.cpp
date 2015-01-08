@@ -14,6 +14,7 @@
 #include "h5_interface.hpp"
 #include "h5_version.hpp"
 
+#define NB_OF_SCALAR_FOR_EULER_ANGLES 3
 
 struct H5Res
 {
@@ -25,6 +26,9 @@ struct H5Res
 
 H5::CompType H5_CreateIdStates(const VectorOfStringModelForEachBody& v);
 H5::CompType H5_CreateIdEfforts(const VectorOfStringModelForEachBody& v);
+H5::CompType H5_CreateIdQuaternion();
+H5::CompType H5_CreateIdEulerAngle();
+H5::CompType H5_CreateIdWrenchType();
 
 template <> void H5_Serialize<H5Res>::write(H5Res const * const data)
 {
@@ -38,6 +42,25 @@ template <> void H5_Serialize<H5Res>::write(H5Res const * const data)
     dataV.push_back(data->t);
     dataV.insert(dataV.end(),data->v.begin(),data->v.end());
     dataset.write(dataV.data(), this->get_type(), this->get_space(), fspace);
+}
+
+H5::CompType H5_CreateIdQuaternion()
+{
+    H5::CompType quaternionType = H5::CompType(4*sizeof(double));
+    quaternionType.insertMember("Qr", 0*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    quaternionType.insertMember("Qi", 1*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    quaternionType.insertMember("Qj", 2*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    quaternionType.insertMember("Qk", 3*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    return quaternionType;
+}
+
+H5::CompType H5_CreateIdEulerAngle()
+{
+    H5::CompType eulerType = H5::CompType(NB_OF_SCALAR_FOR_EULER_ANGLES*sizeof(double));
+    eulerType.insertMember("Phi", 0*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    eulerType.insertMember("Theta", 1*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    eulerType.insertMember("Psi", 2*sizeof(double), H5::PredType::NATIVE_DOUBLE);
+    return eulerType;
 }
 
 H5::CompType H5_CreateIdStates(const VectorOfStringModelForEachBody& v)
@@ -68,9 +91,7 @@ H5::CompType H5_CreateIdStates(const VectorOfStringModelForEachBody& v)
     return mtype;
 }
 
-
-H5::CompType h5_createWrenchType();
-H5::CompType h5_createWrenchType()
+H5::CompType H5_CreateIdWrenchType()
 {
     H5::CompType wrenchType = H5::CompType(6*sizeof(double));
     wrenchType.insertMember("Fx", 0*sizeof(double), H5::PredType::NATIVE_DOUBLE);
@@ -99,7 +120,7 @@ H5::CompType H5_CreateIdEfforts(const VectorOfStringModelForEachBody& v)
         size_t iModel = 0;
         for (auto itModel = itBody->second.begin() ; itModel != itBody->second.end() ; ++itModel)
         {
-            bodyType.insertMember(*itModel, iModel*6*sizeof(double), h5_createWrenchType());
+            bodyType.insertMember(*itModel, iModel*6*sizeof(double), H5_CreateIdWrenchType());
             ++iModel;
         }
         mtype.insertMember(body_name, offsetof(H5Res, v)+iGlobal*6*sizeof(double), bodyType);
