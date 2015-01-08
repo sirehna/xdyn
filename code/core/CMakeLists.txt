@@ -7,6 +7,7 @@ set(SRC src/update_kinematics.cpp
         src/Res.cpp
         src/SurfaceElevationBuilder.cpp
         src/Body.cpp
+        src/BodyStates.cpp
         src/BodyBuilder.cpp
         src/EnvironmentAndFrames.cpp
         src/ControllableForceModel.cpp
@@ -18,6 +19,7 @@ set(SRC src/update_kinematics.cpp
         src/EmergedSurfaceForceModel.cpp
         src/yaml2eigen.cpp
         src/DefaultSurfaceElevation.cpp
+        src/BodyStates.cpp
         )
 
 # Using C++ 2011
