@@ -17,7 +17,6 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const ssc::
                                         input(input_),
                                         builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
                                         force_parsers(),
-                                        new_force_parsers(),
                                         controlled_force_parsers(),
                                         surface_elevation_parsers(),
                                         wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
@@ -34,7 +33,7 @@ bool SimulatorBuilder::detected_surface_forces() const
     {
         for (auto that_force_model = that_body->external_forces.begin() ; that_force_model!= that_body->external_forces.end() ; ++that_force_model)
         {
-            for (auto try_to_parse:new_force_parsers)
+            for (auto try_to_parse:force_parsers)
             {
                 boost::optional<ForcePtr> f = try_to_parse(that_force_model->model, that_force_model->yaml, EnvironmentAndFrames());
                 if (f)
@@ -166,7 +165,7 @@ ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& 
 void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
-    for (auto try_to_parse:new_force_parsers)
+    for (auto try_to_parse:force_parsers)
     {
         boost::optional<ForcePtr> f = try_to_parse(model.model, model.yaml, env);
         if (f)

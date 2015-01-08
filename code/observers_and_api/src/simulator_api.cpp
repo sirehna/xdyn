@@ -37,15 +37,15 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_sou
            .can_parse<SurfaceElevationFromWaves>()
            .can_parse<Airy>()
            .can_parse<WageningenControlledForceModel>()
-           .new_can_parse<GravityForceModel>()
-           .new_can_parse<ExactHydrostaticForceModel>()
-           .new_can_parse<FastHydrostaticForceModel>()
-           .new_can_parse<FroudeKrylovForceModel>()
-           .new_can_parse<LinearDampingForceModel>()
-           .new_can_parse<ResistanceCurveForceModel>()
-           .new_can_parse<DiffractionForceModel>()
-           .new_can_parse<RadiationDampingForceModel>()
-           .new_can_parse<QuadraticDampingForceModel>();
+           .can_parse<GravityForceModel>()
+           .can_parse<ExactHydrostaticForceModel>()
+           .can_parse<FastHydrostaticForceModel>()
+           .can_parse<FroudeKrylovForceModel>()
+           .can_parse<LinearDampingForceModel>()
+           .can_parse<ResistanceCurveForceModel>()
+           .can_parse<DiffractionForceModel>()
+           .can_parse<RadiationDampingForceModel>()
+           .can_parse<QuadraticDampingForceModel>();
     return builder;
 }
 
