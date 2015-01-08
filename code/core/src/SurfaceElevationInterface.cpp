@@ -165,7 +165,11 @@ SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
     const size_t ny = output_mesh_size.second;
     if ((nx*ny)!=res.size())
     {
-        THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"Problem");
+        std::stringstream ss;
+        ss << "Problem : " <<std::endl
+           << "nx*ny = "<<nx << "*"<<ny <<"="<<nx*ny
+           <<" should be equal to res.size() = "<<res.size()<<std::endl;
+        THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,ss.str());
     }
     SurfaceElevationGrid s(nx,ny,t);
     for(size_t i=0;i<nx;++i)
