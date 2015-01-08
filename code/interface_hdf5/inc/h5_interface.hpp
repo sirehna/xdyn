@@ -15,20 +15,42 @@ class H5InterfaceException: public ssc::exception_handling::Exception
         }
 };
 
-H5::DataSpace h5_CreateDataSpace1DUnlimited();
+namespace H5_Tools
+{
+    std::vector<std::string> split(
+            const std::string & str,
+            const std::string & delim = "/");
 
-H5::DataSet h5_CreateDataSet(const H5::H5File& file, const std::string& datasetName, const H5::DataType& datasetType, const H5::DataSpace& space);
+    std::string ensureStringStartsAndEndsWithAPattern(
+            const std::string & str,
+            const std::string & delim);
+
+    std::string ensureStringStartsWithAPattern(
+            const std::string & str,
+            const std::string & delim
+            );
+
+    H5::DataSpace createDataSpace1DUnlimited();
+
+    H5::DataSet createDataSet(
+            const H5::H5File& file, const std::string& datasetName,
+            const H5::DataType& datasetType, const H5::DataSpace& space);
+
+    H5::Group createMissingGroups(
+            const H5::H5File& file,
+            const std::string& datasetName);
+}
 
 template <typename T> class H5_Interface
 {
     public:
         H5_Interface():
-                h5Space(h5_CreateDataSpace1DUnlimited()),
+                h5Space(H5_Tools::createDataSpace1DUnlimited()),
                 h5Type(createId())
         {
         }
         H5_Interface(const H5::CompType& h5Type_):
-                h5Space(h5_CreateDataSpace1DUnlimited()),
+                h5Space(H5_Tools::createDataSpace1DUnlimited()),
                 h5Type(h5Type_)
         {
         }
@@ -56,7 +78,7 @@ template <typename T> class H5_Serialize : public H5_Interface<T>
                 const std::string& fileName,
                 const std::string& datasetName): H5_Interface<T>(),
                     file(H5::H5File(fileName, H5F_ACC_TRUNC)),
-                    dataset(h5_CreateDataSet(file,datasetName,this->get_type(),this->get_space())),
+                    dataset(H5_Tools::createDataSet(file,datasetName,this->get_type(),this->get_space())),
                     n(0),inputIsDirectlyAH5File(false)
         {
         }
@@ -64,7 +86,7 @@ template <typename T> class H5_Serialize : public H5_Interface<T>
                 const H5::H5File& h5File,
                 const std::string& datasetName): H5_Interface<T>(),
                     file(h5File),
-                    dataset(h5_CreateDataSet(file,datasetName,this->get_type(),this->get_space())),
+                    dataset(H5_Tools::createDataSet(file,datasetName,this->get_type(),this->get_space())),
                     n(0),inputIsDirectlyAH5File(true)
         {
         }
@@ -74,7 +96,7 @@ template <typename T> class H5_Serialize : public H5_Interface<T>
                 const std::string& datasetName,
                 const H5::CompType& h5Type): H5_Interface<T>(h5Type),
                     file(H5::H5File(fileName, H5F_ACC_TRUNC)),
-                    dataset(h5_CreateDataSet(file,datasetName,this->get_type(),this->get_space())),
+                    dataset(H5_Tools::createDataSet(file,datasetName,this->get_type(),this->get_space())),
                     n(0),inputIsDirectlyAH5File(false)
         {
         }
@@ -83,7 +105,7 @@ template <typename T> class H5_Serialize : public H5_Interface<T>
                 const std::string& datasetName,
                 const H5::CompType& h5Type): H5_Interface<T>(h5Type),
                     file(h5File),
-                    dataset(h5_CreateDataSet(file,datasetName,this->get_type(),this->get_space())),
+                    dataset(H5_Tools::createDataSet(file,datasetName,this->get_type(),this->get_space())),
                     n(0),inputIsDirectlyAH5File(true)
         {
         }

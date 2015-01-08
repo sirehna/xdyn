@@ -18,8 +18,8 @@ H5InterfaceTest::H5InterfaceTest() : a(ssc::random_data_generator::DataGenerator
 TEST_F(H5InterfaceTest, writeFileDescription)
 {
     const std::string fileName("writeFileDescription.h5");
-    EXPECT_EQ(1,h5_writeFileDescription(fileName));
-    EXPECT_EQ(0,remove(fileName.c_str()));
+    ASSERT_EQ(1,h5_writeFileDescription(fileName));
+    ASSERT_EQ(0,remove(fileName.c_str()));
 }
 
 #define MAX_NAME_LENGTH 32
@@ -78,12 +78,82 @@ TEST_F(H5InterfaceTest, should_be_able_to_serialize_and_parse_a_static_structure
     ASSERT_EQ('F',res.at(2).sex);
     ASSERT_STREQ("Tom",res.at(2).name);
     ASSERT_EQ((float)178.6,res.at(2).height);
-    EXPECT_EQ(0,remove(fileName.c_str()));
+    ASSERT_EQ(0,remove(fileName.c_str()));
 }
 
-TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups)
+TEST_F(H5InterfaceTest, should_be_able_to_create_1d_unlimited_dataspace)
 {
-    const std::string fileName("should_be_able_to_create_file_with_groups.h5");
+    H5_Tools::createDataSpace1DUnlimited();
+}
+
+TEST_F(H5InterfaceTest, should_correctly_split_dataset_name_V0)
+{
+    const std::string s1("");
+    const std::vector<std::string> s1Split = H5_Tools::split(s1, "/");
+    ASSERT_TRUE(s1Split.empty());
+}
+
+TEST_F(H5InterfaceTest, should_correctly_split_dataset_name_V1)
+{
+    const std::string s1("toto");
+    const std::vector<std::string> s1Split = H5_Tools::split(s1, "/");
+    ASSERT_EQ(1,s1Split.size());
+    ASSERT_EQ("toto",s1Split.at(0));
+}
+
+TEST_F(H5InterfaceTest, should_correctly_split_dataset_name_V2)
+{
+    const std::string s1("/A/B/C/D/toto");
+    const std::vector<std::string> s1Split = H5_Tools::split(s1, "/");
+    ASSERT_EQ(5,s1Split.size());
+    ASSERT_EQ("A",s1Split.at(0));
+    ASSERT_EQ("B",s1Split.at(1));
+    ASSERT_EQ("C",s1Split.at(2));
+    ASSERT_EQ("D",s1Split.at(3));
+    ASSERT_EQ("toto",s1Split.at(4));
+}
+
+TEST_F(H5InterfaceTest, should_correctly_split_dataset_name_V3)
+{
+    const std::string s1("A/B/C/D/toto");
+    const std::vector<std::string> s1Split = H5_Tools::split(s1, "/");
+    ASSERT_EQ(5,s1Split.size());
+    ASSERT_EQ("A",s1Split.at(0));
+    ASSERT_EQ("B",s1Split.at(1));
+    ASSERT_EQ("C",s1Split.at(2));
+    ASSERT_EQ("D",s1Split.at(3));
+    ASSERT_EQ("toto",s1Split.at(4));
+}
+
+TEST_F(H5InterfaceTest, should_correctly_split_dataset_name_V4)
+{
+    const std::string s1("A/B/C/D/toto/");
+    const std::vector<std::string> s1Split = H5_Tools::split(s1, "/");
+    ASSERT_EQ(6,s1Split.size());
+    ASSERT_EQ("A",s1Split.at(0));
+    ASSERT_EQ("B",s1Split.at(1));
+    ASSERT_EQ("C",s1Split.at(2));
+    ASSERT_EQ("D",s1Split.at(3));
+    ASSERT_EQ("toto",s1Split.at(4));
+    ASSERT_EQ("",s1Split.at(5));
+}
+
+TEST_F(H5InterfaceTest, should_correctly_split_dataset_name_V5)
+{
+    const std::string s1("/A/B/C/D/toto/");
+    const std::vector<std::string> s1Split = H5_Tools::split(s1, "/");
+    ASSERT_EQ(6,s1Split.size());
+    ASSERT_EQ("A",s1Split.at(0));
+    ASSERT_EQ("B",s1Split.at(1));
+    ASSERT_EQ("C",s1Split.at(2));
+    ASSERT_EQ("D",s1Split.at(3));
+    ASSERT_EQ("toto",s1Split.at(4));
+    ASSERT_EQ("",s1Split.at(5));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups_raw)
+{
+    const std::string fileName("should_be_able_to_create_file_with_groups_raw.h5");
     H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
     H5::Group group1_id = h5File.createGroup("/MyGroup", 0);
     H5::Group group2_id = h5File.createGroup("/MyGroup/Group_A", 0);
@@ -92,39 +162,127 @@ TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups)
     group2_id.close();
     group3_id.close();
     h5File.close();
-    EXPECT_EQ(0,remove(fileName.c_str()));
+    ASSERT_EQ(0,remove(fileName.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups_Level0)
+{
+    const std::string fileName("should_be_able_to_create_file_with_groups_Level0.h5");
+    const std::string datasetName("");
+    {
+        H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        H5::Group g = H5_Tools::createMissingGroups(h5File,datasetName);
+    }
+    ASSERT_EQ(0,remove(fileName.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups_Level1)
+{
+    const std::string fileName("should_be_able_to_create_file_with_groups_Level1.h5");
+    const std::string datasetName("A");
+    {
+        H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        H5::Group g = H5_Tools::createMissingGroups(h5File,datasetName);
+    }
+    ASSERT_EQ(0,remove(fileName.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups_Level2a)
+{
+    const std::string fileName("should_be_able_to_create_file_with_groups_Level2a.h5");
+    const std::string datasetName("A/B");
+    {
+        H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        H5::Group g = H5_Tools::createMissingGroups(h5File,datasetName);
+    }
+    ASSERT_EQ(0,remove(fileName.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups_Level2b)
+{
+    const std::string fileName("should_be_able_to_create_file_with_groups_Level2b.h5");
+    const std::string datasetName("/A/B");
+    {
+        H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        H5::Group g = H5_Tools::createMissingGroups(h5File,datasetName);
+    }
+    ASSERT_EQ(0,remove(fileName.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups_Level2c)
+{
+    const std::string fileName("should_be_able_to_create_file_with_groups_Level2c.h5");
+    const std::string datasetName("/A/");
+    {
+        H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        H5::Group g = H5_Tools::createMissingGroups(h5File,datasetName);
+    }
+    ASSERT_EQ(0,remove(fileName.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_create_file_with_groups_LevelX)
+{
+    const std::string fileName("should_be_able_to_create_file_with_groups_LevelX.h5");
+    const std::string datasetName("/A/B/C/D/toto");
+    {
+        H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        H5::Group g = H5_Tools::createMissingGroups(h5File,datasetName);
+    }
+    ASSERT_EQ(0,remove(fileName.c_str()));
 }
 
 TEST_F(H5InterfaceTest, should_be_able_to_create_dataset_in_groups)
 {
     const std::string fileName("should_be_able_to_create_dataset_in_groups.h5");
-    H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
     const std::string datasetName("/A/B/C/D/toto");
-    H5::DataType dtype(H5::PredType::NATIVE_DOUBLE);
-    H5::DataSpace space = h5_CreateDataSpace1DUnlimited();
-    H5::DataSet s = h5_CreateDataSet(h5File, datasetName, dtype, space);
-    s.close();
-    dtype.close();
-    space.close();
-    h5File.close();
-    EXPECT_EQ(0,remove(fileName.c_str()));
+    {
+        H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        H5::DataType dtype(H5::PredType::NATIVE_DOUBLE);
+        H5::DataSpace space = H5_Tools::createDataSpace1DUnlimited();
+        H5::DataSet s = H5_Tools::createDataSet(h5File, datasetName, dtype, space);
+    }
+    ASSERT_EQ(0,remove(fileName.c_str()));
 }
 
 TEST_F(H5InterfaceTest, should_throw_an_exception_when_trying_to_create_an_existing_dataset)
 {
     const std::string fileName("should_throw_an_exception_when_trying_to_create_an_existing_dataset.h5");
-    H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
     const std::string datasetName("/A/B/C/D/toto");
-    H5::DataType dtype(H5::PredType::NATIVE_DOUBLE);
-    H5::DataSpace space = h5_CreateDataSpace1DUnlimited();
-    H5::DataSet s = h5_CreateDataSet(h5File, datasetName, dtype, space);
-    H5::DataSet ss;
-    ASSERT_THROW(ss=h5_CreateDataSet(h5File, datasetName, dtype, space), H5InterfaceException);
-    s.close();
-    dtype.close();
-    space.close();
-    h5File.close();
-    h5File.close();
-    EXPECT_EQ(0,remove(fileName.c_str()));
+    {
+        H5::H5File h5File(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+        H5::DataType dtype(H5::PredType::NATIVE_DOUBLE);
+        H5::DataSpace space = H5_Tools::createDataSpace1DUnlimited();
+        H5::DataSet s = H5_Tools::createDataSet(h5File, datasetName, dtype, space);
+        H5::DataSet ss;
+        ASSERT_THROW(ss=H5_Tools::createDataSet(h5File, datasetName, dtype, space), H5InterfaceException);
+    }
+    ASSERT_EQ(0,remove(fileName.c_str()));
 }
 
+TEST_F(H5InterfaceTest, should_handle_correctly_group_name)
+{
+    const std::string delim("/");
+    ASSERT_EQ("/",H5_Tools::ensureStringStartsAndEndsWithAPattern("", delim));
+    ASSERT_EQ("/",H5_Tools::ensureStringStartsAndEndsWithAPattern("/", delim));
+    ASSERT_EQ("//",H5_Tools::ensureStringStartsAndEndsWithAPattern("//", delim));
+    ASSERT_EQ("/a/",H5_Tools::ensureStringStartsAndEndsWithAPattern("a", delim));
+    ASSERT_EQ("/a/b/",H5_Tools::ensureStringStartsAndEndsWithAPattern("a/b", delim));
+    ASSERT_EQ("/a/b/",H5_Tools::ensureStringStartsAndEndsWithAPattern("a/b/", delim));
+    ASSERT_EQ("/a/b/",H5_Tools::ensureStringStartsAndEndsWithAPattern("/a/b/", delim));
+    ASSERT_EQ("/a/b/c/",H5_Tools::ensureStringStartsAndEndsWithAPattern("/a/b/c", delim));
+    ASSERT_EQ("/a/b/c/",H5_Tools::ensureStringStartsAndEndsWithAPattern("/a/b/c/", delim));
+}
+
+TEST_F(H5InterfaceTest, should_handle_correctly_root_group_name)
+{
+    const std::string delim("/");
+    ASSERT_EQ("/",H5_Tools::ensureStringStartsWithAPattern("", delim));
+    ASSERT_EQ("/",H5_Tools::ensureStringStartsWithAPattern("/", delim));
+    ASSERT_EQ("//",H5_Tools::ensureStringStartsWithAPattern("//", delim));
+    ASSERT_EQ("/a",H5_Tools::ensureStringStartsWithAPattern("a", delim));
+    ASSERT_EQ("/a/b",H5_Tools::ensureStringStartsWithAPattern("a/b", delim));
+    ASSERT_EQ("/a/b/",H5_Tools::ensureStringStartsWithAPattern("a/b/", delim));
+    ASSERT_EQ("/a/b/",H5_Tools::ensureStringStartsWithAPattern("/a/b/", delim));
+    ASSERT_EQ("/a/b/c",H5_Tools::ensureStringStartsWithAPattern("/a/b/c", delim));
+    ASSERT_EQ("/a/b/c/",H5_Tools::ensureStringStartsWithAPattern("/a/b/c/", delim));
+}

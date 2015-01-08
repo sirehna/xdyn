@@ -1,18 +1,44 @@
 #include "h5_interface.hpp"
 #include <vector>
 
-inline std::vector<std::string> Split(const std::string & str, const std::string & delim = "/")
+std::string H5_Tools::ensureStringStartsAndEndsWithAPattern(
+        const std::string & str,        //!< String to check
+        const std::string & delim       //!< Pattern to place at the beginning and the end of the \a str
+        )
+{
+    std::string res(str);
+    if (str.empty()) return delim;
+    if (delim.size()>res.size()) return delim + res + delim;
+    if (res.rfind(delim,0)!=0) res = delim + res;
+    const size_t lastPoss = res.size()-delim.size();
+    if (res.rfind(delim,lastPoss)!=lastPoss) res = res+delim;
+    return res;
+}
+
+std::string H5_Tools::ensureStringStartsWithAPattern(
+        const std::string & str,        //!< String to check
+        const std::string & delim       //!< Pattern to place at the beginning of the \a str
+        )
+{
+    std::string res(str);
+    if (str.empty()) return delim;
+    if (delim.size()>res.size()) return delim + res + delim;
+    if (res.rfind(delim,0)!=0) res = delim + res;
+    return res;
+}
+
+std::vector<std::string> H5_Tools::split(const std::string & str, const std::string & delim)
 {
     std::vector<std::string> tokens;
-    if (str.size() > 0)
+    if (not(str.empty()))
     {
-        if (delim.size() > 0)
+        if (not(delim.empty()))
         {
             std::string::size_type currPos = 0, prevPos = 0;
             while ((currPos = str.find(delim, prevPos)) != std::string::npos)
             {
                 std::string item = str.substr(prevPos, currPos - prevPos);
-                if (item.size() > 0)
+                if (not(item.empty()))
                 {
                     tokens.push_back(item);
                 }
@@ -28,30 +54,49 @@ inline std::vector<std::string> Split(const std::string & str, const std::string
     return tokens;
 }
 
-inline void createMissingGroups(const H5::H5File& file, const std::string& datasetName)
+H5::Group H5_Tools::createMissingGroups(
+        const H5::H5File& file,
+        const std::string& datasetName)
 {
-    const std::vector<std::string> tokens = Split(datasetName, "/");
+    const std::vector<std::string> tokens = split(datasetName, "/");
+    const size_t nTokens = tokens.size();
     std::string current;
-    for (std::size_t i=0;i<(tokens.size()-1);++i)
+    if (nTokens<(size_t)2)
     {
-        const std::string& currentGroup = tokens.at(i);
-        current += "/"+currentGroup;
-        if (H5Lexists(file.getId(), current.c_str(), H5P_DEFAULT)<=0)
+        return file.openGroup("/");
+    }
+    else if (nTokens>(size_t)2)
+    {
+        for (size_t i=0;i<(nTokens-2);++i)
         {
-            file.createGroup(current);
+            const std::string& currentGroup = tokens.at(i);
+            current += "/"+currentGroup;
+            if (H5Lexists(file.getId(), current.c_str(), H5P_DEFAULT)<=0)
+            {
+                file.createGroup(current);
+            }
         }
+    }
+    const std::string& currentGroup = tokens.at(nTokens-2);
+    current += "/"+currentGroup;
+    if (H5Lexists(file.getId(), current.c_str(), H5P_DEFAULT)<=0)
+    {
+        return file.createGroup(current);
+    }
+    else
+    {
+        return file.openGroup(current);
     }
 }
 
-H5::DataSet h5_CreateDataSet(const H5::H5File& file, const std::string& datasetName, const H5::DataType& datasetType, const H5::DataSpace& space)
+H5::DataSet H5_Tools::createDataSet(
+        const H5::H5File& file, const std::string& datasetName,
+        const H5::DataType& datasetType, const H5::DataSpace& space)
 {
     const hsize_t chunk_dims[1] = {1};
     H5::DSetCreatPropList cparms;
     cparms.setChunk(1, chunk_dims);
-    if (datasetName.find('/')!=std::string::npos)
-    {
-        createMissingGroups(file, datasetName);
-    }
+    createMissingGroups(file, datasetName);
     htri_t dataset_status = H5Lexists(file.getId(), datasetName.c_str(), H5P_DEFAULT);
     if (dataset_status<=0)
     {
@@ -59,12 +104,12 @@ H5::DataSet h5_CreateDataSet(const H5::H5File& file, const std::string& datasetN
     }
     else
     {
-        THROW(__PRETTY_FUNCTION__, H5InterfaceException, "Dataset already exists");
+        THROW(__PRETTY_FUNCTION__, H5InterfaceException, "Dataset already exists" + datasetName);
         return file.openDataSet(datasetName);
     }
 }
 
-H5::DataSpace h5_CreateDataSpace1DUnlimited()
+H5::DataSpace H5_Tools::createDataSpace1DUnlimited()
 {
     const hsize_t dims[1] = {1};
     const hsize_t maxdims[1] = {H5S_UNLIMITED};
