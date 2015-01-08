@@ -46,6 +46,13 @@ TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model() const
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
 }
 
+TEST_F(SurfaceElevationFromWavesTest, default_constructor_contains_an_empty_output_wave_mesh)
+{
+    const auto ms = SurfaceElevationFromWaves(get_model()).get_output_mesh_size();
+    ASSERT_EQ(0,ms.first);
+    ASSERT_EQ(0,ms.second);
+}
+
 TEST_F(SurfaceElevationFromWavesTest, relative_wave_height)
 {
 //! [SurfaceElevationFromWavesTest relative_wave_height example]
