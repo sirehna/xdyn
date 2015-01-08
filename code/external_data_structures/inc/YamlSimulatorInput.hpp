@@ -12,7 +12,6 @@
 #include "YamlModel.hpp"
 #include "YamlBody.hpp"
 #include "YamlPoint.hpp"
-#include "YamlBlockedDegreesOfFreedom.hpp"
 #include "YamlPositionOutput.hpp"
 #include "YamlAnglesOutput.hpp"
 #include "YamlForcesAndTorquesOutput.hpp"
@@ -26,7 +25,6 @@ struct YamlSimulatorInput
     std::vector<YamlModel> environment;
     std::vector<YamlBody> bodies;
     std::vector<YamlPoint> points;
-    std::vector<YamlBlockedDegreesOfFreedom> blocked_degrees_of_freedom;
     std::vector<YamlPositionOutput> position_output;
     std::vector<YamlAnglesOutput> angles_output;
     std::vector<YamlPositionOutput> linear_velocities_output;

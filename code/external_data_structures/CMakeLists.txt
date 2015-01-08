@@ -7,7 +7,6 @@ SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "P
 
 SET(SRC src/YamlAngle.cpp
         src/YamlAnglesOutput.cpp
-        src/YamlBlockedDegreesOfFreedom.cpp
         src/YamlBody.cpp
         src/YamlCommands.cpp
         src/YamlCoordinates.cpp

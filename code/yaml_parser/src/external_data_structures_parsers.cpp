@@ -179,12 +179,6 @@ void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
     }
 }
 
-void operator >> (const YAML::Node& node, YamlBlockedDegreesOfFreedom& m)
-{
-    node["body"] >> m.body;
-    node["blocked"] >> m.blocked;
-}
-
 void operator >> (const YAML::Node& node, YamlOutput& p)
 {
     node["axes"] >> p.axes;

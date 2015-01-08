@@ -242,16 +242,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_points)
     ASSERT_DOUBLE_EQ(300, points.at(1).z);
 }
 
-TEST_F(SimulatorYamlParserTest, can_parse_blocked_degrees_of_freedom)
-{
-    const std::vector<YamlBlockedDegreesOfFreedom> b = yaml.blocked_degrees_of_freedom;
-    ASSERT_EQ(1,b.size());
-    ASSERT_EQ("body 1", b.at(0).body);
-    ASSERT_EQ(2, b.at(0).blocked.size());
-    ASSERT_EQ("x", b.at(0).blocked.at(0));
-    ASSERT_EQ("theta", b.at(0).blocked.at(1));
-}
-
 TEST_F(SimulatorYamlParserTest, can_parse_output_positions)
 {
     const std::vector<YamlPositionOutput> p = yaml.position_output;

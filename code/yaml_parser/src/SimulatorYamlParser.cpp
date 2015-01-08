@@ -47,7 +47,6 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
     node["rotations convention"] >> ret.rotations;
     PARSE_OPTIONAL_KEY("environment models", ret.environment);
     PARSE_OPTIONAL_KEY("points", ret.points)
-    PARSE_OPTIONAL_KEY("blocked degrees of freedom body/NED->body", ret.blocked_degrees_of_freedom)
 
     if(const YAML::Node *parameter = node.FindValue("outputs"))
     {
