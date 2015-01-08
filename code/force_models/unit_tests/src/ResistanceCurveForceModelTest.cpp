@@ -9,7 +9,6 @@
 #include "ResistanceCurveForceModel.hpp"
 #include "ResistanceCurveForceModelTest.hpp"
 #include "yaml_data.hpp"
-#include "YamlResistanceCurve.hpp"
 #include "EnvironmentAndFrames.hpp"
 
 #define EPS 1E-6
@@ -32,7 +31,7 @@ void ResistanceCurveForceModelTest::TearDown()
 
 TEST_F(ResistanceCurveForceModelTest, parser)
 {
-    const YamlResistanceCurve r = ResistanceCurveForceModel::parse(test_data::resistance_curve());
+    const auto r = ResistanceCurveForceModel::parse(test_data::resistance_curve());
     ASSERT_EQ(8, r.R.size());
     ASSERT_EQ(8, r.Va.size());
 

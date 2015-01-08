@@ -12,14 +12,13 @@
 #include "environment_parsers.hpp"
 #include "Body.hpp"
 #include "ResistanceCurveForceModel.hpp"
-#include "YamlResistanceCurve.hpp"
 
 const std::string ResistanceCurveForceModel::model_name = "resistance curve";
 
 class ResistanceCurveForceModel::Impl
 {
     public:
-        Impl(const YamlResistanceCurve& data) : S(data.Va, data.R, /*allow queries outside bounds*/ true), vmin(data.Va.front()), vmax(data.Va.back())
+        Impl(const Yaml& data) : S(data.Va, data.R, /*allow queries outside bounds*/ true), vmin(data.Va.front()), vmax(data.Va.back())
         {
         }
 
@@ -37,17 +36,21 @@ class ResistanceCurveForceModel::Impl
         double vmax;
 };
 
-ResistanceCurveForceModel::ResistanceCurveForceModel(const YamlResistanceCurve& data, const EnvironmentAndFrames&) : ForceModel("resistance curve"), pimpl(new Impl(data))
+ResistanceCurveForceModel::Yaml::Yaml() : Va(), R()
 {
 }
 
-ResistanceCurveForceModel::Input ResistanceCurveForceModel::parse(const std::string& yaml)
+ResistanceCurveForceModel::ResistanceCurveForceModel(const Yaml& data, const EnvironmentAndFrames&) : ForceModel("resistance curve"), pimpl(new Impl(data))
+{
+}
+
+ResistanceCurveForceModel::Yaml ResistanceCurveForceModel::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    YamlResistanceCurve ret;
+    Yaml ret;
     parse_uv(node["speed"], ret.Va);
     parse_uv(node["resistance"], ret.R);
     return ret;

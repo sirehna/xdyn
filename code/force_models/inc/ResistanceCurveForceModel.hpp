@@ -11,7 +11,6 @@
 #include <ssc/macros.hpp>
 
 #include "ForceModel.hpp"
-#include "YamlResistanceCurve.hpp"
 
 class EnvironmentAndFrames;
 
@@ -27,9 +26,14 @@ class EnvironmentAndFrames;
 class ResistanceCurveForceModel : public ForceModel
 {
     public:
-        typedef YamlResistanceCurve Input;
-        ResistanceCurveForceModel(const Input& data, const EnvironmentAndFrames& env);
-        static Input parse(const std::string& yaml);
+        struct Yaml
+        {
+            Yaml();
+            std::vector<double> Va;
+            std::vector<double> R;
+        };
+        ResistanceCurveForceModel(const Yaml& data, const EnvironmentAndFrames& env);
+        static Yaml parse(const std::string& yaml);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
         static const std::string model_name;
 
