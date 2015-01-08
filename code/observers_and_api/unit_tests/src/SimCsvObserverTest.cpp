@@ -51,7 +51,7 @@ TEST_F(SimCsvObserverTest, can_simulate_system_with_no_wave_output)
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
 }
 
-TEST_F(SimCsvObserverTest, can_simulate_environment_with_no_system)
+TEST_F(SimCsvObserverTest, can_simulate_environment_with_no_system_for_two_time_steps)
 {
     const double dt = 1E-1;
     const double tend = 0.1;
@@ -73,7 +73,7 @@ TEST_F(SimCsvObserverTest, can_simulate_environment_with_no_system)
     ASSERT_EQ(expected.str(), wave_stream.str());
 }
 
-TEST_F(SimCsvObserverTest, can_simulate_both_environment_and_system)
+TEST_F(SimCsvObserverTest, can_simulate_both_environment_and_system_for_two_time_steps)
 {
     const double dt = 1E-1;
     const double tend = dt;
