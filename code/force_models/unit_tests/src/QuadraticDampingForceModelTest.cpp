@@ -8,6 +8,7 @@
 #include "QuadraticDampingForceModel.hpp"
 #include "QuadraticDampingForceModelTest.hpp"
 #include "generate_body_for_tests.hpp"
+#include "BodyStates.hpp"
 #include "EnvironmentAndFrames.hpp"
 
 #include <ssc/kinematics.hpp>
@@ -53,9 +54,9 @@ TEST_F(QuadraticDampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
     const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >(), EnvironmentAndFrames());
-    Body b = get_body(BODY);
+    const BodyStates states = get_body(BODY).states;
     const double t = a.random<double>();
-    const ssc::kinematics::Wrench f = F(b.states,t);
+    const ssc::kinematics::Wrench f = F(states,t);
 //! [DampingForceModelTest example]
 //! [DampingForceModelTest expected output]
     ASSERT_EQ(BODY, f.get_frame());
@@ -74,16 +75,16 @@ TEST_F(QuadraticDampingForceModelTest, example_with_random_positive_velocities_a
     const Eigen::Matrix<double,6,6> D = Eigen::Matrix<double,6,6>::Identity();
     QuadraticDampingForceModel F(D, EnvironmentAndFrames());
     double u,v,w,p,q,r;
-    Body b = get_body(BODY);
+    BodyStates states = get_body(BODY).states;
     for (size_t i=0;i<100;++i)
     {
-        b.states.u = u = a.random<double>().greater_than(0.0);
-        b.states.v = v = a.random<double>().greater_than(0.0);
-        b.states.w = w = a.random<double>().greater_than(0.0);
-        b.states.p = p = a.random<double>().greater_than(0.0);
-        b.states.q = q = a.random<double>().greater_than(0.0);
-        b.states.r = r = a.random<double>().greater_than(0.0);
-        const ssc::kinematics::Wrench f = F(b.states,a.random<double>());
+        states.u = u = a.random<double>().greater_than(0.0);
+        states.v = v = a.random<double>().greater_than(0.0);
+        states.w = w = a.random<double>().greater_than(0.0);
+        states.p = p = a.random<double>().greater_than(0.0);
+        states.q = q = a.random<double>().greater_than(0.0);
+        states.r = r = a.random<double>().greater_than(0.0);
+        const ssc::kinematics::Wrench f = F(states,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
         ASSERT_NEAR(-u*u, f.X(),EPS);
         ASSERT_NEAR(-v*v, f.Y(),EPS);
@@ -100,7 +101,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
     Eigen::Matrix<double,6,6> D;
     double u,v,w,p,q,r;
     double uu,vv,ww,pp,qq,rr;
-    Body b = get_body(BODY);
+    BodyStates states = get_body(BODY).states;
     D <<  2,   3,   5,   7,  11,  13,
          17,  19,  23,  29,  31,  37,
          41,  43,  47,  53,  59,  61,
@@ -110,19 +111,19 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
     QuadraticDampingForceModel F(D, EnvironmentAndFrames());
     for (int i=0;i<100;++i)
     {
-        b.states.u = u = a.random<double>().between(-10.0,+10.0);
-        b.states.v = v = a.random<double>().between(-10.0,+10.0);
-        b.states.w = w = a.random<double>().between(-10.0,+10.0);
-        b.states.p = p = a.random<double>().between(-10.0,+10.0);
-        b.states.q = q = a.random<double>().between(-10.0,+10.0);
-        b.states.r = r = a.random<double>().between(-10.0,+10.0);
+        states.u = u = a.random<double>().between(-10.0,+10.0);
+        states.v = v = a.random<double>().between(-10.0,+10.0);
+        states.w = w = a.random<double>().between(-10.0,+10.0);
+        states.p = p = a.random<double>().between(-10.0,+10.0);
+        states.q = q = a.random<double>().between(-10.0,+10.0);
+        states.r = r = a.random<double>().between(-10.0,+10.0);
         uu = fabs(u)*u;
         vv = fabs(v)*v;
         ww = fabs(w)*w;
         pp = fabs(p)*p;
         qq = fabs(q)*q;
         rr = fabs(r)*r;
-        const ssc::kinematics::Wrench f = F(b.states,a.random<double>());
+        const ssc::kinematics::Wrench f = F(states,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
         for (int j=0;j<3;++j)
         {

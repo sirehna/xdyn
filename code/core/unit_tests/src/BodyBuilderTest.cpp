@@ -37,7 +37,7 @@ Body BodyBuilderTest::build_body()
     const auto yaml = SimulatorYamlParser(test_data::full_example()).parse();
     const auto mesh = read_stl(test_data::cube());
     BodyBuilder builder(yaml.rotations);
-    return builder.build(yaml.bodies.front(), mesh);
+    return builder.build(yaml.bodies.front(), mesh, 0);
 }
 
 TEST_F(BodyBuilderTest, name_should_be_correct)

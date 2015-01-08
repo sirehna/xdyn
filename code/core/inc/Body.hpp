@@ -14,7 +14,7 @@ struct YamlBody;
 class Body
 {
     public:
-        Body();
+        Body(const size_t idx);
         /** \brief Use SurfaceElevation to compute wave height & update accordingly
          */
         void update_intersection_with_free_surface(const EnvironmentAndFrames& env,
@@ -22,6 +22,10 @@ class Body
                                                   );
 
         BodyStates states;
+
+    private:
+        Body();
+        size_t idx;
 };
 
 #endif /* BODY_HPP_ */

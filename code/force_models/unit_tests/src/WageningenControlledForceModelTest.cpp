@@ -9,7 +9,7 @@
 #include <cmath>
 #define PI M_PI
 
-#include "Body.hpp"
+#include "BodyStates.hpp"
 #include "yaml_data.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelTest.hpp"
@@ -331,11 +331,11 @@ TEST_F(WageningenControlledForceModelTest, KQ)
 TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
 {
     const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), EnvironmentAndFrames());
-    Body b;
-    b.states.u = 3;
+    BodyStates states;
+    states.u = 3;
     std::map<std::string,double> commands;
     commands["rpm"] = 20*2*PI;
-    ASSERT_DOUBLE_EQ(3./400., w.advance_ratio(b.states, commands));
+    ASSERT_DOUBLE_EQ(3./400., w.advance_ratio(states, commands));
 }
 
 TEST_F(WageningenControlledForceModelTest, force)
@@ -345,18 +345,18 @@ TEST_F(WageningenControlledForceModelTest, force)
     EnvironmentAndFrames env;
     env.rho = 1024;
     const WageningenControlledForceModel w(input, env);
-    Body b;
-    b.states.u = 1;
+    BodyStates states;
+    states.u = 1;
 
     std::map<std::string,double> commands;
     commands["rpm"] = 5*(2*PI);
     commands["P/D"] = 0.5;
 
-    ASSERT_NEAR(0.3*1024*25*16*0.18587823151195928539, w.get_force(b.states, a.random<double>(),commands)(0), EPS);
-    ASSERT_EQ(0, w.get_force(b.states, a.random<double>(),commands)(1));
-    ASSERT_EQ(0, w.get_force(b.states, a.random<double>(),commands)(2));
-    ASSERT_EQ(0, w.get_force(b.states, a.random<double>(),commands)(4));
-    ASSERT_EQ(0, w.get_force(b.states, a.random<double>(),commands)(5));
+    ASSERT_NEAR(0.3*1024*25*16*0.18587823151195928539, w.get_force(states, a.random<double>(),commands)(0), EPS);
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(1));
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(2));
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(4));
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(5));
 }
 
 TEST_F(WageningenControlledForceModelTest, torque)
@@ -366,21 +366,21 @@ TEST_F(WageningenControlledForceModelTest, torque)
     EnvironmentAndFrames env;
     env.rho = 1024;
     const WageningenControlledForceModel w(input, env);
-    Body b;
-    b.states.u = 1;
+    BodyStates states;
+    states.u = 1;
 
     std::map<std::string,double> commands;
     commands["rpm"] = 5*(2*PI);
     commands["P/D"] = 0.5;
 
-    ASSERT_NEAR(-1024*25*32*0.015890316523410611543, w.get_force(b.states, a.random<double>(),commands)(3), EPS);
+    ASSERT_NEAR(-1024*25*32*0.015890316523410611543, w.get_force(states, a.random<double>(),commands)(3), EPS);
 }
 
 TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding_to_rotation)
 {
     auto input = WageningenControlledForceModel::parse(test_data::wageningen());
-    Body b;
-    b.states.u = a.random<double>().greater_than(0);
+    BodyStates states;
+    states.u = a.random<double>().greater_than(0);
     EnvironmentAndFrames env;
     env.rho = a.random<double>().greater_than(0);
 
@@ -389,8 +389,8 @@ TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding
     const WageningenControlledForceModel w_anti_clockwise(input, env);
 
     std::map<std::string,double> commands;
-    commands["rpm"] = a.random<double>().between(b.states.u,2*b.states.u);
+    commands["rpm"] = a.random<double>().between(states.u,2*states.u);
     commands["P/D"] = a.random<double>().between(0.5,1.4);
-    ASSERT_GT(0, w_clockwise.get_force(b.states, a.random<double>(),commands)(3));
-    ASSERT_LT(0, w_anti_clockwise.get_force(b.states, a.random<double>(),commands)(3));
+    ASSERT_GT(0, w_clockwise.get_force(states, a.random<double>(),commands)(3));
+    ASSERT_LT(0, w_anti_clockwise.get_force(states, a.random<double>(),commands)(3));
 }

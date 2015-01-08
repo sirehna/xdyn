@@ -89,7 +89,7 @@ TEST_F(update_kinematicsTests, can_compute_transform_from_mesh_to_body_from_Body
 
 TEST_F(update_kinematicsTests, can_get_transform_from_NED_to_body_from_states)
 {
-    Body body;
+    Body body(1);
     body.states.name = a.random<std::string>();
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     const ssc::kinematics::Transform T = get_transform_from_ned_to(x, body, 1);

@@ -61,45 +61,45 @@ TEST_F(ResistanceCurveForceModelTest, example)
     ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), EnvironmentAndFrames());
 //! [ResistanceCurveForceModelTest example]
 //! [ResistanceCurveForceModelTest expected output]
-    Body b;
-    b.states.u = 0;
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).X());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Y());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Z());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).K());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).M());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).N());
+    BodyStates states;
+    states.u = 0;
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).X());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Y());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Z());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).K());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).M());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).N());
 
-    b.states.u = 0.514444444444444;
-    ASSERT_NEAR(-1e6, (double)F(b.states, a.random<double>()).X(), EPS);
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Y());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Z());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).K());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).M());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).N());
+    states.u = 0.514444444444444;
+    ASSERT_NEAR(-1e6, (double)F(states, a.random<double>()).X(), EPS);
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Y());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Z());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).K());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).M());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).N());
 
 
-    b.states.u = 0.514444444444444*15;
-    ASSERT_NEAR(-225e6, (double)F(b.states, a.random<double>()).X(), EPS);
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Y());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Z());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).K());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).M());
-    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).N());
+    states.u = 0.514444444444444*15;
+    ASSERT_NEAR(-225e6, (double)F(states, a.random<double>()).X(), EPS);
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Y());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Z());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).K());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).M());
+    ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).N());
 //! [ResistanceCurveForceModelTest expected output]
 }
 
 TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower_than_min_speed_specified_in_resistance_curve_table)
 {
     ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), EnvironmentAndFrames());
-    Body b;
+    BodyStates states;
     std::stringstream error;
     // Redirect cerr to our stringstream buffer or any other ostream
     std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     ASSERT_TRUE(error.str().empty());
     // Call the resistance curve model
-    b.states.u = -1;
-    F(b.states, a.random<double>());
+    states.u = -1;
+    F(states, a.random<double>());
     ASSERT_FALSE(error.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
@@ -108,14 +108,14 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower
 TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_greater_than_max_speed_specified_in_resistance_curve_table)
 {
     ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), EnvironmentAndFrames());
-    Body b;
+    BodyStates states;
     std::stringstream error;
     // Redirect cerr to our stringstream buffer or any other ostream
     std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     ASSERT_TRUE(error.str().empty());
     // Call the resistance curve model
-    b.states.u = 20*0.514444444444444444 + 1E-10;
-    F(b.states, a.random<double>());
+    states.u = 20*0.514444444444444444 + 1E-10;
+    F(states, a.random<double>());
     ASSERT_FALSE(error.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);

@@ -10,7 +10,7 @@
 #include "SurfaceElevationInterface.hpp"
 #include "YamlBody.hpp"
 
-Body::Body() : states()
+Body::Body(const size_t i) : states(), idx(i)
 {
 }
 

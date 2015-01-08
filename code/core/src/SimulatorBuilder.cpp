@@ -49,12 +49,13 @@ bool SimulatorBuilder::detected_surface_forces() const
 std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
 {
     std::vector<Body> ret;
+    size_t i = 0;
     for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
     {
         const auto that_mesh = meshes.find(that_body->name);
         if (that_mesh != meshes.end())
         {
-            ret.push_back(builder->build(*that_body, that_mesh->second));
+            ret.push_back(builder->build(*that_body, that_mesh->second, i++));
         }
         else
         {

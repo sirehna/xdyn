@@ -35,9 +35,9 @@ void BodyBuilder::change_mesh_ref_frame(Body& body, const VectorOfVectorOfPoints
     body.states.M = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(body.states.mesh->nodes, body.states.name));
 }
 
-Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh) const
+Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx) const
 {
-    Body ret;
+    Body ret(idx);
     ret.states.name = input.name;
     ret.states.G = make_point(input.dynamics.centre_of_inertia);
     ret.states.m = input.dynamics.mass;
@@ -107,7 +107,7 @@ Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) c
     return ret;
 }
 
-Body BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& mesh) const
+Body BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx) const
 {
     YamlBody input;
     input.name = name;
@@ -120,5 +120,5 @@ Body BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& m
     input.dynamics.rigid_body_inertia.row_5 = {0,0,0,0,1,0};
     input.dynamics.rigid_body_inertia.row_6 = {0,0,0,0,0,1};
     input.dynamics.added_mass = input.dynamics.rigid_body_inertia;
-    return build(input, mesh);
+    return build(input, mesh, idx);
 }
