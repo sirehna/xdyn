@@ -15,7 +15,7 @@
 class BodyBuilderTest : public ::testing::Test
 {
     public:
-        static Body build_body();
+        static Body build_body(const size_t idx=0);
 
     protected:
         BodyBuilderTest();

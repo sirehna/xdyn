@@ -4,9 +4,9 @@ project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/SimulatorBuilderTest.cpp
               src/update_kinematicsTests.cpp
-              src/SimulatorBuilderTest.cpp
               src/BodyBuilderTest.cpp
               src/SurfaceElevationFromWavesTest.cpp
+              src/BodyTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

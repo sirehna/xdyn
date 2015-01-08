@@ -32,12 +32,12 @@ void BodyBuilderTest::TearDown()
 {
 }
 
-Body BodyBuilderTest::build_body()
+Body BodyBuilderTest::build_body(size_t idx)
 {
     const auto yaml = SimulatorYamlParser(test_data::full_example()).parse();
     const auto mesh = read_stl(test_data::cube());
     BodyBuilder builder(yaml.rotations);
-    return builder.build(yaml.bodies.front(), mesh, 0);
+    return builder.build(yaml.bodies.front(), mesh, idx);
 }
 
 TEST_F(BodyBuilderTest, name_should_be_correct)
