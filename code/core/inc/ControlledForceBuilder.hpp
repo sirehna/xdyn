@@ -23,7 +23,7 @@ class ControlledForceBuilderInterface
     public:
         ControlledForceBuilderInterface() {}
         virtual ~ControlledForceBuilderInterface(){}
-        virtual boost::optional<ControlledForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const = 0;
+        virtual boost::optional<ControllableForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const = 0;
 };
 
 template <typename T>
@@ -31,7 +31,7 @@ class ControlledForceBuilder : public ControlledForceBuilderInterface
 {
     public:
         ControlledForceBuilder() : ControlledForceBuilderInterface(){}
-        boost::optional<ControlledForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
+        boost::optional<ControllableForcePtr> try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const;
 };
 
 typedef TR1(shared_ptr)<ControlledForceBuilderInterface> ControlledForceBuilderPtr;

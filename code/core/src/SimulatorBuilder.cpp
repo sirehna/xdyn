@@ -188,7 +188,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     bool parsed = false;
     for (auto that_parser = controlled_force_parsers.begin() ; that_parser != controlled_force_parsers.end() ; ++that_parser)
     {
-        boost::optional<ControlledForcePtr> f = (*that_parser)->try_to_parse(model.model, model.yaml, env);
+        boost::optional<ControllableForcePtr> f = (*that_parser)->try_to_parse(model.model, model.yaml, env);
         if (f)
         {
             L.push_back(f.get());

@@ -52,7 +52,7 @@ class ControllableForceModel
         ssc::kinematics::Point point_of_application;
 };
 
-typedef TR1(shared_ptr)<ControllableForceModel> ControlledForcePtr;
-typedef std::vector<ControlledForcePtr> ListOfControlledForces;
+typedef TR1(shared_ptr)<ControllableForceModel> ControllableForcePtr;
+typedef std::vector<ControllableForcePtr> ListOfControlledForces;
 
 #endif /* CONTROLLABLEFORCEMODEL_HPP_ */
