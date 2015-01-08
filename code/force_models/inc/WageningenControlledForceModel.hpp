@@ -13,7 +13,7 @@
 #define NB_COEFF_KT 39
 #define NB_COEFF_KQ 47
 
-#include "YamlWageningen.hpp"
+#include "YamlPosition.hpp"
 
 /** \brief
  *  \details
@@ -27,13 +27,27 @@
 class WageningenControlledForceModel : public ControllableForceModel
 {
     public:
-        WageningenControlledForceModel(const YamlWageningen& input, const EnvironmentAndFrames& env);
+        struct Yaml
+        {
+            Yaml();
+            std::string name;
+            YamlPosition position_of_propeller_frame;
+            double wake_coefficient;
+            double relative_rotative_efficiency;
+            double thrust_deduction_factor;
+            bool rotating_clockwise;
+            size_t number_of_blades;
+            double blade_area_ratio;
+            double diameter;
+        };
+
+        WageningenControlledForceModel(const Yaml& input, const EnvironmentAndFrames& env);
         ssc::kinematics::Vector6d get_force(const Body& body, const double t, std::map<std::string,double> commands) const;
         double Kt(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double Kq(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double advance_ratio(const Body& body, std::map<std::string,double>& commands) const;
         static const std::string model_name;
-        static YamlWageningen parse(const std::string& yaml);
+        static Yaml parse(const std::string& yaml);
 
     private:
         WageningenControlledForceModel();

@@ -26,7 +26,6 @@ SET(SRC src/YamlAngle.cpp
         src/YamlSimulatorInput.cpp
         src/YamlSpeed.cpp
         src/YamlWaveModelInput.cpp
-        src/YamlWageningen.cpp
         src/YamlDiffraction.cpp
         )
 

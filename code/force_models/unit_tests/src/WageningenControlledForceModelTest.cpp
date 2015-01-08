@@ -43,7 +43,7 @@ void WageningenControlledForceModelTest::TearDown()
 
 TEST_F(WageningenControlledForceModelTest, parser)
 {
-    const YamlWageningen w = WageningenControlledForceModel::parse(test_data::wageningen());
+    const auto w = WageningenControlledForceModel::parse(test_data::wageningen());
     ASSERT_DOUBLE_EQ(0.5, w.blade_area_ratio);
     ASSERT_EQ("port side propeller", w.name);
     ASSERT_EQ(3, w.number_of_blades);

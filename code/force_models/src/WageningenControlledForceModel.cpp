@@ -16,11 +16,24 @@
 #include "parse_unit_value.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelException.hpp"
-#include "YamlWageningen.hpp"
 
 const std::string WageningenControlledForceModel::model_name = "wageningen B-series";
 
-WageningenControlledForceModel::WageningenControlledForceModel(const YamlWageningen& input, const EnvironmentAndFrames& env_) : ControllableForceModel(input.name,{"rpm","P/D"},input.position_of_propeller_frame, env_),
+
+WageningenControlledForceModel::Yaml::Yaml() :
+        name(),
+        position_of_propeller_frame(),
+        wake_coefficient(),
+        relative_rotative_efficiency(),
+        thrust_deduction_factor(),
+        rotating_clockwise(),
+        number_of_blades(),
+        blade_area_ratio(),
+        diameter()
+{
+}
+
+WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input, const EnvironmentAndFrames& env_) : ControllableForceModel(input.name,{"rpm","P/D"},input.position_of_propeller_frame, env_),
             w(input.wake_coefficient),
             eta_R(input.relative_rotative_efficiency),
             t(input.thrust_deduction_factor),
@@ -106,13 +119,13 @@ double WageningenControlledForceModel::advance_ratio(const Body& body, std::map<
     return (1-w)*Va/n/D;
 }
 
-YamlWageningen WageningenControlledForceModel::parse(const std::string& yaml)
+WageningenControlledForceModel::Yaml WageningenControlledForceModel::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    YamlWageningen ret;
+    Yaml ret;
     std::string rot;
     node["rotation"] >> rot;
     ret.rotating_clockwise = (rot == "clockwise");
