@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.8)
-project(wave_models)
+project(environment_models)
 
 set(SRC src/WaveSpectralDensity.cpp
         src/JonswapSpectrum.cpp

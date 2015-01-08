@@ -203,7 +203,7 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:observers_and_api>
         $<TARGET_OBJECTS:parser_extensions>
         $<TARGET_OBJECTS:force_models>
-        $<TARGET_OBJECTS:wave_models>
+        $<TARGET_OBJECTS:environment_models>
         $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:yaml_parser>
@@ -251,7 +251,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>
         $<TARGET_OBJECTS:core_tests>
-        $<TARGET_OBJECTS:wave_models_tests>
+        $<TARGET_OBJECTS:environment_models_tests>
         $<TARGET_OBJECTS:kissfft_static>
         $<TARGET_OBJECTS:force_models_tests>
         $<TARGET_OBJECTS:parser_extensions_tests>

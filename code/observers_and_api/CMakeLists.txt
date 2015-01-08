@@ -28,7 +28,7 @@ include_directories(${core_INCLUDE_DIRS})
 include_directories(${force_models_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
-include_directories(${wave_models_INCLUDE_DIRS})
+include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${external_file_formats_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
