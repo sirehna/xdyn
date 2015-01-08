@@ -12,6 +12,8 @@
 #include "SimHdf5WaveObserver.hpp"
 #include "Sim.hpp"
 #include "h5_interface.hpp"
+#include "h5_version.hpp"
+
 
 struct H5Res
 {
@@ -123,6 +125,7 @@ class SimHdf5Observer::Impl
             sEfforts(h5File, baseName_.empty()?"efforts":baseName_+"/efforts", H5_CreateIdEfforts(s)),
             sWaves(h5File, baseName_.empty()?"waveElevation":baseName_+"/waveElevation", waves_mesh_size.first, waves_mesh_size.second)
         {
+            h5_writeFileDescription(h5File);
         }
 
         void observe_states(const double t, const Sim& s);
