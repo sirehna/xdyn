@@ -29,18 +29,15 @@ H5::CompType H5_CreateIdEfforts(const VectorOfStringModelForEachBody& v);
 template <> void H5_Serialize<H5Res>::write(H5Res const * const data)
 {
     const hsize_t dims[1] = {(hsize_t)1};
-    double * dataV = new double[1+data->v.size()];
-    hsize_t offset[1];
-    hsize_t size[1];
-    offset[0] = n;
-    size[0] = ++n;
+    const hsize_t offset[1] = {n};
+    const hsize_t size[1] = {++n};
     dataset.extend(size);
     H5::DataSpace fspace = dataset.getSpace();
     fspace.selectHyperslab(H5S_SELECT_SET, dims, offset);
-    dataV[0] = data->t;
-    memcpy(dataV+1,&data->v.at(0),data->v.size()*sizeof(double));
-    dataset.write(dataV, this->get_type(), this->get_space(), fspace);
-    delete dataV;
+    std::vector<double> dataV;
+    dataV.push_back(data->t);
+    dataV.insert(dataV.end(),data->v.begin(),data->v.end());
+    dataset.write(dataV.data(), this->get_type(), this->get_space(), fspace);
 }
 
 H5::CompType H5_CreateIdStates(const VectorOfStringModelForEachBody& v)
