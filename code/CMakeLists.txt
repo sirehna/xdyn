@@ -202,7 +202,7 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:observers_and_api>
         $<TARGET_OBJECTS:parser_extensions>
-        $<TARGET_OBJECTS:models>
+        $<TARGET_OBJECTS:force_models>
         $<TARGET_OBJECTS:wave_models>
         $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:mesh>
@@ -253,7 +253,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:core_tests>
         $<TARGET_OBJECTS:wave_models_tests>
         $<TARGET_OBJECTS:kissfft_static>
-        $<TARGET_OBJECTS:models_tests>
+        $<TARGET_OBJECTS:force_models_tests>
         $<TARGET_OBJECTS:parser_extensions_tests>
         $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:hdb_interpolators_tests>

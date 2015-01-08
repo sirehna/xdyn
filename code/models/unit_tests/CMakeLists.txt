@@ -1,5 +1,5 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-SET(MODULE_UNDER_TEST models)
+SET(MODULE_UNDER_TEST force_models)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/DefaultSurfaceElevationTest.cpp
