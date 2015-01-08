@@ -31,6 +31,10 @@ class Body
         ssc::kinematics::Transform get_transform_from_ned_to(const StateType& x) const;
         void update_kinematics(StateType x, const KinematicsPtr& k) const;
         void update_body_states(const StateType& x);
+        /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
+         */
+        void update_projection_of_z_in_mesh_frame(const double g,
+                                                  ssc::kinematics::KinematicsPtr& k);
 
 
         BodyStates states;

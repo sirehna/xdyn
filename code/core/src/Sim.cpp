@@ -75,15 +75,7 @@ void Sim::update_body(Body& body, const size_t , const StateType& x, const doubl
 {
     body.update_body_states(x);
     if (pimpl->there_are_surface_forces) body.update_intersection_with_free_surface(pimpl->env, t);
-    update_projection_of_z_in_mesh_frame(body.states);
-}
-
-void Sim::update_projection_of_z_in_mesh_frame(BodyStates& states         //!< Body we wish to update
-                                              ) const
-{
-    const ssc::kinematics::Point g_in_NED("NED", 0, 0, pimpl->env.g);
-    const ssc::kinematics::RotationMatrix ned2mesh = pimpl->env.k->get("NED", std::string("mesh(") + states.name + ")").get_rot();
-    states.down_direction_in_mesh_frame = ned2mesh*g_in_NED.v;
+    body.update_projection_of_z_in_mesh_frame(pimpl->env.g, pimpl->env.k);
 }
 
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)

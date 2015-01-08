@@ -80,11 +80,6 @@ class Sim
                          const double t      //!< Current instant
                          ) const;
 
-        /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
-         */
-        void update_projection_of_z_in_mesh_frame(BodyStates& states         //!< Body we wish to update
-                                                 ) const;
-
         void fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
         void fill_force_map_with_zeros(OuputtedForces& m) const;
 
