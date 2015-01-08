@@ -36,8 +36,8 @@ class SimHdf5WaveObserverBuilder
         size_t get_ny() const {return ny;};
     private:
         H5::H5File h5File;
-        H5::Group group;
         std::string datasetName;
+        H5::Group group;
         size_t nx;
         size_t ny;
 };
