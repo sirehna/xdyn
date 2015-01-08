@@ -87,6 +87,5 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
                                 ) const;
 
         std::vector<TR1(shared_ptr)<WaveModel> > models;
-        std::pair<std::size_t,std::size_t> output_mesh_size;
 };
 #endif /* SURFACEELEVATIONFROMWAVES_HPP_ */

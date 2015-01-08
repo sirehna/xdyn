@@ -16,9 +16,10 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(
         const std::vector<TR1(shared_ptr)<WaveModel> >& models_,
         const std::pair<std::size_t,std::size_t> output_mesh_size_,
         const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) :
-                SurfaceElevationInterface(output_mesh_), models(models_), output_mesh_size(output_mesh_size_)
+                SurfaceElevationInterface(output_mesh_, output_mesh_size_),
+                models(models_)
 {
-    if(output_mesh_size.first*output_mesh_size.second != (std::size_t)output_mesh_->m.cols())
+    if(output_mesh_size_.first*output_mesh_size_.second != (std::size_t)output_mesh_->m.cols())
     {
         THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"Number of columns in PointMatrix input should match the product of Nx*Ny");
     }
@@ -28,9 +29,10 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(
         const TR1(shared_ptr)<WaveModel>& model,
         const std::pair<std::size_t,std::size_t> output_mesh_size_,
         const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) :
-                SurfaceElevationInterface(output_mesh_), models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model)), output_mesh_size(output_mesh_size_)
+                SurfaceElevationInterface(output_mesh_, output_mesh_size_),
+                models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model))
 {
-    if(output_mesh_size.first*output_mesh_size.second != (std::size_t)output_mesh_->m.cols())
+    if(output_mesh_size_.first*output_mesh_size_.second != (std::size_t)output_mesh_->m.cols())
     {
         THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"Number of columns in PointMatrix input should match the product of Nx*Ny");
     }
