@@ -10,7 +10,6 @@
 #define PI M_PI
 
 #include "Body.hpp"
-#include "force_parsers.hpp"
 #include "yaml_data.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelTest.hpp"
@@ -18,6 +17,13 @@
 
 #define EPS 1E-2
 #define NB_TRIALS 100
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
+#define DEG2RAD (PI/180.)
+
 
 WageningenControlledForceModelTest::WageningenControlledForceModelTest() : a(ssc::random_data_generator::DataGenerator(7))
 {
@@ -35,9 +41,29 @@ void WageningenControlledForceModelTest::TearDown()
 {
 }
 
+TEST_F(WageningenControlledForceModelTest, parser)
+{
+    const YamlWageningen w = WageningenControlledForceModel::parse(test_data::wageningen());
+    ASSERT_DOUBLE_EQ(0.5, w.blade_area_ratio);
+    ASSERT_EQ("port side propeller", w.name);
+    ASSERT_EQ(3, w.number_of_blades);
+    ASSERT_DOUBLE_EQ(0, w.position_of_propeller_frame.angle.phi);
+    ASSERT_DOUBLE_EQ(-10*DEG2RAD, w.position_of_propeller_frame.angle.theta);
+    ASSERT_DOUBLE_EQ(-1*DEG2RAD, w.position_of_propeller_frame.angle.psi);
+    ASSERT_DOUBLE_EQ(-4, w.position_of_propeller_frame.coordinates.x);
+    ASSERT_DOUBLE_EQ(-2, w.position_of_propeller_frame.coordinates.y);
+    ASSERT_DOUBLE_EQ(2, w.position_of_propeller_frame.coordinates.z);
+    ASSERT_EQ("mesh(body 1)", w.position_of_propeller_frame.frame);
+    ASSERT_DOUBLE_EQ(1, w.relative_rotative_efficiency);
+    ASSERT_TRUE(w.rotating_clockwise);
+    ASSERT_DOUBLE_EQ(0.7, w.thrust_deduction_factor);
+    ASSERT_DOUBLE_EQ(0.9, w.wake_coefficient);
+    ASSERT_DOUBLE_EQ(2, w.diameter);
+}
+
 TEST_F(WageningenControlledForceModelTest, should_throw_if_blade_area_ratio_is_outside_bounds)
 {
-    auto input  = parse_wageningen(test_data::wageningen());
+    auto input  = WageningenControlledForceModel::parse(test_data::wageningen());
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
         input.blade_area_ratio = a.random<double>().between(0,0.3);
@@ -53,7 +79,7 @@ TEST_F(WageningenControlledForceModelTest, should_throw_if_blade_area_ratio_is_o
 
 TEST_F(WageningenControlledForceModelTest, should_throw_if_number_of_blades_is_outside_bounds)
 {
-    auto input  = parse_wageningen(test_data::wageningen());
+    auto input  = WageningenControlledForceModel::parse(test_data::wageningen());
     input.number_of_blades = 0;
     ASSERT_THROW(WageningenControlledForceModel w(input, EnvironmentAndFrames()), WageningenControlledForceModelException);
     input.number_of_blades = 1;
@@ -81,8 +107,8 @@ TEST_F(WageningenControlledForceModelTest, should_throw_if_number_of_blades_is_o
 
 TEST_F(WageningenControlledForceModelTest, Kt_should_issue_a_warning_if_P_D_is_outside_bounds)
 {
-    auto input  = parse_wageningen(test_data::wageningen());
-    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
+    auto input  = WageningenControlledForceModel::parse(test_data::wageningen());
+    const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
     std::stringstream error;
@@ -120,8 +146,8 @@ TEST_F(WageningenControlledForceModelTest, Kt_should_issue_a_warning_if_P_D_is_o
 
 TEST_F(WageningenControlledForceModelTest, Kt_should_throw_if_J_is_outside_bounds)
 {
-    auto input  = parse_wageningen(test_data::wageningen());
-    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
+    auto input  = WageningenControlledForceModel::parse(test_data::wageningen());
+    const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
     std::stringstream error;
@@ -158,8 +184,8 @@ TEST_F(WageningenControlledForceModelTest, Kt_should_throw_if_J_is_outside_bound
 
 TEST_F(WageningenControlledForceModelTest, Kq_should_throw_if_P_D_is_outside_bounds)
 {
-    auto input  = parse_wageningen(test_data::wageningen());
-    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
+    auto input  = WageningenControlledForceModel::parse(test_data::wageningen());
+    const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
     std::stringstream error;
@@ -196,8 +222,8 @@ TEST_F(WageningenControlledForceModelTest, Kq_should_throw_if_P_D_is_outside_bou
 
 TEST_F(WageningenControlledForceModelTest, Kq_should_throw_if_J_is_outside_bounds)
 {
-    auto input  = parse_wageningen(test_data::wageningen());
-    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
+    auto input  = WageningenControlledForceModel::parse(test_data::wageningen());
+    const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
     std::stringstream error;
@@ -235,7 +261,7 @@ TEST_F(WageningenControlledForceModelTest, Kq_should_throw_if_J_is_outside_bound
 TEST_F(WageningenControlledForceModelTest, KT)
 {
 //! [WageningenControlledForceModelTest KT_example]
-    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
+    const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
     // B6-65 (cf. The Wageningen Propeller Series, 1992, Gert Kuiper, Marin publication 92-001 page 128
@@ -265,7 +291,7 @@ TEST_F(WageningenControlledForceModelTest, KT)
 TEST_F(WageningenControlledForceModelTest, KQ)
 {
     //! [WageningenControlledForceModelTest KQ_example]
-    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
+    const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), EnvironmentAndFrames());
     size_t Z;
     double AE_A0, P_D, J;
 
@@ -304,7 +330,7 @@ TEST_F(WageningenControlledForceModelTest, KQ)
 
 TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
 {
-    const WageningenControlledForceModel w(parse_wageningen(test_data::wageningen()), EnvironmentAndFrames());
+    const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), EnvironmentAndFrames());
     Body b;
     b.u = 3;
     std::map<std::string,double> commands;
@@ -314,7 +340,7 @@ TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
 
 TEST_F(WageningenControlledForceModelTest, force)
 {
-    auto input = parse_wageningen(test_data::wageningen());
+    auto input = WageningenControlledForceModel::parse(test_data::wageningen());
     input.blade_area_ratio = 0.4;
     EnvironmentAndFrames env;
     env.rho = 1024;
@@ -335,7 +361,7 @@ TEST_F(WageningenControlledForceModelTest, force)
 
 TEST_F(WageningenControlledForceModelTest, torque)
 {
-    auto input = parse_wageningen(test_data::wageningen());
+    auto input = WageningenControlledForceModel::parse(test_data::wageningen());
     input.blade_area_ratio = 0.4;
     EnvironmentAndFrames env;
     env.rho = 1024;
@@ -352,7 +378,7 @@ TEST_F(WageningenControlledForceModelTest, torque)
 
 TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding_to_rotation)
 {
-    auto input = parse_wageningen(test_data::wageningen());
+    auto input = WageningenControlledForceModel::parse(test_data::wageningen());
     Body b;
     b.u = a.random<double>().greater_than(0);
     EnvironmentAndFrames env;

@@ -9,10 +9,16 @@
 #include <cmath>
 #define PI M_PI
 
+#include "yaml.h"
+
 #include "Body.hpp"
+#include "external_data_structures_parsers.hpp"
+#include "parse_unit_value.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelException.hpp"
 #include "YamlWageningen.hpp"
+
+const std::string WageningenControlledForceModel::model_name = "wageningen B-series";
 
 WageningenControlledForceModel::WageningenControlledForceModel(const YamlWageningen& input, const EnvironmentAndFrames& env_) : ControllableForceModel(input.name,{"rpm","P/D"},input.position_of_propeller_frame, env_),
             w(input.wake_coefficient),
@@ -99,3 +105,25 @@ double WageningenControlledForceModel::advance_ratio(const Body& body, std::map<
     const double n = commands["rpm"]/(2*PI);
     return (1-w)*Va/n/D;
 }
+
+YamlWageningen WageningenControlledForceModel::parse(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlWageningen ret;
+    std::string rot;
+    node["rotation"] >> rot;
+    ret.rotating_clockwise = (rot == "clockwise");
+    node["thrust deduction factor t"]        >> ret.thrust_deduction_factor;
+    node["wake coefficient w"]               >> ret.wake_coefficient;
+    node["name"]                             >> ret.name;
+    node["blade area ratio AE/A0"]           >> ret.blade_area_ratio;
+    node["number of blades"]                 >> ret.number_of_blades;
+    node["position of propeller frame"]      >> ret.position_of_propeller_frame;
+    node["relative rotative efficiency etaR"]>> ret.relative_rotative_efficiency;
+    parse_uv(node["diameter"], ret.diameter);
+    return ret;
+}
+

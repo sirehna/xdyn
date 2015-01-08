@@ -13,7 +13,7 @@
 #define NB_COEFF_KT 39
 #define NB_COEFF_KQ 47
 
-struct YamlWageningen;
+#include "YamlWageningen.hpp"
 
 /** \brief
  *  \details
@@ -32,6 +32,8 @@ class WageningenControlledForceModel : public ControllableForceModel
         double Kt(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double Kq(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double advance_ratio(const Body& body, std::map<std::string,double>& commands) const;
+        static const std::string model_name;
+        static YamlWageningen parse(const std::string& yaml);
 
     private:
         WageningenControlledForceModel();

@@ -10,6 +10,8 @@
 
 #include <map>
 
+#include <boost/optional/optional.hpp>
+
 #include <ssc/kinematics.hpp>
 
 #include "EnvironmentAndFrames.hpp"
@@ -18,6 +20,11 @@
 namespace ssc { namespace data_source { class DataSource;}}
 class Body;
 struct YamlRotation;
+
+class ControllableForceModel;
+typedef TR1(shared_ptr)<ControllableForceModel> ControllableForcePtr;
+typedef std::vector<ControllableForcePtr> ListOfControlledForces;
+typedef std::function<boost::optional<ControllableForcePtr>(const std::string&, const std::string, const EnvironmentAndFrames&)> ControllableForceParser;
 
 /** \brief These force models read commands from a DataSource.
  *  \details Provides facilities to the derived classes to retrieve the commands
@@ -38,6 +45,21 @@ class ControllableForceModel
         virtual ssc::kinematics::Vector6d get_force(const Body& body, const double t, std::map<std::string,double> commands) const = 0;
         std::string get_name() const;
 
+        template <typename ControllableForceType>
+        static ControllableForceParser build_parser()
+        {
+            auto parser = [](const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) -> boost::optional<ControllableForcePtr>
+                          {
+                              boost::optional<ControllableForcePtr> ret;
+                              if (model == ControllableForceType::model_name)
+                              {
+                                  ret.reset(ControllableForcePtr(new ControllableForceType(ControllableForceType::parse(yaml), env)));
+                              }
+                              return ret;
+                          };
+            return parser;
+        }
+
     protected:
         EnvironmentAndFrames env;
 
@@ -51,8 +73,5 @@ class ControllableForceModel
         YamlPosition position_of_frame;
         ssc::kinematics::Point point_of_application;
 };
-
-typedef TR1(shared_ptr)<ControllableForceModel> ControllableForcePtr;
-typedef std::vector<ControllableForcePtr> ListOfControlledForces;
 
 #endif /* CONTROLLABLEFORCEMODEL_HPP_ */

@@ -15,7 +15,6 @@
 
 #include <ssc/data_source.hpp>
 
-#include "ControlledForceBuilder.hpp"
 #include "SurfaceElevationBuilder.hpp"
 #include "WaveModel.hpp"
 #include "WaveDirectionalSpreading.hpp"
@@ -137,7 +136,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<ControllableForceModel,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            controlled_force_parsers.push_back(ControlledForceBuilderPtr(new ControlledForceBuilder<T>()));
+            controllable_force_parsers.push_back(ControllableForceModel::build_parser<T>());
             return *this;
         }
 
@@ -185,7 +184,7 @@ class SimulatorBuilder
         YamlSimulatorInput input;
         TR1(shared_ptr)<BodyBuilder> builder;
         std::vector<ForceParser> force_parsers;
-        std::vector<ControlledForceBuilderPtr> controlled_force_parsers;
+        std::vector<ControllableForceParser> controllable_force_parsers;
         std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;

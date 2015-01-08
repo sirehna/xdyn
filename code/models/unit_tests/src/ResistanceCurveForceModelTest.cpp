@@ -6,7 +6,6 @@
  */
 
 #include "Body.hpp"
-#include "force_parsers.hpp"
 #include "ResistanceCurveForceModel.hpp"
 #include "ResistanceCurveForceModelTest.hpp"
 #include "yaml_data.hpp"

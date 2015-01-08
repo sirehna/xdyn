@@ -10,6 +10,8 @@
 
 #include <vector>
 
+#include <ssc/kinematics.hpp>
+
 #include <boost/optional/optional.hpp>
 #include <ssc/macros.hpp>
 #include TR1INC(memory)

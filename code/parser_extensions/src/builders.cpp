@@ -13,7 +13,6 @@
 #include "DefaultSurfaceElevation.hpp"
 #include "environment_parsers.hpp"
 #include "SimulatorBuilderException.hpp"
-#include "force_parsers.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "GravityForceModel.hpp"
 #include "discretize.hpp"
@@ -180,13 +179,3 @@ boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > DirectionalSpreading
     return ret;
 }
 
-boost::optional<TR1(shared_ptr)<ControllableForceModel> > ControlledForceBuilder<WageningenControlledForceModel>::try_to_parse(const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) const
-{
-    boost::optional<TR1(shared_ptr)<ControllableForceModel> > ret;
-    if (model == "wageningen B-series")
-    {
-        const YamlWageningen data = parse_wageningen(yaml);
-        ret.reset(TR1(shared_ptr)<ControllableForceModel>(new WageningenControlledForceModel(data, env)));
-    }
-    return ret;
-}
