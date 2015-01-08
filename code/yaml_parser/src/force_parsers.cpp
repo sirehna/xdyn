@@ -33,18 +33,6 @@ YamlWageningen parse_wageningen(const std::string& yaml)
     return ret;
 }
 
-YamlResistanceCurve parse_resistance_curve(const std::string& yaml)
-{
-    std::stringstream stream(yaml);
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
-    YamlResistanceCurve ret;
-    parse_uv(node["speed"], ret.Va);
-    parse_uv(node["resistance"], ret.R);
-    return ret;
-}
-
 TypeOfQuadrature parse_type_of_quadrature(const std::string& s)
 {
     if      (s == "gauss-kronrod")   return TypeOfQuadrature::GAUSS_KRONROD;

@@ -19,7 +19,6 @@
 #include "YamlWageningen.hpp"
 
 YamlWageningen parse_wageningen(const std::string& yaml);
-YamlResistanceCurve parse_resistance_curve(const std::string& yaml);
 TypeOfQuadrature parse_type_of_quadrature(const std::string& s);
 YamlRadiationDamping parse_radiation_damping(const std::string& yaml);
 YamlDiffraction parse_diffraction(const std::string& yaml);
