@@ -92,27 +92,27 @@ TEST_F(RadiationDampingForceModelTest, example)
     Body b = get_body(body_name);
 //! [RadiationDampingForceModelTest example]
 //! [RadiationDampingForceModelTest expected output]
-    b.u = 1;
-    b.v = 1;
-    b.w = 1;
-    b.p = 1;
-    b.q = 1;
-    b.r = 1;
-    auto Frad = F(b,0);
+    b.states.u = 1;
+    b.states.v = 1;
+    b.states.w = 1;
+    b.states.p = 1;
+    b.states.q = 1;
+    b.states.r = 1;
+    auto Frad = F(b.states,0);
     ASSERT_EQ(0, Frad.X());
     ASSERT_EQ(0, Frad.Y());
     ASSERT_EQ(0, Frad.Z());
     ASSERT_EQ(0, Frad.K());
     ASSERT_EQ(0, Frad.M());
     ASSERT_EQ(0, Frad.N());
-    ASSERT_EQ(body_name, F(b, 0).get_frame());
-    b.u = 1;
-    b.v = 1;
-    b.w = 1;
-    b.p = 1;
-    b.q = 1;
-    b.r = 1;
-    Frad = F(b,100);
+    ASSERT_EQ(body_name, F(b.states, 0).get_frame());
+    b.states.u = 1;
+    b.states.v = 1;
+    b.states.w = 1;
+    b.states.p = 1;
+    b.states.q = 1;
+    b.states.r = 1;
+    Frad = F(b.states,100);
 
     const double Fexpected = ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);
     ASSERT_DOUBLE_EQ(Frad.X(),Frad.Y());

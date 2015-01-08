@@ -35,19 +35,19 @@ ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x, const si
 
 ssc::kinematics::Point get_position_of_body_relative_to_mesh(const Body& body)
 {
-    return ssc::kinematics::Point(std::string("mesh(")+body.name+")", body.x_relative_to_mesh,
-                                                     body.y_relative_to_mesh,
-                                                     body.z_relative_to_mesh);
+    return ssc::kinematics::Point(std::string("mesh(")+body.states.name+")", body.states.x_relative_to_mesh,
+                                                     body.states.y_relative_to_mesh,
+                                                     body.states.z_relative_to_mesh);
 }
 
 ssc::kinematics::Transform get_transform_from_mesh_to(const Body& body)
 {
-    return ssc::kinematics::Transform(get_position_of_body_relative_to_mesh(body), body.mesh_to_body, body.name);
+    return ssc::kinematics::Transform(get_position_of_body_relative_to_mesh(body), body.states.mesh_to_body, body.states.name);
 }
 
 ssc::kinematics::Transform get_transform_from_ned_to(const StateType& x, const Body& body, const size_t idx)
 {
-    return ssc::kinematics::Transform(get_origin(x, idx), get_rot_from_ned_to(x, idx), body.name);
+    return ssc::kinematics::Transform(get_origin(x, idx), get_rot_from_ned_to(x, idx), body.states.name);
 }
 
 void update_kinematics(StateType x, const Body& body, const size_t idx, const KinematicsPtr& k)
@@ -84,10 +84,10 @@ StateType get_initial_states(const YamlRotation& convention, const std::vector<Y
 
 void update_body_states(const StateType& x, Body& body, const size_t i)
 {
-    body.u = *_U(x,i);
-    body.v = *_V(x,i);
-    body.w = *_W(x,i);
-    body.p = *_P(x,i);
-    body.q = *_Q(x,i);
-    body.r = *_R(x,i);
+    body.states.u = *_U(x,i);
+    body.states.v = *_V(x,i);
+    body.states.w = *_W(x,i);
+    body.states.p = *_P(x,i);
+    body.states.q = *_Q(x,i);
+    body.states.r = *_R(x,i);
 }

@@ -37,16 +37,16 @@ class SurfaceForceModel : public ForceModel
 
         SurfaceForceModel(const std::string& name, const EnvironmentAndFrames& env);
         virtual ~SurfaceForceModel();
-        ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
+        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         virtual DF dF(const FacetIterator& that_facet,
                       const EnvironmentAndFrames& env,
-                      const Body& body,
+                      const BodyStates& states,
                       const double t
                       ) const = 0;
 
     /**  \brief Compute potential energy of the hydrostatic force model
       */
-        double potential_energy(const Body& body, const std::vector<double>& x) const;
+        double potential_energy(const BodyStates& states, const std::vector<double>& x) const;
 
         bool is_a_surface_force_model() const;
 
@@ -54,7 +54,7 @@ class SurfaceForceModel : public ForceModel
         SurfaceForceModel();
         virtual FacetIterator begin(const MeshIntersectorPtr& intersector) const = 0;
         virtual FacetIterator end(const MeshIntersectorPtr& intersector) const = 0;
-        virtual double pe(const Body& body, const std::vector<double>& x, const EnvironmentAndFrames& env) const = 0;
+        virtual double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const = 0;
         EnvironmentAndFrames env;
         ssc::kinematics::Point g_in_NED;
 };

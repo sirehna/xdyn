@@ -42,10 +42,10 @@ class WageningenControlledForceModel : public ControllableForceModel
         };
 
         WageningenControlledForceModel(const Yaml& input, const EnvironmentAndFrames& env);
-        ssc::kinematics::Vector6d get_force(const Body& body, const double t, std::map<std::string,double> commands) const;
+        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
         double Kt(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double Kq(const size_t Z, const double AE_A0, const double P_D, const double J) const;
-        double advance_ratio(const Body& body, std::map<std::string,double>& commands) const;
+        double advance_ratio(const BodyStates& states, std::map<std::string,double>& commands) const;
         static const std::string model_name;
         static Yaml parse(const std::string& yaml);
 

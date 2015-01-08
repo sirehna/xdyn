@@ -18,7 +18,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-class Body;
+struct BodyStates;
 struct EnvironmentAndFrames;
 class ForceModel;
 
@@ -42,8 +42,8 @@ class ForceModel
     public:
         ForceModel(const std::string& name);
         virtual ~ForceModel(){}
-        virtual ssc::kinematics::Wrench operator()(const Body& body, const double t) const = 0;
-        virtual double potential_energy(const Body& body, const std::vector<double>& x) const {(void)body;(void)x;return 0;}
+        virtual ssc::kinematics::Wrench operator()(const BodyStates& body, const double t) const = 0;
+        virtual double potential_energy(const BodyStates& body, const std::vector<double>& x) const {(void)body;(void)x;return 0;}
         std::string get_name() const;
         virtual bool is_a_surface_force_model() const;
 

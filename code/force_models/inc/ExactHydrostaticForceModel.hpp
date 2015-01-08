@@ -27,7 +27,7 @@ class ExactHydrostaticForceModel : public FastHydrostaticForceModel
 
     private:
         ExactHydrostaticForceModel();
-        EPoint get_application_point(const FacetIterator& that_facet, const Body& body, const double zG) const;
+        EPoint get_application_point(const FacetIterator& that_facet, const BodyStates& states, const double zG) const;
 };
 
 #endif /* EXACTHYDROSTATICFORCEMODEL_HPP_ */

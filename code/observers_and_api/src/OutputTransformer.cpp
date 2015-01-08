@@ -142,7 +142,7 @@ double OutputTransformer::compute_kinetic_energy(const size_t i, const StateType
     V(4) = *_Q(x,i);
     V(5) = *_R(x,i);
 
-    const auto IV = bodies.at(i).solid_body_inertia->operator*(V);
+    const auto IV = bodies.at(i).states.solid_body_inertia->operator*(V);
 
     return 0.5*(V.transpose()*IV)(0,0);
 }
@@ -152,7 +152,7 @@ double OutputTransformer::compute_potential_energy(const size_t i, const StateTy
     double Ep = 0;
     for (auto that_force = forces.at(i).begin() ; that_force != forces.at(i).end() ; ++that_force)
     {
-        const double ep = (*that_force)->potential_energy(bodies.at(i),std::vector<double>(x.begin()+(long)i*13,x.begin()+(long)(i+1)*13-1));
+        const double ep = (*that_force)->potential_energy(bodies.at(i).states,std::vector<double>(x.begin()+(long)i*13,x.begin()+(long)(i+1)*13-1));
         Ep += ep;
     }
     return Ep;
@@ -162,9 +162,9 @@ void OutputTransformer::fill_energy(std::map<std::string,double>& out, const siz
 {
     const double Ec = compute_kinetic_energy(i, res);
     const double Ep = compute_potential_energy(i, res);
-    out[std::string("Ec(")+bodies.at(i).name+")"] = Ec;
-    out[std::string("Ep(")+bodies.at(i).name+")"] = Ep;
-    out[std::string("Em(")+bodies.at(i).name+")"] = Ec+Ep;
+    out[std::string("Ec(")+bodies.at(i).states.name+")"] = Ec;
+    out[std::string("Ep(")+bodies.at(i).states.name+")"] = Ep;
+    out[std::string("Em(")+bodies.at(i).states.name+")"] = Ec+Ep;
 }
 
 std::map<std::string,double> OutputTransformer::operator()(const Res& res)

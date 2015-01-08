@@ -35,9 +35,9 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
     return ret;
 }
 
-ssc::kinematics::Wrench ControllableForceModel::operator()(const Body& body, const double t, ssc::data_source::DataSource& command_listener) const
+ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener) const
 {
-    return ssc::kinematics::Wrench(point_of_application, get_force(body, t, get_commands(command_listener, t)));
+    return ssc::kinematics::Wrench(point_of_application, get_force(states, t, get_commands(command_listener, t)));
 }
 
 void ControllableForceModel::add_reference_frame(const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const

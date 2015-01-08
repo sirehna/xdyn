@@ -17,15 +17,15 @@ const std::string GravityForceModel::model_name = "gravity";
 GravityForceModel::GravityForceModel(const EnvironmentAndFrames& env) : ForceModel("gravity"), g(env.g), k(env.k)
 {}
 
-ssc::kinematics::Wrench GravityForceModel::operator()(const Body& body, const double) const
+ssc::kinematics::Wrench GravityForceModel::operator()(const BodyStates& states, const double) const
 {
-    const ssc::kinematics::Transform T = k->get(body.name, "NED");
-    return ssc::kinematics::Wrench(body.G,
-                                   T.get_rot()*Eigen::Vector3d(0,0,body.m*g),
+    const ssc::kinematics::Transform T = k->get(states.name, "NED");
+    return ssc::kinematics::Wrench(states.G,
+                                   T.get_rot()*Eigen::Vector3d(0,0,states.m*g),
                                    Eigen::Vector3d(0,0,0));
 }
 
-double GravityForceModel::potential_energy(const Body& body, const std::vector<double>& x) const
+double GravityForceModel::potential_energy(const BodyStates& states, const std::vector<double>& x) const
 {
-    return -body.m*g*x[2];
+    return -states.m*g*x[2];
 }

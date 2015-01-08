@@ -16,8 +16,8 @@ ExactHydrostaticForceModel::ExactHydrostaticForceModel(const EnvironmentAndFrame
 }
 
 EPoint ExactHydrostaticForceModel::get_application_point(const FacetIterator& that_facet,
-                                                         const Body& body,
+                                                         const BodyStates& states,
                                                          const double zG) const
 {
-    return exact_application_point(that_facet,body.down_direction_in_mesh_frame,zG,body.intersector->mesh->all_nodes,body.intersector->all_relative_immersions);
+    return exact_application_point(that_facet,states.down_direction_in_mesh_frame,zG,states.intersector->mesh->all_nodes,states.intersector->all_relative_immersions);
 }

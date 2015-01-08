@@ -25,14 +25,14 @@ class FroudeKrylovForceModel : public ImmersedSurfaceForceModel
         FroudeKrylovForceModel(const EnvironmentAndFrames& env);
         DF dF(const FacetIterator& that_facet,
               const EnvironmentAndFrames& env,
-              const Body& body,
+              const BodyStates& states,
               const double t
               ) const;
         static const std::string model_name;
 
     private:
         FroudeKrylovForceModel();
-        double pe(const Body& body, const std::vector<double>& x, const EnvironmentAndFrames& env) const;
+        double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const;
 };
 
 #endif /* FROUDEKRYLOVFORCEMODEL_HPP_ */

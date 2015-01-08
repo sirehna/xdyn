@@ -67,12 +67,12 @@ WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input
     }
 }
 
-ssc::kinematics::Vector6d WageningenControlledForceModel::get_force(const Body& body, const double , std::map<std::string,double> commands) const
+ssc::kinematics::Vector6d WageningenControlledForceModel::get_force(const BodyStates& states, const double , std::map<std::string,double> commands) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     const double n2 = commands["rpm"]*commands["rpm"]/(4*PI*PI); // In turns per second (Hz)
     const double P_D = commands["P/D"];
-    const double J = advance_ratio(body, commands);
+    const double J = advance_ratio(states, commands);
     tau(0) = (1-t)*env.rho*n2*D4*Kt(Z, AE_A0, P_D, J);
     tau(3) = kappa*eta_R*env.rho*n2*D5*Kq(Z, AE_A0, P_D, J);
     return tau;
@@ -112,9 +112,9 @@ double WageningenControlledForceModel::Kq(const size_t Z, const double AE_A0_, c
     return kq;
 }
 
-double WageningenControlledForceModel::advance_ratio(const Body& body, std::map<std::string,double>& commands) const
+double WageningenControlledForceModel::advance_ratio(const BodyStates& states, std::map<std::string,double>& commands) const
 {
-    const double Va = fabs(body.u);
+    const double Va = fabs(states.u);
     const double n = commands["rpm"]/(2*PI);
     return (1-w)*Va/n/D;
 }

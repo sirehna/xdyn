@@ -146,11 +146,11 @@ class RadiationDampingForceModel::Impl
             return K_X_dot;
         }
 
-        ssc::kinematics::Wrench get_wrench(const Body& b, const double t)
+        ssc::kinematics::Wrench get_wrench(const BodyStates& states, const double t)
         {
-            save_state(b, t);
+            save_state(states, t);
             ssc::kinematics::Vector6d W;
-            const ssc::kinematics::Point H(b.name,H0);
+            const ssc::kinematics::Point H(states.name,H0);
 
             W(0) = get_convolution_for_axis(0);
             W(1) = get_convolution_for_axis(1);
@@ -158,17 +158,17 @@ class RadiationDampingForceModel::Impl
             W(3) = get_convolution_for_axis(3);
             W(4) = get_convolution_for_axis(4);
             W(5) = get_convolution_for_axis(5);
-            return ssc::kinematics::Wrench(b.name,W);
+            return ssc::kinematics::Wrench(states.name,W);
         }
 
-        void save_state(const Body& b, const double t)
+        void save_state(const BodyStates& states, const double t)
         {
-            h[0].record(t,b.u);
-            h[1].record(t,b.v);
-            h[2].record(t,b.w);
-            h[3].record(t,b.p);
-            h[4].record(t,b.q);
-            h[5].record(t,b.r);
+            h[0].record(t,states.u);
+            h[1].record(t,states.v);
+            h[2].record(t,states.w);
+            h[3].record(t,states.p);
+            h[4].record(t,states.q);
+            h[5].record(t,states.r);
         }
 
     private:
@@ -191,9 +191,9 @@ pimpl(new Impl(input.hdb, input.yaml))
 {
 }
 
-ssc::kinematics::Wrench RadiationDampingForceModel::operator()(const Body& b, const double t) const
+ssc::kinematics::Wrench RadiationDampingForceModel::operator()(const BodyStates& states, const double t) const
 {
-    return pimpl->get_wrench(b, t);
+    return pimpl->get_wrench(states, t);
 }
 
 TypeOfQuadrature parse_type_of_quadrature_(const std::string& s);

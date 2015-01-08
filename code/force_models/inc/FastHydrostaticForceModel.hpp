@@ -16,7 +16,7 @@ class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
         FastHydrostaticForceModel(const EnvironmentAndFrames& env);
         DF dF(const FacetIterator& that_facet,
               const EnvironmentAndFrames& env,
-              const Body& body,
+              const BodyStates& states,
               const double t
               ) const;
 
@@ -24,8 +24,8 @@ class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
 
     private:
         FastHydrostaticForceModel();
-        virtual EPoint get_application_point(const FacetIterator& that_facet, const Body& body, const double zG) const;
-        double pe(const Body& body, const std::vector<double>& x, const EnvironmentAndFrames& env) const;
+        virtual EPoint get_application_point(const FacetIterator& that_facet, const BodyStates& states, const double zG) const;
+        double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const;
 };
 
 #endif /* FASTHYDROSTATICFORCEMODEL_HPP_ */

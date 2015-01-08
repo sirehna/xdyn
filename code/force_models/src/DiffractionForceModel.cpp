@@ -99,10 +99,10 @@ DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const 
 {
 }
 
-ssc::kinematics::Wrench DiffractionForceModel::operator()(const Body& body, const double t) const
+ssc::kinematics::Wrench DiffractionForceModel::operator()(const BodyStates& states, const double t) const
 {
 
-    return pimpl->evaluate(body.name, t);
+    return pimpl->evaluate(states.name, t);
 }
 
 DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yaml)

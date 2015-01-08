@@ -17,15 +17,15 @@ DampingForceModel::DampingForceModel(const std::string& name_, const Eigen::Matr
 {
 }
 
-ssc::kinematics::Wrench DampingForceModel::operator()(const Body& body, const double) const
+ssc::kinematics::Wrench DampingForceModel::operator()(const BodyStates& states, const double) const
 {
     Eigen::Matrix<double, 6, 1> W;
-    W <<body.u,
-        body.v,
-        body.w,
-        body.p,
-        body.q,
-        body.r;
-    return ssc::kinematics::Wrench(body.hydrodynamic_forces_calculation_point, get_force_and_torque(D, W));
+    W <<states.u,
+        states.v,
+        states.w,
+        states.p,
+        states.q,
+        states.r;
+    return ssc::kinematics::Wrench(states.hydrodynamic_forces_calculation_point, get_force_and_torque(D, W));
 }
 

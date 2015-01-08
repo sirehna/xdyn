@@ -62,30 +62,30 @@ TEST_F(ResistanceCurveForceModelTest, example)
 //! [ResistanceCurveForceModelTest example]
 //! [ResistanceCurveForceModelTest expected output]
     Body b;
-    b.u = 0;
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).X());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).Y());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).Z());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).K());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).M());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).N());
+    b.states.u = 0;
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).X());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Y());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Z());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).K());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).M());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).N());
 
-    b.u = 0.514444444444444;
-    ASSERT_NEAR(-1e6, (double)F(b, a.random<double>()).X(), EPS);
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).Y());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).Z());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).K());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).M());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).N());
+    b.states.u = 0.514444444444444;
+    ASSERT_NEAR(-1e6, (double)F(b.states, a.random<double>()).X(), EPS);
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Y());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Z());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).K());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).M());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).N());
 
 
-    b.u = 0.514444444444444*15;
-    ASSERT_NEAR(-225e6, (double)F(b, a.random<double>()).X(), EPS);
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).Y());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).Z());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).K());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).M());
-    ASSERT_DOUBLE_EQ(0, (double)F(b, a.random<double>()).N());
+    b.states.u = 0.514444444444444*15;
+    ASSERT_NEAR(-225e6, (double)F(b.states, a.random<double>()).X(), EPS);
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Y());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).Z());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).K());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).M());
+    ASSERT_DOUBLE_EQ(0, (double)F(b.states, a.random<double>()).N());
 //! [ResistanceCurveForceModelTest expected output]
 }
 
@@ -98,8 +98,8 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower
     std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     ASSERT_TRUE(error.str().empty());
     // Call the resistance curve model
-    b.u = -1;
-    F(b, a.random<double>());
+    b.states.u = -1;
+    F(b.states, a.random<double>());
     ASSERT_FALSE(error.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
@@ -114,8 +114,8 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_great
     std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     ASSERT_TRUE(error.str().empty());
     // Call the resistance curve model
-    b.u = 20*0.514444444444444444 + 1E-10;
-    F(b, a.random<double>());
+    b.states.u = 20*0.514444444444444444 + 1E-10;
+    F(b.states, a.random<double>());
     ASSERT_FALSE(error.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);

@@ -21,42 +21,42 @@ BodyBuilder::BodyBuilder(const YamlRotation& convention) : rotations(convention)
 
 void BodyBuilder::change_mesh_ref_frame(Body& body, const VectorOfVectorOfPoints& mesh) const
 {
-    ssc::kinematics::Point translation(body.name, body.x_relative_to_mesh, body.y_relative_to_mesh, body.z_relative_to_mesh);
-    ssc::kinematics::Transform transform(translation, body.mesh_to_body, "mesh("+body.name+")");
-    body.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
+    ssc::kinematics::Point translation(body.states.name, body.states.x_relative_to_mesh, body.states.y_relative_to_mesh, body.states.z_relative_to_mesh);
+    ssc::kinematics::Transform transform(translation, body.states.mesh_to_body, "mesh("+body.states.name+")");
+    body.states.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
     const auto T = transform.inverse();
-    body.mesh->nodes = (T*ssc::kinematics::PointMatrix(body.mesh->nodes, "mesh("+body.name+")")).m;
-    body.mesh->all_nodes = (T*ssc::kinematics::PointMatrix(body.mesh->all_nodes, "mesh("+body.name+")")).m;
-    for (size_t i = 0 ; i < body.mesh->facets.size() ; ++i)
+    body.states.mesh->nodes = (T*ssc::kinematics::PointMatrix(body.states.mesh->nodes, "mesh("+body.states.name+")")).m;
+    body.states.mesh->all_nodes = (T*ssc::kinematics::PointMatrix(body.states.mesh->all_nodes, "mesh("+body.states.name+")")).m;
+    for (size_t i = 0 ; i < body.states.mesh->facets.size() ; ++i)
     {
-        body.mesh->facets[i].barycenter = T*body.mesh->facets[i].barycenter;
-        body.mesh->facets[i].unit_normal = T.get_rot()*body.mesh->facets[i].unit_normal;
+        body.states.mesh->facets[i].barycenter = T*body.states.mesh->facets[i].barycenter;
+        body.states.mesh->facets[i].unit_normal = T.get_rot()*body.states.mesh->facets[i].unit_normal;
     }
-    body.M = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(body.mesh->nodes, body.name));
+    body.states.M = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(body.states.mesh->nodes, body.states.name));
 }
 
 Body BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh) const
 {
     Body ret;
-    ret.name = input.name;
-    ret.G = make_point(input.dynamics.centre_of_inertia);
-    ret.m = input.dynamics.mass;
+    ret.states.name = input.name;
+    ret.states.G = make_point(input.dynamics.centre_of_inertia);
+    ret.states.m = input.dynamics.mass;
 
-    ret.hydrodynamic_forces_calculation_point = make_point(input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame, input.name);
+    ret.states.hydrodynamic_forces_calculation_point = make_point(input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame, input.name);
 
-    ret.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
-    ret.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
-    ret.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
-    ret.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle, rotations);
+    ret.states.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
+    ret.states.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
+    ret.states.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
+    ret.states.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle, rotations);
     change_mesh_ref_frame(ret, mesh);
     add_inertia(ret, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
-    ret.u = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u;
-    ret.v = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.v;
-    ret.w = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.w;
-    ret.p = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p;
-    ret.q = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q;
-    ret.r = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
-    ret.intersector = MeshIntersectorPtr(new MeshIntersector(ret.mesh));
+    ret.states.u = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u;
+    ret.states.v = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.v;
+    ret.states.w = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.w;
+    ret.states.p = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p;
+    ret.states.q = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q;
+    ret.states.r = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
+    ret.states.intersector = MeshIntersectorPtr(new MeshIntersector(ret.states.mesh));
     return ret;
 }
 
@@ -87,9 +87,9 @@ void BodyBuilder::add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_bod
         THROW(__PRETTY_FUNCTION__, BodyBuilderException, ss.str());
     }
     Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
-    body.inverse_of_the_total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(M_inv));
-    body.solid_body_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mrb));
-    body.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mt));
+    body.states.inverse_of_the_total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(M_inv));
+    body.states.solid_body_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mrb));
+    body.states.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(Mt));
 }
 
 Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) const

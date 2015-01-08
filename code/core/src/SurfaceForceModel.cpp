@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "Body.hpp"
+#include "BodyStates.hpp"
 #include "SurfaceForceModel.hpp"
 
 SurfaceForceModel::SurfaceForceModel(const std::string& name_, const EnvironmentAndFrames& env_) : ForceModel(name_),
@@ -18,18 +18,18 @@ SurfaceForceModel::~SurfaceForceModel()
 {
 }
 
-ssc::kinematics::Wrench SurfaceForceModel::operator()(const Body& body, const double t) const
+ssc::kinematics::Wrench SurfaceForceModel::operator()(const BodyStates& states, const double t) const
 {
-    ssc::kinematics::UnsafeWrench F(body.G);
-    const double orientation_factor = body.intersector->mesh->orientation_factor;
-    const auto e = end(body.intersector);
+    ssc::kinematics::UnsafeWrench F(states.G);
+    const double orientation_factor = states.intersector->mesh->orientation_factor;
+    const auto e = end(states.intersector);
 
-    for (auto that_facet = begin(body.intersector) ; that_facet != e ; ++that_facet)
+    for (auto that_facet = begin(states.intersector) ; that_facet != e ; ++that_facet)
     {
-        const DF f = dF(that_facet, env, body, t);
-        const double x = (f.C(0)-body.G.v(0));
-        const double y = (f.C(1)-body.G.v(1));
-        const double z = (f.C(2)-body.G.v(2));
+        const DF f = dF(that_facet, env, states, t);
+        const double x = (f.C(0)-states.G.v(0));
+        const double y = (f.C(1)-states.G.v(1));
+        const double z = (f.C(2)-states.G.v(2));
         F.X() += orientation_factor*f.dF(0);
         F.Y() += orientation_factor*f.dF(1);
         F.Z() += orientation_factor*f.dF(2);
@@ -40,9 +40,9 @@ ssc::kinematics::Wrench SurfaceForceModel::operator()(const Body& body, const do
     return F;
 }
 
-double SurfaceForceModel::potential_energy(const Body& body, const std::vector<double>& x) const
+double SurfaceForceModel::potential_energy(const BodyStates& states, const std::vector<double>& x) const
 {
-    return pe(body, x, env);
+    return pe(states, x, env);
 }
 
 bool SurfaceForceModel::is_a_surface_force_model() const

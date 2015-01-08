@@ -34,7 +34,7 @@ class ResistanceCurveForceModel : public ForceModel
         };
         ResistanceCurveForceModel(const Yaml& data, const EnvironmentAndFrames& env);
         static Yaml parse(const std::string& yaml);
-        ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
+        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         static const std::string model_name;
 
     private:

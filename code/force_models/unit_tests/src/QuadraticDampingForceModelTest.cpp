@@ -55,7 +55,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_null_velocities)
     const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >(), EnvironmentAndFrames());
     Body b = get_body(BODY);
     const double t = a.random<double>();
-    const ssc::kinematics::Wrench f = F(b,t);
+    const ssc::kinematics::Wrench f = F(b.states,t);
 //! [DampingForceModelTest example]
 //! [DampingForceModelTest expected output]
     ASSERT_EQ(BODY, f.get_frame());
@@ -77,13 +77,13 @@ TEST_F(QuadraticDampingForceModelTest, example_with_random_positive_velocities_a
     Body b = get_body(BODY);
     for (size_t i=0;i<100;++i)
     {
-        b.u = u = a.random<double>().greater_than(0.0);
-        b.v = v = a.random<double>().greater_than(0.0);
-        b.w = w = a.random<double>().greater_than(0.0);
-        b.p = p = a.random<double>().greater_than(0.0);
-        b.q = q = a.random<double>().greater_than(0.0);
-        b.r = r = a.random<double>().greater_than(0.0);
-        const ssc::kinematics::Wrench f = F(b,a.random<double>());
+        b.states.u = u = a.random<double>().greater_than(0.0);
+        b.states.v = v = a.random<double>().greater_than(0.0);
+        b.states.w = w = a.random<double>().greater_than(0.0);
+        b.states.p = p = a.random<double>().greater_than(0.0);
+        b.states.q = q = a.random<double>().greater_than(0.0);
+        b.states.r = r = a.random<double>().greater_than(0.0);
+        const ssc::kinematics::Wrench f = F(b.states,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
         ASSERT_NEAR(-u*u, f.X(),EPS);
         ASSERT_NEAR(-v*v, f.Y(),EPS);
@@ -110,19 +110,19 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
     QuadraticDampingForceModel F(D, EnvironmentAndFrames());
     for (int i=0;i<100;++i)
     {
-        b.u = u = a.random<double>().between(-10.0,+10.0);
-        b.v = v = a.random<double>().between(-10.0,+10.0);
-        b.w = w = a.random<double>().between(-10.0,+10.0);
-        b.p = p = a.random<double>().between(-10.0,+10.0);
-        b.q = q = a.random<double>().between(-10.0,+10.0);
-        b.r = r = a.random<double>().between(-10.0,+10.0);
+        b.states.u = u = a.random<double>().between(-10.0,+10.0);
+        b.states.v = v = a.random<double>().between(-10.0,+10.0);
+        b.states.w = w = a.random<double>().between(-10.0,+10.0);
+        b.states.p = p = a.random<double>().between(-10.0,+10.0);
+        b.states.q = q = a.random<double>().between(-10.0,+10.0);
+        b.states.r = r = a.random<double>().between(-10.0,+10.0);
         uu = fabs(u)*u;
         vv = fabs(v)*v;
         ww = fabs(w)*w;
         pp = fabs(p)*p;
         qq = fabs(q)*q;
         rr = fabs(r)*r;
-        const ssc::kinematics::Wrench f = F(b,a.random<double>());
+        const ssc::kinematics::Wrench f = F(b.states,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
         for (int j=0;j<3;++j)
         {

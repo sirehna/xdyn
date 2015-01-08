@@ -22,7 +22,7 @@ class DampingForceModel : public ForceModel
 {
     public:
         DampingForceModel(const std::string& name, const Eigen::Matrix<double,6,6>& D);
-        ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
+        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
 
     private:
         virtual Eigen::Matrix<double, 6, 1> get_force_and_torque(const Eigen::Matrix<double,6,6>& D, const Eigen::Matrix<double, 6, 1>& W) const = 0;
