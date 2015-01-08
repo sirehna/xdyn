@@ -18,7 +18,6 @@
 #include "YamlResistanceCurve.hpp"
 #include "YamlWageningen.hpp"
 
-Eigen::Matrix<double,6,6> parse_quadratic_damping(const std::string& yaml);
 YamlWageningen parse_wageningen(const std::string& yaml);
 YamlResistanceCurve parse_resistance_curve(const std::string& yaml);
 TypeOfQuadrature parse_type_of_quadrature(const std::string& s);
