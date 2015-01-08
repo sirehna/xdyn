@@ -29,7 +29,7 @@ class RadiationDampingForceModel : public ForceModel
         };
         RadiationDampingForceModel(const Input& input, const EnvironmentAndFrames& env);
         ssc::kinematics::Wrench operator()(const Body& body, const double t) const;
-        static Input parse(const std::string& yaml);
+        static Input parse(const std::string& yaml, const bool parse_hdb=true);
         static const std::string model_name;
 
     private:

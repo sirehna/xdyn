@@ -18,6 +18,7 @@
 #include "RadiationDampingForceModel.hpp"
 #include "RadiationDampingForceModelTest.hpp"
 #include "EnvironmentAndFrames.hpp"
+#include "yaml_data.hpp"
 
 #define EPS 5E-2
 
@@ -60,6 +61,23 @@ YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data(const bool sh
     ret.type_of_quadrature_for_convolution = TypeOfQuadrature::CLENSHAW_CURTIS;
     ret.type_of_quadrature_for_cos_transform = TypeOfQuadrature::SIMPSON;
     return ret;
+}
+
+TEST_F(RadiationDampingForceModelTest, parser)
+{
+    const YamlRadiationDamping r = RadiationDampingForceModel::parse(test_data::radiation_damping(),false).yaml;
+    ASSERT_EQ("anthineas.hdb", r.hdb_filename);
+    ASSERT_EQ(50, r.nb_of_points_for_retardation_function_discretization);
+    ASSERT_DOUBLE_EQ(30,r.omega_max);
+    ASSERT_EQ(0,r.omega_min);
+    ASSERT_TRUE(r.output_Br_and_K);
+    ASSERT_DOUBLE_EQ(10,r.tau_max);
+    ASSERT_DOUBLE_EQ(0.2094395,r.tau_min);
+    ASSERT_EQ(TypeOfQuadrature::CLENSHAW_CURTIS, r.type_of_quadrature_for_convolution);
+    ASSERT_EQ(TypeOfQuadrature::SIMPSON, r.type_of_quadrature_for_cos_transform);
+    ASSERT_DOUBLE_EQ(0.696, r.calculation_point_in_body_frame.x);
+    ASSERT_DOUBLE_EQ(0, r.calculation_point_in_body_frame.y);
+    ASSERT_DOUBLE_EQ(1.418, r.calculation_point_in_body_frame.z);
 }
 
 TEST_F(RadiationDampingForceModelTest, example)

@@ -50,30 +50,6 @@ TypeOfQuadrature parse_type_of_quadrature(const std::string& s)
     }
 }
 
-YamlRadiationDamping parse_radiation_damping(const std::string& yaml)
-{
-    std::stringstream stream(yaml);
-    std::stringstream ss;
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
-    YamlRadiationDamping ret;
-    node["hdb"] >> ret.hdb_filename;
-    std::string s;
-    node["type of quadrature for cos transform"] >> s;
-    ret.type_of_quadrature_for_cos_transform = parse_type_of_quadrature(s);
-    node["type of quadrature for convolution"] >> s;
-    ret.type_of_quadrature_for_convolution = parse_type_of_quadrature(s);
-    node["nb of points for retardation function discretization"] >> ret.nb_of_points_for_retardation_function_discretization;
-    parse_uv(node["omega min"], ret.omega_min);
-    parse_uv(node["omega max"], ret.omega_max);
-    parse_uv(node["tau min"], ret.tau_min);
-    parse_uv(node["tau max"], ret.tau_max);
-    node["output Br and K"] >> ret.output_Br_and_K;
-    node["calculation point in body frame"] >> ret.calculation_point_in_body_frame;
-    return ret;
-}
-
 YamlDiffraction parse_diffraction(const std::string& yaml)
 {
     std::stringstream stream(yaml);

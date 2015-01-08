@@ -215,8 +215,9 @@ TypeOfQuadrature parse_type_of_quadrature_(const std::string& s)
     return TypeOfQuadrature::FILON;
 }
 
-RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::string& yaml)
+RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::string& yaml, const bool parse_hdb)
 {
+    RadiationDampingForceModel::Input ret;
     std::stringstream stream(yaml);
     std::stringstream ss;
     YAML::Parser parser(stream);
@@ -236,9 +237,11 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     parse_uv(node["tau max"], input.tau_max);
     node["output Br and K"] >> input.output_Br_and_K;
     node["calculation point in body frame"] >> input.calculation_point_in_body_frame;
-    const TR1(shared_ptr)<HDBParser> hdb(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
-    RadiationDampingForceModel::Input ret;
-    ret.hdb = hdb;
+    if (parse_hdb)
+    {
+        const TR1(shared_ptr)<HDBParser> hdb(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
+        ret.hdb = hdb;
+    }
     ret.yaml = input;
     return ret;
 }

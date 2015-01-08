@@ -51,23 +51,6 @@ TEST_F(force_parsersTest, wageningen)
     ASSERT_DOUBLE_EQ(2, w.diameter);
 }
 
-TEST_F(force_parsersTest, radiation_damping)
-{
-    const YamlRadiationDamping r = parse_radiation_damping(test_data::radiation_damping());
-    ASSERT_EQ("anthineas.hdb", r.hdb_filename);
-    ASSERT_EQ(50, r.nb_of_points_for_retardation_function_discretization);
-    ASSERT_DOUBLE_EQ(30,r.omega_max);
-    ASSERT_EQ(0,r.omega_min);
-    ASSERT_TRUE(r.output_Br_and_K);
-    ASSERT_DOUBLE_EQ(10,r.tau_max);
-    ASSERT_DOUBLE_EQ(0.2094395,r.tau_min);
-    ASSERT_EQ(TypeOfQuadrature::CLENSHAW_CURTIS, r.type_of_quadrature_for_convolution);
-    ASSERT_EQ(TypeOfQuadrature::SIMPSON, r.type_of_quadrature_for_cos_transform);
-    ASSERT_DOUBLE_EQ(0.696, r.calculation_point_in_body_frame.x);
-    ASSERT_DOUBLE_EQ(0, r.calculation_point_in_body_frame.y);
-    ASSERT_DOUBLE_EQ(1.418, r.calculation_point_in_body_frame.z);
-}
-
 TEST_F(force_parsersTest, diffraction)
 {
     const YamlDiffraction r = parse_diffraction(test_data::diffraction());
