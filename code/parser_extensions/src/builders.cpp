@@ -14,9 +14,7 @@
 #include "environment_parsers.hpp"
 #include "SimulatorBuilderException.hpp"
 #include "EnvironmentAndFrames.hpp"
-#include "GravityForceModel.hpp"
 #include "discretize.hpp"
-#include "YamlWageningen.hpp"
 #include "HDBParser.hpp"
 
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
