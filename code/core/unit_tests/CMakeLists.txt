@@ -18,6 +18,7 @@ include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${binary_stl_data_INCLUDE_DIRS})
+include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${parser_extensions_INCLUDE_DIRS}/../unit_tests/inc)
 
 # Using C++ 2011
