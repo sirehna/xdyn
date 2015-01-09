@@ -62,9 +62,8 @@ class Sim
           *  ideal because it means the model does not see the state values set
           *  by the stepper.
           */
-        void normalize_quaternions(StateType& all_states, //!< States of all bodies in the system
-                                   const size_t i         //!< Index of the body under consideration
-                                   );
+        StateType normalize_quaternions(const StateType& all_states
+                                       ) const;
 
         void fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
         void fill_force_map_with_zeros(OuputtedForces& m) const;

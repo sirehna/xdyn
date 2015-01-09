@@ -56,24 +56,27 @@ Sim::Sim(const std::vector<BodyPtr>& bodies,
     fill_force_map_with_zeros(pimpl->outputted_forces);
 }
 
-void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies in the system
-                                   const size_t i         //!< Index of the body under consideration
-                               )
+StateType Sim::normalize_quaternions(const StateType& all_states
+                                    ) const
 {
-    const auto norm = sqrt((double)SQUARE(*_QR(all_states,i))+(double)SQUARE(*_QI(all_states,i))
-                          +(double)SQUARE(*_QJ(all_states,i))+(double)SQUARE(*_QK(all_states,i)));
-    *_QR(all_states,i) /= norm;
-    *_QI(all_states,i) /= norm;
-    *_QJ(all_states,i) /= norm;
-    *_QK(all_states,i) /= norm;
+    StateType normalized = all_states;
+    for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
+    {
+        const auto norm = sqrt((double)SQUARE(*_QR(normalized,i))+(double)SQUARE(*_QI(normalized,i))
+                              +(double)SQUARE(*_QJ(normalized,i))+(double)SQUARE(*_QK(normalized,i)));
+        *_QR(normalized,i) /= norm;
+        *_QI(normalized,i) /= norm;
+        *_QJ(normalized,i) /= norm;
+        *_QK(normalized,i) /= norm;
+    }
+    return normalized;
 }
 
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
-    auto x_with_normalized_quaternions = x;
+    auto x_with_normalized_quaternions = normalize_quaternions(x);
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
     {
-        normalize_quaternions(x_with_normalized_quaternions, i);
         (pimpl->bodies[i])->update(pimpl->env,x_with_normalized_quaternions,t);
         (pimpl->bodies[i])->calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), x_with_normalized_quaternions, dx_dt, pimpl->env);
     }
