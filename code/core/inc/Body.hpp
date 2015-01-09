@@ -45,7 +45,8 @@ class Body
                                          StateType& dx_dt,
                                          const EnvironmentAndFrames& env) const;
 
-
+        Eigen::Vector3d get_uvw_in_body_frame(const StateType& x) const;
+        Eigen::Vector3d get_pqr(const StateType& x) const;
         BodyStates states;
 
     private:

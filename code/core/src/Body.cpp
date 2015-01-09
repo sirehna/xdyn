@@ -115,3 +115,13 @@ void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_for
     *_QJ(dx_dt,idx) = 0.5*(double)dq_dt.y();
     *_QK(dx_dt,idx) = 0.5*(double)dq_dt.z();
 }
+
+Eigen::Vector3d Body::get_uvw_in_body_frame(const StateType& x) const
+{
+    return Eigen::Vector3d::Map(_U(x,idx));
+}
+
+Eigen::Vector3d Body::get_pqr(const StateType& x) const
+{
+    return Eigen::Vector3d::Map(_P(x,idx));
+}
