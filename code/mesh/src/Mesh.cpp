@@ -6,7 +6,8 @@ Mesh::Mesh():nodes(),edges(),facets(), orientation_factor(1)
 {
 }
 
-Mesh::Mesh(const Matrix3x& nodes_,
+Mesh::Mesh(
+        const Matrix3x& nodes_,
         const ArrayOfEdges& edges_,
         const std::vector<Facet>& facets_,
         const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
@@ -81,7 +82,8 @@ bool Mesh::get_oriented_edge_direction(size_t oriented_edge)
     return (oriented_edge & 1) != 0;
 }
 
-/** \brief return the first vertex of an oriented edge
+/**
+ * \brief return the first vertex of an oriented edge
  */
 size_t Mesh::first_vertex_of_oriented_edge(size_t oriented_edge) const
 {
@@ -90,7 +92,8 @@ size_t Mesh::first_vertex_of_oriented_edge(size_t oriented_edge) const
     return edges[reverse_direction][edge_index];
 }
 
-/** \brief return the second vertex of an oriented edge
+/**
+ * \brief return the second vertex of an oriented edge
  */
 size_t Mesh::second_vertex_of_oriented_edge(size_t oriented_edge) const
 {
