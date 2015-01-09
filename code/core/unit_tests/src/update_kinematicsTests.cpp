@@ -30,8 +30,6 @@ void update_kinematicsTests::TearDown()
 {
 }
 
-const Body update_kinematicsTests::body = BodyBuilderTest::build_body();
-
 TEST_F(update_kinematicsTests, can_get_initial_states)
 {
     const auto yaml = SimulatorYamlParser(test_data::full_example()).parse();

@@ -29,15 +29,15 @@
 #include <cmath>
 #define PI M_PI
 
-Body get_body(const std::string& name);
-Body get_body(const std::string& name, const VectorOfVectorOfPoints& points);
+BodyPtr get_body(const std::string& name);
+BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points);
 
-Body get_body(const std::string& name)
+BodyPtr get_body(const std::string& name)
 {
     return get_body(name, two_triangles());
 }
 
-Body get_body(const std::string& name, const VectorOfVectorOfPoints& points)
+BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points)
 
 {
     YamlRotation rot;
@@ -82,11 +82,11 @@ EnvironmentAndFrames get_env()
 void test(const ForceModel& F, const EnvironmentAndFrames& env, const size_t n);
 void test(const ForceModel& F, const EnvironmentAndFrames& env, size_t n)
 {
-    Body body = get_body(BODY, anthineas());
+    BodyPtr body = get_body(BODY, anthineas());
     const double t = 0;
-    body.update_intersection_with_free_surface(env, t);
+    body->update_intersection_with_free_surface(env, t);
     ssc::kinematics::Wrench Fhs;
-    for (size_t i = 0 ; i < n ; ++i) F(body.states, t);
+    for (size_t i = 0 ; i < n ; ++i) F(body->states, t);
 }
 
 int main(int argc, char* argv[])

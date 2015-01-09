@@ -15,7 +15,7 @@
 class BodyBuilderTest : public ::testing::Test
 {
     public:
-        static Body build_body(const size_t idx=0);
+        static BodyPtr build_body(const size_t idx=0);
 
     protected:
         BodyBuilderTest();
@@ -23,7 +23,7 @@ class BodyBuilderTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
-        static const Body body;
+        static const BodyPtr body;
 };
 
 #endif  /* BODYBUILDERTEST_HPP_ */

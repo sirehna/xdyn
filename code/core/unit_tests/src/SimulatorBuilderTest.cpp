@@ -49,8 +49,8 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
     m[input.bodies.front().name] = two_triangles();
     const auto bodies = builder.get_bodies(m, std::vector<bool>(1,false));
     ASSERT_EQ(1, bodies.size());
-    ASSERT_EQ(input.bodies.front().name, bodies.front().states.name);
-    const auto Id = (*bodies.front().states.inverse_of_the_total_inertia)*(*bodies.front().states.total_inertia);
+    ASSERT_EQ(input.bodies.front().name, bodies.front()->states.name);
+    const auto Id = (*bodies.front()->states.inverse_of_the_total_inertia)*(*bodies.front()->states.total_inertia);
     for (int i = 0 ; i < 6 ; ++i)
     {
         for (int j = 0 ; j < 6 ; ++j)
@@ -73,30 +73,35 @@ std::string SimulatorBuilderTest::customize(const std::string& body_name, const 
     return something + "(" + body_name + ")";
 }
 
+std::vector<BodyPtr> SimulatorBuilderTest::get_body_vector(const std::string& name) const
+{
+    return std::vector<BodyPtr>(1, get_body(name));
+}
+
 TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
 {
     builder.can_parse<DefaultSurfaceElevation>();
-    const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
+    const auto bodies = get_body_vector(a.random<std::string>());
 
     KinematicsPtr k(new ssc::kinematics::Kinematics());
     builder.add_initial_transforms(bodies,k);
     ASSERT_TRUE(k.get() != NULL);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        ASSERT_NO_THROW(k->get(that_body->states.name, customize(that_body->states.name, "mesh")));
+        ASSERT_NO_THROW(k->get((*that_body)->states.name, customize((*that_body)->states.name, "mesh")));
     }
 }
 
 TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 {
     builder.can_parse<DefaultSurfaceElevation>();
-    const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
+    const auto bodies = get_body_vector(a.random<std::string>());
     KinematicsPtr k(new ssc::kinematics::Kinematics());
     builder.add_initial_transforms(bodies,k);
     ASSERT_TRUE(k.get() != NULL);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        ASSERT_NO_THROW(k->get("NED", that_body->states.name));
+        ASSERT_NO_THROW(k->get("NED", (*that_body)->states.name));
     }
 }
 

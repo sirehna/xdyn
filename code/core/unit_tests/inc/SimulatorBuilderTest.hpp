@@ -21,6 +21,7 @@ class SimulatorBuilderTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         std::string customize(const std::string& body_name, const std::string& something) const;
+        std::vector<BodyPtr> get_body_vector(const std::string& name) const;
 
         ssc::random_data_generator::DataGenerator a;
         static const YamlSimulatorInput input;

@@ -45,4 +45,6 @@ class Body
         size_t idx;
 };
 
+typedef TR1(shared_ptr)<Body> BodyPtr;
+
 #endif /* BODY_HPP_ */

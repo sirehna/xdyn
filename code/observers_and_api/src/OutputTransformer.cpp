@@ -20,7 +20,7 @@
 
 OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) :
             input(builder.get_parsed_yaml()),
-            bodies(std::vector<Body>()),
+            bodies(std::vector<BodyPtr>()),
             points(std::map<std::string,ssc::kinematics::Point>()),
             k(TR1(shared_ptr)<ssc::kinematics::Kinematics>(new ssc::kinematics::Kinematics())),
             forces(),
@@ -39,8 +39,8 @@ void OutputTransformer::update_kinematics(const StateType& x) const
 {
     for (size_t i = 0 ; i < bodies.size() ; ++i)
     {
-        bodies[i].update_kinematics(x, k);
-        bodies[i].update_kinematics(x, env.k);
+        bodies[i]->update_kinematics(x, k);
+        bodies[i]->update_kinematics(x, env.k);
     }
 }
 
@@ -142,7 +142,7 @@ double OutputTransformer::compute_kinetic_energy(const size_t i, const StateType
     V(4) = *_Q(x,i);
     V(5) = *_R(x,i);
 
-    const auto IV = bodies.at(i).states.solid_body_inertia->operator*(V);
+    const auto IV = bodies.at(i)->states.solid_body_inertia->operator*(V);
 
     return 0.5*(V.transpose()*IV)(0,0);
 }
@@ -152,7 +152,7 @@ double OutputTransformer::compute_potential_energy(const size_t i, const StateTy
     double Ep = 0;
     for (auto that_force = forces.at(i).begin() ; that_force != forces.at(i).end() ; ++that_force)
     {
-        const double ep = (*that_force)->potential_energy(bodies.at(i).states,std::vector<double>(x.begin()+(long)i*13,x.begin()+(long)(i+1)*13-1));
+        const double ep = (*that_force)->potential_energy(bodies.at(i)->states,std::vector<double>(x.begin()+(long)i*13,x.begin()+(long)(i+1)*13-1));
         Ep += ep;
     }
     return Ep;
@@ -162,9 +162,9 @@ void OutputTransformer::fill_energy(std::map<std::string,double>& out, const siz
 {
     const double Ec = compute_kinetic_energy(i, res);
     const double Ep = compute_potential_energy(i, res);
-    out[std::string("Ec(")+bodies.at(i).states.name+")"] = Ec;
-    out[std::string("Ep(")+bodies.at(i).states.name+")"] = Ep;
-    out[std::string("Em(")+bodies.at(i).states.name+")"] = Ec+Ep;
+    out[std::string("Ec(")+bodies.at(i)->states.name+")"] = Ec;
+    out[std::string("Ep(")+bodies.at(i)->states.name+")"] = Ep;
+    out[std::string("Em(")+bodies.at(i)->states.name+")"] = Ec+Ep;
 }
 
 std::map<std::string,double> OutputTransformer::operator()(const Res& res)
@@ -178,7 +178,7 @@ std::map<std::string,double> OutputTransformer::operator()(const Res& res)
     update_kinematics(res.x);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        that_body->update_intersection_with_free_surface(env, res.t);
+        (*that_body)->update_intersection_with_free_surface(env, res.t);
     }
     for (auto that_position = input.position_output.begin() ; that_position != input.position_output.end() ; ++that_position)
     {

@@ -46,17 +46,17 @@ bool SimulatorBuilder::detected_surface_forces() const
     return surface_forces_detected;
 }
 
-std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces) const
+std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces) const
 {
-    std::vector<Body> ret;
+    std::vector<BodyPtr> ret;
     size_t i = 0;
     for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
     {
         const auto that_mesh = meshes.find(that_body->name);
         if (that_mesh != meshes.end())
         {
-            if (bodies_contain_surface_forces.at(i)) ret.push_back(builder->build(*that_body, that_mesh->second, i++));
-            else                                     ret.push_back(builder->build(*that_body, that_mesh->second, i++));
+            ret.push_back(builder->build(*that_body, that_mesh->second, i,bodies_contain_surface_forces.at(i)));
+            i++;
         }
         else
         {
@@ -66,13 +66,13 @@ std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes, const std:
     return ret;
 }
 
-void SimulatorBuilder::add_initial_transforms(const std::vector<Body>& bodies, KinematicsPtr& k) const
+void SimulatorBuilder::add_initial_transforms(const std::vector<BodyPtr>& bodies, KinematicsPtr& k) const
 {
     const StateType x = ::get_initial_states(input.rotations, input.bodies);
     for (size_t i = 0; i < bodies.size(); ++i)
     {
-        k->add(bodies.at(i).get_transform_from_mesh_to());
-        k->add(bodies.at(i).get_transform_from_ned_to(x));
+        k->add(bodies.at(i)->get_transform_from_mesh_to());
+        k->add(bodies.at(i)->get_transform_from_ned_to(x));
     }
 }
 

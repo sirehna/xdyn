@@ -54,7 +54,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
     const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >(), EnvironmentAndFrames());
-    const BodyStates states = get_body(BODY).states;
+    const BodyStates states = get_body(BODY)->states;
     const double t = a.random<double>();
     const ssc::kinematics::Wrench f = F(states,t);
 //! [DampingForceModelTest example]
@@ -75,7 +75,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_random_positive_velocities_a
     const Eigen::Matrix<double,6,6> D = Eigen::Matrix<double,6,6>::Identity();
     QuadraticDampingForceModel F(D, EnvironmentAndFrames());
     double u,v,w,p,q,r;
-    BodyStates states = get_body(BODY).states;
+    BodyStates states = get_body(BODY)->states;
     for (size_t i=0;i<100;++i)
     {
         states.u = u = a.random<double>().greater_than(0.0);
@@ -101,7 +101,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
     Eigen::Matrix<double,6,6> D;
     double u,v,w,p,q,r;
     double uu,vv,ww,pp,qq,rr;
-    BodyStates states = get_body(BODY).states;
+    BodyStates states = get_body(BODY)->states;
     D <<  2,   3,   5,   7,  11,  13,
          17,  19,  23,  29,  31,  37,
          41,  43,  47,  53,  59,  61,

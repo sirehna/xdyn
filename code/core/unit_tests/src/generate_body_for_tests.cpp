@@ -10,12 +10,12 @@
 #include "BodyBuilder.hpp"
 #include "TriMeshTestData.hpp"
 
-Body get_body(const std::string& name)
+BodyPtr get_body(const std::string& name)
 {
     return get_body(name, two_triangles());
 }
 
-Body get_body(const std::string& name, const VectorOfVectorOfPoints& points)
+BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points)
 
 {
     YamlRotation rot;

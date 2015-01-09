@@ -13,7 +13,7 @@
 #include "Body.hpp"
 #include "GeometricTypes3d.hpp"
 
-Body get_body(const std::string& names);
-Body get_body(const std::string& name, const VectorOfVectorOfPoints& points);
+BodyPtr get_body(const std::string& names);
+BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points);
 
 #endif /* SIMULATOR_TEST_HPP_ */

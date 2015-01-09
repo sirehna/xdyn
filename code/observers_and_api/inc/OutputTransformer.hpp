@@ -50,7 +50,7 @@ class OutputTransformer
         double compute_potential_energy(const size_t i, const StateType& x) const;
 
         YamlSimulatorInput input;
-        std::vector<Body> bodies;
+        std::vector<BodyPtr> bodies;
         std::map<std::string,ssc::kinematics::Point> points;
         TR1(shared_ptr)<ssc::kinematics::Kinematics> k;
         std::vector<ListOfForces> forces;

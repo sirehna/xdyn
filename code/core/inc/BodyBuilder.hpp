@@ -36,19 +36,19 @@ class BodyBuilder
         /** \brief Build a 'Body' object from YAML & STL data
          *  \returns New Body object
          */
-        Body build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx) const;
+        BodyPtr build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx, const bool has_surface_forces = false) const;
 
         /** \details Only used for testing purposes when we don't want to go
          *           through the hassle of defining the inertia matrix & initial
          *           positions
          *  \returns New Body object
          */
-        Body build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx) const;
+        BodyPtr build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx, const bool has_surface_forces = false) const;
 
     private:
         BodyBuilder(); //Disabled
 
-        void add_inertia(Body& body, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const;
+        void add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const;
 
         /**  \details Converts the external YAML data structure (several std::vectors)
          *            to an Eigen::Matrix used for calculations
@@ -58,7 +58,7 @@ class BodyBuilder
         /** \brief Puts the mesh in the body frame
          *  \details Uses the body frame's initial position relative to the mesh
          */
-        void change_mesh_ref_frame(Body& body, const VectorOfVectorOfPoints& mesh) const;
+        void change_mesh_ref_frame(BodyPtr& body, const VectorOfVectorOfPoints& mesh) const;
 
         YamlRotation rotations; //!< Rotation convention (describes how we can build a rotation matrix from three angles)
 };

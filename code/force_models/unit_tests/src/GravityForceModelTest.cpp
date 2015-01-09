@@ -41,9 +41,9 @@ TEST_F(GravityForceModelTest, example)
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     GravityForceModel F(env);
-    Body b = get_body(BODY);
-    b.states.m = 100;
-    const ssc::kinematics::Wrench f = F(b.states, a.random<double>());
+    BodyPtr b = get_body(BODY);
+    b->states.m = 100;
+    const ssc::kinematics::Wrench f = F(b->states, a.random<double>());
 //! [GravityForceModelTest example]
 //! [GravityForceModelTest expected output]
     ASSERT_EQ(BODY, f.get_frame());
@@ -93,9 +93,9 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(Transform(rot, "NED", BODY));
     GravityForceModel F(env);
-    Body b = get_body(BODY);
-    b.states.m = 100;
-    const Wrench f = F(b.states,a.random<double>());
+    BodyPtr b = get_body(BODY);
+    b->states.m = 100;
+    const Wrench f = F(b->states,a.random<double>());
     ASSERT_EQ(BODY, f.get_frame());
     ASSERT_NEAR(0, f.K(),EPS);
     ASSERT_NEAR(0, f.M(),EPS);
@@ -124,10 +124,10 @@ TEST_F(GravityForceModelTest, potential_energy)
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     GravityForceModel F(env);
-    Body b = get_body(BODY);
-    b.states.m = 100;
+    BodyPtr b = get_body(BODY);
+    b->states.m = 100;
 
-    ASSERT_DOUBLE_EQ(0, F.potential_energy(b.states, x));
+    ASSERT_DOUBLE_EQ(0, F.potential_energy(b->states, x));
     x[2] = 123.;
-    ASSERT_DOUBLE_EQ(-120663., F.potential_energy(b.states, x));
+    ASSERT_DOUBLE_EQ(-120663., F.potential_energy(b->states, x));
 }

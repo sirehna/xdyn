@@ -17,7 +17,7 @@
 class Sim::Impl
 {
     public:
-        Impl(const std::vector<Body>& bodies_,
+        Impl(const std::vector<BodyPtr>& bodies_,
              const std::vector<ListOfForces>& forces_,
              const std::vector<ListOfControlledForces>& controlled_forces_,
              const EnvironmentAndFrames& env_,
@@ -31,7 +31,7 @@ class Sim::Impl
 
         }
 
-        std::vector<Body> bodies;
+        std::vector<BodyPtr> bodies;
         std::vector<ListOfForces> forces;
         std::vector<ListOfControlledForces> controlled_forces;
         EnvironmentAndFrames env;
@@ -41,7 +41,7 @@ class Sim::Impl
         OuputtedForces outputted_forces;
 };
 
-Sim::Sim(const std::vector<Body>& bodies,
+Sim::Sim(const std::vector<BodyPtr>& bodies,
          const std::vector<ListOfForces>& forces,
          const std::vector<ListOfControlledForces>& controlled_forces,
          const EnvironmentAndFrames& env,
@@ -84,9 +84,9 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
     {
         normalize_quaternions(x_with_normalized_quaternions, i);
-        pimpl->bodies[i].update_kinematics(x_with_normalized_quaternions,pimpl->env.k);
-        update_body(pimpl->bodies[i], i, x_with_normalized_quaternions, t);
-        calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), pimpl->bodies[i].states.inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
+        pimpl->bodies[i]->update_kinematics(x_with_normalized_quaternions,pimpl->env.k);
+        update_body(*(pimpl->bodies[i]), i, x_with_normalized_quaternions, t);
+        calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), pimpl->bodies[i]->states.inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
     }
     state = x_with_normalized_quaternions;
     pimpl->_dx_dt = dx_dt;
@@ -110,7 +110,7 @@ std::vector<std::string> Sim::get_names_of_bodies() const
     std::vector<std::string> ret;
     for (auto that_body=pimpl->bodies.begin() ; that_body != pimpl->bodies.end() ; ++that_body)
     {
-        ret.push_back(that_body->states.name);
+        ret.push_back((*that_body)->states.name);
     }
     return ret;
 }
@@ -141,11 +141,11 @@ void Sim::fill_force_map_with_zeros(OuputtedForces& m) const
     {
         for (auto that_force=pimpl->forces[i].begin() ; that_force != pimpl->forces[i].end() ; ++that_force)
         {
-            fill_force(m, pimpl->bodies[i].states.name, (*that_force)->get_name(), ssc::kinematics::Wrench(ssc::kinematics::Point(), ssc::kinematics::Vector6d::Zero()));
+            fill_force(m, pimpl->bodies[i]->states.name, (*that_force)->get_name(), ssc::kinematics::Wrench(ssc::kinematics::Point(), ssc::kinematics::Vector6d::Zero()));
         }
         for (auto that_force=pimpl->controlled_forces[i].begin() ; that_force != pimpl->controlled_forces[i].end() ; ++that_force)
         {
-            fill_force(m, pimpl->bodies[i].states.name, (*that_force)->get_name(), ssc::kinematics::Wrench(ssc::kinematics::Point(), ssc::kinematics::Vector6d::Zero()));
+            fill_force(m, pimpl->bodies[i]->states.name, (*that_force)->get_name(), ssc::kinematics::Wrench(ssc::kinematics::Point(), ssc::kinematics::Vector6d::Zero()));
         }
     }
 }
@@ -194,31 +194,31 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
 {
     const Eigen::Vector3d& uvw_in_body_frame = Eigen::Vector3d::Map(_U(x,body));
     const Eigen::Vector3d& pqr = Eigen::Vector3d::Map(_P(x,body));
-    ssc::kinematics::UnsafeWrench S(coriolis_and_centripetal(pimpl->bodies[body].states.G,pimpl->bodies[body].states.solid_body_inertia.get(),uvw_in_body_frame, pqr));
+    ssc::kinematics::UnsafeWrench S(coriolis_and_centripetal(pimpl->bodies[body]->states.G,pimpl->bodies[body]->states.solid_body_inertia.get(),uvw_in_body_frame, pqr));
     for (auto that_force=pimpl->forces[body].begin() ; that_force != pimpl->forces[body].end() ; ++that_force)
     {
-        const ssc::kinematics::Wrench tau = (**that_force)(pimpl->bodies[body].states, t);
-        if (tau.get_frame() != pimpl->bodies[body].states.name)
+        const ssc::kinematics::Wrench tau = (**that_force)(pimpl->bodies[body]->states, t);
+        if (tau.get_frame() != pimpl->bodies[body]->states.name)
         {
-            const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), pimpl->bodies[body].states.name);
+            const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), pimpl->bodies[body]->states.name);
             const auto t = tau.change_frame_but_keep_ref_point(T);
-            const ssc::kinematics::UnsafeWrench tau_body(pimpl->bodies[body].states.G, t.force, t.torque + (t.get_point()-pimpl->bodies[body].states.G).cross(t.force));
-            fill_force(pimpl->outputted_forces,pimpl->bodies[body].states.name, (*that_force)->get_name(), tau_body);
+            const ssc::kinematics::UnsafeWrench tau_body(pimpl->bodies[body]->states.G, t.force, t.torque + (t.get_point()-pimpl->bodies[body]->states.G).cross(t.force));
+            fill_force(pimpl->outputted_forces,pimpl->bodies[body]->states.name, (*that_force)->get_name(), tau_body);
             S += tau_body;
         }
         else
         {
-            fill_force(pimpl->outputted_forces,pimpl->bodies[body].states.name, (*that_force)->get_name(), tau);
+            fill_force(pimpl->outputted_forces,pimpl->bodies[body]->states.name, (*that_force)->get_name(), tau);
             S += tau;
         }
     }
     for (auto that_force=pimpl->controlled_forces[body].begin() ; that_force != pimpl->controlled_forces[body].end() ; ++that_force)
     {
-        const ssc::kinematics::Wrench tau = (**that_force)(pimpl->bodies[body].states, t, pimpl->command_listener);
-        const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), pimpl->bodies[body].states.name);
+        const ssc::kinematics::Wrench tau = (**that_force)(pimpl->bodies[body]->states, t, pimpl->command_listener);
+        const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), pimpl->bodies[body]->states.name);
         const auto t = tau.change_frame_but_keep_ref_point(T);
-        const ssc::kinematics::UnsafeWrench tau_body(pimpl->bodies[body].states.G, t.force, t.torque + (t.get_point()-pimpl->bodies[body].states.G).cross(t.force));
-        fill_force(pimpl->outputted_forces,pimpl->bodies[body].states.name, (*that_force)->get_name(), tau_body);
+        const ssc::kinematics::UnsafeWrench tau_body(pimpl->bodies[body]->states.G, t.force, t.torque + (t.get_point()-pimpl->bodies[body]->states.G).cross(t.force));
+        fill_force(pimpl->outputted_forces,pimpl->bodies[body]->states.name, (*that_force)->get_name(), tau_body);
         S += tau_body;
     }
     return S;
@@ -236,7 +236,7 @@ void Sim::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forc
     dXdt = inverse_of_the_total_inertia->operator*(sum_of_forces.to_vector());
 
     // dx/dt, dy/dt, dz/dt
-    const ssc::kinematics::RotationMatrix& R = pimpl->env.k->get("NED", pimpl->bodies[i].states.name).get_rot();
+    const ssc::kinematics::RotationMatrix& R = pimpl->env.k->get("NED", pimpl->bodies[i]->states.name).get_rot();
     const Eigen::Map<const Eigen::Vector3d> uvw_in_body_frame(_U(x,i));
     const Eigen::Vector3d uvw_in_ned_frame(R*uvw_in_body_frame);
     *_X(dx_dt,i) = uvw_in_ned_frame(0);
@@ -265,7 +265,7 @@ std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current in
         {
             for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
             {
-                pimpl->bodies[i].update_kinematics(state,pimpl->env.k);
+                pimpl->bodies[i]->update_kinematics(state,pimpl->env.k);
             }
             return pimpl->env.w->get_waves_on_mesh(pimpl->env.k, t);
         }

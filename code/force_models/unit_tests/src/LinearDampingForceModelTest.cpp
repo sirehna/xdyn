@@ -83,7 +83,7 @@ TEST_F(LinearDampingForceModelTest, example)
     Eigen::Matrix<double,6,6> D;
     double u,v,w,p,q,r;
     EnvironmentAndFrames env;
-    Body b = get_body(BODY);
+    BodyPtr b = get_body(BODY);
     D <<  2,   3,   5,   7,  11,  13,
          17,  19,  23,  29,  31,  37,
          41,  43,  47,  53,  59,  61,
@@ -93,19 +93,19 @@ TEST_F(LinearDampingForceModelTest, example)
     LinearDampingForceModel F(D,env);
     for (size_t i=0;i<100;++i)
     {
-        b.states.u = u = a.random<double>().between(-10.0,+10.0);
-        b.states.v = v = a.random<double>().between(-10.0,+10.0);
-        b.states.w = w = a.random<double>().between(-10.0,+10.0);
-        b.states.p = p = a.random<double>().between(-10.0,+10.0);
-        b.states.q = q = a.random<double>().between(-10.0,+10.0);
-        b.states.r = r = a.random<double>().between(-10.0,+10.0);
-        const ssc::kinematics::Wrench f = F(b.states,a.random<double>());
+        b->states.u = u = a.random<double>().between(-10.0,+10.0);
+        b->states.v = v = a.random<double>().between(-10.0,+10.0);
+        b->states.w = w = a.random<double>().between(-10.0,+10.0);
+        b->states.p = p = a.random<double>().between(-10.0,+10.0);
+        b->states.q = q = a.random<double>().between(-10.0,+10.0);
+        b->states.r = r = a.random<double>().between(-10.0,+10.0);
+        const ssc::kinematics::Wrench f = F(b->states,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
         for (int j=0;j<3;++j)
         {
             const int k = j+3;
-            ASSERT_NEAR(D(j,0)*b.states.u+D(j,1)*b.states.v+D(j,2)*b.states.w+D(j,3)*b.states.p+D(j,4)*b.states.q+D(j,5)*b.states.r,-f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
-            ASSERT_NEAR(D(k,0)*b.states.u+D(k,1)*b.states.v+D(k,2)*b.states.w+D(k,3)*b.states.p+D(k,4)*b.states.q+D(k,5)*b.states.r,-f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
+            ASSERT_NEAR(D(j,0)*b->states.u+D(j,1)*b->states.v+D(j,2)*b->states.w+D(j,3)*b->states.p+D(j,4)*b->states.q+D(j,5)*b->states.r,-f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
+            ASSERT_NEAR(D(k,0)*b->states.u+D(k,1)*b->states.v+D(k,2)*b->states.w+D(k,3)*b->states.p+D(k,4)*b->states.q+D(k,5)*b->states.r,-f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
         }
     }
     //! [LinearDampingForceModelTest example]

@@ -20,7 +20,7 @@ class BodyTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
-        static const Body body;
+        static const BodyPtr body;
 };
 
 #endif  /* BODYTEST_HPP_ */

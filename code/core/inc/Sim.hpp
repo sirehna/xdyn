@@ -23,7 +23,7 @@ typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfS
 class Sim
 {
     public:
-        Sim(const std::vector<Body>& bodies,
+        Sim(const std::vector<BodyPtr>& bodies,
             const std::vector<ListOfForces>& forces,
             const std::vector<ListOfControlledForces>& controllable_forces,
             const EnvironmentAndFrames& env,
