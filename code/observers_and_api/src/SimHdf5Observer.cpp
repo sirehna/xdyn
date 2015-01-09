@@ -42,6 +42,27 @@ class SimHdf5Observer::Impl
         SimHdf5WaveObserver sWaves;
 };
 
+#include "yaml2eigen.hpp"
+ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations);
+ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations)
+{
+    using namespace ssc::kinematics;
+    if (rotations.order_by == "angle")
+    {
+        if (match(rotations.convention, "z", "y'", "x''"))
+            return euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R);
+        std::stringstream ss;
+        ss << "Rotation convention '" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "' is not currently supported.";
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, std::string("Ordering rotations by '") + rotations.order_by + "' is not currently supported");
+    }
+    return EulerAngles();
+}
+// ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
+
 void SimHdf5Observer::Impl::observe_states(const double t, const Sim& s)
 {
     const size_t nbody = s.get_names_of_bodies().size();
