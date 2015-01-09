@@ -46,7 +46,7 @@ bool SimulatorBuilder::detected_surface_forces() const
     return surface_forces_detected;
 }
 
-std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
+std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces) const
 {
     std::vector<Body> ret;
     size_t i = 0;
@@ -55,7 +55,8 @@ std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
         const auto that_mesh = meshes.find(that_body->name);
         if (that_mesh != meshes.end())
         {
-            ret.push_back(builder->build(*that_body, that_mesh->second, i++));
+            if (bodies_contain_surface_forces.at(i)) ret.push_back(builder->build(*that_body, that_mesh->second, i++));
+            else                                     ret.push_back(builder->build(*that_body, that_mesh->second, i++));
         }
         else
         {
@@ -217,7 +218,7 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     auto env = get_environment();
     const auto forces = get_forces(env);
-    const auto bodies = get_bodies(meshes);
+    const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(forces));
     add_initial_transforms(bodies, env.k);
     return Sim(bodies, forces, get_controlled_forces(env), env, get_initial_states(), command_listener, detected_surface_forces());
 }

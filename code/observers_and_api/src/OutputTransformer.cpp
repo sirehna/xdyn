@@ -26,9 +26,9 @@ OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) :
             forces(),
             env()
 {
-    bodies = builder.get_bodies(builder.make_mesh_map());
     env = builder.get_environment();
     forces = builder.get_forces(env);
+    bodies = builder.get_bodies(builder.make_mesh_map(), builder.are_there_surface_forces_acting_on_body(forces));
     for (auto that_point = input.points.begin() ; that_point != input.points.end() ; ++that_point)
     {
         points[that_point->name] = ssc::kinematics::Point(that_point->frame,that_point->x,that_point->y,that_point->z);

@@ -164,7 +164,7 @@ class SimulatorBuilder
           */
         bool detected_surface_forces() const;
 
-        std::vector<Body> get_bodies(const MeshMap& meshes) const;
+        std::vector<Body> get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces) const;
         EnvironmentAndFrames get_environment() const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
         std::vector<ListOfControlledForces> get_controlled_forces(const EnvironmentAndFrames& env) const;

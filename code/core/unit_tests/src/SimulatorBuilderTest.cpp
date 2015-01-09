@@ -40,14 +40,14 @@ void SimulatorBuilderTest::TearDown()
 
 TEST_F(SimulatorBuilderTest, throws_if_cannot_find_mesh)
 {
-    ASSERT_THROW(builder.get_bodies(MeshMap()),SimulatorBuilderException);
+    ASSERT_THROW(builder.get_bodies(MeshMap(), std::vector<bool>(1,false)),SimulatorBuilderException);
 }
 
 TEST_F(SimulatorBuilderTest, can_get_bodies)
 {
     MeshMap m;
     m[input.bodies.front().name] = two_triangles();
-    const auto bodies = builder.get_bodies(m);
+    const auto bodies = builder.get_bodies(m, std::vector<bool>(1,false));
     ASSERT_EQ(1, bodies.size());
     ASSERT_EQ(input.bodies.front().name, bodies.front().states.name);
     const auto Id = (*bodies.front().states.inverse_of_the_total_inertia)*(*bodies.front().states.total_inertia);
@@ -123,7 +123,7 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
     MeshMap m;
     const std::string name = input.bodies.front().name;
     m[name] = two_triangles();
-    const auto bodies = builder.get_bodies(m);
+    const auto bodies = builder.get_bodies(m, std::vector<bool>(1,false));
     const auto env = builder.get_environment();
     ASSERT_THROW(builder.get_forces(env), SimulatorBuilderException);
 }
