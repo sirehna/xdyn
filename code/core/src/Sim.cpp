@@ -83,7 +83,8 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     for (auto body:pimpl->bodies)
     {
         body->update(pimpl->env,x_with_normalized_quaternions,t);
-        body->calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, body, t), x_with_normalized_quaternions, dx_dt, pimpl->env);
+        const auto Fext = sum_of_forces(x_with_normalized_quaternions, body, t);
+        body->calculate_state_derivatives(Fext, x_with_normalized_quaternions, dx_dt, pimpl->env);
     }
     state = x_with_normalized_quaternions;
     pimpl->_dx_dt = dx_dt;
