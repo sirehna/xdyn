@@ -79,6 +79,7 @@ void Body::update_projection_of_z_in_mesh_frame(const double g,
 
 void Body::update(const EnvironmentAndFrames& env, const StateType& x, const double t)
 {
+    update_kinematics(x,env.k);
     update_body_states(x);
     update_intersection_with_free_surface(env, t);
     update_projection_of_z_in_mesh_frame(env.g, env.k);

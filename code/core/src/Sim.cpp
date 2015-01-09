@@ -74,7 +74,6 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
     {
         normalize_quaternions(x_with_normalized_quaternions, i);
-        pimpl->bodies[i]->update_kinematics(x_with_normalized_quaternions,pimpl->env.k);
         (pimpl->bodies[i])->update(pimpl->env,x_with_normalized_quaternions,t);
         calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), pimpl->bodies[i]->states.inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
     }
