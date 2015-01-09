@@ -23,10 +23,9 @@ Body::~Body()
 ssc::kinematics::Point Body::get_origin(const StateType& x) const
 {
     return ssc::kinematics::Point("NED", *_X(x,idx),
-                        *_Y(x,idx),
-                        *_Z(x,idx));
+                                         *_Y(x,idx),
+                                         *_Z(x,idx));
 }
-
 
 ssc::kinematics::RotationMatrix Body::get_rot_from_ned_to(const StateType& x) const
 {
@@ -39,9 +38,10 @@ ssc::kinematics::RotationMatrix Body::get_rot_from_ned_to(const StateType& x) co
 
 ssc::kinematics::Point Body::get_position_of_body_relative_to_mesh() const
 {
-    return ssc::kinematics::Point(std::string("mesh(")+states.name+")", states.x_relative_to_mesh,
-                                                     states.y_relative_to_mesh,
-                                                     states.z_relative_to_mesh);
+    return ssc::kinematics::Point(std::string("mesh(")+states.name+")",
+                                  states.x_relative_to_mesh,
+                                  states.y_relative_to_mesh,
+                                  states.z_relative_to_mesh);
 }
 
 ssc::kinematics::Transform Body::get_transform_from_mesh_to() const
