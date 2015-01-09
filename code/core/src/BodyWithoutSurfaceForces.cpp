@@ -11,4 +11,7 @@ BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const size_t i) : Body(i)
 {
 }
 
-
+void BodyWithoutSurfaceForces::update_intersection_with_free_surface(const EnvironmentAndFrames& ,
+                                    const double )
+{
+}

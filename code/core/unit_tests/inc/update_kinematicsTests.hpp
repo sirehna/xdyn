@@ -19,8 +19,6 @@ class update_kinematicsTests : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
-        static const Body body;
-
 };
 
 #endif  /* UPDATE_KINEMATICSTESTS_HPP_ */

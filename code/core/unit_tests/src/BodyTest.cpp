@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "Body.hpp"
+#include "BodyWithSurfaceForces.hpp"
 #include "BodyTest.hpp"
 #include "BodyBuilderTest.hpp"
 #include <ssc/kinematics.hpp>
@@ -89,7 +89,7 @@ TEST_F(BodyTest, can_compute_transform_from_mesh_to_body_from_Body_object)
 
 TEST_F(BodyTest, can_get_transform_from_NED_to_body_from_states)
 {
-    Body b(1);
+    BodyWithSurfaceForces b(1);
     b.states.name = "body 1";
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     const ssc::kinematics::Transform T = b.get_transform_from_ned_to(x);

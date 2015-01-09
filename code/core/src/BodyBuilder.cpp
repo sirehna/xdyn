@@ -10,6 +10,8 @@
 
 #include "BodyBuilder.hpp"
 #include "BodyBuilderException.hpp"
+#include "BodyWithSurfaceForces.hpp"
+#include "BodyWithoutSurfaceForces.hpp"
 #include "HDBParser.hpp"
 #include "MeshBuilder.hpp"
 #include "YamlBody.hpp"
@@ -38,8 +40,8 @@ void BodyBuilder::change_mesh_ref_frame(BodyPtr& body, const VectorOfVectorOfPoi
 BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx, const bool has_surface_forces) const
 {
     BodyPtr ret;
-    if (has_surface_forces) ret.reset(new Body(idx));
-    else                    ret.reset(new Body(idx));
+    if (has_surface_forces) ret.reset(new BodyWithSurfaceForces(idx));
+    else                    ret.reset(new BodyWithoutSurfaceForces(idx));
     ret->states.name = input.name;
     ret->states.G = make_point(input.dynamics.centre_of_inertia);
     ret->states.m = input.dynamics.mass;

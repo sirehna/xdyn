@@ -21,9 +21,9 @@ class Body
         Body(const size_t idx);
         /** \brief Use SurfaceElevation to compute wave height & update accordingly
          */
-        void update_intersection_with_free_surface(const EnvironmentAndFrames& env,
+        virtual void update_intersection_with_free_surface(const EnvironmentAndFrames& env,
                                                    const double t
-                                                  );
+                                                  ) = 0;
 
         ssc::kinematics::Point get_origin(const StateType& x) const;
         ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
