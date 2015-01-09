@@ -77,7 +77,9 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
-    const auto k = builder.add_initial_transforms(bodies);
+
+    KinematicsPtr k(new ssc::kinematics::Kinematics());
+    builder.add_initial_transforms(bodies,k);
     ASSERT_TRUE(k.get() != NULL);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
@@ -89,7 +91,8 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
-    const auto k = builder.add_initial_transforms(bodies);
+    KinematicsPtr k(new ssc::kinematics::Kinematics());
+    builder.add_initial_transforms(bodies,k);
     ASSERT_TRUE(k.get() != NULL);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {

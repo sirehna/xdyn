@@ -175,8 +175,8 @@ class SimulatorBuilder
         /**  \brief Create a Kinematics object with transforms from NED to each body
           *  \returns KinematicsPtr containing the initial transforms
           */
-        KinematicsPtr add_initial_transforms(const std::vector<Body>& bodies //!< Bodies containing the initial coordinates
-                                            ) const;
+        void add_initial_transforms(const std::vector<Body>& bodies, //!< Bodies containing the initial coordinates
+                                    KinematicsPtr& k) const;
 
     private:
         SimulatorBuilder(); // Disabled

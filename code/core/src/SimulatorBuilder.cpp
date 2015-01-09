@@ -65,26 +65,14 @@ std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
     return ret;
 }
 
-KinematicsPtr SimulatorBuilder::add_initial_transforms(const std::vector<Body>& bodies) const
+void SimulatorBuilder::add_initial_transforms(const std::vector<Body>& bodies, KinematicsPtr& k) const
 {
-    if (bodies.size() != input.bodies.size())
-    {
-        std::stringstream ss;
-        ss << "YAML data contains " << input.bodies.size() << " bod";
-        if (input.bodies.size()>1) ss << "ies";
-        else                       ss << "y";
-        ss << ", but method received " << bodies.size() << " Body object";
-        if (bodies.size()>1) ss << "s";
-        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
-    }
-    KinematicsPtr k(new ssc::kinematics::Kinematics());
     const StateType x = ::get_initial_states(input.rotations, input.bodies);
     for (size_t i = 0; i < bodies.size(); ++i)
     {
         k->add(bodies.at(i).get_transform_from_mesh_to());
         k->add(bodies.at(i).get_transform_from_ned_to(x));
     }
-    return k;
 }
 
 EnvironmentAndFrames SimulatorBuilder::get_environment() const
@@ -94,6 +82,7 @@ EnvironmentAndFrames SimulatorBuilder::get_environment() const
     env.rho = input.environmental_constants.rho;
     env.rot = input.rotations;
     env.w = get_wave();
+    env.k = KinematicsPtr(new ssc::kinematics::Kinematics());
     return env;
 }
 
@@ -213,7 +202,7 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     const auto bodies = get_bodies(meshes);
     auto env = get_environment();
-    env.k = add_initial_transforms(bodies);
+    add_initial_transforms(bodies, env.k);
     return Sim(bodies, get_forces(env), get_controlled_forces(env), env, get_initial_states(), command_listener, detected_surface_forces());
 }
 
