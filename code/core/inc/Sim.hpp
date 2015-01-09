@@ -42,7 +42,7 @@ class Sim
         std::vector<double> get_forces_as_a_vector_of_doubles() const;
         std::map<std::string,double> get_states(const StateType& x) const;
 
-        /**  \brief Serialize wave data on mesh
+        /**  \brief Serialize wave data on mesh for an ASCII observer
           *  \details Called by SimCsvObserver at each time step. The aim is to
           *  calculate the wave data on a mesh expressed in a particular frame of
           *  reference (eg. NED or body). For example we might want to calculate the
@@ -54,8 +54,19 @@ class Sim
         std::vector<ssc::kinematics::Point> get_waves(const double t            //!< Current instant
                                                      ) const;
 
+        /**  \brief Serialize wave data on mesh for the HDF5 observer
+          *  \details Called by SimHdf5WaveObserver at each time step. The aim is to
+          *  calculate the wave data on a mesh expressed in a particular frame of
+          *  reference (eg. NED or body). For example we might want to calculate the
+          *  wave data on a mesh surrounding the ship for visualization purposes.
+          *  \returns A grid
+          */
         SurfaceElevationGrid get_waves_as_a_grid(const double t//!< Current instant
                                                 ) const;
+        /**
+         * \brief Give the size of the output wave mesh
+         * \return The pair nx,ny, corresponding to the number of points along X and Y
+         */
         std::pair<std::size_t,std::size_t> get_waves_mesh_size() const;
         StateType state;
 
