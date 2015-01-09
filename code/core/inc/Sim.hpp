@@ -39,6 +39,7 @@ class Sim
         VectorOfStringModelForEachBody get_vector_of_string_model_for_each_body() const;
         OuputtedForces get_forces() const;
         std::vector<double> get_forces_as_a_vector_of_doubles() const;
+        std::map<std::string,double> get_states(const StateType& x) const;
 
         /**  \brief Serialize wave data on mesh
           *  \details Called by SimCsvObserver at each time step. The aim is to

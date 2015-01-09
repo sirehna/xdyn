@@ -133,6 +133,30 @@ std::vector<double> Sim::get_forces_as_a_vector_of_doubles() const
     return ret;
 }
 
+std::map<std::string,double> Sim::get_states(const StateType& x) const
+{
+    std::map<std::string,double> ret;
+    size_t i = 0;
+    for (auto body:pimpl->bodies)
+    {
+        ret[std::string("x(") + body->states.name + ")"] = *_X(x,i);
+        ret[std::string("y(") + body->states.name + ")"] = *_Y(x,i);
+        ret[std::string("z(") + body->states.name + ")"] = *_Z(x,i);
+        ret[std::string("u(") + body->states.name + ")"] = *_U(x,i);
+        ret[std::string("v(") + body->states.name + ")"] = *_V(x,i);
+        ret[std::string("w(") + body->states.name + ")"] = *_W(x,i);
+        ret[std::string("p(") + body->states.name + ")"] = *_P(x,i);
+        ret[std::string("q(") + body->states.name + ")"] = *_Q(x,i);
+        ret[std::string("r(") + body->states.name + ")"] = *_R(x,i);
+        ret[std::string("qr(") + body->states.name + ")"] = *_QR(x,i);
+        ret[std::string("qi(") + body->states.name + ")"] = *_QI(x,i);
+        ret[std::string("qj(") + body->states.name + ")"] = *_QJ(x,i);
+        ret[std::string("qk(") + body->states.name + ")"] = *_QK(x,i);
+        i++;
+    }
+    return ret;
+}
+
 void Sim::fill_force_map_with_zeros(OuputtedForces& m) const
 {
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
