@@ -26,26 +26,6 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const ssc::
 {
 }
 
-bool SimulatorBuilder::detected_surface_forces() const
-{
-    bool surface_forces_detected = false;
-    for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
-    {
-        for (auto that_force_model = that_body->external_forces.begin() ; that_force_model!= that_body->external_forces.end() ; ++that_force_model)
-        {
-            for (auto try_to_parse:force_parsers)
-            {
-                boost::optional<ForcePtr> f = try_to_parse(that_force_model->model, that_force_model->yaml, EnvironmentAndFrames());
-                if (f)
-                {
-                    surface_forces_detected |= f.get()->is_a_surface_force_model();
-                }
-            }
-        }
-    }
-    return surface_forces_detected;
-}
-
 std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces) const
 {
     std::vector<BodyPtr> ret;
@@ -220,7 +200,7 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
     const auto forces = get_forces(env);
     const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(forces));
     add_initial_transforms(bodies, env.k);
-    return Sim(bodies, forces, get_controlled_forces(env), env, get_initial_states(), command_listener, detected_surface_forces());
+    return Sim(bodies, forces, get_controlled_forces(env), env, get_initial_states(), command_listener);
 }
 
 StateType SimulatorBuilder::get_initial_states() const

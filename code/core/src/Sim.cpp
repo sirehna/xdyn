@@ -22,10 +22,9 @@ class Sim::Impl
              const std::vector<ListOfControlledForces>& controlled_forces_,
              const EnvironmentAndFrames& env_,
              const StateType& x,
-             const ssc::data_source::DataSource& command_listener_,
-             const bool there_are_surface_forces_) :
+             const ssc::data_source::DataSource& command_listener_) :
                  bodies(bodies_), forces(forces_), controlled_forces(controlled_forces_), env(env_),
-                 _dx_dt(StateType(x.size(),0)), command_listener(command_listener_), there_are_surface_forces(there_are_surface_forces_),
+                 _dx_dt(StateType(x.size(),0)), command_listener(command_listener_),
                  outputted_forces()
         {
 
@@ -37,7 +36,6 @@ class Sim::Impl
         EnvironmentAndFrames env;
         StateType _dx_dt;
         ssc::data_source::DataSource command_listener;
-        bool there_are_surface_forces;
         OuputtedForces outputted_forces;
 };
 
@@ -46,8 +44,7 @@ Sim::Sim(const std::vector<BodyPtr>& bodies,
          const std::vector<ListOfControlledForces>& controlled_forces,
          const EnvironmentAndFrames& env,
          const StateType& x,
-         const ssc::data_source::DataSource& command_listener,
-         const bool there_are_surface_forces) : state(x), pimpl(new Impl(bodies, forces, controlled_forces, env, x, command_listener, there_are_surface_forces))
+         const ssc::data_source::DataSource& command_listener) : state(x), pimpl(new Impl(bodies, forces, controlled_forces, env, x, command_listener))
 {
     for (size_t i = 0 ; i < pimpl->controlled_forces.size() ; ++i)
     {
@@ -74,7 +71,7 @@ void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies
 void Sim::update_body(Body& body, const size_t , const StateType& x, const double t) const
 {
     body.update_body_states(x);
-    if (pimpl->there_are_surface_forces) body.update_intersection_with_free_surface(pimpl->env, t);
+    body.update_intersection_with_free_surface(pimpl->env, t);
     body.update_projection_of_z_in_mesh_frame(pimpl->env.g, pimpl->env.k);
 }
 

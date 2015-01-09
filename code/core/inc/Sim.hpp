@@ -28,8 +28,7 @@ class Sim
             const std::vector<ListOfControlledForces>& controllable_forces,
             const EnvironmentAndFrames& env,
             const StateType& x,
-            const ssc::data_source::DataSource& command_listener,
-            const bool there_are_surface_forces);
+            const ssc::data_source::DataSource& command_listener);
         void operator()(const StateType& x, StateType& dxdt, double t);
 
         void update_discrete_states();
