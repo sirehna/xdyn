@@ -6,6 +6,7 @@ set(SRC src/simulator_api.cpp
         src/SimObserver.cpp
         src/SimCsvObserver.cpp
         src/SimHdf5Observer.cpp
+        src/SimHdf5ObserverBuilder.cpp
         src/SimHdf5WaveObserver.cpp
         src/SimHdf5WaveObserverBuilder.cpp
         src/SimNoObserver.cpp
