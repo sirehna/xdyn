@@ -63,7 +63,7 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
 TEST_F(SimulatorBuilderTest, can_get_rho_and_g)
 {
     builder.can_parse<DefaultSurfaceElevation>();
-    const auto env = builder.get_environment_and_frames(std::vector<Body>(1,get_body(a.random<std::string>())));
+    const auto env = builder.get_environment();
     ASSERT_DOUBLE_EQ(9.81,env.g);
     ASSERT_DOUBLE_EQ(1000,env.rho);
 }
@@ -77,11 +77,11 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
-    const auto env = builder.get_environment_and_frames(bodies);
-    ASSERT_TRUE(env.k.get() != NULL);
+    const auto k = builder.add_initial_transforms(bodies);
+    ASSERT_TRUE(k.get() != NULL);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        ASSERT_NO_THROW(env.k->get(that_body->states.name, customize(that_body->states.name, "mesh")));
+        ASSERT_NO_THROW(k->get(that_body->states.name, customize(that_body->states.name, "mesh")));
     }
 }
 
@@ -89,29 +89,29 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     const std::vector<Body> bodies(1,get_body(a.random<std::string>()));
-    const auto env = builder.get_environment_and_frames(bodies);
-    ASSERT_TRUE(env.k.get() != NULL);
+    const auto k = builder.add_initial_transforms(bodies);
+    ASSERT_TRUE(k.get() != NULL);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        ASSERT_NO_THROW(env.k->get("NED", that_body->states.name));
+        ASSERT_NO_THROW(k->get("NED", that_body->states.name));
     }
 }
 
 TEST_F(SimulatorBuilderTest, should_throw_if_no_wave_parser_defined)
 {
-    ASSERT_THROW(builder.get_environment_and_frames(std::vector<Body>()), SimulatorBuilderException);
+    ASSERT_THROW(builder.get_environment(), SimulatorBuilderException);
 }
 
 TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twice)
 {
     YamlModel model;
     model.model = "no waves";
-    model.yaml = "constant wave height in NED frame:\n   unit: m\n   value: 12";
+    model.yaml = "constant sea elevation in NED frame:\n   unit: m\n   value: 12";
     auto input2 = input;
     input2.environment.push_back(model);
     SimulatorBuilder builder2(input2);
     builder2.can_parse<DefaultSurfaceElevation>();
-    ASSERT_THROW(builder2.get_environment_and_frames(std::vector<Body>()), SimulatorBuilderException);
+    ASSERT_THROW(builder2.get_environment(), SimulatorBuilderException);
 }
 
 TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
@@ -121,7 +121,7 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
     const std::string name = input.bodies.front().name;
     m[name] = two_triangles();
     const auto bodies = builder.get_bodies(m);
-    const auto env = builder.get_environment_and_frames(bodies);
+    const auto env = builder.get_environment();
     ASSERT_THROW(builder.get_forces(env), SimulatorBuilderException);
 }
 /*

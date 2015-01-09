@@ -65,13 +65,8 @@ std::vector<Body> SimulatorBuilder::get_bodies(const MeshMap& meshes) const
     return ret;
 }
 
-EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vector<Body>& bodies) const
+KinematicsPtr SimulatorBuilder::add_initial_transforms(const std::vector<Body>& bodies) const
 {
-    EnvironmentAndFrames env;
-    env.g = input.environmental_constants.g;
-    env.rho = input.environmental_constants.rho;
-    env.rot = input.rotations;
-    env.k = KinematicsPtr(new ssc::kinematics::Kinematics());
     if (bodies.size() != input.bodies.size())
     {
         std::stringstream ss;
@@ -82,12 +77,22 @@ EnvironmentAndFrames SimulatorBuilder::get_environment_and_frames(const std::vec
         if (bodies.size()>1) ss << "s";
         THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
     }
+    KinematicsPtr k(new ssc::kinematics::Kinematics());
     const StateType x = ::get_initial_states(input.rotations, input.bodies);
-    for (size_t i = 0 ; i < bodies.size() ; ++i)
+    for (size_t i = 0; i < bodies.size(); ++i)
     {
-        env.k->add(bodies.at(i).get_transform_from_mesh_to());
-        env.k->add(bodies.at(i).get_transform_from_ned_to(x));
+        k->add(bodies.at(i).get_transform_from_mesh_to());
+        k->add(bodies.at(i).get_transform_from_ned_to(x));
     }
+    return k;
+}
+
+EnvironmentAndFrames SimulatorBuilder::get_environment() const
+{
+    EnvironmentAndFrames env;
+    env.g = input.environmental_constants.g;
+    env.rho = input.environmental_constants.rho;
+    env.rot = input.rotations;
     env.w = get_wave();
     return env;
 }
@@ -207,7 +212,8 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     const auto bodies = get_bodies(meshes);
-    const auto env = get_environment_and_frames(bodies);
+    auto env = get_environment();
+    env.k = add_initial_transforms(bodies);
     return Sim(bodies, get_forces(env), get_controlled_forces(env), env, get_initial_states(), command_listener, detected_surface_forces());
 }
 

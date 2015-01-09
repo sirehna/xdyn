@@ -27,7 +27,7 @@ OutputTransformer::OutputTransformer(const SimulatorBuilder& builder) :
             env()
 {
     bodies = builder.get_bodies(builder.make_mesh_map());
-    env = builder.get_environment_and_frames(bodies);
+    env = builder.get_environment();
     forces = builder.get_forces(env);
     for (auto that_point = input.points.begin() ; that_point != input.points.end() ; ++that_point)
     {
