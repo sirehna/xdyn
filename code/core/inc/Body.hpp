@@ -17,6 +17,7 @@ struct YamlRotation;
 class Body
 {
     public:
+        virtual ~Body();
         Body(const size_t idx);
         /** \brief Use SurfaceElevation to compute wave height & update accordingly
          */

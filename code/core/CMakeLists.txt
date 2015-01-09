@@ -7,6 +7,8 @@ set(SRC src/update_kinematics.cpp
         src/Res.cpp
         src/SurfaceElevationBuilder.cpp
         src/Body.cpp
+        src/BodyWithSurfaceForces.cpp
+        src/BodyWithoutSurfaceForces.cpp
         src/BodyStates.cpp
         src/BodyBuilder.cpp
         src/EnvironmentAndFrames.cpp

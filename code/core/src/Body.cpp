@@ -14,6 +14,10 @@ Body::Body(const size_t i) : states(), idx(i)
 {
 }
 
+Body::~Body()
+{
+}
+
 void Body::update_intersection_with_free_surface(const EnvironmentAndFrames& env,
                                     const double t)
 {
