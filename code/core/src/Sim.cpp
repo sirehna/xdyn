@@ -68,13 +68,6 @@ void Sim::normalize_quaternions(StateType& all_states, //!< States of all bodies
     *_QK(all_states,i) /= norm;
 }
 
-void Sim::update_body(Body& body, const size_t , const StateType& x, const double t) const
-{
-    body.update_body_states(x);
-    body.update_intersection_with_free_surface(pimpl->env, t);
-    body.update_projection_of_z_in_mesh_frame(pimpl->env.g, pimpl->env.k);
-}
-
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto x_with_normalized_quaternions = x;
@@ -82,7 +75,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     {
         normalize_quaternions(x_with_normalized_quaternions, i);
         pimpl->bodies[i]->update_kinematics(x_with_normalized_quaternions,pimpl->env.k);
-        update_body(*(pimpl->bodies[i]), i, x_with_normalized_quaternions, t);
+        (pimpl->bodies[i])->update(pimpl->env,x_with_normalized_quaternions,t);
         calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), pimpl->bodies[i]->states.inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
     }
     state = x_with_normalized_quaternions;

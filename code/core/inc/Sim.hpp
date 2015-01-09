@@ -71,14 +71,6 @@ class Sim
                                    const size_t i         //!< Index of the body under consideration
                                    );
 
-        /**  \brief Update Body structure taking the new coordinates & wave heights into account
-         */
-        void update_body(Body& body,         //!< Body we wish to update
-                         const size_t i,     //!< Index of the body (to retrieve its states from 'x')
-                         const StateType& x, //!< State vector containing all states of all bodies
-                         const double t      //!< Current instant
-                         ) const;
-
         void fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
         void fill_force_map_with_zeros(OuputtedForces& m) const;
 

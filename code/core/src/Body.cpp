@@ -70,9 +70,16 @@ void Body::update_body_states(const StateType& x)
 }
 
 void Body::update_projection_of_z_in_mesh_frame(const double g,
-                                                ssc::kinematics::KinematicsPtr& k)
+                                                const ssc::kinematics::KinematicsPtr& k)
 {
     const ssc::kinematics::Point g_in_NED("NED", 0, 0, g);
     const ssc::kinematics::RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + states.name + ")").get_rot();
     states.down_direction_in_mesh_frame = ned2mesh*g_in_NED.v;
+}
+
+void Body::update(const EnvironmentAndFrames& env, const StateType& x, const double t)
+{
+    update_body_states(x);
+    update_intersection_with_free_surface(env, t);
+    update_projection_of_z_in_mesh_frame(env.g, env.k);
 }

@@ -30,12 +30,15 @@ class Body
         ssc::kinematics::Point get_position_of_body_relative_to_mesh() const;
         ssc::kinematics::Transform get_transform_from_mesh_to() const;
         ssc::kinematics::Transform get_transform_from_ned_to(const StateType& x) const;
+        /**  \brief Update Body structure taking the new coordinates & wave heights into account
+         */
+        void update(const EnvironmentAndFrames& env, const StateType& x, const double t);
         void update_kinematics(StateType x, const KinematicsPtr& k) const;
         void update_body_states(const StateType& x);
         /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
          */
         void update_projection_of_z_in_mesh_frame(const double g,
-                                                  ssc::kinematics::KinematicsPtr& k);
+                                                  const ssc::kinematics::KinematicsPtr& k);
 
 
         BodyStates states;
