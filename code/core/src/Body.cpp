@@ -84,3 +84,34 @@ void Body::update(const EnvironmentAndFrames& env, const StateType& x, const dou
     update_intersection_with_free_surface(env, t);
     update_projection_of_z_in_mesh_frame(env.g, env.k);
 }
+
+void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
+                                         const StateType& x,
+                                         StateType& dx_dt,
+                                         const EnvironmentAndFrames& env) const
+{
+    // du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt
+    Eigen::Map<Eigen::Matrix<double,6,1> > dXdt(_U(dx_dt,idx));
+
+    dXdt = states.inverse_of_the_total_inertia->operator*(sum_of_forces.to_vector());
+
+    // dx/dt, dy/dt, dz/dt
+    const ssc::kinematics::RotationMatrix& R = env.k->get("NED", states.name).get_rot();
+    const Eigen::Map<const Eigen::Vector3d> uvw_in_body_frame(_U(x,idx));
+    const Eigen::Vector3d uvw_in_ned_frame(R*uvw_in_body_frame);
+    *_X(dx_dt,idx) = uvw_in_ned_frame(0);
+    *_Y(dx_dt,idx) = uvw_in_ned_frame(1);
+    *_Z(dx_dt,idx) = uvw_in_ned_frame(2);
+
+    // dqr/dt, dqi/dt, dqj/dt, dqk/dt
+    const Eigen::Quaternion<double> q1(*_QR(x,idx),
+                                       *_QI(x,idx),
+                                       *_QJ(x,idx),
+                                       *_QK(x,idx));
+    const Eigen::Quaternion<double> q2(0,*_P(x,idx),*_Q(x,idx),*_R(x,idx));
+    const Eigen::Quaternion<double>& dq_dt = q1*q2;
+    *_QR(dx_dt,idx) = 0.5*(double)dq_dt.w();
+    *_QI(dx_dt,idx) = 0.5*(double)dq_dt.x();
+    *_QJ(dx_dt,idx) = 0.5*(double)dq_dt.y();
+    *_QK(dx_dt,idx) = 0.5*(double)dq_dt.z();
+}

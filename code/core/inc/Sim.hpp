@@ -56,11 +56,6 @@ class Sim
 
     private:
         ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const size_t body_index, const double t);
-        void calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
-                                         const MatrixPtr& inverse_of_the_total_inertia,
-                                         const StateType& x,
-                                         StateType& dx_dt,
-                                         const size_t index_of_first_state) const;
 
         /**  \brief Make sure quaternions can be converted to Euler angles
           *  \details Normalization takes place at each time step, which is not

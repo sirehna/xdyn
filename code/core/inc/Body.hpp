@@ -40,12 +40,17 @@ class Body
         void update_projection_of_z_in_mesh_frame(const double g,
                                                   const ssc::kinematics::KinematicsPtr& k);
 
+        void calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
+                                         const StateType& x,
+                                         StateType& dx_dt,
+                                         const EnvironmentAndFrames& env) const;
+
 
         BodyStates states;
 
     private:
         Body();
-        size_t idx;
+        size_t idx; //!< Index of the first state
 };
 
 typedef TR1(shared_ptr)<Body> BodyPtr;

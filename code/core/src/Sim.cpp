@@ -75,7 +75,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     {
         normalize_quaternions(x_with_normalized_quaternions, i);
         (pimpl->bodies[i])->update(pimpl->env,x_with_normalized_quaternions,t);
-        calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), pimpl->bodies[i]->states.inverse_of_the_total_inertia, x_with_normalized_quaternions, dx_dt, i);
+        (pimpl->bodies[i])->calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, i, t), x_with_normalized_quaternions, dx_dt, pimpl->env);
     }
     state = x_with_normalized_quaternions;
     pimpl->_dx_dt = dx_dt;
@@ -211,38 +211,6 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const size_
         S += tau_body;
     }
     return S;
-}
-
-void Sim::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
-                                      const MatrixPtr& inverse_of_the_total_inertia,
-                                      const StateType& x,
-                                      StateType& dx_dt,
-                                      const size_t i) const
-{
-    // du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt
-    Eigen::Map<Eigen::Matrix<double,6,1> > dXdt(_U(dx_dt,i));
-
-    dXdt = inverse_of_the_total_inertia->operator*(sum_of_forces.to_vector());
-
-    // dx/dt, dy/dt, dz/dt
-    const ssc::kinematics::RotationMatrix& R = pimpl->env.k->get("NED", pimpl->bodies[i]->states.name).get_rot();
-    const Eigen::Map<const Eigen::Vector3d> uvw_in_body_frame(_U(x,i));
-    const Eigen::Vector3d uvw_in_ned_frame(R*uvw_in_body_frame);
-    *_X(dx_dt,i) = uvw_in_ned_frame(0);
-    *_Y(dx_dt,i) = uvw_in_ned_frame(1);
-    *_Z(dx_dt,i) = uvw_in_ned_frame(2);
-
-    // dqr/dt, dqi/dt, dqj/dt, dqk/dt
-    const Eigen::Quaternion<double> q1(*_QR(x,i),
-                                       *_QI(x,i),
-                                       *_QJ(x,i),
-                                       *_QK(x,i));
-    const Eigen::Quaternion<double> q2(0,*_P(x,i),*_Q(x,i),*_R(x,i));
-    const Eigen::Quaternion<double>& dq_dt = q1*q2;
-    *_QR(dx_dt,i) = 0.5*(double)dq_dt.w();
-    *_QI(dx_dt,i) = 0.5*(double)dq_dt.x();
-    *_QJ(dx_dt,i) = 0.5*(double)dq_dt.y();
-    *_QK(dx_dt,i) = 0.5*(double)dq_dt.z();
 }
 
 std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current instant
