@@ -80,10 +80,10 @@ StateType Sim::normalize_quaternions(const StateType& all_states
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto x_with_normalized_quaternions = normalize_quaternions(x);
-    for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
+    for (auto body:pimpl->bodies)
     {
-        (pimpl->bodies[i])->update(pimpl->env,x_with_normalized_quaternions,t);
-        (pimpl->bodies[i])->calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, pimpl->bodies[i]->states, i, t), x_with_normalized_quaternions, dx_dt, pimpl->env);
+        body->update(pimpl->env,x_with_normalized_quaternions,t);
+        body->calculate_state_derivatives(sum_of_forces(x_with_normalized_quaternions, body, t), x_with_normalized_quaternions, dx_dt, pimpl->env);
     }
     state = x_with_normalized_quaternions;
     pimpl->_dx_dt = dx_dt;
@@ -189,37 +189,37 @@ void Sim::fill_force(OuputtedForces& ret, const std::string& body_name, const st
     ret[body_name][force_name] = s;
 }
 
-ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyStates& states, const size_t body, const double t)
+ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyPtr& body, const double t)
 {
-    const Eigen::Vector3d& uvw_in_body_frame = Eigen::Vector3d::Map(_U(x,body));
-    const Eigen::Vector3d& pqr = Eigen::Vector3d::Map(_P(x,body));
-    ssc::kinematics::UnsafeWrench S(coriolis_and_centripetal(states.G,states.solid_body_inertia.get(),uvw_in_body_frame, pqr));
-    const auto forces = pimpl->forces[states.name];
+    const Eigen::Vector3d uvw_in_body_frame = body->get_uvw_in_body_frame(x);
+    const Eigen::Vector3d pqr = body->get_pqr(x);
+    ssc::kinematics::UnsafeWrench S(coriolis_and_centripetal(body->states.G,body->states.solid_body_inertia.get(),uvw_in_body_frame, pqr));
+    const auto forces = pimpl->forces[body->states.name];
     for (auto force:forces)
     {
-        const ssc::kinematics::Wrench tau = (*force)(states, t);
-        if (tau.get_frame() != states.name)
+        const ssc::kinematics::Wrench tau = (*force)(body->states, t);
+        if (tau.get_frame() != body->states.name)
         {
-            const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), states.name);
+            const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->states.name);
             const auto t = tau.change_frame_but_keep_ref_point(T);
-            const ssc::kinematics::UnsafeWrench tau_body(states.G, t.force, t.torque + (t.get_point()-states.G).cross(t.force));
-            fill_force(pimpl->outputted_forces,states.name, force->get_name(), tau_body);
+            const ssc::kinematics::UnsafeWrench tau_body(body->states.G, t.force, t.torque + (t.get_point()-body->states.G).cross(t.force));
+            fill_force(pimpl->outputted_forces,body->states.name, force->get_name(), tau_body);
             S += tau_body;
         }
         else
         {
-            fill_force(pimpl->outputted_forces,states.name, force->get_name(), tau);
+            fill_force(pimpl->outputted_forces,body->states.name, force->get_name(), tau);
             S += tau;
         }
     }
-    const auto controlled_forces = pimpl->controlled_forces[states.name];
+    const auto controlled_forces = pimpl->controlled_forces[body->states.name];
     for (auto force:controlled_forces)
     {
-        const ssc::kinematics::Wrench tau = (*force)(states, t, pimpl->command_listener);
-        const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), states.name);
+        const ssc::kinematics::Wrench tau = (*force)(body->states, t, pimpl->command_listener);
+        const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->states.name);
         const auto t = tau.change_frame_but_keep_ref_point(T);
-        const ssc::kinematics::UnsafeWrench tau_body(states.G, t.force, t.torque + (t.get_point()-states.G).cross(t.force));
-        fill_force(pimpl->outputted_forces,states.name, force->get_name(), tau_body);
+        const ssc::kinematics::UnsafeWrench tau_body(body->states.G, t.force, t.torque + (t.get_point()-body->states.G).cross(t.force));
+        fill_force(pimpl->outputted_forces,body->states.name, force->get_name(), tau_body);
         S += tau_body;
     }
     return S;

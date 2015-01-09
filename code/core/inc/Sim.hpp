@@ -55,7 +55,7 @@ class Sim
         StateType state;
 
     private:
-        ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyStates& states, const size_t body_index, const double t);
+        ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);
 
         /**  \brief Make sure quaternions can be converted to Euler angles
           *  \details Normalization takes place at each time step, which is not
