@@ -178,6 +178,8 @@ class SimulatorBuilder
         void add_initial_transforms(const std::vector<Body>& bodies, //!< Bodies containing the initial coordinates
                                     KinematicsPtr& k) const;
 
+        std::vector<bool> are_there_surface_forces_acting_on_body(const std::vector<ListOfForces>& forces) const;
+
     private:
         SimulatorBuilder(); // Disabled
         SurfaceElevationPtr get_wave() const;

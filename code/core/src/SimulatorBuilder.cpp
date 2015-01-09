@@ -198,6 +198,21 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     }
 }
 
+std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(const std::vector<ListOfForces>& forces) const
+{
+    std::vector<bool> ret;
+    for (auto forces_acting_on_body:forces)
+    {
+        bool has_surface_forces = false;
+        for (auto force:forces_acting_on_body)
+        {
+            has_surface_forces |= force->is_a_surface_force_model();
+        }
+        ret.push_back(has_surface_forces);
+    }
+    return ret;
+}
+
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     auto env = get_environment();
