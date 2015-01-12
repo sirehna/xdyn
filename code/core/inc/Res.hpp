@@ -24,7 +24,7 @@ struct Res
 {
     Res();
     Res(const double t_, const StateType& x_);
-    double t; //<! Instant at which the states correspond
+    double t; //!< Instant at which the states correspond
     StateType x; //!< Values of the states of the system
 };
 
