@@ -22,9 +22,11 @@ struct BodyStates;
 struct EnvironmentAndFrames;
 class ForceModel;
 
+class Observer;
+typedef std::tr1::shared_ptr<Observer> ObserverPtr;
+
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
 typedef std::function<boost::optional<ForcePtr>(const std::string&, const std::string, const EnvironmentAndFrames&)> ForceParser;
-
 
 // SFINAE test for 'parse' method
 template<typename T>
@@ -48,6 +50,9 @@ class ForceModel
         std::string get_name() const;
         virtual bool is_a_surface_force_model() const;
         ssc::kinematics::Wrench get() const;
+        void feed(ObserverPtr& observer) const;
+        virtual void extra_observations(ObserverPtr& observer) const;
+
 
         template <typename ForceType>
         static typename boost::enable_if<HasParse<ForceType>, ForceParser>::type build_parser()
