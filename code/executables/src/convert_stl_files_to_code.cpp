@@ -13,7 +13,7 @@ std::string description()
     std::stringstream ss;
     ss << "Takes a STL (STereoLithography) ascii file & transforms it to a C++ source code (written to standard output)."
        << "This is done so as to avoid putting the whole ascii file in a string (unacceptable build time)." << std::endl
-       << "(c) SIREHNA 2014." << std::endl
+       << "(c) SIREHNA 2014-2015." << std::endl
        << std::endl
        << "ID : @GIT_SHA1@" << std::endl
        << std::endl;

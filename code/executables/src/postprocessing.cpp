@@ -25,7 +25,7 @@ std::string description()
     ss << "This is the post-processing tool used to calculate derived quantities from the simulator's CSV output." << std::endl
        << "The YAML files describing both the bodies & the outputs are given as arguments but the CSV data is read from the standard input." << std::endl
        << "This post-processing tool writes to the standard output." << std::endl
-       << "(c) SIREHNA 2014." << std::endl
+       << "(c) SIREHNA 2014-2015." << std::endl
        << std::endl
        << "ID : @GIT_SHA1@" << std::endl
        << std::endl;
