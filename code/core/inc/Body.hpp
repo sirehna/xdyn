@@ -14,6 +14,9 @@ struct YamlBody;
 typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
 struct YamlRotation;
 
+class Observer;
+typedef std::tr1::shared_ptr<Observer> ObserverPtr;
+
 class Body
 {
     public:
@@ -48,6 +51,8 @@ class Body
         Eigen::Vector3d get_uvw_in_body_frame(const StateType& x) const;
         Eigen::Vector3d get_pqr(const StateType& x) const;
         BodyStates states;
+
+        void feed(const StateType& x,ObserverPtr& observer) const;
 
     private:
         Body();
