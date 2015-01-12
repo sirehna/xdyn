@@ -106,9 +106,9 @@ std::vector<ssc::kinematics::EulerAngles> Sim::get_EulerAngles(const StateType& 
     StateType all_statesN = normalize_quaternions(all_states);
     std::vector<ssc::kinematics::EulerAngles> v;
     StateType normalized = all_states;
-    for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
+    for (auto body: pimpl->bodies)
     {
-        v.push_back(convert(pimpl->bodies.at(i)->get_rot_from_ned_to(all_statesN),c));
+        v.push_back(convert(body->get_rot_from_ned_to(all_statesN),c));
     }
     return v;
 }
@@ -116,7 +116,7 @@ std::vector<ssc::kinematics::EulerAngles> Sim::get_EulerAngles(const StateType& 
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto x_with_normalized_quaternions = normalize_quaternions(x);
-    for (auto body:pimpl->bodies)
+    for (auto body: pimpl->bodies)
     {
         body->update(pimpl->env,x_with_normalized_quaternions,t);
         const auto Fext = sum_of_forces(x_with_normalized_quaternions, body, t);
