@@ -42,10 +42,12 @@ class ForceModel
     public:
         ForceModel(const std::string& name);
         virtual ~ForceModel(){}
+        void update(const BodyStates& body, const double t);
         virtual ssc::kinematics::Wrench operator()(const BodyStates& body, const double t) const = 0;
         virtual double potential_energy(const BodyStates& body, const std::vector<double>& x) const {(void)body;(void)x;return 0;}
         std::string get_name() const;
         virtual bool is_a_surface_force_model() const;
+        ssc::kinematics::Wrench get() const;
 
         template <typename ForceType>
         static typename boost::enable_if<HasParse<ForceType>, ForceParser>::type build_parser()
@@ -80,6 +82,7 @@ class ForceModel
     private:
         ForceModel(); // Disabled
         std::string name;
+        ssc::kinematics::Wrench force;
 };
 
 typedef std::vector<ForcePtr> ListOfForces;

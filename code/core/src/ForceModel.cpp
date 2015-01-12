@@ -7,7 +7,7 @@
 
 #include "ForceModel.hpp"
 
-ForceModel::ForceModel(const std::string& name_) : name(name_)
+ForceModel::ForceModel(const std::string& name_) : name(name_), force()
 {
 }
 
@@ -19,4 +19,14 @@ bool ForceModel::is_a_surface_force_model() const
 std::string ForceModel::get_name() const
 {
     return name;
+}
+
+void ForceModel::update(const BodyStates& body, const double t)
+{
+    force = this->operator()(body, t);
+}
+
+ssc::kinematics::Wrench ForceModel::get() const
+{
+    return force;
 }
