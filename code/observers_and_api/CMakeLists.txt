@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.8)
 project(observers_and_api)
 
+INCLUDE(CMakeListsGenerateDemoMatLab.txt)
+INCLUDE(CMakeListsGenerateDemoPython.txt)
+
 set(SRC src/simulator_api.cpp
         src/OutputTransformer.cpp
         src/SimObserver.cpp
@@ -10,6 +13,8 @@ set(SRC src/simulator_api.cpp
         src/SimHdf5WaveObserver.cpp
         src/SimHdf5WaveObserverBuilder.cpp
         src/SimNoObserver.cpp
+        ${CMAKE_BINARY_DIR}/demoMatLab.cpp
+        ${CMAKE_BINARY_DIR}/demoPython.cpp
         )
 
 # Using C++ 2011
@@ -26,6 +31,7 @@ include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_hdf5_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(${ssc_INCLUDE_DIRS})
+include_directories(${CMAKE_BINARY_DIR})
 include_directories(${interface_hdf5_INCLUDE_DIRS})
 include_directories(${external_data_structures_INCLUDE_DIRS})
 include_directories(${core_INCLUDE_DIRS})

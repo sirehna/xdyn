@@ -1,0 +1,53 @@
+FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/demoPython.py" contents)
+
+FILE(WRITE ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "/* Header for file demoPython.hpp*/\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "#ifndef DEMOPYTHON_HPP\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "#define DEMOPYTHON_HPP\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "#include <string>\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "#include \"H5Cpp.h\"\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "void exportPythonScripts(\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "        const H5::H5File& h5File,\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "        const std::string& fileName,\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "        const std::string& baseName,\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "        const std::string& destination\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "        );\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "#endif\n")
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                        ${CMAKE_BINARY_DIR}/demoPython.hpp.txt
+                        ${CMAKE_BINARY_DIR}/demoPython.hpp)
+
+FILE(WRITE ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "/* Generated source file from template Python source file*/\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "#include <sstream>\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "#include <ostream>\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "#include \"h5_interface.hpp\"\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "#include \"demoPython.hpp\"\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "void exportPythonScripts(\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "        const H5::H5File& h5File,\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "        const std::string& fileName,\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "        const std::string& baseName,\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "        const std::string& destination\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "        )\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "{\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "    std::stringstream ss;\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "    ss\n")
+FOREACH(hit ${contents})
+    FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "    <<\"${hit}\"<<std::endl\n")
+ENDFOREACH()
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt ";\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "std::string text = H5_Tools::replaceString(ss.str(),\"hdf5Filename_.h5\",H5_Tools::getBasename(fileName));\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "H5_Tools::replaceStringInPlace(text,\"hdf5Group_\",baseName);\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "H5_Tools::writeString(h5File, destination+\"/demoPython.m\", text);\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.cpp.txt "}\n")
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                        ${CMAKE_BINARY_DIR}/demoPython.cpp.txt
+                        ${CMAKE_BINARY_DIR}/demoPython.cpp)
+SET_SOURCE_FILES_PROPERTIES(
+    ${CMAKE_BINARY_DIR}/demoPython.cpp.txt
+    ${CMAKE_BINARY_DIR}/demoPython.cpp
+    PROPERTIES GENERATED TRUE)
+
+SET_SOURCE_FILES_PROPERTIES(
+    ${CMAKE_BINARY_DIR}/demoPython.hpp.txt
+    ${CMAKE_BINARY_DIR}/demoPython.hpp
+    PROPERTIES GENERATED TRUE
+    HEADER_FILE_ONLY TRUE)

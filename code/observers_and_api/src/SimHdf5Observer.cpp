@@ -14,6 +14,8 @@
 #include "Sim.hpp"
 #include "h5_interface.hpp"
 #include "h5_version.hpp"
+#include "demoMatLab.hpp"
+#include "demoPython.hpp"
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 
@@ -24,12 +26,14 @@ class SimHdf5Observer::Impl
              const std::string& baseName_,
              const VectorOfStringModelForEachBody& s,
              const std::pair<std::size_t,std::size_t>& waves_mesh_size) :
-            fileName(fileName_),h5File(H5::H5File(fileName_, H5F_ACC_TRUNC)),
+            fileName(fileName_),h5File(H5::H5File(fileName, H5F_ACC_TRUNC)),
             sStates(h5File, baseName_.empty()?"states":baseName_+"/states", H5_CreateIdStates(s)),
             sEfforts(h5File, baseName_.empty()?"efforts":baseName_+"/efforts", H5_CreateIdEfforts(s)),
             sWaves(h5File, baseName_.empty()?"waveElevation":baseName_+"/waveElevation", waves_mesh_size.first, waves_mesh_size.second)
         {
             h5_writeFileDescription(h5File);
+            exportMatLabScripts(h5File, fileName_, baseName_, baseName_.empty()?"scripts/MatLab":baseName_+"/scripts/MatLab");
+            exportPythonScripts(h5File, fileName_, baseName_, baseName_.empty()?"scripts/Python":baseName_+"/scripts/Python");
         }
 
         void observe_states(const double t, const Sim& s);
