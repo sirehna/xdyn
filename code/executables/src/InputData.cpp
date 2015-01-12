@@ -9,6 +9,7 @@
 
 InputData::InputData() : yaml_filenames(),
                          solver(),
+                         output_filename(),
                          wave_output(),
                          command_file(),
                          initial_timestep(0),

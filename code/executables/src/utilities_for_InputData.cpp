@@ -57,6 +57,7 @@ po::options_description get_options_description(InputData& input_data)
         ("dt",         po::value<double>(&input_data.initial_timestep),                  "Initial time step (or value of the fixed time step for fixed step solvers)")
         ("tstart",     po::value<double>(&input_data.tstart)->default_value(0),          "Date corresponding to the beginning of the simulation (in seconds)")
         ("tend",       po::value<double>(&input_data.tend),                              "Last time step")
+        ("output,o",   po::value<std::string>(&input_data.output_filename),              "Name of the output HDF5 file where all computed data will be exported")
         ("waves,w",    po::value<std::string>(&input_data.wave_output),                  "Name of the YAML output file where the wave heights will be stored ('output' section of the YAML file)")
         ("commands,c", po::value<std::string>(&input_data.command_file),                 "Name of the YAML file storing the commands for controlled forces")
     ;

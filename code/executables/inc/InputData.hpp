@@ -16,6 +16,7 @@ struct InputData
     InputData();
     std::vector<std::string> yaml_filenames;
     std::string solver;
+    std::string output_filename;
     std::string wave_output;
     std::string command_file;
     double initial_timestep;
@@ -23,6 +24,5 @@ struct InputData
     double tend;
     bool help;
 };
-
 
 #endif /* INPUTDATA_HPP_ */
