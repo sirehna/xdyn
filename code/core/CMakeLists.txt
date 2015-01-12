@@ -22,6 +22,7 @@ set(SRC src/update_kinematics.cpp
         src/yaml2eigen.cpp
         src/DefaultSurfaceElevation.cpp
         src/BodyStates.cpp
+        src/Observer.cpp
         )
 
 # Using C++ 2011

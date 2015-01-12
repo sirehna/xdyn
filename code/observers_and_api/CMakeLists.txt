@@ -5,6 +5,7 @@ INCLUDE(CMakeListsGenerateDemoMatLab.txt)
 INCLUDE(CMakeListsGenerateDemoPython.txt)
 
 set(SRC src/simulator_api.cpp
+        src/ListOfObservers.cpp
         src/OutputTransformer.cpp
         src/SimObserver.cpp
         src/SimCsvObserver.cpp
