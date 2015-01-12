@@ -6,6 +6,7 @@
  */
 
 #include <ssc/kinematics.hpp>
+#include <ssc/numeric.hpp>
 #include "Sim.hpp"
 #include "update_kinematics.hpp"
 #include "SurfaceElevationInterface.hpp"
@@ -69,10 +70,13 @@ StateType Sim::normalize_quaternions(const StateType& all_states
     {
         const auto norm = sqrt((double)SQUARE(*_QR(normalized,i))+(double)SQUARE(*_QI(normalized,i))
                               +(double)SQUARE(*_QJ(normalized,i))+(double)SQUARE(*_QK(normalized,i)));
-        *_QR(normalized,i) /= norm;
-        *_QI(normalized,i) /= norm;
-        *_QJ(normalized,i) /= norm;
-        *_QK(normalized,i) /= norm;
+        if (not almost_equal(norm,1.0))
+        {
+            *_QR(normalized,i) /= norm;
+            *_QI(normalized,i) /= norm;
+            *_QJ(normalized,i) /= norm;
+            *_QK(normalized,i) /= norm;
+        }
     }
     return normalized;
 }
