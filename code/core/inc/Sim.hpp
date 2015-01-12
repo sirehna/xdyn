@@ -21,6 +21,8 @@
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
 
+class Observer;
+
 class Sim
 {
     public:
@@ -75,6 +77,8 @@ class Sim
                 const YamlRotation& c = YamlRotation("angle",{"z", "y'", "x''"})) const;
 
         StateType state;
+
+        void output(const StateType& x, Observer& obs) const;
 
     private:
         ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);

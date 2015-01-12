@@ -15,7 +15,6 @@ typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
 struct YamlRotation;
 
 class Observer;
-typedef std::tr1::shared_ptr<Observer> ObserverPtr;
 
 class Body
 {
@@ -52,7 +51,7 @@ class Body
         Eigen::Vector3d get_pqr(const StateType& x) const;
         BodyStates states;
 
-        void feed(const StateType& x,ObserverPtr& observer) const;
+        void feed(const StateType& x, Observer& observer) const;
 
     private:
         Body();

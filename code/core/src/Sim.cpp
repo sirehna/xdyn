@@ -342,3 +342,12 @@ std::pair<std::size_t,std::size_t> Sim::get_waves_mesh_size() const
     }
     return std::make_pair((std::size_t)0,(std::size_t)0);
 }
+
+void Sim::output(const StateType& x, Observer& obs) const
+{
+    for (auto forces:pimpl->forces)
+    {
+        for (auto force:forces.second) force->feed(obs);
+    }
+    for (auto body:pimpl->bodies) body->feed(x, obs);
+}

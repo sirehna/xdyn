@@ -23,7 +23,6 @@ struct EnvironmentAndFrames;
 class ForceModel;
 
 class Observer;
-typedef std::tr1::shared_ptr<Observer> ObserverPtr;
 
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
 typedef std::function<boost::optional<ForcePtr>(const std::string&, const std::string, const EnvironmentAndFrames&)> ForceParser;
@@ -50,8 +49,8 @@ class ForceModel
         std::string get_name() const;
         virtual bool is_a_surface_force_model() const;
         ssc::kinematics::Wrench get() const;
-        void feed(ObserverPtr& observer) const;
-        virtual void extra_observations(ObserverPtr& observer) const;
+        void feed(Observer& observer) const;
+        virtual void extra_observations(Observer& observer) const;
 
 
         template <typename ForceType>

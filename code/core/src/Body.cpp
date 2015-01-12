@@ -127,21 +127,21 @@ Eigen::Vector3d Body::get_pqr(const StateType& x) const
     return Eigen::Vector3d::Map(_P(x,idx));
 }
 
-void Body::feed(const StateType& x,ObserverPtr& observer) const
+void Body::feed(const StateType& x, Observer& observer) const
 {
     std::vector<std::string> where;
     where.push_back(states.name);
-    observer->write(TypedOutputtedVar<double>(*_X(x,idx),where,std::string("x(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_Y(x,idx),where,std::string("y(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_Z(x,idx),where,std::string("z(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_U(x,idx),where,std::string("u(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_V(x,idx),where,std::string("v(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_W(x,idx),where,std::string("w(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_P(x,idx),where,std::string("p(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_Q(x,idx),where,std::string("q(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_R(x,idx),where,std::string("r(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_QR(x,idx),where,std::string("qr(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_QI(x,idx),where,std::string("qi(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_QJ(x,idx),where,std::string("qj(")+states.name+")"));
-    observer->write(TypedOutputtedVar<double>(*_QK(x,idx),where,std::string("qk(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_X(x,idx),where,std::string("x(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_Y(x,idx),where,std::string("y(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_Z(x,idx),where,std::string("z(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_U(x,idx),where,std::string("u(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_V(x,idx),where,std::string("v(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_W(x,idx),where,std::string("w(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_P(x,idx),where,std::string("p(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_Q(x,idx),where,std::string("q(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_R(x,idx),where,std::string("r(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_QR(x,idx),where,std::string("qr(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_QI(x,idx),where,std::string("qi(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_QJ(x,idx),where,std::string("qj(")+states.name+")"));
+    observer.write(TypedOutputtedVar<double>(*_QK(x,idx),where,std::string("qk(")+states.name+")"));
 }
