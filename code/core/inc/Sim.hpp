@@ -68,6 +68,12 @@ class Sim
          * \return The pair nx,ny, corresponding to the number of points along X and Y
          */
         std::pair<std::size_t,std::size_t> get_waves_mesh_size() const;
+
+
+        std::vector<ssc::kinematics::EulerAngles> get_EulerAngles(
+                const StateType& all_states,
+                const YamlRotation& c = YamlRotation("angle",{"z", "y'", "x''"})) const;
+
         StateType state;
 
     private:
@@ -80,6 +86,7 @@ class Sim
           */
         StateType normalize_quaternions(const StateType& all_states
                                        ) const;
+
 
         void fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
         void fill_force_map_with_zeros(OuputtedForces& m) const;

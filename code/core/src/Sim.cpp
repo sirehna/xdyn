@@ -81,6 +81,38 @@ StateType Sim::normalize_quaternions(const StateType& all_states
     return normalized;
 }
 
+#include "yaml2eigen.hpp"
+ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations = YamlRotation("angle",{"z", "y'", "x''"}));
+ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations)
+{
+    using namespace ssc::kinematics;
+    if (rotations.order_by == "angle")
+    {
+        if (match(rotations.convention, "z", "y'", "x''"))
+            return euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R);
+        std::stringstream ss;
+        ss << "Rotation convention '" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "' is not currently supported.";
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, std::string("Ordering rotations by '") + rotations.order_by + "' is not currently supported");
+    }
+    return EulerAngles();
+}
+
+std::vector<ssc::kinematics::EulerAngles> Sim::get_EulerAngles(const StateType& all_states, const YamlRotation& c) const
+{
+    StateType all_statesN = normalize_quaternions(all_states);
+    std::vector<ssc::kinematics::EulerAngles> v;
+    StateType normalized = all_states;
+    for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
+    {
+        v.push_back(convert(pimpl->bodies.at(i)->get_rot_from_ned_to(all_statesN),c));
+    }
+    return v;
+}
+
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto x_with_normalized_quaternions = normalize_quaternions(x);
