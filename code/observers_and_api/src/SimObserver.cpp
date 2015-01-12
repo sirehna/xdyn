@@ -16,10 +16,7 @@ SimObserver::SimObserver() : res(std::vector<Res>())
 
 void SimObserver::observe(const Sim& s, const double t)
 {
-    Res r;
-    r.t = t;
-    r.x = s.state;
-    res.push_back(r);
+    res.push_back(Res(t,s.state));
 }
 
 std::vector<Res> SimObserver::get() const
