@@ -54,6 +54,39 @@ std::vector<std::string> H5_Tools::split(const std::string & str, const std::str
     return tokens;
 }
 
+std::string H5_Tools::replaceString(
+        const std::string& subject,
+        const std::string& search,
+        const std::string& replace) {
+    std::string result(subject);
+    size_t pos = 0;
+    while ((pos = result.find(search, pos)) != std::string::npos)
+    {
+         result.replace(pos, search.length(), replace);
+         pos += replace.length();
+    }
+    return result;
+}
+
+std::string& H5_Tools::replaceStringInPlace(
+        std::string& subject,
+        const std::string& search,
+        const std::string& replace)
+{
+    size_t pos = 0;
+    while ((pos = subject.find(search, pos)) != std::string::npos)
+    {
+         subject.replace(pos, search.length(), replace);
+         pos += replace.length();
+    }
+    return subject;
+}
+
+std::string H5_Tools::getBasename(std::string const & path, std::string const & delims)
+{
+  return path.substr(path.find_last_of(delims) + 1);
+}
+
 H5::Group H5_Tools::createMissingGroups(
         const H5::H5File& file,
         const std::string& datasetName)
@@ -114,4 +147,16 @@ H5::DataSpace H5_Tools::createDataSpace1DUnlimited()
     const hsize_t dims[1] = {1};
     const hsize_t maxdims[1] = {H5S_UNLIMITED};
     return H5::DataSpace(1, dims, maxdims);
+}
+
+void H5_Tools::writeString(
+        const H5::H5File& file,
+        const std::string& datasetName,
+        const std::string& stringToWrite)
+{
+    const hsize_t numberOfLines[1] = {1};
+    H5::StrType strdatatype(H5::PredType::C_S1, stringToWrite.size());
+    H5::DataSpace sid1(1, numberOfLines);
+    H5::DataSet d = H5_Tools::createDataSet(file, datasetName, strdatatype, sid1);
+    d.write((void*)stringToWrite.c_str(), strdatatype);
 }

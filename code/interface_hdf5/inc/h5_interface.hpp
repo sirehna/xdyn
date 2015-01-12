@@ -30,6 +30,25 @@ namespace H5_Tools
             const std::string & delim
             );
 
+    void writeString(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            const std::string& stringToWrite);
+
+    std::string getBasename(
+            const std::string& path,
+            const std::string& delims = "/\\");
+
+    std::string replaceString(
+            const std::string& subject,
+            const std::string& search,
+            const std::string& replace);
+
+    std::string& replaceStringInPlace(
+            std::string& subject,
+            const std::string& search,
+            const std::string& replace);
+
     H5::DataSpace createDataSpace1DUnlimited();
 
     H5::DataSet createDataSet(
