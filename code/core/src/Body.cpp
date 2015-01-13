@@ -15,8 +15,17 @@ Body::Body(const size_t i) : states(), idx(i)
 {
 }
 
+Body::Body(const BodyStates& s, const size_t i) : states(s), idx(i)
+{
+}
+
 Body::~Body()
 {
+}
+
+BodyStates Body::get_states() const
+{
+    return states;
 }
 
 #define SQUARE(x) ((x)*(x))
@@ -144,4 +153,9 @@ void Body::feed(const StateType& x, Observer& observer) const
     observer.write(*_QI(x,idx),where,std::string("qi(")+states.name+")");
     observer.write(*_QJ(x,idx),where,std::string("qj(")+states.name+")");
     observer.write(*_QK(x,idx),where,std::string("qk(")+states.name+")");
+}
+
+std::string Body::get_name() const
+{
+    return states.name;
 }

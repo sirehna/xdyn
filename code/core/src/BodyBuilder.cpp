@@ -21,46 +21,48 @@ BodyBuilder::BodyBuilder(const YamlRotation& convention) : rotations(convention)
 {
 }
 
-void BodyBuilder::change_mesh_ref_frame(BodyPtr& body, const VectorOfVectorOfPoints& mesh) const
+void BodyBuilder::change_mesh_ref_frame(BodyStates& states, const VectorOfVectorOfPoints& mesh) const
 {
-    ssc::kinematics::Point translation(body->states.name, body->states.x_relative_to_mesh, body->states.y_relative_to_mesh, body->states.z_relative_to_mesh);
-    ssc::kinematics::Transform transform(translation, body->states.mesh_to_body, "mesh("+body->states.name+")");
-    body->states.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
+    ssc::kinematics::Point translation(states.name, states.x_relative_to_mesh, states.y_relative_to_mesh, states.z_relative_to_mesh);
+    ssc::kinematics::Transform transform(translation, states.mesh_to_body, "mesh("+states.name+")");
+    states.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
     const auto T = transform.inverse();
-    body->states.mesh->nodes = (T*ssc::kinematics::PointMatrix(body->states.mesh->nodes, "mesh("+body->states.name+")")).m;
-    body->states.mesh->all_nodes = (T*ssc::kinematics::PointMatrix(body->states.mesh->all_nodes, "mesh("+body->states.name+")")).m;
-    for (size_t i = 0 ; i < body->states.mesh->facets.size() ; ++i)
+    states.mesh->nodes = (T*ssc::kinematics::PointMatrix(states.mesh->nodes, "mesh("+states.name+")")).m;
+    states.mesh->all_nodes = (T*ssc::kinematics::PointMatrix(states.mesh->all_nodes, "mesh("+states.name+")")).m;
+    for (size_t i = 0 ; i < states.mesh->facets.size() ; ++i)
     {
-        body->states.mesh->facets[i].barycenter = T*body->states.mesh->facets[i].barycenter;
-        body->states.mesh->facets[i].unit_normal = T.get_rot()*body->states.mesh->facets[i].unit_normal;
+        states.mesh->facets[i].barycenter = T*states.mesh->facets[i].barycenter;
+        states.mesh->facets[i].unit_normal = T.get_rot()*states.mesh->facets[i].unit_normal;
     }
-    body->states.M = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(body->states.mesh->nodes, body->states.name));
+    states.M = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(states.mesh->nodes, states.name));
 }
 
 BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx, const bool has_surface_forces) const
 {
+    BodyStates states;
+    states.name = input.name;
+    states.G = make_point(input.dynamics.centre_of_inertia);
+    states.m = input.dynamics.mass;
+
+    states.hydrodynamic_forces_calculation_point = make_point(input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame, input.name);
+
+    states.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
+    states.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
+    states.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
+    states.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle, rotations);
+    change_mesh_ref_frame(states, mesh);
+    add_inertia(states, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
+    states.u = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u;
+    states.v = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.v;
+    states.w = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.w;
+    states.p = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p;
+    states.q = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q;
+    states.r = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
+    states.intersector = MeshIntersectorPtr(new MeshIntersector(states.mesh));
+
     BodyPtr ret;
-    if (has_surface_forces) ret.reset(new BodyWithSurfaceForces(idx));
-    else                    ret.reset(new BodyWithoutSurfaceForces(idx));
-    ret->states.name = input.name;
-    ret->states.G = make_point(input.dynamics.centre_of_inertia);
-    ret->states.m = input.dynamics.mass;
-
-    ret->states.hydrodynamic_forces_calculation_point = make_point(input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame, input.name);
-
-    ret->states.x_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.x;
-    ret->states.y_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.y;
-    ret->states.z_relative_to_mesh = input.position_of_body_frame_relative_to_mesh.coordinates.z;
-    ret->states.mesh_to_body = angle2matrix(input.position_of_body_frame_relative_to_mesh.angle, rotations);
-    change_mesh_ref_frame(ret, mesh);
-    add_inertia(ret->states, input.dynamics.rigid_body_inertia, input.dynamics.added_mass);
-    ret->states.u = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u;
-    ret->states.v = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.v;
-    ret->states.w = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.w;
-    ret->states.p = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.p;
-    ret->states.q = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.q;
-    ret->states.r = input.initial_velocity_of_body_frame_relative_to_NED_projected_in_body.r;
-    ret->states.intersector = MeshIntersectorPtr(new MeshIntersector(ret->states.mesh));
+    if (has_surface_forces) ret.reset(new BodyWithSurfaceForces(states,idx));
+    else                    ret.reset(new BodyWithoutSurfaceForces(states,idx));
     return ret;
 }
 

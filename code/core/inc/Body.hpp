@@ -21,6 +21,10 @@ class Body
     public:
         virtual ~Body();
         Body(const size_t idx);
+        Body(const BodyStates& states, const size_t idx);
+
+        BodyStates get_states() const;
+
         /** \brief Use SurfaceElevation to compute wave height & update accordingly
          */
         virtual void update_intersection_with_free_surface(const EnvironmentAndFrames& env,
@@ -49,9 +53,13 @@ class Body
 
         Eigen::Vector3d get_uvw_in_body_frame(const StateType& x) const;
         Eigen::Vector3d get_pqr(const StateType& x) const;
-        BodyStates states;
+        std::string get_name() const;
+
 
         void feed(const StateType& x, Observer& observer) const;
+
+    protected:
+        BodyStates states;
 
     private:
         Body();

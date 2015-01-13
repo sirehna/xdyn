@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "Body.hpp"
+#include "BodyWithSurfaceForces.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "FastHydrostaticForceModel.hpp"
 #include "HydrostaticForceModelTest.hpp"
@@ -68,13 +68,15 @@ TEST_F(HydrostaticForceModelTest, example)
     const EnvironmentAndFrames env = get_environment_and_frames();
     const auto points = get_points();
 
-    BodyPtr body = get_body(BODY, points);
-    body->states.G = ssc::kinematics::Point("NED",0,2,2./3.);
+    BodyStates states = get_body(BODY, points)->get_states();
+
+    states.G = ssc::kinematics::Point("NED",0,2,2./3.);
+    BodyPtr body(new BodyWithSurfaceForces(states,0));
 
     FastHydrostaticForceModel F(env);
     const double t = a.random<double>();
     body->update_intersection_with_free_surface(env, t);
-    const ssc::kinematics::Wrench Fhs = F(body->states, t);
+    const ssc::kinematics::Wrench Fhs = F(body->get_states(), t);
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
     const double dz = 2./3;
@@ -127,58 +129,59 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     const auto points = two_triangles_immerged();
 
     BodyPtr body = get_body(BODY, points);
-    body->states.G = G;
+    //body->states.G = G;
+    const auto states = body->get_states();
 
-    ASSERT_DOUBLE_EQ(0.0, body->states.x_relative_to_mesh);
-    ASSERT_DOUBLE_EQ(0.0, body->states.y_relative_to_mesh);
-    ASSERT_DOUBLE_EQ(0.0, body->states.z_relative_to_mesh);
-    ASSERT_DOUBLE_EQ(1.0, body->states.mesh_to_body(0,0));
-    ASSERT_DOUBLE_EQ(1.0, body->states.mesh_to_body(1,1));
-    ASSERT_DOUBLE_EQ(1.0, body->states.mesh_to_body(2,2));
-    ASSERT_DOUBLE_EQ(0.0, body->states.mesh_to_body(0,1));
-    ASSERT_DOUBLE_EQ(0.0, body->states.mesh_to_body(0,2));
-    ASSERT_DOUBLE_EQ(0.0, body->states.mesh_to_body(1,0));
-    ASSERT_DOUBLE_EQ(0.0, body->states.mesh_to_body(1,2));
-    ASSERT_DOUBLE_EQ(0.0, body->states.mesh_to_body(2,0));
-    ASSERT_DOUBLE_EQ(0.0, body->states.mesh_to_body(2,1));
+    ASSERT_DOUBLE_EQ(0.0, states.x_relative_to_mesh);
+    ASSERT_DOUBLE_EQ(0.0, states.y_relative_to_mesh);
+    ASSERT_DOUBLE_EQ(0.0, states.z_relative_to_mesh);
+    ASSERT_DOUBLE_EQ(1.0, states.mesh_to_body(0,0));
+    ASSERT_DOUBLE_EQ(1.0, states.mesh_to_body(1,1));
+    ASSERT_DOUBLE_EQ(1.0, states.mesh_to_body(2,2));
+    ASSERT_DOUBLE_EQ(0.0, states.mesh_to_body(0,1));
+    ASSERT_DOUBLE_EQ(0.0, states.mesh_to_body(0,2));
+    ASSERT_DOUBLE_EQ(0.0, states.mesh_to_body(1,0));
+    ASSERT_DOUBLE_EQ(0.0, states.mesh_to_body(1,2));
+    ASSERT_DOUBLE_EQ(0.0, states.mesh_to_body(2,0));
+    ASSERT_DOUBLE_EQ(0.0, states.mesh_to_body(2,1));
 
     FastHydrostaticForceModel F(env);
-    const ssc::kinematics::Wrench Fhs = F(body->states,a.random<double>());
+    const ssc::kinematics::Wrench Fhs = F(states,a.random<double>());
 
-    ASSERT_EQ(3,(size_t)body->states.mesh->nodes.rows());
-    ASSERT_EQ(4,(size_t)body->states.mesh->nodes.cols());
+    ASSERT_EQ(3,(size_t)states.mesh->nodes.rows());
+    ASSERT_EQ(4,(size_t)states.mesh->nodes.cols());
 
-    ASSERT_DOUBLE_EQ(-2.0,body->states.mesh->nodes(0,0));
-    ASSERT_DOUBLE_EQ(+4.0,body->states.mesh->nodes(1,0));
-    ASSERT_DOUBLE_EQ(+6.0,body->states.mesh->nodes(2,0));
+    ASSERT_DOUBLE_EQ(-2.0,states.mesh->nodes(0,0));
+    ASSERT_DOUBLE_EQ(+4.0,states.mesh->nodes(1,0));
+    ASSERT_DOUBLE_EQ(+6.0,states.mesh->nodes(2,0));
 
-    ASSERT_DOUBLE_EQ(-2.0,body->states.mesh->nodes(0,1));
-    ASSERT_DOUBLE_EQ(-4.0,body->states.mesh->nodes(1,1));
-    ASSERT_DOUBLE_EQ(+6.0,body->states.mesh->nodes(2,1));
+    ASSERT_DOUBLE_EQ(-2.0,states.mesh->nodes(0,1));
+    ASSERT_DOUBLE_EQ(-4.0,states.mesh->nodes(1,1));
+    ASSERT_DOUBLE_EQ(+6.0,states.mesh->nodes(2,1));
 
-    ASSERT_DOUBLE_EQ(+2.0,body->states.mesh->nodes(0,2));
-    ASSERT_DOUBLE_EQ(+4.0,body->states.mesh->nodes(1,2));
-    ASSERT_DOUBLE_EQ(+4.0,body->states.mesh->nodes(2,2));
+    ASSERT_DOUBLE_EQ(+2.0,states.mesh->nodes(0,2));
+    ASSERT_DOUBLE_EQ(+4.0,states.mesh->nodes(1,2));
+    ASSERT_DOUBLE_EQ(+4.0,states.mesh->nodes(2,2));
 
-    ASSERT_DOUBLE_EQ(+2.0,body->states.mesh->nodes(0,3));
-    ASSERT_DOUBLE_EQ(-4.0,body->states.mesh->nodes(1,3));
-    ASSERT_DOUBLE_EQ(+4.0,body->states.mesh->nodes(2,3));
+    ASSERT_DOUBLE_EQ(+2.0,states.mesh->nodes(0,3));
+    ASSERT_DOUBLE_EQ(-4.0,states.mesh->nodes(1,3));
+    ASSERT_DOUBLE_EQ(+4.0,states.mesh->nodes(2,3));
 
-    ASSERT_EQ(2,body->states.mesh->facets.size());
+    ASSERT_EQ(2,states.mesh->facets.size());
     for (size_t i=0;i<2;++i)
     {
-        ASSERT_DOUBLE_EQ(sin(atan(0.5)),body->states.mesh->facets[i].unit_normal(0));
-        ASSERT_DOUBLE_EQ(0.0,body->states.mesh->facets[i].unit_normal(1));
-        ASSERT_DOUBLE_EQ(cos(atan(0.5)),body->states.mesh->facets[i].unit_normal(2));
+        ASSERT_DOUBLE_EQ(sin(atan(0.5)),states.mesh->facets[i].unit_normal(0));
+        ASSERT_DOUBLE_EQ(0.0,states.mesh->facets[i].unit_normal(1));
+        ASSERT_DOUBLE_EQ(cos(atan(0.5)),states.mesh->facets[i].unit_normal(2));
     }
 
-    ASSERT_DOUBLE_EQ(-2.0/3.0,body->states.mesh->facets[0].barycenter(0));
-    ASSERT_DOUBLE_EQ(+4.0/3.0,body->states.mesh->facets[0].barycenter(1));
-    ASSERT_DOUBLE_EQ(5.0+1.0/3.0,body->states.mesh->facets[0].barycenter(2));
+    ASSERT_DOUBLE_EQ(-2.0/3.0,states.mesh->facets[0].barycenter(0));
+    ASSERT_DOUBLE_EQ(+4.0/3.0,states.mesh->facets[0].barycenter(1));
+    ASSERT_DOUBLE_EQ(5.0+1.0/3.0,states.mesh->facets[0].barycenter(2));
 
-    ASSERT_DOUBLE_EQ(+2.0/3.0,body->states.mesh->facets[1].barycenter(0));
-    ASSERT_DOUBLE_EQ(-4.0/3.0,body->states.mesh->facets[1].barycenter(1));
-    ASSERT_DOUBLE_EQ(4.0+2.0/3.0,body->states.mesh->facets[1].barycenter(2));
+    ASSERT_DOUBLE_EQ(+2.0/3.0,states.mesh->facets[1].barycenter(0));
+    ASSERT_DOUBLE_EQ(-4.0/3.0,states.mesh->facets[1].barycenter(1));
+    ASSERT_DOUBLE_EQ(4.0+2.0/3.0,states.mesh->facets[1].barycenter(2));
 
     // What is currently implemented with the hypothesis of application
     // point force located at barycenter of each face
@@ -208,14 +211,14 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_fast)
     TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
     env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
-    BodyPtr body = get_body(BODY, unit_cube());
+    BodyStates states = get_body(BODY, unit_cube())->get_states();
     std::vector<double> x(13,0);
     std::vector<double> dz;
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(0.5);
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(-0.5);
     FastHydrostaticForceModel F(env);
-    body->states.intersector->update_intersection_with_free_surface(dz,dz);
-    const double Ep = F.potential_energy(body->states, x);
+    states.intersector->update_intersection_with_free_surface(dz,dz);
+    const double Ep = F.potential_energy(states, x);
     ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
 }
 
@@ -231,14 +234,14 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_exact)
     TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
     env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
-    BodyPtr body = get_body(BODY, unit_cube());
+    BodyStates states = get_body(BODY, unit_cube())->get_states();
     std::vector<double> x(13,0);
     std::vector<double> dz;
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(0.5);
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(-0.5);
-    body->states.intersector->update_intersection_with_free_surface(dz,dz);
+    states.intersector->update_intersection_with_free_surface(dz,dz);
 
     ExactHydrostaticForceModel F(env);
-    const double Ep = F.potential_energy(body->states, x);
+    const double Ep = F.potential_energy(states, x);
     ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
 }

@@ -86,7 +86,7 @@ void test(const ForceModel& F, const EnvironmentAndFrames& env, size_t n)
     const double t = 0;
     body->update_intersection_with_free_surface(env, t);
     ssc::kinematics::Wrench Fhs;
-    for (size_t i = 0 ; i < n ; ++i) F(body->states, t);
+    for (size_t i = 0 ; i < n ; ++i) F(body->get_states(), t);
 }
 
 int main(int argc, char* argv[])

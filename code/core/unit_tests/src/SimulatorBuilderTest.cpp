@@ -12,11 +12,8 @@
 #include "generate_body_for_tests.hpp"
 #include <ssc/kinematics.hpp>
 #include "DefaultSurfaceElevation.hpp"
-//#include "GravityForceModel.hpp"
-//#include "FastHydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
-//#include "QuadraticDampingForceModel.hpp"
 
 const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
 
@@ -49,8 +46,9 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
     m[input.bodies.front().name] = two_triangles();
     const auto bodies = builder.get_bodies(m, std::vector<bool>(1,false));
     ASSERT_EQ(1, bodies.size());
-    ASSERT_EQ(input.bodies.front().name, bodies.front()->states.name);
-    const auto Id = (*bodies.front()->states.inverse_of_the_total_inertia)*(*bodies.front()->states.total_inertia);
+    ASSERT_EQ(input.bodies.front().name, bodies.front()->get_name());
+    const auto states = bodies.front()->get_states();
+    const auto Id = (*states.inverse_of_the_total_inertia)*(*states.total_inertia);
     for (int i = 0 ; i < 6 ; ++i)
     {
         for (int j = 0 ; j < 6 ; ++j)
@@ -88,7 +86,7 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
     ASSERT_TRUE(k.get() != NULL);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        ASSERT_NO_THROW(k->get((*that_body)->states.name, customize((*that_body)->states.name, "mesh")));
+        ASSERT_NO_THROW(k->get((*that_body)->get_name(), customize((*that_body)->get_name(), "mesh")));
     }
 }
 
@@ -101,7 +99,7 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
     ASSERT_TRUE(k.get() != NULL);
     for (auto that_body = bodies.begin() ; that_body != bodies.end() ; ++that_body)
     {
-        ASSERT_NO_THROW(k->get("NED", (*that_body)->states.name));
+        ASSERT_NO_THROW(k->get("NED", (*that_body)->get_name()));
     }
 }
 

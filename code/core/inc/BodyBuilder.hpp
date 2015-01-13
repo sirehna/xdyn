@@ -58,7 +58,7 @@ class BodyBuilder
         /** \brief Puts the mesh in the body frame
          *  \details Uses the body frame's initial position relative to the mesh
          */
-        void change_mesh_ref_frame(BodyPtr& body, const VectorOfVectorOfPoints& mesh) const;
+        void change_mesh_ref_frame(BodyStates& states, const VectorOfVectorOfPoints& mesh) const;
 
         YamlRotation rotations; //!< Rotation convention (describes how we can build a rotation matrix from three angles)
 };

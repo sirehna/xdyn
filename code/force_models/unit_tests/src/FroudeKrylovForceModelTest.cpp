@@ -6,7 +6,7 @@
  */
 
 #include "FroudeKrylovForceModelTest.hpp"
-#include "Body.hpp"
+#include "BodyWithSurfaceForces.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "FroudeKrylovForceModel.hpp"
 #include "generate_body_for_tests.hpp"
@@ -93,13 +93,14 @@ TEST_F(FroudeKrylovForceModelTest, example)
     const EnvironmentAndFrames env = get_environment_and_frames(get_wave_model());
     const auto points = get_points();
 
-    BodyPtr body = get_body(BODY, points);
-    body->states.G = ssc::kinematics::Point("NED",0,2,2./3.);
+    BodyStates states = get_body(BODY, points)->get_states();
+    states.G = ssc::kinematics::Point("NED",0,2,2./3.);
+    BodyPtr body(new BodyWithSurfaceForces(states, 0));
 
     FroudeKrylovForceModel F(env);
     const double t = 0;
     body->update_intersection_with_free_surface(env, t);
-    const ssc::kinematics::Wrench Ffk = F(body->states, t);
+    const ssc::kinematics::Wrench Ffk = F(body->get_states(), t);
 //! [FroudeKrylovForceModelTest example]
 //! [FroudeKrylovForceModelTest expected output]
     ASSERT_DOUBLE_EQ(81544.906276859518, Ffk.X());
@@ -168,13 +169,13 @@ TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
 
     const EnvironmentAndFrames env = get_environment_and_frames(TR1(shared_ptr)<WaveModel>(new Airy(A, phi)));
 
-
-    BodyPtr body = get_body(BODY, cube(0.2,0,0,0.2));
-    body->states.G = ssc::kinematics::Point("NED",0,0,0.2);
+    BodyStates states = get_body(BODY, cube(0.2,0,0,0.2))->get_states();
+    states.G = ssc::kinematics::Point("NED",0,0,0.2);
+    BodyPtr body(new BodyWithSurfaceForces(states,0));
 
     FroudeKrylovForceModel F(env);
     body->update_intersection_with_free_surface(env, t);
-    const ssc::kinematics::Wrench Ffk = F(body->states, t);
+    const ssc::kinematics::Wrench Ffk = F(states, t);
     ASSERT_NEAR(-0.28002164687919873, Ffk.X(), EPS);
     ASSERT_NEAR(0, Ffk.Y(), EPS);
     ASSERT_NEAR(-0.56631957463955374, Ffk.Z(), EPS);

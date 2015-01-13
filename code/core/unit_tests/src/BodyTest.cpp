@@ -89,12 +89,13 @@ TEST_F(BodyTest, can_compute_transform_from_mesh_to_body_from_Body_object)
 
 TEST_F(BodyTest, can_get_transform_from_NED_to_body_from_states)
 {
-    BodyWithSurfaceForces b(1);
-    b.states.name = "body 1";
+    BodyStates states;
+    states.name = "body 1";
+    BodyWithSurfaceForces b(states,1);
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     const ssc::kinematics::Transform T = b.get_transform_from_ned_to(x);
     ASSERT_EQ("NED", T.get_from_frame());
-    ASSERT_EQ(body->states.name, T.get_to_frame());
+    ASSERT_EQ(body->get_name(), T.get_to_frame());
     ASSERT_EQ("NED", T.get_point().get_frame());
     ASSERT_DOUBLE_EQ(1, T.get_point().x());
     ASSERT_DOUBLE_EQ(2, T.get_point().y());
@@ -119,9 +120,9 @@ TEST_F(BodyTest, can_update_Kinematics_object_from_states)
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     BodyPtr b(body);
     b->update_kinematics(x, k);
-    const auto T = k->get("NED", b->states.name);
+    const auto T = k->get("NED", b->get_name());
     ASSERT_EQ("NED", T.get_from_frame());
-    ASSERT_EQ(body->states.name, T.get_to_frame());
+    ASSERT_EQ(body->get_name(), T.get_to_frame());
     ASSERT_EQ("NED", T.get_point().get_frame());
     ASSERT_DOUBLE_EQ(1, T.get_point().x());
     ASSERT_DOUBLE_EQ(2, T.get_point().y());

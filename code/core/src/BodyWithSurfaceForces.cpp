@@ -11,7 +11,10 @@
 
 BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i) : Body(i)
 {
+}
 
+BodyWithSurfaceForces::BodyWithSurfaceForces(const BodyStates& s, const size_t i) : Body(s, i)
+{
 }
 
 void BodyWithSurfaceForces::update_intersection_with_free_surface(const EnvironmentAndFrames& env,
