@@ -55,9 +55,11 @@ bool CSVObserver::should_add_coma()
 void CSVObserver::flush_after_initialization()
 {
     add_coma = false;
+    os << std::endl;
 }
 
 void CSVObserver::flush_after_write()
 {
     add_coma = false;
+    os << std::endl;
 }
