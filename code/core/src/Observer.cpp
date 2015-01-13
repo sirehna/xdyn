@@ -8,27 +8,42 @@
 
 
 #include "Observer.hpp"
+#include "Sim.hpp"
 
-Observer::Observer(const std::vector<std::string>& data_) : data(data_)
+Observer::Observer(const std::vector<std::string>& data_) : initialized(false), stuff_to_write(data_), serialize(), initialize()
 {
 
 }
 
-void Observer::observe(const Sim& , const double )
+bool Observer::is_initialized() const
 {
+    return initialized;
+}
 
+void Observer::observe(const Sim& sys, const double t)
+{
+    write(t, std::vector<std::string>(), "t");
+    sys.output(sys.state,*this);
+    initialize_everything_if_necessary();
+    serialize_everything();
+}
+
+void Observer::initialize_everything_if_necessary()
+{
+    if (not(initialized))
+    {
+        for (auto stuff:stuff_to_write) initialize[stuff]();
+        flush_after_initialization();
+    }
+    initialized = true;
+}
+
+void Observer::serialize_everything()
+{
+    for (auto stuff:stuff_to_write) serialize[stuff]();
+    flush_after_write();
 }
 
 Observer::~Observer()
 {
-}
-
-void Observer::write(const TypedOutputtedVar<std::string>& )
-{
-
-}
-
-void Observer::write(const TypedOutputtedVar<std::vector<double> >& )
-{
-
 }

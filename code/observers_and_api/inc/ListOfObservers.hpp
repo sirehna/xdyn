@@ -8,6 +8,8 @@
 #ifndef LISTOFOBSERVERS_HPP_
 #define LISTOFOBSERVERS_HPP_
 
+#include <map>
+
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
@@ -18,7 +20,7 @@ typedef std::tr1::shared_ptr<Observer> ObserverPtr;
 class ListOfObservers
 {
     public:
-        ListOfObservers(const std::vector<std::string>& formats, const std::vector<std::string>& data);
+        ListOfObservers(const std::map<std::string, std::vector<std::string> >& data_per_format);
         void observe(const Sim& sys, const double t);
 
     private:

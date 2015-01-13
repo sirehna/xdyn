@@ -8,16 +8,14 @@
 
 #include "ListOfObservers.hpp"
 
-ListOfObservers::ListOfObservers(const std::vector<std::string>& formats, const std::vector<std::string>& data) :
+ListOfObservers::ListOfObservers(const std::map<std::string, std::vector<std::string> >& data_per_format) :
 observers()
 {
-    (void) formats;
-    (void) data;
-//    for (auto format:formats)
-//    {
-//        if (format == "csv")  observers.push_back(ObserverPtr(new CSVObserver(data)));
-//        if (format == "hdf5") observers.push_back(ObserverPtr(new HDF5Observer(data)));
-//    }
+    for (auto output:data_per_format)
+    {
+//        if (output.first == "csv")  observers.push_back(ObserverPtr(new CSVObserver(output.second)));
+//        if (output.first == "hdf5") observers.push_back(ObserverPtr(new HDF5Observer(output.second)));
+    }
 }
 
 void ListOfObservers::observe(const Sim& sys, const double t)
