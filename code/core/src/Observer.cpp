@@ -5,14 +5,12 @@
  *      Author: cady
  */
 
-
-
 #include "Observer.hpp"
 #include "Sim.hpp"
 
 Observer::Observer(const std::vector<std::string>& data_) : initialized(false), stuff_to_write(data_), serialize(), initialize()
 {
-
+    stuff_to_write.insert(stuff_to_write.begin(), "t");
 }
 
 bool Observer::is_initialized() const
