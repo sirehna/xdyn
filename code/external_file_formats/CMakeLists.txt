@@ -3,6 +3,7 @@ PROJECT(external_file_formats)
 
 SET(SRC src/stl_reader.cpp
         src/stl_writer.cpp
+        src/stl_io_hdf5.cpp
         src/hdb_to_ast.cpp
         src/pretty_print_hdb.cpp
         )
@@ -20,10 +21,12 @@ ENDIF()
 
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${HDF5_INCLUDE_DIR})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
