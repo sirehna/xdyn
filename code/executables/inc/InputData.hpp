@@ -19,6 +19,7 @@ struct InputData
     std::string output_filename;
     std::string wave_output;
     std::string command_file;
+    std::string basename;
     double initial_timestep;
     double tstart;
     double tend;
