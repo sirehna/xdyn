@@ -1,3 +1,6 @@
+#ifndef STL_READER_HPP_
+#define STL_READER_HPP_
+
 #include <string>
 #include "GeometricTypes3d.hpp"
 
@@ -41,3 +44,5 @@ VectorOfVectorOfPoints read_binary_stl(std::istream& stream);
 VectorOfVectorOfPoints read_binary_stl(const std::string& input);
 std::string escape_backslashes(const std::string& s);
 std::string replace(char c, const std::string& replacement, const std::string& s);
+
+#endif
