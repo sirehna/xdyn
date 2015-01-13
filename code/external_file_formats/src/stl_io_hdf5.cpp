@@ -1,6 +1,7 @@
+#include <utility>
+#include "eigen3-hdf5.hpp"
 #include "h5_tools.hpp"
 #include "stl_io_hdf5.hpp"
-#include <utility>
 
 size_t getNumberOfPoints(const VectorOfVectorOfPoints& vvP);
 size_t getNumberOfTriangles(const VectorOfVectorOfPoints& vvP);
@@ -49,7 +50,6 @@ std::vector<double> SVectorOfVectorOfPoints::concatenatePoints() const
     return res;
 }
 
-
 std::vector<uint64_t> SVectorOfVectorOfPoints::concatenateTriangles() const
 {
     std::vector<uint64_t> res;
@@ -67,7 +67,6 @@ std::vector<uint64_t> SVectorOfVectorOfPoints::concatenateTriangles() const
     }
     return res;
 }
-
 
 void writeMeshToHdf5File(
         const std::string& file,
@@ -92,23 +91,37 @@ void writeMeshToHdf5File(
     H5::DataType uint64Type(H5::PredType::NATIVE_UINT64);
     const hsize_t sTriangles[2] = {sv.nTriangles,3};
     H5::DataSpace trianglesSpace(2, sTriangles);
-    H5::DataSet dT = H5_Tools::createDataSet(file, datasetName+"/triangles", uint64Type, trianglesSpace);
+    H5::DataSet dT = H5_Tools::createDataSet(file, datasetName+"/faces", uint64Type, trianglesSpace);
     dT.write((void*)sv.concatenateTriangles().data(), uint64Type);
 }
-/*
-void readMeshFromHdf5File(
+
+VectorOfVectorOfPoints readMeshFromHdf5File(
         const std::string& file,
-        const std::string& datasetName,
-        const VectorOfVectorOfPoints& v)
+        const std::string& datasetName)
 {
-    readMeshFromHdf5File(H5::H5File(file,H5F_ACC_RDONLY), datasetName,v);
+    return readMeshFromHdf5File(H5::H5File(file,H5F_ACC_RDONLY), datasetName);
 }
 
-void readMeshFromHdf5File(
+VectorOfVectorOfPoints readMeshFromHdf5File(
         const H5::H5File& file,
-        const std::string& datasetName,
-        const VectorOfVectorOfPoints& v)
+        const std::string& datasetName)
 {
-
+    VectorOfVectorOfPoints v;
+    Eigen::MatrixXd points;
+    Eigen::Matrix<uint64_t, Eigen::Dynamic, Eigen::Dynamic> faces;
+    EigenHDF5::load(file, datasetName+"/points", points);
+    EigenHDF5::load(file, datasetName+"/faces", faces);
+    for (size_t i=0;i<faces.rows();++i)
+    {
+        std::vector<EPoint> vv;
+        for (size_t j=0;j<faces.cols();++j)
+        {
+            vv.push_back(EPoint(
+                            points(faces(i,j)-1,0),
+                            points(faces(i,j)-1,1),
+                            points(faces(i,j)-1,2)));
+        }
+        v.push_back(vv);
+    }
+    return v;
 }
-*/
