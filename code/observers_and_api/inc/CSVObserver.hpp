@@ -8,14 +8,14 @@
 #ifndef CSVOBSERVER_HPP_
 #define CSVOBSERVER_HPP_
 
-#include <ostream>
+#include <fstream>
 
 #include "Observer.hpp"
 
 class CSVObserver : public Observer
 {
     public:
-        CSVObserver(std::ostream& os, const std::vector<std::string>& data);
+        CSVObserver(const std::string& filename, const std::vector<std::string>& data);
 
     private:
         void flush_after_initialization();
@@ -23,7 +23,7 @@ class CSVObserver : public Observer
 
         bool should_add_coma();
         bool add_coma;
-        std::ostream& os;
+        std::ofstream os;
         using Observer::get_serializer;
         using Observer::get_initializer;
         std::function<void()> get_serializer(const double val, const std::vector<std::string>& where, const std::string& name);

@@ -7,7 +7,7 @@
 
 #include "CSVObserver.hpp"
 
-CSVObserver::CSVObserver(std::ostream& os_, const std::vector<std::string>& d) : Observer(d), add_coma(false), os(os_)
+CSVObserver::CSVObserver(const std::string& filename, const std::vector<std::string>& d) : Observer(d), add_coma(false), os(filename)
 {
 }
 
