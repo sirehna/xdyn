@@ -217,4 +217,3 @@ void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f)
     parse_uv(node["g"], f.g);
     parse_uv(node["rho"], f.rho);
 }
-

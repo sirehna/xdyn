@@ -29,4 +29,3 @@ test_utilities
 text_file_reader
 threadpool11
 yaml-cpp
-yaml_parser

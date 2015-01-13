@@ -7,6 +7,10 @@
 
 #include "YamlOutput.hpp"
 
-YamlOutput::YamlOutput() : projected_in_frame(""), axes(std::vector<std::string>())
+YamlOutput::YamlOutput() : projected_in_frame(), axes()
+{
+}
+
+YamlOutput2::YamlOutput2() : format(), data()
 {
 }

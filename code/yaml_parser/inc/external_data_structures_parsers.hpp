@@ -6,7 +6,7 @@
  */
 
 #ifndef EXTERNAL_DATA_STRUCTURES_PARSERS_HPP_
-#define CHECK_INPUT_YAML_HPP_
+#define EXTERNAL_DATA_STRUCTURES_PARSERS_HPP_
 #include "yaml.h"
 #include "YamlSimulatorInput.hpp"
 
@@ -27,4 +27,4 @@ void operator >> (const YAML::Node& node, YamlAnglesOutput& p);
 void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f);
 void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f);
 
-#endif /* CHECK_INPUT_YAML_HPP_ */
+#endif /* EXTERNAL_DATA_STRUCTURES_PARSERS_HPP_ */

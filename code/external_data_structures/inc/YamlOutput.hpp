@@ -19,4 +19,11 @@ struct YamlOutput
     std::vector<std::string> axes;
 };
 
+struct YamlOutput2
+{
+    YamlOutput2();
+    std::string format;
+    std::vector<std::string> data;
+};
+
 #endif /* YAMLOUTPUT_HPP_ */
