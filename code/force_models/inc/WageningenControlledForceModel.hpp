@@ -41,7 +41,7 @@ class WageningenControlledForceModel : public ControllableForceModel
             double diameter;
         };
 
-        WageningenControlledForceModel(const Yaml& input, const EnvironmentAndFrames& env);
+        WageningenControlledForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
         double Kt(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double Kq(const size_t Z, const double AE_A0, const double P_D, const double J) const;

@@ -177,8 +177,8 @@ class SimulatorBuilder
         SurfaceElevationPtr get_wave() const;
         ListOfForces forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
         ListOfControlledForces controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
-        void add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const;
-        void add(const YamlModel& model, ListOfControlledForces& L, const EnvironmentAndFrames& env) const;
+        void add(const YamlModel& model, ListOfForces& L, const std::string& name, const EnvironmentAndFrames& env) const;
+        void add(const YamlModel& model, ListOfControlledForces& L, const std::string& name, const EnvironmentAndFrames& env) const;
         VectorOfVectorOfPoints get_mesh(const YamlBody& body) const;
 
         YamlSimulatorInput input;

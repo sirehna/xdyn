@@ -16,7 +16,7 @@ class QuadraticDampingForceModel : public DampingForceModel
 {
     public:
         typedef Eigen::Matrix<double,6,6> Input;
-        QuadraticDampingForceModel(const Input& D, const EnvironmentAndFrames& env);
+        QuadraticDampingForceModel(const Input& D, const std::string& body_name, const EnvironmentAndFrames& env);
         static Input parse(const std::string& yaml);
         static const std::string model_name;
 

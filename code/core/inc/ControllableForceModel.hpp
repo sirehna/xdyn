@@ -24,7 +24,7 @@ struct YamlRotation;
 class ControllableForceModel;
 typedef TR1(shared_ptr)<ControllableForceModel> ControllableForcePtr;
 typedef std::vector<ControllableForcePtr> ListOfControlledForces;
-typedef std::function<boost::optional<ControllableForcePtr>(const std::string&, const std::string, const EnvironmentAndFrames&)> ControllableForceParser;
+typedef std::function<boost::optional<ControllableForcePtr>(const std::string&, const std::string&, const std::string, const EnvironmentAndFrames&)> ControllableForceParser;
 
 /** \brief These force models read commands from a DataSource.
  *  \details Provides facilities to the derived classes to retrieve the commands
@@ -38,7 +38,7 @@ typedef std::function<boost::optional<ControllableForcePtr>(const std::string&, 
 class ControllableForceModel
 {
     public:
-        ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& position_of_frame, const EnvironmentAndFrames& env);
+        ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& position_of_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
         virtual ~ControllableForceModel();
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener) const;
         void add_reference_frame(const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const;
@@ -48,12 +48,12 @@ class ControllableForceModel
         template <typename ControllableForceType>
         static ControllableForceParser build_parser()
         {
-            auto parser = [](const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) -> boost::optional<ControllableForcePtr>
+            auto parser = [](const std::string& model, const std::string& yaml, const std::string& body_name_, const EnvironmentAndFrames& env) -> boost::optional<ControllableForcePtr>
                           {
                               boost::optional<ControllableForcePtr> ret;
                               if (model == ControllableForceType::model_name)
                               {
-                                  ret.reset(ControllableForcePtr(new ControllableForceType(ControllableForceType::parse(yaml), env)));
+                                  ret.reset(ControllableForcePtr(new ControllableForceType(ControllableForceType::parse(yaml), body_name_, env)));
                               }
                               return ret;
                           };

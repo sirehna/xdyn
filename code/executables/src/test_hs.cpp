@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 {
     const size_t n = argc>1 ? (size_t)atoi(argv[1]) : N;
     auto env = get_env();
-    test(FroudeKrylovForceModel(env), env, n);
+    test(FroudeKrylovForceModel(BODY, env), env, n);
     //test(FastHydrostaticForceModel(env), env, N);
     return 0;
 }

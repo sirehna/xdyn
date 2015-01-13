@@ -40,7 +40,7 @@ ResistanceCurveForceModel::Yaml::Yaml() : Va(), R()
 {
 }
 
-ResistanceCurveForceModel::ResistanceCurveForceModel(const Yaml& data, const EnvironmentAndFrames&) : ForceModel("resistance curve"), pimpl(new Impl(data))
+ResistanceCurveForceModel::ResistanceCurveForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames&) : ForceModel("resistance curve", body_name_), pimpl(new Impl(data))
 {
 }
 

@@ -13,7 +13,7 @@
 #include "QuadraticDampingForceModel.hpp"
 
 
-DampingForceModel::DampingForceModel(const std::string& name_, const Eigen::Matrix<double,6,6>& D_) : ForceModel(name_), D(D_)
+DampingForceModel::DampingForceModel(const std::string& name_, const std::string& body_name_, const Eigen::Matrix<double,6,6>& D_) : ForceModel(name_, body_name_), D(D_)
 {
 }
 

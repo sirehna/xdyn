@@ -58,7 +58,7 @@ TEST_F(ResistanceCurveForceModelTest, parser)
 TEST_F(ResistanceCurveForceModelTest, example)
 {
 //! [ResistanceCurveForceModelTest example]
-    ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), EnvironmentAndFrames());
+    ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), "", EnvironmentAndFrames());
 //! [ResistanceCurveForceModelTest example]
 //! [ResistanceCurveForceModelTest expected output]
     BodyStates states;
@@ -91,7 +91,7 @@ TEST_F(ResistanceCurveForceModelTest, example)
 
 TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower_than_min_speed_specified_in_resistance_curve_table)
 {
-    ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), EnvironmentAndFrames());
+    ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), "", EnvironmentAndFrames());
     BodyStates states;
     std::stringstream error;
     // Redirect cerr to our stringstream buffer or any other ostream
@@ -107,7 +107,7 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower
 
 TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_greater_than_max_speed_specified_in_resistance_curve_table)
 {
-    ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), EnvironmentAndFrames());
+    ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), "", EnvironmentAndFrames());
     BodyStates states;
     std::stringstream error;
     // Redirect cerr to our stringstream buffer or any other ostream

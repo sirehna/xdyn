@@ -30,7 +30,6 @@ class Observer
         }
 
     protected:
-        bool is_initialized() const;
 
         virtual std::function<void()> get_serializer(const double val, const std::vector<std::string>& where, const std::string& name) = 0;
         virtual std::function<void()> get_serializer(const std::string& val, const std::vector<std::string>& where, const std::string& name) = 0;
@@ -40,6 +39,7 @@ class Observer
         virtual std::function<void()> get_initializer(const std::vector<double>& val, const std::vector<std::string>& where, const std::string& name) = 0;
         virtual void flush_after_initialization() = 0;
         virtual void flush_after_write() = 0;
+        virtual void flush_value() = 0;
 
     private:
         Observer(); // Disabled

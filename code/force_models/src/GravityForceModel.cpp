@@ -14,7 +14,7 @@
 
 const std::string GravityForceModel::model_name = "gravity";
 
-GravityForceModel::GravityForceModel(const EnvironmentAndFrames& env) : ForceModel("gravity"), g(env.g), k(env.k)
+GravityForceModel::GravityForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) : ForceModel("gravity", body_name_), g(env.g), k(env.k)
 {}
 
 ssc::kinematics::Wrench GravityForceModel::operator()(const BodyStates& states, const double) const

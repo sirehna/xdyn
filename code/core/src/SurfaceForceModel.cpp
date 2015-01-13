@@ -8,7 +8,7 @@
 #include "BodyStates.hpp"
 #include "SurfaceForceModel.hpp"
 
-SurfaceForceModel::SurfaceForceModel(const std::string& name_, const EnvironmentAndFrames& env_) : ForceModel(name_),
+SurfaceForceModel::SurfaceForceModel(const std::string& name_, const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(name_, body_name_),
         env(env_),
         g_in_NED(ssc::kinematics::Point("NED", 0, 0, env.g))
 {

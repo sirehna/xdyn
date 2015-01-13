@@ -13,7 +13,7 @@
 class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
 {
     public:
-        FastHydrostaticForceModel(const EnvironmentAndFrames& env);
+        FastHydrostaticForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
         DF dF(const FacetIterator& that_facet,
               const EnvironmentAndFrames& env,
               const BodyStates& states,

@@ -22,7 +22,7 @@
 class ExactHydrostaticForceModel : public FastHydrostaticForceModel
 {
     public:
-        ExactHydrostaticForceModel(const EnvironmentAndFrames& env);
+        ExactHydrostaticForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
         static const std::string model_name;
 
     private:

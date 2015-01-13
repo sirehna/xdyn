@@ -17,7 +17,7 @@ struct EnvironmentAndFrames;
 class GravityForceModel : public ForceModel
 {
     public:
-        GravityForceModel(const EnvironmentAndFrames& env);
+        GravityForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         double potential_energy(const BodyStates& states, const std::vector<double>& x) const;
         static const std::string model_name;

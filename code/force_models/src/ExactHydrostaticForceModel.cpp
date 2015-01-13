@@ -11,7 +11,7 @@
 
 const std::string ExactHydrostaticForceModel::model_name = "non-linear hydrostatic (exact)";
 
-ExactHydrostaticForceModel::ExactHydrostaticForceModel(const EnvironmentAndFrames& env_) : FastHydrostaticForceModel(env_)
+ExactHydrostaticForceModel::ExactHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : FastHydrostaticForceModel(body_name_, env_)
 {
 }
 

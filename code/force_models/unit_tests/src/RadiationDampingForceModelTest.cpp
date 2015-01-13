@@ -87,7 +87,7 @@ TEST_F(RadiationDampingForceModelTest, example)
     RadiationDampingForceModel::Input input;
     input.hdb = get_hdb_data();
     input.yaml = yaml;
-    RadiationDampingForceModel F(input, EnvironmentAndFrames());
+    RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     const std::string body_name = a.random<std::string>();
     BodyStates states;
     states.name = body_name;
@@ -139,7 +139,7 @@ TEST_F(RadiationDampingForceModelTest, should_print_debugging_information_if_req
     RadiationDampingForceModel::Input input;
     input.hdb = get_hdb_data();
     input.yaml = get_yaml_data(true);
-    RadiationDampingForceModel F(input, EnvironmentAndFrames());
+    RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_FALSE(debug.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
@@ -154,7 +154,7 @@ TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if
     RadiationDampingForceModel::Input input;
     input.hdb = get_hdb_data();
     input.yaml = get_yaml_data(false);
-    RadiationDampingForceModel F(input, EnvironmentAndFrames());
+    RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_TRUE(debug.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);

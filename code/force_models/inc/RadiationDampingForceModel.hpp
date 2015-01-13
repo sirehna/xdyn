@@ -27,7 +27,7 @@ class RadiationDampingForceModel : public ForceModel
             TR1(shared_ptr)<HDBParser> hdb;
             YamlRadiationDamping yaml;
         };
-        RadiationDampingForceModel(const Input& input, const EnvironmentAndFrames& env);
+        RadiationDampingForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         static Input parse(const std::string& yaml, const bool parse_hdb=true);
         static const std::string model_name;

@@ -20,6 +20,7 @@ class CSVObserver : public Observer
     private:
         void flush_after_initialization();
         void flush_after_write();
+        void flush_value();
 
         bool should_add_coma();
         bool add_coma;

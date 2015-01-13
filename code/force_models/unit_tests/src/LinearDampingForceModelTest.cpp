@@ -90,7 +90,7 @@ TEST_F(LinearDampingForceModelTest, example)
          67,  71,  73,  79,  83,  89,
          97, 101, 103, 107, 109, 113,
         127, 131, 137, 139, 149, 151;
-    LinearDampingForceModel F(D,env);
+    LinearDampingForceModel F(D,BODY, env);
     for (size_t i=0;i<100;++i)
     {
         states.u = u = a.random<double>().between(-10.0,+10.0);

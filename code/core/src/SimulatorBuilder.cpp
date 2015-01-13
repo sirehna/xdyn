@@ -123,7 +123,7 @@ ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const Environme
     ListOfForces ret;
     for (auto that_force_model = body.external_forces.begin() ; that_force_model!= body.external_forces.end() ; ++that_force_model)
     {
-        add(*that_force_model, ret, env);
+        add(*that_force_model, ret, body.name, env);
     }
     return ret;
 }
@@ -133,17 +133,17 @@ ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& 
     ListOfControlledForces ret;
     for (auto that_force_model = body.controlled_forces.begin() ; that_force_model!= body.controlled_forces.end() ; ++that_force_model)
     {
-        add(*that_force_model, ret, env);
+        add(*that_force_model, ret, body.name, env);
     }
     return ret;
 }
 
-void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const EnvironmentAndFrames& env) const
+void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::string& body_name, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
     for (auto try_to_parse:force_parsers)
     {
-        boost::optional<ForcePtr> f = try_to_parse(model.model, model.yaml, env);
+        boost::optional<ForcePtr> f = try_to_parse(model.model, model.yaml, body_name, env);
         if (f)
         {
             L.push_back(f.get());
@@ -159,12 +159,12 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const Enviro
     }
 }
 
-void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, const EnvironmentAndFrames& env) const
+void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, const std::string& name, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
     for (auto try_to_parse:controllable_force_parsers)
     {
-        boost::optional<ControllableForcePtr> f = try_to_parse(model.model, model.yaml, env);
+        boost::optional<ControllableForcePtr> f = try_to_parse(model.model, model.yaml, name, env);
         if (f)
         {
             L.push_back(f.get());

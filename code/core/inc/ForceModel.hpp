@@ -25,7 +25,7 @@ class ForceModel;
 class Observer;
 
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
-typedef std::function<boost::optional<ForcePtr>(const std::string&, const std::string, const EnvironmentAndFrames&)> ForceParser;
+typedef std::function<boost::optional<ForcePtr>(const std::string&, const std::string&, const std::string&, const EnvironmentAndFrames&)> ForceParser;
 
 // SFINAE test for 'parse' method
 template<typename T>
@@ -41,7 +41,7 @@ struct HasParse
 class ForceModel
 {
     public:
-        ForceModel(const std::string& name);
+        ForceModel(const std::string& force_name, const std::string& body_name);
         virtual ~ForceModel(){}
         void update(const BodyStates& body, const double t);
         virtual ssc::kinematics::Wrench operator()(const BodyStates& body, const double t) const = 0;
@@ -54,12 +54,12 @@ class ForceModel
         template <typename ForceType>
         static typename boost::enable_if<HasParse<ForceType>, ForceParser>::type build_parser()
         {
-            auto parser = [](const std::string& model, const std::string& yaml, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
+            auto parser = [](const std::string& model, const std::string& yaml, const std::string& body, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
                           {
                               boost::optional<ForcePtr> ret;
                               if (model == ForceType::model_name)
                               {
-                                  ret.reset(ForcePtr(new ForceType(ForceType::parse(yaml), env)));
+                                  ret.reset(ForcePtr(new ForceType(ForceType::parse(yaml), body, env)));
                               }
                               return ret;
                           };
@@ -69,12 +69,12 @@ class ForceModel
         template <typename ForceType>
         static typename boost::disable_if<HasParse<ForceType>, ForceParser>::type build_parser()
         {
-            auto parser = [](const std::string& model, const std::string& , const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
+            auto parser = [](const std::string& model, const std::string& , const std::string& body, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
                           {
                               boost::optional<ForcePtr> ret;
                               if (model == ForceType::model_name)
                               {
-                                  ret.reset(ForcePtr(new ForceType(env)));
+                                  ret.reset(ForcePtr(new ForceType(body, env)));
                               }
                               return ret;
                           };
@@ -86,7 +86,8 @@ class ForceModel
 
     private:
         ForceModel(); // Disabled
-        std::string name;
+        std::string force_name;
+        std::string body_name;
         ssc::kinematics::Wrench force;
 };
 

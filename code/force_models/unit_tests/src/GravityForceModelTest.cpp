@@ -40,7 +40,7 @@ TEST_F(GravityForceModelTest, example)
     env.g = 9.81;
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
-    GravityForceModel F(env);
+    GravityForceModel F(BODY, env);
     BodyStates states = get_body(BODY)->get_states();
     states.m = 100;
 
@@ -93,7 +93,7 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     env.g = 9.81;
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(Transform(rot, "NED", BODY));
-    GravityForceModel F(env);
+    GravityForceModel F(BODY, env);
     BodyStates states = get_body(BODY)->get_states();
     states.m = 100;
 
@@ -125,7 +125,7 @@ TEST_F(GravityForceModelTest, potential_energy)
     env.g = 9.81;
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
-    GravityForceModel F(env);
+    GravityForceModel F(BODY, env);
     BodyStates states = get_body(BODY)->get_states();
     states.m = 100;
 

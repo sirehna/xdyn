@@ -186,7 +186,7 @@ class RadiationDampingForceModel::Impl
 };
 
 
-RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const EnvironmentAndFrames& ) : ForceModel("radiation damping"),
+RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& ) : ForceModel("radiation damping", body_name_),
 pimpl(new Impl(input.hdb, input.yaml))
 {
 }

@@ -95,7 +95,7 @@ class DiffractionForceModel::Impl
 
 };
 
-DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const EnvironmentAndFrames& env) : ForceModel("diffraction"), pimpl(new Impl(data,env))
+DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env) : ForceModel("diffraction", body_name_), pimpl(new Impl(data,env))
 {
 }
 
