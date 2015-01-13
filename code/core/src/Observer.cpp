@@ -6,6 +6,7 @@
  */
 
 #include "Observer.hpp"
+#include "ObserverException.hpp"
 #include "Sim.hpp"
 
 Observer::Observer(const std::vector<std::string>& data_) : initialized(false), stuff_to_write(data_), serialize(), initialize()
@@ -30,6 +31,14 @@ void Observer::initialize_everything_if_necessary()
 {
     if (not(initialized))
     {
+        for (auto stuff:stuff_to_write)
+        {
+            auto initialize_stuff = initialize.find(stuff);
+            if (initialize_stuff == initialize.end())
+            {
+                THROW(__PRETTY_FUNCTION__, ObserverException, std::string("Simulation does not compute '") + stuff + "'");
+            }
+        }
         for (auto stuff:stuff_to_write) initialize[stuff]();
         flush_after_initialization();
     }
