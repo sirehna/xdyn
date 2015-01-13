@@ -20,7 +20,7 @@ typedef std::tr1::shared_ptr<Observer> ObserverPtr;
 class ListOfObservers
 {
     public:
-        ListOfObservers(const std::map<std::string, std::vector<std::string> >& data_per_format);
+        ListOfObservers(const std::string& basename, const std::map<std::string, std::vector<std::string> >& data_per_format);
         void observe(const Sim& sys, const double t);
 
     private:

@@ -5,15 +5,16 @@
  *      Author: cady
  */
 
-
+#include "CSVObserver.hpp"
 #include "ListOfObservers.hpp"
 
-ListOfObservers::ListOfObservers(const std::map<std::string, std::vector<std::string> >& data_per_format) :
+ListOfObservers::ListOfObservers(const std::string& basename, const std::map<std::string, std::vector<std::string> >& data_per_format) :
 observers()
 {
+    (void)basename;
     for (auto output:data_per_format)
     {
-//        if (output.first == "csv")  observers.push_back(ObserverPtr(new CSVObserver(output.second)));
+        if (output.first == "csv")  observers.push_back(ObserverPtr(new CSVObserver(basename + ".csv",output.second)));
 //        if (output.first == "hdf5") observers.push_back(ObserverPtr(new HDF5Observer(output.second)));
     }
 }
