@@ -4,61 +4,7 @@
 #include <string>
 #include <vector>
 #include "H5Cpp.h"
-#include "ssc/exception_handling.hpp"
-
-class H5InterfaceException: public ssc::exception_handling::Exception
-{
-    public:
-        H5InterfaceException(const char* s) :
-                Exception(s)
-        {
-        }
-};
-
-namespace H5_Tools
-{
-    std::vector<std::string> split(
-            const std::string & str,
-            const std::string & delim = "/");
-
-    std::string ensureStringStartsAndEndsWithAPattern(
-            const std::string & str,
-            const std::string & delim);
-
-    std::string ensureStringStartsWithAPattern(
-            const std::string & str,
-            const std::string & delim
-            );
-
-    void writeString(
-            const H5::H5File& file,
-            const std::string& datasetName,
-            const std::string& stringToWrite);
-
-    std::string getBasename(
-            const std::string& path,
-            const std::string& delims = "/\\");
-
-    std::string replaceString(
-            const std::string& subject,
-            const std::string& search,
-            const std::string& replace);
-
-    std::string& replaceStringInPlace(
-            std::string& subject,
-            const std::string& search,
-            const std::string& replace);
-
-    H5::DataSpace createDataSpace1DUnlimited();
-
-    H5::DataSet createDataSet(
-            const H5::H5File& file, const std::string& datasetName,
-            const H5::DataType& datasetType, const H5::DataSpace& space);
-
-    H5::Group createMissingGroups(
-            const H5::H5File& file,
-            const std::string& datasetName);
-}
+#include "h5_tools.hpp"
 
 template <typename T> class H5_Interface
 {

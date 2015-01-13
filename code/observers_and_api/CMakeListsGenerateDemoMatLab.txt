@@ -19,7 +19,7 @@ EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different
 FILE(WRITE ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "/* Generated source file from template MatLab source file*/\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "#include <sstream>\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "#include <ostream>\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "#include \"h5_interface.hpp\"\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "#include \"h5_tools.hpp\"\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "#include \"demoMatLab.hpp\"\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "void exportMatLabScripts(\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "        const H5::H5File& h5File,\n")

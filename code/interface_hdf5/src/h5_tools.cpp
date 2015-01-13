@@ -1,5 +1,5 @@
-#include "h5_interface.hpp"
-#include <vector>
+#include "h5_exception.hpp"
+#include "h5_tools.hpp"
 
 std::string H5_Tools::ensureStringStartsAndEndsWithAPattern(
         const std::string & str,        //!< String to check
@@ -137,7 +137,7 @@ H5::DataSet H5_Tools::createDataSet(
     }
     else
     {
-        THROW(__PRETTY_FUNCTION__, H5InterfaceException, "Dataset already exists" + datasetName);
+        THROW(__PRETTY_FUNCTION__, H5Exception, "Dataset already exists" + datasetName);
         return file.openDataSet(datasetName);
     }
 }
