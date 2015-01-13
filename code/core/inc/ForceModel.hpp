@@ -50,8 +50,6 @@ class ForceModel
         virtual bool is_a_surface_force_model() const;
         ssc::kinematics::Wrench get() const;
         void feed(Observer& observer) const;
-        virtual void extra_observations(Observer& observer) const;
-
 
         template <typename ForceType>
         static typename boost::enable_if<HasParse<ForceType>, ForceParser>::type build_parser()
@@ -82,6 +80,9 @@ class ForceModel
                           };
             return parser;
         }
+
+    protected:
+        virtual void extra_observations(Observer& observer) const;
 
     private:
         ForceModel(); // Disabled
