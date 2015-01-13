@@ -5,8 +5,10 @@
  *      Author: cady
  */
 
-#include "EnvironmentAndFrames.hpp"
 #include <ssc/kinematics.hpp>
+
+#include "EnvironmentAndFrames.hpp"
+#include "Observer.hpp"
 
 using namespace ssc::kinematics;
 
@@ -16,4 +18,9 @@ EnvironmentAndFrames::EnvironmentAndFrames() : w(SurfaceElevationPtr()),
                                                g(0),
                                                rot()
 {
+}
+
+void EnvironmentAndFrames::feed(Observer& observer) const
+{
+    (void)observer;
 }

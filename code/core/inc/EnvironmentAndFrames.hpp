@@ -15,12 +15,14 @@
 
 #include "YamlRotation.hpp"
 
+class Observer;
 class SurfaceElevationInterface;
 typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 
 struct EnvironmentAndFrames
 {
     EnvironmentAndFrames();
+    void feed(Observer& observer) const;
     SurfaceElevationPtr w;
     ssc::kinematics::KinematicsPtr k;
     double rho;
