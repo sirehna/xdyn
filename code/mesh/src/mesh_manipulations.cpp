@@ -5,11 +5,8 @@
  *      Author: cady
  */
 
-#include <boost/foreach.hpp>
-
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
-#include <ssc/numeric.hpp>
 
 double area(const Matrix3x& M, //!< Matrix containing (amongst others), the points of interest
             const int idxA,    //!< Index of the column containing the first point
@@ -174,7 +171,7 @@ Matrix3x convert(const VectorOfPoints& v)
     }
     return ret;
 }
-#include <ssc/macros.hpp>
+
 bool oriented_clockwise(const VectorOfVectorOfPoints& v, const EPoint& O)
 {
     if (v.size() < 2) return true;
@@ -251,9 +248,10 @@ Eigen::Matrix3d inertia_of_polygon(
     return total_inertia/total_area;
 }
 
-double average_immersion(const std::vector<size_t>& idx,    //!< Indices of the points
-                                      const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
-                                      )
+double average_immersion(
+        const std::vector<size_t>& idx,    //!< Indices of the points
+        const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+        )
 {
     const size_t n = idx.size();
     double average = 0;
@@ -266,11 +264,11 @@ double average_immersion(const std::vector<size_t>& idx,    //!< Indices of the 
 }
 
 EPoint normal_to_free_surface(
-            const FacetIterator&       that_facet,      //!< the facet of interest
-            const EPoint&              down_direction,  //!< local down direction expressed in mesh frame
-            const Matrix3x&            all_nodes,       //!< the nodes of the mesh
-            const std::vector<double>& all_immersions   //!< the immersions for all nodes of the mesh
-            )
+        const FacetIterator&       that_facet,      //!< the facet of interest
+        const EPoint&              down_direction,  //!< local down direction expressed in mesh frame
+        const Matrix3x&            all_nodes,       //!< the nodes of the mesh
+        const std::vector<double>& all_immersions   //!< the immersions for all nodes of the mesh
+        )
 {
     // Compute normal to free surface, oriented downward
     const Matrix3x vertices = project_facet_on_free_surface(that_facet,down_direction,all_nodes,all_immersions);
@@ -312,12 +310,12 @@ Eigen::Matrix3d facet_trihedron(
 }
 
 EPoint exact_application_point(
-            const FacetIterator&       that_facet,     //!< the facet of interest
-            const EPoint&              down_direction, //!< local down direction expressed in mesh frame
-            const double               zG,             //!< Relative immersion of facet barycentre (in metres)
-            const Matrix3x&            all_nodes,      //!< the nodes of the mesh
-            const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
-            )
+        const FacetIterator&       that_facet,     //!< the facet of interest
+        const EPoint&              down_direction, //!< local down direction expressed in mesh frame
+        const double               zG,             //!< Relative immersion of facet barycentre (in metres)
+        const Matrix3x&            all_nodes,      //!< the nodes of the mesh
+        const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
+        )
 {
     const EPoint n=that_facet->unit_normal;
     const EPoint ns=normal_to_free_surface(that_facet,down_direction,all_nodes,all_immersions);
@@ -337,11 +335,11 @@ EPoint exact_application_point(
 }
 
 Matrix3x project_facet_on_free_surface(
-            const FacetIterator&       that_facet,     //!< the facet of interest
-            const EPoint&              down_direction, //!< local down direction expressed in mesh frame
-            const Matrix3x&            all_nodes,      //!< the nodes of the mesh
-            const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
-            )
+        const FacetIterator&       that_facet,     //!< the facet of interest
+        const EPoint&              down_direction, //!< local down direction expressed in mesh frame
+        const Matrix3x&            all_nodes,      //!< the nodes of the mesh
+        const std::vector<double>& all_immersions  //!< the immersions for all nodes of the mesh
+        )
 {
     const size_t nVertices = that_facet->vertex_index.size();
     Matrix3x newVertices(3,nVertices);
@@ -353,10 +351,10 @@ Matrix3x project_facet_on_free_surface(
 }
 
 Eigen::Matrix3d get_inertia_of_polygon_wrt(
-            const FacetIterator&  that_facet,  //!< the facet of interest
-            const Eigen::Matrix3d R20,         //!< coordinates of inertia frame vectors versus mesh frame
-            const Matrix3x&       all_nodes    //!< the nodes of the mesh
-            )
+        const FacetIterator&  that_facet,  //!< the facet of interest
+        const Eigen::Matrix3d R20,         //!< coordinates of inertia frame vectors versus mesh frame
+        const Matrix3x&       all_nodes    //!< the nodes of the mesh
+        )
 {
     // Compute the coordinates of facet vertices in R2
     const EPoint G=that_facet->barycenter;
