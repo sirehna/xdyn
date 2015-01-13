@@ -20,11 +20,6 @@ namespace H5_Tools
             const std::string & delim
             );
 
-    void writeString(
-            const H5::H5File& file,
-            const std::string& datasetName,
-            const std::string& stringToWrite);
-
     std::string getBasename(
             const std::string& path,
             const std::string& delims = "/\\");
@@ -48,6 +43,11 @@ namespace H5_Tools
     H5::Group createMissingGroups(
             const H5::H5File& file,
             const std::string& datasetName);
+
+    void writeString(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            const std::string& stringToWrite);
 }
 
 #endif
