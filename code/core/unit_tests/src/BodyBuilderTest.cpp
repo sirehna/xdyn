@@ -10,7 +10,7 @@
 #include "Mesh.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "STL_data.hpp"
-#include "StlReader.hpp"
+#include "stl_reader.hpp"
 #include "yaml_data.hpp"
 #include <ssc/kinematics.hpp>
 

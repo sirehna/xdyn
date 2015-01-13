@@ -10,7 +10,7 @@
 #include "SimulatorBuilder.hpp"
 #include "SimulatorBuilderException.hpp"
 #include "update_kinematics.hpp"
-#include "StlReader.hpp"
+#include "stl_reader.hpp"
 #include "BodyBuilder.hpp"
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const ssc::data_source::DataSource& command_listener_) :

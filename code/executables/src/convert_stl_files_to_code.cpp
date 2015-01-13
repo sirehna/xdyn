@@ -2,10 +2,10 @@
 #include <string>
 
 #include "mesh_manipulations.hpp"
-#include "StlReader.hpp"
+#include "stl_reader.hpp"
+#include "stl_writer.hpp"
 #include <ssc/text_file_reader.hpp>
 #include "base91x.hpp"
-#include "stl_writer.hpp"
 
 std::string description();
 std::string description()

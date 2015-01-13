@@ -6,13 +6,11 @@
  */
 
 #include "stl_writerTest.hpp"
-#include "StlReader.hpp"
+#include "stl_reader.hpp"
 #include "stl_writer.hpp"
 #include "STL_data.hpp"
 #include "base91x.hpp"
-//#include "STL_data.hpp"
 #include "TriMeshTestData.hpp"
-#include "stl_writer.hpp"
 
 stl_writerTest::stl_writerTest() : a(ssc::random_data_generator::DataGenerator(542))
 {

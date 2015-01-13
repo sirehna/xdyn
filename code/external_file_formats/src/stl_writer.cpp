@@ -1,7 +1,7 @@
 #include <sstream>
 
 #include "stl_writer.hpp"
-#include "StlReaderException.hpp"
+#include "stl_reader_exception.hpp"
 
 ::std::ostream& operator<<(::std::ostream& os, const EPoint& point);
 ::std::ostream& operator<<(::std::ostream& os, const EPoint& point)

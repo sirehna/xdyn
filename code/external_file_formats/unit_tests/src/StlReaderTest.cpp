@@ -1,5 +1,5 @@
-#include "StlReader.hpp"
-#include "StlReaderException.hpp"
+#include "stl_reader.hpp"
+#include "stl_reader_exception.hpp"
 #include "STL_data.hpp"
 #include "StlReaderTest.hpp"
 

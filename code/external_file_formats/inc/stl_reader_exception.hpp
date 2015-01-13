@@ -1,5 +1,5 @@
-#ifndef STLREADEREXCEPTION_HPP_
-#define STLREADEREXCEPTION_HPP_
+#ifndef STL_READER_EXCEPTION_HPP_
+#define STL_READER_EXCEPTION_HPP_
 
 #include <ssc/exception_handling.hpp>
 

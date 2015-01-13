@@ -8,7 +8,7 @@
 #include "mesh_manipulations.hpp"
 #include <ssc/macros.hpp>
 #include "STL_data.hpp"
-#include "StlReader.hpp"
+#include "stl_reader.hpp"
 #include "MeshIntersector.hpp"
 #include "generate_anthineas.hpp"
 

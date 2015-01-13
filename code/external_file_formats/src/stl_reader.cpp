@@ -3,8 +3,8 @@
 #include <sstream>
 #include <cstdio>
 
-#include "StlReaderException.hpp"
-#include "StlReader.hpp"
+#include "stl_reader_exception.hpp"
+#include "stl_reader.hpp"
 
 const int LINE_MAX_LENGTH = 256;
 const char TOKEN_vertex[] = "vertex";

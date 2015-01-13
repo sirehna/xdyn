@@ -14,7 +14,7 @@
 #include "FastHydrostaticForceModel.hpp"
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
-#include "StlReader.hpp"
+#include "stl_reader.hpp"
 #include "SimulatorBuilder.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 #include "FroudeKrylovForceModel.hpp"
