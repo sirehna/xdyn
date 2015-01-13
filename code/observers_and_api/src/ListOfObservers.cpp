@@ -7,14 +7,14 @@
 
 #include "CSVObserver.hpp"
 #include "ListOfObservers.hpp"
+#include "YamlOutput.hpp"
 
-ListOfObservers::ListOfObservers(const std::string& basename, const std::map<std::string, std::vector<std::string> >& data_per_format) :
+ListOfObservers::ListOfObservers(const std::string& basename, const std::vector<YamlOutput2>& yaml) :
 observers()
 {
-    (void)basename;
-    for (auto output:data_per_format)
+    for (auto output:yaml)
     {
-        if (output.first == "csv")  observers.push_back(ObserverPtr(new CSVObserver(basename + ".csv",output.second)));
+        if (output.format == "csv")  observers.push_back(ObserverPtr(new CSVObserver(basename + ".csv",output.data)));
 //        if (output.first == "hdf5") observers.push_back(ObserverPtr(new HDF5Observer(output.second)));
     }
 }
