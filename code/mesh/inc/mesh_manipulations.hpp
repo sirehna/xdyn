@@ -45,7 +45,7 @@ Eigen::Vector3d barycenter(const Matrix3x& points //!< List of points
   *  \brief Computes the barycenter of a polygon given by vertex index.
   *  \details Decomposes the polygon in triangles & sums the areas
   */
-Eigen::Vector3d barycenter(const Matrix3x& p,std::vector<size_t> &vertex_index);
+Eigen::Vector3d barycenter(const Matrix3x& p, const std::vector<size_t> &vertex_index);
 
 /**  \brief Computes the iso-braycenter of a list of points
   *  \returns The iso-barycenter of the points
@@ -68,7 +68,7 @@ double area(const Matrix3x& polygon //!< Polygon for which the area is computed
   *  \brief Computes the area of a polygon given by vertex index.
   *  \details Decomposes the polygon in triangles & sums the areas
   */
-double area(const Matrix3x& points,std::vector<size_t> &vertex_index);
+double area(const Matrix3x& points, const std::vector<size_t> &vertex_index);
 
 /**  \author cec
   *  \date May 21, 2014, 10:39:36 AM

@@ -40,7 +40,7 @@ double area(const Matrix3x& points)
     return a;
 }
 
-double area(const Matrix3x& points,std::vector<size_t> &vertex_index)
+double area(const Matrix3x& points, const std::vector<size_t> &vertex_index)
 {
     const size_t n = vertex_index.size();
     double a = 0;
@@ -58,7 +58,7 @@ Eigen::Vector3d barycenter(const Matrix3x& p)
     return p.rowwise().sum().array()/double(p.cols());
 }
 
-Eigen::Vector3d barycenter(const Matrix3x& p,std::vector<size_t> &vertex_index)
+Eigen::Vector3d barycenter(const Matrix3x& p, const std::vector<size_t> &vertex_index)
 {
     double x = 0;
     double y = 0;
