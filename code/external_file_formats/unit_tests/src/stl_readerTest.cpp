@@ -1,7 +1,7 @@
 #include "stl_reader.hpp"
 #include "stl_reader_exception.hpp"
 #include "STL_data.hpp"
-#include "StlReaderTest.hpp"
+#include "stl_readerTest.hpp"
 
 TEST_F(StlReaderTest, number_of_facets_should_be_correct_for_a_single_facet_file)
 {

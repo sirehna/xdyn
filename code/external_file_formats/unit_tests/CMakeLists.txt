@@ -1,6 +1,6 @@
 SET(MODULE_UNDER_TEST external_file_formats)
 PROJECT(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/StlReaderTest.cpp
+FILE(GLOB SRC src/stl_readerTest.cpp
               src/stl_writerTest.cpp
               src/low_level_hdb_parserTest.cpp
         )
