@@ -162,7 +162,7 @@ VectorOfVectorOfPoints read_stl(const std::string& input)
 
 VectorOfVectorOfPoints read_binary_stl(std::istream& stream) // Shamelessly copied from http://ravehgonen.wordpress.com/tag/stl-file-format/
 {
-    char buffer[4];
+    char buffer[4] = {0};
     VectorOfVectorOfPoints ret;
 
     stream.ignore(80);

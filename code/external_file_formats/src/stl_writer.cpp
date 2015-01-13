@@ -49,7 +49,8 @@ std::string write_stl(const VectorOfPoints& mesh)
     return write_stl(VectorOfVectorOfPoints(1,mesh));
 }
 
-Eigen::Vector3d unit_normal__(const Matrix3x& points);Eigen::Vector3d unit_normal__(const Matrix3x& points)
+Eigen::Vector3d unit_normal__(const Matrix3x& points);
+Eigen::Vector3d unit_normal__(const Matrix3x& points)
 {
     //const double sign = oriented_clockwise ? -1 : 1;
     if (points.cols() < 3)
@@ -96,7 +97,7 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
         float x = (float)normal(0);
         float y = (float)normal(1);
         float z = (float)normal(2);
-        os.write(reinterpret_cast<const char*>(&x), 4);
+        os.write(reinterpret_cast<const char*>(&x), sizeof(float));
         os.write(reinterpret_cast<const char*>(&y), sizeof(float));
         os.write(reinterpret_cast<const char*>(&z), sizeof(float));
         for (int j = 0 ; j < 3 ; ++j)
@@ -104,10 +105,10 @@ void write_binary_stl(const VectorOfVectorOfPoints& stl, std::ostream& os)
             float x = (float)M(0,j);
             float y = (float)M(1,j);
             float z = (float)M(2,j);
-            os.write(reinterpret_cast<const char*>(&x), 4);
-            os.write(reinterpret_cast<const char*>(&y), 4);
-            os.write(reinterpret_cast<const char*>(&z), 4);
+            os.write(reinterpret_cast<const char*>(&x), sizeof(float));
+            os.write(reinterpret_cast<const char*>(&y), sizeof(float));
+            os.write(reinterpret_cast<const char*>(&z), sizeof(float));
         }
-        os.write(reinterpret_cast<const char*>(&spacer), 2);
+        os.write(reinterpret_cast<const char*>(&spacer), sizeof(uint16));
     }
 }
