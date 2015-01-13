@@ -13,6 +13,9 @@
 #include "simulator_api.hpp"
 #include "SimCsvObserver.hpp"
 #include "SimHdf5Observer.hpp"
+#include "ListOfObservers.hpp"
+#include "parse_output.hpp"
+
 #include <ssc/solver.hpp>
 #include <ssc/check_ssc_version.hpp>
 #include <string>
@@ -36,7 +39,8 @@ int main(int argc, char** argv)
         std::ofstream ws(input_data.wave_output.c_str());
         if (input_data.wave_output.empty()) copy_stream(dev_null_buffer, ws);
         //SimCsvObserver observer(std::cout, ws);
-        SimHdf5Observer observer(input_data.output_filename, sys);
+        //SimHdf5Observer observer(input_data.output_filename, sys);
+        ListOfObservers observer(input_data.basename, parse_output(yaml_reader.get_contents()));
         if (input_data.solver=="euler")
         {
             ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
