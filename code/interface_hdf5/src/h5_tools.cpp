@@ -126,9 +126,12 @@ H5::DataSet H5_Tools::createDataSet(
         const H5::H5File& file, const std::string& datasetName,
         const H5::DataType& datasetType, const H5::DataSpace& space)
 {
-    const hsize_t chunk_dims[1] = {1};
+    const int nDims = space.getSimpleExtentNdims();
+    hsize_t * chunk_dims = new hsize_t[nDims];
+    for (int i=0;i<nDims;++i) chunk_dims[i]=1;
     H5::DSetCreatPropList cparms;
-    cparms.setChunk(1, chunk_dims);
+    cparms.setChunk(nDims, chunk_dims);
+    delete [] chunk_dims;
     createMissingGroups(file, datasetName);
     htri_t dataset_status = H5Lexists(file.getId(), datasetName.c_str(), H5P_DEFAULT);
     if (dataset_status<=0)
