@@ -26,11 +26,25 @@ color: #000000;}
   a:hover {
       color: #0066FF;
   }
+/*
+h1 { font-family: IM Fell English; font-size: 24px; font-style: normal;
+font-variant: normal; font-weight: 500; line-height: 26.4px; } h3 {
+font-family: IM Fell English; font-size: 14px; font-style: normal;
+font-variant: normal; font-weight: 500; line-height: 15.4px; } p { font-family:
+IM Fell English; font-size: 14px; font-style: normal; font-variant: normal;
+font-weight: 400; line-height: 20px; } blockquote { font-family: IM Fell
+English; font-size: 21px; font-style: normal; font-variant: normal; font-weight:
+400; line-height: 30px; } pre { font-family: IM Fell English; font-size: 13px;
+font-style: normal; font-variant: normal; font-weight: 400; line-height:
+18.5667px;
+*/
 body{
   line-height: 1.4;
   /*font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;*/
   color: #222;
   font: 15px/19px Roboto, sans-serif;
+  /*font-family: IM Fell English;*/
+  /*font-family: 'Josefin Sans Std Light'*/
   font-weight: 100;
   letter-spacing:.1;
   width: 80%;

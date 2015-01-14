@@ -1084,6 +1084,29 @@ Voici un exemple de fichier de commande :
   P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+### Contrôleur de cap simplifié
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controlled forces:
+  - name: controller
+    model: simple heading controller
+    ksi: 0.9
+    Tp: {value: 4, unit: s}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `name` : nom du contrôleur (si l'on en utilise plusieurs)
+- `model` : `simple heading controller` pour ce modèle
+- `ksi`: coefficient d'amortissement de la loi de commande
+- `Tp`: temps de réponse (système du second ordre).
+
+Ce modèle n'a qu'une seule commande, le cap `psi_co` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- name: controller
+  t: [0,1,3,10]
+  psi_co: {unit: deg, values: [25, 30, 40, 0]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Sorties
 
 La spécification des sorties se fait au moyen de la section `output`, à la

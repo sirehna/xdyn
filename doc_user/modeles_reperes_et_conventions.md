@@ -1609,3 +1609,41 @@ bilan des efforts.
 - *Thrust Estimation and Control of Marine Propellers in Four-Quadrant Operations*, 2008, Luca Pivano, NTNU, ISBN 978-82-471-6258-3, page 30, 31
 - *The Wageningen Propeller Series*, 1992, Gert Kuiper, Marin publication 92-001
 
+## Contrôleur de cap simplifié
+
+### Description
+
+Le but de ce contrôleur est de pouvoir réaliser des simulations sous houle (par
+exemple pour calculer des RAO d'effort) en limitant les variations de cap. Ce
+contrôleur génère directement un moment au centre de gravité du corps.
+
+### Expression des efforts
+
+Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\mbox{co}}-\psi) - K_r\cdot r =
+\sigma_{zz}\ddot{\psi}$ où $\sigma_{zz}$ désigne le moment d'inertie total
+(inertie propre et inertie ajoutée) autour de l'axe $z$.
+
+Dans le domaine de Laplace, l'équation du contrôleur s'écrit :
+
+$$\sigma_{zz}p^2 + K_r p + K_{\psi} = 0$$
+
+ou encore, sous forme canonique :
+
+$$p^2 + 2\zeta\omega_0 p + \omega_0^2 = 0$$
+
+d'où
+
+$$K_{\psi} = \sigma_{zz} \omega_0^2$$ et $$K_r= 2\zeta\omega_0\sigma_{zz}$$
+
+On peut exprimer ces gains en fonction de l'amortissement $\zeta$ et du temps de
+réponse $T_p$ donné par $T_p=\frac{2\pi}{\omega_0}$.
+
+$$K_{\psi} = \sigma_{zz}\left(\frac{2\pi}{T_p}\right)^2$$
+$$K_{r} = 2\zeta\sigma_{zz}\frac{2\pi}{T_p}$$
+
+Le cap $\psi_{\mbox{co}}$ est donné dans le repère NED.
+Si l'on suppose que $r=0$, pour $\psi<\psi_{\mbox{co}}$, le moment généré doit
+être positif, donc $K_{\psi}\cdot(\psi_{\mbox{co}}-\psi)>0$. Par conséquent,
+$K_{\psi}>0$.
+De même, en prenant $r<0$ et $\psi=\psi_{\mbox{co}}$, le moment généré doit
+être positif pour contrer la vitesse $r$, donc $-K_r\cdot r>0$, d'où $K_r>0$.
