@@ -1084,3 +1084,27 @@ Voici un exemple de fichier de commande :
   P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Sorties
+
+La spécification des sorties se fait au moyen de la section `output`, à la
+racine du fichier YAML, dont voici un exemple :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: csv
+     filename: test.csv
+     data: [t, x(ball), 'Fx(gravity,ball)']
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `format` : `csv` pour un fichier texte dont les colonnes sont séparées par
+  une virgule ou `hdf5` pour le format des fichiers .mat de Matlab (HDF5)
+- `filename` : nom du fichier de sortie
+- `data` : liste des colonnes à écrire. Le temps est noté `t`, et les états
+  sont `x(body)`, `y(body)` `z(body)`, `u(body)`, `v(body)`, `w(body)`,
+  `p(body)`, `q(body)`, `r(body)`, `qr(body)`, `qi(body)`, `qj(body)`,
+  `qk(body)`. `body` doit être remplacé par le nom du corps (`ball` dans
+  l'exemple ci-dessus). Les sorties d'effort sont `Fx(body,model)`,
+  `Fy(body,model)`, `Fz(body,model)`, `Mx(body,model)`, `My(body,model)`,
+  `Mz(body,model)` où `model` est le nom du modèle d'effort (renseigné dans la
+  clef `model` de chaque modèle d'effort).
+
