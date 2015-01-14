@@ -28,5 +28,4 @@ class ListOfObservers
         std::vector<ObserverPtr> observers;
 };
 
-
 #endif /* LISTOFOBSERVERS_HPP_ */
