@@ -10,12 +10,9 @@
 
 #include "Res.hpp"
 
-#include <map>
-#include <string>
 #include <vector>
 
 class Sim;
-struct YamlSimulatorInput;
 
 /** \author cec
  *  \date Jun 17, 2014, 8:23:16 AM
