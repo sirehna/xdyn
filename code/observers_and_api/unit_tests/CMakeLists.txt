@@ -6,7 +6,7 @@ FILE(GLOB SRC src/SimCsvObserverTest.cpp
               src/SimHdf5ObserverBuilderTest.cpp
               src/SimHdf5WaveObserverTest.cpp
               src/SimHdf5WaveObserverBuilderTest.cpp
-              src/OutputTransformerTest.cpp
+              #src/OutputTransformerTest.cpp
               src/SimTest.cpp
               )
 # ------8<---------------------------------------------->8-----

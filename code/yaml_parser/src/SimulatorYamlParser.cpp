@@ -21,18 +21,6 @@ if(const YAML::Node *parameter = node.FindValue(key))\
         *parameter >> dest;\
     }
 
-void parse_outputs(const YAML::Node& node, YamlSimulatorInput& ret);
-void parse_outputs(const YAML::Node& node, YamlSimulatorInput& ret)
-{
-    PARSE_OPTIONAL_KEY("positions"             , ret.position_output)
-    PARSE_OPTIONAL_KEY("angles"                , ret.angles_output)
-    PARSE_OPTIONAL_KEY("linear velocities"     , ret.linear_velocities_output)
-    PARSE_OPTIONAL_KEY("angular velocities"    , ret.angular_velocities_output)
-    PARSE_OPTIONAL_KEY("linear accelerations"  , ret.linear_accelerations_output)
-    PARSE_OPTIONAL_KEY("angular accelerations" , ret.angular_accelerations_output)
-    PARSE_OPTIONAL_KEY("forces and torques"    , ret.forces_and_torques_output)
-}
-
 YamlSimulatorInput SimulatorYamlParser::parse() const
 {
     YAML::Node node;
@@ -48,9 +36,5 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
     PARSE_OPTIONAL_KEY("environment models", ret.environment);
     PARSE_OPTIONAL_KEY("points", ret.points)
 
-    if(const YAML::Node *parameter = node.FindValue("outputs"))
-    {
-        parse_outputs(*parameter, ret);
-    }
     return ret;
 }

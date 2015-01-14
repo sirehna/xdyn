@@ -179,39 +179,6 @@ void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
     }
 }
 
-void operator >> (const YAML::Node& node, YamlOutput& p)
-{
-    node["axes"] >> p.axes;
-    node["projected in frame"] >> p.projected_in_frame;
-}
-
-void operator >> (const YAML::Node& node, YamlPositionOutput& p)
-{
-    YamlOutput o;
-    node >> o;
-    p = o;
-    node["point"] >> p.point;
-    node["relative to frame"] >> p.relative_to_frame;
-}
-
-void operator >> (const YAML::Node& node, YamlAnglesOutput& p)
-{
-    YamlOutput o;
-    node >> o;
-    p = o;
-    node["frame"] >> p.frame;
-    node["relative to frame"] >> p.relative_to_frame;
-}
-
-void operator >> (const YAML::Node& node, YamlForcesAndTorquesOutput& f)
-{
-    node["axes"] >> f.axes;
-    node["point frame"] >> f.point_frame;
-    node["point name"] >> f.point_name;
-    node["projected in frame"] >> f.projected_in_frame;
-    node["type"] >> f.type;
-}
-
 void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f)
 {
     parse_uv(node["g"], f.g);

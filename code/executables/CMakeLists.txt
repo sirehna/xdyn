@@ -28,14 +28,10 @@ INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS})
 include_directories(${observers_and_api_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/utilities_for_InputData.cpp "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
-CONFIGURE_FILE(src/postprocessing.cpp "${CMAKE_CURRENT_BINARY_DIR}/postprocessing.cpp" @ONLY)
 CONFIGURE_FILE(src/convert_stl_files_to_code.cpp "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
 ADD_EXECUTABLE(sim ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
                    src/InputData.cpp
                    src/simulator.cpp)
-
-ADD_EXECUTABLE(postprocessing ${CMAKE_CURRENT_BINARY_DIR}/postprocessing.cpp)
-TARGET_LINK_LIBRARIES(postprocessing simulatorIrtJv)
 
 TARGET_LINK_LIBRARIES(sim simulatorIrtJv)
 TARGET_LINK_LIBRARIES(sim ${Boost_PROGRAM_OPTIONS_LIBRARY})
@@ -85,8 +81,6 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
 
 ################################################################################
 INSTALL(TARGETS sim
-        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-INSTALL(TARGETS postprocessing
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 INSTALL(TARGETS convert_stl_files_to_code
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
