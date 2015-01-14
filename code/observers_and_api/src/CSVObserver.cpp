@@ -26,6 +26,11 @@ std::function<void()> CSVObserver::get_serializer(const std::vector<double>& , c
     return [](){};
 }
 
+std::function<void()> CSVObserver::get_serializer(const std::vector<std::vector<double> >& , const std::vector<std::string>& , const std::string& )
+{
+    return [](){};
+}
+
 std::function<void()> CSVObserver::get_initializer(const double , const std::vector<std::string>& , const std::string& name)
 {
     return [this,name](){os << name;};
@@ -37,6 +42,11 @@ std::function<void()> CSVObserver::get_initializer(const std::string& , const st
 }
 
 std::function<void()> CSVObserver::get_initializer(const std::vector<double>& , const std::vector<std::string>& , const std::string& )
+{
+    return [](){};
+}
+
+std::function<void()> CSVObserver::get_initializer(const std::vector<std::vector<double> >& , const std::vector<std::string>& , const std::string& )
 {
     return [](){};
 }
