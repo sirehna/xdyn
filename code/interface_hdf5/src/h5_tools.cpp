@@ -152,6 +152,20 @@ H5::DataSet H5_Tools::createDataSet(
     }
 }
 
+std::string H5_Tools::join(const std::vector<std::string>&v, const std::string& delim)
+{
+    std::ostringstream s;
+    for (std::vector<std::string>::const_iterator it = v.begin(); it != v.end(); ++it)
+    {
+        if (it != v.begin())
+        {
+            s << delim;
+        }
+        s << *it;
+    }
+    return s.str();
+}
+
 H5::DataSpace H5_Tools::createDataSpace1DUnlimited()
 {
     const hsize_t dims[1] = {1};

@@ -301,3 +301,14 @@ TEST_F(H5InterfaceTest, should_be_able_to_perform_inplace_string_replacement)
     ASSERT_EQ("a?? a?? def",H5_Tools::replaceStringInPlace(input,"bc","??"));
     ASSERT_EQ("a?? a?? def",input);
 }
+
+TEST_F(H5InterfaceTest, should_be_able_to_join_group_names)
+{
+    std::vector<std::string> gg;
+    gg.push_back("a");
+    gg.push_back("b");
+    ASSERT_EQ("a/b",H5_Tools::join(gg,"/"));
+    gg.push_back("c");
+    ASSERT_EQ("a/b/c",H5_Tools::join(gg,"/"));
+}
+

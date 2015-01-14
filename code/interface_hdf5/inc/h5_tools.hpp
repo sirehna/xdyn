@@ -1,6 +1,8 @@
 #ifndef H5_TOOLS_HPP
 #define H5_TOOLS_HPP
 
+#include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include "H5Cpp.h"
@@ -34,6 +36,8 @@ namespace H5_Tools
             const std::string& search,
             const std::string& replace);
 
+    std::string join(const std::vector<std::string>&v, const std::string& delim);
+
     H5::DataSpace createDataSpace1DUnlimited();
 
     H5::DataSet createDataSet(
@@ -53,5 +57,6 @@ namespace H5_Tools
             const std::string& datasetName,
             const std::string& stringToWrite);
 }
+
 
 #endif
