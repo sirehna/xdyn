@@ -27,15 +27,15 @@ class CsvObserver : public Observer
         std::ofstream os;
         using Observer::get_serializer;
         using Observer::get_initializer;
-        std::function<void()> get_serializer(const double val, const std::vector<std::string>& where, const std::string& name);
-        std::function<void()> get_serializer(const std::string& val, const std::vector<std::string>& where, const std::string& name);
-        std::function<void()> get_serializer(const std::vector<double>& val, const std::vector<std::string>& where, const std::string& name);
-        std::function<void()> get_serializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>& where, const std::string& name);
+        std::function<void()> get_serializer(const double val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name);
+        std::function<void()> get_serializer(const std::string& val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name);
+        std::function<void()> get_serializer(const std::vector<double>& val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name);
+        std::function<void()> get_serializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name);
 
-        std::function<void()> get_initializer(const double val, const std::vector<std::string>& where, const std::string& name);
-        std::function<void()> get_initializer(const std::string& val, const std::vector<std::string>& where, const std::string& name);
-        std::function<void()> get_initializer(const std::vector<double>& val, const std::vector<std::string>& where, const std::string& name);
-        std::function<void()> get_initializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>& where, const std::string& name);
+        std::function<void()> get_initializer(const double val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name);
+        std::function<void()> get_initializer(const std::string& val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name);
+        std::function<void()> get_initializer(const std::vector<double>& val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name);
+        std::function<void()> get_initializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name);
 };
 
 #endif /* CSVOBSERVER_HPP_ */

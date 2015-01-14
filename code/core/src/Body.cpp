@@ -138,21 +138,21 @@ Eigen::Vector3d Body::get_pqr(const StateType& x) const
 
 void Body::feed(const StateType& x, Observer& observer) const
 {
-    std::vector<std::string> where;
-    where.push_back(states.name);
-    observer.write(*_X(x,idx),where,std::string("x(")+states.name+")");
-    observer.write(*_Y(x,idx),where,std::string("y(")+states.name+")");
-    observer.write(*_Z(x,idx),where,std::string("z(")+states.name+")");
-    observer.write(*_U(x,idx),where,std::string("u(")+states.name+")");
-    observer.write(*_V(x,idx),where,std::string("v(")+states.name+")");
-    observer.write(*_W(x,idx),where,std::string("w(")+states.name+")");
-    observer.write(*_P(x,idx),where,std::string("p(")+states.name+")");
-    observer.write(*_Q(x,idx),where,std::string("q(")+states.name+")");
-    observer.write(*_R(x,idx),where,std::string("r(")+states.name+")");
-    observer.write(*_QR(x,idx),where,std::string("qr(")+states.name+")");
-    observer.write(*_QI(x,idx),where,std::string("qi(")+states.name+")");
-    observer.write(*_QJ(x,idx),where,std::string("qj(")+states.name+")");
-    observer.write(*_QK(x,idx),where,std::string("qk(")+states.name+")");
+    std::vector<std::string> address;
+    address.push_back("states");
+    observer.write(*_X(x,idx),address,std::vector<std::string>{states.name,"X"},std::string("x(")+states.name+")");
+    observer.write(*_Y(x,idx),address,std::vector<std::string>{states.name,"Y"},std::string("y(")+states.name+")");
+    observer.write(*_Z(x,idx),address,std::vector<std::string>{states.name,"Z"},std::string("z(")+states.name+")");
+    observer.write(*_U(x,idx),address,std::vector<std::string>{states.name,"U"},std::string("u(")+states.name+")");
+    observer.write(*_V(x,idx),address,std::vector<std::string>{states.name,"V"},std::string("v(")+states.name+")");
+    observer.write(*_W(x,idx),address,std::vector<std::string>{states.name,"W"},std::string("w(")+states.name+")");
+    observer.write(*_P(x,idx),address,std::vector<std::string>{states.name,"P"},std::string("p(")+states.name+")");
+    observer.write(*_Q(x,idx),address,std::vector<std::string>{states.name,"Q"},std::string("q(")+states.name+")");
+    observer.write(*_R(x,idx),address,std::vector<std::string>{states.name,"R"},std::string("r(")+states.name+")");
+    observer.write(*_QR(x,idx),address,std::vector<std::string>{states.name,"Quat","Qr"},std::string("qr(")+states.name+")");
+    observer.write(*_QI(x,idx),address,std::vector<std::string>{states.name,"Quat","Qi"},std::string("qi(")+states.name+")");
+    observer.write(*_QJ(x,idx),address,std::vector<std::string>{states.name,"Quat","Qj"},std::string("qj(")+states.name+")");
+    observer.write(*_QK(x,idx),address,std::vector<std::string>{states.name,"Quat","Qk"},std::string("qk(")+states.name+")");
 }
 
 std::string Body::get_name() const

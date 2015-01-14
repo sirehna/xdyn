@@ -11,42 +11,42 @@ CsvObserver::CsvObserver(const std::string& filename, const std::vector<std::str
 {
 }
 
-std::function<void()> CsvObserver::get_serializer(const double val, const std::vector<std::string>& , const std::string& )
+std::function<void()> CsvObserver::get_serializer(const double val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& )
 {
     return [this,val](){os << val;};
 }
 
-std::function<void()> CsvObserver::get_serializer(const std::string& val, const std::vector<std::string>& , const std::string& )
+std::function<void()> CsvObserver::get_serializer(const std::string& val, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& )
 {
     return [this,val](){os << val;};
 }
 
-std::function<void()> CsvObserver::get_serializer(const std::vector<double>& , const std::vector<std::string>& , const std::string& )
+std::function<void()> CsvObserver::get_serializer(const std::vector<double>&, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& )
 {
     return [](){};
 }
 
-std::function<void()> CsvObserver::get_serializer(const std::vector<std::vector<double> >& , const std::vector<std::string>& , const std::string& )
+std::function<void()> CsvObserver::get_serializer(const std::vector<std::vector<double> >&, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& )
 {
     return [](){};
 }
 
-std::function<void()> CsvObserver::get_initializer(const double , const std::vector<std::string>& , const std::string& name)
+std::function<void()> CsvObserver::get_initializer(const double , const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name)
 {
     return [this,name](){os << name;};
 }
 
-std::function<void()> CsvObserver::get_initializer(const std::string& , const std::vector<std::string>& , const std::string& name)
+std::function<void()> CsvObserver::get_initializer(const std::string&, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& name)
 {
     return [this,name](){os << name;};
 }
 
-std::function<void()> CsvObserver::get_initializer(const std::vector<double>& , const std::vector<std::string>& , const std::string& )
+std::function<void()> CsvObserver::get_initializer(const std::vector<double>&, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& )
 {
     return [](){};
 }
 
-std::function<void()> CsvObserver::get_initializer(const std::vector<std::vector<double> >& , const std::vector<std::string>& , const std::string& )
+std::function<void()> CsvObserver::get_initializer(const std::vector<std::vector<double> >&, const std::vector<std::string>&, const std::vector<std::string>&, const std::string& )
 {
     return [](){};
 }
