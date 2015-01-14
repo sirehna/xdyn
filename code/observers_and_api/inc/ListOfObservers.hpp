@@ -20,7 +20,7 @@ class YamlOutput2;
 class ListOfObservers
 {
     public:
-        ListOfObservers(const std::string& basename, const std::vector<YamlOutput2>& yaml);
+        ListOfObservers(const std::vector<YamlOutput2>& yaml);
         void observe(const Sim& sys, const double t);
 
     private:

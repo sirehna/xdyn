@@ -40,7 +40,7 @@ int main(int argc, char** argv)
         if (input_data.wave_output.empty()) copy_stream(dev_null_buffer, ws);
         //SimCsvObserver observer(std::cout, ws);
         //SimHdf5Observer observer(input_data.output_filename, sys);
-        ListOfObservers observer(input_data.basename, parse_output(yaml_reader.get_contents()));
+        ListOfObservers observer(parse_output(yaml_reader.get_contents()));
         if (input_data.solver=="euler")
         {
             ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);

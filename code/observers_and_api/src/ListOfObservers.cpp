@@ -9,12 +9,12 @@
 #include "ListOfObservers.hpp"
 #include "YamlOutput.hpp"
 
-ListOfObservers::ListOfObservers(const std::string& basename, const std::vector<YamlOutput2>& yaml) :
+ListOfObservers::ListOfObservers(const std::vector<YamlOutput2>& yaml) :
 observers()
 {
     for (auto output:yaml)
     {
-        if (output.format == "csv")  observers.push_back(ObserverPtr(new CSVObserver(basename + ".csv",output.data)));
+        if (output.format == "csv")  observers.push_back(ObserverPtr(new CSVObserver(output.filename,output.data)));
 //        if (output.first == "hdf5") observers.push_back(ObserverPtr(new HDF5Observer(output.second)));
     }
 }

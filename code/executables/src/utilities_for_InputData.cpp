@@ -60,7 +60,6 @@ po::options_description get_options_description(InputData& input_data)
         ("output,o",   po::value<std::string>(&input_data.output_filename),              "Name of the output HDF5 file where all computed data will be exported")
         ("waves,w",    po::value<std::string>(&input_data.wave_output),                  "Name of the YAML output file where the wave heights will be stored ('output' section of the YAML file)")
         ("commands,c", po::value<std::string>(&input_data.command_file),                 "Name of the YAML file storing the commands for controlled forces")
-        ("basename,b", po::value<std::string>(&input_data.basename),                     "Basename of the outputs (eg. basename=foo => foo.csv, foo.hdf5 will be generated)")
     ;
     return desc;
 }
