@@ -11,6 +11,6 @@ YamlOutput::YamlOutput() : projected_in_frame(), axes()
 {
 }
 
-YamlOutput2::YamlOutput2() : format(), data()
+YamlOutput2::YamlOutput2() : filename(), format(), data()
 {
 }

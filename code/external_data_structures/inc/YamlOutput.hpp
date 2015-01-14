@@ -22,6 +22,7 @@ struct YamlOutput
 struct YamlOutput2
 {
     YamlOutput2();
+    std::string filename;
     std::string format;
     std::vector<std::string> data;
 };

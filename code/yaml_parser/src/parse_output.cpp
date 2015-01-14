@@ -12,8 +12,9 @@
 void operator >> (const YAML::Node& node, YamlOutput2& f);
 void operator >> (const YAML::Node& node, YamlOutput2& f)
 {
-    node["format"] >> f.format;
-    node["data"] >> f.data;
+    node["filename"] >> f.filename;
+    node["format"]   >> f.format;
+    node["data"]     >> f.data;
 }
 
 std::vector<YamlOutput2> parse_output(const std::string yaml)
