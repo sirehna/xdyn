@@ -25,9 +25,7 @@ namespace test_data
     std::string anthineas_fast_hydrostatic_test();
     std::string anthineas_propulsion();
     std::string anthineas_waves_test();
-    std::string anthineas_post_processing();
     std::string anthineas_diffraction();
-    std::string outputs();
     std::string waves();
     std::string simple_waves();
     std::string cube_in_waves();

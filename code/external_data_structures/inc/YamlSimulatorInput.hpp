@@ -21,7 +21,6 @@ struct YamlSimulatorInput
     YamlEnvironmentalConstants environmental_constants;
     std::vector<YamlModel> environment;
     std::vector<YamlBody> bodies;
-    std::vector<YamlPoint> points;
 };
 
 #endif /* YAMLSIMULATORINPUT_HPP_ */

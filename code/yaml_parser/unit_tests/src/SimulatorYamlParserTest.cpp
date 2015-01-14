@@ -224,24 +224,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_from_hdb_file)
     ASSERT_EQ("anthineas.hdb", input.bodies.front().dynamics.added_mass.hdb_filename);
 }
 
-TEST_F(SimulatorYamlParserTest, can_parse_points)
-{
-    const std::vector<YamlPoint> points = yaml.points;
-    ASSERT_EQ(2, points.size());
-
-    ASSERT_EQ("P", points.at(0).name);
-    ASSERT_EQ("body 1", points.at(0).frame);
-    ASSERT_DOUBLE_EQ(10, points.at(0).x);
-    ASSERT_DOUBLE_EQ(10, points.at(0).y);
-    ASSERT_DOUBLE_EQ(20, points.at(0).z);
-
-    ASSERT_EQ("O", points.at(1).name);
-    ASSERT_EQ("NED", points.at(1).frame);
-    ASSERT_DOUBLE_EQ(0.03, points.at(1).x);
-    ASSERT_DOUBLE_EQ(-0.7, points.at(1).y);
-    ASSERT_DOUBLE_EQ(300, points.at(1).z);
-}
-
 TEST_F(SimulatorYamlParserTest, should_not_throw_even_if_no_mesh_is_defined)
 {
     ASSERT_NO_THROW(SimulatorYamlParser(test_data::falling_ball_example()).parse());

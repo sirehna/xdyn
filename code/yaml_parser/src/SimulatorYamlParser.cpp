@@ -34,7 +34,5 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
     PARSE_OPTIONAL_KEY("bodies", ret.bodies);
     node["rotations convention"] >> ret.rotations;
     PARSE_OPTIONAL_KEY("environment models", ret.environment);
-    PARSE_OPTIONAL_KEY("points", ret.points)
-
     return ret;
 }

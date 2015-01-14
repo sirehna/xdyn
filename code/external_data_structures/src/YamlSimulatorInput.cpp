@@ -10,7 +10,6 @@
 YamlSimulatorInput::YamlSimulatorInput() : rotations(YamlRotation()),
                                            environmental_constants(YamlEnvironmentalConstants()),
                                            environment(std::vector<YamlModel>()),
-                                           bodies(std::vector<YamlBody>()),
-                                           points(std::vector<YamlPoint>())
+                                           bodies(std::vector<YamlBody>())
 {
 }
