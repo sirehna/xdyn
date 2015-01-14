@@ -5,10 +5,12 @@
  *      Author: cady
  */
 
+#include "h5_version.hpp"
 #include "Hdf5Observer.hpp"
 
-Hdf5Observer::Hdf5Observer(const std::string& , const std::vector<std::string>& d) : Observer(d)
+Hdf5Observer::Hdf5Observer(const std::string& filename, const std::vector<std::string>& d) : Observer(d), h5File(H5::H5File(filename,H5F_ACC_TRUNC))
 {
+    h5_writeFileDescription(h5File);
 }
 
 std::function<void()> Hdf5Observer::get_serializer(const double, const std::vector<std::string>& , const std::string& )

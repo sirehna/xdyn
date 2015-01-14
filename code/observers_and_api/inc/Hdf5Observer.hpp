@@ -2,6 +2,7 @@
 #define HDF5OBSERVER_HPP_
 
 #include "Observer.hpp"
+#include "H5Cpp.h"
 
 class Hdf5Observer : public Observer
 {
@@ -24,6 +25,8 @@ class Hdf5Observer : public Observer
         std::function<void()> get_initializer(const std::string& val, const std::vector<std::string>& where, const std::string& name);
         std::function<void()> get_initializer(const std::vector<double>& val, const std::vector<std::string>& where, const std::string& name);
         std::function<void()> get_initializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>& where, const std::string& name);
+
+        H5::H5File h5File;
 };
 
 #endif
