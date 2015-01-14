@@ -92,7 +92,14 @@ H5::Group H5_Tools::createMissingGroups(
         const std::string& datasetName)
 {
     const std::vector<std::string> tokens = split(datasetName, "/");
-    const size_t nTokens = tokens.size();
+    return createMissingGroups(file, tokens);
+}
+
+H5::Group H5_Tools::createMissingGroups(
+        const H5::H5File& file,
+        const std::vector<std::string>& datasetName)
+{
+    const size_t nTokens = datasetName.size();
     std::string current;
     if (nTokens<(size_t)2)
     {
@@ -102,7 +109,7 @@ H5::Group H5_Tools::createMissingGroups(
     {
         for (size_t i=0;i<(nTokens-2);++i)
         {
-            const std::string& currentGroup = tokens.at(i);
+            const std::string& currentGroup = datasetName.at(i);
             current += "/"+currentGroup;
             if (H5Lexists(file.getId(), current.c_str(), H5P_DEFAULT)<=0)
             {
@@ -110,7 +117,7 @@ H5::Group H5_Tools::createMissingGroups(
             }
         }
     }
-    const std::string& currentGroup = tokens.at(nTokens-2);
+    const std::string& currentGroup = datasetName.at(nTokens-2);
     current += "/"+currentGroup;
     if (H5Lexists(file.getId(), current.c_str(), H5P_DEFAULT)<=0)
     {

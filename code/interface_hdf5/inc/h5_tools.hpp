@@ -44,6 +44,10 @@ namespace H5_Tools
             const H5::H5File& file,
             const std::string& datasetName);
 
+    H5::Group createMissingGroups(
+            const H5::H5File& file,
+            const std::vector<std::string>& datasetName);
+
     void writeString(
             const H5::H5File& file,
             const std::string& datasetName,
