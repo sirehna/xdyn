@@ -15,12 +15,12 @@
 
 typedef std::tr1::shared_ptr<Observer> ObserverPtr;
 
-class YamlOutput2;
+class YamlOutput;
 
 class ListOfObservers
 {
     public:
-        ListOfObservers(const std::vector<YamlOutput2>& yaml);
+        ListOfObservers(const std::vector<YamlOutput>& yaml);
         void observe(const Sim& sys, const double t);
 
     private:

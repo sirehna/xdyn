@@ -13,7 +13,7 @@
 
 #include "YamlOutput.hpp"
 
-std::vector<YamlOutput2> parse_output(const std::string yaml);
+std::vector<YamlOutput> parse_output(const std::string yaml);
 
 
 #endif /* PARSE_OUTPUT_HPP_ */

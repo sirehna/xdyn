@@ -9,17 +9,17 @@
 
 #include "parse_output.hpp"
 
-void operator >> (const YAML::Node& node, YamlOutput2& f);
-void operator >> (const YAML::Node& node, YamlOutput2& f)
+void operator >> (const YAML::Node& node, YamlOutput& f);
+void operator >> (const YAML::Node& node, YamlOutput& f)
 {
     node["filename"] >> f.filename;
     node["format"]   >> f.format;
     node["data"]     >> f.data;
 }
 
-std::vector<YamlOutput2> parse_output(const std::string yaml)
+std::vector<YamlOutput> parse_output(const std::string yaml)
 {
-    std::vector<YamlOutput2> ret;
+    std::vector<YamlOutput> ret;
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;

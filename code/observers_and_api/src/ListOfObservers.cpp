@@ -9,7 +9,7 @@
 #include "ListOfObservers.hpp"
 #include "YamlOutput.hpp"
 
-ListOfObservers::ListOfObservers(const std::vector<YamlOutput2>& yaml) :
+ListOfObservers::ListOfObservers(const std::vector<YamlOutput>& yaml) :
 observers()
 {
     for (auto output:yaml)

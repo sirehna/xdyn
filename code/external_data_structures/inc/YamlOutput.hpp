@@ -14,14 +14,6 @@
 struct YamlOutput
 {
     YamlOutput();
-    virtual ~YamlOutput(){}
-    std::string projected_in_frame;
-    std::vector<std::string> axes;
-};
-
-struct YamlOutput2
-{
-    YamlOutput2();
     std::string filename;
     std::string format;
     std::vector<std::string> data;

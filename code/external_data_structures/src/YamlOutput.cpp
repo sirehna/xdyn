@@ -7,10 +7,6 @@
 
 #include "YamlOutput.hpp"
 
-YamlOutput::YamlOutput() : projected_in_frame(), axes()
-{
-}
-
-YamlOutput2::YamlOutput2() : filename(), format(), data()
+YamlOutput::YamlOutput() : filename(), format(), data()
 {
 }
