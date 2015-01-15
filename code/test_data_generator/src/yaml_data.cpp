@@ -1931,3 +1931,13 @@ std::string test_data::anthineas_radiation_damping()
        << "    \n";
         return ss.str();
 }
+
+std::string test_data::simple_track_keeping()
+{
+    std::stringstream ss;
+    ss << "name: controller\n"
+       << "model: simple heading controller\n"
+       << "ksi: 0.9\n"
+       << "Tp: {value: 4, unit: s}\n";
+    return ss.str();
+}
