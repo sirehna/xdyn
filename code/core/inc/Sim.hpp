@@ -78,7 +78,7 @@ class Sim
 
         StateType state;
 
-        void output(const StateType& x, Observer& obs) const;
+        void output(const StateType& x, Observer& obs, double t) const;
 
     private:
         ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);

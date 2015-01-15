@@ -22,7 +22,7 @@ typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 struct EnvironmentAndFrames
 {
     EnvironmentAndFrames();
-    void feed(Observer& observer) const;
+    void feed(Observer& observer, double t) const;
     SurfaceElevationPtr w;
     ssc::kinematics::KinematicsPtr k;
     double rho;
