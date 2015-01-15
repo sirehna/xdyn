@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "Csv_Observer.hpp"
+#include "CsvObserver.hpp"
 
 CsvObserver::CsvObserver(const std::string& filename, const std::vector<std::string>& d) : Observer(d), add_coma(false), os(filename)
 {
