@@ -7,6 +7,8 @@
 
 
 #include "SimpleTrackKeepingControllerTest.hpp"
+#include "SimpleTrackKeepingController.hpp"
+#include "yaml_data.hpp"
 
 SimpleTrackKeepingControllerTest::SimpleTrackKeepingControllerTest() : a(ssc::random_data_generator::DataGenerator(545454))
 {
@@ -24,12 +26,12 @@ void SimpleTrackKeepingControllerTest::TearDown()
 {
 }
 
-TEST_F(SimpleTrackKeepingControllerTest, example)
+TEST_F(SimpleTrackKeepingControllerTest, parser)
 {
-//! [SimpleTrackKeepingControllerTest example]
-//! [SimpleTrackKeepingControllerTest example]
-//! [SimpleTrackKeepingControllerTest expected output]
-//! [SimpleTrackKeepingControllerTest expected output]
+    const auto k = SimpleTrackKeepingController::parse(test_data::simple_track_keeping());
+    ASSERT_DOUBLE_EQ(4, k.Tp);
+    ASSERT_DOUBLE_EQ(0.9, k.ksi);
+    ASSERT_EQ("controller", k.name);
 }
 
 
