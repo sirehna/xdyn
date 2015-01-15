@@ -7,6 +7,7 @@
 
 #include <ssc/kinematics.hpp>
 
+#include "SurfaceElevationInterface.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "Observer.hpp"
 

@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include "SurfaceElevationGrid.hpp"
+
 class Sim;
 
 struct DataAddressing
@@ -44,8 +46,11 @@ class Observer
     protected:
 
         virtual std::function<void()> get_serializer(const double val, const DataAddressing& address) = 0;
-
         virtual std::function<void()> get_initializer(const double val, const DataAddressing& address) = 0;
+
+        virtual std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address) = 0;
+        virtual std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address) = 0;
+
         virtual void flush_after_initialization() = 0;
         virtual void flush_after_write() = 0;
         virtual void flush_value() = 0;

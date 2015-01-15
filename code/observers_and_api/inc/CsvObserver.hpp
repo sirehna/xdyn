@@ -10,6 +10,8 @@
 
 #include <fstream>
 
+
+#include "SurfaceElevationGrid.hpp"
 #include "Observer.hpp"
 
 class CsvObserver : public Observer
@@ -27,8 +29,13 @@ class CsvObserver : public Observer
         std::ofstream os;
         using Observer::get_serializer;
         using Observer::get_initializer;
+
         std::function<void()> get_serializer(const double val, const DataAddressing& address);
         std::function<void()> get_initializer(const double val, const DataAddressing& address);
+
+        std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address);
+        std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address);
+
 };
 
 #endif /* CSVOBSERVER_HPP_ */

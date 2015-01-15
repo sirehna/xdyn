@@ -59,6 +59,16 @@ std::function<void()> Hdf5Observer::get_initializer(const double , const DataAdd
            };
 }
 
+std::function<void()> Hdf5Observer::get_serializer(const SurfaceElevationGrid&, const DataAddressing&)
+{
+    return [](){};
+}
+
+std::function<void()> Hdf5Observer::get_initializer(const SurfaceElevationGrid&, const DataAddressing&)
+{
+    return [](){};
+}
+
 void Hdf5Observer::flush_after_initialization()
 {
     for (const auto addressing:address2columns)

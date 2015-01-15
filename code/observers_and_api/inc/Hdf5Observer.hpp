@@ -30,8 +30,12 @@ class Hdf5Observer : public Observer
 
         using Observer::get_serializer;
         using Observer::get_initializer;
+
         std::function<void()> get_serializer(const double val, const DataAddressing& address);
         std::function<void()> get_initializer(const double val, const DataAddressing& address);
+
+        std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address);
+        std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address);
 
         H5::H5File h5File;
         std::string basename;
