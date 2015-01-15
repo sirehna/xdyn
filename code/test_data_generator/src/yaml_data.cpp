@@ -427,7 +427,11 @@ std::string test_data::falling_ball_example()
        << "        g: {value: 9.81, unit: m/s^2}\n"
        << "output:\n"
        << "   - format: csv\n"
-       << "     data: [x(ball)]\n";
+       << "     filename: falling_ball.csv\n"
+       << "     data: [x(ball)]\n"
+       << "   - format: hdf5\n"
+       << "     filename: falling_ball.h5\n"
+       << "     data: ['x(ball)','y(ball)','z(ball)','Fz(gravity,ball)']\n";
     return ss.str();
 }
 
