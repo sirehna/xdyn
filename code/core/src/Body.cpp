@@ -138,21 +138,19 @@ Eigen::Vector3d Body::get_pqr(const StateType& x) const
 
 void Body::feed(const StateType& x, Observer& observer) const
 {
-    std::vector<std::string> address;
-    address.push_back("states");
-    observer.write(*_X(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"X"},std::string("x(")+states.name+")"));
-    observer.write(*_Y(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"Y"},std::string("y(")+states.name+")"));
-    observer.write(*_Z(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"Z"},std::string("z(")+states.name+")"));
-    observer.write(*_U(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"U"},std::string("u(")+states.name+")"));
-    observer.write(*_V(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"V"},std::string("v(")+states.name+")"));
-    observer.write(*_W(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"W"},std::string("w(")+states.name+")"));
-    observer.write(*_P(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"P"},std::string("p(")+states.name+")"));
-    observer.write(*_Q(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"Q"},std::string("q(")+states.name+")"));
-    observer.write(*_R(x,idx), DataAddressing(address,std::vector<std::string>{states.name,"R"},std::string("r(")+states.name+")"));
-    observer.write(*_QR(x,idx),DataAddressing(address,std::vector<std::string>{states.name,"Quat","Qr"},std::string("qr(")+states.name+")"));
-    observer.write(*_QI(x,idx),DataAddressing(address,std::vector<std::string>{states.name,"Quat","Qi"},std::string("qi(")+states.name+")"));
-    observer.write(*_QJ(x,idx),DataAddressing(address,std::vector<std::string>{states.name,"Quat","Qj"},std::string("qj(")+states.name+")"));
-    observer.write(*_QK(x,idx),DataAddressing(address,std::vector<std::string>{states.name,"Quat","Qk"},std::string("qk(")+states.name+")"));
+    observer.write(*_X(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"X"},std::string("x(")+states.name+")"));
+    observer.write(*_Y(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Y"},std::string("y(")+states.name+")"));
+    observer.write(*_Z(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Z"},std::string("z(")+states.name+")"));
+    observer.write(*_U(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"U"},std::string("u(")+states.name+")"));
+    observer.write(*_V(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"V"},std::string("v(")+states.name+")"));
+    observer.write(*_W(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"W"},std::string("w(")+states.name+")"));
+    observer.write(*_P(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"P"},std::string("p(")+states.name+")"));
+    observer.write(*_Q(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Q"},std::string("q(")+states.name+")"));
+    observer.write(*_R(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"R"},std::string("r(")+states.name+")"));
+    observer.write(*_QR(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qr"},std::string("qr(")+states.name+")"));
+    observer.write(*_QI(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qi"},std::string("qi(")+states.name+")"));
+    observer.write(*_QJ(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qj"},std::string("qj(")+states.name+")"));
+    observer.write(*_QK(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qk"},std::string("qk(")+states.name+")"));
 }
 
 std::string Body::get_name() const

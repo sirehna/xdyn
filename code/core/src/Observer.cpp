@@ -16,8 +16,7 @@ Observer::Observer(const std::vector<std::string>& data_) : initialized(false), 
 
 void Observer::observe(const Sim& sys, const double t)
 {
-    write(t, DataAddressing(std::vector<std::string>(1,"states"), std::vector<std::string>(1,"t"), "t"));
-    //write(t, DataAddressing(std::vector<std::string>(1,"efforts"), std::vector<std::string>(1,"t"), "t"));
+    write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     sys.output(sys.state,*this, t);
     initialize_everything_if_necessary();
     serialize_everything();

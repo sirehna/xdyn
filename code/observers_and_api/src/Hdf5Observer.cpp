@@ -1,10 +1,3 @@
-/*
- * Hdf5Observer.cpp
- *
- *  Created on: Jan 12, 2015
- *      Author: cady
- */
-
 #include "h5_version.hpp"
 #include "h5_tools.hpp"
 #include "Hdf5Observer.hpp"
@@ -16,11 +9,8 @@ Hdf5Addressing::Hdf5Addressing(
         const DataAddressing& addressing,
         const std::string& basename) :
             name(addressing.name),
-            address(H5_Tools::ensureStringStartsWithAPattern(
-                        basename +
-                        H5_Tools::ensureStringStartsWithAPattern(H5_Tools::join(addressing.address,"/"),"/") +
-                        H5_Tools::ensureStringStartsWithAPattern(H5_Tools::join(addressing.column,"/"),"/"),"/")),
-            column(addressing.column)
+            address(H5_Tools::ensureStringStartsWithAPattern(basename,"/") +
+                    H5_Tools::ensureStringStartsWithAPattern(H5_Tools::join(addressing.address,"/"),"/"))
 {
 }
 
@@ -83,6 +73,7 @@ void Hdf5Observer::flush_after_initialization()
         else
         {
             /* No to create a dynamic coumpound datatype*/
+            //throw should not append
         }
     }
 }

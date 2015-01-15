@@ -36,13 +36,12 @@ ssc::kinematics::Wrench ForceModel::get() const
 
 void ForceModel::feed(Observer& observer) const
 {
-    std::vector<std::string> position(1,"efforts");
-    observer.write(force.X(),DataAddressing(position,std::vector<std::string>{body_name,force_name,"Fx"},std::string("Fx(")+force_name+","+body_name+")"));
-    observer.write(force.Y(),DataAddressing(position,std::vector<std::string>{body_name,force_name,"Fy"},std::string("Fy(")+force_name+","+body_name+")"));
-    observer.write(force.Z(),DataAddressing(position,std::vector<std::string>{body_name,force_name,"Fz"},std::string("Fz(")+force_name+","+body_name+")"));
-    observer.write(force.K(),DataAddressing(position,std::vector<std::string>{body_name,force_name,"Mx"},std::string("Mx(")+force_name+","+body_name+")"));
-    observer.write(force.M(),DataAddressing(position,std::vector<std::string>{body_name,force_name,"My"},std::string("My(")+force_name+","+body_name+")"));
-    observer.write(force.N(),DataAddressing(position,std::vector<std::string>{body_name,force_name,"Mz"},std::string("Mz(")+force_name+","+body_name+")"));
+    observer.write(force.X(),DataAddressing(std::vector<std::string>{"efforts",body_name,force_name,"Fx"},std::string("Fx(")+force_name+","+body_name+")"));
+    observer.write(force.Y(),DataAddressing(std::vector<std::string>{"efforts",body_name,force_name,"Fy"},std::string("Fy(")+force_name+","+body_name+")"));
+    observer.write(force.Z(),DataAddressing(std::vector<std::string>{"efforts",body_name,force_name,"Fz"},std::string("Fz(")+force_name+","+body_name+")"));
+    observer.write(force.K(),DataAddressing(std::vector<std::string>{"efforts",body_name,force_name,"Mx"},std::string("Mx(")+force_name+","+body_name+")"));
+    observer.write(force.M(),DataAddressing(std::vector<std::string>{"efforts",body_name,force_name,"My"},std::string("My(")+force_name+","+body_name+")"));
+    observer.write(force.N(),DataAddressing(std::vector<std::string>{"efforts",body_name,force_name,"Mz"},std::string("Mz(")+force_name+","+body_name+")"));
     extra_observations(observer);
 }
 

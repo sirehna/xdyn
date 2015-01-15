@@ -19,13 +19,11 @@ struct DataAddressing
 {
     std::string name;
     std::vector<std::string> address;
-    std::vector<std::string> column;
-    DataAddressing():name(),address(),column(){};
+    DataAddressing():name(),address(){};
     DataAddressing(
             const std::vector<std::string>& address_,
-            const std::vector<std::string>& column_,
             const std::string& name_):
-        name(name_),address(address_),column(column_){};
+        name(name_),address(address_){};
 };
 
 class Observer
@@ -60,8 +58,8 @@ class Observer
 
         bool initialized;
         std::vector<std::string> stuff_to_write;
-        std::map<std::string,std::function<void()> > serialize;
-        std::map<std::string,std::function<void()> > initialize;
+        std::map<std::string, std::function<void()> > serialize;
+        std::map<std::string, std::function<void()> > initialize;
 };
 
 #endif  /* OBSERVER_HPP_ */

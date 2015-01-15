@@ -11,8 +11,7 @@ struct Hdf5Addressing
 {
     std::string name;
     std::string address;
-    std::vector<std::string> column;
-    Hdf5Addressing():name(),address(),column(){};
+    Hdf5Addressing():name(),address(){};
     Hdf5Addressing(
             const DataAddressing& addressing,
             const std::string& basename=""
