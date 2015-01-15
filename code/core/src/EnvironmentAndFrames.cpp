@@ -6,12 +6,24 @@
  */
 
 #include <ssc/kinematics.hpp>
+#include <ssc/exception_handling.hpp>
 
 #include "SurfaceElevationInterface.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "Observer.hpp"
 
 using namespace ssc::kinematics;
+
+
+class EnvironmentAndFramesException: public ::ssc::exception_handling::Exception
+{
+    public:
+    EnvironmentAndFramesException(const char* s) :
+            ::ssc::exception_handling::Exception(s)
+        {
+        }
+};
+
 
 EnvironmentAndFrames::EnvironmentAndFrames() : w(),
                                                k(KinematicsPtr(new Kinematics())),
