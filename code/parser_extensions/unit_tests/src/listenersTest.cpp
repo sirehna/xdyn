@@ -9,6 +9,8 @@
 #include "listeners.hpp"
 #include "yaml_data.hpp"
 
+#define EPS (1E-14)
+
 listenersTest::listenersTest() : a(ssc::random_data_generator::DataGenerator(54545))
 {
 }
@@ -52,3 +54,32 @@ TEST_F(listenersTest, example)
     //! [listenersTest listen_to_file_example]
 }
 
+TEST_F(listenersTest, can_parse_simple_track_keeping_commands)
+{
+    auto ds = listen_to_file(test_data::controlled_forces());
+    ds.check_in("listenersTest (can_parse_simple_track_keeping_commands)");
+    ds.set<double>("t", 0);
+    ASSERT_NEAR(0.25, ds.get<double>("controller(psi_co)"),EPS);
+
+    ds.set<double>("t", 0.5);
+    ASSERT_NEAR(0.275, ds.get<double>("controller(psi_co)"),EPS);
+
+    ds.set<double>("t", 1);
+    ASSERT_NEAR(0.3, ds.get<double>("controller(psi_co)"),EPS);
+
+    ds.set<double>("t", 2);
+    ASSERT_NEAR(0.35, ds.get<double>("controller(psi_co)"),EPS);
+
+    ds.set<double>("t", 3);
+    ASSERT_NEAR(0.4, ds.get<double>("controller(psi_co)"),EPS);
+
+    ds.set<double>("t", 5);
+    ASSERT_NEAR(2./7., ds.get<double>("controller(psi_co)"),EPS);
+
+    ds.set<double>("t", 10);
+    ASSERT_NEAR(0, ds.get<double>("controller(psi_co)"), EPS);
+
+    ds.set<double>("t", 100);
+    ASSERT_NEAR(0, ds.get<double>("controller(psi_co)"), EPS);
+    ds.check_out();
+}

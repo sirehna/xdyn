@@ -1660,7 +1660,11 @@ std::string test_data::controlled_forces()
     ss << "- name: propeller\n"
           "  t: [0,1,3,10]\n"
           "  rpm: {unit: rad/s, values: [3, 30, 30, 40]}\n"
-          "  P/D: [1.064935,1.064935,1.064935,1.064935]\n";
+          "  P/D: [1.064935,1.064935,1.064935,1.064935]\n"
+          "- name: controller\n"
+          "  t: [0,1,3,10]\n"
+          "  psi_co: {unit: rad, values: [0.25, 0.30, 0.40, 0]}\n";
+
     return ss.str();
 }
 
