@@ -71,6 +71,9 @@ void Body::update_kinematics(StateType x, const KinematicsPtr& k) const
 
 void Body::update_body_states(const StateType& x)
 {
+    states.x = *_X(x,idx);
+    states.y = *_Y(x,idx);
+    states.z = *_Z(x,idx);
     states.u = *_U(x,idx);
     states.v = *_V(x,idx);
     states.w = *_W(x,idx);
