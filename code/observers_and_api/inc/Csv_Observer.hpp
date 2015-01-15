@@ -12,10 +12,10 @@
 
 #include "Observer.hpp"
 
-class CSVObserver : public Observer
+class CsvObserver : public Observer
 {
     public:
-        CSVObserver(const std::string& filename, const std::vector<std::string>& data);
+        CsvObserver(const std::string& filename, const std::vector<std::string>& data);
 
     private:
         void flush_after_initialization();

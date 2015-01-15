@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "CSVObserver.hpp"
+#include "Csv_Observer.hpp"
 #include "ListOfObservers.hpp"
 #include "YamlOutput.hpp"
 
@@ -14,7 +14,7 @@ observers()
 {
     for (auto output:yaml)
     {
-        if (output.format == "csv")  observers.push_back(ObserverPtr(new CSVObserver(output.filename,output.data)));
+        if (output.format == "csv")  observers.push_back(ObserverPtr(new CsvObserver(output.filename,output.data)));
 //        if (output.first == "hdf5") observers.push_back(ObserverPtr(new HDF5Observer(output.second)));
     }
 }
