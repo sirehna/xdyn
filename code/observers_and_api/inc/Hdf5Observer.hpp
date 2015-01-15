@@ -1,12 +1,23 @@
 #ifndef HDF5OBSERVER_HPP_
 #define HDF5OBSERVER_HPP_
 
-#include <set>
 #include <map>
 #include <string>
 #include <vector>
 #include "H5Cpp.h"
 #include "Observer.hpp"
+
+struct Hdf5Addressing
+{
+    std::string name;
+    std::string address;
+    std::vector<std::string> column;
+    Hdf5Addressing():name(),address(),column(){};
+    Hdf5Addressing(
+            const DataAddressing& addressing,
+            const std::string& basename=""
+            );
+};
 
 class Hdf5Observer : public Observer
 {
@@ -20,20 +31,14 @@ class Hdf5Observer : public Observer
 
         using Observer::get_serializer;
         using Observer::get_initializer;
-        std::function<void()> get_serializer(const double val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name);
-        std::function<void()> get_serializer(const std::string& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name);
-        std::function<void()> get_serializer(const std::vector<double>& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name);
-        std::function<void()> get_serializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name);
-
-        std::function<void()> get_initializer(const double val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name);
-        std::function<void()> get_initializer(const std::string& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name);
-        std::function<void()> get_initializer(const std::vector<double>& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name);
-        std::function<void()> get_initializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name);
+        std::function<void()> get_serializer(const double val, const DataAddressing& address);
+        std::function<void()> get_initializer(const double val, const DataAddressing& address);
 
         H5::H5File h5File;
         std::string basename;
-        std::set<std::string> datasetNames;
-        std::map<std::string,H5::DataSet> h5Dataset;
+        std::map<std::string, std::vector<Hdf5Addressing> > address2columns;
+        std::map<std::string,H5::DataSet> address2dataset;
+        std::map<std::string,H5::DataType> name2datatype;
 };
 
 #endif

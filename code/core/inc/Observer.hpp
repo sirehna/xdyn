@@ -15,6 +15,19 @@
 
 class Sim;
 
+struct DataAddressing
+{
+    std::string name;
+    std::vector<std::string> address;
+    std::vector<std::string> column;
+    DataAddressing():name(),address(),column(){};
+    DataAddressing(
+            const std::vector<std::string>& address_,
+            const std::vector<std::string>& column_,
+            const std::string& name_):
+        name(name_),address(address_),column(column_){};
+};
+
 class Observer
 {
     public:
@@ -24,25 +37,17 @@ class Observer
 
         template <typename T> void write(
                 const T& val,
-                const std::vector<std::string>& address,
-                const std::vector<std::string>& columnName,
-                const std::string& name)
+                const DataAddressing& address)
         {
-            serialize[name] = get_serializer(val, address, columnName, name);
-            initialize[name] = get_initializer(val, address, columnName, name);
+            initialize[address.name] = get_initializer(val, address);
+            serialize[address.name] = get_serializer(val, address);
         }
 
     protected:
 
-        virtual std::function<void()> get_serializer(const double val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name) = 0;
-        virtual std::function<void()> get_serializer(const std::string& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name) = 0;
-        virtual std::function<void()> get_serializer(const std::vector<double>& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name) = 0;
-        virtual std::function<void()> get_serializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name) = 0;
+        virtual std::function<void()> get_serializer(const double val, const DataAddressing& address) = 0;
 
-        virtual std::function<void()> get_initializer(const double val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name) = 0;
-        virtual std::function<void()> get_initializer(const std::string& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name) = 0;
-        virtual std::function<void()> get_initializer(const std::vector<double>& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name) = 0;
-        virtual std::function<void()> get_initializer(const std::vector<std::vector<double> >& val, const std::vector<std::string>& address, const std::vector<std::string>& columnName, const std::string& name) = 0;
+        virtual std::function<void()> get_initializer(const double val, const DataAddressing& address) = 0;
         virtual void flush_after_initialization() = 0;
         virtual void flush_after_write() = 0;
         virtual void flush_value() = 0;

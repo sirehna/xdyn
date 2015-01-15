@@ -55,7 +55,6 @@ class Body
         Eigen::Vector3d get_pqr(const StateType& x) const;
         std::string get_name() const;
 
-
         void feed(const StateType& x, Observer& observer) const;
 
     protected:
