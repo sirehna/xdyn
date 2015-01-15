@@ -15,6 +15,9 @@
 
 #include "YamlRotation.hpp"
 
+#include "Body.hpp"
+#include "StateMacros.hpp"
+
 class Observer;
 class SurfaceElevationInterface;
 typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
@@ -22,7 +25,7 @@ typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 struct EnvironmentAndFrames
 {
     EnvironmentAndFrames();
-    void feed(Observer& observer, double t) const;
+    void feed(Observer& observer, double t, const std::vector<BodyPtr>& bodies, const StateType& state) const;
     SurfaceElevationPtr w;
     ssc::kinematics::KinematicsPtr k;
     double rho;

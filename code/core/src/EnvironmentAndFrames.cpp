@@ -32,20 +32,30 @@ EnvironmentAndFrames::EnvironmentAndFrames() : w(),
                                                rot()
 {
 }
-
-void EnvironmentAndFrames::feed(Observer& observer, double t) const
+void EnvironmentAndFrames::feed(
+        Observer& observer, double t,
+        const std::vector<BodyPtr>& bodies, const StateType& state) const
 {
-    (void) observer;
-    (void) t;
-    /*
-    std::vector<std::string> address;
-    address.push_back("waveElevation");
-    const auto kk = w->get_waves_on_mesh_as_a_grid(k, t);
-    if(kk.z.size()!=0)
+    try
     {
-        observer.write(
-                std::vector<double>(kk.x.data(), kk.x.data() + kk.x.size()),
-                address+"/x", std::vector<std::string>{},"wave");
+        if (w.get())
+        {
+            for (size_t i = 0 ; i < bodies.size() ; ++i)
+            {
+                bodies[i]->update_kinematics(state,k);
+            }
+            const auto kk = w->get_waves_on_mesh_as_a_grid(k, t);
+            if(kk.z.size()!=0)
+            {
+                const auto address = DataAddressing(std::vector<std::string>{"waveElevation"},"wave");
+                observer.write(kk, address);
+            }
+        }
     }
-    */
+    catch (const ssc::kinematics::KinematicsException& e)
+    {
+        std::stringstream ss;
+        ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
+        THROW(__PRETTY_FUNCTION__, EnvironmentAndFramesException, ss.str());
+    }
 }
