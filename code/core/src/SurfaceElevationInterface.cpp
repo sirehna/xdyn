@@ -5,12 +5,13 @@
  *      Author: cady
  */
 
-
 #include "SurfaceElevationInterface.hpp"
 #include <ssc/kinematics.hpp>
 #include <ssc/exception_handling.hpp>
 
-template <typename PointType> PointType compute_relative_position(const PointType& P, const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k)
+template <typename PointType> PointType compute_relative_position(
+        const PointType& P,
+        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k)
 {
     ssc::kinematics::Transform T = k->get("NED", P.get_frame());
     // Create the equivalent transformation just by swapping frame names
@@ -18,15 +19,17 @@ template <typename PointType> PointType compute_relative_position(const PointTyp
     return T*P;
 }
 
-ssc::kinematics::PointMatrix compute_relative_position(const Matrix3x& M,                                     //!< Points for which to compute the relative wave height
-                                                       const std::string& frame,                              //!< Name of the reference frame in which the coordinates in M are expressed
-                                                       const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k //!< Object used to compute the transforms to the NED frame)
-                                                       );
+ssc::kinematics::PointMatrix compute_relative_position(
+        const Matrix3x& M,                                      //!< Points for which to compute the relative wave height
+        const std::string& frame,                               //!< Name of the reference frame in which the coordinates in M are expressed
+        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k   //!< Object used to compute the transforms to the NED frame)
+        );
 
-ssc::kinematics::PointMatrix compute_relative_position(const Matrix3x& M,                                     //!< Points for which to compute the relative wave height
-                                                       const std::string& frame,                              //!< Name of the reference frame in which the coordinates in M are expressed
-                                                       const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k //!< Object used to compute the transforms to the NED frame)
-                                                       )
+ssc::kinematics::PointMatrix compute_relative_position(
+        const Matrix3x& M,                                     //!< Points for which to compute the relative wave height
+        const std::string& frame,                              //!< Name of the reference frame in which the coordinates in M are expressed
+        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k //!< Object used to compute the transforms to the NED frame)
+        )
 {
     ssc::kinematics::Transform T = k->get("NED", frame);
     // Create the equivalent transformation just by swapping frame names
@@ -56,7 +59,10 @@ SurfaceElevationInterface::~SurfaceElevationInterface()
 {
 }
 
-std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_points_on_free_surface(const double t, const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& Mned) const
+std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_points_on_free_surface(
+        const double t,
+        const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& Mned
+        ) const
 {
     std::vector<ssc::kinematics::Point> ret;
     for (int i = 0 ; i < output_mesh->m.cols() ; ++i)
@@ -84,10 +90,11 @@ std::vector<double> SurfaceElevationInterface::get_surface_elevation() const
     return surface_elevation_for_each_point_in_mesh;
 }
 
-void SurfaceElevationInterface::update_surface_elevation(const ssc::kinematics::PointMatrixPtr& P,                     //!< Points for which to compute the relative wave height
-                                                         const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                                         const double t //!< Current instant (in seconds)
-       )
+void SurfaceElevationInterface::update_surface_elevation(
+        const ssc::kinematics::PointMatrixPtr& P,                  //!< Points for which to compute the relative wave height
+        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k,     //!< Object used to compute the transforms to the NED frame
+        const double t                                             //!< Current instant (in seconds)
+        )
 {
     const int n = (int)P->m.cols();
     if (n>0)
@@ -124,13 +131,14 @@ std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_angular_fr
     return std::vector<std::vector<double> >();
 }
 
-double SurfaceElevationInterface::get_dynamic_pressure(const double rho, // Water density (in kg/m^3)
-                                                       const double g, //!< Gravity (in m/s^2)
-                                                       const ssc::kinematics::Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
-                                                       const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                                       const double eta, //!< Wave elevation at P in the NED frame (in meters)
-                                                       const double t //!< Current instant (in seconds)
-                                    ) const
+double SurfaceElevationInterface::get_dynamic_pressure(
+        const double rho,                                       //!< Water density (in kg/m^3)
+        const double g,                                         //!< Gravity (in m/s^2)
+        const ssc::kinematics::Point& P,                        //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
+        const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k,  //!< Object used to compute the transforms to the NED frame
+        const double eta,                                       //!< Wave elevation at P in the NED frame (in meters)
+        const double t                                          //!< Current instant (in seconds)
+        ) const
 {
     const ssc::kinematics::Point OP = compute_relative_position(P, k);
     return dynamic_pressure(rho, g, OP.x(),OP.y(),OP.z(),eta,t);
