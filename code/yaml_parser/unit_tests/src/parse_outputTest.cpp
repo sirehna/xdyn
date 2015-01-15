@@ -35,10 +35,11 @@ TEST_F(parse_outputTest, can_parse_outputs)
     ASSERT_EQ(1, res.at(0).data.size());
     ASSERT_EQ("x(body 1)", res.at(0).data.at(0));
 
-    ASSERT_EQ(3, res.at(1).data.size());
+    ASSERT_EQ(4, res.at(1).data.size());
     ASSERT_EQ("hdf5", res.at(1).format);
     ASSERT_EQ("tutorial_1.h5", res.at(1).filename);
     ASSERT_EQ("y(body 1)", res.at(1).data.at(0));
     ASSERT_EQ("z(body 1)", res.at(1).data.at(1));
     ASSERT_EQ("Fz(gravity,body 1)", res.at(1).data.at(2));
+    ASSERT_EQ("wave", res.at(1).data.at(3));
 }

@@ -237,7 +237,7 @@ std::string test_data::full_example()
        << "     data: [x(body 1)]\n"
        << "   - format: hdf5\n"
        << "     filename: tutorial_1.h5\n"
-       << "     data: ['y(body 1)','z(body 1)','Fz(gravity,body 1)']\n";
+       << "     data: ['y(body 1)','z(body 1)','Fz(gravity,body 1)','wave']\n";
     return ss.str();
 }
 
@@ -1179,11 +1179,15 @@ std::string test_data::simple_waves()
        << "        frame of reference: NED\n"
        << "        mesh:\n"
        << "            xmin: {value: -10, unit: m}\n"
-       << "            xmax: {value: 1, unit: km}\n"
-       << "            nx: 10\n"
+       << "            xmax: {value: 10, unit: m}\n"
+       << "            nx: 21\n"
        << "            ymin: {value: -20, unit: m}\n"
-       << "            ymax: {value: 3, unit: km}\n"
-       << "            ny: 20\n";
+       << "            ymax: {value: +20, unit: m}\n"
+       << "            ny: 41\n"
+       << "output:\n"
+       << "   - format: hdf5\n"
+       << "     filename: simple_waves.h5\n"
+       << "     data: ['wave']\n";
     return ss.str();
 }
 
