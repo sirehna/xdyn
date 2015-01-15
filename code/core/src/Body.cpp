@@ -80,6 +80,10 @@ void Body::update_body_states(const StateType& x)
     states.p = *_P(x,idx);
     states.q = *_Q(x,idx);
     states.r = *_R(x,idx);
+    states.qr = *_QR(x,idx);
+    states.qi = *_QI(x,idx);
+    states.qj = *_QJ(x,idx);
+    states.qk = *_QK(x,idx);
 }
 
 void Body::update_projection_of_z_in_mesh_frame(const double g,

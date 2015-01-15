@@ -49,6 +49,10 @@ struct BodyStates
     double p;                                                      //!< Projection of the body's rotational speed (relative to NED) along the body's X-axis (in rad/s)
     double q;                                                      //!< Projection of the body's rotational speed (relative to NED) along the body's Y-axis (in rad/s)
     double r;                                                      //!< Projection of the body's rotational speed (relative to NED) along the body's Z-axis (in rad/s)
+    double qr;                                                     //!< Real part of the quaternion (of the rotation from NED to body)
+    double qi;                                                     //!< Imaginary part of the quaternion (of the rotation from NED to body)
+    double qj;                                                     //!< Imaginary part of the quaternion (of the rotation from NED to body)
+    double qk;                                                     //!< Imaginary part of the quaternion (of the rotation from NED to body)
     MeshIntersectorPtr intersector;                                //!< Allows us to iterate on all emerged or immersed facets
     EPoint down_direction_in_mesh_frame;                           //!< Unit vertical vector, expressed in the body's mesh frame
     ssc::kinematics::Point hydrodynamic_forces_calculation_point;  //!< Point of expression of hydrodynamic forces (except Froude-Krylov & hydrostatic)
