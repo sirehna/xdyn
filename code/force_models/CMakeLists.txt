@@ -12,6 +12,7 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/ResistanceCurveForceModel.cpp
         src/DiffractionForceModel.cpp
         src/RadiationDampingForceModel.cpp
+        src/SimpleTrackKeepingController.cpp
         )
 
 # Using C++ 2011
