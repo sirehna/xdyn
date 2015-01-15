@@ -17,6 +17,10 @@
 #include "ForceModel.hpp"
 #include "GeometricTypes3d.hpp"
 #include "MeshIntersector.hpp"
+#include "StateMacros.hpp"
+
+struct YamlRotation;
+
 
 class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
@@ -56,6 +60,12 @@ struct BodyStates
     MeshIntersectorPtr intersector;                                //!< Allows us to iterate on all emerged or immersed facets
     EPoint down_direction_in_mesh_frame;                           //!< Unit vertical vector, expressed in the body's mesh frame
     ssc::kinematics::Point hydrodynamic_forces_calculation_point;  //!< Point of expression of hydrodynamic forces (except Froude-Krylov & hydrostatic)
+
+    ssc::kinematics::EulerAngles get_angles(const YamlRotation& c) const;
+    ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const size_t idx, const YamlRotation& c) const;
+    ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations) const;
+    ssc::kinematics::RotationMatrix get_rot_from_ned_to_body() const;
+    ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t idx) const;
 };
 
 #endif /* BODYSTATES_HPP_ */

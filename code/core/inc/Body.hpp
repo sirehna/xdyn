@@ -32,7 +32,6 @@ class Body
                                                   ) = 0;
 
         ssc::kinematics::Point get_origin(const StateType& x) const;
-        ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
         ssc::kinematics::Point get_position_of_body_relative_to_mesh() const;
         ssc::kinematics::Transform get_transform_from_mesh_to() const;
         ssc::kinematics::Transform get_transform_from_ned_to(const StateType& x) const;
@@ -54,6 +53,8 @@ class Body
         Eigen::Vector3d get_uvw_in_body_frame(const StateType& x) const;
         Eigen::Vector3d get_pqr(const StateType& x) const;
         std::string get_name() const;
+        ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
+        ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const YamlRotation& c) const;
 
         void feed(const StateType& x, Observer& observer) const;
 
@@ -62,6 +63,7 @@ class Body
 
     private:
         Body();
+
         size_t idx; //!< Index of the first state
 };
 

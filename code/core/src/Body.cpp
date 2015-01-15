@@ -37,15 +37,6 @@ ssc::kinematics::Point Body::get_origin(const StateType& x) const
                                          *_Z(x,idx));
 }
 
-ssc::kinematics::RotationMatrix Body::get_rot_from_ned_to(const StateType& x) const
-{
-    const Eigen::Quaternion<double> q(*_QR(x,idx),
-                                      *_QI(x,idx),
-                                      *_QJ(x,idx),
-                                      *_QK(x,idx));
-    return q.matrix();
-}
-
 ssc::kinematics::Point Body::get_position_of_body_relative_to_mesh() const
 {
     return ssc::kinematics::Point(std::string("mesh(")+states.name+")",
@@ -61,7 +52,7 @@ ssc::kinematics::Transform Body::get_transform_from_mesh_to() const
 
 ssc::kinematics::Transform Body::get_transform_from_ned_to(const StateType& x) const
 {
-    return ssc::kinematics::Transform(get_origin(x), get_rot_from_ned_to(x), states.name);
+    return ssc::kinematics::Transform(get_origin(x), states.get_rot_from_ned_to(x, idx), states.name);
 }
 
 void Body::update_kinematics(StateType x, const KinematicsPtr& k) const
@@ -163,4 +154,14 @@ void Body::feed(const StateType& x, Observer& observer) const
 std::string Body::get_name() const
 {
     return states.name;
+}
+
+ssc::kinematics::RotationMatrix Body::get_rot_from_ned_to(const StateType& x) const
+{
+    return states.get_rot_from_ned_to(x,idx);
+}
+
+ssc::kinematics::EulerAngles Body::get_angles(const StateType& all_states, const YamlRotation& c) const
+{
+    return states.get_angles(all_states, idx, c);
 }
