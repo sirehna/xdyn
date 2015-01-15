@@ -37,6 +37,12 @@ struct BodyStates
     double z_relative_to_mesh;                                     //!< Position of the body frame relative to the mesh frame, along the z-axis, in meters
     ssc::kinematics::RotationMatrix mesh_to_body;                  //!< Rotation matrix from mesh to body
     ssc::kinematics::PointMatrixPtr M;                             //!< For the wave model (just the points in the mesh)
+    double x;                                                      //!< x-coordinate of the body's center of gravity in the NED frame (in m)
+    double y;                                                      //!< y-coordinate of the body's center of gravity in the NED frame (in m)
+    double z;                                                      //!< z-coordinate of the body's center of gravity in the NED frame (in m)
+    double phi;                                                    //!< Euler angle (first component) of the rotation from NED to body (in radian)
+    double theta;                                                  //!< Euler angle (second component) of the rotation from NED to body (in radian)
+    double psi;                                                    //!< Euler angle (third component) of the rotation from NED to body (in radian)
     double u;                                                      //!< Projection of the body's translation speed (relative to NED) along the body's X-axis (in m/s)
     double v;                                                      //!< Projection of the body's translation speed (relative to NED) along the body's Y-axis (in m/s)
     double w;                                                      //!< Projection of the body's translation speed (relative to NED) along the body's Z-axis (in m/s)
