@@ -6,7 +6,6 @@
  */
 
 #include "yaml.h"
-
 #include "parse_output.hpp"
 
 void operator >> (const YAML::Node& node, YamlOutput& f);
@@ -34,3 +33,67 @@ std::vector<YamlOutput> parse_output(const std::string yaml)
     return ret;
 }
 
+std::string customize(const std::string& var_name, const std::string& body_name);
+std::string customize(const std::string& var_name, const std::string& body_name)
+{
+    return var_name + "(" + body_name + ")";
+}
+
+void fill(YamlOutput& out, const std::string& body_name);
+void fill(YamlOutput& out, const std::string& body_name)
+{
+    out.data.push_back(customize("x", body_name));
+    out.data.push_back(customize("y", body_name));
+    out.data.push_back(customize("z", body_name));
+    out.data.push_back(customize("u", body_name));
+    out.data.push_back(customize("v", body_name));
+    out.data.push_back(customize("w", body_name));
+    out.data.push_back(customize("p", body_name));
+    out.data.push_back(customize("q", body_name));
+    out.data.push_back(customize("r", body_name));
+    out.data.push_back(customize("qr", body_name));
+    out.data.push_back(customize("qi", body_name));
+    out.data.push_back(customize("qj", body_name));
+    out.data.push_back(customize("qk", body_name));
+}
+
+std::vector<std::string> get_body_names(const std::string yaml);
+std::vector<std::string> get_body_names(const std::string yaml)
+{
+    std::vector<std::string> out;
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    const YAML::Node *parameter = node.FindValue("bodies");
+    for (size_t i = 0 ; i < parameter->size() ; ++i)
+    {
+        std::string name;
+        (*parameter)[i]["name"] >> name;
+        out.push_back(name);
+    }
+    return out;
+}
+
+std::string get_format(const std::string& filename);
+std::string get_format(const std::string& filename)
+{
+    const size_t n = filename.size();
+    if (!n)                             return "tsv";
+    if (filename.substr(n-3,3)==".h5")  return "hdf5";
+    if (filename.substr(n-4,4)==".csv") return "csv";
+    if (filename.substr(n-4,4)==".tsv") return "tsv";
+                                        return "???";
+}
+#include <ssc/macros.hpp>
+YamlOutput generate_all_outputs(const std::string yaml, const std::string& filename)
+{
+    YamlOutput out;
+    out.format = get_format(filename);
+    COUT(filename);
+    out.filename = filename;
+    out.data.push_back("t");
+    const auto bodies = get_body_names(yaml);
+    for (auto body:bodies) fill(out, body);
+    return out;
+}
