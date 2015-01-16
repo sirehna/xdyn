@@ -7,6 +7,8 @@
 #include "H5Cpp.h"
 #include "Observer.hpp"
 #include "h5_element.hpp"
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
 
 struct Hdf5Addressing
 {
@@ -18,6 +20,7 @@ struct Hdf5Addressing
             );
 };
 
+class SimHdf5WaveObserver;
 class Hdf5Observer : public Observer
 {
     public:
@@ -44,16 +47,7 @@ class Hdf5Observer : public Observer
         std::map<std::string, H5::DataType> name2datatype;
         std::map<std::string, H5::DataSpace> name2dataspace;
 
-        H5Element h5ElementT;   /**< Hdf5 dataspace and dataset for time values*/
-        H5Element h5ElementX;   /**< Hdf5 dataspace and dataset for X vector values*/
-        H5Element h5ElementY;   /**< Hdf5 dataspace and dataset for Y vector values*/
-        H5Element h5ElementZ;   /**< Hdf5 dataspace and dataset for Z matrice values*/
-        hsize_t n;              /**< Counter for wave elevation field exported. This counter is used for offset purpose*/
-
-        void write_T(const SurfaceElevationGrid& waveElevationGrid) const;
-        void write_X(const SurfaceElevationGrid& waveElevationGrid) const;
-        void write_Y(const SurfaceElevationGrid& waveElevationGrid) const;
-        void write_Z(const SurfaceElevationGrid& waveElevationGrid) const;
+        TR1(shared_ptr)<SimHdf5WaveObserver> wave_serializer;
 };
 
 #endif
