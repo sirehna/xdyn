@@ -327,6 +327,6 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
     {
         for (auto force:forces.second) force->feed(obs);
     }
-    for (auto body:pimpl->bodies) body->feed(x, obs);
+    for (auto body:pimpl->bodies) body->feed(x, obs, pimpl->env.rot);
     pimpl->env.feed(obs, t, pimpl->bodies, state);
 }

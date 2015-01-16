@@ -56,7 +56,7 @@ class Body
         ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
         ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const YamlRotation& c) const;
 
-        void feed(const StateType& x, Observer& observer) const;
+        void feed(const StateType& x, Observer& observer, const YamlRotation& c) const;
 
     protected:
         BodyStates states;

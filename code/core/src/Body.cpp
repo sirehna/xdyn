@@ -134,7 +134,7 @@ Eigen::Vector3d Body::get_pqr(const StateType& x) const
     return Eigen::Vector3d::Map(_P(x,idx));
 }
 
-void Body::feed(const StateType& x, Observer& observer) const
+void Body::feed(const StateType& x, Observer& observer, const YamlRotation& c) const
 {
     observer.write(*_X(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"X"},std::string("x(")+states.name+")"));
     observer.write(*_Y(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Y"},std::string("y(")+states.name+")"));
@@ -149,6 +149,11 @@ void Body::feed(const StateType& x, Observer& observer) const
     observer.write(*_QI(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qi"},std::string("qi(")+states.name+")"));
     observer.write(*_QJ(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qj"},std::string("qj(")+states.name+")"));
     observer.write(*_QK(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qk"},std::string("qk(")+states.name+")"));
+    const auto angles = get_angles(x, c);
+    observer.write(angles.phi, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("phi(")+states.name+")"));
+    observer.write(angles.theta, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("theta(")+states.name+")"));
+    observer.write(angles.psi, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("psi(")+states.name+")"));
+
 }
 
 std::string Body::get_name() const
