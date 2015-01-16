@@ -5,6 +5,17 @@
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"
 
+#include <ssc/exception_handling.hpp>
+
+class Hdf5ObserverException: public ::ssc::exception_handling::Exception
+{
+    public:
+        Hdf5ObserverException(const char* s) :
+            ::ssc::exception_handling::Exception(s)
+        {
+        }
+};
+
 Hdf5Addressing::Hdf5Addressing(
         const DataAddressing& addressing,
         const std::string& basename) :
@@ -33,7 +44,9 @@ std::function<void()> Hdf5Observer::get_serializer(const double val, const DataA
                 hsize_t size[1];
                 if (dataspace.getSimpleExtentDims(size)!=1)
                 {
-                    //throw rank exception
+                    std::stringstream ss;
+                    ss << "Rank mismatch -> Should be one, not " << dataspace.getSimpleExtentNdims();
+                    THROW(__PRETTY_FUNCTION__, Hdf5ObserverException, ss.str());
                 }
                 const hsize_t dims[1] = {(hsize_t)1};
                 offset[0] = size[0];
