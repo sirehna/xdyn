@@ -14,6 +14,16 @@ Observer::Observer(const std::vector<std::string>& data_) : initialized(false), 
     stuff_to_write.insert(stuff_to_write.begin(), "t");
 }
 
+std::function<void()> Observer::get_serializer(const SurfaceElevationGrid& , const DataAddressing& )
+{
+    return [](){};
+}
+
+std::function<void()> Observer::get_initializer(const SurfaceElevationGrid& , const DataAddressing& )
+{
+    return [](){};
+}
+
 void Observer::observe(const Sim& sys, const double t)
 {
     write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));

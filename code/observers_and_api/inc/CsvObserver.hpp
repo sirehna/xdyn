@@ -32,10 +32,6 @@ class CsvObserver : public Observer
 
         std::function<void()> get_serializer(const double val, const DataAddressing& address);
         std::function<void()> get_initializer(const double val, const DataAddressing& address);
-
-        std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address);
-        std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address);
-
 };
 
 #endif /* CSVOBSERVER_HPP_ */

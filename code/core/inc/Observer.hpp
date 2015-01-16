@@ -48,8 +48,8 @@ class Observer
         virtual std::function<void()> get_serializer(const double val, const DataAddressing& address) = 0;
         virtual std::function<void()> get_initializer(const double val, const DataAddressing& address) = 0;
 
-        virtual std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address) = 0;
-        virtual std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address) = 0;
+        virtual std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address);
+        virtual std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address);
 
         virtual void flush_after_initialization() = 0;
         virtual void flush_after_write() = 0;

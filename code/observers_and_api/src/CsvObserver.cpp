@@ -21,16 +21,6 @@ std::function<void()> CsvObserver::get_initializer(const double, const DataAddre
     return [this,address](){os << address.name;};
 }
 
-std::function<void()> CsvObserver::get_serializer(const SurfaceElevationGrid&, const DataAddressing&)
-{
-    return [](){};
-}
-
-std::function<void()> CsvObserver::get_initializer(const SurfaceElevationGrid&, const DataAddressing&)
-{
-    return [](){};
-}
-
 void CsvObserver::flush_after_initialization()
 {
     os << std::endl;
