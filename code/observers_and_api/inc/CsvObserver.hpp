@@ -10,8 +10,6 @@
 
 #include <fstream>
 
-
-#include "SurfaceElevationGrid.hpp"
 #include "Observer.hpp"
 
 class CsvObserver : public Observer
@@ -24,8 +22,6 @@ class CsvObserver : public Observer
         void flush_after_write();
         void flush_value();
 
-        bool should_add_coma();
-        bool add_coma;
         std::ofstream os;
         using Observer::get_serializer;
         using Observer::get_initializer;
