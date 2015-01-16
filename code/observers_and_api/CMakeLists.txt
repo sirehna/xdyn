@@ -10,6 +10,7 @@ set(SRC src/simulator_api.cpp
         src/SimHdf5WaveObserverBuilder.cpp
         src/SimObserver.cpp
         src/CsvObserver.cpp
+        src/TsvObserver.cpp
         src/Hdf5Observer.cpp
         ${CMAKE_BINARY_DIR}/demoMatLab.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
