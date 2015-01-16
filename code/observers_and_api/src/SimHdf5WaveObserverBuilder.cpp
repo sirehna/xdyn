@@ -51,8 +51,9 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementT() const
     const hsize_t chunk_dims1[1] = {1};
     H5::DSetCreatPropList cparms1;
     cparms1.setChunk(1, chunk_dims1);
+    h5ElementT.datatype = H5::DataType(H5::PredType::NATIVE_DOUBLE);
     h5ElementT.dataspace = H5::DataSpace(1, dimsT, maxdimsT);
-    h5ElementT.dataset = group.createDataSet(datasetName+"t",H5::PredType::NATIVE_DOUBLE, h5ElementT.dataspace, cparms1);
+    h5ElementT.dataset = group.createDataSet(datasetName+"t",h5ElementT.datatype, h5ElementT.dataspace, cparms1);
     return h5ElementT;
 }
 
@@ -67,8 +68,9 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementX() const
     const hsize_t chunk_dims2[2] = {1, MIN(CHUNK_SIZE,(hsize_t)nx)};
     H5::DSetCreatPropList cparms2;
     cparms2.setChunk(2, chunk_dims2);
+    h5ElementX.datatype = H5::DataType(H5::PredType::NATIVE_DOUBLE);
     h5ElementX.dataspace = H5::DataSpace(2, dimsX, maxdimsX);
-    h5ElementX.dataset = group.createDataSet(datasetName+"x",H5::PredType::NATIVE_DOUBLE, h5ElementX.dataspace, cparms2);
+    h5ElementX.dataset = group.createDataSet(datasetName+"x",h5ElementX.datatype, h5ElementX.dataspace, cparms2);
     return h5ElementX;
 }
 
@@ -83,8 +85,9 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementY() const
     const hsize_t chunk_dims2[2] = {1, MIN(CHUNK_SIZE,(hsize_t)ny)};
     H5::DSetCreatPropList cparms2;
     cparms2.setChunk(2, chunk_dims2);
+    h5ElementY.datatype = H5::DataType(H5::PredType::NATIVE_DOUBLE);
     h5ElementY.dataspace = H5::DataSpace(2, dimsY, maxdimsY);
-    h5ElementY.dataset = group.createDataSet(datasetName+"y",H5::PredType::NATIVE_DOUBLE, h5ElementY.dataspace, cparms2);
+    h5ElementY.dataset = group.createDataSet(datasetName+"y",h5ElementY.datatype, h5ElementY.dataspace, cparms2);
     return h5ElementY;
 }
 
@@ -101,7 +104,9 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementZ() const
     const hsize_t chunk_dims3[3] = {MIN(CHUNK_SIZE,(hsize_t)nx),MIN(CHUNK_SIZE,(hsize_t)ny),1};
     H5::DSetCreatPropList cparms3;
     cparms3.setChunk(3, chunk_dims3);
+    h5ElementZ.datatype = H5::DataType(H5::PredType::NATIVE_DOUBLE);
     h5ElementZ.dataspace = H5::DataSpace(3, dimsZ, maxdimsZ);
-    h5ElementZ.dataset = group.createDataSet(datasetName+"z",H5::PredType::NATIVE_DOUBLE, h5ElementZ.dataspace, cparms3);
+    h5ElementZ.dataset = group.createDataSet(datasetName+"z",h5ElementZ.datatype, h5ElementZ.dataspace, cparms3);
     return h5ElementZ;
 }
+

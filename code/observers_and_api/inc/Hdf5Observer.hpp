@@ -6,6 +6,7 @@
 #include <vector>
 #include "H5Cpp.h"
 #include "Observer.hpp"
+#include "h5_element.hpp"
 
 struct Hdf5Addressing
 {
@@ -15,13 +16,6 @@ struct Hdf5Addressing
             const DataAddressing& addressing,
             const std::string& basename=""
             );
-};
-
-struct H5Element
-{
-    H5::DataSpace dataspace;
-    H5::DataSet dataset;
-    H5Element(): dataspace(), dataset(){}
 };
 
 class Hdf5Observer : public Observer
@@ -50,17 +44,12 @@ class Hdf5Observer : public Observer
         std::map<std::string, H5::DataType> name2datatype;
         std::map<std::string, H5::DataSpace> name2dataspace;
 
-        H5::Group group;        /**< Hdf5 group where all wave elevation data will be exported*/
         H5Element h5ElementT;   /**< Hdf5 dataspace and dataset for time values*/
         H5Element h5ElementX;   /**< Hdf5 dataspace and dataset for X vector values*/
         H5Element h5ElementY;   /**< Hdf5 dataspace and dataset for Y vector values*/
         H5Element h5ElementZ;   /**< Hdf5 dataspace and dataset for Z matrice values*/
         hsize_t n;              /**< Counter for wave elevation field exported. This counter is used for offset purpose*/
 
-        H5Element get_h5ElementT(const size_t nx, const size_t ny) const;
-        H5Element get_h5ElementX(const size_t nx, const size_t ny) const;
-        H5Element get_h5ElementY(const size_t nx, const size_t ny) const;
-        H5Element get_h5ElementZ(const size_t nx, const size_t ny) const;
         void write_T(const SurfaceElevationGrid& waveElevationGrid) const;
         void write_X(const SurfaceElevationGrid& waveElevationGrid) const;
         void write_Y(const SurfaceElevationGrid& waveElevationGrid) const;

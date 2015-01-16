@@ -5,10 +5,9 @@
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"
 
-#include <ssc/exception_handling.hpp>
+#include "SimHdf5WaveObserverBuilder.hpp"
 
-#define CHUNK_SIZE (hsize_t)10
-#define MIN(i1,i2) (i1 < i2 ? i1 : i2)
+#include <ssc/exception_handling.hpp>
 
 class Hdf5ObserverException: public ::ssc::exception_handling::Exception
 {
@@ -37,7 +36,6 @@ Hdf5Observer::Hdf5Observer(
             name2dataset(),
             name2datatype(),
             name2dataspace(),
-            group(),
             h5ElementT(),
             h5ElementX(),
             h5ElementY(),
@@ -98,76 +96,12 @@ std::function<void()> Hdf5Observer::get_initializer(const SurfaceElevationGrid& 
            {
                const size_t nx = waveElevationGrid.x.size();
                const size_t ny = waveElevationGrid.y.size();
-               group = ((nx*ny)>0)?(H5_Tools::createMissingGroups(h5File, "waves")):H5::Group();
-               h5ElementT = get_h5ElementT(nx,ny);
-               h5ElementX = get_h5ElementX(nx,ny);
-               h5ElementY = get_h5ElementY(nx,ny);
-               h5ElementZ = get_h5ElementZ(nx,ny);
+               SimHdf5WaveObserverBuilder ss(h5File,this->basename+"/waves",nx,ny);
+               h5ElementT = ss.get_h5ElementT();
+               h5ElementX = ss.get_h5ElementX();
+               h5ElementY = ss.get_h5ElementY();
+               h5ElementZ = ss.get_h5ElementZ();
            };
-}
-
-H5Element Hdf5Observer::get_h5ElementT(const size_t nx, const size_t ny) const
-{
-    H5Element h5ElementT;
-    if ((nx*ny)==0) return h5ElementT;
-    hsize_t dimsT[1] = {1};
-    const hsize_t maxdimsT[1] = {H5S_UNLIMITED};
-    const hsize_t chunk_dims1[1] = {1};
-    H5::DSetCreatPropList cparms1;
-    cparms1.setChunk(1, chunk_dims1);
-    h5ElementT.dataspace = H5::DataSpace(1, dimsT, maxdimsT);
-    h5ElementT.dataset = group.createDataSet("wavest",H5::PredType::NATIVE_DOUBLE, h5ElementT.dataspace, cparms1);
-    return h5ElementT;
-}
-
-H5Element Hdf5Observer::get_h5ElementX(const size_t nx, const size_t ny) const
-{
-    H5Element h5ElementX;
-    if ((nx*ny)==0) return h5ElementX;
-    hsize_t dimsX[2] = {1, 1};
-    hsize_t maxdimsX[2] = {H5S_UNLIMITED, H5S_UNLIMITED};
-    dimsX[1] = (hsize_t)nx;
-    maxdimsX[1] = (hsize_t)nx;
-    const hsize_t chunk_dims2[2] = {1, MIN(CHUNK_SIZE,(hsize_t)nx)};
-    H5::DSetCreatPropList cparms2;
-    cparms2.setChunk(2, chunk_dims2);
-    h5ElementX.dataspace = H5::DataSpace(2, dimsX, maxdimsX);
-    h5ElementX.dataset = group.createDataSet("wavesx",H5::PredType::NATIVE_DOUBLE, h5ElementX.dataspace, cparms2);
-    return h5ElementX;
-}
-
-H5Element Hdf5Observer::get_h5ElementY(const size_t nx, const size_t ny) const
-{
-    H5Element h5ElementY;
-    if ((nx*ny)==0) return h5ElementY;
-    hsize_t dimsY[2] = {1, 1};
-    hsize_t maxdimsY[2] = {H5S_UNLIMITED, H5S_UNLIMITED};
-    dimsY[1] = (hsize_t)ny;
-    maxdimsY[1] = (hsize_t)ny;
-    const hsize_t chunk_dims2[2] = {1, MIN(CHUNK_SIZE,(hsize_t)ny)};
-    H5::DSetCreatPropList cparms2;
-    cparms2.setChunk(2, chunk_dims2);
-    h5ElementY.dataspace = H5::DataSpace(2, dimsY, maxdimsY);
-    h5ElementY.dataset = group.createDataSet("wavesy",H5::PredType::NATIVE_DOUBLE, h5ElementY.dataspace, cparms2);
-    return h5ElementY;
-}
-
-H5Element Hdf5Observer::get_h5ElementZ(const size_t nx, const size_t ny) const
-{
-    H5Element h5ElementZ;
-    if ((nx*ny)==0) return h5ElementZ;
-    hsize_t dimsZ[3] = {1, 1, 1};
-    hsize_t maxdimsZ[3] = {H5S_UNLIMITED, H5S_UNLIMITED, H5S_UNLIMITED};
-    dimsZ[0] = (hsize_t)nx;
-    maxdimsZ[0] = (hsize_t)nx;
-    dimsZ[1] = (hsize_t)ny;
-    maxdimsZ[1] = (hsize_t)ny;
-    const hsize_t chunk_dims3[3] = {MIN(CHUNK_SIZE,(hsize_t)nx),MIN(CHUNK_SIZE,(hsize_t)ny),1};
-    H5::DSetCreatPropList cparms3;
-    cparms3.setChunk(3, chunk_dims3);
-    h5ElementZ.dataspace = H5::DataSpace(3, dimsZ, maxdimsZ);
-    h5ElementZ.dataset = group.createDataSet("wavesz",H5::PredType::NATIVE_DOUBLE, h5ElementZ.dataspace, cparms3);
-    return h5ElementZ;
 }
 
 void Hdf5Observer::flush_after_initialization()

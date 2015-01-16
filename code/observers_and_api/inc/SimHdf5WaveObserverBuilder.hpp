@@ -3,13 +3,7 @@
 
 #include <string>
 #include "H5Cpp.h"
-
-struct H5Element
-{
-    H5::DataSpace dataspace;
-    H5::DataSet dataset;
-    H5Element(): dataspace(), dataset(){}
-};
+#include "h5_element.hpp"
 
 class SimHdf5WaveObserverBuilder
 {
