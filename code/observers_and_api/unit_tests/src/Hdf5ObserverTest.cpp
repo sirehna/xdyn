@@ -42,7 +42,7 @@ TEST_F(Hdf5ObserverTest, should_be_able_to_create_an_observer_with_wave_output)
     {
         if (output.format == "hdf5")
         {
-            std::cout<<output.filename;
+            //std::cout<<output.filename;
             //EXPECT_EQ(0,remove(output.filename.c_str()));
         }
     }
