@@ -9,9 +9,8 @@
 
 struct Hdf5Addressing
 {
-    std::string name;
     std::string address;
-    Hdf5Addressing():name(),address(){};
+    Hdf5Addressing():address(){};
     Hdf5Addressing(
             const DataAddressing& addressing,
             const std::string& basename=""
@@ -39,9 +38,9 @@ class Hdf5Observer : public Observer
 
         H5::H5File h5File;
         std::string basename;
-        std::map<std::string, std::vector<Hdf5Addressing> > address2columns;
-        std::map<std::string,H5::DataSet> address2dataset;
-        std::map<std::string,H5::DataType> name2datatype;
+        std::map<std::string, std::string > name2address;
+        std::map<std::string, H5::DataSet> name2dataset;
+        std::map<std::string, H5::DataType> name2datatype;
 };
 
 #endif
