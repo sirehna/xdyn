@@ -11,8 +11,6 @@
 
 #include "listeners.hpp"
 #include "simulator_api.hpp"
-#include "SimCsvObserver.hpp"
-#include "SimHdf5Observer.hpp"
 #include "ListOfObservers.hpp"
 #include "parse_output.hpp"
 
@@ -36,10 +34,6 @@ int main(int argc, char** argv)
             command_listener = listen_to_file(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input_data.command_file)).get_contents());
         }
         auto sys = get_system(yaml_reader.get_contents(),command_listener);
-        std::ofstream ws(input_data.wave_output.c_str());
-        if (input_data.wave_output.empty()) copy_stream(dev_null_buffer, ws);
-        //SimCsvObserver observer(std::cout, ws);
-        //SimHdf5Observer observer(input_data.output_filename, sys);
         ListOfObservers observer(parse_output(yaml_reader.get_contents()));
         if (input_data.solver=="euler")
         {

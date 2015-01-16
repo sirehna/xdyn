@@ -6,13 +6,9 @@ INCLUDE(CMakeListsGenerateDemoPython.txt)
 
 set(SRC src/simulator_api.cpp
         src/ListOfObservers.cpp
-        src/SimObserver.cpp
-        src/SimCsvObserver.cpp
-        src/SimHdf5Observer.cpp
-        src/SimHdf5ObserverBuilder.cpp
         src/SimHdf5WaveObserver.cpp
         src/SimHdf5WaveObserverBuilder.cpp
-        src/SimNoObserver.cpp
+        src/SimObserver.cpp
         src/CsvObserver.cpp
         src/Hdf5Observer.cpp
         ${CMAKE_BINARY_DIR}/demoMatLab.cpp

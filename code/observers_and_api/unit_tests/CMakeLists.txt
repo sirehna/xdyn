@@ -1,14 +1,10 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST observers_and_api)
 project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/SimCsvObserverTest.cpp
-              src/SimHdf5ObserverTest.cpp
-              src/SimHdf5ObserverBuilderTest.cpp
-              src/SimHdf5WaveObserverTest.cpp
+FILE(GLOB SRC src/SimHdf5WaveObserverTest.cpp
               src/SimHdf5WaveObserverBuilderTest.cpp
               src/ListOfObserversTest.cpp
               src/Hdf5ObserverTest.cpp
-              #src/OutputTransformerTest.cpp
               src/SimTest.cpp
               )
 # ------8<---------------------------------------------->8-----

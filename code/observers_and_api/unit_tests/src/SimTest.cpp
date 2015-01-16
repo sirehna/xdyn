@@ -23,8 +23,6 @@
 #include "SimulatorYamlParser.hpp"
 #include "STL_data.hpp"
 #include "simulator_api.hpp"
-#include "SimCsvObserver.hpp"
-#include "SimNoObserver.hpp"
 #include <ssc/solver.hpp>
 #include "TriMeshTestData.hpp"
 #include "generate_anthineas.hpp"
