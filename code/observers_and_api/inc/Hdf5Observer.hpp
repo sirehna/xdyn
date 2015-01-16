@@ -41,6 +41,7 @@ class Hdf5Observer : public Observer
         std::map<std::string, std::string > name2address;
         std::map<std::string, H5::DataSet> name2dataset;
         std::map<std::string, H5::DataType> name2datatype;
+        std::map<std::string, H5::DataSpace> name2dataspace;
 };
 
 #endif

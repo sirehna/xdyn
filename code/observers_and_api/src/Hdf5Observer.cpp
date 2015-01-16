@@ -27,7 +27,7 @@ Hdf5Addressing::Hdf5Addressing(
 Hdf5Observer::Hdf5Observer(
         const std::string& filename,
         const std::vector<std::string>& d) :
-            Observer(d), h5File(H5::H5File(filename,H5F_ACC_TRUNC)), basename("outputs"),name2address(),name2dataset(),name2datatype()
+            Observer(d), h5File(H5::H5File(filename,H5F_ACC_TRUNC)), basename("outputs"),name2address(),name2dataset(),name2datatype(),name2dataspace()
 {
     h5_writeFileDescription(h5File);
     exportMatLabScripts(h5File, filename, basename, "/scripts/MatLab");
@@ -64,6 +64,7 @@ std::function<void()> Hdf5Observer::get_initializer(const double , const DataAdd
            {
                 name2address[addressing.name] = Hdf5Addressing(addressing,this->basename).address;
                 name2datatype[addressing.name] = H5::DataType(H5::PredType::NATIVE_DOUBLE);
+                name2dataspace[addressing.name] = H5_Tools::createDataSpace1DUnlimited();
            };
 }
 
@@ -81,14 +82,11 @@ void Hdf5Observer::flush_after_initialization()
 {
     for (const auto addressing:name2address)
     {
-        hsize_t dimsT[1] = {1};
-        const hsize_t maxdimsT[1] = {H5S_UNLIMITED};
-        H5::DataSpace dataspace(1, dimsT, maxdimsT);
         name2dataset[addressing.first] =
                 H5_Tools::createDataSet(h5File,
                                         addressing.second,
                                         name2datatype[addressing.first],
-                                        dataspace);
+                                        name2dataspace[addressing.first]);
     }
 }
 
