@@ -43,3 +43,9 @@ TEST_F(parse_outputTest, can_parse_outputs)
     ASSERT_EQ("Fz(gravity,body 1)", res.at(1).data.at(2));
     ASSERT_EQ("wave", res.at(1).data.at(3));
 }
+
+TEST_F(parse_outputTest, should_work_even_if_string_is_empty)
+{
+    parse_output("");
+    ASSERT_NO_THROW(parse_output(""));
+}

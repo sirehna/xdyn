@@ -24,7 +24,13 @@ std::vector<YamlOutput> parse_output(const std::string yaml)
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    node["output"] >> ret;
+    try
+    {
+        node["output"]         >> ret;
+    }
+    catch(std::exception& ) // Nothing to do: 'output' section is not mandatory
+    {
+    }
     return ret;
 }
 
