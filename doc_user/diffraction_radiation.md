@@ -1,4 +1,10 @@
-# Expression des efforts hydrodynamiques
+
+# Modélisation des effort de diffraction et de radiation
+
+Cette section propose une décomposition des efforts hydrodynamiques comme
+représentée sur le schéma suivant :
+
+![](images/efforts_hydros.svg)
 
 ## Potentiel d'interaction entre la houle et l'obstacle
 
@@ -62,8 +68,6 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
    \Psi_I) \cdot n + V_o \cdot n$ où $V_o$ est la vitesse normale de l'obstacle en
    un point $P$ et $n$ est la normale extérieure à l'obstacle.
 
-
-
 ## Résolution
 
 Si l'on suppose l'obstacle fixe, la condition (5) s'écrit :
@@ -91,8 +95,6 @@ en adoptant les notations suivantes :
 - $V=\left[f_1,f_2,f_3\right]$ est la vitesse de translation du corps
 - $\Omega=\left[f_4,f_5,f_6\right]$ est sa vitesse de rotation
 
-
-
 ## Expression des efforts hydrodynamiques
 
 On pose $$\Phi_{\mbox{PR}} =  \Re\left[\sum_{j=1}^6 f_j \Psi_{PR_j} e^{-i\omega
@@ -110,22 +112,6 @@ $F_E$. Les efforts $\rho \frac{d}{dt} \int_{C}\Phi_{\mbox{PR}} dS$ sont nommés
 "efforts de radiation" et sont désignés par $F_R$. On a donc :
 
 $$F_{\mbox{hd}} = F_E + F_R$$
-
-
-
-## Calcul des efforts d'excitation
-
-Les efforts de Froude-Krylov sont calculés en intégrant la pression dynamique
-sur la carène et en supposant que le corps ne perturbe pas la houle. En
-pratique, ils peuvent être négligés dès que le corps est à plus d'une-demi
-longueur d'onde de profondeur.
-
-Les efforts de diffraction sont interpolés à partir de tables
-calculées par des logiciels de calculs hydrodynamiques basés sur des méthodes
-potentielles, tels qu'Aqua+. Ils sont paramétrés en pulsation, incidence et
-vitesse d'avance (RAO d'efforts).
-
-
 
 ## Calcul des efforts de radiation
 
@@ -197,8 +183,6 @@ le domaine fréquentiel :
 $$F_{\mbox{R}}(t) = -\left(M_A(\omega)\frac{d^2\eta(t)}{dt^2} + B_r(\omega)
 \frac{d\eta(t)}{dt}\right)$$
 
-
-
 ## Propriétés
 
 On peut montrer en utilisant la deuxième identité de Green, que les matrices
@@ -223,8 +207,8 @@ rien car elle ne décrit que les mouvements en régime établi sinusoïdal : cet
 équation n'est qu'une représentation de la réponse fréquentielle du navire.
 
 Cette constatation a été faite en 1962 par W. E. Cummins, alors employé par le
-David Taylor Model Basin de l'armée américaine ("The Impulse Response & Ship
-Motions", Report 1661, October 1962).
+David Taylor Model Basin de l'armée américaine (*The Impulse Response & Ship
+Motions*, Report 1661, October 1962).
 
 Dans ce document, Cummins entreprend d'expliciter les efforts hydrodynamiques
 dans le domaine temporel. Pour ce faire, il fait l'hypothèse que les mouvements
@@ -336,9 +320,245 @@ $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 
 $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
-En pratique, il est plus robuste de considérer $K$ comme une entrée du
-simulateur car $B_r$ présente souvent des anomalies et donc le passage de $B_r$
-à $K$ est souvent assorti d'opérations de filtrage qui dépendent de l'allure de
-$B_r$.
+## Calcul numérique des amortissements de radiation
 
+En pratique, on utilise en entrée du simulateur les fichiers HDB de Diodore,
+qui contiennent les matrices d'amortissement de radiation à différentes
+pulsations. Ces fichiers sont utilisés dans une table d'interpolation (soit une
+interpolation linéaire par morceaux, soit des splines) puis on évalue
+l'intégrale suivante pour différentes valeurs de $\tau$ :
+
+$$K_{i,j}(\tau) =
+\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega$$
+
+Cette intégrale est calculé à l'aide d'un schéma d'intégration numérique
+(méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
+
+![](images/radiation_damping_doc.png "Calcul de l'amortissement de radiation")
+
+On calcule ensuite les efforts d'amortissement de radiation en prenant en
+compte l'historique sur une période $T$ :
+
+$$F_{\mbox{rad}}(t)\sim\int_0^{T}\dot{X}(t-\tau)K_r(\tau)d\tau$$
+
+Il est important de noter que ces efforts sont exprimés dans le [repère de
+calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique) : un changement
+de repère est nécessaire pour les exprimer dans le repère "body".
+
+### Paramétrage
+
+Pour utiliser ce modèle, on écrit `model: radiation damping`.
+Les matrices d'amortissement de radiation sont lues depuis un fichier HDB
+(format Diodore). Ce fichier contient les matrices $B_r$ pour différentes
+périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
+suivantes sont réalisées :
+
+- Lecture du fichier HDB : son chemin est renseigné dans la clef `hdb`.
+- Interpolation des matrices de fonction d'amortissement : on utilise des
+  splines dites "naturelles", c'est-à-dire
+  dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
+  qui se prolongent par des droites aux extrémités du domaine.
+- Calcul des fonctions retard par intégration numérique : on choisit
+  l'algorithme d'intégration en renseignant la clef `type of quadrature for cos
+  tranform`. Les types d'intégration
+  connus sont : [`rectangle`](#m%C3%A9thode-des-rectangles), [`trapezoidal`](#m%C3%A9thode-des-trap%C3%A8zes),
+  [`simpson`](#r%C3%A8gle-de-simpson),
+  [`gauss-kronrod`](#quadrature-de-gauss-kronrod), [`clenshaw-curtis`](),
+  [`filon`]() et [`burcher`](). Les bornes d'intégration sont spécifiées par
+  `omega min` et `omega max`. Si ces bornes ne sont pas incluses dans
+  l'intervalle
+  $\left[\frac{2\pi}{\omega_{\mbox{max}}},\frac{2\pi}{\omega_{\mbox{min}}}\right]$,
+  un message d'avertissement s'affiche (car dans ce cas l'intégration se poursuit
+  hors du domaine de définition des fonctions de retard qui sont alors
+  extrapolées).
+- Interpolation des fonctions de retard lors de la convolution : comme pour les
+  fonctions d'amortissement, on utilise des splines naturelles.
+  Le nombre de points de discrétisation à partir duquel
+  est réalisée cette interpolation (le nombre de valeurs de $\tau$ pour
+  lesquelles qu'on calcule l'intégrale
+  $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
+  est donné par `nb of points for retardation function discretization`.
+- Interpolation des états : lors du calcul de l'intgrale de convolution, les
+  états sont interpolés linéairement entre deux instants
+- Calcul de la convolution : l'algorithme d'intégration est spécifié par `type
+  of quadrature for convolution`, qui peut prendre les mêmes valeurs que `type of
+  quadrature for cos transform`.
+- Verbosité : le calcul des efforts d'amortissement de radiation comprenant de
+  nombreuses étapes et étant extrêmement sensible aux bornes d'intégration et aux
+  types d'algorithmes utilisés, nous proposons l'affichage de résultats,
+  nommément les amortissements interpolés sur une grille plus fine que celle
+  fournie en entrée (afin de valider les erreurs dues à la discrétisation) et les
+  fonctions de retard (afin de valider les bornes d'intégration et l'algorithme
+  utilisés). Pour activer la verbosité, on met la clef `output Br and K` à
+  `true`. Sinon on la met à `false`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: radiation damping
+  hdb: anthineas.hdb
+  type of quadrature for cos transform: simpson
+  type of quadrature for convolution: clenshaw-curtis
+  nb of points for retardation function discretization: 50
+  omega min: {value: 0, unit: rad/s}
+  omega max: {value: 30, unit: rad/s}
+  tau min: {value: 0.2094395, unit: rad/s}
+  tau max: {value: 10, unit: s}
+  output Br and K: true
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+### Méthode des rectangles
+
+C’est la méthode la plus simple qui consiste à interpoler la fonction
+$f$ à intégrer par une fonction constante (polynôme de degré 0).
+
+Si $x_i$ est le point d’interpolation, la formule est la suivante :
+:$$I(f) = (b-a) f(x_i)$$
+
+Le choix de $x_i$ influence l’erreur $E(f) = I - I(f)$
+:
+- Si $x_i = a$ ou $x_i = b$, l’erreur est donnée
+  par $$E(f) = \frac{(b-a)^2}{2} f'(\eta), \quad \eta \in
+  [a,b]$$ C’est la ''méthode du rectangle'' qui est d’ordre
+  0.
+- Si $\xi = (a+b)/2\,$, l’erreur est donnée par $$E(f) =
+  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]$$ Il s’agit
+  de la méthode du point médian qui est d’ordre 1.
+
+Ainsi, le choix du point milieu améliore l’ordre de la méthode : celle du
+rectangle est exacte (c’est-à-dire $E(f) = 0$) pour les fonctions
+constantes alors que celle du point milieu est exacte pour les polynômes de
+degré 1. Ceci s’explique par le fait que l’écart d’intégration de la méthode du
+point milieu donne lieu à deux erreurs d’évaluation, de valeurs absolues
+environ égales et de signes opposés.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formules_du_rectangle_et_du_point_milieu)
+
+![](images/integration_num_rectangles.svg)
+
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_rectangles.svg?uselang=fr)
+
+
+### Méthode des trapèzes
+
+En interpolant $f$ par un polynôme de degré 1, les deux points
+d'interpolation $(a, f(a))$ et $(b, f(b))$ suffisent
+à tracer un segment dont l’intégrale correspond à l’aire d’un trapèze,
+justifiant le nom de méthode des trapèzes qui est d’ordre 1 :
+:$I(f) = (b-a) \frac{f(a) + f(b)}{2}$
+
+L’erreur est donnée par
+:$E(f) = - \frac{(b-a)^3}{12} f''(\eta), \quad \eta \in [a,b]$
+
+Conformément aux expressions de l’erreur, la méthode des trapèzes est souvent
+moins performante que celle du point milieu.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formule_du_trap.C3.A8ze)
+
+![](images/integration_num_trapezes.svg)
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_trap%C3%A8zes.svg)
+
+### Règle de Simpson
+
+En interpolant $f$ par un polynôme de degré 2 (3 degrés de liberté),
+3 points (ou conditions) sont nécessaires pour le caractériser : les valeurs
+aux extrémités $a$, $b$, et celle choisie en leur milieu
+$x_{1/2} = (a + b) / 2$. La méthode de Simpson est basée sur un
+polynôme de degré 2 (intégrale d’une parabole), tout en restant exacte pour des
+polynômes de degré 3 ; elle est donc d’ordre 3 :
+:$I(f) = \frac{(b-a)}{6} [ f(a) + 4 f(x_{1/2}) + f(b) ]$
+
+L’erreur globale est donnée par
+:$E(f) = - \frac{(b-a)^5}{2880} f^{(4)}(\eta), \quad \eta \in [a,b]$
+
+Remarque : comme la méthode du point médian qui caractérise un polynôme de
+degré 0 et qui reste exacte pour tout polynôme de degré 1, la méthode de
+Simpson caractérise un polynôme de degré 2 et reste exacte pour tout polynôme
+de degré 3. Il s’agit d’une sorte d’"anomalie" où se produisent des
+compensations bénéfiques à l’ordre de la méthode.
+
+[Source :
+Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formule_de_Simpson)
+
+![](images/integration_num_simpson.svg)
+[Source :
+Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_Simpson.svg)
+
+### Quadrature de Gauss-Kronrod
+La formule de quadrature de Gauss-Kronrod est une extension de la quadrature de
+Gauss. Lorsque l'on calcule une quadrature de Gauss sur un intervalle et que
+l'on divise cet intervalle en deux partie, on ne peut réutiliser aucun des
+points (sauf le point médian dans le cas d'un nombre de points impairs).
+La formule de Gauss-Kronrod, créée dans les années 60 par Alexander Kronrod,
+permet de transformer un schéma d'ordre $n$ en schéma d'ordre $3n+1$ en
+ajoutant aux $n$ points de la quadrature de Gauss $n+1$ zéros des polylônmes de
+Stieltjes-Wigert. Les polynômes de Stieltjes-Wigert sont des polynômes
+orthogonaux pour la fonction de poids :
+
+$$w(x)=\pi^{-1/2}\cdot k\cdot x^{k^2\log(x)},x\in\mathbf{R}_+^*, k>0$$
+
+On pose $$q_k=e^{-\frac{1}{2k^2}}$$
+
+Les polynômes de Stieltjes-Wigert s'écrivent alors :
+
+$$p_0(x)=q^{1/4}$$
+et
+$$p_{n,k}(x) = \frac{(-1)^n q_k^{\frac{n}{2} +
+\frac{1}{4}}}{\sqrt{(q_k;q_k)_n}}\sum{\nu=0}^n\left[\begin{array}{c}n\\\nu\end{array}\right]q_k^{\nu^2}(-\sqrt{q_k}x)^\nu$$
+
+où
+$$k\in[1,n]$$
+$$\left[\begin{array}{c}n\\\nu\end{array}\right]=\prod_{i=0}^{\nu-1}\frac{1-q^{n-i}}{1-q^{i+1}}$$
+($q$-symbole de Pochhammer)
+$$(q;a)_n=\left\{\begin{array}{c}
+          \prod_{j=0}^{n-1}(1-qa^j),n>0\\
+          1,n=0\\
+          \prod_{j=0}^{|n|}(1-qa^j),n<0\\
+          \prod_{j=0}^{\infty}(1-qa^j),n=\infty
+          \end{array}\right.$$ (coefficient $q$-binomial)
+
+Afin d'accélérer davantage la convergence, on utilise l'intégration de
+Gauss-Kronrod de manière répétée (puisque cette méthode offre l'avantage de
+pouvoir réutiliser les points de calcul de l'itération précédente) et l'on
+applique l'$\varepsilon$-algorithme de Wynn.
+
+Les formules de Gauss-Kronrod sont implémentées dans des bibliothèques
+numériques standard telles que celles de Netlib (QUADPACK, en particulier la
+routine DQAGS).
+
+- [Weisstein, Eric W. "Stieltjes-Wigert Polynomial." From
+MathWorld--A Wolfram Web
+Resource.](http://mathworld.wolfram.com/Stieltjes-WigertPolynomial.html)
+- Szegö, G., **Orthogonal Polynomials**, 4th ed. Providence, RI: Amer. Math. Soc.,
+p. 33, 1975. 
+- R. Piessens, E. deDoncker–Kapenga, C. Uberhuber, D. Kahaner (1983) **Quadpack: a
+Subroutine Package for Automatic Integration**; Springer Verlag. 
+
+### Méthode de Filon
+
+### Méthode de Clenshaw-Curtis
+
+### Méthode de Burcher
+
+## Calcul des matrices de masse ajoutée
+
+Dans le simulateur, la matrice de masses ajoutées est soit lue directement
+depuis le fichier YAML, soit calculée à partir d'un fichier DIODORE (extension
+HDB). Les fichiers HDB contenant les masses ajoutées à plusieurs périodes, on
+choisit la première, c'est-à-dire la matrice correspondant à la période la plus
+faible. On ne fait pas d'interpolation en zéro car une telle interpolation ne
+garantit pas la symmétrie et le caractère positif et défini de la matrice (les
+coefficients ont tendance à osciller fortement au voisinage de $T=0$). On
+suppose que les mailles utilisées pour le calcul des masses ajoutées
+(résolution du potentiel) sont suffisament fines pour que le résultat ait un
+sens.
+
+## Références
+- *Practical Source Code for Ship Motions Time Domain Numerical Analysis and
+  Its Mobile Device Application*, 2011, Zayar Thein, Department of Shipping and
+Marine Technology, CHALMERS UNIVERSITY OF TECHNOLOGY, Göteborg, Sweden, page 18
 

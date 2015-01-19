@@ -123,25 +123,32 @@ IF(PANDOC)
     FOREACH(f ${files})
         INSTALL(FILES ${f} DESTINATION doc/images)
     ENDFOREACH()
+
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html
-                       COMMAND pandoc -s --toc --mathml -f markdown introduction.md documentation_yaml.md solver.md modeles_reperes_et_conventions.md tutorial_*.md  -t html --highlight-style pygments -o doc.html  -c stylesheet.css
+                       COMMAND pandoc -s --toc --mathml -f markdown introduction.md interfaces.md solver.md reperes_et_conventions.md modeles_environnementaux.md diffraction_radiation.md modeles_efforts.md tutorial_*.md  -t html --highlight-style pygments -o doc.html  -c stylesheet.css
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
                        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/documentation_yaml.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_reperes_et_conventions.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/reperes_et_conventions.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_environnementaux.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
                        )
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.docx
-                       COMMAND pandoc -s --toc --mathml -f markdown introduction.md documentation_yaml.md solver.md modeles_reperes_et_conventions.md tutorial_*.md  --highlight-style pygments -o doc.docx  -c stylesheet.css
+                       COMMAND pandoc -s --toc --mathml -f markdown introduction.md interfaces.md solver.md reperes_et_conventions.md modeles_environnementaux.md diffraction_radiation.md modeles_efforts.md tutorial_*.md  -t html --highlight-style pygments -o doc.docx  -c stylesheet.css
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
                        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/documentation_yaml.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_reperes_et_conventions.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/reperes_et_conventions.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_environnementaux.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
