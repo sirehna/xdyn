@@ -529,6 +529,36 @@ documentation](#efforts-damortissement-visqueux).
 - *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
 - *Marine Control Systems: Guidance, Navigation and Control of Ships, Rigs and Underwater Vehicles*, 2002, THor I. Fossen, Marine Cybernetics, ISBN 82-92356-00-2, page 71
 
+## Modèles de manoeuvrabilité
+
+### Description
+
+Le but de ce modèle d'effort est de pouvoir écrire un modèle de manoeuvrabilité
+de façon assez générique, sans avoir à recompiler le code source. Des
+expressions simples des états et du temps peuvent être calculées, par exemple:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: maneuvering
+  X: 2*x(t-tau)*x'(t)/sqrt(x(t)^2+y(t)^2)
+  Y: 0
+  Z: 0
+  K: 0
+  M: 0
+  N: 0
+  tau: 25
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Toutes les valeurs sont supposées en unité du système international. Le modèle
+nécessite de spécifier X, Y, Z, K, M et N. Des variables accessoires (telles
+que `tau` dans l'exemple ci-dessus) peuvent être utilisées. Le modèle vérifie
+automatiquement à l'exécution qu'il possède toutes les clefs nécessaires.
+
+### Grammaire
+
+De façon plus formelle, les modèles doivent obéir à la grammaire suivante
+(format Bachus-Naur ou BNF) :
+
+
 # Efforts commandés
 
 ## Description
