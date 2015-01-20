@@ -13,6 +13,7 @@ FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/HDBParserForTests.cpp
               src/DiffractionForceModelTest.cpp
               src/SimpleTrackKeepingControllerTest.cpp
+              src/ManeuveringForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
