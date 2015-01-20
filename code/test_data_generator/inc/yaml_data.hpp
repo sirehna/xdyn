@@ -42,6 +42,7 @@ namespace test_data
     std::string diffraction();
     std::string anthineas_radiation_damping();
     std::string simple_track_keeping();
+    std::string maneuvering();
 }
 
 #endif /* YAML_DATA_HPP_ */

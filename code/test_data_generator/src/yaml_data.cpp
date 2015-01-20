@@ -1941,3 +1941,51 @@ std::string test_data::simple_track_keeping()
        << "Tp: {value: 4, unit: s}\n";
     return ss.str();
 }
+
+std::string test_data::maneuvering()
+{
+    std::stringstream ss;
+    ss << "calculation point in body frame:\n"
+       << "    x: {value: 0.696, unit: m}\n"
+       << "    y: {value: 0, unit: m}\n"
+       << "    z: {value: 1.418, unit: m}\n"
+       << "X: 0.5*rho*Vs^2*L^2*X_\n"
+       << "Y: 0.5*rho*Vs^2*L^2*Y_\n"
+       << "Z: 0\n"
+       << "K: 0\n"
+       << "M: 0\n"
+       << "N: 0.5*rho*Vs^2*L^3*N_\n"
+       << "rho: 1024\n"
+       << "Vs: sqrt(u(t)^2+v(t)^2)\n"
+       << "L: 21.569\n"
+       << "X_: Xu*u_ + Xuu*u_^2 + Xuuu*u_^3 + Xvv*v_^2 + Xrr*r_^2 + Xvr*abs(v_)*abs(r_)\n"
+       << "Y_: Yv*v_ + Yvv*v*abs(v) + Yvvv*v_^3 + Yvrr*v_*r_^2 + Yr*r_ + Yrr*r_*abs(r_) + Yrrr*r_^3 + Yrvv*r_*v_^2\n"
+       << "N_: Nv*v_ + Nvv*v*abs(v) + Nvvv*v_^3 + Nvrr*v_*r_^2 + Nr*r_ + Nrr*r_*abs(r_) + Nrrr*r_^3 + Nrvv*r_*v_^2\n"
+       << "u_: u(t)/Vs\n"
+       << "v_: v(t)/Vs\n"
+       << "r_: r(t)/Vs*L\n"
+       << "Xu: 0\n"
+       << "Xuu: 0\n"
+       << "Xuuu: 0\n"
+       << "Xvv: -0.041\n"
+       << "Xrr: -0.01\n"
+       << "Xvr: -0.015\n"
+       << "Yv: -0.13\n"
+       << "Yvv: -0.18\n"
+       << "Yvvv: 0\n"
+       << "Yvrr: 0\n"
+       << "Yr: 0.015\n"
+       << "Yrr: 0.021\n"
+       << "Yrrr: 0\n"
+       << "Yrvv: 0\n"
+       << "Nv: -0.37\n"
+       << "Nvv: -0.12\n"
+       << "Nvvv: 0\n"
+       << "Nvrr: 0\n"
+       << "Nr: -0.1\n"
+       << "Nrr: 0.005\n"
+       << "Nrrr: 0\n"
+       << "Nrvv: 0\n"
+       << "\n";
+    return ss.str();
+}
