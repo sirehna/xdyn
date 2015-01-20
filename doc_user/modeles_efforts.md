@@ -539,14 +539,56 @@ expressions simples des états et du temps peuvent être calculées, par exemple
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: maneuvering
-  X: 2*x(t-tau)*x'(t)/sqrt(x(t)^2+y(t)^2)
-  Y: 0
+  point of application (in body frame):
+      x: {value: 0.696, unit: m}
+      y: {value: 0, unit: m}
+      z: {value: 1.418, unit: m}
+  X: 0.5*rho*Vs^2*L^2*X_
+  Y: 0.5*rho*Vs^2*L^2*Y_
   Z: 0
   K: 0
   M: 0
-  N: 0
-  tau: 25
+  N: 0.5*rho*Vs^2*L^3*N_
+  rho: 1024
+  Vs: sqrt(u(t)^2+v(t)^2)
+  L: 21.569
+  X_: Xu*u_ + Xuu*u_^2 + Xuuu*u_^3 + Xvv*v_^2 + Xrr*r_^2 + Xvr*abs(v_)*abs(r_)
+  Y_: Yv*v_ + Yvv*v*abs(v) + Yvvv*v_^3 + Yvrr*v_*r_^2 + Yr*r_ + Yrr*r_*abs(r_) + Yrrr*r_^3 + Yrvv*r_*v_^2
+  N_: Nv*v_ + Nvv*v*abs(v) + Nvvv*v_^3 + Nvrr*v_*r_^2 + Nr*r_ + Nrr*r_*abs(r_) + Nrrr*r_^3 + Nrvv*r_*v_^2
+  u_: u(t)/Vs
+  v_: v(t)/Vs
+  r_: r(t)/Vs*L
+  Xu: 0
+  Xuu: 0
+  Xuuu: 0
+  Xvv: -0.041
+  Xrr: -0.01
+  Xvr: -0.015
+  Yv: -0.13
+  Yvv: -0.18
+  Yvvv: 0
+  Yvrr: 0
+  Yr: 0.015
+  Yrr: 0.021
+  Yrrr: 0
+  Yrvv: 0
+  Nv: -0.37
+  Nvv: -0.12
+  Nvvv: 0
+  Nvrr: 0
+  Nr: -0.1
+  Nrr: 0.005
+  Nrrr: 0
+  Nrvv: 0
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`point of application (in body frame)`: Coordonnées du point d'application du
+torseur (dans le repère "body"). Le torseur est automatiquement déplacé au
+centre de gravité (point (0,0,0) du repère "body").
+`X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
+body), exprimé au point d'application défini ci-dessus.
+
+Les autres clefs peuvent être quelconques et dépendent du modèle.
 
 Toutes les valeurs sont supposées en unité du système international. Le modèle
 nécessite de spécifier X, Y, Z, K, M et N. Des variables accessoires (telles

@@ -11,6 +11,7 @@
 #include <map>
 
 #include "ForceModel.hpp"
+#include "YamlCoordinates.hpp"
 
 class ManeuveringForceModel : public ForceModel
 {
@@ -19,6 +20,7 @@ class ManeuveringForceModel : public ForceModel
         struct Yaml
         {
             Yaml();
+            YamlCoordinates point_of_application;
             std::map<std::string, std::string> var2expr;
         };
         ManeuveringForceModel(const Yaml& data, const std::string& body_name, const EnvironmentAndFrames& env);

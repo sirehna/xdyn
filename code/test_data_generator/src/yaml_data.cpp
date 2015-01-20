@@ -1945,7 +1945,7 @@ std::string test_data::simple_track_keeping()
 std::string test_data::maneuvering()
 {
     std::stringstream ss;
-    ss << "calculation point in body frame:\n"
+    ss << "point of application (in body frame):\n"
        << "    x: {value: 0.696, unit: m}\n"
        << "    y: {value: 0, unit: m}\n"
        << "    z: {value: 1.418, unit: m}\n"
