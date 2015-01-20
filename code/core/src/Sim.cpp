@@ -25,8 +25,7 @@ class Sim::Impl
              const StateType& x,
              const ssc::data_source::DataSource& command_listener_) :
                  bodies(bodies_), forces(), controlled_forces(), env(env_),
-                 _dx_dt(StateType(x.size(),0)), command_listener(command_listener_),
-                 outputted_forces()
+                 _dx_dt(StateType(x.size(),0)), command_listener(command_listener_)
         {
             size_t i = 0;
             for (auto body:bodies)
@@ -42,7 +41,6 @@ class Sim::Impl
         EnvironmentAndFrames env;
         StateType _dx_dt;
         ssc::data_source::DataSource command_listener;
-        OuputtedForces outputted_forces;
 };
 
 Sim::Sim(const std::vector<BodyPtr>& bodies,
@@ -59,7 +57,6 @@ Sim::Sim(const std::vector<BodyPtr>& bodies,
             force->add_reference_frame(pimpl->env.k, pimpl->env.rot);
         }
     }
-    fill_force_map_with_zeros(pimpl->outputted_forces);
 }
 
 StateType Sim::normalize_quaternions(const StateType& all_states
@@ -110,123 +107,6 @@ void Sim::update_continuous_states()
 {
 }
 
-StateType Sim::get_state_derivatives() const
-{
-    return pimpl->_dx_dt;
-}
-
-std::vector<std::string> Sim::get_names_of_bodies() const
-{
-    std::vector<std::string> ret;
-    for (auto that_body=pimpl->bodies.begin() ; that_body != pimpl->bodies.end() ; ++that_body)
-    {
-        ret.push_back((*that_body)->get_name());
-    }
-    return ret;
-}
-
-OuputtedForces Sim::get_forces() const
-{
-    return pimpl->outputted_forces;
-}
-
-std::vector<double> Sim::get_forces_as_a_vector_of_doubles() const
-{
-    std::vector<double> ret;
-    const auto m = pimpl->outputted_forces;
-    for (auto it1 = m.begin() ; it1 != m.end() ; ++it1)
-    {
-        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
-        {
-            const std::vector<double> mm(it2->second.data(),it2->second.data()+6);
-            ret.insert(ret.end(), mm.begin(), mm.end());
-        }
-    }
-    return ret;
-}
-
-std::map<std::string,double> Sim::get_states(const StateType& x) const
-{
-    std::map<std::string,double> ret;
-    size_t i = 0;
-    for (auto body:pimpl->bodies)
-    {
-        const auto states = body->get_states();
-        ret[std::string("x(") + states.name + ")"] = *_X(x,i);
-        ret[std::string("y(") + states.name + ")"] = *_Y(x,i);
-        ret[std::string("z(") + states.name + ")"] = *_Z(x,i);
-        ret[std::string("u(") + states.name + ")"] = *_U(x,i);
-        ret[std::string("v(") + states.name + ")"] = *_V(x,i);
-        ret[std::string("w(") + states.name + ")"] = *_W(x,i);
-        ret[std::string("p(") + states.name + ")"] = *_P(x,i);
-        ret[std::string("q(") + states.name + ")"] = *_Q(x,i);
-        ret[std::string("r(") + states.name + ")"] = *_R(x,i);
-        ret[std::string("qr(") + states.name + ")"] = *_QR(x,i);
-        ret[std::string("qi(") + states.name + ")"] = *_QI(x,i);
-        ret[std::string("qj(") + states.name + ")"] = *_QJ(x,i);
-        ret[std::string("qk(") + states.name + ")"] = *_QK(x,i);
-        i++;
-    }
-    return ret;
-}
-
-void Sim::fill_force_map_with_zeros(OuputtedForces& m) const
-{
-    for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
-    {
-        auto forces = pimpl->forces[pimpl->bodies[i]->get_name()];
-        auto controlled_forces = pimpl->controlled_forces[pimpl->bodies[i]->get_name()];
-        for (auto force:forces)
-        {
-            fill_force(m, pimpl->bodies[i]->get_name(), force->get_name(), ssc::kinematics::Wrench(ssc::kinematics::Point(), ssc::kinematics::Vector6d::Zero()));
-        }
-        for (auto force:controlled_forces)
-        {
-            fill_force(m, pimpl->bodies[i]->get_name(), force->get_name(), ssc::kinematics::Wrench(ssc::kinematics::Point(), ssc::kinematics::Vector6d::Zero()));
-        }
-    }
-}
-
-std::vector<std::string> Sim::get_force_names() const
-{
-    std::vector<std::string> ret;
-    OuputtedForces m;
-    fill_force_map_with_zeros(m);
-    for (auto it1 = m.begin() ; it1 != m.end() ; ++it1)
-    {
-        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
-        {
-            ret.push_back(it2->first + " acting on " + it1->first);
-        }
-    }
-    return ret;
-}
-
-VectorOfStringModelForEachBody Sim::get_vector_of_string_model_for_each_body() const
-{
-    VectorOfStringModelForEachBody ret;
-    OuputtedForces m;
-    fill_force_map_with_zeros(m);
-    for (auto it1 = m.begin() ; it1 != m.end() ; ++it1)
-    {
-        std::vector<std::string> bodyModel;
-        for (auto it2 = it1->second.begin() ; it2 != it1->second.end() ; ++it2)
-        {
-            bodyModel.push_back(it2->first);
-        }
-        ret.push_back(std::make_pair(it1->first,bodyModel));
-    }
-    return ret;
-}
-
-void Sim::fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const
-{
-    ssc::kinematics::Vector6d s;
-    s<<tau.force,
-       tau.torque;
-    ret[body_name][force_name] = s;
-}
-
 ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyPtr& body, const double t)
 {
     const Eigen::Vector3d uvw_in_body_frame = body->get_uvw_in_body_frame(x);
@@ -243,12 +123,10 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
             const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->get_name());
             const auto t = tau.change_frame_but_keep_ref_point(T);
             const ssc::kinematics::UnsafeWrench tau_body(states.G, t.force, t.torque + (t.get_point()-states.G).cross(t.force));
-            fill_force(pimpl->outputted_forces,body->get_name(), force->get_name(), tau_body);
             S += tau_body;
         }
         else
         {
-            fill_force(pimpl->outputted_forces,body->get_name(), force->get_name(), tau);
             S += tau;
         }
     }
@@ -259,7 +137,6 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
         const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->get_name());
         const auto t = tau.change_frame_but_keep_ref_point(T);
         const ssc::kinematics::UnsafeWrench tau_body(states.G, t.force, t.torque + (t.get_point()-states.G).cross(t.force));
-        fill_force(pimpl->outputted_forces,body->get_name(), force->get_name(), tau_body);
         S += tau_body;
     }
     return S;
@@ -286,39 +163,6 @@ std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current in
         THROW(__PRETTY_FUNCTION__, SimException, ss.str());
     }
     return std::vector<ssc::kinematics::Point>();
-}
-
-SurfaceElevationGrid Sim::get_waves_as_a_grid(
-        const double t//!< Current instant
-        ) const
-{
-    try
-    {
-        if (pimpl->env.w.get())
-        {
-            for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
-            {
-                pimpl->bodies[i]->update_kinematics(state,pimpl->env.k);
-            }
-            return pimpl->env.w->get_waves_on_mesh_as_a_grid(pimpl->env.k, t);
-        }
-    }
-    catch (const ssc::kinematics::KinematicsException& e)
-    {
-        std::stringstream ss;
-        ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
-        THROW(__PRETTY_FUNCTION__, SimException, ss.str());
-    }
-    return SurfaceElevationGrid();
-}
-
-std::pair<std::size_t,std::size_t> Sim::get_waves_mesh_size() const
-{
-    if (pimpl->env.w.get())
-    {
-        return pimpl->env.w->get_output_mesh_size();
-    }
-    return std::make_pair((std::size_t)0,(std::size_t)0);
 }
 
 void Sim::output(const StateType& x, Observer& obs, const double t) const

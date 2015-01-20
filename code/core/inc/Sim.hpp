@@ -36,13 +36,6 @@ class Sim
 
         void update_discrete_states();
         void update_continuous_states();
-        StateType get_state_derivatives() const;
-        std::vector<std::string> get_names_of_bodies() const;
-        std::vector<std::string> get_force_names() const;
-        VectorOfStringModelForEachBody get_vector_of_string_model_for_each_body() const;
-        OuputtedForces get_forces() const;
-        std::vector<double> get_forces_as_a_vector_of_doubles() const;
-        std::map<std::string,double> get_states(const StateType& x) const;
 
         /**  \brief Serialize wave data on mesh for an ASCII observer
           *  \details Called by SimCsvObserver at each time step. The aim is to
@@ -55,22 +48,6 @@ class Sim
           */
         std::vector<ssc::kinematics::Point> get_waves(const double t            //!< Current instant
                                                      ) const;
-
-        /**  \brief Serialize wave data on mesh for the HDF5 observer
-          *  \details Called by SimHdf5WaveObserver at each time step. The aim is to
-          *  calculate the wave data on a mesh expressed in a particular frame of
-          *  reference (eg. NED or body). For example we might want to calculate the
-          *  wave data on a mesh surrounding the ship for visualization purposes.
-          *  \returns A grid
-          */
-        SurfaceElevationGrid get_waves_as_a_grid(const double t//!< Current instant
-                                                ) const;
-        /**
-         * \brief Give the size of the output wave mesh
-         * \return The pair nx,ny, corresponding to the number of points along X and Y
-         */
-        std::pair<std::size_t,std::size_t> get_waves_mesh_size() const;
-
 
         std::vector<ssc::kinematics::EulerAngles> get_EulerAngles(
                 const StateType& all_states,
@@ -90,10 +67,6 @@ class Sim
           */
         StateType normalize_quaternions(const StateType& all_states
                                        ) const;
-
-
-        void fill_force(OuputtedForces& ret, const std::string& body_name, const std::string& force_name, const ssc::kinematics::Wrench& tau) const;
-        void fill_force_map_with_zeros(OuputtedForces& m) const;
 
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;
