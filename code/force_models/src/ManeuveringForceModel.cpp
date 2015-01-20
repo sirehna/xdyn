@@ -26,5 +26,16 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
     YAML::Node node;
     parser.GetNextDocument(node);
     node["point of application (in body frame)"] >> ret.point_of_application;
+    for(YAML::Iterator it=node.begin();it!=node.end();++it)
+    {
+        std::string key = "";
+        it.first() >> key;
+        if (key != "point of application (in body frame)")
+        {
+            std::string value;
+            node[key] >> value;
+            ret.var2expr[key] = value;
+        }
+    }
     return ret;
 }

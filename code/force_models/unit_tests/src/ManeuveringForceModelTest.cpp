@@ -38,3 +38,13 @@ TEST_F(ManeuveringForceModelTest, can_parse_point_of_application)
 //! [ManeuveringForceModelTest expected output]
 }
 
+TEST_F(ManeuveringForceModelTest, can_parse_X_Y_Z_K_M_N)
+{
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    ASSERT_EQ("0.5*rho*Vs^2*L^2*X_", data.var2expr["X"]);
+    ASSERT_EQ("0.5*rho*Vs^2*L^2*Y_", data.var2expr["Y"]);
+    ASSERT_EQ("0", data.var2expr["Z"]);
+    ASSERT_EQ("0", data.var2expr["K"]);
+    ASSERT_EQ("0", data.var2expr["M"]);
+    ASSERT_EQ("0.5*rho*Vs^2*L^3*N_", data.var2expr["N"]);
+}
