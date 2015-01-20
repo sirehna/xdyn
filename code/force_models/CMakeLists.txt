@@ -14,6 +14,7 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/RadiationDampingForceModel.cpp
         src/SimpleTrackKeepingController.cpp
         src/ManeuveringForceModel.cpp
+        src/ManeuveringAST.cpp
         )
 
 # Using C++ 2011
