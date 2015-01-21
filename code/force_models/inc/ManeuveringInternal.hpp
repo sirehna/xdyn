@@ -60,6 +60,25 @@ namespace maneuvering
         private:
             double val;
     };
+
+    class Unary : public Node
+    {
+        public:
+            Unary(const NodePtr operand);
+
+        protected:
+            NodePtr get_operand() const;
+    };
+
+    class Cos : public Unary
+    {
+        public:
+            Cos(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    NodePtr make_constant(const double val);
+    NodePtr make_cos(const NodePtr& operand);
 }
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */
