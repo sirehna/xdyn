@@ -24,8 +24,6 @@ class History
 {
     public:
         History();
-        History(const double Tmax //!< Maximum duration to store in history (in seconds)
-               );
 
         /**  \brief Returns the value at t-tau, t being the current instant
           *  \returns Value at t-tau in history
@@ -73,7 +71,7 @@ class History
 
         double Tmax;
         Container L;
-        double oldest_recorded_instant;
+        double oldest_recorded_instant; //!< Maximum duration to store in history (in seconds)
 };
 
 

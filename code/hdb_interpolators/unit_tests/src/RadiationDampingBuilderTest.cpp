@@ -51,7 +51,7 @@ TEST_F(RadiationDampingBuilderTest, can_calculate_cosine_transform)
 
 TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
 {
-    History h(1000);
+    History h;
     h.record(0,1);
     h.record(1000,1);
     RadiationDampingBuilder builder(TypeOfQuadrature::FILON, TypeOfQuadrature::FILON);

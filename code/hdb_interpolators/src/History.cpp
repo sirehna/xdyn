@@ -16,16 +16,6 @@ History::History() : Tmax(0), L(), oldest_recorded_instant(0)
 {
 }
 
-History::History(const double Tmax_) : Tmax(Tmax_), L(), oldest_recorded_instant(0)
-{
-    if (Tmax<=0)
-    {
-        std::stringstream ss;
-        ss << "Tmax should be greater than 0: received " << Tmax;
-        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
-    }
-}
-
 double History::operator()(const double tau //!< How far back in history do we need to go (in seconds)?
                           )
 {

@@ -110,7 +110,7 @@ class RadiationDampingForceModel::Impl
                         tau_writer.add("K",K[i][j],i+1,j+1);
                     }
                 }
-                h.at(i) = History(Tmax);
+                h.at(i) = History();
             }
             if (yaml.output_Br_and_K)
             {

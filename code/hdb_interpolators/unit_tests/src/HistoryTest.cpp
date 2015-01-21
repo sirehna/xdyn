@@ -31,26 +31,18 @@ TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
     const double Tmax = a.random<double>().greater_than(0);
     const double t_lower_than_Tmax = a.random<double>().between(0,Tmax);
     const double t_greater_than_Tmax = a.random<double>().greater_than(Tmax);
-    History h(Tmax);
-    h.record(a.random<double>(), a.random<double>());
-    h(t_lower_than_Tmax);
+    History h;
+    const double t0 = a.random<double>().greater_than(0);
+    h.record(t0, a.random<double>());
+    h.record(t0+Tmax, a.random<double>());
     ASSERT_NO_THROW(h(t_lower_than_Tmax));
     ASSERT_NO_THROW(h(Tmax));
     ASSERT_THROW(h(t_greater_than_Tmax), HistoryException);
 }
 
-TEST_F(HistoryTest, constructor_should_throw_if_Tmax_is_negative)
-{
-    const double positive_Tmax = a.random<double>().greater_than(0);
-    ASSERT_NO_THROW(History h(positive_Tmax));
-    const double negative_Tmax = a.random<double>().no().greater_than(0);
-    ASSERT_THROW(History h(negative_Tmax), HistoryException);
-    ASSERT_THROW(History h(0), HistoryException);
-}
-
 TEST_F(HistoryTest, should_throw_if_recording_the_same_instant_twice_with_different_values)
 {
-    History h(a.random<double>().greater_than(0));
+    History h;
     const double t = a.random<double>().greater_than(0);
     const double x0 = a.random<double>();
     ASSERT_NO_THROW(h.record(t, x0));
@@ -62,13 +54,13 @@ TEST_F(HistoryTest, should_throw_if_recording_the_same_instant_twice_with_differ
 
 TEST_F(HistoryTest, cannot_retrieve_anything_if_history_is_empty)
 {
-    History h(a.random<double>().greater_than(0));
-    ASSERT_THROW(History h(0), HistoryException);
+    History h;
+    ASSERT_THROW(h(0), HistoryException);
 }
 
 TEST_F(HistoryTest, can_retrieve_initial_values)
 {
-    History h(3);
+    History h;
     const double t0 = a.random<double>();
     h.record(t0-2, 1);
     h.record(t0-1, 2);
@@ -81,7 +73,7 @@ TEST_F(HistoryTest, can_retrieve_initial_values)
 
 TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
 {
-    History h(3);
+    History h;
     const double t0 = a.random<double>();
     h.record(t0-2, 1);
     h.record(t0-1, 2);
@@ -92,7 +84,7 @@ TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
 TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
 {
     //! [HistoryTest example]
-    History h(516);
+    History h;
     h.record(421, 1);
     h.record(216, 277);
     h.record(420, 73);
@@ -115,14 +107,14 @@ TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
 TEST_F(HistoryTest, can_get_size_of_history)
 {
     const size_t N = a.random<size_t>().between(2,1000);
-    History h((double)N);
+    History h;
     for (size_t i = 0 ; i < N ; ++i) h.record((double)i, a.random<double>());
     ASSERT_EQ(N, h.size());
 }
 
 TEST_F(HistoryTest, should_shift_history)
 {
-    History h;//(13.5);
+    History h;
     h.record(10, 10);
     ASSERT_EQ(1, h.size());
 
@@ -143,14 +135,14 @@ TEST_F(HistoryTest, should_shift_history)
     ASSERT_DOUBLE_EQ(11, h(13.5));
 
     h.record(30, 25);
-    //ASSERT_EQ(6, h.size());
+    ASSERT_EQ(7, h.size());
 
     h.record(31, 26);
-    //ASSERT_EQ(7, h.size());
+    ASSERT_EQ(8, h.size());
     ASSERT_DOUBLE_EQ(16, h(13.5));
 
     h.record(33, 27);
-    //ASSERT_EQ(8, h.size());
+    ASSERT_EQ(9, h.size());
     ASSERT_DOUBLE_EQ(12.8, h(13.5));
 }
 
@@ -160,7 +152,11 @@ TEST_F(HistoryTest, can_get_history_max_length)
     {
         //! [HistoryTest get_Tmax_example]
         const double Tmax = a.random<double>().greater_than(0);
-        ASSERT_DOUBLE_EQ(Tmax, History(Tmax).get_Tmax());
+        History h;
+        const double t = a.random<double>().between(0,10);
+        h.record(t, a.random<double>());
+        h.record(t+Tmax, a.random<double>());
+        ASSERT_DOUBLE_EQ(Tmax, h.get_Tmax());
         //! [HistoryTest get_Tmax_example]
     }
 }
@@ -168,7 +164,7 @@ TEST_F(HistoryTest, can_get_history_max_length)
 TEST_F(HistoryTest, can_get_history_length)
 {
     //! [HistoryTest get_length_example]
-    History h(516);
+    History h;
     h.record(421, 1);
     ASSERT_DOUBLE_EQ(0, h.get_length());
     h.record(216, 277);
