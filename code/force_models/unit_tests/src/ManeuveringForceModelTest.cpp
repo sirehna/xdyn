@@ -15,6 +15,8 @@
 #include <cmath>
 #define PI M_PI
 
+using namespace maneuvering;
+
 ManeuveringForceModelTest::ManeuveringForceModelTest() : a(ssc::random_data_generator::DataGenerator(87542))
 {
 }
@@ -56,7 +58,7 @@ TEST_F(ManeuveringForceModelTest, can_parse_X_Y_Z_K_M_N)
 
 TEST_F(ManeuveringForceModelTest, internal_constant)
 {
-    const auto c = maneuvering::make_constant(4);
+    const auto c = make_constant(4);
     const auto f = c->get_lambda();
     BodyStates states;
     ssc::data_source::DataSource ds;
@@ -66,10 +68,20 @@ TEST_F(ManeuveringForceModelTest, internal_constant)
 
 TEST_F(ManeuveringForceModelTest, internal_cos)
 {
-    const auto c = make_cos(maneuvering::make_constant(PI/3.));
+    const auto c = make_cos(make_constant(PI/3.));
     const auto f = c->get_lambda();
     BodyStates states;
     ssc::data_source::DataSource ds;
     const double t = a.random<double>();
     ASSERT_DOUBLE_EQ(0.5, f(states, ds, t));
+}
+
+TEST_F(ManeuveringForceModelTest, internal_abs)
+{
+    const auto c = make_abs(make_cos(make_constant(PI)));
+    const auto f = c->get_lambda();
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = a.random<double>();
+    ASSERT_DOUBLE_EQ(1, f(states, ds, t));
 }
