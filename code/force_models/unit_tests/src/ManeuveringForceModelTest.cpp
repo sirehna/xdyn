@@ -95,3 +95,13 @@ TEST_F(ManeuveringForceModelTest, internal_sin)
     const double t = a.random<double>();
     ASSERT_DOUBLE_EQ(0.5, f(states, ds, t));
 }
+
+TEST_F(ManeuveringForceModelTest, internal_log)
+{
+    const auto c = make_log(make_constant(exp(1)));
+    const auto f = c->get_lambda();
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = a.random<double>();
+    ASSERT_DOUBLE_EQ(1, f(states, ds, t));
+}

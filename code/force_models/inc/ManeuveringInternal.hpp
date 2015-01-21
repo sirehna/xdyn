@@ -91,10 +91,18 @@ namespace maneuvering
             Function get_lambda() const;
     };
 
+    class Log : public Unary
+    {
+        public:
+            Log(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
     NodePtr make_constant(const double val);
     NodePtr make_cos(const NodePtr& operand);
     NodePtr make_sin(const NodePtr& operand);
     NodePtr make_abs(const NodePtr& operand);
+    NodePtr make_log(const NodePtr& operand);
 }
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */
