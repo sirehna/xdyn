@@ -153,6 +153,21 @@ Function Exp::get_lambda() const
             };
 }
 
+Difference::Difference(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
+{
+}
+
+Function Difference::get_lambda() const
+{
+    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+    {
+        const auto op1 = get_lhs()->get_lambda();
+        const auto op2 = get_rhs()->get_lambda();
+        return op1(states, ds, t) - op2(states, ds, t);
+    };
+}
+
+
 NodePtr maneuvering::make_constant(const double val)
 {
     return NodePtr(new Constant(val));
@@ -191,4 +206,9 @@ NodePtr maneuvering::make_pow(const NodePtr& lhs, const NodePtr& rhs)
 NodePtr maneuvering::make_exp(const NodePtr& n)
 {
     return NodePtr(new Exp(n));
+}
+
+NodePtr maneuvering::make_difference(const NodePtr& lhs, const NodePtr& rhs)
+{
+    return NodePtr(new Difference(lhs,rhs));
 }

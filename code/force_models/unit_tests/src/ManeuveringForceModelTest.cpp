@@ -138,3 +138,15 @@ TEST_F(ManeuveringForceModelTest, internal_exp)
     const double t = a.random<double>();
     ASSERT_DOUBLE_EQ(x, f(states, ds, t));
 }
+
+TEST_F(ManeuveringForceModelTest, internal_difference)
+{
+    const double x = a.random<double>().between(-10,10);
+    const double y = a.random<double>().between(-10,10);
+    const auto c = make_difference(make_constant(x),make_constant(y));
+    const auto f = c->get_lambda();
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = a.random<double>();
+    ASSERT_DOUBLE_EQ(x-y, f(states, ds, t));
+}
