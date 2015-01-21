@@ -12,11 +12,11 @@
 #include "History.hpp"
 #include "HistoryException.hpp"
 
-History::History() : Tmax(), L()
+History::History() : Tmax(0), L(), oldest_recorded_instant(0)
 {
 }
 
-History::History(const double Tmax_) : Tmax(Tmax_), L()
+History::History(const double Tmax_) : Tmax(Tmax_), L(), oldest_recorded_instant(0)
 {
     if (Tmax<=0)
     {
@@ -27,7 +27,7 @@ History::History(const double Tmax_) : Tmax(Tmax_), L()
 }
 
 double History::operator()(const double tau //!< How far back in history do we need to go (in seconds)?
-                          ) const
+                          )
 {
     if (tau>Tmax)
     {
@@ -52,7 +52,7 @@ double History::operator()(const double tau //!< How far back in history do we n
 
 double History::get_current_time() const
 {
-    return L.back().first;
+    return L.empty() ? oldest_recorded_instant : L.back().first;
 }
 
 double History::get_value(const size_t idx, const double t) const
@@ -112,7 +112,6 @@ size_t History::find_braketing_position(const double t) const
 
 void History::shift_oldest_recorded_instant()
 {
-    const double oldest_recorded_instant = get_current_time() - Tmax;
     const size_t idx = find_braketing_position(oldest_recorded_instant);
     const bool oldest_recorded_instant_is_not_in_first_interval = idx>0;
     if (oldest_recorded_instant_is_not_in_first_interval)
@@ -126,15 +125,18 @@ void History::shift_oldest_recorded_instant()
 
 void History::add_value_to_history(const double t, const double val)
 {
-    const size_t t_idx = find_braketing_position(t);
-    throw_if_already_added(t_idx, t, val);
-    L.insert(L.begin() + (long) (t_idx), std::make_pair(t, val));
+    const size_t idx = find_braketing_position(t);
+    throw_if_already_added(idx, t, val);
+    L.insert(L.begin() + (long) (idx), std::make_pair(t, val));
 }
 
 void History::record(const double t, //!< Instant corresponding to the value being added
                      const double val //!< Value to add
                     )
 {
+    if (L.empty()) oldest_recorded_instant = t;
+    oldest_recorded_instant = std::min(oldest_recorded_instant,t);
+    Tmax = std::max(Tmax,std::max(t,get_current_time()) - oldest_recorded_instant);
     add_value_to_history(t, val);
     shift_oldest_recorded_instant();
 }

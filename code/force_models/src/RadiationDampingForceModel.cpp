@@ -131,7 +131,7 @@ class RadiationDampingForceModel::Impl
             return builder.build_retardation_function(Br,taus,1E-3,omega.front(),omega.back());
         }
 
-        double get_convolution_for_axis(const size_t i) const
+        double get_convolution_for_axis(const size_t i)
         {
             double K_X_dot = 0;
             for (size_t k = 0 ; k < 6 ; ++k)

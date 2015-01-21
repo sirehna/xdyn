@@ -32,7 +32,7 @@ class History
           *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
           */
         double operator()(const double tau = 0//!< How far back in history do we need to go (in seconds)?
-                         ) const;
+                         );
 
         /**  \brief Adds a value to history
           *  \details
@@ -73,6 +73,7 @@ class History
 
         double Tmax;
         Container L;
+        double oldest_recorded_instant;
 };
 
 
