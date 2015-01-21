@@ -110,22 +110,33 @@ size_t History::find_braketing_position(const double t) const
     return L.size();
 }
 
+void History::shift_oldest_recorded_instant()
+{
+    const double oldest_recorded_instant = get_current_time() - Tmax;
+    const size_t idx = find_braketing_position(oldest_recorded_instant);
+    const bool oldest_recorded_instant_is_not_in_first_interval = idx>0;
+    if (oldest_recorded_instant_is_not_in_first_interval)
+    {
+        const double vmin = get_value(idx, oldest_recorded_instant);
+        L.erase(L.begin(), L.begin() + (long) (idx));
+        if (L.front().first != oldest_recorded_instant)
+            L.insert(L.begin(), std::make_pair(oldest_recorded_instant, vmin));
+    }
+}
+
+void History::add_value_to_history(const double t, const double val)
+{
+    const size_t t_idx = find_braketing_position(t);
+    throw_if_already_added(t_idx, t, val);
+    L.insert(L.begin() + (long) (t_idx), std::make_pair(t, val));
+}
+
 void History::record(const double t, //!< Instant corresponding to the value being added
                      const double val //!< Value to add
                     )
 {
-    const size_t t_idx = find_braketing_position(t);
-    throw_if_already_added(t_idx, t, val);
-    L.insert(L.begin()+(long)t_idx,std::make_pair(t,val));
-
-    const double tmin = get_current_time() - Tmax;
-    const size_t t_minus_tau_idx = find_braketing_position(tmin);
-    if (t_minus_tau_idx)
-    {
-        const double vmin = get_value(t_minus_tau_idx, tmin);
-        L.erase(L.begin(), L.begin()+ (long)t_minus_tau_idx);
-        if (L.front().first != tmin) L.insert(L.begin(), std::make_pair(tmin, vmin));
-    }
+    add_value_to_history(t, val);
+    shift_oldest_recorded_instant();
 }
 
 size_t History::size() const

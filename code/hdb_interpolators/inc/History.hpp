@@ -68,6 +68,8 @@ class History
         size_t find_braketing_position(const double t) const;
         double get_value(const size_t idx, const double t) const;
         double get_current_time() const;
+        void shift_oldest_recorded_instant();
+        void add_value_to_history(const double t, const double val);
 
         double Tmax;
         Container L;
