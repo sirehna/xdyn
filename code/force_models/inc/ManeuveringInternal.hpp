@@ -109,12 +109,20 @@ namespace maneuvering
             Function get_lambda() const;
     };
 
+    class Pow : public Binary
+    {
+        public:
+            Pow(const NodePtr& lhs, const NodePtr& rhs);
+            Function get_lambda() const;
+    };
+
     NodePtr make_constant(const double val);
     NodePtr make_cos(const NodePtr& operand);
     NodePtr make_sin(const NodePtr& operand);
     NodePtr make_abs(const NodePtr& operand);
     NodePtr make_log(const NodePtr& operand);
     NodePtr make_sum(const NodePtr& lhs, const NodePtr& rhs);
+    NodePtr make_pow(const NodePtr& lhs, const NodePtr& rhs);
 }
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */

@@ -115,3 +115,15 @@ TEST_F(ManeuveringForceModelTest, internal_sum)
     const double t = a.random<double>();
     ASSERT_DOUBLE_EQ(1, f(states, ds, t));
 }
+
+TEST_F(ManeuveringForceModelTest, internal_pow)
+{
+    const double theta = a.random<double>().between(-PI,PI);
+    const auto c = make_sum(make_pow(make_cos(make_constant(theta)), make_constant(2)),
+                            make_pow(make_sin(make_constant(theta)), make_constant(2)));
+    const auto f = c->get_lambda();
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = a.random<double>();
+    ASSERT_DOUBLE_EQ(1, f(states, ds, t));
+}
