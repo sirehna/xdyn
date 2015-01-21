@@ -8,6 +8,7 @@
 
 #include "ManeuveringForceModelTest.hpp"
 #include "ManeuveringForceModel.hpp"
+#include "ManeuveringInternal.hpp"
 #include "yaml_data.hpp"
 
 ManeuveringForceModelTest::ManeuveringForceModelTest() : a(ssc::random_data_generator::DataGenerator(87542))
@@ -47,4 +48,14 @@ TEST_F(ManeuveringForceModelTest, can_parse_X_Y_Z_K_M_N)
     ASSERT_EQ("0", data.var2expr["K"]);
     ASSERT_EQ("0", data.var2expr["M"]);
     ASSERT_EQ("0.5*rho*Vs^2*L^3*N_", data.var2expr["N"]);
+}
+
+TEST_F(ManeuveringForceModelTest, internal_constant)
+{
+    maneuvering::Constant c(4);
+    const auto f = c.get_lambda();
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = a.random<double>();
+    ASSERT_DOUBLE_EQ(4, f(states, ds, t));
 }
