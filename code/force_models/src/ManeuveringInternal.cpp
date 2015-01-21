@@ -140,6 +140,18 @@ Function Pow::get_lambda() const
     };
 }
 
+Exp::Exp(const NodePtr& operand) : Unary(operand)
+{
+}
+
+Function Exp::get_lambda() const
+{
+    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+            {
+                const auto op = get_operand()->get_lambda();
+                return std::exp(op(states, ds, t));
+            };
+}
 
 NodePtr maneuvering::make_constant(const double val)
 {
@@ -174,4 +186,9 @@ NodePtr maneuvering::make_sum(const NodePtr& lhs, const NodePtr& rhs)
 NodePtr maneuvering::make_pow(const NodePtr& lhs, const NodePtr& rhs)
 {
     return NodePtr(new Pow(lhs,rhs));
+}
+
+NodePtr maneuvering::make_exp(const NodePtr& n)
+{
+    return NodePtr(new Exp(n));
 }

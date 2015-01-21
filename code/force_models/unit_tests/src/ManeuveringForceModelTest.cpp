@@ -127,3 +127,14 @@ TEST_F(ManeuveringForceModelTest, internal_pow)
     const double t = a.random<double>();
     ASSERT_DOUBLE_EQ(1, f(states, ds, t));
 }
+
+TEST_F(ManeuveringForceModelTest, internal_exp)
+{
+    const double x = a.random<double>().between(-10,10);
+    const auto c = make_log(make_exp(make_constant(x)));
+    const auto f = c->get_lambda();
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = a.random<double>();
+    ASSERT_DOUBLE_EQ(x, f(states, ds, t));
+}

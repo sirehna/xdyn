@@ -116,6 +116,13 @@ namespace maneuvering
             Function get_lambda() const;
     };
 
+    class Exp : public Unary
+    {
+        public:
+            Exp(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
     NodePtr make_constant(const double val);
     NodePtr make_cos(const NodePtr& operand);
     NodePtr make_sin(const NodePtr& operand);
@@ -123,6 +130,7 @@ namespace maneuvering
     NodePtr make_log(const NodePtr& operand);
     NodePtr make_sum(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_pow(const NodePtr& lhs, const NodePtr& rhs);
+    NodePtr make_exp(const NodePtr& operand);
 }
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */
