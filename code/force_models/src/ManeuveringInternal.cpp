@@ -102,6 +102,31 @@ Function Log::get_lambda() const
             };
 }
 
+Sum::Sum(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
+{
+
+}
+
+NodePtr Binary::get_lhs() const
+{
+    return children.at(0);
+}
+
+NodePtr Binary::get_rhs() const
+{
+    return children.at(1);
+}
+
+Function Sum::get_lambda() const
+{
+    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+    {
+        const auto op1 = get_lhs()->get_lambda();
+        const auto op2 = get_rhs()->get_lambda();
+        return op1(states, ds, t) + op2(states, ds, t);
+    };
+}
+
 NodePtr maneuvering::make_constant(const double val)
 {
     return NodePtr(new Constant(val));
@@ -125,4 +150,9 @@ NodePtr maneuvering::make_abs(const NodePtr& n)
 NodePtr maneuvering::make_log(const NodePtr& n)
 {
     return NodePtr(new Log(n));
+}
+
+NodePtr maneuvering::make_sum(const NodePtr& lhs, const NodePtr& rhs)
+{
+    return NodePtr(new Sum(lhs,rhs));
 }

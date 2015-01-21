@@ -47,6 +47,10 @@ namespace maneuvering
         public:
             Binary(const NodePtr& lhs, const NodePtr& rhs);
 
+        protected:
+            NodePtr get_lhs() const;
+            NodePtr get_rhs() const;
+
         private:
             Binary();
     };
@@ -98,11 +102,19 @@ namespace maneuvering
             Function get_lambda() const;
     };
 
+    class Sum : public Binary
+    {
+        public:
+            Sum(const NodePtr& lhs, const NodePtr& rhs);
+            Function get_lambda() const;
+    };
+
     NodePtr make_constant(const double val);
     NodePtr make_cos(const NodePtr& operand);
     NodePtr make_sin(const NodePtr& operand);
     NodePtr make_abs(const NodePtr& operand);
     NodePtr make_log(const NodePtr& operand);
+    NodePtr make_sum(const NodePtr& lhs, const NodePtr& rhs);
 }
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */
