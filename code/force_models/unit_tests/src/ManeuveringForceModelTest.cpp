@@ -162,3 +162,15 @@ TEST_F(ManeuveringForceModelTest, internal_divide)
     const double t = a.random<double>();
     ASSERT_DOUBLE_EQ(x/y, f(states, ds, t));
 }
+
+TEST_F(ManeuveringForceModelTest, internal_multiply)
+{
+    const double x = a.random<double>().between(-10,10);
+    const double y = a.random<double>().between(10,20);
+    const auto c = make_multiply(make_constant(x),make_constant(y));
+    const auto f = c->get_lambda();
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = a.random<double>();
+    ASSERT_DOUBLE_EQ(x*y, f(states, ds, t));
+}

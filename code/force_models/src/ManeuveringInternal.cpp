@@ -181,6 +181,20 @@ Function Divide::get_lambda() const
     };
 }
 
+Multiply::Multiply(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
+{
+}
+
+Function Multiply::get_lambda() const
+{
+    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+    {
+        const auto op1 = get_lhs()->get_lambda();
+        const auto op2 = get_rhs()->get_lambda();
+        return op1(states, ds, t) * op2(states, ds, t);
+    };
+}
+
 NodePtr maneuvering::make_constant(const double val)
 {
     return NodePtr(new Constant(val));
@@ -229,4 +243,9 @@ NodePtr maneuvering::make_difference(const NodePtr& lhs, const NodePtr& rhs)
 NodePtr maneuvering::make_divide(const NodePtr& lhs, const NodePtr& rhs)
 {
     return NodePtr(new Divide(lhs,rhs));
+}
+
+NodePtr maneuvering::make_multiply(const NodePtr& lhs, const NodePtr& rhs)
+{
+    return NodePtr(new Multiply(lhs,rhs));
 }
