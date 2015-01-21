@@ -64,6 +64,18 @@ Function Cos::get_lambda() const
             };
 }
 
+Sin::Sin(const NodePtr& operand) : Unary(operand)
+{
+}
+Function Sin::get_lambda() const
+{
+    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+            {
+                const auto op = get_operand()->get_lambda();
+                return sin(op(states, ds, t));
+            };
+}
+
 Abs::Abs(const NodePtr& operand) : Unary(operand)
 {
 }
@@ -84,6 +96,11 @@ NodePtr maneuvering::make_constant(const double val)
 NodePtr maneuvering::make_cos(const NodePtr& n)
 {
     return NodePtr(new Cos(n));
+}
+
+NodePtr maneuvering::make_sin(const NodePtr& n)
+{
+    return NodePtr(new Sin(n));
 }
 
 NodePtr maneuvering::make_abs(const NodePtr& n)
