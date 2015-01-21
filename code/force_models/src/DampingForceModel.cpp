@@ -20,12 +20,12 @@ DampingForceModel::DampingForceModel(const std::string& name_, const std::string
 ssc::kinematics::Wrench DampingForceModel::operator()(const BodyStates& states, const double) const
 {
     Eigen::Matrix<double, 6, 1> W;
-    W <<states.u,
-        states.v,
-        states.w,
-        states.p,
-        states.q,
-        states.r;
+    W <<states.u(),
+        states.v(),
+        states.w(),
+        states.p(),
+        states.q(),
+        states.r();
     return ssc::kinematics::Wrench(states.hydrodynamic_forces_calculation_point, get_force_and_torque(D, W));
 }
 

@@ -13,7 +13,7 @@ TEST_F(Hdf5ObserverTest, should_be_able_to_create_an_observer)
 {
     const double dt = 1E-1;
     const double tend = 10;
-    auto sys = get_system(test_data::falling_ball_example());
+    auto sys = get_system(test_data::falling_ball_example(), 0);
     const auto yaml = parse_output(test_data::falling_ball_example());
     {
         ListOfObservers observers(yaml);
@@ -32,7 +32,7 @@ TEST_F(Hdf5ObserverTest, should_be_able_to_create_an_observer_with_wave_output)
 {
     const double dt = 1E-1;
     const double tend = 10;
-    auto sys = get_system(test_data::simple_waves());
+    auto sys = get_system(test_data::simple_waves(), 0);
     const auto yaml = parse_output(test_data::simple_waves());
     {
         ListOfObservers observers(yaml);

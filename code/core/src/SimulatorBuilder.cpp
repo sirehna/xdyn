@@ -13,7 +13,7 @@
 #include "stl_reader.hpp"
 #include "BodyBuilder.hpp"
 
-SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const ssc::data_source::DataSource& command_listener_) :
+SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const double t0_, const ssc::data_source::DataSource& command_listener_) :
                                         input(input_),
                                         builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
                                         force_parsers(),
@@ -22,7 +22,8 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const ssc::
                                         wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
                                         directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
                                         spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
-                                        command_listener(command_listener_)
+                                        command_listener(command_listener_),
+                                        t0(t0_)
 {
 }
 
@@ -35,7 +36,7 @@ std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const s
         const auto that_mesh = meshes.find(that_body->name);
         if (that_mesh != meshes.end())
         {
-            ret.push_back(builder->build(*that_body, that_mesh->second, i,bodies_contain_surface_forces.at(i)));
+            ret.push_back(builder->build(*that_body, that_mesh->second, i,t0,bodies_contain_surface_forces.at(i)));
             i++;
         }
         else

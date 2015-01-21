@@ -19,7 +19,7 @@ const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_
 
 
 SimulatorBuilderTest::SimulatorBuilderTest() : a(ssc::random_data_generator::DataGenerator(1212)),
-                                               builder(SimulatorBuilder(input))
+                                               builder(SimulatorBuilder(input, 0))
 {
 }
 
@@ -115,7 +115,7 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     model.yaml = "constant sea elevation in NED frame:\n   unit: m\n   value: 12";
     auto input2 = input;
     input2.environment.push_back(model);
-    SimulatorBuilder builder2(input2);
+    SimulatorBuilder builder2(input2, 0);
     builder2.can_parse<DefaultSurfaceElevation>();
     ASSERT_THROW(builder2.get_environment(), SimulatorBuilderException);
 }

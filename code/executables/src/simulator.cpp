@@ -34,7 +34,7 @@ int main(int argc, char** argv)
             command_listener = listen_to_file(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input_data.command_file)).get_contents());
         }
         const auto yaml = yaml_reader.get_contents();
-        auto sys = get_system(yaml,command_listener);
+        auto sys = get_system(yaml,input_data.tstart,command_listener);
         auto out = parse_output(yaml);
         out.push_back(generate_all_outputs(yaml, input_data.output_filename));
         ListOfObservers observer(out);

@@ -17,7 +17,7 @@ History::History() : Tmax(0), L(), oldest_recorded_instant(0)
 }
 #include <ssc/macros.hpp>
 double History::operator()(double tau //!< How far back in history do we need to go (in seconds)?
-                          )
+                          ) const
 {
     const double eps = 1E-12;
     if (std::abs(tau-Tmax)<eps) tau = Tmax;
@@ -118,8 +118,15 @@ void History::shift_oldest_recorded_instant()
 void History::add_value_to_history(const double t, const double val)
 {
     const size_t idx = find_braketing_position(t);
-    throw_if_already_added(idx, t, val);
-    L.insert(L.begin() + (long) (idx), std::make_pair(t, val));
+    //throw_if_already_added(idx, t, val);
+    if ((idx != L.size()) and (L[idx].first == t))
+    {
+        L[idx] = std::make_pair(t, val);
+    }
+    else
+    {
+        L.insert(L.begin() + (long) (idx), std::make_pair(t, val));
+    }
 }
 
 void History::record(const double t, //!< Instant corresponding to the value being added

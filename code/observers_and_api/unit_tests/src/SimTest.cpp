@@ -206,13 +206,13 @@ TEST_F(SimTest, should_throw_if_wave_output_mesh_does_not_exist)
 {
     auto input = SimulatorYamlParser(test_data::waves()).parse();
     boost::replace_all(input.environment[0].yaml, "frame of reference: NED", "frame of reference: foo");
-    const Sim sys = get_system(input);
+    const Sim sys = get_system(input, 0);
     ASSERT_THROW(sys.get_waves(a.random<double>()),SimException);
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh)
 {
-    const Sim sys = get_system(test_data::waves());
+    const Sim sys = get_system(test_data::waves(), 0);
     const double t = 9951191801.8523445;
     const std::vector<ssc::kinematics::Point> w = sys.get_waves(t);
 
@@ -256,7 +256,7 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh)
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
 {
-    const Sim sys = get_system(test_data::stable_rolling_cube_test(), test_data::cube());
+    const Sim sys = get_system(test_data::stable_rolling_cube_test(), test_data::cube(), 0);
     const std::vector<ssc::kinematics::Point> w = sys.get_waves(a.random<double>());
     ASSERT_EQ(200, w.size());
     for (size_t i = 0 ; i < 200 ; ++i)

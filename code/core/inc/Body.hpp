@@ -39,7 +39,7 @@ class Body
          */
         void update(const EnvironmentAndFrames& env, const StateType& x, const double t);
         void update_kinematics(StateType x, const KinematicsPtr& k) const;
-        void update_body_states(const StateType& x);
+        void update_body_states(const StateType& x, const double t);
         /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
          */
         void update_projection_of_z_in_mesh_frame(const double g,

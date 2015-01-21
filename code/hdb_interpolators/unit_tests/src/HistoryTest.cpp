@@ -40,18 +40,6 @@ TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
     ASSERT_THROW(h(t_greater_than_Tmax), HistoryException);
 }
 
-TEST_F(HistoryTest, should_throw_if_recording_the_same_instant_twice_with_different_values)
-{
-    History h;
-    const double t = a.random<double>().greater_than(0);
-    const double x0 = a.random<double>();
-    ASSERT_NO_THROW(h.record(t, x0));
-    ASSERT_NO_THROW(h.record(t, x0));
-    ASSERT_THROW(h.record(t, a.random<double>()), HistoryException);
-    ASSERT_NO_THROW(h.record(t+1, a.random<double>()));
-    ASSERT_THROW(h.record(t+1, a.random<double>()), HistoryException);
-}
-
 TEST_F(HistoryTest, cannot_retrieve_anything_if_history_is_empty)
 {
     History h;

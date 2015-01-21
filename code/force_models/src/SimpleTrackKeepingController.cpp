@@ -53,6 +53,6 @@ ssc::kinematics::Vector6d SimpleTrackKeepingController::get_force(const BodyStat
     const double sigma_zz = states.total_inertia->operator()(2,2);
     const double K_psi = sigma_zz*omega0*omega0;
     const double K_r = 2*ksi*omega0*sigma_zz;
-    ret(5) = K_psi*delta_psi - K_r*states.r;
+    ret(5) = K_psi*delta_psi - K_r*states.r();
     return ret;
 }

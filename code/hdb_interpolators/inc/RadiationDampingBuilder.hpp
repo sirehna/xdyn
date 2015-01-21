@@ -50,7 +50,7 @@ class RadiationDampingBuilder
           *  \returns \f$\int_0^T h(t-\tau)*f(\tau) d\tau\f$
           *  \snippet hdb_interpolators/unit_tests/src/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest method_example
           */
-        double convolution(History& h, //!< State history
+        double convolution(const History& h, //!< State history
                            const std::function<double(double)>& f, //!< Function to convolute with
                            const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
                            const double Tmax  //!< End of the convolution

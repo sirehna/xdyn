@@ -114,7 +114,7 @@ double WageningenControlledForceModel::Kq(const size_t Z, const double AE_A0_, c
 
 double WageningenControlledForceModel::advance_ratio(const BodyStates& states, std::map<std::string,double>& commands) const
 {
-    const double Va = fabs(states.u);
+    const double Va = fabs(states.u());
     const double n = commands["rpm"]/(2*PI);
     return (1-w)*Va/n/D;
 }

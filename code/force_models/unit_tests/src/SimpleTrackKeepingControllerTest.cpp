@@ -48,11 +48,11 @@ TEST_F(SimpleTrackKeepingControllerTest, force_and_torque)
     const SimpleTrackKeepingController w(input, "body", env);
     BodyStates states;
     const double psi = 1.234;
-    states.qr = cos(psi/2);
-    states.qi = 0;
-    states.qj = 0;
-    states.qk = sin(psi/2);
-    states.r = 10;
+    states.qr.record(0,  cos(psi/2));
+    states.qi.record(0,  0);
+    states.qj.record(0,  0);
+    states.qk.record(0,  sin(psi/2));
+    states.r.record(0, 10);
     states.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>());
     states.total_inertia->operator()(2,2) = 4;
 

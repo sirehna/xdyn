@@ -12,14 +12,14 @@
 
 struct YamlSimulatorInput;
 
-SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
-Sim get_system(const std::string& yaml, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
-Sim get_system(const std::string& yaml, const std::string& mesh, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
-Sim get_system(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
-Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
-Sim get_system(const YamlSimulatorInput& yaml, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
-Sim get_system(const YamlSimulatorInput& yaml, const std::string& mesh, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
-Sim get_system(const YamlSimulatorInput& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+Sim get_system(const std::string& yaml, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+Sim get_system(const std::string& yaml, const std::string& mesh, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+Sim get_system(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+Sim get_system(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+Sim get_system(const YamlSimulatorInput& yaml, const std::string& mesh, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+Sim get_system(const YamlSimulatorInput& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 
 template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)
 {
@@ -30,7 +30,7 @@ template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const double tstart, const double tend, const double dt, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource())
 {
-    Sim sys = get_system(yaml, command_listener);
+    Sim sys = get_system(yaml, tstart, command_listener);
     return simulate<StepperType>(sys, tstart, tend, dt);
 }
 
@@ -38,25 +38,25 @@ MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh);
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const std::string& mesh, const double tstart, const double tend, const double dt, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource())
 {
-    Sim sys = get_system(yaml, mesh, command_listener);
+    Sim sys = get_system(yaml, mesh, tstart, command_listener);
     return simulate<StepperType>(sys, tstart, tend, dt);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double tstart, const double tend, const double dt, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource())
 {
-    Sim sys = get_system(yaml, meshes, command_listener);
+    Sim sys = get_system(yaml, meshes, tstart, command_listener);
     return simulate<StepperType>(sys, tstart, tend, dt);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& yaml, const double tstart, const double tend, const double dt, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource())
 {
-    Sim sys = get_system(yaml, command_listener);
+    Sim sys = get_system(yaml, tstart, command_listener);
     return simulate<StepperType>(sys, tstart, tend, dt);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double tstart, const double tend, const double dt, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource())
 {
-    Sim sys = get_system(yaml, meshes, command_listener);
+    Sim sys = get_system(yaml, meshes, tstart, command_listener);
     return simulate<StepperType>(sys, tstart, tend, dt);
 }
 

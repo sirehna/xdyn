@@ -93,12 +93,12 @@ TEST_F(RadiationDampingForceModelTest, example)
     states.name = body_name;
 //! [RadiationDampingForceModelTest example]
 //! [RadiationDampingForceModelTest expected output]
-    states.u = 1;
-    states.v = 1;
-    states.w = 1;
-    states.p = 1;
-    states.q = 1;
-    states.r = 1;
+    states.u.record(0, 1);
+    states.v.record(0, 1);
+    states.w.record(0, 1);
+    states.p.record(0, 1);
+    states.q.record(0, 1);
+    states.r.record(0, 1);
     auto Frad = F(states,0);
     ASSERT_EQ(0, Frad.X());
     ASSERT_EQ(0, Frad.Y());
@@ -107,12 +107,12 @@ TEST_F(RadiationDampingForceModelTest, example)
     ASSERT_EQ(0, Frad.M());
     ASSERT_EQ(0, Frad.N());
     ASSERT_EQ(body_name, F(states, 0).get_frame());
-    states.u = 1;
-    states.v = 1;
-    states.w = 1;
-    states.p = 1;
-    states.q = 1;
-    states.r = 1;
+    states.u.record(100, 1);
+    states.v.record(100, 1);
+    states.w.record(100, 1);
+    states.p.record(100, 1);
+    states.q.record(100, 1);
+    states.r.record(100, 1);
     Frad = F(states,100);
 
     const double Fexpected = ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);

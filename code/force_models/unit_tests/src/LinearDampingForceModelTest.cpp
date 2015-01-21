@@ -93,19 +93,19 @@ TEST_F(LinearDampingForceModelTest, example)
     LinearDampingForceModel F(D,BODY, env);
     for (size_t i=0;i<100;++i)
     {
-        states.u = u = a.random<double>().between(-10.0,+10.0);
-        states.v = v = a.random<double>().between(-10.0,+10.0);
-        states.w = w = a.random<double>().between(-10.0,+10.0);
-        states.p = p = a.random<double>().between(-10.0,+10.0);
-        states.q = q = a.random<double>().between(-10.0,+10.0);
-        states.r = r = a.random<double>().between(-10.0,+10.0);
+        states.u.record(0, u = a.random<double>().between(-10.0,+10.0));
+        states.v.record(0, v = a.random<double>().between(-10.0,+10.0));
+        states.w.record(0, w = a.random<double>().between(-10.0,+10.0));
+        states.p.record(0, p = a.random<double>().between(-10.0,+10.0));
+        states.q.record(0, q = a.random<double>().between(-10.0,+10.0));
+        states.r.record(0, r = a.random<double>().between(-10.0,+10.0));
         const ssc::kinematics::Wrench f = F(states,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
         for (int j=0;j<3;++j)
         {
             const int k = j+3;
-            ASSERT_NEAR(D(j,0)*states.u+D(j,1)*states.v+D(j,2)*states.w+D(j,3)*states.p+D(j,4)*states.q+D(j,5)*states.r,-f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
-            ASSERT_NEAR(D(k,0)*states.u+D(k,1)*states.v+D(k,2)*states.w+D(k,3)*states.p+D(k,4)*states.q+D(k,5)*states.r,-f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
+            ASSERT_NEAR(D(j,0)*states.u()+D(j,1)*states.v()+D(j,2)*states.w()+D(j,3)*states.p()+D(j,4)*states.q()+D(j,5)*states.r(),-f.force[j],EPS)<<" row: "<<i << ", col:"<<j;
+            ASSERT_NEAR(D(k,0)*states.u()+D(k,1)*states.v()+D(k,2)*states.w()+D(k,3)*states.p()+D(k,4)*states.q()+D(k,5)*states.r(),-f.torque[j],EPS)<<" row: "<<i << ", col:"<<k;
         }
     }
     //! [LinearDampingForceModelTest example]

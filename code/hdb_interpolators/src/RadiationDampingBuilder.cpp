@@ -82,7 +82,7 @@ std::function<double(double)> RadiationDampingBuilder::build_retardation_functio
     return build_interpolator(taus, y);
 }
 
-double RadiationDampingBuilder::convolution(History& h, //!< State history
+double RadiationDampingBuilder::convolution(const History& h, //!< State history
                            const std::function<double(double)>& f, //!< Function to convolute with
                            const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
                            const double Tmax  //!< End of the convolution

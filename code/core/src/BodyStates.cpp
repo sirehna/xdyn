@@ -74,7 +74,7 @@ ssc::kinematics::EulerAngles BodyStates::get_angles(const StateType& all_states,
 
 ssc::kinematics::RotationMatrix BodyStates::get_rot_from_ned_to_body() const
 {
-    return Eigen::Quaternion<double>(qr,qi,qj,qk).matrix();
+    return Eigen::Quaternion<double>(qr(),qi(),qj(),qk()).matrix();
 }
 
 ssc::kinematics::RotationMatrix BodyStates::get_rot_from_ned_to(const StateType& x, const size_t idx) const

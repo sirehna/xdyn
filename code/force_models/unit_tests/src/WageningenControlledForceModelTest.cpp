@@ -332,7 +332,7 @@ TEST_F(WageningenControlledForceModelTest, can_calculate_advance_ratio)
 {
     const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), "", EnvironmentAndFrames());
     BodyStates states;
-    states.u = 3;
+    states.u.record(0, 3);
     std::map<std::string,double> commands;
     commands["rpm"] = 20*2*PI;
     ASSERT_DOUBLE_EQ(3./400., w.advance_ratio(states, commands));
@@ -346,7 +346,7 @@ TEST_F(WageningenControlledForceModelTest, force)
     env.rho = 1024;
     const WageningenControlledForceModel w(input, "", env);
     BodyStates states;
-    states.u = 1;
+    states.u.record(0, 1);
 
     std::map<std::string,double> commands;
     commands["rpm"] = 5*(2*PI);
@@ -367,7 +367,7 @@ TEST_F(WageningenControlledForceModelTest, torque)
     env.rho = 1024;
     const WageningenControlledForceModel w(input, "", env);
     BodyStates states;
-    states.u = 1;
+    states.u.record(0, 1);
 
     std::map<std::string,double> commands;
     commands["rpm"] = 5*(2*PI);
@@ -380,7 +380,7 @@ TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding
 {
     auto input = WageningenControlledForceModel::parse(test_data::wageningen());
     BodyStates states;
-    states.u = a.random<double>().greater_than(0);
+    states.u.record(0, a.random<double>().greater_than(0));
     EnvironmentAndFrames env;
     env.rho = a.random<double>().greater_than(0);
 
@@ -389,7 +389,7 @@ TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding
     const WageningenControlledForceModel w_anti_clockwise(input, "", env);
 
     std::map<std::string,double> commands;
-    commands["rpm"] = a.random<double>().between(states.u,2*states.u);
+    commands["rpm"] = a.random<double>().between(states.u(),2*states.u());
     commands["P/D"] = a.random<double>().between(0.5,1.4);
     ASSERT_GT(0, w_clockwise.get_force(states, a.random<double>(),commands)(3));
     ASSERT_LT(0, w_anti_clockwise.get_force(states, a.random<double>(),commands)(3));

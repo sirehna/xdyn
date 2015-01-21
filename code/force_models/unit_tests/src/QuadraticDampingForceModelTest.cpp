@@ -78,12 +78,12 @@ TEST_F(QuadraticDampingForceModelTest, example_with_random_positive_velocities_a
     BodyStates states = get_body(BODY)->get_states();
     for (size_t i=0;i<100;++i)
     {
-        states.u = u = a.random<double>().greater_than(0.0);
-        states.v = v = a.random<double>().greater_than(0.0);
-        states.w = w = a.random<double>().greater_than(0.0);
-        states.p = p = a.random<double>().greater_than(0.0);
-        states.q = q = a.random<double>().greater_than(0.0);
-        states.r = r = a.random<double>().greater_than(0.0);
+        states.u.record(0, u = a.random<double>().greater_than(0.0));
+        states.v.record(0, v = a.random<double>().greater_than(0.0));
+        states.w.record(0, w = a.random<double>().greater_than(0.0));
+        states.p.record(0, p = a.random<double>().greater_than(0.0));
+        states.q.record(0, q = a.random<double>().greater_than(0.0));
+        states.r.record(0, r = a.random<double>().greater_than(0.0));
         const ssc::kinematics::Wrench f = F(states,a.random<double>());
         ASSERT_EQ(BODY, f.get_frame());
         ASSERT_NEAR(-u*u, f.X(),EPS);
@@ -111,12 +111,12 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
     QuadraticDampingForceModel F(D, BODY, EnvironmentAndFrames());
     for (int i=0;i<100;++i)
     {
-        states.u = u = a.random<double>().between(-10.0,+10.0);
-        states.v = v = a.random<double>().between(-10.0,+10.0);
-        states.w = w = a.random<double>().between(-10.0,+10.0);
-        states.p = p = a.random<double>().between(-10.0,+10.0);
-        states.q = q = a.random<double>().between(-10.0,+10.0);
-        states.r = r = a.random<double>().between(-10.0,+10.0);
+        states.u.record((double)(i+1), u = a.random<double>().between(-10.0,+10.0));
+        states.v.record((double)(i+1), v = a.random<double>().between(-10.0,+10.0));
+        states.w.record((double)(i+1), w = a.random<double>().between(-10.0,+10.0));
+        states.p.record((double)(i+1), p = a.random<double>().between(-10.0,+10.0));
+        states.q.record((double)(i+1), q = a.random<double>().between(-10.0,+10.0));
+        states.r.record((double)(i+1), r = a.random<double>().between(-10.0,+10.0));
         uu = fabs(u)*u;
         vv = fabs(v)*v;
         ww = fabs(w)*w;

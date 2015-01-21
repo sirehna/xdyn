@@ -62,7 +62,7 @@ TEST_F(ResistanceCurveForceModelTest, example)
 //! [ResistanceCurveForceModelTest example]
 //! [ResistanceCurveForceModelTest expected output]
     BodyStates states;
-    states.u = 0;
+    states.u.record(0, 0);
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).X());
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Y());
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Z());
@@ -70,7 +70,7 @@ TEST_F(ResistanceCurveForceModelTest, example)
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).M());
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).N());
 
-    states.u = 0.514444444444444;
+    states.u.record(1, 0.514444444444444);
     ASSERT_NEAR(-1e6, (double)F(states, a.random<double>()).X(), EPS);
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Y());
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Z());
@@ -79,7 +79,7 @@ TEST_F(ResistanceCurveForceModelTest, example)
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).N());
 
 
-    states.u = 0.514444444444444*15;
+    states.u.record(2, 0.514444444444444*15);
     ASSERT_NEAR(-225e6, (double)F(states, a.random<double>()).X(), EPS);
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Y());
     ASSERT_DOUBLE_EQ(0, (double)F(states, a.random<double>()).Z());
@@ -98,7 +98,7 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower
     std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     ASSERT_TRUE(error.str().empty());
     // Call the resistance curve model
-    states.u = -1;
+    states.u.record(0, -1);
     F(states, a.random<double>());
     ASSERT_FALSE(error.str().empty());
     // Restore cerr's buffer
@@ -114,7 +114,7 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_great
     std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
     ASSERT_TRUE(error.str().empty());
     // Call the resistance curve model
-    states.u = 20*0.514444444444444444 + 1E-10;
+    states.u.record(0, 20*0.514444444444444444 + 1E-10);
     F(states, a.random<double>());
     ASSERT_FALSE(error.str().empty());
     // Restore cerr's buffer

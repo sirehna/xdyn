@@ -44,14 +44,14 @@ typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 class SimulatorBuilder
 {
     public:
-        SimulatorBuilder(const YamlSimulatorInput& input, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+        SimulatorBuilder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 
         /**  \brief Builds a Sim object using the supplied mesh map (one mesh per body)
           *  \details This function is mainly used in the integration tests.
           *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest build_example
           */
         Sim build(const MeshMap& input_meshes //!< Map containing a mesh for each body
-                 ) const;
+                  ) const;
 
         /**  \brief Builds a Sim object reading the meshes from files
           *  \details Reads the STL data from an STL file & call the version of
@@ -190,6 +190,7 @@ class SimulatorBuilder
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
         TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
         ssc::data_source::DataSource command_listener;
+        double t0; //!< First time step (to initialize state history)
 };
 
 

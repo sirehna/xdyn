@@ -90,7 +90,7 @@ class CSVWriter
 class RadiationDampingForceModel::Impl
 {
     public:
-        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, h(), builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)), K(),
+        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)), K(),
         omega(parser->get_radiation_damping_angular_frequencies()), taus(), n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
         H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y)
         {
@@ -110,7 +110,6 @@ class RadiationDampingForceModel::Impl
                         tau_writer.add("K",K[i][j],i+1,j+1);
                     }
                 }
-                h.at(i) = History();
             }
             if (yaml.output_Br_and_K)
             {
@@ -131,50 +130,38 @@ class RadiationDampingForceModel::Impl
             return builder.build_retardation_function(Br,taus,1E-3,omega.front(),omega.back());
         }
 
-        double get_convolution_for_axis(const size_t i)
+        double get_convolution_for_axis(const size_t i, const History& his)
         {
             double K_X_dot = 0;
             for (size_t k = 0 ; k < 6 ; ++k)
             {
-                if (h[k].get_length() >= Tmin)
+                if (his.get_length() >= Tmin)
                 {
                     // Integrate up to Tmax if possible, but never exceed the history length
-                    const double co = builder.convolution(h[k], K[i][k], Tmin, std::min(Tmax, h[k].get_length()));
+                    const double co = builder.convolution(his, K[i][k], Tmin, std::min(Tmax, his.get_length()));
                     K_X_dot += co;
                 }
             }
             return K_X_dot;
         }
 
-        ssc::kinematics::Wrench get_wrench(const BodyStates& states, const double t)
+        ssc::kinematics::Wrench get_wrench(const BodyStates& states)
         {
-            save_state(states, t);
             ssc::kinematics::Vector6d W;
             const ssc::kinematics::Point H(states.name,H0);
 
-            W(0) = get_convolution_for_axis(0);
-            W(1) = get_convolution_for_axis(1);
-            W(2) = get_convolution_for_axis(2);
-            W(3) = get_convolution_for_axis(3);
-            W(4) = get_convolution_for_axis(4);
-            W(5) = get_convolution_for_axis(5);
+            W(0) = get_convolution_for_axis(0, states.u);
+            W(1) = get_convolution_for_axis(1, states.v);
+            W(2) = get_convolution_for_axis(2, states.w);
+            W(3) = get_convolution_for_axis(3, states.p);
+            W(4) = get_convolution_for_axis(4, states.q);
+            W(5) = get_convolution_for_axis(5, states.r);
             return ssc::kinematics::Wrench(states.name,W);
-        }
-
-        void save_state(const BodyStates& states, const double t)
-        {
-            h[0].record(t,states.u);
-            h[1].record(t,states.v);
-            h[2].record(t,states.w);
-            h[3].record(t,states.p);
-            h[4].record(t,states.q);
-            h[5].record(t,states.r);
         }
 
     private:
         Impl();
         TR1(shared_ptr)<HDBParser> hdb;
-        std::array<History, 6> h;
         RadiationDampingBuilder builder;
         std::array<std::array<std::function<double(double)>,6>, 6> K;
         std::vector<double> omega;
@@ -191,9 +178,9 @@ pimpl(new Impl(input.hdb, input.yaml))
 {
 }
 
-ssc::kinematics::Wrench RadiationDampingForceModel::operator()(const BodyStates& states, const double t) const
+ssc::kinematics::Wrench RadiationDampingForceModel::operator()(const BodyStates& states, const double ) const
 {
-    return pimpl->get_wrench(states, t);
+    return pimpl->get_wrench(states);
 }
 
 TypeOfQuadrature parse_type_of_quadrature_(const std::string& s);

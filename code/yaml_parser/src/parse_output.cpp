@@ -85,12 +85,11 @@ std::string get_format(const std::string& filename)
     if (filename.substr(n-4,4)==".tsv") return "tsv";
                                         return "???";
 }
-#include <ssc/macros.hpp>
+
 YamlOutput generate_all_outputs(const std::string yaml, const std::string& filename)
 {
     YamlOutput out;
     out.format = get_format(filename);
-    COUT(filename);
     out.filename = filename;
     out.data.push_back("t");
     const auto bodies = get_body_names(yaml);

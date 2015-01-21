@@ -59,6 +59,6 @@ ResistanceCurveForceModel::Yaml ResistanceCurveForceModel::parse(const std::stri
 ssc::kinematics::Wrench ResistanceCurveForceModel::operator()(const BodyStates& states, const double ) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
-    tau(0) = -pimpl->get_resistance(states.u);
+    tau(0) = -pimpl->get_resistance(states.u());
     return ssc::kinematics::Wrench(states.hydrodynamic_forces_calculation_point, tau);
 }

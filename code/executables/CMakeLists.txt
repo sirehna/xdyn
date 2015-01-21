@@ -26,6 +26,7 @@ INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${force_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS})
 include_directories(${observers_and_api_INCLUDE_DIRS})
+include_directories(${hdb_interpolators_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/utilities_for_InputData.cpp "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
 CONFIGURE_FILE(src/convert_stl_files_to_code.cpp "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)

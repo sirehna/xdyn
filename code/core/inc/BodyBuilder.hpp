@@ -36,14 +36,14 @@ class BodyBuilder
         /** \brief Build a 'Body' object from YAML & STL data
          *  \returns New Body object
          */
-        BodyPtr build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx, const bool has_surface_forces = false) const;
+        BodyPtr build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const bool has_surface_forces = false) const;
 
         /** \details Only used for testing purposes when we don't want to go
          *           through the hassle of defining the inertia matrix & initial
          *           positions
          *  \returns New Body object
          */
-        BodyPtr build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx, const bool has_surface_forces = false) const;
+        BodyPtr build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const bool has_surface_forces = false) const;
 
     private:
         BodyBuilder(); //Disabled

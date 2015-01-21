@@ -1,5 +1,5 @@
 /*
- * Body.cpp
+ * Body., cpp
  *
  *  Created on: Jun 16, 2014
  *      Author: cady
@@ -60,21 +60,21 @@ void Body::update_kinematics(StateType x, const KinematicsPtr& k) const
     k->add(get_transform_from_ned_to(x));
 }
 
-void Body::update_body_states(const StateType& x)
+void Body::update_body_states(const StateType& x, const double t)
 {
-    states.x = *_X(x,idx);
-    states.y = *_Y(x,idx);
-    states.z = *_Z(x,idx);
-    states.u = *_U(x,idx);
-    states.v = *_V(x,idx);
-    states.w = *_W(x,idx);
-    states.p = *_P(x,idx);
-    states.q = *_Q(x,idx);
-    states.r = *_R(x,idx);
-    states.qr = *_QR(x,idx);
-    states.qi = *_QI(x,idx);
-    states.qj = *_QJ(x,idx);
-    states.qk = *_QK(x,idx);
+    states.x.record(t, *_X(x,idx));
+    states.y.record(t, *_Y(x,idx));
+    states.z.record(t, *_Z(x,idx));
+    states.u.record(t, *_U(x,idx));
+    states.v.record(t, *_V(x,idx));
+    states.w.record(t, *_W(x,idx));
+    states.p.record(t, *_P(x,idx));
+    states.q.record(t, *_Q(x,idx));
+    states.r.record(t, *_R(x,idx));
+    states.qr.record(t, *_QR(x,idx));
+    states.qi.record(t, *_QI(x,idx));
+    states.qj.record(t, *_QJ(x,idx));
+    states.qk.record(t, *_QK(x,idx));
 }
 
 void Body::update_projection_of_z_in_mesh_frame(const double g,
@@ -88,7 +88,7 @@ void Body::update_projection_of_z_in_mesh_frame(const double g,
 void Body::update(const EnvironmentAndFrames& env, const StateType& x, const double t)
 {
     update_kinematics(x,env.k);
-    update_body_states(x);
+    update_body_states(x, t);
     update_intersection_with_free_surface(env, t);
     update_projection_of_z_in_mesh_frame(env.g, env.k);
 }
