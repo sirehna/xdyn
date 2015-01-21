@@ -31,8 +31,8 @@ class History
           *  \returns Value at t-tau in history
           *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
           */
-        double get(double tau //!< How far back in history do we need to go (in seconds)?
-                   ) const;
+        double operator()(const double tau = 0//!< How far back in history do we need to go (in seconds)?
+                         ) const;
 
         /**  \brief Adds a value to history
           *  \details

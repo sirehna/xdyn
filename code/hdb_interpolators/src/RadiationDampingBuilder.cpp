@@ -88,7 +88,7 @@ double RadiationDampingBuilder::convolution(const History& h, //!< State history
                            const double Tmax  //!< End of the convolution
                            ) const
 {
-    const auto g = [&h, &f](const double tau){return h.get(tau)*f(tau);};
+    const auto g = [&h, &f](const double tau){return h(tau)*f(tau);};
     return ssc::integrate::GaussKronrod(g).integrate_f(Tmin, Tmax);
 }
 

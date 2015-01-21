@@ -26,8 +26,8 @@ History::History(const double Tmax_) : Tmax(Tmax_), L()
     }
 }
 
-double History::get(double tau //!< How far back in history do we need to go (in seconds)?
-                               ) const
+double History::operator()(const double tau //!< How far back in history do we need to go (in seconds)?
+                          ) const
 {
     if (tau>Tmax)
     {

@@ -33,10 +33,10 @@ TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
     const double t_greater_than_Tmax = a.random<double>().greater_than(Tmax);
     History h(Tmax);
     h.record(a.random<double>(), a.random<double>());
-    h.get(t_lower_than_Tmax);
-    ASSERT_NO_THROW(h.get(t_lower_than_Tmax));
-    ASSERT_NO_THROW(h.get(Tmax));
-    ASSERT_THROW(h.get(t_greater_than_Tmax), HistoryException);
+    h(t_lower_than_Tmax);
+    ASSERT_NO_THROW(h(t_lower_than_Tmax));
+    ASSERT_NO_THROW(h(Tmax));
+    ASSERT_THROW(h(t_greater_than_Tmax), HistoryException);
 }
 
 TEST_F(HistoryTest, constructor_should_throw_if_Tmax_is_negative)
@@ -74,9 +74,9 @@ TEST_F(HistoryTest, can_retrieve_initial_values)
     h.record(t0-1, 2);
     h.record(t0, 3);
 
-    ASSERT_DOUBLE_EQ(3, h.get(0));
-    ASSERT_DOUBLE_EQ(2, h.get(1));
-    ASSERT_DOUBLE_EQ(1, h.get(2));
+    ASSERT_DOUBLE_EQ(3, h(0));
+    ASSERT_DOUBLE_EQ(2, h(1));
+    ASSERT_DOUBLE_EQ(1, h(2));
 }
 
 TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
@@ -86,7 +86,7 @@ TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
     h.record(t0-2, 1);
     h.record(t0-1, 2);
     h.record(t0, 3);
-    ASSERT_THROW(h.get(-1), HistoryException);
+    ASSERT_THROW(h(-1), HistoryException);
 }
 
 TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
@@ -100,16 +100,16 @@ TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
     h.record(24, 1);
     //! [HistoryTest example]
     //! [HistoryTest expected output]
-    ASSERT_DOUBLE_EQ(1,  h.get(516));
-    ASSERT_DOUBLE_EQ(73, h.get(120));
-    ASSERT_DOUBLE_EQ(1,  h.get(119));
-    ASSERT_DOUBLE_EQ(239,h.get(0));
+    ASSERT_DOUBLE_EQ(1,  h(516));
+    ASSERT_DOUBLE_EQ(73, h(120));
+    ASSERT_DOUBLE_EQ(1,  h(119));
+    ASSERT_DOUBLE_EQ(239,h(0));
     //! [HistoryTest expected output]
-    ASSERT_DOUBLE_EQ(277,h.get(324));
-    ASSERT_DOUBLE_EQ(24, h.get(500));
-    ASSERT_DOUBLE_EQ(193,h.get(240));
-    ASSERT_DOUBLE_EQ(37, h.get(119.5));
-    ASSERT_DOUBLE_EQ(3,  h.get(118));
+    ASSERT_DOUBLE_EQ(277,h(324));
+    ASSERT_DOUBLE_EQ(24, h(500));
+    ASSERT_DOUBLE_EQ(193,h(240));
+    ASSERT_DOUBLE_EQ(37, h(119.5));
+    ASSERT_DOUBLE_EQ(3,  h(118));
 }
 
 TEST_F(HistoryTest, can_get_size_of_history)
@@ -152,18 +152,18 @@ TEST_F(HistoryTest, should_shift_history)
 
     h.record(24, 16);
     ASSERT_EQ(6, h.size());
-    ASSERT_DOUBLE_EQ(11, h.get(13.5));
+    ASSERT_DOUBLE_EQ(11, h(13.5));
 
     h.record(30, 25);
     ASSERT_EQ(6, h.size());
 
     h.record(31, 26);
     ASSERT_EQ(7, h.size());
-    ASSERT_DOUBLE_EQ(16, h.get(13.5));
+    ASSERT_DOUBLE_EQ(16, h(13.5));
 
     h.record(33, 27);
     ASSERT_EQ(8, h.size());
-    ASSERT_DOUBLE_EQ(12.8, h.get(13.5));
+    ASSERT_DOUBLE_EQ(12.8, h(13.5));
 }
 
 TEST_F(HistoryTest, can_get_history_max_length)
