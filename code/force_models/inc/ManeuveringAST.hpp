@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace maneuvering_AST
+namespace maneuvering
 {
     struct Op
     {
