@@ -15,10 +15,12 @@
 History::History() : Tmax(0), L(), oldest_recorded_instant(0)
 {
 }
-
-double History::operator()(const double tau //!< How far back in history do we need to go (in seconds)?
+#include <ssc/macros.hpp>
+double History::operator()(double tau //!< How far back in history do we need to go (in seconds)?
                           )
 {
+    const double eps = 1E-12;
+    if (std::abs(tau-Tmax)<eps) tau = Tmax;
     if (tau>Tmax)
     {
         std::stringstream ss;

@@ -28,11 +28,11 @@ void HistoryTest::TearDown()
 
 TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
 {
-    const double Tmax = a.random<double>().greater_than(0);
+    const double Tmax = a.random<double>().between(0,100);
     const double t_lower_than_Tmax = a.random<double>().between(0,Tmax);
     const double t_greater_than_Tmax = a.random<double>().greater_than(Tmax);
     History h;
-    const double t0 = a.random<double>().greater_than(0);
+    const double t0 = a.random<double>().between(Tmax,10*Tmax);
     h.record(t0, a.random<double>());
     h.record(t0+Tmax, a.random<double>());
     ASSERT_NO_THROW(h(t_lower_than_Tmax));
