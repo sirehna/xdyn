@@ -29,7 +29,7 @@ namespace maneuvering
             virtual Function get_lambda() const = 0;
             std::vector<NodePtr> get_children() const;
 
-        protected:
+        //protected:
             std::vector<NodePtr> children;
 
         private:
@@ -144,6 +144,69 @@ namespace maneuvering
             Function get_lambda() const;
     };
 
+    class StateX : public Unary
+    {
+        public:
+            StateX(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    class StateY : public Unary
+    {
+        public:
+            StateY(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    class StateZ : public Unary
+    {
+        public:
+            StateZ(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    class StateU : public Unary
+    {
+        public:
+            StateU(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    class StateV : public Unary
+    {
+        public:
+            StateV(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    class StateW : public Unary
+    {
+        public:
+            StateW(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    class StateP : public Unary
+    {
+        public:
+            StateP(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    class StateQ : public Unary
+    {
+        public:
+            StateQ(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
+    class StateR : public Unary
+    {
+        public:
+            StateR(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
     NodePtr make_constant(const double val);
     NodePtr make_cos(const NodePtr& operand);
     NodePtr make_sin(const NodePtr& operand);
@@ -155,6 +218,15 @@ namespace maneuvering
     NodePtr make_difference(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_divide(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_multiply(const NodePtr& lhs, const NodePtr& rhs);
+    NodePtr make_state_x(const NodePtr& operand);
+    NodePtr make_state_y(const NodePtr& operand);
+    NodePtr make_state_z(const NodePtr& operand);
+    NodePtr make_state_u(const NodePtr& operand);
+    NodePtr make_state_v(const NodePtr& operand);
+    NodePtr make_state_w(const NodePtr& operand);
+    NodePtr make_state_p(const NodePtr& operand);
+    NodePtr make_state_q(const NodePtr& operand);
+    NodePtr make_state_r(const NodePtr& operand);
 }
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */

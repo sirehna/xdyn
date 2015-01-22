@@ -174,3 +174,55 @@ TEST_F(ManeuveringForceModelTest, internal_multiply)
     const double t = a.random<double>();
     ASSERT_DOUBLE_EQ(x*y, f(states, ds, t));
 }
+
+TEST_F(ManeuveringForceModelTest, internal_state)
+{
+    const auto xx = make_state_x(make_constant(5));
+    const auto yy = make_state_y(make_constant(5));
+    const auto zz = make_state_z(make_constant(5));
+    const auto uu = make_state_u(make_constant(5));
+    const auto vv = make_state_v(make_constant(5));
+    const auto ww = make_state_w(make_constant(5));
+    const auto pp = make_state_p(make_constant(5));
+    const auto qq = make_state_q(make_constant(5));
+    const auto rr = make_state_r(make_constant(5));
+    const auto x = xx->get_lambda();
+    const auto y = yy->get_lambda();
+    const auto z = zz->get_lambda();
+    const auto u = uu->get_lambda();
+    const auto v = vv->get_lambda();
+    const auto w = ww->get_lambda();
+    const auto p = pp->get_lambda();
+    const auto q = qq->get_lambda();
+    const auto r = rr->get_lambda();
+    BodyStates states;
+    states.x.record(0, 1);
+    states.y.record(0, 2);
+    states.z.record(0, 3);
+    states.u.record(0, 4);
+    states.v.record(0, 5);
+    states.w.record(0, 6);
+    states.p.record(0, 7);
+    states.q.record(0, 8);
+    states.r.record(0, 9);
+    states.x.record(10, 2*1);
+    states.y.record(10, 2*2);
+    states.z.record(10, 2*3);
+    states.u.record(10, 2*4);
+    states.v.record(10, 2*5);
+    states.w.record(10, 2*6);
+    states.p.record(10, 2*7);
+    states.q.record(10, 2*8);
+    states.r.record(10, 2*9);
+    ssc::data_source::DataSource ds;
+    const double t = 10;
+    ASSERT_DOUBLE_EQ(1.5*1, x(states, ds, t));
+    ASSERT_DOUBLE_EQ(1.5*2, y(states, ds, t));
+    ASSERT_DOUBLE_EQ(1.5*3, z(states, ds, t));
+    ASSERT_DOUBLE_EQ(1.5*4, u(states, ds, t));
+    ASSERT_DOUBLE_EQ(1.5*5, v(states, ds, t));
+    ASSERT_DOUBLE_EQ(1.5*6, w(states, ds, t));
+    ASSERT_DOUBLE_EQ(1.5*7, p(states, ds, t));
+    ASSERT_DOUBLE_EQ(1.5*8, q(states, ds, t));
+    ASSERT_DOUBLE_EQ(1.5*9, r(states, ds, t));
+}
