@@ -48,6 +48,21 @@ namespace maneuvering
         NullaryNode(const std::string& operator_name);
         private: NullaryNode();
     };
+
+    struct StateNode : UnaryNode
+    {
+        StateNode(const std::string& name, const Op& operand);
+        private: StateNode();
+    };
+
+    struct ConstantNode : NullaryNode
+    {
+        ConstantNode(const double value);
+        double get_value() const;
+        private:
+            ConstantNode();
+            double value;
+    };
 }
 
 #endif  /* MANEUVERINGAST_HPP_ */
