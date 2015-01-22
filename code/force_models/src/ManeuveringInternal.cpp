@@ -196,115 +196,6 @@ Function Multiply::get_lambda() const
     };
 }
 
-StateX::StateX(const NodePtr& operand) : Unary(operand)
-{
-}
-
-Function StateX::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.x(op(states,ds,t));
-            };
-}
-
-StateY::StateY(const NodePtr& operand) : Unary(operand)
-{
-}
-Function StateY::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.y(op(states,ds,t));
-            };
-}
-
-StateZ::StateZ(const NodePtr& operand) : Unary(operand)
-{
-}
-Function StateZ::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.z(op(states,ds,t));
-            };
-}
-
-StateU::StateU(const NodePtr& operand) : Unary(operand)
-{
-}
-Function StateU::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.u(op(states,ds,t));
-            };
-}
-
-StateV::StateV(const NodePtr& operand) : Unary(operand)
-{
-}
-Function StateV::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.v(op(states,ds,t));
-            };
-}
-
-StateW::StateW(const NodePtr& operand) : Unary(operand)
-{
-}
-Function StateW::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.w(op(states,ds,t));
-            };
-}
-
-StateP::StateP(const NodePtr& operand) : Unary(operand)
-{
-}
-Function StateP::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.p(op(states,ds,t));
-            };
-}
-
-StateQ::StateQ(const NodePtr& operand) : Unary(operand)
-{
-}
-Function StateQ::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.q(op(states,ds,t));
-            };
-}
-
-StateR::StateR(const NodePtr& operand) : Unary(operand)
-{
-}
-Function StateR::get_lambda() const
-{
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return states.r(op(states,ds,t));
-            };
-}
-
 NodePtr maneuvering::make_constant(const double val)
 {
     return NodePtr(new Constant(val));
@@ -362,45 +253,45 @@ NodePtr maneuvering::make_multiply(const NodePtr& lhs, const NodePtr& rhs)
 
 NodePtr maneuvering::make_state_x(const NodePtr& n)
 {
-    return NodePtr(new StateX(n));
+    return NodePtr(new State<StateType::X>(n));
 }
 
 NodePtr maneuvering::make_state_y(const NodePtr& n)
 {
-    return NodePtr(new StateY(n));
+    return NodePtr(new State<StateType::Y>(n));
 }
 
 NodePtr maneuvering::make_state_z(const NodePtr& n)
 {
-    return NodePtr(new StateZ(n));
+    return NodePtr(new State<StateType::Z>(n));
 }
 
 NodePtr maneuvering::make_state_u(const NodePtr& n)
 {
-    return NodePtr(new StateU(n));
+    return NodePtr(new State<StateType::U>(n));
 }
 
 NodePtr maneuvering::make_state_v(const NodePtr& n)
 {
-    return NodePtr(new StateV(n));
+    return NodePtr(new State<StateType::V>(n));
 }
 
 NodePtr maneuvering::make_state_w(const NodePtr& n)
 {
-    return NodePtr(new StateW(n));
+    return NodePtr(new State<StateType::W>(n));
 }
 
 NodePtr maneuvering::make_state_p(const NodePtr& n)
 {
-    return NodePtr(new StateP(n));
+    return NodePtr(new State<StateType::P>(n));
 }
 
 NodePtr maneuvering::make_state_q(const NodePtr& n)
 {
-    return NodePtr(new StateQ(n));
+    return NodePtr(new State<StateType::Q>(n));
 }
 
 NodePtr maneuvering::make_state_r(const NodePtr& n)
 {
-    return NodePtr(new StateR(n));
+    return NodePtr(new State<StateType::R>(n));
 }

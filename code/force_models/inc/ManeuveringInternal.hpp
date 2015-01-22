@@ -29,7 +29,7 @@ namespace maneuvering
             virtual Function get_lambda() const = 0;
             std::vector<NodePtr> get_children() const;
 
-        //protected:
+        protected:
             std::vector<NodePtr> children;
 
         private:
@@ -144,67 +144,32 @@ namespace maneuvering
             Function get_lambda() const;
     };
 
-    class StateX : public Unary
-    {
-        public:
-            StateX(const NodePtr& operand);
-            Function get_lambda() const;
-    };
+    enum class StateType {X, Y, Z, U, V, W, P, Q, R};
 
-    class StateY : public Unary
+    template <StateType S> class State : public Unary
     {
         public:
-            StateY(const NodePtr& operand);
-            Function get_lambda() const;
-    };
-
-    class StateZ : public Unary
-    {
-        public:
-            StateZ(const NodePtr& operand);
-            Function get_lambda() const;
-    };
-
-    class StateU : public Unary
-    {
-        public:
-            StateU(const NodePtr& operand);
-            Function get_lambda() const;
-    };
-
-    class StateV : public Unary
-    {
-        public:
-            StateV(const NodePtr& operand);
-            Function get_lambda() const;
-    };
-
-    class StateW : public Unary
-    {
-        public:
-            StateW(const NodePtr& operand);
-            Function get_lambda() const;
-    };
-
-    class StateP : public Unary
-    {
-        public:
-            StateP(const NodePtr& operand);
-            Function get_lambda() const;
-    };
-
-    class StateQ : public Unary
-    {
-        public:
-            StateQ(const NodePtr& operand);
-            Function get_lambda() const;
-    };
-
-    class StateR : public Unary
-    {
-        public:
-            StateR(const NodePtr& operand);
-            Function get_lambda() const;
+            State(const NodePtr& operand) : Unary(operand){}
+            Function get_lambda() const
+            {
+                return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+                        {
+                            const auto op = get_operand()->get_lambda();
+                            switch(S)
+                            {
+                                case StateType::X : return states.x(op(states,ds,t));break;
+                                case StateType::Y : return states.y(op(states,ds,t));break;
+                                case StateType::Z : return states.z(op(states,ds,t));break;
+                                case StateType::U : return states.u(op(states,ds,t));break;
+                                case StateType::V : return states.v(op(states,ds,t));break;
+                                case StateType::W : return states.w(op(states,ds,t));break;
+                                case StateType::P : return states.p(op(states,ds,t));break;
+                                case StateType::Q : return states.q(op(states,ds,t));break;
+                                case StateType::R : return states.r(op(states,ds,t));break;
+                            }
+                            return op(states,ds,t);
+                        };
+            }
     };
 
     NodePtr make_constant(const double val);
