@@ -1,11 +1,8 @@
 #!/bin/sh
-if [ $# -eq 1 ]
-then
-    f=$1
-else
-    f=user_guide_fr
-fi
-pandoc -s --highlight-style pygments -o ${f}Ori.tex ${f}.md
-sed 's/svg/png/g' ${f}Ori.tex > ${f}.tex
-pdflatex ${f}.tex
-rm ${f}.tex ${f}Ori.tex ${f}.out ${f}.aux ${f}.log
+cat introduction.md interfaces.md solver.md reperes_et_conventions.md modeles_environnementaux.md diffraction_radiation.md modeles_efforts.md tutorial_*.md > concatenated_doc.md
+sed -i 's/svg/png/g' concatenated_doc.md
+pandoc -s --highlight-style pygments -o concatenated_doc.tex concatenated_doc.md
+pdflatex concatenated_doc.tex
+mv concatenated_doc.pdf simulator_doc.pdf
+rm *.tex
+rm concatenated_doc.md
