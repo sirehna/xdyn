@@ -58,7 +58,8 @@ l'espace.
 La plus simple densité spectrale de puissance correspond à une houle
 monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
 
-$$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) = \left\{\begin{array}0, \mbox{si }\omega\neq \omega_0\\1, \mbox{si
+$$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
+\left\{\begin{array}{l}0, \mbox{si }\omega\neq \omega_0\\1, \mbox{si
 } \omega=\omega_0\end{array}\right\}$$
 
 Le paramétrage de ce spectre est :
@@ -187,8 +188,8 @@ $$p_{\mbox{dyn}} = \rho\cdot g
 h)}\cos(k\cdot(x\cdot
 \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
-$g$ désigne l'accélération de la pesanteur (9.81 m/s²)
-$\rho$ est la densité volumique du fluide (en kg/m^3)
+$g$ désigne l'accélération de la pesanteur (9.81 $m/s^2$)
+$\rho$ est la densité volumique du fluide (en $kg/m^3$)
 
 Lorsque la profondeur $h$ est très grande devant $z$, on obtient :
 

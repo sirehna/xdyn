@@ -34,7 +34,7 @@ quaternions (c'est d'ailleurs ainsi qu'elle est exprimée dans le code du simula
 ## Conventions d'orientations
 
 Cette section présente les notations utilisées pour définir l'orientation
-d'un élément dans l'espace à partir d'un triplet de trois angles $(\phi,$\theta$,\psi$)$.
+d'un élément dans l'espace à partir d'un triplet de trois angles $(\phi,\theta,\psi)$.
 
 
 ### Définition d'une orientation

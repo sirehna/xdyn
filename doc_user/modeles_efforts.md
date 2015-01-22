@@ -329,8 +329,8 @@ Le point de calcul n'est pas nécessairement le centre de gravité. En revanche,
 il s'agit nécessairement d'un point fixe dans le repère du solide.
 
 Le paramètre `mirror for 180 to 360` sert à pouvoir ne spécifier que la partie
-de la RAO entre 0° et 180°, quitte à la symétriser pour obtenir les points entre
-180° et 360°.
+de la RAO entre 0$^{\circ}$ et 180$^{\circ}$, quitte à la symétriser pour
+obtenir les points entre 180$^{\circ}$ et 360$^{\circ}$.
 
 
 ## Résistance à l'avancement
@@ -375,7 +375,7 @@ de calcul
 hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
 est :
 
-$$\tau_\mbox{res} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
+$$\tau_{\mbox{res}} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
 
 ### Paramétrage
 
@@ -446,33 +446,33 @@ hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique).
 La vitesse du courant (vitesse de l'eau par rapport au repère NED, projetée
 dans le repère NED) est notée :
 
-$$V_\mbox{eau/sol} =
-\left[\begin{array}{c}U_\mbox{courant}\\V_\mbox{courant}\\0\end{array}\right]$$
+$$V_{\mbox{eau/sol}} =
+\left[\begin{array}{c}U_{\mbox{courant}}\\V_{\mbox{courant}}\\0\end{array}\right]$$
 
 On définit :
 
-$$\nu_\mbox{local} = {}^\mbox{local}T_\mbox{body} \nu_b -
-{}^\mbox{local}T_\mbox{NED}V_\mbox{eau/sol}$$
+$$\nu_{\mbox{local}} = {}^{\mbox{local}}T_{\mbox{body}} \nu_b -
+{}^{\mbox{local}}T_{\mbox{NED}}V_{\mbox{eau/sol}}$$
 
-$$\omega_\mbox{local} = {}^\mbox{local}T_\mbox{body}\omega_{nb}^b$$
+$$\omega_{\mbox{local}} = {}^{\mbox{local}}T_{\mbox{body}}\omega_{nb}^b$$
 
 Si les efforts de radiation ne sont par modélisés par ailleurs, les
 amortissements linéaires s'écrivent (dans le [repère de calcul
 hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique)) :
 
-$$F_{\mbox{al}}=-D_l\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_\mbox{local}$$
+$$F_{\mbox{al}}=-D_l\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_{\mbox{local}}$$
 
 où $D_l$ est la matrice d'amortissement linéaire lue depuis [le fichier de
 paramètres](#amortissement-linéaire).
 
 Pour les amortissements quadratiques :
 
-$$F_{\mbox{aq}}=-D_q(\nu_{\mbox{local}})\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_\mbox{local}$$
+$$F_{\mbox{aq}}=-D_q(\nu_{\mbox{local}})\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_{\mbox{local}}$$
 
 où
 
 $$D_q(\nu_{\mbox{local}}) = \left[
-\begin{array}{ccc}
+\begin{array}{cccccc}
 d_{11}\cdot|u_{\mbox{local}}| & d_{12}\cdot |v_{\mbox{local}}| & d_{13}\cdot |w_{\mbox{local}}| & d_{14}\cdot |p_{\mbox{local}}| & d_{15}\cdot |q_{\mbox{local}}| & d_{16}\cdot |r_{\mbox{local}}|\\
 d_{21}\cdot|u_{\mbox{local}}| & d_{22}\cdot |v_{\mbox{local}}| & d_{23}\cdot |w_{\mbox{local}}| & d_{24}\cdot |p_{\mbox{local}}| & d_{25}\cdot |q_{\mbox{local}}| & d_{26}\cdot |r_{\mbox{local}}|\\
 d_{31}\cdot|u_{\mbox{local}}| & d_{32}\cdot |v_{\mbox{local}}| & d_{33}\cdot |w_{\mbox{local}}| & d_{34}\cdot |p_{\mbox{local}}| & d_{35}\cdot |q_{\mbox{local}}| & d_{36}\cdot |r_{\mbox{local}}|\\
@@ -776,7 +776,7 @@ on peut ensuite dériver la poussée et le couple.
 ### Prise en compte des effets de la coque et du sillage
 
 Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque, la
-vitesse du fluide au niveau de l'hélice $V_a n'est pas égale (en valeur absolue) à
+vitesse du fluide au niveau de l'hélice $V_a$ n'est pas égale (en valeur absolue) à
 la vitesse du navire par rapport à l'eau $V_s$, autrement dit $V_a\neq V_s$.
 La vitesse d'avance $V_a$ est, en général, très
 difficile à mesurer et l'on suppose qu'elle est proportionnelle à la vitesse du
@@ -863,8 +863,8 @@ dans le sens des $x$ positifs.
 Le sens de rotation de l'hélice doit également être spécifié parce qu'il
 détermine le signe du couple généré par l'hélice sur le navire. On définit ce
 sens de rotation en se plaçant face à l'hélice, en regardant dans la direction
-des $x_\mbox{hélice}$ positifs (donc vers l'avant du navire). Autrement dit, l'axe de
-rotation de l'hélice est non pas $x_\mbox{hélice}$ mais $-x_\mbox{hélice}$.
+des $x_{\mbox{hélice}}$ positifs (donc vers l'avant du navire). Autrement dit, l'axe de
+rotation de l'hélice est non pas $x_{\mbox{hélice}}$ mais $-x_{\mbox{hélice}}$.
 Lorsque l'hélice tourne dans le sens **horaire**, elle génère un couple dans le
 sens trigonométrique, soit un couple de signe **négatif** lorsqu'il est exprimé
 dans le repère de l'hélice :
@@ -875,14 +875,14 @@ Le torseur des efforts générés par l'hélice et subit par le navire
 (apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
 exprimé dans le repère de l'hélice, est donc :
 
-$$\tau_\mbox{hélice} = \left[\begin{array}{c}
+$$\tau_{\mbox{hélice}} = \left[\begin{array}{c}
 X\\
 Y\\
 Z\\
 K\\
 M\\
 N
-\end{array}\right]_\mbox{hélice}$$
+\end{array}\right]_{\mbox{hélice}}$$
 
 $$= \left[\begin{array}{c}
            T_b\\
@@ -891,7 +891,7 @@ $$= \left[\begin{array}{c}
            \kappa Q_b\\
            0\\
            0
-\end{array}\right]_\mbox{hélice}$$
+\end{array}\right]_{\mbox{hélice}}$$
 $$= \left[\begin{array}{c}
            (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)\\
            0\\
@@ -899,7 +899,7 @@ $$= \left[\begin{array}{c}
            \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J,
 R_n,\sigma_0)\\
            0\\
-           0\end{array}\right]_\mbox{hélice}
+           0\end{array}\right]_{\mbox{hélice}}
 $$
 
 $\kappa$ vaut -1 si l'hélice tourne dans le sens horaire (en se plaçant
