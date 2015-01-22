@@ -3,6 +3,6 @@ cat introduction.md interfaces.md solver.md reperes_et_conventions.md modeles_en
 sed -i 's/svg/png/g' concatenated_doc.md
 pandoc -s --highlight-style pygments -o concatenated_doc.tex concatenated_doc.md
 pdflatex concatenated_doc.tex
-mv concatenated_doc.pdf simulator_doc.pdf
+mv concatenated_doc.pdf doc.pdf
 rm *.tex
 rm concatenated_doc.md

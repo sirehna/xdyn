@@ -154,6 +154,23 @@ IF(PANDOC)
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
                        )
+    ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.pdf
+                       COMMAND ./doc_pdf.sh
+                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
+                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/reperes_et_conventions.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_environnementaux.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
+                       )
+
+
 
 #    LIST(APPEND doc_files documentation_yaml)
 #    LIST(APPEND doc_files modeles_reperes_et_conventions)
@@ -167,6 +184,7 @@ IF(PANDOC)
 #                          )
         LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html)
         LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.docx)
+        LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.pdf)
 #    ENDFOREACH()
     ADD_CUSTOM_TARGET(doc_user ALL DEPENDS ${DOC_USER_INSTALL_FILES})
     INSTALL(FILES ${DOC_USER_INSTALL_FILES} DESTINATION doc)
