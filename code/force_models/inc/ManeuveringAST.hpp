@@ -25,28 +25,28 @@ namespace maneuvering
 
     };
 
-    struct Var : Op
+    struct VarNode : Op
     {
-        Var(const std::string& name);
-        private: Var();
+        VarNode(const std::string& name);
+        private: VarNode();
     };
 
-    struct Binary : Op
+    struct BinaryNode : Op
     {
-        Binary(const std::string& operator_name, const Op& lhs, const Op& rhs);
-        private: Binary();
+        BinaryNode(const std::string& operator_name, const Op& lhs, const Op& rhs);
+        private: BinaryNode();
     };
 
-    struct Unary : Op
+    struct UnaryNode : Op
     {
-        Unary(const std::string& operator_name, const Op& son);
-        private: Unary();
+        UnaryNode(const std::string& operator_name, const Op& son);
+        private: UnaryNode();
     };
 
-    struct State : Op
+    struct NullaryNode : Op
     {
-        State(const std::string& name, const Op& operand);
-        private: State();
+        NullaryNode(const std::string& operator_name);
+        private: NullaryNode();
     };
 }
 
