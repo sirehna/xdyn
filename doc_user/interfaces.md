@@ -222,9 +222,9 @@ output:
   sont `x(body)`, `y(body)` `z(body)`, `u(body)`, `v(body)`, `w(body)`,
   `p(body)`, `q(body)`, `r(body)`, `qr(body)`, `qi(body)`, `qj(body)`,
   `qk(body)`. `body` doit être remplacé par le nom du corps (`ball` dans
-  l'exemple ci-dessus). Les sorties d'effort sont `Fx(body,model)`,
-  `Fy(body,model)`, `Fz(body,model)`, `Mx(body,model)`, `My(body,model)`,
-  `Mz(body,model)` où `model` est le nom du modèle d'effort (renseigné dans la
+  l'exemple ci-dessus). Les sorties d'effort sont `Fx(model,body)`,
+  `Fy(model,body)`, `Fz(model,body)`, `Mx(model,body)`, `My(model,body)`,
+  `Mz(model,body)` où `model` est le nom du modèle d'effort (renseigné dans la
   clef `model` de chaque modèle d'effort).
 
 

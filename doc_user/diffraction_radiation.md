@@ -400,7 +400,7 @@ suivantes sont réalisées :
   nb of points for retardation function discretization: 50
   omega min: {value: 0, unit: rad/s}
   omega max: {value: 30, unit: rad/s}
-  tau min: {value: 0.2094395, unit: rad/s}
+  tau min: {value: 0.2094395, unit: s}
   tau max: {value: 10, unit: s}
   output Br and K: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
