@@ -16,6 +16,8 @@
 #include "parse_unit_value.hpp"
 #include "SimpleTrackKeepingController.hpp"
 
+const std::string SimpleTrackKeepingController::model_name = "simple heading controller";
+
 SimpleTrackKeepingController::Yaml::Yaml() : name(), ksi(0), Tp(0)
 {
 }
