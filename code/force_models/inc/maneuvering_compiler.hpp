@@ -14,7 +14,7 @@
 
 namespace maneuvering
 {
-    NodePtr compile(const Op& ast);
+    NodePtr compile(const std::string& expression);
 }
 
 

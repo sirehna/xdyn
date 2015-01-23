@@ -15,6 +15,7 @@ FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/SimpleTrackKeepingControllerTest.cpp
               src/ManeuveringForceModelTest.cpp
               src/maneuvering_parserTest.cpp
+              src/maneuvering_compilerTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

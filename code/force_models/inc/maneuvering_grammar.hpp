@@ -105,6 +105,7 @@ namespace maneuvering
             term       = atom | mul_expression | constant;
             factor     = atom | ('(' >> term >> ')');
             atom       = functional | identifier | constant;
+            expression = atom;//add_expression | mul_expression | factor | term;
             using qi::debug;
 
         }
@@ -119,6 +120,7 @@ namespace maneuvering
         qi::rule<Iterator, Atom(), SpaceType>                          atom;
         qi::rule<Iterator, Term(), SpaceType>                          term;
         qi::rule<Iterator, Term(), SpaceType>                          factor;
+        qi::rule<Iterator, Term(), SpaceType>                          expression;
 
     };
     typedef Grammar<std::string::const_iterator> grammar;

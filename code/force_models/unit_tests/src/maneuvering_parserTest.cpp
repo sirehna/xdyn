@@ -41,13 +41,6 @@ void maneuvering_parserTest::TearDown()
 
 using boost::spirit::ascii::blank;
 
-TEST_F(maneuvering_parserTest, can_compile_constant)
-{
-    const auto f = compile(ConstantNode(1.23456));
-    ASSERT_EQ(1.23456, f->get_lambda()(states, ds, t));
-}
-
-
 TEST_F(maneuvering_parserTest, parse_very_simple_grammar)
 {
     const std::string s = "1.2 2.3 3.4";
@@ -219,4 +212,15 @@ TEST_F(maneuvering_parserTest, can_parse_mul_expression2)
     ASSERT_EQ("^", expression.operator_name);
     const TermVisitor visit_term;
     ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visit_term, expression.lhs));
+}
+
+TEST_F(maneuvering_parserTest, can_parse_expression)
+{
+    const std::string s = "2.3";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    maneuvering::Term expression;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, g.expression, blank, expression);
+    const TermVisitor visit_term;
+    ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visit_term, expression));
 }
