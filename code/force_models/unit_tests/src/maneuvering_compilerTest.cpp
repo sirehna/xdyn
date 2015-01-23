@@ -142,12 +142,12 @@ class TermVisitor
 };
 template <> double TermVisitor::operator()(const Atom& a) const;
 template <> double TermVisitor::operator()(const Atom& a) const
-        {
-    COUT("");
+{
+COUT("");
     AtomVisitor visitor;
-                boost::apply_visitor(visitor, a);
-            return boost::get<double>(a);
-        }
+    boost::apply_visitor(visitor, a);
+    return boost::get<double>(a);
+}
 
 TEST_F(maneuvering_compilerTest, can_parse_atom)
 {
@@ -169,4 +169,30 @@ TEST_F(maneuvering_compilerTest, can_parse_factor)
     qi::phrase_parse(b, e, g.factor, blank, actual);
     const TermVisitor visitor;
     ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visitor, actual));
+}
+
+TEST_F(maneuvering_compilerTest, can_parse_expression)
+{
+    const std::string s = "2.3  + 3.4";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    maneuvering::Expression expression;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, g.expression, blank, expression);
+    ASSERT_EQ("+", expression.operator_name);
+    const TermVisitor visitor;
+    ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visitor, expression.lhs));
+    ASSERT_DOUBLE_EQ(3.4, boost::apply_visitor(visitor, expression.rhs));
+}
+
+TEST_F(maneuvering_compilerTest, can_parse_expression2)
+{
+    const std::string s = "2.3  + (3.4)";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    maneuvering::Expression expression;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, g.expression, blank, expression);
+    ASSERT_EQ("+", expression.operator_name);
+    const TermVisitor visitor;
+    ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visitor, expression.lhs));
+    ASSERT_DOUBLE_EQ(3.4, boost::apply_visitor(visitor, expression.rhs));
 }

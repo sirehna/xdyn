@@ -97,7 +97,8 @@ namespace maneuvering
             mulop      = qi::char_("*") | qi::char_("/");
             constant   = double_;
             functional = identifier >> '(' >> term >> ')';
-            expression = term >> addop >> term;
+            expression = term >> addop >> factor
+                       |  expression  >> addop >> term;
             term       = atom | expression | constant;
             factor     = atom | ('(' >> term >> ')');
             atom       = functional | identifier | constant;
