@@ -103,3 +103,53 @@ TEST_F(maneuvering_compilerTest, can_parse_functional)
     qi::phrase_parse(b, e, g.functional, blank, actual);
     ASSERT_EQ("f", actual.identifier);
 }
+
+class IsFunction
+    : public boost::static_visitor<>
+{
+    public:
+        IsFunction() : function_name(""){}
+        void operator()(const maneuvering::Functional & f)
+        {
+            COUT(f.identifier);
+            function_name = f.identifier;
+        }
+
+        void operator()(const maneuvering::Nil & ) const
+        {
+            COUT("");
+        }
+
+        void operator()(const maneuvering::Identifier & id) const
+        {
+            COUT(id);
+        }
+
+        void operator()(const double & d) const
+        {
+            COUT(d);
+        }
+
+        bool matches(const std::string& name) const
+        {
+            return function_name==name;
+        }
+
+    private:
+
+        std::string function_name;
+
+};
+
+TEST_F(maneuvering_compilerTest, can_parse_atom)
+{
+    const std::string s = "foo(a)";
+    const std::string s2 = "1.4";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    maneuvering::Atom actual;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, g.functional, blank, actual);
+    IsFunction parsed_function_name;
+    boost::apply_visitor(parsed_function_name, actual);
+    ASSERT_TRUE(parsed_function_name.matches("foo"));
+}

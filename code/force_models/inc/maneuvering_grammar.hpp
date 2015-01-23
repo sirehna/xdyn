@@ -40,36 +40,34 @@ namespace maneuvering
                     >
                 Term;
 
-    typedef boost::variant<
-                            Nil
-                          , boost::recursive_wrapper<Atom>
-                          , boost::recursive_wrapper<Expression>
-                          , double
-                        >
-    ExpressionNode;
+
 
     struct Expression
     {
+        Term lhs;
         std::string operator_name;
-        std::vector<ExpressionNode> children;
+        Term rhs;
     };
 
     struct Functional
     {
         std::string identifier;
-        Expression operand;
+        Term operand;
     };
+
 }
+
     BOOST_FUSION_ADAPT_STRUCT(
             maneuvering::Expression,
-        (std::string, operator_)
-        (std::vector<maneuvering::ExpressionNode>, children)
+        (maneuvering::Term, lhs)
+        (std::string, operator_name)
+        (maneuvering::Term, rhs)
     )
 
     BOOST_FUSION_ADAPT_STRUCT(
             maneuvering::Functional,
             (std::string, identifier)
-            (maneuvering::Expression, operand)
+            (maneuvering::Term, operand)
         )
 
 namespace maneuvering
@@ -86,26 +84,37 @@ namespace maneuvering
     typedef SimpleGrammar<std::string::const_iterator> simple_grammar;
 
 
-
+    using boost::spirit::qi::hold;
     template <typename Iterator>
     struct Grammar : qi::grammar<Iterator, maneuvering::Term(), SpaceType>
     {
         //using qi::_1;
+
         Grammar() : Grammar::base_type(ast)
         {
             identifier = +qi::char_("_a-zA-Z");
+            addop      = qi::char_("+") | qi::char_("-");
+            mulop      = qi::char_("*") | qi::char_("/");
             constant   = double_;
-            functional = identifier >> lit('(') >> expression >> lit(')');
-//            using qi::debug;
-//            BOOST_SPIRIT_DEBUG_NODE(ast);
+            functional = identifier >> '(' >> term >> ')';
+            expression = term >> addop >> term;
+            term       = atom | expression | constant;
+            factor     = atom | '(' >> expression >> ')';
+            atom       = functional | identifier | constant;
+            using qi::debug;
+
         }
-        qi::rule<Iterator, Term(), SpaceType> ast;
-        qi::rule<Iterator, Expression(), SpaceType>                    expression;
-        qi::rule<Iterator, Functional(), SpaceType>                    functional;
-//        qi::rule<Iterator, Term(), SpaceType>                          term;
-//        qi::rule<Iterator, Atom(), SpaceType>                          atom;
+        qi::rule<Iterator, Term(), SpaceType>                          ast;
+        qi::rule<Iterator, std::string(), SpaceType>                   addop;
+        qi::rule<Iterator, std::string(), SpaceType>                   mulop;
         qi::rule<Iterator, std::string(), SpaceType>                   identifier;
         qi::rule<Iterator, double(), SpaceType>                        constant;
+        qi::rule<Iterator, Functional(), SpaceType>                    functional;
+        qi::rule<Iterator, Expression(), SpaceType>                    expression;
+        qi::rule<Iterator, Atom(), SpaceType>                          atom;
+        qi::rule<Iterator, Term(), SpaceType>                          term;
+        qi::rule<Iterator, Term(), SpaceType>                          factor;
+
     };
     typedef Grammar<std::string::const_iterator> grammar;
 }
