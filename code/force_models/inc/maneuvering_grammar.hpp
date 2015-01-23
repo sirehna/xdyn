@@ -94,12 +94,15 @@ namespace maneuvering
         {
             identifier = +qi::char_("_a-zA-Z");
             addop      = qi::char_("+") | qi::char_("-");
-            mulop      = qi::char_("*") | qi::char_("/");
+            mulop      = qi::char_("*") | qi::char_("/") | qi::char_("^");
             constant   = double_;
             functional = identifier >> '(' >> term >> ')';
-            expression = term >> addop >> factor
-                       |  expression  >> addop >> term;
-            term       = atom | expression | constant;
+            add_expression = term >> addop >> factor
+                           |  add_expression  >> addop >> term
+                           |  term  >> addop >> mul_expression
+                           |  add_expression  >> addop >> mul_expression;
+            mul_expression = term >> mulop >> factor;
+            term       = atom | mul_expression | constant;
             factor     = atom | ('(' >> term >> ')');
             atom       = functional | identifier | constant;
             using qi::debug;
@@ -111,7 +114,8 @@ namespace maneuvering
         qi::rule<Iterator, std::string(), SpaceType>                   identifier;
         qi::rule<Iterator, double(), SpaceType>                        constant;
         qi::rule<Iterator, Functional(), SpaceType>                    functional;
-        qi::rule<Iterator, Expression(), SpaceType>                    expression;
+        qi::rule<Iterator, Expression(), SpaceType>                    add_expression;
+        qi::rule<Iterator, Expression(), SpaceType>                    mul_expression;
         qi::rule<Iterator, Atom(), SpaceType>                          atom;
         qi::rule<Iterator, Term(), SpaceType>                          term;
         qi::rule<Iterator, Term(), SpaceType>                          factor;
