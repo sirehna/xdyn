@@ -179,6 +179,17 @@ namespace maneuvering
             Function get_lambda() const;
     };
 
+    class UnknownIdentifier : public Nullary
+    {
+        public:
+            UnknownIdentifier(const std::string& identifier_name);
+            Function get_lambda() const;
+
+        private:
+            UnknownIdentifier();
+            std::string identifier_name;
+    };
+
     NodePtr make_constant(const double val);
     NodePtr make_cos(const NodePtr& operand);
     NodePtr make_sin(const NodePtr& operand);
@@ -200,6 +211,7 @@ namespace maneuvering
     NodePtr make_state_q(const NodePtr& operand);
     NodePtr make_state_r(const NodePtr& operand);
     NodePtr make_time();
+    NodePtr make_unknown_identifier(const std::string& identifier_name);
 }
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */

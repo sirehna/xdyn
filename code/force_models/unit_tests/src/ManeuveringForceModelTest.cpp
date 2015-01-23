@@ -236,3 +236,14 @@ TEST_F(ManeuveringForceModelTest, internal_time)
     const auto f = c->get_lambda();
     ASSERT_DOUBLE_EQ(t, f(states, ds, t));
 }
+
+TEST_F(ManeuveringForceModelTest, unknown_identifier)
+{
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    ds.set<double>("foo", 123.456);
+    const double t = a.random<double>();
+    const auto c = make_unknown_identifier("foo");
+    const auto f = c->get_lambda();
+    ASSERT_DOUBLE_EQ(123.456, f(states, ds, t));
+}

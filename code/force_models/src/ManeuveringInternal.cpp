@@ -207,6 +207,18 @@ Function Time::get_lambda() const
             };
 }
 
+UnknownIdentifier::UnknownIdentifier(const std::string& identifier_name_) : identifier_name(identifier_name_)
+{
+}
+
+Function UnknownIdentifier::get_lambda() const
+{
+    return [this](const BodyStates& , ssc::data_source::DataSource& ds, const double )
+            {
+                return ds.get<double>(identifier_name);
+            };
+}
+
 NodePtr maneuvering::make_constant(const double val)
 {
     return NodePtr(new Constant(val));
@@ -310,4 +322,9 @@ NodePtr maneuvering::make_state_r(const NodePtr& n)
 NodePtr maneuvering::make_time()
 {
     return NodePtr(new Time());
+}
+
+NodePtr maneuvering::make_unknown_identifier(const std::string& identifier_name)
+{
+    return NodePtr(new UnknownIdentifier(identifier_name));
 }
