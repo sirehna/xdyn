@@ -40,6 +40,8 @@ void maneuvering_compilerTest::TearDown()
 {
 }
 
+using boost::spirit::ascii::blank;
+
 TEST_F(maneuvering_compilerTest, can_compile_constant)
 {
     const auto f = compile(ConstantNode(1.23456));
@@ -53,7 +55,6 @@ TEST_F(maneuvering_compilerTest, parse_very_simple_grammar)
     std::string::const_iterator b = s.begin(), e = s.end();
     std::vector<double> v;
     maneuvering::simple_grammar g;
-    using boost::spirit::ascii::blank;
     qi::phrase_parse(b, e, g.values_for_tests, blank, v);
     ASSERT_EQ(3, v.size());
     ASSERT_DOUBLE_EQ(1.2, v.at(0));
@@ -61,6 +62,27 @@ TEST_F(maneuvering_compilerTest, parse_very_simple_grammar)
     ASSERT_DOUBLE_EQ(3.4, v.at(2));
 }
 
+TEST_F(maneuvering_compilerTest, can_parse_valid_identifier)
+{
+    const std::string s = "valid_identifier";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::string actual;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, *(g.identifier), blank, actual);
+    const std::string expected = s;
+    ASSERT_EQ(expected, actual);
+}
+
+TEST_F(maneuvering_compilerTest, cannot_parse_invalid_identifier)
+{
+    const std::string s = "0valid_identifier";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::string actual;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, *(g.identifier), blank, actual);
+    const std::string expected = "";
+    ASSERT_EQ(expected, actual);
+}
 
 TEST_F(maneuvering_compilerTest, can_parse_constant)
 {
@@ -68,6 +90,6 @@ TEST_F(maneuvering_compilerTest, can_parse_constant)
     std::string::const_iterator b = s.begin(), e = s.end();
     std::list<maneuvering::Term> v;
     maneuvering::grammar g;
-    using boost::spirit::ascii::blank;
+
     qi::phrase_parse(b, e, *(g.ast), blank, v);
 }

@@ -93,6 +93,7 @@ namespace maneuvering
         //using qi::_1;
         Grammar() : Grammar::base_type(ast)
         {
+            identifier = qi::lexeme[qi::char_("_a-zA-Z") >> +(qi::char_("-_a-zA-Z0-9+"))];
 //            using qi::debug;
 //            BOOST_SPIRIT_DEBUG_NODE(ast);
         }
@@ -101,7 +102,7 @@ namespace maneuvering
 //        qi::rule<Iterator, Functional(), SpaceType>                    function;
 //        qi::rule<Iterator, Term(), SpaceType>                          term;
 //        qi::rule<Iterator, Atom(), SpaceType>                          atom;
-//        qi::rule<Iterator, std::string(), SpaceType>                   identifier;
+        qi::rule<Iterator, std::string(), SpaceType>                   identifier;
     };
     typedef Grammar<std::string::const_iterator> grammar;
 }
