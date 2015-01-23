@@ -8,6 +8,7 @@ SET(SRC src/stl_reader.cpp
         src/pretty_print_hdb.cpp
         )
 
+# Disabled virtual destructors warning in Boost
 IF(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"))
     SET(CMAKE_CXX_FLAGS " -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros -std=gnu++0x")
     IF(CMAKE_SIZEOF_VOID_P EQUAL 8) # If on a 64 bit machine
