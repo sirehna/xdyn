@@ -93,7 +93,7 @@ namespace maneuvering
         //using qi::_1;
         Grammar() : Grammar::base_type(ast)
         {
-            identifier = qi::lexeme[qi::char_("_a-zA-Z") >> +(qi::char_("-_a-zA-Z0-9+"))];
+            identifier = +qi::char_("_a-zA-Z");
             constant   = double_;
             functional = identifier >> lit('(') >> expression >> lit(')');
 //            using qi::debug;
