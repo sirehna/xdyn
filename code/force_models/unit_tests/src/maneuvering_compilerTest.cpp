@@ -93,3 +93,13 @@ TEST_F(maneuvering_compilerTest, can_parse_constant)
     qi::phrase_parse(b, e, g.constant, blank, actual);
     ASSERT_DOUBLE_EQ(1.234, actual);
 }
+
+TEST_F(maneuvering_compilerTest, can_parse_functional)
+{
+    const std::string s = "f(a)";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    maneuvering::Functional actual;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, g.functional, blank, actual);
+    ASSERT_EQ("f", actual.identifier);
+}
