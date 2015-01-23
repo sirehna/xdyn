@@ -5,12 +5,11 @@
  *      Author: cady
  */
 
-#include "maneuvering_compilerTest.hpp"
-#include "maneuvering_compiler.hpp"
+#include "maneuvering_parserTest.hpp"
 
 using namespace maneuvering;
 
-maneuvering_compilerTest::maneuvering_compilerTest() :
+maneuvering_parserTest::maneuvering_parserTest() :
             a(ssc::random_data_generator::DataGenerator(2121212188)),
             states(),
             ds(),
@@ -28,28 +27,28 @@ maneuvering_compilerTest::maneuvering_compilerTest() :
     states.r.record(0, a.random<double>());
 }
 
-maneuvering_compilerTest::~maneuvering_compilerTest()
+maneuvering_parserTest::~maneuvering_parserTest()
 {
 }
 
-void maneuvering_compilerTest::SetUp()
+void maneuvering_parserTest::SetUp()
 {
 }
 
-void maneuvering_compilerTest::TearDown()
+void maneuvering_parserTest::TearDown()
 {
 }
 
 using boost::spirit::ascii::blank;
 
-TEST_F(maneuvering_compilerTest, can_compile_constant)
+TEST_F(maneuvering_parserTest, can_compile_constant)
 {
     const auto f = compile(ConstantNode(1.23456));
     ASSERT_EQ(1.23456, f->get_lambda()(states, ds, t));
 }
 
 
-TEST_F(maneuvering_compilerTest, parse_very_simple_grammar)
+TEST_F(maneuvering_parserTest, parse_very_simple_grammar)
 {
     const std::string s = "1.2 2.3 3.4";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -62,7 +61,7 @@ TEST_F(maneuvering_compilerTest, parse_very_simple_grammar)
     ASSERT_DOUBLE_EQ(3.4, v.at(2));
 }
 
-TEST_F(maneuvering_compilerTest, can_parse_valid_identifier)
+TEST_F(maneuvering_parserTest, can_parse_valid_identifier)
 {
     const std::string s = "valid_identifier";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -72,7 +71,7 @@ TEST_F(maneuvering_compilerTest, can_parse_valid_identifier)
     ASSERT_EQ(expected, actual);
 }
 
-TEST_F(maneuvering_compilerTest, cannot_parse_invalid_identifier)
+TEST_F(maneuvering_parserTest, cannot_parse_invalid_identifier)
 {
     const std::string s = "0valid_identifier";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -82,7 +81,7 @@ TEST_F(maneuvering_compilerTest, cannot_parse_invalid_identifier)
     ASSERT_EQ(expected, actual);
 }
 
-TEST_F(maneuvering_compilerTest, can_parse_constant)
+TEST_F(maneuvering_parserTest, can_parse_constant)
 {
     const std::string s = "1.234";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -91,7 +90,7 @@ TEST_F(maneuvering_compilerTest, can_parse_constant)
     ASSERT_DOUBLE_EQ(1.234, actual);
 }
 
-TEST_F(maneuvering_compilerTest, can_parse_functional)
+TEST_F(maneuvering_parserTest, can_parse_functional)
 {
     const std::string s = "f(a)";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -149,7 +148,7 @@ COUT("");
     return boost::get<double>(a);
 }
 
-TEST_F(maneuvering_compilerTest, can_parse_atom)
+TEST_F(maneuvering_parserTest, can_parse_atom)
 {
     const std::string s = "foo(a)";
     const std::string s2 = "1.4";
@@ -160,7 +159,7 @@ TEST_F(maneuvering_compilerTest, can_parse_atom)
     ASSERT_EQ("foo", boost::apply_visitor(visitor, actual));
 }
 
-TEST_F(maneuvering_compilerTest, can_parse_factor)
+TEST_F(maneuvering_parserTest, can_parse_factor)
 {
     const std::string s = "(2.3)";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -171,7 +170,7 @@ TEST_F(maneuvering_compilerTest, can_parse_factor)
     ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visitor, actual));
 }
 
-TEST_F(maneuvering_compilerTest, can_parse_add_expression)
+TEST_F(maneuvering_parserTest, can_parse_add_expression)
 {
     const std::string s = "2.3  + 3.4";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -184,7 +183,7 @@ TEST_F(maneuvering_compilerTest, can_parse_add_expression)
     ASSERT_DOUBLE_EQ(3.4, boost::apply_visitor(visitor, expression.rhs));
 }
 
-TEST_F(maneuvering_compilerTest, can_parse_add_expression2)
+TEST_F(maneuvering_parserTest, can_parse_add_expression2)
 {
     const std::string s = "2.3  + (3.4)";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -197,7 +196,7 @@ TEST_F(maneuvering_compilerTest, can_parse_add_expression2)
     ASSERT_DOUBLE_EQ(3.4, boost::apply_visitor(visitor, expression.rhs));
 }
 
-TEST_F(maneuvering_compilerTest, can_parse_mul_expression)
+TEST_F(maneuvering_parserTest, can_parse_mul_expression)
 {
     const std::string s = "2.3    * 3.4";
     std::string::const_iterator b = s.begin(), e = s.end();
@@ -208,4 +207,16 @@ TEST_F(maneuvering_compilerTest, can_parse_mul_expression)
     const TermVisitor visitor;
     ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visitor, expression.lhs));
     ASSERT_DOUBLE_EQ(3.4, boost::apply_visitor(visitor, expression.rhs));
+}
+
+TEST_F(maneuvering_parserTest, can_parse_mul_expression2)
+{
+    const std::string s = "2.3    ^ (3.4-x)";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    maneuvering::Expression expression;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, g.mul_expression, blank, expression);
+    ASSERT_EQ("^", expression.operator_name);
+    const TermVisitor visit_term;
+    ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visit_term, expression.lhs));
 }

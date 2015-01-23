@@ -17,11 +17,11 @@
 #include "maneuvering_grammar.hpp"
 
 
-class maneuvering_compilerTest : public ::testing::Test
+class maneuvering_parserTest : public ::testing::Test
 {
     protected:
-        maneuvering_compilerTest();
-        virtual ~maneuvering_compilerTest();
+        maneuvering_parserTest();
+        virtual ~maneuvering_parserTest();
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
