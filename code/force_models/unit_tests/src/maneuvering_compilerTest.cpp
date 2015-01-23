@@ -51,7 +51,7 @@ TEST_F(maneuvering_compilerTest, can_compile_constant)
 
 TEST_F(maneuvering_compilerTest, parse_very_simple_grammar)
 {
-    std::string s = "1.2 2.3 3.4";
+    const std::string s = "1.2 2.3 3.4";
     std::string::const_iterator b = s.begin(), e = s.end();
     std::vector<double> v;
     maneuvering::simple_grammar g;
@@ -86,10 +86,10 @@ TEST_F(maneuvering_compilerTest, cannot_parse_invalid_identifier)
 
 TEST_F(maneuvering_compilerTest, can_parse_constant)
 {
-    std::string s = "1.2+2.3";
+    const std::string s = "1.234";
     std::string::const_iterator b = s.begin(), e = s.end();
-    std::list<maneuvering::Term> v;
+    double actual;
     maneuvering::grammar g;
-
-    qi::phrase_parse(b, e, *(g.ast), blank, v);
+    qi::phrase_parse(b, e, g.constant, blank, actual);
+    ASSERT_DOUBLE_EQ(1.234, actual);
 }
