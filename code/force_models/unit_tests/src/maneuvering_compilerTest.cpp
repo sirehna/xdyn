@@ -7,6 +7,7 @@
 
 #include "maneuvering_compilerTest.hpp"
 #include "maneuvering_compiler.hpp"
+#include "maneuvering_grammar.hpp"
 
 using namespace maneuvering;
 
@@ -45,3 +46,31 @@ TEST_F(maneuvering_compilerTest, can_compile_constant)
     ASSERT_EQ(1.23456, f->get_lambda()(states, ds, t));
 }
 
+
+TEST_F(maneuvering_compilerTest, parse_very_simple_grammar)
+{
+    std::string s = "1.2 2.3 3.4";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    std::vector<double> v;
+    maneuvering::grammar g;
+    using boost::spirit::ascii::blank;
+    qi::phrase_parse(b, e, g.values_for_tests, blank, v);
+    ASSERT_EQ(3, v.size());
+    ASSERT_DOUBLE_EQ(1.2, v.at(0));
+    ASSERT_DOUBLE_EQ(2.3, v.at(1));
+    ASSERT_DOUBLE_EQ(3.4, v.at(2));
+}
+//
+//TEST_F(maneuvering_compilerTest, can_parse_sum)
+//{
+//    std::string s = "1.2+2.3";
+//    std::string::const_iterator b = s.begin(), e = s.end();
+//    std::vector<double> v;
+//    maneuvering::grammar g;
+//    using boost::spirit::ascii::blank;
+//    qi::phrase_parse(b, e, g.values, blank, v);
+//    ASSERT_EQ(3, v.size());
+//    ASSERT_DOUBLE_EQ(1.2, v.at(0));
+//    ASSERT_DOUBLE_EQ(2.2, v.at(1));
+//    ASSERT_DOUBLE_EQ(3.4, v.at(2));
+//}

@@ -19,6 +19,19 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/maneuvering_compiler.cpp
         )
 
+# Disabled virtual destructors warning in Boost
+IF(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"))
+    SET(CMAKE_CXX_FLAGS " -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros -std=gnu++0x")
+    IF(CMAKE_SIZEOF_VOID_P EQUAL 8) # If on a 64 bit machine
+        IF(UNIX AND NOT WIN32) # If on Linux
+            SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+            SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fPIC")
+        ENDIF()
+    ENDIF()
+ENDIF()
+
+
 # Using C++ 2011
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
@@ -31,6 +44,7 @@ include_directories(inc)
 include_directories(${ssc_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(${external_data_structures_INCLUDE_DIRS})
+include_directories(${external_file_formats_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
