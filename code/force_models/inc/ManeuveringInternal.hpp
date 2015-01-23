@@ -172,6 +172,13 @@ namespace maneuvering
             }
     };
 
+    class Time : public Nullary
+    {
+        public:
+            Time();
+            Function get_lambda() const;
+    };
+
     NodePtr make_constant(const double val);
     NodePtr make_cos(const NodePtr& operand);
     NodePtr make_sin(const NodePtr& operand);
@@ -192,6 +199,7 @@ namespace maneuvering
     NodePtr make_state_p(const NodePtr& operand);
     NodePtr make_state_q(const NodePtr& operand);
     NodePtr make_state_r(const NodePtr& operand);
+    NodePtr make_time();
 }
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */

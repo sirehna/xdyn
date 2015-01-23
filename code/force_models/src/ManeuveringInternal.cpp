@@ -45,7 +45,6 @@ Function Constant::get_lambda() const
 
 Unary::Unary(const NodePtr operand) : Node({operand})
 {
-    COUT(children.size());
 }
 
 NodePtr Unary::get_operand() const
@@ -196,6 +195,18 @@ Function Multiply::get_lambda() const
     };
 }
 
+Time::Time()
+{
+}
+
+Function Time::get_lambda() const
+{
+    return [this](const BodyStates& , ssc::data_source::DataSource& , const double t)
+            {
+                return t;
+            };
+}
+
 NodePtr maneuvering::make_constant(const double val)
 {
     return NodePtr(new Constant(val));
@@ -294,4 +305,9 @@ NodePtr maneuvering::make_state_q(const NodePtr& n)
 NodePtr maneuvering::make_state_r(const NodePtr& n)
 {
     return NodePtr(new State<StateType::R>(n));
+}
+
+NodePtr maneuvering::make_time()
+{
+    return NodePtr(new Time());
 }

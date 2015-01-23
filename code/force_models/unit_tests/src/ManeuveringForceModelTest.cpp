@@ -226,3 +226,13 @@ TEST_F(ManeuveringForceModelTest, internal_state)
     ASSERT_DOUBLE_EQ(1.5*8, q(states, ds, t));
     ASSERT_DOUBLE_EQ(1.5*9, r(states, ds, t));
 }
+
+TEST_F(ManeuveringForceModelTest, internal_time)
+{
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = a.random<double>();
+    const auto c = make_time();
+    const auto f = c->get_lambda();
+    ASSERT_DOUBLE_EQ(t, f(states, ds, t));
+}
