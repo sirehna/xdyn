@@ -14,6 +14,7 @@
 #include <ssc/data_source.hpp>
 
 #include "BodyStates.hpp"
+#include "maneuvering_grammar.hpp"
 
 
 class maneuvering_compilerTest : public ::testing::Test
@@ -27,6 +28,7 @@ class maneuvering_compilerTest : public ::testing::Test
         BodyStates states;
         ssc::data_source::DataSource ds;
         double t;
+        maneuvering::grammar g;
 };
 
 #endif  /* MANEUVERING_COMPILERTEST_HPP_ */

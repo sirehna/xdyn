@@ -7,7 +7,6 @@
 
 #include "maneuvering_compilerTest.hpp"
 #include "maneuvering_compiler.hpp"
-#include "maneuvering_grammar.hpp"
 
 using namespace maneuvering;
 
@@ -15,7 +14,8 @@ maneuvering_compilerTest::maneuvering_compilerTest() :
             a(ssc::random_data_generator::DataGenerator(2121212188)),
             states(),
             ds(),
-            t(a.random<double>())
+            t(a.random<double>()),
+            g()
 {
     states.x.record(0, a.random<double>());
     states.y.record(0, a.random<double>());
@@ -54,8 +54,8 @@ TEST_F(maneuvering_compilerTest, parse_very_simple_grammar)
     const std::string s = "1.2 2.3 3.4";
     std::string::const_iterator b = s.begin(), e = s.end();
     std::vector<double> v;
-    maneuvering::simple_grammar g;
-    qi::phrase_parse(b, e, g.values_for_tests, blank, v);
+    maneuvering::simple_grammar sg;
+    qi::phrase_parse(b, e, sg.values_for_tests, blank, v);
     ASSERT_EQ(3, v.size());
     ASSERT_DOUBLE_EQ(1.2, v.at(0));
     ASSERT_DOUBLE_EQ(2.3, v.at(1));
@@ -67,7 +67,6 @@ TEST_F(maneuvering_compilerTest, can_parse_valid_identifier)
     const std::string s = "valid_identifier";
     std::string::const_iterator b = s.begin(), e = s.end();
     std::string actual;
-    maneuvering::grammar g;
     qi::phrase_parse(b, e, *(g.identifier), blank, actual);
     const std::string expected = s;
     ASSERT_EQ(expected, actual);
@@ -78,7 +77,6 @@ TEST_F(maneuvering_compilerTest, cannot_parse_invalid_identifier)
     const std::string s = "0valid_identifier";
     std::string::const_iterator b = s.begin(), e = s.end();
     std::string actual;
-    maneuvering::grammar g;
     qi::phrase_parse(b, e, *(g.identifier), blank, actual);
     const std::string expected = "";
     ASSERT_EQ(expected, actual);
@@ -89,7 +87,6 @@ TEST_F(maneuvering_compilerTest, can_parse_constant)
     const std::string s = "1.234";
     std::string::const_iterator b = s.begin(), e = s.end();
     double actual;
-    maneuvering::grammar g;
     qi::phrase_parse(b, e, g.constant, blank, actual);
     ASSERT_DOUBLE_EQ(1.234, actual);
 }
@@ -99,47 +96,58 @@ TEST_F(maneuvering_compilerTest, can_parse_functional)
     const std::string s = "f(a)";
     std::string::const_iterator b = s.begin(), e = s.end();
     maneuvering::Functional actual;
-    maneuvering::grammar g;
     qi::phrase_parse(b, e, g.functional, blank, actual);
     ASSERT_EQ("f", actual.identifier);
 }
 
-class IsFunction
-    : public boost::static_visitor<>
+class AtomVisitor
+    : public boost::static_visitor<std::string>
 {
     public:
-        IsFunction() : function_name(""){}
-        void operator()(const maneuvering::Functional & f)
+        std::string operator()(const maneuvering::Functional & f)
         {
             COUT(f.identifier);
-            function_name = f.identifier;
+            return f.identifier;
         }
 
-        void operator()(const maneuvering::Nil & ) const
+        std::string operator()(const maneuvering::Nil & ) const
         {
             COUT("");
+            return "";
         }
 
-        void operator()(const maneuvering::Identifier & id) const
+        std::string operator()(const maneuvering::Identifier & id) const
         {
             COUT(id);
+            return id;
         }
 
-        void operator()(const double & d) const
+        std::string operator()(const double & d)
         {
             COUT(d);
-        }
-
-        bool matches(const std::string& name) const
-        {
-            return function_name==name;
+            return "";
         }
 
     private:
-
-        std::string function_name;
-
 };
+
+class TermVisitor
+    : public boost::static_visitor<double>
+{
+    public:
+        template <typename T> double operator()(const T& ) const
+        {
+            return 0;
+        }
+};
+template <> double TermVisitor::operator()(const Atom& a) const;
+template <> double TermVisitor::operator()(const Atom& a) const
+        {
+    COUT("");
+    AtomVisitor visitor;
+                boost::apply_visitor(visitor, a);
+            return boost::get<double>(a);
+        }
 
 TEST_F(maneuvering_compilerTest, can_parse_atom)
 {
@@ -147,9 +155,18 @@ TEST_F(maneuvering_compilerTest, can_parse_atom)
     const std::string s2 = "1.4";
     std::string::const_iterator b = s.begin(), e = s.end();
     maneuvering::Atom actual;
-    maneuvering::grammar g;
     qi::phrase_parse(b, e, g.functional, blank, actual);
-    IsFunction parsed_function_name;
-    boost::apply_visitor(parsed_function_name, actual);
-    ASSERT_TRUE(parsed_function_name.matches("foo"));
+    AtomVisitor visitor;
+    ASSERT_EQ("foo", boost::apply_visitor(visitor, actual));
+}
+
+TEST_F(maneuvering_compilerTest, can_parse_factor)
+{
+    const std::string s = "(2.3)";
+    std::string::const_iterator b = s.begin(), e = s.end();
+    maneuvering::Term actual;
+    maneuvering::grammar g;
+    qi::phrase_parse(b, e, g.factor, blank, actual);
+    const TermVisitor visitor;
+    ASSERT_DOUBLE_EQ(2.3, boost::apply_visitor(visitor, actual));
 }

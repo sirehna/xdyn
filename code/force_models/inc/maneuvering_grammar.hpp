@@ -99,7 +99,7 @@ namespace maneuvering
             functional = identifier >> '(' >> term >> ')';
             expression = term >> addop >> term;
             term       = atom | expression | constant;
-            factor     = atom | '(' >> expression >> ')';
+            factor     = atom | ('(' >> term >> ')');
             atom       = functional | identifier | constant;
             using qi::debug;
 
