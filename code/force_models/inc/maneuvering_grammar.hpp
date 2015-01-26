@@ -151,10 +151,10 @@ typedef boost::variant<
             >
         Number;
 
-struct Term;
+struct Expr;
 typedef boost::variant<
                 Nil
-              , boost::recursive_wrapper<Term>
+              , boost::recursive_wrapper<Expr>
               , double
             >
         Base;
@@ -177,14 +177,16 @@ template <> double NumberVisitor::operator()(const Factor& d) const
 {
     COUT("");
     const double b = this->operator ()(d.base);
+    COUT(b);
     std::vector<double> exponents;
+    COUT(d.exponents.size());
     for (auto e:d.exponents){ exponents.push_back(this->operator()(e));COUT(exponents.back());}
     double ret = b;
     for (auto e:exponents) ret = std::pow(ret, e);
     return ret;
 }
 
-struct OperatorAndOperand
+struct OperatorAndFactor
 {
     std::string operator_;
     Factor factor;
@@ -193,7 +195,19 @@ struct OperatorAndOperand
 struct Term
 {
     Factor first;
-    std::vector<OperatorAndOperand> rest;
+    std::vector<OperatorAndFactor> rest;
+};
+
+struct OperatorAndTerm
+{
+    std::string operator_;
+    Term term;
+};
+
+struct Expr
+{
+    Term first;
+    std::vector<OperatorAndTerm> rest;
 };
 
 template <> double NumberVisitor::operator()(const Term& d) const;
@@ -212,6 +226,22 @@ template <> double NumberVisitor::operator()(const Term& d) const
     return ret;
 }
 
+template <> double NumberVisitor::operator()(const Expr& d) const;
+template <> double NumberVisitor::operator()(const Expr& d) const
+{
+    COUT("");
+    double ret = this->operator ()(d.first);
+    for (auto op:d.rest)
+    {
+        const double val = this->operator()(op.term);
+        if (op.operator_ == "-") ret -= val;
+        if (op.operator_ == "+") ret += val;
+        if (op.operator_ == "*") ret *= val;
+        if (op.operator_ == "/") ret /= val;
+    }
+    return ret;
+}
+
 BOOST_FUSION_ADAPT_STRUCT(
         Factor,
     (Base, base)
@@ -219,7 +249,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-        OperatorAndOperand,
+        OperatorAndTerm,
+    (std::string, operator_)
+    (Term, term)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+        OperatorAndFactor,
     (std::string, operator_)
     (Factor, factor)
 )
@@ -227,22 +263,36 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
         Term,
     (Factor, first)
-    (std::vector<OperatorAndOperand>, rest)
+    (std::vector<OperatorAndFactor>, rest)
 )
 
-struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Number(), SpaceType>
+BOOST_FUSION_ADAPT_STRUCT(
+        Expr,
+    (Term, first)
+    (std::vector<OperatorAndTerm>, rest)
+)
+
+struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), SpaceType>
 {
-    ArithmeticGrammar() : ArithmeticGrammar::base_type(number)
+    ArithmeticGrammar() : ArithmeticGrammar::base_type(expr)
     {
-        //expr     = term >> *( (qi::lit('+') | '-') >> term);
-        //term     = factor >> *( (qi::lit('*') | '/') >> factor);
+        expr     = term >> *(operator_and_term);
+        add_operators = qi::char_("+") | qi::char_("-");
+        mul_operators = qi::char_("*") | qi::char_("/");
+        operator_and_term = add_operators >> term;
+        operator_and_factor = mul_operators >> factor;
+        term     = factor >> *(operator_and_factor);
         factor   = base >> *( '^' >> exponent);
         base     = ('(' >> expr >> ')') | number;
         exponent = base;
         number   = double_;
     }
 
-    qi::rule<std::string::const_iterator, Term(), SpaceType>   expr;
+    qi::rule<std::string::const_iterator, Expr(), SpaceType>   expr;
+    qi::rule<std::string::const_iterator, std::string(), SpaceType>   add_operators;
+    qi::rule<std::string::const_iterator, std::string(), SpaceType>   mul_operators;
+    qi::rule<std::string::const_iterator, OperatorAndTerm(), SpaceType>   operator_and_term;
+    qi::rule<std::string::const_iterator, OperatorAndFactor(), SpaceType>   operator_and_factor;
     qi::rule<std::string::const_iterator, Term(), SpaceType>   term;
     qi::rule<std::string::const_iterator, Factor(), SpaceType> factor;
     qi::rule<std::string::const_iterator, Base(), SpaceType>   base;

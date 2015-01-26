@@ -58,9 +58,9 @@ double parse(const std::string& string_to_parse);
 double parse(const std::string& string_to_parse)
 {
     std::string::const_iterator b = string_to_parse.begin(), e = string_to_parse.end();
-        Factor ast;
+        Expr ast;
         ArithmeticGrammar g;
-        qi::phrase_parse(b, e, g.factor, blank, ast);
+        qi::phrase_parse(b, e, g.expr, blank, ast);
         NumberVisitor visitor;
         return visitor(ast);
         //return boost::apply_visitor(visitor, ast);
@@ -79,6 +79,26 @@ TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_numbers)
 TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_power)
 {
     ASSERT_DOUBLE_EQ(8,      parse("2^3"));
+}
+
+TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_multiplications)
+{
+    ASSERT_DOUBLE_EQ(240,      parse("1.2*2e2"));
+}
+
+TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_additions)
+{
+    ASSERT_DOUBLE_EQ(1e3,      parse("1.2e3-2e2"));
+}
+
+TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_divisions)
+{
+    ASSERT_DOUBLE_EQ(10,      parse("1.2e3/1.2e2"));
+}
+
+TEST_F(maneuvering_parserTest, complex_expression_for_arithmetic_parser)
+{
+    ASSERT_DOUBLE_EQ((10.3/4-5.8*5.8*5.8)*std::sqrt(2),      parse("(10.3/4.-5.8^3)*2^(1/2)"));
 }
 
 TEST_F(maneuvering_parserTest, can_parse_valid_identifier)
