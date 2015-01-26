@@ -11,9 +11,15 @@
 
 template <> double NumericalEvaluator::operator()(const double& d) const
 {
+    COUT("");
     return d;
 }
 
+template <> double NumericalEvaluator::operator()(const std::string& d) const
+{
+    COUT("");
+    return std::nan("");
+}
 
 template <> double NumericalEvaluator::operator()(const Base& d) const
 {
@@ -65,3 +71,7 @@ template <> double NumericalEvaluator::operator()(const Expr& d) const
     return ret;
 }
 
+template <> double NumericalEvaluator::operator()(const Atom& d) const
+{
+    return boost::apply_visitor(*this,d);
+}

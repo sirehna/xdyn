@@ -134,6 +134,7 @@ struct Nil
 typedef boost::variant<
                 Nil
               , double
+              , std::string
             >
         Atom;
 
@@ -141,7 +142,7 @@ struct Expr;
 typedef boost::variant<
                 Nil
               , boost::recursive_wrapper<Expr>
-              , double
+              , boost::recursive_wrapper<Atom>
             >
         Base;
 
@@ -175,6 +176,12 @@ struct Expr
     std::vector<OperatorAndTerm> rest;
 };
 
+struct FunctionCall
+{
+    std::string name;
+    Expr expr;
+};
+
 BOOST_FUSION_ADAPT_STRUCT(
         Factor,
     (Base, base)
@@ -205,6 +212,12 @@ BOOST_FUSION_ADAPT_STRUCT(
     (std::vector<OperatorAndTerm>, rest)
 )
 
+BOOST_FUSION_ADAPT_STRUCT(
+        FunctionCall,
+    (std::string, name)
+    (Expr, expr)
+)
+
 struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), SpaceType>
 {
     ArithmeticGrammar() : ArithmeticGrammar::base_type(expr)
@@ -218,7 +231,10 @@ struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), Spac
         factor   = base >> *( '^' >> exponent);
         base     = ('(' >> expr >> ')') | atom;
         exponent = base;
-        atom   = double_;
+        atom   = identifier | double_;
+        function_call = identifier >> '(' >> expr >> ')';
+        identifier = +qi::char_("_a-zA-Z");
+
     }
 
     qi::rule<std::string::const_iterator, Expr(), SpaceType>              expr;
@@ -231,6 +247,8 @@ struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), Spac
     qi::rule<std::string::const_iterator, Base(), SpaceType>              base;
     qi::rule<std::string::const_iterator, Base(), SpaceType>              exponent;
     qi::rule<std::string::const_iterator, Atom(), SpaceType>              atom;
+    qi::rule<std::string::const_iterator, FunctionCall(), SpaceType>      function_call;
+    qi::rule<std::string::const_iterator, std::string(), SpaceType>       identifier;
 };
 
 

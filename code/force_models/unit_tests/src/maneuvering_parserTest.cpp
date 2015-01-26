@@ -122,6 +122,7 @@ TEST_F(maneuvering_parserTest, string_evaluation_for_arithmetic_parser)
     ASSERT_EQ("10.3*(2)", string_parse("10.3*2"));
     ASSERT_EQ("10.3+2", string_parse("10.3+2"));
     ASSERT_EQ("10.3-2", string_parse("10.3-2"));
+    ASSERT_EQ("fabs", string_parse("fabs"));
 }
 
 TEST_F(maneuvering_parserTest, can_parse_valid_identifier)

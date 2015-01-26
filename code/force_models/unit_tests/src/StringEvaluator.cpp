@@ -17,6 +17,11 @@ template <> void StringEvaluator::operator()(const double& d)
     os << d;
 }
 
+template <> void StringEvaluator::operator()(const std::string& d)
+{
+    os << d;
+}
+
 template <> void StringEvaluator::operator()(const Base& d)
 {
     boost::apply_visitor(*this,d);
@@ -57,3 +62,15 @@ template <> void StringEvaluator::operator()(const Expr& d)
     }
 }
 
+template <> void StringEvaluator::operator()(const FunctionCall& d)
+{
+    COUT("");
+    os << d.name << "(";
+    this->operator ()(d.expr);
+    os << ")";
+}
+
+template <> void StringEvaluator::operator()(const Atom& d)
+{
+    boost::apply_visitor(*this,d);
+}
