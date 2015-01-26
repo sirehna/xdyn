@@ -151,13 +151,103 @@ typedef boost::variant<
             >
         Number;
 
+struct Term;
+typedef boost::variant<
+                Nil
+              , boost::recursive_wrapper<Term>
+              , double
+            >
+        Base;
+
+struct Factor
+{
+    Base base;
+    std::vector<Base> exponents;
+};
+
+template <> double NumberVisitor::operator()(const Base& d) const;
+template <> double NumberVisitor::operator()(const Base& d) const
+{
+    COUT("");
+    return boost::apply_visitor(*this,d);
+}
+
+template <> double NumberVisitor::operator()(const Factor& d) const;
+template <> double NumberVisitor::operator()(const Factor& d) const
+{
+    COUT("");
+    const double b = this->operator ()(d.base);
+    std::vector<double> exponents;
+    for (auto e:d.exponents){ exponents.push_back(this->operator()(e));COUT(exponents.back());}
+    double ret = b;
+    for (auto e:exponents) ret = std::pow(ret, e);
+    return ret;
+}
+
+struct OperatorAndOperand
+{
+    std::string operator_;
+    Factor factor;
+};
+
+struct Term
+{
+    Factor first;
+    std::vector<OperatorAndOperand> rest;
+};
+
+template <> double NumberVisitor::operator()(const Term& d) const;
+template <> double NumberVisitor::operator()(const Term& d) const
+{
+    COUT("");
+    double ret = this->operator ()(d.first);
+    for (auto op:d.rest)
+    {
+        const double val = this->operator()(op.factor);
+        if (op.operator_ == "-") ret -= val;
+        if (op.operator_ == "+") ret += val;
+        if (op.operator_ == "*") ret *= val;
+        if (op.operator_ == "/") ret /= val;
+    }
+    return ret;
+}
+
+BOOST_FUSION_ADAPT_STRUCT(
+        Factor,
+    (Base, base)
+    (std::vector<Base>, exponents)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+        OperatorAndOperand,
+    (std::string, operator_)
+    (Factor, factor)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+        Term,
+    (Factor, first)
+    (std::vector<OperatorAndOperand>, rest)
+)
+
 struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Number(), SpaceType>
 {
     ArithmeticGrammar() : ArithmeticGrammar::base_type(number)
     {
-        number = double_;
+        //expr     = term >> *( (qi::lit('+') | '-') >> term);
+        //term     = factor >> *( (qi::lit('*') | '/') >> factor);
+        factor   = base >> *( '^' >> exponent);
+        base     = ('(' >> expr >> ')') | number;
+        exponent = base;
+        number   = double_;
     }
-    qi::rule<std::string::const_iterator, Number(), SpaceType>                          number;
+
+    qi::rule<std::string::const_iterator, Term(), SpaceType>   expr;
+    qi::rule<std::string::const_iterator, Term(), SpaceType>   term;
+    qi::rule<std::string::const_iterator, Factor(), SpaceType> factor;
+    qi::rule<std::string::const_iterator, Base(), SpaceType>   base;
+    qi::rule<std::string::const_iterator, Base(), SpaceType>   exponent;
+    qi::rule<std::string::const_iterator, Number(), SpaceType> number;
 };
 
 
