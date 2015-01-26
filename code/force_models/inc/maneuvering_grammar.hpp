@@ -135,7 +135,7 @@ typedef boost::variant<
                 Nil
               , double
             >
-        Number;
+        Atom;
 
 struct Expr;
 typedef boost::variant<
@@ -216,9 +216,9 @@ struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), Spac
         operator_and_factor = mul_operators >> factor;
         term     = factor >> *(operator_and_factor);
         factor   = base >> *( '^' >> exponent);
-        base     = ('(' >> expr >> ')') | number;
+        base     = ('(' >> expr >> ')') | atom;
         exponent = base;
-        number   = double_;
+        atom   = double_;
     }
 
     qi::rule<std::string::const_iterator, Expr(), SpaceType>              expr;
@@ -230,7 +230,7 @@ struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), Spac
     qi::rule<std::string::const_iterator, Factor(), SpaceType>            factor;
     qi::rule<std::string::const_iterator, Base(), SpaceType>              base;
     qi::rule<std::string::const_iterator, Base(), SpaceType>              exponent;
-    qi::rule<std::string::const_iterator, Number(), SpaceType>            number;
+    qi::rule<std::string::const_iterator, Atom(), SpaceType>              atom;
 };
 
 

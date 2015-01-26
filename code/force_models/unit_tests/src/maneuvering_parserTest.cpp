@@ -202,8 +202,8 @@ class TermVisitor
             return 0;
         }
 };
-template <> double TermVisitor::operator()(const Atom& a) const;
-template <> double TermVisitor::operator()(const Atom& a) const
+template <> double TermVisitor::operator()(const ::maneuvering::Atom& a) const;
+template <> double TermVisitor::operator()(const ::maneuvering::Atom& a) const
 {
 COUT("");
     AtomVisitor visitor;
