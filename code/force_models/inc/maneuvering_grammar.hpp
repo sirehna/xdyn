@@ -126,4 +126,39 @@ namespace maneuvering
     typedef Grammar<std::string::const_iterator> grammar;
 }
 
+
+class NumberVisitor: public boost::static_visitor<double>
+{
+    public:
+        template <typename T> double operator()(const T& ) const
+        {
+            return std::nan("");
+        }
+};
+
+template <> double NumberVisitor::operator()(const double& d) const;
+template <> double NumberVisitor::operator()(const double& d) const
+{
+    return d;
+}
+
+struct Nil
+{
+};
+typedef boost::variant<
+                Nil
+              , double
+            >
+        Number;
+
+struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Number(), SpaceType>
+{
+    ArithmeticGrammar() : ArithmeticGrammar::base_type(number)
+    {
+        number = double_;
+    }
+    qi::rule<std::string::const_iterator, Number(), SpaceType>                          number;
+};
+
+
 #endif  /* MANEUVERING_GRAMMAR_HPP_ */

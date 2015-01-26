@@ -54,6 +54,27 @@ TEST_F(maneuvering_parserTest, parse_very_simple_grammar)
     ASSERT_DOUBLE_EQ(3.4, v.at(2));
 }
 
+double parse(const std::string& string_to_parse);
+double parse(const std::string& string_to_parse)
+{
+    std::string::const_iterator b = string_to_parse.begin(), e = string_to_parse.end();
+        Number ast;
+        ArithmeticGrammar g;
+        qi::phrase_parse(b, e, g.number, blank, ast);
+        NumberVisitor visitor;
+        return boost::apply_visitor(visitor, ast);
+}
+
+TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_numbers)
+{
+    ASSERT_DOUBLE_EQ(0,      parse("-0"));
+    ASSERT_DOUBLE_EQ(0,      parse("0"));
+    ASSERT_DOUBLE_EQ(1.2,    parse("1.2"));
+    ASSERT_DOUBLE_EQ(-1.2,   parse("-1.2"));
+    ASSERT_DOUBLE_EQ(1.2e3,  parse("1.2e3"));
+    ASSERT_DOUBLE_EQ(-1.2e3, parse("-1.2e3"));
+}
+
 TEST_F(maneuvering_parserTest, can_parse_valid_identifier)
 {
     const std::string s = "valid_identifier";
