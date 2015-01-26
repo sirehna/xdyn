@@ -11,7 +11,7 @@
 
 const std::string FastHydrostaticForceModel::model_name = "non-linear hydrostatic (fast)";
 
-FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel("fast hydrostatic", body_name_, env_)
+FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(model_name, body_name_, env_)
 {
 }
 
