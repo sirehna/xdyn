@@ -17,7 +17,7 @@ template <> void StringEvaluator::operator()(const double& d)
     os << d;
 }
 
-template <> void StringEvaluator::operator()(const std::string& d)
+template <> void StringEvaluator::operator()(const Identifier& d)
 {
     os << d;
 }
@@ -65,7 +65,7 @@ template <> void StringEvaluator::operator()(const Expr& d)
 template <> void StringEvaluator::operator()(const FunctionCall& d)
 {
     COUT("");
-    os << d.name << "(";
+    os << d.function << "(";
     this->operator ()(d.expr);
     os << ")";
 }

@@ -23,12 +23,13 @@ class NumericalEvaluator: public boost::static_visitor<double>
 };
 
 template <> double NumericalEvaluator::operator()(const double& d) const;
-template <> double NumericalEvaluator::operator()(const std::string& d) const;
+template <> double NumericalEvaluator::operator()(const Identifier& d) const;
 template <> double NumericalEvaluator::operator()(const Base& d) const;
 template <> double NumericalEvaluator::operator()(const Factor& d) const;
 template <> double NumericalEvaluator::operator()(const Term& d) const;
 template <> double NumericalEvaluator::operator()(const Expr& d) const;
 template <> double NumericalEvaluator::operator()(const Atom& d) const;
+template <> double NumericalEvaluator::operator()(const FunctionCall& d) const;
 
 
 #endif  /* NUMERICALEVALUATOR_HPP_ */

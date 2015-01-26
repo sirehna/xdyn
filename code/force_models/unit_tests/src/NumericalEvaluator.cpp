@@ -15,7 +15,7 @@ template <> double NumericalEvaluator::operator()(const double& d) const
     return d;
 }
 
-template <> double NumericalEvaluator::operator()(const std::string& d) const
+template <> double NumericalEvaluator::operator()(const Identifier& d) const
 {
     COUT("");
     return std::nan("");
@@ -73,5 +73,17 @@ template <> double NumericalEvaluator::operator()(const Expr& d) const
 
 template <> double NumericalEvaluator::operator()(const Atom& d) const
 {
+    COUT("");
     return boost::apply_visitor(*this,d);
+}
+
+template <> double NumericalEvaluator::operator()(const FunctionCall& d) const
+{
+    COUT("");
+    if (d.function == "cos")  return std::cos(this->operator()(d.expr));
+    if (d.function == "sin")  return std::sin (this->operator()(d.expr));
+    if (d.function == "exp")  return std::exp (this->operator()(d.expr));
+    if (d.function == "abs")  return std::abs (this->operator()(d.expr));
+    if (d.function == "sqrt") return std::sqrt(this->operator()(d.expr));
+                              return std::nan("");
 }

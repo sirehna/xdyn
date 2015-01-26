@@ -131,14 +131,26 @@ namespace maneuvering
 struct Nil
 {
 };
+
+struct FunctionCall;
+
+typedef std::string Identifier;
+
+BOOST_FUSION_ADAPT_STRUCT(
+        Identifier,
+    (std::string, name)
+)
+
 typedef boost::variant<
                 Nil
               , double
-              , std::string
+              , Identifier
+              , boost::recursive_wrapper<FunctionCall>
             >
         Atom;
 
 struct Expr;
+
 typedef boost::variant<
                 Nil
               , boost::recursive_wrapper<Expr>
@@ -178,7 +190,7 @@ struct Expr
 
 struct FunctionCall
 {
-    std::string name;
+    Identifier function;
     Expr expr;
 };
 
@@ -214,7 +226,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
         FunctionCall,
-    (std::string, name)
+    (Identifier, function)
     (Expr, expr)
 )
 
@@ -231,7 +243,7 @@ struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), Spac
         factor   = base >> *( '^' >> exponent);
         base     = ('(' >> expr >> ')') | atom;
         exponent = base;
-        atom   = identifier | double_;
+        atom   = function_call | identifier | double_;
         function_call = identifier >> '(' >> expr >> ')';
         identifier = +qi::char_("_a-zA-Z");
 
@@ -248,7 +260,7 @@ struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), Spac
     qi::rule<std::string::const_iterator, Base(), SpaceType>              exponent;
     qi::rule<std::string::const_iterator, Atom(), SpaceType>              atom;
     qi::rule<std::string::const_iterator, FunctionCall(), SpaceType>      function_call;
-    qi::rule<std::string::const_iterator, std::string(), SpaceType>       identifier;
+    qi::rule<std::string::const_iterator, Identifier(), SpaceType>        identifier;
 };
 
 

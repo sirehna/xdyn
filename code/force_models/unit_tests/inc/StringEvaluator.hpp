@@ -27,7 +27,7 @@ class StringEvaluator: public boost::static_visitor<>
 };
 
 template <> void StringEvaluator::operator()(const double& d);
-template <> void StringEvaluator::operator()(const std::string& d);
+template <> void StringEvaluator::operator()(const Identifier& d);
 template <> void StringEvaluator::operator()(const Base& d);
 template <> void StringEvaluator::operator()(const Factor& d);
 template <> void StringEvaluator::operator()(const Term& d);
