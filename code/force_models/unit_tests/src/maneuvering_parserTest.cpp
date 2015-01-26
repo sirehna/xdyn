@@ -7,6 +7,7 @@
 
 #include "maneuvering_parserTest.hpp"
 #include "NumericalEvaluator.hpp"
+#include "StringEvaluator.hpp"
 
 using namespace maneuvering;
 
@@ -55,8 +56,8 @@ TEST_F(maneuvering_parserTest, parse_very_simple_grammar)
     ASSERT_DOUBLE_EQ(3.4, v.at(2));
 }
 
-double parse(const std::string& string_to_parse);
-double parse(const std::string& string_to_parse)
+double numerical_parse(const std::string& string_to_parse);
+double numerical_parse(const std::string& string_to_parse)
 {
     std::string::const_iterator b = string_to_parse.begin(), e = string_to_parse.end();
     Expr ast;
@@ -66,39 +67,61 @@ double parse(const std::string& string_to_parse)
     return visitor(ast);
 }
 
+std::string string_parse(const std::string& string_to_parse);
+std::string string_parse(const std::string& string_to_parse)
+{
+    std::string::const_iterator b = string_to_parse.begin(), e = string_to_parse.end();
+    Expr ast;
+    ArithmeticGrammar g;
+    qi::phrase_parse(b, e, g.expr, blank, ast);
+    std::stringstream ss;
+    StringEvaluator visitor(ss);
+    visitor(ast);
+    return ss.str();
+}
+
 TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_numbers)
 {
-    ASSERT_DOUBLE_EQ(0,      parse("-0"));
-    ASSERT_DOUBLE_EQ(0,      parse("0"));
-    ASSERT_DOUBLE_EQ(1.2,    parse("1.2"));
-    ASSERT_DOUBLE_EQ(-1.2,   parse("-1.2"));
-    ASSERT_DOUBLE_EQ(1.2e3,  parse("1.2e3"));
-    ASSERT_DOUBLE_EQ(-1.2e3, parse("-1.2e3"));
+    ASSERT_DOUBLE_EQ(0,      numerical_parse("-0"));
+    ASSERT_DOUBLE_EQ(0,      numerical_parse("0"));
+    ASSERT_DOUBLE_EQ(1.2,    numerical_parse("1.2"));
+    ASSERT_DOUBLE_EQ(-1.2,   numerical_parse("-1.2"));
+    ASSERT_DOUBLE_EQ(1.2e3,  numerical_parse("1.2e3"));
+    ASSERT_DOUBLE_EQ(-1.2e3, numerical_parse("-1.2e3"));
 }
 
 TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_power)
 {
-    ASSERT_DOUBLE_EQ(8,      parse("2^3"));
+    ASSERT_DOUBLE_EQ(8,      numerical_parse("2^3"));
 }
 
 TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_multiplications)
 {
-    ASSERT_DOUBLE_EQ(240,      parse("1.2*2e2"));
+    ASSERT_DOUBLE_EQ(240,      numerical_parse("1.2*2e2"));
 }
 
 TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_additions)
 {
-    ASSERT_DOUBLE_EQ(1e3,      parse("1.2e3-2e2"));
+    ASSERT_DOUBLE_EQ(1e3,      numerical_parse("1.2e3-2e2"));
 }
 
 TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_divisions)
 {
-    ASSERT_DOUBLE_EQ(10,      parse("1.2e3/1.2e2"));
+    ASSERT_DOUBLE_EQ(10,      numerical_parse("1.2e3/1.2e2"));
 }
 
 TEST_F(maneuvering_parserTest, complex_expression_for_arithmetic_parser)
 {
-    ASSERT_DOUBLE_EQ((10.3/4-5.8*5.8*5.8)*std::sqrt(2),      parse("(10.3/4.-5.8^3)*2^(1/2)"));
+    ASSERT_DOUBLE_EQ((10.3/4-5.8*5.8*5.8)*std::sqrt(2),      numerical_parse("(10.3/4.-5.8^3)*2^(1/2)"));
+}
+
+TEST_F(maneuvering_parserTest, string_evaluation_for_arithmetic_parser)
+{
+    ASSERT_EQ("10.3",   string_parse("10.3"));
+    ASSERT_EQ("10.3/(2)", string_parse("10.3/2"));
+    ASSERT_EQ("10.3*(2)", string_parse("10.3*2"));
+    ASSERT_EQ("10.3+2", string_parse("10.3+2"));
+    ASSERT_EQ("10.3-2", string_parse("10.3-2"));
 }
 
 TEST_F(maneuvering_parserTest, can_parse_valid_identifier)
