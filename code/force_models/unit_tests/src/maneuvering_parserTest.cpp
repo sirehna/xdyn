@@ -6,6 +6,7 @@
  */
 
 #include "maneuvering_parserTest.hpp"
+#include "NumericalEvaluator.hpp"
 
 using namespace maneuvering;
 
@@ -58,12 +59,11 @@ double parse(const std::string& string_to_parse);
 double parse(const std::string& string_to_parse)
 {
     std::string::const_iterator b = string_to_parse.begin(), e = string_to_parse.end();
-        Expr ast;
-        ArithmeticGrammar g;
-        qi::phrase_parse(b, e, g.expr, blank, ast);
-        NumberVisitor visitor;
-        return visitor(ast);
-        //return boost::apply_visitor(visitor, ast);
+    Expr ast;
+    ArithmeticGrammar g;
+    qi::phrase_parse(b, e, g.expr, blank, ast);
+    NumericalEvaluator visitor;
+    return visitor(ast);
 }
 
 TEST_F(maneuvering_parserTest, arithmetic_parser_can_parse_numbers)
