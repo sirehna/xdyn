@@ -121,7 +121,7 @@ environment models:
         seed of the random data generator: 0
         directional spreading:
            type: dirac
-           waves coming from: {value: 90, unit: deg}
+           waves propagating to: {value: 90, unit: deg}
         spectral density:
            type: jonswap
            Hs: {value: 5, unit: m}
@@ -133,7 +133,7 @@ environment models:
         directional spreading:
            type: cos2s
            s: 2
-           waves coming from: {value: 90, unit: deg}
+           waves propagating to: {value: 90, unit: deg}
         spectral density:
            type: dirac
            omega0: {value: 0.05, unit: rad/s}

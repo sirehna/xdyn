@@ -110,10 +110,10 @@ Lorsque cet étalement est choisi, la houle est mono-directionnelle.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 directional spreading:
      type: dirac
-     waves coming from: {value: 90, unit: deg}
+     waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La direction de propagation est donnée par `waves coming from`.
+La direction de propagation est donnée par `waves propagating to`.
 
 #### Cos2s
 
@@ -128,10 +128,10 @@ Cet étalement est paramétré de la façon suivante :
 directional spreading:
    type: cos2s
    s: 2
-   waves coming from: {value: 90, unit: deg}
+   waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`waves coming from` donne la direction de propagation $\psi_0$.
+`waves propagating to` donne la direction de propagation $\psi_0$.
 
 
 ### Modèles de houle
@@ -206,7 +206,7 @@ Les spectres directionnels sont définis de la façon suivante :
   seed of the random data generator: 0
   directional spreading:
      type: dirac
-     waves coming from: {value: 90, unit: deg}
+     waves propagating to: {value: 90, unit: deg}
   spectral density:
      type: jonswap
      Hs: {value: 5, unit: m}

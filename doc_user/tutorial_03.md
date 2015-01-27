@@ -49,7 +49,7 @@ Le premier spectre est défini de la façon suivante :
   seed of the random data generator: 0
   directional spreading:
      type: dirac
-     waves coming from: {value: 90, unit: deg}
+     waves propagating to: {value: 90, unit: deg}
   spectral density:
      type: jonswap
      Hs: {value: 5, unit: m}
@@ -66,7 +66,7 @@ Pour le second spectre, on écrit :
   directional spreading:
      type: cos2s
      s: 2
-     waves coming from: {value: 90, unit: deg}
+     waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On définit les sorties de la façon suivante ##sorties):
@@ -99,7 +99,7 @@ environment models:
         seed of the random data generator: 0
         directional spreading:
            type: dirac
-           waves coming from: {value: 90, unit: deg}
+           waves propagating to: {value: 90, unit: deg}
         spectral density:
            type: jonswap
            Hs: {value: 5, unit: m}
@@ -111,7 +111,7 @@ environment models:
         directional spreading:
            type: cos2s
            s: 2
-           waves coming from: {value: 90, unit: deg}
+           waves propagating to: {value: 90, unit: deg}
         spectral density:
            type: dirac
            omega0: {value: 0.05, unit: rad/s}
@@ -148,7 +148,7 @@ environment models:
         seed of the random data generator: 0
         directional spreading:
            type: dirac
-           waves coming from: {value: 90, unit: deg}
+           waves propagating to: {value: 90, unit: deg}
         spectral density:
            type: jonswap
            Hs: {value: 5, unit: m}
@@ -160,7 +160,7 @@ environment models:
         directional spreading:
            type: cos2s
            s: 2
-           waves coming from: {value: 90, unit: deg}
+           waves propagating to: {value: 90, unit: deg}
         spectral density:
            type: dirac
            omega0: {value: 0.05, unit: rad/s}

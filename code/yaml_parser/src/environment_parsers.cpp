@@ -130,7 +130,7 @@ YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["waves coming from"], ret.psi0);
+        parse_uv(node["waves propagating to"], ret.psi0);
     }
     catch(std::exception& e)
     {
@@ -235,7 +235,7 @@ YamlCos2s            parse_cos2s(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["waves coming from"], ret.psi0);
+        parse_uv(node["waves propagating to"], ret.psi0);
         node["s"] >> ret.s;
     }
     catch(std::exception& e)

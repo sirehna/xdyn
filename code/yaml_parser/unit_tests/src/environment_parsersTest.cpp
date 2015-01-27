@@ -73,16 +73,16 @@ TEST_F(environment_parsersTest, can_parse_wave_spreading_and_spectral_data)
     ASSERT_EQ(2,yaml.spectra.size());
 
     ASSERT_EQ("dirac",yaml.spectra.at(0).directional_spreading_type);
-    ASSERT_EQ("type: dirac\nwaves coming from:\n  unit: deg\n  value: 90",yaml.spectra.at(0).directional_spreading_yaml);
+    ASSERT_EQ("type: dirac\nwaves propagating to:\n  unit: deg\n  value: 90",yaml.spectra.at(0).directional_spreading_yaml);
     ASSERT_EQ("airy",yaml.spectra.at(0).model);
-    ASSERT_EQ("depth:\n  unit: km\n  value: 1.7\ndirectional spreading:\n  type: dirac\n  waves coming from:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 0\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: m\n    value: 15\n  gamma: 1.2\n  type: jonswap",yaml.spectra.at(0).model_yaml);
+    ASSERT_EQ("depth:\n  unit: km\n  value: 1.7\ndirectional spreading:\n  type: dirac\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 0\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: m\n    value: 15\n  gamma: 1.2\n  type: jonswap",yaml.spectra.at(0).model_yaml);
     ASSERT_EQ("jonswap",yaml.spectra.at(0).spectral_density_type);
     ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: m\n  value: 15\ngamma: 1.2\ntype: jonswap",yaml.spectra.at(0).spectral_density_yaml);
 
     ASSERT_EQ("cos2s",yaml.spectra.at(1).directional_spreading_type);
-    ASSERT_EQ("s: 2\ntype: cos2s\nwaves coming from:\n  unit: deg\n  value: 90",yaml.spectra.at(1).directional_spreading_yaml);
+    ASSERT_EQ("s: 2\ntype: cos2s\nwaves propagating to:\n  unit: deg\n  value: 90",yaml.spectra.at(1).directional_spreading_yaml);
     ASSERT_EQ("airy",yaml.spectra.at(1).model);
-    ASSERT_EQ("depth:\n  unit: m\n  value: 12\ndirectional spreading:\n  s: 2\n  type: cos2s\n  waves coming from:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 1872\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: m\n    value: 15\n  type: dirac",yaml.spectra.at(1).model_yaml);
+    ASSERT_EQ("depth:\n  unit: m\n  value: 12\ndirectional spreading:\n  s: 2\n  type: cos2s\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 1872\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: m\n    value: 15\n  type: dirac",yaml.spectra.at(1).model_yaml);
     ASSERT_EQ("dirac",yaml.spectra.at(1).spectral_density_type);
     ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: m\n  value: 15\ntype: dirac",yaml.spectra.at(1).spectral_density_yaml);
 }
@@ -135,14 +135,14 @@ TEST_F(environment_parsersTest, can_parse_bretschneider_spectrum)
 
 TEST_F(environment_parsersTest, can_parse_dirac_spreading)
 {
-    const YamlDiracDirection y = parse_wave_dirac_direction("waves coming from: {value: 5, unit: deg}\n");
+    const YamlDiracDirection y = parse_wave_dirac_direction("waves propagating to: {value: 5, unit: deg}\n");
     ASSERT_DOUBLE_EQ(5*PI/180, y.psi0);
 }
 
 TEST_F(environment_parsersTest, can_parse_cos2s_spreading)
 {
     const YamlCos2s y = parse_cos2s("s: 2\n"
-                                    "waves coming from: {value: 90, unit: deg}\n");
+                                    "waves propagating to: {value: 90, unit: deg}\n");
     ASSERT_DOUBLE_EQ(PI/2., y.psi0);
     ASSERT_DOUBLE_EQ(2, y.s);
 }
