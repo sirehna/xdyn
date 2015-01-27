@@ -116,6 +116,6 @@ TEST_F(maneuvering_compilerTest, can_compile_identifiers_with_indexes)
     ds.set("Var_1", 1.0);
     ds.set("Var_2", 2.0);
     ASSERT_DOUBLE_EQ(1.0,    test_compile("Var_1", ds));
-    //ASSERT_DOUBLE_EQ(2.0,    test_compile("Var_2", ds));
-    //ASSERT_DOUBLE_EQ(2.0,    test_compile("Var_2^Var_1", ds));
+    ASSERT_DOUBLE_EQ(2.0,    test_compile("Var_2", ds));
+    ASSERT_DOUBLE_EQ(2.0,    test_compile("Var_2^Var_1", ds));
 }
