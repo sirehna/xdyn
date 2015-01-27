@@ -20,7 +20,11 @@ namespace maneuvering
 {
     typedef std::function<double(const BodyStates&, ssc::data_source::DataSource&, const double)> Function;
     class Node;
+
     typedef TR1(shared_ptr)<Node> NodePtr;
+
+    class AbstractNodeVisitor;
+
     class Node
     {
         public:
@@ -28,6 +32,7 @@ namespace maneuvering
             virtual ~Node();
             virtual Function get_lambda() const = 0;
             std::vector<NodePtr> get_children() const;
+            virtual void accept(AbstractNodeVisitor& visitor) const = 0;
 
         protected:
             std::vector<NodePtr> children;
@@ -60,6 +65,7 @@ namespace maneuvering
         public:
             Constant(const double val);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
 
         private:
             double val;
@@ -79,6 +85,7 @@ namespace maneuvering
         public:
             Cos(const NodePtr& operand);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Sin : public Unary
@@ -86,6 +93,7 @@ namespace maneuvering
         public:
             Sin(const NodePtr& operand);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Abs : public Unary
@@ -93,6 +101,7 @@ namespace maneuvering
         public:
             Abs(const NodePtr& operand);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Log : public Unary
@@ -100,6 +109,7 @@ namespace maneuvering
         public:
             Log(const NodePtr& operand);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Sum : public Binary
@@ -107,6 +117,7 @@ namespace maneuvering
         public:
             Sum(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Pow : public Binary
@@ -114,6 +125,7 @@ namespace maneuvering
         public:
             Pow(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Exp : public Unary
@@ -121,6 +133,7 @@ namespace maneuvering
         public:
             Exp(const NodePtr& operand);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Sqrt : public Unary
@@ -128,6 +141,7 @@ namespace maneuvering
         public:
             Sqrt(const NodePtr& operand);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Difference : public Binary
@@ -135,6 +149,7 @@ namespace maneuvering
         public:
             Difference(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Divide : public Binary
@@ -142,6 +157,7 @@ namespace maneuvering
         public:
             Divide(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Multiply : public Binary
@@ -149,6 +165,7 @@ namespace maneuvering
         public:
             Multiply(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     enum class StateType {X, Y, Z, U, V, W, P, Q, R};
@@ -177,6 +194,7 @@ namespace maneuvering
                             return op(states,ds,t);
                         };
             }
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class Time : public Nullary
@@ -184,6 +202,7 @@ namespace maneuvering
         public:
             Time();
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
     };
 
     class UnknownIdentifier : public Nullary
@@ -191,10 +210,33 @@ namespace maneuvering
         public:
             UnknownIdentifier(const std::string& identifier_name);
             Function get_lambda() const;
+            void accept(AbstractNodeVisitor& visitor) const;
+            std::string get_name() const;
 
         private:
             UnknownIdentifier();
             std::string identifier_name;
+    };
+
+    class AbstractNodeVisitor
+    {
+        public:
+            AbstractNodeVisitor(){};
+            virtual ~AbstractNodeVisitor(){}
+            virtual void visit(const UnknownIdentifier& f) = 0;
+            virtual void visit(const Time& f) = 0;
+            virtual void visit(const State<StateType::X>& f) = 0;
+            virtual void visit(const State<StateType::Y>& f) = 0;
+            virtual void visit(const State<StateType::Z>& f) = 0;
+            virtual void visit(const State<StateType::U>& f) = 0;
+            virtual void visit(const State<StateType::V>& f) = 0;
+            virtual void visit(const State<StateType::W>& f) = 0;
+            virtual void visit(const State<StateType::P>& f) = 0;
+            virtual void visit(const State<StateType::Q>& f) = 0;
+            virtual void visit(const State<StateType::R>& f) = 0;
+            virtual void visit(const Binary& f) = 0;
+            virtual void visit(const Unary& f) = 0;
+            virtual void visit(const Constant& f) = 0;
     };
 
     NodePtr make_constant(const double val);

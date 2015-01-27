@@ -43,6 +43,11 @@ Function Constant::get_lambda() const
             };
 }
 
+void Constant::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
 Unary::Unary(const NodePtr operand) : Node({operand})
 {
 }
@@ -64,6 +69,11 @@ Function Cos::get_lambda() const
             };
 }
 
+void Cos::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
 Sin::Sin(const NodePtr& operand) : Unary(operand)
 {
 }
@@ -74,6 +84,11 @@ Function Sin::get_lambda() const
                 const auto op = get_operand()->get_lambda();
                 return sin(op(states, ds, t));
             };
+}
+
+void Sin::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
 }
 
 Abs::Abs(const NodePtr& operand) : Unary(operand)
@@ -89,6 +104,11 @@ Function Abs::get_lambda() const
             };
 }
 
+void Abs::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
 Log::Log(const NodePtr& operand) : Unary(operand)
 {
 }
@@ -100,6 +120,11 @@ Function Log::get_lambda() const
                 const auto op = get_operand()->get_lambda();
                 return std::log(op(states, ds, t));
             };
+}
+
+void Log::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
 }
 
 NodePtr Binary::get_lhs() const
@@ -126,6 +151,11 @@ Function Sum::get_lambda() const
     };
 }
 
+void Sum::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
 Pow::Pow(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
 {
 }
@@ -140,8 +170,27 @@ Function Pow::get_lambda() const
     };
 }
 
+void Pow::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
 Exp::Exp(const NodePtr& operand) : Unary(operand)
 {
+}
+
+Function Exp::get_lambda() const
+{
+    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+            {
+                const auto op = get_operand()->get_lambda();
+                return std::exp(op(states, ds, t));
+            };
+}
+
+void Exp::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
 }
 
 Function Sqrt::get_lambda() const
@@ -157,13 +206,9 @@ Sqrt::Sqrt(const NodePtr& operand) : Unary(operand)
 {
 }
 
-Function Exp::get_lambda() const
+void Sqrt::accept(AbstractNodeVisitor& visitor) const
 {
-    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
-            {
-                const auto op = get_operand()->get_lambda();
-                return std::exp(op(states, ds, t));
-            };
+    visitor.visit(*this);
 }
 
 Difference::Difference(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
@@ -180,6 +225,11 @@ Function Difference::get_lambda() const
     };
 }
 
+void Difference::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
 Divide::Divide(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
 {
 }
@@ -192,6 +242,11 @@ Function Divide::get_lambda() const
         const auto op2 = get_rhs()->get_lambda();
         return op1(states, ds, t) / op2(states, ds, t);
     };
+}
+
+void Divide::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
 }
 
 Multiply::Multiply(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
@@ -208,6 +263,11 @@ Function Multiply::get_lambda() const
     };
 }
 
+void Multiply::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
 Time::Time()
 {
 }
@@ -220,6 +280,11 @@ Function Time::get_lambda() const
             };
 }
 
+void Time::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
 UnknownIdentifier::UnknownIdentifier(const std::string& identifier_name_) : identifier_name(identifier_name_)
 {
 }
@@ -230,6 +295,16 @@ Function UnknownIdentifier::get_lambda() const
             {
                 return ds.get<double>(identifier_name);
             };
+}
+
+void UnknownIdentifier::accept(AbstractNodeVisitor& visitor) const
+{
+    visitor.visit(*this);
+}
+
+std::string UnknownIdentifier::get_name() const
+{
+    return identifier_name;
 }
 
 NodePtr maneuvering::make_constant(const double val)
@@ -345,4 +420,44 @@ NodePtr maneuvering::make_time()
 NodePtr maneuvering::make_unknown_identifier(const std::string& identifier_name)
 {
     return NodePtr(new UnknownIdentifier(identifier_name));
+}
+
+namespace maneuvering
+{
+    template <> void State<StateType::X>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::Y>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::Z>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::U>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::V>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::W>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::P>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::Q>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::R>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
 }
