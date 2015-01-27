@@ -42,6 +42,14 @@ double test_compile(const std::string& stuff)
     return evaluate(stuff, states, t, ds);
 }
 
+double test_compile(const std::string& stuff, ssc::data_source::DataSource& ds);
+double test_compile(const std::string& stuff, ssc::data_source::DataSource& ds)
+{
+    BodyStates states;
+    const double t = 0;
+    return evaluate(stuff, states, t, ds);
+}
+
 TEST_F(maneuvering_compilerTest, can_compile_constant)
 {
     ASSERT_DOUBLE_EQ(0,         test_compile("0"));
@@ -85,4 +93,11 @@ TEST_F(maneuvering_compilerTest, can_compile_sqrt)
 TEST_F(maneuvering_compilerTest, can_compile_abs)
 {
     ASSERT_DOUBLE_EQ(2.5e3,    test_compile("abs(-2.5e3)"));
+}
+
+TEST_F(maneuvering_compilerTest, can_compile_identifier)
+{
+    ssc::data_source::DataSource ds;
+    ds.set("Var_", 123.456);
+    ASSERT_DOUBLE_EQ(123.456,    test_compile("Var_", ds));
 }
