@@ -5,4 +5,7 @@ pandoc -s --highlight-style pygments -o concatenated_doc.tex concatenated_doc2.m
 pdflatex -interaction=nonstopmode concatenated_doc.tex > log.txt 2> err.txt
 mv concatenated_doc.pdf doc.pdf
 rm *.tex
+rm *.log
+rm *.aux
+rm *.out
 rm concatenated_doc*.md
