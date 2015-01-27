@@ -25,21 +25,21 @@ void maneuvering_compilerTest::TearDown()
 {
 }
 
-double evaluate(const maneuvering::Function& f);
-double evaluate(const maneuvering::Function& f)
+double evaluate(const std::string& stuff, const BodyStates& states, const double t, ssc::data_source::DataSource& ds);
+double evaluate(const std::string& stuff, const BodyStates& states, const double t, ssc::data_source::DataSource& ds)
 {
-    BodyStates states;
-    ssc::data_source::DataSource ds;
-    const double t = 0;
+    const auto n = maneuvering::compile(stuff);
+    const auto f = n->get_lambda();
     return f(states, ds, t);
 }
 
 double test_compile(const std::string& stuff);
 double test_compile(const std::string& stuff)
 {
-    const auto n = maneuvering::compile(stuff);
-    const auto f = n->get_lambda();
-    return evaluate(f);
+    BodyStates states;
+    ssc::data_source::DataSource ds;
+    const double t = 0;
+    return evaluate(stuff, states, t, ds);
 }
 
 TEST_F(maneuvering_compilerTest, can_compile_constant)
