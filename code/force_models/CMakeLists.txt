@@ -14,7 +14,6 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/RadiationDampingForceModel.cpp
         src/SimpleTrackKeepingController.cpp
         src/ManeuveringForceModel.cpp
-        src/ManeuveringAST.cpp
         src/ManeuveringInternal.cpp
         src/maneuvering_compiler.cpp
         )

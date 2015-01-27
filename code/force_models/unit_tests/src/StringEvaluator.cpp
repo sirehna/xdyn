@@ -17,21 +17,19 @@ template <> void StringEvaluator::operator()(const double& d)
     os << d;
 }
 
-template <> void StringEvaluator::operator()(const Identifier& d)
+template <> void StringEvaluator::operator()(const maneuvering::Identifier& d)
 {
     os << d;
 }
 
-template <> void StringEvaluator::operator()(const Base& d)
+template <> void StringEvaluator::operator()(const maneuvering::Base& d)
 {
     boost::apply_visitor(*this,d);
 }
 
-template <> void StringEvaluator::operator()(const Factor& d)
+template <> void StringEvaluator::operator()(const maneuvering::Factor& d)
 {
-    COUT("");
     this->operator ()(d.base);
-    COUT(d.exponents.size());
     for (auto e:d.exponents)
     {
         os << "^(";
@@ -39,9 +37,8 @@ template <> void StringEvaluator::operator()(const Factor& d)
     }
     for (auto e:d.exponents) os << ")";
 }
-template <> void StringEvaluator::operator()(const Term& d)
+template <> void StringEvaluator::operator()(const maneuvering::Term& d)
 {
-    COUT("");
     this->operator ()(d.first);
     for (auto op:d.rest)
     {
@@ -51,9 +48,8 @@ template <> void StringEvaluator::operator()(const Term& d)
     }
 }
 
-template <> void StringEvaluator::operator()(const Expr& d)
+template <> void StringEvaluator::operator()(const maneuvering::Expr& d)
 {
-    COUT("");
     this->operator ()(d.first);
     for (auto op:d.rest)
     {
@@ -62,15 +58,14 @@ template <> void StringEvaluator::operator()(const Expr& d)
     }
 }
 
-template <> void StringEvaluator::operator()(const FunctionCall& d)
+template <> void StringEvaluator::operator()(const maneuvering::FunctionCall& d)
 {
-    COUT("");
     os << d.function << "(";
     this->operator ()(d.expr);
     os << ")";
 }
 
-template <> void StringEvaluator::operator()(const Atom& d)
+template <> void StringEvaluator::operator()(const maneuvering::Atom& d)
 {
     boost::apply_visitor(*this,d);
 }

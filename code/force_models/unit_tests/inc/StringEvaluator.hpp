@@ -27,12 +27,12 @@ class StringEvaluator: public boost::static_visitor<>
 };
 
 template <> void StringEvaluator::operator()(const double& d);
-template <> void StringEvaluator::operator()(const Identifier& d);
-template <> void StringEvaluator::operator()(const Base& d);
-template <> void StringEvaluator::operator()(const Factor& d);
-template <> void StringEvaluator::operator()(const Term& d);
-template <> void StringEvaluator::operator()(const Expr& d);
-template <> void StringEvaluator::operator()(const FunctionCall& d);
-template <> void StringEvaluator::operator()(const Atom& d);
+template <> void StringEvaluator::operator()(const maneuvering::Identifier& d);
+template <> void StringEvaluator::operator()(const maneuvering::Base& d);
+template <> void StringEvaluator::operator()(const maneuvering::Factor& d);
+template <> void StringEvaluator::operator()(const maneuvering::Term& d);
+template <> void StringEvaluator::operator()(const maneuvering::Expr& d);
+template <> void StringEvaluator::operator()(const maneuvering::FunctionCall& d);
+template <> void StringEvaluator::operator()(const maneuvering::Atom& d);
 
 #endif  /* STRINGEVALUATOR_HPP_ */

@@ -11,11 +11,6 @@
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
-#include <ssc/data_source.hpp>
-
-#include "BodyStates.hpp"
-#include "maneuvering_grammar.hpp"
-
 
 class maneuvering_parserTest : public ::testing::Test
 {
@@ -25,9 +20,6 @@ class maneuvering_parserTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
-        BodyStates states;
-        ssc::data_source::DataSource ds;
-        double t;
 };
 
 #endif  /* MANEUVERING_COMPILERTEST_HPP_ */

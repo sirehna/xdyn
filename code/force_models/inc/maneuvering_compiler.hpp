@@ -9,7 +9,6 @@
 #ifndef MANEUVERING_COMPILER_HPP_
 #define MANEUVERING_COMPILER_HPP_
 
-#include "ManeuveringAST.hpp"
 #include "ManeuveringInternal.hpp"
 
 namespace maneuvering
