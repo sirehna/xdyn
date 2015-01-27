@@ -164,15 +164,15 @@ namespace maneuvering
                             const auto op = get_operand()->get_lambda();
                             switch(S)
                             {
-                                case StateType::X : return states.x(op(states,ds,t));break;
-                                case StateType::Y : return states.y(op(states,ds,t));break;
-                                case StateType::Z : return states.z(op(states,ds,t));break;
-                                case StateType::U : return states.u(op(states,ds,t));break;
-                                case StateType::V : return states.v(op(states,ds,t));break;
-                                case StateType::W : return states.w(op(states,ds,t));break;
-                                case StateType::P : return states.p(op(states,ds,t));break;
-                                case StateType::Q : return states.q(op(states,ds,t));break;
-                                case StateType::R : return states.r(op(states,ds,t));break;
+                                case StateType::X : return states.x(t-op(states,ds,t));break;
+                                case StateType::Y : return states.y(t-op(states,ds,t));break;
+                                case StateType::Z : return states.z(t-op(states,ds,t));break;
+                                case StateType::U : return states.u(t-op(states,ds,t));break;
+                                case StateType::V : return states.v(t-op(states,ds,t));break;
+                                case StateType::W : return states.w(t-op(states,ds,t));break;
+                                case StateType::P : return states.p(t-op(states,ds,t));break;
+                                case StateType::Q : return states.q(t-op(states,ds,t));break;
+                                case StateType::R : return states.r(t-op(states,ds,t));break;
                             }
                             return op(states,ds,t);
                         };

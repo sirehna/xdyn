@@ -50,6 +50,14 @@ double test_compile(const std::string& stuff, ssc::data_source::DataSource& ds)
     return evaluate(stuff, states, t, ds);
 }
 
+double test_compile(const std::string& stuff, const BodyStates& states);
+double test_compile(const std::string& stuff, const BodyStates& states)
+{
+    ssc::data_source::DataSource ds;
+    const double t = 0;
+    return evaluate(stuff, states, t, ds);
+}
+
 TEST_F(maneuvering_compilerTest, can_compile_constant)
 {
     ASSERT_DOUBLE_EQ(0,         test_compile("0"));
@@ -118,4 +126,16 @@ TEST_F(maneuvering_compilerTest, can_compile_identifiers_with_indexes)
     ASSERT_DOUBLE_EQ(1.0,    test_compile("Var_1", ds));
     ASSERT_DOUBLE_EQ(2.0,    test_compile("Var_2", ds));
     ASSERT_DOUBLE_EQ(2.0,    test_compile("Var_2^Var_1", ds));
+}
+
+TEST_F(maneuvering_compilerTest, can_compile_body_states)
+{
+    BodyStates states;
+    states.x.record(-10, 13);
+    states.x.record(0, 23);
+    states.y.record(0, 2);
+    ASSERT_DOUBLE_EQ(23,    test_compile("x(0)", states));
+    ASSERT_DOUBLE_EQ(23,    test_compile("x(t)", states));
+    ASSERT_DOUBLE_EQ(20,    test_compile("x(t-3)", states));
+    ASSERT_DOUBLE_EQ(400,   test_compile("x(t-3)^y(t)", states));
 }
