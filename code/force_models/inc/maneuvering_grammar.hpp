@@ -15,7 +15,7 @@
 #include "ManeuveringInternal.hpp"
 
 typedef ascii::blank_type SpaceType;
-
+/*
 namespace maneuvering
 {
     struct Nil {};
@@ -124,7 +124,7 @@ namespace maneuvering
 
     };
     typedef Grammar<std::string::const_iterator> grammar;
-}
+}*/
 
 
 

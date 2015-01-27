@@ -15,8 +15,7 @@ maneuvering_parserTest::maneuvering_parserTest() :
             a(ssc::random_data_generator::DataGenerator(2121212188)),
             states(),
             ds(),
-            t(a.random<double>()),
-            g()
+            t(a.random<double>())
 {
     states.x.record(0, a.random<double>());
     states.y.record(0, a.random<double>());
@@ -42,19 +41,6 @@ void maneuvering_parserTest::TearDown()
 }
 
 using boost::spirit::ascii::blank;
-
-TEST_F(maneuvering_parserTest, parse_very_simple_grammar)
-{
-    const std::string s = "1.2 2.3 3.4";
-    std::string::const_iterator b = s.begin(), e = s.end();
-    std::vector<double> v;
-    maneuvering::simple_grammar sg;
-    qi::phrase_parse(b, e, sg.values_for_tests, blank, v);
-    ASSERT_EQ(3, v.size());
-    ASSERT_DOUBLE_EQ(1.2, v.at(0));
-    ASSERT_DOUBLE_EQ(2.3, v.at(1));
-    ASSERT_DOUBLE_EQ(3.4, v.at(2));
-}
 
 double numerical_parse(const std::string& string_to_parse);
 double numerical_parse(const std::string& string_to_parse)

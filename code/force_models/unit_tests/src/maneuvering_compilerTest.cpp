@@ -50,5 +50,8 @@ TEST_F(maneuvering_compilerTest, can_compile_constant)
     ASSERT_DOUBLE_EQ(-1.234e-6, test_compile("-1.234e-6"));
 }
 
-
+TEST_F(maneuvering_compilerTest, can_compile_sum)
+{
+    ASSERT_DOUBLE_EQ(3,         test_compile("1+2"));
+}
 

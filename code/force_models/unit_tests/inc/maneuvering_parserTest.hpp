@@ -28,7 +28,6 @@ class maneuvering_parserTest : public ::testing::Test
         BodyStates states;
         ssc::data_source::DataSource ds;
         double t;
-        maneuvering::grammar g;
 };
 
 #endif  /* MANEUVERING_COMPILERTEST_HPP_ */
