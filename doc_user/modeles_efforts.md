@@ -553,8 +553,8 @@ expressions simples des états et du temps peuvent être calculées, par exemple
   Vs: sqrt(u(t)^2+v(t)^2)
   L: 21.569
   X_: Xu*u_ + Xuu*u_^2 + Xuuu*u_^3 + Xvv*v_^2 + Xrr*r_^2 + Xvr*abs(v_)*abs(r_)
-  Y_: Yv*v_ + Yvv*v*abs(v) + Yvvv*v_^3 + Yvrr*v_*r_^2 + Yr*r_ + Yrr*r_*abs(r_) + Yrrr*r_^3 + Yrvv*r_*v_^2
-  N_: Nv*v_ + Nvv*v*abs(v) + Nvvv*v_^3 + Nvrr*v_*r_^2 + Nr*r_ + Nrr*r_*abs(r_) + Nrrr*r_^3 + Nrvv*r_*v_^2
+  Y_: Yv*v_ + Yvv*v_*abs(v_) + Yvvv*v_^3 + Yvrr*v_*r_^2 + Yr*r_ + Yrr*r_*abs(r_) + Yrrr*r_^3 + Yrvv*r_*v_^2
+  N_: Nv*v_ + Nvv*v_*abs(v_) + Nvvv*v_^3 + Nvrr*v_*r_^2 + Nr*r_ + Nrr*r_*abs(r_) + Nrrr*r_^3 + Nrvv*r_*v_^2
   u_: u(t)/Vs
   v_: v(t)/Vs
   r_: r(t)/Vs*L
@@ -588,17 +588,38 @@ centre de gravité (point (0,0,0) du repère "body").
 `X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
 body), exprimé au point d'application défini ci-dessus.
 
-Les autres clefs peuvent être quelconques et dépendent du modèle.
-
 Toutes les valeurs sont supposées en unité du système international. Le modèle
-nécessite de spécifier X, Y, Z, K, M et N. Des variables accessoires (telles
+nécessite de spécifier X, Y, Z, K, M et N, les autres clefs pouvant être
+quelconques. Des variables accessoires (telles
 que `tau` dans l'exemple ci-dessus) peuvent être utilisées. Le modèle vérifie
-automatiquement à l'exécution qu'il possède toutes les clefs nécessaires.
+automatiquement à l'exécution qu'il possède toutes les clefs nécessaires et
+infère l'ordre d'évaluation, autrement dit, une expression n'est évaluée que
+lorque toutes les expressions dont elle dépend l'ont été (quel que soit l'ordre
+dans lequel elles ont été déclarées).
+
+On peut évaluer ces valeurs retardées des états x,y,z,u,v,w,p,q,r en écrivant
+`x(t-tau)` (par exemple) ou `tau` désigne une expression dont la valeur est
+positive. `t` désigne implicitement l'instant courant.
 
 ### Grammaire
 
 De façon plus formelle, les modèles doivent obéir à la grammaire suivante
-(format Bachus-Naur ou BNF) :
+(format "Extended Bachus-Naur" ou EBNF) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.ebnf}
+expr                = term  operator_and_term*
+add_operators       = '+' | '-'
+mul_operators       = '*' | '/'
+operator_and_term   = add_operators term
+operator_and_factor = mul_operators factor
+term                = factor operator_and_factor*
+factor              = base ( '^' exponent)*
+base                = ('('  expr ')') | atom
+exponent            = base
+atom                = function_call | identifier | double
+function_call       = identifier '(' expr ')'
+identifier          = alpha (alphanum | '_')*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # Efforts commandés
