@@ -136,11 +136,6 @@ struct FunctionCall;
 
 typedef std::string Identifier;
 
-BOOST_FUSION_ADAPT_STRUCT(
-        Identifier,
-    (std::string, name)
-)
-
 typedef boost::variant<
                 Nil
               , double
@@ -234,6 +229,8 @@ struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), Spac
 {
     ArithmeticGrammar() : ArithmeticGrammar::base_type(expr)
     {
+        using boost::spirit::ascii::alnum;
+        using boost::spirit::ascii::alpha;
         expr     = term >> *(operator_and_term);
         add_operators = qi::char_("+") | qi::char_("-");
         mul_operators = qi::char_("*") | qi::char_("/");
@@ -245,8 +242,7 @@ struct ArithmeticGrammar : qi::grammar<std::string::const_iterator, Expr(), Spac
         exponent = base;
         atom   = function_call | identifier | double_;
         function_call = identifier >> '(' >> expr >> ')';
-        identifier = +qi::char_("_a-zA-Z");
-
+        identifier = alpha >> *(alnum | qi::char_('_'));
     }
 
     qi::rule<std::string::const_iterator, Expr(), SpaceType>              expr;

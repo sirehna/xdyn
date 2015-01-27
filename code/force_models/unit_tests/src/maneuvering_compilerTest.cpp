@@ -109,3 +109,13 @@ TEST_F(maneuvering_compilerTest, can_compile_operations_on_identifiers)
     ds.set("b", 456.789);
     ASSERT_DOUBLE_EQ(123.456+456.789,    test_compile("a+b", ds));
 }
+
+TEST_F(maneuvering_compilerTest, can_compile_identifiers_with_indexes)
+{
+    ssc::data_source::DataSource ds;
+    ds.set("Var_1", 1.0);
+    ds.set("Var_2", 2.0);
+    ASSERT_DOUBLE_EQ(1.0,    test_compile("Var_1", ds));
+    //ASSERT_DOUBLE_EQ(2.0,    test_compile("Var_2", ds));
+    //ASSERT_DOUBLE_EQ(2.0,    test_compile("Var_2^Var_1", ds));
+}

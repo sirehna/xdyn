@@ -56,10 +56,14 @@ double numerical_parse(const std::string& string_to_parse)
 std::string string_parse(const std::string& string_to_parse);
 std::string string_parse(const std::string& string_to_parse)
 {
-    std::string::const_iterator b = string_to_parse.begin(), e = string_to_parse.end();
+    std::string::const_iterator it = string_to_parse.begin(), e = string_to_parse.end();
     Expr ast;
     ArithmeticGrammar g;
-    qi::phrase_parse(b, e, g.expr, blank, ast);
+    const bool success = qi::phrase_parse(it, e, g.expr, blank, ast);
+    if (not(success and it == e))
+    {
+        return "NA";
+    }
     std::stringstream ss;
     StringEvaluator visitor(ss);
     visitor(ast);
@@ -120,6 +124,19 @@ TEST_F(maneuvering_parserTest, string_evaluation_for_arithmetic_parser)
     ASSERT_EQ("10.3-2", string_parse("10.3-2"));
     ASSERT_EQ("fabs", string_parse("fabs"));
 }
+
+TEST_F(maneuvering_parserTest, can_parse_valid_identifier)
+{
+    ASSERT_EQ("valid_identifier",   string_parse("valid_identifier"));
+    ASSERT_EQ("Var_1",   string_parse("Var_1"));
+}
+
+TEST_F(maneuvering_parserTest, cannot_parse_invalid_identifier)
+{
+    const std::string invalid_identifier = "0valid_identifier";
+    ASSERT_EQ("NA",   string_parse(invalid_identifier));
+}
+
 /*
 TEST_F(maneuvering_parserTest, can_parse_valid_identifier)
 {
