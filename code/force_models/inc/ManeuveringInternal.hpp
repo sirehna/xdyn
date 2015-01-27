@@ -123,6 +123,13 @@ namespace maneuvering
             Function get_lambda() const;
     };
 
+    class Sqrt : public Unary
+    {
+        public:
+            Sqrt(const NodePtr& operand);
+            Function get_lambda() const;
+    };
+
     class Difference : public Binary
     {
         public:
@@ -198,6 +205,7 @@ namespace maneuvering
     NodePtr make_sum(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_pow(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_exp(const NodePtr& operand);
+    NodePtr make_sqrt(const NodePtr& operand);
     NodePtr make_difference(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_divide(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_multiply(const NodePtr& lhs, const NodePtr& rhs);

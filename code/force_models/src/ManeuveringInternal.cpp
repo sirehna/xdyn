@@ -144,6 +144,19 @@ Exp::Exp(const NodePtr& operand) : Unary(operand)
 {
 }
 
+Function Sqrt::get_lambda() const
+{
+    return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+            {
+                const auto op = get_operand()->get_lambda();
+                return std::sqrt(op(states, ds, t));
+            };
+}
+
+Sqrt::Sqrt(const NodePtr& operand) : Unary(operand)
+{
+}
+
 Function Exp::get_lambda() const
 {
     return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
@@ -257,6 +270,11 @@ NodePtr maneuvering::make_pow(const NodePtr& lhs, const NodePtr& rhs)
 NodePtr maneuvering::make_exp(const NodePtr& n)
 {
     return NodePtr(new Exp(n));
+}
+
+NodePtr maneuvering::make_sqrt(const NodePtr& n)
+{
+    return NodePtr(new Sqrt(n));
 }
 
 NodePtr maneuvering::make_difference(const NodePtr& lhs, const NodePtr& rhs)
