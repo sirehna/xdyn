@@ -52,6 +52,37 @@ TEST_F(maneuvering_compilerTest, can_compile_constant)
 
 TEST_F(maneuvering_compilerTest, can_compile_sum)
 {
-    ASSERT_DOUBLE_EQ(3,         test_compile("1+2"));
+    ASSERT_DOUBLE_EQ(3,    test_compile("1+2"));
+    ASSERT_DOUBLE_EQ(0.79, test_compile("-1.21+2"));
 }
 
+TEST_F(maneuvering_compilerTest, can_compile_product)
+{
+    ASSERT_DOUBLE_EQ(24,    test_compile("20*1.2"));
+}
+
+TEST_F(maneuvering_compilerTest, can_compile_cosine)
+{
+    ASSERT_DOUBLE_EQ(1,    test_compile("cos(0)"));
+}
+
+TEST_F(maneuvering_compilerTest, can_compile_sine)
+{
+    ASSERT_DOUBLE_EQ(sin(1),    test_compile("sin(1)"));
+}
+
+TEST_F(maneuvering_compilerTest, can_compile_exp_and_log)
+{
+    ASSERT_DOUBLE_EQ(1,    test_compile("exp(log(1))"));
+    ASSERT_DOUBLE_EQ(10,   test_compile("exp(log(10))"));
+}
+
+TEST_F(maneuvering_compilerTest, can_compile_sqrt)
+{
+    ASSERT_DOUBLE_EQ(5,    test_compile("sqrt(25)"));
+}
+
+TEST_F(maneuvering_compilerTest, can_compile_abs)
+{
+    ASSERT_DOUBLE_EQ(2.5e3,    test_compile("abs(-2.5e3)"));
+}
