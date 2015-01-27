@@ -314,3 +314,13 @@ TEST_F(SimTest, propulsion_and_resistance)
         ASSERT_DOUBLE_EQ(0, res.at(i).x[RIDX(0)]);
     }
 }
+
+TEST_F(SimTest, bug_2641)
+{
+    const auto yaml = SimulatorYamlParser(test_data::bug_2641()).parse();
+    ssc::data_source::DataSource commands;
+    commands.set<double>("propeller(rpm)", 5*(2*PI));
+    commands.set<double>("propeller(P/D)", 0.67);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 5, 1, commands);
+    ASSERT_LT(res.back().x[VIDX(0)], -0.003);
+}

@@ -43,6 +43,7 @@ namespace test_data
     std::string anthineas_radiation_damping();
     std::string simple_track_keeping();
     std::string maneuvering();
+    std::string bug_2641();
 }
 
 #endif /* YAML_DATA_HPP_ */
