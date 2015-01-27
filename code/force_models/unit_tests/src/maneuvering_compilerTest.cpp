@@ -42,9 +42,12 @@ double test_compile(const std::string& stuff)
     return evaluate(f);
 }
 
-TEST_F(maneuvering_compilerTest, example)
+TEST_F(maneuvering_compilerTest, can_compile_constant)
 {
-    ASSERT_DOUBLE_EQ(2, test_compile("2"));
+    ASSERT_DOUBLE_EQ(0,         test_compile("0"));
+    ASSERT_DOUBLE_EQ(2,         test_compile("2"));
+    ASSERT_DOUBLE_EQ(1.234e-6,  test_compile("1.234e-6"));
+    ASSERT_DOUBLE_EQ(-1.234e-6, test_compile("-1.234e-6"));
 }
 
 
