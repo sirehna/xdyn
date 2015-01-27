@@ -7,7 +7,8 @@
 
 #include "external_data_structures_parsers.hpp"
 #include "ManeuveringForceModel.hpp"
-
+#include "maneuvering_compiler.hpp"
+#include "maneuvering_DataSource_builder.hpp"
 #include "yaml.h"
 
 
@@ -16,6 +17,8 @@ ManeuveringForceModel::Yaml::Yaml() :
     var2expr()
 {
 }
+
+const std::string ManeuveringForceModel::model_name = "maneuvering";
 
 ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml)
 {
@@ -38,4 +41,29 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
         }
     }
     return ret;
+}
+
+ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames&) :
+        ForceModel(model_name, body_name_),
+        point_of_application(body_name_, data.point_of_application.x, data.point_of_application.y, data.point_of_application.z),
+        m()
+{
+    for (auto var2expr:data.var2expr) m[var2expr.first] = maneuvering::compile(var2expr.second);
+}
+
+ssc::kinematics::Wrench ManeuveringForceModel::operator()(const BodyStates& states, const double t) const
+{
+    auto ds = maneuvering::build_ds(m);
+    ds.check_in(__PRETTY_FUNCTION__);
+    ds.set("states", states);
+    ds.set("t", t);
+    ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
+    tau(0) = ds.get<double>("X");
+    tau(1) = ds.get<double>("Y");
+    tau(2) = ds.get<double>("Z");
+    tau(3) = ds.get<double>("K");
+    tau(4) = ds.get<double>("M");
+    tau(5) = ds.get<double>("N");
+    ds.check_out();
+    return ssc::kinematics::Wrench(point_of_application, tau);
 }

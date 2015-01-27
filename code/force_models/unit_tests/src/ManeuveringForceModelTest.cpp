@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-
+#include "EnvironmentAndFrames.hpp"
 #include "ManeuveringForceModelTest.hpp"
 #include "ManeuveringForceModel.hpp"
 #include "ManeuveringInternal.hpp"
@@ -256,4 +256,148 @@ TEST_F(ManeuveringForceModelTest, unknown_identifier)
     const auto c = make_unknown_identifier("foo");
     const auto f = c->get_lambda();
     ASSERT_DOUBLE_EQ(123.456, f(states, ds, t));
+}
+
+TEST_F(ManeuveringForceModelTest, can_evaluate_simple_maneuvering_model)
+{
+    const std::string yaml = "point of application (in body frame):\n"
+                             "    x: {value: 0.696, unit: m}\n"
+                             "    y: {value: 0, unit: m}\n"
+                             "    z: {value: 1.418, unit: m}\n"
+                             "X: 2*Y+sqrt(x(t))\n"
+                             "Y: y(t)^2\n"
+                             "Z: 0\n"
+                             "K: 0\n"
+                             "M: 0\n"
+                             "N: 0\n";
+    EnvironmentAndFrames env;
+    ManeuveringForceModel force(ManeuveringForceModel::parse(yaml),"some body", env);
+    BodyStates states;
+    const double t = 10;
+    states.x.record(t, 1024);
+    states.y.record(t, 400);
+    const auto F = force(states, t);
+
+    ASSERT_EQ("some body", F.get_frame());
+    ASSERT_DOUBLE_EQ(320032, F.X());
+    ASSERT_DOUBLE_EQ(160000, F.Y());
+    ASSERT_DOUBLE_EQ(0, F.Z());
+    ASSERT_DOUBLE_EQ(0, F.K());
+    ASSERT_DOUBLE_EQ(0, F.M());
+    ASSERT_DOUBLE_EQ(0, F.N());
+}
+
+
+/*  The following test data was generated using this Python code:
+
+from math import fabs,sqrt
+def man(x,y,z,u,v,w,p,q,r):
+       Xu= 0
+       Xuu= 0
+       Xuuu= 0
+       Xvv= -0.041
+       Xrr= -0.01
+       Xvr= -0.015
+       Yv= -0.13
+       Yvv= -0.18
+       Yvvv= 0
+       Yvrr= 0
+       Yr= 0.015
+       Yrr= 0.021
+       Yrrr= 0
+       Yrvv= 0
+       Nv= -0.37
+       Nvv= -0.12
+       Nvvv= 0
+       Nvrr= 0
+       Nr= -0.1
+       Nrr= 0.005
+       Nrrr= 0
+       Nrvv= 0
+       rho= 1024
+       Vs= sqrt(u**2+v**2)
+       L= 21.569
+       u_= u/Vs
+       v_= v/Vs
+       r_= r/Vs*L
+       X_= Xu*u_ + Xuu*u_**2 + Xuuu*u_**3 + Xvv*v_**2 + Xrr*r_**2 + Xvr*fabs(v_)*fabs(r_)
+       Y_= Yv*v_ + Yvv*v_*fabs(v_) + Yvvv*v_**3 + Yvrr*v_*r_**2 + Yr*r_ + Yrr*r_*fabs(r_) + Yrrr*r_**3 + Yrvv*r_*v_**2
+       N_= Nv*v_ + Nvv*v_*fabs(v_) + Nvvv*v_**3 + Nvrr*v_*r_**2 + Nr*r_ + Nrr*r_*fabs(r_) + Nrrr*r_**3 + Nrvv*r_*v_**2
+       X= 0.5*rho*Vs**2*L**2*X_
+       Y= 0.5*rho*Vs**2*L**2*Y_
+       Z= 0
+       K= 0
+       M= 0
+       N= 0.5*rho*Vs**2*L**3*N_
+       return {'X': X,\
+               'Y': Y,\
+               'Z': Z,\
+               'K': K,\
+               'M': M,\
+               'N': N
+              }
+
+man(1,2,3,4,5,6,7,8,9)
+man(0.1,2.04,6.28,0.45,0.01,5.869,0.23,0,0.38)
+ */
+
+TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
+{
+    const auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    EnvironmentAndFrames env;
+    ManeuveringForceModel force(data,"some body", env);
+
+    BodyStates states;
+
+    states.x.record(0, 1);
+    states.y.record(0, 2);
+    states.z.record(0, 3);
+    states.u.record(0, 4);
+    states.v.record(0, 5);
+    states.w.record(0, 6);
+    states.p.record(0, 7);
+    states.q.record(0, 8);
+    states.r.record(0, 9);
+
+    const double t = 0;
+
+    const auto F = force(states, t);
+
+    ASSERT_EQ("some body", F.get_frame());
+    ASSERT_DOUBLE_EQ(-93470409.32377005, F.X());
+    ASSERT_DOUBLE_EQ(190870415.43062863, F.Y());
+    ASSERT_DOUBLE_EQ(0, F.Z());
+    ASSERT_DOUBLE_EQ(0, F.K());
+    ASSERT_DOUBLE_EQ(0, F.M());
+    ASSERT_DOUBLE_EQ(253134236.3875341, F.N());
+}
+
+TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
+{
+    const auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    EnvironmentAndFrames env;
+    ManeuveringForceModel force(data,"some body", env);
+
+    BodyStates states;
+
+    states.x.record(0, 0.1);
+    states.y.record(0, 2.04);
+    states.z.record(0, 6.28);
+    states.u.record(0, 0.45);
+    states.v.record(0, 0.01);
+    states.w.record(0, 5.869);
+    states.p.record(0, 0.23);
+    states.q.record(0, 0);
+    states.r.record(0, 0.38);
+
+    const double t = 0;
+
+    const auto F = force(states, t);
+    ASSERT_EQ("some body", F.get_frame());
+    ASSERT_DOUBLE_EQ(-160307.53008106418, F.X());
+    ASSERT_DOUBLE_EQ(349066.3153463915, F.Y());
+    ASSERT_DOUBLE_EQ(0, F.Z());
+    ASSERT_DOUBLE_EQ(0, F.K());
+    ASSERT_DOUBLE_EQ(0, F.M());
+    ASSERT_DOUBLE_EQ(-178317.02217866198, F.N());
 }

@@ -10,8 +10,15 @@
 
 #include <map>
 
+#include <ssc/data_source.hpp>
+#include <ssc/macros.hpp>
+
 #include "ForceModel.hpp"
 #include "YamlCoordinates.hpp"
+#include "ManeuveringInternal.hpp"
+
+
+#include TR1INC(memory)
 
 class ManeuveringForceModel : public ForceModel
 {
@@ -30,6 +37,8 @@ class ManeuveringForceModel : public ForceModel
 
     private:
         ManeuveringForceModel();
+        ssc::kinematics::Point point_of_application;
+        std::map<std::string, maneuvering::NodePtr> m;
 };
 
 #endif /* MANEUVERINGFORCEMODEL_HPP_ */
