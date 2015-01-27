@@ -34,11 +34,17 @@ double evaluate(const maneuvering::Function& f)
     return f(states, ds, t);
 }
 
+double test_compile(const std::string& stuff);
+double test_compile(const std::string& stuff)
+{
+    const auto n = maneuvering::compile(stuff);
+    const auto f = n->get_lambda();
+    return evaluate(f);
+}
+
 TEST_F(maneuvering_compilerTest, example)
 {
-    const auto n = maneuvering::compile("2");
-    const auto f = n->get_lambda();
-    ASSERT_DOUBLE_EQ(2, evaluate(f));
+    ASSERT_DOUBLE_EQ(2, test_compile("2"));
 }
 
 
