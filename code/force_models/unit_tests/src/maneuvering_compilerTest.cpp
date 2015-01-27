@@ -101,3 +101,11 @@ TEST_F(maneuvering_compilerTest, can_compile_identifier)
     ds.set("Var_", 123.456);
     ASSERT_DOUBLE_EQ(123.456,    test_compile("Var_", ds));
 }
+
+TEST_F(maneuvering_compilerTest, can_compile_operations_on_identifiers)
+{
+    ssc::data_source::DataSource ds;
+    ds.set("a", 123.456);
+    ds.set("b", 456.789);
+    ASSERT_DOUBLE_EQ(123.456+456.789,    test_compile("a+b", ds));
+}
