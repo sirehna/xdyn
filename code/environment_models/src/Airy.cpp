@@ -122,3 +122,40 @@ double Airy::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
     p *= rho*g*sqrt(2*spectrum.domega*spectrum.dpsi);
     return p;
 }
+
+ssc::kinematics::Point Airy::orbital_velocity(const double g,   //!< gravity (in m/s^2)
+                                              const double x,   //!< x-position in the NED frame (in meters)
+                                              const double y,   //!< y-position in the NED frame (in meters)
+                                              const double z,   //!< z-position in the NED frame (in meters)
+                                              const double t    //!< Current time instant (in seconds)
+                                              ) const
+{
+    double u = 0;
+    double v = 0;
+    double w = 0;
+    const double eta = 0; // No stretching for the orbital velocity
+    for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
+    {
+        const double Ai = sqrt(spectrum.Si[i]);
+        const double k = spectrum.k[i];
+        const double omega = spectrum.omega[i];
+        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
+        {
+            const double Dj = sqrt(spectrum.Dj[j]);
+            const double psi = spectrum.psi[j];
+            const double theta = omega*t-k*(x*cos(psi)+y*sin(psi))+spectrum.phase[i][j];
+            const double cos_theta = cos(theta);
+            const double pdyn_factor = spectrum.pdyn_factor(k,z,eta);
+            const double Ai_Dj_k_omega = Ai*Dj*k/omega;
+            const double Ai_Dj_k_omega_pdyn_factor_cos_theta = Ai_Dj_k_omega*pdyn_factor*cos_theta;
+            u += Ai_Dj_k_omega_pdyn_factor_cos_theta*cos(psi);
+            v += Ai_Dj_k_omega_pdyn_factor_cos_theta*sin(psi);
+            w += Ai_Dj_k_omega*spectrum.pdyn_factor_sh(k,z,eta)*sin(theta);
+        }
+    }
+    const double f = g*sqrt(2*spectrum.domega*spectrum.dpsi);
+    u *= f;
+    v *= f;
+    w *= f;
+    return ssc::kinematics::Point("NED", u, v, w);
+}
