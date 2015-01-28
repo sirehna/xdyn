@@ -50,6 +50,7 @@ struct DiscreteDirectionalWaveSpectrum
     double domega;                                    //!< Angular frequency discretization step (in rad/s)
     double dpsi;                                      //!< Spatial direction discretization step (in rad)
     std::function<double(double,double,double)> pdyn_factor; //!< Factor used when computing the dynamic pressure (no unit)
+    std::function<double(double,double,double)> pdyn_factor_sh; //!< Factor used when computing the orbital velocity (no unit)
 };
 
 /** \brief Used by the wave models (eg. Airy, Stokes, etc.)

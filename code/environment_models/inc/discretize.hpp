@@ -69,4 +69,14 @@ double dynamic_pressure_factor(const double k,   //!< Wave number (in 1/m)
                                const double eta //!< Wave elevation at (x,y) in the NED frame (in meters)
                               );
 
+/**  \brief Utility function used by the discretize function. Finite depth.
+  *  \returns Factor \f$f(k,z,h)\f$ such that \f$p_{\mbox{dyn}}=\rho g \eta_a f(k,z,h)\f$ (no unit), finite depth.
+  *  \snippet wave_models/unit_tests/src/discretizeTest.cpp discretizeTest dynamic_pressure_factor example
+  */
+double dynamic_pressure_factor_sh(const double k,   //!< Wave number (in 1/m)
+                                  const double z,   //!< z-position in the NED frame (in meters)
+                                  const double h,   //!< Average water depth (in meters)
+                                  const double eta //!< Wave elevation at (x,y) in the NED frame (in meters)
+                                 );
+
 #endif /* DISCRETIZE_HPP_ */
