@@ -265,7 +265,7 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
     }
 }
 
-TEST_F(SimTest, waves_test_on_anthineas)
+TEST_F(SimTest, LONG_waves_test_on_anthineas)
 {
     const auto yaml = SimulatorYamlParser(test_data::anthineas_waves_test()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
@@ -276,13 +276,13 @@ TEST_F(SimTest, waves_test_on_anthineas)
 }
 
 
-TEST_F(SimTest, froude_krylov)
+TEST_F(SimTest, LONG_froude_krylov)
 {
     const auto yaml = SimulatorYamlParser(test_data::anthineas_froude_krylov()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
 }
 
-TEST_F(SimTest, anthineas_damping)
+TEST_F(SimTest, LONG_anthineas_damping)
 {
     const auto yaml = SimulatorYamlParser(test_data::anthineas_damping()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 20, 1);
