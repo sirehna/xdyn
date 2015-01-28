@@ -24,6 +24,7 @@
 #include "ResistanceCurveForceModel.hpp"
 #include "RadiationDampingForceModel.hpp"
 #include "SimpleTrackKeepingController.hpp"
+#include "ManeuveringForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener)
 {
@@ -47,7 +48,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<DiffractionForceModel>()
            .can_parse<RadiationDampingForceModel>()
            .can_parse<QuadraticDampingForceModel>()
-           .can_parse<SimpleTrackKeepingController>();
+           .can_parse<SimpleTrackKeepingController>()
+           .can_parse<ManeuveringForceModel>();
     return builder;
 }
 
