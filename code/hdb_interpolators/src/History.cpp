@@ -62,7 +62,9 @@ double History::get_value(const size_t idx, const double t) const
     const double yA = L[idx-1].second;
     const double yB = L[idx].second;
 
-    return (t-tA)/(tB-tA)*(yB-yA) + yA;
+    if (std::abs(t-tA) < 1E-12) return yA; // To fix bug 2655
+    if (std::abs(t-tB) < 1E-12) return yB;
+                                return (t-tA)/(tB-tA)*(yB-yA) + yA;
 }
 
 void History::throw_if_already_added(const size_t idx, const double t, const double val) const

@@ -291,6 +291,14 @@ TEST_F(SimTest, anthineas_damping)
     ASSERT_EQ(res.back().x[ZIDX(0)],res.back().x[ZIDX(0)]); // Check if nan
 }
 
+TEST_F(SimTest, LONG_bug_2655)
+{
+    const auto yaml = SimulatorYamlParser(test_data::bug_2655()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 1.4, 0.1);
+    ASSERT_EQ(15, res.size());
+    ASSERT_NEAR(-0.228388, res.back().x[WIDX(0)], 1e-6);
+}
+
 TEST_F(SimTest, propulsion_and_resistance)
 {
     const auto yaml = SimulatorYamlParser(test_data::propulsion_and_resistance()).parse();
