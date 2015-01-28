@@ -1102,3 +1102,89 @@ Ce modèle n'a qu'une seule commande, le cap `psi_co` :
   psi_co: {unit: deg, values: [25, 30, 40, 0]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Contrôleur de position simplifié
+
+### Description
+
+Le but de ce contrôleur est de pouvoir réaliser des simulations sous houle (par
+exemple pour calculer des RAO d'effort) en limitant les variations de cap et de
+position. Ce contrôleur génère directement un moment et un effort au centre de
+gravité du corps.
+
+### Expression des efforts
+
+L'effort généré suivant l'axe X est $F_x = K_{x}\cdot (x_{\mbox{co}}-x) -
+K_u\cdot u = \sigma_{xx}\ddot{x}$ où $\sigma_{xx}$ désigne le moment d'inertie total
+(inertie propre et inertie ajoutée) autour de l'axe $x$.
+L'effort généré suivant l'aye X est $F_y = K_{y}\cdot (y_{\mboy{co}}-y) -
+K_v\cdot v = \sigma_{yy}\ddot{y}$ où $\sigma_{yy}$ désigne le moment d'inertie total
+(inertie propre et inertie ajoutée) autour de l'aye $y$.
+Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\mbox{co}}-\psi) - K_r\cdot r =
+\sigma_{zz}\ddot{\psi}$ où $\sigma_{zz}$ désigne le moment d'inertie total
+(inertie propre et inertie ajoutée) autour de l'axe $z$.
+
+Dans le domaine de Laplace, les équations du contrôleur s'écrivent :
+
+$$\sigma_{xx}p^2 + K_u p + K_{x} = 0$$
+$$\sigma_{yy}p^2 + K_u p + K_{y} = 0$$
+$$\sigma_{zz}p^2 + K_r p + K_{\psi} = 0$$
+
+ou encore, sous forme canonique :
+
+$$p^2 + 2\zeta_x\omega_x p + \omega_x^2 = 0$$
+$$p^2 + 2\zeta_y\omega_y p + \omega_y^2 = 0$$
+$$p^2 + 2\zeta_{psi}\omega_{\psi} p + \omega_{\psi}^2 = 0$$
+
+d'où
+
+$$K_{x} = \sigma_{xx} \omega_x^2$$ et $$K_u= 2\zeta_x\omega_x\sigma_{xx}$$
+$$K_{y} = \sigma_{yy} \omega_y^2$$ et $$K_v= 2\zeta_y\omega_y\sigma_{yy}$$
+$$K_{\psi} = \sigma_{zz} \omega_{\psi}^2$$ et $$K_r= 2\zeta\omega_{\psi}\sigma_{zz}$$
+
+On peut exprimer ces gains en fonction de l'amortissement $\zeta$ et du temps de
+réponse $T$ donné par $T=\frac{2\pi}{\omega}$.
+
+$$K_{x} = \sigma_{xx}\left(\frac{2\pi}{T_x}\right)^2$$
+$$K_{u} = 2\zeta\sigma_{xx}\frac{2\pi}{T_x}$$
+$$K_{y} = \sigma_{yy}\left(\frac{2\pi}{T_y}\right)^2$$
+$$K_{v} = 2\zeta\sigma_{yy}\frac{2\pi}{T_y}$$
+$$K_{\psi} = \sigma_{zz}\left(\frac{2\pi}{T_{\psi}}\right)^2$$
+$$K_{r} = 2\zeta\sigma_{zz}\frac{2\pi}{T_{\psi}}$$
+
+Le cap $\psi_{\mbox{co}}$ est donné dans le repère NED.
+Si l'on suppose que $r=0$, pour $\psi<\psi_{\mbox{co}}$, le moment généré doit
+être positif, donc $K_{\psi}\cdot(\psi_{\mbox{co}}-\psi)>0$. Par conséquent,
+$K_{\psi}>0$.
+De même, en prenant $r<0$ et $\psi=\psi_{\mbox{co}}$, le moment généré doit
+être positif pour contrer la vitesse $r$, donc $-K_r\cdot r>0$, d'où $K_r>0$.
+
+### Paramétrage
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controlled forces:
+  - name: controller
+    model: simple station-keeping controller
+    ksi_x: 0.9
+    T_x: {value: 2, unit: s}
+    ksi_y: 0.85
+    T_y: {value: 3, unit: s}
+    ksi_psi: 0.8
+    T_psi: {value: 4, unit: s}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `name` : nom du contrôleur (si l'on en utilise plusieurs)
+- `model` : `simple heading controller` pour ce modèle
+- `ksi_*`: coefficient d'amortissement de la loi de commande
+- `T_*`: temps de réponse (système du second ordre).
+
+Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
+(dans le repère NED) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- name: controller
+  t: [0,1,3,10]
+  x_co: {unit: m, values: [25, 30, 40, 0]}
+  y_co: {unit: m, values: [25, 30, 40, 0]}
+  psi_co: {unit: deg, values: [25, 30, 40, 0]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
