@@ -155,13 +155,69 @@ libre dans le repère NED.
 On peut définir une houle comme étant une somme de plusieurs spectres
 directionnels, c'est-à-dire un spectre de puissance et une dispersion spatiale.
 Pour dériver l'expression générale d'une houle composée de plusieurs spectres,
-on commence par le cas d'une houle monochromatique et monodirectionnelle, pour
-laquelle le potentiel de vitesse s'exprime :
+on commence par le cas d'une houle monochromatique et monodirectionnelle.
 
-$$\phi(x,y,t) = \frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\cos(k\cdot(x\cdot
+Soit $V(x,y,z,t)=(u,v,w)$ la vitesse du fluide au point de coordonnées $(x,y,z)$
+(dans le repère NED) et à l'instant $t$.
+
+On suppose l'eau non visqueuse, incompressible, homogène et isotrope et l'on
+considère un écoulement irrotationnel.
+Supposer l'écoulement irrotationnel implique (d'après le lemme
+de Poincaré) que la vitesse dérive d'un potentiel que l'on appelle
+$\phi:(x,y,z,t)\mapsto\phi(x,y,z,t)$. Par définition, la vitesse en tout
+point de l'écoulement est donc donnée par :
+
+$$V(x,y,z,t) = \mbox{grad}{\phi(x,y,z,t)}$$
+
+La pression $p$ vérifie l'équation de Bernoulli :
+
+$$p + \rho g z +\rho\frac{\partial\phi}{\partial t} + \frac{\rho}{2} V\cdot V =
+C(t)$$
+
+où $C:t\mapsto C(t)$ est une fonction du temps arbitraire, donc en particulier
+$C(t)=p_0$ (pression atmosphérique à la surface) :
+
+$$p_0 + \rho g z +\rho\frac{\partial\phi}{\partial t} + \frac{\rho}{2} V\cdot V =
+p_0$$
+
+soit
+
+$$g z +\frac{\partial\phi}{\partial t} + \frac{1}{2} V\cdot V = 0$$
+
+Il s'agit de la première condition de surface libre.
+
+On peut définir la fonction $F(x,y,z,t)=z-\eta(x,y,t)$
+
+Pour une particule sur la surface libre, $F(x,y,z,t)=0$ ce qui implique que sa
+dérivéee particulaire est nulle :
+
+$$\frac{DF}{Dt} = \frac{\partial F}{\partial t} + V\cdot \nabla F = 0$$
+
+soit
+
+$\frac{\partial\eta}{\partial t} + \frac{\phi}{\partial x}\frac{\partial
+\eta}{\partial x} + \frac{\phi}{\partial x}\frac{\partial\eta}{\partial y} -
+\frac{\partial\phi}{\partial z} = 0$ sur $z=\eta(x,y,t)$.
+
+C'est la deuxième condition de surface libre.
+
+En linéarisant ces deux conditions de surface libre, on obtient :
+
+$$\frac{\partial \eta}{\partial t} = \frac{\partial\phi}{\partial z}$$
+$$g\eta + \frac{\partial\phi}{\partial t} = 0$$
+
+Par ailleurs, l'eau étant supposée incompressible, $$\nabla\cdot V=
+\frac{\partial^2\phi}{\partial x^2} +  \frac{\partial^2\phi}{\partial y^2} +
+\frac{\partial^2\phi}{\partial z^2} = 0$$
+
+Il s'agit d'une équation de Laplace dont la solution s'obtient par la méthode de
+séparation des variables :
+
+$$\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\sin(k\cdot(x\cdot
 \cos(\psi)+ y\cdot \sin(\psi))-\omega_i\cdot t+\phi)$$
 
 $h$ est la profondeur du fluide (hauteur du sol à la surface libre)
+$\eta_a=2\sqrt{S(\omega)}$ est l'amplitude (en m)
 $x,y,z$ sont les coordonnées du point considéré, exprimées dans le repère NED
 $k$ est le nombre d'onde, traduisant la périodicité spatiale et vérifie la
 relation de dispersion :
@@ -171,15 +227,15 @@ $$\omega^2 = g\cdot k \cdot \tanh(k\cdot h)$$
 On peut généraliser et dériver cette expression pour obtenir l'élévation d'une
 houle polychromatique et multi-directionnelle :
 
-$$\eta(x,y,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
-\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\cos(k\cdot(x\cdot \cos(\psi_j)
+$$\eta(x,y,t) = -\frac{1}{\rho}\frac{\partial\phi}{\partial t} = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\sin(k\cdot(x\cdot \cos(\psi_j)
 + y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
-ainsi que l'expression de la pression dynamique, utilisée par le modèle de
-[Froude-Krylov](#calcul-des-efforts-dexcitation)
-:
+L'expression de la pression dynamique, utilisée par le modèle de
+[Froude-Krylov](#calcul-des-efforts-dexcitation), se déduit de la première
+condition de surface libre linéarisée :
 
-$$p_{\mbox{dyn}} = \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
+$$p_{\mbox{dyn}} = \rho g z = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
 
 soit
 
@@ -197,6 +253,19 @@ $$p_{\mbox{dyn}} = \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}e^{-k\cdot
 (z-\eta(x,y,t))}\cos(k\cdot(x\cdot\cos(\psi_j)+ y\cdot
 \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+La vitesse $V(x,y,z,t) = (u,v,w)$ orbitale de la houle est définie par :
+
+$$u = \frac{\partial \phi}{\partial x} = \frac{k\cdot g}{\omega}
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot
+h)}\cdot\cos(\psi_j)\cos(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+$$v = \frac{\partial \phi}{\partial y} = \frac{k\cdot g}{\omega}
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot
+h)}\cdot\sin(\psi_j)\cos(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+$$w = \frac{\partial \phi}{\partial z} = \frac{k\cdot g}{\omega}
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\frac{\sinh(k\cdot(z+h))}{\cosh(k\cdot
+h)}\sin(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+
 
 Les spectres directionnels sont définis de la façon suivante :
 
@@ -263,6 +332,13 @@ discretization:
 directionnel $S_i\cdot D_j$ sont classés par ordre décroissant. On calcule la
 somme cumulative et l'on s'arrête lorsque l'énergie accumulée vaut `energy
 fraction` de l'énergie totale.
+
+#### Références 
+- *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+- *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70
+- *Sea Loads on Ships And Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 27
+- *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 75
+- *Offshore Hydromechanics*, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
 
 ### Sorties
 
