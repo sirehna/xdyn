@@ -12,11 +12,11 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
 
-class SimpleTrackKeepingControllerTest : public ::testing::Test
+class SimpleHeadingKeepingControllerTest : public ::testing::Test
 {
     protected:
-        SimpleTrackKeepingControllerTest();
-        virtual ~SimpleTrackKeepingControllerTest();
+        SimpleHeadingKeepingControllerTest();
+        virtual ~SimpleHeadingKeepingControllerTest();
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;

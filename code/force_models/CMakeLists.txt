@@ -12,7 +12,7 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/ResistanceCurveForceModel.cpp
         src/DiffractionForceModel.cpp
         src/RadiationDampingForceModel.cpp
-        src/SimpleTrackKeepingController.cpp
+        src/SimpleHeadingKeepingController.cpp
         src/ManeuveringForceModel.cpp
         src/ManeuveringInternal.cpp
         src/maneuvering_compiler.cpp

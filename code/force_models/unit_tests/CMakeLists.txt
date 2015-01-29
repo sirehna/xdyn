@@ -12,7 +12,7 @@ FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/RadiationDampingForceModelTest.cpp
               src/HDBParserForTests.cpp
               src/DiffractionForceModelTest.cpp
-              src/SimpleTrackKeepingControllerTest.cpp
+              src/SimpleHeadingKeepingControllerTest.cpp
               src/ManeuveringForceModelTest.cpp
               src/maneuvering_parserTest.cpp
               src/maneuvering_compilerTest.cpp

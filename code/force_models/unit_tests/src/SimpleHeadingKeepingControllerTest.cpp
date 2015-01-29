@@ -10,42 +10,42 @@
 #define PI M_PI
 
 #include "BodyStates.hpp"
-#include "SimpleTrackKeepingControllerTest.hpp"
-#include "SimpleTrackKeepingController.hpp"
+#include "SimpleHeadingKeepingControllerTest.hpp"
+#include "SimpleHeadingKeepingController.hpp"
 #include "yaml_data.hpp"
 
 #define EPS 1E-14
 
-SimpleTrackKeepingControllerTest::SimpleTrackKeepingControllerTest() : a(ssc::random_data_generator::DataGenerator(545454))
+SimpleHeadingKeepingControllerTest::SimpleHeadingKeepingControllerTest() : a(ssc::random_data_generator::DataGenerator(545454))
 {
 }
 
-SimpleTrackKeepingControllerTest::~SimpleTrackKeepingControllerTest()
+SimpleHeadingKeepingControllerTest::~SimpleHeadingKeepingControllerTest()
 {
 }
 
-void SimpleTrackKeepingControllerTest::SetUp()
+void SimpleHeadingKeepingControllerTest::SetUp()
 {
 }
 
-void SimpleTrackKeepingControllerTest::TearDown()
+void SimpleHeadingKeepingControllerTest::TearDown()
 {
 }
 
-TEST_F(SimpleTrackKeepingControllerTest, parser)
+TEST_F(SimpleHeadingKeepingControllerTest, parser)
 {
-    const auto k = SimpleTrackKeepingController::parse(test_data::simple_track_keeping());
+    const auto k = SimpleHeadingKeepingController::parse(test_data::simple_track_keeping());
     ASSERT_DOUBLE_EQ(4, k.Tp);
     ASSERT_DOUBLE_EQ(0.9, k.ksi);
     ASSERT_EQ("controller", k.name);
 }
 
-TEST_F(SimpleTrackKeepingControllerTest, force_and_torque)
+TEST_F(SimpleHeadingKeepingControllerTest, force_and_torque)
 {
-    auto input = SimpleTrackKeepingController::parse(test_data::simple_track_keeping());
+    auto input = SimpleHeadingKeepingController::parse(test_data::simple_track_keeping());
     input.Tp = 2*PI;
     EnvironmentAndFrames env;
-    const SimpleTrackKeepingController w(input, "body", env);
+    const SimpleHeadingKeepingController w(input, "body", env);
     BodyStates states;
     const double psi = 1.234;
     states.qr.record(0,  cos(psi/2));

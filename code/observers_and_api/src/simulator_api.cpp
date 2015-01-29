@@ -23,7 +23,7 @@
 #include "WageningenControlledForceModel.hpp"
 #include "ResistanceCurveForceModel.hpp"
 #include "RadiationDampingForceModel.hpp"
-#include "SimpleTrackKeepingController.hpp"
+#include "SimpleHeadingKeepingController.hpp"
 #include "ManeuveringForceModel.hpp"
 #include "SimpleStationKeepingController.hpp"
 
@@ -49,7 +49,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<DiffractionForceModel>()
            .can_parse<RadiationDampingForceModel>()
            .can_parse<QuadraticDampingForceModel>()
-           .can_parse<SimpleTrackKeepingController>()
+           .can_parse<SimpleHeadingKeepingController>()
            .can_parse<ManeuveringForceModel>()
            .can_parse<SimpleStationKeepingController>();
     return builder;
