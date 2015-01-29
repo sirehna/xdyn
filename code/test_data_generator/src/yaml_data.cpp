@@ -2226,3 +2226,17 @@ std::string test_data::bug_2641()
        << "     data: [t, x(Anthineas), y(Anthineas), z(Anthineas), u(Anthineas), v(Anthineas), w(Anthineas), p(Anthineas), q(Anthineas), r(Anthineas), phi(Anthineas), theta(Anthineas), psi(Anthineas)]\n";
     return ss.str();
 }
+
+std::string test_data::simple_station_keeping()
+{
+    std::stringstream ss;
+    ss << "name: controller\n"
+       << "model: simple station-keeping controller\n"
+       << "ksi_x: 0.9\n"
+       << "T_x: {value: 2, unit: s}\n"
+       << "ksi_y: 0.85\n"
+       << "T_y: {value: 3, unit: s}\n"
+       << "ksi_psi: 0.8\n"
+       << "T_psi: {value: 4, unit: s}\n";
+    return ss.str();
+}

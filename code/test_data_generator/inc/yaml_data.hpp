@@ -45,6 +45,7 @@ namespace test_data
     std::string simple_track_keeping();
     std::string maneuvering();
     std::string bug_2641();
+    std::string simple_station_keeping();
 }
 
 #endif /* YAML_DATA_HPP_ */
