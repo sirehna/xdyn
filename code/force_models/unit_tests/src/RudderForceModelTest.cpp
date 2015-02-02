@@ -12,6 +12,28 @@
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
 
+
+namespace ssc
+{
+    namespace random_data_generator
+    {
+        template <> RudderForceModel::Yaml TypedScalarDataGenerator<RudderForceModel::Yaml>::get() const
+        {
+            RudderForceModel::Yaml ret;
+            ret.Ar = random<double>();
+            ret.b = random<double>();
+            ret.blade_area_ratio = random<double>();
+            ret.diameter = random<double>();
+            ret.drag_coeff = random<double>();
+            ret.effective_aspect_ratio_factor = random<double>();
+            ret.lift_coeff = random<double>();
+            ret.nu = random<double>();
+            ret.rho = random<double>();
+            return ret;
+        }
+    }
+}
+
 RudderForceModelTest::RudderForceModelTest() : a(ssc::random_data_generator::DataGenerator(21212))
 {
 }
@@ -31,8 +53,8 @@ void RudderForceModelTest::TearDown()
 TEST_F(RudderForceModelTest, angle_of_attack)
 {
 //! [RudderForceModelTest get_alpha_example]
-    RudderForceModel::InWake riw(a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
-    RudderForceModel::OutsideWake row(a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
+    RudderForceModel::InWake riw(a.random<RudderForceModel::Yaml>());
+    RudderForceModel::OutsideWake row(a.random<RudderForceModel::Yaml>());
 //! [RudderForceModelTest get_alpha_example]
 //! [RudderForceModelTest get_alpha_example output]
     for (size_t i = 0 ; i < 100 ; ++i)
@@ -49,8 +71,14 @@ TEST_F(RudderForceModelTest, angle_of_attack)
 
 TEST_F(RudderForceModelTest, get_Cd)
 {
-    RudderForceModel::InWake riw(2,1024,3,4,0.5,a.random<double>(),a.random<double>());
-    RudderForceModel::OutsideWake row(2,1024,3,4,0.5,a.random<double>(),a.random<double>());
+    RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
+    parameters.nu = 2;
+    parameters.rho = 1024;
+    parameters.Ar = 3;
+    parameters.b = 4;
+    parameters.effective_aspect_ratio_factor = 0.5;
+    RudderForceModel::InWake riw(parameters);
+    RudderForceModel::OutsideWake row(parameters);
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double Vs = a.random<double>().between(0,30);
@@ -64,8 +92,14 @@ TEST_F(RudderForceModelTest, get_Cd)
 
 TEST_F(RudderForceModelTest, get_Cl)
 {
-    RudderForceModel::InWake riw(2,1024,3,4,0.5,a.random<double>(),a.random<double>());
-    RudderForceModel::OutsideWake row(2,1024,3,4,0.5,a.random<double>(),a.random<double>());
+    RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
+    parameters.nu = 2;
+    parameters.rho = 1024;
+    parameters.Ar = 3;
+    parameters.b = 4;
+    parameters.effective_aspect_ratio_factor = 0.5;
+    RudderForceModel::InWake riw(parameters);
+    RudderForceModel::OutsideWake row(parameters);
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double alpha = a.random<double>().between(-PI,PI);
@@ -77,8 +111,11 @@ TEST_F(RudderForceModelTest, get_Cl)
 
 TEST_F(RudderForceModelTest, get_lift)
 {
-    RudderForceModel::InWake riw(a.random<double>(),1024,10,a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
-    RudderForceModel::OutsideWake row(a.random<double>(),1024,10,a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
+    RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
+    parameters.rho = 1024;
+    parameters.Ar = 10;
+    RudderForceModel::InWake riw(parameters);
+    RudderForceModel::OutsideWake row(parameters);
 
     for (size_t i = 0 ; i < 100 ; ++i)
     {

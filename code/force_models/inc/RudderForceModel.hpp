@@ -15,20 +15,22 @@ class RudderForceModel : public ControllableForceModel
     public:
         struct Yaml : WageningenControlledForceModel::Yaml
         {
-
+            Yaml();
+            double nu;                            //!< Water viscosity (in m^2/s)
+            double rho;                           //!< Water density (in kg/m^3)
+            double Ar;                            //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
+            double b;                             //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
+            double effective_aspect_ratio_factor; //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+            double lift_coeff;                    //!< Non-dimensional: lift is multiplied by it (for tuning)
+            double drag_coeff;                    //!< Non-dimensional: drag is multiplied by it (for tuning)
         };
+
         RudderForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
 
         struct RudderModel
         {
-            RudderModel(const double nu, //!< Water viscosity (in m^2/s)
-                        const double rho, //!< Water density (in kg/m^3)
-                        const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                        const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                        const double effective_aspect_ratio_factor, //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                        const double lift_coeff, //!< Non-dimensional: lift is multiplied by it (for tuning)
-                        const double drag_coeff //!< Non-dimensional: drag is multiplied by it (for tuning)
+            RudderModel(const Yaml& parameters
                         );
             virtual ~RudderModel(){}
 
@@ -83,25 +85,15 @@ class RudderForceModel : public ControllableForceModel
 
             private:
                 RudderModel(); // Disabled
-                double nu;     //!< Water viscosity (in m^2/s)
-                double rho;    //!< Water density (in kg/m^3)
-                double chord;  //!< Chord length (from tip to tail) (in meters) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                double Ar;     //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                double lambda; //!< Effective aspect ratio (non-dimensional) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                double lift_coeff; //!< Non-dimensional: lift is multiplied by it (for tuning)
-                double drag_coeff; //!< Non-dimensional: drag is multiplied by it (for tuning)
+                Yaml parameters;
+                double chord;
+                double lambda;
         };
 
         struct InWake : RudderModel
         {
-            InWake(const double nu, //!< Water viscosity (in m^2/s)
-                   const double rho, //!< Water density (in kg/m^3)
-                   const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                   const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                   const double effective_aspect_ratio_factor,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                   const double lift_coeff, //!< Non-dimensional: lift is multiplied by it (for tuning)
-                   const double drag_coeff //!< Non-dimensional: drag is multiplied by it (for tuning)
-                    );
+            InWake(const Yaml& parameters);
+
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.
               */
@@ -118,14 +110,8 @@ class RudderForceModel : public ControllableForceModel
 
         struct OutsideWake : RudderModel
         {
-            OutsideWake(const double nu, //!< Water viscosity (in m^2/s)
-                        const double rho, //!< Water density (in kg/m^3)
-                        const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                        const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                        const double effective_aspect_ratio_factor,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                        const double lift_coeff, //!< Non-dimensional: lift is multiplied by it (for tuning)
-                        const double drag_coeff //!< Non-dimensional: drag is multiplied by it (for tuning)
-                       );
+            OutsideWake(const Yaml& parameters);
+
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.
               */
@@ -143,10 +129,6 @@ class RudderForceModel : public ControllableForceModel
 
     private:
         WageningenControlledForceModel propulsion;
-        double envergure;
-        double rho;
-        double surf;
-        double c;
 };
 
 

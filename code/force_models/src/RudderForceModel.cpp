@@ -11,21 +11,22 @@
 
 #include "RudderForceModel.hpp"
 
-RudderForceModel::RudderModel::RudderModel(const double nu_, //!< Water viscosity (in m^2/s)
-                                           const double rho_, //!< Water density (in kg/m^3)
-                                           const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                           const double b,   //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                           const double effective_aspect_ratio_factor,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                                           const double lift_coeff_, //!< Non-dimensional: lift is multiplied by it (for tuning)
-                                           const double drag_coeff_ //!< Non-dimensional: drag is multiplied by it (for tuning)
-                                           ) :
-                                           nu(nu_),
-                                           rho(rho_),
-                                           chord(Ar_/b),
-                                           Ar(Ar_),
-                                           lambda(effective_aspect_ratio_factor * b*b / Ar),
-                                           lift_coeff(lift_coeff_),
-                                           drag_coeff(drag_coeff_)
+RudderForceModel::Yaml::Yaml() :
+                nu(0),
+                rho(0),
+                Ar(0),
+                b(0),
+                effective_aspect_ratio_factor(0),
+                lift_coeff(0),
+                drag_coeff(0)
+{
+
+}
+
+RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_) :
+                                           parameters(parameters_),
+                                           chord(parameters.Ar/parameters.b),
+                                           lambda(parameters.effective_aspect_ratio_factor * parameters.b*parameters.b / parameters.Ar)
 {
 }
 
@@ -41,7 +42,7 @@ double RudderForceModel::RudderModel::get_Cd(const double Vs, //!< Norm of the s
                                              ) const
 {
     // Reynolds number of the rudder (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 78 eq. 1.2.12)
-    const double Rn = Vs * chord / nu;
+    const double Rn = Vs * chord / parameters.nu;
     // ITTC resistance coefficient , "Marine rudders and Control Surfaces" p.31 eq. 3.18
     const double Cf = 0.075 / pow((log(Rn)/log(10.0)-2),2);
     // Resistance coefficient (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 78 (§ "for Cd0"))
@@ -61,7 +62,7 @@ double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the 
                                                const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
                                                ) const
 {
-    return 0.5 * rho * Ar * Vs*Vs * Cl * cos(alpha);
+    return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha);
 }
 
 double RudderForceModel::InWake::get_wake_angle() const
@@ -84,24 +85,10 @@ double RudderForceModel::OutsideWake::get_relative_ship_speed() const
     return 0;
 }
 
-RudderForceModel::OutsideWake::OutsideWake(const double nu_, //!< Water viscosity (in m^2/s)
-                                           const double rho_, //!< Water density (in kg/m^3)
-                                           const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                           const double b_,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                           const double effective_aspect_ratio_factor_,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                                           const double lift_coeff_, //!< Non-dimensional: lift is multiplied by it (for tuning)
-                                           const double drag_coeff_ //!< Non-dimensional: drag is multiplied by it (for tuning)
-                                           ) : RudderModel(nu_, rho_, Ar_, b_, effective_aspect_ratio_factor_, lift_coeff_, drag_coeff_)
+RudderForceModel::OutsideWake::OutsideWake(const Yaml& parameters_) : RudderModel(parameters_)
 {
 }
 
-RudderForceModel::InWake::InWake(const double nu_, //!< Water viscosity (in m^2/s)
-                                 const double rho_, //!< Water density (in kg/m^3)
-                                 const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                 const double b_,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                 const double effective_aspect_ratio_factor_,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                                 const double lift_coeff_, //!< Non-dimensional: lift is multiplied by it (for tuning)
-                                 const double drag_coeff_ //!< Non-dimensional: drag is multiplied by it (for tuning)
-                               ) : RudderModel(nu_, rho_, Ar_, b_, effective_aspect_ratio_factor_, lift_coeff_, drag_coeff_)
+RudderForceModel::InWake::InWake(const Yaml& parameters_) : RudderModel(parameters_)
 {
 }
