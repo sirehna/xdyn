@@ -23,6 +23,7 @@ class RudderForceModel : public ControllableForceModel
             double effective_aspect_ratio_factor; //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
             double lift_coeff;                    //!< Non-dimensional: lift is multiplied by it (for tuning)
             double drag_coeff;                    //!< Non-dimensional: drag is multiplied by it (for tuning)
+            double Kr;
         };
 
         RudderForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
@@ -76,64 +77,11 @@ class RudderForceModel : public ControllableForceModel
               */
             ssc::kinematics::Vector6d get_wrench() const;
 
-            /**  \brief Angle of the fluid in the ship's reference frame
-             *   \details If the fluid is propagating along -X, the angle is 0.
-              */
-            virtual double get_wake_angle(const double u, //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
-                                          const double v  //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
-                                         ) const = 0;
-
-            /**  \brief Norm of the speed of the ship relative to the fluid
-             *   \details In m/s
-              */
-            virtual double get_relative_ship_speed() const = 0;
-
             private:
                 RudderModel(); // Disabled
                 Yaml parameters;
                 double chord;
                 double lambda;
-        };
-
-        struct InWake : RudderModel
-        {
-            InWake(const Yaml& parameters);
-
-            /**  \brief Angle of the fluid in the ship's reference frame
-             *   \details If the fluid is propagating along -X, the angle is 0.
-              */
-            double get_wake_angle(const double u, //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
-                                  const double v  //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
-                                 ) const;
-
-            /**  \brief Norm of the speed of the ship relative to the fluid
-             *   \details In m/s
-              */
-            double get_relative_ship_speed() const;
-
-            private:
-            InWake(); // Disabled
-        };
-
-        struct OutsideWake : RudderModel
-        {
-            OutsideWake(const Yaml& parameters);
-
-            /**  \brief Angle of the fluid in the ship's reference frame
-             *   \details If the fluid is propagating along -X, the angle is 0.
-              */
-            double get_wake_angle(const double u, //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
-                                  const double v  //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
-                                  ) const;
-
-            /**  \brief Norm of the speed of the ship relative to the fluid
-             *   \details In m/s
-              */
-            double get_relative_ship_speed() const;
-
-
-            private:
-                OutsideWake(); // Disabled
         };
 
     private:
