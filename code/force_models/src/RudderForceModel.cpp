@@ -52,6 +52,14 @@ double RudderForceModel::RudderModel::get_Cl(const double alpha_wake //!< Angle 
     return 2 * PI * lambda * (lambda + 1) / (lambda + 2) / (lambda + 2) * sin(alpha_wake);
 }
 
+double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the speed of the ship relative to the fluid
+                                               const double Cl,//!< Rudder lift coefficient (non-dimensional)
+                                               const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
+                                               ) const
+{
+    return 0.5 * rho * Ar * Vs*Vs * Cl * cos(alpha);
+}
+
 double RudderForceModel::InWake::get_wake_angle() const
 {
     return 0;

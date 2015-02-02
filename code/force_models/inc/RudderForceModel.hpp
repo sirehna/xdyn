@@ -42,7 +42,10 @@ class RudderForceModel : public ControllableForceModel
             /**  \brief Calculates the norm of the lift force acting on the rudder
               *  \returns Lift force (in Newton)
               */
-            double get_lift() const;
+            double get_lift(const double Vs,   //!< Norm of the speed of the ship relative to the fluid
+                            const double Cl,   //!< Rudder lift coefficient (non-dimensional)
+                            const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
+                    ) const;
 
             /**  \brief Calculates the norm of the drag force acting on the rudder
               *  \returns Drag force (in Newton)

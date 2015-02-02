@@ -74,3 +74,21 @@ TEST_F(RudderForceModelTest, get_Cl)
     const double alpha = 0.4;
     ASSERT_DOUBLE_EQ(1.0985577009852809, riw.get_Cl(alpha));
 }
+
+TEST_F(RudderForceModelTest, get_lift)
+{
+    RudderForceModel::InWake riw(a.random<double>(),1024,10,a.random<double>(),a.random<double>());
+    RudderForceModel::OutsideWake row(a.random<double>(),1024,10,a.random<double>(),a.random<double>());
+
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double Vs = a.random<double>().between(0,50);
+        const double Cl = a.random<double>().between(0,2);
+        const double alpha = a.random<double>().between(-PI,PI);
+        ASSERT_DOUBLE_EQ(riw.get_lift(Vs,Cl,alpha),row.get_lift(Vs,Cl,alpha));
+    }
+    const double Vs = 12;
+    const double Cl = 1.3;
+    const double alpha = PI/4;
+    ASSERT_DOUBLE_EQ(677736.39392318309, riw.get_lift(Vs,Cl,alpha));
+}
