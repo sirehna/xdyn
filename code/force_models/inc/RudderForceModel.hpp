@@ -26,7 +26,9 @@ class RudderForceModel : public ControllableForceModel
                         const double rho, //!< Water density (in kg/m^3)
                         const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                         const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                        const double effective_aspect_ratio_factor  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                        const double effective_aspect_ratio_factor, //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                        const double lift_coeff, //!< Non-dimensional: lift is multiplied by it (for tuning)
+                        const double drag_coeff //!< Non-dimensional: drag is multiplied by it (for tuning)
                         );
             virtual ~RudderModel(){}
 
@@ -86,6 +88,8 @@ class RudderForceModel : public ControllableForceModel
                 double chord;  //!< Chord length (from tip to tail) (in meters) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                 double Ar;     //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                 double lambda; //!< Effective aspect ratio (non-dimensional) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                double lift_coeff; //!< Non-dimensional: lift is multiplied by it (for tuning)
+                double drag_coeff; //!< Non-dimensional: drag is multiplied by it (for tuning)
         };
 
         struct InWake : RudderModel
@@ -94,7 +98,9 @@ class RudderForceModel : public ControllableForceModel
                    const double rho, //!< Water density (in kg/m^3)
                    const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                    const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                   const double effective_aspect_ratio_factor  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                   const double effective_aspect_ratio_factor,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                   const double lift_coeff, //!< Non-dimensional: lift is multiplied by it (for tuning)
+                   const double drag_coeff //!< Non-dimensional: drag is multiplied by it (for tuning)
                     );
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.
@@ -116,7 +122,9 @@ class RudderForceModel : public ControllableForceModel
                         const double rho, //!< Water density (in kg/m^3)
                         const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                         const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                        const double effective_aspect_ratio_factor  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                        const double effective_aspect_ratio_factor,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                        const double lift_coeff, //!< Non-dimensional: lift is multiplied by it (for tuning)
+                        const double drag_coeff //!< Non-dimensional: drag is multiplied by it (for tuning)
                        );
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.

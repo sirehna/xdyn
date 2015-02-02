@@ -15,13 +15,17 @@ RudderForceModel::RudderModel::RudderModel(const double nu_, //!< Water viscosit
                                            const double rho_, //!< Water density (in kg/m^3)
                                            const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                            const double b,   //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                           const double effective_aspect_ratio_factor  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                                           const double effective_aspect_ratio_factor,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                                           const double lift_coeff_, //!< Non-dimensional: lift is multiplied by it (for tuning)
+                                           const double drag_coeff_ //!< Non-dimensional: drag is multiplied by it (for tuning)
                                            ) :
                                            nu(nu_),
                                            rho(rho_),
                                            chord(Ar_/b),
                                            Ar(Ar_),
-                                           lambda(effective_aspect_ratio_factor * b*b / Ar)
+                                           lambda(effective_aspect_ratio_factor * b*b / Ar),
+                                           lift_coeff(lift_coeff_),
+                                           drag_coeff(drag_coeff_)
 {
 }
 
@@ -84,8 +88,10 @@ RudderForceModel::OutsideWake::OutsideWake(const double nu_, //!< Water viscosit
                                            const double rho_, //!< Water density (in kg/m^3)
                                            const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                            const double b_,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                           const double effective_aspect_ratio_factor_  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                                           ) : RudderModel(nu_, rho_, Ar_, b_, effective_aspect_ratio_factor_)
+                                           const double effective_aspect_ratio_factor_,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                                           const double lift_coeff_, //!< Non-dimensional: lift is multiplied by it (for tuning)
+                                           const double drag_coeff_ //!< Non-dimensional: drag is multiplied by it (for tuning)
+                                           ) : RudderModel(nu_, rho_, Ar_, b_, effective_aspect_ratio_factor_, lift_coeff_, drag_coeff_)
 {
 }
 
@@ -93,7 +99,9 @@ RudderForceModel::InWake::InWake(const double nu_, //!< Water viscosity (in m^2/
                                  const double rho_, //!< Water density (in kg/m^3)
                                  const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                  const double b_,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-                                 const double effective_aspect_ratio_factor_  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                               ) : RudderModel(nu_, rho_, Ar_, b_, effective_aspect_ratio_factor_)
+                                 const double effective_aspect_ratio_factor_,  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+                                 const double lift_coeff_, //!< Non-dimensional: lift is multiplied by it (for tuning)
+                                 const double drag_coeff_ //!< Non-dimensional: drag is multiplied by it (for tuning)
+                               ) : RudderModel(nu_, rho_, Ar_, b_, effective_aspect_ratio_factor_, lift_coeff_, drag_coeff_)
 {
 }
