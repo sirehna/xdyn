@@ -50,7 +50,9 @@ class RudderForceModel : public ControllableForceModel
 
             /**  \brief Calculates the drag coefficient (non-dimensional)
               */
-            double get_Cd() const;
+            double get_Cd(const double Vs, //!< Norm of the speed of the ship relative to the fluid
+                          const double Cl  //!< Rudder lift coefficient (non-dimensional)
+                          ) const;
 
             /**  \brief Calculates the lift coefficient (non-dimensional)
               */

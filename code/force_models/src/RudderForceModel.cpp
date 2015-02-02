@@ -30,6 +30,20 @@ double RudderForceModel::RudderModel::get_angle_of_attack(const double rudder_an
     return rudder_angle-fluid_angle;
 }
 
+double RudderForceModel::RudderModel::get_Cd(const double Vs, //!< Norm of the speed of the ship relative to the fluid
+                                             const double Cl  //!< Rudder lift coefficient (non-dimensional)
+                                             ) const
+{
+    // Reynolds number of the rudder (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 78 eq. 1.2.12)
+    const double Rn = Vs * chord / nu;
+    // ITTC resistance coefficient , "Marine rudders and Control Surfaces" p.31 eq. 3.18
+    const double Cf = 0.075 / pow((log(Rn)/log(10.0)-2),2);
+    // Resistance coefficient (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 78 (§ "for Cd0"))
+    const double Cd0 = 2.5 * Cf;
+    // Rudder drag coefficient (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 78 eq. 1.2.9)
+    return 1.1 * Cl*Cl / (PI * lambda) + Cd0;
+}
+
 double RudderForceModel::InWake::get_wake_angle() const
 {
     return 0;
