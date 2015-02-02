@@ -132,3 +132,27 @@ TEST_F(RudderForceModelTest, get_force)
     ASSERT_DOUBLE_EQ(0, (double)v(4));
     ASSERT_DOUBLE_EQ(0, (double)v(5));
 }
+
+TEST_F(RudderForceModelTest, get_wrench)
+{
+//! [RudderForceModelTest get_alpha_example]
+    RudderForceModel::Yaml parameters;
+    parameters.rho = 1024;
+    parameters.Ar = 10;
+    parameters.drag_coeff = 2;
+    parameters.lift_coeff = 5;
+    parameters.nu = 0.75;
+    parameters.b = 99;
+    parameters.effective_aspect_ratio_factor = 2.3;
+    RudderForceModel::RudderModel riw(parameters);
+    const double drag = 10;
+    const double lift = 200;
+    const double angle = -PI/3;
+    ssc::kinematics::Vector6d v = riw.get_wrench(3,4,0.5);
+    ASSERT_DOUBLE_EQ(-12407.491439906866, (double)v(0));
+    ASSERT_DOUBLE_EQ(10756.707156851009, (double)v(1));
+    ASSERT_DOUBLE_EQ(0, (double)v(2));
+    ASSERT_DOUBLE_EQ(0, (double)v(3));
+    ASSERT_DOUBLE_EQ(0, (double)v(4));
+    ASSERT_DOUBLE_EQ(0, (double)v(5));
+}

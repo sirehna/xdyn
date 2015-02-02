@@ -84,3 +84,16 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double 
     ret(1) = + lift * cos (angle) - drag * sin (angle);
     return ret;
 }
+
+ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
+                                                                    const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+                                                                    const double Vs            //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                                                                    ) const
+{
+    const double alpha = get_angle_of_attack(rudder_angle, fluid_angle);
+    const double Cl = get_Cl(fluid_angle);
+    const double lift = get_lift(Vs, Cl, alpha);
+    const double Cd = get_Cd(Vs, Cl);
+    const double drag = get_drag(Vs, Cd, alpha);
+    return get_force(lift, drag, fluid_angle);
+}
