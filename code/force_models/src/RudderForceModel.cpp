@@ -65,6 +65,14 @@ double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the 
     return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha) * parameters.lift_coeff;
 }
 
+double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the speed of the ship relative to the fluid
+                                               const double Cl,//!< Rudder lift coefficient (non-dimensional)
+                                               const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
+                                               ) const
+{
+    return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha) * parameters.drag_coeff;
+}
+
 double RudderForceModel::InWake::get_wake_angle() const
 {
     return 0;
