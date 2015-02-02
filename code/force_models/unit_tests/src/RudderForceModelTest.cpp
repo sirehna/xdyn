@@ -116,3 +116,19 @@ TEST_F(RudderForceModelTest, get_drag)
     const double alpha = PI/4;
     ASSERT_DOUBLE_EQ(2*677736.39392318309, riw.get_drag(Vs,Cl,alpha));
 }
+
+TEST_F(RudderForceModelTest, get_force)
+{
+//! [RudderForceModelTest get_alpha_example]
+    RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>());
+    const double drag = 10;
+    const double lift = 200;
+    const double angle = -PI/3;
+    ssc::kinematics::Vector6d v = riw.get_force(drag, lift, angle);
+    ASSERT_DOUBLE_EQ(-91.339745962155646, (double)v(0));
+    ASSERT_DOUBLE_EQ(178.20508075688772, (double)v(1));
+    ASSERT_DOUBLE_EQ(0, (double)v(2));
+    ASSERT_DOUBLE_EQ(0, (double)v(3));
+    ASSERT_DOUBLE_EQ(0, (double)v(4));
+    ASSERT_DOUBLE_EQ(0, (double)v(5));
+}

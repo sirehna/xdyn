@@ -77,6 +77,13 @@ class RudderForceModel : public ControllableForceModel
               */
             ssc::kinematics::Vector6d get_wrench() const;
 
+            /**  \brief Wrench created by the rudder on the ship
+             *   \details Expressed in the rudder's reference frame
+              */
+            ssc::kinematics::Vector6d get_force(const double lift, //!< Norm of the lift (in N)
+                                                const double drag, //!< Norm of the drag (in N)
+                                                const double angle //!< Angle between the fluid & the rudder (in radian)
+                                                ) const;
             private:
                 RudderModel(); // Disabled
                 Yaml parameters;

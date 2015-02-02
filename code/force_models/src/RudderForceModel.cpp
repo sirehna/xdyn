@@ -73,3 +73,14 @@ double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the 
 {
     return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha) * parameters.drag_coeff;
 }
+
+ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double lift, //!< Norm of the lift (in N)
+                                                                   const double drag, //!< Norm of the drag (in N)
+                                                                   const double angle //!< Angle between the fluid & the rudder (in radian)
+                                    ) const
+{
+    ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
+    ret(0) = - lift * sin (angle) - drag * cos (angle);
+    ret(1) = + lift * cos (angle) - drag * sin (angle);
+    return ret;
+}
