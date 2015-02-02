@@ -55,8 +55,10 @@ class RudderForceModel : public ControllableForceModel
                           ) const;
 
             /**  \brief Calculates the lift coefficient (non-dimensional)
+             *   \ref // Soeding formula, "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag, p. 97 eq 1.2.48 & p. 77 eq. 1.2.8
               */
-            double get_Cl() const;
+            double get_Cl(const double alpha_wake //!< Angle of the fluid in the ship's reference frame (in radian)
+                         ) const;
 
             /**  \brief Wrench created by the rudder on the ship
              *   \details Expressed in the rudder's reference frame

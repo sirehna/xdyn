@@ -44,6 +44,12 @@ double RudderForceModel::RudderModel::get_Cd(const double Vs, //!< Norm of the s
     return 1.1 * Cl*Cl / (PI * lambda) + Cd0;
 }
 
+double RudderForceModel::RudderModel::get_Cl(const double alpha_wake //!< Angle of the fluid in the ship's reference frame (in radian)
+                                            ) const
+{
+    return 2 * PI * lambda * (lambda + 1) / (lambda + 2) / (lambda + 2) * sin(alpha_wake);
+}
+
 double RudderForceModel::InWake::get_wake_angle() const
 {
     return 0;

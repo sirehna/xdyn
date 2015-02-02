@@ -5,6 +5,9 @@
  *      Author: cady
  */
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
@@ -59,3 +62,15 @@ TEST_F(RudderForceModelTest, get_Cd)
     ASSERT_DOUBLE_EQ(6.5028916553907399, riw.get_Cd(Vs, Cl));
 }
 
+TEST_F(RudderForceModelTest, get_Cl)
+{
+    RudderForceModel::InWake riw(2,3,4,0.5);
+    RudderForceModel::OutsideWake row(2,3,4,0.5);
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double alpha = a.random<double>().between(-PI,PI);
+        ASSERT_DOUBLE_EQ(riw.get_Cl(alpha),row.get_Cl(alpha));
+    }
+    const double alpha = 0.4;
+    ASSERT_DOUBLE_EQ(1.0985577009852809, riw.get_Cl(alpha));
+}
