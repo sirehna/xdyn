@@ -62,7 +62,7 @@ double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the 
                                                const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
                                                ) const
 {
-    return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha);
+    return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha) * parameters.lift_coeff;
 }
 
 double RudderForceModel::InWake::get_wake_angle() const

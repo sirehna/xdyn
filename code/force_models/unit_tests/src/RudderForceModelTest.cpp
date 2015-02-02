@@ -114,6 +114,7 @@ TEST_F(RudderForceModelTest, get_lift)
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
     parameters.rho = 1024;
     parameters.Ar = 10;
+    parameters.lift_coeff = 2;
     RudderForceModel::InWake riw(parameters);
     RudderForceModel::OutsideWake row(parameters);
 
@@ -127,5 +128,5 @@ TEST_F(RudderForceModelTest, get_lift)
     const double Vs = 12;
     const double Cl = 1.3;
     const double alpha = PI/4;
-    ASSERT_DOUBLE_EQ(677736.39392318309, riw.get_lift(Vs,Cl,alpha));
+    ASSERT_DOUBLE_EQ(2*677736.39392318309, riw.get_lift(Vs,Cl,alpha));
 }
