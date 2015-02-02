@@ -6,6 +6,8 @@
 *.pdf
 *.log
 *.out
+err.txt
+log.txt
 images/AB2_stability.svg
 images/euler_stability.svg
 images/runge_kutta_4_stability.svg
