@@ -79,7 +79,9 @@ class RudderForceModel : public ControllableForceModel
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.
               */
-            virtual double get_wake_angle() const = 0;
+            virtual double get_wake_angle(const double u, //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+                                          const double v  //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+                                         ) const = 0;
 
             /**  \brief Norm of the speed of the ship relative to the fluid
              *   \details In m/s
@@ -100,7 +102,9 @@ class RudderForceModel : public ControllableForceModel
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.
               */
-            double get_wake_angle() const;
+            double get_wake_angle(const double u, //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+                                  const double v  //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+                                 ) const;
 
             /**  \brief Norm of the speed of the ship relative to the fluid
              *   \details In m/s
@@ -118,7 +122,9 @@ class RudderForceModel : public ControllableForceModel
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.
               */
-            double get_wake_angle() const;
+            double get_wake_angle(const double u, //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+                                  const double v  //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+                                  ) const;
 
             /**  \brief Norm of the speed of the ship relative to the fluid
              *   \details In m/s

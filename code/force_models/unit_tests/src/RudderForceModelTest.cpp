@@ -152,3 +152,10 @@ TEST_F(RudderForceModelTest, get_drag)
     const double alpha = PI/4;
     ASSERT_DOUBLE_EQ(2*677736.39392318309, riw.get_drag(Vs,Cl,alpha));
 }
+
+TEST_F(RudderForceModelTest, get_wake_angle_outside_wake)
+{
+    RudderForceModel::OutsideWake row(a.random<RudderForceModel::Yaml>());
+    ASSERT_DOUBLE_EQ(PI/4, row.get_wake_angle(1,1));
+    ASSERT_DOUBLE_EQ(3.*PI/4., row.get_wake_angle(-1,1));
+}

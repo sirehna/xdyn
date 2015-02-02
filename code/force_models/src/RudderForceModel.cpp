@@ -73,7 +73,9 @@ double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the 
     return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha) * parameters.drag_coeff;
 }
 
-double RudderForceModel::InWake::get_wake_angle() const
+double RudderForceModel::InWake::get_wake_angle(const double , //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+        const double   //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+        ) const
 {
     return 0;
 }
@@ -82,10 +84,12 @@ double RudderForceModel::InWake::get_relative_ship_speed() const
 {
     return 0;
 }
-
-double RudderForceModel::OutsideWake::get_wake_angle() const
+//atan2 (V_nav_rel[1], V_nav_rel[0])(vitesse du courant et vitesse orbitale de la houle prises en compte)
+double RudderForceModel::OutsideWake::get_wake_angle(const double u, //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+                                                     const double v  //!< Speed of the ship (relative to the water, taking current & wave orbital velocity into account) along the X-axis of the BODY frame, in m/s
+        ) const
 {
-    return 0;
+    return atan2 (v, u);
 }
 
 double RudderForceModel::OutsideWake::get_relative_ship_speed() const
