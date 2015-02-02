@@ -65,7 +65,7 @@ class RudderForceModel : public ControllableForceModel
             virtual double get_relative_ship_speed() const = 0;
         };
 
-        struct RudderInWake : RudderModel
+        struct InWake : RudderModel
         {
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.
@@ -78,7 +78,7 @@ class RudderForceModel : public ControllableForceModel
             double get_relative_ship_speed() const;
         };
 
-        struct RudderOutsideWake : RudderModel
+        struct OutsideWake : RudderModel
         {
             /**  \brief Angle of the fluid in the ship's reference frame
              *   \details If the fluid is propagating along -X, the angle is 0.
