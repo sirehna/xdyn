@@ -28,8 +28,8 @@ void RudderForceModelTest::TearDown()
 TEST_F(RudderForceModelTest, angle_of_attack)
 {
 //! [RudderForceModelTest get_alpha_example]
-    RudderForceModel::InWake riw;
-    RudderForceModel::OutsideWake row;
+    RudderForceModel::InWake riw(a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
+    RudderForceModel::OutsideWake row(a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
 //! [RudderForceModelTest get_alpha_example]
 //! [RudderForceModelTest get_alpha_example output]
     for (size_t i = 0 ; i < 100 ; ++i)
