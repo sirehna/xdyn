@@ -11,6 +11,13 @@
 
 #include "RudderForceModel.hpp"
 
+double RudderForceModel::RudderModel::get_angle_of_attack(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
+                                                          const double fluid_angle   //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+                                                          ) const
+{
+    return rudder_angle-fluid_angle;
+}
+
 double RudderForceModel::InWake::get_wake_angle() const
 {
     return 0;

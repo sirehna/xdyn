@@ -29,7 +29,9 @@ class RudderForceModel : public ControllableForceModel
               *  \returns Angle of attack (in radian)
               *  \snippet force_models/unit_tests/src/RudderForceModelTest.cpp RudderForceModelTest get_alpha_example
               */
-            double get_angle_of_attack() const;
+            double get_angle_of_attack(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
+                                       const double fluid_angle   //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+                                      ) const;
 
             /**  \brief Calculates the norm of the lift force acting on the rudder
               *  \returns Lift force (in Newton)
