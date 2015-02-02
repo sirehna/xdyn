@@ -19,7 +19,7 @@ RudderForceModel::Yaml::Yaml() :
                 effective_aspect_ratio_factor(0),
                 lift_coeff(0),
                 drag_coeff(0),
-                Kr(0)
+                distance_between_rudder_and_screw(0)
 {
 
 }

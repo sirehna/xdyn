@@ -16,14 +16,14 @@ class RudderForceModel : public ControllableForceModel
         struct Yaml : WageningenControlledForceModel::Yaml
         {
             Yaml();
-            double nu;                            //!< Water viscosity (in m^2/s)
-            double rho;                           //!< Water density (in kg/m^3)
-            double Ar;                            //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-            double b;                             //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
-            double effective_aspect_ratio_factor; //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-            double lift_coeff;                    //!< Non-dimensional: lift is multiplied by it (for tuning)
-            double drag_coeff;                    //!< Non-dimensional: drag is multiplied by it (for tuning)
-            double Kr;
+            double nu;                                //!< Water viscosity (in m^2/s)
+            double rho;                               //!< Water density (in kg/m^3)
+            double Ar;                                //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
+            double b;                                 //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
+            double effective_aspect_ratio_factor;     //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+            double lift_coeff;                        //!< Non-dimensional: lift is multiplied by it (for tuning)
+            double drag_coeff;                        //!< Non-dimensional: drag is multiplied by it (for tuning)
+            double distance_between_rudder_and_screw; //!< In m. Rudder is assumed to always be behind screw.
         };
 
         RudderForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
