@@ -12,11 +12,13 @@
 #include "RudderForceModel.hpp"
 
 RudderForceModel::RudderModel::RudderModel(const double nu_, //!< Water viscosity (in m^2/s)
+                                           const double rho_, //!< Water density (in kg/m^3)
                                            const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                            const double b,   //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                            const double effective_aspect_ratio_factor  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
                                            ) :
                                            nu(nu_),
+                                           rho(rho_),
                                            chord(Ar_/b),
                                            Ar(Ar_),
                                            lambda(effective_aspect_ratio_factor * b*b / Ar)
@@ -71,17 +73,19 @@ double RudderForceModel::OutsideWake::get_relative_ship_speed() const
 }
 
 RudderForceModel::OutsideWake::OutsideWake(const double nu_, //!< Water viscosity (in m^2/s)
+                                           const double rho_, //!< Water density (in kg/m^3)
                                            const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                            const double b_,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                            const double effective_aspect_ratio_factor_  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                                           ) : RudderModel(nu_, Ar_, b_, effective_aspect_ratio_factor_)
+                                           ) : RudderModel(nu_, rho_, Ar_, b_, effective_aspect_ratio_factor_)
 {
 }
 
 RudderForceModel::InWake::InWake(const double nu_, //!< Water viscosity (in m^2/s)
+                                 const double rho_, //!< Water density (in kg/m^3)
                                  const double Ar_, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                  const double b_,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                                  const double effective_aspect_ratio_factor_  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
-                               ) : RudderModel(nu_, Ar_, b_, effective_aspect_ratio_factor_)
+                               ) : RudderModel(nu_, rho_, Ar_, b_, effective_aspect_ratio_factor_)
 {
 }

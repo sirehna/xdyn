@@ -23,6 +23,7 @@ class RudderForceModel : public ControllableForceModel
         struct RudderModel
         {
             RudderModel(const double nu, //!< Water viscosity (in m^2/s)
+                        const double rho, //!< Water density (in kg/m^3)
                         const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                         const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                         const double effective_aspect_ratio_factor  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
@@ -78,6 +79,7 @@ class RudderForceModel : public ControllableForceModel
             private:
                 RudderModel(); // Disabled
                 double nu;     //!< Water viscosity (in m^2/s)
+                double rho;    //!< Water density (in kg/m^3)
                 double chord;  //!< Chord length (from tip to tail) (in meters) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                 double Ar;     //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                 double lambda; //!< Effective aspect ratio (non-dimensional) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
@@ -86,6 +88,7 @@ class RudderForceModel : public ControllableForceModel
         struct InWake : RudderModel
         {
             InWake(const double nu, //!< Water viscosity (in m^2/s)
+                   const double rho, //!< Water density (in kg/m^3)
                    const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                    const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                    const double effective_aspect_ratio_factor  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
@@ -107,6 +110,7 @@ class RudderForceModel : public ControllableForceModel
         struct OutsideWake : RudderModel
         {
             OutsideWake(const double nu, //!< Water viscosity (in m^2/s)
+                        const double rho, //!< Water density (in kg/m^3)
                         const double Ar, //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                         const double b,  //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
                         const double effective_aspect_ratio_factor  //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)

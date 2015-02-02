@@ -31,8 +31,8 @@ void RudderForceModelTest::TearDown()
 TEST_F(RudderForceModelTest, angle_of_attack)
 {
 //! [RudderForceModelTest get_alpha_example]
-    RudderForceModel::InWake riw(a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
-    RudderForceModel::OutsideWake row(a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
+    RudderForceModel::InWake riw(a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
+    RudderForceModel::OutsideWake row(a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>(),a.random<double>());
 //! [RudderForceModelTest get_alpha_example]
 //! [RudderForceModelTest get_alpha_example output]
     for (size_t i = 0 ; i < 100 ; ++i)
@@ -49,8 +49,8 @@ TEST_F(RudderForceModelTest, angle_of_attack)
 
 TEST_F(RudderForceModelTest, get_Cd)
 {
-    RudderForceModel::InWake riw(2,3,4,0.5);
-    RudderForceModel::OutsideWake row(2,3,4,0.5);
+    RudderForceModel::InWake riw(2,1024,3,4,0.5);
+    RudderForceModel::OutsideWake row(2,1024,3,4,0.5);
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double Vs = a.random<double>().between(0,30);
@@ -64,8 +64,8 @@ TEST_F(RudderForceModelTest, get_Cd)
 
 TEST_F(RudderForceModelTest, get_Cl)
 {
-    RudderForceModel::InWake riw(2,3,4,0.5);
-    RudderForceModel::OutsideWake row(2,3,4,0.5);
+    RudderForceModel::InWake riw(2,1024,3,4,0.5);
+    RudderForceModel::OutsideWake row(2,1024,3,4,0.5);
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         const double alpha = a.random<double>().between(-PI,PI);
