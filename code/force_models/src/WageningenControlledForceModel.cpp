@@ -33,7 +33,8 @@ WageningenControlledForceModel::Yaml::Yaml() :
 {
 }
 
-WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) : ControllableForceModel(input.name,{"rpm","P/D"},input.position_of_propeller_frame, body_name_, env_),
+WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+            ControllableForceModel(input.name,{"rpm","P/D"},input.position_of_propeller_frame, body_name_, env_),
             w(input.wake_coefficient),
             eta_R(input.relative_rotative_efficiency),
             t(input.thrust_deduction_factor),
