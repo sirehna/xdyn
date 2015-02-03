@@ -10,10 +10,12 @@
 #define PI M_PI
 
 #include "Airy.hpp"
+#include "BodyWithoutSurfaceForces.hpp"
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "discretize.hpp"
+#include "env_for_tests.hpp"
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
 
@@ -231,3 +233,28 @@ TR1(shared_ptr)<WaveModel> RudderForceModelTest::get_wave_model() const
     return TR1(shared_ptr)<WaveModel>(new Airy(A, phi));
 }
 
+TEST_F(RudderForceModelTest, ship_speed_relative_to_the_fluid)
+{
+    EnvironmentAndFrames env = get_environment_and_frames(get_wave_model());
+    RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
+    parameters.number_of_blades = 3;
+    parameters.blade_area_ratio = 0.5;
+    parameters.position_of_propeller_frame.frame = "body";
+    const RudderForceModel F(parameters, a.random<std::string>(), env);
+    BodyStates states;
+    std::vector<double> s = {1,2,3,4,5,6,0,0,0,1,0,0,0};
+    const double t = 24;
+    states.u.record(t, s[2]);
+    states.v.record(t, s[3]);
+    states.w.record(t, s[4]);
+    states.name = "body";
+    BodyWithoutSurfaceForces b(states,0);
+    b.update_kinematics(s, env.k);
+    env.k->get("NED","body");
+
+    ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t);
+
+    ASSERT_DOUBLE_EQ(2.9980910555870492, Vship_water.x());
+    ASSERT_DOUBLE_EQ(4, Vship_water.y());
+    ASSERT_DOUBLE_EQ(5.1018196248767653, Vship_water.z());
+}

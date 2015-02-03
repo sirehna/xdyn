@@ -10,6 +10,7 @@
 #define PI M_PI
 
 #include "RudderForceModel.hpp"
+#include "SurfaceElevationInterface.hpp"
 #include "yaml2eigen.hpp"
 
 RudderForceModel::Yaml::Yaml() :
@@ -166,4 +167,18 @@ RudderForceModel::RudderForceModel(const Yaml& input_, const std::string& body_n
 ssc::kinematics::Vector6d RudderForceModel::get_force(const BodyStates& , const double , std::map<std::string,double> ) const
 {
     return ssc::kinematics::Vector6d();
+}
+
+ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states, const double t) const
+{
+    const auto Tbody2ned = env.k->get(rudder_position.get_frame(),"NED");
+    const ssc::kinematics::Point P = Tbody2ned*rudder_position;
+    const auto Vwater_ground = env.w->orbital_velocity(env.g, P.x(), P.y(), P.z(), t);
+    const ssc::kinematics::Point Vship_ground(rudder_position.get_frame(), states.u(), states.v(),states.w());
+    const ssc::kinematics::Point Vship_water("NED", Vship_ground.x() - Vwater_ground.x(),
+                                                    Vship_ground.y() - Vwater_ground.y(),
+                                                    Vship_ground.z() - Vwater_ground.z());
+    const auto Vwater_ground_projected_in_body = Tbody2ned.get_rot()*Vship_water.v;
+
+    return ssc::kinematics::Point(rudder_position.get_frame(), Vwater_ground_projected_in_body);
 }
