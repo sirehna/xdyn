@@ -62,6 +62,7 @@ EnvironmentAndFrames SimulatorBuilder::get_environment() const
     EnvironmentAndFrames env;
     env.g = input.environmental_constants.g;
     env.rho = input.environmental_constants.rho;
+    env.nu = input.environmental_constants.nu;
     env.rot = input.rotations;
     env.w = get_wave();
     env.k = KinematicsPtr(new ssc::kinematics::Kinematics());

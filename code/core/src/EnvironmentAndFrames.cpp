@@ -28,6 +28,7 @@ class EnvironmentAndFramesException: public ::ssc::exception_handling::Exception
 EnvironmentAndFrames::EnvironmentAndFrames() : w(),
                                                k(KinematicsPtr(new Kinematics())),
                                                rho(0),
+                                               nu(0),
                                                g(0),
                                                rot()
 {

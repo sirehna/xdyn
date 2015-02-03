@@ -13,6 +13,7 @@ struct YamlEnvironmentalConstants
     YamlEnvironmentalConstants();
     double g;
     double rho;
+    double nu;
 };
 
 #endif /* YAMLENVIRONMENTALCONSTANTS_HPP_ */

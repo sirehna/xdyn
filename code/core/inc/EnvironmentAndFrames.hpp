@@ -29,6 +29,7 @@ struct EnvironmentAndFrames
     SurfaceElevationPtr w;
     ssc::kinematics::KinematicsPtr k;
     double rho;
+    double nu;
     double g;
     YamlRotation rot;
 };

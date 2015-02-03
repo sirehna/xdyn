@@ -8,6 +8,6 @@
 #include "YamlEnvironmentalConstants.hpp"
 
 
-YamlEnvironmentalConstants::YamlEnvironmentalConstants() : g(0), rho(0)
+YamlEnvironmentalConstants::YamlEnvironmentalConstants() : g(0), rho(0), nu(0)
 {
 }
