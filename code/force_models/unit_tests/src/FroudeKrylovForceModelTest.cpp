@@ -18,12 +18,11 @@
 #include "discretize.hpp"
 #include "Airy.hpp"
 #include "SurfaceElevationFromWaves.hpp"
+#include "env_for_tests.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-#define BODY "body 1"
 
 #define EPS 1E-8
 #define BIG_EPS 1E-3
@@ -56,19 +55,6 @@ TR1(shared_ptr)<WaveModel> FroudeKrylovForceModelTest::get_wave_model() const
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq);
     int random_seed = 0;
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
-}
-
-EnvironmentAndFrames FroudeKrylovForceModelTest::get_environment_and_frames(const TR1(shared_ptr)<WaveModel>& wave_model) const
-{
-    EnvironmentAndFrames env;
-    env.g = 9.81;
-    env.rho = 1024;
-    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
-    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
-    env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
-    env.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(wave_model));
-    return env;
 }
 
 VectorOfVectorOfPoints FroudeKrylovForceModelTest::get_points() const
