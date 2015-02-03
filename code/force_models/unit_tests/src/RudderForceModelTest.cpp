@@ -165,7 +165,7 @@ TEST_F(RudderForceModelTest, get_Ar)
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
     RudderForceModel::RudderModel riw(parameters);
     const double CTh = a.random<double>();
-    const RudderForceModel::Ar ar = riw.get_Ar(CTh);
+    const RudderForceModel::InOutWake ar = riw.get_Ar(CTh);
     ASSERT_DOUBLE_EQ(parameters.Ar, ar.in_wake-ar.outside_wake);
 }
 

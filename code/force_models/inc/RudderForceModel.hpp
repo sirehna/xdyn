@@ -29,9 +29,9 @@ class RudderForceModel : public ControllableForceModel
         RudderForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
 
-        struct Ar
+        struct InOutWake
         {
-            Ar() : in_wake(0), outside_wake(0) {}
+            InOutWake() : in_wake(0), outside_wake(0) {}
             double in_wake;
             double outside_wake;
         };
@@ -45,7 +45,7 @@ class RudderForceModel : public ControllableForceModel
             /**  \brief Calculates the rudder area (in or outside wake)
               *  \returns Rudder area (in m^2)
               */
-            Ar get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+            InOutWake get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
                      ) const;
 
             /**  \brief Calculates the angle between the propeller's wake & the rudder

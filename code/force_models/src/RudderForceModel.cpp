@@ -103,10 +103,10 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double
     return get_force(lift, drag, fluid_angle);
 }
 
-RudderForceModel::Ar RudderForceModel::RudderModel::get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+RudderForceModel::InOutWake RudderForceModel::RudderModel::get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
                                                           ) const
 {
-    Ar ar;
+    InOutWake ar;
     // Jet speed coefficient, "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 96 eq. 1.2.44
     const double Cj = 1 + Kr * (sqrt(1 + CTh) -1);
     const double Dwake = D * sqrt((1 + 0.5 * (sqrt(1 + CTh) - 1)) / Cj);
