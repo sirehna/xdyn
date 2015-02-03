@@ -154,3 +154,14 @@ RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_Ar(const 
     ar.outside_wake = ar.in_wake-parameters.Ar;
     return ar;
 }
+
+RudderForceModel::RudderForceModel(const Yaml& input_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+        ControllableForceModel(input_.name,{"rpm","P/D","angle"},input_.position_of_propeller_frame, body_name_, env_),
+        propulsion(WageningenControlledForceModel(input_, body_name_, env))
+{
+}
+
+ssc::kinematics::Vector6d RudderForceModel::get_force(const BodyStates& , const double , std::map<std::string,double> ) const
+{
+    return ssc::kinematics::Vector6d();
+}
