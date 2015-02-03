@@ -16,6 +16,7 @@ class RudderForceModel : public ControllableForceModel
         struct Yaml : WageningenControlledForceModel::Yaml
         {
             Yaml();
+            Yaml(const WageningenControlledForceModel::Yaml& yaml);
             double nu;                                                      //!< Water viscosity (in m^2/s)
             double rho;                                                     //!< Water density (in kg/m^3)
             double Ar;                                                      //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
@@ -29,6 +30,8 @@ class RudderForceModel : public ControllableForceModel
         RudderForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
         ssc::kinematics::Point get_ship_speed(const BodyStates& states, const double t) const;
+        static Yaml parse(const std::string& yaml);
+
 
         template <typename T> struct InOutWake
         {

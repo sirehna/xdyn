@@ -9,6 +9,8 @@
 #include <cmath>
 #define PI M_PI
 
+#define DEG2RAD (PI/180.)
+
 #include "Airy.hpp"
 #include "BodyWithoutSurfaceForces.hpp"
 #include "DiscreteDirectionalWaveSpectrum.hpp"
@@ -18,7 +20,7 @@
 #include "env_for_tests.hpp"
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
-
+#include "yaml_data.hpp"
 
 namespace ssc
 {
@@ -263,3 +265,32 @@ TEST_F(RudderForceModelTest, ship_speed_relative_to_the_fluid)
     ASSERT_DOUBLE_EQ(4, Vship_water.y());
     ASSERT_DOUBLE_EQ(5.1018196248767653, Vship_water.z());
 }
+
+TEST_F(RudderForceModelTest, parser)
+{
+    const auto w = RudderForceModel::parse(test_data::rudder());
+    ASSERT_DOUBLE_EQ(0.5, w.blade_area_ratio);
+    ASSERT_EQ("port side propeller", w.name);
+    ASSERT_EQ(3, w.number_of_blades);
+    ASSERT_DOUBLE_EQ(0, w.position_of_propeller_frame.angle.phi);
+    ASSERT_DOUBLE_EQ(-10*DEG2RAD, w.position_of_propeller_frame.angle.theta);
+    ASSERT_DOUBLE_EQ(-1*DEG2RAD, w.position_of_propeller_frame.angle.psi);
+    ASSERT_DOUBLE_EQ(-4, w.position_of_propeller_frame.coordinates.x);
+    ASSERT_DOUBLE_EQ(-2, w.position_of_propeller_frame.coordinates.y);
+    ASSERT_DOUBLE_EQ(2, w.position_of_propeller_frame.coordinates.z);
+    ASSERT_EQ("mesh(body 1)", w.position_of_propeller_frame.frame);
+    ASSERT_DOUBLE_EQ(1, w.relative_rotative_efficiency);
+    ASSERT_TRUE(w.rotating_clockwise);
+    ASSERT_DOUBLE_EQ(0.7, w.thrust_deduction_factor);
+    ASSERT_DOUBLE_EQ(0.9, w.wake_coefficient);
+    ASSERT_DOUBLE_EQ(2, w.diameter);
+    ASSERT_DOUBLE_EQ(2.2, w.Ar);
+    ASSERT_DOUBLE_EQ(2,w.b);
+    ASSERT_DOUBLE_EQ(1,w.drag_coeff);
+    ASSERT_DOUBLE_EQ(2.1,w.lift_coeff);
+    ASSERT_DOUBLE_EQ(1.7,w.effective_aspect_ratio_factor);
+    ASSERT_DOUBLE_EQ(-5.1, w.position_of_the_rudder_frame_in_the_body_frame.x);
+    ASSERT_DOUBLE_EQ(-2, w.position_of_the_rudder_frame_in_the_body_frame.y);
+    ASSERT_DOUBLE_EQ(2, w.position_of_the_rudder_frame_in_the_body_frame.z);
+}
+

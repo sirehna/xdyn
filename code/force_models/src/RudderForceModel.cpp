@@ -9,9 +9,12 @@
 #include <cmath>
 #define PI M_PI
 
+#include "external_data_structures_parsers.hpp"
+#include "parse_unit_value.hpp"
 #include "RudderForceModel.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "yaml2eigen.hpp"
+#include "yaml.h"
 
 #define HYPOT(X,Y,Z) sqrt((X)*(X)+(Y)*(Y)+(Z)*(Z))
 
@@ -25,7 +28,19 @@ RudderForceModel::Yaml::Yaml() :
                 drag_coeff(0),
                 position_of_the_rudder_frame_in_the_body_frame()
 {
+}
 
+RudderForceModel::Yaml::Yaml(const WageningenControlledForceModel::Yaml& yaml) :
+                        WageningenControlledForceModel::Yaml(yaml),
+                        nu(0),
+                        rho(0),
+                        Ar(0),
+                        b(0),
+                        effective_aspect_ratio_factor(0),
+                        lift_coeff(0),
+                        drag_coeff(0),
+                        position_of_the_rudder_frame_in_the_body_frame()
+{
 }
 
 RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_) :
@@ -187,4 +202,22 @@ ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states
     const auto Vwater_ground_projected_in_body = Tbody2ned.get_rot()*Vship_water.v;
 
     return ssc::kinematics::Point(rudder_position.get_frame(), Vwater_ground_projected_in_body);
+}
+
+RudderForceModel::Yaml RudderForceModel::parse(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    Yaml ret(WageningenControlledForceModel::parse(yaml));
+
+    parse_uv(node["rudder area"], ret.Ar);
+    parse_uv(node["rudder height"], ret.b);
+    node["effective aspect ratio"]           >> ret.effective_aspect_ratio_factor;
+    node["lift tuning coefficient"]          >> ret.lift_coeff;
+    node["drag tuning coefficient"]          >> ret.drag_coeff;
+    node["position of rudder in body frame"] >> ret.position_of_the_rudder_frame_in_the_body_frame;
+
+    return ret;
 }
