@@ -9,6 +9,11 @@
 #include <cmath>
 #define PI M_PI
 
+#include "Airy.hpp"
+#include "DiscreteDirectionalWaveSpectrum.hpp"
+#include "DiracSpectralDensity.hpp"
+#include "DiracDirectionalSpreading.hpp"
+#include "discretize.hpp"
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
 
@@ -208,3 +213,21 @@ TEST_F(RudderForceModelTest, get_fluid_angle)
     ASSERT_DOUBLE_EQ(1.1071487177940904, vs.in_wake);
     ASSERT_DOUBLE_EQ(-3*PI/4, vs.outside_wake);
 }
+
+TR1(shared_ptr)<WaveModel> RudderForceModelTest::get_wave_model() const
+{
+    const double Hs = 0.1;
+    const double Tp = 5;
+    const double omega0 = 2*PI/Tp;
+    double psi = 0;
+    double phi = 5.8268;
+    double t = 0;
+
+    const double omega_min = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
+    const size_t nfreq = a.random<size_t>().between(2,100);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq);
+
+    return TR1(shared_ptr)<WaveModel>(new Airy(A, phi));
+}
+
