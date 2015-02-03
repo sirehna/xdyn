@@ -257,7 +257,6 @@ TEST_F(RudderForceModelTest, ship_speed_relative_to_the_fluid)
     states.name = "body";
     BodyWithoutSurfaceForces b(states,0);
     b.update_kinematics(s, env.k);
-    env.k->get("NED","body");
 
     ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t);
 
