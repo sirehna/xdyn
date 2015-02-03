@@ -27,7 +27,9 @@ RudderForceModel::Yaml::Yaml() :
 RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_) :
                                            parameters(parameters_),
                                            chord(parameters.Ar/parameters.b),
-                                           lambda(parameters.effective_aspect_ratio_factor * parameters.b*parameters.b / parameters.Ar)
+                                           lambda(parameters.effective_aspect_ratio_factor * parameters.b*parameters.b / parameters.Ar),
+                                           D(parameters_.diameter),
+                                           Kr(0.5+0.5/(1+0.15/std::abs(parameters_.distance_between_rudder_and_screw/parameters_.diameter)))
 {
 }
 
@@ -96,4 +98,16 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double
     const double Cd = get_Cd(Vs, Cl);
     const double drag = get_drag(Vs, Cd, alpha);
     return get_force(lift, drag, fluid_angle);
+}
+
+RudderForceModel::Ar RudderForceModel::RudderModel::get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+                                                          ) const
+{
+    Ar ar;
+    // Jet speed coefficient, "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 96 eq. 1.2.44
+    const double Cj = 1 + Kr * (sqrt(1 + CTh) -1);
+    const double Dwake = D * sqrt((1 + 0.5 * (sqrt(1 + CTh) - 1)) / Cj);
+    ar.in_wake = std::min(parameters.Ar, chord*Dwake);
+    ar.outside_wake = ar.in_wake-parameters.Ar;
+    return ar;
 }

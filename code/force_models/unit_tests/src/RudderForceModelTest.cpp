@@ -156,3 +156,26 @@ TEST_F(RudderForceModelTest, get_wrench)
     ASSERT_DOUBLE_EQ(0, (double)v(4));
     ASSERT_DOUBLE_EQ(0, (double)v(5));
 }
+
+TEST_F(RudderForceModelTest, get_Ar)
+{
+    RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
+    RudderForceModel::RudderModel riw(parameters);
+    const double CTh = a.random<double>();
+    const RudderForceModel::Ar ar = riw.get_Ar(CTh);
+    ASSERT_DOUBLE_EQ(parameters.Ar, ar.in_wake-ar.outside_wake);
+}
+
+TEST_F(RudderForceModelTest, get_Ar2)
+{
+    RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
+    parameters.Ar = 10;
+    parameters.b = 4;
+    parameters.distance_between_rudder_and_screw = 2.47;
+    parameters.diameter = 1.67;
+    const double CTh = 5.3;
+    RudderForceModel::RudderModel riw(parameters);
+    const auto ar = riw.get_Ar(CTh);
+    ASSERT_DOUBLE_EQ(3.5404447215261827, ar.in_wake);
+    ASSERT_DOUBLE_EQ(-6.4595552784738173, ar.outside_wake);
+}
