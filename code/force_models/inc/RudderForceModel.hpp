@@ -90,11 +90,20 @@ class RudderForceModel : public ControllableForceModel
             /**  \brief Wrench created by the rudder on the ship
              *   \details Expressed in the rudder's reference frame
               */
+            InOutWake<ssc::kinematics::Vector6d> get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
+                                                            const InOutWake<double>& fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+                                                            const InOutWake<ssc::kinematics::Point>& Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                                                            const InOutWake<double>& area          //!< Rudder area (in or outside wake) in m^2
+                                                             ) const;
+
+            /**  \brief Wrench created by the rudder on the ship
+             *   \details Expressed in the rudder's reference frame
+              */
             ssc::kinematics::Vector6d get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
                                                  const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
                                                  const double Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
                                                  const double area          //!< Rudder area (in or outside wake) in m^2
-                                                 ) const;
+                                                             ) const;
 
             /**  \brief Wrench created by the rudder on the ship
              *   \details Expressed in the rudder's reference frame
