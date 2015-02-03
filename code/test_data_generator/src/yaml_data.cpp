@@ -2240,3 +2240,35 @@ std::string test_data::simple_station_keeping()
        << "T_psi: {value: 4, unit: s}\n";
     return ss.str();
 }
+
+std::string test_data::rudder()
+{
+    std::stringstream ss;
+    ss << "name: port side propeller\n"
+          "model: wageningen B-series\n"
+          "position of propeller frame:\n"
+          "    frame: mesh(body 1)\n"
+          "    x: {value: -4, unit: m}\n"
+          "    y: {value: -2, unit: m}\n"
+          "    z: {value: 2, unit: m}\n"
+          "    phi: {value: 0, unit: rad}\n"
+          "    theta: {value: -10, unit: deg}\n"
+          "    psi: {value: -1, unit: deg}\n"
+          "wake coefficient w: 0.9\n"
+          "relative rotative efficiency etaR: 1\n"
+          "thrust deduction factor t: 0.7\n"
+          "rotation: clockwise\n"
+          "number of blades: 3\n"
+          "blade area ratio AE/A0: 0.5\n"
+          "diameter: {value: 2, unit: m}\n"
+          "rudder area: {value: 2.2, unit: m^2}\n"
+          "rudder height: {value: 2, unit: m^2}\n"
+          "effective aspect ratio: 1.7\n"
+          "lift tuning coefficient: 2.1\n"
+          "drag tuning coefficient: 1\n"
+          "position of rudder in body frame:\n"
+          "    x: {value: -5.1, unit: m}\n"
+          "    y: {value: -2, unit: m}\n"
+          "    z: {value: 2, unit: m}\n";
+    return ss.str();
+}
