@@ -100,7 +100,8 @@ TEST_F(RudderForceModelTest, get_lift)
     const double Vs = 12;
     const double Cl = 1.3;
     const double alpha = PI/4;
-    ASSERT_DOUBLE_EQ(2*677736.39392318309, riw.get_lift(Vs,Cl,alpha));
+    const double Ar = 1.4;
+    ASSERT_DOUBLE_EQ(189766.19029849127, riw.get_lift(Vs,Cl,alpha,Ar));
 }
 
 TEST_F(RudderForceModelTest, get_drag)
@@ -114,7 +115,8 @@ TEST_F(RudderForceModelTest, get_drag)
     const double Vs = 12;
     const double Cl = 1.3;
     const double alpha = PI/4;
-    ASSERT_DOUBLE_EQ(2*677736.39392318309, riw.get_drag(Vs,Cl,alpha));
+    const double Ar = 1.4;
+    ASSERT_DOUBLE_EQ(189766.19029849127, riw.get_drag(Vs,Cl,alpha,Ar));
 }
 
 TEST_F(RudderForceModelTest, get_force)
@@ -148,9 +150,10 @@ TEST_F(RudderForceModelTest, get_wrench)
     const double drag = 10;
     const double lift = 200;
     const double angle = -PI/3;
-    ssc::kinematics::Vector6d v = riw.get_wrench(3,4,0.5);
-    ASSERT_DOUBLE_EQ(-12407.491439906866, (double)v(0));
-    ASSERT_DOUBLE_EQ(10756.707156851009, (double)v(1));
+    const double area = 1.467;
+    ssc::kinematics::Vector6d v = riw.get_wrench(3,4,0.5,area);
+    ASSERT_DOUBLE_EQ(-1820.1789942343371, (double)v(0));
+    ASSERT_DOUBLE_EQ(1578.008939910043, (double)v(1));
     ASSERT_DOUBLE_EQ(0, (double)v(2));
     ASSERT_DOUBLE_EQ(0, (double)v(3));
     ASSERT_DOUBLE_EQ(0, (double)v(4));

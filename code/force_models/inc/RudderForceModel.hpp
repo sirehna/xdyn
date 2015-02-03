@@ -60,17 +60,19 @@ class RudderForceModel : public ControllableForceModel
             /**  \brief Calculates the norm of the lift force acting on the rudder
               *  \returns Lift force (in Newton)
               */
-            double get_lift(const double Vs,   //!< Norm of the speed of the ship relative to the fluid
-                            const double Cl,   //!< Rudder lift coefficient (non-dimensional)
-                            const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
+            double get_lift(const double Vs,    //!< Norm of the speed of the ship relative to the fluid
+                            const double Cl,    //!< Rudder lift coefficient (non-dimensional)
+                            const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
+                            const double area   //!< Rudder area (in or outside wake) in m^2
                             ) const;
 
             /**  \brief Calculates the norm of the drag force acting on the rudder
               *  \returns Drag force (in Newton)
               */
-            double get_drag(const double Vs,   //!< Norm of the speed of the ship relative to the fluid
-                            const double Cl,   //!< Rudder lift coefficient (non-dimensional)
-                            const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
+            double get_drag(const double Vs,    //!< Norm of the speed of the ship relative to the fluid
+                            const double Cl,    //!< Rudder lift coefficient (non-dimensional)
+                            const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
+                            const double area   //!< Rudder area (in or outside wake) in m^2
                             ) const;
 
             /**  \brief Calculates the drag coefficient (non-dimensional)
@@ -90,7 +92,8 @@ class RudderForceModel : public ControllableForceModel
               */
             ssc::kinematics::Vector6d get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
                                                  const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
-                                                 const double Vs            //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                                                 const double Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                                                 const double area          //!< Rudder area (in or outside wake) in m^2
                                                  ) const;
 
             /**  \brief Wrench created by the rudder on the ship

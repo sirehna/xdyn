@@ -62,18 +62,20 @@ double RudderForceModel::RudderModel::get_Cl(const double alpha_wake //!< Angle 
 
 double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the speed of the ship relative to the fluid
                                                const double Cl,//!< Rudder lift coefficient (non-dimensional)
-                                               const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
+                                               const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
+                                               const double area   //!< Rudder area (in or outside wake) in m^2
                                                ) const
 {
-    return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha) * parameters.lift_coeff;
+    return 0.5 * parameters.rho * area * Vs*Vs * Cl * cos(alpha) * parameters.lift_coeff;
 }
 
 double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the speed of the ship relative to the fluid
                                                const double Cl,//!< Rudder lift coefficient (non-dimensional)
-                                               const double alpha //!< Angle between the propeller's wake & the rudder (in radian)
+                                               const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
+                                               const double area   //!< Rudder area (in or outside wake) in m^2
                                                ) const
 {
-    return 0.5 * parameters.rho * parameters.Ar * Vs*Vs * Cl * cos(alpha) * parameters.drag_coeff;
+    return 0.5 * parameters.rho * area * Vs*Vs * Cl * cos(alpha) * parameters.drag_coeff;
 }
 
 ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double lift, //!< Norm of the lift (in N)
@@ -89,14 +91,15 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double 
 
 ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
                                                                     const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
-                                                                    const double Vs            //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                                                                    const double Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                                                                    const double area          //!< Rudder area (in or outside wake) in m^2
                                                                     ) const
 {
     const double alpha = get_angle_of_attack(rudder_angle, fluid_angle);
     const double Cl = get_Cl(fluid_angle);
-    const double lift = get_lift(Vs, Cl, alpha);
+    const double lift = get_lift(Vs, Cl, alpha, area);
     const double Cd = get_Cd(Vs, Cl);
-    const double drag = get_drag(Vs, Cd, alpha);
+    const double drag = get_drag(Vs, Cd, alpha, area);
     return get_force(lift, drag, fluid_angle);
 }
 
