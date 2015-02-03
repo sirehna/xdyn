@@ -100,3 +100,18 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
 //! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
 }
 
+TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
+{
+    TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
+    SurfaceElevationFromWaves wave(get_model());
+    const double g = 4.57;
+    const double x = 3.7;
+    const double y = 5.3;
+    const double z = 1.62;
+    const double t = 664.2;
+    ssc::kinematics::Point v = wave.orbital_velocity(g, x, y, z, t);
+    ASSERT_NEAR(0.26164706746726851, v.x(),1e-10);
+    ASSERT_NEAR(0.26164706746726851, v.y(),1e-10);
+    ASSERT_NEAR(-0.17968143538987366, v.z(),1e-10);
+}
+

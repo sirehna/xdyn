@@ -73,6 +73,18 @@ class SurfaceElevationInterface
                             const std::vector<std::vector<std::vector<double> > >& rao_phase //!< Phase of the RAO
                              ) const;
 
+        /**  \author cec
+          *  \date Feb 3, 2015, 10:06:45 AM
+          *  \brief Orbital velocity
+          *  \returns Velocity of the fluid at a given point & instant, in m/s
+          */
+        virtual ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
+                                                        const double x,   //!< x-position in the NED frame (in meters)
+                                                        const double y,   //!< y-position in the NED frame (in meters)
+                                                        const double z,   //!< z-position in the NED frame (in meters)
+                                                        const double t    //!< Current time instant (in seconds)
+                                                       ) const;
+
         virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
         virtual std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
 

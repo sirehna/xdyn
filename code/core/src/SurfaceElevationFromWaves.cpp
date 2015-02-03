@@ -96,3 +96,21 @@ double SurfaceElevationFromWaves::dynamic_pressure(const double rho, //!< water 
     BOOST_FOREACH(const TR1(shared_ptr)<WaveModel> model, models) pdyn += model->dynamic_pressure(rho,g,x,y,z,eta,t);
     return pdyn;
 }
+
+ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double g,   //!< gravity (in m/s^2)
+                                                                   const double x,   //!< x-position in the NED frame (in meters)
+                                                                   const double y,   //!< y-position in the NED frame (in meters)
+                                                                   const double z,   //!< z-position in the NED frame (in meters)
+                                                                   const double t    //!< Current time instant (in seconds)
+                                                                   ) const
+{
+    ssc::kinematics::Point Vwaves("NED", 0, 0, 0);
+    for (auto model:models)
+    {
+        auto vw = model->orbital_velocity(g, x, y, z, t);
+        Vwaves.x() += vw.x();
+        Vwaves.y() += vw.y();
+        Vwaves.z() += vw.z();
+    }
+    return Vwaves;
+}
