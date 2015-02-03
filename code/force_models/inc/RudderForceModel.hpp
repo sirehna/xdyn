@@ -105,14 +105,14 @@ class RudderForceModel : public ControllableForceModel
                                                 ) const;
 
             /**  \brief Calculates speed inside & outside wake
-             *   \details Norm of the ship speed (relative to the fluid)
+             *   \details Ship speed relative to the fluid, in m/s
               *  \returns Rudder area (in m^2)
               */
-            InOutWake<double> get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
-                                     const double Va,  //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
-                                     const double v,   //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
-                                     const double T    //!< Propeller thrust (in N)
-                                     ) const;
+            InOutWake<ssc::kinematics::Point> get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+                                                     const double Va,  //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
+                                                     const double v,   //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
+                                                     const double T    //!< Propeller thrust (in N)
+                                                     ) const;
 
             private:
                 RudderModel(); // Disabled

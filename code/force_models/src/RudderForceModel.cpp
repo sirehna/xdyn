@@ -89,20 +89,22 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double 
     return ret;
 }
 
-RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+RudderForceModel::InOutWake<ssc::kinematics::Point> RudderForceModel::RudderModel::get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
                                                                   const double Va,  //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
                                                                   const double v,   //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
                                                                   const double T    //!< Propeller thrust (in N)
                                                                   ) const
 {
-    RudderForceModel::InOutWake<double> Vs;
+    RudderForceModel::InOutWake<ssc::kinematics::Point> Vs;
     // Reduction factor (cf. "Marine rudders and Control Surfaces", p.371, eq 11.1)
     const double RF = CTh>0.0729 ? 0.5 : 1 - 0.135 * sqrt(CTh); // Because 0.0729 = pow(0.5/0.135,2) and 1 - 0.135 * sqrt(pow(0.5/0.135,2)) = 0.5
     // Vchange = Vbollard - Va (cf. "Marine rudders and Control Surfaces", p.51, eq 3.38)
     const double Vchange = sqrt(Va*Va + 8 / PI * T / (parameters.rho * parameters.diameter*parameters.diameter)) - Va;
     // Ship speed (relative to the current) in the ship's reference frame (m/s)
-    Vs.in_wake = hypot((Va+Kr*Vchange) * RF, + v);
-    Vs.outside_wake = hypot(Va, v);
+    Vs.in_wake.x() = (Va+Kr*Vchange) * RF;
+    Vs.in_wake.y() = v;
+    Vs.outside_wake.x() = Va;
+    Vs.outside_wake.y() = v;
     return Vs;
 }
 
