@@ -165,7 +165,7 @@ TEST_F(RudderForceModelTest, get_Ar)
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
     RudderForceModel::RudderModel riw(parameters);
     const double CTh = a.random<double>();
-    const RudderForceModel::InOutWake ar = riw.get_Ar(CTh);
+    const auto ar = riw.get_Ar(CTh);
     ASSERT_DOUBLE_EQ(parameters.Ar, ar.in_wake-ar.outside_wake);
 }
 
@@ -189,7 +189,7 @@ TEST_F(RudderForceModelTest, get_Vs)
     parameters.diameter = 3.6;
     parameters.rho = 1024;
     RudderForceModel::RudderModel riw(parameters);
-    const RudderForceModel::InOutWake vs = riw.get_vs(1.5,12,6,12e4);
+    const auto vs = riw.get_vs(1.5,12,6,12e4);
     ASSERT_DOUBLE_EQ(8.6501382915679557, vs.in_wake);
     ASSERT_DOUBLE_EQ(13.416407864998739, vs.outside_wake);
 }

@@ -29,11 +29,11 @@ class RudderForceModel : public ControllableForceModel
         RudderForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
 
-        struct InOutWake
+        template <typename T> struct InOutWake
         {
-            InOutWake() : in_wake(0), outside_wake(0) {}
-            double in_wake;
-            double outside_wake;
+            InOutWake() : in_wake(), outside_wake() {}
+            T in_wake;
+            T outside_wake;
         };
 
         struct RudderModel
@@ -45,8 +45,8 @@ class RudderForceModel : public ControllableForceModel
             /**  \brief Calculates the rudder area (in or outside wake)
               *  \returns Rudder area (in m^2)
               */
-            InOutWake get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
-                     ) const;
+            InOutWake<double> get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+                                    ) const;
 
             /**  \brief Calculates the angle between the propeller's wake & the rudder
               *  \details When positive, the wake is coming towards the rudder's port side
@@ -108,11 +108,11 @@ class RudderForceModel : public ControllableForceModel
              *   \details Norm of the ship speed (relative to the fluid)
               *  \returns Rudder area (in m^2)
               */
-            InOutWake get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
-                             const double Va,  //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
-                             const double v,   //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
-                             const double T    //!< Propeller thrust (in N)
-                             ) const;
+            InOutWake<double> get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+                                     const double Va,  //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
+                                     const double v,   //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
+                                     const double T    //!< Propeller thrust (in N)
+                                     ) const;
 
             private:
                 RudderModel(); // Disabled

@@ -89,13 +89,13 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double 
     return ret;
 }
 
-RudderForceModel::InOutWake RudderForceModel::RudderModel::get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
                                                                   const double Va,  //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
                                                                   const double v,   //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
                                                                   const double T    //!< Propeller thrust (in N)
                                                                   ) const
 {
-    RudderForceModel::InOutWake Vs;
+    RudderForceModel::InOutWake<double> Vs;
     // Reduction factor (cf. "Marine rudders and Control Surfaces", p.371, eq 11.1)
     const double RF = CTh>0.0729 ? 0.5 : 1 - 0.135 * sqrt(CTh); // Because 0.0729 = pow(0.5/0.135,2) and 1 - 0.135 * sqrt(pow(0.5/0.135,2)) = 0.5
     // Vchange = Vbollard - Va (cf. "Marine rudders and Control Surfaces", p.51, eq 3.38)
@@ -120,10 +120,10 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double
     return get_force(lift, drag, fluid_angle);
 }
 
-RudderForceModel::InOutWake RudderForceModel::RudderModel::get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
                                                           ) const
 {
-    InOutWake ar;
+    InOutWake<double> ar;
     // Jet speed coefficient, "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 96 eq. 1.2.44
     const double Cj = 1 + Kr * (sqrt(1 + CTh) -1);
     const double Dwake = D * sqrt((1 + 0.5 * (sqrt(1 + CTh) - 1)) / Cj);
