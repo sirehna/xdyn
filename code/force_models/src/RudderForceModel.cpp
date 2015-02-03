@@ -13,6 +13,8 @@
 #include "SurfaceElevationInterface.hpp"
 #include "yaml2eigen.hpp"
 
+#define HYPOT(X,Y,Z) sqrt((X)*(X)+(Y)*(Y)+(Z)*(Z))
+
 RudderForceModel::Yaml::Yaml() :
                 nu(0),
                 rho(0),
@@ -21,7 +23,7 @@ RudderForceModel::Yaml::Yaml() :
                 effective_aspect_ratio_factor(0),
                 lift_coeff(0),
                 drag_coeff(0),
-                distance_between_rudder_and_screw(0)
+                position_of_the_rudder_frame_in_the_body_frame()
 {
 
 }
@@ -31,8 +33,12 @@ RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_) :
                                            chord(parameters.Ar/parameters.b),
                                            lambda(parameters.effective_aspect_ratio_factor * parameters.b*parameters.b / parameters.Ar),
                                            D(parameters_.diameter),
-                                           Kr(0.5+0.5/(1+0.15/std::abs(parameters_.distance_between_rudder_and_screw/parameters_.diameter)))
+                                           Kr()
 {
+    const double distance_between_rudder_and_screw = HYPOT(parameters_.position_of_propeller_frame.coordinates.x - parameters_.position_of_the_rudder_frame_in_the_body_frame.x,
+                                                           parameters_.position_of_propeller_frame.coordinates.y - parameters_.position_of_the_rudder_frame_in_the_body_frame.y,
+                                                           parameters_.position_of_propeller_frame.coordinates.z - parameters_.position_of_the_rudder_frame_in_the_body_frame.z);
+    Kr = 0.5+0.5/(1+0.15/std::abs(distance_between_rudder_and_screw/parameters_.diameter));
 }
 
 double RudderForceModel::RudderModel::get_angle_of_attack(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side

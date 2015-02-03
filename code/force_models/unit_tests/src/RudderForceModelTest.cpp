@@ -181,7 +181,12 @@ TEST_F(RudderForceModelTest, get_Ar2)
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
     parameters.Ar = 10;
     parameters.b = 4;
-    parameters.distance_between_rudder_and_screw = 2.47;
+    parameters.position_of_propeller_frame.coordinates.x = 0;
+    parameters.position_of_propeller_frame.coordinates.y = 0;
+    parameters.position_of_propeller_frame.coordinates.z = 0;
+    parameters.position_of_the_rudder_frame_in_the_body_frame.x = 2.47;
+    parameters.position_of_the_rudder_frame_in_the_body_frame.y = 0;
+    parameters.position_of_the_rudder_frame_in_the_body_frame.z = 0;
     parameters.diameter = 1.67;
     const double CTh = 5.3;
     RudderForceModel::RudderModel riw(parameters);
