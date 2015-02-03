@@ -114,6 +114,12 @@ class RudderForceModel : public ControllableForceModel
                                                      const double T    //!< Propeller thrust (in N)
                                                      ) const;
 
+            /**  \brief Calculates the angle of incidence of the fluid, inside & outside wake
+              *  \returns Angle in radian
+              */
+            InOutWake<double> get_fluid_angle(const InOutWake<ssc::kinematics::Point>& Vs   //!< Ship speed relative to the fluid, inside & outside wake
+                                              ) const;
+
             private:
                 RudderModel(); // Disabled
                 Yaml parameters;

@@ -193,3 +193,18 @@ TEST_F(RudderForceModelTest, get_Vs)
     ASSERT_DOUBLE_EQ(8.6501382915679557, (double)vs.in_wake.v.norm());
     ASSERT_DOUBLE_EQ(13.416407864998739, (double)vs.outside_wake.v.norm());
 }
+
+TEST_F(RudderForceModelTest, get_fluid_angle)
+{
+    const RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>());
+    RudderForceModel::InOutWake<ssc::kinematics::Point> V;
+    V.in_wake.x() = 1;
+    V.in_wake.y() = 2;
+    V.in_wake.z() = a.random<double>();
+    V.outside_wake.x() = -4;
+    V.outside_wake.y() = -4;
+    V.outside_wake.z() = a.random<double>();
+    const auto vs = riw.get_fluid_angle(V);
+    ASSERT_DOUBLE_EQ(1.1071487177940904, vs.in_wake);
+    ASSERT_DOUBLE_EQ(-3*PI/4, vs.outside_wake);
+}

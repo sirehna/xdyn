@@ -108,6 +108,15 @@ RudderForceModel::InOutWake<ssc::kinematics::Point> RudderForceModel::RudderMode
     return Vs;
 }
 
+RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_fluid_angle(const RudderForceModel::InOutWake<ssc::kinematics::Point>& Vs   //!< Ship speed relative to the fluid, inside & outside wake
+                                              ) const
+{
+    RudderForceModel::InOutWake<double> angle;
+    angle.in_wake      = atan2(Vs.in_wake.y(), Vs.in_wake.x());
+    angle.outside_wake = atan2(Vs.outside_wake.y(), Vs.outside_wake.x());
+    return angle;
+}
+
 ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
                                                                     const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
                                                                     const double Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
