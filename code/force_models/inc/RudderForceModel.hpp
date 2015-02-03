@@ -140,6 +140,7 @@ class RudderForceModel : public ControllableForceModel
 
     private:
         WageningenControlledForceModel propulsion;
+        ssc::kinematics::Point rudder_position;
 };
 
 
