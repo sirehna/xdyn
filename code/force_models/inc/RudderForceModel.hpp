@@ -133,6 +133,8 @@ class RudderForceModel : public ControllableForceModel
             InOutWake<double> get_fluid_angle(const InOutWake<ssc::kinematics::Point>& Vs   //!< Ship speed relative to the fluid, inside & outside wake
                                               ) const;
 
+            double get_D() const;
+
             private:
                 RudderModel(); // Disabled
                 Yaml parameters;

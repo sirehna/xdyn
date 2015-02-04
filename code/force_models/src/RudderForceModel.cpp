@@ -221,3 +221,8 @@ RudderForceModel::Yaml RudderForceModel::parse(const std::string& yaml)
 
     return ret;
 }
+
+double RudderForceModel::RudderModel::get_D() const
+{
+    return D;
+}
