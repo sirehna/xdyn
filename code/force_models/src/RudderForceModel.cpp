@@ -179,7 +179,12 @@ RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_Ar(const 
 RudderForceModel::RudderForceModel(const Yaml& input_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
         ControllableForceModel(input_.name,{"rpm","P/D","angle"},input_.position_of_propeller_frame, body_name_, env_),
         propulsion(WageningenControlledForceModel(input_, body_name_, env)),
-        rudder_position(ssc::kinematics::Point(make_point(input_.position_of_propeller_frame.coordinates, input_.position_of_propeller_frame.frame)))
+        rudder_position(ssc::kinematics::Point(make_point(input_.position_of_propeller_frame.coordinates, input_.position_of_propeller_frame.frame))),
+        model(input_, env_.rho, env_.nu),
+        translation_from_rudder_to_propeller(rudder_position.get_frame(),
+                                             input_.position_of_propeller_frame.coordinates.x - rudder_position.x(),
+                                             input_.position_of_propeller_frame.coordinates.y - rudder_position.y(),
+                                             input_.position_of_propeller_frame.coordinates.z - rudder_position.z())
 {
 }
 
