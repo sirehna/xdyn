@@ -282,3 +282,30 @@ TEST_F(RudderForceModelTest, parser)
     ASSERT_DOUBLE_EQ(2, w.position_of_the_rudder_frame_in_the_body_frame.z);
 }
 
+TEST_F(RudderForceModelTest, force_and_torque)
+{
+    EnvironmentAndFrames env = get_environment_and_frames(get_wave_model());
+    const RudderForceModel rudder(RudderForceModel::parse(test_data::rudder()), a.random<std::string>(), env);
+    BodyStates states;
+    std::vector<double> s = {1,2,3,4,5,6,0,0,0,1,0,0,0};
+    const double t = 24;
+    states.u.record(t, s[2]);
+    states.v.record(t, s[3]);
+    states.w.record(t, s[4]);
+    states.name = "body";
+    BodyWithoutSurfaceForces b(states,0);
+    b.update_kinematics(s, env.k);
+    std::map<std::string,double> commands;
+    commands["rpm"] = 200;
+    commands["P/D"] = 1.2;
+    commands["beta"] = PI/6;
+
+
+    const auto F = rudder.get_force(states, t, commands);
+    ASSERT_DOUBLE_EQ(2318885.6624483513, (double)F(0));
+    ASSERT_DOUBLE_EQ(434953.188304963, (double)F(1));
+    ASSERT_DOUBLE_EQ(0, (double)F(2));
+    ASSERT_DOUBLE_EQ(-2793416.1021430148, (double)F(3));
+    ASSERT_DOUBLE_EQ(0, (double)F(4));
+    ASSERT_DOUBLE_EQ(0, (double)F(5));
+}
