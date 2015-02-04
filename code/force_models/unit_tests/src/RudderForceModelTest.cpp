@@ -36,8 +36,6 @@ namespace ssc
             ret.drag_coeff = random<double>();
             ret.effective_aspect_ratio_factor = random<double>();
             ret.lift_coeff = random<double>();
-            ret.nu = random<double>();
-            ret.rho = random<double>();
             return ret;
         }
     }
@@ -62,7 +60,7 @@ void RudderForceModelTest::TearDown()
 TEST_F(RudderForceModelTest, angle_of_attack)
 {
 //! [RudderForceModelTest get_alpha_example]
-    RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>());
+    RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>(),a.random<double>(),a.random<double>());
 //! [RudderForceModelTest get_alpha_example]
 //! [RudderForceModelTest get_alpha_example output]
     ASSERT_DOUBLE_EQ(-1,riw.get_angle_of_attack(1, 2));
@@ -73,12 +71,10 @@ TEST_F(RudderForceModelTest, angle_of_attack)
 TEST_F(RudderForceModelTest, get_Cd)
 {
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
-    parameters.nu = 2;
-    parameters.rho = 1024;
     parameters.Ar = 3;
     parameters.b = 4;
     parameters.effective_aspect_ratio_factor = 0.5;
-    RudderForceModel::RudderModel riw(parameters);
+    RudderForceModel::RudderModel riw(parameters,1024,2);
 
     const double Vs = 6;
     const double Cl = 7;
@@ -88,12 +84,10 @@ TEST_F(RudderForceModelTest, get_Cd)
 TEST_F(RudderForceModelTest, get_Cl)
 {
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
-    parameters.nu = 2;
-    parameters.rho = 1024;
     parameters.Ar = 3;
     parameters.b = 4;
     parameters.effective_aspect_ratio_factor = 0.5;
-    RudderForceModel::RudderModel riw(parameters);
+    RudderForceModel::RudderModel riw(parameters,1024,2);
     const double alpha = 0.4;
     ASSERT_DOUBLE_EQ(1.0985577009852809, riw.get_Cl(alpha));
 }
@@ -101,10 +95,9 @@ TEST_F(RudderForceModelTest, get_Cl)
 TEST_F(RudderForceModelTest, get_lift)
 {
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
-    parameters.rho = 1024;
     parameters.Ar = 10;
     parameters.lift_coeff = 2;
-    RudderForceModel::RudderModel riw(parameters);
+    RudderForceModel::RudderModel riw(parameters,1024,a.random<double>());
 
     const double Vs = 12;
     const double Cl = 1.3;
@@ -116,10 +109,9 @@ TEST_F(RudderForceModelTest, get_lift)
 TEST_F(RudderForceModelTest, get_drag)
 {
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
-    parameters.rho = 1024;
     parameters.Ar = 10;
     parameters.drag_coeff = 2;
-    RudderForceModel::RudderModel riw(parameters);
+    RudderForceModel::RudderModel riw(parameters,1024,a.random<double>());
 
     const double Vs = 12;
     const double Cl = 1.3;
@@ -131,7 +123,7 @@ TEST_F(RudderForceModelTest, get_drag)
 TEST_F(RudderForceModelTest, get_force)
 {
 //! [RudderForceModelTest get_alpha_example]
-    RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>());
+    RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>(),a.random<double>(),a.random<double>());
     const double drag = 10;
     const double lift = 200;
     const double angle = -PI/3;
@@ -148,14 +140,12 @@ TEST_F(RudderForceModelTest, get_wrench)
 {
 //! [RudderForceModelTest get_alpha_example]
     RudderForceModel::Yaml parameters;
-    parameters.rho = 1024;
     parameters.Ar = 10;
     parameters.drag_coeff = 2;
     parameters.lift_coeff = 5;
-    parameters.nu = 0.75;
     parameters.b = 99;
     parameters.effective_aspect_ratio_factor = 2.3;
-    RudderForceModel::RudderModel riw(parameters);
+    RudderForceModel::RudderModel riw(parameters,1024,0.75);
     const double drag = 10;
     const double lift = 200;
     const double angle = -PI/3;
@@ -172,7 +162,7 @@ TEST_F(RudderForceModelTest, get_wrench)
 TEST_F(RudderForceModelTest, get_Ar)
 {
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
-    RudderForceModel::RudderModel riw(parameters);
+    RudderForceModel::RudderModel riw(parameters,a.random<double>(),a.random<double>());
     const double CTh = a.random<double>();
     const auto ar = riw.get_Ar(CTh);
     ASSERT_DOUBLE_EQ(parameters.Ar, ar.in_wake-ar.outside_wake);
@@ -191,7 +181,7 @@ TEST_F(RudderForceModelTest, get_Ar2)
     parameters.position_of_the_rudder_frame_in_the_body_frame.z = 0;
     parameters.diameter = 1.67;
     const double CTh = 5.3;
-    RudderForceModel::RudderModel riw(parameters);
+    RudderForceModel::RudderModel riw(parameters,a.random<double>(),a.random<double>());
     const auto ar = riw.get_Ar(CTh);
     ASSERT_DOUBLE_EQ(3.5404447215261827, ar.in_wake);
     ASSERT_DOUBLE_EQ(-6.4595552784738173, ar.outside_wake);
@@ -201,8 +191,7 @@ TEST_F(RudderForceModelTest, get_Vs)
 {
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
     parameters.diameter = 3.6;
-    parameters.rho = 1024;
-    RudderForceModel::RudderModel riw(parameters);
+    RudderForceModel::RudderModel riw(parameters,1024,a.random<double>());
     const auto vs = riw.get_vs(1.5,12,6,12e4);
     ASSERT_DOUBLE_EQ(8.6501382915679557, (double)vs.in_wake.v.norm());
     ASSERT_DOUBLE_EQ(13.416407864998739, (double)vs.outside_wake.v.norm());
@@ -210,7 +199,7 @@ TEST_F(RudderForceModelTest, get_Vs)
 
 TEST_F(RudderForceModelTest, get_fluid_angle)
 {
-    const RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>());
+    const RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>(),a.random<double>(),a.random<double>());
     RudderForceModel::InOutWake<ssc::kinematics::Point> V;
     V.in_wake.x() = 1;
     V.in_wake.y() = 2;

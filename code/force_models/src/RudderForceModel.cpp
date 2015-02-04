@@ -19,8 +19,6 @@
 #define HYPOT(X,Y,Z) sqrt((X)*(X)+(Y)*(Y)+(Z)*(Z))
 
 RudderForceModel::Yaml::Yaml() :
-                nu(0),
-                rho(0),
                 Ar(0),
                 b(0),
                 effective_aspect_ratio_factor(0),
@@ -32,8 +30,6 @@ RudderForceModel::Yaml::Yaml() :
 
 RudderForceModel::Yaml::Yaml(const WageningenControlledForceModel::Yaml& yaml) :
                         WageningenControlledForceModel::Yaml(yaml),
-                        nu(0),
-                        rho(0),
                         Ar(0),
                         b(0),
                         effective_aspect_ratio_factor(0),
@@ -43,12 +39,14 @@ RudderForceModel::Yaml::Yaml(const WageningenControlledForceModel::Yaml& yaml) :
 {
 }
 
-RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_) :
+RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_, const double rho_, const double nu_) :
                                            parameters(parameters_),
                                            chord(parameters.Ar/parameters.b),
                                            lambda(parameters.effective_aspect_ratio_factor * parameters.b*parameters.b / parameters.Ar),
                                            D(parameters_.diameter),
-                                           Kr()
+                                           Kr(),
+                                           rho(rho_),
+                                           nu(nu_)
 {
     const double distance_between_rudder_and_screw = HYPOT(parameters_.position_of_propeller_frame.coordinates.x - parameters_.position_of_the_rudder_frame_in_the_body_frame.x,
                                                            parameters_.position_of_propeller_frame.coordinates.y - parameters_.position_of_the_rudder_frame_in_the_body_frame.y,
@@ -68,7 +66,7 @@ double RudderForceModel::RudderModel::get_Cd(const double Vs, //!< Norm of the s
                                              ) const
 {
     // Reynolds number of the rudder (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 78 eq. 1.2.12)
-    const double Rn = Vs * chord / parameters.nu;
+    const double Rn = Vs * chord / nu;
     // ITTC resistance coefficient , "Marine rudders and Control Surfaces" p.31 eq. 3.18
     const double Cf = 0.075 / pow((log(Rn)/log(10.0)-2),2);
     // Resistance coefficient (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 78 (§ "for Cd0"))
@@ -89,7 +87,7 @@ double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the 
                                                const double area   //!< Rudder area (in or outside wake) in m^2
                                                ) const
 {
-    return 0.5 * parameters.rho * area * Vs*Vs * Cl * cos(alpha) * parameters.lift_coeff;
+    return 0.5 * rho * area * Vs*Vs * Cl * cos(alpha) * parameters.lift_coeff;
 }
 
 double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the speed of the ship relative to the fluid
@@ -98,7 +96,7 @@ double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the 
                                                const double area   //!< Rudder area (in or outside wake) in m^2
                                                ) const
 {
-    return 0.5 * parameters.rho * area * Vs*Vs * Cl * cos(alpha) * parameters.drag_coeff;
+    return 0.5 * rho * area * Vs*Vs * Cl * cos(alpha) * parameters.drag_coeff;
 }
 
 ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double lift, //!< Norm of the lift (in N)
@@ -122,7 +120,7 @@ RudderForceModel::InOutWake<ssc::kinematics::Point> RudderForceModel::RudderMode
     // Reduction factor (cf. "Marine rudders and Control Surfaces", p.371, eq 11.1)
     const double RF = CTh>0.0729 ? 0.5 : 1 - 0.135 * sqrt(CTh); // Because 0.0729 = pow(0.5/0.135,2) and 1 - 0.135 * sqrt(pow(0.5/0.135,2)) = 0.5
     // Vchange = Vbollard - Va (cf. "Marine rudders and Control Surfaces", p.51, eq 3.38)
-    const double Vchange = sqrt(Va*Va + 8 / PI * T / (parameters.rho * parameters.diameter*parameters.diameter)) - Va;
+    const double Vchange = sqrt(Va*Va + 8 / PI * T / (rho * parameters.diameter*parameters.diameter)) - Va;
     // Ship speed (relative to the current) in the ship's reference frame (m/s)
     Vs.in_wake.x() = (Va+Kr*Vchange) * RF;
     Vs.in_wake.y() = v;
@@ -153,9 +151,9 @@ RudderForceModel::InOutWake<ssc::kinematics::Vector6d> RudderForceModel::RudderM
 }
 
 ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
-                                                 const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
-                                                 const double Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
-                                                 const double area          //!< Rudder area (in or outside wake) in m^2
+                                                                    const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+                                                                    const double Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                                                                    const double area          //!< Rudder area (in or outside wake) in m^2
                                                              ) const
 {
     const double alpha = get_angle_of_attack(rudder_angle, fluid_angle);

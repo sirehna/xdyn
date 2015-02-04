@@ -17,8 +17,6 @@ class RudderForceModel : public ControllableForceModel
         {
             Yaml();
             Yaml(const WageningenControlledForceModel::Yaml& yaml);
-            double nu;                                                      //!< Water viscosity (in m^2/s)
-            double rho;                                                     //!< Water density (in kg/m^3)
             double Ar;                                                      //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
             double b;                                                       //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
             double effective_aspect_ratio_factor;                           //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
@@ -42,7 +40,9 @@ class RudderForceModel : public ControllableForceModel
 
         struct RudderModel
         {
-            RudderModel(const Yaml& parameters
+            RudderModel(const Yaml& parameters,
+                        const double rho,
+                        const double nu
                         );
             virtual ~RudderModel(){}
 
@@ -142,6 +142,8 @@ class RudderForceModel : public ControllableForceModel
                 double lambda;
                 double D; //!< Propeller diameter (in m)
                 double Kr;//!< Contraction factor (cf. Marine Rudders & Control Surfaces, Molland & Turnock, eq. 3.37 p.51
+                double rho;
+                double nu;
         };
 
     private:
