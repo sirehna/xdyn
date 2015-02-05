@@ -30,6 +30,7 @@ class WageningenControlledForceModel : public ControllableForceModel
         struct Yaml
         {
             Yaml();
+            virtual ~Yaml(){}
             std::string name;
             YamlPosition position_of_propeller_frame;
             double wake_coefficient;
