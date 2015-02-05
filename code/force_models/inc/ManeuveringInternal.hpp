@@ -176,7 +176,7 @@ namespace maneuvering
             State(const NodePtr& operand) : Unary(operand){}
             Function get_lambda() const
             {
-                return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)
+                return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)->double
                         {
                             const auto op = get_operand()->get_lambda();
                             switch(S)
