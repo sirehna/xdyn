@@ -152,6 +152,7 @@ class RudderForceModel : public ControllableForceModel
         ssc::kinematics::Point rudder_position;
         ssc::kinematics::Point translation_from_rudder_to_propeller;
         RudderModel model;
+        double w; //!< Wake fraction
 };
 
 

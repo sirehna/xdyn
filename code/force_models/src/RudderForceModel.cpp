@@ -184,13 +184,14 @@ RudderForceModel::RudderForceModel(const Yaml& input_, const std::string& body_n
         translation_from_rudder_to_propeller(rudder_position.get_frame(),
                                              input_.position_of_propeller_frame.coordinates.x - rudder_position.x(),
                                              input_.position_of_propeller_frame.coordinates.y - rudder_position.y(),
-                                             input_.position_of_propeller_frame.coordinates.z - rudder_position.z())
+                                             input_.position_of_propeller_frame.coordinates.z - rudder_position.z()),
+        w(input_.wake_coefficient)
 {
 }
 
 ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(const BodyStates& states, const double t, std::map<std::string,double> commands, const double T) const
 {
-    const double Va = states.u();
+    const double Va = states.u()*(1-w); // Cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag p. 96, eq. 1.2.41
     const double DVa = model.get_D()*Va;
     // Thrust loading coefficient, Cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
     const double CTh = std::abs(DVa) < 1e-10 ? 8e20 / PI * T / env.rho : 8 / PI * T / (env.rho * DVa*DVa);
