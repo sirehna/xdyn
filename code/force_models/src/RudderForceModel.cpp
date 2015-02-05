@@ -239,7 +239,7 @@ RudderForceModel::Yaml RudderForceModel::parse(const std::string& yaml)
 
     parse_uv(node["rudder area"], ret.Ar);
     parse_uv(node["rudder height"], ret.b);
-    node["effective aspect ratio"]           >> ret.effective_aspect_ratio_factor;
+    node["effective aspect ratio factor"]    >> ret.effective_aspect_ratio_factor;
     node["lift tuning coefficient"]          >> ret.lift_coeff;
     node["drag tuning coefficient"]          >> ret.drag_coeff;
     node["position of rudder in body frame"] >> ret.position_of_the_rudder_frame_in_the_body_frame;

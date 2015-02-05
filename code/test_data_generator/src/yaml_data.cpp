@@ -2286,7 +2286,7 @@ std::string test_data::rudder()
           "diameter: {value: 2, unit: m}\n"
           "rudder area: {value: 2.2, unit: m^2}\n"
           "rudder height: {value: 2, unit: m^2}\n"
-          "effective aspect ratio: 1.7\n"
+          "effective aspect ratio factor: 1.7\n"
           "lift tuning coefficient: 2.1\n"
           "drag tuning coefficient: 1\n"
           "position of rudder in body frame:\n"
