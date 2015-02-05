@@ -49,10 +49,6 @@ class Sim
         std::vector<ssc::kinematics::Point> get_waves(const double t            //!< Current instant
                                                      ) const;
 
-        std::vector<ssc::kinematics::EulerAngles> get_euler_angles(
-                const StateType& all_states,
-                const YamlRotation& c = YamlRotation("angle",{"z", "y'", "x''"})) const;
-
         StateType state;
 
         void output(const StateType& x, Observer& obs, double t) const;

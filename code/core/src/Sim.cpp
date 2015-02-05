@@ -78,14 +78,6 @@ StateType Sim::normalize_quaternions(const StateType& all_states
     return normalized;
 }
 
-std::vector<ssc::kinematics::EulerAngles> Sim::get_euler_angles(const StateType& all_states, const YamlRotation& c) const
-{
-    StateType all_statesN = normalize_quaternions(all_states);
-    std::vector<ssc::kinematics::EulerAngles> v;
-    for (auto body: pimpl->bodies) v.push_back(body->get_angles(all_statesN, c));
-    return v;
-}
-
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
     auto x_with_normalized_quaternions = normalize_quaternions(x);
