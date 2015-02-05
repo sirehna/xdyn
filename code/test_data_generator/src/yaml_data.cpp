@@ -361,7 +361,7 @@ std::string test_data::full_example()
        << "     data: [x(body 1)]\n"
        << "   - format: hdf5\n"
        << "     filename: tutorial_1.h5\n"
-       << "     data: ['y(body 1)','z(body 1)','Fz(gravity,body 1)','wave']\n";
+       << "     data: ['y(body 1)','z(body 1)','Fz(gravity,body 1)','waves']\n";
     return ss.str();
 }
 
@@ -1323,7 +1323,7 @@ std::string test_data::simple_waves()
        << "output:\n"
        << "   - format: hdf5\n"
        << "     filename: simple_waves.h5\n"
-       << "     data: ['wave']\n";
+       << "     data: ['waves']\n";
     return ss.str();
 }
 

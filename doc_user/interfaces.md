@@ -225,6 +225,8 @@ output:
   l'exemple ci-dessus). Les sorties d'effort sont `Fx(model,body)`,
   `Fy(model,body)`, `Fz(model,body)`, `Mx(model,body)`, `My(model,body)`,
   `Mz(model,body)` où `model` est le nom du modèle d'effort (renseigné dans la
-  clef `model` de chaque modèle d'effort).
+  clef `model` de chaque modèle d'effort). Les sorties de houle sont notées
+  `waves` et leur contenu est décrit dans la section [Modèle de
+houle/Sorties](#sorties-1).
 
 
