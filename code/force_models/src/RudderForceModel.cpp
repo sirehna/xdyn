@@ -174,7 +174,7 @@ RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_Ar(const 
     const double Cj = 1 + Kr * (sqrt(1 + CTh) -1);
     const double Dwake = D * sqrt((1 + 0.5 * (sqrt(1 + CTh) - 1)) / Cj);
     ar.in_wake = std::min(parameters.Ar, chord*Dwake);
-    ar.outside_wake = ar.in_wake-parameters.Ar;
+    ar.outside_wake = parameters.Ar-ar.in_wake;
     return ar;
 }
 
