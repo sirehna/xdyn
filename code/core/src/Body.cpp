@@ -151,8 +151,8 @@ void Body::feed(const StateType& x, Observer& observer, const YamlRotation& c) c
     observer.write(*_QK(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qk"},std::string("qk(")+states.name+")"));
     const auto angles = get_angles(x, c);
     observer.write(angles.phi, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("phi(")+states.name+")"));
-    observer.write(angles.theta, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("theta(")+states.name+")"));
-    observer.write(angles.psi, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("psi(")+states.name+")"));
+    observer.write(angles.theta, DataAddressing(std::vector<std::string>{"states",states.name,"THETA"},std::string("theta(")+states.name+")"));
+    observer.write(angles.psi, DataAddressing(std::vector<std::string>{"states",states.name,"PSI"},std::string("psi(")+states.name+")"));
 
 }
 
