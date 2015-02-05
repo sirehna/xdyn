@@ -346,7 +346,8 @@ On peut sortir les hauteurs de houle calculées sur un maillage (défini dans un
 repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
 simulation de houle, sans corps, tel que décrit dans le [tutoriel 3](#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
 
-On définit un maillage (cartésien) sur lequel sera calculé la houle. Par exemple :
+On définit un maillage (cartésien) sur lequel sera calculé la houle (dans la
+section `environement/model/output`). Par exemple :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
@@ -370,8 +371,9 @@ Dans l'exemple précédent, les coordonnées sont données dans le repère NED. 
 maillage comporte 10 points :
 (1,1),(1,2),(2,1),(2,2),(3,1),(3,2),(4,1),(4,2),(5,1),(5,2).
 
-Les sorties sont écrites dans le fichier spécifié après le flag `-w` en
-argument de l'exécutable `sim`.
+Les sorties sont écrites dans le fichier et le format spécifiés dans la
+section [`/output`](#sorties).
+
 
 On obtient deux résultats différents, suivant que le repère dans lequel ils
 sont exprimés est mobile ou fixe par rapport au repère NED. En effet, si le

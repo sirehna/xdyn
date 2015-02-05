@@ -48,7 +48,7 @@ void EnvironmentAndFrames::feed(
             const auto kk = w->get_waves_on_mesh_as_a_grid(k, t);
             if(kk.z.size()!=0)
             {
-                const auto address = DataAddressing(std::vector<std::string>{"waveElevation"},"wave");
+                const auto address = DataAddressing(std::vector<std::string>{"waveElevation"},"waves");
                 observer.write(kk, address);
             }
         }
