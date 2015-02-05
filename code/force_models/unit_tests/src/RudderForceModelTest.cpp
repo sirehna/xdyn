@@ -184,7 +184,7 @@ TEST_F(RudderForceModelTest, get_Ar2)
     RudderForceModel::RudderModel riw(parameters,a.random<double>(),a.random<double>());
     const auto ar = riw.get_Ar(CTh);
     ASSERT_DOUBLE_EQ(3.5404447215261827, ar.in_wake);
-    ASSERT_DOUBLE_EQ(-6.4595552784738173, ar.outside_wake);
+    ASSERT_DOUBLE_EQ(6.4595552784738173, ar.outside_wake);
 }
 
 TEST_F(RudderForceModelTest, get_Vs)
@@ -300,10 +300,9 @@ TEST_F(RudderForceModelTest, force_and_torque)
     commands["P/D"] = 1.2;
     commands["beta"] = PI/6;
 
-
     const auto F = rudder.get_force(states, t, commands);
-    ASSERT_DOUBLE_EQ(2310512.5326717831, (double)F(0));
-    ASSERT_DOUBLE_EQ(437450.98632334737, (double)F(1));
+    ASSERT_DOUBLE_EQ(2277479.7696042517, (double)F(0));
+    ASSERT_DOUBLE_EQ(434517.69509122841, (double)F(1));
     ASSERT_DOUBLE_EQ(0, (double)F(2));
     ASSERT_DOUBLE_EQ(-2793416.1021430148, (double)F(3));
     ASSERT_DOUBLE_EQ(0, (double)F(4));
