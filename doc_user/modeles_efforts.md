@@ -1188,3 +1188,308 @@ Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
   psi_co: {unit: deg, values: [25, 30, 40, 0]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Hélice et safran
+
+### Description
+Ce modèle décrit l'ensemble constitué d'une hélice Wageningen et d'un safran.
+Les deux sont utilisés ensemble car le modèle de safran n'a de sens que
+lorsqu'il est utilisé avec une hélice (il utilise les informations calculées sur le
+sillage).
+
+### Expression des efforts
+
+La figure suivante illustre l'ensemble modélisé :
+
+![](images/rudder.svg)
+
+Les efforts sont calculés au point P (de l'hélice) et transportés ensuite au
+centre de gravité. Ils s'écrivent :
+
+$F\mbox{tot}_P = F\mbox{safran}_P + F\mbox{hélice}_P$
+
+L'expression du torseur $F\mbox{hélice}_P$ est donnée dans le modèle "Hélices
+Wageningen série B".
+
+Les efforts dûs au safran seront calculés au point R puis le torseur sera
+déplacé au point P. Dans la suite, on notera simplement $F\mbox{safran}$ le
+torseur au point R.
+
+La modélisation choisie sépare les efforts dûs au safran en deux parties :
+
+- La part provenant de l'immersion dans le sillage de l'hélice
+- La part simplement due à la vitesse du safran en eau libre
+
+$F\mbox{safran} = F\mbox{safran}^{\mbox{sillage}} + F\mbox{safran}^{\mbox{hors sillage}}$
+
+Dans le repère lié au safran, celui-ci ne crée qu'une résultante suivant les axes X et Y (autrement dit, Fz=0 et Mx=My=Mz=0).
+
+Les composantes $F_x$ et $F_y$ de cette résultantes s'expriment sous la forme :
+
+$$F_x = -\mbox{Lift}(V_s, C_l, \alpha, S)\cdot\sin(\alpha) - \mbox{Drag}(V_s, C_d, \alpha, S)\cdot\cos(\alpha)$$
+$$F_y = +\mbox{Lift}(V_s, C_l, \alpha, S)\cdot\cos(\alpha) - \mbox{Drag}(V_s, C_d, \alpha, S)\cdot\sin(\alpha)$$
+
+La vitesse $V_s$ et l'aire $S$ sont calculées différemment suivant que l'on
+considère la partie du gouvernail dans le sillage de l'hélice ou celle à
+l'extérieur de ce sillage.
+L'angle d'incidence du fluide par rapport au safran est noté $\alpha$ et est défini par rapport à l'angle d'incidence $a$ du fluide (dans le repère NED) et l'angle
+du safran $\beta$ :
+
+![](images/rudder_angles.svg)
+
+$$\alpha = \beta - a(V_S) = \beta - atan2({V_S}_x, {V_S}_y)$$
+
+$$\mbox{Lift}(V_S, C_l, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cl(\alpha)\cos(\alpha) K_{\mbox{lift}}$$
+$$\mbox{Drag}(V_S, C_d, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cd(\alpha)\cos(\alpha) K_{\mbox{drag}}$$
+
+Le coefficient $\cos(\alpha)$ permet de réduire l'efficacité du gouvernail lorsque $\alpha$ devient important.
+
+Dans la suite, nous détaillerons le calcul de $V_S$, $C_l$, $C_d$ et $S$ pour
+la partie hors sillage et la partie interne sillage.
+
+#### Calcul de $V_S$
+
+Les notations utilisées figurent sur le schéma ci-dessus.
+La poussée $T$ générée par l'hélice est égale à la variation de la quantité de
+mouvement :
+
+$$ T = \rho\cdot A\cdot V_1\cdot(V_2 - V_a)$$
+
+(équation 3.31 *Marine Rudders & Control Surfaces* p. 49).
+
+Cette poussée est également égale à la variation de pression multipliée par
+l'aire du disque :
+
+$$ T = A\cdot(P_1'-P_1)$$
+
+On écrit l'équation de Bernoulli en amont du safran, entre $P_0$ et $P_1$, puis
+en aval du safran, entre $P_1'$ et $P_2$ :
+
+$$P_0 + \frac{1}{2}\rho V_a^2 = P_1 + \frac{1}{2}\rho V_1^2$$
+$$P_1' + \frac{1}{2}\rho V_1^2 = P_2 + \frac{1}{2}\rho V_2^2$$
+
+d'où
+
+$$P_1' = P_2 + \frac{1}{2}\rho V_2^2 - \frac{1}{2}\rho V_1^2$$
+$$P_1 = P_0 + \frac{1}{2}\rho V_a^2 - \frac{1}{2}\rho V_1^2$$
+
+puis
+
+$$P_1'-P_1 = P_2-P_0 + \frac{1}{2}\rho(V_2^2-V_a^2)$$
+
+Les pressions $P_2$ et $P_0$ correspondent à des écoulements non-perturbés (très
+en amont et très en aval du couple (safran,hélice)). Par conséquent, ces deux
+pressions sont égales :
+
+$$ T = A\cdot(P_1'-P_1) = \frac{1}{2}\rho A(V_2^2-V_a^2)$$
+
+(équation 3.32 *Marine Rudders & Control Surfaces* p. 49)
+
+On en déduit l'expression de $V_2$ :
+
+$$V_2 = \sqrt{V_a^2 + \frac{2T}{\rho A}}$$
+
+La vitesse $V_1$ au niveau du safran peut être déduit de l'égalité de deux
+expressions de $T$ :
+
+- D'une part, $T = \rho A V_1 (V_2 - V_a)$
+- Mais d'autre part, $T = \frac{1}{2}\rho A (V_2^2-V_a^2) = \frac{1}{2}\rho
+  A(V_2 - V_a)(V_2+V_a)$
+
+On en déduit :
+
+$$V_1 = \frac{1}{2}(V_a + V_2) = V_a + \frac{1}{2}(V_2-V_a)$$
+
+Les calculs de $V_0$ et de $V_2$ étant fait en régime stationnaire, cette
+expression de la vitesse $V_1$ ne tient pas compte de l'accélération du fluide
+entre l'hélice et le safran. On modélise l'effet de cette accélération par un
+facteur $K_R$ appelé "facteur de contraction" (cf. *Marine Rudders & Control
+Surfaces* eq. 3.37 p.51). On obtient ainsi une vitesse $u_{RS}$ telle que :
+
+$$u_{RS} = V_a + K_R(V_2-V_a)$$
+
+avec
+
+$$Kr =
+0.5+\frac{0.5}{1+\frac{0.15}{\left|\frac{\Delta_x}{D}\right|}}$$
+
+$\Delta_x$ désigne la distance entre l'hélide et le safran (suivant l'axe $x$)
+et $D$ est le diamètre de l'hélice.
+
+Afin de factoriser cette expression, on peut exprimer la vitesse $V_2$ en
+fonction de la vitesse $V_a$ : 
+
+$$V_2 = \sqrt{V_a^2 + \frac{2T}{\rho A}}$$
+
+or une autre expression de $T$ peut être donnée à partir du modèle de Wageningen :
+
+$$T = \rho n^2 D^4 K_T$$
+
+$$\frac{2T}{\rho A} = \frac{8}{\pi} n^2 D^2 K_T$$
+
+mais le paramètre d'avance $J$ s'écrit :
+
+$$J = \frac{V_a}{n D}$$
+
+donc
+
+$$\frac{2T}{\rho A} = \frac{8}{\pi} \frac{K_T}{J^2} V_a^2$$
+
+d'où
+
+$$u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + \frac{8 K_T}{\pi J^2}} -
+1\right)\right)$$
+
+On pose $$C_{Th} = \frac{8}{\pi} \frac{K_T}{J^2}$$
+
+$$u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}} - 1\right)\right)$$
+
+Cette vitesse $u_{RS}$ a été calculée en faisant les hypothèses suivantes :
+
+- Pas de frottement
+- L'hélice possède un nombre infini de lames
+- Pas de modification de la vitesse radiale par l'hélice
+
+On constate en pratique des écarts pouvant atteindre 30% entre $u_{RS}$ et les
+mesures réalisées lors d'essais. C'est pourquoi on multiplie la vitesse $u_{RS}$
+par un facteur $RF$ appelé "facteur de réduction" (cf. eq 11.1 p.? 371 *Marine
+Rudders & Control Surfaces*) :
+
+$$RF = 1-0.135\sqrt{C_{Th}}$$
+
+La vitesse dans le sillage de l'hélice s'exprime donc (dans le repère "body") :
+
+$$V_S = \left[\begin{array}{c}RF\cdot V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}}
+- 1\right)\right)\\ v\\0\end{array}\right]$$
+
+La vitesse hors du sillage est simplement :
+
+$$V_S = \left[\begin{array}{c}V_a\\ v\\0\end{array}\right]$$
+
+où $V_a = (1-w)\cdot u$, $w$ désignant le coefficient de sillage.
+
+#### Calcul de $C_l$
+
+On introduit le rapport de forme $\Lambda$ (cf. *Manoeuvring Technical Manual*
+p. 76) $$\Lambda = K_{\Lambda}\frac{b^2}{A_R}$$
+où $K_{\Lambda}$ est un paramètre renseigné par l'utilisateur.
+
+On utilise la formule de Soeding (cf. *Manoeuvring Technical Manual*, éq. 1.2.8
+p.77 et éq. 1.2.48 p.97) :
+
+$$Cl(\alpha) = 2\pi\frac{\Lambda(\Lambda+1)}{(\Lambda+2)^2\sin(\alpha)}$$
+
+#### Calcul de $C_d$
+
+On utilie la formule suivante (cf. *Maneuvering Technical Manual*, p. 78 eq. 1.2.9)
+$$C_d = 1.1 \frac{Cl^2}{\pi \Lambda} + Cd_0$$
+
+Le coefficient de résistance $Cd_0$ vaut :
+
+$$Cd_0 = 2.5 C_f$$
+
+(cf. *Maneuvering Technical Manual*, p. 78 (§ *for Cd0*))
+
+$C_f$ est un coefficient ITTC que l'on trouve par exemple dans *Marine rudders
+and Control Surfaces*, p.31 éq. 3.18 :
+
+$$Cf = \frac{0.075}{\left(\frac{\log(R_n)}{log(10.0)}-2\right)^2}$$
+
+Le nombre de Reynolds $R_n$ du safranest donné par (cf. *Maneuvering Technical
+Manual*, p. 78 éq. 1.2.12) :
+$$Rn = Vs  \frac{c}{\nu}$$
+
+où la corde $c$ du safran vaut :
+
+$$c = \frac{A_R}{b}$$
+
+#### Calcul de $S$
+
+On sépare l'aire $A_R$ du safran en deux parties : une partie à l'intérieur du
+sillage et une partie à l'extérieur. La partie à l'intérieur du sillage est
+obtenue en considérant le diamètre du sillage $D_w$ et la partie à l'extérieur en
+faisant la différence avec $A_R$.
+
+$$S_{\mbox{sillage}} = \min(A_R, c\cdot D_w)$$
+$$S_{\mbox{hors sillage}} = A_R - S_{\mbox{sillage}}$$
+
+où $c$ est la corde calculée ci-dessus.
+
+Le diamètre $D_w$ du sillage est défini par :
+
+$$\frac{D_w}{D_{\mbox{hélice}}} = \sqrt{\frac{V_1}{u_{RS}}}$$
+
+$$V_1 = V_a\left(1 + 0.5 \left(\sqrt{1 + C_{Th}} - 1\right)\right)$$
+$$u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}} - 1\right)\right)$$
+
+d'où
+
+$$\frac{D_w}{D_{\mbox{hélice}}} =
+\sqrt{\frac{1+0.5(\sqrt{1+C_{Th}}-1)}{1+K_R(\sqrt{1+C_{Th}}-1)}}$$
+
+
+### Paramétrage
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controlled forces:
+  - name: Prop. & rudder
+    model: propeller+rudder
+    position of propeller frame:
+        frame: mesh(body 1)
+        x: {value: -4, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: -1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency etaR: 1
+    thrust deduction factor t: 0.7
+    rotation: clockwise
+    number of blades: 3
+    blade area ratio AE/A0: 0.5
+    diameter: {value: 2, unit: m}
+    rudder area: {value: 2.2, unit: m^2}
+    rudder height: {value: 2, unit: m^2}
+    effective aspect ratio: 1.7
+    lift tuning coefficient: 2.1
+    drag tuning coefficient: 1
+    position of rudder in body frame:
+        x: {value: -5.1, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On retrouve les paramètres du modèle 'Wageningen' qui ne sont pas décrits à
+nouveau ici (hormis `model`). On a les paramètres supplémentaires suivants :
+
+- `model` : `propeller+rudder` pour ce modèle
+- `rudder area` : $A_R$
+- `rudder height` : $b$
+- `effective aspect ratio`: Paramètre $K_{\Lambda}$ dans le calcule du rapport
+   de forme (pour la formule de Soeding) ci-dessus
+- `lift tuning coefficient`: $K_{\mbox{lift}}$ dans les formules ci-dessus 
+- `drag tuning coefficient`: $K_{\mbox{drag}}$ dans les formules ci-dessus
+- `position of rudder in body frame`: coordonnées du point $P$ (cf. schéma ci-dessus), projetées dans le repère "body"
+
+Ce modèle a trois commandes :
+
+- La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
+par `rpm`.
+- Le ratio "pas sur diamètre", défini par `P/D`
+- L'angle du safran, défini par `beta`
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- name: controller
+  t: [1,3,10]
+  rpm: {unit: rpm, values: [3000, 3000, 4000]}
+  P/D: [0.7,0.7,0.8]
+  beta: {unit: deg, values: [10,-15,20]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Références
+
+- *Marine Rudders & Control Surfaces, Principles, Data, Design &
+  Applications*, Anthony F. Molland & Stephen R. Turnock, published by Elsevier
+  Ltd., 2007, ISBN: 978-0-75-066944-3
+- *Maneuvoeuvring Technical Manual*, Seehafen Verlag, 1993, ISBN 3-87743-902-0
+
