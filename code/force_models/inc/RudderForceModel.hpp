@@ -142,7 +142,7 @@ class RudderForceModel : public ControllableForceModel
                 double chord;
                 double lambda;
                 double D; //!< Propeller diameter (in m)
-                double Kr;//!< Contraction factor (cf. Marine Rudders & Control Surfaces, Molland & Turnock, eq. 3.37 p.51
+                double Kr;//!< Contraction factor (cf. Marine Rudders & Control Surfaces, Molland & Turnock, eq. 3.37 p.51)
                 double rho;
                 double nu;
         };
