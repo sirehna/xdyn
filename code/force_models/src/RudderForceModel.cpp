@@ -18,6 +18,8 @@
 
 #define HYPOT(X,Y,Z) sqrt((X)*(X)+(Y)*(Y)+(Z)*(Z))
 
+const std::string RudderForceModel::model_name = "propeller+rudder";
+
 RudderForceModel::Yaml::Yaml() :
                 Ar(0),
                 b(0),

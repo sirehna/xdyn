@@ -30,6 +30,7 @@ class RudderForceModel : public ControllableForceModel
         ssc::kinematics::Vector6d get_rudder_force(const BodyStates& states, const double t, std::map<std::string,double> commands, const double T) const;
         ssc::kinematics::Point get_ship_speed(const BodyStates& states, const double t) const;
         static Yaml parse(const std::string& yaml);
+        static const std::string model_name;
 
 
         template <typename T> struct InOutWake
