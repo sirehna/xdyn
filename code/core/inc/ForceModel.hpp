@@ -46,7 +46,7 @@ class ForceModel
         void update(const BodyStates& body, const double t);
         virtual ssc::kinematics::Wrench operator()(const BodyStates& body, const double t) const = 0;
         virtual double potential_energy(const BodyStates& body, const std::vector<double>& x) const {(void)body;(void)x;return 0;}
-        std::string get_name() const;
+        virtual std::string get_name() const;
         virtual bool is_a_surface_force_model() const;
         ssc::kinematics::Wrench get() const;
         void feed(Observer& observer) const;
