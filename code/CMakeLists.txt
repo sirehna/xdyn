@@ -197,6 +197,7 @@ ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(force_models)
 ADD_SUBDIRECTORY(parser_extensions)
 ADD_SUBDIRECTORY(observers_and_api)
+ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
 
 ADD_LIBRARY(${PROJECT_NAME} SHARED
@@ -211,6 +212,7 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:external_data_structures>
         $<TARGET_OBJECTS:hdb_interpolators>
         $<TARGET_OBJECTS:interface_hdf5>
+        $<TARGET_OBJECTS:gz_curves>
         )
 
 MACRO(ADD_IMPORTED_LIB libname)
@@ -260,6 +262,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:hdb_interpolators_tests>
         $<TARGET_OBJECTS:interface_hdf5_tests>
         $<TARGET_OBJECTS:observers_and_api_tests>
+        $<TARGET_OBJECTS:gz_curves_tests>
         )
 
 SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
