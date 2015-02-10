@@ -170,3 +170,8 @@ ssc::kinematics::EulerAngles Body::get_angles(const StateType& all_states, const
 {
     return states.get_angles(all_states, idx, c);
 }
+
+std::tuple<double,double,double,double> Body::get_quaternions(const ssc::kinematics::EulerAngles& angle, const YamlRotation& c) const
+{
+    return states.convert(angle,c);
+}

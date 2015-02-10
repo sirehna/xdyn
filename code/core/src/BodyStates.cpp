@@ -62,6 +62,33 @@ ssc::kinematics::EulerAngles BodyStates::convert(const ssc::kinematics::Rotation
     return EulerAngles();
 }
 
+std::tuple<double,double,double,double> BodyStates::convert(const ssc::kinematics::EulerAngles& R, const YamlRotation& rotations) const
+{
+    using namespace ssc::kinematics;
+    if (rotations.order_by == "angle")
+    {
+        if (match(rotations.convention, "z", "y'", "x''"))
+        {
+            Eigen::Quaternion<double> quat(rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R));
+            std::tuple<double,double,double,double> ret;
+            std::get<0>(ret) = quat.w();
+            std::get<1>(ret) = quat.x();
+            std::get<2>(ret) = quat.y();
+            std::get<3>(ret) = quat.z();
+            return ret;
+        }
+
+        std::stringstream ss;
+        ss << "Rotation convention '" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "' is not currently supported.";
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, std::string("Ordering rotations by '") + rotations.order_by + "' is not currently supported");
+    }
+    return std::make_tuple(0.,0.,0.,0.);
+}
+
 ssc::kinematics::EulerAngles BodyStates::get_angles(const YamlRotation& c) const
 {
     return convert(get_rot_from_ned_to_body(),c);

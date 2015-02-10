@@ -8,6 +8,8 @@
 #ifndef BODYSTATES_HPP_
 #define BODYSTATES_HPP_
 
+#include <tuple>
+
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
@@ -62,6 +64,7 @@ struct BodyStates
     ssc::kinematics::EulerAngles get_angles(const YamlRotation& c) const;
     ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const size_t idx, const YamlRotation& c) const;
     ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations) const;
+    std::tuple<double,double,double,double> convert(const ssc::kinematics::EulerAngles& R, const YamlRotation& rotations) const;
     ssc::kinematics::RotationMatrix get_rot_from_ned_to_body() const;
     ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t idx) const;
 };
