@@ -10,6 +10,7 @@
 #include "make_sim_for_GZ.hpp"
 #include "ResultantForceComputerTest.hpp"
 #include "ResultantForceComputer.hpp"
+#include "SurfaceElevationInterface.hpp"
 #include "GZTypes.hpp"
 #include "STL_data.hpp"
 #include "yaml_data.hpp"
@@ -49,6 +50,20 @@ TEST_F(ResultantForceComputerTest, sim_only_contains_gravity_and_hydrostatic_for
     ASSERT_TRUE(has_gravity);
     ASSERT_TRUE(has_hydrostatic);
 }
+
+TEST_F(ResultantForceComputerTest, sim_only_contains_default_surface_elevation)
+{
+    const auto s = GZ::make_sim(test_data::cube_in_waves(), test_data::cube());
+    EnvironmentAndFrames env = s.get_env();
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double x = a.random<double>().between(-1000,1000);
+        const double y = a.random<double>().between(-1000,1000);
+        const double t = a.random<double>().between(0,1000);
+        ASSERT_DOUBLE_EQ(0, env.w->wave_height(x,y,t));
+    }
+}
+
 
 TEST_F(ResultantForceComputerTest, can_compute_resultant_force_for_a_cube)
 {
