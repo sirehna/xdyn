@@ -46,7 +46,7 @@ TEST_F(ResultantForceComputerTest, sim_only_contains_gravity_and_hydrostatic_for
     }
     ASSERT_EQ(2, force_models.size());
     const bool has_gravity = force_models.find("gravity") != force_models.end();
-    const bool has_hydrostatic = force_models.find("non-linear hydrostatic (exact)") != force_models.end();
+    const bool has_hydrostatic = force_models.find("non-linear hydrostatic (fast)") != force_models.end();
     ASSERT_TRUE(has_gravity);
     ASSERT_TRUE(has_hydrostatic);
 }

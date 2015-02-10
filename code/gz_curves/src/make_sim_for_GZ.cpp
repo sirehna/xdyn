@@ -19,7 +19,7 @@ Sim GZ::make_sim(const std::string& yaml, const std::string& stl)
     body.external_forces.clear();
     YamlModel gravity, hydrostatic, waves;
     gravity.model = "gravity";
-    hydrostatic.model = "non-linear hydrostatic (exact)";
+    hydrostatic.model = "non-linear hydrostatic (fast)";
     body.external_forces.push_back(gravity);
     body.external_forces.push_back(hydrostatic);
     input.bodies[0] = body;
