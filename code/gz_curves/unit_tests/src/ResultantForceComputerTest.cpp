@@ -15,6 +15,7 @@
 #include "STL_data.hpp"
 #include "yaml_data.hpp"
 
+#define EPS (1E-10)
 
 Sim ResultantForceComputerTest::sim = GZ::make_sim(test_data::stable_cube_example(), test_data::cube());
 
@@ -67,11 +68,15 @@ TEST_F(ResultantForceComputerTest, sim_only_contains_default_surface_elevation)
 
 TEST_F(ResultantForceComputerTest, can_compute_resultant_force_for_a_cube)
 {
-    const GZ::ResultantForceComputer sum_of_forces(sim);
-    const auto F = sum_of_forces(GZ::State(0,0,0));
-    ASSERT_DOUBLE_EQ(0, F.z);
-    ASSERT_DOUBLE_EQ(0, F.theta);
-    ASSERT_DOUBLE_EQ(0, F.phi);
+    GZ::ResultantForceComputer sum_of_forces(sim);
+    const auto F0 = sum_of_forces(GZ::State(0,0,0));
+    ASSERT_NEAR(1000*9.81-1026*0.5*9.81, F0.z,EPS);
+    ASSERT_NEAR(0, F0.phi,EPS);
+    ASSERT_NEAR(0, F0.theta,EPS);
+    const auto F1 = sum_of_forces(GZ::State(2,0,0));
+    ASSERT_NEAR(1000*9.81-1026*1.*9.81, F1.z,EPS);
+    ASSERT_NEAR(0, F1.phi,EPS);
+    ASSERT_NEAR(0, F1.theta,EPS);
 }
 
 
