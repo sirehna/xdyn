@@ -332,3 +332,13 @@ TEST_F(SimTest, bug_2641)
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 5, 1, commands);
     ASSERT_LT(res.back().x[VIDX(0)], -0.003);
 }
+
+TEST_F(SimTest, bug_in_exact_hydrostatic)
+{
+    const auto yaml = SimulatorYamlParser(test_data::anthineas_exact_hydrostatic_test()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::bug_in_exact_hydrostatic(), test_data::cube(), 0, 0.1, 0.4);
+    for (auto r:res)
+    {
+        ASSERT_FALSE(std::isnan(r.x.front()));
+    }
+}

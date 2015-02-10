@@ -320,7 +320,7 @@ EPoint exact_application_point(
     const EPoint n=that_facet->unit_normal;
     const EPoint ns=normal_to_free_surface(that_facet,down_direction,all_nodes,all_immersions);
     const Eigen::Matrix3d R20 = facet_trihedron(n,ns);
-    if(R20.col(0).norm() < 0.5 ) // quick test : facet is parallel to the free surface
+    if (n.cross(ns).norm()<0.5) // quick test : facet is parallel to the free surface
         return that_facet->barycenter;
 
     const Eigen::Matrix3d JR2=get_inertia_of_polygon_wrt(that_facet,R20,all_nodes );
