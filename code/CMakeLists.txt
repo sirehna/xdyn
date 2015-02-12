@@ -45,7 +45,7 @@ INCLUDE(CMakeBoost)
 SET(Boost_USE_STATIC_LIBS   ON)
 SET(Boost_USE_MULTITHREADED OFF)
 #SET(Boost_USE_STATIC_RUNTIME    OFF)
-FIND_PACKAGE(Boost 1.53 COMPONENTS program_options REQUIRED)
+FIND_PACKAGE(Boost 1.53 COMPONENTS program_options system REQUIRED)
 IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_INCLUDE_DIRS  : ${Boost_INCLUDE_DIRS}")
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
@@ -135,7 +135,11 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         binary_stl_data_static
         ${PROJECT_NAME}
         random_data_generator_shared
+        ${Boost_SYSTEM_LIBRARY}
         )
+IF(WIN32)
+    TARGET_LINK_LIBRARIES(${TEST_EXE} ws2_32)
+ENDIF()
 
 INCLUDE(CMakeTesting)
 INCLUDE(CMakeDocumentation)
