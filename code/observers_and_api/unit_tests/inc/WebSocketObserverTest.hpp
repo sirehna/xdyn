@@ -1,14 +1,14 @@
-#ifndef SOCKETOBSERVERTEST_HPP_
-#define SOCKETOBSERVERTEST_HPP_
+#ifndef WEBSOCKETOBSERVERTEST_HPP_
+#define WEBSOCKETOBSERVERTEST_HPP_
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
 
-class SocketObserverTest : public ::testing::Test
+class WebSocketObserverTest : public ::testing::Test
 {
     protected:
-    SocketObserverTest();
-        virtual ~SocketObserverTest(){};
+        WebSocketObserverTest();
+        virtual ~WebSocketObserverTest(){};
         virtual void SetUp(){};
         virtual void TearDown(){};
         ssc::random_data_generator::DataGenerator a;

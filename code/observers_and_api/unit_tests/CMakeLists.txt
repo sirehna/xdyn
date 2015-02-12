@@ -5,11 +5,13 @@ FILE(GLOB SRC src/SimHdf5WaveObserverTest.cpp
               src/SimHdf5WaveObserverBuilderTest.cpp
               src/ListOfObserversTest.cpp
               src/Hdf5ObserverTest.cpp
-              src/ForceTester.cpp              src/ForceTests.cpp
+              src/SocketObserverTest.cpp
+              src/WebSocketObserverBoostAsioTest.cpp
               src/SimTest.cpp
               src/ForceTester.cpp
+              src/ForceTests.cpp
               src/MapObserverTest.cpp
-              src/SocketObserverTest.cpp              )
+              )
 # ------8<---------------------------------------------->8-----
 
 # Include directories
