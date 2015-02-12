@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>My first Three.js app</title>
+        <link rel="stylesheet" href="css/buttons.css"/>
+    </head>
+    <body>
+
+        <button class="myButton"
+            onclick="reset()">RESET</button>
+                <form method="post" onsubmit="f(document.getElementById('xval').value,document.getElementById('yval').value,document.getElementById('zval').value);return false;">
+                X<input type="text" id="xval" value=0>
+                Y<input type="text" id="yval" value=0>
+                Z<input type="text" id="zval" value=0>
+                <input type="submit" class "myButton" value="Submit">
+                </form>
+
+        <script src="js/three.min.js"></script>
+        <script src="js/STLLoader.js"></script>
+        <script src="js/Detector.js"></script>
+        <script src="js/test.js"></script>
+    </body>
+</html>
