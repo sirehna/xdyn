@@ -12,6 +12,7 @@ set(SRC src/simulator_api.cpp
         src/CsvObserver.cpp
         src/TsvObserver.cpp
         src/Hdf5Observer.cpp
+        src/WebSocketObserver.cpp
         ${CMAKE_BINARY_DIR}/demoMatLab.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
         src/MapObserver.cpp
