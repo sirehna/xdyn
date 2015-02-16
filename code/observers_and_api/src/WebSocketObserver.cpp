@@ -107,13 +107,13 @@ WebSocketEndpoint::~WebSocketEndpoint()
 
         std::cout << "> Closing connection " << it->second->get_id() << std::endl;
 
-        websocketpp::lib::error_code ec;
-        m_endpoint.close(it->second->get_hdl(), websocketpp::close::status::going_away, "", ec);
-        if (ec)
+        websocketpp::lib::error_code error_code;
+        m_endpoint.close(it->second->get_hdl(), websocketpp::close::status::going_away, "", error_code);
+        if (error_code)
         {
             std::stringstream ss;
             ss << "> Error closing connection " << it->second->get_id() << ": "
-               << ec.message() << std::endl;
+               << error_code.message() << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketObserverException,ss.str());
         }
     }
@@ -122,14 +122,14 @@ WebSocketEndpoint::~WebSocketEndpoint()
 
 int WebSocketEndpoint::connect(std::string const & uri)
 {
-    websocketpp::lib::error_code ec;
+    websocketpp::lib::error_code error_code;
 
-    client::connection_ptr con = m_endpoint.get_connection(uri, ec);
+    client::connection_ptr con = m_endpoint.get_connection(uri, error_code);
 
-    if (ec)
+    if (error_code)
     {
         std::stringstream ss;
-        ss << "> Connect initialization error: " << ec.message() << std::endl;
+        ss << "> Connect initialization error: " << error_code.message() << std::endl;
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
         return -1;
     }
@@ -170,7 +170,7 @@ int WebSocketEndpoint::connect(std::string const & uri)
 
 void WebSocketEndpoint::close(int id, websocketpp::close::status::value code, std::string reason)
 {
-    websocketpp::lib::error_code ec;
+    websocketpp::lib::error_code error_code;
 
     con_list::iterator metadata_it = m_connection_list.find(id);
     if (metadata_it == m_connection_list.end())
@@ -179,30 +179,30 @@ void WebSocketEndpoint::close(int id, websocketpp::close::status::value code, st
         return;
     }
 
-    m_endpoint.close(metadata_it->second->get_hdl(), code, reason, ec);
-    if (ec)
+    m_endpoint.close(metadata_it->second->get_hdl(), code, reason, error_code);
+    if (error_code)
     {
         std::stringstream ss;
-        ss << "> Error initiating close: " << ec.message() << std::endl;
+        ss << "> Error initiating close: " << error_code.message() << std::endl;
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
     }
 }
 
 void WebSocketEndpoint::send(const int id, const std::string& message)
 {
-    websocketpp::lib::error_code ec;
+    websocketpp::lib::error_code error_code;
     con_list::iterator metadata_it = m_connection_list.find(id);
     if (metadata_it == m_connection_list.end())
     {
         std::cout << "> No connection found with id " << id << std::endl;
         return;
     }
-
-    m_endpoint.send(metadata_it->second->get_hdl(), message, websocketpp::frame::opcode::text, ec);
-    if (ec)
+    auto hdl = metadata_it->second->get_hdl();
+    m_endpoint.send(hdl, message, websocketpp::frame::opcode::text, error_code);
+    if (error_code)
     {
         std::stringstream ss;
-        ss << "> Error sending message: " << ec.message() << std::endl;
+        ss << "> Error sending message: " << error_code.message() << std::endl;
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
         return;
     }
@@ -212,7 +212,7 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
 
 void WebSocketEndpoint::send(const int id, const std::vector<double>& vector)
 {
-    websocketpp::lib::error_code ec;
+    websocketpp::lib::error_code error_code;
     con_list::iterator metadata_it = m_connection_list.find(id);
     if (metadata_it == m_connection_list.end())
     {
@@ -220,11 +220,11 @@ void WebSocketEndpoint::send(const int id, const std::vector<double>& vector)
         return;
     }
 
-    m_endpoint.send(metadata_it->second->get_hdl(), vector.data(),vector.size()*sizeof(double), websocketpp::frame::opcode::binary, ec);
-    if (ec)
+    m_endpoint.send(metadata_it->second->get_hdl(), vector.data(),vector.size()*sizeof(double), websocketpp::frame::opcode::binary, error_code);
+    if (error_code)
     {
         std::stringstream ss;
-        ss << "> Error sending message: " << ec.message() << std::endl;
+        ss << "> Error sending message: " << error_code.message() << std::endl;
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
         return;
     }
