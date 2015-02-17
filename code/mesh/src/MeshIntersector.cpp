@@ -35,10 +35,9 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
         int status = get_edge_immersion_status(z0, z1);
         edges_immersion_status[edge_index] = status;
         if (crosses_free_surface(status))
-            split_edges[edge_index] = split_partially_immersed_edge(edge_index,
-                    edges_immersion_status);
+            split_edges[edge_index] = split_partially_immersed_edge(edge_index, edges_immersion_status);
 
-        if (crosses_free_surface(status) || just_touches_free_surface(status))
+        if (crosses_free_surface(status) or just_touches_free_surface(status))
             for (std::vector<size_t>::const_iterator that_facet =
                     mesh->facetsPerEdge[edge_index].begin();
                     that_facet != mesh->facetsPerEdge[edge_index].end();
