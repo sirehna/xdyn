@@ -18,7 +18,7 @@ FroudeKrylovForceModel::FroudeKrylovForceModel(const std::string& body_name_, co
 SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double t) const
 {
     const EPoint dS = that_facet->area*that_facet->unit_normal;
-    const ssc::kinematics::Point C(states.M->get_frame(), that_facet->barycenter);
+    const ssc::kinematics::Point C(states.M->get_frame(), that_facet->centre_of_gravity);
     double eta = 0;
     for (auto it = that_facet->vertex_index.begin() ; it != that_facet->vertex_index.end() ; ++it)
     {

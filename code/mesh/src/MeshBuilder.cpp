@@ -63,7 +63,7 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
         const Matrix3x M = convert(list_of_points);
         facet.unit_normal = unit_normal(M);
         facet.area = area(M);
-        facet.barycenter = centre_of_gravity(M);
+        facet.centre_of_gravity = centre_of_gravity(M);
         for (VectorOfPoints::const_iterator it = list_of_points.begin() ; it != list_of_points.end() ; )
         {
             size_t vertex_index = build_one_point(*it);

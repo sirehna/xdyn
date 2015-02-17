@@ -339,7 +339,7 @@ EPoint exact_application_point(
     const EPoint ns=normal_to_free_surface(that_facet,down_direction,all_nodes,all_immersions);
     const Eigen::Matrix3d R20 = facet_trihedron(n,ns);
     if ((double)n.cross(ns).norm()<1000*std::numeric_limits<double>::epsilon()) // quick test : facet is parallel to the free surface
-        return that_facet->barycenter;
+        return that_facet->centre_of_gravity;
 
     const Eigen::Matrix3d JR2=get_inertia_of_polygon_wrt(that_facet,R20,all_nodes );
     const Eigen::Matrix3d R02 = R20.transpose();
@@ -349,7 +349,7 @@ EPoint exact_application_point(
     const double xR = JR2(0,1)/yG;
     const double yR = JR2(0,0)/yG;
     const EPoint offset2( xR , yR , 0);
-    return that_facet->barycenter + R02 * offset2;
+    return that_facet->centre_of_gravity + R02 * offset2;
 }
 
 Matrix3x project_facet_on_free_surface(
@@ -375,7 +375,7 @@ Eigen::Matrix3d get_inertia_of_polygon_wrt(
         )
 {
     // Compute the coordinates of facet vertices in R2
-    const EPoint G=that_facet->barycenter;
+    const EPoint G=that_facet->centre_of_gravity;
     const size_t nVertices = that_facet->vertex_index.size();
     Matrix3x verticesInR0(3,nVertices);
     for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {

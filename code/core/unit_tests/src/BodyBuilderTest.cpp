@@ -218,53 +218,53 @@ TEST_F(BodyBuilderTest, mesh_is_correct)
     ASSERT_NEAR(   -0.116867487937,(double)states.mesh->facets.at(11).unit_normal(1),EPS);
     ASSERT_NEAR(    0.419507112791,(double)states.mesh->facets.at(11).unit_normal(2),EPS);
 
-    ASSERT_NEAR( 4653.107061659046,(double)states.mesh->facets.at(0).barycenter(0),EPS);
-    ASSERT_NEAR(27495.176689261680,(double)states.mesh->facets.at(0).barycenter(1),EPS);
-    ASSERT_NEAR(17643.637701317213,(double)states.mesh->facets.at(0).barycenter(2),EPS);
+    ASSERT_NEAR( 4653.107061659046,(double)states.mesh->facets.at(0).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.176689261680,(double)states.mesh->facets.at(0).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17643.637701317213,(double)states.mesh->facets.at(0).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4652.669668367245,(double)states.mesh->facets.at(1).barycenter(0),EPS);
-    ASSERT_NEAR(27495.317970853757,(double)states.mesh->facets.at(1).barycenter(1),EPS);
-    ASSERT_NEAR(17643.533064601623,(double)states.mesh->facets.at(1).barycenter(2),EPS);
+    ASSERT_NEAR( 4652.669668367245,(double)states.mesh->facets.at(1).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.317970853757,(double)states.mesh->facets.at(1).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17643.533064601623,(double)states.mesh->facets.at(1).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4653.110854251884,(double)states.mesh->facets.at(2).barycenter(0),EPS);
-    ASSERT_NEAR(27496.189976644138,(double)states.mesh->facets.at(2).barycenter(1),EPS);
-    ASSERT_NEAR(17643.928124126061,(double)states.mesh->facets.at(2).barycenter(2),EPS);
+    ASSERT_NEAR( 4653.110854251884,(double)states.mesh->facets.at(2).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27496.189976644138,(double)states.mesh->facets.at(2).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17643.928124126061,(double)states.mesh->facets.at(2).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4652.948115790528,(double)states.mesh->facets.at(3).barycenter(0),EPS);
-    ASSERT_NEAR(27495.970783393434,(double)states.mesh->facets.at(3).barycenter(1),EPS);
-    ASSERT_NEAR(17644.312432250183,(double)states.mesh->facets.at(3).barycenter(2),EPS);
+    ASSERT_NEAR( 4652.948115790528,(double)states.mesh->facets.at(3).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.970783393434,(double)states.mesh->facets.at(3).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17644.312432250183,(double)states.mesh->facets.at(3).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4652.879446831289,(double)states.mesh->facets.at(4).barycenter(0),EPS);
-    ASSERT_NEAR(27495.814847424819,(double)states.mesh->facets.at(4).barycenter(1),EPS);
-    ASSERT_NEAR(17643.327054887071,(double)states.mesh->facets.at(4).barycenter(2),EPS);
+    ASSERT_NEAR( 4652.879446831289,(double)states.mesh->facets.at(4).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.814847424819,(double)states.mesh->facets.at(4).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17643.327054887071,(double)states.mesh->facets.at(4).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4652.626420957397,(double)states.mesh->facets.at(5).barycenter(0),EPS);
-    ASSERT_NEAR(27496.053574915863,(double)states.mesh->facets.at(5).barycenter(1),EPS);
-    ASSERT_NEAR(17643.645189000905,(double)states.mesh->facets.at(5).barycenter(2),EPS);
+    ASSERT_NEAR( 4652.626420957397,(double)states.mesh->facets.at(5).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27496.053574915863,(double)states.mesh->facets.at(5).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17643.645189000905,(double)states.mesh->facets.at(5).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4653.338469079641,(double)states.mesh->facets.at(6).barycenter(0),EPS);
-    ASSERT_NEAR(27495.551818480999,(double)states.mesh->facets.at(6).barycenter(1),EPS);
-    ASSERT_NEAR(17644.238770556203,(double)states.mesh->facets.at(6).barycenter(2),EPS);
+    ASSERT_NEAR( 4653.338469079641,(double)states.mesh->facets.at(6).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.551818480999,(double)states.mesh->facets.at(6).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17644.238770556203,(double)states.mesh->facets.at(6).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4652.991363200376,(double)states.mesh->facets.at(7).barycenter(0),EPS);
-    ASSERT_NEAR(27495.235179331332,(double)states.mesh->facets.at(7).barycenter(1),EPS);
-    ASSERT_NEAR(17644.200307850901,(double)states.mesh->facets.at(7).barycenter(2),EPS);
+    ASSERT_NEAR( 4652.991363200376,(double)states.mesh->facets.at(7).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.235179331332,(double)states.mesh->facets.at(7).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17644.200307850901,(double)states.mesh->facets.at(7).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4653.501207540998,(double)states.mesh->facets.at(8).barycenter(0),EPS);
-    ASSERT_NEAR(27495.771011731704,(double)states.mesh->facets.at(8).barycenter(1),EPS);
-    ASSERT_NEAR(17643.854462432086,(double)states.mesh->facets.at(8).barycenter(2),EPS);
+    ASSERT_NEAR( 4653.501207540998,(double)states.mesh->facets.at(8).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.771011731704,(double)states.mesh->facets.at(8).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17643.854462432086,(double)states.mesh->facets.at(8).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4653.316840123090,(double)states.mesh->facets.at(9).barycenter(0),EPS);
-    ASSERT_NEAR(27495.673565832738,(double)states.mesh->facets.at(9).barycenter(1),EPS);
-    ASSERT_NEAR(17643.431691602662,(double)states.mesh->facets.at(9).barycenter(2),EPS);
+    ASSERT_NEAR( 4653.316840123090,(double)states.mesh->facets.at(9).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.673565832738,(double)states.mesh->facets.at(9).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17643.431691602662,(double)states.mesh->facets.at(9).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4652.553969908576,(double)states.mesh->facets.at(10).barycenter(0),EPS);
-    ASSERT_NEAR(27495.376460923409,(double)states.mesh->facets.at(10).barycenter(1),EPS);
-    ASSERT_NEAR(17644.095671135306,(double)states.mesh->facets.at(10).barycenter(2),EPS);
+    ASSERT_NEAR( 4652.553969908576,(double)states.mesh->facets.at(10).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.376460923409,(double)states.mesh->facets.at(10).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17644.095671135306,(double)states.mesh->facets.at(10).centre_of_gravity(2),EPS);
 
-    ASSERT_NEAR( 4652.463682496041,(double)states.mesh->facets.at(11).barycenter(0),EPS);
-    ASSERT_NEAR(27495.834381665158,(double)states.mesh->facets.at(11).barycenter(1),EPS);
-    ASSERT_NEAR(17644.029497125022,(double)states.mesh->facets.at(11).barycenter(2),EPS);
+    ASSERT_NEAR( 4652.463682496041,(double)states.mesh->facets.at(11).centre_of_gravity(0),EPS);
+    ASSERT_NEAR(27495.834381665158,(double)states.mesh->facets.at(11).centre_of_gravity(1),EPS);
+    ASSERT_NEAR(17644.029497125022,(double)states.mesh->facets.at(11).centre_of_gravity(2),EPS);
 
     ASSERT_EQ(8,states.mesh->nodes.cols());
     ASSERT_EQ(3,states.mesh->nodes.rows());
