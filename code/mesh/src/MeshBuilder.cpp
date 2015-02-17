@@ -43,14 +43,15 @@ Matrix3x MeshBuilder::resize(const Matrix3x& M) const
 Mesh MeshBuilder::build()
 {
     *this = std::for_each(v.begin(), v.end(), *this);
-    std::array<std::vector<size_t>,2> edges_for_mesh;
-    edges_for_mesh[0].reserve(edges.size());
-    edges_for_mesh[1].reserve(edges.size());
-    for(size_t i=0;i<edges.size();i++) {
-        edges_for_mesh[0].push_back(edges[i].vertex_index[0]);
-        edges_for_mesh[1].push_back(edges[i].vertex_index[1]);
+    std::array<std::vector<size_t>,2> edges_in_mesh;
+    edges_in_mesh[0].reserve(edges.size());
+    edges_in_mesh[1].reserve(edges.size());
+    for(size_t i=0;i<edges.size();i++)
+    {
+        edges_in_mesh[0].push_back(edges[i].vertex_index[0]);
+        edges_in_mesh[1].push_back(edges[i].vertex_index[1]);
     }
-    return Mesh(resize(nodes), edges_for_mesh , facets, facetsPerEdge , orientedEdgesPerFacet , clockwise);
+    return Mesh(resize(nodes), edges_in_mesh , facets, facetsPerEdge , orientedEdgesPerFacet , clockwise);
 }
 
 void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
