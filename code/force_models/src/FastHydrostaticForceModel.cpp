@@ -17,6 +17,7 @@ FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_nam
 
 SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double) const
 {
+    if (that_facet->area == 0) return DF(EPoint(0,0,0),EPoint(0,0,0));
     const double zG = zg_calculator->get_zG_in_NED(that_facet->barycenter);
     const EPoint dS = that_facet->area*that_facet->unit_normal;
     const EPoint C = get_application_point(that_facet, states, zG);
