@@ -19,6 +19,7 @@ Sim get_system(const std::string& yaml, const std::map<std::string, VectorOfVect
 Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 Sim get_system(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 Sim get_system(const YamlSimulatorInput& yaml, const std::string& mesh, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
+Sim get_system(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& mesh, const double t0, const ssc::data_source::DataSource& command_listener);
 Sim get_system(const YamlSimulatorInput& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 
 template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)

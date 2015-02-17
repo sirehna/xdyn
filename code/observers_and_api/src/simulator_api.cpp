@@ -70,6 +70,14 @@ Sim get_system(const YamlSimulatorInput& input, const std::string& mesh, const d
     return get_system(input, meshes, t0, command_listener);
 }
 
+Sim get_system(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& mesh, const double t0, const ssc::data_source::DataSource& command_listener)
+{
+    const auto name = input.bodies.front().name;
+    MeshMap meshes;
+    meshes[name] = mesh;
+    return get_system(input, meshes, t0, command_listener);
+}
+
 Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, const double t0, const ssc::data_source::DataSource& command_listener)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
