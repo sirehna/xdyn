@@ -25,7 +25,7 @@ SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_fa
 
 EPoint FastHydrostaticForceModel::get_application_point(const FacetIterator& that_facet, const BodyStates&, const double) const
 {
-    return that_facet->barycenter;
+    return that_facet->barycenter; // In Body frame
 }
 
 double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector<double>&, const EnvironmentAndFrames& env) const
