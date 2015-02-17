@@ -329,7 +329,7 @@ TEST_F(ForceTests, new_hydrostatic_should_only_be_along_z)
     }
 }
 
-TEST_F(ForceTests, DISABLED_new_hydrostatic_should_only_be_along_z_for_anthineas)
+TEST_F(ForceTests, new_hydrostatic_should_only_be_along_z_for_anthineas)
 {
     ForceTester test(test_data::oscillating_cube_example(), anthineas());
 

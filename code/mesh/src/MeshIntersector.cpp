@@ -337,6 +337,7 @@ CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const F
         ret += center_of_mass(*that_facet);
     }
     if (ret.volume>0) ret.G /= ret.volume;
+    ret.volume = std::abs(ret.volume);
     return ret;
 }
 
@@ -348,7 +349,8 @@ CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const F
     {
         ret += center_of_mass(closing_facet);
     }
-    if (ret.volume>0) ret.G /= ret.volume;
+    if (ret.volume!=0) ret.G /= ret.volume;
+    ret.volume = std::abs(ret.volume);
     return ret;
 }
 
