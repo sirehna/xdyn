@@ -228,6 +228,12 @@ class MeshIntersector
         void classify_or_split(const std::vector<size_t>& split_edges,
                                std::vector<bool>& facet_crosses_free_surface,
                                std::vector<int>& edges_immersion_status);
+
+        /**
+         * \brief Classify facet based on immersion status
+         */
+        void classify_facet(const size_t facet_index, const std::vector<int>& edges_immersion_status);
+
         void reset_dynamic_members();
 
         double volume(const FacetIterator& begin, const FacetIterator& end) const;

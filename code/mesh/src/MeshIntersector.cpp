@@ -53,26 +53,29 @@ void MeshIntersector::classify_or_split(
         std::vector<bool>& facet_crosses_free_surface,
         std::vector<int>& edges_immersion_status)
 {
-    // iterate on each facet to classify and/or split
-    for (size_t facet_index = 0; facet_index < mesh->static_facets;
-            ++facet_index)
+    // Iterate on each facet to classify and/or split
+    for (size_t facet_index = 0 ; facet_index < mesh->static_facets ; ++facet_index)
     {
-        if (facet_crosses_free_surface[facet_index])
-        {
-            split_partially_immersed_facet(facet_index, edges_immersion_status,
-                    split_edges);
-        }
-        else
-        {
-            if (is_emerged(
-                    edges_immersion_status[mesh->orientedEdgesPerFacet[facet_index][0]
-                            >> 1]))
-                index_of_emerged_facets.push_back(facet_index);
-            else
-                index_of_immersed_facets.push_back(facet_index);
-        }
+        if (facet_crosses_free_surface[facet_index]) split_partially_immersed_facet(facet_index,
+                                                                                    edges_immersion_status,
+                                                                                    split_edges);
+        else                                         classify_facet(facet_index, edges_immersion_status);
     }
 
+}
+
+void MeshIntersector::classify_facet(const size_t facet_index, const std::vector<int>& edges_immersion_status)
+{
+    // Each edge contains exactly two nodes: as the edge does not cross the free
+    // surface in this branch of the 'if' statement, the immersion status of both
+    // nodes is the same and is equal to the immersion status of the corresponding
+    // edge.
+    const size_t index_of_first_node_in_edge = mesh->orientedEdgesPerFacet[facet_index][0];
+    // Divide by two to obtain index of corresponding edge
+    const size_t index_of_edge_containing_first_node_in_edge = index_of_first_node_in_edge >> 1;
+    const int immersion_status_of_first_node_in_edge = edges_immersion_status[index_of_edge_containing_first_node_in_edge];
+    if (is_emerged(immersion_status_of_first_node_in_edge)) index_of_emerged_facets.push_back(facet_index);
+    else                                                    index_of_immersed_facets.push_back(facet_index);
 }
 
 void MeshIntersector::reset_dynamic_members()
