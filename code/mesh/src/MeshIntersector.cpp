@@ -384,7 +384,7 @@ Facet MeshIntersector::make(const Facet& f, const size_t i1, const size_t i2, co
     f_.unit_normal = f.unit_normal;
     const auto M = convert(f_);
     f_.area = area(M);
-    f_.centre_of_gravity = barycenter(M);
+    f_.centre_of_gravity = centre_of_gravity(M);
     return f_;
 }
 
