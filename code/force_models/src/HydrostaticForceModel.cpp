@@ -28,21 +28,14 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
 {
     const auto body = states.name;
     const auto mesh = std::string("mesh(") + body + ")";
-    //const auto Tbody2mesh = env.k->get(body, mesh);
     auto Tned2body = env.k->get(body, "NED");
     Tned2body.swap();
     auto TG2body = env.k->get(states.G.get_frame(), body);
-
-    //auto Tmesh2ned = (Tbody2mesh*Tned2body).inverse();
 
     const auto C = states.intersector->center_of_mass(states.intersector->begin_immersed(),
                                                       states.intersector->end_immersed());
 
     const ssc::kinematics::Point B(body, C.G);
-
-    COUT(C.G);
-    COUT(C.volume);
-
 
     ssc::kinematics::Vector6d w;
 
@@ -59,7 +52,6 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
     ssc::kinematics::Wrench ret2(B, ret.force, ret.torque);
     ret2.change_point_of_application(G);
     ssc::kinematics::Wrench ret3(states.G, ret.force, ret.torque);
-    COUT(ret3);
     return ret3;
 }
 
