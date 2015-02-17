@@ -19,6 +19,7 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/maneuvering_DataSource_builder.cpp
         src/SimpleStationKeepingController.cpp
         src/RudderForceModel.cpp
+        src/HydrostaticForceModel.cpp
         )
 
 # Disabled virtual destructors warning in Boost
