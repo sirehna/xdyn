@@ -107,7 +107,6 @@ ssc::kinematics::Wrench ForceTester::force_in_ned(const double x,
 
     ret.force = body->get_rot_from_ned_to(states)*ret.force;
     ret.torque = body->get_rot_from_ned_to(states)*ret.torque;
-    COUT(ret);
     current_instant += 1;
     return ret;
 }
