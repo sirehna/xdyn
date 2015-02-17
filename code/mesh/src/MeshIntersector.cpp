@@ -1,3 +1,5 @@
+#include <algorithm> //std::all_of
+#include <numeric> //std::accumulate
 #include <set>
 
 #include "MeshBuilder.hpp"
@@ -310,10 +312,20 @@ bool MeshIntersector::has(const Facet& f, //!< Facet to check
 {
     if (f.vertex_index.empty()) return false;
     std::set<size_t> s(f.vertex_index.begin(), f.vertex_index.end());
+    std::set<size_t> s_;
+    const double ref_area = std::accumulate(begin, end, 0., [](const double d, const Facet f){return d + f.area;});
+    double area = 0;
     for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
-        std::set<size_t> s_(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
-        if (s==s_) return true;
+        const bool all_facet_vertices_are_in_f = std::all_of(that_facet->vertex_index.begin(),
+                                                             that_facet->vertex_index.end(),
+                                                             [&s](const size_t idx){return s.find(idx)!=s.end();});
+        if (all_facet_vertices_are_in_f)
+        {
+            s_.insert(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
+            area += that_facet->area;
+            if ((s==s_) and (std::abs(area-ref_area) < 1E6*ref_area)) return true;
+        }
     }
     return false;
 }

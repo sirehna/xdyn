@@ -652,6 +652,14 @@ TEST_F(MeshIntersectorTest, can_compute_the_barycenter_of_a_partially_immersed_c
     }
 }
 
+TEST_F(MeshIntersectorTest, bug_2715_emerged_volume)
+{
+    MeshIntersector intersector(unit_cube());
+    const std::vector<double> dz = {1,1,1,1,0,0,0,0};
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
+}
+
 TEST_F(MeshIntersectorTest, bug_in_facet_volume)
 {
     MeshIntersector intersector(cube(1, 0, 0, 0));
