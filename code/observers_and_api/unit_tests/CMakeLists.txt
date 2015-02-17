@@ -5,6 +5,7 @@ FILE(GLOB SRC src/SimHdf5WaveObserverTest.cpp
               src/SimHdf5WaveObserverBuilderTest.cpp
               src/ListOfObserversTest.cpp
               src/Hdf5ObserverTest.cpp
+              src/ForceTests.cpp
               src/SimTest.cpp
               src/ForceTester.cpp
               )
