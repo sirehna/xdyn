@@ -48,7 +48,7 @@ size_t Mesh::create_facet_from_edges(const std::vector<size_t>& oriented_edge_li
         vertex_list[ei]=vertex_index;
     }
     size_t facet_index = facets.size();
-    facets.push_back(Facet(vertex_list,unit_normal,::barycenter(all_nodes,vertex_list),::area(all_nodes,vertex_list)));
+    facets.push_back(Facet(vertex_list,unit_normal,::centre_of_gravity(all_nodes,vertex_list),::area(all_nodes,vertex_list)));
     return facet_index;
 }
 

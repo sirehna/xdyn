@@ -291,7 +291,7 @@ TEST_F(SimTest, LONG_anthineas_damping)
     ASSERT_EQ(res.back().x[ZIDX(0)],res.back().x[ZIDX(0)]); // Check if nan
 }
 
-TEST_F(SimTest, LONG_bug_2655)
+TEST_F(SimTest, DISABLED_LONG_bug_2655)
 {
     const auto yaml = SimulatorYamlParser(test_data::bug_2655()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 1.4, 0.1);
@@ -323,7 +323,7 @@ TEST_F(SimTest, propulsion_and_resistance)
     }
 }
 
-TEST_F(SimTest, bug_2641)
+TEST_F(SimTest, DISABLED_LONG_bug_2641)
 {
     const auto yaml = SimulatorYamlParser(test_data::bug_2641()).parse();
     ssc::data_source::DataSource commands;
