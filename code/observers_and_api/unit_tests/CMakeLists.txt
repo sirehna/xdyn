@@ -6,6 +6,7 @@ FILE(GLOB SRC src/SimHdf5WaveObserverTest.cpp
               src/ListOfObserversTest.cpp
               src/Hdf5ObserverTest.cpp
               src/SimTest.cpp
+              src/ForceTester.cpp
               )
 # ------8<---------------------------------------------->8-----
 
