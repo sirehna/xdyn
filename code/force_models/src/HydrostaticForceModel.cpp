@@ -32,8 +32,10 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
     Tned2body.swap();
     auto TG2body = env.k->get(states.G.get_frame(), body);
 
-    const auto C = states.intersector->center_of_mass(states.intersector->begin_immersed(),
-                                                      states.intersector->end_immersed());
+    auto C = states.intersector->center_of_mass(states.intersector->begin_immersed(),
+                                                states.intersector->end_immersed());
+
+    if (C.in_same_plane) C.volume = 0;
 
     const ssc::kinematics::Point B(body, C.G);
 

@@ -465,7 +465,7 @@ TEST_F(ForceTests, only_two_points_touch_the_surface_the_rest_is_under_for_new_h
     ASSERT_NEAR(-1026*1*9.81, F.Z(),EPS);
 }
 
-TEST_F(ForceTests, DISABLED_one_facet_exactly_at_the_surface_and_the_rest_above_for_new_hydrostatic)
+TEST_F(ForceTests, one_facet_exactly_at_the_surface_and_the_rest_above_for_new_hydrostatic)
 {
     ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
 
@@ -476,7 +476,7 @@ TEST_F(ForceTests, DISABLED_one_facet_exactly_at_the_surface_and_the_rest_above_
     ASSERT_NEAR(0, F.Z(),EPS);
 }
 
-TEST_F(ForceTests, DISABLED_one_facet_exactly_at_the_surface_and_the_rest_under_for_new_hydrostatic)
+TEST_F(ForceTests, one_facet_exactly_at_the_surface_and_the_rest_under_for_new_hydrostatic)
 {
     ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
 

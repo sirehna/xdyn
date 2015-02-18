@@ -354,10 +354,13 @@ bool MeshIntersector::has(const Facet& f //!< Facet to check
 CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end) const
 {
     CenterOfMass ret(EPoint(0,0,0), 0);
-
+    if (begin==end) return ret;
+    auto ref_normal_vector = begin->unit_normal;
+    ret.in_same_plane = true;
     for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
         ret += center_of_mass(*that_facet);
+        ret.in_same_plane &= ref_normal_vector.dot(that_facet->unit_normal) > 1-1E-6;
     }
     if (ret.volume>0) ret.G /= ret.volume;
     ret.volume = std::abs(ret.volume);
