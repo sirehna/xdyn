@@ -2,6 +2,8 @@
 .metadata
 .project
 .settings
+build*
+install*
 RemoteSystemsTempFiles
 base91x
 boost
