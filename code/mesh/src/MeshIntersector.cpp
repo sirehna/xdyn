@@ -108,9 +108,9 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
 }
 
 void MeshIntersector::split_partially_immersed_facet(
-        size_t facet_index,                             //!< the index of facet to be split
-        const std::vector<int>& edges_immersion_status, //!< the immersion status of each edge
-        const std::vector<size_t>& split_edges          //!< the replacement map for split edges
+        size_t facet_index,                             //!< index of facet to split
+        const std::vector<int>& edges_immersion_status, //!< immersion status of each edge
+        const std::vector<size_t>& split_edges          //!< replacement map for split edges
         )
 {
     const std::vector<size_t> oriented_edges_of_this_facet = mesh->orientedEdgesPerFacet[facet_index];
