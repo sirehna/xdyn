@@ -1003,7 +1003,7 @@ std::string test_data::anthineas_hydrostatic_test(const std::string& type)
        << "            row 6: [0,0,0,0,0,6.676e6]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "      - model: non-linear hydrostatic (" << type << ")\n"
+       << "      - model: " << type << "\n"
        << "    \n";
     return ss.str();
 }
@@ -1115,12 +1115,17 @@ std::string test_data::anthineas_propulsion()
 
 std::string test_data::anthineas_fast_hydrostatic_test()
 {
-    return anthineas_hydrostatic_test("fast");
+    return anthineas_hydrostatic_test("non-linear hydrostatic (fast)");
 }
 
 std::string test_data::anthineas_exact_hydrostatic_test()
 {
-    return anthineas_hydrostatic_test("exact");
+    return anthineas_hydrostatic_test("non-linear hydrostatic (exact)");
+}
+
+std::string test_data::anthineas_new_hydrostatic_test()
+{
+    return anthineas_hydrostatic_test("hydrostatic");
 }
 
 std::string test_data::anthineas_waves_test()

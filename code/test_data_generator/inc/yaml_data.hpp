@@ -24,6 +24,7 @@ namespace test_data
     std::string anthineas_hydrostatic_test(const std::string& type);
     std::string anthineas_exact_hydrostatic_test();
     std::string anthineas_fast_hydrostatic_test();
+    std::string anthineas_new_hydrostatic_test();
     std::string anthineas_propulsion();
     std::string anthineas_waves_test();
     std::string anthineas_diffraction();
