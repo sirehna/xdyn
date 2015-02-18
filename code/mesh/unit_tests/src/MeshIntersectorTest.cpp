@@ -660,6 +660,30 @@ TEST_F(MeshIntersectorTest, bug_2715_emerged_volume_for_cube_just_beneath_the_su
     ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
 }
 
+TEST_F(MeshIntersectorTest, bug_2715_immersed_volume_for_cube_just_beneath_the_surface)
+{
+    MeshIntersector intersector(unit_cube());
+    const std::vector<double> dz = {1,1,1,1,0,0,0,0};
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_DOUBLE_EQ(1, intersector.immersed_volume());
+}
+
+TEST_F(MeshIntersectorTest, bug_2715_emerged_volume_for_cube_just_above_the_surface)
+{
+    MeshIntersector intersector(unit_cube());
+    const std::vector<double> dz = {0,0,0,0,-1,-1,-1,-1};
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_DOUBLE_EQ(1, intersector.emerged_volume());
+}
+
+TEST_F(MeshIntersectorTest, bug_2715_immersed_volume_for_cube_just_above_the_surface)
+{
+    MeshIntersector intersector(unit_cube());
+    const std::vector<double> dz = {0,0,0,0,-1,-1,-1,-1};
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_DOUBLE_EQ(0, intersector.immersed_volume());
+}
+
 TEST_F(MeshIntersectorTest, bug_in_facet_volume)
 {
     MeshIntersector intersector(cube(1, 0, 0, 0));

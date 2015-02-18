@@ -38,8 +38,7 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
         edges_immersion_status[edge_index] = status;
         if (crosses_free_surface(status))
             split_edges[edge_index] = split_partially_immersed_edge(edge_index, edges_immersion_status);
-
-        if (crosses_free_surface(status) or just_touches_free_surface(status))
+        if (crosses_free_surface(status) or both_ends_just_touch_free_surface(status) or one_of_the_ends_just_touches_free_surface(status))
             for (std::vector<size_t>::const_iterator that_facet =
                     mesh->facetsPerEdge[edge_index].begin();
                     that_facet != mesh->facetsPerEdge[edge_index].end();
@@ -123,7 +122,15 @@ void MeshIntersector::split_partially_immersed_facet(
     for(auto oriented_edge:oriented_edges_of_this_facet)
     {
         size_t edge_index=Mesh::get_oriented_edge_index(oriented_edge);
-        if (is_emerged(edges_immersion_status[edge_index]))
+        // Handle degenerate case
+        if (both_ends_just_touch_free_surface(edges_immersion_status[edge_index]))
+        {
+            emerged_edges.push_back(oriented_edge);
+            immersed_edges.push_back(oriented_edge);
+            if(status==3) first_emerged = emerged_edges.size();
+            if(status==0) first_immersed = immersed_edges.size();
+        }
+        else if (is_emerged(edges_immersion_status[edge_index]))
         {
             if(status==3) first_emerged = emerged_edges.size();
             emerged_edges.push_back(oriented_edge);
@@ -247,30 +254,36 @@ int MeshIntersector::get_edge_immersion_status(
         const double z1  //!< Relative immersion of second vertex (in m)
         )
 {
-    bool first_is_immersed  = z0 > 0 or (z0 == 0 and z1 > 0);
-    bool second_is_immersed = z1 > 0 or (z1 == 0 and z0 > 0);
-    bool just_touches = z0 == 0 or z1 == 0;
-    return (first_is_immersed?1:0) | (second_is_immersed?2:0) | (just_touches?4:0);
+    bool first_is_immersed  = z0 > 0;
+    bool second_is_immersed = z1 > 0;
+    bool first_is_emerged = z0 < 0;
+    bool second_is_emerged = z1 < 0;
+    return (first_is_immersed?1:0) | (second_is_immersed?2:0) | (first_is_emerged?4:0) | (second_is_emerged?8:0);
 }
 
 bool MeshIntersector::crosses_free_surface(int status)
 {
-    return ((status & 1) != 0) xor ((status & 2) != 0);
+    return (status==9) or (status==6);
 }
 
 bool MeshIntersector::is_emerged(int status)
 {
-    return (status & 3) == 0;
+    return (status==12) or (status==8) or (status==4);
 }
 
 bool MeshIntersector::is_immersed(int status)
 {
-    return (status & 3) == 3;
+    return (status==1) or (status==2) or (status==3);
 }
 
-bool MeshIntersector::just_touches_free_surface(int status)
+bool MeshIntersector::one_of_the_ends_just_touches_free_surface(int status)
 {
-    return ((status & 4) != 0);
+    return (status==1) or (status==2) or (status==4) or (status==8);
+}
+
+bool MeshIntersector::both_ends_just_touch_free_surface(int status)
+{
+    return status==0;
 }
 
 Facet MeshIntersector::compute_closing_facet() const
@@ -403,7 +416,7 @@ CenterOfMass MeshIntersector::center_of_mass(const Facet& f) const
         zCenter += ((P1(2) + P2(2) + P3(2)) / 4) * currentVolume;
     }
     if (totalVolume!=0) return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
-                       return CenterOfMass(EPoint(0,0,0), 0);
+                        return CenterOfMass(EPoint(0,0,0), 0);
 }
 
 double MeshIntersector::facet_volume(const Facet& f) const

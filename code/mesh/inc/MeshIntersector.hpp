@@ -157,9 +157,14 @@ class MeshIntersector
         static bool is_immersed(int status);
 
         /**
-         * \brief answer whether this edge touches the free surface
+         * \brief true if one of the ends (but not both) just touch the free surface (z==0)
          */
-        static bool just_touches_free_surface(int status);
+        static bool one_of_the_ends_just_touches_free_surface(int status);
+
+        /**
+         * \brief true if both ends just touch the free surface (z==0)
+         */
+        static bool both_ends_just_touch_free_surface(int status);
 
         MeshPtr mesh;
 
