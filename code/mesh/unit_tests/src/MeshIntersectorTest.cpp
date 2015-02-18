@@ -373,7 +373,7 @@ TEST_F(MeshIntersectorTest, correct_immerged_polygon_when_two_points_are_exactly
     ASSERT_DOUBLE_EQ(1, i[1]);
 }
 
-TEST_F(MeshIntersectorTest, bug2_in_immerged_polygon)
+TEST_F(MeshIntersectorTest, bug2_in_immersed_polygon)
 {
     Eigen::Matrix<double,3,4> M;
     M <<  -1, 0, 1,  0,
