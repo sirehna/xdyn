@@ -60,10 +60,10 @@ void createServerEcho(WSServer& echo_server)
     echo_server.run();
 }
 
-TEST_F(WebSocketObserverTest, should_be_able_to_connect_a_web_socket_server)
+TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
 {
     WSServer server;
-    websocketpp::lib::thread threadServer(createServerEcho,std::ref(server));
+    websocketpp::lib::thread threadServer(createServerEcho, std::ref(server));
     {
         usleep(10000);
         std::cout << "Start creating observer" << std::endl<<std::flush;
@@ -74,7 +74,7 @@ TEST_F(WebSocketObserverTest, should_be_able_to_connect_a_web_socket_server)
         {
             connection_metadata::ptr metadata = endpoint.get_metadata(id);
             k++;
-            if (k>1000)
+            if (k>100)
             {
                 std::stringstream ss;
                 ss << "Time out" <<id<<std::endl;
@@ -103,7 +103,7 @@ TEST_F(WebSocketObserverTest, should_be_able_to_connect_a_web_socket_server)
             ss << "Unknown connection id : " <<id<<std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
         }
-        endpoint.send(id,"dfsqfdsqg");
+        endpoint.send(id,"First message");
     }
     server.stop();
     threadServer.join();
