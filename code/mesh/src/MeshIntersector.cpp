@@ -120,9 +120,8 @@ void MeshIntersector::split_partially_immersed_facet(
     size_t first_emerged  = 0;
     size_t first_immersed = 0;
 
-    for(size_t i=0 ; i < oriented_edges_of_this_facet.size() ; ++i)
+    for(auto oriented_edge:oriented_edges_of_this_facet)
     {
-        size_t oriented_edge = oriented_edges_of_this_facet[i];
         size_t edge_index=Mesh::get_oriented_edge_index(oriented_edge);
         if (is_emerged(edges_immersion_status[edge_index]))
         {
