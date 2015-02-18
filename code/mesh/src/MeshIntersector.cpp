@@ -51,7 +51,7 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
 
 void MeshIntersector::classify_or_split(
         const std::vector<size_t>& split_edges,
-        std::vector<bool>& facet_crosses_free_surface,
+        const std::vector<bool>& facet_crosses_free_surface,
         std::vector<int>& edges_immersion_status)
 {
     // Iterate on each facet to classify and/or split

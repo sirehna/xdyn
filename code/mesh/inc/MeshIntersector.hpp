@@ -226,7 +226,7 @@ class MeshIntersector
          * \brief Iterate on each facet to classify and/or split
          */
         void classify_or_split(const std::vector<size_t>& split_edges,
-                               std::vector<bool>& facet_crosses_free_surface,
+                               const std::vector<bool>& facet_crosses_free_surface,
                                std::vector<int>& edges_immersion_status);
 
         /**
