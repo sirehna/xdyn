@@ -342,3 +342,16 @@ TEST_F(SimTest, bug_in_exact_hydrostatic)
         ASSERT_FALSE(std::isnan(r.x.front()));
     }
 }
+
+TEST_F(SimTest, LONG_no_displacement_on_x_and_y)
+{
+    const auto yaml = SimulatorYamlParser(test_data::anthineas_new_hydrostatic_test()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 1);
+    for (auto r:res)
+    {
+        ASSERT_DOUBLE_EQ(0, r.x[XIDX(0)]);
+        ASSERT_DOUBLE_EQ(0, r.x[UIDX(0)]);
+        ASSERT_DOUBLE_EQ(0, r.x[YIDX(0)]);
+        ASSERT_DOUBLE_EQ(0, r.x[VIDX(0)]);
+    }
+}
