@@ -52,8 +52,9 @@ class WebSocketEndpoint
         void close(int id, websocketpp::close::status::value code, std::string reason);
         void send(const int id, const std::string& message);
         void send(const int id, const std::vector<double>& vector);
-        connection_metadata::ptr get_metadata(int id) const;
-        std::list<int> get_ids() const;
+        connection_metadata::ptr getMetadata(int id) const;
+        std::list<int> getIds() const;
+        int getFirstId() const;
     private:
         typedef std::map<int,connection_metadata::ptr> con_list;
         client m_endpoint;

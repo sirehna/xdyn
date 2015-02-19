@@ -103,7 +103,7 @@ WebSocketEndpoint::~WebSocketEndpoint()
             // Only close open connections
             continue;
         }
-        std::cout << "> Closing connection " << it->second->get_id() << std::endl;
+        std::cout << "> Closing connection " << it->second->get_id() << std::endl<<std::flush;
         websocketpp::lib::error_code error_code;
         m_endpoint.close(it->second->get_hdl(), websocketpp::close::status::going_away, "", error_code);
         if (error_code)
@@ -115,6 +115,7 @@ WebSocketEndpoint::~WebSocketEndpoint()
         }
     }
     m_thread->join();
+    std::cout << "End WebSocketEndpoint::~WebSocketEndpoint()"<< std::endl<<std::flush;
 }
 
 int WebSocketEndpoint::connect(std::string const & uri)
@@ -202,7 +203,6 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
         return;
     }
-
     metadata_it->second->record_sent_message(message);
 }
 
@@ -215,8 +215,12 @@ void WebSocketEndpoint::send(const int id, const std::vector<double>& vector)
         std::cout << "> No connection found with id " << id << std::endl;
         return;
     }
-
-    m_endpoint.send(metadata_it->second->get_hdl(), vector.data(),vector.size()*sizeof(double), websocketpp::frame::opcode::binary, error_code);
+    auto hdl = metadata_it->second->get_hdl();
+    const size_t s = vector.size();
+    double *m = new double[s];
+    memcpy(m,&vector[0],s);
+    m_endpoint.send(hdl, (void*)m, 8*s, websocketpp::frame::opcode::binary, error_code);
+    delete[] m;
     if (error_code)
     {
         std::stringstream ss;
@@ -224,10 +228,9 @@ void WebSocketEndpoint::send(const int id, const std::vector<double>& vector)
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
         return;
     }
-    // metadata_it->second->record_sent_message(message);
 }
 
-connection_metadata::ptr WebSocketEndpoint::get_metadata(int id) const
+connection_metadata::ptr WebSocketEndpoint::getMetadata(int id) const
 {
     con_list::const_iterator metadata_it = m_connection_list.find(id);
     if (metadata_it == m_connection_list.end())
@@ -240,7 +243,7 @@ connection_metadata::ptr WebSocketEndpoint::get_metadata(int id) const
     }
 }
 
-std::list<int> WebSocketEndpoint::get_ids() const
+std::list<int> WebSocketEndpoint::getIds() const
 {
     std::list<int> list;
     for (con_list::const_iterator metadata_it = m_connection_list.begin();metadata_it!=m_connection_list.end();++metadata_it)
@@ -248,6 +251,12 @@ std::list<int> WebSocketEndpoint::get_ids() const
         list.push_back(metadata_it->first);
     }
     return list;
+}
+
+int WebSocketEndpoint::getFirstId() const
+{
+    con_list::const_iterator metadata_it = m_connection_list.begin();
+    return metadata_it->first;
 }
 
 WebSocketObserver::WebSocketObserver(const std::string& address, const std::vector<std::string>& data):Observer(data),endpoint(),id(endpoint.connect(address))
@@ -271,13 +280,6 @@ void WebSocketObserver::send(const std::vector<double>& vector)
 
 WebSocketObserver::~WebSocketObserver()
 {
-    std::cout<<"Destructor"<<std::endl<<std::flush;
-    /*
-    for (const auto id:endpoint.get_ids())
-    {
-        endpoint.close(id, (websocketpp::close::status::value)websocketpp::close::status::normal, "");
-    }
-    */
 }
 
 std::function<void()> WebSocketObserver::get_serializer(const double val, const DataAddressing&)
@@ -314,9 +316,9 @@ void WebSocketObserver::flush_value()
 
 std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObserver)
 {
-    for (const auto id:wsObserver.endpoint.get_ids())
+    for (const auto id:wsObserver.endpoint.getIds())
     {
-        connection_metadata::ptr metadata = wsObserver.endpoint.get_metadata(id);
+        connection_metadata::ptr metadata = wsObserver.endpoint.getMetadata(id);
         if (metadata)
         {
             out << *metadata << std::endl;
