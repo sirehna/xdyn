@@ -606,7 +606,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_partially_immersed_cube)
     }
 }
 
-TEST_F(MeshIntersectorTest, can_compute_the_volume_of_the_anthineas)
+TEST_F(MeshIntersectorTest, LONG_can_compute_the_volume_of_the_anthineas)
 {
     MeshIntersector intersector(anthineas());
     const std::vector<double> dz(intersector.mesh->node_count,1);

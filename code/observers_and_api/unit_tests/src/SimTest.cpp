@@ -78,7 +78,7 @@ TEST_F(SimTest, can_simulate_falling_ball)
     }
 }
 
-TEST_F(SimTest, can_simulate_oscillating_cube)
+TEST_F(SimTest, LONG_can_simulate_oscillating_cube)
 {
     const double dt = 1E-1;
     const double tend = 10;
@@ -115,7 +115,7 @@ TEST_F(SimTest, can_simulate_oscillating_cube)
     }
 }
 
-TEST_F(SimTest, can_simulate_stable_cube)
+TEST_F(SimTest, LONG_can_simulate_stable_cube)
 {
     const double dt = 1E-1;
     const double tend = 10;
@@ -177,7 +177,7 @@ TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
     }
 }
 
-TEST_F(SimTest, hydrostatic_test_on_anthineas)
+TEST_F(SimTest, LONG_hydrostatic_test_on_anthineas)
 {
     const auto yaml = SimulatorYamlParser(test_data::anthineas_fast_hydrostatic_test()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
@@ -198,7 +198,7 @@ TEST_F(SimTest, hydrostatic_test_on_anthineas)
     }
 }
 
-TEST_F(SimTest, exact_hydrostatic_test_on_anthineas)
+TEST_F(SimTest, LONG_exact_hydrostatic_test_on_anthineas)
 {
     const auto yaml = SimulatorYamlParser(test_data::anthineas_exact_hydrostatic_test()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 0.4);
@@ -301,7 +301,7 @@ TEST_F(SimTest, DISABLED_LONG_bug_2655)
     ASSERT_NEAR(-0.228388, res.back().x[WIDX(0)], 1e-6);
 }
 
-TEST_F(SimTest, propulsion_and_resistance)
+TEST_F(SimTest, LONG_propulsion_and_resistance)
 {
     const auto yaml = SimulatorYamlParser(test_data::propulsion_and_resistance()).parse();
     ssc::data_source::DataSource commands;

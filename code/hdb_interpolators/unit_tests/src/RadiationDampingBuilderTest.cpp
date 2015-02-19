@@ -282,7 +282,7 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_an
     ASSERT_NEAR(test_data::analytical_K(0.01), builder.cos_transform(Br_, omega_min, omega_max, 0.01), 1E-2);
 }
 
-TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_analytical_results_2)
+TEST_F(RadiationDampingBuilderTest, LONG_retardation_function_should_closely_match_analytical_results_2)
 {
     std::vector<double> vBr;
     size_t N = 100;

@@ -38,7 +38,7 @@ void ForceTests::TearDown()
 {
 }
 
-TEST_F(ForceTests, fast_hydrostatic_should_only_be_along_z)
+TEST_F(ForceTests, LONG_fast_hydrostatic_should_only_be_along_z)
 {
     ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
 
@@ -86,7 +86,7 @@ TEST_F(ForceTests, DISABLED_fast_hydrostatic_should_only_be_along_z_for_anthinea
     }
 }
 
-TEST_F(ForceTests, rotation_around_z_should_not_change_anything_for_fast_hydrostatic)
+TEST_F(ForceTests, LONG_rotation_around_z_should_not_change_anything_for_fast_hydrostatic)
 {
     ForceTester test(test_data::oscillating_cube_example(), anthineas());
 
@@ -144,7 +144,7 @@ TEST_F(ForceTests, DISABLED_no_torque_for_fast_hydrostatic_when_cube_is_at_45_de
     ASSERT_NEAR(0, F.N(),EPS);
 }
 
-TEST_F(ForceTests, norm_of_fast_torque_should_be_equal_for_opposite_rotations_of_the_cube)
+TEST_F(ForceTests, LONG_norm_of_fast_torque_should_be_equal_for_opposite_rotations_of_the_cube)
 {
     ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
 
@@ -173,7 +173,7 @@ TEST_F(ForceTests, force_should_be_correct_for_fast_hydrostatic_when_cube_is_at_
     ASSERT_NEAR(-1026*0.5*9.81, F.Z(),EPS);
 }
 
-TEST_F(ForceTests, exact_hydrostatic_should_only_be_along_z)
+TEST_F(ForceTests, LONG_exact_hydrostatic_should_only_be_along_z)
 {
     ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
 
@@ -221,7 +221,7 @@ TEST_F(ForceTests, DISABLED_exact_hydrostatic_should_only_be_along_z_for_anthine
     }
 }
 
-TEST_F(ForceTests, rotation_around_z_should_not_change_anything_for_exact_hydrostatic)
+TEST_F(ForceTests, LONG_rotation_around_z_should_not_change_anything_for_exact_hydrostatic)
 {
     ForceTester test(test_data::oscillating_cube_example(), anthineas());
 
@@ -279,7 +279,7 @@ TEST_F(ForceTests, DISABLED_no_torque_for_exact_hydrostatic_when_cube_is_at_45_d
     ASSERT_NEAR(0, F.N(),EPS);
 }
 
-TEST_F(ForceTests, norm_of_exact_torque_should_be_equal_for_opposite_rotations_of_the_cube)
+TEST_F(ForceTests, LONG_norm_of_exact_torque_should_be_equal_for_opposite_rotations_of_the_cube)
 {
     ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
 
@@ -308,7 +308,7 @@ TEST_F(ForceTests, force_should_be_correct_for_exact_hydrostatic_when_cube_is_at
     ASSERT_NEAR(-1026*0.5*9.81, F.Z(),EPS);
 }
 
-TEST_F(ForceTests, new_hydrostatic_should_only_be_along_z)
+TEST_F(ForceTests, LONG_new_hydrostatic_should_only_be_along_z)
 {
     ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
 
@@ -329,7 +329,7 @@ TEST_F(ForceTests, new_hydrostatic_should_only_be_along_z)
     }
 }
 
-TEST_F(ForceTests, new_hydrostatic_should_only_be_along_z_for_anthineas)
+TEST_F(ForceTests, LONG_new_hydrostatic_should_only_be_along_z_for_anthineas)
 {
     ForceTester test(test_data::oscillating_cube_example(), anthineas());
 
@@ -356,7 +356,7 @@ TEST_F(ForceTests, new_hydrostatic_should_only_be_along_z_for_anthineas)
     }
 }
 
-TEST_F(ForceTests, rotation_around_z_should_not_change_anything_for_new_hydrostatic)
+TEST_F(ForceTests, LONG_rotation_around_z_should_not_change_anything_for_new_hydrostatic)
 {
     ForceTester test(test_data::oscillating_cube_example(), anthineas());
 
@@ -414,7 +414,7 @@ TEST_F(ForceTests, no_torque_for_new_hydrostatic_when_cube_is_at_45_deg_around_x
     ASSERT_NEAR(0, F.N(),EPS);
 }
 
-TEST_F(ForceTests, norm_of_new_torque_should_be_equal_for_opposite_rotations_of_the_cube)
+TEST_F(ForceTests, LONG_norm_of_new_torque_should_be_equal_for_opposite_rotations_of_the_cube)
 {
     ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
 

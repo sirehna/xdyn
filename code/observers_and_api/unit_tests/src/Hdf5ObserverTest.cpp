@@ -28,7 +28,7 @@ TEST_F(Hdf5ObserverTest, should_be_able_to_create_an_observer)
     }
 }
 
-TEST_F(Hdf5ObserverTest, should_be_able_to_create_an_observer_with_wave_output)
+TEST_F(Hdf5ObserverTest, LONG_should_be_able_to_create_an_observer_with_wave_output)
 {
     const double dt = 1E-1;
     const double tend = 10;
