@@ -16,7 +16,7 @@
 #include "STL_data.hpp"
 #include "yaml_data.hpp"
 
-#define EPS (1E-9)
+#define EPS (1E-8)
 
 #define _USE_MATH_DEFINE
 #include <cmath>
