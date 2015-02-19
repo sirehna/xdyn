@@ -19,6 +19,7 @@ namespace test_data
     std::string full_example_with_propulsion();
     std::string falling_ball_example();
     std::string oscillating_cube_example();
+    std::string new_oscillating_cube_example();
     std::string stable_cube_example();
     std::string stable_rolling_cube_test();
     std::string anthineas_hydrostatic_test(const std::string& type);

@@ -487,3 +487,24 @@ TEST_F(ForceTests, one_facet_exactly_at_the_surface_and_the_rest_under_for_new_h
     ASSERT_NEAR(-1026*1*9.81, F.Z(),EPS);
 }
 
+TEST_F(ForceTests, can_compute_torque_for_a_cube_rotated_on_phi)
+{
+    ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
+
+    test.add<HydrostaticForceModel>();
+    const auto F = test.force_in_ned(0,0,0,PI/3,0,0);
+    ASSERT_NEAR(-1026*0.5*9.81, F.Z(),EPS);
+    EXPECT_NEAR(0, F.M(),EPS);
+    EXPECT_NEAR(-1026*0.5*9.81*1/36., F.K(),EPS);
+}
+
+TEST_F(ForceTests, can_compute_torque_for_a_cube_rotated_on_theta)
+{
+    ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
+
+    test.add<HydrostaticForceModel>();
+    const auto F = test.force_in_ned(0,0,0,0,PI/3,0);
+    ASSERT_NEAR(-1026*0.5*9.81, F.Z(),EPS);
+    EXPECT_NEAR(0, F.K(),EPS);
+    EXPECT_NEAR(-1026*0.5*9.81*1/36., F.M(),EPS);
+}

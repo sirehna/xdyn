@@ -343,15 +343,44 @@ TEST_F(SimTest, bug_in_exact_hydrostatic)
     }
 }
 
-TEST_F(SimTest, LONG_no_displacement_on_x_and_y)
+ssc::kinematics::EulerAngles convert(const double qr, const double qi, const double qj, const double qk);
+ssc::kinematics::EulerAngles convert(const double qr, const double qi, const double qj, const double qk)
 {
-    const auto yaml = SimulatorYamlParser(test_data::anthineas_new_hydrostatic_test()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 1);
+    using namespace ssc::kinematics;
+    Eigen::Quaternion<double> quat(qr,qi,qj,qk);
+    const RotationMatrix R = quat.toRotationMatrix();
+    return ssc::kinematics::euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R);
+}
+
+TEST_F(SimTest, rolling_cube_with_big_mesh)
+{
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::new_oscillating_cube_example(), test_data::big_cube(), 0, 1, 0.1);
+    std::vector<double> phi;
     for (auto r:res)
     {
-        ASSERT_DOUBLE_EQ(0, r.x[XIDX(0)]);
-        ASSERT_DOUBLE_EQ(0, r.x[UIDX(0)]);
-        ASSERT_DOUBLE_EQ(0, r.x[YIDX(0)]);
-        ASSERT_DOUBLE_EQ(0, r.x[VIDX(0)]);
+        ASSERT_NEAR(0, r.x[XIDX(0)], 3E-15);
+        ASSERT_NEAR(0, r.x[YIDX(0)], 3E-15);
+        ASSERT_NEAR(0, r.x[ZIDX(0)], 3E-15);
+        ASSERT_NEAR(0, r.x[UIDX(0)], 3E-15);
+        ASSERT_NEAR(0, r.x[VIDX(0)], 3E-15);
+        ASSERT_NEAR(0, r.x[WIDX(0)], 3E-15);
+        ASSERT_NEAR(0, r.x[QIDX(0)], 3E-15);
+        ASSERT_NEAR(0, r.x[RIDX(0)], 3E-15);
+        const auto angle = convert(r.x[QRIDX(0)],r.x[QIIDX(0)],r.x[QJIDX(0)],r.x[QKIDX(0)]);
+        ASSERT_NEAR(0, angle.theta, 2E-15);
+        ASSERT_NEAR(0, angle.psi, 2E-15);
+        phi.push_back(angle.phi);
     }
+    ASSERT_EQ(11, phi.size());
+    ASSERT_NEAR(0.43633231299858238339, phi[0],1e-6);
+    ASSERT_NEAR(0.43700828067963098933, phi[1],1e-6);
+    ASSERT_NEAR(0.43903680991706939274, phi[2],1e-6);
+    ASSERT_NEAR(0.44241973378965104846, phi[3],1e-6);
+    ASSERT_NEAR(0.44715995408222602991, phi[4],1e-6);
+    ASSERT_NEAR(0.45326120625305410528, phi[5],1e-6);
+    ASSERT_NEAR(0.46072772026846647853, phi[6],1e-6);
+    ASSERT_NEAR(0.46956376697152346633, phi[7],1e-6);
+    ASSERT_NEAR(0.479773076406918908  , phi[8],1e-6);
+    ASSERT_NEAR(0.49135811108789601009, phi[9],1e-6);
+    ASSERT_NEAR(0.50431917355733746344, phi[10],1e-6);
 }
