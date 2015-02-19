@@ -43,6 +43,3 @@ GZ::State GZ::ResultantForceComputer::operator()(const ::GZ::State& point)
     return GZ::State(sum_of_forces.Z(), sum_of_forces.K(), sum_of_forces.M());
 }
 
-GZ::ResultantForceComputer::~ResultantForceComputer()
-{
-}

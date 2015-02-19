@@ -22,7 +22,6 @@ namespace GZ
         public:
             ResultantForceComputer(const Sim& sim);
             ::GZ::State operator()(const ::GZ::State& point);
-            ~ResultantForceComputer();
 
         private:
             BodyPtr body;
