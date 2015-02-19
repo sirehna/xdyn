@@ -1,10 +1,10 @@
 #include "WebSocketObserver.hpp"
 
 connection_metadata::connection_metadata(
-        int id, websocketpp::connection_hdl hdl, std::string uri)
+        int id, websocketpp::connection_hdl hdl, const std::string& uri)
           : m_id(id)
           , m_hdl(hdl)
-          , m_status("Connecting")
+          , m_status("Connecting...")
           , m_uri(uri)
           , m_server("N/A")
           , m_error_reason("")
@@ -20,7 +20,6 @@ void connection_metadata::on_open(client * c, websocketpp::connection_hdl hdl)
 void connection_metadata::on_fail(client * c, websocketpp::connection_hdl hdl)
 {
     m_status = "Failed";
-
     client::connection_ptr con = c->get_con_from_hdl(hdl);
     m_server = con->get_response_header("Server");
     m_error_reason = con->get_ec().message();
@@ -90,7 +89,7 @@ WebSocketEndpoint::WebSocketEndpoint () : m_endpoint(), m_thread(), m_connection
     m_endpoint.clear_access_channels(websocketpp::log::alevel::all);
     m_endpoint.clear_error_channels(websocketpp::log::elevel::all);
     m_endpoint.init_asio();
-    //m_endpoint.start_perpetual();
+    m_endpoint.start_perpetual();
     m_thread = websocketpp::lib::make_shared<websocketpp::lib::thread>(&client::run, &m_endpoint);
 }
 
@@ -104,9 +103,7 @@ WebSocketEndpoint::~WebSocketEndpoint()
             // Only close open connections
             continue;
         }
-
         std::cout << "> Closing connection " << it->second->get_id() << std::endl;
-
         websocketpp::lib::error_code error_code;
         m_endpoint.close(it->second->get_hdl(), websocketpp::close::status::going_away, "", error_code);
         if (error_code)
@@ -171,7 +168,6 @@ int WebSocketEndpoint::connect(std::string const & uri)
 void WebSocketEndpoint::close(int id, websocketpp::close::status::value code, std::string reason)
 {
     websocketpp::lib::error_code error_code;
-
     con_list::iterator metadata_it = m_connection_list.find(id);
     if (metadata_it == m_connection_list.end())
     {

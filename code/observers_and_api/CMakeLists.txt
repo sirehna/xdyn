@@ -23,8 +23,12 @@ set(SRC src/simulator_api.cpp
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
 IF (NOT(MSVC))
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
+
+ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_STL_)
+ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_THREAD_)
+ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_SYSTEM_ERROR_)
 
 include_directories(inc)
 include_directories(SYSTEM ${HDF5_INCLUDE_DIR})

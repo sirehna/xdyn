@@ -2,13 +2,12 @@
 #include "WebSocketObserverTest.hpp"
 
 #include <iostream>
+#include <unistd.h> //usleep
 
-#include <boost/date_time/time_clock.hpp>
+#include <ssc/macros.hpp>
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 #include <websocketpp/common/thread.hpp>
-
-#include <ssc/macros.hpp>
 
 typedef websocketpp::server<websocketpp::config::asio> WSServer;
 
@@ -42,93 +41,70 @@ WebSocketObserverTest::WebSocketObserverTest() : a(ssc::random_data_generator::D
 {
 }
 
-WSServer* foo();
-WSServer* foo()
+void createServerEcho(WSServer& echo_server);
+void createServerEcho(WSServer& echo_server)
 {
-    WSServer* echo_server = new WSServer();
+    echo_server.set_reuse_addr(true);
     // Set logging settings
-    echo_server->set_access_channels(websocketpp::log::alevel::all);
-    echo_server->clear_access_channels(websocketpp::log::alevel::frame_payload);
+    echo_server.set_access_channels(websocketpp::log::alevel::all);
+    echo_server.clear_access_channels(websocketpp::log::alevel::frame_payload);
     // Initialize ASIO
-    echo_server->init_asio();
+    echo_server.init_asio();
     // Register our message handler
-    echo_server->set_message_handler(bind(&on_message,echo_server,::_1,::_2));
+    echo_server.set_message_handler(bind(&on_message,&echo_server,::_1,::_2));
     // Listen on port 9002
-    echo_server->listen(9002);
+    echo_server.listen("127.0.0.1","9002");
     // Start the server accept loop
-    echo_server->start_accept();
-    std::cout << "Start running" << std::endl<<std::flush;
+    echo_server.start_accept();
     // Start the ASIO io_service run loop
-    //echo_server->run();
-    //echo_server->run_one();
-    //thread t(bind(&WSServer::run,&echo_server));
-    //t.detach();
-    //echo_server->poll();
-    return echo_server;
+    echo_server.run();
 }
 
-#include <thread>
-#include <chrono>
 TEST_F(WebSocketObserverTest, should_be_able_to_connect_a_web_socket_server)
 {
-    // Create a server endpoint
-    // WSServer echo_server;
-    WSServer * echo_server = foo();
-//    try {
-        /*
-        // Set logging settings
-        echo_server.set_access_channels(websocketpp::log::alevel::all);
-        echo_server.clear_access_channels(websocketpp::log::alevel::frame_payload);
-        // Initialize ASIO
-        echo_server.init_asio();
-        // Register our message handler
-        echo_server.set_message_handler(bind(&on_message,&echo_server,::_1,::_2));
-        // Listen on port 9002
-        echo_server.listen(9002);
-        // Start the server accept loop
-        echo_server.start_accept();
-        std::cout << "Start running" << std::endl<<std::flush;
-        // Start the ASIO io_service run loop
-        //echo_server.run();
-        //echo_server.run_one();
-        //thread t(bind(&WSServer::run,&echo_server));
-        //t.detach();
-        echo_server.poll();
-        //std::this_thread::sleep_for (std::chrono::seconds(1));
-        */
-        echo_server->poll();
+    WSServer server;
+    websocketpp::lib::thread threadServer(createServerEcho,std::ref(server));
+    {
+        usleep(10000);
+        std::cout << "Start creating observer" << std::endl<<std::flush;
+        WebSocketEndpoint endpoint;
+        size_t k=0;
+        int id = endpoint.connect("ws://localhost:9002");
+        while(true)
         {
-            //std::this_thread::sleep_for(std::chrono::seconds(1));
-            std::cout << "Start creating observer" << std::endl<<std::flush;
-            WebSocketEndpoint endpoint;
-            int id=endpoint.connect("ws://localhost:9002");
-            COUT(id);
-            endpoint.send(id,"dfsqfdsqg");
-
-            //WebSocketObserver ss("ws://localhost:9002",std::vector<std::string>(1,""));
-            //std::cout << "Display state" << std::endl<<std::flush;
-            //std::cout<<ss;
-            //std::cout << "Display state" << std::endl<<std::flush;
-            //std::cout<<ss;
-            //std::cout << "Send message" << std::endl<<std::flush;
-            //ss.send("toto");
-            //std::cout << "Display state" << std::endl<<std::flush;
-            //std::cout<<ss;
-            ////std::cout<<ss;
+            connection_metadata::ptr metadata = endpoint.get_metadata(id);
+            k++;
+            if (k>1000)
+            {
+                std::stringstream ss;
+                ss << "Time out" <<id<<std::endl;
+                THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+            }
+            std::cout<<metadata->get_status()<<std::endl;
+            if (metadata->get_status()=="Open")
+            {
+                break;
+            }
+            else if (metadata->get_status()=="Failed")
+            {
+                COUT("Fail");
+            }
+            usleep(100000);
         }
-        std::cout << "Stop server" << std::endl<<std::flush;
-        echo_server->stop();
-        echo_server->stop_perpetual();
-        delete echo_server;
-//    }
-//    catch (websocketpp::exception const & e)
-//    {
-//        std::cout << e.what() << std::endl<<std::flush;
-//        delete echo_server;
-//    }
-//    catch (...)
-//    {
-//        std::cout << "other exception" << std::endl<<std::flush;
-//        delete echo_server;
-//    }
+        COUT(k);
+        connection_metadata::ptr metadata = endpoint.get_metadata(id);
+        if (metadata)
+        {
+            std::cout << *metadata << std::endl<<std::flush;
+        }
+        else
+        {
+            std::stringstream ss;
+            ss << "Unknown connection id : " <<id<<std::endl;
+            THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+        }
+        endpoint.send(id,"dfsqfdsqg");
+    }
+    server.stop();
+    threadServer.join();
 }
