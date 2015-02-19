@@ -48,7 +48,7 @@ SimpleStationKeepingController::Yaml SimpleStationKeepingController::parse(const
 }
 
 SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(input.name, {"x_co", "y_co", "psi_co"}, YamlPosition(), body_name_, env_),
+        ControllableForceModel(input.name, {"x_co", "y_co", "psi_co"}, YamlPosition(YamlCoordinates(),YamlAngle(), body_name_), body_name_, env_),
         ksi_x(input.ksi_x),
         omega_x(2*PI/input.T_x),
         ksi_y(input.ksi_y),

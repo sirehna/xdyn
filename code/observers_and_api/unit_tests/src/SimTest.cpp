@@ -394,3 +394,13 @@ TEST_F(SimTest, LONG_bug_2714_heading_keeping)
     ASSERT_EQ(2, res.size());
 }
 
+TEST_F(SimTest, LONG_bug_2714_station_keeping)
+{
+    ssc::data_source::DataSource command_listener;
+    command_listener.set<double>("controller(x_co)", 0);
+    command_listener.set<double>("controller(y_co)", 0);
+    command_listener.set<double>("controller(psi_co)", 0);
+    const auto yaml = SimulatorYamlParser(test_data::bug_2714_station_keeping()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 0.1, command_listener);
+    ASSERT_EQ(2, res.size());
+}
