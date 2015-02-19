@@ -62,6 +62,8 @@ text_file_reader_shared
 decode_unit_shared
 csv_file_reader_shared)
 
+ADD_EXECUTABLE(yml2test src/yml2test.cpp)
+
 ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp 
         $<TARGET_OBJECTS:yaml_parser>
         $<TARGET_OBJECTS:external_data_structures>)
