@@ -5,11 +5,6 @@
 #include <unistd.h> //usleep
 
 #include <ssc/macros.hpp>
-#include <websocketpp/config/asio_no_tls.hpp>
-#include <websocketpp/server.hpp>
-#include <websocketpp/common/thread.hpp>
-
-typedef websocketpp::server<websocketpp::config::asio> WSServer;
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -19,6 +14,8 @@ using websocketpp::lib::thread;
 // pull out the type of messages sent by our config
 typedef WSServer::message_ptr message_ptr;
 
+#define MESSAGE_SENT "First message"
+
 // Define a callback to handle incoming messages
 void on_message(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
 void on_message(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
@@ -26,6 +23,7 @@ void on_message(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
     std::cout << "on_message called with hdl: " << hdl.lock().get()
               << " and message: " << msg->get_payload()
               << std::endl;
+    ASSERT_EQ(MESSAGE_SENT, msg->get_payload());
     try
     {
         s->send(hdl, msg->get_payload(), msg->get_opcode());
@@ -35,10 +33,6 @@ void on_message(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
         std::cout << "Echo failed because: " << e
                   << "(" << e.message() << ")" << std::endl;
     }
-}
-
-WebSocketObserverTest::WebSocketObserverTest() : a(ssc::random_data_generator::DataGenerator(546545))
-{
 }
 
 void createServerEcho(WSServer& echo_server);
@@ -60,51 +54,65 @@ void createServerEcho(WSServer& echo_server)
     echo_server.run();
 }
 
-TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
+int connectToServer(WebSocketEndpoint& endpoint);
+int connectToServer(WebSocketEndpoint& endpoint)
 {
-    WSServer server;
-    websocketpp::lib::thread threadServer(createServerEcho, std::ref(server));
+    usleep(10000);
+    std::cout << "Start creating observer" << std::endl<<std::flush;
+    size_t k=0;
+    int id = endpoint.connect("ws://localhost:9002");
+    while(true)
     {
-        usleep(10000);
-        std::cout << "Start creating observer" << std::endl<<std::flush;
-        WebSocketEndpoint endpoint;
-        size_t k=0;
-        int id = endpoint.connect("ws://localhost:9002");
-        while(true)
-        {
-            connection_metadata::ptr metadata = endpoint.get_metadata(id);
-            k++;
-            if (k>100)
-            {
-                std::stringstream ss;
-                ss << "Time out" <<id<<std::endl;
-                THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
-            }
-            std::cout<<metadata->get_status()<<std::endl;
-            if (metadata->get_status()=="Open")
-            {
-                break;
-            }
-            else if (metadata->get_status()=="Failed")
-            {
-                COUT("Fail");
-            }
-            usleep(100000);
-        }
-        COUT(k);
         connection_metadata::ptr metadata = endpoint.get_metadata(id);
-        if (metadata)
-        {
-            std::cout << *metadata << std::endl<<std::flush;
-        }
-        else
+        k++;
+        if (k>100)
         {
             std::stringstream ss;
-            ss << "Unknown connection id : " <<id<<std::endl;
+            ss << "Time out" <<id<<std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
         }
-        endpoint.send(id,"First message");
+        std::cout<<metadata->get_status()<<std::endl;
+        if (metadata->get_status()=="Open")
+        {
+            break;
+        }
+        else if (metadata->get_status()=="Failed")
+        {
+            std::stringstream ss;
+            ss << "Connection failed" <<id<<std::endl;
+            THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+            break;
+        }
+        usleep(100000);
     }
+    COUT(k);
+    connection_metadata::ptr metadata = endpoint.get_metadata(id);
+    if (metadata)
+    {
+        std::cout << *metadata << std::endl<<std::flush;
+    }
+    else
+    {
+        std::stringstream ss;
+        ss << "Unknown connection id : " <<id<<std::endl;
+        THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+    }
+    return id;
+}
+
+WebSocketObserverTest::WebSocketObserverTest():server(),threadServer(createServerEcho, std::ref(server))
+{
+}
+
+WebSocketObserverTest::~WebSocketObserverTest()
+{
     server.stop();
     threadServer.join();
+}
+
+TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
+{
+    WebSocketEndpoint endpoint;
+    const int id = connectToServer(endpoint);
+    endpoint.send(id,MESSAGE_SENT);
 }
