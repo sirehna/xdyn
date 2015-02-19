@@ -50,6 +50,8 @@ namespace test_data
     std::string simple_station_keeping();
     std::string rudder();
     std::string bug_in_exact_hydrostatic();
+    std::string bug_2714_heading_keeping();
+    std::string bug_2714_station_keeping();
 }
 
 #endif /* YAML_DATA_HPP_ */
