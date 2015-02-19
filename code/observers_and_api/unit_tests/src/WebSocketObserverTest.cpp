@@ -14,6 +14,16 @@ using websocketpp::lib::thread;
 // pull out the type of messages sent by our config
 typedef WSServer::message_ptr message_ptr;
 
+#ifndef STR
+#define STR(s) STR_(s)
+#endif
+
+#ifndef STR_
+#define STR_(s) #s
+#endif
+
+#define ADDRESS 127.0.0.1
+#define PORT 9002
 #define MESSAGE_SENT "First message"
 
 // Define a callback to handle incoming messages
@@ -46,8 +56,8 @@ void createServerEcho(WSServer& echo_server)
     echo_server.init_asio();
     // Register our message handler
     echo_server.set_message_handler(bind(&on_message,&echo_server,::_1,::_2));
-    // Listen on port 9002
-    echo_server.listen("127.0.0.1","9002");
+    // Listen on port
+    echo_server.listen(STR(ADDRESS),STR(PORT));
     // Start the server accept loop
     echo_server.start_accept();
     // Start the ASIO io_service run loop
@@ -60,7 +70,8 @@ int connectToServer(WebSocketEndpoint& endpoint)
     usleep(10000);
     std::cout << "Start creating observer" << std::endl<<std::flush;
     size_t k=0;
-    int id = endpoint.connect("ws://localhost:9002");
+    const std::string connectAddress(std::string("ws://")+std::string(STR(ADDRESS))+std::string(":")+std::string(STR(PORT)));
+    int id = endpoint.connect(connectAddress);
     while(true)
     {
         connection_metadata::ptr metadata = endpoint.get_metadata(id);
@@ -114,5 +125,5 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_
 {
     WebSocketEndpoint endpoint;
     const int id = connectToServer(endpoint);
-    endpoint.send(id,MESSAGE_SENT);
+    endpoint.send(id, MESSAGE_SENT);
 }
