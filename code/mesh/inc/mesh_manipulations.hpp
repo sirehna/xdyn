@@ -89,6 +89,10 @@ double area(const Matrix3x& points, //!< Matrix containing (amongst others), the
 Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
                                  );
 
+/**  \brief Computes the position of the centre of gravity of a polygon
+  */
+Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon, const std::vector<size_t>& vertex_index);
+
 /**  \brief Convert a VectorOfPoints to an Eigen::Matrix3s
   *  \details Each line corresponds to a coordinate & each column to a point.
   *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest convert_example

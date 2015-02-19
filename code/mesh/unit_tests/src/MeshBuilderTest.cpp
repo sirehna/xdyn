@@ -40,9 +40,9 @@ TEST_F(MeshBuilderTest, should_be_able_to_evaluate_the_barycenter_of_a_single_tr
 	const Mesh m = MeshBuilder(one_triangle()).build();
 	ASSERT_EQ(1,m.static_facets);
 	ASSERT_EQ(3,m.static_nodes);
-	ASSERT_DOUBLE_EQ((1.0+2.1+3.1)/3.0,(double)m.facets.at(0).barycenter(0));
-	ASSERT_DOUBLE_EQ((2.1+3.7+4.5)/3.0,(double)m.facets.at(0).barycenter(1));
-	ASSERT_DOUBLE_EQ((3.2+4.5+6.7)/3.0,(double)m.facets.at(0).barycenter(2));
+	ASSERT_DOUBLE_EQ((1.0+2.1+3.1)/3.0,(double)m.facets.at(0).centre_of_gravity(0));
+	ASSERT_DOUBLE_EQ((2.1+3.7+4.5)/3.0,(double)m.facets.at(0).centre_of_gravity(1));
+	ASSERT_DOUBLE_EQ((3.2+4.5+6.7)/3.0,(double)m.facets.at(0).centre_of_gravity(2));
 }
 
 TEST_F(MeshBuilderTest, should_be_able_to_evaluate_the_area_of_a_single_triangle)

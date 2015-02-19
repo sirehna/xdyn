@@ -1,3 +1,4 @@
+#include <map>
 
 #include "Mesh.hpp"
 #include "mesh_manipulations.hpp"
@@ -42,13 +43,21 @@ size_t Mesh::create_facet_from_edges(const std::vector<size_t>& oriented_edge_li
 {
     size_t n=oriented_edge_list.size();
     std::vector<size_t> vertex_list(n,0);
-    Matrix3x coords(3,n);
-    for( size_t ei=0;ei<oriented_edge_list.size();ei++) {
+    std::map<size_t, bool> vertex_inserted;
+    size_t nb_of_vertices = 0;
+    for( size_t ei=0;ei<oriented_edge_list.size();ei++)
+    {
         size_t vertex_index = second_vertex_of_oriented_edge(oriented_edge_list[ei]); // Note: use second vertex rather than first for compatibility with existing tests
-        vertex_list[ei]=vertex_index;
+        if (not(vertex_inserted[vertex_index]))
+        {
+            vertex_list[ei]=vertex_index;
+            vertex_inserted[vertex_index] = true;
+            nb_of_vertices++;
+        }
     }
+    vertex_list.resize(nb_of_vertices);
     size_t facet_index = facets.size();
-    facets.push_back(Facet(vertex_list,unit_normal,::barycenter(all_nodes,vertex_list),::area(all_nodes,vertex_list)));
+    facets.push_back(Facet(vertex_list,unit_normal,::centre_of_gravity(all_nodes,vertex_list),::area(all_nodes,vertex_list)));
     return facet_index;
 }
 

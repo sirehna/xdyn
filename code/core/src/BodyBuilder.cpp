@@ -31,7 +31,7 @@ void BodyBuilder::change_mesh_ref_frame(BodyStates& states, const VectorOfVector
     states.mesh->all_nodes = (T*ssc::kinematics::PointMatrix(states.mesh->all_nodes, "mesh("+states.name+")")).m;
     for (size_t i = 0 ; i < states.mesh->facets.size() ; ++i)
     {
-        states.mesh->facets[i].barycenter = T*states.mesh->facets[i].barycenter;
+        states.mesh->facets[i].centre_of_gravity = T*states.mesh->facets[i].centre_of_gravity;
         states.mesh->facets[i].unit_normal = T.get_rot()*states.mesh->facets[i].unit_normal;
     }
     states.M = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(states.mesh->nodes, states.name));

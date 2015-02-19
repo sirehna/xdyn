@@ -157,9 +157,14 @@ class MeshIntersector
         static bool is_immersed(int status);
 
         /**
-         * \brief answer whether this edge touches the free surface
+         * \brief true if one of the ends (but not both) just touch the free surface (z==0)
          */
-        static bool just_touches_free_surface(int status);
+        static bool one_of_the_ends_just_touches_free_surface(int status);
+
+        /**
+         * \brief true if both ends just touch the free surface (z==0)
+         */
+        static bool both_ends_just_touch_free_surface(int status);
 
         MeshPtr mesh;
 
@@ -226,8 +231,14 @@ class MeshIntersector
          * \brief Iterate on each facet to classify and/or split
          */
         void classify_or_split(const std::vector<size_t>& split_edges,
-                               std::vector<bool>& facet_crosses_free_surface,
+                               const std::vector<bool>& facet_crosses_free_surface,
                                std::vector<int>& edges_immersion_status);
+
+        /**
+         * \brief Classify facet based on immersion status
+         */
+        void classify_facet(const size_t facet_index, const std::vector<int>& edges_immersion_status);
+
         void reset_dynamic_members();
 
         double volume(const FacetIterator& begin, const FacetIterator& end) const;

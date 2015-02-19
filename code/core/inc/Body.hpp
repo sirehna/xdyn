@@ -8,6 +8,8 @@
 #ifndef BODY_HPP_
 #define BODY_HPP_
 
+#include <tuple>
+
 #include "BodyStates.hpp"
 #include "StateMacros.hpp"
 struct YamlBody;
@@ -55,6 +57,7 @@ class Body
         std::string get_name() const;
         ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
         ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const YamlRotation& c) const;
+        std::tuple<double,double,double,double> get_quaternions(const ssc::kinematics::EulerAngles& angle, const YamlRotation& c) const;
 
         void feed(const StateType& x, Observer& observer, const YamlRotation& c) const;
 

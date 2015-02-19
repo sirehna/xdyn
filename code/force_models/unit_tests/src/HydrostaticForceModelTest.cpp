@@ -175,13 +175,13 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
         ASSERT_DOUBLE_EQ(cos(atan(0.5)),states.mesh->facets[i].unit_normal(2));
     }
 
-    ASSERT_DOUBLE_EQ(-2.0/3.0,states.mesh->facets[0].barycenter(0));
-    ASSERT_DOUBLE_EQ(+4.0/3.0,states.mesh->facets[0].barycenter(1));
-    ASSERT_DOUBLE_EQ(5.0+1.0/3.0,states.mesh->facets[0].barycenter(2));
+    ASSERT_DOUBLE_EQ(-2.0/3.0,states.mesh->facets[0].centre_of_gravity(0));
+    ASSERT_DOUBLE_EQ(+4.0/3.0,states.mesh->facets[0].centre_of_gravity(1));
+    ASSERT_DOUBLE_EQ(5.0+1.0/3.0,states.mesh->facets[0].centre_of_gravity(2));
 
-    ASSERT_DOUBLE_EQ(+2.0/3.0,states.mesh->facets[1].barycenter(0));
-    ASSERT_DOUBLE_EQ(-4.0/3.0,states.mesh->facets[1].barycenter(1));
-    ASSERT_DOUBLE_EQ(4.0+2.0/3.0,states.mesh->facets[1].barycenter(2));
+    ASSERT_DOUBLE_EQ(+2.0/3.0,states.mesh->facets[1].centre_of_gravity(0));
+    ASSERT_DOUBLE_EQ(-4.0/3.0,states.mesh->facets[1].centre_of_gravity(1));
+    ASSERT_DOUBLE_EQ(4.0+2.0/3.0,states.mesh->facets[1].centre_of_gravity(2));
 
     // What is currently implemented with the hypothesis of application
     // point force located at barycenter of each face

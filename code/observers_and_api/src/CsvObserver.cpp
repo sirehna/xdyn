@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <boost/algorithm/string.hpp>
+
 #include "CsvObserver.hpp"
 
 CsvObserver::CsvObserver(const std::string& filename, const std::vector<std::string>& d) : Observer(d), os(filename)
@@ -18,7 +20,7 @@ std::function<void()> CsvObserver::get_serializer(const double val, const DataAd
 
 std::function<void()> CsvObserver::get_initializer(const double, const DataAddressing& address)
 {
-    return [this,address](){os << address.name;};
+    return [this,address](){std::string title = address.name;boost::replace_all(title, ",", " ");os << title;};
 }
 
 void CsvObserver::flush_after_initialization()

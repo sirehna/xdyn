@@ -13,6 +13,29 @@
 #include "GeometricTypes3d.hpp"
 #include "MeshIntersector.hpp"
 
+
+class ZGCalculator
+{
+    public:
+        ZGCalculator() : tz(0), r31(0), r32(0), r33(0) {}
+        void update_transform(const ssc::kinematics::Transform& T)
+        {
+            tz = T.get_point().z();
+            const auto R = T.get_rot();
+            r31 = R(2,0);
+            r32 = R(2,1);
+            r33 = R(2,2);
+        }
+        double get_zG_in_NED(const Eigen::Vector3d& G_in_body) const
+        {
+            return tz + r31*G_in_body(0) + r32*G_in_body(1) + r33*G_in_body(2);
+        }
+
+    private:
+        double tz, r31, r32, r33;
+};
+
+
 /** \brief Models a force integrated of a surface mesh
  *  \details Implements the integration of the force in operator()
  *  \addtogroup model_wrappers
@@ -57,6 +80,9 @@ class SurfaceForceModel : public ForceModel
         virtual double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const = 0;
         EnvironmentAndFrames env;
         ssc::kinematics::Point g_in_NED;
+
+    protected:
+        TR1(shared_ptr)<ZGCalculator> zg_calculator;
 };
 
 #endif /* SURFACEFORCEMODEL_HPP_ */

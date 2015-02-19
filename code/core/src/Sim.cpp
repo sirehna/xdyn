@@ -43,6 +43,21 @@ class Sim::Impl
         ssc::data_source::DataSource command_listener;
 };
 
+std::map<std::string,std::vector<ForcePtr> > Sim::get_forces() const
+{
+    return pimpl->forces;
+}
+
+std::vector<BodyPtr> Sim::get_bodies() const
+{
+    return pimpl->bodies;
+}
+
+EnvironmentAndFrames Sim::get_env() const
+{
+	return pimpl->env;
+}
+
 Sim::Sim(const std::vector<BodyPtr>& bodies,
          const std::vector<ListOfForces>& forces,
          const std::vector<ListOfControlledForces>& controlled_forces,

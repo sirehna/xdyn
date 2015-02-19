@@ -27,6 +27,7 @@
 #include "ManeuveringForceModel.hpp"
 #include "SimpleStationKeepingController.hpp"
 #include "RudderForceModel.hpp"
+#include "HydrostaticForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener)
 {
@@ -53,7 +54,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<SimpleHeadingKeepingController>()
            .can_parse<ManeuveringForceModel>()
            .can_parse<SimpleStationKeepingController>()
-           .can_parse<RudderForceModel>();
+           .can_parse<RudderForceModel>()
+           .can_parse<HydrostaticForceModel>();
     return builder;
 }
 
@@ -67,6 +69,14 @@ Sim get_system(const YamlSimulatorInput& input, const std::string& mesh, const d
     const auto name = input.bodies.front().name;
     MeshMap meshes;
     meshes[name] = read_stl(mesh);
+    return get_system(input, meshes, t0, command_listener);
+}
+
+Sim get_system(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& mesh, const double t0, const ssc::data_source::DataSource& command_listener)
+{
+    const auto name = input.bodies.front().name;
+    MeshMap meshes;
+    meshes[name] = mesh;
     return get_system(input, meshes, t0, command_listener);
 }
 

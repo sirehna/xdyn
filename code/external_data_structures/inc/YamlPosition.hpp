@@ -16,6 +16,7 @@
 struct YamlPosition
 {
     YamlPosition();
+    YamlPosition(const YamlCoordinates& c, const YamlAngle& a, const std::string& frame);
     YamlCoordinates coordinates;
     YamlAngle angle;
     std::string frame;

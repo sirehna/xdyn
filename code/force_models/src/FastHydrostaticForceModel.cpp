@@ -17,7 +17,8 @@ FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_nam
 
 SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double) const
 {
-    const double zG = average_immersion(that_facet->vertex_index, states.intersector->all_absolute_immersions);
+    if (that_facet->area == 0) return DF(EPoint(0,0,0),EPoint(0,0,0));
+    const double zG = zg_calculator->get_zG_in_NED(that_facet->centre_of_gravity);
     const EPoint dS = that_facet->area*that_facet->unit_normal;
     const EPoint C = get_application_point(that_facet, states, zG);
     return DF(-env.rho*env.g*zG*dS,C);
@@ -25,7 +26,7 @@ SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_fa
 
 EPoint FastHydrostaticForceModel::get_application_point(const FacetIterator& that_facet, const BodyStates&, const double) const
 {
-    return that_facet->barycenter;
+    return that_facet->centre_of_gravity; // In Body frame
 }
 
 double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector<double>&, const EnvironmentAndFrames& env) const

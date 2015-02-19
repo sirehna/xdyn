@@ -1,3 +1,5 @@
+#include <algorithm> //std::all_of
+#include <numeric> //std::accumulate
 #include <set>
 
 #include "MeshBuilder.hpp"
@@ -35,10 +37,8 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
         int status = get_edge_immersion_status(z0, z1);
         edges_immersion_status[edge_index] = status;
         if (crosses_free_surface(status))
-            split_edges[edge_index] = split_partially_immersed_edge(edge_index,
-                    edges_immersion_status);
-
-        if (crosses_free_surface(status) || just_touches_free_surface(status))
+            split_edges[edge_index] = split_partially_immersed_edge(edge_index, edges_immersion_status);
+        if (crosses_free_surface(status) or both_ends_just_touch_free_surface(status) or one_of_the_ends_just_touches_free_surface(status))
             for (std::vector<size_t>::const_iterator that_facet =
                     mesh->facetsPerEdge[edge_index].begin();
                     that_facet != mesh->facetsPerEdge[edge_index].end();
@@ -50,29 +50,32 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
 
 void MeshIntersector::classify_or_split(
         const std::vector<size_t>& split_edges,
-        std::vector<bool>& facet_crosses_free_surface,
+        const std::vector<bool>& facet_crosses_free_surface,
         std::vector<int>& edges_immersion_status)
 {
-    // iterate on each facet to classify and/or split
-    for (size_t facet_index = 0; facet_index < mesh->static_facets;
-            ++facet_index)
+    // Iterate on each facet to classify and/or split
+    for (size_t facet_index = 0 ; facet_index < mesh->static_facets ; ++facet_index)
     {
-        if (facet_crosses_free_surface[facet_index])
-        {
-            split_partially_immersed_facet(facet_index, edges_immersion_status,
-                    split_edges);
-        }
-        else
-        {
-            if (is_emerged(
-                    edges_immersion_status[mesh->orientedEdgesPerFacet[facet_index][0]
-                            >> 1]))
-                index_of_emerged_facets.push_back(facet_index);
-            else
-                index_of_immersed_facets.push_back(facet_index);
-        }
+        if (facet_crosses_free_surface[facet_index]) split_partially_immersed_facet(facet_index,
+                                                                                    edges_immersion_status,
+                                                                                    split_edges);
+        else                                         classify_facet(facet_index, edges_immersion_status);
     }
 
+}
+
+void MeshIntersector::classify_facet(const size_t facet_index, const std::vector<int>& edges_immersion_status)
+{
+    // Each edge contains exactly two nodes: as the edge does not cross the free
+    // surface in this branch of the 'if' statement, the immersion status of both
+    // nodes is the same and is equal to the immersion status of the corresponding
+    // edge.
+    const size_t index_of_first_node_in_edge = mesh->orientedEdgesPerFacet[facet_index][0];
+    // Divide by two to obtain index of corresponding edge
+    const size_t index_of_edge_containing_first_node_in_edge = Mesh::get_oriented_edge_index(index_of_first_node_in_edge);
+    const int immersion_status_of_first_node_in_edge = edges_immersion_status[index_of_edge_containing_first_node_in_edge];
+    if (is_emerged(immersion_status_of_first_node_in_edge)) index_of_emerged_facets.push_back(facet_index);
+    else                                                    index_of_immersed_facets.push_back(facet_index);
 }
 
 void MeshIntersector::reset_dynamic_members()
@@ -104,9 +107,9 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
 }
 
 void MeshIntersector::split_partially_immersed_facet(
-        size_t facet_index,                             //!< the index of facet to be split
-        const std::vector<int>& edges_immersion_status, //!< the immersion status of each edge
-        const std::vector<size_t>& split_edges          //!< the replacement map for split edges
+        size_t facet_index,                             //!< index of facet to split
+        const std::vector<int>& edges_immersion_status, //!< immersion status of each edge
+        const std::vector<size_t>& split_edges          //!< replacement map for split edges
         )
 {
     const std::vector<size_t> oriented_edges_of_this_facet = mesh->orientedEdgesPerFacet[facet_index];
@@ -116,11 +119,18 @@ void MeshIntersector::split_partially_immersed_facet(
     size_t first_emerged  = 0;
     size_t first_immersed = 0;
 
-    for(size_t i=0 ; i < oriented_edges_of_this_facet.size() ; ++i)
+    for(auto oriented_edge:oriented_edges_of_this_facet)
     {
-        size_t oriented_edge = oriented_edges_of_this_facet[i];
         size_t edge_index=Mesh::get_oriented_edge_index(oriented_edge);
-        if (is_emerged(edges_immersion_status[edge_index]))
+        // Handle degenerate case
+        if (both_ends_just_touch_free_surface(edges_immersion_status[edge_index]))
+        {
+            emerged_edges.push_back(oriented_edge);
+            immersed_edges.push_back(oriented_edge);
+            if(status==3) first_emerged = emerged_edges.size();
+            if(status==0) first_immersed = immersed_edges.size();
+        }
+        else if (is_emerged(edges_immersion_status[edge_index]))
         {
             if(status==3) first_emerged = emerged_edges.size();
             emerged_edges.push_back(oriented_edge);
@@ -244,30 +254,36 @@ int MeshIntersector::get_edge_immersion_status(
         const double z1  //!< Relative immersion of second vertex (in m)
         )
 {
-    bool first_is_immersed  = z0 > 0 or (z0 == 0 and z1 > 0);
-    bool second_is_immersed = z1 > 0 or (z1 == 0 and z0 > 0);
-    bool just_touches = z0 == 0 or z1 == 0;
-    return (first_is_immersed?1:0) | (second_is_immersed?2:0) | (just_touches?4:0);
+    bool first_is_immersed  = z0 > 0;
+    bool second_is_immersed = z1 > 0;
+    bool first_is_emerged = z0 < 0;
+    bool second_is_emerged = z1 < 0;
+    return (first_is_immersed?1:0) | (second_is_immersed?2:0) | (first_is_emerged?4:0) | (second_is_emerged?8:0);
 }
 
 bool MeshIntersector::crosses_free_surface(int status)
 {
-    return ((status & 1) != 0) xor ((status & 2) != 0);
+    return (status==9) or (status==6);
 }
 
 bool MeshIntersector::is_emerged(int status)
 {
-    return (status & 3) == 0;
+    return (status==12) or (status==8) or (status==4);
 }
 
 bool MeshIntersector::is_immersed(int status)
 {
-    return (status & 3) == 3;
+    return (status==1) or (status==2) or (status==3);
 }
 
-bool MeshIntersector::just_touches_free_surface(int status)
+bool MeshIntersector::one_of_the_ends_just_touches_free_surface(int status)
 {
-    return ((status & 4) != 0);
+    return (status==1) or (status==2) or (status==4) or (status==8);
+}
+
+bool MeshIntersector::both_ends_just_touch_free_surface(int status)
+{
+    return status==0;
 }
 
 Facet MeshIntersector::compute_closing_facet() const
@@ -308,10 +324,20 @@ bool MeshIntersector::has(const Facet& f, //!< Facet to check
 {
     if (f.vertex_index.empty()) return false;
     std::set<size_t> s(f.vertex_index.begin(), f.vertex_index.end());
+    std::set<size_t> s_;
+    const double ref_area = std::accumulate(begin, end, 0., [](const double d, const Facet f){return d + f.area;});
+    double area = 0;
     for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
-        std::set<size_t> s_(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
-        if (s==s_) return true;
+        const bool all_facet_vertices_are_in_f = std::all_of(that_facet->vertex_index.begin(),
+                                                             that_facet->vertex_index.end(),
+                                                             [&s](const size_t idx){return s.find(idx)!=s.end();});
+        if (all_facet_vertices_are_in_f)
+        {
+            s_.insert(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
+            area += that_facet->area;
+            if ((s==s_) and (std::abs(area-ref_area) < 1E6*ref_area)) return true;
+        }
     }
     return false;
 }
@@ -328,12 +354,16 @@ bool MeshIntersector::has(const Facet& f //!< Facet to check
 CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end) const
 {
     CenterOfMass ret(EPoint(0,0,0), 0);
-
+    if (begin==end) return ret;
+    auto ref_normal_vector = begin->unit_normal;
+    ret.in_same_plane = true;
     for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
         ret += center_of_mass(*that_facet);
+        ret.in_same_plane &= ref_normal_vector.dot(that_facet->unit_normal) > 1-1E-6;
     }
     if (ret.volume>0) ret.G /= ret.volume;
+    ret.volume = std::abs(ret.volume);
     return ret;
 }
 
@@ -345,7 +375,8 @@ CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const F
     {
         ret += center_of_mass(closing_facet);
     }
-    if (ret.volume>0) ret.G /= ret.volume;
+    if (ret.volume!=0) ret.G /= ret.volume;
+    ret.volume = std::abs(ret.volume);
     return ret;
 }
 
@@ -368,7 +399,7 @@ Facet MeshIntersector::make(const Facet& f, const size_t i1, const size_t i2, co
     f_.unit_normal = f.unit_normal;
     const auto M = convert(f_);
     f_.area = area(M);
-    f_.barycenter = barycenter(M);
+    f_.centre_of_gravity = centre_of_gravity(M);
     return f_;
 }
 
@@ -388,7 +419,7 @@ CenterOfMass MeshIntersector::center_of_mass(const Facet& f) const
         zCenter += ((P1(2) + P2(2) + P3(2)) / 4) * currentVolume;
     }
     if (totalVolume!=0) return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
-                       return CenterOfMass(EPoint(0,0,0), 0);
+                        return CenterOfMass(EPoint(0,0,0), 0);
 }
 
 double MeshIntersector::facet_volume(const Facet& f) const

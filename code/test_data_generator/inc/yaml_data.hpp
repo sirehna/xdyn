@@ -19,11 +19,13 @@ namespace test_data
     std::string full_example_with_propulsion();
     std::string falling_ball_example();
     std::string oscillating_cube_example();
+    std::string new_oscillating_cube_example();
     std::string stable_cube_example();
     std::string stable_rolling_cube_test();
     std::string anthineas_hydrostatic_test(const std::string& type);
     std::string anthineas_exact_hydrostatic_test();
     std::string anthineas_fast_hydrostatic_test();
+    std::string anthineas_new_hydrostatic_test();
     std::string anthineas_propulsion();
     std::string anthineas_waves_test();
     std::string anthineas_diffraction();
@@ -47,6 +49,9 @@ namespace test_data
     std::string bug_2641();
     std::string simple_station_keeping();
     std::string rudder();
+    std::string bug_in_exact_hydrostatic();
+    std::string bug_2714_heading_keeping();
+    std::string bug_2714_station_keeping();
 }
 
 #endif /* YAML_DATA_HPP_ */

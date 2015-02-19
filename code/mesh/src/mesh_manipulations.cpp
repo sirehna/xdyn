@@ -162,6 +162,24 @@ Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish t
     return areas_times_points/areas;
 }
 
+Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon, const std::vector<size_t>& vertex_index)
+{
+    const size_t n = (size_t)vertex_index.size();
+    Eigen::Vector3d areas_times_points(0,0,0);
+    double areas = 0;
+    const size_t idx0 = vertex_index.front();
+    for (size_t i = 2 ; i < n ; ++i)
+    {
+        const size_t idx1 = vertex_index[i-1];
+        const size_t idx2 = vertex_index[i];
+        const double S = area(polygon, (int)idx0, (int)idx1, (int)idx2);
+        areas += S;
+        areas_times_points += S*(polygon.col(idx0)+polygon.col(idx1)+polygon.col(idx2))/3.;
+    }
+    return areas_times_points/areas;
+}
+
+
 Matrix3x convert(const VectorOfPoints& v)
 {
     Matrix3x ret(3,v.size());
@@ -320,8 +338,8 @@ EPoint exact_application_point(
     const EPoint n=that_facet->unit_normal;
     const EPoint ns=normal_to_free_surface(that_facet,down_direction,all_nodes,all_immersions);
     const Eigen::Matrix3d R20 = facet_trihedron(n,ns);
-    if(R20.col(0).norm() < 0.5 ) // quick test : facet is parallel to the free surface
-        return that_facet->barycenter;
+    if ((double)n.cross(ns).norm()<1000*std::numeric_limits<double>::epsilon()) // quick test : facet is parallel to the free surface
+        return that_facet->centre_of_gravity;
 
     const Eigen::Matrix3d JR2=get_inertia_of_polygon_wrt(that_facet,R20,all_nodes );
     const Eigen::Matrix3d R02 = R20.transpose();
@@ -331,7 +349,7 @@ EPoint exact_application_point(
     const double xR = JR2(0,1)/yG;
     const double yR = JR2(0,0)/yG;
     const EPoint offset2( xR , yR , 0);
-    return that_facet->barycenter + R02 * offset2;
+    return that_facet->centre_of_gravity + R02 * offset2;
 }
 
 Matrix3x project_facet_on_free_surface(
@@ -357,7 +375,7 @@ Eigen::Matrix3d get_inertia_of_polygon_wrt(
         )
 {
     // Compute the coordinates of facet vertices in R2
-    const EPoint G=that_facet->barycenter;
+    const EPoint G=that_facet->centre_of_gravity;
     const size_t nVertices = that_facet->vertex_index.size();
     Matrix3x verticesInR0(3,nVertices);
     for(size_t iVertex = 0 ; iVertex < nVertices ; ++ iVertex) {

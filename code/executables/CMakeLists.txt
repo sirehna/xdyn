@@ -12,6 +12,7 @@ ENDIF()
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${boost_program_options_descriptions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
@@ -60,6 +61,18 @@ yaml_parser_shared
 text_file_reader_shared
 decode_unit_shared
 csv_file_reader_shared)
+
+ADD_EXECUTABLE(yml2test src/yml2test.cpp)
+
+ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp 
+        $<TARGET_OBJECTS:yaml_parser>
+        $<TARGET_OBJECTS:external_data_structures>)
+TARGET_LINK_LIBRARIES(quat2eul yaml_parser_shared
+                               decode_unit_shared
+                               exception_handling_shared
+                               kinematics_shared
+                               )
+
 
 ADD_EXECUTABLE(convert_stl_files_to_code ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp)
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code
