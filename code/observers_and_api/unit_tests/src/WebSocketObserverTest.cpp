@@ -60,6 +60,9 @@ void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr
     std::cout << "on_message called with hdl: " << hdl.lock().get()
               << "payload hex = '"<<websocketpp::utility::to_hex(payload)<<"' "<< std::endl
               << std::endl;
+    //ASSERT_EQ(1.0,*reinterpret_cast<const double*>(payload.substr(0,8).c_str()));
+    //ASSERT_EQ(2.0,*reinterpret_cast<const double*>(payload.substr(8,8).c_str()));
+    //ASSERT_EQ(3.0,*reinterpret_cast<const double*>(payload.substr(16,8).c_str()));
     try
     {
         s->send(hdl, msg->get_payload(), msg->get_opcode());
