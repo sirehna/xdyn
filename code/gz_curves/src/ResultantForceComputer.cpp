@@ -9,6 +9,8 @@
 #include "ResultantForceComputer.hpp"
 #include "Sim.hpp"
 
+#define NORM(f) (sqrt(f.X()*f.X()+f.Y()*f.Y()+f.Z()*f.Z()))
+
 GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s) :
     body(s.get_bodies().front()),
     env(s.get_env()),
@@ -34,6 +36,7 @@ GZ::State GZ::ResultantForceComputer::operator()(const ::GZ::State& point)
     x[QIIDX(0)] = std::get<1>(quaternion);
     x[QJIDX(0)] = std::get<2>(quaternion);
     x[QKIDX(0)] = std::get<3>(quaternion);
+
     body->update(env,x,current_instant);
 
     auto sum_of_forces = gravity->operator ()(body->get_states(),current_instant)
