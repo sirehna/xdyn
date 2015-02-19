@@ -384,3 +384,13 @@ TEST_F(SimTest, rolling_cube_with_big_mesh)
     ASSERT_NEAR(0.49135811108789601009, phi[9],1e-6);
     ASSERT_NEAR(0.50431917355733746344, phi[10],1e-6);
 }
+
+TEST_F(SimTest, LONG_bug_2714_heading_keeping)
+{
+    ssc::data_source::DataSource command_listener;
+    command_listener.set<double>("controller(psi_co)", 0);
+    const auto yaml = SimulatorYamlParser(test_data::bug_2714_heading_keeping()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 0.1, command_listener);
+    ASSERT_EQ(2, res.size());
+}
+
