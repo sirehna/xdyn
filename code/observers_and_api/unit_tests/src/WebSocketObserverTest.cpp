@@ -11,7 +11,6 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 #include <websocketpp/common/thread.hpp>
-#include <boost/lexical_cast.hpp>
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -32,47 +31,6 @@ typedef WSServer::message_ptr message_ptr;
 #define ADDRESS 127.0.0.1
 #define PORT 9002
 #define MESSAGE_SENT "First message"
-
-// Define a callback to handle incoming messages
-void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
-void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
-{
-    std::cout << "on_message called with hdl: " << hdl.lock().get()
-              << " and message: " << msg->get_payload()
-              << std::endl;
-    ASSERT_EQ(MESSAGE_SENT, msg->get_payload());
-    try
-    {
-        s->send(hdl, msg->get_payload(), msg->get_opcode());
-    }
-    catch (const websocketpp::lib::error_code& e)
-    {
-        std::cout << "Echo failed because: " << e
-                  << "(" << e.message() << ")" << std::endl;
-    }
-}
-void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
-void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
-{
-    ASSERT_EQ(websocketpp::frame::opcode::binary, msg->get_opcode());
-    std::string payload = msg->get_payload();
-    ASSERT_EQ(3,payload.size()/8);
-    std::cout << "on_message called with hdl: " << hdl.lock().get()
-              << "payload hex = '"<<websocketpp::utility::to_hex(payload)<<"' "<< std::endl
-              << std::endl;
-    //ASSERT_EQ(1.0,*reinterpret_cast<const double*>(payload.substr(0,8).c_str()));
-    //ASSERT_EQ(2.0,*reinterpret_cast<const double*>(payload.substr(8,8).c_str()));
-    //ASSERT_EQ(3.0,*reinterpret_cast<const double*>(payload.substr(16,8).c_str()));
-    try
-    {
-        s->send(hdl, msg->get_payload(), msg->get_opcode());
-    }
-    catch (const websocketpp::lib::error_code& e)
-    {
-        std::cout << "Echo failed because: " << e
-                  << "(" << e.message() << ")" << std::endl;
-    }
-}
 
 void createServerEcho(WSServer& echo_server, std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> f);
 void createServerEcho(WSServer& echo_server, std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> f)
@@ -165,6 +123,24 @@ WebSocketServer::~WebSocketServer()
     threadServer.join();
 }
 
+void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
+void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
+{
+    std::cout << "on_message called with hdl: " << hdl.lock().get()
+              << " and message: " << msg->get_payload()
+              << std::endl;
+    ASSERT_EQ(MESSAGE_SENT, msg->get_payload());
+    try
+    {
+        s->send(hdl, msg->get_payload(), msg->get_opcode());
+    }
+    catch (const websocketpp::lib::error_code& e)
+    {
+        std::cout << "Echo failed because: " << e
+                  << "(" << e.message() << ")" << std::endl;
+    }
+}
+
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
 {
     TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )>(on_message_string)));
@@ -210,12 +186,34 @@ void convertStdStringToStdVector(const std::string& s,std::vector<T>& res)
     }
 }
 
+void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
+void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
+{
+    ASSERT_EQ(websocketpp::frame::opcode::binary, msg->get_opcode());
+    const std::string payload = msg->get_payload();
+    std::vector<double> vv;convertStdStringToStdVector(payload,vv);
+    ASSERT_EQ(3,payload.size()/8);
+    ASSERT_EQ(3,vv.size());
+    ASSERT_EQ(1.0,vv[0]);
+    ASSERT_EQ(2.0,vv[1]);
+    ASSERT_EQ(3.0,vv[2]);
+    try
+    {
+        s->send(hdl, msg->get_payload(), msg->get_opcode());
+    }
+    catch (const websocketpp::lib::error_code& e)
+    {
+        std::cout << "Echo failed because: " << e
+                  << "(" << e.message() << ")" << std::endl;
+    }
+}
+
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_doubles)
 {
     TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )>(on_message_vector)));
     {
         std::vector<double> v(3,0.0);
-        v[0]=1.0;v[0]=2.0;v[0]=3.0;
+        v[0]=1.0;v[1]=2.0;v[2]=3.0;
         WebSocketEndpoint endpoint;
         const int id = connectToServer(endpoint);
         endpoint.send(id, v);
