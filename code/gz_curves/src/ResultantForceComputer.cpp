@@ -6,6 +6,8 @@
  */
 
 #include "GZTypes.hpp"
+#include "GravityForceModel.hpp"
+#include "HydrostaticForceModel.hpp"
 #include "ResultantForceComputer.hpp"
 #include "Sim.hpp"
 
@@ -14,14 +16,14 @@
 GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s) :
     body(s.get_bodies().front()),
     env(s.get_env()),
-    gravity(s.get_forces().begin()->second.front()),
-    hydrostatic(s.get_forces().begin()->second.back()),
+    gravity(TR1(static_pointer_cast)<GravityForceModel>(s.get_forces().begin()->second.front())),
+    hydrostatic(TR1(static_pointer_cast)<HydrostaticForceModel>(s.get_forces().begin()->second.back())),
     current_instant(0)
 {
 
 }
 
-GZ::State GZ::ResultantForceComputer::operator()(const ::GZ::State& point)
+GZ::Resultant GZ::ResultantForceComputer::operator()(const ::GZ::State& point)
 {
     std::vector<double> x(13, 0);
     x[ZIDX(0)] = point.z;
@@ -43,6 +45,10 @@ GZ::State GZ::ResultantForceComputer::operator()(const ::GZ::State& point)
                        + hydrostatic->operator ()(body->get_states(),current_instant);
 
     current_instant += 1;
-    return GZ::State(sum_of_forces.Z(), sum_of_forces.K(), sum_of_forces.M());
+    GZ::Resultant ret;
+    ret.state = GZ::State(sum_of_forces.Z(), sum_of_forces.K(), sum_of_forces.M());
+    ret.centre_of_buyoancy = hydrostatic->get_centre_of_buoyancy();
+
+    return ret;
 }
 

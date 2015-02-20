@@ -13,21 +13,24 @@
 #include "ForceModel.hpp"
 
 class Sim;
+class GravityForceModel;
+class HydrostaticForceModel;
 
 namespace GZ
 {
+    struct Resultant;
     struct State;
     class ResultantForceComputer
     {
         public:
             ResultantForceComputer(const Sim& sim);
-            ::GZ::State operator()(const ::GZ::State& point);
+            ::GZ::Resultant operator()(const ::GZ::State& point);
 
         private:
             BodyPtr body;
             EnvironmentAndFrames env;
-            ForcePtr gravity;
-            ForcePtr hydrostatic;
+            TR1(shared_ptr)<GravityForceModel> gravity;
+            TR1(shared_ptr)<HydrostaticForceModel> hydrostatic;
             double current_instant;
     };
 }
