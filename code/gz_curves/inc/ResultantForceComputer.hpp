@@ -22,7 +22,7 @@ namespace GZ
     class ResultantForceComputer
     {
         public:
-            ResultantForceComputer(const Sim& sim);
+            ResultantForceComputer(const Sim& sim, const double dz = 1e-6, const double dphi = 1e-6, const double dtheta = 1e-6);
             ::GZ::Resultant operator()(const ::GZ::State& point);
             double gz(const ssc::kinematics::Point& B //!< Centre of buoyancy in the body frame
                      ) const;
@@ -34,6 +34,9 @@ namespace GZ
             TR1(shared_ptr)<HydrostaticForceModel> hydrostatic;
             double current_instant;
             ssc::kinematics::Point G;
+            double dz;
+            double dphi;
+            double dtheta;
     };
 }
 

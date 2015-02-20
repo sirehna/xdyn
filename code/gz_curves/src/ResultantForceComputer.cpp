@@ -13,13 +13,16 @@
 
 #define NORM(f) (sqrt(f.X()*f.X()+f.Y()*f.Y()+f.Z()*f.Z()))
 
-GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s) :
+GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s, const double dz_, const double dphi_, const double dtheta_) :
     body(s.get_bodies().front()),
     env(s.get_env()),
     gravity(TR1(static_pointer_cast)<GravityForceModel>(s.get_forces().begin()->second.front())),
     hydrostatic(TR1(static_pointer_cast)<HydrostaticForceModel>(s.get_forces().begin()->second.back())),
     current_instant(0),
-    G(body->get_states().G)
+    G(body->get_states().G),
+    dz(dz_),
+    dphi(dphi_),
+    dtheta(dtheta_)
 {
 
 }
