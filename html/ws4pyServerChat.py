@@ -43,7 +43,6 @@ class ChatWebSocketHandler(WebSocket):
         text = m.data
         if text.find("@") == -1:
             # echo to all
-            print("Broadcasting")
             cherrypy.engine.publish('websocket-broadcast', m)
         else:
             # or echo to a single user
@@ -69,7 +68,7 @@ class Root(object):
     def index(self):
         return """<html>
     <head>
-      <script type='application/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js'></script>
+      <script type='application/javascript' src='js/jquery.min.js'></script>
       <script type='application/javascript'>
         $(document).ready(function() {
 
@@ -144,7 +143,7 @@ if __name__ == '__main__':
 
     cherrypy.config.update({'server.socket_host': args.host,
                             'server.socket_port': args.port,
-                            'tools.staticdir.root': os.path.abspath(os.path.join(os.path.dirname(__file__), 'static'))})
+                            'tools.staticdir.root': os.path.abspath(os.path.join(os.path.dirname(__file__), '.'))})
 
     if args.ssl:
         cherrypy.config.update({'server.ssl_certificate': './server.crt',
