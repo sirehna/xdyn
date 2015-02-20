@@ -8,6 +8,8 @@
 #ifndef GZTYPES_HPP_
 #define GZTYPES_HPP_
 
+#include <ssc/kinematics.hpp>
+
 namespace GZ
 {
     struct State
@@ -16,6 +18,13 @@ namespace GZ
         double z;
         double phi;
         double theta;
+    };
+
+    struct Resultant
+    {
+        Resultant();
+        State state;
+        ssc::kinematics::Point centre_of_buyoancy;
     };
 }
 
