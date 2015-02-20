@@ -206,7 +206,13 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
     metadata_it->second->record_sent_message(message);
 }
 
-void WebSocketEndpoint::send(const int id, const std::vector<double>& vector)
+/**
+ * \brief Send a vector through a web socket
+ * \param[in] id Id of the connection to use
+ * \param[in] vector Vector passed by values to make a copy of the vector
+ *            on purpose
+ */
+void WebSocketEndpoint::send(const int id, const std::vector<double> vector)
 {
     websocketpp::lib::error_code error_code;
     con_list::iterator metadata_it = m_connection_list.find(id);
@@ -217,10 +223,7 @@ void WebSocketEndpoint::send(const int id, const std::vector<double>& vector)
     }
     auto hdl = metadata_it->second->get_hdl();
     const size_t s = vector.size();
-    double *m = new double[s];
-    memcpy(m,&vector[0],s);
-    m_endpoint.send(hdl, (void*)m, 8*s, websocketpp::frame::opcode::binary, error_code);
-    delete[] m;
+    m_endpoint.send(hdl, &vector[0], sizeof(double)*s, websocketpp::frame::opcode::binary, error_code);
     if (error_code)
     {
         std::stringstream ss;
