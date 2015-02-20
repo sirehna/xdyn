@@ -16,6 +16,7 @@
 #include "yaml_data.hpp"
 
 #define EPS (1E-10)
+#define BIG_EPS (1E-5)
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -156,4 +157,16 @@ TEST_F(ResultantForceComputerTest, can_compute_GZ)
     const GZ::ResultantForceComputer cube(sim);
     ASSERT_DOUBLE_EQ(4,cube.gz(ssc::kinematics::Point("cube", 3,4,6)));
     ASSERT_DOUBLE_EQ(-4,cube.gz(ssc::kinematics::Point("cube", 3,-4,6)));
+}
+
+TEST_F(ResultantForceComputerTest, can_compute_K)
+{
+    GZ::ResultantForceComputer cube(sim);
+    const auto K =  cube.K(Eigen::Vector3d(0,0,0));
+
+    ASSERT_NEAR(0, (double)K(0,1), BIG_EPS);
+    ASSERT_NEAR(0, (double)K(1,0), BIG_EPS);
+
+    ASSERT_NEAR(-6710.0400001436356, (double)K(0,0), BIG_EPS);
+    ASSERT_NEAR(  419.3774999700085, (double)K(1,1), BIG_EPS);
 }

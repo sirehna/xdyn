@@ -27,6 +27,10 @@ namespace GZ
             double gz(const ssc::kinematics::Point& B //!< Centre of buoyancy in the body frame
                      ) const;
 
+            Eigen::Matrix2d K(const Eigen::Vector3d& X);
+
+            Eigen::Matrix2d dF(const Eigen::Vector3d& X);
+
         private:
             BodyPtr body;
             EnvironmentAndFrames env;

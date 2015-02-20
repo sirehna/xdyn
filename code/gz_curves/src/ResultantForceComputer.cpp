@@ -61,3 +61,31 @@ double GZ::ResultantForceComputer::gz(const ssc::kinematics::Point& B //!< Centr
 {
     return (B-G)(1);
 }
+
+Eigen::Matrix2d GZ::ResultantForceComputer::dF(const Eigen::Vector3d& X)
+{
+    const Eigen::Vector3d dz_2(dz/2,0,0);
+    const Eigen::Vector3d dtheta_2(0,0,dtheta/2);
+    const Eigen::Vector3d dFz     = resultant(X+dz_2).state     - resultant(X-dz_2).state;
+    const Eigen::Vector3d dFtheta = resultant(X+dtheta_2).state - resultant(X-dtheta_2).state;
+    Eigen::Matrix2d F;
+    F << dFz(0), dFtheta(0),
+         dFz(2), dFtheta(2);
+    return F;
+}
+
+Eigen::Matrix2d GZ::ResultantForceComputer::K(const Eigen::Vector3d& X)
+{
+    Eigen::Matrix2d ret;
+    const Eigen::Vector2d dx(dz,dtheta);
+    const Eigen::Matrix2d df = dF(X);
+
+    for (size_t i = 0 ; i < 2 ; ++i)
+    {
+        for (size_t j = 0 ; j < 2 ; ++j)
+        {
+            ret(i,j) = df(i,j)/dx(j);
+        }
+    }
+    return ret;
+}
