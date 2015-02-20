@@ -155,7 +155,10 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_STL_)
 ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_THREAD_)
 ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_SYSTEM_ERROR_)
-FOREACH(f DemoWebSocket DemoWebSocketClient DemoWebSocketServerSingleClient)
+FOREACH(f DemoWebSocket
+          DemoWebSocketClient
+          DemoWebSocketServerSingleClient
+          DemoWebSocketServerMultiClient)
     ADD_EXECUTABLE(${f}
         observers_and_api/unit_tests/src/${f}.cpp)
     TARGET_LINK_LIBRARIES(${f} ${Boost_SYSTEM_LIBRARY})
