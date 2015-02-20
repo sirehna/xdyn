@@ -11,6 +11,9 @@
 #include "GZException.hpp"
 #include "STL_data.hpp"
 #include "yaml_data.hpp"
+#include "make_sim_for_GZ.hpp"
+
+Sim GZCurveTest::sim = GZ::make_sim(test_data::anthineas_hydrostatic_test("hydrostatic"), test_data::cube());
 
 #define EPS 1E-10
 
