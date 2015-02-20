@@ -29,9 +29,9 @@ std::string ForceModel::get_name() const
 
 void ForceModel::update(const BodyStates& body, const double t)
 {
+    body_name = body.name;
     force_in_body_frame = this->operator()(body, t);
     force_in_ned_frame = project_into_NED_frame(force_in_body_frame, body.get_rot_from_ned_to_body());
-    body_name = body.name;
 }
 
 ssc::kinematics::Wrench ForceModel::project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R)
