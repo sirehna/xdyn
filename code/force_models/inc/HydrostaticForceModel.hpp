@@ -33,7 +33,7 @@ class HydrostaticForceModel : public ForceModel
     private:
         HydrostaticForceModel();
         EnvironmentAndFrames env;
-        TR1(shared_ptr)<Eigen::Vector3d> centre_of_buyoancy;
+        TR1(shared_ptr)<Eigen::Vector3d> centre_of_buoyancy;
 };
 
 #endif /* HYDROSTATICFORCEMODEL_HPP_ */

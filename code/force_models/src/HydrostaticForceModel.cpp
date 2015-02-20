@@ -17,7 +17,7 @@
 const std::string HydrostaticForceModel::model_name = "hydrostatic";
 
 HydrostaticForceModel::HydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(model_name, body_name_),
-env(env_), centre_of_buyoancy(new Eigen::Vector3d())
+env(env_), centre_of_buoyancy(new Eigen::Vector3d())
 {
 }
 
@@ -39,7 +39,7 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
 
     if (C.in_same_plane) C.volume = 0;
 
-    for (size_t i = 0 ; i < 3 ; ++i) centre_of_buyoancy->operator()(i) = C.G(i);
+    for (size_t i = 0 ; i < 3 ; ++i) centre_of_buoyancy->operator()(i) = C.G(i);
 
     // Coordinates of the centre of buyoancy in the BODY frame
     const ssc::kinematics::Point B(body, C.G);
@@ -65,14 +65,14 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
 
 ssc::kinematics::Point HydrostaticForceModel::get_centre_of_buoyancy() const
 {
-    return ssc::kinematics::Point(get_body_name(), centre_of_buyoancy->operator()(0),
-                                                   centre_of_buyoancy->operator()(1),
-                                                   centre_of_buyoancy->operator()(2));
+    return ssc::kinematics::Point(get_body_name(), centre_of_buoyancy->operator()(0),
+                                                   centre_of_buoyancy->operator()(1),
+                                                   centre_of_buoyancy->operator()(2));
 }
 
 void HydrostaticForceModel::extra_observations(Observer& observer) const
 {
-    observer.write(centre_of_buyoancy->operator()(0),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bx"},std::string("Bx")));
-    observer.write(centre_of_buyoancy->operator()(1),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"By"},std::string("By")));
-    observer.write(centre_of_buyoancy->operator()(2),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bz"},std::string("Bz")));
+    observer.write(centre_of_buoyancy->operator()(0),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bx"},std::string("Bx")));
+    observer.write(centre_of_buoyancy->operator()(1),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"By"},std::string("By")));
+    observer.write(centre_of_buoyancy->operator()(2),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bz"},std::string("Bz")));
 }
