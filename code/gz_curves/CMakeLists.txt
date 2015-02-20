@@ -5,6 +5,7 @@ set(SRC src/GZTypes.cpp
         src/make_sim_for_GZ.cpp
         src/ResultantForceComputer.cpp
         src/gz_newton_raphson.cpp
+        src/GZCurve.cpp
         )
 
 # Using C++ 2011
