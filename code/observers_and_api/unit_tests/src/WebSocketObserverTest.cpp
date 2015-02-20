@@ -164,7 +164,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
 template<typename T>
 std::string convertStdVectorToStdString(const std::vector<T>& v);
 template<typename T>
-void convertStdStringToStdVector(const std::string& s,std::vector<T>& res);
+typename std::vector<T> convertStdStringToStdVector(const std::string& s);
 
 template<typename T>
 std::string convertStdVectorToStdString(const std::vector<T>& v)
@@ -176,14 +176,16 @@ std::string convertStdVectorToStdString(const std::vector<T>& v)
 }
 
 template<typename T>
-void convertStdStringToStdVector(const std::string& s,std::vector<T>& res)
+typename std::vector<T> convertStdStringToStdVector(const std::string& s)
 {
+    std::vector<T> res;
     const size_t n = s.size()/sizeof(T);
     res.resize(n);
     for (size_t i=0;i<n;++i)
     {
         res[i]=*reinterpret_cast<const double*>(s.c_str() + sizeof(T)*i);
     }
+    return res;
 }
 
 void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
@@ -191,7 +193,7 @@ void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr
 {
     ASSERT_EQ(websocketpp::frame::opcode::binary, msg->get_opcode());
     const std::string payload = msg->get_payload();
-    std::vector<double> vv;convertStdStringToStdVector(payload,vv);
+    std::vector<double> vv = convertStdStringToStdVector<double>(payload);
     ASSERT_EQ(3,payload.size()/8);
     ASSERT_EQ(3,vv.size());
     ASSERT_EQ(1.0,vv[0]);
@@ -227,7 +229,7 @@ TEST_F(WebSocketObserverTest, should_be_able_to_convert_vector_of_doubles_to_str
     v[0]=1.0;v[1]=2.0;v[2]=3.0;
     const std::string s = convertStdVectorToStdString(v);
     ASSERT_EQ(3*8,s.size());
-    std::vector<double> v2;convertStdStringToStdVector(s,v2);
+    std::vector<double> v2=convertStdStringToStdVector<double>(s);
     ASSERT_EQ(n,v2.size());
     for (size_t i=0;i<n;++i)
     {
