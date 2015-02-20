@@ -18,7 +18,8 @@ GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s) :
     env(s.get_env()),
     gravity(TR1(static_pointer_cast)<GravityForceModel>(s.get_forces().begin()->second.front())),
     hydrostatic(TR1(static_pointer_cast)<HydrostaticForceModel>(s.get_forces().begin()->second.back())),
-    current_instant(0)
+    current_instant(0),
+    G(body->get_states().G)
 {
 
 }
@@ -52,3 +53,8 @@ GZ::Resultant GZ::ResultantForceComputer::operator()(const ::GZ::State& point)
     return ret;
 }
 
+double GZ::ResultantForceComputer::gz(const ssc::kinematics::Point& B //!< Centre of buoyancy in the body frame
+                                ) const
+{
+    return (B-G)(1);
+}

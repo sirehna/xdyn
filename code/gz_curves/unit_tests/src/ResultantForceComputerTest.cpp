@@ -148,3 +148,12 @@ TEST_F(ResultantForceComputerTest, can_compute_centre_of_buoyancy_for_a_cube_rot
     ASSERT_NEAR(expected_By_body, B.y(),EPS);
     ASSERT_NEAR(expected_Bz_body, B.z(),EPS);
 }
+
+TEST_F(ResultantForceComputerTest, can_compute_GZ)
+{
+    const GZ::ResultantForceComputer anthineas(GZ::make_sim(test_data::anthineas_hydrostatic_test("hydrostatic"), test_data::cube()));
+    ASSERT_DOUBLE_EQ(4,anthineas.gz(ssc::kinematics::Point("cube", 3,4,6)));
+    const GZ::ResultantForceComputer cube(sim);
+    ASSERT_DOUBLE_EQ(4,cube.gz(ssc::kinematics::Point("cube", 3,4,6)));
+    ASSERT_DOUBLE_EQ(-4,cube.gz(ssc::kinematics::Point("cube", 3,-4,6)));
+}

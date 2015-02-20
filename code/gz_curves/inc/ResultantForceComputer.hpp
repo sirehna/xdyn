@@ -25,6 +25,8 @@ namespace GZ
         public:
             ResultantForceComputer(const Sim& sim);
             ::GZ::Resultant operator()(const ::GZ::State& point);
+            double gz(const ssc::kinematics::Point& B //!< Centre of buoyancy in the body frame
+                     ) const;
 
         private:
             BodyPtr body;
@@ -32,6 +34,7 @@ namespace GZ
             TR1(shared_ptr)<GravityForceModel> gravity;
             TR1(shared_ptr)<HydrostaticForceModel> hydrostatic;
             double current_instant;
+            ssc::kinematics::Point G;
     };
 }
 
