@@ -185,6 +185,31 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
     }
 }
 
+template<typename T>
+std::string convertStdVectorToStdString(const std::vector<T>& v);
+template<typename T>
+void convertStdStringToStdVector(const std::string& s,std::vector<T>& res);
+
+template<typename T>
+std::string convertStdVectorToStdString(const std::vector<T>& v)
+{
+    const size_t ss = v.size()*sizeof(T);
+    std::string s(ss, 0);
+    memcpy((void*)s.c_str(),v.data(),ss);
+    return s;
+}
+
+template<typename T>
+void convertStdStringToStdVector(const std::string& s,std::vector<T>& res)
+{
+    const size_t n = s.size()/sizeof(T);
+    res.resize(n);
+    for (size_t i=0;i<n;++i)
+    {
+        res[i]=*reinterpret_cast<const double*>(s.c_str() + sizeof(T)*i);
+    }
+}
+
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_doubles)
 {
     TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )>(on_message_vector)));
@@ -197,3 +222,17 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_
     }
 }
 
+TEST_F(WebSocketObserverTest, should_be_able_to_convert_vector_of_doubles_to_string_and_back)
+{
+    const size_t n=3;
+    std::vector<double> v(n,0.0);
+    v[0]=1.0;v[1]=2.0;v[2]=3.0;
+    const std::string s = convertStdVectorToStdString(v);
+    ASSERT_EQ(3*8,s.size());
+    std::vector<double> v2;convertStdStringToStdVector(s,v2);
+    ASSERT_EQ(n,v2.size());
+    for (size_t i=0;i<n;++i)
+    {
+        ASSERT_EQ(v[i],v2[i]);
+    }
+}
