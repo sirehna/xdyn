@@ -27,10 +27,12 @@ class HydrostaticForceModel : public ForceModel
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         const static std::string model_name;
         bool is_a_surface_force_model() const;
+        void extra_observations(Observer& ) const;
 
     private:
         HydrostaticForceModel();
         EnvironmentAndFrames env;
+        TR1(shared_ptr)<Eigen::Vector3d> centre_of_buyoancy;
 };
 
 #endif /* HYDROSTATICFORCEMODEL_HPP_ */

@@ -5,17 +5,19 @@
  *      Author: cady
  */
 
-#include "HydrostaticForceModel.hpp"
-
 #include <Eigen/Dense>
+
 #include <ssc/kinematics.hpp>
+
 #include "Body.hpp"
+#include "HydrostaticForceModel.hpp"
+#include "Observer.hpp"
 #include "QuadraticDampingForceModel.hpp"
 
 const std::string HydrostaticForceModel::model_name = "hydrostatic";
 
 HydrostaticForceModel::HydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(model_name, body_name_),
-env(env_)
+env(env_), centre_of_buyoancy(new Eigen::Vector3d())
 {
 }
 
@@ -36,6 +38,8 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
                                                 states.intersector->end_immersed());
 
     if (C.in_same_plane) C.volume = 0;
+
+    for (size_t i = 0 ; i < 3 ; ++i) centre_of_buyoancy->operator()(i) = C.G(i);
 
     // Coordinates of the centre of buyoancy in the BODY frame
     const ssc::kinematics::Point B(body, C.G);
@@ -59,3 +63,9 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
     return ret3;
 }
 
+void HydrostaticForceModel::extra_observations(Observer& observer) const
+{
+    observer.write(centre_of_buyoancy->operator()(0),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bx"},std::string("Bx")));
+    observer.write(centre_of_buyoancy->operator()(1),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"By"},std::string("By")));
+    observer.write(centre_of_buyoancy->operator()(2),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bz"},std::string("Bz")));
+}

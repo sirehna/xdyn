@@ -67,6 +67,11 @@ void ForceModel::feed(Observer& observer) const
     extra_observations(observer);
 }
 
+std::string ForceModel::get_body_name() const
+{
+    return body_name;
+}
+
 void ForceModel::extra_observations(Observer& ) const
 {
 }
