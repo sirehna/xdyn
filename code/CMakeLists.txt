@@ -162,13 +162,13 @@ ENDIF()
 
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM websocketpp)
-ADD_EXECUTABLE(DemoWebSocketServer
-    observers_and_api/unit_tests/src/DemoWebSocketServer.cpp)
-TARGET_LINK_LIBRARIES(DemoWebSocketServer ${Boost_SYSTEM_LIBRARY})
+ADD_EXECUTABLE(DemoWebSocketServerSingleClient
+    observers_and_api/unit_tests/src/DemoWebSocketServerSingleClient.cpp)
+TARGET_LINK_LIBRARIES(DemoWebSocketServerSingleClient ${Boost_SYSTEM_LIBRARY})
 IF(WIN32)
-    TARGET_LINK_LIBRARIES(DemoWebSocketServer wsock32 ws2_32)
+    TARGET_LINK_LIBRARIES(DemoWebSocketServerSingleClient wsock32 ws2_32)
 ELSE()
-    TARGET_LINK_LIBRARIES(DemoWebSocketServer pthread rt)
+    TARGET_LINK_LIBRARIES(DemoWebSocketServerSingleClient pthread rt)
 ENDIF()
 
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
