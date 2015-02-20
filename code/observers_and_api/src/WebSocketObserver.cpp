@@ -118,6 +118,14 @@ WebSocketEndpoint::~WebSocketEndpoint()
     std::cout << "End WebSocketEndpoint::~WebSocketEndpoint()"<< std::endl<<std::flush;
 }
 
+/**
+ * \param[in] uri
+ * \return id the connection generated. In case of error, the value returns is -1
+ * \note
+ * The \param uri can looks like
+ *  - "ws://localhost:9002"
+ *  - "ws://localhost:9002/ws?username=me"
+ */
 int WebSocketEndpoint::connect(std::string const & uri)
 {
     websocketpp::lib::error_code error_code;
