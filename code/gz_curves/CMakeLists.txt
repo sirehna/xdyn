@@ -4,6 +4,7 @@ project(gz_curves)
 set(SRC src/GZTypes.cpp
         src/make_sim_for_GZ.cpp
         src/ResultantForceComputer.cpp
+        src/gz_newton_raphson.cpp
         )
 
 # Using C++ 2011

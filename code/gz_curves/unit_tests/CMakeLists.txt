@@ -2,6 +2,7 @@
 set(MODULE_UNDER_TEST gz_curves)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/ResultantForceComputerTest.cpp
+              src/gz_newton_raphsonTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
