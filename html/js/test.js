@@ -52,7 +52,7 @@ function init() {
     var material = new THREE.MeshPhongMaterial( { ambient: 0x555555, color: 0xAAAAAA, specular: 0x111111, shininess: 200 } );
 
     var loader = new THREE.STLLoader();
-    loader.load( 'pr2_head_pan.stl', function ( geometry ) {
+    loader.load( 'stl/pr2_head_pan.stl', function ( geometry ) {
 
     var mesh = new THREE.Mesh( geometry, material );
     meshes["bla"] = mesh;
