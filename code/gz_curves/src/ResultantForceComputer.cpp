@@ -27,8 +27,8 @@ GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s) :
 GZ::Resultant GZ::ResultantForceComputer::operator()(const ::GZ::State& point)
 {
     std::vector<double> x(13, 0);
-    x[ZIDX(0)] = point.z;
-    ssc::kinematics::EulerAngles angle(point.phi,point.theta,0);
+    x[ZIDX(0)] = point(0);
+    ssc::kinematics::EulerAngles angle(point(1),point(2),0);
     YamlRotation c;
     c.order_by = "angle";
     c.convention.push_back("z");

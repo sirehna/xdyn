@@ -12,13 +12,7 @@
 
 namespace GZ
 {
-    struct State
-    {
-        State(const double z, const double phi, const double theta);
-        double z;
-        double phi;
-        double theta;
-    };
+    typedef Eigen::Vector3d State;
 
     struct Resultant
     {

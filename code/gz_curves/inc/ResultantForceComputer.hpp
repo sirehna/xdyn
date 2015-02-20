@@ -11,6 +11,7 @@
 #include "Body.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "ForceModel.hpp"
+#include "GZTypes.hpp"
 
 class Sim;
 class GravityForceModel;
@@ -18,8 +19,6 @@ class HydrostaticForceModel;
 
 namespace GZ
 {
-    struct Resultant;
-    struct State;
     class ResultantForceComputer
     {
         public:
