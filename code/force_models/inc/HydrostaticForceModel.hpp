@@ -28,6 +28,7 @@ class HydrostaticForceModel : public ForceModel
         const static std::string model_name;
         bool is_a_surface_force_model() const;
         void extra_observations(Observer& ) const;
+        ssc::kinematics::Point get_centre_of_buoyancy() const;
 
     private:
         HydrostaticForceModel();

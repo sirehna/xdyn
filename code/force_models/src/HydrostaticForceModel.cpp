@@ -63,6 +63,13 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
     return ret3;
 }
 
+ssc::kinematics::Point HydrostaticForceModel::get_centre_of_buoyancy() const
+{
+    return ssc::kinematics::Point(get_body_name(), centre_of_buyoancy->operator()(0),
+                                                   centre_of_buyoancy->operator()(1),
+                                                   centre_of_buyoancy->operator()(2));
+}
+
 void HydrostaticForceModel::extra_observations(Observer& observer) const
 {
     observer.write(centre_of_buyoancy->operator()(0),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bx"},std::string("Bx")));
