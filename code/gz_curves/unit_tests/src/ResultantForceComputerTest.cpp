@@ -72,11 +72,11 @@ TEST_F(ResultantForceComputerTest, sim_only_contains_default_surface_elevation)
 TEST_F(ResultantForceComputerTest, can_compute_resultant_force_for_a_cube)
 {
     GZ::ResultantForceComputer sum_of_forces(sim);
-    const auto F0 = sum_of_forces(GZ::State(0,0,0)).state;
+    const auto F0 = sum_of_forces.resultant(GZ::State(0,0,0)).state;
     ASSERT_NEAR(1000*9.81-1026*0.5*9.81, F0(0),EPS);
     ASSERT_NEAR(0, F0(1),EPS);
     ASSERT_NEAR(0, F0(2),EPS);
-    const auto F1 = sum_of_forces(GZ::State(2,0,0)).state;
+    const auto F1 = sum_of_forces.resultant(GZ::State(2,0,0)).state;
     ASSERT_NEAR(1000*9.81-1026*1.*9.81, F1(0),EPS);
     ASSERT_NEAR(0, F1(1),EPS);
     ASSERT_NEAR(0, F1(2),EPS);
@@ -85,7 +85,7 @@ TEST_F(ResultantForceComputerTest, can_compute_resultant_force_for_a_cube)
 TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_rotated_on_phi)
 {
     GZ::ResultantForceComputer sum_of_forces(sim);
-    const auto F = sum_of_forces(GZ::State(0,PI/3,0)).state;
+    const auto F = sum_of_forces.resultant(GZ::State(0,PI/3,0)).state;
     ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(PI/3), F(0),EPS);
     EXPECT_NEAR(-1026*9.81*0.5*(2./9.*cos(PI/3.)-0.096225044864937658851*sin(PI/3.)), F(1),EPS);
     EXPECT_NEAR(0, F(2),EPS);
@@ -94,7 +94,7 @@ TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_rotated_on_phi)
 TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_rotated_on_theta)
 {
     GZ::ResultantForceComputer sum_of_forces(sim);
-    const auto F = sum_of_forces(GZ::State(0,0,PI/3)).state;
+    const auto F = sum_of_forces.resultant(GZ::State(0,0,PI/3)).state;
     ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(PI/3), F(0),EPS);
     EXPECT_NEAR(0, F(1),EPS);
     EXPECT_NEAR(-1026*9.81*0.5*(2./9.*cos(PI/3.)-0.096225044864937658851*sin(PI/3.)), F(2),EPS);
@@ -103,7 +103,7 @@ TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_rotated_on_thet
 TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_rotated_by_a_quarter)
 {
     GZ::ResultantForceComputer sum_of_forces(sim);
-    const auto F = sum_of_forces(GZ::State(0,PI/4,0)).state;
+    const auto F = sum_of_forces.resultant(GZ::State(0,PI/4,0)).state;
     ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(PI/4), F(0),EPS);
     ASSERT_NEAR(0, F(1),EPS);
     ASSERT_NEAR(0, F(2),EPS);
@@ -112,7 +112,7 @@ TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_rotated_by_a_qu
 TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_at_the_surface)
 {
     GZ::ResultantForceComputer sum_of_forces(sim);
-    const auto F = sum_of_forces(GZ::State(-0.5,0,0)).state;
+    const auto F = sum_of_forces.resultant(GZ::State(-0.5,0,0)).state;
     ASSERT_NEAR(1000*9.81, F(0),EPS);
     ASSERT_NEAR(0, F(1),EPS);
     ASSERT_NEAR(0, F(2),EPS);
@@ -125,9 +125,9 @@ TEST_F(ResultantForceComputerTest, can_compute_resultant_for_any_angle)
     for (size_t i = 0 ; i < n ; ++i)
     {
         const double angle = -PI + (2*PI)*(double)(i)/(std::max(1.,(double)n - 1));
-        const auto F1 = sum_of_forces(GZ::State(0,angle,0)).state;
+        const auto F1 = sum_of_forces.resultant(GZ::State(0,angle,0)).state;
         ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(angle), F1(0),EPS);
-        const auto F2 = sum_of_forces(GZ::State(0,0,angle)).state;
+        const auto F2 = sum_of_forces.resultant(GZ::State(0,0,angle)).state;
         ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(angle), F2(0),EPS);
     }
 
@@ -137,7 +137,7 @@ TEST_F(ResultantForceComputerTest, can_compute_centre_of_buoyancy_for_a_cube_rot
 {
     GZ::ResultantForceComputer sum_of_forces(sim);
     const double phi = PI/3;
-    const auto B = sum_of_forces(GZ::State(0,phi,0)).centre_of_buyoancy;
+    const auto B = sum_of_forces.resultant(GZ::State(0,phi,0)).centre_of_buyoancy;
     const double By_ned = 1./36.;
     const double Bz_ned = 5*sqrt(3)/36.;
 

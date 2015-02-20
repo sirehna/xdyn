@@ -27,7 +27,7 @@ GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s, const double dz
 
 }
 
-GZ::Resultant GZ::ResultantForceComputer::operator()(const ::GZ::State& point)
+GZ::Resultant GZ::ResultantForceComputer::resultant(const ::GZ::State& point)
 {
     std::vector<double> x(13, 0);
     x[ZIDX(0)] = point(0);
