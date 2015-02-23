@@ -361,7 +361,7 @@ std::string test_data::full_example()
        << "     data: [x(body 1)]\n"
        << "   - format: hdf5\n"
        << "     filename: tutorial_1.h5\n"
-       << "     data: ['y(body 1)','z(body 1)','Fz(gravity,body 1)','waves']\n";
+       << "     data: ['y(body 1)','z(body 1)','Fz(gravity,body 1,body 1)','waves']\n";
     return ss.str();
 }
 
@@ -557,7 +557,7 @@ std::string test_data::falling_ball_example()
        << "     data: [x(ball)]\n"
        << "   - format: hdf5\n"
        << "     filename: falling_ball.h5\n"
-       << "     data: ['x(ball)','y(ball)','z(ball)','Fz(gravity,ball)']\n";
+       << "     data: ['x(ball)','y(ball)','z(ball)','Fz(gravity,ball,ball)']\n";
     return ss.str();
 }
 

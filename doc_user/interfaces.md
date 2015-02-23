@@ -222,11 +222,15 @@ output:
   sont `x(body)`, `y(body)` `z(body)`, `u(body)`, `v(body)`, `w(body)`,
   `p(body)`, `q(body)`, `r(body)`, `qr(body)`, `qi(body)`, `qj(body)`,
   `qk(body)`. `body` doit être remplacé par le nom du corps (`ball` dans
-  l'exemple ci-dessus). Les sorties d'effort sont `Fx(model,body)`,
-  `Fy(model,body)`, `Fz(model,body)`, `Mx(model,body)`, `My(model,body)`,
-  `Mz(model,body)` où `model` est le nom du modèle d'effort (renseigné dans la
-  clef `model` de chaque modèle d'effort). Les sorties de houle sont notées
+  l'exemple ci-dessus). Les sorties d'effort sont `Fx(modèle,corps,repère)`,
+  `Fy(modèle,corps,repère)`, `Fz(modèle,corps,repère)`, `Mx(modèle,corps,repère)`, `My(modèle,corps,repère)`,
+  `Mz(modèle,corps,repère)` où `modèle` est le nom du modèle d'effort (renseigné dans la
+  clef `modèle` de chaque modèle d'effort), `corps` est le nom du corps sur
+  lequel agit l'effort et `repère` est le repère d'expression (qui ne peut être
+  que `NED` ou le nom du corps). Les sorties de houle sont notées
   `waves` et leur contenu est décrit dans la section [Modèle de
-houle/Sorties](#sorties-1).
+  houle/Sorties](#sorties-1). La somme des efforts appliquées à un corps est
+  accessible par `Fx(sum of forces,corps,repère)` (resp. Fy, Fz, Mx, My, Mz).
+  Actuellement, le repère est forcément le repère `body`.
 
 

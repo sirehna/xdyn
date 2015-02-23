@@ -14,7 +14,7 @@
 #include "YamlOutput.hpp"
 
 std::vector<YamlOutput> parse_output(const std::string yaml);
-YamlOutput generate_all_outputs(const std::string yaml, const std::string& filename);
+YamlOutput generate_default_outputter_with_all_states_in_it(const std::string yaml, const std::string& filename);
 
 
 #endif /* PARSE_OUTPUT_HPP_ */
