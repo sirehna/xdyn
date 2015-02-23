@@ -34,7 +34,7 @@ void ForceModel::update(const BodyStates& body, const double t)
     body_name = body.name;
 }
 
-ssc::kinematics::Wrench ForceModel::project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R) const
+ssc::kinematics::Wrench ForceModel::project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R)
 {
     return ssc::kinematics::Wrench(ssc::kinematics::Point("NED"),R*F.force,R*F.torque);
 }

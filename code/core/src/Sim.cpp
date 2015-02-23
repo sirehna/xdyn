@@ -27,7 +27,8 @@ class Sim::Impl
              const StateType& x,
              const ssc::data_source::DataSource& command_listener_) :
                  bodies(bodies_), forces(), controlled_forces(), env(env_),
-                 _dx_dt(StateType(x.size(),0)), command_listener(command_listener_), sum_of_forces()
+                 _dx_dt(StateType(x.size(),0)), command_listener(command_listener_), sum_of_forces_in_body_frame(),
+                 sum_of_forces_in_NED_frame()
         {
             size_t i = 0;
             for (auto body:bodies)
@@ -39,12 +40,18 @@ class Sim::Impl
 
         void feed_sum_of_forces(Observer& observer, const std::string& body_name)
         {
-            observer.write(sum_of_forces[body_name].X(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",body_name,"Fx"},std::string("Fx(sum of forces,")+body_name+","+body_name+")"));
-            observer.write(sum_of_forces[body_name].Y(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",body_name,"Fy"},std::string("Fy(sum of forces,")+body_name+","+body_name+")"));
-            observer.write(sum_of_forces[body_name].Z(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",body_name,"Fz"},std::string("Fz(sum of forces,")+body_name+","+body_name+")"));
-            observer.write(sum_of_forces[body_name].K(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",body_name,"Mx"},std::string("Mx(sum of forces,")+body_name+","+body_name+")"));
-            observer.write(sum_of_forces[body_name].M(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",body_name,"My"},std::string("My(sum of forces,")+body_name+","+body_name+")"));
-            observer.write(sum_of_forces[body_name].N(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",body_name,"Mz"},std::string("Mz(sum of forces,")+body_name+","+body_name+")"));
+            feed_sum_of_forces(observer, sum_of_forces_in_body_frame[body_name], body_name, body_name);
+            feed_sum_of_forces(observer, sum_of_forces_in_NED_frame[body_name], body_name, "NED");
+        }
+
+        void feed_sum_of_forces(Observer& observer, ssc::kinematics::UnsafeWrench& W, const std::string& body_name, const std::string& frame)
+        {
+            observer.write(W.X(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"Fx"},std::string("Fx(sum of forces,")+body_name+","+frame+")"));
+            observer.write(W.Y(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"Fy"},std::string("Fy(sum of forces,")+body_name+","+frame+")"));
+            observer.write(W.Z(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"Fz"},std::string("Fz(sum of forces,")+body_name+","+frame+")"));
+            observer.write(W.K(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"Mx"},std::string("Mx(sum of forces,")+body_name+","+frame+")"));
+            observer.write(W.M(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"My"},std::string("My(sum of forces,")+body_name+","+frame+")"));
+            observer.write(W.N(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"Mz"},std::string("Mz(sum of forces,")+body_name+","+frame+")"));
         }
 
         std::vector<BodyPtr> bodies;
@@ -53,7 +60,8 @@ class Sim::Impl
         EnvironmentAndFrames env;
         StateType _dx_dt;
         ssc::data_source::DataSource command_listener;
-        std::map<std::string,ssc::kinematics::UnsafeWrench> sum_of_forces;
+        std::map<std::string,ssc::kinematics::UnsafeWrench> sum_of_forces_in_body_frame;
+        std::map<std::string,ssc::kinematics::UnsafeWrench> sum_of_forces_in_NED_frame;
 };
 
 std::map<std::string,std::vector<ForcePtr> > Sim::get_forces() const
@@ -132,7 +140,7 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     const Eigen::Vector3d uvw_in_body_frame = body->get_uvw_in_body_frame(x);
     const Eigen::Vector3d pqr = body->get_pqr(x);
     const auto states = body->get_states();
-    pimpl->sum_of_forces[body->get_name()] = ssc::kinematics::UnsafeWrench(coriolis_and_centripetal(states.G,states.solid_body_inertia.get(),uvw_in_body_frame, pqr));
+    pimpl->sum_of_forces_in_body_frame[body->get_name()] = ssc::kinematics::UnsafeWrench(coriolis_and_centripetal(states.G,states.solid_body_inertia.get(),uvw_in_body_frame, pqr));
     const auto forces = pimpl->forces[body->get_name()];
     for (auto force:forces)
     {
@@ -143,11 +151,11 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
             const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->get_name());
             const auto t = tau.change_frame_but_keep_ref_point(T);
             const ssc::kinematics::UnsafeWrench tau_body(states.G, t.force, t.torque + (t.get_point()-states.G).cross(t.force));
-            pimpl->sum_of_forces[body->get_name()] += tau_body;
+            pimpl->sum_of_forces_in_body_frame[body->get_name()] += tau_body;
         }
         else
         {
-            pimpl->sum_of_forces[body->get_name()] += tau;
+            pimpl->sum_of_forces_in_body_frame[body->get_name()] += tau;
         }
     }
     const auto controlled_forces = pimpl->controlled_forces[body->get_name()];
@@ -157,9 +165,10 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
         const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->get_name());
         const auto t = tau.change_frame_but_keep_ref_point(T);
         const ssc::kinematics::UnsafeWrench tau_body(states.G, t.force, t.torque + (t.get_point()-states.G).cross(t.force));
-        pimpl->sum_of_forces[body->get_name()] += tau_body;
+        pimpl->sum_of_forces_in_body_frame[body->get_name()] += tau_body;
     }
-    return pimpl->sum_of_forces[body->get_name()];
+    pimpl->sum_of_forces_in_NED_frame[body->get_name()] = ForceModel::project_into_NED_frame(pimpl->sum_of_forces_in_body_frame[body->get_name()],states.get_rot_from_ned_to_body());
+    return pimpl->sum_of_forces_in_body_frame[body->get_name()];
 }
 
 std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current instant
@@ -193,5 +202,8 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
     }
     for (auto body:pimpl->bodies) body->feed(x, obs, pimpl->env.rot);
     pimpl->env.feed(obs, t, pimpl->bodies, state);
-    for (auto body:pimpl->bodies) pimpl->feed_sum_of_forces(obs, body->get_name());
+    for (auto body:pimpl->bodies)
+    {
+        pimpl->feed_sum_of_forces(obs, body->get_name());
+    }
 }

@@ -82,13 +82,13 @@ class ForceModel
             return parser;
         }
 
+        static ssc::kinematics::Wrench project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R);
+
     protected:
         virtual void extra_observations(Observer& observer) const;
 
     private:
         ForceModel(); // Disabled
-
-        ssc::kinematics::Wrench project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R) const;
 
         std::string force_name;
         std::string body_name;
