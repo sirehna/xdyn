@@ -104,7 +104,7 @@ public:
         }
 
         std::stringstream val;
-        val << "count is " << m_count++;
+        val << "{\"count\":"<< m_count++<<"}";
 
         // Broadcast count to all connections
         con_list::iterator it;
