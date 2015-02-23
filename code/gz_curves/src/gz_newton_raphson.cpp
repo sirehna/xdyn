@@ -14,10 +14,10 @@ double delta(const Eigen::Vector3d& X1, const Eigen::Vector3d& X2)
 }
 
 GZ::State GZ::newton_raphson(const GZ::State& X0, //!< Initial value
-                         const GZ::FType& f,      //!< Function calculating the sum of forces
-                         const GZ::KComputer& K,  //!< Function calculating the stiffness matrix (f')
-                         const size_t max_it,     //!< Maximum number of iterations
-                         const double eps         //!< Desired precision
+                             const GZ::FType& f,      //!< Function calculating the sum of forces
+                             const GZ::KComputer& K,  //!< Function calculating the stiffness matrix (f')
+                             const size_t max_it,     //!< Maximum number of iterations
+                             const double eps         //!< Desired precision
                               )
 {
     Eigen::Vector3d Xn = X0;
@@ -26,7 +26,11 @@ GZ::State GZ::newton_raphson(const GZ::State& X0, //!< Initial value
     {
         if (delta(Xn,Xn_1) < eps) return Xn;
         Xn_1 = Xn;
-        Xn = Xn_1 - K(Xn_1).lu().solve(f(Xn_1).state);
+        const auto k = K(Xn_1);
+        const double det_k = k(0,0)*k(1,1) - k(0,1)*k(1,0);
+        const auto y = f(Xn_1).state;
+        Xn(0) = Xn_1(0) - (k(1,1)*y(0) - k(0,1)*y(2))/det_k;
+        Xn(2) = Xn_1(2) - (k(0,0)*y(2) - k(1,0)*y(0))/det_k;
     }
     return Xn;
 }
