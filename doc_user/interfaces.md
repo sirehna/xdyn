@@ -229,6 +229,8 @@ output:
   lequel agit l'effort et `repère` est le repère d'expression (qui ne peut être
   que `NED` ou le nom du corps). Les sorties de houle sont notées
   `waves` et leur contenu est décrit dans la section [Modèle de
-houle/Sorties](#sorties-1).
+  houle/Sorties](#sorties-1). La somme des efforts appliquées à un corps est
+  accessible par `Fx(sum of forces,corps,repère)` (resp. Fy, Fz, Mx, My, Mz).
+  Actuellement, le repère est forcément le repère `body`.
 
 
