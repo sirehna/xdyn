@@ -137,18 +137,28 @@ function reset()
     meshes["bla"].position.y=0;
     meshes["bla"].position.z=0;
 }
-function render_(x,y,z) {
-if ("bla" in meshes)
-{
-    console.log("x = "+x);
-    console.log("y = "+y);
-    console.log("z = "+z);
-    meshes["bla"].position.x=x;
-    meshes["bla"].position.y=y;
-    meshes["bla"].position.z=z;
-}
+function render_(x, y, z, qr, qx, qy, qz) {
+    if ("bla" in meshes)
+    {
+        qr = typeof qr !== 'undefined' ? qr : 1.0;
+        qx = typeof qx !== 'undefined' ? qx : 0.0;
+        qy = typeof qy !== 'undefined' ? qy : 0.0;
+        qz = typeof qz !== 'undefined' ? qz : 0.0;
+        meshes["bla"].position.x=x;
+        meshes["bla"].position.y=y;
+        meshes["bla"].position.z=z;
+        var quaternion = new THREE.Quaternion(qx,qy,qz,qr);
+        quaternion = quaternion.normalize();
+        meshes["bla"].rotation.setFromQuaternion(quaternion);
+        meshes["bla"].updateMatrix();
+        console.log("x = "+x);
+        console.log("y = "+y);
+        console.log("z = "+z);
+        console.log("q = "+[qx,qy,qz,qr]);
+        //var euler = new THREE.Euler().setFromQuaternion ( quaternion, 'XYZ');
+        //console.log("euler = "+euler.x);
+    }
     renderer.render( scene, camera );
-
 }
 
 function render() {
