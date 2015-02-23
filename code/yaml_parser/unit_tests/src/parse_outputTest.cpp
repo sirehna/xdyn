@@ -52,7 +52,7 @@ TEST_F(parse_outputTest, should_work_even_if_string_is_empty)
 
 TEST_F(parse_outputTest, can_create_list_of_all_outputs_for_a_given_yaml)
 {
-    const YamlOutput res = generate_all_outputs(test_data::full_example(), "");
+    const YamlOutput res = generate_default_outputter_with_all_states_in_it(test_data::full_example(), "");
     ASSERT_EQ("", res.filename);
     ASSERT_EQ("tsv", res.format);
     ASSERT_EQ(13+1,res.data.size());
@@ -74,14 +74,14 @@ TEST_F(parse_outputTest, can_create_list_of_all_outputs_for_a_given_yaml)
 
 TEST_F(parse_outputTest, format_is_HDF5_if_extension_is_h5)
 {
-    const YamlOutput res = generate_all_outputs(test_data::full_example(), "blabla.h5");
+    const YamlOutput res = generate_default_outputter_with_all_states_in_it(test_data::full_example(), "blabla.h5");
     ASSERT_EQ("blabla.h5", res.filename);
     ASSERT_EQ("hdf5", res.format);
 }
 
 TEST_F(parse_outputTest, format_is_CSV_if_extension_is_csv)
 {
-    const YamlOutput res = generate_all_outputs(test_data::full_example(), "blabla.csv");
+    const YamlOutput res = generate_default_outputter_with_all_states_in_it(test_data::full_example(), "blabla.csv");
     ASSERT_EQ("blabla.csv", res.filename);
     ASSERT_EQ("csv", res.format);
 }

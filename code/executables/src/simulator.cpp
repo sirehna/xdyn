@@ -36,7 +36,7 @@ int main(int argc, char** argv)
         const auto yaml = yaml_reader.get_contents();
         auto sys = get_system(yaml,input_data.tstart,command_listener);
         auto out = parse_output(yaml);
-        out.push_back(generate_all_outputs(yaml, input_data.output_filename));
+        out.push_back(generate_default_outputter_with_all_states_in_it(yaml, input_data.output_filename));
         ListOfObservers observer(out);
         if (input_data.solver=="euler")
         {
