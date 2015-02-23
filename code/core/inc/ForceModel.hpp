@@ -48,7 +48,8 @@ class ForceModel
         virtual double potential_energy(const BodyStates& body, const std::vector<double>& x) const {(void)body;(void)x;return 0;}
         virtual std::string get_name() const;
         virtual bool is_a_surface_force_model() const;
-        ssc::kinematics::Wrench get() const;
+        ssc::kinematics::Wrench get_force_in_body_frame() const;
+        ssc::kinematics::Wrench get_force_in_ned_frame() const;
         void feed(Observer& observer) const;
 
         template <typename ForceType>
@@ -86,9 +87,13 @@ class ForceModel
 
     private:
         ForceModel(); // Disabled
+
+        ssc::kinematics::Wrench project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R) const;
+
         std::string force_name;
         std::string body_name;
-        ssc::kinematics::Wrench force;
+        ssc::kinematics::Wrench force_in_body_frame;
+        ssc::kinematics::Wrench force_in_ned_frame;
 };
 
 typedef std::vector<ForcePtr> ListOfForces;

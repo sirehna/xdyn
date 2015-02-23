@@ -124,7 +124,7 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     for (auto force:forces)
     {
         force->update(states, t);
-        const ssc::kinematics::Wrench tau = force->get();
+        const ssc::kinematics::Wrench tau = force->get_force_in_body_frame();
         if (tau.get_frame() != body->get_name())
         {
             const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->get_name());
