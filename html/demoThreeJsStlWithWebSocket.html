@@ -36,7 +36,17 @@
             
             ws.onmessage = function(e) {
                 document.getElementById("messages").innerHTML = "Server: "+e.data+"<br/>";
-                render_(0.05*parseInt(e.data.split(" ")[2]),0,0);
+                console.log(typeof(e.data));
+                if (typeof(e.data)==="string")
+                {
+                    var obj = JSON && JSON.parse(e.data) || $.parseJSON(e.data);
+                    render_(0.05*obj.count,0,0);
+                    //render_(0.05*parseInt(e.data.split(" ")[2]),0,0);
+                }
+                else
+                {
+                    //var bytes = new Float64Array(buffer);
+                }
             };
         }
 
