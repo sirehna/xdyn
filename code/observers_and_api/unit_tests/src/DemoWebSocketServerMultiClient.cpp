@@ -191,7 +191,6 @@ int main(int argc, char* argv[]) {
     if (argc == 1)
     {
         std::cout << "Usage: "<<argv[0]<<" [documentroot] [port]" << std::endl;
-        return EXIT_FAILURE;
     }
 
     if (argc >= 2)
