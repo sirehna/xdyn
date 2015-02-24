@@ -12,6 +12,7 @@
 #include "hdb_data.hpp"
 #include "STL_data.hpp"
 #include "stl_writer.hpp"
+#include "TriMeshTestData.hpp"
 
 int main(int argc, const char* argv[])
 {
@@ -22,6 +23,7 @@ int main(int argc, const char* argv[])
     stl["three_facets.stl"] = test_data::three_facets();
     stl["cube.stl"]         = test_data::cube();
     stl["big_cube.stl"]     = test_data::big_cube();
+    stl["L.stl"]            = write_stl(L());
     stl["anthineas.stl"]    = write_stl(anthineas());
     stl["anthineas.hdb"]    = test_data::anthineas_hdb();
 
