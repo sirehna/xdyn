@@ -20,9 +20,9 @@ Mesh::Mesh(
 ,facetsPerEdge(facetsPerEdge_)
 ,orientedEdgesPerFacet(orientedEdgesPerFacet_)
 ,static_nodes((size_t)nodes_.cols())
-,static_edges(edges_[0].size())
+,nb_of_static_edges(edges_[0].size())
 ,static_facets(facets_.size())
-,all_nodes(3,static_nodes+static_edges)
+,all_nodes(3,static_nodes+nb_of_static_edges)
 ,node_count(static_nodes)
 ,orientation_factor(clockwise ? -1 : 1)
 {
@@ -34,8 +34,8 @@ Mesh::Mesh(
 void Mesh::reset_dynamic_data()
 {
     node_count = static_nodes;
-    edges[0].erase( edges[0].begin() + (int)static_edges , edges[0].end());
-    edges[1].erase( edges[1].begin() + (int)static_edges , edges[1].end());
+    edges[0].erase( edges[0].begin() + (int)nb_of_static_edges , edges[0].end());
+    edges[1].erase( edges[1].begin() + (int)nb_of_static_edges , edges[1].end());
     facets.erase( facets.begin() + (int)static_facets , facets.end());
 }
 

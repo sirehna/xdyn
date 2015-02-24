@@ -95,7 +95,7 @@ public:
     std::vector<std::vector<size_t> > facetsPerEdge;            //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
     std::vector<std::vector<size_t> > orientedEdgesPerFacet;    //!< for each Facet (index), the list of Edges composing the facet and running direction of each edge
     size_t static_nodes;                                        //!< Number of static nodes
-    size_t static_edges;                                        //!< Number of static edges
+    size_t nb_of_static_edges;                                        //!< Number of static edges
     size_t static_facets;                                       //!< Number of static facets
     Matrix3x all_nodes;                                         //!< Coordinates of all vertices in mesh, including dynamic ones added for free surface intersection
     size_t node_count;                                          //!< Total number of nodes used, including dynamic ones

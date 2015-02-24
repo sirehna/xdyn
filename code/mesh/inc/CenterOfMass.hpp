@@ -17,7 +17,7 @@ struct CenterOfMass
 
     EPoint G;
     double volume;
-    bool in_same_plane;
+    bool all_facets_are_in_same_plane;
 
     private:
         CenterOfMass();

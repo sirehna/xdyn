@@ -37,7 +37,7 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
     auto C = states.intersector->center_of_mass(states.intersector->begin_immersed(),
                                                 states.intersector->end_immersed());
 
-    if (C.in_same_plane) C.volume = 0;
+    if (C.all_facets_are_in_same_plane) C.volume = 0;
 
     for (size_t i = 0 ; i < 3 ; ++i) centre_of_buoyancy->operator()(i) = C.G(i);
 

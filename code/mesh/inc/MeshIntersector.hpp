@@ -104,7 +104,7 @@ class MeshIntersector
         /**
          * \brief split a Facet into an emerged and an immersed part
          */
-        void split_partially_immersed_facet(
+        void split_partially_immersed_facet_and_classify(
                 size_t facet_index,                             //!< the index of facet to be split
                 const std::vector<int> &edges_immersion_status, //!< the immersion status of each edge
                 const std::vector<size_t> &split_edges          //!< the replacement map for split edges

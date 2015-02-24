@@ -29,7 +29,7 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
         std::vector<int>& edges_immersion_status,
         std::vector<bool>& facet_crosses_free_surface)
 {
-    for (size_t edge_index = 0; edge_index < mesh->static_edges;
+    for (size_t edge_index = 0; edge_index < mesh->nb_of_static_edges;
             ++edge_index)
     {
         double z0 = all_relative_immersions[mesh->edges[0][edge_index]];
@@ -37,13 +37,12 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
         int status = get_edge_immersion_status(z0, z1);
         edges_immersion_status[edge_index] = status;
         if (crosses_free_surface(status))
+        {
             split_edges[edge_index] = split_partially_immersed_edge(edge_index, edges_immersion_status);
+        }
         if (crosses_free_surface(status) or both_ends_just_touch_free_surface(status) or one_of_the_ends_just_touches_free_surface(status))
-            for (std::vector<size_t>::const_iterator that_facet =
-                    mesh->facetsPerEdge[edge_index].begin();
-                    that_facet != mesh->facetsPerEdge[edge_index].end();
-                    ++that_facet)
-                facet_crosses_free_surface[*that_facet] = true;
+            for (auto facet_index:mesh->facetsPerEdge[edge_index])
+                facet_crosses_free_surface[facet_index] = true;
     }
     return split_edges;
 }
@@ -56,10 +55,14 @@ void MeshIntersector::classify_or_split(
     // Iterate on each facet to classify and/or split
     for (size_t facet_index = 0 ; facet_index < mesh->static_facets ; ++facet_index)
     {
-        if (facet_crosses_free_surface[facet_index]) split_partially_immersed_facet(facet_index,
-                                                                                    edges_immersion_status,
-                                                                                    split_edges);
-        else                                         classify_facet(facet_index, edges_immersion_status);
+        if (facet_crosses_free_surface[facet_index])
+            {
+            split_partially_immersed_facet_and_classify(facet_index,
+                                           edges_immersion_status,
+                                           split_edges);
+            }
+        else{                                         classify_facet(facet_index, edges_immersion_status);
+        }
     }
 
 }
@@ -95,8 +98,8 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
     all_absolute_wave_elevations = absolute_wave_elevations;
     reset_dynamic_members();
     std::vector<bool> facet_crosses_free_surface(mesh->static_facets,false);
-    std::vector<int> edges_immersion_status(mesh->static_edges,0); // the immersion status of each edge
-    std::vector<size_t > split_edges(mesh->static_edges,0);  //!< a table indicating the index of replacing edge for each edge that is split (there are two consecutive edges per split edge, the table only gives the first one)
+    std::vector<int> edges_immersion_status(mesh->nb_of_static_edges,0); // the immersion status of each edge
+    std::vector<size_t > split_edges(mesh->nb_of_static_edges,0);  //!< a table indicating the index of replacing edge for each edge that is split (there are two consecutive edges per split edge, the table only gives the first one)
     find_intersection_with_free_surface(split_edges, edges_immersion_status, facet_crosses_free_surface);
     classify_or_split(split_edges, facet_crosses_free_surface, edges_immersion_status);
     all_absolute_immersions.resize(all_absolute_wave_elevations.size());
@@ -106,7 +109,7 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
     }
 }
 
-void MeshIntersector::split_partially_immersed_facet(
+void MeshIntersector::split_partially_immersed_facet_and_classify(
         size_t facet_index,                             //!< index of facet to split
         const std::vector<int>& edges_immersion_status, //!< immersion status of each edge
         const std::vector<size_t>& split_edges          //!< replacement map for split edges
@@ -356,11 +359,12 @@ CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const F
     CenterOfMass ret(EPoint(0,0,0), 0);
     if (begin==end) return ret;
     auto ref_normal_vector = begin->unit_normal;
-    ret.in_same_plane = true;
+    ret.all_facets_are_in_same_plane = true;
     for (auto that_facet = begin ; that_facet != end ; ++that_facet)
     {
         ret += center_of_mass(*that_facet);
-        ret.in_same_plane &= ref_normal_vector.dot(that_facet->unit_normal) > 1-1E-6;
+        const bool current_facet_has_same_normal_as_ref = ref_normal_vector.dot(that_facet->unit_normal) > 1-1E-6;
+        ret.all_facets_are_in_same_plane = ret.all_facets_are_in_same_plane and current_facet_has_same_normal_as_ref;
     }
     if (ret.volume>0) ret.G /= ret.volume;
     ret.volume = std::abs(ret.volume);
