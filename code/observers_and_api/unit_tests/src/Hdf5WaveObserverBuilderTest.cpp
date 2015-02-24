@@ -1,6 +1,6 @@
-#include "SimHdf5WaveObserverTest.hpp"
-#include "SimHdf5WaveObserver.hpp"
-#include "SimHdf5WaveObserverBuilder.hpp"
+#include "Hdf5WaveObserver.hpp"
+#include "Hdf5WaveObserverBuilder.hpp"
+#include "Hdf5WaveObserverTest.hpp"
 
 TEST_F(SimHdf5WaveObserverTest, SimHdf5WaveObserver_can_be_created_from_a_filename)
 {

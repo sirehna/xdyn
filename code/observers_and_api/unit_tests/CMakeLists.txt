@@ -1,17 +1,18 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 set(MODULE_UNDER_TEST observers_and_api)
 project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/SimHdf5WaveObserverTest.cpp
-              src/SimHdf5WaveObserverBuilderTest.cpp
-              src/ListOfObserversTest.cpp
-              src/Hdf5ObserverTest.cpp
-              src/WebSocketObserverTest.cpp
-              src/WebSocketObserverBoostAsioTest.cpp
-              src/SimTest.cpp
-              src/ForceTester.cpp
-              src/ForceTests.cpp
-              src/MapObserverTest.cpp
-              )
+FILE(GLOB SRC
+        src/ListOfObserversTest.cpp
+        src/Hdf5ObserverTest.cpp
+        src/Hdf5WaveObserverTest.cpp
+        src/Hdf5WaveObserverBuilderTest.cpp
+        src/WebSocketObserverTest.cpp
+        src/WebSocketObserverBoostAsioTest.cpp
+        src/SimTest.cpp
+        src/ForceTester.cpp
+        src/ForceTests.cpp
+        src/MapObserverTest.cpp
+        )
 # ------8<---------------------------------------------->8-----
 
 # Include directories

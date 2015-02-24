@@ -1,5 +1,5 @@
-#ifndef SIMHDF5WAVEOBSERVER_HPP_
-#define SIMHDF5WAVEOBSERVER_HPP_
+#ifndef HDF5WAVEOBSERVER_HPP_
+#define HDF5WAVEOBSERVER_HPP_
 
 #include <string>
 #include <ssc/macros.hpp>
@@ -31,4 +31,4 @@ class SimHdf5WaveObserver
         TR1(shared_ptr)<Impl> pimpl;
 };
 
-#endif /* SIMHDF5WAVEOBSERVER_HPP_ */
+#endif

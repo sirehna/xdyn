@@ -1,5 +1,5 @@
-#ifndef SIMHDF5WAVEOBSERVERBUILDER_HPP_
-#define SIMHDF5WAVEOBSERVERBUILDER_HPP_
+#ifndef HDF5WAVEOBSERVERBUILDER_HPP_
+#define HDF5WAVEOBSERVERBUILDER_HPP_
 
 #include <string>
 #include "H5Cpp.h"
@@ -36,4 +36,4 @@ class SimHdf5WaveObserverBuilder
         size_t ny;
 };
 
-#endif /* SIMHDF5WAVEOBSERVERBUILDER_HPP_ */
+#endif

@@ -1,5 +1,5 @@
-#ifndef SIMHDF5WAVEOBSERVERTEST_HPP_
-#define SIMHDF5WAVEOBSERVERTEST_HPP_
+#ifndef HDF5WAVEOBSERVERTEST_HPP_
+#define HDF5WAVEOBSERVERTEST_HPP_
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
@@ -12,7 +12,6 @@ class SimHdf5WaveObserverTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
-
 };
 
-#endif  /* SIMHDF5WAVEOBSERVERTEST_HPP_ */
+#endif

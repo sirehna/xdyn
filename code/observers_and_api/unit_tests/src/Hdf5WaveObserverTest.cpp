@@ -1,12 +1,5 @@
-/*
- * SimHdf5WaveObserverTest.cpp
- *
- *  Created on: Dec 17, 2014
- *      Author: jacquenot
- */
-
-#include "SimHdf5WaveObserverTest.hpp"
-#include "SimHdf5WaveObserver.hpp"
+#include "Hdf5WaveObserver.hpp"
+#include "Hdf5WaveObserverTest.hpp"
 
 SimHdf5WaveObserverTest::SimHdf5WaveObserverTest() : a(ssc::random_data_generator::DataGenerator(546545))
 {

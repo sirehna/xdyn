@@ -5,9 +5,8 @@
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"
 
-#include "SimHdf5WaveObserver.hpp"
-
 #include <ssc/exception_handling.hpp>
+#include "Hdf5WaveObserver.hpp"
 
 class Hdf5ObserverException: public ::ssc::exception_handling::Exception
 {

@@ -1,4 +1,5 @@
-#include "SimHdf5WaveObserverBuilder.hpp"
+#include "Hdf5WaveObserverBuilder.hpp"
+
 #include "h5_interface.hpp"
 
 /** \def MIN(i1,i2) Define minimum of two scalar*/
