@@ -730,8 +730,8 @@ TEST_F(MeshIntersectorTest, bug_detected_in_potential_energy)
     }
 }
 
-std::vector<double> get_L_immersion(const double z0);
-std::vector<double> get_L_immersion(const double z0)
+std::vector<double> get_L_immersions(const double z0);
+std::vector<double> get_L_immersions(const double z0)
 {
     std::vector<double> dz = {z0,z0,z0,z0-1,z0-1,z0-2,z0-2,z0,z0,z0,z0-1,z0-1,z0-2,z0-2};
     return std::vector<double>({dz[0],dz[5],dz[6],dz[1],dz[3],dz[4],dz[2],dz[13],dz[12],dz[7],dz[8],dz[11],dz[10],dz[9]});
@@ -740,7 +740,7 @@ std::vector<double> get_L_immersion(const double z0)
 TEST_F(MeshIntersectorTest, DISABLED_bug_in_centroid)
 {
     MeshIntersector intersector(L(),false);
-    std::vector<double> dz = get_L_immersion(0);
+    std::vector<double> dz = get_L_immersions(0);
     intersector.update_intersection_with_free_surface(dz,dz);
     auto C = intersector.center_of_mass(intersector.begin_immersed(),
                                         intersector.end_immersed());
@@ -749,7 +749,7 @@ TEST_F(MeshIntersectorTest, DISABLED_bug_in_centroid)
 //    for (double z0=0.1;z0<1;z0+=0.1)
     for (double z0=1;z0<2;z0+=1)
     {
-        dz = get_L_immersion(z0);
+        dz = get_L_immersions(z0);
         intersector.update_intersection_with_free_surface(dz,dz);
         C = intersector.center_of_mass(intersector.begin_immersed(),
                                        intersector.end_immersed());
@@ -795,7 +795,7 @@ TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_unit_cube)
 TEST_F(MeshIntersectorTest, can_compute_volume_of_fully_immersed_L)
 {
     MeshIntersector intersector(L(),false);
-    std::vector<double> dz = get_L_immersion(10);
+    std::vector<double> dz = get_L_immersions(10);
     intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_DOUBLE_EQ(3, intersector.immersed_volume());
     ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
@@ -807,7 +807,7 @@ TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_L)
     const std::vector<double> immersions = {0.4,0.3,0.2,0.1,-0.1,-0.2,-0.3,-0.4};
     for (const auto z0:immersions)
     {
-        std::vector<double> dz = get_L_immersion(z0);
+        std::vector<double> dz = get_L_immersions(z0);
         intersector.update_intersection_with_free_surface(dz,dz);
         ASSERT_DOUBLE_EQ(z0+0.5, intersector.immersed_volume());
     }
