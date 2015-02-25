@@ -76,7 +76,7 @@ public:
      * To avoid ctors/dtors, this is encoded in a single int, index being left shifted, and direction encoded on low bit
      */
     static size_t make_oriented_edge(size_t edge_index_,bool reverse_direction_);
-    static size_t get_oriented_edge_index(size_t oriented_edge);
+    static size_t get_oriented_edge_index(size_t node_index);
     static bool get_oriented_edge_direction(size_t oriented_edge);
 
     /**

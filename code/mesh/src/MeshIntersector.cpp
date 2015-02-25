@@ -74,7 +74,6 @@ void MeshIntersector::classify_facet(const size_t facet_index, const std::vector
     // nodes is the same and is equal to the immersion status of the corresponding
     // edge.
     const size_t index_of_first_node_in_edge = mesh->oriented_edges_per_facet[facet_index][0];
-    // Divide by two to obtain index of corresponding edge
     const size_t index_of_edge_containing_first_node_in_edge = Mesh::get_oriented_edge_index(index_of_first_node_in_edge);
     const int immersion_status_of_first_node_in_edge = edges_immersion_status[index_of_edge_containing_first_node_in_edge];
     if (is_emerged(immersion_status_of_first_node_in_edge)) index_of_emerged_facets.push_back(facet_index);

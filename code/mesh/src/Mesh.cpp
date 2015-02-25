@@ -81,9 +81,11 @@ size_t Mesh::make_oriented_edge(size_t edge_index,bool reverse_direction)
     return (edge_index<<1) | (reverse_direction?1:0);
 }
 
-size_t Mesh::get_oriented_edge_index(size_t oriented_edge)
+size_t Mesh::get_oriented_edge_index(size_t node_index)
 {
-    return oriented_edge >> 1;
+    // Divide by two to obtain index of corresponding edge
+    // because there are exactly two nodes per edge
+    return node_index >> 1;
 }
 
 bool Mesh::get_oriented_edge_direction(size_t oriented_edge)
