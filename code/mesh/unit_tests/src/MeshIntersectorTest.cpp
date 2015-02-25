@@ -780,6 +780,15 @@ TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_unit_cube)
     }
 }
 
+TEST_F(MeshIntersectorTest, can_compute_volume_of_fully_immersed_L)
+{
+    MeshIntersector intersector(L(),false);
+    std::vector<double> dz = get_L_immersion(10);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_DOUBLE_EQ(3, intersector.immersed_volume());
+    ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
+}
+
 TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_L)
 {
     MeshIntersector intersector(L(),false);
