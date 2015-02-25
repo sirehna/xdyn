@@ -7,7 +7,7 @@
 #include "MeshIntersectorException.hpp"
 #include "mesh_manipulations.hpp"
 
-MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_).build())))
+MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_, const bool check_orientation) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_, check_orientation).build())))
 ,all_relative_immersions()
 ,all_absolute_wave_elevations()
 ,all_absolute_immersions()

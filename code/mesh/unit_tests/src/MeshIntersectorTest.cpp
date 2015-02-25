@@ -733,7 +733,7 @@ std::vector<double> get_L_immersion(const double z0)
 
 TEST_F(MeshIntersectorTest, DISABLED_bug_in_centroid)
 {
-    MeshIntersector intersector(L());
+    MeshIntersector intersector(L(),false);
     std::vector<double> dz = get_L_immersion(0);
     intersector.update_intersection_with_free_surface(dz,dz);
     auto C = intersector.center_of_mass(intersector.begin_immersed(),
@@ -782,7 +782,7 @@ TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_unit_cube)
 
 TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_L)
 {
-    MeshIntersector intersector(L());
+    MeshIntersector intersector(L(),false);
     const std::vector<double> immersions = {0.4,0.3,0.2,0.1,-0.1,-0.2,-0.3,-0.4};
     for (const auto z0:immersions)
     {

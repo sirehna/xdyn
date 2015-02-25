@@ -60,8 +60,8 @@ typedef std::map<Edge, size_t, EdgeComparator> EdgeMap;
 class MeshBuilder
 {
     public:
-        MeshBuilder(const VectorOfVectorOfPoints& v_);
-        MeshBuilder(const VectorOfPoints& tri);
+        MeshBuilder(const VectorOfVectorOfPoints& v_, const bool check_orientation=true);
+        MeshBuilder(const VectorOfPoints& tri, const bool check_orientation=true);
         MeshBuilder(const Matrix3x& tri);
         Mesh build();
         void operator()(const VectorOfPoints& Tri);

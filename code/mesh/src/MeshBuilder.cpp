@@ -4,7 +4,7 @@
 #include "MeshBuilder.hpp"
 #include "mesh_manipulations.hpp"
 
-MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
+MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_, const bool check_orientation) : v(v_),
                                                                    xyzMap(Vector3dMap()),
                                                                    edgeMap(EdgeMap()),
                                                                    index(0),
@@ -12,12 +12,12 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_) : v(v_),
                                                                    nodes(Matrix3x()),
                                                                    edges(std::vector<Edge>()),
                                                                    facets(std::vector<Facet>()),
-                                                                   clockwise(oriented_clockwise(v,barycenter(v)))
+                                                                   clockwise( check_orientation ? oriented_clockwise(v,barycenter(v)) : true)
 {
     if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
 
-MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1,tri)),
+MeshBuilder::MeshBuilder(const VectorOfPoints& tri, const bool check_orientation) : v(VectorOfVectorOfPoints(1,tri)),
                                                             xyzMap(Vector3dMap()),
                                                             edgeMap(EdgeMap()),
                                                             index(0),
@@ -25,7 +25,7 @@ MeshBuilder::MeshBuilder(const VectorOfPoints& tri) : v(VectorOfVectorOfPoints(1
                                                             nodes(Matrix3x()),
                                                             edges(std::vector<Edge>()),
                                                             facets(std::vector<Facet>()),
-                                                            clockwise(false)
+                                                            clockwise( check_orientation ? oriented_clockwise(v,barycenter(v)) : true)
 {
     if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
