@@ -30,8 +30,7 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
         std::vector<int>& edges_immersion_status,
         std::vector<bool>& facet_crosses_free_surface)
 {
-    for (size_t edge_index = 0; edge_index < mesh->nb_of_static_edges;
-            ++edge_index)
+    for (size_t edge_index = 0; edge_index < mesh->nb_of_static_edges; ++edge_index)
     {
         double z0 = all_relative_immersions[mesh->edges[0][edge_index]];
         double z1 = all_relative_immersions[mesh->edges[1][edge_index]];
@@ -41,9 +40,15 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
         {
             split_edges[edge_index] = split_partially_immersed_edge(edge_index, edges_immersion_status);
         }
-        if (crosses_free_surface(status) or both_ends_just_touch_free_surface(status) or one_of_the_ends_just_touches_free_surface(status))
+        if (   crosses_free_surface(status)
+            or both_ends_just_touch_free_surface(status)
+            or one_of_the_ends_just_touches_free_surface(status))
+        {
             for (auto facet_index:mesh->facets_per_edge[edge_index])
+            {
                 facet_crosses_free_surface[facet_index] = true;
+            }
+        }
     }
     return split_edges;
 }
@@ -57,12 +62,14 @@ void MeshIntersector::classify_or_split(
     for (size_t facet_index = 0 ; facet_index < mesh->nb_of_static_facets ; ++facet_index)
     {
         if (facet_crosses_free_surface[facet_index])
-            {
+        {
             split_partially_immersed_facet_and_classify(facet_index,
-                                           edges_immersion_status,
-                                           split_edges);
-            }
-        else{                                         classify_facet(facet_index, edges_immersion_status);
+                                                        edges_immersion_status,
+                                                        split_edges);
+        }
+        else
+        {
+            classify_facet(facet_index, edges_immersion_status);
         }
     }
 
@@ -167,7 +174,6 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
             }
         }
     }
-
     // handle the degenerated cases, when the facet is tangent to free surface
     if(emerged_edges.size() <= 1)
     {
