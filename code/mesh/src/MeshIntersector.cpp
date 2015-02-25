@@ -489,3 +489,16 @@ std::string MeshIntersector::display_facet_in_NED(const Facet& facet, const EPoi
        << M;
     return ss.str();
 }
+
+std::string MeshIntersector::display_edge_in_NED(const size_t edge_idx, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const
+{
+    std::stringstream ss;
+    ss << "Edge:" << std::endl;
+    const auto P1 = R_from_ned_to_mesh*(mesh->all_nodes.col(mesh->edges[0][edge_idx])) + mesh_center_in_NED_frame;
+    const auto P2 = R_from_ned_to_mesh*(mesh->all_nodes.col(mesh->edges[1][edge_idx])) + mesh_center_in_NED_frame;
+    Eigen::MatrixXd edge(3,2);
+
+    edge << P1, P2;
+    ss << edge << std::endl;
+    return ss.str();
+}

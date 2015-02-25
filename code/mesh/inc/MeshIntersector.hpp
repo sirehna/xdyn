@@ -223,6 +223,7 @@ class MeshIntersector
         double facet_volume(const Facet& f) const;
 
         std::string display_facet_in_NED(const Facet& facet, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
+        std::string display_edge_in_NED(const size_t idx, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
 
     private:
         /**
