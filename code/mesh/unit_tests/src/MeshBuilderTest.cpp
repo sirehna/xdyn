@@ -18,70 +18,70 @@ MeshBuilderTest::MeshBuilderTest()
 
 TEST_F(MeshBuilderTest, should_be_able_to_build_a_mesh_from_a_single_triangle)
 {
-	const Mesh m = MeshBuilder(one_triangle()).build();
-	ASSERT_EQ(1,m.nb_of_static_facets);
-	ASSERT_EQ(3,m.nb_of_static_nodes);
+    const Mesh m = MeshBuilder(one_triangle()).build();
+    ASSERT_EQ(1,m.nb_of_static_facets);
+    ASSERT_EQ(3,m.nb_of_static_nodes);
     ASSERT_EQ(3,m.nb_of_static_edges);
 }
 
 TEST_F(MeshBuilderTest, adding_twice_a_triangle_should_not_change_the_number_of_nodes_nor_edges)
 {
-	VectorOfVectorOfPoints triangles;
-	triangles.push_back(one_triangle());
-	triangles.push_back(one_triangle());
-	Mesh m = MeshBuilder(triangles).build();
-	ASSERT_EQ(2,m.nb_of_static_facets);
-	ASSERT_EQ(3,m.nb_of_static_nodes);
+    VectorOfVectorOfPoints triangles;
+    triangles.push_back(one_triangle());
+    triangles.push_back(one_triangle());
+    Mesh m = MeshBuilder(triangles).build();
+    ASSERT_EQ(2,m.nb_of_static_facets);
+    ASSERT_EQ(3,m.nb_of_static_nodes);
     ASSERT_EQ(3,m.nb_of_static_edges);
 }
 
 TEST_F(MeshBuilderTest, should_be_able_to_evaluate_the_barycenter_of_a_single_triangle)
 {
-	const Mesh m = MeshBuilder(one_triangle()).build();
-	ASSERT_EQ(1,m.nb_of_static_facets);
-	ASSERT_EQ(3,m.nb_of_static_nodes);
-	ASSERT_DOUBLE_EQ((1.0+2.1+3.1)/3.0,(double)m.facets.at(0).centre_of_gravity(0));
-	ASSERT_DOUBLE_EQ((2.1+3.7+4.5)/3.0,(double)m.facets.at(0).centre_of_gravity(1));
-	ASSERT_DOUBLE_EQ((3.2+4.5+6.7)/3.0,(double)m.facets.at(0).centre_of_gravity(2));
+    const Mesh m = MeshBuilder(one_triangle()).build();
+    ASSERT_EQ(1,m.nb_of_static_facets);
+    ASSERT_EQ(3,m.nb_of_static_nodes);
+    ASSERT_DOUBLE_EQ((1.0+2.1+3.1)/3.0,(double)m.facets.at(0).centre_of_gravity(0));
+    ASSERT_DOUBLE_EQ((2.1+3.7+4.5)/3.0,(double)m.facets.at(0).centre_of_gravity(1));
+    ASSERT_DOUBLE_EQ((3.2+4.5+6.7)/3.0,(double)m.facets.at(0).centre_of_gravity(2));
 }
 
 TEST_F(MeshBuilderTest, should_be_able_to_evaluate_the_area_of_a_single_triangle)
 {
-	const Mesh m = MeshBuilder(one_triangle()).build();
-	Eigen::Vector3d n1,n2,v;
-	ASSERT_EQ(1,m.nb_of_static_facets);
-	ASSERT_EQ(3,m.nb_of_static_nodes);
-	n1(0)= 2.1-1.0;
-	n1(1)= 3.7-2.1;
-	n1(2)= 4.5-3.2;
-	n2(0)= 3.1-1.0;
-	n2(1)= 4.5-2.1;
-	n2(2)= 6.7-3.2;
-	v(0) = n1(1)*n2(2)-n1(2)*n2(1);
-	v(1) = n1(2)*n2(0)-n1(0)*n2(2);
-	v(2) = n1(0)*n2(1)-n1(1)*n2(0);
-	ASSERT_DOUBLE_EQ(0.5*sqrt(v(0)*v(0)+v(1)*v(1)+v(2)*v(2)),(double)m.facets.at(0).area);
+    const Mesh m = MeshBuilder(one_triangle()).build();
+    Eigen::Vector3d n1,n2,v;
+    ASSERT_EQ(1,m.nb_of_static_facets);
+    ASSERT_EQ(3,m.nb_of_static_nodes);
+    n1(0)= 2.1-1.0;
+    n1(1)= 3.7-2.1;
+    n1(2)= 4.5-3.2;
+    n2(0)= 3.1-1.0;
+    n2(1)= 4.5-2.1;
+    n2(2)= 6.7-3.2;
+    v(0) = n1(1)*n2(2)-n1(2)*n2(1);
+    v(1) = n1(2)*n2(0)-n1(0)*n2(2);
+    v(2) = n1(0)*n2(1)-n1(1)*n2(0);
+    ASSERT_DOUBLE_EQ(0.5*sqrt(v(0)*v(0)+v(1)*v(1)+v(2)*v(2)),(double)m.facets.at(0).area);
 }
 
 TEST_F(MeshBuilderTest, should_be_able_to_evaluate_the_normal_of_a_single_triangle)
 {
-	const Mesh m = MeshBuilder(one_triangle()).build();
+    const Mesh m = MeshBuilder(one_triangle()).build();
 
-	ASSERT_EQ(1,m.nb_of_static_facets);
-	ASSERT_EQ(3,m.nb_of_static_nodes);
-	ASSERT_DOUBLE_EQ(+2.48/sqrt(2.48*2.48+1.12*1.12+0.72*0.72),(double)m.facets.at(0).unit_normal(0));
-	ASSERT_DOUBLE_EQ(-1.12/sqrt(2.48*2.48+1.12*1.12+0.72*0.72),(double)m.facets.at(0).unit_normal(1));
-	ASSERT_DOUBLE_EQ(-0.72/sqrt(2.48*2.48+1.12*1.12+0.72*0.72),(double)m.facets.at(0).unit_normal(2));
+    ASSERT_EQ(1,m.nb_of_static_facets);
+    ASSERT_EQ(3,m.nb_of_static_nodes);
+    ASSERT_DOUBLE_EQ(+2.48/sqrt(2.48*2.48+1.12*1.12+0.72*0.72),(double)m.facets.at(0).unit_normal(0));
+    ASSERT_DOUBLE_EQ(-1.12/sqrt(2.48*2.48+1.12*1.12+0.72*0.72),(double)m.facets.at(0).unit_normal(1));
+    ASSERT_DOUBLE_EQ(-0.72/sqrt(2.48*2.48+1.12*1.12+0.72*0.72),(double)m.facets.at(0).unit_normal(2));
 }
 
 TEST_F(MeshBuilderTest, should_be_able_to_represent_a_cube)
 {
-	const Mesh m = MeshBuilder(unit_cube()).build();
-	ASSERT_EQ(12,m.nb_of_static_facets);
-	ASSERT_EQ(8,m.nb_of_static_nodes);
+    const Mesh m = MeshBuilder(unit_cube()).build();
+    ASSERT_EQ(12,m.nb_of_static_facets);
+    ASSERT_EQ(8,m.nb_of_static_nodes);
     ASSERT_EQ(18,m.nb_of_static_edges);
-	for (size_t i=0;i<12;++i)
-		ASSERT_DOUBLE_EQ(0.5,m.facets.at(i).area)<<i;
+    for (size_t i=0;i<12;++i)
+        ASSERT_DOUBLE_EQ(0.5,m.facets.at(i).area)<<i;
 }
 
 TEST_F(MeshBuilderTest, can_enumerate_vertices_of_facets_in_same_order_than_edges)
