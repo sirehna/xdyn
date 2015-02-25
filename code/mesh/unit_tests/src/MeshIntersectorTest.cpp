@@ -766,6 +766,12 @@ std::vector<double> get_cube_immersions(const double z0)
     return std::vector<double>({z0+0.5,z0+0.5,z0+0.5,z0+0.5,z0-0.5,z0-0.5,z0-0.5,z0-0.5});
 }
 
+std::vector<double> get_U_immersions(const double z0);
+std::vector<double> get_U_immersions(const double z0)
+{
+    return std::vector<double>({z0, z0-2, z0-2,  z0, z0-1, z0-1,  z0, z0-2, z0-2,  z0, z0-2, z0-2,  z0,  z0, z0-1, z0-1,  z0, z0-2, z0-2,  z0});
+}
+
 void check_vector(const Eigen::Vector3d& v_to_check, const double x_expected, const double y_expected, const double z_expected);
 void check_vector(const Eigen::Vector3d& v_to_check, const double x_expected, const double y_expected, const double z_expected)
 {
@@ -833,6 +839,14 @@ TEST_F(MeshIntersectorTest, can_display_facet_in_NED_frame)
                                  "  -0.707107   -0.707107 5.55112e-17\n"
                                  "5.55112e-17 5.55112e-17    0.707107";
     ASSERT_EQ(expected, actual);
+}
+
+TEST_F(MeshIntersectorTest, can_calculate_the_volume_of_fully_immersed_U)
+{
+    MeshIntersector intersector(U(),false);
+    const std::vector<double> dz = get_U_immersions(10);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_DOUBLE_EQ(5, intersector.immersed_volume());
 }
 
 TEST_F(MeshIntersectorTest, area_of_immersed_facets_is_properly_computed)
