@@ -2,17 +2,23 @@
  * MeshIntersectorTest.cpp
  */
 
+#include <ssc/macros.hpp>
+#include <ssc/kinematics.hpp>
+
 #include "TriMeshTestData.hpp"
 #include "MeshBuilder.hpp"
 #include "MeshIntersectorTest.hpp"
 #include "mesh_manipulations.hpp"
-#include <ssc/macros.hpp>
 #include "STL_data.hpp"
 #include "stl_reader.hpp"
 #include "MeshIntersector.hpp"
 #include "generate_anthineas.hpp"
 
 #define EPS 1E-6
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 MeshIntersectorTest::MeshIntersectorTest() : a(ssc::random_data_generator::DataGenerator(2))
 {
@@ -799,6 +805,34 @@ TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_L)
         intersector.update_intersection_with_free_surface(dz,dz);
         ASSERT_DOUBLE_EQ(z0+0.5, intersector.immersed_volume());
     }
+}
+
+using namespace ssc::kinematics;
+
+RotationMatrix rot(const double phi, const double theta, const double psi);
+RotationMatrix rot(const double phi, const double theta, const double psi)
+{
+    return rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(ssc::kinematics::EulerAngles(phi,theta,psi));
+}
+
+TEST_F(MeshIntersectorTest, can_display_facet_in_NED_frame)
+{
+    MeshIntersector intersector(unit_cube());
+    std::vector<double> dz = get_cube_immersions(10);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    const double phi = PI/4;
+    const double theta = 0;
+    const double psi = 0;
+    const std::string actual = intersector.display_facet_in_NED(*intersector.begin_immersed(),EPoint(0,0,0),rot(phi,theta,psi));
+    const std::string expected = "Facet:\n"
+                                 "Unit normal: 0 0 1\n"
+                                 "Area: 0.5\n"
+                                 "Center of gravity:  0.166667 -0.471405  0.235702\n"
+                                 "Coordinates in NED frame (one column per point):\n"
+                                 "       -0.5         0.5         0.5\n"
+                                 "  -0.707107   -0.707107 5.55112e-17\n"
+                                 "5.55112e-17 5.55112e-17    0.707107";
+    ASSERT_EQ(expected, actual);
 }
 
 TEST_F(MeshIntersectorTest, area_of_immersed_facets_is_properly_computed)

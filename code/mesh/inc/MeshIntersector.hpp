@@ -1,6 +1,8 @@
 #ifndef MESH_INTERSECTOR_HPP
 #define MESH_INTERSECTOR_HPP
 
+#include <ssc/kinematics.hpp>
+
 #include "CenterOfMass.hpp"
 #include "Mesh.hpp"
 
@@ -219,6 +221,9 @@ class MeshIntersector
 
         Eigen::MatrixXd convert(const Facet& f) const;
         double facet_volume(const Facet& f) const;
+
+        std::string display_facet_in_NED(const Facet& facet, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
+
     private:
         /**
          * \brief Iterate on each edge to find intersection with free surface

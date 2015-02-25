@@ -1,6 +1,7 @@
 #include <algorithm> //std::all_of
 #include <numeric> //std::accumulate
 #include <set>
+#include <sstream>
 
 #include "MeshBuilder.hpp"
 #include "MeshIntersector.hpp"
@@ -469,4 +470,22 @@ double MeshIntersector::emerged_volume() const
         V += closing_facet_volume;
     }
     return fabs(V);
+}
+
+std::string MeshIntersector::display_facet_in_NED(const Facet& facet, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const
+{
+    std::stringstream ss;
+    ss << "Facet:" << std::endl
+       << "Unit normal: " << facet.unit_normal.transpose() << std::endl
+       << "Area: " << facet.area << std::endl
+       << "Center of gravity: " << (mesh_center_in_NED_frame + R_from_ned_to_mesh*facet.centre_of_gravity).transpose() << std::endl;
+    auto M = convert(facet);
+    M = R_from_ned_to_mesh*M;
+    for (int i = 0 ; i < M.cols(); ++i)
+    {
+        M.col(i) += mesh_center_in_NED_frame;
+    }
+    ss << "Coordinates in NED frame (one column per point):" << std::endl
+       << M;
+    return ss.str();
 }
