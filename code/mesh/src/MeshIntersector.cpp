@@ -8,21 +8,26 @@
 #include "MeshIntersectorException.hpp"
 #include "mesh_manipulations.hpp"
 
-MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_, const bool check_orientation) : mesh(MeshPtr(new Mesh(MeshBuilder(mesh_, check_orientation).build())))
+MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_, const bool check_orientation) :
+ mesh(MeshPtr(new Mesh(MeshBuilder(mesh_, check_orientation).build())))
 ,all_relative_immersions()
 ,all_absolute_wave_elevations()
 ,all_absolute_immersions()
 ,index_of_emerged_facets()
 ,index_of_immersed_facets()
+,index_of_facets_exactly_on_the_surface()
+,index_of_edges_exactly_on_surface()
 {}
 
 MeshIntersector::MeshIntersector(const MeshPtr mesh_)
-:mesh(mesh_)
-,all_relative_immersions()
-,all_absolute_wave_elevations()
-,all_absolute_immersions()
-,index_of_emerged_facets()
-,index_of_immersed_facets()
+        :mesh(mesh_)
+        ,all_relative_immersions()
+        ,all_absolute_wave_elevations()
+        ,all_absolute_immersions()
+        ,index_of_emerged_facets()
+        ,index_of_immersed_facets()
+        ,index_of_facets_exactly_on_the_surface()
+        ,index_of_edges_exactly_on_surface()
 {}
 
 std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
@@ -93,8 +98,11 @@ void MeshIntersector::reset_dynamic_members()
     mesh->reset_dynamic_data();
     index_of_emerged_facets.clear();
     index_of_immersed_facets.clear();
+    index_of_facets_exactly_on_the_surface.clear();
     index_of_emerged_facets.reserve(mesh->facets.size());
     index_of_immersed_facets.reserve(mesh->facets.size());
+    index_of_facets_exactly_on_the_surface.reserve(mesh->facets.size());
+    index_of_edges_exactly_on_surface.clear();
 }
 
 void MeshIntersector::update_intersection_with_free_surface(const std::vector<double>& relative_immersions,
@@ -137,6 +145,7 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
         {
             emerged_edges.push_back(oriented_edge);
             immersed_edges.push_back(oriented_edge);
+            index_of_edges_exactly_on_surface.insert(edge_index);
             if(status==3) first_emerged = emerged_edges.size();
             if(status==0) first_immersed = immersed_edges.size();
         }
@@ -185,11 +194,12 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
         index_of_emerged_facets.push_back(facet_index);
         return;
     }
-
     // insert the closing edge
     size_t closing_edge_index = mesh->add_edge(
             mesh->first_vertex_of_oriented_edge(immersed_edges[first_immersed]),
             mesh->first_vertex_of_oriented_edge( emerged_edges[ first_emerged]));
+    if (mesh->edges[0][closing_edge_index] != mesh->edges[1][closing_edge_index])
+        index_of_edges_exactly_on_surface.insert(closing_edge_index);
     immersed_edges.insert(immersed_edges.begin()+(long)first_immersed,Mesh::make_oriented_edge(closing_edge_index,true));
     emerged_edges.insert( emerged_edges.begin()+ (long)first_emerged,Mesh::make_oriented_edge(closing_edge_index,false));
 

@@ -1,6 +1,8 @@
 #ifndef MESH_INTERSECTOR_HPP
 #define MESH_INTERSECTOR_HPP
 
+#include <set>
+
 #include <ssc/kinematics.hpp>
 
 #include "CenterOfMass.hpp"
@@ -175,6 +177,8 @@ class MeshIntersector
         std::vector<double> all_absolute_immersions;                //!< Absolute immersion (z coordinate in NED frame) of all nodes (including the dynamically added ones)
         std::vector<size_t> index_of_emerged_facets;                //!< All emerged facets, including the ones dynamically created by split
         std::vector<size_t> index_of_immersed_facets;               //!< All immersed facets, including the ones dynamically created by split
+        std::vector<size_t> index_of_facets_exactly_on_the_surface; //!< All facets exactly on the surface (z==0 for all points), including the ones dynamically created by split
+        std::set<size_t>    index_of_edges_exactly_on_surface;      //!< Edges exactly on free surface (either generated or static)
 
         friend class ImmersedFacetIterator;
         friend class EmergedFacetIterator;

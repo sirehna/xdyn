@@ -849,6 +849,39 @@ TEST_F(MeshIntersectorTest, can_calculate_the_volume_of_fully_immersed_U)
     ASSERT_DOUBLE_EQ(5, intersector.immersed_volume());
 }
 
+TEST_F(MeshIntersectorTest, can_retrieve_edges_exactly_on_the_surface_for_U)
+{
+    MeshIntersector intersector(U(),false);
+    const std::vector<double> dz = get_U_immersions(2);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_EQ(10, intersector.index_of_edges_exactly_on_surface.size());
+}
+
+TEST_F(MeshIntersectorTest, can_retrieve_edges_exactly_on_the_surface_for_L)
+{
+    MeshIntersector intersector(L(),false);
+    const std::vector<double> dz = get_L_immersions(2);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_EQ(5, intersector.index_of_edges_exactly_on_surface.size());
+}
+
+TEST_F(MeshIntersectorTest, can_retrieve_edges_exactly_on_the_surface_for_cube_rotated_45_deg)
+{
+    MeshIntersector intersector(unit_cube());
+    const std::vector<double> dz = {0,0,sqrt(2)/2,sqrt(2)/2,-sqrt(2)/2,-sqrt(2)/2,0,0};
+    intersector.update_intersection_with_free_surface(dz,dz);
+    // 5 because one diagonal edge is split by the free surface
+    ASSERT_EQ(5, intersector.index_of_edges_exactly_on_surface.size());
+}
+
+TEST_F(MeshIntersectorTest, can_retrieve_edges_exactly_on_the_surface_for_partially_immersed_cube)
+{
+    MeshIntersector intersector(unit_cube());
+    const std::vector<double> dz = get_cube_immersions(0.3);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    ASSERT_EQ(8, intersector.index_of_edges_exactly_on_surface.size());
+}
+
 TEST_F(MeshIntersectorTest, area_of_immersed_facets_is_properly_computed)
 {
     MeshIntersector intersector(unit_cube());
