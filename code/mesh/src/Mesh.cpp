@@ -3,7 +3,18 @@
 #include "Mesh.hpp"
 #include "mesh_manipulations.hpp"
 
-Mesh::Mesh():nodes(),edges(),facets(), orientation_factor(1)
+Mesh::Mesh():
+    nodes(),
+    edges(),
+    facets(),
+    facets_per_edge(),
+    oriented_edges_per_facet(),
+    nb_of_static_nodes(),
+    nb_of_static_edges(),
+    nb_of_static_facets(),
+    all_nodes(),
+    total_number_of_nodes(),
+    orientation_factor(1)
 {
 }
 
