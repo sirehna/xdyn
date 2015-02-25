@@ -92,13 +92,13 @@ public:
     Matrix3x nodes;                                             //!< Coordinates of static vertices in mesh
     ArrayOfEdges edges;                                         //!< All edges in mesh
     std::vector<Facet> facets;                                  //!< For each facet, the indexes of its nodes, unit normal, barycenter & area
-    std::vector<std::vector<size_t> > facetsPerEdge;            //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
-    std::vector<std::vector<size_t> > orientedEdgesPerFacet;    //!< for each Facet (index), the list of Edges composing the facet and running direction of each edge
-    size_t static_nodes;                                        //!< Number of static nodes
-    size_t nb_of_static_edges;                                        //!< Number of static edges
-    size_t static_facets;                                       //!< Number of static facets
+    std::vector<std::vector<size_t> > facets_per_edge;          //!< For each Edge (index), the list of Facet (indices) to which the edge belongs
+    std::vector<std::vector<size_t> > oriented_edges_per_facet; //!< For each Facet (index), the list of Edges composing the facet and running direction of each edge
+    size_t nb_of_static_nodes;                                  //!< Number of static nodes (ie. read from an STL file & not generated dynamically)
+    size_t nb_of_static_edges;                                  //!< Number of static edges (ie. read from an STL file & not generated dynamically)
+    size_t nb_of_static_facets;                                 //!< Number of static facets (ie. read from an STL file & not generated dynamically)
     Matrix3x all_nodes;                                         //!< Coordinates of all vertices in mesh, including dynamic ones added for free surface intersection
-    size_t node_count;                                          //!< Total number of nodes used, including dynamic ones
+    size_t total_number_of_nodes;                               //!< Total number of nodes used, including dynamic ones
     double orientation_factor;                                  //!< -1 if the facet is orientation clockwise, +1 otherwise
 };
 

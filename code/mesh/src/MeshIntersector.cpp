@@ -41,7 +41,7 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
             split_edges[edge_index] = split_partially_immersed_edge(edge_index, edges_immersion_status);
         }
         if (crosses_free_surface(status) or both_ends_just_touch_free_surface(status) or one_of_the_ends_just_touches_free_surface(status))
-            for (auto facet_index:mesh->facetsPerEdge[edge_index])
+            for (auto facet_index:mesh->facets_per_edge[edge_index])
                 facet_crosses_free_surface[facet_index] = true;
     }
     return split_edges;
@@ -53,7 +53,7 @@ void MeshIntersector::classify_or_split(
         std::vector<int>& edges_immersion_status)
 {
     // Iterate on each facet to classify and/or split
-    for (size_t facet_index = 0 ; facet_index < mesh->static_facets ; ++facet_index)
+    for (size_t facet_index = 0 ; facet_index < mesh->nb_of_static_facets ; ++facet_index)
     {
         if (facet_crosses_free_surface[facet_index])
             {
@@ -73,7 +73,7 @@ void MeshIntersector::classify_facet(const size_t facet_index, const std::vector
     // surface in this branch of the 'if' statement, the immersion status of both
     // nodes is the same and is equal to the immersion status of the corresponding
     // edge.
-    const size_t index_of_first_node_in_edge = mesh->orientedEdgesPerFacet[facet_index][0];
+    const size_t index_of_first_node_in_edge = mesh->oriented_edges_per_facet[facet_index][0];
     // Divide by two to obtain index of corresponding edge
     const size_t index_of_edge_containing_first_node_in_edge = Mesh::get_oriented_edge_index(index_of_first_node_in_edge);
     const int immersion_status_of_first_node_in_edge = edges_immersion_status[index_of_edge_containing_first_node_in_edge];
@@ -97,7 +97,7 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
     all_relative_immersions = relative_immersions;
     all_absolute_wave_elevations = absolute_wave_elevations;
     reset_dynamic_members();
-    std::vector<bool> facet_crosses_free_surface(mesh->static_facets,false);
+    std::vector<bool> facet_crosses_free_surface(mesh->nb_of_static_facets,false);
     std::vector<int> edges_immersion_status(mesh->nb_of_static_edges,0); // the immersion status of each edge
     std::vector<size_t > split_edges(mesh->nb_of_static_edges,0);  //!< a table indicating the index of replacing edge for each edge that is split (there are two consecutive edges per split edge, the table only gives the first one)
     find_intersection_with_free_surface(split_edges, edges_immersion_status, facet_crosses_free_surface);
@@ -115,7 +115,7 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
         const std::vector<size_t>& split_edges          //!< replacement map for split edges
         )
 {
-    const std::vector<size_t> oriented_edges_of_this_facet = mesh->orientedEdgesPerFacet[facet_index];
+    const std::vector<size_t> oriented_edges_of_this_facet = mesh->oriented_edges_per_facet[facet_index];
     std::vector<size_t> emerged_edges;
     std::vector<size_t> immersed_edges;
     int status=-1;
@@ -293,18 +293,18 @@ Facet MeshIntersector::compute_closing_facet() const
 {
     Facet ret;
     std::vector<size_t> vertex_index;
-    vertex_index.reserve(mesh->node_count);
+    vertex_index.reserve(mesh->total_number_of_nodes);
     EPoint bar(0,0,0);
     double A = 0;
     Eigen::Vector3d n(0,0,0);
-    if (all_relative_immersions.size() != mesh->node_count)
+    if (all_relative_immersions.size() != mesh->total_number_of_nodes)
     {
         std::stringstream ss;
         ss << "Need as many immersions as there are nodes. There are "
-           << mesh->node_count << " nodes, but " << all_relative_immersions.size() << " immersions.";
+           << mesh->total_number_of_nodes << " nodes, but " << all_relative_immersions.size() << " immersions.";
         THROW(__PRETTY_FUNCTION__, MeshIntersectorException, ss.str());
     }
-    for (size_t i = 0 ; i < mesh->node_count ; ++i)
+    for (size_t i = 0 ; i < mesh->total_number_of_nodes ; ++i)
     {
         if (all_relative_immersions[i] == 0)
         {
