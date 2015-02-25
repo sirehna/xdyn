@@ -18,5 +18,6 @@ VectorOfVectorOfPoints tetrahedron(const double a, const double x0, const double
 VectorOfVectorOfPoints tetrahedron_clockwise(const double a, const double x0, const double y0, const double z0);
 VectorOfVectorOfPoints generated_stl();
 VectorOfVectorOfPoints L();
+VectorOfVectorOfPoints U();
 
 #endif

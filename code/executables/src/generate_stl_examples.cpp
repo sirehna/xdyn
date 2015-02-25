@@ -24,6 +24,7 @@ int main(int argc, const char* argv[])
     stl["cube.stl"]         = test_data::cube();
     stl["big_cube.stl"]     = test_data::big_cube();
     stl["L.stl"]            = write_stl(L());
+    stl["U.stl"]            = write_stl(U());
     stl["anthineas.stl"]    = write_stl(anthineas());
     stl["anthineas.hdb"]    = test_data::anthineas_hdb();
 
