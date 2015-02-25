@@ -142,27 +142,27 @@ class MeshIntersector
                  );
 
         /**
-         * \brief answer whether this edge crosses the free surface
+         * \brief True if one end of the edge has z < 0 & the other has z > 0
          */
-        static bool crosses_free_surface(int status);
+        static bool crosses_free_surface(int edge_immersion_status);
 
         /**
-         * \brief answer whether this edge is totally emerged
+         * \brief True if edge is immersed (at least one edge with z < 0 the other with z <= 0)
          */
-        static bool is_emerged(int status);
+        static bool is_emerged(int edge_immersion_status);
 
         /**
-         * \brief answer whether this edge is totally immersed
+         * \brief True if edge is immersed (at least one edge with z > 0 the other with z >= 0)
          */
-        static bool is_immersed(int status);
+        static bool is_immersed(int edge_immersion_status);
 
         /**
-         * \brief true if one of the ends (but not both) just touch the free surface (z==0)
+         * \brief True if one of the ends of the edge (but not both) just touch the free surface (z==0)
          */
-        static bool one_of_the_ends_just_touches_free_surface(int status);
+        static bool one_of_the_ends_just_touches_free_surface(int edge_immersion_status);
 
         /**
-         * \brief true if both ends just touch the free surface (z==0)
+         * \brief True if both ends of the edge just touch the free surface (z==0 for both ends)
          */
         static bool both_ends_just_touch_free_surface(int status);
 
