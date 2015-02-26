@@ -77,7 +77,6 @@ void MeshIntersector::classify_or_split(
             classify_facet(facet_index, edges_immersion_status);
         }
     }
-
 }
 
 void MeshIntersector::classify_facet(const size_t facet_index, const std::vector<int>& edges_immersion_status)
@@ -137,6 +136,8 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
     size_t first_emerged  = 0;
     size_t first_immersed = 0;
 
+    bool facet_is_exactly_on_free_surface = true;
+
     for(auto oriented_edge:oriented_edges_of_this_facet)
     {
         size_t edge_index=Mesh::get_oriented_edge_index(oriented_edge);
@@ -151,18 +152,21 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
         }
         else if (is_emerged(edges_immersion_status[edge_index]))
         {
+            facet_is_exactly_on_free_surface = false;
             if(status==3) first_emerged = emerged_edges.size();
             emerged_edges.push_back(oriented_edge);
             status = 0;
         }
         else if (is_immersed(edges_immersion_status[edge_index]))
         {
+            facet_is_exactly_on_free_surface = false;
             if(status==0) first_immersed = immersed_edges.size();
             immersed_edges.push_back(oriented_edge);
             status = 3;
         }
         else
         {
+            facet_is_exactly_on_free_surface = false;
             bool reverse_direction=Mesh::get_oriented_edge_direction(oriented_edge);
             size_t edge1 = split_edges[edge_index];
             size_t edge2 = edge1 + 1; // because edges are always added by pair...
@@ -183,6 +187,7 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
             }
         }
     }
+    if (facet_is_exactly_on_free_surface) index_of_facets_exactly_on_the_surface.push_back(facet_index);
     // handle the degenerated cases, when the facet is tangent to free surface
     if(emerged_edges.size() <= 1)
     {

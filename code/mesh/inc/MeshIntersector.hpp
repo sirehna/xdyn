@@ -91,6 +91,20 @@ class MeshIntersector
             return FacetIterator(target, here);
         }
 
+        FacetIterator begin_surface() const
+        {
+            std::vector<Facet>::const_iterator target=mesh->facets.begin();
+            std::vector<size_t>::const_iterator here = index_of_facets_exactly_on_the_surface.begin();
+            return FacetIterator(target, here);
+        }
+
+        FacetIterator end_surface() const
+        {
+            std::vector<Facet>::const_iterator target=mesh->facets.begin();
+            std::vector<size_t>::const_iterator here = index_of_facets_exactly_on_the_surface.end();
+            return FacetIterator(target, here);
+        }
+
         /**
          * \brief Compute the point of intersection with free surface between two vertices
          * \details One of the vertices must be emerged and the other immersed

@@ -904,6 +904,19 @@ TEST_F(MeshIntersectorTest, area_of_immersed_facets_is_properly_computed)
     ASSERT_DOUBLE_EQ(0.405, immersed_facets.at(9).area);
 }
 
+TEST_F(MeshIntersectorTest, can_retrieve_facets_exactly_on_the_surface)
+{
+    MeshIntersector intersector(U(),false);
+    std::vector<double> dz = get_U_immersions(2);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    std::vector<Facet> facet_exactly_on_the_surface;
+    for (auto it = intersector.begin_surface() ; it != intersector.end_surface() ; ++it)
+    {
+        facet_exactly_on_the_surface.push_back(*it);
+    }
+    ASSERT_EQ(4, facet_exactly_on_the_surface.size());
+}
+
 TEST_F(MeshIntersectorTest, center_of_gravity_of_immersed_facets_is_properly_computed)
 {
     MeshIntersector intersector(unit_cube());
