@@ -6,6 +6,7 @@ FILE(GLOB SRC
         src/MeshIntersectorTest.cpp
         src/mesh_manipulationsTest.cpp
         src/RandomEPointGenerator.cpp
+        src/ClosingFacetComputerTest.hpp
         )
 # ------8<---------------------------------------------->8-----
 
