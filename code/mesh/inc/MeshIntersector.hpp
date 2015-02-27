@@ -243,12 +243,6 @@ class MeshIntersector
         std::string display_facet_in_NED(const Facet& facet, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
         std::string display_edge_in_NED(const size_t idx, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
 
-        /**  \brief Takes a list of edges on the surface & groups connected ones together
-          *  \details Used to compute the closing facets
-          *  \returns A list of facets containing their constituting edges
-          */
-        static std::vector<std::vector<size_t> > group_connected_edges_into_facets(const std::vector<size_t>& edges_index, const std::vector<std::pair<size_t,size_t> >& edges);
-
     private:
         /**
          * \brief Iterate on each edge to find intersection with free surface
