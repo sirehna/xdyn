@@ -288,6 +288,18 @@ TestMesh case_10()
     return ret;
 }
 
+TestMesh case_11();
+TestMesh case_11()
+{
+    TestMesh ret;
+    ret.all_nodes = Eigen::MatrixXd::Zero(3,8);
+    ret.all_nodes << 2, 3, 4, 5, 4, 3, 2, 1,
+                     0, 1, 2, 3, 6, 5, 4, 3,
+                     0, 0, 0, 0, 0, 0, 0, 0;
+    ret.edges = {{0,1},{2,3},{3,4},{4,5},{5,6},{6,7},{7,0},{5,2},{1,6}};
+    return ret;
+}
+
 ClosingFacetComputer make(const TestMesh& mesh);
 ClosingFacetComputer make(const TestMesh& mesh)
 {
@@ -333,4 +345,5 @@ TEST_F(ClosingFacetComputerTest, can_find_extreme_node)
     ASSERT_EQ(0,  make(case_8()).find_extreme_node());
     ASSERT_EQ(0,  make(case_9()).find_extreme_node());
     ASSERT_EQ(0,  make(case_10()).find_extreme_node());
+    ASSERT_EQ(7,  make(case_11()).find_extreme_node());
 }
