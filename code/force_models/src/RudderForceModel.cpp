@@ -50,9 +50,7 @@ RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_, const double
                                            rho(rho_),
                                            nu(nu_)
 {
-    const double distance_between_rudder_and_screw = HYPOT(parameters_.position_of_propeller_frame.coordinates.x - parameters_.position_of_the_rudder_frame_in_the_body_frame.x,
-                                                           parameters_.position_of_propeller_frame.coordinates.y - parameters_.position_of_the_rudder_frame_in_the_body_frame.y,
-                                                           parameters_.position_of_propeller_frame.coordinates.z - parameters_.position_of_the_rudder_frame_in_the_body_frame.z);
+    const double distance_between_rudder_and_screw = std::abs(parameters_.position_of_propeller_frame.coordinates.x - parameters_.position_of_the_rudder_frame_in_the_body_frame.x);
     Kr = 0.5+0.5/(1+0.15/std::abs(distance_between_rudder_and_screw/parameters_.diameter));
 }
 
