@@ -204,6 +204,18 @@ TestMesh case_4()
     return ret;
 }
 
+TestMesh case_5();
+TestMesh case_5()
+{
+    TestMesh ret;
+    ret.all_nodes = Eigen::MatrixXd::Zero(3,6);
+    ret.all_nodes << 0, 1, 2, 2, 1, 0,
+                     0, 0, 0, 1, 1, 1,
+                     0, 0, 0, 0, 0, 0;
+    ret.edges = {{0,1},{1,2},{2,3},{3,4},{4,5},{1,5},{5,0},{1,4}};
+    return ret;
+}
+
 TEST_F(ClosingFacetComputerTest, can_cluster_edges_into_independent_facets_to_compute_closing_facet)
 {
     const std::vector<size_t> edges_index = {1,2,3,5,8,17};
