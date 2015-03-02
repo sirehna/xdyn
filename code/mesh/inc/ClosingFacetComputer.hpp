@@ -35,7 +35,7 @@ class ClosingFacetComputer
 
         /**  \returns Index of node guaranteed to be on the frontier
          *   \details Uses the first node at minimal x value
-          */
+         */
         size_t find_extreme_node() const;
 
     private:
