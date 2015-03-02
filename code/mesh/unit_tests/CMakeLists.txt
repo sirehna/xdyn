@@ -25,6 +25,8 @@ include_directories(${test_data_generator_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 include_directories(${external_file_formats_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
+include_directories(SYSTEM ${GMOCK_INCLUDE_DIRS})
+
 include_directories(${binary_stl_data_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

@@ -7,10 +7,13 @@
 
 #include <Eigen/Dense>
 
+#include "gmock/gmock.h"
+
 #include <ssc/macros.hpp>
 
 #include "ClosingFacetComputerTest.hpp"
 #include "ClosingFacetComputer.hpp"
+#include "ClosingFacetComputerException.hpp"
 
 ClosingFacetComputerTest::ClosingFacetComputerTest() : a(ssc::random_data_generator::DataGenerator(21233))
 {
@@ -346,4 +349,11 @@ TEST_F(ClosingFacetComputerTest, can_find_extreme_node)
     ASSERT_EQ(0,  make(case_9()).find_extreme_node());
     ASSERT_EQ(0,  make(case_10()).find_extreme_node());
     ASSERT_EQ(7,  make(case_11()).find_extreme_node());
+}
+
+using namespace testing;
+
+TEST_F(ClosingFacetComputerTest, can_sort_edges)
+{
+    ASSERT_THAT(make(case_0()).sort_edges({3,0,2,1}), ElementsAre(3, 0, 1, 2));
 }
