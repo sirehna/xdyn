@@ -363,3 +363,7 @@ TEST_F(ClosingFacetComputerTest, sort_edges_should_throw_if_not_all_edges_are_co
     ASSERT_THROW(make(case_0()).sort_edges({1,3}),ClosingFacetComputerException);
 }
 
+TEST_F(ClosingFacetComputerTest, sort_edges_should_throw_if_some_indexes_are_out_of_range)
+{
+    ASSERT_THROW(make(case_0()).sort_edges({1,8}),ClosingFacetComputerException);
+}

@@ -178,6 +178,15 @@ std::vector<size_t> ClosingFacetComputer::sort_edges(const std::vector<size_t>& 
     TR1(unordered_map)<size_t,size_t> idx_of_first_node_in_edge_to_edge_idx;
     for (const auto idx:indexes_of_edges_to_sort)
     {
+        if (idx>edges.size())
+        {
+            std::stringstream ss;
+            ss << "Unable to find edge #" << idx;
+            if (idx>0) ss << " (starting from 0)";
+            ss << ":  mesh only contains " << edges.size() << " edge";
+            if (edges.size() > 1) ss << "s";
+            THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+        }
         idx_of_first_node_in_edge_to_edge_idx[edges.at(idx).first] = idx;
     }
 
