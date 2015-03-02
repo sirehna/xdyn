@@ -13,6 +13,8 @@
 #include <utility> // std::pair
 #include <vector>
 
+typedef std::pair<size_t,size_t> Edge;
+typedef std::vector<Edge> ListOfEdges;
 
 class ClosingFacetComputer
 {
