@@ -357,3 +357,9 @@ TEST_F(ClosingFacetComputerTest, can_sort_edges)
 {
     ASSERT_THAT(make(case_0()).sort_edges({3,0,2,1}), ElementsAre(3, 0, 1, 2));
 }
+
+TEST_F(ClosingFacetComputerTest, sort_edges_should_throw_if_not_all_edges_are_connected)
+{
+    ASSERT_THROW(make(case_0()).sort_edges({1,3}),ClosingFacetComputerException);
+}
+

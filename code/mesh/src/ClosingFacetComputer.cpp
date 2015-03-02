@@ -190,5 +190,9 @@ std::vector<size_t> ClosingFacetComputer::sort_edges(const std::vector<size_t>& 
         const size_t idx_of_first_node_in_next_edge = edges.at(iterator_to_next_edge->second).second;
         iterator_to_next_edge = idx_of_first_node_in_edge_to_edge_idx.find(idx_of_first_node_in_next_edge);
     }
+    if (ret.size() != indexes_of_edges_to_sort.size())
+    {
+        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, "Unable to sort edges");
+    }
     return ret;
 }
