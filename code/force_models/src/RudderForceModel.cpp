@@ -77,7 +77,7 @@ double RudderForceModel::RudderModel::get_Cd(const double Vs, //!< Norm of the s
     return 1.1 * Cl*Cl / (PI * lambda) + Cd0;
 }
 
-double RudderForceModel::RudderModel::get_Cl(const double alpha_wake //!< Angle of the fluid in the ship's reference frame (in radian)
+double RudderForceModel::RudderModel::get_Cl(const double alpha_wake //!< Angle of rudder wrt the fluid (in radian)
                                             ) const
 {
     return 2 * PI * lambda * (lambda + 1) / (lambda + 2) / (lambda + 2) * sin(alpha_wake);
@@ -159,7 +159,7 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double
                                                              ) const
 {
     const double alpha = get_angle_of_attack(rudder_angle, fluid_angle);
-    const double Cl = get_Cl(fluid_angle);
+    const double Cl = get_Cl(alpha);
     const double lift = get_lift(Vs, Cl, alpha, area);
     const double Cd = get_Cd(Vs, Cl);
     const double drag = get_drag(Vs, Cd, alpha, area);
