@@ -117,7 +117,7 @@ TEST_F(RudderForceModelTest, get_drag)
     const double Cl = 1.3;
     const double alpha = PI/4;
     const double Ar = 1.4;
-    ASSERT_DOUBLE_EQ(189766.19029849127, riw.get_drag(Vs,Cl,alpha,Ar));
+    ASSERT_DOUBLE_EQ(268369.91999999998, riw.get_drag(Vs,Cl,alpha,Ar));
 }
 
 TEST_F(RudderForceModelTest, get_force)
@@ -151,8 +151,8 @@ TEST_F(RudderForceModelTest, get_wrench)
     const double angle = -PI/3;
     const double area = 1.467;
     ssc::kinematics::Vector6d v = riw.get_wrench(3,4,0.5,area);
-    ASSERT_DOUBLE_EQ(-2024.033204364142, (double)v(0));
-    ASSERT_DOUBLE_EQ(1754.2979123376751, (double)v(1));
+    ASSERT_DOUBLE_EQ(-2021.4412785509464, (double)v(0));
+    ASSERT_DOUBLE_EQ(1757.2988992064641, (double)v(1));
     ASSERT_DOUBLE_EQ(0, (double)v(2));
     ASSERT_DOUBLE_EQ(0, (double)v(3));
     ASSERT_DOUBLE_EQ(0, (double)v(4));
@@ -301,8 +301,8 @@ TEST_F(RudderForceModelTest, force_and_torque)
     commands["beta"] = PI/6;
 
     const auto F = rudder.get_force(states, t, commands);
-    ASSERT_DOUBLE_EQ(2211293.1529238601, (double)F(0));
-    ASSERT_DOUBLE_EQ(779918.10980848665, (double)F(1));
+    ASSERT_DOUBLE_EQ(2208573.9553180891, (double)F(0));
+    ASSERT_DOUBLE_EQ(777997.67996840423, (double)F(1));
     ASSERT_DOUBLE_EQ(0, (double)F(2));
     ASSERT_DOUBLE_EQ(-2793416.1021430148, (double)F(3));
     ASSERT_DOUBLE_EQ(0, (double)F(4));

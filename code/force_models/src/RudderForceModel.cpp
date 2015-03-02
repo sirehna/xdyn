@@ -98,7 +98,7 @@ double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the 
                                                const double area   //!< Rudder area (in or outside wake) in m^2
                                                ) const
 {
-    return 0.5 * rho * area * Vs*Vs * Cl * cos(alpha) * parameters.drag_coeff;
+    return 0.5 * rho * area * Vs*Vs * Cl * parameters.drag_coeff;
 }
 
 ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double lift, //!< Norm of the lift (in N)
