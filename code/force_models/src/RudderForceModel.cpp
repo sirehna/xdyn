@@ -120,7 +120,7 @@ RudderForceModel::InOutWake<ssc::kinematics::Point> RudderForceModel::RudderMode
 {
     RudderForceModel::InOutWake<ssc::kinematics::Point> Vs;
     // Reduction factor (cf. "Marine rudders and Control Surfaces", p.371, eq 11.1)
-    const double RF = CTh>0.0729 ? 0.5 : 1 - 0.135 * sqrt(CTh); // Because 0.0729 = pow(0.5/0.135,2) and 1 - 0.135 * sqrt(pow(0.5/0.135,2)) = 0.5
+    const double RF = CTh>13.71742 ? 0.5 : 1 - 0.135 * sqrt(CTh); // Because 13.71742 = pow(0.5/0.135,2) and 1 - 0.135 * sqrt(pow(0.5/0.135,2)) = 0.5
     // Vchange = Vbollard - Va (cf. "Marine rudders and Control Surfaces", p.51, eq 3.38)
     const double Vchange = sqrt(Va*Va + 8 / PI * T / (rho * parameters.diameter*parameters.diameter)) - Va;
     // Ship speed (relative to the current) in the ship's reference frame (m/s)

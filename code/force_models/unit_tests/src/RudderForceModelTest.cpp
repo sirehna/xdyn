@@ -193,7 +193,7 @@ TEST_F(RudderForceModelTest, get_Vs)
     parameters.diameter = 3.6;
     RudderForceModel::RudderModel riw(parameters,1024,a.random<double>());
     const auto vs = riw.get_vs(1.5,12,6,12e4);
-    ASSERT_DOUBLE_EQ(8.6501382915679557, (double)vs.in_wake.v.norm());
+    ASSERT_DOUBLE_EQ(12.007932248435861, (double)vs.in_wake.v.norm());
     ASSERT_DOUBLE_EQ(13.416407864998739, (double)vs.outside_wake.v.norm());
 }
 
