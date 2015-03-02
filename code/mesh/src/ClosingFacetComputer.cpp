@@ -141,4 +141,22 @@ std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges_in
     return facets;
 }
 
-
+std::vector<size_t> ClosingFacetComputer::extract_nodes(const std::vector<std::pair<size_t,size_t> >& edges)
+{
+    std::set<size_t> used_nodes;
+    std::vector<size_t> ret;
+    for (const auto edge:edges)
+    {
+        if (not(has(used_nodes, edge.first)))
+        {
+            used_nodes.insert(edge.first);
+            ret.push_back(edge.first);
+        }
+        if (not(has(used_nodes, edge.second)))
+        {
+            used_nodes.insert(edge.second);
+            ret.push_back(edge.second);
+        }
+    }
+    return ret;
+}

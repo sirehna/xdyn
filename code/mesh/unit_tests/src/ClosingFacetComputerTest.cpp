@@ -304,3 +304,13 @@ TEST_F(ClosingFacetComputerTest, can_cluster_edges_into_independent_facets_to_co
     ASSERT_EQ(17, closing_facets.at(1).at(2));
 }
 
+TEST_F(ClosingFacetComputerTest, can_extract_relevant_nodes)
+{
+    const auto mesh = case_0();
+    const std::vector<size_t> relevant_nodes = ClosingFacetComputer::extract_nodes(mesh.edges);
+    ASSERT_EQ(4,relevant_nodes.size());
+    ASSERT_EQ(13, relevant_nodes.at(0));
+    ASSERT_EQ(15, relevant_nodes.at(1));
+    ASSERT_EQ(9, relevant_nodes.at(2));
+    ASSERT_EQ(11, relevant_nodes.at(3));
+}
