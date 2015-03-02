@@ -1,18 +1,8 @@
 #include <set>
 #include <sstream>
 
-#include <ssc/exception_handling.hpp>
-
 #include "ClosingFacetComputer.hpp"
-
-class ClosingFacetComputerException: public ssc::exception_handling::Exception
-{
-    public:
-        ClosingFacetComputerException(const char* s) :
-               Exception(s)
-        {
-        }
-};
+#include "ClosingFacetComputerException.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(unordered_map)
