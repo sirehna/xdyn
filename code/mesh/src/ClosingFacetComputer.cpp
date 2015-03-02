@@ -46,10 +46,10 @@ void check_nodes_appear_just_once_as_first_or_second_node_in_edge(const size_t c
     }
 }
 
-template <typename T> bool contains(const TR1(unordered_map)<size_t,T>& map, const size_t idx)
+template <typename T,typename U> bool has(const U& map_or_set, const T idx)
 {
-    if (map.find(idx) != map.end()) return true;
-                                    return false;
+    if (map_or_set.find(idx) != map_or_set.end()) return true;
+                                                  return false;
 }
 
 bool put_edges_in_facets(const TR1(unordered_map)<size_t,size_t>& node2edge,
@@ -67,14 +67,14 @@ bool put_edges_in_facets(const TR1(unordered_map)<size_t,size_t>& node2edge,
                          TR1(unordered_map)<size_t,std::vector<size_t> >& facet_idx_to_facet
                          )
 {
-    const bool node_appears_in_two_different_edges = contains(node2edge,node);
+    const bool node_appears_in_two_different_edges = has(node2edge,node);
     if (node_appears_in_two_different_edges)
     {
         // The two different edges in question belong to the same facet, as they are linked by the first node in the current edge
         const size_t idx_of_first_edge = current_edge_idx;
         const size_t idx_of_second_edge = node2edge.find(node)->second;
-        const bool first_edge_already_in_a_facet = contains(edge2facet,idx_of_first_edge);
-        const bool second_edge_already_in_a_facet = contains(edge2facet,idx_of_second_edge);
+        const bool first_edge_already_in_a_facet = has(edge2facet,idx_of_first_edge);
+        const bool second_edge_already_in_a_facet = has(edge2facet,idx_of_second_edge);
         if (first_edge_already_in_a_facet and not(second_edge_already_in_a_facet))
         {
             // Put second edge in a facet

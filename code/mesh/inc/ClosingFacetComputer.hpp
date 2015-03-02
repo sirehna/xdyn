@@ -20,7 +20,6 @@ class ClosingFacetComputer
 {
     public:
         /**  \brief Takes a list of edges on the surface & groups connected ones together
-          *  \details Used to compute the closing facets
           *  \returns A list of facets containing their constituting edges
           */
         static std::vector<std::vector<size_t> > group_connected_edges_into_facets(const std::vector<size_t>& edges_index, const std::vector<std::pair<size_t,size_t> >& edges);
