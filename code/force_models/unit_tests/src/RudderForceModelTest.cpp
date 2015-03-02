@@ -29,7 +29,7 @@ namespace ssc
         template <> RudderForceModel::Yaml TypedScalarDataGenerator<RudderForceModel::Yaml>::get() const
         {
             RudderForceModel::Yaml ret;
-            ret.Ar = random<double>();
+            ret.Ar = random<double>().between(0,1e5);
             ret.b = random<double>();
             ret.blade_area_ratio = random<double>();
             ret.diameter = random<double>();
@@ -163,9 +163,10 @@ TEST_F(RudderForceModelTest, get_Ar)
 {
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
     RudderForceModel::RudderModel riw(parameters,a.random<double>(),a.random<double>());
-    const double CTh = a.random<double>();
+    const double CTh = a.random<double>().between(-1,1000);
     const auto ar = riw.get_Ar(CTh);
-    ASSERT_DOUBLE_EQ(parameters.Ar, ar.in_wake-ar.outside_wake);
+    //ar.outside_wake = parameters.Ar-ar.in_wake;
+    ASSERT_SMALL_RELATIVE_ERROR(parameters.Ar, ar.in_wake+ar.outside_wake, 1E-10);
 }
 
 TEST_F(RudderForceModelTest, get_Ar2)
