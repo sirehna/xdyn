@@ -319,3 +319,18 @@ TEST_F(ClosingFacetComputerTest, can_extract_relevant_nodes)
     ASSERT_EQ(9, relevant_nodes.at(2));
     ASSERT_EQ(11, relevant_nodes.at(3));
 }
+
+TEST_F(ClosingFacetComputerTest, can_find_extreme_node)
+{
+    ASSERT_EQ(13, make(case_0()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_1()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_2()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_3()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_4()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_5()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_6()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_7()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_8()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_9()).find_extreme_node());
+    ASSERT_EQ(0,  make(case_10()).find_extreme_node());
+}

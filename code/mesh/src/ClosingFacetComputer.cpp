@@ -19,7 +19,8 @@ class ClosingFacetComputerException: public ssc::exception_handling::Exception
 
 ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_) :
         mesh(mesh_),
-        edges(edges_)
+        edges(edges_),
+        node_idx_in_mesh(extract_nodes())
 {
 }
 
@@ -162,4 +163,20 @@ std::vector<size_t> ClosingFacetComputer::extract_nodes() const
         }
     }
     return ret;
+}
+
+size_t ClosingFacetComputer::find_extreme_node() const
+{
+    size_t idx_xmin = 0;
+    double xmin = mesh(0,0);
+    for (size_t i = 1 ; i < node_idx_in_mesh.size() ; ++i)
+    {
+        const double val = mesh(0,node_idx_in_mesh.at(i));
+        if (val<xmin)
+        {
+            idx_xmin = i;
+            xmin = val;
+        }
+    }
+    return node_idx_in_mesh.at(idx_xmin);
 }

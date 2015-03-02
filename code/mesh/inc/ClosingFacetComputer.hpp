@@ -33,9 +33,15 @@ class ClosingFacetComputer
           */
         std::vector<size_t> extract_nodes() const;
 
+        /**  \returns Index of node guaranteed to be on the frontier
+         *   \details Uses the first node at minimal x value
+          */
+        size_t find_extreme_node() const;
+
     private:
         Eigen::Matrix3Xd mesh;
         ListOfEdges edges;
+        std::vector<size_t> node_idx_in_mesh;
 };
 
 #endif  /* CLOSINGFACETCOMPUTER_HPP_ */
