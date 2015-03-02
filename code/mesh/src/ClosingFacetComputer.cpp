@@ -3,6 +3,8 @@
 
 #include <ssc/exception_handling.hpp>
 
+#include "ClosingFacetComputer.hpp"
+
 class ClosingFacetComputerException: public ssc::exception_handling::Exception
 {
     public:
@@ -15,10 +17,11 @@ class ClosingFacetComputerException: public ssc::exception_handling::Exception
 #include <ssc/macros.hpp>
 #include TR1INC(unordered_map)
 
-
-
-#include "ClosingFacetComputer.hpp"
-
+ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_) :
+        mesh(mesh_),
+        edges(edges_)
+{
+}
 
 void check_nodes_appear_just_once_as_first_or_second_node_in_edge(const size_t current_edge_idx,
                                                                   const std::pair<size_t,size_t>& edge,
@@ -141,7 +144,7 @@ std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges_in
     return facets;
 }
 
-std::vector<size_t> ClosingFacetComputer::extract_nodes(const std::vector<std::pair<size_t,size_t> >& edges)
+std::vector<size_t> ClosingFacetComputer::extract_nodes() const
 {
     std::set<size_t> used_nodes;
     std::vector<size_t> ret;

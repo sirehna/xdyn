@@ -288,6 +288,12 @@ TestMesh case_10()
     return ret;
 }
 
+ClosingFacetComputer make(const TestMesh& mesh);
+ClosingFacetComputer make(const TestMesh& mesh)
+{
+    return ClosingFacetComputer(mesh.all_nodes, mesh.edges);
+}
+
 TEST_F(ClosingFacetComputerTest, can_cluster_edges_into_independent_facets_to_compute_closing_facet)
 {
     const std::vector<size_t> edges_index = {1,2,3,5,8,17};
@@ -306,8 +312,7 @@ TEST_F(ClosingFacetComputerTest, can_cluster_edges_into_independent_facets_to_co
 
 TEST_F(ClosingFacetComputerTest, can_extract_relevant_nodes)
 {
-    const auto mesh = case_0();
-    const std::vector<size_t> relevant_nodes = ClosingFacetComputer::extract_nodes(mesh.edges);
+    const std::vector<size_t> relevant_nodes = make(case_0()).extract_nodes();
     ASSERT_EQ(4,relevant_nodes.size());
     ASSERT_EQ(13, relevant_nodes.at(0));
     ASSERT_EQ(15, relevant_nodes.at(1));
