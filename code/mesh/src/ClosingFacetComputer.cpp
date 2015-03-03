@@ -1,6 +1,10 @@
 #include <set>
 #include <sstream>
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #include "ClosingFacetComputer.hpp"
 #include "ClosingFacetComputerException.hpp"
 
@@ -215,4 +219,93 @@ std::vector<size_t> ClosingFacetComputer::sort_edges(const std::vector<size_t>& 
         THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, "Unable to sort edges");
     }
     return ret;
+}
+
+struct TwoEdges
+{
+    TwoEdges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC, const ListOfEdges& edges) :
+        idx_A(),
+        idx_B(),
+        idx_C(),
+        idx_D()
+    {
+        check_edge_index(idx_of_edge_AB, edges, __PRETTY_FUNCTION__, __LINE__);
+        check_edge_index(idx_of_edge_BC, edges, __PRETTY_FUNCTION__, __LINE__);
+        idx_A = edges.at(idx_of_edge_AB).first;
+        idx_B = edges.at(idx_of_edge_AB).second;
+        idx_C = edges.at(idx_of_edge_BC).first;
+        idx_D = edges.at(idx_of_edge_BC).second;
+        const size_t common_node = get_common_node();
+        if (idx_C == common_node) idx_C = idx_D;
+    }
+
+    size_t get_idx_A() const
+    {
+        return idx_A;
+    }
+
+    size_t get_idx_B() const
+    {
+        return idx_B;
+    }
+
+    size_t get_idx_C() const
+    {
+        return idx_C;
+    }
+
+    private:
+        TwoEdges();
+
+        std::vector<size_t> common_nodes() const
+        {
+            std::vector<size_t> ret;
+            if (idx_A == idx_C) ret.push_back(idx_A);
+            if (idx_A == idx_D) ret.push_back(idx_A);
+            if (idx_B == idx_C) ret.push_back(idx_B);
+            if (idx_B == idx_D) ret.push_back(idx_B);
+            return ret;
+        }
+
+        size_t get_common_node() const
+        {
+            const std::vector<size_t> nodes = common_nodes();
+            std::stringstream err;
+            if (nodes.empty())              err << "Edges have no common' middle nodes should be the same. ";
+            else
+            {
+                if (nodes.size() > 1)       err << "Edges have more than one common node. ";
+                if (idx_B != nodes.front()) err << "The common node should be the second node of the first edge. ";
+
+            }
+            if (not(err.str().empty()))
+            {
+                err << "First edge has nodes " << idx_A
+                    << " & " << idx_B << ", and second edge has nodes "<< idx_C
+                    << " & " << idx_D << ".";
+                THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, err.str());
+            }
+            return nodes.front();
+        }
+
+        size_t idx_A;
+        size_t idx_B;
+        size_t idx_C;
+        size_t idx_D;
+};
+
+double wrap_2pi(const double theta); // We know the result of atan2 is between -pi & pi
+double wrap_2pi(const double theta)
+{
+    return theta > 0 ? theta : theta+2*PI;
+}
+
+double ClosingFacetComputer::edge_angle(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC) const
+{
+    const TwoEdges AB_BC(idx_of_edge_AB, idx_of_edge_BC, edges);
+    const auto BA = mesh.col(AB_BC.get_idx_A()) - mesh.col(AB_BC.get_idx_B());
+    const auto BC = mesh.col(AB_BC.get_idx_C()) - mesh.col(AB_BC.get_idx_B());
+    const double BA_angle = wrap_2pi(std::atan2(BA(1),BA(0)));
+    const double BC_angle = wrap_2pi(std::atan2(BC(1),BC(0)));
+    return BA_angle - BC_angle;
 }

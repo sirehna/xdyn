@@ -42,6 +42,10 @@ class ClosingFacetComputer
          */
         std::vector<size_t> sort_edges(const std::vector<size_t>& indexes_of_edges_to_sort) const;
 
+        /**  \brief Computes the angle between two edges
+         */
+        double edge_angle(const size_t idx_of_first_edge, const size_t idx_of_second_edge) const;
+
     private:
         Eigen::Matrix3Xd mesh;
         ListOfEdges edges;
