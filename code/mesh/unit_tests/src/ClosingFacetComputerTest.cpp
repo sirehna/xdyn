@@ -303,6 +303,30 @@ TestMesh case_11()
     return ret;
 }
 
+TestMesh case_12();
+TestMesh case_12()
+{
+    TestMesh ret;
+    ret.all_nodes = Eigen::MatrixXd::Zero(3,4);
+    ret.all_nodes << -1, 0,  0, -1,
+                      1, 0, -1, -1,
+                      0, 0,  0,  0;
+    ret.edges = {{0,1},{1,2},{1,3}};
+    return ret;
+}
+
+TestMesh case_13();
+TestMesh case_13()
+{
+    TestMesh ret;
+    ret.all_nodes = Eigen::MatrixXd::Zero(3,4);
+    ret.all_nodes <<  0, 1, 1, 0,
+                      0, 0, 1, 1,
+                      0, 0, 0, 0;
+    ret.edges = {{0,1},{1,2},{1,3}};
+    return ret;
+}
+
 ClosingFacetComputer make(const TestMesh& mesh);
 ClosingFacetComputer make(const TestMesh& mesh)
 {
