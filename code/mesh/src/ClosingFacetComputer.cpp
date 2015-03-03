@@ -7,6 +7,25 @@
 #include <ssc/macros.hpp>
 #include TR1INC(unordered_map)
 
+
+void check_edge_index(const size_t idx, const ListOfEdges& edges, const std::string& function, const size_t line);
+void check_edge_index(const size_t idx, const ListOfEdges& edges, const std::string& function, const size_t line)
+{
+    if (idx>=edges.size())
+    {
+        std::stringstream ss;
+        ss << "In file " << __FILE__ << ", line " << line << ", function "
+           << function
+           << ": "
+           << "Unable to find edge #" << idx;
+        if (idx>0) ss << " (starting from 0)";
+        ss << ": mesh only contains " << edges.size() << " edge";
+        if (edges.size() > 1) ss << "s";
+        ss << ".";
+        throw ClosingFacetComputerException(ss.str().c_str());
+    }
+}
+
 ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_) :
         mesh(mesh_),
         edges(edges_),
@@ -178,15 +197,7 @@ std::vector<size_t> ClosingFacetComputer::sort_edges(const std::vector<size_t>& 
     TR1(unordered_map)<size_t,size_t> idx_of_first_node_in_edge_to_edge_idx;
     for (const auto idx:indexes_of_edges_to_sort)
     {
-        if (idx>edges.size())
-        {
-            std::stringstream ss;
-            ss << "Unable to find edge #" << idx;
-            if (idx>0) ss << " (starting from 0)";
-            ss << ":  mesh only contains " << edges.size() << " edge";
-            if (edges.size() > 1) ss << "s";
-            THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
-        }
+        check_edge_index(idx, edges, __PRETTY_FUNCTION__, __LINE__);
         idx_of_first_node_in_edge_to_edge_idx[edges.at(idx).first] = idx;
     }
 
