@@ -42,7 +42,7 @@ class ClosingFacetComputer
 
         /**  \brief Computes the angle between two edges
          */
-        double edge_angle(const size_t idx_of_first_edge, const size_t idx_of_second_edge) const;
+        double angle_between_edges(const size_t idx_of_first_edge, const size_t idx_of_second_edge) const;
 
         /**  \returns All edges connected to the second point of an edge (except that edge, of course)
          */

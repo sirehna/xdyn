@@ -284,7 +284,7 @@ double wrap_2pi(const double theta)
     return theta > 0 ? theta : theta+2*PI;
 }
 
-double ClosingFacetComputer::edge_angle(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC) const
+double ClosingFacetComputer::angle_between_edges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC) const
 {
     const TwoEdges AB_BC(idx_of_edge_AB, idx_of_edge_BC, edges);
     const auto BA = mesh.col(AB_BC.get_idx_A()) - mesh.col(AB_BC.get_idx_B());
@@ -324,10 +324,10 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx) const
         THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
     }
     size_t idx = 0;
-    double angle = edge_angle(edge_idx, connected_edges.front());
+    double angle = angle_between_edges(edge_idx, connected_edges.front());
     for (size_t i = 1 ; i < connected_edges.size() ; ++i)
     {
-        const double new_angle = edge_angle(edge_idx, connected_edges.at(i));
+        const double new_angle = angle_between_edges(edge_idx, connected_edges.at(i));
         if ((angle < 0) and (new_angle > 0))
         {
             if (new_angle < angle)

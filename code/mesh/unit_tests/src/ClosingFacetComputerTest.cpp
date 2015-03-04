@@ -382,31 +382,31 @@ TEST_F(ClosingFacetComputerTest, can_find_extreme_node)
 
 TEST_F(ClosingFacetComputerTest, can_retrieve_angle_between_two_edges)
 {
-    ASSERT_DOUBLE_EQ(PI/2, make(case_1()).edge_angle(0,1));
-    ASSERT_DOUBLE_EQ(3*PI/4-PI/2, make(case_1()).edge_angle(1,2));
-    ASSERT_DOUBLE_EQ(-PI/2, make(case_1()).edge_angle(2,5));
+    ASSERT_DOUBLE_EQ(PI/2, make(case_1()).angle_between_edges(0,1));
+    ASSERT_DOUBLE_EQ(3*PI/4-PI/2, make(case_1()).angle_between_edges(1,2));
+    ASSERT_DOUBLE_EQ(-PI/2, make(case_1()).angle_between_edges(2,5));
 }
 
 TEST_F(ClosingFacetComputerTest, angle_between_closing_edges_should_be_the_greatest_when_positive)
 {
-    ASSERT_GT(make(case_13()).edge_angle(0,1), make(case_13()).edge_angle(0,2));
-    ASSERT_GT(make(case_10()).edge_angle(3,4), make(case_10()).edge_angle(3,12));
+    ASSERT_GT(make(case_13()).angle_between_edges(0,1), make(case_13()).angle_between_edges(0,2));
+    ASSERT_GT(make(case_10()).angle_between_edges(3,4), make(case_10()).angle_between_edges(3,12));
 }
 
 TEST_F(ClosingFacetComputerTest, angle_between_closing_edges_should_be_the_lowest_when_negative)
 {
-    ASSERT_LT(make(case_12()).edge_angle(0,1), make(case_12()).edge_angle(0,2));
+    ASSERT_LT(make(case_12()).angle_between_edges(0,1), make(case_12()).angle_between_edges(0,2));
 }
 
 TEST_F(ClosingFacetComputerTest, edge_angle_should_throw_if_edges_do_not_exist)
 {
-    ASSERT_THROW(make(case_1()).edge_angle(5,6), ClosingFacetComputerException);
-    ASSERT_THROW(make(case_1()).edge_angle(6,5), ClosingFacetComputerException);
+    ASSERT_THROW(make(case_1()).angle_between_edges(5,6), ClosingFacetComputerException);
+    ASSERT_THROW(make(case_1()).angle_between_edges(6,5), ClosingFacetComputerException);
 }
 
 TEST_F(ClosingFacetComputerTest, edge_angle_should_throw_if_edges_do_not_have_a_point_in_common)
 {
-    ASSERT_THROW(make(case_1()).edge_angle(0,3), ClosingFacetComputerException);
+    ASSERT_THROW(make(case_1()).angle_between_edges(0,3), ClosingFacetComputerException);
 }
 
 TEST_F(ClosingFacetComputerTest, can_find_edges_connected_to_second_point_of_a_particular_edge)
