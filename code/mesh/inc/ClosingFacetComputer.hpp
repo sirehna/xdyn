@@ -56,6 +56,10 @@ class ClosingFacetComputer
          */
         size_t next_edge(const size_t edge_idx) const;
 
+        /**  \returns Index of edge guaranteed to be on the contour
+         */
+        size_t first_extreme_edge() const;
+
     private:
         Eigen::Matrix3Xd mesh;
         ListOfEdges edges;

@@ -375,3 +375,36 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx) const
     }
     return connected_edges.at(idx);
 }
+
+size_t ClosingFacetComputer::first_extreme_edge() const
+{
+    const auto extreme_node = find_extreme_node();
+    const auto it = node_to_connected_edges.find(extreme_node);
+    if (it == node_to_connected_edges.end())
+    {
+        std::stringstream ss;
+        ss << "Unable to find node " << extreme_node << " in map.";
+        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+    }
+    const auto candidates = it->second;
+    const auto A = mesh.col(extreme_node);
+    const auto compute_angle = [this, A, extreme_node](const size_t candidate) -> double
+                               {
+                                   const auto idxB = edges.at(candidate).first==extreme_node ? edges.at(candidate).second : edges.at(candidate).first;
+                                   const auto B = mesh.col(idxB);
+                                   const auto AB = B-A;
+                                   return wrap_2pi(std::atan2(AB(1),AB(0)));
+                               };
+    size_t ret = 0;
+    double angle = compute_angle(ret);
+    for (const auto candidate:candidates)
+    {
+        const double new_angle = compute_angle(candidate);
+        if (new_angle > angle)
+        {
+            ret = candidate;
+            angle = new_angle;
+        }
+    }
+    return ret;
+}

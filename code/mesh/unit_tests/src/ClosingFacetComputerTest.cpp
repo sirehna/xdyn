@@ -552,3 +552,18 @@ TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_11
     ASSERT_EQ(5, make(case_11()).next_edge(4));
     ASSERT_EQ(6, make(case_11()).next_edge(5));
 }
+
+TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge)
+{
+    ASSERT_EQ(0, make(case_1()).first_extreme_edge());
+    ASSERT_EQ(0, make(case_2()).first_extreme_edge());
+    ASSERT_EQ(0, make(case_3()).first_extreme_edge());
+    ASSERT_EQ(0, make(case_4()).first_extreme_edge());
+    ASSERT_EQ(0, make(case_5()).first_extreme_edge());
+    ASSERT_EQ(0, make(case_6()).first_extreme_edge());
+    ASSERT_EQ(5, make(case_7()).first_extreme_edge());
+    ASSERT_EQ(0, make(case_8()).first_extreme_edge());
+    ASSERT_EQ(5, make(case_9()).first_extreme_edge());
+    ASSERT_EQ(7, make(case_10()).first_extreme_edge());
+    ASSERT_EQ(0, make(case_11()).first_extreme_edge());
+}
