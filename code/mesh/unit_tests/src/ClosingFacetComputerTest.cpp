@@ -353,12 +353,10 @@ using namespace testing; // So we can use 'ElementsAre' unqualified
 
 TEST_F(ClosingFacetComputerTest, can_cluster_edges_into_independent_facets_to_compute_closing_facet)
 {
-    const std::vector<size_t> edges_index = {1,2,3,5,8,17};
-    const std::vector<std::pair<size_t,size_t> > edges_on_free_surface = {{1,2},{2,3},{3,1},{8,10},{10,12},{12,8}};
-    const std::vector<std::vector<size_t> > closing_facets=ClosingFacetComputer::group_connected_edges_into_facets(edges_index, edges_on_free_surface);
+    const std::vector<std::vector<size_t> > closing_facets=make(case_14()).group_connected_edges_into_facets();
     ASSERT_EQ(2,  closing_facets.size());
-    ASSERT_THAT(closing_facets.at(0), ElementsAre(1,2,3));
-    ASSERT_THAT(closing_facets.at(1), ElementsAre(5,8,17));
+    ASSERT_THAT(closing_facets.at(0), ElementsAre(0,1,2));
+    ASSERT_THAT(closing_facets.at(1), ElementsAre(3,4,5));
 }
 
 TEST_F(ClosingFacetComputerTest, can_extract_relevant_nodes)

@@ -131,7 +131,7 @@ bool put_edges_in_facets(const TR1(unordered_map)<size_t,size_t>& node2edge,
     return false;
 }
 
-std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges_into_facets(const std::vector<size_t>& edges_index, const std::vector<std::pair<size_t,size_t> >& edges)
+std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges_into_facets()
 {
     std::vector<std::vector<size_t> > facets;
     TR1(unordered_map)<size_t,size_t> idx_of_first_node_in_edge_to_edge_idx;
@@ -143,22 +143,21 @@ std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges_in
     const size_t n = edges.size();
     for (size_t i = 0 ; i < n ; ++i)
     {
-        const size_t current_edge_idx = edges_index.at(i);
         const auto edge = edges.at(i);
-        check_nodes_appear_just_once_as_first_or_second_node_in_edge(current_edge_idx,edge,idx_of_first_node_in_edge_to_edge_idx,idx_of_second_node_in_edge_to_edge_idx);
-        idx_of_first_node_in_edge_to_edge_idx[edge.first] = current_edge_idx;
-        idx_of_second_node_in_edge_to_edge_idx[edge.second] = current_edge_idx;
+        check_nodes_appear_just_once_as_first_or_second_node_in_edge(i,edge,idx_of_first_node_in_edge_to_edge_idx,idx_of_second_node_in_edge_to_edge_idx);
+        idx_of_first_node_in_edge_to_edge_idx[edge.first] = i;
+        idx_of_second_node_in_edge_to_edge_idx[edge.second] = i;
         if (put_edges_in_facets(idx_of_second_node_in_edge_to_edge_idx,
                                 edge_idx_to_facet_idx,
                                 edge.first,
-                                current_edge_idx,
+                                i,
                                 current_nb_of_facets,
                                 facet_idx_to_facet))
             current_nb_of_facets++;
         if (put_edges_in_facets(idx_of_first_node_in_edge_to_edge_idx,
                                 edge_idx_to_facet_idx,
                                 edge.second,
-                                current_edge_idx,
+                                i,
                                 current_nb_of_facets,
                                 facet_idx_to_facet))
             current_nb_of_facets++;
