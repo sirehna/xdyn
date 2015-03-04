@@ -205,33 +205,6 @@ size_t ClosingFacetComputer::find_extreme_node() const
     return node_idx_in_mesh.at(idx_xmin);
 }
 
-std::vector<size_t> ClosingFacetComputer::sort_edges(const std::vector<size_t>& indexes_of_edges_to_sort) const
-{
-    std::vector<size_t> ret;
-    if (indexes_of_edges_to_sort.empty()) return ret;
-    TR1(unordered_map)<size_t,size_t> idx_of_first_node_in_edge_to_edge_idx;
-    for (const auto idx:indexes_of_edges_to_sort)
-    {
-        check_edge_index(idx, edges, __PRETTY_FUNCTION__, __LINE__);
-        idx_of_first_node_in_edge_to_edge_idx[edges.at(idx).first] = idx;
-    }
-
-    const auto first_edge = edges.at(indexes_of_edges_to_sort.front());
-    auto iterator_to_next_edge = idx_of_first_node_in_edge_to_edge_idx.find(first_edge.first);
-
-    while ((iterator_to_next_edge != idx_of_first_node_in_edge_to_edge_idx.end()) and ret.size() < indexes_of_edges_to_sort.size())
-    {
-        ret.push_back(iterator_to_next_edge->second);
-        const size_t idx_of_first_node_in_next_edge = edges.at(iterator_to_next_edge->second).second;
-        iterator_to_next_edge = idx_of_first_node_in_edge_to_edge_idx.find(idx_of_first_node_in_next_edge);
-    }
-    if (ret.size() != indexes_of_edges_to_sort.size())
-    {
-        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, "Unable to sort edges");
-    }
-    return ret;
-}
-
 struct TwoEdges
 {
     TwoEdges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC, const ListOfEdges& edges) :

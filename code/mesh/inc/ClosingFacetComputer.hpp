@@ -40,10 +40,6 @@ class ClosingFacetComputer
          */
         size_t find_extreme_node() const;
 
-        /**  \brief Puts all edges such that the second node of one is the beginning node of the next
-         */
-        std::vector<size_t> sort_edges(const std::vector<size_t>& indexes_of_edges_to_sort) const;
-
         /**  \brief Computes the angle between two edges
          */
         double edge_angle(const size_t idx_of_first_edge, const size_t idx_of_second_edge) const;
