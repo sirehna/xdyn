@@ -567,3 +567,18 @@ TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge)
     ASSERT_EQ(7, make(case_10()).first_extreme_edge());
     ASSERT_EQ(0, make(case_11()).first_extreme_edge());
 }
+
+TEST_F(ClosingFacetComputerTest, can_find_contour)
+{
+    ASSERT_THAT(make(case_1()).contour(), ElementsAre(0,1,3,4));
+    ASSERT_THAT(make(case_2()).contour(), ElementsAre(0,1,2,5,4));
+    ASSERT_THAT(make(case_3()).contour(), ElementsAre(0,1,2,3,4,5,6,7));
+    ASSERT_THAT(make(case_4()).contour(), ElementsAre(0,5,4,7));
+    ASSERT_THAT(make(case_5()).contour(), ElementsAre(0,1,2,3,4,6));
+    ASSERT_THAT(make(case_6()).contour(), ElementsAre(0,1,2,3,4,5));
+    ASSERT_THAT(make(case_7()).contour(), ElementsAre(5,0,1,2,3,4));
+    ASSERT_THAT(make(case_8()).contour(), ElementsAre(0,1,2,3,4));
+    ASSERT_THAT(make(case_9()).contour(), ElementsAre(5,0,1,2,3,4));
+    ASSERT_THAT(make(case_10()).contour(), ElementsAre(7,0,1,2,3,4,5,6));
+    ASSERT_THAT(make(case_11()).contour(), ElementsAre(0,8,4,5,6));
+}

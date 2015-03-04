@@ -60,6 +60,10 @@ class ClosingFacetComputer
          */
         size_t first_extreme_edge() const;
 
+        /**  \returns Outside edges, in order
+         */
+        std::vector<size_t> contour() const;
+
     private:
         Eigen::Matrix3Xd mesh;
         ListOfEdges edges;

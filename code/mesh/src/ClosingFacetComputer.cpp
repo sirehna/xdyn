@@ -408,3 +408,16 @@ size_t ClosingFacetComputer::first_extreme_edge() const
     }
     return ret;
 }
+
+std::vector<size_t> ClosingFacetComputer::contour() const
+{
+    size_t edge = first_extreme_edge();
+    std::vector<size_t> ret;
+    ret.push_back(edge);
+
+    while (((edge = next_edge(edge)) != ret.front()) and (ret.size() < edges.size()))
+    {
+        ret.push_back(edge);
+    }
+    return ret;
+}
