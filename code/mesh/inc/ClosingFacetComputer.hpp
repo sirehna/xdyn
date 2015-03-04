@@ -17,12 +17,11 @@
 
 #include <Eigen/Dense>
 
-typedef std::pair<size_t,size_t> Edge;
-typedef std::vector<Edge> ListOfEdges;
-
 class ClosingFacetComputer
 {
     public:
+        typedef std::pair<size_t,size_t> Edge;
+        typedef std::vector<Edge> ListOfEdges;
         ClosingFacetComputer(const Eigen::Matrix3Xd& mesh, const ListOfEdges& edges);
 
         /**  \brief Takes a list of edges on the surface & groups connected ones together

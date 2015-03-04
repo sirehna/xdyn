@@ -14,8 +14,8 @@
 #include TR1INC(unordered_map)
 
 
-void check_edge_index(const size_t idx, const ListOfEdges& edges, const std::string& function, const size_t line);
-void check_edge_index(const size_t idx, const ListOfEdges& edges, const std::string& function, const size_t line)
+void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges& edges, const std::string& function, const size_t line);
+void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges& edges, const std::string& function, const size_t line)
 {
     if (idx>=edges.size())
     {
@@ -207,7 +207,7 @@ size_t ClosingFacetComputer::find_extreme_node() const
 
 struct TwoEdges
 {
-    TwoEdges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC, const ListOfEdges& edges) :
+    TwoEdges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC, const ClosingFacetComputer::ListOfEdges& edges) :
         idx_A(),
         idx_B(),
         idx_C(),

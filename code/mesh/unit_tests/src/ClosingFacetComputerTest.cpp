@@ -38,7 +38,7 @@ void ClosingFacetComputerTest::TearDown()
 struct TestMesh
 {
     Eigen::Matrix3Xd all_nodes;
-    ListOfEdges edges;
+    ClosingFacetComputer::ListOfEdges edges;
 };
 
 struct Range
@@ -96,8 +96,8 @@ Eigen::Matrix3Xi convert(const Eigen::Matrix3Xd& M)
 
 typedef std::vector<XY<int> > Line;
 
-std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ListOfEdges& edges);
-std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ListOfEdges& edges)
+std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetComputer::ListOfEdges& edges);
+std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetComputer::ListOfEdges& edges)
 {
     std::vector<Line> ret;
     for (const auto edge:edges)
