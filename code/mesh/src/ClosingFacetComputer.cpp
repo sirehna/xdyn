@@ -338,3 +338,40 @@ std::vector<size_t> ClosingFacetComputer::edges_connected_to_second_node_of_edge
     std::copy_if(edges.begin(), edges.end(), std::back_inserter(ret),[edge_idx](const size_t i) { return i != edge_idx; });
     return ret;
 }
+
+size_t ClosingFacetComputer::next_edge(const size_t edge_idx) const
+{
+    check_edge_index(edge_idx, edges, __PRETTY_FUNCTION__, __LINE__);
+    const std::vector<size_t> connected_edges = edges_connected_to_second_node_of_edge(edge_idx);
+    if (connected_edges.empty())
+    {
+        std::stringstream ss;
+        ss << "Second node of edge #" << edge_idx;;
+        if (edge_idx>0) ss << " (starting from 0)";
+        ss << " is not connected to anything: cannot find following edge.";
+        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+    }
+    size_t idx = 0;
+    double angle = edge_angle(edge_idx, connected_edges.front());
+    for (size_t i = 1 ; i < connected_edges.size() ; ++i)
+    {
+        const double new_angle = edge_angle(edge_idx, connected_edges.at(i));
+        if ((angle < 0) and (new_angle > 0))
+        {
+            if (new_angle < angle)
+            {
+                idx = i;
+                angle = new_angle;
+            }
+        }
+        else
+        {
+            if (new_angle > angle)
+            {
+                idx = i;
+                angle = new_angle;
+            }
+        }
+    }
+    return connected_edges.at(idx);
+}

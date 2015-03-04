@@ -52,6 +52,10 @@ class ClosingFacetComputer
          */
         std::vector<size_t> edges_connected_to_second_node_of_edge(const size_t edge_idx) const;
 
+        /**  \returns Next edge in contour
+         */
+        size_t next_edge(const size_t edge_idx) const;
+
     private:
         Eigen::Matrix3Xd mesh;
         ListOfEdges edges;

@@ -434,3 +434,121 @@ TEST_F(ClosingFacetComputerTest, can_find_edges_connected_to_second_point_of_a_p
     ASSERT_THAT(make(case_1()).edges_connected_to_second_node_of_edge(5), ElementsAre(3,4));
     ASSERT_THAT(make(case_9()).edges_connected_to_second_node_of_edge(3), ElementsAre(0,1,4));
 }
+
+TEST_F(ClosingFacetComputerTest, next_edge_should_throw_if_edge_does_not_exist)
+{
+    ASSERT_THROW(make(case_1()).next_edge(10), ClosingFacetComputerException);
+}
+
+TEST_F(ClosingFacetComputerTest, next_edge_should_throw_if_edge_is_not_connected_to_anything)
+{
+    ASSERT_THROW(make(case_8()).next_edge(5), ClosingFacetComputerException);
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_1)
+{
+    ASSERT_EQ(1, make(case_1()).next_edge(0));
+    ASSERT_EQ(3, make(case_1()).next_edge(1));
+    ASSERT_EQ(4, make(case_1()).next_edge(3));
+    ASSERT_EQ(0, make(case_1()).next_edge(4));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_2)
+{
+    ASSERT_EQ(1, make(case_2()).next_edge(0));
+    ASSERT_EQ(2, make(case_2()).next_edge(1));
+    ASSERT_EQ(5, make(case_2()).next_edge(2));
+    ASSERT_EQ(4, make(case_2()).next_edge(5));
+    ASSERT_EQ(0, make(case_2()).next_edge(4));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_3)
+{
+    ASSERT_EQ(1, make(case_3()).next_edge(0));
+    ASSERT_EQ(2, make(case_3()).next_edge(1));
+    ASSERT_EQ(3, make(case_3()).next_edge(2));
+    ASSERT_EQ(4, make(case_3()).next_edge(3));
+    ASSERT_EQ(5, make(case_3()).next_edge(4));
+    ASSERT_EQ(6, make(case_3()).next_edge(5));
+    ASSERT_EQ(7, make(case_3()).next_edge(6));
+    ASSERT_EQ(0, make(case_3()).next_edge(7));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_4)
+{
+    ASSERT_EQ(5, make(case_4()).next_edge(0));
+    ASSERT_EQ(4, make(case_4()).next_edge(5));
+    ASSERT_EQ(7, make(case_4()).next_edge(4));
+    ASSERT_EQ(0, make(case_4()).next_edge(7));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_5)
+{
+    ASSERT_EQ(1, make(case_5()).next_edge(0));
+    ASSERT_EQ(2, make(case_5()).next_edge(1));
+    ASSERT_EQ(3, make(case_5()).next_edge(2));
+    ASSERT_EQ(4, make(case_5()).next_edge(3));
+    ASSERT_EQ(6, make(case_5()).next_edge(4));
+    ASSERT_EQ(0, make(case_5()).next_edge(6));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_6)
+{
+    ASSERT_EQ(1, make(case_6()).next_edge(0));
+    ASSERT_EQ(2, make(case_6()).next_edge(1));
+    ASSERT_EQ(3, make(case_6()).next_edge(2));
+    ASSERT_EQ(4, make(case_6()).next_edge(3));
+    ASSERT_EQ(5, make(case_6()).next_edge(4));
+    ASSERT_EQ(0, make(case_6()).next_edge(5));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_7)
+{
+    ASSERT_EQ(1, make(case_7()).next_edge(0));
+    ASSERT_EQ(2, make(case_7()).next_edge(1));
+    ASSERT_EQ(3, make(case_7()).next_edge(2));
+    ASSERT_EQ(4, make(case_7()).next_edge(3));
+    ASSERT_EQ(5, make(case_7()).next_edge(4));
+    ASSERT_EQ(0, make(case_7()).next_edge(5));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_8)
+{
+    ASSERT_EQ(1, make(case_8()).next_edge(0));
+    ASSERT_EQ(2, make(case_8()).next_edge(1));
+    ASSERT_EQ(3, make(case_8()).next_edge(2));
+    ASSERT_EQ(4, make(case_8()).next_edge(3));
+    ASSERT_EQ(0, make(case_8()).next_edge(4));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_9)
+{
+    ASSERT_EQ(1, make(case_9()).next_edge(0));
+    ASSERT_EQ(2, make(case_9()).next_edge(1));
+    ASSERT_EQ(3, make(case_9()).next_edge(2));
+    ASSERT_EQ(4, make(case_9()).next_edge(3));
+    ASSERT_EQ(5, make(case_9()).next_edge(4));
+    ASSERT_EQ(0, make(case_9()).next_edge(5));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_10)
+{
+    ASSERT_EQ(1, make(case_10()).next_edge(0));
+    ASSERT_EQ(2, make(case_10()).next_edge(1));
+    ASSERT_EQ(3, make(case_10()).next_edge(2));
+    ASSERT_EQ(4, make(case_10()).next_edge(3));
+    ASSERT_EQ(5, make(case_10()).next_edge(4));
+    ASSERT_EQ(6, make(case_10()).next_edge(5));
+    ASSERT_EQ(7, make(case_10()).next_edge(6));
+    ASSERT_EQ(0, make(case_10()).next_edge(7));
+}
+
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_11)
+{
+    ASSERT_EQ(8, make(case_11()).next_edge(0));
+    ASSERT_EQ(2, make(case_11()).next_edge(1));
+    ASSERT_EQ(3, make(case_11()).next_edge(2));
+    ASSERT_EQ(4, make(case_11()).next_edge(3));
+    ASSERT_EQ(5, make(case_11()).next_edge(4));
+    ASSERT_EQ(6, make(case_11()).next_edge(5));
+}
