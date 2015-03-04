@@ -337,30 +337,21 @@ ClosingFacetComputer make(const TestMesh& mesh)
     return ClosingFacetComputer(mesh.all_nodes, mesh.edges);
 }
 
+using namespace testing; // So we can use 'ElementsAre' unqualified
+
 TEST_F(ClosingFacetComputerTest, can_cluster_edges_into_independent_facets_to_compute_closing_facet)
 {
     const std::vector<size_t> edges_index = {1,2,3,5,8,17};
     const std::vector<std::pair<size_t,size_t> > edges_on_free_surface = {{1,2},{2,3},{3,1},{8,10},{10,12},{12,8}};
     const std::vector<std::vector<size_t> > closing_facets=ClosingFacetComputer::group_connected_edges_into_facets(edges_index, edges_on_free_surface);
     ASSERT_EQ(2,  closing_facets.size());
-    ASSERT_EQ(3,  closing_facets.at(0).size());
-    ASSERT_EQ(3,  closing_facets.at(1).size());
-    ASSERT_EQ(1,  closing_facets.at(0).at(0));
-    ASSERT_EQ(2,  closing_facets.at(0).at(1));
-    ASSERT_EQ(3,  closing_facets.at(0).at(2));
-    ASSERT_EQ(5,  closing_facets.at(1).at(0));
-    ASSERT_EQ(8,  closing_facets.at(1).at(1));
-    ASSERT_EQ(17, closing_facets.at(1).at(2));
+    ASSERT_THAT(closing_facets.at(0), ElementsAre(1,2,3));
+    ASSERT_THAT(closing_facets.at(1), ElementsAre(5,8,17));
 }
 
 TEST_F(ClosingFacetComputerTest, can_extract_relevant_nodes)
 {
-    const std::vector<size_t> relevant_nodes = make(case_0()).extract_nodes();
-    ASSERT_EQ(4,relevant_nodes.size());
-    ASSERT_EQ(13, relevant_nodes.at(0));
-    ASSERT_EQ(15, relevant_nodes.at(1));
-    ASSERT_EQ(9, relevant_nodes.at(2));
-    ASSERT_EQ(11, relevant_nodes.at(3));
+    ASSERT_THAT(make(case_0()).extract_nodes(), ElementsAre(13,15,9,11));
 }
 
 TEST_F(ClosingFacetComputerTest, can_find_extreme_node)
@@ -378,8 +369,6 @@ TEST_F(ClosingFacetComputerTest, can_find_extreme_node)
     ASSERT_EQ(0,  make(case_10()).find_extreme_node());
     ASSERT_EQ(7,  make(case_11()).find_extreme_node());
 }
-
-using namespace testing;
 
 TEST_F(ClosingFacetComputerTest, can_sort_edges)
 {
