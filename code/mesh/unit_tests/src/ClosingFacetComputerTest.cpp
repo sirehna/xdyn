@@ -425,3 +425,12 @@ TEST_F(ClosingFacetComputerTest, edge_angle_should_throw_if_edges_do_not_have_a_
 {
     ASSERT_THROW(make(case_1()).edge_angle(0,3), ClosingFacetComputerException);
 }
+
+TEST_F(ClosingFacetComputerTest, can_find_edges_connected_to_second_point_of_a_particular_edge)
+{
+    ASSERT_THAT(make(case_1()).edges_connected_to_second_node_of_edge(0), ElementsAre(1));
+    ASSERT_THAT(make(case_1()).edges_connected_to_second_node_of_edge(1), ElementsAre(2,3));
+    ASSERT_THAT(make(case_1()).edges_connected_to_second_node_of_edge(3), ElementsAre(4,5));
+    ASSERT_THAT(make(case_1()).edges_connected_to_second_node_of_edge(5), ElementsAre(3,4));
+    ASSERT_THAT(make(case_9()).edges_connected_to_second_node_of_edge(3), ElementsAre(0,1,4));
+}

@@ -1,3 +1,5 @@
+#include <algorithm> // std::copy_if
+#include <iterator> // std::back_inserter
 #include <set>
 #include <sstream>
 
@@ -33,8 +35,18 @@ void check_edge_index(const size_t idx, const ListOfEdges& edges, const std::str
 ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_) :
         mesh(mesh_),
         edges(edges_),
-        node_idx_in_mesh(extract_nodes())
+        node_idx_in_mesh(extract_nodes()),
+        node_to_connected_edges()
 {
+    for (size_t i = 0 ; i < edges.size() ; ++i)
+    {
+        auto it = node_to_connected_edges.find(edges.at(i).first);
+        if (it == node_to_connected_edges.end()) node_to_connected_edges[edges.at(i).first] = std::set<size_t>({i});
+        else                                     it->second.insert(i);
+        it = node_to_connected_edges.find(edges.at(i).second);
+        if (it == node_to_connected_edges.end()) node_to_connected_edges[edges.at(i).second] = std::set<size_t>({i});
+        else                                     it->second.insert(i);
+    }
 }
 
 void check_nodes_appear_just_once_as_first_or_second_node_in_edge(const size_t current_edge_idx,
@@ -308,4 +320,21 @@ double ClosingFacetComputer::edge_angle(const size_t idx_of_edge_AB, const size_
     const double BA_angle = wrap_2pi(std::atan2(BA(1),BA(0)));
     const double BC_angle = wrap_2pi(std::atan2(BC(1),BC(0)));
     return BA_angle - BC_angle;
+}
+
+std::vector<size_t> ClosingFacetComputer::edges_connected_to_second_node_of_edge(const size_t edge_idx) const
+{
+    check_edge_index(edge_idx, edges, __PRETTY_FUNCTION__, __LINE__);
+    const size_t second_node = edges.at(edge_idx).second;
+    const auto it = node_to_connected_edges.find(second_node);
+    if (it == node_to_connected_edges.end())
+    {
+        std::stringstream ss;
+        ss << "Unable to find edges connected to second node of edge #" << edge_idx << " (starting at 0)";
+        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+    }
+    const auto edges = it->second;
+    std::vector<size_t> ret;
+    std::copy_if(edges.begin(), edges.end(), std::back_inserter(ret),[edge_idx](const size_t i) { return i != edge_idx; });
+    return ret;
 }
