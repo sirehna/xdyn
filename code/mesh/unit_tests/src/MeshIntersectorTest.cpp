@@ -36,9 +36,9 @@ void MeshIntersectorTest::TearDown()
 {
 }
 
-TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_for_one_immerged_node)
+TEST_F(MeshIntersectorTest, can_compute_immersed_polygon_for_one_immersed_node)
 {
-//! [MeshIntersectorTest immerged_polygon_example_1]
+//! [MeshIntersectorTest immersed_polygon_example_1]
     Eigen::Matrix<double,3,3> M;
     M(0,0) = 1; M(0,1) = 4; M(0,2) = 7;
     M(1,0) = 1; M(1,1) = 6; M(1,2) = 8;
@@ -70,7 +70,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_for_one_immerged_node)
 }
 
 
-TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_for_two_immerged_node)
+TEST_F(MeshIntersectorTest, can_compute_immersed_polygon_for_two_immersed_nodes)
 {
     Eigen::Matrix<double,3,3> M;
     M(0,0) = 1; M(0,1) = 4; M(0,2) = 7;
@@ -106,7 +106,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_for_two_immerged_node)
     ASSERT_DOUBLE_EQ(1,immersions.at(2));
 }
 
-TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_first_nodes)
+TEST_F(MeshIntersectorTest, can_compute_immersed_polygon_when_emerged_nodes_are_the_first_nodes)
 {
     Eigen::Matrix<double,3,5> M;
     M(0,0) = 1; M(0,1) = 2; M(0,2) = 4; M(0,3) = 5; M(0,4) = 9;
@@ -142,7 +142,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
     ASSERT_DOUBLE_EQ(1,immersions.at(2));
 }
 
-TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_the_last_nodes)
+TEST_F(MeshIntersectorTest, can_compute_immersed_polygon_when_emerged_nodes_are_the_last_nodes)
 {
     Eigen::Matrix<double,3,5> M;
     M(0,0) = 1; M(0,1) = 2; M(0,2) = 4; M(0,3) = 5; M(0,4) = 9;
@@ -178,7 +178,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
     ASSERT_DOUBLE_EQ(0,immersions.at(2));
 }
 
-TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_in_the_middle)
+TEST_F(MeshIntersectorTest, can_compute_immersed_polygon_when_emerged_nodes_are_in_the_middle)
 {
     Eigen::Matrix<double,3,5> M;
     M(0,0) = 1; M(0,1) = 2; M(0,2) = 4; M(0,3) = 5; M(0,4) = 9;
@@ -214,7 +214,7 @@ TEST_F(MeshIntersectorTest, can_compute_immerged_polygon_when_emerged_nodes_are_
     ASSERT_DOUBLE_EQ(1,immersions.at(2));
 }
 
-TEST_F(MeshIntersectorTest, immerged_polygon_should_throw_if_all_points_are_immerged)
+TEST_F(MeshIntersectorTest, immersed_polygon_should_throw_if_all_points_are_immersed)
 {
     Eigen::Matrix<double,3,3> M;
     M <<
@@ -280,7 +280,7 @@ TEST_F(MeshIntersectorTest, can_compute_intersection_with_the_surface_bug_detect
     ASSERT_DOUBLE_EQ(5, I(2));
 }
 
-TEST_F(MeshIntersectorTest, immerged_polygon_should_throw_if_no_points_are_immerged)
+TEST_F(MeshIntersectorTest, immersed_polygon_should_throw_if_no_points_are_immersed)
 {
     Eigen::Matrix<double,3,3> M;
     M <<
@@ -297,7 +297,7 @@ TEST_F(MeshIntersectorTest, immerged_polygon_should_throw_if_no_points_are_immer
     ASSERT_EQ(0,intersector.index_of_emerged_facets.at(0));
 }
 
-TEST_F(MeshIntersectorTest, another_bug_in_immerged_polygon)
+TEST_F(MeshIntersectorTest, another_bug_in_immersed_polygon)
 {
     MeshPtr mesh(new Mesh(MeshBuilder(two_triangles()).build()));
     const std::vector<double> v = {-1,-1,-2,1};
@@ -345,7 +345,7 @@ TEST_F(MeshIntersectorTest, should_be_able_to_compute_intersection_even_if_one_o
     ASSERT_DOUBLE_EQ((double)Q(2), (double)C(2));
 }
 
-TEST_F(MeshIntersectorTest, correct_immerged_polygon_when_two_points_are_exactly_on_the_surface)
+TEST_F(MeshIntersectorTest, correct_immersed_polygon_when_two_points_are_exactly_on_the_surface)
 {
     Eigen::Matrix<double,3,4> M;
     M <<  0, -1, 0, 1,
@@ -412,7 +412,7 @@ TEST_F(MeshIntersectorTest, bug2_in_immersed_polygon)
     ASSERT_DOUBLE_EQ(0, i[2]);
 }
 
-TEST_F(MeshIntersectorTest, bug3_in_immerged_polygon)
+TEST_F(MeshIntersectorTest, bug3_in_immersed_polygon)
 {
     Eigen::Matrix<double,3,3> M;
     M <<  0.5,   0.5,   0.5,
