@@ -7,6 +7,7 @@ SET(SRC src/Mesh.cpp
         src/mesh_manipulations.cpp
         src/CenterOfMass.cpp
         src/ClosingFacetComputer.cpp
+        src/2DMeshDisplay.cpp
         )
 
 INCLUDE_DIRECTORIES(inc)
