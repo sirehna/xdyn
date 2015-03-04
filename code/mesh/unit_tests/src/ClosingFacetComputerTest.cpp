@@ -353,7 +353,7 @@ using namespace testing; // So we can use 'ElementsAre' unqualified
 
 TEST_F(ClosingFacetComputerTest, can_cluster_edges_into_independent_facets_to_compute_closing_facet)
 {
-    const std::vector<std::vector<size_t> > closing_facets=make(case_14()).group_connected_edges_into_facets();
+    const std::vector<std::vector<size_t> > closing_facets = ClosingFacetComputer::group_connected_edges(case_14().edges);
     ASSERT_EQ(2,  closing_facets.size());
     ASSERT_THAT(closing_facets.at(0), ElementsAre(0,1,2));
     ASSERT_THAT(closing_facets.at(1), ElementsAre(3,4,5));

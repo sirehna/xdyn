@@ -131,7 +131,7 @@ bool put_edges_in_facets(const TR1(unordered_map)<size_t,size_t>& node2edge,
     return false;
 }
 
-std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges_into_facets()
+std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges(const ListOfEdges& edges_)
 {
     std::vector<std::vector<size_t> > facets;
     TR1(unordered_map)<size_t,size_t> idx_of_first_node_in_edge_to_edge_idx;
@@ -140,10 +140,10 @@ std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges_in
     TR1(unordered_map)<size_t,std::vector<size_t> > facet_idx_to_facet;
 
     size_t current_nb_of_facets = 0;
-    const size_t n = edges.size();
+    const size_t n = edges_.size();
     for (size_t i = 0 ; i < n ; ++i)
     {
-        const auto edge = edges.at(i);
+        const auto edge = edges_.at(i);
         check_nodes_appear_just_once_as_first_or_second_node_in_edge(i,edge,idx_of_first_node_in_edge_to_edge_idx,idx_of_second_node_in_edge_to_edge_idx);
         idx_of_first_node_in_edge_to_edge_idx[edge.first] = i;
         idx_of_second_node_in_edge_to_edge_idx[edge.second] = i;
