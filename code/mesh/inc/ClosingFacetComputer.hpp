@@ -66,6 +66,14 @@ class ClosingFacetComputer
         ListOfEdges edges;
         std::vector<size_t> node_idx_in_mesh;
         std::map<size_t,std::set<size_t> > node_to_connected_edges;
+
+        struct ConnectedComponents
+        {
+            std::vector<int> component_idx_per_node;
+            int nb_of_components;
+        };
+        static std::vector<std::set<size_t> > get_edges_per_component(const ConnectedComponents& connected_components, const ListOfEdges& edges_);
+        static ClosingFacetComputer::ConnectedComponents get_connected_components(const ListOfEdges& edges);
 };
 
 #endif  /* CLOSINGFACETCOMPUTER_HPP_ */

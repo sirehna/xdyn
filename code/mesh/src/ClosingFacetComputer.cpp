@@ -7,6 +7,9 @@
 #include <cmath>
 #define PI M_PI
 
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/connected_components.hpp>
+
 #include "ClosingFacetComputer.hpp"
 #include "ClosingFacetComputerException.hpp"
 
@@ -40,124 +43,52 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const 
 {
 }
 
-void check_nodes_appear_just_once_as_first_or_second_node_in_edge(const size_t current_edge_idx,
-                                                                  const std::pair<size_t,size_t>& edge,
-                                                                  const TR1(unordered_map)<size_t,size_t>& node_idx_to_idx_of_first_node_in_edge,
-                                                                  const TR1(unordered_map)<size_t,size_t>& node_idx_to_idx_of_second_node_in_edge);
-void check_nodes_appear_just_once_as_first_or_second_node_in_edge(const size_t current_edge_idx,
-                                                                  const std::pair<size_t,size_t>& edge,
-                                                                  const TR1(unordered_map)<size_t,size_t>& node_idx_to_idx_of_first_node_in_edge,
-                                                                  const TR1(unordered_map)<size_t,size_t>& node_idx_to_idx_of_second_node_in_edge)
-{
-    std::stringstream ss;
-    const auto it1 = node_idx_to_idx_of_first_node_in_edge.find(edge.first);
-    if (it1 != node_idx_to_idx_of_first_node_in_edge.end())
-    {
-        ss << "Node " << edge.first << " appears twice as a first node (once for edge " << it1->second
-           << ", and once for current edge " << current_edge_idx << " (all indexes start at 0)";
-        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
-    }
-    const auto it2 = node_idx_to_idx_of_second_node_in_edge.find(edge.second);
-    if (it2 != node_idx_to_idx_of_second_node_in_edge.end())
-    {
-        ss << "Node " << edge.second << " appears twice as a second node (once for edge " << it2->second
-           << ", and once for current edge " << current_edge_idx << " (all indexes start at 0)";
-        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
-    }
-}
-
 template <typename T,typename U> bool has(const U& map_or_set, const T idx)
 {
     if (map_or_set.find(idx) != map_or_set.end()) return true;
                                                   return false;
 }
 
-bool put_edges_in_facets(const TR1(unordered_map)<size_t,size_t>& node2edge,
-                         TR1(unordered_map)<size_t,size_t>& edge2facet,
-                         const size_t node,
-                         const size_t current_edge_idx,
-                         const size_t current_nb_of_facets,
-                         TR1(unordered_map)<size_t,std::vector<size_t> >& facet_idx_to_facet
-                         );
-bool put_edges_in_facets(const TR1(unordered_map)<size_t,size_t>& node2edge,
-                         TR1(unordered_map)<size_t,size_t>& edge2facet,
-                         const size_t node,
-                         const size_t current_edge_idx,
-                         const size_t current_nb_of_facets,
-                         TR1(unordered_map)<size_t,std::vector<size_t> >& facet_idx_to_facet
-                         )
+std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std::set<size_t> >& facets);
+std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std::set<size_t> >& facets)
 {
-    const bool node_appears_in_two_different_edges = has(node2edge,node);
-    if (node_appears_in_two_different_edges)
+    std::vector<std::vector<size_t> > ret;
+    for (const auto facet : facets)
     {
-        // The two different edges in question belong to the same facet, as they are linked by the first node in the current edge
-        const size_t idx_of_first_edge = current_edge_idx;
-        const size_t idx_of_second_edge = node2edge.find(node)->second;
-        const bool first_edge_already_in_a_facet = has(edge2facet,idx_of_first_edge);
-        const bool second_edge_already_in_a_facet = has(edge2facet,idx_of_second_edge);
-        if (first_edge_already_in_a_facet and not(second_edge_already_in_a_facet))
-        {
-            // Put second edge in a facet
-            const size_t facet_idx = edge2facet[idx_of_first_edge];
-            edge2facet[idx_of_second_edge] = facet_idx;
-            facet_idx_to_facet[facet_idx].push_back(idx_of_second_edge);
-        }
-        if (second_edge_already_in_a_facet and not(first_edge_already_in_a_facet))
-        {
-            // Put first edge in a facet
-            const size_t facet_idx = edge2facet[idx_of_second_edge];
-            edge2facet[idx_of_first_edge] = facet_idx;
-            facet_idx_to_facet[facet_idx].push_back(idx_of_first_edge);
-        }
-        if (not(first_edge_already_in_a_facet) and not(second_edge_already_in_a_facet))
-        {
-            // Create a new facet
-            edge2facet[idx_of_second_edge] = current_nb_of_facets;
-            edge2facet[idx_of_first_edge] = current_nb_of_facets;
-            facet_idx_to_facet[current_nb_of_facets] = {idx_of_second_edge,idx_of_first_edge};
-            return true;
-        }
-        // If both edges are already in a facet, do nothing
+        ret.push_back(std::vector<size_t>(facet.begin(), facet.end()));
     }
-    return false;
+    return ret;
+}
+
+ClosingFacetComputer::ConnectedComponents ClosingFacetComputer::get_connected_components(const ListOfEdges& edges)
+{
+    using namespace boost;
+    typedef adjacency_list <vecS, vecS, undirectedS> Graph;
+    Graph G;
+    for (const auto edge:edges) add_edge(edge.first, edge.second, G);
+
+    ConnectedComponents ret;
+    ret.component_idx_per_node = std::vector<int>(num_vertices(G));
+    ret.nb_of_components = connected_components(G, &ret.component_idx_per_node[0]);
+    return ret;
+}
+
+std::vector<std::set<size_t> > ClosingFacetComputer::get_edges_per_component(const ConnectedComponents& connected_components, const ListOfEdges& edges_)
+{
+    std::vector<std::set<size_t> > facets(connected_components.nb_of_components);
+    auto node2edges = get_node_to_connected_edges(edges_);
+    for (size_t node_idx = 0 ; node_idx < connected_components.component_idx_per_node.size() ; ++node_idx)
+    {
+        const auto edges_connected_to_current_node = node2edges[node_idx];
+        const auto facet_idx = connected_components.component_idx_per_node[node_idx];
+        facets[facet_idx].insert(edges_connected_to_current_node.begin(),edges_connected_to_current_node.end());
+    }
+    return facets;
 }
 
 std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges(const ListOfEdges& edges_)
 {
-    std::vector<std::vector<size_t> > facets;
-    TR1(unordered_map)<size_t,size_t> idx_of_first_node_in_edge_to_edge_idx;
-    TR1(unordered_map)<size_t,size_t> idx_of_second_node_in_edge_to_edge_idx;
-    TR1(unordered_map)<size_t,size_t> edge_idx_to_facet_idx;
-    TR1(unordered_map)<size_t,std::vector<size_t> > facet_idx_to_facet;
-
-    size_t current_nb_of_facets = 0;
-    const size_t n = edges_.size();
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        const auto edge = edges_.at(i);
-        check_nodes_appear_just_once_as_first_or_second_node_in_edge(i,edge,idx_of_first_node_in_edge_to_edge_idx,idx_of_second_node_in_edge_to_edge_idx);
-        idx_of_first_node_in_edge_to_edge_idx[edge.first] = i;
-        idx_of_second_node_in_edge_to_edge_idx[edge.second] = i;
-        if (put_edges_in_facets(idx_of_second_node_in_edge_to_edge_idx,
-                                edge_idx_to_facet_idx,
-                                edge.first,
-                                i,
-                                current_nb_of_facets,
-                                facet_idx_to_facet))
-            current_nb_of_facets++;
-        if (put_edges_in_facets(idx_of_first_node_in_edge_to_edge_idx,
-                                edge_idx_to_facet_idx,
-                                edge.second,
-                                i,
-                                current_nb_of_facets,
-                                facet_idx_to_facet))
-            current_nb_of_facets++;
-    }
-    for (auto facet:facet_idx_to_facet)
-    {
-        facets.push_back(facet.second);
-    }
-    return facets;
+    return convert_sets_to_vectors(get_edges_per_component(get_connected_components(edges_), edges_));
 }
 
 std::vector<size_t> ClosingFacetComputer::extract_nodes() const

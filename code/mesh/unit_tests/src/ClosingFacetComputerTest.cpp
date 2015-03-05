@@ -259,3 +259,11 @@ TEST_F(ClosingFacetComputerTest, can_find_contour)
     ASSERT_THAT(make(case_10()).contour(), ElementsAre(7,0,1,2,3,4,5,6));
     ASSERT_THAT(make(case_11()).contour(), ElementsAre(0,8,4,5,6));
 }
+
+TEST_F(ClosingFacetComputerTest, bug_in_group_connected_edges_detected_in_MeshIntersector)
+{
+    const std::vector<std::vector<size_t> > closing_facets = ClosingFacetComputer::group_connected_edges(case_16().edges);
+    ASSERT_EQ(2,  closing_facets.size());
+    ASSERT_THAT(closing_facets.at(0), ElementsAre(0,1,2,3,4));
+    ASSERT_THAT(closing_facets.at(1), ElementsAre(5,6,7,8,9));
+}
