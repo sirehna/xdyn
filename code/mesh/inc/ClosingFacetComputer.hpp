@@ -50,7 +50,7 @@ class ClosingFacetComputer
          */
         double angle_between_edges(const size_t idx_of_first_edge, const size_t idx_of_second_edge) const;
 
-        /**  \returns All edges connected to the second point of an edge (except that edge, of course)
+        /**  \returns All edges connected to the second node of an edge (except that edge, of course)
          */
         std::vector<size_t> edges_connected_to_second_node_of_edge(const size_t edge_idx) const;
 
