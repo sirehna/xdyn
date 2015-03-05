@@ -20,7 +20,7 @@
 class ClosingFacetComputer
 {
     public:
-        typedef std::pair<int,int> Edge;
+        typedef std::pair<size_t,size_t> Edge;
         typedef std::vector<Edge> ListOfEdges;
         ClosingFacetComputer(const Eigen::Matrix3Xd& mesh, const ListOfEdges& edges);
 
