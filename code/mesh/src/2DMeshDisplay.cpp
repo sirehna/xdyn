@@ -73,7 +73,7 @@ std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetCom
     return ret;
 }
 
-std::vector<std::string> make_mesh(const Eigen::Matrix3Xi& M, const std::vector<Line>& lines)
+std::vector<std::string> make_mesh(const Eigen::Matrix3Xi& M, const std::vector<Line>& lines, const std::set<size_t>& idx_to_display)
 {
     const std::string spaces(X_CANVAS_SIZE+1, ' ');
     std::vector<std::string> canvas(Y_CANVAS_SIZE+1, spaces);
@@ -84,9 +84,12 @@ std::vector<std::string> make_mesh(const Eigen::Matrix3Xi& M, const std::vector<
             canvas[dot.y][dot.x] = DOT_CHAR;
         }
     }
-    for (int j = 0 ; j < M.cols() ; ++j)
+    for (const auto j:idx_to_display)
     {
-        canvas[M(1,j)][M(0,j)] = POINT_CHAR;
+        std::stringstream ss;
+        ss << j;
+        canvas[M(1,j)].replace(M(0,j), ss.str().size(), ss.str());
+        //canvas[M(1,j)][M(0,j)] = POINT_CHAR;
     }
     return canvas;
 }
@@ -95,7 +98,13 @@ std::ostream& operator<<(std::ostream& os, const TestMesh& mesh)
 {
     const auto Mi = convert(mesh.all_nodes);
     const auto L = make_lines(Mi, mesh.edges);
-    const auto lines = make_mesh(Mi, L);
+    std::set<size_t> nodes_to_display;
+    for (const auto edge:mesh.edges)
+    {
+        nodes_to_display.insert(edge.first);
+        nodes_to_display.insert(edge.second);
+    }
+    const auto lines = make_mesh(Mi, L, nodes_to_display);
     os << std::endl;
     for (const auto line:lines)
     {
