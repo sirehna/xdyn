@@ -36,6 +36,14 @@ void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges&
 }
 
 ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_) :
+        mesh(new Eigen::Matrix3Xd(mesh_)),
+        edges(edges_),
+        node_idx_in_mesh(extract_nodes()),
+        node_to_connected_edges(get_node_to_connected_edges(edges))
+{
+}
+
+ClosingFacetComputer::ClosingFacetComputer(const TR1(shared_ptr)<Eigen::Matrix3Xd>& mesh_, const ListOfEdges& edges_) :
         mesh(mesh_),
         edges(edges_),
         node_idx_in_mesh(extract_nodes()),
@@ -114,13 +122,13 @@ std::vector<size_t> ClosingFacetComputer::extract_nodes() const
 std::pair<size_t,size_t> ClosingFacetComputer::find_extreme_nodes() const
 {
     size_t idx_xmin = 0;
-    double xmin = mesh(0,0);
+    double xmin = mesh->operator()(0,0);
     size_t idx_ymax = 0;
-    double ymax = mesh(0,0);
+    double ymax = mesh->operator()(0,0);
     for (size_t i = 1 ; i < node_idx_in_mesh.size() ; ++i)
     {
-        const double xval = mesh(0,node_idx_in_mesh.at(i));
-        const double yval = mesh(1,node_idx_in_mesh.at(i));
+        const double xval = mesh->operator()(0,node_idx_in_mesh.at(i));
+        const double yval = mesh->operator()(1,node_idx_in_mesh.at(i));
         if (xval<xmin)
         {
             idx_xmin = i;
@@ -217,8 +225,8 @@ double wrap_2pi(const double theta)
 double ClosingFacetComputer::angle_between_edges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC) const
 {
     const TwoEdges AB_BC(idx_of_edge_AB, idx_of_edge_BC, edges);
-    const auto BA = mesh.col(AB_BC.get_idx_A()) - mesh.col(AB_BC.get_idx_B());
-    const auto BC = mesh.col(AB_BC.get_idx_C()) - mesh.col(AB_BC.get_idx_B());
+    const auto BA = mesh->col(AB_BC.get_idx_A()) - mesh->col(AB_BC.get_idx_B());
+    const auto BC = mesh->col(AB_BC.get_idx_C()) - mesh->col(AB_BC.get_idx_B());
     const double BA_angle = wrap_2pi(std::atan2(BA(1),BA(0)));
     const double BC_angle = wrap_2pi(std::atan2(BC(1),BC(0)));
     return BA_angle - BC_angle;
@@ -288,11 +296,11 @@ size_t ClosingFacetComputer::extreme_edge(const size_t extreme_node) const
         THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
     }
     const auto candidates = it->second;
-    const auto A = mesh.col(extreme_node);
+    const auto A = mesh->col(extreme_node);
     const auto compute_angle = [this, A, extreme_node](const size_t candidate) -> double
                                {
                                    const auto idxB = edges.at(candidate).first==extreme_node ? edges.at(candidate).second : edges.at(candidate).first;
-                                   const auto B = mesh.col(idxB);
+                                   const auto B = mesh->col(idxB);
                                    const auto AB = B-A;
                                    return wrap_2pi(std::atan2(AB(1),AB(0)));
                                };

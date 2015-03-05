@@ -17,12 +17,16 @@
 
 #include <Eigen/Dense>
 
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
+
 class ClosingFacetComputer
 {
     public:
         typedef std::pair<size_t,size_t> Edge;
         typedef std::vector<Edge> ListOfEdges;
         ClosingFacetComputer(const Eigen::Matrix3Xd& mesh, const ListOfEdges& edges);
+        ClosingFacetComputer(const TR1(shared_ptr)<Eigen::Matrix3Xd>& mesh, const ListOfEdges& edges);
 
         /**  \brief Takes a list of edges on the surface & groups connected ones together
           *  \returns A list of facets containing their constituting edges
@@ -67,7 +71,7 @@ class ClosingFacetComputer
         std::vector<size_t> contour() const;
 
     private:
-        Eigen::Matrix3Xd mesh;
+        TR1(shared_ptr)<Eigen::Matrix3Xd> mesh;
         ListOfEdges edges;
         std::vector<size_t> node_idx_in_mesh;
         std::map<size_t,std::set<size_t> > node_to_connected_edges;
