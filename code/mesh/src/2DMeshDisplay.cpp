@@ -31,11 +31,13 @@ XY<Range> get_min_max(const Eigen::Matrix3Xd M)
 Eigen::Matrix3Xi convert(const Eigen::Matrix3Xd& M)
 {
     const XY<Range> r = get_min_max(M);
+    const double delta_x = r.x.max == r.x.min ? 1 : r.x.max-r.x.min;
+    const double delta_y = r.y.max == r.y.min ? 1 : r.y.max-r.y.min;
     Eigen::Matrix3Xi ret = Eigen::Matrix3Xi::Zero(3, M.cols());
     for (int j = 0 ; j < M.cols() ; ++j)
     {
-        ret(0,j) = (int)std::floor((M(0,j)-r.x.min)/(r.x.max-r.x.min)*X_CANVAS_SIZE+0.5);
-        ret(1,j) = Y_CANVAS_SIZE - (int)std::floor((M(1,j)-r.y.min)/(r.y.max-r.y.min)*Y_CANVAS_SIZE+0.5);
+        ret(0,j) = (int)std::floor((M(0,j)-r.x.min)/delta_x*X_CANVAS_SIZE+0.5);
+        ret(1,j) = Y_CANVAS_SIZE - (int)std::floor((M(1,j)-r.y.min)/delta_y*Y_CANVAS_SIZE+0.5);
     }
     return ret;
 }
@@ -89,7 +91,6 @@ std::vector<std::string> make_mesh(const Eigen::Matrix3Xi& M, const std::vector<
         std::stringstream ss;
         ss << j;
         canvas[M(1,j)].replace(M(0,j), ss.str().size(), ss.str());
-        //canvas[M(1,j)][M(0,j)] = POINT_CHAR;
     }
     return canvas;
 }
