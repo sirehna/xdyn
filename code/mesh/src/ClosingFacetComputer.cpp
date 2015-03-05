@@ -291,7 +291,7 @@ size_t ClosingFacetComputer::extreme_edge(const size_t extreme_node) const
     const auto A = mesh.col(extreme_node);
     const auto compute_angle = [this, A, extreme_node](const size_t candidate) -> double
                                {
-                                   const auto idxB = edges.at(candidate).first==extreme_node ? edges.at(candidate).second : edges.at(candidate).first;
+                                   const auto idxB = std::abs(edges.at(candidate).first)==(int)extreme_node ? std::abs(edges.at(candidate).second) : std::abs(edges.at(candidate).first);
                                    const auto B = mesh.col(idxB);
                                    const auto AB = B-A;
                                    return wrap_2pi(std::atan2(AB(1),AB(0)));
