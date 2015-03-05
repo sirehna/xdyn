@@ -257,7 +257,6 @@ TEST_F(ClosingFacetComputerTest, can_find_contour)
     ASSERT_THAT(make(case_8()).contour(), ElementsAre(0,1,2,3,4));
     ASSERT_THAT(make(case_9()).contour(), ElementsAre(5,0,1,2,3,4));
     ASSERT_THAT(make(case_10()).contour(), ElementsAre(7,0,1,2,3,4,5,6));
-    ASSERT_THAT(make(case_11()).contour(), ElementsAre(0,8,4,5,6));
 }
 
 TEST_F(ClosingFacetComputerTest, bug_in_group_connected_edges_detected_in_MeshIntersector)
