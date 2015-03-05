@@ -48,15 +48,19 @@ class ClosingFacetComputer
 
         /**  \brief Computes the angle between two edges
          */
-        double angle_between_edges(const size_t idx_of_first_edge, const size_t idx_of_second_edge) const;
+        double angle_between_edges(const size_t idx_of_first_edge, const size_t idx_of_second_edge, const bool reverse=false) const;
 
         /**  \returns All edges connected to the second node of an edge (except that edge, of course)
          */
         std::vector<size_t> edges_connected_to_second_node_of_edge(const size_t edge_idx) const;
 
+        /**  \returns All edges connected to the first node of an edge (except that edge, of course)
+         */
+        std::vector<size_t> edges_connected_to_first_node_of_edge(const size_t edge_idx) const;
+
         /**  \returns Next edge in contour
          */
-        size_t next_edge(const size_t edge_idx) const;
+        size_t next_edge(const size_t edge_idx, const bool reverse=false) const;
 
         /**  \returns Index of two edges guaranteed to be on the contour
          */
@@ -86,6 +90,8 @@ class ClosingFacetComputer
         /**  \returns Outside edges, in order
          */
         std::vector<size_t> contour(size_t extreme_edge) const;
+
+        bool need_to_reverse(const size_t first_edge, const size_t second_edge) const;
 };
 
 #endif  /* CLOSINGFACETCOMPUTER_HPP_ */

@@ -76,15 +76,19 @@ TEST_F(ClosingFacetComputerTest, can_find_extreme_node_using_xmin_strategy)
 
 TEST_F(ClosingFacetComputerTest, can_retrieve_angle_between_two_edges)
 {
-    ASSERT_DOUBLE_EQ(PI/2, make(case_1()).angle_between_edges(0,1));
-    ASSERT_DOUBLE_EQ(3*PI/4-PI/2, make(case_1()).angle_between_edges(1,2));
+    ASSERT_DOUBLE_EQ(3*PI/2, make(case_1()).angle_between_edges(0,1));
+    ASSERT_DOUBLE_EQ(7*PI/4, make(case_1()).angle_between_edges(1,2));
     ASSERT_DOUBLE_EQ(-PI/2, make(case_1()).angle_between_edges(2,5));
-}
-
-TEST_F(ClosingFacetComputerTest, angle_between_closing_edges_should_be_the_greatest_when_positive)
-{
-    ASSERT_GT(make(case_13()).angle_between_edges(0,1), make(case_13()).angle_between_edges(0,2));
-    ASSERT_GT(make(case_10()).angle_between_edges(3,4), make(case_10()).angle_between_edges(3,12));
+    ASSERT_DOUBLE_EQ(-PI/2, make(case_9()).angle_between_edges(0,1));
+    ASSERT_DOUBLE_EQ(PI, make(case_9()).angle_between_edges(0,3));
+    ASSERT_DOUBLE_EQ(3*PI/2, make(case_9()).angle_between_edges(0,4));
+    ASSERT_DOUBLE_EQ(-PI/4, make(case_15()).angle_between_edges(1,4));
+    ASSERT_DOUBLE_EQ(-PI/2, make(case_15()).angle_between_edges(1,0));
+    ASSERT_DOUBLE_EQ(7*PI/4, make(case_15()).angle_between_edges(0,4));
+    ASSERT_DOUBLE_EQ(3*PI/2, make(case_15()).angle_between_edges(0,1));
+    ASSERT_DOUBLE_EQ(3*PI/2, make(case_15()).angle_between_edges(3,0));
+    ASSERT_DOUBLE_EQ(7*PI/4, make(case_15()).angle_between_edges(2,4));
+    ASSERT_DOUBLE_EQ(3*PI/2, make(case_15()).angle_between_edges(2,3));
 }
 
 TEST_F(ClosingFacetComputerTest, angle_between_closing_edges_should_be_the_lowest_when_negative)
@@ -230,6 +234,16 @@ TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_11
     ASSERT_EQ(6, make(case_11()).next_edge(5));
 }
 
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_15)
+{
+    ASSERT_EQ(1, make(case_15()).next_edge(0));
+    ASSERT_EQ(1, make(case_9()).next_edge(0));
+    ASSERT_EQ(0, make(case_15()).next_edge(1));
+    ASSERT_EQ(2, make(case_15()).next_edge(1,true));
+    ASSERT_EQ(3, make(case_15()).next_edge(2));
+    ASSERT_EQ(0, make(case_15()).next_edge(3));
+}
+
 TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge_using_xmin_strategy)
 {
     ASSERT_EQ(0, make(case_1()).extreme_edges().first);
@@ -270,4 +284,9 @@ TEST_F(ClosingFacetComputerTest, bug_in_group_connected_edges_detected_in_MeshIn
 TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_11)
 {
     ASSERT_THROW(make(case_11()).contour(), ClosingFacetComputerException);
+}
+
+TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_15)
+{
+    ASSERT_THAT(make(case_15()).contour(), ElementsAre(3,0,1,2));
 }

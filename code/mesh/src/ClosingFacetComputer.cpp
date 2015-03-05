@@ -16,6 +16,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(unordered_map)
 
+#include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
 
 void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges& edges, const std::string& function, const size_t line);
 void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges& edges, const std::string& function, const size_t line)
@@ -145,7 +146,7 @@ std::pair<size_t,size_t> ClosingFacetComputer::find_extreme_nodes() const
 
 struct TwoEdges
 {
-    TwoEdges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC, const ClosingFacetComputer::ListOfEdges& edges) :
+    TwoEdges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC, const ClosingFacetComputer::ListOfEdges& edges, const bool reverse) :
         idx_A(),
         idx_B(),
         idx_C(),
@@ -157,7 +158,7 @@ struct TwoEdges
         idx_B = edges.at(idx_of_edge_AB).second;
         idx_C = edges.at(idx_of_edge_BC).first;
         idx_D = edges.at(idx_of_edge_BC).second;
-        const size_t common_node = get_common_node();
+        const size_t common_node = get_common_node(reverse);
         if (idx_C == common_node) idx_C = idx_D;
     }
 
@@ -189,7 +190,7 @@ struct TwoEdges
             return ret;
         }
 
-        size_t get_common_node() const
+        size_t get_common_node(const bool reverse) const
         {
             const std::vector<size_t> nodes = common_nodes();
             std::stringstream err;
@@ -197,8 +198,8 @@ struct TwoEdges
             else
             {
                 if (nodes.size() > 1)       err << "Edges have more than one common node. ";
-                if (idx_B != nodes.front()) err << "The common node should be the second node of the first edge. ";
-
+                if ((not(reverse)) and (idx_B != nodes.front())) err << "The common node should be the second node of the first edge. ";
+                if (reverse and (idx_A != nodes.front())) err << "The common node should be the first node of the first edge because it is reversed. ";
             }
             if (not(err.str().empty()))
             {
@@ -222,14 +223,25 @@ double wrap_2pi(const double theta)
     return theta > 0 ? theta : theta+2*PI;
 }
 
-double ClosingFacetComputer::angle_between_edges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC) const
+double constrainAngle(double x);
+double constrainAngle(double x)
 {
-    const TwoEdges AB_BC(idx_of_edge_AB, idx_of_edge_BC, edges);
+    x = fmod(x,2*PI);
+    if (x < 0)
+        x += 2*PI;
+    return x;// - PI;
+}
+
+double ClosingFacetComputer::angle_between_edges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC, const bool reverse) const
+{
+    const TwoEdges AB_BC(idx_of_edge_AB, idx_of_edge_BC, edges, reverse);
     const auto BA = mesh->col(AB_BC.get_idx_A()) - mesh->col(AB_BC.get_idx_B());
     const auto BC = mesh->col(AB_BC.get_idx_C()) - mesh->col(AB_BC.get_idx_B());
-    const double BA_angle = wrap_2pi(std::atan2(BA(1),BA(0)));
-    const double BC_angle = wrap_2pi(std::atan2(BC(1),BC(0)));
-    return BA_angle - BC_angle;
+    const double BA_angle = (std::atan2(BA(1),BA(0)));
+    const double BC_angle = (std::atan2(BC(1),BC(0)));
+    const double angle = (BC_angle - BA_angle);
+    const double sign = (-BA).cross(BC)(2) <0 ? -1 : 1;
+    return sign*constrainAngle(angle);
 }
 
 std::vector<size_t> ClosingFacetComputer::edges_connected_to_second_node_of_edge(const size_t edge_idx) const
@@ -249,10 +261,27 @@ std::vector<size_t> ClosingFacetComputer::edges_connected_to_second_node_of_edge
     return ret;
 }
 
-size_t ClosingFacetComputer::next_edge(const size_t edge_idx) const
+std::vector<size_t> ClosingFacetComputer::edges_connected_to_first_node_of_edge(const size_t edge_idx) const
 {
     check_edge_index(edge_idx, edges, __PRETTY_FUNCTION__, __LINE__);
-    const std::vector<size_t> connected_edges = edges_connected_to_second_node_of_edge(edge_idx);
+    const size_t first_node = edges.at(edge_idx).first;
+    const auto it = node_to_connected_edges.find(first_node);
+    if (it == node_to_connected_edges.end())
+    {
+        std::stringstream ss;
+        ss << "Unable to find edges connected to first node of edge #" << edge_idx << " (starting at 0)";
+        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+    }
+    const auto edges = it->second;
+    std::vector<size_t> ret;
+    std::copy_if(edges.begin(), edges.end(), std::back_inserter(ret),[edge_idx](const size_t i) { return i != edge_idx; });
+    return ret;
+}
+
+size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse) const
+{
+    check_edge_index(edge_idx, edges, __PRETTY_FUNCTION__, __LINE__);
+    const std::vector<size_t> connected_edges = reverse ? edges_connected_to_first_node_of_edge(edge_idx) : edges_connected_to_second_node_of_edge(edge_idx);
     if (connected_edges.empty())
     {
         std::stringstream ss;
@@ -262,11 +291,21 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx) const
         THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
     }
     size_t idx = 0;
-    double angle = angle_between_edges(edge_idx, connected_edges.front());
+    double angle = angle_between_edges(edge_idx, connected_edges.front(),reverse);
     for (size_t i = 1 ; i < connected_edges.size() ; ++i)
     {
-        const double new_angle = angle_between_edges(edge_idx, connected_edges.at(i));
-        if ((angle < 0) and (new_angle > 0))
+        const size_t idx_of_connected_edge = connected_edges.at(i);
+
+        const double new_angle = angle_between_edges(edge_idx, idx_of_connected_edge,reverse);
+        if ((angle < 0) and (new_angle < 0))
+        {
+            if (new_angle < angle)
+            {
+                idx = i;
+                angle = new_angle;
+            }
+        }
+        else if ((angle < 0) and (new_angle > 0))
         {
             if (new_angle < angle)
             {
@@ -276,7 +315,7 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx) const
         }
         else
         {
-            if (new_angle > angle)
+            if (new_angle < angle)
             {
                 idx = i;
                 angle = new_angle;
@@ -324,14 +363,24 @@ std::pair<size_t,size_t> ClosingFacetComputer::extreme_edges() const
     return std::make_pair(extreme_edge(extreme_node.first), extreme_edge(extreme_node.second));
 }
 
+bool ClosingFacetComputer::need_to_reverse(const size_t first_edge, const size_t second_edge) const
+{
+    return edges.at(first_edge).second != edges.at(second_edge).first;
+}
+
 std::vector<size_t> ClosingFacetComputer::contour(size_t edge) const
 {
     std::vector<size_t> ret;
     ret.push_back(edge);
-
-    while (((edge = next_edge(edge)) != ret.front()) and (ret.size() < edges.size()))
+    size_t previous_edge = edge;
+    edge = next_edge(edge);
+    bool reverse = false;
+    while ((edge != ret.front()) and (ret.size() < edges.size()))
     {
         ret.push_back(edge);
+        reverse = not(reverse) and need_to_reverse(previous_edge,edge);
+        previous_edge = edge;
+        edge = next_edge(edge,reverse);
     }
     return ret;
 }
