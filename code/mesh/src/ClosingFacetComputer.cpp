@@ -69,16 +69,33 @@ std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std:
     return ret;
 }
 
-ClosingFacetComputer::ConnectedComponents ClosingFacetComputer::get_connected_components(const ListOfEdges& edges)
+ClosingFacetComputer::ConnectedComponents ClosingFacetComputer::get_connected_components(const ListOfEdges& edges_)
 {
     using namespace boost;
     typedef adjacency_list <vecS, vecS, undirectedS> Graph;
     Graph G;
-    for (const auto edge:edges) add_edge(edge.first, edge.second, G);
+    std::map<size_t,size_t> idx_in_mesh_to_node_idx;
+    std::map<size_t,size_t> node_idx_to_idx_in_mesh;
+    const auto idx_in_mesh = extract_nodes(edges_);
+    size_t i = 0;
+    size_t max_idx = 0;
+    for (auto idx:idx_in_mesh)
+    {
+        idx_in_mesh_to_node_idx[idx] = i;
+        node_idx_to_idx_in_mesh[i++] = idx;
+        max_idx = std::max(max_idx, idx);
+    }
+    for (const auto edge:edges_) add_edge(idx_in_mesh_to_node_idx[edge.first], idx_in_mesh_to_node_idx[edge.second], G);
 
     ConnectedComponents ret;
     ret.component_idx_per_node = std::vector<int>(num_vertices(G));
     ret.nb_of_components = connected_components(G, &ret.component_idx_per_node[0]);
+    std::vector<int> component_idx_per_node(max_idx+1);
+    for (size_t i= 0 ; i <ret.component_idx_per_node.size() ; ++i)
+    {
+        component_idx_per_node[node_idx_to_idx_in_mesh[i]] = ret.component_idx_per_node[i];
+    }
+    ret.component_idx_per_node = component_idx_per_node;
     return ret;
 }
 
@@ -97,7 +114,10 @@ std::vector<std::set<size_t> > ClosingFacetComputer::get_edges_per_component(con
 
 std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges(const ListOfEdges& edges_)
 {
-    return convert_sets_to_vectors(get_edges_per_component(get_connected_components(edges_), edges_));
+    const auto c = get_connected_components(edges_);
+    const auto e = get_edges_per_component(c, edges_);
+    const auto v = convert_sets_to_vectors(e);
+    return v;
 }
 
 std::vector<size_t> ClosingFacetComputer::extract_nodes(const ListOfEdges& edges_)
