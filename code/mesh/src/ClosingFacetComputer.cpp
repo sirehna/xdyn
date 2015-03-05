@@ -111,20 +111,28 @@ std::vector<size_t> ClosingFacetComputer::extract_nodes() const
     return ret;
 }
 
-size_t ClosingFacetComputer::find_extreme_node() const
+std::pair<size_t,size_t> ClosingFacetComputer::find_extreme_nodes() const
 {
     size_t idx_xmin = 0;
     double xmin = mesh(0,0);
+    size_t idx_ymax = 0;
+    double ymax = mesh(0,0);
     for (size_t i = 1 ; i < node_idx_in_mesh.size() ; ++i)
     {
-        const double val = mesh(0,node_idx_in_mesh.at(i));
-        if (val<xmin)
+        const double xval = mesh(0,node_idx_in_mesh.at(i));
+        const double yval = mesh(1,node_idx_in_mesh.at(i));
+        if (xval<xmin)
         {
             idx_xmin = i;
-            xmin = val;
+            xmin = xval;
+        }
+        if (yval>ymax)
+        {
+            idx_ymax = i;
+            ymax = yval;
         }
     }
-    return node_idx_in_mesh.at(idx_xmin);
+    return std::make_pair(node_idx_in_mesh.at(idx_xmin),node_idx_in_mesh.at(idx_ymax));
 }
 
 struct TwoEdges
@@ -270,9 +278,8 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx) const
     return connected_edges.at(idx);
 }
 
-size_t ClosingFacetComputer::first_extreme_edge() const
+size_t ClosingFacetComputer::extreme_edge(const size_t extreme_node) const
 {
-    const auto extreme_node = find_extreme_node();
     const auto it = node_to_connected_edges.find(extreme_node);
     if (it == node_to_connected_edges.end())
     {
@@ -303,9 +310,14 @@ size_t ClosingFacetComputer::first_extreme_edge() const
     return ret;
 }
 
-std::vector<size_t> ClosingFacetComputer::contour() const
+std::pair<size_t,size_t> ClosingFacetComputer::extreme_edges() const
 {
-    size_t edge = first_extreme_edge();
+    const auto extreme_node = find_extreme_nodes();
+    return std::make_pair(extreme_edge(extreme_node.first), extreme_edge(extreme_node.second));
+}
+
+std::vector<size_t> ClosingFacetComputer::contour(size_t edge) const
+{
     std::vector<size_t> ret;
     ret.push_back(edge);
 
@@ -314,6 +326,33 @@ std::vector<size_t> ClosingFacetComputer::contour() const
         ret.push_back(edge);
     }
     return ret;
+}
+
+template <typename T> bool have_same_elements(const std::vector<T>& v1, const std::vector<T>& v2)
+{
+    const std::set<T> s1(v1.begin(), v1.end());
+    const std::set<T> s2(v2.begin(), v2.end());
+    for (const auto val:s1)
+    {
+        if (s2.find(val) == s2.end()) return false;
+    }
+    for (const auto val:s2)
+    {
+        if (s1.find(val) == s1.end()) return false;
+    }
+    return true;
+}
+
+std::vector<size_t> ClosingFacetComputer::contour() const
+{
+    auto ext_edges = extreme_edges();
+    const auto first_contour = contour(ext_edges.first);
+    const auto second_contour = contour(ext_edges.second);
+    if (not(have_same_elements(first_contour, second_contour)))
+    {
+        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, "Not getting the same contour when starting from two different extreme edges");
+    }
+    return first_contour;
 }
 
 std::map<size_t,std::set<size_t> > ClosingFacetComputer::get_node_to_connected_edges(const ListOfEdges& edges_)

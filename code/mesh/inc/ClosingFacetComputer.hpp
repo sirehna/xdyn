@@ -36,10 +36,11 @@ class ClosingFacetComputer
           */
         std::vector<size_t> extract_nodes() const;
 
-        /**  \returns Index of node guaranteed to be on the frontier
-         *   \details Uses the first node at minimal x value
+        /**  \returns Index of two nodes guaranteed to be on the frontier
+         *   \details Uses the first node at minimal x value & the first node at maximal y value
+         *            Won't work in all cases (in particular, for case 17)
          */
-        size_t find_extreme_node() const;
+        std::pair<size_t,size_t> find_extreme_nodes() const;
 
         /**  \brief Computes the angle between two edges
          */
@@ -53,9 +54,13 @@ class ClosingFacetComputer
          */
         size_t next_edge(const size_t edge_idx) const;
 
-        /**  \returns Index of edge guaranteed to be on the contour
+        /**  \returns Index of two edges guaranteed to be on the contour
          */
-        size_t first_extreme_edge() const;
+        std::pair<size_t,size_t> extreme_edges() const;
+
+        /**  \returns Index of one edge containing given node & guaranteed to be on the contour
+         */
+        size_t extreme_edge(const size_t extreme_node) const;
 
         /**  \returns Outside edges, in order
          */
@@ -74,6 +79,9 @@ class ClosingFacetComputer
         };
         static std::vector<std::set<size_t> > get_edges_per_component(const ConnectedComponents& connected_components, const ListOfEdges& edges_);
         static ClosingFacetComputer::ConnectedComponents get_connected_components(const ListOfEdges& edges);
+        /**  \returns Outside edges, in order
+         */
+        std::vector<size_t> contour(size_t extreme_edge) const;
 };
 
 #endif  /* CLOSINGFACETCOMPUTER_HPP_ */

@@ -58,20 +58,20 @@ TEST_F(ClosingFacetComputerTest, can_extract_relevant_nodes)
     ASSERT_THAT(make(case_0()).extract_nodes(), ElementsAre(13,15,9,11));
 }
 
-TEST_F(ClosingFacetComputerTest, can_find_extreme_node)
+TEST_F(ClosingFacetComputerTest, can_find_extreme_node_using_xmin_strategy)
 {
-    ASSERT_EQ(13, make(case_0()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_1()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_2()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_3()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_4()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_5()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_6()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_7()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_8()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_9()).find_extreme_node());
-    ASSERT_EQ(0,  make(case_10()).find_extreme_node());
-    ASSERT_EQ(7,  make(case_11()).find_extreme_node());
+    ASSERT_EQ(13, make(case_0()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_1()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_2()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_3()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_4()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_5()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_6()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_7()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_8()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_9()).find_extreme_nodes().first);
+    ASSERT_EQ(0,  make(case_10()).find_extreme_nodes().first);
+    ASSERT_EQ(7,  make(case_11()).find_extreme_nodes().first);
 }
 
 TEST_F(ClosingFacetComputerTest, can_retrieve_angle_between_two_edges)
@@ -230,19 +230,19 @@ TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_11
     ASSERT_EQ(6, make(case_11()).next_edge(5));
 }
 
-TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge)
+TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge_using_xmin_strategy)
 {
-    ASSERT_EQ(0, make(case_1()).first_extreme_edge());
-    ASSERT_EQ(0, make(case_2()).first_extreme_edge());
-    ASSERT_EQ(0, make(case_3()).first_extreme_edge());
-    ASSERT_EQ(0, make(case_4()).first_extreme_edge());
-    ASSERT_EQ(0, make(case_5()).first_extreme_edge());
-    ASSERT_EQ(0, make(case_6()).first_extreme_edge());
-    ASSERT_EQ(5, make(case_7()).first_extreme_edge());
-    ASSERT_EQ(0, make(case_8()).first_extreme_edge());
-    ASSERT_EQ(5, make(case_9()).first_extreme_edge());
-    ASSERT_EQ(7, make(case_10()).first_extreme_edge());
-    ASSERT_EQ(0, make(case_11()).first_extreme_edge());
+    ASSERT_EQ(0, make(case_1()).extreme_edges().first);
+    ASSERT_EQ(0, make(case_2()).extreme_edges().first);
+    ASSERT_EQ(0, make(case_3()).extreme_edges().first);
+    ASSERT_EQ(0, make(case_4()).extreme_edges().first);
+    ASSERT_EQ(0, make(case_5()).extreme_edges().first);
+    ASSERT_EQ(0, make(case_6()).extreme_edges().first);
+    ASSERT_EQ(5, make(case_7()).extreme_edges().first);
+    ASSERT_EQ(0, make(case_8()).extreme_edges().first);
+    ASSERT_EQ(5, make(case_9()).extreme_edges().first);
+    ASSERT_EQ(7, make(case_10()).extreme_edges().first);
+    ASSERT_EQ(0, make(case_11()).extreme_edges().first);
 }
 
 TEST_F(ClosingFacetComputerTest, can_find_contour)
@@ -265,4 +265,9 @@ TEST_F(ClosingFacetComputerTest, bug_in_group_connected_edges_detected_in_MeshIn
     ASSERT_EQ(2,  closing_facets.size());
     ASSERT_THAT(closing_facets.at(0), ElementsAre(0,1,2,3,4));
     ASSERT_THAT(closing_facets.at(1), ElementsAre(5,6,7,8,9));
+}
+
+TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_11)
+{
+    ASSERT_THROW(make(case_11()).contour(), ClosingFacetComputerException);
 }
