@@ -36,17 +36,8 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const 
         mesh(mesh_),
         edges(edges_),
         node_idx_in_mesh(extract_nodes()),
-        node_to_connected_edges()
+        node_to_connected_edges(get_node_to_connected_edges(edges))
 {
-    for (size_t i = 0 ; i < edges.size() ; ++i)
-    {
-        auto it = node_to_connected_edges.find(edges.at(i).first);
-        if (it == node_to_connected_edges.end()) node_to_connected_edges[edges.at(i).first] = std::set<size_t>({i});
-        else                                     it->second.insert(i);
-        it = node_to_connected_edges.find(edges.at(i).second);
-        if (it == node_to_connected_edges.end()) node_to_connected_edges[edges.at(i).second] = std::set<size_t>({i});
-        else                                     it->second.insert(i);
-    }
 }
 
 void check_nodes_appear_just_once_as_first_or_second_node_in_edge(const size_t current_edge_idx,
@@ -390,6 +381,21 @@ std::vector<size_t> ClosingFacetComputer::contour() const
     while (((edge = next_edge(edge)) != ret.front()) and (ret.size() < edges.size()))
     {
         ret.push_back(edge);
+    }
+    return ret;
+}
+
+std::map<size_t,std::set<size_t> > ClosingFacetComputer::get_node_to_connected_edges(const ListOfEdges& edges_)
+{
+    std::map<size_t,std::set<size_t> > ret;
+    for (size_t i = 0 ; i < edges_.size() ; ++i)
+    {
+        auto it = ret.find(edges_.at(i).first);
+        if (it == ret.end()) ret[edges_.at(i).first] = std::set<size_t>({i});
+        else                 it->second.insert(i);
+        it = ret.find(edges_.at(i).second);
+        if (it == ret.end()) ret[edges_.at(i).second] = std::set<size_t>({i});
+        else                 it->second.insert(i);
     }
     return ret;
 }

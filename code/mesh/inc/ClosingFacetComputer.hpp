@@ -29,6 +29,8 @@ class ClosingFacetComputer
           */
         static std::vector<std::vector<size_t> > group_connected_edges(const ListOfEdges& edges);
 
+        static std::map<size_t,std::set<size_t> > get_node_to_connected_edges(const ListOfEdges& edges);
+
         /**  \brief Takes a list of edges on the surface & returns the list of unique nodes appearing in them
           *  \returns A list of node indexes, in the order in which they are use in the edges
           */
