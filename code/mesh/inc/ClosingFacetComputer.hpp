@@ -38,7 +38,7 @@ class ClosingFacetComputer
         /**  \brief Takes a list of edges on the surface & returns the list of unique nodes appearing in them
           *  \returns A list of node indexes, in the order in which they are use in the edges
           */
-        std::vector<size_t> extract_nodes() const;
+        static std::vector<size_t> extract_nodes(const ListOfEdges& edges);
 
         /**  \returns Index of two nodes guaranteed to be on the frontier
          *   \details Uses the first node at minimal x value & the first node at maximal y value

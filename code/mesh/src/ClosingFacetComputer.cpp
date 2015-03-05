@@ -39,7 +39,7 @@ void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges&
 ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_) :
         mesh(new Eigen::Matrix3Xd(mesh_)),
         edges(edges_),
-        node_idx_in_mesh(extract_nodes()),
+        node_idx_in_mesh(extract_nodes(edges)),
         node_to_connected_edges(get_node_to_connected_edges(edges))
 {
 }
@@ -47,7 +47,7 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const 
 ClosingFacetComputer::ClosingFacetComputer(const TR1(shared_ptr)<Eigen::Matrix3Xd>& mesh_, const ListOfEdges& edges_) :
         mesh(mesh_),
         edges(edges_),
-        node_idx_in_mesh(extract_nodes()),
+        node_idx_in_mesh(extract_nodes(edges)),
         node_to_connected_edges(get_node_to_connected_edges(edges))
 {
 }
@@ -100,11 +100,11 @@ std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges(co
     return convert_sets_to_vectors(get_edges_per_component(get_connected_components(edges_), edges_));
 }
 
-std::vector<size_t> ClosingFacetComputer::extract_nodes() const
+std::vector<size_t> ClosingFacetComputer::extract_nodes(const ListOfEdges& edges_)
 {
     std::set<size_t> used_nodes;
     std::vector<size_t> ret;
-    for (const auto edge:edges)
+    for (const auto edge:edges_)
     {
         if (not(has(used_nodes, edge.first)))
         {

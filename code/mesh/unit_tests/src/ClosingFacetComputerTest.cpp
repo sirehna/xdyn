@@ -55,7 +55,7 @@ TEST_F(ClosingFacetComputerTest, can_cluster_edges_into_independent_facets_to_co
 
 TEST_F(ClosingFacetComputerTest, can_extract_relevant_nodes)
 {
-    ASSERT_THAT(make(case_0()).extract_nodes(), ElementsAre(13,15,9,11));
+    ASSERT_THAT(ClosingFacetComputer::extract_nodes(case_0().edges), ElementsAre(13,15,9,11));
 }
 
 TEST_F(ClosingFacetComputerTest, can_find_extreme_node_using_xmin_strategy)
