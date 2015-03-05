@@ -393,14 +393,28 @@ std::vector<size_t> ClosingFacetComputer::contour(size_t edge) const
     std::vector<size_t> ret;
     ret.push_back(edge);
     size_t previous_edge = edge;
-    edge = next_edge(edge);
+    try
+    {
+        edge = next_edge(edge);
+    }
+    catch (const ClosingFacetComputerException&)
+    {
+        return std::vector<size_t>();
+    }
     bool reverse = false;
     while ((edge != ret.front()) and (ret.size() < edges.size()))
     {
-        ret.push_back(edge);
-        reverse = not(reverse) and need_to_reverse(previous_edge,edge);
-        previous_edge = edge;
-        edge = next_edge(edge,reverse);
+        try
+        {
+            ret.push_back(edge);
+            reverse = not(reverse) and need_to_reverse(previous_edge,edge);
+            previous_edge = edge;
+            edge = next_edge(edge,reverse);
+        }
+        catch (const ClosingFacetComputerException&)
+        {
+            return std::vector<size_t>();
+        }
     }
     return ret;
 }
