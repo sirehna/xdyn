@@ -336,3 +336,13 @@ TEST_F(ClosingFacetComputerTest, can_use_only_some_edges_in_mesh)
     mesh.all_nodes = M.transpose();
     ASSERT_THAT(make(mesh, {1,2,4,5,6}).contour(), ElementsAre(1,4,2,6,5));
 }
+
+TEST_F(ClosingFacetComputerTest, can_use_only_some_edges_in_mesh_when_grouping_connected_edges)
+{
+    const ClosingFacetComputer::ListOfEdges all_edges = {{1,7},{0,1},{0,6},{6,2},{2,5},{6,7},{3,5},{2,4},{4,5},{3,4},{2,3},{0,7},{1,6}};
+    const std::vector<size_t> idx_of_relevant_edges = {1,2,4,5,7,8,9,10,11,12};
+    const std::vector<std::vector<size_t> > grouped_edges = ClosingFacetComputer::group_connected_edges(all_edges, idx_of_relevant_edges);
+    ASSERT_EQ(2,  grouped_edges.size());
+    ASSERT_THAT(grouped_edges.at(0), ElementsAre(1,2,5,11,12));
+    ASSERT_THAT(grouped_edges.at(1), ElementsAre(4,7,8,9,10));
+}

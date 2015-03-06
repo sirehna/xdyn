@@ -31,7 +31,7 @@ class ClosingFacetComputer
         /**  \brief Takes a list of edges on the surface & groups connected ones together
           *  \returns A list of facets containing their constituting edges
           */
-        static std::vector<std::vector<size_t> > group_connected_edges(const ListOfEdges& edges);
+        static std::vector<std::vector<size_t> > group_connected_edges(const ListOfEdges& edges, std::vector<size_t> idx_of_relevant_edges=std::vector<size_t>());
 
         static std::map<size_t,std::set<size_t> > get_node_to_connected_edges(const ListOfEdges& edges);
 

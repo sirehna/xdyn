@@ -130,12 +130,32 @@ std::vector<std::set<size_t> > ClosingFacetComputer::get_edges_per_component(con
     return facets;
 }
 
-std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges(const ListOfEdges& edges_)
+std::vector<std::vector<size_t> > convert_to_original_indexes(const std::vector<std::vector<size_t> >& idx_to_convert, const std::vector<size_t>& idx_of_relevant_edges);
+std::vector<std::vector<size_t> > convert_to_original_indexes(const std::vector<std::vector<size_t> >& idx_to_convert, const std::vector<size_t>& idx_of_relevant_edges)
 {
-    const auto c = get_connected_components(edges_);
-    const auto e = get_edges_per_component(c, edges_);
+    std::vector<std::vector<size_t> > ret;
+    for (auto v:idx_to_convert)
+    {
+        std::vector<size_t> l;
+        for (auto idx:v)
+        {
+            l.push_back(idx_of_relevant_edges[idx]);
+        }
+        ret.push_back(l);
+    }
+    return ret;
+}
+
+std::vector<std::vector<size_t> > ClosingFacetComputer::group_connected_edges(const ListOfEdges& edges_, std::vector<size_t> idx_of_relevant_edges)
+{
+    ListOfEdges relevant_edges;
+    if (idx_of_relevant_edges.empty()) for (size_t i = 0 ; i < edges_.size() ; ++i) idx_of_relevant_edges.push_back(i);
+    for (auto idx:idx_of_relevant_edges) relevant_edges.push_back(edges_.at(idx));
+    const auto c = get_connected_components(relevant_edges);
+    const auto e = get_edges_per_component(c, relevant_edges);
     const auto v = convert_sets_to_vectors(e);
-    return v;
+    const auto o = convert_to_original_indexes(v, idx_of_relevant_edges);
+    return o;
 }
 
 std::vector<size_t> ClosingFacetComputer::extract_nodes(const ListOfEdges& edges_)
