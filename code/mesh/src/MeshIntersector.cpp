@@ -190,16 +190,16 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
             if(reverse_direction) std::swap(edge1,edge2);
             if(is_emerged(edges_immersion_status[edge1]))
             {
-                emerged_edges.push_back(Mesh::make_oriented_edge(edge1,reverse_direction));
+                emerged_edges.push_back(Mesh::convert_index_to_oriented_edge_id(edge1,reverse_direction));
                 first_immersed = immersed_edges.size();
-                immersed_edges.push_back(Mesh::make_oriented_edge(edge2,reverse_direction));
+                immersed_edges.push_back(Mesh::convert_index_to_oriented_edge_id(edge2,reverse_direction));
                 status = 3;
             }
             else
             {
-                immersed_edges.push_back(Mesh::make_oriented_edge(edge1,reverse_direction));
+                immersed_edges.push_back(Mesh::convert_index_to_oriented_edge_id(edge1,reverse_direction));
                 first_emerged = emerged_edges.size();
-                emerged_edges.push_back(Mesh::make_oriented_edge(edge2,reverse_direction));
+                emerged_edges.push_back(Mesh::convert_index_to_oriented_edge_id(edge2,reverse_direction));
                 status = 0;
             }
         }
@@ -221,8 +221,8 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
             mesh->first_vertex_of_oriented_edge( emerged_edges[ first_emerged]));
     if (mesh->edges[0][closing_edge_index] != mesh->edges[1][closing_edge_index])
         index_of_edges_exactly_on_surface.insert(closing_edge_index);
-    immersed_edges.insert(immersed_edges.begin()+(long)first_immersed,Mesh::make_oriented_edge(closing_edge_index,true));
-    emerged_edges.insert( emerged_edges.begin()+ (long)first_emerged,Mesh::make_oriented_edge(closing_edge_index,false));
+    immersed_edges.insert(immersed_edges.begin() + (long)first_immersed, Mesh::convert_index_to_oriented_edge_id(closing_edge_index,true));
+    emerged_edges.insert( emerged_edges.begin()  + (long)first_emerged,  Mesh::convert_index_to_oriented_edge_id(closing_edge_index,false));
 
     // create the Facets
     EPoint unit_normal=(mesh->facets.begin()+(long)facet_index)->unit_normal;

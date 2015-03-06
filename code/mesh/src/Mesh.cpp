@@ -87,8 +87,9 @@ size_t Mesh::add_vertex(const EPoint &vertex_coords)
     return node_index;
 }
 
-size_t Mesh::make_oriented_edge(size_t edge_index,bool reverse_direction)
+size_t Mesh::convert_index_to_oriented_edge_id(size_t edge_index,bool reverse_direction)
 {
+    // Tribute to optimization: direction is stored in last bit
     return (edge_index<<1) | (reverse_direction?1:0);
 }
 

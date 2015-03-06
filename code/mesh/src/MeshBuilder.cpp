@@ -74,7 +74,7 @@ void MeshBuilder::operator()(const VectorOfPoints& list_of_points)
                 ? build_one_edge(Edge(vertex_index,build_one_point(*it)))
                 : build_one_edge(Edge(vertex_index,build_one_point(*(list_of_points.begin()))));
             bool reverse_direction = edges.at(edge_index).vertex_index[1] == vertex_index;
-            oriented_edges_of_this_facet.push_back(Mesh::make_oriented_edge(edge_index,reverse_direction));
+            oriented_edges_of_this_facet.push_back(Mesh::convert_index_to_oriented_edge_id(edge_index,reverse_direction));
             facetsPerEdge.at(edge_index).push_back(facet_index);
         }
         facets.push_back(facet);
