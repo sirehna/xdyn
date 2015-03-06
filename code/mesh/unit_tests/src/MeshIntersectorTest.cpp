@@ -733,8 +733,7 @@ TEST_F(MeshIntersectorTest, bug_detected_in_potential_energy)
 std::vector<double> get_L_immersions(const double z0);
 std::vector<double> get_L_immersions(const double z0)
 {
-    std::vector<double> dz = {z0,z0,z0,z0-1,z0-1,z0-2,z0-2,z0,z0,z0,z0-1,z0-1,z0-2,z0-2};
-    return std::vector<double>({dz[0],dz[5],dz[6],dz[1],dz[3],dz[4],dz[2],dz[13],dz[12],dz[7],dz[8],dz[11],dz[10],dz[9]});
+    return {z0,z0-1,z0-1,z0,z0-2,z0-2,z0-1,z0,z0-2,z0-2,z0-1,z0-1,z0,z0,z0-1,z0};
 }
 
 TEST_F(MeshIntersectorTest, DISABLED_bug_in_centroid)
@@ -1050,4 +1049,46 @@ TEST_F(MeshIntersectorTest, unit_normal_of_facets_on_surface_is_properly_compute
     ASSERT_EQ(2, facets_on_surface.size());
     check_vector(facets_on_surface.at(0).unit_normal, 0, 0, -1);
     check_vector(facets_on_surface.at(1).unit_normal, 0, 0, -1);
+}
+
+TEST_F(MeshIntersectorTest, center_of_gravity_of_facets_on_surface_is_properly_computed_3)
+{
+    MeshIntersector intersector(L(),false);
+    std::vector<double> dz = get_L_immersions(1.5);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    std::vector<Facet> facets_on_surface;
+    for (auto it = intersector.begin_surface() ; it != intersector.end_surface() ; ++it)
+    {
+        facets_on_surface.push_back(*it);
+    }
+    ASSERT_EQ(1, facets_on_surface.size());
+    check_vector(facets_on_surface.at(0).centre_of_gravity, 0.5, 0.5, -1.5);
+}
+
+TEST_F(MeshIntersectorTest, area_of_facets_on_surface_is_properly_computed_3)
+{
+    MeshIntersector intersector(L(),false);
+    std::vector<double> dz = get_L_immersions(1.5);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    std::vector<Facet> facets_on_surface;
+    for (auto it = intersector.begin_surface() ; it != intersector.end_surface() ; ++it)
+    {
+        facets_on_surface.push_back(*it);
+    }
+    ASSERT_EQ(1, facets_on_surface.size());
+    ASSERT_DOUBLE_EQ(1, facets_on_surface.at(0).area);
+}
+
+TEST_F(MeshIntersectorTest, unit_normal_of_facets_on_surface_is_properly_computed_3)
+{
+    MeshIntersector intersector(L(),false);
+    std::vector<double> dz = get_L_immersions(1.5);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    std::vector<Facet> facets_on_surface;
+    for (auto it = intersector.begin_surface() ; it != intersector.end_surface() ; ++it)
+    {
+        facets_on_surface.push_back(*it);
+    }
+    ASSERT_EQ(1, facets_on_surface.size());
+    check_vector(facets_on_surface.at(0).unit_normal, 0, 0, -1);
 }
