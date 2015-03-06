@@ -298,3 +298,22 @@ TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_15)
 {
     ASSERT_THAT(make(case_15()).contour(), ElementsAre(3,0,1,2));
 }
+
+TEST_F(ClosingFacetComputerTest, bug_detected_in_MeshIntersector)
+{
+    TestMesh mesh;
+    mesh.edges = {{0,1}, {6,7}, {7,1}, {0,8}, {8,6}};
+    Eigen::MatrixXd M = Eigen::MatrixXd::Zero(9,3);
+    M << -0.5, -0.5,  0.5,
+          0.5, -0.5,  0.5,
+          0.5,  0.5,  0.5,
+         -0.5,  0.5,  0.5,
+          0.5, -0.5, -0.5,
+         -0.5, -0.5, -0.5,
+         -0.5,  0.5, -0.5,
+          0.5,  0.5, -0.5,
+         -0.5,    0,    0;
+
+    mesh.all_nodes = M.transpose();
+    ASSERT_THAT(make(mesh).contour(), ElementsAre(0,2,1,4,3));
+}

@@ -383,9 +383,9 @@ std::pair<size_t,size_t> ClosingFacetComputer::extreme_edges() const
     return std::make_pair(extreme_edge(extreme_node.first), extreme_edge(extreme_node.second));
 }
 
-bool ClosingFacetComputer::need_to_reverse(const size_t first_edge, const size_t second_edge) const
+bool ClosingFacetComputer::need_to_reverse(const size_t first_edge, const size_t second_edge, const bool reverse) const
 {
-    return edges.at(first_edge).second != edges.at(second_edge).first;
+    return reverse ? edges.at(first_edge).first != edges.at(second_edge).first : edges.at(first_edge).second != edges.at(second_edge).first;
 }
 
 std::vector<size_t> ClosingFacetComputer::contour(size_t edge) const
@@ -407,7 +407,7 @@ std::vector<size_t> ClosingFacetComputer::contour(size_t edge) const
         try
         {
             ret.push_back(edge);
-            reverse = not(reverse) and need_to_reverse(previous_edge,edge);
+            reverse = need_to_reverse(previous_edge,edge,reverse);
             previous_edge = edge;
             edge = next_edge(edge,reverse);
         }

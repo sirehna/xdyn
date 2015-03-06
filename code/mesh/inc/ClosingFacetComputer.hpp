@@ -91,7 +91,7 @@ class ClosingFacetComputer
          */
         std::vector<size_t> contour(size_t extreme_edge) const;
 
-        bool need_to_reverse(const size_t first_edge, const size_t second_edge) const;
+        bool need_to_reverse(const size_t first_edge, const size_t second_edge, const bool) const;
 };
 
 #endif  /* CLOSINGFACETCOMPUTER_HPP_ */
