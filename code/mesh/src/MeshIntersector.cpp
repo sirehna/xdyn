@@ -124,22 +124,28 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
 
 void MeshIntersector::build_closing_edge()
 {
-    ClosingFacetComputer::ListOfEdges L;
-    for (const auto idx:index_of_edges_exactly_on_surface)
+    ClosingFacetComputer::ListOfEdges all_edges_as_pairs;
+    for (size_t idx = 0 ; idx < mesh->edges.at(0).size() ; ++idx)
     {
-        L.push_back(std::make_pair(mesh->edges.at(0).at(idx), mesh->edges.at(1).at(idx)));
+        all_edges_as_pairs.push_back(std::make_pair(mesh->edges.at(0).at(idx), mesh->edges.at(1).at(idx)));
     }
-    const auto ll = ClosingFacetComputer::group_connected_edges(L);
+    if (index_of_edges_exactly_on_surface.empty()) return;
+    const auto ll = ClosingFacetComputer::group_connected_edges(all_edges_as_pairs, std::vector<size_t>(index_of_edges_exactly_on_surface.begin(),index_of_edges_exactly_on_surface.end()));
     for (const auto l:ll)
     {
-        ClosingFacetComputer::ListOfEdges edges;
-        for (const auto i:l) edges.push_back(L.at(i));
-        const ClosingFacetComputer c(mesh->all_nodes, edges);
+        const ClosingFacetComputer c(mesh->all_nodes, all_edges_as_pairs, l);
         const auto contour = c.contour();
         if (not(contour.edge_idx.empty()))
         {
             EPoint unit_normal(0,0,-1);
-            index_of_facets_exactly_on_the_surface.push_back(mesh->create_facet_from_edges(contour.edge_idx,unit_normal));
+            std::vector<size_t> contour_with_oriented_edge_ids;
+            for (size_t i = 0 ; i < contour.edge_idx.size() ; ++i)
+            {
+                const size_t idx = contour.edge_idx.at(i);
+                const bool reversed = contour.reversed.at(i);
+                contour_with_oriented_edge_ids.push_back(Mesh::convert_index_to_oriented_edge_id(idx,reversed));
+            }
+            index_of_facets_exactly_on_the_surface.push_back(mesh->create_facet_from_edges(contour_with_oriented_edge_ids,unit_normal));
         }
     }
 }
@@ -488,6 +494,14 @@ double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& 
 double MeshIntersector::immersed_volume() const
 {
     double V = volume(begin_immersed(), end_immersed());
+//    for (auto closing_facet=begin_surface();closing_facet!=end_surface();++closing_facet)
+//    {
+//        if (not(has(*closing_facet)))
+//        {
+//            const double closing_facet_volume = facet_volume(*closing_facet);
+//            V += closing_facet_volume;
+//        }
+//    }
     const Facet closing_facet = compute_closing_facet();
     if (not(has(closing_facet)))
     {
