@@ -37,7 +37,7 @@ void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges&
 }
 
 ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_, std::vector<size_t> index_of_relevant_edges) :
-        mesh(new Eigen::Matrix3Xd(mesh_)),
+        mesh(&mesh_),
         edges(),
         node_idx_in_mesh(),
         node_to_connected_edges(),
@@ -53,7 +53,7 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const 
     node_to_connected_edges = get_node_to_connected_edges(edges);
 }
 
-ClosingFacetComputer::ClosingFacetComputer(const TR1(shared_ptr)<Eigen::Matrix3Xd>& mesh_, const ListOfEdges& edges_, std::vector<size_t> index_of_relevant_edges) :
+ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd* mesh_, const ListOfEdges& edges_, std::vector<size_t> index_of_relevant_edges) :
         mesh(mesh_),
         edges(),
         node_idx_in_mesh(),
