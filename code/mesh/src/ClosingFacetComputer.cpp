@@ -446,8 +446,8 @@ ClosingFacetComputer::Contour ClosingFacetComputer::contour(size_t edge) const
         try
         {
             ret.edge_idx.push_back(edge);
-            ret.reversed.push_back(reverse);
             reverse = need_to_reverse(previous_edge,edge,reverse);
+            ret.reversed.push_back(reverse);
             previous_edge = edge;
             edge = next_edge(edge,reverse);
         }

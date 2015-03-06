@@ -346,3 +346,10 @@ TEST_F(ClosingFacetComputerTest, can_use_only_some_edges_in_mesh_when_grouping_c
     ASSERT_THAT(grouped_edges.at(0), ElementsAre(1,2,5,11,12));
     ASSERT_THAT(grouped_edges.at(1), ElementsAre(4,7,8,9,10));
 }
+
+TEST_F(ClosingFacetComputerTest, orientation_should_be_correct_for_case_18)
+{
+    const auto case_18_contour = make(case_18()).contour();
+    ASSERT_THAT(case_18_contour.edge_idx, ElementsAre(3,2,1,0));
+    ASSERT_THAT(case_18_contour.reversed, ElementsAre(false,false,false,true));
+}
