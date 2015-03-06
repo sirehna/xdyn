@@ -23,6 +23,12 @@
 class ClosingFacetComputer
 {
     public:
+        struct Contour
+        {
+            std::vector<size_t> edge_idx;
+            std::vector<bool> reversed;
+        };
+
         typedef std::pair<size_t,size_t> Edge;
         typedef std::vector<Edge> ListOfEdges;
         ClosingFacetComputer(const Eigen::Matrix3Xd& mesh, const ListOfEdges& edges, std::vector<size_t> index_of_relevant_edges=std::vector<size_t>());
@@ -70,9 +76,9 @@ class ClosingFacetComputer
          */
         size_t extreme_edge(const size_t extreme_node) const;
 
-        /**  \returns Outside edges, in order
+        /**  \returns Outside edges, in order.
          */
-        std::vector<size_t> contour() const;
+        Contour contour() const;
 
     private:
         TR1(shared_ptr)<Eigen::Matrix3Xd> mesh;
@@ -90,7 +96,7 @@ class ClosingFacetComputer
         static ClosingFacetComputer::ConnectedComponents get_connected_components(const ListOfEdges& edges);
         /**  \returns Outside edges, in order
          */
-        std::vector<size_t> contour(size_t extreme_edge) const;
+        Contour contour(size_t extreme_edge) const;
 
         bool need_to_reverse(const size_t first_edge, const size_t second_edge, const bool) const;
 };

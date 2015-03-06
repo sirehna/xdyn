@@ -426,10 +426,11 @@ bool ClosingFacetComputer::need_to_reverse(const size_t first_edge, const size_t
     return reverse ? edges.at(first_edge).first != edges.at(second_edge).first : edges.at(first_edge).second != edges.at(second_edge).first;
 }
 
-std::vector<size_t> ClosingFacetComputer::contour(size_t edge) const
+ClosingFacetComputer::Contour ClosingFacetComputer::contour(size_t edge) const
 {
-    std::vector<size_t> ret;
-    ret.push_back(edge);
+    Contour ret;
+    ret.edge_idx.push_back(edge);
+    ret.reversed.push_back(false);
     size_t previous_edge = edge;
     try
     {
@@ -437,21 +438,22 @@ std::vector<size_t> ClosingFacetComputer::contour(size_t edge) const
     }
     catch (const ClosingFacetComputerException&)
     {
-        return std::vector<size_t>();
+        return Contour();
     }
     bool reverse = false;
-    while ((edge != ret.front()) and (ret.size() < edges.size()))
+    while ((edge != ret.edge_idx.front()) and (ret.edge_idx.size() < edges.size()))
     {
         try
         {
-            ret.push_back(edge);
+            ret.edge_idx.push_back(edge);
+            ret.reversed.push_back(reverse);
             reverse = need_to_reverse(previous_edge,edge,reverse);
             previous_edge = edge;
             edge = next_edge(edge,reverse);
         }
         catch (const ClosingFacetComputerException&)
         {
-            return std::vector<size_t>();
+            return Contour();
         }
     }
     return ret;
@@ -472,18 +474,21 @@ template <typename T> bool have_same_elements(const std::vector<T>& v1, const st
     return true;
 }
 
-std::vector<size_t> ClosingFacetComputer::contour() const
+ClosingFacetComputer::Contour ClosingFacetComputer::contour() const
 {
     auto ext_edges = extreme_edges();
     const auto first_contour = contour(ext_edges.first);
     const auto second_contour = contour(ext_edges.second);
-    if (not(have_same_elements(first_contour, second_contour)))
+    if (not(have_same_elements(first_contour.edge_idx, second_contour.edge_idx)))
     {
         THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, "Not getting the same contour when starting from two different extreme edges");
     }
     std::vector<size_t> contour_with_original_indexes;
-    for (const auto idx:first_contour) contour_with_original_indexes.push_back(original_edge_index[idx]);
-    return contour_with_original_indexes;
+    for (const auto idx:first_contour.edge_idx) contour_with_original_indexes.push_back(original_edge_index[idx]);
+    Contour ret;
+    ret.edge_idx = contour_with_original_indexes;
+    ret.reversed = first_contour.reversed;
+    return ret;
 }
 
 std::map<size_t,std::set<size_t> > ClosingFacetComputer::get_node_to_connected_edges(const ListOfEdges& edges_)

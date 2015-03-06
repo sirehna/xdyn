@@ -261,16 +261,16 @@ TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge_using_xmin_strategy
 
 TEST_F(ClosingFacetComputerTest, can_find_contour)
 {
-    ASSERT_THAT(make(case_1()).contour(), ElementsAre(0,1,3,4));
-    ASSERT_THAT(make(case_2()).contour(), ElementsAre(0,1,2,5,4));
-    ASSERT_THAT(make(case_3()).contour(), ElementsAre(0,1,2,3,4,5,6,7));
-    ASSERT_THAT(make(case_4()).contour(), ElementsAre(0,5,4,7));
-    ASSERT_THAT(make(case_5()).contour(), ElementsAre(0,1,2,3,4,6));
-    ASSERT_THAT(make(case_6()).contour(), ElementsAre(0,1,2,3,4,5));
-    ASSERT_THAT(make(case_7()).contour(), ElementsAre(5,0,1,2,3,4));
-    ASSERT_THAT(make(case_8()).contour(), ElementsAre(0,1,2,3,4));
-    ASSERT_THAT(make(case_9()).contour(), ElementsAre(5,0,1,2,3,4));
-    ASSERT_THAT(make(case_10()).contour(), ElementsAre(7,0,1,2,3,4,5,6));
+    ASSERT_THAT(make(case_1()).contour().edge_idx, ElementsAre(0,1,3,4));
+    ASSERT_THAT(make(case_2()).contour().edge_idx, ElementsAre(0,1,2,5,4));
+    ASSERT_THAT(make(case_3()).contour().edge_idx, ElementsAre(0,1,2,3,4,5,6,7));
+    ASSERT_THAT(make(case_4()).contour().edge_idx, ElementsAre(0,5,4,7));
+    ASSERT_THAT(make(case_5()).contour().edge_idx, ElementsAre(0,1,2,3,4,6));
+    ASSERT_THAT(make(case_6()).contour().edge_idx, ElementsAre(0,1,2,3,4,5));
+    ASSERT_THAT(make(case_7()).contour().edge_idx, ElementsAre(5,0,1,2,3,4));
+    ASSERT_THAT(make(case_8()).contour().edge_idx, ElementsAre(0,1,2,3,4));
+    ASSERT_THAT(make(case_9()).contour().edge_idx, ElementsAre(5,0,1,2,3,4));
+    ASSERT_THAT(make(case_10()).contour().edge_idx, ElementsAre(7,0,1,2,3,4,5,6));
 }
 
 TEST_F(ClosingFacetComputerTest, bug_in_group_connected_edges_detected_in_MeshIntersector)
@@ -296,7 +296,7 @@ TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_11)
 
 TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_15)
 {
-    ASSERT_THAT(make(case_15()).contour(), ElementsAre(3,0,1,2));
+    ASSERT_THAT(make(case_15()).contour().edge_idx, ElementsAre(3,0,1,2));
 }
 
 TEST_F(ClosingFacetComputerTest, bug_detected_in_MeshIntersector)
@@ -315,7 +315,7 @@ TEST_F(ClosingFacetComputerTest, bug_detected_in_MeshIntersector)
          -0.5,    0,    0;
 
     mesh.all_nodes = M.transpose();
-    ASSERT_THAT(make(mesh).contour(), ElementsAre(0,2,1,4,3));
+    ASSERT_THAT(make(mesh).contour().edge_idx, ElementsAre(0,2,1,4,3));
 }
 
 TEST_F(ClosingFacetComputerTest, can_use_only_some_edges_in_mesh)
@@ -334,7 +334,7 @@ TEST_F(ClosingFacetComputerTest, can_use_only_some_edges_in_mesh)
          -0.5,    0,    0;
 
     mesh.all_nodes = M.transpose();
-    ASSERT_THAT(make(mesh, {1,2,4,5,6}).contour(), ElementsAre(1,4,2,6,5));
+    ASSERT_THAT(make(mesh, {1,2,4,5,6}).contour().edge_idx, ElementsAre(1,4,2,6,5));
 }
 
 TEST_F(ClosingFacetComputerTest, can_use_only_some_edges_in_mesh_when_grouping_connected_edges)

@@ -137,10 +137,10 @@ void MeshIntersector::build_closing_edge()
         for (const auto i:l) edges.push_back(L.at(i));
         const ClosingFacetComputer c(mesh->all_nodes, edges);
         const auto contour = c.contour();
-        if (not(contour.empty()))
+        if (not(contour.edge_idx.empty()))
         {
             EPoint unit_normal(0,0,-1);
-            index_of_facets_exactly_on_the_surface.push_back(mesh->create_facet_from_edges(contour,unit_normal));
+            index_of_facets_exactly_on_the_surface.push_back(mesh->create_facet_from_edges(contour.edge_idx,unit_normal));
         }
     }
 }
