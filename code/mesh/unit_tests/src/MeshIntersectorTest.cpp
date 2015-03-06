@@ -914,7 +914,7 @@ TEST_F(MeshIntersectorTest, can_retrieve_facets_exactly_on_the_surface)
     {
         facet_exactly_on_the_surface.push_back(*it);
     }
-    ASSERT_EQ(4, facet_exactly_on_the_surface.size());
+    ASSERT_EQ(2, facet_exactly_on_the_surface.size());
 }
 
 TEST_F(MeshIntersectorTest, center_of_gravity_of_immersed_facets_is_properly_computed)

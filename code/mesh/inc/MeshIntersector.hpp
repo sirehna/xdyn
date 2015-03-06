@@ -267,6 +267,8 @@ class MeshIntersector
 
         double volume(const FacetIterator& begin, const FacetIterator& end) const;
         Facet make(const Facet& f, const size_t i1, const size_t i2, const size_t i3) const;
+
+        void build_closing_edge();
 };
 
 typedef TR1(shared_ptr)<MeshIntersector> MeshIntersectorPtr;
