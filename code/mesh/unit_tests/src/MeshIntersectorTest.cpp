@@ -1021,3 +1021,33 @@ TEST_F(MeshIntersectorTest, center_of_gravity_of_facets_on_surface_is_properly_c
     check_vector(facets_on_surface.at(0).centre_of_gravity, 0.5, 0.5, -1.5);
     check_vector(facets_on_surface.at(1).centre_of_gravity, 0.5, 2.5, -1.5);
 }
+
+TEST_F(MeshIntersectorTest, area_of_facets_on_surface_is_properly_computed_2)
+{
+    MeshIntersector intersector(U(),false);
+    std::vector<double> dz = get_U_immersions(1.5);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    std::vector<Facet> facets_on_surface;
+    for (auto it = intersector.begin_surface() ; it != intersector.end_surface() ; ++it)
+    {
+        facets_on_surface.push_back(*it);
+    }
+    ASSERT_EQ(2, facets_on_surface.size());
+    ASSERT_DOUBLE_EQ(1, facets_on_surface.at(0).area);
+    ASSERT_DOUBLE_EQ(1, facets_on_surface.at(1).area);
+}
+
+TEST_F(MeshIntersectorTest, unit_normal_of_facets_on_surface_is_properly_computed_2)
+{
+    MeshIntersector intersector(U(),false);
+    std::vector<double> dz = get_U_immersions(1.5);
+    intersector.update_intersection_with_free_surface(dz,dz);
+    std::vector<Facet> facets_on_surface;
+    for (auto it = intersector.begin_surface() ; it != intersector.end_surface() ; ++it)
+    {
+        facets_on_surface.push_back(*it);
+    }
+    ASSERT_EQ(2, facets_on_surface.size());
+    check_vector(facets_on_surface.at(0).unit_normal, 0, 0, -1);
+    check_vector(facets_on_surface.at(1).unit_normal, 0, 0, -1);
+}
