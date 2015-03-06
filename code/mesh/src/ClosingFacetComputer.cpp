@@ -461,7 +461,9 @@ std::vector<size_t> ClosingFacetComputer::contour() const
     {
         THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, "Not getting the same contour when starting from two different extreme edges");
     }
-    return first_contour;
+    std::vector<size_t> contour_with_original_indexes;
+    for (const auto idx:first_contour) contour_with_original_indexes.push_back(original_edge_index[idx]);
+    return contour_with_original_indexes;
 }
 
 std::map<size_t,std::set<size_t> > ClosingFacetComputer::get_node_to_connected_edges(const ListOfEdges& edges_)

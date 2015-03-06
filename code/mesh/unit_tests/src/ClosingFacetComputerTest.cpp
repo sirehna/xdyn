@@ -37,10 +37,10 @@ void ClosingFacetComputerTest::TearDown()
 {
 }
 
-ClosingFacetComputer make(const TestMesh& mesh);
-ClosingFacetComputer make(const TestMesh& mesh)
+ClosingFacetComputer make(const TestMesh& mesh, const std::vector<size_t>& idx_of_relevant_edges=std::vector<size_t>());
+ClosingFacetComputer make(const TestMesh& mesh, const std::vector<size_t>& idx_of_relevant_edges)
 {
-    return ClosingFacetComputer(mesh.all_nodes, mesh.edges);
+    return ClosingFacetComputer(mesh.all_nodes, mesh.edges, idx_of_relevant_edges);
 }
 
 using namespace testing; // So we can use 'ElementsAre' unqualified
@@ -316,4 +316,23 @@ TEST_F(ClosingFacetComputerTest, bug_detected_in_MeshIntersector)
 
     mesh.all_nodes = M.transpose();
     ASSERT_THAT(make(mesh).contour(), ElementsAre(0,2,1,4,3));
+}
+
+TEST_F(ClosingFacetComputerTest, can_use_only_some_edges_in_mesh)
+{
+    TestMesh mesh;
+    mesh.edges = {{3,4},{0,1}, {6,7}, {2,3} , {7,1}, {0,8}, {8,6},{0,2}};
+    Eigen::MatrixXd M = Eigen::MatrixXd::Zero(9,3);
+    M << -0.5, -0.5,  0.5,
+          0.5, -0.5,  0.5,
+          0.5,  0.5,  0.5,
+         -0.5,  0.5,  0.5,
+          0.5, -0.5, -0.5,
+         -0.5, -0.5, -0.5,
+         -0.5,  0.5, -0.5,
+          0.5,  0.5, -0.5,
+         -0.5,    0,    0;
+
+    mesh.all_nodes = M.transpose();
+    ASSERT_THAT(make(mesh, {1,2,4,5,6}).contour(), ElementsAre(1,4,2,6,5));
 }
