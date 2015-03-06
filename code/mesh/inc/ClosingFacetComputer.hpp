@@ -86,6 +86,10 @@ class ClosingFacetComputer
         std::vector<size_t> node_idx_in_mesh;
         std::map<size_t,std::set<size_t> > node_to_connected_edges;
         std::vector<size_t> original_edge_index; //!< Edge index in original mesh
+        double xmin;
+        double xmax;
+        double ymin;
+        double ymax;
 
         struct ConnectedComponents
         {

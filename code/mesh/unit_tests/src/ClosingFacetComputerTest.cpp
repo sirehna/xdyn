@@ -244,6 +244,12 @@ TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_15
     ASSERT_EQ(0, make(case_15()).next_edge(3));
 }
 
+TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_19)
+{
+    ASSERT_EQ(0, make(case_19()).next_edge(2,true));
+}
+
+
 TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge_using_xmin_strategy)
 {
     ASSERT_EQ(0, make(case_1()).extreme_edges().first);
@@ -352,4 +358,11 @@ TEST_F(ClosingFacetComputerTest, orientation_should_be_correct_for_case_18)
     const auto case_18_contour = make(case_18()).contour();
     ASSERT_THAT(case_18_contour.edge_idx, ElementsAre(3,2,1,0));
     ASSERT_THAT(case_18_contour.reversed, ElementsAre(false,false,false,true));
+}
+
+TEST_F(ClosingFacetComputerTest, can_compute_contour_for_case_19)
+{
+    const auto case_18_contour = make(case_19()).contour(4);
+    ASSERT_THAT(case_18_contour.edge_idx, ElementsAre(4,1,2,0));
+    ASSERT_THAT(case_18_contour.reversed, ElementsAre(false,true,true,true));
 }
