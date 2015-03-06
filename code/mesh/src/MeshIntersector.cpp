@@ -29,7 +29,7 @@ MeshIntersector::MeshIntersector(const MeshPtr mesh_)
         ,index_of_edges_exactly_on_surface()
 {}
 
-std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
+void MeshIntersector::find_intersection_with_free_surface(
         std::vector<size_t>& split_edges,
         std::vector<int>& edges_immersion_status,
         std::vector<bool>& facet_crosses_free_surface)
@@ -54,7 +54,6 @@ std::vector<size_t > MeshIntersector::find_intersection_with_free_surface(
             }
         }
     }
-    return split_edges;
 }
 
 void MeshIntersector::classify_or_split(

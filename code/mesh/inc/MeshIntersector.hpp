@@ -247,7 +247,7 @@ class MeshIntersector
         /**
          * \brief Iterate on each edge to find intersection with free surface
          */
-        std::vector<size_t> find_intersection_with_free_surface(
+        void find_intersection_with_free_surface(
                 std::vector<size_t>& split_edges,
                 std::vector<int>& edges_immersion_status,
                 std::vector<bool>& facet_crosses_free_surface);
