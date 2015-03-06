@@ -85,7 +85,7 @@ void MeshIntersector::classify_facet(const size_t facet_index, const std::vector
     // nodes is the same and is equal to the immersion status of the corresponding
     // edge.
     const size_t index_of_first_node_in_edge = mesh->oriented_edges_per_facet[facet_index][0];
-    const size_t index_of_edge_containing_first_node_in_edge = Mesh::get_oriented_edge_index(index_of_first_node_in_edge);
+    const size_t index_of_edge_containing_first_node_in_edge = Mesh::convert_oriented_edge_id_to_edge_index(index_of_first_node_in_edge);
     const int immersion_status_of_first_node_in_edge = edges_immersion_status[index_of_edge_containing_first_node_in_edge];
     if (is_emerged(immersion_status_of_first_node_in_edge)) index_of_emerged_facets.push_back(facet_index);
     else                                                    index_of_immersed_facets.push_back(facet_index);
@@ -160,7 +160,7 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
 
     for(auto oriented_edge:oriented_edges_of_this_facet)
     {
-        size_t edge_index=Mesh::get_oriented_edge_index(oriented_edge);
+        size_t edge_index=Mesh::convert_oriented_edge_id_to_edge_index(oriented_edge);
         // Handle degenerate case
         if (both_ends_just_touch_free_surface(edges_immersion_status[edge_index]))
         {

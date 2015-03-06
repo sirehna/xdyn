@@ -116,7 +116,7 @@ TEST_F(MeshBuilderTest, the_facets_of_an_edge_and_the_edges_of_a_facet)
     }
     for(size_t facet_index=0 ; facet_index < m.oriented_edges_per_facet.size() ; ++facet_index) {
         for(size_t ie=0 ; ie < m.oriented_edges_per_facet.at(facet_index).size() ; ++ie ) {
-            size_t edge_index = Mesh::get_oriented_edge_index(m.oriented_edges_per_facet.at(facet_index).at(ie));
+            size_t edge_index = Mesh::convert_oriented_edge_id_to_edge_index(m.oriented_edges_per_facet.at(facet_index).at(ie));
             auto facets_of_this_edge = m.facets_per_edge.at( edge_index );
             ASSERT_EQ( 1,  std::count( facets_of_this_edge.begin(),facets_of_this_edge.end() , facet_index )) << "facet_index = " << facet_index;
         }

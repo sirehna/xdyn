@@ -93,10 +93,9 @@ size_t Mesh::convert_index_to_oriented_edge_id(size_t edge_index,bool reverse_di
     return (edge_index<<1) | (reverse_direction?1:0);
 }
 
-size_t Mesh::get_oriented_edge_index(size_t node_index)
+size_t Mesh::convert_oriented_edge_id_to_edge_index(size_t node_index)
 {
-    // Divide by two to obtain index of corresponding edge
-    // because there are exactly two nodes per edge
+    // Divide by two because last bit only stores direction (cf. convert_index_to_oriented_edge_id above)
     return node_index >> 1;
 }
 
