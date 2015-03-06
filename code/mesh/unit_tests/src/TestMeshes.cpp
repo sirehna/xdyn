@@ -215,3 +215,14 @@ TestMesh case_18()
     ret.edges = {{0,1},{2,1},{3,2},{0,3},{1,3}};
     return ret;
 }
+
+TestMesh case_19()
+{
+    TestMesh ret;
+    ret.all_nodes = Eigen::MatrixXd::Zero(3,4);
+    ret.all_nodes <<  0, 0, 1, 1,
+                      1, 0, 0, 1,
+                      0, 0, 0, 0;
+    ret.edges = {{0,1},{2,3},{1,2},{1,3},{0,3}};
+    return ret;
+}
