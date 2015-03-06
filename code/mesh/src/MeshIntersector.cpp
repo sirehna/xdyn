@@ -218,7 +218,8 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
     size_t closing_edge_index = mesh->add_edge(
             mesh->first_vertex_of_oriented_edge(immersed_edges[first_immersed]),
             mesh->first_vertex_of_oriented_edge( emerged_edges[ first_emerged]));
-    if (mesh->edges[0][closing_edge_index] != mesh->edges[1][closing_edge_index])
+    const bool closing_edge_is_a_point = mesh->edges[0][closing_edge_index] == mesh->edges[1][closing_edge_index];
+    if (not(closing_edge_is_a_point))
         index_of_edges_exactly_on_surface.insert(closing_edge_index);
     immersed_edges.insert(immersed_edges.begin() + (long)first_immersed, Mesh::convert_index_to_oriented_edge_id(closing_edge_index,true));
     emerged_edges.insert( emerged_edges.begin()  + (long)first_emerged,  Mesh::convert_index_to_oriented_edge_id(closing_edge_index,false));
