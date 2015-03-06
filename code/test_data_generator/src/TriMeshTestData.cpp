@@ -674,30 +674,35 @@ VectorOfVectorOfPoints U()
     v.resize(3);
 
     // y,z plane, looking towards x>0
-    v[0]=EPoint(0,0,0);v[1]=EPoint(0,1,-2);v[2]=EPoint(0,0,-2);ret.push_back(v);
-    v[0]=EPoint(0,0,0);v[1]=EPoint(0,1,0);v[2]=EPoint(0,1,-2);ret.push_back(v);
-    v[0]=EPoint(0,1,0);v[1]=EPoint(0,2,-1);v[2]=EPoint(0,1,-1);ret.push_back(v);
+    v[0]=EPoint(0,0,0);v[1]=EPoint(0,1,0);v[2]=EPoint(0,1,-1);ret.push_back(v);
+    v[0]=EPoint(0,0,0);v[1]=EPoint(0,1,-1);v[2]=EPoint(0,0,-1);ret.push_back(v);
+    v[0]=EPoint(0,0,-1);v[1]=EPoint(0,1,-1);v[2]=EPoint(0,1,-2);ret.push_back(v);
+    v[0]=EPoint(0,0,-1);v[1]=EPoint(0,1,-2);v[2]=EPoint(0,0,-2);ret.push_back(v);
     v[0]=EPoint(0,1,0);v[1]=EPoint(0,2,0);v[2]=EPoint(0,2,-1);ret.push_back(v);
-    v[0]=EPoint(0,2,0);v[1]=EPoint(0,3,-2);v[2]=EPoint(0,2,-2);ret.push_back(v);
-    v[0]=EPoint(0,2,0);v[1]=EPoint(0,3,0);v[2]=EPoint(0,3,-2);ret.push_back(v);
+    v[0]=EPoint(0,1,0);v[1]=EPoint(0,2,-1);v[2]=EPoint(0,1,-1);ret.push_back(v);
+    v[0]=EPoint(0,2,0);v[1]=EPoint(0,3,0);v[2]=EPoint(0,3,-1);ret.push_back(v);
+    v[0]=EPoint(0,2,0);v[1]=EPoint(0,3,-1);v[2]=EPoint(0,2,-1);ret.push_back(v);
+    v[0]=EPoint(0,2,-1);v[1]=EPoint(0,3,-1);v[2]=EPoint(0,3,-2);ret.push_back(v);
+    v[0]=EPoint(0,2,-1);v[1]=EPoint(0,3,-2);v[2]=EPoint(0,2,-2);ret.push_back(v);
 
     // y,z plane, looking towards x<0
-    v[0]=EPoint(1,0,-2);v[1]=EPoint(1,1,-2);v[2]=EPoint(1,0,0);ret.push_back(v);
-    v[0]=EPoint(1,1,-2);v[1]=EPoint(1,1,0);v[2]=EPoint(1,0,0);ret.push_back(v);
-    v[0]=EPoint(1,1,0);v[1]=EPoint(1,1,-1);v[2]=EPoint(1,2,-1);ret.push_back(v);
-    v[0]=EPoint(1,1,0);v[1]=EPoint(1,2,-1);v[2]=EPoint(1,2,0);ret.push_back(v);
-    v[0]=EPoint(1,2,-2);v[1]=EPoint(1,3,-2);v[2]=EPoint(1,2,0);ret.push_back(v);
-    v[0]=EPoint(1,3,-2);v[1]=EPoint(1,3,0);v[2]=EPoint(1,2,0);ret.push_back(v);
+    v[0]=EPoint(1,3,0);v[1]=EPoint(1,2,0);v[2]=EPoint(1,2,-1);ret.push_back(v);
+    v[0]=EPoint(1,3,0);v[1]=EPoint(1,2,-1);v[2]=EPoint(1,3,-1);ret.push_back(v);
+    v[0]=EPoint(1,3,-1);v[1]=EPoint(1,2,-1);v[2]=EPoint(1,2,-2);ret.push_back(v);
+    v[0]=EPoint(1,3,-1);v[1]=EPoint(1,2,-2);v[2]=EPoint(1,3,-2);ret.push_back(v);
+    v[0]=EPoint(1,2,0);v[1]=EPoint(1,1,0);v[2]=EPoint(1,1,-1);ret.push_back(v);
+    v[0]=EPoint(1,2,0);v[1]=EPoint(1,1,-1);v[2]=EPoint(1,2,-1);ret.push_back(v);
+    v[0]=EPoint(1,1,0);v[1]=EPoint(1,0,0);v[2]=EPoint(1,0,-1);ret.push_back(v);
+    v[0]=EPoint(1,1,0);v[1]=EPoint(1,0,-1);v[2]=EPoint(1,1,-1);ret.push_back(v);
+    v[0]=EPoint(1,1,-1);v[1]=EPoint(1,0,-1);v[2]=EPoint(1,0,-2);ret.push_back(v);
+    v[0]=EPoint(1,1,-1);v[1]=EPoint(1,0,-2);v[2]=EPoint(1,1,-2);ret.push_back(v);
 
     // x,z plane, looking towards y<0
-    //v[0]=EPoint(0,2,0);v[1]=EPoint(1,2,0);v[2]=EPoint(1,2,-1);ret.push_back(v);
-    //v[0]=EPoint(0,2,0);v[1]=EPoint(1,2,-1);v[2]=EPoint(0,2,-1);ret.push_back(v);
     v[0]=EPoint(0,1,-1);v[1]=EPoint(1,1,-1);v[2]=EPoint(1,1,-2);ret.push_back(v);
     v[0]=EPoint(0,1,-1);v[1]=EPoint(1,1,-2);v[2]=EPoint(0,1,-2);ret.push_back(v);
-    v[0]=EPoint(1,3,0);v[2]=EPoint(0,3,-2);v[1]=EPoint(1,3,-2);ret.push_back(v);
-    v[0]=EPoint(1,3,0);v[2]=EPoint(0,3,0);v[1]=EPoint(0,3,-2);ret.push_back(v);
     v[0]=EPoint(0,2,-1);v[2]=EPoint(1,2,-1);v[1]=EPoint(1,2,-2);ret.push_back(v);
     v[0]=EPoint(0,2,-1);v[2]=EPoint(1,2,-2);v[1]=EPoint(0,2,-2);ret.push_back(v);
+
 
     // x,y plane, looking towards z>0
     v[0]=EPoint(0,0,-2);v[1]=EPoint(1,1,-2);v[2]=EPoint(1,0,-2);ret.push_back(v);
@@ -708,12 +713,22 @@ VectorOfVectorOfPoints U()
     v[0]=EPoint(0,2,-2);v[1]=EPoint(0,3,-2);v[2]=EPoint(1,3,-2);ret.push_back(v);
 
     // x,z plane, looking towards y>0
-    v[0]=EPoint(1,0,0);v[1]=EPoint(0,0,-2);v[2]=EPoint(1,0,-2);ret.push_back(v);
-    v[0]=EPoint(1,0,0);v[1]=EPoint(0,0,0);v[2]=EPoint(0,0,-2);ret.push_back(v);
+    v[0]=EPoint(1,0,0);v[1]=EPoint(0,0,0);v[2]=EPoint(0,0,-1);ret.push_back(v);
+    v[0]=EPoint(1,0,0);v[1]=EPoint(0,0,-1);v[2]=EPoint(1,0,-1);ret.push_back(v);
+    v[0]=EPoint(1,0,-1);v[1]=EPoint(0,0,-1);v[2]=EPoint(0,0,-2);ret.push_back(v);
+    v[0]=EPoint(1,0,-1);v[1]=EPoint(0,0,-2);v[2]=EPoint(1,0,-2);ret.push_back(v);
+    v[0]=EPoint(0,3,0);v[1]=EPoint(1,3,0);v[2]=EPoint(1,3,-1);ret.push_back(v);
+    v[0]=EPoint(0,3,0);v[1]=EPoint(1,3,-1);v[2]=EPoint(0,3,-1);ret.push_back(v);
+    v[0]=EPoint(0,3,-1);v[1]=EPoint(1,3,-1);v[2]=EPoint(1,3,-2);ret.push_back(v);
+    v[0]=EPoint(0,3,-1);v[1]=EPoint(1,3,-2);v[2]=EPoint(0,3,-2);ret.push_back(v);
 
     // x,y plane, looking towards z<0
-    v[0]=EPoint(1,0,0);v[1]=EPoint(0,3,0);v[2]=EPoint(0,0,0);ret.push_back(v);
-    v[0]=EPoint(1,0,0);v[1]=EPoint(1,3,0);v[2]=EPoint(0,3,0);ret.push_back(v);
+    v[0]=EPoint(1,0,0);v[1]=EPoint(1,1,0);v[2]=EPoint(0,1,0);ret.push_back(v);
+    v[0]=EPoint(1,0,0);v[1]=EPoint(0,1,0);v[2]=EPoint(0,0,0);ret.push_back(v);
+    v[0]=EPoint(1,1,0);v[1]=EPoint(1,2,0);v[2]=EPoint(0,2,0);ret.push_back(v);
+    v[0]=EPoint(1,1,0);v[1]=EPoint(0,2,0);v[2]=EPoint(0,1,0);ret.push_back(v);
+    v[0]=EPoint(1,2,0);v[1]=EPoint(1,3,0);v[2]=EPoint(0,3,0);ret.push_back(v);
+    v[0]=EPoint(1,2,0);v[1]=EPoint(0,3,0);v[2]=EPoint(0,2,0);ret.push_back(v);
 
     return ret;
 }
