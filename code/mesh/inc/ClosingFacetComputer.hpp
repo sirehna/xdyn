@@ -76,6 +76,9 @@ class ClosingFacetComputer
         /**  \returns Outside edges, in order.
          */
         Contour contour() const;
+        /**  \returns Outside edges, in order
+         */
+        Contour contour(size_t extreme_edge) const;
 
     private:
         const Eigen::Matrix3Xd* mesh;
@@ -91,9 +94,6 @@ class ClosingFacetComputer
         };
         static std::vector<std::set<size_t> > get_edges_per_component(const ConnectedComponents& connected_components, const ListOfEdges& edges_);
         static ClosingFacetComputer::ConnectedComponents get_connected_components(const ListOfEdges& edges);
-        /**  \returns Outside edges, in order
-         */
-        Contour contour(size_t extreme_edge) const;
 
         bool need_to_reverse(const size_t first_edge, const size_t second_edge, const bool) const;
 };
