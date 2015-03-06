@@ -36,20 +36,38 @@ void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges&
     }
 }
 
-ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_) :
+ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_, std::vector<size_t> index_of_relevant_edges) :
         mesh(new Eigen::Matrix3Xd(mesh_)),
-        edges(edges_),
-        node_idx_in_mesh(extract_nodes(edges)),
-        node_to_connected_edges(get_node_to_connected_edges(edges))
+        edges(),
+        node_idx_in_mesh(),
+        node_to_connected_edges(),
+        original_edge_index()
 {
+    if (index_of_relevant_edges.empty()) for (size_t i = 0 ; i < edges_.size() ; ++i) index_of_relevant_edges.push_back(i);
+    for (const auto idx:index_of_relevant_edges)
+    {
+        edges.push_back(edges_.at(idx));
+        original_edge_index.push_back(idx);
+    }
+    node_idx_in_mesh = extract_nodes(edges);
+    node_to_connected_edges = get_node_to_connected_edges(edges);
 }
 
-ClosingFacetComputer::ClosingFacetComputer(const TR1(shared_ptr)<Eigen::Matrix3Xd>& mesh_, const ListOfEdges& edges_) :
+ClosingFacetComputer::ClosingFacetComputer(const TR1(shared_ptr)<Eigen::Matrix3Xd>& mesh_, const ListOfEdges& edges_, std::vector<size_t> index_of_relevant_edges) :
         mesh(mesh_),
-        edges(edges_),
-        node_idx_in_mesh(extract_nodes(edges)),
-        node_to_connected_edges(get_node_to_connected_edges(edges))
+        edges(),
+        node_idx_in_mesh(),
+        node_to_connected_edges(),
+        original_edge_index()
 {
+    if (index_of_relevant_edges.empty()) for (size_t i = 0 ; i < edges_.size() ; ++i) index_of_relevant_edges.push_back(i);
+    for (const auto idx:index_of_relevant_edges)
+    {
+        edges.push_back(edges_.at(idx));
+        original_edge_index.push_back(idx);
+    }
+    node_idx_in_mesh = extract_nodes(edges);
+    node_to_connected_edges = get_node_to_connected_edges(edges);
 }
 
 template <typename T,typename U> bool has(const U& map_or_set, const T idx)

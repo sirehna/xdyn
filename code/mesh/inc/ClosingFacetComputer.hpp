@@ -25,8 +25,8 @@ class ClosingFacetComputer
     public:
         typedef std::pair<size_t,size_t> Edge;
         typedef std::vector<Edge> ListOfEdges;
-        ClosingFacetComputer(const Eigen::Matrix3Xd& mesh, const ListOfEdges& edges);
-        ClosingFacetComputer(const TR1(shared_ptr)<Eigen::Matrix3Xd>& mesh, const ListOfEdges& edges);
+        ClosingFacetComputer(const Eigen::Matrix3Xd& mesh, const ListOfEdges& edges, std::vector<size_t> index_of_relevant_edges=std::vector<size_t>());
+        ClosingFacetComputer(const TR1(shared_ptr)<Eigen::Matrix3Xd>& mesh, const ListOfEdges& edges, std::vector<size_t> index_of_relevant_edges=std::vector<size_t>());
 
         /**  \brief Takes a list of edges on the surface & groups connected ones together
           *  \returns A list of facets containing their constituting edges
@@ -79,6 +79,7 @@ class ClosingFacetComputer
         ListOfEdges edges;
         std::vector<size_t> node_idx_in_mesh;
         std::map<size_t,std::set<size_t> > node_to_connected_edges;
+        std::vector<size_t> original_edge_index; //!< Edge index in original mesh
 
         struct ConnectedComponents
         {
