@@ -362,7 +362,7 @@ TEST_F(ClosingFacetComputerTest, orientation_should_be_correct_for_case_18)
 
 TEST_F(ClosingFacetComputerTest, can_compute_contour_for_case_19)
 {
-    const auto case_18_contour = make(case_19()).contour(4);
-    ASSERT_THAT(case_18_contour.edge_idx, ElementsAre(4,1,2,0));
-    ASSERT_THAT(case_18_contour.reversed, ElementsAre(false,true,true,true));
+    const auto case_19_contour = make(case_19()).contour(4);
+    ASSERT_THAT(case_19_contour.edge_idx, ElementsAre(4,1,2,0));
+    ASSERT_THAT(case_19_contour.reversed, ElementsAre(false,true,true,true));
 }
