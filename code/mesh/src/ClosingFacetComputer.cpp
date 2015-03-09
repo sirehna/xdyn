@@ -380,12 +380,12 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse
 
     double angle = angle_between_edges(edge_idx, connected_edges.front(),reverse);
     bool save_lowest = true;
+    if (not(stuff_to_the_left) and stuff_to_the_right and stuff_to_the_top)
+        save_lowest = not(reverse);
     for (size_t i = 1 ; i < connected_edges.size() ; ++i)
     {
         const size_t idx_of_connected_edge = connected_edges.at(i);
         const double new_angle = angle_between_edges(edge_idx, idx_of_connected_edge,reverse);
-        if (not(stuff_to_the_left) and stuff_to_the_right and stuff_to_the_top)
-            save_lowest = not(reverse);
         if (save_lowest)
         {
             if (new_angle < angle)
