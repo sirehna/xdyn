@@ -366,3 +366,57 @@ TEST_F(ClosingFacetComputerTest, can_compute_contour_for_case_19)
     ASSERT_THAT(case_19_contour.edge_idx, ElementsAre(4,1,2,0));
     ASSERT_THAT(case_19_contour.reversed, ElementsAre(false,true,true,true));
 }
+
+TEST_F(ClosingFacetComputerTest, bug_detected_in_MeshIntersectorTest_bug_in_centroid_1)
+{
+    const auto case_20_contour = make(case_20()).contour(4);
+    ASSERT_THAT(case_20_contour.edge_idx, ElementsAre(4,3,2,5,0,1));
+    ASSERT_THAT(case_20_contour.reversed, ElementsAre(false,false,false,false,false,false));
+    ASSERT_NO_THROW(make(case_20()).contour());
+}
+
+TEST_F(ClosingFacetComputerTest, bug_detected_in_MeshIntersectorTest_bug_in_centroid_2)
+{
+    ASSERT_EQ(2,make(case_20()).next_edge(3));
+}
+
+TEST_F(ClosingFacetComputerTest, bug_detected_in_MeshIntersectorTest_bug_in_centroid_3)
+{
+    auto node2edge = ClosingFacetComputer::get_node_to_connected_edges(case_20().edges);
+    auto S0 = node2edge[0];
+    auto S1 = node2edge[1];
+    auto S2 = node2edge[2];
+    auto S3 = node2edge[3];
+    auto S4 = node2edge[4];
+    auto S5 = node2edge[5];
+
+    ASSERT_EQ(2,S0.size());
+    ASSERT_TRUE(has(S0, 0));
+    ASSERT_TRUE(has(S0, 5));
+
+    ASSERT_EQ(4,S1.size());
+    ASSERT_TRUE(has(S1, 0));
+    ASSERT_TRUE(has(S1, 1));
+    ASSERT_TRUE(has(S1, 6));
+    ASSERT_TRUE(has(S1, 7));
+
+    ASSERT_EQ(3,S2.size());
+    ASSERT_TRUE(has(S2, 1));
+    ASSERT_TRUE(has(S2, 4));
+    ASSERT_TRUE(has(S2, 8));
+
+    ASSERT_EQ(3,S3.size());
+    ASSERT_TRUE(has(S3, 2));
+    ASSERT_TRUE(has(S3, 5));
+    ASSERT_TRUE(has(S3, 6));
+
+    ASSERT_EQ(4,S4.size());
+    ASSERT_TRUE(has(S4, 2));
+    ASSERT_TRUE(has(S4, 3));
+    ASSERT_TRUE(has(S4, 7));
+    ASSERT_TRUE(has(S4, 8));
+
+    ASSERT_EQ(2,S5.size());
+    ASSERT_TRUE(has(S5, 3));
+    ASSERT_TRUE(has(S5, 4));
+}

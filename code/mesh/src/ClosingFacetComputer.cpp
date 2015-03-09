@@ -370,7 +370,7 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse
         ss << " is not connected to anything: cannot find following edge.";
         THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
     }
-    size_t idx = 0;
+
     const double x0 = reverse ? mesh->operator()(0,edges.at(edge_idx).first) : mesh->operator()(0,edges.at(edge_idx).second);
     const double y0 = reverse ? mesh->operator()(1,edges.at(edge_idx).first) : mesh->operator()(1,edges.at(edge_idx).second);
 
@@ -378,14 +378,30 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse
     const bool stuff_to_the_right = xmax > x0;
     const bool stuff_to_the_top = ymax > y0;
 
-    double angle = angle_between_edges(edge_idx, connected_edges.front(),reverse);
+
+    std::vector<double> angles;
+    bool all_negative = true;
+    for (const auto idx_of_connected_edge:connected_edges)
+    {
+        angles.push_back(angle_between_edges(edge_idx, idx_of_connected_edge,reverse));
+        if (std::abs(std::abs(angles.back())-PI)> 1E-10)
+        {
+            all_negative = all_negative and (angles.back() < 0);
+        }
+    }
+    size_t idx = 0;
+    double angle = angles.front();
+
     bool save_lowest = true;
     if (not(stuff_to_the_left) and stuff_to_the_right and stuff_to_the_top)
         save_lowest = not(reverse);
     for (size_t i = 1 ; i < connected_edges.size() ; ++i)
     {
-        const size_t idx_of_connected_edge = connected_edges.at(i);
-        const double new_angle = angle_between_edges(edge_idx, idx_of_connected_edge,reverse);
+        double new_angle = angles.at(i);
+        if ((std::abs(angle-PI) < 1E-10) and (all_negative))
+        {
+            angle = -PI;
+        }
         if (save_lowest)
         {
             if (new_angle < angle)
