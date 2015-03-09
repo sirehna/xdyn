@@ -106,6 +106,8 @@ class ClosingFacetComputer
         static ClosingFacetComputer::ConnectedComponents get_connected_components(const ListOfEdges& edges);
 
         bool need_to_reverse(const size_t first_edge, const size_t second_edge, const bool) const;
+        bool keep_lowest_angle(const double x0, const double y0,
+                const bool reverse) const;
 };
 
 #endif  /* CLOSINGFACETCOMPUTER_HPP_ */

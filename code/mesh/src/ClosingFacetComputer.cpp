@@ -297,18 +297,13 @@ struct TwoEdges
         size_t idx_D;
 };
 
-double wrap_2pi(const double theta); // We know the result of atan2 is between -pi & pi
-double wrap_2pi(const double theta)
-{
-    return theta > 0 ? theta : theta+2*PI;
-}
-
 double constrain_0_2pi(double x);
 double constrain_0_2pi(double x)
 {
     x = fmod(x,2*PI);
     if (x < 0)
         x += 2*PI;
+    if (std::abs(x-2*PI)<1E-14) x = 0;
     return x;// - PI;
 }
 
@@ -358,6 +353,21 @@ std::vector<size_t> ClosingFacetComputer::edges_connected_to_first_node_of_edge(
     return ret;
 }
 
+bool ClosingFacetComputer::keep_lowest_angle(const double x0, const double y0,
+        const bool reverse) const
+{
+    const bool stuff_to_the_left = xmin < x0;
+    const bool stuff_to_the_right = xmax > x0;
+    const bool stuff_to_the_top = ymax > y0;
+    bool save_lowest = true;
+    if (not(stuff_to_the_left) && stuff_to_the_right && stuff_to_the_top)
+        save_lowest = !(reverse);
+    if (stuff_to_the_left && not(stuff_to_the_right))
+        save_lowest = !(reverse);
+
+    return save_lowest;
+}
+
 size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse) const
 {
     check_edge_index(edge_idx, edges, __PRETTY_FUNCTION__, __LINE__);
@@ -374,11 +384,7 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse
     const double x0 = reverse ? mesh->operator()(0,edges.at(edge_idx).first) : mesh->operator()(0,edges.at(edge_idx).second);
     const double y0 = reverse ? mesh->operator()(1,edges.at(edge_idx).first) : mesh->operator()(1,edges.at(edge_idx).second);
 
-    const bool stuff_to_the_left = xmin < x0;
-    const bool stuff_to_the_right = xmax > x0;
-    const bool stuff_to_the_top = ymax > y0;
-
-
+    bool save_lowest = keep_lowest_angle(x0, y0, reverse);
     std::vector<double> angles;
     bool all_negative = true;
     for (const auto idx_of_connected_edge:connected_edges)
@@ -392,9 +398,6 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse
     size_t idx = 0;
     double angle = angles.front();
 
-    bool save_lowest = true;
-    if (not(stuff_to_the_left) and stuff_to_the_right and stuff_to_the_top)
-        save_lowest = not(reverse);
     for (size_t i = 1 ; i < connected_edges.size() ; ++i)
     {
         double new_angle = angles.at(i);
@@ -438,17 +441,29 @@ size_t ClosingFacetComputer::extreme_edge(const size_t extreme_node) const
                                    const auto idxB = edges.at(candidate).first==extreme_node ? edges.at(candidate).second : edges.at(candidate).first;
                                    const auto B = mesh->col(idxB);
                                    const auto AB = B-A;
-                                   return wrap_2pi(std::atan2(AB(1),AB(0)));
+                                   return constrain_0_2pi(std::atan2(AB(1),AB(0)));
                                };
     size_t ret = 0;
     double angle = compute_angle(ret);
+    bool save_lowest = keep_lowest_angle(A(0), A(1), true);
     for (const auto candidate:candidates)
     {
         const double new_angle = compute_angle(candidate);
-        if (new_angle > angle)
+        if (save_lowest)
         {
-            ret = candidate;
-            angle = new_angle;
+            if (new_angle < angle)
+            {
+                ret = candidate;
+                angle = new_angle;
+            }
+        }
+        else
+        {
+            if (new_angle > angle)
+            {
+                ret = candidate;
+                angle = new_angle;
+            }
         }
     }
     return ret;
