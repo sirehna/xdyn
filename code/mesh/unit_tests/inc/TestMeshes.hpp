@@ -30,6 +30,7 @@ TestMesh case_16();
 TestMesh case_17();
 TestMesh case_18();
 TestMesh case_19();
+TestMesh case_20();
 
 
 #endif /* TESTMESHES_HPP_ */
