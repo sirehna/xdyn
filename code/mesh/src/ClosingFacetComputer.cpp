@@ -98,12 +98,6 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd* mesh_, const 
     node_to_connected_edges = get_node_to_connected_edges(edges);
 }
 
-template <typename T,typename U> bool has(const U& map_or_set, const T idx)
-{
-    if (map_or_set.find(idx) != map_or_set.end()) return true;
-                                                  return false;
-}
-
 std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std::set<size_t> >& facets);
 std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std::set<size_t> >& facets)
 {
