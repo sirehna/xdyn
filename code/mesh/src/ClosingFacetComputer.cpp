@@ -303,8 +303,8 @@ double wrap_2pi(const double theta)
     return theta > 0 ? theta : theta+2*PI;
 }
 
-double constrainAngle(double x);
-double constrainAngle(double x)
+double constrain_0_2pi(double x);
+double constrain_0_2pi(double x)
 {
     x = fmod(x,2*PI);
     if (x < 0)
@@ -321,7 +321,7 @@ double ClosingFacetComputer::angle_between_edges(const size_t idx_of_edge_AB, co
     const double BC_angle = (std::atan2(BC(1),BC(0)));
     const double angle = (BC_angle - BA_angle);
     const double sign = (-BA).cross(BC)(2) <0 ? -1 : 1;
-    return sign*constrainAngle(angle);
+    return sign*constrain_0_2pi(angle);
 }
 
 std::vector<size_t> ClosingFacetComputer::edges_connected_to_second_node_of_edge(const size_t edge_idx) const
