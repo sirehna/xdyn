@@ -829,14 +829,33 @@ TEST_F(MeshIntersectorTest, can_display_facet_in_NED_frame)
     const double theta = 0;
     const double psi = 0;
     const std::string actual = intersector.display_facet_in_NED(*intersector.begin_immersed(),EPoint(0,0,0),rot(phi,theta,psi));
-    const std::string expected = "Facet:\n"
-                                 "Unit normal: 0 0 1\n"
-                                 "Area: 0.5\n"
-                                 "Center of gravity:  0.166667 -0.471405  0.235702\n"
-                                 "Coordinates in NED frame (one column per point):\n"
-                                 "       -0.5         0.5         0.5\n"
-                                 "  -0.707107   -0.707107 5.55112e-17\n"
-                                 "5.55112e-17 5.55112e-17    0.707107";
+    std::string expected;
+    std::stringstream ss;
+    ss << 1e-20;
+    if (ss.str() == "1e-020")
+    {
+        expected = "Facet:\n"
+                   "Unit normal: 0 0 1\n"
+                   "Area: 0.5\n"
+                   "Center of gravity:  0.166667 -0.471405  0.235702\n"
+                   "Vertex indices: [0, 1, 2]\n"
+                   "Coordinates in NED frame (one column per point):\n"
+                   "        -0.5          0.5          0.5\n"
+                   "   -0.707107    -0.707107 5.55112e-017\n"
+                   "5.55112e-017 5.55112e-017     0.707107";
+    }
+    else
+    {
+        expected = "Facet:\n"
+                   "Unit normal: 0 0 1\n"
+                   "Area: 0.5\n"
+                   "Center of gravity:  0.166667 -0.471405  0.235702\n"
+                   "Vertex indices: [0, 1, 2]\n"
+                   "Coordinates in NED frame (one column per point):\n"
+                   "       -0.5         0.5         0.5\n"
+                   "  -0.707107   -0.707107 5.55112e-17\n"
+                   "5.55112e-17 5.55112e-17    0.707107";
+    }
     ASSERT_EQ(expected, actual);
 }
 

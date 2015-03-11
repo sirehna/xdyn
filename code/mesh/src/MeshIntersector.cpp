@@ -6,6 +6,8 @@
 #include "MeshIntersector.hpp"
 #include "MeshIntersectorException.hpp"
 #include "mesh_manipulations.hpp"
+#include "2DMeshDisplay.hpp"
+#include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
 
 Facet flip(Facet facet);
 Facet flip(Facet facet)
@@ -544,7 +546,8 @@ std::string MeshIntersector::display_facet_in_NED(const Facet& facet, const EPoi
     {
         M.col(i) += mesh_center_in_NED_frame;
     }
-    ss << "Coordinates in NED frame (one column per point):" << std::endl
+    ss << "Vertex indices: " << facet.vertex_index << std::endl
+       << "Coordinates in NED frame (one column per point):" << std::endl
        << M;
     return ss.str();
 }
