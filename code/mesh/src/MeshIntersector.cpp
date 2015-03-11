@@ -7,6 +7,14 @@
 #include "MeshIntersectorException.hpp"
 #include "mesh_manipulations.hpp"
 
+Facet flip(Facet facet);
+Facet flip(Facet facet)
+{
+    std::reverse(facet.vertex_index.begin(), facet.vertex_index.end());
+    facet.unit_normal = -facet.unit_normal;
+    return facet;
+}
+
 MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_, const bool check_orientation) :
  mesh(MeshPtr(new Mesh(MeshBuilder(mesh_, check_orientation).build())))
 ,all_relative_immersions()
