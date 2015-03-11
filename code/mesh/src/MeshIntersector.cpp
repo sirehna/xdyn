@@ -342,60 +342,37 @@ bool MeshIntersector::both_ends_just_touch_free_surface(int status)
     return status==0;
 }
 
-Facet MeshIntersector::compute_closing_facet() const
-{
-    Facet ret;
-    std::vector<size_t> vertex_index;
-    vertex_index.reserve(mesh->total_number_of_nodes);
-    EPoint bar(0,0,0);
-    double A = 0;
-    Eigen::Vector3d n(0,0,0);
-    if (all_relative_immersions.size() != mesh->total_number_of_nodes)
-    {
-        std::stringstream ss;
-        ss << "Need as many immersions as there are nodes. There are "
-           << mesh->total_number_of_nodes << " nodes, but " << all_relative_immersions.size() << " immersions.";
-        THROW(__PRETTY_FUNCTION__, MeshIntersectorException, ss.str());
-    }
-    for (size_t i = 0 ; i < mesh->total_number_of_nodes ; ++i)
-    {
-        if (all_relative_immersions[i] == 0)
-        {
-            vertex_index.push_back(i);
-        }
-    }
-    if (vertex_index.size() > 2)
-    {
-        bar = ::barycenter(mesh->all_nodes, vertex_index);
-        A = area(mesh->all_nodes, vertex_index);
-        n = unit_normal(mesh->all_nodes, vertex_index);
-    }
-    return Facet(vertex_index, n, bar, A);
-}
-
 bool MeshIntersector::has(const Facet& f, //!< Facet to check
                           const FacetIterator& begin,
                           const FacetIterator& end
                          ) const
 {
     if (f.vertex_index.empty()) return false;
-    std::set<size_t> s(f.vertex_index.begin(), f.vertex_index.end());
-    std::set<size_t> s_;
-    const double ref_area = std::accumulate(begin, end, 0., [](const double d, const Facet f){return d + f.area;});
-    double area = 0;
-    for (auto that_facet = begin ; that_facet != end ; ++that_facet)
+
+    const auto facet_contains_vertex = [](const size_t vertex_to_test, const Facet& facet, const Eigen::Vector3d& unit_normal) -> bool
+                                     {
+                                         if ((unit_normal-facet.unit_normal).norm()>1E-8) return false;
+                                         for (const auto current_vertex:facet.vertex_index)
+                                         {
+                                             if (current_vertex == vertex_to_test) return true;
+                                         }
+                                         return false;
+                                     };
+
+    const auto at_least_one_facet_contains_vertex = [&facet_contains_vertex](const size_t vertex_to_test, const FacetIterator& begin, const FacetIterator& end, const Eigen::Vector3d& unit_normal) -> bool
+                                                  {
+                                                      for (auto that_facet = begin ; that_facet != end ; ++that_facet)
+                                                      {
+                                                          if (facet_contains_vertex(vertex_to_test, *that_facet, unit_normal)) return true;
+                                                      }
+                                                      return false;
+                                                  };
+
+    for (const auto vertex:f.vertex_index)
     {
-        const bool all_facet_vertices_are_in_f = std::all_of(that_facet->vertex_index.begin(),
-                                                             that_facet->vertex_index.end(),
-                                                             [&s](const size_t idx){return s.find(idx)!=s.end();});
-        if (all_facet_vertices_are_in_f)
-        {
-            s_.insert(that_facet->vertex_index.begin(), that_facet->vertex_index.end());
-            area += that_facet->area;
-            if ((s==s_) and (std::abs(area-ref_area) < 1E6*ref_area)) return true;
-        }
+        if (not(at_least_one_facet_contains_vertex(vertex, begin, end, f.unit_normal))) return false;
     }
-    return false;
+    return true;
 }
 
 bool MeshIntersector::has(const Facet& f //!< Facet to check
@@ -406,8 +383,24 @@ bool MeshIntersector::has(const Facet& f //!< Facet to check
     if (has(f, begin_emerged(), end_emerged()))   return true;
                                                   return false;
 }
+using namespace ssc::kinematics;
+RotationMatrix rot_(const double phi, const double theta, const double psi);
+RotationMatrix rot_(const double phi, const double theta, const double psi)
+{
+    return rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(ssc::kinematics::EulerAngles(phi,theta,psi));
+}
 
-CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end) const
+CenterOfMass MeshIntersector::center_of_mass_immersed() const
+{
+    return center_of_mass(begin_immersed(), end_immersed(), true);
+}
+
+CenterOfMass MeshIntersector::center_of_mass_emerged() const
+{
+    return center_of_mass(begin_emerged(), end_emerged(), false);
+}
+
+CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end, const bool immersed) const
 {
     CenterOfMass ret(EPoint(0,0,0), 0);
     if (begin==end) return ret;
@@ -419,18 +412,13 @@ CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const F
         const bool current_facet_has_same_normal_as_ref = ref_normal_vector.dot(that_facet->unit_normal) > 1-1E-6;
         ret.all_facets_are_in_same_plane = ret.all_facets_are_in_same_plane and current_facet_has_same_normal_as_ref;
     }
-    if (ret.volume>0) ret.G /= ret.volume;
-    ret.volume = std::abs(ret.volume);
-    return ret;
-}
-
-CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end, const Facet& closing_facet) const
-{
-    CenterOfMass ret = center_of_mass(begin, end);
-    ret.G *= ret.volume;
-    if (not(has(closing_facet, begin, end)))
+    for (auto that_facet = begin_surface() ; that_facet != end_surface() ; ++that_facet)
     {
-        ret += center_of_mass(closing_facet);
+        const auto closing_facet = immersed ? *that_facet : flip(*that_facet);
+        if (not(has(closing_facet, begin, end)))
+        {
+            ret += center_of_mass(closing_facet);
+        }
     }
     if (ret.volume!=0) ret.G /= ret.volume;
     ret.volume = std::abs(ret.volume);
@@ -504,19 +492,14 @@ double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& 
 double MeshIntersector::immersed_volume() const
 {
     double V = volume(begin_immersed(), end_immersed());
-//    for (auto closing_facet=begin_surface();closing_facet!=end_surface();++closing_facet)
-//    {
-//        if (not(has(*closing_facet)))
-//        {
-//            const double closing_facet_volume = facet_volume(*closing_facet);
-//            V += closing_facet_volume;
-//        }
-//    }
-    const Facet closing_facet = compute_closing_facet();
-    if (not(has(closing_facet)))
+    if (V == 0) return 0; // Because it means that the closing facet is equal to the immersed facets
+    for (auto closing_facet=begin_surface();closing_facet!=end_surface();++closing_facet)
     {
-        const double closing_facet_volume = facet_volume(closing_facet);
-        V -= closing_facet_volume;
+        if (not(has(*closing_facet, begin_immersed(), end_immersed())))
+        {
+            const double closing_facet_volume = facet_volume(*closing_facet);
+            V += closing_facet_volume;
+        }
     }
     return fabs(V);
 }
@@ -524,11 +507,15 @@ double MeshIntersector::immersed_volume() const
 double MeshIntersector::emerged_volume() const
 {
     double V = volume(begin_emerged(), end_emerged());
-    const Facet closing_facet = compute_closing_facet();
-    if (not(has(closing_facet)))
+    if (V == 0) return 0; // Because it means that the closing facet is equal to the emerged facets
+    for (auto closing_facet=begin_surface();closing_facet!=end_surface();++closing_facet)
     {
-        const double closing_facet_volume = facet_volume(closing_facet);
-        V += closing_facet_volume;
+        const auto facet = flip(*closing_facet);
+        if (not(has(facet, begin_emerged(), end_emerged())))
+        {
+            const double closing_facet_volume = facet_volume(facet);
+            V += closing_facet_volume;
+        }
     }
     return fabs(V);
 }

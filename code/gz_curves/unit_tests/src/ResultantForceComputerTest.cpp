@@ -167,6 +167,6 @@ TEST_F(ResultantForceComputerTest, can_compute_K)
     ASSERT_NEAR(0, (double)K(0,1), BIG_EPS);
     ASSERT_NEAR(0, (double)K(1,0), BIG_EPS);
 
-    ASSERT_NEAR(-6710.0400001436356, (double)K(0,0), BIG_EPS);
+    ASSERT_NEAR(-10065.060000670201, (double)K(0,0), BIG_EPS);
     ASSERT_NEAR(  419.3774999700085, (double)K(1,1), BIG_EPS);
 }

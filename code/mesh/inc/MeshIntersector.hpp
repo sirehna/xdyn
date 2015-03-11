@@ -212,18 +212,6 @@ class MeshIntersector
           *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
           */
         double emerged_volume() const;
-        CenterOfMass center_of_mass(const FacetIterator& begin, const FacetIterator& end, const Facet& closing_facet) const;
-        CenterOfMass center_of_mass(const FacetIterator& begin, const FacetIterator& end) const;
-        CenterOfMass center_of_mass(const Facet& f) const;
-
-        /**  \brief used by the 'volume' method to close the mesh.
-          *  \details When computing the intersection with free surface, the
-          *           algorithm does not close the two resulting meshes (emerged
-          *           & immersed mesh).
-          *  \returns Facet on free surface & closing the mesh
-          *  \snippet mesh/unit_tests/src/MeshIntersectorTest.cpp MeshIntersectorTest compute_closing_facet_example
-          */
-        Facet compute_closing_facet() const;
 
         /**  \brief Detect if a facet already exists in mesh.
           *  \details Only compares the indices (not the barycenter or unit normal or area).
@@ -240,10 +228,15 @@ class MeshIntersector
         Eigen::MatrixXd convert(const Facet& f) const;
         double facet_volume(const Facet& f) const;
 
+        CenterOfMass center_of_mass_immersed() const;
+        CenterOfMass center_of_mass_emerged() const;
+
         std::string display_facet_in_NED(const Facet& facet, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
         std::string display_edge_in_NED(const size_t idx, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
 
     private:
+        CenterOfMass center_of_mass(const FacetIterator& begin, const FacetIterator& end, const bool immersed) const;
+        CenterOfMass center_of_mass(const Facet& f) const;
         /**
          * \brief Iterate on each edge to find intersection with free surface
          */

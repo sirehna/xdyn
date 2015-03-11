@@ -20,6 +20,26 @@
 #include <cmath>
 #define PI M_PI
 
+std::vector<double> get_cube_immersions(const double z0);
+std::vector<double> get_cube_immersions(const double z0)
+{
+    return std::vector<double>({z0+0.5,z0+0.5,z0+0.5,z0+0.5,z0-0.5,z0-0.5,z0-0.5,z0-0.5});
+}
+
+std::vector<double> get_U_immersions(const double z0);
+std::vector<double> get_U_immersions(const double z0)
+{
+    return std::vector<double>({z0, z0, z0-1,  z0-1, z0-2, z0-2,  z0, z0-1, z0,  z0-1, z0-2, z0-2,  z0,  z0, z0-1, z0-1,  z0-2, z0-2, z0,  z0-1,z0, z0-1, z0-2, z0-2});
+}
+
+void check_vector(const Eigen::Vector3d& v_to_check, const double x_expected, const double y_expected, const double z_expected);
+void check_vector(const Eigen::Vector3d& v_to_check, const double x_expected, const double y_expected, const double z_expected)
+{
+    ASSERT_DOUBLE_EQ(x_expected, (double)v_to_check(0)) << "Expected: " << Eigen::Vector3d(x_expected, y_expected, z_expected).transpose() << ", actual: " << v_to_check.transpose();
+    ASSERT_DOUBLE_EQ(y_expected, (double)v_to_check(1)) << "Expected: " << Eigen::Vector3d(x_expected, y_expected, z_expected).transpose() << ", actual: " << v_to_check.transpose();;
+    ASSERT_DOUBLE_EQ(z_expected, (double)v_to_check(2)) << "Expected: " << Eigen::Vector3d(x_expected, y_expected, z_expected).transpose() << ", actual: " << v_to_check.transpose();;
+}
+
 MeshIntersectorTest::MeshIntersectorTest() : a(ssc::random_data_generator::DataGenerator(2))
 {
 }
@@ -449,7 +469,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_tetrahedron)
         const std::vector<double> v = {z,z+l*sqrt(6)/6,z+l*sqrt(6)/6,z+l*sqrt(6)/6};
         MeshIntersector intersector(tetrahedron(l,a.random<double>().between(-100,100),a.random<double>().between(-100,100),z));
         intersector.update_intersection_with_free_surface(v,v);
-        ASSERT_NEAR(l*l*l/6./sqrt(2.), intersector.immersed_volume() + intersector.emerged_volume(), 1E-2);
+        ASSERT_NEAR(l*l*l/6./sqrt(2.), intersector.immersed_volume() + intersector.emerged_volume(), 1E-2) << "z = " << z << ", l = " << l;
     }
 }
 
@@ -518,45 +538,6 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_an_emerged_cube)
     }
 }
 
-TEST_F(MeshIntersectorTest, can_compute_closing_facet)
-{
-    const MeshPtr mesh(new Mesh(MeshBuilder(cube(1, 0, 0, 0, false)).build()));
-    MeshIntersector intersector(mesh);
-    std::vector<double> dz(8);
-    dz[0] = -1;
-    dz[1] = -1;
-    dz[2] = -1;
-    dz[3] = -1;
-    dz[4] = 1;
-    dz[5] = 1;
-    dz[6] = 1;
-    dz[7] = 1;
-    intersector.update_intersection_with_free_surface(dz,dz);
-    const Facet f = intersector.compute_closing_facet();
-    ASSERT_DOUBLE_EQ(1, f.area);
-    ASSERT_DOUBLE_EQ( 0, (double)f.unit_normal(0));
-    ASSERT_DOUBLE_EQ( 0, (double)f.unit_normal(1));
-    ASSERT_DOUBLE_EQ(-1, (double)f.unit_normal(2));
-    ASSERT_DOUBLE_EQ(0, f.centre_of_gravity.norm());
-    ASSERT_EQ(4, f.vertex_index.size());
-    const auto P1 = mesh->all_nodes.col((int)f.vertex_index[0]);
-    const auto P2 = mesh->all_nodes.col((int)f.vertex_index[1]);
-    const auto P3 = mesh->all_nodes.col((int)f.vertex_index[2]);
-    const auto P4 = mesh->all_nodes.col((int)f.vertex_index[3]);
-    ASSERT_DOUBLE_EQ(-0.5, (double)P1(0));
-    ASSERT_DOUBLE_EQ(0.5, (double)P1(1));
-    ASSERT_DOUBLE_EQ(0, (double)P1(2));
-    ASSERT_DOUBLE_EQ(0.5, (double)P2(0));
-    ASSERT_DOUBLE_EQ(0.5, (double)P2(1));
-    ASSERT_DOUBLE_EQ(0, (double)P2(2));
-    ASSERT_DOUBLE_EQ(0.5, (double)P3(0));
-    ASSERT_DOUBLE_EQ(-0.5, (double)P3(1));
-    ASSERT_DOUBLE_EQ(0, (double)P3(2));
-    ASSERT_DOUBLE_EQ(-0.5, (double)P4(0));
-    ASSERT_DOUBLE_EQ(-0.5, (double)P4(1));
-    ASSERT_DOUBLE_EQ(0, (double)P4(2));
-}
-
 TEST_F(MeshIntersectorTest, can_detect_if_facet_is_already_included)
 {
     const MeshPtr mesh(new Mesh(MeshBuilder(cube(1, 0, 0, 0, false)).build()));
@@ -576,11 +557,12 @@ TEST_F(MeshIntersectorTest, can_detect_if_facet_is_already_included)
     f.vertex_index.push_back(1);
     f.vertex_index.push_back(2);
     f.vertex_index.push_back(3);
+    f.unit_normal(0) = 0;
+    f.unit_normal(1) = 0;
+    f.unit_normal(2) = -1;
     ASSERT_TRUE(intersector.has(f));
     f.vertex_index.back() = 4;
     ASSERT_FALSE(intersector.has(f));
-    const Facet zero = intersector.compute_closing_facet();
-    ASSERT_TRUE(intersector.has(zero));
 }
 
 TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_partially_immersed_cube)
@@ -591,14 +573,14 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_partially_immersed_cube)
         const double immersed_ratio = a.random<double>().between(0,1);
         std::vector<double> half_immersed(8);
         const double z0 = l*(immersed_ratio-0.5);
-        half_immersed[0] = z0+l/2;
-        half_immersed[1] = z0+l/2;
-        half_immersed[2] = z0+l/2;
-        half_immersed[3] = z0+l/2;
-        half_immersed[4] = z0-l/2;
-        half_immersed[5] = z0-l/2;
-        half_immersed[6] = z0-l/2;
-        half_immersed[7] = z0-l/2;
+        half_immersed[0] = z0-l/2;
+        half_immersed[1] = z0-l/2;
+        half_immersed[2] = z0-l/2;
+        half_immersed[3] = z0-l/2;
+        half_immersed[4] = z0+l/2;
+        half_immersed[5] = z0+l/2;
+        half_immersed[6] = z0+l/2;
+        half_immersed[7] = z0+l/2;
 
         const double x0 = a.random<double>().between(-100,100);
         const double y0 = a.random<double>().between(-100,100);
@@ -644,10 +626,8 @@ TEST_F(MeshIntersectorTest, can_compute_the_barycenter_of_a_partially_immersed_c
 
         intersector.update_intersection_with_free_surface(half_immersed,half_immersed);
 
-        const Facet closing_facet = intersector.compute_closing_facet();
-
-        const EPoint G_emerged = intersector.center_of_mass(intersector.begin_emerged(), intersector.end_emerged(), closing_facet).G;
-        const EPoint G_immersed = intersector.center_of_mass(intersector.begin_immersed(), intersector.end_immersed(), closing_facet).G;
+        const EPoint G_emerged = intersector.center_of_mass_emerged().G;
+        const EPoint G_immersed = intersector.center_of_mass_immersed().G;
 
         ASSERT_NEAR(x0, (double)G_emerged(0),EPS);
         ASSERT_NEAR(y0, (double)G_emerged(1),EPS);
@@ -661,7 +641,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_barycenter_of_a_partially_immersed_c
 TEST_F(MeshIntersectorTest, bug_2715_emerged_volume_for_cube_just_beneath_the_surface)
 {
     MeshIntersector intersector(unit_cube());
-    const std::vector<double> dz = {1,1,1,1,0,0,0,0};
+    const auto dz = get_cube_immersions(0.5);
     intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
 }
@@ -669,7 +649,7 @@ TEST_F(MeshIntersectorTest, bug_2715_emerged_volume_for_cube_just_beneath_the_su
 TEST_F(MeshIntersectorTest, bug_2715_immersed_volume_for_cube_just_beneath_the_surface)
 {
     MeshIntersector intersector(unit_cube());
-    const std::vector<double> dz = {1,1,1,1,0,0,0,0};
+    const auto dz = get_cube_immersions(0.5);
     intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_DOUBLE_EQ(1, intersector.immersed_volume());
 }
@@ -677,7 +657,7 @@ TEST_F(MeshIntersectorTest, bug_2715_immersed_volume_for_cube_just_beneath_the_s
 TEST_F(MeshIntersectorTest, bug_2715_emerged_volume_for_cube_just_above_the_surface)
 {
     MeshIntersector intersector(unit_cube());
-    const std::vector<double> dz = {0,0,0,0,-1,-1,-1,-1};
+    const auto dz = get_cube_immersions(-0.5);
     intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_DOUBLE_EQ(1, intersector.emerged_volume());
 }
@@ -685,7 +665,7 @@ TEST_F(MeshIntersectorTest, bug_2715_emerged_volume_for_cube_just_above_the_surf
 TEST_F(MeshIntersectorTest, bug_2715_immersed_volume_for_cube_just_above_the_surface)
 {
     MeshIntersector intersector(unit_cube());
-    const std::vector<double> dz = {0,0,0,0,-1,-1,-1,-1};
+    const auto dz = get_cube_immersions(-0.5);
     intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_DOUBLE_EQ(0, intersector.immersed_volume());
 }
@@ -700,10 +680,10 @@ TEST_F(MeshIntersectorTest, bug_in_facet_volume)
 
 TEST_F(MeshIntersectorTest, bug_detected_in_potential_energy)
 {
-    //for (size_t i = 0 ; i < 100 ; ++i)
+    for (size_t i = 0 ; i < 100 ; ++i)
     {
-        const double l = 1;//a.random<double>().between(0, 10);
-        const double immersed_ratio = 0.5;//a.random<double>().between(0,1);
+        const double l = a.random<double>().between(0, 10);
+        const double immersed_ratio = a.random<double>().between(0,1);
         std::vector<double> half_immersed(8);
         const double z0 = l*(immersed_ratio-0.5);
         half_immersed[0] = z0-l/2;
@@ -715,18 +695,16 @@ TEST_F(MeshIntersectorTest, bug_detected_in_potential_energy)
         half_immersed[6] = z0+l/2;
         half_immersed[7] = z0+l/2;
 
-        const double x0 = 0;//a.random<double>().between(-100,100);
-        const double y0 = 0;//a.random<double>().between(-100,100);
+        const double x0 = a.random<double>().between(-100,100);
+        const double y0 = a.random<double>().between(-100,100);
 
         MeshIntersector intersector(cube(l, x0, y0, z0));
 
         intersector.update_intersection_with_free_surface(half_immersed,half_immersed);
 
-        const Facet closing_facet = intersector.compute_closing_facet();
+        const EPoint G_immersed = intersector.center_of_mass_immersed().G;
 
-        const EPoint G_immersed = intersector.center_of_mass(intersector.begin_immersed(), intersector.end_immersed(), closing_facet).G;
-
-        ASSERT_NEAR(0.25, (double)G_immersed(2),EPS);
+        ASSERT_NEAR(l*immersed_ratio/2, (double)G_immersed(2),EPS) << "l = " << l << ", immersed_ratio = " << immersed_ratio << ", z0 = " << z0;
     }
 }
 
@@ -736,50 +714,28 @@ std::vector<double> get_L_immersions(const double z0)
     return {z0,z0-1,z0-1,z0,z0-2,z0-2,z0-1,z0,z0-2,z0-2,z0-1,z0-1,z0,z0,z0-1,z0};
 }
 
-TEST_F(MeshIntersectorTest, DISABLED_bug_in_centroid)
+TEST_F(MeshIntersectorTest, bug_in_centroid)
 {
     MeshIntersector intersector(L(),false);
     std::vector<double> dz = get_L_immersions(0);
     intersector.update_intersection_with_free_surface(dz,dz);
-    auto C = intersector.center_of_mass(intersector.begin_immersed(),
-                                        intersector.end_immersed());
+    auto C = intersector.center_of_mass_immersed();
     ASSERT_DOUBLE_EQ(0, C.volume);
 
-//    for (double z0=0.1;z0<1;z0+=0.1)
-    for (double z0=1;z0<2;z0+=1)
+    for (double z0=0.1;z0<1;z0+=0.1)
     {
         dz = get_L_immersions(z0);
         intersector.update_intersection_with_free_surface(dz,dz);
-        C = intersector.center_of_mass(intersector.begin_immersed(),
-                                       intersector.end_immersed());
-        ASSERT_DOUBLE_EQ(2*z0, C.volume) << "z0 = " << z0;
-        ASSERT_DOUBLE_EQ(0.5,  (double)C.G(0)) << "z0 = " << z0;
-        ASSERT_DOUBLE_EQ(1,    (double)C.G(1)) << "z0 = " << z0;
-        ASSERT_DOUBLE_EQ(z0/2, (double)C.G(2)) << "z0 = " << z0;
+        auto C = intersector.center_of_mass_immersed();
+        EXPECT_DOUBLE_EQ(2*z0, C.volume) << "z0 = " << z0;
+        // Coordinates are in the mesh frame
+        EXPECT_DOUBLE_EQ(0.5,  (double)C.G(0)) << "z0 = " << z0;
+        EXPECT_DOUBLE_EQ(1,    (double)C.G(1)) << "z0 = " << z0;
+        EXPECT_DOUBLE_EQ(-z0/2, (double)C.G(2)) << "z0 = " << z0;
     }
 }
 
-std::vector<double> get_cube_immersions(const double z0);
-std::vector<double> get_cube_immersions(const double z0)
-{
-    return std::vector<double>({z0+0.5,z0+0.5,z0+0.5,z0+0.5,z0-0.5,z0-0.5,z0-0.5,z0-0.5});
-}
-
-std::vector<double> get_U_immersions(const double z0);
-std::vector<double> get_U_immersions(const double z0)
-{
-    return std::vector<double>({z0, z0, z0-1,  z0-1, z0-2, z0-2,  z0, z0-1, z0,  z0-1, z0-2, z0-2,  z0,  z0, z0-1, z0-1,  z0-2, z0-2, z0,  z0-1,z0, z0-1, z0-2, z0-2});
-}
-
-void check_vector(const Eigen::Vector3d& v_to_check, const double x_expected, const double y_expected, const double z_expected);
-void check_vector(const Eigen::Vector3d& v_to_check, const double x_expected, const double y_expected, const double z_expected)
-{
-    ASSERT_DOUBLE_EQ(x_expected, v_to_check(0)) << "Expected: " << Eigen::Vector3d(x_expected, y_expected, z_expected).transpose() << ", actual: " << v_to_check.transpose();
-    ASSERT_DOUBLE_EQ(y_expected, v_to_check(1)) << "Expected: " << Eigen::Vector3d(x_expected, y_expected, z_expected).transpose() << ", actual: " << v_to_check.transpose();;
-    ASSERT_DOUBLE_EQ(z_expected, v_to_check(2)) << "Expected: " << Eigen::Vector3d(x_expected, y_expected, z_expected).transpose() << ", actual: " << v_to_check.transpose();;
-}
-
-TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_unit_cube)
+TEST_F(MeshIntersectorTest, immersed_volume_of_unit_cube)
 {
     MeshIntersector intersector(unit_cube());
     const std::vector<double> immersions = {0.4,0.3,0.2,0.1,-0.1,-0.2,-0.3,-0.4};
@@ -800,15 +756,24 @@ TEST_F(MeshIntersectorTest, can_compute_volume_of_fully_immersed_L)
     ASSERT_DOUBLE_EQ(0, intersector.emerged_volume());
 }
 
-TEST_F(MeshIntersectorTest, DISABLED_immersed_volume_of_L)
+TEST_F(MeshIntersectorTest, immersed_volume_of_L)
 {
     MeshIntersector intersector(L(),false);
-    const std::vector<double> immersions = {0.4,0.3,0.2,0.1,-0.1,-0.2,-0.3,-0.4};
+    std::vector<double> immersions = {0.4,0.3,0.2,0.1};
+
     for (const auto z0:immersions)
     {
         std::vector<double> dz = get_L_immersions(z0);
         intersector.update_intersection_with_free_surface(dz,dz);
-        ASSERT_DOUBLE_EQ(z0+0.5, intersector.immersed_volume());
+        ASSERT_DOUBLE_EQ(2*z0, intersector.immersed_volume()) << "z0 = " << z0;
+    }
+
+    immersions = {1.5,1.6,1.7,1.8,1.9,2};
+    for (const auto z0:immersions)
+    {
+        std::vector<double> dz = get_L_immersions(z0);
+        intersector.update_intersection_with_free_surface(dz,dz);
+        ASSERT_DOUBLE_EQ(1+z0, intersector.immersed_volume()) << "z0 = " << z0;
     }
 }
 

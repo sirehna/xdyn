@@ -31,11 +31,9 @@ EPoint FastHydrostaticForceModel::get_application_point(const FacetIterator& tha
 
 double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector<double>&, const EnvironmentAndFrames& env) const
 {
-    const auto b = states.intersector->begin_immersed();
-    const auto e = states.intersector->end_immersed();
-    const auto G = states.intersector->center_of_mass(b, e);
+    const auto G = states.intersector->center_of_mass_immersed();
     const double zC = G.G(2);
-    const double Vim = states.intersector->immersed_volume();
-    return -env.rho*env.g*Vim*zC;
+    const double immersed_volume = G.volume;
+    return -env.rho*env.g*immersed_volume*zC;
 }
 
