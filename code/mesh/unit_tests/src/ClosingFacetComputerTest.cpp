@@ -279,16 +279,16 @@ TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge_using_xmin_strategy
 
 TEST_F(ClosingFacetComputerTest, can_find_contour)
 {
-    ASSERT_THAT(make(case_1()).contour().edge_idx, ElementsAre(4,0,1,3));
-    ASSERT_THAT(make(case_2()).contour().edge_idx, ElementsAre(4,0,1,2,5));
-    ASSERT_THAT(make(case_3()).contour().edge_idx, ElementsAre(7,0,1,2,3,4,5,6));
-    ASSERT_THAT(make(case_4()).contour().edge_idx, ElementsAre(7,0,5,4));
-    ASSERT_THAT(make(case_5()).contour().edge_idx, ElementsAre(6,0,1,2,3,4));
-    ASSERT_THAT(make(case_6()).contour().edge_idx, ElementsAre(5,0,1,2,3,4));
-    ASSERT_THAT(make(case_7()).contour().edge_idx, ElementsAre(5,0,1,2,3,4));
-    ASSERT_THAT(make(case_8()).contour().edge_idx, ElementsAre(4,0,1,2,3));
-    ASSERT_THAT(make(case_9()).contour().edge_idx, ElementsAre(5,0,1,2,3,4));
-    ASSERT_THAT(make(case_10()).contour().edge_idx, ElementsAre(7,0,1,2,3,4,5,6));
+    ASSERT_THAT(make(case_1()).contour().edge_idx, ElementsAre(3,1,0,4));
+    ASSERT_THAT(make(case_2()).contour().edge_idx, ElementsAre(5,2,1,0,4));
+    ASSERT_THAT(make(case_3()).contour().edge_idx, ElementsAre(6,5,4,3,2,1,0,7));
+    ASSERT_THAT(make(case_4()).contour().edge_idx, ElementsAre(4,5,0,7));
+    ASSERT_THAT(make(case_5()).contour().edge_idx, ElementsAre(4,3,2,1,0,6));
+    ASSERT_THAT(make(case_6()).contour().edge_idx, ElementsAre(4,3,2,1,0,5));
+    ASSERT_THAT(make(case_7()).contour().edge_idx, ElementsAre(4,3,2,1,0,5));
+    ASSERT_THAT(make(case_8()).contour().edge_idx, ElementsAre(3,2,1,0,4));
+    ASSERT_THAT(make(case_9()).contour().edge_idx, ElementsAre(4,3,2,1,0,5));
+    ASSERT_THAT(make(case_10()).contour().edge_idx, ElementsAre(6,5,4,3,2,1,0,7));
 }
 
 TEST_F(ClosingFacetComputerTest, bug_in_group_connected_edges_detected_in_MeshIntersector)
@@ -314,7 +314,7 @@ TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_11)
 
 TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_15)
 {
-    ASSERT_THAT(make(case_15()).contour().edge_idx, ElementsAre(3,0,1,2));
+    ASSERT_THAT(make(case_15()).contour().edge_idx, ElementsAre(2,1,0,3));
 }
 
 TEST_F(ClosingFacetComputerTest, bug_detected_in_MeshIntersector)
@@ -455,6 +455,13 @@ TEST_F(ClosingFacetComputerTest, bug_in_next_edge_found_in_MeshIntersectorTest_b
 TEST_F(ClosingFacetComputerTest, contour_in_MeshIntersectorTest_bug_in_centroid)
 {
     const auto contour = make(case_21()).contour();
-    ASSERT_THAT(contour.edge_idx, ElementsAre(0,7,2,3,4,1));
-    ASSERT_THAT(contour.reversed, ElementsAre(false,false,true,false,false,false));
+    ASSERT_THAT(contour.edge_idx, ElementsAre(1,4,3,2,7,0));
+    ASSERT_THAT(contour.reversed, ElementsAre(true,true,true,false,true,true));
+}
+
+TEST_F(ClosingFacetComputerTest, facet_orientation_should_be_correct)
+{
+    const auto contour = make(case_22()).contour();
+    ASSERT_THAT(contour.edge_idx, ElementsAre(0,1,2,3,4,5));
+    ASSERT_THAT(contour.reversed, ElementsAre(false,false,false,false,false,false));
 }

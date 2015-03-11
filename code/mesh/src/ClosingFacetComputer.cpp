@@ -480,6 +480,37 @@ bool ClosingFacetComputer::need_to_reverse(const size_t first_edge, const size_t
     return reverse ? edges.at(first_edge).first != edges.at(second_edge).first : edges.at(first_edge).second != edges.at(second_edge).first;
 }
 
+bool ClosingFacetComputer::direct_orientation(const ClosingFacetComputer::Contour& contour) const // Normal should be oriented downwards
+{
+    const auto idxA = edges.at(contour.edge_idx.front()).first;
+    const auto idxB = edges.at(contour.edge_idx.front()).second;
+    const auto AB = mesh->col(idxB) - mesh->col(idxA);
+    size_t i = 1;
+    auto idxC = contour.reversed.at(i) ? edges.at(contour.edge_idx.at(i)).second : edges.at(contour.edge_idx.at(i)).first;
+    auto idxD = contour.reversed.at(i) ? edges.at(contour.edge_idx.at(i)).first : edges.at(contour.edge_idx.at(i)).second;
+    auto CD = mesh->col(idxD) - mesh->col(idxC);
+    auto z_coord = (double)AB.cross(CD)(2);
+    bool colinear = std::abs(z_coord) < 1E-10;
+    while (colinear and (i<contour.edge_idx.size()-1))
+    {
+        ++i;
+        auto idxC = contour.reversed.at(i) ? edges.at(contour.edge_idx.at(i)).second : edges.at(contour.edge_idx.at(i)).first;
+        auto idxD = contour.reversed.at(i) ? edges.at(contour.edge_idx.at(i)).first : edges.at(contour.edge_idx.at(i)).second;
+        auto CD = mesh->col(idxD) - mesh->col(idxC);
+        z_coord = (double)AB.cross(CD)(2);
+        colinear = std::abs(z_coord) < 1E-10;
+    }
+    return z_coord<0;
+}
+
+void flip(ClosingFacetComputer::Contour& contour);
+void flip(ClosingFacetComputer::Contour& contour)
+{
+    for (auto && b:contour.reversed) b = not(b);
+    std::reverse(contour.edge_idx.begin(),contour.edge_idx.end());
+    std::reverse(contour.reversed.begin(),contour.reversed.end());
+}
+
 ClosingFacetComputer::Contour ClosingFacetComputer::contour(size_t edge) const
 {
     Contour ret;
@@ -509,6 +540,10 @@ ClosingFacetComputer::Contour ClosingFacetComputer::contour(size_t edge) const
         {
             return Contour();
         }
+    }
+    if (not(direct_orientation(ret)))
+    {
+        flip(ret);
     }
     return ret;
 }

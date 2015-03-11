@@ -108,6 +108,7 @@ class ClosingFacetComputer
         bool need_to_reverse(const size_t first_edge, const size_t second_edge, const bool) const;
         bool keep_lowest_angle(const double x0, const double y0,
                 const bool reverse) const;
+        bool direct_orientation(const Contour& contour) const;
 };
 
 #endif  /* CLOSINGFACETCOMPUTER_HPP_ */
