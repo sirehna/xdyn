@@ -18,8 +18,9 @@
 #include <ssc/check_ssc_version.hpp>
 #include <string>
 #include <fstream>
+#include <utility>
 
-CHECK_SSC_VERSION(0xf97df17051798cb3)
+CHECK_SSC_VERSION(0xf86815fd87af243f)
 
 int main(int argc, char** argv)
 {
