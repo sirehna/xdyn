@@ -52,6 +52,7 @@ namespace test_data
     std::string bug_in_exact_hydrostatic();
     std::string bug_2714_heading_keeping();
     std::string bug_2714_station_keeping();
+    std::string bug_2732();
 }
 
 #endif /* YAML_DATA_HPP_ */
