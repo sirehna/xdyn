@@ -99,3 +99,10 @@ TEST_F(GZCurveTest, should_throw_if_phi_max_lower_than_dphi)
         ASSERT_THROW(GZ::Curve::get_phi(dphi, phi_max), GZException);
     }
 }
+
+TEST_F(GZCurveTest, can_calculate_GZ_for_phi_0)
+{
+    const Sim sim = GZ::make_sim(test_data::oscillating_cube_example(), test_data::cube());
+    const GZ::Curve calculate(sim);
+    ASSERT_DOUBLE_EQ(0, calculate.gz(0));
+}

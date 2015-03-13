@@ -39,8 +39,17 @@ std::vector<double> compute_phi(const double dphi, const double phi_max)
     return ret;
 }
 
+GZ::Curve::Curve(const Sim& )
+{
+}
+
 std::vector<double> GZ::Curve::get_phi(const double dphi, const double phi_max)
 {
     check_input(dphi, phi_max);
     return compute_phi(dphi, phi_max);
+}
+
+double GZ::Curve::gz(const double phi) const
+{
+    return phi;
 }
