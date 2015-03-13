@@ -1486,6 +1486,23 @@ par `rpm`.
   beta: {unit: deg, values: [10,-15,20]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+### Sorties
+
+Pour obtenir les sorties d'effort de ce modèle, on écrit par exemple :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: csv
+     filename: propRudd.csv
+     data: [t, 'Fx(Prop. & rudder,Anthineas,Anthineas)', 'Fx(Prop. & rudder,Anthineas,NED)']
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On obtient dans l'exemple précédent la projection suivant l'axe $X$ du repère
+`Anthineas` de l'effort `Prop. & rudder` (correspondant au nom de l'actionneur
+renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
+même type) ainsi que la projection de ce même effort suivant l'axe $X$ du repère
+NED.
+
 ### Références
 
 - *Marine Rudders & Control Surfaces, Principles, Data, Design &
