@@ -161,7 +161,8 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     const auto controlled_forces = pimpl->controlled_forces[body->get_name()];
     for (auto force:controlled_forces)
     {
-        const ssc::kinematics::Wrench tau = (*force)(states, t, pimpl->command_listener);
+        force->update(states, t, pimpl->command_listener);
+        const ssc::kinematics::Wrench tau = force->get_force_in_body_frame();
         const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->get_name());
         const auto t = tau.change_frame_but_keep_ref_point(T);
         const ssc::kinematics::UnsafeWrench tau_body(states.G, t.force, t.torque + (t.get_point()-states.G).cross(t.force));
@@ -199,6 +200,10 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
     for (auto forces:pimpl->forces)
     {
         for (auto force:forces.second) force->feed(obs);
+    }
+    for (auto controlled_forces:pimpl->controlled_forces)
+    {
+        for (auto force:controlled_forces.second) force->feed(obs);
     }
     for (auto body:pimpl->bodies) body->feed(x, obs, pimpl->env.rot);
     pimpl->env.feed(obs, t, pimpl->bodies, state);

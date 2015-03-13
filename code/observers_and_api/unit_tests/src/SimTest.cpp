@@ -26,6 +26,8 @@
 #include <ssc/solver.hpp>
 #include "TriMeshTestData.hpp"
 #include "generate_anthineas.hpp"
+#include "parse_output.hpp"
+#include "ListOfObservers.hpp"
 
 #define EPS (1E-10)
 #define SQUARE(x) ((x)*(x))
@@ -403,4 +405,16 @@ TEST_F(SimTest, LONG_bug_2714_station_keeping)
     const auto yaml = SimulatorYamlParser(test_data::bug_2714_station_keeping()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 0.1, command_listener);
     ASSERT_EQ(2, res.size());
+}
+
+TEST_F(SimTest, LONG_bug_2732)
+{
+    const auto yaml = test_data::bug_2732();
+    ListOfObservers observer(parse_output(yaml));
+    ssc::data_source::DataSource command_listener;
+    command_listener.set<double>("Prop. & rudder(rpm)", 50);
+    command_listener.set<double>("Prop. & rudder(P/D)", 1);
+    command_listener.set<double>("Prop. & rudder(beta)", 0);
+    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    ASSERT_NO_THROW(ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.4, observer));
 }

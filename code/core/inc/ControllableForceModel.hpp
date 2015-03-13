@@ -26,6 +26,8 @@ typedef TR1(shared_ptr)<ControllableForceModel> ControllableForcePtr;
 typedef std::vector<ControllableForcePtr> ListOfControlledForces;
 typedef std::function<boost::optional<ControllableForcePtr>(const std::string&, const std::string&, const std::string, const EnvironmentAndFrames&)> ControllableForceParser;
 
+class Observer;
+
 /** \brief These force models read commands from a DataSource.
  *  \details Provides facilities to the derived classes to retrieve the commands
  *  \addtogroup model_wrappers
@@ -41,6 +43,8 @@ class ControllableForceModel
         ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& position_of_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
         virtual ~ControllableForceModel();
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener) const;
+        ssc::kinematics::Wrench get_force_in_body_frame() const;
+        void update(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener);
         void add_reference_frame(const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const;
         virtual ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const = 0;
         std::string get_name() const;
@@ -60,6 +64,8 @@ class ControllableForceModel
             return parser;
         }
 
+        void feed(Observer& observer) const;
+
     protected:
         EnvironmentAndFrames env;
 
@@ -69,9 +75,12 @@ class ControllableForceModel
         std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener, const double t) const;
 
         std::string name;
+        std::string body_name;
         std::vector<std::string> commands;
         YamlPosition position_of_frame;
         ssc::kinematics::Point point_of_application;
+        ssc::kinematics::Wrench force_in_body_frame;
+        ssc::kinematics::Wrench force_in_ned_frame;
 };
 
 #endif /* CONTROLLABLEFORCEMODEL_HPP_ */

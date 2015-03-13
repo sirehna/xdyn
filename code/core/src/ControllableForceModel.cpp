@@ -9,14 +9,19 @@
 
 #include "ControllableForceModel.hpp"
 #include "ControllableForceModelException.hpp"
+#include "ForceModel.hpp"
+#include "Observer.hpp"
 #include "yaml2eigen.hpp"
 
-ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& position_of_frame_, const std::string& , const EnvironmentAndFrames& env_) :
+ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& position_of_frame_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
     env(env_),
     name(name_),
+    body_name(body_name_),
     commands(commands_),
     position_of_frame(position_of_frame_),
-    point_of_application(make_point(position_of_frame.coordinates, position_of_frame.frame))
+    point_of_application(make_point(position_of_frame.coordinates, position_of_frame.frame)),
+    force_in_body_frame(),
+    force_in_ned_frame()
 {
 }
 
@@ -41,7 +46,19 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
 
 ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener) const
 {
-    return ssc::kinematics::Wrench(point_of_application, get_force(states, t, get_commands(command_listener, t)));
+    return ssc::kinematics::Wrench(point_of_application, get_force(states,t,get_commands(command_listener,t)));
+}
+
+ssc::kinematics::Wrench ControllableForceModel::get_force_in_body_frame() const
+{
+    return force_in_body_frame;
+}
+
+void ControllableForceModel::update(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener)
+{
+    body_name = states.name;
+    force_in_body_frame = this->operator()(states, t, command_listener);
+    force_in_ned_frame = ::ForceModel::project_into_NED_frame(force_in_body_frame, states.get_rot_from_ned_to_body());
 }
 
 void ControllableForceModel::add_reference_frame(const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const
@@ -65,4 +82,21 @@ double ControllableForceModel::get_command(const std::string& command_name, ssc:
         THROW(__PRETTY_FUNCTION__, ControllableForceModelException, msg);
     }
     return ret;
+}
+
+void ControllableForceModel::feed(Observer& observer) const
+{
+    observer.write(force_in_body_frame.X(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fx"},std::string("Fx(")+name+","+body_name+","+body_name+")"));
+    observer.write(force_in_body_frame.Y(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fy"},std::string("Fy(")+name+","+body_name+","+body_name+")"));
+    observer.write(force_in_body_frame.Z(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fz"},std::string("Fz(")+name+","+body_name+","+body_name+")"));
+    observer.write(force_in_body_frame.K(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Mx"},std::string("Mx(")+name+","+body_name+","+body_name+")"));
+    observer.write(force_in_body_frame.M(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"My"},std::string("My(")+name+","+body_name+","+body_name+")"));
+    observer.write(force_in_body_frame.N(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Mz"},std::string("Mz(")+name+","+body_name+","+body_name+")"));
+
+    observer.write(force_in_ned_frame.X(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Fx"},std::string("Fx(")+name+","+body_name+",NED)"));
+    observer.write(force_in_ned_frame.Y(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Fy"},std::string("Fy(")+name+","+body_name+",NED)"));
+    observer.write(force_in_ned_frame.Z(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Fz"},std::string("Fz(")+name+","+body_name+",NED)"));
+    observer.write(force_in_ned_frame.K(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Mx"},std::string("Mx(")+name+","+body_name+",NED)"));
+    observer.write(force_in_ned_frame.M(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","My"},std::string("My(")+name+","+body_name+",NED)"));
+    observer.write(force_in_ned_frame.N(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Mz"},std::string("Mz(")+name+","+body_name+",NED)"));
 }
