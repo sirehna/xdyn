@@ -832,6 +832,26 @@ TEST_F(MeshIntersectorTest, can_calculate_the_volume_of_fully_immersed_U)
     ASSERT_DOUBLE_EQ(5, intersector.immersed_volume());
 }
 
+TEST_F(MeshIntersectorTest, can_calculate_the_volume_of_a_unit_cube)
+{
+    std::vector<double> half_immersed(8);
+    half_immersed[0] = +0.5;
+    half_immersed[1] = +0.5;
+    half_immersed[2] = +0.5;
+    half_immersed[3] = +0.5;
+    half_immersed[4] = -0.5;
+    half_immersed[5] = -0.5;
+    half_immersed[6] = -0.5;
+    half_immersed[7] = -0.5;
+
+    MeshIntersector intersector(read_stl(test_data::cube()));
+
+    intersector.update_intersection_with_free_surface(half_immersed,half_immersed);
+    ASSERT_SMALL_RELATIVE_ERROR(1, intersector.immersed_volume()+intersector.emerged_volume(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(0.5, intersector.emerged_volume(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(0.5, intersector.immersed_volume(), EPS);
+}
+
 TEST_F(MeshIntersectorTest, can_retrieve_edges_exactly_on_the_surface_for_U)
 {
     MeshIntersector intersector(U(),false);
