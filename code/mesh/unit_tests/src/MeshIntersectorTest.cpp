@@ -743,7 +743,7 @@ TEST_F(MeshIntersectorTest, immersed_volume_of_unit_cube)
     {
         std::vector<double> dz = get_cube_immersions(z0);
         intersector.update_intersection_with_free_surface(dz,dz);
-        ASSERT_DOUBLE_EQ(z0+0.5, intersector.immersed_volume());
+        ASSERT_DOUBLE_EQ(z0+0.5, intersector.immersed_volume()) << "z0 = " << z0;
     }
 }
 
