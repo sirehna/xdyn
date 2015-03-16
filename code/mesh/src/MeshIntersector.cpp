@@ -117,6 +117,10 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
         )
 {
     all_relative_immersions = relative_immersions;
+    if (std::any_of(relative_immersions.begin(),relative_immersions.end(), [](const double x){return std::isnan(x);}))
+    {
+        THROW(__PRETTY_FUNCTION__, MeshIntersectorException, "Some relative immersions are NaN.");
+    }
     all_absolute_wave_elevations = absolute_wave_elevations;
     reset_dynamic_members();
     std::vector<bool> facet_crosses_free_surface(mesh->nb_of_static_facets,false);
