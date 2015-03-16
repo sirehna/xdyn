@@ -37,9 +37,23 @@ ssc::kinematics::PointMatrix compute_relative_position(
     return T*ssc::kinematics::PointMatrix(M, frame);
 }
 
+#define CHECK(x) if (std::isnan(x)) {THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"NaN detected in " QUOTEME(x));}
+
 template <typename PointType> PointType compute_relative_position(const TR1(shared_ptr)<PointType>& P, const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k)
 {
     ssc::kinematics::Transform T = k->get("NED", P->get_frame());
+    CHECK(T.get_point().v(0));
+    CHECK(T.get_point().v(1));
+    CHECK(T.get_point().v(2));
+    CHECK(T.get_rot()(0,0));
+    CHECK(T.get_rot()(0,1));
+    CHECK(T.get_rot()(0,2));
+    CHECK(T.get_rot()(1,0));
+    CHECK(T.get_rot()(1,1));
+    CHECK(T.get_rot()(1,2));
+    CHECK(T.get_rot()(2,0));
+    CHECK(T.get_rot()(2,1));
+    CHECK(T.get_rot()(2,2));
     // Create the equivalent transformation just by swapping frame names
     T.swap();
     return T*P;
