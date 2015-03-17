@@ -119,6 +119,16 @@ TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_at_the_surface)
     ASSERT_NEAR(0, F(2),EPS);
 }
 
+TEST_F(ResultantForceComputerTest, can_compute_resultant_for_half_immersed_cube)
+{
+    GZ::ResultantForceComputer sum_of_forces(sim);
+    const auto F = sum_of_forces.resultant(GZ::State(0,0,0)).state;
+    ASSERT_NEAR(1000*9.81-1026*0.5*9.81, F(0),EPS);
+    ASSERT_NEAR(0, F(1),EPS);
+    ASSERT_NEAR(0, F(2),EPS);
+}
+
+
 TEST_F(ResultantForceComputerTest, can_compute_resultant_for_any_angle)
 {
     GZ::ResultantForceComputer sum_of_forces(sim);
