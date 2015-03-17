@@ -169,6 +169,53 @@ TEST_F(ResultantForceComputerTest, can_compute_GZ)
     ASSERT_DOUBLE_EQ(-4,cube.gz(ssc::kinematics::Point("cube", 3,-4,6)));
 }
 
+std::ostream& operator<<(std::ostream& os, const GZ::MinMax& m);
+std::ostream& operator<<(std::ostream& os, const GZ::MinMax& m)
+{
+    os << "{min: " << m.min << ", max: " << m.max << "}";
+    return os;
+}
+
+TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_0)
+{
+    GZ::ResultantForceComputer cube(sim);
+    const GZ::MinMax z = cube.get_zmin_zmax(0);
+    ASSERT_DOUBLE_EQ(-0.5, z.min);
+    ASSERT_DOUBLE_EQ(0.5, z.max);
+}
+
+TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_4)
+{
+    GZ::ResultantForceComputer cube(sim);
+    const GZ::MinMax z = cube.get_zmin_zmax(PI/4);
+    ASSERT_DOUBLE_EQ(-sqrt(2)/2., z.min);
+    ASSERT_DOUBLE_EQ(sqrt(2)/2., z.max);
+}
+
+TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_3)
+{
+    GZ::ResultantForceComputer cube(sim);
+    const GZ::MinMax z = cube.get_zmin_zmax(PI/3);
+    ASSERT_DOUBLE_EQ(-(1+sqrt(3))/4, z.min);
+    ASSERT_DOUBLE_EQ((1+sqrt(3))/4, z.max);
+}
+
+TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_2)
+{
+    GZ::ResultantForceComputer cube(sim);
+    const GZ::MinMax z = cube.get_zmin_zmax(PI/2);
+    ASSERT_DOUBLE_EQ(-0.5, z.min);
+    ASSERT_DOUBLE_EQ(0.5, z.max);
+}
+
+TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_minus_pi_6)
+{
+    GZ::ResultantForceComputer cube(sim);
+    const GZ::MinMax z = cube.get_zmin_zmax(-PI/6);
+    ASSERT_DOUBLE_EQ(-(1+sqrt(3))/4, z.min);
+    ASSERT_DOUBLE_EQ((1+sqrt(3))/4, z.max);
+}
+
 TEST_F(ResultantForceComputerTest, can_compute_K)
 {
     GZ::ResultantForceComputer cube(sim);

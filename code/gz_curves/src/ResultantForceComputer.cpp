@@ -89,3 +89,28 @@ Eigen::Matrix2d GZ::ResultantForceComputer::K(const Eigen::Vector3d& X)
     }
     return ret;
 }
+
+GZ::MinMax GZ::ResultantForceComputer::get_zmin_zmax(const double phi)
+{
+    std::vector<double> x(13, 0);
+    ssc::kinematics::EulerAngles angle(phi, 0, 0);
+    YamlRotation c;
+    c.order_by = "angle";
+    c.convention.push_back("z");
+    c.convention.push_back("y'");
+    c.convention.push_back("x''");
+    const auto quaternion = body->get_quaternions(angle, c);
+    x[QRIDX(0)] = std::get<0>(quaternion);
+    x[QIIDX(0)] = std::get<1>(quaternion);
+    x[QJIDX(0)] = std::get<2>(quaternion);
+    x[QKIDX(0)] = std::get<3>(quaternion);
+
+    body->update(env,x,current_instant);
+
+    const auto Tmesh2ned = env.k->get(body->get_states().M->get_frame(), "NED");
+    const auto M = Tmesh2ned*(*(body->get_states().M));
+    const double zmin = M.m.row(2).minCoeff();
+    const double zmax = M.m.row(2).maxCoeff();
+    current_instant++;
+    return MinMax(zmin,zmax);
+}

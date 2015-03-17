@@ -19,6 +19,13 @@ class HydrostaticForceModel;
 
 namespace GZ
 {
+    struct MinMax
+    {
+        MinMax(const double min_, const double max_) : min(min_), max(max_) {}
+        double min;
+        double max;
+    };
+
     class ResultantForceComputer
     {
         public:
@@ -30,6 +37,7 @@ namespace GZ
             Eigen::Matrix2d K(const Eigen::Vector3d& X);
 
             Eigen::Matrix2d dF(const Eigen::Vector3d& X);
+            MinMax get_zmin_zmax(const double phi);
 
         private:
             BodyPtr body;
