@@ -5,6 +5,17 @@
  *      Author: cady
  */
 
+#include <ssc/exception_handling.hpp>
+
+class gz_newton_raphsonException: public ssc::exception_handling::Exception
+{
+    public:
+        gz_newton_raphsonException(const char* s) :
+               Exception(s)
+        {
+        }
+};
+
 #include "gz_newton_raphson.hpp"
 
 double delta(const Eigen::Vector3d& X1, const Eigen::Vector3d& X2);
@@ -28,7 +39,12 @@ GZ::State GZ::newton_raphson(const GZ::State& X0, //!< Initial value
         Xn_1 = Xn;
         const auto k = K(Xn_1);
         const double det_k = k(0,0)*k(1,1) - k(0,1)*k(1,0);
+        if (std::abs(det_k) < 1E-15)
+        {
+            THROW(__PRETTY_FUNCTION__, gz_newton_raphsonException, "Determinant of K is very close to 0.");
+        }
         const auto y = f(Xn_1).state;
+        if (delta(y,Eigen::Vector3d::Zero()) < eps) return Xn;
         Xn(0) = Xn_1(0) - (k(1,1)*y(0) - k(0,1)*y(2))/det_k;
         Xn(2) = Xn_1(2) - (k(0,0)*y(2) - k(1,0)*y(0))/det_k;
     }
