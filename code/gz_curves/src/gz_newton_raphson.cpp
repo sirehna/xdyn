@@ -24,7 +24,7 @@ double delta(const Eigen::Vector3d& X1, const Eigen::Vector3d& X2)
     return (X1-X2).array().abs().maxCoeff();
 }
 
-GZ::State GZ::newton_raphson(const GZ::State& X0, //!< Initial value
+GZ::State GZ::newton_raphson(const GZ::State& X0,     //!< Initial value
                              const GZ::FType& f,      //!< Function calculating the sum of forces
                              const GZ::KComputer& K,  //!< Function calculating the stiffness matrix (f')
                              const size_t max_it,     //!< Maximum number of iterations
