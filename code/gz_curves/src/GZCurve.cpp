@@ -10,6 +10,22 @@
 
 #include "GZCurve.hpp"
 #include "GZException.hpp"
+#include "gz_newton_raphson.hpp"
+#include "ResultantForceComputer.hpp"
+
+struct GZ::Curve::Impl
+{
+    Impl(const Sim& sim) : res(sim)
+    {
+    }
+
+    double FZ(const double z, const double phi, const double theta)
+    {
+        return res.resultant(State(z, phi, theta)).state(0);
+    }
+
+    ResultantForceComputer res;
+};
 
 void check_input(const double dphi, const double phi_max);
 void check_input(const double dphi, const double phi_max)
@@ -39,8 +55,13 @@ std::vector<double> compute_phi(const double dphi, const double phi_max)
     return ret;
 }
 
-GZ::Curve::Curve(const Sim& )
+GZ::Curve::Curve(const Sim& sim) : pimpl(new Impl(sim)), theta_eq()
 {
+    const FType f = std::bind(&ResultantForceComputer::resultant, &pimpl->res, std::placeholders::_1);
+    const KComputer k = std::bind(&ResultantForceComputer::K, &pimpl->res, std::placeholders::_1);
+    const auto X0 = GZ::newton_raphson(GZ::State::Zero(), f, k, 100, 1E-6);
+    const auto Xeq = GZ::newton_raphson(X0, f, k, 100, 1E-6);
+    theta_eq = Xeq(2);
 }
 
 std::vector<double> GZ::Curve::get_phi(const double dphi, const double phi_max)
@@ -49,7 +70,49 @@ std::vector<double> GZ::Curve::get_phi(const double dphi, const double phi_max)
     return compute_phi(dphi, phi_max);
 }
 
+double delta(const GZ::MinMax& z);
+double delta(const GZ::MinMax& z)
+{
+    return z.max-z.min;
+}
+
+double average(const GZ::MinMax& z);
+double average(const GZ::MinMax& z)
+{
+    return 0.5*(z.min+z.max);
+}
+
+double GZ::Curve::zeq(const double phi, const double theta) const
+{
+    auto z = pimpl->res.get_zmin_zmax(phi);
+    MinMax FZ(pimpl->FZ(z.max,phi,theta), pimpl->FZ(z.min,phi,theta));
+    if (FZ.min>0)
+    {
+        return FZ.min;
+    }
+    if (FZ.max<0)
+    {
+        THROW(__PRETTY_FUNCTION__, GZException, "Resultant should be oriented downwards when body is fully emerged");
+    }
+
+    while (delta(z)>1E-10)
+    {
+        const double z0 = average(z);
+        double FZ0 = pimpl->FZ(average(z),phi,theta);
+        z = (FZ0 < 0) ? MinMax(z.min,z0) : MinMax(z0,z.max);
+    }
+    return average(z);
+}
+
 double GZ::Curve::gz(const double phi) const
 {
-    return phi;
+    const double z_eq = zeq(phi, theta_eq);
+    const GZ::State Xeq(z_eq, phi, theta_eq);
+    const auto B = pimpl->res.resultant(Xeq).centre_of_buyoancy;
+    return pimpl->res.gz(B);
+}
+
+double GZ::Curve::get_theta_eq() const
+{
+    return theta_eq;
 }

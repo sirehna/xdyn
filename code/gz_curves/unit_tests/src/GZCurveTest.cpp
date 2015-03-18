@@ -12,6 +12,12 @@
 #include "STL_data.hpp"
 #include "yaml_data.hpp"
 #include "make_sim_for_GZ.hpp"
+#include "generate_anthineas.hpp"
+#include "stl_writer.hpp"
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 Sim GZCurveTest::sim = GZ::make_sim(test_data::anthineas_hydrostatic_test("hydrostatic"), test_data::cube());
 
@@ -100,9 +106,16 @@ TEST_F(GZCurveTest, should_throw_if_phi_max_lower_than_dphi)
     }
 }
 
+TEST_F(GZCurveTest, can_calculate_zeq_for_phi_0)
+{
+    const Sim sim = GZ::make_sim(test_data::oscillating_cube_example(), test_data::cube());
+    const GZ::Curve calculate(sim);
+    ASSERT_NEAR(1000./1026.-0.5, calculate.zeq(0, 0),EPS);
+}
+
 TEST_F(GZCurveTest, can_calculate_GZ_for_phi_0)
 {
     const Sim sim = GZ::make_sim(test_data::oscillating_cube_example(), test_data::cube());
     const GZ::Curve calculate(sim);
-    ASSERT_DOUBLE_EQ(0, calculate.gz(0));
+    ASSERT_NEAR(0, calculate.gz(0),EPS);
 }
