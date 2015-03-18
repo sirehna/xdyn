@@ -148,25 +148,8 @@ TEST_F(ResultantForceComputerTest, can_compute_centre_of_buoyancy_for_a_cube_rot
 {
     GZ::ResultantForceComputer sum_of_forces(sim);
     const double phi = PI/3;
-    const auto B = sum_of_forces.resultant(GZ::State(0,phi,0)).centre_of_buyoancy;
-    const double By_ned = 1./36.;
-    const double Bz_ned = 5*sqrt(3)/36.;
-
-    const double expected_By_body = By_ned*cos(-phi) - Bz_ned*sin(-phi);
-    const double expected_Bz_body = By_ned*sin(-phi) + Bz_ned*cos(-phi);
-
-    ASSERT_NEAR(0, B.x(),EPS);
-    ASSERT_NEAR(expected_By_body, B.y(),EPS);
-    ASSERT_NEAR(expected_Bz_body, B.z(),EPS);
-}
-
-TEST_F(ResultantForceComputerTest, can_compute_GZ)
-{
-    const GZ::ResultantForceComputer anthineas(GZ::make_sim(test_data::anthineas_hydrostatic_test("hydrostatic"), test_data::cube()));
-    ASSERT_DOUBLE_EQ(4,anthineas.gz(ssc::kinematics::Point("cube", 3,4,6)));
-    const GZ::ResultantForceComputer cube(sim);
-    ASSERT_DOUBLE_EQ(4,cube.gz(ssc::kinematics::Point("cube", 3,4,6)));
-    ASSERT_DOUBLE_EQ(-4,cube.gz(ssc::kinematics::Point("cube", 3,-4,6)));
+    const auto gz = sum_of_forces.resultant(GZ::State(0,phi,0)).gz;
+    ASSERT_NEAR(1./18., gz, EPS);
 }
 
 TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_0)

@@ -31,8 +31,6 @@ namespace GZ
         public:
             ResultantForceComputer(const Sim& sim, const double dz = 1e-6, const double dphi = 1e-6, const double dtheta = 1e-6);
             ::GZ::Resultant resultant(const ::GZ::State& point);
-            double gz(const ssc::kinematics::Point& B //!< Centre of buoyancy in the body frame
-                     ) const;
             Eigen::Matrix2d K(const Eigen::Vector3d& X);
 
             MinMax get_zmin_zmax(const double phi);

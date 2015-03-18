@@ -8,6 +8,6 @@
 #include "GZTypes.hpp"
 
 
-GZ::Resultant::Resultant() : state(0,0,0), centre_of_buyoancy()
+GZ::Resultant::Resultant() : state(0,0,0), gz(0)
 {
 }

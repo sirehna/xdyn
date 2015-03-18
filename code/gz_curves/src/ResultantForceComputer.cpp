@@ -51,21 +51,20 @@ GZ::Resultant GZ::ResultantForceComputer::resultant(const ::GZ::State& point)
 
     body->update(env,x,current_instant);
 
-    auto sum_of_forces = gravity->operator ()(body->get_states(),current_instant)
-                       + hydrostatic->operator ()(body->get_states(),current_instant);
+    const auto gravity_force = gravity->operator ()(body->get_states(),current_instant);
+    const auto hydrostatic_force = hydrostatic->operator ()(body->get_states(),current_instant);
+    auto sum_of_forces = gravity_force
+                       + hydrostatic_force;
 
     current_instant += 1;
     GZ::Resultant ret;
     ret.state = GZ::State(sum_of_forces.Z(), sum_of_forces.K(), sum_of_forces.M());
-    ret.centre_of_buyoancy = hydrostatic->get_centre_of_buoyancy();
+
+    const double Fz = hydrostatic_force.force(2);
+    const double Mx = hydrostatic_force.torque(0);
+    ret.gz = Fz!=0 ? Mx/Fz : 0;
 
     return ret;
-}
-
-double GZ::ResultantForceComputer::gz(const ssc::kinematics::Point& B //!< Centre of buoyancy in the body frame
-                                ) const
-{
-    return (B-G)(1);
 }
 
 Eigen::Matrix2d GZ::ResultantForceComputer::dF(const Eigen::Vector3d& X)

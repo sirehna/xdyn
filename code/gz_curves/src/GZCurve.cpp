@@ -108,8 +108,7 @@ double GZ::Curve::gz(const double phi) const
 {
     const double z_eq = zeq(phi, theta_eq);
     const GZ::State Xeq(z_eq, phi, theta_eq);
-    const auto B = pimpl->res.resultant(Xeq).centre_of_buyoancy;
-    return pimpl->res.gz(B);
+    return pimpl->res.resultant(Xeq).gz;
 }
 
 double GZ::Curve::get_theta_eq() const

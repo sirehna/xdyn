@@ -18,7 +18,7 @@ namespace GZ
     {
         Resultant();
         State state;
-        ssc::kinematics::Point centre_of_buyoancy;
+        double gz;
     };
 }
 
