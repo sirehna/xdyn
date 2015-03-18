@@ -169,13 +169,6 @@ TEST_F(ResultantForceComputerTest, can_compute_GZ)
     ASSERT_DOUBLE_EQ(-4,cube.gz(ssc::kinematics::Point("cube", 3,-4,6)));
 }
 
-std::ostream& operator<<(std::ostream& os, const GZ::MinMax& m);
-std::ostream& operator<<(std::ostream& os, const GZ::MinMax& m)
-{
-    os << "{min: " << m.min << ", max: " << m.max << "}";
-    return os;
-}
-
 TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_0)
 {
     GZ::ResultantForceComputer cube(sim);

@@ -114,3 +114,9 @@ GZ::MinMax GZ::ResultantForceComputer::get_zmin_zmax(const double phi)
     current_instant++;
     return MinMax(zmin,zmax);
 }
+
+std::ostream& operator<<(std::ostream& os, const GZ::MinMax& m)
+{
+    os << "{min: " << m.min << ", max: " << m.max << "}";
+    return os;
+}

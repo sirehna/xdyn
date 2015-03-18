@@ -52,4 +52,6 @@ namespace GZ
     };
 }
 
+std::ostream& operator<<(std::ostream& os, const GZ::MinMax& m);
+
 #endif /* RESULTANTFORCECOMPUTER_HPP_ */
