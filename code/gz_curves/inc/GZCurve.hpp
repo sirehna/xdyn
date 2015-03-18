@@ -15,6 +15,8 @@
 
 #include TR1INC(memory)
 
+#include "GZTypes.hpp"
+
 class Sim;
 
 namespace GZ
@@ -27,7 +29,7 @@ namespace GZ
             double gz(const double phi) const;
             double zeq(const double phi, const double theta) const;
             double get_theta_eq() const;
-
+            State get_Xeq() const;
 
         private:
             Curve();

@@ -15,7 +15,10 @@
 
 struct GZ::Curve::Impl
 {
-    Impl(const Sim& sim) : res(sim)
+    Impl(const Sim& sim) :
+        res(sim),
+        f(std::bind(&ResultantForceComputer::resultant, &res, std::placeholders::_1)),
+        k(std::bind(&ResultantForceComputer::K, &res, std::placeholders::_1))
     {
     }
 
@@ -25,6 +28,8 @@ struct GZ::Curve::Impl
     }
 
     ResultantForceComputer res;
+    FType f;
+    KComputer k;
 };
 
 void check_input(const double dphi, const double phi_max);
@@ -55,13 +60,13 @@ std::vector<double> compute_phi(const double dphi, const double phi_max)
     return ret;
 }
 
-GZ::Curve::Curve(const Sim& sim) : pimpl(new Impl(sim)), theta_eq()
+GZ::State GZ::Curve::get_Xeq() const
 {
-    const FType f = std::bind(&ResultantForceComputer::resultant, &pimpl->res, std::placeholders::_1);
-    const KComputer k = std::bind(&ResultantForceComputer::K, &pimpl->res, std::placeholders::_1);
-    const auto X0 = GZ::newton_raphson(GZ::State::Zero(), f, k, 100, 1E-6);
-    const auto Xeq = GZ::newton_raphson(X0, f, k, 100, 1E-6);
-    theta_eq = Xeq(2);
+    return GZ::newton_raphson(GZ::State::Zero(), pimpl->f, pimpl->k, 100, 1E-6);
+}
+
+GZ::Curve::Curve(const Sim& sim) : pimpl(new Impl(sim)), theta_eq(get_Xeq()(2))
+{
 }
 
 std::vector<double> GZ::Curve::get_phi(const double dphi, const double phi_max)
