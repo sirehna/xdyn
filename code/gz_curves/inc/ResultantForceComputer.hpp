@@ -33,13 +33,13 @@ namespace GZ
             ::GZ::Resultant resultant(const ::GZ::State& point);
             double gz(const ssc::kinematics::Point& B //!< Centre of buoyancy in the body frame
                      ) const;
-
             Eigen::Matrix2d K(const Eigen::Vector3d& X);
 
-            Eigen::Matrix2d dF(const Eigen::Vector3d& X);
             MinMax get_zmin_zmax(const double phi);
 
         private:
+            Eigen::Matrix2d dF(const Eigen::Vector3d& X);
+
             BodyPtr body;
             EnvironmentAndFrames env;
             TR1(shared_ptr)<GravityForceModel> gravity;
