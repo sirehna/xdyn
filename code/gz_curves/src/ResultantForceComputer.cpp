@@ -26,12 +26,18 @@ GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s, const double dz
 {
 
 }
-
+#define CHECK(x) if (std::isnan(x)) {THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"NaN detected in " QUOTEME(x));}
 GZ::Resultant GZ::ResultantForceComputer::resultant(const ::GZ::State& point)
 {
+    const double z = point(0);
+    const double phi = point(1);
+    const double theta = point(2);
+    CHECK(z);
+    CHECK(phi);
+    CHECK(theta);
     std::vector<double> x(13, 0);
-    x[ZIDX(0)] = point(0);
-    ssc::kinematics::EulerAngles angle(point(1),point(2),0);
+    x[ZIDX(0)] = z;
+    ssc::kinematics::EulerAngles angle(phi, theta, 0);
     YamlRotation c;
     c.order_by = "angle";
     c.convention.push_back("z");
