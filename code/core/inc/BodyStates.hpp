@@ -58,7 +58,7 @@ struct BodyStates
     History qj;                                                    //!< Imaginary part of the quaternion (of the rotation from NED to body)
     History qk;                                                    //!< Imaginary part of the quaternion (of the rotation from NED to body)
     MeshIntersectorPtr intersector;                                //!< Allows us to iterate on all emerged or immersed facets
-    EPoint down_direction_in_mesh_frame;                           //!< Unit vertical vector, expressed in the body's mesh frame
+    EPoint g_in_mesh_frame;                           //!< Unit vertical vector, expressed in the body's mesh frame
     ssc::kinematics::Point hydrodynamic_forces_calculation_point;  //!< Point of expression of hydrodynamic forces (except Froude-Krylov & hydrostatic)
 
     ssc::kinematics::EulerAngles get_angles(const YamlRotation& c) const;

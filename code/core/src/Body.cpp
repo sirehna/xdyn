@@ -82,7 +82,7 @@ void Body::update_projection_of_z_in_mesh_frame(const double g,
 {
     const ssc::kinematics::Point g_in_NED("NED", 0, 0, g);
     const ssc::kinematics::RotationMatrix ned2mesh = k->get("NED", std::string("mesh(") + states.name + ")").get_rot();
-    states.down_direction_in_mesh_frame = ned2mesh*g_in_NED.v;
+    states.g_in_mesh_frame = ned2mesh*g_in_NED.v;
 }
 
 #define CHECK(x) if (std::isnan(x)) {THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"NaN detected in " QUOTEME(x));}
