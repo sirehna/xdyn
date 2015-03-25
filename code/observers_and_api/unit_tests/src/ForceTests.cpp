@@ -549,3 +549,29 @@ TEST_F(ForceTests, LONG_immersed_and_emerged_surfaces_are_correct)
     emerged_surface = test.emerged_surface(0,0,-2.4,PI/4,0,0);
     ASSERT_NEAR(495.51109419742073214, immersed_surface+emerged_surface, 1E-10);
 }
+
+TEST_F(ForceTests, DISABLED_center_of_buoyancy_L)
+{
+    ForceTester test(test_data::L_config(), L());
+    test.add<HydrostaticForceModel>();
+    const double z0 = -2.5/3;
+    const double eps = 1E-10;
+    for (double z = 0.1 ; z < 1 ; z+=0.1)
+    {
+        const auto centre_of_buoyancy_in_ned = test.center_of_buoyancy_in_ned_frame(+0.5,2.5/3,z+z0,0,0,0);
+        ASSERT_NEAR(0.5, (double)centre_of_buoyancy_in_ned(0), eps) << "z[ned]=" << z << ", B = " << centre_of_buoyancy_in_ned.transpose();
+        ASSERT_NEAR(1, (double)centre_of_buoyancy_in_ned(1), eps) << "z[ned]=" << z << ", B = " << centre_of_buoyancy_in_ned.transpose();
+        ASSERT_NEAR(z/2, (double)centre_of_buoyancy_in_ned(2), eps) << "z[ned]=" << z << ", B = " << centre_of_buoyancy_in_ned.transpose();
+    }
+    for (double z = 0 ; z < 1 ; z+=0.1)
+    {
+        const auto centre_of_buoyancy_in_ned = test.center_of_buoyancy_in_ned_frame(+0.5,2.5/3,z+1+z0,0,0,0);
+        ASSERT_NEAR(0.5, (double)centre_of_buoyancy_in_ned(0), eps) << "z[ned]=" << z+1 << ", B = " << centre_of_buoyancy_in_ned.transpose();
+        ASSERT_NEAR((2+z/2)/(2+z), (double)centre_of_buoyancy_in_ned(1), eps) << "z[ned]=" << z+1 << ", B = " << centre_of_buoyancy_in_ned.transpose();
+        ASSERT_NEAR((1+z)-(1+z+z*z/2)/(2+z), (double)centre_of_buoyancy_in_ned(2), eps) << "z[ned]=" << z+1 << ", B = " << centre_of_buoyancy_in_ned.transpose();
+    }
+    const auto B = test.center_of_buoyancy_in_ned_frame(+0.5,2.5/3,z0,PI/2,0,0);
+    ASSERT_NEAR(0.5, (double)B(0), eps) << "B = " << B.transpose();
+    ASSERT_NEAR(2.5/3, (double)B(1), eps) << "B = " << B.transpose();;
+    ASSERT_NEAR(2.5/3, (double)B(2), eps) << "B = " << B.transpose();;
+}
