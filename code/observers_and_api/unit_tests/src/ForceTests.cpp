@@ -16,6 +16,7 @@
 #include "STL_data.hpp"
 #include "yaml_data.hpp"
 #include "stl_writer.hpp"
+#include "TriMeshTestData.hpp"
 
 #define EPS (1E-8)
 
@@ -515,4 +516,22 @@ TEST_F(ForceTests, LONG_validation_of_anthineas_volume_against_VTK)
     ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
     ASSERT_NEAR(601.726637766, test.emerged_volume(0,0,-100,0,0,0), 1E-4);
     ASSERT_NEAR(601.726637766, test.immersed_volume(0,0,100,0,0,0), 1E-4);
+}
+
+TEST_F(ForceTests, validation_of_L_volume_against_VTK)
+{
+    ForceTester test(test_data::L_config(), L());
+    const double z0 = -2.5/3;
+    ASSERT_NEAR(0, test.immersed_volume(0,0,z0,0,0,0), 1E-10);
+    ASSERT_NEAR(0.5, test.immersed_volume(0,0,z0+0.25,0,0,0), 1E-10);
+    ASSERT_NEAR(1, test.immersed_volume(0,0,z0+0.5,0,0,0), 1E-10);
+    ASSERT_NEAR(2, test.immersed_volume(0,0,z0+1,0,0,0), 1E-10);
+    ASSERT_NEAR(2.5, test.immersed_volume(0,0,z0+1.5,0,0,0), 1E-10);
+    ASSERT_NEAR(3, test.immersed_volume(0,0,z0+2,0,0,0), 1E-10);
+    ASSERT_NEAR(3, test.emerged_volume(0,0,z0,0,0,0), 1E-10);
+    ASSERT_NEAR(2.5, test.emerged_volume(0,0,z0+0.25,0,0,0), 1E-10);
+    ASSERT_NEAR(2, test.emerged_volume(0,0,z0+0.5,0,0,0), 1E-10);
+    ASSERT_NEAR(1, test.emerged_volume(0,0,z0+1,0,0,0), 1E-10);
+    ASSERT_NEAR(0.5, test.emerged_volume(0,0,z0+1.5,0,0,0), 1E-10);
+    ASSERT_NEAR(0, test.emerged_volume(0,0,z0+2,0,0,0), 1E-10);
 }
