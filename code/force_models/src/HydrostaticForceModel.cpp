@@ -40,7 +40,7 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
 
     for (size_t i = 0 ; i < 3 ; ++i) centre_of_buoyancy->operator()(i) = C.G(i);
 
-    // Coordinates of the centre of buyoancy in the BODY frame
+    // Coordinates of the center of buoyancy in the BODY frame
     const ssc::kinematics::Point B(body, C.G);
 
     ssc::kinematics::Vector6d w;
@@ -52,7 +52,7 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
          0,
          0;
 
-    // The coordinates of the centre of buyoancy (in the NED frame) are given by Tned2body.inverse()*B
+    // The coordinates of the center of buoyancy (in the NED frame) are given by Tned2body.inverse()*B
     ssc::kinematics::Wrench ret(Tned2body.inverse()*B,w);
     const auto G = TG2body*states.G;
     ret = ret.change_frame_but_keep_ref_point(Tned2body);
