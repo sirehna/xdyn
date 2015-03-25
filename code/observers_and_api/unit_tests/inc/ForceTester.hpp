@@ -44,6 +44,13 @@ class ForceTester
             return *this;
         }
 
+        EPoint center_of_buoyancy_in_ned_frame(const double x,
+                                               const double y,
+                                               const double z,
+                                               const double phi,
+                                               const double theta,
+                                               const double psi);
+
     private:
         ForceTester();
         Sim make_sim(const std::string& yaml, const std::string& stl) const;

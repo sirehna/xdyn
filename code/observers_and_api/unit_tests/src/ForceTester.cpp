@@ -140,3 +140,25 @@ double ForceTester::emerged_volume(const double x,
     set_states(x, y, z, phi, theta, psi);
     return body->get_states().intersector->emerged_volume();
 }
+
+EPoint ForceTester::center_of_buoyancy_in_ned_frame(const double x,
+                                                    const double y,
+                                                    const double z,
+                                                    const double phi,
+                                                    const double theta,
+                                                    const double psi)
+{
+    std::vector<double> states = set_states(x, y, z, phi, theta, psi);
+    auto Tned2body = body->get_transform_from_ned_to(states);
+    Tned2body.swap();
+    for (const auto force:forces)
+    {
+        const auto hs = dynamic_cast<HydrostaticForceModel*>(force.get());
+        if (hs)
+        {
+            hs->operator()(body->get_states(), current_instant++);
+            return (Tned2body*hs->get_centre_of_buoyancy()).v;
+        }
+    }
+    return EPoint(std::nan(""),std::nan(""),std::nan(""));
+}
