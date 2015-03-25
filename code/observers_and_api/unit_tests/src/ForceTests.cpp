@@ -575,3 +575,18 @@ TEST_F(ForceTests, DISABLED_center_of_buoyancy_L)
     ASSERT_NEAR(2.5/3, (double)B(1), eps) << "B = " << B.transpose();;
     ASSERT_NEAR(2.5/3, (double)B(2), eps) << "B = " << B.transpose();;
 }
+
+TEST_F(ForceTests, DISABLED_center_of_buoyancy_cube)
+{
+    ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
+    test.add<HydrostaticForceModel>();
+    const double eps = 1E-10;
+    EPoint B = test.center_of_buoyancy_in_ned_frame(0,0,0,PI/4,0,0);
+    ASSERT_NEAR(0, (double)B(0), eps) << "B = " << B.transpose();
+    ASSERT_NEAR(0, (double)B(1), eps) << "B = " << B.transpose();
+    ASSERT_NEAR(sqrt(2)/6, (double)B(2), eps) << "B = " << B.transpose();
+    B = test.center_of_buoyancy_in_ned_frame(0,0,0,PI/2,0,0);
+    ASSERT_NEAR(0, (double)B(0), eps) << "B = " << B.transpose();
+    ASSERT_NEAR(0, (double)B(1), eps) << "B = " << B.transpose();
+    ASSERT_NEAR(sqrt(2)/6, (double)B(2), eps) << "B = " << B.transpose();
+}
