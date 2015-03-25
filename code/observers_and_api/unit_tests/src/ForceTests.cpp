@@ -15,6 +15,7 @@
 #include "HydrostaticForceModel.hpp"
 #include "STL_data.hpp"
 #include "yaml_data.hpp"
+#include "stl_writer.hpp"
 
 #define EPS (1E-8)
 
@@ -507,4 +508,11 @@ TEST_F(ForceTests, can_compute_torque_for_a_cube_rotated_on_theta)
     ASSERT_NEAR(-1026*0.5*9.81, F.Z(),EPS);
     EXPECT_NEAR(0, F.K(),EPS);
     EXPECT_NEAR(-1026*0.5*9.81*1/36., F.M(),EPS);
+}
+
+TEST_F(ForceTests, LONG_validation_of_anthineas_volume_against_VTK)
+{
+    ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
+    ASSERT_NEAR(601.726637766, test.emerged_volume(0,0,-100,0,0,0), 1E-4);
+    ASSERT_NEAR(601.726637766, test.immersed_volume(0,0,100,0,0,0), 1E-4);
 }
