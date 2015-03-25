@@ -8,6 +8,7 @@
 
 #include "check_input_yaml.hpp"
 #include "ForceTester.hpp"
+#include "HydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "simulator_api.hpp"
 #include "StateMacros.hpp"
@@ -74,12 +75,8 @@ ForceTester::ForceTester(const std::string& yaml, const std::string& stl) :
     env = sys.get_env();
 }
 
-ssc::kinematics::Wrench ForceTester::force_in_ned(const double x,
-                                                  const double y,
-                                                  const double z,
-                                                  const double phi,
-                                                  const double theta,
-                                                  const double psi)
+std::vector<double> ForceTester::set_states(const double x, const double y,
+        const double z, const double phi, const double theta, const double psi)
 {
     std::vector<double> states(13, 0);
     states[XIDX(0)] = x;
@@ -97,6 +94,18 @@ ssc::kinematics::Wrench ForceTester::force_in_ned(const double x,
     states[QJIDX(0)] = std::get<2>(quaternion);
     states[QKIDX(0)] = std::get<3>(quaternion);
     body->update(env,states,current_instant);
+    current_instant += 1;
+    return states;
+}
+
+ssc::kinematics::Wrench ForceTester::force_in_ned(const double x,
+                                                  const double y,
+                                                  const double z,
+                                                  const double phi,
+                                                  const double theta,
+                                                  const double psi)
+{
+    std::vector<double> states = set_states(x, y, z, phi, theta, psi);
     ssc::kinematics::Wrench ret;
     if (not(forces.empty())) ret = forces.front()->operator()(body->get_states(), current_instant);
     for (size_t i = 1 ; i < forces.size() ; ++i)
@@ -107,8 +116,27 @@ ssc::kinematics::Wrench ForceTester::force_in_ned(const double x,
 
     ret.force = body->get_rot_from_ned_to(states)*ret.force;
     ret.torque = body->get_rot_from_ned_to(states)*ret.torque;
-    current_instant += 1;
     return ret;
 }
 
+double ForceTester::immersed_volume(const double x,
+                                    const double y,
+                                    const double z,
+                                    const double phi,
+                                    const double theta,
+                                    const double psi)
+{
+    set_states(x, y, z, phi, theta, psi);
+    return body->get_states().intersector->immersed_volume();
+}
 
+double ForceTester::emerged_volume(const double x,
+                                    const double y,
+                                    const double z,
+                                    const double phi,
+                                    const double theta,
+                                    const double psi)
+{
+    set_states(x, y, z, phi, theta, psi);
+    return body->get_states().intersector->emerged_volume();
+}

@@ -22,6 +22,21 @@ class ForceTester
                                              const double phi,
                                              const double theta,
                                              const double psi);
+        double immersed_volume(const double x,
+                               const double y,
+                               const double z,
+                               const double phi,
+                               const double theta,
+                               const double psi);
+        double emerged_volume(const double x,
+                              const double y,
+                              const double z,
+                              const double phi,
+                              const double theta,
+                              const double psi);
+        std::vector<double> set_states(const double x, const double y,
+                const double z, const double phi, const double theta,
+                const double psi);
 
         template <typename ForceType> ForceTester& add()
         {
