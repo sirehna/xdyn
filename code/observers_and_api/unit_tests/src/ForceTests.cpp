@@ -590,3 +590,12 @@ TEST_F(ForceTests, DISABLED_center_of_buoyancy_cube)
     ASSERT_NEAR(0, (double)B(1), eps) << "B = " << B.transpose();
     ASSERT_NEAR(sqrt(2)/6, (double)B(2), eps) << "B = " << B.transpose();
 }
+
+TEST_F(ForceTests, DISABLED_LONG_bug_detected_in_GZ)
+{
+    const double eps = 1.0103e-12;
+    ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
+    const double V1 = test.immersed_volume(0,0,-eps/2,-PI/2,0,0);
+    const double V2 = test.immersed_volume(0,0,+eps/2,-PI/2,0,0);
+    ASSERT_NEAR(V1, V2, 1);
+}
