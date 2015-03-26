@@ -10,6 +10,7 @@
 #include <ssc/kinematics.hpp>
 
 #include "Body.hpp"
+#include "calculate_gz.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "Observer.hpp"
 #include "QuadraticDampingForceModel.hpp"
@@ -69,9 +70,15 @@ ssc::kinematics::Point HydrostaticForceModel::get_centre_of_buoyancy() const
                                                    centre_of_buoyancy->operator()(2));
 }
 
+double HydrostaticForceModel::gz() const
+{
+    return calculate_gz(env.k->get("NED", get_body_name()), get_force_in_ned_frame());
+}
+
 void HydrostaticForceModel::extra_observations(Observer& observer) const
 {
     observer.write(centre_of_buoyancy->operator()(0),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bx"},std::string("Bx")));
     observer.write(centre_of_buoyancy->operator()(1),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"By"},std::string("By")));
     observer.write(centre_of_buoyancy->operator()(2),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bz"},std::string("Bz")));
+    observer.write(gz(),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),get_body_name(),"GZ"},std::string("GZ(")+get_name()+","+get_body_name()+")"));
 }

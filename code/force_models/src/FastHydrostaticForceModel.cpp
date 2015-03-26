@@ -7,12 +7,19 @@
 
 #include "Body.hpp"
 #include "FastHydrostaticForceModel.hpp"
+#include "calculate_gz.hpp"
 #include "mesh_manipulations.hpp"
+#include "Observer.hpp"
 
 const std::string FastHydrostaticForceModel::model_name = "non-linear hydrostatic (fast)";
 
 FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(model_name, body_name_, env_)
 {
+}
+
+double FastHydrostaticForceModel::gz() const
+{
+    return calculate_gz(env.k->get("NED", get_body_name()), get_force_in_ned_frame());
 }
 
 SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double) const
@@ -37,3 +44,7 @@ double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector
     return -env.rho*env.g*immersed_volume*zC;
 }
 
+void FastHydrostaticForceModel::extra_observations(Observer& observer) const
+{
+    observer.write(gz(),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),get_body_name(),"GZ"},std::string("GZ(")+get_name()+","+get_body_name()+")"));
+}
