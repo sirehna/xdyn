@@ -555,3 +555,18 @@ std::string MeshIntersector::display_edge_in_NED(const size_t edge_idx, const EP
     ss << edge << std::endl;
     return ss.str();
 }
+
+VectorOfVectorOfPoints MeshIntersector::serialize(const FacetIterator& begin, const FacetIterator& end) const
+{
+    VectorOfVectorOfPoints ret;
+    for (auto it = begin ; it != end ; ++it)
+    {
+        VectorOfPoints v;
+        for (const auto i:it->vertex_index)
+        {
+            v.push_back(mesh->all_nodes.col(i));
+        }
+        ret.push_back(v);
+    }
+    return ret;
+}

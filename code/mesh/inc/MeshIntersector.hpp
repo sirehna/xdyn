@@ -234,6 +234,8 @@ class MeshIntersector
         std::string display_facet_in_NED(const Facet& facet, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
         std::string display_edge_in_NED(const size_t idx, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
 
+        VectorOfVectorOfPoints serialize(const FacetIterator& begin, const FacetIterator& end) const;
+
     private:
         CenterOfMass center_of_mass(const FacetIterator& begin, const FacetIterator& end, const bool immersed) const;
         CenterOfMass center_of_mass(const Facet& f) const;
