@@ -78,7 +78,11 @@ class SurfaceForceModel : public ForceModel
         virtual FacetIterator begin(const MeshIntersectorPtr& intersector) const = 0;
         virtual FacetIterator end(const MeshIntersectorPtr& intersector) const = 0;
         virtual double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const = 0;
+
+    protected:
         EnvironmentAndFrames env;
+
+    private:
         ssc::kinematics::Point g_in_NED;
 
     protected:
