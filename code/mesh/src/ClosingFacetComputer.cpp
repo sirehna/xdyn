@@ -565,6 +565,7 @@ template <typename T> bool have_same_elements(const std::vector<T>& v1, const st
 
 ClosingFacetComputer::Contour ClosingFacetComputer::contour() const
 {
+    if (edges.size() == 1) return Contour();
     auto ext_edges = extreme_edges();
     const auto first_contour = contour(ext_edges.first);
     const auto second_contour = contour(ext_edges.second);
