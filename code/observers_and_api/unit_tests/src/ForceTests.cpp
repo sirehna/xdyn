@@ -24,6 +24,9 @@
 #include <cmath>
 #define PI M_PI
 
+#define ANTHINEAS_VOLUME 601.726637766
+#define ANTHINEAS_SURFACE 495.51109419742073214
+
 ForceTests::ForceTests() : a(ssc::random_data_generator::DataGenerator(8222))
 {
 }
@@ -514,8 +517,8 @@ TEST_F(ForceTests, can_compute_torque_for_a_cube_rotated_on_theta)
 TEST_F(ForceTests, LONG_validation_of_anthineas_volume_against_VTK)
 {
     ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
-    ASSERT_NEAR(601.726637766, test.emerged_volume(0,0,-100,0,0,0), 1E-4);
-    ASSERT_NEAR(601.726637766, test.immersed_volume(0,0,100,0,0,0), 1E-4);
+    ASSERT_NEAR(ANTHINEAS_VOLUME, test.emerged_volume(0,0,-100,0,0,0), 1E-4);
+    ASSERT_NEAR(ANTHINEAS_VOLUME, test.immersed_volume(0,0,100,0,0,0), 1E-4);
 }
 
 TEST_F(ForceTests, validation_of_L_volume_against_VTK)
