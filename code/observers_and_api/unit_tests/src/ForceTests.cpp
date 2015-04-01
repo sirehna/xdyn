@@ -595,7 +595,22 @@ TEST_F(ForceTests, DISABLED_LONG_bug_detected_in_GZ)
 {
     const double eps = 1.0103e-12;
     ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
-    const double V1 = test.immersed_volume(0,0,-eps/2,-PI/2,0,0);
-    const double V2 = test.immersed_volume(0,0,+eps/2,-PI/2,0,0);
-    ASSERT_NEAR(V1, V2, 1);
+    test.immersed_volume(0,0,-eps/2,-PI/2,0,0);
+    const double V1_immersed = test.immersed_volume(0,0,-eps/2,-PI/2,0,0);
+    const double V1_emerged = test.immersed_volume(0,0,-eps/2,-PI/2,0,0);
+    const double V2_immersed = test.immersed_volume(0,0,+eps/2,-PI/2,0,0);
+    const double V2_emerged = test.immersed_volume(0,0,+eps/2,-PI/2,0,0);
+
+    ASSERT_NEAR(ANTHINEAS_VOLUME/2, V1_immersed, 1E-1);
+    ASSERT_NEAR(ANTHINEAS_VOLUME/2, V1_emerged, 1E-1);
+    ASSERT_NEAR(ANTHINEAS_VOLUME/2, V2_immersed, 1E-1);
+    ASSERT_NEAR(ANTHINEAS_VOLUME/2, V2_emerged, 1E-1);
+
+    ASSERT_NEAR(ANTHINEAS_VOLUME, V1_immersed+V1_emerged, 1E-1);
+    ASSERT_NEAR(V1_immersed, V1_emerged, 1E-1);
+    ASSERT_NEAR(V2_immersed, V2_emerged, 1E-1);
+
+    ASSERT_NEAR(ANTHINEAS_VOLUME, V2_immersed+V2_emerged, 1E-1);
+    ASSERT_NEAR(V1_immersed, V2_immersed+V2_emerged, 1E-1);
+    ASSERT_NEAR(V1_emerged, V2_emerged, 1);
 }
