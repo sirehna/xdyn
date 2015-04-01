@@ -10,12 +10,12 @@
 
 /** \def MESH_EQ(a,b)*/
 #ifndef MESH_EQ
-#define MESH_EQ(a, b)               (fabs((a) - (b)) <= MESH_EPSILON)
+#define MESH_EQ(a, b)               ((a)==(b))
 #endif
 
 /** \def MESH_LT(a,b) Lower than (strict)*/
 #ifndef MESH_LT
-#define MESH_LT(a, b)            (((b) - (a)) > MESH_EPSILON)
+#define MESH_LT(a, b)            (((b) - (a)) > 0)
 #endif
 
 #endif
