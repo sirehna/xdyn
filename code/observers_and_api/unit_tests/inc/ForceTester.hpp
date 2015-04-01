@@ -34,6 +34,18 @@ class ForceTester
                               const double phi,
                               const double theta,
                               const double psi);
+        double immersed_surface(const double x,
+                               const double y,
+                               const double z,
+                               const double phi,
+                               const double theta,
+                               const double psi);
+        double emerged_surface(const double x,
+                              const double y,
+                              const double z,
+                              const double phi,
+                              const double theta,
+                              const double psi);
         std::vector<double> set_states(const double x, const double y,
                 const double z, const double phi, const double theta,
                 const double psi);

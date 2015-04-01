@@ -130,6 +130,38 @@ double ForceTester::immersed_volume(const double x,
     return body->get_states().intersector->immersed_volume();
 }
 
+double ForceTester::immersed_surface(const double x,
+                                     const double y,
+                                     const double z,
+                                     const double phi,
+                                     const double theta,
+                                     const double psi)
+{
+    set_states(x, y, z, phi, theta, psi);
+    double S = 0;
+    for (auto it = body->get_states().intersector->begin_immersed() ; it != body->get_states().intersector->end_immersed() ; ++it)
+    {
+        S += it->area;
+    }
+    return S;
+}
+
+double ForceTester::emerged_surface(const double x,
+                                    const double y,
+                                    const double z,
+                                    const double phi,
+                                    const double theta,
+                                    const double psi)
+{
+    set_states(x, y, z, phi, theta, psi);
+    double S = 0;
+    for (auto it = body->get_states().intersector->begin_emerged() ; it != body->get_states().intersector->end_emerged() ; ++it)
+    {
+        S += it->area;
+    }
+    return S;
+}
+
 double ForceTester::emerged_volume(const double x,
                                     const double y,
                                     const double z,

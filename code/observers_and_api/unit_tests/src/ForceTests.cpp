@@ -535,3 +535,14 @@ TEST_F(ForceTests, validation_of_L_volume_against_VTK)
     ASSERT_NEAR(0.5, test.emerged_volume(0,0,z0+1.5,0,0,0), 1E-10);
     ASSERT_NEAR(0, test.emerged_volume(0,0,z0+2,0,0,0), 1E-10);
 }
+
+TEST_F(ForceTests, LONG_immersed_and_emerged_surfaces_are_correct)
+{
+    ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
+    double immersed_surface = test.immersed_surface(0,0,1,-PI/2,0,0);
+    double emerged_surface = test.emerged_surface(0,0,1,-PI/2,0,0);
+    ASSERT_NEAR(495.51109419742073214, immersed_surface+emerged_surface, 1E-10);
+    immersed_surface = test.immersed_surface(0,0,-2.4,PI/4,0,0);
+    emerged_surface = test.emerged_surface(0,0,-2.4,PI/4,0,0);
+    ASSERT_NEAR(495.51109419742073214, immersed_surface+emerged_surface, 1E-10);
+}
