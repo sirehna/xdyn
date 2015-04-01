@@ -114,7 +114,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
     const double B = x3*y1-x1*y3;
     const double C = x1*y2-x2*y1;
 
-    const double norm = sqrt(A*A+B*B+C*C);
+    const double norm = hypot(hypot(A,B),C);
     if (norm<1000*std::numeric_limits<double>::epsilon()) return Eigen::Vector3d(0,0,0);
     return Eigen::Vector3d(A/norm,B/norm,C/norm);
 }
@@ -142,8 +142,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& points, //!< Polygon for which the u
     const double B = x3*y1-x1*y3;
     const double C = x1*y2-x2*y1;
 
-    const double norm = sqrt(A*A+B*B+C*C);
-    if (norm<1000*std::numeric_limits<double>::epsilon()) return Eigen::Vector3d(0,0,0);
+    const double norm = hypot(hypot(A,B),C);
     return Eigen::Vector3d(A/norm,B/norm,C/norm);
 }
 
