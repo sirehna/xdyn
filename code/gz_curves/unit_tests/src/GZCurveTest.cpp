@@ -119,3 +119,39 @@ TEST_F(GZCurveTest, can_calculate_GZ_for_phi_0)
     const GZ::Curve calculate(sim);
     ASSERT_NEAR(0, calculate.gz(0),EPS);
 }
+
+TEST_F(GZCurveTest, LONG_validate_gz_against_python_code)
+{
+    const Sim sim = GZ::make_sim(test_data::anthineas_damping(), write_stl(anthineas()));
+    const GZ::Curve calculate(sim);
+
+    ASSERT_SMALL_RELATIVE_ERROR(-7.78E-001, calculate.gz(-70*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-7.87E-001, calculate.gz(-65*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-7.86E-001, calculate.gz(-60*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-7.70E-001, calculate.gz(-55*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-7.39E-001, calculate.gz(-50*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-6.85E-001, calculate.gz(-45*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-6.04E-001, calculate.gz(-40*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-5.13E-001, calculate.gz(-35*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-4.24E-001, calculate.gz(-30*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-3.39E-001, calculate.gz(-25*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-2.63E-001, calculate.gz(-20*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-1.93E-001, calculate.gz(-15*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-1.27E-001, calculate.gz(-10*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(-6.27E-002, calculate.gz(-5*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(4.10E-004, calculate.gz(0), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(6.20E-002, calculate.gz(5*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(1.26E-001, calculate.gz(10*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(1.92E-001, calculate.gz(15*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(2.63E-001, calculate.gz(20*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(3.39E-001, calculate.gz(25*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(4.24E-001, calculate.gz(30*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(5.12E-001, calculate.gz(35*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(6.04E-001, calculate.gz(40*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(6.85E-001, calculate.gz(45*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(7.39E-001, calculate.gz(50*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(7.71E-001, calculate.gz(55*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(7.86E-001, calculate.gz(60*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(7.88E-001, calculate.gz(65*PI/180.), 0.05);
+    ASSERT_SMALL_RELATIVE_ERROR(7.78E-001, calculate.gz(70*PI/180.), 0.05);
+}
