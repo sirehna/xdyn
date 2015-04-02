@@ -88,6 +88,7 @@ void JsonObserver::flush_after_write()
         os << "}";
     }
     os << "]"<<std::endl;
+    os <<std::flush;
 }
 
 void JsonObserver::flush_value()
