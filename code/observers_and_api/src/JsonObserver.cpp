@@ -34,7 +34,6 @@ JsonObserver::~JsonObserver()
 
 std::function<void()> JsonObserver::get_serializer(const double val, const DataAddressing& d)
 {
-    std::cout<<"'"<<d.name<<"':"<<val<<std::endl<<std::flush;
     return [this,d,val]()
                       {
                         JsonMapKeyVar j = extractKeyVarFromString(d.name);
@@ -90,26 +89,6 @@ void JsonObserver::flush_after_write()
     }
     os << "]"<<std::endl;
 }
-
-/*
-void Observer::serialize_everything()
-{
-    const size_t n = stuff_to_write.size();
-    size_t i = 0;
-    for (auto stuff:stuff_to_write)
-    {
-        auto serialize_stuff = serialize.find(stuff);
-        if (serialize_stuff == serialize.end())
-        {
-            THROW(__PRETTY_FUNCTION__, ObserverException, std::string("Simulation does not compute '") + stuff + "'");
-        }
-        serialize_stuff->second();
-        if (i<(n-1)) flush_value();
-        ++i;
-    }
-    flush_after_write();
-}
- */
 
 void JsonObserver::flush_value()
 {
