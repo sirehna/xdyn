@@ -6,6 +6,7 @@ FILE(GLOB SRC
         src/Hdf5ObserverTest.cpp
         src/Hdf5WaveObserverTest.cpp
         src/Hdf5WaveObserverBuilderTest.cpp
+        src/JsonObserverTest.cpp
         src/WebSocketObserverTest.cpp
         src/WebSocketObserverBoostAsioTest.cpp
         src/SimTest.cpp
