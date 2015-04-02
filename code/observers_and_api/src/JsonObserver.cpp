@@ -60,7 +60,7 @@ void flushMap(std::ostream& os, const std::map<std::string,double>& stuff_to_wri
     os << "{";
     for (auto const& stuff:stuff_to_write)
     {
-        os << "'"<<stuff.first<<"':"<<stuff.second;
+        os << "\""<<stuff.first<<"\":"<<stuff.second;
         if (i<(n-1)) os << ",";
         ++i;
     }
@@ -73,16 +73,16 @@ void JsonObserver::flush_after_write()
     for (auto const& object:jsonMap)
     {
         os << "{";
-        os << "'name':'"<<object.first<<"',";
+        os << "\"name\":\""<<object.first<<"\",";
         if (object.first.find(',')==std::string::npos)
         {
-            os << "'type':'attitude',";
+            os << "\"type\":\"attitude\",";
         }
         else
         {
-            os << "'type':'wrench',";
+            os << "\"type\":\"wrench\",";
         }
-        os << "'var':";
+        os << "\"var\":";
         flushMap(os, object.second);
         os << "}";
     }
