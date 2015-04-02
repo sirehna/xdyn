@@ -129,17 +129,17 @@ TEST_F(ResultantForceComputerTest, can_compute_resultant_for_half_immersed_cube)
 }
 
 
-TEST_F(ResultantForceComputerTest, can_compute_resultant_for_any_angle)
+TEST_F(ResultantForceComputerTest, LONG_can_compute_resultant_for_any_angle)
 {
-    GZ::ResultantForceComputer sum_of_forces(sim);
-    const size_t n = 1;//100;
+    GZ::ResultantForceComputer sum_of_forces(GZ::make_sim(test_data::oscillating_cube_example(), test_data::cube()));
+    const size_t n = 100;
     for (size_t i = 0 ; i < n ; ++i)
     {
         const double angle = -PI + (2*PI)*(double)(i)/(std::max(1.,(double)n - 1));
         const auto F1 = sum_of_forces.resultant(GZ::State(0,angle,0)).state;
-        ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(angle), F1(0),EPS);
+        ASSERT_NEAR((1000*9.81-1026*0.5*9.81), F1(0),EPS) << "angle = " << angle;
         const auto F2 = sum_of_forces.resultant(GZ::State(0,0,angle)).state;
-        ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(angle), F2(0),EPS);
+        ASSERT_NEAR((1000*9.81-1026*0.5*9.81), F2(0),EPS) << "angle = " << angle;
     }
 
 }

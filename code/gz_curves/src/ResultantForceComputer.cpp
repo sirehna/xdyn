@@ -51,18 +51,18 @@ GZ::Resultant GZ::ResultantForceComputer::resultant(const ::GZ::State& point)
 
     body->update(env,x,current_instant);
 
-    const auto gravity_force = gravity->operator ()(body->get_states(),current_instant);
-    const auto hydrostatic_force = hydrostatic->operator ()(body->get_states(),current_instant);
+    gravity->update(body->get_states(),current_instant);
+    hydrostatic->update(body->get_states(),current_instant);
+    const auto gravity_force = gravity->get_force_in_ned_frame();
+    const auto hydrostatic_force = hydrostatic->get_force_in_ned_frame();
+    const double gz = hydrostatic->gz();
     auto sum_of_forces = gravity_force
                        + hydrostatic_force;
 
     current_instant += 1;
     GZ::Resultant ret;
     ret.state = GZ::State(sum_of_forces.Z(), sum_of_forces.K(), sum_of_forces.M());
-
-    const double Fz = hydrostatic_force.force(2);
-    const double Mx = hydrostatic_force.torque(0);
-    ret.gz = Fz!=0 ? Mx/Fz : 0;
+    ret.gz = gz;
 
     return ret;
 }
