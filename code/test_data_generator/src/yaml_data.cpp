@@ -557,7 +557,10 @@ std::string test_data::falling_ball_example()
        << "     data: [x(ball)]\n"
        << "   - format: hdf5\n"
        << "     filename: falling_ball.h5\n"
-       << "     data: ['x(ball)','y(ball)','z(ball)','Fz(gravity,ball,ball)']\n";
+       << "     data: ['x(ball)','y(ball)','z(ball)','Fz(gravity,ball,ball)']\n"
+       << "   - format: json\n"
+       << "     filename: falling_ball.json\n"
+       << "     data: ['x(ball)','y(ball)','z(ball)','qr(ball)','qi(ball)','qj(ball)','qk(ball)']\n";
     return ss.str();
 }
 
