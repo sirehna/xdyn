@@ -24,7 +24,6 @@ JsonObserver::JsonObserver(
         os(output_to_file ? *(new std::ofstream(filename)) : std::cout),
         jsonMap()
 {
-    std::cout<<filename<<std::endl;
 }
 
 JsonObserver::~JsonObserver()
