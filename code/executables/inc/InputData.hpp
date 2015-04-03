@@ -22,7 +22,6 @@ struct InputData
     double initial_timestep;
     double tstart;
     double tend;
-    bool help;
     bool empty() const;
 };
 

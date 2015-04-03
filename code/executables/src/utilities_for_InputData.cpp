@@ -75,8 +75,7 @@ int get_input_data(int argc, char **argv, InputData& input_data)
                                                  .positional(p)
                                                  .run(), vm);
     po::notify(vm);
-    input_data.help = vm.count("help");
-    if (invalid(input_data) || input_data.help)
+    if (invalid(input_data) or vm.count("help"))
     {
         print_usage(std::cout, desc, argv[0], "This is a ship simulator");
         return EXIT_FAILURE;
