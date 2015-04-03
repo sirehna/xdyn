@@ -65,9 +65,8 @@ po::options_description get_options_description(InputData& input_data)
     return desc;
 }
 
-int get_input_data(int argc, char **argv, InputData& input_data)
+bool parse_input(int argc, char **argv, const po::options_description& desc)
 {
-    const po::options_description desc = get_options_description(input_data);
     po::positional_options_description p;
     p.add("yml", -1);
     po::variables_map vm;
@@ -75,7 +74,14 @@ int get_input_data(int argc, char **argv, InputData& input_data)
                                                  .positional(p)
                                                  .run(), vm);
     po::notify(vm);
-    if (invalid(input_data) or vm.count("help"))
+    return vm.count("help");
+}
+
+int get_input_data(int argc, char **argv, InputData& input_data)
+{
+    const po::options_description desc = get_options_description(input_data);
+    const bool help = parse_input(argc, argv, desc);
+    if (invalid(input_data) or help)
     {
         print_usage(std::cout, desc, argv[0], "This is a ship simulator");
         return EXIT_FAILURE;
