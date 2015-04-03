@@ -21,7 +21,7 @@ InputData::InputData() : yaml_filenames(),
 
 bool InputData::empty() const
 {
-    return wave_output.empty() and command_file.empty() and output_filename.empty() and solver.empty()
+    return wave_output.empty() and command_file.empty() and output_filename.empty()
             and yaml_filenames.empty() and (initial_timestep == 0) and (tstart == 0) and (tend == 0)
             and (not(help));
 }

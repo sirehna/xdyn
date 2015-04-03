@@ -29,6 +29,7 @@ std::string description(const std::string& des)
 
 bool invalid(const InputData& input)
 {
+    if (input.empty()) return true;
     if (input.yaml_filenames.empty())
     {
         std::cerr << "Error: no input YAML files defined: need at least one." << std::endl;
