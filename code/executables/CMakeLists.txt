@@ -28,6 +28,7 @@ INCLUDE_DIRECTORIES(${force_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS})
 include_directories(${observers_and_api_INCLUDE_DIRS})
 include_directories(${hdb_interpolators_INCLUDE_DIRS})
+include_directories(${gz_curves_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/utilities_for_InputData.cpp "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
 CONFIGURE_FILE(src/convert_stl_files_to_code.cpp "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
@@ -76,6 +77,16 @@ TARGET_LINK_LIBRARIES(quat2eul yaml_parser_shared
 
 ADD_EXECUTABLE(convert_stl_files_to_code ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp)
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code
+                      simulatorIrtJv
+                      ${Boost_PROGRAM_OPTIONS_LIBRARY}
+                      boost_program_options_descriptions_static
+                      base91x_static)
+
+ADD_EXECUTABLE(gz src/gz.cpp
+                  ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
+                  src/InputData.cpp)
+
+TARGET_LINK_LIBRARIES(gz
                       simulatorIrtJv
                       ${Boost_PROGRAM_OPTIONS_LIBRARY}
                       boost_program_options_descriptions_static
