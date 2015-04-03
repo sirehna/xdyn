@@ -18,7 +18,7 @@
 std::string description(const std::string& des)
 {
     std::stringstream ss;
-    ss << des << " Created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
+    ss << des << " created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
        << "(c) SIREHNA 2014-2015." << std::endl
        << std::endl
        << "ID: @GIT_SHA1@" << std::endl
@@ -78,7 +78,7 @@ int get_input_data(int argc, char **argv, InputData& input_data)
     input_data.help = vm.count("help");
     if (invalid(input_data) || input_data.help)
     {
-        print_usage(std::cout, desc, argv[0], "This is a ship simulator.");
+        print_usage(std::cout, desc, argv[0], "This is a ship simulator");
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
