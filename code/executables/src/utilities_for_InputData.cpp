@@ -78,17 +78,17 @@ int get_input_data(int argc, char **argv, InputData& input_data)
     input_data.help = vm.count("help");
     if (invalid(input_data) || input_data.help)
     {
-        print_usage(std::cout, desc);
+        print_usage(std::cout, desc, argv[0], "This is a ship simulator.");
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
 }
 
-void print_usage(std::ostream& os, const po::options_description& desc)
+void print_usage(std::ostream& os, const po::options_description& desc, const std::string& program_name, const std::string& des)
 {
     po::positional_options_description positionalOptions;
-    os << description("This is a ship simulator.") << std::endl;
-    rad::OptionPrinter::printStandardAppDesc("sim <yaml file>",
+    os << description(des) << std::endl;
+    rad::OptionPrinter::printStandardAppDesc(program_name + " <yaml file>",
                                              os,
                                              desc,
                                              &positionalOptions);
