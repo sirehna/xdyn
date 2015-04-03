@@ -101,8 +101,7 @@ StateType Sim::normalize_quaternions(const StateType& all_states
     StateType normalized = all_states;
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
     {
-        const auto norm = sqrt((double)SQUARE(*_QR(normalized,i))+(double)SQUARE(*_QI(normalized,i))
-                              +(double)SQUARE(*_QJ(normalized,i))+(double)SQUARE(*_QK(normalized,i)));
+        const auto norm = std::hypot(std::hypot(std::hypot(*_QR(normalized,i),*_QI(normalized,i)),*_QJ(normalized,i)),*_QK(normalized,i));
         if (not almost_equal(norm,1.0))
         {
             *_QR(normalized,i) /= norm;
@@ -116,14 +115,13 @@ StateType Sim::normalize_quaternions(const StateType& all_states
 
 void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
 {
-    auto x_with_normalized_quaternions = normalize_quaternions(x);
     for (auto body: pimpl->bodies)
     {
-        body->update(pimpl->env,x_with_normalized_quaternions,t);
-        const auto Fext = sum_of_forces(x_with_normalized_quaternions, body, t);
-        body->calculate_state_derivatives(Fext, x_with_normalized_quaternions, dx_dt, pimpl->env);
+        body->update(pimpl->env,x,t);
+        const auto Fext = sum_of_forces(x, body, t);
+        body->calculate_state_derivatives(Fext, x, dx_dt, pimpl->env);
     }
-    state = x_with_normalized_quaternions;
+    state = normalize_quaternions(x);
     pimpl->_dx_dt = dx_dt;
 }
 
@@ -197,6 +195,7 @@ std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current in
 
 void Sim::output(const StateType& x, Observer& obs, const double t) const
 {
+    const auto normalized_x = normalize_quaternions(x);
     for (auto forces:pimpl->forces)
     {
         for (auto force:forces.second) force->feed(obs);
@@ -205,8 +204,8 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
     {
         for (auto force:controlled_forces.second) force->feed(obs);
     }
-    for (auto body:pimpl->bodies) body->feed(x, obs, pimpl->env.rot);
-    pimpl->env.feed(obs, t, pimpl->bodies, state);
+    for (auto body:pimpl->bodies) body->feed(normalized_x, obs, pimpl->env.rot);
+    pimpl->env.feed(obs, t, pimpl->bodies, normalized_x);
     for (auto body:pimpl->bodies)
     {
         pimpl->feed_sum_of_forces(obs, body->get_name());
