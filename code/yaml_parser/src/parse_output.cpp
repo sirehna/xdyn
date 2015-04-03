@@ -91,9 +91,10 @@ std::string get_format(const std::string& filename)
                                          return "???";
 }
 
-void handle_output_request_from_filename(const std::string& filename, YamlOutput& out);
-void handle_output_request_from_filename(const std::string& filename, YamlOutput& out)
+YamlOutput build_YamlOutput_from_filename(const std::string& filename);
+YamlOutput build_YamlOutput_from_filename(const std::string& filename)
 {
+    YamlOutput out;
     if ((filename.empty()) or (filename=="tsv"))
     {
         out.format = "tsv";
@@ -114,12 +115,12 @@ void handle_output_request_from_filename(const std::string& filename, YamlOutput
         out.format = get_format(filename);
         out.filename = filename;
     }
+    return out;
 }
 
 YamlOutput generate_default_outputter_with_all_states_in_it(const std::string yaml, const std::string& filename)
 {
-    YamlOutput out;
-    handle_output_request_from_filename(filename, out);
+    auto out = build_YamlOutput_from_filename(filename);
     out.data.push_back("t");
     const auto bodies = get_body_names(yaml);
     for (auto body:bodies) fill(out, body);
