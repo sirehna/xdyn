@@ -10,7 +10,7 @@
 
 #include <string>
 #include <vector>
-
+#include <ssc/macros.hpp>
 struct InputData
 {
     InputData();
@@ -23,6 +23,7 @@ struct InputData
     double tstart;
     double tend;
     bool help;
+    bool empty() const;
 };
 
 #endif /* INPUTDATA_HPP_ */
