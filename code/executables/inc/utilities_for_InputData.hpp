@@ -21,7 +21,7 @@ void print_usage(std::ostream& os, const po::options_description& desc);
 bool invalid(const InputData& input);
 po::options_description get_options_description(InputData& input_data);
 int get_input_data(int argc, char **argv, InputData& input_data);
-std::string description();
+std::string description(const std::string& des);
 void copy_stream(const std::ostream& from_stream, std::ostream& to_stream);
 
 #endif /* UTILITIES_FOR_INPUTDATA_HPP_ */

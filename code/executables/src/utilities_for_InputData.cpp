@@ -15,10 +15,10 @@
 #include "InputData.hpp"
 #include "OptionPrinter.hpp"
 
-std::string description()
+std::string description(const std::string& des)
 {
     std::stringstream ss;
-    ss << "This is the simulator created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
+    ss << des << " Created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
        << "(c) SIREHNA 2014-2015." << std::endl
        << std::endl
        << "ID: @GIT_SHA1@" << std::endl
@@ -86,7 +86,7 @@ int get_input_data(int argc, char **argv, InputData& input_data)
 void print_usage(std::ostream& os, const po::options_description& desc)
 {
     po::positional_options_description positionalOptions;
-    os << description() << std::endl;
+    os << description("This is a ship simulator.") << std::endl;
     rad::OptionPrinter::printStandardAppDesc("sim <yaml file>",
                                              os,
                                              desc,
