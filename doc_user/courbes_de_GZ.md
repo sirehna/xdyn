@@ -110,6 +110,69 @@ $$x_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{x(P_1)+x(P_2)+x(
 $$y_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{y(P_1)+y(P_2)+y(P_3)}{4}dV$$
 $$z_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{z(P_1)+z(P_2)+z(P_3)}{4}dV$$
 
+#### Autre méthode de calcul
+
+Une méthode plus simple car ne nécessitant pas le calcul explicite du centre de
+carène est de projeter le vecteur $GB$ sur le vecteur $y$ du plan vertical
+attaché au corps :
+
+$$GZ = y\cdot GB$$
+
+or 
+
+$$y = \frac{x_{\mbox{body}}^{\mbox{(ned)}} \times
+z_{\mbox{ned}}^{\mbox{(ned)}}}{\left\|x_{\mbox{body}}^{\mbox{(ned)}} \times
+z_{\mbox{ned}}^{\mbox{(ned)}}\right\|}$$
+
+
+où $x_{\mbox{body}}^{\mbox{(ned)}}$ désigne les coordonnées du vecteur $x$ du
+repère body, exprimées dans le repère NED et $z_{\mbox{ned}}^{\mbox{(ned)}}$ les
+coordonnées du vecteur $z$ du repère NED exprimées dans le repère NED.
+
+Il se trouve qu'il n'est pas nécessaire de connaître la coordonnée $z$ du
+vecteur GB. En effet,
+
+$$\exists \lambda_0\in\mathbf{R} : GB = \frac{M\times
+F}{\left\|F\right\|} + \lambda_0 F$$
+
+où $M$ est le moment en $G$ de l'effort hydrostatique et $F$ la résultante de
+l'effort hydrostatique.
+
+On pose
+
+$$GB_{\lambda} = \frac{M\times F}{\left\|F\right\|} + \lambda F$$
+
+Dans le repère NED, on a :
+
+$$F = \left[\begin{array}{c}0\\0\\f_z\end{array}\right]$$
+$$M = \left[\begin{array}{c}m_x\\m_y\\m_z\end{array}\right]$$
+
+donc
+
+$$GB_{lambda} = \left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]$$
+
+où l'on a noté
+
+$$M\times F = \left[\begin{array}{c}mf_x\\mf_y\\mf_z\end{array}\right]$$
+
+$$GZ_{\lambda} = y\cdot GB_{\lambda} =
+\left[\begin{array}{c}x\\y\\z\end{array}\right]\times
+\left[\begin{array}{c}0\\0\\1\end{array}\right]\cdot
+\left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]$$
+
+d'où
+
+$$\forall \lambda\in\mathbf{R}, GZ_{\lambda} = \frac{x m_x}{f_z} + \frac{y
+m_y}{f_z}$$
+
+soit, avec les conventions de rotation usuelles :
+
+
+$$ GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
+\sin(\psi)\cdot\cos(\theta)\cdot m_y}{f_z\left\|x_{\mbox{body}}^{\mbox{(ned)}}\right\|}
+$$
+
+
 ## Outil de calcul de $GZ$
 
 Parallèlement au simulateur, un autre exécutable appelé `gz` permet de calculer
@@ -119,6 +182,32 @@ Cet outil prend en entrée des paramètres de ligne de commande et un fichier
 YAML au même format que celui pour le simulateur. Contrairement au
 simulateur, l'outil `gz` n'utilise ni les conditions initiales, ni les sorties,
 ni les efforts extérieurs spécifiés dans le fichier YAML.
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+APPEL: ./gz <yaml file> [-h] [-y ARG] [-s ARG] [--dphi ARG] [--phi_max ARG] 
+Options:
+  -h [ --help ]         Afficher le message d'aide (en anglais)
+  -y [ --yml ] arg      Nom du (ou des) fichier(s) YAML (le flag est facultatif)
+  -s [ --stl ] arg      Nom du fichier STL
+  --dphi arg            Pas de calcul en roulis (en degrés)
+  --phi_max arg         Angle de roulis maximal (en degrés)
+~~~~~~~~~~~~~~~~~~~~
+
+Exemple : 
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+./gz anthineas_in_waves.yml -s anthineas.stl --dphi 10 --phi_max 40
+Phi [deg]   GZ(phi) [m]
+-40 -0.615127
+-30 -0.432902
+-20 -0.269154
+-10 -0.129381
+0   0.000617987
+10  0.130468
+20  0.269942
+30  0.433329
+40  0.615116
+~~~~~~~~~~~~~~~~~~~~
 
 ## Références
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 398
