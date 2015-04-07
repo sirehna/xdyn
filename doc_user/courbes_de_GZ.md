@@ -149,7 +149,7 @@ $$M = \left[\begin{array}{c}m_x\\m_y\\m_z\end{array}\right]$$
 
 donc
 
-$$GB_{lambda} = \left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]$$
+$$GB_{\lambda} = \left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]$$
 
 où l'on a noté
 
