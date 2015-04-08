@@ -19,7 +19,7 @@
 
 #include "external_data_structures_parsers.hpp"
 
-CHECK_SSC_VERSION(0xf86815fd87af243f)
+CHECK_SSC_VERSION(0x8fc63877569cb532)
 
 #define _USE_MATH_DEFINE
 #include <cmath>
