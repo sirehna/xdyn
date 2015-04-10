@@ -6,6 +6,7 @@
  */
 
 #include "calculate_gz.hpp"
+#include "EnvironmentAndFrames.hpp"
 
 double calculate_gz(const ssc::kinematics::Transform& body2ned,
                     const ssc::kinematics::Wrench& force_and_torque_projected_in_NED_frame)
@@ -17,4 +18,9 @@ double calculate_gz(const ssc::kinematics::Transform& body2ned,
     const double mx = force_and_torque_projected_in_NED_frame.torque(0);
     const double my = force_and_torque_projected_in_NED_frame.torque(1);
     return (cos_psi_cos_theta*mx + sin_psi_cos_theta*my)/fz/Xbody_projected_in_NED_frame.norm();
+}
+
+double calculate_gz(const ForceModel& F, const EnvironmentAndFrames& env)
+{
+    return calculate_gz(env.k->get("NED", F.get_body_name()), F.get_force_in_ned_frame());
 }
