@@ -26,6 +26,7 @@ MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_, const bool
 ,index_of_immersed_facets()
 ,index_of_facets_exactly_on_the_surface()
 ,index_of_edges_exactly_on_surface()
+,need_to_update_closing_facet(true)
 {}
 
 MeshIntersector::MeshIntersector(const MeshPtr mesh_)
@@ -37,6 +38,7 @@ MeshIntersector::MeshIntersector(const MeshPtr mesh_)
         ,index_of_immersed_facets()
         ,index_of_facets_exactly_on_the_surface()
         ,index_of_edges_exactly_on_surface()
+        ,need_to_update_closing_facet(true)
 {}
 
 void MeshIntersector::find_intersection_with_free_surface(
@@ -133,7 +135,7 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
     {
         all_absolute_immersions[i] = all_relative_immersions[i] + all_absolute_wave_elevations[i];
     }
-    build_closing_edge();
+    need_to_update_closing_facet = true;
 }
 
 void MeshIntersector::build_closing_edge()
@@ -162,6 +164,7 @@ void MeshIntersector::build_closing_edge()
             index_of_facets_exactly_on_the_surface.push_back(mesh->create_facet_from_edges(contour_with_oriented_edge_ids,unit_normal));
         }
     }
+    need_to_update_closing_facet = false;
 }
 
 void MeshIntersector::split_partially_immersed_facet_and_classify(
@@ -394,18 +397,19 @@ RotationMatrix rot_(const double phi, const double theta, const double psi)
     return rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(ssc::kinematics::EulerAngles(phi,theta,psi));
 }
 
-CenterOfMass MeshIntersector::center_of_mass_immersed() const
+CenterOfMass MeshIntersector::center_of_mass_immersed()
 {
     return center_of_mass(begin_immersed(), end_immersed(), true);
 }
 
-CenterOfMass MeshIntersector::center_of_mass_emerged() const
+CenterOfMass MeshIntersector::center_of_mass_emerged()
 {
     return center_of_mass(begin_emerged(), end_emerged(), false);
 }
 
-CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end, const bool immersed) const
+CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end, const bool immersed)
 {
+    if (need_to_update_closing_facet) build_closing_edge();
     CenterOfMass ret(EPoint(0,0,0), 0);
     if (begin==end) return ret;
     auto ref_normal_vector = begin->unit_normal;
@@ -493,8 +497,9 @@ double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& 
     return volume;
 }
 
-double MeshIntersector::immersed_volume() const
+double MeshIntersector::immersed_volume()
 {
+    if (need_to_update_closing_facet) build_closing_edge();
     double V = volume(begin_immersed(), end_immersed());
     if (V == 0) return 0; // Because it means that the closing facet is equal to the immersed facets
     for (auto closing_facet=begin_surface();closing_facet!=end_surface();++closing_facet)
@@ -508,8 +513,9 @@ double MeshIntersector::immersed_volume() const
     return fabs(V);
 }
 
-double MeshIntersector::emerged_volume() const
+double MeshIntersector::emerged_volume()
 {
+    if (need_to_update_closing_facet) build_closing_edge();
     double V = volume(begin_emerged(), end_emerged());
     if (V == 0) return 0; // Because it means that the closing facet is equal to the emerged facets
     for (auto closing_facet=begin_surface();closing_facet!=end_surface();++closing_facet)

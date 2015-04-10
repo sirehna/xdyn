@@ -91,15 +91,17 @@ class MeshIntersector
             return FacetIterator(target, here);
         }
 
-        FacetIterator begin_surface() const
+        FacetIterator begin_surface()
         {
+            if (need_to_update_closing_facet) build_closing_edge();
             std::vector<Facet>::const_iterator target=mesh->facets.begin();
             std::vector<size_t>::const_iterator here = index_of_facets_exactly_on_the_surface.begin();
             return FacetIterator(target, here);
         }
 
-        FacetIterator end_surface() const
+        FacetIterator end_surface()
         {
+            if (need_to_update_closing_facet) build_closing_edge();
             std::vector<Facet>::const_iterator target=mesh->facets.begin();
             std::vector<size_t>::const_iterator here = index_of_facets_exactly_on_the_surface.end();
             return FacetIterator(target, here);
@@ -203,7 +205,7 @@ class MeshIntersector
           *  \see admesh-0.95
           *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
           */
-        double immersed_volume() const;
+        double immersed_volume();
 
         /**  \brief Computes the volume inside a closed mesh, for the points above the free surface.
           *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
@@ -211,7 +213,7 @@ class MeshIntersector
           *  \see admesh-0.95
           *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
           */
-        double emerged_volume() const;
+        double emerged_volume();
 
         /**  \brief Detect if a facet already exists in mesh.
           *  \details Only compares the indices (not the barycenter or unit normal or area).
@@ -228,8 +230,8 @@ class MeshIntersector
         Eigen::MatrixXd convert(const Facet& f) const;
         double facet_volume(const Facet& f) const;
 
-        CenterOfMass center_of_mass_immersed() const;
-        CenterOfMass center_of_mass_emerged() const;
+        CenterOfMass center_of_mass_immersed();
+        CenterOfMass center_of_mass_emerged();
 
         std::string display_facet_in_NED(const Facet& facet, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
         std::string display_edge_in_NED(const size_t idx, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const;
@@ -237,7 +239,7 @@ class MeshIntersector
         VectorOfVectorOfPoints serialize(const FacetIterator& begin, const FacetIterator& end) const;
 
     private:
-        CenterOfMass center_of_mass(const FacetIterator& begin, const FacetIterator& end, const bool immersed) const;
+        CenterOfMass center_of_mass(const FacetIterator& begin, const FacetIterator& end, const bool immersed);
         CenterOfMass center_of_mass(const Facet& f) const;
         /**
          * \brief Iterate on each edge to find intersection with free surface
@@ -264,6 +266,7 @@ class MeshIntersector
         Facet make(const Facet& f, const size_t i1, const size_t i2, const size_t i3) const;
 
         void build_closing_edge();
+        bool need_to_update_closing_facet;
 };
 
 typedef TR1(shared_ptr)<MeshIntersector> MeshIntersectorPtr;
