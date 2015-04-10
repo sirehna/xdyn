@@ -28,4 +28,5 @@ simulation
 test_utilities
 text_file_reader
 threadpool11
+websocketpp
 yaml-cpp
