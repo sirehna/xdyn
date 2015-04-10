@@ -12,6 +12,7 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
+#define EPS 1E-10
 
 HDBParserTest::HDBParserTest() : a(ssc::random_data_generator::DataGenerator(833332))
 {
@@ -114,12 +115,12 @@ TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
     const auto M = data.get_added_mass();
     ASSERT_EQ(6, M.cols());
     ASSERT_EQ(6, M.rows());
-    ASSERT_DOUBLE_EQ(1.503212E+04, (double)M(2,0));
-    ASSERT_DOUBLE_EQ(-1.618101E+02, (double)M(2,1));
-    ASSERT_DOUBLE_EQ(1.781351E+05, (double)M(2,2));
-    ASSERT_DOUBLE_EQ(-1.053934E+02, (double)M(2,3));
-    ASSERT_DOUBLE_EQ(3.267841E+05, (double)M(2,4));
-    ASSERT_DOUBLE_EQ(6.774041E+02, (double)M(2,5));
+    ASSERT_NEAR(1.503212E+04, (double)M(2,0), EPS);
+    ASSERT_NEAR(-1.618101E+02, (double)M(2,1), EPS);
+    ASSERT_NEAR(1.781351E+05, (double)M(2,2), EPS);
+    ASSERT_NEAR(-1.053934E+02, (double)M(2,3), EPS);
+    ASSERT_NEAR(3.267841E+05, (double)M(2,4), EPS);
+    ASSERT_NEAR(6.774041E+02, (double)M(2,5), EPS);
 }
 
 TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
