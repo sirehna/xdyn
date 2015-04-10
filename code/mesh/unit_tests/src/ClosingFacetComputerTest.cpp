@@ -274,6 +274,7 @@ TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge_using_xmin_strategy
     ASSERT_EQ(4, make(case_8()).extreme_edges().first);
     ASSERT_EQ(5, make(case_9()).extreme_edges().first);
     ASSERT_EQ(7, make(case_10()).extreme_edges().first);
+    COUT(case_11());
     ASSERT_EQ(0, make(case_11()).extreme_edges().first);
 }
 
