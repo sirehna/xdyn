@@ -28,3 +28,8 @@ void ListOfObservers::observe(const Sim& sys, const double t)
         observer->observe(sys,t);
     }
 }
+
+std::vector<ObserverPtr> ListOfObservers::get() const
+{
+    return observers;
+}
