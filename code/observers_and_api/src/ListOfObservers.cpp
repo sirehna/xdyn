@@ -8,6 +8,7 @@
 #include "CsvObserver.hpp"
 #include "Hdf5Observer.hpp"
 #include "ListOfObservers.hpp"
+#include "MapObserver.hpp"
 #include "TsvObserver.hpp"
 #include "YamlOutput.hpp"
 
@@ -18,6 +19,7 @@ ListOfObservers::ListOfObservers(const std::vector<YamlOutput>& yaml) : observer
         if (output.format == "csv")  observers.push_back(ObserverPtr(new CsvObserver(output.filename,output.data)));
         if (output.format == "hdf5") observers.push_back(ObserverPtr(new Hdf5Observer(output.filename,output.data)));
         if (output.format == "tsv")  observers.push_back(ObserverPtr(new TsvObserver(output.filename,output.data)));
+        if (output.format == "map")  observers.push_back(ObserverPtr(new MapObserver(output.data)));
     }
 }
 

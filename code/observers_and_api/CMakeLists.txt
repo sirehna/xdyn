@@ -14,6 +14,7 @@ set(SRC src/simulator_api.cpp
         src/Hdf5Observer.cpp
         ${CMAKE_BINARY_DIR}/demoMatLab.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
+        src/MapObserver.cpp
         )
 
 # Using C++ 2011
