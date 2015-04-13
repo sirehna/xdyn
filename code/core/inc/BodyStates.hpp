@@ -21,6 +21,7 @@
 #include "MeshIntersector.hpp"
 #include "StateMacros.hpp"
 #include "History.hpp"
+#include "YamlRotation.hpp"
 
 struct YamlRotation;
 
@@ -67,6 +68,7 @@ struct BodyStates
     std::tuple<double,double,double,double> convert(const ssc::kinematics::EulerAngles& R, const YamlRotation& rotations) const;
     ssc::kinematics::RotationMatrix get_rot_from_ned_to_body() const;
     ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t idx) const;
+    YamlRotation convention;  //!< Rotation convention
 };
 
 #endif /* BODYSTATES_HPP_ */

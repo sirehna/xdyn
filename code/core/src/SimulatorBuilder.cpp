@@ -36,7 +36,7 @@ std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const s
         const auto that_mesh = meshes.find(that_body->name);
         if (that_mesh != meshes.end())
         {
-            ret.push_back(builder->build(*that_body, that_mesh->second, i,t0,bodies_contain_surface_forces.at(i)));
+            ret.push_back(builder->build(*that_body, that_mesh->second, i,t0,input.rotations,bodies_contain_surface_forces.at(i)));
             i++;
         }
         else
