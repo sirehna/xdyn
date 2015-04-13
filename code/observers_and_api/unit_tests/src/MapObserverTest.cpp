@@ -12,6 +12,12 @@
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
+#include "STL_data.hpp"
+
+#define EPS 1E-8
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 MapObserverTest::MapObserverTest() : a(ssc::random_data_generator::DataGenerator(8725200))
 {
@@ -64,5 +70,17 @@ TEST_F(MapObserverTest, example)
 //! [MapObserverTest expected output]
 }
 
-
+TEST_F(MapObserverTest, GM)
+{
+    const double dt = 1;
+    const double tend = 1;
+    auto sys = get_system(test_data::GM_cube(), test_data::cube(), 0);
+    auto observers = observe({"Fz(GM,cube,NED)","GM(cube)"});
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observers);
+    const auto m = get_map(observers);
+    ASSERT_TRUE(m.find("Fz(GM,cube,NED)") != m.end());
+    ASSERT_TRUE(m.find("GM(cube)") != m.end());
+    ASSERT_NEAR(-1000*9.81*0.5, m.find("Fz(GM,cube,NED)")->second.back(), EPS);
+    ASSERT_NEAR(-1/(12*PI), m.find("GM(cube)")->second.back(), EPS);
+}
 

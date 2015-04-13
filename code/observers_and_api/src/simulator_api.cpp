@@ -28,6 +28,7 @@
 #include "SimpleStationKeepingController.hpp"
 #include "RudderForceModel.hpp"
 #include "HydrostaticForceModel.hpp"
+#include "GMForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener)
 {
@@ -55,7 +56,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<ManeuveringForceModel>()
            .can_parse<SimpleStationKeepingController>()
            .can_parse<RudderForceModel>()
-           .can_parse<HydrostaticForceModel>();
+           .can_parse<HydrostaticForceModel>()
+           .can_parse<GMForceModel>();
     return builder;
 }
 
