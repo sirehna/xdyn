@@ -17,7 +17,6 @@ external_data_structures
 gmock
 gcovr
 interpolation
-kiss_fft
 lapack
 macros
 profile

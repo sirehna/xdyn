@@ -130,8 +130,6 @@ SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include
                           ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include/yaml-cpp)
 
-ADD_SUBDIRECTORY(kiss_fft)
-
 SET(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
 SET(eigen_hdf5_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen3-hdf5)
 ADD_DEFINITIONS(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
@@ -216,7 +214,6 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:external_file_formats_tests>
         $<TARGET_OBJECTS:core_tests>
         $<TARGET_OBJECTS:environment_models_tests>
-        $<TARGET_OBJECTS:kissfft_static>
         $<TARGET_OBJECTS:force_models_tests>
         $<TARGET_OBJECTS:parser_extensions_tests>
         $<TARGET_OBJECTS:test_data_generator>
