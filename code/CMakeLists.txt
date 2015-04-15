@@ -36,34 +36,15 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
 
 #############################################################################
 INCLUDE(CMakeGMock)
-
 INCLUDE(CMakeOutputDirectories)
 INCLUDE(CMakeSSC)
+INCLUDE(CMakeBoost)
+INCLUDE(CMakeYamlCpp)
 
 #############################################################################
 # Third party libraries
 # Boost
 # -> Require at least version 1.53 of boost to use Odeint
-#SET(Boost_DEBUG 1)
-IF (WIN32)
-    IF(NOT DEFINED BOOST_ROOT)
-        SET(BOOST_ROOT "C:\\Program Files\\boost")
-        IF(NOT "$ENV{BOOST_ROOT}" STREQUAL "")
-            MESSAGE(STATUS "Use of environnement variable for BOOST")
-            SET(BOOST_ROOT $ENV{BOOST_ROOT})
-        ENDIF()
-    ENDIF()
-ENDIF()
-MESSAGE(STATUS "BOOST_ROOT : ${BOOST_ROOT}")
-SET(Boost_USE_STATIC_LIBS   ON)
-SET(Boost_USE_MULTITHREADED OFF)
-#SET(Boost_USE_STATIC_RUNTIME    OFF)
-FIND_PACKAGE(Boost 1.53 COMPONENTS program_options REQUIRED)
-IF(Boost_FOUND)
-    MESSAGE(STATUS "Boost_INCLUDE_DIRS  : ${Boost_INCLUDE_DIRS}")
-    MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
-ENDIF()
-
 SET(YAML_SKIP_INSTALL ON)
 ADD_SUBDIRECTORY(yaml-cpp)
 SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
