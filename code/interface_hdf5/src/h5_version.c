@@ -1,4 +1,3 @@
-#include "macrosId.h"
 #include "h5_tools.h"
 #include "h5_version.h"
 
@@ -73,7 +72,7 @@ int h5_writeFileDescriptionGivenAFileId(hid_t file)
     hsize_t dims[1] = {NUMBER_OF_ATTRIBUTES};
 
     sprintf(string_att[0], "%s", STR(PROJECT_NAME));
-    sprintf(string_att[1], "Version : %s", STR(GIT_VERSION_SHORT));
+    sprintf(string_att[1], "Version : @GIT_SHA1@");
     sprintf(string_att[2], "Compilation date : %s -- %s", __DATE__, __TIME__);
     sprintf(string_att[3], "Build type : %s -- %s -- %s\n", STR(TARGET_OS), STR(BUILD_TYPE), STR(TARGET_ARCH));
     #if defined(_WIN32) && defined(_MSC_VER)

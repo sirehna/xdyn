@@ -67,45 +67,6 @@ SET(${PROJECT_NAME}_MINOR_VERSION ${GIT_VERSION_MINOR})
 SET(${PROJECT_NAME}_PATCH_VERSION ${GIT_VERSION_PATCH})
 
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
-ADD_CUSTOM_TARGET(githeader ALL DEPENDS ${CMAKE_BINARY_DIR}/macrosId.h)
-FILE(WRITE ${CMAKE_BINARY_DIR}/macrosId.h.txt "/* Header file containing compilation infos */\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#ifndef MACROSID_H\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define MACROSID_H\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define PROJECT_NAME ${CMAKE_PROJECT_NAME}\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define GIT_VERSION_MAJOR ${GIT_VERSION_MAJOR}\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define GIT_VERSION_MINOR ${GIT_VERSION_MINOR}\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define GIT_VERSION_PATCH ${GIT_VERSION_PATCH}\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define GIT_VERSION_SHORT ${GIT_VERSION_SHORT}\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define BUILD_TYPE ${CMAKE_BUILD_TYPE}\n")
-IF(ARCH64_BITS)
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define TARGET_ARCH 64Bits\n")
-ELSE()
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define TARGET_ARCH 32Bits\n")
-ENDIF()
-IF(APPLE)
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define TARGET_OS Apple\n")
-ELSEIF(WIN32)
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define TARGET_OS Windows\n")
-ELSEIF(UNIX)
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define TARGET_OS Unix\n")
-ELSE()
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#define TARGET_OS Unknown\n")
-ENDIF()
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/macrosId.h.txt "#endif\n")
-# copy the file to the final header only if the version changes
-# reduces needless rebuilds
-EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                        ${CMAKE_BINARY_DIR}/macrosId.h.txt
-                        ${CMAKE_BINARY_DIR}/macrosId.h)
-SET_SOURCE_FILES_PROPERTIES(
-    ${CMAKE_BINARY_DIR}/macrosId.h.txt
-    ${CMAKE_BINARY_DIR}/macrosId.h
-    PROPERTIES GENERATED TRUE
-    HEADER_FILE_ONLY TRUE)
 
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
                "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt" @ONLY)
