@@ -40,16 +40,12 @@ INCLUDE(CMakeOutputDirectories)
 INCLUDE(CMakeSSC)
 INCLUDE(CMakeBoost)
 INCLUDE(CMakeYamlCpp)
+INCLUDE(CMakeEigen)
 
 #############################################################################
 # Third party libraries
 # Boost
 # -> Require at least version 1.53 of boost to use Odeint
-SET(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
-SET(eigen_hdf5_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen3-hdf5)
-ADD_DEFINITIONS(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
-ADD_DEFINITIONS(-DEIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT)
-#ADD_DEFINITIONS(-DEIGEN_NO_DEBUG)
 
 INCLUDE(CMakeHdf5)
 
