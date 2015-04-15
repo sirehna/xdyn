@@ -147,12 +147,6 @@ ADD_TEST(NAME ${PROJECT_NAME}_TEST_001
          WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
          COMMAND ${TEST_EXE} --gtest_output=xml:test_output.xml)
 
-IF(CMAKE_BUILD_TYPE_UPPER MATCHES COVERAGE)
-    ENABLE_COVERAGE_REPORT(TARGETS ${TEST_EXE}
-                           FILTER boost eigen gmock lapack
-                                  /c/mingw/lib/gcc /usr/include)
-ENDIF()
-
 #############################################################################
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
