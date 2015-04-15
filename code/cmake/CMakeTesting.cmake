@@ -1,3 +1,4 @@
+INCLUDE(CTest)
 ENABLE_TESTING()
 IF(BUILD_TESTING)
     SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")

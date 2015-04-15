@@ -1,8 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(simulatorIrtJv)
 
-INCLUDE(CTest)
-
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 #############################################################################
 # User configuration
