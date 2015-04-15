@@ -223,8 +223,6 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:gz_curves_tests>
         )
 
-SET(LINK_FLAGS ${LINK_FLAGS} "-Wl,-whole-archive")
-
 TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest gtest_main                 # static
         gmock gmock_main                 # static
