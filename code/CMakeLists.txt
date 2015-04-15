@@ -37,10 +37,19 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
 INCLUDE(CMakeGMock)
 INCLUDE(CMakeOutputDirectories)
 INCLUDE(CMakeSSC)
-INCLUDE(CMakeBoost)
 INCLUDE(CMakeYamlCpp)
 INCLUDE(CMakeEigen)
 INCLUDE(CMakeHdf5)
+
+INCLUDE(CMakeBoost)
+SET(Boost_USE_STATIC_LIBS   ON)
+SET(Boost_USE_MULTITHREADED OFF)
+#SET(Boost_USE_STATIC_RUNTIME    OFF)
+FIND_PACKAGE(Boost 1.53 COMPONENTS program_options REQUIRED)
+IF(Boost_FOUND)
+    MESSAGE(STATUS "Boost_INCLUDE_DIRS  : ${Boost_INCLUDE_DIRS}")
+    MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
+ENDIF()
 
 #############################################################################
 # Compilation part
@@ -127,6 +136,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         )
 
 INCLUDE(CMakeTesting)
+INCLUDE(CMakeDocumentation)
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
 
