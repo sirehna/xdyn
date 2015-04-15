@@ -45,12 +45,6 @@ INCLUDE(CMakeYamlCpp)
 # Third party libraries
 # Boost
 # -> Require at least version 1.53 of boost to use Odeint
-SET(YAML_SKIP_INSTALL ON)
-ADD_SUBDIRECTORY(yaml-cpp)
-SET(YAML_CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/src
-                          ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include
-                          ${CMAKE_CURRENT_SOURCE_DIR}/yaml-cpp/include/yaml-cpp)
-
 SET(eigen_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen)
 SET(eigen_hdf5_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eigen3-hdf5)
 ADD_DEFINITIONS(-DEIGEN_DONT_VECTORIZE) # Cf. http://eigen.tuxfamily.org/dox-devel/group__TopicUnalignedArrayAssert.html
