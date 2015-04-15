@@ -106,19 +106,6 @@ IF(PANDOC)
         COMMENT "Generating tutorial SVG images" VERBATIM
         DEPENDS move_stl sim ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/generate_images_for_tutorials.sh
         )
-#    ADD_CUSTOM_COMMAND(
-#        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html
-#        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
-#        COMMAND ${PANDOC} -s --toc --mathml -f markdown tutorial_01.md tutorial_02.md tutorial_03.md tutorial_06.md -t html --highlight-style pygments -o tutorials.html -c stylesheet.css
-#        COMMENT "Creating tutorials.html" VERBATIM
-#        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
-#                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
-#                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
-#                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
-#                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images/tutorial_01.svg
-#        )
-#    ADD_CUSTOM_TARGET(tutorial ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html)
-#    LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorials.html)
     FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images/*.svg")
     FOREACH(f ${files})
         INSTALL(FILES ${f} DESTINATION doc/images)
@@ -176,22 +163,9 @@ IF(PANDOC)
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
                        )
 
-
-
-#    LIST(APPEND doc_files documentation_yaml)
-#    LIST(APPEND doc_files modeles_reperes_et_conventions)
-#    LIST(APPEND doc_files solver)
-#    LIST(APPEND doc_files introduction)
-#    FOREACH(f ${doc_files})
-#        ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/${f}.html
-#                           COMMAND ./doc_html.sh ${f}
-#                           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
-#                           DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/${f}.md
-#                          )
         LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html)
         LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.docx)
         LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.pdf)
-#    ENDFOREACH()
     ADD_CUSTOM_TARGET(doc_user ALL DEPENDS ${DOC_USER_INSTALL_FILES})
     INSTALL(FILES ${DOC_USER_INSTALL_FILES} DESTINATION doc)
     INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/stylesheet.css DESTINATION doc)
