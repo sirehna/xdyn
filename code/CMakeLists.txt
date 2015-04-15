@@ -35,18 +35,13 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
                "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt" @ONLY)
 
 #############################################################################
+# External libraries
 INCLUDE(CMakeGMock)
 INCLUDE(CMakeOutputDirectories)
 INCLUDE(CMakeSSC)
 INCLUDE(CMakeBoost)
 INCLUDE(CMakeYamlCpp)
 INCLUDE(CMakeEigen)
-
-#############################################################################
-# Third party libraries
-# Boost
-# -> Require at least version 1.53 of boost to use Odeint
-
 INCLUDE(CMakeHdf5)
 
 #############################################################################
