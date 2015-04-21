@@ -44,7 +44,8 @@ void createServerEcho(WSServer& echo_server, std::function<void(WSServer* , webs
     // Register our message handler
     echo_server.set_message_handler(bind(f,&echo_server,::_1,::_2));
     // Listen on port
-    echo_server.listen(STR(ADDRESS),STR(PORT));
+    boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address::from_string(STR(ADDRESS)), PORT);
+    echo_server.listen(ep);
     // Start the server accept loop
     echo_server.start_accept();
     // Start the ASIO io_service run loop
