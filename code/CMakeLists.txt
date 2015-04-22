@@ -156,6 +156,7 @@ ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_STL_)
 ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_THREAD_)
 ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_SYSTEM_ERROR_)
 FOREACH(f DemoWebSocket
+          DemoWebSocketBug
           DemoWebSocketClient
           DemoWebSocketServerSingleClient
           DemoWebSocketServerMultiClient)
