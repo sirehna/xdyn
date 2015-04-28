@@ -1,8 +1,6 @@
 #include <websocketpp/common/thread.hpp>
-#include <websocketpp/client.hpp>
 #include <websocketpp/server.hpp>
 #include <websocketpp/config/asio_no_tls.hpp>
-#include <websocketpp/config/asio_no_tls_client.hpp>
 
 #include <iostream>
 #include <functional> // std::function
