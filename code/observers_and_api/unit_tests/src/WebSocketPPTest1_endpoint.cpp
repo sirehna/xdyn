@@ -51,34 +51,6 @@ struct endpoint_extension {
     int extension_value;
 };
 
-struct stub_config : public websocketpp::config::core {
-    typedef core::concurrency_type concurrency_type;
-
-    typedef core::request_type request_type;
-    typedef core::response_type response_type;
-
-    typedef core::message_type message_type;
-    typedef core::con_msg_manager_type con_msg_manager_type;
-    typedef core::endpoint_msg_manager_type endpoint_msg_manager_type;
-
-    typedef core::alog_type alog_type;
-    typedef core::elog_type elog_type;
-
-    typedef core::rng_type rng_type;
-
-    typedef core::transport_type transport_type;
-
-    typedef endpoint_extension endpoint_base;
-};
-
-TEST_F(WebSocketPPTest1_endpoint,  endpoint_extensions ) {
-    websocketpp::server<stub_config> s;
-
-    ASSERT_EQ( s.extension_value, 5 );
-    ASSERT_EQ( s.extension_method(), 5 );
-    ASSERT_TRUE( s.is_server() );
-}
-
 TEST_F(WebSocketPPTest1_endpoint,  listen_after_listen_failure )
 {
     using websocketpp::transport::asio::error::make_error_code;
