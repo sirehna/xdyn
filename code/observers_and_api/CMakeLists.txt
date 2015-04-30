@@ -18,7 +18,7 @@ set(SRC src/simulator_api.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
         src/MapObserver.cpp
         src/ConnectionMetadata.cpp
-        src/WebSocketEndpoint.cpp
+        src/WebSocketClient.cpp
         )
 
 # Using C++ 2011
