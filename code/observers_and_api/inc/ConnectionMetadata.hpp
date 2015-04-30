@@ -30,14 +30,15 @@ class ConnectionMetadata
         void record_sent_message(const std::string& message);
 
         friend std::ostream & operator<< (std::ostream & out, ConnectionMetadata const & data);
+
     private:
         int m_id;
-        websocketpp::connection_hdl m_hdl;
-        std::string m_status;
-        std::string m_uri;
-        std::string m_server;
-        std::string m_error_reason;
-        std::vector<std::string> m_messages;
+        websocketpp::connection_hdl hdl;
+        std::string status;
+        std::string uri;
+        std::string server;
+        std::string error_reason;
+        std::vector<std::string> messages;
 };
 
 #endif  /* CONNECTION_METADATA_HPP_ */
