@@ -140,25 +140,6 @@ void WebSocketClient::connect(std::string const & uri)
     endpoint.connect(con);
 }
 
-void WebSocketClient::close(const int id, websocketpp::close::status::value code, std::string reason)
-{
-    websocketpp::lib::error_code error_code;
-    IdToConnexionMap::iterator metadata_it = id_to_connection.find(id);
-    if (metadata_it == id_to_connection.end())
-    {
-        std::cout << "> No connection found with id " << id << std::endl;
-        return;
-    }
-
-    endpoint.close(metadata_it->second->get_hdl(), code, reason, error_code);
-    if (error_code)
-    {
-        std::stringstream ss;
-        ss << "> Error initiating close: " << error_code.message() << std::endl;
-        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-    }
-}
-
 void WebSocketClient::send(const int id, const std::string& message)
 {
     websocketpp::lib::error_code error_code;

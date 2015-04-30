@@ -19,7 +19,6 @@ class WebSocketClient
     public:
         WebSocketClient(std::string address, const short unsigned int port);
         ~WebSocketClient();
-        void close(const int id, websocketpp::close::status::value code, std::string reason);
         void send(const std::string& message); // Sends to current socket
         bool good() const; // Returns true if the connection is successfully established
 
