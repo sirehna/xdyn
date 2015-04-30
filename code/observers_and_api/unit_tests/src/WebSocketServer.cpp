@@ -7,7 +7,7 @@
 
 #include "WebSocketServer.hpp"
 #include "WebSocketEndpoint.hpp"
-#include "WebSocketObserverException.hpp"
+#include "WebSocketException.hpp"
 
 WebSocketServer::WebSocketServer(const MessageHandler& message_handler):
         server(),

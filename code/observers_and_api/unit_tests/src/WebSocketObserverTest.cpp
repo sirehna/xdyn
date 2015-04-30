@@ -1,5 +1,5 @@
 #include "WebSocketObserverTest.hpp"
-#include "WebSocketObserverException.hpp"
+#include "WebSocketException.hpp"
 #include "WebSocketEndpoint.hpp"
 #include "WebSocketServer.hpp"
 

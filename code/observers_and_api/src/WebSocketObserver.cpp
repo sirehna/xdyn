@@ -1,5 +1,5 @@
 #include "WebSocketObserver.hpp"
-#include "WebSocketObserverException.hpp"
+#include "WebSocketException.hpp"
 #include "WebSocketEndpoint.hpp"
 
 WebSocketObserver::WebSocketObserver(const std::string& address, const std::vector<std::string>& data):

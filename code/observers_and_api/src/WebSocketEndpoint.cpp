@@ -8,7 +8,7 @@
 #include <unistd.h> //usleep
 
 #include "WebSocketEndpoint.hpp"
-#include "WebSocketObserverException.hpp"
+#include "WebSocketException.hpp"
 
 WebSocketEndpoint::WebSocketEndpoint(const std::string& address) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
 {
