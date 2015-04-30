@@ -6,7 +6,7 @@
  */
 
 
-#include "connection_metadata.hpp"
+#include "ConnectionMetadata.hpp"
 
 ConnectionMetadata::ConnectionMetadata(
         int id, websocketpp::connection_hdl hdl, const std::string& uri)
