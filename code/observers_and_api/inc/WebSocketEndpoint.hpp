@@ -13,7 +13,6 @@
 #include <websocketpp/client.hpp>
 
 #include "connection_metadata.hpp"
-#include "WebSocketObserverException.hpp"
 
 class WebSocketEndpoint
 {
@@ -33,34 +32,20 @@ class WebSocketEndpoint
         template<typename T>
         void send(const int id, const std::vector<T> vector)
         {
-            websocketpp::lib::error_code error_code;
-            con_list::iterator metadata_it = m_connection_list.find(id);
-            if (metadata_it == m_connection_list.end())
-            {
-                std::cout << "> No connection found with id " << id << std::endl;
-                return;
-            }
-            auto hdl = metadata_it->second->get_hdl();
-            const size_t s = vector.size();
-            m_endpoint.send(hdl, &vector[0], sizeof(T)*s, websocketpp::frame::opcode::binary, error_code);
-            if (error_code)
-            {
-                std::stringstream ss;
-                ss << "> Error sending message: " << error_code.message() << std::endl;
-                THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
-                return;
-            }
+            send_vector(id, &vector[0], sizeof(T)*vector.size());
         }
+
         connection_metadata::ptr getMetadata(int id) const;
         std::list<int> getIds() const;
         int getFirstId() const;
 
     private:
-        typedef std::map<int,connection_metadata::ptr> con_list;
-        client m_endpoint;
-        websocketpp::lib::shared_ptr<websocketpp::lib::thread> m_thread;
-        con_list m_connection_list;
-        int m_next_id;
+        void send_vector(const int id, void const * payload, const size_t nb_of_bytes);
+        typedef std::map<int,connection_metadata::ptr> IdToConnexionMap;
+        client endpoint;
+        websocketpp::lib::shared_ptr<websocketpp::lib::thread> websocket_thread;
+        IdToConnexionMap id_to_connection;
+        int next_id;
 };
 
 #endif  /* WEBSOCKETENDPOINT_HPP_ */
