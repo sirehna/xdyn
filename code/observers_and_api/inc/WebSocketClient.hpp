@@ -9,15 +9,16 @@
 #ifndef WEBSOCKETENDPOINT_HPP_
 #define WEBSOCKETENDPOINT_HPP_
 
-#include <websocketpp/config/asio_no_tls_client.hpp>
-#include <websocketpp/client.hpp>
+#include <string>
+#include <vector>
 
-#include "ConnectionMetadata.hpp"
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
 
 class WebSocketClient
 {
     public:
-        WebSocketClient(std::string address, const short unsigned int port);
+        WebSocketClient(const std::string& address, const short unsigned int port);
         ~WebSocketClient();
         void send(const std::string& message); // Sends to current socket
         bool good() const; // Returns true if the connection is successfully established
@@ -31,27 +32,20 @@ class WebSocketClient
         template<typename T>
         void send(const std::vector<T> vector)
         {
-            send_vector(next_id, &vector[0], sizeof(T)*vector.size());
+            send_vector(&vector[0], sizeof(T)*vector.size());
         }
 
     private:
         WebSocketClient();
-        void connect(std::string const & uri);
+        struct Impl;
+        TR1(shared_ptr)<Impl> pimpl;
         void send_vector(const int id, void const * payload, const size_t nb_of_bytes);
-        void close(const ConnectionMetadata::ptr& connexion);
-        void send(const int id, const std::string& message);
+        void send_vector(void const * payload, const size_t nb_of_bytes);
         template<typename T>
         void send(const int id, const std::vector<T> vector)
         {
             send_vector(id, &vector[0], sizeof(T)*vector.size());
         }
-        ConnectionMetadata::ptr get_metadata(const int id) const;
-
-        typedef std::map<int,ConnectionMetadata::ptr> IdToConnexionMap;
-        client endpoint;
-        websocketpp::lib::shared_ptr<websocketpp::lib::thread> websocket_thread;
-        IdToConnexionMap id_to_connection;
-        int next_id;
 };
 
 #endif  /* WEBSOCKETENDPOINT_HPP_ */
