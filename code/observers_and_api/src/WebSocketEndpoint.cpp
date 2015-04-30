@@ -145,7 +145,7 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
     metadata_it->second->record_sent_message(message);
 }
 
-connection_metadata::ptr WebSocketEndpoint::getMetadata(const int id) const
+connection_metadata::ptr WebSocketEndpoint::get_metadata(const int id) const
 {
     IdToConnexionMap::const_iterator metadata_it = id_to_connection.find(id);
     if (metadata_it == id_to_connection.end())
@@ -158,7 +158,7 @@ connection_metadata::ptr WebSocketEndpoint::getMetadata(const int id) const
     }
 }
 
-std::list<int> WebSocketEndpoint::getIds() const
+std::list<int> WebSocketEndpoint::get_ids() const
 {
     std::list<int> list;
     for (IdToConnexionMap::const_iterator metadata_it = id_to_connection.begin();metadata_it!=id_to_connection.end();++metadata_it)
@@ -168,7 +168,7 @@ std::list<int> WebSocketEndpoint::getIds() const
     return list;
 }
 
-int WebSocketEndpoint::getFirstId() const
+int WebSocketEndpoint::get_first_id() const
 {
     IdToConnexionMap::const_iterator metadata_it = id_to_connection.begin();
     return metadata_it->first;

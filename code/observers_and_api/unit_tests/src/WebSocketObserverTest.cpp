@@ -64,7 +64,7 @@ int connectToServer(WebSocketEndpoint& endpoint)
     endpoint.connect(connectAddress);
     while(true)
     {
-        connection_metadata::ptr metadata = endpoint.getMetadata(endpoint.get_current_id());
+        connection_metadata::ptr metadata = endpoint.get_metadata(endpoint.get_current_id());
         k++;
         if (k>100)
         {
@@ -87,7 +87,7 @@ int connectToServer(WebSocketEndpoint& endpoint)
         usleep(100000);
     }
     COUT(k);
-    connection_metadata::ptr metadata = endpoint.getMetadata(endpoint.get_current_id());
+    connection_metadata::ptr metadata = endpoint.get_metadata(endpoint.get_current_id());
     if (metadata)
     {
         std::cout << *metadata << std::endl<<std::flush;

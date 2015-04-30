@@ -60,9 +60,9 @@ void WebSocketObserver::flush_value()
 
 std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObserver)
 {
-    for (const auto id:wsObserver.endpoint->getIds())
+    for (const auto id:wsObserver.endpoint->get_ids())
     {
-        connection_metadata::ptr metadata = wsObserver.endpoint->getMetadata(id);
+        connection_metadata::ptr metadata = wsObserver.endpoint->get_metadata(id);
         if (metadata)
         {
             out << *metadata << std::endl;

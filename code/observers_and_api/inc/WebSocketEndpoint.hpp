@@ -37,9 +37,9 @@ class WebSocketEndpoint
             send_vector(id, &vector[0], sizeof(T)*vector.size());
         }
 
-        connection_metadata::ptr getMetadata(const int id) const;
-        std::list<int> getIds() const;
-        int getFirstId() const;
+        connection_metadata::ptr get_metadata(const int id) const;
+        std::list<int> get_ids() const;
+        int get_first_id() const;
 
     private:
         void send_vector(const int id, void const * payload, const size_t nb_of_bytes);
