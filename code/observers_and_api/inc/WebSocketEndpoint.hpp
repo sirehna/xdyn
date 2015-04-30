@@ -20,7 +20,7 @@ class WebSocketEndpoint
         WebSocketEndpoint();
         ~WebSocketEndpoint();
         void connect(std::string const & uri);
-        void close(int id, websocketpp::close::status::value code, std::string reason);
+        void close(const int id, websocketpp::close::status::value code, std::string reason);
         void send(const int id, const std::string& message);
         bool good() const; // Returns true if the connection is successfully established
         int get_current_id() const;
@@ -37,7 +37,7 @@ class WebSocketEndpoint
             send_vector(id, &vector[0], sizeof(T)*vector.size());
         }
 
-        connection_metadata::ptr getMetadata(int id) const;
+        connection_metadata::ptr getMetadata(const int id) const;
         std::list<int> getIds() const;
         int getFirstId() const;
 

@@ -105,7 +105,7 @@ void WebSocketEndpoint::connect(std::string const & uri)
     endpoint.connect(con);
 }
 
-void WebSocketEndpoint::close(int id, websocketpp::close::status::value code, std::string reason)
+void WebSocketEndpoint::close(const int id, websocketpp::close::status::value code, std::string reason)
 {
     websocketpp::lib::error_code error_code;
     IdToConnexionMap::iterator metadata_it = id_to_connection.find(id);
@@ -145,7 +145,7 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
     metadata_it->second->record_sent_message(message);
 }
 
-connection_metadata::ptr WebSocketEndpoint::getMetadata(int id) const
+connection_metadata::ptr WebSocketEndpoint::getMetadata(const int id) const
 {
     IdToConnexionMap::const_iterator metadata_it = id_to_connection.find(id);
     if (metadata_it == id_to_connection.end())
