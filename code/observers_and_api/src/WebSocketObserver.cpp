@@ -2,8 +2,8 @@
 #include "WebSocketException.hpp"
 #include "WebSocketEndpoint.hpp"
 
-WebSocketObserver::WebSocketObserver(const std::string& address, const std::vector<std::string>& data):
-Observer(data),endpoint(new WebSocketEndpoint(address))
+WebSocketObserver::WebSocketObserver(const std::string& address, const short unsigned int port, const std::vector<std::string>& data):
+Observer(data),endpoint(new WebSocketEndpoint(address, port))
 {
     if (endpoint->good()) std::cout<<"Connection successful" << std::endl << std::flush;
     else

@@ -10,8 +10,11 @@
 #include "WebSocketEndpoint.hpp"
 #include "WebSocketException.hpp"
 
-WebSocketEndpoint::WebSocketEndpoint(const std::string& address) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
+WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned int port) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
 {
+    std::stringstream ss;
+    ss << address << ":" << port;
+    address = ss.str();
     endpoint.clear_access_channels(websocketpp::log::alevel::all);
     endpoint.clear_error_channels(websocketpp::log::elevel::all);
     endpoint.init_asio();

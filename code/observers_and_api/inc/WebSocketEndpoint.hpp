@@ -17,7 +17,7 @@
 class WebSocketEndpoint
 {
     public:
-        WebSocketEndpoint(const std::string& address);
+        WebSocketEndpoint(std::string address, const short unsigned int port);
         ~WebSocketEndpoint();
         void connect(std::string const & uri);
         void close(const int id, websocketpp::close::status::value code, std::string reason);
