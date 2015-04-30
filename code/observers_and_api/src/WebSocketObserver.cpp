@@ -8,7 +8,7 @@ Observer(data),endpoint(new WebSocketEndpoint)
     if (endpoint->good()) std::cout<<"Connection successful" << std::endl << std::flush;
     else
     {
-        THROW(__PRETTY_FUNCTION__, WebSocketObserverException, "WebSocketObserver failed to connect to address" + address);
+        THROW(__PRETTY_FUNCTION__, WebSocketException, "WebSocketObserver failed to connect to address" + address);
     }
 }
 
@@ -71,7 +71,7 @@ std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObser
         {
             std::stringstream ss;
             ss << "Unknown connection id : " <<id<<std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         }
     }
     return out;

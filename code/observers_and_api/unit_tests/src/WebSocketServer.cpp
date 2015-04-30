@@ -58,7 +58,7 @@ int connectToServer(WebSocketEndpoint& endpoint)
         {
             std::stringstream ss;
             ss << "Time out: " << std::boolalpha << endpoint.good() << std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         }
         std::cout<<metadata->get_status()<<std::endl;
         if (metadata->get_status()=="Open")
@@ -69,7 +69,7 @@ int connectToServer(WebSocketEndpoint& endpoint)
         {
             std::stringstream ss;
             ss << "Connection failed" << endpoint.good() <<std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
             break;
         }
         usleep(100000);
@@ -84,7 +84,7 @@ int connectToServer(WebSocketEndpoint& endpoint)
     {
         std::stringstream ss;
         ss << "Unknown connection id : " <<endpoint.get_current_id()<<std::endl;
-        THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
     return endpoint.get_current_id();
 }
@@ -100,7 +100,7 @@ void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr
     {
         std::stringstream ss;
         ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg->get_payload();
-        THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
     try
     {

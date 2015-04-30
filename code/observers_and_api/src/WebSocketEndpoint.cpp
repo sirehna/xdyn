@@ -35,7 +35,7 @@ WebSocketEndpoint::~WebSocketEndpoint()
             std::stringstream ss;
             ss << "> Error closing connection " << it->second->get_id() << ": "
                << error_code.message() << std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketObserverException,ss.str());
+            THROW(__PRETTY_FUNCTION__, WebSocketException,ss.str());
         }
     }
     websocket_thread->join();
@@ -70,7 +70,7 @@ void WebSocketEndpoint::connect(std::string const & uri)
     {
         std::stringstream ss;
         ss << "> Connect initialization error: " << error_code.message() << std::endl;
-        THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
 
     next_id++;
@@ -120,7 +120,7 @@ void WebSocketEndpoint::close(const int id, websocketpp::close::status::value co
     {
         std::stringstream ss;
         ss << "> Error initiating close: " << error_code.message() << std::endl;
-        THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
 }
 
@@ -139,7 +139,7 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
     {
         std::stringstream ss;
         ss << "> Error sending message: " << error_code.message() << std::endl;
-        THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         return;
     }
     metadata_it->second->record_sent_message(message);
@@ -189,7 +189,7 @@ void WebSocketEndpoint::send_vector(const int id, void const * payload, const si
     {
         std::stringstream ss;
         ss << "> Error sending message: " << error_code.message() << std::endl;
-        THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         return;
     }
 }

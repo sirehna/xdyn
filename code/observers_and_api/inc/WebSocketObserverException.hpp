@@ -11,10 +11,10 @@
 
 #include <ssc/exception_handling.hpp>
 
-class WebSocketObserverException: public ::ssc::exception_handling::Exception
+class WebSocketException: public ::ssc::exception_handling::Exception
 {
     public:
-        WebSocketObserverException(const char* s) :
+        WebSocketException(const char* s) :
             ::ssc::exception_handling::Exception(s)
         {
         }
