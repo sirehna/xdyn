@@ -42,6 +42,11 @@ WebSocketEndpoint::~WebSocketEndpoint()
     std::cout << "End WebSocketEndpoint::~WebSocketEndpoint()"<< std::endl<<std::flush;
 }
 
+bool WebSocketEndpoint::good() const
+{
+    return next_id != -1;
+}
+
 /**
  * \param[in] uri
  * \return id the connection generated. In case of error, the value returns is -1

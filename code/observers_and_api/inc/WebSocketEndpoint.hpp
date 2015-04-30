@@ -22,6 +22,7 @@ class WebSocketEndpoint
         int connect(std::string const & uri);
         void close(int id, websocketpp::close::status::value code, std::string reason);
         void send(const int id, const std::string& message);
+        bool good() const; // Returns true if the connection is successfully established
 
         /**
          * \brief Send a vector through a web socket
