@@ -7,7 +7,7 @@
 
 #include <unistd.h> //usleep
 
-#include "WebSocketEndpoint.hpp"
+#include "WebSocketClient.hpp"
 #include "WebSocketException.hpp"
 
 std::string append_port_to_address(const std::string& address, const short unsigned int port);

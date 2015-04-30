@@ -1,6 +1,6 @@
 #include "WebSocketObserver.hpp"
 #include "WebSocketException.hpp"
-#include "WebSocketEndpoint.hpp"
+#include "WebSocketClient.hpp"
 
 WebSocketObserver::WebSocketObserver(const std::string& address, const short unsigned int port, const std::vector<std::string>& data):
 Observer(data),endpoint(new WebSocketClient(address, port))
