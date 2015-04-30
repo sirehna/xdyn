@@ -5,8 +5,8 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-class WebSocketEndpoint;
-typedef TR1(shared_ptr)<WebSocketEndpoint> WebSocketEndpointPtr;
+class WebSocketClient;
+typedef TR1(shared_ptr)<WebSocketClient> WebSocketEndpointPtr;
 
 class WebSocketObserver : public Observer
 {

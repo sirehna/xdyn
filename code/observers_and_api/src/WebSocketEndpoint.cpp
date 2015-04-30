@@ -18,7 +18,7 @@ std::string append_port_to_address(const std::string& address, const short unsig
     return ss.str();
 }
 
-WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned int port) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
+WebSocketClient::WebSocketClient(std::string address, const short unsigned int port) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
 {
     address = append_port_to_address(address, port);
     endpoint.clear_access_channels(websocketpp::log::alevel::all);
@@ -61,7 +61,7 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
     }
 }
 
-void WebSocketEndpoint::close(const ConnectionMetadata::ptr& connexion)
+void WebSocketClient::close(const ConnectionMetadata::ptr& connexion)
 {
     // Only close open connections
     if (connexion->get_status() != "Open") return;
@@ -76,14 +76,14 @@ void WebSocketEndpoint::close(const ConnectionMetadata::ptr& connexion)
     }
 }
 
-WebSocketEndpoint::~WebSocketEndpoint()
+WebSocketClient::~WebSocketClient()
 {
     endpoint.stop_perpetual();
     for (const auto id2connection:id_to_connection) close(id2connection.second);
     websocket_thread->join();
 }
 
-bool WebSocketEndpoint::good() const
+bool WebSocketClient::good() const
 {
     return next_id != -1;
 }
@@ -95,7 +95,7 @@ bool WebSocketEndpoint::good() const
  *  - "ws://localhost:9002"
  *  - "ws://localhost:9002/ws?username=me"
  */
-void WebSocketEndpoint::connect(std::string const & uri)
+void WebSocketClient::connect(std::string const & uri)
 {
     websocketpp::lib::error_code error_code;
 
@@ -140,7 +140,7 @@ void WebSocketEndpoint::connect(std::string const & uri)
     endpoint.connect(con);
 }
 
-void WebSocketEndpoint::close(const int id, websocketpp::close::status::value code, std::string reason)
+void WebSocketClient::close(const int id, websocketpp::close::status::value code, std::string reason)
 {
     websocketpp::lib::error_code error_code;
     IdToConnexionMap::iterator metadata_it = id_to_connection.find(id);
@@ -159,7 +159,7 @@ void WebSocketEndpoint::close(const int id, websocketpp::close::status::value co
     }
 }
 
-void WebSocketEndpoint::send(const int id, const std::string& message)
+void WebSocketClient::send(const int id, const std::string& message)
 {
     websocketpp::lib::error_code error_code;
     IdToConnexionMap::iterator metadata_it = id_to_connection.find(id);
@@ -180,12 +180,12 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
     metadata_it->second->record_sent_message(message);
 }
 
-void WebSocketEndpoint::send(const std::string& message)
+void WebSocketClient::send(const std::string& message)
 {
     send(next_id, message);
 }
 
-ConnectionMetadata::ptr WebSocketEndpoint::get_metadata(const int id) const
+ConnectionMetadata::ptr WebSocketClient::get_metadata(const int id) const
 {
     IdToConnexionMap::const_iterator metadata_it = id_to_connection.find(id);
     if (metadata_it == id_to_connection.end())
@@ -198,7 +198,7 @@ ConnectionMetadata::ptr WebSocketEndpoint::get_metadata(const int id) const
     }
 }
 
-void WebSocketEndpoint::send_vector(const int id, void const * payload, const size_t nb_of_bytes)
+void WebSocketClient::send_vector(const int id, void const * payload, const size_t nb_of_bytes)
 {
     websocketpp::lib::error_code error_code;
     IdToConnexionMap::iterator metadata_it = id_to_connection.find(id);
