@@ -36,11 +36,12 @@ typedef websocketpp::server<websocketpp::config::asio> WSServer;
 typedef WSServer::message_ptr message_ptr;
 
 class WebSocketEndpoint;
+typedef std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> MessageHandler;
 
 class WebSocketServer
 {
     public:
-        WebSocketServer(std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> m);
+        WebSocketServer(const MessageHandler& message_handler);
         ~WebSocketServer();
     protected:
         WSServer server;
@@ -49,7 +50,8 @@ class WebSocketServer
         WebSocketServer();
 };
 
-void createServerEcho(WSServer& echo_server, std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> f);
+
+void createServerEcho(WSServer& echo_server, const MessageHandler& message_handler);
 int connectToServer(WebSocketEndpoint& endpoint, const std::string& address);
 void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
 

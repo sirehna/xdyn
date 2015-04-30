@@ -11,9 +11,9 @@
 #include "WebSocketEndpoint.hpp"
 #include "WebSocketObserverException.hpp"
 
-WebSocketServer::WebSocketServer(std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> m):
+WebSocketServer::WebSocketServer(const MessageHandler& message_handler):
         server(),
-        threadServer(createServerEcho,std::ref(server),m)
+        threadServer(createServerEcho, std::ref(server), message_handler)
 {
 }
 
@@ -24,7 +24,7 @@ WebSocketServer::~WebSocketServer()
     threadServer.join();
 }
 
-void createServerEcho(WSServer& echo_server, std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> f)
+void createServerEcho(WSServer& echo_server, const MessageHandler& message_handler)
 {
     echo_server.set_reuse_addr(true);
     // Set logging settings
@@ -33,7 +33,7 @@ void createServerEcho(WSServer& echo_server, std::function<void(WSServer* , webs
     // Initialize ASIO
     echo_server.init_asio();
     // Register our message handler
-    echo_server.set_message_handler(bind(f,&echo_server,::_1,::_2));
+    echo_server.set_message_handler(bind(message_handler,&echo_server,::_1,::_2));
     // Listen on port
     boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address::from_string(STR(ADDRESS)), PORT);
     echo_server.listen(ep);
