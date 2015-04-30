@@ -12,6 +12,30 @@
 
 #define WEBSOCKET_ADDRESS "ws://127.0.0.1:9002"
 
+void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
+void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
+{
+    std::cout << "on_message called with hdl: " << hdl.lock().get()
+              << " and message: " << msg->get_payload()
+              << std::endl;
+    if (MESSAGE_SENT != msg->get_payload())
+    {
+        std::stringstream ss;
+        ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg->get_payload();
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
+    }
+    try
+    {
+        s->send(hdl, msg->get_payload(), msg->get_opcode());
+    }
+    catch (const websocketpp::lib::error_code& e)
+    {
+        std::cout << "Echo failed because: " << e
+                  << "(" << e.message() << ")" << std::endl;
+    }
+}
+
+
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
 {
     TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string));

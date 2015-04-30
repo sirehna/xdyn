@@ -39,25 +39,3 @@ void create_server_echo(WSServer& echo_server, const MessageHandler& message_han
     // Start the ASIO io_service run loop
     echo_server.run();
 }
-
-void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
-{
-    std::cout << "on_message called with hdl: " << hdl.lock().get()
-              << " and message: " << msg->get_payload()
-              << std::endl;
-    if (MESSAGE_SENT != msg->get_payload())
-    {
-        std::stringstream ss;
-        ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg->get_payload();
-        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-    }
-    try
-    {
-        s->send(hdl, msg->get_payload(), msg->get_opcode());
-    }
-    catch (const websocketpp::lib::error_code& e)
-    {
-        std::cout << "Echo failed because: " << e
-                  << "(" << e.message() << ")" << std::endl;
-    }
-}
