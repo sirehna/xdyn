@@ -17,7 +17,7 @@
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )>(on_message_string)));
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string));
     {
         WebSocketEndpoint endpoint;
         const int id = connect_to_server(endpoint, WEBSOCKET_ADDRESS);
@@ -27,7 +27,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )>(on_message_string)));
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string));
     {
         WebSocketEndpoint endpoint;
         const int id = connect_to_server(endpoint, WEBSOCKET_ADDRESS);
@@ -86,7 +86,7 @@ void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_doubles)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )>(on_message_vector)));
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_vector));
     {
         std::vector<double> v(3,0.0);
         v[0]=1.0;v[1]=2.0;v[2]=3.0;
