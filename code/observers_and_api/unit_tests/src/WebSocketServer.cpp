@@ -6,7 +6,6 @@
  */
 
 #include "WebSocketServer.hpp"
-#include "WebSocketEndpoint.hpp"
 #include "WebSocketException.hpp"
 
 WebSocketServer::WebSocketServer(const MessageHandler& message_handler, const std::string& address, const short unsigned int port):

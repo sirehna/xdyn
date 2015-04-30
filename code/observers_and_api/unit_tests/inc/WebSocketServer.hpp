@@ -30,8 +30,6 @@ using websocketpp::lib::thread;
 
 typedef websocketpp::server<websocketpp::config::asio> WSServer;
 typedef WSServer::message_ptr message_ptr;
-
-class WebSocketEndpoint;
 typedef std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> MessageHandler;
 
 class WebSocketServer
