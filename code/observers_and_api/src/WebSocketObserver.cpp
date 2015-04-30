@@ -1,7 +1,9 @@
 #include "WebSocketObserver.hpp"
 #include "WebSocketObserverException.hpp"
+#include "WebSocketEndpoint.hpp"
 
-WebSocketObserver::WebSocketObserver(const std::string& address, const std::vector<std::string>& data):Observer(data),endpoint(),id(endpoint.connect(address))
+WebSocketObserver::WebSocketObserver(const std::string& address, const std::vector<std::string>& data):
+Observer(data),endpoint(new WebSocketEndpoint),id(endpoint->connect(address))
 {
     std::cout<<"id "<<id<<std::endl<<std::flush;
     if (id == -1)
@@ -12,12 +14,12 @@ WebSocketObserver::WebSocketObserver(const std::string& address, const std::vect
 
 void WebSocketObserver::send(const std::string& message)
 {
-    this->endpoint.send(this->id,message);
+    this->endpoint->send(this->id,message);
 }
 
 void WebSocketObserver::send(const std::vector<double>& vector)
 {
-    this->endpoint.send(this->id,vector);
+    this->endpoint->send(this->id,vector);
 }
 
 WebSocketObserver::~WebSocketObserver()
@@ -58,9 +60,9 @@ void WebSocketObserver::flush_value()
 
 std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObserver)
 {
-    for (const auto id:wsObserver.endpoint.getIds())
+    for (const auto id:wsObserver.endpoint->getIds())
     {
-        connection_metadata::ptr metadata = wsObserver.endpoint.getMetadata(id);
+        connection_metadata::ptr metadata = wsObserver.endpoint->getMetadata(id);
         if (metadata)
         {
             out << *metadata << std::endl;

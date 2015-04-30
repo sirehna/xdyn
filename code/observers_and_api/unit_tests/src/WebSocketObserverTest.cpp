@@ -1,6 +1,7 @@
 #include "WebSocketObserver.hpp"
 #include "WebSocketObserverTest.hpp"
 #include "WebSocketObserverException.hpp"
+#include "WebSocketEndpoint.hpp"
 
 #include <iostream>
 #include <unistd.h> //usleep

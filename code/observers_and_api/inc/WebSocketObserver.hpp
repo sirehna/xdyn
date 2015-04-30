@@ -2,7 +2,11 @@
 #define WEBSOCKETOBSERVER_HPP_
 
 #include "Observer.hpp"
-#include "WebSocketEndpoint.hpp"
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
+
+class WebSocketEndpoint;
+typedef TR1(shared_ptr)<WebSocketEndpoint> WebSocketEndpointPtr;
 
 class WebSocketObserver : public Observer
 {
@@ -13,7 +17,7 @@ class WebSocketObserver : public Observer
         void send(const std::vector<double>& vector);
         friend std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObserver);
     private:
-        WebSocketEndpoint endpoint;
+        WebSocketEndpointPtr endpoint;
         int id;
         void flush_after_initialization();
         void flush_after_write();
