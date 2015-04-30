@@ -4,11 +4,11 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
 
-class WebSocketObserverBoostAsioTest : public ::testing::Test
+class BoostAsioTest : public ::testing::Test
 {
     protected:
-        WebSocketObserverBoostAsioTest();
-        virtual ~WebSocketObserverBoostAsioTest(){};
+        BoostAsioTest();
+        virtual ~BoostAsioTest(){};
         virtual void SetUp(){};
         virtual void TearDown(){};
         ssc::random_data_generator::DataGenerator a;
