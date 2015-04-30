@@ -1,11 +1,9 @@
-#include "WebSocketObserver.hpp"
 #include "WebSocketObserverTest.hpp"
 #include "WebSocketObserverException.hpp"
 #include "WebSocketEndpoint.hpp"
 #include "WebSocketServer.hpp"
 
 #include <iostream>
-#include <functional> // std::function
 
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
