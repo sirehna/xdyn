@@ -23,48 +23,46 @@ struct WebSocketClient::Impl
         return ss.str();
     }
 
-
-    Impl(std::string address, const short unsigned int port) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
+    void throw_if_time_out(const size_t counter) const
     {
-        address = append_port_to_address(address, port);
+        if (counter>100)
+        {
+            std::stringstream ss;
+            ss << "Time out when retrieving metadata from the endpoint" << std::endl;
+            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
+        }
+    }
+
+    bool connected(const size_t k)
+    {
+        ConnectionMetadata::ptr metadata = get_metadata(next_id);
+        throw_if_time_out(k);
+        if (metadata->get_status()=="Open") return true;
+        if (metadata->get_status()=="Failed")
+        {
+            THROW(__PRETTY_FUNCTION__, WebSocketException, "Unable to connect to websocket");
+        }
+        usleep(100000);
+        return false;
+    }
+
+    void prepare_endpoint()
+    {
         endpoint.clear_access_channels(websocketpp::log::alevel::all);
         endpoint.clear_error_channels(websocketpp::log::elevel::all);
         endpoint.init_asio();
         endpoint.start_perpetual();
+    }
+
+    Impl(std::string address, const short unsigned int port) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
+    {
+        address = append_port_to_address(address, port);
+        prepare_endpoint();
         websocket_thread = websocketpp::lib::make_shared<websocketpp::lib::thread>(&client::run, &endpoint);
         usleep(10000);
         size_t k=0;
         connect(address);
-        while(true)
-        {
-            ConnectionMetadata::ptr metadata = get_metadata(next_id);
-            k++;
-            if (k>100)
-            {
-                std::stringstream ss;
-                ss << "Time out when retrieving metadata from the endpoint" << std::endl;
-                THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-            }
-            if (metadata->get_status()=="Open")
-            {
-                break;
-            }
-            else if (metadata->get_status()=="Failed")
-            {
-                std::stringstream ss;
-                ss << "Connection failed" <<std::endl;
-                THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-                break;
-            }
-            usleep(100000);
-        }
-        ConnectionMetadata::ptr metadata = get_metadata(next_id);
-        if (not(metadata))
-        {
-            std::stringstream ss;
-            ss << "Unknown connection id : " << next_id << std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-        }
+        while(not(connected(k))) k++;
     }
 
     /**
@@ -160,6 +158,9 @@ struct WebSocketClient::Impl
         IdToConnexionMap::const_iterator metadata_it = id_to_connection.find(id);
         if (metadata_it == id_to_connection.end())
         {
+            std::stringstream ss;
+            ss << "Unknown connection id : " << next_id << std::endl;
+            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
             return ConnectionMetadata::ptr();
         }
         else
