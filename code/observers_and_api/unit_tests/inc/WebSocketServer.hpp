@@ -13,7 +13,6 @@
 
 #include <websocketpp/server.hpp>
 #include <websocketpp/config/asio_no_tls.hpp>
-#include <websocketpp/common/thread.hpp>
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -50,7 +49,7 @@ class WebSocketServer
 
     protected:
         WSServer server;
-        websocketpp::lib::thread server_thread; // Thread in which the server runs
+        std::thread server_thread; // Thread in which the server runs
 
     private:
         WebSocketServer();
