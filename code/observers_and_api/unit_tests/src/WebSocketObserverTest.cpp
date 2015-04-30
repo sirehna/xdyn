@@ -1,3 +1,4 @@
+#include "string2vector.hpp"
 #include "WebSocketObserverTest.hpp"
 #include "WebSocketException.hpp"
 #include "WebSocketEndpoint.hpp"
@@ -34,6 +35,19 @@ void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr
     }
 }
 
+void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
+void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
+{
+    ASSERT_EQ(websocketpp::frame::opcode::binary, msg->get_opcode());
+    const std::string payload = msg->get_payload();
+    std::vector<double> vv = convert_string_to_vector<double>(payload);
+    ASSERT_EQ(3,payload.size()/8);
+    ASSERT_EQ(3,vv.size());
+    ASSERT_EQ(1.0,vv[0]);
+    ASSERT_EQ(2.0,vv[1]);
+    ASSERT_EQ(3.0,vv[2]);
+    s->send(hdl, msg->get_payload(), msg->get_opcode());
+}
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
 {
@@ -51,47 +65,6 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
         WebSocketEndpoint endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
         endpoint.send(MESSAGE_SENT);
     }
-}
-
-template<typename T>
-std::string convert_vector_to_string(const std::vector<T>& v);
-template<typename T>
-typename std::vector<T> convert_string_to_vector(const std::string& s);
-
-template<typename T>
-std::string convert_vector_to_string(const std::vector<T>& v)
-{
-    const size_t ss = v.size()*sizeof(T);
-    std::string s(ss, 0);
-    memcpy((void*)s.c_str(),v.data(),ss);
-    return s;
-}
-
-template<typename T>
-typename std::vector<T> convert_string_to_vector(const std::string& s)
-{
-    std::vector<T> res;
-    const size_t n = s.size()/sizeof(T);
-    res.resize(n);
-    for (size_t i=0;i<n;++i)
-    {
-        res[i]=*reinterpret_cast<const double*>(s.c_str() + sizeof(T)*i);
-    }
-    return res;
-}
-
-void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
-void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
-{
-    ASSERT_EQ(websocketpp::frame::opcode::binary, msg->get_opcode());
-    const std::string payload = msg->get_payload();
-    std::vector<double> vv = convert_string_to_vector<double>(payload);
-    ASSERT_EQ(3,payload.size()/8);
-    ASSERT_EQ(3,vv.size());
-    ASSERT_EQ(1.0,vv[0]);
-    ASSERT_EQ(2.0,vv[1]);
-    ASSERT_EQ(3.0,vv[2]);
-    s->send(hdl, msg->get_payload(), msg->get_opcode());
 }
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_doubles)
