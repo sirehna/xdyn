@@ -24,7 +24,6 @@ class WebSocketEndpoint
         void send(const int id, const std::string& message);
         void send(const std::string& message); // Sends to current socket
         bool good() const; // Returns true if the connection is successfully established
-        int get_current_id() const;
 
         /**
          * \brief Send a vector through a web socket
@@ -41,7 +40,7 @@ class WebSocketEndpoint
         template<typename T>
         void send(const std::vector<T> vector)
         {
-            send_vector(get_current_id(), &vector[0], sizeof(T)*vector.size());
+            send_vector(next_id, &vector[0], sizeof(T)*vector.size());
         }
 
         connection_metadata::ptr get_metadata(const int id) const;

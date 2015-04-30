@@ -25,7 +25,7 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
     connect(address);
     while(true)
     {
-        connection_metadata::ptr metadata = get_metadata(get_current_id());
+        connection_metadata::ptr metadata = get_metadata(next_id);
         k++;
         if (k>100)
         {
@@ -46,11 +46,11 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
         }
         usleep(100000);
     }
-    connection_metadata::ptr metadata = get_metadata(get_current_id());
+    connection_metadata::ptr metadata = get_metadata(next_id);
     if (not(metadata))
     {
         std::stringstream ss;
-        ss << "Unknown connection id : " << get_current_id()<<std::endl;
+        ss << "Unknown connection id : " << next_id << std::endl;
         THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
 }
@@ -76,11 +76,6 @@ WebSocketEndpoint::~WebSocketEndpoint()
         }
     }
     websocket_thread->join();
-}
-
-int WebSocketEndpoint::get_current_id() const
-{
-    return next_id;
 }
 
 bool WebSocketEndpoint::good() const
@@ -183,7 +178,7 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
 
 void WebSocketEndpoint::send(const std::string& message)
 {
-    send(get_current_id(), message);
+    send(next_id, message);
 }
 
 connection_metadata::ptr WebSocketEndpoint::get_metadata(const int id) const
