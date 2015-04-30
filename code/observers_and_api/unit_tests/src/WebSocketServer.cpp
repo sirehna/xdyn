@@ -13,7 +13,7 @@
 
 WebSocketServer::WebSocketServer(const MessageHandler& message_handler):
         server(),
-        threadServer(createServerEcho, std::ref(server), message_handler)
+        threadServer(create_server_echo, std::ref(server), message_handler)
 {
 }
 
@@ -24,7 +24,7 @@ WebSocketServer::~WebSocketServer()
     threadServer.join();
 }
 
-void createServerEcho(WSServer& echo_server, const MessageHandler& message_handler)
+void create_server_echo(WSServer& echo_server, const MessageHandler& message_handler)
 {
     echo_server.set_reuse_addr(true);
     // Set logging settings
@@ -43,7 +43,7 @@ void createServerEcho(WSServer& echo_server, const MessageHandler& message_handl
     echo_server.run();
 }
 
-int connectToServer(WebSocketEndpoint& endpoint, const std::string& address)
+int connect_to_server(WebSocketEndpoint& endpoint, const std::string& address)
 {
     usleep(10000);
     size_t k=0;

@@ -43,16 +43,18 @@ class WebSocketServer
     public:
         WebSocketServer(const MessageHandler& message_handler);
         ~WebSocketServer();
+
     protected:
         WSServer server;
         websocketpp::lib::thread threadServer;
+
     private:
         WebSocketServer();
 };
 
 
-void createServerEcho(WSServer& echo_server, const MessageHandler& message_handler);
-int connectToServer(WebSocketEndpoint& endpoint, const std::string& address);
+void create_server_echo(WSServer& echo_server, const MessageHandler& message_handler);
+int connect_to_server(WebSocketEndpoint& endpoint, const std::string& address);
 void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
 
 
