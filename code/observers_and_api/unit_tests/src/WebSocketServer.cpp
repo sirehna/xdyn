@@ -11,14 +11,14 @@
 
 WebSocketServer::WebSocketServer(const MessageHandler& message_handler):
         server(),
-        threadServer(create_server_echo, std::ref(server), message_handler, STR(ADDRESS), PORT)
+        server_thread(create_server_echo, std::ref(server), message_handler, STR(ADDRESS), PORT)
 {
 }
 
 WebSocketServer::~WebSocketServer()
 {
     server.stop();
-    threadServer.join();
+    server_thread.join();
 }
 
 void create_server_echo(WSServer& echo_server, const MessageHandler& message_handler, const std::string& address, const short unsigned int port)

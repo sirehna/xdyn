@@ -46,7 +46,7 @@ class WebSocketServer
 
     protected:
         WSServer server;
-        websocketpp::lib::thread threadServer;
+        websocketpp::lib::thread server_thread; // Thread in which the server runs
 
     private:
         WebSocketServer();
