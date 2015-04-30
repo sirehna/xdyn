@@ -19,7 +19,6 @@ class WebSocketEndpoint
     public:
         WebSocketEndpoint(std::string address, const short unsigned int port);
         ~WebSocketEndpoint();
-        void connect(std::string const & uri);
         void close(const int id, websocketpp::close::status::value code, std::string reason);
         void send(const std::string& message); // Sends to current socket
         bool good() const; // Returns true if the connection is successfully established
@@ -40,6 +39,7 @@ class WebSocketEndpoint
 
     private:
         WebSocketEndpoint();
+        void connect(std::string const & uri);
         void send_vector(const int id, void const * payload, const size_t nb_of_bytes);
         void close(const ConnectionMetadata::ptr& connexion);
         void send(const int id, const std::string& message);

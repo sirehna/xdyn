@@ -90,7 +90,6 @@ bool WebSocketEndpoint::good() const
 
 /**
  * \param[in] uri
- * \return id the connection generated. In case of error, the value returns is -1
  * \note
  * The \param uri can looks like
  *  - "ws://localhost:9002"
