@@ -3,7 +3,7 @@
 #include "WebSocketEndpoint.hpp"
 
 WebSocketObserver::WebSocketObserver(const std::string& address, const std::vector<std::string>& data):
-Observer(data),endpoint(new WebSocketEndpoint)
+Observer(data),endpoint(new WebSocketEndpoint(address))
 {
     if (endpoint->good()) std::cout<<"Connection successful" << std::endl << std::flush;
     else

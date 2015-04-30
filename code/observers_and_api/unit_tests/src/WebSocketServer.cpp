@@ -40,52 +40,6 @@ void create_server_echo(WSServer& echo_server, const MessageHandler& message_han
     echo_server.run();
 }
 
-int connect_to_server(WebSocketEndpoint& endpoint, const std::string& address)
-{
-    usleep(10000);
-    size_t k=0;
-    std::cout << "Starting server at: " << address<<std::endl<<std::flush;
-    endpoint.connect(address);
-    while(true)
-    {
-        connection_metadata::ptr metadata = endpoint.get_metadata(endpoint.get_current_id());
-        k++;
-        if (k>100)
-        {
-            std::stringstream ss;
-            ss << "Time out when retrieving metadata from the endpoint" << std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-        }
-        std::cout<<metadata->get_status()<<std::endl;
-        if (metadata->get_status()=="Open")
-        {
-            break;
-        }
-        else if (metadata->get_status()=="Failed")
-        {
-            std::stringstream ss;
-            ss << "Connection failed" <<std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-            break;
-        }
-        usleep(100000);
-    }
-    connection_metadata::ptr metadata = endpoint.get_metadata(endpoint.get_current_id());
-    if (metadata)
-    {
-        std::cout << *metadata << std::endl<<std::flush;
-    }
-    else
-    {
-        std::stringstream ss;
-        ss << "Unknown connection id : " <<endpoint.get_current_id()<<std::endl;
-        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-    }
-    return endpoint.get_current_id();
-}
-
-
-
 void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
 {
     std::cout << "on_message called with hdl: " << hdl.lock().get()

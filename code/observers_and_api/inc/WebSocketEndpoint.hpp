@@ -17,7 +17,7 @@
 class WebSocketEndpoint
 {
     public:
-        WebSocketEndpoint();
+        WebSocketEndpoint(const std::string& address);
         ~WebSocketEndpoint();
         void connect(std::string const & uri);
         void close(const int id, websocketpp::close::status::value code, std::string reason);
@@ -42,6 +42,7 @@ class WebSocketEndpoint
         int get_first_id() const;
 
     private:
+        WebSocketEndpoint();
         void send_vector(const int id, void const * payload, const size_t nb_of_bytes);
         typedef std::map<int,connection_metadata::ptr> IdToConnexionMap;
         client endpoint;

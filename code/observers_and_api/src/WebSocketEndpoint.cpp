@@ -5,16 +5,57 @@
  *      Author: cady
  */
 
+#include <unistd.h> //usleep
+
 #include "WebSocketEndpoint.hpp"
 #include "WebSocketObserverException.hpp"
 
-WebSocketEndpoint::WebSocketEndpoint () : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
+WebSocketEndpoint::WebSocketEndpoint(const std::string& address) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
 {
     endpoint.clear_access_channels(websocketpp::log::alevel::all);
     endpoint.clear_error_channels(websocketpp::log::elevel::all);
     endpoint.init_asio();
     endpoint.start_perpetual();
     websocket_thread = websocketpp::lib::make_shared<websocketpp::lib::thread>(&client::run, &endpoint);
+    usleep(10000);
+    size_t k=0;
+    std::cout << "Starting server at: " << address<<std::endl<<std::flush;
+    connect(address);
+    while(true)
+    {
+        connection_metadata::ptr metadata = get_metadata(get_current_id());
+        k++;
+        if (k>100)
+        {
+            std::stringstream ss;
+            ss << "Time out when retrieving metadata from the endpoint" << std::endl;
+            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
+        }
+        std::cout<<metadata->get_status()<<std::endl;
+        if (metadata->get_status()=="Open")
+        {
+            break;
+        }
+        else if (metadata->get_status()=="Failed")
+        {
+            std::stringstream ss;
+            ss << "Connection failed" <<std::endl;
+            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
+            break;
+        }
+        usleep(100000);
+    }
+    connection_metadata::ptr metadata = get_metadata(get_current_id());
+    if (metadata)
+    {
+        std::cout << *metadata << std::endl<<std::flush;
+    }
+    else
+    {
+        std::stringstream ss;
+        ss << "Unknown connection id : " << get_current_id()<<std::endl;
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
+    }
 }
 
 WebSocketEndpoint::~WebSocketEndpoint()
