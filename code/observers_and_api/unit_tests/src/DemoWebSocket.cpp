@@ -34,11 +34,11 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg)
 
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
-class connection_metadata {
+class ConnectionMetadata {
 public:
-    typedef websocketpp::lib::shared_ptr<connection_metadata> ptr;
+    typedef websocketpp::lib::shared_ptr<ConnectionMetadata> ptr;
 
-    connection_metadata(int id, websocketpp::connection_hdl hdl, std::string uri)
+    ConnectionMetadata(int id, websocketpp::connection_hdl hdl, std::string uri)
         : m_id(id)
         , m_hdl(hdl)
         , m_status("Connecting")
@@ -97,7 +97,7 @@ public:
         m_messages.push_back(">> " + message);
     }
 
-    friend std::ostream & operator<< (std::ostream & out, connection_metadata const & data);
+    friend std::ostream & operator<< (std::ostream & out, ConnectionMetadata const & data);
 private:
     int m_id;
     websocketpp::connection_hdl m_hdl;
@@ -108,7 +108,7 @@ private:
     std::vector<std::string> m_messages;
 };
 
-std::ostream & operator<< (std::ostream & out, connection_metadata const & data) {
+std::ostream & operator<< (std::ostream & out, ConnectionMetadata const & data) {
     out << "> URI: " << data.m_uri << "\n"
         << "> Status: " << data.m_status << "\n"
         << "> Remote Server: " << (data.m_server.empty() ? "None Specified" : data.m_server) << "\n"
@@ -168,29 +168,29 @@ public:
         }
 
         int new_id = m_next_id++;
-        connection_metadata::ptr metadata_ptr = websocketpp::lib::make_shared<connection_metadata>(new_id, con->get_handle(), uri);
+        ConnectionMetadata::ptr metadata_ptr = websocketpp::lib::make_shared<ConnectionMetadata>(new_id, con->get_handle(), uri);
         m_connection_list[new_id] = metadata_ptr;
 
         con->set_open_handler(websocketpp::lib::bind(
-            &connection_metadata::on_open,
+            &ConnectionMetadata::on_open,
             metadata_ptr,
             &m_endpoint,
             websocketpp::lib::placeholders::_1
         ));
         con->set_fail_handler(websocketpp::lib::bind(
-            &connection_metadata::on_fail,
+            &ConnectionMetadata::on_fail,
             metadata_ptr,
             &m_endpoint,
             websocketpp::lib::placeholders::_1
         ));
         con->set_close_handler(websocketpp::lib::bind(
-            &connection_metadata::on_close,
+            &ConnectionMetadata::on_close,
             metadata_ptr,
             &m_endpoint,
             websocketpp::lib::placeholders::_1
         ));
         con->set_message_handler(websocketpp::lib::bind(
-            &connection_metadata::on_message,
+            &ConnectionMetadata::on_message,
             metadata_ptr,
             websocketpp::lib::placeholders::_1,
             websocketpp::lib::placeholders::_2
@@ -234,16 +234,16 @@ public:
         metadata_it->second->record_sent_message(message);
     }
 
-    connection_metadata::ptr get_metadata(int id) const {
+    ConnectionMetadata::ptr get_metadata(int id) const {
         con_list::const_iterator metadata_it = m_connection_list.find(id);
         if (metadata_it == m_connection_list.end()) {
-            return connection_metadata::ptr();
+            return ConnectionMetadata::ptr();
         } else {
             return metadata_it->second;
         }
     }
 private:
-    typedef std::map<int,connection_metadata::ptr> con_list;
+    typedef std::map<int,ConnectionMetadata::ptr> con_list;
 
     client m_endpoint;
     websocketpp::lib::shared_ptr<websocketpp::lib::thread> m_thread;
@@ -325,7 +325,7 @@ int main() {
         } else if (input.substr(0,4) == "show") {
             int id = atoi(input.substr(5).c_str());
 
-            connection_metadata::ptr metadata = endpoint.get_metadata(id);
+            ConnectionMetadata::ptr metadata = endpoint.get_metadata(id);
             if (metadata) {
                 std::cout << *metadata << std::endl;
             } else {

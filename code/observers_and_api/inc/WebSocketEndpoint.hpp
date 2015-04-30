@@ -43,16 +43,16 @@ class WebSocketEndpoint
             send_vector(next_id, &vector[0], sizeof(T)*vector.size());
         }
 
-        connection_metadata::ptr get_metadata(const int id) const;
+        ConnectionMetadata::ptr get_metadata(const int id) const;
         std::list<int> get_ids() const;
         int get_first_id() const;
 
     private:
         WebSocketEndpoint();
         void send_vector(const int id, void const * payload, const size_t nb_of_bytes);
-        void close(const connection_metadata::ptr& connexion);
+        void close(const ConnectionMetadata::ptr& connexion);
 
-        typedef std::map<int,connection_metadata::ptr> IdToConnexionMap;
+        typedef std::map<int,ConnectionMetadata::ptr> IdToConnexionMap;
         client endpoint;
         websocketpp::lib::shared_ptr<websocketpp::lib::thread> websocket_thread;
         IdToConnexionMap id_to_connection;

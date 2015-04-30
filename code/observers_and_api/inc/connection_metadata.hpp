@@ -15,11 +15,11 @@
 
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
-class connection_metadata
+class ConnectionMetadata
 {
     public:
-        typedef websocketpp::lib::shared_ptr<connection_metadata> ptr;
-        connection_metadata(int id, websocketpp::connection_hdl hdl, const std::string& uri);
+        typedef websocketpp::lib::shared_ptr<ConnectionMetadata> ptr;
+        ConnectionMetadata(int id, websocketpp::connection_hdl hdl, const std::string& uri);
         void on_open(client * c, websocketpp::connection_hdl hdl);
         void on_fail(client * c, websocketpp::connection_hdl hdl);
         void on_close(client * c, websocketpp::connection_hdl hdl);
@@ -29,7 +29,7 @@ class connection_metadata
         std::string get_status() const;
         void record_sent_message(const std::string& message);
 
-        friend std::ostream & operator<< (std::ostream & out, connection_metadata const & data);
+        friend std::ostream & operator<< (std::ostream & out, ConnectionMetadata const & data);
     private:
         int m_id;
         websocketpp::connection_hdl m_hdl;

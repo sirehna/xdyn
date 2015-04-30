@@ -31,7 +31,7 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
     connect(address);
     while(true)
     {
-        connection_metadata::ptr metadata = get_metadata(next_id);
+        ConnectionMetadata::ptr metadata = get_metadata(next_id);
         k++;
         if (k>100)
         {
@@ -52,7 +52,7 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
         }
         usleep(100000);
     }
-    connection_metadata::ptr metadata = get_metadata(next_id);
+    ConnectionMetadata::ptr metadata = get_metadata(next_id);
     if (not(metadata))
     {
         std::stringstream ss;
@@ -61,7 +61,7 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
     }
 }
 
-void WebSocketEndpoint::close(const connection_metadata::ptr& connexion)
+void WebSocketEndpoint::close(const ConnectionMetadata::ptr& connexion)
 {
     // Only close open connections
     if (connexion->get_status() != "Open") return;
@@ -110,29 +110,29 @@ void WebSocketEndpoint::connect(std::string const & uri)
     }
 
     next_id++;
-    connection_metadata::ptr metadata_ptr = websocketpp::lib::make_shared<connection_metadata>(next_id, con->get_handle(), uri);
+    ConnectionMetadata::ptr metadata_ptr = websocketpp::lib::make_shared<ConnectionMetadata>(next_id, con->get_handle(), uri);
     id_to_connection[next_id] = metadata_ptr;
 
     con->set_open_handler(websocketpp::lib::bind(
-        &connection_metadata::on_open,
+        &ConnectionMetadata::on_open,
         metadata_ptr,
         &endpoint,
         websocketpp::lib::placeholders::_1
     ));
     con->set_fail_handler(websocketpp::lib::bind(
-        &connection_metadata::on_fail,
+        &ConnectionMetadata::on_fail,
         metadata_ptr,
         &endpoint,
         websocketpp::lib::placeholders::_1
     ));
     con->set_close_handler(websocketpp::lib::bind(
-        &connection_metadata::on_close,
+        &ConnectionMetadata::on_close,
         metadata_ptr,
         &endpoint,
         websocketpp::lib::placeholders::_1
     ));
     con->set_message_handler(websocketpp::lib::bind(
-        &connection_metadata::on_message,
+        &ConnectionMetadata::on_message,
         metadata_ptr,
         websocketpp::lib::placeholders::_1,
         websocketpp::lib::placeholders::_2
@@ -186,12 +186,12 @@ void WebSocketEndpoint::send(const std::string& message)
     send(next_id, message);
 }
 
-connection_metadata::ptr WebSocketEndpoint::get_metadata(const int id) const
+ConnectionMetadata::ptr WebSocketEndpoint::get_metadata(const int id) const
 {
     IdToConnexionMap::const_iterator metadata_it = id_to_connection.find(id);
     if (metadata_it == id_to_connection.end())
     {
-        return connection_metadata::ptr();
+        return ConnectionMetadata::ptr();
     }
     else
     {

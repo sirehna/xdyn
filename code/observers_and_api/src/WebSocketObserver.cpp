@@ -62,7 +62,7 @@ std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObser
 {
     for (const auto id:wsObserver.endpoint->get_ids())
     {
-        connection_metadata::ptr metadata = wsObserver.endpoint->get_metadata(id);
+        ConnectionMetadata::ptr metadata = wsObserver.endpoint->get_metadata(id);
         if (metadata)
         {
             out << *metadata << std::endl;
