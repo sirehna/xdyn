@@ -186,6 +186,11 @@ void WebSocketEndpoint::send(const int id, const std::string& message)
     metadata_it->second->record_sent_message(message);
 }
 
+void WebSocketEndpoint::send(const std::string& message)
+{
+    send(get_current_id(), message);
+}
+
 connection_metadata::ptr WebSocketEndpoint::get_metadata(const int id) const
 {
     IdToConnexionMap::const_iterator metadata_it = id_to_connection.find(id);
