@@ -13,8 +13,6 @@
 
 #define WEBSOCKET_ADDRESS "ws://127.0.0.1:9002"
 
-//const std::string connectAddress(std::string("ws://")+std::string(STR(ADDRESS))+std::string(":")+std::string(STR(PORT)));
-
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
 {
     TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string));
