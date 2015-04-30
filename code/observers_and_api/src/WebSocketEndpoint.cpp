@@ -22,7 +22,6 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
     websocket_thread = websocketpp::lib::make_shared<websocketpp::lib::thread>(&client::run, &endpoint);
     usleep(10000);
     size_t k=0;
-    std::cout << "Starting server at: " << address<<std::endl<<std::flush;
     connect(address);
     while(true)
     {
@@ -34,7 +33,6 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
             ss << "Time out when retrieving metadata from the endpoint" << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         }
-        std::cout<<metadata->get_status()<<std::endl;
         if (metadata->get_status()=="Open")
         {
             break;
@@ -49,11 +47,7 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
         usleep(100000);
     }
     connection_metadata::ptr metadata = get_metadata(get_current_id());
-    if (metadata)
-    {
-        std::cout << *metadata << std::endl<<std::flush;
-    }
-    else
+    if (not(metadata))
     {
         std::stringstream ss;
         ss << "Unknown connection id : " << get_current_id()<<std::endl;
@@ -71,7 +65,6 @@ WebSocketEndpoint::~WebSocketEndpoint()
             // Only close open connections
             continue;
         }
-        std::cout << "> Closing connection " << it->second->get_id() << std::endl<<std::flush;
         websocketpp::lib::error_code error_code;
         endpoint.close(it->second->get_hdl(), websocketpp::close::status::going_away, "", error_code);
         if (error_code)
@@ -83,7 +76,6 @@ WebSocketEndpoint::~WebSocketEndpoint()
         }
     }
     websocket_thread->join();
-    std::cout << "End WebSocketEndpoint::~WebSocketEndpoint()"<< std::endl<<std::flush;
 }
 
 int WebSocketEndpoint::get_current_id() const
