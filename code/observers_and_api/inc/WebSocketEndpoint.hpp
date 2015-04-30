@@ -37,8 +37,6 @@ class WebSocketEndpoint
         }
 
         ConnectionMetadata::ptr get_metadata(const int id) const;
-        std::list<int> get_ids() const;
-        int get_first_id() const;
 
     private:
         WebSocketEndpoint();

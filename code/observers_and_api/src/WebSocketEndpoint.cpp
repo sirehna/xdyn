@@ -199,22 +199,6 @@ ConnectionMetadata::ptr WebSocketEndpoint::get_metadata(const int id) const
     }
 }
 
-std::list<int> WebSocketEndpoint::get_ids() const
-{
-    std::list<int> list;
-    for (IdToConnexionMap::const_iterator metadata_it = id_to_connection.begin();metadata_it!=id_to_connection.end();++metadata_it)
-    {
-        list.push_back(metadata_it->first);
-    }
-    return list;
-}
-
-int WebSocketEndpoint::get_first_id() const
-{
-    IdToConnexionMap::const_iterator metadata_it = id_to_connection.begin();
-    return metadata_it->first;
-}
-
 void WebSocketEndpoint::send_vector(const int id, void const * payload, const size_t nb_of_bytes)
 {
     websocketpp::lib::error_code error_code;
