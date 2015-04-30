@@ -28,7 +28,6 @@ using websocketpp::lib::thread;
 #define STR_(s) #s
 #endif
 
-#define ADDRESS 127.0.0.1
 #define PORT 9002
 
 typedef websocketpp::server<websocketpp::config::asio> WSServer;
@@ -40,7 +39,7 @@ typedef std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr 
 class WebSocketServer
 {
     public:
-        WebSocketServer(const MessageHandler& message_handler);
+        WebSocketServer(const MessageHandler& message_handler, const std::string& address);
         ~WebSocketServer();
 
     protected:

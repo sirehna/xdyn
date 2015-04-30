@@ -10,7 +10,8 @@
 #include TR1INC(memory)
 
 #define MESSAGE_SENT      "First message"
-#define WEBSOCKET_ADDRESS "ws://127.0.0.1"
+#define ADDRESS "127.0.0.1"
+#define WEBSOCKET_ADDRESS "ws://" ADDRESS
 #define WEBSOCKET_PORT    9002
 
 void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
@@ -52,7 +53,7 @@ void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string));
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string, ADDRESS));
     {
         WebSocketEndpoint endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
         ASSERT_TRUE(endpoint.good());
@@ -61,7 +62,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string));
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string, ADDRESS));
     {
         WebSocketEndpoint endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
         endpoint.send(MESSAGE_SENT);
@@ -70,7 +71,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_doubles)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_vector));
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_vector, ADDRESS));
     {
         std::vector<double> v(3,0.0);
         v[0]=1.0;v[1]=2.0;v[2]=3.0;

@@ -9,9 +9,9 @@
 #include "WebSocketEndpoint.hpp"
 #include "WebSocketException.hpp"
 
-WebSocketServer::WebSocketServer(const MessageHandler& message_handler):
+WebSocketServer::WebSocketServer(const MessageHandler& message_handler, const std::string& address):
         server(),
-        server_thread(create_server_echo, std::ref(server), message_handler, STR(ADDRESS), PORT)
+        server_thread(create_server_echo, std::ref(server), message_handler, address, PORT)
 {
 }
 
