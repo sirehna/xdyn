@@ -53,7 +53,7 @@ class WebSocketServer
 };
 
 
-void create_server_echo(WSServer& echo_server, const MessageHandler& message_handler);
+void create_server_echo(WSServer& echo_server, const MessageHandler& message_handler, const std::string& address, const short unsigned int port);
 int connect_to_server(WebSocketEndpoint& endpoint, const std::string& address);
 void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
 
