@@ -109,7 +109,7 @@ struct WebSocketClient::Impl
         if (error_code)
         {
             std::stringstream ss;
-            ss << "> Connect initialization error: " << error_code.message() << std::endl;
+            ss << "Unable to get a connection: " << error_code.message() << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         }
 
@@ -129,7 +129,7 @@ struct WebSocketClient::Impl
         if (error_code)
         {
             std::stringstream ss;
-            ss << "> Error closing connection " << connexion->get_id() << ": "
+            ss << "Error closing connection " << connexion->get_id() << ": "
                << error_code.message() << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketException,ss.str());
         }
@@ -141,15 +141,16 @@ struct WebSocketClient::Impl
         IdToConnexionMap::iterator metadata_it = id_to_connection.find(id);
         if (metadata_it == id_to_connection.end())
         {
-            std::cout << "> No connection found with id " << id << std::endl;
-            return;
+            std::stringstream ss;
+            ss << "Could not send message to connection: id " << id << " not found: " << error_code.message();
+            THROW(__PRETTY_FUNCTION__, WebSocketException,ss.str());
         }
         auto hdl = metadata_it->second->get_hdl();
         endpoint.send(hdl, message, websocketpp::frame::opcode::text, error_code);
         if (error_code)
         {
             std::stringstream ss;
-            ss << "> Error sending message: " << error_code.message() << std::endl;
+            ss << "Error sending message: " << error_code.message() << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
             return;
         }
@@ -164,12 +165,8 @@ struct WebSocketClient::Impl
             std::stringstream ss;
             ss << "Unknown connection id : " << next_id << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-            return ConnectionMetadata::ptr();
         }
-        else
-        {
-            return metadata_it->second;
-        }
+        return metadata_it->second;
     }
 
     typedef std::map<int,ConnectionMetadata::ptr> IdToConnexionMap;
@@ -211,15 +208,16 @@ void WebSocketClient::send_vector(const int id, void const * payload, const size
     Impl::IdToConnexionMap::iterator metadata_it = pimpl->id_to_connection.find(id);
     if (metadata_it == pimpl->id_to_connection.end())
     {
-        std::cout << "> No connection found with id " << id << std::endl;
-        return;
+        std::stringstream ss;
+        ss << "Unknown connection id : " << id << std::endl;
+        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
     auto handle = metadata_it->second->get_hdl();
     pimpl->endpoint.send(handle, payload, nb_of_bytes, websocketpp::frame::opcode::binary, error_code);
     if (error_code)
     {
         std::stringstream ss;
-        ss << "> Error sending message: " << error_code.message() << std::endl;
+        ss << "Error sending message: " << error_code.message() << std::endl;
         THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         return;
     }
