@@ -15,6 +15,7 @@ FILE(GLOB SRC
         src/ForceTester.cpp
         src/ForceTests.cpp
         src/MapObserverTest.cpp
+        src/WebSocketServer.cpp
         )
 # ------8<---------------------------------------------->8-----
 
