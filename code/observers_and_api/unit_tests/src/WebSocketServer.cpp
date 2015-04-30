@@ -11,7 +11,7 @@
 
 WebSocketServer::WebSocketServer(const MessageHandler& message_handler, const std::string& address, const short unsigned int port):
         server(),
-        server_thread(&WebSocketServer::create_server_echo, this, std::ref(server), message_handler, address, port)
+        server_thread(&WebSocketServer::create_echo_server, this, std::ref(server), message_handler, address, port)
 {
 }
 
@@ -21,7 +21,7 @@ WebSocketServer::~WebSocketServer()
     server_thread.join();
 }
 
-void WebSocketServer::create_server_echo(WSServer& echo_server, const MessageHandler& message_handler, const std::string& address, const short unsigned int port)
+void WebSocketServer::create_echo_server(WSServer& echo_server, const MessageHandler& message_handler, const std::string& address, const short unsigned int port)
 {
     echo_server.set_reuse_addr(true);
     // Set logging settings

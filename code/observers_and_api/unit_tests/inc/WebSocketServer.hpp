@@ -45,7 +45,7 @@ class WebSocketServer
         websocketpp::lib::thread server_thread; // Thread in which the server runs
 
     private:
-        void create_server_echo(WSServer& echo_server, const MessageHandler& message_handler, const std::string& address, const short unsigned int port);
+        void create_echo_server(WSServer& echo_server, const MessageHandler& message_handler, const std::string& address, const short unsigned int port);
         WebSocketServer();
 };
 
