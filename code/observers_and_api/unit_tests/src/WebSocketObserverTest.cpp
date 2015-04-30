@@ -68,15 +68,7 @@ void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr
     ASSERT_EQ(1.0,vv[0]);
     ASSERT_EQ(2.0,vv[1]);
     ASSERT_EQ(3.0,vv[2]);
-    try
-    {
-        s->send(hdl, msg->get_payload(), msg->get_opcode());
-    }
-    catch (const websocketpp::lib::error_code& e)
-    {
-        std::cout << "Echo failed because: " << e
-                  << "(" << e.message() << ")" << std::endl;
-    }
+    s->send(hdl, msg->get_payload(), msg->get_opcode());
 }
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_doubles)
