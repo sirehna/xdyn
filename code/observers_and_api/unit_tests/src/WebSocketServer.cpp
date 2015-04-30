@@ -5,8 +5,6 @@
  *      Author: cady
  */
 
-#include <ssc/macros.hpp>
-
 #include "WebSocketServer.hpp"
 #include "WebSocketEndpoint.hpp"
 #include "WebSocketObserverException.hpp"
@@ -19,7 +17,6 @@ WebSocketServer::WebSocketServer(const MessageHandler& message_handler):
 
 WebSocketServer::~WebSocketServer()
 {
-    std::cout<<"Calling WebSocketServer::~WebSocketServer"<<std::endl<<std::flush;
     server.stop();
     threadServer.join();
 }
@@ -47,7 +44,7 @@ int connect_to_server(WebSocketEndpoint& endpoint, const std::string& address)
 {
     usleep(10000);
     size_t k=0;
-    std::cout << "Start creating observer :" << address<<std::endl<<std::flush;
+    std::cout << "Starting server at: " << address<<std::endl<<std::flush;
     endpoint.connect(address);
     while(true)
     {
@@ -67,13 +64,12 @@ int connect_to_server(WebSocketEndpoint& endpoint, const std::string& address)
         else if (metadata->get_status()=="Failed")
         {
             std::stringstream ss;
-            ss << "Connection failed" << endpoint.good() <<std::endl;
+            ss << "Connection failed" <<std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
             break;
         }
         usleep(100000);
     }
-    COUT(k);
     connection_metadata::ptr metadata = endpoint.get_metadata(endpoint.get_current_id());
     if (metadata)
     {
