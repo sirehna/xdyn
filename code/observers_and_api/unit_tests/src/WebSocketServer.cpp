@@ -43,13 +43,12 @@ void createServerEcho(WSServer& echo_server, std::function<void(WSServer* , webs
     echo_server.run();
 }
 
-int connectToServer(WebSocketEndpoint& endpoint)
+int connectToServer(WebSocketEndpoint& endpoint, const std::string& address)
 {
     usleep(10000);
     size_t k=0;
-    const std::string connectAddress(std::string("ws://")+std::string(STR(ADDRESS))+std::string(":")+std::string(STR(PORT)));
-    std::cout << "Start creating observer :" << connectAddress<<std::endl<<std::flush;
-    endpoint.connect(connectAddress);
+    std::cout << "Start creating observer :" << address<<std::endl<<std::flush;
+    endpoint.connect(address);
     while(true)
     {
         connection_metadata::ptr metadata = endpoint.get_metadata(endpoint.get_current_id());
@@ -57,7 +56,7 @@ int connectToServer(WebSocketEndpoint& endpoint)
         if (k>100)
         {
             std::stringstream ss;
-            ss << "Time out: " << std::boolalpha << endpoint.good() << std::endl;
+            ss << "Time out when retrieving metadata from the endpoint" << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         }
         std::cout<<metadata->get_status()<<std::endl;

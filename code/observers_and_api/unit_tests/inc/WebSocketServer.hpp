@@ -50,7 +50,7 @@ class WebSocketServer
 };
 
 void createServerEcho(WSServer& echo_server, std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> f);
-int connectToServer(WebSocketEndpoint& endpoint);
+int connectToServer(WebSocketEndpoint& endpoint, const std::string& address);
 void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
 
 
