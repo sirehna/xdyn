@@ -65,30 +65,8 @@ struct WebSocketClient::Impl
         while(not(connected(k))) k++;
     }
 
-    /**
-     * \param[in] uri
-     * \note
-     * The \param uri can looks like
-     *  - "ws://localhost:9002"
-     *  - "ws://localhost:9002/ws?username=me"
-     */
-    void connect(std::string const & uri)
+    void set_handlers(const client::connection_ptr& con, const ConnectionMetadata::ptr& metadata_ptr)
     {
-        websocketpp::lib::error_code error_code;
-
-        client::connection_ptr con = endpoint.get_connection(uri, error_code);
-
-        if (error_code)
-        {
-            std::stringstream ss;
-            ss << "> Connect initialization error: " << error_code.message() << std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-        }
-
-        next_id++;
-        ConnectionMetadata::ptr metadata_ptr = websocketpp::lib::make_shared<ConnectionMetadata>(next_id, con->get_handle(), uri);
-        id_to_connection[next_id] = metadata_ptr;
-
         con->set_open_handler(websocketpp::lib::bind(
             &ConnectionMetadata::on_open,
             metadata_ptr,
@@ -113,7 +91,32 @@ struct WebSocketClient::Impl
             websocketpp::lib::placeholders::_1,
             websocketpp::lib::placeholders::_2
         ));
+    }
 
+    /**
+     * \param[in] uri
+     * \note
+     * The \param uri can looks like
+     *  - "ws://localhost:9002"
+     *  - "ws://localhost:9002/ws?username=me"
+     */
+    void connect(std::string const & uri)
+    {
+        websocketpp::lib::error_code error_code;
+
+        client::connection_ptr con = endpoint.get_connection(uri, error_code);
+
+        if (error_code)
+        {
+            std::stringstream ss;
+            ss << "> Connect initialization error: " << error_code.message() << std::endl;
+            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
+        }
+
+        next_id++;
+        ConnectionMetadata::ptr metadata_ptr = websocketpp::lib::make_shared<ConnectionMetadata>(next_id, con->get_handle(), uri);
+        id_to_connection[next_id] = metadata_ptr;
+        set_handlers(con, metadata_ptr);
         endpoint.connect(con);
     }
 
