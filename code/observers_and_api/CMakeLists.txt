@@ -17,7 +17,7 @@ set(SRC src/simulator_api.cpp
         ${CMAKE_BINARY_DIR}/demoMatLab.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
         src/MapObserver.cpp
-        src/connection_metadata.cpp
+        src/ConnectionMetadata.cpp
         src/WebSocketEndpoint.cpp
         )
 
