@@ -69,9 +69,9 @@ int WebSocketEndpoint::connect(std::string const & uri)
         return -1;
     }
 
-    int new_id = next_id++;
-    connection_metadata::ptr metadata_ptr = websocketpp::lib::make_shared<connection_metadata>(new_id, con->get_handle(), uri);
-    id_to_connection[new_id] = metadata_ptr;
+    next_id++;
+    connection_metadata::ptr metadata_ptr = websocketpp::lib::make_shared<connection_metadata>(next_id, con->get_handle(), uri);
+    id_to_connection[next_id] = metadata_ptr;
 
     con->set_open_handler(websocketpp::lib::bind(
         &connection_metadata::on_open,
@@ -100,7 +100,7 @@ int WebSocketEndpoint::connect(std::string const & uri)
 
     endpoint.connect(con);
 
-    return new_id;
+    return next_id;
 }
 
 void WebSocketEndpoint::close(int id, websocketpp::close::status::value code, std::string reason)
