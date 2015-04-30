@@ -192,7 +192,7 @@ bool WebSocketClient::good() const
     return pimpl->next_id != -1;
 }
 
-void WebSocketClient::send(const std::string& message)
+void WebSocketClient::send_text(const std::string& message)
 {
     pimpl->send(pimpl->next_id, message);
 }

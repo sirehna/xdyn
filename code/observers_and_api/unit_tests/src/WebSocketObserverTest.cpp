@@ -54,7 +54,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
     TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string, ADDRESS, WEBSOCKET_PORT));
     {
         WebSocketClient endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
-        endpoint.send(MESSAGE_SENT);
+        endpoint.send_text(MESSAGE_SENT);
     }
 }
 
@@ -65,7 +65,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_
         std::vector<double> v(3,0.0);
         v[0]=1.0;v[1]=2.0;v[2]=3.0;
         WebSocketClient endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
-        endpoint.send(v);
+        endpoint.send_binary(v);
     }
 }
 

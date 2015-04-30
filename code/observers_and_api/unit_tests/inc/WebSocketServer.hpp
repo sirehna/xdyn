@@ -20,14 +20,6 @@ using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
 using websocketpp::lib::thread;
 
-#ifndef STR
-#define STR(s) STR_(s)
-#endif
-
-#ifndef STR_
-#define STR_(s) #s
-#endif
-
 typedef websocketpp::server<websocketpp::config::asio> WSServer;
 typedef WSServer::message_ptr message_ptr;
 typedef std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> MessageHandler;

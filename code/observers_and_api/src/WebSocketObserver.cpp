@@ -14,12 +14,12 @@ Observer(data),endpoint(new WebSocketClient(address, port))
 
 void WebSocketObserver::send(const std::string& message)
 {
-    this->endpoint->send(message);
+    this->endpoint->send_text(message);
 }
 
 void WebSocketObserver::send(const std::vector<double>& vector)
 {
-    this->endpoint->send(vector);
+    this->endpoint->send_binary(vector);
 }
 
 WebSocketObserver::~WebSocketObserver()

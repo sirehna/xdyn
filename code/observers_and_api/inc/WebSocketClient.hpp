@@ -20,7 +20,7 @@ class WebSocketClient
     public:
         WebSocketClient(const std::string& address, const short unsigned int port);
         ~WebSocketClient();
-        void send(const std::string& message); // Sends to current socket
+        void send_text(const std::string& message); // Sends to current socket
         bool good() const; // Returns true if the connection is successfully established
 
         /**
@@ -30,7 +30,7 @@ class WebSocketClient
          *            on purpose
          */
         template<typename T>
-        void send(const std::vector<T> vector)
+        void send_binary(const std::vector<T> vector)
         {
             send_vector(&vector[0], sizeof(T)*vector.size());
         }
