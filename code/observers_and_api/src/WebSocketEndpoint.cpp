@@ -55,26 +55,25 @@ WebSocketEndpoint::WebSocketEndpoint(std::string address, const short unsigned i
     }
 }
 
+void WebSocketEndpoint::close(const connection_metadata::ptr& connexion)
+{
+    // Only close open connections
+    if (connexion->get_status() != "Open") return;
+    websocketpp::lib::error_code error_code;
+    endpoint.close(connexion->get_hdl(), websocketpp::close::status::going_away, "", error_code);
+    if (error_code)
+    {
+        std::stringstream ss;
+        ss << "> Error closing connection " << connexion->get_id() << ": "
+           << error_code.message() << std::endl;
+        THROW(__PRETTY_FUNCTION__, WebSocketException,ss.str());
+    }
+}
+
 WebSocketEndpoint::~WebSocketEndpoint()
 {
     endpoint.stop_perpetual();
-    for (IdToConnexionMap::const_iterator it = id_to_connection.begin(); it != id_to_connection.end(); ++it)
-    {
-        if (it->second->get_status() != "Open")
-        {
-            // Only close open connections
-            continue;
-        }
-        websocketpp::lib::error_code error_code;
-        endpoint.close(it->second->get_hdl(), websocketpp::close::status::going_away, "", error_code);
-        if (error_code)
-        {
-            std::stringstream ss;
-            ss << "> Error closing connection " << it->second->get_id() << ": "
-               << error_code.message() << std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketException,ss.str());
-        }
-    }
+    for (const auto id2connection:id_to_connection) close(id2connection.second);
     websocket_thread->join();
 }
 
