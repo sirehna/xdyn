@@ -8,9 +8,24 @@
 #include "WebSocketServer.hpp"
 #include "WebSocketException.hpp"
 
+typedef std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> InternalMessageHandler;
+
+void create_echo_server(WSServer& echo_server, const std::string& address, const short unsigned int port, const InternalMessageHandler& message_handler);
+
+InternalMessageHandler get_lambda(const MessageHandler& message_handler);
+InternalMessageHandler get_lambda(const MessageHandler& message_handler)
+{
+    return [message_handler](WSServer* server, const websocketpp::connection_hdl& handle, const message_ptr& mes )
+                                                                {Message msg;
+                                                                 msg.handle = handle;
+                                                                 msg.message = mes;
+                                                                 msg.server = server;
+                                                                 message_handler(msg);};
+}
+
 WebSocketServer::WebSocketServer(const MessageHandler& message_handler, const std::string& address, const short unsigned int port):
         server(),
-        server_thread(&WebSocketServer::create_echo_server, this, std::ref(server), message_handler, address, port)
+        server_thread(create_echo_server, std::ref(server), address, port, get_lambda(message_handler))
 {
 }
 
@@ -20,7 +35,8 @@ WebSocketServer::~WebSocketServer()
     server_thread.join();
 }
 
-void WebSocketServer::create_echo_server(WSServer& echo_server, const MessageHandler& message_handler, const std::string& address, const short unsigned int port)
+
+void create_echo_server(WSServer& echo_server, const std::string& address, const short unsigned int port, const InternalMessageHandler& message_handler)
 {
     echo_server.set_reuse_addr(true);
     // Set logging settings
@@ -38,4 +54,3 @@ void WebSocketServer::create_echo_server(WSServer& echo_server, const MessageHan
     // Start the ASIO io_service run loop
     echo_server.run();
 }
-

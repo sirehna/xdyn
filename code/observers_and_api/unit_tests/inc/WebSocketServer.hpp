@@ -22,7 +22,25 @@ using websocketpp::lib::thread;
 
 typedef websocketpp::server<websocketpp::config::asio> WSServer;
 typedef WSServer::message_ptr message_ptr;
-typedef std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> MessageHandler;
+
+struct Message
+{
+    Message() : server(), handle(), message() {}
+    ~Message() {}
+    Message(const Message& rhs) : server(rhs.server), handle(rhs.handle), message(rhs.message) {}
+    Message& operator=(const Message& rhs)
+    {
+        server = rhs.server;
+        handle = rhs.handle;
+        message = rhs.message;
+        return *this;
+    }
+    WSServer* server;
+    websocketpp::connection_hdl handle;
+    message_ptr message;
+};
+
+typedef std::function<void(const Message&)> MessageHandler;
 
 class WebSocketServer
 {
@@ -35,7 +53,6 @@ class WebSocketServer
         websocketpp::lib::thread server_thread; // Thread in which the server runs
 
     private:
-        void create_echo_server(WSServer& echo_server, const MessageHandler& message_handler, const std::string& address, const short unsigned int port);
         WebSocketServer();
 };
 

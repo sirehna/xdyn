@@ -14,30 +14,30 @@
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 #define WEBSOCKET_PORT    9002
 
-void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
-void on_message_string(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
+void on_message_string(const Message& msg);
+void on_message_string(const Message& msg)
 {
-    if (MESSAGE_SENT != msg->get_payload())
+    if (MESSAGE_SENT != msg.message->get_payload())
     {
         std::stringstream ss;
-        ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg->get_payload();
+        ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg.message->get_payload();
         THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
-    s->send(hdl, msg->get_payload(), msg->get_opcode());
+    msg.server->send(msg.handle, msg.message->get_payload(), msg.message->get_opcode());
 }
 
-void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg);
-void on_message_vector(WSServer* s, websocketpp::connection_hdl hdl, message_ptr msg)
+void on_message_vector(const Message& msg);
+void on_message_vector(const Message& msg)
 {
-    ASSERT_EQ(websocketpp::frame::opcode::binary, msg->get_opcode());
-    const std::string payload = msg->get_payload();
+    ASSERT_EQ(websocketpp::frame::opcode::binary, msg.message->get_opcode());
+    const std::string payload = msg.message->get_payload();
     std::vector<double> vv = convert_string_to_vector<double>(payload);
     ASSERT_EQ(3,payload.size()/8);
     ASSERT_EQ(3,vv.size());
     ASSERT_EQ(1.0,vv[0]);
     ASSERT_EQ(2.0,vv[1]);
     ASSERT_EQ(3.0,vv[2]);
-    s->send(hdl, msg->get_payload(), msg->get_opcode());
+    msg.server->send(msg.handle, msg.message->get_payload(), msg.message->get_opcode());
 }
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
