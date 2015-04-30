@@ -42,6 +42,11 @@ WebSocketEndpoint::~WebSocketEndpoint()
     std::cout << "End WebSocketEndpoint::~WebSocketEndpoint()"<< std::endl<<std::flush;
 }
 
+int WebSocketEndpoint::get_current_id() const
+{
+    return next_id;
+}
+
 bool WebSocketEndpoint::good() const
 {
     return next_id != -1;
