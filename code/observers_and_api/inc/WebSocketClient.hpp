@@ -34,8 +34,6 @@ class WebSocketClient
             send_vector(next_id, &vector[0], sizeof(T)*vector.size());
         }
 
-        ConnectionMetadata::ptr get_metadata(const int id) const;
-
     private:
         WebSocketClient();
         void connect(std::string const & uri);
@@ -47,6 +45,7 @@ class WebSocketClient
         {
             send_vector(id, &vector[0], sizeof(T)*vector.size());
         }
+        ConnectionMetadata::ptr get_metadata(const int id) const;
 
         typedef std::map<int,ConnectionMetadata::ptr> IdToConnexionMap;
         client endpoint;
