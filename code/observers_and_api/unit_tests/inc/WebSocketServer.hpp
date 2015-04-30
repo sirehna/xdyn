@@ -30,7 +30,6 @@ using websocketpp::lib::thread;
 
 #define ADDRESS 127.0.0.1
 #define PORT 9002
-#define MESSAGE_SENT "First message"
 
 typedef websocketpp::server<websocketpp::config::asio> WSServer;
 typedef WSServer::message_ptr message_ptr;

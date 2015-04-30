@@ -9,6 +9,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
+#define MESSAGE_SENT      "First message"
 #define WEBSOCKET_ADDRESS "ws://127.0.0.1"
 #define WEBSOCKET_PORT    9002
 
