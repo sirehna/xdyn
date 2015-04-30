@@ -18,7 +18,6 @@ class WebSocketObserver : public Observer
         friend std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObserver);
     private:
         WebSocketEndpointPtr endpoint;
-        int id;
         void flush_after_initialization();
         void flush_after_write();
         void flush_value();

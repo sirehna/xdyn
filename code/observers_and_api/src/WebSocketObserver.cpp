@@ -3,10 +3,10 @@
 #include "WebSocketEndpoint.hpp"
 
 WebSocketObserver::WebSocketObserver(const std::string& address, const std::vector<std::string>& data):
-Observer(data),endpoint(new WebSocketEndpoint),id(endpoint->connect(address))
+Observer(data),endpoint(new WebSocketEndpoint)
 {
-    std::cout<<"id "<<id<<std::endl<<std::flush;
-    if (id == -1)
+    if (endpoint->good()) std::cout<<"Connection successful" << std::endl << std::flush;
+    else
     {
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, "WebSocketObserver failed to connect to address" + address);
     }
@@ -14,12 +14,12 @@ Observer(data),endpoint(new WebSocketEndpoint),id(endpoint->connect(address))
 
 void WebSocketObserver::send(const std::string& message)
 {
-    this->endpoint->send(this->id,message);
+    this->endpoint->send(endpoint->get_current_id(),message);
 }
 
 void WebSocketObserver::send(const std::vector<double>& vector)
 {
-    this->endpoint->send(this->id,vector);
+    this->endpoint->send(endpoint->get_current_id(),vector);
 }
 
 WebSocketObserver::~WebSocketObserver()

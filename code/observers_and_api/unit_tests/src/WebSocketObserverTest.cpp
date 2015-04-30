@@ -61,15 +61,15 @@ int connectToServer(WebSocketEndpoint& endpoint)
     size_t k=0;
     const std::string connectAddress(std::string("ws://")+std::string(STR(ADDRESS))+std::string(":")+std::string(STR(PORT)));
     std::cout << "Start creating observer :" << connectAddress<<std::endl<<std::flush;
-    int id = endpoint.connect(connectAddress);
+    endpoint.connect(connectAddress);
     while(true)
     {
-        connection_metadata::ptr metadata = endpoint.getMetadata(id);
+        connection_metadata::ptr metadata = endpoint.getMetadata(endpoint.get_current_id());
         k++;
         if (k>100)
         {
             std::stringstream ss;
-            ss << "Time out" <<id<<std::endl;
+            ss << "Time out: " << std::boolalpha << endpoint.good() << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
         }
         std::cout<<metadata->get_status()<<std::endl;
@@ -80,14 +80,14 @@ int connectToServer(WebSocketEndpoint& endpoint)
         else if (metadata->get_status()=="Failed")
         {
             std::stringstream ss;
-            ss << "Connection failed" <<id<<std::endl;
+            ss << "Connection failed" << endpoint.good() <<std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
             break;
         }
         usleep(100000);
     }
     COUT(k);
-    connection_metadata::ptr metadata = endpoint.getMetadata(id);
+    connection_metadata::ptr metadata = endpoint.getMetadata(endpoint.get_current_id());
     if (metadata)
     {
         std::cout << *metadata << std::endl<<std::flush;
@@ -95,10 +95,10 @@ int connectToServer(WebSocketEndpoint& endpoint)
     else
     {
         std::stringstream ss;
-        ss << "Unknown connection id : " <<id<<std::endl;
+        ss << "Unknown connection id : " <<endpoint.get_current_id()<<std::endl;
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
     }
-    return id;
+    return endpoint.get_current_id();
 }
 
 class WebSocketServer

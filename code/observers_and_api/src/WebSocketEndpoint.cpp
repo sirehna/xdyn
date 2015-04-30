@@ -60,7 +60,7 @@ bool WebSocketEndpoint::good() const
  *  - "ws://localhost:9002"
  *  - "ws://localhost:9002/ws?username=me"
  */
-int WebSocketEndpoint::connect(std::string const & uri)
+void WebSocketEndpoint::connect(std::string const & uri)
 {
     websocketpp::lib::error_code error_code;
 
@@ -71,7 +71,6 @@ int WebSocketEndpoint::connect(std::string const & uri)
         std::stringstream ss;
         ss << "> Connect initialization error: " << error_code.message() << std::endl;
         THROW(__PRETTY_FUNCTION__, WebSocketObserverException, ss.str());
-        return -1;
     }
 
     next_id++;
@@ -104,8 +103,6 @@ int WebSocketEndpoint::connect(std::string const & uri)
     ));
 
     endpoint.connect(con);
-
-    return next_id;
 }
 
 void WebSocketEndpoint::close(int id, websocketpp::close::status::value code, std::string reason)
