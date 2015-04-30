@@ -15,7 +15,7 @@ class WebSocketObserver : public Observer
         ~WebSocketObserver();
         void send(const std::string& message);
         void send(const std::vector<double>& vector);
-        friend std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObserver);
+
     private:
         WebSocketEndpointPtr endpoint;
         void flush_after_initialization();

@@ -58,22 +58,3 @@ void WebSocketObserver::flush_value()
 {
 }
 
-std::ostream & operator<< (std::ostream & out, WebSocketObserver const & wsObserver)
-{
-    for (const auto id:wsObserver.endpoint->get_ids())
-    {
-        ConnectionMetadata::ptr metadata = wsObserver.endpoint->get_metadata(id);
-        if (metadata)
-        {
-            out << *metadata << std::endl;
-        }
-        else
-        {
-            std::stringstream ss;
-            ss << "Unknown connection id : " <<id<<std::endl;
-            THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
-        }
-    }
-    return out;
-}
-
