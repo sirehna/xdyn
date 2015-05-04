@@ -46,13 +46,10 @@ class WebSocketServer
         WebSocketServer(const MessageHandler& message_handler, const std::string& address, const short unsigned int port);
         ~WebSocketServer();
 
-    protected:
-        WSServer server;
-        std::thread server_thread; // Thread in which the server runs
-
     private:
+        struct Impl;
+        TR1(shared_ptr)<Impl> pimpl;
         WebSocketServer();
-        TR1(shared_ptr)<WebSocketClient> socket;
 };
 
 

@@ -8,6 +8,21 @@
 #include "WebSocketServer.hpp"
 #include "WebSocketException.hpp"
 
+struct WebSocketServer::Impl
+{
+    Impl() :
+        server(),
+        server_thread(),
+        socket(new WebSocketClient())
+    {}
+
+    WSServer server;
+    std::thread server_thread; // Thread in which the server runs
+    TR1(shared_ptr)<WebSocketClient> socket;
+};
+
+
+
 typedef std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr )> InternalMessageHandler;
 
 using std::placeholders::_1;
@@ -28,18 +43,16 @@ InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket
 }
 
 WebSocketServer::WebSocketServer(const MessageHandler& message_handler, const std::string& address, const short unsigned int port):
-        server(),
-        server_thread(),
-        socket(new WebSocketClient())
+        pimpl(new Impl())
 {
-    server_thread = std::thread(create_server, std::ref(server), address, port, get_lambda(socket,message_handler));
-    *socket = WebSocketClient(std::string("ws://") + address,port);
+    pimpl->server_thread = std::thread(create_server, std::ref(pimpl->server), address, port, get_lambda(pimpl->socket,message_handler));
+    *(pimpl->socket) = WebSocketClient(std::string("ws://") + address,port);
 }
 
 WebSocketServer::~WebSocketServer()
 {
-    server.stop();
-    server_thread.join();
+    pimpl->server.stop();
+    pimpl->server_thread.join();
 }
 
 
