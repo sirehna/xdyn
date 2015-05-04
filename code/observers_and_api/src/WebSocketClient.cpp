@@ -27,6 +27,7 @@ struct WebSocketClient::Impl
     {
         if (counter>100)
         {
+            std::cerr << "In file " << __FILE__ << ", line " << __LINE__ << ": timeout when attempting connexion to websocket." << std::endl;
             std::stringstream ss;
             ss << "Time out when retrieving metadata from the endpoint" << std::endl;
             THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
@@ -40,7 +41,8 @@ struct WebSocketClient::Impl
         if (metadata->get_status()=="Open") return true;
         if (metadata->get_status()=="Failed")
         {
-            THROW(__PRETTY_FUNCTION__, WebSocketException, "Unable to connect to websocket");
+            std::cerr << "In file " << __FILE__ << ", line " << __LINE__ << ": Unable to open websocket." << std::endl;
+            THROW(__PRETTY_FUNCTION__, WebSocketException, "Unable to open websocket");
         }
         usleep(100000);
         return false;
@@ -62,7 +64,12 @@ struct WebSocketClient::Impl
         usleep(10000);
         size_t k=0;
         connect(address);
-        while(not(connected(k))) k++;
+        bool is_connected = false;
+        while(not(is_connected = connected(k))) k++;
+        if (not(is_connected))
+        {
+            std::cerr << "In file " << __FILE__ << ", line " << __LINE__ << ": timeout when attempting connexion to websocket at address" << address << std::endl;
+        }
     }
 
     void set_handlers(const client::connection_ptr& con, const ConnectionMetadata::ptr& metadata_ptr)
@@ -103,16 +110,14 @@ struct WebSocketClient::Impl
     void connect(std::string const & uri)
     {
         websocketpp::lib::error_code error_code;
-
         client::connection_ptr con = endpoint.get_connection(uri, error_code);
-
         if (error_code)
         {
             std::stringstream ss;
-            ss << "Unable to get a connection: " << error_code.message() << std::endl;
+            ss << "Unable to get a connection to " << uri << ": " << error_code.message() << std::endl;
+            std::cerr << ss.str() << "Throwing an exception which might crash the program";
             THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
         }
-
         next_id++;
         ConnectionMetadata::ptr metadata_ptr = websocketpp::lib::make_shared<ConnectionMetadata>(next_id, con->get_handle(), uri);
         id_to_connection[next_id] = metadata_ptr;
