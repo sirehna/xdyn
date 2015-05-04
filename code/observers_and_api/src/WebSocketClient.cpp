@@ -56,6 +56,10 @@ struct WebSocketClient::Impl
         endpoint.start_perpetual();
     }
 
+    Impl() : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
+    {
+    }
+
     Impl(std::string address, const short unsigned int port) : endpoint(), websocket_thread(), id_to_connection(), next_id(0)
     {
         address = append_port_to_address(address, port);
@@ -182,6 +186,10 @@ struct WebSocketClient::Impl
 };
 
 WebSocketClient::WebSocketClient(const std::string& address, const short unsigned int port) : pimpl(new Impl(address, port))
+{
+}
+
+WebSocketClient::WebSocketClient() : pimpl(new Impl())
 {
 }
 

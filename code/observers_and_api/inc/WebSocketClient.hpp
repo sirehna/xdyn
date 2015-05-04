@@ -18,6 +18,7 @@
 class WebSocketClient
 {
     public:
+        WebSocketClient();
         WebSocketClient(const std::string& address, const short unsigned int port);
         ~WebSocketClient();
         void send_text(const std::string& message); // Sends to current socket
@@ -36,7 +37,6 @@ class WebSocketClient
         }
 
     private:
-        WebSocketClient();
         struct Impl;
         TR1(shared_ptr)<Impl> pimpl;
         void send_vector(const int id, void const * payload, const size_t nb_of_bytes);
