@@ -19,6 +19,7 @@ set(SRC src/simulator_api.cpp
         src/MapObserver.cpp
         src/ConnectionMetadata.cpp
         src/WebSocketClient.cpp
+        src/WebSocketMessage.cpp
         )
 
 # Using C++ 2011
