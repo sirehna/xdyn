@@ -13,7 +13,7 @@ typedef std::function<void(WSServer* , websocketpp::connection_hdl, message_ptr 
 using std::placeholders::_1;
 using std::placeholders::_2;
 
-void create_echo_server(WSServer& echo_server, const std::string& address, const short unsigned int port, const InternalMessageHandler& message_handler);
+void create_server(WSServer& server, const std::string& address, const short unsigned int port, const InternalMessageHandler& message_handler);
 
 InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket, const MessageHandler& message_handler);
 InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket, const MessageHandler& message_handler)
@@ -33,7 +33,7 @@ WebSocketServer::WebSocketServer(const MessageHandler& message_handler, const st
         socket(new WebSocketClient())
 {
     const auto lambda = get_lambda(socket,message_handler);
-    server_thread = std::thread(create_echo_server, std::ref(server), address, port, lambda);
+    server_thread = std::thread(create_server, std::ref(server), address, port, lambda);
     *socket = WebSocketClient(std::string("ws://") + address,port);
 }
 
@@ -44,21 +44,21 @@ WebSocketServer::~WebSocketServer()
 }
 
 
-void create_echo_server(WSServer& echo_server, const std::string& address, const short unsigned int port, const InternalMessageHandler& message_handler)
+void create_server(WSServer& server, const std::string& address, const short unsigned int port, const InternalMessageHandler& message_handler)
 {
-    echo_server.set_reuse_addr(true);
+    server.set_reuse_addr(true);
     // Set logging settings
-    echo_server.set_access_channels(websocketpp::log::alevel::all);
-    echo_server.clear_access_channels(websocketpp::log::alevel::frame_payload);
+    server.set_access_channels(websocketpp::log::alevel::all);
+    server.clear_access_channels(websocketpp::log::alevel::frame_payload);
     // Initialize ASIO
-    echo_server.init_asio();
+    server.init_asio();
     // Register our message handler
-    echo_server.set_message_handler(std::bind(message_handler,&echo_server,::_1,::_2));
+    server.set_message_handler(std::bind(message_handler,&server,::_1,::_2));
     // Listen on port
     boost::asio::ip::tcp::endpoint ep(boost::asio::ip::address::from_string(address), port);
-    echo_server.listen(ep);
+    server.listen(ep);
     // Start the server accept loop
-    echo_server.start_accept();
+    server.start_accept();
     // Start the ASIO io_service run loop
-    echo_server.run();
+    server.run();
 }
