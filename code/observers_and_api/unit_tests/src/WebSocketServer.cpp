@@ -32,8 +32,7 @@ WebSocketServer::WebSocketServer(const MessageHandler& message_handler, const st
         server_thread(),
         socket(new WebSocketClient())
 {
-    const auto lambda = get_lambda(socket,message_handler);
-    server_thread = std::thread(create_server, std::ref(server), address, port, lambda);
+    server_thread = std::thread(create_server, std::ref(server), address, port, get_lambda(socket,message_handler));
     *socket = WebSocketClient(std::string("ws://") + address,port);
 }
 
