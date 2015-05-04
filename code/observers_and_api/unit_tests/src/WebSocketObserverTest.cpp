@@ -14,8 +14,8 @@
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 #define WEBSOCKET_PORT    9002
 
-void on_message_string(const Message& msg);
-void on_message_string(const Message& msg)
+void on_message_string(const WebSocketMessage& msg);
+void on_message_string(const WebSocketMessage& msg)
 {
     if (MESSAGE_SENT != msg.message->get_payload())
     {
@@ -26,8 +26,8 @@ void on_message_string(const Message& msg)
     msg.server->send(msg.handle, msg.message->get_payload(), msg.message->get_opcode());
 }
 
-void on_message_vector(const Message& msg);
-void on_message_vector(const Message& msg)
+void on_message_vector(const WebSocketMessage& msg);
+void on_message_vector(const WebSocketMessage& msg)
 {
     ASSERT_EQ(websocketpp::frame::opcode::binary, msg.message->get_opcode());
     const std::string payload = msg.message->get_payload();

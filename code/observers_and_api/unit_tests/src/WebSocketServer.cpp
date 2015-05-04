@@ -34,7 +34,7 @@ InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket
 InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket, const MessageHandler& message_handler)
 {
     return [message_handler,socket](WSServer* server, const websocketpp::connection_hdl& handle, const message_ptr& mes )
-                                                                {Message msg;
+                                                                {WebSocketMessage msg;
                                                                  msg.handle = handle;
                                                                  msg.message = mes;
                                                                  msg.server = server;

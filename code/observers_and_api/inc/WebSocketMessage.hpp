@@ -20,12 +20,12 @@
 typedef websocketpp::server<websocketpp::config::asio> WSServer;
 typedef WSServer::message_ptr message_ptr;
 
-struct Message
+struct WebSocketMessage
 {
-    Message();
-    ~Message();
-    Message(const Message& rhs);
-    Message& operator=(const Message& rhs);
+    WebSocketMessage();
+    ~WebSocketMessage();
+    WebSocketMessage(const WebSocketMessage& rhs);
+    WebSocketMessage& operator=(const WebSocketMessage& rhs);
 
     WSServer* server;
     websocketpp::connection_hdl handle;

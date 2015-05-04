@@ -8,18 +8,18 @@
 
 #include "WebSocketMessage.hpp"
 
-Message::Message()
+WebSocketMessage::WebSocketMessage()
     :server()
     ,handle()
     ,message()
     ,socket()
 {}
 
-Message::~Message()
+WebSocketMessage::~WebSocketMessage()
 {
 }
 
-Message::Message(const Message& rhs)
+WebSocketMessage::WebSocketMessage(const WebSocketMessage& rhs)
     :server(rhs.server)
     ,handle(rhs.handle)
     ,message(rhs.message)
@@ -27,7 +27,7 @@ Message::Message(const Message& rhs)
 {
 }
 
-Message& Message::operator=(const Message& rhs)
+WebSocketMessage& WebSocketMessage::operator=(const WebSocketMessage& rhs)
 {
     server = rhs.server;
     handle = rhs.handle;

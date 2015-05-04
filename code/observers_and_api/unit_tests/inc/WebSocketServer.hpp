@@ -14,7 +14,7 @@
 #include "WebSocketClient.hpp"
 #include "WebSocketMessage.hpp"
 
-typedef std::function<void(const Message&)> MessageHandler;
+typedef std::function<void(const WebSocketMessage&)> MessageHandler;
 
 class WebSocketServer
 {
