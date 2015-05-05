@@ -14,6 +14,8 @@
 #include "WebSocketClient.hpp"
 #include "WebSocketException.hpp"
 
+using namespace ssc::websocket;
+
 struct WebSocketClient::Impl
 {
     std::string append_port_to_address(const std::string& address, const short unsigned int port)
