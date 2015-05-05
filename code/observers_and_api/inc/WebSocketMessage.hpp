@@ -16,6 +16,7 @@
 #include TR1INC(memory)
 
 #include "WebSocketClient.hpp"
+#include "string2vector.hpp"
 
 typedef websocketpp::server<websocketpp::config::asio> WSServer;
 typedef WSServer::message_ptr message_ptr;
@@ -30,6 +31,14 @@ struct WebSocketMessage
     {
         const std::string s = convert_vector_to_string(vector);
         send_binary_string(s);
+    }
+
+    std::string get_payload() const;
+
+    template <typename T> std::vector<T> get_binary_payload() const
+    {
+        const std::string payload = get_payload();
+        return convert_string_to_vector<T>(payload);
     }
 
 

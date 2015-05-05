@@ -17,27 +17,25 @@
 void on_message_string(const WebSocketMessage& msg);
 void on_message_string(const WebSocketMessage& msg)
 {
-    if (MESSAGE_SENT != msg.message->get_payload())
+    if (MESSAGE_SENT != msg.get_payload())
     {
         std::stringstream ss;
-        ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg.message->get_payload();
+        ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg.get_payload();
         THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
-    msg.send_text(msg.message->get_payload());
+    msg.send_text(msg.get_payload());
 }
 
 void on_message_vector(const WebSocketMessage& msg);
 void on_message_vector(const WebSocketMessage& msg)
 {
     ASSERT_EQ(websocketpp::frame::opcode::binary, msg.message->get_opcode());
-    const std::string payload = msg.message->get_payload();
-    std::vector<double> vv = convert_string_to_vector<double>(payload);
-    ASSERT_EQ(3,payload.size()/8);
-    ASSERT_EQ(3,vv.size());
-    ASSERT_EQ(1.0,vv[0]);
-    ASSERT_EQ(2.0,vv[1]);
-    ASSERT_EQ(3.0,vv[2]);
-    msg.send_binary(vv);
+    const std::vector<double> payload = msg.get_binary_payload<double>();
+    ASSERT_EQ(3,payload.size());
+    ASSERT_EQ(1.0,payload[0]);
+    ASSERT_EQ(2.0,payload[1]);
+    ASSERT_EQ(3.0,payload[2]);
+    msg.send_binary(payload);
 }
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)

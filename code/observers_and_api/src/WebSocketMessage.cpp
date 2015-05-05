@@ -20,6 +20,11 @@ void WebSocketMessage::send_text(const std::string& payload) const
     server->send(handle, payload, websocketpp::frame::opcode::TEXT);
 }
 
+std::string WebSocketMessage::get_payload() const
+{
+    return message->get_payload();
+}
+
 void WebSocketMessage::send_binary_string(const std::string& payload) const
 {
     server->send(handle, payload, websocketpp::frame::opcode::BINARY);
