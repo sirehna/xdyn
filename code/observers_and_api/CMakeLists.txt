@@ -17,10 +17,6 @@ set(SRC src/simulator_api.cpp
         ${CMAKE_BINARY_DIR}/demoMatLab.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
         src/MapObserver.cpp
-        src/ConnectionMetadata.cpp
-        src/WebSocketClient.cpp
-        src/WebSocketMessage.cpp
-        src/WebSocketMessageImpl.cpp
         )
 
 # Using C++ 2011
@@ -31,16 +27,11 @@ IF (NOT(MSVC))
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
-ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_STL_)
-ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_THREAD_)
-ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_SYSTEM_ERROR_)
-
 include_directories(inc)
 include_directories(SYSTEM ${HDF5_INCLUDE_DIR})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_hdf5_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-include_directories(SYSTEM ${websocketpp_INCLUDE_DIR})
 include_directories(${ssc_INCLUDE_DIRS})
 include_directories(${CMAKE_BINARY_DIR})
 include_directories(${interface_hdf5_INCLUDE_DIRS})
@@ -52,6 +43,7 @@ include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${external_file_formats_INCLUDE_DIRS})
+include_directories(${websocket_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")

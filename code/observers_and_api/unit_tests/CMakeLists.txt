@@ -7,16 +7,10 @@ FILE(GLOB SRC
         src/Hdf5WaveObserverTest.cpp
         src/Hdf5WaveObserverBuilderTest.cpp
         src/JsonObserverTest.cpp
-        src/WebSocketObserverTest.cpp
-        src/BoostAsioTest.cpp
-        src/WebSocketPPTest1_endpoint.cpp
-        src/WebSocketPPTest2_server.cpp
         src/SimTest.cpp
         src/ForceTester.cpp
         src/ForceTests.cpp
         src/MapObserverTest.cpp
-        src/WebSocketServer.cpp
-        src/string2vectorTest.cpp
         )
 # ------8<---------------------------------------------->8-----
 

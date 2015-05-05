@@ -70,6 +70,7 @@ ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(force_models)
 ADD_SUBDIRECTORY(parser_extensions)
+ADD_SUBDIRECTORY(websocket)
 ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
@@ -87,6 +88,7 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:hdb_interpolators>
         $<TARGET_OBJECTS:interface_hdf5>
         $<TARGET_OBJECTS:gz_curves>
+        $<TARGET_OBJECTS:websocket>
         )
 
 ADD_IMPORTED_LIB(numeric_shared)
@@ -134,6 +136,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:hdb_interpolators_tests>
         $<TARGET_OBJECTS:interface_hdf5_tests>
         $<TARGET_OBJECTS:observers_and_api_tests>
+        $<TARGET_OBJECTS:websocket_tests>
         $<TARGET_OBJECTS:gz_curves_tests>
         )
 
@@ -148,27 +151,6 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
 IF(WIN32)
     TARGET_LINK_LIBRARIES(${TEST_EXE} wsock32 ws2_32)
 ENDIF()
-
-INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(SYSTEM websocketpp)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_STL_)
-ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_THREAD_)
-ADD_DEFINITIONS(-D_WEBSOCKETPP_CPP11_SYSTEM_ERROR_)
-FOREACH(f DemoWebSocket
-          DemoWebSocketBug
-          DemoWebSocketClient
-          DemoWebSocketServerSingleClient
-          DemoWebSocketServerMultiClient)
-    ADD_EXECUTABLE(${f}
-        observers_and_api/unit_tests/src/${f}.cpp)
-    TARGET_LINK_LIBRARIES(${f} ${Boost_SYSTEM_LIBRARY})
-    IF(WIN32)
-        TARGET_LINK_LIBRARIES(${f} wsock32 ws2_32)
-    ELSE()
-        TARGET_LINK_LIBRARIES(${f} pthread rt)
-    ENDIF()
-ENDFOREACH()
 
 INCLUDE(CMakeTesting)
 INCLUDE(CMakeDocumentation)
