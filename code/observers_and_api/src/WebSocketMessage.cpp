@@ -15,6 +15,16 @@ WebSocketMessage::WebSocketMessage()
     ,socket()
 {}
 
+void WebSocketMessage::send_text(const std::string& payload) const
+{
+    server->send(handle, payload, websocketpp::frame::opcode::TEXT);
+}
+
+void WebSocketMessage::send_binary_string(const std::string& payload) const
+{
+    server->send(handle, payload, websocketpp::frame::opcode::BINARY);
+}
+
 WebSocketMessage::~WebSocketMessage()
 {
 }

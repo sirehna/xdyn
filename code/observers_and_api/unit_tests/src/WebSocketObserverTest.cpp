@@ -23,7 +23,7 @@ void on_message_string(const WebSocketMessage& msg)
         ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg.message->get_payload();
         THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
-    msg.server->send(msg.handle, msg.message->get_payload(), msg.message->get_opcode());
+    msg.send_text(msg.message->get_payload());
 }
 
 void on_message_vector(const WebSocketMessage& msg);
@@ -37,7 +37,7 @@ void on_message_vector(const WebSocketMessage& msg)
     ASSERT_EQ(1.0,vv[0]);
     ASSERT_EQ(2.0,vv[1]);
     ASSERT_EQ(3.0,vv[2]);
-    msg.server->send(msg.handle, msg.message->get_payload(), msg.message->get_opcode());
+    msg.send_binary(vv);
 }
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)

@@ -23,9 +23,22 @@ typedef WSServer::message_ptr message_ptr;
 struct WebSocketMessage
 {
     WebSocketMessage();
+
+    void send_text(const std::string& payload) const;
+    template<typename T>
+    void send_binary(const std::vector<T> vector) const
+    {
+        const std::string s = convert_vector_to_string(vector);
+        send_binary_string(s);
+    }
+
+
     ~WebSocketMessage();
     WebSocketMessage(const WebSocketMessage& rhs);
     WebSocketMessage& operator=(const WebSocketMessage& rhs);
+
+
+    void send_binary_string(const std::string& s) const;
 
     WSServer* server;
     websocketpp::connection_hdl handle;
