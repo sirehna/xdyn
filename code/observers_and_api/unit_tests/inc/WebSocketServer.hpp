@@ -24,17 +24,17 @@ namespace ssc
             virtual void operator()(const WebSocketMessage&) = 0;
         };
 
-        class WebSocketServer
+        class Server
         {
             public:
-                WebSocketServer(MessageHandler& message_handler, const std::string& address, const short unsigned int port);
-                WebSocketServer(const std::string& address, const short unsigned int port);
-                ~WebSocketServer();
+                Server(MessageHandler& message_handler, const std::string& address, const short unsigned int port);
+                Server(const std::string& address, const short unsigned int port);
+                ~Server();
 
             private:
                 struct Impl;
                 TR1(shared_ptr)<Impl> pimpl;
-                WebSocketServer();
+                Server();
         };
     }
 }
