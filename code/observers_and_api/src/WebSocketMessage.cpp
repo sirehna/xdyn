@@ -8,6 +8,8 @@
 #include "WebSocketMessage.hpp"
 #include "WebSocketMessageImpl.hpp"
 
+using namespace ssc::websocket;
+
 WebSocketMessage::WebSocketMessage()
     :pimpl(new WebSocketMessageImpl())
 {}
