@@ -5,21 +5,20 @@
 WebSocketObserver::WebSocketObserver(const std::string& address, const short unsigned int port, const std::vector<std::string>& data):
 Observer(data),endpoint(new ssc::websocket::Client(address, port))
 {
-    if (endpoint->good()) std::cout<<"Connection successful" << std::endl << std::flush;
-    else
+    if (not(endpoint->good()))
     {
-        THROW(__PRETTY_FUNCTION__, ssc::websocket::WebSocketException, "WebSocketObserver failed to connect to address" + address);
+        THROW(__PRETTY_FUNCTION__, ssc::websocket::WebSocketException, "WebSocketObserver failed to connect to address " + address);
     }
 }
 
 void WebSocketObserver::send(const std::string& message)
 {
-    this->endpoint->send_text(message);
+    endpoint->send_text(message);
 }
 
 void WebSocketObserver::send(const std::vector<double>& vector)
 {
-    this->endpoint->send_binary(vector);
+    endpoint->send_binary(vector);
 }
 
 WebSocketObserver::~WebSocketObserver()
