@@ -20,6 +20,7 @@ set(SRC src/simulator_api.cpp
         src/ConnectionMetadata.cpp
         src/WebSocketClient.cpp
         src/WebSocketMessage.cpp
+        src/WebSocketMessageImpl.cpp
         )
 
 # Using C++ 2011

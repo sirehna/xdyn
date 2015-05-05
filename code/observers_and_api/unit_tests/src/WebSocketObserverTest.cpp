@@ -29,7 +29,6 @@ void on_message_string(const WebSocketMessage& msg)
 void on_message_vector(const WebSocketMessage& msg);
 void on_message_vector(const WebSocketMessage& msg)
 {
-    ASSERT_EQ(websocketpp::frame::opcode::binary, msg.message->get_opcode());
     const std::vector<double> payload = msg.get_binary_payload<double>();
     ASSERT_EQ(3,payload.size());
     ASSERT_EQ(1.0,payload[0]);

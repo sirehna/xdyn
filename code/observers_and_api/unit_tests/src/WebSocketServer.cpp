@@ -7,6 +7,7 @@
 
 #include "WebSocketServer.hpp"
 #include "WebSocketException.hpp"
+#include "WebSocketMessageImpl.hpp"
 
 struct WebSocketServer::Impl
 {
@@ -34,12 +35,12 @@ InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket
 InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket, const MessageHandler& message_handler)
 {
     return [message_handler,socket](WSServer* server, const websocketpp::connection_hdl& handle, const message_ptr& mes )
-                                                                {WebSocketMessage msg;
-                                                                 msg.handle = handle;
-                                                                 msg.message = mes;
-                                                                 msg.server = server;
-                                                                 msg.socket = socket;
-                                                                 message_handler(msg);};
+                                                                {
+                                                                 WebSocketMessageImpl pimpl;
+                                                                 pimpl.handle = handle;
+                                                                 pimpl.message = mes;
+                                                                 pimpl.server = server;
+                                                                 message_handler(WebSocketMessage(pimpl));};
 }
 
 WebSocketServer::WebSocketServer(const MessageHandler& message_handler, const std::string& address, const short unsigned int port):
