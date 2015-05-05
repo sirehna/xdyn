@@ -15,13 +15,11 @@ struct Server::Impl
 {
     Impl() :
         server(),
-        server_thread(),
-        socket(new WebSocketClient())
+        server_thread()
     {}
 
     WSServer server;
     std::thread server_thread; // Thread in which the server runs
-    TR1(shared_ptr)<WebSocketClient> socket;
 };
 
 
@@ -33,10 +31,10 @@ using std::placeholders::_2;
 
 void create_server(WSServer& server, const std::string& address, const short unsigned int port, const InternalMessageHandler& message_handler);
 
-InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket, MessageHandler& message_handler);
-InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket, MessageHandler& message_handler)
+InternalMessageHandler get_lambda(MessageHandler& message_handler);
+InternalMessageHandler get_lambda(MessageHandler& message_handler)
 {
-    return [&message_handler,socket](WSServer* server, const websocketpp::connection_hdl& handle, const message_ptr& mes )
+    return [&message_handler](WSServer* server, const websocketpp::connection_hdl& handle, const message_ptr& mes )
                                                                 {
                                                                  WebSocketMessageImpl pimpl;
                                                                  pimpl.handle = handle;
@@ -48,8 +46,7 @@ InternalMessageHandler get_lambda(const TR1(shared_ptr)<WebSocketClient>& socket
 Server::Server(MessageHandler& message_handler, const std::string& address, const short unsigned int port):
         pimpl(new Impl())
 {
-    pimpl->server_thread = std::thread(create_server, std::ref(pimpl->server), address, port, get_lambda(pimpl->socket,message_handler));
-    *(pimpl->socket) = WebSocketClient(std::string("ws://") + address,port);
+    pimpl->server_thread = std::thread(create_server, std::ref(pimpl->server), address, port, get_lambda(message_handler));
 }
 
 struct DoNothing : public MessageHandler
@@ -60,8 +57,7 @@ struct DoNothing : public MessageHandler
 Server::Server(const std::string& address, const short unsigned int port) : pimpl(new Impl())
 {
     DoNothing message_handler;
-    pimpl->server_thread = std::thread(create_server, std::ref(pimpl->server), address, port, get_lambda(pimpl->socket,message_handler));
-    *(pimpl->socket) = WebSocketClient(std::string("ws://") + address,port);
+    pimpl->server_thread = std::thread(create_server, std::ref(pimpl->server), address, port, get_lambda(message_handler));
 }
 
 
