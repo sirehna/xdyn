@@ -40,7 +40,7 @@ InternalMessageHandler get_lambda(MessageHandler& message_handler)
                                                                  pimpl.handle = handle;
                                                                  pimpl.message = mes;
                                                                  pimpl.server = server;
-                                                                 message_handler(WebSocketMessage(pimpl));};
+                                                                 message_handler(Message(pimpl));};
 }
 
 Server::Server(MessageHandler& message_handler, const std::string& address, const short unsigned int port):
@@ -51,7 +51,7 @@ Server::Server(MessageHandler& message_handler, const std::string& address, cons
 
 struct DoNothing : public MessageHandler
 {
-    void operator()(const WebSocketMessage&){}
+    void operator()(const Message&){}
 };
 
 Server::Server(const std::string& address, const short unsigned int port) : pimpl(new Impl())

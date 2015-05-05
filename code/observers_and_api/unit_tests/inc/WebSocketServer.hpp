@@ -21,7 +21,7 @@ namespace ssc
         struct MessageHandler // What should we do when we receive a message?
         {
             virtual ~MessageHandler() {}
-            virtual void operator()(const WebSocketMessage&) = 0;
+            virtual void operator()(const Message&) = 0;
         };
 
         class Server

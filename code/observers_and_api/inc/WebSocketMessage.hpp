@@ -21,10 +21,10 @@ namespace ssc
 {
     namespace websocket
     {
-        struct WebSocketMessage
+        struct Message
         {
-            WebSocketMessage();
-            WebSocketMessage(const WebSocketMessageImpl& pimpl);
+            Message();
+            Message(const WebSocketMessageImpl& pimpl);
             void send_text(const std::string& payload) const;
             template<typename T>
             void send_binary(const std::vector<T> vector) const
