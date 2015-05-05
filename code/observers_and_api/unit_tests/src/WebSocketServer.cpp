@@ -9,6 +9,8 @@
 #include "WebSocketException.hpp"
 #include "WebSocketMessageImpl.hpp"
 
+using namespace ssc::websocket;
+
 struct WebSocketServer::Impl
 {
     Impl() :

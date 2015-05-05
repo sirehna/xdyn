@@ -13,6 +13,8 @@
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 #define WEBSOCKET_PORT    9002
 
+using namespace ssc::websocket;
+
 struct ListOfStringMessages : public MessageHandler
 {
     ListOfStringMessages() : messages()
