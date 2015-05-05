@@ -16,7 +16,7 @@
 
 using namespace ssc::websocket;
 
-struct WebSocketClient::Impl
+struct Client::Impl
 {
     std::string append_port_to_address(const std::string& address, const short unsigned int port)
     {
@@ -187,37 +187,37 @@ struct WebSocketClient::Impl
     int next_id;
 };
 
-WebSocketClient::WebSocketClient(const std::string& address, const short unsigned int port) : pimpl(new Impl(address, port))
+Client::Client(const std::string& address, const short unsigned int port) : pimpl(new Impl(address, port))
 {
 }
 
-WebSocketClient::WebSocketClient() : pimpl(new Impl())
+Client::Client() : pimpl(new Impl())
 {
 }
 
-WebSocketClient::~WebSocketClient()
+Client::~Client()
 {
     pimpl->endpoint.stop_perpetual();
     for (const auto id2connection:pimpl->id_to_connection) pimpl->close(id2connection.second);
     pimpl->websocket_thread->join();
 }
 
-bool WebSocketClient::good() const
+bool Client::good() const
 {
     return pimpl->next_id != -1;
 }
 
-void WebSocketClient::send_text(const std::string& message)
+void Client::send_text(const std::string& message)
 {
     pimpl->send(pimpl->next_id, message);
 }
 
-void WebSocketClient::send_vector(void const * payload, const size_t nb_of_bytes)
+void Client::send_vector(void const * payload, const size_t nb_of_bytes)
 {
     send_vector(pimpl->next_id, payload, nb_of_bytes);
 }
 
-void WebSocketClient::send_vector(const int id, void const * payload, const size_t nb_of_bytes)
+void Client::send_vector(const int id, void const * payload, const size_t nb_of_bytes)
 {
     websocketpp::lib::error_code error_code;
     Impl::IdToConnexionMap::iterator metadata_it = pimpl->id_to_connection.find(id);

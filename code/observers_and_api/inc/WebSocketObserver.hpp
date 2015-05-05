@@ -9,11 +9,11 @@ namespace ssc
 {
     namespace websocket
     {
-        class WebSocketClient;
+        class Client;
     }
 }
 
-typedef TR1(shared_ptr)<ssc::websocket::WebSocketClient> WebSocketEndpointPtr;
+typedef TR1(shared_ptr)<ssc::websocket::Client> WebSocketEndpointPtr;
 
 class WebSocketObserver : public Observer
 {

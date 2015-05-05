@@ -46,7 +46,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_
 {
     TR1(shared_ptr)<Server> w(new Server(ADDRESS, WEBSOCKET_PORT));
     {
-        WebSocketClient endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
+        Client endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
         ASSERT_TRUE(endpoint.good());
     }
 }
@@ -59,7 +59,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
     ListOfStringMessages message_handler;
     TR1(shared_ptr)<Server> w(new Server(message_handler, ADDRESS, WEBSOCKET_PORT));
     { // Creating a scope ensures that the message is actually sent at the end of the scope
-        WebSocketClient endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
+        Client endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
         endpoint.send_text(s1);
         endpoint.send_text(s2);
         endpoint.send_text(s3);
@@ -77,7 +77,7 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_
     {
         std::vector<double> v(3,0.0);
         v[0]=1.0;v[1]=2.0;v[2]=3.0;
-        WebSocketClient endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
+        Client endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
         endpoint.send_binary(v);
     }
     ASSERT_EQ(3, message_handler.messages.size());

@@ -19,12 +19,12 @@ namespace ssc
 {
     namespace websocket
     {
-        class WebSocketClient
+        class Client
         {
             public:
-                WebSocketClient();
-                WebSocketClient(const std::string& address, const short unsigned int port);
-                ~WebSocketClient();
+                Client();
+                Client(const std::string& address, const short unsigned int port);
+                ~Client();
                 void send_text(const std::string& message); // Sends to current socket
                 bool good() const; // Returns true if the connection is successfully established
 
