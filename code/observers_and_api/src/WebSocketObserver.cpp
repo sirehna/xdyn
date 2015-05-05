@@ -11,16 +11,6 @@ Observer(data),endpoint(new ssc::websocket::Client(address, port))
     }
 }
 
-void WebSocketObserver::send(const std::string& message)
-{
-    endpoint->send_text(message);
-}
-
-void WebSocketObserver::send(const std::vector<double>& vector)
-{
-    endpoint->send_binary(vector);
-}
-
 WebSocketObserver::~WebSocketObserver()
 {
 }

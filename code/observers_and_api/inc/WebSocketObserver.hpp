@@ -20,8 +20,6 @@ class WebSocketObserver : public Observer
     public:
         WebSocketObserver(const std::string& address, const short unsigned int port, const std::vector<std::string>& data);
         ~WebSocketObserver();
-        void send(const std::string& message);
-        void send(const std::vector<double>& vector);
 
     private:
         WebSocketEndpointPtr endpoint;
