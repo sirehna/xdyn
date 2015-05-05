@@ -70,7 +70,6 @@ ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(force_models)
 ADD_SUBDIRECTORY(parser_extensions)
-ADD_SUBDIRECTORY(websocket)
 ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
@@ -88,7 +87,6 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:hdb_interpolators>
         $<TARGET_OBJECTS:interface_hdf5>
         $<TARGET_OBJECTS:gz_curves>
-        $<TARGET_OBJECTS:websocket>
         )
 
 ADD_IMPORTED_LIB(numeric_shared)
@@ -102,6 +100,7 @@ ADD_IMPORTED_LIB(exception_handling_shared)
 ADD_IMPORTED_LIB(data_source_shared)
 ADD_IMPORTED_LIB(interpolation_shared)
 ADD_IMPORTED_LIB(integrate_shared)
+ADD_IMPORTED_LIB(websocket_shared)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE gfortran)
@@ -136,7 +135,6 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:hdb_interpolators_tests>
         $<TARGET_OBJECTS:interface_hdf5_tests>
         $<TARGET_OBJECTS:observers_and_api_tests>
-        $<TARGET_OBJECTS:websocket_tests>
         $<TARGET_OBJECTS:gz_curves_tests>
         )
 
@@ -146,7 +144,6 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         binary_stl_data_static
         ${PROJECT_NAME}
         random_data_generator_shared
-        ${Boost_SYSTEM_LIBRARY}
         )
 IF(WIN32)
     TARGET_LINK_LIBRARIES(${TEST_EXE} wsock32 ws2_32)
