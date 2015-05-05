@@ -17,8 +17,6 @@ typedef WSServer::message_ptr message_ptr;
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "WebSocketInternalTypes.hpp"
-
 struct WebSocketMessageImpl
 {
     WebSocketMessageImpl();

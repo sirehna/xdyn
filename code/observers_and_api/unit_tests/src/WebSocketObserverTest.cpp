@@ -9,37 +9,40 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#define MESSAGE_SENT      "First message"
 #define ADDRESS "127.0.0.1"
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 #define WEBSOCKET_PORT    9002
 
-void on_message_string(const WebSocketMessage& msg);
-void on_message_string(const WebSocketMessage& msg)
+struct ListOfStringMessages : public MessageHandler
 {
-    if (MESSAGE_SENT != msg.get_payload())
+    ListOfStringMessages() : messages()
     {
-        std::stringstream ss;
-        ss << "Message sent does not match payload: MESSAGE_SENT=" << MESSAGE_SENT << " but payload=" << msg.get_payload();
-        THROW(__PRETTY_FUNCTION__, WebSocketException, ss.str());
     }
-    msg.send_text(msg.get_payload());
-}
+    void operator()(const WebSocketMessage& msg)
+    {
+        messages.push_back(msg.get_payload());
+    }
 
-void on_message_vector(const WebSocketMessage& msg);
-void on_message_vector(const WebSocketMessage& msg)
+    std::vector<std::string> messages;
+};
+
+struct ListOfDoubleMessages : public MessageHandler
 {
-    const std::vector<double> payload = msg.get_binary_payload<double>();
-    ASSERT_EQ(3,payload.size());
-    ASSERT_EQ(1.0,payload[0]);
-    ASSERT_EQ(2.0,payload[1]);
-    ASSERT_EQ(3.0,payload[2]);
-    msg.send_binary(payload);
-}
+    ListOfDoubleMessages() : messages()
+    {
+    }
+    void operator()(const WebSocketMessage& msg)
+    {
+        const auto v = msg.get_binary_payload<double>();
+        messages.insert(messages.end(), v.begin(), v.end());
+    }
+
+    std::vector<double> messages;
+};
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_socket_server)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string, ADDRESS, WEBSOCKET_PORT));
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(ADDRESS, WEBSOCKET_PORT));
     {
         WebSocketClient endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
         ASSERT_TRUE(endpoint.good());
@@ -48,20 +51,35 @@ TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_connect_a_web_
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_string)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_string, ADDRESS, WEBSOCKET_PORT));
-    {
+    const std::string s1 = a.random<std::string>();
+    const std::string s2 = a.random<std::string>();
+    const std::string s3 = a.random<std::string>();
+    ListOfStringMessages message_handler;
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(message_handler, ADDRESS, WEBSOCKET_PORT));
+    { // Creating a scope ensures that the message is actually sent at the end of the scope
         WebSocketClient endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
-        endpoint.send_text(MESSAGE_SENT);
+        endpoint.send_text(s1);
+        endpoint.send_text(s2);
+        endpoint.send_text(s3);
     }
+    ASSERT_EQ(3, message_handler.messages.size());
+    ASSERT_EQ(s1, message_handler.messages.at(0));
+    ASSERT_EQ(s2, message_handler.messages.at(1));
+    ASSERT_EQ(s3, message_handler.messages.at(2));
 }
 
 TEST_F(WebSocketObserverTest, WebSocketEndpoint_should_be_able_to_send_a_vector_doubles)
 {
-    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(on_message_vector, ADDRESS, WEBSOCKET_PORT));
+    ListOfDoubleMessages message_handler;
+    TR1(shared_ptr)<WebSocketServer> w(new WebSocketServer(message_handler, ADDRESS, WEBSOCKET_PORT));
     {
         std::vector<double> v(3,0.0);
         v[0]=1.0;v[1]=2.0;v[2]=3.0;
         WebSocketClient endpoint(WEBSOCKET_ADDRESS, WEBSOCKET_PORT);
         endpoint.send_binary(v);
     }
+    ASSERT_EQ(3, message_handler.messages.size());
+    ASSERT_DOUBLE_EQ(1, message_handler.messages.at(0));
+    ASSERT_DOUBLE_EQ(2, message_handler.messages.at(1));
+    ASSERT_DOUBLE_EQ(3, message_handler.messages.at(2));
 }

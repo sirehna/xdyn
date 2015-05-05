@@ -5,7 +5,6 @@
  *      Author: cady
  */
 
-#include "WebSocketInternalTypes.hpp"
 #include "WebSocketMessage.hpp"
 #include "WebSocketMessageImpl.hpp"
 

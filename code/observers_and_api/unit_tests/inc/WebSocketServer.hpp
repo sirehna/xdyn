@@ -14,12 +14,17 @@
 #include "WebSocketClient.hpp"
 #include "WebSocketMessage.hpp"
 
-typedef std::function<void(const WebSocketMessage&)> MessageHandler;
+struct MessageHandler // What should we do when we receive a message?
+{
+    virtual ~MessageHandler() {}
+    virtual void operator()(const WebSocketMessage&) = 0;
+};
 
 class WebSocketServer
 {
     public:
-        WebSocketServer(const MessageHandler& message_handler, const std::string& address, const short unsigned int port);
+        WebSocketServer(MessageHandler& message_handler, const std::string& address, const short unsigned int port);
+        WebSocketServer(const std::string& address, const short unsigned int port);
         ~WebSocketServer();
 
     private:
