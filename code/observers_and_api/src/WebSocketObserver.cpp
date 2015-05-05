@@ -8,7 +8,7 @@ Observer(data),endpoint(new ssc::websocket::Client(address, port))
     if (endpoint->good()) std::cout<<"Connection successful" << std::endl << std::flush;
     else
     {
-        THROW(__PRETTY_FUNCTION__, WebSocketException, "WebSocketObserver failed to connect to address" + address);
+        THROW(__PRETTY_FUNCTION__, ssc::websocket::WebSocketException, "WebSocketObserver failed to connect to address" + address);
     }
 }
 
