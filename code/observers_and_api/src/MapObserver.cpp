@@ -29,7 +29,7 @@ void MapObserver::flush_after_write()
 {
 }
 
-void MapObserver::flush_value()
+void MapObserver::flush_value_during_write()
 {
 }
 

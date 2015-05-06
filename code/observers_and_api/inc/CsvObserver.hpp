@@ -20,7 +20,7 @@ class CsvObserver : public Observer
     private:
         void flush_after_initialization();
         void flush_after_write();
-        void flush_value();
+        void flush_value_during_write();
 
         std::ofstream os;
         using Observer::get_serializer;

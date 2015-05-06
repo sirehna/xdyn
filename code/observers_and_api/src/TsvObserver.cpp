@@ -45,7 +45,7 @@ void TsvObserver::flush_after_write()
     os << std::endl;
 }
 
-void TsvObserver::flush_value()
+void TsvObserver::flush_value_during_write()
 {
     os << ' ';
 }

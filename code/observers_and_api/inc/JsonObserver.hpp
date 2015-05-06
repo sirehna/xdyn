@@ -19,7 +19,7 @@ class JsonObserver : public Observer
     private:
         void flush_after_initialization();
         void flush_after_write();
-        void flush_value();
+        void flush_value_during_write();
 
         bool output_to_file;
         std::ostream& os;

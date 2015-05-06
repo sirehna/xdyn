@@ -25,7 +25,12 @@ class WebSocketObserver : public Observer
         WebSocketEndpointPtr endpoint;
         void flush_after_initialization();
         void flush_after_write();
-        void flush_value();
+        void flush_value_during_write();
+        void flush_value_during_initialization();
+        void before_write();
+
+        using Observer::get_serializer;
+        using Observer::get_initializer;
         std::function<void()> get_serializer(const double val, const DataAddressing&);
         std::function<void()> get_initializer(const double, const DataAddressing& address);
         std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing&);

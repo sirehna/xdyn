@@ -39,11 +39,18 @@ void WebSocketObserver::flush_after_initialization()
 {
 }
 
+void WebSocketObserver::before_write()
+{
+}
+
 void WebSocketObserver::flush_after_write()
 {
 }
 
-void WebSocketObserver::flush_value()
+void WebSocketObserver::flush_value_during_write()
 {
 }
 
+void WebSocketObserver::flush_value_during_initialization()
+{
+}

@@ -33,7 +33,7 @@ void CsvObserver::flush_after_write()
     os << std::endl;
 }
 
-void CsvObserver::flush_value()
+void CsvObserver::flush_value_during_write()
 {
     os << ',';
 }

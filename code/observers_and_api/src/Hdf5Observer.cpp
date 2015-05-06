@@ -104,6 +104,6 @@ void Hdf5Observer::flush_after_write()
 {
 }
 
-void Hdf5Observer::flush_value()
+void Hdf5Observer::flush_value_during_write()
 {
 }

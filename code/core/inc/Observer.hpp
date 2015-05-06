@@ -51,9 +51,12 @@ class Observer
         virtual std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address);
         virtual std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address);
 
+
         virtual void flush_after_initialization() = 0;
+        virtual void before_write();
         virtual void flush_after_write() = 0;
-        virtual void flush_value() = 0;
+        virtual void flush_value_during_write() = 0;
+        virtual void flush_value_during_initialization();
 
     private:
         Observer(); // Disabled

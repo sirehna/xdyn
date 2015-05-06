@@ -23,6 +23,10 @@ std::function<void()> Observer::get_initializer(const SurfaceElevationGrid& , co
     return [](){};
 }
 
+void Observer::before_write()
+{
+}
+
 void Observer::observe(const Sim& sys, const double t)
 {
     write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
@@ -45,7 +49,7 @@ void Observer::initialize_everything_if_necessary()
                 THROW(__PRETTY_FUNCTION__, ObserverException, std::string("Simulation does not compute '") + stuff + "'");
             }
             initialize_stuff->second();
-            if (i<(n-1)) flush_value();
+            if (i<(n-1)) flush_value_during_initialization();
             ++i;
         }
         flush_after_initialization();
@@ -57,6 +61,7 @@ void Observer::serialize_everything()
 {
     const size_t n = stuff_to_write.size();
     size_t i = 0;
+    before_write();
     for (auto stuff:stuff_to_write)
     {
         auto serialize_stuff = serialize.find(stuff);
@@ -65,7 +70,7 @@ void Observer::serialize_everything()
             THROW(__PRETTY_FUNCTION__, ObserverException, std::string("Simulation does not compute '") + stuff + "'");
         }
         serialize_stuff->second();
-        if (i<(n-1)) flush_value();
+        if (i<(n-1)) flush_value_during_write();
         ++i;
     }
     flush_after_write();
@@ -73,4 +78,9 @@ void Observer::serialize_everything()
 
 Observer::~Observer()
 {
+}
+
+void Observer::flush_value_during_initialization()
+{
+    flush_value_during_write();
 }

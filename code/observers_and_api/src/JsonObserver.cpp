@@ -90,6 +90,6 @@ void JsonObserver::flush_after_write()
     os <<std::flush;
 }
 
-void JsonObserver::flush_value()
+void JsonObserver::flush_value_during_write()
 {
 }

@@ -23,7 +23,7 @@ class MapObserver : public Observer
         std::function<void()> get_initializer(const double val, const DataAddressing& address);
         void flush_after_initialization();
         void flush_after_write();
-        void flush_value();
+        void flush_value_during_write();
 
         std::map<std::string,std::vector<double> > m;
 };
