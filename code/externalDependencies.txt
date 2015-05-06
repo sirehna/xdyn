@@ -4,4 +4,3 @@ http://130.66.124.6/svn/tools/ThirdParty eigen3-hdf5 1.0.0
 http://130.66.124.6/svn/tools/ThirdParty yaml-cpp 0.3.0
 http://130.66.124.6/svn/tools/ThirdParty gcovr
 http://130.66.124.6/svn/tools/ThirdParty base91x 3.0.0
-http://130.66.124.6/svn/tools/ThirdParty websocketpp 0.5.1
