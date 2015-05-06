@@ -1,91 +1,149 @@
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-var container, stats;
-
-var camera, cameraTarget, scene, renderer;
+var container;
+var bbox;
+var camera, cameraTarget, cameraPosition, scene, renderer;
 var meshes = {};
+var bboxes = {};
+
+var current = { c: 1};
 
 init();
+console.log("Start animate");
 animate();
-/*
-if ('WebSocket' in window){
-    console.log("websocket supported");
-  /* WebSocket is supported. You can proceed with your code
-    var connection = new WebSocket('ws://localhost:12345/test');
 
-} else {
-console.log("websocket NOT supported");
-   /*WebSockets are not supported. Try a fallback method like long-polling etc
+function resetCamera() {
+    camera.position.set( -0.0, +0.0, -1.0);
+    camera.lookAt( cameraTarget );
 }
-*/
+
+function sleep(miliseconds) {
+    var currentTime = new Date().getTime();
+    while (currentTime + miliseconds >= new Date().getTime()) {
+    }
+}
 
 function init() {
-
+    console.log("Init");
     container = document.createElement( 'div' );
     document.body.appendChild( container );
 
     camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 15 );
-    camera.position.set( 3, 0.15, 3 );
-    camera.position.x = 2;/*Math.cos( timer ) * 3;*/
-    camera.position.y = 2;/*Math.sin( timer ) * 3;*/
-    camera.position.z = 2;/*Math.sin( timer ) * 3;*/
+    cameraPosition = new THREE.Vector3( 0, 0.0, 0 );
+    cameraTarget = new THREE.Vector3( 0, 0.0, 0 );
+    resetCamera()
 
-    cameraTarget = new THREE.Vector3( 0, -0.25, 0 );
-    camera.lookAt( cameraTarget );
+    controls = new THREE.TrackballControls( camera );
+    controls.rotateSpeed = 1.0;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.8;
+    controls.noZoom = false;
+    controls.noPan = false;
+    controls.staticMoving = true;
+    controls.dynamicDampingFactor = 0.3;
+    controls.keys = [ 65, 83, 68 ];
+    controls.addEventListener( 'change', render );
 
     scene = new THREE.Scene();
-    scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
+    // Fog
+    //scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
 
+    var cc = function(scope)
+    {
+        scene.add( scope.bodyMesh );
+        // Grid
+        var dx = (scope.bodyBBox.max.x-scope.bodyBBox.min.x);
+        var dy = (scope.bodyBBox.max.y-scope.bodyBBox.min.y);
+        var dz = (scope.bodyBBox.max.z-scope.bodyBBox.min.z);
+        var mx = 0.5*(scope.bodyBBox.max.x+scope.bodyBBox.min.x);
+        var my = 0.5*(scope.bodyBBox.max.y+scope.bodyBBox.min.y);
+        var mz = 0.5*(scope.bodyBBox.max.z+scope.bodyBBox.min.z);
+        cameraTarget.x=mx;
+        cameraTarget.y=my;
+        cameraTarget.z=mz;
+        cameraPosition.x=mx-dx;
+        cameraPosition.y=my-dy;
+        cameraPosition.z=mz-dz;
+        camera.lookAt( cameraTarget );
+        camera.position.set(cameraPosition);
+        console.log("Hello")
+        console.log(camera.position.x.x)
+        console.log(camera.position.x.y)
+        console.log(camera.position.x.z)
+        console.log(cameraTarget.x)
+        console.log(cameraTarget.y)
+        console.log(cameraTarget.z)
+        addShadowedLight( cameraTarget.x, cameraTarget.y, cameraTarget.z-1, 0xffffff, 135 );
+        //addShadowedLight( 0.5, 1, -1, 0xffaa00, 1 );
+        var pGrid = 10*0.5*dx;
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push( new THREE.Vector3( - pGrid, 0, 0 ) );
+        geometry.vertices.push( new THREE.Vector3( pGrid, 0, 0 ) );
+        linesMaterial = new THREE.LineBasicMaterial( 0x000000, 0.2 );
+        for ( var i = 0; i <= 20; i ++ ) {
+            var line = new THREE.Line( geometry, linesMaterial );
+            line.position.z = ( i * pGrid/10.0 ) - pGrid;
+            scene.add( line );
+            var line = new THREE.Line( geometry, linesMaterial );
+            line.position.x = ( i * pGrid/10.0 ) - pGrid;
+            line.rotation.y = 90 * Math.PI / 180;
+            scene.add( line );
+        }
 
-    // Ground
+        // Ground
+        var plane = new THREE.Mesh(
+            new THREE.PlaneBufferGeometry( 3*pGrid, 3*pGrid ),
+            new THREE.MeshPhongMaterial( { ambient: 0x999999, color: 0x999999, specular: 0x101010 } )
+        );
+        plane.rotation.x = -Math.PI/2;
+        plane.position.y = 0.0; //-0.5;
+        plane.receiveShadow = true;
+        scene.add( plane );
+    };
+//    c = new Car();
+//    c.callback = cc
+//    c.loadPartsSTL('stl/anthineas.stl');
+
     var plane = new THREE.Mesh(
-        new THREE.PlaneBufferGeometry( 40, 40 ),
-        new THREE.MeshPhongMaterial( { ambient: 0x999999, color: 0x999999, specular: 0x101010 } )
-    );
-    plane.rotation.x = -Math.PI/2;
-    plane.position.y = -0.5;
-    scene.add( plane );
+            new THREE.PlaneBufferGeometry( 3*10, 3*10),
+            new THREE.MeshPhongMaterial( { ambient: 0x999999, color: 0x999999, specular: 0x101010 } )
+        );
+        plane.rotation.x = -Math.PI/2;
+        plane.position.y = 0.0; //-0.5;
+        plane.receiveShadow = true;
+        scene.add( plane );
 
-    plane.receiveShadow = true;
-    // Binary files
-
-    var material = new THREE.MeshPhongMaterial( { ambient: 0x555555, color: 0xAAAAAA, specular: 0x111111, shininess: 200 } );
-
-    var loader = new THREE.STLLoader();
-    loader.load( 'stl/pr2_head_pan.stl', function ( geometry ) {
-
-    var mesh = new THREE.Mesh( geometry, material );
-    meshes["bla"] = mesh;
-    mesh.position.set( 0, - 0.37, - 0.6 );
-    mesh.rotation.set( - Math.PI / 2, 0, 0 );
-    mesh.scale.set( 2, 2, 2 );
-
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.matrixAutoUpdate = true;
-    scene.add( mesh );
-
-    } );
-    console.log(meshes);
+//        var plane = new THREE.Mesh(
+//                new THREE.PlaneBufferGeometry( 3*10, 3*10),
+//                new THREE.MeshPhongMaterial( { ambient: 0x999999, color: 0x999999, specular: 0x101010 } )
+//            );
+//            plane.rotation.x = +Math.PI/2;
+//            plane.position.y = 0.0; //-0.5;
+//            plane.receiveShadow = true;
+//            scene.add( plane );
 
     // Lights
-    scene.add( new THREE.AmbientLight( 0x777777 ) );
+        hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
+        hemiLight.color.setHSL( 0.6, 1, 0.6 );
+        hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+        hemiLight.position.set( 0, 0, -10 );
+        scene.add( hemiLight );
+
+    var ambLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambLight);
 
     addShadowedLight( 1, 1, 1, 0xffffff, 1.35 );
     addShadowedLight( 0.5, 1, -1, 0xffaa00, 1 );
 
     // renderer
-
     renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setClearColor( scene.fog.color );
+    //GJ  renderer.setClearColor( scene.fog.color );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
-
-    renderer.gammaInput = true;
-    renderer.gammaOutput = true;
-
-    renderer.shadowMapEnabled = true;
-    renderer.shadowMapCullFace = THREE.CullFaceBack;
+//    renderer.gammaInput = true;
+//    renderer.gammaOutput = true;
+//    renderer.shadowMapEnabled = true;
+//    renderer.shadowMapCullFace = THREE.CullFaceBack;
 
     container.appendChild( renderer.domElement );
 }
@@ -95,80 +153,82 @@ function addShadowedLight( x, y, z, color, intensity ) {
     var directionalLight = new THREE.DirectionalLight( color, intensity );
     directionalLight.position.set( x, y, z )
     scene.add( directionalLight );
-
     directionalLight.castShadow = true;
-    // directionalLight.shadowCameraVisible = true;
+//    // directionalLight.shadowCameraVisible = true;
+//    var d = 1;
+//    directionalLight.shadowCameraLeft = -d;
+//    directionalLight.shadowCameraRight = d;
+//    directionalLight.shadowCameraTop = d;
+//    directionalLight.shadowCameraBottom = -d;
+//    directionalLight.shadowCameraNear = 1;
+//    directionalLight.shadowCameraFar = 4;
+//    directionalLight.shadowMapWidth = 1024;
+//    directionalLight.shadowMapHeight = 1024;
+//    directionalLight.shadowBias = -0.005;
+//    directionalLight.shadowDarkness = 0.15;
+}
 
-    var d = 1;
-    directionalLight.shadowCameraLeft = -d;
-    directionalLight.shadowCameraRight = d;
-    directionalLight.shadowCameraTop = d;
-    directionalLight.shadowCameraBottom = -d;
-
-    directionalLight.shadowCameraNear = 1;
-    directionalLight.shadowCameraFar = 4;
-
-    directionalLight.shadowMapWidth = 1024;
-    directionalLight.shadowMapHeight = 1024;
-
-    directionalLight.shadowBias = -0.005;
-    directionalLight.shadowDarkness = 0.15;
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    controls.handleResize();
+    render();
 }
 
 function animate() {
     requestAnimationFrame( animate );
+    controls.update();
     render();
-}
-
-function f(x,y,z) {
-    /*
-    x = meshes["bla"].position.x + x;
-    y = meshes["bla"].position.y + y;
-    z = meshes["bla"].position.z + z;
-    console.log(x);
-    console.log(y);
-    console.log(z);*/
-    render_(x,y,z);
 }
 
 function reset()
 {
-    meshes["bla"].position.x=0;
-    meshes["bla"].position.y=0;
-    meshes["bla"].position.z=0;
-}
-function render_(x, y, z, qr, qx, qy, qz) {
-    if ("bla" in meshes)
+    for (var mesh in meshes)
     {
-        qr = typeof qr !== 'undefined' ? qr : 1.0;
-        qx = typeof qx !== 'undefined' ? qx : 0.0;
-        qy = typeof qy !== 'undefined' ? qy : 0.0;
-        qz = typeof qz !== 'undefined' ? qz : 0.0;
-        meshes["bla"].position.x=x;
-        meshes["bla"].position.y=y;
-        meshes["bla"].position.z=z;
+        if (meshes.hasOwnProperty(mesh))
+        {
+            meshes[mesh].position.x=0;
+            meshes[mesh].position.y=0;
+            meshes[mesh].position.z=0;
+            var quaternion = new THREE.Quaternion(1.0,0.0,0.0,0.0);
+            meshes[mesh].rotation.setFromQuaternion(quaternion);
+            meshes[mesh].updateMatrix();
+        }
+    }
+}
+
+function render_(meshName, x, y, z, qr, qx, qy, qz) {
+    meshName = meshName || "anthineas.stl"
+    if (meshName in meshes)
+    {
+        qr = qr || 1.0;
+        qx = qx || 0.0;
+        qy = qy || 0.0;
+        qz = qz || 0.0;
+        meshes[meshName].position.x = x;
+        meshes[meshName].position.y = y;
+        meshes[meshName].position.z = z;
         var quaternion = new THREE.Quaternion(qx,qy,qz,qr);
         quaternion = quaternion.normalize();
-        meshes["bla"].rotation.setFromQuaternion(quaternion);
-        meshes["bla"].updateMatrix();
-        console.log("x = "+x);
-        console.log("y = "+y);
-        console.log("z = "+z);
-        console.log("q = "+[qx,qy,qz,qr]);
-        //var euler = new THREE.Euler().setFromQuaternion ( quaternion, 'XYZ');
-        //console.log("euler = "+euler.x);
+        meshes[meshName].rotation.setFromQuaternion(quaternion);
+        meshes[meshName].updateMatrix();
     }
-    renderer.render( scene, camera );
+}
+
+function getBaseName(str)
+{
+   var base = new String(str).substring(str.lastIndexOf('/') + 1);
+    if(base.lastIndexOf(".") != -1)
+        base = base.substring(0, base.lastIndexOf("."));
+   return base;
+}
+
+function getExtension(filename)
+{
+   return filename.split('.').pop();
 }
 
 function render() {
-    var timer = 0;/*Date.now() * 5e-3;*/
-    if ("bla" in meshes)
-    {
-
-        var x = meshes["bla"].position.x;
-        var y = meshes["bla"].position.y;
-        var z = meshes["bla"].position.z;
-        render_(x,y,z);
-    }
+    renderer.render( scene, camera );
 }
