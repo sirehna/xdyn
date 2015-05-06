@@ -23,25 +23,40 @@
                 document.getElementById("server_url").disabled = true;
                 document.getElementById("toggle_connect").innerHTML = "Disconnect";
             };
-            
+
             ws.onerror = function(e) {
                 document.getElementById("messages").innerHTML += "Client: An error occurred, see console log for more details.<br />";
                 console.log(e);
             };
-            
+
             ws.onclose = function(e) {
                 document.getElementById("messages").innerHTML += "Client: The connection to "+url+" was closed. ["+e.code+(e.reason != "" ? ","+e.reason : "")+"]<br />";
                 cleanup_disconnect();
             };
-            
             ws.onmessage = function(e) {
                 document.getElementById("messages").innerHTML = "Server: "+e.data+"<br/>";
-                console.log(typeof(e.data));
                 if (typeof(e.data)==="string")
                 {
+                    //console.log(e.data);
                     var obj = JSON && JSON.parse(e.data) || $.parseJSON(e.data);
-                    render_(0.05*obj.count,0,0);
-                    //render_(0.05*parseInt(e.data.split(" ")[2]),0,0);
+                    for (i=0;i<obj.length;++i)
+                    {
+                        if (obj[i].type === 'attitude')
+                        {
+                            console.log(obj[i].type);
+                            console.log(obj[i].var.x);
+                            render_(obj[i].name,
+                                    obj[i].var.x,
+                                    obj[i].var.y,
+                                    obj[i].var.z,
+                                    obj[i].var.qr,
+                                    obj[i].var.qi,
+                                    obj[i].var.qj,
+                                    obj[i].var.qk);
+                            appendSmoothie(obj[i].var.u,obj[i].var.v,obj[i].var.w,
+                                           obj[i].var.p,obj[i].var.q,obj[i].var.r);
+                        }
+                    }
                 }
                 else
                 {
@@ -78,16 +93,23 @@
         <div id="messages"></div>
         <button class="myButton"
             onclick="reset()">RESET</button>
-                <form method="post" onsubmit="f(document.getElementById('xval').value,document.getElementById('yval').value,document.getElementById('zval').value);return false;">
+        <form method="post" onsubmit="f(document.getElementById('xval').value,document.getElementById('yval').value,document.getElementById('zval').value);return false;">
                 X<input type="text" id="xval" value=0>
                 Y<input type="text" id="yval" value=0>
                 Z<input type="text" id="zval" value=0>
                 <input type="submit" class "myButton" value="Submit">
                 </form>
+        <canvas id="canvasUVW" width="400" height="100"></canvas>
+        <canvas id="canvasPQR" width="400" height="100"></canvas>
 
-        <script src="js/three.min.js"></script>
-        <script src="js/STLLoader.js"></script>
-        <script src="js/Detector.js"></script>
-        <script src="js/test.js"></script>
+        <script type="text/javascript" src="js/three.min.js"></script>
+        <script type="text/javascript" src="js/Detector.js"></script>
+        <script type="text/javascript" src="js/TrackballControls.js"></script>
+        <script type="text/javascript" src="js/STLLoader.js"></script>
+        <script type="text/javascript" src="js/OBJLoader.js"></script>
+        <script type="text/javascript" src="js/Car.js"></script>
+        <script type="text/javascript" src="js/smoothie.js"></script>
+        <script type="text/javascript" src="js/test.js"></script>
+        <script type="text/javascript" src="js/testSmoothie.js"></script>
     </body>
 </html>
