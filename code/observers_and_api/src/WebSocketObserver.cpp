@@ -3,9 +3,9 @@
 #include "WebSocketClient.hpp"
 
 WebSocketObserver::WebSocketObserver(const std::string& address, const short unsigned int port, const std::vector<std::string>& data):
-Observer(data),endpoint(new ssc::websocket::Client(address, port))
+Observer(data),socket(new ssc::websocket::Client(address, port)), ss()
 {
-    if (not(endpoint->good()))
+    if (not(socket->good()))
     {
         THROW(__PRETTY_FUNCTION__, ssc::websocket::WebSocketException, "WebSocketObserver failed to connect to address " + address);
     }
@@ -15,24 +15,17 @@ WebSocketObserver::~WebSocketObserver()
 {
 }
 
-std::function<void()> WebSocketObserver::get_serializer(const double val, const DataAddressing&)
+std::function<void()> WebSocketObserver::get_serializer(const double val, const DataAddressing& da)
 {
-    return [this,val](){};
+    return [this,val,da]()
+           {
+              ss << da.name << ": " << val;
+           };
 }
 
-std::function<void()> WebSocketObserver::get_initializer(const double, const DataAddressing& address)
+std::function<void()> WebSocketObserver::get_initializer(const double, const DataAddressing& )
 {
-    return [this,address](){};
-}
-
-std::function<void()> WebSocketObserver::get_serializer(const SurfaceElevationGrid& val, const DataAddressing&)
-{
-    return [this,val](){};
-}
-
-std::function<void()> WebSocketObserver::get_initializer(const SurfaceElevationGrid&, const DataAddressing&address)
-{
-    return [this,address](){};
+    return [](){};
 }
 
 void WebSocketObserver::flush_after_initialization()
@@ -41,14 +34,20 @@ void WebSocketObserver::flush_after_initialization()
 
 void WebSocketObserver::before_write()
 {
+     ss << "{";
 }
 
 void WebSocketObserver::flush_after_write()
 {
+    ss << "}";
+    socket->send_text(ss.str());
+    ss.clear();//clear any bits set
+    ss.str(std::string());
 }
 
 void WebSocketObserver::flush_value_during_write()
 {
+    ss << ", ";
 }
 
 void WebSocketObserver::flush_value_during_initialization()
