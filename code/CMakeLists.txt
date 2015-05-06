@@ -51,8 +51,6 @@ IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
 ENDIF()
 
-SET(websocketpp_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/websocketpp)
-
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
@@ -145,9 +143,6 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         ${PROJECT_NAME}
         random_data_generator_shared
         )
-IF(WIN32)
-    TARGET_LINK_LIBRARIES(${TEST_EXE} wsock32 ws2_32)
-ENDIF()
 
 INCLUDE(CMakeTesting)
 INCLUDE(CMakeDocumentation)
