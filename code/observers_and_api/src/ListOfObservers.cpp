@@ -11,6 +11,7 @@
 #include "MapObserver.hpp"
 #include "TsvObserver.hpp"
 #include "JsonObserver.hpp"
+#include "WebSocketObserver.hpp"
 #include "YamlOutput.hpp"
 
 ListOfObservers::ListOfObservers(const std::vector<YamlOutput>& yaml) : observers()
@@ -22,6 +23,7 @@ ListOfObservers::ListOfObservers(const std::vector<YamlOutput>& yaml) : observer
         if (output.format == "tsv")  observers.push_back(ObserverPtr(new TsvObserver(output.filename,output.data)));
         if (output.format == "map")  observers.push_back(ObserverPtr(new MapObserver(output.data)));
         if (output.format == "json") observers.push_back(ObserverPtr(new JsonObserver(output.filename,output.data)));
+        if (output.format == "ws")   observers.push_back(ObserverPtr(new WebSocketObserver(output.address,output.port,output.data)));
     }
 }
 

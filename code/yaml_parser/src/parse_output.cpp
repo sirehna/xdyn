@@ -11,7 +11,18 @@
 void operator >> (const YAML::Node& node, YamlOutput& f);
 void operator >> (const YAML::Node& node, YamlOutput& f)
 {
-    node["filename"] >> f.filename;
+    if(const YAML::Node *pName = node.FindValue("filename"))
+    {
+        *pName >> f.filename;
+    }
+    if(const YAML::Node *pName = node.FindValue("address"))
+    {
+        *pName >> f.address;
+    }
+    if(const YAML::Node *pName = node.FindValue("port"))
+    {
+        *pName >> f.port;
+    }
     node["format"]   >> f.format;
     node["data"]     >> f.data;
 }
