@@ -68,7 +68,7 @@ class Root(object):
     def index(self):
         return """<html>
     <head>
-      <script type='application/javascript' src='js/jquery.min.js'></script>
+      <script type='application/javascript' src='js/third_party/jquery.min.js'></script>
       <script type='application/javascript'>
         $(document).ready(function() {
 
