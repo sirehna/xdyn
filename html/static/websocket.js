@@ -61,7 +61,7 @@ $(function() {
     var name = 'cube';
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    var websocket = new WebSocket('ws://130.66.124.225:9002');
+    var websocket = new WebSocket('ws://127.0.0.1:9002');
     websocket.onopen = function () {
         $('h1').css('color', 'green');
         get_new_canvas();
