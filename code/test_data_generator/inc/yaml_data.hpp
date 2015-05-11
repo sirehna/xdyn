@@ -55,6 +55,7 @@ namespace test_data
     std::string bug_2732();
     std::string L_config();
     std::string GM_cube();
+    std::string bug_2838();
 }
 
 #endif /* YAML_DATA_HPP_ */
