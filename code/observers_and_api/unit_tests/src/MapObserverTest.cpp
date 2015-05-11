@@ -44,7 +44,6 @@ ListOfObservers observe(const std::vector<std::string>& stuff_to_watch)
     return ListOfObservers({out});
 }
 
-std::map<std::string,std::vector<double> > get_map(const ListOfObservers& observers);
 std::map<std::string,std::vector<double> > get_map(const ListOfObservers& observers)
 {
     const auto map_observer = static_cast<MapObserver*>(observers.get().front().get());
