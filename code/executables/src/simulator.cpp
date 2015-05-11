@@ -20,7 +20,7 @@
 #include <fstream>
 #include <utility>
 
-CHECK_SSC_VERSION(0x8fc63877569cb532)
+CHECK_SSC_VERSION(0xabbcb1fc3028e755)
 
 int main(int argc, char** argv)
 {
