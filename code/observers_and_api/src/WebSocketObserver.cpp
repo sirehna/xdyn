@@ -1,6 +1,5 @@
 #include "WebSocketObserver.hpp"
-#include "WebSocketException.hpp"
-#include "WebSocketClient.hpp"
+#include <ssc/websocket.hpp>
 
 WebSocketObserver::WebSocketObserver(const std::string& address, const short unsigned int port, const std::vector<std::string>& data):
 Observer(data),socket(new ssc::websocket::Client(address, port)), ss()
