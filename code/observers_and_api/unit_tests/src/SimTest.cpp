@@ -28,6 +28,7 @@
 #include "generate_anthineas.hpp"
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
+#include "MapObserverTest.hpp"
 
 #define EPS (1E-10)
 #define SQUARE(x) ((x)*(x))
@@ -417,4 +418,23 @@ TEST_F(SimTest, LONG_bug_2732)
     command_listener.set<double>("Prop. & rudder(beta)", 0);
     auto sys = get_system(yaml,anthineas_stl,0,command_listener);
     ASSERT_NO_THROW(ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.4, observer));
+}
+
+TEST_F(SimTest, LONG_bug_2838)
+{
+    const auto yaml = test_data::bug_2838();
+    ListOfObservers observer(parse_output(yaml));
+    const auto input = SimulatorYamlParser(test_data::bug_2838()).parse();
+    ssc::data_source::DataSource command_listener;
+    command_listener.set<double>("PropRudd(rpm)", 50);
+    command_listener.set<double>("PropRudd(P/D)", 1);
+    command_listener.set<double>("PropRudd(beta)", 0);
+    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
+    const auto m = get_map(observer);
+    ASSERT_EQ(2, m.size());
+    const auto it = m.find("Mz(PropRudd,Anthineas,Anthineas)");
+    ASSERT_NE(m.end(), it);
+    ASSERT_EQ(5, it->second.size());
+    ASSERT_GT(std::abs(it->second.back()), 0);
 }

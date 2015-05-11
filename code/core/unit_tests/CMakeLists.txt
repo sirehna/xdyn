@@ -7,6 +7,8 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/BodyBuilderTest.cpp
               src/SurfaceElevationFromWavesTest.cpp
               src/BodyTest.cpp
+              src/ControllableForceModelTest.cpp
+              src/random_kinematics.cpp
               )
 # ------8<---------------------------------------------->8-----
 
@@ -25,7 +27,7 @@ INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS}/../unit_tests/inc)
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
 IF (NOT(MSVC))
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+    SET(CMAKE_CXX_FLAGS "--std=gnu++0x")
 ENDIF()
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
