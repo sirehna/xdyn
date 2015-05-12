@@ -1,14 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
-#
-# Copyright (c) 2013 Baptiste LABAT
-#
-# Licensed under the MIT License,
-# https://github.com/baptistelabat/robokite
-# Authors: Baptiste LABAT
-#
-# Used http://www.linuxforu.com/2012/04/getting-started-with-html5-websockets/
- 
+
 import tornado.web
 import tornado.websocket
 import tornado.ioloop
