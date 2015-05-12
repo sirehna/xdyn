@@ -39,6 +39,9 @@ class MainHandler(tornado.web.RequestHandler):
         self.render("websocket_test.html")
  
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
+
     def initialize(self, client_tracker):
         print("Initializing websocket handler")
         self.client_tracker = client_tracker
