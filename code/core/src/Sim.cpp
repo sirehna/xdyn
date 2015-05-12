@@ -161,10 +161,7 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     {
         force->update(states, t, pimpl->command_listener);
         const ssc::kinematics::Wrench tau = force->get_force_in_body_frame();
-        const ssc::kinematics::Transform T = pimpl->env.k->get(tau.get_frame(), body->get_name());
-        const auto t = tau.change_frame_but_keep_ref_point(T);
-        const ssc::kinematics::UnsafeWrench tau_body(states.G, t.force, t.torque + (t.get_point()-states.G).cross(t.force));
-        pimpl->sum_of_forces_in_body_frame[body->get_name()] += tau_body;
+        pimpl->sum_of_forces_in_body_frame[body->get_name()] += tau;//_body;
     }
     pimpl->sum_of_forces_in_NED_frame[body->get_name()] = ForceModel::project_into_NED_frame(pimpl->sum_of_forces_in_body_frame[body->get_name()],states.get_rot_from_ned_to_body());
     return pimpl->sum_of_forces_in_body_frame[body->get_name()];
