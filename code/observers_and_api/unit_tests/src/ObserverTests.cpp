@@ -23,6 +23,8 @@
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
 
+#include <unistd.h> // usleep
+
 #define ADDRESS "127.0.0.1"
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 #define WEBSOCKET_PORT    1234
