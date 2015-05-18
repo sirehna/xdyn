@@ -5,6 +5,23 @@ ADD_CUSTOM_TARGET(
     COMMENT "Evaluates the amount of work of the project"
 )
 
+file(GLOB script ${CMAKE_SOURCE_DIR}/integration_tests.py)
+add_custom_target(python_script)
+add_custom_command(TARGET python_script POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E
+                                                copy ${script}
+                                                ${PROJECT_BINARY_DIR}/executables)
+ADD_CUSTOM_TARGET(integration_tests
+    DEPENDS sim python_script ${CMAKE_CURRENT_BINARY_DIR}/demos/cube.stl ${CMAKE_CURRENT_BINARY_DIR}/demos/cube_in_waves.yml
+)
+ADD_CUSTOM_COMMAND(
+    TARGET integration_tests
+    POST_BUILD
+    COMMAND cp demos/*.*l . && python integration_tests.py
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/executables
+    COMMENT "Checking the tutorials execute OK"
+)
+
 ADD_CUSTOM_TARGET(
     md5sum
     COMMAND find . -type f \\\( -name \"*.c\" -o -name \"*.h\" \\\) -print0 | xargs -0 md5sum > "${PROJECT_BINARY_DIR}/md5sum.txt"

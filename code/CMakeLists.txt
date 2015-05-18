@@ -109,6 +109,9 @@ INSTALL(TARGETS ${PROJECT_NAME}
 #############################################################################
 # Testing part
 
+INSTALL(FILES integration_tests.py
+        DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
+
 SET(TEST_EXE run_all_tests)
 
 ADD_EXECUTABLE(${TEST_EXE}

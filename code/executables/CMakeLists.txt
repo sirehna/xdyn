@@ -113,6 +113,7 @@ FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
 
 IF(WIN32)
     ADD_CUSTOM_COMMAND(TARGET generate_yaml_example
+                       OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/demos/cube_in_waves.yml
                        POST_BUILD
                        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
                        COMMAND generate_yaml_example demos
@@ -120,6 +121,7 @@ IF(WIN32)
                        DEPENDS simulatorIrtJv
                        COMMENT "Generate YAML simulation input data files")
     ADD_CUSTOM_COMMAND(TARGET generate_stl_examples
+                       OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/demos/cube.stl
                        POST_BUILD
                        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
                        COMMAND generate_stl_examples demos
