@@ -47,7 +47,6 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
 ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener) const
 {
     const auto F = get_force(states,t,get_commands(command_listener,t));
-    const ssc::kinematics::Transform T = env.k->get(point_of_application.get_frame(), states.name);
     const Eigen::Vector3d force(F(0),F(1),F(2));
     const Eigen::Vector3d torque(F(3),F(4),F(5));
     const ssc::kinematics::UnsafeWrench tau_body(states.G, force, torque + (point_of_application-states.G).cross(force));
