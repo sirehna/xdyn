@@ -66,11 +66,14 @@ std::vector<std::string> get_body_names(const std::string yaml)
     YAML::Node node;
     parser.GetNextDocument(node);
     const YAML::Node *parameter = node.FindValue("bodies");
-    for (size_t i = 0 ; i < parameter->size() ; ++i)
+    if (parameter)
     {
-        std::string name;
-        (*parameter)[i]["name"] >> name;
-        out.push_back(name);
+        for (size_t i = 0 ; i < parameter->size() ; ++i)
+        {
+            std::string name;
+            (*parameter)[i]["name"] >> name;
+            out.push_back(name);
+        }
     }
     return out;
 }
