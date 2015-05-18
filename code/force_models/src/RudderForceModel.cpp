@@ -48,7 +48,10 @@ RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_, const double
                                            D(parameters_.diameter),
                                            Kr(),
                                            rho(rho_),
-                                           nu(nu_)
+                                           nu(nu_),
+                                           translation_from_rudder_to_propeller(parameters.position_of_propeller_frame.coordinates.x - parameters.position_of_the_rudder_frame_in_the_body_frame.x,
+                                                                                parameters.position_of_propeller_frame.coordinates.y - parameters.position_of_the_rudder_frame_in_the_body_frame.y,
+                                                                                parameters.position_of_propeller_frame.coordinates.z - parameters.position_of_the_rudder_frame_in_the_body_frame.z)
 {
     const double distance_between_rudder_and_screw = std::abs(parameters_.position_of_propeller_frame.coordinates.x - parameters_.position_of_the_rudder_frame_in_the_body_frame.x);
     Kr = 0.5+0.5/(1+0.15/std::abs(distance_between_rudder_and_screw/parameters_.diameter));
@@ -105,8 +108,17 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double 
                                     ) const
 {
     ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
-    ret(0) = - lift * sin (angle) - drag * cos (angle);
-    ret(1) = + lift * cos (angle) - drag * sin (angle);
+    const Eigen::Vector3d f(- lift * sin (angle) - drag * cos (angle),
+                            + lift * cos (angle) - drag * sin (angle),
+                            0);
+    const Eigen::Vector3d m = -translation_from_rudder_to_propeller.cross(f);
+    ret(0) = f(0);
+    ret(1) = f(1);
+    ret(2) = f(2);
+    ret(3) = m(0);
+    ret(4) = m(1);
+    ret(5) = m(2);
+
     return ret;
 }
 
@@ -206,7 +218,7 @@ ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(const BodyStates& s
 
 ssc::kinematics::Vector6d RudderForceModel::get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
 {
-    const ssc::kinematics::Vector6d propeller_force = propulsion.get_force(states,t,commands);
+    const ssc::kinematics::Vector6d propeller_force = ssc::kinematics::Vector6d::Zero();//propulsion.get_force(states,t,commands);
     const ssc::kinematics::Vector6d rudder_force = get_rudder_force(states, t, commands, (double)propeller_force.norm());
     const std::string frame = translation_from_rudder_to_propeller.get_frame();
     const ssc::kinematics::Wrench prop(frame, propeller_force);

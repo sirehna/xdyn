@@ -146,6 +146,7 @@ class RudderForceModel : public ControllableForceModel
                 double Kr;//!< Contraction factor (cf. Marine Rudders & Control Surfaces, Molland & Turnock, eq. 3.37 p.51)
                 double rho;
                 double nu;
+                Eigen::Vector3d translation_from_rudder_to_propeller;
         };
 
     private:
