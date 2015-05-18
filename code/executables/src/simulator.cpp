@@ -22,6 +22,22 @@
 
 CHECK_SSC_VERSION(0xabbcb1fc3028e755)
 
+ListOfObservers get_observers(const std::string& yaml, const InputData& input_data);
+ListOfObservers get_observers(const std::string& yaml, const InputData& input_data)
+{
+    auto out = parse_output(yaml);
+    if (not(input_data.wave_output.empty()))
+    {
+        YamlOutput o;
+        o.data = {"waves"};
+        o.filename = input_data.wave_output;
+        o.format = get_format(input_data.wave_output);
+        out.push_back(o);
+    }
+    out.push_back(generate_default_outputter_with_all_states_in_it(yaml, input_data.output_filename));
+    return ListOfObservers(out);
+}
+
 int main(int argc, char** argv)
 {
     InputData input_data;
@@ -35,10 +51,8 @@ int main(int argc, char** argv)
             command_listener = listen_to_file(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input_data.command_file)).get_contents());
         }
         const auto yaml = yaml_reader.get_contents();
+        auto observer = get_observers(yaml, input_data);
         auto sys = get_system(yaml,input_data.tstart,command_listener);
-        auto out = parse_output(yaml);
-        out.push_back(generate_default_outputter_with_all_states_in_it(yaml, input_data.output_filename));
-        ListOfObservers observer(out);
         if (input_data.solver=="euler")
         {
             ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);

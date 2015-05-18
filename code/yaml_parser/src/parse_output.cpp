@@ -78,7 +78,6 @@ std::vector<std::string> get_body_names(const std::string yaml)
     return out;
 }
 
-std::string get_format(const std::string& filename);
 std::string get_format(const std::string& filename)
 {
     const size_t n = filename.size();
@@ -86,6 +85,7 @@ std::string get_format(const std::string& filename)
     if (filename.substr(n-3,3)==".h5")  return "hdf5";
     if (filename.substr(n-4,4)==".csv") return "csv";
     if (filename.substr(n-4,4)==".tsv") return "tsv";
+    std::cerr << "Warning: could not recognize the format of specified output file '" << filename << "'";
                                         return "???";
 }
 
