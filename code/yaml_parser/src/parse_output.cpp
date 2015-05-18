@@ -81,12 +81,13 @@ std::vector<std::string> get_body_names(const std::string yaml)
 std::string get_format(const std::string& filename)
 {
     const size_t n = filename.size();
-    if (!n)                             return "tsv";
-    if (filename.substr(n-3,3)==".h5")  return "hdf5";
-    if (filename.substr(n-4,4)==".csv") return "csv";
-    if (filename.substr(n-4,4)==".tsv") return "tsv";
+    if (!n)                              return "tsv";
+    if (filename.substr(n-3,3)==".h5")   return "hdf5";
+    if (filename.substr(n-5,5)==".hdf5") return "hdf5";
+    if (filename.substr(n-4,4)==".csv")  return "csv";
+    if (filename.substr(n-4,4)==".tsv")  return "tsv";
     std::cerr << "Warning: could not recognize the format of specified output file '" << filename << "'";
-                                        return "???";
+                                         return "???";
 }
 
 YamlOutput generate_default_outputter_with_all_states_in_it(const std::string yaml, const std::string& filename)
