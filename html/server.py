@@ -1,12 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+import os
+import sys
 import tornado.web
 import tornado.websocket
 import tornado.ioloop
-import os
 import webbrowser
-import sys
+
+def get_ip():
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 0))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 class ClientTracker:
     def __init__(self, should_log):
@@ -37,7 +50,7 @@ class ClientTracker:
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("websocket_test.html")
- 
+
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
@@ -46,13 +59,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         print("Initializing websocket handler")
         self.client_tracker = client_tracker
 
-    def on_message(self, message):  
+    def on_message(self, message):
         print("message received: " + message)
         self.client_tracker.broadcast(message)
 
     def open(self):
-        self.client_tracker.add(self) 
-      
+        self.client_tracker.add(self)
+
     def on_close(self):
         self.client_tracker.remove(self)
 
@@ -88,10 +101,24 @@ class SimulatorGUI:
         #self.open_html_page_in_browser(self.url)
         print("Initialized: now starting main server loop.")
         self.mainLoop.start()
-        
 
 if __name__ == "__main__":
+    import argparse
+    import sys
+    from os.path import basename
+    progName = basename(sys.argv[0])
+    parser = argparse.ArgumentParser(\
+        prog = progName, \
+        description = u"Server creation.\n")
+    parser.add_argument("-a","--address", \
+        help = "Nom du fichier modele utilise en entree contenant la description "\
+            "du sous-marin. Par exemple 'sousmarin.mod'", default = 'http://'+get_ip())
+    parser.add_argument("-p","--port", \
+        help = "Nom du fichier modele utilise en entree contenant la description "\
+            "du sous-marin. Par exemple 'sousmarin.mod'", default = 9002)
+    args = parser.parse_args()
     #gui = SimulatorGUI("http://127.0.0.1", 9002)
-    gui = SimulatorGUI("http://130.66.124.225", 9002)
+    print('Connecting to ' + args.address)
+    gui = SimulatorGUI(address = args.address, port = args.port)
     gui.run()
 
