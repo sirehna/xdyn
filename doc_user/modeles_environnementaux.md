@@ -333,7 +333,7 @@ directionnel $S_i\cdot D_j$ sont classés par ordre décroissant. On calcule la
 somme cumulative et l'on s'arrête lorsque l'énergie accumulée vaut `energy
 fraction` de l'énergie totale.
 
-#### Références 
+#### Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70
 - *Sea Loads on Ships And Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 27

@@ -937,7 +937,7 @@ et $\Delta K_Q$ supplémentaires :
 $$K_T(J, P/D, A_E/A_0, Z, R_n) = K_T(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
 K_T(J, P/D, A_E/A_0, Z, R_n)$$
 $$K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
-K_Q(J, P/D, A_E/A_0, Z, R_n)$$ 
+K_Q(J, P/D, A_E/A_0, Z, R_n)$$
 
 ### Expression des efforts
 
@@ -1341,7 +1341,7 @@ $\Delta_x$ désigne la distance entre l'hélide et le safran (suivant l'axe $x$)
 et $D$ est le diamètre de l'hélice.
 
 Afin de factoriser cette expression, on peut exprimer la vitesse $V_2$ en
-fonction de la vitesse $V_a$ : 
+fonction de la vitesse $V_a$ :
 
 $$V_2 = \sqrt{V_a^2 + \frac{2T}{\rho A}}$$
 
@@ -1492,7 +1492,7 @@ nouveau ici (hormis `model`). On a les paramètres supplémentaires suivants :
 - `rudder height` : $b$
 - `effective aspect ratio`: Paramètre $K_{\Lambda}$ dans le calcule du rapport
    de forme (pour la formule de Soeding) ci-dessus
-- `lift tuning coefficient`: $K_{\mbox{lift}}$ dans les formules ci-dessus 
+- `lift tuning coefficient`: $K_{\mbox{lift}}$ dans les formules ci-dessus
 - `drag tuning coefficient`: $K_{\mbox{drag}}$ dans les formules ci-dessus
 - `position of rudder in body frame`: coordonnées du point $P$ (cf. schéma ci-dessus), projetées dans le repère "body"
 

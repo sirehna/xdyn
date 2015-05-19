@@ -118,7 +118,7 @@ attaché au corps :
 
 $$GZ = y\cdot GB$$
 
-or 
+or
 
 $$y = \frac{x_{\mbox{body}}^{\mbox{(ned)}} \times
 z_{\mbox{ned}}^{\mbox{(ned)}}}{\left\|x_{\mbox{body}}^{\mbox{(ned)}} \times
@@ -184,7 +184,7 @@ simulateur, l'outil `gz` n'utilise ni les conditions initiales, ni les sorties,
 ni les efforts extérieurs spécifiés dans le fichier YAML.
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-APPEL: ./gz <yaml file> [-h] [-y ARG] [-s ARG] [--dphi ARG] [--phi_max ARG] 
+APPEL: ./gz <yaml file> [-h] [-y ARG] [-s ARG] [--dphi ARG] [--phi_max ARG]
 Options:
   -h [ --help ]         Afficher le message d'aide (en anglais)
   -y [ --yml ] arg      Nom du (ou des) fichier(s) YAML (le flag est facultatif)
@@ -193,7 +193,7 @@ Options:
   --phi_max arg         Angle de roulis maximal (en degrés)
 ~~~~~~~~~~~~~~~~~~~~
 
-Exemple : 
+Exemple :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./gz anthineas_in_waves.yml -s anthineas.stl --dphi 10 --phi_max 40

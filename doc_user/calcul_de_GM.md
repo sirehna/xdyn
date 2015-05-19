@@ -121,7 +121,7 @@ Le couple de rappel $Mr$ est par définition :
 $$Mr = F_{\mbox{HS}} \cdot GZ = F_{\mbox{HS}} \cdot GM\cdot \sin(\theta)$$
 
 Pour de petites variations isocarènes de $\theta$, le volume ne variant pas,
-$F_{\mbox{HS}}$ est constante donc 
+$F_{\mbox{HS}}$ est constante donc
 
 $$dMr = F_{\mbox{HS}}\cdot(\sin(\theta)dGM + GM\cdot\cos(\theta)d\theta)$$
 
@@ -144,7 +144,7 @@ $$GM\sim \frac{I_{Oxx}}{V}$$
 
 ## Extensions
 
-Pour utiliser le concept de métacentre sous houle pour un navire réel, 
+Pour utiliser le concept de métacentre sous houle pour un navire réel,
 il faut s'affranchir des hypothèses précédentes (planéité de la surface libre,
 petites rotations isocarènes, symétries). On pose alors comme définition :
 

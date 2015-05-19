@@ -534,9 +534,9 @@ routine DQAGS).
 MathWorld--A Wolfram Web
 Resource.](http://mathworld.wolfram.com/Stieltjes-WigertPolynomial.html)
 - Szegö, G., **Orthogonal Polynomials**, 4th ed. Providence, RI: Amer. Math. Soc.,
-p. 33, 1975. 
+p. 33, 1975.
 - R. Piessens, E. deDoncker–Kapenga, C. Uberhuber, D. Kahaner (1983) **Quadpack: a
-Subroutine Package for Automatic Integration**; Springer Verlag. 
+Subroutine Package for Automatic Integration**; Springer Verlag.
 
 ### Méthode de Filon
 
