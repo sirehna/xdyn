@@ -92,7 +92,6 @@
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 			var camera, scene, renderer, dirLight, hemiLight;
-			var morphs = [];
 			var stats;
 
 			var clock = new THREE.Clock();
@@ -114,20 +113,16 @@
 
 				/*
 				controls = new THREE.TrackballControls( camera );
-
 				controls.rotateSpeed = 1.0;
 				controls.zoomSpeed = 1.2;
 				controls.panSpeed = 0.8;
-
 				controls.noZoom = false;
 				controls.noPan = false;
-
 				controls.staticMoving = true;
 				controls.dynamicDampingFactor = 0.15;
 				*/
 
 				// LIGHTS
-
 				hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
 				hemiLight.color.setHSL( 0.6, 1, 0.6 );
 				hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
@@ -135,20 +130,15 @@
 				scene.add( hemiLight );
 
 				//
-
 				dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
 				dirLight.color.setHSL( 0.1, 1, 0.95 );
 				dirLight.position.set( -1, 1.75, 1 );
 				dirLight.position.multiplyScalar( 50 );
 				scene.add( dirLight );
-
 				dirLight.castShadow = true;
-
 				dirLight.shadowMapWidth = 2048;
 				dirLight.shadowMapHeight = 2048;
-
 				var d = 50;
-
 				dirLight.shadowCameraLeft = -d;
 				dirLight.shadowCameraRight = d;
 				dirLight.shadowCameraTop = d;
@@ -227,7 +217,6 @@
                 //
 				//	scene.add( meshAnim );
 				//	morphs.push( meshAnim );
-                //
 				//} );
 
 				// RENDERER
@@ -302,27 +291,14 @@
 			//
 
 			function animate() {
-
 				requestAnimationFrame( animate );
-
 				render();
 				stats.update();
-
 			}
 
 			function render() {
-
 				var delta = clock.getDelta();
-
 				//controls.update();
-
-				for ( var i = 0; i < morphs.length; i ++ ) {
-
-					morph = morphs[ i ];
-					morph.updateAnimation( 1000 * delta );
-
-				}
-
 				renderer.render( scene, camera );
 
 			}
