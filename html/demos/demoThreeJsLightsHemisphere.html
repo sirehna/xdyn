@@ -50,10 +50,10 @@
 			press <strong>h</strong> to toggle hemisphere light, <strong>d</strong> to toggle directional light
 		</div>
 
-		<script src="../js/three.min.js"></script>
-		<script src="../js/controls/TrackballControls.js"></script>
-		<script src="../js/Detector.js"></script>
-		<script src="../js/stats.min.js"></script>
+		<script src="../js/third_party/ThreeJS/three.min.js"></script>
+		<script src="../js/third_party/ThreeJS/TrackballControls.js"></script>
+		<script src="../js/third_party/ThreeJS/Detector.js"></script>
+		<script src="../js/third_party/ThreeJS/stats.min.js"></script>
 		<script type="x-shader/x-vertex" id="vertexShader">
 
 			varying vec3 vWorldPosition;
@@ -191,7 +191,7 @@
 
 				var sky = new THREE.Mesh( skyGeo, skyMat );
 				scene.add( sky );
-                
+
                 var geometrySphere = new THREE.SphereGeometry( 5, 32, 32 );
                 var materialSphere = new THREE.MeshBasicMaterial( {color: 0xffff00} );
                 var sphere = new THREE.Mesh( geometrySphere, materialSphere );
@@ -202,7 +202,7 @@
                 //geometrySphere2.position.y = -33;
                 var sphere2 = new THREE.Mesh( geometrySphere2, materialSphere2 );
                 scene.add( sphere2 );
-                
+
 				// MODEL
 
 				//var loader = new THREE.JSONLoader();
