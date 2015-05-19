@@ -1,6 +1,15 @@
 build
+build*32
+build*64
 install
+install*32
+install*64
 Debug
-gcc
 debug
+gcc
 clang
+.cproject
+.pydevproject
+.metadata
+.project
+.settings
