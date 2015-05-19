@@ -32,7 +32,7 @@
 
   var i = 0;
 
-  var base91 = {
+  var base91Float32 = {
     decode: function(data) {
       var len = data.length,
           estimatedSize = ((len / AVERAGE_ENCODING_RATIO) | 0),
@@ -100,5 +100,5 @@
       return ret;
     }
   };
-    window.base91 = base91;
+    window.base91Float32 = base91Float32;
 })();
