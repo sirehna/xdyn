@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${base91x_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${boost_program_options_descriptions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
@@ -21,7 +22,6 @@ INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${yaml_parser_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${base91x_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${force_models_INCLUDE_DIRS})
@@ -49,7 +49,7 @@ ADD_EXECUTABLE(test_hs src/test_hs.cpp $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:yaml_parser>
         $<TARGET_OBJECTS:external_data_structures>)
-TARGET_LINK_LIBRARIES(test_hs simulatorIrtJv binary_stl_data_static base91x_static
+TARGET_LINK_LIBRARIES(test_hs simulatorIrtJv binary_stl_data_static
 )
 
 TARGET_LINK_LIBRARIES(test_hs yaml-cpp
@@ -79,8 +79,7 @@ ADD_EXECUTABLE(convert_stl_files_to_code ${CMAKE_CURRENT_BINARY_DIR}/convert_stl
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code
                       simulatorIrtJv
                       ${Boost_PROGRAM_OPTIONS_LIBRARY}
-                      boost_program_options_descriptions_static
-                      base91x_static)
+                      boost_program_options_descriptions_static)
 
 ADD_EXECUTABLE(gz src/gz.cpp
                   ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
@@ -89,8 +88,7 @@ ADD_EXECUTABLE(gz src/gz.cpp
 TARGET_LINK_LIBRARIES(gz
                       simulatorIrtJv
                       ${Boost_PROGRAM_OPTIONS_LIBRARY}
-                      boost_program_options_descriptions_static
-                      base91x_static)
+                      boost_program_options_descriptions_static)
 
 ADD_EXECUTABLE(generate_yaml_example
                src/generate_yaml_examples.cpp src/file_writer.cpp
@@ -101,7 +99,6 @@ ADD_EXECUTABLE(generate_stl_examples
                $<TARGET_OBJECTS:test_data_generator>)
 TARGET_LINK_LIBRARIES(generate_stl_examples
                       binary_stl_data_static
-                      base91x_static
                       simulatorIrtJv)
 
 ################################################################################

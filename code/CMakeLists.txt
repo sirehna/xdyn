@@ -132,7 +132,6 @@ ADD_EXECUTABLE(${TEST_EXE}
 TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest gtest_main                 # static
         gmock gmock_main                 # static
-        base91x_static
         binary_stl_data_static
         ${PROJECT_NAME}
         random_data_generator_shared

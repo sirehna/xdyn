@@ -9,7 +9,7 @@
 #include "stl_reader.hpp"
 #include "stl_writer.hpp"
 #include "STL_data.hpp"
-#include "base91x.hpp"
+#include "base91.hpp"
 #include "TriMeshTestData.hpp"
 
 stl_writerTest::stl_writerTest() : a(ssc::random_data_generator::DataGenerator(542))
