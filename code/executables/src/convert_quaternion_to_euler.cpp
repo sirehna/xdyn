@@ -6,18 +6,8 @@
  */
 
 #include <iostream>
-#include <string>
-#include <vector>
-
-#include <boost/algorithm/string/join.hpp>
-
 #include <ssc/check_ssc_version.hpp>
-#include <ssc/exception_handling.hpp>
 #include <ssc/kinematics.hpp>
-#include <ssc/macros.hpp>
-#include <ssc/yaml_parser.hpp>
-
-#include "external_data_structures_parsers.hpp"
 
 CHECK_SSC_VERSION(0xabbcb1fc3028e755)
 
@@ -52,5 +42,4 @@ int main(int argc, char** argv)
               << "psi: "   << angles.psi*RAD2DEG << std::endl;
     return 0;
 }
-
 
