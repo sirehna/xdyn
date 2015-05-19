@@ -5,20 +5,16 @@
  *      Author: cady
  */
 
-#include <ssc/text_file_reader.hpp>
 #include "InputData.hpp"
-#include "utilities_for_InputData.hpp"
-
-#include "listeners.hpp"
-#include "simulator_api.hpp"
 #include "ListOfObservers.hpp"
+#include "utilities_for_InputData.hpp"
+#include "listeners.hpp"
 #include "parse_output.hpp"
+#include "simulator_api.hpp"
 
-#include <ssc/solver.hpp>
 #include <ssc/check_ssc_version.hpp>
-#include <string>
-#include <fstream>
-#include <utility>
+#include <ssc/text_file_reader.hpp>
+#include <ssc/solver.hpp>
 
 CHECK_SSC_VERSION(0xabbcb1fc3028e755)
 
