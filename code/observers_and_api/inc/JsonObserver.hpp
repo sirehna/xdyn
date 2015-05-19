@@ -1,13 +1,12 @@
 #ifndef JSONOBSERVER_HPP_
 #define JSONOBSERVER_HPP_
 
+#include <map>
+#include <string>
 #include <ostream>
-#include <fstream>
 
 #include "Observer.hpp"
 
-#include <map>
-#include <string>
 typedef std::map<std::string, std::map<std::string, double> > JsonMap;
 
 class JsonObserver : public Observer

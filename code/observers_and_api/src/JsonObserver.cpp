@@ -1,7 +1,8 @@
+#include <fstream>
 #include <iostream>
+#include <utility>
 #include "JsonObserver.hpp"
 
-#include <utility>
 typedef std::pair<std::string,std::string> JsonMapKeyVar;
 JsonMapKeyVar extractKeyVarFromString(const std::string& s);
 JsonMapKeyVar extractKeyVarFromString(const std::string& s)
