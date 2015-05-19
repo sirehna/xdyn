@@ -1,0 +1,7 @@
+.cproject
+.pydevproject
+.metadata
+.project
+.settings
+*.pyc
+*.pyo
