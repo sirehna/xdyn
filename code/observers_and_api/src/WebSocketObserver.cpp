@@ -1,5 +1,6 @@
-#include "WebSocketObserver.hpp"
 #include <ssc/websocket.hpp>
+#include "base91.hpp"
+#include "WebSocketObserver.hpp"
 
 WebSocketObserver::WebSocketObserver(const std::string& address, const short unsigned int port, const std::vector<std::string>& data):
 Observer(data),socket(new ssc::websocket::Client(address, port)), ss()
@@ -25,6 +26,22 @@ std::function<void()> WebSocketObserver::get_serializer(const double val, const 
 std::function<void()> WebSocketObserver::get_initializer(const double, const DataAddressing& )
 {
     return [](){};
+}
+
+std::function<void()> WebSocketObserver::get_serializer(const SurfaceElevationGrid& s, const DataAddressing&)
+{
+    return [this,s](){
+        const size_t n = s.z.size();
+        std::vector<float> v(n,0.0);
+        double const * const data = s.z.data();
+        for (size_t i=0;i<n;++i) v[i] = (float)data[i];
+        ss<<"waves : {z:"<<base<91>::encode(sizeof(float)*n,data)<<"}";
+    };
+}
+
+std::function<void()> WebSocketObserver::get_initializer(const SurfaceElevationGrid&, const DataAddressing&)
+{
+    return [this](){};
 }
 
 void WebSocketObserver::flush_after_initialization()

@@ -35,6 +35,10 @@ class WebSocketObserver : public Observer
         using Observer::get_initializer;
         std::function<void()> get_serializer(const double val, const DataAddressing&);
         std::function<void()> get_initializer(const double, const DataAddressing& address);
+
+        std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address);
+        std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address);
+
         std::stringstream ss;
 };
 
