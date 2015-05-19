@@ -1,0 +1,6 @@
+.cproject
+.metadata
+.project
+.settings
+*.pyc
+*.pyo
