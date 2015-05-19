@@ -1,6 +1,7 @@
-# Base91 encode/decode
+# Base91 encode/decode for Python 2 and Python 3
 #
 # Copyright (c) 2012 Adrien Beraud
+# Copyright (c) 2015 Guillaume Jacquenot
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -64,14 +65,14 @@ def decode(encoded_str):
     if v+1:
         out += struct.pack('B', (b | v << n) & 255 )
     return out
-    
+
 def encode(bindata):
     ''' Encode a bytearray to a Base91 string '''
-    l = len(bindata)
     b = 0
     n = 0
     out = ''
-    for byte in bindata:
+    for count in range(len(bindata)):
+        byte = bindata[count:count+1]
         b |= struct.unpack('B', byte)[0] << n
         n += 8
         if n>13:
@@ -83,15 +84,10 @@ def encode(bindata):
                 v = b & 16383
                 b >>= 14
                 n -= 14
-            out += base91_alphabet[v % 91] + base91_alphabet[v / 91]
+            out += base91_alphabet[v % 91] + base91_alphabet[v // 91]
     if n:
         out += base91_alphabet[b % 91]
         if n>7 or b>90:
-            out += base91_alphabet[b / 91]
+            out += base91_alphabet[b // 91]
     return out
-
-
-
-
-
 
