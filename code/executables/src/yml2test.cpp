@@ -6,10 +6,8 @@
  */
 
 #include <fstream>
-#include <iomanip>
 #include <iostream>
 #include <string>
-
 
 void remove_carriage_return(std::string& line);
 void remove_carriage_return(std::string& line)
@@ -62,6 +60,5 @@ int main(int argc, char** argv)
               << "}" << std::endl;
     return 0;
 }
-
 
 
