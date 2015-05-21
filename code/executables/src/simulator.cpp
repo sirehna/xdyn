@@ -18,17 +18,23 @@
 
 CHECK_SSC_VERSION(0x95e96c28e3b2eedd)
 
+YamlOutput createAWaveObserver(const InputData& input_data);
+YamlOutput createAWaveObserver(const InputData& input_data)
+{
+    YamlOutput o;
+    o.data = {"waves"};
+    o.filename = input_data.wave_output;
+    o.format = get_format(input_data.wave_output);
+    return o;
+}
+
 ListOfObservers get_observers(const std::string& yaml, const InputData& input_data);
 ListOfObservers get_observers(const std::string& yaml, const InputData& input_data)
 {
     auto out = parse_output(yaml);
     if (not(input_data.wave_output.empty()))
     {
-        YamlOutput o;
-        o.data = {"waves"};
-        o.filename = input_data.wave_output;
-        o.format = get_format(input_data.wave_output);
-        out.push_back(o);
+        out.push_back(createAWaveObserver(input_data));
     }
     out.push_back(generate_default_outputter_with_all_states_in_it(yaml, input_data.output_filename));
     return ListOfObservers(out);
