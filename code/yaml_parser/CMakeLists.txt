@@ -14,16 +14,15 @@ set(SRC src/SimulatorYamlParser.cpp
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
 if(NOT(MSVC))
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 endif()
 
 include_directories(inc)
-INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+include_directories(${ssc_INCLUDE_DIRS})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
-include_directories(${external_data_structures_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+include_directories(${external_data_structures_INCLUDE_DIRS})
 include_directories(${environment_models_INCLUDE_DIRS})
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
