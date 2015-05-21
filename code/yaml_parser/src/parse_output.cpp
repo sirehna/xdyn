@@ -5,7 +5,9 @@
  *      Author: cady
  */
 
+#include <boost/algorithm/string/predicate.hpp>
 #include "yaml.h"
+#include "parse_address.hpp"
 #include "parse_output.hpp"
 
 void operator >> (const YAML::Node& node, YamlOutput& f);
@@ -120,6 +122,11 @@ YamlOutput build_YamlOutput_from_filename(const std::string& filename)
     {
         out.format = "json";
         out.filename = "";
+    }
+    else if (boost::algorithm::starts_with(filename,"ws") or
+             boost::algorithm::starts_with(filename,"wss"))
+    {
+        out = build_YamlOutput_from_WS_URL(filename);
     }
     else
     {

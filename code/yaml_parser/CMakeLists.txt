@@ -7,6 +7,7 @@ set(SRC src/SimulatorYamlParser.cpp
         src/external_data_structures_parsers.cpp
         src/parse_commands.cpp
         src/parse_output.cpp
+        src/parse_address.cpp
         )
 
 # Using C++ 2011
