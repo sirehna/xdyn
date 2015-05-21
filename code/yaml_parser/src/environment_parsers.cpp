@@ -7,8 +7,6 @@
 
 #include <sstream>
 
-#include <boost/foreach.hpp>
-
 #include "environment_parsers.hpp"
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
