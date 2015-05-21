@@ -55,13 +55,13 @@ YamlOutput build_YamlOutput_from_WS_URL(const std::string& url)
         const std::string protocol(what[1].first, what[1].second);
         const std::string domain(what[2].first, what[2].second);
         const std::string portAsString(what[3].first, what[3].second);
-        out.format = protocol;
-        if (out.format!="ws")
+        if (protocol!="ws")
         {
             std::stringstream ss;
             ss << "Only 'ws' is valid. wss is not implemented yet";
             THROW(__PRETTY_FUNCTION__, ParseAddressException, ss.str());
         }
+        out.format = "ws";
         out.address = protocol+"://"+domain;
         const int portAsInt = std::atoi(portAsString.c_str());
         if ( portAsInt <= 0 || portAsInt > 65535 )
