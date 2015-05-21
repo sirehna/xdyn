@@ -5,6 +5,7 @@ FILE(GLOB SRC src/SimulatorYamlParserTest.cpp
               src/environment_parsersTest.cpp
               src/parse_commandsTest.cpp
               src/parse_outputTest.cpp
+              src/parse_addressTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
