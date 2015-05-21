@@ -20,7 +20,7 @@ TEST_F(parse_addressTest, can_create_YamlOuput_from_websocket_url_1)
 {
     YamlOutput out = build_YamlOutput_from_WS_URL("ws://localhost:210");
     ASSERT_EQ("ws",out.format);
-    ASSERT_EQ("localhost",out.address);
+    ASSERT_EQ("ws://localhost",out.address);
     ASSERT_EQ(210,out.port);
     ASSERT_EQ("",out.filename);
     ASSERT_EQ(std::vector<std::string>(),out.data);
@@ -30,7 +30,7 @@ TEST_F(parse_addressTest, can_create_YamlOuput_from_websocket_url_2)
 {
     YamlOutput out = build_YamlOutput_from_WS_URL("ws://130.66.124.6:210");
     ASSERT_EQ("ws",out.format);
-    ASSERT_EQ("130.66.124.6",out.address);
+    ASSERT_EQ("ws://130.66.124.6",out.address);
     ASSERT_EQ(210,out.port);
     ASSERT_EQ("",out.filename);
     ASSERT_EQ(std::vector<std::string>(),out.data);
@@ -40,7 +40,7 @@ TEST_F(parse_addressTest, can_create_YamlOuput_from_websocket_url_3)
 {
     YamlOutput out = build_YamlOutput_from_WS_URL("ws://www.google.com:443/webhp?gws_rd=ssl#q=cpp");
     ASSERT_EQ("ws",out.format);
-    ASSERT_EQ("www.google.com",out.address);
+    ASSERT_EQ("ws://www.google.com",out.address);
     ASSERT_EQ(443,out.port);
     ASSERT_EQ("",out.filename);
     ASSERT_EQ(std::vector<std::string>(),out.data);
