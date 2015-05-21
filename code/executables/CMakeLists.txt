@@ -65,15 +65,10 @@ csv_file_reader_shared)
 
 ADD_EXECUTABLE(yml2test src/yml2test.cpp)
 
-ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp 
-        $<TARGET_OBJECTS:yaml_parser>
-        $<TARGET_OBJECTS:external_data_structures>)
-TARGET_LINK_LIBRARIES(quat2eul yaml_parser_shared
-                               decode_unit_shared
-                               exception_handling_shared
+ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp)
+TARGET_LINK_LIBRARIES(quat2eul exception_handling_shared
                                kinematics_shared
                                )
-
 
 ADD_EXECUTABLE(convert_stl_files_to_code ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp)
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code
