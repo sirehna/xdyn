@@ -10,7 +10,7 @@
 
 #include <string>
 #include <vector>
-#include <ssc/macros.hpp>
+
 struct InputData
 {
     InputData();
