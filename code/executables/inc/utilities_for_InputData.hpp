@@ -8,10 +8,8 @@
 #ifndef UTILITIES_FOR_INPUTDATA_HPP_
 #define UTILITIES_FOR_INPUTDATA_HPP_
 
+#include <string>
 #include <fstream> // std::cout
-
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
 
 struct InputData;
 #include "boost/program_options.hpp"
