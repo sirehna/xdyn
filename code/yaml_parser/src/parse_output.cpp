@@ -95,6 +95,11 @@ std::string get_format(const std::string& filename)
 {
     const size_t n = filename.size();
     if (!n)                              return "tsv";
+    if (n<3)
+    {
+        std::cerr<<"Invalid file format. Expected extensions are h5,hdf5,csv,tsv,json"<<std::endl;
+        return "???";
+    }
     if (filename.substr(n-3,3)==".h5")   return "hdf5";
     if (filename.substr(n-5,5)==".hdf5") return "hdf5";
     if (filename.substr(n-4,4)==".csv")  return "csv";
