@@ -29,7 +29,7 @@ void operator >> (const YAML::Node& node, YamlOutput& f)
     node["data"]     >> f.data;
 }
 
-std::vector<YamlOutput> parse_output(const std::string yaml)
+std::vector<YamlOutput> parse_output(const std::string& yaml)
 {
     std::vector<YamlOutput> ret;
     std::stringstream stream(yaml);
@@ -136,7 +136,7 @@ YamlOutput build_YamlOutput_from_filename(const std::string& filename)
     return out;
 }
 
-YamlOutput generate_default_outputter_with_all_states_in_it(const std::string yaml, const std::string& filename)
+YamlOutput generate_default_outputter_with_all_states_in_it(const std::string& yaml, const std::string& filename)
 {
     auto out = build_YamlOutput_from_filename(filename);
     out.data.push_back("t");
