@@ -2,8 +2,10 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(executables)
 
 # Using C++ 2011
-# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
-# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
+# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't
+# declare non-standard functions
+# (and _stricmp() is non-standard - it's just a version of strcmp() that's
+# case-insensitive).
 # Use -std=gnu++0x instead.
 IF(NOT(MSVC))
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
@@ -30,8 +32,14 @@ INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
 
-CONFIGURE_FILE(src/utilities_for_InputData.cpp "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
-CONFIGURE_FILE(src/convert_stl_files_to_code.cpp "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
+CONFIGURE_FILE(
+        src/utilities_for_InputData.cpp
+        "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
+
+CONFIGURE_FILE(
+        src/convert_stl_files_to_code.cpp
+        "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
+
 ADD_EXECUTABLE(sim
         ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
         src/utilities_for_simulator.cpp
@@ -40,11 +48,14 @@ ADD_EXECUTABLE(sim
         src/simulator.cpp
         )
 
-TARGET_LINK_LIBRARIES(sim simulatorIrtJv)
-TARGET_LINK_LIBRARIES(sim ${Boost_PROGRAM_OPTIONS_LIBRARY})
-TARGET_LINK_LIBRARIES(sim boost_program_options_descriptions_static)
+TARGET_LINK_LIBRARIES(sim
+        simulatorIrtJv
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+        boost_program_options_descriptions_static
+        )
 
-ADD_EXECUTABLE(test_hs src/test_hs.cpp
+ADD_EXECUTABLE(test_hs
+        src/test_hs.cpp
         $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:parser_extensions>
@@ -60,8 +71,10 @@ TARGET_LINK_LIBRARIES(test_hs
         binary_stl_data_static
         )
 
-TARGET_LINK_LIBRARIES(test_hs yaml-cpp
-        gfortran)
+TARGET_LINK_LIBRARIES(test_hs
+        yaml-cpp
+        gfortran
+        )
 
 TARGET_LINK_LIBRARIES(test_hs
         numeric_shared
@@ -76,6 +89,7 @@ TARGET_LINK_LIBRARIES(test_hs
 ADD_EXECUTABLE(yml2test src/yml2test.cpp)
 
 ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp)
+
 TARGET_LINK_LIBRARIES(quat2eul
         exception_handling_shared
         kinematics_shared
@@ -127,33 +141,37 @@ INSTALL(TARGETS convert_stl_files_to_code
 FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
 
 IF(WIN32)
-    ADD_CUSTOM_COMMAND(TARGET generate_yaml_example
-                       POST_BUILD
-                       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
-                       COMMAND generate_yaml_example demos
-                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                       DEPENDS simulatorIrtJv
-                       COMMENT "Generate YAML simulation input data files")
-    ADD_CUSTOM_COMMAND(TARGET generate_stl_examples
-                       POST_BUILD
-                       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
-                       COMMAND generate_stl_examples demos
-                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                       DEPENDS simulatorIrtJv
-                       COMMENT "Generate STL mesh input data files")
+    ADD_CUSTOM_COMMAND(
+            TARGET generate_yaml_example
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
+            COMMAND generate_yaml_example demos
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS simulatorIrtJv
+            COMMENT "Generate YAML simulation input data files")
+    ADD_CUSTOM_COMMAND(
+            TARGET generate_stl_examples
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
+            COMMAND generate_stl_examples demos
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS simulatorIrtJv
+            COMMENT "Generate STL mesh input data files")
 ELSE()
-    ADD_CUSTOM_COMMAND(TARGET generate_yaml_example
-                       POST_BUILD
-                       COMMAND generate_yaml_example demos
-                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                       DEPENDS simulatorIrtJv
-                       COMMENT "Generate YAML simulation input data files")
-    ADD_CUSTOM_COMMAND(TARGET generate_stl_examples
-                       POST_BUILD
-                       COMMAND generate_stl_examples demos
-                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                       DEPENDS simulatorIrtJv
-                       COMMENT "Generate STL mesh input data files")
+    ADD_CUSTOM_COMMAND(
+            TARGET generate_yaml_example
+            POST_BUILD
+            COMMAND generate_yaml_example demos
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS simulatorIrtJv
+            COMMENT "Generate YAML simulation input data files")
+    ADD_CUSTOM_COMMAND(
+            TARGET generate_stl_examples
+            POST_BUILD
+            COMMAND generate_stl_examples demos
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            DEPENDS simulatorIrtJv
+            COMMENT "Generate STL mesh input data files")
 ENDIF()
 
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/plot.py
