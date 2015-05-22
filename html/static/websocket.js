@@ -1,5 +1,4 @@
 
-
 $(function() {
     data = [];
     name = "cube";
@@ -17,15 +16,48 @@ $(function() {
     var plot = $.plot($("#placeholder"), [ data ], { yaxis: { max: 1 }});
     latest_t = 0;
 
+    function change_state(svg, state)
+    {
+       svg.select("#bottom-pin").attr("class", state);
+       svg.select("#left-chord").attr("class", state);
+       svg.select("#top-pin").attr("class", state);
+       svg.select("#left-connector").attr("class", state);
+       svg.select("#right-connector").attr("class", state);
+       svg.select("#right-chord").attr("class", state);
+
+       // Translate
+       var offset = 0;
+       if (state == "connected")
+       {
+        offset = 10;
+       }
+       svg.select("#right-connector").transform("t-"+offset+", 0");
+       svg.select("#left-connector").transform("t"+offset+", 0");
+       svg.select("#bottom-pin").transform("t"+offset+", 0");
+       svg.select("#top-pin").transform("t"+offset+", 0");
+       svg.select("#left-chord").transform("t"+offset+", 0");
+       svg.select("#right-chord").transform("t-"+offset+", 0");
+    }
+
+    function set_plug_state(state)
+    {
+        var s = Snap('#plug');
+        change_state(s, state);
+    }
+
+
+
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     //var websocket = new WebSocket('ws://127.0.0.1:9002');
-    //var websocket = new WebSocket('ws://130.66.124.225:9002');
-    var websocket = new WebSocket('ws://localhost:9002');
+    var websocket = new WebSocket('ws://130.66.124.225:9003');
+    //var websocket = new WebSocket('ws://localhost:9002');
     websocket.onopen = function () {
         $('h1').css('color', 'green');
+        set_plug_state("connected");
     };
     websocket.onerror = function () {
         $('h1').css('color', 'red');
+        set_plug_state("disconnected");
     };
     websocket.onmessage = function (message) {
            var parsed_message = jsyaml.load(message.data);
