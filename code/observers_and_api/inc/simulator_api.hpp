@@ -4,7 +4,6 @@
 #include <map>
 #include <string>
 
-#include "GeometricTypes3d.hpp"
 #include "Sim.hpp"
 #include "SimulatorBuilder.hpp"
 #include "SimObserver.hpp"
