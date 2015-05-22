@@ -1,4 +1,3 @@
-
 $(function() {
     data = [];
     name = "cube";
@@ -45,12 +44,9 @@ $(function() {
         change_state(s, state);
     }
 
-
-
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    //var websocket = new WebSocket('ws://127.0.0.1:9002');
-    var websocket = new WebSocket('ws://130.66.124.225:9003');
-    //var websocket = new WebSocket('ws://localhost:9002');
+    //var websocket = new WebSocket('ws://130.66.124.225:9003');
+    var websocket = new WebSocket('ws://localhost:9002');
     websocket.onopen = function () {
         $('h1').css('color', 'green');
         set_plug_state("connected");
@@ -60,23 +56,27 @@ $(function() {
         set_plug_state("disconnected");
     };
     websocket.onmessage = function (message) {
-           var parsed_message = jsyaml.load(message.data);
+            var parsed_message = jsyaml.load(message.data);
             t = parsed_message['t'];
             x = parsed_message['x(' + name + ')']
             y = parsed_message['y(' + name + ')']
             z = parsed_message['z(' + name + ')']
-           if (typeof t != 'undefined')
-           {
-                if (t<latest_t)
-                {
-                    data = [];
-                }
-                console.log("z = " + z);
-                plot.setData([append(t,z)]);
-                plot.setupGrid();
-                plot.draw();
-                latest_t = t;
-           }
+            if (typeof t != 'undefined')
+            {
+                    if (t<latest_t)
+                    {
+                        data = [];
+                    }
+                    console.log("z = " + z);
+                    plot.setData([append(t,z)]);
+                    plot.setupGrid();
+                    plot.draw();
+                    latest_t = t;
+            }
+            if (parsed_message.hasOwnProperty('waves'))
+            {
+                waves = parsed_message['waves'];
+                console.log(base91Float32.decode(waves['z']));
+            }
     };
-            });
-
+});
