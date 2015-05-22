@@ -28,6 +28,14 @@ std::function<void()> WebSocketObserver::get_initializer(const double, const Dat
     return [](){};
 }
 
+/**
+ * \brief generate a yaml string with data encoded in base91
+ * \code
+   import yaml
+   message = "waves: {z: \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~\"}"
+   yaml.load(message)
+   \encode
+ */
 std::function<void()> WebSocketObserver::get_serializer(const SurfaceElevationGrid& s, const DataAddressing&)
 {
     return [this,s](){
