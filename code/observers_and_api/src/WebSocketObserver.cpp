@@ -19,7 +19,7 @@ std::function<void()> WebSocketObserver::get_serializer(const double val, const 
 {
     return [this,val,da]()
            {
-              ss << da.name << ": " << val;
+                ss << da.name << ": " << val;
            };
 }
 
@@ -35,7 +35,7 @@ std::function<void()> WebSocketObserver::get_serializer(const SurfaceElevationGr
         std::vector<float> v(n,0.0);
         double const * const data = s.z.data();
         for (size_t i=0;i<n;++i) v[i] = (float)data[i];
-        ss<<"waves : {z:"<<base<91>::encode(sizeof(float)*n,data)<<"}";
+        ss<<"waves: {z: '"<<base<91>::encode(sizeof(float)*n,&v[0])<<"'}";
     };
 }
 
