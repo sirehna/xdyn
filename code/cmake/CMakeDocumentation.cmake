@@ -1,6 +1,7 @@
 # Add a target to generate API documentation with Doxygen
 FIND_PACKAGE(Doxygen)
 FIND_PACKAGE(Pandoc)
+FIND_PACKAGE(XmlTransform)
 
 MESSAGE(STATUS "PANDOC : ${PANDOC}")
 IF(PANDOC)
@@ -22,7 +23,6 @@ IF(DOXYGEN_FOUND)
     )
 
     IF(WIN32)
-        FIND_PACKAGE(XmlTransform)
         IF(XMLTRANSFORM_FOUND)
             ADD_CUSTOM_TARGET(functionalities
                 COMMAND ${XMLTRANSFORM_EXECUTABLE} -s:test_output.xml -xsl:${CMAKE_CURRENT_SOURCE_DIR}/get_specifications.xml -o:list_of_functionalities.html
