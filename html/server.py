@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf8 -*-
 
 import os
 import sys
@@ -7,6 +6,9 @@ import tornado.web
 import tornado.websocket
 import tornado.ioloop
 import webbrowser
+
+if sys.version_info.major<3:
+    sys.exit("Python server should be run with Python 3")
 
 def get_ip():
     import socket
@@ -104,7 +106,6 @@ class SimulatorGUI:
 
 if __name__ == "__main__":
     import argparse
-    import sys
     from os.path import basename
     progName = basename(sys.argv[0])
     parser = argparse.ArgumentParser(\
@@ -115,8 +116,6 @@ if __name__ == "__main__":
     parser.add_argument("-p","--port", \
         help = "Port à ouvrir. Par exemple 9002", default = 9002)
     args = parser.parse_args()
-    #gui = SimulatorGUI("http://127.0.0.1", 9002)
     print('Connecting to ' + args.address)
     gui = SimulatorGUI(address = args.address, port = args.port)
     gui.run()
-
