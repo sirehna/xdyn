@@ -111,11 +111,9 @@ if __name__ == "__main__":
         prog = progName, \
         description = u"Server creation.\n")
     parser.add_argument("-a","--address", \
-        help = "Nom du fichier modele utilise en entree contenant la description "\
-            "du sous-marin. Par exemple 'sousmarin.mod'", default = 'http://'+get_ip())
+        help = "IP. Par exemple localhost", default = 'http://'+get_ip())
     parser.add_argument("-p","--port", \
-        help = "Nom du fichier modele utilise en entree contenant la description "\
-            "du sous-marin. Par exemple 'sousmarin.mod'", default = 9002)
+        help = "Port à ouvrir. Par exemple 9002", default = 9002)
     args = parser.parse_args()
     #gui = SimulatorGUI("http://127.0.0.1", 9002)
     print('Connecting to ' + args.address)
