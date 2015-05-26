@@ -56,6 +56,8 @@ $(function() {
         set_plug_state("disconnected");
     };
     websocket.onmessage = function (message) {
+        try
+        {
             var parsed_message = jsyaml.load(message.data);
             t = parsed_message['t'];
             x = parsed_message['x(' + name + ')']
@@ -78,5 +80,11 @@ $(function() {
                 waves = parsed_message['waves'];
                 console.log(base91Float32.decode(waves['z']));
             }
+        }
+        catch(err)
+        {
+            console.log(err.message)
+            console.log('Can not parse ' + message.data)
+        }
     };
 });
