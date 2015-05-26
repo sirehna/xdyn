@@ -2,7 +2,7 @@ var colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50,
                0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF,
                0xEFEFEF, 0x303030 ];
 
-Car = function () {
+Mobile = function () {
 
 	var scope = this;
 
@@ -72,7 +72,7 @@ Car = function () {
 	function createBody ( geometry, materials )
 	{
 		createMembers ( geometry, materials );
-		createCar();
+		createMobile();
 	}
 
 	function createMembers ( geometry, materials )
@@ -89,7 +89,7 @@ Car = function () {
 		}
 	}
 
-	function createCar ()
+	function createMobile()
 	{
 		if ( scope.bodyGeometry )
 		{
