@@ -35,6 +35,10 @@ ADD_CUSTOM_COMMAND(
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../html
     COMMENT "Generate simulator server"
 )
+FILE(GLOB files "${CMAKE_CURRENT_BINARY_DIR}/python_server/*/*")
+FOREACH(f ${files})
+    INSTALL(FILES ${f} DESTINATION server)
+ENDFOREACH()
 
 ADD_CUSTOM_TARGET(
     md5sum
