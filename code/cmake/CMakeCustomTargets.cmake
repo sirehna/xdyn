@@ -27,6 +27,15 @@ ADD_CUSTOM_COMMAND(
     COMMENT "Checking the tutorials execute OK"
 )
 
+ADD_CUSTOM_TARGET(sim_server)
+ADD_CUSTOM_COMMAND(
+    TARGET sim_server
+    POST_BUILD
+    COMMAND python3 setup.py build -b ${CMAKE_CURRENT_BINARY_DIR}/python_server
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../html
+    COMMENT "Generate simulator server"
+)
+
 ADD_CUSTOM_TARGET(
     md5sum
     COMMAND find . -type f \\\( -name \"*.c\" -o -name \"*.h\" \\\) -print0 | xargs -0 md5sum > "${PROJECT_BINARY_DIR}/md5sum.txt"
