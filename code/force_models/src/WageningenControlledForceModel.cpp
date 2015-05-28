@@ -13,7 +13,7 @@
 
 #include "Body.hpp"
 #include "external_data_structures_parsers.hpp"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelException.hpp"
 
@@ -137,7 +137,7 @@ WageningenControlledForceModel::Yaml WageningenControlledForceModel::parse(const
     node["number of blades"]                 >> ret.number_of_blades;
     node["position of propeller frame"]      >> ret.position_of_propeller_frame;
     node["relative rotative efficiency etaR"]>> ret.relative_rotative_efficiency;
-    parse_uv(node["diameter"], ret.diameter);
+    ssc::yaml_parser::parse_uv(node["diameter"], ret.diameter);
     return ret;
 }
 

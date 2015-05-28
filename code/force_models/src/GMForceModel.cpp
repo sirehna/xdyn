@@ -8,7 +8,7 @@
 #include "calculate_gz.hpp"
 #include "GMForceModel.hpp"
 #include "yaml.h"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 #include "environment_parsers.hpp"
 #include "Body.hpp"
 #include "ExactHydrostaticForceModel.hpp"
@@ -61,7 +61,7 @@ GMForceModel::Yaml GMForceModel::parse(const std::string& yaml)
     parser.GetNextDocument(node);
     Yaml ret;
     node["name of hydrostatic force model"] >> ret.name_of_hydrostatic_force_model;
-    parse_uv(node["roll step"], ret.roll_step);
+    ssc::yaml_parser::parse_uv(node["roll step"], ret.roll_step);
     bool managed_to_parse = false;
     if (ret.name_of_hydrostatic_force_model == "hydrostatic")
     {

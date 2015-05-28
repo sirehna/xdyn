@@ -8,7 +8,7 @@
 #include <ssc/interpolation.hpp>
 
 #include "yaml.h"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 #include "environment_parsers.hpp"
 #include "Body.hpp"
 #include "ResistanceCurveForceModel.hpp"
@@ -51,8 +51,8 @@ ResistanceCurveForceModel::Yaml ResistanceCurveForceModel::parse(const std::stri
     YAML::Node node;
     parser.GetNextDocument(node);
     Yaml ret;
-    parse_uv(node["speed"], ret.Va);
-    parse_uv(node["resistance"], ret.R);
+    ssc::yaml_parser::parse_uv(node["speed"], ret.Va);
+    ssc::yaml_parser::parse_uv(node["resistance"], ret.R);
     return ret;
 }
 

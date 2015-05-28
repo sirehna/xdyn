@@ -6,7 +6,7 @@
  */
 
 #include "parse_commands.hpp"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 #include "yaml.h"
 
 void operator >> (const YAML::Node& node, YamlCommands& c);
@@ -21,7 +21,7 @@ void operator >> (const YAML::Node& node, YamlCommands& c)
         if ((key != "name") and (key != "t"))
         {
             std::vector<double> values;
-            parse_uv(node[key], values);
+            ssc::yaml_parser::parse_uv(node[key], values);
             c.commands[key] = values;
         }
     }

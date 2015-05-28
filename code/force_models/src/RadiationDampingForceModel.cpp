@@ -25,7 +25,7 @@
 
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 
 const std::string RadiationDampingForceModel::model_name = "radiation damping";
 
@@ -218,10 +218,10 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     node["type of quadrature for convolution"] >> s;
     input.type_of_quadrature_for_convolution = parse_type_of_quadrature_(s);
     node["nb of points for retardation function discretization"] >> input.nb_of_points_for_retardation_function_discretization;
-    parse_uv(node["omega min"], input.omega_min);
-    parse_uv(node["omega max"], input.omega_max);
-    parse_uv(node["tau min"], input.tau_min);
-    parse_uv(node["tau max"], input.tau_max);
+    ssc::yaml_parser::parse_uv(node["omega min"], input.omega_min);
+    ssc::yaml_parser::parse_uv(node["omega max"], input.omega_max);
+    ssc::yaml_parser::parse_uv(node["tau min"], input.tau_min);
+    ssc::yaml_parser::parse_uv(node["tau max"], input.tau_max);
     node["output Br and K"] >> input.output_Br_and_K;
     node["calculation point in body frame"] >> input.calculation_point_in_body_frame;
     if (parse_hdb)

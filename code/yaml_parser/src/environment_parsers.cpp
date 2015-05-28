@@ -11,7 +11,7 @@
 
 #include "environment_parsers.hpp"
 #include "yaml.h"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 #include "SimulatorYamlParserException.hpp"
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g);
@@ -27,7 +27,7 @@ YamlDefaultWaveModel parse_default_wave_model(const std::string& yaml)
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    parse_uv(node["constant sea elevation in NED frame"], ret.zwave);
+    ssc::yaml_parser::parse_uv(node["constant sea elevation in NED frame"], ret.zwave);
     try
     {
         node["output"]         >> ret.output;
@@ -82,8 +82,8 @@ YamlWaveModel parse_waves(const std::string& yaml)
 void operator >> (const YAML::Node& node, YamlDiscretization& g)
 {
     node["n"] >> g.n;
-    parse_uv(node["omega min"], g.omega_min);
-    parse_uv(node["omega max"], g.omega_max);
+    ssc::yaml_parser::parse_uv(node["omega min"], g.omega_min);
+    ssc::yaml_parser::parse_uv(node["omega max"], g.omega_max);
     node["energy fraction"] >> g.energy_fraction;
 }
 
@@ -106,17 +106,17 @@ void operator >> (const YAML::Node& node, YamlSpectra& g)
     node["spectral density"]["type"] >> g.spectral_density_type;
     get_yaml(node["spectral density"], g.spectral_density_yaml);
 
-    parse_uv(node["depth"], g.depth);
+    ssc::yaml_parser::parse_uv(node["depth"], g.depth);
 }
 
 void operator >> (const YAML::Node& node, YamlWaveOutput& g)
 {
     node["frame of reference"] >> g.frame_of_reference;
-    parse_uv(node["mesh"]["xmin"], g.xmin);
-    parse_uv(node["mesh"]["xmax"], g.xmax);
+    ssc::yaml_parser::parse_uv(node["mesh"]["xmin"], g.xmin);
+    ssc::yaml_parser::parse_uv(node["mesh"]["xmax"], g.xmax);
     node["mesh"]["nx"]                    >> g.nx;
-    parse_uv(node["mesh"]["ymin"], g.ymin);
-    parse_uv(node["mesh"]["ymax"], g.ymax);
+    ssc::yaml_parser::parse_uv(node["mesh"]["ymin"], g.ymin);
+    ssc::yaml_parser::parse_uv(node["mesh"]["ymax"], g.ymax);
     node["mesh"]["ny"]                    >> g.ny;
 }
 
@@ -130,7 +130,7 @@ YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["waves propagating to"], ret.psi0);
+        ssc::yaml_parser::parse_uv(node["waves propagating to"], ret.psi0);
     }
     catch(std::exception& e)
     {
@@ -150,8 +150,8 @@ YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["Hs"], ret.Hs);
-        parse_uv(node["omega0"], ret.omega0);
+        ssc::yaml_parser::parse_uv(node["Hs"], ret.Hs);
+        ssc::yaml_parser::parse_uv(node["omega0"], ret.omega0);
     }
     catch(std::exception& e)
     {
@@ -171,8 +171,8 @@ YamlJonswap          parse_jonswap(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["Hs"], ret.Hs);
-        parse_uv(node["Tp"], ret.Tp);
+        ssc::yaml_parser::parse_uv(node["Hs"], ret.Hs);
+        ssc::yaml_parser::parse_uv(node["Tp"], ret.Tp);
         node["gamma"] >> ret.gamma;
     }
     catch(std::exception& e)
@@ -193,8 +193,8 @@ YamlPiersonMoskowitz parse_pierson_moskowitz(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["Hs"], ret.Hs);
-        parse_uv(node["Tp"], ret.Tp);
+        ssc::yaml_parser::parse_uv(node["Hs"], ret.Hs);
+        ssc::yaml_parser::parse_uv(node["Tp"], ret.Tp);
     }
     catch(std::exception& e)
     {
@@ -214,8 +214,8 @@ YamlBretschneider    parse_bretschneider(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["Hs"], ret.Hs);
-        parse_uv(node["Tp"], ret.Tp);
+        ssc::yaml_parser::parse_uv(node["Hs"], ret.Hs);
+        ssc::yaml_parser::parse_uv(node["Tp"], ret.Tp);
     }
     catch(std::exception& e)
     {
@@ -235,7 +235,7 @@ YamlCos2s            parse_cos2s(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        parse_uv(node["waves propagating to"], ret.psi0);
+        ssc::yaml_parser::parse_uv(node["waves propagating to"], ret.psi0);
         node["s"] >> ret.s;
     }
     catch(std::exception& e)

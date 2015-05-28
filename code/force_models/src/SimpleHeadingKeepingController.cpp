@@ -13,7 +13,7 @@
 
 #include "BodyStates.hpp"
 #include "external_data_structures_parsers.hpp"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 #include "SimpleHeadingKeepingController.hpp"
 
 const std::string SimpleHeadingKeepingController::model_name = "simple heading controller";
@@ -31,7 +31,7 @@ SimpleHeadingKeepingController::Yaml SimpleHeadingKeepingController::parse(const
     Yaml ret;
     node["name"] >> ret.name;
     node["ksi"] >> ret.ksi;
-    parse_uv(node["Tp"], ret.Tp);
+    ::ssc::yaml_parser::parse_uv(node["Tp"], ret.Tp);
     return ret;
 }
 

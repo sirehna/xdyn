@@ -10,7 +10,7 @@
 #define PI M_PI
 
 #include "external_data_structures_parsers.hpp"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 #include "RudderForceModel.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "yaml2eigen.hpp"
@@ -250,8 +250,8 @@ RudderForceModel::Yaml RudderForceModel::parse(const std::string& yaml)
     parser.GetNextDocument(node);
     Yaml ret(WageningenControlledForceModel::parse(yaml));
 
-    parse_uv(node["rudder area"], ret.Ar);
-    parse_uv(node["rudder height"], ret.b);
+    ssc::yaml_parser::parse_uv(node["rudder area"], ret.Ar);
+    ssc::yaml_parser::parse_uv(node["rudder height"], ret.b);
     node["effective aspect ratio factor"]    >> ret.effective_aspect_ratio_factor;
     node["lift tuning coefficient"]          >> ret.lift_coeff;
     node["drag tuning coefficient"]          >> ret.drag_coeff;

@@ -16,7 +16,7 @@
 #include <ssc/text_file_reader.hpp>
 #include <ssc/solver.hpp>
 
-CHECK_SSC_VERSION(0xabbcb1fc3028e755)
+CHECK_SSC_VERSION(0x95e96c28e3b2eedd)
 
 ListOfObservers get_observers(const std::string& yaml, const InputData& input_data);
 ListOfObservers get_observers(const std::string& yaml, const InputData& input_data)

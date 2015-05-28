@@ -11,7 +11,7 @@
 
 #include "BodyStates.hpp"
 #include "external_data_structures_parsers.hpp"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -39,11 +39,11 @@ SimpleStationKeepingController::Yaml SimpleStationKeepingController::parse(const
     Yaml ret;
     node["name"] >> ret.name;
     node["ksi_x"] >> ret.ksi_x;
-    parse_uv(node["T_x"], ret.T_x);
+    ssc::yaml_parser::parse_uv(node["T_x"], ret.T_x);
     node["ksi_y"] >> ret.ksi_y;
-    parse_uv(node["T_y"], ret.T_y);
+    ssc::yaml_parser::parse_uv(node["T_y"], ret.T_y);
     node["ksi_psi"] >> ret.ksi_psi;
-    parse_uv(node["T_psi"], ret.T_psi);
+    ssc::yaml_parser::parse_uv(node["T_psi"], ret.T_psi);
     return ret;
 }
 

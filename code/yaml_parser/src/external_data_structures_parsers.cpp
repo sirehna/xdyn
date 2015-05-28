@@ -8,7 +8,7 @@
 #include "external_data_structures_parsers.hpp"
 #include "yaml.h"
 #include "SimulatorYamlParserException.hpp"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 
 template <typename T> void try_to_parse(const YAML::Node& node, const std::string& key, T& value)
 {
@@ -110,33 +110,33 @@ void operator >> (const YAML::Node& node, YamlPosition& p)
 
 void operator >> (const YAML::Node& node, YamlAngle& a)
 {
-    parse_uv(node["phi"], a.phi);
-    parse_uv(node["theta"], a.theta);
-    parse_uv(node["psi"], a.psi);
+    ssc::yaml_parser::parse_uv(node["phi"], a.phi);
+    ssc::yaml_parser::parse_uv(node["theta"], a.theta);
+    ssc::yaml_parser::parse_uv(node["psi"], a.psi);
 }
 
 void operator >> (const YAML::Node& node, YamlCoordinates& c)
 {
-    parse_uv(node["x"], c.x);
-    parse_uv(node["y"], c.y);
-    parse_uv(node["z"], c.z);
+    ssc::yaml_parser::parse_uv(node["x"], c.x);
+    ssc::yaml_parser::parse_uv(node["y"], c.y);
+    ssc::yaml_parser::parse_uv(node["z"], c.z);
 }
 
 void operator >> (const YAML::Node& node, YamlSpeed& s)
 {
     node["frame"] >> s.frame;
-    parse_uv(node["u"], s.u);
-    parse_uv(node["v"], s.v);
-    parse_uv(node["w"], s.w);
-    parse_uv(node["p"], s.p);
-    parse_uv(node["q"], s.q);
-    parse_uv(node["r"], s.r);
+    ssc::yaml_parser::parse_uv(node["u"], s.u);
+    ssc::yaml_parser::parse_uv(node["v"], s.v);
+    ssc::yaml_parser::parse_uv(node["w"], s.w);
+    ssc::yaml_parser::parse_uv(node["p"], s.p);
+    ssc::yaml_parser::parse_uv(node["q"], s.q);
+    ssc::yaml_parser::parse_uv(node["r"], s.r);
 }
 
 void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
-    parse_uv(node["mass"], d.mass);
+    ssc::yaml_parser::parse_uv(node["mass"], d.mass);
     node["rigid body inertia matrix at the center of buoyancy projected in the body frame"] >> d.rigid_body_inertia;
     node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
@@ -181,7 +181,7 @@ void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
 
 void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f)
 {
-    parse_uv(node["g"], f.g);
-    parse_uv(node["rho"], f.rho);
-    parse_uv(node["nu"], f.nu);
+    ssc::yaml_parser::parse_uv(node["g"], f.g);
+    ssc::yaml_parser::parse_uv(node["rho"], f.rho);
+    ssc::yaml_parser::parse_uv(node["nu"], f.nu);
 }

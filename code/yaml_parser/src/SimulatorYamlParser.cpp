@@ -8,7 +8,7 @@
 #include "SimulatorYamlParser.hpp"
 #include "yaml.h"
 #include "SimulatorYamlParserException.hpp"
-#include "parse_unit_value.hpp"
+#include <ssc/yaml_parser.hpp>
 #include "external_data_structures_parsers.hpp"
 
 SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
