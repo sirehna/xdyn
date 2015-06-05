@@ -7,7 +7,7 @@ import tornado.websocket
 import tornado.ioloop
 import webbrowser
 
-if sys.version_info.major<3:
+if sys.version_info.major < 3:
     sys.exit("Python server should be run with Python 3")
 
 def get_ip():
@@ -84,8 +84,8 @@ class SimulatorGUI:
             # unfrozen
             dir_ = os.path.dirname(__file__)
         handlers = [
-            (r"/"+suffix, MainHandler),
-            (r"/",        WebSocketHandler, dict(client_tracker=self.client_tracker)),
+            (r"/" + suffix, MainHandler),
+            (r"/", WebSocketHandler, dict(client_tracker = self.client_tracker)),
         ]
         settings = {
              "static_path": os.path.join(os.path.dirname(dir_), "static"),
@@ -95,12 +95,12 @@ class SimulatorGUI:
 
     def open_html_page_in_browser(self, url):
         # Open in a new tab, if possible
-        webbrowser.open(url,new=2)
+        webbrowser.open(url, new = 2)
 
     def run(self):
         self.application.listen(self.port)
         self.mainLoop = tornado.ioloop.IOLoop.instance()
-        #self.open_html_page_in_browser(self.url)
+        # self.open_html_page_in_browser(self.url)
         print("Initialized: now starting main server loop.")
         self.mainLoop.start()
 
@@ -110,12 +110,12 @@ if __name__ == "__main__":
     progName = basename(sys.argv[0])
     parser = argparse.ArgumentParser(\
         prog = progName, \
-        description = u"Server creation.\n")
-    parser.add_argument("-a","--address", \
-        help = "IP. Par exemple localhost", default = 'http://'+get_ip())
-    parser.add_argument("-p","--port", \
-        help = "Port à ouvrir. Par exemple 9002", default = 9002)
+        description = "Création du serveur\n")
+    parser.add_argument("-a", "--address", \
+        help = "IP. Par exemple localhost. Par défaut, l'IP locale est utilisée", \
+        default = 'http://' + get_ip())
+    parser.add_argument("-p", "--port", \
+        help = "Port à ouvrir. Le port par défaut est 9002", default = 9002)
     args = parser.parse_args()
-    print('Connecting to ' + args.address)
     gui = SimulatorGUI(address = args.address, port = args.port)
     gui.run()
