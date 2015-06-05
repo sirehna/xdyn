@@ -4,6 +4,14 @@ import argparse
 import sys
 import pandas as pd
 
+def _isString(inputData):
+    if sys.version_info.major == 2:
+        return isinstance(inputData, (str, unicode))
+    elif sys.version_info.major >= 3:
+        return type(inputData)==str
+    else:
+        raise Exception('Unrecognized Python version')
+
 def _addEulerAnglesToDataframe(R, output = '', toDegree = False):
     def getQuaternion(R, output = ''):
         q = R[['qr(' + output + ')', 'qi(' + output + ')', 'qj(' + output + ')', 'qk(' + output + ')']]
@@ -32,7 +40,7 @@ def addEulerAnglesToDataframe(input = '', output = '', names = '', toDegree = Tr
         R = pd.read_csv(sys.stdin)
     else:
         R = pd.read_csv(input)
-    if isinstance(names, (str, unicode)):
+    if _isString(names):
         names = [names]
     for n in names:
         R = _addEulerAnglesToDataframe(R, output = n, toDegree = toDegree)
