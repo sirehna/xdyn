@@ -18,7 +18,7 @@ FUNCTION(FIND_PYTHON_MODULE module)
 ENDFUNCTION(FIND_PYTHON_MODULE)
 ################################################################################
 
-FIND_PACKAGE(PythonInterp 3)
+FIND_PACKAGE(PythonInterp 3.4)
 IF(PYTHONINTERP_FOUND)
     FIND_PYTHON_MODULE(cx_Freeze)
     FIND_PYTHON_MODULE(tornado)
