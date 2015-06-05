@@ -27,8 +27,8 @@ ADD_CUSTOM_COMMAND(
     COMMENT "Checking the tutorials execute OK"
 )
 
+ADD_CUSTOM_TARGET(sim_server)
 IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
-    ADD_CUSTOM_TARGET(sim_server)
     ADD_CUSTOM_COMMAND(
         TARGET sim_server
         POST_BUILD
@@ -40,6 +40,12 @@ IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
     FOREACH(f ${files})
         INSTALL(FILES ${f} DESTINATION server)
     ENDFOREACH()
+ELSE()
+    ADD_CUSTOM_COMMAND(
+        TARGET sim_server
+        POST_BUILD
+        COMMENT "No simulator server will be built: platform does not meet requirements"
+    )
 ENDIF()
 
 ADD_CUSTOM_TARGET(
