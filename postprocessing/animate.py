@@ -153,7 +153,6 @@ def main(mobile, wave, resultDirectory = r'Results', \
     mobileSimulationCsvFiles = mobile['SimulationCsvFiles']
     mobileSimulationObjectNames = mobile['SimulationObjectNames']
 
-    wavePathPattern = wave['PathPattern']
     waveColor = wave['Color']
     waveFiles = wave['Files']
 
@@ -296,12 +295,12 @@ def main(mobile, wave, resultDirectory = r'Results', \
         Mobile_KF_Ry_Cue = [GetAnimationTrack('Rotation', 1, proxy = mobile_tr.Transform) for mobile_tr in Mobile_tr]
         Mobile_KF_Rz_Cue = [GetAnimationTrack('Rotation', 2, proxy = mobile_tr.Transform) for mobile_tr in Mobile_tr]
 
-        Mobile_KF_Tx = [[] for mobile_tr in Mobile_tr]
-        Mobile_KF_Ty = [[] for mobile_tr in Mobile_tr]
-        Mobile_KF_Tz = [[] for mobile_tr in Mobile_tr]
-        Mobile_KF_Rx = [[] for mobile_tr in Mobile_tr]
-        Mobile_KF_Ry = [[] for mobile_tr in Mobile_tr]
-        Mobile_KF_Rz = [[] for mobile_tr in Mobile_tr]
+        Mobile_KF_Tx = [[] for _ in Mobile_tr]
+        Mobile_KF_Ty = [[] for _ in Mobile_tr]
+        Mobile_KF_Tz = [[] for _ in Mobile_tr]
+        Mobile_KF_Rx = [[] for _ in Mobile_tr]
+        Mobile_KF_Ry = [[] for _ in Mobile_tr]
+        Mobile_KF_Rz = [[] for _ in Mobile_tr]
 
         for j, rowResult in enumerate(rowResults):
             for i in range(0, N):
