@@ -31,10 +31,10 @@ INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
 
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
                "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt" @ONLY)
-
 #############################################################################
 # External libraries
 INCLUDE(CMakeOutputDirectories)
+INCLUDE(CMakePython)
 INCLUDE(CMakeGMock)
 INCLUDE(CMakeSSC)
 INCLUDE(CMakeYamlCpp)
