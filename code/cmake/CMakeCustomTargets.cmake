@@ -40,6 +40,10 @@ IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
     FOREACH(f ${files})
         INSTALL(FILES ${f} DESTINATION server)
     ENDFOREACH()
+    FILE(GLOB files "${CMAKE_CURRENT_BINARY_DIR}/python_server/*/server*")
+    FOREACH(f ${files})
+        INSTALL(FILES ${f} DESTINATION server PERMISSIONS OWNER_EXECUTE)
+    ENDFOREACH()
 ELSE()
     ADD_CUSTOM_COMMAND(
         TARGET sim_server
