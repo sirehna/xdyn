@@ -29,21 +29,26 @@ ADD_CUSTOM_COMMAND(
 
 ADD_CUSTOM_TARGET(sim_server)
 IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
+    FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_server/server)
     ADD_CUSTOM_COMMAND(
         TARGET sim_server
         POST_BUILD
-        COMMAND ${PYTHON_EXECUTABLE} setup.py install_exe -d ${CMAKE_CURRENT_BINARY_DIR}/python_server
+        COMMAND ${PYTHON_EXECUTABLE} setup.py install_exe -d ${CMAKE_CURRENT_BINARY_DIR}/python_server/server
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../html
         COMMENT "Generate simulator server"
     )
-    FILE(GLOB files "${CMAKE_CURRENT_BINARY_DIR}/python_server/*/*")
-    FOREACH(f ${files})
-        INSTALL(FILES ${f} DESTINATION server)
-    ENDFOREACH()
-    FILE(GLOB files "${CMAKE_CURRENT_BINARY_DIR}/python_server/*/server*")
+    INSTALL(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/python_server/server"
+            DESTINATION ".")
+    FILE(GLOB files "${CMAKE_CURRENT_BINARY_DIR}/python_server/server/server*")
     FOREACH(f ${files})
         INSTALL(FILES ${f} DESTINATION server PERMISSIONS OWNER_EXECUTE)
     ENDFOREACH()
+    INSTALL(DIRECTORY "${PROJECT_SOURCE_DIR}/../html/css"
+            DESTINATION "server")
+    INSTALL(DIRECTORY "${PROJECT_SOURCE_DIR}/../html/static"
+            DESTINATION "server")
+    INSTALL(FILES "${PROJECT_SOURCE_DIR}/../html/websocket_test.html"
+            DESTINATION "server")
 ELSE()
     ADD_CUSTOM_COMMAND(
         TARGET sim_server
