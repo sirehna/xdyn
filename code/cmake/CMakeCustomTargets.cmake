@@ -32,7 +32,7 @@ IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
     ADD_CUSTOM_COMMAND(
         TARGET sim_server
         POST_BUILD
-        COMMAND ${PYTHON_EXECUTABLE} setup.py build -b ${CMAKE_CURRENT_BINARY_DIR}/python_server
+        COMMAND ${PYTHON_EXECUTABLE} setup.py install_exe -d ${CMAKE_CURRENT_BINARY_DIR}/python_server
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../html
         COMMENT "Generate simulator server"
     )
