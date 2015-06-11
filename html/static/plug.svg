@@ -25,7 +25,7 @@
 <style type="text/css"><![CDATA[
 .connected {
   stroke: #199f4b;
-  fill: #199f4b;
+  fill: #1e88e5;
 }
 
 .disconnected {

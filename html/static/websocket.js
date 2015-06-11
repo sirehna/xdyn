@@ -12,60 +12,107 @@ $(function() {
         return data;
     }
 
-    var plot = $.plot($("#placeholder"), [ data ], { yaxis: { max: 1 }});
+    var plot = $.plot($("#graph"), [ data ], { yaxis: { max: 1 }});
     latest_t = 0;
-
-    function change_state(svg, state)
-    {
-       svg.select("#bottom-pin").attr("class", state);
-       svg.select("#left-chord").attr("class", state);
-       svg.select("#top-pin").attr("class", state);
-       svg.select("#left-connector").attr("class", state);
-       svg.select("#right-connector").attr("class", state);
-       svg.select("#right-chord").attr("class", state);
-
-       // Translate
-       var offset = 0;
-       if (state == "connected")
-       {
-        offset = 10;
-       }
-       svg.select("#right-connector").transform("t-"+offset+", 0");
-       svg.select("#left-connector").transform("t"+offset+", 0");
-       svg.select("#bottom-pin").transform("t"+offset+", 0");
-       svg.select("#top-pin").transform("t"+offset+", 0");
-       svg.select("#left-chord").transform("t"+offset+", 0");
-       svg.select("#right-chord").transform("t-"+offset+", 0");
-    }
-
-    function set_plug_state(state)
-    {
-        var s = Snap('#plug');
-        $('[id="connection_status"]').html(state);
-        if (state == "connected")
+    
+    $("#yaml_upload").change(function() {
+        if(this.files.length)
         {
-            $('[id="placeholder"]').css('visibility', 'visible');
+            var reader = new FileReader();
+
+            reader.onload = function(e)
+            {
+                var parsed_message = jsyaml.load(e.target.result);
+                console.log(parsed_message);
+                if (parsed_message['bodies'])
+                {
+                    var mesh = parsed_message['bodies'][0]['mesh'];
+                    if (mesh)
+                    {
+                        $('#stlfilechooser').css('visibility', 'visible');
+                        //$('#stl_button').html('<span>Browse for ' + mesh.substr(0,2) + '</span>')
+                    }
+                    else
+                    {
+                        $('#solver_form').css('visibility', 'visible');
+                    }
+                }
+            };
+
+            reader.readAsBinaryString(this.files[0]);
         }
         else
         {
-            $('[id="placeholder"]').css('visibility', 'hidden');
-            $('[id="vertically_centered"]').addClass('vertically_centered');
+            $('#stlfilechooser').css('visibility', 'hidden');
+            $('#solver_form').css('visibility', 'visible');
         }
-        change_state(s, state);
+        $('#yaml_file_name').css('visibility', 'visible');
+    });
+    
+    $("#stl_upload").change(function() {
+        $('#solver_form').css('visibility', 'visible');
+    });
+    
+    $("#solver_chooser").change(function() {
+        $('#run_button').css('visibility', 'visible');
+    });
+    
+    $('select').material_select();
+    
+
+    function set_plug_state(svg, state)
+    {
+        // Change the color
+        svg.select("#bottom-pin").attr("class", state);
+        svg.select("#left-chord").attr("class", state);
+        svg.select("#top-pin").attr("class", state);
+        svg.select("#left-connector").attr("class", state);
+        svg.select("#right-connector").attr("class", state);
+        svg.select("#right-chord").attr("class", state);
+
+        // Put the two connectors together
+        var offset = 0;
+        if (state == "connected")
+        {
+            offset = 10;
+        }
+        svg.select("#right-connector").transform("t-"+offset+", 0");
+        svg.select("#left-connector").transform("t"+offset+", 0");
+        svg.select("#bottom-pin").transform("t"+offset+", 0");
+        svg.select("#top-pin").transform("t"+offset+", 0");
+        svg.select("#left-chord").transform("t"+offset+", 0");
+        svg.select("#right-chord").transform("t-"+offset+", 0");
+    }
+
+    function register_connection_state(state)
+    {
+        var s = Snap('#plug');
+        $('[id="connection_status"]').html(state);
+        set_plug_state(s, state);
     }
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     var websocket = new WebSocket('ws://130.66.124.225:9003');
     //var websocket = new WebSocket('ws://localhost:9002');
+    $('#graph').css('visibility', 'hidden');
+    $('#filechooser').css('visibility', 'hidden');
+    $('#stlfilechooser').css('visibility', 'hidden');
+    $('#yaml_file_name').css('visibility', 'hidden');
+    $('#run_button').css('visibility', 'hidden');
+    $('#solver_form').css('visibility', 'hidden');
     websocket.onopen = function () {
-        $('h1').css('color', 'green');
-        set_plug_state("connected");
+        $('h1').css('color', '#1e88e5');
+        register_connection_state("connected");
+        $('#filechooser').css('visibility', 'visible');
+        //$('#stlfilechooser').css('visibility', 'hidden');
     };
     websocket.onerror = function () {
         $('h1').css('color', 'red');
-        set_plug_state("disconnected");
+        register_connection_state("disconnected");
     };
     websocket.onmessage = function (message) {
+        $('#graph').css('visibility', 'visible');
+        $('#filechooser#').css('visibility', 'hidden');
         try
         {
             var parsed_message = jsyaml.load(message.data);

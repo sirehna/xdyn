@@ -5,10 +5,33 @@
     position: relative;
 }
 
+#graph {
+    margin-left: auto;
+    margin-right: auto;
+}
+/*
+#yamlfilechooser {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#stlfilechooser {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}*/
+
 .vertically_centered {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+}
+
+#run_button {
+    margin-left: auto;
+    margin-right: 0;
+    width: 20%;
 }
 
 #title {

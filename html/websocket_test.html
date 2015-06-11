@@ -5,14 +5,19 @@
         <title>Websocket Test</title>
         <link rel="stylesheet" type="text/css" href="static/css/fonts.css"/>
         <link rel="stylesheet" type="text/css" href="static/css/layout.css"/>
+        <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css"  media="screen,projection"/>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700"/>
         <script type="text/javascript" src="static/third_party/jquery-2.1.4.min.js"></script>
         <script type="text/javascript" src="static/third_party/js-yaml.min.js"></script>
         <script type="text/javascript" src="static/third_party/flot/jquery.flot.js"></script>
         <script type="text/javascript" src="static/third_party/snap.svg-min.js"></script>
         <script type="text/javascript" src="static/third_party/base91/base91Float32.js"></script>
+        <script type="text/javascript" src="static/js/materialize.min.js"></script>
         <script type="text/javascript" src="static/websocket.js"></script>
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     </head>
+
     <body>
         <div id="main">
             <div id="title"><h1>Ship Simulator</h1></div>
@@ -20,8 +25,58 @@
                 <object id="plug" data="static/plug.svg" type="image/svg+xml"></object>
                 <div id="connection_status"></div>
             </div>
+            <form id="filechooser">
+                <!--YAML file selector-->
+                <div id="yamlfilechooser">
+                    <div class="file-field input-field">
+                        <input class="file-path validate" ID="yaml_file_name" type="text"/><br/>
+                        <div class="btn blue darken-1">
+                            <span>YAML</span>
+                            <input type="file" ID="yaml_upload" name="yaml_file"/>
+                        </div>
+                    </div>
+                </div>
+                <!--STL file selector-->
+                <div id="stlfilechooser">
+                    <div class="file-field input-field">
+                        <input class="file-path validate" ID="stl_file_name" type="text"/><br/>
+                        <div class="btn blue darken-1" id="stl_button">
+                            <span>STL</span>
+                            <input type="file" ID="stl_upload" name="stl_file"/>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <!--Solver-->
+                <div id="solver_form">
+                    <form>
+                        <label>Choose your solver</label>
+                        <select ID="solver_chooser">
+                            <option value="euler">Euler</option>
+                            <option value="rk4">Runge-Kutta 4</option>
+                            <option value="rkck">Runge-Kutta-Cash-Karp</option>
+                        </select>
+                    </form>
+                </div>
+
+
+
+                <!--Run button-->
+                <div id="run_button">
+                    <button class="btn waves-effect green" type="submit" name="action">Run
+                    <i class="mdi-av-play-arrow"></i>
+                    </button>
+                </div>
+            </form>
+                
+                
+                
+                
             
-            <div id="placeholder" style="width:600px;height:300px"></div>
+            
+            
+            <div id="graph" style="width:600px;height:300px"></div>
         </div>
     </body>
 </html>
