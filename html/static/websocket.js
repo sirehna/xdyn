@@ -41,12 +41,22 @@ $(function() {
     function set_plug_state(state)
     {
         var s = Snap('#plug');
+        $('[id="connection_status"]').html(state);
+        if (state == "connected")
+        {
+            $('[id="placeholder"]').css('visibility', 'visible');
+        }
+        else
+        {
+            $('[id="placeholder"]').css('visibility', 'hidden');
+            $('[id="vertically_centered"]').addClass('vertically_centered');
+        }
         change_state(s, state);
     }
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    //var websocket = new WebSocket('ws://130.66.124.225:9003');
-    var websocket = new WebSocket('ws://localhost:9002');
+    var websocket = new WebSocket('ws://130.66.124.225:9003');
+    //var websocket = new WebSocket('ws://localhost:9002');
     websocket.onopen = function () {
         $('h1').css('color', 'green');
         set_plug_state("connected");
