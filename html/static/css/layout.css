@@ -1,0 +1,31 @@
+#main {
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    position: relative;
+}
+
+.vertically_centered {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#title {
+    text-align: center;
+}
+
+#plug {
+    width: 10%;
+    position: relative;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+#connection_status {
+    text-align: center;
+    text-transform: uppercase;
+}
+
