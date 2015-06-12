@@ -80,6 +80,7 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
                << ") but nfreq != 1";
             THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
         }
+        return std::vector<double>(1, omega_min);
     }
     std::vector<double> omega(n, 0);
     const double Domega = omega_max - omega_min;
