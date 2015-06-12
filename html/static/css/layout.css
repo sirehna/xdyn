@@ -9,33 +9,50 @@
     margin-left: auto;
     margin-right: auto;
 }
-/*
-#yamlfilechooser {
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+
+#plug {
+    width: 100pc;
 }
 
-#stlfilechooser {
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-}*/
-
-.vertically_centered {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+#plug_and_status {
+    position:absolute;
+    top:0;
+    right:0;
+    width: 25%;
 }
 
 #run_button {
     margin-left: auto;
     margin-right: 0;
-    width: 20%;
+    width: 7pc;
 }
+
+#filechooser {
+    position: relative;
+    top: 3pc;
+}
+
+h2 {
+    position: relative;
+    /*margin-bottom: -1pc;*/
+    /*top: 1.5pc;*/
+}
+
+h3 {
+    position: relative;
+    margin-bottom: -1pc;
+    margin-top: -1pc;
+    /*top: 1.5pc;*/
+}
+
 
 #title {
     text-align: center;
+}
+
+.lbl {
+    position: relative;
+    top: 0;
 }
 
 #plug {

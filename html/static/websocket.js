@@ -29,12 +29,14 @@ $(function() {
                     var mesh = parsed_message['bodies'][0]['mesh'];
                     if (mesh)
                     {
-                        $('#stlfilechooser').css('visibility', 'visible');
-                        //$('#stl_button').html('<span>Browse for ' + mesh.substr(0,2) + '</span>')
+                        $('#stlfilechooser').css('display', 'block');
                     }
                     else
                     {
-                        $('#solver_form').css('visibility', 'visible');
+                        $('#stlfilechooser').css('display', 'none');
+                        $('#solver').css('display', 'block');
+                        $('#outputs').css('display', 'block');
+                        $('#run_button').css('display', 'block');
                     }
                 }
             };
@@ -43,19 +45,21 @@ $(function() {
         }
         else
         {
-            $('#stlfilechooser').css('visibility', 'hidden');
-            $('#solver_form').css('visibility', 'visible');
+            $('#stlfilechooser').css('display', 'none');
+            $('#solver').css('display', 'block');
+            $('#outputs').css('display', 'block');
+            $('#run_button').css('display', 'block');
         }
-        $('#yaml_file_name').css('visibility', 'visible');
+        $('#yaml_file_name').css('display', 'block');
+        //$('#stepsize').css('display', 'block');
     });
     
     $("#stl_upload").change(function() {
-        $('#solver_form').css('visibility', 'visible');
+        $('#solver').css('display', 'block');
+        $('#outputs').css('display', 'block');
+        $('#run_button').css('display', 'block');
     });
-    
-    $("#solver_chooser").change(function() {
-        $('#run_button').css('visibility', 'visible');
-    });
+
     
     $('select').material_select();
     
@@ -94,25 +98,26 @@ $(function() {
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     var websocket = new WebSocket('ws://130.66.124.225:9003');
     //var websocket = new WebSocket('ws://localhost:9002');
-    $('#graph').css('visibility', 'hidden');
-    $('#filechooser').css('visibility', 'hidden');
-    $('#stlfilechooser').css('visibility', 'hidden');
-    $('#yaml_file_name').css('visibility', 'hidden');
-    $('#run_button').css('visibility', 'hidden');
-    $('#solver_form').css('visibility', 'hidden');
+    $('#graph').css('display', 'none');
+    $('#filechooser').css('display', 'none');
+    $('#stlfilechooser').css('display', 'none');
+    $('#yaml_file_name').css('display', 'none');
+    $('#run_button').css('display', 'none');
+    $('#solver').css('display', 'none');
+    $('#outputs').css('display', 'none');
     websocket.onopen = function () {
         $('h1').css('color', '#1e88e5');
         register_connection_state("connected");
-        $('#filechooser').css('visibility', 'visible');
-        //$('#stlfilechooser').css('visibility', 'hidden');
+        $('#filechooser').css('display', 'block');
+        //$('#stlfilechooser').css('display', 'none');
     };
     websocket.onerror = function () {
         $('h1').css('color', 'red');
         register_connection_state("disconnected");
     };
     websocket.onmessage = function (message) {
-        $('#graph').css('visibility', 'visible');
-        $('#filechooser#').css('visibility', 'hidden');
+        $('#graph').css('display', 'block');
+        $('#filechooser#').css('display', 'none');
         try
         {
             var parsed_message = jsyaml.load(message.data);
