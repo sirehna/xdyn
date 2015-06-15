@@ -38,6 +38,8 @@ On définit donc un NED "local", c'est-à-dire un repère centré au même point
 que le repère navire mais simplement translaté par rapport à NED :
 
 ![](images/local_ned.svg "Repère NED local (plan X,Y)")
+
+
 ![](images/local_ned2.svg "Repère NED local (plan X,Z)")
 
 Ce repère est nommé "NED(body)". Ainsi, si le navire s'appelle "nav1", le
