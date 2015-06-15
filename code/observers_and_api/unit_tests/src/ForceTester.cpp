@@ -181,7 +181,7 @@ EPoint ForceTester::center_of_buoyancy_in_ned_frame(const double x,
                                                     const double psi)
 {
     std::vector<double> states = set_states(x, y, z, phi, theta, psi);
-    auto Tned2body = body->get_transform_from_ned_to(states);
+    auto Tned2body = body->get_transform_from_ned_to_body(states);
     Tned2body.swap();
     for (const auto force:forces)
     {

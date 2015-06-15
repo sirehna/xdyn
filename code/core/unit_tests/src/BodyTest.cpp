@@ -66,7 +66,7 @@ TEST_F(BodyTest, can_return_position_of_body_mesh_from_Body_object)
 
 TEST_F(BodyTest, can_compute_transform_from_mesh_to_body_from_Body_object)
 {
-    ssc::kinematics::Transform T = body->get_transform_from_mesh_to();
+    ssc::kinematics::Transform T = body->get_transform_from_mesh_to_body();
     ASSERT_EQ("mesh(body 1)", T.get_from_frame());
     ASSERT_EQ("body 1", T.get_to_frame());
     ASSERT_EQ("mesh(body 1)", T.get_point().get_frame());
@@ -93,7 +93,7 @@ TEST_F(BodyTest, can_get_transform_from_NED_to_body_from_states)
     states.name = "body 1";
     BodyWithSurfaceForces b(states,1);
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
-    const ssc::kinematics::Transform T = b.get_transform_from_ned_to(x);
+    const ssc::kinematics::Transform T = b.get_transform_from_ned_to_body(x);
     ASSERT_EQ("NED", T.get_from_frame());
     ASSERT_EQ(body->get_name(), T.get_to_frame());
     ASSERT_EQ("NED", T.get_point().get_frame());
@@ -139,4 +139,32 @@ TEST_F(BodyTest, can_update_Kinematics_object_from_states)
     ASSERT_DOUBLE_EQ(2*5*13+2*7*3,    (double)T.get_rot()(0,2));
     ASSERT_DOUBLE_EQ(2*7*13-2*5*3,    (double)T.get_rot()(1,2));
     ASSERT_DOUBLE_EQ(1-2*5*5-2*7*7,   (double)T.get_rot()(2,2));
+}
+
+TEST_F(BodyTest, can_compute_transform_from_ned_to_local_ned)
+{
+    KinematicsPtr k(new ssc::kinematics::Kinematics());
+    const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
+    BodyPtr b(body);
+    b->update_kinematics(x, k);
+    const std::string local_ned = std::string("NED(") + b->get_name() + ")";
+    const auto T = k->get("NED", local_ned);
+    ASSERT_EQ("NED", T.get_from_frame());
+    ASSERT_EQ(local_ned, T.get_to_frame());
+    ASSERT_EQ("NED", T.get_point().get_frame());
+    ASSERT_DOUBLE_EQ(1, T.get_point().x());
+    ASSERT_DOUBLE_EQ(2, T.get_point().y());
+    ASSERT_DOUBLE_EQ(3, T.get_point().z());
+
+    ASSERT_DOUBLE_EQ(1, (double)T.get_rot()(0,0));
+    ASSERT_DOUBLE_EQ(0, (double)T.get_rot()(1,0));
+    ASSERT_DOUBLE_EQ(0, (double)T.get_rot()(2,0));
+
+    ASSERT_DOUBLE_EQ(0, (double)T.get_rot()(0,1));
+    ASSERT_DOUBLE_EQ(1, (double)T.get_rot()(1,1));
+    ASSERT_DOUBLE_EQ(0, (double)T.get_rot()(2,1));
+
+    ASSERT_DOUBLE_EQ(0, (double)T.get_rot()(0,2));
+    ASSERT_DOUBLE_EQ(0, (double)T.get_rot()(1,2));
+    ASSERT_DOUBLE_EQ(1, (double)T.get_rot()(2,2));
 }

@@ -45,19 +45,25 @@ ssc::kinematics::Point Body::get_position_of_body_relative_to_mesh() const
                                   states.z_relative_to_mesh);
 }
 
-ssc::kinematics::Transform Body::get_transform_from_mesh_to() const
+ssc::kinematics::Transform Body::get_transform_from_mesh_to_body() const
 {
     return ssc::kinematics::Transform(get_position_of_body_relative_to_mesh(), states.mesh_to_body, states.name);
 }
 
-ssc::kinematics::Transform Body::get_transform_from_ned_to(const StateType& x) const
+ssc::kinematics::Transform Body::get_transform_from_ned_to_body(const StateType& x) const
 {
     return ssc::kinematics::Transform(get_origin(x), states.get_rot_from_ned_to(x, idx), states.name);
 }
 
+ssc::kinematics::Transform Body::get_transform_from_ned_to_local_ned(const StateType& x) const
+{
+    return ssc::kinematics::Transform(get_origin(x), std::string("NED(") + states.name + ")");
+}
+
 void Body::update_kinematics(StateType x, const KinematicsPtr& k) const
 {
-    k->add(get_transform_from_ned_to(x));
+    k->add(get_transform_from_ned_to_body(x));
+    k->add(get_transform_from_ned_to_local_ned(x));
 }
 
 void Body::update_body_states(const StateType& x, const double t)

@@ -23,6 +23,26 @@ Les axes du repère navire sont les suivants
 
 ![](images/ShipFrame.svg "Repère navire")
 
+### Repère NED local
+
+Lors des exports de champs de vagues, ni le repère NED ni le repère navire
+ne sont parfaitement adaptés : en effet, si le maillage sur lequel on
+calcule la houle est lié à NED, le navire finira par sortir de cette zone
+lorsqu'il se déplacera. Si l'on calcule les hauteurs de
+vague dans le repère navire, l'aire de la grille vue dans le repère NED
+va varier en fonction de l'attitude du navire et, à la limite, pour un
+navire vertical ($\theta=\pi/2$ par exemple), la projection de la grille
+est un segment.
+
+On définit donc un NED "local", c'est-à-dire un repère centré au même point
+que le repère navire mais simplement translaté par rapport à NED :
+
+![](images/local_ned.svg "Repère NED local (plan X,Y)")
+![](images/local_ned2.svg "Repère NED local (plan X,Z)")
+
+Ce repère est nommé "NED(body)". Ainsi, si le navire s'appelle "nav1", le
+repère NED local sera "NED(nav1)".
+
 ### Attitude navire
 
 L'attitude d'un corps permet de connaître sa position et son orientation par

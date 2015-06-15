@@ -35,8 +35,10 @@ class Body
 
         ssc::kinematics::Point get_origin(const StateType& x) const;
         ssc::kinematics::Point get_position_of_body_relative_to_mesh() const;
-        ssc::kinematics::Transform get_transform_from_mesh_to() const;
-        ssc::kinematics::Transform get_transform_from_ned_to(const StateType& x) const;
+        ssc::kinematics::Transform get_transform_from_mesh_to_body() const;
+        ssc::kinematics::Transform get_transform_from_ned_to_body(const StateType& x) const;
+        ssc::kinematics::Transform get_transform_from_ned_to_local_ned(const StateType& x) const;
+
         /**  \brief Update Body structure taking the new coordinates & wave heights into account
          */
         void update(const EnvironmentAndFrames& env, const StateType& x, const double t);

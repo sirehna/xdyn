@@ -52,8 +52,8 @@ void SimulatorBuilder::add_initial_transforms(const std::vector<BodyPtr>& bodies
     const StateType x = ::get_initial_states(input.rotations, input.bodies);
     for (size_t i = 0; i < bodies.size(); ++i)
     {
-        k->add(bodies.at(i)->get_transform_from_mesh_to());
-        k->add(bodies.at(i)->get_transform_from_ned_to(x));
+        k->add(bodies.at(i)->get_transform_from_mesh_to_body());
+        k->add(bodies.at(i)->get_transform_from_ned_to_body(x));
     }
 }
 
