@@ -100,7 +100,7 @@ TR1(shared_ptr)<WaveModel> SurfaceElevationBuilder<SurfaceElevationFromWaves>::p
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<SurfaceElevationFromWaves>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > ret;
-    if (model == "waves") // The "model" key is always "wave", except for the default wave model "no waves"
+    if (model == "waves") // The "model" key is always "waves", except for the default wave model "no waves"
     {
         const YamlWaveModel input = parse_waves(yaml);
         const auto output_mesh = make_wave_mesh(input.output);
