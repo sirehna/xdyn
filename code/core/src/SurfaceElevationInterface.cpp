@@ -78,7 +78,7 @@ std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_points_on_fre
         const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& Mned
         ) const
 {
-    std::vector<ssc::kinematics::Point> ret;
+    std::vector<ssc::kinematics::Point> ret(output_mesh->m.cols());
     for (int i = 0 ; i < output_mesh->m.cols() ; ++i)
     {
         // Ugly & dangerous hack: the points are in fact expressed in the NED frame
@@ -89,7 +89,7 @@ std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_points_on_fre
         const double x = Mned->m(0,i);
         const double y = Mned->m(1,i);
         const double z = wave_height(x,y,t);
-        ret.push_back(ssc::kinematics::Point(output_mesh->get_frame(),x,y,z));
+        ret[i] = ssc::kinematics::Point(output_mesh->get_frame(),x,y,z);
     }
     return ret;
 }
