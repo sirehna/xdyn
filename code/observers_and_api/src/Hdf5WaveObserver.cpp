@@ -114,7 +114,7 @@ void SimHdf5WaveObserver::Impl::write_Z(const SurfaceElevationGrid& waveElevatio
     {
         h5ElementZ.dataspace.setExtentSimple(3,sizeZ,sizeZ);
     }
-    if (!waveElevationGrid.z.IsRowMajor)
+    if (not(waveElevationGrid.z.IsRowMajor))
     {
         const Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> row_major_mat(waveElevationGrid.z);
         h5ElementZ.dataset.write(row_major_mat.data(), H5::PredType::NATIVE_DOUBLE, h5ElementZ.dataspace, fspaceZ);
