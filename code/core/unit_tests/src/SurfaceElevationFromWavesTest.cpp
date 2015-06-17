@@ -32,7 +32,7 @@ void SurfaceElevationFromWavesTest::TearDown()
 {
 }
 
-TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model() const
+TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
 {
     const double psi0 = PI/4;
     const double Hs = 3;
@@ -40,10 +40,14 @@ TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model() const
     const double omega0 = 2*PI/Tp;
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
-    const size_t nfreq = a.random<size_t>().between(2,100);
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq);
     int random_seed = 0;
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
+}
+
+TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model() const
+{
+    return get_model(a.random<size_t>().between(2,100));
 }
 
 TEST_F(SurfaceElevationFromWavesTest, default_constructor_contains_an_empty_output_wave_mesh)
