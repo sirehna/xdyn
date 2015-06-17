@@ -9,8 +9,10 @@
 #include "DiracDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
 #include <ssc/kinematics.hpp>
+#include "SurfaceElevationBuilder.hpp"
 #include "SurfaceElevationFromWavesTest.hpp"
 #include "SurfaceElevationFromWaves.hpp"
+#include "YamlWaveModelInput.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -119,3 +121,34 @@ TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
     ASSERT_NEAR(-0.17968143538987366, v.z(),1e-10);
 }
 
+TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
+{
+    TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
+    YamlWaveOutput out;
+    out.frame_of_reference = "NED";
+    out.xmin = -10;
+    out.xmax = 10;
+    out.nx = 50;
+    out.ymin = -100;
+    out.ymax = 100;
+    out.ny = 20;
+    const auto output_mesh = SurfaceElevationBuilderInterface::make_wave_mesh(out);
+    SurfaceElevationFromWaves wave(get_model(5), std::make_pair(50, 20), output_mesh);
+    SurfaceElevationGrid grid = wave.get_waves_on_mesh_as_a_grid(k, 0);
+    ASSERT_EQ(50, grid.x.count());
+    ASSERT_EQ(20, grid.y.count());
+    ASSERT_EQ(20, grid.z.cols());
+    ASSERT_EQ(50, grid.z.rows());
+
+    const double EPS = 1E-6;
+    for (size_t i = 0 ; i < 1 ; ++i)
+    {
+        ASSERT_NEAR((double)grid.z(i,0),1.4350787887938283,EPS);
+        ASSERT_NEAR((double)grid.z(i,1),1.4999864342292188,EPS);
+        ASSERT_NEAR((double)grid.z(i,2),1.4313139178312773,EPS);
+        ASSERT_NEAR((double)grid.z(i,3),1.2351768188109919,EPS);
+        ASSERT_NEAR((double)grid.z(i,4),0.92904197875491012,EPS);
+        ASSERT_NEAR((double)grid.z(i,5),0.54017200520689668,EPS);
+        ASSERT_NEAR((double)grid.z(i,6),0.10319742069255035,EPS);
+    }
+}

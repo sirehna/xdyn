@@ -212,12 +212,12 @@ SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
     {
         s.y(j) = res.at(j*nx).v(1);
     }
-    for(size_t i = 0;i<nx;++i)
+    size_t idx = 0;
+    for(size_t j=0;j<ny;++j)
     {
-        const size_t ii = i*ny;
-        for(size_t j=0;j<ny;++j)
+        for(size_t i = 0;i<nx;++i)
         {
-            s.z(i,j) = res.at(ii+j).v(2);
+            s.z(i,j) = res.at(idx++).v(2);
         }
     }
     return s;
