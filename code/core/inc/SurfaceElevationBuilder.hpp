@@ -35,7 +35,7 @@ class SurfaceElevationBuilderInterface
                              spectrum_parsers(spectrum_parsers_)
         {}
         virtual ~SurfaceElevationBuilderInterface();
-        TR1(shared_ptr)<ssc::kinematics::PointMatrix> make_wave_mesh(const YamlWaveOutput& output) const;
+        static TR1(shared_ptr)<ssc::kinematics::PointMatrix> make_wave_mesh(const YamlWaveOutput& output);
         std::pair<std::size_t,std::size_t> get_wave_mesh_size(const YamlWaveOutput& output) const;
         virtual boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const = 0;
 

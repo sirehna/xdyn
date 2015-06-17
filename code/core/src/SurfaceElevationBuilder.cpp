@@ -29,7 +29,7 @@ std::pair<std::size_t,std::size_t> SurfaceElevationBuilderInterface::get_wave_me
     return std::make_pair(nx,ny);
 }
 
-TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationBuilderInterface::make_wave_mesh(const YamlWaveOutput& output) const
+TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationBuilderInterface::make_wave_mesh(const YamlWaveOutput& output)
 {
     const std::pair<double,double> dxdy = get_wave_mesh_step_size(output);
     const double dx = dxdy.first;
