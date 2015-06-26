@@ -981,18 +981,18 @@ $$= \left[\begin{array}{c}
            0
 \end{array}\right]_{\mbox{hélice}}$$
 $$= \left[\begin{array}{c}
-           (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)\\
+           (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, A_E/A_0, Z, P/D)\\
            0\\
            0\\
            \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J,
-R_n,\sigma_0)\\
+A_E/A_0, Z, P/D)\\
            0\\
            0\end{array}\right]_{\mbox{hélice}}
 $$
 
 $\kappa$ vaut -1 si l'hélice tourne dans le sens horaire (en se plaçant
 derrière l'hélice et en regardant vers l'avant du navire) et +1 si elle tourne
-dans le sens trigronométrique.
+dans le sens trigonométrique.
 
 Ce torseur est ensuite déplacé (changement de point d'application et changement
 de coordonnées) dans le repère body afin d'être sommé avec les autres lors du
@@ -1534,4 +1534,113 @@ NED.
   Applications*, Anthony F. Molland & Stephen R. Turnock, published by Elsevier
   Ltd., 2007, ISBN: 978-0-75-066944-3
 - *Maneuvoeuvring Technical Manual*, Seehafen Verlag, 1993, ISBN 3-87743-902-0
+
+
+
+## Modèle Kt(J) & Kq(J)
+
+### Description
+
+Le but de ce modèle est de spécifier des courbes d'effort d'hélice $K_t$ et
+$K_q$ en fonction du coefficient d'avance $J$ uniquement.
+Hormis le calcul de $Kt$ et $Kq$, ce modèle est identique au modèle d'hélice
+Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'hélice et subit par le navire
+(apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
+exprimé dans le repère de l'hélice, est donc :
+
+$$\tau_{\mbox{hélice}} = \left[\begin{array}{c}
+X\\
+Y\\
+Z\\
+K\\
+M\\
+N
+\end{array}\right]_{\mbox{hélice}}$$
+
+$$= \left[\begin{array}{c}
+           T_b\\
+           0\\
+           0\\
+           \kappa Q_b\\
+           0\\
+           0
+\end{array}\right]_{\mbox{hélice}}$$
+$$= \left[\begin{array}{c}
+           (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J)\\
+           0\\
+           0\\
+           \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J)\\
+           0\\
+           0\end{array}\right]_{\mbox{hélice}}
+$$
+
+### Paramétrage
+
+Voici un exemple de configuration possible :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controlled forces:
+  - name: port side propeller
+    model: Kt(J) & Kq(J)
+    position of propeller frame:
+        frame: mesh(body 1)
+        x: {value: -4, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: -1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency eta: 1
+    thrust deduction factor t: 0.7
+    rotation: clockwise
+    diameter: {value: 2, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
+celui renseigné dans le fichier de [commandes
+attendues](#syntaxe-du-fichier-de-commande).
+- `model` : Nom du modèle. Doit être `wageningen B-series` pour utiliser ce
+modèle.
+- `position of propeller frame` : Définition du [repère de
+l'hélice](#expression-des-efforts).
+- `frame` : repère dans lequel sont exprimés `x`,`y`,`z`,`phi`,`theta` et `psi`.
+- `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par rapport au centre du repère attaché au maillage et projeté sur ce dernier.
+- `phi`,`theta`,`psi` : Définition de la rotation permettant de passer du
+repère attaché au maillage au [repère attaché à
+l'hélice](#expression-des-efforts), en suivant la
+[convention d'angle choisie](#rotations).
+- `wake coefficient` : [coefficient de
+sillage](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et
+1.
+- `relative rotative efficiency` : [rendement
+d'adaptation](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+- `thrust deduction factor t` : [coefficient de
+succion](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+- `rotation` définition du sens de rotation pour générer une poussée positive.
+Utilisé pour calculer le signe du moment généré par l'hélice sur le navire. Les
+valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
+`clockwise`, l'hélice tournera dans le sens horaire (en se plaçant à l'arrière
+du navire et en regardant vers la proue) et génèrera un moment négatif sur le navire (dans le repère de l'hélice). Voir [la
+documentation](#expression-des-efforts).
+- `diameter` : diamètre de l'hélice (en m)
+
+### Sorties
+
+Pour obtenir les sorties d'effort de ce modèle, on écrit par exemple :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: csv
+     filename: prop.csv
+     data: [t, 'Fx(port side propeller,Anthineas,Anthineas)', 'Fx(port side propeller,Anthineas,NED)']
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On obtient dans l'exemple précédent la projection suivant l'axe $X$ du repère
+`Anthineas` de l'effort `port side propeller` (correspondant au nom de l'actionneur
+renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
+même type) ainsi que la projection de ce même effort suivant l'axe $X$ du repère
+NED.
+
 
