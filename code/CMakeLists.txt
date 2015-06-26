@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(simulatorIrtJv)
-
+SET(DESCRIPTION "Simulateur IRT JV : Simulateur 6ddl de navires")
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 #############################################################################
 # User configuration
