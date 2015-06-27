@@ -21,7 +21,20 @@
 class KtKqForceModel : public WageningenControlledForceModel
 {
     public:
-
+        struct Yaml
+        {
+            Yaml();
+            std::string name;
+            YamlPosition position_of_propeller_frame;
+            double wake_coefficient;
+            double relative_rotative_efficiency;
+            double thrust_deduction_factor;
+            bool rotating_clockwise;
+            double diameter;
+            std::vector<double> J;
+            std::vector<double> Kt;
+            std::vector<double> Kq;
+        };
     private:
 };
 #endif /* KTKQFORCEMODEL_HPP_ */
