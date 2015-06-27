@@ -22,6 +22,7 @@ FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/SimpleStationKeepingControllerTest.cpp
               src/RudderForceModelTest.cpp
               src/env_for_tests.cpp
+              src/KtKqForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
