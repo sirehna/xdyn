@@ -1595,6 +1595,9 @@ controlled forces:
     thrust deduction factor t: 0.7
     rotation: clockwise
     diameter: {value: 2, unit: m}
+    J: [-1.00000E+00,-8.00000E-01,-5.00000E-01,-2.50000E-01,-1.00000E-03,1.00000E-03, 2.00000E-01, 4.00000E-01, 6.00000E-01, 7.00000E-01, 8.00000E-01,1.00000E+00]
+    Kt: [-4.50000E-01,-2.50000E-01,-1.90000E-01,-2.00000E-01,-2.00000E-01,3.25000E-01, 2.80000E-01, 2.33000E-01, 1.85000E-01, 1.62000E-01,1.36000E-01,8.50000E-02]
+    Kq: [-4.80000E-02,-3.30000E-02,-2.20000E-02,-2.50000E-02,-2.80000E-02,3.40000E-02, 3.26000E-02, 2.97000E-02, 2.55000E-02, 2.30000E-02, 2.040000E-02,1.50000E-02]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
@@ -1625,6 +1628,9 @@ valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
 du navire et en regardant vers la proue) et génèrera un moment négatif sur le navire (dans le repère de l'hélice). Voir [la
 documentation](#expression-des-efforts).
 - `diameter` : diamètre de l'hélice (en m)
+- `J`: coefficient d'avance. Correspond aux listes Kt et Kq
+- `Kt`: coefficient de poussée en fonction de `J`
+- `Kq`: coefficient de moment en fonction de `J`
 
 ### Sorties
 
