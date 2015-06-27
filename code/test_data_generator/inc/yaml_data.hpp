@@ -57,6 +57,7 @@ namespace test_data
     std::string GM_cube();
     std::string bug_2838();
     std::string bug_2845();
+    std::string kt_kq();
 }
 
 #endif /* YAML_DATA_HPP_ */

@@ -3310,3 +3310,27 @@ std::string test_data::bug_2845()
        << "     data: [t,  'Mz(PropRudd,Anthineas,Anthineas)']\n";
     return ss.str();
 }
+
+std::string test_data::kt_kq()
+{
+    std::stringstream ss;
+    ss << "name: port side propeller\n"
+       << "model: Kt(J) & Kq(J)\n"
+       << "position of propeller frame:\n"
+       << "    frame: mesh(body 1)\n"
+       << "    x: {value: -4, unit: m}\n"
+       << "    y: {value: -2, unit: m}\n"
+       << "    z: {value: 2, unit: m}\n"
+       << "    phi: {value: 0, unit: rad}\n"
+       << "    theta: {value: -10, unit: deg}\n"
+       << "    psi: {value: -1, unit: deg}\n"
+       << "wake coefficient w: 0.9\n"
+       << "relative rotative efficiency eta: 1\n"
+       << "thrust deduction factor t: 0.7\n"
+       << "rotation: clockwise\n"
+       << "diameter: {value: 2, unit: m}\n"
+       << "J: [-1.00000E+00,-8.00000E-01,-5.00000E-01,-2.50000E-01,-1.00000E-03,1.00000E-03, 2.00000E-01, 4.00000E-01, 6.00000E-01, 7.00000E-01, 8.00000E-01,1.00000E+00]\n"
+       << "Kt: [-4.50000E-01,-2.50000E-01,-1.90000E-01,-2.00000E-01,-2.00000E-01,3.25000E-01, 2.80000E-01, 2.33000E-01, 1.85000E-01, 1.62000E-01,1.36000E-01,8.50000E-02]\n"
+       << "Kq: [-4.80000E-02,-3.30000E-02,-2.20000E-02,-2.50000E-02,-2.80000E-02,3.40000E-02, 3.26000E-02, 2.97000E-02, 2.55000E-02, 2.30000E-02, 2.040000E-02,1.50000E-02]\n";
+    return ss.str();
+}
