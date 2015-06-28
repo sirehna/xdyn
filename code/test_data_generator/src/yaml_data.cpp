@@ -3325,7 +3325,7 @@ std::string test_data::kt_kq()
        << "    theta: {value: -10, unit: deg}\n"
        << "    psi: {value: -1, unit: deg}\n"
        << "wake coefficient w: 0.9\n"
-       << "relative rotative efficiency eta: 1\n"
+       << "relative rotative efficiency etaR: 1\n"
        << "thrust deduction factor t: 0.7\n"
        << "rotation: clockwise\n"
        << "diameter: {value: 2, unit: m}\n"

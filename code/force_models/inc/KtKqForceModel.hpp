@@ -35,6 +35,8 @@ class KtKqForceModel : public WageningenControlledForceModel
             std::vector<double> Kt;
             std::vector<double> Kq;
         };
+
+        static Yaml parse(const std::string& yaml);
     private:
 };
 #endif /* KTKQFORCEMODEL_HPP_ */

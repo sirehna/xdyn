@@ -1591,7 +1591,7 @@ controlled forces:
         theta: {value: -10, unit: deg}
         psi: {value: -1, unit: deg}
     wake coefficient w: 0.9
-    relative rotative efficiency eta: 1
+    relative rotative efficiency etaR: 1
     thrust deduction factor t: 0.7
     rotation: clockwise
     diameter: {value: 2, unit: m}
@@ -1617,7 +1617,7 @@ l'hélice](#expression-des-efforts), en suivant la
 sillage](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
 traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et
 1.
-- `relative rotative efficiency` : [rendement
+- `relative rotative efficiency etaR` : [rendement
 d'adaptation](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
 - `thrust deduction factor t` : [coefficient de
 succion](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
