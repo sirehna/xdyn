@@ -33,9 +33,9 @@ KtKqForceModel::Yaml KtKqForceModel::parse(const std::string& yaml)
     YAML::Node node;
     parser.GetNextDocument(node);
     Yaml ret = AbstractWageningen::parse(yaml);;
-    node["J"]                                 >>ret.J;
-    node["Kt"]                                >>ret.Kt;
-    node["Kq"]                                >>ret.Kq;
+    node["J"]  >> ret.J;
+    node["Kt"] >> ret.Kt;
+    node["Kq"] >> ret.Kq;
 
     return ret;
 }
