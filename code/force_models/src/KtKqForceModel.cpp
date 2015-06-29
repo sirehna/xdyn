@@ -11,18 +11,19 @@
 #include "yaml.h"
 
 KtKqForceModel::Yaml::Yaml() :
-            name(),
-            position_of_propeller_frame(),
-            wake_coefficient(),
-            relative_rotative_efficiency(),
-            thrust_deduction_factor(),
-            rotating_clockwise(),
-            diameter(),
+            AbstractWageningen::Yaml(),
             J(),
             Kt(),
             Kq()
 {
+}
 
+KtKqForceModel::Yaml::Yaml(const AbstractWageningen::Yaml& y) :
+        AbstractWageningen::Yaml(y),
+        J(),
+        Kt(),
+        Kq()
+{
 }
 
 KtKqForceModel::Yaml KtKqForceModel::parse(const std::string& yaml)
@@ -31,16 +32,7 @@ KtKqForceModel::Yaml KtKqForceModel::parse(const std::string& yaml)
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    Yaml ret;
-    std::string rot;
-    node["rotation"] >> rot;
-    ret.rotating_clockwise = (rot == "clockwise");
-    node["thrust deduction factor t"]         >> ret.thrust_deduction_factor;
-    node["wake coefficient w"]                >> ret.wake_coefficient;
-    node["name"]                              >> ret.name;
-    node["position of propeller frame"]       >> ret.position_of_propeller_frame;
-    node["relative rotative efficiency etaR"] >> ret.relative_rotative_efficiency;
-    ssc::yaml_parser::parse_uv(node["diameter"], ret.diameter);
+    Yaml ret = AbstractWageningen::parse(yaml);;
     node["J"]                                 >>ret.J;
     node["Kt"]                                >>ret.Kt;
     node["Kq"]                                >>ret.Kq;

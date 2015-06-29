@@ -15,9 +15,9 @@
 
 ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& position_of_frame_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
     env(env_),
+    commands(commands_),
     name(name_),
     body_name(body_name_),
-    commands(commands_),
     position_of_frame(position_of_frame_),
     point_of_application(make_point(position_of_frame.coordinates, position_of_frame.frame)),
     force_in_body_frame(),

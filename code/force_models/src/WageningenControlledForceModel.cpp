@@ -5,10 +5,6 @@
  *      Author: cady
  */
 
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
-
 #include "yaml.h"
 
 #include "Body.hpp"
@@ -21,29 +17,33 @@ const std::string WageningenControlledForceModel::model_name = "wageningen B-ser
 
 
 WageningenControlledForceModel::Yaml::Yaml() :
-        name(),
-        position_of_propeller_frame(),
-        wake_coefficient(),
-        relative_rotative_efficiency(),
-        thrust_deduction_factor(),
-        rotating_clockwise(),
+        AbstractWageningen::Yaml(),
         number_of_blades(),
-        blade_area_ratio(),
-        diameter()
+        blade_area_ratio()
 {
 }
 
+WageningenControlledForceModel::Yaml::Yaml(const AbstractWageningen::Yaml& y) :
+                AbstractWageningen::Yaml(y),
+                number_of_blades(),
+                blade_area_ratio()
+{
+}
+
+double WageningenControlledForceModel::get_Kt(const double P_D, const double J) const
+{
+    return Kt(Z, AE_A0, P_D, J);
+}
+
+double WageningenControlledForceModel::get_Kq(const double P_D, const double J) const
+{
+    return Kq(Z, AE_A0, P_D, J);
+}
+
 WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-            ControllableForceModel(input.name,{"rpm","P/D"},input.position_of_propeller_frame, body_name_, env_),
-            w(input.wake_coefficient),
-            eta_R(input.relative_rotative_efficiency),
-            t(input.thrust_deduction_factor),
-            kappa(input.rotating_clockwise ? -1 : 1),
+            AbstractWageningen(input, body_name_, env_),
             Z(input.number_of_blades),
             AE_A0(input.blade_area_ratio),
-            D(input.diameter),
-            D4(D*D*D*D),
-            D5(D4*D),
             ct{0.00880496,-0.204554,0.166351,0.158114,-0.147581,-0.481497,0.415437,0.0144043,-0.0530054,0.0143481,0.0606826,-0.0125894,0.0109689,-0.133698,0.00638407,-0.00132718,0.168496,-0.0507214,0.0854559,-0.0504475,0.010465,-0.00648272,-0.00841728,0.0168424,-0.00102296,-0.0317791,0.018604,-0.00410798,-0.000606848,-0.0049819,0.0025983,-0.000560528,-0.00163652,-0.000328787,0.000116502,0.000690904,0.00421749,0.0000565229,-0.00146564},
             st{0,1,0,0,2,1,0,0,2,0,1,0,1,0,0,2,3,0,2,3,1,2,0,1,3,0,1,0,0,1,2,3,1,1,2,0,0,3,0},
             tt{0,0,1,2,0,1,2,0,0,1,1,0,0,3,6,6,0,0,0,0,6,6,3,3,3,3,0,2,0,0,0,0,2,6,6,0,3,6,3},
@@ -55,6 +55,7 @@ WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input
             uq{0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,2,0,0,0,1,1,2,2,2,2,0,0,0,1,1,1,1,2,2,2,2,2},
             vq{0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2}
 {
+    commands.push_back("P/D");
     std::stringstream ss;
     if ((Z<2) or (Z>7))
     {
@@ -66,17 +67,6 @@ WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input
         ss << "Invalid number of blade area ratio AE_A0 received: expected 0.3 <= AE_A0 <= 1.05 but got AE_A0=" << AE_A0;
         THROW(__PRETTY_FUNCTION__, WageningenControlledForceModelException, ss.str());
     }
-}
-
-ssc::kinematics::Vector6d WageningenControlledForceModel::get_force(const BodyStates& states, const double , std::map<std::string,double> commands) const
-{
-    ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
-    const double n2 = commands["rpm"]*commands["rpm"]/(4*PI*PI); // In turns per second (Hz)
-    const double P_D = commands["P/D"];
-    const double J = advance_ratio(states, commands);
-    tau(0) = (1-t)*env.rho*n2*D4*Kt(Z, AE_A0, P_D, J);
-    tau(3) = kappa*eta_R*env.rho*n2*D5*Kq(Z, AE_A0, P_D, J);
-    return tau;
 }
 
 void WageningenControlledForceModel::check(const double P_D, const double J) const
@@ -113,31 +103,15 @@ double WageningenControlledForceModel::Kq(const size_t Z, const double AE_A0_, c
     return kq;
 }
 
-double WageningenControlledForceModel::advance_ratio(const BodyStates& states, std::map<std::string,double>& commands) const
-{
-    const double Va = fabs(states.u());
-    const double n = commands["rpm"]/(2*PI);
-    return (1-w)*Va/n/D;
-}
-
 WageningenControlledForceModel::Yaml WageningenControlledForceModel::parse(const std::string& yaml)
 {
+    WageningenControlledForceModel::Yaml ret(AbstractWageningen::parse(yaml));
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    Yaml ret;
-    std::string rot;
-    node["rotation"] >> rot;
-    ret.rotating_clockwise = (rot == "clockwise");
-    node["thrust deduction factor t"]        >> ret.thrust_deduction_factor;
-    node["wake coefficient w"]               >> ret.wake_coefficient;
-    node["name"]                             >> ret.name;
     node["blade area ratio AE/A0"]           >> ret.blade_area_ratio;
     node["number of blades"]                 >> ret.number_of_blades;
-    node["position of propeller frame"]      >> ret.position_of_propeller_frame;
-    node["relative rotative efficiency etaR"]>> ret.relative_rotative_efficiency;
-    ssc::yaml_parser::parse_uv(node["diameter"], ret.diameter);
     return ret;
 }
 

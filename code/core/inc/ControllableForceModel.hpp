@@ -68,6 +68,7 @@ class ControllableForceModel
 
     protected:
         EnvironmentAndFrames env;
+        std::vector<std::string> commands;
 
     private:
         ControllableForceModel(); // Deactivated
@@ -76,7 +77,6 @@ class ControllableForceModel
 
         std::string name;
         std::string body_name;
-        std::vector<std::string> commands;
         YamlPosition position_of_frame;
         ssc::kinematics::Point point_of_application;
         ssc::kinematics::Wrench force_in_body_frame;

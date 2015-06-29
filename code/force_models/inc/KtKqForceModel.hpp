@@ -8,7 +8,7 @@
 #ifndef KTKQFORCEMODEL_HPP_
 #define KTKQFORCEMODEL_HPP_
 
-#include "WageningenControlledForceModel.hpp"
+#include "AbstractWageningen.hpp"
 
 /** \details This class was created to
  *  \addtogroup module
@@ -18,19 +18,13 @@
  *  \section ex2 Expected output
  *  \snippet module/unit_tests/src/KtKqForceModelTest.cpp KtKqForceModelTest expected output
  */
-class KtKqForceModel : public WageningenControlledForceModel
+class KtKqForceModel : public AbstractWageningen
 {
     public:
-        struct Yaml
+        struct Yaml : public AbstractWageningen::Yaml
         {
             Yaml();
-            std::string name;
-            YamlPosition position_of_propeller_frame;
-            double wake_coefficient;
-            double relative_rotative_efficiency;
-            double thrust_deduction_factor;
-            bool rotating_clockwise;
-            double diameter;
+            Yaml(const AbstractWageningen::Yaml& y);
             std::vector<double> J;
             std::vector<double> Kt;
             std::vector<double> Kq;
