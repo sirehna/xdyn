@@ -13,7 +13,12 @@
 using ::testing::_;
 using ::testing::ElementsAreArray;
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 #define DEG2RAD (atan(1)/45.)
+#define EPS 1E-6
 
 KtKqForceModelTest::KtKqForceModelTest() : a(ssc::random_data_generator::DataGenerator(9876))
 {
@@ -52,3 +57,22 @@ TEST_F(KtKqForceModelTest, parser)
     ASSERT_THAT(k.Kq, ElementsAreArray({-4.80000E-02,-3.30000E-02,-2.20000E-02,-2.50000E-02,-2.80000E-02,3.40000E-02, 3.26000E-02, 2.97000E-02, 2.55000E-02, 2.30000E-02, 2.040000E-02,1.50000E-02}));
 }
 
+
+TEST_F(KtKqForceModelTest, force)
+{
+    auto input = KtKqForceModel::parse(test_data::kt_kq());
+    EnvironmentAndFrames env;
+    env.rho = 1024;
+    const KtKqForceModel w(input, "", env);
+    BodyStates states;
+    states.u.record(0, 1);
+
+    std::map<std::string,double> commands;
+    commands["rpm"] = 5*(2*PI);
+
+    ASSERT_NEAR(306063.03332753148, w.get_force(states, a.random<double>(),commands)(0), EPS);
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(1));
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(2));
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(4));
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(5));
+}

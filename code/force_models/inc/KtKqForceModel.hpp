@@ -10,6 +10,8 @@
 
 #include "AbstractWageningen.hpp"
 
+#include <ssc/macros/tr1_macros.hpp>
+
 /** \details This class was created to
  *  \addtogroup module
  *  \ingroup module
@@ -29,8 +31,14 @@ class KtKqForceModel : public AbstractWageningen
             std::vector<double> Kt;
             std::vector<double> Kq;
         };
-
+        KtKqForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
         static Yaml parse(const std::string& yaml);
+
+        double get_Kt(const double P_D, const double J) const;
+        double get_Kq(const double P_D, const double J) const;
+
     private:
+        class Impl;
+        TR1(shared_ptr)<Impl> pimpl;
 };
 #endif /* KTKQFORCEMODEL_HPP_ */
