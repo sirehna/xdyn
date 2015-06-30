@@ -9,7 +9,7 @@
 #include <ssc/check_ssc_version.hpp>
 #include <ssc/kinematics.hpp>
 
-CHECK_SSC_VERSION(0xcb9745b34670edcb)
+CHECK_SSC_VERSION(0xe0d6433e66840efc)
 
 #define _USE_MATH_DEFINE
 #include <cmath>
