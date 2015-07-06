@@ -11,6 +11,10 @@
 #include "parse_output.hpp"
 
 void operator >> (const YAML::Node& node, YamlOutput& f);
+std::string customize(const std::string& var_name, const std::string& body_name);
+void fill(YamlOutput& out, const std::string& body_name);
+std::vector<std::string> get_body_names(const std::string yaml);
+
 void operator >> (const YAML::Node& node, YamlOutput& f)
 {
     if(const YAML::Node *pName = node.FindValue("filename"))
@@ -46,13 +50,11 @@ std::vector<YamlOutput> parse_output(const std::string& yaml)
     return ret;
 }
 
-std::string customize(const std::string& var_name, const std::string& body_name);
 std::string customize(const std::string& var_name, const std::string& body_name)
 {
     return var_name + "(" + body_name + ")";
 }
 
-void fill(YamlOutput& out, const std::string& body_name);
 void fill(YamlOutput& out, const std::string& body_name)
 {
     out.data.push_back(customize("x", body_name));
@@ -70,7 +72,6 @@ void fill(YamlOutput& out, const std::string& body_name)
     out.data.push_back(customize("qk", body_name));
 }
 
-std::vector<std::string> get_body_names(const std::string yaml);
 std::vector<std::string> get_body_names(const std::string yaml)
 {
     std::vector<std::string> out;
