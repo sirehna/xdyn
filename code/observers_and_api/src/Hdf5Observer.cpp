@@ -72,7 +72,7 @@ std::function<void()> Hdf5Observer::get_initializer(const double , const DataAdd
            {
                 name2address[addressing.name] = Hdf5Addressing(addressing,this->basename).address;
                 name2datatype[addressing.name] = H5::DataType(H5::PredType::NATIVE_DOUBLE);
-                name2dataspace[addressing.name] = H5_Tools::createDataSpace1DUnlimited();
+                name2dataspace[addressing.name] = H5_Tools::createDataSpace1DEmptyUnlimited();
                 name2dataset[addressing.name] =
                         H5_Tools::createDataSet(h5File,
                                                 name2address[addressing.name],
