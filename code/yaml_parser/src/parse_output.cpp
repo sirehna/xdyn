@@ -92,22 +92,46 @@ std::vector<std::string> get_body_names(const std::string yaml)
     return out;
 }
 
+std::string get_format_for_wave_observer(const std::string& filename)
+{
+    const size_t n = filename.size();
+    if (n<=3)
+    {
+        std::stringstream ss;
+        ss << "Invalid file format for wave output file. One expects filename with extension .h5 or .hdf5";
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+    }
+    if (filename.substr(n-3,3)==".h5")   return "hdf5";
+    if (filename.substr(n-5,5)==".hdf5") return "hdf5";
+    if (filename.substr(n-3,3)==".H5")   return "hdf5";
+    if (filename.substr(n-5,5)==".HDF5") return "hdf5";
+    {
+        std::stringstream ss;
+        ss << "Invalid file format for wave output file. Expected extensions are h5,hdf5";
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+    }
+}
+
 std::string get_format(const std::string& filename)
 {
     const size_t n = filename.size();
     if (!n)                              return "tsv";
-    if (n<3)
+    if (n<=3)
     {
-        std::cerr<<"Invalid file format. Expected extensions are h5,hdf5,csv,tsv,json"<<std::endl;
-        return "???";
+        std::stringstream ss;
+        ss << "Invalid file format for output file. One expects filenames with extension like .tsv, .csv, .h5, .hdf5, .json";
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
     }
     if (filename.substr(n-3,3)==".h5")   return "hdf5";
     if (filename.substr(n-5,5)==".hdf5") return "hdf5";
     if (filename.substr(n-4,4)==".csv")  return "csv";
     if (filename.substr(n-4,4)==".tsv")  return "tsv";
     if (filename.substr(n-5,5)==".json") return "json";
-    std::cerr << "Warning: could not recognize the format of specified output file '" << filename << "'";
-                                         return "???";
+    {
+        std::stringstream ss;
+        ss << "Could not recognize the format of specified output file '" << filename << "'";
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+    }
 }
 
 YamlOutput build_YamlOutput_from_filename(const std::string& filename);
