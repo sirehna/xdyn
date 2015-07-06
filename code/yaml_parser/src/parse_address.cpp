@@ -48,7 +48,7 @@ bool parseWebSocketURL(const std::string& url)
 YamlOutput build_YamlOutput_from_WS_URL(const std::string& url)
 {
     YamlOutput out;
-    boost::regex ex = generateBoostRegexParsingWebSocketUrl();
+    const boost::regex ex = generateBoostRegexParsingWebSocketUrl();
     boost::cmatch what;
     if(regex_match(url.c_str(), what, ex))
     {
@@ -67,7 +67,7 @@ YamlOutput build_YamlOutput_from_WS_URL(const std::string& url)
         if ( portAsInt <= 0 || portAsInt > 65535 )
         {
             std::stringstream ss;
-            ss << "Port: " << portAsInt << " is not valid ";
+            ss << "Port: " << portAsInt << " is not valid. It should be between 0 and 65535";
             THROW(__PRETTY_FUNCTION__, ParseAddressException, ss.str());
         }
         out.port = (short unsigned int)portAsInt;
@@ -75,7 +75,9 @@ YamlOutput build_YamlOutput_from_WS_URL(const std::string& url)
     else
     {
         std::stringstream ss;
-        ss << "Address: " << url << " is not valid ";
+        ss << "Address: " << url << " is not valid. Here are some examples"<<std::endl
+           << "  ws://localhost:8080"<<std::endl
+           << "  ws://130.66.124.200:8080";
         THROW(__PRETTY_FUNCTION__, ParseAddressException, ss.str());
     }
     return out;
