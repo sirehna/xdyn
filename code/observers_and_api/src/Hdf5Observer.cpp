@@ -48,8 +48,8 @@ std::function<void()> Hdf5Observer::get_serializer(const double val, const DataA
            {
                 H5::DataSet dataset = name2dataset[addressing.name];
                 H5::DataSpace dataspace = dataset.getSpace();
-                hsize_t offset[1];
-                hsize_t size[1];
+                hsize_t offset[1] = {(hsize_t)0};
+                hsize_t size[1] = {(hsize_t)0};
                 if (dataspace.getSimpleExtentDims(size)!=1)
                 {
                     std::stringstream ss;
