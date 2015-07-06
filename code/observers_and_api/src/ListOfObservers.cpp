@@ -5,14 +5,14 @@
  *      Author: cady
  */
 
+#include "YamlOutput.hpp"
 #include "CsvObserver.hpp"
-#include "Hdf5Observer.hpp"
-#include "ListOfObservers.hpp"
-#include "MapObserver.hpp"
 #include "TsvObserver.hpp"
 #include "JsonObserver.hpp"
+#include "MapObserver.hpp"
+#include "Hdf5Observer.hpp"
 #include "WebSocketObserver.hpp"
-#include "YamlOutput.hpp"
+#include "ListOfObservers.hpp"
 
 ListOfObservers::ListOfObservers(const std::vector<YamlOutput>& yaml) : observers()
 {
