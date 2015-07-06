@@ -19,6 +19,7 @@ ListOfObservers::ListOfObservers(const std::vector<YamlOutput>& yaml) : observer
     for (auto output:yaml)
     {
         if (output.format == "csv")  observers.push_back(ObserverPtr(new CsvObserver(output.filename,output.data)));
+        if (output.format == "h5")   observers.push_back(ObserverPtr(new Hdf5Observer(output.filename,output.data)));
         if (output.format == "hdf5") observers.push_back(ObserverPtr(new Hdf5Observer(output.filename,output.data)));
         if (output.format == "tsv")  observers.push_back(ObserverPtr(new TsvObserver(output.filename,output.data)));
         if (output.format == "map")  observers.push_back(ObserverPtr(new MapObserver(output.data)));
