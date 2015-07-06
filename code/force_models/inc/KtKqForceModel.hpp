@@ -37,6 +37,7 @@ class KtKqForceModel : public AbstractWageningen
         double get_Kt(const double P_D, const double J) const;
         double get_Kq(const double P_D, const double J) const;
 
+        static const std::string model_name;
     private:
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;
