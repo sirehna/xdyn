@@ -166,6 +166,13 @@ std::string H5_Tools::join(const std::vector<std::string>&v, const std::string& 
     return s.str();
 }
 
+H5::DataSpace H5_Tools::createDataSpace1DEmptyUnlimited()
+{
+    const hsize_t dims[1] = {0};
+    const hsize_t maxdims[1] = {H5S_UNLIMITED};
+    return H5::DataSpace(1, dims, maxdims);
+}
+
 H5::DataSpace H5_Tools::createDataSpace1DUnlimited()
 {
     const hsize_t dims[1] = {1};

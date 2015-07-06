@@ -38,6 +38,8 @@ namespace H5_Tools
 
     std::string join(const std::vector<std::string>&v, const std::string& delim);
 
+    H5::DataSpace createDataSpace1DEmptyUnlimited();
+
     H5::DataSpace createDataSpace1DUnlimited();
 
     H5::DataSet createDataSet(
