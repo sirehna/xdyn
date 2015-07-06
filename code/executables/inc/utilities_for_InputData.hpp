@@ -20,6 +20,7 @@ bool invalid(const InputData& input);
 bool parse_input(int argc, char **argv, const po::options_description& desc);
 po::options_description get_options_description(InputData& input_data);
 int get_input_data(int argc, char **argv, InputData& input_data);
+int display_help(char *argv, InputData& input_data);
 std::string description(const std::string& des);
 void copy_stream(const std::ostream& from_stream, std::ostream& to_stream);
 

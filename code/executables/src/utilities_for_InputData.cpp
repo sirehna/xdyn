@@ -88,6 +88,13 @@ int get_input_data(int argc, char **argv, InputData& input_data)
     return EXIT_SUCCESS;
 }
 
+int display_help(char *argv, InputData& input_data)
+{
+    const po::options_description desc = get_options_description(input_data);
+    print_usage(std::cout, desc, argv, "This is a ship simulator");
+    return EXIT_SUCCESS;
+}
+
 void print_usage(std::ostream& os, const po::options_description& desc, const std::string& program_name, const std::string& des)
 {
     po::positional_options_description positionalOptions;
