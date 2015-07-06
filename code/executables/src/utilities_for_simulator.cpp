@@ -20,7 +20,7 @@ YamlOutput create_a_wave_observer(const InputData& input_data)
     YamlOutput o;
     o.data = {"waves"};
     o.filename = input_data.wave_output;
-    o.format = get_format(input_data.wave_output);
+    o.format = get_format_for_wave_observer(input_data.wave_output);
     return o;
 }
 void add_observers_from_cli_with_output_filename(
@@ -31,7 +31,7 @@ void add_observers_from_cli_with_output_filename(
     YamlOutput outputterCli = generate_default_outputter_with_all_states_in_it(yaml,input_data.output_filename);
     if (not(input_data.wave_output.empty()))
     {
-        if (outputterCli.format=="ws")
+        if ((outputterCli.format=="ws") or (outputterCli.format=="hdf5"))
         {
             outputterCli.data.push_back("waves");
         }
