@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 {
     InputData input_data;
     if (argc==1) return display_help(argv[0], input_data);
-    int error = get_input_data(argc, argv, input_data);
+    const int error = get_input_data(argc, argv, input_data);
     if (error)
     {
         std::cerr <<"A problem occurred while parsing inputs"<<std::endl;
