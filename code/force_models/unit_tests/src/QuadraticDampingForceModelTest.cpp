@@ -54,6 +54,7 @@ TEST_F(QuadraticDampingForceModelTest, example_with_null_velocities)
 {
 //! [DampingForceModelTest example]
     const QuadraticDampingForceModel F(a.random<Eigen::Matrix<double,6,6> >(), BODY, EnvironmentAndFrames());
+    ASSERT_EQ("quadratic damping", F.model_name);
     const BodyStates states = get_body(BODY)->get_states();
     const double t = a.random<double>();
     const ssc::kinematics::Wrench f = F(states,t);

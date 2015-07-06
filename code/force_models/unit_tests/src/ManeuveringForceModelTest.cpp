@@ -272,6 +272,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_simple_maneuvering_model)
                              "N: 0\n";
     EnvironmentAndFrames env;
     ManeuveringForceModel force(ManeuveringForceModel::parse(yaml),"some body", env);
+    ASSERT_EQ("maneuvering", force.model_name);
     BodyStates states;
     const double t = 10;
     states.x.record(t, 1024);

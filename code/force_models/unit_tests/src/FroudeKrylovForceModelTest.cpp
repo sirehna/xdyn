@@ -84,6 +84,7 @@ TEST_F(FroudeKrylovForceModelTest, example)
     BodyPtr body(new BodyWithSurfaceForces(states, 0));
 
     FroudeKrylovForceModel F(BODY, env);
+    ASSERT_EQ("non-linear Froude-Krylov", F.model_name);
     const double t = 0;
     body->update_intersection_with_free_surface(env, t);
     const ssc::kinematics::Wrench Ffk = F(body->get_states(), t);

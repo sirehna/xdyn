@@ -88,6 +88,7 @@ TEST_F(RadiationDampingForceModelTest, example)
     input.hdb = get_hdb_data();
     input.yaml = yaml;
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
+    ASSERT_EQ("radiation damping", F.model_name);
     const std::string body_name = a.random<std::string>();
     BodyStates states;
     states.name = body_name;

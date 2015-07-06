@@ -74,6 +74,7 @@ TEST_F(HydrostaticForceModelTest, example)
     BodyPtr body(new BodyWithSurfaceForces(states,0));
 
     FastHydrostaticForceModel F(BODY, env);
+    ASSERT_EQ("non-linear hydrostatic (fast)",F.model_name);
     const double t = a.random<double>();
     body->update_intersection_with_free_surface(env, t);
     const ssc::kinematics::Wrench Fhs = F(body->get_states(), t);

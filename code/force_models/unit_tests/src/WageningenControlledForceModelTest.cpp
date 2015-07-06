@@ -262,6 +262,7 @@ TEST_F(WageningenControlledForceModelTest, KT)
 {
 //! [WageningenControlledForceModelTest KT_example]
     const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), "", EnvironmentAndFrames());
+    ASSERT_EQ("wageningen B-series", w.model_name);
     size_t Z;
     double AE_A0, P_D, J;
     // B6-65 (cf. The Wageningen Propeller Series, 1992, Gert Kuiper, Marin publication 92-001 page 128
@@ -292,6 +293,7 @@ TEST_F(WageningenControlledForceModelTest, KQ)
 {
     //! [WageningenControlledForceModelTest KQ_example]
     const WageningenControlledForceModel w(WageningenControlledForceModel::parse(test_data::wageningen()), "", EnvironmentAndFrames());
+    ASSERT_EQ("wageningen B-series", w.model_name);
     size_t Z;
     double AE_A0, P_D, J;
 

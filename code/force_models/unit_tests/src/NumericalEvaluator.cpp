@@ -70,9 +70,9 @@ template <> double NumericalEvaluator::operator()(const maneuvering::Atom& d) co
 template <> double NumericalEvaluator::operator()(const maneuvering::FunctionCall& d) const
 {
     if (d.function == "cos")  return std::cos(this->operator()(d.expr));
-    if (d.function == "sin")  return std::sin (this->operator()(d.expr));
-    if (d.function == "exp")  return std::exp (this->operator()(d.expr));
-    if (d.function == "abs")  return std::abs (this->operator()(d.expr));
+    if (d.function == "sin")  return std::sin(this->operator()(d.expr));
+    if (d.function == "exp")  return std::exp(this->operator()(d.expr));
+    if (d.function == "abs")  return std::abs(this->operator()(d.expr));
     if (d.function == "sqrt") return std::sqrt(this->operator()(d.expr));
                               return std::nan("");
 }

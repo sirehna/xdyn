@@ -46,6 +46,7 @@ TEST_F(SimpleHeadingKeepingControllerTest, force_and_torque)
     input.Tp = 2*PI;
     EnvironmentAndFrames env;
     const SimpleHeadingKeepingController w(input, "body", env);
+    ASSERT_EQ("simple heading controller", w.model_name);
     BodyStates states;
     const double psi = 1.234;
     states.qr.record(0,  cos(psi/2));

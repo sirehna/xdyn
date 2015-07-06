@@ -57,13 +57,13 @@ TEST_F(KtKqForceModelTest, parser)
     ASSERT_THAT(k.Kq, ElementsAreArray({-4.80000E-02,-3.30000E-02,-2.20000E-02,-2.50000E-02,-2.80000E-02,3.40000E-02, 3.26000E-02, 2.97000E-02, 2.55000E-02, 2.30000E-02, 2.040000E-02,1.50000E-02}));
 }
 
-
 TEST_F(KtKqForceModelTest, force)
 {
     auto input = KtKqForceModel::parse(test_data::kt_kq());
     EnvironmentAndFrames env;
     env.rho = 1024;
     const KtKqForceModel w(input, "", env);
+    ASSERT_EQ("Kt(J) & Kq(J)", w.model_name);
     BodyStates states;
     states.u.record(0, 1);
 
