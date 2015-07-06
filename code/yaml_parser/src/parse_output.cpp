@@ -129,6 +129,12 @@ YamlOutput build_YamlOutput_from_filename(const std::string& filename)
         out.format = "json";
         out.filename = "";
     }
+    else if ((filename=="h5") or (filename=="hdf5"))
+    {
+        std::stringstream ss;
+        ss << "One needs to specify an input filename for HDF5 export from command line";
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+    }
     else if (boost::algorithm::starts_with(filename,"ws") or
              boost::algorithm::starts_with(filename,"wss"))
     {
