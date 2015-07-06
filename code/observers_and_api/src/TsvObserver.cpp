@@ -7,7 +7,7 @@
 
 #define PRECISION 3
 #define WIDTH (PRECISION+6)
-#include <ssc/macros.hpp>
+
 TsvObserver::TsvObserver(const std::string& filename, const std::vector<std::string>& d) :
             Observer(d),
             output_to_file(not(filename.empty())),
