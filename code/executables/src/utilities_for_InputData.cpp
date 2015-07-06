@@ -80,7 +80,12 @@ int get_input_data(int argc, char **argv, InputData& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     const bool help = parse_input(argc, argv, desc);
-    if (invalid(input_data) or help)
+    if (help)
+    {
+        print_usage(std::cout, desc, argv[0], "This is a ship simulator");
+        return EXIT_SUCCESS;
+    }
+    else if (invalid(input_data))
     {
         print_usage(std::cout, desc, argv[0], "This is a ship simulator");
         return EXIT_FAILURE;
