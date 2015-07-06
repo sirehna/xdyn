@@ -2,7 +2,19 @@
 #include "parse_output.hpp"
 #include "utilities_for_simulator.hpp"
 
-YamlOutput create_a_wave_observer(const InputData& input_data);
+YamlOutput create_a_wave_observer(
+        const InputData& input_data);
+
+void add_observers_from_cli(
+        const std::string& yaml,
+        const InputData& input_data,
+        std::vector<YamlOutput>& out);
+
+void add_observers_from_cli_with_output_filename(
+        const std::string& yaml,
+        const InputData& input_data,
+        std::vector<YamlOutput>& out);
+
 YamlOutput create_a_wave_observer(const InputData& input_data)
 {
     YamlOutput o;
@@ -11,11 +23,6 @@ YamlOutput create_a_wave_observer(const InputData& input_data)
     o.format = get_format(input_data.wave_output);
     return o;
 }
-
-void add_observers_from_cli_with_output_filename(
-        const std::string& yaml,
-        const InputData& input_data,
-        std::vector<YamlOutput>& out);
 void add_observers_from_cli_with_output_filename(
         const std::string& yaml,
         const InputData& input_data,
@@ -35,11 +42,6 @@ void add_observers_from_cli_with_output_filename(
     }
     out.push_back(outputterCli);
 }
-
-void add_observers_from_cli(
-        const std::string& yaml,
-        const InputData& input_data,
-        std::vector<YamlOutput>& out);
 
 void add_observers_from_cli(
         const std::string& yaml,
