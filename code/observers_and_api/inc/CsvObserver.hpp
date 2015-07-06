@@ -8,7 +8,7 @@
 #ifndef CSVOBSERVER_HPP_
 #define CSVOBSERVER_HPP_
 
-#include <fstream>
+#include <ostream>
 
 #include "Observer.hpp"
 
@@ -16,13 +16,16 @@ class CsvObserver : public Observer
 {
     public:
         CsvObserver(const std::string& filename, const std::vector<std::string>& data);
+        ~CsvObserver();
 
     private:
         void flush_after_initialization();
         void flush_after_write();
         void flush_value_during_write();
 
-        std::ofstream os;
+        bool output_to_file;
+        std::ostream& os;
+
         using Observer::get_serializer;
         using Observer::get_initializer;
 
