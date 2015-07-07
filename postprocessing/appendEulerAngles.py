@@ -50,7 +50,7 @@ def addEulerAnglesToDataframe(input = '', output = '', names = '', toDegree = Tr
         R.to_csv(output, index = False)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description = '')
+    parser = argparse.ArgumentParser(description = 'Append Euler angle to simulation results coming from stdin or a CSV file')
     parser.add_argument("-i", "--input",
                         help = "Name of the file to process",
                         nargs = '*',
