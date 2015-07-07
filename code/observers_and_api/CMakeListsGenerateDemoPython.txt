@@ -1,4 +1,4 @@
-FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/demoPython.py" contents)
+FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/Python/demoPython.py" contents)
 
 FILE(WRITE ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "/* Header for file demoPython.hpp*/\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoPython.hpp.txt "#ifndef DEMOPYTHON_HPP\n")

@@ -174,9 +174,9 @@ ELSE()
             COMMENT "Generate STL mesh input data files")
 ENDIF()
 
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/plot.py
-              ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/animate.py
-              ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/waveYamlToCsv.py
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/Python/plot.py
+              ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/Python/animate.py
+              ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/Python/waveYamlToCsv.py
         DESTINATION demos)
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/demos

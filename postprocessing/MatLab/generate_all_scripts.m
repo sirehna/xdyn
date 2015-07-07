@@ -1,4 +1,7 @@
-function generate_all_script(filename)
+function generate_all_scripts(filename)
+% GENERATE_ALL_SCRIPTS extracts the MatLab script contained in a HDF5 result
+% file
+
 if nargin == 0
     filename = 'can_simulate_both_environment_and_system_for_several_time_steps.h5';
 end
