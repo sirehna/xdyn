@@ -17,16 +17,9 @@ phase(std::vector<std::vector<double> >()),
 rng(),
 generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 {
-    for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
-    {
-        std::vector<double> p;
-        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
-        {
-            p.push_back(constant_random_phase);
-
-        }
-        spectrum.phase.push_back(p);
-    }
+    const size_t nPsi = spectrum.psi.size();
+    const size_t nOmega = spectrum.omega.size();
+    spectrum.phase = std::vector<std::vector<double> >(nOmega, std::vector<double>(nPsi, constant_random_phase));
 }
 
 
