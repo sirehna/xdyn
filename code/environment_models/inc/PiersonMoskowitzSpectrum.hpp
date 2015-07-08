@@ -17,9 +17,9 @@
  *  \details
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet wave_models/unit_tests/src/PiersonMoskowitzSpectrum : public WaveSpectrumTest.cpp PiersonMoskowitzSpectrum : public WaveSpectrumTest example
+ *  \snippet environment_models/unit_tests/src/PiersonMoskowitzSpectrum : public WaveSpectrumTest.cpp PiersonMoskowitzSpectrum : public WaveSpectrumTest example
  *  \section ex2 Expected output
- *  \snippet wave_models/unit_tests/src/PiersonMoskowitzSpectrum : public WaveSpectrumTest.cpp PiersonMoskowitzSpectrum : public WaveSpectrumTest expected output
+ *  \snippet environment_models/unit_tests/src/PiersonMoskowitzSpectrum : public WaveSpectrumTest.cpp PiersonMoskowitzSpectrum : public WaveSpectrumTest expected output
  *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 49
  *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 43
  */

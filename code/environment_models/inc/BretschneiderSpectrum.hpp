@@ -14,9 +14,9 @@
  *  \date Jul 30, 2014, 2:25:11 PM
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet wave_models/unit_tests/src/BretschneiderSpectrumTest.cpp BretschneiderSpectrumTest example
+ *  \snippet environment_models/unit_tests/src/BretschneiderSpectrumTest.cpp BretschneiderSpectrumTest example
  *  \section ex2 Expected output
- *  \snippet wave_models/unit_tests/src/BretschneiderSpectrumTest.cpp BretschneiderSpectrumTest expected output
+ *  \snippet environment_models/unit_tests/src/BretschneiderSpectrumTest.cpp BretschneiderSpectrumTest expected output
  */
 class BretschneiderSpectrum : public WaveSpectralDensity
 {
@@ -34,7 +34,7 @@ class BretschneiderSpectrum : public WaveSpectralDensity
           *  \date Jul 30, 2014, 9:40:33 AM
           *  \brief Computes the amplitude of the power spectrum at a given angular frequency
           *  \returns Amplitude of the power spectrum (in m^2 s)
-          *  \snippet wave_models/unit_tests/src/BretschneiderSpectrumTest.cpp BretschneiderSpectrumTest example
+          *  \snippet environment_models/unit_tests/src/BretschneiderSpectrumTest.cpp BretschneiderSpectrumTest example
           */
         double operator()(const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
                          ) const;

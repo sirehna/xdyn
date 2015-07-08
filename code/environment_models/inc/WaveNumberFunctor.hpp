@@ -18,9 +18,9 @@
  *           The function is \f$k\mapsto g\cdot k\cdot \tanh{kh} - \omega^2$\f
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet wave_models/unit_tests/src/WaveNumberFunctorTest.cpp WaveNumberFunctorTest example
+ *  \snippet environment_models/unit_tests/src/WaveNumberFunctorTest.cpp WaveNumberFunctorTest example
  *  \section ex2 Expected output
- *  \snippet wave_models/unit_tests/src/WaveNumberFunctorTest.cpp WaveNumberFunctorTest expected output
+ *  \snippet environment_models/unit_tests/src/WaveNumberFunctorTest.cpp WaveNumberFunctorTest expected output
  */
 class WaveNumberFunctor
 {

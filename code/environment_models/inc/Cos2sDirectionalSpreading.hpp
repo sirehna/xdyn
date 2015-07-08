@@ -12,9 +12,9 @@
 
 /** \ingroup wave_models
  *  \section ex1 Example
- *  \snippet wave_models/unit_tests/src/Cos2sDirectionalSpreadingTest.cpp Cos2sDirectionalSpreadingTest example
+ *  \snippet environment_models/unit_tests/src/Cos2sDirectionalSpreadingTest.cpp Cos2sDirectionalSpreadingTest example
  *  \section ex2 Expected output
- *  \snippet wave_models/unit_tests/src/Cos2sDirectionalSpreadingTest.cpp Cos2sDirectionalSpreadingTest expected output
+ *  \snippet environment_models/unit_tests/src/Cos2sDirectionalSpreadingTest.cpp Cos2sDirectionalSpreadingTest expected output
  *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, page 131
  */
 class Cos2sDirectionalSpreading : public WaveDirectionalSpreading

@@ -36,7 +36,7 @@ class SumOfWaveSpectralDensities : public WaveSpectralDensity
 
         /**  \brief Returns n angular frequencies between omega_min (included)
           *         and omega_max (also included)
-          *  \snippet wave_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
+          *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
           */
         std::vector<double> get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
                                                     const double omega_max, //!< Minimum angular frequency (in rad/s)

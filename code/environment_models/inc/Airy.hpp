@@ -21,9 +21,9 @@
 /** \brief First order Stokes wave model
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet wave_models/unit_tests/src/AiryTest.cpp AiryTest example
+ *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest example
  *  \section ex2 Expected output
- *  \snippet wave_models/unit_tests/src/AiryTest.cpp AiryTest expected output
+ *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest expected output
  */
 class Airy : public WaveModel
 {
@@ -47,7 +47,7 @@ class Airy : public WaveModel
           *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
           *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 29
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
-          *  \snippet wave_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
+          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
         double elevation(const double x,                                  //!< x-position in the NED frame (in meters)
                          const double y,                                  //!< y-position in the NED frame (in meters)
@@ -66,7 +66,7 @@ class Airy : public WaveModel
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation VI.34, page 183
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 68
           *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
-          *  \snippet wave_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
+          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
         double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
                                 const double g,   //!< gravity (in m/s^2)

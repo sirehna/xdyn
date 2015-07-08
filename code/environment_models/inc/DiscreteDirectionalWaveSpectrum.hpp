@@ -32,9 +32,9 @@ struct DiscreteDirectionalWaveDensity
  *  \brief Used by 'discretize'
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet wave_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
+ *  \snippet environment_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
  *  \section ex2 Expected output
- *  \snippet wave_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
+ *  \snippet environment_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
  */
 struct DiscreteDirectionalWaveSpectrum
 {
@@ -57,9 +57,9 @@ struct DiscreteDirectionalWaveSpectrum
  *  \details No loop on frequency & space is necessary.
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet wave_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
+ *  \snippet environment_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
  *  \section ex2 Expected output
- *  \snippet wave_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
+ *  \snippet environment_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
  */
 struct FlatDiscreteDirectionalWaveSpectrum
 {
