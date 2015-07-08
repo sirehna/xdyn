@@ -167,7 +167,8 @@ double SurfaceElevationInterface::get_dynamic_pressure(
     return dynamic_pressure(rho, g, OP.x(),OP.y(),OP.z(),eta,t);
 }
 
-ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NED_frame(const ssc::kinematics::KinematicsPtr& k) const
+ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NED_frame(
+        const ssc::kinematics::KinematicsPtr& k) const
 {
     if (output_mesh->get_frame() != "NED")
     {
@@ -177,8 +178,8 @@ ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NE
 }
 
 std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_waves_on_mesh(
-        const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
-        const double t //!< Current instant (in seconds)
+        const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+        const double t                           //!< Current instant (in seconds)
         ) const
 {
     if (output_mesh->m.cols()==0) return std::vector<ssc::kinematics::Point>();
@@ -186,8 +187,8 @@ std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_waves_on_mesh
 }
 
 SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
-        const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
-        const double t //!< Current instant (in seconds)
+        const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
+        const double t                              //!< Current instant (in seconds)
         ) const
 {
     std::vector<ssc::kinematics::Point> res = get_waves_on_mesh(k,t);
