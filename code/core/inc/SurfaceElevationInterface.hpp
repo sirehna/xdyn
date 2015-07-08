@@ -26,7 +26,7 @@ class SurfaceElevationInterface
 {
     public:
         SurfaceElevationInterface(
-                const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh,
+                const ssc::kinematics::PointMatrixPtr& output_mesh,
                 const std::pair<std::size_t,std::size_t>& output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0)
         );
 
@@ -35,9 +35,9 @@ class SurfaceElevationInterface
         /**  \brief Computes surface elevation for each point on mesh.
           *  \details Updates the absolute surface elevation & the relative wave height.
           */
-        void update_surface_elevation(const ssc::kinematics::PointMatrixPtr& M,              //!< Points for which to compute the relative wave height
-                                      const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                      const double t //!< Current instant (in seconds)
+        void update_surface_elevation(const ssc::kinematics::PointMatrixPtr& M,     //!< Points for which to compute the relative wave height
+                                      const ssc::kinematics::KinematicsPtr& k,      //!< Object used to compute the transforms to the NED frame
+                                      const double t                                //!< Current instant (in seconds)
                                      );
 
         /**  \brief Returns the relative wave height computed by update_surface_elevation
@@ -91,12 +91,12 @@ class SurfaceElevationInterface
           *  \returns Pdyn (in Pascal)
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
-        double get_dynamic_pressure(const double rho, //!< Water density (in kg/m^3)
-                                    const double g, //!< Gravity (in m/s^2)
-                                    const ssc::kinematics::Point& P, //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
-                                    const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                                    const double eta, //!< Wave elevation at P in the NED frame (in meters)
-                                    const double t  //!< Current instant (in seconds)
+        double get_dynamic_pressure(const double rho,                           //!< Water density (in kg/m^3)
+                                    const double g,                             //!< Gravity (in m/s^2)
+                                    const ssc::kinematics::Point& P,            //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
+                                    const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
+                                    const double eta,                           //!< Wave elevation at P in the NED frame (in meters)
+                                    const double t                              //!< Current instant (in seconds)
                                     ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
@@ -106,8 +106,8 @@ class SurfaceElevationInterface
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
         std::vector<ssc::kinematics::Point> get_waves_on_mesh(
-                const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                const double t //!< Current instant (in seconds)
+                const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+                const double t                           //!< Current instant (in seconds)
                 ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
@@ -119,8 +119,8 @@ class SurfaceElevationInterface
           *           the NED frame.
           */
         SurfaceElevationGrid get_waves_on_mesh_as_a_grid(
-                const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k, //!< Object used to compute the transforms to the NED frame
-                const double t                                         //!< Current instant (in seconds)
+                const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
+                const double t                              //!< Current instant (in seconds)
                 ) const;
 
         /**  \brief Computes the wave heights on a mesh. Used by get_waves_on_mesh
@@ -130,8 +130,8 @@ class SurfaceElevationInterface
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
         std::vector<ssc::kinematics::Point> get_points_on_free_surface(
-                const double t,                                             //!< Current instant (in seconds)
-                const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& Mned   //!< Output mesh in NED frame
+                const double t,                               //!< Current instant (in seconds)
+                const ssc::kinematics::PointMatrixPtr& Mned   //!< Output mesh in NED frame
                 ) const;
 
         /**  \brief Surface elevation
@@ -170,11 +170,11 @@ class SurfaceElevationInterface
 
         /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
           */
-        TR1(shared_ptr)<ssc::kinematics::PointMatrix> get_output_mesh_in_NED_frame(const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k //!< Object used to compute the transforms to the NED frame
-                                            ) const;
+        ssc::kinematics::PointMatrixPtr get_output_mesh_in_NED_frame(const ssc::kinematics::KinematicsPtr& k //!< Object used to compute the transforms to the NED frame
+                                                                    ) const;
 
-        TR1(shared_ptr)<ssc::kinematics::PointMatrix> output_mesh; //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant
-        std::pair<std::size_t,std::size_t> output_mesh_size; //!< Mesh size defined as a pair containing nx and ny
+        ssc::kinematics::PointMatrixPtr output_mesh;            //!< Mesh defined in the 'output' section of the YAML file. Points at which we want to know the wave height at each instant
+        std::pair<std::size_t,std::size_t> output_mesh_size;    //!< Mesh size defined as a pair containing nx and ny
         std::vector<double> relative_wave_height_for_each_point_in_mesh;
         std::vector<double> surface_elevation_for_each_point_in_mesh;
 };
