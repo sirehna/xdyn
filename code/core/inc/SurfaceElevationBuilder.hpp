@@ -21,7 +21,6 @@
 #include "WaveModelBuilder.hpp"
 
 class SurfaceElevationInterface;
-class PointMatrix;
 struct YamlWaveOutput;
 
 class SurfaceElevationBuilderInterface
