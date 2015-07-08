@@ -38,12 +38,13 @@ TR1(shared_ptr)<ssc::kinematics::PointMatrix> SurfaceElevationBuilderInterface::
     const size_t ny = (dy==0 and output.ny) ? 1 : output.ny;
     ssc::kinematics::PointMatrix M(output.frame_of_reference, nx*ny);
     int k = 0;
-    for (int j = 0 ; j < (int)ny ; ++j)
+    for (size_t j = 0 ; j < ny ; ++j)
     {
-        for (int i = 0 ; i < (int)nx ; ++i)
+        const double y = output.ymin + (double)j*dy;
+        for (size_t i = 0 ; i < nx ; ++i)
         {
             M.m(0,k) = output.xmin + (double)i*dx;
-            M.m(1,k) = output.ymin + (double)j*dy;
+            M.m(1,k) = y;
             M.m(2,k) = 0;
             ++k;
         }
