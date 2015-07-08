@@ -7,55 +7,27 @@
 
 #include "SurfaceElevationInterface.hpp"
 #include <ssc/exception_handling.hpp>
+#include <string>
 
-template <typename PointType> PointType compute_relative_position(
+/**
+ * \note One can optimize the evaluation of the transformation in case only a
+ * translation is required. For example, if transformation is defined from
+ * NED to NED(body), only a translation is required
+ */
+template <typename PointType>
+PointType compute_position_in_NED_frame(
         const PointType& P,
         const ssc::kinematics::KinematicsPtr& k)
 {
-    ssc::kinematics::Transform T = k->get("NED", P.get_frame());
-    // Create the equivalent transformation just by swapping frame names
-    T.swap();
-    return T*P;
-}
-
-ssc::kinematics::PointMatrix compute_relative_position(
-        const Matrix3x& M,                                      //!< Points for which to compute the relative wave height
-        const std::string& frame,                               //!< Name of the reference frame in which the coordinates in M are expressed
-        const ssc::kinematics::KinematicsPtr& k                 //!< Object used to compute the transforms to the NED frame)
-        );
-
-ssc::kinematics::PointMatrix compute_relative_position(
-        const Matrix3x& M,                                     //!< Points for which to compute the relative wave height
-        const std::string& frame,                              //!< Name of the reference frame in which the coordinates in M are expressed
-        const ssc::kinematics::KinematicsPtr& k                //!< Object used to compute the transforms to the NED frame)
-        )
-{
-    ssc::kinematics::Transform T = k->get("NED", frame);
-    // Create the equivalent transformation just by swapping frame names
-    T.swap();
-    return T*ssc::kinematics::PointMatrix(M, frame);
-}
-
-#define CHECK(x) if (std::isnan(x)) {THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"NaN detected in " QUOTEME(x));}
-
-template <typename PointType> PointType compute_relative_position(const TR1(shared_ptr)<PointType>& P, const TR1(shared_ptr)<ssc::kinematics::Kinematics>& k)
-{
-    ssc::kinematics::Transform T = k->get("NED", P->get_frame());
-    CHECK(T.get_point().v(0));
-    CHECK(T.get_point().v(1));
-    CHECK(T.get_point().v(2));
-    CHECK(T.get_rot()(0,0));
-    CHECK(T.get_rot()(0,1));
-    CHECK(T.get_rot()(0,2));
-    CHECK(T.get_rot()(1,0));
-    CHECK(T.get_rot()(1,1));
-    CHECK(T.get_rot()(1,2));
-    CHECK(T.get_rot()(2,0));
-    CHECK(T.get_rot()(2,1));
-    CHECK(T.get_rot()(2,2));
-    // Create the equivalent transformation just by swapping frame names
-    T.swap();
-    return T*P;
+    const std::string frame = P.get_frame();
+    if (frame!="NED")
+    {
+        ssc::kinematics::Transform T = k->get("NED", P.get_frame());
+        // Create the equivalent transformation just by swapping frame names
+        T.swap();
+        return T*P;
+    }
+    return P;
 }
 
 SurfaceElevationInterface::SurfaceElevationInterface(
@@ -163,18 +135,15 @@ double SurfaceElevationInterface::get_dynamic_pressure(
         const double t                              //!< Current instant (in seconds)
         ) const
 {
-    const ssc::kinematics::Point OP = compute_relative_position(P, k);
+    const ssc::kinematics::Point OP = compute_position_in_NED_frame(P, k);
     return dynamic_pressure(rho, g, OP.x(),OP.y(),OP.z(),eta,t);
 }
 
 ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NED_frame(
         const ssc::kinematics::KinematicsPtr& k) const
 {
-    if (output_mesh->get_frame() != "NED")
-    {
-        return ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(k->get(output_mesh->get_frame(),"NED")*(*output_mesh)));
-    }
-    return output_mesh;
+    using namespace ssc::kinematics;
+    return PointMatrixPtr(new PointMatrix(compute_position_in_NED_frame(*output_mesh,k)));
 }
 
 std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_waves_on_mesh(
