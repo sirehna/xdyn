@@ -1,5 +1,5 @@
 /*
- * AiryInfiniteDepth.cpp
+ * Airy.cpp
  *
  *  Created on: Aug 1, 2014
  *      Author: cady
