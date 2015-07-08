@@ -7,13 +7,6 @@
 
 #include "SumOfWaveDirectionalSpreadings.hpp"
 
-/*
- * SumOfWaveSpectralDensities.cpp
- *
- *  Created on: Sep 3, 2014
- *      Author: cady
- */
-
 #include <list>
 #include <set>
 
