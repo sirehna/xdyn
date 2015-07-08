@@ -22,19 +22,18 @@ generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
     spectrum.phase = std::vector<std::vector<double> >(nOmega, std::vector<double>(nPsi, constant_random_phase));
 }
 
-
 Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(spectrum_),
 phase(std::vector<std::vector<double> >()),
 rng(boost::mt19937((unsigned int)random_number_generator_seed)),
 generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 {
+    const size_t nPsi = spectrum.psi.size();
     for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
     {
-        std::vector<double> p;
-        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
+        std::vector<double> p(nPsi,0.0);
+        for (size_t j = 0 ; j < nPsi ; ++j)
         {
-            p.push_back(generate_random_phase(rng));
-
+            p[j] = generate_random_phase(rng);
         }
         spectrum.phase.push_back(p);
     }
