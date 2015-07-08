@@ -8,10 +8,6 @@
 #ifndef SURFACELEVATIONINTERFACE_HPP_
 #define SURFACELEVATIONINTERFACE_HPP_
 
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
-#include <vector>
-
 #include "GeometricTypes3d.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include <ssc/kinematics.hpp>
