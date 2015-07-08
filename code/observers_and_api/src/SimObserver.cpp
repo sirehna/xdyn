@@ -6,9 +6,7 @@
  */
 
 #include "SimObserver.hpp"
-#include "StateMacros.hpp"
 #include "Sim.hpp"
-#include "YamlSimulatorInput.hpp"
 
 SimObserver::SimObserver() : res(std::vector<Res>())
 {
