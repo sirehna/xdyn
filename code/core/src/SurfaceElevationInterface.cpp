@@ -6,7 +6,6 @@
  */
 
 #include "SurfaceElevationInterface.hpp"
-#include <ssc/kinematics.hpp>
 #include <ssc/exception_handling.hpp>
 
 template <typename PointType> PointType compute_relative_position(
