@@ -1,5 +1,5 @@
 /*
- * Res.cpp
+ * SurfaceElevationBuilder.cpp
  *
  *  Created on: Jul 1, 2014
  *      Author: cady
