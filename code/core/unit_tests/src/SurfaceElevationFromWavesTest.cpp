@@ -66,7 +66,7 @@ TEST_F(SurfaceElevationFromWavesTest, relative_wave_height)
     const double Hs = 3;
     const double Tp = 10;
     const double k_ = 4.*PI*PI/Tp/Tp/9.81;
-    TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
+    ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     SurfaceElevationFromWaves wave(get_model());
     const double phi = 3.4482969340598712549;
 //! [SurfaceElevationFromWavesTest relative_wave_height example]
@@ -88,7 +88,7 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
     const double Hs = 3;
     const double Tp = 10;
     const double k_ = 4.*PI*PI/Tp/Tp/9.81;
-    TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
+    ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     SurfaceElevationFromWaves wave(get_model());
     const double phi = 3.4482969340598712549;
 //! [SurfaceElevationFromWavesTest dynamic_pressure example]
@@ -108,7 +108,7 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
 
 TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
 {
-    TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
+    ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     SurfaceElevationFromWaves wave(get_model());
     const double g = 4.57;
     const double x = 3.7;
@@ -123,7 +123,7 @@ TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
 
 TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
 {
-    TR1(shared_ptr)<ssc::kinematics::Kinematics> k(new ssc::kinematics::Kinematics());
+    ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     YamlWaveOutput out;
     out.frame_of_reference = "NED";
     out.xmin = -10;
