@@ -24,13 +24,14 @@ WaveDirectionalSpreading::~WaveDirectionalSpreading()
 }
 
 std::vector<double> WaveDirectionalSpreading::get_directions(const size_t n          //!< Number of angles to return
-                                                   ) const
+                                                             ) const
 {
     std::vector<double> psi(n, 0);
     const double two_pi = 2*PI;
+    const double scale = two_pi/double(n);
     for (size_t i = 0 ; i < n ; ++i)
     {
-        psi[i] = double(i)/double(n)*two_pi;
+        psi[i] = double(i)*scale;
     }
     return psi;
 }
