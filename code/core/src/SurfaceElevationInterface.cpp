@@ -77,18 +77,19 @@ std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_points_on_fre
         const ssc::kinematics::PointMatrixPtr& Mned
         ) const
 {
+    if (Mned->get_frame()!="NED")
+    {
+        std::stringstream ss;
+        ss << "Problem : " <<std::endl;
+        THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,ss.str());
+    }
     std::vector<ssc::kinematics::Point> ret(output_mesh->m.cols());
     for (int i = 0 ; i < output_mesh->m.cols() ; ++i)
     {
-        // Ugly & dangerous hack: the points are in fact expressed in the NED frame
-        // but we use output_mesh->get_frame() so that the observer can decide
-        // whether to write the x & y coordinates at each time step (if the
-        // output_mesh frame moves wrt NED) or once & for all at the beginning
-        // of the YAML wave output (if output_mesh is expressed in the NED frame)
         const double x = Mned->m(0,i);
         const double y = Mned->m(1,i);
         const double z = wave_height(x,y,t);
-        ret[i] = ssc::kinematics::Point(output_mesh->get_frame(),x,y,z);
+        ret[i] = ssc::kinematics::Point("NED",x,y,z);
     }
     return ret;
 }
