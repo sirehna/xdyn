@@ -10,8 +10,6 @@
 
 #include "AbstractWageningen.hpp"
 
-#include <ssc/macros/tr1_macros.hpp>
-
 /** \details This class was created to
  *  \addtogroup module
  *  \ingroup module

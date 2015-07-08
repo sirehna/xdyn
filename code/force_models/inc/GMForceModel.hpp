@@ -9,7 +9,6 @@
 #define GMFORCEMODEL_HPP_
 
 #include "ImmersedSurfaceForceModel.hpp"
-#include <Eigen/Dense>
 #include <ssc/kinematics.hpp>
 
 #include "EnvironmentAndFrames.hpp"
