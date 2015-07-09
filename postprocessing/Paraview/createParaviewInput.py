@@ -142,7 +142,7 @@ def generateCsvTrajectoryFileFromH5(state, t = None, exportFilename = 'state.csv
     if t is None:
         t = np.arange(nombreDePasDeSimulation)
     f = open(exportFilename, 'w')
-    f.write("t,X,Y,Z,ParaviewRotDegX,ParaviewRotDegY,ParaviewRotDegZ\n")
+    f.write("Time,X,Y,Z,ParaviewRotDegX,ParaviewRotDegY,ParaviewRotDegZ\n")
     for i in range(nombreDePasDeSimulation):
         euler = ctm2eul312(quat2ctm([Qr[i], Qi[i], Qj[i], Qk[i]]), useDegree = True)
         strToWrite = "{0},{1:.5f},{2:.5f},{3:.5f},{4:.5f},{5:.5f},{6:.5f}\n".\

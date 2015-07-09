@@ -33,15 +33,21 @@ waveDirectory       = r'{{ waveDirectory }}'
 #   END USER INPUTS
 # ======================================================================
 
+waves = None
 if waveDirectory != '':
     waveDirectory = op.join(simulationDirectory, waveDirectory)
     if op.isdir(waveDirectory):
         files = sorted(glob(op.join(waveDirectory, '*.vtk')))
         waves = LegacyVTKReader(FileNames=files)
         renderView = GetActiveViewOrCreate('RenderView')
-        wavesDisplay = Show(waves, renderView)
-        wavesDisplay.ColorArrayName = [None, '']
+        wavesDisplay = Hide(waves, renderView)
         Hide3DWidgets(proxy = waves)
+        temporalShiftScale = TemporalShiftScale(Input=waves)
+        temporalShiftScale.Scale = 1.0
+        temporalShiftScaleDisplay = Show(temporalShiftScale, renderView)
+        temporalShiftScaleDisplay.ColorArrayName = [None, '']
+        temporalShiftScaleDisplay.DiffuseColor = [0.0, 2.0/3.0, 1.0]
+        Hide3DWidgets(proxy = temporalShiftScale)
 
 if resultLegend:
     if (type(resultLegend)==str or type(resultLegend)==unicode):
@@ -100,7 +106,8 @@ for i,resultFile in enumerate(resultFiles):
     datas.append(servermanager.Fetch(Results[-1],0))
     rowResults.append(datas[-1].GetRowData())
 
-labelsList = ['t','X','Y','Z','ParaviewRotDegX','ParaviewRotDegY','ParaviewRotDegZ']
+labelTime = 'Time'
+labelsList = [labelTime,'X','Y','Z','ParaviewRotDegX','ParaviewRotDegY','ParaviewRotDegZ']
 resultsLabelsDict = []
 for rowResult in rowResults:
     resultLabelsDict = {}
@@ -139,15 +146,20 @@ for i,SM in enumerate(SMs_tr_Initials):
     SM_tr_repr.EdgeColor = [0.0, 0.0, 0.50]
     if nResultFiles>1:
         SM_tr_repr.DiffuseColor = defaultColor[i]
+    else:
+        SM_tr_repr.DiffuseColor = [1.0, 2.0/3.0, 0.0]
     SetActiveSource(SM)
 
-t0 = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetRange()[0]
-tf = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetRange()[1]
-N  = rowResults[0].GetArray(resultsLabelsDict[0]['t']).GetSize()
+rt = rowResults[0].GetArray(resultsLabelsDict[0][labelTime])
+t0 = rt.GetRange()[0]
+tf = rt.GetRange()[1]
+N  = rt.GetSize()
+time = [rt.GetTuple1(i) for i in range(N)]
 for i,rowResult in enumerate(rowResults):
-    t0 = min(t0,rowResult.GetArray(resultsLabelsDict[i]['t']).GetRange()[0])
-    tf = max(tf,rowResult.GetArray(resultsLabelsDict[i]['t']).GetRange()[1])
-    N  = max(N,rowResult.GetArray(resultsLabelsDict[i]['t']).GetSize())
+    rt = rowResult.GetArray(resultsLabelsDict[i][labelTime])
+    t0 = min(t0,rt.GetRange()[0])
+    tf = max(tf,rt.GetRange()[1])
+    N  = max(N,rt.GetSize())
 
 print('Tstart {0:+06.2f} - Tend {1:+06.2f} - N =  {2}'.format(t0, tf,N))
 
@@ -160,11 +172,12 @@ scene.StartTime = t0
 scene.EndTime = tf
 scene.NumberOfFrames = N
 animationDuration = tf - t0
+dt = animationDuration/(N-1)
 
 Render()
 
-pos = ('TX','TY','TZ')
-rot = ('RX','RY','RZ')
+pos = ('TX', 'TY', 'TZ')
+rot = ('RX', 'RY', 'RZ')
 
 SMs_KF_Cue = {k:[None]*nResultFiles for k in pos+rot}
 SMs_KF     = {k:[[]]*nResultFiles for k in pos+rot}
@@ -178,7 +191,7 @@ for i,SM_tr in enumerate(SMs_tr):
 for j,rowResult in enumerate(rowResults):
     N = rowResult.GetNumberOfTuples()
     for ii in range(0,N,1):
-        keytime = (rowResult.GetArray(resultsLabelsDict[j]['t']).GetTuple(ii)[0]-t0)/animationDuration
+        keytime = (rowResult.GetArray(resultsLabelsDict[j][labelTime]).GetTuple(ii)[0]-t0)/animationDuration
         for t,u in zip(pos+rot,labelsList[1:]):
             SMs_KF[t][j].append( \
                     CompositeKeyFrame(Interpolation = "Boolean", \
@@ -206,7 +219,13 @@ if nResultFiles>1:
         DataRepresentation.FontSize = 12
         DataRepresentation.WindowLocation = 'AnyLocation'
 
-timeLabel = AnnotateTimeFilter()
+if waves is not None:
+    SetActiveSource(temporalShiftScale)
+    temporalShiftScale.Scale = dt
+    timeLabel = AnnotateTimeFilter(temporalShiftScale)
+else:
+    timeLabel = AnnotateTimeFilter()
+
 timeLabel_repr = Show()
 timeLabel.Format = 'Time: %4.2f'
 timeLabel_repr.FontSize = 14
