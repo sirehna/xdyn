@@ -52,11 +52,12 @@ std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_points_on_fre
     if (Mned->get_frame()!="NED")
     {
         std::stringstream ss;
-        ss << "Problem : " <<std::endl;
+        ss << "Points should be expressed in NED frame" <<std::endl;
         THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,ss.str());
     }
-    std::vector<ssc::kinematics::Point> ret(output_mesh->m.cols());
-    for (int i = 0 ; i < output_mesh->m.cols() ; ++i)
+    const size_t nPoints = output_mesh->m.cols();
+    std::vector<ssc::kinematics::Point> ret(nPoints);
+    for (int i = 0 ; i < nPoints ; ++i)
     {
         const double x = Mned->m(0,i);
         const double y = Mned->m(1,i);
