@@ -9,7 +9,7 @@
 
 DefaultSurfaceElevation::DefaultSurfaceElevation(
         const double wave_height_,
-        const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_,
+        const ssc::kinematics::PointMatrixPtr& output_mesh_,
         const std::pair<std::size_t,std::size_t> output_mesh_size_):
             SurfaceElevationInterface(output_mesh_, output_mesh_size_), zwave(wave_height_)
 {

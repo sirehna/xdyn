@@ -15,7 +15,7 @@
 SurfaceElevationFromWaves::SurfaceElevationFromWaves(
         const std::vector<TR1(shared_ptr)<WaveModel> >& models_,
         const std::pair<std::size_t,std::size_t> output_mesh_size_,
-        const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) :
+        const ssc::kinematics::PointMatrixPtr& output_mesh_) :
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_),
                 models(models_)
 {
@@ -28,7 +28,7 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(
 SurfaceElevationFromWaves::SurfaceElevationFromWaves(
         const TR1(shared_ptr)<WaveModel>& model,
         const std::pair<std::size_t,std::size_t> output_mesh_size_,
-        const TR1(shared_ptr)<ssc::kinematics::PointMatrix>& output_mesh_) :
+        const ssc::kinematics::PointMatrixPtr& output_mesh_) :
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_),
                 models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model))
 {
