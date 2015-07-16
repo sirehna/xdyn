@@ -167,7 +167,7 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     return pimpl->sum_of_forces_in_body_frame[body->get_name()];
 }
 
-std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current instant
+ssc::kinematics::PointMatrix Sim::get_waves(const double t//!< Current instant
                                                   ) const
 {
     try
@@ -187,7 +187,7 @@ std::vector<ssc::kinematics::Point> Sim::get_waves(const double t//!< Current in
         ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
         THROW(__PRETTY_FUNCTION__, SimException, ss.str());
     }
-    return std::vector<ssc::kinematics::Point>();
+    return ssc::kinematics::PointMatrix("NED",0);
 }
 
 void Sim::output(const StateType& x, Observer& obs, const double t) const

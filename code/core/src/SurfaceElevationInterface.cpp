@@ -44,7 +44,7 @@ SurfaceElevationInterface::~SurfaceElevationInterface()
 {
 }
 
-std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_points_on_free_surface(
+ssc::kinematics::PointMatrix SurfaceElevationInterface::get_points_on_free_surface(
         const double t,
         const ssc::kinematics::PointMatrixPtr& Mned
         ) const
@@ -55,13 +55,10 @@ std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_points_on_fre
         ss << "Points should be expressed in NED frame" <<std::endl;
         THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,ss.str());
     }
-    std::vector<ssc::kinematics::Point> ret(output_mesh->m.cols());
-    for (int i = 0 ; i < output_mesh->m.cols() ; ++i)
+    ssc::kinematics::PointMatrix ret(*Mned);
+    for (int i = 0 ; i < Mned->m.cols() ; ++i)
     {
-        const double x = Mned->m(0,i);
-        const double y = Mned->m(1,i);
-        const double z = wave_height(x,y,t);
-        ret[i] = ssc::kinematics::Point("NED",x,y,z);
+        ret.m(2,i) = wave_height((double)ret.m(0,i), (double)ret.m(1,i),t);
     }
     return ret;
 }
@@ -146,12 +143,12 @@ ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NE
     return PointMatrixPtr(new PointMatrix(compute_position_in_NED_frame(*output_mesh,k)));
 }
 
-std::vector<ssc::kinematics::Point> SurfaceElevationInterface::get_waves_on_mesh(
+ssc::kinematics::PointMatrix SurfaceElevationInterface::get_waves_on_mesh(
         const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
         const double t                           //!< Current instant (in seconds)
         ) const
 {
-    if (output_mesh->m.cols()==0) return std::vector<ssc::kinematics::Point>();
+    if (output_mesh->m.cols()==0) return ssc::kinematics::PointMatrix("NED",0);
     return get_points_on_free_surface(t, get_output_mesh_in_NED_frame(k));
 }
 
@@ -160,33 +157,34 @@ SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
         const double t                              //!< Current instant (in seconds)
         ) const
 {
-    std::vector<ssc::kinematics::Point> res = get_waves_on_mesh(k,t);
-    if (res.empty()) return SurfaceElevationGrid(t);
+    ssc::kinematics::PointMatrix res = get_waves_on_mesh(k,t);
+    const size_t nPoints = (size_t)res.m.cols();
+    if (nPoints==0) return SurfaceElevationGrid(t);
     const size_t nx = output_mesh_size.first;
     const size_t ny = output_mesh_size.second;
-    if ((nx*ny)!=res.size())
+    if ((nx*ny)!=nPoints)
     {
         std::stringstream ss;
         ss << "Problem : " <<std::endl
            << "nx*ny = "<<nx << "*"<<ny <<"="<<nx*ny
-           <<" should be equal to res.size() = "<<res.size()<<std::endl;
+           <<" should be equal to res.size() = "<<nPoints<<std::endl;
         THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,ss.str());
     }
     SurfaceElevationGrid s(nx,ny,t);
     for(size_t i=0;i<nx;++i)
     {
-        s.x(i) = res.at(i).v(0);
+        s.x(i) = res.m(0,i);
     }
     for(size_t j=0; j<ny; ++j)
     {
-        s.y(j) = res.at(j*nx).v(1);
+        s.y(j) = res.m(1,j*nx);
     }
     size_t idx = 0;
     for(size_t j=0;j<ny;++j)
     {
         for(size_t i = 0;i<nx;++i)
         {
-            s.z(i,j) = res.at(idx++).v(2);
+            s.z(i,j) = res.m(2,idx++);
         }
     }
     return s;

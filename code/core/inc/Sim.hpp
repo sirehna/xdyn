@@ -46,8 +46,8 @@ class Sim
           *           the z coordinate being the wave height (in meters)
           *  \snippet simulator/unit_tests/src/SimTest.cpp SimTest get_waves_example
           */
-        std::vector<ssc::kinematics::Point> get_waves(const double t            //!< Current instant
-                                                     ) const;
+        ssc::kinematics::PointMatrix get_waves(const double t            //!< Current instant
+                                              ) const;
 
         StateType state;
 

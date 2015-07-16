@@ -105,7 +105,7 @@ class SurfaceElevationInterface
           *           point in output_mesh
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
-        std::vector<ssc::kinematics::Point> get_waves_on_mesh(
+        ssc::kinematics::PointMatrix get_waves_on_mesh(
                 const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
                 const double t                           //!< Current instant (in seconds)
                 ) const;
@@ -129,7 +129,7 @@ class SurfaceElevationInterface
           *           point in P
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
-        std::vector<ssc::kinematics::Point> get_points_on_free_surface(
+        ssc::kinematics::PointMatrix get_points_on_free_surface(
                 const double t,                               //!< Current instant (in seconds)
                 const ssc::kinematics::PointMatrixPtr& Mned   //!< Output mesh in NED frame
                 ) const;

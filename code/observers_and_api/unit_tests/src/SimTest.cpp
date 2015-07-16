@@ -217,54 +217,54 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh)
 {
     const Sim sys = get_system(test_data::waves(), 0);
     const double t = 9951191801.8523445;
-    const std::vector<ssc::kinematics::Point> w = sys.get_waves(t);
+    const ssc::kinematics::PointMatrix w = sys.get_waves(t);
 
-    ASSERT_EQ(10, w.size());
-    ASSERT_DOUBLE_EQ(1, (double)w[0].x());
-    ASSERT_DOUBLE_EQ(1, (double)w[0].y());
-    EXPECT_NEAR(5.3843063341769382, (double)w[0].z(), 1E-5);
+    ASSERT_EQ(10, w.m.cols());
+    ASSERT_DOUBLE_EQ(1, (double)w.m(0,0));
+    ASSERT_DOUBLE_EQ(1, (double)w.m(1,0));
+    EXPECT_NEAR(5.3843063341769382, (double)w.m(2,0), 1E-5);
 
-    ASSERT_DOUBLE_EQ(2, (double)w[1].x());
-    ASSERT_DOUBLE_EQ(1, (double)w[1].y());
-    EXPECT_NEAR(5.3847660459188535, (double)w[1].z(), 1E-5);
+    ASSERT_DOUBLE_EQ(2, (double)w.m(0,1));
+    ASSERT_DOUBLE_EQ(1, (double)w.m(1,1));
+    EXPECT_NEAR(5.3847660459188535, (double)w.m(2,1), 1E-5);
 
-    ASSERT_DOUBLE_EQ(3, (double)w[2].x());
-    ASSERT_DOUBLE_EQ(1, (double)w[2].y());
-    EXPECT_NEAR(5.3852257763390483, (double)w[2].z(), 1E-5);
+    ASSERT_DOUBLE_EQ(3, (double)w.m(0,2));
+    ASSERT_DOUBLE_EQ(1, (double)w.m(1,2));
+    EXPECT_NEAR(5.3852257763390483, (double)w.m(2,2), 1E-5);
 
-    ASSERT_DOUBLE_EQ(4, (double)w[3].x());
-    ASSERT_DOUBLE_EQ(1, (double)w[3].y());
-    EXPECT_NEAR(5.3856852968972957, (double)w[3].z(), 1E-5);
+    ASSERT_DOUBLE_EQ(4, (double)w.m(0,3));
+    ASSERT_DOUBLE_EQ(1, (double)w.m(1,3));
+    EXPECT_NEAR(5.3856852968972957, (double)w.m(2,3), 1E-5);
 
-    ASSERT_DOUBLE_EQ(5, (double)w[4].x());
-    ASSERT_DOUBLE_EQ(1, (double)w[4].y());
-    EXPECT_NEAR(5.3861450323603179, (double)w[4].z(), 1E-5);
+    ASSERT_DOUBLE_EQ(5, (double)w.m(0,4));
+    ASSERT_DOUBLE_EQ(1, (double)w.m(1,4));
+    EXPECT_NEAR(5.3861450323603179, (double)w.m(2,4), 1E-5);
 
-    ASSERT_DOUBLE_EQ(1, (double)w[5].x());
-    ASSERT_DOUBLE_EQ(2, (double)w[5].y());
-    EXPECT_NEAR(5.314654694054445, (double)w[5].z(), 1E-5);
+    ASSERT_DOUBLE_EQ(1, (double)w.m(0,5));
+    ASSERT_DOUBLE_EQ(2, (double)w.m(1,5));
+    EXPECT_NEAR(5.314654694054445, (double)w.m(2,5), 1E-5);
 
-    ASSERT_DOUBLE_EQ(2, (double)w[6].x());
-    ASSERT_DOUBLE_EQ(2, (double)w[6].y());
-    EXPECT_NEAR(5.3151144417756662, (double)w[6].z(), 1E-5);
+    ASSERT_DOUBLE_EQ(2, (double)w.m(0,6));
+    ASSERT_DOUBLE_EQ(2, (double)w.m(1,6));
+    EXPECT_NEAR(5.3151144417756662, (double)w.m(2,6), 1E-5);
 
-    ASSERT_DOUBLE_EQ(3, (double)w[7].x());
-    ASSERT_DOUBLE_EQ(2, (double)w[7].y());
-    EXPECT_NEAR(5.3155740110918153, (double)w[7].z(), 1E-5);
+    ASSERT_DOUBLE_EQ(3, (double)w.m(0,7));
+    ASSERT_DOUBLE_EQ(2, (double)w.m(1,7));
+    EXPECT_NEAR(5.3155740110918153, (double)w.m(2,7), 1E-5);
 
-    ASSERT_DOUBLE_EQ(4, (double)w[8].x());
-    ASSERT_DOUBLE_EQ(2, (double)w[8].y());
-    EXPECT_NEAR(5.316033768387376, (double)w[8].z(), 1E-5);
+    ASSERT_DOUBLE_EQ(4, (double)w.m(0,8));
+    ASSERT_DOUBLE_EQ(2, (double)w.m(1,8));
+    EXPECT_NEAR(5.316033768387376, (double)w.m(2,8), 1E-5);
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
 {
     const Sim sys = get_system(test_data::stable_rolling_cube_test(), test_data::cube(), 0);
-    const std::vector<ssc::kinematics::Point> w = sys.get_waves(a.random<double>());
-    ASSERT_EQ(200, w.size());
+    ssc::kinematics::PointMatrix w = sys.get_waves(a.random<double>());
+    ASSERT_EQ(200, w.m.cols());
     for (size_t i = 0 ; i < 200 ; ++i)
     {
-        ASSERT_DOUBLE_EQ(0, (double)w[i].z());
+        ASSERT_DOUBLE_EQ(0, (double)w.m(2,i));
     }
 }
 
