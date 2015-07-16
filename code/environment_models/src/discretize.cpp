@@ -35,6 +35,8 @@ DiscreteDirectionalWaveSpectrum common(
     ret.psi = D.get_directions(nfreq);
     if (ret.omega.size()>1) ret.domega = ret.omega[1]-ret.omega[0];
     if (ret.psi.size()>1)   ret.dpsi = ret.psi[1]-ret.psi[0];
+    ret.Si.reserve(ret.omega.size());
+    ret.Dj.reserve(ret.psi.size());
     BOOST_FOREACH(double omega, ret.omega) ret.Si.push_back(S(omega));
     BOOST_FOREACH(double psi, ret.psi)   ret.Dj.push_back(D(psi));
     return ret;
@@ -49,6 +51,7 @@ DiscreteDirectionalWaveSpectrum discretize(
         )
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
+    ret.k.reserve(ret.omega.size());
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega));
     ret.pdyn_factor = [](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta);};
     ret.pdyn_factor_sh = [](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta);};
@@ -71,6 +74,7 @@ DiscreteDirectionalWaveSpectrum discretize(
         )
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
+    ret.k.reserve(ret.omega.size());
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
     ret.pdyn_factor = [h](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,h,eta);};
     ret.pdyn_factor_sh = [h](const double k, const double z, const double eta){return dynamic_pressure_factor_sh(k,z,h,eta);};
@@ -99,19 +103,22 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
     ret.domega = spectrum.domega;
     ret.dpsi = spectrum.dpsi;
     double S = 0;
+    const size_t nOmega = spectrum.omega.size();
+    const size_t nPsi = spectrum.psi.size();
     std::list<ValIdx> SiDj;
+    std::vector<size_t> i_idx(nOmega*nPsi);
+    std::vector<size_t> j_idx(nOmega*nPsi);
     size_t k = 0;
-    std::vector<size_t> i_idx;
-    std::vector<size_t> j_idx;
-    for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
+    for (size_t i = 0 ; i < nOmega ; ++i)
     {
-        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
+        for (size_t j = 0 ; j < nPsi ; ++j)
         {
             const double s = spectrum.Si[i]*spectrum.Dj[j];
             S += s;
-            SiDj.push_back(std::make_pair(s,k++));
-            i_idx.push_back(i);
-            j_idx.push_back(j);
+            SiDj.push_back(std::make_pair(s,k));
+            i_idx[k] = i;
+            j_idx[k] = j;
+            k++;
         }
     }
     SiDj.sort(comparator);
