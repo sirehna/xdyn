@@ -15,13 +15,15 @@
 #include "WaveDirectionalSpreading.hpp"
 #include "WaveSpectralDensity.hpp"
 
-DiscreteDirectionalWaveSpectrum common(const WaveSpectralDensity& S,      //!< Frequency spectrum
+DiscreteDirectionalWaveSpectrum common(
+        const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
         );
-DiscreteDirectionalWaveSpectrum common(const WaveSpectralDensity& S,      //!< Frequency spectrum
+DiscreteDirectionalWaveSpectrum common(
+        const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
@@ -38,12 +40,13 @@ DiscreteDirectionalWaveSpectrum common(const WaveSpectralDensity& S,      //!< F
     return ret;
 }
 
-DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //!< Frequency spectrum
-                                           const WaveDirectionalSpreading& D, //!< Spatial spectrum
-                                           const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
-                                           const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-                                           const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
-                                           )
+DiscreteDirectionalWaveSpectrum discretize(
+        const WaveSpectralDensity& S,      //!< Frequency spectrum
+        const WaveDirectionalSpreading& D, //!< Spatial spectrum
+        const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
+        const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
+        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+        )
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega));
@@ -58,13 +61,14 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
   *  \details Finite depth hypothesis (for the wave number)
   *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest discretize_example
   */
-DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //!< Frequency spectrum
-                                           const WaveDirectionalSpreading& D, //!< Spatial spectrum
-                                           const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
-                                           const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-                                           const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-                                           const double h                     //!< Water depth (in meters)
-                                           )
+DiscreteDirectionalWaveSpectrum discretize(
+        const WaveSpectralDensity& S,      //!< Frequency spectrum
+        const WaveDirectionalSpreading& D, //!< Spatial spectrum
+        const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
+        const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
+        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const double h                     //!< Water depth (in meters)
+        )
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
@@ -86,9 +90,10 @@ bool comparator ( const ValIdx& l, const ValIdx& r)
   *  \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
   *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
   */
-FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to flatten
-                                            const double ratio //!< Between 0 & 1: where should we cut off the spectra?
-                                            )
+FlatDiscreteDirectionalWaveSpectrum flatten(
+        const DiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to flatten
+        const double ratio //!< Between 0 & 1: where should we cut off the spectra?
+        )
 {
     FlatDiscreteDirectionalWaveSpectrum ret;
     ret.domega = spectrum.domega;
