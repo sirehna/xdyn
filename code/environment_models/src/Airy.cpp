@@ -47,17 +47,25 @@ double Airy::evaluate_rao(
         ) const
 {
     double F = 0;
+    const size_t nPsi = spectrum.psi.size();
+    std::vector<double> v_Dj(nPsi), v_xCosPsi_ySinPsi(nPsi);
+    for (size_t j = 0 ; j < nPsi ; ++j)
+    {
+        const double psi = spectrum.psi[j];
+        v_xCosPsi_ySinPsi[j] = x*cos(psi)+y*sin(psi);
+        v_Dj[j] = sqrt(spectrum.Dj[j]);
+    }
     for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
     {
         const double k = spectrum.k[i];
-        const double omega = spectrum.omega[i];
-        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
+        const double omega_t = spectrum.omega[i] * t;
+        for (size_t j = 0 ; j < nPsi ; ++j)
         {
             const double Aij = rao_module[i][j];
-            const double Dj = sqrt(spectrum.Dj[j]);
-            const double psi = spectrum.psi[j];
+            const double Dj = v_Dj[j];
+            const double k_xCosPsi_ySinPsi = k * v_xCosPsi_ySinPsi[j];
             const double theta = rao_phase[i][j];
-            F += Aij*Dj*cos(omega*t - k*(x*cos(psi)+y*sin(psi)) + theta + spectrum.phase[i][j]);
+            F += Aij*Dj*cos(omega_t - k_xCosPsi_ySinPsi + theta + spectrum.phase[i][j]);
         }
     }
     F *= sqrt(2*spectrum.domega*spectrum.dpsi);
