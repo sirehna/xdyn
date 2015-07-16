@@ -147,23 +147,36 @@ ssc::kinematics::Point Airy::orbital_velocity(
     double v = 0;
     double w = 0;
     const double eta = 0; // No stretching for the orbital velocity
+
+    const size_t nPsi = spectrum.psi.size();
+    std::vector<double> v_Dj(nPsi), v_xCosPsi_ySinPsi(nPsi);
+    std::vector<double> v_CosPsi(nPsi), v_SinPsi(nPsi);
+    for (size_t j = 0 ; j < nPsi ; ++j)
+    {
+        const double psi = spectrum.psi[j];
+        const double cosPsi = v_CosPsi[j] = cos(psi);
+        const double sinPsi = v_SinPsi[j] = sin(psi);
+        v_xCosPsi_ySinPsi[j] = x*cosPsi+y*sinPsi;
+        v_Dj[j] = sqrt(spectrum.Dj[j]);
+    }
+
     for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
     {
         const double Ai = sqrt(spectrum.Si[i]);
-        const double k = spectrum.k[i];
         const double omega = spectrum.omega[i];
-        for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
+        const double k = spectrum.k[i];
+        const double pdyn_factor = spectrum.pdyn_factor(k,z,eta);
+        const double pdyn_factor_sh = spectrum.pdyn_factor_sh(k,z,eta);
+        for (size_t j = 0 ; j < nPsi ; ++j)
         {
-            const double Dj = sqrt(spectrum.Dj[j]);
-            const double psi = spectrum.psi[j];
-            const double theta = omega*t-k*(x*cos(psi)+y*sin(psi))+spectrum.phase[i][j];
+            const double theta = omega*t-k*v_xCosPsi_ySinPsi[j] + spectrum.phase[i][j];
             const double cos_theta = cos(theta);
-            const double pdyn_factor = spectrum.pdyn_factor(k,z,eta);
-            const double Ai_Dj_k_omega = Ai*Dj*k/omega;
+            const double sin_theta = sin(theta);
+            const double Ai_Dj_k_omega = Ai*v_Dj[j]*k/omega;
             const double Ai_Dj_k_omega_pdyn_factor_cos_theta = Ai_Dj_k_omega*pdyn_factor*cos_theta;
-            u += Ai_Dj_k_omega_pdyn_factor_cos_theta*cos(psi);
-            v += Ai_Dj_k_omega_pdyn_factor_cos_theta*sin(psi);
-            w += Ai_Dj_k_omega*spectrum.pdyn_factor_sh(k,z,eta)*sin(theta);
+            u += Ai_Dj_k_omega_pdyn_factor_cos_theta * v_CosPsi[j];
+            v += Ai_Dj_k_omega_pdyn_factor_cos_theta * v_SinPsi[j];
+            w += Ai_Dj_k_omega * pdyn_factor_sh * sin_theta;
         }
     }
     const double f = g*sqrt(2*spectrum.domega*spectrum.dpsi);
