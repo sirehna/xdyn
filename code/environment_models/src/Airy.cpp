@@ -38,12 +38,13 @@ generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
     }
 }
 
-double Airy::evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                          const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                          const double t, //!< Current time instant (in seconds)
-                          const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO
-                          const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
-                         ) const
+double Airy::evaluate_rao(
+        const double x,                                         //!< x-position of the RAO's calculation point in the NED frame (in meters)
+        const double y,                                         //!< y-position of the RAO's calculation point in the NED frame (in meters)
+        const double t,                                         //!< Current time instant (in seconds)
+        const std::vector<std::vector<double> >& rao_module,    //!< Module of the RAO
+        const std::vector<std::vector<double> >& rao_phase      //!< Phase of the RAO
+        ) const
 {
     double F = 0;
     for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
@@ -63,10 +64,11 @@ double Airy::evaluate_rao(const double x, //!< x-position of the RAO's calculati
     return F;
 }
 
-double Airy::elevation(const double x,                                  //!< x-position in the NED frame (in meters)
-                       const double y,                                  //!< y-position in the NED frame (in meters)
-                       const double t                                   //!< Current time instant (in seconds)
-                       ) const
+double Airy::elevation(
+        const double x,     //!< x-position in the NED frame (in meters)
+        const double y,     //!< y-position in the NED frame (in meters)
+        const double t      //!< Current time instant (in seconds)
+        ) const
 {
     double zeta = 0;
     const size_t nPsi = spectrum.psi.size();
@@ -94,15 +96,15 @@ double Airy::elevation(const double x,                                  //!< x-p
     return zeta;
 }
 
-
-double Airy::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
-                              const double g,   //!< gravity (in m/s^2)
-                              const double x,   //!< x-position in the NED frame (in meters)
-                              const double y,   //!< y-position in the NED frame (in meters)
-                              const double z,   //!< z-position in the NED frame (in meters)
-                              const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-                              const double t    //!< Current time instant (in seconds)
-                             ) const
+double Airy::dynamic_pressure(
+        const double rho, //!< water density (in kg/m^3)
+        const double g,   //!< gravity (in m/s^2)
+        const double x,   //!< x-position in the NED frame (in meters)
+        const double y,   //!< y-position in the NED frame (in meters)
+        const double z,   //!< z-position in the NED frame (in meters)
+        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
+        const double t    //!< Current time instant (in seconds)
+        ) const
 {
     double p = 0;
     for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
@@ -122,12 +124,13 @@ double Airy::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
     return p;
 }
 
-ssc::kinematics::Point Airy::orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                              const double x,   //!< x-position in the NED frame (in meters)
-                                              const double y,   //!< y-position in the NED frame (in meters)
-                                              const double z,   //!< z-position in the NED frame (in meters)
-                                              const double t    //!< Current time instant (in seconds)
-                                              ) const
+ssc::kinematics::Point Airy::orbital_velocity(
+        const double g,   //!< gravity (in m/s^2)
+        const double x,   //!< x-position in the NED frame (in meters)
+        const double y,   //!< y-position in the NED frame (in meters)
+        const double z,   //!< z-position in the NED frame (in meters)
+        const double t    //!< Current time instant (in seconds)
+        ) const
 {
     double u = 0;
     double v = 0;
