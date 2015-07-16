@@ -107,17 +107,28 @@ double Airy::dynamic_pressure(
         ) const
 {
     double p = 0;
+
+    const size_t nPsi = spectrum.psi.size();
+    std::vector<double> v_Dj(nPsi), v_xCosPsi_ySinPsi(nPsi);
+    for (size_t j = 0 ; j < nPsi ; ++j)
+    {
+        const double psi = spectrum.psi[j];
+        v_xCosPsi_ySinPsi[j] = x*cos(psi)+y*sin(psi);
+        v_Dj[j] = sqrt(spectrum.Dj[j]);
+    }
+
     for (size_t i = 0 ; i < spectrum.omega.size() ; ++i)
     {
         const double Ai = sqrt(spectrum.Si[i]);
         const double k = spectrum.k[i];
-        const double omega = spectrum.omega[i];
+        const double omega_t = spectrum.omega[i] * t;
+        const double pdyn_fact = spectrum.pdyn_factor(k,z,eta);
         for (size_t j = 0 ; j < spectrum.psi.size() ; ++j)
         {
-            const double Dj = sqrt(spectrum.Dj[j]);
-            const double psi = spectrum.psi[j];
+            const double Dj = v_Dj[j];
+            const double k_xCosPsi_ySinPsi = k * v_xCosPsi_ySinPsi[j];
             const double theta = spectrum.phase[i][j];
-            p += Ai*Dj*spectrum.pdyn_factor(k,z,eta)*cos(omega*t-k*(x*cos(psi)+y*sin(psi))+theta);
+            p += Ai * Dj * pdyn_fact * cos(omega_t - k_xCosPsi_ySinPsi + theta);
         }
     }
     p *= rho*g*sqrt(2*spectrum.domega*spectrum.dpsi);
