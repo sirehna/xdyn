@@ -6,7 +6,7 @@
  */
 
 #include <ssc/check_ssc_version.hpp>
-CHECK_SSC_VERSION(0xe0d6433e66840efc)
+CHECK_SSC_VERSION(5,3)
 
 #include <iostream>
 #include "InputData.hpp"
