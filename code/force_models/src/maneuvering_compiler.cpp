@@ -15,6 +15,66 @@ using boost::spirit::ascii::blank;
 
 namespace maneuvering
 {
+    class PrettyPrinter : public boost::static_visitor<std::string>
+    {
+        public:
+            std::string operator()(const Nil& ) const
+            {
+                return "NaN";
+            }
+            std::string operator()(const double& d) const
+            {
+                std::stringstream ss;
+                ss << d;
+                return ss.str();
+            }
+            std::string operator()(const Identifier& name) const
+            {
+                return name;
+            }
+            std::string operator()(const Base& d) const
+            {
+                return boost::apply_visitor(*this,d);
+            }
+            std::string operator()(const Factor& d) const
+            {
+                const std::string b = this->operator ()(d.base);
+                std::vector<std::string> exponents;
+                for (auto e:d.exponents) exponents.push_back(this->operator()(e));
+                std::string ret = b;
+                for (auto e:exponents) ret = std::string("(") + ret + ")^(" + e + ")";
+                return ret;
+            }
+            std::string operator()(const ::Term& d) const
+            {
+                std::string ret = this->operator ()(d.first);
+                for (auto op:d.rest)
+                {
+                    std::string val = this->operator()(op.factor);
+                    ret = ret + op.operator_ + "(" + val + ")";
+                }
+                return ret;
+            }
+            std::string operator()(const ::Expr& d) const
+            {
+                std::string ret = this->operator ()(d.first);
+                for (auto op:d.rest)
+                {
+                    std::string val = this->operator()(op.term);
+                    ret = ret + op.operator_ + "(" + val + ")";
+                }
+                return ret;
+            }
+            std::string operator()(const Atom& d) const
+            {
+                return boost::apply_visitor(*this,d);
+            }
+            std::string operator()(const FunctionCall& d) const
+            {
+                return d.function + "(" + this->operator()(d.expr) + ")";
+            }
+    };
+
     class Evaluator: public boost::static_visitor<NodePtr>
     {
         public:
@@ -91,7 +151,7 @@ namespace maneuvering
                 if (d.function == "p")    return make_state_p(this->operator()(d.expr));
                 if (d.function == "q")    return make_state_q(this->operator()(d.expr));
                 if (d.function == "r")    return make_state_r(this->operator()(d.expr));
-                                          return make_constant(0);
+                                          return make_unknown_identifier(PrettyPrinter()(d));
             }
     };
 
@@ -103,6 +163,16 @@ namespace maneuvering
         qi::phrase_parse(b, e, g.expr, blank, ast);
         Evaluator evaluate;
         return evaluate(ast);
+    }
+
+    std::string print(const std::string& expression)
+    {
+        std::string::const_iterator b = expression.begin(), e = expression.end();
+        Expr ast;
+        ArithmeticGrammar g;
+        qi::phrase_parse(b, e, g.expr, blank, ast);
+        PrettyPrinter pretty_print;
+        return pretty_print(ast);
     }
 }
 

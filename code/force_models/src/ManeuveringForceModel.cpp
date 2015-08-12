@@ -5,15 +5,19 @@
  *      Author: cady
  */
 
+#include "EnvironmentAndFrames.hpp"
 #include "external_data_structures_parsers.hpp"
 #include "ManeuveringForceModel.hpp"
 #include "maneuvering_compiler.hpp"
 #include "maneuvering_DataSource_builder.hpp"
 #include "yaml.h"
+#include "yaml2eigen.hpp"
 
 
 ManeuveringForceModel::Yaml::Yaml() :
-    point_of_application(),
+    name(),
+    frame_of_reference(),
+    commands(),
     var2expr()
 {
 }
@@ -28,32 +32,43 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    node["point of application (in body frame)"] >> ret.point_of_application;
+    node["reference frame"] >> ret.frame_of_reference;
+    node["name"] >> ret.name;
     for(YAML::Iterator it=node.begin();it!=node.end();++it)
     {
         std::string key = "";
         it.first() >> key;
-        if (key != "point of application (in body frame)")
+        if (key == "commands")
+        {
+            node[key] >> ret.commands;
+        }
+        else if (key != "reference frame")
         {
             std::string value;
             node[key] >> value;
             ret.var2expr[key] = value;
         }
+
     }
     return ret;
 }
 
-ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames&) :
-        ForceModel(model_name, body_name_),
-        point_of_application(body_name_, data.point_of_application.x, data.point_of_application.y, data.point_of_application.z),
+ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+        ControllableForceModel(data.name, data.commands, data.frame_of_reference, body_name_, env_),
+        point_of_application(data.name, data.frame_of_reference.coordinates.x, data.frame_of_reference.coordinates.y, data.frame_of_reference.coordinates.z),
         m()
 {
-    for (auto var2expr:data.var2expr) m[var2expr.first] = maneuvering::compile(var2expr.second);
+    env.k->add(make_transform(data.frame_of_reference, data.name, env.rot));
+    for (auto var2expr:data.var2expr)
+        {
+            m[var2expr.first] = maneuvering::compile(var2expr.second);
+        }
 }
 
-ssc::kinematics::Wrench ManeuveringForceModel::operator()(const BodyStates& states, const double t) const
+ssc::kinematics::Vector6d ManeuveringForceModel::get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
 {
-    auto ds = maneuvering::build_ds(m);
+    ssc::data_source::DataSource ds;
+    maneuvering::build_ds(ds, m, commands);
     ds.check_in(__PRETTY_FUNCTION__);
     ds.set("states", states);
     ds.set("t", t);
@@ -65,5 +80,5 @@ ssc::kinematics::Wrench ManeuveringForceModel::operator()(const BodyStates& stat
     tau(4) = ds.get<double>("M");
     tau(5) = ds.get<double>("N");
     ds.check_out();
-    return ssc::kinematics::Wrench(point_of_application, tau);
+    return tau;
 }

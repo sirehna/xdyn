@@ -41,6 +41,8 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
     {
         ret[*that_command] = get_command(*that_command, command_listener, t);
     }
+    auto m = command_listener.get_all<double>();
+    ret.insert(m.begin(),m.end());
     return ret;
 }
 
