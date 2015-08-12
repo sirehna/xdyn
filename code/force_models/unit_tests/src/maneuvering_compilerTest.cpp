@@ -139,3 +139,9 @@ TEST_F(maneuvering_compilerTest, can_compile_body_states)
     ASSERT_DOUBLE_EQ(20,    test_compile("x(t-3)", states));
     ASSERT_DOUBLE_EQ(400,   test_compile("x(t-3)^y(t)", states));
 }
+
+TEST_F(maneuvering_compilerTest, can_pretty_print)
+{
+    ASSERT_EQ("x(t)+(3)",maneuvering::print("x(t)+3"));
+    ASSERT_EQ("(x(t))^(y(t)+(3))",maneuvering::print("x(t)^(y(t)+3)"));
+}

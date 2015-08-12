@@ -449,9 +449,46 @@ TEST_F(SimTest, LONG_bug_2845)
     auto sys = get_system(yaml,anthineas_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
     const auto m = get_map(observer);
-    ASSERT_EQ(2, m.size());
+    ASSERT_EQ(3, m.size());
     const auto it = m.find("Mz(PropRudd,Anthineas,Anthineas)");
     ASSERT_NE(m.end(), it);
     ASSERT_EQ(5, it->second.size());
     ASSERT_NEAR(0, it->second.back(), 1E-8);
+}
+
+TEST_F(SimTest, LONG_can_retrieve_maneuvering_force)
+{
+    const auto yaml = test_data::bug_2845();
+    ListOfObservers observer(parse_output(yaml));
+    ssc::data_source::DataSource command_listener;
+    command_listener.set<double>("PropRudd(rpm)", 50);
+    command_listener.set<double>("PropRudd(P/D)", 1);
+    command_listener.set<double>("PropRudd(beta)", 0.8);
+    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
+    const auto m = get_map(observer);
+    ASSERT_EQ(3, m.size());
+    const auto it = m.find("Fx(Fman,Anthineas,Anthineas)");
+    ASSERT_NE(m.end(), it);
+    ASSERT_EQ(5, it->second.size());
+}
+
+TEST_F(SimTest, LONG_can_use_commands_in_maneuvering_model)
+{
+    const auto yaml = test_data::maneuvering_with_commands();
+    ListOfObservers observer(parse_output(yaml));
+    ssc::data_source::DataSource command_listener;
+    command_listener.check_in(__PRETTY_FUNCTION__);
+    command_listener.set<double>("PropRudd(rpm)", 50);
+    command_listener.set<double>("PropRudd(P/D)", 1);
+    command_listener.set<double>("PropRudd(beta)", 0.8);
+    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
+    command_listener.check_out();
+    const auto m = get_map(observer);
+    ASSERT_EQ(4, m.size());
+    const auto it = m.find("Fx(F1,Anthineas,Anthineas)");
+    ASSERT_NE(m.end(), it);
+    ASSERT_EQ(5, it->second.size());
+    ASSERT_NEAR(50, it->second.at(1), 1E-8);
 }

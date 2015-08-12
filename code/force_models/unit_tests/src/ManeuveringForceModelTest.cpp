@@ -4,8 +4,10 @@
  *  Created on: Jan 19, 2015
  *      Author: cady
  */
+#include "gmock/gmock.h"
 
 #include "EnvironmentAndFrames.hpp"
+#include "generate_body_for_tests.hpp"
 #include "ManeuveringForceModelTest.hpp"
 #include "ManeuveringForceModel.hpp"
 #include "ManeuveringInternal.hpp"
@@ -16,6 +18,7 @@
 #define PI M_PI
 
 using namespace maneuvering;
+using namespace testing; // So we can use 'ElementsAre' unqualified
 
 ManeuveringForceModelTest::ManeuveringForceModelTest() : a(ssc::random_data_generator::DataGenerator(87542))
 {
@@ -33,15 +36,18 @@ void ManeuveringForceModelTest::TearDown()
 {
 }
 
-TEST_F(ManeuveringForceModelTest, can_parse_point_of_application)
+TEST_F(ManeuveringForceModelTest, can_parse_frame_of_reference)
 {
 //! [ManeuveringForceModelTest example]
     const auto data = ManeuveringForceModel::parse(test_data::maneuvering());
 //! [ManeuveringForceModelTest example]
 //! [ManeuveringForceModelTest expected output]
-    ASSERT_DOUBLE_EQ(0.696, data.point_of_application.x);
-    ASSERT_DOUBLE_EQ(0, data.point_of_application.y);
-    ASSERT_DOUBLE_EQ(1.418, data.point_of_application.z);
+    ASSERT_DOUBLE_EQ(0.696,       data.frame_of_reference.coordinates.x);
+    ASSERT_DOUBLE_EQ(0,           data.frame_of_reference.coordinates.y);
+    ASSERT_DOUBLE_EQ(1.418,       data.frame_of_reference.coordinates.z);
+    ASSERT_DOUBLE_EQ(0.7,         data.frame_of_reference.angle.phi);
+    ASSERT_DOUBLE_EQ(2*PI/180.,   data.frame_of_reference.angle.theta);
+    ASSERT_DOUBLE_EQ(0.3*PI/180., data.frame_of_reference.angle.psi);
 //! [ManeuveringForceModelTest expected output]
 }
 
@@ -54,6 +60,18 @@ TEST_F(ManeuveringForceModelTest, can_parse_X_Y_Z_K_M_N)
     ASSERT_EQ("0", data.var2expr["K"]);
     ASSERT_EQ("0", data.var2expr["M"]);
     ASSERT_EQ("0.5*rho*Vs^2*L^3*N_", data.var2expr["N"]);
+}
+
+TEST_F(ManeuveringForceModelTest, can_parse_model_name)
+{
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    ASSERT_EQ("test", data.name);
+}
+
+TEST_F(ManeuveringForceModelTest, can_parse_commands)
+{
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    ASSERT_THAT(data.commands, ElementsAre("a","b","c"));
 }
 
 TEST_F(ManeuveringForceModelTest, internal_constant)
@@ -258,26 +276,41 @@ TEST_F(ManeuveringForceModelTest, unknown_identifier)
     ASSERT_DOUBLE_EQ(123.456, f(states, ds, t));
 }
 
+EnvironmentAndFrames get_env_with_default_rotation_convention();
+EnvironmentAndFrames get_env_with_default_rotation_convention()
+{
+    EnvironmentAndFrames env;
+    env.rot.convention = {"z", "y'", "x''"};
+    env.rot.order_by = "angle";
+    return env;
+}
+
 TEST_F(ManeuveringForceModelTest, can_evaluate_simple_maneuvering_model)
 {
-    const std::string yaml = "point of application (in body frame):\n"
-                             "    x: {value: 0.696, unit: m}\n"
+    const std::string yaml = "reference frame:\n"
+                             "    frame: some body\n"
+                             "    x: {value: 0, unit: m}\n"
                              "    y: {value: 0, unit: m}\n"
-                             "    z: {value: 1.418, unit: m}\n"
+                             "    z: {value: 0, unit: m}\n"
+                             "    phi: {value: 0, unit: rad}\n"
+                             "    theta: {value: 0, unit: deg}\n"
+                             "    psi: {value: 0, unit: deg}\n"
+                             "name: something\n"
                              "X: 2*Y+sqrt(x(t))\n"
                              "Y: y(t)^2\n"
                              "Z: 0\n"
                              "K: 0\n"
                              "M: 0\n"
                              "N: 0\n";
-    EnvironmentAndFrames env;
+    const auto env = get_env_with_default_rotation_convention();
     ManeuveringForceModel force(ManeuveringForceModel::parse(yaml),"some body", env);
     ASSERT_EQ("maneuvering", force.model_name);
-    BodyStates states;
+    auto states = get_body("some body")->get_states();
     const double t = 10;
     states.x.record(t, 1024);
     states.y.record(t, 400);
-    const auto F = force(states, t);
+    ssc::data_source::DataSource command_listener;
+    const auto F = force(states, t, command_listener);
 
     ASSERT_EQ("some body", F.get_frame());
     ASSERT_DOUBLE_EQ(320032, F.X());
@@ -344,11 +377,13 @@ man(0.1,2.04,6.28,0.45,0.01,5.869,0.23,0,0.38)
 
 TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
 {
-    const auto data = ManeuveringForceModel::parse(test_data::maneuvering());
-    EnvironmentAndFrames env;
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    data.frame_of_reference.angle = YamlAngle();
+    data.frame_of_reference.coordinates = YamlCoordinates();
+    const auto env = get_env_with_default_rotation_convention();
     ManeuveringForceModel force(data,"some body", env);
 
-    BodyStates states;
+    auto states = get_body("some body")->get_states();
 
     states.x.record(0, 1);
     states.y.record(0, 2);
@@ -362,7 +397,11 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
 
     const double t = 0;
 
-    const auto F = force(states, t);
+    ssc::data_source::DataSource command_listener;
+    command_listener.set("test(a)", 0.);
+    command_listener.set("test(b)", 0.);
+    command_listener.set("test(c)", 0.);
+    const auto F = force(states, t, command_listener);
 
     ASSERT_EQ("some body", F.get_frame());
     ASSERT_DOUBLE_EQ(-93470409.32377005, F.X());
@@ -375,11 +414,13 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
 
 TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
 {
-    const auto data = ManeuveringForceModel::parse(test_data::maneuvering());
-    EnvironmentAndFrames env;
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    data.frame_of_reference.angle = YamlAngle();
+    data.frame_of_reference.coordinates = YamlCoordinates();
+    const auto env = get_env_with_default_rotation_convention();
     ManeuveringForceModel force(data,"some body", env);
 
-    BodyStates states;
+    auto states = get_body("some body")->get_states();
 
     states.x.record(0, 0.1);
     states.y.record(0, 2.04);
@@ -393,7 +434,11 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
 
     const double t = 0;
 
-    const auto F = force(states, t);
+    ssc::data_source::DataSource command_listener;
+    command_listener.set("test(a)", 0.);
+    command_listener.set("test(b)", 0.);
+    command_listener.set("test(c)", 0.);
+    const auto F = force(states, t, command_listener);
     ASSERT_EQ("some body", F.get_frame());
     ASSERT_DOUBLE_EQ(-160307.53008106418, F.X());
     ASSERT_DOUBLE_EQ(349066.3153463915, F.Y());

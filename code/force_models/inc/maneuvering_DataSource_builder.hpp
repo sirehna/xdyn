@@ -14,7 +14,7 @@
 
 namespace maneuvering
 {
-    ssc::data_source::DataSource build_ds(const std::map<std::string, NodePtr>& nodes);
+    void build_ds(ssc::data_source::DataSource& ds, const std::map<std::string, NodePtr>& nodes, const std::map<std::string, double>& commands=std::map<std::string, double>());
 }
 
 

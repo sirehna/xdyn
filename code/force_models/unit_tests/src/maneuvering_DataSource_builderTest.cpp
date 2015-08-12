@@ -33,7 +33,8 @@ TEST_F(maneuvering_DataSource_builderTest, example)
     m["X"] = maneuvering::compile("2*Y+sqrt(x(t))");
     m["Y"] = maneuvering::compile("y(t)^2");
 
-    auto ds = maneuvering::build_ds(m);
+    ssc::data_source::DataSource ds;
+    maneuvering::build_ds(ds, m);
     ds.check_in(__PRETTY_FUNCTION__);
     BodyStates states;
     states.x.record(10, 1024);

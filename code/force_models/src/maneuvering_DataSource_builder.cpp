@@ -55,9 +55,8 @@ maneuvering::Module make_module(ssc::data_source::DataSource& ds, const std::pai
     return maneuvering::Module(&ds, name_node);
 }
 
-ssc::data_source::DataSource maneuvering::build_ds(const std::map<std::string, NodePtr>& nodes)
+void maneuvering::build_ds(ssc::data_source::DataSource& ds, const std::map<std::string, NodePtr>& nodes, const std::map<std::string, double>& commands)
 {
-    ssc::data_source::DataSource ds;
     for (auto node:nodes) ds.add(make_module(ds,node));
-    return ds;
+    for (auto c:commands) ds.set<double>(c.first, c.second);
 }

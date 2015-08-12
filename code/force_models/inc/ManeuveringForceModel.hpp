@@ -13,26 +13,28 @@
 #include <ssc/data_source.hpp>
 #include <ssc/macros.hpp>
 
-#include "ForceModel.hpp"
-#include "YamlCoordinates.hpp"
+#include "ControllableForceModel.hpp"
+#include "YamlPosition.hpp"
 #include "ManeuveringInternal.hpp"
 
 
 #include TR1INC(memory)
 
-class ManeuveringForceModel : public ForceModel
+class ManeuveringForceModel : public ControllableForceModel
 {
     public:
 
         struct Yaml
         {
             Yaml();
-            YamlCoordinates point_of_application;
+            std::string name;
+            YamlPosition frame_of_reference;
+            std::vector<std::string> commands;
             std::map<std::string, std::string> var2expr;
         };
         ManeuveringForceModel(const Yaml& data, const std::string& body_name, const EnvironmentAndFrames& env);
         static Yaml parse(const std::string& yaml);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
         static const std::string model_name;
 
     private:
