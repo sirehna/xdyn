@@ -554,6 +554,58 @@ documentation](#efforts-damortissement-visqueux).
 - *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
 - *Marine Control Systems: Guidance, Navigation and Control of Ships, Rigs and Underwater Vehicles*, 2002, THor I. Fossen, Marine Cybernetics, ISBN 82-92356-00-2, page 71
 
+## Efforts hydrostatiques linéaires
+
+### Description
+
+Le modèle d'efforts hydrostatiques linéaires est beaucoup plus rapide à
+calculer que son homologue non-linéaire puisqu'il ne nécessite que quatre
+calculs de hauteur de houle.
+
+![](images/linear_hydrostatics.svg)
+
+On utilise les variables suivantes :
+
+$$\overline{z} = \frac{1}{4}\sum_{i=1}^4 z_i^h$$
+$$\overline{\phi} = \frac{1}{2}\left(\frac{\mbox{atan}(z_2^h-z_1^h)}{d_{12}} +
+\frac{\mbox{atan}(z_4^h-z_3^h)}{d_{43}}\right)$$
+$$\overline{\theta} = \frac{1}{2}\left(\frac{\mbox{atan}(z_2^h-z_4^h)}{d_{24}} +
+\frac{\mbox{atan}(z_1^h-z_3^h)}{d_{13}}\right)$$
+
+où $d_{ij} = \sqrt{(x^h_i-x^h_j)^2 + (y^h_i-y^h_j)}$ est la distance entre deux
+points de mesure.
+
+Le torseur d'effort est donné dans le repère NED par :
+
+$$F_{\mbox{hs}} = K_{3\times 3}
+\left[\begin{array}{c}z-\overline{z}-z_{\mbox{eq}}\\\theta-\overline{\theta}-\theta_{\mbox{eq}}\\\psi-\overline{\psi}-\psi_{\mbox{eq}}\end{array}\right]$$
+
+$z_{\mbox{eq}}, \theta_{\mbox{eq}}, \psi_{\mbox{eq}}$ sont les valeurs
+d'équilibre renseignées dans le fichier de paramétrage.
+
+### Paramétrage
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: linear hydrostatics
+  z eq: {value: 0, unit: m}
+  theta eq: {value: 0, unit: deg}
+  psi eq: {value: 0, unit: deg}
+  K row 1: [1, 0 , 0]
+  K row 2: [0, 1 , 0]
+  K row 3: [0, 0 , 1]
+  x1: {value: 10, unit: m}
+  y1: {value: -10, unit: m}
+  x2: {value: 10, unit: m}
+  y2: {value: 10, unit: m}
+  x3: {value: -10, unit: m}
+  y3: {value: -10, unit: m}
+  x4: {value: -10, unit: m}
+  y4: {value: 10, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Les coordonnées $(x_i,y_j)$ sont données dans le repère body.
+Les coefficients de la matrice $K$ sont donnés en unité SI.
+
 # Efforts commandés
 
 ## Description
