@@ -3474,3 +3474,24 @@ std::string test_data::kt_kq()
        << "Kq: [-4.80000E-02,-3.30000E-02,-2.20000E-02,-2.50000E-02,-2.80000E-02,3.40000E-02, 3.26000E-02, 2.97000E-02, 2.55000E-02, 2.30000E-02, 2.040000E-02,1.50000E-02]\n";
     return ss.str();
 }
+
+std::string test_data::linear_hydrostatics()
+{
+    std::stringstream ss;
+    ss << "- model: linear hydrostatics\n"
+       << "  z eq: {value: 0, unit: m}\n"
+       << "  theta eq: {value: 0, unit: deg}\n"
+       << "  psi eq: {value: 0, unit: deg}\n"
+       << "  K row 1: [1, 0 , 0]\n"
+       << "  K row 2: [0, 1 , 0]\n"
+       << "  K row 3: [0, 0 , 1]\n"
+       << "  x1: {value: 10, unit: m}\n"
+       << "  y1: {value: -10, unit: m}\n"
+       << "  x2: {value: 10, unit: m}\n"
+       << "  y2: {value: 10, unit: m}\n"
+       << "  x3: {value: -10, unit: m}\n"
+       << "  y3: {value: -10, unit: m}\n"
+       << "  x4: {value: -10, unit: m}\n"
+       << "  y4: {value: 10, unit: m}\n";
+    return ss.str();
+}
