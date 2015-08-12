@@ -554,99 +554,6 @@ documentation](#efforts-damortissement-visqueux).
 - *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
 - *Marine Control Systems: Guidance, Navigation and Control of Ships, Rigs and Underwater Vehicles*, 2002, THor I. Fossen, Marine Cybernetics, ISBN 82-92356-00-2, page 71
 
-## Modèles de manoeuvrabilité
-
-### Description
-
-Le but de ce modèle d'effort est de pouvoir écrire un modèle de manoeuvrabilité
-de façon assez générique, sans avoir à recompiler le code source. Des
-expressions simples des états et du temps peuvent être calculées, par exemple:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- model: maneuvering
-  point of application (in body frame):
-      x: {value: 0.696, unit: m}
-      y: {value: 0, unit: m}
-      z: {value: 1.418, unit: m}
-  X: 0.5*rho*Vs^2*L^2*X_
-  Y: 0.5*rho*Vs^2*L^2*Y_
-  Z: 0
-  K: 0
-  M: 0
-  N: 0.5*rho*Vs^2*L^3*N_
-  rho: 1024
-  Vs: sqrt(u(t)^2+v(t)^2)
-  L: 21.569
-  X_: Xu*u_ + Xuu*u_^2 + Xuuu*u_^3 + Xvv*v_^2 + Xrr*r_^2 + Xvr*abs(v_)*abs(r_)
-  Y_: Yv*v_ + Yvv*v_*abs(v_) + Yvvv*v_^3 + Yvrr*v_*r_^2 + Yr*r_ + Yrr*r_*abs(r_) + Yrrr*r_^3 + Yrvv*r_*v_^2
-  N_: Nv*v_ + Nvv*v_*abs(v_) + Nvvv*v_^3 + Nvrr*v_*r_^2 + Nr*r_ + Nrr*r_*abs(r_) + Nrrr*r_^3 + Nrvv*r_*v_^2
-  u_: u(t)/Vs
-  v_: v(t)/Vs
-  r_: r(t)/Vs*L
-  Xu: 0
-  Xuu: 0
-  Xuuu: 0
-  Xvv: -0.041
-  Xrr: -0.01
-  Xvr: -0.015
-  Yv: -0.13
-  Yvv: -0.18
-  Yvvv: 0
-  Yvrr: 0
-  Yr: 0.015
-  Yrr: 0.021
-  Yrrr: 0
-  Yrvv: 0
-  Nv: -0.37
-  Nvv: -0.12
-  Nvvv: 0
-  Nvrr: 0
-  Nr: -0.1
-  Nrr: 0.005
-  Nrrr: 0
-  Nrvv: 0
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-`point of application (in body frame)`: Coordonnées du point d'application du
-torseur (dans le repère "body"). Le torseur est automatiquement déplacé au
-centre de gravité (point (0,0,0) du repère "body").
-`X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
-body), exprimé au point d'application défini ci-dessus.
-
-Toutes les valeurs sont supposées en unité du système international. Le modèle
-nécessite de spécifier X, Y, Z, K, M et N, les autres clefs pouvant être
-quelconques. Des variables accessoires (telles
-que `tau` dans l'exemple ci-dessus) peuvent être utilisées. Le modèle vérifie
-automatiquement à l'exécution qu'il possède toutes les clefs nécessaires et
-infère l'ordre d'évaluation, autrement dit, une expression n'est évaluée que
-lorque toutes les expressions dont elle dépend l'ont été (quel que soit l'ordre
-dans lequel elles ont été déclarées).
-
-On peut évaluer ces valeurs retardées des états x,y,z,u,v,w,p,q,r en écrivant
-`x(t-tau)` (par exemple) ou `tau` désigne une expression dont la valeur est
-positive. `t` désigne implicitement l'instant courant.
-
-### Grammaire
-
-De façon plus formelle, les modèles doivent obéir à la grammaire suivante
-(format "Extended Bachus-Naur" ou EBNF) :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.ebnf}
-expr                = term  operator_and_term*
-add_operators       = '+' | '-'
-mul_operators       = '*' | '/'
-operator_and_term   = add_operators term
-operator_and_factor = mul_operators factor
-term                = factor operator_and_factor*
-factor              = base ( '^' exponent)*
-base                = ('('  expr ')') | atom
-exponent            = base
-atom                = function_call | identifier | double
-function_call       = identifier '(' expr ')'
-identifier          = alpha (alphanum | '_')*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 # Efforts commandés
 
 ## Description
@@ -755,6 +662,111 @@ Voici un exemple de fichier de commande :
   rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
   P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+## Modèles de manoeuvrabilité
+
+### Description
+
+Le but de ce modèle d'effort est de pouvoir écrire un modèle de manoeuvrabilité
+de façon assez générique, sans avoir à recompiler le code source. Des
+expressions simples des états et du temps peuvent être calculées, par exemple:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: maneuvering
+  name: test
+  reference frame:
+      frame: NED
+      x: {value: 0.696, unit: m}
+      y: {value: 0, unit: m}
+      z: {value: 1.418, unit: m}
+      phi: {value: 0, unit: deg}
+      theta: {value: 0, unit: deg}
+      psi: {value: 0, unit: deg}
+  commands: [command1, b, a]
+  X: 0.5*rho*Vs^2*L^2*X_
+  Y: 0.5*rho*Vs^2*L^2*Y_
+  Z: 0
+  K: 0
+  M: 0
+  N: 0.5*rho*Vs^2*L^3*N_
+  rho: 1024
+  Vs: sqrt(u(t)^2+v(t)^2)
+  L: 21.569
+  X_: Xu*u_ + Xuu*u_^2 + Xuuu*u_^3 + Xvv*v_^2 + Xrr*r_^2 + Xvr*abs(v_)*abs(r_)
+  Y_: Yv*v_ + Yvv*v_*abs(v_) + Yvvv*v_^3 + Yvrr*v_*r_^2 + Yr*r_ + Yrr*r_*abs(r_) + Yrrr*r_^3 + Yrvv*r_*v_^2
+  N_: Nv*v_ + Nvv*v_*abs(v_) + Nvvv*v_^3 + Nvrr*v_*r_^2 + Nr*r_ + Nrr*r_*abs(r_) + Nrrr*r_^3 + Nrvv*r_*v_^2
+  u_: u(t)/Vs
+  v_: v(t)/Vs
+  r_: r(t)/Vs*L
+  Xu: 0
+  Xuu: 0
+  Xuuu: 0
+  Xvv: -0.041
+  Xrr: -0.01
+  Xvr: -0.015
+  Yv: -0.13
+  Yvv: -0.18
+  Yvvv: 0
+  Yvrr: 0
+  Yr: 0.015
+  Yrr: 0.021
+  Yrrr: 0
+  Yrvv: 0
+  Nv: -0.37
+  Nvv: -0.12
+  Nvvv: 0
+  Nvrr: 0
+  Nr: -0.1
+  Nrr: 0.005
+  Nrrr: 0
+  Nrvv: 0
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`reference frame`: Définit la transformation permettant de passer d'un repère
+connu (dont le nom est donné par `frame` au repère dans lequel sont exprimés
+les efforts. Le torseur est automatiquement déplacé au
+centre de gravité (point (0,0,0) du repère "body").
+`commands`: optionnel. Le modèle de manoeuvrabilité peut accepter des commandes
+externes. Il peut aussi utiliser les commandes de n'importe quel autre modèle
+d'effort (mais il faut pour cela bien renseigner le nom complet de la commande,
+soit par exemple `PropRudd(rpm)`)
+`X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
+body), exprimé au point d'application défini ci-dessus.
+
+Toutes les valeurs sont supposées en unité du système international. Le modèle
+nécessite de spécifier X, Y, Z, K, M et N, les autres clefs pouvant être
+quelconques. Des variables accessoires (telles
+que `tau` dans l'exemple ci-dessus) peuvent être utilisées. Le modèle vérifie
+automatiquement à l'exécution qu'il possède toutes les clefs nécessaires et
+infère l'ordre d'évaluation, autrement dit, une expression n'est évaluée que
+lorque toutes les expressions dont elle dépend l'ont été (quel que soit l'ordre
+dans lequel elles ont été déclarées).
+
+On peut évaluer ces valeurs retardées des états x,y,z,u,v,w,p,q,r en écrivant
+`x(t-tau)` (par exemple) ou `tau` désigne une expression dont la valeur est
+positive. `t` désigne implicitement l'instant courant.
+
+### Grammaire
+
+De façon plus formelle, les modèles doivent obéir à la grammaire suivante
+(format "Extended Bachus-Naur" ou EBNF) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.ebnf}
+expr                = term  operator_and_term*
+add_operators       = '+' | '-'
+mul_operators       = '*' | '/'
+operator_and_term   = add_operators term
+operator_and_factor = mul_operators factor
+term                = factor operator_and_factor*
+factor              = base ( '^' exponent)*
+base                = ('('  expr ')') | atom
+exponent            = base
+atom                = function_call | identifier | double
+function_call       = identifier '(' expr ')'
+identifier          = alpha (alphanum | '_')*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ## Hélices Wageningen série B
 
