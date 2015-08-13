@@ -12,7 +12,7 @@
 #include "History.hpp"
 #include "HistoryException.hpp"
 
-History::History() : Tmax(0), L(), oldest_recorded_instant(0)
+History::History(const double Tmax_) : Tmax(Tmax_), L(), oldest_recorded_instant(0)
 {
 }
 #include <ssc/macros.hpp>
@@ -54,18 +54,14 @@ double History::get_value(const double tau) const
 
 double History::interpolate_value_in_interval(const size_t idx, const double t) const
 {
-    if (idx == 0)
+    if ((idx == 0) or (idx >= L.size()))
     {
-        return L[idx].second;
+        return L.at(0).second;
     }
-    if (idx == L.size())
-    {
-        THROW(__PRETTY_FUNCTION__, HistoryException, "Something is very wrong: first bracketing value is last value in list.");
-    }
-    const double tA = L[idx-1].first;
-    const double tB = L[idx].first;
-    const double yA = L[idx-1].second;
-    const double yB = L[idx].second;
+    const double tA = L.at(idx-1).first;
+    const double tB = L.at(idx).first;
+    const double yA = L.at(idx-1).second;
+    const double yB = L.at(idx).second;
 
     if (std::abs(t-tA) < 1E-12) return yA; // To fix bug 2655
     if (std::abs(t-tB) < 1E-12) return yB;
@@ -111,11 +107,11 @@ size_t History::find_braketing_position(const double t) const
 
 void History::shift_oldest_recorded_instant_if_necessary()
 {
-    const size_t idx = find_braketing_position(oldest_recorded_instant);
-    const bool oldest_recorded_instant_is_not_in_first_interval = idx>0;
-    if (oldest_recorded_instant_is_not_in_first_interval)
+    if (get_current_time() - oldest_recorded_instant >= Tmax)
     {
-        const double vmin = interpolate_value_in_interval(idx, oldest_recorded_instant);
+        oldest_recorded_instant = get_current_time()-Tmax;
+        const double vmin = interpolate_value_in_interval(1, oldest_recorded_instant);
+        const size_t idx = find_braketing_position(oldest_recorded_instant);
         L.erase(L.begin(), L.begin() + (long) (idx));
         if (L.front().first != oldest_recorded_instant)
             L.insert(L.begin(), std::make_pair(oldest_recorded_instant, vmin));
@@ -135,13 +131,17 @@ void History::add_value_to_history(const double t, const double val)
     }
 }
 
+void History::update_oldest_recorded_instant(const double t)
+{
+    if (L.empty()) oldest_recorded_instant = t;
+    oldest_recorded_instant = std::min(oldest_recorded_instant, t);
+}
+
 void History::record(const double t, //!< Instant corresponding to the value being added
                      const double val //!< Value to add
                     )
 {
-    if (L.empty()) oldest_recorded_instant = t;
-    oldest_recorded_instant = std::min(oldest_recorded_instant,t);
-    Tmax = std::max(Tmax,std::max(t,get_current_time()) - oldest_recorded_instant);
+    update_oldest_recorded_instant(t);
     add_value_to_history(t, val);
     shift_oldest_recorded_instant_if_necessary();
 }

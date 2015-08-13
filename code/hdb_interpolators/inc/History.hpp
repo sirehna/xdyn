@@ -24,7 +24,7 @@
 class History
 {
     public:
-        History();
+        History(const double Tmax=0);
 
         /**  \brief Returns the value at t-tau, t being the current instant
           *  \returns Value at t-tau in history
@@ -73,6 +73,7 @@ class History
         double get_current_time() const;
         void shift_oldest_recorded_instant_if_necessary();
         void add_value_to_history(const double t, const double val);
+        void update_oldest_recorded_instant(const double t);
 
         double Tmax;
         Container L;
