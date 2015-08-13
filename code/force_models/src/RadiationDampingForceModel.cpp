@@ -159,6 +159,11 @@ class RadiationDampingForceModel::Impl
             return ssc::kinematics::Wrench(states.name,W);
         }
 
+        double get_Tmax() const
+        {
+            return Tmax;
+        }
+
     private:
         Impl();
         TR1(shared_ptr)<HDBParser> hdb;
@@ -176,6 +181,11 @@ class RadiationDampingForceModel::Impl
 RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& ) : ForceModel("radiation damping", body_name_),
 pimpl(new Impl(input.hdb, input.yaml))
 {
+}
+
+double RadiationDampingForceModel::get_Tmax() const
+{
+    return pimpl->get_Tmax();
 }
 
 ssc::kinematics::Wrench RadiationDampingForceModel::operator()(const BodyStates& states, const double ) const

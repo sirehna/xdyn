@@ -160,3 +160,12 @@ TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
 }
+
+TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
+{
+    RadiationDampingForceModel::Input input;
+    input.hdb = get_hdb_data();
+    input.yaml = get_yaml_data(false);
+    const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
+    ASSERT_DOUBLE_EQ(input.yaml.tau_max, F.get_Tmax());
+}
