@@ -175,27 +175,20 @@ TEST_F(HistoryTest, history_should_not_grow_indefinitely)
     h.record(t-12, 1);
     h.record(t-9, 3);
     h.record(t-8, 2);
-    COUT(h);
     ASSERT_DOUBLE_EQ(1, h(4));
-    COUT(h);
     ASSERT_EQ(3, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
     ASSERT_THROW(h(4.1), HistoryException);
     h.record(t-5, 4);
-    COUT(h);
     ASSERT_EQ(3, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
     ASSERT_DOUBLE_EQ(3, h(4));
     h.record(t-4, 2);
-    COUT(h);
     h.record(t-2, 7);
-    COUT(h);
     h.record(t-1, 6);
-    COUT(h);
     ASSERT_EQ(4, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
     h.record(t, 8);
-    COUT(h);
     ASSERT_DOUBLE_EQ(2, h(4));
     ASSERT_EQ(4, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
@@ -205,8 +198,6 @@ TEST_F(HistoryTest, interpolation_should_be_OK_after_shift)
 {
     History h(3);
     h.record(-10, 13);
-    COUT(h);
     h.record(0, 23);
-    COUT(h);
     ASSERT_DOUBLE_EQ(20, h(3));
 }
