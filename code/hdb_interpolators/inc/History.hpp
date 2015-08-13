@@ -68,7 +68,8 @@ class History
 
         void throw_if_already_added(const size_t idx, const double t, const double val) const;
         size_t find_braketing_position(const double t) const;
-        double get_value(const size_t idx, const double t) const;
+        double interpolate_value_in_interval(const size_t idx, const double t) const;
+        double get_value(const double tau) const;
         double get_current_time() const;
         void shift_oldest_recorded_instant();
         void add_value_to_history(const double t, const double val);

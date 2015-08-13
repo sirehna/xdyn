@@ -37,9 +37,7 @@ double History::operator()(double tau //!< How far back in history do we need to
     {
         THROW(__PRETTY_FUNCTION__, HistoryException, "Cannot retrieve anything from history because it is empty");
     }
-    const double t = get_current_time();
-    const auto idx = find_braketing_position(t-tau);
-    return get_value(idx, t-tau);
+    return get_value(tau);
 }
 
 double History::get_current_time() const
@@ -47,7 +45,14 @@ double History::get_current_time() const
     return L.empty() ? oldest_recorded_instant : L.back().first;
 }
 
-double History::get_value(const size_t idx, const double t) const
+double History::get_value(const double tau) const
+{
+    const double t = get_current_time();
+    const auto idx = find_braketing_position(t-tau);
+    return interpolate_value_in_interval(idx, t-tau);
+}
+
+double History::interpolate_value_in_interval(const size_t idx, const double t) const
 {
     if (idx == 0)
     {
@@ -110,7 +115,7 @@ void History::shift_oldest_recorded_instant()
     const bool oldest_recorded_instant_is_not_in_first_interval = idx>0;
     if (oldest_recorded_instant_is_not_in_first_interval)
     {
-        const double vmin = get_value(idx, oldest_recorded_instant);
+        const double vmin = interpolate_value_in_interval(idx, oldest_recorded_instant);
         L.erase(L.begin(), L.begin() + (long) (idx));
         if (L.front().first != oldest_recorded_instant)
             L.insert(L.begin(), std::make_pair(oldest_recorded_instant, vmin));
