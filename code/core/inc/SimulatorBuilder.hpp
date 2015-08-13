@@ -155,8 +155,7 @@ class SimulatorBuilder
             spectrum_parsers->push_back(SpectrumBuilderPtr(new SpectrumBuilder<T>()));
             return *this;
         }
-
-        std::vector<BodyPtr> get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces) const;
+        std::vector<BodyPtr> get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces, std::map<std::string,double> Tmax) const;
         EnvironmentAndFrames get_environment() const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
         std::vector<ListOfControlledForces> get_controlled_forces(const EnvironmentAndFrames& env) const;
@@ -174,6 +173,7 @@ class SimulatorBuilder
 
     private:
         SimulatorBuilder(); // Disabled
+        std::map<std::string, double> get_max_history_length(const std::vector<ListOfForces>& forces_for_all_bodies, const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies) const;
         SurfaceElevationPtr get_wave() const;
         ListOfForces forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
         ListOfControlledForces controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;

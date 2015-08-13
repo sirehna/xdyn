@@ -45,7 +45,7 @@ BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points)
     rot.convention.push_back("y'");
     rot.convention.push_back("x''");
     rot.order_by = "angle";
-    return BodyBuilder(rot).build(name, points, 0, 0, rot);
+    return BodyBuilder(rot).build(name, points, 0, 0, rot, 0);
 }
 
 TR1(shared_ptr)<WaveModel> get_wave_model();

@@ -37,9 +37,9 @@ void BodyBuilder::change_mesh_ref_frame(BodyStates& states, const VectorOfVector
     states.M = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix(states.mesh->nodes, states.name));
 }
 
-BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const YamlRotation& convention, const bool has_surface_forces) const
+BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const YamlRotation& convention, const double Tmax, const bool has_surface_forces) const
 {
-    BodyStates states;
+    BodyStates states(Tmax);
     states.name = input.name;
     states.G = make_point(input.dynamics.centre_of_inertia);
     states.m = input.dynamics.mass;
@@ -114,7 +114,7 @@ Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) c
     return ret;
 }
 
-BodyPtr BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const YamlRotation& convention, const bool has_surface_forces) const
+BodyPtr BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const YamlRotation& convention, const double Tmax, const bool has_surface_forces) const
 {
     YamlBody input;
     input.name = name;
@@ -127,5 +127,5 @@ BodyPtr BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints
     input.dynamics.rigid_body_inertia.row_5 = {0,0,0,0,1,0};
     input.dynamics.rigid_body_inertia.row_6 = {0,0,0,0,0,1};
     input.dynamics.added_mass = input.dynamics.rigid_body_inertia;
-    return build(input, mesh, idx, t0, convention, has_surface_forces);
+    return build(input, mesh, idx, t0, convention, has_surface_forces, Tmax);
 }
