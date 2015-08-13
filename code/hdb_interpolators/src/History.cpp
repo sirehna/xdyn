@@ -84,19 +84,19 @@ void History::throw_if_already_added(const size_t idx, const double t, const dou
 
 size_t History::find_braketing_position(const double t) const
 {
-    if (L.empty())            return L.size();
-    if (L.back().first < t)   return L.size();
-    if (L.front().first >= t) return 0;
+    if (L.empty())                    return 0;
+    if (L.back().first < t)           return L.size();
+    if (L.front().first >= t)         return 0;
     size_t idx_lower = 0;
     size_t idx_greater = L.size()-1;
     while (true)
     {
-        if (t==L[idx_lower].first) return idx_lower;
-        if (t==L[idx_greater].first) return idx_greater;
+        if (t==L[idx_lower].first)    return idx_lower;
+        if (t==L[idx_greater].first)  return idx_greater;
         if (idx_greater<=idx_lower+1) return idx_greater;
         const size_t idx_middle = (size_t)std::floor(((double)idx_lower+(double)idx_greater)/2.);
         const auto middle = L[idx_middle];
-        if (t==middle.first) return idx_middle;
+        if (t==middle.first)          return idx_middle;
         if (t < middle.first)
         {
             idx_greater = idx_middle;
@@ -106,7 +106,7 @@ size_t History::find_braketing_position(const double t) const
             idx_lower = idx_middle;
         }
     }
-    return L.size();
+                                      return L.size();
 }
 
 void History::shift_oldest_recorded_instant()
