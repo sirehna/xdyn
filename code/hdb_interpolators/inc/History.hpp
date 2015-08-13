@@ -76,7 +76,7 @@ class History
 
         double Tmax;
         Container L;
-        double oldest_recorded_instant; //!< Maximum duration to store in history (in seconds)
+        double oldest_recorded_instant;
 };
 
 std::ostream& operator<<(std::ostream& os, const History& h);
