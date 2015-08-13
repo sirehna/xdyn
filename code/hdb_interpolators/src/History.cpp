@@ -125,7 +125,6 @@ void History::shift_oldest_recorded_instant()
 void History::add_value_to_history(const double t, const double val)
 {
     const size_t idx = find_braketing_position(t);
-    //throw_if_already_added(idx, t, val);
     if ((idx != L.size()) and (L[idx].first == t))
     {
         L[idx] = std::make_pair(t, val);
