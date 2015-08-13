@@ -492,3 +492,52 @@ TEST_F(SimTest, LONG_can_use_commands_in_maneuvering_model)
     ASSERT_EQ(5, it->second.size());
     ASSERT_NEAR(50, it->second.at(1), 1E-8);
 }
+
+TEST_F(SimTest, linear_hydrostatics_without_waves)
+{
+    const double T = 10;
+    const double dt = 0.1;
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_linear_hydrostatics_without_waves(), test_data::cube(), 0, T, dt);
+
+    const double k = 100002.8;
+    const double m = 253310;
+    const double z0 = 1;
+    const double w0 = 1;
+    const double omega = sqrt(k/m);
+    const double zeq = -0.099;
+
+    auto z = [k,m,z0,w0,omega,zeq](const double t){return (z0-zeq)*cos(omega*t) + w0/omega*sin(omega*t) + zeq;};
+    const double eps = 1E-5;
+    for (size_t i = 0 ; i < res.size() ; ++i)
+    {
+        const double t = res.at(i).t;
+        const double model = z(t);
+        const double simulation = res.at(i).x[ZIDX(0)];
+        ASSERT_NEAR(0, res.at(i).x[XIDX(0)], eps) << "i = " << i;
+        ASSERT_NEAR(0, res.at(i).x[YIDX(0)], eps) << "i = " << i;
+        ASSERT_NEAR(model, simulation, eps) << "i = " << i;
+    }
+}
+
+TEST_F(SimTest, LONG_linear_hydrostatics_with_waves)
+{
+    const double T = 20;
+    const double dt = 0.1;
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_linear_hydrostatics_with_waves(), test_data::cube(), 0, T, dt);
+
+    const double eps = 1E-3;
+    ASSERT_NEAR(1      , res.at(0).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.0841 , res.at(1).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.1385 , res.at(2).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.16757, res.at(3).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.17703, res.at(4).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.17357, res.at(5).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.16441, res.at(6).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.15686, res.at(7).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.15779, res.at(8).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.17321, res.at(9).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.20792, res.at(10).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.2651 , res.at(11).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.34619, res.at(12).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.45072, res.at(13).x[ZIDX(0)], eps);
+}

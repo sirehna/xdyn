@@ -24,6 +24,7 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/GMForceModel.cpp
         src/KtKqForceModel.cpp
         src/AbstractWageningen.cpp
+        src/LinearHydrostaticForceModel.cpp
         )
 
 # Disabled virtual destructors warning in Boost
