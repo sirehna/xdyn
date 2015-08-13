@@ -64,15 +64,18 @@ YamlWaveModel parse_waves(const std::string& yaml)
         ss << "Error parsing section wave/spectra: " << e.what();
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
     }
-    try
+    if (node.FindValue("output"))
     {
-        node["output"]         >> ret.output;
-    }
-    catch(std::exception& e)
-    {
-        std::stringstream ss;
-        ss << "Error parsing section wave/output: " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        try
+        {
+            node["output"]         >> ret.output;
+        }
+        catch(std::exception& e)
+        {
+            std::stringstream ss;
+            ss << "Error parsing section wave/output: " << e.what();
+            THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        }
     }
     return ret;
 }
