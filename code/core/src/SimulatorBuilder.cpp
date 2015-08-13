@@ -103,9 +103,9 @@ SurfaceElevationPtr SimulatorBuilder::get_wave() const
 std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
 {
     std::vector<ListOfForces> forces;
-    for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
+    for (const auto body:input.bodies)
     {
-        forces.push_back(forces_from(*that_body, env));
+        forces.push_back(forces_from(body, env));
     }
     return forces;
 }
