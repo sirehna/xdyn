@@ -154,16 +154,16 @@ TEST_F(HistoryTest, can_get_history_length)
     //! [HistoryTest get_length_example]
     History h;
     h.record(421, 1);
-    ASSERT_DOUBLE_EQ(0, h.get_length());
+    ASSERT_DOUBLE_EQ(0, h.get_duration());
     h.record(216, 277);
-    ASSERT_DOUBLE_EQ(421-216, h.get_length());
+    ASSERT_DOUBLE_EQ(421-216, h.get_duration());
     h.record(420, 73);
-    ASSERT_DOUBLE_EQ(421-216, h.get_length());
+    ASSERT_DOUBLE_EQ(421-216, h.get_duration());
     h.record(540, 239);
-    ASSERT_DOUBLE_EQ(540-216, h.get_length());
+    ASSERT_DOUBLE_EQ(540-216, h.get_duration());
     h.record(24, 1);
-    ASSERT_DOUBLE_EQ(516, h.get_length());
+    ASSERT_DOUBLE_EQ(516, h.get_duration());
     h.record(2400, 1);
-    ASSERT_DOUBLE_EQ(2376, h.get_length());
+    ASSERT_DOUBLE_EQ(2376, h.get_duration());
     //! [HistoryTest get_length_example]
 }

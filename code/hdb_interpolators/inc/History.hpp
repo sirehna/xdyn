@@ -58,7 +58,7 @@ class History
          *   \returns Difference between last & first instants in L.
           *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_length_example
           */
-        double get_length() const;
+        double get_duration() const;
 
         friend std::ostream& operator<<(std::ostream& os, const History& h);
 

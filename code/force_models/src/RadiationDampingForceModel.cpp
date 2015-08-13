@@ -135,10 +135,10 @@ class RadiationDampingForceModel::Impl
             double K_X_dot = 0;
             for (size_t k = 0 ; k < 6 ; ++k)
             {
-                if (his.get_length() >= Tmin)
+                if (his.get_duration() >= Tmin)
                 {
                     // Integrate up to Tmax if possible, but never exceed the history length
-                    const double co = builder.convolution(his, K[i][k], Tmin, std::min(Tmax, his.get_length()));
+                    const double co = builder.convolution(his, K[i][k], Tmin, std::min(Tmax, his.get_duration()));
                     K_X_dot += co;
                 }
             }

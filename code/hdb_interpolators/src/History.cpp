@@ -152,7 +152,7 @@ double History::get_Tmax() const
     return Tmax;
 }
 
-double History::get_length() const
+double History::get_duration() const
 {
     return L.back().first - L.front().first;
 }
