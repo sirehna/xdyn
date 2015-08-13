@@ -172,3 +172,18 @@ std::ostream& operator<<(std::ostream& os, const History& h)
     os << "]";
     return os;
 }
+
+double History::average(const double T) const
+{
+    if (L.size() < 2)
+    {
+        THROW(__PRETTY_FUNCTION__, HistoryException, "Cannot retrieve average value because history it contains less than two elements");
+    }
+    if (T > get_duration())
+    {
+        std::stringstream ss;
+        ss << "Cannot retrieve average value because history is not long enough: it currently has a duration of " << get_duration() << " s, but the average was requested on " << T << " s";
+        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+    }
+    return L.front().second;
+}

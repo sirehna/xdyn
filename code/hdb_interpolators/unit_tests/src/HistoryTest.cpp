@@ -201,3 +201,25 @@ TEST_F(HistoryTest, interpolation_should_be_OK_after_shift)
     h.record(0, 23);
     ASSERT_DOUBLE_EQ(20, h(3));
 }
+
+TEST_F(HistoryTest, cannot_calculate_average_value_for_one_point)
+{
+    History h(2);
+    h.record(0,1);
+    ASSERT_THROW(h.average(1), HistoryException);
+}
+
+TEST_F(HistoryTest, should_throw_when_requesting_average_value_of_an_empty_history)
+{
+    History h(2);
+    ASSERT_THROW(h.average(1), HistoryException);
+}
+
+TEST_F(HistoryTest, should_throw_when_requesting_average_value_over_a_greater_length_than_the_history_itself)
+{
+    History h(2);
+    h.record(0,1);
+    h.record(2,1);
+    ASSERT_NO_THROW(h.average(2));
+    ASSERT_THROW(h.average(3), HistoryException);
+}

@@ -26,6 +26,13 @@ class History
     public:
         History(const double Tmax=0);
 
+        /**  \brief Returns the average value integrated between t-length and t, t being the current instant.
+         *   \details A trapezoidal integration is used.
+          *  \returns Value at t-tau in history
+          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
+          */
+        double average(const double length) const;
+
         /**  \brief Returns the value at t-tau, t being the current instant
           *  \returns Value at t-tau in history
           *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
