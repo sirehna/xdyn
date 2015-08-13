@@ -109,7 +109,7 @@ size_t History::find_braketing_position(const double t) const
                                       return L.size();
 }
 
-void History::shift_oldest_recorded_instant()
+void History::shift_oldest_recorded_instant_if_necessary()
 {
     const size_t idx = find_braketing_position(oldest_recorded_instant);
     const bool oldest_recorded_instant_is_not_in_first_interval = idx>0;
@@ -143,7 +143,7 @@ void History::record(const double t, //!< Instant corresponding to the value bei
     oldest_recorded_instant = std::min(oldest_recorded_instant,t);
     Tmax = std::max(Tmax,std::max(t,get_current_time()) - oldest_recorded_instant);
     add_value_to_history(t, val);
-    shift_oldest_recorded_instant();
+    shift_oldest_recorded_instant_if_necessary();
 }
 
 size_t History::size() const

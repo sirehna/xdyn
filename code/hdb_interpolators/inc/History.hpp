@@ -71,7 +71,7 @@ class History
         double interpolate_value_in_interval(const size_t idx, const double t) const;
         double get_value(const double tau) const;
         double get_current_time() const;
-        void shift_oldest_recorded_instant();
+        void shift_oldest_recorded_instant_if_necessary();
         void add_value_to_history(const double t, const double val);
 
         double Tmax;
