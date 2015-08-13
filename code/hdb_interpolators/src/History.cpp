@@ -56,12 +56,12 @@ double History::interpolate_value_in_interval(const size_t idx, const double t) 
 {
     if ((idx == 0) or (idx >= L.size()))
     {
-        return L.at(0).second;
+        return L[0].second;
     }
-    const double tA = L.at(idx-1).first;
-    const double tB = L.at(idx).first;
-    const double yA = L.at(idx-1).second;
-    const double yB = L.at(idx).second;
+    const double tA = L[idx-1].first;
+    const double tB = L[idx].first;
+    const double yA = L[idx-1].second;
+    const double yB = L[idx].second;
 
     if (std::abs(t-tA) < 1E-12) return yA; // To fix bug 2655
     if (std::abs(t-tB) < 1E-12) return yB;
