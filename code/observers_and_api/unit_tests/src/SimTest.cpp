@@ -518,3 +518,26 @@ TEST_F(SimTest, linear_hydrostatics_without_waves)
         ASSERT_NEAR(model, simulation, eps) << "i = " << i;
     }
 }
+
+TEST_F(SimTest, LONG_linear_hydrostatics_with_waves)
+{
+    const double T = 20;
+    const double dt = 0.1;
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_linear_hydrostatics_with_waves(), test_data::cube(), 0, T, dt);
+
+    const double eps = 1E-3;
+    ASSERT_NEAR(1      , res.at(0).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.0841 , res.at(1).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.1385 , res.at(2).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.16757, res.at(3).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.17703, res.at(4).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.17357, res.at(5).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.16441, res.at(6).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.15686, res.at(7).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.15779, res.at(8).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.17321, res.at(9).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.20792, res.at(10).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.2651 , res.at(11).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.34619, res.at(12).x[ZIDX(0)], eps);
+    ASSERT_NEAR(1.45072, res.at(13).x[ZIDX(0)], eps);
+}
