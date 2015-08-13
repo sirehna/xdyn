@@ -9,6 +9,7 @@
 #define HISTORY_HPP_
 
 #include <cstdlib> //size_t
+#include <sstream>
 #include <vector>
 
 /** \brief
@@ -59,6 +60,8 @@ class History
           */
         double get_length() const;
 
+        friend std::ostream& operator<<(std::ostream& os, const History& h);
+
     private:
         typedef std::pair<double,double> TimeValue;
         typedef std::vector<TimeValue> Container;
@@ -75,5 +78,6 @@ class History
         double oldest_recorded_instant; //!< Maximum duration to store in history (in seconds)
 };
 
+std::ostream& operator<<(std::ostream& os, const History& h);
 
 #endif /* HISTORY_HPP_ */

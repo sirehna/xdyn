@@ -156,3 +156,15 @@ double History::get_length() const
 {
     return L.back().first - L.front().first;
 }
+
+std::ostream& operator<<(std::ostream& os, const History& h)
+{
+    os << "[";
+    for (size_t i = 0 ; i < h.L.size() -1 ; ++i)
+    {
+        os << "(" << h.L.at(i).first << "," << h.L.at(i).second << "), ";
+    }
+    if (not(h.L.empty())) os << "(" << h.L.back().first << "," << h.L.back().second << ")";
+    os << "]";
+    return os;
+}
