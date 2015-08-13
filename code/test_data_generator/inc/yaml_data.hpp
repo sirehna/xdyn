@@ -60,6 +60,8 @@ namespace test_data
     std::string maneuvering_with_commands();
     std::string kt_kq();
     std::string linear_hydrostatics();
+    std::string anthineas_linear_hydrostatics_without_waves();
+    std::string anthineas_linear_hydrostatics_with_waves();
 }
 
 #endif /* YAML_DATA_HPP_ */
