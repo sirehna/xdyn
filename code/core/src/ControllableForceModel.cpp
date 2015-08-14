@@ -111,3 +111,8 @@ double ControllableForceModel::get_Tmax() const
 {
     return 0.;
 }
+
+std::string ControllableForceModel::get_body_name() const
+{
+    return body_name;
+}
