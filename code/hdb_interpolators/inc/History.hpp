@@ -81,6 +81,8 @@ class History
         void shift_oldest_recorded_instant_if_necessary();
         void add_value_to_history(const double t, const double val);
         void update_oldest_recorded_instant(const double t);
+        double trapeze(const double xa, const double ya, const double xb, const double yb) const;
+        double integrate(const size_t idx) const;
 
         double Tmax;
         Container L;

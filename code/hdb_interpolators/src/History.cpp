@@ -173,6 +173,21 @@ std::ostream& operator<<(std::ostream& os, const History& h)
     return os;
 }
 
+double History::trapeze(const double xa, const double ya, const double xb, const double yb) const
+{
+    return (xb-xa)*(ya+yb)/2.;
+}
+
+double History::integrate(const size_t idx) const
+{
+    double ret = 0;
+    for (size_t i = idx ; i < L.size()-1 ; ++i)
+    {
+        ret += trapeze(L.at(i).first, L.at(i).second, L.at(i+1).first, L.at(i+1).second);
+    }
+    return ret;
+}
+
 double History::average(const double T) const
 {
     if (L.size() < 2)
@@ -185,5 +200,16 @@ double History::average(const double T) const
         ss << "Cannot retrieve average value because history is not long enough: it currently has a duration of " << get_duration() << " s, but the average was requested on " << T << " s";
         THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
     }
-    return L.front().second;
+    if (T < 0)
+    {
+        std::stringstream ss;
+        ss << "Cannot retrieve average value because supplied length is negative: received T = " << T;
+        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+    }
+    const double t = get_current_time() - T;
+    const size_t idx = find_braketing_position(t);
+    const double first_value = interpolate_value_in_interval(idx, t);
+    const double integral_of_first_interval = trapeze(t, first_value, L.at(idx).first, L.at(idx).second);
+    const double integral_from_t_to_now = integrate(idx);
+    return  T ? (integral_of_first_interval + integral_from_t_to_now)/T : L.back().second;
 }

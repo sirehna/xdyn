@@ -199,7 +199,7 @@ TEST_F(HistoryTest, interpolation_should_be_OK_after_shift)
     History h(3);
     h.record(-10, 13);
     h.record(0, 23);
-    ASSERT_DOUBLE_EQ(20, h(3));
+    ASSERT_DOUBLE_EQ(20., h(3));
 }
 
 TEST_F(HistoryTest, cannot_calculate_average_value_for_one_point)
@@ -222,4 +222,48 @@ TEST_F(HistoryTest, should_throw_when_requesting_average_value_over_a_greater_le
     h.record(2,1);
     ASSERT_NO_THROW(h.average(2));
     ASSERT_THROW(h.average(3), HistoryException);
+}
+
+TEST_F(HistoryTest, should_throw_if_length_of_average_is_negative)
+{
+    History h(2);
+    h.record(0,1);
+    h.record(2,1);
+    ASSERT_THROW(h.average(-1), HistoryException);
+}
+
+TEST_F(HistoryTest, can_retrieve_average_for_two_values)
+{
+    History h(2);
+    h.record(0,0);
+    h.record(2,2);
+    ASSERT_NEAR(1, h.average(2), 1E-3);
+}
+
+TEST_F(HistoryTest, full_average_test)
+{
+    History h(4);
+    const double t = 12;
+    h.record(t-12, 1);
+    h.record(t-9, 3);
+    h.record(t-8, 2);
+    h.record(t-5, 4);
+    ASSERT_DOUBLE_EQ(11.5/4., h.average(4));
+
+    h.record(t-4, 2);
+    h.record(t-4+4./5., 4);
+    ASSERT_DOUBLE_EQ(3, h.average(1+4./5.));
+    h.record(t-2, 7);
+    h.record(t-1, 6);
+    h.record(t, 8);
+    ASSERT_DOUBLE_EQ(7, h.average(1));
+    ASSERT_DOUBLE_EQ(7.5, h.average(0.5));
+}
+
+TEST_F(HistoryTest, average_is_instant_value_when_length_is_zero)
+{
+    History h(2);
+    h.record(0,1);
+    h.record(2,2);
+    ASSERT_DOUBLE_EQ(2, h.average(0));
 }
