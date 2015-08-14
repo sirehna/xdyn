@@ -75,3 +75,9 @@ std::string ForceModel::get_body_name() const
 void ForceModel::extra_observations(Observer& ) const
 {
 }
+
+
+double ForceModel::get_Tmax() const
+{
+    return 0.;
+}

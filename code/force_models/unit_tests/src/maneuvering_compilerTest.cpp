@@ -130,7 +130,7 @@ TEST_F(maneuvering_compilerTest, can_compile_identifiers_with_indexes)
 
 TEST_F(maneuvering_compilerTest, can_compile_body_states)
 {
-    BodyStates states;
+    BodyStates states(3);
     states.x.record(-10, 13);
     states.x.record(0, 23);
     states.y.record(0, 2);

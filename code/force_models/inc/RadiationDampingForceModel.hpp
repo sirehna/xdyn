@@ -31,6 +31,7 @@ class RadiationDampingForceModel : public ForceModel
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         static Input parse(const std::string& yaml, const bool parse_hdb=true);
         static const std::string model_name;
+        double get_Tmax() const;
 
     private:
         RadiationDampingForceModel();

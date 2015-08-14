@@ -223,7 +223,7 @@ TEST_F(ManeuveringForceModelTest, internal_state)
     const auto p = pp->get_lambda();
     const auto q = qq->get_lambda();
     const auto r = rr->get_lambda();
-    BodyStates states;
+    BodyStates states(10);
     states.x.record(0, 1);
     states.y.record(0, 2);
     states.z.record(0, 3);

@@ -31,7 +31,7 @@ TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
     const double Tmax = a.random<double>().between(0,100);
     const double t_lower_than_Tmax = a.random<double>().between(0,Tmax);
     const double t_greater_than_Tmax = a.random<double>().greater_than(Tmax);
-    History h;
+    History h(Tmax);
     const double t0 = a.random<double>().between(Tmax,10*Tmax);
     h.record(t0, a.random<double>());
     h.record(t0+Tmax, a.random<double>());
@@ -48,7 +48,7 @@ TEST_F(HistoryTest, cannot_retrieve_anything_if_history_is_empty)
 
 TEST_F(HistoryTest, can_retrieve_initial_values)
 {
-    History h;
+    History h(2);
     const double t0 = a.random<double>();
     h.record(t0-2, 1);
     h.record(t0-1, 2);
@@ -72,7 +72,7 @@ TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
 TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
 {
     //! [HistoryTest example]
-    History h;
+    History h(1e3);
     h.record(421, 1);
     h.record(216, 277);
     h.record(420, 73);
@@ -95,14 +95,14 @@ TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
 TEST_F(HistoryTest, can_get_size_of_history)
 {
     const size_t N = a.random<size_t>().between(2,1000);
-    History h;
+    History h(1e10);
     for (size_t i = 0 ; i < N ; ++i) h.record((double)i, a.random<double>());
     ASSERT_EQ(N, h.size());
 }
 
 TEST_F(HistoryTest, should_shift_history)
 {
-    History h;
+    History h(1E10);
     h.record(10, 10);
     ASSERT_EQ(1, h.size());
 
@@ -140,7 +140,7 @@ TEST_F(HistoryTest, can_get_history_max_length)
     {
         //! [HistoryTest get_Tmax_example]
         const double Tmax = a.random<double>().greater_than(0);
-        History h;
+        History h(Tmax);
         const double t = a.random<double>().between(0,10);
         h.record(t, a.random<double>());
         h.record(t+Tmax, a.random<double>());
@@ -152,18 +152,61 @@ TEST_F(HistoryTest, can_get_history_max_length)
 TEST_F(HistoryTest, can_get_history_length)
 {
     //! [HistoryTest get_length_example]
-    History h;
+    History h(1e10);
     h.record(421, 1);
-    ASSERT_DOUBLE_EQ(0, h.get_length());
+    ASSERT_DOUBLE_EQ(0, h.get_duration());
     h.record(216, 277);
-    ASSERT_DOUBLE_EQ(421-216, h.get_length());
+    ASSERT_DOUBLE_EQ(421-216, h.get_duration());
     h.record(420, 73);
-    ASSERT_DOUBLE_EQ(421-216, h.get_length());
+    ASSERT_DOUBLE_EQ(421-216, h.get_duration());
     h.record(540, 239);
-    ASSERT_DOUBLE_EQ(540-216, h.get_length());
+    ASSERT_DOUBLE_EQ(540-216, h.get_duration());
     h.record(24, 1);
-    ASSERT_DOUBLE_EQ(516, h.get_length());
+    ASSERT_DOUBLE_EQ(516, h.get_duration());
     h.record(2400, 1);
-    ASSERT_DOUBLE_EQ(2376, h.get_length());
+    ASSERT_DOUBLE_EQ(2376, h.get_duration());
     //! [HistoryTest get_length_example]
+}
+#include <ssc/macros.hpp>
+TEST_F(HistoryTest, history_should_not_grow_indefinitely)
+{
+    History h(4);
+    const double t = 12;
+    h.record(t-12, 1);
+    h.record(t-9, 3);
+    h.record(t-8, 2);
+    COUT(h);
+    ASSERT_DOUBLE_EQ(1, h(4));
+    COUT(h);
+    ASSERT_EQ(3, h.size());
+    ASSERT_DOUBLE_EQ(4, h.get_duration());
+    ASSERT_THROW(h(4.1), HistoryException);
+    h.record(t-5, 4);
+    COUT(h);
+    ASSERT_EQ(3, h.size());
+    ASSERT_DOUBLE_EQ(4, h.get_duration());
+    ASSERT_DOUBLE_EQ(3, h(4));
+    h.record(t-4, 2);
+    COUT(h);
+    h.record(t-2, 7);
+    COUT(h);
+    h.record(t-1, 6);
+    COUT(h);
+    ASSERT_EQ(4, h.size());
+    ASSERT_DOUBLE_EQ(4, h.get_duration());
+    h.record(t, 8);
+    COUT(h);
+    ASSERT_DOUBLE_EQ(2, h(4));
+    ASSERT_EQ(4, h.size());
+    ASSERT_DOUBLE_EQ(4, h.get_duration());
+}
+
+TEST_F(HistoryTest, interpolation_should_be_OK_after_shift)
+{
+    History h(3);
+    h.record(-10, 13);
+    COUT(h);
+    h.record(0, 23);
+    COUT(h);
+    ASSERT_DOUBLE_EQ(20, h(3));
 }

@@ -90,7 +90,7 @@ TEST_F(RadiationDampingForceModelTest, example)
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_EQ("radiation damping", F.model_name);
     const std::string body_name = a.random<std::string>();
-    BodyStates states;
+    BodyStates states(100);
     states.name = body_name;
 //! [RadiationDampingForceModelTest example]
 //! [RadiationDampingForceModelTest expected output]
@@ -159,4 +159,13 @@ TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if
     ASSERT_TRUE(debug.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
+}
+
+TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
+{
+    RadiationDampingForceModel::Input input;
+    input.hdb = get_hdb_data();
+    input.yaml = get_yaml_data(false);
+    const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
+    ASSERT_DOUBLE_EQ(input.yaml.tau_max, F.get_Tmax());
 }

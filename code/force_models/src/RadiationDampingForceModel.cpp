@@ -135,10 +135,10 @@ class RadiationDampingForceModel::Impl
             double K_X_dot = 0;
             for (size_t k = 0 ; k < 6 ; ++k)
             {
-                if (his.get_length() >= Tmin)
+                if (his.get_duration() >= Tmin)
                 {
                     // Integrate up to Tmax if possible, but never exceed the history length
-                    const double co = builder.convolution(his, K[i][k], Tmin, std::min(Tmax, his.get_length()));
+                    const double co = builder.convolution(his, K[i][k], Tmin, std::min(Tmax, his.get_duration()));
                     K_X_dot += co;
                 }
             }
@@ -159,6 +159,11 @@ class RadiationDampingForceModel::Impl
             return ssc::kinematics::Wrench(states.name,W);
         }
 
+        double get_Tmax() const
+        {
+            return Tmax;
+        }
+
     private:
         Impl();
         TR1(shared_ptr)<HDBParser> hdb;
@@ -176,6 +181,11 @@ class RadiationDampingForceModel::Impl
 RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& ) : ForceModel("radiation damping", body_name_),
 pimpl(new Impl(input.hdb, input.yaml))
 {
+}
+
+double RadiationDampingForceModel::get_Tmax() const
+{
+    return pimpl->get_Tmax();
 }
 
 ssc::kinematics::Wrench RadiationDampingForceModel::operator()(const BodyStates& states, const double ) const
