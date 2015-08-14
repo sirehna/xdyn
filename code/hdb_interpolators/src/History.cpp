@@ -188,24 +188,35 @@ double History::integrate(const size_t idx) const
     return ret;
 }
 
-double History::average(const double T) const
+void History::check_if_average_can_be_retrieved(const double T) const
 {
     if (L.size() < 2)
     {
-        THROW(__PRETTY_FUNCTION__, HistoryException, "Cannot retrieve average value because history it contains less than two elements");
+        THROW(__PRETTY_FUNCTION__, HistoryException,
+                "Cannot retrieve average value because history it contains less than two elements");
     }
     if (T > get_duration())
     {
         std::stringstream ss;
-        ss << "Cannot retrieve average value because history is not long enough: it currently has a duration of " << get_duration() << " s, but the average was requested on " << T << " s";
+        ss
+                << "Cannot retrieve average value because history is not long enough: it currently has a duration of "
+                << get_duration() << " s, but the average was requested on "
+                << T << " s";
         THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
     }
     if (T < 0)
     {
         std::stringstream ss;
-        ss << "Cannot retrieve average value because supplied length is negative: received T = " << T;
+        ss
+                << "Cannot retrieve average value because supplied length is negative: received T = "
+                << T;
         THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
     }
+}
+
+double History::average(const double T) const
+{
+    check_if_average_can_be_retrieved(T);
     const double t = get_current_time() - T;
     const size_t idx = find_braketing_position(t);
     const double first_value = interpolate_value_in_interval(idx, t);

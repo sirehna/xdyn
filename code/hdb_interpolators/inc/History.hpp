@@ -83,6 +83,7 @@ class History
         void update_oldest_recorded_instant(const double t);
         double trapeze(const double xa, const double ya, const double xb, const double yb) const;
         double integrate(const size_t idx) const;
+        void check_if_average_can_be_retrieved(const double T) const;
 
         double Tmax;
         Container L;
