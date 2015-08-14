@@ -31,7 +31,7 @@ class History
           *  \returns Value at t-tau in history
           *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
           */
-        double average(const double length) const;
+        double average(double length) const;
 
         /**  \brief Returns the value at t-tau, t being the current instant
           *  \returns Value at t-tau in history
