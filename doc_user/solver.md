@@ -97,3 +97,4 @@ $$k_5 = dt\cdot f\left(X + \frac{-11}{54}\cdot k_1 + \frac{5}{2}\cdot k_2 +\frac
 $$k_6 = dt\cdot f\left(X + \frac{1631}{55296}\cdot k_1 + \frac{175}{512}\cdot k_2 + \frac{575}{13824}\cdot k_3 + \frac{44275}{110592}\cdot k_4  + \frac{253}{4096}\cdot k_5, t+\frac{7}{8}\cdot dt, U, P\right),$$
 
 ![](images/runge_kutta_cash_karp_stability.svg "Domaine de stabilité de la méthode de Runge-Kutta Cash-Karp")
+
