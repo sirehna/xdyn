@@ -33,11 +33,11 @@ V(X_f)\end{array}$$ On suppose $V$ continue.
 
 * On note $B$ la fonction calculant la position du centre de carène (dans le
 repère NED) :
-$$V:\left\{\begin{array}{c}\mathbf{R}^3\rightarrow\mathbf{R}^3\\X_f\mapsto
+$$B:\left\{\begin{array}{c}\mathbf{R}^3\rightarrow\mathbf{R}^3\\X_f\mapsto
 B(X_f)\end{array}$$
 
 * Soit $V_{\mbox{tot}}$ le volume total du navire. On note $I$ l'intervalle de
-$\mathbf{R}$ I=[0,V_{\mbox{tot}}]$
+$\mathbf{R}$ $I=[0,V_{\mbox{tot}}]$
 
 ## Surface de flottaison et surface de poussée
 
@@ -78,11 +78,16 @@ courbe de poussée.
 
 Pour toute position de navire, il existe une position isocarène. Soit en effet
 $X_0=(z_0,\phi_0,\theta_0)$ et $X_1=(z_1,\phi_1,\theta_1)$ deux paramètres de
-flottaison tels que $\phi_0\neq\phi_1$ et $\theta_0\neq\theta_1$. Soit
-$V_0=V(X_0)\in I$. On note $V_z$ l'application partielle $V_z:z\mapsto
-V(z,\phi_0,\theta_0)$. $V$ étant continue par hypothèse, $V_z$ l'est aussi.
-Comme $V_z$ prend ses valeurs dans $I$, d'après le théorème des valeurs
-intermédiaires $\exists z_2:V_z(z_2)=V_0$.
+flottaison tels que $\phi_0\neq\phi_1$ et $\theta_0\neq\theta_1$.
+Soit $V_{\mbox{max}}$ le volume de la carène lorsque le navire est totalement
+immergé. On note $I$ l'intervalle $[0,V_{\mbox{max}}]$.
+
+On note $V_z$ l'application partielle $V_z:z\mapsto
+V(z,\phi_1,\theta_1)$. $V$ étant continue par hypothèse, $V_z$ l'est aussi.
+Par ailleurs, on sait que $V_z(-\infty)=0$ et $V_z(+\infty)=V_{\mbox{max}}$
+donc d'après le théorème des valeurs intermédiaires, $\forall V_0\in I,
+$\exists z_2:V_z(z_2)=V_0$ ce qui signifie que $X_0=(z_0,\phi_0,\theta_0)$ et
+$X_1=(z_2,\phi_1,\theta_1)$ sont isocarènes.
 
 ## Métacentre
 
@@ -96,13 +101,15 @@ propriété particulière.
 Si l'on se place dans les conditions d'applicabilité du théorème d'Euler
 (positions isocarènes infiniment voisines) et que l'on suppose que l'une des
 positions est une position d'équilibre, le plan contenant les centres de carène
-correspondant à ces positions (notés $B_0$ et $B_1$) et $G$ est vertical. En
+correspondant à ces positions (notés respectivement $B_0$ et $B_1$) et $G$ est
+vertical puisque $B_0$ est à la verticale de $G$. En
 outre, il existe une rotation permettant de passer d'une position à l'autre. Le
 plan de cette rotation n'est pas forcément le plan $(G,B_0,B_1)$. Si l'on
-ajoute une hypothèse de symétrie transversale et longitudinale, alors ces deux
-plans sont nécessairement confondus. Dans ce cas, le point métacentrique est à
-l'intersection des droites d'action des efforts hydrostatiques (et non plus
-simplement de leur projection). On peut alors écrire :
+ajoute une hypothèse de symétrie transversale et longitudinale (coque
+amphidrome), alors ces deux plans sont nécessairement confondus. Dans ce cas,
+le point métacentrique est à l'intersection des droites d'action des efforts
+hydrostatiques (et non plus simplement de leur projection). On peut alors
+écrire :
 
 $$GZ = GM\sin(\alpha)$$, où $\alpha$ désigne l'angle de la rotation isocarène.
 
