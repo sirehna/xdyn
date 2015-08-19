@@ -5,7 +5,10 @@
  *      Author: cady
  */
 
+#include <map>
+
 #include "BlockedDOF.hpp"
+#include "BlockedDOFException.hpp"
 #include "SimulatorYamlParserException.hpp"
 #include <ssc/yaml_parser.hpp>
 #include "yaml.h"
@@ -116,3 +119,34 @@ std::ostream& operator<<(std::ostream& os, const BlockedDOF::BlockableState& s)
     return os;
 }
 
+void throw_if_already_defined(const BlockedDOF::BlockableState& state, std::map<BlockedDOF::BlockableState, bool>& defined);
+void throw_if_already_defined(const BlockedDOF::BlockableState& state, std::map<BlockedDOF::BlockableState, bool>& defined)
+{
+    if (defined[state])
+    {
+        std::stringstream ss;
+        ss << "Attempting to define state " << state
+                << " twice in 'blocked dof' section of the YAML file.";
+        THROW(__PRETTY_FUNCTION__, BlockedDOFException, ss.str());
+    }
+    defined[state] = true;
+}
+
+void BlockedDOF::check_states_are_not_defined_twice(const Yaml& input) const
+{
+    std::map<BlockedDOF::BlockableState, bool> defined_in_yaml, defined_in_csv;
+    for (const auto state : input.from_yaml)
+    {
+        throw_if_already_defined(state.state, defined_in_yaml);
+    }
+    for (const auto state : input.from_csv)
+    {
+        throw_if_already_defined(state.state, defined_in_yaml);
+        throw_if_already_defined(state.state, defined_in_csv);
+    }
+}
+
+BlockedDOF::BlockedDOF(const Yaml& input)
+{
+    check_states_are_not_defined_twice(input);
+}

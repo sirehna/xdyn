@@ -8,6 +8,7 @@
 #ifndef BLOCKEDDOF_HPP_
 #define BLOCKEDDOF_HPP_
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -46,6 +47,12 @@ class BlockedDOF
         };
 
         static Yaml parse(const std::string& yaml);
+
+        BlockedDOF(const Yaml& input);
+
+    private:
+        BlockedDOF();
+        void check_states_are_not_defined_twice(const Yaml& input) const;
 };
 
 #endif /* BLOCKEDDOF_HPP_ */

@@ -7,6 +7,7 @@
 
 
 #include "BlockedDOF.hpp"
+#include "BlockedDOFException.hpp"
 #include "BlockedDOFTest.hpp"
 #include "gmock/gmock.h"
 using namespace testing; // So we can use 'ElementsAre' unqualified
@@ -71,14 +72,44 @@ TEST_F(BlockedDOFTest, should_throw_if_forcing_anything_other_than_uvwpqr)
     ASSERT_THROW(BlockedDOF::parse(yaml), SimulatorYamlParserException);
 }
 
-TEST_F(BlockedDOFTest, DISABLED_should_throw_if_forcing_same_state_twice)
+TEST_F(BlockedDOFTest, should_throw_if_forcing_same_state_twice)
 {
-    ASSERT_TRUE(false);
-}
+    const std::string yaml1 = "from CSV:\n"
+                             "  - state: u\n"
+                             "    t: T\n"
+                             "    value: PS\n"
+                             "    interpolation: spline\n"
+                             "    filename: test.csv\n"
+                             "  - state: u\n"
+                             "    t: T\n"
+                             "    value: PS\n"
+                             "    interpolation: spline\n"
+                             "    filename: test.csv\n";
+    const std::string yaml2 =
+                             "from YAML:\n"
+                             "  - state: p\n"
+                             "    t: [4.2]\n"
+                             "    value: [5]\n"
+                             "    interpolation: piecewise constant\n"
+                             "  - state: p\n"
+                             "    t: [4.2]\n"
+                             "    value: [5]\n"
+                             "    interpolation: piecewise constant\n";
+    const std::string yaml3 = "from CSV:\n"
+                             "  - state: u\n"
+                             "    t: T\n"
+                             "    value: PS\n"
+                             "    interpolation: spline\n"
+                             "    filename: test.csv\n"
+                             "from YAML:\n"
+                             "  - state: u\n"
+                             "    t: [4.2]\n"
+                             "    value: [5]\n"
+                             "    interpolation: piecewise constant\n";
 
-TEST_F(BlockedDOFTest, DISABLED_should_throw_if_both_read_from_and_value_are_specified)
-{
-    ASSERT_TRUE(false);
+    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml1)), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml2)), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml3)), BlockedDOFException);
 }
 
 TEST_F(BlockedDOFTest, DISABLED_should_throw_if_not_as_many_values_as_instants)
