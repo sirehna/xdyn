@@ -9,6 +9,7 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/BodyTest.cpp
               src/ControllableForceModelTest.cpp
               src/random_kinematics.cpp
+              src/BlockedDOFTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

@@ -23,6 +23,7 @@ set(SRC src/update_kinematics.cpp
         src/DefaultSurfaceElevation.cpp
         src/BodyStates.cpp
         src/Observer.cpp
+        src/BlockedDOF.cpp
         )
 
 # Using C++ 2011
