@@ -86,3 +86,33 @@ BlockedDOF::Yaml BlockedDOF::parse(const std::string& yaml)
     if (node.FindValue("from YAML")) node["from YAML"] >> ret.from_yaml;
     return ret;
 }
+
+std::ostream& operator<<(std::ostream& os, const BlockedDOF::BlockableState& s);
+std::ostream& operator<<(std::ostream& os, const BlockedDOF::BlockableState& s)
+{
+    switch(s)
+    {
+        case BlockedDOF::BlockableState::U:
+            os << "u";
+            break;
+        case BlockedDOF::BlockableState::V:
+            os << "v";
+            break;
+        case BlockedDOF::BlockableState::W:
+            os << "w";
+            break;
+        case BlockedDOF::BlockableState::P:
+            os << "p";
+            break;
+        case BlockedDOF::BlockableState::Q:
+            os << "q";
+            break;
+        case BlockedDOF::BlockableState::R:
+            os << "r";
+            break;
+        default:
+            break;
+    }
+    return os;
+}
+
