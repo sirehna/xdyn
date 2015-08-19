@@ -10,6 +10,7 @@
 #include "BlockedDOFTest.hpp"
 #include "gmock/gmock.h"
 using namespace testing; // So we can use 'ElementsAre' unqualified
+#include "SimulatorYamlParserException.hpp"
 
 BlockedDOFTest::BlockedDOFTest() : a(ssc::random_data_generator::DataGenerator(854512))
 {
@@ -54,9 +55,20 @@ TEST_F(BlockedDOFTest, can_parse_forced_dof)
     ASSERT_EQ("test.csv", input.from_csv.front().filename);
 }
 
-TEST_F(BlockedDOFTest, DISABLED_should_throw_if_forcing_anything_other_than_uvwpqr)
+TEST_F(BlockedDOFTest, should_throw_if_forcing_anything_other_than_uvwpqr)
 {
-    ASSERT_TRUE(false);
+    const std::string yaml = "from CSV:\n"
+                             "  - state: x\n"
+                             "    t: T\n"
+                             "    value: PS\n"
+                             "    interpolation: spline\n"
+                             "    filename: test.csv\n"
+                             "from YAML:\n"
+                             "  - state: p\n"
+                             "    t: [4.2]\n"
+                             "    value: [5]\n"
+                             "    interpolation: piecewise constant\n";
+    ASSERT_THROW(BlockedDOF::parse(yaml), SimulatorYamlParserException);
 }
 
 TEST_F(BlockedDOFTest, DISABLED_should_throw_if_forcing_same_state_twice)
