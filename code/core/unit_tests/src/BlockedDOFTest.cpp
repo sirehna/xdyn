@@ -252,9 +252,19 @@ TEST_F(BlockedDOFTest, spline_should_work)
     ASSERT_DOUBLE_EQ(3, states[BlockedDOF::BlockableState::Q]->f(5));
 }
 
-TEST_F(BlockedDOFTest, DISABLED_blocked_derivative_should_work)
+TEST_F(BlockedDOFTest, blocked_derivative_should_work)
 {
-    ASSERT_TRUE(false);
+    const std::string yaml = "from YAML:\n"
+                             "  - state: u\n"
+                             "    t: [1,4.2,5]\n"
+                             "    value: [1,2,3]\n"
+                             "    interpolation: linear\n";
+    auto states = BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states();
+    ASSERT_DOUBLE_EQ(1./3.2, states[BlockedDOF::BlockableState::U]->df(1));
+    ASSERT_DOUBLE_EQ(1./3.2, states[BlockedDOF::BlockableState::U]->df(2.6));
+    ASSERT_DOUBLE_EQ(1./0.8, states[BlockedDOF::BlockableState::U]->df(4.2));
+    ASSERT_DOUBLE_EQ(1./0.8, states[BlockedDOF::BlockableState::U]->df(4.6));
+    ASSERT_DOUBLE_EQ(1./0.8, states[BlockedDOF::BlockableState::U]->df(5));
 }
 
 TEST_F(BlockedDOFTest, DISABLED_force_delta)
