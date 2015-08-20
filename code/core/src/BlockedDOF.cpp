@@ -11,6 +11,8 @@
 #include "BlockedDOFException.hpp"
 #include "SimulatorYamlParserException.hpp"
 #include <ssc/yaml_parser.hpp>
+#include <ssc/csv_file_reader.hpp>
+#include <ssc/text_file_reader.hpp>
 #include "yaml.h"
 
 BlockedDOF::YamlCSVDOF::YamlCSVDOF() :
@@ -142,4 +144,81 @@ void BlockedDOF::check_states_are_not_defined_twice(const Yaml& input) const
 BlockedDOF::BlockedDOF(const Yaml& input)
 {
     check_states_are_not_defined_twice(input);
+}
+
+BlockedDOF::Builder::Builder(const Yaml& yaml) : input(yaml)
+{
+}
+
+BlockedDOF::Interpolator BlockedDOF::Builder::build(const BlockedDOF::YamlDOF<std::vector<double> >& y) const
+{
+    BlockedDOF::Interpolator ret;
+    try
+    {
+        ret = build(y.t, y.value, y.interpolation);
+    }
+    catch(const ssc::exception_handling::Exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from YAML': " << e.get_message());
+    }
+    catch(const std::exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from YAML': " << e.what());
+    }
+    return ret;
+}
+
+BlockedDOF::Interpolator BlockedDOF::Builder::build(const BlockedDOF::YamlCSVDOF& y) const
+{
+    try
+    {
+        const ssc::text_file_reader::TextFileReader txt(y.filename);
+        const ssc::csv_file_reader::CSVFileReader reader(txt.get_contents());
+        auto m = reader.get_map();
+        const auto it1 = m.find(y.t);
+        if (it1 == m.end())
+        {
+            THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Unable to find column " << y.t << " in CSV file " << y.filename);
+        }
+        const auto it2 = m.find(y.value);
+        if (it2 == m.end())
+        {
+            THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Unable to find column " << y.value << " in CSV file " << y.filename);
+        }
+        const auto t = it1->second;
+        const auto state = it2->second;
+        return build(t, state, y.interpolation);
+    }
+    catch(const std::exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.what());
+    }
+    return BlockedDOF::Interpolator();
+}
+
+std::map<BlockedDOF::BlockableState, BlockedDOF::Interpolator> BlockedDOF::Builder::get_forced_states() const
+{
+    std::map<BlockableState, Interpolator> ret;
+    for (const auto y:input.from_csv) ret[y.state] = build(y);
+    for (const auto y:input.from_yaml) ret[y.state] = build(y);
+    return ret;
+}
+
+BlockedDOF::Interpolator BlockedDOF::Builder::build(const std::vector<double>& t, const std::vector<double>& state, const BlockedDOF::InterpolationType& type_of_interpolation) const
+{
+    switch(type_of_interpolation)
+    {
+        case InterpolationType::LINEAR:
+            return BlockedDOF::Interpolator(new ssc::interpolation::LinearInterpolationVariableStep(t, state));
+            break;
+        case InterpolationType::PIECEWISE_CONSTANT:
+            return BlockedDOF::Interpolator(new ssc::interpolation::PiecewiseConstantVariableStep<double>(t, state));
+            break;
+        case InterpolationType::SPLINE:
+            return BlockedDOF::Interpolator(new ssc::interpolation::SplineVariableStep(t, state));
+            break;
+        default:
+            break;
+    }
+    return Interpolator();
 }

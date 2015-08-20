@@ -112,9 +112,15 @@ TEST_F(BlockedDOFTest, should_throw_if_forcing_same_state_twice)
     ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml3)), BlockedDOFException);
 }
 
-TEST_F(BlockedDOFTest, DISABLED_should_throw_if_not_as_many_values_as_instants)
+TEST_F(BlockedDOFTest, should_throw_if_not_as_many_values_as_instants)
 {
-    ASSERT_TRUE(false);
+    const std::string invalid_yaml =
+                             "from YAML:\n"
+                             "  - state: p\n"
+                             "    t: [4.2,5]\n"
+                             "    value: [5]\n"
+                             "    interpolation: piecewise constant\n";
+    ASSERT_THROW(BlockedDOF::Builder(BlockedDOF::parse(invalid_yaml)).get_forced_states(), BlockedDOFException);
 }
 
 TEST_F(BlockedDOFTest, DISABLED_should_throw_if_t_not_strictly_increasing)

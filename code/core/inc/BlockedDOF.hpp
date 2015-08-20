@@ -12,6 +12,11 @@
 #include <string>
 #include <vector>
 
+#include <ssc/interpolation.hpp>
+#include <ssc/macros/tr1_macros.hpp>
+
+#include TR1INC(memory)
+
 class BlockedDOF
 {
     public:
@@ -44,6 +49,22 @@ class BlockedDOF
             Yaml();
             std::vector<YamlDOF<std::vector<double> > > from_yaml;
             std::vector<YamlCSVDOF> from_csv;
+        };
+
+        typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> Interpolator;
+
+        class Builder
+        {
+            public:
+                Builder(const Yaml& yaml);
+                std::map<BlockableState, Interpolator> get_forced_states() const;
+
+            private:
+                Builder();
+                Interpolator build(const YamlDOF<std::vector<double> >& y) const;
+                Interpolator build(const YamlCSVDOF& y) const;
+                Interpolator build(const std::vector<double>& t, const std::vector<double>& state, const InterpolationType& interpolation_type) const;
+                Yaml input;
         };
 
         static Yaml parse(const std::string& yaml);
