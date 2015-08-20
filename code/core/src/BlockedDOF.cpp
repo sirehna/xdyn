@@ -15,6 +15,11 @@
 #include <ssc/text_file_reader.hpp>
 #include "yaml.h"
 
+struct BlockedDOF::Impl
+{
+
+};
+
 BlockedDOF::YamlCSVDOF::YamlCSVDOF() :
     YamlDOF<std::string>(),
     filename()
@@ -142,7 +147,7 @@ void check_states_are_not_defined_twice(const BlockedDOF::Yaml& input)
     }
 }
 
-BlockedDOF::BlockedDOF(const Yaml& input)
+BlockedDOF::BlockedDOF(const Yaml& input) : pimpl(new Impl())
 {
     check_states_are_not_defined_twice(input);
 }

@@ -73,6 +73,9 @@ class BlockedDOF
 
     private:
         BlockedDOF();
+        class Impl;
+        TR1(shared_ptr)<Impl> pimpl;
+
 };
 
 #endif /* BLOCKEDDOF_HPP_ */
