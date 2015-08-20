@@ -145,9 +145,15 @@ TEST_F(BlockedDOFTest, interpolation_type_should_be_valid)
     ASSERT_THROW(BlockedDOF::parse(invalid_yaml), SimulatorYamlParserException);
 }
 
-TEST_F(BlockedDOFTest, DISABLED_should_throw_if_CSV_file_does_not_exist)
+TEST_F(BlockedDOFTest, should_throw_if_CSV_file_does_not_exist)
 {
-    ASSERT_TRUE(false);
+    const std::string yaml = "from CSV:\n"
+                             "  - state: u\n"
+                             "    t: T\n"
+                             "    value: PS\n"
+                             "    interpolation: spline\n"
+                             "    filename: test.csv\n";
+    ASSERT_THROW(BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states(), BlockedDOFException);
 }
 
 TEST_F(BlockedDOFTest, DISABLED_piecewise_constant_should_work)

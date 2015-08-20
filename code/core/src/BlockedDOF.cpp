@@ -189,6 +189,10 @@ BlockedDOF::Interpolator BlockedDOF::Builder::build(const BlockedDOF::YamlCSVDOF
         const auto state = it2->second;
         return build(t, state, y.interpolation);
     }
+    catch(const ssc::exception_handling::Exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.get_message());
+    }
     catch(const std::exception& e)
     {
         THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.what());
