@@ -222,9 +222,19 @@ TEST_F(BlockedDOFTest, piecewise_constant_should_work)
     ASSERT_DOUBLE_EQ(3,   states[BlockedDOF::BlockableState::P]->f(5));
 }
 
-TEST_F(BlockedDOFTest, DISABLED_linear_should_work)
+TEST_F(BlockedDOFTest, linear_should_work)
 {
-    ASSERT_TRUE(false);
+    const std::string yaml = "from YAML:\n"
+                             "  - state: u\n"
+                             "    t: [1,4.2,5]\n"
+                             "    value: [1,2,3]\n"
+                             "    interpolation: linear\n";
+    auto states = BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states();
+    ASSERT_DOUBLE_EQ(1,   states[BlockedDOF::BlockableState::U]->f(1));
+    ASSERT_DOUBLE_EQ(1.5, states[BlockedDOF::BlockableState::U]->f(2.6));
+    ASSERT_DOUBLE_EQ(2,   states[BlockedDOF::BlockableState::U]->f(4.2));
+    ASSERT_DOUBLE_EQ(2.5, states[BlockedDOF::BlockableState::U]->f(4.6));
+    ASSERT_DOUBLE_EQ(3,   states[BlockedDOF::BlockableState::U]->f(5));
 }
 
 TEST_F(BlockedDOFTest, DISABLED_spline_should_work)
