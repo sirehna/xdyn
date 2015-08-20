@@ -123,9 +123,15 @@ TEST_F(BlockedDOFTest, should_throw_if_not_as_many_values_as_instants)
     ASSERT_THROW(BlockedDOF::Builder(BlockedDOF::parse(invalid_yaml)).get_forced_states(), BlockedDOFException);
 }
 
-TEST_F(BlockedDOFTest, DISABLED_should_throw_if_t_not_strictly_increasing)
+TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
 {
-    ASSERT_TRUE(false);
+    const std::string invalid_yaml =
+                             "from YAML:\n"
+                             "  - state: p\n"
+                             "    t: [5,4.2]\n"
+                             "    value: [5,6]\n"
+                             "    interpolation: piecewise constant\n";
+    ASSERT_THROW(BlockedDOF::Builder(BlockedDOF::parse(invalid_yaml)).get_forced_states(), BlockedDOFException);
 }
 
 TEST_F(BlockedDOFTest, DISABLED_interpolation_type_should_be_valid)
