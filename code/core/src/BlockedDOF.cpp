@@ -184,6 +184,10 @@ BlockedDOF::BlockedDOF(const Yaml& input, const size_t body_idx) : pimpl(new Imp
 {
 }
 
+BlockedDOF::BlockedDOF(const std::string& input, const size_t body_idx) : pimpl(new Impl(Builder(parse(input)),body_idx))
+{
+}
+
 BlockedDOF::Builder::Builder(const Yaml& yaml) : input(yaml)
 {
     check_states_are_not_defined_twice(input);

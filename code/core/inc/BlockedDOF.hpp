@@ -72,10 +72,10 @@ class BlockedDOF
         static Yaml parse(const std::string& yaml);
 
         BlockedDOF(const Yaml& input, const size_t body_idx=0);
+        BlockedDOF(const std::string& input, const size_t body_idx=0);
         void force_states(StateType& x, const double t) const;
         void force_state_derivatives(StateType& dx_dt, const double t) const;
     private:
-        BlockedDOF();
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;
 

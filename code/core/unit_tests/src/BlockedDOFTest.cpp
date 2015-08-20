@@ -111,9 +111,9 @@ TEST_F(BlockedDOFTest, should_throw_if_forcing_same_state_twice)
                              "    value: [5]\n"
                              "    interpolation: piecewise constant\n";
 
-    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml1)), BlockedDOFException);
-    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml2)), BlockedDOFException);
-    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml3)), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(yaml1), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(yaml2), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(yaml3), BlockedDOFException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_not_as_many_values_as_instants)
@@ -124,7 +124,7 @@ TEST_F(BlockedDOFTest, should_throw_if_not_as_many_values_as_instants)
                              "    t: [4.2,5]\n"
                              "    value: [5]\n"
                              "    interpolation: piecewise constant\n";
-    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(invalid_yaml)), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(invalid_yaml), BlockedDOFException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
@@ -135,7 +135,7 @@ TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
                              "    t: [5,4.2]\n"
                              "    value: [5,6]\n"
                              "    interpolation: piecewise constant\n";
-    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(invalid_yaml)), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(invalid_yaml), BlockedDOFException);
 }
 
 TEST_F(BlockedDOFTest, interpolation_type_should_be_valid)
@@ -157,7 +157,7 @@ TEST_F(BlockedDOFTest, should_throw_if_CSV_file_does_not_exist)
                              "    value: PS\n"
                              "    interpolation: spline\n"
                              "    filename: test.csv\n";
-    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml)), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(yaml), BlockedDOFException);
 }
 
 struct TmpFile
@@ -203,7 +203,7 @@ TEST_F(BlockedDOFTest, should_not_throw_if_CSV_file_exists)
     const std::string csv = "T,PS\n"
                             "1,2\n";
     csv_file << csv;
-    ASSERT_NO_THROW(BlockedDOF(BlockedDOF::parse(yaml)));
+    ASSERT_NO_THROW(BlockedDOF b(yaml));
 }
 
 TEST_F(BlockedDOFTest, piecewise_constant_should_work)
@@ -214,7 +214,7 @@ TEST_F(BlockedDOFTest, piecewise_constant_should_work)
                              "    value: [1,2,3]\n"
                              "    interpolation: piecewise constant\n";
     StateType x(13);
-    const BlockedDOF blocker(BlockedDOF::parse(yaml));
+    const BlockedDOF blocker(yaml);
     blocker.force_states(x,1);
     ASSERT_DOUBLE_EQ(1, x[PIDX(0)]);
     blocker.force_states(x,2.6);
@@ -235,7 +235,7 @@ TEST_F(BlockedDOFTest, linear_should_work)
                              "    value: [1,2,3]\n"
                              "    interpolation: linear\n";
     StateType x(13);
-    const BlockedDOF blocker(BlockedDOF::parse(yaml));
+    const BlockedDOF blocker(yaml);
     blocker.force_states(x,1);
     ASSERT_DOUBLE_EQ(1, x[UIDX(0)]);
     blocker.force_states(x,2.6);
@@ -256,7 +256,7 @@ TEST_F(BlockedDOFTest, spline_should_work)
                              "    value: [1,2,3]\n"
                              "    interpolation: spline\n";
     StateType x(13);
-    const BlockedDOF blocker(BlockedDOF::parse(yaml));
+    const BlockedDOF blocker(yaml);
     blocker.force_states(x,1);
     ASSERT_DOUBLE_EQ(1, x[QIDX(0)]);
     blocker.force_states(x,2.6);
@@ -277,7 +277,7 @@ TEST_F(BlockedDOFTest, blocked_derivative_should_work)
                              "    value: [1,2,3]\n"
                              "    interpolation: linear\n";
     StateType dx_dt(13);
-    const BlockedDOF blocker(BlockedDOF::parse(yaml));
+    const BlockedDOF blocker(yaml);
     blocker.force_state_derivatives(dx_dt,1);
     ASSERT_DOUBLE_EQ(1./3.2, dx_dt[UIDX(0)]);
     blocker.force_state_derivatives(dx_dt,2.6);
