@@ -73,7 +73,6 @@ class BlockedDOF
 
     private:
         BlockedDOF();
-        void check_states_are_not_defined_twice(const Yaml& input) const;
 };
 
 #endif /* BLOCKEDDOF_HPP_ */

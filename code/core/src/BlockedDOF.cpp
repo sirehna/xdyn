@@ -127,7 +127,8 @@ void throw_if_already_defined(const BlockedDOF::BlockableState& state, std::map<
     defined[state] = true;
 }
 
-void BlockedDOF::check_states_are_not_defined_twice(const Yaml& input) const
+void check_states_are_not_defined_twice(const BlockedDOF::Yaml& input);
+void check_states_are_not_defined_twice(const BlockedDOF::Yaml& input)
 {
     std::map<BlockedDOF::BlockableState, bool> defined_in_yaml, defined_in_csv;
     for (const auto state : input.from_yaml)
