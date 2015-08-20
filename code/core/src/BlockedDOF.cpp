@@ -152,11 +152,11 @@ void check_states_are_not_defined_twice(const BlockedDOF::Yaml& input)
 
 BlockedDOF::BlockedDOF(const Yaml& input) : pimpl(new Impl(Builder(input)))
 {
-    check_states_are_not_defined_twice(input);
 }
 
 BlockedDOF::Builder::Builder(const Yaml& yaml) : input(yaml)
 {
+    check_states_are_not_defined_twice(input);
 }
 
 BlockedDOF::Interpolator BlockedDOF::Builder::build(const BlockedDOF::YamlDOF<std::vector<double> >& y) const
