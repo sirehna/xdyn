@@ -289,3 +289,24 @@ void BlockedDOF::force_state_derivatives(StateType& dx_dt, const double t) const
         dx_dt[pimpl->state_index(dof.first)] = dof.second->df(t);
     }
 }
+
+BlockedDOF::Vector BlockedDOF::get_delta_F(const StateType& dx_dt_, const Eigen::Matrix<double,6,6>& total_inertia, const ssc::kinematics::Wrench& sum_of_other_forces) const
+{
+    BlockedDOF::Vector delta_F;
+    BlockedDOF::Vector dx_dt;
+    dx_dt(0) = dx_dt_[UIDX(pimpl->body_idx)];
+    dx_dt(1) = dx_dt_[VIDX(pimpl->body_idx)];
+    dx_dt(2) = dx_dt_[WIDX(pimpl->body_idx)];
+    dx_dt(3) = dx_dt_[PIDX(pimpl->body_idx)];
+    dx_dt(4) = dx_dt_[QIDX(pimpl->body_idx)];
+    dx_dt(5) = dx_dt_[RIDX(pimpl->body_idx)];
+    BlockedDOF::Vector F;
+    F(0) = sum_of_other_forces.X();
+    F(1) = sum_of_other_forces.Y();
+    F(2) = sum_of_other_forces.Z();
+    F(3) = sum_of_other_forces.K();
+    F(4) = sum_of_other_forces.M();
+    F(5) = sum_of_other_forces.N();
+    delta_F = total_inertia*dx_dt - F;
+    return delta_F;
+}

@@ -290,7 +290,35 @@ TEST_F(BlockedDOFTest, blocked_derivative_should_work)
     ASSERT_DOUBLE_EQ(1./0.8, dx_dt[UIDX(0)]);
 }
 
-TEST_F(BlockedDOFTest, DISABLED_force_delta)
+TEST_F(BlockedDOFTest, force_delta)
 {
-    ASSERT_TRUE(false);
+    const std::string yaml = "from YAML:\n"
+                             "  - state: u\n"
+                             "    t: [1,4.2,5]\n"
+                             "    value: [1,2,3]\n"
+                             "    interpolation: linear\n";
+    const StateType dx_dt = {10,11,12,13,14,15,16,17,18,19,20,21,23};
+    const BlockedDOF blocker(yaml);
+    Eigen::Matrix<double,6,6> total_inertia;
+    total_inertia << 1, 2, 3, 4, 5, 6,
+                     7, 8, 9, 0, 1, 2,
+                     3, 4, 5, 6, 7, 8,
+                     9, 0, 1, 2, 3, 4,
+                     5, 6, 7, 8, 9, 0,
+                     1, 2, 3, 4, 5, 6;
+    Eigen::Vector3d F,T;
+    F(0) = 50;
+    F(1) = 51;
+    F(2) = 52;
+    T(0) = 60;
+    T(1) = 61;
+    T(2) = 62;
+    ssc::kinematics::Wrench sum_of_other_forces(ssc::kinematics::Point("d",1,2,3),F,T);
+    const auto delta_F = blocker.get_delta_F(dx_dt,total_inertia,sum_of_other_forces);
+    EXPECT_DOUBLE_EQ(293, (double)delta_F(0));
+    EXPECT_DOUBLE_EQ(340, (double)delta_F(1));
+    EXPECT_DOUBLE_EQ(477, (double)delta_F(2));
+    EXPECT_DOUBLE_EQ(227, (double)delta_F(3));
+    EXPECT_DOUBLE_EQ(474, (double)delta_F(4));
+    EXPECT_DOUBLE_EQ(281, (double)delta_F(5));
 }
