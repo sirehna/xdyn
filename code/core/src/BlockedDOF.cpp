@@ -21,6 +21,35 @@ struct BlockedDOF::Impl
     std::map<BlockableState, Interpolator> blocked_dof;
     size_t body_idx;
 
+    size_t state_index(const BlockedDOF::BlockableState& s)
+    {
+        switch (s)
+        {
+            case BlockedDOF::BlockableState::U:
+                return UIDX(body_idx);
+                break;
+            case BlockedDOF::BlockableState::V:
+                return VIDX(body_idx);
+                break;
+            case BlockedDOF::BlockableState::W:
+                return WIDX(body_idx);
+                break;
+            case BlockedDOF::BlockableState::P:
+                return PIDX(body_idx);
+                break;
+            case BlockedDOF::BlockableState::Q:
+                return QIDX(body_idx);
+                break;
+            case BlockedDOF::BlockableState::R:
+                return RIDX(body_idx);
+                break;
+            default:
+                break;
+        }
+        return 0;
+    }
+
+
     private:Impl();
 };
 
@@ -151,7 +180,7 @@ void check_states_are_not_defined_twice(const BlockedDOF::Yaml& input)
     }
 }
 
-BlockedDOF::BlockedDOF(const Yaml& input, const size_t body_idx) : pimpl(new Impl(Builder(input)))
+BlockedDOF::BlockedDOF(const Yaml& input, const size_t body_idx) : pimpl(new Impl(Builder(input),body_idx))
 {
 }
 
@@ -235,4 +264,20 @@ BlockedDOF::Interpolator BlockedDOF::Builder::build(const std::vector<double>& t
             break;
     }
     return Interpolator();
+}
+
+void BlockedDOF::force_states(StateType& x, const double t) const
+{
+    for (auto dof:pimpl->blocked_dof)
+    {
+        x[pimpl->state_index(dof.first)] = dof.second->f(t);
+    }
+}
+
+void BlockedDOF::force_state_derivatives(StateType& dx_dt, const double t) const
+{
+    for (auto dof:pimpl->blocked_dof)
+    {
+        dx_dt[pimpl->state_index(dof.first)] = dof.second->df(t);
+    }
 }
