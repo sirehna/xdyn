@@ -45,7 +45,7 @@ INCLUDE(CMakeBoost)
 SET(Boost_USE_STATIC_LIBS   ON)
 SET(Boost_USE_MULTITHREADED OFF)
 #SET(Boost_USE_STATIC_RUNTIME    OFF)
-FIND_PACKAGE(Boost 1.53 COMPONENTS program_options system regex REQUIRED) #random
+FIND_PACKAGE(Boost 1.53 COMPONENTS program_options filesystem system regex REQUIRED) #random
 IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_INCLUDE_DIRS  : ${Boost_INCLUDE_DIRS}")
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
@@ -103,6 +103,7 @@ ADD_IMPORTED_LIB(websocket_shared)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE gfortran)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE hdf5_cpp hdf5)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${Boost_FILESYSTEM_LIBRARY})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${Boost_SYSTEM_LIBRARY})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${Boost_REGEX_LIBRARY})
 IF(WIN32)
@@ -121,7 +122,6 @@ INSTALL(FILES integration_tests.py
         DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 
 SET(TEST_EXE run_all_tests)
-
 ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:yaml_parser_tests>
@@ -141,6 +141,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest gtest_main                 # static
         gmock gmock_main                 # static
         binary_stl_data_static
+        ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
         random_data_generator_shared
         )

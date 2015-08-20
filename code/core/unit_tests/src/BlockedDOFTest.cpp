@@ -6,6 +6,10 @@
  */
 
 
+#include <fstream>
+
+#include <boost/filesystem.hpp> // For boost::filesystem::unique_path
+
 #include "BlockedDOF.hpp"
 #include "BlockedDOFException.hpp"
 #include "BlockedDOFTest.hpp"
@@ -154,6 +158,53 @@ TEST_F(BlockedDOFTest, should_throw_if_CSV_file_does_not_exist)
                              "    interpolation: spline\n"
                              "    filename: test.csv\n";
     ASSERT_THROW(BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states(), BlockedDOFException);
+}
+
+struct TmpFile
+{
+    TmpFile() : path(boost::filesystem::unique_path())
+    {
+    }
+
+    ~TmpFile()
+    {
+        if (boost::filesystem::exists(path)) boost::filesystem::remove(path);
+    }
+
+    TmpFile& operator<<(const std::string& s)
+    {
+        std::ofstream of(path.string(), std::ofstream::out | std::ofstream::app);
+        of << s;
+        of.close();
+        return *this;
+    }
+
+    std::string get_filename() const
+    {
+        return path.string();
+    }
+
+    private:
+        TmpFile(const TmpFile& rhs);
+        TmpFile& operator=(const TmpFile& rhs);
+        boost::filesystem::path path;
+};
+
+
+TEST_F(BlockedDOFTest, should_not_throw_if_CSV_file_exists)
+{
+    TmpFile csv_file;
+    const std::string yaml = "from CSV:\n"
+                             "  - state: u\n"
+                             "    t: T\n"
+                             "    value: PS\n"
+                             "    interpolation: spline\n"
+                             "    filename: " + csv_file.get_filename();
+    const std::string csv = "T,PS\n"
+                            "1,2\n";
+    csv_file << csv;
+    BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states();
+    ASSERT_NO_THROW(BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states());
 }
 
 TEST_F(BlockedDOFTest, DISABLED_piecewise_constant_should_work)
