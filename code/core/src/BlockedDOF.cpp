@@ -40,9 +40,7 @@ void operator >> (const YAML::Node& node, BlockedDOF::BlockableState& g)
     else if (t == "r") g = BlockedDOF::BlockableState::R;
     else
     {
-        std::stringstream ss;
-        ss << "Unrecognized state: '" << t << "'. Has to be one of 'u', 'v', 'w', 'p', 'q' or 'r'.";
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Unrecognized state: '" << t << "'. Has to be one of 'u', 'v', 'w', 'p', 'q' or 'r'.");
     }
 }
 
@@ -55,9 +53,7 @@ void operator >> (const YAML::Node& node, BlockedDOF::InterpolationType& g)
     else if (t == "spline")             g = BlockedDOF::InterpolationType::SPLINE;
     else
     {
-        std::stringstream ss;
-        ss << "Unrecognized interpolation type: '" << t << "'. Has to be one of 'piecewise constant', 'linear', 'spline'";
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Unrecognized interpolation type: '" << t << "'. Has to be one of 'piecewise constant', 'linear', 'spline'");
     }
 }
 
@@ -124,10 +120,7 @@ void throw_if_already_defined(const BlockedDOF::BlockableState& state, std::map<
 {
     if (defined[state])
     {
-        std::stringstream ss;
-        ss << "Attempting to define state " << state
-                << " twice in 'blocked dof' section of the YAML file.";
-        THROW(__PRETTY_FUNCTION__, BlockedDOFException, ss.str());
+        THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Attempting to define state " << state << " twice in 'blocked dof' section of the YAML file.");
     }
     defined[state] = true;
 }
