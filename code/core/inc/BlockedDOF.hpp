@@ -24,7 +24,7 @@ class BlockedDOF
                 state(BlockableState::U),
                 t(),
                 value(),
-                interpolation(BlockedDOF::InterpolationType::PIECEWISE_CONSTANT)
+                interpolation(InterpolationType::PIECEWISE_CONSTANT)
             {}
             virtual ~YamlDOF() {}
             BlockableState state;
