@@ -134,9 +134,15 @@ TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
     ASSERT_THROW(BlockedDOF::Builder(BlockedDOF::parse(invalid_yaml)).get_forced_states(), BlockedDOFException);
 }
 
-TEST_F(BlockedDOFTest, DISABLED_interpolation_type_should_be_valid)
+TEST_F(BlockedDOFTest, interpolation_type_should_be_valid)
 {
-    ASSERT_TRUE(false);
+    const std::string invalid_yaml =
+                                 "from YAML:\n"
+                                 "  - state: p\n"
+                                 "    t: [5,4.2]\n"
+                                 "    value: [5,6]\n"
+                                 "    interpolation: something\n";
+    ASSERT_THROW(BlockedDOF::parse(invalid_yaml), SimulatorYamlParserException);
 }
 
 TEST_F(BlockedDOFTest, DISABLED_should_throw_if_CSV_file_does_not_exist)
