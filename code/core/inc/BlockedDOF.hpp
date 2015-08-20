@@ -17,6 +17,8 @@
 
 #include TR1INC(memory)
 
+#include "StateMacros.hpp"
+
 class BlockedDOF
 {
     public:
@@ -69,7 +71,7 @@ class BlockedDOF
 
         static Yaml parse(const std::string& yaml);
 
-        BlockedDOF(const Yaml& input);
+        BlockedDOF(const Yaml& input, const size_t body_idx);
 
     private:
         BlockedDOF();

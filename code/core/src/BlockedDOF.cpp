@@ -17,8 +17,9 @@
 
 struct BlockedDOF::Impl
 {
-    Impl(const Builder& builder) : blocked_dof(builder.get_forced_states()) {}
+    Impl(const Builder& builder, const size_t body_idx_) : blocked_dof(builder.get_forced_states()), body_idx(body_idx_) {}
     std::map<BlockableState, Interpolator> blocked_dof;
+    size_t body_idx;
 
     private:Impl();
 };
@@ -150,7 +151,7 @@ void check_states_are_not_defined_twice(const BlockedDOF::Yaml& input)
     }
 }
 
-BlockedDOF::BlockedDOF(const Yaml& input) : pimpl(new Impl(Builder(input)))
+BlockedDOF::BlockedDOF(const Yaml& input, const size_t body_idx) : pimpl(new Impl(Builder(input)))
 {
 }
 
