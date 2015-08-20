@@ -135,7 +135,7 @@ TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
                              "    t: [5,4.2]\n"
                              "    value: [5,6]\n"
                              "    interpolation: piecewise constant\n";
-    ASSERT_THROW(BlockedDOF::Builder(BlockedDOF::parse(invalid_yaml)).get_forced_states(), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(invalid_yaml)), BlockedDOFException);
 }
 
 TEST_F(BlockedDOFTest, interpolation_type_should_be_valid)
@@ -157,7 +157,7 @@ TEST_F(BlockedDOFTest, should_throw_if_CSV_file_does_not_exist)
                              "    value: PS\n"
                              "    interpolation: spline\n"
                              "    filename: test.csv\n";
-    ASSERT_THROW(BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states(), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF(BlockedDOF::parse(yaml)), BlockedDOFException);
 }
 
 struct TmpFile
@@ -203,8 +203,7 @@ TEST_F(BlockedDOFTest, should_not_throw_if_CSV_file_exists)
     const std::string csv = "T,PS\n"
                             "1,2\n";
     csv_file << csv;
-    BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states();
-    ASSERT_NO_THROW(BlockedDOF::Builder(BlockedDOF::parse(yaml)).get_forced_states());
+    ASSERT_NO_THROW(BlockedDOF(BlockedDOF::parse(yaml)));
 }
 
 TEST_F(BlockedDOFTest, piecewise_constant_should_work)
