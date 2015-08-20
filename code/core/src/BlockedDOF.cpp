@@ -17,7 +17,10 @@
 
 struct BlockedDOF::Impl
 {
+    Impl(const Builder& builder) : blocked_dof(builder.get_forced_states()) {}
+    std::map<BlockableState, Interpolator> blocked_dof;
 
+    private:Impl();
 };
 
 BlockedDOF::YamlCSVDOF::YamlCSVDOF() :
@@ -147,7 +150,7 @@ void check_states_are_not_defined_twice(const BlockedDOF::Yaml& input)
     }
 }
 
-BlockedDOF::BlockedDOF(const Yaml& input) : pimpl(new Impl())
+BlockedDOF::BlockedDOF(const Yaml& input) : pimpl(new Impl(Builder(input)))
 {
     check_states_are_not_defined_twice(input);
 }
