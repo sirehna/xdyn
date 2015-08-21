@@ -53,6 +53,7 @@ class Body
         void calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                          const StateType& x,
                                          StateType& dx_dt,
+                                         const double t,
                                          const EnvironmentAndFrames& env) const;
 
         Eigen::Vector3d get_uvw_in_body_frame(const StateType& x) const;

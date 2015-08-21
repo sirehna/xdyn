@@ -117,6 +117,7 @@ void Body::update(const EnvironmentAndFrames& env, const StateType& x, const dou
 void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                          const StateType& x,
                                          StateType& dx_dt,
+                                         const double ,
                                          const EnvironmentAndFrames& env) const
 {
     // du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt

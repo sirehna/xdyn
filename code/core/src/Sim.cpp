@@ -119,7 +119,7 @@ void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
     {
         body->update(pimpl->env,x,t);
         const auto Fext = sum_of_forces(x, body, t);
-        body->calculate_state_derivatives(Fext, x, dx_dt, pimpl->env);
+        body->calculate_state_derivatives(Fext, x, dx_dt, t, pimpl->env);
     }
     state = normalize_quaternions(x);
     pimpl->_dx_dt = dx_dt;
