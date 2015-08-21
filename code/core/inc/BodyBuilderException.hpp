@@ -13,8 +13,8 @@
 class BodyBuilderException: public ::ssc::exception_handling::Exception
 {
     public:
-        BodyBuilderException(const char* s) :
-            ::ssc::exception_handling::Exception(s)
+        BodyBuilderException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+            ::ssc::exception_handling::Exception(message, file, function, line)
         {
         }
 };

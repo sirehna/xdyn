@@ -14,8 +14,8 @@
 class GZException: public ssc::exception_handling::Exception
 {
     public:
-        GZException(const char* s) :
-               Exception(s)
+        GZException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+            ::ssc::exception_handling::Exception(message, file, function, line)
         {
         }
 };

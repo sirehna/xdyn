@@ -18,8 +18,8 @@ using namespace ssc::kinematics;
 class EnvironmentAndFramesException: public ::ssc::exception_handling::Exception
 {
     public:
-    EnvironmentAndFramesException(const char* s) :
-            ::ssc::exception_handling::Exception(s)
+    EnvironmentAndFramesException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+        ::ssc::exception_handling::Exception(message, file, function, line)
         {
         }
 };

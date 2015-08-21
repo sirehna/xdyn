@@ -13,8 +13,8 @@
 class ControllableForceModelException: public ssc::exception_handling::Exception
 {
     public:
-        ControllableForceModelException(const char* s) :
-                Exception(s)
+        ControllableForceModelException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+            ::ssc::exception_handling::Exception(message, file, function, line)
         {
         }
 };

@@ -21,8 +21,8 @@
 class GMForceModelException: public ssc::exception_handling::Exception
 {
     public:
-        GMForceModelException(const char* s) :
-               Exception(s)
+        GMForceModelException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+            ::ssc::exception_handling::Exception(message, file, function, line)
         {
         }
 };

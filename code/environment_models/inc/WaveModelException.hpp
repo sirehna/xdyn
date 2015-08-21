@@ -13,8 +13,8 @@
 class WaveModelException: public ::ssc::exception_handling::Exception
 {
     public:
-        WaveModelException(const char* s) :
-            ::ssc::exception_handling::Exception(s)
+        WaveModelException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+            ::ssc::exception_handling::Exception(message, file, function, line)
         {
         }
 };

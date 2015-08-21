@@ -32,7 +32,7 @@ void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges&
         ss << ": mesh only contains " << edges.size() << " edge";
         if (edges.size() > 1) ss << "s";
         ss << ".";
-        throw ClosingFacetComputerException(ss.str().c_str());
+        throw ClosingFacetComputerException(ss.str().c_str(), "?", "?", 0);
     }
 }
 

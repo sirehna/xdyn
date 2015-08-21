@@ -13,8 +13,8 @@
 class SimulatorYamlParserException : public ::ssc::exception_handling::Exception
 {
     public:
-        SimulatorYamlParserException(const char* s) :
-            ::ssc::exception_handling::Exception(s)
+        SimulatorYamlParserException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+            ::ssc::exception_handling::Exception(message, file, function, line)
         {
         }
 };

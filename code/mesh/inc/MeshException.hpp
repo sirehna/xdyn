@@ -6,8 +6,8 @@
 class MeshException : public ::ssc::exception_handling::Exception
 {
     public:
-        MeshException(const char* s) :
-            ::ssc::exception_handling::Exception(s)
+        MeshException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+            ::ssc::exception_handling::Exception(message, file, function, line)
         {
         }
 };
