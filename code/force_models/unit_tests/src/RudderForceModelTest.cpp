@@ -245,7 +245,7 @@ TEST_F(RudderForceModelTest, ship_speed_relative_to_the_fluid)
     states.v.record(t, s[3]);
     states.w.record(t, s[4]);
     states.name = "body";
-    BodyWithoutSurfaceForces b(states,0);
+    BodyWithoutSurfaceForces b(states,0,BlockedDOF(""));
     b.update_kinematics(s, env.k);
 
     ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t);
@@ -295,7 +295,7 @@ TEST_F(RudderForceModelTest, force_and_torque)
     states.v.record(t, s[3]);
     states.w.record(t, s[4]);
     states.name = "body";
-    BodyWithoutSurfaceForces b(states,0);
+    BodyWithoutSurfaceForces b(states,0,BlockedDOF(""));
     b.update_kinematics(s, env.k);
     std::map<std::string,double> commands;
     commands["rpm"] = 200;

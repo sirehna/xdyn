@@ -62,8 +62,9 @@ BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& 
     states.convention = convention;
 
     BodyPtr ret;
-    if (has_surface_forces) ret.reset(new BodyWithSurfaceForces(states,idx));
-    else                    ret.reset(new BodyWithoutSurfaceForces(states,idx));
+    const BlockedDOF blocked_states(input.blocked_dof,idx);
+    if (has_surface_forces) ret.reset(new BodyWithSurfaceForces(states,idx,blocked_states));
+    else                    ret.reset(new BodyWithoutSurfaceForces(states,idx,blocked_states));
     return ret;
 }
 

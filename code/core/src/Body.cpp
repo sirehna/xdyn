@@ -11,11 +11,11 @@
 #include "SurfaceElevationInterface.hpp"
 #include "YamlBody.hpp"
 
-Body::Body(const size_t i) : states(), idx(i)
+Body::Body(const size_t i, const BlockedDOF& blocked_states_) : states(), idx(i), blocked_states(blocked_states_)
 {
 }
 
-Body::Body(const BodyStates& s, const size_t i) : states(s), idx(i)
+Body::Body(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : states(s), idx(i), blocked_states(blocked_states_)
 {
 }
 
@@ -66,8 +66,9 @@ void Body::update_kinematics(StateType x, const KinematicsPtr& k) const
     k->add(get_transform_from_ned_to_local_ned(x));
 }
 
-void Body::update_body_states(const StateType& x, const double t)
+void Body::update_body_states(StateType x, const double t)
 {
+    blocked_states.force_states(x,t);
     states.x.record(t, *_X(x,idx));
     states.y.record(t, *_Y(x,idx));
     states.z.record(t, *_Z(x,idx));

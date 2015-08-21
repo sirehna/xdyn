@@ -71,7 +71,7 @@ TEST_F(HydrostaticForceModelTest, example)
     BodyStates states = get_body(BODY, points)->get_states();
 
     states.G = ssc::kinematics::Point("NED",0,2,2./3.);
-    BodyPtr body(new BodyWithSurfaceForces(states,0));
+    BodyPtr body(new BodyWithSurfaceForces(states,0,BlockedDOF("")));
 
     FastHydrostaticForceModel F(BODY, env);
     ASSERT_EQ("non-linear hydrostatic (fast)",F.model_name);
