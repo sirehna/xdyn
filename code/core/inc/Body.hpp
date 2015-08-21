@@ -64,6 +64,7 @@ class Body
         std::tuple<double,double,double,double> get_quaternions(const ssc::kinematics::EulerAngles& angle, const YamlRotation& c) const;
 
         void feed(const StateType& x, Observer& observer, const YamlRotation& c) const;
+        BlockedDOF::Vector get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const;
 
     protected:
         BodyStates states;

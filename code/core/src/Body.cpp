@@ -158,6 +158,11 @@ Eigen::Vector3d Body::get_pqr(const StateType& x) const
     return Eigen::Vector3d::Map(_P(x,idx));
 }
 
+BlockedDOF::Vector Body::get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const
+{
+    return blocked_states.get_delta_F(dx_dt,*states.total_inertia,sum_of_other_forces);
+}
+
 void Body::feed(const StateType& x, Observer& observer, const YamlRotation& c) const
 {
     observer.write(*_X(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"X"},std::string("x(")+states.name+")"));
