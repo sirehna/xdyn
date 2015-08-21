@@ -117,7 +117,7 @@ void Body::update(const EnvironmentAndFrames& env, const StateType& x, const dou
 void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                          const StateType& x,
                                          StateType& dx_dt,
-                                         const double ,
+                                         const double t,
                                          const EnvironmentAndFrames& env) const
 {
     // du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt
@@ -144,6 +144,8 @@ void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_for
     *_QI(dx_dt,idx) = 0.5*(double)dq_dt.x();
     *_QJ(dx_dt,idx) = 0.5*(double)dq_dt.y();
     *_QK(dx_dt,idx) = 0.5*(double)dq_dt.z();
+
+    blocked_states.force_state_derivatives(dx_dt, t);
 }
 
 Eigen::Vector3d Body::get_uvw_in_body_frame(const StateType& x) const
