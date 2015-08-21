@@ -83,3 +83,25 @@ TEST_F(MapObserverTest, GM)
     ASSERT_NEAR(-1/(12*PI), m.find("GM(cube)")->second.back(), EPS);
 }
 
+TEST_F(MapObserverTest, blocked_state_force_residuals_should_appear)
+{
+    const double dt = 1;
+    const double tend = 1;
+    auto sys = get_system(test_data::full_example(), test_data::cube(), 0);
+    auto observers = observe({"Fx(blocked states,body 1,body 1)","Fy(blocked states,body 1,body 1)","Fz(blocked states,body 1,body 1)","Mx(blocked states,body 1,body 1)","My(blocked states,body 1,body 1)","Mz(blocked states,body 1,body 1)"});
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observers);
+    auto m = get_map(observers);
+    ASSERT_EQ(6, m.size());
+    ASSERT_TRUE(m.find("Fx(blocked states,body 1,body 1)") != m.end());
+    ASSERT_TRUE(m.find("Fy(blocked states,body 1,body 1)") != m.end());
+    ASSERT_TRUE(m.find("Fz(blocked states,body 1,body 1)") != m.end());
+    ASSERT_TRUE(m.find("Mx(blocked states,body 1,body 1)") != m.end());
+    ASSERT_TRUE(m.find("My(blocked states,body 1,body 1)") != m.end());
+    ASSERT_TRUE(m.find("Mz(blocked states,body 1,body 1)") != m.end());
+    ASSERT_NEAR(686292685.67614079, m["Fx(blocked states,body 1,body 1)"].back(), EPS);
+    ASSERT_NEAR(0, m["Fy(blocked states,body 1,body 1)"].back(), 1E-6);
+    ASSERT_NEAR(0, m["Fz(blocked states,body 1,body 1)"].back(), 1E-6);
+    ASSERT_NEAR(0, m["Mx(blocked states,body 1,body 1)"].back(), 1E-6);
+    ASSERT_NEAR(0, m["My(blocked states,body 1,body 1)"].back(), 1E-6);
+    ASSERT_NEAR(0, m["Mz(blocked states,body 1,body 1)"].back(), 1E-6);
+}

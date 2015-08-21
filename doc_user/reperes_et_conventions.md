@@ -588,6 +588,24 @@ Si les valeurs sont lues depuis un fichier CSV :
 Pour les valeurs de t hors de l'intervalle [tmin,tmax], l'état est supposé
 libre (non forcé).
 
+Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
+l'effort permettant de conserver les forçages, en d'autres termes il est
+possible de récupérer
+
+$$(M+M_a)\dot{X_{\mbox{forced}}} - \sum F_i$$
+
+Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
+corps s'appelle 'body 1):
+
+- `Fx(blocked states,body 1,body 1)`
+- `Fy(blocked states,body 1,body 1)`
+- `Fz(blocked states,body 1,body 1)`
+- `Mx(blocked states,body 1,body 1)`
+- `My(blocked states,body 1,body 1)`
+- `Mz(blocked states,body 1,body 1)`
+
+Il est à noter que ces efforts sont exprimés dans le repère BODY.
+
 ## Repère de calcul hydrodynamique
 
 Les efforts d'[amortissement
