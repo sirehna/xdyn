@@ -26,8 +26,6 @@
 class BlockedDOF
 {
     public:
-        static YamlBlockedDOF parse(const std::string& yaml);
-
         BlockedDOF(const YamlBlockedDOF& input, const size_t body_idx=0);
         BlockedDOF(const std::string& input, const size_t body_idx=0);
         void force_states(StateType& x, const double t) const;

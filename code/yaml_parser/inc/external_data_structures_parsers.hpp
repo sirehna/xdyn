@@ -23,4 +23,6 @@ void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::stri
 void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m);
 void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f);
 
+YamlBlockedDOF parse(const std::string& yaml);
+
 #endif /* EXTERNAL_DATA_STRUCTURES_PARSERS_HPP_ */

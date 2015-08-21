@@ -185,3 +185,69 @@ void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f)
     ssc::yaml_parser::parse_uv(node["rho"], f.rho);
     ssc::yaml_parser::parse_uv(node["nu"], f.nu);
 }
+
+void operator >> (const YAML::Node& node, BlockableState& g);
+void operator >> (const YAML::Node& node, BlockableState& g)
+{
+    std::string t;
+    node >> t;
+    if      (t == "u") g = BlockableState::U;
+    else if (t == "v") g = BlockableState::V;
+    else if (t == "w") g = BlockableState::W;
+    else if (t == "p") g = BlockableState::P;
+    else if (t == "q") g = BlockableState::Q;
+    else if (t == "r") g = BlockableState::R;
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Unrecognized state: '" << t << "'. Has to be one of 'u', 'v', 'w', 'p', 'q' or 'r'.");
+    }
+}
+
+void operator >> (const YAML::Node& node, InterpolationType& g);
+void operator >> (const YAML::Node& node, InterpolationType& g)
+{
+    std::string t;
+    node >> t;
+    if      (t == "piecewise constant") g = InterpolationType::PIECEWISE_CONSTANT;
+    else if (t == "linear")             g = InterpolationType::LINEAR;
+    else if (t == "spline")             g = InterpolationType::SPLINE;
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Unrecognized interpolation type: '" << t << "'. Has to be one of 'piecewise constant', 'linear', 'spline'");
+    }
+}
+
+void operator >> (const YAML::Node& node, YamlCSVDOF& g);
+void operator >> (const YAML::Node& node, YamlCSVDOF& g)
+{
+    node["filename"]      >> g.filename;
+    node["interpolation"] >> g.interpolation;
+    node["state"]         >> g.state;
+    node["t"]             >> g.t;
+    node["value"]         >> g.value;
+}
+
+void operator >> (const YAML::Node& node, YamlDOF<std::vector<double> >& g);
+void operator >> (const YAML::Node& node, YamlDOF<std::vector<double> >& g)
+{
+    node["interpolation"] >> g.interpolation;
+    node["state"]         >> g.state;
+    node["t"]             >> g.t;
+    node["value"]         >> g.value;
+}
+
+YamlBlockedDOF parse(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlBlockedDOF ret;
+
+    if (node.FindValue("blocked dof"))
+    {
+        if (node["blocked dof"].FindValue("from CSV"))  node["blocked dof"]["from CSV"]  >> ret.from_csv;
+        if (node["blocked dof"].FindValue("from YAML")) node["blocked dof"]["from YAML"] >> ret.from_yaml;
+    }
+    return ret;
+}

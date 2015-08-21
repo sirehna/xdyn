@@ -13,9 +13,6 @@
 #include "BlockedDOF.hpp"
 #include "BlockedDOFException.hpp"
 #include "BlockedDOFTest.hpp"
-#include "gmock/gmock.h"
-using namespace testing; // So we can use 'ElementsAre' unqualified
-#include "SimulatorYamlParserException.hpp"
 
 BlockedDOFTest::BlockedDOFTest() : a(ssc::random_data_generator::DataGenerator(854512))
 {
@@ -31,51 +28,6 @@ void BlockedDOFTest::SetUp()
 
 void BlockedDOFTest::TearDown()
 {
-}
-
-TEST_F(BlockedDOFTest, can_parse_forced_dof)
-{
-    const std::string yaml = "blocked dof:\n"
-                             "   from CSV:\n"
-                             "     - state: u\n"
-                             "       t: T\n"
-                             "       value: PS\n"
-                             "       interpolation: spline\n"
-                             "       filename: test.csv\n"
-                             "   from YAML:\n"
-                             "     - state: p\n"
-                             "       t: [4.2]\n"
-                             "       value: [5]\n"
-                             "       interpolation: piecewise constant\n";
-    const YamlBlockedDOF input = BlockedDOF::parse(yaml);
-    ASSERT_EQ(1, input.from_yaml.size());
-    ASSERT_EQ(BlockableState::P, input.from_yaml.front().state);
-    ASSERT_EQ(InterpolationType::PIECEWISE_CONSTANT, input.from_yaml.front().interpolation);
-    ASSERT_THAT(input.from_yaml.front().t, ElementsAre(4.2));
-    ASSERT_THAT(input.from_yaml.front().value, ElementsAre(5));
-    ASSERT_EQ(1, input.from_csv.size());
-    ASSERT_EQ(BlockableState::U, input.from_csv.front().state);
-    ASSERT_EQ(InterpolationType::SPLINE, input.from_csv.front().interpolation);
-    ASSERT_EQ("T", input.from_csv.front().t);
-    ASSERT_EQ("PS", input.from_csv.front().value);
-    ASSERT_EQ("test.csv", input.from_csv.front().filename);
-}
-
-TEST_F(BlockedDOFTest, should_throw_if_forcing_anything_other_than_uvwpqr)
-{
-    const std::string yaml = "blocked dof:\n"
-                             "   from CSV:\n"
-                             "     - state: x\n"
-                             "       t: T\n"
-                             "       value: PS\n"
-                             "       interpolation: spline\n"
-                             "       filename: test.csv\n"
-                             "   from YAML:\n"
-                             "     - state: p\n"
-                             "       t: [4.2]\n"
-                             "       value: [5]\n"
-                             "       interpolation: piecewise constant\n";
-    ASSERT_THROW(BlockedDOF::parse(yaml), SimulatorYamlParserException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_forcing_same_state_twice)
@@ -143,18 +95,6 @@ TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
                              "       value: [5,6]\n"
                              "       interpolation: piecewise constant\n";
     ASSERT_THROW(BlockedDOF b(invalid_yaml), BlockedDOFException);
-}
-
-TEST_F(BlockedDOFTest, interpolation_type_should_be_valid)
-{
-    const std::string invalid_yaml =
-                                 "blocked dof:\n"
-                                 "   from YAML:\n"
-                                 "     - state: p\n"
-                                 "       t: [5,4.2]\n"
-                                 "       value: [5,6]\n"
-                                 "       interpolation: something\n";
-    ASSERT_THROW(BlockedDOF::parse(invalid_yaml), SimulatorYamlParserException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_CSV_file_does_not_exist)
