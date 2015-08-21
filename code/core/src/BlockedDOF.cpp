@@ -261,8 +261,11 @@ BlockedDOF::Yaml BlockedDOF::parse(const std::string& yaml)
     parser.GetNextDocument(node);
     BlockedDOF::Yaml ret;
 
-    if (node.FindValue("from CSV"))  node["from CSV"]  >> ret.from_csv;
-    if (node.FindValue("from YAML")) node["from YAML"] >> ret.from_yaml;
+    if (node.FindValue("blocked dof"))
+    {
+        if (node["blocked dof"].FindValue("from CSV"))  node["blocked dof"]["from CSV"]  >> ret.from_csv;
+        if (node["blocked dof"].FindValue("from YAML")) node["blocked dof"]["from YAML"] >> ret.from_yaml;
+    }
     return ret;
 }
 
