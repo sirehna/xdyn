@@ -47,15 +47,15 @@ TEST_F(BlockedDOFTest, can_parse_forced_dof)
                              "       t: [4.2]\n"
                              "       value: [5]\n"
                              "       interpolation: piecewise constant\n";
-    const BlockedDOF::Yaml input = BlockedDOF::parse(yaml);
+    const YamlBlockedDOF input = BlockedDOF::parse(yaml);
     ASSERT_EQ(1, input.from_yaml.size());
-    ASSERT_EQ(BlockedDOF::BlockableState::P, input.from_yaml.front().state);
-    ASSERT_EQ(BlockedDOF::InterpolationType::PIECEWISE_CONSTANT, input.from_yaml.front().interpolation);
+    ASSERT_EQ(BlockableState::P, input.from_yaml.front().state);
+    ASSERT_EQ(InterpolationType::PIECEWISE_CONSTANT, input.from_yaml.front().interpolation);
     ASSERT_THAT(input.from_yaml.front().t, ElementsAre(4.2));
     ASSERT_THAT(input.from_yaml.front().value, ElementsAre(5));
     ASSERT_EQ(1, input.from_csv.size());
-    ASSERT_EQ(BlockedDOF::BlockableState::U, input.from_csv.front().state);
-    ASSERT_EQ(BlockedDOF::InterpolationType::SPLINE, input.from_csv.front().interpolation);
+    ASSERT_EQ(BlockableState::U, input.from_csv.front().state);
+    ASSERT_EQ(InterpolationType::SPLINE, input.from_csv.front().interpolation);
     ASSERT_EQ("T", input.from_csv.front().t);
     ASSERT_EQ("PS", input.from_csv.front().value);
     ASSERT_EQ("test.csv", input.from_csv.front().filename);

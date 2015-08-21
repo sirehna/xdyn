@@ -15,6 +15,17 @@ YamlBody::YamlBody() :
     initial_velocity_of_body_frame_relative_to_NED_projected_in_body(),
     dynamics(),
     external_forces(),
-    controlled_forces()
+    controlled_forces(),
+    blocked_dof()
+{
+}
+
+YamlCSVDOF::YamlCSVDOF() :
+    YamlDOF<std::string>(),
+    filename()
+{
+}
+
+YamlBlockedDOF::YamlBlockedDOF() : from_yaml(), from_csv()
 {
 }

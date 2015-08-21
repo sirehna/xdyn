@@ -15,39 +15,39 @@
 #include <ssc/text_file_reader.hpp>
 #include "yaml.h"
 
-void operator >> (const YAML::Node& node, BlockedDOF::BlockableState& g);
-void operator >> (const YAML::Node& node, BlockedDOF::BlockableState& g)
+void operator >> (const YAML::Node& node, BlockableState& g);
+void operator >> (const YAML::Node& node, BlockableState& g)
 {
     std::string t;
     node >> t;
-    if      (t == "u") g = BlockedDOF::BlockableState::U;
-    else if (t == "v") g = BlockedDOF::BlockableState::V;
-    else if (t == "w") g = BlockedDOF::BlockableState::W;
-    else if (t == "p") g = BlockedDOF::BlockableState::P;
-    else if (t == "q") g = BlockedDOF::BlockableState::Q;
-    else if (t == "r") g = BlockedDOF::BlockableState::R;
+    if      (t == "u") g = BlockableState::U;
+    else if (t == "v") g = BlockableState::V;
+    else if (t == "w") g = BlockableState::W;
+    else if (t == "p") g = BlockableState::P;
+    else if (t == "q") g = BlockableState::Q;
+    else if (t == "r") g = BlockableState::R;
     else
     {
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Unrecognized state: '" << t << "'. Has to be one of 'u', 'v', 'w', 'p', 'q' or 'r'.");
     }
 }
 
-void operator >> (const YAML::Node& node, BlockedDOF::InterpolationType& g);
-void operator >> (const YAML::Node& node, BlockedDOF::InterpolationType& g)
+void operator >> (const YAML::Node& node, InterpolationType& g);
+void operator >> (const YAML::Node& node, InterpolationType& g)
 {
     std::string t;
     node >> t;
-    if      (t == "piecewise constant") g = BlockedDOF::InterpolationType::PIECEWISE_CONSTANT;
-    else if (t == "linear")             g = BlockedDOF::InterpolationType::LINEAR;
-    else if (t == "spline")             g = BlockedDOF::InterpolationType::SPLINE;
+    if      (t == "piecewise constant") g = InterpolationType::PIECEWISE_CONSTANT;
+    else if (t == "linear")             g = InterpolationType::LINEAR;
+    else if (t == "spline")             g = InterpolationType::SPLINE;
     else
     {
         THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Unrecognized interpolation type: '" << t << "'. Has to be one of 'piecewise constant', 'linear', 'spline'");
     }
 }
 
-void operator >> (const YAML::Node& node, BlockedDOF::YamlCSVDOF& g);
-void operator >> (const YAML::Node& node, BlockedDOF::YamlCSVDOF& g)
+void operator >> (const YAML::Node& node, YamlCSVDOF& g);
+void operator >> (const YAML::Node& node, YamlCSVDOF& g)
 {
     node["filename"]      >> g.filename;
     node["interpolation"] >> g.interpolation;
@@ -56,8 +56,8 @@ void operator >> (const YAML::Node& node, BlockedDOF::YamlCSVDOF& g)
     node["value"]         >> g.value;
 }
 
-void operator >> (const YAML::Node& node, BlockedDOF::YamlDOF<std::vector<double> >& g);
-void operator >> (const YAML::Node& node, BlockedDOF::YamlDOF<std::vector<double> >& g)
+void operator >> (const YAML::Node& node, YamlDOF<std::vector<double> >& g);
+void operator >> (const YAML::Node& node, YamlDOF<std::vector<double> >& g)
 {
     node["interpolation"] >> g.interpolation;
     node["state"]         >> g.state;
@@ -65,27 +65,27 @@ void operator >> (const YAML::Node& node, BlockedDOF::YamlDOF<std::vector<double
     node["value"]         >> g.value;
 }
 
-std::ostream& operator<<(std::ostream& os, const BlockedDOF::BlockableState& s);
-std::ostream& operator<<(std::ostream& os, const BlockedDOF::BlockableState& s)
+std::ostream& operator<<(std::ostream& os, const BlockableState& s);
+std::ostream& operator<<(std::ostream& os, const BlockableState& s)
 {
     switch(s)
     {
-        case BlockedDOF::BlockableState::U:
+        case BlockableState::U:
             os << "u";
             break;
-        case BlockedDOF::BlockableState::V:
+        case BlockableState::V:
             os << "v";
             break;
-        case BlockedDOF::BlockableState::W:
+        case BlockableState::W:
             os << "w";
             break;
-        case BlockedDOF::BlockableState::P:
+        case BlockableState::P:
             os << "p";
             break;
-        case BlockedDOF::BlockableState::Q:
+        case BlockableState::Q:
             os << "q";
             break;
-        case BlockedDOF::BlockableState::R:
+        case BlockableState::R:
             os << "r";
             break;
         default:
@@ -99,13 +99,13 @@ typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> Interpolator;
 class Builder
 {
     public:
-        Builder(const BlockedDOF::Yaml& yaml) : input(yaml)
+        Builder(const YamlBlockedDOF& yaml) : input(yaml)
         {
             check_states_are_not_defined_twice(input);
         }
-        std::map<BlockedDOF::BlockableState, Interpolator> get_forced_states() const
+        std::map<BlockableState, Interpolator> get_forced_states() const
         {
-            std::map<BlockedDOF::BlockableState, Interpolator> ret;
+            std::map<BlockableState, Interpolator> ret;
             for (const auto y:input.from_csv) ret[y.state] = build(y);
             for (const auto y:input.from_yaml) ret[y.state] = build(y);
             return ret;
@@ -113,7 +113,7 @@ class Builder
 
     private:
         Builder();
-        void throw_if_already_defined(const BlockedDOF::BlockableState& state, std::map<BlockedDOF::BlockableState, bool>& defined) const
+        void throw_if_already_defined(const BlockableState& state, std::map<BlockableState, bool>& defined) const
         {
             if (defined[state])
             {
@@ -122,9 +122,9 @@ class Builder
             defined[state] = true;
         }
 
-        void check_states_are_not_defined_twice(const BlockedDOF::Yaml& input) const
+        void check_states_are_not_defined_twice(const YamlBlockedDOF& input) const
         {
-            std::map<BlockedDOF::BlockableState, bool> defined_in_yaml, defined_in_csv;
+            std::map<BlockableState, bool> defined_in_yaml, defined_in_csv;
             for (const auto state : input.from_yaml)
             {
                 throw_if_already_defined(state.state, defined_in_yaml);
@@ -135,7 +135,7 @@ class Builder
                 throw_if_already_defined(state.state, defined_in_csv);
             }
         }
-        Interpolator build(const BlockedDOF::YamlDOF<std::vector<double> >& y) const
+        Interpolator build(const YamlDOF<std::vector<double> >& y) const
         {
             Interpolator ret;
             try
@@ -153,7 +153,7 @@ class Builder
             return ret;
         }
 
-        Interpolator build(const BlockedDOF::YamlCSVDOF& y) const
+        Interpolator build(const YamlCSVDOF& y) const
         {
             try
             {
@@ -184,17 +184,17 @@ class Builder
             }
             return Interpolator();
         }
-        Interpolator build(const std::vector<double>& t, const std::vector<double>& state, const BlockedDOF::InterpolationType& interpolation_type) const
+        Interpolator build(const std::vector<double>& t, const std::vector<double>& state, const InterpolationType& interpolation_type) const
         {
             switch(interpolation_type)
             {
-                case BlockedDOF::InterpolationType::LINEAR:
+                case InterpolationType::LINEAR:
                     return Interpolator(new ssc::interpolation::LinearInterpolationVariableStep(t, state));
                     break;
-                case BlockedDOF::InterpolationType::PIECEWISE_CONSTANT:
+                case InterpolationType::PIECEWISE_CONSTANT:
                     return Interpolator(new ssc::interpolation::PiecewiseConstantVariableStep<double>(t, state));
                     break;
-                case BlockedDOF::InterpolationType::SPLINE:
+                case InterpolationType::SPLINE:
                     return Interpolator(new ssc::interpolation::SplineVariableStep(t, state));
                     break;
                 default:
@@ -202,7 +202,7 @@ class Builder
             }
             return Interpolator();
         }
-        BlockedDOF::Yaml input;
+        YamlBlockedDOF input;
 };
 
 struct BlockedDOF::Impl
@@ -211,26 +211,26 @@ struct BlockedDOF::Impl
     std::map<BlockableState, Interpolator> blocked_dof;
     size_t body_idx;
 
-    size_t state_index(const BlockedDOF::BlockableState& s)
+    size_t state_index(const BlockableState& s)
     {
         switch (s)
         {
-            case BlockedDOF::BlockableState::U:
+            case BlockableState::U:
                 return UIDX(body_idx);
                 break;
-            case BlockedDOF::BlockableState::V:
+            case BlockableState::V:
                 return VIDX(body_idx);
                 break;
-            case BlockedDOF::BlockableState::W:
+            case BlockableState::W:
                 return WIDX(body_idx);
                 break;
-            case BlockedDOF::BlockableState::P:
+            case BlockableState::P:
                 return PIDX(body_idx);
                 break;
-            case BlockedDOF::BlockableState::Q:
+            case BlockableState::Q:
                 return QIDX(body_idx);
                 break;
-            case BlockedDOF::BlockableState::R:
+            case BlockableState::R:
                 return RIDX(body_idx);
                 break;
             default:
@@ -243,23 +243,13 @@ struct BlockedDOF::Impl
     private:Impl();
 };
 
-BlockedDOF::YamlCSVDOF::YamlCSVDOF() :
-    YamlDOF<std::string>(),
-    filename()
-{
-}
-
-BlockedDOF::Yaml::Yaml() : from_yaml(), from_csv()
-{
-}
-
-BlockedDOF::Yaml BlockedDOF::parse(const std::string& yaml)
+YamlBlockedDOF BlockedDOF::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    BlockedDOF::Yaml ret;
+    YamlBlockedDOF ret;
 
     if (node.FindValue("blocked dof"))
     {
@@ -269,7 +259,7 @@ BlockedDOF::Yaml BlockedDOF::parse(const std::string& yaml)
     return ret;
 }
 
-BlockedDOF::BlockedDOF(const Yaml& input, const size_t body_idx) : pimpl(new Impl(Builder(input),body_idx))
+BlockedDOF::BlockedDOF(const YamlBlockedDOF& input, const size_t body_idx) : pimpl(new Impl(Builder(input),body_idx))
 {
 }
 
