@@ -91,6 +91,7 @@ void operator >> (const YAML::Node& node, YamlBody& b)
     node["initial position of body frame relative to NED"]      >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
     node["initial velocity of body frame relative to NED"]      >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
     node["dynamics"]                                            >> b.dynamics;
+    try_to_parse(node, "blocked dof", b.blocked_dof);
 }
 
 void operator >> (const YAML::Node& node, YamlModel& m)
@@ -236,6 +237,12 @@ void operator >> (const YAML::Node& node, YamlDOF<std::vector<double> >& g)
     node["value"]         >> g.value;
 }
 
+void operator >> (const YAML::Node& node, YamlBlockedDOF& b)
+{
+    if (node.FindValue("from CSV"))  node["from CSV"]  >> b.from_csv;
+    if (node.FindValue("from YAML")) node["from YAML"] >> b.from_yaml;
+}
+
 YamlBlockedDOF parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
@@ -247,8 +254,7 @@ YamlBlockedDOF parse(const std::string& yaml)
     {
         if (node.FindValue("blocked dof"))
         {
-            if (node["blocked dof"].FindValue("from CSV"))  node["blocked dof"]["from CSV"]  >> ret.from_csv;
-            if (node["blocked dof"].FindValue("from YAML")) node["blocked dof"]["from YAML"] >> ret.from_yaml;
+            node["blocked dof"] >> ret;
         }
     }
     return ret;
