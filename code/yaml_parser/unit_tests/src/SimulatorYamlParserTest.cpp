@@ -278,6 +278,13 @@ TEST_F(SimulatorYamlParserTest, can_parse_forced_dof)
     ASSERT_EQ("test.csv", input.from_csv.front().filename);
 }
 
+TEST_F(SimulatorYamlParserTest, can_parse_blocked_DOF_even_if_there_is_nothing_to_parse)
+{
+    const auto y  = parse("");
+    ASSERT_TRUE(y.from_csv.empty());
+    ASSERT_TRUE(y.from_yaml.empty());
+}
+
 TEST_F(SimulatorYamlParserTest, should_throw_if_forcing_anything_other_than_uvwpqr)
 {
     const std::string yaml = "blocked dof:\n"
