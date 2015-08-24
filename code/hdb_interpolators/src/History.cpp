@@ -54,7 +54,7 @@ double History::get_value(const double tau) const
 
 double History::interpolate_value_in_interval(const size_t idx, const double t) const
 {
-    if (idx == 0)
+    if ((idx == 0) or (idx >= L.size()))
     {
         return L[0].second;
     }
