@@ -56,12 +56,12 @@ double History::interpolate_value_in_interval(const size_t idx, const double t) 
 {
     if ((idx == 0) or (idx >= L.size()))
     {
-        return L.at(0).second;
+        return L[0].second;
     }
-    const double tA = L.at(idx-1).first;
-    const double tB = L.at(idx).first;
-    const double yA = L.at(idx-1).second;
-    const double yB = L.at(idx).second;
+    const double tA = L[idx-1].first;
+    const double tB = L[idx].first;
+    const double yA = L[idx-1].second;
+    const double yB = L[idx].second;
 
     if (std::abs(t-tA) < 1E-12) return yA; // To fix bug 2655
     if (std::abs(t-tB) < 1E-12) return yB;
@@ -97,7 +97,7 @@ size_t History::find_braketing_position(const double t) const
         {
             idx_greater = idx_middle;
         }
-        else // t > middle->first
+        else // t > middle.first
         {
             idx_lower = idx_middle;
         }
@@ -171,4 +171,45 @@ std::ostream& operator<<(std::ostream& os, const History& h)
     if (not(h.L.empty())) os << "(" << h.L.back().first << "," << h.L.back().second << ")";
     os << "]";
     return os;
+}
+
+double History::trapeze(const double xa, const double ya, const double xb, const double yb) const
+{
+    return (xb-xa)*(ya+yb)/2.;
+}
+
+double History::integrate(const size_t idx) const
+{
+    double ret = 0;
+    for (size_t i = idx ; i < L.size()-1 ; ++i)
+    {
+        ret += trapeze(L.at(i).first, L.at(i).second, L.at(i+1).first, L.at(i+1).second);
+    }
+    return ret;
+}
+
+void History::check_if_average_can_be_retrieved(const double T) const
+{
+    if (T < 0)
+    {
+        std::stringstream ss;
+        ss
+                << "Cannot retrieve average value because supplied length is negative: received T = "
+                << T;
+        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+    }
+}
+
+double History::average(double T) const
+{
+    if (L.empty()) return 0;
+    if (L.size()==1) return L.front().second;
+    check_if_average_can_be_retrieved(T);
+    T = std::min(T, get_duration());
+    const double t = get_current_time() - T;
+    const size_t idx = find_braketing_position(t);
+    const double first_value = interpolate_value_in_interval(idx, t);
+    const double integral_of_first_interval = trapeze(t, first_value, L.at(idx).first, L.at(idx).second);
+    const double integral_from_t_to_now = integrate(idx);
+    return  T ? (integral_of_first_interval + integral_from_t_to_now)/T : L.back().second;
 }
