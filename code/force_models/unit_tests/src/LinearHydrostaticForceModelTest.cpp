@@ -16,7 +16,7 @@
 
 using namespace testing; // So we can use 'ElementsAre' unqualified
 
-LinearHydrostaticForceModelTest::LinearHydrostaticForceModelTest() : a(ssc::random_data_generator::DataGenerator(8615615618))
+LinearHydrostaticForceModelTest::LinearHydrostaticForceModelTest() : a(ssc::random_data_generator::DataGenerator(8615615))
 {
 }
 
