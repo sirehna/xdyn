@@ -48,6 +48,8 @@ class ControllableForceModel
         void add_reference_frame(const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const;
         virtual ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const = 0;
         std::string get_name() const;
+        virtual double get_Tmax() const; // Can be overloaded if model needs access to History (not a problem, just has to say how much history to keep)
+        std::string get_body_name() const;
 
         template <typename ControllableForceType>
         static ControllableForceParser build_parser()

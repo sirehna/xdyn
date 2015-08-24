@@ -10,6 +10,8 @@
 #include <cmath>
 #define PI M_PI
 
+#include <fstream>
+
 #include <boost/algorithm/string.hpp> // replace in string
 
 #include <ssc/data_source.hpp>
@@ -26,6 +28,7 @@
 #include <ssc/solver.hpp>
 #include "TriMeshTestData.hpp"
 #include "generate_anthineas.hpp"
+#include "hdb_data.hpp"
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "MapObserverTest.hpp"
@@ -540,4 +543,20 @@ TEST_F(SimTest, LONG_linear_hydrostatics_with_waves)
     ASSERT_NEAR(1.2651 , res.at(11).x[ZIDX(0)], eps);
     ASSERT_NEAR(1.34619, res.at(12).x[ZIDX(0)], eps);
     ASSERT_NEAR(1.45072, res.at(13).x[ZIDX(0)], eps);
+}
+
+TEST_F(SimTest, LONG_can_simulate_radiation_damping)
+{
+    const double T = 12;
+    const double dt = 0.2;
+    std::ofstream of("anthineas.hdb");
+    of << test_data::anthineas_hdb();
+    ssc::data_source::DataSource command_listener;
+    command_listener.check_in(__PRETTY_FUNCTION__);
+    command_listener.set<double>("propeller(rpm)", 50);
+    command_listener.set<double>("propeller(P/D)", 1);
+    command_listener.set<double>("propeller(beta)", 0.8);
+    command_listener.check_out();
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_radiation_damping(), test_data::cube(), 0, T, dt, command_listener);
+    ASSERT_NEAR(0.6613596894521887, res.at(5).x[XIDX(0)], 1E-3);
 }

@@ -106,3 +106,13 @@ void ControllableForceModel::feed(Observer& observer) const
     observer.write(force_in_ned_frame.M(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","My"},std::string("My(")+name+","+body_name+",NED)"));
     observer.write(force_in_ned_frame.N(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Mz"},std::string("Mz(")+name+","+body_name+",NED)"));
 }
+
+double ControllableForceModel::get_Tmax() const
+{
+    return 0.;
+}
+
+std::string ControllableForceModel::get_body_name() const
+{
+    return body_name;
+}

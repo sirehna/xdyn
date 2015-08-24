@@ -32,7 +32,8 @@ typedef TR1(shared_ptr)<Eigen::Matrix<double,6,6> > MatrixPtr;
 
 struct BodyStates
 {
-    BodyStates();
+    BodyStates(const double Tmax=0 //!< Defines how much history we store
+              );
     std::string name;                                              //!< Body's name
     ssc::kinematics::Point G;                                      //!< Position of the ship's centre of gravity
     double m;                                                      //!< Total mass of the body (in kg)

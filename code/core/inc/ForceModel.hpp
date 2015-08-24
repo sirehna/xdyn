@@ -51,6 +51,7 @@ class ForceModel
         ssc::kinematics::Wrench get_force_in_body_frame() const;
         ssc::kinematics::Wrench get_force_in_ned_frame() const;
         void feed(Observer& observer) const;
+        virtual double get_Tmax() const; // Can be overloaded if model needs access to History (not a problem, just has to say how much history to keep)
 
         template <typename ForceType>
         static typename boost::enable_if<HasParse<ForceType>, ForceParser>::type build_parser()

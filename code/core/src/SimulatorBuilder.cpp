@@ -27,21 +27,21 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const doubl
 {
 }
 
-std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces) const
+std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces, std::map<std::string,double> history_length) const
 {
     std::vector<BodyPtr> ret;
     size_t i = 0;
-    for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
+    for (const auto body:input.bodies)
     {
-        const auto that_mesh = meshes.find(that_body->name);
+        const auto that_mesh = meshes.find(body.name);
         if (that_mesh != meshes.end())
         {
-            ret.push_back(builder->build(*that_body, that_mesh->second, i,t0,input.rotations,bodies_contain_surface_forces.at(i)));
+            ret.push_back(builder->build(body, that_mesh->second, i,t0,input.rotations,history_length[body.name],bodies_contain_surface_forces.at(i)));
             i++;
         }
         else
         {
-            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("Unable to find mesh for '") + that_body->name + "' in map");
+            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("Unable to find mesh for '") + body.name + "' in map");
         }
     }
     return ret;
@@ -103,11 +103,29 @@ SurfaceElevationPtr SimulatorBuilder::get_wave() const
 std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
 {
     std::vector<ListOfForces> forces;
-    for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
+    for (const auto body:input.bodies)
     {
-        forces.push_back(forces_from(*that_body, env));
+        forces.push_back(forces_from(body, env));
     }
     return forces;
+}
+
+std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std::vector<ListOfForces>& forces_for_all_bodies, const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies) const
+{
+    std::map<std::string, double> ret;
+    for (const auto forces:forces_for_all_bodies)
+    {
+        double Tmax = 0;
+        for (const auto force:forces) Tmax = std::max(Tmax, force->get_Tmax());
+        if (not(forces.empty())) ret[forces.front()->get_body_name()] = Tmax;
+    }
+    for (const auto forces:controlled_forces_for_all_bodies)
+    {
+        double Tmax = 0;
+        for (const auto force:forces) Tmax = std::max(Tmax, force->get_Tmax());
+        if (not(forces.empty())) ret[forces.front()->get_body_name()] = std::max(Tmax, ret[forces.front()->get_body_name()]);
+    }
+    return ret;
 }
 
 std::vector<ListOfControlledForces> SimulatorBuilder::get_controlled_forces(const EnvironmentAndFrames& env) const
@@ -200,7 +218,9 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     auto env = get_environment();
     const auto forces = get_forces(env);
-    const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(forces));
+    const auto controlled_forces = get_controlled_forces(env);
+    auto history_length = get_max_history_length(forces, controlled_forces);
+    const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(forces), history_length);
     add_initial_transforms(bodies, env.k);
     return Sim(bodies, forces, get_controlled_forces(env), env, get_initial_states(), command_listener);
 }
