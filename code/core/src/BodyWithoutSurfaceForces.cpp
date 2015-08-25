@@ -7,11 +7,11 @@
 
 #include "BodyWithoutSurfaceForces.hpp"
 
-BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const size_t i) : Body(i)
+BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const size_t i, const BlockedDOF& blocked_states_) : Body(i, blocked_states_)
 {
 }
 
-BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const BodyStates& s, const size_t i) : Body(s, i)
+BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : Body(s, i, blocked_states_)
 {
 }
 

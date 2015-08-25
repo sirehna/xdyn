@@ -13,8 +13,8 @@
 class BodyWithoutSurfaceForces : public Body
 {
     public:
-        BodyWithoutSurfaceForces(const size_t idx);
-        BodyWithoutSurfaceForces(const BodyStates& states, const size_t idx);
+        BodyWithoutSurfaceForces(const size_t idx, const BlockedDOF& blocked_states);
+        BodyWithoutSurfaceForces(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states);
         void update_intersection_with_free_surface(const EnvironmentAndFrames& env,
                                                            const double t
                                                           );

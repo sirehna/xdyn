@@ -8,6 +8,7 @@
 #include "BodyWithSurfaceForces.hpp"
 #include "BodyTest.hpp"
 #include "BodyBuilderTest.hpp"
+#include "EnvironmentAndFrames.hpp"
 #include <ssc/kinematics.hpp>
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
@@ -91,7 +92,7 @@ TEST_F(BodyTest, can_get_transform_from_NED_to_body_from_states)
 {
     BodyStates states;
     states.name = "body 1";
-    BodyWithSurfaceForces b(states,1);
+    BodyWithSurfaceForces b(states,1,BlockedDOF(""));
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     const ssc::kinematics::Transform T = b.get_transform_from_ned_to_body(x);
     ASSERT_EQ("NED", T.get_from_frame());
@@ -167,4 +168,42 @@ TEST_F(BodyTest, can_compute_transform_from_ned_to_local_ned)
     ASSERT_DOUBLE_EQ(0, (double)T.get_rot()(0,2));
     ASSERT_DOUBLE_EQ(0, (double)T.get_rot()(1,2));
     ASSERT_DOUBLE_EQ(1, (double)T.get_rot()(2,2));
+}
+
+TEST_F(BodyTest, forced_states_are_taken_into_account)
+{
+    const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,44,5,6,7,8,9,3,5,7,13};
+    const double t = 2.1;
+    body->update_body_states(x, t);
+    const auto states = body->get_states();
+    ASSERT_DOUBLE_EQ(4.5, states.u());
+}
+
+TEST_F(BodyTest, forced_state_derivatives_are_taken_into_account)
+{
+    const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,44,5,6,7,8,9,3,5,7,13};
+    StateType dx_dt = {1,2,3,4,5,6,7,8,9,10,11,12,13,10,11,12,13,14,15,16,17,18,19,20,21,23};
+    Eigen::Matrix<double,6,6> total_inertia;
+    total_inertia << 1, 2, 3, 4, 5, 6,
+                     7, 8, 9, 0, 1, 2,
+                     3, 4, 5, 6, 7, 8,
+                     9, 0, 1, 2, 3, 4,
+                     5, 6, 7, 8, 9, 0,
+                     1, 2, 3, 4, 5, 6;
+    Eigen::Vector3d F,T;
+    F(0) = 50;
+    F(1) = 51;
+    F(2) = 52;
+    T(0) = 60;
+    T(1) = 61;
+    T(2) = 62;
+    ssc::kinematics::Wrench sum_of_other_forces(ssc::kinematics::Point("d",1,2,3),F,T);
+    EnvironmentAndFrames env;
+    ssc::kinematics::Point P("NED", 0,0,0);
+    ssc::kinematics::Transform tr(P, body->get_name());
+    env.k->add(tr);
+    const double t = 2.1;
+    body->calculate_state_derivatives(sum_of_other_forces, x, dx_dt, t, env);
+
+    ASSERT_DOUBLE_EQ(1./4.2, dx_dt[UIDX(1)]);
 }

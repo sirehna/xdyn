@@ -11,11 +11,11 @@
 #include "SurfaceElevationInterface.hpp"
 #include "YamlBody.hpp"
 
-Body::Body(const size_t i) : states(), idx(i)
+Body::Body(const size_t i, const BlockedDOF& blocked_states_) : states(), idx(i), blocked_states(blocked_states_)
 {
 }
 
-Body::Body(const BodyStates& s, const size_t i) : states(s), idx(i)
+Body::Body(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : states(s), idx(i), blocked_states(blocked_states_)
 {
 }
 
@@ -66,8 +66,9 @@ void Body::update_kinematics(StateType x, const KinematicsPtr& k) const
     k->add(get_transform_from_ned_to_local_ned(x));
 }
 
-void Body::update_body_states(const StateType& x, const double t)
+void Body::update_body_states(StateType x, const double t)
 {
+    blocked_states.force_states(x,t);
     states.x.record(t, *_X(x,idx));
     states.y.record(t, *_Y(x,idx));
     states.z.record(t, *_Z(x,idx));
@@ -116,6 +117,7 @@ void Body::update(const EnvironmentAndFrames& env, const StateType& x, const dou
 void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                          const StateType& x,
                                          StateType& dx_dt,
+                                         const double t,
                                          const EnvironmentAndFrames& env) const
 {
     // du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt
@@ -142,6 +144,8 @@ void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_for
     *_QI(dx_dt,idx) = 0.5*(double)dq_dt.x();
     *_QJ(dx_dt,idx) = 0.5*(double)dq_dt.y();
     *_QK(dx_dt,idx) = 0.5*(double)dq_dt.z();
+
+    blocked_states.force_state_derivatives(dx_dt, t);
 }
 
 Eigen::Vector3d Body::get_uvw_in_body_frame(const StateType& x) const
@@ -152,6 +156,11 @@ Eigen::Vector3d Body::get_uvw_in_body_frame(const StateType& x) const
 Eigen::Vector3d Body::get_pqr(const StateType& x) const
 {
     return Eigen::Vector3d::Map(_P(x,idx));
+}
+
+BlockedDOF::Vector Body::get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const
+{
+    return blocked_states.get_delta_F(dx_dt,*states.total_inertia,sum_of_other_forces);
 }
 
 void Body::feed(const StateType& x, Observer& observer, const YamlRotation& c) const

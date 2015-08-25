@@ -81,7 +81,7 @@ TEST_F(FroudeKrylovForceModelTest, example)
 
     BodyStates states = get_body(BODY, points)->get_states();
     states.G = ssc::kinematics::Point("NED",0,2,2./3.);
-    BodyPtr body(new BodyWithSurfaceForces(states, 0));
+    BodyPtr body(new BodyWithSurfaceForces(states, 0, BlockedDOF("")));
 
     FroudeKrylovForceModel F(BODY, env);
     ASSERT_EQ("non-linear Froude-Krylov", F.model_name);
@@ -158,7 +158,7 @@ TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
 
     BodyStates states = get_body(BODY, cube(0.2,0,0,0.2))->get_states();
     states.G = ssc::kinematics::Point("NED",0,0,0.2);
-    BodyPtr body(new BodyWithSurfaceForces(states,0));
+    BodyPtr body(new BodyWithSurfaceForces(states,0,BlockedDOF("")));
 
     FroudeKrylovForceModel F(BODY, env);
     body->update_intersection_with_free_surface(env, t);

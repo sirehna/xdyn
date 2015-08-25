@@ -14,6 +14,37 @@
 #include "YamlDynamics.hpp"
 #include "YamlModel.hpp"
 
+enum class InterpolationType {PIECEWISE_CONSTANT, LINEAR, SPLINE};
+enum class BlockableState {U, V, W, P, Q, R};
+
+template <typename T> struct YamlDOF
+{
+    YamlDOF() :
+        state(BlockableState::U),
+        t(),
+        value(),
+        interpolation(InterpolationType::PIECEWISE_CONSTANT)
+    {}
+    virtual ~YamlDOF() {}
+    BlockableState state;
+    T t;
+    T value;
+    InterpolationType interpolation;
+};
+
+struct YamlCSVDOF : public YamlDOF<std::string>
+{
+    YamlCSVDOF();
+    std::string filename;
+};
+
+struct YamlBlockedDOF
+{
+    YamlBlockedDOF();
+    std::vector<YamlDOF<std::vector<double> > > from_yaml;
+    std::vector<YamlCSVDOF> from_csv;
+};
+
 struct YamlBody
 {
     YamlBody();
@@ -25,6 +56,7 @@ struct YamlBody
     YamlDynamics dynamics;
     std::vector<YamlModel> external_forces;
     std::vector<YamlModel> controlled_forces;
+    YamlBlockedDOF blocked_dof;
 };
 
 #endif /* YAMLBODY_HPP_ */

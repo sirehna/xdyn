@@ -5,9 +5,14 @@
  *      Author: cady
  */
 
+#include "gmock/gmock.h"
+using namespace testing; // So we can use 'ElementsAre' unqualified
+
+#include "external_data_structures_parsers.hpp"
 #include "SimulatorYamlParserTest.hpp"
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
+#include "SimulatorYamlParserException.hpp"
 
 const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
 
@@ -243,4 +248,68 @@ TEST_F(SimulatorYamlParserTest, can_parse_hydrodynamic_calculation_point)
     ASSERT_DOUBLE_EQ(0.696, P.x);
     ASSERT_DOUBLE_EQ(0, P.y);
     ASSERT_DOUBLE_EQ(1.418, P.z);
+}
+
+TEST_F(SimulatorYamlParserTest, can_parse_forced_dof)
+{
+    const std::string yaml = "blocked dof:\n"
+                             "   from CSV:\n"
+                             "     - state: u\n"
+                             "       t: T\n"
+                             "       value: PS\n"
+                             "       interpolation: spline\n"
+                             "       filename: test.csv\n"
+                             "   from YAML:\n"
+                             "     - state: p\n"
+                             "       t: [4.2]\n"
+                             "       value: [5]\n"
+                             "       interpolation: piecewise constant\n";
+    const YamlBlockedDOF input = parse(yaml);
+    ASSERT_EQ(1, input.from_yaml.size());
+    ASSERT_EQ(BlockableState::P, input.from_yaml.front().state);
+    ASSERT_EQ(InterpolationType::PIECEWISE_CONSTANT, input.from_yaml.front().interpolation);
+    ASSERT_THAT(input.from_yaml.front().t, ElementsAre(4.2));
+    ASSERT_THAT(input.from_yaml.front().value, ElementsAre(5));
+    ASSERT_EQ(1, input.from_csv.size());
+    ASSERT_EQ(BlockableState::U, input.from_csv.front().state);
+    ASSERT_EQ(InterpolationType::SPLINE, input.from_csv.front().interpolation);
+    ASSERT_EQ("T", input.from_csv.front().t);
+    ASSERT_EQ("PS", input.from_csv.front().value);
+    ASSERT_EQ("test.csv", input.from_csv.front().filename);
+}
+
+TEST_F(SimulatorYamlParserTest, can_parse_blocked_DOF_even_if_there_is_nothing_to_parse)
+{
+    const auto y  = parse("");
+    ASSERT_TRUE(y.from_csv.empty());
+    ASSERT_TRUE(y.from_yaml.empty());
+}
+
+TEST_F(SimulatorYamlParserTest, should_throw_if_forcing_anything_other_than_uvwpqr)
+{
+    const std::string yaml = "blocked dof:\n"
+                             "   from CSV:\n"
+                             "     - state: x\n"
+                             "       t: T\n"
+                             "       value: PS\n"
+                             "       interpolation: spline\n"
+                             "       filename: test.csv\n"
+                             "   from YAML:\n"
+                             "     - state: p\n"
+                             "       t: [4.2]\n"
+                             "       value: [5]\n"
+                             "       interpolation: piecewise constant\n";
+    ASSERT_THROW(parse(yaml), SimulatorYamlParserException);
+}
+
+TEST_F(SimulatorYamlParserTest, interpolation_type_should_be_valid)
+{
+    const std::string invalid_yaml =
+                                 "blocked dof:\n"
+                                 "   from YAML:\n"
+                                 "     - state: p\n"
+                                 "       t: [5,4.2]\n"
+                                 "       value: [5,6]\n"
+                                 "       interpolation: something\n";
+    ASSERT_THROW(parse(invalid_yaml), SimulatorYamlParserException);
 }

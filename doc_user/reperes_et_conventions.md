@@ -318,6 +318,7 @@ Chaque corps comprend :
  - des données définissant son comportement dynamique (section `dynamics`)
  - la liste des efforts auxquels il est soumis (sections `external forces` et
    `controlled forces`).
+ - de façon facultative, des états forcés.
 
 ### Exemple complet
 
@@ -379,6 +380,18 @@ bodies: # All bodies have NED as parent frame
     external forces:
       - model: gravity
       - model: non-linear hydrostatic (fast)
+    forced dof:
+       from CSV:
+         - state: u
+           t: T
+           value: PS
+           interpolation: spline
+           filename: test.csv
+       from YAML:
+         - state: p
+           t: [4.2]
+           value: [5]
+           interpolation: piecewise constant
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Nommage du solide
@@ -528,6 +541,70 @@ lance une exception si on le fait).
 Comme le fichier STL, le chemin du fichier HDB est relatif à l'endroit d'où on
 lance l'exécutable.
 
+### Forçage de degrés de liberté
+
+Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
+P, Q, R.
+
+Pour forcer les degrés de liberté, on ajoute la section (facultative) suivante
+à la section `body` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+blocked dof:
+   from CSV:
+     - state: u
+       t: T
+       value: PS
+       interpolation: spline
+       filename: test.csv
+   from YAML:
+     - state: p
+       t: [4.2]
+       value: [5]
+       interpolation: piecewise constant
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Soit les états sont donnés directement dans le fichier YAML, soit ils sont lus
+depuis un fichier CSV.
+- `name`: nom de l'état à forcer. u, v, w, p, q ou r.
+
+Si les valeurs des états sont dans le YAML :
+
+- `value`: Valeur de l'état forcé pour chaque instant
+   (dans l'exemple ci-dessus, u=5 pour t $\geq$ 4.2).
+- `t`: instants auxquels est défini l'état
+- `interpolation`: type d'interpolation à réaliser. `piecewise constant`,
+  `linear` ou `spline`.
+
+Si les valeurs sont lues depuis un fichier CSV :
+
+- `filename`: nom du fichier contenant les valeurs forcées. Le chemin du
+  fichier s'entend relativement à l'endroit d'où est lancé le simulateur.
+- `value`: nom de la colonne contenant les valeurs à lire
+- `t`: nom de la colonne contenant le temps
+- `interpolation`: type d'interpolation à réaliser. `piecewise constant`,
+  `linear` ou `spline`.
+
+Pour les valeurs de t hors de l'intervalle [tmin,tmax], l'état est supposé
+libre (non forcé).
+
+Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
+l'effort permettant de conserver les forçages, en d'autres termes il est
+possible de récupérer
+
+$$(M+M_a)\dot{X_{\mbox{forced}}} - \sum F_i$$
+
+Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
+corps s'appelle 'body 1):
+
+- `Fx(blocked states,body 1,body 1)`
+- `Fy(blocked states,body 1,body 1)`
+- `Fz(blocked states,body 1,body 1)`
+- `Mx(blocked states,body 1,body 1)`
+- `My(blocked states,body 1,body 1)`
+- `Mz(blocked states,body 1,body 1)`
+
+Il est à noter que ces efforts sont exprimés dans le repère BODY.
 
 ## Repère de calcul hydrodynamique
 

@@ -23,6 +23,7 @@ set(SRC src/update_kinematics.cpp
         src/DefaultSurfaceElevation.cpp
         src/BodyStates.cpp
         src/Observer.cpp
+        src/BlockedDOF.cpp
         )
 
 # Using C++ 2011
@@ -45,6 +46,7 @@ include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${parser_extensions_INCLUDE_DIRS})
 include_directories(${mesh_INCLUDE_DIRS})
 include_directories(${hdb_interpolators_INCLUDE_DIRS})
+include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
 

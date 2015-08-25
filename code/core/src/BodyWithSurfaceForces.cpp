@@ -9,11 +9,11 @@
 #include "EnvironmentAndFrames.hpp"
 #include "SurfaceElevationInterface.hpp"
 
-BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i) : Body(i)
+BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i, const BlockedDOF& blocked_states_) : Body(i, blocked_states_)
 {
 }
 
-BodyWithSurfaceForces::BodyWithSurfaceForces(const BodyStates& s, const size_t i) : Body(s, i)
+BodyWithSurfaceForces::BodyWithSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : Body(s, i, blocked_states_)
 {
 }
 

@@ -9,6 +9,7 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/BodyTest.cpp
               src/ControllableForceModelTest.cpp
               src/random_kinematics.cpp
+              src/BlockedDOFTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
@@ -18,6 +19,7 @@ INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${GMOCK_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS}/../unit_tests/inc)

@@ -10,6 +10,7 @@
 
 #include <tuple>
 
+#include "BlockedDOF.hpp"
 #include "BodyStates.hpp"
 #include "StateMacros.hpp"
 struct YamlBody;
@@ -22,8 +23,8 @@ class Body
 {
     public:
         virtual ~Body();
-        Body(const size_t idx);
-        Body(const BodyStates& states, const size_t idx);
+        Body(const size_t idx, const BlockedDOF& blocked_states);
+        Body(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states);
 
         BodyStates get_states() const;
 
@@ -43,7 +44,7 @@ class Body
          */
         void update(const EnvironmentAndFrames& env, const StateType& x, const double t);
         void update_kinematics(StateType x, const KinematicsPtr& k) const;
-        void update_body_states(const StateType& x, const double t);
+        void update_body_states(StateType x, const double t);
         /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
          */
         void update_projection_of_z_in_mesh_frame(const double g,
@@ -52,6 +53,7 @@ class Body
         void calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                          const StateType& x,
                                          StateType& dx_dt,
+                                         const double t,
                                          const EnvironmentAndFrames& env) const;
 
         Eigen::Vector3d get_uvw_in_body_frame(const StateType& x) const;
@@ -62,6 +64,7 @@ class Body
         std::tuple<double,double,double,double> get_quaternions(const ssc::kinematics::EulerAngles& angle, const YamlRotation& c) const;
 
         void feed(const StateType& x, Observer& observer, const YamlRotation& c) const;
+        BlockedDOF::Vector get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const;
 
     protected:
         BodyStates states;
@@ -70,6 +73,7 @@ class Body
         Body();
 
         size_t idx; //!< Index of the first state
+        BlockedDOF blocked_states;
 };
 
 typedef TR1(shared_ptr)<Body> BodyPtr;
