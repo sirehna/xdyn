@@ -96,8 +96,8 @@ $(function() {
     }
 
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    var websocket = new WebSocket('ws://130.66.124.225:9003');
-    //var websocket = new WebSocket('ws://localhost:9002');
+    //var websocket = new WebSocket('ws://130.66.124.225:9003');
+    var websocket = new WebSocket('ws://localhost:9002');
     $('#graph').css('display', 'none');
     $('#filechooser').css('display', 'none');
     $('#stlfilechooser').css('display', 'none');
