@@ -136,7 +136,7 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
 ################################################################################
 INSTALL(TARGETS sim
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-INSTALL(TARGETS convert_stl_files_to_code
+INSTALL(TARGETS gz
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
 
