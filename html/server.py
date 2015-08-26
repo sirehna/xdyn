@@ -5,6 +5,7 @@ import sys
 import tornado.web
 import tornado.websocket
 import tornado.ioloop
+import uuid
 import webbrowser
 
 def get_ip():
@@ -46,8 +47,32 @@ class ClientTracker:
             print("Closing client " + str(self.clients_id[client]))
         self.clients_id.pop(client, None)
 
+
+def upload_file(request, key):
+    if request.files[key]:
+        fileinfo = request.files[key][0]
+        __UPLOADS__ = "uploads/"
+        fname = fileinfo['filename']
+        extn = os.path.splitext(fname)[1]
+        filename = __UPLOADS__ + str(uuid.uuid4()) + extn
+        fh = open(filename, 'w')
+        fh.write(fileinfo['body'].decode('utf-8'))
+        return filename
+    else:
+        return ""
+
+
+def get_form_contents(request):
+    form = {}
+    form["yaml"] = upload_file(request, 'yaml_file')
+    form["stl"] = upload_file(request, 'stl_file')
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
+        self.render("websocket_test.html")
+
+    def post(self):
+        get_form_contents(self.request)
         self.render("websocket_test.html")
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
