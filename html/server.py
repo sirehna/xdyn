@@ -7,9 +7,6 @@ import tornado.websocket
 import tornado.ioloop
 import webbrowser
 
-if sys.version_info.major < 3:
-    sys.exit("Python server should be run with Python 3")
-
 def get_ip():
     import socket
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -107,15 +104,17 @@ class SimulatorGUI:
 if __name__ == "__main__":
     import argparse
     from os.path import basename
+    if sys.version_info.major < 3:
+        sys.exit("Python server should be run with Python 3")
     progName = basename(sys.argv[0])
     parser = argparse.ArgumentParser(\
         prog = progName, \
-        description = "Création du serveur\n")
+        description = "Creating server\n")
     parser.add_argument("-a", "--address", \
-        help = "IP. Par exemple localhost. Par défaut, l'IP locale est utilisée", \
+        help = "IP. For example localhost. By default, current IP is used", \
         default = 'http://' + get_ip())
     parser.add_argument("-p", "--port", \
-        help = "Port à ouvrir. Le port par défaut est 9002", default = 9002)
+        help = "Port to open. Default value is 9002", default = 9002)
     args = parser.parse_args()
     gui = SimulatorGUI(address = args.address, port = args.port)
     gui.run()
