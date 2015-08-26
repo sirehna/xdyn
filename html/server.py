@@ -48,32 +48,46 @@ class ClientTracker:
         self.clients_id.pop(client, None)
 
 
-def upload_file(request, key):
-    if request.files[key]:
-        fileinfo = request.files[key][0]
-        __UPLOADS__ = "uploads/"
-        fname = fileinfo['filename']
-        extn = os.path.splitext(fname)[1]
-        filename = __UPLOADS__ + str(uuid.uuid4()) + extn
-        fh = open(filename, 'w')
-        fh.write(fileinfo['body'].decode('utf-8'))
-        return filename
-    else:
-        return ""
-
-
-def get_form_contents(request):
-    form = {}
-    form["yaml"] = upload_file(request, 'yaml_file')
-    form["stl"] = upload_file(request, 'stl_file')
-
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("websocket_test.html")
 
+    def upload_file(self, key):
+        if key in self.request.files:
+            fileinfo = self.request.files[key][0]
+            __UPLOADS__ = "uploads/"
+            fname = fileinfo['filename']
+            extn = os.path.splitext(fname)[1]
+            filename = __UPLOADS__ + str(uuid.uuid4()) + extn
+            fh = open(filename, 'w')
+            fh.write(fileinfo['body'].decode('utf-8'))
+            return filename
+        else:
+            return ""
+
+    def get_checkbox(self, key):
+        if key in self.request.arguments:
+            return self.request.arguments[key]
+        return False
+
+    def get_form_contents(self):
+        form = {}
+        form["yaml"]   = self.upload_file('yaml_file')
+        form["stl"]    = self.upload_file('stl_file')
+        form['solver'] = self.get_body_argument('solver')
+        form['dt']     = float(self.get_body_argument('dt'))
+        form['T']      = float(self.get_body_argument('T'))
+        form['csv']    = self.get_checkbox('csv')
+        form['tsv']    = self.get_checkbox('tsv')
+        form['hdf5']   = self.get_checkbox('hdf5')
+        print(form)
+
     def post(self):
-        get_form_contents(self.request)
+        self.get_form_contents()
         self.render("websocket_test.html")
+
+
+
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
