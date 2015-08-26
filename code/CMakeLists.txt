@@ -113,9 +113,15 @@ ELSE()
     TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE pthread)
 ENDIF()
 
+if(UNIX AND NOT(WIN32))
+    set(LIBRARY_OUTPUT_DIRECTORY "lib")
+INSTALL(TARGETS ${PROJECT_NAME}
+        LIBRARY DESTINATION lib)
+else()
 INSTALL(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
         LIBRARY DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
+endif()
 #############################################################################
 # Testing part
 
