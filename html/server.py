@@ -8,7 +8,7 @@ import tornado.ioloop
 import types
 import uuid
 import webbrowser
-from subprocess import call
+import subprocess
 
 def get_ip():
     import socket
@@ -85,19 +85,24 @@ class MainHandler(tornado.web.RequestHandler):
         return form
 
     def build_command_line(self, form):
-        out = ['./sim', '--dt ' + str(form.dt), '--tend ' + str(form.T), '-s ' + form.solver]
+        out = ['sim', str(form.yaml), '--dt', str(form.dt),  '--tend', str(form.T), '-s', form.solver]
         if form.csv:
-            out.append('-o ' + str(uuid.uuid4()) + '.csv')
+            out.append("-o")
+            out.append(str(uuid.uuid4()) + ".csv")
         if form.tsv:
-            out.append('-o ' + str(uuid.uuid4()) + '.tsv')
+            out.append('-o ')
+            out.append(str(uuid.uuid4()) + '.tsv')
         if form.hdf5:
-            out.append('-o ' + str(uuid.uuid4()) + '.h5')
+            out.append('-o')
+            out.append(str(uuid.uuid4()) + '.h5')
         return out
 
     def post(self):
         form = self.get_form_contents()
         print(form)
-        print(self.build_command_line(form))
+        command_line = self.build_command_line(form)
+        print(command_line)
+        subprocess.call(command_line)
         self.render("websocket_test.html")
 
 
