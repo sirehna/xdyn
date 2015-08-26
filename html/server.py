@@ -80,10 +80,11 @@ class MainHandler(tornado.web.RequestHandler):
         form['csv']    = self.get_checkbox('csv')
         form['tsv']    = self.get_checkbox('tsv')
         form['hdf5']   = self.get_checkbox('hdf5')
-        print(form)
+        return form
 
     def post(self):
-        self.get_form_contents()
+        form = self.get_form_contents()
+        print(form)
         self.render("websocket_test.html")
 
 
