@@ -5,8 +5,10 @@ import sys
 import tornado.web
 import tornado.websocket
 import tornado.ioloop
+import types
 import uuid
 import webbrowser
+from subprocess import call
 
 def get_ip():
     import socket
@@ -71,20 +73,31 @@ class MainHandler(tornado.web.RequestHandler):
         return False
 
     def get_form_contents(self):
-        form = {}
-        form["yaml"]   = self.upload_file('yaml_file')
-        form["stl"]    = self.upload_file('stl_file')
-        form['solver'] = self.get_body_argument('solver')
-        form['dt']     = float(self.get_body_argument('dt'))
-        form['T']      = float(self.get_body_argument('T'))
-        form['csv']    = self.get_checkbox('csv')
-        form['tsv']    = self.get_checkbox('tsv')
-        form['hdf5']   = self.get_checkbox('hdf5')
+        form = types.SimpleNamespace()
+        form.yaml   = self.upload_file('yaml_file')
+        form.stl    = self.upload_file('stl_file')
+        form.solver = self.get_body_argument('solver')
+        form.dt     = float(self.get_body_argument('dt'))
+        form.T      = float(self.get_body_argument('T'))
+        form.csv    = self.get_checkbox('csv')
+        form.tsv    = self.get_checkbox('tsv')
+        form.hdf5   = self.get_checkbox('hdf5')
         return form
+
+    def build_command_line(self, form):
+        out = ['./sim', '--dt ' + str(form.dt), '--tend ' + str(form.T), '-s ' + form.solver]
+        if form.csv:
+            out.append('-o ' + str(uuid.uuid4()) + '.csv')
+        if form.tsv:
+            out.append('-o ' + str(uuid.uuid4()) + '.tsv')
+        if form.hdf5:
+            out.append('-o ' + str(uuid.uuid4()) + '.h5')
+        return out
 
     def post(self):
         form = self.get_form_contents()
         print(form)
+        print(self.build_command_line(form))
         self.render("websocket_test.html")
 
 
