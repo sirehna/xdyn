@@ -135,7 +135,7 @@ $(function() {
         catch(err)
         {
             console.log(err.message)
-            console.log('Can not parse ' + message.data)
+            console.log('Cannot parse ' + message.data)
         }
     };
 });
