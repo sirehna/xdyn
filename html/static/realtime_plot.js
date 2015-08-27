@@ -12,8 +12,41 @@ function get_plotter()
         data.push([t,x]);
         return data;
     }
+    var dd = {};
 
-    var plot = $.plot($("#graph"), [ data ]);
+    function create_dataset(yaml,variable)
+    {
+        return {label: variable, data: [[t, yaml[variable]]]};
+    }
+
+    function apnd(yaml)
+    {
+        var t = yaml['t'];
+        $.each(yaml, function(key, val)
+                     {
+                     try{
+                        if (key != 't')
+                        {
+                            if (dd[key])
+                            {
+                                dd[key]["data"].push([t,val]);
+                            }
+                            else
+                            {
+                                dd[key] = create_dataset(yaml,key);
+                            }
+                        }
+                        }
+                        catch(err)
+                        {
+                            console.log(err);
+                        }
+                     });
+        return dd;
+    }
+
+
+    var plot = $.plot($("#graph"), dd);
     latest_t = 0;
     var f = function plot_yaml(yaml_data, ship_name, variable_to_plot)
     {
@@ -24,10 +57,12 @@ function get_plotter()
                 if (t<latest_t)
                 {
                     data = [];
+                    dd = {};
                 }
-                plot.setData([append(t,y)]);
-                plot.setupGrid();
-                plot.draw();
+                dd = apnd(yaml_data)
+                var D = dd['z(Anthineas)'];
+                D.color = 1;
+                 $.plot($("#graph"), [D]);
                 latest_t = t;
         }
         if (yaml_data.hasOwnProperty('waves'))
