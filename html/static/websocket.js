@@ -95,9 +95,6 @@ $(function() {
         set_plug_state(s, state);
     }
 
-    window.WebSocket = window.WebSocket || window.MozWebSocket;
-    //var websocket = new WebSocket('ws://130.66.124.225:9003');
-    var websocket = new WebSocket('ws://localhost:9002');
     $('#graph').css('display', 'none');
     $('#filechooser').css('display', 'none');
     $('#stlfilechooser').css('display', 'none');
@@ -105,12 +102,15 @@ $(function() {
     $('#run_button').css('display', 'none');
     $('#solver').css('display', 'none');
     $('#outputs').css('display', 'none');
+    window.WebSocket = window.WebSocket || window.MozWebSocket;
+    var address = $('#websocket_address').html();
+    var websocket = new WebSocket(address);
     websocket.onopen = function () {
         $('h1').css('color', '#1e88e5');
         register_connection_state("connected");
         $('#filechooser').css('display', 'block');
-        //$('#stlfilechooser').css('display', 'none');
     };
+
     websocket.onerror = function () {
         $('h1').css('color', 'red');
         register_connection_state("disconnected");

@@ -51,8 +51,11 @@ class ClientTracker:
 
 
 class MainHandler(tornado.web.RequestHandler):
+    def initialize(self, websocket_url):
+        self.url = websocket_url
+
     def get(self):
-        self.render("websocket_test.html")
+        self.render("websocket_test.html", websocket_address=self.url)
 
     def upload_file(self, key):
         if key in self.request.files:
@@ -103,7 +106,7 @@ class MainHandler(tornado.web.RequestHandler):
         command_line = self.build_command_line(form)
         print(command_line)
         subprocess.call(command_line)
-        self.render("websocket_test.html")
+        self.render("websocket_test.html", websocket_address=self.url)
 
 
 
@@ -126,12 +129,12 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         self.client_tracker.remove(self)
 
-
 class SimulatorGUI:
     def __init__(self, address, port):
         self.client_tracker = ClientTracker(True)
         suffix = "main"
         self.port = port
+        self.websocket_url = address.replace("http", "ws") + ":" + str(port)
         if getattr(sys, 'frozen', False):
             # frozen
             dir_ = os.path.dirname(sys.executable)
@@ -139,14 +142,13 @@ class SimulatorGUI:
             # unfrozen
             dir_ = os.path.dirname(__file__)
         handlers = [
-            (r"/" + suffix, MainHandler),
+            (r"/" + suffix, MainHandler, dict(websocket_url = self.websocket_url)),
             (r"/", WebSocketHandler, dict(client_tracker = self.client_tracker)),
         ]
         settings = {
              "static_path": os.path.join(os.path.dirname(dir_), "static"),
         }
         self.application = tornado.web.Application(handlers, **settings)
-        self.url = address + ":" + str(port) + "/" + suffix
 
     def open_html_page_in_browser(self, url):
         # Open in a new tab, if possible
