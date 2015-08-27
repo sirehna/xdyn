@@ -1,6 +1,7 @@
 $(function() {
     data = [];
-    name = "cube";
+    name = "Anthineas";
+    var_to_plot = "z";
     totalPoints = 300;
     function append(t,x)
     {
@@ -12,7 +13,7 @@ $(function() {
         return data;
     }
 
-    var plot = $.plot($("#graph"), [ data ], { yaxis: { max: 1 }});
+    var plot = $.plot($("#graph"), [ data ] /*, { yaxis: { max: 1 }}*/);
     latest_t = 0;
  
     var gui_elements = ["stlfilechooser", "solver", "outputs", "run_button"];
@@ -83,6 +84,31 @@ $(function() {
         svg.select("#right-chord").transform("t-"+offset+", 0");
     }
 
+    function plot_yaml(yaml_data, ship_name, variable_to_plot)
+    {
+        t = yaml_data['t'];
+        y = yaml_data[variable_to_plot + '(' + ship_name + ')']
+        if (typeof t != 'undefined')
+        {
+                if (t<latest_t)
+                {
+                    data = [];
+                }
+
+                console.log(variable_to_plot + "(" + ship_name + ") = " + y);
+                plot.setData([append(t,y)]);
+                plot.setupGrid();
+                plot.draw();
+                latest_t = t;
+        }
+        if (yaml_data.hasOwnProperty('waves'))
+        {
+            waves = yaml_data['waves'];
+            console.log(base91Float32.decode(waves['z']));
+        }
+    }
+
+
     function register_connection_state(state)
     {
         var s = Snap('#plug');
@@ -110,27 +136,7 @@ $(function() {
         try
         {
             var parsed_message = jsyaml.load(message.data);
-            t = parsed_message['t'];
-            x = parsed_message['x(' + name + ')']
-            y = parsed_message['y(' + name + ')']
-            z = parsed_message['z(' + name + ')']
-            if (typeof t != 'undefined')
-            {
-                    if (t<latest_t)
-                    {
-                        data = [];
-                    }
-                    console.log("z = " + z);
-                    plot.setData([append(t,z)]);
-                    plot.setupGrid();
-                    plot.draw();
-                    latest_t = t;
-            }
-            if (parsed_message.hasOwnProperty('waves'))
-            {
-                waves = parsed_message['waves'];
-                console.log(base91Float32.decode(waves['z']));
-            }
+            plot_yaml(parsed_message, name, var_to_plot);
         }
         catch(err)
         {
