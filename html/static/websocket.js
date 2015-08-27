@@ -14,7 +14,42 @@ $(function() {
 
     var plot = $.plot($("#graph"), [ data ], { yaxis: { max: 1 }});
     latest_t = 0;
-    
+ 
+    var gui_elements = ["stlfilechooser", "solver", "outputs", "run_button"];
+
+    var all = function(list, element, before)
+    {
+        var out = [];
+        var found = false;
+        for (var i = 0 ; i < list.length ; i++)
+        {
+            found = found || (list[i] == element);
+            if (before && !found) out.push(list[i]);
+            if (!before && found && (list[i] != element)) out.push(list[i]);
+        }
+        return out;
+    }
+
+    var hide = function(element)
+    {
+        $('#' + element).css('display', 'none');
+    }
+
+    var show = function(element)
+    {
+        $('#' + element).css('display', 'block');
+    }
+
+    var all_before = function(list, element)
+    {
+        return all(list, element, true);
+    }
+
+    var all_after = function(list, element)
+    {
+        return all(list, element, false);
+    }
+
     $("#yaml_upload").change(function() {
         if(this.files.length)
         {
@@ -29,14 +64,12 @@ $(function() {
                     var mesh = parsed_message['bodies'][0]['mesh'];
                     if (mesh)
                     {
-                        $('#stlfilechooser').css('display', 'block');
+                        show("stlfilechooser");
                     }
                     else
                     {
-                        $('#stlfilechooser').css('display', 'none');
-                        $('#solver').css('display', 'block');
-                        $('#outputs').css('display', 'block');
-                        $('#run_button').css('display', 'block');
+                        hide("stlfilechooser");
+                        $.map(all_after(gui_elements, "stlfilechooser"), show);
                     }
                 }
             };
@@ -45,19 +78,14 @@ $(function() {
         }
         else
         {
-            $('#stlfilechooser').css('display', 'none');
-            $('#solver').css('display', 'block');
-            $('#outputs').css('display', 'block');
-            $('#run_button').css('display', 'block');
+            hide("stlfilechooser");
+            $.map(all_after(gui_elements, "stlfilechooser"), show);
         }
-        $('#yaml_file_name').css('display', 'block');
-        //$('#stepsize').css('display', 'block');
+        show("yaml_file_name");
     });
     
     $("#stl_upload").change(function() {
-        $('#solver').css('display', 'block');
-        $('#outputs').css('display', 'block');
-        $('#run_button').css('display', 'block');
+        $.map(all_after(gui_elements, "stlfilechooser"), show);
     });
 
     
@@ -95,13 +123,8 @@ $(function() {
         set_plug_state(s, state);
     }
 
-    $('#graph').css('display', 'none');
-    $('#filechooser').css('display', 'none');
-    $('#stlfilechooser').css('display', 'none');
-    $('#yaml_file_name').css('display', 'none');
-    $('#run_button').css('display', 'none');
-    $('#solver').css('display', 'none');
-    $('#outputs').css('display', 'none');
+    $.map(gui_elements, hide);
+    hide("graph");
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     var address = $('#websocket_address').html();
     var websocket = new WebSocket(address);
