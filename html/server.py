@@ -93,7 +93,7 @@ class MainHandler(tornado.web.RequestHandler):
             out.append("-o")
             out.append(str(uuid.uuid4()) + ".csv")
         if form.tsv:
-            out.append('-o ')
+            out.append('-o')
             out.append(str(uuid.uuid4()) + '.tsv')
         if form.hdf5:
             out.append('-o')
