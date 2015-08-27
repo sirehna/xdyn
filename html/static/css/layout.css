@@ -1,30 +1,8 @@
 #main {
     margin-left: auto;
     margin-right: auto;
-    width: 70%;
+    width: 100%;
     position: relative;
-}
-
-#graph {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#plug {
-    width: 100pc;
-}
-
-#plug_and_status {
-    position:absolute;
-    top:0;
-    right:0;
-    width: 25%;
-}
-
-#run_button {
-    margin-left: auto;
-    margin-right: 0;
-    width: 7pc;
 }
 
 #filechooser {
@@ -34,20 +12,19 @@
 
 h2 {
     position: relative;
-    /*margin-bottom: -1pc;*/
-    /*top: 1.5pc;*/
 }
 
 h3 {
     position: relative;
     margin-bottom: -1pc;
     margin-top: -1pc;
-    /*top: 1.5pc;*/
 }
 
 
 #title {
     text-align: center;
+    position: relative;
+    top: -2pc;
 }
 
 .lbl {
@@ -55,17 +32,29 @@ h3 {
     top: 0;
 }
 
-#plug {
-    width: 10%;
-    position: relative;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    transform: translateX(-50%);
+#run_button {
+    margin-left: auto;
+    margin-right: auto;
+    width: 7pc;
+    top:2pc;
+    position:relative;
 }
 
-#connection_status {
-    text-align: center;
-    text-transform: uppercase;
+#graph_title {
+    top: 0.6pc;
 }
+
+#graph {
+    margin-left: auto;
+    margin-right: auto;
+    top: 2pc;
+}
+
+#graph_controls {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    top: 1pc;
+}
+
 

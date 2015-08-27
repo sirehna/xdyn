@@ -47,45 +47,15 @@ $(function() {
     $('select').material_select();
     
 
-    function set_plug_state(svg, state)
-    {
-        // Change the color
-        svg.select("#bottom-pin").attr("class", state);
-        svg.select("#left-chord").attr("class", state);
-        svg.select("#top-pin").attr("class", state);
-        svg.select("#left-connector").attr("class", state);
-        svg.select("#right-connector").attr("class", state);
-        svg.select("#right-chord").attr("class", state);
-
-        // Put the two connectors together
-        var offset = 0;
-        if (state == "connected")
-        {
-            offset = 10;
-        }
-        svg.select("#right-connector").transform("t-"+offset+", 0");
-        svg.select("#left-connector").transform("t"+offset+", 0");
-        svg.select("#bottom-pin").transform("t"+offset+", 0");
-        svg.select("#top-pin").transform("t"+offset+", 0");
-        svg.select("#left-chord").transform("t"+offset+", 0");
-        svg.select("#right-chord").transform("t-"+offset+", 0");
-    }
-
-    function register_connection_state(state)
-    {
-        var s = Snap('#plug');
-        $('[id="connection_status"]').html(state);
-        set_plug_state(s, state);
-    }
-
     $.map(gui_elements, hide);
     hide("graph");
+    hide("graph_controls");
+    hide("graph_title");
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     var address = $('#websocket_address').html();
     var websocket = new WebSocket(address);
     websocket.onopen = function () {
         $('h1').css('color', '#1e88e5');
-        register_connection_state("connected");
         show("filechooser");
     };
 
@@ -95,6 +65,8 @@ $(function() {
     };
     websocket.onmessage = function (message) {
         show("graph");
+        show("graph_controls");
+        show("graph_title");
         try
         {
             var parsed_message = jsyaml.load(message.data);
