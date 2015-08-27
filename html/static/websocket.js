@@ -1,5 +1,5 @@
 $(function() {
-    name = "Anthineas";
+    ship_name = "";
     var_to_plot = "z";
     plotter = get_plotter();
 
@@ -13,10 +13,10 @@ $(function() {
             reader.onload = function(e)
             {
                 var parsed_message = jsyaml.load(e.target.result);
-                console.log(parsed_message);
                 if (parsed_message['bodies'])
                 {
                     var mesh = parsed_message['bodies'][0]['mesh'];
+                    ship_name = parsed_message['bodies'][0]['name'];
                     if (mesh)
                     {
                         show("stlfilechooser");
@@ -70,7 +70,7 @@ $(function() {
         try
         {
             var parsed_message = jsyaml.load(message.data);
-            plotter(parsed_message, name, var_to_plot);
+            plotter(parsed_message, ship_name, var_to_plot);
         }
         catch(err)
         {

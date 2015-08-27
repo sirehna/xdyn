@@ -25,8 +25,6 @@ function get_plotter()
                 {
                     data = [];
                 }
-
-                console.log(variable_to_plot + "(" + ship_name + ") = " + y);
                 plot.setData([append(t,y)]);
                 plot.setupGrid();
                 plot.draw();
