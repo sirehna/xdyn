@@ -1,21 +1,8 @@
 $(function() {
-    data = [];
     name = "Anthineas";
     var_to_plot = "z";
-    totalPoints = 300;
-    function append(t,x)
-    {
-        if (data.length == totalPoints)
-        {
-            data = data.slice(1);
-        }
-        data.push([t,x]);
-        return data;
-    }
+    plotter = get_plotter();
 
-    var plot = $.plot($("#graph"), [ data ] /*, { yaxis: { max: 1 }}*/);
-    latest_t = 0;
- 
     var gui_elements = ["stlfilechooser", "solver", "outputs", "run_button"];
 
     $("#yaml_upload").change(function() {
@@ -84,31 +71,6 @@ $(function() {
         svg.select("#right-chord").transform("t-"+offset+", 0");
     }
 
-    function plot_yaml(yaml_data, ship_name, variable_to_plot)
-    {
-        t = yaml_data['t'];
-        y = yaml_data[variable_to_plot + '(' + ship_name + ')']
-        if (typeof t != 'undefined')
-        {
-                if (t<latest_t)
-                {
-                    data = [];
-                }
-
-                console.log(variable_to_plot + "(" + ship_name + ") = " + y);
-                plot.setData([append(t,y)]);
-                plot.setupGrid();
-                plot.draw();
-                latest_t = t;
-        }
-        if (yaml_data.hasOwnProperty('waves'))
-        {
-            waves = yaml_data['waves'];
-            console.log(base91Float32.decode(waves['z']));
-        }
-    }
-
-
     function register_connection_state(state)
     {
         var s = Snap('#plug');
@@ -136,7 +98,7 @@ $(function() {
         try
         {
             var parsed_message = jsyaml.load(message.data);
-            plot_yaml(parsed_message, name, var_to_plot);
+            plotter(parsed_message, name, var_to_plot);
         }
         catch(err)
         {
