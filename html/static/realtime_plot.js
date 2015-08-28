@@ -2,16 +2,6 @@
 function get_plotter()
 {
     totalPoints = 300;
-    data = [];
-    function append(t,x)
-    {
-        if (data.length == totalPoints)
-        {
-            data = data.slice(1);
-        }
-        data.push([t,x]);
-        return data;
-    }
     var dd = {};
 
     function create_dataset(yaml,variable)
@@ -56,7 +46,6 @@ function get_plotter()
         {
                 if (t<latest_t)
                 {
-                    data = [];
                     dd = {};
                 }
                 dd = apnd(yaml_data)
