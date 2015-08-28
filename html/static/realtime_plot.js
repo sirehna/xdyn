@@ -9,7 +9,7 @@ function get_plotter()
         return {label: variable, data: [[t, yaml[variable]]]};
     }
 
-    function apnd(yaml)
+    function append(yaml)
     {
         var t = yaml['t'];
         $.each(yaml, function(key, val)
@@ -48,7 +48,7 @@ function get_plotter()
                 {
                     dd = {};
                 }
-                dd = apnd(yaml_data)
+                dd = append(yaml_data)
                 var D = dd['z(Anthineas)'];
                 D.color = 1;
                  $.plot($("#graph"), [D]);
