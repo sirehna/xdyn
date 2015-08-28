@@ -49,7 +49,6 @@ $(function() {
 
     $.map(gui_elements, hide);
     hide("graph");
-    hide("graph_controls");
     hide("graph_title");
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     var address = $('#websocket_address').html();
@@ -65,7 +64,6 @@ $(function() {
     };
     websocket.onmessage = function (message) {
         show("graph");
-        show("graph_controls");
         show("graph_title");
         try
         {
