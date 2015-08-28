@@ -2,7 +2,7 @@
 function get_plotter()
 {
     totalPoints = 300;
-    var dd = {};
+    var full_plot_data = {};
 
     function create_dataset(yaml,variable)
     {
@@ -17,13 +17,13 @@ function get_plotter()
                      try{
                         if (key != 't')
                         {
-                            if (dd[key])
+                            if (full_plot_data[key])
                             {
-                                dd[key]["data"].push([t,val]);
+                                full_plot_data[key]["data"].push([t,val]);
                             }
                             else
                             {
-                                dd[key] = create_dataset(yaml,key);
+                                full_plot_data[key] = create_dataset(yaml,key);
                             }
                         }
                         }
@@ -32,11 +32,11 @@ function get_plotter()
                             console.log(err);
                         }
                      });
-        return dd;
+        return full_plot_data;
     }
 
 
-    var plot = $.plot($("#graph"), dd);
+    var plot = $.plot($("#graph"), full_plot_data);
     latest_t = 0;
     var f = function plot_yaml(yaml_data, ship_name, variable_to_plot)
     {
@@ -46,12 +46,12 @@ function get_plotter()
         {
                 if (t<latest_t)
                 {
-                    dd = {};
+                    full_plot_data = {};
                 }
-                dd = append(yaml_data)
-                var D = dd['z(Anthineas)'];
-                D.color = 1;
-                 $.plot($("#graph"), [D]);
+                full_plot_data = append(yaml_data)
+                var selected_data_to_plot = full_plot_data['z(Anthineas)'];
+                selected_data_to_plot.color = 1;
+                $.plot($("#graph"), [selected_data_to_plot]);
                 latest_t = t;
         }
         if (yaml_data.hasOwnProperty('waves'))
