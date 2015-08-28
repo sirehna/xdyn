@@ -38,11 +38,17 @@ function get_plotter()
 
     var plot = $.plot($("#graph"), full_plot_data);
     latest_t = 0;
+
+    function data_was_received_from_websocket_at_this_instant(t)
+    {
+        return (typeof t != 'undefined');
+    }
+
     var f = function plot_yaml(yaml_data, ship_name, variable_to_plot)
     {
         t = yaml_data['t'];
         y = yaml_data[variable_to_plot + '(' + ship_name + ')']
-        if (typeof t != 'undefined')
+        if (data_was_received_from_websocket_at_this_instant(t))
         {
                 if (t<latest_t)
                 {
