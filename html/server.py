@@ -9,6 +9,7 @@ import types
 import uuid
 import webbrowser
 import subprocess
+import yaml
 
 def get_ip():
     import socket
@@ -51,11 +52,12 @@ class ClientTracker:
 
 
 class MainHandler(tornado.web.RequestHandler):
-    def initialize(self, websocket_url):
-        self.url = websocket_url
+    def initialize(self, websocket_url, main_url):
+        self.websocket_url = websocket_url
+        self.main_url = main_url
 
     def get(self):
-        self.render("websocket_test.html", websocket_address=self.url)
+        self.render("websocket_test.html", websocket_address=self.websocket_url)
 
     def upload_file(self, key):
         if key in self.request.files:
@@ -75,10 +77,21 @@ class MainHandler(tornado.web.RequestHandler):
             return self.request.arguments[key]
         return False
 
+    def modify_yaml(self, form):
+        with open(form.yaml, 'r') as stream:
+            tree = yaml.load(stream)
+        if 'bodies' in tree:
+           if 'mesh' in tree['bodies'][0]: 
+                original_mesh_file = tree['bodies'][0]['mesh']
+                if original_mesh_file and form.stl:
+                    tree['bodies'][0]['mesh'] = form.stl
+        modified_yaml_file = open(form.yaml, 'w')
+        yaml.dump(tree, modified_yaml_file, default_flow_style=False)
+
     def get_form_contents(self):
         form = types.SimpleNamespace()
         form.yaml   = self.upload_file('yaml_file')
-        form.stl    = self.upload_file('stl_file')
+        form.stl    = self.upload_file('stl_file') 
         form.solver = self.get_body_argument('solver')
         form.dt     = float(self.get_body_argument('dt'))
         form.T      = float(self.get_body_argument('T'))
@@ -88,28 +101,15 @@ class MainHandler(tornado.web.RequestHandler):
         return form
 
     def build_command_line(self, form):
-        out = ['sim', str(form.yaml), '--dt', str(form.dt),  '--tend', str(form.T), '-s', form.solver]
-        if form.csv:
-            out.append("-o")
-            out.append(str(uuid.uuid4()) + ".csv")
-        if form.tsv:
-            out.append('-o')
-            out.append(str(uuid.uuid4()) + '.tsv')
-        if form.hdf5:
-            out.append('-o')
-            out.append(str(uuid.uuid4()) + '.h5')
+        out = ['sim', str(form.yaml), '--dt', str(form.dt),  '--tend', str(form.T), '-s', form.solver, '-o',self.websocket_url]
         return out
 
     def post(self):
         form = self.get_form_contents()
-        print(form)
+        self.modify_yaml(form)
         command_line = self.build_command_line(form)
-        print(command_line)
-        subprocess.call(command_line)
-        self.render("websocket_test.html", websocket_address=self.url)
-
-
-
+        proc = subprocess.Popen(command_line)
+        print("the commandline is {}".format(proc.args))
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
@@ -142,7 +142,7 @@ class SimulatorGUI:
             # unfrozen
             dir_ = os.path.dirname(__file__)
         handlers = [
-            (r"/" + suffix, MainHandler, dict(websocket_url = self.websocket_url)),
+            (r"/" + suffix, MainHandler, dict(websocket_url = self.websocket_url, main_url = address)),
             (r"/", WebSocketHandler, dict(client_tracker = self.client_tracker)),
         ]
         settings = {

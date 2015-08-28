@@ -6,10 +6,11 @@
         <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css"  media="screen,projection"/>
         <link rel="stylesheet" type="text/css" href="static/css/fonts.css"/>
         <link rel="stylesheet" type="text/css" href="static/css/layout.css"/>
-        <!--<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700"/>-->
         <script type="text/javascript" src="static/third_party/jquery-2.1.4.min.js"></script>
         <script type="text/javascript" src="static/third_party/js-yaml.min.js"></script>
+        <script type="text/javascript" src="static/third_party/rainbowvis.js"></script>
         <script type="text/javascript" src="static/third_party/flot/jquery.flot.js"></script>
+        <script type="text/javascript" src="static/third_party/jquery.color.js"></script>
         <script type="text/javascript" src="static/third_party/snap.svg-min.js"></script>
         <script type="text/javascript" src="static/third_party/base91/base91Float32.js"></script>
         <script type="text/javascript" src="static/js/materialize.min.js"></script>
@@ -80,18 +81,18 @@
                         <label for="output-hdf5">HDF5 (binary format)</label>
                         </p>
                     </div>
-                </form>
-
-            </div>
-            <div class="col s6" id="output">
                 <!--Run button-->
                 <div id="run_button">
                     <button class="btn waves-effect blue" type="submit" name="action">Run
                     </button>
                 </div>
+                </form>
+            </div>
+            <div class="col s6" id="output">
                 <h2 id="graph_title">Plots</h2>
                 <div id="graph" style="height:300px"></div>
-                <p id="legend"></p>
+                    <div id="plot_selector" class="col s3"></div>
+                </div>
             </div>
         </div>
     </body>

@@ -50,3 +50,13 @@ h3 {
     top: 2pc;
 }
 
+#plot_selector {
+    position:relative;
+    top: 5pc;
+    left: auto;
+    right: auto;
+}
+
+label {
+    color: #000000;
+}

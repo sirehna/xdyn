@@ -1,9 +1,26 @@
 $(function() {
     ship_name = "";
     var_to_plot = "z";
-    plotter = get_plotter();
-
+    var plotter = get_plotter();
+    var Tmax = 0;
     var gui_elements = ["stlfilechooser", "solver", "outputs", "run_button"];
+
+$('form#filechooser').submit(function(event) {
+    event.preventDefault(); // Otherwise it reloads the page
+    url = $(this).attr( 'action' );
+    var formData = new FormData($(this)[0]);
+    Tmax = $('#durationduration').val();
+    /* Send the data using ajax */
+    $.ajax(
+    {
+        url: url,
+        data:formData,
+        type:'POST',
+    processData: false, contentType: false
+    }
+);
+
+});
 
     $("#yaml_upload").change(function() {
         if(this.files.length)

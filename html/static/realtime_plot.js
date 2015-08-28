@@ -1,20 +1,33 @@
 
 function get_plotter()
 {
+    var latest_t = 0;
     totalPoints = 300;
     var full_plot_data = {};
+    var number_of_different_colors = 20;
 
-    function create_dataset(yaml,variable)
+    function idx2color(i)
     {
-        return {label: variable, data: [[t, yaml[variable]]]};
+        return jQuery.Color({ hue: (i*200/number_of_different_colors), saturation: 0.95, lightness: 0.35, alpha: 1 }).toHexString();
+    }
+
+    function create_dataset(yaml,variable,col)
+    {
+        var hex_color = idx2color(col);
+        return {label: variable, data: [[t, yaml[variable]]], color: hex_color};
     }
 
     function append(yaml)
     {
         var t = yaml['t'];
+        var col = 0;
+        if (t < latest_t)
+        {
+            latest_t = 0;
+            full_plot_data = {};
+        }
         $.each(yaml, function(key, val)
                      {
-                     try{
                         if (key != 't')
                         {
                             if (full_plot_data[key])
@@ -23,15 +36,12 @@ function get_plotter()
                             }
                             else
                             {
-                                full_plot_data[key] = create_dataset(yaml,key);
+                                full_plot_data[key] = create_dataset(yaml,key,col);
+                                col++;
                             }
                         }
-                        }
-                        catch(err)
-                        {
-                            console.log(err);
-                        }
                      });
+        latest_t = t;
         return full_plot_data;
     }
 
@@ -43,24 +53,29 @@ function get_plotter()
         return (typeof t != 'undefined');
     }
 
-    var legend_container = $("#legend");
+    var plot_selector_container = $("#plot_selector");
     function insert_checkboxes()
     {
+        var i = 0;
         $.each(full_plot_data, function(key, val) {
-        legend_container.append("<br/>" +
-                                "<input type='checkbox' name='" + key + "' checked='checked' id='id" + key + "'></input>" +
-                                "<label for='id" + key + "'>" + val.label + "</label>");
+        plot_selector_container.append("<div style='font-color: black; background-color: " + idx2color(i) + ";'>" +
+                                "<input type='checkbox' name='" + key + "' checked='checked' id='id" + key + "' style=></input>" +
+                                "<label for='id" + key + "'>" + val.label + "</label></div>");
+        i++;
         });
-        legend_container.find("input").click(plot_selected_curves);
+        plot_selector_container.find("input").click(plot_selected_curves);
     }
-
 
     function plot_selected_curves()
     {
+        plot_options = {
+                            legend: {show: true, container: '#legend_container'},
+                            series: {shadowSize: 0}
+                       };
 
         var selected_data_to_plot = [];
 
-        legend_container.find("input:checked").each(function ()
+        plot_selector_container.find("input:checked").each(function ()
                                                     {
                                                         var key = $(this).attr("name");
                                                         if (key && full_plot_data[key]) selected_data_to_plot.push(full_plot_data[key]);
@@ -68,7 +83,7 @@ function get_plotter()
 
         if (selected_data_to_plot.length > 0)
         {
-            $.plot($("#graph"), selected_data_to_plot);
+            $.plot($("#graph"), selected_data_to_plot, plot_options);
         }
     }
 
