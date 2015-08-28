@@ -37,7 +37,6 @@ function get_plotter()
 
 
     var plot = $.plot($("#graph"), full_plot_data);
-    latest_t = 0;
 
     function data_was_received_from_websocket_at_this_instant(t)
     {
@@ -50,15 +49,10 @@ function get_plotter()
         y = yaml_data[variable_to_plot + '(' + ship_name + ')']
         if (data_was_received_from_websocket_at_this_instant(t))
         {
-                if (t<latest_t)
-                {
-                    full_plot_data = {};
-                }
                 full_plot_data = append(yaml_data)
                 var selected_data_to_plot = full_plot_data['z(Anthineas)'];
                 selected_data_to_plot.color = 1;
                 $.plot($("#graph"), [selected_data_to_plot]);
-                latest_t = t;
         }
         if (yaml_data.hasOwnProperty('waves'))
         {
