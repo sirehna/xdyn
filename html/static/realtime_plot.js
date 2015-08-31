@@ -4,7 +4,7 @@ function get_plotter()
     var latest_t = 0;
     totalPoints = 300;
     var full_plot_data = {};
-    var number_of_different_colors = 20;
+    var number_of_different_colors = 13;
 
     function idx2color(i)
     {
