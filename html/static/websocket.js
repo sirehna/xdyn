@@ -1,3 +1,4 @@
+
 $(function() {
     ship_name = "";
     var_to_plot = "z";
@@ -61,9 +62,6 @@ $('form#filechooser').submit(function(event) {
     });
 
     
-    $('select').material_select();
-    
-
     $.map(gui_elements, hide);
     hide("graph");
     hide("graph_title");

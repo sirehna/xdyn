@@ -2,18 +2,23 @@
 <html>
     <head>
         <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Websocket Test</title>
-        <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css"  media="screen,projection"/>
+        <link href="static/css/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="static/css/jasny-bootstrap/css/jasny-bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" type="text/css" href="static/css/fonts.css"/>
         <link rel="stylesheet" type="text/css" href="static/css/layout.css"/>
+        <link rel="stylesheet" type="text/css" href="static/css/custom_widgets.css"/>
         <script type="text/javascript" src="static/third_party/jquery-2.1.4.min.js"></script>
         <script type="text/javascript" src="static/third_party/js-yaml.min.js"></script>
-        <script type="text/javascript" src="static/third_party/rainbowvis.js"></script>
         <script type="text/javascript" src="static/third_party/flot/jquery.flot.js"></script>
         <script type="text/javascript" src="static/third_party/jquery.color.js"></script>
         <script type="text/javascript" src="static/third_party/snap.svg-min.js"></script>
         <script type="text/javascript" src="static/third_party/base91/base91Float32.js"></script>
-        <script type="text/javascript" src="static/js/materialize.min.js"></script>
+        <script type="text/javascript" src="static/css/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<!--        <script type="text/javascript" src="static/css/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>-->
         <script type="text/javascript" src="static/utilities_for_list_of_gui_elements.js"></script>
         <script type="text/javascript" src="static/realtime_plot.js"></script>
         <script type="text/javascript" src="static/websocket.js"></script>
@@ -23,75 +28,75 @@
 
     <body>
         <div id="websocket_address" style="display: none;">{{ websocket_address }}</div>
-        <div id="main" class="row">
-            <div id="title"><h1>Ship Simulator</h1></div>
-            <div class="col s6">
+        <div id="title">
+            <h1>Ship Simulator</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 <form id="filechooser" method="POST" enctype="multipart/form-data">
                     <h2>Models &amp; configuration</h2>
                     <!--YAML file selector-->
-                    <div id="yamlfilechooser">
-                        <div class="file-field input-field">
-                            <input class="file-path validate" ID="yaml_file_name" type="text"/><br/>
-                            <div class="btn blue darken-1">
-                                <span>YAML</span>
-                                <input type="file" ID="yaml_upload" name="yaml_file"/>
-                            </div>
-                        </div>
+                    <div id='yamlfilechooser' class="fileinput fileinput-new" data-provides="fileinput">
+                        <span class="btn btn-primary btn-file">
+                            <span class="fileinput-new">Choose YAML file</span>
+                            <span class="fileinput-exists">YAML</span>
+                            <input type="file" name="yaml_file" id="yaml_upload"/>
+                        </span>
+                        <span class="fileinput-filename"></span>
                     </div>
                     <!--STL file selector-->
-                    <div id="stlfilechooser">
-                        <div class="file-field input-field">
-                            <input class="file-path validate" ID="stl_file_name" type="text"/><br/>
-                            <div class="btn blue darken-1" id="stl_button">
-                                <span>STL</span>
-                                <input type="file" ID="stl_upload" name="stl_file"/>
-                            </div>
-                        </div>
+                    <div id='stlfilechooser' class="fileinput fileinput-new" data-provides="fileinput">
+                        <span class="btn btn-primary btn-file">
+                            <span class="fileinput-new">Choose STL file</span>
+                            <span class="fileinput-exists">STL</span>
+                            <input type="file" name="stl_file" id="stl_upload"/>
+                        </span>
+                        <span class="fileinput-filename"></span>
                     </div>
-                    
                     
                     <!--Solver-->
                     <div id="solver">
                         <h2>Simulation</h2>
-                            <h3>Solver</h3>
-                            <select ID="solver_chooser" name="solver" type="text">
-                                <option value="euler">Euler</option>
-                                <option value="rk4">Runge-Kutta 4</option>
-                                <option value="rkck">Runge-Kutta-Cash-Karp</option>
-                            </select>
-                            <h3>Time step (in seconds)</h3>
-                            <input value="0.1" id="stepstep" name="dt" type="number" min="0" step="any" class="validate">
-                            <h3>Duration (in seconds)</h3>
-                            <input value="10" id="durationduration" name="T" type="number" min="0" step="any" class="validate">
+                        <h3>Solver</h3>
+                        <select class="form-control" ID="solver_chooser" name="solver" type="text">
+                            <option value="euler">Euler</option>
+                            <option value="rk4">Runge-Kutta 4</option>
+                            <option value="rkck">Runge-Kutta-Cash-Karp</option>
+                        </select>
+                        <h3>Time step (in seconds)</h3>
+                        <input class="form-control" value="0.1" id="stepstep" name="dt" type="number" min="0" step="any" class="validate">
+                        <h3>Duration (in seconds)</h3>
+                        <input class="form-control" value="10" id="durationduration" name="T" type="number" min="0" step="any" class="validate"/>
                     </div>
 
                     <!--Outputs-->
                     <div id="outputs">
                         <h2>Outputs</h2>
                         <p>
-                        <input type="checkbox" class="filled-in" id="output-csv" name="csv"/>
-                        <label for="output-csv">CSV (comma-separated values)</label>
+                            <input type="checkbox" class="filled-in" id="output-csv" name="csv"/>
+                            <label for="output-csv">CSV (comma-separated values)</label>
                         </p>
                         <p>
-                        <input type="checkbox" class="filled-in" id="output-tsv" name="tsv"/>
-                        <label for="output-tsv">TSV (tab-separated values)</label>
+                            <input type="checkbox" class="filled-in" id="output-tsv" name="tsv"/>
+                            <label for="output-tsv">TSV (tab-separated values)</label>
                         </p>
                         <p>
-                        <input type="checkbox" class="filled-in" id="output-hdf5" name="hdf5"/>
-                        <label for="output-hdf5">HDF5 (binary format)</label>
+                            <input type="checkbox" class="filled-in" id="output-hdf5" name="hdf5"/>
+                            <label for="output-hdf5">HDF5 (binary format)</label>
                         </p>
                     </div>
-                <!--Run button-->
-                <div id="run_button">
-                    <button class="btn waves-effect blue" type="submit" name="action">Run
-                    </button>
-                </div>
+                    <!--Run button-->
+                    <div id="run_button">
+                        <button class="btn btn-success" type="submit" name="action">Run
+                        </button>
+                    </div>
                 </form>
             </div>
-            <div class="col s6" id="output">
+           
+            <div id="output" class="col-md-8">
                 <h2 id="graph_title">Plots</h2>
                 <div id="graph" style="height:300px"></div>
-                    <div id="plot_selector" class="col s3"></div>
+                    <div id="plot_selector"></div>
                 </div>
             </div>
         </div>

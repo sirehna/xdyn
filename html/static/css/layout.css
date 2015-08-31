@@ -1,10 +1,11 @@
+
 #main {
     margin-left: auto;
     margin-right: auto;
     width: 100%;
     position: relative;
 }
-
+/*
 #filechooser {
     position: relative;
     top: 3pc;
@@ -19,7 +20,7 @@ h3 {
     margin-bottom: -1pc;
     margin-top: -1pc;
 }
-
+*/
 
 #title {
     text-align: center;
@@ -60,3 +61,4 @@ h3 {
 label {
     color: #000000;
 }
+
