@@ -23,6 +23,10 @@
     width: 5em;
 }
 
+#outputs {
+    width: 15em;
+}
+
 #graph_title {
     top: 0.6pc;
 }
