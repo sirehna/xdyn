@@ -10,6 +10,8 @@ $('form#filechooser').submit(function(event) {
     event.preventDefault(); // Otherwise it reloads the page
     url = $(this).attr( 'action' );
     var formData = new FormData($(this)[0]);
+    var solver = $('#solver input:radio:checked').val();
+    formData.append("solver", solver);
     Tmax = $('#durationduration').val();
     /* Send the data using ajax */
     $.ajax(

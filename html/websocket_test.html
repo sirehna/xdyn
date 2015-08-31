@@ -57,11 +57,18 @@
                     <div id="solver">
                         <h2>Simulation</h2>
                         <h3>Solver</h3>
-                        <select class="form-control" ID="solver_chooser" name="solver" type="text">
-                            <option value="euler">Euler</option>
-                            <option value="rk4">Runge-Kutta 4</option>
-                            <option value="rkck">Runge-Kutta-Cash-Karp</option>
-                        </select>
+                        <div class="btn-group" id='solver' data-toggle="buttons">
+                        <label class="btn btn-primary active">
+                            <input type="radio" value="euler" autocomplete="off"/> Euler
+                        </label>
+                        <label class="btn btn-primary">
+                            <input type="radio" value="rk4" autocomplete="off"/> Runge-Kutta 4
+                        </label>
+                        <label class="btn btn-primary">
+                            <input type="radio" value="rkck" autocomplete="off"/> Runge-Kutta-Cash-Karp
+                        </label>
+
+                    </div>
                         <h3>Time step (in seconds)</h3>
                         <input class="form-control" value="0.1" id="stepstep" name="dt" type="number" min="0" step="any" class="validate">
                         <h3>Duration (in seconds)</h3>
