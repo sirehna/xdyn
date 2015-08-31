@@ -25,7 +25,6 @@ h3 {
 #title {
     text-align: center;
     position: relative;
-    top: -2pc;
 }
 
 .lbl {
@@ -48,14 +47,13 @@ h3 {
 #graph {
     margin-left: auto;
     margin-right: auto;
-    top: 2pc;
 }
 
 #plot_selector {
     position:relative;
-    top: 5pc;
-    left: auto;
-    right: auto;
+    width: 10pc;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 label {
