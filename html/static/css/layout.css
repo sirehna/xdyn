@@ -17,11 +17,10 @@
 }
 
 #run_button {
+    position: relative;
+    margin-right: 0;
     margin-left: auto;
-    margin-right: auto;
-    width: 7pc;
-    top:2pc;
-    position:relative;
+    width: 5em;
 }
 
 #graph_title {
