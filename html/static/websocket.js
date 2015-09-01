@@ -25,14 +25,6 @@ $('form#filechooser').submit(function(event) {
         type:'POST',
         processData: false,
         contentType: false,
-        success: function (jsonResponse) {
-                                var objresponse = JSON.parse(jsonResponse);
-                                console.log(objresponse['newkey']);
-                                $("#output-files").text(objresponse['newkey']);
-                            },
-        error: function () {
-            $("#output-files").text("Error");
-        }
     }
 );
 
