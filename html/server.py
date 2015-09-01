@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import json
 import os
 import sys
 import tornado.web
@@ -93,6 +94,7 @@ class MainHandler(tornado.web.RequestHandler):
         form.yaml   = self.upload_file('yaml_file')
         form.stl    = self.upload_file('stl_file') 
         form.solver = self.get_body_argument('solver')
+        form.outputs= self.get_body_argument('outputs')
         form.dt     = float(self.get_body_argument('dt'))
         form.T      = float(self.get_body_argument('T'))
         form.csv    = self.get_checkbox('csv')
@@ -110,6 +112,11 @@ class MainHandler(tornado.web.RequestHandler):
         command_line = self.build_command_line(form)
         proc = subprocess.Popen(command_line)
         print("the commandline is {}".format(proc.args))
+        # new dictionary
+        response_to_send = {}
+        response_to_send['newkey'] = form.outputs
+        print("response_to_send: " + str(response_to_send))
+        self.write(json.dumps(response_to_send))
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):

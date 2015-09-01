@@ -1,4 +1,3 @@
-
 $(function() {
     ship_name = "";
     var_to_plot = "z";
@@ -12,6 +11,11 @@ $('form#filechooser').submit(function(event) {
     var formData = new FormData($(this)[0]);
     var solver = $('#solver input:radio:checked').val();
     formData.append("solver", solver);
+
+    var outputs = $('#outputs input:checkbox:checked').map(function() {
+        return this.value;
+    }).get();
+    formData.append("outputs", outputs);
     Tmax = $('#durationduration').val();
     /* Send the data using ajax */
     $.ajax(
@@ -19,7 +23,16 @@ $('form#filechooser').submit(function(event) {
         url: url,
         data:formData,
         type:'POST',
-    processData: false, contentType: false
+        processData: false,
+        contentType: false,
+        success: function (jsonResponse) {
+                                var objresponse = JSON.parse(jsonResponse);
+                                console.log(objresponse['newkey']);
+                                $("#output-files").text(objresponse['newkey']);
+                            },
+        error: function () {
+            $("#output-files").text("Error");
+        }
     }
 );
 
