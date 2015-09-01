@@ -78,6 +78,7 @@ def make_list_of_things_to_output(body, outputs):
             'position': ['x', 'y', 'z'],
             'attitude': ['phi', 'theta', 'psi'],
             'speed': ['u', 'v', 'w'],
+            'quaternions': ['qr', 'qi', 'qj', 'qk'],
             'rotational-speed': ['p', 'q', 'r']
             }
     for output in outputs:
