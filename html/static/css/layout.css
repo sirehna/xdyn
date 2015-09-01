@@ -27,6 +27,10 @@
     width: 10em;
 }
 
+#output {
+    top: 3em;
+}
+
 #graph {
     margin-left: auto;
     margin-right: auto;
