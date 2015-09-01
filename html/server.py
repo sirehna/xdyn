@@ -170,7 +170,6 @@ class MainHandler(tornado.web.RequestHandler):
         modify_yaml(form, self.main_url, self.port)
         command_line = self.build_command_line(form)
         proc = subprocess.Popen(command_line)
-        print("the commandline is {}".format(proc.args))
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
