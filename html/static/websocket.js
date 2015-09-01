@@ -6,6 +6,7 @@ $(function() {
     var gui_elements = ["stlfilechooser", "solver", "outputs", "run_button"];
 
 $('form#filechooser').submit(function(event) {
+    hide('results');
     event.preventDefault(); // Otherwise it reloads the page
     url = $(this).attr( 'action' );
     var formData = new FormData($(this)[0]);
@@ -26,6 +27,7 @@ $('form#filechooser').submit(function(event) {
         type:'POST',
         processData: false,
         contentType: false,
+        success: function () {show('results');}
     }
 );
 
@@ -73,6 +75,7 @@ $('form#filechooser').submit(function(event) {
     $.map(gui_elements, hide);
     hide("graph");
     hide("graph_title");
+    hide("results");
     window.WebSocket = window.WebSocket || window.MozWebSocket;
     var address = $('#websocket_address').html();
     var websocket = new WebSocket(address);

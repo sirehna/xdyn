@@ -60,7 +60,12 @@ def modify_stl(tree, stl_from_form):
                 tree['bodies'][0]['mesh'] = stl_from_form
     return tree;
 
-def make_output_section(list_of_things_to_output, address, port):
+def make_output_section(list_of_things_to_output, type_of_output):
+    return {'format': type_of_output,
+            'filename': 'out.' + type_of_output,
+            'data': ['t'] + list_of_things_to_output}
+
+def make_ws_output_section(list_of_things_to_output, address, port):
     return {'format': 'ws',
             'address': address,
             'port': port,
@@ -100,7 +105,11 @@ def get_body_names(tree):
 def modify_outputs(tree, outputs, address, port):
     bodies = get_body_names(tree)
     list_of_things_to_output = make_list_of_things_to_output_for_all_bodies(bodies, outputs)
-    tree['output'] = [make_output_section(list_of_things_to_output, address, port)]
+    output_section = [make_ws_output_section(list_of_things_to_output, address, port)]
+    everything = make_list_of_things_to_output_for_all_bodies(bodies, ['position', 'attitude', 'speed', 'quaternions', 'rotational-speed'])
+    output_section.append(make_output_section(everything, 'hdf5'))
+    output_section.append(make_output_section(everything, 'csv'))
+    tree['output'] = output_section
     return tree
 
 def modify_yaml(form, address, port):
@@ -144,7 +153,7 @@ class MainHandler(tornado.web.RequestHandler):
         form.yaml    = self.upload_file('yaml_file')
         form.stl     = self.upload_file('stl_file') 
         form.solver  = self.get_body_argument('solver')
-        form.outputs = self.get_body_argument('outputs').split(',')
+        form.outputs = filter(None,self.get_body_argument('outputs').split(','))
         form.dt      = float(self.get_body_argument('dt'))
         form.T       = float(self.get_body_argument('T'))
         form.csv     = self.get_checkbox('csv')
@@ -195,6 +204,7 @@ class SimulatorGUI:
         handlers = [
             (r"/" + suffix, MainHandler, dict(main_url = address, port = port)),
             (r"/", WebSocketHandler, dict(client_tracker = self.client_tracker)),
+            (r'/outputs/(.*)', tornado.web.StaticFileHandler, {'path': dir_})
         ]
         settings = {
              "static_path": os.path.join(os.path.dirname(dir_), "static"),
