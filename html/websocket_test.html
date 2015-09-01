@@ -75,7 +75,7 @@
                     </div>
 
                     <!--Outputs-->
-                    <h2>Outputs</h2>
+                    <h2>Plots</h2>
                     <div class="btn-group-vertical" id='outputs' data-toggle="buttons">
                         <label class="btn btn-default">
                             <input type="checkbox" value="position" autocomplete="off"/> Position
@@ -102,12 +102,12 @@
             </div>
            
             <div id="output" class="col-md-8">
-                <h2 id="graph_title">Plots</h2>
                 <div id="graph" style="height:300px"></div>
                 <div id="plot_selector"></div>
                 <div id="results">
-                <a href="outputs/out.csv">CSV</a>
-                <a href="outputs/out.hdf5">HDF5</a>
+                <h2>Results</h2>
+                    <a href="outputs/out.csv" class="btn btn-success"><span class="glyphicon glyphicon-download"></span> CSV</a>
+                    <a href="outputs/out.hdf5" class="btn btn-success"><span class="glyphicon glyphicon-download"></span> HDF5</a>
                 </div>
             </div>
         </div>
