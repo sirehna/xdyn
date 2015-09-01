@@ -12,9 +12,10 @@ $('form#filechooser').submit(function(event) {
     var solver = $('#solver input:radio:checked').val();
     formData.append("solver", solver);
 
-    var outputs = $('#outputs input:checkbox:checked').map(function() {
-        return this.value;
-    }).get();
+    var outputs = [];
+    $('#outputs input:checkbox:checked').map(function() {
+        outputs.push(this.value);
+    });
     formData.append("outputs", outputs);
     Tmax = $('#durationduration').val();
     /* Send the data using ajax */

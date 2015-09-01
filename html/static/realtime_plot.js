@@ -57,6 +57,7 @@ function get_plotter()
     function insert_checkboxes()
     {
         var i = 0;
+        plot_selector_container.empty();
         $.each(full_plot_data, function(key, val) {
         plot_selector_container.append("<div style='font-color: black; background-color: " + idx2color(i) + ";'>" +
                                 "<input type='checkbox' name='" + key + "' checked='checked' id='id" + key + "' style=></input>" +
@@ -92,7 +93,7 @@ function get_plotter()
     var t = NaN;
     var f = function plot_yaml(yaml_data, ship_name, variable_to_plot)
     {
-        var first_run = isNaN(t);
+        var first_run = isNaN(t) || yaml_data['t']<t;
         t = yaml_data['t'];
         y = yaml_data[variable_to_plot + '(' + ship_name + ')']
         if (data_was_received_from_websocket_at_this_instant(t))

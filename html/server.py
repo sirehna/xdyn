@@ -60,17 +60,61 @@ def modify_stl(tree, stl_from_form):
                 tree['bodies'][0]['mesh'] = stl_from_form
     return tree;
 
-def modify_yaml(form):
+def make_output_section(list_of_things_to_output, address, port):
+    return {'format': 'ws',
+            'address': address,
+            'port': port,
+            'data': ['t'] + list_of_things_to_output}
+
+def personalize(states, body):
+    L = []
+    for state in states:
+        L.append(state + '(' + body + ')')
+    return L
+
+def make_list_of_things_to_output(body, outputs):
+    L = []
+    output2states = {
+            'position': ['x', 'y', 'z'],
+            'attitude': ['phi', 'theta', 'psi'],
+            'speed': ['u', 'v', 'w'],
+            'rotational-speed': ['p', 'q', 'r']
+            }
+    for output in outputs:
+        L.extend(personalize(output2states[output], body))
+    return L
+        
+def make_list_of_things_to_output_for_all_bodies(bodies, outputs):
+    L = []
+    for body in bodies:
+        L.extend(make_list_of_things_to_output(body, outputs))
+    return L
+
+def get_body_names(tree):
+    names = []
+    if 'bodies' in tree:
+        names.append(tree['bodies'][0]['name'])
+    return names
+
+def modify_outputs(tree, outputs, address, port):
+    bodies = get_body_names(tree)
+    list_of_things_to_output = make_list_of_things_to_output_for_all_bodies(bodies, outputs)
+    tree['output'] = [make_output_section(list_of_things_to_output, address, port)]
+    return tree
+
+def modify_yaml(form, address, port):
     with open(form.yaml, 'r') as stream:
         tree = yaml.load(stream)
     modified_yaml_file = open(form.yaml, 'w')
     tree = modify_stl(tree, form.stl)
+    tree = modify_outputs(tree, form.outputs, address, port)
     yaml.dump(tree, modified_yaml_file, default_flow_style=False)
 
 
 class MainHandler(tornado.web.RequestHandler):
-    def initialize(self, websocket_url, main_url):
-        self.websocket_url = websocket_url
+    def initialize(self, main_url, port):
+        self.port = port
+        self.websocket_url = main_url.replace("http", "ws") + ":" + str(port)
         self.main_url = main_url
 
     def get(self):
@@ -99,7 +143,7 @@ class MainHandler(tornado.web.RequestHandler):
         form.yaml    = self.upload_file('yaml_file')
         form.stl     = self.upload_file('stl_file') 
         form.solver  = self.get_body_argument('solver')
-        form.outputs = self.get_body_argument('outputs')
+        form.outputs = self.get_body_argument('outputs').split(',')
         form.dt      = float(self.get_body_argument('dt'))
         form.T       = float(self.get_body_argument('T'))
         form.csv     = self.get_checkbox('csv')
@@ -108,12 +152,12 @@ class MainHandler(tornado.web.RequestHandler):
         return form
 
     def build_command_line(self, form):
-        out = ['sim', str(form.yaml), '--dt', str(form.dt),  '--tend', str(form.T), '-s', form.solver, '-o',self.websocket_url]
+        out = ['sim', str(form.yaml), '--dt', str(form.dt),  '--tend', str(form.T), '-s', form.solver]
         return out
 
     def post(self):
         form = self.get_form_contents()
-        modify_yaml(form)
+        modify_yaml(form, self.main_url, self.port)
         command_line = self.build_command_line(form)
         proc = subprocess.Popen(command_line)
         print("the commandline is {}".format(proc.args))
@@ -141,7 +185,6 @@ class SimulatorGUI:
         self.client_tracker = ClientTracker(True)
         suffix = "main"
         self.port = port
-        self.websocket_url = address.replace("http", "ws") + ":" + str(port)
         if getattr(sys, 'frozen', False):
             # frozen
             dir_ = os.path.dirname(sys.executable)
@@ -149,7 +192,7 @@ class SimulatorGUI:
             # unfrozen
             dir_ = os.path.dirname(__file__)
         handlers = [
-            (r"/" + suffix, MainHandler, dict(websocket_url = self.websocket_url, main_url = address)),
+            (r"/" + suffix, MainHandler, dict(main_url = address, port = port)),
             (r"/", WebSocketHandler, dict(client_tracker = self.client_tracker)),
         ]
         settings = {
