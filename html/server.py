@@ -52,6 +52,22 @@ class ClientTracker:
         self.clients_id.pop(client, None)
 
 
+def modify_stl(tree, stl_from_form):
+    if 'bodies' in tree:
+       if 'mesh' in tree['bodies'][0]: 
+            original_mesh_file = tree['bodies'][0]['mesh']
+            if original_mesh_file and stl_from_form:
+                tree['bodies'][0]['mesh'] = stl_from_form
+    return tree;
+
+def modify_yaml(form):
+    with open(form.yaml, 'r') as stream:
+        tree = yaml.load(stream)
+    modified_yaml_file = open(form.yaml, 'w')
+    tree = modify_stl(tree, form.stl)
+    yaml.dump(tree, modified_yaml_file, default_flow_style=False)
+
+
 class MainHandler(tornado.web.RequestHandler):
     def initialize(self, websocket_url, main_url):
         self.websocket_url = websocket_url
@@ -78,28 +94,17 @@ class MainHandler(tornado.web.RequestHandler):
             return self.request.arguments[key]
         return False
 
-    def modify_yaml(self, form):
-        with open(form.yaml, 'r') as stream:
-            tree = yaml.load(stream)
-        if 'bodies' in tree:
-           if 'mesh' in tree['bodies'][0]: 
-                original_mesh_file = tree['bodies'][0]['mesh']
-                if original_mesh_file and form.stl:
-                    tree['bodies'][0]['mesh'] = form.stl
-        modified_yaml_file = open(form.yaml, 'w')
-        yaml.dump(tree, modified_yaml_file, default_flow_style=False)
-
     def get_form_contents(self):
         form = types.SimpleNamespace()
-        form.yaml   = self.upload_file('yaml_file')
-        form.stl    = self.upload_file('stl_file') 
-        form.solver = self.get_body_argument('solver')
-        form.outputs= self.get_body_argument('outputs')
-        form.dt     = float(self.get_body_argument('dt'))
-        form.T      = float(self.get_body_argument('T'))
-        form.csv    = self.get_checkbox('csv')
-        form.tsv    = self.get_checkbox('tsv')
-        form.hdf5   = self.get_checkbox('hdf5')
+        form.yaml    = self.upload_file('yaml_file')
+        form.stl     = self.upload_file('stl_file') 
+        form.solver  = self.get_body_argument('solver')
+        form.outputs = self.get_body_argument('outputs')
+        form.dt      = float(self.get_body_argument('dt'))
+        form.T       = float(self.get_body_argument('T'))
+        form.csv     = self.get_checkbox('csv')
+        form.tsv     = self.get_checkbox('tsv')
+        form.hdf5    = self.get_checkbox('hdf5')
         return form
 
     def build_command_line(self, form):
@@ -108,7 +113,7 @@ class MainHandler(tornado.web.RequestHandler):
 
     def post(self):
         form = self.get_form_contents()
-        self.modify_yaml(form)
+        modify_yaml(form)
         command_line = self.build_command_line(form)
         proc = subprocess.Popen(command_line)
         print("the commandline is {}".format(proc.args))
