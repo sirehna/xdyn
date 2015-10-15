@@ -24,6 +24,7 @@ set(SRC src/update_kinematics.cpp
         src/BodyStates.cpp
         src/Observer.cpp
         src/BlockedDOF.cpp
+        src/State.cpp
         )
 
 # Using C++ 2011
