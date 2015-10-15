@@ -18,3 +18,8 @@ State::State(const AbstractStates<double>& vals,
     qj.record(t0, vals.qj);
     qk.record(t0, vals.qk);
 }
+
+State::State(const double Tmax) :
+        AbstractStates<History>(Tmax)
+{
+}
