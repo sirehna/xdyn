@@ -3,6 +3,7 @@
 
 #include "History.hpp"
 #include "AbstractStates.hpp"
+#include "StateMacros.hpp"
 
 class State : public AbstractStates<History>
 {
@@ -11,6 +12,7 @@ class State : public AbstractStates<History>
 
         State(const AbstractStates<double>& vals,
               const double t0);
+        State(const StateType& state_values, const double t);
 
     private :
         State();

@@ -23,3 +23,21 @@ State::State(const double Tmax) :
         AbstractStates<History>(Tmax)
 {
 }
+
+State::State(const StateType& state_values, const double t) :
+        AbstractStates<History>()
+{
+    x.record(t, state_values[0]);
+    y.record(t, state_values[1]);
+    z.record(t, state_values[2]);
+    u.record(t, state_values[3]);
+    v.record(t, state_values[4]);
+    w.record(t, state_values[5]);
+    p.record(t, state_values[6]);
+    q.record(t, state_values[7]);
+    r.record(t, state_values[8]);
+    qr.record(t, state_values[9]);
+    qi.record(t, state_values[10]);
+    qj.record(t, state_values[11]);
+    qk.record(t, state_values[12]);
+}
