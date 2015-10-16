@@ -216,3 +216,15 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
         pimpl->feed_sum_of_forces(obs, body->get_name());
     }
 }
+
+void Sim::set_bodystates(const std::vector<State>& states)
+{
+	if(states.size()!=1)
+	{
+		THROW(__PRETTY_FUNCTION__, InternalErrorException, "<states> size must be 1");
+	}
+
+	pimpl->bodies[0]->set_states_history(states[0]);
+
+
+}

@@ -17,6 +17,7 @@
 #include "ForceModel.hpp"
 #include "ControllableForceModel.hpp"
 #include "SurfaceElevationGrid.hpp"
+#include "State.hpp"
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
@@ -53,9 +54,13 @@ class Sim
 
         void output(const StateType& x, Observer& obs, double t) const;
 
+        void set_bodystates(const std::vector<State>& states);
+
         std::map<std::string,std::vector<ForcePtr> > get_forces() const;
         std::vector<BodyPtr> get_bodies() const;
         EnvironmentAndFrames get_env() const;
+
+
 
     private:
         ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);
