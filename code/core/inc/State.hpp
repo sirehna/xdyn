@@ -9,6 +9,7 @@ class State : public AbstractStates<History>
 {
     public :
         State(const double Tmax=0);
+        State(const AbstractStates<History>& h);
 
         State(const AbstractStates<double>& vals,
               const double t0);

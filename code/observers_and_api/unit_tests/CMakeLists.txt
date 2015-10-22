@@ -12,6 +12,8 @@ FILE(GLOB SRC
         src/ForceTests.cpp
         src/MapObserverTest.cpp
         src/ObserverTests.cpp
+        src/SimStepperTest.cpp
+        src/ConfBuilderTest.cpp
         )
 # ------8<---------------------------------------------->8-----
 

@@ -24,6 +24,9 @@ State::State(const double Tmax) :
 {
 }
 
+State::State(const AbstractStates<History>& h) : AbstractStates<History>(h)
+{}
+
 State::State(const StateType& state_values, const double t) :
         AbstractStates<History>()
 {

@@ -13,6 +13,23 @@
 
 template <typename T> struct AbstractStates
 {
+    AbstractStates(const T& x_
+                  ,const T& y_
+                  ,const T& z_
+                  ,const T& u_
+                  ,const T& v_
+                  ,const T& w_
+                  ,const T& p_
+                  ,const T& q_
+                  ,const T& r_
+                  ,const T& qr_
+                  ,const T& qi_
+                  ,const T& qj_
+                  ,const T& qk_
+                  ) : x(x_),y(y_),z(z_),u(u_),v(v_),w(w_),p(p_),q(q_),r(r_),qr(qr_),qi(qi_),qj(qj_),qk(qk_)
+    {
+    }
+
     AbstractStates(const double Tmax=0) : x(Tmax),y(Tmax),z(Tmax),u(Tmax),v(Tmax),w(Tmax),p(Tmax),q(Tmax),r(Tmax),qr(Tmax),qi(Tmax),qj(Tmax),qk(Tmax) {}
     AbstractStates<T>& operator=(const AbstractStates<T>& rhs)
     {
