@@ -5,12 +5,11 @@
  *      Author: sirehna
  */
 
-
+#include "InvalidInputException.hpp"
 #include "SimStepperTest.hpp"
 #include "SimStepper.hpp"
 #include "yaml_data.hpp"
 #include "ConfBuilder.hpp"
-#include "ssc/macros/SerializeMapsSetsAndVectors.hpp"
 #include <ssc/macros.hpp>
 #define EPS 1E-8
 
@@ -30,9 +29,9 @@ void SimStepperTest::TearDown()
 {
 }
 
-TEST_F(SimStepperTest, example)
+TEST_F(SimStepperTest, can_compute_one_step_with_euler_solver)
 {
-//! [SimStepperTest example]
+//! [SimStepperTest can_compute_one_step_with_euler_solver]
     const double g = 9.81;
     const std::string solver = "euler";
     const double dt = 1.0;
@@ -71,3 +70,30 @@ TEST_F(SimStepperTest, example)
     ASSERT_NEAR(0,                        next_X.qk(), EPS);
 //! [SimStepperTest expected output]
 }
+
+TEST_F(SimStepperTest, wrong_solver_must_raise_exception)
+{
+//! [SimStepperTest wrong_solver_must_raise_exception]
+    const std::string solver = "wrong solver";
+    const double dt = 1.0;
+    const double t_start = 0;
+    const double Dt = 10;
+    std::map<std::string,double> u;
+
+    ConfBuilder builder(test_data::falling_ball_example(), u);
+    SimStepper simstepper(builder, solver, dt); // SimStepper's creator controls the stability of the numerical integration
+    const double x0=4;
+    const double y0=8;
+    const double z0=12;
+    const double u0 = 1;
+    const double v0 = 0;
+    const double w0 = 0;
+
+    const State X0(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
+//! [SimStepperTest wrong_solver_must_raise_exception]
+
+//! [SimStepperTest wrong_solver_must_raise_exception output]
+    ASSERT_THROW(simstepper.step(X0, t_start, Dt), InvalidInputException);
+//! [SimStepperTest expected output]
+}
+
