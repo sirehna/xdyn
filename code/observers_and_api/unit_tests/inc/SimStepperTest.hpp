@@ -1,11 +1,3 @@
-/*
- * SimStepperTest.hpp
- *
- *  Created on: 13 oct. 2015
- *      Author: sirehna
- */
-
-
 #ifndef OBSERVERS_AND_API_UNIT_TESTS_INC_SIMSTEPPERTEST_HPP_
 #define OBSERVERS_AND_API_UNIT_TESTS_INC_SIMSTEPPERTEST_HPP_
 

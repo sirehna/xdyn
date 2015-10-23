@@ -55,7 +55,6 @@ TEST_F(SimStepperTest, example)
     const State next_X = simstepper.step(X0, t_start, Dt);
 //! [SimStepperTest example]
 
-
 //! [SimStepperTest expected output]
     ASSERT_NEAR(x0+u0*t_end,              next_X.x(), EPS);
     ASSERT_NEAR(y0,                       next_X.y(), EPS);
