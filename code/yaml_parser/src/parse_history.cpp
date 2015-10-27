@@ -69,3 +69,79 @@ YamlState parse_history_yaml(const std::string& yaml)
     node >> ret;
     return ret;
 }
+
+void operator << (YAML::Emitter& out, std::pair<double,double>& p);
+void operator << (YAML::Emitter& out, std::pair<double,double>& p)
+{
+    out<<YAML::Flow;
+    out<<YAML::BeginSeq<<p.first<<p.second<<YAML::EndSeq;
+}
+
+void operator << (YAML::Emitter& out, std::vector<std::pair<double,double>>& v);
+void operator << (YAML::Emitter& out, std::vector<std::pair<double,double>>& v)
+{
+    out<<YAML::BeginSeq;
+    for(size_t i=0 ; i<v.size(); i++)
+    {
+        out<<v[i];
+    }
+    out<<YAML::EndSeq;
+
+}
+
+void operator << (std::vector<std::pair<double,double>>& lists, const YamlHistory& h);
+void operator << (std::vector<std::pair<double,double>>& lists, const YamlHistory& h)
+{
+    for(size_t it=0; it<h.values.size();it++)
+    {
+        std::pair<double,double> p(h.tau[it], h.values[it]);
+        lists.push_back(p);
+    }
+}
+
+void operator << (YAML::Emitter& out, const YamlHistory& h);
+void operator << (YAML::Emitter& out, const YamlHistory& h)
+{
+    std::vector<std::pair<double,double>> lists;
+    lists<<h;
+
+    out<<YAML::BeginSeq;
+    for(size_t it=0; it<lists.size();it++)
+    {
+        out<<lists[it];
+    }
+    out<<YAML::EndSeq;
+}
+
+void operator << (YAML::Emitter& out, const YamlState& state);
+void operator << (YAML::Emitter& out, const YamlState& state)
+{
+    out<<YAML::Flow;
+    out<<YAML::BeginMap;
+    out<<YAML::Key<<"t"<<YAML::Value<<state.t;
+    out<<YAML::Key<<"x"<<YAML::Value<<state.x;
+    out<<YAML::Key<<"y"<<YAML::Value<<state.y;
+    out<<YAML::Key<<"z"<<YAML::Value<<state.z;
+    out<<YAML::Key<<"u"<<YAML::Value<<state.u;
+    out<<YAML::Key<<"v"<<YAML::Value<<state.v;
+    out<<YAML::Key<<"w"<<YAML::Value<<state.w;
+    out<<YAML::Key<<"p"<<YAML::Value<<state.p;
+    out<<YAML::Key<<"q"<<YAML::Value<<state.q;
+    out<<YAML::Key<<"r"<<YAML::Value<<state.r;
+    out<<YAML::Key<<"qr"<<YAML::Value<<state.qr;
+    out<<YAML::Key<<"qi"<<YAML::Value<<state.qi;
+    out<<YAML::Key<<"qj"<<YAML::Value<<state.qj;
+    out<<YAML::Key<<"qk"<<YAML::Value<<state.qk;
+    out<<YAML::EndMap;
+}
+
+
+std::string generate_history_yaml(const YamlState& state)
+{
+    YAML::Emitter e;
+    e<<state;
+    return e.c_str();
+}
+
+
+

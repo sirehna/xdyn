@@ -19,5 +19,8 @@ struct YamlState : AbstractStates<YamlHistory>
     double t;
 };
 
+bool operator == (const YamlState& state1, const YamlState& state2);
+bool operator == (const YamlHistory& h1, const YamlHistory& h2);
+
 #endif /* EXTERNAL_DATA_STRUCTURES_INC_YAMLSTATE_HPP_ */
 
