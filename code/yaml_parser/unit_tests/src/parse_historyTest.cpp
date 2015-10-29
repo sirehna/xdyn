@@ -12,6 +12,7 @@
 #include "parse_history.hpp"
 #include <vector>
 #include <sstream>
+#include <ssc/macros.hpp>
 
 parse_historyTest::parse_historyTest() : a(ssc::random_data_generator::DataGenerator(42))
 {
@@ -33,7 +34,7 @@ void parse_historyTest::TearDown()
 TEST_F(parse_historyTest, can_parse_simple_history)
 {
 //! [parse_historyTest can_parse_simple_history]
-    double tau_list[5] = {0.0, 0.1, 0.2, 0.3, 0.4};
+    double tau_list[5] = {0.4, 0.3, 0.2, 0.1, 0.0};
     double x0=10, y0=11, z0=12, u0=13, v0=14, w0=15, p0=16, q0=17, r0=18, qr0=19, qi0=20, qj0=21, qk0=22;
     double step_test = 20;
     size_t size_test = 5;
@@ -98,57 +99,57 @@ TEST_F(parse_historyTest, can_produce_yaml_from_YamlHistory)
     state.t = 123.45;
     const std::string expected_yaml_for_t("t: 123.45");
 
-    state.x.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.x.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.x.values = {100,200,300,400,500};
-    const std::string expected_yaml_for_x("x: [[0, 100], [0.1, 200], [0.2, 300], [0.3, 400], [0.4, 500]]");
+    const std::string expected_yaml_for_x("x: [[0.4, 100], [0.3, 200], [0.2, 300], [0.1, 400], [0, 500]]");
 
-    state.y.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.y.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.y.values = {101,201,301,401,501};
-    const std::string expected_yaml_for_y= "y: [[0, 101], [0.1, 201], [0.2, 301], [0.3, 401], [0.4, 501]]";
+    const std::string expected_yaml_for_y= "y: [[0.4, 101], [0.3, 201], [0.2, 301], [0.1, 401], [0, 501]]";
 
-    state.z.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.z.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.z.values = {102,202,302,402,502};
-    const std::string expected_yaml_for_z("z: [[0, 102], [0.1, 202], [0.2, 302], [0.3, 402], [0.4, 502]]");
+    const std::string expected_yaml_for_z("z: [[0.4, 102], [0.3, 202], [0.2, 302], [0.1, 402], [0, 502]]");
 
-    state.u.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.u.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.u.values = {103,203,303,403,503};
-    const std::string expected_yaml_for_u("u: [[0, 103], [0.1, 203], [0.2, 303], [0.3, 403], [0.4, 503]]");
+    const std::string expected_yaml_for_u("u: [[0.4, 103], [0.3, 203], [0.2, 303], [0.1, 403], [0, 503]]");
 
-    state.v.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.v.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.v.values = {104,204,304,404,504};
-    const std::string expected_yaml_for_v("v: [[0, 104], [0.1, 204], [0.2, 304], [0.3, 404], [0.4, 504]]");
+    const std::string expected_yaml_for_v("v: [[0.4, 104], [0.3, 204], [0.2, 304], [0.1, 404], [0, 504]]");
 
-    state.w.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.w.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.w.values = {105,205,305,405,505};
-    const std::string expected_yaml_for_w("w: [[0, 105], [0.1, 205], [0.2, 305], [0.3, 405], [0.4, 505]]");
+    const std::string expected_yaml_for_w("w: [[0.4, 105], [0.3, 205], [0.2, 305], [0.1, 405], [0, 505]]");
 
-    state.p.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.p.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.p.values = {106,206,306,406,506};
-    const std::string expected_yaml_for_p("p: [[0, 106], [0.1, 206], [0.2, 306], [0.3, 406], [0.4, 506]]");
+    const std::string expected_yaml_for_p("p: [[0.4, 106], [0.3, 206], [0.2, 306], [0.1, 406], [0, 506]]");
 
-    state.q.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.q.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.q.values = {107,207,307,407,507};
-    const std::string expected_yaml_for_q("q: [[0, 107], [0.1, 207], [0.2, 307], [0.3, 407], [0.4, 507]]");
+    const std::string expected_yaml_for_q("q: [[0.4, 107], [0.3, 207], [0.2, 307], [0.1, 407], [0, 507]]");
 
-    state.r.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.r.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.r.values = {108,208,308,408,508};
-    const std::string expected_yaml_for_r("r: [[0, 108], [0.1, 208], [0.2, 308], [0.3, 408], [0.4, 508]]");
+    const std::string expected_yaml_for_r("r: [[0.4, 108], [0.3, 208], [0.2, 308], [0.1, 408], [0, 508]]");
 
-    state.qr.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.qr.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.qr.values = {109,209,309,409,509};
-    const std::string expected_yaml_for_qr("qr: [[0, 109], [0.1, 209], [0.2, 309], [0.3, 409], [0.4, 509]]");
+    const std::string expected_yaml_for_qr("qr: [[0.4, 109], [0.3, 209], [0.2, 309], [0.1, 409], [0, 509]]");
 
-    state.qi.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.qi.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.qi.values = {110,210,310,410,510};
-    const std::string expected_yaml_for_qi("qi: [[0, 110], [0.1, 210], [0.2, 310], [0.3, 410], [0.4, 510]]");
+    const std::string expected_yaml_for_qi("qi: [[0.4, 110], [0.3, 210], [0.2, 310], [0.1, 410], [0, 510]]");
 
-    state.qj.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.qj.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.qj.values = {111,211,311,411,511};
-    const std::string expected_yaml_for_qj("qj: [[0, 111], [0.1, 211], [0.2, 311], [0.3, 411], [0.4, 511]]");
+    const std::string expected_yaml_for_qj("qj: [[0.4, 111], [0.3, 211], [0.2, 311], [0.1, 411], [0, 511]]");
 
-    state.qk.tau = {0.0,0.1,0.2,0.3,0.4};
+    state.qk.tau = {0.4, 0.3, 0.2, 0.1, 0.0};
     state.qk.values = {112,212,312,412,512};
-    const std::string expected_yaml_for_qk("qk: [[0, 112], [0.1, 212], [0.2, 312], [0.3, 412], [0.4, 512]]");
+    const std::string expected_yaml_for_qk("qk: [[0.4, 112], [0.3, 212], [0.2, 312], [0.1, 412], [0, 512]]");
 
     std::stringstream sstream;
     std::string expected_yaml;
@@ -173,18 +174,11 @@ TEST_F(parse_historyTest, can_produce_yaml_from_YamlHistory)
 
     std::string result(generate_history_yaml(state));
 
-
-
-
-
     //! [parse_historyTest can_parse_simple_history]
 
     //! [parse_historyTest expected output]
 
-
         ASSERT_EQ(expected_yaml,result);
-
-
 
     //! [parse_historyTest expected output]
 }
@@ -196,9 +190,25 @@ TEST_F(parse_historyTest, translation_loop)
     const YamlState new_history = parse_history_yaml(yaml);
 
     ASSERT_EQ(history, new_history);
-
 }
 
-
-
-
+TEST_F(parse_historyTest, get_info_from_gui)
+{
+    YamlSimStepperInfo yinfos = get_yamlsimstepperinfo(test_data::complete_yaml_message_from_gui());
+    ASSERT_EQ(yinfos.commands.find("RPM")->second, 1.2);
+    ASSERT_EQ(yinfos.commands.find("B1")->second, 0.1);
+    ASSERT_EQ(yinfos.state.t, 1234.5);
+    ASSERT_EQ(yinfos.state.x.values[0], 90);
+    ASSERT_EQ(yinfos.state.y.values[0], 91);
+    ASSERT_EQ(yinfos.state.z.values[0], 92);
+    ASSERT_EQ(yinfos.state.u.values[0], 93);
+    ASSERT_EQ(yinfos.state.v.values[0], 94);
+    ASSERT_EQ(yinfos.state.w.values[0], 95);
+    ASSERT_EQ(yinfos.state.p.values[0], 96);
+    ASSERT_EQ(yinfos.state.q.values[0], 97);
+    ASSERT_EQ(yinfos.state.r.values[0], 98);
+    ASSERT_EQ(yinfos.state.qr.values[0], 99);
+    ASSERT_EQ(yinfos.state.qi.values[0], 100);
+    ASSERT_EQ(yinfos.state.qj.values[0], 101);
+    ASSERT_EQ(yinfos.state.qk.values[0], 102);
+}

@@ -2,18 +2,26 @@
 #include "simulator_api.hpp"
 #include "InvalidInputException.hpp"
 
-
-SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt):
-sim(builder.sim),
-solver(solver),
-dt(dt)
+SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt)
+    : sim(builder.sim)
+    , solver(solver)
+    , dt(dt)
 {
 }
 
-State SimStepper::step(const State& state, const double t, const double Dt)
+SimStepperInfos::SimStepperInfos()
+    : t(0)
+    , state(0)
+    , commands({})
 {
-    const std::vector<State>states =  {state};
+}
+
+State SimStepper::step(const SimStepperInfos& infos, double Dt)
+{
+    const double t = infos.t;
+    std::vector<State>states =  {infos.state};
     sim.set_bodystates(states);
+    sim.set_command_listener(infos.commands);
     std::vector<Res> results;
     if(solver == "euler")
     {

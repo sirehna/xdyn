@@ -60,6 +60,7 @@ class Sim
         std::vector<BodyPtr> get_bodies() const;
         EnvironmentAndFrames get_env() const;
 
+        void set_command_listener(const std::map<std::string, double>& new_commands);
 
 
     private:

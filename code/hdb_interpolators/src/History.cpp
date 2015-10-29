@@ -208,3 +208,15 @@ double History::average(double T) const
     const double integral_from_t_to_now = integrate(idx);
     return  (T!=0) ? (integral_of_first_interval + integral_from_t_to_now)/T : L.back().second;
 }
+
+std::pair<double,double> History::operator[](const int index) const
+{
+    if(index>=0)
+    {
+        return L[(size_t)index];
+    }
+    else
+    {
+        return L[L.size()+(size_t)index];
+    }
+}

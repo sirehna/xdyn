@@ -5,11 +5,20 @@
 #ifndef OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 #define OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 
+struct SimStepperInfos
+{
+    SimStepperInfos();
+    double t;
+    State state;
+    std::map<std::string, double> commands;
+};
+
+
 class SimStepper
 {
     public:
         SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt);
-        State step(const State& state, const double t, const double Dt);
+        State step(const SimStepperInfos& infos, double Dt);
 
 
     private:

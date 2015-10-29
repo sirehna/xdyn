@@ -13,7 +13,7 @@
 class ConfBuilder
 {
     public :
-        ConfBuilder(const std::string& yaml, const std::map<std::string,double>& commands);
+        ConfBuilder(const std::string& yaml_model);
 
         const Sim sim;
         const double Tmax;

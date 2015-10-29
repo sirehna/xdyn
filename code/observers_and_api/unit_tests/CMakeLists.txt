@@ -14,6 +14,7 @@ FILE(GLOB SRC
         src/ObserverTests.cpp
         src/SimStepperTest.cpp
         src/ConfBuilderTest.cpp
+        src/HistoryParserTest.cpp
         )
 # ------8<---------------------------------------------->8-----
 

@@ -228,3 +228,12 @@ void Sim::set_bodystates(const std::vector<State>& states)
 
 
 }
+
+void Sim::set_command_listener(const std::map<std::string, double>& new_commands)
+{
+    for(const auto c : new_commands)
+    {
+        pimpl->command_listener.set(c.first, c.second);
+    }
+}
+

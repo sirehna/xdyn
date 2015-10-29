@@ -67,6 +67,7 @@ class History
           */
         double get_duration() const;
 
+        std::pair<double,double> operator[](const int index) const;
         friend std::ostream& operator<<(std::ostream& os, const History& h);
 
     private:

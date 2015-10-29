@@ -38,9 +38,8 @@ TEST_F(SimStepperTest, can_compute_one_step_with_euler_solver)
     const double t_start = 0;
     const double Dt = 10;
     const double t_end = t_start+Dt;
-    std::map<std::string,double> u;
 
-    ConfBuilder builder(test_data::falling_ball_example(), u);
+    ConfBuilder builder(test_data::falling_ball_example());
     SimStepper simstepper(builder, solver, dt); // SimStepper's creator controls the stability of the numerical integration
     const double x0=4;
     const double y0=8;
@@ -49,9 +48,12 @@ TEST_F(SimStepperTest, can_compute_one_step_with_euler_solver)
     const double v0 = 0;
     const double w0 = 0;
 
-    const State X0(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
+    SimStepperInfos infos;
+    infos.state=State(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
+    infos.commands={};
+    infos.t = t_start;
 
-    const State next_X = simstepper.step(X0, t_start, Dt);
+    const State next_X = simstepper.step(infos, Dt);
 //! [SimStepperTest example]
 
 //! [SimStepperTest expected output]
@@ -78,9 +80,8 @@ TEST_F(SimStepperTest, wrong_solver_must_raise_exception)
     const double dt = 1.0;
     const double t_start = 0;
     const double Dt = 10;
-    std::map<std::string,double> u;
 
-    ConfBuilder builder(test_data::falling_ball_example(), u);
+    ConfBuilder builder(test_data::falling_ball_example());
     SimStepper simstepper(builder, solver, dt); // SimStepper's creator controls the stability of the numerical integration
     const double x0=4;
     const double y0=8;
@@ -89,11 +90,15 @@ TEST_F(SimStepperTest, wrong_solver_must_raise_exception)
     const double v0 = 0;
     const double w0 = 0;
 
-    const State X0(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
+    SimStepperInfos infos;
+    infos.state=State(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
+    infos.commands={};
+    infos.t = t_start;
+
 //! [SimStepperTest wrong_solver_must_raise_exception]
 
 //! [SimStepperTest wrong_solver_must_raise_exception output]
-    ASSERT_THROW(simstepper.step(X0, t_start, Dt), InvalidInputException);
+    ASSERT_THROW(simstepper.step(infos, Dt), InvalidInputException);
 //! [SimStepperTest expected output]
 }
 

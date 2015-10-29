@@ -4,6 +4,7 @@
 #include <vector>
 #include "InvalidInputException.hpp"
 
+
 void operator >> (const YAML::Node& node, std::pair<double,double>& v);
 void operator >> (const YAML::Node& node, std::pair<double,double>& v)
 {
@@ -26,8 +27,6 @@ void operator >> (const YAML::Node& node, std::vector<std::pair<double,double>>&
 void operator >> (const YAML::Node& node, YamlHistory& h);
 void operator >> (const YAML::Node& node, YamlHistory& h)
 {
-    //
-
     std::vector<std::pair<double,double>> valeur;
     node>>valeur;
     for(auto i=valeur.begin();i!=valeur.end(); i++)
@@ -69,6 +68,7 @@ YamlState parse_history_yaml(const std::string& yaml)
     node >> ret;
     return ret;
 }
+
 
 void operator << (YAML::Emitter& out, std::pair<double,double>& p);
 void operator << (YAML::Emitter& out, std::pair<double,double>& p)
@@ -142,6 +142,29 @@ std::string generate_history_yaml(const YamlState& state)
     e<<state;
     return e.c_str();
 }
+
+void operator>> (const YAML::Node& node, YamlSimStepperInfo& infos);
+void operator>> (const YAML::Node& node, YamlSimStepperInfo& infos)
+{
+    node["states"]   >> infos.state;
+    node["commands"] >> infos.commands;
+
+}
+
+YamlSimStepperInfo get_yamlsimstepperinfo(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlSimStepperInfo infos;
+    node>>infos;
+    return infos;
+
+
+}
+
+
 
 
 
