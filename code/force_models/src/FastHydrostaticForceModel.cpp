@@ -17,9 +17,18 @@ FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_nam
 {
 }
 
+FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& force_name_, const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(force_name_, body_name_, env_)
+{
+}
+
 double FastHydrostaticForceModel::gz() const
 {
     return calculate_gz(env.k->get("NED", get_body_name()), get_force_in_ned_frame());
+}
+
+std::string FastHydrostaticForceModel::get_name() const
+{
+    return this->model_name;
 }
 
 SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double) const
