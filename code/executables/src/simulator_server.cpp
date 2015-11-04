@@ -41,15 +41,7 @@ int main(int argc, char** argv)
         const std::string solver = argv[5];
         TR1(shared_ptr)<SimServer> sim_server (new SimServer(yaml_model, solver, dt, Dt));
         SimulationMessage message(sim_server);
-        Server* s = new Server(message, IP, port);
-        std::cout<<s;
-
-
-
+        new Server(message, IP, port);
     }
-
-
-
-
 }
 
