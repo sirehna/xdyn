@@ -133,6 +133,21 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         binary_stl_data_static
         simulatorIrtJv
         )
+        
+ADD_EXECUTABLE(simulator_server
+        src/simulator_server.cpp
+        )
+
+TARGET_LINK_LIBRARIES(simulator_server
+        simulatorIrtJv
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+        boost_program_options_descriptions_static
+        )
+
+
+
+
+        
 
 ################################################################################
 INSTALL(TARGETS sim
