@@ -10,8 +10,8 @@
 #include "Body.hpp"
 #include "external_data_structures_parsers.hpp"
 #include <ssc/yaml_parser.hpp>
+#include "InvalidInputException.hpp"
 #include "WageningenControlledForceModel.hpp"
-#include "WageningenControlledForceModelException.hpp"
 
 const std::string WageningenControlledForceModel::model_name = "wageningen B-series";
 
@@ -56,16 +56,13 @@ WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input
             vq{0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2}
 {
     commands.push_back("P/D");
-    std::stringstream ss;
     if ((Z<2) or (Z>7))
     {
-        ss << "Invalid number of blades Z received: expected 2 <= Z <= 7 but got Z=" << Z;
-        THROW(__PRETTY_FUNCTION__, WageningenControlledForceModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid number of blades Z received: expected 2 <= Z <= 7 but got Z=" << Z);
     }
     if ((AE_A0<0.3) or (AE_A0>1.05))
     {
-        ss << "Invalid number of blade area ratio AE_A0 received: expected 0.3 <= AE_A0 <= 1.05 but got AE_A0=" << AE_A0;
-        THROW(__PRETTY_FUNCTION__, WageningenControlledForceModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid number of blade area ratio AE_A0 received: expected 0.3 <= AE_A0 <= 1.05 but got AE_A0=" << AE_A0);
     }
 }
 
@@ -111,7 +108,7 @@ WageningenControlledForceModel::Yaml WageningenControlledForceModel::parse(const
     YAML::Node node;
     parser.GetNextDocument(node);
     node["blade area ratio AE/A0"]           >> ret.blade_area_ratio;
-    node["number of blades"]                 >> ret.number_of_blades;
+    ret.number_of_blades = try_to_parse_positive_integer(node,"number of blades");
     return ret;
 }
 

@@ -8,9 +8,10 @@
 #include <sstream>
 
 #include "environment_parsers.hpp"
+#include "external_data_structures_parsers.hpp"
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
-#include "SimulatorYamlParserException.hpp"
+#include "InvalidInputException.hpp"
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g);
 void operator >> (const YAML::Node& node, YamlSpectra& g);
@@ -52,7 +53,7 @@ YamlWaveModel parse_waves(const std::string& yaml)
     {
         std::stringstream ss;
         ss << "Error parsing section wave/discretization: " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     try
     {
@@ -62,7 +63,7 @@ YamlWaveModel parse_waves(const std::string& yaml)
     {
         std::stringstream ss;
         ss << "Error parsing section wave/spectra: " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     if (node.FindValue("output"))
     {
@@ -74,7 +75,7 @@ YamlWaveModel parse_waves(const std::string& yaml)
         {
             std::stringstream ss;
             ss << "Error parsing section wave/output: " << e.what();
-            THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
         }
     }
     return ret;
@@ -82,7 +83,7 @@ YamlWaveModel parse_waves(const std::string& yaml)
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g)
 {
-    node["n"] >> g.n;
+    g.n = try_to_parse_positive_integer(node, "n");
     ssc::yaml_parser::parse_uv(node["omega min"], g.omega_min);
     ssc::yaml_parser::parse_uv(node["omega max"], g.omega_max);
     node["energy fraction"] >> g.energy_fraction;
@@ -115,10 +116,10 @@ void operator >> (const YAML::Node& node, YamlWaveOutput& g)
     node["frame of reference"] >> g.frame_of_reference;
     ssc::yaml_parser::parse_uv(node["mesh"]["xmin"], g.xmin);
     ssc::yaml_parser::parse_uv(node["mesh"]["xmax"], g.xmax);
-    node["mesh"]["nx"]                    >> g.nx;
+    g.nx = try_to_parse_positive_integer(node["mesh"],"nx");
     ssc::yaml_parser::parse_uv(node["mesh"]["ymin"], g.ymin);
     ssc::yaml_parser::parse_uv(node["mesh"]["ymax"], g.ymax);
-    node["mesh"]["ny"]                    >> g.ny;
+    g.ny = try_to_parse_positive_integer(node["mesh"],"ny");
 }
 
 
@@ -137,7 +138,7 @@ YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
     {
         std::stringstream ss;
         ss << "Error parsing Dirac directional spreading parameters ('environment models/model/spectra/directional spreading' section in the YAML file): " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
 return ret;
 }
@@ -158,7 +159,7 @@ YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml)
     {
         std::stringstream ss;
         ss << "Error parsing Dirac spectrum parameters ('environment models/model/spectra/directional spreading' section in the YAML file): " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     return ret;
 }
@@ -180,7 +181,7 @@ YamlJonswap          parse_jonswap(const std::string& yaml)
     {
         std::stringstream ss;
         ss << "Error parsing JONSWAP wave spectrum parameters ('wave' section in the YAML file): " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     return ret;
 }
@@ -201,7 +202,7 @@ YamlPiersonMoskowitz parse_pierson_moskowitz(const std::string& yaml)
     {
         std::stringstream ss;
         ss << "Error parsing Pierson-Moskowitz spectrum parameters ('wave' section in the YAML file): " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     return ret;
 }
@@ -222,7 +223,7 @@ YamlBretschneider    parse_bretschneider(const std::string& yaml)
     {
         std::stringstream ss;
         ss << "Error parsing Bretschneider spectrum parameters ('wave' section in the YAML file): " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     return ret;
 }
@@ -243,7 +244,7 @@ YamlCos2s            parse_cos2s(const std::string& yaml)
     {
         std::stringstream ss;
         ss << "Error parsing cos2s directional spreading parameters ('wave' section in the YAML file): " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     return ret;
 }
@@ -257,13 +258,13 @@ int                  parse_airy(const std::string& yaml)
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        node["seed of the random data generator"] >> ret;
+        ret = (int)try_to_parse_positive_integer(node, "seed of the random data generator");
     }
     catch(std::exception& e)
     {
         std::stringstream ss;
         ss << "Error parsing Airy wave model parameters ('wave' section in the YAML file): " << e.what();
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     return ret;
 }

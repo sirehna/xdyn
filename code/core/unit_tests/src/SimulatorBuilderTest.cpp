@@ -7,7 +7,7 @@
 
 #include "SimulatorBuilderTest.hpp"
 #include "SimulatorBuilder.hpp"
-#include "SimulatorBuilderException.hpp"
+#include "InternalErrorException.hpp"
 #include "TriMeshTestData.hpp"
 #include "generate_body_for_tests.hpp"
 #include <ssc/kinematics.hpp>
@@ -37,7 +37,7 @@ void SimulatorBuilderTest::TearDown()
 
 TEST_F(SimulatorBuilderTest, throws_if_cannot_find_mesh)
 {
-    ASSERT_THROW(builder.get_bodies(MeshMap(), std::vector<bool>(1,false), std::map<std::string,double>()),SimulatorBuilderException);
+    ASSERT_THROW(builder.get_bodies(MeshMap(), std::vector<bool>(1,false), std::map<std::string,double>()),InternalErrorException);
 }
 
 TEST_F(SimulatorBuilderTest, can_get_bodies)
@@ -105,7 +105,7 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 
 TEST_F(SimulatorBuilderTest, should_throw_if_no_wave_parser_defined)
 {
-    ASSERT_THROW(builder.get_environment(), SimulatorBuilderException);
+    ASSERT_THROW(builder.get_environment(), InternalErrorException);
 }
 
 TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twice)
@@ -117,7 +117,7 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     input2.environment.push_back(model);
     SimulatorBuilder builder2(input2, 0);
     builder2.can_parse<DefaultSurfaceElevation>();
-    ASSERT_THROW(builder2.get_environment(), SimulatorBuilderException);
+    ASSERT_THROW(builder2.get_environment(), InternalErrorException);
 }
 
 TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
@@ -128,5 +128,5 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
     m[name] = two_triangles();
     const auto bodies = builder.get_bodies(m, std::vector<bool>(1,false), std::map<std::string,double>());
     const auto env = builder.get_environment();
-    ASSERT_THROW(builder.get_forces(env), SimulatorBuilderException);
+    ASSERT_THROW(builder.get_forces(env), InvalidInputException);
 }

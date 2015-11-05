@@ -21,7 +21,7 @@
 #include "SimTest.hpp"
 #include "YamlSimulatorInput.hpp"
 #include "yaml_data.hpp"
-#include "SimException.hpp"
+#include "InternalErrorException.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "STL_data.hpp"
 #include "simulator_api.hpp"
@@ -213,7 +213,7 @@ TEST_F(SimTest, should_throw_if_wave_output_mesh_does_not_exist)
     auto input = SimulatorYamlParser(test_data::waves()).parse();
     boost::replace_all(input.environment[0].yaml, "frame of reference: NED", "frame of reference: foo");
     const Sim sys = get_system(input, 0);
-    ASSERT_THROW(sys.get_waves(a.random<double>()),SimException);
+    ASSERT_THROW(sys.get_waves(a.random<double>()),InternalErrorException);
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh)

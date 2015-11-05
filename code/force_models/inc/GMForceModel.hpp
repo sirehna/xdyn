@@ -22,7 +22,7 @@ class Body;
 class GMForceModel : public ImmersedSurfaceForceModel
 {
     public:
-        struct Yaml
+        struct Yaml : public YamlModel
         {
             Yaml();
             std::string name_of_hydrostatic_force_model;

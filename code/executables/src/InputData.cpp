@@ -14,7 +14,8 @@ InputData::InputData() : yaml_filenames(),
                          command_file(),
                          initial_timestep(0),
                          tstart(0),
-                         tend(0)
+                         tend(0),
+                         catch_exceptions(false)
 {
 }
 

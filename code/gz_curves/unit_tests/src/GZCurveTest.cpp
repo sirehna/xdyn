@@ -8,7 +8,8 @@
 
 #include "GZCurveTest.hpp"
 #include "GZCurve.hpp"
-#include "GZException.hpp"
+#include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
 #include "STL_data.hpp"
 #include "yaml_data.hpp"
 #include "make_sim_for_GZ.hpp"
@@ -82,7 +83,7 @@ TEST_F(GZCurveTest, should_throw_if_dphi_is_not_strictly_positive)
     {
         const double dphi = a.random<double>().no().greater_than(0);
         const double phi_max = a.random<double>().greater_than(0);
-        ASSERT_THROW(GZ::Curve::get_phi(dphi, phi_max), GZException);
+        ASSERT_THROW(GZ::Curve::get_phi(dphi, phi_max), InvalidInputException);
     }
 }
 
@@ -92,7 +93,7 @@ TEST_F(GZCurveTest, should_throw_if_phi_max_is_not_strictly_positive)
     {
         const double dphi = a.random<double>().greater_than(0);
         const double phi_max = a.random<double>().no().greater_than(0);
-        ASSERT_THROW(GZ::Curve::get_phi(dphi, phi_max), GZException);
+        ASSERT_THROW(GZ::Curve::get_phi(dphi, phi_max), InvalidInputException);
     }
 }
 
@@ -102,7 +103,7 @@ TEST_F(GZCurveTest, should_throw_if_phi_max_lower_than_dphi)
     {
         const double dphi = a.random<double>().greater_than(0);
         const double phi_max = a.random<double>().between(0,dphi);
-        ASSERT_THROW(GZ::Curve::get_phi(dphi, phi_max), GZException);
+        ASSERT_THROW(GZ::Curve::get_phi(dphi, phi_max), InvalidInputException);
     }
 }
 

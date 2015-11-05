@@ -11,7 +11,7 @@
 
 #include "Cos2sDirectionalSpreadingTest.hpp"
 #include "Cos2sDirectionalSpreading.hpp"
-#include "WaveModelException.hpp"
+#include "InvalidInputException.hpp"
 
 #define NB_TRIALS 10
 
@@ -60,7 +60,7 @@ TEST_F(Cos2sDirectionalSpreadingTest, should_throw_if_s_is_negative)
 {
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
-        ASSERT_THROW(Cos2sDirectionalSpreading(a.random<double>(), a.random<double>().no().greater_than(0)), WaveModelException);
+        ASSERT_THROW(Cos2sDirectionalSpreading(a.random<double>(), a.random<double>().no().greater_than(0)), InvalidInputException);
     }
 }
 

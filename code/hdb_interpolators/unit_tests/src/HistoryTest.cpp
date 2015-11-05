@@ -8,7 +8,7 @@
 
 #include "History.hpp"
 #include "HistoryTest.hpp"
-#include "HistoryException.hpp"
+#include "InternalErrorException.hpp"
 
 HistoryTest::HistoryTest() : a(ssc::random_data_generator::DataGenerator(5422))
 {
@@ -37,13 +37,13 @@ TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
     h.record(t0+Tmax, a.random<double>());
     ASSERT_NO_THROW(h(t_lower_than_Tmax));
     ASSERT_NO_THROW(h(Tmax));
-    ASSERT_THROW(h(t_greater_than_Tmax), HistoryException);
+    ASSERT_THROW(h(t_greater_than_Tmax), InternalErrorException);
 }
 
 TEST_F(HistoryTest, cannot_retrieve_anything_if_history_is_empty)
 {
     History h;
-    ASSERT_THROW(h(0), HistoryException);
+    ASSERT_THROW(h(0), InternalErrorException);
 }
 
 TEST_F(HistoryTest, can_retrieve_initial_values)
@@ -66,7 +66,7 @@ TEST_F(HistoryTest, cannot_retrieve_value_in_the_future)
     h.record(t0-2, 1);
     h.record(t0-1, 2);
     h.record(t0, 3);
-    ASSERT_THROW(h(-1), HistoryException);
+    ASSERT_THROW(h(-1), InternalErrorException);
 }
 
 TEST_F(HistoryTest, linear_interpolation_should_be_accurate)
@@ -178,7 +178,7 @@ TEST_F(HistoryTest, history_should_not_grow_indefinitely)
     ASSERT_DOUBLE_EQ(1, h(4));
     ASSERT_EQ(3, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
-    ASSERT_THROW(h(4.1), HistoryException);
+    ASSERT_THROW(h(4.1), InternalErrorException);
     h.record(t-5, 4);
     ASSERT_EQ(3, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
@@ -214,7 +214,7 @@ TEST_F(HistoryTest, should_throw_if_length_of_average_is_negative)
     History h(2);
     h.record(0,1);
     h.record(2,1);
-    ASSERT_THROW(h.average(-1), HistoryException);
+    ASSERT_THROW(h.average(-1), InternalErrorException);
 }
 
 TEST_F(HistoryTest, can_retrieve_average_for_two_values)

@@ -20,6 +20,7 @@ endif()
 
 include_directories(inc)
 include_directories(${ssc_INCLUDE_DIRS})
+include_directories(${exceptions_INCLUDE_DIRS})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(${external_data_structures_INCLUDE_DIRS})

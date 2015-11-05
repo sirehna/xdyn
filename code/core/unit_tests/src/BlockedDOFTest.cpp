@@ -11,7 +11,7 @@
 #include <boost/filesystem.hpp> // For boost::filesystem::unique_path
 
 #include "BlockedDOF.hpp"
-#include "BlockedDOFException.hpp"
+#include "InvalidInputException.hpp"
 #include "BlockedDOFTest.hpp"
 
 BlockedDOFTest::BlockedDOFTest() : a(ssc::random_data_generator::DataGenerator(854512))
@@ -68,9 +68,9 @@ TEST_F(BlockedDOFTest, should_throw_if_forcing_same_state_twice)
                              "       value: [5]\n"
                              "       interpolation: piecewise constant\n";
 
-    ASSERT_THROW(BlockedDOF b(yaml1), BlockedDOFException);
-    ASSERT_THROW(BlockedDOF b(yaml2), BlockedDOFException);
-    ASSERT_THROW(BlockedDOF b(yaml3), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(yaml1), InvalidInputException);
+    ASSERT_THROW(BlockedDOF b(yaml2), InvalidInputException);
+    ASSERT_THROW(BlockedDOF b(yaml3), InvalidInputException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_not_as_many_values_as_instants)
@@ -82,7 +82,7 @@ TEST_F(BlockedDOFTest, should_throw_if_not_as_many_values_as_instants)
                              "       t: [4.2,5]\n"
                              "       value: [5]\n"
                              "       interpolation: piecewise constant\n";
-    ASSERT_THROW(BlockedDOF b(invalid_yaml), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(invalid_yaml), InvalidInputException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
@@ -94,7 +94,7 @@ TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
                              "       t: [5,4.2]\n"
                              "       value: [5,6]\n"
                              "       interpolation: piecewise constant\n";
-    ASSERT_THROW(BlockedDOF b(invalid_yaml), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(invalid_yaml), InvalidInputException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_CSV_file_does_not_exist)
@@ -106,7 +106,7 @@ TEST_F(BlockedDOFTest, should_throw_if_CSV_file_does_not_exist)
                              "       value: PS\n"
                              "       interpolation: spline\n"
                              "       filename: test.csv\n";
-    ASSERT_THROW(BlockedDOF b(yaml), BlockedDOFException);
+    ASSERT_THROW(BlockedDOF b(yaml), InvalidInputException);
 }
 
 struct TmpFile

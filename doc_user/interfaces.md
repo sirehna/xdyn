@@ -22,6 +22,10 @@ Options:
                              d'entrée
   -c [ --commands ] arg      Nom du fichier contenant les commandes à appliquer
                              à chaque instant. Cf. section 'Efforts commandés'
+  -d [ --debug ]             Option utilisée par l'équipe de support pour aider
+                             au diagnostique d'erreur. Permet de voir l'endroit
+                             exact du code où une erreur a eu lieu (ne capture
+                             pas les exceptions, par exemple pour utiliser un debugger).
 ~~~~~~~~~~~~~~~~~~~~
 
 Les résultats sont écrits (au format CSV) vers la sortie standard. On peut les

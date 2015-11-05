@@ -9,10 +9,9 @@
 #include <cmath>
 #define PI M_PI
 
-#include <sstream>
 
 #include "BretschneiderSpectrum.hpp"
-#include "WaveModelException.hpp"
+#include "InvalidInputException.hpp"
 
 #define POW2(x) ((x)*(x))
 #define POW4(x) (POW2(POW2(x)))
@@ -23,15 +22,11 @@ BretschneiderSpectrum::BretschneiderSpectrum(const double Hs_,   //!< Significan
 {
     if (Hs_<0)
     {
-        std::stringstream ss;
-        ss << "Hs should be greater than or equal to 0: got " << Hs_;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Hs should be greater than or equal to 0: got " << Hs_);
     }
     if (Tp_<=0)
     {
-        std::stringstream ss;
-        ss << "Tp should be greater than 0: got " << Tp_;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Tp should be greater than 0: got " << Tp_);
     }
     omega0 /= Tp;
 }
@@ -40,9 +35,7 @@ double BretschneiderSpectrum::operator()(const double omega) const
 {
     if (omega<=0)
     {
-        std::stringstream ss;
-        ss << "omega should be greater than 0: got " << omega;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega should be greater than 0: got " << omega);
     }
     const double alpha = POW4(omega0/omega);
     return 0.3125 * (alpha/omega) * Hs2 * exp(-1.25*alpha);

@@ -4,7 +4,7 @@
 #include "ClosingFacetComputer.hpp"
 #include "MeshBuilder.hpp"
 #include "MeshIntersector.hpp"
-#include "MeshIntersectorException.hpp"
+#include "InternalErrorException.hpp"
 #include "mesh_manipulations.hpp"
 #include "2DMeshDisplay.hpp"
 #include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
@@ -121,7 +121,7 @@ void MeshIntersector::update_intersection_with_free_surface(const std::vector<do
     all_relative_immersions = relative_immersions;
     if (std::any_of(relative_immersions.begin(),relative_immersions.end(), [](const double x){return std::isnan(x);}))
     {
-        THROW(__PRETTY_FUNCTION__, MeshIntersectorException, "Some relative immersions are NaN.");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Some relative immersions are NaN.");
     }
     all_absolute_wave_elevations = absolute_wave_elevations;
     reset_dynamic_members();

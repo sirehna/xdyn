@@ -13,7 +13,6 @@
 #include "SimTest.hpp"
 #include "YamlSimulatorInput.hpp"
 #include "yaml_data.hpp"
-#include "SimException.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "STL_data.hpp"
 #include "simulator_api.hpp"

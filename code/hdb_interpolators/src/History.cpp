@@ -10,7 +10,7 @@
 #include <sstream>
 
 #include "History.hpp"
-#include "HistoryException.hpp"
+#include "InternalErrorException.hpp"
 
 History::History(const double Tmax_) : Tmax(Tmax_), L(), oldest_recorded_instant(0)
 {
@@ -23,19 +23,17 @@ double History::operator()(double tau //!< How far back in history do we need to
     if (std::abs(tau-Tmax)<eps) tau = Tmax;
     if (tau>Tmax)
     {
-        std::stringstream ss;
-        ss << "Requesting value too far in the past: asked for t-" << tau << ", but history only goes back to t-" << Tmax;
-        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException,
+                "Requesting value too far in the past: asked for t-" << tau << ", but history only goes back to t-" << Tmax);
     }
     if (tau<0)
     {
-        std::stringstream ss;
-        ss << "Requesting value in the future: asked for t-tau with tau = " << tau;
-        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException,
+                "Requesting value in the future: asked for t-tau with tau = " << tau);
     }
     if (L.empty())
     {
-        THROW(__PRETTY_FUNCTION__, HistoryException, "Cannot retrieve anything from history because it is empty");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Cannot retrieve anything from history because it is empty");
     }
     return get_value(tau);
 }
@@ -72,9 +70,8 @@ void History::throw_if_already_added(const size_t idx, const double t, const dou
 {
     if ((idx != L.size()) and (L[idx].first == t) and (val != L[idx].second))
     {
-        std::stringstream ss;
-        ss << "Attempting to insert the same instant in History with different value: t = " << t << " already exists.";
-        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException,
+                "Attempting to insert the same instant in History with different value: t = " << t << " already exists.");
     }
 }
 
@@ -192,11 +189,9 @@ void History::check_if_average_can_be_retrieved(const double T) const
 {
     if (T < 0)
     {
-        std::stringstream ss;
-        ss
-                << "Cannot retrieve average value because supplied length is negative: received T = "
-                << T;
-        THROW(__PRETTY_FUNCTION__, HistoryException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException,
+                "Cannot retrieve average value because supplied length is negative: received T = "
+                << T);
     }
 }
 

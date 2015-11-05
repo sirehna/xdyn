@@ -7,8 +7,31 @@
 
 #include "external_data_structures_parsers.hpp"
 #include "yaml.h"
-#include "SimulatorYamlParserException.hpp"
+#include "yaml-cpp/exceptions.h"
+#include "InvalidInputException.hpp"
 #include <ssc/yaml_parser.hpp>
+
+size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& key)
+{
+    double x;
+    try
+    {
+        node[key] >> x;
+    }
+    catch(YAML::Exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error trying to parse key '" << key << "' (" << e.msg << ")";
+        throw YAML::Exception(node.GetMark(), ss.str());
+    }
+    if (x != (size_t)x)
+    {
+        std::stringstream ss;
+        ss << "Expected a positive integer for key '" << key << "', but got " << x;
+        throw YAML::Exception(node.GetMark(), ss.str());
+    }
+    return (size_t)x;
+}
 
 template <typename T> void try_to_parse(const YAML::Node& node, const std::string& key, T& value)
 {
@@ -43,7 +66,7 @@ void operator >> (const YAML::Node& node, YamlRotation& g)
     {
         std::stringstream ss;
         ss << "Could not parse rotations: there should be exactly three elements in the 'rotations convention' list, but " << s.size() << " were detected.";
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     bool detected_axis = false;
     bool detected_angle = false;
@@ -55,7 +78,7 @@ void operator >> (const YAML::Node& node, YamlRotation& g)
         {
             std::stringstream ss;
             ss << "Could not parse rotations: element nb " << i << " (starting from 0) in vector was " << si;
-            THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
         }
         const std::string si_with_no_apostrophs = si.substr(0,si.find_first_of('\''));
         if ((si_with_no_apostrophs == "x") or (si_with_no_apostrophs == "y") or (si_with_no_apostrophs == "z"))
@@ -73,7 +96,7 @@ void operator >> (const YAML::Node& node, YamlRotation& g)
         {
             std::stringstream ss;
             ss << "Could not parse rotations: could not detect convention for element nb " << i << " (starting from 0) in vector, which was " << si;
-            THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, ss.str());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
         }
         g.convention.push_back(si);
     }
@@ -100,6 +123,8 @@ void operator >> (const YAML::Node& node, YamlModel& m)
     YAML::Emitter out;
     out << node;
     m.yaml = out.c_str();
+    const int i = node.GetMark().line;
+    m.index_of_first_line_in_global_yaml = i > 0 ? 1+(size_t)i : 0;
 }
 
 void operator >> (const YAML::Node& node, YamlPosition& p)
@@ -163,7 +188,7 @@ void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
             or node.FindValue("row 5")
             or node.FindValue("row 6"))
         {
-            THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': cannot specify both an HDB filename & a matrix.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': cannot specify both an HDB filename & a matrix.");
         }
         m.read_from_file = true;
         *parameter >> m.hdb_filename;
@@ -200,7 +225,7 @@ void operator >> (const YAML::Node& node, BlockableState& g)
     else if (t == "r") g = BlockableState::R;
     else
     {
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Unrecognized state: '" << t << "'. Has to be one of 'u', 'v', 'w', 'p', 'q' or 'r'.");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unrecognized state: '" << t << "'. Has to be one of 'u', 'v', 'w', 'p', 'q' or 'r'.");
     }
 }
 
@@ -214,7 +239,7 @@ void operator >> (const YAML::Node& node, InterpolationType& g)
     else if (t == "spline")             g = InterpolationType::SPLINE;
     else
     {
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Unrecognized interpolation type: '" << t << "'. Has to be one of 'piecewise constant', 'linear', 'spline'");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unrecognized interpolation type: '" << t << "'. Has to be one of 'piecewise constant', 'linear', 'spline'");
     }
 }
 

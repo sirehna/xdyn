@@ -13,7 +13,7 @@
 #include "update_kinematics.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "YamlWaveModelInput.hpp"
-#include "SimException.hpp"
+#include "InternalErrorException.hpp"
 
 #define SQUARE(x) ((x)*(x))
 
@@ -183,9 +183,7 @@ ssc::kinematics::PointMatrix Sim::get_waves(const double t//!< Current instant
     }
     catch (const ssc::kinematics::KinematicsException& e)
     {
-        std::stringstream ss;
-        ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
-        THROW(__PRETTY_FUNCTION__, SimException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating waves on mesh: the output reference frame does not exist (" << e.get_message() << ")");
     }
     return ssc::kinematics::PointMatrix("NED",0);
 }

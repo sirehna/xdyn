@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
+#include "InvalidInputException.hpp"
 #include "Observer.hpp"
-#include "ObserverException.hpp"
 #include "Sim.hpp"
 
 Observer::Observer(const std::vector<std::string>& data_) : initialized(false), stuff_to_write(data_), serialize(), initialize()
@@ -46,7 +46,7 @@ void Observer::initialize_everything_if_necessary()
             auto initialize_stuff = initialize.find(stuff);
             if (initialize_stuff == initialize.end())
             {
-                THROW(__PRETTY_FUNCTION__, ObserverException, std::string("Simulation does not compute '") + stuff + "'");
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
             }
             initialize_stuff->second();
             if (i<(n-1)) flush_value_during_initialization();
@@ -67,7 +67,7 @@ void Observer::serialize_everything()
         auto serialize_stuff = serialize.find(stuff);
         if (serialize_stuff == serialize.end())
         {
-            THROW(__PRETTY_FUNCTION__, ObserverException, std::string("Simulation does not compute '") + stuff + "'");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
         }
         serialize_stuff->second();
         if (i<(n-1)) flush_value_during_write();

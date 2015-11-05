@@ -19,7 +19,7 @@ typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 #define PI M_PI
 
 #include "History.hpp"
-#include "DampingMatrixInterpolatorException.hpp"
+#include "InternalErrorException.hpp"
 #include "RadiationDampingBuilder.hpp"
 
 RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfQuadrature& type_of_quadrature_for_convolution_, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
@@ -65,7 +65,7 @@ double RadiationDampingBuilder::cos_transform(const std::function<double(double)
             return 2./PI*ssc::integrate::Filon(Br,tau).integrate_f(a, b);
             break;
         default:
-            THROW(__PRETTY_FUNCTION__, DampingMatrixInterpolatorException, "Unknown type of quadrature.");
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Unknown quadrature type");
             break;
     }
     return 0;

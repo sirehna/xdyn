@@ -6,6 +6,7 @@
  */
 
 #include "InterpolationModule.hpp"
+#include "InvalidInputException.hpp"
 #include "listeners.hpp"
 #include "YamlCommands.hpp"
 #include "parse_commands.hpp"
@@ -18,6 +19,7 @@ void add_interpolation_table(const std::string& x_name, const std::vector<double
 {
     ds.check_in(__PRETTY_FUNCTION__);
     TR1(shared_ptr)<ssc::interpolation::LinearInterpolationVariableStep> I(new ssc::interpolation::LinearInterpolationVariableStep(x, y));
+
     const std::string module_name = x_name + "->" + y_name;
     InterpolationModule module(&ds, module_name, x_name, y_name, I);
     ds.add(module);
@@ -40,7 +42,14 @@ void add(std::vector<YamlCommands>::iterator& that_command, ssc::data_source::Da
     {
         for (auto it = that_command->commands.begin() ; it != that_command->commands.end() ; ++it)
         {
-            add_interpolation_table("t", t, that_command->name + "(" + it->first + ")", it->second, ds);
+            try
+            {
+                add_interpolation_table("t", t, that_command->name + "(" + it->first + ")", it->second, ds);
+            }
+            catch(const ssc::interpolation::PiecewiseConstantVariableStepException& e)
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to build interpolation table between 't' and '" << it->first << "' for force model '" << that_command->name << "': " << e.get_message());
+            }
         }
     }
     ds.check_out();

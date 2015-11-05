@@ -18,7 +18,8 @@ FILE(GLOB SRC src/JonswapSpectrumTest.cpp
 # Include directories
 include_directories(inc)
 include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
-include_directories(${random_data_generator_INCLUDE_DIRS})
+include_directories(${ssc_INCLUDE_DIRS})
+include_directories(${exceptions_INCLUDE_DIRS})
 include_directories(${test_macros_SOURCE_DIR})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})

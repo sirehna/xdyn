@@ -10,6 +10,7 @@
 #include "yaml.h"
 #include "YamlSimulatorInput.hpp"
 
+size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& key);
 void operator >> (const YAML::Node& node, YamlRotation& g);
 void operator >> (const YAML::Node& node, YamlBody& b);
 void operator >> (const YAML::Node& node, YamlModel& m);

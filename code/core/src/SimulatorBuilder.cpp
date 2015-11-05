@@ -8,7 +8,7 @@
 #include <ssc/kinematics.hpp>
 #include <ssc/text_file_reader.hpp>
 #include "SimulatorBuilder.hpp"
-#include "SimulatorBuilderException.hpp"
+#include "InternalErrorException.hpp"
 #include "update_kinematics.hpp"
 #include "stl_reader.hpp"
 #include "BodyBuilder.hpp"
@@ -41,7 +41,7 @@ std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const s
         }
         else
         {
-            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("Unable to find mesh for '") + body.name + "' in map");
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Unable to find mesh for '" << body.name << "' in map.");
         }
     }
     return ret;
@@ -73,7 +73,7 @@ SurfaceElevationPtr SimulatorBuilder::get_wave() const
 {
     if (surface_elevation_parsers.empty())
     {
-        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No wave parser defined: use SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wave parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
     }
     SurfaceElevationPtr ret;
     for (auto that_model=input.environment.begin() ; that_model != input.environment.end() ; ++that_model)
@@ -86,7 +86,7 @@ SurfaceElevationPtr SimulatorBuilder::get_wave() const
             {
                 if (ret.use_count())
                 {
-                    THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "More than one wave model was defined.");
+                    THROW(__PRETTY_FUNCTION__, InternalErrorException, "More than one wave model was defined.");
                 }
                 ret = w.get();
                 wave_model_successfully_parsed = true;
@@ -94,7 +94,7 @@ SurfaceElevationPtr SimulatorBuilder::get_wave() const
         }
         if (not(wave_model_successfully_parsed))
         {
-            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, std::string("Could not parse wave model '") + that_model->model + "'");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not understand wave model '" << that_model->model << "'");
         }
     }
     return ret;
@@ -163,7 +163,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::s
     bool parsed = false;
     for (auto try_to_parse:force_parsers)
     {
-        boost::optional<ForcePtr> f = try_to_parse(model.model, model.yaml, body_name, env);
+        boost::optional<ForcePtr> f = try_to_parse(model, body_name, env);
         if (f)
         {
             L.push_back(f.get());
@@ -173,9 +173,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::s
 
     if (not(parsed))
     {
-        std::stringstream ss;
-        ss << "Unable to find a parser to parse model '" << model.model << "'";
-        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator.");
     }
 }
 
@@ -184,7 +182,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     bool parsed = false;
     for (auto try_to_parse:controllable_force_parsers)
     {
-        boost::optional<ControllableForcePtr> f = try_to_parse(model.model, model.yaml, name, env);
+        boost::optional<ControllableForcePtr> f = try_to_parse(model, name, env);
         if (f)
         {
             L.push_back(f.get());
@@ -193,9 +191,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     }
     if (not(parsed))
     {
-        std::stringstream ss;
-        ss << "Unable to find a parser to parse model '" << model.model << "'";
-        THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator.");
     }
 }
 

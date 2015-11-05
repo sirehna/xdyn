@@ -55,6 +55,7 @@ ENDIF()
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
 ADD_SUBDIRECTORY(base91x)
+ADD_SUBDIRECTORY(exceptions)
 ADD_SUBDIRECTORY(external_data_structures)
 ADD_SUBDIRECTORY(test_data_generator)
 ADD_SUBDIRECTORY(interface_hdf5)

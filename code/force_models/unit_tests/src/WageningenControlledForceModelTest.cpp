@@ -13,7 +13,7 @@
 #include "yaml_data.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelTest.hpp"
-#include "WageningenControlledForceModelException.hpp"
+#include "InvalidInputException.hpp"
 
 #define EPS 1E-2
 #define NB_TRIALS 100
@@ -67,11 +67,11 @@ TEST_F(WageningenControlledForceModelTest, should_throw_if_blade_area_ratio_is_o
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
         input.blade_area_ratio = a.random<double>().between(0,0.3);
-        ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), WageningenControlledForceModelException);
+        ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), InvalidInputException);
         input.blade_area_ratio = a.random<double>().between(1.05,10);
-        ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), WageningenControlledForceModelException);
+        ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), InvalidInputException);
         input.blade_area_ratio = a.random<double>().outside(0.3,1.05);
-        ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), WageningenControlledForceModelException);
+        ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), InvalidInputException);
         input.blade_area_ratio = a.random<double>().between(0.3,1.05);
         ASSERT_NO_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()));
     }
@@ -81,11 +81,11 @@ TEST_F(WageningenControlledForceModelTest, should_throw_if_number_of_blades_is_o
 {
     auto input  = WageningenControlledForceModel::parse(test_data::wageningen());
     input.number_of_blades = 0;
-    ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), WageningenControlledForceModelException);
+    ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), InvalidInputException);
     input.number_of_blades = 1;
-    ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), WageningenControlledForceModelException);
+    ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), InvalidInputException);
     input.number_of_blades = 8;
-    ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), WageningenControlledForceModelException);
+    ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), InvalidInputException);
     input.number_of_blades = 2;
     ASSERT_NO_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()));
     input.number_of_blades = 3;
@@ -101,7 +101,7 @@ TEST_F(WageningenControlledForceModelTest, should_throw_if_number_of_blades_is_o
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
         input.number_of_blades = a.random<size_t>().greater_than(7);
-        ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), WageningenControlledForceModelException);
+        ASSERT_THROW(WageningenControlledForceModel w(input, "", EnvironmentAndFrames()), InvalidInputException);
     }
 }
 

@@ -9,21 +9,17 @@
 #include <sstream>
 
 #include "DiracSpectralDensity.hpp"
-#include "WaveModelException.hpp"
+#include "InvalidInputException.hpp"
 
 DiracSpectralDensity::DiracSpectralDensity(const double omega0_, const double Hs_) : omega0(omega0_), Hs(Hs_)
 {
     if (Hs<0)
     {
-        std::stringstream ss;
-        ss << "Hs should be greater than or equal to 0: got " << Hs;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Hs should be greater than or equal to 0: got " << Hs);
     }
     if (omega0<=0)
     {
-        std::stringstream ss;
-        ss << "omega0 should be greater than 0: got " << omega0;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega0 should be greater than 0: got " << omega0);
     }
 }
 
@@ -31,9 +27,7 @@ double DiracSpectralDensity::operator()(const double omega) const
 {
     if (omega<=0)
     {
-        std::stringstream ss;
-        ss << "omega should be greater than 0: got " << omega;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega should be greater than 0: got " << omega);
     }
     if (fabs(omega-omega0)<1E-15) return Hs*Hs/8;
                                   return 0;

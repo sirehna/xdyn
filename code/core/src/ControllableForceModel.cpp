@@ -8,7 +8,7 @@
 #include <ssc/data_source.hpp>
 
 #include "ControllableForceModel.hpp"
-#include "ControllableForceModelException.hpp"
+#include "InvalidInputException.hpp"
 #include "ForceModel.hpp"
 #include "Observer.hpp"
 #include "yaml2eigen.hpp"
@@ -84,8 +84,10 @@ double ControllableForceModel::get_command(const std::string& command_name, ssc:
     }
     catch (const ssc::data_source::DataSourceException& e)
     {
-        const std::string msg = std::string("Unable to retrieve command '") + command_name + "' for '" + name + "'\n" + e.what();
-        THROW(__PRETTY_FUNCTION__, ControllableForceModelException, msg);
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Unable to retrieve command '" << command_name << "' for '" << name << "': " << e.get_message()
+                << " Check that the YAML file containing the commands was supplied to the simulator & that the command exists in that file."
+                );
     }
     return ret;
 }

@@ -7,6 +7,7 @@
 
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
+#include "InternalErrorException.hpp"
 
 double area(const Matrix3x& M, //!< Matrix containing (amongst others), the points of interest
             const int idxA,    //!< Index of the column containing the first point
@@ -102,7 +103,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
            << points.cols() << " point";
         if (points.cols()>1) ss << "s";
         ss << ".";
-       THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
+       THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     const double x1 = points(0,1)-points(0,0);
     const double x2 = points(1,1)-points(1,0);
@@ -130,7 +131,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& points, //!< Polygon for which the u
            << vertex_index.size() << " point";
         if (vertex_index.size()>1) ss << "s";
         ss << ".";
-       THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
+       THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     const double x1 = points(0,(int)vertex_index[1])-points(0,(int)vertex_index[0]);
     const double x2 = points(1,(int)vertex_index[1])-points(1,(int)vertex_index[0]);

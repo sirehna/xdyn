@@ -13,6 +13,7 @@ FILE(GLOB SRC src/SimulatorYamlParserTest.cpp
 include_directories(inc)
 include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+include_directories(${exceptions_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${GMOCK_INCLUDE_DIRS})
 include_directories(${external_data_structures_INCLUDE_DIRS})

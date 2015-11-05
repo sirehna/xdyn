@@ -15,17 +15,7 @@
 #include "FastHydrostaticForceModel.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "Observer.hpp"
-
-#include <ssc/exception_handling.hpp>
-
-class GMForceModelException: public ssc::exception_handling::Exception
-{
-    public:
-        GMForceModelException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
-            ::ssc::exception_handling::Exception(message, file, function, line)
-        {
-        }
-};
+#include "InvalidInputException.hpp"
 
 const std::string GMForceModel::model_name = "GM";
 
@@ -40,16 +30,17 @@ GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, cons
 , env(env_)
 , GM(new double(0))
 {
-    boost::optional<ForcePtr> f = data.try_to_parse(data.name_of_hydrostatic_force_model, "", get_body_name(), env);
+    YamlModel data_for_hs;
+    data_for_hs.index_of_first_line_in_global_yaml = data.index_of_first_line_in_global_yaml;
+    data_for_hs.model = data.name_of_hydrostatic_force_model;
+    boost::optional<ForcePtr> f = data.try_to_parse(data_for_hs, get_body_name(), env);
     if (f)
     {
         underlying_hs_force_model = f.get();
     }
     else
     {
-        std::stringstream ss;
-        ss << "Unable to find a parser to parse model '" << data.name_of_hydrostatic_force_model << "'";
-        THROW(__PRETTY_FUNCTION__, GMForceModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find a parser to parse model '" << data.name_of_hydrostatic_force_model << "'");
     }
 }
 
@@ -62,29 +53,23 @@ GMForceModel::Yaml GMForceModel::parse(const std::string& yaml)
     Yaml ret;
     node["name of hydrostatic force model"] >> ret.name_of_hydrostatic_force_model;
     ssc::yaml_parser::parse_uv(node["roll step"], ret.roll_step);
-    bool managed_to_parse = false;
     if (ret.name_of_hydrostatic_force_model == "hydrostatic")
     {
         ret.try_to_parse = ForceModel::build_parser<HydrostaticForceModel>();
-        managed_to_parse = true;
+        return ret;
     }
     if (ret.name_of_hydrostatic_force_model == "non-linear hydrostatic (exact)")
     {
         ret.try_to_parse = ForceModel::build_parser<ExactHydrostaticForceModel>();
-        managed_to_parse = true;
+        return ret;
     }
     if (ret.name_of_hydrostatic_force_model == "non-linear hydrostatic (fast)")
     {
         ret.try_to_parse = ForceModel::build_parser<FastHydrostaticForceModel>();
-        managed_to_parse = true;
+        return ret;
     }
-    if (not(managed_to_parse))
-    {
-        std::stringstream ss;
-        ss << "Couldn't find any suitable hydrostatic force model: "
-           << "received '" << ret.name_of_hydrostatic_force_model << "', expected one of 'non-linear hydrostatic (exact)', 'non-linear hydrostatic (fast)' or 'hydrostatic'";
-        THROW(__PRETTY_FUNCTION__, GMForceModelException, ss.str());
-    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Couldn't find any suitable hydrostatic force model: "
+            << "received '" << ret.name_of_hydrostatic_force_model << "', expected one of 'non-linear hydrostatic (exact)', 'non-linear hydrostatic (fast)' or 'hydrostatic'");
     return ret;
 }
 

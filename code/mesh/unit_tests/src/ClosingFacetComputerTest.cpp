@@ -18,7 +18,7 @@
 #include "2DMeshDisplay.hpp"
 #include "ClosingFacetComputerTest.hpp"
 #include "ClosingFacetComputer.hpp"
-#include "ClosingFacetComputerException.hpp"
+#include "InternalErrorException.hpp"
 #include "TestMeshes.hpp"
 
 ClosingFacetComputerTest::ClosingFacetComputerTest() : a(ssc::random_data_generator::DataGenerator(21233))
@@ -98,13 +98,13 @@ TEST_F(ClosingFacetComputerTest, angle_between_closing_edges_should_be_the_lowes
 
 TEST_F(ClosingFacetComputerTest, edge_angle_should_throw_if_edges_do_not_exist)
 {
-    ASSERT_THROW(make(case_1()).angle_between_edges(5,6), ClosingFacetComputerException);
-    ASSERT_THROW(make(case_1()).angle_between_edges(6,5), ClosingFacetComputerException);
+    ASSERT_THROW(make(case_1()).angle_between_edges(5,6), InternalErrorException);
+    ASSERT_THROW(make(case_1()).angle_between_edges(6,5), InternalErrorException);
 }
 
 TEST_F(ClosingFacetComputerTest, edge_angle_should_throw_if_edges_do_not_have_a_point_in_common)
 {
-    ASSERT_THROW(make(case_1()).angle_between_edges(0,3), ClosingFacetComputerException);
+    ASSERT_THROW(make(case_1()).angle_between_edges(0,3), InternalErrorException);
 }
 
 TEST_F(ClosingFacetComputerTest, can_find_edges_connected_to_second_point_of_a_particular_edge)
@@ -118,12 +118,12 @@ TEST_F(ClosingFacetComputerTest, can_find_edges_connected_to_second_point_of_a_p
 
 TEST_F(ClosingFacetComputerTest, next_edge_should_throw_if_edge_does_not_exist)
 {
-    ASSERT_THROW(make(case_1()).next_edge(10), ClosingFacetComputerException);
+    ASSERT_THROW(make(case_1()).next_edge(10), InternalErrorException);
 }
 
 TEST_F(ClosingFacetComputerTest, next_edge_should_throw_if_edge_is_not_connected_to_anything)
 {
-    ASSERT_THROW(make(case_8()).next_edge(5), ClosingFacetComputerException);
+    ASSERT_THROW(make(case_8()).next_edge(5), InternalErrorException);
 }
 
 TEST_F(ClosingFacetComputerTest, can_find_the_next_edge_in_a_contour_for_case_1)
@@ -274,7 +274,6 @@ TEST_F(ClosingFacetComputerTest, can_find_first_extreme_edge_using_xmin_strategy
     ASSERT_EQ(4, make(case_8()).extreme_edges().first);
     ASSERT_EQ(5, make(case_9()).extreme_edges().first);
     ASSERT_EQ(7, make(case_10()).extreme_edges().first);
-    COUT(case_11());
     ASSERT_EQ(0, make(case_11()).extreme_edges().first);
 }
 
@@ -310,7 +309,7 @@ TEST_F(ClosingFacetComputerTest, another_bug_in_group_connected_edges_detected_i
 
 TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_11)
 {
-    ASSERT_THROW(make(case_11()).contour(), ClosingFacetComputerException);
+    ASSERT_THROW(make(case_11()).contour(), InternalErrorException);
 }
 
 TEST_F(ClosingFacetComputerTest, contour_does_not_work_for_test_case_15)

@@ -19,6 +19,7 @@ include_directories(inc)
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
+include_directories(${exceptions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 

@@ -9,7 +9,7 @@
 #include <ssc/text_file_reader.hpp>
 
 #include "BodyBuilder.hpp"
-#include "BodyBuilderException.hpp"
+#include "InvalidInputException.hpp"
 #include "BodyWithSurfaceForces.hpp"
 #include "BodyWithoutSurfaceForces.hpp"
 #include "HDBParser.hpp"
@@ -84,15 +84,15 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
     if (fabs(Mt.determinant())<1E-10)
     {
-        std::stringstream ss;
-        ss << "Unable to compute the inverse of the total inertia matrix (rigid body inertia + added mass): " << std::endl
-           << "Mrb = " << std::endl
-           << Mrb << std::endl
-           << "Ma = " << std::endl
-           << Ma << std::endl
-           << "Mrb+Ma = " << std::endl
-           << Mt << std::endl;
-        THROW(__PRETTY_FUNCTION__, BodyBuilderException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Unable to compute the inverse of the total inertia matrix (rigid body inertia + added mass) "
+                << "for body '" << states.name << ": " << std::endl
+                << "Mrb = " << std::endl
+                << Mrb << std::endl
+                << "Ma = " << std::endl
+                << Ma << std::endl
+                << "Mrb+Ma = " << std::endl
+                << Mt << std::endl);
     }
     Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
     states.inverse_of_the_total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(M_inv));

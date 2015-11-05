@@ -11,13 +11,19 @@
 #include <string>
 #include <fstream> // std::cout
 
+struct BooleanArguments
+{
+    bool help;
+    bool debug;
+};
+
 struct InputData;
 #include "boost/program_options.hpp"
 namespace po = boost::program_options;
 
 void print_usage(std::ostream& os, const po::options_description& desc, const std::string& program_name, const std::string& des);
 bool invalid(const InputData& input);
-bool parse_input(int argc, char **argv, const po::options_description& desc);
+BooleanArguments parse_input(int argc, char **argv, const po::options_description& desc);
 po::options_description get_options_description(InputData& input_data);
 int get_input_data(int argc, char **argv, InputData& input_data);
 int display_help(char *argv, InputData& input_data);

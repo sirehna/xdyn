@@ -7,7 +7,7 @@
 
 #include "SimulatorYamlParser.hpp"
 #include "yaml.h"
-#include "SimulatorYamlParserException.hpp"
+#include "InvalidInputException.hpp"
 #include <ssc/yaml_parser.hpp>
 #include "external_data_structures_parsers.hpp"
 
@@ -27,7 +27,7 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
     convert_stream_to_yaml_node(contents, node);
     if (node.size() == 0)
     {
-        THROW(__PRETTY_FUNCTION__, SimulatorYamlParserException, "Something is wrong with the YAML data: no YAML nodes were detected by the YAML parser.");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML data: no YAML nodes were detected by the YAML parser.");
     }
     YamlSimulatorInput ret;
     PARSE_OPTIONAL_KEY("environmental constants", ret.environmental_constants);

@@ -12,7 +12,7 @@
 #include "builders.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "environment_parsers.hpp"
-#include "SimulatorBuilderException.hpp"
+#include "InternalErrorException.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "discretize.hpp"
 #include "HDBParser.hpp"
@@ -24,7 +24,7 @@ boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBui
     {
         if (yaml.empty())
         {
-            THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, "No yaml data detected for default wave model (expected 'constant wave height in NED frame: {value: xx, unit: yy})'");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "No yaml data detected for default wave model (expected 'constant wave height in NED frame: {value: xx, unit: yy})'");
         }
         YamlDefaultWaveModel input = parse_default_wave_model(yaml);
         const auto output_mesh = make_wave_mesh(input.output);
@@ -49,12 +49,18 @@ TR1(shared_ptr)<WaveSpectralDensity> SurfaceElevationBuilder<SurfaceElevationFro
 {
     for (auto that_parser = spectrum_parsers->begin() ; that_parser != spectrum_parsers->end() ; ++that_parser)
     {
-        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > w = (*that_parser)->try_to_parse(spectrum.spectral_density_type, spectrum.spectral_density_yaml);
+        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > w;
+        try
+        {
+            w = (*that_parser)->try_to_parse(spectrum.spectral_density_type, spectrum.spectral_density_yaml);
+        }
+        catch (const InvalidInputException& exception)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Problem when parsing spectral density '" << spectrum.model << "': " << exception.get_message());
+        }
         if (w) return w.get();
     }
-    std::stringstream ss;
-    ss << "Unable to find a parser to parse wave spectral density '" << spectrum.spectral_density_type << "'";
-    THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "The wave spectral density specified in the YAML file is not understood by the simulator ('" << spectrum.spectral_density_type << "'): either it is misspelt or this simulator version is outdated.");
     return TR1(shared_ptr)<WaveSpectralDensity>();
 }
 
@@ -62,12 +68,18 @@ TR1(shared_ptr)<WaveDirectionalSpreading> SurfaceElevationBuilder<SurfaceElevati
 {
     for (auto that_parser = directional_spreading_parsers->begin() ; that_parser != directional_spreading_parsers->end() ; ++that_parser)
     {
-        boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > w = (*that_parser)->try_to_parse(spectrum.directional_spreading_type, spectrum.directional_spreading_yaml);
+        boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > w;
+        try
+        {
+            w = (*that_parser)->try_to_parse(spectrum.directional_spreading_type, spectrum.directional_spreading_yaml);
+        }
+        catch (const InvalidInputException& exception)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Problem when parsing directional spreading '" << spectrum.model << "': " << exception.get_message());
+        }
         if (w) return w.get();
     }
-    std::stringstream ss;
-    ss << "Unable to find a parser to parse wave directional spreading '" << spectrum.directional_spreading_type << "'";
-    THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "The wave directional spreading specified in the YAML file is not understood by the simulator ('" << spectrum.directional_spreading_type << "'): either it is misspelt or this simulator version is outdated.");
     return TR1(shared_ptr)<WaveDirectionalSpreading>();
 }
 
@@ -91,9 +103,7 @@ TR1(shared_ptr)<WaveModel> SurfaceElevationBuilder<SurfaceElevationFromWaves>::p
         boost::optional<TR1(shared_ptr)<WaveModel> > w = (*that_parser)->try_to_parse(spectrum.model, discrete_spectrum, spectrum.model_yaml);
         if (w) return w.get();
     }
-    std::stringstream ss;
-    ss << "Unable to find a parser to parse wave model '" << spectrum.model << "'";
-    THROW(__PRETTY_FUNCTION__, SimulatorBuilderException, ss.str());
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "The wave model specified in the YAML file is not understood by the simulator ('" << spectrum.model << "'): either it is misspelt or this simulator version is outdated.");
     return TR1(shared_ptr)<WaveModel>();
 }
 

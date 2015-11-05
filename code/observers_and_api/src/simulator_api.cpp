@@ -49,6 +49,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<ExactHydrostaticForceModel>()
            .can_parse<FastHydrostaticForceModel>()
            .can_parse<FroudeKrylovForceModel>()
+           .can_parse<HydrostaticForceModel>()
            .can_parse<LinearDampingForceModel>()
            .can_parse<ResistanceCurveForceModel>()
            .can_parse<DiffractionForceModel>()
@@ -58,7 +59,6 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<ManeuveringForceModel>()
            .can_parse<SimpleStationKeepingController>()
            .can_parse<RudderForceModel>()
-           .can_parse<HydrostaticForceModel>()
            .can_parse<GMForceModel>()
            .can_parse<KtKqForceModel>()
            .can_parse<LinearHydrostaticForceModel>();

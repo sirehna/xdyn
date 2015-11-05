@@ -22,6 +22,7 @@ struct InputData
     double initial_timestep;
     double tstart;
     double tend;
+    bool catch_exceptions;
     bool empty() const;
 };
 

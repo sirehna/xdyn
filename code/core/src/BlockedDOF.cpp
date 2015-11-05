@@ -8,7 +8,7 @@
 #include <map>
 
 #include "BlockedDOF.hpp"
-#include "BlockedDOFException.hpp"
+#include "InvalidInputException.hpp"
 #include "external_data_structures_parsers.hpp"
 
 #include <ssc/csv_file_reader.hpp>
@@ -66,7 +66,7 @@ class Builder
         {
             if (defined[state])
             {
-                THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Attempting to define state " << state << " twice in 'blocked dof' section of the YAML file.");
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Attempting to define state " << state << " twice in 'blocked dof' section of the YAML file.");
             }
             defined[state] = true;
         }
@@ -86,20 +86,19 @@ class Builder
         }
         Interpolator build(const YamlDOF<std::vector<double> >& y) const
         {
-            Interpolator ret;
             try
             {
-                ret = build(y.t, y.value, y.interpolation);
+                return build(y.t, y.value, y.interpolation);
             }
             catch(const ssc::exception_handling::Exception& e)
             {
-                THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from YAML': " << e.get_message());
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.get_message());
             }
             catch(const std::exception& e)
             {
-                THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from YAML': " << e.what());
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.what());
             }
-            return ret;
+            return Interpolator();
         }
 
         Interpolator build(const YamlCSVDOF& y) const
@@ -112,12 +111,12 @@ class Builder
                 const auto it1 = m.find(y.t);
                 if (it1 == m.end())
                 {
-                    THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Unable to find column " << y.t << " in CSV file " << y.filename);
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find column " << y.t << " in CSV file " << y.filename);
                 }
                 const auto it2 = m.find(y.value);
                 if (it2 == m.end())
                 {
-                    THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Unable to find column " << y.value << " in CSV file " << y.filename);
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find column " << y.value << " in CSV file " << y.filename);
                 }
                 const auto t = it1->second;
                 const auto state = it2->second;
@@ -125,11 +124,11 @@ class Builder
             }
             catch(const ssc::exception_handling::Exception& e)
             {
-                THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.get_message());
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.get_message());
             }
             catch(const std::exception& e)
             {
-                THROW(__PRETTY_FUNCTION__, BlockedDOFException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.what());
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.what());
             }
             return Interpolator();
         }

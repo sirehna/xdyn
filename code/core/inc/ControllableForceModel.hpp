@@ -14,6 +14,10 @@
 
 #include <ssc/kinematics.hpp>
 
+#include "yaml-cpp/exceptions.h"
+#include "InvalidInputException.hpp"
+#include "YamlBody.hpp"
+
 #include "EnvironmentAndFrames.hpp"
 #include "YamlPosition.hpp"
 
@@ -24,7 +28,7 @@ struct YamlRotation;
 class ControllableForceModel;
 typedef TR1(shared_ptr)<ControllableForceModel> ControllableForcePtr;
 typedef std::vector<ControllableForcePtr> ListOfControlledForces;
-typedef std::function<boost::optional<ControllableForcePtr>(const std::string&, const std::string&, const std::string, const EnvironmentAndFrames&)> ControllableForceParser;
+typedef std::function<boost::optional<ControllableForcePtr>(const YamlModel&, const std::string&, const EnvironmentAndFrames&)> ControllableForceParser;
 
 class Observer;
 
@@ -54,12 +58,26 @@ class ControllableForceModel
         template <typename ControllableForceType>
         static ControllableForceParser build_parser()
         {
-            auto parser = [](const std::string& model, const std::string& yaml, const std::string& body_name_, const EnvironmentAndFrames& env) -> boost::optional<ControllableForcePtr>
+            auto parser = [](const YamlModel& yaml, const std::string& body_name, const EnvironmentAndFrames& env) -> boost::optional<ControllableForcePtr>
                           {
                               boost::optional<ControllableForcePtr> ret;
-                              if (model == ControllableForceType::model_name)
+                              if (yaml.model == ControllableForceType::model_name)
                               {
-                                  ret.reset(ControllableForcePtr(new ControllableForceType(ControllableForceType::parse(yaml), body_name_, env)));
+                                  std::string context = "Invalid input data for model '" + ControllableForceType::model_name + "'.";
+                                  try
+                                  {
+                                      ret.reset(ControllableForcePtr(new ControllableForceType(ControllableForceType::parse(yaml.yaml), body_name, env)));
+                                  }
+                                  catch (const InvalidInputException& exception)
+                                  {
+                                      THROW(__PRETTY_FUNCTION__, InvalidInputException, context << std::endl << exception.get_message());
+                                  }
+                                  catch (const YAML::Exception& exception)
+                                  {
+                                      const size_t line_number = yaml.index_of_first_line_in_global_yaml;
+                                      THROW(__PRETTY_FUNCTION__, InvalidInputException, context << std::endl << "Model containing error is defined line "
+                                                                                         << line_number << " of the YAML file." << std::endl << "The error was: " << exception.msg);
+                                  }
                               }
                               return ret;
                           };

@@ -9,7 +9,8 @@
 #include <sstream>
 
 #include "GZCurve.hpp"
-#include "GZException.hpp"
+#include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
 #include "gz_newton_raphson.hpp"
 #include "ResultantForceComputer.hpp"
 
@@ -43,7 +44,7 @@ void check_input(const double dphi, const double phi_max)
 
     if (not(error_msg.str().empty()))
     {
-        THROW(__PRETTY_FUNCTION__, GZException, error_msg.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, error_msg.str());
     }
 }
 
@@ -97,7 +98,7 @@ double GZ::Curve::zeq(const double phi, const double theta) const
     }
     if (FZ.max<0)
     {
-        THROW(__PRETTY_FUNCTION__, GZException, "Resultant should be oriented downwards when body is fully emerged");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Resultant should be oriented downwards when body is fully emerged");
     }
 
     while (delta(z)>1E-10)

@@ -76,8 +76,8 @@ int get_gz_data(int argc, char **argv, GZOptions& input_data);
 int get_gz_data(int argc, char **argv, GZOptions& input_data)
 {
     const po::options_description desc = gz_options(input_data);
-    const bool help = parse_input(argc, argv, desc);
-    if (invalid(input_data) or help)
+    const BooleanArguments has = parse_input(argc, argv, desc);
+    if (invalid(input_data) or has.help)
     {
         print_usage(std::cout, desc, argv[0], "Righting lever curve computer");
         return EXIT_FAILURE;

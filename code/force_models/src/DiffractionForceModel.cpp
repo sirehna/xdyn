@@ -6,16 +6,15 @@
  */
 
 #include <array>
-#include <sstream>
 
 #include <ssc/interpolation.hpp>
 #include <ssc/text_file_reader.hpp>
 
 #include "Body.hpp"
 #include "DiffractionForceModel.hpp"
-#include "DiffractionForceModelException.hpp"
 #include "DiffractionInterpolator.hpp"
 #include "HDBParser.hpp"
+#include "InvalidInputException.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
@@ -42,10 +41,11 @@ class DiffractionForceModel::Impl
                     {
                         if ((omega<omegas_hdb.front()) or (omega>omegas_hdb.back()))
                         {
-                            ss << "HDB only defines the RAO for angular frequencies omega within [" << omegas_hdb.front() << "," << omegas_hdb.back() << "] "
-                               << " Rad/s, but wave spectrum discretization contains omega=" << omega
-                               << " Rad/s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file";
-                            THROW(__PRETTY_FUNCTION__, DiffractionForceModelException, ss.str());
+                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                                    "HDB only defines the RAO for angular frequencies omega within [" << omegas_hdb.front() << "," << omegas_hdb.back() << "] "
+                                 << " Rad/s, but wave spectrum discretization contains omega=" << omega
+                                 << " Rad/s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file"
+                            );
                         }
                     }
                 }

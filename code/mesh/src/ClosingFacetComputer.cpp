@@ -11,7 +11,7 @@
 #include <boost/graph/connected_components.hpp>
 
 #include "ClosingFacetComputer.hpp"
-#include "ClosingFacetComputerException.hpp"
+#include "InternalErrorException.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(unordered_map)
@@ -32,7 +32,7 @@ void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges&
         ss << ": mesh only contains " << edges.size() << " edge";
         if (edges.size() > 1) ss << "s";
         ss << ".";
-        throw ClosingFacetComputerException(ss.str().c_str(), "?", "?", 0);
+        throw InternalErrorException(ss.str().c_str(), "?", "?", 0);
     }
 }
 
@@ -286,7 +286,7 @@ struct TwoEdges
                 err << "First edge has nodes " << idx_A
                     << " & " << idx_B << ", and second edge has nodes "<< idx_C
                     << " & " << idx_D << ".";
-                THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, err.str());
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, err.str());
             }
             return nodes.front();
         }
@@ -328,7 +328,7 @@ std::vector<size_t> ClosingFacetComputer::edges_connected_to_second_node_of_edge
     {
         std::stringstream ss;
         ss << "Unable to find edges connected to second node of edge #" << edge_idx << " (starting at 0)";
-        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     const auto edges = it->second;
     std::vector<size_t> ret;
@@ -345,7 +345,7 @@ std::vector<size_t> ClosingFacetComputer::edges_connected_to_first_node_of_edge(
     {
         std::stringstream ss;
         ss << "Unable to find edges connected to first node of edge #" << edge_idx << " (starting at 0)";
-        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     const auto edges = it->second;
     std::vector<size_t> ret;
@@ -378,7 +378,7 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse
         ss << "Second node of edge #" << edge_idx;;
         if (edge_idx>0) ss << " (starting from 0)";
         ss << " is not connected to anything: cannot find following edge.";
-        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
 
     const double x0 = reverse ? mesh->operator()(0,edges.at(edge_idx).first) : mesh->operator()(0,edges.at(edge_idx).second);
@@ -432,7 +432,7 @@ size_t ClosingFacetComputer::extreme_edge(const size_t extreme_node) const
     {
         std::stringstream ss;
         ss << "Unable to find node " << extreme_node << " in map.";
-        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     const auto candidates = it->second;
     const auto A = mesh->col(extreme_node);
@@ -521,7 +521,7 @@ ClosingFacetComputer::Contour ClosingFacetComputer::contour(size_t edge) const
     {
         edge = next_edge(edge);
     }
-    catch (const ClosingFacetComputerException&)
+    catch (const InternalErrorException&)
     {
         return Contour();
     }
@@ -536,7 +536,7 @@ ClosingFacetComputer::Contour ClosingFacetComputer::contour(size_t edge) const
             previous_edge = edge;
             edge = next_edge(edge,reverse);
         }
-        catch (const ClosingFacetComputerException&)
+        catch (const InternalErrorException&)
         {
             return Contour();
         }
@@ -571,7 +571,7 @@ ClosingFacetComputer::Contour ClosingFacetComputer::contour() const
     const auto second_contour = contour(ext_edges.second);
     if (not(have_same_elements(first_contour.edge_idx, second_contour.edge_idx)))
     {
-        THROW(__PRETTY_FUNCTION__, ClosingFacetComputerException, "Not getting the same contour when starting from two different extreme edges");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Not getting the same contour when starting from two different extreme edges");
     }
     std::vector<size_t> contour_with_original_indexes;
     for (const auto idx:first_contour.edge_idx) contour_with_original_indexes.push_back(original_edge_index[idx]);

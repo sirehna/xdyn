@@ -14,14 +14,13 @@
 #include "Body.hpp"
 #include "HDBParser.hpp"
 #include "History.hpp"
+#include "InvalidInputException.hpp"
 #include "RadiationDampingBuilder.hpp"
 #include "RadiationDampingForceModel.hpp"
-#include "RadiationDampingForceModelException.hpp"
 
 #include <ssc/macros.hpp>
 #include <ssc/text_file_reader.hpp>
 #include <cassert>
-#include <sstream>
 
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
@@ -205,9 +204,7 @@ TypeOfQuadrature parse_type_of_quadrature_(const std::string& s)
     else if (s == "filon")           return TypeOfQuadrature::FILON;
     else
     {
-        std::stringstream ss;
-        ss << "Unkown quadrature type: " << s << ". Should be one of 'gauss-kronrod', 'rectangle', ' simpson', 'trapezoidal', 'burcher', 'clenshaw-curtis' or 'filon'.";
-        THROW(__PRETTY_FUNCTION__, RadiationDampingForceModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unkown quadrature type: " << s << ". Should be one of 'gauss-kronrod', 'rectangle', ' simpson', 'trapezoidal', 'burcher', 'clenshaw-curtis' or 'filon'.";);
     }
     return TypeOfQuadrature::FILON;
 }

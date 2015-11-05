@@ -19,7 +19,7 @@
 
 #include "hdb_parser_internal_data_structures.hpp"
 #include "HDBParser.hpp"
-#include "HDBBuilderException.hpp"
+#include "InvalidInputException.hpp"
 #include "hdb_to_ast.hpp"
 
 class HDBParser::Impl
@@ -50,7 +50,7 @@ class HDBParser::Impl
             {
                 if(*it==0)
                 {
-                    THROW(__PRETTY_FUNCTION__, HDBBuilderException, "Zero period detected: cannot compute angular frequency. Check Added_mass_Radiation_Damping section of the HDB file.");
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Zero period detected: cannot compute angular frequency. Check Added_mass_Radiation_Damping section of the HDB file.");
                 }
                 omega_rad.push_back(2*PI/ *it);
             }
@@ -61,12 +61,11 @@ class HDBParser::Impl
             if (ret.empty()) ret.resize(M.size());
             if (M.size() != ret.size())
             {
-                std::stringstream ss;
-                ss << "Something is wrong with the HDB file: detected "
-                   << ret.size()
-                   << " periods in Added_mass_Radiation_Damping, but line "
-                   << i << " has " << M.size() << " periods";
-                THROW(__PRETTY_FUNCTION__, HDBBuilderException,  ss.str());
+                THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                        "Something is wrong with the HDB file: detected "
+                        << ret.size()
+                        << " periods in Added_mass_Radiation_Damping, but line "
+                        << i << " has " << M.size() << " periods");
             }
             for (size_t k = 0 ; k < M.size() ; ++k)
             {
@@ -99,9 +98,7 @@ class HDBParser::Impl
             {
                 if (not(found_line[i]))
                 {
-                    std::stringstream ss;
-                    ss << "Unable to find key '" << matrix << "_" << i+1 << "' in HDB file";
-                    THROW(__PRETTY_FUNCTION__, HDBBuilderException, ss.str());
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find key '" << matrix << "_" << i+1 << "' in HDB file");
                 }
             }
             return ret;

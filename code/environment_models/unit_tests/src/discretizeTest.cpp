@@ -15,7 +15,7 @@
 #include "Cos2sDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
-#include "WaveModelException.hpp"
+#include "InvalidInputException.hpp"
 
 discretizeTest::discretizeTest() : a(ssc::random_data_generator::DataGenerator(8421))
 {
@@ -90,7 +90,7 @@ TEST_F(discretizeTest, should_throw_if_omega_min_is_negative)
     const double omega_min = a.random<double>().no().greater_than(0);
     const double omega_max = a.random<double>().greater_than(0);
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), WaveModelException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_min_is_zero)
@@ -103,7 +103,7 @@ TEST_F(discretizeTest, should_throw_if_omega_min_is_zero)
     const double omega_min = 0;
     const double omega_max = a.random<double>().greater_than(0);
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), WaveModelException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_negative)
@@ -116,7 +116,7 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_negative)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().no().greater_than(0);
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), WaveModelException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_zero)
@@ -129,7 +129,7 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_zero)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = 0;
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), WaveModelException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_lower_than_omega_min)
@@ -142,7 +142,7 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_lower_than_omega_min)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().no().greater_than(omega_min);
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), WaveModelException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_nfreq_is_zero)
@@ -155,7 +155,7 @@ TEST_F(discretizeTest, should_throw_if_nfreq_is_zero)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(0);
     const size_t nfreq = 0;
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), WaveModelException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_nfreq_is_one_but_omega_min_is_not_omega_max)
@@ -168,7 +168,7 @@ TEST_F(discretizeTest, should_throw_if_nfreq_is_one_but_omega_min_is_not_omega_m
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(0);
     const size_t nfreq = 1;
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), WaveModelException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_not_one)
@@ -181,7 +181,7 @@ TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_n
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = omega_min;
     const size_t nfreq = a.random<size_t>().but_not(1);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), WaveModelException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
 }
 
 TEST_F(discretizeTest, flatten)

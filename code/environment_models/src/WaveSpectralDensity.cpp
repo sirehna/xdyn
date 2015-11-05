@@ -4,7 +4,6 @@
  *  Created on: Jul 30, 2014
  *      Author: cady
  */
-#include <sstream>
 #include <limits>
 
 #include <boost/math/tools/roots.hpp>
@@ -12,7 +11,7 @@
 #include "SumOfWaveSpectralDensities.hpp"
 #include "WaveSpectralDensity.hpp"
 #include "WaveNumberFunctor.hpp"
-#include "WaveModelException.hpp"
+#include "InvalidInputException.hpp"
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
@@ -34,51 +33,38 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
 {
     if (omega_min<=0)
     {
-        std::stringstream ss;
-        ss << "omega_min = " << omega_min << ": should be positive.";
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega_min = " << omega_min << ": should be positive.");
     }
     if (omega_max<=0)
     {
-        std::stringstream ss;
-        ss << "omega_max = " << omega_max << ": should be positive.";
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega_max = " << omega_max << ": should be positive.");
     }
     if (omega_max<omega_min)
     {
-        std::stringstream ss;
-        ss << "omega_max (=" << omega_max << ") < omega_min (=" << omega_min;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega_max (=" << omega_max << ") < omega_min (=" << omega_min);
     }
     if (omega_max<omega_min)
     {
-        std::stringstream ss;
-        ss << "omega_max (=" << omega_max << ") < omega_min (=" << omega_min;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega_max (=" << omega_max << ") < omega_min (=" << omega_min);
     }
     if (n==0)
     {
-        std::stringstream ss;
-        THROW(__PRETTY_FUNCTION__, WaveModelException, "nfreq == 0");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "nfreq == 0");
     }
     if (n==1)
     {
         if (omega_min != omega_max)
         {
-            std::stringstream ss;
-            ss << "Asked for a single frequency (nfreq = 1), but omega_min (=" << omega_min
-               << ") != omega_max (=" << omega_max << ")";
-            THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Asked for a single frequency (nfreq = 1), but omega_min (=" << omega_min
+                    << ") != omega_max (=" << omega_max << ")");
         }
     }
     if (omega_min==omega_max)
     {
         if (n != 1)
         {
-            std::stringstream ss;
-            ss << "omega_min = omega_max (=" << omega_min
-               << ") but nfreq != 1";
-            THROW(__PRETTY_FUNCTION__, WaveModelException, ss.str());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega_min = omega_max (=" << omega_min
+                    << ") but nfreq != 1");
         }
         return std::vector<double>(1, omega_min);
     }

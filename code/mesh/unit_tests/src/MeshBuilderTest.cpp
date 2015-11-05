@@ -1,6 +1,7 @@
 #include <cmath>
 #include <algorithm>
 
+#include "InternalErrorException.hpp"
 #include "MeshException.hpp"
 #include "Mesh.hpp"
 #include "MeshBuilderTest.hpp"
@@ -159,8 +160,8 @@ TEST_F(MeshBuilderTest, two_triangles)
 
 TEST_F(MeshBuilderTest, cannot_build_mesh_if_facets_have_one_or_two_points)
 {
-    ASSERT_THROW(MeshBuilder(n_gone(1)).build(),MeshException);
-    ASSERT_THROW(MeshBuilder(n_gone(2)).build(),MeshException);
+    ASSERT_THROW(MeshBuilder(n_gone(1)).build(),InternalErrorException);
+    ASSERT_THROW(MeshBuilder(n_gone(2)).build(),InternalErrorException);
 }
 
 TEST_F(MeshBuilderTest, can_build_empty_mesh)

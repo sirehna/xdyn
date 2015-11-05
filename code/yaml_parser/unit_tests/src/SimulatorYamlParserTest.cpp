@@ -12,7 +12,7 @@ using namespace testing; // So we can use 'ElementsAre' unqualified
 #include "SimulatorYamlParserTest.hpp"
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
-#include "SimulatorYamlParserException.hpp"
+#include "InvalidInputException.hpp"
 
 const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
 
@@ -299,7 +299,7 @@ TEST_F(SimulatorYamlParserTest, should_throw_if_forcing_anything_other_than_uvwp
                              "       t: [4.2]\n"
                              "       value: [5]\n"
                              "       interpolation: piecewise constant\n";
-    ASSERT_THROW(parse(yaml), SimulatorYamlParserException);
+    ASSERT_THROW(parse(yaml), InvalidInputException);
 }
 
 TEST_F(SimulatorYamlParserTest, interpolation_type_should_be_valid)
@@ -311,5 +311,5 @@ TEST_F(SimulatorYamlParserTest, interpolation_type_should_be_valid)
                                  "       t: [5,4.2]\n"
                                  "       value: [5,6]\n"
                                  "       interpolation: something\n";
-    ASSERT_THROW(parse(invalid_yaml), SimulatorYamlParserException);
+    ASSERT_THROW(parse(invalid_yaml), InvalidInputException);
 }
