@@ -5,10 +5,10 @@
  *      Author: jacquenot
  */
 
-#include "h5_exception.hpp"
 #include "h5_interface.hpp"
 #include "h5_version.hpp"
 #include "h5_interface_tests.hpp"
+#include "InternalErrorException.hpp"
 
 #include <string>
 
@@ -255,7 +255,7 @@ TEST_F(H5InterfaceTest, should_throw_an_exception_when_trying_to_create_an_exist
         H5::DataSpace space = H5_Tools::createDataSpace1DUnlimited();
         H5::DataSet s = H5_Tools::createDataSet(h5File, datasetName, dtype, space);
         H5::DataSet ss;
-        ASSERT_THROW(ss=H5_Tools::createDataSet(h5File, datasetName, dtype, space), H5Exception);
+        ASSERT_THROW(ss=H5_Tools::createDataSet(h5File, datasetName, dtype, space), InternalErrorException);
     }
     ASSERT_EQ(0,remove(fileName.c_str()));
 }

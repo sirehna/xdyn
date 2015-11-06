@@ -1,6 +1,7 @@
 #include <vector>
 #include "parse_addressTest.hpp"
 #include "parse_address.hpp"
+#include "InvalidInputException.hpp"
 
 parse_addressTest::parse_addressTest() : a(ssc::random_data_generator::DataGenerator(666))
 {
@@ -48,5 +49,5 @@ TEST_F(parse_addressTest, can_create_YamlOuput_from_websocket_url_3)
 
 TEST_F(parse_addressTest, can_create_YamlOuput_from_websocket_url_4)
 {
-    ASSERT_THROW(build_YamlOutput_from_WS_URL("http://www.google.com:443/webhp?gws_rd=ssl#q=cpp"), ParseAddressException);
+    ASSERT_THROW(build_YamlOutput_from_WS_URL("http://www.google.com:443/webhp?gws_rd=ssl#q=cpp"), InvalidInputException);
 }

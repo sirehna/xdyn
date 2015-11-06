@@ -8,21 +8,12 @@
 #include <ssc/kinematics.hpp>
 #include <ssc/exception_handling.hpp>
 
+#include "InvalidInputException.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "Observer.hpp"
 
 using namespace ssc::kinematics;
-
-
-class EnvironmentAndFramesException: public ::ssc::exception_handling::Exception
-{
-    public:
-    EnvironmentAndFramesException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
-        ::ssc::exception_handling::Exception(message, file, function, line)
-        {
-        }
-};
 
 
 EnvironmentAndFrames::EnvironmentAndFrames() : w(),
@@ -55,8 +46,7 @@ void EnvironmentAndFrames::feed(
     }
     catch (const ssc::kinematics::KinematicsException& e)
     {
-        std::stringstream ss;
-        ss << "Error when calculating waves on mesh: the output reference frame does not exist (caught the following exception: " << e.what() << ")";
-        THROW(__PRETTY_FUNCTION__, EnvironmentAndFramesException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "In the YAML file (section [environment models/model/output/frame of reference]): the output reference frame is not defined (" << e.get_message() << ")");
     }
 }

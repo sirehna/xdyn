@@ -1,4 +1,4 @@
-#include "h5_exception.hpp"
+#include "InternalErrorException.hpp"
 #include "h5_tools.hpp"
 
 std::string H5_Tools::ensureStringStartsAndEndsWithAPattern(
@@ -147,7 +147,7 @@ H5::DataSet H5_Tools::createDataSet(
     }
     else
     {
-        THROW(__PRETTY_FUNCTION__, H5Exception, "Dataset already exists" + datasetName);
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "When serializing to HDF5, attempting to create dataset '" << datasetName << "' twice");
         return file.openDataSet(datasetName);
     }
 }

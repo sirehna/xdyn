@@ -3,7 +3,7 @@
 #include <sstream>
 #include <cstdio>
 
-#include "stl_reader_exception.hpp"
+#include "MeshException.hpp"
 #include "stl_reader.hpp"
 
 const int LINE_MAX_LENGTH = 256;
@@ -56,7 +56,7 @@ EPoint readVertex(char *line, ParserState& state)
     /*int res = */sscanf(line, "%s%n", token, &width);
     if (strcmp(token, TOKEN_vertex))
     {
-        THROW(__PRETTY_FUNCTION__, StlReaderException, state.parseErrorString(TOKEN_vertex));
+        THROW(__PRETTY_FUNCTION__, MeshException, state.parseErrorString(TOKEN_vertex));
     }
     sscanf(line+width,"%lf %lf %lf",&ret(0),&ret(1),&ret(2));
     return ret;
@@ -68,7 +68,7 @@ void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state){
     //char *str = skipWhiteSpace(line);
     /*int res = */sscanf(line, "%s%n", token, &width);
     if (strcmp(token, TOKEN_normal)){
-        THROW(__PRETTY_FUNCTION__, StlReaderException, state.parseErrorString(TOKEN_normal));
+        THROW(__PRETTY_FUNCTION__, MeshException, state.parseErrorString(TOKEN_normal));
     }
     sscanf(line+width,"%lf %lf %lf",&vertices(0),&vertices(1),&vertices(2));
 }
@@ -140,12 +140,12 @@ VectorOfVectorOfPoints readAsciiStl(
             endReached = true;
         } else { // Unexpected or unrecognized.
             setlocale(LC_ALL, locale.c_str());
-            THROW(__PRETTY_FUNCTION__, StlReaderException, state.errorUnknownString(token));
+            THROW(__PRETTY_FUNCTION__, MeshException, state.errorUnknownString(token));
         }
     }
     if(!endReached){
-        THROW(__PRETTY_FUNCTION__, StlReaderException,
-                "The 'endsolid' keyword was not found in end of file. "
+        THROW(__PRETTY_FUNCTION__, MeshException,
+                "The 'endsolid' keyword was not found before the end of file. "
                  "The file may be damaged or is a binary STL format. "
                  "A binary STL file must not have 'solid' keyword in header.");
     }

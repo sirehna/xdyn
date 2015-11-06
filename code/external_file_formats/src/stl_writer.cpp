@@ -1,7 +1,7 @@
 #include <sstream>
 
 #include "stl_writer.hpp"
-#include "stl_reader_exception.hpp"
+#include "MeshException.hpp"
 
 ::std::ostream& operator<<(::std::ostream& os, const EPoint& point);
 ::std::ostream& operator<<(::std::ostream& os, const EPoint& point)
@@ -60,7 +60,7 @@ Eigen::Vector3d unit_normal__(const Matrix3x& points)
            << points.cols() << " point";
         if (points.cols()>1) ss << "s";
         ss << ".";
-       THROW(__PRETTY_FUNCTION__, StlReaderException, ss.str());
+       THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
     }
     const double x1 = points(0,1)-points(0,0);
     const double x2 = points(1,1)-points(1,0);

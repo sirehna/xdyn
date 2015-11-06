@@ -7,6 +7,7 @@
 
 #include "yaml2eigen.hpp"
 
+#include "InvalidInputException.hpp"
 #include "YamlAngle.hpp"
 #include "YamlCoordinates.hpp"
 #include "YamlPoint.hpp"
@@ -14,15 +15,6 @@
 #include "YamlRotation.hpp"
 
 #include <ssc/exception_handling.hpp>
-
-class Yaml2EigenException: public ssc::exception_handling::Exception
-{
-    public:
-        Yaml2EigenException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
-            ::ssc::exception_handling::Exception(message, file, function, line)
-        {
-        }
-};
 
 ssc::kinematics::RotationMatrix angle2matrix(const YamlAngle& a, const YamlRotation& rotations)
 {
@@ -34,13 +26,11 @@ ssc::kinematics::RotationMatrix angle2matrix(const YamlAngle& a, const YamlRotat
             return ssc::kinematics::rotation_matrix<ssc::kinematics::INTRINSIC,
                                                     ssc::kinematics::CHANGING_ANGLE_ORDER,
                                                     3, 2, 1>(e);
-        std::stringstream ss;
-        ss << "Rotation convention '" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "' is not currently supported.";
-        THROW(__PRETTY_FUNCTION__, Yaml2EigenException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "In YAML file, section 'rotations convention', convention [" << rotations.convention.at(0) << "," << rotations.convention.at(1) << "," << rotations.convention.at(2) << "] is not currently supported.");
     }
     else
     {
-        THROW(__PRETTY_FUNCTION__, Yaml2EigenException, std::string("Ordering rotations by '") + rotations.order_by + "' is not currently supported");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "In YAML file, section 'rotations convention', ordering rotations by '" << rotations.order_by << "' is not currently supported");
     }
     return ssc::kinematics::RotationMatrix();
 }

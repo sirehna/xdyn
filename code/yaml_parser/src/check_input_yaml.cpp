@@ -5,8 +5,10 @@
  *      Author: cady
  */
 
-#include "check_input_yaml.hpp"
 #include <sstream>
+
+#include "check_input_yaml.hpp"
+#include "InvalidInputException.hpp"
 
 void check_rotations(const YamlRotation& input);
 void throw_if_any_errors_were_detected(const std::string& caller, const std::stringstream& ss);
@@ -17,7 +19,7 @@ void throw_if_any_errors_were_detected(const std::string& caller, const std::str
     const std::string errors = ss.str();
     if (not(errors.empty()))
     {
-        THROW(caller, YamlCheckerException, errors);
+        THROW(caller, InvalidInputException, errors);
     }
 }
 

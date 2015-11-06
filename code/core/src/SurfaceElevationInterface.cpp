@@ -22,10 +22,17 @@ PointType compute_position_in_NED_frame(
     const std::string frame = P.get_frame();
     if (frame!="NED")
     {
-        ssc::kinematics::Transform T = k->get("NED", P.get_frame());
-        // Create the equivalent transformation just by swapping frame names
-        T.swap();
-        return T*P;
+        try
+        {
+            ssc::kinematics::Transform T = k->get("NED", P.get_frame());
+            // Create the equivalent transformation just by swapping frame names
+            T.swap();
+            return T*P;
+        }
+        catch(const ssc::kinematics::KinematicsException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, ssc::kinematics::KinematicsException, "frame '" << P.get_frame() << "' does not exist");
+        }
     }
     return P;
 }

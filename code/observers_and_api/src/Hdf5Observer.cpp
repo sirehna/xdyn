@@ -5,17 +5,8 @@
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"
 
-#include <ssc/exception_handling.hpp>
 #include "Hdf5WaveObserver.hpp"
-
-class Hdf5ObserverException: public ::ssc::exception_handling::Exception
-{
-    public:
-        Hdf5ObserverException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
-            ::ssc::exception_handling::Exception(message, file, function, line)
-        {
-        }
-};
+#include "InternalErrorException.hpp"
 
 Hdf5Addressing::Hdf5Addressing(
         const DataAddressing& addressing,
@@ -54,7 +45,7 @@ std::function<void()> Hdf5Observer::get_serializer(const double val, const DataA
                 {
                     std::stringstream ss;
                     ss << "Rank mismatch -> Should be one, not " << dataspace.getSimpleExtentNdims();
-                    THROW(__PRETTY_FUNCTION__, Hdf5ObserverException, ss.str());
+                    THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
                 }
                 const hsize_t dims[1] = {(hsize_t)1};
                 offset[0] = size[0];

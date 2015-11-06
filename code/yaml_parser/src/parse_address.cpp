@@ -2,6 +2,7 @@
 #include <cstdlib> // std::atoi
 #include <iostream>
 #include <boost/regex.hpp>
+#include "InvalidInputException.hpp"
 
 boost::regex generateBoostRegexParsingWebSocketUrl();
 boost::regex generateBoostRegexParsingWebSocketUrl()
@@ -57,28 +58,23 @@ YamlOutput build_YamlOutput_from_WS_URL(const std::string& url)
         const std::string portAsString(what[3].first, what[3].second);
         if (protocol!="ws")
         {
-            std::stringstream ss;
-            ss << "Only 'ws' is valid. wss is not implemented yet";
-            THROW(__PRETTY_FUNCTION__, ParseAddressException, ss.str());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Only 'ws' is valid. wss is not implemented yet");
         }
         out.format = "ws";
         out.address = protocol+"://"+domain;
         const int portAsInt = std::atoi(portAsString.c_str());
         if ( portAsInt <= 0 || portAsInt > 65535 )
         {
-            std::stringstream ss;
-            ss << "Port: " << portAsInt << " is not valid. It should be between 0 and 65535";
-            THROW(__PRETTY_FUNCTION__, ParseAddressException, ss.str());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Port: " << portAsInt << " is not valid. It should be between 0 and 65535");
         }
         out.port = (short unsigned int)portAsInt;
     }
     else
     {
-        std::stringstream ss;
-        ss << "Address: " << url << " is not valid. Here are some examples"<<std::endl
-           << "  ws://localhost:8080"<<std::endl
-           << "  ws://130.66.124.200:8080";
-        THROW(__PRETTY_FUNCTION__, ParseAddressException, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Address: " << url << " is not valid. Here are some examples"<<std::endl
+                           << "  ws://localhost:8080"<<std::endl
+                           << "  ws://130.66.124.200:8080");
     }
     return out;
 }

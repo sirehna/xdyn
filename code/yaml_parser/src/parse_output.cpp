@@ -7,6 +7,7 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 #include "yaml.h"
+#include "InvalidInputException.hpp"
 #include "parse_address.hpp"
 #include "parse_output.hpp"
 
@@ -97,18 +98,14 @@ std::string get_format_for_wave_observer(const std::string& filename)
     const size_t n = filename.size();
     if (n<=3)
     {
-        std::stringstream ss;
-        ss << "Invalid file format for wave output file. One expects filename with extension .h5 or .hdf5";
-        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid file format for wave output file. Expected filename extension .h5 or .hdf5");
     }
     if (filename.substr(n-3,3)==".h5")   return "hdf5";
     if (filename.substr(n-5,5)==".hdf5") return "hdf5";
     if (filename.substr(n-3,3)==".H5")   return "hdf5";
     if (filename.substr(n-5,5)==".HDF5") return "hdf5";
     {
-        std::stringstream ss;
-        ss << "Invalid file format for wave output file. Expected extensions are h5,hdf5";
-        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid file format for wave output file. Expected filename extensions are h5,hdf5");
     }
 }
 
@@ -118,9 +115,7 @@ std::string get_format(const std::string& filename)
     if (!n)                              return "tsv";
     if (n<=3)
     {
-        std::stringstream ss;
-        ss << "Invalid file format for output file. One expects filenames with extension like .tsv, .csv, .h5, .hdf5, .json";
-        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid file format for output file. E");
     }
     if (filename.substr(n-3,3)==".h5")   return "hdf5";
     if (filename.substr(n-5,5)==".hdf5") return "hdf5";
@@ -128,9 +123,7 @@ std::string get_format(const std::string& filename)
     if (filename.substr(n-4,4)==".tsv")  return "tsv";
     if (filename.substr(n-5,5)==".json") return "json";
     {
-        std::stringstream ss;
-        ss << "Could not recognize the format of specified output file '" << filename << "'";
-        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Could not recognize the format of specified output file '" << filename << "': expected filename extensions are .tsv, .csv, .h5, .hdf5 or .json");
     }
 }
 
@@ -155,9 +148,7 @@ YamlOutput build_YamlOutput_from_filename(const std::string& filename)
     }
     else if ((filename=="h5") or (filename=="hdf5"))
     {
-        std::stringstream ss;
-        ss << "One needs to specify an input filename for HDF5 export from command line";
-        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, ss.str());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Need to specify an input filename for HDF5 export from command line");
     }
     else if (boost::algorithm::starts_with(filename,"ws") or
              boost::algorithm::starts_with(filename,"wss"))

@@ -5,16 +5,7 @@
  *      Author: cady
  */
 
-#include <ssc/exception_handling.hpp>
-
-class gz_newton_raphsonException: public ssc::exception_handling::Exception
-{
-    public:
-        gz_newton_raphsonException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
-            ::ssc::exception_handling::Exception(message, file, function, line)
-        {
-        }
-};
+#include "InternalErrorException.hpp"
 
 #include "gz_newton_raphson.hpp"
 
@@ -41,7 +32,7 @@ GZ::State GZ::newton_raphson(const GZ::State& X0,     //!< Initial value
         const double det_k = k(0,0)*k(1,1) - k(0,1)*k(1,0);
         if (std::abs(det_k) < 1E-15)
         {
-            THROW(__PRETTY_FUNCTION__, gz_newton_raphsonException, "Determinant of stiffness matrix is very close to zero (|det K| < 1E-15)");
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Determinant of stiffness matrix is very close to zero (|det K| < 1E-15)");
         }
         const auto y = f(Xn_1).state;
         if (delta(y,Eigen::Vector3d::Zero()) < eps) return Xn;
