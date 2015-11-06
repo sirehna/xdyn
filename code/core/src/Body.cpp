@@ -10,6 +10,7 @@
 #include "Observer.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "YamlBody.hpp"
+#include "NumericalErrorException.hpp"
 
 Body::Body(const size_t i, const BlockedDOF& blocked_states_) : states(), idx(i), blocked_states(blocked_states_)
 {
@@ -92,7 +93,7 @@ void Body::update_projection_of_z_in_mesh_frame(const double g,
     states.g_in_mesh_frame = ned2mesh*g_in_NED.v;
 }
 
-#define CHECK(x) if (std::isnan(x)) {THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,"NaN detected in " QUOTEME(x));}
+#define CHECK(x) if (std::isnan(x)) {THROW(__PRETTY_FUNCTION__,NumericalErrorException,"NaN detected in " QUOTEME(x));}
 void Body::update(const EnvironmentAndFrames& env, const StateType& x, const double t)
 {
     CHECK(*_X(x,idx));

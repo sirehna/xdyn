@@ -2,6 +2,7 @@
 
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
+#include "NumericalErrorException.hpp"
 #include "utilities_for_simulator.hpp"
 #include "listeners.hpp"
 #include "simulator_api.hpp"
@@ -48,6 +49,10 @@ void catch_exceptions(const std::function<void(void)>& f)
     catch(const MeshException& e)
     {
         std::cerr << "A problem was detected with the STL file (mesh): " << e.get_message() << std::endl;
+    }
+    catch(const NumericalErrorException& e)
+    {
+        std::cerr << "The simulation has diverged and cannot continue: " << e.get_message() << std::endl;
     }
     catch(ssc::exception_handling::Exception& e)
     {
