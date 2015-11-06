@@ -70,11 +70,11 @@ void WageningenControlledForceModel::check(const double P_D, const double J) con
 {
     if ((P_D<0.5) or (P_D>1.4))
     {
-        std::cerr << "Invalid pitch/diameter ratio P/D received: expected 0.5 <= P/D <= 1.4 but got P_D=" << P_D;
+        std::cerr << "Invalid pitch/diameter ratio P/D received: expected 0.5 <= P/D <= 1.4 but got P_D=" << P_D << std::endl;
     }
     if ((J<0) or (J>1.5))
     {
-        std::cerr << "Invalid advance ratio J received: expected 0 <= J <= 1.5 but got J=" << J;
+        std::cerr << "Invalid advance ratio J received: expected 0 <= J <= 1.5 but got J=" << J << std::endl;
     }
 }
 
@@ -107,7 +107,7 @@ WageningenControlledForceModel::Yaml WageningenControlledForceModel::parse(const
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    node["blade area ratio AE/A0"]           >> ret.blade_area_ratio;
+    node["blade area ratio AE/A0"] >> ret.blade_area_ratio;
     ret.number_of_blades = try_to_parse_positive_integer(node,"number of blades");
     return ret;
 }
