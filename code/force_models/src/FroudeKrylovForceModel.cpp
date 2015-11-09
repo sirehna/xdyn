@@ -13,6 +13,10 @@ const std::string FroudeKrylovForceModel::model_name = "non-linear Froude-Krylov
 
 FroudeKrylovForceModel::FroudeKrylovForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(model_name, body_name_, env_)
 {
+    if (env.w.use_count()==0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << model_name << "' needs a wave model, even if it's 'no waves'");
+    }
 }
 
 SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double t) const

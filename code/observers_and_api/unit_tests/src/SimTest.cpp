@@ -560,3 +560,28 @@ TEST_F(SimTest, LONG_can_simulate_radiation_damping)
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_radiation_damping(), test_data::cube(), 0, T, dt, command_listener);
     ASSERT_NEAR(0.6613596894521887, res.at(5).x[XIDX(0)], 1E-3);
 }
+
+TEST_F(SimTest, bug_2963_should_not_be_able_to_use_fast_hydrostatic_without_specifying_wave_model)
+{
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_hs_fast(), test_data::cube(), 0, 1, 1), InvalidInputException);
+}
+
+TEST_F(SimTest, bug_2963_should_not_be_able_to_use_exact_hydrostatic_without_specifying_wave_model)
+{
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_hs_exact(), test_data::cube(), 0, 1, 1), InvalidInputException);
+}
+
+TEST_F(SimTest, bug_2963_should_not_be_able_to_use_froude_krylov_without_specifying_wave_model)
+{
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_fk(), test_data::cube(), 0, 1, 1), InvalidInputException);
+}
+
+TEST_F(SimTest, bug_2963_should_not_be_able_to_use_GM_without_specifying_wave_model)
+{
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_gm(), test_data::cube(), 0, 1, 1), InvalidInputException);
+}
+
+TEST_F(SimTest, bug_2963_should_not_be_able_to_use_diffraction_without_specifying_wave_model)
+{
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_diff(), test_data::cube(), 0, 1, 1), InvalidInputException);
+}

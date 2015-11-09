@@ -13,6 +13,10 @@ const std::string ExactHydrostaticForceModel::model_name = "non-linear hydrostat
 
 ExactHydrostaticForceModel::ExactHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : FastHydrostaticForceModel(ExactHydrostaticForceModel::model_name, body_name_, env_)
 {
+    if (env.w.use_count()==0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << model_name << "' needs a wave model, even if it's 'no waves'");
+    }
 }
 
 EPoint ExactHydrostaticForceModel::get_application_point(const FacetIterator& that_facet,

@@ -61,6 +61,10 @@ class DiffractionForceModel::Impl
                     }
                 }
             }
+            else
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << DiffractionForceModel::model_name << "' needs a wave model, even if it's 'no waves'");
+            }
 
         }
 
