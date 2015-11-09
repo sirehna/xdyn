@@ -26,6 +26,12 @@ void add_interpolation_table(const std::string& x_name, const std::vector<double
     ds.check_out();
 }
 
+std::string namify(const std::string& command_name, const std::string& model_name);
+std::string namify(const std::string& command_name, const std::string& model_name)
+{
+    return model_name + "(" + command_name + ")";
+}
+
 void add(std::vector<YamlCommands>::iterator& that_command, ssc::data_source::DataSource& ds);
 void add(std::vector<YamlCommands>::iterator& that_command, ssc::data_source::DataSource& ds)
 {
@@ -35,7 +41,7 @@ void add(std::vector<YamlCommands>::iterator& that_command, ssc::data_source::Da
     {
         for (auto it = that_command->commands.begin() ; it != that_command->commands.end() ; ++it)
         {
-            ds.set<double>(it->first, it->second.front());
+            ds.set<double>(namify(it->first, that_command->name), it->second.front());
         }
     }
     else
@@ -44,7 +50,7 @@ void add(std::vector<YamlCommands>::iterator& that_command, ssc::data_source::Da
         {
             try
             {
-                add_interpolation_table("t", t, that_command->name + "(" + it->first + ")", it->second, ds);
+                add_interpolation_table("t", t, namify(it->first, that_command->name), it->second, ds);
             }
             catch(const ssc::interpolation::PiecewiseConstantVariableStepException& e)
             {

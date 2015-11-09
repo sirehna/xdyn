@@ -10,6 +10,9 @@
 #include "yaml_data.hpp"
 
 #define EPS (1E-14)
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 listenersTest::listenersTest() : a(ssc::random_data_generator::DataGenerator(54545))
 {
@@ -81,5 +84,17 @@ TEST_F(listenersTest, can_parse_simple_track_keeping_commands)
 
     ds.set<double>("t", 100);
     ASSERT_NEAR(0, ds.get<double>("controller(psi_co)"), EPS);
+    ds.check_out();
+}
+
+TEST_F(listenersTest, bug_2961_can_have_a_single_value_for_commands)
+{
+    auto ds = listen_to_file(test_data::bug_2961());
+    ds.check_in("listenersTest (bug_2961_can_have_a_single_value_for_commands)");
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        ds.set<double>("t", a.random<double>());
+        ASSERT_NEAR(30*PI/180., ds.get<double>("controller(psi_co)"),EPS);
+    }
     ds.check_out();
 }

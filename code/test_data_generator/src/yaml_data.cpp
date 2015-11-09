@@ -1896,6 +1896,16 @@ std::string test_data::controlled_forces()
     return ss.str();
 }
 
+std::string test_data::bug_2961()
+{
+    std::stringstream ss;
+    ss << "- name: controller\n"
+          "  t: [0]\n"
+          "  psi_co: {unit: deg, values: [30]}\n";
+
+    return ss.str();
+}
+
 std::string test_data::wageningen()
 {
     std::stringstream ss;

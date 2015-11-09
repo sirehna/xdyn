@@ -38,6 +38,7 @@ namespace test_data
     std::string rolling_cube();
     std::string anthineas_damping();
     std::string controlled_forces();
+    std::string bug_2961();
     std::string wageningen();
     std::string resistance_curve();
     std::string propulsion_and_resistance();
