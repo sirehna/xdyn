@@ -79,7 +79,7 @@ La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
 spectral density:
      type: jonswap
      Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: m}
+     Tp: {value: 15, unit: s}
      gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -89,7 +89,7 @@ spectral density:
 spectral density:
      type: pierson-moskowitz
      Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: m}
+     Tp: {value: 15, unit: s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### Bretschneider
@@ -98,7 +98,7 @@ spectral density:
 spectral density:
      type: bretschneider
      Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: m}
+     Tp: {value: 15, unit: s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Etalements directionnels
@@ -279,7 +279,7 @@ Les spectres directionnels sont définis de la façon suivante :
   spectral density:
      type: jonswap
      Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: m}
+     Tp: {value: 15, unit: s}
      gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
