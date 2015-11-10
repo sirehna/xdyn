@@ -282,6 +282,7 @@ EnvironmentAndFrames get_env_with_default_rotation_convention()
     EnvironmentAndFrames env;
     env.rot.convention = {"z", "y'", "x''"};
     env.rot.order_by = "angle";
+    env.rho = 1024;
     return env;
 }
 

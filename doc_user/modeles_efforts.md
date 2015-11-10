@@ -742,7 +742,6 @@ expressions simples des états et du temps peuvent être calculées, par exemple
   K: 0
   M: 0
   N: 0.5*rho*Vs^2*L^3*N_
-  rho: 1024
   Vs: sqrt(u(t)^2+v(t)^2)
   L: 21.569
   X_: Xu*u_ + Xuu*u_^2 + Xuuu*u_^3 + Xvv*v_^2 + Xrr*r_^2 + Xvr*abs(v_)*abs(r_)
@@ -798,6 +797,9 @@ dans lequel elles ont été déclarées).
 On peut évaluer ces valeurs retardées des états x,y,z,u,v,w,p,q,r en écrivant
 `x(t-tau)` (par exemple) ou `tau` désigne une expression dont la valeur est
 positive. `t` désigne implicitement l'instant courant.
+
+Les valeurs de `g`, `nu` et `rho` sont utilisables et leurs valeurs sont celles
+renseignées dans la section `environmental constants` du fichier YAML.
 
 ### Grammaire
 
