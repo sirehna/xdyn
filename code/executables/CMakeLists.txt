@@ -135,6 +135,9 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         )
         
 ADD_EXECUTABLE(simulator_server
+        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
+        src/utilities_for_simulator.cpp
+        src/InputData.cpp
         src/simulator_server.cpp
         )
 

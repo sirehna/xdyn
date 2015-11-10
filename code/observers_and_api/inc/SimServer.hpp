@@ -10,8 +10,7 @@ class SimServer
     public :
         SimServer(const std::string& yaml_model,
                   const std::string& solver,
-                  const double dt,
-                  const double Dt);
+                  const double dt);
 
         std::string play_one_step(const std::string& raw_yaml);
 
@@ -21,7 +20,6 @@ class SimServer
         const double dt;
         SimStepper stepper;
         HistoryParser parser;
-        const double Dt;
 
 };
 
