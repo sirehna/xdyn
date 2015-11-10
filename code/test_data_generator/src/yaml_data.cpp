@@ -4097,3 +4097,28 @@ std::string test_data::complete_yaml_message_from_gui()
       <<"}}";
     return ss.str();
 }
+
+std::string test_data::complete_yaml_message_for_falling_ball()
+{
+    std::stringstream ss;
+    ss << "{Dt: 10.0,"
+       << "states: {"
+       << "t: 0.0, "
+       << "x: [[0.0,4.0]], "
+       << "y: [[0.0,8.0]], "
+       << "z: [[0.0,12.0]], "
+       << "u: [[0.0,1.0]], "
+       << "v: [[0.0,0.0]], "
+       << "w: [[0.0,0.0]], "
+       << "p: [[0.0,0.0]], "
+       << "q: [[0.0,0.0]], "
+       << "r: [[0.0,0.0]], "
+      << "qr: [[0.0,1.0]], "
+      << "qi: [[0.0,0.0]], "
+      << "qj: [[0.0,0.0]], "
+      << "qk: [[0.0,0.0]], "
+      <<"}, "
+      <<"commands: null }";
+
+    return ss.str();
+}

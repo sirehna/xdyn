@@ -103,8 +103,4 @@ SimStepperInfos HistoryParser::get_simstepperinfo(const std::string& yaml)
     SimStepperInfos infos;
     infos<<yinfo;
     return infos;
-
-
 }
-
-
