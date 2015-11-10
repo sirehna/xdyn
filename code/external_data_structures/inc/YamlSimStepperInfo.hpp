@@ -6,6 +6,7 @@
 struct YamlSimStepperInfo
 {
     YamlSimStepperInfo();
+    double Dt;
     YamlState state;
     std::map<std::string, double> commands;
 };

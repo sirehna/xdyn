@@ -4,7 +4,6 @@
 #include <vector>
 #include "InvalidInputException.hpp"
 
-
 void operator >> (const YAML::Node& node, std::pair<double,double>& v);
 void operator >> (const YAML::Node& node, std::pair<double,double>& v)
 {
@@ -146,9 +145,9 @@ std::string generate_history_yaml(const YamlState& state)
 void operator>> (const YAML::Node& node, YamlSimStepperInfo& infos);
 void operator>> (const YAML::Node& node, YamlSimStepperInfo& infos)
 {
+    node["Dt"]       >> infos.Dt;
     node["states"]   >> infos.state;
     node["commands"] >> infos.commands;
-
 }
 
 YamlSimStepperInfo get_yamlsimstepperinfo(const std::string& yaml)
@@ -160,11 +159,4 @@ YamlSimStepperInfo get_yamlsimstepperinfo(const std::string& yaml)
     YamlSimStepperInfo infos;
     node>>infos;
     return infos;
-
-
 }
-
-
-
-
-

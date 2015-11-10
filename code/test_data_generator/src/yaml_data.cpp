@@ -4074,7 +4074,8 @@ std::string test_data::dummy_history()
 std::string test_data::complete_yaml_message_from_gui()
 {
     std::stringstream ss;
-    ss << "{states: {"
+    ss << "{Dt: 2.0,"
+       << "states: {"
        << "t: 1234.5, "
        << "x: [[0,90]], "
        << "y: [[0,91]], "

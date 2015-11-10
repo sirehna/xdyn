@@ -1,7 +1,8 @@
 #include "YamlSimStepperInfo.hpp"
 
 YamlSimStepperInfo::YamlSimStepperInfo()
-    : state()
+    : Dt()
+    , state()
     , commands()
 {
 }

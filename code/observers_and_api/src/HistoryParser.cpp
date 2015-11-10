@@ -90,6 +90,7 @@ std::string  HistoryParser::emit_state_history_yaml(const State& state)
 void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo);
 void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo)
 {
+    info.Dt = yinfo.Dt;
     yinfo.state>>info.state;
     info.commands = yinfo.commands;
 

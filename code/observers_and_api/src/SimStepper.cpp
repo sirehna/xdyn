@@ -11,6 +11,7 @@ SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, co
 
 SimStepperInfos::SimStepperInfos()
     : t(0)
+    , Dt(0)
     , state(0)
     , commands({})
 {
@@ -39,7 +40,6 @@ State SimStepper::step(const SimStepperInfos& infos, double Dt)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "unknown solver");
     }
-
     sim.get_bodies().front()->update_body_states(results.back().x, results.back().t);
     return State(sim.get_bodies().front()->get_states());
 }
