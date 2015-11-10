@@ -191,6 +191,7 @@ Options:
   -s [ --stl ] arg      Nom du fichier STL
   --dphi arg            Pas de calcul en roulis (en degrés)
   --phi_max arg         Angle de roulis maximal (en degrés)
+  -c [ --csv ] arg      Nom du fichier de sortie (format CSV). Facultatif.
 ~~~~~~~~~~~~~~~~~~~~
 
 Exemple :
