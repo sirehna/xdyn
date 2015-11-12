@@ -69,10 +69,9 @@ void catch_exceptions(const std::function<void(void)>& f)
 
 void run_simulation(const InputData& input_data)
 {
-    const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
-
-    const auto f = [input_data,yaml_reader](){
+    const auto f = [input_data](){
     {
+        const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
         ssc::data_source::DataSource command_listener;
         if (not(input_data.command_file.empty()))
         {
