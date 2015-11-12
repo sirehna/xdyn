@@ -74,17 +74,24 @@ void WageningenControlledForceModel::check(const double P_D, const double J) con
     }
     if ((J<0) or (J>1.5))
     {
-        std::cerr << "Invalid advance ratio J received: expected 0 <= J <= 1.5 but got J=" << J << std::endl;
+        std::cerr << "Warning: Wageningen model used outside of its domain. Maybe n is too small? Invalid advance ratio J: expected 0 <= J <= 1.5 but got J=" << J << ". Saturating at 1.5 to continue simulation." << std::endl;
     }
+}
+
+double saturate(const double J);
+double saturate(const double J)
+{
+    return std::max(std::min(J,1.5),0.);
 }
 
 double WageningenControlledForceModel::Kt(const size_t Z, const double AE_A0_, const double P_D, const double J) const
 {
     check(P_D, J);
     double kt = 0;
+    const double saturated_J = saturate(J);
     for (size_t i = 0 ; i < NB_COEFF_KT ; ++i)
     {
-        kt += ct[i]*std::pow(J, st[i])*std::pow(P_D, tt[i])*std::pow(AE_A0_, ut[i])*std::pow(Z,vt[i]);
+        kt += ct[i]*std::pow(saturated_J, st[i])*std::pow(P_D, tt[i])*std::pow(AE_A0_, ut[i])*std::pow(Z,vt[i]);
     }
     return kt;
 }
@@ -93,9 +100,10 @@ double WageningenControlledForceModel::Kq(const size_t Z, const double AE_A0_, c
 {
     check(P_D, J);
     double kq = 0;
+    const double saturated_J = saturate(J);
     for (size_t i = 0 ; i < NB_COEFF_KQ ; ++i)
     {
-        kq += cq[i]*std::pow(J, sq[i])*std::pow(P_D, tq[i])*std::pow(AE_A0_, uq[i])*std::pow(Z,vq[i]);
+        kq += cq[i]*std::pow(saturated_J, sq[i])*std::pow(P_D, tq[i])*std::pow(AE_A0_, uq[i])*std::pow(Z,vq[i]);
     }
     return kq;
 }
