@@ -8,9 +8,6 @@
 #include "utilities_for_InputData.hpp"
 
 
-
-//#include <unistd.h> // usleep
-
 using namespace ssc::websocket;
 
 #define ADDRESS "127.0.0.1"
@@ -29,8 +26,6 @@ struct SimulationMessage : public MessageHandler
         const std::string input_yaml = msg.get_payload();
         const std::string output_yaml = sim_server->play_one_step(input_yaml);
         msg.send_text(output_yaml);
-        COUT("réponse serveur :"<<output_yaml)
-        COUT("message !");
     }
 
     private: TR1(shared_ptr)<SimServer> sim_server;
@@ -45,7 +40,6 @@ void start_server(const InputData& input_data)
     SimulationMessage handler(sim_server);
 
     new ssc::websocket::Server(handler, ADDRESS, WEBSOCKET_PORT);
-    usleep(1000000);
 }
 
 int main(int argc, char** argv)
