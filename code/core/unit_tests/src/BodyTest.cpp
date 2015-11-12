@@ -254,3 +254,58 @@ TEST_F(BodyTest, can_overwrite_history_with_single_value)
     ASSERT_DOUBLE_EQ(body->get_states().qk(),new_states.qk());
     ASSERT_EQ(body->get_states().qk.size(),1);
 }
+
+TEST_F(BodyTest, can_overwrite_history_with_single_value_several_times)
+{
+
+    for(size_t i=0; i<5; i++)
+    {
+        double new_x=a.random<double>();
+        double new_y=a.random<double>();
+        double new_z=a.random<double>();
+        double new_u=a.random<double>();
+        double new_v=a.random<double>();
+        double new_w=a.random<double>();
+        double new_p=a.random<double>();
+        double new_q=a.random<double>();
+        double new_r=a.random<double>();
+        double new_qr=a.random<double>();
+        double new_qi=a.random<double>();
+        double new_qj=a.random<double>();
+        double new_qk=a.random<double>();
+        double t=0.0;
+
+        const State new_state(AbstractStates<double>(new_x, new_y, new_z, new_u, new_v, new_w, new_p, new_q, new_r, new_qr, new_qi, new_qj, new_qk),t);
+
+        body->set_states_history(new_state);
+
+        ASSERT_DOUBLE_EQ(body->get_states().x(),new_x);
+        ASSERT_EQ(body->get_states().x.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().y(),new_y);
+        ASSERT_EQ(body->get_states().y.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().z(),new_z);
+        ASSERT_EQ(body->get_states().z.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().u(),new_u);
+        ASSERT_EQ(body->get_states().u.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().v(),new_v);
+        ASSERT_EQ(body->get_states().v.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().w(),new_w);
+        ASSERT_EQ(body->get_states().w.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().p(),new_p);
+        ASSERT_EQ(body->get_states().p.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().q(),new_q);
+        ASSERT_EQ(body->get_states().q.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().r(),new_r);
+        ASSERT_EQ(body->get_states().r.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().qr(),new_qr);
+        ASSERT_EQ(body->get_states().qr.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().qi(),new_qi);
+        ASSERT_EQ(body->get_states().qi.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().qj(),new_qj);
+        ASSERT_EQ(body->get_states().qj.size(),1);
+        ASSERT_DOUBLE_EQ(body->get_states().qk(),new_qk);
+        ASSERT_EQ(body->get_states().qk.size(),1);
+    }
+
+
+}
