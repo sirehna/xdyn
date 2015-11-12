@@ -303,10 +303,10 @@ TEST_F(RudderForceModelTest, force_and_torque)
     commands["beta"] = PI/6;
 
     const auto F = rudder.get_force(states, t, commands);
-    ASSERT_DOUBLE_EQ(53168.537806335349, (double)F(0));
-    ASSERT_DOUBLE_EQ(-17194.190464713774, (double)F(1));
+    ASSERT_DOUBLE_EQ(2208573.9553180891, (double)F(0));
+    ASSERT_DOUBLE_EQ(777997.67996840423, (double)F(1));
     ASSERT_DOUBLE_EQ(0, (double)F(2));
-    ASSERT_DOUBLE_EQ(0, (double)F(3));
+    ASSERT_DOUBLE_EQ(-2793416.1021430148, (double)F(3));
     ASSERT_DOUBLE_EQ(0, (double)F(4));
-    ASSERT_DOUBLE_EQ(18913.609511185146, (double)F(5));
+    ASSERT_DOUBLE_EQ(-855797.44796524453, (double)F(5));
 }

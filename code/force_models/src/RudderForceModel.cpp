@@ -218,7 +218,7 @@ ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(const BodyStates& s
 
 ssc::kinematics::Vector6d RudderForceModel::get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
 {
-    const ssc::kinematics::Vector6d propeller_force = ssc::kinematics::Vector6d::Zero();//propulsion.get_force(states,t,commands);
+    const ssc::kinematics::Vector6d propeller_force = propulsion.get_force(states,t,commands);
     const ssc::kinematics::Vector6d rudder_force = get_rudder_force(states, t, commands, (double)propeller_force.norm());
     const std::string frame = translation_from_rudder_to_propeller.get_frame();
     const ssc::kinematics::Wrench prop(frame, propeller_force);
