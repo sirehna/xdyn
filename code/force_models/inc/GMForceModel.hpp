@@ -51,6 +51,7 @@ class GMForceModel : public ImmersedSurfaceForceModel
         double dphi;
         EnvironmentAndFrames env;
         TR1(shared_ptr)<double> GM;
+        TR1(shared_ptr)<double> GZ;
 };
 
 #endif /* GMFORCEMODEL_HPP_ */

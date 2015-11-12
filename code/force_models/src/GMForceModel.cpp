@@ -29,6 +29,7 @@ GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, cons
 , dphi(data.roll_step)
 , env(env_)
 , GM(new double(0))
+, GZ(new double(0))
 {
     if (env.w.use_count()==0)
     {
@@ -106,12 +107,14 @@ ssc::kinematics::Wrench GMForceModel::operator()(const BodyStates& states, const
     const double gz1 = calculate_gz(*underlying_hs_force_model, env);
     const double gz2 = get_gz_for_shifted_states(states, t);
     *GM = (gz1-gz2)/dphi;
+    *GZ = (gz1+gz2)/2;
     return ret;
 }
 
 void GMForceModel::extra_observations(Observer& observer) const
 {
     observer.write(*GM,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GM"},std::string("GM(") + get_body_name() + ")"));
+    observer.write(*GZ,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GM"},std::string("GZ(") + get_body_name() + ")"));
 }
 
 double GMForceModel::pe(const BodyStates& , const std::vector<double>& , const EnvironmentAndFrames& ) const
