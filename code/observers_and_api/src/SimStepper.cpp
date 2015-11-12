@@ -20,7 +20,7 @@ SimStepperInfos::SimStepperInfos()
 State SimStepper::step(const SimStepperInfos& infos, double Dt)
 {
     const double t = infos.t;
-    std::vector<State>states =  {infos.state};
+    const std::vector<State>states = {infos.state};
     sim.set_bodystates(states);
     sim.set_command_listener(infos.commands);
     std::vector<Res> results;
