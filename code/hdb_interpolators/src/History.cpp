@@ -206,5 +206,5 @@ double History::average(double T) const
     const double first_value = interpolate_value_in_interval(idx, t);
     const double integral_of_first_interval = trapeze(t, first_value, L.at(idx).first, L.at(idx).second);
     const double integral_from_t_to_now = integrate(idx);
-    return  T ? (integral_of_first_interval + integral_from_t_to_now)/T : L.back().second;
+    return  (T!=0) ? (integral_of_first_interval + integral_from_t_to_now)/T : L.back().second;
 }

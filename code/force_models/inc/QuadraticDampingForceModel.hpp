@@ -8,7 +8,7 @@
 #ifndef QuadraticDampingForceModel_HPP_
 #define QuadraticDampingForceModel_HPP_
 
-class EnvironmentAndFrames;
+struct EnvironmentAndFrames;
 
 #include "DampingForceModel.hpp"
 

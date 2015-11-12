@@ -132,7 +132,7 @@ template <typename T> class H5_Parse : public H5_Interface<T>
         {
             const H5::DataSet dataset = h5file.openDataSet(datasetName);
             const H5::DataSpace dataspace = dataset.getSpace();
-            const std::size_t ndims = dataspace.getSimpleExtentNdims();
+            const std::size_t ndims = (std::size_t)dataspace.getSimpleExtentNdims();
             if (ndims != 1)
             {
                 //throw std::runtime_error("HDF5 array has incorrect number of dimensions to represent a sparse matrix.");

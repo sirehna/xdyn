@@ -19,8 +19,8 @@
 
 template <typename T,typename U> bool has(const U& map_or_set, const T idx)
 {
-    if (map_or_set.find(idx) != map_or_set.end()) return true;
-                                                  return false;
+    if (map_or_set.find((unsigned long)idx) != map_or_set.end()) return true;
+                                                                 return false;
 }
 
 class ClosingFacetComputer

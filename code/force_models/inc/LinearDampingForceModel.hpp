@@ -8,7 +8,7 @@
 #ifndef LINEARDAMPINGFORCEMODEL_HPP_
 #define LINEARDAMPINGFORCEMODEL_HPP_
 
-class EnvironmentAndFrames;
+struct EnvironmentAndFrames;
 
 /** \brief
  *  \details

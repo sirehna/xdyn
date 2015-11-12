@@ -21,8 +21,8 @@ struct SurfaceElevationGrid
             const std::size_t nx,
             const std::size_t ny,
             const double t_ = 0.0
-            ):t(t_),x(Eigen::VectorXd(nx)),
-              y(Eigen::VectorXd(ny)),z(Eigen::MatrixXd(nx,ny)){};
+            ):t(t_),x(Eigen::VectorXd((long)nx)),
+              y(Eigen::VectorXd((long)ny)),z(Eigen::MatrixXd((long)nx,(long)ny)){};
 };
 
 #endif /* SURFACEELEVATIONGRID_HPP_ */

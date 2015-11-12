@@ -48,13 +48,13 @@ std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetCom
     for (const auto edge:edges)
     {
         Line l;
-        const int xmin = std::min(mesh(0,edge.first),mesh(0,edge.second));
-        const int xmax = std::max(mesh(0,edge.first),mesh(0,edge.second));
+        const int xmin = std::min(mesh(0,(long)edge.first),mesh(0,(long)edge.second));
+        const int xmax = std::max(mesh(0,(long)edge.first),mesh(0,(long)edge.second));
         if (xmin==xmax)
         {
             const int x = xmin;
-            const int ymin = std::min(mesh(1,edge.first),mesh(1,edge.second));
-            const int ymax = std::max(mesh(1,edge.first),mesh(1,edge.second));
+            const int ymin = std::min(mesh(1,(long)edge.first),mesh(1,(long)edge.second));
+            const int ymax = std::max(mesh(1,(long)edge.first),mesh(1,(long)edge.second));
             for (int y = ymin ; y <= ymax ; ++y)
             {
                 l.push_back(XY<int>(x,y));
@@ -62,8 +62,8 @@ std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetCom
         }
         else
         {
-            const double m = ((double)mesh(1,edge.first)-(double)mesh(1,edge.second))/((double)mesh(0,edge.first)-(double)mesh(0,edge.second));
-            const double p = mesh(1,edge.first) - m*mesh(0,edge.first);
+            const double m = ((double)mesh(1,(long)edge.first)-(double)mesh(1,(long)edge.second))/((double)mesh(0,(long)edge.first)-(double)mesh(0,(long)edge.second));
+            const double p = mesh(1,(long)edge.first) - m*mesh(0,(long)edge.first);
             for (int x = xmin ; x <= xmax ; ++x)
             {
                 const int y = (int)std::floor(m*x+p + 0.5);
@@ -83,14 +83,14 @@ std::vector<std::string> make_mesh(const Eigen::Matrix3Xi& M, const std::vector<
     {
         for (const auto dot:line)
         {
-            canvas[dot.y][dot.x] = DOT_CHAR;
+            canvas[(size_t)dot.y][(size_t)dot.x] = DOT_CHAR;
         }
     }
     for (const auto j:idx_to_display)
     {
         std::stringstream ss;
         ss << j;
-        canvas[M(1,j)].replace(M(0,j), ss.str().size(), ss.str());
+        canvas[(unsigned long)M(1,(long)j)].replace((unsigned long)M(0,(long)j), ss.str().size(), ss.str());
     }
     return canvas;
 }

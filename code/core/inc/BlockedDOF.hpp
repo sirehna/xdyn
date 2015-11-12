@@ -34,7 +34,7 @@ class BlockedDOF
         Vector get_delta_F(const StateType& dx_dt, const Eigen::Matrix<double,6,6>& total_inertia, const ssc::kinematics::Wrench& sum_of_other_forces) const;
 
     private:
-        class Impl;
+        struct Impl;
         TR1(shared_ptr)<Impl> pimpl;
 
 };

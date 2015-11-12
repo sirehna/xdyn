@@ -13,9 +13,9 @@
 
 #include "Observer.hpp"
 
-typedef std::tr1::shared_ptr<Observer> ObserverPtr;
+typedef TR1(shared_ptr)<Observer> ObserverPtr;
 
-class YamlOutput;
+struct YamlOutput;
 
 class ListOfObservers
 {

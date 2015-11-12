@@ -128,5 +128,5 @@ BodyPtr BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints
     input.dynamics.rigid_body_inertia.row_5 = {0,0,0,0,1,0};
     input.dynamics.rigid_body_inertia.row_6 = {0,0,0,0,0,1};
     input.dynamics.added_mass = input.dynamics.rigid_body_inertia;
-    return build(input, mesh, idx, t0, convention, has_surface_forces, Tmax);
+    return build(input, mesh, idx, t0, convention, Tmax, has_surface_forces);
 }

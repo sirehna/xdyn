@@ -20,12 +20,12 @@ void SimHdf5WaveObserverTest::TearDown()
 Eigen::MatrixXd foo(const Eigen::VectorXd& x, const Eigen::VectorXd& y);
 Eigen::MatrixXd foo(const Eigen::VectorXd& x, const Eigen::VectorXd& y)
 {
-    const size_t nx = x.size();
-    const size_t ny = y.size();
+    const long nx = (long)x.size();
+    const long ny = (long)y.size();
     Eigen::MatrixXd m(nx,ny);
-    for (size_t i=0;i<nx;++i)
+    for (long i=0;i<nx;++i)
     {
-        for (size_t j=0;j<ny;++j)
+        for (long j=0;j<ny;++j)
         {
             m(i,j)=x[i]+y[j];
         }
@@ -53,11 +53,11 @@ TEST_F(SimHdf5WaveObserverTest, can_serialize_a_wave_field_elevation_in_time)
     waveElevationGrid.t = 10.0;
     waveElevationGrid.x = Eigen::VectorXd(nx);
     waveElevationGrid.y = Eigen::VectorXd(ny);
-    for (size_t i = 0;i<(size_t)waveElevationGrid.x.size();++i)
+    for (long i = 0;i<(long)waveElevationGrid.x.size();++i)
     {
         waveElevationGrid.x(i) = (double)i;
     }
-    for (size_t j = 0;j<(size_t)waveElevationGrid.y.size();++j)
+    for (long j = 0;j<(long)waveElevationGrid.y.size();++j)
     {
         waveElevationGrid.y(j) = (double)j;
     }

@@ -14,7 +14,7 @@
 
 #define NORM(f) (sqrt(f.X()*f.X()+f.Y()*f.Y()+f.Z()*f.Z()))
 
-GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s, const double dz_, const double dphi_, const double dtheta_) :
+GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s, const double dz_, const double dtheta_) :
     body(s.get_bodies().front()),
     env(s.get_env()),
     gravity(TR1(static_pointer_cast)<GravityForceModel>(s.get_forces().begin()->second.front())),
@@ -22,7 +22,6 @@ GZ::ResultantForceComputer::ResultantForceComputer(const Sim& s, const double dz
     current_instant(0),
     G(body->get_states().G),
     dz(dz_),
-    dphi(dphi_),
     dtheta(dtheta_)
 {
 
@@ -86,9 +85,9 @@ Eigen::Matrix2d GZ::ResultantForceComputer::K(const Eigen::Vector3d& X)
     const Eigen::Vector2d dx(dz,dtheta);
     const Eigen::Matrix2d df = dF(X);
 
-    for (size_t i = 0 ; i < 2 ; ++i)
+    for (long i = 0 ; i < 2 ; ++i)
     {
-        for (size_t j = 0 ; j < 2 ; ++j)
+        for (long j = 0 ; j < 2 ; ++j)
         {
             ret(i,j) = df(i,j)/dx(j);
         }

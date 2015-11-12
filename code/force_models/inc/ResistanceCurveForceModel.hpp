@@ -12,7 +12,7 @@
 
 #include "ForceModel.hpp"
 
-class EnvironmentAndFrames;
+struct EnvironmentAndFrames;
 
 /** \brief Resistance curve given by interpolation table
  *  \details

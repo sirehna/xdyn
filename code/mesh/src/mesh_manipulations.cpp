@@ -174,7 +174,7 @@ Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon, const std::vector<siz
         const size_t idx2 = vertex_index[i];
         const double S = area(polygon, (int)idx0, (int)idx1, (int)idx2);
         areas += S;
-        areas_times_points += S*(polygon.col(idx0)+polygon.col(idx1)+polygon.col(idx2))/3.;
+        areas_times_points += S*(polygon.col((long)idx0)+polygon.col((long)idx1)+polygon.col((long)idx2))/3.;
     }
     return areas_times_points/areas;
 }

@@ -39,7 +39,7 @@ std::function<void()> WebSocketObserver::get_initializer(const double, const Dat
 std::function<void()> WebSocketObserver::get_serializer(const SurfaceElevationGrid& s, const DataAddressing&)
 {
     return [this,s](){
-        const size_t n = s.z.size();
+        const size_t n = (size_t)s.z.size();
         std::vector<float> v(n,0.0);
         double const * const data = s.z.data();
         for (size_t i=0;i<n;++i) v[i] = (float)data[i];

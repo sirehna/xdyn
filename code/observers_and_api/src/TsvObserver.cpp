@@ -31,7 +31,7 @@ std::function<void()> TsvObserver::get_serializer(const double val, const DataAd
 
 std::function<void()> TsvObserver::get_initializer(const double, const DataAddressing& address)
 {
-    return [this,address](){length_of_title_line+=std::max((int)address.name.size(),WIDTH)+1;os << std::setw(WIDTH) << address.name;};
+    return [this,address](){length_of_title_line+=(size_t)std::max((int)address.name.size(),WIDTH)+1;os << std::setw(WIDTH) << address.name;};
 }
 
 void TsvObserver::flush_after_initialization()

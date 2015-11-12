@@ -265,7 +265,7 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
     const Sim sys = get_system(test_data::stable_rolling_cube_test(), test_data::cube(), 0);
     ssc::kinematics::PointMatrix w = sys.get_waves(a.random<double>());
     ASSERT_EQ(200, w.m.cols());
-    for (size_t i = 0 ; i < 200 ; ++i)
+    for (long i = 0 ; i < 200 ; ++i)
     {
         ASSERT_DOUBLE_EQ(0, (double)w.m(2,i));
     }

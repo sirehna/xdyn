@@ -16,7 +16,7 @@
 
 class HDBParser;
 
-class EnvironmentAndFrames;
+struct EnvironmentAndFrames;
 
 class RadiationDampingForceModel : public ForceModel
 {

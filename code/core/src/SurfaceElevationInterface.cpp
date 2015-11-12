@@ -178,18 +178,18 @@ SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
         THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,ss.str());
     }
     SurfaceElevationGrid s(nx,ny,t);
-    for(size_t i=0;i<nx;++i)
+    for(long i=0;i<(long)nx;++i)
     {
         s.x(i) = res.m(0,i);
     }
-    for(size_t j=0; j<ny; ++j)
+    for(long j=0; j<(long)ny; ++j)
     {
-        s.y(j) = res.m(1,j*nx);
+        s.y(j) = res.m(1,j*((long)nx));
     }
-    size_t idx = 0;
-    for(size_t j=0;j<ny;++j)
+    long idx = 0;
+    for(long j=0;j<(long)ny;++j)
     {
-        for(size_t i = 0;i<nx;++i)
+        for(long i = 0;i<(long)nx;++i)
         {
             s.z(i,j) = res.m(2,idx++);
         }

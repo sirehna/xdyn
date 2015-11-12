@@ -553,8 +553,8 @@ std::string MeshIntersector::display_edge_in_NED(const size_t edge_idx, const EP
 {
     std::stringstream ss;
     ss << "Edge:" << std::endl;
-    const auto P1 = R_from_ned_to_mesh*(mesh->all_nodes.col(mesh->edges[0][edge_idx])) + mesh_center_in_NED_frame;
-    const auto P2 = R_from_ned_to_mesh*(mesh->all_nodes.col(mesh->edges[1][edge_idx])) + mesh_center_in_NED_frame;
+    const auto P1 = R_from_ned_to_mesh*(mesh->all_nodes.col((long)mesh->edges[0][edge_idx])) + mesh_center_in_NED_frame;
+    const auto P2 = R_from_ned_to_mesh*(mesh->all_nodes.col((long)mesh->edges[1][edge_idx])) + mesh_center_in_NED_frame;
     Eigen::MatrixXd edge(3,2);
 
     edge << P1, P2;
@@ -570,7 +570,7 @@ VectorOfVectorOfPoints MeshIntersector::serialize(const FacetIterator& begin, co
         VectorOfPoints v;
         for (const auto i:it->vertex_index)
         {
-            v.push_back(mesh->all_nodes.col(i));
+            v.push_back(mesh->all_nodes.col((long)i));
         }
         ret.push_back(v);
     }

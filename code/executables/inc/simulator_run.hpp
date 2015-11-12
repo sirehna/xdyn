@@ -1,7 +1,7 @@
 #ifndef SIMULATOR_RUN_HPP_
 #define SIMULATOR_RUN_HPP_
 
-class InputData;
+struct InputData;
 class Sim;
 class ListOfObservers;
 

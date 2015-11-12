@@ -48,20 +48,20 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const 
         ymax()
 {
     if (index_of_relevant_edges.empty()) for (size_t i = 0 ; i < edges_.size() ; ++i) index_of_relevant_edges.push_back(i);
-    xmin = (double)mesh->operator()(0,edges_.at(0).first);
-    xmax = (double)mesh->operator()(0,edges_.at(0).first);
-    ymin = (double)mesh->operator()(1,edges_.at(0).first);
-    ymin = (double)mesh->operator()(1,edges_.at(0).first);
+    xmin = (double)mesh->operator()(0,(long)edges_.at(0).first);
+    xmax = (double)mesh->operator()(0,(long)edges_.at(0).first);
+    ymin = (double)mesh->operator()(1,(long)edges_.at(0).first);
+    ymin = (double)mesh->operator()(1,(long)edges_.at(0).first);
     for (const auto idx:index_of_relevant_edges)
     {
         edges.push_back(edges_.at(idx));
         original_edge_index.push_back(idx);
         const auto j1 = edges.back().first;
         const auto j2 = edges.back().second;
-        xmin = std::min(std::min(xmin, (double)mesh->operator()(0,j1)),(double)mesh->operator()(0,j2));
-        xmax = std::max(std::max(xmax, (double)mesh->operator()(0,j1)),(double)mesh->operator()(0,j2));
-        ymin = std::min(std::min(ymin, (double)mesh->operator()(1,j1)),(double)mesh->operator()(1,j2));
-        ymax = std::max(std::max(ymax, (double)mesh->operator()(1,j1)),(double)mesh->operator()(1,j2));
+        xmin = std::min(std::min(xmin, (double)mesh->operator()(0,(long)j1)),(double)mesh->operator()(0,(long)j2));
+        xmax = std::max(std::max(xmax, (double)mesh->operator()(0,(long)j1)),(double)mesh->operator()(0,(long)j2));
+        ymin = std::min(std::min(ymin, (double)mesh->operator()(1,(long)j1)),(double)mesh->operator()(1,(long)j2));
+        ymax = std::max(std::max(ymax, (double)mesh->operator()(1,(long)j1)),(double)mesh->operator()(1,(long)j2));
     }
     node_idx_in_mesh = extract_nodes(edges);
     node_to_connected_edges = get_node_to_connected_edges(edges);
@@ -79,20 +79,20 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd* mesh_, const 
         ymax()
 {
     if (index_of_relevant_edges.empty()) for (size_t i = 0 ; i < edges_.size() ; ++i) index_of_relevant_edges.push_back(i);
-    xmin = (double)mesh->operator()(0,edges_.at(0).first);
-    xmax = (double)mesh->operator()(0,edges_.at(0).first);
-    ymin = (double)mesh->operator()(1,edges_.at(0).first);
-    ymin = (double)mesh->operator()(1,edges_.at(0).first);
+    xmin = (double)mesh->operator()(0,(long)edges_.at(0).first);
+    xmax = (double)mesh->operator()(0,(long)edges_.at(0).first);
+    ymin = (double)mesh->operator()(1,(long)edges_.at(0).first);
+    ymin = (double)mesh->operator()(1,(long)edges_.at(0).first);
     for (const auto idx:index_of_relevant_edges)
     {
         edges.push_back(edges_.at(idx));
         original_edge_index.push_back(idx);
         const auto j1 = edges.back().first;
         const auto j2 = edges.back().second;
-        xmin = std::min(std::min(xmin, (double)mesh->operator()(0,j1)),(double)mesh->operator()(0,j2));
-        xmax = std::max(std::max(xmax, (double)mesh->operator()(0,j1)),(double)mesh->operator()(0,j2));
-        ymin = std::min(std::min(ymin, (double)mesh->operator()(1,j1)),(double)mesh->operator()(1,j2));
-        ymax = std::max(std::max(ymax, (double)mesh->operator()(1,j1)),(double)mesh->operator()(1,j2));
+        xmin = std::min(std::min(xmin, (double)mesh->operator()(0,(long)j1)),(double)mesh->operator()(0,(long)j2));
+        xmax = std::max(std::max(xmax, (double)mesh->operator()(0,(long)j1)),(double)mesh->operator()(0,(long)j2));
+        ymin = std::min(std::min(ymin, (double)mesh->operator()(1,(long)j1)),(double)mesh->operator()(1,(long)j2));
+        ymax = std::max(std::max(ymax, (double)mesh->operator()(1,(long)j1)),(double)mesh->operator()(1,(long)j2));
     }
     node_idx_in_mesh = extract_nodes(edges);
     node_to_connected_edges = get_node_to_connected_edges(edges);
@@ -141,13 +141,13 @@ ClosingFacetComputer::ConnectedComponents ClosingFacetComputer::get_connected_co
 
 std::vector<std::set<size_t> > ClosingFacetComputer::get_edges_per_component(const ConnectedComponents& connected_components, const ListOfEdges& edges_)
 {
-    std::vector<std::set<size_t> > facets(connected_components.nb_of_components);
+    std::vector<std::set<size_t> > facets((unsigned long)connected_components.nb_of_components);
     auto node2edges = get_node_to_connected_edges(edges_);
     for (size_t node_idx = 0 ; node_idx < connected_components.component_idx_per_node.size() ; ++node_idx)
     {
         const auto edges_connected_to_current_node = node2edges[node_idx];
         const auto facet_idx = connected_components.component_idx_per_node[node_idx];
-        facets[facet_idx].insert(edges_connected_to_current_node.begin(),edges_connected_to_current_node.end());
+        facets[(size_t)facet_idx].insert(edges_connected_to_current_node.begin(),edges_connected_to_current_node.end());
     }
     return facets;
 }
@@ -208,8 +208,8 @@ std::pair<size_t,size_t> ClosingFacetComputer::find_extreme_nodes() const
     double ymax = mesh->operator()(0,0);
     for (size_t i = 1 ; i < node_idx_in_mesh.size() ; ++i)
     {
-        const double xval = mesh->operator()(0,node_idx_in_mesh.at(i));
-        const double yval = mesh->operator()(1,node_idx_in_mesh.at(i));
+        const double xval = mesh->operator()(0,(long)node_idx_in_mesh.at(i));
+        const double yval = mesh->operator()(1,(long)node_idx_in_mesh.at(i));
         if (xval<xmin)
         {
             idx_xmin = i;
@@ -310,8 +310,8 @@ double constrain_0_2pi(double x)
 double ClosingFacetComputer::angle_between_edges(const size_t idx_of_edge_AB, const size_t idx_of_edge_BC, const bool reverse) const
 {
     const TwoEdges AB_BC(idx_of_edge_AB, idx_of_edge_BC, edges, reverse);
-    const auto BA = mesh->col(AB_BC.get_idx_A()) - mesh->col(AB_BC.get_idx_B());
-    const auto BC = mesh->col(AB_BC.get_idx_C()) - mesh->col(AB_BC.get_idx_B());
+    const auto BA = mesh->col((long)AB_BC.get_idx_A()) - mesh->col((long)AB_BC.get_idx_B());
+    const auto BC = mesh->col((long)AB_BC.get_idx_C()) - mesh->col((long)AB_BC.get_idx_B());
     const double BA_angle = (std::atan2(BA(1),BA(0)));
     const double BC_angle = (std::atan2(BC(1),BC(0)));
     const double angle = (BC_angle - BA_angle);
@@ -381,8 +381,8 @@ size_t ClosingFacetComputer::next_edge(const size_t edge_idx, const bool reverse
         THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
 
-    const double x0 = reverse ? mesh->operator()(0,edges.at(edge_idx).first) : mesh->operator()(0,edges.at(edge_idx).second);
-    const double y0 = reverse ? mesh->operator()(1,edges.at(edge_idx).first) : mesh->operator()(1,edges.at(edge_idx).second);
+    const double x0 = reverse ? mesh->operator()(0,(long)edges.at(edge_idx).first) : mesh->operator()(0,(long)edges.at(edge_idx).second);
+    const double y0 = reverse ? mesh->operator()(1,(long)edges.at(edge_idx).first) : mesh->operator()(1,(long)edges.at(edge_idx).second);
 
     bool save_lowest = keep_lowest_angle(x0, y0, reverse);
     std::vector<double> angles;
@@ -435,11 +435,11 @@ size_t ClosingFacetComputer::extreme_edge(const size_t extreme_node) const
         THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     const auto candidates = it->second;
-    const auto A = mesh->col(extreme_node);
+    const auto A = mesh->col((long)extreme_node);
     const auto compute_angle = [this, A, extreme_node](const size_t candidate) -> double
                                {
                                    const auto idxB = edges.at(candidate).first==extreme_node ? edges.at(candidate).second : edges.at(candidate).first;
-                                   const auto B = mesh->col(idxB);
+                                   const auto B = mesh->col((long)idxB);
                                    const auto AB = B-A;
                                    return constrain_0_2pi(std::atan2(AB(1),AB(0)));
                                };
@@ -484,11 +484,11 @@ bool ClosingFacetComputer::direct_orientation(const ClosingFacetComputer::Contou
 {
     const auto idxA = edges.at(contour.edge_idx.front()).first;
     const auto idxB = edges.at(contour.edge_idx.front()).second;
-    const auto AB = mesh->col(idxB) - mesh->col(idxA);
+    const auto AB = mesh->col((long)idxB) - mesh->col((long)idxA);
     size_t i = 1;
     auto idxC = contour.reversed.at(i) ? edges.at(contour.edge_idx.at(i)).second : edges.at(contour.edge_idx.at(i)).first;
     auto idxD = contour.reversed.at(i) ? edges.at(contour.edge_idx.at(i)).first : edges.at(contour.edge_idx.at(i)).second;
-    auto CD = mesh->col(idxD) - mesh->col(idxC);
+    auto CD = mesh->col((long)idxD) - mesh->col((long)idxC);
     auto z_coord = (double)AB.cross(CD)(2);
     bool colinear = std::abs(z_coord) < 1E-10;
     while (colinear and (i<contour.edge_idx.size()-1))
@@ -496,7 +496,7 @@ bool ClosingFacetComputer::direct_orientation(const ClosingFacetComputer::Contou
         ++i;
         auto idxC = contour.reversed.at(i) ? edges.at(contour.edge_idx.at(i)).second : edges.at(contour.edge_idx.at(i)).first;
         auto idxD = contour.reversed.at(i) ? edges.at(contour.edge_idx.at(i)).first : edges.at(contour.edge_idx.at(i)).second;
-        auto CD = mesh->col(idxD) - mesh->col(idxC);
+        auto CD = mesh->col((long)idxD) - mesh->col((long)idxC);
         z_coord = (double)AB.cross(CD)(2);
         colinear = std::abs(z_coord) < 1E-10;
     }
