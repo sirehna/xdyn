@@ -63,6 +63,7 @@ namespace test_data
     std::string linear_hydrostatics();
     std::string anthineas_linear_hydrostatics_without_waves();
     std::string anthineas_linear_hydrostatics_with_waves();
+    std::string dummy_history();
     std::string bug_2963_hs_fast();
     std::string bug_2963_hs_exact();
     std::string bug_2963_fk();

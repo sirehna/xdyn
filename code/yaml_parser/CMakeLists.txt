@@ -8,6 +8,7 @@ set(SRC src/SimulatorYamlParser.cpp
         src/parse_commands.cpp
         src/parse_output.cpp
         src/parse_address.cpp
+        src/parse_history.cpp
         )
 
 # Using C++ 2011
