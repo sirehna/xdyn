@@ -1005,6 +1005,30 @@ K_T(J, P/D, A_E/A_0, Z, R_n)$$
 $$K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
 K_Q(J, P/D, A_E/A_0, Z, R_n)$$
 
+### Domaine de validité
+
+Le modèle de Wageningen ne devrait être utilisé que lorsque les hypothèses
+suivantes sont vérifiées :
+
+- Le nombre de pales $Z$ doit être compris entre 2 (inclus) et 7 (inclus). 
+- Le ratio $\frac{A_E}{A_0}$ doit être situé dans l'intervalle
+  $\left[0.3,1.05\right]$. La simulation ne se lancera pas sinon.
+- Le pas de l'hélice $P$ doit vérifier $P/D\in\left[0.5,1.4\right]$
+- Le coefficient d'avance $J$ est tel que $0\leq J\leq 1.5$
+
+Les conditions sur $Z$ et $\frac{A_E}{A_0}$ touchant des grandeurs constantes
+au cours de la simulation, elles sont vérifiées avant le lancement et la
+simulation ne s'effectuera pas si ces conditions ne sont pas vérifiées.
+
+Si le coefficient d'avance $J$ se situe hors de l'intervalle $\left[0,1.5\right]$, un
+message d'avertissement est affiché et $J$ est saturé pour être ramené
+dans l'intervalle : $J \leftarrow \min(\max(J,0),1.5)$
+
+La condition sur le pas $P$ est vérifiée en cours de simulation et un message
+d'avertissement est affiché sur la console. Par contre, le pas n'est pas
+modifié.
+
+
 ### Expression des efforts
 
 Les efforts générés par l'hélice sont calculés dans un repère spécifique
