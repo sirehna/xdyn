@@ -9,7 +9,11 @@
 #ifndef CORE_INC_ABSTRACTSTATES_HPP_
 #define CORE_INC_ABSTRACTSTATES_HPP_
 
-#define ASSIGN(x) x = rhs.x // To prevent typos (eg. rhs & lhs don't match in assigment)
+#define OP(x,op,y) (x op y)
+
+#define EQUAL(x) OP(lhs.x,==,rhs.x)
+
+#define ASSIGN(x) OP(x,=,rhs.x) // To prevent typos (eg. rhs & lhs don't match in assigment)
 
 template <typename T> struct AbstractStates
 {
@@ -62,5 +66,22 @@ template <typename T> struct AbstractStates
     T qj; //!< Imaginary part of the quaternion (of the rotation from NED to body)
     T qk; //!< Imaginary part of the quaternion (of the rotation from NED to body)
 };
+
+template <typename T> bool operator==(const AbstractStates<T>& lhs, const AbstractStates<T>& rhs)
+{
+    return EQUAL(x)
+       and EQUAL(y)
+       and EQUAL(z)
+       and EQUAL(u)
+       and EQUAL(v)
+       and EQUAL(w)
+       and EQUAL(p)
+       and EQUAL(q)
+       and EQUAL(r)
+       and EQUAL(qr)
+       and EQUAL(qi)
+       and EQUAL(qj)
+       and EQUAL(qk);
+}
 
 #endif  /* CORE_INC_ABSTRACTSTATES_HPP_ */
