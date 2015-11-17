@@ -205,3 +205,8 @@ std::tuple<double,double,double,double> Body::get_quaternions(const ssc::kinemat
 {
     return states.convert(angle,c);
 }
+
+void Body::set_states_history(const AbstractStates<History>& s)
+{
+    states = s;
+}

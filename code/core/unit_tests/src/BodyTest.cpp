@@ -12,6 +12,7 @@
 #include <ssc/kinematics.hpp>
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
+#include "State.hpp"
 
 #define EPS (1E-10)
 
@@ -206,4 +207,50 @@ TEST_F(BodyTest, forced_state_derivatives_are_taken_into_account)
     body->calculate_state_derivatives(sum_of_other_forces, x, dx_dt, t, env);
 
     ASSERT_DOUBLE_EQ(1./4.2, dx_dt[UIDX(1)]);
+}
+
+TEST_F(BodyTest, can_overwrite_history_with_single_value)
+{
+    AbstractStates<History> new_states;
+    new_states.x.record(a.random<double>(),a.random<double>());
+    new_states.y.record(a.random<double>(),a.random<double>());
+    new_states.z.record(a.random<double>(),a.random<double>());
+    new_states.u.record(a.random<double>(),a.random<double>());
+    new_states.v.record(a.random<double>(),a.random<double>());
+    new_states.w.record(a.random<double>(),a.random<double>());
+    new_states.p.record(a.random<double>(),a.random<double>());
+    new_states.q.record(a.random<double>(),a.random<double>());
+    new_states.r.record(a.random<double>(),a.random<double>());
+    new_states.qr.record(a.random<double>(),a.random<double>());
+    new_states.qi.record(a.random<double>(),a.random<double>());
+    new_states.qj.record(a.random<double>(),a.random<double>());
+    new_states.qk.record(a.random<double>(),a.random<double>());
+    body->set_states_history(new_states);
+
+    ASSERT_DOUBLE_EQ(body->get_states().x(),new_states.x());
+    ASSERT_EQ(body->get_states().x.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().y(),new_states.y());
+    ASSERT_EQ(body->get_states().y.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().z(),new_states.z());
+    ASSERT_EQ(body->get_states().z.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().u(),new_states.u());
+    ASSERT_EQ(body->get_states().u.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().v(),new_states.v());
+    ASSERT_EQ(body->get_states().v.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().w(),new_states.w());
+    ASSERT_EQ(body->get_states().w.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().p(),new_states.p());
+    ASSERT_EQ(body->get_states().p.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().q(),new_states.q());
+    ASSERT_EQ(body->get_states().q.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().r(),new_states.r());
+    ASSERT_EQ(body->get_states().r.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().qr(),new_states.qr());
+    ASSERT_EQ(body->get_states().qr.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().qi(),new_states.qi());
+    ASSERT_EQ(body->get_states().qi.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().qj(),new_states.qj());
+    ASSERT_EQ(body->get_states().qj.size(),1);
+    ASSERT_DOUBLE_EQ(body->get_states().qk(),new_states.qk());
+    ASSERT_EQ(body->get_states().qk.size(),1);
 }

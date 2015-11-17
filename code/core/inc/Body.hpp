@@ -66,6 +66,7 @@ class Body
         void feed(const StateType& x, Observer& observer, const YamlRotation& c) const;
         BlockedDOF::Vector get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const;
 
+        void set_states_history(const AbstractStates<History>& states);
     protected:
         BodyStates states;
 
