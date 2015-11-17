@@ -12,7 +12,8 @@
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
 
-BodyStates::BodyStates(const double Tmax) : name(),
+BodyStates::BodyStates(const double Tmax) : AbstractStates<History>(Tmax),
+name(),
 G(),
 m(),
 mesh(),
@@ -24,19 +25,6 @@ y_relative_to_mesh(),
 z_relative_to_mesh(),
 mesh_to_body(),
 M(),
-x(Tmax),
-y(Tmax),
-z(Tmax),
-u(Tmax),
-v(Tmax),
-w(Tmax),
-p(Tmax),
-q(Tmax),
-r(Tmax),
-qr(Tmax),
-qi(Tmax),
-qj(Tmax),
-qk(Tmax),
 intersector(),
 g_in_mesh_frame(),
 hydrodynamic_forces_calculation_point(),
@@ -44,6 +32,11 @@ convention()
 {
 }
 
+BodyStates& BodyStates::operator=(const AbstractStates<History>& rhs)
+{
+    AbstractStates<History>::operator=(rhs);
+    return *this;
+}
 
 ssc::kinematics::EulerAngles BodyStates::convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations)
 {

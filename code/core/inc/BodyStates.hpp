@@ -22,6 +22,7 @@
 #include "StateMacros.hpp"
 #include "History.hpp"
 #include "YamlRotation.hpp"
+#include "AbstractStates.hpp"
 
 struct YamlRotation;
 
@@ -30,10 +31,11 @@ class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
 typedef TR1(shared_ptr)<Eigen::Matrix<double,6,6> > MatrixPtr;
 
-struct BodyStates
+struct BodyStates : AbstractStates<History>
 {
     BodyStates(const double Tmax=0 //!< Defines how much history we store
               );
+    BodyStates& operator=(const AbstractStates<History>& rhs);
     std::string name;                                              //!< Body's name
     ssc::kinematics::Point G;                                      //!< Position of the ship's centre of gravity
     double m;                                                      //!< Total mass of the body (in kg)
@@ -46,19 +48,6 @@ struct BodyStates
     double z_relative_to_mesh;                                     //!< Position of the body frame relative to the mesh frame, along the z-axis, in meters
     ssc::kinematics::RotationMatrix mesh_to_body;                  //!< Rotation matrix from mesh to body
     ssc::kinematics::PointMatrixPtr M;                             //!< For the wave model (just the points in the mesh)
-    History x;                                                     //!< x-coordinate of the body's center of gravity in the NED frame (in m)
-    History y;                                                     //!< y-coordinate of the body's center of gravity in the NED frame (in m)
-    History z;                                                     //!< z-coordinate of the body's center of gravity in the NED frame (in m)
-    History u;                                                     //!< Projection of the body's translation speed (relative to NED) along the body's X-axis (in m/s)
-    History v;                                                     //!< Projection of the body's translation speed (relative to NED) along the body's Y-axis (in m/s)
-    History w;                                                     //!< Projection of the body's translation speed (relative to NED) along the body's Z-axis (in m/s)
-    History p;                                                     //!< Projection of the body's rotational speed (relative to NED) along the body's X-axis (in rad/s)
-    History q;                                                     //!< Projection of the body's rotational speed (relative to NED) along the body's Y-axis (in rad/s)
-    History r;                                                     //!< Projection of the body's rotational speed (relative to NED) along the body's Z-axis (in rad/s)
-    History qr;                                                    //!< Real part of the quaternion (of the rotation from NED to body)
-    History qi;                                                    //!< Imaginary part of the quaternion (of the rotation from NED to body)
-    History qj;                                                    //!< Imaginary part of the quaternion (of the rotation from NED to body)
-    History qk;                                                    //!< Imaginary part of the quaternion (of the rotation from NED to body)
     MeshIntersectorPtr intersector;                                //!< Allows us to iterate on all emerged or immersed facets
     EPoint g_in_mesh_frame;                           //!< Unit vertical vector, expressed in the body's mesh frame
     ssc::kinematics::Point hydrodynamic_forces_calculation_point;  //!< Point of expression of hydrodynamic forces (except Froude-Krylov & hydrostatic)
