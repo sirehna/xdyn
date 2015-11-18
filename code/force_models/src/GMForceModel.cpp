@@ -101,7 +101,6 @@ double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const d
 
 ssc::kinematics::Wrench GMForceModel::operator()(const BodyStates& states, const double t) const
 {
-    ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     underlying_hs_force_model->update(states, t);
     const auto ret = underlying_hs_force_model->get_force_in_body_frame();
     const double gz1 = calculate_gz(*underlying_hs_force_model, env);
