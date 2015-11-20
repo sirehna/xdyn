@@ -45,7 +45,7 @@ convention()
 }
 
 
-ssc::kinematics::EulerAngles BodyStates::convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations) const
+ssc::kinematics::EulerAngles BodyStates::convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations)
 {
     using namespace ssc::kinematics;
     if (rotations.order_by == "angle")
