@@ -78,6 +78,7 @@ namespace maneuvering
     class Evaluator: public boost::static_visitor<NodePtr>
     {
         public:
+            Evaluator(const YamlRotation& rot_) : rot(rot_) {}
             NodePtr operator()(const Nil& ) const
             {
                 return make_constant(std::nan(""));
@@ -142,26 +143,34 @@ namespace maneuvering
                 if (d.function == "abs")  return make_abs    (this->operator()(d.expr));
                 if (d.function == "log")  return make_log    (this->operator()(d.expr));
                 if (d.function == "sqrt") return make_sqrt   (this->operator()(d.expr));
-                if (d.function == "x")    return make_state_x(this->operator()(d.expr));
-                if (d.function == "y")    return make_state_y(this->operator()(d.expr));
-                if (d.function == "z")    return make_state_z(this->operator()(d.expr));
-                if (d.function == "u")    return make_state_u(this->operator()(d.expr));
-                if (d.function == "v")    return make_state_v(this->operator()(d.expr));
-                if (d.function == "w")    return make_state_w(this->operator()(d.expr));
-                if (d.function == "p")    return make_state_p(this->operator()(d.expr));
-                if (d.function == "q")    return make_state_q(this->operator()(d.expr));
-                if (d.function == "r")    return make_state_r(this->operator()(d.expr));
+                if (d.function == "x")    return make_state_x(this->operator()(d.expr), rot);
+                if (d.function == "y")    return make_state_y(this->operator()(d.expr), rot);
+                if (d.function == "z")    return make_state_z(this->operator()(d.expr), rot);
+                if (d.function == "u")    return make_state_u(this->operator()(d.expr), rot);
+                if (d.function == "v")    return make_state_v(this->operator()(d.expr), rot);
+                if (d.function == "w")    return make_state_w(this->operator()(d.expr), rot);
+                if (d.function == "p")    return make_state_p(this->operator()(d.expr), rot);
+                if (d.function == "q")    return make_state_q(this->operator()(d.expr), rot);
+                if (d.function == "r")    return make_state_r(this->operator()(d.expr), rot);
+                if (d.function == "phi")  return make_state_phi(this->operator()(d.expr), rot);
+                if (d.function == "theta")return make_state_theta(this->operator()(d.expr), rot);
+                if (d.function == "psi")  return make_state_psi(this->operator()(d.expr), rot);
+                if (d.function == "qr")   return make_state_qr(this->operator()(d.expr), rot);
+                if (d.function == "qi")   return make_state_qi(this->operator()(d.expr), rot);
+                if (d.function == "qj")   return make_state_qj(this->operator()(d.expr), rot);
+                if (d.function == "qk")   return make_state_qk(this->operator()(d.expr), rot);
                                           return make_unknown_identifier(PrettyPrinter()(d));
             }
+            YamlRotation rot;
     };
 
-    NodePtr compile(const std::string& expression)
+    NodePtr compile(const std::string& expression, const YamlRotation& rot)
     {
         std::string::const_iterator b = expression.begin(), e = expression.end();
         Expr ast;
         ArithmeticGrammar g;
         qi::phrase_parse(b, e, g.expr, blank, ast);
-        Evaluator evaluate;
+        Evaluator evaluate(rot);
         return evaluate(ast);
     }
 

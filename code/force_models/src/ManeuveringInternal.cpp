@@ -367,49 +367,84 @@ NodePtr maneuvering::make_multiply(const NodePtr& lhs, const NodePtr& rhs)
     return NodePtr(new Multiply(lhs,rhs));
 }
 
-NodePtr maneuvering::make_state_x(const NodePtr& n)
+NodePtr maneuvering::make_state_x(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::X>(n));
+    return NodePtr(new State<StateType::X>(n,rot));
 }
 
-NodePtr maneuvering::make_state_y(const NodePtr& n)
+NodePtr maneuvering::make_state_y(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::Y>(n));
+    return NodePtr(new State<StateType::Y>(n,rot));
 }
 
-NodePtr maneuvering::make_state_z(const NodePtr& n)
+NodePtr maneuvering::make_state_z(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::Z>(n));
+    return NodePtr(new State<StateType::Z>(n,rot));
 }
 
-NodePtr maneuvering::make_state_u(const NodePtr& n)
+NodePtr maneuvering::make_state_u(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::U>(n));
+    return NodePtr(new State<StateType::U>(n,rot));
 }
 
-NodePtr maneuvering::make_state_v(const NodePtr& n)
+NodePtr maneuvering::make_state_v(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::V>(n));
+    return NodePtr(new State<StateType::V>(n,rot));
 }
 
-NodePtr maneuvering::make_state_w(const NodePtr& n)
+NodePtr maneuvering::make_state_w(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::W>(n));
+    return NodePtr(new State<StateType::W>(n,rot));
 }
 
-NodePtr maneuvering::make_state_p(const NodePtr& n)
+NodePtr maneuvering::make_state_p(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::P>(n));
+    return NodePtr(new State<StateType::P>(n,rot));
 }
 
-NodePtr maneuvering::make_state_q(const NodePtr& n)
+NodePtr maneuvering::make_state_q(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::Q>(n));
+    return NodePtr(new State<StateType::Q>(n,rot));
 }
 
-NodePtr maneuvering::make_state_r(const NodePtr& n)
+NodePtr maneuvering::make_state_r(const NodePtr& n, const YamlRotation& rot)
 {
-    return NodePtr(new State<StateType::R>(n));
+    return NodePtr(new State<StateType::R>(n,rot));
+}
+
+NodePtr maneuvering::make_state_phi(const NodePtr& n, const YamlRotation& rot)
+{
+    return NodePtr(new State<StateType::PHI>(n,rot));
+}
+
+NodePtr maneuvering::make_state_theta(const NodePtr& n, const YamlRotation& rot)
+{
+    return NodePtr(new State<StateType::THETA>(n,rot));
+}
+
+NodePtr maneuvering::make_state_psi(const NodePtr& n, const YamlRotation& rot)
+{
+    return NodePtr(new State<StateType::PSI>(n,rot));
+}
+
+NodePtr maneuvering::make_state_qr(const NodePtr& n, const YamlRotation& rot)
+{
+    return NodePtr(new State<StateType::QR>(n,rot));
+}
+
+NodePtr maneuvering::make_state_qi(const NodePtr& n, const YamlRotation& rot)
+{
+    return NodePtr(new State<StateType::QI>(n,rot));
+}
+
+NodePtr maneuvering::make_state_qj(const NodePtr& n, const YamlRotation& rot)
+{
+    return NodePtr(new State<StateType::QJ>(n,rot));
+}
+
+NodePtr maneuvering::make_state_qk(const NodePtr& n, const YamlRotation& rot)
+{
+    return NodePtr(new State<StateType::QK>(n,rot));
 }
 
 NodePtr maneuvering::make_time()
@@ -457,6 +492,34 @@ namespace maneuvering
         visitor.visit(*this);
     }
     template <> void State<StateType::R>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::PHI>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::THETA>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::PSI>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::QR>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::QI>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::QJ>::accept(AbstractNodeVisitor& visitor) const
+    {
+        visitor.visit(*this);
+    }
+    template <> void State<StateType::QK>::accept(AbstractNodeVisitor& visitor) const
     {
         visitor.visit(*this);
     }

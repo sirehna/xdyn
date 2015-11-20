@@ -30,8 +30,8 @@ TEST_F(maneuvering_DataSource_builderTest, example)
 {
     std::map<std::string, maneuvering::NodePtr> m;
 
-    m["X"] = maneuvering::compile("2*Y+sqrt(x(t))");
-    m["Y"] = maneuvering::compile("y(t)^2");
+    m["X"] = maneuvering::compile("2*Y+sqrt(x(t))", YamlRotation());
+    m["Y"] = maneuvering::compile("y(t)^2", YamlRotation());
 
     ssc::data_source::DataSource ds;
     maneuvering::build_ds(ds, m);

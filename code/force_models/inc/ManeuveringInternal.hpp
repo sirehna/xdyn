@@ -168,33 +168,49 @@ namespace maneuvering
             void accept(AbstractNodeVisitor& visitor) const;
     };
 
-    enum class StateType {X, Y, Z, U, V, W, P, Q, R};
+    enum class StateType {X, Y, Z, U, V, W, P, Q, R, QR, QI, QJ, QK, PHI, THETA, PSI};
 
     template <StateType S> class State : public Unary
     {
         public:
-            State(const NodePtr& operand) : Unary(operand){}
+            State(const NodePtr& operand, const YamlRotation& rot_) : Unary(operand), rot(rot_)
+            {}
             Function get_lambda() const
             {
                 return [this](const BodyStates& states, ssc::data_source::DataSource& ds, const double t)->double
                         {
                             const auto op = get_operand()->get_lambda();
+                            ssc::kinematics::RotationMatrix R;
+                            ssc::kinematics::EulerAngles angles;
+                            if ((S == StateType::PHI) or (S == StateType::THETA) or (S == StateType::PSI))
+                            {
+                                R = Eigen::Quaternion<double>(states.qr(t-op(states,ds,t)),states.qi(t-op(states,ds,t)),states.qj(t-op(states,ds,t)),states.qk(t-op(states,ds,t))).matrix();
+                                angles = BodyStates::convert(R, rot);
+                            }
                             switch(S)
                             {
-                                case StateType::X : return states.x(t-op(states,ds,t));break;
-                                case StateType::Y : return states.y(t-op(states,ds,t));break;
-                                case StateType::Z : return states.z(t-op(states,ds,t));break;
-                                case StateType::U : return states.u(t-op(states,ds,t));break;
-                                case StateType::V : return states.v(t-op(states,ds,t));break;
-                                case StateType::W : return states.w(t-op(states,ds,t));break;
-                                case StateType::P : return states.p(t-op(states,ds,t));break;
-                                case StateType::Q : return states.q(t-op(states,ds,t));break;
-                                case StateType::R : return states.r(t-op(states,ds,t));break;
+                                case StateType::X :    return states.x(t-op(states,ds,t)); break;
+                                case StateType::Y :    return states.y(t-op(states,ds,t)); break;
+                                case StateType::Z :    return states.z(t-op(states,ds,t)); break;
+                                case StateType::U :    return states.u(t-op(states,ds,t)); break;
+                                case StateType::V :    return states.v(t-op(states,ds,t)); break;
+                                case StateType::W :    return states.w(t-op(states,ds,t)); break;
+                                case StateType::P :    return states.p(t-op(states,ds,t)); break;
+                                case StateType::Q :    return states.q(t-op(states,ds,t)); break;
+                                case StateType::R :    return states.r(t-op(states,ds,t)); break;
+                                case StateType::QR :   return states.qr(t-op(states,ds,t));break;
+                                case StateType::QI :   return states.qi(t-op(states,ds,t));break;
+                                case StateType::QJ :   return states.qj(t-op(states,ds,t));break;
+                                case StateType::QK :   return states.qk(t-op(states,ds,t));break;
+                                case StateType::PHI:   return angles.phi;                  break;
+                                case StateType::THETA: return angles.theta;                break;
+                                case StateType::PSI:   return angles.psi;                  break;
                             }
                             return op(states,ds,t);
                         };
             }
             void accept(AbstractNodeVisitor& visitor) const;
+            YamlRotation rot;
     };
 
     class Time : public Nullary
@@ -234,6 +250,13 @@ namespace maneuvering
             virtual void visit(const State<StateType::P>& f) = 0;
             virtual void visit(const State<StateType::Q>& f) = 0;
             virtual void visit(const State<StateType::R>& f) = 0;
+            virtual void visit(const State<StateType::PHI>& f) = 0;
+            virtual void visit(const State<StateType::THETA>& f) = 0;
+            virtual void visit(const State<StateType::PSI>& f) = 0;
+            virtual void visit(const State<StateType::QR>& f) = 0;
+            virtual void visit(const State<StateType::QI>& f) = 0;
+            virtual void visit(const State<StateType::QJ>& f) = 0;
+            virtual void visit(const State<StateType::QK>& f) = 0;
             virtual void visit(const Binary& f) = 0;
             virtual void visit(const Unary& f) = 0;
             virtual void visit(const Constant& f) = 0;
@@ -251,15 +274,22 @@ namespace maneuvering
     NodePtr make_difference(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_divide(const NodePtr& lhs, const NodePtr& rhs);
     NodePtr make_multiply(const NodePtr& lhs, const NodePtr& rhs);
-    NodePtr make_state_x(const NodePtr& operand);
-    NodePtr make_state_y(const NodePtr& operand);
-    NodePtr make_state_z(const NodePtr& operand);
-    NodePtr make_state_u(const NodePtr& operand);
-    NodePtr make_state_v(const NodePtr& operand);
-    NodePtr make_state_w(const NodePtr& operand);
-    NodePtr make_state_p(const NodePtr& operand);
-    NodePtr make_state_q(const NodePtr& operand);
-    NodePtr make_state_r(const NodePtr& operand);
+    NodePtr make_state_x(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_y(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_z(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_u(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_v(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_w(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_p(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_q(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_r(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_phi(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_theta(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_psi(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_qr(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_qi(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_qj(const NodePtr& operand, const YamlRotation& rot);
+    NodePtr make_state_qk(const NodePtr& operand, const YamlRotation& rot);
     NodePtr make_time();
     NodePtr make_unknown_identifier(const std::string& identifier_name);
 }

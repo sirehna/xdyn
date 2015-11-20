@@ -205,15 +205,15 @@ TEST_F(ManeuveringForceModelTest, internal_multiply)
 
 TEST_F(ManeuveringForceModelTest, internal_state)
 {
-    const auto xx = make_state_x(make_constant(5));
-    const auto yy = make_state_y(make_constant(5));
-    const auto zz = make_state_z(make_constant(5));
-    const auto uu = make_state_u(make_constant(5));
-    const auto vv = make_state_v(make_constant(5));
-    const auto ww = make_state_w(make_constant(5));
-    const auto pp = make_state_p(make_constant(5));
-    const auto qq = make_state_q(make_constant(5));
-    const auto rr = make_state_r(make_constant(5));
+    const auto xx = make_state_x(make_constant(5),YamlRotation());
+    const auto yy = make_state_y(make_constant(5),YamlRotation());
+    const auto zz = make_state_z(make_constant(5),YamlRotation());
+    const auto uu = make_state_u(make_constant(5),YamlRotation());
+    const auto vv = make_state_v(make_constant(5),YamlRotation());
+    const auto ww = make_state_w(make_constant(5),YamlRotation());
+    const auto pp = make_state_p(make_constant(5),YamlRotation());
+    const auto qq = make_state_q(make_constant(5),YamlRotation());
+    const auto rr = make_state_r(make_constant(5),YamlRotation());
     const auto x = xx->get_lambda();
     const auto y = yy->get_lambda();
     const auto z = zz->get_lambda();
@@ -416,6 +416,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
 TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
 {
     auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    // Re-initialize to zero
     data.frame_of_reference.angle = YamlAngle();
     data.frame_of_reference.coordinates = YamlCoordinates();
     const auto env = get_env_with_default_rotation_convention();
@@ -447,4 +448,42 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
     ASSERT_DOUBLE_EQ(0, F.K());
     ASSERT_DOUBLE_EQ(0, F.M());
     ASSERT_DOUBLE_EQ(-178317.02217866198, F.N());
+}
+
+TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_manoeuvring)
+{
+    auto data = ManeuveringForceModel::parse(test_data::manoeuvring_with_euler_angles_and_quaternions());
+    // Re-initialize to zero
+    data.frame_of_reference.angle = YamlAngle();
+    data.frame_of_reference.coordinates = YamlCoordinates();
+    const auto env = get_env_with_default_rotation_convention();
+    ManeuveringForceModel force(data,"some body", env);
+    YamlRotation rot;
+    rot.order_by = "angle";
+    rot.convention.push_back("z");
+    rot.convention.push_back("y'");
+    rot.convention.push_back("x''");
+    auto states = get_body("some body")->get_states();
+    states.x.record(0, 0.1);
+    states.y.record(0, 2.04);
+    states.z.record(0, 6.28);
+    states.u.record(0, 0.45);
+    states.v.record(0, 0.01);
+    states.w.record(0, 5.869);
+    states.p.record(0, 0.23);
+    states.q.record(0, 0);
+    states.r.record(0, 0.38);
+    states.qr.record(0, 0.36);
+    states.qi.record(0, 0.37);
+    states.qj.record(0, 0.38);
+    states.qk.record(0, 0.39);
+    const auto angles = states.get_angles(rot);
+    ssc::data_source::DataSource command_listener;
+    const auto F = force(states, 0, command_listener);
+    ASSERT_DOUBLE_EQ(angles.phi, (double)F.X());
+    ASSERT_DOUBLE_EQ(angles.theta, (double)F.Y());
+    ASSERT_DOUBLE_EQ(angles.psi, (double)F.Z());
+    ASSERT_DOUBLE_EQ(states.qr(), (double)F.K());
+    ASSERT_DOUBLE_EQ(states.qi(), (double)F.M());
+    ASSERT_DOUBLE_EQ(states.qj()+states.qk(), (double)F.N());
 }

@@ -13,7 +13,7 @@
 
 namespace maneuvering
 {
-    NodePtr compile(const std::string& expression);
+    NodePtr compile(const std::string& expression, const YamlRotation& rot);
     std::string print(const std::string& expression);
 }
 

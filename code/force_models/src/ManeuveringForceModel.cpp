@@ -64,7 +64,7 @@ ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string
     env.k->add(make_transform(data.frame_of_reference, data.name, env.rot));
     for (auto var2expr:data.var2expr)
     {
-        m[var2expr.first] = maneuvering::compile(var2expr.second);
+        m[var2expr.first] = maneuvering::compile(var2expr.second, env.rot);
     }
     g  = env.g;
     nu  = env.nu;

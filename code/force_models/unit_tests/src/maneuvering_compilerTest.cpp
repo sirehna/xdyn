@@ -28,7 +28,7 @@ void maneuvering_compilerTest::TearDown()
 double evaluate(const std::string& stuff, const BodyStates& states, const double t, ssc::data_source::DataSource& ds);
 double evaluate(const std::string& stuff, const BodyStates& states, const double t, ssc::data_source::DataSource& ds)
 {
-    const auto n = maneuvering::compile(stuff);
+    const auto n = maneuvering::compile(stuff, YamlRotation());
     const auto f = n->get_lambda();
     return f(states, ds, t);
 }
