@@ -57,37 +57,33 @@ ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string
         ControllableForceModel(data.name, data.commands, data.frame_of_reference, body_name_, env_),
         point_of_application(data.name, data.frame_of_reference.coordinates.x, data.frame_of_reference.coordinates.y, data.frame_of_reference.coordinates.z),
         m(),
-        g(),
-        nu(),
-        rho()
+        ds(new ssc::data_source::DataSource())
 {
     env.k->add(make_transform(data.frame_of_reference, data.name, env.rot));
     for (auto var2expr:data.var2expr)
     {
         m[var2expr.first] = maneuvering::compile(var2expr.second, env.rot);
     }
-    g  = env.g;
-    nu  = env.nu;
-    rho = env.rho;
+    ds->set("g", env.g);
+    ds->set("nu", env.nu);
+    ds->set("rho", env.rho);
+    maneuvering::build_ds(*ds, m);
 }
 
 ssc::kinematics::Vector6d ManeuveringForceModel::get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
 {
-    ssc::data_source::DataSource ds;
-    maneuvering::build_ds(ds, m, commands);
-    ds.check_in(__PRETTY_FUNCTION__);
-    ds.set("states", states);
-    ds.set("t", t);
-    ds.set("g", g);
-    ds.set("nu", nu);
-    ds.set("rho", rho);
+    ds->check_in(__PRETTY_FUNCTION__);
+    ds->set("states", states);
+    ds->set("t", t);
+    for (const auto command:commands) ds->set(command.first, command.second);
+
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
-    tau(0) = ds.get<double>("X");
-    tau(1) = ds.get<double>("Y");
-    tau(2) = ds.get<double>("Z");
-    tau(3) = ds.get<double>("K");
-    tau(4) = ds.get<double>("M");
-    tau(5) = ds.get<double>("N");
-    ds.check_out();
+    tau(0) = ds->get<double>("X");
+    tau(1) = ds->get<double>("Y");
+    tau(2) = ds->get<double>("Z");
+    tau(3) = ds->get<double>("K");
+    tau(4) = ds->get<double>("M");
+    tau(5) = ds->get<double>("N");
+    ds->check_out();
     return tau;
 }

@@ -41,7 +41,7 @@ class ManeuveringForceModel : public ControllableForceModel
         ManeuveringForceModel();
         ssc::kinematics::Point point_of_application;
         std::map<std::string, maneuvering::NodePtr> m;
-        double g, nu, rho;
+        TR1(shared_ptr)<ssc::data_source::DataSource> ds;
 };
 
 #endif /* MANEUVERINGFORCEMODEL_HPP_ */
