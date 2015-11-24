@@ -135,10 +135,10 @@ void Sim::update_continuous_states()
 
 ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyPtr& body, const double t)
 {
-    const Eigen::Vector3d uvw_in_body_frame = body->get_uvw_in_body_frame(x);
+    const Eigen::Vector3d uvw = body->get_uvw(x);
     const Eigen::Vector3d pqr = body->get_pqr(x);
     const auto states = body->get_states();
-    pimpl->sum_of_forces_in_body_frame[body->get_name()] = ssc::kinematics::UnsafeWrench(coriolis_and_centripetal(states.G,states.solid_body_inertia.get(),uvw_in_body_frame, pqr));
+    pimpl->sum_of_forces_in_body_frame[body->get_name()] = ssc::kinematics::UnsafeWrench(coriolis_and_centripetal(states.G,states.solid_body_inertia.get(),uvw, pqr));
     const auto forces = pimpl->forces[body->get_name()];
     for (auto force:forces)
     {

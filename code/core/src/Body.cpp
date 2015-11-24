@@ -128,11 +128,11 @@ void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_for
 
     // dx/dt, dy/dt, dz/dt
     const ssc::kinematics::RotationMatrix& R = env.k->get("NED", states.name).get_rot();
-    const Eigen::Map<const Eigen::Vector3d> uvw_in_body_frame(_U(x,idx));
     const Eigen::Vector3d uvw_in_ned_frame(R*uvw_in_body_frame);
     *_X(dx_dt,idx) = uvw_in_ned_frame(0);
     *_Y(dx_dt,idx) = uvw_in_ned_frame(1);
     *_Z(dx_dt,idx) = uvw_in_ned_frame(2);
+    const Eigen::Map<const Eigen::Vector3d> uvw(_U(x,idx));
 
     // dqr/dt, dqi/dt, dqj/dt, dqk/dt
     const Eigen::Quaternion<double> q1(*_QR(x,idx),
@@ -149,7 +149,7 @@ void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_for
     blocked_states.force_state_derivatives(dx_dt, t);
 }
 
-Eigen::Vector3d Body::get_uvw_in_body_frame(const StateType& x) const
+Eigen::Vector3d Body::get_uvw(const StateType& x) const
 {
     return Eigen::Vector3d::Map(_U(x,idx));
 }

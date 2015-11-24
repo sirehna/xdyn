@@ -56,7 +56,7 @@ class Body
                                          const double t,
                                          const EnvironmentAndFrames& env) const;
 
-        Eigen::Vector3d get_uvw_in_body_frame(const StateType& x) const;
+        Eigen::Vector3d get_uvw(const StateType& x) const;
         Eigen::Vector3d get_pqr(const StateType& x) const;
         std::string get_name() const;
         ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
