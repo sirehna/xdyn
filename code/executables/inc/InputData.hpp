@@ -26,4 +26,12 @@ struct InputData
     bool empty() const;
 };
 
+struct InputDataSimServer : InputData
+{
+    InputDataSimServer();
+    bool empty() const;
+    short unsigned int port;
+
+};
+
 #endif /* INPUTDATA_HPP_ */

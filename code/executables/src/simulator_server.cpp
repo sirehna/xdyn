@@ -5,7 +5,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include "InputData.hpp"
-#include "utilities_for_InputData.hpp"
+#include "utilities_for_InputDataSimServer.hpp"
 
 
 using namespace ssc::websocket;
@@ -31,20 +31,20 @@ struct SimulationMessage : public MessageHandler
     private: TR1(shared_ptr)<SimServer> sim_server;
 };
 
-void start_server(const InputData& input_data);
-void start_server(const InputData& input_data)
+void start_server(const InputDataSimServer& input_data);
+void start_server(const InputDataSimServer& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
     TR1(shared_ptr)<SimServer> sim_server (new SimServer(yaml, input_data.solver, input_data.initial_timestep));
     SimulationMessage handler(sim_server);
 
-    new ssc::websocket::Server(handler, ADDRESS, WEBSOCKET_PORT);
+    new ssc::websocket::Server(handler, ADDRESS, input_data.port);
 }
 
 int main(int argc, char** argv)
 {
-    InputData input_data;
+    InputDataSimServer input_data;
     if (argc==1) return display_help(argv[0], input_data);
     const int error = get_input_data(argc, argv, input_data);
     if (error)
