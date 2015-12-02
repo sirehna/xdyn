@@ -157,11 +157,22 @@ construits par la méthode `SimulatorBuilder::get_forces` :
   `SimulatorBuilder::forces_from` en lui fournissant le modèle d'environnement
   construit précédemment (parce que le constructeur de chaque modèle d'effort a
   besoin de l'environnement puisqu'il est possédé par chaque modèle)
-- La méthode `SimulatorBuilder::forces_from`
+- La méthode `SimulatorBuilder::forces_from` boucle sur tous les modèles
+  d'effort (c'est-à-dire, à ce stade, un nom et une chaîne de caractère
+  contenant le YAML de configuration) et appelle la méthode
+  `SimulatorBuilder::add`
+- Cette dernière boucle sur tous les parseurs d'effort non-commandés, à la
+  manière de `SimulatorBuilder::get_wave`, en appelant `try_to_parse` sur
+  chacun. Le résultat est un `boost::optional<ForcePtr>` qui contient soit un
+  modèle d'effort, soit rien, suivant que le parseur a réussi à interprêter la
+  chaîne de caractères.
 
+#### Construction des corps à simuler
 
-
-
+Les corps à simuler sont construits dans la méthode `SimulatorBuilder::build`,
+simplement en invoquant le constructeur de la classe `Sim`, en lui fournissant
+les objets construits précédemment (efforts commandés et non-commandés,
+environnement et commandes).
 
 
 
