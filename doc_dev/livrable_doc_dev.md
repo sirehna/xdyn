@@ -174,7 +174,93 @@ simplement en invoquant le constructeur de la classe `Sim`, en lui fournissant
 les objets construits précédemment (efforts commandés et non-commandés,
 environnement et commandes).
 
+## Création des observateurs
 
+Le rôle des observateurs est, étant donné l'état du système, d'effectuer des
+actions telles que la sérialisation en différents formats. Le design de ces
+observateurs a été assujetti aux contraintes suivantes :
 
+- Pouvoir utiliser plusieurs sérialisations en parallèle, éventuellement en
+  sérialisant des choses différentes dans chacune et les traiter de façon
+  homogène
+- N'avoir à intervenir qu'à un seul endroit du code pour rendre une variable
+  interne "sérialisable" (par exemple, lorsque l'on a rendu "GM" disponible à
+  partir du modèle `GMForceModel`)
+- N'avoir à intervenir qu'à un seul endroit lorsque l'on rajoute un type de
+  sérialisation
 
+L'API des observateurs est décrite dans une classe abstraite (`Observer`) définie dans
+le module `core`. Toutes les méthodes virtuelles pures de cette classe sont
+protégées (`protected`) afin de garantir le fonctionnement de l'API : les
+classes dérivées ne peuvent pas changer l'ordre dans lequel sont appelées ces
+méthodes.
 
+Deux éléments de design sont essentiels dans la classe `Observer` :
+
+1. L'initialisation est séparée de la sérialisation. L'initialisation a lieu
+   avant la première sérialisation et sert, par exemple, à écrire la première
+   ligne (les titres de colonne) d'un fichier CSV ou à initialiser la structure
+   d'un fichier HDF5. La sérialisation proprement dite a lieu à chaque pas de
+   temps.
+2. Les fonctions virtuelles de la classe `Observer` n'effectuent pas
+   directement ni la sérialisation ni l'initialisation : elles renvoient des
+   fonctions qui effectueront ces tâches pour une valeur donnée. Ainsi, lorsque
+   l'on appelle la méthode `Observer::write`, on ne fait qu'ajouter une
+   fonction d'initialisation et une fonction de sérialisation à un dictionnaire
+   : aucune valeur n'est écrite immédiatement.
+
+En pratique, le fonctionnement est le suivant :
+
+- L'utilisateur défini les sérialisations qu'il souhaite voir réaliser dans la
+  section `output` du fichier YAML
+- Juste après la création du système à simuler, dans la fonction
+  `run_simulation` du fichier `simulator_run.cpp` du module `executables`, on
+  crée les observateurs au moyen de la fonction `get_observers` du même module.
+- Cette fonction parse la section `output` du fichier YAML et retourne une
+  liste de structures de données externes `YamlOutput`.
+- Une fois le parsing achevé, on ajoute à cette liste les éventuels
+  observateurs demandés sur la ligne de commande (qui sont spécifiés avec le flag `-o`)
+- La dernière étape de la fonction `get_observers` est la construction de la
+  liste des observateurs au moyen du constructeur de la classe
+  `ListOfObservers`. Ce constructeur appelle les constructeurs de chaque type
+  d'observateur avec en paramètre la liste des variables à sérialiser.
+
+La classe `ListOfObservers` est un observateur (au sens de
+`ssc::solver::quicksolve`) mais ne dérive pas de `Observer`. Cela signifie
+qu'elle doit simplement disposer d'une méthode `observer`, prenant un système à
+simuler et le temps courant. Cette méthode se contente d'appeler la méthode
+`observe` de chaque observateur contenu dans `ListOfObservers`.
+
+La méthode `Observer::observe` commence par rendre le temps disponible en
+appelant la méthode `write`. Ensuite, l'observateur demande au système de lui
+donner toutes les valeurs sérialisables grâce à la méthode `Sim::output`. Cette
+dernière appelle la méthode `feed` de chaque modèle d'effort et de chaque
+corps. Le rôle des méthodes `feed` consiste à fournir à l'observateur toutes
+les valeurs qui peuvent être sérialisées. Dans le cas des modèles d'effort, ce
+sont bien sûr Fx, Fy, Fz, K, M, N, mais éventuellement aussi d'autres
+observations spécifiques renseignées dans `extra_observations`. La méthode
+`Observer::write` prend une adresse (utilisée surtout pour la sérialisation en
+HDF5) et une valeur.
+
+Il est important de noter qu'à ce stade aucune valeur n'a été effectivement
+écrite par l'observateur : il contient simplement des valeurs que l'on peut
+sérialiser. La sérialisation effective est commandée par les deux dernières
+lignes d'`Observer::observer` : `initialize_everything_if_necessary` et
+`serialize_everything`. La première n'est appelée qu'une fois avant le premier
+pas de temps (par exemple, pour écrire la ligne de titre d'un fichier CSV) et
+la seconde est appelée systématiquement. Elle boucle sur la liste des choses à
+sérialiser (qui ont été définies au moment de la construction de l'observateur)
+et cherche pour chacune une fonction réalisant cette sérialisation dans le
+dictionnaire de fonction rempli par les appels à la fonction `write`de chaque
+observateur effectué par chacun des modèles. Si elle trouve une telle fonction,
+elle l'appelle (et la sérialisation s'effectue), sinon elle lance une exception
+(et la simulation s'arrête).
+
+Les observateurs implémentés sont les suivants :
+
+- CSV (Comma-Separated Values)
+- HDF5
+- TSV (tab-separated values)
+- std::map (utilisé uniquement pour les tests unitaires internes)
+- JSON
+- Websocket (pour l'interface HTML)
