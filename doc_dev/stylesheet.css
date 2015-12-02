@@ -1,0 +1,67 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  /*background-color: #ffffff;/*#f1e9dd;*/
+  background-color:#F9F9F9;
+  -webkit-font-smoothing: antialiased;
+  /* prevent subpixel antialiasing, which thickens the text */
+  /* text-rendering: optimizeLegibility; */
+  /* turned off ligatures due to bug 5945455 */
+
+}
+  /* unvisited link */
+a {
+color: #000000;}
+  a:link {
+      color: #000000;
+  }
+
+  /* visited link */
+  a:visited {
+      color: #000000;
+  }
+
+  /* mouse over link */
+  a:hover {
+      color: #0066FF;
+  }
+/*
+h1 { font-family: IM Fell English; font-size: 24px; font-style: normal;
+font-variant: normal; font-weight: 500; line-height: 26.4px; } h3 {
+font-family: IM Fell English; font-size: 14px; font-style: normal;
+font-variant: normal; font-weight: 500; line-height: 15.4px; } p { font-family:
+IM Fell English; font-size: 14px; font-style: normal; font-variant: normal;
+font-weight: 400; line-height: 20px; } blockquote { font-family: IM Fell
+English; font-size: 21px; font-style: normal; font-variant: normal; font-weight:
+400; line-height: 30px; } pre { font-family: IM Fell English; font-size: 13px;
+font-style: normal; font-variant: normal; font-weight: 400; line-height:
+18.5667px;
+*/
+body{
+  line-height: 1.4;
+  /*font-family: "Myriad Pro", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;*/
+  color: #222;
+  font: 15px/19px Roboto, sans-serif;
+  /*font-family: IM Fell English;*/
+  /*font-family: 'Josefin Sans Std Light'*/
+  font-weight: 100;
+  letter-spacing:.1;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding:0 10px; }
+
+
+h2 {
+    font-size: 20px;
+    margin: 20px 0 20px;
+    padding:0;
+    border-bottom: 1px solid #999999;
+}
+
+h3{
+    display: inline
+    background-image: none;
+}
