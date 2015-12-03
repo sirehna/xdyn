@@ -12,7 +12,7 @@ Les modules sont matérialisés par des répertoires.
 
 | Module                     | Description                                                                     |
 |----------------------------|---------------------------------------------------------------------------------|
-| `core`                     | Cœur de calcul décrivant le comportement de l'outil au cours de la simulation  |
+| `core`                     | Cœur de calcul décrivant le comportement de l'outil au cours de la simulation   |
 | `environment_models`       | Modèles de houle                                                                |
 | `exceptions`               | Gestion des erreurs                                                             |
 | `executables`              | Programmes principaux (sim, gz)                                                 |
