@@ -12,7 +12,7 @@ Les modules sont matérialisés par des répertoires.
 
 | Module                     | Description                                                                     |
 |----------------------------|---------------------------------------------------------------------------------|
-| `core`                     | Cœur de calcul décrivant le comportement de l'outil au cours de la simulation  | 
+| `core`                     | Cœur de calcul décrivant le comportement de l'outil au cours de la simulation  |
 | `environment_models`       | Modèles de houle                                                                |
 | `exceptions`               | Gestion des erreurs                                                             |
 | `executables`              | Programmes principaux (sim, gz)                                                 |
@@ -106,7 +106,7 @@ En conséquence, le YAML est parsé en deux temps :
 
 1. parties communes
 2. modèles d'effort et d'environnement
-    
+
 Cette architecture permet de regrouper l'ensemble des traitements afférents à
 un modèle particulier dans une seule et même classe.  Ainsi, lorsque l'on
 intervient par exemple sur le modèle de Wageningen, on utilise la classe
@@ -375,7 +375,7 @@ rapidité globale de la simulation. Pour atteindre des temps de calculs acceptab
 un tribut a été payé à l'optimisation par un code d'assez bas niveau. Il s'agit
 donc du code le plus difficile à appréhender du simulateur, en particulier la
 méthode `MeshIntersector::split_partially_immersed_facet_and_classify`.
- 
+
 #### Calcul de la somme des efforts appliqués à chaque corps
 
 Le bilan des forces est réalisé par la classe `Sim` (méthode
