@@ -219,17 +219,13 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
 
 void Sim::set_bodystates(const std::vector<State>& states)
 {
-	if(states.size()!=1 or pimpl->bodies.size()!=1)
-	{
-		THROW(__PRETTY_FUNCTION__, InternalErrorException, "'states' size must be 1");
-	}
+    if(states.size()!=1 or pimpl->bodies.size()!=1)
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "'states' size must be 1");
+    }
 
-
-	pimpl->bodies.at(0)->set_states_history(states.at(0));
-	state = states.at(0).get_StateType(0);
-
-
-
+    pimpl->bodies.at(0)->set_states_history(states.at(0));
+    state = states.at(0).get_StateType(0);
 }
 
 void Sim::set_command_listener(const std::map<std::string, double>& new_commands)
