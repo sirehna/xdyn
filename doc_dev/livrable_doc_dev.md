@@ -497,3 +497,58 @@ Le serveur a été écrit en Python en utilisant la bibliothèque `tornado` car
 c'était le langage qui minimisait la quantité de code à écrire et les opérations
 de mise en place.
 
+# Compilation du simulateur
+
+La machine virtuelle Linux livrée est déjà préconfigurée pour la compilation du
+simulateur. Voici cependant les instructions pour compiler depuis une machine
+vierge.
+
+La première étape est de décompresser le fichier `tgz` contenant le code source.
+On obtient ainsi un dossier que nous nommerons `XDYN_ROOT` par la suite.
+
+## Récupération des dépendances
+
+
+
+## En ligne de commande
+
+- A partir du dossier `XDYN_ROOT/code`, créer un répertoire `build`
+- Se placer dans `XDYN_ROOT/code/build`
+- Sous Windows (MinGW), exécuter `cmake -G "MSYS Makefiles" ..`
+- Sous Linux, `cmake ..` On peut aussi choisir d'utiliser Ninja (plus rapide que
+  Make) en spécifiant `-G Ninja`
+- Lancer `make`
+
+On peut ensuite lancer les tests unitaires :
+
+`./run_all_tests`
+
+La documentation est construite par :
+
+`make doc`
+
+On peut créer un programme d'installation en faisant :
+
+`make package`
+
+
+## A partir d'Eclipse
+
+1. Créer un nouveau projet
+    ![Right-click - New Project](create_eclipse_project.png)
+2. Selectionner 'C++ Project'
+    ![Select C++ Project](create_eclipse_project_2.png)
+3. Ne pas utiliser l'emplacement par défaut
+    ![Don't use default location](create_eclipse_project_3_1.png)
+4. Choisir "Empty Project"
+    ![Choose Empty project](create_eclipse_project_3_2.png)
+5. Sous Windows, choisir 'MinGW GCC toolchain'
+    ![MinGW GCC Toolchain](create_eclipse_project_3_3.png)
+6. Choisir le répertoire de build
+    ![Change project properties](create_eclipse_project_4.png)
+    ![Check we're using external builder](create_eclipse_project_4_1.png)
+    ![Change build location to ${workspace}/build](create_eclipse_project_4_2.png)
+7. Créer les cibles
+    ![New target](create_eclipse_project_5.png)
+    ![Target parameters](create_eclipse_project_6.png)
+
