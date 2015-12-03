@@ -1,3 +1,7 @@
+% Documentation développeur du simulateur X-Dyn
+% Charles-Edouard CADY, SIREHNA (DCNS Research)
+
+
 Le but de ce document est de donner une vue globale de l'architecture
 logicielle du simulateur Bassin Numérique, en insistant sur les justifications
 techniques du design.
