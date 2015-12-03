@@ -552,3 +552,36 @@ On peut créer un programme d'installation en faisant :
     ![New target](create_eclipse_project_5.png)
     ![Target parameters](create_eclipse_project_6.png)
 
+# Perspectives de développement
+
+Pour une poursuite du travail sur ce simulateur, les fonctionalités suivantes
+pourraient être considérées :
+
+## Modèles supplémentaires
+
+- Hollenbach résistance à l'avancement
+- Modèle de houle régulière non-linéaire
+- Vent (spectre de Harris)
+- Variation des conditions environnementales suivant un scénario
+
+## Aspects multi-corps
+
+- Liaisons cinématiques (permet de simuler le déplacement d'objets amarés au
+  navire)
+- Détection des collisions
+- Intégration d'un système algébro-différentiel (permet de forcer proprement les
+  états)
+
+## Amélioration des performances
+
+- Des gains de performance peuvent sans doute être obtenus sur les calculs
+  d'intersection de maillage. Par exemple, on pourrait utiliser la librarie LGPL
+  "GNU Triangulated Surface Library" ou CGAL. L'idée serait alors de créer un
+  maillage de la surface libre et de calculer son intersection avec le maillage
+  de la coque, plutôt que de calculer les hauteurs de houle en chaque point du
+  maillage.
+- L'évaluation des modèles de houle peut être accélérée en la parallélisant (par
+  exemple, sur un GPU)
+- La vitesse d'exécution des modèles de manoeuvrabilité peut être améliorée :
+  actuellement, ils sont interprêtés, mais il est possible de les compiler
+  dynamiquement pour atteindre les performances d'un code natif.
