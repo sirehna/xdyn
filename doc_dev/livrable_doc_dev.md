@@ -33,6 +33,21 @@ Les modules sont matérialisés par des répertoires.
 | `yaml_parser`              | Interprétation des parties génériques du YAML (non spécifiques à un modèle)     |
 |                            | par exemple la définition des corps et des sorties.                             |
 
+Chaque module contient nécessairement :
+
+- Un fichier `CMakeLists.txt` qui indique comment le module doit être compilé,
+  quelles sont ses dépendances, etc.
+- Un répertoire `inc` qui contient les fichiers d'en-tête (interface, API)
+
+Les sous-répertoires suivants sont généralement présent, mais pas
+systématiquement :
+- `src` contient les fichiers source à compilé. Le module `exceptions` n'en
+  contient pas, par exemple.
+- `unit_tests` (qui contient à son tour un fichier `CMakeLists.txt`, un
+  répertoire `inc` et un répertoire `src`) stocke les tests unitaires (une
+  classe de test par classe, en principe). Le module `test_data_generator` ne
+  contient pas de test unitaire.
+
 # Déroulement d'une simulation
 
 Le schéma ci-dessous représente la liste des tâches que le simulateur va
