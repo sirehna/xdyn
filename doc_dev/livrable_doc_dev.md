@@ -423,3 +423,77 @@ l'observateur considéré par tous les modèles d'effort (commandés et
 non-commandé) et tous les corps simulés (pour récupérer les états). En outre,
 elle se charge de calculer la différence entre la somme des efforts calculés et
 les efforts qu'il faut réellement appliquer pour maintenir les forçages.
+
+# Architecture de l'interface graphique
+
+L'interface graphique est réalisée en HTML5 (Javascript + HTML + CSS). Voici les
+raisons de ce choix :
+
+- Utiliser un langage différent de celui du simulateur force à découpler
+  clairement l'interface graphique du cœur de calcul
+- Le simulateur n'a pas besoin d'être installé sur la machine d'un utilisateur
+  pour pouvoir y être utilisé : il n'a besoin que d'un navigateur internet
+- Le développement d'interfaces graphiques en HTML5 ne nécessite que peu
+  d'outils, pas même un compilateur puisque celui-ci est déjà dans le
+  navigateur, ce qui rend le développement très rapide
+- Si l'on souhaite sous-traiter l'interface graphique, il existe plus de
+  développeurs Javascript que dans tout autre langage de programmation
+
+Afin de faire communiquer le cœur de calcul et l'interface graphique
+(Javascript), on utilise des Wesockets. Ce sont des sockets TCP classiques mais
+ils sont compris par le navigateur. L'intérêt principal de cette technologie est
+qu'elle permet d'envoyer des données de façon asynchrone du serveur au client et
+non pas simplement de répondre à des requêtes du client.
+
+Le fonctionnement de l'interface graphique s'articule autour de trois éléments :
+
+- Le simulateur, par le truchement du `WebSocketObserver`
+- Le code HTML5
+- Un serveur Python (`tornado`) qui s'occupe d'appeler le simulateur avec les
+  paramètres fournis à l'interface graphique et de créer le websocket
+
+## L'observateur websocket
+
+La classe `WebSocketObserver` est définie dans le module `observers_and_api`.
+Elle se connecte à un websocket existant (elle ne crée pas de websocket) et
+envoie les données sous format YAML. Voici un exemple de trame émise :
+
+~~~~~~~~~~~~~ {.yaml}
+{
+'x(Anthineas)': 23.4,
+'y(Anthineas)': 121.4,
+'z(Anthineas)': 0.4,
+'u(Anthineas)': 0.4,
+'v(Anthineas)': 0.7,
+'w(Anthineas)': 0.1,
+'p(Anthineas)': 0.07,
+'q(Anthineas)': 0.4,
+'r(Anthineas)': 0.121,
+'qr(Anthineas)': 1,
+'qi(Anthineas)': 0,
+'qj(Anthineas)': 0,
+'qk(Anthineas)': 1
+}
+~~~~~~~~~~~~~
+
+Pour des raisons de place, les données de houle sont transmises sous forme
+binaire au format 'base 91' qui permet de n'utiliser que des caractères ascii
+valides.
+
+## Structure du code HTML5
+
+Le code HTML5 comprend :
+
+- Un fichier HTML (`websocket_test.html`) qui contient les conteneurs pour les
+  différents éléments de la page
+- Des fichiers CSS (le framework Bootstrap de Twitter est utilisé pour le rendu
+  des widgets)
+- Des fichiers Javascript. Le fichier `websocket.js` contient tous les aspects de communication avec le
+  simulateur et le fichier `realtime_plot.js` les fonctions de tracé 
+
+## Fonctionnement du serveur Python
+
+Le serveur a été écrit en Python en utilisant la bibliothèque `tornado` car
+c'était le langage qui minimisait la quantité de code à écrire et les opérations
+de mise en place.
+
