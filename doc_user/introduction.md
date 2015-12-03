@@ -1,4 +1,4 @@
-% Simulateur M-ocean
+% Simulateur X-Dyn
 % Charles-Edouard CADY, SIREHNA
 
 # Description
