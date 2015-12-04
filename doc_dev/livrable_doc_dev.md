@@ -573,6 +573,136 @@ On peut créer un programme d'installation en faisant :
 
 # Tutoriels
 
+## Ajout d'un modèle d'effort non-commandé
+
+- Créer les fichiers source (hpp et cpp) dans les répertoires `inc` et `src`
+  (respectivement) du répertoire `force_models`
+- Créer également (pas indispensable, mais fortement recommandé) les fichiers
+  de test unitaires dans le sous-répertoire `unit_tests`.
+- Ajouter ces fichiers dans les `CMakeLists.txt` (un dans le répertoire
+ `force_models` et un dans le répertoire `force_models/unit_tests`). Cette
+ opération est suffisante pour à la fois demander la compilation des tests et
+ aussi les inclure à la batterie de tests de X-DYN.
+
+Il faut ensuite décider du type d'effort :
+
+- Modèle d'effort surfacique agissant sur la partie immergée (par exemple
+  hydrostatique) : dériver de `ImmersedForceModel`
+- Modèle d'effort surfacique agissant sur la partie émergée (par exemple
+  le vent) : dériver de `EmergedForceModel`
+- Modèle d'effort non-surfacique : dériver de `ForceModel`
+
+La documentation du modèle d'effort doit être mise dans le fichier Markdown
+`XDYN_ROOT/doc_user/modeles_efforts.md`.
+
+Ensuite, il y a deux cas de figure : soit le modèle a besoin de paramètres
+(auquel cas il faut définir un parseur), soit il n'en a pas besoin.
+
+### Définition d'une classe d'effort ne nécessitant pas de parseur
+Le cas le plus simple est évidemment lorsqu'on n'a pas besoin de parseur. Un
+exemple de tel modèle est `GravityForceModel`.
+
+On crée une classe `GravityForceModel` dans le module `force_models` et on la
+fait dériver de `ForceModel`. Elle doit fournir les éléments suivnats :
+
+- une variable statique `model_name` qui doit correspondre au nom du modèle
+  tel qu'il sera renseigné dans le fichier YAML
+- un constructeur prenant le nom du corps et l'environnement en paramètres (ce
+  constructeur est appelé par la méthode statique `ForceModel::build_parser`)
+- la fonction de calcul du torseur d'effort.
+- Eventuellement, si la fonction utilise l'historique des états, une
+  implémentation de `get_Tmax` pour que le simulateur sache quelle durée garder
+  en mémoire.
+- Eventuellement une méthode `extra_observations` dans le cas où le modèle
+  exporte des valeurs en plus du torseur d'effort (exporté d'office).
+
+La classe `ForceModel` ne fournit aucun service ni aucun membre à ses classes
+dérivées, pas même l'environnement. Dans le cadre de `GravityForceModel`, la
+valeur de `g` doit être lue dans l'environnement reçu par le constructeur.
+
+Pour l'implémentation du modèle, la classe dispose du temps courant et d'un
+objet `BodyStates` contenant :
+
+- Les treize états du corps
+- Le maillage (le cas échéant)
+- Les matrices d'inertie
+- Des fonctions de conversion des quaternions en angles étant donnée une certaine convention
+- Un objet `MeshIntersector` pour accéder aux facettes immergées et/ou émergées
+- Les coordonnées de quelques points particuliers (point de résolution des
+  équations de la dynamique, centre du repère maillage, point de calcul
+  hydrodynamique)
+
+
+### Définition d'une classe d'effort nécessitant un parseur
+Un exemple de cas avec parseur est `GMForceModel`.
+
+Le constructeur requis a un prototype légèrement différent puisqu'il doit
+prendre les données YAML en premier paramètre. Il est à noter que le nom de
+cette structure de données (`Yaml`) est imposé et qu'elle doit être définie
+dans le namespace de la classe.
+En plus des éléments définis pour le cas sans parseur, il faut définir une
+méthode statique `parse` dont le prototype est nécessairement :
+
+~~~~~~~~~~~ {.cpp}
+static Yaml parse(const std::string& yaml);
+~~~~~~~~~~~
+
+`Yaml` faisant ici bien sûr référence à la structure de données définie dans le
+namespace de la classe.
+
+### Intégration dans X-DYN
+Que le modèle d'effort nécessite ou non un parseur, l'intégration dans X-DYN se
+fait de façon identique. Il faut ajouter une ligne à la fonction `get_builder`
+définie dans le fichier `simulator_api.cpp` dans le module `observers_and_api`
+:
+
+~~~~~~~~ {.cpp}
+builder.can_parse<GravityForceModel>()
+       .can_parse<GMForceModel>()
+~~~~~~~~
+
+
+## Ajout d'un modèle d'effort commandé
+
+La procédure est sensiblement identique à la précédente. Il y a cependant deux
+différences :
+
+- Les efforts doivent dériver de `ControllableForceModel`
+- Il faut définir les commandes.
+
+
+### Définition de la classe
+Un exemple simple un modèle d'effort commandé est `SimpleHeadingKeepingController`.
+La différence par rapport aux modèles précédents est dans la méthode calculant
+le torseur d'efforts : ce calcul est réalisé dans
+
+~~~~~~~~ {.cpp}
+ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
+~~~~~~~~
+
+
+### Définition des commandes
+
+Le modèle d'effort doit déclarer ses commandes au constructeur de
+`ControllableForceModel` : 
+
+~~~~~~~~ {.cpp}
+SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Yaml& input, const
+std::string& body_name_, const EnvironmentAndFrames& env_) :
+        ControllableForceModel(input.name, {"psi_co"},
+        YamlPosition(YamlCoordinates(),YamlAngle(), body_name_), body_name_,
+        env_)
+~~~~~~~~
+
+Bien que le nom du modèle soit spécifié dans le nom de la commande renseigné
+dans le fichier YAML de commande, la méthode `get_force` reçoit un dictionnaire
+contenant automatiquement les commandes nécesaires, sans le nom du modèle.
+
+
+### Intégration dans X-DYN
+L'intégration se fait de la même façon que pour les modèles d'effort
+non-commandés.
+
 ## Ajout d'une sérialisation
 
 Les sérialisations sont définies dans le module `observers_and_api`.
