@@ -6,9 +6,27 @@ Le but de ce document est de donner une vue globale de l'architecture
 logicielle du simulateur X-DYN, en insistant sur les justifications
 techniques du design.
 
+Il s'agit moins d'une description systématique et exhaustive de tous les
+fichiers du code que d'une présentation fonctionnelle structurée des concepts
+et principes qui ont régi les développements.
+
 # Cartographie des modules
 
-Les modules sont matérialisés par des répertoires.
+Le code a été réparti en répertoires que l'on appelera ici
+`module`. L'inclusion de code dans un module dépend de deux critères :
+
+- Ce que fait le code en question (chaque module doit être fonctionnellement
+  cohérent)
+- Les dépendances dudit code (il faut minimiser les dépendances entre les
+  modules)
+
+La cohérence fonctionnelle facilite l'appréhension du code et contribue à
+réduire les risques de conflit en cas de développements concomittants. La
+minimisation des dépendances est nécessaire pour ordonnancer la compilation
+(éviter les cycles, savoir quel fichier compiler en premier) et permet de
+limiter les impacts des modifications éventuelles apportées à un module.
+
+Voici la description des modules de X-DYN :
 
 | Module                     | Description                                                                     |
 |----------------------------|---------------------------------------------------------------------------------|
@@ -46,7 +64,7 @@ systématiquement :
 - `unit_tests` (qui contient à son tour un fichier `CMakeLists.txt`, un
   répertoire `inc` et un répertoire `src`) stocke les tests unitaires (une
   classe de test par classe, en principe). Le module `test_data_generator` ne
-  contient pas de test unitaire.
+  contient pas de tests unitaires.
 
 # Déroulement d'une simulation
 
