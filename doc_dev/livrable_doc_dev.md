@@ -570,6 +570,319 @@ On peut créer un programme d'installation en faisant :
     ![New target](create_eclipse_project_5.png)
     ![Target parameters](create_eclipse_project_6.png)
 
+
+# Tutoriels
+
+## Ajout d'un modèle de houle
+
+Les modèles de houle sont définis dans le module `environment_models` et
+s'articulent autour des types suivants :
+
+- `WaveSpectralDensity` représente la densité spectrale de puissance (par
+  exemple, JONSWAP réifié par la classe `JonswapSpectrum`)
+- `WaveDirectionalSpreading` représente l'étalement directionnel (par exemple,
+  l'étalement $\psi\mapsto\cos^{2s}(\psi-\psi_0)$ réifié par la classe
+  `Cos2sDirectionalSpreading`)
+- `DiscreteDirectionalWaveSpectrum` est le résultat de la fonction `discretize`
+  et représente une discrétisation particulière d'un spectre et d'un étalement
+  continus. Aucune classe ne dérive de celle-ci : dans la mesure où le spectre
+  et l'étalement sont définis et dérivent des deux classes précédentes, la
+  discrétisation fonctionnera dessus.
+- `WaveModel` réalise les calculs du modèle de houle (élévation, vitesse
+  orbitale, évaluation de RAO et calcul de la pression dynamique) à partir d'un spectre
+  directionnel discrétisé (`DiscreteDirectionalWaveSpectrum`). Un exemple de
+  tel model est `Airy` où la hauteur de houle est une somme de sinusoïdes.
+
+L'extension des modèles de houle peut donc se faire de trois manières :
+
+- Ajout d'une densité spectrale de puissance (en dérivant de
+  `WaveSpectralDensity`
+- Ajout d'un étalement directionnel (en dérivant de `WaveDirectionalSpreading`)
+- Ajout d'un modèle de houle (en dérivant de `WaveModel`)
+
+Parser les modèles de houle est plus complexe que pour les modèles d'effort :
+en effet, si les modèles d'effort ne dépendent que d'eux-mêmes, les modèles de
+houle dépendent des étalement directionnels et des densité spectrales de
+puissance. Pour des raisons de temps, les modèles de houle n'ont pas encore été
+mis sous le même formalisme que les modèles d'effort : ainsi, il faut
+intervenir sur cinq modules pour ajouter un modèle de houle :
+
+- `environment_models` pour la définition du modèle proprement dit
+- `external_data_structures` pour l'ajout d'une structure de donnée contenant
+  les paramètres du modèle lus depuis le fichier YAML
+- `parser_extensions` pour l'interface du parseur
+- `yaml_parser` pour le parsing effectif
+- `observers_and_api` pour l'ajout à X-DYN (dans `simulator_api.cpp`)
+
+
+Cette situation défavorable rend l'ajout de modèle de houle peu aisé et
+constitue une piste d'amélioration possible pour des développements futurs.
+
+
+### Ajout d'une densité spectrale de puissance
+
+Considérons l'exemple du spectre de JONSWAP.
+
+#### Implémentation du modèle
+Dans les répertoires `inc` et `src` du module `environment_models` on crée
+respectivement les fichiers `JonswapSpectrum.hpp` et
+`JonswapSpectrum.cpp`. On ajoute ce dernier au `CMakeLists.txt`.
+
+Il est fortement recommandé (mais pas strictement indispensable) d'ajouter une
+classe de test `JonswapSpectrumTest` dans le sous-répertoire
+`unit_tests` (ne pas oublier de l'ajouter au `CMakeLists.txt` pour qu'elle soit
+compilée et incluse dans la batterie de tests).
+
+`JonswapSpectrum` doit dériver de `WaveSpectralDensity` et doit donc fournir
+une implémentation des deux méthodes virtuelles pures suivantes :
+
+~~~~~~~~ {.cpp}
+double operator()(const double omega) const;
+WaveSpectralDensity* clone() const;
+~~~~~~~~
+
+L'implémentations de `operator()` dépend du modèle que l'on souhaite. La
+méthode `clone` sera, quant à elle, systématiquement :
+
+~~~~~~~~ {.cpp}
+WaveSpectralDensity* JonswapSpectrum::clone() const
+{
+    return new JonswapSpectrum(*this);
+}
+~~~~~~~~
+
+#### Parseur
+
+On commence par définir la structure de données qui va contenir les données
+lues depuis le fichier YAML. On l'appelle par exemple `YamlJonswap` et on la
+stocke dans `YamlWaveModelInput.hpp` dans le module `external_data_structures`.
+
+Ensuite, dans le module `parser_extensions`, on spécialise le template de
+classe `SpectrumBuilder` défini dans `builders.hpp` de la façon suivante :
+
+~~~~~~~~ {.cpp}
+template <>
+class SpectrumBuilder<JonswapSpectrum> : public SpectrumBuilderInterface
+{
+    public:
+        SpectrumBuilder();
+        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > try_to_parse(const std::string& model, const std::string& yaml) const;
+};
+~~~~~~~~
+
+dont l'implémentation peut être la suivante :
+
+~~~~~~~~ {.cpp}
+boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > SpectrumBuilder<JonswapSpectrum>::try_to_parse(const std::string& model, const std::string& yaml) const
+{
+    boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > ret;
+    if (model == "jonswap")
+    {
+        const YamlJonswap data = parse_jonswap(yaml);
+        ret.reset(TR1(shared_ptr)<WaveSpectralDensity>(new JonswapSpectrum(data.Hs, data.Tp, data.gamma)));
+    }
+    return ret;
+}
+~~~~~~~~
+
+Le parsing effectif est fait par la fonction `parse_jonswap` définie dans le
+fichier `environment_parsers.cpp` du module `yaml_parser`. Son implémentation
+peut être, par exemple :
+
+~~~~~~~~ {.cpp}
+YamlJonswap parse_jonswap(const std::string& yaml)
+{
+    YamlJonswap ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+        ssc::yaml_parser::parse_uv(node["Hs"], ret.Hs);
+        ssc::yaml_parser::parse_uv(node["Tp"], ret.Tp);
+        node["gamma"] >> ret.gamma;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing JONSWAP wave spectrum parameters ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+    }
+    return ret;
+}
+~~~~~~~~
+
+#### Prise en compte dans X-DYN
+
+Pour que X-DYN sache utiliser le modèle ainsi défini, il faut ajouter une ligne
+à la fonction `get_builder` définie dans le fichier `simulator_api.cpp` dans le
+module `observers_and_api` :
+
+~~~~~~~~ {.cpp}
+builder.can_parse<DefaultSurfaceElevation>()
+       .can_parse<BretschneiderSpectrum>()
+       .can_parse<JonswapSpectrum>()
+~~~~~~~~
+
+La ligne ajoutée est la dernière :
+
+~~~~~~~~ {.cpp}
+       .can_parse<JonswapSpectrum>()
+~~~~~~~~
+
+
+### Ajout d'un étalement directionnel
+
+Prenons par exemple l'étalement $\psi\mapsto\cos^{2s}(\psi-\psi_0)$.
+
+#### Implémentation du modèle
+Dans les répertoires `inc` et `src` du module `environment_models` on crée
+respectivement les fichiers `Cos2sDirectionalSpreading.hpp` et
+`Cos2sDirectionalSpreading.cpp`. On ajoute ce dernier au `CMakeLists.txt`.
+
+Il est fortement recommandé (mais pas strictement indispensable) d'ajouter une
+classe de test `Cos2sDirectionalSpreadingTest` dans le sous-répertoire
+`unit_tests` (ne pas oublier de l'ajouter au `CMakeLists.txt` pour qu'elle soit
+compilée et incluse dans la batterie de tests).
+
+`Cos2sDirectionalSpreading` doit dériver de `WaveDirectionalSpreading` et doit
+donc fournir une implémentation pour les deux méthodes suivantes :
+
+~~~~~~~~ {.cpp}
+double operator()(const double psi) const;
+WaveDirectionalSpreading* clone() const;
+~~~~~~~~
+
+L'implémentations de `operator()` dépend du modèle que l'on souhaite. La
+méthode `clone` sera, quant à elle, systématiquement :
+
+~~~~~~~~ {.cpp}
+WaveDirectionalSpreading* Cos2sDirectionalSpreading::clone() const
+{
+    return new Cos2sDirectionalSpreading(*this);
+}
+~~~~~~~~
+
+Cette méthode est nécessaire pour des raisons techniques liées au langage pour
+permettre le  stockage de spectres directionnels différents dans une même liste.
+
+Le modèle peut alors être testé unitairement.
+
+#### Parseur
+
+On commence par définir la structure de données qui va contenir les données
+lues depuis le fichier YAML. On l'appelle par exemple `YamlCos2s` et on la
+stocke dans `YamlWaveModelInput.hpp` dans le module `external_data_structures`.
+
+Ensuite, dans le module `parser_extensions`, on spécialise le template de
+classe `DirectionalSpreadingBuilder` défini dans `builders.hpp` de la façon suivante :
+
+~~~~~~~~ {.cpp}
+template <>
+class DirectionalSpreadingBuilder<Cos2sDirectionalSpreading> : public DirectionalSpreadingBuilderInterface
+{
+    public:
+        DirectionalSpreadingBuilder() :
+        DirectionalSpreadingBuilderInterface(){}
+        boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > try_to_parse(const std::string& model, const std::string& yaml) const;
+};
+~~~~~~~~
+
+dont l'implémentation peut être la suivante :
+
+~~~~~~~~ {.cpp}
+boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > DirectionalSpreadingBuilder<Cos2sDirectionalSpreading>::try_to_parse(const std::string& model, const std::string& yaml) const
+{
+    boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > ret;
+    if (model == "cos2s")
+    {
+        const YamlCos2s data = parse_cos2s(yaml);
+        ret.reset(TR1(shared_ptr)<WaveDirectionalSpreading>(new Cos2sDirectionalSpreading(data.psi0, data.s)));
+    }
+    return ret;
+}
+~~~~~~~~
+
+Le parsing effectif est fait par la fonction `parse_cos2s` définie dans le
+fichier `environment_parsers.cpp` du module `yaml_parser`. Son implémentation
+peut être, par exemple :
+
+~~~~~~~~ {.cpp}
+YamlCos2s parse_cos2s(const std::string& yaml)
+{
+    YamlCos2s ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+        ssc::yaml_parser::parse_uv(node["waves propagating to"], ret.psi0);
+        node["s"] >> ret.s;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing cos2s directional spreading parameters ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+    }
+    return ret;
+}
+~~~~~~~~
+
+
+#### Prise en compte dans X-DYN
+
+Pour que X-DYN sache utiliser le modèle ainsi défini, il faut ajouter une ligne
+à la fonction `get_builder` définie dans le fichier `simulator_api.cpp` dans le
+module `observers_and_api` :
+
+~~~~~~~~ {.cpp}
+builder.can_parse<DefaultSurfaceElevation>()
+       .can_parse<BretschneiderSpectrum>()
+       .can_parse<JonswapSpectrum>()
+       .can_parse<PiersonMoskowitzSpectrum>()
+       .can_parse<DiracSpectralDensity>()
+       .can_parse<DiracDirectionalSpreading>()
+       .can_parse<Cos2sDirectionalSpreading>()
+~~~~~~~~
+
+La ligne ajoutée est la dernière :
+
+~~~~~~~~ {.cpp}
+       .can_parse<Cos2sDirectionalSpreading>()
+~~~~~~~~
+
+
+### Ajout d'un modèle de houle
+
+Pour ajouter un modèle de houle, on ajoute une classe que l'on fait dériver de
+`WaveModel`. Cette classe doit fournir une implémentation pour les quatre méthodes
+virtuelles pures suivantes :
+
+- `evaluate_rao` utilisé pour le calcul des amortissements de radiation
+- `elevation` utilisé par les modèles hydrostatiques
+- `orbital_velocity` utilisé par le modèle de safran `RudderForceModel`
+- `dynamic_pressure` utilisé pour le calcul des efforts de Froude-Krylov
+
+Pour implémenter ces méthodes virtuelles, la classe qu'on ajoute dispose d'une
+structure de type `DiscreteDirectionalWaveSpectrum` héritée de `WaveModel`.
+Celle-ci lui fournit :
+
+- Les valeurs discrétisées de la pulsation $\omega$
+- Les valeurs discrétisées de $\psi$
+- La densité spectrale de puissance pour chaque $\omega$
+- L'étalement directionnel pour chaque $\psi$
+- Le nombre d'onde correspondant à chaque pulsation
+- Des phases aléatoires (une par couple $(\omega,\psi)$)
+
+Il faut ensuite, comme précédemment, ajouter le modèle dans `get_builder` :
+
+~~~~~~~~ {.cpp}
+       .can_parse<Airy>()
+~~~~~~~~
+
 # Perspectives de développement
 
 Pour une poursuite du travail sur ce simulateur, les fonctionalités suivantes
