@@ -581,6 +581,8 @@ pourraient être considérées :
 - Modèle de houle régulière non-linéaire
 - Vent (spectre de Harris)
 - Variation des conditions environnementales suivant un scénario
+- Faciliter la maintenance des modèles de houle en calquant le fonctionnement
+  de leurs parseurs sur celui des modèles d'effort
 
 ## Aspects multi-corps
 
