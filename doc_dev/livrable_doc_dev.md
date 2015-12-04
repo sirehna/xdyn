@@ -3,7 +3,7 @@
 
 
 Le but de ce document est de donner une vue globale de l'architecture
-logicielle du simulateur Bassin Numérique, en insistant sur les justifications
+logicielle du simulateur X-DYN, en insistant sur les justifications
 techniques du design.
 
 # Cartographie des modules
