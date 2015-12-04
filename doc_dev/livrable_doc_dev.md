@@ -573,6 +573,117 @@ On peut créer un programme d'installation en faisant :
 
 # Tutoriels
 
+## Ajout d'une sérialisation
+
+Les sérialisations sont définies dans le module `observers_and_api`.
+Considérons l'exemple de la sérialisation en CSV définie dans la classe
+`CsvObserver`.
+
+### Implémentation de l'observateur
+
+`CsvObserver` étant un observateur, elle dérive de `Observer` et doit donc
+implémenter les méthodes virtuelles suivantes :
+
+~~~~~~ {.cpp}
+void flush_after_initialization();
+void flush_after_write();
+void flush_value_during_write();
+std::function<void()> get_serializer(const double val, const DataAddressing& address);
+std::function<void()> get_initializer(const double val, const DataAddressing& address);
+~~~~~~
+
+Dans la déclaration de la classe, pour éviter les phénomènes de masquage par la
+classe `Observer`, il faut bien spécifier les directives suivantes avant la
+déclaration de `get_serializer` et `get_initializer` :
+
+~~~~~~ {.cpp}
+using Observer::get_serializer;
+using Observer::get_initializer;
+~~~~~~
+
+L'initialisation est ici comprise comme une étape ayant lieu avant la première
+sérialisation. Dans ce cas précis, il s'agit de l'écriture des noms de colonne
+du fichier CSV. Cette étape est spécifiée dans `get_initializer` :
+
+~~~~~~ {.cpp}
+std::function<void()> CsvObserver::get_initializer(const double, const
+DataAddressing& address)
+{
+    return [this,address](){std::string title =
+    address.name;boost::replace_all(title, ",", " ");os << title;};
+}
+~~~~~~
+
+`flush_after_initialization` est une étape réalisée juste après
+l'initialisation. Ici, il s'agit d'un retour à la ligne.
+~~~~~~ {.cpp}
+void CsvObserver::flush_after_initialization()
+{
+    os << std::endl;
+}
+~~~~~~
+
+`flush_value_during_write` est appelée juste après la sérialisation d'une
+valeur si ce n'est pas la dernière. Ici, c'est une virgule qui est insérée :
+~~~~~~ {.cpp}
+void CsvObserver::flush_value_during_write()
+{
+    os << ',';
+}
+~~~~~~
+
+`flush_after_write` est appelée lorsque la dernière valeur vient d'être
+sérialisée. Ici, un retour à la ligne est inséré :
+
+~~~~~~ {.cpp}
+void CsvObserver::flush_after_write()
+{
+    os << std::endl;
+}
+~~~~~~
+
+L'écriture des valeurs est spécifiée dans la méthode `get_serializer` :
+
+~~~~~~ {.cpp}
+std::function<void()> CsvObserver::get_serializer(const double val, const DataAddressing&)
+{
+    return [this,val](){os << val;};
+}
+~~~~~~
+
+### Rendre l'observateur utilisable dans X-DYN
+
+Il suffit de rajouter une ligne au constructeur de la classe `ListOfObservers`
+défini dans le fichier `ListOfObservers.cpp` du même module `observers_and_api`
+:
+
+~~~~~~ {.cpp}
+if (output.format == "csv")  observers.push_back(ObserverPtr(newCsvObserver(output.filename,output.data)));
+~~~~~~
+
+`output.format` correspond à la clef `format` de la section `output` du fichier
+YAML. Pour pouvoir utiliser la nouvelle sérialisation avec le flag `-o` de la
+ligne de commande, il faut également spécifier la correspondance entre
+l'extension du fichier de sortie et le format de sérialisation. Cette
+correspondance est réalisée dans les fonctions `build_YamlOutput_from_filename`
+et `get_format` définies dans le fichier `parse_output.cpp` du module `yaml_parser` :
+
+Dans `build_YamlOutput_from_filename` :
+
+~~~~~~ {.cpp}
+if (output.format == "csv")  observers.push_back(ObserverPtr(new CsvObserver(output.filename,output.data)));
+~~~~~~
+
+Dans `get_format` :
+
+~~~~~~ {.cpp}
+if (filename.substr(n-4,4)==".csv")  return "csv";
+~~~~~~
+
+Cette étape pourrait certainement être simplifiée en intégrant la
+correspondance extension/type de sérialisation dans l'observateur ajouté. Cette
+amélioration pourrait être réalisée lors de développements futurs.
+
 ## Ajout d'un modèle de houle
 
 Les modèles de houle sont définis dans le module `environment_models` et
@@ -896,6 +1007,8 @@ pourraient être considérées :
 - Variation des conditions environnementales suivant un scénario
 - Faciliter la maintenance des modèles de houle en calquant le fonctionnement
   de leurs parseurs sur celui des modèles d'effort
+- Faciliter la maintenance des observateurs en leur ajoutant la responsabilité
+  de reconnaître le format de sortie à partir de l'extension de fichier.
 
 ## Aspects multi-corps
 
