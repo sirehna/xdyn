@@ -142,12 +142,86 @@ On simule 50 secondes par pas de 0.2 secondes :
 
 
 # Accélération
+## Scénario
+{% set_filenames('anthineas_amortissementTangage') %}
+
+## Configuration de X-DYN
+Le fichier de configuration a la forme suivante :
+
+{{show(yaml_data)}}
+
+On simule 50 secondes par pas de 0.2 secondes :
+{{sim(yaml_file, dt=0.2, tend=50, o=xdyn)}}
+{% set xdyn_res = hdf5(xdyn) %}
+{% set sos_res = hdf5(sos) %}
+{% set trials_res = hdf5(trials) %}
+
+## Comparaison avec le simulateur SOS-stabilité
+
+### Déplacements et attitude
+{% plot_position_and_attitude(xdyn_res, sos_res) %}
+
+### Vitesses locales
+{% plot_speed_in_body(xdyn_res, sos_res) %}
+
+### Vitesses NED
+{% plot_speed_in_NED(xdyn_res, sos_res) %}
+
+
+## Comparaison avec les essais SOS-stabilité
+
+### Déplacements et attitude
+{% plot_position_and_attitude(xdyn_res, trials_res) %}
+
+### Vitesses locales
+{% plot_speed_in_body(xdyn_res, trials_res) %}
+
+### Vitesses NED
+{% plot_speed_in_NED(xdyn_res, trials_res) %}
+
+
+
 
 # Décélération
 ## Scénario
+{% set_filenames('anthineas_amortissementTangage') %}
+
 ## Configuration de X-DYN
+Le fichier de configuration a la forme suivante :
+
+{{show(yaml_data)}}
+
+On simule 50 secondes par pas de 0.2 secondes :
+{{sim(yaml_file, dt=0.2, tend=50, o=xdyn)}}
+{% set xdyn_res = hdf5(xdyn) %}
+{% set sos_res = hdf5(sos) %}
+{% set trials_res = hdf5(trials) %}
+
 ## Comparaison avec le simulateur SOS-stabilité
+
+### Déplacements et attitude
+{% plot_position_and_attitude(xdyn_res, sos_res) %}
+
+### Vitesses locales
+{% plot_speed_in_body(xdyn_res, sos_res) %}
+
+### Vitesses NED
+{% plot_speed_in_NED(xdyn_res, sos_res) %}
+
+
 ## Comparaison avec les essais SOS-stabilité
+
+### Déplacements et attitude
+{% plot_position_and_attitude(xdyn_res, trials_res) %}
+
+### Vitesses locales
+{% plot_speed_in_body(xdyn_res, trials_res) %}
+
+### Vitesses NED
+{% plot_speed_in_NED(xdyn_res, trials_res) %}
+
+
+
 
 # Comparaisons avec DYSCO et DYSCO-ASM
 
