@@ -67,11 +67,9 @@ La liste de toutes les options est disponible en exécutant :
 Voici un tracé de l'élévation au cours du temps :
 
 {% set data = csv('out.csv') %}
-{% set data_ref = csv('ref.csv') %}
-{% set plot1 = prepare_plot_data(data, x = 't', y = 'z(ball)', name='Résultat') %}
-{% set plotref = prepare_plot_data(data_ref, t = 't', z = 'z(ball)', name='Référence']) %}
+{% set plot = prepare_plot_data(data, x = 't', y = 'z(ball)', name='Résultat') %}
 
-{% set g = cartesian_graph([plot1, plot_ref], x='t (s)', y='Elévation (m)') %}
+{% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
 
 {{layout(g, title='Elévation au cours du temps')}}
 
