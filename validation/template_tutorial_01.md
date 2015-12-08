@@ -2,7 +2,7 @@
 
 On commence par définir les conventions de rotation :
 
-{{show(yaml_data, ['rotations convention'])}}
+{{show(yaml_data, 'rotations convention')}}
 
 Puis l'on donne des [constantes
 environnementales](##constantes-environnementales) :
@@ -20,8 +20,8 @@ On définit la position du repère "body" par rapport au maillage :
 
 Les conditions initiales sont décrites comme suit :
 
-{{show(yaml_data, 'bodies/0/initial position of body frame relative to NED'])}}
-{{show(yaml_data, 'bodies/0/initial velocity of body frame relative to NED'])}}
+{{show(yaml_data, 'bodies/0/initial position of body frame relative to NED')}}
+{{show(yaml_data, 'bodies/0/initial velocity of body frame relative to NED')}}
 
 Les données dynamiques comprennent la masse, la matrice d'inertie, les inerties ajoutées
 et la position du centre d'inertie :
@@ -42,10 +42,10 @@ La simulation peut s'exécuter comme suit :
 
 {{sim('tutorial_01_falling_ball.yml', dt=0.01, tend=1, o='out.csv')}}
 
-% On peut aussi la lancer silencieusement (c'est-à-dire sans afficher la ligne de commande).
-% Pour cela, on passe la structure de données plutôt que le nom du fichier YAML :
+On peut aussi la lancer silencieusement (c'est-à-dire sans afficher la ligne de commande).
+Pour cela, on passe la structure de données plutôt que le nom du fichier YAML :
 
-{{sim(yaml_data, dt=0.01, tend=1)}}
+{#{{sim(yaml_data, dt=0.01, tend=1)}}#}
 
 On peut également changer l'instant initial (étant entendu que les conditions
 initiales définies dans le fichier YAML s'appliquent à cet instant initial,
@@ -71,7 +71,9 @@ Voici un tracé de l'élévation au cours du temps :
 
 {% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
 
-{{layout(g, title='Elévation au cours du temps')}}
+{%set l = layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps') %}
+
+{{ export_layout(l, "png") }}
 
 
 # Pour les capa plots
