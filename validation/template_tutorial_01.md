@@ -40,7 +40,7 @@ En définitive, on obtient le fichier suivant :
 
 La simulation peut s'exécuter comme suit :
 
-{{sim('tutorial_01_falling_ball.yml', dt=0.01, tend=1, o='out.csv')}}
+{{exec('sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
 
 On peut aussi la lancer silencieusement (c'est-à-dire sans afficher la ligne de commande).
 Pour cela, on passe la structure de données plutôt que le nom du fichier YAML :
@@ -51,16 +51,15 @@ On peut également changer l'instant initial (étant entendu que les conditions
 initiales définies dans le fichier YAML s'appliquent à cet instant initial,
 quel qu'il soit, et non pas à t = 0) :
 
-{{sim('tutorial_01_falling_ball.yml', dt=0.01, tend=1, tstart=2, o='out.csv')}}
+{{ exec('sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1 --tstart 2 -o out.csv')}}
 
 On peut choisir le solveur :
 
-{{sim('tutorial_01_falling_ball.yml', dt=0.01, tend=1, s='rkck', o='out.csv')}}
-
+{{ exec('sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rkck -o out.csv')}}
 
 La liste de toutes les options est disponible en exécutant :
 
-{{sim('tutorial_01_falling_ball.yml', h=None)}}
+{{exec('sim tutorial_01_falling_ball.yml -h')}}
 
 ### Résultats
 
