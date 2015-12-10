@@ -45,7 +45,8 @@ La simulation peut s'exécuter comme suit :
 On peut aussi la lancer silencieusement (c'est-à-dire sans afficher la ligne de commande).
 Pour cela, on passe la structure de données plutôt que le nom du fichier YAML :
 
-{#{{sim(yaml_data, dt=0.01, tend=1)}}#}
+{%set yaml_filename = to_yaml(yaml_data)%}
+{{exec('sim '+yaml_filename+' --dt 0.01 --tend 1')}}
 
 On peut également changer l'instant initial (étant entendu que les conditions
 initiales définies dans le fichier YAML s'appliquent à cet instant initial,
@@ -70,12 +71,12 @@ Voici un tracé de l'élévation au cours du temps :
 
 {% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
 
-{%set l = layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps') %}
-
-{{ export_layout(l, "png") }}
+{{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
 
 
 # Pour les capa plots
+
+
 
 
 
