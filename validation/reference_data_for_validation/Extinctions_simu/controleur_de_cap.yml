@@ -1,0 +1,5 @@
+    controlled forces:
+      - name: controller
+        model: simple heading controller
+        ksi: 0.9
+        Tp: {value: 4, unit: s}

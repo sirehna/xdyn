@@ -1,0 +1,9 @@
+    controlled forces:
+      - name: controller
+        model: simple station-keeping controller
+        ksi_x: 0.9
+        T_x: {value: 2, unit: s}
+        ksi_y: 0.9
+        T_y: {value: 3, unit: s}
+        ksi_psi: 0.9
+        T_psi: {value: 4, unit: s}

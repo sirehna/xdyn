@@ -1,0 +1,5 @@
+- name: controller
+  t: [0,10]
+  x_co: {unit: deg, values: [0,0]}
+  y_co: {unit: deg, values: [0,0]}
+  psi_co: {unit: deg, values: [0,0]}
