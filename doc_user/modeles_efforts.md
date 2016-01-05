@@ -19,9 +19,9 @@ Le navire est soumis aux efforts suivants :
 - Les efforts hydrostatiques, liés à la pression exercée par le fluide au repos
   sur la coque,
 - Les efforts hydrodynamiques, provenant d'une part de l'excitation de la houle
-  et d'autre par des phénomènes de radiation/diffraction,
+  et d'autre part des phénomènes de radiation/diffraction,
 - Les efforts d'amortissement visqueux, dûs aux frottements de l'eau sur la
-  coque et aux tourbillons,
+  coque et aux tourbillons.
 
 
 ## Efforts de gravité
