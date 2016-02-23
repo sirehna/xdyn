@@ -145,8 +145,8 @@ ADD_EXECUTABLE(${TEST_EXE}
         )
 
 TARGET_LINK_LIBRARIES(${TEST_EXE}
-        gtest gtest_main                 # static
-        gmock gmock_main                 # static
+        gtest      # static
+        gmock_main # static
         binary_stl_data_static
         ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
