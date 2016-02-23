@@ -1,9 +1,7 @@
 #include "GeometricTypes3d.hpp"
 
-#include "GeometricTypes3d.hpp"
-
-VectorOfVectorOfPoints stl();
-VectorOfVectorOfPoints stl()
+VectorOfVectorOfPoints stl0();
+VectorOfVectorOfPoints stl0()
 {
     VectorOfVectorOfPoints ret;
     ret.reserve(12);
@@ -72,10 +70,9 @@ VectorOfVectorOfPoints stl()
 
     return ret;
 }
-#include "GeometricTypes3d.hpp"
 
-VectorOfVectorOfPoints stl();
-VectorOfVectorOfPoints stl()
+VectorOfVectorOfPoints stl1();
+VectorOfVectorOfPoints stl1()
 {
     VectorOfVectorOfPoints ret;
     ret.reserve(12);
