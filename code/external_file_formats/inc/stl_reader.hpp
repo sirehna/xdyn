@@ -2,10 +2,11 @@
 #define STL_READER_HPP_
 
 #include <string>
+#include <istream>
 #include "GeometricTypes3d.hpp"
 
 /**
- * \brief reads an ASCII STL (stereolithography) file.
+ * \brief reads an STL (stereolithography) file.
  * \param[in] input String containing the STL data
  * \return Raw list of unmerged triangles
  * \note
@@ -42,5 +43,7 @@
 VectorOfVectorOfPoints read_stl(const std::string& input);
 VectorOfVectorOfPoints read_binary_stl(std::istream& stream);
 VectorOfVectorOfPoints read_binary_stl(const std::string& input);
+
+bool isStlDataBinary(const std::string& input);
 
 #endif

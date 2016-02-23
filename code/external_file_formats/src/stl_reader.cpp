@@ -153,11 +153,36 @@ VectorOfVectorOfPoints readAsciiStl(
     return result;
 }
 
+bool startsWith(const std::string& input, const std::string& pattern);
+bool startsWith(const std::string& input, const std::string& pattern)
+{
+    return pattern.size() <= input.size() && input.compare(0, pattern.size(), pattern) == 0;
+}
+
+bool isStlDataBinary(const std::string& input)
+{
+    if (startsWith(input, "solid ") || startsWith(input, "SOLID "))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 VectorOfVectorOfPoints read_stl(const std::string& input)
 {
-    std::istringstream inputStream(input);
-    ParserState state(inputStream);
-    return readAsciiStl(inputStream, state);
+    if (isStlDataBinary(input))
+    {
+        return read_binary_stl(input);
+    }
+    else
+    {
+        std::istringstream inputStream(input);
+        ParserState state(inputStream);
+        return readAsciiStl(inputStream, state);
+    }
 }
 
 VectorOfVectorOfPoints read_binary_stl(std::istream& stream) // Shamelessly copied from http://ravehgonen.wordpress.com/tag/stl-file-format/

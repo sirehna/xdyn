@@ -1,7 +1,12 @@
-#include "stl_reader.hpp"
 #include "MeshException.hpp"
+#include "stl_reader.hpp"
 #include "STL_data.hpp"
 #include "stl_readerTest.hpp"
+
+TEST_F(StlReaderTest, should_be_able_to_detect_ascii_file)
+{
+    ASSERT_FALSE(isStlDataBinary(test_data::single_facet()));
+}
 
 TEST_F(StlReaderTest, number_of_facets_should_be_correct_for_a_single_facet_file)
 {
