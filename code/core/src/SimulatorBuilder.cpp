@@ -250,7 +250,7 @@ VectorOfVectorOfPoints SimulatorBuilder::get_mesh(const YamlBody& body) const
 {
     if (not(body.mesh.empty()))
     {
-        const ssc::text_file_reader::TextFileReader reader(std::vector<std::string>(1, body.mesh));
+        const ssc::text_file_reader::TextFileReader reader(body.mesh);
         return read_stl(reader.get_contents());
     }
     return VectorOfVectorOfPoints();
