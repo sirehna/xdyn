@@ -206,11 +206,7 @@ VectorOfVectorOfPoints read_binary_stl(const std::string& input)
     return read_binary_stl(ss);
 }
 
-std::string escape_backslashes(const std::string& s)
-{
-    return replace('\\', "\\\\", s);
-}
-
+std::string replace(char c, const std::string& replacement, const std::string& s);
 std::string replace(char c, const std::string& replacement, const std::string& s)
 {
     std::string result;
@@ -235,4 +231,10 @@ std::string replace(char c, const std::string& replacement, const std::string& s
         pos = s.find_first_of(chars, searchStartPos);
     }
     return result;
+}
+
+std::string escape_backslashes(const std::string& s);
+std::string escape_backslashes(const std::string& s)
+{
+    return replace('\\', "\\\\", s);
 }
