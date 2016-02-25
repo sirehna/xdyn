@@ -87,7 +87,7 @@ On note $V_z$ l'application partielle $V_z:z\mapsto
 V(z,\phi_1,\theta_1)$. $V$ étant continue par hypothèse, $V_z$ l'est aussi.
 Par ailleurs, on sait que $V_z(-\infty)=0$ et $V_z(+\infty)=V_{\mbox{max}}$
 donc d'après le théorème des valeurs intermédiaires, $\forall V_0\in I,
-$\exists z_2:V_z(z_2)=V_0$ ce qui signifie que $X_0=(z_0,\phi_0,\theta_0)$ et
+\exists z_2:V_z(z_2)=V_0$ ce qui signifie que $X_0=(z_0,\phi_0,\theta_0)$ et
 $X_1=(z_2,\phi_1,\theta_1)$ sont isocarènes.
 
 ## Métacentre
@@ -112,7 +112,7 @@ le point métacentrique est à l'intersection des droites d'action des efforts
 hydrostatiques (et non plus simplement de leur projection). On peut alors
 écrire :
 
-$$GZ = GM\sin(\alpha)$$, où $\alpha$ désigne l'angle de la rotation isocarène.
+$$GZ = GM\sin(\alpha)$$ où $\alpha$ désigne l'angle de la rotation isocarène.
 
 Lorsque l'angle d'inclinaison $\alpha$ tend vers 0, le point métacentrique $H$
 tend vers un point appelé métacentre.
