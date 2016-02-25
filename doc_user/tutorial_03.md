@@ -69,7 +69,7 @@ Pour le second spectre, on écrit :
      waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On définit les sorties de la façon suivante ##sorties):
+On définit les sorties de la façon suivante (#sorties):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
@@ -201,7 +201,7 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La description de ce fichier est faite [dans la documentation des fichiers YAML]##sorties).
+La description de ce fichier est faite [dans la documentation des fichiers YAML](#sorties).
 
 On peut aussi simuler les vagues dans un autre référentiel que le référentiel
 NED (par exemple le référentiel associé à un solide) et l'on obtient alors des

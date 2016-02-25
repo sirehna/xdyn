@@ -6,7 +6,7 @@ comparer succinctement les modèles `non-linear hydrostatic (exact)` et
 
 ### Description du problème
 Dans cet exemple, nous considérons un navire,
-(l'Anthineas)[http://www.marinetraffic.com/en/ais/details/ships/228367000/vessel:ANTHINEAS],
+[l'Anthineas](http://www.marinetraffic.com/en/ais/details/ships/228367000/vessel:ANTHINEAS),
 soumis uniquement à la pesanteur et aux efforts hydrostatiques, sans
 amortissement. Le navire est lâché sans vitesse initiale au-dessus de la
 surface libre (supposée plane) et va donc réaliser des oscillations

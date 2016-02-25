@@ -29,9 +29,8 @@ du système international.
 Les modèles de houle interviennent pour le calcul des [efforts
 hydrostatiques](#efforts-hydrostatiques-non-lin%C3%A9aires)
 (par truchement de l'élévation de la surface libre),
-d'une part, et les [efforts de
-Froude-Krylov](#calcul-des-efforts-dexcitation) d'autre part (par le biais de la
-pression dynamique).
+d'une part, et les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation)
+d'autre part (par le biais de la pression dynamique).
 
 ### Conventions
 
@@ -59,15 +58,15 @@ La plus simple densité spectrale de puissance correspond à une houle
 monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
 
 $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
-\left\{\begin{array}{l}0, \mbox{si }\omega\neq \omega_0\\1, \mbox{si
-} \omega=\omega_0\end{array}\right\}$$
+\left\{\begin{array}{l}0, \mbox{\text{si }}\omega\neq \omega_0\\1, \mbox{\text{si }
+} \omega=\omega_0\end{array}\right.$$
 
 Le paramétrage de ce spectre est :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
    type: dirac
-   Hs: {value: 5, unit: m}\n"
+   Hs: {value: 5, unit: m}
    omega0: {value: 15, unit: rad/s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -118,7 +117,7 @@ La direction de propagation est donnée par `waves propagating to`.
 #### Cos2s
 
 L'étalement est donné par :
-$$\psi\mapsto \cos^{2s}{\psi-\psi_0}$$
+$$\psi\mapsto \cos^{2s}\left({\psi-\psi_0}\right)$$
 
 où $\psi_0$ est la direction de propagation.
 
@@ -138,7 +137,8 @@ directional spreading:
 
 #### Absence de houle
 
-Pour simuler une surface libre parfaitement horizontale, on opère de la façon suivante :
+Pour simuler une surface libre parfaitement horizontale, on opère de la façon
+suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     environment:
@@ -171,14 +171,14 @@ $$V(x,y,z,t) = \mbox{grad}{\phi(x,y,z,t)}$$
 
 La pression $p$ vérifie l'équation de Bernoulli :
 
-$$p + \rho g z +\rho\frac{\partial\phi}{\partial t} + \frac{\rho}{2} V\cdot V =
-C(t)$$
+$$p + \rho g z +\rho\frac{\partial\phi}{\partial t} +
+\frac{\rho}{2} V\cdot V = C(t)$$
 
 où $C:t\mapsto C(t)$ est une fonction du temps arbitraire, donc en particulier
 $C(t)=p_0$ (pression atmosphérique à la surface) :
 
-$$p_0 + \rho g z +\rho\frac{\partial\phi}{\partial t} + \frac{\rho}{2} V\cdot V =
-p_0$$
+$$p_0 + \rho g z +\rho\frac{\partial\phi}{\partial t} +
+\frac{\rho}{2} V\cdot V = p_0$$
 
 soit
 
@@ -213,12 +213,13 @@ Par ailleurs, l'eau étant supposée incompressible, $$\nabla\cdot V=
 Il s'agit d'une équation de Laplace dont la solution s'obtient par la méthode de
 séparation des variables :
 
-$$\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\sin(k\cdot(x\cdot
-\cos(\psi)+ y\cdot \sin(\psi))-\omega_i\cdot t+\phi)$$
+$$\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(z+h))}
+{\cosh(k\cdot h)}\sin(k\cdot(x\cdot
+\cos(\psi)+ y\cdot \sin(\psi))-\omega\cdot t+\phi)$$
 
 $h$ est la profondeur du fluide (hauteur du sol à la surface libre)
 $\eta_a=2\sqrt{S(\omega)}$ est l'amplitude (en m)
-$x,y,z$ sont les coordonnées du point considéré, exprimées dans le repère NED
+$x,y,z$ sont les coordonnées du point considéré, exprimées dans le repère NED.
 $k$ est le nombre d'onde, traduisant la périodicité spatiale et vérifie la
 relation de dispersion :
 
@@ -227,8 +228,9 @@ $$\omega^2 = g\cdot k \cdot \tanh(k\cdot h)$$
 On peut généraliser et dériver cette expression pour obtenir l'élévation d'une
 houle polychromatique et multi-directionnelle :
 
-$$\eta(x,y,t) = -\frac{1}{\rho}\frac{\partial\phi}{\partial t} = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
-\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\sin(k\cdot(x\cdot \cos(\psi_j)
+$$\eta(x,y,t) = -\frac{1}{\rho}\frac{\partial\phi}{\partial t} =
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\sin(k_i\cdot(x\cdot \cos(\psi_j)
 + y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 L'expression de la pression dynamique, utilisée par le modèle de
@@ -240,31 +242,37 @@ $$p_{\mbox{dyn}} = \rho g z = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
 soit
 
 $$p_{\mbox{dyn}} = \rho\cdot g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\frac{\cosh(k\cdot(z-\eta+h))}{\cosh(k\cdot
-h)}\cos(k\cdot(x\cdot
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
+\frac{\cosh(k_i\cdot(z-\eta+h))}{\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
 \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
-$g$ désigne l'accélération de la pesanteur (9.81 $m/s^2$)
-$\rho$ est la densité volumique du fluide (en $kg/m^3$)
+- $g$ désigne l'accélération de la pesanteur (9.81 $m/s^2$)
+- $\rho$ est la densité volumique du fluide (en $kg/m^3$)
 
 Lorsque la profondeur $h$ est très grande devant $z$, on obtient :
 
 $$p_{\mbox{dyn}} = \rho\cdot g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}e^{-k\cdot
-(z-\eta(x,y,t))}\cos(k\cdot(x\cdot\cos(\psi_j)+ y\cdot
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
+e^{-k_i\cdot(z-\eta(x,y,t))}\cos(k_i\cdot(x\cdot\cos(\psi_j)+ y\cdot
 \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 La vitesse $V(x,y,z,t) = (u,v,w)$ orbitale de la houle est définie par :
 
-$$u = \frac{\partial \phi}{\partial x} = \frac{k\cdot g}{\omega}
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot
-h)}\cdot\cos(\psi_j)\cos(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
-$$v = \frac{\partial \phi}{\partial y} = \frac{k\cdot g}{\omega}
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot
-h)}\cdot\sin(\psi_j)\cos(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
-$$w = \frac{\partial \phi}{\partial z} = \frac{k\cdot g}{\omega}
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\frac{\sinh(k\cdot(z+h))}{\cosh(k\cdot
-h)}\sin(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+$$u = \frac{\partial \phi}{\partial x} = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
+\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\cdot\cos(\psi_j)
+\cos(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+$$v = \frac{\partial \phi}{\partial y} = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
+\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\cdot\sin(\psi_j)
+\cos(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+$$w = \frac{\partial \phi}{\partial z} = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
+\frac{\sinh(k\cdot(z+h))}{\cosh(k\cdot h)}
+\sin(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 
 Les spectres directionnels sont définis de la façon suivante :
@@ -306,9 +314,10 @@ aléatoire. On obtient ainsi un signal apériodique.
 La performance de l'implémentation des modèles de houle est cruciale : en
 effet, la pression dynamique et la pression statique étant intégrées sur toutes
 les facettes du maillage, ces modèles sont évalués de nombreuses fois par pas
-de calcul. Comme le nombre de composantes sommées pour calculer les élévations et pressions
-dynamiques étant potentiellement important, on ne sélectionne que les produits
-$S(\omega_i)D(\psi_j)$ contribuant de manière significative à l'énergie totale.
+de calcul. Comme le nombre de composantes sommées pour calculer les élévations
+et pressions dynamiques étant potentiellement important, on ne sélectionne
+que les produits $S(\omega_i)D(\psi_j)$ contribuant de manière significative
+à l'énergie totale.
 Pour ce faire, on classe ces produits par ordre décroissant et l'on sélectionne
 les $n$ premiers de façon à ce que leur somme représente une fraction
 prédéterminée de la puissance totale. De cette manière, on réduit
@@ -325,7 +334,7 @@ discretization:
    energy fraction: 0.999
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- `n` : nombre de points (nombre de fréquences ou nombr de directions)
+- `n` : nombre de points (nombre de fréquences ou nombre de directions)
 - `omega min` : pulsation minimale (incluse)
 - `omega max` : pulsation maximale (incluse)
 - `energy fraction` : les produits de spectre de puissance et d'étalement
@@ -361,7 +370,8 @@ output:
         ny: 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- `frame of reference` : nom du repère dans lequel sont exprimées les coordonnées des points du maillage.
+- `frame of reference` : nom du repère dans lequel sont exprimées les
+  coordonnées des points du maillage.
 - `xmin`, `xmax`, `nx` : définition de la discrétisation de l'axe x. Les
   valeurs vont de `xmin` (inclus) à `xmax` (inclus) et il y a `nx` valeurs au
   total.
@@ -372,7 +382,7 @@ maillage comporte 10 points :
 (1,1),(1,2),(2,1),(2,2),(3,1),(3,2),(4,1),(4,2),(5,1),(5,2).
 
 Les sorties sont écrites dans le fichier et le format spécifiés dans la
-section [`/output`](#sorties).
+section [`output`](#sorties).
 
 
 On obtient deux résultats différents, suivant que le repère dans lequel ils

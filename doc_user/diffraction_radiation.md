@@ -1,5 +1,5 @@
 
-# Modélisation des effort de diffraction et de radiation
+# Modélisation des efforts de diffraction et de radiation
 
 Cette section propose une décomposition des efforts hydrodynamiques comme
 représentée sur le schéma suivant :
@@ -551,10 +551,10 @@ depuis le fichier YAML, soit calculée à partir d'un fichier DIODORE (extension
 HDB). Les fichiers HDB contenant les masses ajoutées à plusieurs périodes, on
 choisit la première, c'est-à-dire la matrice correspondant à la période la plus
 faible. On ne fait pas d'interpolation en zéro car une telle interpolation ne
-garantit pas la symmétrie et le caractère positif et défini de la matrice (les
+garantit pas la symétrie et le caractère positif et défini de la matrice (les
 coefficients ont tendance à osciller fortement au voisinage de $T=0$). On
 suppose que les mailles utilisées pour le calcul des masses ajoutées
-(résolution du potentiel) sont suffisament fines pour que le résultat ait un
+(résolution du potentiel) sont suffisamment fines pour que le résultat ait un
 sens.
 
 ## Références

@@ -44,7 +44,8 @@ $\mathbf{R}$ $I=[0,V_{\mbox{tot}}]$
 Soit $V_0\in I$.
 On appelle surface de poussée $$\mathcal{B}=V^{-1}(V_0)$$
 On appelle surface de flottaison (à ne pas confondre avec la
-flottaison) $$B(V^{-1}(V_0))$$. La surface de flottaison est donc le lieu des
+flottaison) $$B(V^{-1}(V_0))$$
+La surface de flottaison est donc le lieu des
 centres de flottaison correspondant à des positions isocarènes du corps.
 
 ## Caractérisation de la surface de flottaison : théorème d'Euler

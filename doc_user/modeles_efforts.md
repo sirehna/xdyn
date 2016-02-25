@@ -1113,37 +1113,37 @@ controlled forces:
     diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
+- `name` : nom du composant. Défini par l'utilisateur. Doit correspondre à
 celui renseigné dans le fichier de [commandes
 attendues](#syntaxe-du-fichier-de-commande).
-- `model` : Nom du modèle. Doit être `wageningen B-series` pour utiliser ce
+- `model` : nom du modèle. Doit être `wageningen B-series` pour utiliser ce
 modèle.
-- `position of propeller frame` : Définition du [repère de
+- `position of propeller frame` : définition du [repère de
 l'hélice](#expression-des-efforts).
 - `frame` : repère dans lequel sont exprimés `x`,`y`,`z`,`phi`,`theta` et `psi`.
-- `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par rapport au centre du repère attaché au maillage et projeté sur ce dernier.
-- `phi`,`theta`,`psi` : Définition de la rotation permettant de passer du
+- `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par
+  rapport au centre du repère attaché au maillage et projeté sur ce dernier.
+- `phi`, `theta`, `psi` : définition de la rotation permettant de passer du
 repère attaché au maillage au [repère attaché à
 l'hélice](#expression-des-efforts), en suivant la
 [convention d'angle choisie](#rotations).
 - `wake coefficient` : [coefficient de
 sillage](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
-traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et
-1.
+traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et 1.
 - `relative rotative efficiency` : [rendement
-d'adaptation](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+d'adaptation](#prise-en-compte-des-effets-de-la-coque-et-du-sillage).
 - `thrust deduction factor t` : [coefficient de
-succion](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+succion](#prise-en-compte-des-effets-de-la-coque-et-du-sillage).
 - `rotation` définition du sens de rotation pour générer une poussée positive.
 Utilisé pour calculer le signe du moment généré par l'hélice sur le navire. Les
 valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
 `clockwise`, l'hélice tournera dans le sens horaire (en se plaçant à l'arrière
-du navire et en regardant vers la proue) et génèrera un moment négatif sur le navire (dans le repère de l'hélice). Voir [la
-documentation](#expression-des-efforts).
+du navire et en regardant vers la proue) et génèrera un moment négatif sur le
+navire (dans le repère de l'hélice). Voir la [documentation](#expression-des-efforts).
 - `number of blades` : nombre de pales de l'hélice.
 - `blade area ratio AE/A0` : [fraction de
 surface](#expression-des-coefficients-k_t-et-k_q) de l'hélice.
-- `diameter` : diamètre de l'hélice
+- `diameter` : diamètre de l'hélice.
 
 ### Références
 

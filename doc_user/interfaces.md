@@ -233,16 +233,16 @@ output:
   lequel agit l'effort et `repère` est le repère d'expression (qui ne peut être
   que `NED` ou le nom du corps). Les sorties de houle sont notées
   `waves` et leur contenu est décrit dans la section [Modèle de
-  houle/Sorties](#sorties-1). La somme des efforts appliquées à un corps est
+  houle/Sorties](#sorties-1). La somme des efforts appliqués à un corps est
   accessible par `Fx(sum of forces,corps,repère)` (resp. Fy, Fz, Mx, My, Mz).
 
 # Tracés en cours de simulation
 
 Afin de suivre l'évolution du système au cours de la simulation, une interface
 HTML5 a été créée. Celle-ci est accessible en double-cliquant sur `sim_gui`
-dans le répertoire `bin` du simulateur (par exemple, C:\Program
-Files\SimulateurIrtJv\bin) puis en ouvrant un navigateur Internet (type
-Firefox) à l'adresse `http://localhost:666`.
+dans le répertoire `bin` du simulateur (par exemple,
+`C:\Program Files\SimulateurIrtJv\bin`) puis en ouvrant un navigateur Internet
+(type Firefox) à l'adresse `http://localhost:666`.
 
 On peut effectuer des sorties vers un ou plusieurs fichiers en parallèle de
 cette visualisation :

@@ -16,12 +16,11 @@ efforts suivants :
 ### Ecriture du fichier de configuration du simulateur.
 
 Les deux seuls changements par rapport au tutoriel 2 sont l'ajout d'une section
-[`controlled forces`]##efforts-commandés) et un [fichier
-supplémentaire de
-commandes]##syntaxe-du-fichier-de-commande) que l'on nomme `controlled_forces_commands.yml`.
+[`controlled forces`](#efforts-commandés) et un
+[fichier supplémentaire de commandes](#syntaxe-du-fichier-de-commande)
+que l'on nomme `controlled_forces_commands.yml`.
 
-On commence par définir les [caractéristiques du
-propulseur]##efforts-commandés) :
+On commence par définir les [caractéristiques du propulseur](#efforts-commandés) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 controlled forces:
@@ -44,8 +43,8 @@ controlled forces:
     diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Le [fichier de
-commandes]##syntaxe-du-fichier-de-commande) est défini de la façon suivante :
+Le [fichier de commandes](#syntaxe-du-fichier-de-commande) est défini
+de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - name: port side propeller
@@ -111,8 +110,5 @@ La simulation peut maintenant être lancée comme suit :
 ./sim tutorial_06_propulsion.yml --dt 0.1 --tend 20 -c controlled_forces_commands.yml
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 ### Résultats
 ![Vitesse d'avance (axe x)](images/tutorial_06_propulsion_u.svg)
-
-
