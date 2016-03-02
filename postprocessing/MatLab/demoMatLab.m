@@ -13,6 +13,9 @@ function states = demoMatLab(filename, dataGroupName)
 %   states : Structure variable that contains all the displacements of the
 %            n bodies simulated
 %
+% Example:
+%   - states = demoMatLab('simu.hdf5', '/outputs');
+%
 % This function does not rely on any other functions. This single file
 % contains all the code necessary to postprocess a HDF5 file
 if nargin < 2
