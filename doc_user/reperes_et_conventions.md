@@ -416,8 +416,9 @@ nécessaire de définir un maillage.
 La section `mesh` est optionnelle. Si l'on choisit de l'utiliser, elle doit
 contenir un nom de fichier
 [STL](http://fr.wikipedia.org/wiki/Fichier_de_st%C3%A9r%C3%A9olithographie)
-contenant le maillage surfacique du navire au format ASCII. Ce chemin doit être
-donné relativement à l'endroit où l'on lance le simulateur.
+contenant le maillage surfacique du navire.
+Les formats STL ASCII et STL binaire sont supportés.
+Ce chemin doit être donné relativement à l'endroit où l'on lance le simulateur.
 
 Par exemple, si l'exécutable du simulateur est dans le répertoire `A/B/C`, que
 le maillage `m.stl` est dans `A` et qu'on lance l'exécutable depuis `B`, on
