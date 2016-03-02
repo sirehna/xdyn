@@ -1,4 +1,4 @@
-FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/MatLab/demoMatLab.m" contents)
+FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/MatLab/xdyn_postProcess.m" contents)
 
 FILE(WRITE ${CMAKE_BINARY_DIR}/demoMatLab.hpp.txt "/* Header for file demoMatLab.hpp*/\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.hpp.txt "#ifndef DEMOMATLAB_HPP\n")

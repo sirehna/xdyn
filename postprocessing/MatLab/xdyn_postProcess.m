@@ -1,4 +1,4 @@
-function states = demoMatLab(filename, dataGroupName)
+function states = xdyn_postProcess(filename, dataGroupName)
 % Postprocess the result of the simulator
 %
 % 1) Generate a figure with all displacements
@@ -14,7 +14,7 @@ function states = demoMatLab(filename, dataGroupName)
 %            n bodies simulated
 %
 % Example:
-%   - states = demoMatLab('simu.hdf5', '/outputs');
+%   - states = xdyn_postProcess('simu.hdf5', '/outputs');
 %
 % This function does not rely on any other functions. This single file
 % contains all the code necessary to postprocess a HDF5 file
