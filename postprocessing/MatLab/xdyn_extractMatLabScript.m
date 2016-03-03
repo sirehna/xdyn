@@ -1,5 +1,5 @@
-function generate_all_scripts(filename)
-% GENERATE_ALL_SCRIPTS extracts the MatLab script contained in a HDF5 result
+function xdyn_extractMatLabScript(filename)
+% XDYN_EXTRACTMATLABSCRIPT extracts the MatLab script contained in a HDF5 result
 % file
 
 if nargin == 0
