@@ -5,6 +5,13 @@ ADD_CUSTOM_TARGET(
     COMMENT "Evaluates the amount of work of the project"
 )
 
+FILE(GLOB scriptsMatlab ${CMAKE_SOURCE_DIR}/../postprocessing/MatLab/xdyn*.m)
+ADD_CUSTOM_TARGET(matlab_script)
+ADD_CUSTOM_COMMAND(TARGET matlab_script POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy ${scriptsMatlab}
+                                               ${PROJECT_BINARY_DIR}/MatLab)
+INSTALL(FILES ${scriptsMatlab} DESTINATION "matlab")
+
 FILE(GLOB script ${CMAKE_SOURCE_DIR}/integration_tests.py)
 ADD_CUSTOM_TARGET(python_script)
 ADD_CUSTOM_COMMAND(TARGET python_script POST_BUILD
