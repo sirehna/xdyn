@@ -1,35 +1,38 @@
-function results = xdyn_postProcess(filename, dataGroupName, plotResult)
-% Postprocess the result of the simulator
+function results = xdyn_postProcess(filename, plotResult)
+% XDYN_POSTPROCESS postprocesses the result of the simulator XDYN.
 %
-% 1) Generate a figure with all displacements
-% 2) Animate wave if present
-% 3) Create a states variables that holds all displacements of the bodies
+% 1) Create a states variables that holds all displacements of the bodies
+% 2) Generate a figure with all displacements
+% 3) Animate wave if present
 %
 % Inputs:
-%   - filename      [Optional] : HDF5 result filename
-%   - dataGroupName [Optional] : Name of the group containg results
+%   - filename    [Optional] : HDF5 result filename.
+%                              Name of the group containg results
+%   - plotResult  [Optional] :
 %
 % Outputs:
 %   states : Structure variable that contains all the displacements of the
 %            n bodies simulated
 %
 % Example:
-%   - states = xdyn_postProcess('simu.hdf5');
-%   - states = xdyn_postProcess('simu.hdf5', '/outputs');
-%   - states = xdyn_postProcess('simu.hdf5', '/outputs', true);
+%   - results = xdyn_postProcess('simu.hdf5');
+%   - results = xdyn_postProcess({'simu.hdf5', '/outputs'});
+%   - results = xdyn_postProcess({'simu.hdf5', '/outputs'}), true);
 %
 % This function does not rely on any other functions. This single file
 % contains all the code necessary to postprocess a HDF5 file
-if nargin < 3
+if nargin < 2
     plotResult = true;
-    if nargin < 2
-        dataGroupName = 'hdf5Group_';
-        if nargin == 0
-            filename = 'hdf5Filename_.h5';
-        end
+    if nargin == 0
+        filename = 'hdf5Filename_.h5';
     end
 end
-
+if ischar(filename)
+    filename = {filename,'/outputs'};
+end
+tbx_assert(length(filename)==2);
+dataGroupName = filename{2};
+filename = filename{1};
 if exist(filename,'file')~=2
     disp('Input file does not exist');
     return
@@ -579,3 +582,20 @@ if ~strncmp(fliplr(str),fliplr(trailingPattern),length(trailingPattern));
     str = [str trailingPattern];
 end
 return;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function tbx_assert(cond,msg)
+% TBX_ASSERT asserts a condition associated to a message.
+if nargin == 0
+    help(mfilename);
+end
+if nargin == 1
+    % evalin('caller',mfilename)
+    msg = [ mfilename ' : Assert failed'];
+end
+
+if ~cond
+    fprintf(1,'Assertion Failure: %s\n',msg);
+    dbstack;
+    error([mfilename ':e0'],'Assertion Failure: %s',msg);
+end
