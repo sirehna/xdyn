@@ -1,4 +1,4 @@
-function states = xdyn_postProcess(filename, dataGroupName)
+function states = xdyn_postProcess(filename, dataGroupName, plotResult)
 % Postprocess the result of the simulator
 %
 % 1) Generate a figure with all displacements
@@ -14,14 +14,19 @@ function states = xdyn_postProcess(filename, dataGroupName)
 %            n bodies simulated
 %
 % Example:
+%   - states = xdyn_postProcess('simu.hdf5');
 %   - states = xdyn_postProcess('simu.hdf5', '/outputs');
+%   - states = xdyn_postProcess('simu.hdf5', '/outputs', true);
 %
 % This function does not rely on any other functions. This single file
 % contains all the code necessary to postprocess a HDF5 file
-if nargin < 2
-    dataGroupName = 'hdf5Group_';
-    if nargin == 0
-        filename = 'hdf5Filename_.h5';
+if nargin < 3
+    plotResult = true;
+    if nargin < 2
+        dataGroupName = 'hdf5Group_';
+        if nargin == 0
+            filename = 'hdf5Filename_.h5';
+        end
     end
 end
 
@@ -42,37 +47,45 @@ dataGroups = info.Groups(cmp).Groups;
 for i=1:numel(dataGroups)
     name = dataGroups(i).Name;
     if strcmp(name,strcat(dataGroupName,'/states'))
-        states = plotStates(filename, name, [dataGroupName,'/t']);
-    elseif strcmp(name, strcat(dataGroupName,'/waves'))
+        states = extractStates(filename, name, [dataGroupName,'/t']);
+        if plotResult
+            plotStates(states);
+        end
+    elseif strcmp(name, strcat(dataGroupName,'/waves')) && plotResult
         animateWaves(filename, name);
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function states = plotStates(filename, name, time)
+function states = extractStates(filename, name, time)
 info = h5info(filename, name);
 dataGroups = info.Groups;
 nObject = numel(dataGroups);
 s = cell(1,nObject);
-XYZEul = cell(1,nObject);
 states = struct('name',s,'t',s,'x',s,'y',s,'z',s,'quat',s,'eul',s);
 for i=1:nObject
     states(i).name = dataGroups(i).Name;
     states(i).t = h5read(filename, time);
-    states(i).x = h5read(filename,[dataGroups(i).Name '/X']);
-    states(i).y = h5read(filename,[dataGroups(i).Name '/Y']);
-    states(i).z = h5read(filename,[dataGroups(i).Name '/Z']);
+    states(i).x = h5read(filename, [dataGroups(i).Name '/X']);
+    states(i).y = h5read(filename, [dataGroups(i).Name '/Y']);
+    states(i).z = h5read(filename, [dataGroups(i).Name '/Z']);
     states(i).quat = ...
     [h5read(filename, [dataGroups(i).Groups(1).Name '/Qr']),...
      h5read(filename, [dataGroups(i).Groups(1).Name '/Qi']),...
      h5read(filename, [dataGroups(i).Groups(1).Name '/Qj']),...
      h5read(filename, [dataGroups(i).Groups(1).Name '/Qk'])];
     states(i).eul = tbx_geom3d_QUA_TO_EUL(states(i).quat);
-    XYZEul{i} = [states(i).x,states(i).y,states(i).z,states(i).eul];
 end
-figure;
-yLabel = {'X','Y','Z','Phi (°)','Theta (°)','Psi (°)'};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function H = plotStates(states)
+H = figure;
+yLabel = {'X (m)','Y (m)','Z (m)','Phi (deg)','Theta (deg)','Psi (deg)'};
 scale = [1 1 1 180/pi 180/pi 180/pi];
 bodyColor = '-bgmyk';
+nObject = length(states);
+XYZEul = cell(1,nObject);
+for i=1:nObject
+    XYZEul{i} = [states(i).x, states(i).y, states(i).z, states(i).eul];
+end
 for j=1:6
     subplot(2,3,j);
     box on
@@ -81,7 +94,7 @@ for j=1:6
     xlabel('T (s)');
     ylabel(yLabel{j});
     for i=1:nObject
-        plot(states(i).t,scale(j)*XYZEul{i}(:,j),bodyColor(i));
+        plot(states(i).t, scale(j)*XYZEul{i}(:,j), bodyColor(i));
     end
 end
 return
