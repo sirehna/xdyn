@@ -1,4 +1,4 @@
-function states = xdyn_postProcess(filename, dataGroupName, plotResult)
+function results = xdyn_postProcess(filename, dataGroupName, plotResult)
 % Postprocess the result of the simulator
 %
 % 1) Generate a figure with all displacements
@@ -44,15 +44,16 @@ if ~any(cmp)
     return;
 end
 dataGroups = info.Groups(cmp).Groups;
+results = struct;
 for i=1:numel(dataGroups)
     name = dataGroups(i).Name;
     if strcmp(name,strcat(dataGroupName,'/states'))
-        states = extractStates(filename, name, [dataGroupName,'/t']);
+        results.states = extractStates(filename, name, [dataGroupName,'/t']);
         if plotResult
-            plotStates(states);
+            plotStates(results.states);
         end
     elseif strcmp(name, strcat(dataGroupName,'/waves')) && plotResult
-        animateWaves(filename, name);
+        results.waves = animateWaves(filename, name);
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -99,7 +100,7 @@ for j=1:6
 end
 return
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function animateWaves(filename, group)
+function wavesElevation = animateWaves(filename, group)
 wavesElevation = tbx_wave_importWaveElevationFromHdf5(filename,group);
 if ~isempty(wavesElevation)
     dt = wavesElevation.t(2)-wavesElevation.t(1);
