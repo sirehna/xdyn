@@ -1,4 +1,4 @@
-function outputfilename = xdyn_run(param, importResults, verbose)
+function results = xdyn_run(param, importResults, verbose)
 % XDYN_RUN allows to run XDYN from MatLab.
 %
 % Inputs:
@@ -51,7 +51,6 @@ else
     extension = '';
 end
 simulatorExe = fullfile(fileparts(mfilename),'..','bin',['sim' extension]);
-% simulatorExe = '..\..\buildRelease64\executables\sim.exe';
 if ischar(param) || iscell(param)
     tmp = param;
     param = struct;
@@ -91,9 +90,13 @@ if verbose
     disp(cmdLine);
 end
 [status, result] = system(cmdLine,'-echo');
+if verbose
+end
 if importResults
     plotResult = false;
-    results = xdyn_postProcess(param.outputFilename, dataGroupName, plotResult);
+    results = xdyn_postProcess(param.outputFilename, plotResult);
+else
+    results = [];
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function res = stringifyCellArrayOfStrings(data)

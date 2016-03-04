@@ -55,8 +55,11 @@ for i=1:numel(dataGroups)
         if plotResult
             plotStates(results.states);
         end
-    elseif strcmp(name, strcat(dataGroupName,'/waves')) && plotResult
-        results.waves = animateWaves(filename, name);
+    elseif strcmp(name, strcat(dataGroupName,'/waves'))
+        results.waves = tbx_wave_importWaveElevationFromHdf5(filename, name);
+        if plotResult
+            animateWaves(results.waves);
+        end
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -104,7 +107,11 @@ end
 return
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function wavesElevation = animateWaves(filename, group)
-wavesElevation = tbx_wave_importWaveElevationFromHdf5(filename,group);
+if ischar(filename)
+    wavesElevation = tbx_wave_importWaveElevationFromHdf5(filename,group);
+elseif isstruct(filename)
+    wavesElevation = filename;
+end
 if ~isempty(wavesElevation)
     dt = wavesElevation.t(2)-wavesElevation.t(1);
     waveColormap = 'cool';
