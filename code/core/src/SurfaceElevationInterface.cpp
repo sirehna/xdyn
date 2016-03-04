@@ -172,10 +172,12 @@ SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
     if ((nx*ny)!=nPoints)
     {
         std::stringstream ss;
-        ss << "Problem : " <<std::endl
+        ss << "SurfaceElevation Problem : " <<std::endl
            << "nx*ny = "<<nx << "*"<<ny <<"="<<nx*ny
-           <<" should be equal to res.size() = "<<nPoints<<std::endl;
-        THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,ss.str());
+           <<" should be equal to res.size() = "<<nPoints<<std::endl<<std::endl
+           <<" Make sure your 'environment models' are correctly defined for waves"<<std::endl
+           <<" For example, if one declares a 'no waves' model, one should not have an 'output' section"<<std::endl;
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,ss.str());
     }
     SurfaceElevationGrid s(nx,ny,t);
     for(long i=0;i<(long)nx;++i)
