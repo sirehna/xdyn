@@ -70,6 +70,8 @@ void flushMap(std::ostream& os, const std::map<std::string,double>& stuff_to_wri
 
 void JsonObserver::flush_after_write()
 {
+    const size_t n = jsonMap.size();
+    size_t i = 0;
     os << "[";
     for (auto const& object:jsonMap)
     {
@@ -86,6 +88,8 @@ void JsonObserver::flush_after_write()
         os << "\"var\":";
         flushMap(os, object.second);
         os << "}";
+        if (i<(n-1)) os << ",";
+        ++i;
     }
     os << "]"<<std::endl;
     os <<std::flush;
