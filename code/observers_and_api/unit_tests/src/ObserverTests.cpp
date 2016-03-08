@@ -80,9 +80,7 @@ TEST_F(ObserverTests, can_observe_using_a_websocket)
 //! [ObserverTests example]
 //! [ObserverTests expected output]
     ASSERT_EQ(11, handler.messages.size());
-    ASSERT_EQ("{t: 0, x(cube): 0, theta(cube): -0}", handler.messages.front());
+    ASSERT_EQ("{\"t\":0,\"states\":{\"cube\":{\"theta\":-0,\"x\":0}}}", handler.messages.front());
 //! [ObserverTests expected output]
 }
-
-
 

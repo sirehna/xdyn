@@ -183,6 +183,5 @@ void DictObserver::flush_after_write()
     serializeDictMap1();
     serializeDictMap2();
     serializeDictSurfaceElevationGrid();
-    ss << "}"<<std::endl;
+    ss << "}";
 }
-
