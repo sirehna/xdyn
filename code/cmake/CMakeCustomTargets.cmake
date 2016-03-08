@@ -44,17 +44,17 @@ IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
         INSTALL(FILES ${f} DESTINATION server PERMISSIONS OWNER_EXECUTE)
     ENDFOREACH()
     INSTALL(DIRECTORY "${PROJECT_SOURCE_DIR}/../html/css"
-            DESTINATION "server")
+            DESTINATION server)
     INSTALL(DIRECTORY "${PROJECT_SOURCE_DIR}/../html/static"
-            DESTINATION "server")
+            DESTINATION server)
     INSTALL(FILES "${PROJECT_SOURCE_DIR}/../html/websocket_test.html"
-            DESTINATION "server")
+            DESTINATION server)
 ELSE()
+    MESSAGE(STATUS "No simulator server will be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
     ADD_CUSTOM_COMMAND(
         TARGET sim_server
         POST_BUILD
-        COMMENT "No simulator server will be built: platform does not meet requirements"
-    )
+        COMMENT "No simulator server will be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
 ENDIF()
 
 ADD_CUSTOM_TARGET(
