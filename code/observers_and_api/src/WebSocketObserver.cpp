@@ -31,6 +31,7 @@ std::function<void()> WebSocketObserver::get_initializer(const double, const Dat
 /**
  * \brief generate a yaml string with data encoded in base91
  * \code
+   # Python 3
    import yaml
    message = "waves: {z: \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~\"}"
    yaml.load(message)
@@ -39,11 +40,13 @@ std::function<void()> WebSocketObserver::get_initializer(const double, const Dat
 std::function<void()> WebSocketObserver::get_serializer(const SurfaceElevationGrid& s, const DataAddressing&)
 {
     return [this,s](){
+        const size_t nx = (size_t)s.x.size();
+        const size_t ny = (size_t)s.y.size();
         const size_t n = (size_t)s.z.size();
         std::vector<float> v(n,0.0);
         double const * const data = s.z.data();
         for (size_t i=0;i<n;++i) v[i] = (float)data[i];
-        ss<<"waves: {z: '"<<base<91>::encode(sizeof(float)*n,&v[0])<<"'}";
+        ss<<"waves: {nx : " << nx <<"ny : " << ny << "z: '"<<base<91>::encode(sizeof(float)*n,&v[0])<<"'}";
     };
 }
 
