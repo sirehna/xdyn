@@ -116,7 +116,7 @@ void DictObserver::serializeDictMap2Attitudes()
         }
     }
     i = 0;
-    ss << "\"solids\":{";
+    ss << "\"states\":{";
     for (auto const& object:dictMap2)
     {
         if (object.first.find(',')!=std::string::npos) continue;
