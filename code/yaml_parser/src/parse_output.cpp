@@ -43,7 +43,7 @@ std::vector<YamlOutput> parse_output(const std::string& yaml)
     parser.GetNextDocument(node);
     try
     {
-        node["output"]         >> ret;
+        node["output"] >> ret;
     }
     catch(std::exception& ) // Nothing to do: 'output' section is not mandatory
     {
@@ -102,14 +102,14 @@ std::string get_format_for_wave_observer(const std::string& filename)
     const size_t n = filename.size();
     if (n<=3)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid file format for wave output file. Expected filename extension .h5 or .hdf5");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid file format for wave output file. Expected string should be at least 4 characters");
     }
     if (filename.substr(n-3,3)==".h5")   return "hdf5";
     if (filename.substr(n-5,5)==".hdf5") return "hdf5";
     if (filename.substr(n-3,3)==".H5")   return "hdf5";
     if (filename.substr(n-5,5)==".HDF5") return "hdf5";
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid file format for wave output file. Expected filename extensions are h5,hdf5");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid file format for wave output file. Expected filename extensions are h5, hdf5");
     }
 }
 
