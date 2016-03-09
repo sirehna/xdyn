@@ -1,5 +1,3 @@
-#include <functional>
-
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
 #include "NumericalErrorException.hpp"
@@ -12,7 +10,7 @@
 #include <ssc/solver.hpp>
 #include <ssc/exception_handling.hpp>
 
-
+#include <functional>
 
 void solve(const InputData& input_data, Sim& sys, ListOfObservers& observer)
 {
@@ -34,8 +32,8 @@ void solve(const InputData& input_data, Sim& sys, ListOfObservers& observer)
     }
 }
 
-void catch_exceptions(const std::function<void(void)>& f);
-void catch_exceptions(const std::function<void(void)>& f)
+void catch_exceptions(const std::function<void(void)>& f, const InputData& input_data);
+void catch_exceptions(const std::function<void(void)>& f, const InputData& input_data)
 {
     try
     {
@@ -53,6 +51,11 @@ void catch_exceptions(const std::function<void(void)>& f)
     catch(const NumericalErrorException& e)
     {
         std::cerr << "The simulation has diverged and cannot continue: " << e.get_message() << std::endl;
+        if (input_data.solver=="euler")
+        {
+            std::cerr << "The simulation used a Euler integration scheme, maybe the simulation can be run with a " << std::endl
+                      << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
+        }
     }
     catch(ssc::exception_handling::Exception& e)
     {
@@ -82,6 +85,6 @@ void run_simulation(const InputData& input_data)
         auto observer = get_observers(yaml, input_data);
         solve(input_data, sys, observer);
     }};
-    if (input_data.catch_exceptions) catch_exceptions(f);
+    if (input_data.catch_exceptions) catch_exceptions(f, input_data);
     else                             f();
 }
