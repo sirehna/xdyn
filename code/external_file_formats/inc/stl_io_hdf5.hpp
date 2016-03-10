@@ -32,4 +32,4 @@ VectorOfVectorOfPoints readMeshFromHdf5File(
         const H5::H5File& file,
         const std::string& datasetName);
 
-#endif  /* STL_IO_HDF5_CPP_ */
+#endif
