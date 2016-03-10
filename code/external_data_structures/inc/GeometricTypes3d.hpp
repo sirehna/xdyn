@@ -1,7 +1,6 @@
 #ifndef GEOMETRICTYPES3D_HPP_
 #define GEOMETRICTYPES3D_HPP_
 
-#include <cstddef>
 #include <vector>
 
 #include <Eigen/Dense>
