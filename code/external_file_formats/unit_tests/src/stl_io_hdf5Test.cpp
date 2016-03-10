@@ -31,15 +31,15 @@ TEST_F(stl_io_hdf5Test, should_be_able_to_read_triangulated_mesh)
     {
         VectorOfVectorOfPoints facetsRead = readMeshFromHdf5File(fileName, "mesh");
         ASSERT_EQ(1, facetsRead.size());
-        ASSERT_DOUBLE_EQ(1.0, facetsRead.at(0)[0][0]);
-        ASSERT_DOUBLE_EQ(2.1, facetsRead.at(0)[0][1]);
-        ASSERT_DOUBLE_EQ(3.2, facetsRead.at(0)[0][2]);
-        ASSERT_DOUBLE_EQ(2.1, facetsRead.at(0)[1][0]);
-        ASSERT_DOUBLE_EQ(3.7, facetsRead.at(0)[1][1]);
-        ASSERT_DOUBLE_EQ(4.5, facetsRead.at(0)[1][2]);
-        ASSERT_DOUBLE_EQ(3.1, facetsRead.at(0)[2][0]);
-        ASSERT_DOUBLE_EQ(4.5, facetsRead.at(0)[2][1]);
-        ASSERT_DOUBLE_EQ(6.7, facetsRead.at(0)[2][2]);
+        ASSERT_DOUBLE_EQ(1.0, facetsRead[0][0][0]);
+        ASSERT_DOUBLE_EQ(2.1, facetsRead[0][0][1]);
+        ASSERT_DOUBLE_EQ(3.2, facetsRead[0][0][2]);
+        ASSERT_DOUBLE_EQ(2.1, facetsRead[0][1][0]);
+        ASSERT_DOUBLE_EQ(3.7, facetsRead[0][1][1]);
+        ASSERT_DOUBLE_EQ(4.5, facetsRead[0][1][2]);
+        ASSERT_DOUBLE_EQ(3.1, facetsRead[0][2][0]);
+        ASSERT_DOUBLE_EQ(4.5, facetsRead[0][2][1]);
+        ASSERT_DOUBLE_EQ(6.7, facetsRead[0][2][2]);
     }
     EXPECT_EQ(0,remove(fileName.c_str()));
 }
