@@ -37,9 +37,9 @@ std::vector<double> SVectorOfVectorOfPoints::concatenatePoints() const
 {
     std::vector<double> res;
     res.reserve(3*nPoints);
-    for (const auto vP:vvP)
+    for (const auto& vP : vvP)
     {
-        for (const auto p:vP)
+        for (const auto& p:vP)
         {
             for (size_t k = 0; k<3 ; ++k)
             {
@@ -54,16 +54,16 @@ std::vector<uint64_t> SVectorOfVectorOfPoints::concatenateTriangles() const
 {
     std::vector<uint64_t> res;
     res.reserve(3*nTriangles);
-    uint64_t i = 0;
-    for (const auto vP:vvP)
+    uint64_t c = 1;
+    for (const auto& vP : vvP)
     {
-        const uint64_t c = ++i;
         for (size_t k=0;k<vP.size()-2;++k)
         {
             res.push_back(c);
             res.push_back(c+k+1);
             res.push_back(c+k+2);
         }
+        c += vP.size();
     }
     return res;
 }

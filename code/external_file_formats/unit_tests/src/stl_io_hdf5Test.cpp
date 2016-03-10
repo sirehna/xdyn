@@ -21,7 +21,7 @@ TEST_F(stl_io_hdf5Test, should_be_able_to_export_triangulated_mesh)
     EXPECT_EQ(0,remove(fileName.c_str()));
 }
 
-TEST_F(stl_io_hdf5Test, should_be_able_to_read_triangulated_mesh)
+TEST_F(stl_io_hdf5Test, should_be_able_to_read_triangulated_mesh_with_one_facet)
 {
     const std::string fileName("should_be_able_to_read_triangulated_mesh.h5");
     const VectorOfVectorOfPoints facets = read_stl(test_data::single_facet());
@@ -43,3 +43,47 @@ TEST_F(stl_io_hdf5Test, should_be_able_to_read_triangulated_mesh)
     }
     EXPECT_EQ(0,remove(fileName.c_str()));
 }
+
+TEST_F(stl_io_hdf5Test, should_be_able_to_read_triangulated_mesh_with_several_facets)
+{
+    const std::string fileName("should_be_able_to_read_triangulated_mesh.h5");
+    const VectorOfVectorOfPoints facets = read_stl(test_data::three_facets());
+    {
+        writeMeshToHdf5File(fileName, "mesh", facets);
+    }
+    {
+        VectorOfVectorOfPoints facetsRead = readMeshFromHdf5File(fileName, "mesh");
+        ASSERT_EQ(3, facetsRead.size());
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[0][0][0]);
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[0][0][1]);
+        ASSERT_DOUBLE_EQ(+1.0, facetsRead[0][0][2]);
+        ASSERT_DOUBLE_EQ(+0.5, facetsRead[0][1][0]);
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[0][1][1]);
+        ASSERT_DOUBLE_EQ(+1.0, facetsRead[0][1][2]);
+        ASSERT_DOUBLE_EQ(+0.5, facetsRead[0][2][0]);
+        ASSERT_DOUBLE_EQ(+0.5, facetsRead[0][2][1]);
+        ASSERT_DOUBLE_EQ(+1.0, facetsRead[0][2][2]);
+
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[1][0][0]);
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[1][0][1]);
+        ASSERT_DOUBLE_EQ(+1.0, facetsRead[1][0][2]);
+        ASSERT_DOUBLE_EQ(+0.5, facetsRead[1][1][0]);
+        ASSERT_DOUBLE_EQ(+0.5, facetsRead[1][1][1]);
+        ASSERT_DOUBLE_EQ(+1.0, facetsRead[1][1][2]);
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[1][2][0]);
+        ASSERT_DOUBLE_EQ(+0.5, facetsRead[1][2][1]);
+        ASSERT_DOUBLE_EQ(+1.0, facetsRead[1][2][2]);
+
+        ASSERT_DOUBLE_EQ(+0.5, facetsRead[2][0][0]);
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[2][0][1]);
+        ASSERT_DOUBLE_EQ(+0.0, facetsRead[2][0][2]);
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[2][1][0]);
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[2][1][1]);
+        ASSERT_DOUBLE_EQ(+0.0, facetsRead[2][1][2]);
+        ASSERT_DOUBLE_EQ(-0.5, facetsRead[2][2][0]);
+        ASSERT_DOUBLE_EQ(+0.5, facetsRead[2][2][1]);
+        ASSERT_DOUBLE_EQ(+0.0, facetsRead[2][2][2]);
+    }
+    EXPECT_EQ(0,remove(fileName.c_str()));
+}
+
