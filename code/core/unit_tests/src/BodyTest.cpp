@@ -9,7 +9,6 @@
 #include "BodyTest.hpp"
 #include "BodyBuilderTest.hpp"
 #include "EnvironmentAndFrames.hpp"
-#include <ssc/kinematics.hpp>
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
 #include "State.hpp"
@@ -118,7 +117,7 @@ TEST_F(BodyTest, can_get_transform_from_NED_to_body_from_states)
 
 TEST_F(BodyTest, can_update_Kinematics_object_from_states)
 {
-    KinematicsPtr k(new ssc::kinematics::Kinematics());
+    ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     BodyPtr b(body);
     b->update_kinematics(x, k);
@@ -145,7 +144,7 @@ TEST_F(BodyTest, can_update_Kinematics_object_from_states)
 
 TEST_F(BodyTest, can_compute_transform_from_ned_to_local_ned)
 {
-    KinematicsPtr k(new ssc::kinematics::Kinematics());
+    ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     const StateType x = {1,2,3,4,5,6,7,8,9,10,11,12,13,1,2,3,4,5,6,7,8,9,3,5,7,13};
     BodyPtr b(body);
     b->update_kinematics(x, k);
@@ -306,6 +305,4 @@ TEST_F(BodyTest, can_overwrite_history_with_single_value_several_times)
         ASSERT_DOUBLE_EQ(body->get_states().qk(),new_qk);
         ASSERT_EQ(body->get_states().qk.size(),1);
     }
-
-
 }

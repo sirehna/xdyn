@@ -13,14 +13,14 @@
 #include "YamlRotation.hpp"
 #include "BodyBuilder.hpp"
 #include "GeometricTypes3d.hpp"
-#include <ssc/kinematics.hpp>
 #include "generate_anthineas.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "discretize.hpp"
 #include "Airy.hpp"
-#include <ssc/macros.hpp>
 #include "SurfaceElevationFromWaves.hpp"
+
+#include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
 

@@ -8,10 +8,10 @@
 #ifndef YAMLPOSITION_HPP_
 #define YAMLPOSITION_HPP_
 
-#include <string>
-
 #include "YamlCoordinates.hpp"
 #include "YamlAngle.hpp"
+
+#include <string>
 
 struct YamlPosition
 {

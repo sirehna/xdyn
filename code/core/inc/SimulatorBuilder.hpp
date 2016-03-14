@@ -8,17 +8,11 @@
 #ifndef SIMULATORBUILDER_HPP_
 #define SIMULATORBUILDER_HPP_
 
-#include <map>
-
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_base_of.hpp>
-
-#include <ssc/data_source.hpp>
-
-#include "SurfaceElevationBuilder.hpp"
 #include "WaveModel.hpp"
 #include "WaveDirectionalSpreading.hpp"
 #include "WaveSpectralDensity.hpp"
+
+#include "SurfaceElevationBuilder.hpp"
 #include "DirectionalSpreadingBuilder.hpp"
 #include "SpectrumBuilder.hpp"
 #include "WaveModelBuilder.hpp"
@@ -28,6 +22,14 @@
 
 #include "EnvironmentAndFrames.hpp"
 #include "GeometricTypes3d.hpp"
+
+#include <map>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_base_of.hpp>
+
+#include <ssc/data_source.hpp>
+#include <ssc/kinematics.hpp>
+
 class BodyBuilder;
 typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 
@@ -167,7 +169,7 @@ class SimulatorBuilder
           *  \returns KinematicsPtr containing the initial transforms
           */
         void add_initial_transforms(const std::vector<BodyPtr>& bodies, //!< Bodies containing the initial coordinates
-                                    KinematicsPtr& k) const;
+                                    ssc::kinematics::KinematicsPtr& k) const;
 
         std::vector<bool> are_there_surface_forces_acting_on_body(const std::vector<ListOfForces>& forces) const;
 

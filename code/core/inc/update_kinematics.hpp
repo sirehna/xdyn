@@ -8,17 +8,12 @@
 #ifndef UPDATE_KINEMATICS_HPP_
 #define UPDATE_KINEMATICS_HPP_
 
-#include <ssc/kinematics.hpp>
+#include <vector>
+
 #include "StateMacros.hpp"
 
-class Body;
 struct YamlBody;
 struct YamlRotation;
-
-#include <ssc/kinematics.hpp>
-#include TR1INC(memory)
-
-typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
 
 StateType get_initial_states(const YamlRotation& convention, const std::vector<YamlBody>& bodies);
 

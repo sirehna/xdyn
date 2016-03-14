@@ -8,11 +8,13 @@
 #ifndef YAMLBODY_HPP_
 #define YAMLBODY_HPP_
 
-#include <string>
 #include "YamlPosition.hpp"
 #include "YamlSpeed.hpp"
 #include "YamlDynamics.hpp"
 #include "YamlModel.hpp"
+
+#include <vector>
+#include <string>
 
 enum class InterpolationType {PIECEWISE_CONSTANT, LINEAR, SPLINE};
 enum class BlockableState {U, V, W, P, Q, R};

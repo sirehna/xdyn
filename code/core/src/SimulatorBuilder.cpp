@@ -5,13 +5,14 @@
  *      Author: cady
  */
 
-#include <ssc/kinematics.hpp>
-#include <ssc/text_file_reader.hpp>
 #include "SimulatorBuilder.hpp"
+
 #include "InternalErrorException.hpp"
 #include "update_kinematics.hpp"
 #include "stl_reader.hpp"
 #include "BodyBuilder.hpp"
+
+#include <ssc/text_file_reader.hpp>
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const double t0_, const ssc::data_source::DataSource& command_listener_) :
                                         input(input_),
@@ -47,7 +48,7 @@ std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const s
     return ret;
 }
 
-void SimulatorBuilder::add_initial_transforms(const std::vector<BodyPtr>& bodies, KinematicsPtr& k) const
+void SimulatorBuilder::add_initial_transforms(const std::vector<BodyPtr>& bodies, ssc::kinematics::KinematicsPtr& k) const
 {
     const StateType x = ::get_initial_states(input.rotations, input.bodies);
     for (size_t i = 0; i < bodies.size(); ++i)
@@ -65,7 +66,7 @@ EnvironmentAndFrames SimulatorBuilder::get_environment() const
     env.nu = input.environmental_constants.nu;
     env.rot = input.rotations;
     env.w = get_wave();
-    env.k = KinematicsPtr(new ssc::kinematics::Kinematics());
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     return env;
 }
 

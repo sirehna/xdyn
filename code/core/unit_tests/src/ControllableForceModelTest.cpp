@@ -17,7 +17,7 @@ class RandomControllableForce : public ControllableForceModel
 
         RandomControllableForce(ssc::random_data_generator::DataGenerator& a_) : ControllableForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", EnvironmentAndFrames()), a(a_)
         {
-            env.k = KinematicsPtr(new ssc::kinematics::Kinematics());
+            env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
             const auto bTa = random_transform(a, "body", "mock");
             env.k->add(bTa);
         }

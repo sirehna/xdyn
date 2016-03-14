@@ -8,13 +8,15 @@
 #ifndef BODY_HPP_
 #define BODY_HPP_
 
-#include <tuple>
-
 #include "BlockedDOF.hpp"
 #include "BodyStates.hpp"
 #include "StateMacros.hpp"
+
+#include <ssc/kinematics.hpp>
+
+#include <tuple>
+
 struct YamlBody;
-typedef TR1(shared_ptr)<ssc::kinematics::Kinematics> KinematicsPtr;
 struct YamlRotation;
 
 class Observer;
@@ -43,7 +45,7 @@ class Body
         /**  \brief Update Body structure taking the new coordinates & wave heights into account
          */
         void update(const EnvironmentAndFrames& env, const StateType& x, const double t);
-        void update_kinematics(StateType x, const KinematicsPtr& k) const;
+        void update_kinematics(StateType x, const ssc::kinematics::KinematicsPtr& k) const;
         void update_body_states(StateType x, const double t);
         /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
          */

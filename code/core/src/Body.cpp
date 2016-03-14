@@ -1,5 +1,5 @@
 /*
- * Body., cpp
+ * Body.cpp
  *
  *  Created on: Jun 16, 2014
  *      Author: cady
@@ -61,7 +61,7 @@ ssc::kinematics::Transform Body::get_transform_from_ned_to_local_ned(const State
     return ssc::kinematics::Transform(get_origin(x), std::string("NED(") + states.name + ")");
 }
 
-void Body::update_kinematics(StateType x, const KinematicsPtr& k) const
+void Body::update_kinematics(StateType x, const ssc::kinematics::KinematicsPtr& k) const
 {
     k->add(get_transform_from_ned_to_body(x));
     k->add(get_transform_from_ned_to_local_ned(x));
