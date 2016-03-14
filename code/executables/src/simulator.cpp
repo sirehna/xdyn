@@ -31,9 +31,9 @@ int main(int argc, char** argv)
         if (input_data.empty()) return EXIT_SUCCESS;
         run_simulation(input_data);
     }
-    catch (const std::exception& e) 
+    catch (const std::exception& e)
     {
-        std::cerr << "An internal error has occured: " << e.what() << std::endl;
+        std::cerr << "An internal error has occurred: " << e.what() << std::endl;
         error = -1;
     }
     return error;
