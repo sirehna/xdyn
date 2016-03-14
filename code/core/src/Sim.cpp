@@ -76,7 +76,7 @@ std::vector<BodyPtr> Sim::get_bodies() const
 
 EnvironmentAndFrames Sim::get_env() const
 {
-	return pimpl->env;
+    return pimpl->env;
 }
 
 Sim::Sim(const std::vector<BodyPtr>& bodies,
