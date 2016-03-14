@@ -28,58 +28,57 @@ if nargin < 2
     end
 end
 if ischar(filename)
-    filename = {filename,'/outputs'};
+    filename = {filename,'/outputs','/inputs'};
 end
-tbx_assert(length(filename)==2);
-dataGroupName = filename{2};
+tbx_assert(length(filename)==3);
+outputsGroupName = filename{2};
+inputsGroupName = filename{3};
 filename = filename{1};
 if exist(filename,'file')~=2
     disp('Input file does not exist');
     return
 end
-dataGroupName = ensureStringHasHeadingPattern(dataGroupName,'/');
+outputsGroupName = ensureStringHasHeadingPattern(outputsGroupName, '/');
+inputsGroupName = ensureStringHasHeadingPattern(inputsGroupName, '/');
 
 info = h5info(filename);
 listOfGroups = info.Groups;
-cmp = strcmp(dataGroupName, {listOfGroups.Name});
+cmp = strcmp(outputsGroupName, {listOfGroups.Name});
 if ~any(cmp)
     disp('Data group name does not exit');
     return;
 end
-dataGroups = info.Groups(cmp).Groups;
+outputs = info.Groups(cmp).Groups;
 results = struct;
-for i=1:numel(dataGroups)
-    name = dataGroups(i).Name;
-    if strcmp(name,strcat(dataGroupName,'/states'))
-        results.states = extractStates(filename, name, [dataGroupName,'/t']);
+for i=1:numel(outputs)
+    name = outputs(i).Name;
+    if strcmp(name,strcat(outputsGroupName,'/states'))
+        results.states = extractStates(filename, name, [outputsGroupName,'/t']);
         if plotResult
             plotStates(results.states);
         end
-    elseif strcmp(name, strcat(dataGroupName,'/waves'))
+    elseif strcmp(name, strcat(outputsGroupName,'/waves'))
         results.waves = tbx_wave_importWaveElevationFromHdf5(filename, name);
-        if plotResult
-            animateWaves(results.waves);
-        end
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function states = extractStates(filename, name, time)
 info = h5info(filename, name);
-dataGroups = info.Groups;
-nObject = numel(dataGroups);
+outputs = info.Groups;
+nObject = numel(outputs);
 s = cell(1,nObject);
 states = struct('name',s,'t',s,'x',s,'y',s,'z',s,'quat',s,'eul',s);
 for i=1:nObject
-    states(i).name = dataGroups(i).Name;
+    states(i).name = outputs(i).Name;
     states(i).t = h5read(filename, time);
-    states(i).x = h5read(filename, [dataGroups(i).Name '/X']);
-    states(i).y = h5read(filename, [dataGroups(i).Name '/Y']);
-    states(i).z = h5read(filename, [dataGroups(i).Name '/Z']);
+    states(i).x = h5read(filename, [outputs(i).Name '/X']);
+    states(i).y = h5read(filename, [outputs(i).Name '/Y']);
+    states(i).z = h5read(filename, [outputs(i).Name '/Z']);
     states(i).quat = ...
-    [h5read(filename, [dataGroups(i).Groups(1).Name '/Qr']),...
-     h5read(filename, [dataGroups(i).Groups(1).Name '/Qi']),...
-     h5read(filename, [dataGroups(i).Groups(1).Name '/Qj']),...
-     h5read(filename, [dataGroups(i).Groups(1).Name '/Qk'])];
+    [h5read(filename, [outputs(i).Groups(1).Name '/Qr']),...
+     h5read(filename, [outputs(i).Groups(1).Name '/Qi']),...
+     h5read(filename, [outputs(i).Groups(1).Name '/Qj']),...
+     h5read(filename, [outputs(i).Groups(1).Name '/Qk'])];
     states(i).eul = tbx_geom3d_QUA_TO_EUL(states(i).quat);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -727,7 +726,7 @@ function varargout=import_stl_fast(filename,mode)
 %        notice, this list of conditions and the following disclaimer in
 %        the documentation and/or other materials provided with the distribution
 %
-%  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+%  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS
 %  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 %  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 %  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -839,7 +838,7 @@ function [fout, vout, cout] = rndread(filename)
 %        notice, this list of conditions and the following disclaimer in
 %        the documentation and/or other materials provided with the distribution
 %
-%  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+%  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS
 %  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 %  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 %  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -884,26 +883,26 @@ while feof(fid) == 0                    % test for end of file, if not then do s
     tline = fgetl(fid);                 % reads a line of data from file.
     fword = sscanf(tline, '%s ');       % make the line a character string
 % Check for color
-    if strncmpi(fword, 'c',1) == 1;    % Checking if a "C"olor line, as "C" is 1st char.
+    if strncmpi(fword, 'c',1) == 1;    % Checking if a 'C'olor line, as 'C' is 1st char.
        VColor = sscanf(tline, '%*s %f %f %f'); % & if a C, get the RGB color data of the face.
     end                                % Keep this color, until the next color is used.
-    if strncmpi(fword, 'v',1) == 1;    % Checking if a "V"ertex line, as "V" is 1st char.
+    if strncmpi(fword, 'v',1) == 1;    % Checking if a 'V'ertex line, as 'V' is 1st char.
        vnum = vnum + 1;                % If a V we count the # of V's
 
        v(:,vnum) = sscanf(tline, '%*s %f %f %f'); % & if a V, get the XYZ data of it.
        c(:,vnum) = VColor;              % A color for each vertex, which will color the faces.
-    end                                 % we "*s" skip the name "color" and get the data.
+    end                                 % we '*s' skip the name 'color' and get the data.
 end
 %   Build face list; The vertices are in order, so just number them.
 %
 fnum = vnum/3;      %Number of faces, vnum is number of vertices.  STL is triangles.
 flist = 1:vnum;     %Face list of vertices, all in order.
-F = reshape(flist, 3,fnum); %Make a "3 by fnum" matrix of face list data.
+F = reshape(flist, 3,fnum); %Make a '3 by fnum' matrix of face list data.
 %
 %   Return the faces and vertexs.
 %
 fout = F';  %Orients the array for direct use in patch.
-vout = v';  % "
+vout = v';  %
 cout = c';
 %
 fclose(fid);
@@ -957,7 +956,7 @@ function [v, f, n, c, stltitle] = stlread(filename, verbose)
 %        notice, this list of conditions and the following disclaimer in
 %        the documentation and/or other materials provided with the distribution
 %
-%  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+%  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS
 %  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 %  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 %  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
