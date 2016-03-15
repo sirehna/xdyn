@@ -23,7 +23,20 @@ EnvironmentAndFrames::EnvironmentAndFrames() : w(),
                                                g(0),
                                                rot()
 {
+    if (rho<0.0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "rho can not be negative");
+    }
+    if (nu<0.0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "nu can not be negative");
+    }
+    if (g<0.0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "g can not be negative");
+    }
 }
+
 void EnvironmentAndFrames::feed(
         Observer& observer, double t,
         const std::vector<BodyPtr>& bodies, const StateType& state) const
