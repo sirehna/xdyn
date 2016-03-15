@@ -53,7 +53,7 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
     {
         for (int j = 0 ; j < 6 ; ++j)
         {
-            ASSERT_NEAR(Id(i,j), i==j, 1E-14) << "i = " << i << ", j = " << j;
+            ASSERT_NEAR(Id(i,j), i==j, 1E-10) << "i = " << i << ", j = " << j;
         }
     }
 }
