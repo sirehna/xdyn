@@ -16,6 +16,7 @@ namespace test_data
     std::string hydrostatic_test();
     std::string added_mass_from_file();
     std::string full_example();
+    std::string full_example_with_diagonal_inertia();
     std::string full_example_with_propulsion();
     std::string falling_ball_example();
     std::string oscillating_cube_example();
