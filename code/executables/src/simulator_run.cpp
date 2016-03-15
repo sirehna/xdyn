@@ -3,6 +3,7 @@
 #include "NumericalErrorException.hpp"
 #include "utilities_for_simulator.hpp"
 #include "listeners.hpp"
+#include "InputData.hpp"
 #include "simulator_api.hpp"
 #include "simulator_run.hpp"
 
@@ -70,6 +71,24 @@ void catch_exceptions(const std::function<void(void)>& f, const InputData& input
     }
 }
 
+#include "stl_io_hdf5.hpp"
+void observe_init(const Sim& sys, std::vector<YamlOutput>& observers);
+void observe_init(const Sim& sys, std::vector<YamlOutput>& observers)
+{
+    for (const auto observer:observers)
+    {
+        if(observer.format=="hdf5")
+        {
+            for (const auto& bodies : sys.get_bodies())
+            {
+                writeMeshToHdf5File(observer.filename, "/inputs/meshes/"+bodies->get_states().name,
+                                    bodies->get_states().mesh->nodes,
+                                    bodies->get_states().mesh->facets);
+            }
+        }
+    }
+}
+
 void run_simulation(const InputData& input_data)
 {
     const auto f = [input_data](){
@@ -82,8 +101,10 @@ void run_simulation(const InputData& input_data)
         }
         const auto yaml = yaml_reader.get_contents();
         auto sys = get_system(yaml,input_data.tstart,command_listener);
-        auto observer = get_observers(yaml, input_data);
-        solve(input_data, sys, observer);
+        auto observers_description = get_observers_description(yaml, input_data);
+        auto observers = ListOfObservers(observers_description);
+        observe_init(sys, observers_description);
+        solve(input_data, sys, observers);
     }};
     if (input_data.catch_exceptions) catch_exceptions(f, input_data);
     else                             f();
