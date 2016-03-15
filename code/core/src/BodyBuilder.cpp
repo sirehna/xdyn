@@ -5,9 +5,6 @@
  *      Author: cady
  */
 
-#include <ssc/kinematics.hpp>
-#include <ssc/text_file_reader.hpp>
-
 #include "BodyBuilder.hpp"
 #include "InvalidInputException.hpp"
 #include "BodyWithSurfaceForces.hpp"
@@ -16,6 +13,36 @@
 #include "MeshBuilder.hpp"
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
+
+#include <ssc/kinematics.hpp>
+#include <ssc/text_file_reader.hpp>
+
+bool isSymmetric(const Eigen::MatrixXd& m)
+{
+    const double tol = 1e-10;
+    if (m.rows()!=m.cols()) return false;
+    const size_t n = m.rows();
+    for (size_t i = 0;i<n;++i)
+        for (size_t j = i+1;j<n;++j)
+            if (std::abs(m(i,j)-m(j,i))>tol) return false;
+    return true;
+}
+/**
+ * \note is based on Sylvester criterion
+ */
+bool isSymmetricDefinitePositive(const Eigen::MatrixXd& m)
+{
+    if (!isSymmetric(m)) return false;
+    const size_t n = m.rows();
+    for (size_t i = 1;i<=n;++i)
+    {
+        if (m.block(0, 0, i, i).determinant()<=0.0)
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 BodyBuilder::BodyBuilder(const YamlRotation& convention) : rotations(convention)
 {
