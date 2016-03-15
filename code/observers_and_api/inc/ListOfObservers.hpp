@@ -24,6 +24,16 @@ class ListOfObservers
         void observe(const Sim& sys, const double t);
         std::vector<ObserverPtr> get() const;
 
+        template <typename T> void write(
+                const T& val,
+                const DataAddressing& address)
+        {
+            for (auto observer:observers)
+            {
+                observer->write(val, address);
+            }
+        }
+
     private:
 
         std::vector<ObserverPtr> observers;
