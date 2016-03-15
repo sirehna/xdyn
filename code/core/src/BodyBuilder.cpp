@@ -98,6 +98,14 @@ BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& 
 void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
 {
     const Eigen::Matrix<double,6,6> Mrb = convert(rigid_body_inertia);
+    if(!isSymmetricDefinitePositive(Mrb))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "The rigid body inertia mass matrix is not symmetric definite positive"
+                << "for body '" << states.name << ": " << std::endl
+                << "Mrb = " << std::endl
+                << Mrb << std::endl);
+    }
     Eigen::Matrix<double,6,6> Ma;
     if (added_mass.read_from_file)
     {
@@ -108,11 +116,19 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     {
         Ma = convert(added_mass);
     }
-    const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
-    if (fabs(Mt.determinant())<1E-10)
+    if(!isSymmetric(Ma))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "Unable to compute the inverse of the total inertia matrix (rigid body inertia + added mass) "
+                "The input added mass is not symmetric"
+                << "for body '" << states.name << ": " << std::endl
+                << "Ma = " << std::endl
+                << Ma << std::endl);
+    }
+    const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
+    if(!isSymmetricDefinitePositive(Mt))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "The total inertia matrix (rigid body inertia + added mass) is not symmetric definite positive"
                 << "for body '" << states.name << ": " << std::endl
                 << "Mrb = " << std::endl
                 << Mrb << std::endl
