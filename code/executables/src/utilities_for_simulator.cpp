@@ -60,6 +60,13 @@ void add_observers_from_cli(
     }
 }
 
+std::vector<YamlOutput> get_observers_description(const std::string& yaml, const InputData& input_data)
+{
+    auto out = parse_output(yaml);
+    add_observers_from_cli(yaml, input_data, out);
+    return out;
+}
+
 ListOfObservers get_observers(const std::string& yaml, const InputData& input_data)
 {
     auto out = parse_output(yaml);
