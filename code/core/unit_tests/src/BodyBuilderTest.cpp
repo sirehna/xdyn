@@ -53,6 +53,81 @@ TEST_F(BodyBuilderTest, centre_of_gravity_should_be_computed_properly)
     ASSERT_DOUBLE_EQ(-10, G.z());
 }
 
+TEST_F(BodyBuilderTest, should_be_able_to_detect_no_symmetric_inertia_matrix)
+{
+    const size_t n = 3;
+    Eigen::MatrixXd m = Eigen::MatrixXd::Zero(n,n);
+    m(0,0) = m(1,1) = m(2,2) = 2;
+    m(0,1) = m(1,0) = m(2,1) = m(1,2) = -1;
+    ASSERT_TRUE(isSymmetric(m));
+    m(2,1) = -2;
+    ASSERT_FALSE(isSymmetric(m));
+}
+
+TEST_F(BodyBuilderTest, should_be_able_to_detect_inconsistent_inertia_matrix)
+{
+    const size_t n = 3;
+    Eigen::MatrixXd m = Eigen::MatrixXd::Zero(n,n);
+    m(0,0) = m(1,1) = m(2,2) = 2;
+    m(0,1) = m(1,0) = m(2,1) = m(1,2) = -1;
+    ASSERT_TRUE(isSymmetricDefinitePositive(m));
+    m(0,0) = 0.0;
+    ASSERT_FALSE(isSymmetricDefinitePositive(m));
+}
+
+
+/**
+ * \code
+    import scipy.linalg
+    M = scipy.linalg.pascal(6)
+    for i in range(6):
+        for j in range(6):
+            print('    m({0},{1}) = {2};'.format(i,j,M[i,j]))
+ * \endcode
+ */
+TEST_F(BodyBuilderTest, should_be_able_to_detect_inconsistent_inertia_matrix_pascal6)
+{
+    const size_t n = 6;
+    Eigen::MatrixXd m = Eigen::MatrixXd::Zero(n,n);
+    m(0,0) = 1;
+    m(0,1) = 1;
+    m(0,2) = 1;
+    m(0,3) = 1;
+    m(0,4) = 1;
+    m(0,5) = 1;
+    m(1,0) = 1;
+    m(1,1) = 2;
+    m(1,2) = 3;
+    m(1,3) = 4;
+    m(1,4) = 5;
+    m(1,5) = 6;
+    m(2,0) = 1;
+    m(2,1) = 3;
+    m(2,2) = 6;
+    m(2,3) = 10;
+    m(2,4) = 15;
+    m(2,5) = 21;
+    m(3,0) = 1;
+    m(3,1) = 4;
+    m(3,2) = 10;
+    m(3,3) = 20;
+    m(3,4) = 35;
+    m(3,5) = 56;
+    m(4,0) = 1;
+    m(4,1) = 5;
+    m(4,2) = 15;
+    m(4,3) = 35;
+    m(4,4) = 70;
+    m(4,5) = 126;
+    m(5,0) = 1;
+    m(5,1) = 6;
+    m(5,2) = 21;
+    m(5,3) = 56;
+    m(5,4) = 126;
+    m(5,5) = 252;
+    ASSERT_TRUE(isSymmetricDefinitePositive(m));
+}
+
 TEST_F(BodyBuilderTest, mass_should_be_correct)
 {
     ASSERT_DOUBLE_EQ(1E6, body->get_states().m);
