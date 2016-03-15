@@ -50,8 +50,8 @@ BodyBuilder::BodyBuilder(const YamlRotation& convention) : rotations(convention)
 
 void BodyBuilder::change_mesh_ref_frame(BodyStates& states, const VectorOfVectorOfPoints& mesh) const
 {
-    ssc::kinematics::Point translation(states.name, states.x_relative_to_mesh, states.y_relative_to_mesh, states.z_relative_to_mesh);
-    ssc::kinematics::Transform transform(translation, states.mesh_to_body, "mesh("+states.name+")");
+    const ssc::kinematics::Point translation(states.name, states.x_relative_to_mesh, states.y_relative_to_mesh, states.z_relative_to_mesh);
+    const ssc::kinematics::Transform transform(translation, states.mesh_to_body, "mesh("+states.name+")");
     states.mesh = MeshPtr(new Mesh(MeshBuilder(mesh).build()));
     const auto T = transform.inverse();
     states.mesh->nodes = (T*ssc::kinematics::PointMatrix(states.mesh->nodes, "mesh("+states.name+")")).m;
