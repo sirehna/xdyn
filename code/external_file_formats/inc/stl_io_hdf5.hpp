@@ -32,4 +32,16 @@ VectorOfVectorOfPoints readMeshFromHdf5File(
         const H5::H5File& file,
         const std::string& datasetName);
 
+void writeMeshToHdf5File(
+        const std::string& file,
+        const std::string& datasetName,
+        const Matrix3x& nodes,
+        const std::vector<Facet>& facets);
+
+void writeMeshToHdf5File(
+        const H5::H5File& file,
+        const std::string& datasetName,
+        const Matrix3x& nodes,
+        const std::vector<Facet>& facets);
+
 #endif
