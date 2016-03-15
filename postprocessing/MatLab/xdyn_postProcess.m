@@ -1,4 +1,4 @@
-function results = xdyn_postProcess(filename, plotResult)
+function simu = xdyn_postProcess(filename, plotResult)
 % XDYN_POSTPROCESS postprocesses the result of the simulator XDYN.
 %
 % 1) Create a states variables that holds all displacements of the bodies
@@ -49,48 +49,120 @@ if ~any(cmp)
     return;
 end
 outputs = info.Groups(cmp).Groups;
-results = struct;
+simu = struct;
 for i=1:numel(outputs)
     name = outputs(i).Name;
-    if strcmp(name,strcat(outputsGroupName,'/states'))
-        results.states = extractStates(filename, name, [outputsGroupName,'/t']);
+    if strcmp(name, [outputsGroupName,'/states'])
+        simu.t = extractTime(filename, [outputsGroupName,'/t']);
+        simu.states = extractStates(filename, name, [outputsGroupName,'/t']);
         if plotResult
-            plotStates(results.states);
+            plotStates(simu.states);
         end
-    elseif strcmp(name, strcat(outputsGroupName,'/waves'))
-        results.waves = tbx_wave_importWaveElevationFromHdf5(filename, name);
+    elseif strcmp(name, [outputsGroupName,'/waves'])
+        simu.waves = tbx_wave_importWaveElevationFromHdf5(filename, name);
     end
 end
+
+cmp = strcmp(inputsGroupName, {listOfGroups.Name});
+if any(cmp)
+    inputs = info.Groups(cmp).Groups;
+    simu.meshes=struct;
+    for i=1:numel(inputs)
+        name = inputs(i).Name;
+        m = [inputsGroupName,'/meshes'];
+        if strcmp(name, m)
+            hdf5Name = inputs(i).Groups.Name;
+            meshName = getNameFromHdf5Hierarchy(hdf5Name);
+            simu.meshes.(meshName) = struct;
+            simu.meshes.(meshName).points = h5read(filename,[hdf5Name '/points']);
+            simu.meshes.(meshName).nPoints = size(simu.meshes.(meshName).points,2);
+            simu.meshes.(meshName).faces = h5read(filename,[hdf5Name '/faces'])';
+        end
+    end
+end
+
+if plotResult
+    H = figure;
+    dt = simu.t(2) - simu.t(1);
+    ti = title('X-DYN');
+    set(gca,'zdir','reverse');
+    hold on
+    axis equal
+    view(3)
+    if isfield(simu,'states')
+        facecolor = 'g';
+        edgecolor = 'k';
+        hMeshes = tbx_meshes_create(simu, facecolor, edgecolor);
+        if isfield(simu,'waves')
+            waveColormap = 'cool';
+            hs = tbx_wave_create(simu.waves, waveColormap, H);
+        end
+        objs = fieldnames(simu.states);
+        nObj = numel(objs);
+        for i = 1:numel(simu.t)
+            t = simu.t(i);
+            for j = 1:nObj
+                obj = objs{j};
+                s = simu.states.(obj);
+                tran = [s.x(i);s.y(i);s.z(i)];
+                rot = tbx_geom3d_QUA_TO_ROT(s.quat(i,:));
+                nVert = (rot * simu.meshes.(obj).points + repmat(tran,1,simu.meshes.(obj).nPoints))';
+                set(hMeshes(j),'Vertices', nVert);
+            end
+            if isfield(simu,'waves')
+                hs = tbx_wave_update(hs,simu.waves, i);
+            end
+            set(ti,'String',['T = ' num2str(t)]);
+            pause(dt);
+        end
+    else if isfield(simu,'waves')
+            animateWaves(simu.waves);
+        end
+    end
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function t = extractTime(filename, time)
+t = h5read(filename, time);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function states = extractStates(filename, name, time)
 info = h5info(filename, name);
 outputs = info.Groups;
 nObject = numel(outputs);
 s = cell(1,nObject);
-states = struct('name',s,'t',s,'x',s,'y',s,'z',s,'quat',s,'eul',s);
+state = struct('t',s,'x',s,'y',s,'z',s,'quat',s,'eul',s);
+states  =struct;
 for i=1:nObject
-    states(i).name = outputs(i).Name;
-    states(i).t = h5read(filename, time);
-    states(i).x = h5read(filename, [outputs(i).Name '/X']);
-    states(i).y = h5read(filename, [outputs(i).Name '/Y']);
-    states(i).z = h5read(filename, [outputs(i).Name '/Z']);
-    states(i).quat = ...
+    name = getNameFromHdf5Hierarchy(outputs(i).Name);
+    states.(name) = state;
+    states.(name).t = h5read(filename, time);
+    states.(name).x = h5read(filename, [outputs(i).Name '/X']);
+    states.(name).y = h5read(filename, [outputs(i).Name '/Y']);
+    states.(name).z = h5read(filename, [outputs(i).Name '/Z']);
+    states.(name).quat = ...
     [h5read(filename, [outputs(i).Groups(1).Name '/Qr']),...
      h5read(filename, [outputs(i).Groups(1).Name '/Qi']),...
      h5read(filename, [outputs(i).Groups(1).Name '/Qj']),...
      h5read(filename, [outputs(i).Groups(1).Name '/Qk'])];
-    states(i).eul = tbx_geom3d_QUA_TO_EUL(states(i).quat);
+    states.(name).eul = tbx_geom3d_QUA_TO_EUL(states.(name).quat);
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function name = getNameFromHdf5Hierarchy(m)
+names = tbx_string_split(m,'/');
+name = names{end};
+return
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function H = plotStates(states)
 H = figure;
 yLabel = {'X (m)','Y (m)','Z (m)','Phi (deg)','Theta (deg)','Psi (deg)'};
 scale = [1 1 1 180/pi 180/pi 180/pi];
 bodyColor = '-bgmyk';
-nObject = length(states);
+names = fieldnames(states);
+nObject = numel(fieldnames(states));
 XYZEul = cell(1,nObject);
 for i=1:nObject
-    XYZEul{i} = [states(i).x, states(i).y, states(i).z, states(i).eul];
+    n = names{i};
+    XYZEul{i} = [states.(n).x, states.(n).y, states.(n).z, states.(n).eul];
 end
 for j=1:6
     subplot(2,3,j);
@@ -100,10 +172,29 @@ for j=1:6
     xlabel('T (s)');
     ylabel(yLabel{j});
     for i=1:nObject
-        plot(states(i).t, scale(j)*XYZEul{i}(:,j), bodyColor(i));
+        n = names{i};
+        plot(states.(n).t, scale(j)*XYZEul{i}(:,j), bodyColor(i));
     end
 end
 return
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function hMeshes = tbx_meshes_create(simu, facecolor, edgecolor)
+if nargin < 3
+    edgecolor = 'k';
+    if nargin < 2
+        facecolor = 'g';
+    end
+end
+meshNames = fieldnames(simu.meshes);
+nMeshes = numel(meshNames);
+hMeshes = zeros(1, nMeshes);
+for i = 1:nMeshes
+    meshName = meshNames{i};
+    hMeshes(i) = ...
+    patch('Faces',simu.meshes.(meshName).faces,...
+          'Vertices',simu.meshes.(meshName).points',...
+          'FaceColor',facecolor,'EdgeColor',edgecolor);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function wavesElevation = animateWaves(filename, group)
 if ischar(filename)
@@ -116,6 +207,54 @@ if ~isempty(wavesElevation)
     waveColormap = 'cool';
     tbx_wave_animate(wavesElevation, dt, waveColormap);
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function hs = tbx_wave_create(wavesElevation, waveColormap, H)
+if nargin < 3
+    H = [];
+    if nargin < 2
+        waveColormap = 'cool';
+        if nargin < 1
+            x = 0:1:100;
+            y = 0:1:200;
+            t = 0:0.1:20;
+            wavesR = tbx_wave_freeWaveGenerationDemo(1,true);
+            wavesElevation = tbx_wave_elevation(x,y,t,wavesR);
+        end
+    end
+end
+
+t = wavesElevation.t;
+x = wavesElevation.x;
+y = wavesElevation.y;
+Z = wavesElevation.eta;
+
+n = numel(t);
+if size(x,1)==1 && n>1
+    x = repmat(x,n,1);
+end
+if size(y,1)==1 && n>1
+    y = repmat(y,n,1);
+end
+
+i = 1;
+[X, Y] = ndgrid(x(i,:),y(i,:));
+if isempty(H)
+    H = figure;
+    view(3)
+end
+hs = surf(X,Y,Z(:,:,i));
+colormap(waveColormap);
+set(hs,'EdgeColor','None');
+return;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function hs = tbx_wave_update(hs,wavesElevation, i)
+t = wavesElevation.t;
+x = wavesElevation.x;
+y = wavesElevation.y;
+Z = wavesElevation.eta;
+[X,Y] = ndgrid(x(i,:),y(i,:));
+set(hs,'XData',X,'YData',Y,'ZData',Z(:,:,i));
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function tbx_wave_animate(wavesElevation, dt, waveColormap)
 % TBX_WAVE_ANIMATE animates wave elevation on a grid.
@@ -148,7 +287,6 @@ x = wavesElevation.x;
 y = wavesElevation.y;
 Z = wavesElevation.eta;
 
-
 n = numel(t);
 if size(x,1)==1 && n>1
     x = repmat(x,n,1);
@@ -158,7 +296,7 @@ if size(y,1)==1 && n>1
 end
 
 i = 1;
-[X , Y] = ndgrid(x(i,:),y(i,:));
+[X, Y] = ndgrid(x(i,:),y(i,:));
 figure
 view(3)
 hs = surf(X,Y,Z(:,:,i));
@@ -383,6 +521,65 @@ ctm=[
     q0q0+q1q1-q2q2-q3q3 , 2*(q1q2+q0q3) , 2*(q3q1-q0q2) ;
     2*(q1q2-q0q3) , q0q0-q1q1+q2q2-q3q3 , 2*(q2q3+q0q1) ;
     2*(q3q1+q0q2) , 2*(q2q3-q0q1) , q0q0-q1q1-q2q2+q3q3 ];
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function rot = tbx_geom3d_QUA_TO_ROT(q0,q1,q2,q3)
+% TBX_GEOM3D_QUA_TO_ROT computes coordinate transform matrix from
+% quaternion.
+%
+% rot = tbx_geom3d_QUA_TO_ROT(q)
+% rot = tbx_geom3d_QUA_TO_ROT(q0,q1,q2,q3)
+%
+% If the rotation that transform trihedron T1 into Trihedron T2
+% is of angle mu around an axis u [ux uy uz],
+% then the associated quaternion is defined by :
+% q=[q0 q1 q2 q3]
+% q0=cos(mu/2)
+% q1=ux * sin(mu/2)
+% q2=uy * sin(mu/2)
+% q3=uz * sin(mu/2)
+%
+% The coordinates transform matrix on output is the one that transform
+% coordinates in T1 into coordinates in T2 :
+% V_T2 = ROT_T2_T1 * V_T1
+%
+% See also tbx_geom3d_QUA_TO_CTM
+%
+% SIREHNA
+%==========================================================================
+% SVN info
+% SVN $Id: tbx_geom3d_QUA_TO_ROT.m 772 2012-12-03 19:45:48Z gj $
+% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/geom3D/tbx_geom3d_QUA_TO_ROT.m $
+%==========================================================================
+if(nargin == 1)
+    q = q0;
+    n = numel(q);
+    if(n ~= 4)
+        error('the argument should be a vector of length 4 : [q0 q1 q2 q3]');
+    end
+elseif (nargin == 4)
+    q = [q0 q1 q2 q3];
+    n = numel(q);
+    if(n ~= 4)
+        error('the 4 arguments should be scalar');
+    end
+else
+    error('there should be 1 vector [q0 q1 q2 q3] or 4 scalar arguments');
+end
+q0q0 = q(1)*q(1);
+q1q1 = q(2)*q(2);
+q2q2 = q(3)*q(3);
+q3q3 = q(4)*q(4);
+q1q2 = q(2)*q(3);
+q2q3 = q(3)*q(4);
+q3q1 = q(4)*q(2);
+q0q1 = q(1)*q(2);
+q0q2 = q(1)*q(3);
+q0q3 = q(1)*q(4);
+rot  = [
+    q0q0+q1q1-q2q2-q3q3 , 2*(q1q2-q0q3) , 2*(q3q1+q0q2) ;
+    2*(q1q2+q0q3) , q0q0-q1q1+q2q2-q3q3 , 2*(q2q3-q0q1) ;
+    2*(q3q1-q0q2) , 2*(q2q3+q0q1) , q0q0-q1q1-q2q2+q3q3];
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function varargout = tbx_geom3d_CTM_TO_EUL(c,order,epsilon)
 % TBX_GEOM3D_CTM_TO_EUL computes euler angles from coordinate transform
 % matrix.
@@ -589,6 +786,55 @@ if ~strncmp(fliplr(str),fliplr(trailingPattern),length(trailingPattern));
 end
 return;
 
+function str = tbx_string_split(str,delimiters)
+% TBX_STRING_SPLIT splits a string or a cell array of strings.
+%
+% Developped specially for Matlab 6.
+% Use the following command for MatLab 7.
+%   textscan(str,'%s','delimiter',delimiters);
+% 
+% str = tbx_string_split(str)
+% str = tbx_string_split(str,delimiters)
+%
+% Inputs:
+%  - str         : String or cell array of strings for which one wants
+%                  to white spaces.
+%  - delimiters  : [Optional] A set of characters that are used to split
+%                  the string. Default is ',;'
+%
+% Outputs:
+%  - str         : String or cell array of strings for which one wants
+%                  to white spaces.
+%
+% The function is based on strtok function
+%
+% Compliant with MatLab 6
+%
+% SIREHNA
+% GJ
+%==========================================================================
+% SVN info
+% SVN $Id: tbx_string_split.m 940 2013-05-06 16:24:36Z gj $
+% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/string/tbx_string_split.m $
+%==========================================================================
+if nargin == 1
+    delimiters = ',;';
+end
+if ischar(str)
+    str = string_split(str,delimiters);
+elseif iscell(str)
+    for i= 1:numel(str)
+        str{i} = string_split(str{i},delimiters);
+    end
+end
+return;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function strCells = string_split(str,delimiters)
+strCells={};
+while ~isempty(str)
+    [strCells{end+1},str] = strtok(str,delimiters);
+end
+return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function tbx_assert(cond,msg)
 % TBX_ASSERT asserts a condition associated to a message.
