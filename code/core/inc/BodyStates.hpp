@@ -49,7 +49,7 @@ struct BodyStates : AbstractStates<History>
     ssc::kinematics::RotationMatrix mesh_to_body;                  //!< Rotation matrix from mesh to body
     ssc::kinematics::PointMatrixPtr M;                             //!< For the wave model (just the points in the mesh)
     MeshIntersectorPtr intersector;                                //!< Allows us to iterate on all emerged or immersed facets
-    EPoint g_in_mesh_frame;                           //!< Unit vertical vector, expressed in the body's mesh frame
+    EPoint g_in_mesh_frame;                                        //!< Unit vertical vector, expressed in the body's mesh frame
     ssc::kinematics::Point hydrodynamic_forces_calculation_point;  //!< Point of expression of hydrodynamic forces (except Froude-Krylov & hydrostatic)
 
     ssc::kinematics::EulerAngles get_angles(const YamlRotation& c) const;
