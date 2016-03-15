@@ -5,16 +5,14 @@
  *      Author: cady
  */
 
-#include <ssc/kinematics.hpp>
-#include <ssc/exception_handling.hpp>
+#include "EnvironmentAndFrames.hpp"
 
 #include "InvalidInputException.hpp"
 #include "SurfaceElevationInterface.hpp"
-#include "EnvironmentAndFrames.hpp"
 #include "Observer.hpp"
 
+#include <ssc/kinematics.hpp>
 using namespace ssc::kinematics;
-
 
 EnvironmentAndFrames::EnvironmentAndFrames() : w(),
                                                k(KinematicsPtr(new Kinematics())),
