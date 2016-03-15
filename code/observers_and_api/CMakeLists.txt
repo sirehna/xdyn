@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8.8)
 project(observers_and_api)
 
-INCLUDE(CMakeListsGenerateDemoMatLab.txt)
-INCLUDE(CMakeListsGenerateDemoPython.txt)
+include(CMakeListsGenerateDemoMatLab.txt)
+include(CMakeListsGenerateDemoPython.txt)
 
 set(SRC src/simulator_api.cpp
         src/ListOfObservers.cpp
@@ -28,16 +28,16 @@ set(SRC src/simulator_api.cpp
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
-IF (NOT(MSVC))
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-ENDIF()
+if(NOT(MSVC))
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+endif()
 
 include_directories(inc)
 include_directories(SYSTEM ${HDF5_INCLUDE_DIR})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_hdf5_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(SYSTEM ${base91x_INCLUDE_DIRS})
+include_directories(SYSTEM ${base91x_INCLUDE_DIRS})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 include_directories(${exceptions_INCLUDE_DIRS})
 include_directories(${ssc_INCLUDE_DIRS})
@@ -53,8 +53,7 @@ include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${external_file_formats_INCLUDE_DIRS})
 #include_directories(${websocket_INCLUDE_DIRS})
 
-
-ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
+add_library(${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
 add_subdirectory(unit_tests)
