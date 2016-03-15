@@ -1,12 +1,9 @@
 #ifndef HDF5OBSERVER_HPP_
 #define HDF5OBSERVER_HPP_
 
-#include <map>
-#include <string>
-#include <vector>
-#include "H5Cpp.h"
 #include "Observer.hpp"
-#include "h5_element.hpp"
+#include "H5Cpp.h"
+
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
