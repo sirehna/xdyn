@@ -4,7 +4,6 @@
 #include <string>
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
-#include <ssc/kinematics.hpp>
 #include "H5Cpp.h"
 #include "SurfaceElevationGrid.hpp"
 
