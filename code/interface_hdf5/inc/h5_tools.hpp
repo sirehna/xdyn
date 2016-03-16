@@ -58,6 +58,11 @@ namespace H5_Tools
             const H5::H5File& file,
             const std::string& datasetName,
             const std::string& stringToWrite);
+
+    void writeString(
+            const std::string& filename,
+            const std::string& datasetName,
+            const std::string& stringToWrite);
 }
 
 

@@ -1,5 +1,5 @@
-#ifndef H5_TOOLS_HPP
-#define H5_TOOLS_HPP
+#ifndef H5_TOOLS_H
+#define H5_TOOLS_H
 
 #include <stddef.h>
 #include <stdio.h>

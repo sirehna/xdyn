@@ -191,3 +191,11 @@ void H5_Tools::writeString(
     H5::DataSet d = H5_Tools::createDataSet(file, datasetName, strdatatype, sid1);
     d.write((void*)stringToWrite.c_str(), strdatatype);
 }
+
+void H5_Tools::writeString(
+        const std::string& filename,
+        const std::string& datasetName,
+        const std::string& stringToWrite)
+{
+    H5_Tools::writeString(H5::H5File(filename,H5F_ACC_RDWR), datasetName, stringToWrite);
+}
