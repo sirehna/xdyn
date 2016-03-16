@@ -71,6 +71,10 @@ void fill(YamlOutput& out, const std::string& body_name)
     out.data.push_back(customize("qi", body_name));
     out.data.push_back(customize("qj", body_name));
     out.data.push_back(customize("qk", body_name));
+
+    out.data.push_back(customize("phi", body_name));
+    out.data.push_back(customize("theta", body_name));
+    out.data.push_back(customize("psi", body_name));
 }
 
 std::vector<std::string> get_body_names(const std::string yaml)

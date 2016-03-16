@@ -55,7 +55,7 @@ TEST_F(parse_outputTest, can_create_list_of_all_outputs_for_a_given_yaml)
     const YamlOutput res = generate_default_outputter_with_all_states_in_it(test_data::full_example(), "");
     ASSERT_EQ("", res.filename);
     ASSERT_EQ("tsv", res.format);
-    ASSERT_EQ(13+1,res.data.size());
+    ASSERT_EQ(13+1+3,res.data.size());
     ASSERT_EQ("t", res.data.at(0));
     ASSERT_EQ("x(body 1)", res.data.at(1));
     ASSERT_EQ("y(body 1)", res.data.at(2));
@@ -70,6 +70,9 @@ TEST_F(parse_outputTest, can_create_list_of_all_outputs_for_a_given_yaml)
     ASSERT_EQ("qi(body 1)", res.data.at(11));
     ASSERT_EQ("qj(body 1)", res.data.at(12));
     ASSERT_EQ("qk(body 1)", res.data.at(13));
+    ASSERT_EQ("phi(body 1)", res.data.at(14));
+    ASSERT_EQ("theta(body 1)", res.data.at(15));
+    ASSERT_EQ("psi(body 1)", res.data.at(16));
 }
 
 TEST_F(parse_outputTest, format_is_HDF5_if_extension_is_h5)
