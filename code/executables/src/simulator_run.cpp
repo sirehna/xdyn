@@ -72,8 +72,8 @@ void catch_exceptions(const std::function<void(void)>& f, const InputData& input
 }
 
 #include "stl_io_hdf5.hpp"
-void observe_init(const Sim& sys, std::vector<YamlOutput>& observers);
-void observe_init(const Sim& sys, std::vector<YamlOutput>& observers)
+void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys);
+void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys)
 {
     for (const auto observer:observers)
     {
@@ -102,8 +102,8 @@ void run_simulation(const InputData& input_data)
         const auto yaml = yaml_reader.get_contents();
         auto sys = get_system(yaml,input_data.tstart,command_listener);
         auto observers_description = get_observers_description(yaml, input_data);
-        auto observers = ListOfObservers(observers_description);
-        observe_init(sys, observers_description);
+        serialize_context_if_necessary(observers_description, sys);
+        ListOfObservers observers(observers_description);
         solve(input_data, sys, observers);
     }};
     if (input_data.catch_exceptions) catch_exceptions(f, input_data);
