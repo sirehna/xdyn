@@ -1,9 +1,11 @@
 # Giration
 
 ## Scénario
+
 {% set scenario_filename = 'reference_data_for_validation/Giration/anthineas_giration.yml' %}
 
 ## Configuration de X-DYN
+
 Le fichier de configuration a la forme suivante :
 
 {% set yaml_data = load(scenario_filename)%}
@@ -16,6 +18,7 @@ On simule 50 secondes par pas de 0.2 secondes :
 {% set sos_res = xls('reference_data_for_validation/Giration/comparaison_giration_20150224.xlsx',sheetname='SOS') %}
 
 ## Comparaison des positions et attitudes dans le plan X,Y avec le simulateur SOS
+
 {% set plot_xdyn_xy = prepare_plot_data(xdyn_res, name='xdyn', x = 'X', y = 'Y')%}
 {% set plot_sos_xy  = prepare_plot_data(sos_res, name='SOS',x = 'x (m)', y = 'y (m)')%}
 {% set graph_XY     = cartesian_graph([plot_xdyn_xy, plot_sos_xy], x='x (m)', y='y (m)', p={'grid': True, 'axis':'equal'}) %}
