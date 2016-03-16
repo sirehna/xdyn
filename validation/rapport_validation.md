@@ -209,7 +209,7 @@ On simule 50 secondes par pas de 0.2 secondes :
 ## Comparaison des positions et attitudes dans le plan X,Y avec le simulateur SOS
 {% set plot_xdyn_xy = prepare_plot_data(xdyn_res, name='xdyn', x = 'X', y = 'Y')%}
 {% set plot_sos_xy = prepare_plot_data(sos_trials, name='SOS',x = 'x (m)', y = 'y (m)')%}
-{% set graph_XY     = cartesian_graph([plot_xdyn_xy, plot_sos_xy], x='x (m)', y='y (m)$', p={'grid': True}) %}
+{% set graph_XY     = cartesian_graph([plot_xdyn_xy, plot_sos_xy], x='x (m)', y='y (m)', p={'grid': True}) %}
 {{layout(size=(1,1), graphs=[(graph_XY, (0,0))], title="Position")}}
 
 {% set plot_xdyn_tpsi = prepare_plot_data(xdyn_res, name='xdyn', x = 't', y = 'PSI')%}
