@@ -8,79 +8,86 @@ function simu = xdyn_postProcess(filename, plotResult)
 % Inputs:
 %   - filename    [Optional] : HDF5 result filename.
 %                              Name of the group containg results
-%   - plotResult  [Optional] :
+%   - plotResult  [Optional] : Boolean used to plot the results
 %
 % Outputs:
 %   states : Structure variable that contains all the displacements of the
 %            n bodies simulated
 %
 % Example:
-%   - results = xdyn_postProcess('simu.hdf5');
-%   - results = xdyn_postProcess({'simu.hdf5', '/outputs'});
-%   - results = xdyn_postProcess({'simu.hdf5', '/outputs'}), true);
+%   - simu = xdyn_postProcess('simu.hdf5');
+%   - simu = xdyn_postProcess({'simu.hdf5', '/outputs', '/inputs'});
+%   - simu = xdyn_postProcess({'simu.hdf5', '/outputs', '/inputs'}), true);
+%
+%   - simu = xdyn_postProcess(simu, true);
 %
 % This function does not rely on any other functions. This single file
-% contains all the code necessary to postprocess a HDF5 file
+% contains all the code necessary to postprocess a HDF5 file.
 if nargin < 2
     plotResult = true;
     if nargin == 0
         filename = 'hdf5Filename_.h5';
     end
 end
-if ischar(filename)
-    filename = {filename,'/outputs','/inputs'};
-end
-tbx_assert(length(filename)==3);
-outputsGroupName = filename{2};
-inputsGroupName = filename{3};
-filename = filename{1};
-if exist(filename,'file')~=2
-    disp('Input file does not exist');
-    return
-end
-outputsGroupName = ensureStringHasHeadingPattern(outputsGroupName, '/');
-inputsGroupName = ensureStringHasHeadingPattern(inputsGroupName, '/');
+if isstruct(filename)
+    simu = filename;
+else
+    if ischar(filename)
+        filename = {filename,'/outputs','/inputs'};
+    end
+    tbx_assert(length(filename)==3);
+    outputsGroupName = filename{2};
+    inputsGroupName = filename{3};
+    filename = filename{1};
+    if exist(filename,'file')~=2
+        disp('Input file does not exist');
+        return
+    end
+    outputsGroupName = ensureStringHasHeadingPattern(outputsGroupName, '/');
+    inputsGroupName = ensureStringHasHeadingPattern(inputsGroupName, '/');
 
-info = h5info(filename);
-listOfGroups = info.Groups;
-cmp = strcmp(outputsGroupName, {listOfGroups.Name});
-if ~any(cmp)
-    disp('Data group name does not exit');
-    return;
-end
-outputs = info.Groups(cmp).Groups;
-simu = struct;
-for i=1:numel(outputs)
-    name = outputs(i).Name;
-    if strcmp(name, [outputsGroupName,'/states'])
-        simu.t = extractTime(filename, [outputsGroupName,'/t']);
-        simu.states = extractStates(filename, name, [outputsGroupName,'/t']);
-        if plotResult
-            plotStates(simu.states);
+    info = h5info(filename);
+    simu = struct;
+    simu.info = h5readatt(filename,'/','Description');
+    listOfGroups = info.Groups;
+    cmp = strcmp(outputsGroupName, {listOfGroups.Name});
+    if ~any(cmp)
+        disp('Data group name does not exit');
+        return;
+    end
+    outputs = info.Groups(cmp).Groups;
+    for i=1:numel(outputs)
+        name = outputs(i).Name;
+        if strcmp(name, [outputsGroupName,'/states'])
+            simu.t = extractTime(filename, [outputsGroupName,'/t']);
+            simu.states = extractStates(filename, name, [outputsGroupName,'/t']);
+        elseif strcmp(name, [outputsGroupName,'/waves'])
+            simu.waves = tbx_wave_importWaveElevationFromHdf5(filename, name);
         end
-    elseif strcmp(name, [outputsGroupName,'/waves'])
-        simu.waves = tbx_wave_importWaveElevationFromHdf5(filename, name);
+    end
+
+    cmp = strcmp(inputsGroupName, {listOfGroups.Name});
+    if any(cmp)
+        inputs = info.Groups(cmp).Groups;
+        simu.meshes=struct;
+        for i=1:numel(inputs)
+            name = inputs(i).Name;
+            m = [inputsGroupName,'/meshes'];
+            if strcmp(name, m)
+                hdf5Name = inputs(i).Groups.Name;
+                meshName = getNameFromHdf5Hierarchy(hdf5Name);
+                simu.meshes.(meshName) = struct;
+                simu.meshes.(meshName).points = h5read(filename,[hdf5Name '/points']);
+                simu.meshes.(meshName).nPoints = size(simu.meshes.(meshName).points,2);
+                simu.meshes.(meshName).faces = h5read(filename,[hdf5Name '/faces'])';
+            end
+        end
     end
 end
 
-cmp = strcmp(inputsGroupName, {listOfGroups.Name});
-if any(cmp)
-    inputs = info.Groups(cmp).Groups;
-    simu.meshes=struct;
-    for i=1:numel(inputs)
-        name = inputs(i).Name;
-        m = [inputsGroupName,'/meshes'];
-        if strcmp(name, m)
-            hdf5Name = inputs(i).Groups.Name;
-            meshName = getNameFromHdf5Hierarchy(hdf5Name);
-            simu.meshes.(meshName) = struct;
-            simu.meshes.(meshName).points = h5read(filename,[hdf5Name '/points']);
-            simu.meshes.(meshName).nPoints = size(simu.meshes.(meshName).points,2);
-            simu.meshes.(meshName).faces = h5read(filename,[hdf5Name '/faces'])';
-        end
-    end
+if plotResult
+    plotStates(simu.states);
 end
-
 if plotResult
     H = figure;
     dt = simu.t(2) - simu.t(1);
@@ -115,9 +122,8 @@ if plotResult
             set(ti,'String',['T = ' num2str(t)]);
             pause(dt);
         end
-    else if isfield(simu,'waves')
-            animateWaves(simu.waves);
-        end
+    elseif isfield(simu,'waves')
+        animateWaves(simu.waves);
     end
 end
 
@@ -163,6 +169,9 @@ XYZEul = cell(1,nObject);
 for i=1:nObject
     n = names{i};
     XYZEul{i} = [states.(n).x, states.(n).y, states.(n).z, states.(n).eul];
+end
+if nObject==1
+    bodyColor = 'k';
 end
 for j=1:6
     subplot(2,3,j);
@@ -792,7 +801,7 @@ function str = tbx_string_split(str,delimiters)
 % Developped specially for Matlab 6.
 % Use the following command for MatLab 7.
 %   textscan(str,'%s','delimiter',delimiters);
-% 
+%
 % str = tbx_string_split(str)
 % str = tbx_string_split(str,delimiters)
 %
