@@ -78,7 +78,7 @@ void run_simulation(const InputData& input_data)
         ssc::data_source::DataSource command_listener;
         if (not(input_data.command_file.empty()))
         {
-            command_listener = listen_to_file(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input_data.command_file)).get_contents());
+            command_listener = listen_to_file(ssc::text_file_reader::TextFileReader(input_data.command_file).get_contents());
         }
         const auto yaml = yaml_reader.get_contents();
         auto sys = get_system(yaml,input_data.tstart,command_listener);
