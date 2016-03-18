@@ -38,17 +38,20 @@ end
 if plotResult
     plotStates(simu.states);
 end
+scale = 1;
 if plotResult
     H = figure;
-    dt = simu.t(2) - simu.t(1);
+    set(H,'WindowKeyPressFcn',@funPauseCallback);
+    set(H,'UserData',false);
+    dt = scale*(simu.t(2) - simu.t(1));
     ti = title('X-DYN');
     set(gca,'zdir','reverse');
     hold on
     axis equal
-    view(3)
+    view(3);
     if isfield(simu,'states')
         facecolor = 'g';
-        edgecolor = 'k';
+        edgecolor = 'None';
         hMeshes = tbx_meshes_create(simu, facecolor, edgecolor);
         if isfield(simu,'waves')
             waveColormap = 'cool';
@@ -70,13 +73,31 @@ if plotResult
                 hs = tbx_wave_update(hs,simu.waves, i);
             end
             set(ti,'String',['T = ' num2str(t)]);
-            pause(dt);
+            funPause(H,dt);
         end
     elseif isfield(simu,'waves')
         animateWaves(simu.waves);
     end
 end
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function funPause(H,dt)
+ud = get(H,'UserData');
+if ~ud
+    pause(dt);
+else
+    pause;
+end
+drawnow;
+figure(H);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function funPauseCallback(H,~)
+ud = get(H,'UserData');
+if isempty(ud)
+    set(H,'UserData',false);
+end
+ud = ~get(H,'UserData');
+set(H,'UserData',ud);
+figure(H);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function simu = xdyn_loadResultsFromHdf5File(filename)
 if ischar(filename)
@@ -87,8 +108,8 @@ outputsGroupName = filename{2};
 inputsGroupName = filename{3};
 filename = filename{1};
 if exist(filename,'file')~=2
-    disp('Input file does not exist');
-    return
+    error(['Input file ''' filename '''does not exist']);
+
 end
 outputsGroupName = ensureStringHasHeadingPattern(outputsGroupName, '/');
 inputsGroupName = ensureStringHasHeadingPattern(inputsGroupName, '/');
@@ -252,7 +273,7 @@ i = 1;
 [X, Y] = ndgrid(x(i,:),y(i,:));
 if isempty(H)
     H = figure;
-    view(3)
+    view(3);
 end
 hs = surf(X,Y,Z(:,:,i));
 colormap(waveColormap);
@@ -260,7 +281,6 @@ set(hs,'EdgeColor','None');
 return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function hs = tbx_wave_update(hs,wavesElevation, i)
-t = wavesElevation.t;
 x = wavesElevation.x;
 y = wavesElevation.y;
 Z = wavesElevation.eta;
