@@ -11,7 +11,7 @@ Le problème physique considéré dans cet exemple est celui du calcul de
 l'élévation d'une masse ponctuelle soumise uniquement à l'accélération de la
 pesanteur.
 
-### Ecriture du fichier de configuration du simulateur.
+### Écriture du fichier de configuration du simulateur.
 
 Le fichier d'entrée du simulateur est au format [YAML](http://www.yaml.org) (une extension du format
 JSON).
@@ -222,4 +222,5 @@ On peut chaîner les post-traitements (tracés) à la suite de la simulation :
 
 ### Résultats
 
-![Elévation au cours du temps](images/tutorial_01.svg)
+![Élévation au cours du temps](images/tutorial_01.svg)
+

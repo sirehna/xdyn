@@ -197,7 +197,7 @@ deux cas. Les différences se situent plutôt au niveau des moments et sont
 d'autant plus notables que les mailles sont grandes par rapport au solide (à la
 limite, quand la surface des facettes tend vers zéro, les deux modèles
 coïncident). La différence la plus flagrante est obtenue lorsque l'on simule
-les oscillations en roulis (c'est-à-dire autour de $x$) d'un cubé maillé par
+les oscillations en roulis (c'est-à-dire autour de $x$) d'un cube maillé par
 six triangles rectangles : on obtient pour le modèle `fast` des déplacements
 parasites suivant $y$ qui n'apparaissent pas avec le modèle `exact`.
 
@@ -215,7 +215,7 @@ toutes les facettes, on calcule le volume immergé et son centroïde et l'on
 
 $$F_{\mbox{hs}} = \rho\cdot V\cdot \mathbf{g}$$
 
-Ce modèle à l'avantage de forcer la résultante à être suivant $z$.
+Ce modèle a l'avantage de forcer la résultante à être suivant $z$.
 
 Ce modèle remplacera à terme les modèles `non-linear hydrostatic (fast)` et
 `non-linear hydrostatic (exact)` parce qu'il est à la fois plus précis que
@@ -244,7 +244,7 @@ et pour le nouveau modèle :
 
 Le nouveau modèle peut également sortir la position (Bx, By, Bz) du centre de
 carène (immergé). Il suffit, dans la liste `data` de la section `output`, de
-rajouter `Bx` et/ou `By` et/out `Bz`.
+rajouter `Bx` et/ou `By` et/ou `Bz`.
 
 Un exemple de simulation de solide soumis aux efforts hydrostatiques
 (oscillations en immersion) est disponible dans les
@@ -252,6 +252,7 @@ Un exemple de simulation de solide soumis aux efforts hydrostatiques
 
 
 ### Références
+
 Introduction à la mécanique des fluides - CVG 2516, Statique des Fluides, Ioan
 NISTOR
 
@@ -371,13 +372,13 @@ constante et que sa gite est nulle.
 On suppose enfin que la résistance à l'avancement est colinéaire à la
 projection sur le plan horizontal de la force propulsive.
 
-Etant données ces hypothèses, on parle de __résistance de remorquage__ à une
+Étant données ces hypothèses, on parle de __résistance de remorquage__ à une
 vitesse donnée et on note $R_T$ la force nécessaire pour remorquer le navire à
 cette vitesse en eau calme.
 
 ### Modélisation
 
-Le paradoxe de d'Alembert est que lorsque l'on remorque un objet partiellement
+Le paradoxe d'Alembert est que lorsque l'on remorque un objet partiellement
 immergé dans un fluide supposé parfait, sa résistance est nulle.
 Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique
 que :
@@ -407,7 +408,7 @@ $$\tau_{\mbox{res}} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\
 Ce modèle est accessible par la clef [`resistance
 curve`](#r%C3%A9sistance-%C3%A0-lavancement).
 
-Les efforts de résistance à l'avancement est renseignée en fonction de la
+Les efforts de résistance à l'avancement sont renseignés en fonction de la
 vitesse d'avance (axe longitudinal uniquement), c'est-à-dire la projection
 suivant l'axe $x$ du repère body de la vitesse du navire par rapport au repère
 NED. L'interpolation est faite en utilisant des splines cubiques.
@@ -549,6 +550,7 @@ documentation](#efforts-damortissement-visqueux).
 
 
 ### Références
+
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 276
 - *Sea Loads on Ships And Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, page 223
 - *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 223
@@ -684,7 +686,7 @@ nom est passé à l'exécutable de simulation en utilisant le flag `-c` (ou
   P/D: {unit: 1, values: [0.7,0.7,0.8]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La valeur renseigné dans `name` doit correspondre à l'identifiant utilisé dans
+La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans
 la section `controlled forces`. Pour chaque effort contrôlé (identifié par
 `name`), on donne une liste d'instants (en secondes) puis, pour chaque
 commande, les valeurs à ces instants. Il doit donc y avoir, pour chaque
@@ -716,11 +718,11 @@ Voici un exemple de fichier de commande :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-## Modèles de manoeuvrabilité
+## Modèles de manœuvrabilité
 
 ### Description
 
-Le but de ce modèle d'effort est de pouvoir écrire un modèle de manoeuvrabilité
+Le but de ce modèle d'effort est de pouvoir écrire un modèle de manœuvrabilité
 de façon assez générique, sans avoir à recompiler le code source. Des
 expressions simples des états et du temps peuvent être calculées, par exemple:
 
@@ -778,7 +780,7 @@ expressions simples des états et du temps peuvent être calculées, par exemple
 connu (dont le nom est donné par `frame` au repère dans lequel sont exprimés
 les efforts. Le torseur est automatiquement déplacé au
 centre de gravité (point (0,0,0) du repère "body").
-`commands`: optionnel. Le modèle de manoeuvrabilité peut accepter des commandes
+`commands`: optionnel. Le modèle de manœvrabilité peut accepter des commandes
 externes. Il peut aussi utiliser les commandes de n'importe quel autre modèle
 d'effort (mais il faut pour cela bien renseigner le nom complet de la commande,
 soit par exemple `PropRudd(rpm)`)
@@ -804,7 +806,7 @@ renseignées dans la section `environmental constants` du fichier YAML.
 ### Grammaire
 
 De façon plus formelle, les modèles doivent obéir à la grammaire suivante
-(format "Extended Bachus-Naur" ou EBNF) :
+(format "Extended Backus-Naur Form" ou EBNF) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.ebnf}
 expr                = term  operator_and_term*
@@ -828,7 +830,7 @@ identifier          = alpha (alphanum | '_')*
 
 En 1937, l'ingénieur néerlandais L. Troost, alors employé du Maritime Research
 Institue Netherlands (MARIN) basé à Wageningen (Pays-Bas), créa les hélices
-Wageningen série B dont la forme est simple et les performances bonnes.  Afin
+Wageningen série B dont la forme est simple et les performances bonnes. Afin
 d'établir une base pour la conception d'hélices, il publia en 1938 puis en 1940
 une série de tests systématiques en eau libre de 120 hélices "série B", qui
 sont, à ce jour, les séries de test en eau libre les plus connus, bien que
@@ -880,12 +882,12 @@ pas des équations de Navier-Stokes. Le postulat est, qu'étant données les
 hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
 dépende :
 
-- Du diamètre $D$ (en m) de celle-ci
-- De la vitesse $V_a$ d'avance du fluide (en m/s)
-- De la vitesse de rotation $n$ de l'hélice (en Hz)
-- De la densité $\rho$ du fluide (en kg/m^3)
-- De la viscosité $\mu$ du fluide
-- De la pression statique du fluide $p_0-e$ au niveau de l'hélice
+- du diamètre $D$ (en m) de celle-ci
+- de la vitesse $V_a$ d'avance du fluide (en m/s)
+- de la vitesse de rotation $n$ de l'hélice (en Hz)
+- de la densité $\rho$ du fluide (en kg/m^3)
+- de la viscosité $\mu$ du fluide
+- de la pression statique du fluide $p_0-e$ au niveau de l'hélice
 
 On aurait donc :
 
@@ -941,12 +943,12 @@ $$w=1-\frac{V_a}{V_s}$$
 
 $w$ est constant en régime permanent, lorsque l'hélice opère dans les
 conditions nominales. Des ordres de grandeurs de ce coefficient sont donnés par
-exemple dans Carlton, pages 70,72,73 et 74.
+exemple dans Carlton, pages 70, 72, 73 et 74.
 
 En outre, l'hélice accroît la [résistance à
 l'avancement](#r%C3%A9sistance-%C3%A0-lavancement)
 : en effet, elle diminue la pression à l'arrière du navire, ce qui augmente la
-poussée nécessaire pour la propulsion. L'helice accélérant le fluide, il existe
+poussée nécessaire pour la propulsion. L'hélice accélérant le fluide, il existe
 des frottements supplémentaires sur la coque. Pour prendre en compte ces
 phénomènes, on introduit le coefficient de succion $t$ tel que :
 
@@ -1032,9 +1034,9 @@ modifié.
 ### Expression des efforts
 
 Les efforts générés par l'hélice sont calculés dans un repère spécifique
-renseigné dans la section [`position of propeller frame`](#wageningen-b-series) du fichier YAML. La
-poussée (c'est-à-dire l'effort généré par l'hélice sur le navire) est faite
-dans le sens des $x$ positifs.
+renseigné dans la section [`position of propeller frame`](#wageningen-b-series)
+du fichier YAML. La poussée (c'est-à-dire l'effort généré par l'hélice sur
+le navire) est faite dans le sens des $x$ positifs.
 
 ![](images/reperes_helices.svg)
 
@@ -1049,7 +1051,7 @@ dans le repère de l'hélice :
 
 ![](images/rotation_helices.svg)
 
-Le torseur des efforts générés par l'hélice et subit par le navire
+Le torseur des efforts générés par l'hélice et subis par le navire
 (apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
 exprimé dans le repère de l'hélice, est donc :
 
@@ -1231,7 +1233,7 @@ gravité du corps.
 L'effort généré suivant l'axe X est $F_x = K_{x}\cdot (x_{\mbox{co}}-x) -
 K_u\cdot u = \sigma_{xx}\ddot{x}$ où $\sigma_{xx}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'axe $x$.
-L'effort généré suivant l'aye X est $F_y = K_{y}\cdot (y_{\mboy{co}}-y) -
+L'effort généré suivant l'axe Y est $F_y = K_{y}\cdot (y_{\mboy{co}}-y) -
 K_v\cdot v = \sigma_{yy}\ddot{y}$ où $\sigma_{yy}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'aye $y$.
 Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\mbox{co}}-\psi) - K_r\cdot r =
@@ -1241,29 +1243,40 @@ Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\mbox{co}}-\psi) - K_r\cdot 
 Dans le domaine de Laplace, les équations du contrôleur s'écrivent :
 
 $$\sigma_{xx}p^2 + K_u p + K_{x} = 0$$
+
 $$\sigma_{yy}p^2 + K_u p + K_{y} = 0$$
+
 $$\sigma_{zz}p^2 + K_r p + K_{\psi} = 0$$
 
 ou encore, sous forme canonique :
 
 $$p^2 + 2\zeta_x\omega_x p + \omega_x^2 = 0$$
+
 $$p^2 + 2\zeta_y\omega_y p + \omega_y^2 = 0$$
+
 $$p^2 + 2\zeta_{psi}\omega_{\psi} p + \omega_{\psi}^2 = 0$$
 
 d'où
 
 $$K_{x} = \sigma_{xx} \omega_x^2$$ et $$K_u= 2\zeta_x\omega_x\sigma_{xx}$$
+
 $$K_{y} = \sigma_{yy} \omega_y^2$$ et $$K_v= 2\zeta_y\omega_y\sigma_{yy}$$
+
 $$K_{\psi} = \sigma_{zz} \omega_{\psi}^2$$ et $$K_r= 2\zeta\omega_{\psi}\sigma_{zz}$$
 
 On peut exprimer ces gains en fonction de l'amortissement $\zeta$ et du temps de
 réponse $T$ donné par $T=\frac{2\pi}{\omega}$.
 
 $$K_{x} = \sigma_{xx}\left(\frac{2\pi}{T_x}\right)^2$$
+
 $$K_{u} = 2\zeta\sigma_{xx}\frac{2\pi}{T_x}$$
+
 $$K_{y} = \sigma_{yy}\left(\frac{2\pi}{T_y}\right)^2$$
+
 $$K_{v} = 2\zeta\sigma_{yy}\frac{2\pi}{T_y}$$
+
 $$K_{\psi} = \sigma_{zz}\left(\frac{2\pi}{T_{\psi}}\right)^2$$
+
 $$K_{r} = 2\zeta\sigma_{zz}\frac{2\pi}{T_{\psi}}$$
 
 Le cap $\psi_{\mbox{co}}$ est donné dans le repère NED.
@@ -1306,6 +1319,7 @@ Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
 ## Hélice et safran
 
 ### Description
+
 Ce modèle décrit l'ensemble constitué d'une hélice Wageningen et d'un safran.
 Les deux sont utilisés ensemble car le modèle de safran n'a de sens que
 lorsqu'il est utilisé avec une hélice (il utilise les informations calculées sur le
@@ -1341,6 +1355,7 @@ Dans le repère lié au safran, celui-ci ne crée qu'une résultante suivant les
 Les composantes $F_x$ et $F_y$ de cette résultantes s'expriment sous la forme :
 
 $$F_x = -\mbox{Lift}(V_s, C_l, \alpha, S)\cdot\sin(\alpha) - \mbox{Drag}(V_s, C_d, \alpha, S)\cdot\cos(\alpha)$$
+
 $$F_y = +\mbox{Lift}(V_s, C_l, \alpha, S)\cdot\cos(\alpha) - \mbox{Drag}(V_s, C_d, \alpha, S)\cdot\sin(\alpha)$$
 
 La vitesse $V_s$ et l'aire $S$ sont calculées différemment suivant que l'on
@@ -1354,6 +1369,7 @@ du safran $\beta$ :
 $$\alpha = \beta - a(V_S) = \beta - atan2({V_S}_x, {V_S}_y)$$
 
 $$\mbox{Lift}(V_S, C_l, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cl(\alpha)\cos(\alpha) K_{\mbox{lift}}$$
+
 $$\mbox{Drag}(V_S, C_d, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cd(\alpha)\cos(\alpha) K_{\mbox{drag}}$$
 
 Le coefficient $\cos(\alpha)$ permet de réduire l'efficacité du gouvernail lorsque $\alpha$ devient important.
@@ -1380,11 +1396,13 @@ On écrit l'équation de Bernoulli en amont du safran, entre $P_0$ et $P_1$, pui
 en aval du safran, entre $P_1'$ et $P_2$ :
 
 $$P_0 + \frac{1}{2}\rho V_a^2 = P_1 + \frac{1}{2}\rho V_1^2$$
+
 $$P_1' + \frac{1}{2}\rho V_1^2 = P_2 + \frac{1}{2}\rho V_2^2$$
 
 d'où
 
 $$P_1' = P_2 + \frac{1}{2}\rho V_2^2 - \frac{1}{2}\rho V_1^2$$
+
 $$P_1 = P_0 + \frac{1}{2}\rho V_a^2 - \frac{1}{2}\rho V_1^2$$
 
 puis
@@ -1403,7 +1421,7 @@ On en déduit l'expression de $V_2$ :
 
 $$V_2 = \sqrt{V_a^2 + \frac{2T}{\rho A}}$$
 
-La vitesse $V_1$ au niveau du safran peut être déduit de l'égalité de deux
+La vitesse $V_1$ au niveau du safran peut être déduite de l'égalité de deux
 expressions de $T$ :
 
 - D'une part, $T = \rho A V_1 (V_2 - V_a)$
@@ -1464,7 +1482,7 @@ Cette vitesse $u_{RS}$ a été calculée en faisant les hypothèses suivantes :
 - L'hélice possède un nombre infini de lames
 - Pas de modification de la vitesse radiale par l'hélice
 
-On constate en pratique des écarts pouvant atteindre 30% entre $u_{RS}$ et les
+On constate en pratique des écarts pouvent atteindre 30% entre $u_{RS}$ et les
 mesures réalisées lors d'essais. C'est pourquoi on multiplie la vitesse $u_{RS}$
 par un facteur $RF$ appelé "facteur de réduction" (cf. eq 11.1 p.? 371 *Marine
 Rudders & Control Surfaces*) :
@@ -1485,7 +1503,10 @@ où $V_a = (1-w)\cdot u$, $w$ désignant le coefficient de sillage.
 #### Calcul de $C_l$
 
 On introduit le rapport de forme $\Lambda$ (cf. *Manoeuvring Technical Manual*
-p. 76) $$\Lambda = K_{\Lambda}\frac{b^2}{A_R}$$
+p. 76)
+
+$$\Lambda = K_{\Lambda}\frac{b^2}{A_R}$$
+
 où $K_{\Lambda}$ est un paramètre renseigné par l'utilisateur.
 
 On utilise la formule de Soeding (cf. *Manoeuvring Technical Manual*, éq. 1.2.8
@@ -1588,10 +1609,10 @@ nouveau ici (hormis `model`). On a les paramètres supplémentaires suivants :
 
 Ce modèle a trois commandes :
 
-- La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
-par `rpm`.
-- Le ratio "pas sur diamètre", défini par `P/D`
-- L'angle du safran, défini par `beta`
+- la vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
+par `rpm`,
+- le ratio "pas sur diamètre", défini par `P/D`,
+- l'angle du safran, défini par `beta`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - name: controller

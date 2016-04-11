@@ -12,7 +12,7 @@ amortissement. Le navire est lâché sans vitesse initiale au-dessus de la
 surface libre (supposée plane) et va donc réaliser des oscillations
 non-amorties en immersion.
 
-### Ecriture du fichier de configuration du simulateur.
+### Écriture du fichier de configuration du simulateur.
 
 Nous documentons ici uniquement les changements par rapport au
 [tutoriel 1](##tutoriel-1-balle-en-chute-libre).
@@ -193,7 +193,7 @@ La simulation peut maintenant être lancée comme suit :
 Voici les résultats avec le [modèle hydrostatique
 approché](##calcul-du-moment) on obtient :
 
-![Elévation au cours du temps](images/tutorial_02_fast_hydrostatic_z.svg)
+![Élévation au cours du temps](images/tutorial_02_fast_hydrostatic_z.svg)
 
 Pour utiliser le [modèle hydrostatique
 précis](##calcul-du-moment), il suffit de
@@ -205,7 +205,7 @@ external forces:
   - model: non-linear hydrostatic (exact)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-![Elévation au cours du temps](images/tutorial_02_exact_hydrostatic_z.svg)
+![Élévation au cours du temps](images/tutorial_02_exact_hydrostatic_z.svg)
 
 On peut également représenter les déplacements suivant l'axe $y$ en exécutant :
 
@@ -216,3 +216,4 @@ On peut également représenter les déplacements suivant l'axe $y$ en exécutan
 
 ![Embardée (modèle rapide)](images/tutorial_02_fast_hydrostatic_y.svg)
 ![Embardée (modèle précis)](images/tutorial_02_exact_hydrostatic_y.svg)
+

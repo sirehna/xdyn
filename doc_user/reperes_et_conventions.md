@@ -1,4 +1,4 @@
-# Reperes et conventions
+# Repères et conventions
 
 ## Repères
 
@@ -49,7 +49,9 @@ repère NED local sera "NED(nav1)".
 
 L'attitude d'un corps permet de connaître sa position et son orientation par
 rapport à un repère. La position est donnée par le triplet $\left(X,Y,Z\right)$
-et l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$. L'interprétation de ce triplet en termes de rotations autour des axes $x$,$y$,$z$ dépend de la convention d'orientation choisie.
+et l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
+L'interprétation de ce triplet en termes de rotations autour des axes $x$, $y$, $z$
+dépend de la convention d'orientation choisie.
 L'orientation peut également être exprimée de manière différente notamment avec des
 quaternions (c'est d'ailleurs ainsi qu'elle est exprimée dans le code du simulateur).
 
@@ -57,7 +59,6 @@ quaternions (c'est d'ailleurs ainsi qu'elle est exprimée dans le code du simula
 
 Cette section présente les notations utilisées pour définir l'orientation
 d'un élément dans l'espace à partir d'un triplet de trois angles $(\phi,\theta,\psi)$.
-
 
 ### Définition d'une orientation
 
@@ -77,7 +78,7 @@ plusieurs éléments doivent être définis:
   Il permet de définir complètement la composition de rotations.
 
 
-### Enumération des conventions possibles
+### Énumération des conventions possibles
 
 Si on choisit une convention d'angles, alors chaque angle du triplet définit
 respectivement une rotation autour d'un axe $X$, $Y$ ou $Z$.
@@ -111,7 +112,7 @@ nouvellement créés, on parle de composition interne. C'est cette dernière qui
 est utilisée dans la majorité des cas. Au total, ce sont ainsi 36 conventions
 qu'il est possible définir.
 
-### Synthèse des différents conventions
+### Synthèse des différentes conventions
 
 Le tableau suivant présente les 36 conventions possibles :
 
@@ -267,7 +268,7 @@ qui, au prix de l'ajout d'un état supplémentaire permettent de définir les
 rotations sans ambiguïté et de façon unique, quelle que soit la convention
 d'angle adoptée.
 
-## Etats navires
+## États navires
 
 Le simulateur est multi-corps en ce sens que plusieurs corps peuvent être
 simulés en même temps. Actuellement, aucun effort d'interaction ni de liaison
@@ -278,13 +279,14 @@ mouvement. Ces états sont les suivants :
 
 - La position du corps par rapport à l'origine du NED projetée dans le repère
   corps est notée $p^n = [x,y,z]^T$ et est exprimée en mètres.
-- L'attitude du corps est notée $\Theta = [\phi,\theta,\psi]^T$ et est définie au
-  paragraphe précédent. En pratique, on utilise plutôt des quaternions $q = [q_r,
-  q_i, q_j, q_k]$ en interne dans le simulateur pour l'intégration des équations
-  du mouvement, mais les raisonnements présentés dans cette documentation se
-  transposent aisément.
+- L'attitude du corps est notée $\Theta = [\phi,\theta,\psi]^T$ et est définie
+  au paragraphe précédent. En pratique, on utilise plutôt des quaternions
+  $q = [q_r, q_i, q_j, q_k]$ en interne dans le simulateur pour l'intégration
+  des équations du mouvement, mais les raisonnements présentés dans cette
+  documentation se transposent aisément.
 - La vitesse de translation du corps par rapport au repère fixe NED, projetée
-  dans le repère du corps (ou "body") est notée $v^b = [u,v,w]^T$ et s'exprime en m/s.
+  dans le repère du corps (ou "body") est notée $v^b = [u,v,w]^T$ et s'exprime
+  en m/s.
 - Le vecteur vitesse de rotation du repère "body" par rapport au repère NED,
   projeté dans le repère "body", est noté $\omega_{nb}^b = [p,q,r]^T$
   et s'exprime en rad/s.
@@ -318,7 +320,7 @@ Chaque corps comprend :
  - des données définissant son comportement dynamique (section `dynamics`)
  - la liste des efforts auxquels il est soumis (sections `external forces` et
    `controlled forces`).
- - de façon facultative, des états forcés.
+ - de façon facultative, des états forçés.
 
 ### Exemple complet
 
@@ -403,8 +405,6 @@ implicitement le repère qui lui est attaché (le repère "body", cf.
 
 On peut ensuite y faire référence, notamment pour les post-traitements.
 
-
-
 ### Utilisation d'un maillage
 
 Pour les efforts intégrés sur la carène (par exemple, les efforts
@@ -453,7 +453,8 @@ position of body frame relative to mesh:
 La section `dynamics` permet de décrire l'inertie du solide. Elle est composée
 de cinq sous-sections :
 
-- `hydrodynamic forces calculation point in body frame` est le [point de calcul des efforts hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique)
+- `hydrodynamic forces calculation point in body frame` est le
+  [point de calcul des efforts hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique)
 - `centre of inertia` (si le repère "body" n'est pas au centre de masse)
 - `mass` contenant la masse du corps considéré
 - `rigid body inertia matrix at the center of buoyancy projected in the body
@@ -491,7 +492,7 @@ qui vaut 907.185 kg.
 
 #### Matrice d'inertie
 
-La matrice d'inertie n'est pas normalisée et l'on n'effectue pas de changement
+La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
 de repère (ce qui explique l'absence du champs `frame` pour cette section).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -638,9 +639,9 @@ hydrodynamic forces calculation point in body frame:
 On note ${}^{\mbox{local}}T_{\mbox{body}}$ la transformation permettant de
 convertir des coordonnées dans le repère body en coordonnées du même point
 exprimées dans le repère de calcul hydrodynamique.
-${}^{\mbox{local}}T_{\mbox{NED}}$ est celle permettant de convertir des coordonnées
-dans le repère NED  en coordonnées du même point exprimées dans le repère de
-calcul hydrodynamique.
+${}^{\mbox{local}}T_{\mbox{NED}}$ est celle permettant de convertir des
+coordonnées dans le repère NED en coordonnées du même point exprimées dans le
+repère de calcul hydrodynamique.
 
 Il convient de distinguer ce repère de celui utilisé dans la base de données
 hydrodynamiques (fichiers HDB de Diodore), utilisé pour l'expression des
@@ -683,12 +684,13 @@ du  nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe 
 appelé Z''. La double apostrophe fait référence au deuxième repère utilisée
 pour la composition de rotation.
 
-La liste `rotations convention` comporte toujours trois éléments. Le deuxième élément est
-toujours différent du premier. Le troisième est soit différent des deux autres,
-soit égal au premier.
+La liste `rotations convention` comporte toujours trois éléments. Le deuxième
+élément est toujours différent du premier. Le troisième est soit différent des
+deux autres, soit égal au premier.
 
 La convention des angles aéronautiques, fréquemment (et abusivement) dénotée
-"angles d'Euler" (lacet $\psi$, tangage $\theta$, roulis $\phi$), se définit de la façon suivante :
+"angles d'Euler" (lacet $\psi$, tangage $\theta$, roulis $\phi$), se définit de
+la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rotations convention: [psi, theta', phi'']
@@ -711,7 +713,7 @@ Une attitude sera décrite de la manière suivante, avec les champs
 - `x` ,`y` ,`z`: le triplet de position où chaque position est
    définie par le dictionnaire des clés `value` et `unit`,
 - `phi` ,`theta` ,`psi`, le triplet d'orientation dont l'interprétation en
-termes de matrices de rotations dépend de la convention d'orientation choisie
+   termes de matrices de rotations dépend de la convention d'orientation choisie
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     frame: NED
@@ -722,5 +724,3 @@ termes de matrices de rotations dépend de la convention d'orientation choisie
     theta: {value: 0, unit: rad}
     psi: {value: 0, unit: rad}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-

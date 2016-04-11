@@ -1,4 +1,3 @@
-
 # Modélisation des efforts de diffraction et de radiation
 
 Cette section propose une décomposition des efforts hydrodynamiques comme
@@ -24,7 +23,7 @@ effet :
 $$\Phi_I(y,z,t) = \frac{g H}{2 \omega}
 \frac{\cosh(k(z-h))}{\cosh(kh)}\cos(ky-\omega t)$$
 
-avec : $$\omega^2 = g\cdot k\cdot \tanh(kh)$$
+avec : $\omega^2 = g\cdot k\cdot \tanh(kh)$
 
 où $k$ désigne le nombre d'onde, $\omega$ la pulsation de la houle, $h$ la
 profondeur d'eau, $H$ la double amplitude (ou creux) et $g$ l'accélération de
@@ -64,8 +63,8 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
    nulle : $V_z(x,y,h,t) = \frac{\partial Phi_P}{\partial z}(x,y,h,t) = 0$ et
    par là même : $\frac{\partial Psi_P}{\partial z}(x,y,h) = 0$.
 5. L'obstacle étant imperméable, $(\mbox{grad} \Psi_P) \cdot n = \frac{\partial
-\Psi_P}{\partial n} = -(\mbox{grad}
-   \Psi_I) \cdot n + V_o \cdot n$ où $V_o$ est la vitesse normale de l'obstacle en
+   \Psi_P}{\partial n} = -(\mbox{grad} \Psi_I) \cdot n + V_o \cdot n$
+   où $V_o$ est la vitesse normale de l'obstacle en
    un point $P$ et $n$ est la normale extérieure à l'obstacle.
 
 ## Résolution
@@ -196,7 +195,7 @@ $$2Ec = \rho\int_{\omega} (\nabla \Phi)^2 dV = \rho \int_{\partial \Omega} \Phi
 \frac{\partial \Phi_l}{\partial n} dS = \rho {M_A}_{kl} f_k f_l$$
 
 
-## Ecriture en temporel
+## Écriture en temporel
 
 Lorsque l'on écrit le bilan des efforts appliqués au solide, on a :
 
@@ -331,7 +330,7 @@ l'intégrale suivante pour différentes valeurs de $\tau$ :
 $$K_{i,j}(\tau) =
 \frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega$$
 
-Cette intégrale est calculé à l'aide d'un schéma d'intégration numérique
+Cette intégrale est calculée à l'aide d'un schéma d'intégration numérique
 (méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
 
 ![](images/radiation_damping_doc.png "Calcul de l'amortissement de radiation")
@@ -404,8 +403,6 @@ suivantes sont réalisées :
   tau max: {value: 10, unit: s}
   output Br and K: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 
 ### Méthode des rectangles
 
@@ -489,6 +486,7 @@ Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9g
 Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_Simpson.svg)
 
 ### Quadrature de Gauss-Kronrod
+
 La formule de quadrature de Gauss-Kronrod est une extension de la quadrature de
 Gauss. Lorsque l'on calcule une quadrature de Gauss sur un intervalle et que
 l'on divise cet intervalle en deux partie, on ne peut réutiliser aucun des
@@ -558,7 +556,8 @@ suppose que les mailles utilisées pour le calcul des masses ajoutées
 sens.
 
 ## Références
+
 - *Practical Source Code for Ship Motions Time Domain Numerical Analysis and
   Its Mobile Device Application*, 2011, Zayar Thein, Department of Shipping and
-Marine Technology, CHALMERS UNIVERSITY OF TECHNOLOGY, Göteborg, Sweden, page 18
-
+  Marine Technology, CHALMERS UNIVERSITY OF TECHNOLOGY, Göteborg, Sweden,
+  page 18.

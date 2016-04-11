@@ -26,7 +26,7 @@ suivante :
 
 La distance algébrique $GZ=y_C-y_G$ est le bras de levier du couple de rappel
 hydrostatique. Celui-ci doit être suffisant pour redresser le navire. Une
-condition nécessaire et suffisante pour que le le couple de rappel
+condition nécessaire et suffisante pour que le couple de rappel
 hydrostatique soit un couple de redressement est que le point métacentrique $E$
 soit situé au-dessus du centre de gravité $G$. Le point $E$ est à
 l'intersection de la droite $Cz$ et de la droite $C_0 z$.
@@ -40,7 +40,8 @@ centre de carène et $GZ$ est ensuite donné par $GZ(\phi)=y_C(\phi)-y_G$.
 
 #### Calcul de la position d'équilibre à une gîte donnée
 
-Soit $X=(z,\phi,\theta)$ l'etat du système. On suppose le navire soumis aux seuls efforts de
+Soit $X=(z,\phi,\theta)$ l'etat du système. On suppose le navire soumis aux
+seuls efforts de 
 la gravité et de l'hydrostatique. On dénote par $f$ la fonction qui à $X$
 associe la somme des efforts appliqués au système :
 
@@ -90,7 +91,7 @@ l'algorithme de Newton-Raphson).
 
 #### Calcul du centre de carène $C$
 
-La carène est discrétisée par des polygônes. Pour calculer son centre de masse,
+La carène est discrétisée par des polygones. Pour calculer son centre de masse,
 on transforme ces polygônes en triangles et, pour chaque triangle, on calcule
 le volume (algébrique) du tétraèdre de base ce triangle et de sommet l'origine.
 
@@ -107,7 +108,9 @@ $$dV=\mbox{det}(P_1,P_2,P_3)$$
 Les coordonnées du centre (par rapport à l'origine choisie pour les tétraèdres) sont données par :
 
 $$x_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{x(P_1)+x(P_2)+x(P_3)}{4}dV$$
+
 $$y_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{y(P_1)+y(P_2)+y(P_3)}{4}dV$$
+
 $$z_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{z(P_1)+z(P_2)+z(P_3)}{4}dV$$
 
 #### Autre méthode de calcul
@@ -166,7 +169,6 @@ $$\forall \lambda\in\mathbf{R}, GZ_{\lambda} = \frac{x m_x}{f_z} + \frac{y
 m_y}{f_z}$$
 
 soit, avec les conventions de rotation usuelles :
-
 
 $$ GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
 \sin(\psi)\cdot\cos(\theta)\cdot m_y}{f_z\left\|x_{\mbox{body}}^{\mbox{(ned)}}\right\|}

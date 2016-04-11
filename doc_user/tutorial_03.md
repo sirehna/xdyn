@@ -7,6 +7,7 @@ de vague afin de tester des algorithmes de prédiction de mouvement sur houle.
 Ce tutoriel explique comment utiliser le simulateur pour ce type de simulation.
 
 ### Description du problème
+
 Dans cet exemple, nous simulerons une houle d'Airy constituée de la somme de
 deux spectres directionnels :
 
@@ -19,7 +20,7 @@ On se limite dans cet exemple à deux spectres, mais le simulateur permet d'en
 sommer autant qu'on le souhaite (on n'est limité que par la mémoire de la
 machine).
 
-### Ecriture du fichier de configuration du simulateur.
+### Écriture du fichier de configuration du simulateur.
 
 La section `environment models` est nettement plus fournie que pour les
 tutoriels précédents.

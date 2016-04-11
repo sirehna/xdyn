@@ -10,7 +10,7 @@ L'accélération de la pesanteur (dénotée par `g`) et la densité volumique de
 l'eau (`rho`) sont des
 constantes qui interviennent dans plusieurs modèles physiques. Par conséquent,
 plutôt que d'être renseignées au niveau de chaque modèle et risquer ainsi des
-incohérence, elles figurent dans la section `environmental constants` qui a la
+incohérences, elles figurent dans la section `environmental constants` qui a la
 forme suivante :
 
 ~~~~~~~~~~~~~~ {.yaml}
@@ -54,6 +54,7 @@ l'espace.
 ### Densités spectrales de puissance implémentées
 
 #### Dirac
+
 La plus simple densité spectrale de puissance correspond à une houle
 monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
 
@@ -65,9 +66,9 @@ Le paramétrage de ce spectre est :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
-   type: dirac
-   Hs: {value: 5, unit: m}
-   omega0: {value: 15, unit: rad/s}
+    type: dirac
+    Hs: {value: 5, unit: m}
+    omega0: {value: 15, unit: rad/s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
@@ -76,31 +77,31 @@ La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
-     type: jonswap
-     Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: s}
-     gamma: 1.2
+    type: jonswap
+    Hs: {value: 5, unit: m}
+    Tp: {value: 15, unit: s}
+    gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### Pierson-Moskowitz
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
-     type: pierson-moskowitz
-     Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: s}
+    type: pierson-moskowitz
+    Hs: {value: 5, unit: m}
+    Tp: {value: 15, unit: s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### Bretschneider
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
-     type: bretschneider
-     Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: s}
+    type: bretschneider
+    Hs: {value: 5, unit: m}
+    Tp: {value: 15, unit: s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### Etalements directionnels
+### Étalements directionnels
 
 #### Dirac
 
@@ -108,8 +109,8 @@ Lorsque cet étalement est choisi, la houle est mono-directionnelle.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 directional spreading:
-     type: dirac
-     waves propagating to: {value: 90, unit: deg}
+    type: dirac
+    waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La direction de propagation est donnée par `waves propagating to`.
@@ -125,9 +126,9 @@ Cet étalement est paramétré de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 directional spreading:
-   type: cos2s
-   s: 2
-   waves propagating to: {value: 90, unit: deg}
+    type: cos2s
+    s: 2
+    waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 `waves propagating to` donne la direction de propagation $\psi_0$.
@@ -328,10 +329,10 @@ La discrétisation est paramétrée de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 discretization:
-   n: 128
-   omega min: {value: 0.1, unit: rad/s}
-   omega max: {value: 6, unit: rad/s}
-   energy fraction: 0.999
+    n: 128
+    omega min: {value: 0.1, unit: rad/s}
+    omega max: {value: 6, unit: rad/s}
+    energy fraction: 0.999
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `n` : nombre de points (nombre de fréquences ou nombre de directions)
