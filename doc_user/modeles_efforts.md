@@ -677,11 +677,11 @@ nom est passé à l'exécutable de simulation en utilisant le flag `-c` (ou
 - name: port side propeller
   t: [1,3,10]
   rpm: {unit: rpm, values: [3000, 3000, 4000]}
-  P/D: [0.7,0.7,0.8]
+  P/D: {unit: 1, values: [0.7,0.7,0.8]}
 - name: starboard propeller
   t: [1,3,10]
   rpm: {unit: rpm, values: [3000, 3000, 4000]}
-  P/D: [0.7,0.7,0.8]
+  P/D: {unit: 1, values: [0.7,0.7,0.8]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La valeur renseigné dans `name` doit correspondre à l'identifiant utilisé dans
@@ -712,7 +712,7 @@ Voici un exemple de fichier de commande :
 - name: port side propeller
   t: [0,1,3,10]
   rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
-  P/D: [0.7,0.7,0.7,0.7]
+  P/D: {unit: 1, values: [0.7,0.7,0.7,0.7]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
