@@ -61,7 +61,7 @@ double Airy::evaluate_rao(
         const double omega_t = spectrum.omega[i] * t;
         for (size_t j = 0 ; j < nPsi ; ++j)
         {
-            const double Aij = rao_module[i][j];
+            const double Aij = rao_module[i][j] * sqrt(spectrum.Si[i]);
             const double Dj = v_Dj[j];
             const double k_xCosPsi_ySinPsi = k * v_xCosPsi_ySinPsi[j];
             const double theta = rao_phase[i][j];
