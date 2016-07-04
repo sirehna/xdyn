@@ -1705,8 +1705,7 @@ l'hélice](#expression-des-efforts), en suivant la
 [convention d'angle choisie](#rotations).
 - `wake coefficient` : [coefficient de
 sillage](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
-traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et
-1.
+traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et 1.
 - `relative rotative efficiency etaR` : [rendement
 d'adaptation](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
 - `thrust deduction factor t` : [coefficient de
