@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Merges &apos;integration&apos; branch to master</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3.5">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>ssh://git_simulateur@130.66.124.6/home/git_projets/simulator.git</url>
+        <credentialsId>97ad9442-8356-419f-b023-f31a9fd67e35</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>origin/integration</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.WipeWorkspace/>
+      <hudson.plugins.git.extensions.impl.PreBuildMerge>
+        <options>
+          <mergeRemote>origin</mergeRemote>
+          <mergeTarget>master</mergeTarget>
+          <mergeStrategy>default</mergeStrategy>
+          <fastForwardMode>FF</fastForwardMode>
+        </options>
+      </hudson.plugins.git.extensions.impl.PreBuildMerge>
+    </extensions>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>true</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <jenkins.triggers.ReverseBuildTrigger>
+      <spec></spec>
+      <upstreamProjects>XDYN_INTEGRATION</upstreamProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </jenkins.triggers.ReverseBuildTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>cd /c
+sh switch_to_gcc_492.sh || true</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># Retrieve the external dependencies
+cd code
+./foreach.sh externalDependencies.txt svn_export.sh cec charles</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># Configure
+cd code &amp;&amp; mkdir -p build &amp;&amp; cd build &amp;&amp; cmake .. -G &quot;MSYS Makefiles&quot; -DCMAKE_COLOR_MAKEFILE=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -Wno-dev</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># Compile
+cd code/build &amp;&amp; make</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># Doc developer
+cd code/build &amp;&amp; make doc_dev</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command># Package
+cd code/build &amp;&amp; ./run_all_tests --gtest_output=xml:test_output.xml --gtest_filter=-&quot;*TODO*&quot; &amp;&amp; make package</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>code/build/simulator*</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+    </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.junit.JUnitResultArchiver plugin="junit@1.6">
+      <testResults>code/build/test_output.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <healthScaleFactor>1.0</healthScaleFactor>
+    </hudson.tasks.junit.JUnitResultArchiver>
+    <hudson.plugins.doxygen.DoxygenArchiver plugin="doxygen@0.16">
+      <doxyfilePath>code/build/Doxyfile</doxyfilePath>
+      <keepAll>false</keepAll>
+      <folderWhereYouRunDoxygen>doc_dev</folderWhereYouRunDoxygen>
+    </hudson.plugins.doxygen.DoxygenArchiver>
+    <hudson.plugins.git.GitPublisher plugin="git@2.3.5">
+      <configVersion>2</configVersion>
+      <pushMerge>true</pushMerge>
+      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+      <forcePush>false</forcePush>
+      <branchesToPush>
+        <hudson.plugins.git.GitPublisher_-BranchToPush>
+          <targetRepoName>origin</targetRepoName>
+          <branchName>master</branchName>
+        </hudson.plugins.git.GitPublisher_-BranchToPush>
+      </branchesToPush>
+    </hudson.plugins.git.GitPublisher>
+    <hudson.tasks.Mailer plugin="mailer@1.15">
+      <recipients>charles-edouard.cady@sirehna.com guillaume.jacquenot@sirehna.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers/>
+</project>
