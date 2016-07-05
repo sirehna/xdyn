@@ -72,13 +72,22 @@ void catch_exceptions(const std::function<void(void)>& f, const InputData& input
 }
 
 #include "stl_io_hdf5.hpp"
-void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys);
-void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys)
+#include "h5_tools.hpp"
+void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& yaml_command);
+void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& yaml_command)
 {
     for (const auto observer:observers)
     {
         if(observer.format=="hdf5")
         {
+            if (not(yaml_input.empty()))
+            {
+                H5_Tools::writeString(observer.filename, "/inputs/yaml/input", yaml_input);
+            }
+            if (not(yaml_command.empty()))
+            {
+                H5_Tools::writeString(observer.filename, "/inputs/yaml/command", yaml_command);
+            }
             for (const auto& bodies : sys.get_bodies())
             {
                 writeMeshToHdf5File(observer.filename, "/inputs/meshes/"+bodies->get_states().name,
@@ -93,17 +102,18 @@ void run_simulation(const InputData& input_data)
 {
     const auto f = [input_data](){
     {
-        const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
+        const auto yaml_input = ssc::text_file_reader::TextFileReader(input_data.yaml_filenames).get_contents();
         ssc::data_source::DataSource command_listener;
+        std::string yaml_command;
         if (not(input_data.command_file.empty()))
         {
-            command_listener = listen_to_file(ssc::text_file_reader::TextFileReader(input_data.command_file).get_contents());
+            yaml_command = ssc::text_file_reader::TextFileReader(input_data.command_file).get_contents();
+            command_listener = listen_to_file(yaml_command);
         }
-        const auto yaml = yaml_reader.get_contents();
-        auto sys = get_system(yaml,input_data.tstart,command_listener);
-        auto observers_description = get_observers_description(yaml, input_data);
-        serialize_context_if_necessary(observers_description, sys);
+        auto sys = get_system(yaml_input, input_data.tstart, command_listener);
+        auto observers_description = get_observers_description(yaml_input, input_data);
         ListOfObservers observers(observers_description);
+        serialize_context_if_necessary(observers_description, sys, yaml_input, yaml_command);
         solve(input_data, sys, observers);
     }};
     if (input_data.catch_exceptions) catch_exceptions(f, input_data);

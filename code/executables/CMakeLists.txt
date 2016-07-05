@@ -34,6 +34,7 @@ INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
 
 CONFIGURE_FILE(
         src/utilities_for_InputData.cpp
