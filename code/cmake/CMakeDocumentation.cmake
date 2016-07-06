@@ -36,7 +36,7 @@ IF(DOXYGEN_FOUND)
 
     IF(PANDOC)
         ADD_CUSTOM_TARGET(doc_dev_guide
-            ${PANDOC} dev_guide.md -o html/dev_guide.html
+            ./doc_html.sh
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev
             COMMENT "Generating the developper guide" VERBATIM
         )
@@ -83,10 +83,6 @@ IF(DOXYGEN_FOUND)
     FOREACH(f ${files})
         FILE(COPY ${f} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/html)
     ENDFOREACH()
-
-    IF(WIN32)
-        FILE(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/../doc_dev/doc_developer.bat "\"html/index.html\"\n")
-    ENDIF()
 ELSE()
     MESSAGE("Doxygen not found.")
 ENDIF()
