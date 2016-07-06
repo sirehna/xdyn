@@ -168,7 +168,7 @@ de Poincaré) que la vitesse dérive d'un potentiel que l'on appelle
 $\phi:(x,y,z,t)\mapsto\phi(x,y,z,t)$. Par définition, la vitesse en tout
 point de l'écoulement est donc donnée par :
 
-$$V(x,y,z,t) = \mbox{grad}{\phi(x,y,z,t)}$$
+$$V(x,y,z,t) = \textrm{grad}{\phi(x,y,z,t)}$$
 
 La pression $p$ vérifie l'équation de Bernoulli :
 
@@ -238,11 +238,11 @@ L'expression de la pression dynamique, utilisée par le modèle de
 [Froude-Krylov](#calcul-des-efforts-dexcitation), se déduit de la première
 condition de surface libre linéarisée :
 
-$$p_{\mbox{dyn}} = \rho g z = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
+$$p_{\textrm{dyn}} = \rho g z = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
 
 soit
 
-$$p_{\mbox{dyn}} = \rho\cdot g
+$$p_{\textrm{dyn}} = \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
 \frac{\cosh(k_i\cdot(z-\eta+h))}{\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
 \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
@@ -252,7 +252,7 @@ $$p_{\mbox{dyn}} = \rho\cdot g
 
 Lorsque la profondeur $h$ est très grande devant $z$, on obtient :
 
-$$p_{\mbox{dyn}} = \rho\cdot g
+$$p_{\textrm{dyn}} = \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
 e^{-k_i\cdot(z-\eta(x,y,t))}\cos(k_i\cdot(x\cdot\cos(\psi_j)+ y\cdot
 \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$

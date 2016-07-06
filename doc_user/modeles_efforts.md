@@ -69,11 +69,11 @@ d'excitation de Froude-Krylov. En d'autres termes, pour le modèle
 hydrostatique, il faut effectuer le calcul en supposant la surface libre au
 repos. La prise en compte de la pression due à la houle est faite par le modèle
 de Froude-Krylov.
-La force $\textbf{F}_{\mbox{HS}}$ exercée par l'eau sur la carène doit être
-calculée comme l'intégrale de la pression hydrostatique $p_{\mbox{HS}}$ sur
+La force $\textbf{F}_{\textrm{HS}}$ exercée par l'eau sur la carène doit être
+calculée comme l'intégrale de la pression hydrostatique $p_{\textrm{HS}}$ sur
 la surface immergée totale :
 
-$$\textbf{F}_{\mbox{HS}} = \int_{S}p_{\mbox{HS}}(z)\cdot \textbf{n} dS $$
+$$\textbf{F}_{\textrm{HS}} = \int_{S}p_{\textrm{HS}}(z)\cdot \textbf{n} dS $$
 
 Le paramétrage des efforts hydrostatiques non-linéaires dans le simulateur est
 décrit [ici](#).
@@ -149,13 +149,13 @@ de la facette dans ce même repère. Le repère ($t$, $u$) est centré au centro
 de la facette.
 
 Les efforts hydrostatiques s'écrivent :
-$$\textbf{F}_{\mbox{HS}} = \int_{P\in S} \rho\cdot g\cdot z(P) \textbf{dS}(P)$$
+$$\textbf{F}_{\textrm{HS}} = \int_{P\in S} \rho\cdot g\cdot z(P) \textbf{dS}(P)$$
 
 avec $z(P)=t\cdot\sin\theta$
 
 d'où
 
-$$\textbf{F}_{\mbox{HS}} = \rho\cdot g\cdot \sin\theta \textbf{n} \int_S t dS$$
+$$\textbf{F}_{\textrm{HS}} = \rho\cdot g\cdot \sin\theta \textbf{n} \int_S t dS$$
 
 Or
 
@@ -164,7 +164,7 @@ UT\cdot\frac{T}{2} = S\cdot t_G$
 
 d'où
 
-$$\textbf{F}_{\mbox{HS}} = \rho\cdot g\cdot t_G \cdot S \textbf{n}$$
+$$\textbf{F}_{\textrm{HS}} = \rho\cdot g\cdot t_G \cdot S \textbf{n}$$
 
 $t_R$ doit vérifier :
 
@@ -213,7 +213,7 @@ Ce modèle utilise une approche différente : au lieu d'intégrer les efforts su
 toutes les facettes, on calcule le volume immergé et son centroïde et l'on
 écrit :
 
-$$F_{\mbox{hs}} = \rho\cdot V\cdot \mathbf{g}$$
+$$F_{\textrm{hs}} = \rho\cdot V\cdot \mathbf{g}$$
 
 Ce modèle a l'avantage de forcer la résultante à être suivant $z$.
 
@@ -267,8 +267,8 @@ calculés en intégrant la pression dynamique sur la carène. En pratique, ils
 peuvent être négligés dès que le corps est à plus d'une-demi longueur d'onde de
 profondeur :
 
-$$\mathbf{F}_{\mbox{FK}}(t)=\int_{P=(x,y,z)\in S}
-p_{\mbox{dyn}}(x,y,z,t)dS(P)$$
+$$\mathbf{F}_{\textrm{FK}}(t)=\int_{P=(x,y,z)\in S}
+p_{\textrm{dyn}}(x,y,z,t)dS(P)$$
 
 L'expression de la pression dynamique dépend du modèle de houle utilisé et est
 décrite (ici pour la houle d'Airy)
@@ -317,16 +317,16 @@ l'écriture de la condition aux limites.
 Les RAO d'efforts sont lues à partir d'un fichier HDB. Cette table donne, une
 fois interpolée, deux fonctions RAO par axe $k$
 
-$$(\omega,\psi)\mapsto {RAO^{k}}_{\mbox{module}}(\omega,\psi)$$
-$$(\omega,\psi)\mapsto {RAO^{k}}_{\mbox{phase}}(\omega,\psi)$$
+$$(\omega,\psi)\mapsto {RAO^{k}}_{\textrm{module}}(\omega,\psi)$$
+$$(\omega,\psi)\mapsto {RAO^{k}}_{\textrm{phase}}(\omega,\psi)$$
 
 Pour calculer les efforts et les moments, on somme les RAO comme pour le calcul
 de l'élévation de la surface libre :
 
 $$F_k(x_H,y_H,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
-{RAO^{k}}_{\mbox{module}}(\omega_i,\psi_j)\sqrt{\Delta\omega\Delta\psi}\cos(k\cdot(x\cdot \cos(\psi_j)
+{RAO^{k}}_{\textrm{module}}(\omega_i,\psi_j)\sqrt{\Delta\omega\Delta\psi}\cos(k\cdot(x\cdot \cos(\psi_j)
 + y\cdot \sin(\psi_j))-\omega_i\cdot
-t+{RAO^{k}}_{\mbox{phase}}(\omega_i,\psi_j)+\phi_{ij})$$
+t+{RAO^{k}}_{\textrm{phase}}(\omega_i,\psi_j)+\phi_{ij})$$
 
 $x_H$ et $y_H$ désignent les coordonnées du [point de calcul des efforts
 hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique), $t$ est l'instant courant. Les $\omega_i$ et $\psi_j$
@@ -401,7 +401,7 @@ de calcul
 hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
 est :
 
-$$\tau_{\mbox{res}} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
+$$\tau_{\textrm{res}} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
 
 ### Paramétrage
 
@@ -472,39 +472,39 @@ hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique).
 La vitesse du courant (vitesse de l'eau par rapport au repère NED, projetée
 dans le repère NED) est notée :
 
-$$V_{\mbox{eau/sol}} =
-\left[\begin{array}{c}U_{\mbox{courant}}\\V_{\mbox{courant}}\\0\end{array}\right]$$
+$$V_{\textrm{eau/sol}} =
+\left[\begin{array}{c}U_{\textrm{courant}}\\V_{\textrm{courant}}\\0\end{array}\right]$$
 
 On définit :
 
-$$\nu_{\mbox{local}} = {}^{\mbox{local}}T_{\mbox{body}} \nu_b -
-{}^{\mbox{local}}T_{\mbox{NED}}V_{\mbox{eau/sol}}$$
+$$\nu_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}} \nu_b -
+{}^{\textrm{local}}T_{\textrm{NED}}V_{\textrm{eau/sol}}$$
 
-$$\omega_{\mbox{local}} = {}^{\mbox{local}}T_{\mbox{body}}\omega_{nb}^b$$
+$$\omega_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}}\omega_{nb}^b$$
 
 Si les efforts de radiation ne sont par modélisés par ailleurs, les
 amortissements linéaires s'écrivent (dans le [repère de calcul
 hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique)) :
 
-$$F_{\mbox{al}}=-D_l\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_{\mbox{local}}$$
+$$F_{\textrm{al}}=-D_l\left[\begin{array}{c}\nu_{\textrm{local}}\\\omega_{\textrm{local}}\end{array}\right]_{\textrm{local}}$$
 
 où $D_l$ est la matrice d'amortissement linéaire lue depuis [le fichier de
 paramètres](#amortissement-linéaire).
 
 Pour les amortissements quadratiques :
 
-$$F_{\mbox{aq}}=-D_q(\nu_{\mbox{local}})\left[\begin{array}{c}\nu_{\mbox{local}}\\\omega_{\mbox{local}}\end{array}\right]_{\mbox{local}}$$
+$$F_{\textrm{aq}}=-D_q(\nu_{\textrm{local}})\left[\begin{array}{c}\nu_{\textrm{local}}\\\omega_{\textrm{local}}\end{array}\right]_{\textrm{local}}$$
 
 où
 
-$$D_q(\nu_{\mbox{local}}) = \left[
+$$D_q(\nu_{\textrm{local}}) = \left[
 \begin{array}{cccccc}
-d_{11}\cdot|u_{\mbox{local}}| & d_{12}\cdot |v_{\mbox{local}}| & d_{13}\cdot |w_{\mbox{local}}| & d_{14}\cdot |p_{\mbox{local}}| & d_{15}\cdot |q_{\mbox{local}}| & d_{16}\cdot |r_{\mbox{local}}|\\
-d_{21}\cdot|u_{\mbox{local}}| & d_{22}\cdot |v_{\mbox{local}}| & d_{23}\cdot |w_{\mbox{local}}| & d_{24}\cdot |p_{\mbox{local}}| & d_{25}\cdot |q_{\mbox{local}}| & d_{26}\cdot |r_{\mbox{local}}|\\
-d_{31}\cdot|u_{\mbox{local}}| & d_{32}\cdot |v_{\mbox{local}}| & d_{33}\cdot |w_{\mbox{local}}| & d_{34}\cdot |p_{\mbox{local}}| & d_{35}\cdot |q_{\mbox{local}}| & d_{36}\cdot |r_{\mbox{local}}|\\
-d_{41}\cdot|u_{\mbox{local}}| & d_{42}\cdot |v_{\mbox{local}}| & d_{43}\cdot |w_{\mbox{local}}| & d_{44}\cdot |p_{\mbox{local}}| & d_{45}\cdot |q_{\mbox{local}}| & d_{46}\cdot |r_{\mbox{local}}|\\
-d_{51}\cdot|u_{\mbox{local}}| & d_{52}\cdot |v_{\mbox{local}}| & d_{53}\cdot |w_{\mbox{local}}| & d_{54}\cdot |p_{\mbox{local}}| & d_{55}\cdot |q_{\mbox{local}}| & d_{56}\cdot |r_{\mbox{local}}|\\
-d_{61}\cdot|u_{\mbox{local}}| & d_{62}\cdot |v_{\mbox{local}}| & d_{63}\cdot |w_{\mbox{local}}| & d_{64}\cdot |p_{\mbox{local}}| & d_{65}\cdot |q_{\mbox{local}}| & d_{66}\cdot |r_{\mbox{local}}|\\
+d_{11}\cdot|u_{\textrm{local}}| & d_{12}\cdot |v_{\textrm{local}}| & d_{13}\cdot |w_{\textrm{local}}| & d_{14}\cdot |p_{\textrm{local}}| & d_{15}\cdot |q_{\textrm{local}}| & d_{16}\cdot |r_{\textrm{local}}|\\
+d_{21}\cdot|u_{\textrm{local}}| & d_{22}\cdot |v_{\textrm{local}}| & d_{23}\cdot |w_{\textrm{local}}| & d_{24}\cdot |p_{\textrm{local}}| & d_{25}\cdot |q_{\textrm{local}}| & d_{26}\cdot |r_{\textrm{local}}|\\
+d_{31}\cdot|u_{\textrm{local}}| & d_{32}\cdot |v_{\textrm{local}}| & d_{33}\cdot |w_{\textrm{local}}| & d_{34}\cdot |p_{\textrm{local}}| & d_{35}\cdot |q_{\textrm{local}}| & d_{36}\cdot |r_{\textrm{local}}|\\
+d_{41}\cdot|u_{\textrm{local}}| & d_{42}\cdot |v_{\textrm{local}}| & d_{43}\cdot |w_{\textrm{local}}| & d_{44}\cdot |p_{\textrm{local}}| & d_{45}\cdot |q_{\textrm{local}}| & d_{46}\cdot |r_{\textrm{local}}|\\
+d_{51}\cdot|u_{\textrm{local}}| & d_{52}\cdot |v_{\textrm{local}}| & d_{53}\cdot |w_{\textrm{local}}| & d_{54}\cdot |p_{\textrm{local}}| & d_{55}\cdot |q_{\textrm{local}}| & d_{56}\cdot |r_{\textrm{local}}|\\
+d_{61}\cdot|u_{\textrm{local}}| & d_{62}\cdot |v_{\textrm{local}}| & d_{63}\cdot |w_{\textrm{local}}| & d_{64}\cdot |p_{\textrm{local}}| & d_{65}\cdot |q_{\textrm{local}}| & d_{66}\cdot |r_{\textrm{local}}|\\
 \end{array}\right]$$
 
 les $((d_{ij}))$ étant les coefficients de la matrice d'amortissement
@@ -569,20 +569,20 @@ calculs de hauteur de houle.
 On utilise les variables suivantes :
 
 $$\overline{z} = \frac{1}{4}\sum_{i=1}^4 z_i^h$$
-$$\overline{\phi} = \frac{1}{2}\left(\frac{\mbox{atan}(z_2^h-z_1^h)}{d_{12}} +
-\frac{\mbox{atan}(z_4^h-z_3^h)}{d_{43}}\right)$$
-$$\overline{\theta} = \frac{1}{2}\left(\frac{\mbox{atan}(z_2^h-z_4^h)}{d_{24}} +
-\frac{\mbox{atan}(z_1^h-z_3^h)}{d_{13}}\right)$$
+$$\overline{\phi} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_1^h)}{d_{12}} +
+\frac{\textrm{atan}(z_4^h-z_3^h)}{d_{43}}\right)$$
+$$\overline{\theta} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_4^h)}{d_{24}} +
+\frac{\textrm{atan}(z_1^h-z_3^h)}{d_{13}}\right)$$
 
 où $d_{ij} = \sqrt{(x^h_i-x^h_j)^2 + (y^h_i-y^h_j)}$ est la distance entre deux
 points de mesure.
 
 Le torseur d'effort est donné dans le repère NED par :
 
-$$F_{\mbox{hs}} = K_{3\times 3}
-\left[\begin{array}{c}z-\overline{z}-z_{\mbox{eq}}\\\theta-\overline{\theta}-\theta_{\mbox{eq}}\\\psi-\overline{\psi}-\psi_{\mbox{eq}}\end{array}\right]$$
+$$F_{\textrm{hs}} = K_{3\times 3}
+\left[\begin{array}{c}z-\overline{z}-z_{\textrm{eq}}\\\theta-\overline{\theta}-\theta_{\textrm{eq}}\\\psi-\overline{\psi}-\psi_{\textrm{eq}}\end{array}\right]$$
 
-$z_{\mbox{eq}}, \theta_{\mbox{eq}}, \psi_{\mbox{eq}}$ sont les valeurs
+$z_{\textrm{eq}}, \theta_{\textrm{eq}}, \psi_{\textrm{eq}}$ sont les valeurs
 d'équilibre renseignées dans le fichier de paramétrage.
 
 ### Paramétrage
@@ -1043,8 +1043,8 @@ le navire) est faite dans le sens des $x$ positifs.
 Le sens de rotation de l'hélice doit également être spécifié parce qu'il
 détermine le signe du couple généré par l'hélice sur le navire. On définit ce
 sens de rotation en se plaçant face à l'hélice, en regardant dans la direction
-des $x_{\mbox{hélice}}$ positifs (donc vers l'avant du navire). Autrement dit, l'axe de
-rotation de l'hélice est non pas $x_{\mbox{hélice}}$ mais $-x_{\mbox{hélice}}$.
+des $x_{\textrm{hélice}}$ positifs (donc vers l'avant du navire). Autrement dit, l'axe de
+rotation de l'hélice est non pas $x_{\textrm{hélice}}$ mais $-x_{\textrm{hélice}}$.
 Lorsque l'hélice tourne dans le sens **horaire**, elle génère un couple dans le
 sens trigonométrique, soit un couple de signe **négatif** lorsqu'il est exprimé
 dans le repère de l'hélice :
@@ -1055,14 +1055,14 @@ Le torseur des efforts générés par l'hélice et subis par le navire
 (apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
 exprimé dans le repère de l'hélice, est donc :
 
-$$\tau_{\mbox{hélice}} = \left[\begin{array}{c}
+$$\tau_{\textrm{hélice}} = \left[\begin{array}{c}
 X\\
 Y\\
 Z\\
 K\\
 M\\
 N
-\end{array}\right]_{\mbox{hélice}}$$
+\end{array}\right]_{\textrm{hélice}}$$
 
 $$= \left[\begin{array}{c}
            T_b\\
@@ -1071,7 +1071,7 @@ $$= \left[\begin{array}{c}
            \kappa Q_b\\
            0\\
            0
-\end{array}\right]_{\mbox{hélice}}$$
+\end{array}\right]_{\textrm{hélice}}$$
 $$= \left[\begin{array}{c}
            (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, A_E/A_0, Z, P/D)\\
            0\\
@@ -1079,7 +1079,7 @@ $$= \left[\begin{array}{c}
            \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J,
 A_E/A_0, Z, P/D)\\
            0\\
-           0\end{array}\right]_{\mbox{hélice}}
+           0\end{array}\right]_{\textrm{hélice}}
 $$
 
 $\kappa$ vaut -1 si l'hélice tourne dans le sens horaire (en se plaçant
@@ -1167,7 +1167,7 @@ contrôleur génère directement un moment au centre de gravité du corps.
 
 ### Expression des efforts
 
-Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\mbox{co}}-\psi) - K_r\cdot r =
+Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\textrm{co}}-\psi) - K_r\cdot r =
 \sigma_{zz}\ddot{\psi}$ où $\sigma_{zz}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'axe $z$.
 
@@ -1189,11 +1189,11 @@ réponse $T_p$ donné par $T_p=\frac{2\pi}{\omega_0}$.
 $$K_{\psi} = \sigma_{zz}\left(\frac{2\pi}{T_p}\right)^2$$
 $$K_{r} = 2\zeta\sigma_{zz}\frac{2\pi}{T_p}$$
 
-Le cap $\psi_{\mbox{co}}$ est donné dans le repère NED.
-Si l'on suppose que $r=0$, pour $\psi<\psi_{\mbox{co}}$, le moment généré doit
-être positif, donc $K_{\psi}\cdot(\psi_{\mbox{co}}-\psi)>0$. Par conséquent,
+Le cap $\psi_{\textrm{co}}$ est donné dans le repère NED.
+Si l'on suppose que $r=0$, pour $\psi<\psi_{\textrm{co}}$, le moment généré doit
+être positif, donc $K_{\psi}\cdot(\psi_{\textrm{co}}-\psi)>0$. Par conséquent,
 $K_{\psi}>0$.
-De même, en prenant $r<0$ et $\psi=\psi_{\mbox{co}}$, le moment généré doit
+De même, en prenant $r<0$ et $\psi=\psi_{\textrm{co}}$, le moment généré doit
 être positif pour contrer la vitesse $r$, donc $-K_r\cdot r>0$, d'où $K_r>0$.
 
 ### Paramétrage
@@ -1230,13 +1230,13 @@ gravité du corps.
 
 ### Expression des efforts
 
-L'effort généré suivant l'axe X est $F_x = K_{x}\cdot (x_{\mbox{co}}-x) -
+L'effort généré suivant l'axe X est $F_x = K_{x}\cdot (x_{\textrm{co}}-x) -
 K_u\cdot u = \sigma_{xx}\ddot{x}$ où $\sigma_{xx}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'axe $x$.
 L'effort généré suivant l'axe Y est $F_y = K_{y}\cdot (y_{\mboy{co}}-y) -
 K_v\cdot v = \sigma_{yy}\ddot{y}$ où $\sigma_{yy}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'aye $y$.
-Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\mbox{co}}-\psi) - K_r\cdot r =
+Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\textrm{co}}-\psi) - K_r\cdot r =
 \sigma_{zz}\ddot{\psi}$ où $\sigma_{zz}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'axe $z$.
 
@@ -1279,11 +1279,11 @@ $$K_{\psi} = \sigma_{zz}\left(\frac{2\pi}{T_{\psi}}\right)^2$$
 
 $$K_{r} = 2\zeta\sigma_{zz}\frac{2\pi}{T_{\psi}}$$
 
-Le cap $\psi_{\mbox{co}}$ est donné dans le repère NED.
-Si l'on suppose que $r=0$, pour $\psi<\psi_{\mbox{co}}$, le moment généré doit
-être positif, donc $K_{\psi}\cdot(\psi_{\mbox{co}}-\psi)>0$. Par conséquent,
+Le cap $\psi_{\textrm{co}}$ est donné dans le repère NED.
+Si l'on suppose que $r=0$, pour $\psi<\psi_{\textrm{co}}$, le moment généré doit
+être positif, donc $K_{\psi}\cdot(\psi_{\textrm{co}}-\psi)>0$. Par conséquent,
 $K_{\psi}>0$.
-De même, en prenant $r<0$ et $\psi=\psi_{\mbox{co}}$, le moment généré doit
+De même, en prenant $r<0$ et $\psi=\psi_{\textrm{co}}$, le moment généré doit
 être positif pour contrer la vitesse $r$, donc $-K_r\cdot r>0$, d'où $K_r>0$.
 
 ### Paramétrage
@@ -1334,13 +1334,13 @@ La figure suivante illustre l'ensemble modélisé :
 Les efforts sont calculés au point P (de l'hélice) et transportés ensuite au
 centre de gravité. Ils s'écrivent :
 
-$F\mbox{tot}_P = F\mbox{safran}_P + F\mbox{hélice}_P$
+$F\textrm{tot}_P = F\textrm{safran}_P + F\textrm{hélice}_P$
 
-L'expression du torseur $F\mbox{hélice}_P$ est donnée dans le modèle "Hélices
+L'expression du torseur $F\textrm{hélice}_P$ est donnée dans le modèle "Hélices
 Wageningen série B".
 
 Les efforts dûs au safran seront calculés au point R puis le torseur sera
-déplacé au point P. Dans la suite, on notera simplement $F\mbox{safran}$ le
+déplacé au point P. Dans la suite, on notera simplement $F\textrm{safran}$ le
 torseur au point R.
 
 La modélisation choisie sépare les efforts dûs au safran en deux parties :
@@ -1348,15 +1348,15 @@ La modélisation choisie sépare les efforts dûs au safran en deux parties :
 - La part provenant de l'immersion dans le sillage de l'hélice
 - La part simplement due à la vitesse du safran en eau libre
 
-$F\mbox{safran} = F\mbox{safran}^{\mbox{sillage}} + F\mbox{safran}^{\mbox{hors sillage}}$
+$F\textrm{safran} = F\textrm{safran}^{\textrm{sillage}} + F\textrm{safran}^{\textrm{hors sillage}}$
 
 Dans le repère lié au safran, celui-ci ne crée qu'une résultante suivant les axes X et Y (autrement dit, Fz=0 et Mx=My=Mz=0).
 
 Les composantes $F_x$ et $F_y$ de cette résultantes s'expriment sous la forme :
 
-$$F_x = -\mbox{Lift}(V_s, C_l, \alpha, S)\cdot\sin(\alpha) - \mbox{Drag}(V_s, C_d, \alpha, S)\cdot\cos(\alpha)$$
+$$F_x = -\textrm{Lift}(V_s, C_l, \alpha, S)\cdot\sin(\alpha) - \textrm{Drag}(V_s, C_d, \alpha, S)\cdot\cos(\alpha)$$
 
-$$F_y = +\mbox{Lift}(V_s, C_l, \alpha, S)\cdot\cos(\alpha) - \mbox{Drag}(V_s, C_d, \alpha, S)\cdot\sin(\alpha)$$
+$$F_y = +\textrm{Lift}(V_s, C_l, \alpha, S)\cdot\cos(\alpha) - \textrm{Drag}(V_s, C_d, \alpha, S)\cdot\sin(\alpha)$$
 
 La vitesse $V_s$ et l'aire $S$ sont calculées différemment suivant que l'on
 considère la partie du gouvernail dans le sillage de l'hélice ou celle à
@@ -1368,9 +1368,9 @@ du safran $\beta$ :
 
 $$\alpha = \beta - a(V_S) = \beta - atan2({V_S}_x, {V_S}_y)$$
 
-$$\mbox{Lift}(V_S, C_l, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cl(\alpha)\cos(\alpha) K_{\mbox{lift}}$$
+$$\textrm{Lift}(V_S, C_l, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cl(\alpha)\cos(\alpha) K_{\textrm{lift}}$$
 
-$$\mbox{Drag}(V_S, C_d, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cd(\alpha)\cos(\alpha) K_{\mbox{drag}}$$
+$$\textrm{Drag}(V_S, C_d, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cd(\alpha)\cos(\alpha) K_{\textrm{drag}}$$
 
 Le coefficient $\cos(\alpha)$ permet de réduire l'efficacité du gouvernail lorsque $\alpha$ devient important.
 
@@ -1545,21 +1545,21 @@ sillage et une partie à l'extérieur. La partie à l'intérieur du sillage est
 obtenue en considérant le diamètre du sillage $D_w$ et la partie à l'extérieur en
 faisant la différence avec $A_R$.
 
-$$S_{\mbox{sillage}} = \min(A_R, c\cdot D_w)$$
-$$S_{\mbox{hors sillage}} = A_R - S_{\mbox{sillage}}$$
+$$S_{\textrm{sillage}} = \min(A_R, c\cdot D_w)$$
+$$S_{\textrm{hors sillage}} = A_R - S_{\textrm{sillage}}$$
 
 où $c$ est la corde calculée ci-dessus.
 
 Le diamètre $D_w$ du sillage est défini par :
 
-$$\frac{D_w}{D_{\mbox{hélice}}} = \sqrt{\frac{V_1}{u_{RS}}}$$
+$$\frac{D_w}{D_{\textrm{hélice}}} = \sqrt{\frac{V_1}{u_{RS}}}$$
 
 $$V_1 = V_a\left(1 + 0.5 \left(\sqrt{1 + C_{Th}} - 1\right)\right)$$
 $$u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}} - 1\right)\right)$$
 
 d'où
 
-$$\frac{D_w}{D_{\mbox{hélice}}} =
+$$\frac{D_w}{D_{\textrm{hélice}}} =
 \sqrt{\frac{1+0.5(\sqrt{1+C_{Th}}-1)}{1+K_R(\sqrt{1+C_{Th}}-1)}}$$
 
 
@@ -1603,8 +1603,8 @@ nouveau ici (hormis `model`). On a les paramètres supplémentaires suivants :
 - `rudder height` : $b$
 - `effective aspect ratio`: Paramètre $K_{\Lambda}$ dans le calcule du rapport
    de forme (pour la formule de Soeding) ci-dessus
-- `lift tuning coefficient`: $K_{\mbox{lift}}$ dans les formules ci-dessus
-- `drag tuning coefficient`: $K_{\mbox{drag}}$ dans les formules ci-dessus
+- `lift tuning coefficient`: $K_{\textrm{lift}}$ dans les formules ci-dessus
+- `drag tuning coefficient`: $K_{\textrm{drag}}$ dans les formules ci-dessus
 - `position of rudder in body frame`: coordonnées du point $P$ (cf. schéma ci-dessus), projetées dans le repère "body"
 
 Ce modèle a trois commandes :
@@ -1659,14 +1659,14 @@ Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'h
 (apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
 exprimé dans le repère de l'hélice, est donc :
 
-$$\tau_{\mbox{hélice}} = \left[\begin{array}{c}
+$$\tau_{\textrm{hélice}} = \left[\begin{array}{c}
 X\\
 Y\\
 Z\\
 K\\
 M\\
 N
-\end{array}\right]_{\mbox{hélice}}$$
+\end{array}\right]_{\textrm{hélice}}$$
 
 $$= \left[\begin{array}{c}
            T_b\\
@@ -1675,14 +1675,14 @@ $$= \left[\begin{array}{c}
            \kappa Q_b\\
            0\\
            0
-\end{array}\right]_{\mbox{hélice}}$$
+\end{array}\right]_{\textrm{hélice}}$$
 $$= \left[\begin{array}{c}
            (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J)\\
            0\\
            0\\
            \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J)\\
            0\\
-           0\end{array}\right]_{\mbox{hélice}}
+           0\end{array}\right]_{\textrm{hélice}}
 $$
 
 ### Paramétrage

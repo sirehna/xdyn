@@ -80,12 +80,12 @@ courbe de poussée.
 Pour toute position de navire, il existe une position isocarène. Soit en effet
 $X_0=(z_0,\phi_0,\theta_0)$ et $X_1=(z_1,\phi_1,\theta_1)$ deux paramètres de
 flottaison tels que $\phi_0\neq\phi_1$ et $\theta_0\neq\theta_1$.
-Soit $V_{\mbox{max}}$ le volume de la carène lorsque le navire est totalement
-immergé. On note $I$ l'intervalle $[0,V_{\mbox{max}}]$.
+Soit $V_{\textrm{max}}$ le volume de la carène lorsque le navire est totalement
+immergé. On note $I$ l'intervalle $[0,V_{\textrm{max}}]$.
 
 On note $V_z$ l'application partielle $V_z:z\mapsto
 V(z,\phi_1,\theta_1)$. $V$ étant continue par hypothèse, $V_z$ l'est aussi.
-Par ailleurs, on sait que $V_z(-\infty)=0$ et $V_z(+\infty)=V_{\mbox{max}}$
+Par ailleurs, on sait que $V_z(-\infty)=0$ et $V_z(+\infty)=V_{\textrm{max}}$
 donc d'après le théorème des valeurs intermédiaires, $\forall V_0\in I,
 \exists z_2:V_z(z_2)=V_0$ ce qui signifie que $X_0=(z_0,\phi_0,\theta_0)$ et
 $X_1=(z_2,\phi_1,\theta_1)$ sont isocarènes.
@@ -126,14 +126,14 @@ le métacentre.
 
 Le couple de rappel $Mr$ est par définition :
 
-$$Mr = F_{\mbox{HS}} \cdot GZ = F_{\mbox{HS}} \cdot GM\cdot \sin(\theta)$$
+$$Mr = F_{\textrm{HS}} \cdot GZ = F_{\textrm{HS}} \cdot GM\cdot \sin(\theta)$$
 
 Pour de petites variations isocarènes de $\theta$, le volume ne variant pas,
-$F_{\mbox{HS}}$ est constante donc
+$F_{\textrm{HS}}$ est constante donc
 
-$$dMr = F_{\mbox{HS}}\cdot(\sin(\theta)dGM + GM\cdot\cos(\theta)d\theta)$$
+$$dMr = F_{\textrm{HS}}\cdot(\sin(\theta)dGM + GM\cdot\cos(\theta)d\theta)$$
 
-or $$dMr = F_{\mbox{HS}}\cdot dGZ$$
+or $$dMr = F_{\textrm{HS}}\cdot dGZ$$
 d'où
 
 $$dGZ = \sin(\theta)dGM + GM\cdot\cos(\theta)d\theta$$

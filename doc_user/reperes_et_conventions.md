@@ -594,7 +594,7 @@ Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
 l'effort permettant de conserver les forçages, en d'autres termes il est
 possible de récupérer
 
-$$(M+M_a)\dot{X_{\mbox{forced}}} - \sum F_i$$
+$$(M+M_a)\dot{X_{\textrm{forced}}} - \sum F_i$$
 
 Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
 corps s'appelle 'body 1):
@@ -636,10 +636,10 @@ hydrodynamic forces calculation point in body frame:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-On note ${}^{\mbox{local}}T_{\mbox{body}}$ la transformation permettant de
+On note ${}^{\textrm{local}}T_{\textrm{body}}$ la transformation permettant de
 convertir des coordonnées dans le repère body en coordonnées du même point
 exprimées dans le repère de calcul hydrodynamique.
-${}^{\mbox{local}}T_{\mbox{NED}}$ est celle permettant de convertir des
+${}^{\textrm{local}}T_{\textrm{NED}}$ est celle permettant de convertir des
 coordonnées dans le repère NED en coordonnées du même point exprimées dans le
 repère de calcul hydrodynamique.
 

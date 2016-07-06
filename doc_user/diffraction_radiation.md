@@ -14,7 +14,7 @@ de Poincaré) que la vitesse dérive d'un potentiel que l'on appelle
 $\Phi_T:(x,y,z,t)\mapsto\Phi_T(x,y,z,t)$. Par définition, la vitesse en tout
 point de l'écoulement est donc donnée par :
 
-$$V(x,y,z,t) = \mbox{grad}{\Phi_T(x,y,z,t)}$$
+$$V(x,y,z,t) = \textrm{grad}{\Phi_T(x,y,z,t)}$$
 
 Le potentiel de la houle incidente est connu si l'on se place dans le cadre de
 la théorie linéaire de Stokes. On désignera par $\Phi_I$ ce potentiel. On a en
@@ -62,8 +62,8 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
 4. Le fond étant imperméable, la composante suivant $z$ de la vitesse y est
    nulle : $V_z(x,y,h,t) = \frac{\partial \Phi_P}{\partial z}(x,y,h,t) = 0$ et
    par là même : $\frac{\partial \Psi_P}{\partial z}(x,y,h) = 0$.
-5. L'obstacle étant imperméable, $(\mbox{grad} \Psi_P) \cdot n = \frac{\partial
-   \Psi_P}{\partial n} = -(\mbox{grad} \Psi_I) \cdot n + V_o \cdot n$
+5. L'obstacle étant imperméable, $(\textrm{grad} \Psi_P) \cdot n = \frac{\partial
+   \Psi_P}{\partial n} = -(\textrm{grad} \Psi_I) \cdot n + V_o \cdot n$
    où $V_o$ est la vitesse normale de l'obstacle en
    un point $P$ et $n$ est la normale extérieure à l'obstacle.
 
@@ -72,7 +72,7 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
 Si l'on suppose l'obstacle fixe, la condition (5) s'écrit :
 $$ \frac{\partial \Psi_P}{\partial n} = - \frac{\partial \Psi_I}{\partial n}$$
 Cette condition traduit la réflexion (ou diffraction) de la houle incidente sur
-l'obstacle fixe. Un potentiel $\Psi_{\mbox{PD}}$ vérifiant les conditions (1) à
+l'obstacle fixe. Un potentiel $\Psi_{\textrm{PD}}$ vérifiant les conditions (1) à
 (4) et la condition de diffraction est appelé potentiel de diffraction.
 
 Si l'on ne considère qu'on mouvement oscillatoire élémentaire de l'obstacle
@@ -86,8 +86,8 @@ En définitive, la solution complète $\Phi_D$ du problème de
 diffraction-rayonnement obtenue par superposition de la solution "obstacle
 fixe" et des solutions oscillatoires élémentaires peut s'écrire :
 
-$$ \Phi_D = \Re\left[\Psi_{\mbox{PD}}e^{-i\omega t} + \sum_{j=1}^6
-f_j\Psi_{\mbox{PR}_j} e^{-i\omega t}\right]$$
+$$ \Phi_D = \Re\left[\Psi_{\textrm{PD}}e^{-i\omega t} + \sum_{j=1}^6
+f_j\Psi_{\textrm{PR}_j} e^{-i\omega t}\right]$$
 
 en adoptant les notations suivantes :
 
@@ -96,38 +96,38 @@ en adoptant les notations suivantes :
 
 ## Expression des efforts hydrodynamiques
 
-On pose $$\Phi_{\mbox{PR}} =  \Re\left[\sum_{j=1}^6 f_j \Psi_{PR_j} e^{-i\omega
+On pose $$\Phi_{\textrm{PR}} =  \Re\left[\sum_{j=1}^6 f_j \Psi_{PR_j} e^{-i\omega
 t}\right]$$
 
 Les efforts hydrodynamiques s'écrivent :
 
-$$F_{\mbox{hd}} = \rho \frac{d}{dt} \int_{C}\Phi_T dS$$
-$$= \rho \frac{d}{dt} \int_{C}\Phi_I+\Phi_{\mbox{PD}}+\Phi_{\mbox{PR}} dS$$
+$$F_{\textrm{hd}} = \rho \frac{d}{dt} \int_{C}\Phi_T dS$$
+$$= \rho \frac{d}{dt} \int_{C}\Phi_I+\Phi_{\textrm{PD}}+\Phi_{\textrm{PR}} dS$$
 
-On appelle $F_{\mbox{FK}}=\rho \frac{d}{dt} \int_{C}\Phi_I dS$ "efforts de
-Froude-Krylov" et $F_D = \rho \frac{d}{dt} \int_{C}\Phi_{\mbox{PD}} dS$ "efforts de
+On appelle $F_{\textrm{FK}}=\rho \frac{d}{dt} \int_{C}\Phi_I dS$ "efforts de
+Froude-Krylov" et $F_D = \rho \frac{d}{dt} \int_{C}\Phi_{\textrm{PD}} dS$ "efforts de
 diffraction". Ensemble ils constituent les efforts d'excitation de la houle
-$F_E$. Les efforts $\rho \frac{d}{dt} \int_{C}\Phi_{\mbox{PR}} dS$ sont nommés
+$F_E$. Les efforts $\rho \frac{d}{dt} \int_{C}\Phi_{\textrm{PR}} dS$ sont nommés
 "efforts de radiation" et sont désignés par $F_R$. On a donc :
 
-$$F_{\mbox{hd}} = F_E + F_R$$
+$$F_{\textrm{hd}} = F_E + F_R$$
 
 ## Calcul des efforts de radiation
 
 On a, pour l'axe $k$ :
 
-$$ F_{\mbox{R}_k} = \rho \frac{\partial}{\partial t} \int_C \Phi_{\mbox{PR}}n_k dS$$
+$$ F_{\textrm{R}_k} = \rho \frac{\partial}{\partial t} \int_C \Phi_{\textrm{PR}}n_k dS$$
 
-$$= \rho \frac{\partial}{\partial t} \Re \int_C \sum_j \Psi_{\mbox{PR}_j} f_je^{-i\omega t} n_k dS$$
+$$= \rho \frac{\partial}{\partial t} \Re \int_C \sum_j \Psi_{\textrm{PR}_j} f_je^{-i\omega t} n_k dS$$
 
-$$= \rho \Re \int_C \sum_j -i\omega  \Psi_{\mbox{PR}_j} f_j e^{-i\omega t} n_k dS$$
+$$= \rho \Re \int_C \sum_j -i\omega  \Psi_{\textrm{PR}_j} f_j e^{-i\omega t} n_k dS$$
 
-On décompose $\Psi_{\mbox{PR}_j}$ en sa partie réelle et sa partie imaginaire :
-$\Psi_{\mbox{PR}_j} = \Psi_j^R + i \Psi_j^I$
+On décompose $\Psi_{\textrm{PR}_j}$ en sa partie réelle et sa partie imaginaire :
+$\Psi_{\textrm{PR}_j} = \Psi_j^R + i \Psi_j^I$
 
 On a alors :
 
-$$ F_{\mbox{R}_k} = \rho \Re \int_C \sum_j \Re(-i\omega \Psi_j^R + \omega \Psi_j^I)
+$$ F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \Re(-i\omega \Psi_j^R + \omega \Psi_j^I)
 f_j e^{-i\omega t} n_k dS$$
 $$ = \rho \Re \int_C \sum_j -i\omega f_j e^{-i\omega t} \Psi_j^R + \sum_j \omega
 f_j e^{-i\omega t} \Psi_j^I n_k dS$$
@@ -138,7 +138,7 @@ $$-i\omega f_j e^{-i\omega t} \Psi_j^R = \frac{\partial}{\partial t}(f_je^{-i\om
 
  donc
 
-$$ F_{\mbox{R}_k} = \rho \Re \int_C \sum_j \omega f_j e^{-i\omega t} \Psi_j^I + \sum_j \frac{\partial}{\partial t} f_j e^{-i\omega t}\Psi_j^R n_k dS$$
+$$ F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \omega f_j e^{-i\omega t} \Psi_j^I + \sum_j \frac{\partial}{\partial t} f_j e^{-i\omega t}\Psi_j^R n_k dS$$
 
 $$ = \rho\omega \sum_j\Re (f_j e^{-i\omega t})\int_C \Psi_j^I
 n_k dS + \rho \sum_j \frac{d}{dt}\Re(f_j
@@ -146,7 +146,7 @@ e^{-i\omega t})\int_C\Psi_j^R n_k dS$$
 
 On pose $U_j=\Re(f_j e^{-i\omega t})$
 
-$$ F_{\mbox{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I n_k dS + \rho \sum_j
+$$ F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I n_k dS + \rho \sum_j
 \frac{dU_j}{dt}\int_C \Psi_j^R n_k dS$$
 
 Or d'après la condition (5) écrite pour les potentiels élémentaires de
@@ -156,7 +156,7 @@ $$n_k = \frac{\partial \Psi_k^R}{\partial n}$$
 
 On a donc :
 
-$$ F_{\mbox{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
+$$ F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
 \Psi_k^R}{\partial n} dS + \rho \sum_j
 \frac{dU_j}{dt}\int_C \Psi_j^R  \frac{\partial \Psi_k^R}{\partial n} dS$$
 
@@ -173,13 +173,13 @@ dispersion d'énergie par les vagues générées par le solide).
 
 On a alors :
 
-$$F_{\mbox{R}_k} = -\left(\sum_j U_j {B_r}_{jk}(\omega) + \sum_j \frac{dU_j}{dt}
+$$F_{\textrm{R}_k} = -\left(\sum_j U_j {B_r}_{jk}(\omega) + \sum_j \frac{dU_j}{dt}
 {M_A}_{jk}(\omega)\right)$$
 
 En prenant $U=d\eta/dt$, on obtient une formulation vectorielle des efforts dans
 le domaine fréquentiel :
 
-$$F_{\mbox{R}}(t) = -\left(M_A(\omega)\frac{d^2\eta(t)}{dt^2} + B_r(\omega)
+$$F_{\textrm{R}}(t) = -\left(M_A(\omega)\frac{d^2\eta(t)}{dt^2} + B_r(\omega)
 \frac{d\eta(t)}{dt}\right)$$
 
 ## Propriétés
@@ -199,7 +199,7 @@ $$2Ec = \rho\int_{\omega} (\nabla \Phi)^2 dV = \rho \int_{\partial \Omega} \Phi
 
 Lorsque l'on écrit le bilan des efforts appliqués au solide, on a :
 
-$$(M+M_A(\omega)) \ddot{X} + B_r(\omega) \dot{X} = F_{\mbox{autres}}$$
+$$(M+M_A(\omega)) \ddot{X} + B_r(\omega) \dot{X} = F_{\textrm{autres}}$$
 
 Bien que cette équation ressemble à une équation différentielle, il n'en est
 rien car elle ne décrit que les mouvements en régime établi sinusoïdal : cette
@@ -328,7 +328,7 @@ interpolation linéaire par morceaux, soit des splines) puis on évalue
 l'intégrale suivante pour différentes valeurs de $\tau$ :
 
 $$K_{i,j}(\tau) =
-\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega$$
+\frac{2}{\pi}\int_{\omega_{\textrm{min}}}^{\omega_{\textrm{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega$$
 
 Cette intégrale est calculée à l'aide d'un schéma d'intégration numérique
 (méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
@@ -338,7 +338,7 @@ Cette intégrale est calculée à l'aide d'un schéma d'intégration numérique
 On calcule ensuite les efforts d'amortissement de radiation en prenant en
 compte l'historique sur une période $T$ :
 
-$$F_{\mbox{rad}}(t)\sim\int_0^{T}\dot{X}(t-\tau)K_r(\tau)d\tau$$
+$$F_{\textrm{rad}}(t)\sim\int_0^{T}\dot{X}(t-\tau)K_r(\tau)d\tau$$
 
 Il est important de noter que ces efforts sont exprimés dans le [repère de
 calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique) : un changement
@@ -366,7 +366,7 @@ suivantes sont réalisées :
   [`filon`]() et [`burcher`](). Les bornes d'intégration sont spécifiées par
   `omega min` et `omega max`. Si ces bornes ne sont pas incluses dans
   l'intervalle
-  $\left[\frac{2\pi}{\omega_{\mbox{max}}},\frac{2\pi}{\omega_{\mbox{min}}}\right]$,
+  $\left[\frac{2\pi}{\omega_{\textrm{max}}},\frac{2\pi}{\omega_{\textrm{min}}}\right]$,
   un message d'avertissement s'affiche (car dans ce cas l'intégration se poursuit
   hors du domaine de définition des fonctions de retard qui sont alors
   extrapolées).
@@ -375,7 +375,7 @@ suivantes sont réalisées :
   Le nombre de points de discrétisation à partir duquel
   est réalisée cette interpolation (le nombre de valeurs de $\tau$ pour
   lesquelles qu'on calcule l'intégrale
-  $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
+  $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\textrm{min}}}^{\omega_{\textrm{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
   est donné par `nb of points for retardation function discretization`.
 - Interpolation des états : lors du calcul de l'intgrale de convolution, les
   états sont interpolés linéairement entre deux instants

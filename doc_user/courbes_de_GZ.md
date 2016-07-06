@@ -45,14 +45,14 @@ seuls efforts de
 la gravité et de l'hydrostatique. On dénote par $f$ la fonction qui à $X$
 associe la somme des efforts appliqués au système :
 
-$$f(X) = F_{\mbox{hs}}(X) + m\cdot \mathbf{g}$$
+$$f(X) = F_{\textrm{hs}}(X) + m\cdot \mathbf{g}$$
 
 où $m$ désigne la masse du système et $\mathbf{g}$ est le vecteur
 accélération de la pesanteur.
 
 Lorsque le système est à l'équilibre, on a :
 
-$$f(X_{\mbox{eq}})=0$$
+$$f(X_{\textrm{eq}})=0$$
 
 Pour résoudre cette équation, on peut par exemple utiliser la méthode de
 Newton-Raphson :
@@ -103,15 +103,15 @@ délimité par le maillage. Le centre de carène est calculé de la façon suiva
 Soit $P_1,P_2,P_3$ les trois sommets d'un des triangles. Le volume élémentaire
 $dV$ associé à ce triangle est le déterminant des vecteurs $P_1,P_2,P_3$ :
 
-$$dV=\mbox{det}(P_1,P_2,P_3)$$
+$$dV=\textrm{det}(P_1,P_2,P_3)$$
 
 Les coordonnées du centre (par rapport à l'origine choisie pour les tétraèdres) sont données par :
 
-$$x_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{x(P_1)+x(P_2)+x(P_3)}{4}dV$$
+$$x_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{x(P_1)+x(P_2)+x(P_3)}{4}dV$$
 
-$$y_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{y(P_1)+y(P_2)+y(P_3)}{4}dV$$
+$$y_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{y(P_1)+y(P_2)+y(P_3)}{4}dV$$
 
-$$z_C = \frac{1}{\sum_{\mbox{facet}}dV}\sum_{\mbox{facet}}\frac{z(P_1)+z(P_2)+z(P_3)}{4}dV$$
+$$z_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{z(P_1)+z(P_2)+z(P_3)}{4}dV$$
 
 #### Autre méthode de calcul
 
@@ -123,13 +123,13 @@ $$GZ = y\cdot GB$$
 
 or
 
-$$y = \frac{x_{\mbox{body}}^{\mbox{(ned)}} \times
-z_{\mbox{ned}}^{\mbox{(ned)}}}{\left\|x_{\mbox{body}}^{\mbox{(ned)}} \times
-z_{\mbox{ned}}^{\mbox{(ned)}}\right\|}$$
+$$y = \frac{x_{\textrm{body}}^{\textrm{(ned)}} \times
+z_{\textrm{ned}}^{\textrm{(ned)}}}{\left\|x_{\textrm{body}}^{\textrm{(ned)}} \times
+z_{\textrm{ned}}^{\textrm{(ned)}}\right\|}$$
 
 
-où $x_{\mbox{body}}^{\mbox{(ned)}}$ désigne les coordonnées du vecteur $x$ du
-repère body, exprimées dans le repère NED et $z_{\mbox{ned}}^{\mbox{(ned)}}$ les
+où $x_{\textrm{body}}^{\textrm{(ned)}}$ désigne les coordonnées du vecteur $x$ du
+repère body, exprimées dans le repère NED et $z_{\textrm{ned}}^{\textrm{(ned)}}$ les
 coordonnées du vecteur $z$ du repère NED exprimées dans le repère NED.
 
 Il se trouve qu'il n'est pas nécessaire de connaître la coordonnée $z$ du
@@ -171,7 +171,7 @@ m_y}{f_z}$$
 soit, avec les conventions de rotation usuelles :
 
 $$ GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
-\sin(\psi)\cdot\cos(\theta)\cdot m_y}{f_z\left\|x_{\mbox{body}}^{\mbox{(ned)}}\right\|}
+\sin(\psi)\cdot\cos(\theta)\cdot m_y}{f_z\left\|x_{\textrm{body}}^{\textrm{(ned)}}\right\|}
 $$
 
 
