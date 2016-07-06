@@ -571,6 +571,54 @@ On peut créer un programme d'installation en faisant :
     ![Target parameters](create_eclipse_project_6.png)
 
 
+# Intégration continue
+
+Le code source d'X-DYN est versionné sous [GIT](http://www.git-scm.com). Le
+serveur d'intégration continue ([Jenkins](http://www.jenkins-ci.org)) a les
+responsabilité suivantes :
+
+* Récupérer le code source depuis le dépôt Git
+* Compiler le code
+* Générer la documentation utilisateur et la documentation développeur
+* Lancer les tests unitaires
+* Calculer des métriques surle code (couverture des tests, nombre de tests, etc.)
+* Détecter les problèmes mémoire (en utilisant valgrind)
+* Créer un programme d'installation
+* Rendre ce programme d'installation disponible
+
+Les branches Git sont utilisées comme suit :
+
+* Chaque nouvelle fonctionnalité est développée dans une branche spécifique qui
+  a vocation à ne contenir qu'un nombre restreint de commits (quelques dizaines
+  au maximum) et à n'être utilisée qu'une dizaine de jours au plus. Ces
+  "branches fonctionnelles" ou "feature branch" sont préfixées de `dev/`, par
+  exemple `dev/feature1`.
+* Le serveur d'intégration contient un processus `XDYN_DEV` qui surveille tout
+  changement dans n'importe quelle branche `dev/*` et réalise pour chacune
+  l'ensemble des étapes précédemment décrites
+* En cas de succès, le responsable du dépôt effectue une revue de code sur la
+  branche fonctionnelle, puis, le cas échéant, attend le retour du serveur
+  d'intégration continue suite à ses modifications
+* Le responsable du dépôt migre la branche dans `ready/` (par exemple
+  `ready/feature1`)
+* Le serveur d'intégration contient un processus nommé `XDYN_INTEGRATION` qui
+  surveille tout changement dans n'importe quelle branche `ready/*` et réalise,
+  le cas échéant, un merge de la branche en question dans une branch
+  d'intégration puis l'ensemble des opérations de build
+* En cas de succès, la branche `integration` est mergée dans la branche
+  `master`
+* Le serveur d'intégration continue contient un processur nommé
+  `XDYN_PRODUCTION` qui, à son tour, build la branche `master`
+
+L'intérêt de ce processus est d'isoler les erreurs dans les feature branches.
+Ainsi, les développeurs ne sont pas impactés par les erreurs commises sur les
+branches sur lesquelles ils ne travaillent pas. Au cours du développement, les
+développeurs doivent régulièrement faire un rebase sur `master` (sur laquelle
+personne ne commit mis à part Jenkins) afin de s'assurer d'avoir la dernière
+version à jour.
+
+
+
 # Tutoriels
 
 ## Ajout d'un modèle d'effort non-commandé
