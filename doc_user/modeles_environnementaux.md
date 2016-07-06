@@ -59,8 +59,8 @@ La plus simple densité spectrale de puissance correspond à une houle
 monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
 
 $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
-\left\{\begin{array}{l}0, \mbox{\text{si }}\omega\neq \omega_0\\1, \mbox{\text{si }
-} \omega=\omega_0\end{array}\right.$$
+\left\{\begin{array}{l}0, \textrm{si }\omega\neq \omega_0\\1, \textrm{si }
+\omega=\omega_0\end{array}\right.$$
 
 Le paramétrage de ce spectre est :
 

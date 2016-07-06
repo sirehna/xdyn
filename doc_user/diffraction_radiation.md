@@ -60,8 +60,8 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
    diffraction-radiation ont pour nombre d'onde $k$, se propagent dans la
    direction radiale et leur amplitude décroît comme $1/\sqrt{r}$.
 4. Le fond étant imperméable, la composante suivant $z$ de la vitesse y est
-   nulle : $V_z(x,y,h,t) = \frac{\partial Phi_P}{\partial z}(x,y,h,t) = 0$ et
-   par là même : $\frac{\partial Psi_P}{\partial z}(x,y,h) = 0$.
+   nulle : $V_z(x,y,h,t) = \frac{\partial \Phi_P}{\partial z}(x,y,h,t) = 0$ et
+   par là même : $\frac{\partial \Psi_P}{\partial z}(x,y,h) = 0$.
 5. L'obstacle étant imperméable, $(\mbox{grad} \Psi_P) \cdot n = \frac{\partial
    \Psi_P}{\partial n} = -(\mbox{grad} \Psi_I) \cdot n + V_o \cdot n$
    où $V_o$ est la vitesse normale de l'obstacle en
@@ -104,8 +104,8 @@ Les efforts hydrodynamiques s'écrivent :
 $$F_{\mbox{hd}} = \rho \frac{d}{dt} \int_{C}\Phi_T dS$$
 $$= \rho \frac{d}{dt} \int_{C}\Phi_I+\Phi_{\mbox{PD}}+\Phi_{\mbox{PR}} dS$$
 
-On appelle $$F_{\mbox{FK}}=\rho \frac{d}{dt} \int_{C}\Phi_I dS $$ "efforts de
-Froude-Krylov" et $$F_D = \rho \frac{d}{dt} \int_{C}\Phi_{\mbox{PD}} dS $$ "efforts de
+On appelle $F_{\mbox{FK}}=\rho \frac{d}{dt} \int_{C}\Phi_I dS$ "efforts de
+Froude-Krylov" et $F_D = \rho \frac{d}{dt} \int_{C}\Phi_{\mbox{PD}} dS$ "efforts de
 diffraction". Ensemble ils constituent les efforts d'excitation de la houle
 $F_E$. Les efforts $\rho \frac{d}{dt} \int_{C}\Phi_{\mbox{PR}} dS$ sont nommés
 "efforts de radiation" et sont désignés par $F_R$. On a donc :
@@ -116,10 +116,10 @@ $$F_{\mbox{hd}} = F_E + F_R$$
 
 On a, pour l'axe $k$ :
 
-$$ F_{\mbox{R}_k} = \rho \frac{\partial}{\partial t} \int_C \Phi_{\mbox{PR}}
-n_k dS$$
-$$= \rho \frac{\partial}{\partial t} \Re \int_C \sum_j \Psi_{\mbox{PR}_j} f_j
-e^{-i\omega t} n_k dS$$
+$$ F_{\mbox{R}_k} = \rho \frac{\partial}{\partial t} \int_C \Phi_{\mbox{PR}}n_k dS$$
+
+$$= \rho \frac{\partial}{\partial t} \Re \int_C \sum_j \Psi_{\mbox{PR}_j} f_je^{-i\omega t} n_k dS$$
+
 $$= \rho \Re \int_C \sum_j -i\omega  \Psi_{\mbox{PR}_j} f_j e^{-i\omega t} n_k dS$$
 
 On décompose $\Psi_{\mbox{PR}_j}$ en sa partie réelle et sa partie imaginaire :
@@ -134,8 +134,9 @@ f_j e^{-i\omega t} \Psi_j^I n_k dS$$
 
 On remarque que
 
-$-i\omega f_j e^{-i\omega t} \Psi_j^R = \frac{\partial}{\partial t}(f_j
-e^{-i\omega t})$, donc
+$$-i\omega f_j e^{-i\omega t} \Psi_j^R = \frac{\partial}{\partial t}(f_je^{-i\omega t})$$
+
+ donc
 
 $$ F_{\mbox{R}_k} = \rho \Re \int_C \sum_j \omega f_j e^{-i\omega t} \Psi_j^I + \sum_j \frac{\partial}{\partial t} f_j e^{-i\omega t}\Psi_j^R n_k dS$$
 
@@ -161,10 +162,9 @@ $$ F_{\mbox{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
 
 On pose :
 
-$${M_A}_{jk}(\omega) = -\rho \int_C \Psi_j^R \frac{\partial \Psi_k^R}{\partial n} dS$$ (en
-kg)
-$${B_r}_{jk}(\omega) = -\rho \omega \int_C \Psi_j^I \frac{\partial \Psi_k^R}{\partial n} dS$$ (en
-kg/s)
+$${M_A}_{jk}(\omega) = -\rho \int_C \Psi_j^R \frac{\partial \Psi_k^R}{\partial n} dS \textrm{ (en kg)}$$
+
+$${B_r}_{jk}(\omega) = -\rho \omega \int_C \Psi_j^I \frac{\partial \Psi_k^R}{\partial n} dS \textrm{ (en kg/s)}$$
 
 On appelle $M_A$ matrice des masses ajoutées (qui vient de ce que le solide
 déplace le fluide) et $B_r$ matrice des
@@ -253,9 +253,9 @@ t}n_k dS \dot{x_j}(\tau)d\tau$
 
 On pose :
 
-$$A_{jk} = \rho\int_C\psi_j n_k dS$$ (masses ajoutées)
-$$K_{jk}(t) = \rho\int_C\frac{\partial\phi_j(t)}{\partial t}n_k dS$$ (fonctions
-de retard)
+$$A_{jk} = \rho\int_C\psi_j n_k dS \textrm{ (masses ajoutées)}$$
+
+$$K_{jk}(t) = \rho\int_C\frac{\partial\phi_j(t)}{\partial t}n_k dS \textrm{ (fonctions de retard)}$$
 
 On a alors :
 
@@ -418,8 +418,8 @@ Le choix de $x_i$ influence l’erreur $E(f) = I - I(f)$
   par $$E(f) = \frac{(b-a)^2}{2} f'(\eta), \quad \eta \in
   [a,b]$$ C’est la ''méthode du rectangle'' qui est d’ordre
   0.
-- Si $\xi = (a+b)/2\,$, l’erreur est donnée par $$E(f) =
-  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]$$ Il s’agit
+- Si $\xi = (a+b)/2\,$, l’erreur est donnée par $E(f) =
+  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]$. Il s’agit
   de la méthode du point médian qui est d’ordre 1.
 
 Ainsi, le choix du point milieu améliore l’ordre de la méthode : celle du
@@ -506,18 +506,24 @@ Les polynômes de Stieltjes-Wigert s'écrivent alors :
 $$p_0(x)=q^{1/4}$$
 et
 $$p_{n,k}(x) = \frac{(-1)^n q_k^{\frac{n}{2} +
-\frac{1}{4}}}{\sqrt{(q_k;q_k)_n}}\sum{\nu=0}^n\left[\begin{array}{c}n\\\nu\end{array}\right]q_k^{\nu^2}(-\sqrt{q_k}x)^\nu$$
+\frac{1}{4}}}{\sqrt{(q_k;q_k)_n}}\sum_{\nu=0}^n\left[\begin{array}{c}n\\\nu\end{array}\right]q_k^{\nu^2}(-\sqrt{q_k}x)^\nu$$
 
 où
+
 $$k\in[1,n]$$
+
 $$\left[\begin{array}{c}n\\\nu\end{array}\right]=\prod_{i=0}^{\nu-1}\frac{1-q^{n-i}}{1-q^{i+1}}$$
-($q$-symbole de Pochhammer)
+
+avec $q$ le symbole de Pochhammer
+
 $$(q;a)_n=\left\{\begin{array}{c}
           \prod_{j=0}^{n-1}(1-qa^j),n>0\\
           1,n=0\\
           \prod_{j=0}^{|n|}(1-qa^j),n<0\\
           \prod_{j=0}^{\infty}(1-qa^j),n=\infty
-          \end{array}\right.$$ (coefficient $q$-binomial)
+          \end{array}\right.$$
+
+(coefficient $q$-binomial)
 
 Afin d'accélérer davantage la convergence, on utilise l'intégration de
 Gauss-Kronrod de manière répétée (puisque cette méthode offre l'avantage de

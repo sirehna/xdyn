@@ -28,16 +28,16 @@ paramètres de flottaison liées par une transformation isocarène sont dites
 isocarènes.
 
 * On note $V$ la fonction calculant le volume immergé (le volume de la carène)
-: $$V:\left\{\begin{array}{c}\mathbf{R}^3\rightarrow\mathbf{R}^+\\X_f\mapsto
-V(X_f)\end{array}$$ On suppose $V$ continue.
+: $V:\left\{\begin{array}{c}\mathbf{R}^3\rightarrow\mathbf{R}^+\\X_f\mapsto
+V(X_f)\end{array}$. On suppose $V$ continue.
 
 * On note $B$ la fonction calculant la position du centre de carène (dans le
 repère NED) :
 $$B:\left\{\begin{array}{c}\mathbf{R}^3\rightarrow\mathbf{R}^3\\X_f\mapsto
 B(X_f)\end{array}$$
 
-* Soit $V_{\mbox{tot}}$ le volume total du navire. On note $I$ l'intervalle de
-$\mathbf{R}$ $I=[0,V_{\mbox{tot}}]$
+* Soit $V_{\textrm{tot}}$ le volume total du navire. On note $I$ l'intervalle de
+$\mathbf{R}$ $I=[0,V_{\textrm{tot}}]$
 
 ## Surface de flottaison et surface de poussée
 
