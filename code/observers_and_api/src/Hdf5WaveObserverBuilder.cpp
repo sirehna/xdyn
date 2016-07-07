@@ -13,7 +13,7 @@ SimHdf5WaveObserverBuilder::SimHdf5WaveObserverBuilder(
     const std::string& datasetName_,
     const size_t nx_,
     const size_t ny_):
-        h5File(H5::H5File(fileName,H5F_ACC_TRUNC)),
+        h5File(H5_Tools::openOrCreateAHdf5File(fileName)),
         datasetName(H5_Tools::ensureStringStartsAndEndsWithAPattern(datasetName_,"/")),
         group(((nx_*ny_)>0)?(H5_Tools::createMissingGroups(h5File, datasetName)):H5::Group()),
         nx(nx_),ny(ny_)
