@@ -114,7 +114,8 @@ void writeMeshToHdf5File(
         const Matrix3x& nodes,
         const std::vector<Facet>& facets)
 {
-    writeMeshToHdf5File(H5::H5File(file,H5F_ACC_TRUNC), datasetName, nodes, facets);
+    H5_Tools::ifFileDoesNotExistsCreateOne(file);
+    writeMeshToHdf5File(H5::H5File(file,H5F_ACC_RDWR), datasetName, nodes, facets);
 }
 
 void writeMeshToHdf5File(
