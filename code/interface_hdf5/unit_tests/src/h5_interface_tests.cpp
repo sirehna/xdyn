@@ -312,3 +312,27 @@ TEST_F(H5InterfaceTest, should_be_able_to_join_group_names)
     ASSERT_EQ("a/b/c",H5_Tools::join(gg,"/"));
 }
 
+TEST_F(H5InterfaceTest, should_be_able_to_write_string_in_hdf5_files)
+{
+    const std::string filename = "file.h5";
+    H5_Tools::writeString(filename, "/inputs/command", "command");
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_write_several_strings_in_hdf5_files)
+{
+    const std::string filename = "file.h5";
+    H5_Tools::writeString(filename, "/inputs/command", "command0");
+    H5_Tools::writeString(filename, "/inputs/instruction", "instruction");
+    H5_Tools::writeString(filename, "/inputs/hello", "hello");
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_throw_an_exeception_when_writing_to_an_existing_string)
+{
+    const std::string filename = "should_throw_an_exeception_when_writing_to_an_existing_string.h5";
+    H5_Tools::writeString(filename, "/inputs/command", "command0");
+    ASSERT_THROW(H5_Tools::writeString(filename, "/inputs/command", "command1"), InternalErrorException);
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
