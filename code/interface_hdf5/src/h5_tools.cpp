@@ -1,4 +1,5 @@
 #include "InternalErrorException.hpp"
+#include "h5_tools.h"
 #include "h5_tools.hpp"
 
 std::string H5_Tools::ensureStringStartsAndEndsWithAPattern(
@@ -140,16 +141,34 @@ H5::DataSet H5_Tools::createDataSet(
     cparms.setChunk(nDims, chunk_dims);
     delete [] chunk_dims;
     createMissingGroups(file, datasetName);
-    htri_t dataset_status = H5Lexists(file.getId(), datasetName.c_str(), H5P_DEFAULT);
-    if (dataset_status<=0)
+    if (H5_Tools::doesDataSetExist(file, datasetName))
     {
-        return file.createDataSet(datasetName, datasetType, space, cparms);
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "When serializing to HDF5, attempting to create dataset '" << datasetName << "' twice");
     }
     else
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "When serializing to HDF5, attempting to create dataset '" << datasetName << "' twice");
+        return file.createDataSet(datasetName, datasetType, space, cparms);
+    }
+}
+
+H5::DataSet H5_Tools::openDataSet(
+        const H5::H5File& file, const std::string& datasetName)
+{
+    if (H5_Tools::doesDataSetExist(file, datasetName))
+    {
         return file.openDataSet(datasetName);
     }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Attempting to open a non existing dataset '" << datasetName << "' twice");
+    }
+}
+
+bool H5_Tools::doesDataSetExist(
+        const H5::H5File& file, const std::string& datasetName)
+{
+    const htri_t dataset_status = H5Lexists(file.getId(), datasetName.c_str(), H5P_DEFAULT);
+    return (dataset_status>0) ? true : false;
 }
 
 std::string H5_Tools::join(const std::vector<std::string>&v, const std::string& delim)
@@ -197,5 +216,36 @@ void H5_Tools::writeString(
         const std::string& datasetName,
         const std::string& stringToWrite)
 {
-    H5_Tools::writeString(H5::H5File(filename,H5F_ACC_RDWR), datasetName, stringToWrite);
+    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
+    H5_Tools::writeString(H5::H5File(filename, H5F_ACC_RDWR), datasetName, stringToWrite);
+}
+
+bool H5_Tools::doesFileExists(const std::string& filename)
+{
+    return (h5_doesFileExists(filename.c_str())?true:false);
+}
+
+void H5_Tools::createEmptyHdf5File(const std::string& filename)
+{
+    H5::H5File file(filename, H5F_ACC_TRUNC);
+    file.close();
+}
+
+void H5_Tools::ifFileDoesNotExistsCreateOne(const std::string& filename)
+{
+    if (not H5_Tools::doesFileExists(filename))
+    {
+        H5_Tools::createEmptyHdf5File(filename);
+    }
+}
+
+H5::H5File H5_Tools::openOrCreateAHdf5File(const std::string& filename)
+{
+    H5_Tools::ifFileDoesNotExistsCreateOne(filename);
+    return H5::H5File(filename, H5F_ACC_RDWR);
+}
+
+H5::H5File H5_Tools::openEmptyHdf5File(const std::string& filename)
+{
+    return H5::H5File(filename, H5F_ACC_TRUNC);
 }
