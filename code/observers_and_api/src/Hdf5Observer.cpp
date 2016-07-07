@@ -20,7 +20,7 @@ Hdf5Observer::Hdf5Observer(
         const std::string& filename,
         const std::vector<std::string>& d) :
             Observer(d),
-            h5File(H5::H5File(filename,H5F_ACC_TRUNC)),
+            h5File(H5_Tools::openEmptyHdf5File(filename)),
             basename("outputs"),
             name2address(),
             name2dataset(),
