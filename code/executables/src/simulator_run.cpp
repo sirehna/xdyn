@@ -94,9 +94,12 @@ void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Si
             }
             for (const auto& bodies : sys.get_bodies())
             {
-                writeMeshToHdf5File(observer.filename, "/inputs/meshes/"+bodies->get_states().name,
-                                    bodies->get_states().mesh->nodes,
-                                    bodies->get_states().mesh->facets);
+                if (bodies->get_states().mesh->nb_of_static_nodes>0)
+                {
+                    writeMeshToHdf5File(observer.filename, "/inputs/meshes/"+bodies->get_states().name,
+                                        bodies->get_states().mesh->nodes,
+                                        bodies->get_states().mesh->facets);
+                }
             }
         }
     }
