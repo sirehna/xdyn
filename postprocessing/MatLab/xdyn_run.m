@@ -53,7 +53,7 @@ if ispc
 else
     extension = '';
 end
-simulatorExe = fullfile(fileparts(mfilename),'..','bin',['sim' extension]);
+simulatorExe = fullfile(fileparts(mfilename('fullpath')),'..','bin',['sim' extension]);
 if ischar(param) || iscell(param)
     tmp = param;
     param = struct;
@@ -62,14 +62,17 @@ end
 if ischar(param.yaml)
     param.yaml = {param.yaml};
 end
+cwdDirectory = pwd;
+runDirectory = fileparts(param.yaml{1});
+if isempty(runDirectory);runDirectory='.';end
 defaultParam = struct;
 defaultParam.solver = 'rk4';
 defaultParam.dt = '0.1';
 defaultParam.tstart = '0.0';
 defaultParam.tend = '10.0';
 defaultParam.commands = '';
-defaultParam.exportWaves = true;
-defaultParam.outputFilename = 'res.h5';
+defaultParam.exportWaves = false;
+defaultParam.outputFilename = '';
 param = tbx_struct_addMissingFields(defaultParam, param);
 [pathstr, name, ext] = fileparts(param.outputFilename);
 if ~(strcmpi(ext,'.h5') || strcmpi(ext,'.hdf5'))
@@ -81,7 +84,6 @@ cmdLine = [simulatorExe ...
            ' --dt ' num2str(param.dt) ...
            ' --tstart ' num2str(param.tstart) ...
            ' --tend ' num2str(param.tend) ...
-           ' --output ' param.outputFilename
            ];
 if ~isempty(param.commands)
     cmdLine = [cmdLine ' --command ' param.commands];
@@ -89,11 +91,22 @@ end
 if param.exportWaves
     cmdLine = [cmdLine ' --waves true'];
 end
+if ~isempty(param.outputFilename)
+    cmdLine = [cmdLine ' --output ' tbx_getAbsolutePath(param.outputFilename)];
+end
 if verbose
     disp('Running command line:');
     disp(cmdLine);
 end
+cd(runDirectory);
 [status, result] = system(cmdLine, '-echo');
+if status~=0
+    disp(['An error occured while running command']);
+    disp(cmdLine);
+    results = [];
+    return
+end
+cd(cwdDirectory);
 if verbose
     disp(result);
 end
@@ -189,6 +202,47 @@ for i=1:numel(fnames)
         end
     end
 end
+return;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function absolutepath = tbx_getAbsolutePath(partialpath)
+% TBX_GETABSOLUTEPATH returns the absolute path of a partial path.
+%
+% absolutepath = tbx_getAbsolutePath(partialpath)
+%
+% Input :
+%   - partialpath    :  String of the path for which to generate absolute
+%                       path.
+%
+% Output :
+%   - absolutepath   : String of the absolute path of the input.
+%
+% See also tbx_isAbsolutePath
+%
+% SIREHNA
+% GJ
+%==========================================================================
+% SVN info
+% SVN $Id: tbx_getAbsolutePath.m 391 2011-10-18 14:11:40Z gj $
+% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/general/tbx_getAbsolutePath.m $
+%==========================================================================
+
+% parse partial path into path parts
+[pathname filename ext] = fileparts(partialpath);
+% no path qualification is present in partial path; assume parent is pwd, except
+% when path string starts with '~' or is identical to '~'.
+if isempty(pathname) && ~strncmp(partialpath,'~',1)
+    Directory = pwd;
+elseif isempty(regexp(partialpath,'(.:|\\\\)','once')) && ...
+       ~strncmp(partialpath,'/',1) && ~strncmp(partialpath,'~',1);
+    % path did not start with any of drive name, UNC path or '~'.
+    Directory = fullfile(pwd,pathname);
+else
+    % path content present in partial path; assume relative to current directory,
+    % or absolute.
+    Directory = pathname;
+end
+% construct absolute filename
+absolutepath = fullfile(Directory,[filename,ext]);
 return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function tbx_assert(cond,msg)
