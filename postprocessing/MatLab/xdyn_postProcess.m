@@ -35,7 +35,7 @@ else
     simu = xdyn_loadResultsFromHdf5File(filename);
 end
 
-if plotResult
+if plotResult && isfield(simu, 'states')
     plotStates(simu.states);
 end
 scale = 1;
@@ -43,18 +43,18 @@ if plotResult
     H = figure;
     set(H,'WindowKeyPressFcn',@funPauseCallback);
     set(H,'UserData',false);
-    dt = scale*(simu.t(2) - simu.t(1));
+    dt = scale * (simu.t(2) - simu.t(1));
     ti = title('X-DYN');
     set(gca,'zdir','reverse');
     hold on
     axis equal
     view(3);
     hasMeshes = isfield(simu,'meshes') && ~isempty(fieldnames(simu.meshes));
-    if isfield(simu,'states') && hasMeshes
+    if isfield(simu, 'states') && hasMeshes
         facecolor = 'g';
-        edgecolor = 'None';
+        edgecolor = 'k'; % 'None'
         hMeshes = tbx_meshes_create(simu, facecolor, edgecolor);
-        if isfield(simu,'waves')
+        if isfield(simu, 'waves')
             waveColormap = 'cool';
             hs = tbx_wave_create(simu.waves, waveColormap, H);
         end
@@ -133,6 +133,7 @@ for i=1:numel(outputs)
         simu.states = extractStates(filename, name, [outputsGroupName,'/t']);
     elseif strcmp(name, [outputsGroupName,'/waves'])
         simu.waves = tbx_wave_importWaveElevationFromHdf5(filename, name);
+        simu.t = simu.waves.t;
     end
 end
 
@@ -166,25 +167,55 @@ outputs = info.Groups;
 nObject = numel(outputs);
 s = cell(1,nObject);
 state = struct('t',s,'x',s,'y',s,'z',s,'quat',s,'eul',s);
-states  =struct;
+states = struct;
 for i=1:nObject
     name = getNameFromHdf5Hierarchy(outputs(i).Name);
     states.(name) = state;
-    states.(name).t = h5read(filename, time);
-    states.(name).x = h5read(filename, [outputs(i).Name '/X']);
-    states.(name).y = h5read(filename, [outputs(i).Name '/Y']);
-    states.(name).z = h5read(filename, [outputs(i).Name '/Z']);
-    states.(name).quat = ...
-    [h5read(filename, [outputs(i).Groups(1).Name '/Qr']),...
-     h5read(filename, [outputs(i).Groups(1).Name '/Qi']),...
-     h5read(filename, [outputs(i).Groups(1).Name '/Qj']),...
-     h5read(filename, [outputs(i).Groups(1).Name '/Qk'])];
-    states.(name).eul = tbx_geom3d_QUA_TO_EUL(states.(name).quat);
+    fileInfos = h5info(filename, getGroupFromHdf5Hierarchy(time));
+    if ~isempty(fileInfos.Datasets)
+        varNames = {fileInfos.Datasets(:).Name};
+        if ismember('t',varNames)
+            states.(name).t = h5read(filename, time);
+        end
+    end
+    objectInfos = h5info(filename,[outputs(i).Name]);
+    varNames = {objectInfos.Datasets(:).Name};
+    if ismember('X',varNames)
+        states.(name).x = h5read(filename, [outputs(i).Name '/X']);
+    end
+    if ismember('Y',varNames)
+        states.(name).y = h5read(filename, [outputs(i).Name '/Y']);
+    end
+    if ismember('Z',varNames)
+        states.(name).z = h5read(filename, [outputs(i).Name '/Z']);
+    end
+    if ~isempty(outputs.Groups)
+        states.(name).quat = ...
+        [h5read(filename, [outputs(i).Groups(1).Name '/Qr']),...
+         h5read(filename, [outputs(i).Groups(1).Name '/Qi']),...
+         h5read(filename, [outputs(i).Groups(1).Name '/Qj']),...
+         h5read(filename, [outputs(i).Groups(1).Name '/Qk'])];
+        states.(name).eul = tbx_geom3d_QUA_TO_EUL(states.(name).quat);
+    else
+        if ismember('PHI',varNames) && ...
+           ismember('THETA',varNames) && ...
+           ismember('PSI',varNames)
+            states.(name).eul = zeros(length(states.(name).t),3);
+            states.(name).eul(:,1) = h5read(filename, [outputs(i).Name '/PHI']);
+            states.(name).eul(:,2) = h5read(filename, [outputs(i).Name '/THETA']);
+            states.(name).eul(:,3) = h5read(filename, [outputs(i).Name '/PSI']);
+        end
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function name = getNameFromHdf5Hierarchy(m)
 names = tbx_string_split(m,'/');
 name = names{end};
+return
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function name = getGroupFromHdf5Hierarchy(m)
+names = tbx_string_split(m,'/');
+name = ['/' tbx_string_join(names(1:end-1),'/')];
 return
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function H = plotStates(states)
@@ -202,8 +233,15 @@ end
 if nObject==1
     bodyColor = 'k';
 end
-for j=1:6
-    subplot(2,3,j);
+if isempty(states.(n).eul)
+    nRow = 1;
+    nCol = 3;
+else
+    nRow = 2;
+    nCol = 6;
+end
+for j=1:nCol
+    subplot(nRow,3,j);
     box on
     grid on
     hold on
@@ -229,9 +267,9 @@ hMeshes = zeros(1, nMeshes);
 for i = 1:nMeshes
     meshName = meshNames{i};
     hMeshes(i) = ...
-    patch('Faces',simu.meshes.(meshName).faces,...
-          'Vertices',simu.meshes.(meshName).points',...
-          'FaceColor',facecolor,'EdgeColor',edgecolor);
+        patch('Faces',simu.meshes.(meshName).faces,...
+              'Vertices',simu.meshes.(meshName).points',...
+              'FaceColor',facecolor,'EdgeColor',edgecolor);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function wavesElevation = animateWaves(filename, group)
@@ -822,7 +860,7 @@ if ~strncmp(fliplr(str),fliplr(trailingPattern),length(trailingPattern));
     str = [str trailingPattern];
 end
 return;
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function str = tbx_string_split(str,delimiters)
 % TBX_STRING_SPLIT splits a string or a cell array of strings.
 %
@@ -870,6 +908,47 @@ function strCells = string_split(str,delimiters)
 strCells={};
 while ~isempty(str)
     [strCells{end+1},str] = strtok(str,delimiters);
+end
+return;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function str = tbx_string_join(str, delimiter)
+% TBX_STRING_JOIN joins a string or a cell array of strings.
+%
+% str = tbx_string_join(str)
+% str = tbx_string_join(str,delimiter)
+%
+% Inputs:
+%  - str         : String or cell array of strings for which one wants
+%                  to white spaces.
+%  - delimiter   : [Optional] A character that is used to join
+%                  the string. Default is ' '
+%
+% Outputs:
+%  - str         : Joined string
+%
+% The function is based on strtok function
+%
+% Compliant with MatLab 6
+%
+% SIREHNA
+% GJ
+%==========================================================================
+% SVN info
+% SVN $Id: tbx_string_join.m 1568 2016-07-08 09:07:04Z gj $
+% SVN $HeadURL: https://svn.sirehna.com/matlab_toolbox/string/tbx_string_join.m $
+%==========================================================================
+if nargin == 1
+    delimiter = ' ';
+end
+if isempty(str)
+    str = '';
+end
+if iscell(str)
+    res = str{1};
+    for i = 2:numel(str)
+        res = [res delimiter str{i}];
+    end
+    str = res;
 end
 return;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
