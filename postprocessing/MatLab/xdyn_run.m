@@ -4,31 +4,34 @@ function results = xdyn_run(param, importResults, verbose)
 % Inputs:
 %   param : Contains data to run xdyn simulator
 %           `param` is a structure with the following fields:
-%              - yaml           : YAML filename or cell array of YAML filenames
-%                                 containing input data for simulation.
-%              - solver         : Name of solver to use: Can be euler, rk4
-%                                 Default is 'rk4'
-%              - dt             : Time step used for integration
-%                                 Default is 0.1
-%              - tstart         : Start time
-%                                 Default is 0
+%              - yaml           : YAML filename or cell array of YAML
+%                                 filenames containing input data for
+%                                 simulation.
+%              - solver         : Name of solver to use: Can be euler, rk4,
+%                                 rkck
+%                                 Default is 'rk4'.
+%              - dt             : Time step used for integration.
+%                                 Default is 0.1.
+%              - tstart         : Start time.
+%                                 Default is 0.
 %              - tend           : End time for simulation
-%                                 Default is 10
+%                                 Default is 10.
 %              - commands       : [Optional] Yaml file used for commands
-%                                 Default is ''
+%                                 Default is ''.
 %              - outputFilename : [Optional] Name of the HDF5 used to store
-%                                 results
+%                                 results.
 %                                 Default is ''
-%              - exportWaves    : [Optional] Boolean used to export mesh wave
-%                                 elevation
-%                                 Default is true
+%              - exportWaves    : [Optional] Boolean used to export mesh
+%                                 wave elevation.
+%                                 Default is true.
 %           Missing parameters are automatically added.
 %           If `param` is a char array, it is considered as the YAML
 %           filename. All other parameters will be the default parameters
 %           If `param` is a cell array of char array, it is considered as
 %           the set of YAML files to used for simulation. 
-%   importResults : [Optional] Boolean used to import in MatLab the results.
-%                   Default is true
+%   importResults : [Optional] Boolean used to import in MatLab the
+%                   results.
+%                   Default is true.
 %   verbose : [Optional] Boolean used to disp various command
 if nargin < 3
     verbose = false;
@@ -39,8 +42,8 @@ if nargin < 3
             disp('    xdyn_run(''simu.yml'')');
             disp('    xdyn_run(''simu.yml'',''simu.h5'')');
             disp('    xdyn_run(struct(''yaml'',''simu.yml''),''simu.h5'')');
-            disp('');
-            disp('    xdyn_run(struct(''yaml'',''simu.yml''),''simu.h5'')');
+            disp('    xdyn_run(struct(''yaml'',''simu.yml'', ''commands'',''command.yml''),''simu.h5'')');
+            disp('    xdyn_run(struct(''yaml'',{''simu0.yml'',''simu1.yml''}, ''commands'',''command.yml''),''simu.h5'')');
             error('You need to provide at least one argument containing simulations parameters');
         end
     end
@@ -70,10 +73,10 @@ defaultParam.outputFilename = 'res.h5';
 param = tbx_struct_addMissingFields(defaultParam, param);
 [pathstr, name, ext] = fileparts(param.outputFilename);
 if ~(strcmpi(ext,'.h5') || strcmpi(ext,'.hdf5'))
-    
+    error('Extension is not recognized. Choose either .h5 or .hdf5')
 end
 cmdLine = [simulatorExe ...
-           ' ' stringifyCellArrayOfStrings(param.yaml) ...
+           ' -y ' stringifyCellArrayOfStrings(param.yaml) ...
            ' --solver ' param.solver ...
            ' --dt ' num2str(param.dt) ...
            ' --tstart ' num2str(param.tstart) ...
@@ -87,14 +90,20 @@ if param.exportWaves
     cmdLine = [cmdLine ' --waves true'];
 end
 if verbose
+    disp('Running command line:');
     disp(cmdLine);
 end
-[status, result] = system(cmdLine,'-echo');
+[status, result] = system(cmdLine, '-echo');
 if verbose
+    disp(result);
 end
 if importResults
     plotResult = false;
     results = xdyn_postProcess(param.outputFilename, plotResult);
+    if verbose
+        % Print version
+        disp(['XDyn ' results.info{2}]);
+    end
 else
     results = [];
 end
