@@ -11,8 +11,8 @@ function simu = xdyn_postProcess(filename, plotResult)
 %   - plotResult  [Optional] : Boolean used to plot the results
 %
 % Outputs:
-%   states : Structure variable that contains all the displacements of the
-%            n bodies simulated
+%   simu : Structure variable that contains all the displacements of the
+%          n bodies simulated
 %
 % Example:
 %   - simu = xdyn_postProcess('simu.hdf5');
@@ -49,7 +49,8 @@ if plotResult
     hold on
     axis equal
     view(3);
-    if isfield(simu,'states')
+    hasMeshes = isfield(simu,'meshes') && ~isempty(fieldnames(simu.meshes));
+    if isfield(simu,'states') && hasMeshes
         facecolor = 'g';
         edgecolor = 'None';
         hMeshes = tbx_meshes_create(simu, facecolor, edgecolor);
@@ -77,6 +78,8 @@ if plotResult
         end
     elseif isfield(simu,'waves')
         animateWaves(simu.waves);
+    else
+        delete(H);
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -108,8 +111,7 @@ outputsGroupName = filename{2};
 inputsGroupName = filename{3};
 filename = filename{1};
 if exist(filename,'file')~=2
-    error(['Input file ''' filename '''does not exist']);
-
+    error(['Input file ''' filename ''' does not exist']);
 end
 outputsGroupName = ensureStringHasHeadingPattern(outputsGroupName, '/');
 inputsGroupName = ensureStringHasHeadingPattern(inputsGroupName, '/');
@@ -149,6 +151,9 @@ if any(cmp)
             simu.meshes.(meshName).nPoints = size(simu.meshes.(meshName).points,2);
             simu.meshes.(meshName).faces = h5read(filename,[hdf5Name '/faces'])';
         end
+    end
+    if isempty(fieldnames(simu.meshes))
+        simu = rmfield(simu,'meshes');
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
