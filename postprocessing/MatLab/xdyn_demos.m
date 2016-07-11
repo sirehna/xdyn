@@ -201,11 +201,10 @@ disp('Tutorial 06 propulsion');
 disp('');
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
-param.yaml              = {'../demos/tutorial_06_propulsion.yml',...
-                           '../demos/controlled_forces_commands.yml'};
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
+param.yaml              = '../demos/tutorial_06_propulsion.yml';
 param.outputFilename    = 'tutorial_06_propulsion.h5';
 importResults = true;
 verbose = true;
