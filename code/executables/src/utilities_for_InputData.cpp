@@ -59,7 +59,6 @@ po::options_description get_options_description(InputData& input_data)
         ("tend",       po::value<double>(&input_data.tend),                              "Last time step")
         ("output,o",   po::value<std::string>(&input_data.output_filename),              "Name of the output file where all computed data will be exported.\nPossible values/extensions are csv, tsv, json, hdf5, h5, ws")
         ("waves,w",    po::value<std::string>(&input_data.wave_output),                  "Name of the output file where the wave heights will be stored ('output' section of the YAML file). In case output is made to a HDF5 file or web sockets, this option appends the wave height to the main output")
-        ("commands,c", po::value<std::string>(&input_data.command_file),                 "Name of the YAML file storing the commands for controlled forces")
         ("debug,d",                                                                      "Used by the application's support team to help error diagnosis. Allows us to pinpoint the exact location in code where the error occurred (do not catch exceptions), eg. for use in a debugger.")
     ;
     return desc;
@@ -98,7 +97,7 @@ int get_input_data(int argc, char **argv, InputData& input_data)
     return EXIT_SUCCESS;
 }
 
-int display_help(char *argv, InputData& input_data)
+int fill_input_or_display_help(char *argv, InputData& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     print_usage(std::cout, desc, argv, "This is a ship simulator");

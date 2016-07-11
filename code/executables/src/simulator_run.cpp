@@ -73,8 +73,8 @@ void catch_exceptions(const std::function<void(void)>& f, const InputData& input
 
 #include "stl_io_hdf5.hpp"
 #include "h5_tools.hpp"
-void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& yaml_command, const std::string& prog_command);
-void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& yaml_command, const std::string& prog_command)
+void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& prog_command);
+void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& prog_command)
 {
     for (const auto observer:observers)
     {
@@ -87,10 +87,6 @@ void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Si
             if (not(yaml_input.empty()))
             {
                 H5_Tools::writeString(observer.filename, "/inputs/yaml/input", yaml_input);
-            }
-            if (not(yaml_command.empty()))
-            {
-                H5_Tools::writeString(observer.filename, "/inputs/yaml/command", yaml_command);
             }
             for (const auto& bodies : sys.get_bodies())
             {
@@ -109,27 +105,23 @@ std::string input_data_serialize(const InputData& inputData);
 std::string input_data_serialize(const InputData& inputData)
 {
     std::stringstream s;
-    s<<"sim ";
-    if (not inputData.yaml_filenames.empty()) s<<"-y ";
+    s << "sim ";
+    if (not inputData.yaml_filenames.empty()) s << "-y ";
     for (const auto& f:inputData.yaml_filenames)
     {
-        s<<f<<" ";
+        s << f << " ";
     }
-    if (not(inputData.command_file.empty()))
-    {
-        s<<" -c " << inputData.command_file;
-    }
-    s<<" --tstart " << inputData.tstart<<" ";
-    s<<" --tend " << inputData.tend<<" ";
-    s<<" --dt " << inputData.initial_timestep<<" ";
-    s<<" --solver "<<inputData.solver;
+    s << " --tstart " << inputData.tstart<<" ";
+    s << " --tend " << inputData.tend<<" ";
+    s << " --dt " << inputData.initial_timestep<<" ";
+    s << " --solver "<<inputData.solver;
     if (not(inputData.output_filename.empty()))
     {
-        s<<" -o " << inputData.output_filename;
+        s << " -o " << inputData.output_filename;
     }
     if (not(inputData.wave_output.empty()))
     {
-        s<<" -w " << inputData.wave_output;
+        s << " -w " << inputData.wave_output;
     }
     return s.str();
 }
@@ -140,16 +132,10 @@ void run_simulation(const InputData& input_data)
     {
         const auto yaml_input = ssc::text_file_reader::TextFileReader(input_data.yaml_filenames).get_contents();
         ssc::data_source::DataSource command_listener;
-        std::string yaml_command;
-        if (not(input_data.command_file.empty()))
-        {
-            yaml_command = ssc::text_file_reader::TextFileReader(input_data.command_file).get_contents();
-            command_listener = listen_to_file(yaml_command);
-        }
-        auto sys = get_system(yaml_input, input_data.tstart, command_listener);
+        auto sys = get_system(yaml_input, input_data.tstart);
         auto observers_description = get_observers_description(yaml_input, input_data);
         ListOfObservers observers(observers_description);
-        serialize_context_if_necessary(observers_description, sys, yaml_input, yaml_command, input_data_serialize(input_data));
+        serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
         solve(input_data, sys, observers);
     }};
     if (input_data.catch_exceptions) catch_exceptions(f, input_data);

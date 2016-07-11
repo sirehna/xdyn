@@ -9,7 +9,6 @@
 #include "InvalidInputException.hpp"
 #include "listeners.hpp"
 #include "YamlCommands.hpp"
-#include "parse_commands.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
@@ -32,8 +31,8 @@ std::string namify(const std::string& command_name, const std::string& model_nam
     return model_name + "(" + command_name + ")";
 }
 
-void add(std::vector<YamlCommands>::iterator& that_command, ssc::data_source::DataSource& ds);
-void add(std::vector<YamlCommands>::iterator& that_command, ssc::data_source::DataSource& ds)
+void add(std::vector<YamlCommands>::const_iterator& that_command, ssc::data_source::DataSource& ds);
+void add(std::vector<YamlCommands>::const_iterator& that_command, ssc::data_source::DataSource& ds)
 {
     ds.check_in(__PRETTY_FUNCTION__);
     const auto t = that_command->t;
@@ -61,12 +60,11 @@ void add(std::vector<YamlCommands>::iterator& that_command, ssc::data_source::Da
     ds.check_out();
 }
 
-ssc::data_source::DataSource listen_to_file(const std::string& yaml //!< YAML data containing the interpolation tables
+ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommands>& commands //!< Parsed YAML commands
                        )
 {
     ssc::data_source::DataSource ds;
     ds.check_in(__PRETTY_FUNCTION__);
-    auto commands = parse_command_yaml(yaml);
     for (auto that_command = commands.begin() ; that_command != commands.end() ; ++that_command)
     {
         add(that_command, ds);

@@ -65,8 +65,7 @@ TEST_F(ObserverTests, can_observe_using_a_websocket)
     {
         const auto yaml = test_data::oscillating_cube_example();
         const auto mesh = test_data::cube();
-        ssc::data_source::DataSource command_listener;
-        Sim sys = get_system(yaml, mesh, 0, command_listener);
+        Sim sys = get_system(yaml, mesh, 0);
         YamlOutput out;
         out.address = WEBSOCKET_ADDRESS;
         out.port = WEBSOCKET_PORT;

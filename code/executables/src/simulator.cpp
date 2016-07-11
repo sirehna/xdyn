@@ -15,26 +15,39 @@ CHECK_SSC_VERSION(6,0)
 #include "utilities_for_InputData.hpp"
 #include "simulator_run.hpp"
 
+
+int run(const InputData& input_data);
+int run(const InputData& input_data)
+{
+    if (not(input_data.empty())) run_simulation(input_data);
+    return EXIT_SUCCESS;
+}
+
+
+
 int main(int argc, char** argv)
 {
+
+
     InputData input_data;
-    if (argc==1) return display_help(argv[0], input_data);
-    int error = 0;
-    try
+    if (argc==1) return fill_input_or_display_help(argv[0], input_data);
+    const int error = get_input_data(argc, argv, input_data);
+    if (error)
     {
-        error = get_input_data(argc, argv, input_data);
-        if (error)
+        std::cerr <<"A problem occurred while parsing inputs" << std::endl;
+        return error;
+    }
+    if (input_data.catch_exceptions)
+    {
+        try
         {
-            std::cerr <<"A problem occurred while parsing inputs" << std::endl;
-            return error;
+            return run(input_data);
         }
-        if (input_data.empty()) return EXIT_SUCCESS;
-        run_simulation(input_data);
+        catch (const std::exception& e)
+        {
+            std::cerr << "An internal error has occurred: " << e.what() << std::endl;
+            return -1;
+        }
     }
-    catch (const std::exception& e)
-    {
-        std::cerr << "An internal error has occurred: " << e.what() << std::endl;
-        error = -1;
-    }
-    return error;
+    return run(input_data);
 }

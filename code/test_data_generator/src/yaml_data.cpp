@@ -1981,13 +1981,14 @@ std::string test_data::anthineas_damping()
 std::string test_data::controlled_forces()
 {
     std::stringstream ss;
-    ss << "- name: propeller\n"
-          "  t: [0,1,3,10]\n"
-          "  rpm: {unit: rad/s, values: [3, 30, 30, 40]}\n"
-          "  P/D: {unit: 1, values: [1.064935,1.064935,1.064935,1.064935]}\n"
-          "- name: controller\n"
-          "  t: [0,1,3,10]\n"
-          "  psi_co: {unit: rad, values: [0.25, 0.30, 0.40, 0]}\n";
+    ss << "commands:\n"
+          "  - name: propeller\n"
+          "    t: [0,1,3,10]\n"
+          "    rpm: {unit: rad/s, values: [3, 30, 30, 40]}\n"
+          "    P/D: {unit: 1, values: [1.064935,1.064935,1.064935,1.064935]}\n"
+          "  - name: controller\n"
+          "    t: [0,1,3,10]\n"
+          "    psi_co: {unit: rad, values: [0.25, 0.30, 0.40, 0]}\n";
 
     return ss.str();
 }
@@ -1995,9 +1996,10 @@ std::string test_data::controlled_forces()
 std::string test_data::bug_2961()
 {
     std::stringstream ss;
-    ss << "- name: controller\n"
-          "  t: [0]\n"
-          "  psi_co: {unit: deg, values: [30]}\n";
+    ss << "commands:\n"
+          "  - name: controller\n"
+          "    t: [0]\n"
+          "    psi_co: {unit: deg, values: [30]}\n";
 
     return ss.str();
 }

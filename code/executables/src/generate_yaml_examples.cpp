@@ -22,8 +22,8 @@ int main(int argc, const char* argv[])
     yaml["tutorial_03_waves.yml"]             = test_data::waves();
     yaml["tutorial_04_damping.yml"]           = test_data::anthineas_damping();
     yaml["tutorial_05_froude_krylov.yml"]     = test_data::anthineas_froude_krylov();
-    yaml["tutorial_06_propulsion.yml"]        = test_data::anthineas_propulsion();
-    yaml["tutorial_06_1D_propulsion.yml"]     = test_data::propulsion_and_resistance();
+    yaml["tutorial_06_propulsion.yml"]        = test_data::anthineas_propulsion() + test_data::controlled_forces();
+    yaml["tutorial_06_1D_propulsion.yml"]     = test_data::propulsion_and_resistance() + test_data::controlled_forces();
     yaml["tutorial_07_radiation_damping.yml"] = test_data::anthineas_radiation_damping();
     yaml["tutorial_08_diffraction.yml"]       = test_data::anthineas_diffraction();
     yaml["oscillating_cube_test.yml"]         = test_data::oscillating_cube_example();

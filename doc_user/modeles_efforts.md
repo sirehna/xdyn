@@ -618,14 +618,8 @@ YAML communes à tous les efforts commandés sont `name` (qui est un identifiant
 choisi par l'utilisateur) et `model` (qui est une chaîne servant à identifier
 le type de modèle utilisé).
 
-La provenance des commandes (où le simulateur lit les commandes à chaque pas
-de temps) doit être spécifiée lors de l'appel de l'exécutable en
-utilisant le flag `--commands` décrit dans la [documentation de l'interface
-utilisateur](#liste-des-arguments). Les commandes ne sont pas
-directement renseignées dans le fichier YAML pour laisser la possibilité à
-l'utilisateur de les fournir par un autre biais : il est ainsi prévu de les
-lire directement depuis un socket afin de pouvoir s'interfacer avec une
-interface graphique ou un pilote.
+Les commandes sont spécifiées en YAML, soit dans le même fichier que les
+modèles d'effort, soit dans un fichier à part (plus modulaire).
 
 Voici un exemple de section `efforts commandés` :
 
@@ -667,23 +661,22 @@ controlled forces:
     diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### Syntaxe du fichier de commande
+### Syntaxe des commandes
 
-Le fichier de commande spécifie de manière statique les commandes reçues par
-les modèles d'efforts commandés. Il est statique, c'est-à-dire que les
-commandes à chaque instant sont connues lors du lancement de la simulation. Son
-nom est passé à l'exécutable de simulation en utilisant le flag `-c` (ou
-`--commands`).
+La section `commands` spécifie de manière statique les commandes reçues par
+les modèles d'efforts commandés. Les
+commandes à chaque instant sont connues lors du lancement de la simulation.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- name: port side propeller
-  t: [1,3,10]
-  rpm: {unit: rpm, values: [3000, 3000, 4000]}
-  P/D: {unit: 1, values: [0.7,0.7,0.8]}
-- name: starboard propeller
-  t: [1,3,10]
-  rpm: {unit: rpm, values: [3000, 3000, 4000]}
-  P/D: {unit: 1, values: [0.7,0.7,0.8]}
+commands:
+  - name: port side propeller
+    t: [1,3,10]
+    rpm: {unit: rpm, values: [3000, 3000, 4000]}
+    P/D: {unit: 1, values: [0.7,0.7,0.8]}
+  - name: starboard propeller
+    t: [1,3,10]
+    rpm: {unit: rpm, values: [3000, 3000, 4000]}
+    P/D: {unit: 1, values: [0.7,0.7,0.8]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans
@@ -701,20 +694,21 @@ valeur de chaque commande. Ainsi, pour l'exemple présenté ci-dessus, pour tout
 valeur de $t\geq 10$, alors rpm=4000. Pour $t\leq 1$, rpm=3000
 
 Les [commandes
-attendues](#syntaxe-du-fichier-de-commande) pour ce
+attendues](#syntaxe-des-commandes) pour ce
 modèle sont :
 
 - La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
 par `rpm`.
 - Le ratio "pas sur diamètre", défini par `P/D`.
 
-Voici un exemple de fichier de commande :
+Voici un exemple de section commande :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- name: port side propeller
-  t: [0,1,3,10]
-  rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
-  P/D: {unit: 1, values: [0.7,0.7,0.7,0.7]}
+commands:
+  - name: port side propeller
+    t: [0,1,3,10]
+    rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
+    P/D: {unit: 1, values: [0.7,0.7,0.7,0.7]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 

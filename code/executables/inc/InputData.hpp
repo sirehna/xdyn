@@ -18,7 +18,6 @@ struct InputData
     std::string solver;
     std::string output_filename;
     std::string wave_output;
-    std::string command_file;
     double initial_timestep;
     double tstart;
     double tend;

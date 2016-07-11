@@ -43,14 +43,14 @@ controlled forces:
     diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Le [fichier de commandes](#syntaxe-du-fichier-de-commande) est défini
-de la façon suivante :
+Les commandes sont définies à la racine du YAML:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- name: port side propeller
-  t: [0,1,3,10]
-  rpm: {unit: rad/s, values: [3, 30, 30, 40]}
-  P/D: [0.7,0.7,0.7,0.7]
+commands:
+  - name: port side propeller
+    t: [0,1,3,10]
+    rpm: {unit: rad/s, values: [3, 30, 30, 40]}
+    P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 En définitive, le fichier d'entrée est :
@@ -100,6 +100,12 @@ environment models:
             ymin: {value: 1, unit: m}
             ymax: {value: 2, unit: m}
             ny: 2
+
+commands:
+  - name: port side propeller
+    t: [0,1,3,10]
+    rpm: {unit: rad/s, values: [3, 30, 30, 40]}
+    P/D: [0.7,0.7,0.7,0.7]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Lancement de la simulation
@@ -107,7 +113,7 @@ environment models:
 La simulation peut maintenant être lancée comme suit :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_06_propulsion.yml --dt 0.1 --tend 20 -c controlled_forces_commands.yml
+./sim tutorial_06_propulsion.yml --dt 0.1 --tend 20
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Résultats

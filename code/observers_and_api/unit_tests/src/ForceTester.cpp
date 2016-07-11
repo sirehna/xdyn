@@ -15,7 +15,6 @@
 
 Sim ForceTester::make_sim(const std::string& yaml, const std::string& stl) const
 {
-    ssc::data_source::DataSource command_listener;
     auto input = SimulatorYamlParser(yaml).parse();
     YamlBody body = input.bodies.front();
     body.controlled_forces.clear();
@@ -30,12 +29,11 @@ Sim ForceTester::make_sim(const std::string& yaml, const std::string& stl) const
     waves.yaml = "constant sea elevation in NED frame: {value: 0, unit: m}";
     input.environment.push_back(waves);
 
-    return get_system(check_input_yaml(input), stl, 0, command_listener);
+    return get_system(check_input_yaml(input), stl, 0);
 }
 
 Sim ForceTester::make_sim(const std::string& yaml, const VectorOfVectorOfPoints& stl) const
 {
-    ssc::data_source::DataSource command_listener;
     auto input = SimulatorYamlParser(yaml).parse();
     YamlBody body = input.bodies.front();
     body.controlled_forces.clear();
@@ -50,7 +48,7 @@ Sim ForceTester::make_sim(const std::string& yaml, const VectorOfVectorOfPoints&
     waves.yaml = "constant sea elevation in NED frame: {value: 0, unit: m}";
     input.environment.push_back(waves);
 
-    return get_system(check_input_yaml(input), stl, 0, command_listener);
+    return get_system(check_input_yaml(input), stl, 0);
 }
 
 ForceTester::ForceTester(const std::string& yaml, const VectorOfVectorOfPoints& stl) :

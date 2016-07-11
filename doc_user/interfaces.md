@@ -20,8 +20,6 @@ Options:
   -w [ --waves ] arg         Nom du fichier YAML de sortie pour la houle (le
                              cas échéant). Cf. section 'output' du fichier YAML
                              d'entrée
-  -c [ --commands ] arg      Nom du fichier contenant les commandes à appliquer
-                             à chaque instant. Cf. section 'Efforts commandés'
   -d [ --debug ]             Option utilisée par l'équipe de support pour aider
                              au diagnostique d'erreur. Permet de voir l'endroit
                              exact du code où une erreur a eu lieu (ne capture

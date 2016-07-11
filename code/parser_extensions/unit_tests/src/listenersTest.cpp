@@ -7,6 +7,7 @@
 
 #include "listenersTest.hpp"
 #include "listeners.hpp"
+#include "parse_commands.hpp"
 #include "yaml_data.hpp"
 
 #define EPS (1E-14)
@@ -33,7 +34,7 @@ void listenersTest::TearDown()
 TEST_F(listenersTest, example)
 {
 //! [listenersTest listen_to_file_example]
-    auto ds = listen_to_file(test_data::controlled_forces());
+    auto ds = make_command_listener(parse_command_yaml(test_data::controlled_forces()));
     ds.check_in("listenersTest (example)");
     ds.set<double>("t", 0);
     ASSERT_DOUBLE_EQ(3, ds.get<double>("propeller(rpm)"));
@@ -59,7 +60,7 @@ TEST_F(listenersTest, example)
 
 TEST_F(listenersTest, can_parse_simple_track_keeping_commands)
 {
-    auto ds = listen_to_file(test_data::controlled_forces());
+    auto ds = make_command_listener(parse_command_yaml(test_data::controlled_forces()));
     ds.check_in("listenersTest (can_parse_simple_track_keeping_commands)");
     ds.set<double>("t", 0);
     ASSERT_NEAR(0.25, ds.get<double>("controller(psi_co)"),EPS);
@@ -89,7 +90,7 @@ TEST_F(listenersTest, can_parse_simple_track_keeping_commands)
 
 TEST_F(listenersTest, bug_2961_can_have_a_single_value_for_commands)
 {
-    auto ds = listen_to_file(test_data::bug_2961());
+    auto ds = make_command_listener(parse_command_yaml(test_data::bug_2961()));
     ds.check_in("listenersTest (bug_2961_can_have_a_single_value_for_commands)");
     for (size_t i = 0 ; i < 100 ; ++i)
     {

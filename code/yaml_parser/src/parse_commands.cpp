@@ -7,9 +7,7 @@
 
 #include "parse_commands.hpp"
 #include <ssc/yaml_parser.hpp>
-#include "yaml.h"
 
-void operator >> (const YAML::Node& node, YamlCommands& c);
 void operator >> (const YAML::Node& node, YamlCommands& c)
 {
     node["name"] >> c.name;
@@ -34,6 +32,6 @@ std::vector<YamlCommands> parse_command_yaml(const std::string& yaml)
     YAML::Node node;
     parser.GetNextDocument(node);
     std::vector<YamlCommands> ret;
-    node >> ret;
+    node["commands"] >> ret;
     return ret;
 }

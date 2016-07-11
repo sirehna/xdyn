@@ -7,9 +7,10 @@
 
 #include "YamlSimulatorInput.hpp"
 
-YamlSimulatorInput::YamlSimulatorInput() : rotations(YamlRotation()),
-                                           environmental_constants(YamlEnvironmentalConstants()),
-                                           environment(std::vector<YamlModel>()),
-                                           bodies(std::vector<YamlBody>())
+YamlSimulatorInput::YamlSimulatorInput() : rotations(),
+                                           environmental_constants(),
+                                           environment(),
+                                           bodies(),
+                                           commands()
 {
 }
