@@ -62,7 +62,6 @@ for i = 1:numel(demosId)
     end
 end
 
-%% tutorial_cube_in_waves
 function tutorial_cube_in_waves
 disp('');
 disp('cube_in_waves.yml');
@@ -84,25 +83,24 @@ disp('stable_cube_test.yml');
 disp('');
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
 param.yaml              = '../demos/stable_cube_test.yml';
 param.outputFilename    = 'tutorial_stable_cube_test.h5';
 importResults = true;
 verbose = true;
 xdyn_postProcess(xdyn_run(param, importResults, verbose), true);
 
-%% tutorial_cube_in_waves
 function tutorial_oscillating_cube_test
 disp('');
 disp('cube_in_waves.yml');
 disp('');
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
 param.yaml              = '../demos/oscillating_cube_test.yml';
 param.outputFilename    = 'oscillating_cube_test.h5';
 importResults = true;
@@ -115,16 +113,15 @@ disp('anthineas_in_waves');
 disp('');
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
 param.yaml              = '../demos/anthineas_in_waves.yml';
 param.outputFilename    = 'tutorial_cube_in_waves.h5';
 importResults = true;
 verbose = true;
 xdyn_postProcess(xdyn_run(param, importResults, verbose), true);
 
-%% tutorial_01_falling_ball
 function tutorial_01_falling_ball
 disp('');
 disp('Tutorial 01 falling ball');
@@ -134,16 +131,14 @@ verbose         = true;
 plotResult      = true;
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
 param.exportWaves       = false;
 param.yaml              = '../demos/tutorial_01_falling_ball.yml';
 param.outputFilename    = 'tutorial_01_falling_ball.h5';
 result = xdyn_run(param, importResults, verbose);
 simu = xdyn_postProcess(result, plotResult);
-
-% One can fetch simulation results and plot
 figure; hold on; grid on; box on;
 X = simu.states.ball.x-simu.states.ball.x(1);
 Y = simu.states.ball.y-simu.states.ball.y(1);
@@ -159,9 +154,9 @@ disp('Tutorial 03 waves');
 disp('');
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
 param.yaml              = '../demos/tutorial_03_waves.yml';
 param.outputFilename    = 'tutorial_03_waves.h5';
 param.exportWaves       = true;
@@ -175,9 +170,9 @@ disp('Tutorial 04 damping');
 disp('');
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
 param.yaml              = '../demos/tutorial_04_damping.yml';
 param.outputFilename    = 'tutorial_04_damping.h5';
 importResults = true;
@@ -190,9 +185,9 @@ disp('Tutorial 05 Froude Krylov');
 disp('');
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
 param.yaml              = '../demos/tutorial_05_froude_krylov.yml';
 param.outputFilename    = 'tutorial_05_froude_krylov.h5';
 param.exportWaves       = true;
@@ -200,7 +195,6 @@ importResults           = true;
 verbose                 = true;
 xdyn_postProcess(xdyn_run(param, importResults, verbose), true);
 
-%% tutorial_06_propulsion
 function tutorial_06_propulsion
 disp('');
 disp('Tutorial 06 propulsion');
@@ -217,16 +211,15 @@ importResults = true;
 verbose = true;
 xdyn_postProcess(xdyn_run(param, importResults, verbose), true);
 
-%% tutorial_08_diffraction
 function tutorial_07_radiation_damping
 disp('');
 disp('Tutorial 07 diffraction');
 disp('');
 param = struct;
 param.solver            = 'rk4';
-param.dt                = '0.01';
-param.tstart            = '0.0';
-param.tend              = '10.0';
+param.dt                = 0.01;
+param.tstart            = 0.0;
+param.tend              = 10.0;
 param.yaml              = {'../demos/tutorial_07_radiation_damping.yml',...
                            '../demos/controlled_forces_commands.yml'};
 param.outputFilename    = 'tutorial_07_radiation_damping.h5';
@@ -234,7 +227,6 @@ importResults = true;
 verbose = true;
 xdyn_postProcess(xdyn_run(param, importResults, verbose), true);
 
-%% tutorial_08_diffraction
 function tutorial_08_diffraction
 disp('');
 disp('Tutorial 08 diffraction');
