@@ -16,8 +16,6 @@ function results = xdyn_run(param, importResults, verbose)
 %                                 Default is 0.
 %              - tend           : End time for simulation
 %                                 Default is 10.
-%              - commands       : [Optional] Yaml file used for commands
-%                                 Default is ''.
 %              - outputFilename : [Optional] Name of the HDF5 used to store
 %                                 results.
 %                                 Default is ''
@@ -28,11 +26,32 @@ function results = xdyn_run(param, importResults, verbose)
 %           If `param` is a char array, it is considered as the YAML
 %           filename. All other parameters will be the default parameters
 %           If `param` is a cell array of char array, it is considered as
-%           the set of YAML files to used for simulation. 
+%           the set of YAML files to used for simulation.
 %   importResults : [Optional] Boolean used to import in MatLab the
 %                   results.
 %                   Default is true.
 %   verbose : [Optional] Boolean used to disp various command
+%
+% Example:
+%
+%   1) Minimum example
+%
+%       yaml = 'tutorial_01_falling_ball.yml';
+%       result = xdyn_run(yaml);
+%
+%   2) Full example
+%
+%       param = struct;
+%       param.solver = 'rk4';
+%       param.dt = '0.1';
+%       param.tstart = '0.0';
+%       param.tend = '10.0';
+%       param.yaml = 'tutorial_01_falling_ball.yml';
+%       param.outputFilename = 'tutorial_01_falling_ball.h5';
+%       importResults = true;
+%       verbose = true;
+%       result = xdyn_run(param, importResults, verbose);
+
 if nargin < 3
     verbose = false;
     if nargin < 2
@@ -42,8 +61,8 @@ if nargin < 3
             disp('    xdyn_run(''simu.yml'')');
             disp('    xdyn_run(''simu.yml'',''simu.h5'')');
             disp('    xdyn_run(struct(''yaml'',''simu.yml''),''simu.h5'')');
-            disp('    xdyn_run(struct(''yaml'',''simu.yml'', ''commands'',''command.yml''),''simu.h5'')');
-            disp('    xdyn_run(struct(''yaml'',{''simu0.yml'',''simu1.yml''}, ''commands'',''command.yml''),''simu.h5'')');
+            disp('    xdyn_run(struct(''yaml'',''simu.yml'',''dt'',0.1),''simu.h5'')');
+            disp('    xdyn_run(struct(''yaml'',{''simu0.yml'',''command.yml''}),''simu.h5'')');
             error('You need to provide at least one argument containing simulations parameters');
         end
     end
@@ -70,7 +89,6 @@ defaultParam.solver = 'rk4';
 defaultParam.dt = '0.1';
 defaultParam.tstart = '0.0';
 defaultParam.tend = '10.0';
-defaultParam.commands = '';
 defaultParam.exportWaves = false;
 defaultParam.outputFilename = '';
 param = tbx_struct_addMissingFields(defaultParam, param);
@@ -85,9 +103,6 @@ cmdLine = [simulatorExe ...
            ' --tstart ' num2str(param.tstart) ...
            ' --tend ' num2str(param.tend) ...
            ];
-if ~isempty(param.commands)
-    cmdLine = [cmdLine ' --command ' param.commands];
-end
 if param.exportWaves
     cmdLine = [cmdLine ' --waves true'];
 end
