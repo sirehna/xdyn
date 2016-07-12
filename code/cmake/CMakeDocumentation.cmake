@@ -107,61 +107,43 @@ IF(PANDOC)
         INSTALL(FILES ${f} DESTINATION doc/images)
     ENDFOREACH()
 
+    SET(DOCUMENTATION_FILES_FULL_PATH
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/calcul_de_GM.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/courbes_de_GZ.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/reperes_et_conventions.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_environnementaux.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
+           )
+
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html
-                       COMMAND pandoc -s --toc --mathml -f markdown introduction.md interfaces.md courbes_de_GZ.md calcul_de_GM.md solver.md reperes_et_conventions.md modeles_environnementaux.md diffraction_radiation.md modeles_efforts.md tutorial_*.md  -t html --highlight-style pygments -o doc.html  -c stylesheet.css
+                       COMMAND pandoc -s --toc --mathml -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t html --highlight-style pygments -o doc.html -c stylesheet.css
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
-                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/calcul_de_GM.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/courbes_de_GZ.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/reperes_et_conventions.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_environnementaux.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
+                       DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
                        )
+
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.docx
-                       COMMAND pandoc -s --toc --mathml -f markdown introduction.md interfaces.md courbes_de_GZ.md solver.md reperes_et_conventions.md modeles_environnementaux.md diffraction_radiation.md modeles_efforts.md tutorial_*.md  -t html --highlight-style pygments -o doc.docx  -c stylesheet.css
+                       COMMAND pandoc -s --toc --mathml -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t html --highlight-style pygments -o doc.docx
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
-                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/calcul_de_GM.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/courbes_de_GZ.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/reperes_et_conventions.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_environnementaux.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
+                       DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
                        )
+
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.pdf
                        COMMAND ./doc_pdf.sh
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
-                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/courbes_de_GZ.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/calcul_de_GM.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/reperes_et_conventions.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_environnementaux.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
-                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
+                       DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
                        )
 
-        LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html)
-        LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.docx)
-        LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.pdf)
+    LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html)
+    LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.docx)
+    LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.pdf)
     ADD_CUSTOM_TARGET(doc_user ALL DEPENDS ${DOC_USER_INSTALL_FILES})
     INSTALL(FILES ${DOC_USER_INSTALL_FILES} DESTINATION doc)
     INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/stylesheet.css DESTINATION doc)
