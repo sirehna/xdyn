@@ -11,7 +11,6 @@ const char TOKEN_vertex[] = "vertex";
 const char TOKEN_normal[] = "normal";
 
 struct ParserState;
-char* skipWhiteSpace(char *input);
 EPoint readVertex(char *line, ParserState& state);
 void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state);
 VectorOfVectorOfPoints readAsciiStl(std::istream& input_stream, ParserState &state);
@@ -39,11 +38,6 @@ struct ParserState {
     std::istream& input_stream;
 };
 
-char* skipWhiteSpace(char *input){
-    char *next;
-    for (next = input; *next == '\t' && *next == ' '; next++){}
-    return next;
-}
 /**
  * \brief reads a vertex from a line
  */
@@ -52,7 +46,6 @@ EPoint readVertex(char *line, ParserState& state)
     EPoint ret;
     int width;
     char token[20] = "";
-    //char *str = skipWhiteSpace(line);
     /*int res = */sscanf(line, "%s%n", token, &width);
     if (strcmp(token, TOKEN_vertex))
     {
@@ -65,7 +58,6 @@ EPoint readVertex(char *line, ParserState& state)
 void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state){
     int width;
     char token[20];
-    //char *str = skipWhiteSpace(line);
     /*int res = */sscanf(line, "%s%n", token, &width);
     if (strcmp(token, TOKEN_normal)){
         THROW(__PRETTY_FUNCTION__, MeshException, state.parseErrorString(TOKEN_normal));
