@@ -151,6 +151,16 @@ bool startsWith(const std::string& input, const std::string& pattern)
     return pattern.size() <= input.size() && input.compare(0, pattern.size(), pattern) == 0;
 }
 
+std::string removeStartingSpacesFromString(const std::string& str,
+                 const std::string& whitespace = " \t");
+std::string removeStartingSpacesFromString(const std::string& str,
+                 const std::string& whitespace)
+{
+    const auto strBegin = str.find_first_not_of(whitespace);
+    if (strBegin == std::string::npos) return ""; // no content
+    return str.substr(strBegin);
+}
+
 bool isStlDataBinary(const std::string& input)
 {
     if (startsWith(input, "solid ") || startsWith(input, "SOLID "))
