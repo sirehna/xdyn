@@ -163,7 +163,8 @@ std::string removeStartingSpacesFromString(const std::string& str,
 
 bool isStlDataBinary(const std::string& input)
 {
-    if (startsWith(input, "solid ") || startsWith(input, "SOLID "))
+    const std::string trimedInput = removeStartingSpacesFromString(input);
+    if (startsWith(trimedInput, "solid ") || startsWith(trimedInput, "SOLID "))
     {
         return false;
     }
