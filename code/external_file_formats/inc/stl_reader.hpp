@@ -44,6 +44,6 @@ VectorOfVectorOfPoints read_stl(const std::string& input);
 VectorOfVectorOfPoints read_binary_stl(std::istream& stream);
 VectorOfVectorOfPoints read_binary_stl(const std::string& input);
 
-bool isStlDataBinary(const std::string& input);
+bool is_stl_data_binary(const std::string& input);
 
 #endif

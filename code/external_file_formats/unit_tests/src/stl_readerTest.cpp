@@ -5,16 +5,16 @@
 
 TEST_F(StlReaderTest, should_be_able_to_detect_ascii_file)
 {
-    ASSERT_FALSE(isStlDataBinary(test_data::single_facet()));
+    ASSERT_FALSE(is_stl_data_binary(test_data::single_facet()));
 }
 
 TEST_F(StlReaderTest, should_be_able_to_detect_ascii_file_even_with_starting_spaces)
 {
-    ASSERT_FALSE(isStlDataBinary("  " + test_data::single_facet()));
-    ASSERT_FALSE(isStlDataBinary("\t" + test_data::single_facet()));
-    ASSERT_FALSE(isStlDataBinary("   \t  " + test_data::single_facet()));
-    ASSERT_TRUE(isStlDataBinary("   \t  dsq"));
-    ASSERT_TRUE(isStlDataBinary("dummy"));
+    ASSERT_FALSE(is_stl_data_binary("  " + test_data::single_facet()));
+    ASSERT_FALSE(is_stl_data_binary("\t" + test_data::single_facet()));
+    ASSERT_FALSE(is_stl_data_binary("   \t  " + test_data::single_facet()));
+    ASSERT_TRUE(is_stl_data_binary("   \t  dsq"));
+    ASSERT_TRUE(is_stl_data_binary("dummy"));
 }
 
 TEST_F(StlReaderTest, number_of_facets_should_be_correct_for_a_single_facet_file)

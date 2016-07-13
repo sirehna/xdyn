@@ -12,27 +12,27 @@ const char TOKEN_vertex[] = "vertex";
 const char TOKEN_normal[] = "normal";
 
 struct ParserState;
-EPoint readVertex(char *line, ParserState& state);
-void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state);
-VectorOfVectorOfPoints readAsciiStl(std::istream& input_stream, ParserState &state);
+EPoint read_vertex(char *line, ParserState& state);
+void read_normal(char *line, Eigen::Vector3d& vertices, ParserState& state);
+VectorOfVectorOfPoints read_ascii_stl(std::istream& input_stream, ParserState &state);
 
 struct ParserState {
     ParserState(std::istream& istream):
         input_stream(istream){}
 
-    std::string parseErrorString(const std::string &token){
+    std::string parse_error_string(const std::string &token){
         std::ostringstream ostr;
         ostr << "Error parsing \""<< token;
         return ostr.str();
     }
 
-    std::string errorUnknownString(const std::string &token){
+    std::string error_unknown_string(const std::string &token){
         std::ostringstream ostr;
         ostr << "Error unknown token "<< token;
         return ostr.str();
     }
 
-    void getLine(char *line){
+    void get_line(char *line){
         input_stream.getline(line, LINE_MAX_LENGTH);
     }
 
@@ -42,7 +42,7 @@ struct ParserState {
 /**
  * \brief reads a vertex from a line
  */
-EPoint readVertex(char *line, ParserState& state)
+EPoint read_vertex(char *line, ParserState& state)
 {
     EPoint ret;
     int width;
@@ -50,18 +50,18 @@ EPoint readVertex(char *line, ParserState& state)
     /*int res = */sscanf(line, "%s%n", token, &width);
     if (strcmp(token, TOKEN_vertex))
     {
-        THROW(__PRETTY_FUNCTION__, MeshException, state.parseErrorString(TOKEN_vertex));
+        THROW(__PRETTY_FUNCTION__, MeshException, state.parse_error_string(TOKEN_vertex));
     }
     sscanf(line+width,"%lf %lf %lf",&ret(0),&ret(1),&ret(2));
     return ret;
 }
 
-void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state){
+void read_normal(char *line, Eigen::Vector3d& vertices, ParserState& state){
     int width;
     char token[20];
     /*int res = */sscanf(line, "%s%n", token, &width);
     if (strcmp(token, TOKEN_normal)){
-        THROW(__PRETTY_FUNCTION__, MeshException, state.parseErrorString(TOKEN_normal));
+        THROW(__PRETTY_FUNCTION__, MeshException, state.parse_error_string(TOKEN_normal));
     }
     sscanf(line+width,"%lf %lf %lf",&vertices(0),&vertices(1),&vertices(2));
 }
@@ -69,7 +69,7 @@ void readNormal(char *line, Eigen::Vector3d& vertices, ParserState& state){
 /**
  * \brief reads the ASCII file from a char input stream
  */
-VectorOfVectorOfPoints readAsciiStl(
+VectorOfVectorOfPoints read_ascii_stl(
     std::istream& input_stream, //!<
     ParserState &state)
 {
@@ -84,13 +84,13 @@ VectorOfVectorOfPoints readAsciiStl(
     int  width = 0;
     char *next = NULL;
     char input[LINE_MAX_LENGTH];
-    state.getLine(input);
+    state.get_line(input);
     Eigen::Vector3d normal;
 
     // while characters still exists and no errors occurs
     while (input_stream.fail() == 0 && input_stream.eof() == 0) {
         // Read the next line of the file into INPUT.
-        state.getLine(input);
+        state.get_line(input);
 
         // Advance to the first nonspace character in INPUT.
         // 32==SPACE character
@@ -108,21 +108,21 @@ VectorOfVectorOfPoints readAsciiStl(
         if (!strcmp(token, "facet")){
             VectorOfPoints facet;
             // Get the XYZ coordinates of the normal vector to the face.
-            readNormal(next, normal, state);
-            state.getLine(input);
+            read_normal(next, normal, state);
+            state.get_line(input);
             // Get the XYZ coordinates of the vertex1 vector
-            state.getLine(input);
-            facet.push_back(readVertex(input, state));
+            state.get_line(input);
+            facet.push_back(read_vertex(input, state));
             // Get the XYZ coordinates of the vertex2 vector
-            state.getLine(input);
-            facet.push_back(readVertex(input, state));
+            state.get_line(input);
+            facet.push_back(read_vertex(input, state));
             // Get the XYZ coordinates of the vertex3 vector
-            state.getLine(input);
-            facet.push_back(readVertex(input, state));
+            state.get_line(input);
+            facet.push_back(read_vertex(input, state));
             // closeloop
-            state.getLine(input);
+            state.get_line(input);
             // endfacet
-            state.getLine(input);
+            state.get_line(input);
             //
             result.push_back(facet);
         } else if (!strcmp(token, "color")) { // COLOR
@@ -133,7 +133,7 @@ VectorOfVectorOfPoints readAsciiStl(
             endReached = true;
         } else { // Unexpected or unrecognized.
             setlocale(LC_ALL, locale.c_str());
-            THROW(__PRETTY_FUNCTION__, MeshException, state.errorUnknownString(token));
+            THROW(__PRETTY_FUNCTION__, MeshException, state.error_unknown_string(token));
         }
     }
     if(!endReached){
@@ -146,32 +146,32 @@ VectorOfVectorOfPoints readAsciiStl(
     return result;
 }
 
-bool startsWith(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
-bool startsWith(const std::string& input, const std::string& pattern, const size_t initialOffset)
+bool starts_with(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
+bool starts_with(const std::string& input, const std::string& pattern, const size_t initialOffset)
 {
     return pattern.size() <= input.size() && input.compare(initialOffset, pattern.size(), pattern) == 0;
 }
 
-bool startsWithInsensitive(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
-bool startsWithInsensitive(const std::string& input, const std::string& pattern, const size_t initialOffset)
+bool starts_with_insensitive(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
+bool starts_with_insensitive(const std::string& input, const std::string& pattern, const size_t initialOffset)
 {
     std::string patternLower(pattern), patternUpper(pattern);
     std::transform(patternLower.begin(), patternLower.end(), patternLower.begin(), ::tolower);
     std::transform(patternUpper.begin(), patternUpper.end(), patternUpper.begin(), ::toupper);
-    return (startsWith(input, patternLower, initialOffset) || startsWith(input, patternUpper, initialOffset));
+    return (starts_with(input, patternLower, initialOffset) || starts_with(input, patternUpper, initialOffset));
 }
 
-size_t determineIndexOfFirstNonWhitespaceCharacters(const std::string& input);
-size_t determineIndexOfFirstNonWhitespaceCharacters(const std::string& input)
+size_t determine_index_of_first_non_whitespace_characters(const std::string& input);
+size_t determine_index_of_first_non_whitespace_characters(const std::string& input)
 {
     const std::string whitespace = " \t";
     return input.find_first_not_of(whitespace);
 }
 
-bool isStlDataBinary(const std::string& input)
+bool is_stl_data_binary(const std::string& input)
 {
-    const size_t initialOffset = determineIndexOfFirstNonWhitespaceCharacters(input);
-    if (startsWithInsensitive(input, "solid ", initialOffset))
+    const size_t initialOffset = determine_index_of_first_non_whitespace_characters(input);
+    if (starts_with_insensitive(input, "solid ", initialOffset))
     {
         return false;
     }
@@ -183,7 +183,7 @@ bool isStlDataBinary(const std::string& input)
 
 VectorOfVectorOfPoints read_stl(const std::string& input)
 {
-    if (isStlDataBinary(input))
+    if (is_stl_data_binary(input))
     {
         return read_binary_stl(input);
     }
@@ -191,7 +191,7 @@ VectorOfVectorOfPoints read_stl(const std::string& input)
     {
         std::istringstream inputStream(input);
         ParserState state(inputStream);
-        return readAsciiStl(inputStream, state);
+        return read_ascii_stl(inputStream, state);
     }
 }
 
