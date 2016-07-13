@@ -1,3 +1,5 @@
-- name: controller
-  t: [0,10]
-  psi_co: {unit: deg, values: [0,0]}
+commands:
+  - name: controller
+    t: [0,10]
+    psi_co: {unit: deg, values: [0,0]}
+    

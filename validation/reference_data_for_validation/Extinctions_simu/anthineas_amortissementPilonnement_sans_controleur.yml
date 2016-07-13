@@ -7,7 +7,7 @@ environmental constants:
 environment models:
   - model: no waves
     constant sea elevation in NED frame: {value: 0, unit: m}
-    
+
 # Fixed frame: NED
 bodies: # All bodies have NED as parent frame
   - name: Anthineas
