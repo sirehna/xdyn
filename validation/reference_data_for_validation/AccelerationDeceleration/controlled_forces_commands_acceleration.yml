@@ -1,4 +1,5 @@
-- name: propeller
-  t: [0,0.1]
-  rpm: {unit: tr/s, values: [5, 5]}
-  P/D: [0.67,0.67]
+commands:
+  - name: propeller
+    t: [0,0.1]
+    rpm: {unit: tr/s, values: [5, 5]}
+    P/D: [0.67,0.67]
