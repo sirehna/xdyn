@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cstdio>
+#include <algorithm>
 
 #include "MeshException.hpp"
 #include "stl_reader.hpp"
@@ -145,26 +146,32 @@ VectorOfVectorOfPoints readAsciiStl(
     return result;
 }
 
-bool startsWith(const std::string& input, const std::string& pattern);
-bool startsWith(const std::string& input, const std::string& pattern)
+bool startsWith(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
+bool startsWith(const std::string& input, const std::string& pattern, const size_t initialOffset)
 {
-    return pattern.size() <= input.size() && input.compare(0, pattern.size(), pattern) == 0;
+    return pattern.size() <= input.size() && input.compare(initialOffset, pattern.size(), pattern) == 0;
 }
 
-std::string removeStartingSpacesFromString(const std::string& str,
-                 const std::string& whitespace = " \t");
-std::string removeStartingSpacesFromString(const std::string& str,
-                 const std::string& whitespace)
+bool startsWithInsensitive(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
+bool startsWithInsensitive(const std::string& input, const std::string& pattern, const size_t initialOffset)
 {
-    const auto strBegin = str.find_first_not_of(whitespace);
-    if (strBegin == std::string::npos) return ""; // no content
-    return str.substr(strBegin);
+    std::string patternLower(pattern), patternUpper(pattern);
+    std::transform(patternLower.begin(), patternLower.end(), patternLower.begin(), ::tolower);
+    std::transform(patternUpper.begin(), patternUpper.end(), patternUpper.begin(), ::toupper);
+    return (startsWith(input, patternLower, initialOffset) || startsWith(input, patternUpper, initialOffset));
+}
+
+size_t determineIndexOfFirstNonWhitespaceCharacters(const std::string& input);
+size_t determineIndexOfFirstNonWhitespaceCharacters(const std::string& input)
+{
+    const std::string whitespace = " \t";
+    return input.find_first_not_of(whitespace);
 }
 
 bool isStlDataBinary(const std::string& input)
 {
-    const std::string trimedInput = removeStartingSpacesFromString(input);
-    if (startsWith(trimedInput, "solid ") || startsWith(trimedInput, "SOLID "))
+    const size_t initialOffset = determineIndexOfFirstNonWhitespaceCharacters(input);
+    if (startsWithInsensitive(input, "solid ", initialOffset))
     {
         return false;
     }
