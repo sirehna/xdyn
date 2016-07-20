@@ -96,7 +96,9 @@ cmake \
 "-DHDF5_ENABLE_F2003:BOOL=ON" \
 "-DHDF5_BUILD_CPP_LIB:BOOL=ON" \
 "-DHDF5_BUILD_TOOLS:BOOL=ON" \
-"-DCMAKE_INSTALL_PREFIX:PATH=/usr/local/hdf5"
+"-DCMAKE_INSTALL_PREFIX:PATH=/usr/local/hdf5" \
+"-DCMAKE_C_FLAGS=-fpic" \
+"-DCMAKE_CXX_FLAGS=-fpic"
 sudo make install
 
 
