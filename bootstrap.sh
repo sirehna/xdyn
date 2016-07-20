@@ -79,14 +79,6 @@ cd ..
 sudo chown -R vagrant gcovr
 sudo chgrp -R vagrant gcovr
 
-# BASE91x
-cd /vagrant/code
-sudo rm -rf base91x
-git clone https://github.com/r-lyeh/base.git base91x
-sudo chown -R vagrant base91x
-sudo chgrp -R vagrant base91x
-printf "cmake_minimum_required(VERSION 2.8.8)\nproject(base91x)\nset(base91x_INCLUDE_DIRS \${base91x_SOURCE_DIR} CACHE PATH \"Path to base91x's include directory\")" > base91x/CMakeLists.txt
-
 
 # HDF5
 wget https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz -O hdf5_source.tar.gz

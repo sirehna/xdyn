@@ -5,7 +5,6 @@
 build*
 install*
 RemoteSystemsTempFiles
-base91x
 debug
 eigen
 eigen3-hdf5
