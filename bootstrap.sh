@@ -89,6 +89,7 @@ git checkout tags/release-0.3.0
 cd ..
 sudo chown -R vagrant yaml-cpp
 sudo chgrp -R vagrant yaml-cpp
+cp ../yaml-cpp-CMakeLists.txt yaml-cpp/CMakeLists.txt
 
 # GCOVR
 cd /vagrant/code
