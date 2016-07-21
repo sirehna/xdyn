@@ -56,6 +56,7 @@ svn co http://svn.boost.org/svn/boost/trunk/boost/geometry/extensions
 cd Boost_1_55_0
 ./bootstrap.sh
 sudo ./b2 cxxflags=-fPIC link=static link=shared threading=single threading=multi --layout=tagged --prefix=/usr/local/boost_1_55_0 install
+sudo cp -r /home/vagrant/extensions /usr/local/boost_1_55_0/include/boost/geometry/
 
 # GMOCK
 cd /vagrant/code
