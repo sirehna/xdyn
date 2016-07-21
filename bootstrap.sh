@@ -138,4 +138,7 @@ sudo dpkg -i ssc.deb
 cd /vagrant/code
 mkdir build
 cd build
-cmake .. -DBOOST_ROOT=/usr/local/boost_1_55_0 -DHDF5_DIR=/usr/local/hdf5
+cmake .. -DBOOST_ROOT=/usr/local/boost_1_55_0 -DHDF5_DIR=/usr/local/hdf5 -G Ninja
+ninja
+cpack
+
