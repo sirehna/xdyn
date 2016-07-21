@@ -13,7 +13,7 @@
 
 #include <ssc/kinematics.hpp>
 
-const std::string LinearHydrostaticForceModel::model_name = "linear hydrostatics";
+std::string LinearHydrostaticForceModel::model_name() {return "linear hydrostatics";}
 
 LinearHydrostaticForceModel::Input::Input() :
             z_eq(),
@@ -57,7 +57,7 @@ LinearHydrostaticForceModel::Input LinearHydrostaticForceModel::parse(const std:
     return ret;
 }
 
-LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(model_name, body_name_),
+LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(model_name(), body_name_),
         K(),
         P1(body_name_, input.x1, input.y1, 0),
         P2(body_name_, input.x2, input.y2, 0),

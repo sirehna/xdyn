@@ -91,7 +91,7 @@ TEST_F(LinearDampingForceModelTest, example)
          97, 101, 103, 107, 109, 113,
         127, 131, 137, 139, 149, 151;
     LinearDampingForceModel F(D,BODY, env);
-    ASSERT_EQ("linear damping",F.model_name);
+    ASSERT_EQ("linear damping",F.model_name());
     for (size_t i=0;i<100;++i)
     {
         states.u.record(0, u = a.random<double>().between(-10.0,+10.0));

@@ -11,9 +11,9 @@
 #include "mesh_manipulations.hpp"
 #include "Observer.hpp"
 
-const std::string FastHydrostaticForceModel::model_name = "non-linear hydrostatic (fast)";
+std::string FastHydrostaticForceModel::model_name(){return "non-linear hydrostatic (fast)";}
 
-FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(model_name, body_name_, env_)
+FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(model_name(), body_name_, env_)
 {
     if (env.w.use_count()==0)
     {
@@ -32,7 +32,7 @@ double FastHydrostaticForceModel::gz() const
 
 std::string FastHydrostaticForceModel::get_name() const
 {
-    return this->model_name;
+    return this->model_name();
 }
 
 SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double) const

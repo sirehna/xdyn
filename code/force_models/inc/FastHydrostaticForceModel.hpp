@@ -21,7 +21,7 @@ class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
               ) const;
 
         std::string get_name() const;
-        static const std::string model_name;
+        static std::string model_name();
         double gz() const;
 
     protected:

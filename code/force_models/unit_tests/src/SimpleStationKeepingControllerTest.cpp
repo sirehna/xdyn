@@ -52,7 +52,7 @@ TEST_F(SimpleStationKeepingControllerTest, force_and_torque)
     input.T_psi = 2*PI/4;
     EnvironmentAndFrames env;
     const SimpleStationKeepingController w(input, "body", env);
-    ASSERT_EQ("simple station-keeping controller", w.model_name);
+    ASSERT_EQ("simple station-keeping controller", w.model_name());
     BodyStates states;
     const double x = 0.456;
     const double y = 5.769;

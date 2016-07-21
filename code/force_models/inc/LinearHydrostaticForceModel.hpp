@@ -36,7 +36,7 @@ class LinearHydrostaticForceModel : public ForceModel
         LinearHydrostaticForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         static Input parse(const std::string& yaml);
-        static const std::string model_name;
+        static std::string model_name();
 
     private:
         LinearHydrostaticForceModel();

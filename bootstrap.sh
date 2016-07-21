@@ -62,9 +62,9 @@ sudo cp -r /home/vagrant/extensions /usr/local/boost_1_55_0/include/boost/geomet
 cd /vagrant/code
 sudo rm -rf googletest
 git clone https://github.com/google/googletest.git googletest
-cd googletest
-git checkout release-1.7.0
-cd ..
+#cd googletest
+#git checkout release-1.7.0
+#cd ..
 sudo chown -R vagrant gmock
 sudo chgrp -R vagrant gmock
 

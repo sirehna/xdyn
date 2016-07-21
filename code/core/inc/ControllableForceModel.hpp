@@ -61,9 +61,9 @@ class ControllableForceModel
             auto parser = [](const YamlModel& yaml, const std::string& body_name, const EnvironmentAndFrames& env) -> boost::optional<ControllableForcePtr>
                           {
                               boost::optional<ControllableForcePtr> ret;
-                              if (yaml.model == ControllableForceType::model_name)
+                              if (yaml.model == ControllableForceType::model_name())
                               {
-                                  std::string context = "Invalid input data for model '" + ControllableForceType::model_name + "'.";
+                                  std::string context = "Invalid input data for model '" + ControllableForceType::model_name() + "'.";
                                   try
                                   {
                                       ret.reset(ControllableForcePtr(new ControllableForceType(ControllableForceType::parse(yaml.yaml), body_name, env)));

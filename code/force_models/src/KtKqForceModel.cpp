@@ -11,7 +11,7 @@
 #include "KtKqForceModel.hpp"
 #include "yaml.h"
 
-const std::string KtKqForceModel::model_name = "Kt(J) & Kq(J)";
+std::string KtKqForceModel::model_name() {return "Kt(J) & Kq(J)";}
 
 class KtKqForceModel::Impl
 {

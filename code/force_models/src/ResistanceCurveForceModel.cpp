@@ -13,7 +13,7 @@
 #include "Body.hpp"
 #include "ResistanceCurveForceModel.hpp"
 
-const std::string ResistanceCurveForceModel::model_name = "resistance curve";
+std::string ResistanceCurveForceModel::model_name() {return "resistance curve";}
 
 class ResistanceCurveForceModel::Impl
 {
@@ -40,7 +40,7 @@ ResistanceCurveForceModel::Yaml::Yaml() : Va(), R()
 {
 }
 
-ResistanceCurveForceModel::ResistanceCurveForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames&) : ForceModel(model_name, body_name_), pimpl(new Impl(data))
+ResistanceCurveForceModel::ResistanceCurveForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames&) : ForceModel(model_name(), body_name_), pimpl(new Impl(data))
 {
 }
 

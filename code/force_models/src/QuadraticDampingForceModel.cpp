@@ -13,7 +13,7 @@
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
 
-const std::string QuadraticDampingForceModel::model_name = "quadratic damping";
+std::string QuadraticDampingForceModel::model_name() {return "quadratic damping";}
 
 QuadraticDampingForceModel::QuadraticDampingForceModel(const QuadraticDampingForceModel::Input& D_, const std::string& body_name_, const EnvironmentAndFrames&) : DampingForceModel("quadratic damping", body_name_, D_)
 {

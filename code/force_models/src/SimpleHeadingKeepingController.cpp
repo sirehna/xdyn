@@ -16,7 +16,7 @@
 #include <ssc/yaml_parser.hpp>
 #include "SimpleHeadingKeepingController.hpp"
 
-const std::string SimpleHeadingKeepingController::model_name = "simple heading controller";
+std::string SimpleHeadingKeepingController::model_name() {return "simple heading controller";}
 
 SimpleHeadingKeepingController::Yaml::Yaml() : name(), ksi(0), Tp(0)
 {

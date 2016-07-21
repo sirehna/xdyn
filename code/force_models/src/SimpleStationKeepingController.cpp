@@ -17,7 +17,7 @@
 #include <cmath>
 #define PI M_PI
 
-const std::string SimpleStationKeepingController::model_name = "simple station-keeping controller";
+std::string SimpleStationKeepingController::model_name() {return "simple station-keeping controller";}
 
 SimpleStationKeepingController::Yaml::Yaml() :
             name(),

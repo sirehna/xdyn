@@ -305,7 +305,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_simple_maneuvering_model)
                              "N: 0\n";
     const auto env = get_env_with_default_rotation_convention();
     ManeuveringForceModel force(ManeuveringForceModel::parse(yaml),"some body", env);
-    ASSERT_EQ("maneuvering", force.model_name);
+    ASSERT_EQ("maneuvering", force.model_name());
     auto states = get_body("some body")->get_states();
     const double t = 10;
     states.x.record(t, 1024);

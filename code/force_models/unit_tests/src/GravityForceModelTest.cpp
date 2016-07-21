@@ -41,7 +41,7 @@ TEST_F(GravityForceModelTest, example)
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     GravityForceModel F(BODY, env);
-    ASSERT_EQ("gravity", F.model_name);
+    ASSERT_EQ("gravity", F.model_name());
     BodyStates states = get_body(BODY)->get_states();
     states.m = 100;
 

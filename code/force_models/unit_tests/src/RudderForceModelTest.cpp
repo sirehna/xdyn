@@ -287,7 +287,7 @@ TEST_F(RudderForceModelTest, force_and_torque)
 {
     EnvironmentAndFrames env = get_environment_and_frames(get_wave_model());
     const RudderForceModel rudder(RudderForceModel::parse(test_data::rudder()), a.random<std::string>(), env);
-    ASSERT_EQ("propeller+rudder", rudder.model_name);
+    ASSERT_EQ("propeller+rudder", rudder.model_name());
     BodyStates states;
     std::vector<double> s = {1,2,3,4,5,6,0,0,0,1,0,0,0};
     const double t = 24;

@@ -25,7 +25,7 @@ class HydrostaticForceModel : public ForceModel
     public:
         HydrostaticForceModel(const std::string& body_name, const EnvironmentAndFrames& env_);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
-        const static std::string model_name;
+        static std::string model_name();
         bool is_a_surface_force_model() const;
         void extra_observations(Observer& ) const;
         ssc::kinematics::Point get_centre_of_buoyancy() const;

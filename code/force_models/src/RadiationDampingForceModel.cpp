@@ -26,7 +26,7 @@
 #include "external_data_structures_parsers.hpp"
 #include <ssc/yaml_parser.hpp>
 
-const std::string RadiationDampingForceModel::model_name = "radiation damping";
+std::string RadiationDampingForceModel::model_name() {return "radiation damping";}
 
 class CSVWriter
 {

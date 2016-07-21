@@ -15,9 +15,9 @@
 #include "Observer.hpp"
 #include "QuadraticDampingForceModel.hpp"
 
-const std::string HydrostaticForceModel::model_name = "hydrostatic";
+std::string HydrostaticForceModel::model_name(){return "hydrostatic";}
 
-HydrostaticForceModel::HydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(model_name, body_name_),
+HydrostaticForceModel::HydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(model_name(), body_name_),
 env(env_), centre_of_buoyancy(new Eigen::Vector3d())
 {
 }

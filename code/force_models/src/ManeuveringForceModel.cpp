@@ -22,7 +22,7 @@ ManeuveringForceModel::Yaml::Yaml() :
 {
 }
 
-const std::string ManeuveringForceModel::model_name = "maneuvering";
+std::string ManeuveringForceModel::model_name() {return "maneuvering";}
 
 ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml)
 {

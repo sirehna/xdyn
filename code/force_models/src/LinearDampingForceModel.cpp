@@ -13,7 +13,7 @@
 #include "LinearDampingForceModel.hpp"
 #include "external_data_structures_parsers.hpp"
 
-const std::string LinearDampingForceModel::model_name = "linear damping";
+std::string LinearDampingForceModel::model_name() {return "linear damping";}
 
 LinearDampingForceModel::LinearDampingForceModel(const Eigen::Matrix<double,6,6>& D_, const std::string& body_name_, const EnvironmentAndFrames&) : DampingForceModel("linear damping", body_name_, D_)
 {

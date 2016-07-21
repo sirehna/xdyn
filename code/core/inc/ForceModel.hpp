@@ -63,9 +63,9 @@ class ForceModel
             auto parser = [](const YamlModel& yaml, const std::string& body_name, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
                           {
                               boost::optional<ForcePtr> ret;
-                              if (yaml.model == ForceType::model_name)
+                              if (yaml.model == ForceType::model_name())
                               {
-                                  std::string context = "Invalid input data for model '" + ForceType::model_name + "'.";
+                                  std::string context = "Invalid input data for model '" + ForceType::model_name() + "'.";
                                   try
                                   {
                                       ret.reset(ForcePtr(new ForceType(ForceType::parse(yaml.yaml), body_name, env)));
@@ -92,7 +92,7 @@ class ForceModel
             auto parser = [](const YamlModel& yaml, const std::string& body, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
                           {
                               boost::optional<ForcePtr> ret;
-                              if (yaml.model == ForceType::model_name)
+                              if (yaml.model == ForceType::model_name())
                               {
                                   ret.reset(ForcePtr(new ForceType(body, env)));
                               }

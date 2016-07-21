@@ -12,7 +12,7 @@
 
 #include <ssc/kinematics.hpp>
 
-const std::string GravityForceModel::model_name = "gravity";
+std::string GravityForceModel::model_name(){return "gravity";}
 
 GravityForceModel::GravityForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) : ForceModel("gravity", body_name_), g(env.g), k(env.k)
 {}

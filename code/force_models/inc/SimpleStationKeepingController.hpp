@@ -25,7 +25,7 @@ class SimpleStationKeepingController : public ControllableForceModel
             double T_psi;
         };
         static Yaml parse(const std::string& yaml);
-        static const std::string model_name;
+        static std::string model_name();
 
         SimpleStationKeepingController(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;

@@ -60,7 +60,7 @@ TEST_F(ResistanceCurveForceModelTest, example)
 //! [ResistanceCurveForceModelTest example]
     ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), "", EnvironmentAndFrames());
 //! [ResistanceCurveForceModelTest example]
-    ASSERT_EQ("resistance curve",F.model_name);
+    ASSERT_EQ("resistance curve",F.model_name());
 //! [ResistanceCurveForceModelTest expected output]
     BodyStates states;
     states.u.record(0, 0);

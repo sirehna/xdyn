@@ -41,7 +41,7 @@ class WageningenControlledForceModel : public AbstractWageningen
         double get_Kq(const double P_D, const double J) const;
         double Kt(const size_t Z, const double AE_A0, const double P_D, const double J) const;
         double Kq(const size_t Z, const double AE_A0, const double P_D, const double J) const;
-        static const std::string model_name;
+        static std::string model_name();
         static Yaml parse(const std::string& yaml);
 
     private:

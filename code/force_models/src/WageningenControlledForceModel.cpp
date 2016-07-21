@@ -13,7 +13,7 @@
 #include "InvalidInputException.hpp"
 #include "WageningenControlledForceModel.hpp"
 
-const std::string WageningenControlledForceModel::model_name = "wageningen B-series";
+std::string WageningenControlledForceModel::model_name() {return "wageningen B-series";}
 
 
 WageningenControlledForceModel::Yaml::Yaml() :

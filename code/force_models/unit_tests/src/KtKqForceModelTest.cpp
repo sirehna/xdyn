@@ -63,7 +63,7 @@ TEST_F(KtKqForceModelTest, force)
     EnvironmentAndFrames env;
     env.rho = 1024;
     const KtKqForceModel w(input, "", env);
-    ASSERT_EQ("Kt(J) & Kq(J)", w.model_name);
+    ASSERT_EQ("Kt(J) & Kq(J)", w.model_name());
     BodyStates states;
     states.u.record(0, 1);
 

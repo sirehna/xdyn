@@ -161,3 +161,4 @@ bodies: # All bodies have NED as parent frame
         Nrr: 0.005
         Nrrr: 0
         Nrvv: 0
+

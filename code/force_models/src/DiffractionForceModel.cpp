@@ -19,7 +19,7 @@
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
 
-const std::string DiffractionForceModel::model_name = "diffraction";
+std::string DiffractionForceModel::model_name() { return "diffraction";}
 
 class DiffractionForceModel::Impl
 {
