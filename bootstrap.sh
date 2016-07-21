@@ -14,6 +14,9 @@ sudo apt-get install lcov -y
 # G++
 sudo apt-get install g++ -y
 
+# GDB
+sudo apt-get install gdb -y
+
 # PANDOC
 sudo apt-get install pandoc -y
 
