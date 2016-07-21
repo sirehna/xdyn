@@ -14,6 +14,27 @@ sudo apt-get install cmake -y
 # G++
 sudo apt-get install g++ -y
 
+# PANDOC
+sudo apt-get install pandoc -y
+
+# PYTHON3 + TORNADO
+sudo apt-get install python3-tornado -y
+
+# PIP3
+sudo apt-get install python3-pip -y
+
+# CXFREEZE
+# As per http://stackoverflow.com/a/36593715
+wget https://pypi.python.org/packages/62/ff/263fae9f69150c1b696a94dd23ca48c02512228c53bb108aeaccda192028/cx_Freeze-4.3.4.tar.gz#md5=5bd662af9aa36e5432e9144da51c6378
+sudo apt-get install libssl-dev -y
+tar xzf cx_Freeze-4.3.4.tar.gz
+sed -i 's/if not vars.get("Py_ENABLE_SHARED", 0):/if True:/g'  cx_Freeze-4.3.4/setup.py
+sudo pip3 install cx_Freeze-4.3.4/
+
+
+# DOXYGEN
+sudo apt-get install doxygen -y
+
 # GFORTRAN
 sudo apt-get install gfortran -y
 
