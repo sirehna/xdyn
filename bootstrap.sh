@@ -8,9 +8,6 @@ sudo sed -i 's|httpredir.debian.org|ftp.debian.org|g' /etc/apt/sources.list
 # Update package list
 sudo apt-get update
 
-# CMAKE
-sudo apt-get install cmake -y
-
 # G++
 sudo apt-get install g++ -y
 
@@ -100,6 +97,15 @@ git checkout tags/3.2
 cd ..
 sudo chown -R vagrant gcovr
 sudo chgrp -R vagrant gcovr
+
+
+# CMAKE
+wget https://cmake.org/files/v3.5/cmake-3.5.2.tar.gz
+tar xzf cmake-3.5.2.tar.gz
+cd cmake-3.5.2
+./configure
+make
+sudo make install
 
 
 # HDF5
