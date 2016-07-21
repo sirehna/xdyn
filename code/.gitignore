@@ -8,7 +8,7 @@ RemoteSystemsTempFiles
 debug
 eigen
 eigen3-hdf5
-gmock
+googletest
 gcovr
 profile
 release

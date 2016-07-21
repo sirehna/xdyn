@@ -35,10 +35,10 @@ sudo ./b2 cxxflags=-fPIC link=static link=shared threading=single threading=mult
 
 # GMOCK
 cd /vagrant/code
-sudo rm -rf gmock
-git clone https://github.com/google/googletest.git gmock
-cd gmock
-git checkout tags/release-1.7.0
+sudo rm -rf googletest
+git clone https://github.com/google/googletest.git googletest
+cd googletest
+git checkout release-1.7.0
 cd ..
 sudo chown -R vagrant gmock
 sudo chgrp -R vagrant gmock
