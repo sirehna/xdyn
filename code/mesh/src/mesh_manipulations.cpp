@@ -258,8 +258,7 @@ Eigen::Matrix3d inertia_of_polygon(
     for (int i = 2 ; i < nVertices ; ++i)
     {
         const double S = area(verticesInR1, 0, i-1, i);
-        EPoint G = (verticesInR1.col(0)+verticesInR1.col(i-1)+verticesInR1.col(i))/3.;
-        Eigen::Matrix3d JR1 = inertia_of_triangle(verticesInR1.col(0),verticesInR1.col(i-1),verticesInR1.col(i));
+        const Eigen::Matrix3d JR1 = inertia_of_triangle(verticesInR1.col(0),verticesInR1.col(i-1),verticesInR1.col(i));
         total_inertia += JR1*S;
         total_area    += S;
     }
