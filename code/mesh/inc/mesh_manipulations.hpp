@@ -124,9 +124,9 @@ bool oriented_clockwise(const VectorOfVectorOfPoints& v, //!< Points in mesh
   *  <http://www.numdam.org/item?id=NAM_1887_3_6__215_1>
   */
 Eigen::Matrix3d inertia_of_triangle(
-        const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
-        const EPoint vertex2,  //!< second vertex of triangle
-        const EPoint vertex3   //!< third vertex of triangle
+        const EPoint& vertex1,  //!< first vertex of triangle expressed in inertia frame R1
+        const EPoint& vertex2,  //!< second vertex of triangle
+        const EPoint& vertex3   //!< third vertex of triangle
         );
 
 /**  \details Compute the inertia matrix for a planar facet versus an inertia frame, divided by total area

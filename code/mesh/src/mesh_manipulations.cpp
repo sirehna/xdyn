@@ -225,9 +225,9 @@ bool oriented_clockwise(const VectorOfPoints& facet, //!< Points to convert
 }
 
 Eigen::Matrix3d inertia_of_triangle(
-        const EPoint vertex1,  //!< first vertex of triangle expressed in inertia frame R1
-        const EPoint vertex2,  //!< second vertex of triangle
-        const EPoint vertex3   //!< third vertex of triangle
+        const EPoint& vertex1,  //!< first vertex of triangle expressed in inertia frame R1
+        const EPoint& vertex2,  //!< second vertex of triangle
+        const EPoint& vertex3   //!< third vertex of triangle
         )
 {
     Eigen::Matrix3d JR1;
