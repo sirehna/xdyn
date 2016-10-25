@@ -48,8 +48,8 @@ Vagrant.configure(2) do |config|
      vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   
      # Customize the amount of memory on the VM:
-     vb.memory = "4096"
-     vb.cpus = 4
+     vb.memory = "2048"
+     vb.cpus = 1
    end
   #
   # View the documentation for the provider you are using for more
