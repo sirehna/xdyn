@@ -13,6 +13,11 @@ clang
 .metadata
 .project
 .settings
+.vagrant
 *.swp
+*.tar.gz
+*.tgz
+*.bz2
+ssc.deb
 __pycache__
 
