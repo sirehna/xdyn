@@ -20,6 +20,9 @@ sudo apt-get install gdb -y
 # PANDOC
 sudo apt-get install pandoc -y
 
+# PDFLATEX
+sudo apt-get install texlive-latex-base texlive-latex-recommended -y
+
 # PYTHON3 + TORNADO
 sudo apt-get install python3-tornado -y
 
