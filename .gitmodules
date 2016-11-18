@@ -1,0 +1,6 @@
+[submodule "code/base91x"]
+	path = code/base91x
+	url = git@gitlab.sirehna.com:ThirdParty/base91x.git
+[submodule "code/yaml-cpp"]
+	path = code/yaml-cpp
+	url = git@gitlab.sirehna.com:ThirdParty/yaml-cpp.git
