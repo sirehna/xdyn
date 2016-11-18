@@ -7,3 +7,6 @@
 [submodule "code/eigen"]
 	path = code/eigen
 	url = git@gitlab.sirehna.com:ThirdParty/eigen.git
+[submodule "code/gmock"]
+	path = code/gmock
+	url = git@gitlab.sirehna.com:ThirdParty/gmock.git
