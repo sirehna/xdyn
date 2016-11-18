@@ -7,12 +7,12 @@
 [submodule "code/eigen"]
 	path = code/eigen
 	url = git@gitlab.sirehna.com:ThirdParty/eigen.git
-[submodule "code/gmock"]
-	path = code/gmock
-	url = git@gitlab.sirehna.com:ThirdParty/gmock.git
 [submodule "code/eigen3-hdf5"]
 	path = code/eigen3-hdf5
 	url = git@gitlab.sirehna.com:ThirdParty/eigen3-hdf5
 [submodule "code/gcovr"]
 	path = code/gcovr
 	url = git@gitlab.sirehna.com:ThirdParty/gcovr.git
+[submodule "code/google-test"]
+	path = code/google-test
+	url = git@gitlab.sirehna.com:ThirdParty/google-test.git

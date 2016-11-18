@@ -5,9 +5,9 @@ ELSE()
     SET(gtest_disable_pthreads ON CACHE BOOL "")
 ENDIF()
 
-ADD_SUBDIRECTORY(gmock)
-SET(GMOCK_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/gmock/include
-                       ${CMAKE_CURRENT_SOURCE_DIR}/gmock/include/gmock)
-SET(GTEST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/gmock/gtest/include
-                       ${CMAKE_CURRENT_SOURCE_DIR}/gmock/gtest/include/gmock)
+ADD_SUBDIRECTORY(google-test)
+SET(GMOCK_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/google-test/googlemock/include
+                       ${CMAKE_CURRENT_SOURCE_DIR}/google-test/googlemock/include/gmock/)
+SET(GTEST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/google-test/googletest/include
+                       ${CMAKE_CURRENT_SOURCE_DIR}/google-test/googletest/include/gtest)
 
