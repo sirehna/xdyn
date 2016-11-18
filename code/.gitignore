@@ -6,7 +6,6 @@ build*
 install*
 RemoteSystemsTempFiles
 debug
-eigen3-hdf5
 googletest
 gcovr
 profile

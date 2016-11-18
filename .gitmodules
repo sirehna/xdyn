@@ -10,3 +10,6 @@
 [submodule "code/gmock"]
 	path = code/gmock
 	url = git@gitlab.sirehna.com:ThirdParty/gmock.git
+[submodule "code/eigen3-hdf5"]
+	path = code/eigen3-hdf5
+	url = git@gitlab.sirehna.com:ThirdParty/eigen3-hdf5
