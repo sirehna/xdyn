@@ -7,7 +7,6 @@ install*
 RemoteSystemsTempFiles
 debug
 googletest
-gcovr
 profile
 release
 threadpool11
