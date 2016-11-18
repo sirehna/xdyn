@@ -4,3 +4,6 @@
 [submodule "code/yaml-cpp"]
 	path = code/yaml-cpp
 	url = git@gitlab.sirehna.com:ThirdParty/yaml-cpp.git
+[submodule "code/eigen"]
+	path = code/eigen
+	url = git@gitlab.sirehna.com:ThirdParty/eigen.git
