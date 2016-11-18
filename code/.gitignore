@@ -6,7 +6,6 @@ build*
 install*
 RemoteSystemsTempFiles
 debug
-googletest
 profile
 release
 threadpool11
