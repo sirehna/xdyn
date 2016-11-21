@@ -13,3 +13,6 @@
 [submodule "code/google-test"]
 	path = code/google-test
 	url = git@gitlab.sirehna.com:ThirdParty/google-test.git
+[submodule "code/eigen"]
+	path = code/eigen
+	url = git@gitlab.sirehna.com:ThirdParty/eigen.git
