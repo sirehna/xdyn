@@ -2,5 +2,4 @@
 	eigen3-hdf5 = v1.0.0
 	yaml-cpp = v0.3.0
     google-test = release-1.8.0
-[submodule "eigen"]
-	branch = v3.2.0
+	eigen = v3.2.0
