@@ -8,5 +8,3 @@ RemoteSystemsTempFiles
 debug
 profile
 release
-threadpool11
-websocketpp
