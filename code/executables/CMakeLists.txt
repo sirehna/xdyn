@@ -44,7 +44,7 @@ CONFIGURE_FILE(
         src/convert_stl_files_to_code.cpp
         "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
 
-ADD_EXECUTABLE(sim
+ADD_EXECUTABLE(xdyn
         ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
         src/utilities_for_simulator.cpp
         src/InputData.cpp
@@ -52,8 +52,8 @@ ADD_EXECUTABLE(sim
         src/simulator.cpp
         )
 
-TARGET_LINK_LIBRARIES(sim
-        simulatorIrtJv
+TARGET_LINK_LIBRARIES(xdyn
+        x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
         )
@@ -71,7 +71,7 @@ ADD_EXECUTABLE(test_hs
         $<TARGET_OBJECTS:external_data_structures>)
 
 TARGET_LINK_LIBRARIES(test_hs
-        simulatorIrtJv
+        x-dyn
         binary_stl_data_static
         )
 
@@ -104,7 +104,7 @@ ADD_EXECUTABLE(convert_stl_files_to_code
         )
 
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code
-        simulatorIrtJv
+        x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
         )
@@ -116,7 +116,7 @@ ADD_EXECUTABLE(gz
         )
 
 TARGET_LINK_LIBRARIES(gz
-        simulatorIrtJv
+        x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
         )
@@ -134,10 +134,10 @@ ADD_EXECUTABLE(generate_stl_examples
 
 TARGET_LINK_LIBRARIES(generate_stl_examples
         binary_stl_data_static
-        simulatorIrtJv
+        x-dyn
         )
         
-ADD_EXECUTABLE(simulator_server
+ADD_EXECUTABLE(xdyn-server
         src/utilities_for_InputDataSimServer.cpp
         src/utilities_for_simulator.cpp
         src/InputData.cpp
@@ -145,8 +145,8 @@ ADD_EXECUTABLE(simulator_server
 
         )
 
-TARGET_LINK_LIBRARIES(simulator_server
-        simulatorIrtJv
+TARGET_LINK_LIBRARIES(xdyn-server
+        x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
         )
@@ -157,7 +157,7 @@ TARGET_LINK_LIBRARIES(simulator_server
         
 
 ################################################################################
-INSTALL(TARGETS sim
+INSTALL(TARGETS xdyn
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 INSTALL(TARGETS gz
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
@@ -167,18 +167,18 @@ IF(WIN32)
     ADD_CUSTOM_COMMAND(
             TARGET generate_yaml_example
             POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:x-dyn> .
             COMMAND generate_yaml_example demos
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            DEPENDS simulatorIrtJv
+            DEPENDS x-dyn
             COMMENT "Generate YAML simulation input data files")
     ADD_CUSTOM_COMMAND(
             TARGET generate_stl_examples
             POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:simulatorIrtJv> .
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:x-dyn> .
             COMMAND generate_stl_examples demos
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            DEPENDS simulatorIrtJv
+            DEPENDS x-dyn
             COMMENT "Generate STL mesh input data files")
 ELSE()
     ADD_CUSTOM_COMMAND(
@@ -186,14 +186,14 @@ ELSE()
             POST_BUILD
             COMMAND generate_yaml_example demos
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            DEPENDS simulatorIrtJv
+            DEPENDS x-dyn
             COMMENT "Generate YAML simulation input data files")
     ADD_CUSTOM_COMMAND(
             TARGET generate_stl_examples
             POST_BUILD
             COMMAND generate_stl_examples demos
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            DEPENDS simulatorIrtJv
+            DEPENDS x-dyn
             COMMENT "Generate STL mesh input data files")
 ENDIF()
 

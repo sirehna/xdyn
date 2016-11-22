@@ -13,7 +13,7 @@ ADD_CUSTOM_COMMAND(TARGET python_script POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy ${script}
                                                ${PROJECT_BINARY_DIR}/executables)
 ADD_CUSTOM_TARGET(integration_tests
-    DEPENDS sim
+    DEPENDS x-dyn
             generate_yaml_example
             generate_stl_examples
             python_script
@@ -29,15 +29,15 @@ ADD_CUSTOM_COMMAND(
     COMMENT "Checking the tutorials execute OK"
 )
 
-ADD_CUSTOM_TARGET(sim_server)
+ADD_CUSTOM_TARGET(xdynserver)
 IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
     FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_server/server)
     ADD_CUSTOM_COMMAND(
-        TARGET sim_server
+        TARGET x-dyn-server
         POST_BUILD
         COMMAND ${PYTHON_EXECUTABLE} setup.py install_exe -d ${CMAKE_CURRENT_BINARY_DIR}/python_server/server
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../html
-        COMMENT "Generate simulator server"
+        COMMENT "Generate X-DYN's server"
     )
     INSTALL(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/python_server/server"
             DESTINATION ".")
@@ -52,11 +52,11 @@ IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
     INSTALL(FILES "${PROJECT_SOURCE_DIR}/../html/websocket_test.html"
             DESTINATION server)
 ELSE()
-    MESSAGE(STATUS "No simulator server will be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
+    MESSAGE(STATUS "X-DYN's server will be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
     ADD_CUSTOM_COMMAND(
-        TARGET sim_server
+        TARGET xdynserver
         POST_BUILD
-        COMMENT "No simulator server will be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
+        COMMENT "X-DYN's server will be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
 ENDIF()
 
 ADD_CUSTOM_TARGET(
