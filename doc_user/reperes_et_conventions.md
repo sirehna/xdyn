@@ -724,3 +724,28 @@ Une attitude sera décrite de la manière suivante, avec les champs
     theta: {value: 0, unit: rad}
     psi: {value: 0, unit: rad}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Convention de houle {#section_Direction_houle}
+
+X-DYN utilise la convention $Z$ vers le bas pour l'amplitude.
+L'azimuth ou la direction de houle que l'on note $\gamma$ représente la
+direction de propagation de la houle.
+
+Ainsi une direction nulle indique une
+propagation du sud vers le nord de la houle.
+Une direction de 90° représente une propagation de l'ouest vers l'est.
+
+![](images/DirectionHoule.svg)
+
+Les différentes positions du navire par rapport à la houle sont décrites comme suit :
+
+- $\gamma - \psi = 0^\circ$ : navire dos à la houle, houle de l'arrière
+- $0^\circ < \gamma - \psi < 90^\circ$ : Houle venant de bâbord arrière
+- $\gamma - \psi = 90^\circ$ : Houle venant de bâbord
+- $90^\circ < \gamma - \psi < 180^\circ$ : Houle venant de tribord arrière
+- $\gamma - \psi = 180^\circ$: navire cap à la houle, houle de l'avant
+- $180^\circ < \gamma - \psi < 270^\circ$ : Houle venant de tribord avant
+- $\gamma - \psi = 270^\circ$ : Houle venant de tribord
+- $270^\circ < \gamma - \psi < 360^\circ$ : Houle venant de bâbord avant
+
+

@@ -4,6 +4,13 @@ La section `environment` définit les modèles d'environnement pour la simulatio
 à effectuer. Elle permet de prendre en compte des modèles de houle et de vent.
 Elle peut être vide (#tutoriel-1-balle-en-chute-libre)).
 
+Les modèles de houle interviennent pour le calcul des [efforts
+hydrostatiques](#efforts-hydrostatiques-non-lin%C3%A9aires)
+(par truchement de l'élévation de la surface libre),
+d'une part, et les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation)
+d'autre part (par le biais de la pression dynamique).
+
+
 ## Constantes environnementales
 
 L'accélération de la pesanteur (dénotée par `g`) et la densité volumique de
@@ -24,121 +31,10 @@ précédente](#remarques-sur-les-unit%C3%A9s), les
 dimensions physiques ne sont pas vérifiées et simplement converties en unités
 du système international.
 
-## Modèles de houle
 
-Les modèles de houle interviennent pour le calcul des [efforts
-hydrostatiques](#efforts-hydrostatiques-non-lin%C3%A9aires)
-(par truchement de l'élévation de la surface libre),
-d'une part, et les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation)
-d'autre part (par le biais de la pression dynamique).
+## Simulation sans houle
 
-### Conventions
-
-On note $\psi$ la direction de propagation de la houle (les vagues "vont vers"
-$\psi$) dans le repère NED (en d'autres termes, $\psi=0$ correspond aux vagues
-allant vers le Nord, $\psi = 90^\circ$ à des vagues allant vers l'Est). Cette
-convention peut être illustrée par la figure suivante :
-
-![](images/convention_houle.svg)
-
-On appelle $\omega\mapsto S(\omega)$ la densité spectrale de puissance de la
-houle, $\psi\mapsto D(\psi)$ l'étalement directionnel de la houle et $A(\omega,
-\psi) = S(\omega)\cdot D(\psi)$ le spectre directionnel de la houle.
-
-La densité spectrale de puissance donne la distribution (au sens des
-probabilités) de la hauteur de houle
-en fonction de la pulsation de celle-ci et l'étalement directionnel est une
-caractérisation non-stochastique de la variation de la hauteur de houle dans
-l'espace.
-
-### Densités spectrales de puissance implémentées
-
-#### Dirac
-
-La plus simple densité spectrale de puissance correspond à une houle
-monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
-
-$$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
-\left\{\begin{array}{l}0, \textrm{si }\omega\neq \omega_0\\1, \textrm{si }
-\omega=\omega_0\end{array}\right.$$
-
-Le paramétrage de ce spectre est :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-spectral density:
-    type: dirac
-    Hs: {value: 5, unit: m}
-    omega0: {value: 15, unit: rad/s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
-
-#### JONSWAP
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-spectral density:
-    type: jonswap
-    Hs: {value: 5, unit: m}
-    Tp: {value: 15, unit: s}
-    gamma: 1.2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#### Pierson-Moskowitz
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-spectral density:
-    type: pierson-moskowitz
-    Hs: {value: 5, unit: m}
-    Tp: {value: 15, unit: s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#### Bretschneider
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-spectral density:
-    type: bretschneider
-    Hs: {value: 5, unit: m}
-    Tp: {value: 15, unit: s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-### Étalements directionnels
-
-#### Dirac
-
-Lorsque cet étalement est choisi, la houle est mono-directionnelle.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-directional spreading:
-    type: dirac
-    waves propagating to: {value: 90, unit: deg}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-La direction de propagation est donnée par `waves propagating to`.
-
-#### Cos2s
-
-L'étalement est donné par :
-$$\psi\mapsto \cos^{2s}\left({\psi-\psi_0}\right)$$
-
-où $\psi_0$ est la direction de propagation.
-
-Cet étalement est paramétré de la façon suivante :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-directional spreading:
-    type: cos2s
-    s: 2
-    waves propagating to: {value: 90, unit: deg}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-`waves propagating to` donne la direction de propagation $\psi_0$.
-
-
-### Modèles de houle
-
-#### Absence de houle
-
-Pour simuler une surface libre parfaitement horizontale, on opère de la façon
+Pour simuler une surface libre parfaitement plane, on opère de la façon
 suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -151,12 +47,16 @@ suivante :
 `constant sea elevation in NED frame` représente l'élévation de la surface
 libre dans le repère NED.
 
-#### Houle d'Airy
+Dans ce cas, les efforts d'excitation (Froude-Krylov et radiation) seront nuls.
+
+## Houle d'Airy
 
 On peut définir une houle comme étant une somme de plusieurs spectres
 directionnels, c'est-à-dire un spectre de puissance et une dispersion spatiale.
 Pour dériver l'expression générale d'une houle composée de plusieurs spectres,
 on commence par le cas d'une houle monochromatique et monodirectionnelle.
+
+### Expression du potentiel de vitesse de la houle
 
 Soit $V(x,y,z,t)=(u,v,w)$ la vitesse du fluide au point de coordonnées $(x,y,z)$
 (dans le repère NED) et à l'instant $t$.
@@ -172,18 +72,18 @@ $$V(x,y,z,t) = \textrm{grad}{\phi(x,y,z,t)}$$
 
 La pression $p$ vérifie l'équation de Bernoulli :
 
-$$p + \rho g z +\rho\frac{\partial\phi}{\partial t} +
+$$p + \rho g z -\rho\frac{\partial\phi}{\partial t} +
 \frac{\rho}{2} V\cdot V = C(t)$$
 
 où $C:t\mapsto C(t)$ est une fonction du temps arbitraire, donc en particulier
 $C(t)=p_0$ (pression atmosphérique à la surface) :
 
-$$p_0 + \rho g z +\rho\frac{\partial\phi}{\partial t} +
+$$p_0 + \rho g z -\rho\frac{\partial\phi}{\partial t} +
 \frac{\rho}{2} V\cdot V = p_0$$
 
 soit
 
-$$g z +\frac{\partial\phi}{\partial t} + \frac{1}{2} V\cdot V = 0$$
+$$g z -\frac{\partial\phi}{\partial t} + \frac{1}{2} V\cdot V = 0$$
 
 Il s'agit de la première condition de surface libre.
 
@@ -205,7 +105,7 @@ C'est la deuxième condition de surface libre.
 En linéarisant ces deux conditions de surface libre, on obtient :
 
 $$\frac{\partial \eta}{\partial t} = \frac{\partial\phi}{\partial z}$$
-$$g\eta + \frac{\partial\phi}{\partial t} = 0$$
+$$g\eta - \frac{\partial\phi}{\partial t} = 0$$
 
 Par ailleurs, l'eau étant supposée incompressible, $$\nabla\cdot V=
 \frac{\partial^2\phi}{\partial x^2} +  \frac{\partial^2\phi}{\partial y^2} +
@@ -214,9 +114,9 @@ Par ailleurs, l'eau étant supposée incompressible, $$\nabla\cdot V=
 Il s'agit d'une équation de Laplace dont la solution s'obtient par la méthode de
 séparation des variables :
 
-$$\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(z+h))}
-{\cosh(k\cdot h)}\sin(k\cdot(x\cdot
-\cos(\psi)+ y\cdot \sin(\psi))-\omega\cdot t+\phi)$$
+$$\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+{\cosh(k\cdot h)}\cos(k\cdot(x\cdot
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
 
 $h$ est la profondeur du fluide (hauteur du sol à la surface libre)
 $\eta_a=2\sqrt{S(\omega)}$ est l'amplitude (en m)
@@ -226,26 +126,40 @@ relation de dispersion :
 
 $$\omega^2 = g\cdot k \cdot \tanh(k\cdot h)$$
 
-On peut généraliser et dériver cette expression pour obtenir l'élévation d'une
-houle polychromatique et multi-directionnelle :
+qui, en profondeur infinie ($k\cdot h > 3$) tend vers :
 
-$$\eta(x,y,t) = -\frac{1}{\rho}\frac{\partial\phi}{\partial t} =
+$$\omega^2 \sim g\cdot k$$
+
+Le potentiel de vitesse de la houle est ici exprimé pour une seule fréquence et
+une seule direction. On peut la généraliser en :
+
+$$\phi(x,y,z,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir} \sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}\cdot \frac{g}{\omega_i}\frac{\cosh(k\cdot(h-z))}
+{\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
+\cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi)$$
+
+### Elévation de la houle
+
+L'élévation de la houle est donnée par la deuxième condition de surface libre :
+
+$$\eta(x,y,t) = \frac{1}{g}\frac{\partial\phi}{\partial t} = -
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
-\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}\sin(k_i\cdot(x\cdot \cos(\psi_j)
-+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}\sin(k_i\cdot(x\cdot \cos(\gamma_j)
++ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+### Pression dynamique
 
 L'expression de la pression dynamique, utilisée par le modèle de
 [Froude-Krylov](#calcul-des-efforts-dexcitation), se déduit de la première
 condition de surface libre linéarisée :
 
-$$p_{\textrm{dyn}} = \rho g z = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
+$$p_{\textrm{dyn}} = -\rho g z = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
 
 soit
 
 $$p_{\textrm{dyn}} = \rho\cdot g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
-\frac{\cosh(k_i\cdot(z-\eta+h))}{\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
-\cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
+\sin(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 - $g$ désigne l'accélération de la pesanteur (9.81 $m/s^2$)
 - $\rho$ est la densité volumique du fluide (en $kg/m^3$)
@@ -253,30 +167,36 @@ $$p_{\textrm{dyn}} = \rho\cdot g
 Lorsque la profondeur $h$ est très grande devant $z$, on obtient :
 
 $$p_{\textrm{dyn}} = \rho\cdot g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
-e^{-k_i\cdot(z-\eta(x,y,t))}\cos(k_i\cdot(x\cdot\cos(\psi_j)+ y\cdot
-\sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+e^{-k_i\cdot z}\cos(k_i\cdot(x\cdot\cos(\gamma_j)+ y\cdot
+\sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+
+### Vitesse orbitale
 
 La vitesse $V(x,y,z,t) = (u,v,w)$ orbitale de la houle est définie par :
 
 $$u = \frac{\partial \phi}{\partial x} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
-\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\cdot\cos(\psi_j)
-\cos(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$v = \frac{\partial \phi}{\partial y} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
-\frac{\cosh(k\cdot(z+h))}{\cosh(k\cdot h)}\cdot\sin(\psi_j)
-\cos(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\sin(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$w = \frac{\partial \phi}{\partial z} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\psi_j)\Delta\omega\Delta\psi}
-\frac{\sinh(k\cdot(z+h))}{\cosh(k\cdot h)}
-\sin(k\cdot(x\cdot \cos(\psi_j)+ y\cdot \sin(\psi_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\frac{\sinh(k\cdot(h-z))}{\cosh(k\cdot h)}
+\cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 
-Les spectres directionnels sont définis de la façon suivante :
+
+### Paramétrisation des modèles de houle
+
+Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: airy
@@ -301,7 +221,92 @@ phases aléatoires.
 - `spectral density` : densité spectrale de puissance. Cf. infra.
 
 
-#### Discrétisation des spectres et des étalements
+
+## Densités spectrales de puissance
+
+### Dirac
+
+La plus simple densité spectrale de puissance correspond à une houle
+monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
+
+$$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
+\left\{\begin{array}{l}0, \textrm{si }\omega\neq \omega_0\\1, \textrm{si }
+\omega=\omega_0\end{array}\right.$$
+
+Le paramétrage de ce spectre est :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+    type: dirac
+    Hs: {value: 5, unit: m}
+    omega0: {value: 15, unit: rad/s}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
+
+### JONSWAP
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+    type: jonswap
+    Hs: {value: 5, unit: m}
+    Tp: {value: 15, unit: s}
+    gamma: 1.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Pierson-Moskowitz
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+    type: pierson-moskowitz
+    Hs: {value: 5, unit: m}
+    Tp: {value: 15, unit: s}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Bretschneider
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+spectral density:
+    type: bretschneider
+    Hs: {value: 5, unit: m}
+    Tp: {value: 15, unit: s}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Étalements directionnels
+
+### Dirac
+
+Lorsque cet étalement est choisi, la houle est mono-directionnelle.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+directional spreading:
+    type: dirac
+    waves propagating to: {value: 90, unit: deg}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La direction de propagation est donnée par `waves propagating to`.
+
+### Cos2s
+
+L'étalement est donné par :
+$$\gamma\mapsto \cos^{2s}\left({\gamma-\gamma_0}\right)$$
+
+où $\gamma_0$ est la direction de propagation.
+
+Cet étalement est paramétré de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+directional spreading:
+    type: cos2s
+    s: 2
+    waves propagating to: {value: 90, unit: deg}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+`waves propagating to` donne la direction de propagation $\gamma_0$.
+
+
+
+## Discrétisation des spectres et des étalements
 
 Les étalements et les spectres présentés précédemment sont continus. Afin d'en
 réaliser l'implémentation informatique, il faut les discrétiser. Si l'on
@@ -317,7 +322,7 @@ effet, la pression dynamique et la pression statique étant intégrées sur tout
 les facettes du maillage, ces modèles sont évalués de nombreuses fois par pas
 de calcul. Comme le nombre de composantes sommées pour calculer les élévations
 et pressions dynamiques étant potentiellement important, on ne sélectionne
-que les produits $S(\omega_i)D(\psi_j)$ contribuant de manière significative
+que les produits $S(\omega_i)D(\gamma_j)$ contribuant de manière significative
 à l'énergie totale.
 Pour ce faire, on classe ces produits par ordre décroissant et l'on sélectionne
 les $n$ premiers de façon à ce que leur somme représente une fraction
@@ -343,14 +348,7 @@ directionnel $S_i\cdot D_j$ sont classés par ordre décroissant. On calcule la
 somme cumulative et l'on s'arrête lorsque l'énergie accumulée vaut `energy
 fraction` de l'énergie totale.
 
-#### Références
-- *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-- *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70
-- *Sea Loads on Ships And Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 27
-- *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 75
-- *Offshore Hydromechanics*, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
-
-### Sorties
+## Sorties
 
 On peut sortir les hauteurs de houle calculées sur un maillage (défini dans un
 repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
@@ -426,3 +424,9 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Références
+- *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+- *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70
+- *Sea Loads on Ships And Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 27
+- *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 75
+- *Offshore Hydromechanics*, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
