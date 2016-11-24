@@ -1,5 +1,5 @@
 % Simulateur X-Dyn
-% Charles-Edouard CADY, SIREHNA
+% SIREHNA
 
 # Description
 
