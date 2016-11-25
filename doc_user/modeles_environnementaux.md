@@ -174,6 +174,7 @@ e^{-k_i\cdot z}\cos(k_i\cdot(x\cdot\cos(\gamma_j)+ y\cdot
 
 ### Vitesse orbitale
 
+#### En profondeur finie
 La vitesse $V(x,y,z,t) = (u,v,w)$ orbitale de la houle est définie par :
 
 $$u = \frac{\partial \phi}{\partial x} = g
@@ -190,6 +191,28 @@ $$w = \frac{\partial \phi}{\partial z} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 \sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
 \frac{\sinh(k\cdot(h-z))}{\cosh(k\cdot h)}
+\cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+#### En profondeur infinie
+
+Lorsque $k\cdot h >3$, on peut utiliser l'approximation suivante:
+
+$$u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+e^{-k_i z}
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+$$v = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+e^{-k_i z}
+\cdot\sin(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+$$w = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+e^{-k_i z}
 \cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 
