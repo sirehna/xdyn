@@ -158,7 +158,7 @@ soit
 
 $$p_{\textrm{dyn}} = \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
-\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
+\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
 \sin(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 - $g$ désigne l'accélération de la pesanteur (9.81 $m/s^2$)
@@ -168,7 +168,7 @@ Lorsque la profondeur $h$ est très grande devant $z$, on obtient :
 
 $$p_{\textrm{dyn}} = \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
-e^{-k_i\cdot z}\cos(k_i\cdot(x\cdot\cos(\gamma_j)+ y\cdot
+e^{-k_i\cdot z}\cos(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
 \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 
