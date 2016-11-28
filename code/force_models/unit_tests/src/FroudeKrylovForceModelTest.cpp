@@ -90,12 +90,12 @@ TEST_F(FroudeKrylovForceModelTest, example)
     const ssc::kinematics::Wrench Ffk = F(body->get_states(), t);
 //! [FroudeKrylovForceModelTest example]
 //! [FroudeKrylovForceModelTest expected output]
-    ASSERT_DOUBLE_EQ(81544.906276859518, Ffk.X());
+    ASSERT_DOUBLE_EQ(11056.734651002685, Ffk.X());
     ASSERT_DOUBLE_EQ(0, Ffk.Y());
     ASSERT_DOUBLE_EQ(0, Ffk.Z());
     ASSERT_DOUBLE_EQ(0, Ffk.K());
-    ASSERT_DOUBLE_EQ(-27915.707583147494, Ffk.M());
-    ASSERT_DOUBLE_EQ(0, Ffk.N());
+    ASSERT_DOUBLE_EQ(3910.495427875187, Ffk.M());
+    ASSERT_DOUBLE_EQ(432.07086885338083, Ffk.N());
 //! [FroudeKrylovForceModelTest expected output]
 }
 
@@ -137,7 +137,7 @@ TEST_F(FroudeKrylovForceModelTest, validate_formula_against_sos_stab)
 
     EXPECT_NEAR(-0.28057, Fx, BIG_EPS);
     EXPECT_NEAR(0, Fy, BIG_EPS);
-    EXPECT_NEAR(-0.56744, Fz, BIG_EPS);
+    EXPECT_NEAR(-0.56479215074847744, Fz, BIG_EPS);
 }
 
 TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
@@ -163,9 +163,9 @@ TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
     FroudeKrylovForceModel F(BODY, env);
     body->update_intersection_with_free_surface(env, t);
     const ssc::kinematics::Wrench Ffk = F(states, t);
-    ASSERT_NEAR(-0.28002164687919873, Ffk.X(), EPS);
+    ASSERT_NEAR(0.56219471494913797, Ffk.X(), EPS);
     ASSERT_NEAR(0, Ffk.Y(), EPS);
-    ASSERT_NEAR(-0.56631957463955374, Ffk.Z(), EPS);
+    ASSERT_NEAR(0.27603603957852307, Ffk.Z(), EPS);
     ASSERT_NEAR(0, Ffk.K(), EPS);
     ASSERT_NEAR(0, Ffk.M(), EPS);
     ASSERT_NEAR(0, Ffk.N(), EPS);

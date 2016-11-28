@@ -146,26 +146,26 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
 
 double dynamic_pressure_factor(const double k,  //!< Wave number (in 1/m)
                                const double z,  //!< z-position in the NED frame (in meters)
-                               const double eta //!< Wave elevation at (x,y) in the NED frame (in meters)
+                               const double  //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
                               )
 {
-    return exp(-k*(z-eta));
+    return exp(-k*z);
 }
 
 double dynamic_pressure_factor(const double k,  //!< Wave number (in 1/m)
                                const double z,  //!< z-position in the NED frame (in meters)
                                const double h,  //!< Average water depth (in meters)
-                               const double eta //!< Wave elevation at (x,y) in the NED frame (in meters)
+                               const double  //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
                               )
 {
-    return cosh(k*(h-z+eta))/cosh(k*h);
+    return cosh(k*(h-z))/cosh(k*h);
 }
 
 double dynamic_pressure_factor_sh(const double k,  //!< Wave number (in 1/m)
                                   const double z,  //!< z-position in the NED frame (in meters)
                                   const double h,  //!< Average water depth (in meters)
-                                  const double eta //!< Wave elevation at (x,y) in the NED frame (in meters)
+                                  const double  //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
                               )
 {
-    return sinh(k*(h-z+eta))/cosh(k*h);
+    return sinh(k*(h-z))/cosh(k*h);
 }

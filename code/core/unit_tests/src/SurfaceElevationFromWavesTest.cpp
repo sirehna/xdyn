@@ -76,7 +76,7 @@ TEST_F(SurfaceElevationFromWavesTest, relative_wave_height)
         const ssc::kinematics::Point P("NED", a.random<double>(), a.random<double>(), a.random<double>());
         const double x = P.x();
         const double y = P.y();
-        ASSERT_NEAR(Hs/2*cos(2*PI/Tp*t - k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.wave_height(x, y, t), 1E-5);
+        ASSERT_NEAR(-Hs/2*sin(-2*PI/Tp*t + k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.wave_height(x, y, t), 1E-5);
     }
 //! [SurfaceElevationFromWavesTest relative_wave_height expected output]
 }
@@ -101,7 +101,7 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
         const double x = P.x();
         const double y = P.y();
         const double z = P.z();
-        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*cos(2*PI/Tp*t - k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, 0, t), 1E-6);
+        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*sin(-2*PI/Tp*t + k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, 0, t), 1E-6);
     }
 //! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
 }
@@ -116,9 +116,9 @@ TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
     const double z = 1.62;
     const double t = 664.2;
     ssc::kinematics::Point v = wave.orbital_velocity(g, x, y, z, t);
-    ASSERT_NEAR(0.26164706746726851, v.x(),1e-10);
-    ASSERT_NEAR(0.26164706746726851, v.y(),1e-10);
-    ASSERT_NEAR(-0.17968143538987366, v.z(),1e-10);
+    EXPECT_NEAR(-0.12705396141751218, v.x(),1e-10);
+    EXPECT_NEAR(-0.12705396141751218, v.y(),1e-10);
+    EXPECT_NEAR(0.37002483136735936, v.z(),1e-10);
 }
 
 TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
@@ -143,12 +143,12 @@ TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
     const double EPS = 1E-6;
     for (size_t i = 0 ; i < 1 ; ++i)
     {
-        ASSERT_NEAR((double)grid.z(i,0),1.4350787887938283,EPS);
-        ASSERT_NEAR((double)grid.z(i,1),1.4999864342292188,EPS);
-        ASSERT_NEAR((double)grid.z(i,2),1.4313139178312773,EPS);
-        ASSERT_NEAR((double)grid.z(i,3),1.2351768188109919,EPS);
-        ASSERT_NEAR((double)grid.z(i,4),0.92904197875491012,EPS);
-        ASSERT_NEAR((double)grid.z(i,5),0.54017200520689668,EPS);
-        ASSERT_NEAR((double)grid.z(i,6),0.10319742069255035,EPS);
+        EXPECT_NEAR((double)grid.z(i,0),-0.46917699300305094,EPS);
+        EXPECT_NEAR((double)grid.z(i,1),-0.86869551138231271,EPS);
+        EXPECT_NEAR((double)grid.z(i,2),-1.1908530054573996,EPS);
+        EXPECT_NEAR((double)grid.z(i,3),-1.406959982302008,EPS);
+        EXPECT_NEAR((double)grid.z(i,4),-1.4977711979049479,EPS);
+        EXPECT_NEAR((double)grid.z(i,5),-1.4551995278764878,EPS);
+        EXPECT_NEAR((double)grid.z(i,6),-1.2830361602181635,EPS);
     }
 }

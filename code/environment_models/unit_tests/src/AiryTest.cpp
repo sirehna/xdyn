@@ -62,7 +62,7 @@ TEST_F(AiryTest, single_frequency_single_direction_at_one_point)
     //! [AiryTest expected output]
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
-        ASSERT_NEAR(Hs/2*cos(2*PI/Tp*t-k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
+        ASSERT_NEAR(-Hs/2*sin(-2*PI/Tp*t+k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
     }
     //! [AiryTest expected output]
 }
@@ -86,7 +86,7 @@ TEST_F(AiryTest, two_frequencies_single_direction_at_one_point)
     const double k = 4.*PI*PI/Tp/Tp/9.81;
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
-        ASSERT_NEAR(Hs/sqrt(2)*cos(2*PI/Tp*t - k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
+        ASSERT_NEAR(-Hs/sqrt(2)*sin(-2*PI/Tp*t + k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
     }
 }
 
@@ -109,7 +109,7 @@ TEST_F(AiryTest, one_frequency_two_directions_at_one_point)
     const double k = 4.*PI*PI/Tp/Tp/9.81;
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
-        ASSERT_NEAR(Hs/sqrt(2)*cos(2*PI/Tp*t - k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
+        ASSERT_NEAR(-Hs/sqrt(2)*sin(-2*PI/Tp*t + k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
     }
 }
 
@@ -158,7 +158,7 @@ TEST_F(AiryTest, dynamic_pressure)
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
         const double eta = 0;
-        ASSERT_NEAR(Hs/2*rho*g*exp(-k*z)*cos(2*PI/Tp*t - k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.dynamic_pressure(rho,g,x,y,z,eta,t), 1E-6);
+        ASSERT_NEAR(Hs/2*rho*g*exp(-k*z)*sin(-2*PI/Tp*t + k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.dynamic_pressure(rho,g,x,y,z,eta,t), 1E-6);
     }
 }
 
@@ -200,46 +200,15 @@ TEST_F(AiryTest, should_be_able_to_reproduce_results_from_sos_stab)
     const Airy wave(A, phi);
 
     double x=-0.1; double y=0;
-    ASSERT_NEAR(0.045232, wave.elevation(x,y,t), BIG_EPS);
+    EXPECT_NEAR(0.022754911240680714, wave.elevation(x,y,t), BIG_EPS);
     x=0.1;y=0;
-    ASSERT_NEAR(0.044522, wave.elevation(x,y,t), BIG_EPS);
+    EXPECT_NEAR(0.021310005003521912, wave.elevation(x,y,t), BIG_EPS);
     x=0;y=-0.1;
-    ASSERT_NEAR(0.044883, wave.elevation(x,y,t), BIG_EPS);
+    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t), BIG_EPS);
     x=0;y=0.1;
-    ASSERT_NEAR(0.044883, wave.elevation(x,y,t), BIG_EPS);
+    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t), BIG_EPS);
     x=0;y=0;
-    ASSERT_NEAR(0.044883, wave.elevation(x,y,t), BIG_EPS);
-}
-
-TEST_F(AiryTest, validate_dynamic_pressure_formula_against_sos_stab)
-{
-    const double Hs = 0.1;
-    const double Tp = 5;
-    const double omega0 = 2*PI/Tp;
-    double psi = 0;
-    double phi = 5.8268;
-    double t = 0;
-    const double g = 9.81;
-    const double k = omega0*omega0/g;
-
-    const double omega_min = a.random<double>().greater_than(0);
-    const double omega_max = a.random<double>().greater_than(omega_min);
-    const size_t nfreq = a.random<size_t>().between(2,100);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq);
-    const Airy wave(A, phi);
-
-    double x=-0.1; double y=0; double z=0.2;
-    ASSERT_NEAR(0.044118, Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
-    x=0.1;y=0;z=0.2;
-    ASSERT_NEAR(0.04342, Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
-    x=0;y=-0.1;z=0.2;
-    ASSERT_NEAR(0.043775, Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
-    x=0;y=0.1;z=0.2;
-    ASSERT_NEAR(0.043775, Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
-    x=0;y=0;z=0.1;
-    ASSERT_NEAR(0.044486, Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
-    x=0;y=0;z=0.3;
-    ASSERT_NEAR(0.043075, Hs/2*exp(-k*(z-wave.elevation(x,y,t)))*cos(omega0*t-k*(x*cos(psi)+y*sin(psi))+phi), BIG_EPS);
+    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t), BIG_EPS);
 }
 
 TEST_F(AiryTest, dynamic_pressure_compare_with_sos_stab)
@@ -260,17 +229,17 @@ TEST_F(AiryTest, dynamic_pressure_compare_with_sos_stab)
     const Airy wave(A, phi);
 
     double x=-0.1; double y=0; double z=0.2; double eta = wave.elevation(x,y,t);
-    ASSERT_NEAR(0.044118, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
+    EXPECT_NEAR(-0.022033996863949721, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
     x=0.1;y=0;z=0.2; eta = wave.elevation(x,y,t);
-    ASSERT_NEAR(0.04342, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
+    EXPECT_NEAR(-0.020634867719409668, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
     x=0;y=-0.1;z=0.2; eta = wave.elevation(x,y,t);
-    ASSERT_NEAR(0.043775, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
+    EXPECT_NEAR(-0.021337196682411571, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
     x=0;y=0.1;z=0.2;eta = wave.elevation(x,y,t);
-    ASSERT_NEAR(0.043775, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
+    EXPECT_NEAR(-0.021337196682411571, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
     x=0;y=0;z=0.1;eta = wave.elevation(x,y,t);
-    ASSERT_NEAR(0.044486, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
+    EXPECT_NEAR(-0.021683445449540293, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
     x=0;y=0;z=0.3;eta = wave.elevation(x,y,t);
-    ASSERT_NEAR(0.043075, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
+    EXPECT_NEAR(-0.020996476935521684, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
 }
 
 TEST_F(AiryTest, norm_of_orbital_velocity_should_only_depend_on_z)
@@ -326,39 +295,39 @@ TEST_F(AiryTest, orbital_velocity_non_regression_test)
     double x=-0.1; double y=0; double z=0.2;
     V = wave.orbital_velocity(g,x,y,z,t);
     ASSERT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(0.027414126666006417, V.x(), EPS);
-    EXPECT_NEAR(0.047482660230651896, V.y(), EPS);
-    EXPECT_NEAR(-0.026372680043643015, V.z(), EPS);
+    EXPECT_NEAR(-0.013186340021821511, V.x(), EPS);
+    EXPECT_NEAR(-0.022839410883673746, V.y(), EPS);
+    EXPECT_NEAR(0.05482825333201282, V.z(), EPS);
     x=0.1;y=0;z=0.2;
     V = wave.orbital_velocity(g,x,y,z,t);
     EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(0.02719832079249054, V.x(), EPS);
-    EXPECT_NEAR(0.047108873493150613, V.y(), EPS);
-    EXPECT_NEAR(-0.02725180728683603, V.z(), EPS);
+    EXPECT_NEAR(-0.013625903643418018, V.x(), EPS);
+    EXPECT_NEAR(-0.023600757409437879, V.y(), EPS);
+    EXPECT_NEAR(0.054396641584981066, V.z(), EPS);
     x=0;y=-0.1;z=0.2;
     V = wave.orbital_velocity(g,x,y,z,t);
     EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(0.027491344144018031, V.x(), EPS);
-    EXPECT_NEAR(0.047616404825800346, V.y(), EPS);
-    EXPECT_NEAR(-0.026049176661545468, V.z(), EPS);
+    EXPECT_NEAR(-0.013024588330772737, V.x(), EPS);
+    EXPECT_NEAR(-0.022559248736567089, V.y(), EPS);
+    EXPECT_NEAR(0.054982688288036055, V.z(), EPS);
     x=0;y=0.1;z=0.2;
     V = wave.orbital_velocity(g,x,y,z,t);
     EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(0.02711756547781036, V.x(), EPS);
-    EXPECT_NEAR(0.046969001185143334, V.y(), EPS);
-    EXPECT_NEAR(-0.027571836833087733, V.z(), EPS);
+    EXPECT_NEAR(-0.01378591841654387, V.x(), EPS);
+    EXPECT_NEAR(-0.023877911126453464, V.y(), EPS);
+    EXPECT_NEAR(0.054235130955620714, V.z(), EPS);
     x=0;y=0;z=0.1;
     V = wave.orbital_velocity(g,x,y,z,t);
     EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(0.027750233543419611, V.x(), EPS);
-    EXPECT_NEAR(0.048064814419104873, V.y(), EPS);
-    EXPECT_NEAR(-0.027248221171516328, V.z(), EPS);
+    EXPECT_NEAR(-0.013624110585758166, V.x(), EPS);
+    EXPECT_NEAR(-0.023597651742470114, V.y(), EPS);
+    EXPECT_NEAR(0.055500467086839214, V.z(), EPS);
     x=0;y=0;z=0.3;
     V = wave.orbital_velocity(g,x,y,z,t);
     EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(0.026871058840978748, V.x(), EPS);
-    EXPECT_NEAR(0.046542039165748048, V.y(), EPS);
-    EXPECT_NEAR(-0.026384951076760983, V.z(), EPS);
+    EXPECT_NEAR(-0.013192475538380495, V.x(), EPS);
+    EXPECT_NEAR(-0.022850037910084588, V.y(), EPS);
+    EXPECT_NEAR(0.053742117681957483, V.z(), EPS);
 }
 
 TEST_F(AiryTest, orbital_velocity_sanity_check)

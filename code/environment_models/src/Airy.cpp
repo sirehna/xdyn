@@ -97,7 +97,7 @@ double Airy::elevation(
             const double Dj = v_Dj[j];
             const double k_xCosPsi_ySinPsi = k * v_xCosPsi_ySinPsi[j];
             const double theta = spectrum.phase[i][j];
-            zeta += Ai * Dj * cos(omega_t - k_xCosPsi_ySinPsi + theta);
+            zeta -= Ai * Dj * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
         }
     }
     zeta *= sqrt(2*spectrum.domega*spectrum.dpsi);
@@ -136,7 +136,7 @@ double Airy::dynamic_pressure(
             const double Dj = v_Dj[j];
             const double k_xCosPsi_ySinPsi = k * v_xCosPsi_ySinPsi[j];
             const double theta = spectrum.phase[i][j];
-            p += Ai * Dj * pdyn_fact * cos(omega_t - k_xCosPsi_ySinPsi + theta);
+            p += Ai * Dj * pdyn_fact * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
         }
     }
     p *= rho*g*sqrt(2*spectrum.domega*spectrum.dpsi);
@@ -181,10 +181,10 @@ ssc::kinematics::Point Airy::orbital_velocity(
             const double cos_theta = cos(theta);
             const double sin_theta = sin(theta);
             const double Ai_Dj_k_omega = Ai*v_Dj[j]*k/omega;
-            const double Ai_Dj_k_omega_pdyn_factor_cos_theta = Ai_Dj_k_omega*pdyn_factor*cos_theta;
-            u += Ai_Dj_k_omega_pdyn_factor_cos_theta * v_CosPsi[j];
-            v += Ai_Dj_k_omega_pdyn_factor_cos_theta * v_SinPsi[j];
-            w += Ai_Dj_k_omega * pdyn_factor_sh * sin_theta;
+            const double Ai_Dj_k_omega_pdyn_factor_sin_theta = Ai_Dj_k_omega*pdyn_factor*sin_theta;
+            u += Ai_Dj_k_omega_pdyn_factor_sin_theta * v_CosPsi[j];
+            v += Ai_Dj_k_omega_pdyn_factor_sin_theta * v_SinPsi[j];
+            w += Ai_Dj_k_omega * pdyn_factor_sh * cos_theta;
         }
     }
     const double f = g*sqrt(2*spectrum.domega*spectrum.dpsi);

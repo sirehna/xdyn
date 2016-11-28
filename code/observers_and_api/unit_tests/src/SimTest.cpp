@@ -225,39 +225,39 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh)
     ASSERT_EQ(10, w.m.cols());
     ASSERT_DOUBLE_EQ(1, (double)w.m(0,0));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,0));
-    EXPECT_NEAR(5.3843063341769382, (double)w.m(2,0), 1E-5);
+    EXPECT_NEAR(-1.8616294581857908, (double)w.m(2,0), 1E-5);
 
     ASSERT_DOUBLE_EQ(2, (double)w.m(0,1));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,1));
-    EXPECT_NEAR(5.3847660459188535, (double)w.m(2,1), 1E-5);
+    EXPECT_NEAR(-1.8616230500793978, (double)w.m(2,1), 1E-5);
 
     ASSERT_DOUBLE_EQ(3, (double)w.m(0,2));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,2));
-    EXPECT_NEAR(5.3852257763390483, (double)w.m(2,2), 1E-5);
+    EXPECT_NEAR(-1.8616163424638175, (double)w.m(2,2), 1E-5);
 
     ASSERT_DOUBLE_EQ(4, (double)w.m(0,3));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,3));
-    EXPECT_NEAR(5.3856852968972957, (double)w.m(2,3), 1E-5);
+    EXPECT_NEAR(-1.8616092729714091, (double)w.m(2,3), 1E-5);
 
     ASSERT_DOUBLE_EQ(5, (double)w.m(0,4));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,4));
-    EXPECT_NEAR(5.3861450323603179, (double)w.m(2,4), 1E-5);
+    EXPECT_NEAR(-1.8616022355954391, (double)w.m(2,4), 1E-5);
 
     ASSERT_DOUBLE_EQ(1, (double)w.m(0,5));
     ASSERT_DOUBLE_EQ(2, (double)w.m(1,5));
-    EXPECT_NEAR(5.314654694054445, (double)w.m(2,5), 1E-5);
+    EXPECT_NEAR(-1.9778860402171832, (double)w.m(2,5), 1E-5);
 
     ASSERT_DOUBLE_EQ(2, (double)w.m(0,6));
     ASSERT_DOUBLE_EQ(2, (double)w.m(1,6));
-    EXPECT_NEAR(5.3151144417756662, (double)w.m(2,6), 1E-5);
+    EXPECT_NEAR(-1.9778795395339417, (double)w.m(2,6), 1E-5);
 
     ASSERT_DOUBLE_EQ(3, (double)w.m(0,7));
     ASSERT_DOUBLE_EQ(2, (double)w.m(1,7));
-    EXPECT_NEAR(5.3155740110918153, (double)w.m(2,7), 1E-5);
+    EXPECT_NEAR(-1.9778731939201069, (double)w.m(2,7), 1E-5);
 
     ASSERT_DOUBLE_EQ(4, (double)w.m(0,8));
     ASSERT_DOUBLE_EQ(2, (double)w.m(1,8));
-    EXPECT_NEAR(5.316033768387376, (double)w.m(2,8), 1E-5);
+    EXPECT_NEAR(-1.9778666328005694, (double)w.m(2,8), 1E-5);
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
@@ -529,20 +529,20 @@ TEST_F(SimTest, LONG_linear_hydrostatics_with_waves)
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_linear_hydrostatics_with_waves(), test_data::cube(), 0, T, dt);
 
     const double eps = 1E-3;
-    ASSERT_NEAR(1      , res.at(0).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.0841 , res.at(1).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.1385 , res.at(2).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.16757, res.at(3).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.17703, res.at(4).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.17357, res.at(5).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.16441, res.at(6).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.15686, res.at(7).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.15779, res.at(8).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.17321, res.at(9).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.20792, res.at(10).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.2651 , res.at(11).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.34619, res.at(12).x[ZIDX(0)], eps);
-    ASSERT_NEAR(1.45072, res.at(13).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1      , res.at(0).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.1010459072143728, res.at(1).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.1990755183896542, res.at(2).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.2864256014997444, res.at(3).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.3558158151138187, res.at(4).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.4008027467011974, res.at(5).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.4161836722048577, res.at(6).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.3983252434201292, res.at(7).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.3453969093151239, res.at(8).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.2574947155099978, res.at(9).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.1366478447050186, res.at(10).x[ZIDX(0)], eps);
+    EXPECT_NEAR(0.98670744792990239, res.at(11).x[ZIDX(0)], eps);
+    EXPECT_NEAR(0.81312453136543006, res.at(12).x[ZIDX(0)], eps);
+    EXPECT_NEAR(0.62263046374421704, res.at(13).x[ZIDX(0)], eps);
 }
 
 TEST_F(SimTest, LONG_can_simulate_radiation_damping)
