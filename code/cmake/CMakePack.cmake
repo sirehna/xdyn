@@ -21,7 +21,7 @@ ENDIF()
 # Instructions to build an installer
 IF(UNIX OR MSYS)
     INCLUDE(InstallRequiredSystemLibraries)
-    SET(CPACK_PACKAGE_NAME "simulator")
+    SET(CPACK_PACKAGE_NAME "xdyn")
     SET(CPACK_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION OFF)
     SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "X-DYN : Simulateur 6ddl de navires")
     SET(CPACK_PACKAGE_VENDOR "DCNS Research")
