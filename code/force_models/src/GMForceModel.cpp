@@ -49,6 +49,11 @@ GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, cons
     }
 }
 
+double GMForceModel::get_GM() const
+{
+    return *this->GM;
+}
+
 GMForceModel::Yaml GMForceModel::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);

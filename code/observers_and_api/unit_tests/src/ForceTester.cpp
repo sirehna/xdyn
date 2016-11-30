@@ -12,6 +12,7 @@
 #include "SimulatorYamlParser.hpp"
 #include "simulator_api.hpp"
 #include "StateMacros.hpp"
+#include "GMForceModel.hpp"
 
 Sim ForceTester::make_sim(const std::string& yaml, const std::string& stl) const
 {
@@ -191,4 +192,25 @@ EPoint ForceTester::center_of_buoyancy_in_ned_frame(const double x,
         }
     }
     return EPoint(std::nan(""),std::nan(""),std::nan(""));
+}
+
+boost::optional<double> ForceTester::gm(const double x,
+                       const double y,
+                       const double z,
+                       const double phi,
+                       const double theta,
+                       const double psi)
+{
+    std::vector<double> states = set_states(x, y, z, phi, theta, psi);
+    boost::optional<double> ret;
+    for (auto force:forces)
+    {
+        if (force->get_name() == "GM")
+        {
+            GMForceModel* F = static_cast<GMForceModel*>(force.get());
+            F->operator ()(body->get_states(), 0);
+            ret = F->get_GM();
+        }
+    }
+    return ret;
 }

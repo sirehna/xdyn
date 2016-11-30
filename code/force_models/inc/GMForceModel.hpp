@@ -39,6 +39,7 @@ class GMForceModel : public ImmersedSurfaceForceModel
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         void extra_observations(Observer& ) const;
         static std::string model_name();
+        double get_GM() const;
 
     private:
         GMForceModel();

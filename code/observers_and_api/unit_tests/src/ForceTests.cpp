@@ -6,6 +6,8 @@
  */
 
 
+#include <boost/optional/optional_io.hpp>
+
 #include "ForceTester.hpp"
 #include "ForceTests.hpp"
 #include "generate_anthineas.hpp"
@@ -17,6 +19,7 @@
 #include "yaml_data.hpp"
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"
+#include "GMForceModel.hpp"
 
 #define EPS (1E-8)
 
@@ -613,4 +616,16 @@ TEST_F(ForceTests, DISABLED_LONG_bug_detected_in_GZ)
     ASSERT_NEAR(ANTHINEAS_VOLUME, V2_immersed+V2_emerged, 1E-1);
     ASSERT_NEAR(V1_immersed, V2_immersed+V2_emerged, 1E-1);
     ASSERT_NEAR(V1_emerged, V2_emerged, 1);
+}
+
+TEST_F(ForceTests, bug_3004)
+{
+    ForceTester test(test_data::bug_3004(), test_data::cube());
+    test.add<GMForceModel>("model: gm \n"
+                           "name of hydrostatic force model: non-linear hydrostatic (fast)\n"
+                           "roll step: {value: 1, unit: degree}");
+    const auto gm = test.gm(0,0,-2.167,0,0,0);
+    ASSERT_TRUE(gm.is_initialized());
+    ASSERT_FALSE(std::isnan(gm.get()));
+
 }

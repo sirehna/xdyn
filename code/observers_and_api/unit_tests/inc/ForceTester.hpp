@@ -56,12 +56,26 @@ class ForceTester
             return *this;
         }
 
+        template <typename ForceType> ForceTester& add(const std::string& yaml)
+        {
+            const typename ForceType::Yaml params = ForceType::parse(yaml);
+            forces.push_back(ForcePtr(new ForceType(params, body->get_name(), env)));
+            return *this;
+        }
+
         EPoint center_of_buoyancy_in_ned_frame(const double x,
                                                const double y,
                                                const double z,
                                                const double phi,
                                                const double theta,
                                                const double psi);
+
+        boost::optional<double> gm(const double x,
+                                   const double y,
+                                   const double z,
+                                   const double phi,
+                                   const double theta,
+                                   const double psi);
 
     private:
         ForceTester();
