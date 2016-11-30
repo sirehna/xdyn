@@ -73,6 +73,7 @@ namespace test_data
     std::string bug_2963_diff();
     std::string bug_2963_gm();
     std::string manoeuvring_with_euler_angles_and_quaternions();
+    std::string bug_3004();
 }
 
 #endif /* YAML_DATA_HPP_ */

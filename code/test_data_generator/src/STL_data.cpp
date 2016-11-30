@@ -1490,3 +1490,4 @@ std::string test_data::big_cube()
          << "endsolid vcg\n";
     return data.str();
 }
+
