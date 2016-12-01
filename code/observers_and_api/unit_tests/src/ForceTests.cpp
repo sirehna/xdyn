@@ -624,8 +624,7 @@ TEST_F(ForceTests, bug_3004)
     test.add<GMForceModel>("model: gm \n"
                            "name of hydrostatic force model: non-linear hydrostatic (fast)\n"
                            "roll step: {value: 1, unit: degree}");
-    const auto gm = test.gm(0,0,-2.167,0,0,0);
+    const auto gm = test.gm(0,0,-5e-07,0,0,0);
     ASSERT_TRUE(gm.is_initialized());
     ASSERT_FALSE(std::isnan(gm.get()));
-
 }
