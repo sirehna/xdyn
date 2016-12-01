@@ -102,3 +102,22 @@ ssc::kinematics::RotationMatrix BodyStates::get_rot_from_ned_to(const StateType&
 {
     return Eigen::Quaternion<double>(*_QR(x,idx),*_QI(x,idx),*_QJ(x,idx),*_QK(x,idx)).matrix();
 }
+
+std::vector<double> BodyStates::get_current_state_values(const size_t idx) const
+{
+    std::vector<double> s(13, 0);
+    s[XIDX(idx)] = x();
+    s[YIDX(idx)] = y();
+    s[ZIDX(idx)] = z();
+    s[UIDX(idx)] = u();
+    s[VIDX(idx)] = v();
+    s[WIDX(idx)] = w();
+    s[PIDX(idx)] = p();
+    s[QIDX(idx)] = q();
+    s[RIDX(idx)] = r();
+    s[QRIDX(idx)] = qr();
+    s[QIIDX(idx)] = qi();
+    s[QJIDX(idx)] = qj();
+    s[QKIDX(idx)] = qk();
+    return s;
+}
