@@ -80,7 +80,7 @@ TEST_F(MapObserverTest, GM)
     ASSERT_TRUE(m.find("Fz(GM,cube,NED)") != m.end());
     ASSERT_TRUE(m.find("GM(cube)") != m.end());
     ASSERT_NEAR(-1000*9.81*0.5, m.find("Fz(GM,cube,NED)")->second.back(), EPS);
-    ASSERT_NEAR(-1/(12*PI), m.find("GM(cube)")->second.back(), EPS);
+    ASSERT_NEAR(1/(12*PI), m.find("GM(cube)")->second.back(), EPS);
 }
 
 TEST_F(MapObserverTest, blocked_state_force_residuals_should_appear)
