@@ -4242,7 +4242,7 @@ std::string test_data::bug_3004()
        << "        frame: mesh\n"
        << "        x: {value: 0, unit: m}\n"
        << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 2.833, unit: m}\n"
+       << "        z: {value: 0.5, unit: m}\n"
        << "        phi: {value: 0, unit: rad}\n"
        << "        theta: {value: 0, unit: rad}\n"
        << "        psi: {value: 0, unit: rad}\n"
