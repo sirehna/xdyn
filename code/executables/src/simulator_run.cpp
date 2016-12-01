@@ -33,8 +33,7 @@ void solve(const InputData& input_data, Sim& sys, ListOfObservers& observer)
     }
 }
 
-void catch_exceptions(const std::function<void(void)>& f, const InputData& input_data);
-void catch_exceptions(const std::function<void(void)>& f, const InputData& input_data)
+void catch_exceptions(const std::function<void(void)>& f, const std::string& solver)
 {
     try
     {
@@ -52,7 +51,7 @@ void catch_exceptions(const std::function<void(void)>& f, const InputData& input
     catch(const NumericalErrorException& e)
     {
         std::cerr << "The simulation has diverged and cannot continue: " << e.get_message() << std::endl;
-        if (input_data.solver=="euler")
+        if (solver=="euler")
         {
             std::cerr << "The simulation used a Euler integration scheme, maybe the simulation can be run with a " << std::endl
                       << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
@@ -138,6 +137,6 @@ void run_simulation(const InputData& input_data)
         serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
         solve(input_data, sys, observers);
     }};
-    if (input_data.catch_exceptions) catch_exceptions(f, input_data);
+    if (input_data.catch_exceptions) catch_exceptions(f, input_data.solver);
     else                             f();
 }

@@ -113,6 +113,8 @@ ADD_EXECUTABLE(gz
         src/gz.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
         src/InputData.cpp
+        src/simulator_run.cpp
+        src/utilities_for_simulator.cpp
         )
 
 TARGET_LINK_LIBRARIES(gz

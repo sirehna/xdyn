@@ -16,6 +16,7 @@
 #include "make_sim_for_GZ.hpp"
 #include "OptionPrinter.hpp"
 #include "utilities_for_InputData.hpp"
+#include "simulator_run.hpp"
 
 struct GZOptions
 {
@@ -98,25 +99,29 @@ int main(int argc, char** argv)
     const int error = get_gz_data(argc, argv, input_data);
     if (not(error))
     {
-        const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_files);
-        const ssc::text_file_reader::TextFileReader stl_reader(input_data.stl_filename);
-        const Sim sim = GZ::make_sim(yaml_reader.get_contents(), stl_reader.get_contents());
-        const GZ::Curve calculate(sim);
-        const auto phis = calculate.get_phi(input_data.dphi*PI/180., input_data.phi_max*PI/180.);
-        std::ofstream of;
+        const auto f = [input_data]()
+            {
+                const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_files);
+                const ssc::text_file_reader::TextFileReader stl_reader(input_data.stl_filename);
+                const Sim sim = GZ::make_sim(yaml_reader.get_contents(), stl_reader.get_contents());
+                const GZ::Curve calculate(sim);
+                const auto phis = calculate.get_phi(input_data.dphi*PI/180., input_data.phi_max*PI/180.);
+                std::ofstream of;
 
-        if (not(input_data.output_csv_file.empty()))
-        {
-            of.open(input_data.output_csv_file.c_str(), std::ios::out);
-        }
+                if (not(input_data.output_csv_file.empty()))
+                {
+                    of.open(input_data.output_csv_file.c_str(), std::ios::out);
+                }
 
-        std::ostream& os = input_data.output_csv_file.empty() ? std::cout : of;
-        const char sep = input_data.output_csv_file.empty() ? '\t' : ';';
-        write<std::string>(os,"Phi [deg]", "GZ(phi) [m]", sep);
-        for (auto phi:phis)
-        {
-            write(os, phi*180./PI, calculate.gz(phi), sep);
-        }
+                std::ostream& os = input_data.output_csv_file.empty() ? std::cout : of;
+                const char sep = input_data.output_csv_file.empty() ? '\t' : ';';
+                write<std::string>(os,"Phi [deg]", "GZ(phi) [m]", sep);
+                for (auto phi:phis)
+                {
+                    write(os, phi*180./PI, calculate.gz(phi), sep);
+                }
+            };
+        catch_exceptions(f, "");
     }
     return 0;
 }
