@@ -11,7 +11,7 @@ ne dépend que des paramètres de flottaison.
 * On appelle "flottaison" la surface délimitée par l'intersection de la coque
 et de la surface libre (au repos, pour que cette définition ait un sens).
 
-* On appelle "axe d'inclinaison" l'intersection des surfaces libres dans le
+* On appelle "axe d'inclinaison" l'intersection des flottaisons dans le
 repère "body" pour deux attitudes différentes du corps.
 
 * Un angle d'inclinaison est l'angle d'une rotation autour d'un axe
