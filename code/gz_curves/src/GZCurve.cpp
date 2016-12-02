@@ -63,7 +63,10 @@ std::vector<double> compute_phi(const double dphi, const double phi_max)
 
 GZ::State GZ::Curve::get_Xeq() const
 {
-    return GZ::newton_raphson(GZ::State::Zero(), pimpl->f, pimpl->k, 100, 1E-6);
+    const double z0 = zeq(0,0);
+    const GZ::State x0(z0, 0, 0);
+    const auto g = GZ::newton_raphson(x0, pimpl->f, pimpl->k, 100, 1E-6);
+    return x0;
 }
 
 GZ::Curve::Curve(const Sim& sim) : pimpl(new Impl(sim)), theta_eq(get_Xeq()(2))
