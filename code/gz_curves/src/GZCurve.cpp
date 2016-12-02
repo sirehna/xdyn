@@ -97,13 +97,12 @@ double GZ::Curve::zeq(const double phi, const double theta) const
     MinMax FZ(pimpl->FZ(z.max,phi,theta), pimpl->FZ(z.min,phi,theta));
     if (FZ.min>0)
     {
-        return FZ.min;
+        return z.min;
     }
     if (FZ.max<0)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "Resultant should be oriented downwards when body is fully emerged");
     }
-
     while (delta(z)>1E-10)
     {
         const double z0 = average(z);
