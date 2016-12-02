@@ -22,6 +22,7 @@ GZ::State GZ::newton_raphson(const GZ::State& X0,     //!< Initial value
                              const double eps         //!< Desired precision
                               )
 {
+
     Eigen::Vector3d Xn = X0;
     Eigen::Vector3d Xn_1 = X0.array() + 2*eps;
     for (size_t i = 0 ; i < max_it ; ++i)
@@ -32,7 +33,7 @@ GZ::State GZ::newton_raphson(const GZ::State& X0,     //!< Initial value
         const double det_k = k(0,0)*k(1,1) - k(0,1)*k(1,0);
         if (std::abs(det_k) < 1E-15)
         {
-            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Determinant of stiffness matrix is very close to zero (|det K| < 1E-15)");
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Determinant of stiffness matrix is very close to zero (|det K| = " << std::abs(det_k) << " < 1E-15)");
         }
         const auto y = f(Xn_1).state;
         if (delta(y,Eigen::Vector3d::Zero()) < eps) return Xn;
