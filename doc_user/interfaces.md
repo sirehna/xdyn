@@ -26,6 +26,7 @@ Options:
                              pas les exceptions, par exemple pour utiliser un debugger).
 ~~~~~~~~~~~~~~~~~~~~
 
+
 Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
 des modèles](#waves).
 Le paramètre `-c` ne sera pas décrit ici mais dans [le fichier de description
