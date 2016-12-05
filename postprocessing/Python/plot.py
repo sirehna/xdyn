@@ -4,7 +4,7 @@ import matplotlib
 matplotlib.use('SVG')
 import matplotlib.pyplot as plt
 
-# Usage: ../bin/sim -y falling_ball_test.yml -s rkck --dt 0.1 --tstart 0 --tend 10 | python plot.py 'falling ball' 1 3
+# Usage: ../bin/xdyn -y falling_ball_test.yml -s rkck --dt 0.1 --tstart 0 --tend 10 | python plot.py 'falling ball' 1 3
 
 output = sys.argv[1]
 

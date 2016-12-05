@@ -72,7 +72,7 @@ if ispc
 else
     extension = '';
 end
-simulatorExe = fullfile(fileparts(mfilename('fullpath')),'..','bin',['sim' extension]);
+simulatorExe = fullfile(fileparts(mfilename('fullpath')),'..','bin',['xdyn' extension]);
 if ischar(param) || iscell(param)
     tmp = param;
     param = struct;

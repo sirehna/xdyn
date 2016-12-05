@@ -177,20 +177,20 @@ bodies: ## All bodies have NED as parent frame
 La simulation peut s'exécuter comme suit :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 En exécutant cette commande, les résultats s'affichent directement sur la
 sortie standard. On peut bien sûr les rediriger vers un fichier en exécutant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1 > out.csv
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 > out.csv
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ou en spécifiant directement le fichier de sortie :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On peut également changer l'instant initial (étant entendu que les conditions
@@ -198,26 +198,26 @@ initiales définies dans le fichier YAML s'appliquent à cet instant initial,
 quel qu'il soit, et non pas à t = 0) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.01 --tend 10 --tstart 2
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 10 --tstart 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On peut choisir le solveur :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rkck
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rkck
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 La liste de toutes les options est disponible en exécutant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim
+./xdyn
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On peut chaîner les post-traitements (tracés) à la suite de la simulation :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.01 --tend 1 | python plot.py "tutorial_01" 0 3
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 | python plot.py "tutorial_01" 0 3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Résultats

@@ -184,8 +184,8 @@ bodies: ## All bodies have NED as parent frame
 La simulation peut maintenant être lancée comme suit :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_fast_hydrostatic_z" 0 3
-./sim tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_exact_hydrostatic_z" 0 3
+./xdyn tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_fast_hydrostatic_z" 0 3
+./xdyn tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_exact_hydrostatic_z" 0 3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Résultats
@@ -210,8 +210,8 @@ external forces:
 On peut également représenter les déplacements suivant l'axe $y$ en exécutant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_fast_hydrostatic_y" 0 2
-./sim tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_exact_hydrostatic_y" 0 2
+./xdyn tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_fast_hydrostatic_y" 0 2
+./xdyn tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 | python plot.py "tutorial_02_exact_hydrostatic_y" 0 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ![Embardée (modèle rapide)](images/tutorial_02_fast_hydrostatic_y.svg)

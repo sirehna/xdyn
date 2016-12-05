@@ -182,7 +182,7 @@ environment models:
 La simulation peut maintenant être lancée comme suit :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.yml
+./xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.yml
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Le fichier de résultat est `tutorial_03_results.yml`.

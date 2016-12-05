@@ -5,8 +5,8 @@ from json import dumps
 import numpy as np
 import h5py
 
-#./sim tutorial_03_waves.yml --dt 0.1 --tend 60 -w waves.h5
-#../GJ/GIT/SimulateurIrtJv/installRelease64/bin/sim.exe tutorial_03_waves.yml --dt 0.1 --tend 60 -w waves.h5
+#./xdyn tutorial_03_waves.yml --dt 0.1 --tend 60 -w waves.h5
+#../GJ/GIT/SimulateurIrtJv/installRelease64/bin/xdyn.exe tutorial_03_waves.yml --dt 0.1 --tend 60 -w waves.h5
 
 filename = 'waves.h5'
 h5File = h5py.File(filename, 'r')

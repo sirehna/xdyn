@@ -113,7 +113,7 @@ commands:
 La simulation peut maintenant être lancée comme suit :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_06_propulsion.yml --dt 0.1 --tend 20
+./xdyn tutorial_06_propulsion.yml --dt 0.1 --tend 20
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Résultats

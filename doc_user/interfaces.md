@@ -3,7 +3,7 @@
 ## Liste des arguments
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-APPEL: sim <yaml file> [-h] [-y ARG] [-s ARG] [dt ARG] [--tstart ARG]
+APPEL: xdyn <yaml file> [-h] [-y ARG] [-s ARG] [dt ARG] [--tstart ARG]
 [--tend ARG] [-w ARG]
 Options:
   -h [ --help ]              Afficher le message d'aide (en anglais)
@@ -40,14 +40,14 @@ des modèles](#efforts-commandés).
 ### Simulation avec un solveur Runge-Kutta d'ordre 4 en commençant à t=0
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.1 --tend 1
+./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
 ~~~~~~~~~~~~~~~~~~~~
 
 Par défaut, les sorties se font sur la sortie standard (le terminal). Ceci
 permet de chaîner les traitements (pipe UNIX), par exemple :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.1 --tend 1 | python plot.py test 0 3
+./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 | python plot.py test 0 3
 ~~~~~~~~~~~~~~~~~~~~
 
 La commande précédente lance la simulation et génère un tracé (format SVG) à
@@ -56,13 +56,13 @@ l'aide du script python de post-traitement livré avec le simulateur.
 On peut bien sûr choisir de rediriger les sorties vers un fichier :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml --dt 0.1 --tend 1 > out.csv
+./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 > out.csv
 ~~~~~~~~~~~~~~~~~~~~
 
 ### Simulation avec un solveur Euler en commençant à t=1
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-./sim tutorial_01_falling_ball.yml -s euler --dt 0.1 --tstart 1 --tend 1.2
+./xdyn tutorial_01_falling_ball.yml -s euler --dt 0.1 --tstart 1 --tend 1.2
 ~~~~~~~~~~~~~~~~~~~~
 
 # Documentations des données d'entrées du simulateur

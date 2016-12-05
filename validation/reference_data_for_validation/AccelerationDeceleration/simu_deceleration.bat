@@ -1,1 +1,1 @@
-sim anthineas_deceleration.yml --dt 0.2 --tend 60 -o deceleration.h5
+xdyn anthineas_deceleration.yml --dt 0.2 --tend 60 -o deceleration.h5
