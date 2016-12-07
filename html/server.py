@@ -162,7 +162,7 @@ class MainHandler(tornado.web.RequestHandler):
         return form
 
     def build_command_line(self, form):
-        out = ['sim', str(form.yaml), '--dt', str(form.dt),  '--tend', str(form.T), '-s', form.solver]
+        out = ['xdyn', str(form.yaml), '--dt', str(form.dt),  '--tend', str(form.T), '-s', form.solver]
         return out
 
     def post(self):
