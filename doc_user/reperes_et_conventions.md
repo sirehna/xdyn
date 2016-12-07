@@ -94,7 +94,7 @@ Si on choisit une convention d'axes, alors on modifie l'ordre des axes
 sur lesquels appliquer successivement les rotations.
 Des répétitions des axes sont alors possibles, si elles ne se suivent pas.
 Par exemple, $XYX$ sera valide, mais pas $XXY$.
-Par exemple, une convention ZXY définit une composition de rotations
+Par exemple, une convention ZXY définit une composition de rotations.
 Il est possible de définir 12 conventions d'axes:
 $XYX$, $XYZ$, $XZX$, $XZY$, $YXY$, $YXZ$,
 $YZX$, $YZY$, $ZXY$, $ZXZ$, $ZYX$, $ZYZ$.
@@ -110,14 +110,14 @@ Si les rotations sont composées par rapport au repère fixe, on parle de
 composition externe. Si les rotations sont composées par rapport aux repères
 nouvellement créés, on parle de composition interne. C'est cette dernière qui
 est utilisée dans la majorité des cas. Au total, ce sont ainsi 36 conventions
-qu'il est possible définir.
+qu'il est possible de définir.
 
 ### Synthèse des différentes conventions
 
 Le tableau suivant présente les 36 conventions possibles :
 
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| id | Order |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
+| id | Ordre |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
 +====+=======+=============+===============+===================================+========================+
 |  1 | angle |  x y z      |    Extrinsic  | $R_Z(\psi).R_Y(\theta).R_X(\phi)$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
@@ -345,7 +345,7 @@ bodies: # All bodies have NED as parent frame
         theta: {value: -.0058, unit: rad}
         psi: {value: 0, unit: deg}
     initial velocity of body frame relative to NED:
-        frame: body 1
+        frame: Anthineas
         u: {value: 0, unit: m/s}
         v: {value: 0, unit: m/s}
         w: {value: 0, unit: m/s}
@@ -358,13 +358,13 @@ bodies: # All bodies have NED as parent frame
             y: {value: 0, unit: m}
             z: {value: 1.418, unit: m}
         centre of inertia:
-            frame: body 1
+            frame: Anthineas
             x: {value: 0.258, unit: m}
             y: {value: 0, unit: m}
             z: {value: 0.432, unit: m}
         mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
         rigid body inertia matrix at the center of buoyancy projected in the body frame:
-            frame: body 1
+            frame: Anthineas
             row 1: [253310,0,0,0,0,0]
             row 2: [0,253310,0,0,0,0]
             row 3: [0,0,253310,0,0,0]
@@ -372,7 +372,7 @@ bodies: # All bodies have NED as parent frame
             row 5: [0,0,0,0,8.279e6,0]
             row 6: [0,0,0,0,0,7.676e6]
         added mass matrix at the center of buoyancy projected in the body frame:
-            frame: body 1
+            frame: Anthineas
             row 1: [3.519e4,0,0,0,0,0]
             row 2: [0,3.023e5,0,0,0,0]
             row 3: [0,0,1.980e5,0,0,0]
@@ -408,7 +408,7 @@ On peut ensuite y faire référence, notamment pour les post-traitements.
 ### Utilisation d'un maillage
 
 Pour les efforts intégrés sur la carène (par exemple, les efforts
-hydrostatiques non-liénaires et les efforts de Froude-Krylov), il est
+hydrostatiques non-linéaires et les efforts de Froude-Krylov), il est
 nécessaire de définir un maillage.
 
 #### Définition du fichier de maillage
@@ -431,7 +431,7 @@ mesh: ../m.stl
 #### Passage du repère maillage au repère body
 
 L'origine du repère "body" (qui est le repère dans lequel est réalisé le bilan
-des efforts) est spécifiée par rapport repère du maillage. En pratique, $x,y,z$
+des efforts) est spécifiée par rapport au repère du maillage. En pratique, $x,y,z$
 peuvent définir la position du centre de gravité dans le repère maillage et
 $\phi,\theta,\psi$ définissent la rotation permettant de passer du repère
 maillage au repère body (suivant la convention choisie dans la [section
@@ -468,7 +468,7 @@ La section `centre of inertia` a l'allure suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 centre of inertia:
-    frame: body 1
+    frame: Anthineas
     x: {value: 0, unit: m}
     y: {value: 0, unit: m}
     z: {value: 0, unit: m}
@@ -497,7 +497,7 @@ de repère (ce qui explique l'absence du champs `frame` pour cette section).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rigid body inertia matrix at the center of buoyancy projected in the body frame:
-    frame: body 1
+    frame: Anthineas
     row 1: [253310,0,0,0,0,0]
     row 2: [0,253310,0,0,0,0]
     row 3: [0,0,253310,0,0,0]
@@ -512,7 +512,7 @@ La matrice de masse ajoutée est définie de la même façon :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 added mass matrix at the center of buoyancy projected in the body frame:
-    frame: body 1
+    frame: Anthineas
     row 1: [3.519e4,0,0,0,0,0]
     row 2: [0,3.023e5,0,0,0,0]
     row 3: [0,0,1.980e5,0,0,0]
@@ -597,14 +597,14 @@ possible de récupérer
 $$(M+M_a)\dot{X_{\textrm{forced}}} - \sum F_i$$
 
 Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
-corps s'appelle 'body 1):
+corps s'appelle 'Anthineas):
 
-- `Fx(blocked states,body 1,body 1)`
-- `Fy(blocked states,body 1,body 1)`
-- `Fz(blocked states,body 1,body 1)`
-- `Mx(blocked states,body 1,body 1)`
-- `My(blocked states,body 1,body 1)`
-- `Mz(blocked states,body 1,body 1)`
+- `Fx(blocked states,Anthineas,Anthineas)`
+- `Fy(blocked states,Anthineas,Anthineas)`
+- `Fz(blocked states,Anthineas,Anthineas)`
+- `Mx(blocked states,Anthineas,Anthineas)`
+- `My(blocked states,Anthineas,Anthineas)`
+- `Mz(blocked states,Anthineas,Anthineas)`
 
 Il est à noter que ces efforts sont exprimés dans le repère BODY.
 

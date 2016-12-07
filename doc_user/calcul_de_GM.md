@@ -2,7 +2,7 @@
 
 ## Définitions
 
-* On appelle "paramètres de flottaison" et l'on note $X_f$ le triple d'états
+* On appelle "paramètres de flottaison" et l'on note $X_f$ le triplet d'états
 $X_f=(z,\phi,\theta)$. $z$ est la coordonnée sur l'axe $Z$ du repère NED du
 centre d'inertie $G$ et $\phi$ et $\theta$ sont les deux premiers angles des
 rotations du repère NED vers le repère body. Par définition, le volume immergé
@@ -158,10 +158,10 @@ petites rotations isocarènes, symétries). On pose alors comme définition :
 
 $$GM=\frac{dGZ}{d\theta}$$
 
-Le $GM$ donne donc une indication sur la stabilité du souple de rappel
+Le $GM$ donne donc une indication sur la stabilité du couple de rappel
 hydrostatique : plus le $GM$ est important pour un volume de carène donné, plus
 le moment de rappel aura tendance à varier rapidement pour de faibles
-changement d'inclinaison $\theta$.
+changements d'inclinaison $\theta$.
 
 ## Calcul du GM dans le simulateur
 

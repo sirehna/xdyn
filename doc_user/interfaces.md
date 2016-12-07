@@ -26,10 +26,6 @@ Options:
                              pas les exceptions, par exemple pour utiliser un debugger).
 ~~~~~~~~~~~~~~~~~~~~
 
-Les résultats sont écrits (au format CSV) vers la sortie standard. On peut les
-rediriger vers un fichier en utilisant le caractère `>` (sous MS-DOS, MinGW et
-Linux) comme décrit dans la section ci-dessous.
-
 Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
 des modèles](#waves).
 Le paramètre `-c` ne sera pas décrit ici mais dans [le fichier de description
@@ -110,6 +106,7 @@ rotations convention: [psi,theta',phi'']
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1025, unit: kg/m^3}
+	nu: {value: 1.18e-6, unit: m^2/s}
 environment models:
   - model: waves
     discretization:
@@ -170,7 +167,7 @@ bodies: # All bodies have NED as parent frame
         theta: {value: -.0058, unit: rad}
         psi: {value: 0, unit: deg}
     initial velocity of body frame relative to NED:
-        frame: body 1
+        frame: Anthineas
         u: {value: 0, unit: m/s}
         v: {value: 0, unit: m/s}
         w: {value: 0, unit: m/s}
@@ -178,14 +175,18 @@ bodies: # All bodies have NED as parent frame
         q: {value: 0, unit: rad/s}
         r: {value: 0, unit: rad/s}
     dynamics:
+        hydrodynamic forces calculation point in body frame:
+            x: {value: 0.696, unit: m}
+            y: {value: 0, unit: m}
+            z: {value: 1.418, unit: m}
         centre of inertia:
-            frame: body 1
+            frame: Anthineas
             x: {value: 0.258, unit: m}
             y: {value: 0, unit: m}
             z: {value: 0.432, unit: m}
         mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
         rigid body inertia matrix at the center of buoyancy projected in the body frame:
-            frame: body 1
+            frame: Anthineas
             row 1: [253310,0,0,0,0,0]
             row 2: [0,253310,0,0,0,0]
             row 3: [0,0,253310,0,0,0]
@@ -193,7 +194,7 @@ bodies: # All bodies have NED as parent frame
             row 5: [0,0,0,0,8.279e6,0]
             row 6: [0,0,0,0,0,7.676e6]
         added mass matrix at the center of buoyancy projected in the body frame:
-            frame: body 1
+            frame: Anthineas
             row 1: [3.519e4,0,0,0,0,0]
             row 2: [0,3.023e5,0,0,0,0]
             row 3: [0,0,1.980e5,0,0,0]
@@ -272,6 +273,7 @@ Voici les fonctions de base pour travailler avec `X-Dyn`.
    rotation de chaque corps dans le repère de chaque repère.
 - `xdyn_animate3d.m` permet de lancer une animation 3d d'une simulation avec
   les objets simulés et le champ de vagues lorsque celui-ci est exporté.
+- `xdyn_extractMatLabScript` permet d'extraire les scripts matlab de dépouillement intégrés dans le fichier de sortie hdf5
 
 Enfin, le fichier `xdyn_demos.m` permet de lancer les différents tutoriels.
 

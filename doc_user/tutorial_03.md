@@ -18,7 +18,7 @@ On suppose en outre avoir 100 m de fond.
 
 On se limite dans cet exemple à deux spectres, mais le simulateur permet d'en
 sommer autant qu'on le souhaite (on n'est limité que par la mémoire de la
-machine).
+machine et par le temps disponible).
 
 ### Écriture du fichier de configuration du simulateur.
 
@@ -136,6 +136,7 @@ rotations convention: [psi, theta', phi'']
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1026, unit: kg/m^3}
+	nu: {value: 1.18e-6, unit: m^2/s}
 environment models:
   - model: waves
     discretization:

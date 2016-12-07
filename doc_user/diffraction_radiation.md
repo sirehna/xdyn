@@ -374,11 +374,11 @@ suivantes sont réalisées :
   fonctions d'amortissement, on utilise des splines naturelles.
   Le nombre de points de discrétisation à partir duquel
   est réalisée cette interpolation (le nombre de valeurs de $\tau$ pour
-  lesquelles qu'on calcule l'intégrale
+  lesquelles on calcule l'intégrale
   $K_{i,j}(\tau)=\frac{2}{\pi}\int_{\omega_{\textrm{min}}}^{\omega_{\textrm{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\tau$)
   est donné par `nb of points for retardation function discretization`.
-- Interpolation des états : lors du calcul de l'intgrale de convolution, les
-  états sont interpolés linéairement entre deux instants
+- Interpolation des états : lors du calcul de l'intégrale de convolution, les
+  états sont interpolés linéairement entre deux instants.
 - Calcul de la convolution : l'algorithme d'intégration est spécifié par `type
   of quadrature for convolution`, qui peut prendre les mêmes valeurs que `type of
   quadrature for cos transform`.

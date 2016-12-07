@@ -30,6 +30,7 @@ environnementales](##constantes-environnementales) :
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1000, unit: kg/m^3}
+	nu: {value: 1.18e-6, unit: m^2/s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Aucun modèle d'environnement (houle, vent...) n'est nécessaire pour cette
@@ -78,6 +79,10 @@ et la position du centre d'inertie :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
     dynamics:
+        hydrodynamic forces calculation point in body frame:
+            x: {value: 0, unit: m}
+            y: {value: 0, unit: m}
+            z: {value: 0, unit: m}
         centre of inertia:
             frame: ball
             x: {value: 0, unit: m}
@@ -117,6 +122,7 @@ rotations convention: [psi, theta', phi'']
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1000, unit: kg/m^3}
+	nu: {value: 1.18e-6, unit: m^2/s}
 environment models: []
 
 bodies: ## All bodies have NED as parent frame
@@ -180,17 +186,16 @@ La simulation peut s'exécuter comme suit :
 ./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-En exécutant cette commande, les résultats s'affichent directement sur la
-sortie standard. On peut bien sûr les rediriger vers un fichier en exécutant :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 > out.csv
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ou en spécifiant directement le fichier de sortie :
+En exécutant cette commande, les résultats sont sauvegardés vers les sorties définies dans la section `output`.
+On peut également spécifier directement le fichier de sortie :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ou encore (le format est automatiquement détecté à partir de l'extension, parmi les formats disponibles) :
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.h5
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On peut également changer l'instant initial (étant entendu que les conditions

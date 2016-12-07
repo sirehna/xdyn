@@ -34,7 +34,7 @@ Le solveur comprend cinq éléments :
 fonction de $f$, $X$, $U$, $t$ et $P$.
 - un *scheduler* qui calcule le prochain pas de temps (et donc le pas
 d'intégration $dt$ en tenant compte d'éventuels évènements (discontinuités de
-la fonction $f$).
+la fonction $f$)).
 - un *event handler* qui s'occupe de la localisation et du traitement des
 évènements. C'est ce composant qui détermine quelles sont les actions à
 réaliser lorsqu'un évènement est détecté (redémarrage du solveur, arrêt,

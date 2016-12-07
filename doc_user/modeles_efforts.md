@@ -111,7 +111,7 @@ La surface libre est représentée en bleu. Les vrais points d'intersection sont
 P' et Q', mais comme le calcul de la fonction $\eta$ représentant l'élévation
 de la surface libre est coûteux, on calcule les points P et Q, barycentres
 respectifs des segments [AC] et [AD], affectés des coefficients correspondant à
-la hauteur d'eau haut-dessus d'eux. Cela revient à approcher la surface libre
+la hauteur d'eau au-dessus d'eux. Cela revient à approcher la surface libre
 par un plan orthogonal à la facette et passant par P et Q. Cette approximation
 est d'autant plus juste que les mailles sont petites par rapport à la longueur
 d'onde puisque pour une surface libre modélisée à l'ordre 1 par une houle
@@ -134,7 +134,7 @@ force élémentaire qui se situe en général en-dessous du centroïde de la fac
 confondus).
 On peut soit calculer exactement ce point d'application (on obtient alors le
 modèle **`non-linear hydrostatic (exact)`**), soit faire l'approximation que le
-point d'application est confondu avec le centre de gravité (donnant ainsi le
+point d'application est confondu avec le centroïde (donnant ainsi le
 modèle **`non-linear hydrostatic (fast)`**).
 
 Pour calculer le point d'application, on définit les notations suivantes :
@@ -205,7 +205,7 @@ Néanmoins, le modèle `exact` impliquant le calcul des matrices d'inertie de
 chaque maille (en particulier des mailles générées dynamiquement en calculant
 l'intersection de la carène et de la surface libre), il est très coûteux en
 temps de calcul (on peut constater un ordre de grandeur par rapport au modèle
-`fast`.
+`fast`).
 
 ### Nouveau modèle hydrostatique
 
@@ -518,7 +518,7 @@ La paramétrisation des efforts d'amortissement linéaires est faite par une mat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: linear damping
   damping matrix at the center of gravity projected in the body frame:
-      frame: body 1
+      frame: Anthineas
       row 1: [ 0, 0,     0,      0,      0, 0]
       row 2: [ 0, 0,     0,      0,      0, 0]
       row 3: [ 0, 0, 1.9e5,      0,      0, 0]
@@ -527,7 +527,7 @@ La paramétrisation des efforts d'amortissement linéaires est faite par une mat
       row 6: [ 0, 0,     0,      0,      0, 0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cette matrice est la matrice $D_l$ décrit dans [la
+Cette matrice est la matrice $D_l$ décrite dans [la
 documentation](#efforts-damortissement-visqueux).
 
 La paramétrisation des efforts d'amortissement quadratiques est faite par une matrice renseignée de la façon suivante :
@@ -535,7 +535,7 @@ La paramétrisation des efforts d'amortissement quadratiques est faite par une m
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: quadratic damping
   damping matrix at the center of gravity projected in the body frame:
-      frame: body 1
+      frame: Anthineas
       row 1: [ 0, 0,     0,      0,      0, 0]
       row 2: [ 0, 0,     0,      0,      0, 0]
       row 3: [ 0, 0, 1.9e5,      0,      0, 0]
@@ -544,7 +544,7 @@ La paramétrisation des efforts d'amortissement quadratiques est faite par une m
       row 6: [ 0, 0,     0,      0,      0, 0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cette matrice est la matrice $((d_{ij}))$ décrit dans [la
+Cette matrice est la matrice $((d_{ij}))$ décrite dans [la
 documentation](#efforts-damortissement-visqueux).
 
 
@@ -628,7 +628,7 @@ controlled forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
-        frame: mesh(body 1)
+        frame: mesh(Anthineas)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
@@ -645,7 +645,7 @@ controlled forces:
   - name: starboard propeller
     model: wageningen B-series
     position of propeller frame:
-        frame: mesh(body 1)
+        frame: mesh(Anthineas)
         x: {value: -4, unit: m}
         y: {value: 2, unit: m}
         z: {value: 2, unit: m}
@@ -691,7 +691,7 @@ les clefs inutilisées sont simplement ignorées.
 Au-delà de la dernière valeur de temps renseignée, la dernière valeur de chaque
 commande est maintenue. Avant la première valeur de temps, on utilise la première
 valeur de chaque commande. Ainsi, pour l'exemple présenté ci-dessus, pour toute
-valeur de $t\geq 10$, alors rpm=4000. Pour $t\leq 1$, rpm=3000
+valeur de $t\geq 10$, alors rpm=4000. Pour $t\leq 1$, rpm=3000.
 
 Les [commandes
 attendues](#syntaxe-des-commandes) pour ce
@@ -774,7 +774,7 @@ expressions simples des états et du temps peuvent être calculées, par exemple
 connu (dont le nom est donné par `frame` au repère dans lequel sont exprimés
 les efforts. Le torseur est automatiquement déplacé au
 centre de gravité (point (0,0,0) du repère "body").
-`commands`: optionnel. Le modèle de manœvrabilité peut accepter des commandes
+`commands`: optionnel. Le modèle de manœuvrabilité peut accepter des commandes
 externes. Il peut aussi utiliser les commandes de n'importe quel autre modèle
 d'effort (mais il faut pour cela bien renseigner le nom complet de la commande,
 soit par exemple `PropRudd(rpm)`)
@@ -866,7 +866,7 @@ L'intérêt de ce modèle est qu'il est paramétrique et permet de représenter 
 performances de l'hélice sous forme adimensionnelle. On peut ainsi appliquer le
 même modèle (à un coefficient d'échelle près) à des hélices homothétiques.
 Une limitation supplémentaire du modèle polynomial en eau libre est que,
-contrairement au modèle quatre quadrant, il n'est valable qu'en marche
+contrairement au modèle quatre quadrants, il n'est valable qu'en marche
 avant (c'est-à-dire pour $n$ positif ou nul).
 
 ### Dérivation du modèle en eau libre
@@ -1093,7 +1093,7 @@ controlled forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
-        frame: mesh(body 1)
+        frame: mesh(Anthineas)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
@@ -1524,7 +1524,7 @@ and Control Surfaces*, p.31 éq. 3.18 :
 
 $$Cf = \frac{0.075}{\left(\frac{\log(R_n)}{log(10.0)}-2\right)^2}$$
 
-Le nombre de Reynolds $R_n$ du safranest donné par (cf. *Maneuvering Technical
+Le nombre de Reynolds $R_n$ du safran est donné par (cf. *Maneuvering Technical
 Manual*, p. 78 éq. 1.2.12) :
 $$Rn = Vs  \frac{c}{\nu}$$
 
@@ -1564,7 +1564,7 @@ controlled forces:
   - name: Prop. & rudder
     model: propeller+rudder
     position of propeller frame:
-        frame: mesh(body 1)
+        frame: mesh(Anthineas)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
@@ -1595,7 +1595,7 @@ nouveau ici (hormis `model`). On a les paramètres supplémentaires suivants :
 - `model` : `propeller+rudder` pour ce modèle
 - `rudder area` : $A_R$
 - `rudder height` : $b$
-- `effective aspect ratio`: Paramètre $K_{\Lambda}$ dans le calcule du rapport
+- `effective aspect ratio`: Paramètre $K_{\Lambda}$ dans le calcul du rapport
    de forme (pour la formule de Soeding) ci-dessus
 - `lift tuning coefficient`: $K_{\textrm{lift}}$ dans les formules ci-dessus
 - `drag tuning coefficient`: $K_{\textrm{drag}}$ dans les formules ci-dessus
@@ -1649,7 +1649,7 @@ NED.
 Le but de ce modèle est de spécifier des courbes d'effort d'hélice $K_t$ et
 $K_q$ en fonction du coefficient d'avance $J$ uniquement.
 Hormis le calcul de $Kt$ et $Kq$, ce modèle est identique au modèle d'hélice
-Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'hélice et subit par le navire
+Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'hélice et subits par le navire
 (apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
 exprimé dans le repère de l'hélice, est donc :
 
@@ -1688,7 +1688,7 @@ controlled forces:
   - name: port side propeller
     model: Kt(J) & Kq(J)
     position of propeller frame:
-        frame: mesh(body 1)
+        frame: mesh(Anthineas)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}

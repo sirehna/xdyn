@@ -27,7 +27,7 @@ controlled forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
-        relative to: mesh(body 1)
+        relative to: mesh(Anthineas)
         x: {value: -4, unit: m}
         y: {value: 0, unit: m}
         z: {value: 2, unit: m}
@@ -61,6 +61,7 @@ rotations convention: [psi, theta', phi'']
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1026, unit: kg/m^3}
+	nu: {value: 1.18e-6, unit: m^2/s}
 environment models:
   - model: waves
     discretization:

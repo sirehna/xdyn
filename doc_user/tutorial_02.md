@@ -12,7 +12,7 @@ amortissement. Le navire est lâché sans vitesse initiale au-dessus de la
 surface libre (supposée plane) et va donc réaliser des oscillations
 non-amorties en immersion.
 
-### Écriture du fichier de configuration du simulateur.
+### Écriture du fichier de configuration du simulateur
 
 Nous documentons ici uniquement les changements par rapport au
 [tutoriel 1](##tutoriel-1-balle-en-chute-libre).
@@ -62,7 +62,7 @@ initial position of body frame relative to NED:
     theta: {value: -.0058, unit: rad}
     psi: {value: 0, unit: deg}
 initial velocity of body frame relative to NED:
-    frame: body 1
+    frame: Anthineas
     u: {value: 0, unit: m/s}
     v: {value: 0, unit: m/s}
     w: {value: 0, unit: m/s}
@@ -76,14 +76,18 @@ et la position du centre d'inertie :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 dynamics:
+    hydrodynamic forces calculation point in body frame:
+            x: {value: 0.696, unit: m}
+            y: {value: 0, unit: m}
+            z: {value: 1.418, unit: m}
     centre of inertia:
-        frame: body 1
+        frame: Anthineas
         x: {value: 0.258, unit: m}
         y: {value: 0, unit: m}
         z: {value: 0.432, unit: m}
     mass: {value: 253.31, unit: tonne} ## Caution: 'ton' is the british ton which is 907.185 kg
     rigid body inertia matrix at the center of buoyancy projected in the body frame:
-        frame: body 1
+        frame: Anthineas
         row 1: [253310,0,0,0,0,0]
         row 2: [0,253310,0,0,0,0]
         row 3: [0,0,253310,0,0,0]
@@ -91,7 +95,7 @@ dynamics:
         row 5: [0,0,0,0,8.279e6,0]
         row 6: [0,0,0,0,0,7.676e6]
     added mass matrix at the center of buoyancy projected in the body frame:
-        frame: body 1
+        frame: Anthineas
         row 1: [3.519e4,0,0,0,0,0]
         row 2: [0,3.023e5,0,0,0,0]
         row 3: [0,0,1.980e5,0,0,0]
@@ -119,6 +123,7 @@ rotations convention: [psi, theta', phi'']
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1025, unit: kg/m^3}
+	nu: {value: 1.18e-6, unit: m^2/s}
 environment models:
   - model: no waves
     constant sea elevation in NED frame: {value: 0, unit: m}
@@ -144,7 +149,7 @@ bodies: ## All bodies have NED as parent frame
         theta: {value: -.0058, unit: rad}
         psi: {value: 0, unit: deg}
     initial velocity of body frame relative to NED:
-        frame: body 1
+        frame: Anthineas
         u: {value: 0, unit: m/s}
         v: {value: 0, unit: m/s}
         w: {value: 0, unit: m/s}
@@ -152,14 +157,18 @@ bodies: ## All bodies have NED as parent frame
         q: {value: 0, unit: rad/s}
         r: {value: 0, unit: rad/s}
     dynamics:
+        hydrodynamic forces calculation point in body frame:
+            x: {value: 0.696, unit: m}
+            y: {value: 0, unit: m}
+            z: {value: 1.418, unit: m}
         centre of inertia:
-            frame: body 1
+            frame: Anthineas
             x: {value: 0.258, unit: m}
             y: {value: 0, unit: m}
             z: {value: 0.432, unit: m}
         mass: {value: 253.31, unit: tonne} ## Caution: 'ton' is the british ton which is 907.185 kg
         rigid body inertia matrix at the center of buoyancy projected in the body frame:
-            frame: body 1
+            frame: Anthineas
             row 1: [253310,0,0,0,0,0]
             row 2: [0,253310,0,0,0,0]
             row 3: [0,0,253310,0,0,0]
@@ -167,7 +176,7 @@ bodies: ## All bodies have NED as parent frame
             row 5: [0,0,0,0,8.279e6,0]
             row 6: [0,0,0,0,0,7.676e6]
         added mass matrix at the center of buoyancy projected in the body frame:
-            frame: body 1
+            frame: Anthineas
             row 1: [3.519e4,0,0,0,0,0]
             row 2: [0,3.023e5,0,0,0,0]
             row 3: [0,0,1.980e5,0,0,0]

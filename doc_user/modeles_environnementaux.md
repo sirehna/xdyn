@@ -24,6 +24,7 @@ forme suivante :
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1025, unit: kg/m^3}
+	nu: {value: 1.18e-6, unit: m^2/s}
 ~~~~~~~~~~~~~~
 
 Comme expliqué dans [une section
@@ -378,7 +379,7 @@ repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
 simulation de houle, sans corps, tel que décrit dans le [tutoriel 3](#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
 
 On définit un maillage (cartésien) sur lequel sera calculé la houle (dans la
-section `environement/model/output`). Par exemple :
+section `environment/model/output`). Par exemple :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
