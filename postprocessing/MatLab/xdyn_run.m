@@ -18,7 +18,8 @@ function results = xdyn_run(param, importResults, verbose)
 %                                 Default is 10.
 %              - outputFilename : [Optional] Name of the HDF5 used to store
 %                                 results.
-%                                 Default is ''
+%                                 Default is yaml filename with .h5
+%                                 extension
 %              - exportWaves    : [Optional] Boolean used to export mesh
 %                                 wave elevation.
 %                                 Default is true.
@@ -90,7 +91,8 @@ defaultParam.dt = '0.1';
 defaultParam.tstart = '0.0';
 defaultParam.tend = '10.0';
 defaultParam.exportWaves = false;
-defaultParam.outputFilename = '';
+[pathstr,name,ext] = fileparts(param.yaml{1});
+defaultParam.outputFilename = [name '.h5'];
 param = tbx_struct_addMissingFields(defaultParam, param);
 [pathstr, name, ext] = fileparts(param.outputFilename);
 if ~(strcmpi(ext,'.h5') || strcmpi(ext,'.hdf5'))
