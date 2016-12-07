@@ -49,12 +49,6 @@ permet de chaîner les traitements (pipe UNIX), par exemple :
 La commande précédente lance la simulation et génère un tracé (format SVG) à
 l'aide du script python de post-traitement livré avec le simulateur.
 
-On peut bien sûr choisir de rediriger les sorties vers un fichier :
-
-~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 > out.csv
-~~~~~~~~~~~~~~~~~~~~
-
 ### Simulation avec un solveur Euler en commençant à t=1
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
