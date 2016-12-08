@@ -13,6 +13,7 @@
 #include "InternalErrorException.hpp"
 #include "gz_newton_raphson.hpp"
 #include "ResultantForceComputer.hpp"
+#include "Sim.hpp"
 
 struct GZ::Curve::Impl
 {
@@ -21,6 +22,15 @@ struct GZ::Curve::Impl
         f(std::bind(&ResultantForceComputer::resultant, &res, std::placeholders::_1)),
         k(std::bind(&ResultantForceComputer::K, &res, std::placeholders::_1))
     {
+        std::vector<double> x(13, 0);
+        sim.get_bodies().front()->update(sim.get_env(),x,0);
+        const double total_volume = sim.get_bodies().front()->get_states().intersector->emerged_volume() +  sim.get_bodies().front()->get_states().intersector->immersed_volume();
+        const double weight_of_water_displaced_by_fully_immersed_body = sim.get_env().rho*total_volume;
+        const double body_mass = sim.get_bodies().front()->get_states().m;
+        if (body_mass > weight_of_water_displaced_by_fully_immersed_body)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "The body is denser than water & will sink: weight of water displaced by fully immersed_body is " << weight_of_water_displaced_by_fully_immersed_body << " kg, but body mass is " << body_mass << " kg.");
+        }
     }
 
     double FZ(const double z, const double phi, const double theta)

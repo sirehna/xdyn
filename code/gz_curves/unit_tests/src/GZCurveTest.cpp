@@ -156,3 +156,10 @@ TEST_F(GZCurveTest, LONG_validate_gz_against_python_code)
     ASSERT_SMALL_RELATIVE_ERROR(7.88E-001, calculate.gz(65*PI/180.), 0.05);
     ASSERT_SMALL_RELATIVE_ERROR(7.78E-001, calculate.gz(70*PI/180.), 0.05);
 }
+
+TEST_F(GZCurveTest, should_throw_if_ship_is_denser_than_water)
+{
+    const Sim sim = GZ::make_sim(test_data::bug_3004(), test_data::cube());
+    ASSERT_THROW({GZ::Curve simulate(sim);}, InvalidInputException);
+
+}
