@@ -72,52 +72,78 @@ sudo ./b2 cxxflags=-fPIC link=static threading=single --layout=tagged --prefix=$
 sudo chown -R vagrant boost_1_60_0
 sudo chgrp -R vagrant boost_1_60_0
 
+
 # GMOCK
 cd /vagrant/code
-sudo rm -rf googletest
-git clone https://github.com/google/googletest.git googletest
-cd googletest
-git checkout release-1.8.0
-cd ..
-sudo chown -R vagrant gmock
-sudo chgrp -R vagrant gmock
+if [ "$(ls -A eigen)" ]; then
+    echo "Using git submodule's version of GMock"
+else
+    echo "GMock wasn't cloned for some reason (maybe you forgot to specify --recursive?): using version from the Internet"
+    sudo rm -rf googletest
+    git clone https://github.com/google/googletest.git googletest
+    cd googletest
+    git checkout release-1.8.0
+    cd ..
+    sudo chown -R vagrant gmock
+    sudo chgrp -R vagrant gmock
+fi
 
 # EIGEN
 cd /vagrant/code
-wget http://bitbucket.org/eigen/eigen/get/3.2.0.tar.bz2 -O eigen.tar.bz2
-sudo rm -rf eigen
-tar xjf eigen.tar.bz2
-mv eigen-eigen-ffa86ffb5570 eigen
-sudo chown -R vagrant eigen
-sudo chgrp -R vagrant eigen
+if [ "$(ls -A eigen)" ]; then
+    echo "Using git submodule's version of Eigen"
+else
+    echo "Eigen wasn't cloned for some reason (maybe you forgot to specify --recursive?): using version from the Internet"
+    wget http://bitbucket.org/eigen/eigen/get/3.2.0.tar.bz2 -O eigen.tar.bz2
+    sudo rm -rf eigen
+    tar xjf eigen.tar.bz2
+    mv eigen-eigen-ffa86ffb5570 eigen
+    sudo chown -R vagrant eigen
+    sudo chgrp -R vagrant eigen
+fi
 
 # EIGEN3-HDF5
 cd /vagrant/code
-sudo rm -rf eigen3-hdf5
-git clone https://github.com/garrison/eigen3-hdf5
-sudo chown -R vagrant eigen3-hdf5
-sudo chgrp -R vagrant eigen3-hdf5
+if [ "$(ls -A eigen3-hdf5)" ]; then
+    echo "Using git submodule's version of Eigen3HDF5"
+else
+    echo "Eigen3HDF5 wasn't cloned for some reason (maybe you forgot to specify --recursive?): using version from the Internet"
+    sudo rm -rf eigen3-hdf5
+    git clone https://github.com/garrison/eigen3-hdf5
+    sudo chown -R vagrant eigen3-hdf5
+    sudo chgrp -R vagrant eigen3-hdf5
+fi
 
 # YAML-CPP
 cd /vagrant/code
-sudo rm -rf yaml-cpp
-git clone https://github.com/jbeder/yaml-cpp.git
-sudo chown -R vagrant yaml-cpp
-sudo chgrp -R vagrant yaml-cpp
-cd yaml-cpp
-git checkout tags/release-0.3.0
-cd ..
-cp ../yaml-cpp-CMakeLists.txt yaml-cpp/CMakeLists.txt
+if [ "$(ls -A yaml-cpp)" ]; then
+    echo "Using git submodule's version of yaml-cpp"
+else
+    echo "yaml-cpp wasn't cloned for some reason (maybe you forgot to specify --recursive?): using version from the Internet"
+    sudo rm -rf yaml-cpp
+    git clone https://github.com/jbeder/yaml-cpp.git
+    sudo chown -R vagrant yaml-cpp
+    sudo chgrp -R vagrant yaml-cpp
+    cd yaml-cpp
+    git checkout tags/release-0.3.0
+    cd ..
+    cp ../yaml-cpp-CMakeLists.txt yaml-cpp/CMakeLists.txt
+fi
 
 # GCOVR
 cd /vagrant/code
-sudo rm -rf gcovr
-git clone https://github.com/gcovr/gcovr.git
-cd gcovr
-git checkout tags/3.2
-cd ..
-sudo chown -R vagrant gcovr
-sudo chgrp -R vagrant gcovr
+if [ "$(ls -A gcovr)" ]; then
+    echo "Using git submodule's version of gcovr"
+else
+    echo "gcovr wasn't cloned for some reason (maybe you forgot to specify --recursive?): using version from the Internet"
+    sudo rm -rf gcovr
+    git clone https://github.com/gcovr/gcovr.git
+    cd gcovr
+    git checkout tags/3.2
+    cd ..
+    sudo chown -R vagrant gcovr
+    sudo chgrp -R vagrant gcovr
+fi
 
 # CMAKE
 sudo apt-get install -y cmake
