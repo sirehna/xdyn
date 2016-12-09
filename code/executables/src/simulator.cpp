@@ -30,8 +30,17 @@ int main(int argc, char** argv)
 
 
     InputData input_data;
-    if (argc==1) return fill_input_or_display_help(argv[0], input_data);
-    const int error = get_input_data(argc, argv, input_data);
+    int error = 0;
+    try
+    {
+        if (argc==1) return fill_input_or_display_help(argv[0], input_data);
+        error = get_input_data(argc, argv, input_data);
+    }
+    catch(boost::program_options::error& e)
+    {
+      std::cerr << "The command line you supplied is not valid: " << e.what() << std::endl << "Use --help to get the list of available parameters." << std::endl;
+      return -1;
+    }
     if (error)
     {
         std::cerr <<"A problem occurred while parsing inputs" << std::endl;
