@@ -130,7 +130,7 @@ maille.
 
 Pour le calcul du moment, il faut connaître le point d'application de chaque
 force élémentaire qui se situe en général en-dessous du centroïde de la facette
-(sauf si le gradient de pression est uniforme, auquel cas ces deux points sont
+(sauf si la pression est uniforme, auquel cas ces deux points sont
 confondus).
 On peut soit calculer exactement ce point d'application (on obtient alors le
 modèle **`non-linear hydrostatic (exact)`**), soit faire l'approximation que le
@@ -366,8 +366,8 @@ obtenir les points entre 180$^{\circ}$ et 360$^{\circ}$.
 On suppose la propulsion rectiligne, uniforme et directe, c'est-à-dire
 d'intensité et de direction constantes et située dans le plan ($x$,$y$).
 
-On suppose également qu'il n'y a pas de houle (eau calme), que l'assiette du navire est
-constante et que sa gite est nulle.
+On suppose également qu'il n'y a pas de houle (eau calme), que l'assiette et l'enfoncement du navire sont
+constants et que sa gite est nulle.
 
 On suppose enfin que la résistance à l'avancement est colinéaire à la
 projection sur le plan horizontal de la force propulsive.
@@ -378,7 +378,7 @@ cette vitesse en eau calme.
 
 ### Modélisation
 
-Le paradoxe d'Alembert est que lorsque l'on remorque un objet partiellement
+Le paradoxe d'Alembert est que lorsque l'on remorque un objet 
 immergé dans un fluide supposé parfait, sa résistance est nulle.
 Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique
 que :

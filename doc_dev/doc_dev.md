@@ -57,9 +57,9 @@ Chaque module contient nécessairement :
   quelles sont ses dépendances, etc.
 - Un répertoire `inc` qui contient les fichiers d'en-tête (interface, API)
 
-Les sous-répertoires suivants sont généralement présent, mais pas
+Les sous-répertoires suivants sont généralement présents, mais pas
 systématiquement :
-- `src` contient les fichiers source à compilé. Le module `exceptions` n'en
+- `src` contient les fichiers source à compiler. Le module `exceptions` n'en
   contient pas, par exemple.
 - `unit_tests` (qui contient à son tour un fichier `CMakeLists.txt`, un
   répertoire `inc` et un répertoire `src`) stocke les tests unitaires (une
@@ -85,7 +85,7 @@ et la fin des calculs :
 
 ## Récupération des arguments
 
-Le module concerné est `executables`. Les fichiers conernés sont :
+Le module concerné est `executables`. Les fichiers concernés sont :
 
 - `simulator.cpp` : le fichier principal contenant `main`
 - `utilities_for_InputData.cpp` : lit la ligne de commande en utilisant
@@ -117,7 +117,7 @@ caractère et parsé ultérieurement par chaque module. L'idée sous-jacente est
 que les modèles d'effort sont une partie du code amenée à évoluer
 (potentiellement de manière indépendante pour répondre aux besoins internes
 spécifiques de chacun des partenaires) tandis que la description des corps
-(inerties, position du centre de masse, conditions initiales...) doivent peut
+(inerties, position du centre de masse, conditions initiales...) doivent peu
 évoluer.
 
 En conséquence, le YAML est parsé en deux temps :
@@ -130,7 +130,7 @@ un modèle particulier dans une seule et même classe.  Ainsi, lorsque l'on
 intervient par exemple sur le modèle de Wageningen, on utilise la classe
 `WageningenControlledForceModel` du module `force_models` qui contient, outre
 le modèle d'effort spécifique des hélices Wageningen, une méthode statique
-`parse`. Cela évite à devoir intervenir sur deux modules distincts lorsque l'on
+`parse`. Cela évite de devoir intervenir sur deux modules distincts lorsque l'on
 souhaite faire évoluer le modèle.
 
 ### Construction du système

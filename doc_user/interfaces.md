@@ -26,7 +26,6 @@ Options:
                              pas les exceptions, par exemple pour utiliser un debugger).
 ~~~~~~~~~~~~~~~~~~~~
 
-
 Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
 des modèles](#waves).
 Le paramètre `-c` ne sera pas décrit ici mais dans [le fichier de description
@@ -38,6 +37,12 @@ des modèles](#efforts-commandés).
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
+~~~~~~~~~~~~~~~~~~~~
+
+ou si l'on utilise une invite de commande MS-DOS :
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
 ~~~~~~~~~~~~~~~~~~~~
 
 Par défaut, les sorties se font sur la sortie standard (le terminal). Ceci
@@ -229,24 +234,6 @@ output:
   `waves` et leur contenu est décrit dans la section [Modèle de
   houle/Sorties](#sorties-1). La somme des efforts appliqués à un corps est
   accessible par `Fx(sum of forces,corps,repère)` (resp. Fy, Fz, Mx, My, Mz).
-
-# Tracés en cours de simulation
-
-Afin de suivre l'évolution du système au cours de la simulation, une interface
-HTML5 a été créée. Celle-ci est accessible en double-cliquant sur `sim_gui`
-dans le répertoire `bin` du simulateur (par exemple,
-`C:\Program Files\SimulateurIrtJv\bin`) puis en ouvrant un navigateur Internet
-(type Firefox) à l'adresse `http://localhost:666`.
-
-On peut effectuer des sorties vers un ou plusieurs fichiers en parallèle de
-cette visualisation :
-
-![](images/observers.svg)
-
-Une fois le serveur lancé, d'autres machines peuvent s'y connecter :
-
-![](images/websockets.svg)
-
 
 # Interface MatLab
 

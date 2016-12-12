@@ -493,7 +493,7 @@ qui vaut 907.185 kg.
 #### Matrice d'inertie
 
 La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
-de repère (ce qui explique l'absence du champs `frame` pour cette section).
+de repère (le champ `frame` est requis, et n'est pas utilisé).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rigid body inertia matrix at the center of buoyancy projected in the body frame:
@@ -528,6 +528,8 @@ figure dans le membre de gauche de l'équation fondamentale de la dynamique
 $$M\ddot{X} = \sum F_i$$ pour des raisons de stabilité numérique (l'effort
 dépend des accélérations qui doivent justement être calculées par la résolution
 de l'équation fondamentale de la dynamique).
+La matrice de masses ajoutées n'est cependant pas équivalente à une masse supplémentaire, car 
+les termes de Coriolis et centripète qui correspondraient ne sont pas pris en compte.
 
 Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
 à partir d'un fichier HDB. Pour cela, on écrit (pour lire depuis le fichier

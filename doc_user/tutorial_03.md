@@ -183,25 +183,19 @@ environment models:
 La simulation peut maintenant être lancée comme suit :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.yml
+./xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Le fichier de résultat est `tutorial_03_results.yml`.
+Le fichier de résultat est `tutorial_03_results.h5`.
 
 ### Résultats
 
-On obtient le fichier suivant :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-waves:
-  x: [1,2,3,4,5,1,2,3,4,5]
-  y: [1,1,1,1,1,2,2,2,2,2]
-  timesteps:
-    - t: 0
-    - z: [-4.60386,-4.60388,-4.6039,-4.60392,-4.60393,-4.6553,-4.65531,-4.65533,-4.65535,-4.65537]
-    - t: 1
-    - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On obtient un fichier hdf5 qui peut être ouvert avec différents logiciels comme HDFView.
+Dans le groupe "outputs", on trouve un groupe "waves" qui contient quatre jeux de données nommés t, x, y et z.
+t donne les pas de temps de la simulation
+x donne les coordonnées selon x des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps.
+y donne les coordonnées selon y des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps.
+z donne l'élévation aux points définis par x et y. Chaque tranche correspond à un pas de temps.
 
 La description de ce fichier est faite [dans la documentation des fichiers YAML](#sorties).
 

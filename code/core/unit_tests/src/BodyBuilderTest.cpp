@@ -469,7 +469,7 @@ TEST_F(BodyBuilderTest, total_inertia_is_correct)
 }
 
 /**
- * \brief Unit test where instructions where generated with MatLab
+ * \brief Unit test where instructions were generated with MatLab
  * \code
     % Data
     raw_mesh_points = ...

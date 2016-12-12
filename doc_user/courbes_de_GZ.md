@@ -12,7 +12,7 @@ septembre 1970 (bateaux motorisés).
 On considère un navire partiellement immergé en eau calme (la surface libre
 étant donc plane et horizontale) dont le volume immergé $\Omega$ est délimité par une
 surface appelée "carène" (ou surface mouillée) et notée $\mathcal{C}$.
-On appelle "surface de flottaison" et l'on note $S$
+On appelle "flottaison" et l'on note $S$
 l'intersection du volume du navire avec le plan de la surface libre.
 On a donc $\partial\Omega = \mathcal{C}\cup S$.
 On note $G$ le centre de gravité du navire et $C$ le centre de $\Omega$ (appelé

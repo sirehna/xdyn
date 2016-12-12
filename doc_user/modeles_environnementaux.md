@@ -578,7 +578,7 @@ maillage comporte 10 points :
 (1,1),(1,2),(2,1),(2,2),(3,1),(3,2),(4,1),(4,2),(5,1),(5,2).
 
 Les sorties sont écrites dans le fichier et le format spécifiés dans la
-section [`output`](#sorties).
+section [`output`](#sorties) déjà définie à la racine du fichier YAML.
 
 
 On obtient deux résultats différents, suivant que le repère dans lequel ils

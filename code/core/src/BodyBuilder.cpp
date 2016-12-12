@@ -101,7 +101,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     if(!isSymmetricDefinitePositive(Mrb))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "The rigid body inertia mass matrix is not symmetric definite positive"
+                "The rigid body inertia mass matrix is not symmetric definite positive "
                 << "for body '" << states.name << ": " << std::endl
                 << "Mrb = " << std::endl
                 << Mrb << std::endl);
