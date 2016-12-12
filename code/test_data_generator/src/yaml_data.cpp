@@ -652,7 +652,6 @@ std::string test_data::falling_ball_example()
        << "            row 6: [0,0,0,0,0,0]\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
-       << "        g: {value: 9.81, unit: m/s^2}\n"
        << "output:\n"
        << "   - format: csv\n"
        << "     filename: falling_ball.csv\n"
