@@ -10,6 +10,50 @@ Il s'agit moins d'une description systématique et exhaustive de tous les
 fichiers du code que d'une présentation fonctionnelle structurée des concepts
 et principes qui ont régi les développements.
 
+# Récupération du code et compilation
+
+Deux possibilité sont offertes au développeur :
+
+- Soit recréer l'environnement de développement
+- Soit utiliser Vagrant et travailler sur une configuration Linux standard
+
+## En recréant tout l'environnement de développement
+
+Il faut se référer au fichier `bootstrap.sh` qui décrit la liste des dépendances de X-DYN.
+
+## En utilisant Vagrant
+
+Pour compiler X-Dyn à l'aide de Vagrant, il faut :
+
+- Une connexion internet
+- [Vagrant](https://www.vagrantup.com/downloads.html)
+- La bibliothèque de connaissances antérieures de SIREHNA (Sirehna Scientific Computing ou SSC), en version deb (dont le MD5 est 80c050abcfd8310daf56ea2db991ba91)
+- [Git](https://git-scm.com/downloads)
+
+On commence par cloner le dépôt :
+
+- Sur le réseau SIREHNA :
+  `git clone --recursive git@gitlab.sirehna.com:root/x-dyn`
+- Sur le serveur de l'IRT Jules Verne :
+- `git clone git@gitlab2.irt-jules-verne.fr:cecady/x-dyn.git`
+
+On copie le fichier `ssc.deb` dans le répertoire `x-dyn` ainsi créé.
+On ouvre une invite de commande dans ce répertoire (idéalement, en utilisant git BASH fourni avec l'installation de Git)
+
+On tape `vagrant up`.
+
+La machine virtuelle Vagrant va être créée à partir d'une image de base (base box) qui va être configurée.
+Cette opération est longue (environ trois quarts d'heure). Une fois la machine virtuelle créée, une compilation est lancée et tous les tests sont exécutés.
+
+A la racine du dépôt X-Dyn se trouvent trois scripts shell :
+
+- `vagrant_cmake.sh` qui lance CMake sur la machine virtuelle afin de prépare le build
+- `vagrant_ninja.sh` qui effectue la compilation et la génération de la documentation en utilisant le système de build Ninja
+- `vagrant_run_all_tests.sh` qui lance tous les tests. On peut en sélectionner un sous-ensemble en utilisant le flag `--gtest_filter='*LONG*'` par exemple. Se référer à [la documentation de Google Test](https://github.com/google/googletest/blob/master/googletest/docs/AdvancedGuide.md#running-a-subset-of-the-tests).
+
+
+L'idée, en utilisant Vagrant, est que l'on utilise son éditeur local (de la machine hôte) mais le compilateur et les bibliothèques de la machine virtuelle. Le répertoire contenant le dépôt de x-dyn est automatiquement partagé avec la machine virtuelle créée par Vagrant.
+
 # Cartographie des modules
 
 Le code a été réparti en répertoires que l'on appelera ici
