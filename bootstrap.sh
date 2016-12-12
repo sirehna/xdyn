@@ -37,6 +37,8 @@ tar xzf cx_Freeze-4.3.4.tar.gz
 sed -i 's/if not vars.get("Py_ENABLE_SHARED", 0):/if True:/g'  cx_Freeze-4.3.4/setup.py
 sudo pip3 install cx_Freeze-4.3.4/
 
+# MATLPLOTLIB
+sudo apt-get install python3-matplotlib texlive-fonts-recommended texlive-latex-extra dvipng -y
 
 # DOXYGEN
 sudo apt-get install doxygen -y
