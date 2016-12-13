@@ -6,6 +6,8 @@
  */
 
 #include "parse_commands.hpp"
+#include "InvalidInputException.hpp"
+
 #include <ssc/yaml_parser.hpp>
 
 void operator >> (const YAML::Node& node, YamlCommands& c)
@@ -18,9 +20,16 @@ void operator >> (const YAML::Node& node, YamlCommands& c)
         it.first() >> key;
         if ((key != "name") and (key != "t"))
         {
-            std::vector<double> values;
-            ssc::yaml_parser::parse_uv(node[key], values);
-            c.commands[key] = values;
+            try
+            {
+                std::vector<double> values;
+                ssc::yaml_parser::parse_uv(node[key], values);
+                c.commands[key] = values;
+            }
+            catch(const YAML::Exception& e)
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'commands' section. When parsing the '" << key << "' values: " << e.msg);
+            }
         }
     }
 }
