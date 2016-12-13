@@ -248,14 +248,34 @@ phases aléatoires.
 
 ## Densités spectrales de puissance
 
+La formulation des spectres de houles a été développée de façon semi-empirique depuis les années 50. Suivant le spectre, l'état de mer peut être complètement formé (à la limite, le spectre n'a qu'un seul paramètre) ou une combinaison de la houle (swell) et de la mer du vent (wind sea) à six paramètres.
+
+Le choix du spectre dépend donc à la fois du lieu considéré et de l'état de
+mer. Ce choix revêt une grande importance pour la prévision des mouvements des
+plateformes car suivant que l'état de mer est en formation, complètement formé
+ou en atténuation, la réponse du navire va varier.  En effet, un navire peut
+avoir une réponse en pilonnement plus importante sur une mer partiellement
+formée que sur une mer totalement formée car la fréquence modale du spectre est
+plus élevée sur une mer partiellement formée et la fréquence de résonnance du
+pilonnement est souvent plus élevée. Pour le roulis, c'est l'inverse : lorsque
+l'état de mer s'atténue, la fréquence d'excitation du roulis étant en général
+plus basse que celle du pilonnement, les mouvements seront amplifiés.
+
 ### Dirac
 
-La plus simple densité spectrale de puissance correspond à une houle
-monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
+La plus simple densité spectrale de puissance est aussi la moins réaliste car elle
+correspond à une houle monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
 
 $$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
 \left\{\begin{array}{l}0, \textrm{si }\omega\neq \omega_0\\1, \textrm{si }
 \omega=\omega_0\end{array}\right.$$
+
+$\omega_0 = 2\pi f$ est la pulsation (en Rad/s) de la houle.
+
+Ce spectre a l'allure suivante :
+
+![](images/waveMonochromatique.svg)
+
 
 Le paramétrage de ce spectre est :
 
@@ -268,17 +288,143 @@ spectral density:
 
 La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
 
-### JONSWAP
+Ce spectre a uniquement un intérêt pour les phases de validation car il n'est
+pas représentatif de conditions réelles.
+
+### Bretschneider
+
+La fonction analytique la plus souvent utilisée pour représenter des états
+de mer partiellement ou totalement développés a été proposé en 1959 par Bretschneider.
+Initialement, la dépendance à la période de la houle était mise en exergue
+et s'exprimait sous la forme :
+
+$$S(T)=\alpha\cdot T^3\cdot e^{-\beta T^4}$$
+
+Aujourd'hui, on préfère une formulation fréquentielle :
+
+$$ S(\omega=\frac{2\pi}{T}) = \frac{A}{\omega^5}\cdot e^{-\frac{B}{\omega^4}}$$
+
+Le moment d'ordre 0 permet d'obtenir une relation entre $A$ et $B$ :
+
+$$m_0 = \int_0^\infty S(\omega) d\omega = \left[-e^{-\frac{B}{\omega^4}}\right]^\infty_0=\frac{A}{4B}$$
+
+d'où
+
+$A=4m_0 B$
+
+Par ailleurs, la dérivée première du spectre s'annule pour une période $\omega_p$ :
+
+$$ \frac{d}{d\omega}S(\omega) = \frac{A}{\omega^6}e^{-\frac{B}{\omega^4}}\left(\frac{4B}{\omega^4}-5\right)$$
+
+d'où
+
+$$B=\frac{5}{4}\omega_p^4$$
+
+et
+
+$$\omega_p=\left(\frac{4}{5}B\right)^{1/4}$$
+
+Par ailleurs, on constate empiriquement que les hauteurs de houle sont
+distribuées suivant une loi de Rayleigh (loi de la norme d'un vecteur dont les
+deux composantes suivent une loi normale) de variance $\sigma^2=2 m_0$ et, sous
+cette hypothèse, la hauteur de houle $H_S$ correspondant à deux écarts-types est :
+
+$$H_S = 2\sigma = 4\sqrt{m_0}$$
+
+En outre,
+
+$\omega_p=\frac{2\pi}{T_p}$
+
+On peut ainsi exprimer $A$ et $B$ en fonction de $H_S$ et $T_p$ :
+
+$$A=\frac{5\pi^4H_S^2}{T_p^ 4}$$
+$$B=\frac{20\pi^4}{T_p^4}$$
+
+Le fait que ce spectre ait deux paramètres permet, en jouant sur la fréquence
+modale $\omega_p$, de l'utiliser pour des états de mer partiellement ou
+totalement développés, voire en atténuation.
+
+Le spectre a l'allure suivante :
+
+![](images/spectrumBretschneider.svg)
+
+Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
-    type: jonswap
+    type: bretschneider
     Hs: {value: 5, unit: m}
     Tp: {value: 15, unit: s}
-    gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Pierson-Moskowitz
+
+A la fin des années 40, plusieurs navires météorologiques étaient stationnés
+dans l'océan Pacifique et l'Atlantique Nord. Ces navires notaient la météo
+quotidiennement sous forme d'un code météo. En 1961, Tucker créa une méthode
+pour obtenir des estimations quantitatives à partir de ces enregistrements en
+corrélant la fréquence d'occurence des différents codes météo avec les
+observations météo de plusieurs stations à terre. En 1964, Willard Pierson et
+Lionel Moskowitz à l'université de New York, ont
+préparé un rapport pour l'U.S. Naval Oceanographic Office analysant un grand
+nombre d'enregistrements en Atlantique Nord. Seuls les enregistrements pour des
+mers complètement développés ayant été considérés, c'est un spectre adapté à de
+tels états de mer. Il s'écrit sous la forme :
+
+$$S(\omega) = \frac{\alpha\cdot g^2}{\omega^5} \exp{\left(-\beta\left[\frac{g}{U_{19.5}\omega}\right]^4\right)}$$
+
+où $\alpha = 8.1\cdot 10^{-3}$ désigne la constante de Phillips, $g$ l'accélération de
+la gravité terrestre, $U_{19.5}$ la vitesse du vent à 19.5 mètres au-dessus du
+niveau de la mer et $\beta$ vaut 0.74.
+
+Ce spectre est un cas particulier du spectre de Bretschneider en prenant
+
+$$A=8.1\cdot 10^{-3}\cdot g^2$$
+et
+$$B=0.74\left(\frac{g}{U_{19.5}}\right)^4$$
+
+Par la suite, les données de Pierson et Moskowitz ont été réanalysées pour
+établir la relation empirique suivante entre la vitesse du vent et la pulsation
+modale de la houle :
+
+$$0.74 \left(\frac{g}{U_{19.5}}\right)^4=\frac{5}{4}\omega_0^4$$
+
+d'où
+
+$$\omega_p=0.877\frac{g}{U_{19.5}}$$
+
+On peut obtenir une expression de la période de pic $\omega_p$ uniquement en
+fonction de $H_S$ en se servant des relations suivantes, établies pour le
+spectre de Bretschneider :
+
+$m_0=\frac{A}{4B}$ et $$\omega_p=\left(\frac{4}{5}B\right)^{1/4}$$
+
+
+En supposant que les hauteurs de houle suivent une distribution de Rayleigh, on a:
+
+$$H_S=4\sqrt{m_0}=4\sqrt{\frac{A}{4B}}$$
+
+d'où
+
+$B=\frac{4 A}{H_S^2}$
+
+$\omega_p=\left(\frac{4}{5}B\right)^{1/4}=\left(\frac{4A}{5H_S^2}\right)^{1/4}=\left(\frac{16}{5}\cdot 8.1\cdot 10^{-3}\right)^{1/4}\sqrt{\frac{g}{H_S}}$
+
+soit
+
+$$\omega_p=0.4\sqrt{\frac{g}{H_S}}$$
+
+Ce spectre était le spectre de référence pendant de nombreuses années mais
+il n'est valable que pour des états de mer complètement développés et des mers
+résultants de vents modérés sur des fetchs très grands. Les conditions plus
+fréquentes de vents forts sur des fetchs courts, notamment en mer du Nord, des
+spectres à au moins deux paramètres sont plus adaptés.
+
+Ce spectre a l'allure suivante :
+
+![](images/spectrumPiersonMoskowitz.svg)
+
+Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -287,13 +433,40 @@ spectral density:
     Tp: {value: 15, unit: s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### Bretschneider
+### JONSWAP
+
+Le spectre JONSWAP (Joint North Sea Wave Project) a été proposé en
+1973 par Hasselmann et al. après avoir dépouillé des mesures faites lors
+de la formation de tempêtes en Mer du Nord. Plus de 2000 spectres ont ainsi été
+mesurés et une méthode des moindres carrés a été utilisée pour obtenir une
+formulation spectrale. Il est valable pour des fetchs limités des vitesses de vent uniformes.
+L'importance de ce spectre vient de ce qu'il prenne en compte le développement
+des vagues sur un fetch limité d'une part, et, d'autre part, l'atténuation des
+vagues par petits fonds. Ce spectre est souvent utilisé par l'industrie
+offshore en mer du Nord.
+
+$$S(\omega)=(1-0.287 \log(\gamma))\frac{5}{16}\frac{\alpha}{\omega}H_S^2 e^{-1.25\left(\frac{\omega_0}{\omega}\right)^4}\gamma^r$$
+
+avec
+
+$$r=e^{-0.5\left(\frac{\omega-\omega_0}{\sigma\omega_0}\right)^2}$$
+
+et
+
+$$\sigma=\left\{\begin{eqnarray}0.07,\omega\leq\omega_0\\0.09,\omega>\omega_0\end{eqnarray}\right.$$
+
+Ce spectre a l'allure suivante :
+
+![](images/spectrumJonswap.svg)
+
+Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
-    type: bretschneider
+    type: jonswap
     Hs: {value: 5, unit: m}
     Tp: {value: 15, unit: s}
+    gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Étalements directionnels
@@ -454,3 +627,8 @@ waves:
 - *Sea Loads on Ships And Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 27
 - *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 75
 - *Offshore Hydromechanics*, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
+- *Les états de mer naturels*, 2003, Jean Bougis, Institut des Sciences de l'Ingénieur de Toulon et du Var, Université de Toulon et du Var, pages 07-4/14
+- *Sea spectra revisited*, 1999, Walter H. Michel, Marine Technology Vol. 36 No. 4, Winter 1999, pp. 211-227
+- *Air-Sea Interaction: Instruments and Methods*, F. Dobson, L. Hasse, R. Davis, p. 524
+- *Proposed Spectral Form for Fully Developed Wind Seas Based on the Similarity Theory of S. A. Kitaigorodskii*, Pierson, Willard J., Jr. and Moskowitz, Lionel A., Journal of Geophysical Research, Vol. 69, 1964, p.5181-5190
+- http://web.mit.edu/13.42/www/handouts/reading-wavespectra.pdf
