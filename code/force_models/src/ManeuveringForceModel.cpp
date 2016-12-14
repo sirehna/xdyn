@@ -52,9 +52,16 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
         }
         else if (key != "reference frame")
         {
-            std::string value;
-            node[key] >> value;
-            ret.var2expr[key] = value;
+            try
+            {
+                std::string value;
+                node[key] >> value;
+                ret.var2expr[key] = value;
+            }
+            catch (const YAML::Exception&)
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to parse key '" << key << "': in maneuvering model, all keys should be symbolic expressions (parsed as strings) appart from 'reference frame' and 'commands'.");
+            }
         }
     }
     return ret;
