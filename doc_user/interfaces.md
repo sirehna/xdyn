@@ -3,8 +3,8 @@
 ## Liste des arguments
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-APPEL: xdyn <yaml file> [-h] [-y ARG] [-s ARG] [dt ARG] [--tstart ARG]
-[--tend ARG] [-w ARG]
+APPEL: xdyn <yaml file> [-hd] [-y ARG] [-s ARG] [dt ARG] [--tstart ARG] [--tend
+ARG] [-o ARG] [-w ARG]
 Options:
   -h [ --help ]              Afficher le message d'aide (en anglais)
   -y [ --yml ] arg           Nom du (ou des) fichier(s) YAML (le flag est facultatif)
@@ -17,9 +17,18 @@ Options:
   --tstart arg (=0)          Date correspondant au début de la simulation
                              (en secondes)
   --tend arg                 Dernier instant calculé
+  -o [ --output ] arg        Description du format de sortie.
+                             arg peut être un nom de fichier (les extensions possibles
+                             sont .csv, .tsv, .json, .hdf5, .h5)
+                             arg peut être un format texte(les formats possibles sont
+                             csv, tsv, json). Dans ce cas les sorties se font sur la sortie standard.
+                             arg peut être un websocket (ws). Voici des exemples
+                             ws://localhost:8080
+                             ws://130.66.124.200:8080
   -w [ --waves ] arg         Nom du fichier YAML de sortie pour la houle (le
                              cas échéant). Cf. section 'output' du fichier YAML
-                             d'entrée
+                             d'entrée. Dans le cas où la sortie est dans un fichier
+                             HDF5, cette option ajoute les élévations dans ce fichier
   -d [ --debug ]             Option utilisée par l'équipe de support pour aider
                              au diagnostique d'erreur. Permet de voir l'endroit
                              exact du code où une erreur a eu lieu (ne capture

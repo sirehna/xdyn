@@ -15,40 +15,54 @@ et principes qui ont régi les développements.
 Deux possibilité sont offertes au développeur :
 
 - Soit recréer l'environnement de développement
-- Soit utiliser Vagrant et travailler sur une configuration Linux standard
+- Soit utiliser une machine virtuel configurée avec Vagrant et travailler sur une configuration Linux standard
 
 ## En recréant tout l'environnement de développement
 
 Il faut se référer au fichier `bootstrap.sh` qui décrit la liste des dépendances de X-DYN.
+La solution avec Vagrant présentée ci-dessous est cependant à préférer.
 
 ## En utilisant Vagrant
 
-Pour compiler X-Dyn à l'aide de Vagrant, il faut :
+Pour installer les outils nécessaires pour compiler X-Dyn à l'aide de Vagrant, il faut :
 
 - Une connexion internet
-- [Vagrant](https://www.vagrantup.com/downloads.html)
+- [Vagrant](https://www.vagrantup.com/downloads.html).
+- [Virtual Box](https://www.virtualbox.org/) dans une version supportée par Vagrant + modification du BIOS pour autoriser la machine virtuelle.
 - La bibliothèque de connaissances antérieures de SIREHNA (Sirehna Scientific Computing ou SSC), en version deb (dont le MD5 est 80c050abcfd8310daf56ea2db991ba91)
-- [Git](https://git-scm.com/downloads)
+- [Git](https://git-scm.com/downloads) + paramétrage des clés SSH
 
-On commence par cloner le dépôt :
+
+On commence par cloner le dépôt (nécessite les droits d'accès au répertoire xdyn et au répertoire ThirdParty qui est géré comme un module git) :
 
 - Sur le réseau SIREHNA :
-  `git clone --recursive git@gitlab.sirehna.com:root/x-dyn`
+  `git clone --recursive git@gitlab.sirehna.com:root/xdyn.git --config core.autocrlf=input`
 - Sur le serveur de l'IRT Jules Verne :
-- `git clone git@gitlab2.irt-jules-verne.fr:cecady/x-dyn.git`
+  `git clone git@gitlab2.irt-jules-verne.fr:cecady/x-dyn.git --config core.autocrlf=input`
+  
+L'option --recursive permet de récupérer les dépendances (submodules).  
+L'option --config core.autocrlf input permet de forcer les caractères de fin de ligne et d'éviter des problèmes avec le répertoire partagé entre windows et linux, tout en protégeant le dépôt d'une erreur dans les retours chariots.
+Le développeur sous windows devra prendre la précaution d'utiliser les caractères de fin de ligne linux lors de la création de nouveaux fichiers. 
 
-On copie le fichier `ssc.deb` dans le répertoire `x-dyn` ainsi créé.
-On ouvre une invite de commande dans ce répertoire (idéalement, en utilisant git BASH fourni avec l'installation de Git)
+On copie le fichier `ssc.deb` dans le répertoire `xdyn` ainsi créé.
+On ouvre une invite de commande dans ce répertoire (idéalement, en utilisant git BASH fourni avec l'installation de Git).
 
+On s'assure d'avoir une connection internet fonctionnelle pour au moins 1h.
+On s'assure que VirtualBox est déjà lancé.
+On s'assure que la mémoire allouée à la machine virtuelle ne dépasse pas un quart de la mémoire physique
+(vb.memory dans le fichier Vagrantfile).  
 On tape `vagrant up`.
 
 La machine virtuelle Vagrant va être créée à partir d'une image de base (base box) qui va être configurée.
 Cette opération est longue (environ trois quarts d'heure). Une fois la machine virtuelle créée, une compilation est lancée et tous les tests sont exécutés.
 
+Troubleshooting : certaines étapes de l'installation sont longues (notamment l'installation de police Latex), mais il arrive aussi que la machine virtuelle se mette en pause si elle manque de mémoire vive.
+Cela peut se vérifier dans l'interfrace de Virtual Box.  
+
 A la racine du dépôt X-Dyn se trouvent trois scripts shell :
 
-- `vagrant_cmake.sh` qui lance CMake sur la machine virtuelle afin de prépare le build
-- `vagrant_ninja.sh` qui effectue la compilation et la génération de la documentation en utilisant le système de build Ninja
+- `vagrant_cmake.sh` qui lance CMake sur la machine virtuelle afin de préparer le build,
+- `vagrant_ninja.sh` qui effectue la compilation et la génération de la documentation en utilisant le système de build Ninja,
 - `vagrant_run_all_tests.sh` qui lance tous les tests. On peut en sélectionner un sous-ensemble en utilisant le flag `--gtest_filter='*LONG*'` par exemple. Se référer à [la documentation de Google Test](https://github.com/google/googletest/blob/master/googletest/docs/AdvancedGuide.md#running-a-subset-of-the-tests).
 
 
@@ -87,11 +101,11 @@ Voici la description des modules de X-DYN :
 | `hdb_interpolators`        | Calcul des efforts de radiation (convolution)                                   |
 | `interface_hdf5`           | Ecriture des fichiers HDF5                                                      |
 | `mesh`                     | Calculs sur les maillages (intersection navire/surface libre, itération sur les |
-|                            | facettes                                                                        |
+|                            | facettes)                                                                       |
 | `observers_and_api`        | Définition des sorties en cours de simulation (CSV, HDF5, websocket...)         |
 | `parser_extensions`        | Lecture des fichiers de commande et des spectres de houle                       |
 | `slamming`                 | Calcul des efforts de slamming                                                  |
-| `test_data_generator`      | Génération des données de test (notamment utilisées pour générer tutoriels)     |
+| `test_data_generator`      | Génération des données de test (notamment utilisées pour générer les tutoriels) |
 | `yaml_parser`              | Interprétation des parties génériques du YAML (non spécifiques à un modèle)     |
 |                            | par exemple la définition des corps et des sorties.                             |
 
@@ -103,8 +117,6 @@ Chaque module contient nécessairement :
 
 Les sous-répertoires suivants sont généralement présents, mais pas
 systématiquement :
-- `src` contient les fichiers source à compiler. Le module `exceptions` n'en
-  contient pas, par exemple.
 - `unit_tests` (qui contient à son tour un fichier `CMakeLists.txt`, un
   répertoire `inc` et un répertoire `src`) stocke les tests unitaires (une
   classe de test par classe, en principe). Le module `test_data_generator` ne
@@ -123,9 +135,9 @@ et la fin des calculs :
 * **Création du système à simuler** : le contenu des fichiers est interprêté et
   l'on crée les structures de données internes utilisées pour la simulation.
 * **Création des observateurs** : les observateurs permettent de réaliser des
-  actions en cours de simulation (sauvegarde des états, tracés...)
+  actions en cours de simulation (sauvegarde des états, tracés...).
 * **Simulation** : la simulation proprement dite utilise le solveur et les
-  structures de données construites précédemment
+  structures de données construites précédemment.
 
 ## Récupération des arguments
 
@@ -137,7 +149,6 @@ Le module concerné est `executables`. Les fichiers concernés sont :
 - `simulator_run.cpp` : fonction de haut niveau qui appelle la lecture de la
   ligne de commande, l'ouverture des fichiers, la création du système et des
   observateurs et la simulation.
-  commande
 
 ## Création du système à simuler
 
@@ -161,7 +172,6 @@ caractère et parsé ultérieurement par chaque module. L'idée sous-jacente est
 que les modèles d'effort sont une partie du code amenée à évoluer
 (potentiellement de manière indépendante pour répondre aux besoins internes
 spécifiques de chacun des partenaires) tandis que la description des corps
-(inerties, position du centre de masse, conditions initiales...) doivent peu
 évoluer.
 
 En conséquence, le YAML est parsé en deux temps :
@@ -216,7 +226,7 @@ La méthode de construction du modèle de houle est la suivante
 (`SimulatorBuilder::get_wave`) :
 
 - On a récupéré du fichier YAML une liste de modèle (c'est-à-dire un nom et une
-  chaîne de caractères contenant le YAML de configuration de ce modèle)
+  chaîne de caractères contenant le YAML de configuration de ce modèle).
 - Pour chaque modèle, on appelle la méthode `try_to_parse` de chaque parseur de
   vague (inséré par `can_parse` décrit précédemment). Cette méthode retourne un
   `boost::optional<SurfaceElevationPtr>` qui contient soit un modèle de houle
@@ -237,11 +247,11 @@ construits par la méthode `SimulatorBuilder::get_forces` :
 - Pour chaque corps défini dans le fichier YAML, on appelle la méthode
   `SimulatorBuilder::forces_from` en lui fournissant le modèle d'environnement
   construit précédemment (parce que le constructeur de chaque modèle d'effort a
-  besoin de l'environnement puisqu'il est possédé par chaque modèle)
+  besoin de l'environnement puisqu'il est possédé par chaque modèle).
 - La méthode `SimulatorBuilder::forces_from` boucle sur tous les modèles
   d'effort (c'est-à-dire, à ce stade, un nom et une chaîne de caractère
   contenant le YAML de configuration) et appelle la méthode
-  `SimulatorBuilder::add`
+  `SimulatorBuilder::add`.
 - Cette dernière boucle sur tous les parseurs d'effort non-commandés, à la
   manière de `SimulatorBuilder::get_wave`, en appelant `try_to_parse` sur
   chacun. Le résultat est un `boost::optional<ForcePtr>` qui contient soit un
@@ -261,14 +271,14 @@ Le rôle des observateurs est, étant donné l'état du système, d'effectuer de
 actions telles que la sérialisation en différents formats. Le design de ces
 observateurs a été assujetti aux contraintes suivantes :
 
-- Pouvoir utiliser plusieurs sérialisations en parallèle, éventuellement en
+- pouvoir utiliser plusieurs sérialisations en parallèle, éventuellement en
   sérialisant des choses différentes dans chacune et les traiter de façon
-  homogène
-- N'avoir à intervenir qu'à un seul endroit du code pour rendre une variable
+  homogène,
+- n'avoir à intervenir qu'à un seul endroit du code pour rendre une variable
   interne "sérialisable" (par exemple, lorsque l'on a rendu "GM" disponible à
-  partir du modèle `GMForceModel`)
-- N'avoir à intervenir qu'à un seul endroit lorsque l'on rajoute un type de
-  sérialisation
+  partir du modèle `GMForceModel`),
+- n'avoir à intervenir qu'à un seul endroit lorsque l'on rajoute un type de
+  sérialisation.
 
 L'API des observateurs est décrite dans une classe abstraite (`Observer`) définie dans
 le module `core`. Toutes les méthodes virtuelles pures de cette classe sont
@@ -293,7 +303,7 @@ Deux éléments de design sont essentiels dans la classe `Observer` :
 En pratique, le fonctionnement est le suivant :
 
 - L'utilisateur défini les sérialisations qu'il souhaite voir réaliser dans la
-  section `output` du fichier YAML
+  section `output` du fichier YAML.
 - Juste après la création du système à simuler, dans la fonction
   `run_simulation` du fichier `simulator_run.cpp` du module `executables`, on
   crée les observateurs au moyen de la fonction `get_observers` du même module.
@@ -332,7 +342,7 @@ pas de temps (par exemple, pour écrire la ligne de titre d'un fichier CSV) et
 la seconde est appelée systématiquement. Elle boucle sur la liste des choses à
 sérialiser (qui ont été définies au moment de la construction de l'observateur)
 et cherche pour chacune une fonction réalisant cette sérialisation dans le
-dictionnaire de fonction rempli par les appels à la fonction `write`de chaque
+dictionnaire de fonction rempli par les appels à la fonction `write` de chaque
 observateur effectué par chacun des modèles. Si elle trouve une telle fonction,
 elle l'appelle (et la sérialisation s'effectue), sinon elle lance une exception
 (et la simulation s'arrête).
@@ -383,10 +393,10 @@ solveur figure dans la documentation utilisateur).
 
 La responsabilité du solveur est double :
 
-- Appeler l'observateur à la fin de chaque pas de temps en lui fournissant le
-  système et l'instant courant
-- Calculer la valeur des états du système à chaque pas de temps en passant d'un
-  instant au suivant en utilisant le `Stepper`
+- appeler l'observateur à la fin de chaque pas de temps en lui fournissant le
+  système et l'instant courant,
+- calculer la valeur des états du système à chaque pas de temps en passant d'un
+  instant au suivant en utilisant le `Stepper`.
 
 Le fonctionnement des observateurs a déjà été décrit ci-dessus. Pour calculer
 les états du système, le `Stepper` a uniquement besoin des dérivées des états.
@@ -430,7 +440,7 @@ pouvoir itérer sur les facettes immergées ou sur les facettes émergées du
 maillage. Cette fonctionalité est utilisée par les efforts de surface
 (`ExactHydrostaticForceModel`, `FastHydrostaticForceModel`, `GMForceModel` et
 `HydrostaticForceModel`) pour intégrer les efforts sur la coque (réalisé par la
-méthode `SurfaceForceModel::operator()` définie dans le module `core`.
+méthode `SurfaceForceModel::operator()` définie dans le module `core`).
 
 `MeshIntersector` est une classe dont les performances sont critiques pour la
 rapidité globale de la simulation. Pour atteindre des temps de calculs acceptables,
@@ -625,7 +635,7 @@ responsabilité suivantes :
 * Compiler le code
 * Générer la documentation utilisateur et la documentation développeur
 * Lancer les tests unitaires
-* Calculer des métriques surle code (couverture des tests, nombre de tests, etc.)
+* Calculer des métriques sur le code (couverture des tests, nombre de tests, etc.)
 * Détecter les problèmes mémoire (en utilisant valgrind)
 * Créer un programme d'installation
 * Rendre ce programme d'installation disponible
@@ -679,10 +689,10 @@ version à jour.
 Il faut ensuite décider du type d'effort :
 
 - Modèle d'effort surfacique agissant sur la partie immergée (par exemple
-  hydrostatique) : dériver de `ImmersedForceModel`
+  hydrostatique) : dérivé de `ImmersedForceModel`
 - Modèle d'effort surfacique agissant sur la partie émergée (par exemple
-  le vent) : dériver de `EmergedForceModel`
-- Modèle d'effort non-surfacique : dériver de `ForceModel`
+  le vent) : dérivé de `EmergedForceModel`
+- Modèle d'effort non-surfacique : dérivé de `ForceModel`
 
 La documentation du modèle d'effort doit être mise dans le fichier Markdown
 `XDYN_ROOT/doc_user/modeles_efforts.md`.

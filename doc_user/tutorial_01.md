@@ -152,6 +152,10 @@ bodies: ## All bodies have NED as parent frame
         q: {value: 0, unit: rad/s}
         r: {value: 0, unit: rad/s}
     dynamics:
+	    hydrodynamic forces calculation point in body frame:
+            x: {value: 0, unit: m}
+            y: {value: 0, unit: m}
+            z: {value: 0, unit: m}
         centre of inertia:
             frame: ball
             x: {value: 0, unit: m}
@@ -221,7 +225,7 @@ La liste de toutes les options est disponible en exécutant :
 On peut chaîner les post-traitements (tracés) à la suite de la simulation :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 | python plot.py "tutorial_01" 0 3
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o csv | python plot.py "tutorial_01" 0 3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Résultats
