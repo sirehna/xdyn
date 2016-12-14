@@ -159,6 +159,30 @@ ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& 
     return ret;
 }
 
+template <typename T> bool could_parse(const std::vector<T>& parsers, const YamlModel& model, const std::string& body_name, const EnvironmentAndFrames& env)
+{
+    try
+    {
+        for (auto try_to_parse:parsers)
+        {
+            auto f = try_to_parse(model, body_name, env);
+            if (f)
+            {
+                return true;
+            }
+        }
+    }
+    catch (const InvalidInputException&)
+    {
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+    return false;
+}
+
 void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::string& body_name, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
@@ -174,7 +198,11 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::s
 
     if (not(parsed))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator.");
+        if (could_parse(controllable_force_parsers, model, body_name, env))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Model '" << model.model << "' is in the wrong section: it's in the 'controlled forces' section whereas it should be in the 'external forces' section.");
+        }
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator, or maybe you put a controlled force (eg. maneuvering, propeller+rudder, etc.) in the 'external forces' section.");
     }
 }
 
@@ -192,6 +220,10 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     }
     if (not(parsed))
     {
+        if (could_parse(force_parsers, model, name, env))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Model '" << model.model << "' is in the wrong section: it's in the 'external forces' section whereas it should be in the 'controlled forces' section.");
+        }
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator.");
     }
 }
