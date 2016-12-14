@@ -70,7 +70,8 @@ class ControllableForceModel
                                   }
                                   catch (const InvalidInputException& exception)
                                   {
-                                      THROW(__PRETTY_FUNCTION__, InvalidInputException, context << std::endl << exception.get_message());
+                                      THROW(__PRETTY_FUNCTION__, InvalidInputException, context << std::endl << exception.get_message() << std::endl << "Model containing error is defined line "
+                                              << yaml.index_of_first_line_in_global_yaml << " of the YAML file." << std::endl);
                                   }
                                   catch (const YAML::Exception& exception)
                                   {

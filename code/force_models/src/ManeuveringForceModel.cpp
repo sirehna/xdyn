@@ -12,6 +12,7 @@
 #include "maneuvering_DataSource_builder.hpp"
 #include "yaml.h"
 #include "yaml2eigen.hpp"
+#include "InvalidInputException.hpp"
 
 
 ManeuveringForceModel::Yaml::Yaml() :
@@ -32,7 +33,14 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    node["reference frame"] >> ret.frame_of_reference;
+    try
+    {
+        node["reference frame"] >> ret.frame_of_reference;
+    }
+    catch (YAML::Exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to parse 'reference frame': it should contain the sub-nodes 'frame', 'x', 'y', 'z', 'phi', 'theta' and 'psi'.");
+    }
     node["name"] >> ret.name;
     for(YAML::Iterator it=node.begin();it!=node.end();++it)
     {
@@ -48,7 +56,6 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
             node[key] >> value;
             ret.var2expr[key] = value;
         }
-
     }
     return ret;
 }
