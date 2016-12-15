@@ -33,7 +33,7 @@ Pour installer les outils nécessaires pour compiler X-Dyn à l'aide de Vagrant,
 - [Git](https://git-scm.com/downloads) + paramétrage des clés SSH
 
 
-On commence par cloner le dépôt (nécessite les droits d'accès au répertoire xdyn et au répertoire ThirdParty qui est géré comme un module git) :
+On commence par cloner le dépôt (nécessite les droits d'accès au répertoire `xdyn` et au répertoire `ThirdParty` qui est géré comme un module git) :
 
 - Sur le réseau SIREHNA :
   `git clone --recursive git@gitlab.sirehna.com:root/xdyn.git --config core.autocrlf=input`
@@ -47,10 +47,10 @@ Le développeur sous windows devra prendre la précaution d'utiliser les caract�
 On copie le fichier `ssc.deb` dans le répertoire `xdyn` ainsi créé.
 On ouvre une invite de commande dans ce répertoire (idéalement, en utilisant git BASH fourni avec l'installation de Git).
 
-On s'assure d'avoir une connection internet fonctionnelle pour au moins 1h.
+On s'assure d'avoir une connection internet fonctionnelle (compter environ 1h).
 On s'assure que VirtualBox est déjà lancé.
 On s'assure que la mémoire allouée à la machine virtuelle ne dépasse pas un quart de la mémoire physique
-(vb.memory dans le fichier Vagrantfile).  
+(vb.memory dans le fichier `Vagrantfile`).  
 On tape `vagrant up`.
 
 La machine virtuelle Vagrant va être créée à partir d'une image de base (base box) qui va être configurée.

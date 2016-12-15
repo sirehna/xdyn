@@ -37,11 +37,9 @@ Options:
 
 Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
 des modèles](#waves).
-Le paramètre `-c` ne sera pas décrit ici mais dans [le fichier de description
-des modèles](#efforts-commandés).
 
 ## Exemples
-
+Les exemples suivant peuvent-être lancés à partir du répertoire demos  
 ### Simulation avec un solveur Runge-Kutta d'ordre 4 en commençant à t=0
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
@@ -54,11 +52,11 @@ ou si l'on utilise une invite de commande MS-DOS :
 xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
 ~~~~~~~~~~~~~~~~~~~~
 
-Par défaut, les sorties se font sur la sortie standard (le terminal). Ceci
+En rajoutant l'option -o csv, les sorties se font sur la sortie standard (le terminal). Ceci
 permet de chaîner les traitements (pipe UNIX), par exemple :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 | python plot.py test 0 3
+./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv| python plot.py test 0 3
 ~~~~~~~~~~~~~~~~~~~~
 
 La commande précédente lance la simulation et génère un tracé (format SVG) à
@@ -247,7 +245,7 @@ output:
 # Interface MatLab
 
 `X-Dyn` peut être appelé depuis le logiciel `MatLab`.
-Cela présente l'avantage de disposer d'un environnement graphique pour afficher
+Cela présente l'avantage de disposer dans la foulée d'un environnement graphique pour afficher
 les résultats de simulation.
 
 Voici les fonctions de base pour travailler avec `X-Dyn`.
@@ -268,3 +266,8 @@ Voici les fonctions de base pour travailler avec `X-Dyn`.
 
 Enfin, le fichier `xdyn_demos.m` permet de lancer les différents tutoriels.
 
+Il est également possible d'utiliser l'environnement matlab pour analyser des simulations déjà réalisées.
+Par exemple le script demoMatLab.m va lire le fichier tutorial_01_falling_ball.h5 qui aura préalablement été généré à partir de la commande :
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tutorial_01_falling_ball.h5
+~~~~~~~~~~~~~~~~~~~~
