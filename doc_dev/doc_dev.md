@@ -12,24 +12,29 @@ et principes qui ont régi les développements.
 
 # Récupération du code et compilation
 
-Deux possibilité sont offertes au développeur :
+Deux possibilités sont offertes au développeur :
 
 - Soit recréer l'environnement de développement
-- Soit utiliser une machine virtuel configurée avec Vagrant et travailler sur une configuration Linux standard
+- Soit utiliser une machine virtuelle configurée avec Vagrant et travailler sur
+  une configuration Linux standard
 
 ## En recréant tout l'environnement de développement
 
-Il faut se référer au fichier `bootstrap.sh` qui décrit la liste des dépendances de X-DYN.
-La solution avec Vagrant présentée ci-dessous est cependant à préférer.
+Il faut se référer au fichier `bootstrap.sh` qui décrit la liste des
+dépendances de X-DYN.
+La solution avec `Vagrant` présentée ci-dessous est cependant à préférer.
 
 ## En utilisant Vagrant
 
-Pour installer les outils nécessaires pour compiler X-Dyn à l'aide de Vagrant, il faut :
+Pour installer les outils nécessaires pour compiler X-Dyn à l'aide de Vagrant,
+il faut :
 
 - Une connexion internet
 - [Vagrant](https://www.vagrantup.com/downloads.html).
-- [Virtual Box](https://www.virtualbox.org/) dans une version supportée par Vagrant + modification du BIOS pour autoriser la machine virtuelle.
-- La bibliothèque de connaissances antérieures de SIREHNA (Sirehna Scientific Computing ou SSC), en version deb (dont le MD5 est 80c050abcfd8310daf56ea2db991ba91)
+- [Virtual Box](https://www.virtualbox.org/) dans une version supportée par
+  Vagrant + modification du BIOS pour autoriser la machine virtuelle.
+- La bibliothèque de connaissances antérieures de SIREHNA
+  (Sirehna Scientific Computing ou SSC), en version deb (dont le MD5 est 80c050abcfd8310daf56ea2db991ba91)
 - [Git](https://git-scm.com/downloads) + paramétrage des clés SSH
 
 
@@ -39,38 +44,56 @@ On commence par cloner le dépôt (nécessite les droits d'accès au répertoire
   `git clone --recursive git@gitlab.sirehna.com:root/xdyn.git --config core.autocrlf=input`
 - Sur le serveur de l'IRT Jules Verne :
   `git clone git@gitlab2.irt-jules-verne.fr:cecady/x-dyn.git --config core.autocrlf=input`
-  
-L'option --recursive permet de récupérer les dépendances (submodules).  
-L'option --config core.autocrlf input permet de forcer les caractères de fin de ligne et d'éviter des problèmes avec le répertoire partagé entre windows et linux, tout en protégeant le dépôt d'une erreur dans les retours chariots.
-Le développeur sous windows devra prendre la précaution d'utiliser les caractères de fin de ligne linux lors de la création de nouveaux fichiers. 
+
+L'option `--recursive` permet de récupérer les dépendances (`submodules`).
+L'option `--config core.autocrlf` input permet de forcer les caractères de fin de
+ligne et d'éviter des problèmes avec le répertoire partagé entre Windows et linux,
+tout en protégeant le dépôt d'une erreur dans les retours chariots.
+Le développeur sous windows devra prendre la précaution d'utiliser les caractères
+de fin de ligne Linux lors de la création de nouveaux fichiers.
 
 On copie le fichier `ssc.deb` dans le répertoire `xdyn` ainsi créé.
-On ouvre une invite de commande dans ce répertoire (idéalement, en utilisant git BASH fourni avec l'installation de Git).
+On ouvre une invite de commande dans ce répertoire
+(idéalement, en utilisant git BASH fourni avec l'installation de Git).
 
-On s'assure d'avoir une connection internet fonctionnelle (compter environ 1h).
+On s'assure d'avoir une connexion Internet fonctionnelle (compter environ 1h).
 On s'assure que VirtualBox est déjà lancé.
-On s'assure que la mémoire allouée à la machine virtuelle ne dépasse pas un quart de la mémoire physique
-(vb.memory dans le fichier `Vagrantfile`).  
+On s'assure que la mémoire allouée à la machine virtuelle ne dépasse pas un
+quart de la mémoire physique
+(`vb.memory` dans le fichier `Vagrantfile`).
 On tape `vagrant up`.
 
-La machine virtuelle Vagrant va être créée à partir d'une image de base (base box) qui va être configurée.
-Cette opération est longue (environ trois quarts d'heure). Une fois la machine virtuelle créée, une compilation est lancée et tous les tests sont exécutés.
+La machine virtuelle Vagrant va être créée à partir d'une image de base
+(base box) qui va être configurée.
+Cette opération est longue (environ trois quarts d'heure).
+Une fois la machine virtuelle créée, une compilation est lancée et tous les
+tests sont exécutés.
 
-Troubleshooting : certaines étapes de l'installation sont longues (notamment l'installation de police Latex), mais il arrive aussi que la machine virtuelle se mette en pause si elle manque de mémoire vive.
-Cela peut se vérifier dans l'interfrace de Virtual Box.  
+Troubleshooting : certaines étapes de l'installation sont longues
+(notamment l'installation de police Latex), mais il arrive aussi que la
+machine virtuelle se mette en pause si elle manque de mémoire vive.
+Cela peut se vérifier dans l'interface de Virtual Box.
 
-A la racine du dépôt X-Dyn se trouvent trois scripts shell :
+À la racine du dépôt X-Dyn se trouvent trois scripts shell :
 
-- `vagrant_cmake.sh` qui lance CMake sur la machine virtuelle afin de préparer le build,
-- `vagrant_ninja.sh` qui effectue la compilation et la génération de la documentation en utilisant le système de build Ninja,
-- `vagrant_run_all_tests.sh` qui lance tous les tests. On peut en sélectionner un sous-ensemble en utilisant le flag `--gtest_filter='*LONG*'` par exemple. Se référer à [la documentation de Google Test](https://github.com/google/googletest/blob/master/googletest/docs/AdvancedGuide.md#running-a-subset-of-the-tests).
+- `vagrant_cmake.sh` qui lance CMake sur la machine virtuelle afin de préparer
+  le build,
+- `vagrant_ninja.sh` qui effectue la compilation et la génération de la
+  documentation en utilisant le système de build Ninja,
+- `vagrant_run_all_tests.sh` qui lance tous les tests. On peut en sélectionner
+  un sous-ensemble en utilisant le flag `--gtest_filter='*LONG*'` par exemple.
+  Se référer à [la documentation de Google Test](https://github.com/google/googletest/blob/master/googletest/docs/AdvancedGuide.md#running-a-subset-of-the-tests).
 
 
-L'idée, en utilisant Vagrant, est que l'on utilise son éditeur local (de la machine hôte) mais le compilateur et les bibliothèques de la machine virtuelle. Le répertoire contenant le dépôt de x-dyn est automatiquement partagé avec la machine virtuelle créée par Vagrant.
+L'idée, en utilisant Vagrant, est que l'on utilise son éditeur local
+(de la machine hôte) mais le compilateur et les bibliothèques de la machine
+virtuelle.
+Le répertoire contenant le dépôt de x-dyn est automatiquement partagé avec la
+machine virtuelle créée par Vagrant.
 
 # Cartographie des modules
 
-Le code a été réparti en répertoires que l'on appelera ici
+Le code a été réparti en répertoires que l'on appellera ici
 `module`. L'inclusion de code dans un module dépend de deux critères :
 
 - Ce que fait le code en question (chaque module doit être fonctionnellement
@@ -79,7 +102,7 @@ Le code a été réparti en répertoires que l'on appelera ici
   modules)
 
 La cohérence fonctionnelle facilite l'appréhension du code et contribue à
-réduire les risques de conflit en cas de développements concomittants. La
+réduire les risques de conflit en cas de développements concomitants. La
 minimisation des dépendances est nécessaire pour ordonnancer la compilation
 (éviter les cycles, savoir quel fichier compiler en premier) et permet de
 limiter les impacts des modifications éventuelles apportées à un module.
@@ -131,8 +154,8 @@ et la fin des calculs :
 * **Récupération des arguments** : le programme lit les arguments fournis par
   l'utilisateur sur la ligne de commande.
 * **Ouverture des fichiers** : le contenu des fichiers de commande et du (ou des)
-  fichiers YAML est lu (sans être interprêté, à ce stade).
-* **Création du système à simuler** : le contenu des fichiers est interprêté et
+  fichiers YAML est lu (sans être interprété, à ce stade).
+* **Création du système à simuler** : le contenu des fichiers est interprété et
   l'on crée les structures de données internes utilisées pour la simulation.
 * **Création des observateurs** : les observateurs permettent de réaliser des
   actions en cours de simulation (sauvegarde des états, tracés...).
@@ -232,7 +255,7 @@ La méthode de construction du modèle de houle est la suivante
   `boost::optional<SurfaceElevationPtr>` qui contient soit un modèle de houle
   si le parseur a réussi à interpréter la chaîne de caractères, soit rien dans
   le cas contraire.
-- Si la boucle se termine sans qu'aucun parseur n'ait réussi à interprêter la
+- Si la boucle se termine sans qu'aucun parseur n'ait réussi à interpréter la
   chaîne YAML, une erreur est renvoyée.
 
 Ce schéma de construction est utilisé pour tous les autres modèles (efforts
@@ -560,8 +583,9 @@ Le code HTML5 comprend :
   différents éléments de la page
 - Des fichiers CSS (le framework Bootstrap de Twitter est utilisé pour le rendu
   des widgets)
-- Des fichiers Javascript. Le fichier `websocket.js` contient tous les aspects de communication avec le
-  simulateur et le fichier `realtime_plot.js` les fonctions de tracé 
+- Des fichiers Javascript. Le fichier `websocket.js` contient tous les aspects
+  de communication avec le simulateur et le fichier `realtime_plot.js` les
+  fonctions de tracé
 
 ## Fonctionnement du serveur Python
 
@@ -629,7 +653,7 @@ On peut créer un programme d'installation en faisant :
 
 Le code source d'X-DYN est versionné sous [GIT](http://www.git-scm.com). Le
 serveur d'intégration continue ([Jenkins](http://www.jenkins-ci.org)) a les
-responsabilité suivantes :
+responsabilités suivantes :
 
 * Récupérer le code source depuis le dépôt Git
 * Compiler le code
@@ -661,7 +685,7 @@ Les branches Git sont utilisées comme suit :
   d'intégration puis l'ensemble des opérations de build
 * En cas de succès, la branche `integration` est mergée dans la branche
   `master`
-* Le serveur d'intégration continue contient un processur nommé
+* Le serveur d'intégration continue contient un processus nommé
   `XDYN_PRODUCTION` qui, à son tour, build la branche `master`
 
 L'intérêt de ce processus est d'isoler les erreurs dans les feature branches.
@@ -671,24 +695,28 @@ développeurs doivent régulièrement faire un rebase sur `master` (sur laquelle
 personne ne commit mis à part Jenkins) afin de s'assurer d'avoir la dernière
 version à jour.
 
-Voici un exemple de commandes git permettant de réaliser une partie des actions décrites ci-dessus.  
-Les commandes suivantes créent une branche localement, puis la synchronise sur le serveur.
+Voici un exemple de commandes git permettant de réaliser une partie des actions
+décrites ci-dessus. Les commandes suivantes créent une branche localement, puis
+la synchronise sur le serveur.
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 git checkout -b dev/feature1
 git push -u
 ~~~~~~~~~~~~~~~~~~~~
 
-Il est ensuite possible de modifier les fichiers ou d'ajouter des fichiers puis de faire des commits et de les sauvegarder sur le serveur.
+Il est ensuite possible de modifier les fichiers ou d'ajouter des fichiers puis
+de faire des commits et de les sauvegarder sur le serveur.
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 git commit nomDuFichier
 git push
 ~~~~~~~~~~~~~~~~~~~~
 
-De manière régulière et avant de soumettre la branche à une revue du responsable du dépôt, il faut faire un rebase sur master.
+De manière régulière et avant de soumettre la branche à une revue du
+responsable du dépôt, il faut faire un rebase sur master.
 Cela permet de résoudre au plus tôt d'éventuels conflits.
-Pour cela le mieux est de récupérer localement les modifications existant sur le serveur, puis de les intégrer dans l'historique de git.
+Pour cela le mieux est de récupérer localement les modifications existant sur le
+serveur, puis de les intégrer dans l'historique de git.
 Cela peut se faire grâce aux commandes suivantes :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
@@ -733,7 +761,7 @@ Le cas le plus simple est évidemment lorsqu'on n'a pas besoin de parseur. Un
 exemple de tel modèle est `GravityForceModel`.
 
 On crée une classe `GravityForceModel` dans le module `force_models` et on la
-fait dériver de `ForceModel`. Elle doit fournir les éléments suivnats :
+fait dériver de `ForceModel`. Elle doit fournir les éléments suivants :
 
 - une variable statique `model_name` qui doit correspondre au nom du modèle
   tel qu'il sera renseigné dans le fichier YAML
@@ -756,7 +784,8 @@ objet `BodyStates` contenant :
 - Les treize états du corps
 - Le maillage (le cas échéant)
 - Les matrices d'inertie
-- Des fonctions de conversion des quaternions en angles étant donnée une certaine convention
+- Des fonctions de conversion des quaternions en angles étant donnée une
+  certaine convention
 - Un objet `MeshIntersector` pour accéder aux facettes immergées et/ou émergées
 - Les coordonnées de quelques points particuliers (point de résolution des
   équations de la dynamique, centre du repère maillage, point de calcul
@@ -814,7 +843,7 @@ ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, st
 ### Définition des commandes
 
 Le modèle d'effort doit déclarer ses commandes au constructeur de
-`ControllableForceModel` : 
+`ControllableForceModel` :
 
 ~~~~~~~~ {.cpp}
 SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Yaml& input, const
@@ -826,7 +855,7 @@ std::string& body_name_, const EnvironmentAndFrames& env_) :
 
 Bien que le nom du modèle soit spécifié dans le nom de la commande renseigné
 dans le fichier YAML de commande, la méthode `get_force` reçoit un dictionnaire
-contenant automatiquement les commandes nécesaires, sans le nom du modèle.
+contenant automatiquement les commandes nécessaires, sans le nom du modèle.
 
 
 ### Intégration dans X-DYN
@@ -961,9 +990,10 @@ s'articulent autour des types suivants :
   et l'étalement sont définis et dérivent des deux classes précédentes, la
   discrétisation fonctionnera dessus.
 - `WaveModel` réalise les calculs du modèle de houle (élévation, vitesse
-  orbitale, évaluation de RAO et calcul de la pression dynamique) à partir d'un spectre
-  directionnel discrétisé (`DiscreteDirectionalWaveSpectrum`). Un exemple de
-  tel model est `Airy` où la hauteur de houle est une somme de sinusoïdes.
+  orbitale, évaluation de RAO et calcul de la pression dynamique) à partir d'un
+  spectre directionnel discrétisé (`DiscreteDirectionalWaveSpectrum`).
+  Un exemple d'un tel model est `Airy` où la hauteur de houle est une somme
+  de sinusoïdes.
 
 L'extension des modèles de houle peut donc se faire de trois manières :
 
@@ -974,7 +1004,7 @@ L'extension des modèles de houle peut donc se faire de trois manières :
 
 Parser les modèles de houle est plus complexe que pour les modèles d'effort :
 en effet, si les modèles d'effort ne dépendent que d'eux-mêmes, les modèles de
-houle dépendent des étalement directionnels et des densité spectrales de
+houle dépendent des étalements directionnels et des densités spectrales de
 puissance. Pour des raisons de temps, les modèles de houle n'ont pas encore été
 mis sous le même formalisme que les modèles d'effort : ainsi, il faut
 intervenir sur cinq modules pour ajouter un modèle de houle :
@@ -1257,7 +1287,7 @@ Il faut ensuite, comme précédemment, ajouter le modèle dans `get_builder` :
 
 # Perspectives de développement
 
-Pour une poursuite du travail sur ce simulateur, les fonctionalités suivantes
+Pour une poursuite du travail sur ce simulateur, les fonctionnalités suivantes
 pourraient être considérées :
 
 ## Modèles supplémentaires
@@ -1282,13 +1312,13 @@ pourraient être considérées :
 ## Amélioration des performances
 
 - Des gains de performance peuvent sans doute être obtenus sur les calculs
-  d'intersection de maillage. Par exemple, on pourrait utiliser la librarie LGPL
-  "GNU Triangulated Surface Library" ou CGAL. L'idée serait alors de créer un
-  maillage de la surface libre et de calculer son intersection avec le maillage
-  de la coque, plutôt que de calculer les hauteurs de houle en chaque point du
-  maillage.
+  d'intersection de maillage. Par exemple, on pourrait utiliser la bibliothèque
+  LGPL "GNU Triangulated Surface Library" ou CGAL. L'idée serait alors de créer
+  un maillage de la surface libre et de calculer son intersection avec le
+  maillage de la coque, plutôt que de calculer les hauteurs de houle en chaque
+  point du maillage.
 - L'évaluation des modèles de houle peut être accélérée en la parallélisant (par
   exemple, sur un GPU)
-- La vitesse d'exécution des modèles de manoeuvrabilité peut être améliorée :
-  actuellement, ils sont interprêtés, mais il est possible de les compiler
+- La vitesse d'exécution des modèles de manœuvrabilité peut être améliorée :
+  actuellement, ils sont interprétés, mais il est possible de les compiler
   dynamiquement pour atteindre les performances d'un code natif.
