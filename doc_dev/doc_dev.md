@@ -671,6 +671,34 @@ développeurs doivent régulièrement faire un rebase sur `master` (sur laquelle
 personne ne commit mis à part Jenkins) afin de s'assurer d'avoir la dernière
 version à jour.
 
+Voici un exemple de commandes git permettant de réaliser une partie des actions décrites ci-dessus.  
+Les commandes suivantes créent une branche localement, puis la synchronise sur le serveur.
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+git checkout -b dev/feature1
+git push -u
+~~~~~~~~~~~~~~~~~~~~
+
+Il est ensuite possible de modifier les fichiers ou d'ajouter des fichiers puis de faire des commits et de les sauvegarder sur le serveur.
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+git commit nomDuFichier
+git push
+~~~~~~~~~~~~~~~~~~~~
+
+De manière régulière et avant de soumettre la branche à une revue du responsable du dépôt, il faut faire un rebase sur master.
+Cela permet de résoudre au plus tôt d'éventuels conflits.
+Pour cela le mieux est de récupérer localement les modifications existant sur le serveur, puis de les intégrer dans l'historique de git.
+Cela peut se faire grâce aux commandes suivantes :
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+git checkout master
+git pull
+git checkout dev/feature1
+git rebase master
+git push -f
+~~~~~~~~~~~~~~~~~~~~
+
 
 
 # Tutoriels
@@ -848,6 +876,7 @@ DataAddressing& address)
 
 `flush_after_initialization` est une étape réalisée juste après
 l'initialisation. Ici, il s'agit d'un retour à la ligne.
+
 ~~~~~~ {.cpp}
 void CsvObserver::flush_after_initialization()
 {
@@ -857,6 +886,7 @@ void CsvObserver::flush_after_initialization()
 
 `flush_value_during_write` est appelée juste après la sérialisation d'une
 valeur si ce n'est pas la dernière. Ici, c'est une virgule qui est insérée :
+
 ~~~~~~ {.cpp}
 void CsvObserver::flush_value_during_write()
 {
@@ -886,8 +916,7 @@ std::function<void()> CsvObserver::get_serializer(const double val, const DataAd
 ### Rendre l'observateur utilisable dans X-DYN
 
 Il suffit de rajouter une ligne au constructeur de la classe `ListOfObservers`
-défini dans le fichier `ListOfObservers.cpp` du même module `observers_and_api`
-:
+défini dans le fichier `ListOfObservers.cpp` du même module `observers_and_api` :
 
 ~~~~~~ {.cpp}
 if (output.format == "csv")  observers.push_back(ObserverPtr(newCsvObserver(output.filename,output.data)));
