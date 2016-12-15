@@ -26,6 +26,9 @@ sudo apt-get install texlive-latex-base texlive-latex-recommended -y
 # PYTHON3 + TORNADO
 sudo apt-get install python3-tornado -y
 
+# Pandas
+sudo apt-get install pandas -y
+
 # PIP3
 sudo apt-get install python3-pip -y
 
