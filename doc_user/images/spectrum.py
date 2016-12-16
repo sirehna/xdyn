@@ -3,28 +3,19 @@
 
 import os
 import argparse
-
 import matplotlib
-matplotlib.use('AGG')
-
-from matplotlib import rc
-# rc('font', family = 'serif')
-# rc('grid', linewidth = 1, linestyle = '-', color = '#a0a0a0')
-# rc('grid', linewidth = 0.5, linestyle = '--', color = '#939393')
-rc('grid', linewidth = 0.5, linestyle = '--', color = '#bdbdbd')
-rc('xtick', labelsize = 14)
-rc('ytick', labelsize = 14)
-# rc('font',**{'family':'serif','size':14})
-rc('text', usetex = True)
-rc('font', **{'family':'serif', 'serif':['Palatino'], 'size':14})
-
-# print(os.environ['PATH'])
-# os.environ['PATH'] = os.environ['PATH'] + r';C:\Program Files\LaTeX\MiKTeX 2.9\miktex\bin'
-# print(os.environ['PATH'])
-
-from pylab import *
 import math
 import numpy as np
+
+matplotlib.use('AGG')
+matplotlib.rc('grid', linewidth = 0.5, linestyle = '--', color = '#bdbdbd')
+matplotlib.rc('xtick', labelsize = 14)
+matplotlib.rc('ytick', labelsize = 14)
+matplotlib.rc('text', usetex = True)
+matplotlib.rc('font', **{'family':'serif', 'serif':['Palatino'], 'size':14})
+
+# Must be after matplotlib.use
+from pylab import *
 
 def plotOptionsL():
     typeList = ['bx-', 'gp-', 'rs-', 'co-', 'mD-', 'yH-', 'k*-', 'gp--', 'rs--', 'co--', 'mD--', 'yH--', 'k*--']
@@ -131,7 +122,7 @@ def imagePiersonMoskowitz(extensions = getDefaultExtensions(), useColor = False)
     psd07 = psdPiersonMoskowitz(W, 7)
     psd10 = psdPiersonMoskowitz(W, 10)
     psd15 = psdPiersonMoskowitz(W, 15)
-    figure()
+    fig = figure()
     grid()
     plot(W, psd07, label = r'$V= 7m/s$', **plotOptions(0, useColor))
     plot(W, psd10, label = r'$V=10m/s$', **plotOptions(1, useColor))
@@ -141,6 +132,7 @@ def imagePiersonMoskowitz(extensions = getDefaultExtensions(), useColor = False)
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'Pierson-Moskowitz spectrum')
     [savefig(f) for f in generateFigureFileNames('spectrumPiersonMoskowitz', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageJonswap(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useColor = False):
     dw = 0.01
@@ -148,7 +140,7 @@ def imageJonswap(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useColor 
     psd2 = psdJonswap(W, Hs, Tp, 2)
     psd3 = psdJonswap(W, Hs, Tp, 3)
     psd7 = psdJonswap(W, Hs, Tp, 7)
-    figure()
+    fig = figure()
     grid()
     plot(W, psd2, label = r'$\gamma=2$', **plotOptions(0, useColor))
     plot(W, psd3, label = r'$\gamma=3$', **plotOptions(1, useColor))
@@ -158,6 +150,7 @@ def imageJonswap(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useColor 
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'JONSWAP spectrum - $H_s=' + str(Hs) + 'm$ - $T_p=' + str(Tp) + 's$')
     [savefig(f) for f in generateFigureFileNames('spectrumJonswap', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageOchi(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useColor = False):
     dw = 0.01
@@ -165,7 +158,7 @@ def imageOchi(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useColor = F
     psd05 = psdOchi(W, Hs, Tp, ochiLambda = 0.5)
     psd15 = psdOchi(W, Hs, Tp, ochiLambda = 1.5)
     psd30 = psdOchi(W, Hs, Tp, ochiLambda = 3.0)
-    figure()
+    fig = figure()
     grid()
     plot(W, psd05, label = r'$\lambda=0.5$', **plotOptions(0, useColor))
     plot(W, psd15, label = r'$\lambda=1.5$', **plotOptions(1, useColor))
@@ -175,11 +168,12 @@ def imageOchi(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useColor = F
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'Ochi spectrum - $H_s=' + str(Hs) + 'm$ - $T_p=' + str(Tp) + 's$')
     [savefig(f) for f in generateFigureFileNames('spectrumOchi', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageBretschneider(Hs = 1, Tp = None, extensions = getDefaultExtensions(), useColor = False):
     dw = 0.01
     W = np.arange(dw, 3 + dw, dw)
-    figure()
+    fig = figure()
     grid()
     if Tp is None:
         psd05 = psdBretschneider(W, Hs, Tp = 5)
@@ -200,11 +194,12 @@ def imageBretschneider(Hs = 1, Tp = None, extensions = getDefaultExtensions(), u
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'ISSC Bretschneider spectrum - $H_s=' + str(Hs) + 'm$')
     [savefig(f) for f in generateFigureFileNames('spectrumBretschneider', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageITTC(Hs = None, extensions = getDefaultExtensions(), useColor = False):
     dw = 0.01
     W = np.arange(dw, 3 + dw, dw)
-    figure()
+    fig = figure()
     grid()
     if Hs is None:
         psd05 = psdITTC(W, Hs = 0.5)
@@ -225,11 +220,12 @@ def imageITTC(Hs = None, extensions = getDefaultExtensions(), useColor = False):
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'ITTC spectrum')
     [savefig(f) for f in generateFigureFileNames('spectrumITTC', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageVignatBovis(Hs = None, Tp = 10, extensions = getDefaultExtensions(), useColor = False):
     dw = 0.01
     W = np.arange(dw, 3 + dw, dw)
-    figure()
+    fig = figure()
     grid()
     if Hs is None:
         psd05 = psdVignatBovis(W, Hs = 0.5, Tp = Tp)
@@ -250,11 +246,12 @@ def imageVignatBovis(Hs = None, Tp = 10, extensions = getDefaultExtensions(), us
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'Vignat Bovis spectrum')
     [savefig(f) for f in generateFigureFileNames('spectrumVignatBovis', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageOneraTILV10(Hs = None, Tp = 10, extensions = getDefaultExtensions(), useColor = False):
     dw = 0.01
     W = np.arange(dw, 3 + dw, dw)
-    figure()
+    fig = figure()
     grid()
     if Hs is None:
         psd05 = psdOneraTILV10(W, Hs = 0.5, Tp = Tp)
@@ -275,11 +272,12 @@ def imageOneraTILV10(Hs = None, Tp = 10, extensions = getDefaultExtensions(), us
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'Onera TILV10 spectrum')
     [savefig(f) for f in generateFigureFileNames('spectrumOneraTILV10', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageGaussian(Hs = 1, Tp = 10, sigma = None, extensions = getDefaultExtensions(), useColor = False):
     dw = 0.01
     W = np.arange(dw, 3 + dw, dw)
-    figure()
+    fig = figure()
     grid()
     if sigma is None:
         psd001 = psdGaussian(W, Hs, Tp, sigma = 0.01)
@@ -300,9 +298,10 @@ def imageGaussian(Hs = 1, Tp = 10, sigma = None, extensions = getDefaultExtensio
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'Gaussian spectrum - $H_s=' + str(Hs) + 'm$ - $T_p=' + str(Tp) + 's$')
     [savefig(f) for f in generateFigureFileNames('spectrumGaussian', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageMonochromatique(extensions = getDefaultExtensions(), useColor = False):
-    f = figure()
+    fig = figure()
     grid()
     dt = 0.05
     A = 3.5
@@ -316,14 +315,14 @@ def imageMonochromatique(extensions = getDefaultExtensions(), useColor = False):
     ax.arrow(9.5, A+0.15, T, 0, head_width=0.25, head_length=0.25, fc='k', ec='k')
     ax.arrow(9.5+T, A+0.15, -T, 0, head_width=0.25, head_length=0.25, fc='k', ec='k')
     ax.text(9.5+T/2, 0.9*A, "T")
-    # legend(loc = 'upper right')
     xlabel(r'$t$ (s)')
     ylabel(r'$\eta \left( t \right)$ ($m$)')
     title(u'')
     [savefig(f) for f in generateFigureFileNames('waveMonochromatique', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageBichromatique(extensions = getDefaultExtensions(), useColor = False):
-    figure()
+    fig = figure()
     grid()
     dt = 0.025
     A1,A2 = 3.5, 1.3
@@ -331,16 +330,16 @@ def imageBichromatique(extensions = getDefaultExtensions(), useColor = False):
     T1,T2 = 10,17
     y = A1*cos(-2*np.pi/T1*t-0.3) + A2*cos(-2*np.pi/T2*t-0.7)
     plot(t,y,  label =r'', **{'c':'k', 'linestyle':'-'})
-    # legend(loc = 'upper right')
     xlabel(r'$t$ (s)')
     ylabel(r'$\eta \left( t \right)$ ($m$)')
     title(u'')
     [savefig(f) for f in generateFigureFileNames('waveBichromatique', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageComparison1(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useColor = False):
     dw = 0.01
     W = np.arange(dw, 5 + dw, dw)
-    figure()
+    fig = figure()
     grid()
     plot(W, psdPiersonMoskowitz(W, 7), label = r'Pierson-Moskovitz, $V=7m/s$', **plotOptions(0, useColor))
     plot(W, psdITTC(W, Hs), label = r'ITTC, $H_s={0}m$'.format(Hs), **plotOptions(1, useColor))
@@ -355,6 +354,7 @@ def imageComparison1(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useCo
     ylabel(r'Power Spectral Density ($m^2.s$)')
     title(r'Spectra comparison')
     [savefig(f) for f in generateFigureFileNames('spectrumComparison1', extensions)]
+    matplotlib.pyplot.close(fig)
 
 def imageComparison2(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useColor = False):
     def plotOptions(n = 0, useColor = False):
@@ -366,7 +366,7 @@ def imageComparison2(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useCo
         return opt
     dw = 0.01
     W = np.arange(dw, 4 + dw, dw)
-    figure()
+    fig = figure()
     grid()
     plot(W, psdBretschneider(W, Hs, Tp), label = r'ISSC Bretschneider, $H_s={0}m$, $T_p={1}s$'.format(Hs, Tp), **plotOptions(0, useColor))
     plot(W, psdVignatBovis(W, Hs, Tp), label = r'Vignat-Bovis, $H_s={0}m$, $T_p={1}s$'.format(Hs, Tp), **plotOptions(1, useColor))
@@ -374,45 +374,22 @@ def imageComparison2(Hs = 1, Tp = 10, extensions = getDefaultExtensions(), useCo
     legend(loc = 'upper right')
     xlabel(r'$\omega$ (rad/s)')
     ylabel(r'Power Spectral Density ($m^2.s$)')
-    # title(r'Spectra comparison')
     [savefig(f) for f in generateFigureFileNames('spectrumComparison2', extensions)]
+    matplotlib.pyplot.close(fig)
 
-def generateImages(s, e = getDefaultExtensions(), useColor = False):
-    if s in getListOfPossibleImages():
-        if s == 'PiersonMoskowitz':
-            imagePiersonMoskowitz(extensions = e, useColor = useColor)
-        elif s == 'Jonswap':
-            imageJonswap(extensions = e, useColor = useColor)
-        elif s == 'Ochi':
-            imageOchi(extensions = e, useColor = useColor)
-        elif s == 'Bretschneider':
-            imageBretschneider(extensions = e, useColor = useColor)
-        elif s == 'ITTC':
-            imageITTC(extensions = e, useColor = useColor)
-        elif s == 'VignatBovis':
-            imageVignatBovis(extensions = e, useColor = useColor)
-        elif s == 'OneraTILV10':
-            imageOneraTILV10(extensions = e, useColor = useColor)
-        elif s == 'Gaussian':
-            imageGaussian(extensions = e, useColor = useColor)
-        elif s == 'Comparison1':
-            imageComparison1(extensions = e, useColor = useColor)
-        elif s == 'Comparison2':
-            imageComparison2(extensions = e, useColor = useColor)
-        elif s == 'Monochromatique':
-            imageMonochromatique(extensions = e, useColor = useColor)
-        elif s == 'Bichromatique':
-            imageBichromatique(extensions = e, useColor = useColor)
-
-def parseArgumentSpectrum(listOfSpectra):
-    header = 'spectrum'
-    footer = ['.' + e for e in getDefaultExtensions()]
-    listOfExtensions = [os.path.splitext(i)[1] for i in listOfSpectra]
-    listOfSpectra = [i[len(header):] if (i.startswith(header)) else i for i in listOfSpectra]
-    for f in footer:
-        listOfSpectra = [i[:len(i) - len(f)] if (i.endswith(f)) else i for i in listOfSpectra]
-    listOfSpectra = [i[0].upper() + i[1:] for i in listOfSpectra]
-    return listOfSpectra, listOfExtensions
+def generateImages(e, useColor = False):
+    imagePiersonMoskowitz(extensions = e, useColor = useColor)
+    imageJonswap(extensions = e, useColor = useColor)
+    imageOchi(extensions = e, useColor = useColor)
+    imageBretschneider(extensions = e, useColor = useColor)
+    imageITTC(extensions = e, useColor = useColor)
+    imageVignatBovis(extensions = e, useColor = useColor)
+    imageOneraTILV10(extensions = e, useColor = useColor)
+    imageGaussian(extensions = e, useColor = useColor)
+    imageComparison1(extensions = e, useColor = useColor)
+    imageComparison2(extensions = e, useColor = useColor)
+    imageMonochromatique(extensions = e, useColor = useColor)
+    imageBichromatique(extensions = e, useColor = useColor)
 
 def getListOfPossibleImages():
     return ['PiersonMoskowitz', 'Jonswap', 'Ochi', \
@@ -420,35 +397,10 @@ def getListOfPossibleImages():
             'Comparison1', 'Comparison2', 'Monochromatique', 'Bichromatique']
 
 if __name__ == "__main__":
-    def doesSpectrumImagesExist(s, extensions = getDefaultExtensions()):
-        if extensions is None:
-            extensions = getDefaultExtensions()
-        if isinstance(extensions, (str, unicode)):
-            if len(extensions) == 0:
-                extensions = getDefaultExtensions()
-            else:
-                extensions = [extensions]
-        extensions = [e if e.startswith('.') else '.' + e for e in extensions]
-        return all([os.path.isfile('spectrum' + s + e) for e in extensions])
     parser = argparse.ArgumentParser(description = 'Script to generate different images.')
-    parser.add_argument("-i", "--images",
-                        help = "Name of the images to generate. If input is a empty, then all images will be generated." +
-                               "Default is \"{0}\"".format(' '.join(getListOfPossibleImages())),
-                        nargs = '*',
-                        default = getListOfPossibleImages())
-    parser.add_argument("-f", "--force", action = "store_true",
-                        help = "Option used to force the generation of images, even if they exist. Default is false",
-                        default = False)
     parser.add_argument("-c", "--color", action = "store_true",
                         help = "Option to use color. Default is false",
                         default = False)
     args = parser.parse_args()
-
-    listOfSpectra, listOfExtensions = parseArgumentSpectrum(args.images)
-    if args.force:
-        for s, e in zip(listOfSpectra, listOfExtensions):
-            generateImages(s, e, args.color)
-    else:
-        for s, e in zip(listOfSpectra, listOfExtensions):
-            if not doesSpectrumImagesExist(s, e):
-                generateImages(s, e, args.color)
+    generateImages('png', args.color)
+    generateImages('svg', args.color)
