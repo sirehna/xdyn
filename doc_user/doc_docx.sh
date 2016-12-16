@@ -5,4 +5,7 @@ then
 else
     f=user_guide_fr
 fi
-sed 's/svg/png/g' ${f}.md | pandoc -s --latexmathml --highlight-style pygments -o ${f}.docx
+cat introduction.md interfaces.md modeles_environnementaux.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_*.md > concatenated_doc.md
+cat concatenated_doc.md | sed -e 's/svg/png/g' > concatenated_doc2.md
+pandoc -s --latexmathml --highlight-style pygments -t docx -o ${f}.docx concatenated_doc2.md
+rm -f concatenated_doc.md concatenated_doc2.md

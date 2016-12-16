@@ -130,7 +130,8 @@ IF(PANDOC)
                        )
 
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.docx
-                       COMMAND pandoc -s --toc --mathml -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t html --highlight-style pygments -o doc.docx
+                       #COMMAND pandoc --toc -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t docx --highlight-style pygments -o doc.docx
+                       COMMAND ./doc_docx.sh doc
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
                        DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
                        )
