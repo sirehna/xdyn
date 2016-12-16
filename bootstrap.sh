@@ -43,6 +43,9 @@ sudo pip3 install cx_Freeze-4.3.4/
 # MATLPLOTLIB
 sudo apt-get install python3-matplotlib texlive-fonts-recommended texlive-latex-extra dvipng -y
 
+# INKSCAPE to convert SVG to PNG
+sudo apt-get install inkscape -y
+
 # DOXYGEN
 sudo apt-get install doxygen -y
 
