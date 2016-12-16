@@ -81,19 +81,19 @@ sudo chown -R vagrant boost_1_60_0
 sudo chgrp -R vagrant boost_1_60_0
 
 
-# GMOCK
+# Google Test
 cd /vagrant/code
-if [ "$(ls -A eigen)" ]; then
-    echo "Using git submodule's version of GMock"
+if [ "$(ls -A google-test)" ]; then
+    echo "Using git submodule's version of google-test"
 else
-    echo "GMock wasn't cloned for some reason (maybe you forgot to specify --recursive?): using version from the Internet"
-    sudo rm -rf googletest
-    git clone https://github.com/google/googletest.git googletest
-    cd googletest
+    echo "google-test wasn't cloned for some reason (maybe you forgot to specify --recursive?): using version from the Internet"
+    sudo rm -rf google-test
+    git clone https://github.com/google/googletest.git google-test
+    cd google-test
     git checkout release-1.8.0
     cd ..
-    sudo chown -R vagrant gmock
-    sudo chgrp -R vagrant gmock
+    sudo chown -R vagrant google-test
+    sudo chgrp -R vagrant google-test
 fi
 
 # EIGEN
