@@ -194,6 +194,10 @@ sudo dpkg -i ssc.deb
 echo "export LC_ALL=\"en_US.UTF-8\"" > env
 sudo mv env /etc/environment
 
+# SPT (Sirehna Python Toolbox) for module report
+sudo apt-get install python3-h5py python3-yaml python3-jinja2 -y
+cd /vagrant && sudo pip3 install spt-0.0.0-py2.py3-none-any.whl
+
 # FIRST BUILD
 cd /vagrant/code
 mkdir build_vagrant
@@ -202,3 +206,6 @@ cmake .. -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT:PATH=${BOOST_INSTALL} -DHDF5_DI
 ninja
 cpack
 
+# Add X-Dyn to the path so module report can call it
+export PATH=$PATH:/vagrant/code/build_vagrant/executables
+echo "PATH=$PATH:/vagrant/code/build_vagrant/executables" >> ~/.bashrc
