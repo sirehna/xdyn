@@ -268,6 +268,8 @@ Enfin, le fichier `xdyn_demos.m` permet de lancer les différents tutoriels.
 
 Il est également possible d'utiliser l'environnement matlab pour analyser des simulations déjà réalisées.
 Par exemple le script demoMatLab.m va lire le fichier tutorial_01_falling_ball.h5 qui aura préalablement été généré à partir de la commande :
+
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tutorial_01_falling_ball.h5
 ~~~~~~~~~~~~~~~~~~~~
+
