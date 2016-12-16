@@ -567,3 +567,4 @@ sens.
   Its Mobile Device Application*, 2011, Zayar Thein, Department of Shipping and
   Marine Technology, CHALMERS UNIVERSITY OF TECHNOLOGY, Göteborg, Sweden,
   page 18.
+
