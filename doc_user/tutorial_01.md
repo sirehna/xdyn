@@ -13,8 +13,8 @@ pesanteur.
 
 ### Écriture du fichier de configuration du simulateur.
 
-Le fichier d'entrée du simulateur est au format [YAML](http://www.yaml.org) (une extension du format
-JSON).
+Le fichier d'entrée du simulateur est au format [YAML](http://www.yaml.org)
+(une extension du format JSON).
 
 On commence par définir les conventions de rotation (décrite
 [ici](##rotations)):
@@ -190,16 +190,22 @@ La simulation peut s'exécuter comme suit :
 ./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-En exécutant cette commande, les résultats sont sauvegardés vers les sorties définies dans la section `output`.  
-On peut également les rediriger vers la sortie standard en précisant le format texte de sortie (csv,tsv ou json) :
+En exécutant cette commande, les résultats sont sauvegardés vers les sorties
+définies dans la section `output`.
+On peut également les rediriger vers la sortie standard en précisant le format
+texte de sortie (csv, tsv ou json):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o csv
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On peut également spécifier directement le fichier de sortie (le format est automatiquement détecté à partir de l'extension, parmi les formats disponibles) :
+On peut également spécifier directement le fichier de sortie
+(le format est automatiquement détecté à partir de l'extension,
+parmi les formats disponibles) :
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On peut également changer l'instant initial (étant entendu que les conditions
 initiales définies dans le fichier YAML s'appliquent à cet instant initial,
@@ -228,7 +234,8 @@ On peut chaîner les post-traitements (tracés) à la suite de la simulation :
 ./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o csv | python plot.py "tutorial_01" 0 3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cette dernière commande va utiliser le script `plot.py` présent dans le répertoire `demos` pour générer l'image `tutorial_01.svg` (insérée ci-dessous).
+Cette dernière commande va utiliser le script `plot.py` présent dans le
+répertoire `demos` pour générer l'image `tutorial_01.svg` (insérée ci-dessous).
 
 ### Résultats
 
