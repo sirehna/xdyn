@@ -271,8 +271,7 @@ $$\mathbf{F}_{\textrm{FK}}(t)=\int_{P=(x,y,z)\in S}
 p_{\textrm{dyn}}(x,y,z,t)dS(P)$$
 
 L'expression de la pression dynamique dépend du modèle de houle utilisé et est
-décrite (ici pour la houle d'Airy)
-[ici](#modèles-de-houle-1).
+décrite [ici](#modèles-de-houle-1) (pour la houle d'Airy).
 
 La pression totale dans le fluide, en un point donné, est la somme de la
 pression hydrostatique et de la pression dynamique. Lorsque l'on utilise
