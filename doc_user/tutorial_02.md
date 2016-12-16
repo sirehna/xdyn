@@ -71,8 +71,8 @@ initial velocity of body frame relative to NED:
     r: {value: 0, unit: rad/s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les données dynamiques comprennent la masse, la matrice d'inertie, les inerties ajoutées
-et la position du centre d'inertie :
+Les données dynamiques comprennent la masse, la matrice d'inertie, les inerties
+ajoutées et la position du centre d'inertie :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 dynamics:
