@@ -190,7 +190,7 @@ cd /vagrant
 sudo dpkg -i ssc.deb
 
 # The following is necessary otherwise boost::filesystem::unique_path() fails with "locale::facet::_S_create_c_locale name not valid"
-# which means BlockedDOFTest.should_not_throw_if_CSV_file_exists fails
+# which means test BlockedDOFTest.should_not_throw_if_CSV_file_exists fails
 echo "export LC_ALL=\"en_US.UTF-8\"" > env
 sudo mv env /etc/environment
 
