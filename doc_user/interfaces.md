@@ -39,7 +39,9 @@ Le paramètre `-w` ne sera pas décrit ici mais dans [le fichier de description
 des modèles](#waves).
 
 ## Exemples
-Les exemples suivant peuvent-être lancés à partir du répertoire demos  
+
+Les exemples suivants peuvent être lancés à partir du répertoire `demos`:
+
 ### Simulation avec un solveur Runge-Kutta d'ordre 4 en commençant à t=0
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
@@ -52,8 +54,8 @@ ou si l'on utilise une invite de commande MS-DOS :
 xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
 ~~~~~~~~~~~~~~~~~~~~
 
-En rajoutant l'option -o csv, les sorties se font sur la sortie standard (le terminal). Ceci
-permet de chaîner les traitements (pipe UNIX), par exemple :
+En rajoutant l'option -o csv, les sorties se font sur la sortie standard
+(le terminal). Ceci permet de chaîner les traitements (pipe UNIX), par exemple :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv| python plot.py test 0 3
@@ -233,9 +235,11 @@ output:
   `p(body)`, `q(body)`, `r(body)`, `qr(body)`, `qi(body)`, `qj(body)`,
   `qk(body)`. `body` doit être remplacé par le nom du corps (`ball` dans
   l'exemple ci-dessus). Les sorties d'effort sont `Fx(modèle,corps,repère)`,
-  `Fy(modèle,corps,repère)`, `Fz(modèle,corps,repère)`, `Mx(modèle,corps,repère)`, `My(modèle,corps,repère)`,
-  `Mz(modèle,corps,repère)` où `modèle` est le nom du modèle d'effort (renseigné dans la
-  clef `modèle` de chaque modèle d'effort), `corps` est le nom du corps sur
+  `Fy(modèle,corps,repère)`, `Fz(modèle,corps,repère)`,
+  `Mx(modèle,corps,repère)`, `My(modèle,corps,repère)`,
+  `Mz(modèle,corps,repère)` où `modèle` est le nom du modèle d'effort
+  (renseigné dans la clef `modèle` de chaque modèle d'effort),
+  `corps` est le nom du corps sur
   lequel agit l'effort et `repère` est le repère d'expression (qui ne peut être
   que `NED` ou le nom du corps). Les sorties de houle sont notées
   `waves` et leur contenu est décrit dans la section [Modèle de
@@ -245,8 +249,8 @@ output:
 # Interface MatLab
 
 `X-Dyn` peut être appelé depuis le logiciel `MatLab`.
-Cela présente l'avantage de disposer dans la foulée d'un environnement graphique pour afficher
-les résultats de simulation.
+Cela présente l'avantage de disposer dans la foulée d'un environnement graphique
+pour afficher les résultats de simulation.
 
 Voici les fonctions de base pour travailler avec `X-Dyn`.
 
@@ -262,12 +266,16 @@ Voici les fonctions de base pour travailler avec `X-Dyn`.
    rotation de chaque corps dans le repère de chaque repère.
 - `xdyn_animate3d.m` permet de lancer une animation 3d d'une simulation avec
   les objets simulés et le champ de vagues lorsque celui-ci est exporté.
-- `xdyn_extractMatLabScript` permet d'extraire les scripts matlab de dépouillement intégrés dans le fichier de sortie hdf5
+- `xdyn_extractMatLabScript` permet d'extraire les scripts `MatLab` de
+  dépouillement intégrés dans le fichier de sortie hdf5
 
 Enfin, le fichier `xdyn_demos.m` permet de lancer les différents tutoriels.
 
-Il est également possible d'utiliser l'environnement matlab pour analyser des simulations déjà réalisées.
-Par exemple le script demoMatLab.m va lire le fichier tutorial_01_falling_ball.h5 qui aura préalablement été généré à partir de la commande :
+Il est également possible d'utiliser l'environnement `MatLab` pour analyser des
+simulations déjà réalisées.
+Par exemple, le script `xdyn_demos.m` va lire le fichier
+`tutorial_01_falling_ball.h5` qui aura préalablement été généré à partir
+de la commande :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tutorial_01_falling_ball.h5
