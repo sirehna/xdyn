@@ -226,6 +226,9 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
 - model: airy
   depth: {value: 100, unit: m}
   seed of the random data generator: 0
+  stretching:
+     delta: 0
+     h: 100
   directional spreading:
      type: dirac
      waves propagating to: {value: 90, unit: deg}
@@ -237,6 +240,7 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `model` : actuellement, ne peut valoir qu'`airy`.
+- `stretching` : voir le paragraphe ci-dessous.
 - `depth` : profondeur (distance entre le fond et la surface). 0 pour
 l'approximation "profondeur infinie". Utilisé pour le calcul du nombre d'onde.
 - `seed of the random data generator` : germe utilisé pour la génération des
@@ -501,7 +505,225 @@ directional spreading:
 
 `waves propagating to` donne la direction de propagation $\gamma_0$.
 
+## Stretching de la houle
 
+Sous les hypothèses précédentes, la vitesse orbitale des particules d'eau
+par rapport au référentiel NED (projetée sur l'axe $X$ du repère BODY) s'écrit :
+
+$$u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+qui, en profondeur infinie, s'écrit :
+
+$$u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+e^{-k_i z}
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+La valeur du terme $e^{-k_i z}$ est inférieure à 1 pour les points en-dessous
+du niveau moyen (-$z=0$), mais elle croît rapidement pour les points situés
+au-dessus de ce plan, et ce d'autant plus que le nombre d'onde $k$ est grand,
+tandis qu'elle décroît en-dessous du niveau moyen de la mer.
+
+Ceci implique que les contributions (pour le calcul de vitesse orbitale) des
+composantes haute fréquence de la houle seront fortement exagérées et
+irréalistes. Les particules au-dessus du niveau moyen de la mer (notamment sur
+la crête des vagues) seront ainsi vues comme oscillant à des fréquences élevées
+tandis que celles dans le creux des vagues oscilleront plus lentement : le
+niveau moyen de la mer agit donc comme une frontière entre l'amplification et
+l'atténuation des hautes fréquences, ce qui n'est pas physique.
+
+Pour pallier à cet inconvénient, on peut utiliser des modèles dits de
+"stretching", qui permettent de recaler les vitesses orbitales à l'interface
+eau-air (le sommet ou le creux des vagues) d'une des façons décrites
+ci-dessous. Certaines de ces méthodes reviennent à étirer l'axe $z$ (d'où le
+nom de stretching).
+
+Dans X-Dyn, le stretching est renseigné dans la section `stretching` des
+modèles de houle. Le seul modèle de stretching implémenté est le delta-stretching
+et ses dérivés. On a donc le choix entre les quatre modèles de stretching suivants :
+
+- **absence de stretching** (non-recommandé pour les raisons précédemment
+  évoquées), renseigner `h: {value: 0, unit: m}` et `delta: 1`
+- **extrapolation linéaire**, en fixant $h$ à la profondeur d'eau `depth` et $\Delta=1$
+- **modèle de Wheeler**, si $h$ vaut la pronfondeur `depth` et $\Delta=0$
+- **delta stretching** pour toute autre valeur
+
+Ce qui suit est une présentation non-exhaustive de quelques modèles de stretching.
+
+### Stretching linéaire sans extrapolation
+
+Outre l'absence de stretching, le modèle le plus simple revient à bloquer la
+vitesse orbitale au-dessus du niveau de la mer $z=0$ :
+
+$$\forall z\leq 0, u(x,y,z,t) = u(x,y,0,t)$$
+
+On obtient ainsi une rupture du profil de vitesse, à la fois inesthétique et
+peu physique. Ce modèle n'est pas implémenté dans X-Dyn.
+
+### Stretching par extrapolation linéaire
+
+Ce modèle revient à prolonger le modèle de vitesse par une tangente :
+
+$$u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)$$
+
+Ce modèle peut être utilisé dans X-Dyn en fixant `h` à la profondeur d'eau
+`depth` et `delta: 1`.
+
+
+### Stretching de Wheeler
+
+On souhaite obtenir les bonnes vitesses orbitale à la surface de l'eau, c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle de houle), et au fond (en $z=h$).
+
+La vitesse orbitale s'écrit :
+
+$$u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+f(z)
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+avec
+
+$$f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}$$
+
+On cherche donc une fonction $g$ telle que :
+
+$$g(z=\eta)=f(0)$$
+$$g(z=h)=f(h)$$
+
+On peut contruire une telle fonction en prenant
+
+$$g(z) = f(z'(z))$$
+
+avec $z'(\eta)=0$ et $z'(h)=h$.
+
+On peut par exemple choisir une fonction $z\mapsto z'$ linéaire :
+
+$$z'(z)=\frac{h}{h-\eta}(z-\eta)$$
+
+ce qui donne le profil de vitesse (projetée ici sur l'axe $X$ du repère body) :
+
+$$u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\frac{\cosh\left(k\cdot\frac{h}{h-\eta(x,y,t)}(z-\eta(x,y,t))\right)}{\cosh(k\cdot h)}
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+La vitesse orbitale sur les autres axes est donnée par des formules similaires.
+
+Dans ce modèle, la masse n'est pas conservée car le laplacien du potentiel de
+vitesse n'est pas nul. Il n'y a donc pas de justification théorique à ce modèle
+de stretching. Son utilisation découle plus de son intérêt pratique : on
+constate expérimentalement que les vitesses orbitales calculées sans stretching
+sont plus loin des résultats expérimentaux que celles calculées avec
+stretching.
+
+Dans le cas du modèle de Wheeler, des campagnes d'essais montrent que les
+vitesses orbitales calculées dans les crêtes sont quelque peu sous-estimées par
+rapport aux mesures de vélocimètres laser.
+
+Ce modèle étant une forme particulière du modèle de delta-stretching, on peut
+l'utiliser dans X-Dyn en fixant $h$ à la profondeur de l'eau `depth` et
+`delta: 0`.
+
+### Stretching de Chakrabarti
+
+Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la fonction $f$
+
+$$f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}$$
+
+On remplace $\cosh(k\cdot h)$ par $\cosh(k\cdot (h+\eta(x,y,t)))$
+Sur l'axe $X$ du repère body, par exemple, on obtient ainsi le profil :
+
+$$u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot (h+\eta(x,y,t)))}
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+La vitesse sur les autres axes est donnée par des formules similaires.
+
+On constate expérimentalement que, tout comme le modèle de Wheeler, le modèle
+de Chakrabarti sous-estime les vitesses orbitales dans les crêtes.
+
+Ce modèle n'étant pas un dérivé du modèle de delta-stretching, il n'est pas
+accessible dans X-Dyn.
+
+### Delta-stretching
+
+Il s'agit d'une généralisation du modèle de Wheeler qui permet de passer
+continument de ce dernier au modèle d'extrapolation linéaire. En jouant sur ses
+paramètres, on peut retrouver trois modèles de stretching (pas de stretching,
+extrapolation linéaire et modèle de Wheeler) et c'est pour cela qu'il a été
+choisi comme modèle de référence dans X-Dyn. 
+
+Tout comme le modèle de Wheeler, on souhaite retrouver la vitesse orbitale à la surface
+au creux et à la crête des vagues, c'est-à-dire en $z=\eta$. Les auteurs de ce modèle,
+Rodenbusch et Forristal, ajoutent deux paramètres au modèle de Wheeler :
+
+- Un paramètre $h_{\Delta}$ qui contrôle la hauteur d'eau sur laquelle est
+  effectuée le stretching
+- Un paramètre $\Delta$ entre 0 et 1 (0 pour le modèle de Wheeler, 1 pour l'extrapolation linéaire)
+
+$z'$ varie de $h_{\Delta}$ à $\Delta\eta$ lorsque $z$ varie de $h_{\Delta}$ à $\eta$.
+
+On prend donc :
+
+- Pour $z>h_{\Delta}$, $z'=z$
+- Pour $z<h_{\Delta}$, $z' =(z-h_{\Delta})\frac{\Delta\eta-h_{\Delta}}{\eta-h_{\Delta}}+h_{\Delta}$
+
+- Pour $h_{\Delta}=0$ et $\Delta=1$, il n'y a pas de stretching.
+- Si $h_{\Delta}$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le modèle de Wheeler
+- Avec $h_{\Delta}$ valant `depth` et $\Delta=1$ on obtient l'extrapolation linéaire
+
+
+
+### Choix du modèle de stretching
+
+Comme les modèles de stretching n'ont pas vraiment de justification théorique,
+la seule manière de les choisir est de comparer directement avec les profils de
+vitesse mesurés (par exemple à l'aide de vélocimètres laser). Les campagnes
+d'essai réalisées jusqu'à présent n'ont pas permis de choisir de façon
+catégorique un modèle de stretching plutôt qu'un autre. Ceci vient à la fois de
+la difficulté de réaliser l'expérimentation en conditions contrôlées et
+d'obtenir une mesure fiable, mais aussi de l'importance des phénomènes
+non-linéaires, absents des modèles de stretching.
+
+### Paramétrisation dans X-Dyn
+
+Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAML du type :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: airy
+  depth: {value: 100, unit: m}
+  seed of the random data generator: 0
+  stretching:
+     delta: 0
+     h: {unit: m, value: 100}
+  directional spreading:
+     type: dirac
+     waves propagating to: {value: 90, unit: deg}
+  spectral density:
+     type: jonswap
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: s}
+     gamma: 1.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La section `stretching` contient les paramètres `h` et `delta` du modèle de delta-stretching :
+
+- Pour $h=0$ et $\Delta=1$, il n'y a pas de stretching.
+- Si $h$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le modèle de Wheeler
+- Avec $h$ valant `depth` et $\Delta=1$ on obtient l'extrapolation linéaire
 
 ## Discrétisation des spectres et des étalements
 
@@ -623,7 +845,7 @@ waves:
 
 ## Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-- *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70
+- *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70, 78 pour le stretching
 - *Sea Loads on Ships And Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 27
 - *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 75
 - *Offshore Hydromechanics*, 2001, J.M.J. Journée and W.W. Massie, Delft University of Technology, sections 6-20 and 7-11
