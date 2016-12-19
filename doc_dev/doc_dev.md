@@ -62,6 +62,7 @@ On s'assure que la mémoire allouée à la machine virtuelle ne dépasse pas un
 quart de la mémoire physique
 (`vb.memory` dans le fichier `Vagrantfile`).
 On tape `vagrant up`.
+En cas d'erreur, il peut être nécessaire de relancer 2 ou 3 fois la commande (suite au blocage par des logiciels de sécurité).
 
 La machine virtuelle Vagrant va être créée à partir d'une image de base
 (base box) qui va être configurée.
@@ -702,6 +703,13 @@ la synchronise sur le serveur.
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
 git checkout -b dev/feature1
 git push -u
+~~~~~~~~~~~~~~~~~~~~
+
+Dans les versions de git>2, il faut faire :
+
+~~~~~~~~~~~~~~~~~~~~ {.bash}
+git checkout -b dev/feature1
+git push --set-upstream origin dev/feature1
 ~~~~~~~~~~~~~~~~~~~~
 
 Il est ensuite possible de modifier les fichiers ou d'ajouter des fichiers puis
