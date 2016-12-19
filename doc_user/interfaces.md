@@ -42,6 +42,7 @@ des modèles](#waves).
 
 Les exemples suivants peuvent être lancés à partir du répertoire `demos`:
 
+
 ### Simulation avec un solveur Runge-Kutta d'ordre 4 en commençant à t=0
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
@@ -249,6 +250,7 @@ output:
 # Interface MatLab
 
 `X-Dyn` peut être appelé depuis le logiciel `MatLab`.
+Cela présente l'avantage de disposer dans la foulée d'un environnement graphique pour afficher
 Cela présente l'avantage de disposer dans la foulée d'un environnement graphique
 pour afficher les résultats de simulation.
 
