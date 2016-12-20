@@ -21,6 +21,13 @@ struct YamlDiscretization
     double energy_fraction; //!< Between 0 and 1: sum(S(omega[i]).S(psi[j]),taken into account)/sum(S(omega[i]).S(psi[j]),total)
 };
 
+struct YamlStretching
+{
+    YamlStretching();
+    double delta; //!< 0 for Wheeler stretching, 1 for linear extrapolation
+    double h; //!< Depth (in meters) over which the stretching is taken into account. Should usually be equal to "depth" (or 0 for no stretching)
+};
+
 struct YamlSpectra
 {
     YamlSpectra();
@@ -31,6 +38,7 @@ struct YamlSpectra
     std::string spectral_density_type;      //!< Type of spectrum (eg. jonswap)
     std::string spectral_density_yaml;      //!< Spectral model parameters in YAML format
     double depth;                           //!< Water depth (in meters): 0 for infinite depth
+    YamlStretching stretching;              //!< Stretching model for orbital wave velocities (delta-stretching model)
 };
 
 struct YamlWaveOutput

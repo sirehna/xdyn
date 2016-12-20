@@ -17,7 +17,8 @@ directional_spreading_type(std::string()),
 directional_spreading_yaml(std::string()),
 spectral_density_type(std::string()),
 spectral_density_yaml(std::string()),
-depth(0)
+depth(0),
+stretching()
 {}
 
 YamlWaveOutput::YamlWaveOutput() : frame_of_reference(""),
@@ -29,10 +30,15 @@ YamlWaveOutput::YamlWaveOutput() : frame_of_reference(""),
              ny(0)
 {}
 
-YamlWaveModel::YamlWaveModel():
-discretization(YamlDiscretization()),
-spectra(std::vector<YamlSpectra>()),
-output(YamlWaveOutput())
+YamlStretching::YamlStretching():
+        delta(0),
+        h(0)
+{}
+
+YamlWaveModel::YamlWaveModel()
+:discretization()
+,spectra()
+,output()
 {}
 
 YamlJonswap::YamlJonswap():
