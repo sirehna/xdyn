@@ -52,11 +52,11 @@ IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
     INSTALL(FILES "${PROJECT_SOURCE_DIR}/../html/websocket_test.html"
             DESTINATION server)
 ELSE()
-    MESSAGE(STATUS "X-DYN's server will be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
+    MESSAGE(STATUS "X-DYN's server will NOT be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
     ADD_CUSTOM_COMMAND(
         TARGET xdynserver
         POST_BUILD
-        COMMENT "X-DYN's server will be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
+        COMMENT "X-DYN's server will NOT be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
 ENDIF()
 
 ADD_CUSTOM_TARGET(
