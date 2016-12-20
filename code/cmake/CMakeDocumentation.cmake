@@ -123,10 +123,15 @@ IF(PANDOC)
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
            )
 
+    ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images
+                     ${CMAKE_CURRENT_BINARY_DIR}/doc_user_images)
+
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html
                        COMMAND pandoc -s --toc --mathml -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t html --highlight-style pygments -o doc.html -c stylesheet.css
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
-                       DEPENDS ${DOCUMENTATION_FILES_FULL_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/stylesheet.css
+                       DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
+                               ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/stylesheet.css
+                               doc_images_svg
                        )
 
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.docx
@@ -134,12 +139,14 @@ IF(PANDOC)
                        COMMAND ./doc_docx.sh doc
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
                        DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
+                               doc_images_png
                        )
 
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.pdf
                        COMMAND ./doc_pdf.sh
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
                        DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
+                               doc_images_png
                        )
 
     LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html)
