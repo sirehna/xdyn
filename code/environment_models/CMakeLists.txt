@@ -18,6 +18,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/SumOfWaveSpectralDensities.cpp
         src/SumOfWaveDirectionalSpreadings.cpp
         src/WaveDirectionalSpreading.cpp
+        src/Stretching.cpp
         )
 
 # Using C++ 2011
