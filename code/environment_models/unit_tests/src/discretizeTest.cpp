@@ -16,6 +16,8 @@
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "InvalidInputException.hpp"
+#include "Stretching.hpp"
+#include "YamlWaveModelInput.hpp"
 
 discretizeTest::discretizeTest() : a(ssc::random_data_generator::DataGenerator(8421))
 {
@@ -41,7 +43,9 @@ TEST_F(discretizeTest, example)
     const double gamma = 1.4;
     const JonswapSpectrum S(Hs, Tp, gamma);
     const Cos2sDirectionalSpreading D(PI/4, 2);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000);
+    YamlStretching y;
+    const Stretching s(y);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
 //! [discretizeTest example]
 //! [discretizeTest expected output]
     ASSERT_EQ(1000, A.Dj.size());
@@ -57,7 +61,9 @@ TEST_F(discretizeTest, Dirac_in_frequency)
     const double Hs = 3;
     const DiracSpectralDensity S(omega0, Hs);
     const Cos2sDirectionalSpreading D(PI/4, 2);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000);
+    YamlStretching y;
+    const Stretching s(y);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
     ASSERT_EQ(1000, A.Dj.size());
     ASSERT_EQ(1, A.Si.size());
     ASSERT_DOUBLE_EQ(1, A.domega);
@@ -72,7 +78,9 @@ TEST_F(discretizeTest, Dirac_in_direction)
     const double gamma = 1.4;
     const JonswapSpectrum S(Hs, Tp, gamma);
     const DiracDirectionalSpreading D(PI/4);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000);
+    YamlStretching y;
+    const Stretching s(y);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
     ASSERT_EQ(1, A.Dj.size());
     ASSERT_EQ(1000, A.Si.size());
     ASSERT_DOUBLE_EQ(2.99/999, A.domega);
@@ -90,7 +98,9 @@ TEST_F(discretizeTest, should_throw_if_omega_min_is_negative)
     const double omega_min = a.random<double>().no().greater_than(0);
     const double omega_max = a.random<double>().greater_than(0);
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_min_is_zero)
@@ -103,7 +113,9 @@ TEST_F(discretizeTest, should_throw_if_omega_min_is_zero)
     const double omega_min = 0;
     const double omega_max = a.random<double>().greater_than(0);
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_negative)
@@ -116,7 +128,9 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_negative)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().no().greater_than(0);
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_zero)
@@ -129,7 +143,9 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_zero)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = 0;
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_lower_than_omega_min)
@@ -142,7 +158,9 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_lower_than_omega_min)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().no().greater_than(omega_min);
     const size_t nfreq = a.random<size_t>();
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_nfreq_is_zero)
@@ -155,7 +173,9 @@ TEST_F(discretizeTest, should_throw_if_nfreq_is_zero)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(0);
     const size_t nfreq = 0;
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_nfreq_is_one_but_omega_min_is_not_omega_max)
@@ -168,7 +188,9 @@ TEST_F(discretizeTest, should_throw_if_nfreq_is_one_but_omega_min_is_not_omega_m
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(0);
     const size_t nfreq = 1;
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_not_one)
@@ -181,12 +203,16 @@ TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_n
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = omega_min;
     const size_t nfreq = a.random<size_t>().but_not(1);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq), InvalidInputException);
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
 }
 
 TEST_F(discretizeTest, flatten)
 {
-    DiscreteDirectionalWaveSpectrum d;
+    YamlStretching ss;
+    Stretching sss(ss);
+    DiscreteDirectionalWaveSpectrum d(sss);
     d.Si = a.random_vector_of<double>().of_size(3);
     d.Dj = a.random_vector_of<double>().of_size(4);
     d.k = a.random_vector_of<double>().of_size(3);

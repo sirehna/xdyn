@@ -16,6 +16,7 @@
 #include "EnvironmentAndFrames.hpp"
 #include "discretize.hpp"
 #include "HDBParser.hpp"
+#include "Stretching.hpp"
 
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
@@ -89,9 +90,9 @@ DiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWave
     TR1(shared_ptr)<WaveDirectionalSpreading> directional_spreading = parse_directional_spreading(spectrum);
     if (spectrum.depth>0)
     {
-        return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.n);
+        return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.n, Stretching(spectrum.stretching));
     }
-    return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.n, spectrum.depth);
+    return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.n, spectrum.depth, Stretching(spectrum.stretching));
 }
 
 

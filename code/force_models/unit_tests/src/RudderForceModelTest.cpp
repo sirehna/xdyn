@@ -21,6 +21,8 @@
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
 #include "yaml_data.hpp"
+#include "YamlWaveModelInput.hpp"
+#include "Stretching.hpp"
 
 namespace ssc
 {
@@ -225,7 +227,11 @@ TR1(shared_ptr)<WaveModel> RudderForceModelTest::get_wave_model() const
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
     const size_t nfreq = a.random<size_t>().between(2,100);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq);
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const Stretching ss(ys);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
 
     return TR1(shared_ptr)<WaveModel>(new Airy(A, phi));
 }

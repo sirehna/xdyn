@@ -12,6 +12,8 @@
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 
+class Stretching;
+
 /**  \brief Only select the most important spectrum components & create single vector
   *  \details No need to loop on all frequencies & all directions: we only select
   *  the most important ones (i.e. those representing a given ratio of the total
@@ -33,7 +35,8 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
                                            const WaveDirectionalSpreading& D, //!< Spatial spectrum
                                            const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
                                            const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-                                           const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+                                           const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+                                           const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                                            );
 
 /**  \author cec
@@ -47,7 +50,8 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
                                            const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
                                            const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
                                            const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-                                           const double h                     //!< Water depth (in meters)
+                                           const double h,                    //!< Water depth (in meters)
+                                           const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                                            );
 
 /**  \brief Utility function used by the discretize function. Infinite depth approximation

@@ -13,7 +13,8 @@
 #include "SurfaceElevationFromWavesTest.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 #include "YamlWaveModelInput.hpp"
-
+#include "YamlWaveModelInput.hpp"
+#include "Stretching.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
@@ -42,7 +43,11 @@ TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model(const size_t
     const double omega0 = 2*PI/Tp;
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq);
+    YamlStretching y;
+    y.h = 0;
+    y.delta = 1;
+    const Stretching s(y);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s);
     int random_seed = 0;
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
 }

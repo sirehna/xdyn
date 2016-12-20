@@ -25,7 +25,7 @@ FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
 
 }
 
-DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :
+DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum(const Stretching& s) :
                     Si(),
                     Dj(),
                     omega(),
@@ -35,7 +35,8 @@ DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :
                     domega(1),
                     dpsi(1),
                     pdyn_factor(),
-                    pdyn_factor_sh()
+                    pdyn_factor_sh(),
+                    stretching(s)
 
 {
 }

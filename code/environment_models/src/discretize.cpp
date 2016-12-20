@@ -20,17 +20,19 @@ DiscreteDirectionalWaveSpectrum common(
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const Stretching& stretching       //!< Stretching model for orbital wave velocities (delta-stretching model)
         );
 DiscreteDirectionalWaveSpectrum common(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const Stretching& stretching       //!< Stretching model for orbital wave velocities (delta-stretching model)
         )
 {
-    DiscreteDirectionalWaveSpectrum ret;
+    DiscreteDirectionalWaveSpectrum ret(stretching);
     ret.omega = S.get_angular_frequencies(omega_min, omega_max, nfreq);
     ret.psi = D.get_directions(nfreq);
     if (ret.omega.size()>1) ret.domega = ret.omega[1]-ret.omega[0];
@@ -47,10 +49,11 @@ DiscreteDirectionalWaveSpectrum discretize(
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
         )
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
+    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq,stretching);
     ret.k.reserve(ret.omega.size());
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega));
     ret.pdyn_factor = [](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta);};
@@ -70,10 +73,11 @@ DiscreteDirectionalWaveSpectrum discretize(
         const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-        const double h                     //!< Water depth (in meters)
+        const double h,                    //!< Water depth (in meters)
+        const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
         )
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
+    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq,stretching);
     ret.k.reserve(ret.omega.size());
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
     ret.pdyn_factor = [h](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,h,eta);};
