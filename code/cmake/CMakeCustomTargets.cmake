@@ -60,16 +60,6 @@ ELSE()
 ENDIF()
 
 ADD_CUSTOM_TARGET(
-    md5sum
-    COMMAND find . -type f \\\( -name \"*.c\" -o -name \"*.h\" \\\) -print0 | xargs -0 md5sum > "${PROJECT_BINARY_DIR}/md5sum.txt"
-    COMMAND find . -type f \\\( -name \"*.cpp\" -o -name \"*.hpp\" \\\) -print0 | xargs -0 md5sum >> "${PROJECT_BINARY_DIR}/md5sum.txt"
-    COMMAND find . -type f \\\( -name \"*.cxx\" -o -name \"*.hxx\" \\\) -print0 | xargs -0 md5sum >> "${PROJECT_BINARY_DIR}/md5sum.txt"
-    COMMAND find . -type f -name \"*.sh\" -print0 | xargs -0 md5sum >> "${PROJECT_BINARY_DIR}/md5sum.txt"
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    COMMENT "Create a file named md5sum.txt that contains the md5 hash of all source files"
-)
-
-ADD_CUSTOM_TARGET(
     archive
     COMMAND export dateSTR=`date +'%Y_%m_%d__%H_%M'` &&
             export pkg0=`echo $$PWD` &&
