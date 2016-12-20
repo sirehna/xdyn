@@ -16,6 +16,7 @@
 void operator >> (const YAML::Node& node, YamlDiscretization& g);
 void operator >> (const YAML::Node& node, YamlSpectra& g);
 void operator >> (const YAML::Node& node, YamlWaveOutput& g);
+void operator >> (const YAML::Node& node, YamlStretching& g);
 
 void get_yaml(const YAML::Node& node, std::string& out);
 
@@ -89,6 +90,21 @@ void operator >> (const YAML::Node& node, YamlDiscretization& g)
     node["energy fraction"] >> g.energy_fraction;
 }
 
+void operator >> (const YAML::Node& node, YamlStretching& g)
+{
+    try
+    {
+        ssc::yaml_parser::parse_uv(node["h"], g.h);
+        node["delta"] >> g.delta;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing wave stretching parameters ('wave/spectra/stretching' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+    }
+}
+
 
 void get_yaml(const YAML::Node& node, std::string& out)
 {
@@ -107,6 +123,7 @@ void operator >> (const YAML::Node& node, YamlSpectra& g)
 
     node["spectral density"]["type"] >> g.spectral_density_type;
     get_yaml(node["spectral density"], g.spectral_density_yaml);
+    node["stretching"] >> g.stretching;
 
     ssc::yaml_parser::parse_uv(node["depth"], g.depth);
 }

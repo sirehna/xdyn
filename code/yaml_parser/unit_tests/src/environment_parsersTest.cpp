@@ -159,3 +159,11 @@ TEST_F(environment_parsersTest, can_parse_depth_for_wave_models)
     ASSERT_DOUBLE_EQ(1700, yaml.spectra[0].depth);
     ASSERT_DOUBLE_EQ(12, yaml.spectra[1].depth);
 }
+
+TEST_F(environment_parsersTest, can_parse_stretching_data)
+{
+    ASSERT_DOUBLE_EQ(123, yaml.spectra.at(0).stretching.delta);
+    ASSERT_DOUBLE_EQ(100, yaml.spectra.at(0).stretching.h);
+    ASSERT_DOUBLE_EQ(456, yaml.spectra.at(1).stretching.delta);
+    ASSERT_DOUBLE_EQ(101, yaml.spectra.at(1).stretching.h);
+}
