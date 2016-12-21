@@ -34,8 +34,16 @@ FOREACH(s ${SVG_IMAGES})
                        )
 ENDFOREACH()
 
+# One checks if command FIND_PACKAGE(PythonInterp 3.4) has been run from an
+# upper CMakeLists.txt project
+#
+# If not, we choose the default python executable
+IF(NOT PYTHONINTERP_FOUND)
+    SET(PYTHON_EXECUTABLE python)
+ENDIF()
+
 ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/spectrumBretschneider.svg
-                   COMMAND python spectrum.py
+                   COMMAND ${PYTHON_EXECUTABLE} spectrum.py
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/spectrum.py
                    COMMENT "Generating spectra images"
