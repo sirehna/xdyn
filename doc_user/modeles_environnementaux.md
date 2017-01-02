@@ -165,9 +165,14 @@ $$p_{\textrm{dyn}} = \rho\cdot g
 - $g$ désigne l'accélération de la pesanteur (9.81 $m/s^2$)
 - $\rho$ est la densité volumique du fluide (en $kg/m^3$)
 
-Lorsque la profondeur $h$ est très grande devant $z$, on obtient :
+Lorsque la profondeur $h$ est très grande devant $z$, les cosinus hyperboliques sont équivalents à des exponentielles :
 
-$$p_{\textrm{dyn}} = \rho\cdot g
+$$\cosh x\sim_{x\infty} \frac{e^x}{2}$$
+
+
+on obtient donc :
+
+$$p_{\textrm{dyn}} \sim_{h\infty}  \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
 e^{-k_i\cdot z}\cos(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
 \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
@@ -196,7 +201,9 @@ $$w = \frac{\partial \phi}{\partial z} = g
 
 #### En profondeur infinie
 
-Lorsque $k\cdot h >3$, on peut utiliser l'approximation suivante:
+Lorsque $k\cdot h >3$, les cosinus hyperboliques peuvent être considérés comme
+équivalents à des exponentielles (erreur relative inférieure à $2.5\times
+10^{-3}$). On peut donc utiliser l'approximation suivante:
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
@@ -526,13 +533,14 @@ e^{-k_i z}
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 La valeur du terme $e^{-k_i z}$ est inférieure à 1 pour les points en-dessous
-du niveau moyen (-$z=0$), mais elle croît rapidement pour les points situés
+du niveau moyen (surface $z=0$), mais elle croît rapidement pour les points situés
 au-dessus de ce plan, et ce d'autant plus que le nombre d'onde $k$ est grand,
-tandis qu'elle décroît en-dessous du niveau moyen de la mer.
-
-Ceci implique que les contributions (pour le calcul de vitesse orbitale) des
-composantes haute fréquence de la houle seront fortement exagérées et
-irréalistes. Les particules au-dessus du niveau moyen de la mer (notamment sur
+tandis qu'elle décroît en-dessous du niveau moyen de la mer. Ainsi, pour deux
+points proches sur la surface libre (non-horizontale) l'un à $z>0$ et l'autre
+à $z<0$, la vitesse orbitale sera très différente : les contributions des
+composantes haute fréquence de la houle seront fortement amplifiées pour le point
+à $z>0$ et fortement atténuées pour le point à $z<0$.
+Les particules au-dessus du niveau moyen de la mer (notamment sur
 la crête des vagues) seront ainsi vues comme oscillant à des fréquences élevées
 tandis que celles dans le creux des vagues oscilleront plus lentement : le
 niveau moyen de la mer agit donc comme une frontière entre l'amplification et
@@ -613,7 +621,7 @@ ce qui donne le profil de vitesse (projetée ici sur l'axe $X$ du repère body) 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 \sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
-\frac{\cosh\left(k\cdot\frac{h}{h-\eta(x,y,t)}(z-\eta(x,y,t))\right)}{\cosh(k\cdot h)}
+\frac{\cosh\left(k\cdot h\frac{h-z}{h-\eta(x,y,t)}\right)}{\cosh(k\cdot h)}
 \cdot\cos(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
