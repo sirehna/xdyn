@@ -20,19 +20,17 @@ DiscreteDirectionalWaveSpectrum common(
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-        const Stretching& stretching       //!< Stretching model for orbital wave velocities (delta-stretching model)
+        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
         );
 DiscreteDirectionalWaveSpectrum common(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-        const Stretching& stretching       //!< Stretching model for orbital wave velocities (delta-stretching model)
+        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
         )
 {
-    DiscreteDirectionalWaveSpectrum ret(stretching);
+    DiscreteDirectionalWaveSpectrum ret;
     ret.omega = S.get_angular_frequencies(omega_min, omega_max, nfreq);
     ret.psi = D.get_directions(nfreq);
     if (ret.omega.size()>1) ret.domega = ret.omega[1]-ret.omega[0];
@@ -53,11 +51,11 @@ DiscreteDirectionalWaveSpectrum discretize(
         const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
         )
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq,stretching);
+    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     ret.k.reserve(ret.omega.size());
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega));
-    ret.pdyn_factor = [](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta);};
-    ret.pdyn_factor_sh = [](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta);};
+    ret.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
+    ret.pdyn_factor_sh = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
     return ret;
 }
 
@@ -77,11 +75,11 @@ DiscreteDirectionalWaveSpectrum discretize(
         const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
         )
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq,stretching);
+    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     ret.k.reserve(ret.omega.size());
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
-    ret.pdyn_factor = [h](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,h,eta);};
-    ret.pdyn_factor_sh = [h](const double k, const double z, const double eta){return dynamic_pressure_factor_sh(k,z,h,eta);};
+    ret.pdyn_factor = [h,stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,h,eta,stretching);};
+    ret.pdyn_factor_sh = [h,stretching](const double k, const double z, const double eta){return dynamic_pressure_factor_sh(k,z,h,eta,stretching);};
     return ret;
 }
 
@@ -148,28 +146,31 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
     return ret;
 }
 
-double dynamic_pressure_factor(const double k,  //!< Wave number (in 1/m)
-                               const double z,  //!< z-position in the NED frame (in meters)
-                               const double  //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+double dynamic_pressure_factor(const double k,              //!< Wave number (in 1/m)
+                               const double z,              //!< z-position in the NED frame (in meters)
+                               const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+                               const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                               )
 {
-    return exp(-k*z);
+    return exp(-k*stretching.rescaled_z(z,eta));
 }
 
-double dynamic_pressure_factor(const double k,  //!< Wave number (in 1/m)
-                               const double z,  //!< z-position in the NED frame (in meters)
-                               const double h,  //!< Average water depth (in meters)
-                               const double  //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+double dynamic_pressure_factor(const double k,              //!< Wave number (in 1/m)
+                               const double z,              //!< z-position in the NED frame (in meters)
+                               const double h,              //!< Average water depth (in meters)
+                               const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+                               const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                               )
 {
-    return cosh(k*(h-z))/cosh(k*h);
+    return cosh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
 }
 
-double dynamic_pressure_factor_sh(const double k,  //!< Wave number (in 1/m)
-                                  const double z,  //!< z-position in the NED frame (in meters)
-                                  const double h,  //!< Average water depth (in meters)
-                                  const double  //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+double dynamic_pressure_factor_sh(const double k,              //!< Wave number (in 1/m)
+                                  const double z,              //!< z-position in the NED frame (in meters)
+                                  const double h,              //!< Average water depth (in meters)
+                                  const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+                                  const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                               )
 {
-    return sinh(k*(h-z))/cosh(k*h);
+    return sinh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
 }

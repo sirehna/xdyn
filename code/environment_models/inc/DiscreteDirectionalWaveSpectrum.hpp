@@ -40,7 +40,7 @@ struct DiscreteDirectionalWaveDensity
  */
 struct DiscreteDirectionalWaveSpectrum
 {
-    DiscreteDirectionalWaveSpectrum(const Stretching& stretch);
+    DiscreteDirectionalWaveSpectrum();
 
     std::vector<double> Si;                                     //!< Discretized spectral density (in s m^2/rad)
     std::vector<double> Dj;                                     //!< Spatial spreading (in 1/rad)
@@ -54,8 +54,6 @@ struct DiscreteDirectionalWaveSpectrum
     double dpsi;                                                //!< Spatial direction discretization step (in rad)
     std::function<double(double,double,double)> pdyn_factor;    //!< Factor used when computing the dynamic pressure (no unit)
     std::function<double(double,double,double)> pdyn_factor_sh; //!< Factor used when computing the orbital velocity (no unit)
-    Stretching stretching;                                      //!< Stretching model for orbital wave velocities (delta-stretching model)
-    private:DiscreteDirectionalWaveSpectrum();//Disabled
 };
 
 /** \brief Used by the wave models (eg. Airy, Stokes, etc.)

@@ -210,9 +210,7 @@ TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_n
 
 TEST_F(discretizeTest, flatten)
 {
-    YamlStretching ss;
-    Stretching sss(ss);
-    DiscreteDirectionalWaveSpectrum d(sss);
+    DiscreteDirectionalWaveSpectrum d;
     d.Si = a.random_vector_of<double>().of_size(3);
     d.Dj = a.random_vector_of<double>().of_size(4);
     d.k = a.random_vector_of<double>().of_size(3);
@@ -320,9 +318,11 @@ TEST_F(discretizeTest, flatten)
 TEST_F(discretizeTest, dynamic_pressure_factor)
 {
     //! [discretizeTest dynamic_pressure_factor example]
-    ASSERT_DOUBLE_EQ(exp(-2), dynamic_pressure_factor(1,2,3));
-    ASSERT_DOUBLE_EQ(exp(-8), dynamic_pressure_factor(2,4,5));
-    ASSERT_DOUBLE_EQ((exp(5)+exp(-5))/(exp(3)+exp(-3)), dynamic_pressure_factor(1,-2,3,4));
-    ASSERT_DOUBLE_EQ((exp(0.14)+exp(-0.14))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4,0.5));
+    YamlStretching y;
+    const Stretching s(y);
+    ASSERT_DOUBLE_EQ(exp(-2), dynamic_pressure_factor(1,2,3,s));
+    ASSERT_DOUBLE_EQ(exp(-8), dynamic_pressure_factor(2,4,5,s));
+    ASSERT_DOUBLE_EQ((exp(5)+exp(-5))/(exp(3)+exp(-3)), dynamic_pressure_factor(1,-2,3,4,s));
+    ASSERT_DOUBLE_EQ((exp(0.14)+exp(-0.14))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4,0.5,s));
     //! [discretizeTest dynamic_pressure_factor example]
 }
