@@ -7,9 +7,13 @@
 
 #include <boost/foreach.hpp>
 
-#include <cmath> //std::sqrt
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 #include <list>
 #include <utility> //std::pair
+
+#include "InvalidInputException.hpp"
 
 #include "discretize.hpp"
 #include "WaveDirectionalSpreading.hpp"
@@ -78,6 +82,14 @@ DiscreteDirectionalWaveSpectrum discretize(
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     ret.k.reserve(ret.omega.size());
     BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
+    for (size_t i = 0 ; i < ret.k.size() ; ++i)
+    {
+        const double k = ret.k.at(i);
+        if (k*h<PI/10.)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "You should be using a shallow water model (currently none exist in X-DYN) because the water depth (h = " << h << " m) is lower than the wave length divided by twenty (lambda/20 = " << 2*PI/k << ") for omega = " << ret.omega.at(i));
+        }
+    }
     ret.pdyn_factor = [h,stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,h,eta,stretching);};
     ret.pdyn_factor_sh = [h,stretching](const double k, const double z, const double eta){return dynamic_pressure_factor_sh(k,z,h,eta,stretching);};
     return ret;
