@@ -164,6 +164,7 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
                                const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                               )
 {
+    if (eta != 0 && z<eta) return 0;
     return exp(-k*stretching.rescaled_z(z,eta));
 }
 
@@ -174,6 +175,8 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
                                const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                               )
 {
+    if (eta != 0 && z<eta) return 0;
+    if (z>h) return 0;
     return cosh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
 }
 
@@ -184,5 +187,7 @@ double dynamic_pressure_factor_sh(const double k,              //!< Wave number 
                                   const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                               )
 {
+    if (eta != 0 && z<eta) return 0;
+    if (z>h) return 0;
     return sinh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
 }

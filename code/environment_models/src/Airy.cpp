@@ -115,7 +115,7 @@ double Airy::dynamic_pressure(
         ) const
 {
     double p = 0;
-
+    if (z<eta) return 0;
     const size_t nPsi = spectrum.psi.size();
     std::vector<double> v_Dj(nPsi), v_xCosPsi_ySinPsi(nPsi);
     for (size_t j = 0 ; j < nPsi ; ++j)
@@ -148,13 +148,14 @@ ssc::kinematics::Point Airy::orbital_velocity(
         const double x,   //!< x-position in the NED frame (in meters)
         const double y,   //!< y-position in the NED frame (in meters)
         const double z,   //!< z-position in the NED frame (in meters)
-        const double t    //!< Current time instant (in seconds)
+        const double t,   //!< Current time instant (in seconds)
+        const double eta  //!< Wave height at x,y,t (in meters)
         ) const
 {
     double u = 0;
     double v = 0;
     double w = 0;
-    const double eta = 0; // No stretching for the orbital velocity
+    if (z < eta) return ssc::kinematics::Point("NED", 0, 0, 0);
 
     const size_t nPsi = spectrum.psi.size();
     std::vector<double> v_Dj(nPsi), v_xCosPsi_ySinPsi(nPsi);
@@ -173,8 +174,8 @@ ssc::kinematics::Point Airy::orbital_velocity(
         const double Ai = sqrt(spectrum.Si[i]);
         const double omega = spectrum.omega[i];
         const double k = spectrum.k[i];
-        const double pdyn_factor = spectrum.pdyn_factor(k,z,eta);
-        const double pdyn_factor_sh = spectrum.pdyn_factor_sh(k,z,eta);
+        const double pdyn_factor = spectrum.pdyn_factor(k,z,0); // No stretching for the orbital velocity
+        const double pdyn_factor_sh = spectrum.pdyn_factor_sh(k,z,0); // No stretching for the orbital velocity
         for (size_t j = 0 ; j < nPsi ; ++j)
         {
             const double theta = omega*t-k*v_xCosPsi_ySinPsi[j] + spectrum.phase[i][j];

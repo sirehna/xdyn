@@ -89,7 +89,8 @@ class Airy : public WaveModel
                                                 const double x,   //!< x-position in the NED frame (in meters)
                                                 const double y,   //!< y-position in the NED frame (in meters)
                                                 const double z,   //!< z-position in the NED frame (in meters)
-                                                const double t    //!< Current time instant (in seconds)
+                                                const double t,   //!< Current time instant (in seconds)
+                                                const double eta  //!< Wave height at x,y,t (in meters)
                                                 ) const;
 
 

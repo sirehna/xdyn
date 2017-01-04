@@ -101,13 +101,14 @@ ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double 
                                                                    const double x,   //!< x-position in the NED frame (in meters)
                                                                    const double y,   //!< y-position in the NED frame (in meters)
                                                                    const double z,   //!< z-position in the NED frame (in meters)
-                                                                   const double t    //!< Current time instant (in seconds)
+                                                                   const double t,   //!< z-position in the NED frame (in meters)
+                                                                   const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
                                                                    ) const
 {
     ssc::kinematics::Point Vwaves("NED", 0, 0, 0);
     for (auto model:models)
     {
-        auto vw = model->orbital_velocity(g, x, y, z, t);
+        auto vw = model->orbital_velocity(g, x, y, z, t, eta);
         Vwaves.x() += vw.x();
         Vwaves.y() += vw.y();
         Vwaves.z() += vw.z();

@@ -100,13 +100,14 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
 //! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
     for (double t = 0 ; t < 30 ; t+=0.1)
     {
-        const ssc::kinematics::Point P("NED", a.random<double>().between(-100,100), a.random<double>().between(-100,100), a.random<double>().between(-100,100));
+        const ssc::kinematics::Point P("NED", a.random<double>().between(-100,100), a.random<double>().between(-100,100), 6);
         const double rho = a.random<double>().between(0,100);
         const double g = a.random<double>().between(0,10);
         const double x = P.x();
         const double y = P.y();
         const double z = P.z();
-        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*sin(-2*PI/Tp*t + k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, 0, t), 1E-6);
+
+        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*sin(-2*PI/Tp*t + k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, 0, t), 1E-6) << "t = " << t;
     }
 //! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
 }
@@ -120,7 +121,7 @@ TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
     const double y = 5.3;
     const double z = 1.62;
     const double t = 664.2;
-    ssc::kinematics::Point v = wave.orbital_velocity(g, x, y, z, t);
+    ssc::kinematics::Point v = wave.orbital_velocity(g, x, y, z, t, 0);
     EXPECT_NEAR(-0.12705396141751218, v.x(),1e-10);
     EXPECT_NEAR(-0.12705396141751218, v.y(),1e-10);
     EXPECT_NEAR(0.37002483136735936, v.z(),1e-10);

@@ -256,9 +256,9 @@ TEST_F(RudderForceModelTest, ship_speed_relative_to_the_fluid)
 
     ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t);
 
-    ASSERT_DOUBLE_EQ(3.1018196248767658, Vship_water.x());
+    ASSERT_DOUBLE_EQ(3.0621974344648351, Vship_water.x());
     ASSERT_DOUBLE_EQ(4, Vship_water.y());
-    ASSERT_DOUBLE_EQ(4.9980910555870492, Vship_water.z());
+    ASSERT_DOUBLE_EQ(5.0089062285187547, Vship_water.z());
 }
 
 TEST_F(RudderForceModelTest, parser)

@@ -295,13 +295,13 @@ TEST_F(AiryTest, norm_of_orbital_velocity_should_only_depend_on_z)
     for (double z = 100 ; z < 200 ; z+=100)
     {
         double x=0; double y=0;
-        ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t);
+        ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t,0);
         const double ref = std::sqrt(V.x()*V.x() + V.y()*V.y() + V.z()*V.z());
         for (size_t i = 0 ; i < 100 ; ++i)
         {
             x = a.random<double>().between(-100,100);
             y = a.random<double>().between(-100,100);
-            V = wave.orbital_velocity(g,x,y,z,t);
+            V = wave.orbital_velocity(g,x,y,z,t,0);
             const double norm = std::sqrt(V.x()*V.x() + V.y()*V.y() + V.z()*V.z());
             ASSERT_NEAR(ref, norm, EPS);
         }
@@ -330,37 +330,37 @@ TEST_F(AiryTest, orbital_velocity_non_regression_test)
 
     ssc::kinematics::Point V;
     double x=-0.1; double y=0; double z=0.2;
-    V = wave.orbital_velocity(g,x,y,z,t);
+    V = wave.orbital_velocity(g,x,y,z,t,0);
     ASSERT_EQ("NED", V.get_frame());
     EXPECT_NEAR(-0.013186340021821511, V.x(), EPS);
     EXPECT_NEAR(-0.022839410883673746, V.y(), EPS);
     EXPECT_NEAR(0.05482825333201282, V.z(), EPS);
     x=0.1;y=0;z=0.2;
-    V = wave.orbital_velocity(g,x,y,z,t);
+    V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
     EXPECT_NEAR(-0.013625903643418018, V.x(), EPS);
     EXPECT_NEAR(-0.023600757409437879, V.y(), EPS);
     EXPECT_NEAR(0.054396641584981066, V.z(), EPS);
     x=0;y=-0.1;z=0.2;
-    V = wave.orbital_velocity(g,x,y,z,t);
+    V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
     EXPECT_NEAR(-0.013024588330772737, V.x(), EPS);
     EXPECT_NEAR(-0.022559248736567089, V.y(), EPS);
     EXPECT_NEAR(0.054982688288036055, V.z(), EPS);
     x=0;y=0.1;z=0.2;
-    V = wave.orbital_velocity(g,x,y,z,t);
+    V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
     EXPECT_NEAR(-0.01378591841654387, V.x(), EPS);
     EXPECT_NEAR(-0.023877911126453464, V.y(), EPS);
     EXPECT_NEAR(0.054235130955620714, V.z(), EPS);
     x=0;y=0;z=0.1;
-    V = wave.orbital_velocity(g,x,y,z,t);
+    V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
     EXPECT_NEAR(-0.013624110585758166, V.x(), EPS);
     EXPECT_NEAR(-0.023597651742470114, V.y(), EPS);
     EXPECT_NEAR(0.055500467086839214, V.z(), EPS);
     x=0;y=0;z=0.3;
-    V = wave.orbital_velocity(g,x,y,z,t);
+    V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
     EXPECT_NEAR(-0.013192475538380495, V.x(), EPS);
     EXPECT_NEAR(-0.022850037910084588, V.y(), EPS);
@@ -391,10 +391,10 @@ TEST_F(AiryTest, orbital_velocity_sanity_check)
         const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
         const Airy wave(A, a.random<double>().between(-PI,PI));
 
-        double x=a.random<double>().between(-100,100); double y=a.random<double>().between(-100,100); double z=a.random<double>().between(-100,100);
-        const ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t);
-        ASSERT_NEAR(std::abs(cos(psi)),std::abs(V.x()/hypot(V.x(),V.y())), EPS);
-        ASSERT_NEAR(std::abs(sin(psi)),std::abs(V.y()/hypot(V.x(),V.y())), EPS);
+        double x=a.random<double>().between(-100,100); double y=a.random<double>().between(-100,100); double z=a.random<double>().between(2,5);
+        const ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t,0);
+        ASSERT_NEAR(std::abs(cos(psi)),std::abs(V.x()/hypot(V.x(),V.y())), EPS) << "i = " << i;
+        ASSERT_NEAR(std::abs(sin(psi)),std::abs(V.y()/hypot(V.x(),V.y())), EPS) << "i = " << i;
     }
 }
 

@@ -114,7 +114,8 @@ ssc::kinematics::Point SurfaceElevationInterface::orbital_velocity(
         const double ,   //!< x-position in the NED frame (in meters)
         const double ,   //!< y-position in the NED frame (in meters)
         const double ,   //!< z-position in the NED frame (in meters)
-        const double     //!< Current time instant (in seconds)
+        const double ,   //!< current instant (in seconds)
+        const double     //!< Wave elevation at (x,y) in the NED frame (in meters)
         ) const
 {
     return ssc::kinematics::Point("NED", 0, 0, 0);

@@ -78,7 +78,8 @@ class SurfaceElevationInterface
                                                         const double x,   //!< x-position in the NED frame (in meters)
                                                         const double y,   //!< y-position in the NED frame (in meters)
                                                         const double z,   //!< z-position in the NED frame (in meters)
-                                                        const double t    //!< Current time instant (in seconds)
+                                                        const double t,   //!< z-position in the NED frame (in meters)
+                                                        const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
                                                        ) const;
 
         virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;

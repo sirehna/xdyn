@@ -320,9 +320,9 @@ TEST_F(discretizeTest, dynamic_pressure_factor)
     //! [discretizeTest dynamic_pressure_factor example]
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_DOUBLE_EQ(exp(-2), dynamic_pressure_factor(1,2,3,s));
-    ASSERT_DOUBLE_EQ(exp(-8), dynamic_pressure_factor(2,4,5,s));
-    ASSERT_DOUBLE_EQ((exp(5)+exp(-5))/(exp(3)+exp(-3)), dynamic_pressure_factor(1,-2,3,4,s));
-    ASSERT_DOUBLE_EQ((exp(0.14)+exp(-0.14))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4,0.5,s));
+    ASSERT_DOUBLE_EQ(exp(-3), dynamic_pressure_factor(1,3,2,s));
+    ASSERT_DOUBLE_EQ(exp(-10), dynamic_pressure_factor(2,5,4,s));
+    ASSERT_DOUBLE_EQ((exp(1)+exp(-1))/(exp(3)+exp(-3)), dynamic_pressure_factor(1,2,3,-4,s));
+    ASSERT_DOUBLE_EQ((exp(0.14)+exp(-0.14))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4,-0.5,s));
     //! [discretizeTest dynamic_pressure_factor example]
 }
