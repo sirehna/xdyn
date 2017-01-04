@@ -259,7 +259,16 @@ $$w = g
 e^{-k_i z}
 \cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
+#### Evolution de la vitesse orbitale sur la surface libre
 
+L'expression de l'élévation de la surface libre contient un terme en sinus.
+Les vitesses orbitales en $u$ et en $w$ contiennent des termes en cosinus et
+sont donc déphasées par rapport à l'élévation. La composante $v$ de la vitesse
+orbitale, en revanche, est en phase avec l'élévation. Le schéma suivant représente
+l'élévation de la houle (en vert) avec les vecteurs vitesse orbitale (en bleu)
+en plusieurs points de la surface libre dans le plan (X,Z) :
+
+![](images/orbital_velocities.svg)
 
 ### Paramétrisation des modèles de houle
 
