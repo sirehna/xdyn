@@ -179,6 +179,40 @@ $$p_{\textrm{dyn}} \sim_{h\infty}  \rho\cdot g
 e^{-k_i\cdot z}\cos(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
 \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
+On peut démontrer que la pression totale (somme de la pression hydrostatique et de la pression dynamique) est positive.
+
+Le raisonnement s'exprime simplement pour une seule fréquence et une seule direction, mais il est aisément généralisable.
+
+Pour une seule fréquence et une seule direction, on a :
+
+$$p_{\textrm{tot}} = \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta$$
+
+Sous la surface libre, c'est-à-dire pour $z>0$, on a $h-z<h$ donc
+$$0<\frac{\cosh(k(h-z))}{\cosh(k h)}\leq 1$$
+
+donc
+
+$$ \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta \geq \rho g \left(z - \eta\right)$$
+
+or pour le calcul, on considère toujours la partie immergée de la coque donc $z\geq\eta$, d'où $$p_{\textrm{tot}} \geq 0$$
+
+Au-dessus de la surface libre, on a $\eta\leq z\leq 0$ donc $h-z\geq h$ et
+
+$$ \frac{\cosh(k(h-z))}{\cosh(k h)}\geq 1$$
+
+Or
+
+$$p_{\textrm{tot}} = \rho g \cdot \left(z -  \frac{\cosh(k(h-z))}{\cosh(k h)} \eta\right)\geq \rho g \eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)$$
+
+Comme $$1-  \frac{\cosh(k(h-z))}{\cosh(k h)} \leq 0$$ et $\eta\leq z \leq 0$ (on est sous l'eau),
+$$\eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)\geq 0$$
+
+et donc
+
+$$p_{\textrm{tot}}\geq 0$$
+
+
+
 
 ### Vitesse orbitale
 
