@@ -115,7 +115,7 @@ Par ailleurs, l'eau étant supposée incompressible, $$\nabla\cdot V=
 Il s'agit d'une équation de Laplace dont la solution s'obtient par la méthode de
 séparation des variables :
 
-$$\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+$$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\cos(k\cdot(x\cdot
 \cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
 
@@ -149,11 +149,13 @@ $$\eta(x,y,t) = \frac{1}{g}\frac{\partial\phi}{\partial t} = -
 
 ### Pression dynamique
 
-L'expression de la pression dynamique, utilisée par le modèle de
-[Froude-Krylov](#calcul-des-efforts-dexcitation), se déduit de la première
-condition de surface libre linéarisée :
+L'expression de la pression dynamique (champs de pression de la houle
+incidente), utilisée par le modèle de
+[Froude-Krylov](#calcul-des-efforts-dexcitation), est définie comme
+la pression totale moins la pression hydrostatique $\rho g z$ et son
+expression se déduit de la première condition de surface libre linéarisée :
 
-$$p_{\textrm{dyn}} = -\rho g z = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
+$$p_{\textrm{dyn}} = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
 
 soit
 
@@ -185,23 +187,23 @@ La vitesse $V(x,y,z,t) = (u,v,w)$ orbitale de la houle est définie par :
 
 $$u = \frac{\partial \phi}{\partial x} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
-\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega_i\Delta\gamma}
+\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cdot\cos(\gamma_j)
+\sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$v = \frac{\partial \phi}{\partial y} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
-\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\sin(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega_i\Delta\gamma}
+\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cdot\sin(\gamma_j)
+\sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$w = \frac{\partial \phi}{\partial z} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
-\frac{\sinh(k\cdot(h-z))}{\cosh(k\cdot h)}
-\cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sqrt{A(\omega_i,\gamma_j)\Delta\omega_i\Delta\gamma}
+\frac{\sinh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}
+\cos(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 #### En profondeur infinie
 
-Lorsque $k\cdot h >3$, les cosinus hyperboliques peuvent être considérés comme
+Lorsque $k_i\cdot h >3$, les cosinus hyperboliques peuvent être considérés comme
 équivalents à des exponentielles (erreur relative inférieure à $2.5\times
 10^{-3}$). On peut donc utiliser l'approximation suivante:
 

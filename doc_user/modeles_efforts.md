@@ -263,9 +263,9 @@ NISTOR
 Les efforts de Froude-Krylov constituent une partie des efforts d'excitation
 dus à la houle. Ils correspondent aux efforts générés par le champs de pression
 de la houle, en supposant que le navire ne perturbe pas l'écoulement. Ils sont
-calculés en intégrant la pression dynamique sur la carène. En pratique, ils
-peuvent être négligés dès que le corps est à plus d'une-demi longueur d'onde de
-profondeur :
+calculés en intégrant la pression dynamique (champs de pression de la houle
+incidente) sur la carène. En pratique, ils peuvent être négligés dès que le
+corps est à plus d'une-demi longueur d'onde de profondeur :
 
 $$\mathbf{F}_{\textrm{FK}}(t)=\int_{P=(x,y,z)\in S}
 p_{\textrm{dyn}}(x,y,z,t)dS(P)$$
