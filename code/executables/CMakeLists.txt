@@ -58,6 +58,14 @@ TARGET_LINK_LIBRARIES(xdyn
         boost_program_options_descriptions_static
         )
 
+ADD_EXECUTABLE(test_orbital_velocities_and_dynamic_pressures
+src/test_orbital_velocities_and_dynamic_pressures.cpp)
+
+TARGET_LINK_LIBRARIES(test_orbital_velocities_and_dynamic_pressures
+        x-dyn
+        random_data_generator_shared
+        )
+
 ADD_EXECUTABLE(test_hs
         src/test_hs.cpp
         $<TARGET_OBJECTS:test_data_generator>
