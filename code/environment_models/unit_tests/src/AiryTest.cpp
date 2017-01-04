@@ -440,3 +440,255 @@ TEST_F(AiryTest, RAO_non_regression_test)
     const std::vector<std::vector<double> > rao_phase = {{9,8,7},{6,5,4},{1,4,7},{8,5,2},{7,5,3},{1,5,9},{4,5,6},{7,8,9},{6,5,4},{4,8,6}};
     ASSERT_NEAR(0.036121783468892797,wave.evaluate_rao(4,5,6,rao_module,rao_phase), 1E-6);
 }
+
+TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_depth_in_finite_depth)
+{
+    const double Hs = 3;
+    const double Tp = 5;
+    const double psi = 0;
+    const double omega0 = 2*PI/Tp;
+    const double g = 9.81;
+    const double rho = 1000;
+
+    const double omega_min = 0.1;
+    const double omega_max = 10;
+    const size_t nfreq = 100;
+
+
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const double h = 40;
+    const double t = 0;
+    const Stretching stretching(ys);
+    const DiracSpectralDensity S(omega0, Hs);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching);
+    const double random_phase = a.random<double>().between(-PI,PI);
+    const Airy wave(A, random_phase);
+    const double k = S.get_wave_number(omega0,h);
+
+    const double x = a.random<double>().between(-10,10);
+    const double y = a.random<double>().between(-10,10);
+
+    const double z1 = 1;
+    const double z2 = 30;
+
+
+    const double eta = wave.elevation(x,y,t);
+    const ssc::kinematics::Point V1 = wave.orbital_velocity(g,x,y,z1,t,eta);
+    const ssc::kinematics::Point V2 = wave.orbital_velocity(g,x,y,z2,t,eta);
+    const double pdyn1 = wave.dynamic_pressure(rho, g, x, y, z1, eta, t);
+    const double pdyn2 = wave.dynamic_pressure(rho, g, x, y, z2, eta, t);
+
+    const double eps=1E-6;
+
+    ASSERT_NEAR(cosh(k*(h-z1))/cosh(k*(h-z2)),((double)V1.v(0))/((double)V2.v(0)), eps);
+    ASSERT_NEAR(cosh(k*(h-z1))/cosh(k*(h-z2)),pdyn1/pdyn2, eps);
+    ASSERT_LT(0, rho*g*z1+pdyn1);
+    ASSERT_LT(0, rho*g*z2+pdyn2);
+    ASSERT_LT(std::abs(pdyn2), std::abs(pdyn1));
+    ASSERT_LE(std::abs((double)V2.v(0)),std::abs((double)V1.v(0)));
+    ASSERT_LE(std::abs((double)V2.v(1)),std::abs((double)V1.v(1)));
+    ASSERT_LE(std::abs((double)V2.v(2)),std::abs((double)V1.v(2)));
+    ASSERT_NEAR(sinh(k*(h-z1))/sinh(k*(h-z2)),((double)V1.v(2))/((double)V2.v(2)), eps);
+}
+
+TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_depth_in_infinite_depth)
+{
+    const double Hs = 3;
+    const double Tp = 5;
+    const double psi = 0;
+    const double omega0 = 2*PI/Tp;
+    const double g = 9.81;
+    const double rho = 1000;
+
+    const double omega_min = 0.1;
+    const double omega_max = 10;
+    const size_t nfreq = 100;
+
+
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const double t = 0;
+    const Stretching stretching(ys);
+    const DiracSpectralDensity S(omega0, Hs);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching);
+    const double random_phase = a.random<double>().between(-PI,PI);
+    const Airy wave(A, random_phase);
+    const double k = S.get_wave_number(omega0);
+
+    const double x = a.random<double>().between(-10,10);
+    const double y = a.random<double>().between(-10,10);
+
+    const double z1 = 1;
+    const double z2 = 30;
+
+    const double eta = wave.elevation(x,y,t);
+    const ssc::kinematics::Point V1 = wave.orbital_velocity(g,x,y,z1,t,eta);
+    const ssc::kinematics::Point V2 = wave.orbital_velocity(g,x,y,z2,t,eta);
+    const double pdyn1 = wave.dynamic_pressure(rho, g, x, y, z1, eta, t);
+    const double pdyn2 = wave.dynamic_pressure(rho, g, x, y, z2, eta, t);
+
+    const double eps=1E-6;
+
+    ASSERT_LT(0, rho*g*z1+pdyn1);
+    ASSERT_LT(0, rho*g*z2+pdyn2);
+    ASSERT_LT(std::abs(pdyn2), std::abs(pdyn1));
+    ASSERT_NEAR(exp(-k*z1)/exp(-k*z2),((double)V1.v(0))/((double)V2.v(0)), eps);
+    ASSERT_NEAR(exp(-k*z1)/exp(-k*z2),pdyn1/pdyn2, eps);
+    ASSERT_LE(std::abs((double)V2.v(0)),std::abs((double)V1.v(0)));
+    ASSERT_LE(std::abs((double)V2.v(1)),std::abs((double)V1.v(1)));
+    ASSERT_LE(std::abs((double)V2.v(2)),std::abs((double)V1.v(2)));
+    ASSERT_NEAR(exp(-k*z1)/exp(-k*z2),((double)V1.v(2))/((double)V2.v(2)), eps);
+}
+
+TEST_F(AiryTest, total_pressure_should_always_be_positive_in_finite_depth)
+{
+    const double Hs = 3;
+    const double Tp = 5;
+    const double psi = 0;
+    const double omega0 = 2*PI/Tp;
+    const double g = 9.81;
+    const double rho = 1000;
+
+    const double omega_min = 0.1;
+    const double omega_max = 10;
+    const size_t nfreq = 100;
+
+
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const double h = 40;
+    const double t = 0;
+    const Stretching stretching(ys);
+    const DiracSpectralDensity S(omega0, Hs);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching);
+    const double random_phase = a.random<double>().between(-PI,PI);
+    const Airy wave(A, random_phase);
+
+    const size_t n = 100;
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        const double x = a.random<double>().between(-100,100);
+        const double y = a.random<double>().between(-100,100);
+        const double eta = wave.elevation(x,y,t);
+        const double z = eta + (h-eta)*((double)i)/((double)(n-1));
+        ASSERT_LE(0, rho*g*z+wave.dynamic_pressure(rho,g,x,y,z,eta,t));
+    }
+}
+
+TEST_F(AiryTest, total_pressure_should_always_be_positive_in_infinite_depth)
+{
+    const double Hs = 3;
+    const double Tp = 5;
+    const double psi = 0;
+    const double omega0 = 2*PI/Tp;
+    const double g = 9.81;
+    const double rho = 1000;
+
+    const double omega_min = 0.1;
+    const double omega_max = 10;
+    const size_t nfreq = 100;
+
+
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const double t = 0;
+    const Stretching stretching(ys);
+    const DiracSpectralDensity S(omega0, Hs);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching);
+    const double random_phase = a.random<double>().between(-PI,PI);
+    const Airy wave(A, random_phase);
+
+    const size_t n = 100;
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        const double x = a.random<double>().between(-100,100);
+        const double y = a.random<double>().between(-100,100);
+        const double eta = wave.elevation(x,y,t);
+        const double z = eta + (10000-eta)*((double)i)/((double)(n-1));
+        ASSERT_LE(0, rho*g*z+wave.dynamic_pressure(rho,g,x,y,z,eta,t));
+    }
+}
+
+TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_water_in_finite_depth)
+{
+    const double Hs = 3;
+    const double Tp = 5;
+    const double psi = 0;
+    const double omega0 = 2*PI/Tp;
+    const double g = 9.81;
+    const double rho = 1000;
+
+    const double omega_min = 0.1;
+    const double omega_max = 10;
+    const size_t nfreq = 100;
+
+
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const double t = 0;
+    const Stretching stretching(ys);
+    const DiracSpectralDensity S(omega0, Hs);
+    const double h = 40;
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching);
+    const double random_phase = a.random<double>().between(-PI,PI);
+    const Airy wave(A, random_phase);
+
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double x = a.random<double>().between(-100,100);
+        const double y = a.random<double>().between(-100,100);
+        const double eta = wave.elevation(x,y,t);
+        COUT(eta);
+        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho,g,x,y,eta-0.1,eta,t));
+        COUT(eta);
+        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho,g,x,y,h+0.1,eta,t));
+        COUT(eta);
+        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g,x,y,eta-0.1,t,eta).v.norm());
+        COUT(eta);
+        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g,x,y,h+0.1,t,eta).v.norm());
+        COUT(eta);
+        const auto V = wave.orbital_velocity(g,x,y,h,t,eta).v;
+        COUT(eta);
+        ASSERT_DOUBLE_EQ(0, (double)V(2)); // Sea bed is impervious
+    }
+}
+
+TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_water_in_infinite_depth)
+{
+    const double Hs = 3;
+    const double Tp = 5;
+    const double psi = 0;
+    const double omega0 = 2*PI/Tp;
+    const double g = 9.81;
+    const double rho = 1000;
+
+    const double omega_min = 0.1;
+    const double omega_max = 10;
+    const size_t nfreq = 100;
+
+
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const double t = 0;
+    const Stretching stretching(ys);
+    const DiracSpectralDensity S(omega0, Hs);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching);
+    const double random_phase = a.random<double>().between(-PI,PI);
+    const Airy wave(A, random_phase);
+
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double x = a.random<double>().between(-100,100);
+        const double y = a.random<double>().between(-100,100);
+        const double eta = wave.elevation(x,y,t);
+        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho,g,x,y,eta-0.1,eta,t));
+        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g,x,y,eta-0.1,t,eta).v.norm());
+    }
+}
