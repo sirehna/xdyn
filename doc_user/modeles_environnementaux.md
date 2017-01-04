@@ -751,6 +751,23 @@ la difficulté de réaliser l'expérimentation en conditions contrôlées et
 d'obtenir une mesure fiable, mais aussi de l'importance des phénomènes
 non-linéaires, absents des modèles de stretching.
 
+Les trois graphs ci-dessous montrent l'influence du modèle de stretching sur la
+pression dynamique (et montrent aussi qu'il n'est pas pris en compte dans le
+calcul de la vitesse orbitale).
+
+#### Sans stretching
+
+![](images/waves_without_stretching.svg)
+
+#### Extrapolation linéaire
+
+![](images/waves_extrapolation_stretching.svg)
+
+#### Stretching de Wheeler
+
+![](images/waves_wheeler_stretching.svg)
+
+
 ### Paramétrisation dans X-Dyn
 
 Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAML du type :
