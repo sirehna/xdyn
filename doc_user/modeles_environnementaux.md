@@ -358,7 +358,7 @@ $$S(T)=\alpha\cdot T^3\cdot e^{-\beta T^4}$$
 
 Aujourd'hui, on préfère une formulation fréquentielle :
 
-$$ S(\omega=\frac{2\pi}{T}) = \frac{A}{\omega^5}\cdot e^{-\frac{B}{\omega^4}}$$
+$$ S\left(\omega=\frac{2\pi}{T}\right) = \frac{A}{\omega^5}\cdot e^{-\frac{B}{\omega^4}}$$
 
 Le moment d'ordre 0 permet d'obtenir une relation entre $A$ et $B$ :
 
@@ -380,9 +380,9 @@ et
 
 $$\omega_p=\left(\frac{4}{5}B\right)^{1/4}$$
 
-Par ailleurs, on constate empiriquement que les hauteurs de houle sont
+De plus, on constate empiriquement que les hauteurs de houle sont
 distribuées suivant une loi de Rayleigh (loi de la norme d'un vecteur dont les
-deux composantes suivent une loi normale) de variance $\sigma^2=2 m_0$ et, sous
+deux composantes suivent une loi normale) de variance $\sigma^2=4 m_0$ et, sous
 cette hypothèse, la hauteur de houle $H_S$ correspondant à deux écarts-types est :
 
 $$H_S = 2\sigma = 4\sqrt{m_0}$$
@@ -472,7 +472,7 @@ $$\omega_p=0.4\sqrt{\frac{g}{H_S}}$$
 
 Ce spectre était le spectre de référence pendant de nombreuses années mais
 il n'est valable que pour des états de mer complètement développés et des mers
-résultants de vents modérés sur des fetchs très grands. Les conditions plus
+résultants de vents modérés sur des fetchs très grands. Pour les conditions plus
 fréquentes de vents forts sur des fetchs courts, notamment en mer du Nord, des
 spectres à au moins deux paramètres sont plus adaptés.
 
