@@ -529,9 +529,12 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const ssc::kinematics::Point V2 = wave.orbital_velocity(g,x,y,z2,t,eta);
     const double pdyn1 = wave.dynamic_pressure(rho, g, x, y, z1, eta, t);
     const double pdyn2 = wave.dynamic_pressure(rho, g, x, y, z2, eta, t);
+    const double ptot1 = rho*g*z1+pdyn1;
+    const double ptot2 = rho*g*z2+pdyn2;
 
     const double eps=1E-6;
 
+    ASSERT_LT(ptot1, ptot2);
     ASSERT_LT(0, rho*g*z1+pdyn1);
     ASSERT_LT(0, rho*g*z2+pdyn2);
     ASSERT_LT(std::abs(pdyn2), std::abs(pdyn1));
