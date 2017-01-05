@@ -12,6 +12,8 @@ v = matrix(data$v, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 w = matrix(data$w, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 depth = rep(data$depth, data$nx)
 
+
+graphics.off()
 if(makeSVG)
 {
     svg("wave_colormap.svg",width=14,height=7)
