@@ -11,9 +11,9 @@ g = 9.81
 
 data=fromJSON(file="input.json")
 pdyn = matrix(data$pdyn, byrow=TRUE, nrow=data$nx, ncol=data$nz)
-u = matrix(data$u, byrow=TRUE, nrow=data$nx, ncol=data$nz)
-v = matrix(data$v, byrow=TRUE, nrow=data$nx, ncol=data$nz)
-w = matrix(data$w, byrow=TRUE, nrow=data$nx, ncol=data$nz)
+u = matrix(data$uorb, byrow=TRUE, nrow=data$nx, ncol=data$nz)
+v = matrix(data$vorb, byrow=TRUE, nrow=data$nx, ncol=data$nz)
+w = matrix(data$worb, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 z = repmat(t(data$z), n=data$nx, m=1)
 ptot = pdyn + rho*g*z
 depth = rep(data$depth, data$nx)
