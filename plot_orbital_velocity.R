@@ -3,7 +3,10 @@ library(rjson)
 library(pracma)
 library(colorRamps)
 
-makeSVG = T
+makeSVG = F
+
+rho = 1000
+g = 9.81
 
 
 data=fromJSON(file="input.json")
@@ -11,6 +14,8 @@ pdyn = matrix(data$pdyn, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 u = matrix(data$u, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 v = matrix(data$v, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 w = matrix(data$w, byrow=TRUE, nrow=data$nx, ncol=data$nz)
+z = repmat(t(data$z), n=data$nx, m=1)
+ptot = pdyn + rho*g*z
 depth = rep(data$depth, data$nx)
 ncol = 16
 colors = blue2green2red(ncol)#rev(heat.colors(ncol))
@@ -39,11 +44,11 @@ lines(data$x, depth, col='chartreuse4', lwd=4)
 title('Orbital velocity u (in m/s)')
 
 image(data$x, data$z, ptot, xlab="X", ylab="Z", col = colors)
-image.plot(data$x, data$z, v, legend.only=T, breaks=seq(from=min(v),to=max(v), length.out=ncol+1), col = colors)
+image.plot(data$x, data$z, ptot, legend.only=T, breaks=seq(from=min(ptot),to=max(ptot), length.out=ncol+1), col = colors)
 grid()
 lines(data$x, data$eta)
 lines(data$x, depth, col='chartreuse4', lwd=4)
-title('Orbital velocity v (in m/s)')
+title('Total pressure (in N/m²)')
 
 image(data$x, data$z, w, xlab="X", ylab="Z", col = colors)
 image.plot(data$x, data$z, w, legend.only=T, breaks=seq(from=min(w),to=max(w), length.out=ncol+1), col = colors)
