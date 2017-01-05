@@ -1,6 +1,7 @@
 library(fields)
 library(rjson)
 library(pracma)
+library(colorRamps)
 
 makeSVG = T
 
@@ -11,6 +12,8 @@ u = matrix(data$u, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 v = matrix(data$v, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 w = matrix(data$w, byrow=TRUE, nrow=data$nx, ncol=data$nz)
 depth = rep(data$depth, data$nx)
+ncol = 16
+colors = blue2green2red(ncol)#rev(heat.colors(ncol))
 
 
 graphics.off()
@@ -20,30 +23,30 @@ if(makeSVG)
 }
 par(mfrow=c(2,2),oma = c(0, 0, 2, 0))
 
-image(data$x, data$z, pdyn, xlab="X", ylab="Z")
-image.plot(data$x, data$z, pdyn, legend.only=T)
+image(data$x, data$z, pdyn, xlab="X", ylab="Z", col = colors)
+image.plot(data$x, data$z, pdyn, legend.only=T, breaks=seq(from=min(pdyn),to=max(pdyn), length.out=ncol+1), col = colors)
 grid()
 lines(data$x, data$eta)
 lines(data$x, depth, col='chartreuse4', lwd=4)
 title('Dynamic pressure (in N/m²)')
 
 
-image(data$x, data$z, u, xlab="X", ylab="Z")
-image.plot(data$x, data$z, u, legend.only=T)
+image(data$x, data$z, u, xlab="X", ylab="Z", col = colors)
+image.plot(data$x, data$z, u, legend.only=T, breaks=seq(from=min(u),to=max(u), length.out=ncol+1), col = colors)
 grid()
 lines(data$x, data$eta)
 lines(data$x, depth, col='chartreuse4', lwd=4)
 title('Orbital velocity u (in m/s)')
 
-image(data$x, data$z, v, xlab="X", ylab="Z")
-image.plot(data$x, data$z, v, legend.only=T)
+image(data$x, data$z, ptot, xlab="X", ylab="Z", col = colors)
+image.plot(data$x, data$z, v, legend.only=T, breaks=seq(from=min(v),to=max(v), length.out=ncol+1), col = colors)
 grid()
 lines(data$x, data$eta)
 lines(data$x, depth, col='chartreuse4', lwd=4)
 title('Orbital velocity v (in m/s)')
 
-image(data$x, data$z, w, xlab="X", ylab="Z")
-image.plot(data$x, data$z, w, legend.only=T)
+image(data$x, data$z, w, xlab="X", ylab="Z", col = colors)
+image.plot(data$x, data$z, w, legend.only=T, breaks=seq(from=min(w),to=max(w), length.out=ncol+1), col = colors)
 grid()
 lines(data$x, data$eta)
 lines(data$x, depth, col='chartreuse4', lwd=4)
