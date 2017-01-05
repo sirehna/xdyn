@@ -60,11 +60,16 @@ int main(int , char** )
     std::vector<double> worb(nx*nz);
     std::vector<double> x(nx);
     std::vector<double> z(nz);
-    std::vector<double> eta(nx);
+    std::vector<double> eta(nx); //!< wave elevation
+    std::vector<double> usurf(nx); //!< u-component of the orbital velocity, taken on the air-water interface (free surface)
+    std::vector<double> wsurf(nx); //!< w-component of the orbital velocity, taken on the air-water interface (free surface)
     for (size_t i = 0 ; i < nx ; ++i)
     {
         x.at(i) = xmin + (xmax - xmin)* ((double)i)/((double)nx - 1.);
         eta.at(i) = wave.elevation(x.at(i), y, t);
+        const ssc::kinematics::Point Vsurf = wave.orbital_velocity(g,x.at(i),y,eta.at(i),t,eta.at(i));
+        usurf.at(i) = Vsurf.v(0);
+        wsurf.at(i) = Vsurf.v(2);
         for (size_t j = 0 ; j < nz ; ++j)
         {
             z.at(j) = zmin + (zmax - zmin)* ((double)j)/((double)nz - 1.);
@@ -84,6 +89,8 @@ int main(int , char** )
               << ", \"uorb\": " << uorb
               << ", \"vorb\": " << vorb
               << ", \"worb\": " << worb
+              << ", \"usurf\": " << usurf
+              << ", \"wsurf\": " << wsurf
               << ", \"depth\": " << h
               << ", \"Hs\": " << Hs
               << ", \"psi\": " << psi*180/PI
