@@ -11,12 +11,8 @@
 #include <ssc/random_data_generator.hpp>
 
 #include "Airy.hpp"
-//#include "BretschneiderSpectrum.hpp"
-//#include "Cos2sDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
-//#include "SumOfWaveSpectralDensities.hpp"
-//#include "SumOfWaveDirectionalSpreadings.hpp"
 #include "discretize.hpp"
 #include "YamlWaveModelInput.hpp"
 
