@@ -44,14 +44,14 @@ int main(int , char** )
     const Airy wave(A, random_phase);
 
 
-    const double xmin = -25;
-    const double xmax = 25;
-    const double zmin = -5;
-    const double zmax = 40;
+    const double xmin = -20;
+    const double xmax = 20;
+    const double zmin = -2;
+    const double zmax = 30;
     const double y = 0;
 
-    const size_t nx = 400;
-    const size_t nz = 80;
+    const size_t nx = 80;
+    const size_t nz = 640;
 
     double t = 0;
     std::vector<double> pdyn(nx*nz);
