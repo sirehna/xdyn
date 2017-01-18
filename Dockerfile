@@ -49,11 +49,13 @@ ENV PATH="/opt/cmake/bin:${PATH}"
 RUN mkdir -p /opt/share
 ADD . /opt/share
 
-RUN mkdir -p xdyn_build \
+RUN rm -rf /opt/xdyn \
+    && mkdir -p /opt/xdyn \
+    && mkdir -p xdyn_build \
     && cd xdyn_build \
     && cmake -Wno-dev \
              -G Ninja \
-             -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
+             -DINSTALL_PREFIX:PATH=/opt/xdyn \
              -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake \
              -DHDF5_DIR:PATH=/opt/HDF5/share/cmake \
              -DBOOST_ROOT:PATH=/opt/boost \
