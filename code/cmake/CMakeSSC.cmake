@@ -9,6 +9,10 @@ ELSE()
     FIND_PACKAGE(ssc REQUIRED COMPONENTS random_data_generator numeric)
 ENDIF()
 
+IF(EXISTS "${ssc_INCLUDE_DIRS}/check_ssc_version.hpp")
+    SET(ssc_INCLUDE_DIRS "${ssc_INCLUDE_DIRS}/.." CACHE PATH "Path to SSC include directory")
+ENDIF()
+
 IF(ssc_FOUND)
     MESSAGE(STATUS "SSC : ssc_INCLUDE_DIRS = ${ssc_INCLUDE_DIRS}")
     MESSAGE(STATUS "SSC : ssc_VERSION = ${ssc_VERSION}")
