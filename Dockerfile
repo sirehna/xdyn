@@ -65,6 +65,7 @@ RUN rm -rf /opt/xdyn \
     && ninja package \
     && ninja install \
     && cd .. \
-    && rm -rf xdyn_build
+    && rm -rf xdyn_build \
+    && export LD_LIBRARY_PATH=/opt/xdyn/lib:/opt/xdyn/bin
 
 CMD bash
