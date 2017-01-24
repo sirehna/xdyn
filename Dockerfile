@@ -46,6 +46,8 @@ WORKDIR /opt
 
 ENV PATH="/opt/cmake/bin:${PATH}"
 
+ENV LD_LIBRARY_PATH=/opt/xdyn/lib:/opt/xdyn/bin
+
 RUN mkdir -p /opt/share
 ADD . /opt/share
 
@@ -65,7 +67,6 @@ RUN rm -rf /opt/xdyn \
     && ninja package \
     && ninja install \
     && cd .. \
-    && rm -rf xdyn_build \
-    && export LD_LIBRARY_PATH=/opt/xdyn/lib:/opt/xdyn/bin
+    && rm -rf xdyn_build
 
 CMD bash
