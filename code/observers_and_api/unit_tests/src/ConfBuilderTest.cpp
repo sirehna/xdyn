@@ -25,7 +25,7 @@ TEST_F(ConfBuilderTest, compute_right_value_of_Tmax_falling_ball)
 //! [ConfBuilderTest example]
     ConfBuilder builder(test_data::falling_ball_example());
 
-	ASSERT_EQ(builder.Tmax, 0);
+    ASSERT_EQ(builder.Tmax, 0);
 
 
 //! [ConfBuilderTest expected output]
