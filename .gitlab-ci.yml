@@ -5,7 +5,6 @@ before_script:
 build:
    stage: build
    script:
-     - RUNNING=$(docker inspect --format="{{ .State.Running }}" cont_xdyn 2> /dev/null) && if [ $? -eq 0 ]; then echo "Deleting cont_xdyn"; docker rm cont_xdyn; fi
      - docker build -f Dockerfile -t xdyn .
      # - docker run --name cont_xdyn xdyn
      # - docker stop cont_xdyn
