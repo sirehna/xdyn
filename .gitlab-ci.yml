@@ -5,6 +5,12 @@ before_script:
 build:
    stage: build
    script:
+     - cd code &&
+       if grep --recursive --include={*.cpp,*.c,*.h,*.md,*.yml,*.cmake.*.xml,*.html,*.in,*.txt}
+               --exclude-dir={eigen,eigen3-hdf5,gcovr,gtest,gmock,google-test,yaml-cpp} -P "\t" . ;
+       then echo "Tabs found in the lines shown above."; false;
+       else echo "Repo passed no-tabs check."; fi &&
+       cd ..
      - docker build -f Dockerfile -t xdyn .
      # - docker run --name cont_xdyn xdyn
      # - docker stop cont_xdyn
