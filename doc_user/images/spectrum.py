@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import argparse
 import matplotlib
 import math
@@ -11,7 +12,7 @@ matplotlib.use('AGG')
 matplotlib.rc('grid', linewidth = 0.5, linestyle = '--', color = '#bdbdbd')
 matplotlib.rc('xtick', labelsize = 14)
 matplotlib.rc('ytick', labelsize = 14)
-matplotlib.rc('text', usetex = True)
+matplotlib.rc('text', usetex = (sys.platform !='win32'))
 matplotlib.rc('font', **{'family':'serif', 'serif':['Palatino'], 'size':14})
 
 # Must be after matplotlib.use
