@@ -1,6 +1,7 @@
 stages:
   - git_submodule
   - lint
+  - cleanup_Docker
   - build
 
 git_submodule:
@@ -19,6 +20,12 @@ lint:
        else echo "Repo passed no-tabs check."; fi &&
        cd ..
 
+cleanup_Docker:
+   stage: cleanup_Docker
+   script:
+     - docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null || true
+     - docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null || true
+
 build:
    stage: build
    script:
@@ -26,3 +33,4 @@ build:
      # - docker run --name cont_xdyn xdyn
      # - docker stop cont_xdyn
      # - docker rm cont_xdyn
+
