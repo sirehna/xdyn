@@ -1,9 +1,16 @@
-before_script:
-  - git submodule sync --recursive
-  - git submodule update --init --recursive
+stages:
+  - git_submodule
+  - lint
+  - build
 
-build:
-   stage: build
+git_submodule:
+   stage: git_submodule
+   script:
+     - git submodule sync --recursive
+     - git submodule update --init --recursive
+
+lint:
+   stage: lint
    script:
      - cd code &&
        if grep --recursive --include={*.cpp,*.c,*.hpp,*.h,*.md,*.yml,*.cmake.*.xml,*.html,*.in,*.txt}
@@ -11,6 +18,10 @@ build:
        then echo "Tabs found in the lines shown above."; false;
        else echo "Repo passed no-tabs check."; fi &&
        cd ..
+
+build:
+   stage: build
+   script:
      - docker build -f Dockerfile -t xdyn .
      # - docker run --name cont_xdyn xdyn
      # - docker stop cont_xdyn
