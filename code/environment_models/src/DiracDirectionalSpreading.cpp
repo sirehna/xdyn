@@ -5,9 +5,10 @@
  *      Author: cady
  */
 
+#include "DiracDirectionalSpreading.hpp"
+
 #include <cmath>
 
-#include "DiracDirectionalSpreading.hpp"
 
 DiracDirectionalSpreading::DiracDirectionalSpreading(const double psi0_) : WaveDirectionalSpreading(psi0_)
 {
