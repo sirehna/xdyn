@@ -1,5 +1,5 @@
 /*
-* YamlWaveStructures.cpp
+ * YamlSpectraInput.cpp
  *
  *  Created on: Aug 7, 2014
  *      Author: cady
