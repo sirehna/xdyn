@@ -5,11 +5,13 @@
  *      Author: cady
  */
 
+#include "DiracSpectralDensity.hpp"
+
+#include "InvalidInputException.hpp"
+
 #include <cmath>
 #include <sstream>
 
-#include "DiracSpectralDensity.hpp"
-#include "InvalidInputException.hpp"
 
 DiracSpectralDensity::DiracSpectralDensity(const double omega0_, const double Hs_) : omega0(omega0_), Hs(Hs_)
 {
