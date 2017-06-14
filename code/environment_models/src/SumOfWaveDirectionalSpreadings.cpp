@@ -7,10 +7,11 @@
 
 #include "SumOfWaveDirectionalSpreadings.hpp"
 
+#include "SumOfWaveSpectralDensities.hpp"
+
 #include <list>
 #include <set>
 
-#include "SumOfWaveSpectralDensities.hpp"
 
 SumOfWaveDirectionalSpreadings::SumOfWaveDirectionalSpreadings(const WaveDirectionalSpreading& w) : terms(std::vector<TR1(shared_ptr)<WaveDirectionalSpreading> >(1, TR1(shared_ptr)<WaveDirectionalSpreading>(w.clone())))
 {
