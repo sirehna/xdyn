@@ -1,19 +1,19 @@
 /*
- * WaveSpectrum.cpp
+ * WaveSpectralDensity.cpp
  *
  *  Created on: Jul 30, 2014
  *      Author: cady
  */
-#include <limits>
-
-#include <boost/math/tools/roots.hpp>
+#include "WaveSpectralDensity.hpp"
 
 #include "SumOfWaveSpectralDensities.hpp"
-#include "WaveSpectralDensity.hpp"
 #include "WaveNumberFunctor.hpp"
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
 #include <cmath> // For isnan
+
+#include <limits>
+#include <boost/math/tools/roots.hpp>
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
