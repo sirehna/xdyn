@@ -5,10 +5,11 @@
  *      Author: cady
  */
 
+#include "SumOfWaveSpectralDensities.hpp"
+
 #include <list>
 #include <set>
 
-#include "SumOfWaveSpectralDensities.hpp"
 
 SumOfWaveSpectralDensities::SumOfWaveSpectralDensities() : terms(std::vector<TR1(shared_ptr)<WaveSpectralDensity> >())
 {
