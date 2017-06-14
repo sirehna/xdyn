@@ -5,16 +5,16 @@
  *      Author: cady
  */
 
-#define _USE_MATH_DEFINE
+#include "Airy.hpp"
+#include "InternalErrorException.hpp"
 
 #include <vector>
 #include <ssc/macros.hpp>
 
+#define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-#include "InternalErrorException.hpp"
-#include <cmath> // For isnan
-#include "Airy.hpp"
+
 
 Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(spectrum_),
 phase(std::vector<std::vector<double> >()),
