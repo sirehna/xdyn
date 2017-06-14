@@ -5,13 +5,16 @@
  *      Author: cady
  */
 
+#include "Cos2sDirectionalSpreading.hpp"
+
+#include "InvalidInputException.hpp"
+
 #include <boost/math/special_functions/gamma.hpp>
+
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
-#include "Cos2sDirectionalSpreading.hpp"
-#include "InvalidInputException.hpp"
 
 Cos2sDirectionalSpreading::Cos2sDirectionalSpreading(const double psi0, const double s_) : WaveDirectionalSpreading(psi0),
 s(s_),
