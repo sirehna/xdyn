@@ -5,13 +5,12 @@
  *      Author: cady
  */
 
+#include "BretschneiderSpectrum.hpp"
+#include "InvalidInputException.hpp"
+
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-
-#include "BretschneiderSpectrum.hpp"
-#include "InvalidInputException.hpp"
 
 #define POW2(x) ((x)*(x))
 #define POW4(x) (POW2(POW2(x)))
