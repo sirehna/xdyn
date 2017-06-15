@@ -20,4 +20,13 @@ clang
 *.bz2
 ssc.deb
 __pycache__
-
+**.hdf5
+**.h5
+**.bin
+**.docx
+**.pdf
+**.html
+**.png
+**.jpeg
+**.jpg
+**.emf
