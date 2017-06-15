@@ -1,6 +1,7 @@
+#include "h5_tools.hpp"
+
 #include "InternalErrorException.hpp"
 #include "h5_tools.h"
-#include "h5_tools.hpp"
 
 std::string H5_Tools::ensureStringStartsAndEndsWithAPattern(
         const std::string & str,        //!< String to check
