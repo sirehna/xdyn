@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(parser_extensions)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(parser_extensions)
 
-set(SRC src/builders.cpp
+SET(SRC src/builders.cpp
         src/listeners.cpp
         src/InterpolationModule.cpp
         )
@@ -11,23 +11,23 @@ set(SRC src/builders.cpp
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
 IF (NOT(MSVC))
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
-include_directories(inc)
+INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
-include_directories(${core_INCLUDE_DIRS})
-include_directories(${exceptions_INCLUDE_DIRS})
-include_directories(${yaml_parser_INCLUDE_DIRS})
-include_directories(${environment_models_INCLUDE_DIRS})
-include_directories(${external_data_structures_INCLUDE_DIRS})
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
-include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
-include_directories(${mesh_INCLUDE_DIRS})
-include_directories(${hdb_interpolators_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${yaml_parser_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 
-add_library (${PROJECT_NAME} OBJECT ${SRC})
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-add_subdirectory(unit_tests)
+ADD_SUBDIRECTORY(unit_tests)
