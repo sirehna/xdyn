@@ -1,6 +1,7 @@
+#include "Hdf5Observer.hpp"
+
 #include "h5_version.hpp"
 #include "h5_tools.hpp"
-#include "Hdf5Observer.hpp"
 
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"
