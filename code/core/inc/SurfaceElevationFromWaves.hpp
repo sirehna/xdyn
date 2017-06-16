@@ -8,10 +8,15 @@
 #ifndef SURFACEELEVATIONFROMWAVES_HPP_
 #define SURFACEELEVATIONFROMWAVES_HPP_
 
-#include <ssc/kinematics.hpp>
 #include "SurfaceElevationInterface.hpp"
+#include "WaveModel.hpp"
 
-class WaveModel;
+#include <ssc/kinematics.hpp>
+
+#include <iostream>
+
+
+typedef TR1(shared_ptr)<WaveModel> WaveModelPtr;
 
 /** \brief Multiple (directional spreading+spectrum) pairs
  *  \details This is just a very thin layer around the WaveModel class.
@@ -26,19 +31,19 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
 {
     public:
         SurfaceElevationFromWaves(
-                const std::vector<TR1(shared_ptr)<WaveModel> >& models,
+                const std::vector<WaveModelPtr>& models,
                 const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
                 const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
         SurfaceElevationFromWaves(
-                const TR1(shared_ptr)<WaveModel>& model,
+                const WaveModelPtr& model,
                 const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
                 const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
 
         /**
          *  \section ex1 Example
-         *  \snippet model_wrappers/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height example
+         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height example
          *  \section ex2 Expected output
-         *  \snippet model_wrappers/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
+         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
          *  */
         double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
                            const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
@@ -71,6 +76,8 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
         std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
         std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
 
+        std::vector<WaveModelPtr> get_models() const {return models;};
+
     private:
         SurfaceElevationFromWaves(); // Disabled
 
@@ -86,9 +93,9 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation VI.34, page 183
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 68
          *  \section ex1 Example
-         *  \snippet model_wrappers/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure example
+         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure example
          *  \section ex2 Expected output
-         *  \snippet model_wrappers/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure expected output
+         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure expected output
          *  */
         double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
                                 const double g,   //!< gravity (in m/s^2)
@@ -99,6 +106,6 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
                                 const double t    //!< Current time instant (in seconds)
                                 ) const;
 
-        std::vector<TR1(shared_ptr)<WaveModel> > models;
+        std::vector<WaveModelPtr> models;
 };
 #endif /* SURFACEELEVATIONFROMWAVES_HPP_ */
