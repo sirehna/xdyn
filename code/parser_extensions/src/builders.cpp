@@ -5,18 +5,14 @@
  *      Author: cady
  */
 
-#include <boost/foreach.hpp>
-
-#include "ssc/text_file_reader.hpp"
-
 #include "builders.hpp"
 #include "DefaultSurfaceElevation.hpp"
 #include "environment_parsers.hpp"
 #include "InternalErrorException.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "discretize.hpp"
-#include "HDBParser.hpp"
 #include "Stretching.hpp"
+#include <boost/foreach.hpp>
 
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
