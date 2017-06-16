@@ -5,18 +5,19 @@
  *      Author: cady
  */
 
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
-
-#include <ssc/check_ssc_version.hpp>
-#include <ssc/text_file_reader.hpp>
 
 #include "GZCurve.hpp"
 #include "make_sim_for_GZ.hpp"
 #include "OptionPrinter.hpp"
 #include "utilities_for_InputData.hpp"
 #include "simulator_run.hpp"
+
+#include <ssc/text_file_reader.hpp>
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 
 struct GZOptions
 {
