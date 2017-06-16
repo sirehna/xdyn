@@ -5,13 +5,12 @@
  *      Author: cady
  */
 
-#include <ssc/interpolation.hpp>
-
-#include "yaml.h"
-#include <ssc/yaml_parser.hpp>
-#include "environment_parsers.hpp"
-#include "Body.hpp"
 #include "ResistanceCurveForceModel.hpp"
+#include "Body.hpp"
+#include "environment_parsers.hpp"
+#include <ssc/interpolation.hpp>
+#include <ssc/yaml_parser.hpp>
+#include "yaml.h"
 
 std::string ResistanceCurveForceModel::model_name() {return "resistance curve";}
 
