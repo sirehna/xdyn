@@ -1,19 +1,20 @@
 /*
- * WaveModelFromSpectra.cpp
+ * SurfaceElevationFromWaves.cpp
  *
  *  Created on: Aug 7, 2014
  *      Author: cady
  */
 
-#include <boost/foreach.hpp>
+#include "SurfaceElevationFromWaves.hpp"
+#include "WaveModel.hpp"
 
 #include <ssc/exception_handling.hpp>
 
-#include "WaveModel.hpp"
-#include "SurfaceElevationFromWaves.hpp"
+#include <boost/foreach.hpp>
+
 
 SurfaceElevationFromWaves::SurfaceElevationFromWaves(
-        const std::vector<TR1(shared_ptr)<WaveModel> >& models_,
+        const std::vector<WaveModelPtr>& models_,
         const std::pair<std::size_t,std::size_t> output_mesh_size_,
         const ssc::kinematics::PointMatrixPtr& output_mesh_) :
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_),
@@ -26,7 +27,7 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(
 }
 
 SurfaceElevationFromWaves::SurfaceElevationFromWaves(
-        const TR1(shared_ptr)<WaveModel>& model,
+        const WaveModelPtr& model,
         const std::pair<std::size_t,std::size_t> output_mesh_size_,
         const ssc::kinematics::PointMatrixPtr& output_mesh_) :
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_),
@@ -44,7 +45,7 @@ double SurfaceElevationFromWaves::wave_height(const double x, //!< x-coordinate 
                                          ) const
 {
     double zwave = 0;
-    BOOST_FOREACH(const TR1(shared_ptr)<WaveModel> model, models) zwave += model->elevation(x,y,t);
+    BOOST_FOREACH(const WaveModelPtr model, models) zwave += model->elevation(x,y,t);
     return zwave;
 }
 
@@ -93,7 +94,7 @@ double SurfaceElevationFromWaves::dynamic_pressure(const double rho, //!< water 
                                                    ) const
 {
     double pdyn = 0;
-    BOOST_FOREACH(const TR1(shared_ptr)<WaveModel> model, models) pdyn += model->dynamic_pressure(rho,g,x,y,z,eta,t);
+    BOOST_FOREACH(const WaveModelPtr model, models) pdyn += model->dynamic_pressure(rho,g,x,y,z,eta,t);
     return pdyn;
 }
 
