@@ -1,5 +1,5 @@
 /*
- * GZComputer.cpp
+ * calculate_gz.cpp
  *
  *  Created on: Mar 26, 2015
  *      Author: cady
