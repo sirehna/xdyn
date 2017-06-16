@@ -9,6 +9,7 @@ set(SRC src/simulator_api.cpp
         src/Hdf5Observer.cpp
         src/Hdf5WaveObserver.cpp
         src/Hdf5WaveObserverBuilder.cpp
+        src/Hdf5WaveSpectrumObserver.cpp
         src/SimObserver.cpp
         src/CsvObserver.cpp
         src/DictObserver.cpp
