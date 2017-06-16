@@ -4,16 +4,18 @@
  *  Created on: Jun 28, 2015
  *      Author: cady
  */
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
+#include "AbstractWageningen.hpp"
+
+#include "external_data_structures_parsers.hpp"
 
 #include <ssc/yaml_parser.hpp>
 
 #include "yaml.h"
 
-#include "AbstractWageningen.hpp"
-#include "external_data_structures_parsers.hpp"
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 
 AbstractWageningen::Yaml::Yaml() :
         name(),
