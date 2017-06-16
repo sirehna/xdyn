@@ -5,10 +5,9 @@
  *      Author: cady
  */
 
-#include <fstream>
-
 #include "file_writer.hpp"
 #include "yaml_data.hpp"
+#include <fstream>
 
 int main(int argc, const char* argv[])
 {
