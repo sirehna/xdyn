@@ -1,7 +1,5 @@
-#include <fstream>
-
 #include "file_writer.hpp"
-
+#include <fstream>
 
 void write_file(const std::string& filename, const std::string& contents)
 {
