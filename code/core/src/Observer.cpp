@@ -5,9 +5,10 @@
  *      Author: cady
  */
 
-#include "InvalidInputException.hpp"
 #include "Observer.hpp"
+#include "InvalidInputException.hpp"
 #include "Sim.hpp"
+#include "SurfaceElevationGrid.hpp"
 
 Observer::Observer(const std::vector<std::string>& data_) : initialized(false), stuff_to_write(data_), serialize(), initialize()
 {
