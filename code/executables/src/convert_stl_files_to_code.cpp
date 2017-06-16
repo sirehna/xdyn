@@ -1,11 +1,10 @@
-#include <iostream>
-#include <string>
-
 #include "mesh_manipulations.hpp"
 #include "stl_reader.hpp"
 #include "stl_writer.hpp"
-#include <ssc/text_file_reader.hpp>
 #include "base91.hpp"
+#include <ssc/text_file_reader.hpp>
+#include <iostream>
+#include <string>
 
 std::string description();
 std::string description()
