@@ -628,3 +628,14 @@ TEST_F(ForceTests, bug_3004)
     ASSERT_TRUE(gm.is_initialized());
     ASSERT_FALSE(std::isnan(gm.get()));
 }
+
+TEST_F(ForceTests, hydrostatic_plus_froude_krylov)
+{
+    ForceTester test(test_data::oscillating_cube_example(), test_data::cube());
+
+    test.add<HydrostaticForceModel>();
+    const auto F = test.force_in_ned(0,0,0,PI/3,0,0);
+    ASSERT_NEAR(-1026*0.5*9.81, F.Z(),EPS);
+    EXPECT_NEAR(0, F.M(),EPS);
+    EXPECT_NEAR(-1026*0.5*9.81*1/36., F.K(),EPS);
+}

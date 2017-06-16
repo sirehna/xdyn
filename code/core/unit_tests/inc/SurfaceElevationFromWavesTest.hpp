@@ -17,6 +17,7 @@ class SurfaceElevationFromWavesTest : public ::testing::Test
         virtual void TearDown();
         TR1(shared_ptr)<WaveModel> get_model() const;
         TR1(shared_ptr)<WaveModel> get_model(const size_t nfreq) const;
+        TR1(shared_ptr)<WaveModel> get_model(const double Hs, const double Tp, const double phase, const double water_depth) const;
         ssc::random_data_generator::DataGenerator a;
 };
 

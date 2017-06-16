@@ -18,6 +18,7 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
+#include "InvalidInputException.hpp"
 
 SurfaceElevationFromWavesTest::SurfaceElevationFromWavesTest() : a(ssc::random_data_generator::DataGenerator(45454))
 {
@@ -33,6 +34,24 @@ void SurfaceElevationFromWavesTest::SetUp()
 
 void SurfaceElevationFromWavesTest::TearDown()
 {
+}
+
+TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model(const double Hs, const double Tp, const double phase, const double water_depth) const
+{
+    const double psi0 = 0;
+    if (Tp==0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Tp is zero (which implies omega0 will be infinite)");
+    }
+    const double omega0 = 2*PI/Tp;
+    const double omega_min = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
+    YamlStretching y;
+    y.h = 0;
+    y.delta = 1;
+    const Stretching s(y);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, 1, water_depth, s);
+    return TR1(shared_ptr)<WaveModel>(new Airy(A, phase));
 }
 
 TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
@@ -157,4 +176,56 @@ TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
         EXPECT_NEAR((double)grid.z(i,5),-1.4551995278764878,EPS);
         EXPECT_NEAR((double)grid.z(i,6),-1.2830361602181635,EPS);
     }
+}
+
+TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure_plus_hydrostatic)
+{
+    const double psi0 = 0;
+    const double Hs = 2;
+    const double k_ = 1;
+    const double g = 9.81;
+    const double rho = 1024;
+    ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
+    const double h = 20;
+    const double omega0 = sqrt(g*k_*tanh(k_*h));
+    const double phi = 0;//-PI;
+    SurfaceElevationFromWaves wave(get_model(Hs, 2*PI/omega0, phi, h));
+
+    const double t = 0;
+    const double EPS = 1E-4;
+
+    const ssc::kinematics::Point P1("NED", PI/2, 0, -1);
+    const double phs1 = rho*g*P1.z();
+    const double pdyn1 = wave.get_dynamic_pressure(rho, g, P1, k, wave.wave_height(P1.x(), P1.y(), t), t);
+    ASSERT_NEAR(-rho*g, phs1, EPS);
+    ASSERT_NEAR(rho*g*(cosh(h+1)/cosh(h)), pdyn1, EPS);
+    ASSERT_NEAR(rho*g*(cosh(h+1)/cosh(h) - 1), phs1 + pdyn1, EPS);
+
+    const ssc::kinematics::Point P2("NED", PI/2, 0, -0.5);
+    const double phs2 = rho*g*P2.z();
+    const double pdyn2 = wave.get_dynamic_pressure(rho, g, P2, k, wave.wave_height(P2.x(), P2.y(), t), t);
+    ASSERT_NEAR(-rho*g*0.5, phs2, EPS);
+    ASSERT_NEAR(rho*g*(cosh(h+0.5)/cosh(h)), pdyn2, EPS);
+    ASSERT_NEAR(rho*g*(cosh(h+0.5)/cosh(h) - 0.5), phs2 + pdyn2, EPS);
+
+    const ssc::kinematics::Point P3("NED", PI/2, 0, 0);
+    const double phs3 = rho*g*P3.z();
+    const double pdyn3 = wave.get_dynamic_pressure(rho, g, P3, k, wave.wave_height(P3.x(), P3.y(), t), t);
+    ASSERT_NEAR(0, phs3, EPS);
+    ASSERT_NEAR(rho*g, pdyn3, EPS);
+    ASSERT_NEAR(rho*g, phs3 + pdyn3, EPS);
+
+    const ssc::kinematics::Point P4("NED", PI, 0, 0);
+    const double phs4 = rho*g*P4.z();
+    const double pdyn4 = wave.get_dynamic_pressure(rho, g, P4, k, wave.wave_height(P4.x(), P4.y(), t), t);
+    ASSERT_NEAR(0, phs4, EPS);
+    ASSERT_NEAR(0, pdyn4, EPS);
+    ASSERT_NEAR(0, phs4 + pdyn4, EPS);
+
+    const ssc::kinematics::Point P5("NED", 3*PI/2, 0, 1+1E-10);
+    const double phs5 = rho*g*P5.z();
+    const double pdyn5 = wave.get_dynamic_pressure(rho, g, P5, k, wave.wave_height(P5.x(), P5.y(), t), t);
+    ASSERT_NEAR(rho*g, phs5, EPS);
+    ASSERT_NEAR(-rho*g*(cosh(h-1)/cosh(h)), pdyn5, EPS);
+    ASSERT_NEAR(rho*g*(1-cosh(h-1)/cosh(h)), phs5 + pdyn5, EPS);
 }
