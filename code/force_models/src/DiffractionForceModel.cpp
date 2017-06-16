@@ -5,19 +5,20 @@
  *      Author: cady
  */
 
-#include <array>
-
-#include <ssc/interpolation.hpp>
-#include <ssc/text_file_reader.hpp>
+#include "DiffractionForceModel.hpp"
 
 #include "Body.hpp"
-#include "DiffractionForceModel.hpp"
 #include "DiffractionInterpolator.hpp"
 #include "HDBParser.hpp"
 #include "InvalidInputException.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
+
+#include <ssc/interpolation.hpp>
+#include <ssc/text_file_reader.hpp>
+
+#include <array>
 
 std::string DiffractionForceModel::model_name() { return "diffraction";}
 
