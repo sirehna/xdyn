@@ -1,11 +1,10 @@
 /*
- * generate_yaml_examples.cpp
+ * generate_stl_examples.cpp
  *
  *  Created on: 17 avr. 2014
  *      Author: cady
  */
 
-#include <fstream>
 
 #include "file_writer.hpp"
 #include "generate_anthineas.hpp"
@@ -13,6 +12,7 @@
 #include "STL_data.hpp"
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"
+#include <fstream>
 
 int main(int argc, const char* argv[])
 {
