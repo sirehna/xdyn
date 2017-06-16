@@ -2,11 +2,8 @@
 #define SURFACEELEVATIONFROMWAVESTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "Airy.hpp"
+#include "WaveModel.hpp"
 #include <ssc/random_data_generator.hpp>
-#include <ssc/macros.hpp>
-
-#include TR1INC(memory)
 
 class SurfaceElevationFromWavesTest : public ::testing::Test
 {
@@ -15,9 +12,9 @@ class SurfaceElevationFromWavesTest : public ::testing::Test
         virtual ~SurfaceElevationFromWavesTest();
         virtual void SetUp();
         virtual void TearDown();
-        TR1(shared_ptr)<WaveModel> get_model() const;
-        TR1(shared_ptr)<WaveModel> get_model(const size_t nfreq) const;
-        TR1(shared_ptr)<WaveModel> get_model(const double Hs, const double Tp, const double phase, const double water_depth) const;
+        WaveModelPtr get_model() const;
+        WaveModelPtr get_model(const size_t nfreq) const;
+        WaveModelPtr get_model(const double Hs, const double Tp, const double phase, const double water_depth) const;
         ssc::random_data_generator::DataGenerator a;
 };
 

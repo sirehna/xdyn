@@ -1,24 +1,24 @@
 /*
- * WaveModelFromSpectraTest.cpp
+ * SurfaceElevationFromWavesTest.cpp
  *
  *  Created on: Aug 7, 2014
  *      Author: cady
  */
 
+#include "SurfaceElevationFromWavesTest.hpp"
 #include "discretize.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
-#include <ssc/kinematics.hpp>
 #include "SurfaceElevationBuilder.hpp"
-#include "SurfaceElevationFromWavesTest.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 #include "YamlWaveModelInput.hpp"
 #include "YamlWaveModelInput.hpp"
 #include "Stretching.hpp"
+#include "InvalidInputException.hpp"
+#include <ssc/kinematics.hpp>
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-#include "InvalidInputException.hpp"
 
 SurfaceElevationFromWavesTest::SurfaceElevationFromWavesTest() : a(ssc::random_data_generator::DataGenerator(45454))
 {
@@ -36,7 +36,7 @@ void SurfaceElevationFromWavesTest::TearDown()
 {
 }
 
-TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model(const double Hs, const double Tp, const double phase, const double water_depth) const
+WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double Hs, const double Tp, const double phase, const double water_depth) const
 {
     const double psi0 = 0;
     if (Tp==0)
@@ -51,10 +51,10 @@ TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model(const double
     y.delta = 1;
     const Stretching s(y);
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, 1, water_depth, s);
-    return TR1(shared_ptr)<WaveModel>(new Airy(A, phase));
+    return WaveModelPtr(new Airy(A, phase));
 }
 
-TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
+WaveModelPtr SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
 {
     const double psi0 = PI/4;
     const double Hs = 3;
@@ -68,10 +68,10 @@ TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model(const size_t
     const Stretching s(y);
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s);
     int random_seed = 0;
-    return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
+    return WaveModelPtr(new Airy(A, random_seed));
 }
 
-TR1(shared_ptr)<WaveModel> SurfaceElevationFromWavesTest::get_model() const
+WaveModelPtr SurfaceElevationFromWavesTest::get_model() const
 {
     return get_model(a.random<size_t>().between(2,100));
 }
