@@ -1,30 +1,32 @@
 /*
- * DampingForceModel.cpp
+ * RadiationDampingForceModel.cpp
  *
  *  Created on: Oct 2, 2014
  *      Author: jacquenot
  */
 
-#include <array>
-
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
+#include "RadiationDampingForceModel.hpp"
 
 #include "Body.hpp"
 #include "HDBParser.hpp"
 #include "History.hpp"
 #include "InvalidInputException.hpp"
 #include "RadiationDampingBuilder.hpp"
-#include "RadiationDampingForceModel.hpp"
+#include "external_data_structures_parsers.hpp"
 
 #include <ssc/macros.hpp>
 #include <ssc/text_file_reader.hpp>
-#include <cassert>
+
+#include <ssc/yaml_parser.hpp>
 
 #include "yaml.h"
-#include "external_data_structures_parsers.hpp"
-#include <ssc/yaml_parser.hpp>
+
+#include <cassert>
+#include <array>
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 std::string RadiationDampingForceModel::model_name() {return "radiation damping";}
 
