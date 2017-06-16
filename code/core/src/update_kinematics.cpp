@@ -4,15 +4,15 @@
  *  Created on: Jun 16, 2014
  *      Author: cady
  */
-#include <ssc/kinematics.hpp>
-
+#include "update_kinematics.hpp"
 #include "Body.hpp"
 #include "BodyBuilder.hpp"
 #include "StateMacros.hpp"
-#include "update_kinematics.hpp"
 #include "yaml2eigen.hpp"
 #include "YamlAngle.hpp"
 #include "YamlBody.hpp"
+
+#include <ssc/kinematics.hpp>
 
 #define SQUARE(x) ((x)*(x))
 
