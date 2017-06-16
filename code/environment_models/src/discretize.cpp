@@ -4,22 +4,19 @@
  *  Created on: Aug 1, 2014
  *      Author: cady
  */
-
-#include <boost/foreach.hpp>
+#include "discretize.hpp"
+#include "WaveDirectionalSpreading.hpp"
+#include "WaveSpectralDensity.hpp"
+#include "Stretching.hpp"
+#include "InternalErrorException.hpp"
+#include "InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 #include <list>
 #include <utility> //std::pair
-#include "InternalErrorException.hpp"
 #include <cmath> // For isnan
-
-#include "InvalidInputException.hpp"
-
-#include "discretize.hpp"
-#include "WaveDirectionalSpreading.hpp"
-#include "WaveSpectralDensity.hpp"
 
 DiscreteDirectionalWaveSpectrum common(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
@@ -43,8 +40,8 @@ DiscreteDirectionalWaveSpectrum common(
     if (ret.psi.size()>1)   ret.dpsi = ret.psi[1]-ret.psi[0];
     ret.Si.reserve(ret.omega.size());
     ret.Dj.reserve(ret.psi.size());
-    BOOST_FOREACH(double omega, ret.omega) ret.Si.push_back(S(omega));
-    BOOST_FOREACH(double psi, ret.psi)   ret.Dj.push_back(D(psi));
+    for (const auto omega:ret.omega) ret.Si.push_back(S(omega));
+    for (const auto psi:ret.psi) ret.Dj.push_back(D(psi));
     return ret;
 }
 
@@ -59,7 +56,7 @@ DiscreteDirectionalWaveSpectrum discretize(
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     ret.k.reserve(ret.omega.size());
-    BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega));
+    for (const auto omega:ret.omega) ret.k.push_back(S.get_wave_number(omega));
     ret.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
     ret.pdyn_factor_sh = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
     return ret;
@@ -83,7 +80,7 @@ DiscreteDirectionalWaveSpectrum discretize(
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     ret.k.reserve(ret.omega.size());
-    BOOST_FOREACH(double omega, ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
+    for (const auto omega:ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
     for (size_t i = 0 ; i < ret.k.size() ; ++i)
     {
         const double k = ret.k.at(i);
