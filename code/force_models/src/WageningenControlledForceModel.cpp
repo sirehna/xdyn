@@ -5,13 +5,15 @@
  *      Author: cady
  */
 
-#include "yaml.h"
+#include "WageningenControlledForceModel.hpp"
 
 #include "Body.hpp"
 #include "external_data_structures_parsers.hpp"
-#include <ssc/yaml_parser.hpp>
 #include "InvalidInputException.hpp"
-#include "WageningenControlledForceModel.hpp"
+
+#include <ssc/yaml_parser.hpp>
+
+#include "yaml.h"
 
 std::string WageningenControlledForceModel::model_name() {return "wageningen B-series";}
 
