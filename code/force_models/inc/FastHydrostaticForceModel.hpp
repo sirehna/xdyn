@@ -1,5 +1,5 @@
 /*
- * HydrostaticForceModel.hpp
+ * FastHydrostaticForceModel.hpp
  *
  *  Created on: Jun 16, 2014
  *      Author: cady
