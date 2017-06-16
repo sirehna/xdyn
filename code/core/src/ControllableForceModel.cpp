@@ -5,13 +5,13 @@
  *      Author: cady
  */
 
-#include <ssc/data_source.hpp>
-
 #include "ControllableForceModel.hpp"
 #include "InvalidInputException.hpp"
 #include "ForceModel.hpp"
 #include "Observer.hpp"
 #include "yaml2eigen.hpp"
+
+#include <ssc/data_source.hpp>
 
 ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& position_of_frame_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
     env(env_),
