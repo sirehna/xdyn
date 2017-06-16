@@ -72,6 +72,7 @@ void catch_exceptions(const std::function<void(void)>& f, const std::string& sol
 
 #include "stl_io_hdf5.hpp"
 #include "h5_tools.hpp"
+
 void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& prog_command);
 void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& prog_command)
 {
@@ -87,13 +88,18 @@ void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Si
             {
                 H5_Tools::writeString(observer.filename, "/inputs/yaml/input", yaml_input);
             }
+
             for (const auto& bodies : sys.get_bodies())
             {
-                if (bodies->get_states().mesh->nb_of_static_nodes>0)
+                const auto& states = bodies->get_states();
+                const auto& name = states.name;
+                const auto& mesh = states.mesh;
+                if (mesh->nb_of_static_nodes>0)
                 {
-                    writeMeshToHdf5File(observer.filename, "/inputs/meshes/"+bodies->get_states().name,
-                                        bodies->get_states().mesh->nodes,
-                                        bodies->get_states().mesh->facets);
+                    writeMeshToHdf5File(observer.filename,
+                                        "/inputs/meshes/"+name,
+                                        mesh->nodes,
+                                        mesh->facets);
                 }
             }
         }
