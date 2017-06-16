@@ -13,9 +13,10 @@
 #include <string>
 #include <vector>
 
-#include "SurfaceElevationGrid.hpp"
+#include "DiscreteDirectionalWaveSpectrum.hpp"
 
 class Sim;
+class SurfaceElevationGrid;
 
 struct DataAddressing
 {
@@ -42,6 +43,8 @@ class Observer
             initialize[address.name] = get_initializer(val, address);
             serialize[address.name] = get_serializer(val, address);
         }
+
+        virtual void write_before_simulation(const std::vector<DiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
 
     protected:
 

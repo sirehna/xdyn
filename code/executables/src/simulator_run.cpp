@@ -1,3 +1,4 @@
+#include "simulator_run.hpp"
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
 #include "NumericalErrorException.hpp"
@@ -5,7 +6,6 @@
 #include "listeners.hpp"
 #include "InputData.hpp"
 #include "simulator_api.hpp"
-#include "simulator_run.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/solver.hpp>
@@ -70,9 +70,18 @@ void catch_exceptions(const std::function<void(void)>& f, const std::string& sol
     }
 }
 
+#include "SurfaceElevationInterface.hpp"
+void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& sys);
+void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& sys)
+{
+    for (auto observer:observers.get())
+    {
+        sys.get_env().w->serialize_wave_spectra_before_simulation(observer);
+    }
+}
+
 #include "stl_io_hdf5.hpp"
 #include "h5_tools.hpp"
-
 void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& prog_command);
 void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& prog_command)
 {
@@ -141,6 +150,7 @@ void run_simulation(const InputData& input_data)
         auto observers_description = get_observers_description(yaml_input, input_data);
         ListOfObservers observers(observers_description);
         serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
+        serialize_context_if_necessary_new(observers, sys);
         solve(input_data, sys, observers);
     }};
     if (input_data.catch_exceptions) catch_exceptions(f, input_data.solver);

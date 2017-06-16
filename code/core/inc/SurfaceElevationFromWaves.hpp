@@ -77,7 +77,7 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
         std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
 
         std::vector<WaveModelPtr> get_models() const {return models;};
-
+        void serialize_wave_spectra_before_simulation(TR1(shared_ptr)<Observer>& observer) const;
     private:
         SurfaceElevationFromWaves(); // Disabled
 

@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "Observer.hpp"
 #include "SurfaceElevationFromWaves.hpp"
 #include "WaveModel.hpp"
 
@@ -115,4 +116,14 @@ ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double 
         Vwaves.z() += vw.z();
     }
     return Vwaves;
+}
+
+
+void SurfaceElevationFromWaves::serialize_wave_spectra_before_simulation(TR1(shared_ptr)<Observer>& observer) const
+{
+    std::vector<DiscreteDirectionalWaveSpectrum> spectra;
+    spectra.reserve(models.size());
+    for (const auto model:models) spectra.push_back(model->get_spectrum());
+    const DataAddressing address(std::vector<std::string>({"",""}), "");
+    observer->write_before_simulation(spectra, address);
 }

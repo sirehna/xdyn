@@ -34,6 +34,18 @@ class ListOfObservers
             }
         }
 
+        template <typename T> void write_before_simulation(
+                        const T& val,
+                        const DataAddressing& address)
+        {
+            for (auto observer:observers)
+            {
+                observer->write_before_simulation(val, address);
+            }
+        }
+
+
+
     private:
 
         std::vector<ObserverPtr> observers;
