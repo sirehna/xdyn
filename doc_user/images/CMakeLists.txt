@@ -23,16 +23,16 @@ FOREACH(s ${SPECTRA_FULL_FILENAME})
 ENDFOREACH()
 # MESSAGE(STATUS "SVG_IMAGES : ${SVG_IMAGES}")
 
-FOREACH(s ${SVG_IMAGES})
-    STRING(REGEX REPLACE ".svg$" ".png" PNG_IMAGE ${s})
-    LIST(APPEND PNG_IMAGES ${PNG_IMAGE})
-    # MESSAGE(STATUS "Creating target ${PNG_IMAGE}")
-    ADD_CUSTOM_COMMAND(OUTPUT ${PNG_IMAGE}
-                       COMMAND inkscape -z -e ${PNG_IMAGE} ${s} -d 300
-                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                       COMMENT "Generating ${PNG_IMAGE}"
-                       )
-ENDFOREACH()
+#FOREACH(s ${SVG_IMAGES})
+#    STRING(REGEX REPLACE ".svg$" ".png" PNG_IMAGE ${s})
+#    LIST(APPEND PNG_IMAGES ${PNG_IMAGE})
+#    # MESSAGE(STATUS "Creating target ${PNG_IMAGE}")
+#    ADD_CUSTOM_COMMAND(OUTPUT ${PNG_IMAGE}
+#                       COMMAND inkscape -z -e ${PNG_IMAGE} ${s} -d 300
+#                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#                       COMMENT "Generating ${PNG_IMAGE}"
+#                       )
+#ENDFOREACH()
 
 # One checks if command FIND_PACKAGE(PythonInterp 3.4) has been run from an
 # upper CMakeLists.txt project
