@@ -4,17 +4,17 @@
  *  Created on: Jan 15, 2015
  *      Author: cady
  */
-
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
-
-#include "yaml.h"
+#include "SimpleHeadingKeepingController.hpp"
 
 #include "BodyStates.hpp"
 #include "external_data_structures_parsers.hpp"
 #include <ssc/yaml_parser.hpp>
-#include "SimpleHeadingKeepingController.hpp"
+
+#include "yaml.h"
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 std::string SimpleHeadingKeepingController::model_name() {return "simple heading controller";}
 
