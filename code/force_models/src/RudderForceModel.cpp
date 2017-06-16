@@ -5,16 +5,18 @@
  *      Author: cady
  */
 
+#include "RudderForceModel.hpp"
+
+#include "external_data_structures_parsers.hpp"
+#include "SurfaceElevationInterface.hpp"
+#include "yaml2eigen.hpp"
+
+#include <ssc/yaml_parser.hpp>
+#include "yaml.h"
+
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-#include "external_data_structures_parsers.hpp"
-#include <ssc/yaml_parser.hpp>
-#include "RudderForceModel.hpp"
-#include "SurfaceElevationInterface.hpp"
-#include "yaml2eigen.hpp"
-#include "yaml.h"
 
 #define HYPOT(X,Y,Z) sqrt((X)*(X)+(Y)*(Y)+(Z)*(Z))
 
