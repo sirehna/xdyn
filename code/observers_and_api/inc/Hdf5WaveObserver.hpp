@@ -30,4 +30,6 @@ class SimHdf5WaveObserver
         TR1(shared_ptr)<Impl> pimpl;
 };
 
+typedef TR1(shared_ptr)<SimHdf5WaveObserver> SimHdf5WaveObserverPtr;
+
 #endif
