@@ -11,8 +11,6 @@
 
 #include <ssc/exception_handling.hpp>
 
-#include <boost/foreach.hpp>
-
 
 SurfaceElevationFromWaves::SurfaceElevationFromWaves(
         const std::vector<WaveModelPtr>& models_,
@@ -46,7 +44,7 @@ double SurfaceElevationFromWaves::wave_height(const double x, //!< x-coordinate 
                                          ) const
 {
     double zwave = 0;
-    BOOST_FOREACH(const WaveModelPtr model, models) zwave += model->elevation(x,y,t);
+    for (const auto model:models) zwave += model->elevation(x,y,t);
     return zwave;
 }
 
@@ -95,7 +93,7 @@ double SurfaceElevationFromWaves::dynamic_pressure(const double rho, //!< water 
                                                    ) const
 {
     double pdyn = 0;
-    BOOST_FOREACH(const WaveModelPtr model, models) pdyn += model->dynamic_pressure(rho,g,x,y,z,eta,t);
+    for (const auto model:models) pdyn += model->dynamic_pressure(rho,g,x,y,z,eta,t);
     return pdyn;
 }
 
