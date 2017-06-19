@@ -662,7 +662,7 @@ TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_wat
     }
 }
 
-TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_water_in_infinite_depth)
+TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_above_water_in_infinite_depth)
 {
     const double Hs = 3;
     const double Tp = 5;
