@@ -8,10 +8,11 @@
 #ifndef WAVEMODEL_HPP_
 #define WAVEMODEL_HPP_
 
-#include <ssc/kinematics.hpp>
-
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 
+#include <ssc/kinematics.hpp>
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
 
 /** \author cec
  *  \date Aug 1, 2014, 3:15:04 PM
@@ -97,5 +98,7 @@ class WaveModel
     protected:
         DiscreteDirectionalWaveSpectrum spectrum;
 };
+
+typedef TR1(shared_ptr)<WaveModel> WaveModelPtr;
 
 #endif /* WAVEMODEL_HPP_ */
