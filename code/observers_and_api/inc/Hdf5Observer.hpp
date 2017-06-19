@@ -2,10 +2,10 @@
 #define HDF5OBSERVER_HPP_
 
 #include "Observer.hpp"
-#include "H5Cpp.h"
-
+#include "DiscreteDirectionalWaveSpectrum.hpp"
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
+#include "H5Cpp.h"
 
 struct Hdf5Addressing
 {
@@ -22,7 +22,7 @@ class Hdf5Observer : public Observer
 {
     public:
         Hdf5Observer(const std::string& filename, const std::vector<std::string>& data);
-
+        void write_before_simulation(const std::vector<DiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
     private:
         void flush_after_initialization();
         void flush_after_write();
