@@ -1,7 +1,7 @@
-#include <vector>
-#include "eigen3-hdf5.hpp"
 #include "Hdf5WaveObserver.hpp"
 #include "Hdf5WaveObserverBuilder.hpp"
+#include <vector>
+#include "eigen3-hdf5.hpp"
 
 class SimHdf5WaveObserver::Impl
 {
