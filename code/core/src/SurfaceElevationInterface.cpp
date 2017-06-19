@@ -200,6 +200,6 @@ SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
     return s;
 }
 
-void SurfaceElevationInterface::serialize_wave_spectra_before_simulation(TR1(shared_ptr)<Observer>& ) const
+void SurfaceElevationInterface::serialize_wave_spectra_before_simulation(ObserverPtr&) const
 {
 }
