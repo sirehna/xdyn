@@ -9,9 +9,8 @@
 #define SURFACELEVATIONINTERFACE_HPP_
 
 #include "GeometricTypes3d.hpp"
-class  Observer;
-
 #include "SurfaceElevationGrid.hpp"
+#include "Observer.hpp"
 #include <ssc/kinematics.hpp>
 #include <ssc/macros/tr1_macros.hpp>
 #include TR1INC(memory)
@@ -152,7 +151,7 @@ class SurfaceElevationInterface
                                        const double t //!< Current instant (in seconds)
                                        ) const = 0;
 
-            virtual void serialize_wave_spectra_before_simulation(TR1(shared_ptr)<Observer>& observer) const;
+            virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
     private:
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (DNV), "unsteady pressure" (Faltinsen) or constant pressure contour (Lloyd)
