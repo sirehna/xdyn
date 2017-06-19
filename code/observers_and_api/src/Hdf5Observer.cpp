@@ -84,7 +84,7 @@ std::function<void()> Hdf5Observer::get_initializer(const SurfaceElevationGrid& 
            {
                const size_t nx = (size_t)waveElevationGrid.x.size();
                const size_t ny = (size_t)waveElevationGrid.y.size();
-               wave_serializer = SimHdf5WaveObserverPtr(new SimHdf5WaveObserver(h5File, this->basename+"/waves", nx, ny));
+               wave_serializer = Hdf5WaveObserverPtr(new Hdf5WaveObserver(h5File, this->basename+"/waves", nx, ny));
            };
 }
 

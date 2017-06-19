@@ -5,16 +5,16 @@
 #include "H5Cpp.h"
 #include "h5_element.hpp"
 
-class SimHdf5WaveObserverBuilder
+class Hdf5WaveObserverBuilder
 {
     public:
-        SimHdf5WaveObserverBuilder(
+        Hdf5WaveObserverBuilder(
             const std::string& fileName,
             const std::string& datasetName,
             const size_t nx,
             const size_t ny);
 
-        SimHdf5WaveObserverBuilder(
+        Hdf5WaveObserverBuilder(
             const H5::H5File& h5File,
             const std::string& datasetName,
             const size_t nx,

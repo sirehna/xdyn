@@ -39,7 +39,7 @@ TEST_F(SimHdf5WaveObserverTest, should_be_able_to_allocate_hdf5_file)
     const size_t nx = 100;
     const size_t ny = 150;
     {
-        SimHdf5WaveObserver s(filename,"WaveElevation",nx,ny);
+        Hdf5WaveObserver s(filename,"WaveElevation",nx,ny);
     }
     EXPECT_EQ(0,remove(filename.c_str()));
 }
@@ -63,7 +63,7 @@ TEST_F(SimHdf5WaveObserverTest, can_serialize_a_wave_field_elevation_in_time)
     }
     waveElevationGrid.z = foo(waveElevationGrid.x,waveElevationGrid.y);
     {
-        SimHdf5WaveObserver s(filename,"WaveElevation",nx,ny);
+        Hdf5WaveObserver s(filename,"WaveElevation",nx,ny);
         for (size_t i = 0;i<50;++i)
         {
             s<<waveElevationGrid;

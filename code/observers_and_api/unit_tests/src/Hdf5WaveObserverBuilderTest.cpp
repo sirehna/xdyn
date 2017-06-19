@@ -9,7 +9,7 @@ TEST_F(SimHdf5WaveObserverTest, SimHdf5WaveObserver_can_be_created_from_a_filena
     const size_t nx(10);
     const size_t ny(30);
     {
-        const SimHdf5WaveObserverBuilder s(fileName,datasetName,nx,ny);
+        const Hdf5WaveObserverBuilder s(fileName,datasetName,nx,ny);
         ASSERT_EQ(nx,s.get_nx());
         ASSERT_EQ(ny,s.get_ny());
     }
@@ -23,7 +23,7 @@ TEST_F(SimHdf5WaveObserverTest, SimHdf5WaveObserver_can_be_created_from_a_H5File
     const size_t nx(10);
     const size_t ny(30);
     {
-        const SimHdf5WaveObserverBuilder s(H5::H5File(fileName,H5F_ACC_TRUNC),datasetName,nx,ny);
+        const Hdf5WaveObserverBuilder s(H5::H5File(fileName,H5F_ACC_TRUNC),datasetName,nx,ny);
         ASSERT_EQ(nx,s.get_nx());
         ASSERT_EQ(ny,s.get_ny());
     }
@@ -37,7 +37,7 @@ TEST_F(SimHdf5WaveObserverTest, SimHdf5WaveObserver_can_be_created_from_a_H5File
     const size_t nx(10);
     const size_t ny(30);
     {
-        const SimHdf5WaveObserverBuilder s(H5::H5File(fileName,H5F_ACC_TRUNC),datasetName,nx,ny);
+        const Hdf5WaveObserverBuilder s(H5::H5File(fileName,H5F_ACC_TRUNC),datasetName,nx,ny);
         ASSERT_EQ(nx,s.get_nx());
         ASSERT_EQ(ny,s.get_ny());
     }

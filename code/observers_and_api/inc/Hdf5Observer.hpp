@@ -17,7 +17,7 @@ struct Hdf5Addressing
             );
 };
 
-class SimHdf5WaveObserver;
+class Hdf5WaveObserver;
 class Hdf5Observer : public Observer
 {
     public:
@@ -44,7 +44,7 @@ class Hdf5Observer : public Observer
         std::map<std::string, H5::DataType> name2datatype;
         std::map<std::string, H5::DataSpace> name2dataspace;
 
-        TR1(shared_ptr)<SimHdf5WaveObserver> wave_serializer;
+        TR1(shared_ptr)<Hdf5WaveObserver> wave_serializer;
 };
 
 #endif

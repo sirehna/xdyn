@@ -8,7 +8,7 @@
 /** \def CHUNK_SIZE Hdf5 chunk parameter used to buffer data before writing*/
 #define CHUNK_SIZE (hsize_t)10
 
-SimHdf5WaveObserverBuilder::SimHdf5WaveObserverBuilder(
+Hdf5WaveObserverBuilder::Hdf5WaveObserverBuilder(
     const std::string& fileName,
     const std::string& datasetName_,
     const size_t nx_,
@@ -20,7 +20,7 @@ SimHdf5WaveObserverBuilder::SimHdf5WaveObserverBuilder(
 {
 }
 
-SimHdf5WaveObserverBuilder::SimHdf5WaveObserverBuilder(
+Hdf5WaveObserverBuilder::Hdf5WaveObserverBuilder(
     const H5::H5File& h5File_,
     const std::string& datasetName_,
     const size_t nx_,
@@ -33,17 +33,17 @@ SimHdf5WaveObserverBuilder::SimHdf5WaveObserverBuilder(
 {
 }
 
-H5::H5File SimHdf5WaveObserverBuilder::get_h5File() const
+H5::H5File Hdf5WaveObserverBuilder::get_h5File() const
 {
     return h5File;
 }
 
-H5::Group SimHdf5WaveObserverBuilder::get_group() const
+H5::Group Hdf5WaveObserverBuilder::get_group() const
 {
     return group;
 }
 
-H5Element SimHdf5WaveObserverBuilder::get_h5ElementT() const
+H5Element Hdf5WaveObserverBuilder::get_h5ElementT() const
 {
     H5Element h5ElementT;
     if ((nx*ny)==0) return h5ElementT;
@@ -58,7 +58,7 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementT() const
     return h5ElementT;
 }
 
-H5Element SimHdf5WaveObserverBuilder::get_h5ElementX() const
+H5Element Hdf5WaveObserverBuilder::get_h5ElementX() const
 {
     H5Element h5ElementX;
     if ((nx*ny)==0) return h5ElementX;
@@ -75,7 +75,7 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementX() const
     return h5ElementX;
 }
 
-H5Element SimHdf5WaveObserverBuilder::get_h5ElementY() const
+H5Element Hdf5WaveObserverBuilder::get_h5ElementY() const
 {
     H5Element h5ElementY;
     if ((nx*ny)==0) return h5ElementY;
@@ -92,7 +92,7 @@ H5Element SimHdf5WaveObserverBuilder::get_h5ElementY() const
     return h5ElementY;
 }
 
-H5Element SimHdf5WaveObserverBuilder::get_h5ElementZ() const
+H5Element Hdf5WaveObserverBuilder::get_h5ElementZ() const
 {
     H5Element h5ElementZ;
     if ((nx*ny)==0) return h5ElementZ;
