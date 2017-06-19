@@ -111,6 +111,22 @@ namespace H5_Tools
     void write(
             const H5::H5File& file,
             const std::string& datasetName,
+            const std::string& stringToWrite);
+
+    void write(
+            const H5::H5File& file,
+            char const * const datasetName,
+            char const * const stringToWrite,
+            const size_t sizeStringToWrite);
+
+    void write(
+            const std::string& filename,
+            const std::string& datasetName,
+            const double& v);
+
+    void write(
+            const H5::H5File& group,
+            const std::string& datasetName,
             const double& v);
 
     void write(

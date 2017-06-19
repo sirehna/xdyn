@@ -132,8 +132,10 @@ H5::Group H5_Tools::createMissingGroups(
 }
 
 H5::DataSet H5_Tools::createDataSet(
-        const H5::H5File& file, const std::string& datasetName,
-        const H5::DataType& datasetType, const H5::DataSpace& space)
+        const H5::H5File& file,
+        const std::string& datasetName,
+        const H5::DataType& datasetType,
+        const H5::DataSpace& space)
 {
     const int nDims = space.getSimpleExtentNdims();
     hsize_t * chunk_dims = new hsize_t[nDims];
@@ -245,12 +247,14 @@ void H5_Tools::write(
         const std::string& stringToWrite)
 {
     const hsize_t numberOfLines[1] = {1};
-    H5::StrType strdatatype(H5::PredType::C_S1, stringToWrite.size());
-    H5::DataSpace sid1(1, numberOfLines);
-    H5::DataSet d = H5_Tools::createDataSet(file, datasetName, strdatatype, sid1);
-    d.write((void*)stringToWrite.c_str(), strdatatype);
-    d.close();
-    sid1.close();
+    const size_t sizeStringToWrite = stringToWrite.size();
+    if (sizeStringToWrite==0) return;
+    H5::StrType strdatatype(H5::PredType::C_S1, sizeStringToWrite);
+    H5::DataSpace dataspace(1, numberOfLines);
+    H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, strdatatype, dataspace);
+    dataset.write((void*)stringToWrite.c_str(), strdatatype);
+    dataset.close();
+    dataspace.close();
 }
 
 void H5_Tools::write(
