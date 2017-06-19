@@ -99,3 +99,8 @@ void Hdf5Observer::flush_after_write()
 void Hdf5Observer::flush_value_during_write()
 {
 }
+#include "Hdf5WaveSpectrumObserver.hpp"
+void Hdf5Observer::write_before_simulation(const std::vector<DiscreteDirectionalWaveSpectrum>& s, const DataAddressing&)
+{
+    hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
+}
