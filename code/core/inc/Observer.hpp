@@ -12,6 +12,8 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 
@@ -71,5 +73,7 @@ class Observer
         std::map<std::string, std::function<void()> > serialize;
         std::map<std::string, std::function<void()> > initialize;
 };
+
+typedef TR1(shared_ptr)<Observer> ObserverPtr;
 
 #endif  /* OBSERVER_HPP_ */

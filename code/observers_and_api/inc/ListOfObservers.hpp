@@ -8,12 +8,7 @@
 #ifndef LISTOFOBSERVERS_HPP_
 #define LISTOFOBSERVERS_HPP_
 
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
-
 #include "Observer.hpp"
-
-typedef TR1(shared_ptr)<Observer> ObserverPtr;
 
 struct YamlOutput;
 
@@ -43,8 +38,6 @@ class ListOfObservers
                 observer->write_before_simulation(val, address);
             }
         }
-
-
 
     private:
 
