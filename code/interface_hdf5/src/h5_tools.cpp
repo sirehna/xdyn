@@ -249,4 +249,114 @@ void H5_Tools::write(
     H5::DataSpace sid1(1, numberOfLines);
     H5::DataSet d = H5_Tools::createDataSet(file, datasetName, strdatatype, sid1);
     d.write((void*)stringToWrite.c_str(), strdatatype);
+    d.close();
+    sid1.close();
+}
+
+void H5_Tools::write(
+        const H5::H5File& file,
+        char const * const datasetName,
+        char const * const stringToWrite,
+        const size_t sizeStringToWrite)
+{
+    const hsize_t numberOfLines[1] = {1};
+    if (sizeStringToWrite==0) return;
+    H5::StrType strdatatype(H5::PredType::C_S1, sizeStringToWrite);
+    H5::DataSpace dataspace(1, numberOfLines);
+    H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, strdatatype, dataspace);
+    dataset.write((void*)stringToWrite, strdatatype);
+    dataset.close();
+    dataspace.close();
+}
+
+void H5_Tools::write(
+        const std::string& filename,
+        const std::string& datasetName,
+        const double& v)
+{
+    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
+    H5_Tools::write(H5::H5File(filename, H5F_ACC_RDWR), datasetName, v);
+}
+
+void H5_Tools::write(
+        const H5::H5File& file,
+        const std::string& datasetName,
+        const double& v)
+{
+    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    hsize_t dimsf[2];
+    dimsf[0] = 1;
+    dimsf[1] = 1;
+    H5::DataSpace dataspace(2, dimsf);
+    H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
+    dataset.write(&v, H5::PredType::NATIVE_DOUBLE);
+    dataset.close();
+    dataspace.close();
+}
+
+void H5_Tools::write(
+        const std::string& filename,
+        const std::string& datasetName,
+        const std::vector<double>& v)
+{
+    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
+    H5_Tools::write(H5::H5File(filename, H5F_ACC_RDWR), datasetName, v);
+}
+
+void H5_Tools::write(
+        const H5::H5File& file,
+        const std::string& datasetName,
+        const std::vector<double>& v)
+{
+    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    hsize_t dimsf[2];
+    dimsf[0] = (hsize_t)v.size();
+    dimsf[1] = 1;
+    H5::DataSpace dataspace(2, dimsf);
+    H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
+    dataset.write(&v[0], H5::PredType::NATIVE_DOUBLE);
+    dataset.close();
+    dataspace.close();
+}
+
+template <typename T>
+std::vector<T> flatten(const std::vector<std::vector<T> >& v);
+
+template <typename T>
+std::vector<T> flatten(const std::vector<std::vector<T> >& v)
+{
+    std::size_t total_size = 0;
+    for (const auto& sub : v)
+        total_size += sub.size();
+    std::vector<T> result;
+    result.reserve(total_size);
+    for (const auto& sub : v)
+        result.insert(result.end(), sub.begin(), sub.end());
+    return result;
+}
+
+void H5_Tools::write(
+        const std::string& filename,
+        const std::string& datasetName,
+        const std::vector<std::vector<double> >& v)
+{
+    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
+    H5_Tools::write(H5::H5File(filename, H5F_ACC_RDWR), datasetName, v);
+}
+
+void H5_Tools::write(
+        const H5::H5File& file,
+        const std::string& datasetName,
+        const std::vector<std::vector<double> >& v)
+{
+    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    hsize_t dimsf[2];
+    dimsf[0] = (hsize_t)v.size();
+    dimsf[1] = (hsize_t)v.at(0).size();
+    H5::DataSpace dataspace(2, dimsf);
+    H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
+    const auto vflat = flatten(v);
+    dataset.write(&vflat[0], H5::PredType::NATIVE_DOUBLE);
+    dataset.close();
+    dataspace.close();
 }

@@ -84,11 +84,6 @@ namespace H5_Tools
             const H5::H5File& file,
             const std::vector<std::string>& datasetName);
 
-    void write(
-            const H5::H5File& file,
-            const std::string& datasetName,
-            const std::string& stringToWrite);
-
     /**
      * \brief writes a string in a HDF5 file.
      * \note This function creates the HDF5 if not existing
@@ -101,6 +96,42 @@ namespace H5_Tools
             const std::string& filename,
             const std::string& datasetName,
             const std::string& stringToWrite);
+
+    void write(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            const std::string& stringToWrite);
+
+    void write(
+            const H5::H5File& file,
+            char const * const datasetName,
+            char const * const stringToWrite,
+            const size_t sizeStringToWrite);
+
+    void write(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            const double& v);
+
+    void write(
+            const std::string& filename,
+            const std::string& datasetName,
+            const std::vector<double>& v);
+
+    void write(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            const std::vector<double>& v);
+
+    void write(
+            const std::string& filename,
+            const std::string& datasetName,
+            const std::vector<std::vector<double> >& v);
+
+    void write(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            const std::vector<std::vector<double> >& v);
 
     bool doesFileExists(const std::string& filename);
 
