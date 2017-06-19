@@ -10,13 +10,11 @@
 
 #include "SurfaceElevationInterface.hpp"
 #include "WaveModel.hpp"
+#include "Observer.hpp"
 
 #include <ssc/kinematics.hpp>
 
 #include <iostream>
-
-
-typedef TR1(shared_ptr)<WaveModel> WaveModelPtr;
 
 /** \brief Multiple (directional spreading+spectrum) pairs
  *  \details This is just a very thin layer around the WaveModel class.
@@ -27,7 +25,7 @@ typedef TR1(shared_ptr)<WaveModel> WaveModelPtr;
  *  \section ex2 Expected output
  *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
  */
-class SurfaceElevationFromWaves : public SurfaceElevationInterface
+class SurfaceElevationFromWaves: public SurfaceElevationInterface
 {
     public:
         SurfaceElevationFromWaves(
@@ -74,10 +72,12 @@ class SurfaceElevationFromWaves : public SurfaceElevationInterface
                                                ) const;
 
         std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
+
         std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
 
         std::vector<WaveModelPtr> get_models() const {return models;};
-        void serialize_wave_spectra_before_simulation(TR1(shared_ptr)<Observer>& observer) const;
+
+        void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
     private:
         SurfaceElevationFromWaves(); // Disabled
 
