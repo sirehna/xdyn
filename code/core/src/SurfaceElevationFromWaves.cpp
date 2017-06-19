@@ -5,9 +5,7 @@
  *      Author: cady
  */
 
-#include "Observer.hpp"
 #include "SurfaceElevationFromWaves.hpp"
-#include "WaveModel.hpp"
 
 #include <ssc/exception_handling.hpp>
 
@@ -116,12 +114,11 @@ ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double 
     return Vwaves;
 }
 
-
-void SurfaceElevationFromWaves::serialize_wave_spectra_before_simulation(TR1(shared_ptr)<Observer>& observer) const
+void SurfaceElevationFromWaves::serialize_wave_spectra_before_simulation(ObserverPtr& observer) const
 {
     std::vector<DiscreteDirectionalWaveSpectrum> spectra;
     spectra.reserve(models.size());
     for (const auto model:models) spectra.push_back(model->get_spectrum());
-    const DataAddressing address(std::vector<std::string>({"",""}), "");
+    const DataAddressing address;
     observer->write_before_simulation(spectra, address);
 }
