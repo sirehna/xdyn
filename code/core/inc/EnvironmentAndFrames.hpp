@@ -8,19 +8,13 @@
 #ifndef ENVIRONMENTANDFRAMES_HPP_
 #define ENVIRONMENTANDFRAMES_HPP_
 
-#include <ssc/macros/tr1_macros.hpp>
-#include TR1INC(memory)
-
-#include <ssc/kinematics.hpp>
-
 #include "YamlRotation.hpp"
-
 #include "Body.hpp"
 #include "StateMacros.hpp"
+#include "SurfaceElevationInterface.hpp"
+#include <ssc/kinematics.hpp>
 
 class Observer;
-class SurfaceElevationInterface;
-typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 
 struct EnvironmentAndFrames
 {
