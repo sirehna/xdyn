@@ -6,6 +6,7 @@
 #include "listeners.hpp"
 #include "InputData.hpp"
 #include "simulator_api.hpp"
+#include "SurfaceElevationInterface.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/solver.hpp>
@@ -70,13 +71,14 @@ void catch_exceptions(const std::function<void(void)>& f, const std::string& sol
     }
 }
 
-#include "SurfaceElevationInterface.hpp"
 void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& sys);
 void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& sys)
 {
+    const auto env = sys.get_env();
+    const auto w = env.w;
     for (auto observer:observers.get())
     {
-        sys.get_env().w->serialize_wave_spectra_before_simulation(observer);
+        w->serialize_wave_spectra_before_simulation(observer);
     }
 }
 
