@@ -7,6 +7,15 @@ SET(SRC
         src/h5_tools.c
     )
 
+
+# Using C++ 2011
+# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
+# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
+# Use -std=gnu++0x instead.
+IF(NOT(MSVC))
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+ENDIF()
+
 CONFIGURE_FILE(src/h5_version.c "${CMAKE_CURRENT_BINARY_DIR}/h5_version.c" @ONLY)
 
 INCLUDE_DIRECTORIES(inc)
