@@ -13,6 +13,8 @@ class  Observer;
 
 #include "SurfaceElevationGrid.hpp"
 #include <ssc/kinematics.hpp>
+#include <ssc/macros/tr1_macros.hpp>
+#include TR1INC(memory)
 
 /** \author cec
  *  \date 24 avr. 2014, 10:28:25
@@ -183,5 +185,7 @@ class SurfaceElevationInterface
         std::vector<double> relative_wave_height_for_each_point_in_mesh;
         std::vector<double> surface_elevation_for_each_point_in_mesh;
 };
+
+typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationPtr;
 
 #endif /* SURFACELEVATIONINTERFACE_HPP_ */
