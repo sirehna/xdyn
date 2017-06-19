@@ -200,27 +200,6 @@ H5::DataSpace H5_Tools::createDataSpace1DUnlimited()
     return H5::DataSpace(1, dims, maxdims);
 }
 
-void H5_Tools::writeString(
-        const H5::H5File& file,
-        const std::string& datasetName,
-        const std::string& stringToWrite)
-{
-    const hsize_t numberOfLines[1] = {1};
-    H5::StrType strdatatype(H5::PredType::C_S1, stringToWrite.size());
-    H5::DataSpace sid1(1, numberOfLines);
-    H5::DataSet d = H5_Tools::createDataSet(file, datasetName, strdatatype, sid1);
-    d.write((void*)stringToWrite.c_str(), strdatatype);
-}
-
-void H5_Tools::writeString(
-        const std::string& filename,
-        const std::string& datasetName,
-        const std::string& stringToWrite)
-{
-    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
-    H5_Tools::writeString(H5::H5File(filename, H5F_ACC_RDWR), datasetName, stringToWrite);
-}
-
 bool H5_Tools::doesFileExists(const std::string& filename)
 {
     return (h5_doesFileExists(filename.c_str())?true:false);
@@ -249,4 +228,25 @@ H5::H5File H5_Tools::openOrCreateAHdf5File(const std::string& filename)
 H5::H5File H5_Tools::openEmptyHdf5File(const std::string& filename)
 {
     return H5::H5File(filename, H5F_ACC_TRUNC);
+}
+
+void H5_Tools::writeString(
+        const H5::H5File& file,
+        const std::string& datasetName,
+        const std::string& stringToWrite)
+{
+    const hsize_t numberOfLines[1] = {1};
+    H5::StrType strdatatype(H5::PredType::C_S1, stringToWrite.size());
+    H5::DataSpace sid1(1, numberOfLines);
+    H5::DataSet d = H5_Tools::createDataSet(file, datasetName, strdatatype, sid1);
+    d.write((void*)stringToWrite.c_str(), strdatatype);
+}
+
+void H5_Tools::writeString(
+        const std::string& filename,
+        const std::string& datasetName,
+        const std::string& stringToWrite)
+{
+    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
+    H5_Tools::writeString(H5::H5File(filename, H5F_ACC_RDWR), datasetName, stringToWrite);
 }
