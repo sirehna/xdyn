@@ -84,7 +84,7 @@ namespace H5_Tools
             const H5::H5File& file,
             const std::vector<std::string>& datasetName);
 
-    void writeString(
+    void write(
             const H5::H5File& file,
             const std::string& datasetName,
             const std::string& stringToWrite);
@@ -97,7 +97,7 @@ namespace H5_Tools
      *            Can use / to create group
      * \param[in] stringToWrite
      */
-    void writeString(
+    void write(
             const std::string& filename,
             const std::string& datasetName,
             const std::string& stringToWrite);

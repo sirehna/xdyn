@@ -230,7 +230,16 @@ H5::H5File H5_Tools::openEmptyHdf5File(const std::string& filename)
     return H5::H5File(filename, H5F_ACC_TRUNC);
 }
 
-void H5_Tools::writeString(
+void H5_Tools::write(
+        const std::string& filename,
+        const std::string& datasetName,
+        const std::string& stringToWrite)
+{
+    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
+    H5_Tools::write(H5::H5File(filename, H5F_ACC_RDWR), datasetName, stringToWrite);
+}
+
+void H5_Tools::write(
         const H5::H5File& file,
         const std::string& datasetName,
         const std::string& stringToWrite)
@@ -240,13 +249,4 @@ void H5_Tools::writeString(
     H5::DataSpace sid1(1, numberOfLines);
     H5::DataSet d = H5_Tools::createDataSet(file, datasetName, strdatatype, sid1);
     d.write((void*)stringToWrite.c_str(), strdatatype);
-}
-
-void H5_Tools::writeString(
-        const std::string& filename,
-        const std::string& datasetName,
-        const std::string& stringToWrite)
-{
-    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
-    H5_Tools::writeString(H5::H5File(filename, H5F_ACC_RDWR), datasetName, stringToWrite);
 }

@@ -93,11 +93,11 @@ void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Si
         {
             if (not(prog_command.empty()))
             {
-                H5_Tools::writeString(observer.filename, "/inputs/command", prog_command);
+                H5_Tools::write(observer.filename, "/inputs/command", prog_command);
             }
             if (not(yaml_input.empty()))
             {
-                H5_Tools::writeString(observer.filename, "/inputs/yaml/input", yaml_input);
+                H5_Tools::write(observer.filename, "/inputs/yaml/input", yaml_input);
             }
 
             for (const auto& bodies : sys.get_bodies())

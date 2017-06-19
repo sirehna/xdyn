@@ -36,7 +36,7 @@ ENDFOREACH()
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt ";\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "std::string text = H5_Tools::replaceString(ss.str(),\"hdf5Filename_.h5\",H5_Tools::getBasename(fileName));\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "H5_Tools::replaceStringInPlace(text,\"hdf5Group_\",baseName);\n")
-FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "H5_Tools::writeString(h5File, destination+\"/demoMatLab.m\", text);\n")
+FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "H5_Tools::write(h5File, destination+\"/demoMatLab.m\", text);\n")
 FILE(APPEND ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt "}\n")
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different
                         ${CMAKE_BINARY_DIR}/demoMatLab.cpp.txt
