@@ -443,7 +443,7 @@ TEST_F(AiryTest, RAO_non_regression_test)
 
 TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_depth_in_finite_depth)
 {
-    const double Hs = 3;
+    const double Hs = 1;
     const double Tp = 5;
     const double psi = 0;
     const double omega0 = 2*PI/Tp;
