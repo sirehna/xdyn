@@ -21,9 +21,7 @@ void hdf5WaveSpectrumObserver(
         const std::vector<DiscreteDirectionalWaveSpectrum>& s)
 {
     const std::string dn(H5_Tools::ensureStringStartsAndEndsWithAPattern(datasetName,"/"));
-    H5::Group group = H5_Tools::createMissingGroups(h5File, dn);
-    H5_Tools::write(group,
-            std::string("elevation"),
+    H5_Tools::write(h5File, dn+"/elevation",
             std::string("zeta(x,y,t)=-\\sum_{i=1}^{nfreq}\\sum_{j=1}^{ndir}a_{ij}\\sin(k_i \\cdot(x \\cdot \\cos(\\psi_j)+ y \\cdot \\sin(\\psi_j)) - \\omega_i \\cdot t + \\phi_{i,j})"));
     size_t index = 0;
     for (const auto& ss: s)
@@ -62,14 +60,13 @@ void hdf5WaveSpectrumObserver(
         const DiscreteDirectionalWaveSpectrum& s)
 {
     const std::string dn(H5_Tools::ensureStringStartsAndEndsWithAPattern(datasetName,"/"));
-    H5::Group group = H5_Tools::createMissingGroups(h5File, dn);
-    H5_Tools::write(group, "omega", s.omega);
-    H5_Tools::write(group, "Si", s.Si);
-    H5_Tools::write(group, "Dj", s.Dj);
-    H5_Tools::write(group, "gamma", s.psi);
-    H5_Tools::write(group, "k", s.k);
-    H5_Tools::write(group, "phase", s.phase);
-    H5_Tools::write(group, "amplitude",  create_amplitude_matrix(s));
+    H5_Tools::write(h5File, dn+"/omega", s.omega);
+    H5_Tools::write(h5File, dn+"/Si", s.Si);
+    H5_Tools::write(h5File, dn+"/Dj", s.Dj);
+    H5_Tools::write(h5File, dn+"/gamma", s.psi);
+    H5_Tools::write(h5File, dn+"/k", s.k);
+    H5_Tools::write(h5File, dn+"/phase", s.phase);
+    H5_Tools::write(h5File, dn+"/amplitude",  create_amplitude_matrix(s));
 }
 
 void hdf5WaveSpectrumObserver(
