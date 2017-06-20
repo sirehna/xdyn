@@ -336,3 +336,32 @@ TEST_F(H5InterfaceTest, should_throw_an_exeception_when_writing_to_an_existing_s
     ASSERT_EQ(0,remove(filename.c_str()));
 }
 
+TEST_F(H5InterfaceTest, writing_an_empty_string_should_not_crash)
+{
+    const std::string filename = "writing_an_empty_string_should_not_crash.h5";
+    H5_Tools::write(filename, "/inputs/command", "");
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_write_a_double_in_hdf5_files)
+{
+    const std::string filename = "file.h5";
+    H5_Tools::write(filename, "/inputs/command", 1.2);
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_write_a_vector_of_doubles_in_hdf5_files)
+{
+    const std::string filename = "file.h5";
+    H5_Tools::write(filename, "/inputs/command", std::vector<double>(5,666.0));
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_write_a_vector_vector_of_doubles_in_hdf5_files)
+{
+    const std::string filename = "file.h5";
+    std::vector<std::vector<double> > a;
+    a.push_back(std::vector<double>(3,0.0));
+    a.push_back(std::vector<double>(3,0.0));
+    H5_Tools::write(filename, "/inputs/command", a);
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
