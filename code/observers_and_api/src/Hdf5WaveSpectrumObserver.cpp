@@ -66,7 +66,7 @@ void hdf5WaveSpectrumObserver(
     H5_Tools::write(group, "omega", s.omega);
     H5_Tools::write(group, "Si", s.Si);
     H5_Tools::write(group, "Dj", s.Dj);
-    H5_Tools::write(group, "psi", s.psi);
+    H5_Tools::write(group, "gamma", s.psi);
     H5_Tools::write(group, "k", s.k);
     H5_Tools::write(group, "phase", s.phase);
     H5_Tools::write(group, "amplitude",  create_amplitude_matrix(s));
