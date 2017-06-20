@@ -6,9 +6,14 @@
  */
 
 #define _USE_MATH_DEFINE
+
+#include <vector>
+#include <ssc/macros.hpp>
+
 #include <cmath>
 #define PI M_PI
-
+#include "InternalErrorException.hpp"
+#include <cmath> // For isnan
 #include "Airy.hpp"
 
 Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(spectrum_),
@@ -114,6 +119,14 @@ double Airy::dynamic_pressure(
         const double t    //!< Current time instant (in seconds)
         ) const
 {
+    if (std::isnan(z))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "z (value to rescale, in meters) was NaN");
+    }
+    if (std::isnan(eta))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "eta (wave height, in meters) was NaN");
+    }
     double p = 0;
     if (z<eta) return 0;
     const size_t nPsi = spectrum.psi.size();

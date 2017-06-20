@@ -12,6 +12,8 @@
 #define PI M_PI
 #include <list>
 #include <utility> //std::pair
+#include "InternalErrorException.hpp"
+#include <cmath> // For isnan
 
 #include "InvalidInputException.hpp"
 
@@ -164,6 +166,14 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
                                const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                               )
 {
+    if (std::isnan(z))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "z (value to rescale, in meters) was NaN");
+    }
+    if (std::isnan(eta))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "eta (wave height, in meters) was NaN");
+    }
     if (eta != 0 && z<eta) return 0;
     return exp(-k*stretching.rescaled_z(z,eta));
 }
@@ -175,6 +185,14 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
                                const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                               )
 {
+    if (std::isnan(z))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "z (value to rescale, in meters) was NaN");
+    }
+    if (std::isnan(eta))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "eta (wave height, in meters) was NaN");
+    }
     if (eta != 0 && z<eta) return 0;
     if (z>h) return 0;
     return cosh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);

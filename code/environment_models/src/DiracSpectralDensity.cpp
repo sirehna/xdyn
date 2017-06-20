@@ -21,6 +21,11 @@ DiracSpectralDensity::DiracSpectralDensity(const double omega0_, const double Hs
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega0 should be greater than 0: got " << omega0);
     }
+
+    if (std::isinf(omega0))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega0 is infinite");
+    }
 }
 
 double DiracSpectralDensity::operator()(const double omega) const

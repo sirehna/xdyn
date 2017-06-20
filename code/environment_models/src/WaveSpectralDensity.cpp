@@ -12,6 +12,8 @@
 #include "WaveSpectralDensity.hpp"
 #include "WaveNumberFunctor.hpp"
 #include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
+#include <cmath> // For isnan
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
@@ -31,6 +33,14 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
                                                                  const size_t n          //!< Number of angular frequencies to return
                                                                 ) const
 {
+    if (std::isinf(omega_min))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "omega_min is infinite");
+    }
+    if (std::isinf(omega_max))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "omega_max is infinite");
+    }
     if (omega_min<=0)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega_min = " << omega_min << ": should be positive.");
@@ -58,6 +68,7 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "Asked for a single frequency (nfreq = 1), but omega_min (=" << omega_min
                     << ") != omega_max (=" << omega_max << ")");
         }
+        return std::vector<double>(1, omega_min);
     }
     if (omega_min==omega_max)
     {
@@ -87,10 +98,28 @@ double WaveSpectralDensity::get_wave_number(const double omega, //!< Angular fre
                                             const double h      //!< Depth (in meters)
                                            ) const
 {
+    if (std::isinf(omega))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Cannot compute wave number for omega = inf");
+    }
+    if (omega == 0)
+    {
+        return 0;
+    }
     WaveNumberFunctor f(h, omega);
     const double guess = get_wave_number(omega); // Tried Guo's formula (2002) as initial guess, but it slows things down by almost 100%
     const double min = guess;
     const double max = 3.5*guess;
     int digits = std::numeric_limits<double>::digits / 2;
-    return boost::math::tools::halley_iterate(f, guess, min, max, digits);
+    const double k = boost::math::tools::halley_iterate(f, guess, min, max, digits);
+    if (std::isnan(k))
+    {
+        COUT(omega);
+        COUT(guess);
+        COUT(min);
+        COUT(max);
+        COUT(digits);
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Halley iterate for wave number k converged to NaN");
+    }
+    return k;
 }
