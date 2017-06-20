@@ -236,7 +236,7 @@ TR1(shared_ptr)<WaveModel> RudderForceModelTest::get_wave_model() const
     return TR1(shared_ptr)<WaveModel>(new Airy(A, phi));
 }
 
-TEST_F(RudderForceModelTest, ship_speed_relative_to_the_fluid)
+TEST_F(RudderForceModelTest, DISABLED_ship_speed_relative_to_the_fluid)
 {
     EnvironmentAndFrames env = get_environment_and_frames(get_wave_model());
     RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
