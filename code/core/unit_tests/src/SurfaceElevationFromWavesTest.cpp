@@ -7,6 +7,7 @@
 
 #include "SurfaceElevationFromWavesTest.hpp"
 #include "discretize.hpp"
+#include "Airy.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "SurfaceElevationBuilder.hpp"
