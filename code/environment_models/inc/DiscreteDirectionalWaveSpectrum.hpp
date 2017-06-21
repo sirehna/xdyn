@@ -8,8 +8,6 @@
 #ifndef DISCRETEDIRECTIONALWAVESPECTRUM_HPP_
 #define DISCRETEDIRECTIONALWAVESPECTRUM_HPP_
 
-#include "Stretching.hpp"
-
 #include <functional>
 #include <vector>
 
