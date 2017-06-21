@@ -1,20 +1,22 @@
 /*
- * test_orbital_velocities_and_dynamic_pressures.cpp
+ *  test_orbital_velocities_and_dynamic_pressures.cpp
  *
  *  Created on: Jan 3, 2017
  *      Author: cady
  */
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
-
-#include <ssc/random_data_generator.hpp>
-
 #include "Airy.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
+#include "Stretching.hpp"
 #include "discretize.hpp"
 #include "YamlWaveModelInput.hpp"
+#include <ssc/random_data_generator.hpp>
+#include <vector> // Needs to be declared before ssc/macros.hpp to overload <<
+#include <ssc/macros.hpp>
+
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
 int main(int , char** )
 {
