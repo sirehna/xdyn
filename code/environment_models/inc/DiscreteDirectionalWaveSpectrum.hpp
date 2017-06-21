@@ -8,16 +8,10 @@
 #ifndef DISCRETEDIRECTIONALWAVESPECTRUM_HPP_
 #define DISCRETEDIRECTIONALWAVESPECTRUM_HPP_
 
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
+#include "Stretching.hpp"
 
 #include <functional>
 #include <vector>
-
-#include "Stretching.hpp"
-
-class WaveSpectralDensity;
-class WaveDirectionalSpreading;
 
 struct DiscreteDirectionalWaveDensity
 {

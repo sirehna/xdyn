@@ -5,14 +5,14 @@
  *      Author: cady
  */
 
-/** @file */
-
 #ifndef DISCRETIZE_HPP_
 #define DISCRETIZE_HPP_
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 
 class Stretching;
+class WaveSpectralDensity;
+class WaveDirectionalSpreading;
 
 /**  \brief Only select the most important spectrum components & create single vector
   *  \details No need to loop on all frequencies & all directions: we only select
