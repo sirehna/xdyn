@@ -16,57 +16,69 @@
 
 # Require Internet to download all dependencies
 
-FROM ssc
-MAINTAINER Guillaume Jacquenot <guillaume.jacquenot@sirehna.com>
+FROM debian
+MAINTAINER Charles-Edouard Cady <charles-edouard.cady@sirehna.com>
 
-# Install dependencies
-RUN apt-get update -yq && \
-    apt-get install -y \
-        python3-tornado \
-        python3-pip \
-        python3-pandas \
-        libssl-dev && \
-    apt-get clean && \
-    rm -rf /tmp/* /var/tmp/* && \
-    rm -rf /var/lib/apt/lists && \
-    # CX_FREEZE
-    wget https://pypi.python.org/packages/62/ff/263fae9f69150c1b696a94dd23ca48c02512228c53bb108aeaccda192028/cx_Freeze-4.3.4.tar.gz#md5=5bd662af9aa36e5432e9144da51c6378 -O cx_freeze_src.tar.gz && \
-    mkdir -p cx_freeze_src && \
-    tar xzf cx_freeze_src.tar.gz --strip 1 -C cx_freeze_src && \
-    sed -i 's/if not vars.get("Py_ENABLE_SHARED", 0):/if True:/g'  cx_freeze_src/setup.py && \
-    cd cx_freeze_src && \
-    python3 setup.py build && \
-    python3 setup.py install && \
-    cd .. && \
-    rm -rf cx_freeze_src && \
-    rm -rf cx_freeze_src.tar.gz
-
-RUN mkdir -p /opt
 WORKDIR /opt
 
 ENV PATH="/opt/cmake/bin:${PATH}"
 
 ENV LD_LIBRARY_PATH=/opt/xdyn/lib:/opt/xdyn/bin
 
+RUN apt-get update -yq && apt-get install -y \
+    cmake ninja-build git subversion wget \
+    lcov g++ gdb gfortran \
+    pandoc python3-pandas python3-pip python3-matplotlib texlive-fonts-recommended texlive-latex-extra dvipng inkscape doxygen\
+    python3-tornado\
+    libssl-dev\
+    && apt-get clean \
+    && rm -rf /tmp/* /var/tmp/* \
+    && rm -rf /var/lib/apt/lists/
+
+
+# Install dependencies
+# BOOST 1.60
+ENV BOOST_INSTALL=/usr/local/boost_1_60_0
+RUN wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.gz
+RUN tar -xf boost_1_60_0.tar.gz
+RUN cd boost_1_60_0 && ./bootstrap.sh
+# link=shared threading=multi
+RUN cd boost_1_60_0 && ./b2 cxxflags=-fPIC link=static threading=single --layout=tagged --prefix=${BOOST_INSTALL} install || true
+
+
+ENV HDF5_INSTALL="/usr/local/hdf5"
+RUN wget https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz -O hdf5_source.tar.gz
+RUN mkdir -p hdf5_source
+RUN tar -xf hdf5_source.tar.gz --strip 1 -C ./hdf5_source
+RUN mkdir hdf5_build \
+ && cd hdf5_build \
+ && cmake \
+  -Wno-dev \
+  ../hdf5_source \
+  "-DBUILD_SHARED_LIBS:BOOL=OFF" \
+  "-DCMAKE_BUILD_TYPE:STRING=Release" \
+  "-DHDF5_BUILD_HL_LIB:BOOL=ON" \
+  "-DHDF5_BUILD_FORTRAN:BOOL=ON" \
+  "-DHDF5_ENABLE_F2003:BOOL=ON" \
+  "-DHDF5_BUILD_CPP_LIB:BOOL=ON" \
+  "-DHDF5_BUILD_TOOLS:BOOL=ON" \
+  "-DCMAKE_INSTALL_PREFIX:PATH=${HDF5_INSTALL}" \
+  "-DCMAKE_C_FLAGS=-fpic" \
+  "-DCMAKE_CXX_FLAGS=-fpic"
+RUN cd hdf5_build && make install
+
+
 RUN mkdir -p /opt/share
 ADD . /opt/share
+RUN dpkg -i /opt/share/ssc.deb
 
-RUN rm -rf /opt/xdyn \
-    && mkdir -p /opt/xdyn \
-    && mkdir -p xdyn_build \
-    && cd xdyn_build \
-    && cmake -Wno-dev \
-             -G Ninja \
-             -DINSTALL_PREFIX:PATH=/opt/xdyn \
-             -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake \
-             -DHDF5_DIR:PATH=/opt/HDF5/share/cmake \
-             -DBOOST_ROOT:PATH=/opt/boost \
-             ../share/code \
-    && ninja \
-    && ./run_all_tests --gtest_output=xml:run_all_tests.xml \
-    && ninja package \
-    && ninja install \
-    && cd .. \
-    && rm -rf xdyn_build
-
-CMD bash
+RUN cmake -Wno-dev \
+          -G Ninja \
+          -DINSTALL_PREFIX:PATH=/opt/xdyn \
+          -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake \
+          -DHDF5_DIR:PATH=${HDF5_INSTALL} \
+          -DBOOST_ROOT:PATH=${BOOST_INSTALL} \
+          /opt/share/code 
+RUN ninja 
+RUN ./run_all_tests --gtest_output=xml:run_all_tests.xml 
+#ENTRYPOINT /bin/bash

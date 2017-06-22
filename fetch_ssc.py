@@ -10,7 +10,7 @@ builds = gl.project_builds.list(project_id=42)
 
 # Get latest stable build on master
 latest = None
-target_branch = 'dev/ci_docker'
+target_branch = 'master'
 for build in builds:
     if latest is None:
         if build.ref == target_branch and build.status == "success":
