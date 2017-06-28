@@ -1,5 +1,0 @@
-FROM python:3.4
-ADD fetch_ssc.py .
-RUN pip3 install python-gitlab python-dateutil
-RUN apt-get update -yq && apt-get install -y unzip && apt-get clean && rm -rf /tmp/* /var/tmp/*
-CMD python3 fetch_ssc.py && unzip artifacts.zip && ls && cp ssc.deb /out

@@ -16,7 +16,7 @@
 
 # Require Internet to download all dependencies
 
-FROM debian
+FROM debian:8
 MAINTAINER Charles-Edouard Cady <charles-edouard.cady@sirehna.com>
 
 WORKDIR /opt
@@ -27,7 +27,9 @@ ENV LD_LIBRARY_PATH=/opt/xdyn/lib:/opt/xdyn/bin
 
 RUN apt-get update -yq && apt-get install -y \
     cmake ninja-build git subversion wget \
-    lcov g++ gdb gfortran \
+    g++-4.9 \
+    gcc-4.9 \
+    lcov gdb gfortran \
     pandoc python3-pandas python3-pip python3-matplotlib texlive-fonts-recommended texlive-latex-extra dvipng inkscape doxygen\
     python3-tornado\
     libssl-dev\
@@ -35,6 +37,10 @@ RUN apt-get update -yq && apt-get install -y \
     && rm -rf /tmp/* /var/tmp/* \
     && rm -rf /var/lib/apt/lists/
 
+RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 100
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 100
+RUN update-alternatives --set g++ /usr/bin/g++-4.9
+RUN update-alternatives --set gcc /usr/bin/gcc-4.*
 
 # Install dependencies
 # BOOST 1.60
@@ -47,7 +53,7 @@ RUN cd boost_1_60_0 && ./b2 cxxflags=-fPIC link=static threading=single --layout
 
 
 ENV HDF5_INSTALL="/usr/local/hdf5"
-RUN wget https://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz -O hdf5_source.tar.gz
+RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz -O hdf5_source.tar.gz
 RUN mkdir -p hdf5_source
 RUN tar -xf hdf5_source.tar.gz --strip 1 -C ./hdf5_source
 RUN mkdir hdf5_build \
@@ -65,20 +71,11 @@ RUN mkdir hdf5_build \
   "-DCMAKE_INSTALL_PREFIX:PATH=${HDF5_INSTALL}" \
   "-DCMAKE_C_FLAGS=-fpic" \
   "-DCMAKE_CXX_FLAGS=-fpic"
+
 RUN cd hdf5_build && make install
 
+RUN rm -rf /opt/*
 
-RUN mkdir -p /opt/share
-ADD . /opt/share
+ADD ssc.deb /opt/share/ssc.deb
+
 RUN dpkg -i /opt/share/ssc.deb
-
-RUN cmake -Wno-dev \
-          -G Ninja \
-          -DINSTALL_PREFIX:PATH=/opt/xdyn \
-          -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake \
-          -DHDF5_DIR:PATH=${HDF5_INSTALL} \
-          -DBOOST_ROOT:PATH=${BOOST_INSTALL} \
-          /opt/share/code 
-RUN ninja 
-RUN ./run_all_tests --gtest_output=xml:run_all_tests.xml 
-#ENTRYPOINT /bin/bash

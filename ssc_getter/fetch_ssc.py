@@ -36,11 +36,11 @@ if latest is not None:
     latest.artifacts(streamed=True, action=target)
     del(target)  # flushes data on disk
     print("Downloaded artifacts.zip")
-    import zipfile
-    zip_ref = zipfile.ZipFile('artifacts.zip', 'r')
-    zip_ref.extractall('.')
-    zip_ref.close()
-    print("Extracted artifacts.zip")
+#    import zipfile
+#    zip_ref = zipfile.ZipFile('artifacts.zip', 'r')
+#    zip_ref.extractall('.')
+#    zip_ref.close()
+#    print("Extracted artifacts.zip")
 else:
     print("No build found so no artefact downloaded")
 
