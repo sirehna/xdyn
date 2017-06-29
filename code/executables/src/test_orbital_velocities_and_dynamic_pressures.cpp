@@ -4,6 +4,7 @@
  *  Created on: Jan 3, 2017
  *      Author: cady
  */
+#include <vector> // Needs to be declared before ssc/macros.hpp to overload <<
 #include "Airy.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
@@ -11,7 +12,6 @@
 #include "discretize.hpp"
 #include "YamlWaveModelInput.hpp"
 #include <ssc/random_data_generator.hpp>
-#include <vector> // Needs to be declared before ssc/macros.hpp to overload <<
 #include <ssc/macros.hpp>
 
 #define _USE_MATH_DEFINE
