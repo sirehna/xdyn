@@ -1,5 +1,5 @@
 /*
- * GZComputer.hpp
+ * calculate_gz.hpp
  *
  *  Created on: Mar 26, 2015
  *      Author: cady
