@@ -2,7 +2,6 @@ stages:
   - git_submodule
   - lint
   - cleanup_Docker
-  - get_ssc
   - build
 
 git_submodule:
@@ -29,8 +28,8 @@ cleanup_Docker:
      - docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null || true
      - docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null || true
 
-get_ssc:
-   stage: get_ssc
+build:
+   stage: build
    script:
      - cd ssc_getter
      - docker build -f Dockerfile -t get_ssc .
@@ -39,10 +38,6 @@ get_ssc:
      - rm artifacts.zip
      - mv ssc.deb ..
      - cd ..
-
-build:
-   stage: build
-   script:
      - mkdir -p build
      - docker build -f Dockerfile -t xdyn .
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) \
