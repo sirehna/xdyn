@@ -41,5 +41,9 @@ build:
      - mkdir -p build
      - docker build -f Dockerfile -t xdyn .
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i xdyn cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 /opt/share/code      
-     - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i xdyn ninja
+     - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i xdyn ninja package
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i xdyn ./run_all_tests --gtest_output=xml:run_all_tests.xml
+   artifacts:
+     paths:
+     - build/xdyn.deb
+
