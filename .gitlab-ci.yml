@@ -3,6 +3,7 @@ stages:
   - lint
   - cleanup_Docker
   - build
+  - deploy_to_image
 
 git_submodule:
    stage: git_submodule
@@ -47,3 +48,16 @@ build:
      paths:
      - build/xdyn.deb
 
+deploy_to_image:
+    stage: deploy_to_image
+    dependencies:
+      - build
+    script:
+      - ls build
+      - mv build/xdyn.deb deploy_xdyn
+      - cd deploy_xdyn
+      - ./deploy.sh
+      - cd ..
+    artifacts:
+      paths:
+      - deploy_xdyn/deploy-xdyn.tar
