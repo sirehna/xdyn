@@ -26,7 +26,7 @@ void HistoryTest::TearDown()
 {
 }
 
-TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
+TEST_F(HistoryTest, should_not_throw_even_if_retrieving_value_too_far_in_the_past) // Cf. bug 3003
 {
     const double Tmax = a.random<double>().between(0,100);
     const double t_lower_than_Tmax = a.random<double>().between(0,Tmax);
@@ -37,13 +37,7 @@ TEST_F(HistoryTest, throws_if_retrieving_value_too_far_in_the_past)
     h.record(t0+Tmax, a.random<double>());
     ASSERT_NO_THROW(h(t_lower_than_Tmax));
     ASSERT_NO_THROW(h(Tmax));
-    ASSERT_THROW(h(t_greater_than_Tmax), InternalErrorException);
-}
-
-TEST_F(HistoryTest, cannot_retrieve_anything_if_history_is_empty)
-{
-    History h;
-    ASSERT_THROW(h(0), InternalErrorException);
+    ASSERT_NO_THROW(h(t_greater_than_Tmax));
 }
 
 TEST_F(HistoryTest, can_retrieve_initial_values)
@@ -178,7 +172,7 @@ TEST_F(HistoryTest, history_should_not_grow_indefinitely)
     ASSERT_DOUBLE_EQ(1, h(4));
     ASSERT_EQ(3, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
-    ASSERT_THROW(h(4.1), InternalErrorException);
+    ASSERT_DOUBLE_EQ(0, h(4.1));
     h.record(t-5, 4);
     ASSERT_EQ(3, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());

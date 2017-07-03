@@ -23,8 +23,7 @@ double History::operator()(double tau //!< How far back in history do we need to
     if (std::abs(tau-Tmax)<eps) tau = Tmax;
     if (tau>Tmax)
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException,
-                "Requesting value too far in the past: asked for t-" << tau << ", but history only goes back to t-" << Tmax);
+        return 0;
     }
     if (tau<0)
     {
@@ -33,7 +32,7 @@ double History::operator()(double tau //!< How far back in history do we need to
     }
     if (L.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Cannot retrieve anything from history because it is empty");
+        return 0;
     }
     return get_value(tau);
 }

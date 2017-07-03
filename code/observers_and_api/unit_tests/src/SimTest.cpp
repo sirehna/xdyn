@@ -585,3 +585,13 @@ TEST_F(SimTest, bug_2963_should_not_be_able_to_use_diffraction_without_specifyin
 {
     ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_diff(), test_data::cube(), 0, 1, 1), InvalidInputException);
 }
+
+TEST_F(SimTest, bug_3003_crash_in_manoeuvring_model)
+{
+    const double T = 0.1;
+    const double dt = 0.1;
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::bug_3003(), 0, T, dt);
+
+    const double eps = 1E-10;
+    ASSERT_NEAR(-0.099, res.at(0).x[ZIDX(0)], eps);
+}
