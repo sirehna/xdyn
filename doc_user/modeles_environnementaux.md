@@ -76,8 +76,8 @@ La pression $p$ vérifie l'équation de Bernoulli :
 $$p + \rho g z -\rho\frac{\partial\phi}{\partial t} +
 \frac{\rho}{2} V\cdot V = C(t)$$
 
-où $C:t\mapsto C(t)$ est une fonction du temps arbitraire, donc en particulier
-$C(t)=p_0$ (pression atmosphérique à la surface) :
+où $C:t\mapsto C(t)$ est une fonction du temps arbitraire, donc l'équation est
+en particulier valable pour $C(t)=p_0$ (pression atmosphérique à la surface) :
 
 $$p_0 + \rho g z -\rho\frac{\partial\phi}{\partial t} +
 \frac{\rho}{2} V\cdot V = p_0$$
@@ -85,6 +85,9 @@ $$p_0 + \rho g z -\rho\frac{\partial\phi}{\partial t} +
 soit
 
 $$g z -\frac{\partial\phi}{\partial t} + \frac{1}{2} V\cdot V = 0$$
+
+Le terme $\rho g z$ représente la pression hydrostatique et le terme
+$-\rho\frac{\partial\phi}{\partial t}$ est la pression dynamique.
 
 Il s'agit de la première condition de surface libre.
 
@@ -120,32 +123,67 @@ $$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 \cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
 
 $h$ est la profondeur du fluide (hauteur du sol à la surface libre)
-$\eta_a=2\sqrt{S(\omega)}$ est l'amplitude (en m)
+$\eta_a$ est l'amplitude de la houle (en m)
 $x,y,z$ sont les coordonnées du point considéré, exprimées dans le repère NED.
-$k$ est le nombre d'onde, traduisant la périodicité spatiale et vérifie la
-relation de dispersion :
+$k$ est le nombre d'onde, traduisant la périodicité spatiale.
+
+### Relation entre le nombre d'onde et la pulsation
+
+Il existe une relation entre $k$ et $\omega$, appelée relation de dispersion, et qui s'écrit :
 
 $$\omega^2 = g\cdot k \cdot \tanh(k\cdot h)$$
 
-qui, en profondeur infinie ($k\cdot h > 3$) tend vers :
+où $h$ désigne la profondeur d'eau et $g$ l'accélération de la pesanteur.
+
+En profondeur infinie ($k\cdot h > 3$), cette relation tend vers :
 
 $$\omega^2 \sim g\cdot k$$
 
-Le potentiel de vitesse de la houle est ici exprimé pour une seule fréquence et
-une seule direction. On peut la généraliser en :
-
-$$\phi(x,y,z,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir} \sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}\cdot \frac{g}{\omega_i}\frac{\cosh(k\cdot(h-z))}
-{\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
-\cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi)$$
-
 ### Elévation de la houle
 
-L'élévation de la houle est donnée par la deuxième condition de surface libre :
+L'élévation de la houle découle de la deuxième condition de surface libre :
 
-$$\eta(x,y,t) = \frac{1}{g}\frac{\partial\phi}{\partial t} = -
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}\sin(k_i\cdot(x\cdot \cos(\gamma_j)
-+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+$$\eta(t) = \sum_{i=1}^{nfreq} A(\omega_i) \sin(k_i\cdot(x\cdot \cos(\gamma)+
+y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
+
+où $\gamma$ désigne la direction de provenance de la houle, définie à la section
+[convention de houle](#section_Direction_houle).
+
+L'élévation $\eta$ de la houle en un point $(x,y)$ est un signal temporel
+$\eta(t)$. Par définition du plan $z=0$ (élévation moyenne de la houle), ce signal $\eta$ est centré.
+On le suppose également stationnaire, ce qui implique que sa fonction d'auto-corrélation $R$ ne dépend que de $\tau$:
+
+$$R(\tau)=\mathbf{E} (\eta(t)\eta(t+\tau))$$
+
+La densité spectrale de puissance $G$ de $\eta$ est égale à la transformée de
+Fourier de sa fonction d'auto-corrélation $R$. Comme $R$ est paire et réelle,
+$G$ aussi et on ne considère usuellement que la partie positive (one-sided) en
+définissant la densité spectrale $S$ telle que :
+
+$$S(\omega)=\left\{\begin{array}{cc}2G(\omega),&\omega\geq 0\\0,&\omega<0\end{array}\right.$$
+
+On a :
+
+$$R(\tau) = \frac{1}{2}  \sum_{i=1}^{nfreq} A(\omega_i)^2 \cos(\omega_i \tau)$$
+
+or on a également :
+
+$$R(\tau) = \int_0^\infty S(\omega) \cos(\omega\tau)d\omega$$
+
+d'où, par identification :
+
+$$A(\omega_i)^2=2 S(\omega_i)d\omega_i$$
+
+On peut généraliser cette formulation en faisant intervenir l'étalement
+directionnel $D(\gamma)$ de la houle :
+
+$$A(\omega,\gamma)^2 = 2 S(\omega)d\omega D(\gamma) d\gamma$$
+
+On obtient, en définitive :
+
+
+$$\eta(t) = \sum_{i=1}^{nfreq} \sqrt{2 S(\omega_i)d\omega D(\gamma) d\gamma} \sin(k_i\cdot(x\cdot \cos(\gamma)+
+y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
 
 ### Pression dynamique
 
@@ -160,9 +198,9 @@ $$p_{\textrm{dyn}} = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
 soit
 
 $$p_{\textrm{dyn}} = \rho\cdot g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\sum_{i=1}^{nfreq}A(\omega_i,\gamma)
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
-\sin(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sin(\gamma)+ y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
 
 - $g$ désigne l'accélération de la pesanteur (9.81 $m/s^2$)
 - $\rho$ est la densité volumique du fluide (en $kg/m^3$)
@@ -175,9 +213,11 @@ $$\cosh x\sim_{x\infty} \frac{e^x}{2}$$
 on obtient donc :
 
 $$p_{\textrm{dyn}} \sim_{h\infty}  \rho\cdot g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\sum_{i=1}^{nfreq}\sqrt{2 S(\omega_i)d\omega D(\gamma) d\gamma}
 e^{-k_i\cdot z}\cos(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
-\sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
+
+### Pression totale
 
 On peut démontrer que la pression totale (somme de la pression hydrostatique et de la pression dynamique) est positive.
 
@@ -214,6 +254,30 @@ $$p_{\textrm{tot}}\geq 0$$
 
 
 
+### Houle irrégulière
+
+Le potentiel de vitesse de la houle a été jusqu'ici exprimé pour une seule fréquence et
+une seule direction. On peut la généraliser en :
+
+$$\phi(x,y,z,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir} A(\omega_i,\gamma_j)\cdot \frac{g}{\omega_i}\frac{\cosh(k\cdot(h-z))}
+{\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
+\cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+On en déduit l'expression de l'élévation $\eta$ :
+
+$$\eta(x,y,t) = \frac{1}{g}\frac{\partial\phi}{\partial t} = -
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}\sin(k_i\cdot(x\cdot \cos(\gamma_j)
++ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
+ainsi que l'expression de la pression dynamique $p_{\textrm{dyn}}$ :
+
+$$p_{\textrm{dyn}} = \rho\cdot g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{2 S(\omega_i)d\omega
+D(\gamma_j)d\gamma}
+\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
+\sin(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+
 ### Vitesse orbitale
 
 #### En profondeur finie
@@ -221,17 +285,17 @@ La vitesse $V(x,y,z,t) = (u,v,w)$ orbitale de la houle est définie par :
 
 $$u = \frac{\partial \phi}{\partial x} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega_i\Delta\gamma}
+\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cdot\cos(\gamma_j)
 \sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$v = \frac{\partial \phi}{\partial y} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega_i\Delta\gamma}
+\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cdot\sin(\gamma_j)
 \sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$w = \frac{\partial \phi}{\partial z} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega_i\Delta\gamma}
+\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
 \frac{\sinh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}
 \cos(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
@@ -243,19 +307,19 @@ Lorsque $k_i\cdot h >3$, les cosinus hyperboliques peuvent être considérés co
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
 e^{-k_i z}
 \cdot\cos(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$v = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
 e^{-k_i z}
 \cdot\sin(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$w = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
 e^{-k_i z}
 \cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
