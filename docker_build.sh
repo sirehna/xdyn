@@ -12,7 +12,7 @@ cd ..
 mkdir -p code/build
 
 # Build X-DYN container
-docker build -f Dockerfile -t xdyn .
+docker build -f Dockerfile -t build-xdyn .
 
 # Run CMake
 sh docker_cmake.sh -Wno-dev \
