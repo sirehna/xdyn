@@ -11,6 +11,7 @@
 struct YamlAngle
 {
     YamlAngle();
+    YamlAngle(const double phi, const double theta, const double psi);
     double phi;
     double theta;
     double psi;
