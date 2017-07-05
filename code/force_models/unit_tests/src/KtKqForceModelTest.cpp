@@ -62,6 +62,7 @@ TEST_F(KtKqForceModelTest, force)
     auto input = KtKqForceModel::parse(test_data::kt_kq());
     EnvironmentAndFrames env;
     env.rho = 1024;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
     const KtKqForceModel w(input, "", env);
     ASSERT_EQ("Kt(J) & Kq(J)", w.model_name());
     BodyStates states;

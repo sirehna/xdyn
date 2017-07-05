@@ -51,6 +51,7 @@ TEST_F(SimpleStationKeepingControllerTest, force_and_torque)
     input.T_y = 2*PI/3;
     input.T_psi = 2*PI/4;
     EnvironmentAndFrames env;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
     const SimpleStationKeepingController w(input, "body", env);
     ASSERT_EQ("simple station-keeping controller", w.model_name());
     BodyStates states;

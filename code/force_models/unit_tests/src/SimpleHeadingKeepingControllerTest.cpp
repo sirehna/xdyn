@@ -45,6 +45,7 @@ TEST_F(SimpleHeadingKeepingControllerTest, force_and_torque)
     auto input = SimpleHeadingKeepingController::parse(test_data::simple_track_keeping());
     input.Tp = 2*PI;
     EnvironmentAndFrames env;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
     const SimpleHeadingKeepingController w(input, "body", env);
     ASSERT_EQ("simple heading controller", w.model_name());
     BodyStates states;
