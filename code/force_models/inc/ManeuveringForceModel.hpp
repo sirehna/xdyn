@@ -39,7 +39,6 @@ class ManeuveringForceModel : public ControllableForceModel
 
     private:
         ManeuveringForceModel();
-        ssc::kinematics::Point point_of_application;
         std::map<std::string, maneuvering::NodePtr> m;
         TR1(shared_ptr)<ssc::data_source::DataSource> ds;
 };

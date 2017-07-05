@@ -44,12 +44,9 @@ class Observer;
 class ControllableForceModel
 {
     public:
-        ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& position_of_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
+        ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
         virtual ~ControllableForceModel();
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener) const;
-        ssc::kinematics::Wrench get_force_in_body_frame() const;
-        void update(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener);
-        void add_reference_frame(const ::ssc::kinematics::KinematicsPtr& k, const YamlRotation& rotations) const;
+        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener, const ssc::kinematics::KinematicsPtr& k, const ssc::kinematics::Point& G);
         virtual ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const = 0;
         std::string get_name() const;
         virtual double get_Tmax() const; // Can be overloaded if model needs access to History (not a problem, just has to say how much history to keep)
@@ -85,7 +82,7 @@ class ControllableForceModel
             return parser;
         }
 
-        void feed(Observer& observer) const;
+        void feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, const ssc::kinematics::Point& G) const;
 
     protected:
         EnvironmentAndFrames env;
@@ -99,9 +96,8 @@ class ControllableForceModel
         std::string name;
         std::string body_name;
         YamlPosition position_of_frame;
-        ssc::kinematics::Point point_of_application;
-        ssc::kinematics::Wrench force_in_body_frame;
-        ssc::kinematics::Wrench force_in_ned_frame;
+        ssc::kinematics::Wrench latest_force_in_body_frame;
+        ssc::kinematics::Transform from_internal_frame_to_a_known_frame;
 };
 
 #endif /* CONTROLLABLEFORCEMODEL_HPP_ */

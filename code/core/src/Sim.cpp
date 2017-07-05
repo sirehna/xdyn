@@ -27,7 +27,7 @@ class Sim::Impl
              const EnvironmentAndFrames& env_,
              const StateType& x,
              const ssc::data_source::DataSource& command_listener_) :
-                 bodies(bodies_), forces(), controlled_forces(), env(env_),
+                 bodies(bodies_), name2bodyptr(), forces(), controlled_forces(), env(env_),
                  _dx_dt(StateType(x.size(),0)), command_listener(command_listener_), sum_of_forces_in_body_frame(),
                  sum_of_forces_in_NED_frame()
         {
@@ -36,6 +36,7 @@ class Sim::Impl
             {
                 forces[body->get_name()] = forces_.at(i);
                 controlled_forces[body->get_name()] = controlled_forces_.at(i++);
+                name2bodyptr[body->get_name()] = body;
             }
         }
 
@@ -56,6 +57,7 @@ class Sim::Impl
         }
 
         std::vector<BodyPtr> bodies;
+        std::map<std::string,BodyPtr> name2bodyptr;
         std::map<std::string,std::vector<ForcePtr> > forces;
         std::map<std::string,std::vector<ControllableForcePtr> > controlled_forces;
         EnvironmentAndFrames env;
@@ -87,13 +89,6 @@ Sim::Sim(const std::vector<BodyPtr>& bodies,
          const StateType& x,
          const ssc::data_source::DataSource& command_listener) : state(x), pimpl(new Impl(bodies, forces, controlled_forces, env, x, command_listener))
 {
-    for (auto controlled_forces:pimpl->controlled_forces)
-    {
-        for (auto force:controlled_forces.second)
-        {
-            force->add_reference_frame(pimpl->env.k, pimpl->env.rot);
-        }
-    }
 }
 
 StateType Sim::normalize_quaternions(const StateType& all_states
@@ -160,9 +155,8 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     const auto controlled_forces = pimpl->controlled_forces[body->get_name()];
     for (auto force:controlled_forces)
     {
-        force->update(states, t, pimpl->command_listener);
-        const ssc::kinematics::Wrench tau = force->get_force_in_body_frame();
-        pimpl->sum_of_forces_in_body_frame[body->get_name()] += tau;//_body;
+        const ssc::kinematics::Wrench tau = force->operator()(states, t, pimpl->command_listener, pimpl->env.k, states.G);
+        pimpl->sum_of_forces_in_body_frame[body->get_name()] += tau;
     }
     pimpl->sum_of_forces_in_NED_frame[body->get_name()] = ForceModel::project_into_NED_frame(pimpl->sum_of_forces_in_body_frame[body->get_name()],states.get_rot_from_ned_to_body());
     return pimpl->sum_of_forces_in_body_frame[body->get_name()];
@@ -198,7 +192,13 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
     }
     for (auto controlled_forces:pimpl->controlled_forces)
     {
-        for (auto force:controlled_forces.second) force->feed(obs);
+        for (auto force:controlled_forces.second)
+        {
+            const auto body_name = controlled_forces.first;
+            const auto body = pimpl->name2bodyptr[body_name];
+            const auto G = body->get_origin(x);
+            force->feed(obs,pimpl->env.k,G);
+        }
     }
     for (auto body:pimpl->bodies)
     {

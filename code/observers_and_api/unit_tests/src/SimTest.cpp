@@ -324,8 +324,8 @@ TEST_F(SimTest, LONG_propulsion_and_resistance)
         ASSERT_DOUBLE_EQ(0, res.at(i).x[VIDX(0)]);
         ASSERT_DOUBLE_EQ(0, res.at(i).x[WIDX(0)]);
         ASSERT_NEAR(-0.00109667*t, res.at(i).x[PIDX(0)], 8E-2);
-        ASSERT_DOUBLE_EQ(0, res.at(i).x[QIDX(0)]);
-        ASSERT_DOUBLE_EQ(0, res.at(i).x[RIDX(0)]);
+        ASSERT_DOUBLE_EQ(0, res.at(i).x[QIDX(0)]) << "i = " << i;
+        ASSERT_DOUBLE_EQ(0, res.at(i).x[RIDX(0)]) << "i = " << i;
     }
 }
 
@@ -420,6 +420,7 @@ TEST_F(SimTest, LONG_bug_2732)
     command_listener.set<double>("Prop. & rudder(P/D)", 1);
     command_listener.set<double>("Prop. & rudder(beta)", 0);
     auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.4, observer);
     ASSERT_NO_THROW(ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.4, observer));
 }
 
@@ -594,4 +595,89 @@ TEST_F(SimTest, bug_3003_crash_in_manoeuvring_model)
 
     const double eps = 1E-10;
     ASSERT_NEAR(-0.099, res.at(0).x[ZIDX(0)], eps);
+}
+
+TEST_F(SimTest, bug_2984)
+{
+    const auto yaml = test_data::bug_2984();
+    auto input = SimulatorYamlParser(yaml).parse();
+    boost::replace_all(input.bodies[0].controlled_forces[0].yaml
+            ,"  phi:\n"
+             "    unit: rad\n"
+             "    value: 0\n"
+             "  psi:\n"
+             "    unit: deg\n"
+             "    value: 0\n"
+             "  theta:\n"
+             "    unit: deg\n"
+             "    value: 4.\n"
+             "  x:\n"
+             "    unit: m\n"
+             "    value: -53.319\n"
+             "  y:\n"
+             "    unit: m\n"
+             "    value: -3.750\n"
+             "  z:\n"
+             "    unit: m\n"
+             "    value: 6.799\n"
+            ,"  phi:\n"
+             "    unit: rad\n"
+             "    value: 0\n"
+             "  psi:\n"
+             "    unit: deg\n"
+             "    value: 0\n"
+             "  theta:\n"
+             "    unit: deg\n"
+             "    value: 4.\n"
+             "  x:\n"
+             "    unit: m\n"
+             "    value: 0\n"
+             "  y:\n"
+             "    unit: m\n"
+             "    value: 0\n"
+             "  z:\n"
+             "    unit: m\n"
+             "    value: 0\n");
+
+    ListOfObservers observer(parse_output(yaml));
+    ssc::data_source::DataSource command_listener;
+    command_listener.set<double>("propeller(rpm)", 120);
+    command_listener.set<double>("propeller(P/D)", 1);
+    command_listener.set<double>("propeller(beta)", 0);
+    command_listener.set<double>("propeller(rpm)", 120);
+    command_listener.set<double>("propeller(P/D)", 1);
+    command_listener.set<double>("propeller(beta)", 0);
+
+    auto sys = get_system(input,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.1, observer);
+    const auto m = get_map(observer);
+    ASSERT_EQ(6, m.size());
+    const auto Fx = m.find("Fx(propeller,ship,ship)");
+    ASSERT_NE(m.end(), Fx);
+    ASSERT_EQ(2, Fx->second.size());
+    ASSERT_NEAR(69961607.31273420155048*cos(4*PI/180.), Fx->second.back(), 1E-6);
+    const auto Fy = m.find("Fy(propeller,ship,ship)");
+    ASSERT_NE(m.end(), Fy);
+    ASSERT_EQ(2, Fy->second.size());
+    ASSERT_NEAR(0, Fy->second.back(), 1E-8);
+    const auto Fz = m.find("Fz(propeller,ship,ship)");
+    ASSERT_NE(m.end(), Fz);
+    ASSERT_EQ(2, Fz->second.size());
+    ASSERT_NEAR(-sin(4*PI/180.)*69961607.31273420155048, Fz->second.back(), 1E-6);
+
+    ASSERT_NEAR(4*PI/180., std::atan2(-Fz->second.back(),Fx->second.back()), 1E-6);
+    /*
+    const auto Mx = m.find("Mx(PSPropRudd,fremm,fremm)");
+    ASSERT_NE(m.end(), Mx);
+    ASSERT_EQ(2, Mx->second.size());
+    ASSERT_NEAR(0, Mx->second.back(), 1E-8);
+    const auto My = m.find("My(PSPropRudd,fremm,fremm)");
+    ASSERT_NE(m.end(), My);
+    ASSERT_EQ(2, My->second.size());
+    ASSERT_NEAR(0, My->second.back(), 1E-8);
+    const auto Mz = m.find("Mz(PSPropRudd,fremm,fremm)");
+    ASSERT_NE(m.end(), Mz);
+    ASSERT_EQ(2, Mz->second.size());
+    ASSERT_NEAR(0, Mz->second.back(), 1E-8);
+    */
 }

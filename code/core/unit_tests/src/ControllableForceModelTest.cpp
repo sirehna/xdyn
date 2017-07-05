@@ -11,15 +11,24 @@
 #include "ControllableForceModel.hpp"
 #include "random_kinematics.hpp"
 
+EnvironmentAndFrames get_env(ssc::random_data_generator::DataGenerator& a);
+EnvironmentAndFrames get_env(ssc::random_data_generator::DataGenerator& a)
+{
+    EnvironmentAndFrames env;
+    env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
+    const auto bTa = random_transform(a, "body", "mock");
+    env.k->add(bTa);
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    return env;
+}
+
 class RandomControllableForce : public ControllableForceModel
 {
     public:
 
-        RandomControllableForce(ssc::random_data_generator::DataGenerator& a_) : ControllableForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", EnvironmentAndFrames()), a(a_)
+        RandomControllableForce(ssc::random_data_generator::DataGenerator& a_)
+             : ControllableForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", get_env(a_)), a(a_)
         {
-            env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
-            const auto bTa = random_transform(a, "body", "mock");
-            env.k->add(bTa);
         }
 
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
@@ -32,6 +41,11 @@ class RandomControllableForce : public ControllableForceModel
             ret(4) = a.random<double>().between(200,300);
             ret(5) = a.random<double>().between(-300,-200);
             return ret;
+        }
+
+        ssc::kinematics::KinematicsPtr get_k() const
+        {
+            return env.k;
         }
 
     private:
@@ -62,7 +76,9 @@ TEST_F(ControllableForceModelTest, bug_2838)
     BodyStates states;
     states.G = ssc::kinematics::Point("body", 1, 2, 3);
     const double t = a.random<double>();
-    auto w = F(states, t, command_listener);
+
+
+    auto w = F(states, t, command_listener, F.get_k(), states.G);
 //! [ControllableForceModelTest example]
 //! [ControllableForceModelTest expected output]
     ASSERT_EQ("body", w.get_frame());
