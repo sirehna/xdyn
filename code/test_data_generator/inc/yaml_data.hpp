@@ -75,6 +75,7 @@ namespace test_data
     std::string manoeuvring_with_euler_angles_and_quaternions();
     std::string bug_3004();
     std::string bug_3003();
+    std::string bug_2984();
 }
 
 #endif /* YAML_DATA_HPP_ */
