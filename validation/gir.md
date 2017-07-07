@@ -2,7 +2,7 @@
 
 ## Scénario
 
-{% set scenario_filename = 'reference_data_for_validation/Giration/anthineas_giration.yml' %}
+{% set scenario_filename = '/work/reference_data_for_validation/Giration/anthineas_giration.yml' %}
 
 ## Configuration de X-DYN
 
@@ -11,9 +11,9 @@ Le fichier de configuration a la forme suivante :
 {% set yaml_data = load(scenario_filename)%}
 {{show(yaml_data)}}
 
-{% set command_filename = 'reference_data_for_validation/Giration/controlled_forces_commands.yml' %}
+{% set command_filename = '/work/reference_data_for_validation/Giration/controlled_forces_commands.yml' %}
 On simule 50 secondes par pas de 0.2 secondes :
-{{exec('xdyn '+ scenario_filename+ ' -c ' + command_filename + ' --dt 0.2  --tend 50 -o xdyn.h5')}}
+{{exec('xdyn '+ scenario_filename+ ' ' + command_filename + ' --dt 0.2  --tend 50 -o xdyn.h5')}}
 {% set xdyn_res = h5('xdyn.h5', t='outputs/t', X='outputs/states/Anthineas/X', Y='outputs/states/Anthineas/Y', PSI='outputs/states/Anthineas/PSI', U='outputs/states/Anthineas/U', V='outputs/states/Anthineas/V', R='outputs/states/Anthineas/R') %}
 {% set sos_res = xls('reference_data_for_validation/Giration/comparaison_giration_20150224.xlsx',sheetname='SOS') %}
 

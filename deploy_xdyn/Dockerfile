@@ -1,6 +1,12 @@
 FROM bitnami/minideb:jessie
 ENV LD_LIBRARY_PATH=/usr/bin
 
+RUN apt-get update -yq \
+ && apt-get install python3-h5py python3-yaml python3-jinja2 python3-pip python3-matplotlib python3-pandas python3-xlrd pandoc -y \
+ && apt-get clean \
+ && rm -rf /tmp/* /var/tmp/* \
+ && rm -rf /var/lib/apt/lists/
+
 ADD usr/lib/libgfortran.so.3.0.0 /usr/lib/libgfortran.so.3
 ADD usr/lib/libquadmath.so.0.0.0 /usr/lib/libquadmath.so.0
 ADD usr/lib/libstdc++.so.6.0.20 /usr/lib/libstdc++.so.6
@@ -23,4 +29,7 @@ ADD usr/bin/libssc_yaml_parser_shared.so /usr/bin/
 ADD usr/bin/xdyn* /usr/bin/
 ADD usr/lib/libx-dyn.so /usr/lib/
 ADD usr/lib/ld-2.19.so /usr/lib/ld-linux-x86-64.so.2
+ADD spt-0.0.0-py2.py3-none-any.whl .
 
+RUN pip3 install spt-0.0.0-py2.py3-none-any.whl
+RUN sed -i 's/^backend .*/backend : Agg/' `python3 -c'import matplotlib;print(matplotlib.matplotlib_fname())'`

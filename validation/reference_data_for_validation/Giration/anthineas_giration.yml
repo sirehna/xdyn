@@ -11,7 +11,7 @@ environment models:
 # Fixed frame: NED
 bodies: # All bodies have NED as parent frame
   - name: Anthineas
-    mesh: anthineas.stl
+    mesh: /work/anthineas.stl
     position of body frame relative to mesh:
         frame: mesh
         x: {value: 9.355, unit: m}
