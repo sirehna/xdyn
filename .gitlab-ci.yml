@@ -3,7 +3,6 @@ stages:
   - lint
   - cleanup_Docker
   - build
-  - deploy_to_image
 
 git_submodule:
    stage: git_submodule
@@ -44,20 +43,22 @@ build:
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 /opt/share/code      
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn ninja package
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn ./run_all_tests --gtest_output=xml:run_all_tests.xml
-   artifacts:
-     paths:
-     - build/xdyn.deb
-
-deploy_to_image:
-    stage: deploy_to_image
-    dependencies:
-      - build
-    script:
-      - ls build
-      - mv build/xdyn.deb deploy_xdyn
+     - cd spt_getter
+     - docker build -f Dockerfile -t get_spt .
+     - docker run -i --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out --net=host get_spt python fetch_spt.py
+     - rm -rf html spt-0.0.0-py2.py3-none-any.whl
+     - unzip artifacts.zip
+     - rm artifacts.zip
+     - rm -rf html
+     - mv spt-0.0.0-py2.py3-none-any.whl ../deploy_xdyn
+     - cd ..
+      - ls
+      - mv code/build/xdyn.deb deploy_xdyn
       - cd deploy_xdyn
-      - ./deploy.sh
+      - ./make_docker_image.sh
       - cd ..
-    artifacts:
+   artifacts:
       paths:
-      - deploy_xdyn/xdyn.tar
+      - deploy_xdyn/xdyn.tar.gz
+      - build/xdyn.deb
+
