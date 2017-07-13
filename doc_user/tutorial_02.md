@@ -4,6 +4,9 @@ Ce tutoriel vise à illustrer l'utilisation des modèles hydrostatiques et à
 comparer succinctement les modèles `non-linear hydrostatic (exact)` et
 `non-linear hydrostatic (fast)`.
 
+{% set yaml_data_exact_hs = load('tutorial_02_exact_hydrostatic.yml') %}
+{% set yaml_data_fast_hs = load('tutorial_02_fast_hydrostatic.yml') %}
+
 ### Description du problème
 Dans cet exemple, nous considérons un navire,
 [l'Anthineas](http://www.marinetraffic.com/en/ais/details/ships/228367000/vessel:ANTHINEAS),
@@ -19,11 +22,8 @@ Nous documentons ici uniquement les changements par rapport au
 
 L'environnement est défini de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-environment models:
-  - model: no waves
-    constant sea elevation in NED frame: {value: 0, unit: m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{show(yaml_data_exact_hs, 'environment models')}}
 
 Comme décrit dans le [documentation du fichier
 d'entrée](##absence-de-houle), ceci signifie que la
@@ -34,195 +34,56 @@ Par rapport au [tutoriel 1](##tutoriel-1-balle-en-chute-libre), la
 position du repère "body" par rapport au maillage est ici importante puisque
 l'on [fournit un fichier STL](##d%C3%A9finition-du-fichier-de-maillage) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- name: Anthineas
-  mesh: anthineas.stl
-  position of body frame relative to mesh:
-      frame: mesh
-      x: {value: 9.355, unit: m}
-      y: {value: 0, unit: m}
-      z: {value: -3.21, unit: m}
-      phi: {value: 0, unit: rad}
-      theta: {value: 0, unit: rad}
-      psi: {value: 0, unit: rad}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data_exact_hs, 'bodies/0/position of body frame relative to mesh')}}
 
 On décrit dans les conditions initiales le fait que le bateau est lâché à 5 m
 au-dessus du niveau de l'eau (l'axe z du repère NED étant orienté vers le bas,
 des valeurs négatives correspondent à des points au-dessus de la surface libre)
 :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-initial position of body frame relative to NED:
-    frame: NED
-    x: {value: 0, unit: m}
-    y: {value: 0, unit: m}
-    z: {value: -5, unit: m}
-    phi: {value: 0, unit: deg}
-    theta: {value: -.0058, unit: rad}
-    psi: {value: 0, unit: deg}
-initial velocity of body frame relative to NED:
-    frame: Anthineas
-    u: {value: 0, unit: m/s}
-    v: {value: 0, unit: m/s}
-    w: {value: 0, unit: m/s}
-    p: {value: 0, unit: rad/s}
-    q: {value: 0, unit: rad/s}
-    r: {value: 0, unit: rad/s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data_exact_hs, 'bodies/0/initial position of body frame relative to NED')}}
+{{show(yaml_data_exact_hs, 'bodies/0/initial velocity of body frame relative to NED')}}
 
 Les données dynamiques comprennent la masse, la matrice d'inertie, les inerties
 ajoutées et la position du centre d'inertie :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-dynamics:
-    hydrodynamic forces calculation point in body frame:
-            x: {value: 0.696, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 1.418, unit: m}
-    centre of inertia:
-        frame: Anthineas
-        x: {value: 0.258, unit: m}
-        y: {value: 0, unit: m}
-        z: {value: 0.432, unit: m}
-    mass: {value: 253.31, unit: tonne} ## Caution: 'ton' is the british ton which is 907.185 kg
-    rigid body inertia matrix at the center of buoyancy projected in the body frame:
-        frame: Anthineas
-        row 1: [253310,0,0,0,0,0]
-        row 2: [0,253310,0,0,0,0]
-        row 3: [0,0,253310,0,0,0]
-        row 4: [0,0,0,1.522e6,0,0]
-        row 5: [0,0,0,0,8.279e6,0]
-        row 6: [0,0,0,0,0,7.676e6]
-    added mass matrix at the center of buoyancy projected in the body frame:
-        frame: Anthineas
-        row 1: [3.519e4,0,0,0,0,0]
-        row 2: [0,3.023e5,0,0,0,0]
-        row 3: [0,0,1.980e5,0,0,0]
-        row 4: [0,0,0,3.189e5,0,0]
-        row 5: [0,0,0,0,8.866e6,0]
-        row 6: [0,0,0,0,0,6.676e6]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data_exact_hs, 'bodies/0/dynamics')}}
 
 On utilise dans un premier temps le [modèle hydrostatique
 approché](##calcul-du-moment) dont la
 documentation est décrite
 [ici](##hydrostatique-non-lin%C3%A9aire) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-external forces:
-  - model: gravity
-  - model: non-linear hydrostatic (fast)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{show(yaml_data_fast_hs, 'bodies/0/external forces')}}
 
 En définitive, on obtient le fichier suivant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations convention: [psi, theta', phi'']
-
-environmental constants:
-    g: {value: 9.81, unit: m/s^2}
-    rho: {value: 1025, unit: kg/m^3}
-	nu: {value: 1.18e-6, unit: m^2/s}
-environment models:
-  - model: no waves
-    constant sea elevation in NED frame: {value: 0, unit: m}
-
-## Fixed frame: NED
-bodies: ## All bodies have NED as parent frame
-  - name: Anthineas
-    mesh: anthineas.stl
-    position of body frame relative to mesh:
-        frame: mesh
-        x: {value: 9.355, unit: m}
-        y: {value: 0, unit: m}
-        z: {value: -3.21, unit: m}
-        phi: {value: 0, unit: rad}
-        theta: {value: 0, unit: rad}
-        psi: {value: 0, unit: rad}
-    initial position of body frame relative to NED:
-        frame: NED
-        x: {value: 0, unit: m}
-        y: {value: 0, unit: m}
-        z: {value: -5, unit: m}
-        phi: {value: 0, unit: deg}
-        theta: {value: -.0058, unit: rad}
-        psi: {value: 0, unit: deg}
-    initial velocity of body frame relative to NED:
-        frame: Anthineas
-        u: {value: 0, unit: m/s}
-        v: {value: 0, unit: m/s}
-        w: {value: 0, unit: m/s}
-        p: {value: 0, unit: rad/s}
-        q: {value: 0, unit: rad/s}
-        r: {value: 0, unit: rad/s}
-    dynamics:
-        hydrodynamic forces calculation point in body frame:
-            x: {value: 0.696, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 1.418, unit: m}
-        centre of inertia:
-            frame: Anthineas
-            x: {value: 0.258, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 0.432, unit: m}
-        mass: {value: 253.31, unit: tonne} ## Caution: 'ton' is the british ton which is 907.185 kg
-        rigid body inertia matrix at the center of buoyancy projected in the body frame:
-            frame: Anthineas
-            row 1: [253310,0,0,0,0,0]
-            row 2: [0,253310,0,0,0,0]
-            row 3: [0,0,253310,0,0,0]
-            row 4: [0,0,0,1.522e6,0,0]
-            row 5: [0,0,0,0,8.279e6,0]
-            row 6: [0,0,0,0,0,7.676e6]
-        added mass matrix at the center of buoyancy projected in the body frame:
-            frame: Anthineas
-            row 1: [3.519e4,0,0,0,0,0]
-            row 2: [0,3.023e5,0,0,0,0]
-            row 3: [0,0,1.980e5,0,0,0]
-            row 4: [0,0,0,3.189e5,0,0]
-            row 5: [0,0,0,0,8.866e6,0]
-            row 6: [0,0,0,0,0,6.676e6]
-    external forces:
-      - model: gravity
-      - model: non-linear hydrostatic (fast)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data_fast_hs)}}
 
 ### Lancement de la simulation
 
 La simulation peut maintenant être lancée comme suit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 -o csv| python plot.py "tutorial_02_fast_hydrostatic_z" 0 3
-./xdyn tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 -o csv| python plot.py "tutorial_02_exact_hydrostatic_z" 0 3
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{exec('xdyn tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 -o fast.csv')}}
+{{exec('xdyn tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 -o exact.csv')}}
 
 ### Résultats
 
-Voici les résultats avec le [modèle hydrostatique
-approché](##calcul-du-moment) on obtient :
+Voici les résultats :
 
-![Élévation au cours du temps](images/tutorial_02_fast_hydrostatic_z.svg)
-
-Pour utiliser le [modèle hydrostatique
-précis](##calcul-du-moment), il suffit de
-modifier la section `external forces` :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-external forces:
-  - model: gravity
-  - model: non-linear hydrostatic (exact)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-![Élévation au cours du temps](images/tutorial_02_exact_hydrostatic_z.svg)
+{% set fast_data = csv('fast.csv') %}
+{% set exact_data = csv('exact.csv') %}
+{% set fast_plot = prepare_plot_data(fast_data, x = 't', y = 'z(Anthineas)', name='Modèle hydrostatique rapide') %}
+{% set exact_plot = prepare_plot_data(exact_data, x = 't', y = 'z(Anthineas)', name='Modèle hydrostatique exact') %}
+{% set g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='Elévation (m)') %}
+{{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
 
 On peut également représenter les déplacements suivant l'axe $y$ en exécutant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 -o csv| python plot.py "tutorial_02_fast_hydrostatic_y" 0 2
-./xdyn tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 -o csv| python plot.py "tutorial_02_exact_hydrostatic_y" 0 2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-![Embardée (modèle rapide)](images/tutorial_02_fast_hydrostatic_y.svg)
-![Embardée (modèle précis)](images/tutorial_02_exact_hydrostatic_y.svg)
+{% set fast_plot = prepare_plot_data(fast_data, x = 't', y = 'y(Anthineas)', name='Modèle hydrostatique rapide') %}
+{% set exact_plot = prepare_plot_data(exact_data, x = 't', y = 'y(Anthineas)', name='Modèle hydrostatique exact') %}
+{% set g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='y (m)') %}
+{{layout(size=(1,1),graphs=[(g,(0,0))], title='Embardée au cours du temps')}}
 
