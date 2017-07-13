@@ -1,243 +1,72 @@
-# Tutoriels
+## Tutorial 1: chute libre
 
-## Tutoriel 1: balle en chute libre
+{% set yaml_data = load('tutorial_01_falling_ball.yml') %}
 
-Ce tutoriel vise à illustrer le fonctionnement du simulateur. En premier lieu,
-nous décrirons le problème physique modélisé, puis sa traduction en YAML,
-l'exécution de la simulation, puis le tracé des résultats.
+On commence par définir les conventions de rotation :
 
-### Description du problème
-Le problème physique considéré dans cet exemple est celui du calcul de
-l'élévation d'une masse ponctuelle soumise uniquement à l'accélération de la
-pesanteur.
-
-### Écriture du fichier de configuration du simulateur.
-
-Le fichier d'entrée du simulateur est au format [YAML](http://www.yaml.org)
-(une extension du format JSON).
-
-On commence par définir les conventions de rotation (décrite
-[ici](##rotations)):
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations convention: [psi, theta', phi'']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'rotations convention')}}
 
 Puis l'on donne des [constantes
 environnementales](##constantes-environnementales) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-environmental constants:
-    g: {value: 9.81, unit: m/s^2}
-    rho: {value: 1000, unit: kg/m^3}
-	nu: {value: 1.18e-6, unit: m^2/s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'environmental constants')}}
 
 Aucun modèle d'environnement (houle, vent...) n'est nécessaire pour cette
 simulation :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-environment models: []
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'environment models')}}
 
 On définit la position du repère "body" par rapport au maillage :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    position of body frame relative to mesh:
-        frame: mesh
-        x: {value: 0, unit: m}
-        y: {value: 0, unit: m}
-        z: {value: -10, unit: m}
-        phi: {value: 1, unit: rad}
-        theta: {value: 3, unit: rad}
-        psi: {value: 2, unit: rad}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'bodies/0/position of body frame relative to mesh')}}
 
 Les conditions initiales sont décrites comme suit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    initial position of body frame relative to NED:
-        frame: NED
-        x: {value: 4, unit: m}
-        y: {value: 8, unit: m}
-        z: {value: 12, unit: m}
-        phi: {value: 0, unit: rad}
-        theta: {value: 0, unit: rad}
-        psi: {value: 0, unit: rad}
-    initial velocity of body frame relative to NED:
-        frame: ball
-        u: {value: 1, unit: m/s}
-        v: {value: 0, unit: m/s}
-        w: {value: 0, unit: m/s}
-        p: {value: 0, unit: rad/s}
-        q: {value: 0, unit: rad/s}
-        r: {value: 0, unit: rad/s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'bodies/0/initial position of body frame relative to NED')}}
+{{show(yaml_data, 'bodies/0/initial velocity of body frame relative to NED')}}
 
 Les données dynamiques comprennent la masse, la matrice d'inertie, les inerties ajoutées
 et la position du centre d'inertie :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    dynamics:
-        hydrodynamic forces calculation point in body frame:
-            x: {value: 0, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 0, unit: m}
-        centre of inertia:
-            frame: ball
-            x: {value: 0, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 0.5, unit: m}
-        mass: {value: 1000, unit: tonne}
-        rigid body inertia matrix at the center of buoyancy projected in the body frame:
-            frame: ball
-            row 1: [1E6,0,0,0,0,0]
-            row 2: [0,1E6,0,0,0,0]
-            row 3: [0,0,1E6,0,0,0]
-            row 4: [0,0,0,1E6,0,0]
-            row 5: [0,0,0,0,1E6,0]
-            row 6: [0,0,0,0,0,1E6]
-        added mass matrix at the center of buoyancy projected in the body frame:
-            frame: ball
-            row 1: [0,0,0,0,0,0]
-            row 2: [0,0,0,0,0,0]
-            row 3: [0,0,0,0,0,0]
-            row 4: [0,0,0,0,0,0]
-            row 5: [0,0,0,0,0,0]
-            row 6: [0,0,0,0,0,0]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'bodies/0/dynamics')}}
 
 Seule la gravité agit sur le solide :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    external forces:
-      - model: gravity
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'bodies/0/external forces')}}
 
-En définitive, on obtient le fichier suivant (nommé tutorial_`01_falling_ball.yml`) :
+En définitive, on obtient le fichier suivant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations convention: [psi, theta', phi'']
-
-environmental constants:
-    g: {value: 9.81, unit: m/s^2}
-    rho: {value: 1000, unit: kg/m^3}
-	nu: {value: 1.18e-6, unit: m^2/s}
-environment models: []
-
-bodies: ## All bodies have NED as parent frame
-  - name: ball
-    position of body frame relative to mesh:
-        frame: mesh
-        x: {value: 0, unit: m}
-        y: {value: 0, unit: m}
-        z: {value: -10, unit: m}
-        phi: {value: 1, unit: rad}
-        theta: {value: 3, unit: rad}
-        psi: {value: 2, unit: rad}
-    initial position of body frame relative to NED:
-        frame: NED
-        x: {value: 4, unit: m}
-        y: {value: 8, unit: m}
-        z: {value: 12, unit: m}
-        phi: {value: 0, unit: rad}
-        theta: {value: 0, unit: rad}
-        psi: {value: 0, unit: rad}
-    initial velocity of body frame relative to NED:
-        frame: ball
-        u: {value: 1, unit: m/s}
-        v: {value: 0, unit: m/s}
-        w: {value: 0, unit: m/s}
-        p: {value: 0, unit: rad/s}
-        q: {value: 0, unit: rad/s}
-        r: {value: 0, unit: rad/s}
-    dynamics:
-	    hydrodynamic forces calculation point in body frame:
-            x: {value: 0, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 0, unit: m}
-        centre of inertia:
-            frame: ball
-            x: {value: 0, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 0.5, unit: m}
-        mass: {value: 1000, unit: tonne}
-        rigid body inertia matrix at the center of buoyancy projected in the body frame:
-            frame: ball
-            row 1: [1E6,0,0,0,0,0]
-            row 2: [0,1E6,0,0,0,0]
-            row 3: [0,0,1E6,0,0,0]
-            row 4: [0,0,0,1E6,0,0]
-            row 5: [0,0,0,0,1E6,0]
-            row 6: [0,0,0,0,0,1E6]
-        added mass matrix at the center of buoyancy projected in the body frame:
-            frame: ball
-            row 1: [0,0,0,0,0,0]
-            row 2: [0,0,0,0,0,0]
-            row 3: [0,0,0,0,0,0]
-            row 4: [0,0,0,0,0,0]
-            row 5: [0,0,0,0,0,0]
-            row 6: [0,0,0,0,0,0]
-    external forces:
-      - model: gravity
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data)}}
 
 ### Lancement de la simulation
 
 La simulation peut s'exécuter comme suit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-En exécutant cette commande, les résultats sont sauvegardés vers les sorties
-définies dans la section `output`.
-On peut également les rediriger vers la sortie standard en précisant le format
-texte de sortie (csv, tsv ou json):
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o csv
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-On peut également spécifier directement le fichier de sortie
-(le format est automatiquement détecté à partir de l'extension,
-parmi les formats disponibles) :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
 
 On peut également changer l'instant initial (étant entendu que les conditions
 initiales définies dans le fichier YAML s'appliquent à cet instant initial,
 quel qu'il soit, et non pas à t = 0) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 10 --tstart 2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 --tstart 2 -o out.csv')}}
 
 On peut choisir le solveur :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rkck
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rkck -o out.csv')}}
 
 La liste de toutes les options est disponible en exécutant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-On peut chaîner les post-traitements (tracés) à la suite de la simulation :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o csv | python plot.py "tutorial_01" 0 3
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Cette dernière commande va utiliser le script `plot.py` présent dans le
-répertoire `demos` pour générer l'image `tutorial_01.svg` (insérée ci-dessous).
+{{exec('xdyn -h')}}
 
 ### Résultats
 
-![Élévation au cours du temps](images/tutorial_01.svg)
+Voici un tracé de l'élévation au cours du temps :
+
+{% set data = csv('out.csv') %}
+{% set plot = prepare_plot_data(data, x = 't', y = 'z(ball)', name='Résultat') %}
+
+{% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
+
+{{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
+
 
