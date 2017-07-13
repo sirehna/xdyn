@@ -22,171 +22,50 @@ machine et par le temps disponible).
 
 ### Écriture du fichier de configuration du simulateur.
 
+{% set yaml_data = load('tutorial_03_waves.yml') %}
+
 La section `environment models` est nettement plus fournie que pour les
 tutoriels précédents.
 
 On commence par définir la discrétisation. Actuellement, le nombre de
 pulsations est égal au nombre de directions :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-discretization:
-   n: 128
-   omega min: {value: 0.1, unit: rad/s}
-   omega max: {value: 6, unit: rad/s}
-   energy fraction: 0.999
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'environment models/0/discretization')}}
 
-On va donc sommer 128 pulsations et 128 directions, soit 16384 points.
+On va donc sommer {{yaml_data['environment models'][0]['discretization']['n']}} pulsations et {{yaml_data['environment models'][0]['discretization']['n']}} directions, soit {{yaml_data['environment models'][0]['discretization']['n']*yaml_data['environment models'][0]['discretization']['n']}} points.
 Cependant, la discrétisation spatiale des spectres monochromatiques et des
 dispersions monodirectionnelles est réduite à un point. On spécifie en outre
-que l'on veut représenter 99.9% de l'énergie totale, les autres composantes
+que l'on veut représenter {{yaml_data['environment models'][0]['discretization']['energy fraction']*100}}% de l'énergie totale, les autres composantes
 n'étant pas retenues.
 
 Le premier spectre est défini de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- model: airy
-  depth: {value: 100, unit: m}
-  seed of the random data generator: 0
-  directional spreading:
-     type: dirac
-     waves propagating to: {value: 90, unit: deg}
-  spectral density:
-     type: jonswap
-     Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: m}
-     gamma: 1.2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'environment models/0/spectra/0')}}
 
 Pour le second spectre, on écrit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- model: airy
-  depth: {value: 100, unit: m}
-  seed of the random data generator: 10
-  directional spreading:
-     type: cos2s
-     s: 2
-     waves propagating to: {value: 90, unit: deg}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'environment models/0/spectra/1')}}
 
-On définit les sorties de la façon suivante (#sorties):
+On définit les sorties de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-output:
-    frame of reference: NED
-    mesh:
-        xmin: {value: 1, unit: m}
-        xmax: {value: 5, unit: m}
-        nx: 5
-        ymin: {value: 1, unit: m}
-        ymax: {value: 2, unit: m}
-        ny: 2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data, 'environment models/0/output')}}
 
 En définitive, l'environnement est défini de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-environment models:
-  - model: waves
-    discretization:
-       n: 128
-       omega min: {value: 0.1, unit: rad/s}
-       omega max: {value: 6, unit: rad/s}
-       energy fraction: 0.999
-    spectra:
-      - model: airy
-        depth: {value: 100, unit: m}
-        seed of the random data generator: 0
-        directional spreading:
-           type: dirac
-           waves propagating to: {value: 90, unit: deg}
-        spectral density:
-           type: jonswap
-           Hs: {value: 5, unit: m}
-           Tp: {value: 15, unit: m}
-           gamma: 1.2
-      - model: airy
-        depth: {value: 100, unit: m}
-        seed of the random data generator: 10
-        directional spreading:
-           type: cos2s
-           s: 2
-           waves propagating to: {value: 90, unit: deg}
-        spectral density:
-           type: dirac
-           omega0: {value: 0.05, unit: rad/s}
-           Hs: {value: 15, unit: m}
-    output:
-        frame of reference: NED
-        mesh:
-            xmin: {value: 1, unit: m}
-            xmax: {value: 5, unit: m}
-            nx: 5
-            ymin: {value: 1, unit: m}
-            ymax: {value: 2, unit: m}
-            ny: 2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{show(yaml_data, 'environment models')}}
 
 Comme on ne simule pas de corps, le fichier d'entrée se réduit à :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rotations convention: [psi, theta', phi'']
-
-environmental constants:
-    g: {value: 9.81, unit: m/s^2}
-    rho: {value: 1026, unit: kg/m^3}
-	nu: {value: 1.18e-6, unit: m^2/s}
-environment models:
-  - model: waves
-    discretization:
-       n: 128
-       omega min: {value: 0.1, unit: rad/s}
-       omega max: {value: 6, unit: rad/s}
-       energy fraction: 0.999
-    spectra:
-      - model: airy
-        depth: {value: 100, unit: m}
-        seed of the random data generator: 0
-        directional spreading:
-           type: dirac
-           waves propagating to: {value: 90, unit: deg}
-        spectral density:
-           type: jonswap
-           Hs: {value: 5, unit: m}
-           Tp: {value: 15, unit: m}
-           gamma: 1.2
-      - model: airy
-        depth: {value: 100, unit: m}
-        seed of the random data generator: 10
-        directional spreading:
-           type: cos2s
-           s: 2
-           waves propagating to: {value: 90, unit: deg}
-        spectral density:
-           type: dirac
-           omega0: {value: 0.05, unit: rad/s}
-           Hs: {value: 15, unit: m}
-    output:
-        frame of reference: NED
-        mesh:
-            xmin: {value: 1, unit: m}
-            xmax: {value: 5, unit: m}
-            nx: 5
-            ymin: {value: 1, unit: m}
-            ymax: {value: 2, unit: m}
-            ny: 2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{show(yaml_data)}}
 
 ### Lancement de la simulation
 
 La simulation peut maintenant être lancée comme suit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bash}
-./xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{exec('xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5')}}
 
-Le fichier de résultat est `tutorial_03_results.h5`.
+Le fichier de résultat est ici `tutorial_03_results.h5`.
 
 ### Résultats
 
