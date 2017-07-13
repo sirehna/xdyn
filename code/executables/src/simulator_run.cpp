@@ -76,9 +76,12 @@ void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& s
 {
     const auto env = sys.get_env();
     const auto w = env.w;
-    for (auto observer:observers.get())
+    if (w)
     {
-        w->serialize_wave_spectra_before_simulation(observer);
+        for (auto observer:observers.get())
+        {
+            w->serialize_wave_spectra_before_simulation(observer);
+        }
     }
 }
 
