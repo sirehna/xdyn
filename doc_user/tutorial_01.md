@@ -44,6 +44,12 @@ La simulation peut s'exécuter comme suit :
 
 {{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
 
+Pour avoir des sorties sur la console, on peut faire :
+
+{{exec('xdyn tutorial_01_falling_ball.yml --dt 1 --tend 5 -o tsv')}}
+
+`tsv` signifie ici "tab-separated values".
+
 On peut également changer l'instant initial (étant entendu que les conditions
 initiales définies dans le fichier YAML s'appliquent à cet instant initial,
 quel qu'il soit, et non pas à t = 0) :
