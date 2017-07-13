@@ -60,7 +60,7 @@ On peut choisir le solveur :
 
 La liste de toutes les options est disponible en exécutant :
 
-{{exec('xdyn tutorial_01_falling_ball.yml -h')}}
+{{exec('xdyn -h')}}
 
 ### Résultats
 
@@ -72,11 +72,5 @@ Voici un tracé de l'élévation au cours du temps :
 {% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
 
 {{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
-
-
-# Pour les capa plots
-
-
-
 
 
