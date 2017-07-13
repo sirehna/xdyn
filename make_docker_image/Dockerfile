@@ -34,3 +34,4 @@ ADD spt-0.0.0-py2.py3-none-any.whl .
 
 RUN pip3 install spt-0.0.0-py2.py3-none-any.whl
 RUN sed -i 's/^backend .*/backend : Agg/' `python3 -c'import matplotlib;print(matplotlib.matplotlib_fname())'`
+ADD ApiGraphJinja.py ApiDataFormatting.py ApiJinjaCommands.py /usr/local/lib/python3.4/dist-packages/spt/report/

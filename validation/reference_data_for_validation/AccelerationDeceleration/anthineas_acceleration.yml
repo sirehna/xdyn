@@ -105,3 +105,8 @@ bodies: # All bodies have NED as parent frame
         number of blades: 4
         blade area ratio AE/A0: 0.55
         diameter: {value: 1.925, unit: m}
+commands:
+  - name: propeller
+    t: [0,0.1]
+    rpm: {unit: tr/s, values: [5, 5]}
+    P/D: {unit: 1, values: [0.67,0.67]}

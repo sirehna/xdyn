@@ -124,7 +124,6 @@ On simule 50 secondes par pas de 0.2 secondes :
 
 ## Scénario
 {% set scenario_filename = 'reference_data_for_validation/AccelerationDeceleration/anthineas_acceleration.yml' %}
-{% set command_filename = 'reference_data_for_validation/AccelerationDeceleration/controlled_forces_commands_acceleration.yml' %}
 
 ## Configuration de X-DYN
 Le fichier de configuration a la forme suivante :
@@ -133,7 +132,7 @@ Le fichier de configuration a la forme suivante :
 {{show(yaml_data)}}
 
 On simule 50 secondes par pas de 0.2 secondes :
-{{exec('xdyn '+ scenario_filename+ ' '+command_filename+' --dt 0.2  --tend 50 -o xdyn.h5')}}
+{{exec('xdyn '+ scenario_filename+ ' --dt 0.2  --tend 50 -o xdyn.h5')}}
 {% set xdyn_res = h5('xdyn.h5', t='outputs/t', U='outputs/states/Anthineas/U') %}
 {% set sos_trials = xls('reference_data_for_validation/AccelerationDeceleration/AnalyseEssaisErdre_201212.xlsx', sheetname='Accélération', skiprows=3) %}
 
