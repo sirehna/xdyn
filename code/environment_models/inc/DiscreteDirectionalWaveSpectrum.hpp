@@ -60,8 +60,8 @@ struct FlatDiscreteDirectionalWaveSpectrum
 {
     FlatDiscreteDirectionalWaveSpectrum();
     std::vector<DiscreteDirectionalWaveDensity> spectrum;
-    double domega;
-    double dpsi;
+    // double domega;
+    // double dpsi;
 };
 
 #endif /* DISCRETEDIRECTIONALWAVESPECTRUM_HPP_ */

@@ -238,8 +238,6 @@ TEST_F(discretizeTest, flatten)
     d.Si[2] = 4;
 
     FlatDiscreteDirectionalWaveSpectrum s = flatten(d, 0.15);
-    ASSERT_DOUBLE_EQ(d.domega, s.domega);
-    ASSERT_DOUBLE_EQ(d.dpsi, s.dpsi);
     ASSERT_EQ(0, s.spectrum.size());
 
     s = flatten(d, 0.18);

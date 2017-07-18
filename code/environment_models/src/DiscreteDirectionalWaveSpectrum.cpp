@@ -18,9 +18,9 @@ DiscreteDirectionalWaveDensity::DiscreteDirectionalWaveDensity() :
 }
 
 FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
-    spectrum(),
-    domega(0),
-    dpsi(0)
+    spectrum() //,
+    //domega(0),
+    //dpsi(0)
 {
 
 }
