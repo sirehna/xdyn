@@ -21,14 +21,14 @@
 DiscreteDirectionalWaveSpectrum common(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
-        const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
+        const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
         );
 DiscreteDirectionalWaveSpectrum common(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
-        const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
+        const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
         )
@@ -48,7 +48,7 @@ DiscreteDirectionalWaveSpectrum common(
 DiscreteDirectionalWaveSpectrum discretize(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
-        const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
+        const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
         const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
@@ -71,7 +71,7 @@ DiscreteDirectionalWaveSpectrum discretize(
 DiscreteDirectionalWaveSpectrum discretize(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
-        const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
+        const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
         const double h,                    //!< Water depth (in meters)
