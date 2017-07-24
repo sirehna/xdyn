@@ -9,7 +9,7 @@
 
 
 DiscreteDirectionalWaveDensity::DiscreteDirectionalWaveDensity() :
-    sqrt_2_SiDj(0),
+    a(0),
     omega(0),
     psi(0),
     k(0),
@@ -23,6 +23,19 @@ FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
     //dpsi(0)
 {
 
+}
+
+FlatDiscreteDirectionalWaveSpectrum2::FlatDiscreteDirectionalWaveSpectrum2() :
+                    a(),
+                    omega(),
+                    psi(),
+                    cos_psi(),
+                    sin_psi(),
+                    k(),
+                    phase(),
+                    pdyn_factor(),
+                    pdyn_factor_sh()
+{
 }
 
 DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :

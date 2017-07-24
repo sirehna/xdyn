@@ -22,7 +22,10 @@ class WaveDirectionalSpreading;
   *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
   */
 FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to flatten
-                                            const double energy_ratio //!< Between 0 & 1: where should we cut off the spectra?
+                                            const double energy_ratio = 1.0//!< Between 0 & 1: where should we cut off the spectra?
+                                            );
+
+FlatDiscreteDirectionalWaveSpectrum2 flatten2(const DiscreteDirectionalWaveSpectrum& spectrum
                                             );
 
 /**  \author cec

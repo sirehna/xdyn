@@ -104,3 +104,8 @@ void Hdf5Observer::write_before_simulation(const std::vector<DiscreteDirectional
 {
     hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
 }
+
+void Hdf5Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum2>& s, const DataAddressing&)
+{
+    hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
+}

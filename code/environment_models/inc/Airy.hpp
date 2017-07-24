@@ -29,6 +29,9 @@ class Airy : public WaveModel
         Airy(const DiscreteDirectionalWaveSpectrum& spectrum, const double constant_random_phase); // For tests
         Airy(const DiscreteDirectionalWaveSpectrum& spectrum, const int random_number_generator_seed);
 
+        Airy(const FlatDiscreteDirectionalWaveSpectrum2& spectrum_, const double constant_random_phase);
+        Airy(const FlatDiscreteDirectionalWaveSpectrum2& spectrum, const int random_number_generator_seed);
+
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force (or torque), depending on the RAO
           */

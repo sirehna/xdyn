@@ -86,6 +86,8 @@ void Observer::flush_value_during_initialization()
     flush_value_during_write();
 }
 
-
 void Observer::write_before_simulation(const std::vector<DiscreteDirectionalWaveSpectrum>& , const DataAddressing& )
+{}
+
+void Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum2>& , const DataAddressing& )
 {}

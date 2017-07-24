@@ -116,7 +116,7 @@ ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double 
 
 void SurfaceElevationFromWaves::serialize_wave_spectra_before_simulation(ObserverPtr& observer) const
 {
-    std::vector<DiscreteDirectionalWaveSpectrum> spectra;
+    std::vector<FlatDiscreteDirectionalWaveSpectrum2> spectra;
     spectra.reserve(models.size());
     for (const auto model:models) spectra.push_back(model->get_spectrum());
     const DataAddressing address;

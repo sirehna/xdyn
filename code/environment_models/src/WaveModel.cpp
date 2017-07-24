@@ -9,15 +9,15 @@
 #include "InternalErrorException.hpp"
 #include <cmath> // For isnan
 
-WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_) : spectrum(spectrum_)
+WaveModel::WaveModel(const FlatDiscreteDirectionalWaveSpectrum2& spectrum_) : spectrum(spectrum_)
 {
     if (spectrum.omega.empty())
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'omega' values devined in DiscreteDirectionalWaveSpectrum");
     }
-    if (spectrum.Si.empty())
+    if (spectrum.a.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'Si' values devined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'a' values devined in DiscreteDirectionalWaveSpectrum");
     }
     if (spectrum.k.empty())
     {
@@ -39,11 +39,11 @@ WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_) : spectru
             THROW(__PRETTY_FUNCTION__, InternalErrorException, "DiscreteDirectionalWaveSpectrum contains NaN values for k: " << spectrum.k);
         }
     }
-    for (const auto Si:spectrum.Si)
+    for (const auto Si:spectrum.a)
     {
         if (std::isnan(Si))
         {
-            THROW(__PRETTY_FUNCTION__, InternalErrorException, "DiscreteDirectionalWaveSpectrum contains NaN values for Si: " << spectrum.Si);
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "DiscreteDirectionalWaveSpectrum contains NaN values for a: " << spectrum.a);
         }
     }
 }

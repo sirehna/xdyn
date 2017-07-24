@@ -113,8 +113,6 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
         )
 {
     FlatDiscreteDirectionalWaveSpectrum ret;
-    // ret.domega = spectrum.domega;
-    // ret.dpsi = spectrum.dpsi;
     double S = 0;
     const size_t nOmega = spectrum.omega.size();
     const size_t nPsi = spectrum.psi.size();
@@ -151,9 +149,40 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
         x.k = spectrum.k[i];
         x.omega = spectrum.omega[i];
         x.psi = spectrum.psi[j];
-        x.sqrt_2_SiDj = sqrt(2*sidj.first);
+        x.a = sqrt(2 * sidj.first * spectrum.domega * spectrum.dpsi);
         ret.spectrum.push_back(x);
     }
+    return ret;
+}
+
+/**
+ * \param spectrum
+ * \return flattened spectrum
+ * \note We keep all components for the time being
+ * If we filter and discard some rays, we should also take into account rao...
+ */
+FlatDiscreteDirectionalWaveSpectrum2 flatten2(
+        const DiscreteDirectionalWaveSpectrum& spectrum //!< Spectrum to flatten
+        )
+{
+    FlatDiscreteDirectionalWaveSpectrum2 ret;
+    const size_t nOmega = spectrum.omega.size();
+    const size_t nPsi = spectrum.psi.size();
+    for (size_t i = 0 ; i < nOmega ; ++i)
+    {
+        for (size_t j = 0 ; j < nPsi ; ++j)
+        {
+            ret.k.push_back(spectrum.k[i]);
+            ret.omega.push_back(spectrum.omega[i]);
+            ret.psi.push_back(spectrum.psi[j]);
+            ret.cos_psi.push_back(cos(spectrum.psi[j]));
+            ret.sin_psi.push_back(sin(spectrum.psi[j]));
+            const double s = spectrum.Si[i] * spectrum.Dj[j];
+            ret.a.push_back(sqrt(2 * s * spectrum.domega * spectrum.dpsi));
+        }
+    }
+    ret.pdyn_factor = spectrum.pdyn_factor;
+    ret.pdyn_factor_sh = spectrum.pdyn_factor_sh;
     return ret;
 }
 
