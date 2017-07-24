@@ -414,7 +414,7 @@ pas représentatif de conditions réelles.
 ### Bretschneider
 
 La fonction analytique la plus souvent utilisée pour représenter des états
-de mer partiellement ou totalement développés a été proposé en 1959 par Bretschneider.
+de mer partiellement ou totalement développés a été proposée en 1959 par Bretschneider.
 Initialement, la dépendance à la période de la houle était mise en exergue
 et s'exprimait sous la forme :
 
@@ -695,7 +695,7 @@ Ce modèle peut être utilisé dans X-Dyn en fixant `h` à la profondeur d'eau
 
 ### Stretching de Wheeler
 
-On souhaite obtenir les bonnes vitesses orbitale à la surface de l'eau, c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle de houle), et au fond (en $z=h$).
+On souhaite obtenir les bonnes vitesses orbitales à la surface de l'eau, c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle de houle), et au fond (en $z=h$).
 
 La vitesse orbitale s'écrit :
 
