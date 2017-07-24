@@ -116,7 +116,7 @@ rotations convention: [psi,theta',phi'']
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1025, unit: kg/m^3}
-	nu: {value: 1.18e-6, unit: m^2/s}
+    nu: {value: 1.18e-6, unit: m^2/s}
 environment models:
   - model: waves
     discretization:
@@ -250,7 +250,6 @@ output:
 # Interface MatLab
 
 `X-Dyn` peut être appelé depuis le logiciel `MatLab`.
-Cela présente l'avantage de disposer dans la foulée d'un environnement graphique pour afficher
 Cela présente l'avantage de disposer dans la foulée d'un environnement graphique
 pour afficher les résultats de simulation.
 
