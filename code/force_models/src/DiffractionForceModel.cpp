@@ -1,5 +1,5 @@
 /*
- * ResistanceCurveForceModel.cpp
+ * DiffractionForceModel.cpp
  *
  *  Created on: Oct 24, 2014
  *      Author: cady
