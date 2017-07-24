@@ -1226,7 +1226,7 @@ gravité du corps.
 L'effort généré suivant l'axe X est $F_x = K_{x}\cdot (x_{\textrm{co}}-x) -
 K_u\cdot u = \sigma_{xx}\ddot{x}$ où $\sigma_{xx}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'axe $x$.
-L'effort généré suivant l'axe Y est $F_y = K_{y}\cdot (y_{\mboy{co}}-y) -
+L'effort généré suivant l'axe Y est $F_y = K_{y}\cdot (y_{\textrm{co}}-y) -
 K_v\cdot v = \sigma_{yy}\ddot{y}$ où $\sigma_{yy}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'aye $y$.
 Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\textrm{co}}-\psi) - K_r\cdot r =
