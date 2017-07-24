@@ -24,7 +24,7 @@ forme suivante :
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1025, unit: kg/m^3}
-	nu: {value: 1.18e-6, unit: m^2/s}
+    nu: {value: 1.18e-6, unit: m^2/s}
 ~~~~~~~~~~~~~~
 
 Comme expliqué dans [une section
