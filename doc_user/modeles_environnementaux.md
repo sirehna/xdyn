@@ -255,10 +255,17 @@ $$p_{\textrm{tot}}\geq 0$$
 
 ### Houle irrégulière
 
-Le potentiel de vitesse de la houle a été jusqu'ici exprimé pour une seule fréquence et
-une seule direction. On peut la généraliser en :
+Le potentiel de vitesse de la houle a été jusqu'ici exprimé pour une seule
+fréquence et une seule direction.
+On peut le généraliser pour plusieurs fréquences et plusieurs directions.
 
-$$\phi(x,y,z,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir} A(\omega_i,\gamma_j)\cdot \frac{g}{\omega_i}\frac{\cosh(k\cdot(h-z))}
+En notant
+
+$$a_{i,j} = A(\omega_i, \gamma_j) = \sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}$$
+
+le potentiel de houle irrégulière s'ecrit:
+
+$$\phi(x,y,z,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir} a_{i,j} \cdot \frac{g}{\omega_i}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
 \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
@@ -266,15 +273,14 @@ On en déduit l'expression de l'élévation $\eta$ :
 
 $$\eta(x,y,t) = \frac{1}{g}\frac{\partial\phi}{\partial t} = -
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
-\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}\sin(k_i\cdot(x\cdot \cos(\gamma_j)
+a_{i,j}\sin(k_i\cdot(x\cdot \cos(\gamma_j)
 + y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 ainsi que l'expression de la pression dynamique $p_{\textrm{dyn}}$ :
 
 $$p_{\textrm{dyn}}(x,y,z,t) = \rho\cdot g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{2 S(\omega_i)d\omega
-D(\gamma_j)d\gamma}
-\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+a_{i,j}\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
 \sin(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 ### Vitesse orbitale
@@ -284,17 +290,17 @@ La vitesse $V(x,y,z,t) = (u,v,w)$ orbitale de la houle est définie par :
 
 $$u = \frac{\partial \phi}{\partial x} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
+a_{i,j}
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cdot\cos(\gamma_j)
 \sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$v = \frac{\partial \phi}{\partial y} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
+a_{i,j}
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cdot\sin(\gamma_j)
 \sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$w = \frac{\partial \phi}{\partial z} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
+a_{i,j}
 \frac{\sinh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}
 \cos(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
@@ -306,19 +312,19 @@ Lorsque $k_i\cdot h >3$, les cosinus hyperboliques peuvent être considérés co
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
+a_{i,j}
 e^{-k_i z}
 \cdot\cos(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$v = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
+a_{i,j}
 e^{-k_i z}
 \cdot\sin(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 $$w = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
+a_{i,j}
 e^{-k_i z}
 \cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
@@ -627,7 +633,7 @@ par rapport au référentiel NED (projetée sur l'axe $X$ du repère BODY) s'éc
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+a_{i,j}
 \frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\cos(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
@@ -635,7 +641,7 @@ qui, en profondeur infinie, s'écrit :
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+a_{i,j}
 e^{-k_i z}
 \cdot\cos(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
@@ -694,13 +700,14 @@ Ce modèle peut être utilisé dans X-Dyn en fixant `h` à la profondeur d'eau
 
 ### Stretching de Wheeler
 
-On souhaite obtenir les bonnes vitesses orbitales à la surface de l'eau, c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle de houle), et au fond (en $z=h$).
+On souhaite obtenir les bonnes vitesses orbitales à la surface de l'eau,
+c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle de houle), et au fond (en $z=h$).
 
 La vitesse orbitale s'écrit :
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+a_{i,j}
 f(z)
 \cdot\cos(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
@@ -728,7 +735,7 @@ ce qui donne le profil de vitesse (projetée ici sur l'axe $X$ du repère body) 
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+a_{i,j}
 \frac{\cosh\left(k\cdot h\frac{h-z}{h-\eta(x,y,t)}\right)}{\cosh(k\cdot h)}
 \cdot\cos(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
@@ -761,7 +768,7 @@ Sur l'axe $X$ du repère body, par exemple, on obtient ainsi le profil :
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-\sqrt{A(\omega_i,\gamma_j)\Delta\omega\Delta\gamma}
+a_{i,j}
 \frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot (h+\eta(x,y,t)))}
 \cdot\cos(\gamma_j)
 \sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
@@ -814,7 +821,7 @@ la difficulté de réaliser l'expérimentation en conditions contrôlées et
 d'obtenir une mesure fiable, mais aussi de l'importance des phénomènes
 non-linéaires, absents des modèles de stretching.
 
-Les trois graphs ci-dessous montrent l'influence du modèle de stretching sur la
+Les trois graphes ci-dessous montrent l'influence du modèle de stretching sur la
 pression dynamique (et montrent aussi qu'il n'est pas pris en compte dans le
 calcul de la vitesse orbitale).
 
