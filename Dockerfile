@@ -48,11 +48,15 @@ RUN update-alternatives --set gcc /usr/bin/gcc-4.*
 # Install dependencies
 # BOOST 1.60
 ENV BOOST_INSTALL=/usr/local/boost_1_60_0
-RUN wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.gz
-RUN tar -xf boost_1_60_0.tar.gz
-RUN cd boost_1_60_0 && ./bootstrap.sh
-# link=shared threading=multi
-RUN cd boost_1_60_0 && ./b2 cxxflags=-fPIC link=static threading=single --layout=tagged --prefix=${BOOST_INSTALL} install || true
+RUN wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.gz -O boost_source.tar.gz && \
+    mkdir -p boost_SRC && \
+    tar -xf boost_source.tar.gz --strip 1 -C boost_SRC && \
+    cd boost_SRC && \
+    ./bootstrap.sh && \
+    # link=shared threading=multi
+    ./b2 cxxflags=-fPIC link=static threading=single --layout=tagged --prefix=${BOOST_INSTALL} install || true && \
+    cd .. \
+    rm -rf boost_source.tar.gz boost_SRC
 
 
 ENV HDF5_INSTALL="/usr/local/hdf5"
