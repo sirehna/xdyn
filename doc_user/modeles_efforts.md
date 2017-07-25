@@ -323,8 +323,8 @@ Pour calculer les efforts et les moments, on somme les RAO comme pour le calcul
 de l'élévation de la surface libre :
 
 $$F_k(x_H,y_H,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
-{RAO^{k}}_{\textrm{module}}(\omega_i,\psi_j)\sqrt{\Delta\omega\Delta\psi}\cos(k\cdot(x\cdot \cos(\psi_j)
-+ y\cdot \sin(\psi_j))-\omega_i\cdot
+{RAO^{k}}_{\textrm{module}}(\omega_i,\psi_j)\sqrt{\Delta\omega\Delta\psi}\cos(k\cdot(x_H\cdot \cos(\psi_j)
++ y_H\cdot \sin(\psi_j))-\omega_i\cdot
 t+{RAO^{k}}_{\textrm{phase}}(\omega_i,\psi_j)+\phi_{ij})$$
 
 $x_H$ et $y_H$ désignent les coordonnées du [point de calcul des efforts
