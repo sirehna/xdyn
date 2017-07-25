@@ -211,9 +211,9 @@ $$\cosh x\sim_{x\infty} \frac{e^x}{2}$$
 
 on obtient donc :
 
-$$p_{\textrm{dyn}} \sim_{h\infty}  \rho\cdot g
-\sum_{i=1}^{nfreq}\sqrt{2 S(\omega_i)d\omega D(\gamma) d\gamma}
-e^{-k_i\cdot z}\cos(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
+$$p_{\textrm{dyn}} \sim_{h\infty} \rho\cdot g
+\sum_{i=1}^{nfreq}A(\omega_i,\gamma)
+e^{-k_i\cdot z}\sin(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
 \sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
 
 ### Pression totale
