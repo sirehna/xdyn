@@ -272,7 +272,7 @@ $$\eta(x,y,t) = \frac{1}{g}\frac{\partial\phi}{\partial t} = -
 
 ainsi que l'expression de la pression dynamique $p_{\textrm{dyn}}$ :
 
-$$p_{\textrm{dyn}} = \rho\cdot g
+$$p_{\textrm{dyn}}(x,y,z,t) = \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\sqrt{2 S(\omega_i)d\omega
 D(\gamma_j)d\gamma}
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
@@ -323,7 +323,7 @@ $$w = g
 e^{-k_i z}
 \cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
-#### Evolution de la vitesse orbitale sur la surface libre
+#### Évolution de la vitesse orbitale sur la surface libre
 
 L'expression de l'élévation de la surface libre contient un terme en sinus.
 Les vitesses orbitales en $u$ et en $w$ contiennent des termes en cosinus et
@@ -715,7 +715,7 @@ On cherche donc une fonction $g$ telle que :
 $$g(z=\eta)=f(0)$$
 $$g(z=h)=f(h)$$
 
-On peut contruire une telle fonction en prenant
+On peut construire une telle fonction en prenant
 
 $$g(z) = f(z'(z))$$
 
@@ -757,7 +757,7 @@ Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la fo
 
 $$f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}$$
 
-On remplace $\cosh(k\cdot h)$ par $\cosh(k\cdot (h+\eta(x,y,t)))$
+On remplace $\cosh(k\cdot h)$ par $\cosh(k\cdot (h+\eta(x,y,t)))$.
 Sur l'axe $X$ du repère body, par exemple, on obtient ainsi le profil :
 
 $$u = g
