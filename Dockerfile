@@ -60,28 +60,27 @@ RUN wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.t
 
 
 ENV HDF5_INSTALL="/usr/local/hdf5"
-RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz -O hdf5_source.tar.gz
-RUN mkdir -p hdf5_source
-RUN tar -xf hdf5_source.tar.gz --strip 1 -C ./hdf5_source
-RUN mkdir hdf5_build \
- && cd hdf5_build \
- && cmake \
-  -Wno-dev \
-  ../hdf5_source \
-  "-DBUILD_SHARED_LIBS:BOOL=OFF" \
-  "-DCMAKE_BUILD_TYPE:STRING=Release" \
-  "-DHDF5_BUILD_HL_LIB:BOOL=ON" \
-  "-DHDF5_BUILD_FORTRAN:BOOL=ON" \
-  "-DHDF5_ENABLE_F2003:BOOL=ON" \
-  "-DHDF5_BUILD_CPP_LIB:BOOL=ON" \
-  "-DHDF5_BUILD_TOOLS:BOOL=ON" \
-  "-DCMAKE_INSTALL_PREFIX:PATH=${HDF5_INSTALL}" \
-  "-DCMAKE_C_FLAGS=-fpic" \
-  "-DCMAKE_CXX_FLAGS=-fpic"
-
-RUN cd hdf5_build && make install
-
-RUN rm -rf /opt/*
+RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src/hdf5-1.8.12.tar.gz -O hdf5_source.tar.gz && \
+    mkdir -p HDF5_SRC && \
+    tar -xf hdf5_source.tar.gz --strip 1 -C HDF5_SRC && \
+    mkdir -p HDF5_build && \
+    cd HDF5_build && \
+    cmake -G"Unix Makefiles" \
+      -DCMAKE_BUILD_TYPE:STRING=Release \
+      -DCMAKE_INSTALL_PREFIX:PATH=${HDF5_INSTALL} \
+      -DBUILD_SHARED_LIBS:BOOL=OFF \
+      -DBUILD_TESTING:BOOL=OFF \
+      -DHDF5_BUILD_TOOLS:BOOL=OFF \
+      -DHDF5_BUILD_EXAMPLES:BOOL=OFF \
+      -DHDF5_BUILD_HL_LIB:BOOL=ON \
+      -DHDF5_BUILD_CPP_LIB:BOOL=ON \
+      -DHDF5_BUILD_FORTRAN:BOOL=OFF \
+      -DCMAKE_C_FLAGS="-fPIC" \
+      -DCMAKE_CXX_FLAGS="-fPIC" \
+      ../HDF5_SRC && \
+    make install && \
+    cd .. && \
+    rm -rf hdf5_source.tar.gz HDF5_SRC HDF5_build
 
 ADD ssc.deb /opt/share/ssc.deb
 
