@@ -6,8 +6,8 @@ SPECTRA := spectrumBretschneider.svg spectrumGaussian.svg spectrumITTC.svg spect
 
 SPECTRA_PNGS := $(patsubst %.svg,%.png,$(SPECTRA))
 
-#all : $(PNGS) $(SPECTRA)
-all : $(SPECTRA)
+all : $(PNGS) $(SPECTRA)
+#all : $(SPECTRA)
 
 spectrumBretschneider.svg: spectrum.py
 	python3 spectrum.py
