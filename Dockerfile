@@ -25,17 +25,20 @@ ENV PATH="/opt/cmake/bin:${PATH}"
 
 ENV LD_LIBRARY_PATH=/opt/xdyn/lib:/opt/xdyn/bin
 
-    cmake ninja-build git subversion wget \
-    g++-4.9 \
-    gcc-4.9 \
-    lcov gdb gfortran \
-    pandoc python3-pandas python3-pip python3-matplotlib texlive-fonts-recommended texlive-latex-extra dvipng inkscape doxygen\
-    python3-tornado\
-    libssl-dev\
 RUN apt-get update -yq && apt-get install --no-install-recommends -y \
-    && apt-get clean \
-    && rm -rf /tmp/* /var/tmp/* \
-    && rm -rf /var/lib/apt/lists/
+        cmake make ninja-build git subversion wget \
+        g++-4.9 \
+        gcc-4.9 \
+        gfortran-4.9 \
+        lcov gdb \
+        python3-pandas python3-pip python3-matplotlib python3-tornado \
+        pandoc \
+        texlive-fonts-recommended texlive-latex-extra lmodern \
+        inkscape doxygen dvipng \
+        libssl-dev && \
+    apt-get clean && \
+    rm -rf /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists/
 
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 100
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 100
