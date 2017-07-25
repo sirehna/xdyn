@@ -122,10 +122,10 @@ $$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\cos(k\cdot(x\cdot
 \cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
 
-$h$ est la profondeur du fluide (hauteur du sol à la surface libre)
-$\eta_a$ est l'amplitude de la houle (en m)
-$x,y,z$ sont les coordonnées du point considéré, exprimées dans le repère NED.
-$k$ est le nombre d'onde, traduisant la périodicité spatiale.
+- $h$ est la profondeur du fluide (hauteur du sol à la surface libre),
+- $\eta_a$ est l'amplitude de la houle (en m),
+- $x,y,z$ sont les coordonnées du point considéré, exprimées dans le repère NED,
+- $k$ est le nombre d'onde, traduisant la périodicité spatiale.
 
 ### Relation entre le nombre d'onde et la pulsation
 
