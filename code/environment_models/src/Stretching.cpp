@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "YamlWaveModelInput.hpp"
 #include "Stretching.hpp"
+#include "YamlWaveModelInput.hpp"
 #include "InternalErrorException.hpp"
 #include <ssc/macros.hpp>
 #include <cmath> // For isnan
