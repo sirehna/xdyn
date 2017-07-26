@@ -186,6 +186,52 @@ FlatDiscreteDirectionalWaveSpectrum2 flatten2(
     return ret;
 }
 
+/**
+ * \brief Only select the most important spectrum components & create single vector.
+ * \details Output spectrum represents at least `ratio * Energy`
+ *  It No need to loop on all frequencies & all directions: we only select
+ *  the most important ones (i.e. those representing a given ratio of the total
+ *  energy in the spectrum.
+ * \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
+ * \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
+ */
+FlatDiscreteDirectionalWaveSpectrum2 filter(
+        const FlatDiscreteDirectionalWaveSpectrum2& spectrum, //!< Spectrum to filter
+        const double ratio //!< Between 0 & 1: where should we cut off the spectra?
+        )
+{
+    double S = 0;
+    double a = 0;
+    const size_t n = spectrum.omega.size();
+    std::list<ValIdx> SiDj;
+    FlatDiscreteDirectionalWaveSpectrum2 ret;
+    ret.pdyn_factor=spectrum.pdyn_factor;
+    ret.pdyn_factor_sh=spectrum.pdyn_factor_sh;
+    for (size_t i = 0 ; i < n; ++i)
+    {
+        a = spectrum.a.at(i);
+        S += a * a;
+        SiDj.push_back(std::make_pair(a * a, i));
+    }
+    SiDj.sort(comparator);
+    double cumsum = 0;
+    const double max_energy = ratio * S;
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        if (cumsum >= max_energy) return ret;
+        const ValIdx sidj = SiDj.front();
+        SiDj.pop_front();
+        cumsum += sidj.first;
+        ret.a.push_back(spectrum.a.at(sidj.second));
+        ret.omega.push_back(spectrum.omega.at(sidj.second));
+        ret.psi.push_back(spectrum.psi.at(sidj.second));
+        ret.cos_psi.push_back(spectrum.cos_psi.at(sidj.second));
+        ret.sin_psi.push_back(spectrum.sin_psi.at(sidj.second));
+        ret.k.push_back(spectrum.k.at(sidj.second));
+    }
+    return ret;
+}
+
 double dynamic_pressure_factor(const double k,              //!< Wave number (in 1/m)
                                const double z,              //!< z-position in the NED frame (in meters)
                                const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching

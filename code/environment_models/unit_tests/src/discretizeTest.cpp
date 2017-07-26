@@ -313,6 +313,142 @@ TEST_F(discretizeTest, flatten)
     ASSERT_DOUBLE_EQ(10, s.spectrum[11].psi);
 }
 
+
+/**
+ * \code
+ *    |  3  2  4
+ *  ------------
+ *  1 |  3  2  4
+ *  5 | 15 10 20
+ *  4 | 12  8 16
+ *  3 |  9  6 12
+ * \endcode
+ *
+ * \code{.py}
+ * import numpy as np
+ *  S = np.array([3,2,4])
+ * D = np.array([1,5,4,3])
+ * f1,f2 = np.meshgrid(S,D)
+ * M = f1*f2
+ * pct = np.cumsum(np.flip(np.sort(np.hstack(M)),axis=0)) / M.sum()
+ * # Evaluate the sorted contribution of each component
+ * filter_ratio = np.floor(100*pct)
+ * \endcode
+ */
+TEST_F(discretizeTest, filter)
+{
+    DiscreteDirectionalWaveSpectrum d;
+    d.Si = a.random_vector_of<double>().of_size(3);
+    d.Dj = a.random_vector_of<double>().of_size(4);
+    d.k = a.random_vector_of<double>().of_size(3);
+    d.omega = a.random_vector_of<double>().of_size(3);
+    d.phase = std::vector<std::vector<double> >(3,std::vector<double>(4,0));
+    d.psi = a.random_vector_of<double>().of_size(4);
+    d.domega = 1.0;
+    d.dpsi = 1.0;
+
+    d.omega[0] = 0;
+    d.omega[1] = 1;
+    d.omega[2] = 2;
+    d.psi[0] = 10;
+    d.psi[1] = 11;
+    d.psi[2] = 12;
+    d.psi[3] = 13;
+
+    d.Dj[0] = 1;
+    d.Dj[1] = 5;
+    d.Dj[2] = 4;
+    d.Dj[3] = 3;
+
+    d.Si[0] = 3;
+    d.Si[1] = 2;
+    d.Si[2] = 4;
+
+    FlatDiscreteDirectionalWaveSpectrum2 s_ori = flatten2(d);
+    ASSERT_EQ(12, s_ori.a.size());
+    ASSERT_EQ(12, s_ori.omega.size());
+    ASSERT_EQ(12, s_ori.psi.size());
+    ASSERT_EQ(12, s_ori.cos_psi.size());
+    ASSERT_EQ(12, s_ori.sin_psi.size());
+    ASSERT_EQ(12, s_ori.k.size());
+    ASSERT_EQ(0, s_ori.phase.size());
+
+    FlatDiscreteDirectionalWaveSpectrum2 s = filter(s_ori, 0.0);
+    ASSERT_EQ(0, s.a.size());
+
+    s = filter(s_ori, 0.17);
+    ASSERT_EQ(1, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(40), s.a[0]);
+    ASSERT_DOUBLE_EQ(2, s.omega[0]);
+    ASSERT_DOUBLE_EQ(11, s.psi[0]);
+
+    s = filter(s_ori, 0.30);
+    ASSERT_EQ(2, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(32), s.a[1]);
+    ASSERT_DOUBLE_EQ(2, s.omega[1]);
+    ASSERT_DOUBLE_EQ(12, s.psi[1]);
+
+    s = filter(s_ori, 0.43);
+    ASSERT_EQ(3, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(30), s.a[2]);
+    ASSERT_DOUBLE_EQ(0, s.omega[2]);
+    ASSERT_DOUBLE_EQ(11, s.psi[2]);
+
+    s = filter(s_ori, 0.53);
+    ASSERT_EQ(4, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(24), s.a[3]);
+    ASSERT_DOUBLE_EQ(0, s.omega[3]);
+    ASSERT_DOUBLE_EQ(12, s.psi[3]);
+
+    s = filter(s_ori, 0.64);
+    ASSERT_EQ(5, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(24), s.a[4]);
+    ASSERT_DOUBLE_EQ(2, s.omega[4]);
+    ASSERT_DOUBLE_EQ(13, s.psi[4]);
+
+    s = filter(s_ori, 0.72);
+    ASSERT_EQ(6, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(20), s.a[5]);
+    ASSERT_DOUBLE_EQ(1, s.omega[5]);
+    ASSERT_DOUBLE_EQ(11, s.psi[5]);
+
+    s = filter(s_ori, 0.80);
+    ASSERT_EQ(7, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(18), s.a[6]);
+    ASSERT_DOUBLE_EQ(0, s.omega[6]);
+    ASSERT_DOUBLE_EQ(13, s.psi[6]);
+
+    s = filter(s_ori, 0.87);
+    ASSERT_EQ(8, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(16), s.a[7]);
+    ASSERT_DOUBLE_EQ(1, s.omega[7]);
+    ASSERT_DOUBLE_EQ(12, s.psi[7]);
+
+    s = filter(s_ori, 0.92);
+    ASSERT_EQ(9, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(12), s.a[8]);
+    ASSERT_DOUBLE_EQ(1, s.omega[8]);
+    ASSERT_DOUBLE_EQ(13, s.psi[8]);
+
+    s = filter(s_ori, 0.95);
+    ASSERT_EQ(10, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(8), s.a[9]);
+    ASSERT_DOUBLE_EQ(2, s.omega[9]);
+    ASSERT_DOUBLE_EQ(10, s.psi[9]);
+
+    s = filter(s_ori, 0.98);
+    ASSERT_EQ(11, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(6), s.a[10]);
+    ASSERT_DOUBLE_EQ(0, s.omega[10]);
+    ASSERT_DOUBLE_EQ(10, s.psi[10]);
+
+    s = filter(s_ori, 1.0);
+    ASSERT_EQ(12, s.a.size());
+    ASSERT_DOUBLE_EQ(sqrt(4), s.a[11]);
+    ASSERT_DOUBLE_EQ(1, s.omega[11]);
+    ASSERT_DOUBLE_EQ(10, s.psi[11]);
+}
+
 TEST_F(discretizeTest, dynamic_pressure_factor)
 {
     //! [discretizeTest dynamic_pressure_factor example]

@@ -28,6 +28,11 @@ FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectru
 FlatDiscreteDirectionalWaveSpectrum2 flatten2(const DiscreteDirectionalWaveSpectrum& spectrum
                                             );
 
+FlatDiscreteDirectionalWaveSpectrum2 filter(
+        const FlatDiscreteDirectionalWaveSpectrum2& spectrum,
+        const double ratio
+        );
+
 /**  \author cec
   *  \date Aug 1, 2014, 5:04:24 PM
   *  \brief Discretize a wave spectrum
