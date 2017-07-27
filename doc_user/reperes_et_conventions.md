@@ -528,7 +528,7 @@ figure dans le membre de gauche de l'équation fondamentale de la dynamique
 $$M\ddot{X} = \sum F_i$$ pour des raisons de stabilité numérique (l'effort
 dépend des accélérations qui doivent justement être calculées par la résolution
 de l'équation fondamentale de la dynamique).
-La matrice de masses ajoutées n'est cependant pas équivalente à une masse supplémentaire, car 
+La matrice de masses ajoutées n'est cependant pas équivalente à une masse supplémentaire, car
 les termes de Coriolis et centripète qui correspondraient ne sont pas pris en compte.
 
 Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
