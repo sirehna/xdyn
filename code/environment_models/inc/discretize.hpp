@@ -14,6 +14,9 @@ class Stretching;
 class WaveSpectralDensity;
 class WaveDirectionalSpreading;
 
+FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectrum& spectrum
+                                            );
+
 /**  \brief Only select the most important spectrum components & create single vector
   *  \details No need to loop on all frequencies & all directions: we only select
   *  the most important ones (i.e. those representing a given ratio of the total
@@ -21,16 +24,9 @@ class WaveDirectionalSpreading;
   *  \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
   *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
   */
-FlatDiscreteDirectionalWaveSpectrum flatten(const DiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to flatten
-                                            const double energy_ratio = 1.0//!< Between 0 & 1: where should we cut off the spectra?
-                                            );
-
-FlatDiscreteDirectionalWaveSpectrum2 flatten2(const DiscreteDirectionalWaveSpectrum& spectrum
-                                            );
-
-FlatDiscreteDirectionalWaveSpectrum2 filter(
-        const FlatDiscreteDirectionalWaveSpectrum2& spectrum,
-        const double ratio
+FlatDiscreteDirectionalWaveSpectrum filter(
+        const FlatDiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to filter
+        const double energy_ratio = 1.0//!< Between 0 & 1: where should we cut off the spectra?
         );
 
 /**  \author cec

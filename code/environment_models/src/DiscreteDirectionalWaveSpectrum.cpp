@@ -7,25 +7,7 @@
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 
-
-DiscreteDirectionalWaveDensity::DiscreteDirectionalWaveDensity() :
-    a(0),
-    omega(0),
-    psi(0),
-    k(0),
-    phase(0)
-{
-}
-
 FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
-    spectrum() //,
-    //domega(0),
-    //dpsi(0)
-{
-
-}
-
-FlatDiscreteDirectionalWaveSpectrum2::FlatDiscreteDirectionalWaveSpectrum2() :
                     a(),
                     omega(),
                     psi(),

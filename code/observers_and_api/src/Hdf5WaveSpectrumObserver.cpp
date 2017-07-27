@@ -83,7 +83,7 @@ void hdf5WaveSpectrumObserver(
 void hdf5WaveSpectrumObserver(
         const std::string& fileName,
         const std::string& datasetName,
-        const std::vector<FlatDiscreteDirectionalWaveSpectrum2>& s)
+        const std::vector<FlatDiscreteDirectionalWaveSpectrum>& s)
 {
     H5::H5File h5File = H5_Tools::openOrCreateAHdf5File(fileName);
     hdf5WaveSpectrumObserver(h5File, datasetName, s);
@@ -93,7 +93,7 @@ void hdf5WaveSpectrumObserver(
 void hdf5WaveSpectrumObserver(
         const H5::H5File& h5File,
         const std::string& datasetName,
-        const std::vector<FlatDiscreteDirectionalWaveSpectrum2>& s)
+        const std::vector<FlatDiscreteDirectionalWaveSpectrum>& s)
 {
     const std::string dn(H5_Tools::ensureStringStartsAndEndsWithAPattern(datasetName,"/"));
     H5_Tools::write(h5File, dn+"/elevation",
@@ -111,7 +111,7 @@ void hdf5WaveSpectrumObserver(
 void hdf5WaveSpectrumObserver(
         const H5::H5File& h5File,
         const std::string& datasetName,
-        const FlatDiscreteDirectionalWaveSpectrum2& s)
+        const FlatDiscreteDirectionalWaveSpectrum& s)
 {
     const std::string dn(H5_Tools::ensureStringStartsAndEndsWithAPattern(datasetName,"/"));
     H5_Tools::write(h5File, dn+"/omega", s.omega);
@@ -124,7 +124,7 @@ void hdf5WaveSpectrumObserver(
 void hdf5WaveSpectrumObserver(
         const std::string& fileName,
         const std::string& datasetName,
-        const FlatDiscreteDirectionalWaveSpectrum2& s)
+        const FlatDiscreteDirectionalWaveSpectrum& s)
 {
     H5::H5File h5File = H5_Tools::openOrCreateAHdf5File(fileName);
     hdf5WaveSpectrumObserver(h5File, datasetName, s);

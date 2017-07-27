@@ -11,30 +11,6 @@
 #include <functional>
 #include <vector>
 
-struct DiscreteDirectionalWaveDensity
-{
-    DiscreteDirectionalWaveDensity();
-    double a;     //!< Amplitude (in m)
-    double omega; //!< Angular frequencies the spectrum was discretized at (in rad/s)
-    double psi;   //!< Directions between 0 & 2pi the spatial spreading was discretized at (in rad)
-    double k;     //!< Discretized wave number (for each frequency) in rad/m
-    double phase; //!< Random phases, for each (direction,frequency) couple (but time invariant) in radian
-};
-
-struct FlatDiscreteDirectionalWaveSpectrum2
-{
-    FlatDiscreteDirectionalWaveSpectrum2();
-    std::vector<double> a;       //!< Amplitude (in m)
-    std::vector<double> omega;   //!< Angular frequencies the spectrum was discretized at (in rad/s)
-    std::vector<double> psi;     //!< Directions between 0 & 2pi the spatial spreading was discretized at (in rad)
-    std::vector<double> cos_psi; //!< Cosinus directions between 0 & 2pi the spatial spreading was discretized at (Avoid compute it each time)
-    std::vector<double> sin_psi; //!< Sinus directions between 0 & 2pi the spatial spreading was discretized at (Avoid compute it each time)
-    std::vector<double> k;       //!< Discretized wave number (for each frequency) in rad/m
-    std::vector<double> phase;   //!< Random phases, for each (direction,frequency) couple (but time invariant) in radian
-    std::function<double(double,double,double)> pdyn_factor;    //!< Factor used when computing the dynamic pressure (no unit)
-    std::function<double(double,double,double)> pdyn_factor_sh; //!< Factor used when computing the orbital velocity (no unit)
-};
-
 /** \author cec
  *  \date Jul 31, 2014, 1:08:15 PM
  *  \brief Used by 'discretize'
@@ -73,9 +49,15 @@ struct DiscreteDirectionalWaveSpectrum
 struct FlatDiscreteDirectionalWaveSpectrum
 {
     FlatDiscreteDirectionalWaveSpectrum();
-    std::vector<DiscreteDirectionalWaveDensity> spectrum;
-    // double domega;
-    // double dpsi;
+    std::vector<double> a;       //!< Amplitude (in m)
+    std::vector<double> omega;   //!< Angular frequencies the spectrum was discretized at (in rad/s)
+    std::vector<double> psi;     //!< Directions between 0 & 2pi the spatial spreading was discretized at (in rad)
+    std::vector<double> cos_psi; //!< Cosinus directions between 0 & 2pi the spatial spreading was discretized at (Avoid compute it each time)
+    std::vector<double> sin_psi; //!< Sinus directions between 0 & 2pi the spatial spreading was discretized at (Avoid compute it each time)
+    std::vector<double> k;       //!< Discretized wave number (for each frequency) in rad/m
+    std::vector<double> phase;   //!< Random phases, for each (direction,frequency) couple (but time invariant) in radian
+    std::function<double(double,double,double)> pdyn_factor;    //!< Factor used when computing the dynamic pressure (no unit)
+    std::function<double(double,double,double)> pdyn_factor_sh; //!< Factor used when computing the orbital velocity (no unit)
 };
 
 #endif /* DISCRETEDIRECTIONALWAVESPECTRUM_HPP_ */

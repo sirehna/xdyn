@@ -27,7 +27,7 @@
 class WaveModel
 {
     public:
-        WaveModel(const FlatDiscreteDirectionalWaveSpectrum2& spectrum);
+        WaveModel(const FlatDiscreteDirectionalWaveSpectrum& spectrum);
         virtual ~WaveModel();
 
         /**  \brief Calculate radiation forces using first order force RAO
@@ -90,14 +90,13 @@ class WaveModel
           */
         std::vector<double> get_psis() const;
 
-        FlatDiscreteDirectionalWaveSpectrum2 get_spectrum() const {return spectrum;};
+        FlatDiscreteDirectionalWaveSpectrum get_spectrum() const {return spectrum;};
 
     private:
         WaveModel(); // Disabled
 
     protected:
-        FlatDiscreteDirectionalWaveSpectrum2 spectrum;
-        // DiscreteDirectionalWaveSpectrum spectrum;
+        FlatDiscreteDirectionalWaveSpectrum spectrum;
 };
 
 typedef TR1(shared_ptr)<WaveModel> WaveModelPtr;

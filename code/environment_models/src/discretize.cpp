@@ -99,73 +99,17 @@ bool comparator ( const ValIdx& l, const ValIdx& r);
 bool comparator ( const ValIdx& l, const ValIdx& r)
    { return l.first > r.first; }
 
-
-/**  \brief Only select the most important spectrum components & create single vector
-  *  \details No need to loop on all frequencies & all directions: we only select
-  *  the most important ones (i.e. those representing a given ratio of the total
-  *  energy in the spectrum.
-  *  \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
-  */
-FlatDiscreteDirectionalWaveSpectrum flatten(
-        const DiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to flatten
-        const double ratio //!< Between 0 & 1: where should we cut off the spectra?
-        )
-{
-    FlatDiscreteDirectionalWaveSpectrum ret;
-    double S = 0;
-    const size_t nOmega = spectrum.omega.size();
-    const size_t nPsi = spectrum.psi.size();
-    std::list<ValIdx> SiDj;
-    std::vector<size_t> i_idx(nOmega*nPsi);
-    std::vector<size_t> j_idx(nOmega*nPsi);
-    size_t k = 0;
-    for (size_t i = 0 ; i < nOmega ; ++i)
-    {
-        for (size_t j = 0 ; j < nPsi ; ++j)
-        {
-            const double s = spectrum.Si[i]*spectrum.Dj[j];
-            S += s;
-            SiDj.push_back(std::make_pair(s,k));
-            i_idx[k] = i;
-            j_idx[k] = j;
-            k++;
-        }
-    }
-    SiDj.sort(comparator);
-
-    double cumsum = 0;
-    const double max_energy = ratio*S;
-    const size_t n = SiDj.size();
-    for (size_t k = 0 ; k < n ; ++k)
-    {
-        const ValIdx sidj = SiDj.front();
-        SiDj.pop_front();
-        cumsum += sidj.first;
-        if (cumsum>max_energy) return ret;
-        DiscreteDirectionalWaveDensity x;
-        const size_t i = i_idx[sidj.second];
-        const size_t j = j_idx[sidj.second];
-        x.k = spectrum.k[i];
-        x.omega = spectrum.omega[i];
-        x.psi = spectrum.psi[j];
-        x.a = sqrt(2 * sidj.first * spectrum.domega * spectrum.dpsi);
-        ret.spectrum.push_back(x);
-    }
-    return ret;
-}
-
 /**
  * \param spectrum
  * \return flattened spectrum
  * \note We keep all components for the time being
  * If we filter and discard some rays, we should also take into account rao...
  */
-FlatDiscreteDirectionalWaveSpectrum2 flatten2(
+FlatDiscreteDirectionalWaveSpectrum flatten(
         const DiscreteDirectionalWaveSpectrum& spectrum //!< Spectrum to flatten
         )
 {
-    FlatDiscreteDirectionalWaveSpectrum2 ret;
+    FlatDiscreteDirectionalWaveSpectrum ret;
     const size_t nOmega = spectrum.omega.size();
     const size_t nPsi = spectrum.psi.size();
     for (size_t i = 0 ; i < nOmega ; ++i)
@@ -195,8 +139,8 @@ FlatDiscreteDirectionalWaveSpectrum2 flatten2(
  * \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
  * \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
  */
-FlatDiscreteDirectionalWaveSpectrum2 filter(
-        const FlatDiscreteDirectionalWaveSpectrum2& spectrum, //!< Spectrum to filter
+FlatDiscreteDirectionalWaveSpectrum filter(
+        const FlatDiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to filter
         const double ratio //!< Between 0 & 1: where should we cut off the spectra?
         )
 {
@@ -204,7 +148,7 @@ FlatDiscreteDirectionalWaveSpectrum2 filter(
     double a = 0;
     const size_t n = spectrum.omega.size();
     std::list<ValIdx> SiDj;
-    FlatDiscreteDirectionalWaveSpectrum2 ret;
+    FlatDiscreteDirectionalWaveSpectrum ret;
     ret.pdyn_factor=spectrum.pdyn_factor;
     ret.pdyn_factor_sh=spectrum.pdyn_factor_sh;
     for (size_t i = 0 ; i < n; ++i)
