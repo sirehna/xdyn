@@ -14,8 +14,6 @@
 
 #include <ssc/kinematics.hpp>
 
-#include <iostream>
-
 /** \brief Multiple (directional spreading+spectrum) pairs
  *  \details This is just a very thin layer around the WaveModel class.
  *  \addtogroup hydro_models
