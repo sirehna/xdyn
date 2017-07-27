@@ -41,7 +41,7 @@ centre de carène et $GZ$ est ensuite donné par $GZ(\phi)=y_C(\phi)-y_G$.
 #### Calcul de la position d'équilibre à une gîte donnée
 
 Soit $X=(z,\phi,\theta)$ l'etat du système. On suppose le navire soumis aux
-seuls efforts de 
+seuls efforts de
 la gravité et de l'hydrostatique. On dénote par $f$ la fonction qui à $X$
 associe la somme des efforts appliqués au système :
 
@@ -92,7 +92,7 @@ l'algorithme de Newton-Raphson).
 #### Calcul du centre de carène $C$
 
 La carène est discrétisée par des polygones. Pour calculer son centre de masse,
-on transforme ces polygônes en triangles et, pour chaque triangle, on calcule
+on transforme ces polygones en triangles et, pour chaque triangle, on calcule
 le volume (algébrique) du tétraèdre de base ce triangle et de sommet l'origine.
 
 ![](images/buoyancy.svg)
