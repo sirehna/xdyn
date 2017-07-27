@@ -281,7 +281,7 @@ ainsi que l'expression de la pression dynamique $p_{\textrm{dyn}}$ :
 $$p_{\textrm{dyn}}(x,y,z,t) = \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 a_{i,j}\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
-\sin(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
 
 ### Vitesse orbitale
 
