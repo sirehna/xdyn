@@ -377,7 +377,7 @@ cette vitesse en eau calme.
 
 ### Modélisation
 
-Le paradoxe d'Alembert est que lorsque l'on remorque un objet 
+Le paradoxe d'Alembert est que lorsque l'on remorque un objet
 immergé dans un fluide supposé parfait, sa résistance est nulle.
 Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique
 que :
@@ -438,7 +438,7 @@ proviennent d'une part des vagues générées par les mouvements du fluide (et q
 correspondent aux [amortissements de
 radiation](#calcul-des-efforts-dexcitation)),
 et d'autre part des amortissements visqueux dus au frottement du fluide sur la
-coque (apparition d'un sillage tourbillonaire ou turbulent qui dissipe de
+coque (apparition d'un sillage tourbillonnaire ou turbulent qui dissipe de
 l'énergie de manière purement mécanique, essentiellement sur l'axe roulis). Ce
 sont ces derniers qui nous intéressent dans cette section.
 
@@ -1005,7 +1005,7 @@ K_Q(J, P/D, A_E/A_0, Z, R_n)$$
 Le modèle de Wageningen ne devrait être utilisé que lorsque les hypothèses
 suivantes sont vérifiées :
 
-- Le nombre de pales $Z$ doit être compris entre 2 (inclus) et 7 (inclus). 
+- Le nombre de pales $Z$ doit être compris entre 2 (inclus) et 7 (inclus).
 - Le ratio $\frac{A_E}{A_0}$ doit être situé dans l'intervalle
   $\left[0.3,1.05\right]$. La simulation ne se lancera pas sinon.
 - Le pas de l'hélice $P$ doit vérifier $P/D\in\left[0.5,1.4\right]$
@@ -1475,7 +1475,7 @@ Cette vitesse $u_{RS}$ a été calculée en faisant les hypothèses suivantes :
 - L'hélice possède un nombre infini de lames
 - Pas de modification de la vitesse radiale par l'hélice
 
-On constate en pratique des écarts pouvent atteindre 30% entre $u_{RS}$ et les
+On constate en pratique des écarts peuvent atteindre 30% entre $u_{RS}$ et les
 mesures réalisées lors d'essais. C'est pourquoi on multiplie la vitesse $u_{RS}$
 par un facteur $RF$ appelé "facteur de réduction" (cf. eq 11.1 p.? 371 *Marine
 Rudders & Control Surfaces*) :
@@ -1509,7 +1509,7 @@ $$Cl(\alpha) = 2\pi\frac{\Lambda(\Lambda+1)}{(\Lambda+2)^2\sin(\alpha)}$$
 
 #### Calcul de $C_d$
 
-On utilie la formule suivante (cf. *Maneuvering Technical Manual*, p. 78 eq. 1.2.9)
+On utilise la formule suivante (cf. *Maneuvering Technical Manual*, p. 78 eq. 1.2.9)
 $$C_d = 1.1 \frac{Cl^2}{\pi \Lambda} + Cd_0$$
 
 Le coefficient de résistance $Cd_0$ vaut :
