@@ -238,7 +238,9 @@ void H5_Tools::write(
         const std::string& stringToWrite)
 {
     if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
-    H5_Tools::write(H5::H5File(filename, H5F_ACC_RDWR), datasetName, stringToWrite);
+    H5::H5File f(filename, H5F_ACC_RDWR);
+    H5_Tools::write(f, datasetName, stringToWrite);
+    f.close();
 }
 
 void H5_Tools::write(
@@ -279,7 +281,9 @@ void H5_Tools::write(
         const double& v)
 {
     if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
-    H5_Tools::write(H5::H5File(filename, H5F_ACC_RDWR), datasetName, v);
+    H5::H5File f(filename, H5F_ACC_RDWR);
+    H5_Tools::write(f, datasetName, v);
+    f.close();
 }
 
 void H5_Tools::write(
@@ -304,7 +308,9 @@ void H5_Tools::write(
         const std::vector<double>& v)
 {
     if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
-    H5_Tools::write(H5::H5File(filename, H5F_ACC_RDWR), datasetName, v);
+    H5::H5File f(filename, H5F_ACC_RDWR);
+    H5_Tools::write(f, datasetName, v);
+    f.close();
 }
 
 void H5_Tools::write(
@@ -325,6 +331,7 @@ void H5_Tools::write(
 
 template <typename T>
 std::vector<T> flatten(const std::vector<std::vector<T> >& v);
+
 
 template <typename T>
 std::vector<T> flatten(const std::vector<std::vector<T> >& v)
@@ -362,7 +369,9 @@ void H5_Tools::write(
         const std::vector<std::vector<double> >& v)
 {
     if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
-    H5_Tools::write(H5::H5File(filename, H5F_ACC_RDWR), datasetName, v);
+    H5::H5File f(filename, H5F_ACC_RDWR);
+    H5_Tools::write(f, datasetName, v);
+    f.close();
 }
 
 void H5_Tools::write(
