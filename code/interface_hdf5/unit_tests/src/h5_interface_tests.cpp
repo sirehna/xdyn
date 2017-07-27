@@ -349,19 +349,113 @@ TEST_F(H5InterfaceTest, should_be_able_to_write_a_double_in_hdf5_files)
     ASSERT_EQ(0,remove(filename.c_str()));
 }
 
+TEST_F(H5InterfaceTest, should_be_able_to_write_a_double_in_hdf5_files_and_read_it_back)
+{
+    const std::string filename = "file.h5";
+    const std::string datasetname = "/inputs/command";
+    if (H5_Tools::doesFileExists(filename)) remove(filename.c_str());
+    H5_Tools::write(filename, datasetname, 1.2);
+    double res;
+    H5_Tools::read(filename, datasetname, res);
+    ASSERT_EQ(1.2,res);
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
 TEST_F(H5InterfaceTest, should_be_able_to_write_a_vector_of_doubles_in_hdf5_files)
 {
     const std::string filename = "file.h5";
+    if (H5_Tools::doesFileExists(filename)) remove(filename.c_str());
     H5_Tools::write(filename, "/inputs/command", std::vector<double>(5,666.0));
     ASSERT_EQ(0,remove(filename.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_write_a_vector_of_doubles_in_hdf5_files_and_read_it_back)
+{
+    const std::string filename = "file.h5";
+    if (H5_Tools::doesFileExists(filename)) remove(filename.c_str());
+    const std::string datasetname = "/inputs/command";
+    std::vector<double> a({1.0, 2.0, 3.0});
+    std::vector<double> res;
+    H5_Tools::write(filename, datasetname, a);
+    H5_Tools::read(filename, datasetname, res);
+    ASSERT_EQ(3,res.size());
+    ASSERT_EQ(1.0, res[0]);
+    ASSERT_EQ(2.0, res[1]);
+    ASSERT_EQ(3.0, res[2]);
+    ASSERT_EQ(0, remove(filename.c_str()));
 }
 
 TEST_F(H5InterfaceTest, should_be_able_to_write_a_vector_vector_of_doubles_in_hdf5_files)
 {
     const std::string filename = "file.h5";
+    if (H5_Tools::doesFileExists(filename)) remove(filename.c_str());
     std::vector<std::vector<double> > a;
     a.push_back(std::vector<double>(3,0.0));
     a.push_back(std::vector<double>(3,0.0));
     H5_Tools::write(filename, "/inputs/command", a);
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_write_a_vector_vector_of_doubles_in_hdf5_files_and_read_it_back)
+{
+    const std::string filename = "file.h5";
+    if (H5_Tools::doesFileExists(filename)) remove(filename.c_str());
+    const std::string datasetname = "/inputs/command";
+    std::vector<std::vector<double> > a;
+    std::vector<std::vector<double> > res;
+    a.push_back(std::vector<double>{1.0, 2.0, 3.0});
+    a.push_back(std::vector<double>{4.0, 5.0, 6.0});
+    H5_Tools::write(filename, datasetname, a);
+    H5_Tools::read(filename, datasetname, res);
+    ASSERT_EQ(2, res.size());
+    ASSERT_EQ(3,res.at(0).size());
+    ASSERT_EQ(1.0, res[0][0]);
+    ASSERT_EQ(2.0, res[0][1]);
+    ASSERT_EQ(3.0, res[0][2]);
+    ASSERT_EQ(4.0, res[1][0]);
+    ASSERT_EQ(5.0, res[1][1]);
+    ASSERT_EQ(6.0, res[1][2]);
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_write_a_vector_vector_vector_of_doubles_in_hdf5_files)
+{
+    const std::string filename = "file.h5";
+    if (H5_Tools::doesFileExists(filename)) remove(filename.c_str());
+    std::vector<std::vector<std::vector<double> > > aaa;
+    std::vector<std::vector<double> > aa;
+    aa.push_back(std::vector<double>(3,0.0));
+    aa.push_back(std::vector<double>(3,0.0));
+    aaa.push_back(aa);
+    H5_Tools::write(filename, "/inputs/command", aaa);
+    ASSERT_EQ(0,remove(filename.c_str()));
+}
+
+TEST_F(H5InterfaceTest, should_be_able_to_write_a_vector_vector_vector_of_doubles_in_hdf5_files_and_read_it_back)
+{
+    const size_t n0 = 4;
+    const std::string filename = "file.h5";
+    if (H5_Tools::doesFileExists(filename)) remove(filename.c_str());
+    const std::string datasetname = "/inputs/command";
+    std::vector<std::vector<std::vector<double> > > res;
+    std::vector<std::vector<std::vector<double> > > aaa;
+    std::vector<std::vector<double> >aa;
+    aa.push_back(std::vector<double>{1.0, 2.0, 3.0});
+    aa.push_back(std::vector<double>{4.0, 5.0, 6.0});
+    for (size_t i=0;i<n0;++i) aaa.push_back(aa);
+    H5_Tools::write(filename, datasetname, aaa);
+    H5_Tools::read(filename, datasetname, res);
+    ASSERT_EQ(4, res.size());
+    ASSERT_EQ(2,res.at(0).size());
+    ASSERT_EQ(3,res.at(0).at(0).size());
+    for (size_t i=0;i<n0;++i)
+    {
+        ASSERT_EQ(1.0, res[i][0][0]);
+        ASSERT_EQ(2.0, res[i][0][1]);
+        ASSERT_EQ(3.0, res[i][0][2]);
+        ASSERT_EQ(4.0, res[i][1][0]);
+        ASSERT_EQ(5.0, res[i][1][1]);
+        ASSERT_EQ(6.0, res[i][1][2]);
+    }
     ASSERT_EQ(0,remove(filename.c_str()));
 }

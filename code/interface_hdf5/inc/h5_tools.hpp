@@ -159,6 +159,46 @@ namespace H5_Tools
             const std::string& datasetName,
             const std::vector<std::vector<std::vector<double> > >& v);
 
+    void read(
+            const std::string& filename,
+            const std::string& datasetName,
+            double& res);
+
+    void read(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            double& res);
+
+    void read(
+            const std::string& filename,
+            const std::string& datasetName,
+            std::vector<double>& res);
+
+    void read(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            std::vector<double>& res);
+
+    void read(
+            const std::string& filename,
+            const std::string& datasetName,
+            std::vector<std::vector<double> >& res);
+
+    void read(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            std::vector<std::vector<double> >& res);
+
+    void read(
+            const std::string& filename,
+            const std::string& datasetName,
+            std::vector<std::vector<std::vector<double> > > & res);
+
+    void read(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            std::vector<std::vector<std::vector<double> > > & res);
+
     bool doesFileExists(const std::string& filename);
 
     /**
