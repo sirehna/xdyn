@@ -339,6 +339,23 @@ std::vector<T> flatten(const std::vector<std::vector<T> >& v)
     return result;
 }
 
+template <typename T>
+std::vector<T> flatten(const std::vector<std::vector<std::vector<T> > >& v);
+template <typename T>
+std::vector<T> flatten(const std::vector<std::vector<std::vector<T> > >& v)
+{
+    std::size_t total_size = 0;
+    for (const auto& sub1 : v)
+        for (const auto& sub2 : sub1)
+            total_size += sub2.size();
+    std::vector<T> result;
+    result.reserve(total_size);
+    for (const auto& sub1 : v)
+        for (const auto& sub2 : sub1)
+            result.insert(result.end(), sub2.begin(), sub2.end());
+    return result;
+}
+
 void H5_Tools::write(
         const std::string& filename,
         const std::string& datasetName,
