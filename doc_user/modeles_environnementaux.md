@@ -94,7 +94,7 @@ Il s'agit de la première condition de surface libre.
 On peut définir la fonction $F(x,y,z,t)=z-\eta(x,y,t)$
 
 Pour une particule sur la surface libre, $F(x,y,z,t)=0$ ce qui implique que sa
-dérivéee particulaire est nulle :
+dérivée particulaire est nulle :
 
 $$\frac{DF}{Dt} = \frac{\partial F}{\partial t} + V\cdot \nabla F = 0$$
 
@@ -264,7 +264,7 @@ En notant
 
 $$a_{i,j} = A(\omega_i, \gamma_j) = \sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}$$
 
-le potentiel de houle irrégulière s'ecrit:
+le potentiel de houle irrégulière s'écrit:
 
 $$\phi(x,y,z,t) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir} a_{i,j} \cdot \frac{g}{\omega_i}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
@@ -489,7 +489,7 @@ A la fin des années 40, plusieurs navires météorologiques étaient stationné
 dans l'océan Pacifique et l'Atlantique Nord. Ces navires notaient la météo
 quotidiennement sous forme d'un code météo. En 1961, Tucker créa une méthode
 pour obtenir des estimations quantitatives à partir de ces enregistrements en
-corrélant la fréquence d'occurence des différents codes météo avec les
+corrélant la fréquence d'occurrence des différents codes météo avec les
 observations météo de plusieurs stations à terre. En 1964, Willard Pierson et
 Lionel Moskowitz à l'université de New York, ont
 préparé un rapport pour l'U.S. Naval Oceanographic Office analysant un grand
@@ -509,7 +509,7 @@ $$A=8.1\cdot 10^{-3}\cdot g^2$$
 et
 $$B=0.74\left(\frac{g}{U_{19.5}}\right)^4$$
 
-Par la suite, les données de Pierson et Moskowitz ont été réanalysées pour
+Par la suite, les données de Pierson et Moskowitz ont été ré-analysées pour
 établir la relation empirique suivante entre la vitesse du vent et la pulsation
 modale de la houle :
 
@@ -788,7 +788,7 @@ Il s'agit d'une généralisation du modèle de Wheeler qui permet de passer
 continument de ce dernier au modèle d'extrapolation linéaire. En jouant sur ses
 paramètres, on peut retrouver trois modèles de stretching (pas de stretching,
 extrapolation linéaire et modèle de Wheeler) et c'est pour cela qu'il a été
-choisi comme modèle de référence dans X-Dyn. 
+choisi comme modèle de référence dans X-Dyn.
 
 Tout comme le modèle de Wheeler, on souhaite retrouver la vitesse orbitale à la surface
 au creux et à la crête des vagues, c'est-à-dire en $z=\eta$. Les auteurs de ce modèle,
