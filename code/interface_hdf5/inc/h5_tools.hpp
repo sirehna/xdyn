@@ -149,6 +149,16 @@ namespace H5_Tools
             const std::string& datasetName,
             const std::vector<std::vector<double> >& v);
 
+    void write(
+            const std::string& filename,
+            const std::string& datasetName,
+            const std::vector<std::vector<std::vector<double> > >& v);
+
+    void write(
+            const H5::H5File& file,
+            const std::string& datasetName,
+            const std::vector<std::vector<std::vector<double> > >& v);
+
     bool doesFileExists(const std::string& filename);
 
     /**

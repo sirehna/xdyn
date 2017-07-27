@@ -390,3 +390,32 @@ void H5_Tools::write(
     dataset.close();
     dataspace.close();
 }
+
+void H5_Tools::write(
+        const std::string& filename,
+        const std::string& datasetName,
+        const std::vector<std::vector<std::vector<double> > >& v)
+{
+    if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
+    H5::H5File f(filename, H5F_ACC_RDWR);
+    H5_Tools::write(f, datasetName, v);
+    f.close();
+}
+
+void H5_Tools::write(
+        const H5::H5File& file,
+        const std::string& datasetName,
+        const std::vector<std::vector<std::vector<double> > >& v)
+{
+    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    hsize_t dimsf[3];
+    dimsf[0] = (hsize_t)v.size();
+    dimsf[1] = (hsize_t)v.at(0).size();
+    dimsf[2] = (hsize_t)v.at(0).at(0).size();
+    H5::DataSpace dataspace(3, dimsf);
+    H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
+    const auto vflat = flatten(v);
+    dataset.write(&vflat[0], H5::PredType::NATIVE_DOUBLE);
+    dataset.close();
+    dataspace.close();
+}
