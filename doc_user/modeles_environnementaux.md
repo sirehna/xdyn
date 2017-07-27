@@ -143,7 +143,8 @@ $$\omega^2 \sim g\cdot k$$
 
 L'élévation de la houle découle de la deuxième condition de surface libre :
 
-$$\eta(x,y,t) = -\sum_{i=1}^{nfreq} A(\omega_i) \sin(k_i\cdot(x\cdot \cos(\gamma)+
+$$\eta(x,y,t) = +\frac{1}{g} \frac{\partial\phi(x,y,z=0,t)}{\partial t}
+=-\sum_{i=1}^{nfreq} A(\omega_i) \sin(k_i\cdot(x\cdot \cos(\gamma)+
 y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
 
 où $\gamma$ désigne la direction de provenance de la houle, définie à la section
