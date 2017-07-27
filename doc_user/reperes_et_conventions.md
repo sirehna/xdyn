@@ -679,7 +679,7 @@ on aurait d'abord une rotation d'angle $\phi$ autour de l'axe Z, puis une
 rotation d'angle $\theta$ autour du nouvel axe Y, puis une rotation $\psi$
 autour du nouvel axe X.
 
-Des apostrophes sont utilisés pour indiquer des compositions de rotations
+Des apostrophes sont utilisées pour indiquer des compositions de rotations
 par rapport au nouveau système d'axes, et donc une composition interne.
 Ainsi `[x,y',z'']` désignera une rotation autour X, suivie d'une rotation autour
 du  nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z,
