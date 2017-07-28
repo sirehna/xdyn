@@ -1,5 +1,5 @@
 /*
- * AddedMass.hpp
+ * TimestampedMatrix.hpp
  *
  *  Created on: Nov 13, 2014
  *      Author: cady
