@@ -421,12 +421,32 @@ TEST_F(AiryTest, should_get_different_results_when_using_two_different_spectra)
     ASSERT_GT(std::abs(wave1.evaluate_rao(4,5,6,rao_module,rao_phase)-wave2.evaluate_rao(4,5,6,rao_module,rao_phase)), 1E-6);
 }
 
+/**
+ * \code{.py}
+ * from math import pi, cos, sin
+ * phase = 0.0
+ * Hs = 0.1
+ * Tp = 5
+ * omega = 2 * pi / Tp
+ * psi = 2 * pi / 3.0
+ * x = 4
+ * y = 5
+ * t = 6
+ * rao_module = 1
+ * rao_phase = 9
+ * cos_psi = cos(psi)
+ * sin_psi = sin(psi)
+ * k = omega * omega / 9.81
+ * a = Hs / 2.0
+ * result = rao_module * a * cos(-omega * t + k * (x * cos_psi + y * sin_psi) + rao_phase + phase)
+ * \endcode
+ */
 TEST_F(AiryTest, RAO_non_regression_test)
 {
     const double Hs = 0.1;
     const double Tp = 5;
-    const double omega0 = 2*PI/Tp;
-    const double psi = 2*PI/3;
+    const double omega0 = 2.0 * PI / Tp;
+    const double psi = 2.0 * PI / 3.0;
     const double omega_min = 0;
     const double omega_max = 10;
     const size_t nfreq = 11;
@@ -435,10 +455,10 @@ TEST_F(AiryTest, RAO_non_regression_test)
     ys.delta = 1;
     const Stretching ss(ys);
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
-    const Airy wave(A, 0);
+    const Airy wave(A, 0.0);
     const std::vector<double> rao_module = {1};// {{1,2,3},{4,5,6},{7,8,9},{0,1,2},{3,4,5},{6,7,8},{9,0,1},{2,3,4},{5,6,7},{8,9,0}};
     const std::vector<double> rao_phase = {9}; //{{9,8,7},{6,5,4},{1,4,7},{8,5,2},{7,5,3},{1,5,9},{4,5,6},{7,8,9},{6,5,4},{4,8,6}};
-    ASSERT_NEAR(0.036121783468892797,wave.evaluate_rao(4,5,6,rao_module,rao_phase), 1E-6);
+    ASSERT_NEAR(-0.013069734104625542, wave.evaluate_rao(4,5,6,rao_module,rao_phase), 1E-6);
 }
 
 TEST_F(AiryTest, should_respect_dirac_inputs)
