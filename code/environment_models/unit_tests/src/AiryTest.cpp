@@ -441,6 +441,36 @@ TEST_F(AiryTest, RAO_non_regression_test)
     ASSERT_NEAR(0.036121783468892797,wave.evaluate_rao(4,5,6,rao_module,rao_phase), 1E-6);
 }
 
+TEST_F(AiryTest, should_respect_dirac_inputs)
+{
+    const double Hs = 0.1;
+    const double Tp = 5;
+    const double omega0 = 2.0 * PI / Tp;
+    const double psi = 2.0 * PI / 3.0;
+    const double omega_min = 0;
+    const double omega_max = 10;
+    const size_t nfreq = 11;
+    YamlStretching ys;
+    const Stretching ss(ys);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const Airy wave(A, 0.0);
+    FlatDiscreteDirectionalWaveSpectrum s = wave.get_spectrum();
+    ASSERT_EQ(1, s.a.size());
+    ASSERT_EQ(1, s.omega.size());
+    ASSERT_EQ(1, s.psi.size());
+    ASSERT_EQ(1, s.cos_psi.size());
+    ASSERT_EQ(1, s.sin_psi.size());
+    ASSERT_EQ(1, s.k.size());
+    ASSERT_EQ(1, s.phase.size());
+    ASSERT_NEAR(Hs/2.0, s.a[0], 1e-10);
+    ASSERT_NEAR(omega0, s.omega[0], 1e-10);
+    ASSERT_NEAR(psi, s.psi[0], 1e-10);
+    ASSERT_NEAR(cos(psi), s.cos_psi[0], 1e-10);
+    ASSERT_NEAR(sin(psi), s.sin_psi[0], 1e-10);
+    ASSERT_NEAR(omega0 * omega0 / 9.81, s.k[0], 1e-10);
+    ASSERT_NEAR(0.0, s.phase[0], 1e-10);
+}
+
 TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_depth_in_finite_depth)
 {
     const double Hs = 1;
