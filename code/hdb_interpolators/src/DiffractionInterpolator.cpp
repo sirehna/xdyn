@@ -5,12 +5,12 @@
  *      Author: cady
  */
 
+#include "DiffractionInterpolator.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
 #include "HDBParser.hpp"
-#include "DiffractionInterpolator.hpp"
 
 DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Data read from the HDB file
                                              const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
@@ -28,7 +28,7 @@ DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Dat
     }
 }
 
-std::vector<std::vector<double> > DiffractionInterpolator::get_array(Interpolator& i) const
+std::vector<std::vector<double> > DiffractionInterpolator::get_array_cartesian(Interpolator& i) const
 {
     std::vector<std::vector<double> > ret;
     for (auto omega:omegas)
@@ -44,14 +44,41 @@ std::vector<std::vector<double> > DiffractionInterpolator::get_array(Interpolato
     return ret;
 }
 
-std::vector<std::vector<double> > DiffractionInterpolator::get_modules(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+std::vector<std::vector<double> > DiffractionInterpolator::get_modules_cartesian(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
                                                      )
 {
-    return get_array(module.at(k));
+    return get_array_cartesian(module.at(k));
 }
 
-std::vector<std::vector<double> > DiffractionInterpolator::get_phases(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+std::vector<std::vector<double> > DiffractionInterpolator::get_phases_cartesian(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
                                          )
 {
-    return get_array(phase.at(k));
+    return get_array_cartesian(phase.at(k));
 }
+
+std::vector<double> DiffractionInterpolator::get_array_flat(Interpolator& i) const
+{
+    std::vector<double> ret;
+    const size_t n = omegas.size();
+    for (size_t k=0;k<n;++k)
+    {
+        const double omega = omegas[k];
+        const double psi = psis[k];
+        if (mirror and (psi>PI)) ret.push_back(i.f(omega,2*PI-psi));
+        else                     ret.push_back(i.f(omega,psi));
+    }
+    return ret;
+}
+
+std::vector<double> DiffractionInterpolator::get_modules_flat(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+                                                              )
+{
+    return get_array_flat(module.at(k));
+}
+
+std::vector<double> DiffractionInterpolator::get_phases_flat(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+                                                             )
+{
+    return get_array_flat(phase.at(k));
+}
+

@@ -57,8 +57,8 @@ class DiffractionForceModel::Impl
                     DiffractionInterpolator radiation(hdb,omegas.at(i),psis.at(i),data.mirror);
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
-                        rao_module.at(k).push_back(radiation.get_modules(k));
-                        rao_phase.at(k).push_back(radiation.get_phases(k));
+                        rao_module.at(k).push_back(radiation.get_modules_cartesian(k));
+                        rao_phase.at(k).push_back(radiation.get_phases_cartesian(k));
                     }
                 }
             }

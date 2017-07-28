@@ -40,19 +40,26 @@ class DiffractionInterpolator
           *  \returns RAO_module[i][j], where i is frequency index & j direction index
           *  \snippet hdb_interpolators/unit_tests/src/RadiationInterpolatorTest.cpp RadiationInterpolatorTest method_example
           */
-        std::vector<std::vector<double> > get_modules(const size_t k //<! Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-                                                     );
+        std::vector<std::vector<double> > get_modules_cartesian(const size_t k //<! Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+                                                               );
 
         /**  \brief Interpolates the RAO's phase for the values of omega & psi in the wave spectrum
           *  \returns RAO_phase[i][j], where i is frequency index & j direction index
           *  \snippet hdb_interpolators/unit_tests/src/RadiationInterpolatorTest.cpp RadiationInterpolatorTest method_example
           */
-        std::vector<std::vector<double> > get_phases(const size_t k //<! Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-                                                     );
+        std::vector<std::vector<double> > get_phases_cartesian(const size_t k //<! Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+                                                              );
+
+        std::vector<double> get_modules_flat(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+                                      );
+
+        std::vector<double> get_phases_flat(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+                                      );
 
     private:
         DiffractionInterpolator();
-        std::vector<std::vector<double> > get_array(Interpolator& i) const;
+        std::vector<std::vector<double> > get_array_cartesian(Interpolator& i) const;
+        std::vector<double> get_array_flat(Interpolator& i) const;
         std::array<Interpolator,6> module; //!< 2D spline interpolation function (omega,psi) for RAO's module
         std::array<Interpolator,6> phase; //!< 2D spline interpolation function (omega,psi) for RAO's phase
         bool mirror;

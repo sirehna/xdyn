@@ -45,8 +45,8 @@ TEST_F(DiffractionInterpolatorTest, example)
     for (size_t i = 0 ; i < psis.size() ; ++i) psis[i] *= PI/180.;
     DiffractionInterpolator radiation(data,omegas,psis,mirror);
     const size_t k = 0;
-    const std::vector<std::vector<double> > modules = radiation.get_modules(k);
-    const std::vector<std::vector<double> > phases = radiation.get_phases(k);
+    const std::vector<std::vector<double> > modules = radiation.get_modules_cartesian(k);
+    const std::vector<std::vector<double> > phases = radiation.get_phases_cartesian(k);
 //! [DiffractionInterpolatorTest example]
 //! [DiffractionInterpolatorTest expected output]
     ASSERT_EQ(omegas.size(),modules.size());
