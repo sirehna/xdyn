@@ -1,10 +1,11 @@
 /*
- * RadiationInterpolatorTest.cpp
+ * DiffractionInterpolatorTest.cpp
  *
  *  Created on: Dec 16, 2014
  *      Author: cady
  */
 
+#include "DiffractionInterpolatorTest.hpp"
 #include <algorithm> //std::reverse
 
 #define _USE_MATH_DEFINE
@@ -12,7 +13,6 @@
 #define PI M_PI
 
 #include "HDBParser.hpp"
-#include "DiffractionInterpolatorTest.hpp"
 #include "hdb_data.hpp"
 
 #include "DiffractionInterpolator.hpp"
