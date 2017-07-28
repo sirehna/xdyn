@@ -1,9 +1,11 @@
 /*
- * HDBBuilder.cpp
+ * HDBParser.cpp
  *
  *  Created on: Nov 13, 2014
  *      Author: cady
  */
+
+#include "HDBParser.hpp"
 
 #include <list>
 #include <set>
@@ -18,7 +20,6 @@
 #include <ssc/interpolation.hpp>
 
 #include "hdb_parser_internal_data_structures.hpp"
-#include "HDBParser.hpp"
 #include "InvalidInputException.hpp"
 #include "hdb_to_ast.hpp"
 

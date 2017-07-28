@@ -1,12 +1,12 @@
 /*
- * HDBBuilder.hpp
+ * HDBParser.hpp
  *
  *  Created on: Nov 13, 2014
  *      Author: cady
  */
 
-#ifndef HDBBUILDER_HPP_
-#define HDBBUILDER_HPP_
+#ifndef HDBPARSER_HPP_
+#define HDBPARSER_HPP_
 
 #include <Eigen/Dense>
 
@@ -53,4 +53,4 @@ class HDBParser
         TR1(shared_ptr)<Impl> pimpl;
 };
 
-#endif /* HDBBUILDER_HPP_ */
+#endif /* HDBPARSER_HPP_ */
