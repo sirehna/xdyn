@@ -60,7 +60,7 @@ std::vector<double> DiffractionInterpolator::get_array_flat(Interpolator& i) con
 {
     std::vector<double> ret;
     const size_t n = omegas.size();
-    for (size_t k=0;k<n;++k)
+    for (size_t k = 0; k < n; ++k)
     {
         const double omega = omegas[k];
         const double psi = psis[k];

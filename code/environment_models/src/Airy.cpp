@@ -61,31 +61,25 @@ generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 }
 
 double Airy::evaluate_rao(
-        const double x,                                         //!< x-position of the RAO's calculation point in the NED frame (in meters)
-        const double y,                                         //!< y-position of the RAO's calculation point in the NED frame (in meters)
-        const double t,                                         //!< Current time instant (in seconds)
-        const std::vector<std::vector<double> >& rao_module,    //!< Module of the RAO (indexed by RAO[omega][psi])
-        const std::vector<std::vector<double> >& rao_phase      //!< Phase of the RAO (indexed by RAO[omega][psi])
+        const double x,                           //!< x-position of the RAO's calculation point in the NED frame (in meters)
+        const double y,                           //!< y-position of the RAO's calculation point in the NED frame (in meters)
+        const double t,                           //!< Current time instant (in seconds)
+        const std::vector<double>& rao_module,    //!< Module of the RAO
+        const std::vector<double>& rao_phase      //!< Phase of the RAO
         ) const
 {
     double F = 0;
-    const size_t nOmega = rao_module.size();
-    const size_t nPsi = rao_module.at(0).size();
-    size_t index = 0;
-    if (nOmega * nPsi != spectrum.k.size())
+    const size_t n = rao_module.size();
+    if (n != spectrum.k.size())
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "rao size mismatch spectrum size");
     }
-    for (size_t i = 0 ; i < nOmega ; ++i)
+    for (size_t i = 0 ; i < n ; ++i)
     {
-        for (size_t j = 0 ; j < nPsi ; ++j)
-        {
-            const double Aij = rao_module[i][j] * spectrum.a[index];
-            const double omega_t = spectrum.omega[index] * t;
-            const double k_xCosPsi_ySinPsi = spectrum.k[index] * (x * spectrum.cos_psi[index] + y * spectrum.sin_psi[index]);
-            F += Aij * cos(omega_t - k_xCosPsi_ySinPsi + rao_phase[i][j] + spectrum.phase[index]);
-            ++index;
-        }
+        const double rao_a = rao_module[i] * spectrum.a[i];
+        const double omega_t = spectrum.omega[i] * t;
+        const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
+        F += rao_a * cos(omega_t - k_xCosPsi_ySinPsi + rao_phase[i] + spectrum.phase[i]);
     }
     return F;
 }

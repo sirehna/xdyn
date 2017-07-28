@@ -57,8 +57,8 @@ class DiffractionForceModel::Impl
                     DiffractionInterpolator radiation(hdb,omegas.at(i),psis.at(i),data.mirror);
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
-                        rao_module.at(k).push_back(radiation.get_modules_cartesian(k));
-                        rao_phase.at(k).push_back(radiation.get_phases_cartesian(k));
+                        rao_module.at(k).push_back(radiation.get_modules_flat(k));
+                        rao_phase.at(k).push_back(radiation.get_phases_flat(k));
                     }
                 }
             }
@@ -95,8 +95,8 @@ class DiffractionForceModel::Impl
         bool initialized;
         EnvironmentAndFrames env;
         Eigen::Vector3d H0;
-        std::array<std::vector<std::vector<std::vector<double> > >,6> rao_module;
-        std::array<std::vector<std::vector<std::vector<double> > >,6> rao_phase;
+        std::array<std::vector<std::vector<double> >, 6> rao_module;
+        std::array<std::vector<std::vector<double> >, 6> rao_phase;
 
 };
 

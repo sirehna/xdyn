@@ -102,8 +102,8 @@ double SurfaceElevationInterface::evaluate_rao(
         const double , //!< x-position of the RAO's calculation point in the NED frame (in meters)
         const double , //!< y-position of the RAO's calculation point in the NED frame (in meters)
         const double , //!< Current time instant (in seconds)
-        const std::vector<std::vector<std::vector<double> > >& , //!< Module of the RAO
-        const std::vector<std::vector<std::vector<double> > >&  //!< Phase of the RAO
+        const std::vector<std::vector<double> >& , //!< Module of the RAO
+        const std::vector<std::vector<double> >&  //!< Phase of the RAO
         ) const
 {
     return 0;
