@@ -50,15 +50,15 @@ build:
      - unzip artifacts.zip
      - rm artifacts.zip
      - rm -rf html
-     - mv spt-0.0.0-py2.py3-none-any.whl ../deploy_xdyn
+     - mv spt-0.0.0-py2.py3-none-any.whl ../make_docker_image
      - cd ..
       - ls
-      - mv code/build/xdyn.deb deploy_xdyn
-      - cd deploy_xdyn
+      - mv code/build/xdyn.deb make_docker_image
+      - cd make_docker_image
       - ./make_docker_image.sh
       - cd ..
    artifacts:
       paths:
-      - deploy_xdyn/xdyn.tar.gz
+      - make_docker_image/xdyn.tar.gz
       - build/xdyn.deb
 
