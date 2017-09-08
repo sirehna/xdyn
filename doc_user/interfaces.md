@@ -283,3 +283,162 @@ de la commande :
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tutorial_01_falling_ball.h5
 ~~~~~~~~~~~~~~~~~~~~
 
+# Interface Docker et génération automatique de rapports
+
+`X-Dyn` peut être utilisé sous la forme d'un conteneur [Docker](https://www.docker.com/)
+ce qui permet de l'exécuter sur n'importe quelle plateforme.
+
+En outre, c'est actuellement le seul moyen d'utiliser le module de génération automatique
+de rapport décrit ci-après.
+
+Pour utiliser l'image `X-Dyn`, il faut d'abord installer Docker puis importer l'image
+`x-dyn.tar.gz` en exécutant :
+
+~~~~{.bash}
+docker load -i xdyn.tar.gz
+~~~~
+
+## Lancement d'X-DYN via l'image docker
+
+Une fois l'image chargée par la commande précédente, on peut lancer :
+
+~~~~{.bash}
+docker run -it --rm -v $(pwd):/work -w /work xdyn xdyn
+~~~~
+
+- Le paramètre `-v $(pwd):/work` permet de faire correspondre le répertoire courant avec le répertoire `/work`du conteneur.
+- Le paramètre ̀ -w /work` précise que le répertoire de travail du conteneur (celui depuis lequel sera exécuté X-DYN) est `/work`.
+- Le premier `xdyn`de la ligne de commande est le nom de l'image Docker.
+- Le second `xdyn` de la ligne de commande est le nom de l'exécutable à lancer.
+
+Si l'on souhaite lancer une simulation, on ajoute les arguments d'X-DYN à la suite :
+
+~~~~{.bash}
+docker run -it --rm -v $(pwd):/work -w /work xdyn xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
+~~~~
+
+## Génération automatique de rapports
+
+Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker d'X-Dyn.
+
+### Principe de fonctionnement
+
+On utilise un fichier modèle de rapport qui contient le texte, les instructions
+de simulation et les instructions graphiques.  Ce fichier est ensuite
+interpréter (lancement des simulations, génération des images), puis converti
+grâce à l'outil Pandoc au format de sortie demandé. On peut ainsi générer du
+DOCX, PDF, HTML, LaTeX, ODT, Slidy, Reveal.js... La liste complète des formats
+de sortie est disponible [ici](https://pandoc.org/MANUAL.html#general-options).
+
+### Ligne de commande
+
+La ligne de commande à utiliser est quelque peu absconse :
+
+~~~~{.bash}
+docker run --rm -it -w /work -v $(pwd):/work xdyn python3 /usr/local/lib/python3.4/dist-packages/spt/report/JinJaReport.py -p gir.md -r toto.docx -k
+~~~~
+
+Le plus simple est de créer un script pour ne pas avoir à la réécrire :
+
+~~~~{.bash}
+#!/bin/sh
+docker run --rm -it -w /work -v $(pwd):/work xdyn python3 /usr/local/lib/python3.4/dist-packages/spt/report/JinJaReport.py $*
+~~~~
+
+Après on peut utiliser :
+
+~~~~{.bash}
+./report.sh -p gir.md -r toto.docx -k
+~~~~
+
+- Le paramètre `-p gir.md` spécifie le fichier Markdown à utiliser pour le rapport (le modèle).
+- Le paramètre `-r toto.docx` détermine le format de sortie (on peut utiliser
+  aussi les formats PDF et HTML avec `-r toto.pdf` et `-r toto.html`
+  respectivement).
+- Le flag `-k` stipule que l'on souhaite conserver les fichiers intermédiaires
+  générés par X-Dyn. Si on l'omet, seul le fichier de sortie sera généré.
+
+### Syntaxe du fichier modèle
+
+Le fichier modèle est un fichier au format Markdown (voir la syntaxe
+[ici](https://pandoc.org/MANUAL.html#pandocs-markdown)) qui spécifie le contenu
+du rapport généré.
+
+La particularité du fichier modèle par rapport à un format Markdown classique
+est que l'on peut inclure des balises contenant du code Python qui sera exécuté
+au moment de la génération du rapport.
+
+**Chargement du fichier YAML**
+
+~~~~{.markdown}
+{% set yaml_data = load('tutorial_01_falling_ball.yml') %}
+~~~~
+
+**Affichage d'une section du YAML**
+
+~~~~{.markdown}
+{{show(yaml_data, 'bodies/0/initial position of body frame relative to NED')}}
+~~~~
+
+et pour l'intégralité du YAML :
+
+~~~~{.markdown}
+{{show(yaml_data)}}
+~~~~
+
+**Exécution d'une simulation**
+
+~~~~{.markdown}
+{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
+~~~~
+
+**Récupération des données générées**
+
+~~~~{.markdown}
+{% set data = csv('out.csv') %}
+~~~~
+
+**Définition de la donnée à tracer**
+
+~~~~{.markdown}
+{% set plot = prepare_plot_data(data, x = 't', y = 'z(ball)', name='Résultat') %}
+~~~~
+
+**Définition du type de graph**
+
+~~~~{.markdown}
+{% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
+~~~~
+
+**Tracé de la planche**
+
+~~~~{.markdown}
+{{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
+~~~~
+
+
+
+
+
+### Exemple de fichier modèle
+
+~~~~{.markdown}
+# Tutorials
+
+
+## Tutorial 1: chute libre
+
+{% set yaml_data = load('tutorial_01_falling_ball.yml') %}
+
+On commence par définir les conventions de rotation :
+
+{{show(yaml_data, 'rotations convention')}}
+
+Puis l'on donne des [constantes
+environnementales](##constantes-environnementales) :
+
+{{show(yaml_data, 'environmental constants')}}
+
+~~~~
+
+
