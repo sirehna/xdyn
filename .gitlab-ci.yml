@@ -52,11 +52,12 @@ build:
      - rm -rf html
      - mv spt-0.0.0-py2.py3-none-any.whl ../make_docker_image
      - cd ..
-      - ls
-      - mv code/build/xdyn.deb make_docker_image
-      - cd make_docker_image
-      - ./make_docker_image.sh
-      - cd ..
+     - ls
+     - pwd
+     - cp build/xdyn.deb make_docker_image
+     - cd make_docker_image
+     - ./make_docker_image.sh
+     - cd ..
    artifacts:
       paths:
       - make_docker_image/xdyn.tar.gz
