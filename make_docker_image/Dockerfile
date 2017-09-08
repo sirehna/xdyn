@@ -5,7 +5,8 @@ RUN apt-get update -yq \
  && apt-get install python3-h5py python3-yaml python3-jinja2 python3-pip python3-matplotlib python3-pandas python3-xlrd pandoc -y \
  && apt-get clean \
  && rm -rf /tmp/* /var/tmp/* \
- && rm -rf /var/lib/apt/lists/
+ && rm -rf /var/lib/apt/lists/ \
+ && pip3 install pint
 
 ADD usr/lib/libgfortran.so.3.0.0 /usr/lib/libgfortran.so.3
 ADD usr/lib/libquadmath.so.0.0.0 /usr/lib/libquadmath.so.0
