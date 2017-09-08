@@ -332,23 +332,10 @@ de sortie est disponible [ici](https://pandoc.org/MANUAL.html#general-options).
 
 ### Ligne de commande
 
-La ligne de commande à utiliser est quelque peu absconse :
+La ligne de commande à utiliser est :
 
 ~~~~{.bash}
-docker run --rm -it -w /work -v $(pwd):/work xdyn python3 /usr/local/lib/python3.4/dist-packages/spt/report/JinJaReport.py -p gir.md -r toto.docx -k
-~~~~
-
-Le plus simple est de créer un script pour ne pas avoir à la réécrire :
-
-~~~~{.bash}
-#!/bin/sh
-docker run --rm -it -w /work -v $(pwd):/work xdyn python3 /usr/local/lib/python3.4/dist-packages/spt/report/JinJaReport.py $*
-~~~~
-
-Après on peut utiliser :
-
-~~~~{.bash}
-./report.sh -p gir.md -r toto.docx -k
+docker run --rm -it -w /work -v $(pwd):/work xdyn spt_report -p tutorials.md -r tutorials.docx -k
 ~~~~
 
 - Le paramètre `-p gir.md` spécifie le fichier Markdown à utiliser pour le rapport (le modèle).
