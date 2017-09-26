@@ -16,7 +16,8 @@ Il sert à exprimer les déplacements des corps de la simulation.
 Le repère navire correspond au repère attaché au navire lors de la simulation.
 Le point de référence de ce repère correspond généralement au centre de carène
 du navire.
-Les axes du repère navire sont les suivants
+Les axes du repère navire sont les suivants:
+
 - $X$ vers l'avant
 - $Y$ sur tribord
 - $Z$ vers le bas
@@ -105,7 +106,7 @@ terminée par la rotation $R_{X}\left(\psi\right)$.
 
 Avec ces conventions d'angles et d'axes, il existe déjà 18 combinaisons.
 Ce nombre est doublé du fait que la composition de rotations peut être interne
-(intrinsic) ou externe(extrinsic).
+(intrinsic) ou externe (extrinsic).
 Si les rotations sont composées par rapport au repère fixe, on parle de
 composition externe. Si les rotations sont composées par rapport aux repères
 nouvellement créés, on parle de composition interne. C'est cette dernière qui
@@ -114,7 +115,7 @@ qu'il est possible de définir.
 
 ### Synthèse des différentes conventions
 
-Le tableau suivant présente les 36 conventions possibles :
+Les deux tableaux suivants présentent les 36 conventions possibles :
 
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
 | id | Ordre |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
