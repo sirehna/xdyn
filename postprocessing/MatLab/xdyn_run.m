@@ -74,6 +74,9 @@ else
     extension = '';
 end
 simulatorExe = fullfile(fileparts(mfilename('fullpath')),'..','bin',['xdyn' extension]);
+if ispc
+    simulatorExe = ['"' simulatorExe '"'];
+end
 if ischar(param) || iscell(param)
     tmp = param;
     param = struct;
