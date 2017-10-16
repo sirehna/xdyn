@@ -53,7 +53,6 @@ RUN wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.t
     tar -xf boost_source.tar.gz --strip 1 -C boost_SRC && \
     cd boost_SRC && \
     ./bootstrap.sh && \
-    # link=shared threading=multi
     ./b2 cxxflags=-fPIC link=static threading=single --layout=tagged --prefix=${BOOST_INSTALL} install || true && \
     cd .. \
     rm -rf boost_source.tar.gz boost_SRC
