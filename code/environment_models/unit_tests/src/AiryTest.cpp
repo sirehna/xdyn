@@ -380,18 +380,20 @@ TEST_F(AiryTest, orbital_velocity_sanity_check)
     const double omega_max = a.random<double>().greater_than(omega_min);
     const size_t nfreq = a.random<size_t>().between(2,100);
 
+    const double psi = a.random<double>().between(-PI, PI);
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const Stretching ss(ys);
+
 
     for (size_t i = 0 ; i < 100 ; ++i)
     {
-        const double psi = a.random<double>().between(-PI, PI);
-        YamlStretching ys;
-        ys.h = 0;
-        ys.delta = 1;
-        const Stretching ss(ys);
         const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
         const Airy wave(A, a.random<double>().between(-PI,PI));
-
-        double x=a.random<double>().between(-100,100); double y=a.random<double>().between(-100,100); double z=a.random<double>().between(2,5);
+        const double x=a.random<double>().between(-100,100);
+        const double y=a.random<double>().between(-100,100);
+        const double z=a.random<double>().between(2,5);
         const ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t,0);
         ASSERT_NEAR(std::abs(cos(psi)),std::abs(V.x()/hypot(V.x(),V.y())), EPS) << "i = " << i;
         ASSERT_NEAR(std::abs(sin(psi)),std::abs(V.y()/hypot(V.x(),V.y())), EPS) << "i = " << i;
