@@ -142,9 +142,9 @@ TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
     const double z = 1.62;
     const double t = 664.2;
     ssc::kinematics::Point v = wave.orbital_velocity(g, x, y, z, t, 0);
-    EXPECT_NEAR(-0.12705396141751218, v.x(),1e-10);
-    EXPECT_NEAR(-0.12705396141751218, v.y(),1e-10);
-    EXPECT_NEAR(0.37002483136735936, v.z(),1e-10);
+    EXPECT_NEAR(0.25451004448140752, v.x(),1e-10);
+    EXPECT_NEAR(0.25451004448140752, v.y(),1e-10);
+    EXPECT_NEAR(0.1991307825735438, v.z(),1e-10);
 }
 
 TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)

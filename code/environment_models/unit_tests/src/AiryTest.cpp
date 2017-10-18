@@ -332,27 +332,27 @@ TEST_F(AiryTest, orbital_velocity_non_regression_test)
     double x=-0.1; double y=0; double z=0.2;
     V = wave.orbital_velocity(g,x,y,z,t,0);
     ASSERT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013186340021821511, V.x(), EPS);
-    EXPECT_NEAR(-0.022839410883673746, V.y(), EPS);
-    EXPECT_NEAR(0.05482825333201282, V.z(), EPS);
+    EXPECT_NEAR(-0.013625903643418017, V.x(), EPS);
+    EXPECT_NEAR(-0.023600757409437876, V.y(), EPS);
+    EXPECT_NEAR(0.054396641584981066, V.z(), EPS);
     x=0.1;y=0;z=0.2;
     V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013625903643418018, V.x(), EPS);
-    EXPECT_NEAR(-0.023600757409437879, V.y(), EPS);
-    EXPECT_NEAR(0.054396641584981066, V.z(), EPS);
+    EXPECT_NEAR(-0.013186340021821508, V.x(), EPS);
+    EXPECT_NEAR(-0.022839410883673743, V.y(), EPS);
+    EXPECT_NEAR(0.054828253332012813, V.z(), EPS);
     x=0;y=-0.1;z=0.2;
     V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013024588330772737, V.x(), EPS);
-    EXPECT_NEAR(-0.022559248736567089, V.y(), EPS);
-    EXPECT_NEAR(0.054982688288036055, V.z(), EPS);
+    EXPECT_NEAR(-0.013785918416543868, V.x(), EPS);
+    EXPECT_NEAR(-0.02387791112645346, V.y(), EPS);
+    EXPECT_NEAR(0.054235130955620707, V.z(), EPS);
     x=0;y=0.1;z=0.2;
     V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.01378591841654387, V.x(), EPS);
-    EXPECT_NEAR(-0.023877911126453464, V.y(), EPS);
-    EXPECT_NEAR(0.054235130955620714, V.z(), EPS);
+    EXPECT_NEAR(-0.013024588330772734, V.x(), EPS);
+    EXPECT_NEAR(-0.022559248736567082, V.y(), EPS);
+    EXPECT_NEAR(0.054982688288036041, V.z(), EPS);
     x=0;y=0;z=0.1;
     V = wave.orbital_velocity(g,x,y,z,t,0);
     EXPECT_EQ("NED", V.get_frame());
@@ -398,6 +398,41 @@ TEST_F(AiryTest, orbital_velocity_sanity_check)
         ASSERT_NEAR(std::abs(cos(psi)),std::abs(V.x()/hypot(V.x(),V.y())), EPS) << "i = " << i;
         ASSERT_NEAR(std::abs(sin(psi)),std::abs(V.y()/hypot(V.x(),V.y())), EPS) << "i = " << i;
     }
+}
+
+TEST_F(AiryTest, orbital_velocity_and_elevation_should_have_opposite_signs)
+{
+    const double Hs = 0.1;
+    const double Tp = 5;
+    const double omega0 = 2*PI/Tp;
+
+    double t = 0;
+    const double g = 9.81;
+
+    const double omega_min = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
+    const size_t nfreq = a.random<size_t>().between(2,100);
+
+    const double psi = a.random<double>().between(0, PI/4);
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const Stretching ss(ys);
+
+
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+        const Airy wave(A, a.random<double>().between(-PI,PI));
+        const double x=a.random<double>().between(-100,100);
+        const double y=a.random<double>().between(-100,100);
+        const double z=a.random<double>().between(2,5);
+        const ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t,0);
+        const double eta = wave.elevation(x,y,t);
+        ASSERT_LE(V.x()*eta,0);
+        ASSERT_LE(V.y()*eta,0);
+    }
+
 }
 
 TEST_F(AiryTest, should_get_different_results_when_using_two_different_spectra)

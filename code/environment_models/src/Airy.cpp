@@ -160,7 +160,7 @@ ssc::kinematics::Point Airy::orbital_velocity(
         const double pdyn_factor = spectrum.pdyn_factor(k,z,0); // No stretching for the orbital velocity
         const double pdyn_factor_sh = spectrum.pdyn_factor_sh(k,z,0); // No stretching for the orbital velocity
         const double k_xCosPsi_ySinPsi = k * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        const double theta = omega * t- k_xCosPsi_ySinPsi + spectrum.phase[i];
+        const double theta = -omega * t + k_xCosPsi_ySinPsi + spectrum.phase[i];
         const double cos_theta = cos(theta);
         const double sin_theta = sin(theta);
         const double a_k_omega = spectrum.a[i] * k / omega;
