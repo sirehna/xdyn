@@ -573,7 +573,7 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const double x = a.random<double>().between(-10,10);
     const double y = a.random<double>().between(-10,10);
 
-    const double z1 = 1;
+    const double z1 = 4;
     const double z2 = 30;
 
     const double eta = wave.elevation(x,y,t);
