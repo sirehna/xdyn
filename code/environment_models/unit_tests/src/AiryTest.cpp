@@ -699,17 +699,11 @@ TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_wat
         const double x = a.random<double>().between(-100,100);
         const double y = a.random<double>().between(-100,100);
         const double eta = wave.elevation(x,y,t);
-        COUT(eta);
         ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho,g,x,y,eta-0.1,eta,t));
-        COUT(eta);
         ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho,g,x,y,h+0.1,eta,t));
-        COUT(eta);
         ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g,x,y,eta-0.1,t,eta).v.norm());
-        COUT(eta);
         ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g,x,y,h+0.1,t,eta).v.norm());
-        COUT(eta);
         const auto V = wave.orbital_velocity(g,x,y,h,t,eta).v;
-        COUT(eta);
         ASSERT_DOUBLE_EQ(0, (double)V(2)); // Sea bed is impervious
     }
 }
