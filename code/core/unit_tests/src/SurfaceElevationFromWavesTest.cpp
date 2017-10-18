@@ -37,22 +37,27 @@ void SurfaceElevationFromWavesTest::TearDown()
 {
 }
 
-WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double Hs, const double Tp, const double phase, const double water_depth) const
+WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double psi0, const double Hs, const double Tp, const double phase, const double water_depth, const double omega_min, const double omega_max, const size_t nfreq) const
 {
-    const double psi0 = 0;
     if (Tp==0)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Tp is zero (which implies omega0 will be infinite)");
     }
     const double omega0 = 2*PI/Tp;
-    const double omega_min = a.random<double>().greater_than(0);
-    const double omega_max = a.random<double>().greater_than(omega_min);
     YamlStretching y;
     y.h = 0;
     y.delta = 1;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, 1, water_depth, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, water_depth, s);
     return WaveModelPtr(new Airy(A, phase));
+}
+
+WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double Hs, const double Tp, const double phase, const double water_depth) const
+{
+    const double omega_min = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
+    const double psi0 = 0;
+    return get_model(psi0, Hs, Tp, phase, water_depth, omega_min, omega_max, 1);
 }
 
 WaveModelPtr SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
@@ -60,9 +65,9 @@ WaveModelPtr SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
     const double psi0 = PI/4;
     const double Hs = 3;
     const double Tp = 10;
-    const double omega0 = 2*PI/Tp;
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
+    const double omega0 = 2*PI/Tp;
     YamlStretching y;
     y.h = 0;
     y.delta = 1;
