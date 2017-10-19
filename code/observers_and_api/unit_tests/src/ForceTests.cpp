@@ -643,7 +643,7 @@ TEST_F(ForceTests, hydrostatic_plus_froude_krylov)
     EXPECT_NEAR(-1026*0.5*9.81*1/36., F.K(),EPS);
 }
 
-DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents)
+DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents) const
 {
     const std::string yaml = test_data::anthineas_waves_test();
     const std::string stl = test_data::single_facet();

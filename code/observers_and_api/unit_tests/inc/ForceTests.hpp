@@ -21,7 +21,7 @@ class ForceTests : public ::testing::Test
         virtual ~ForceTests();
         virtual void SetUp();
         virtual void TearDown();
-        DiffractionForceModel get_diffraction_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents);
+        DiffractionForceModel get_diffraction_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents) const;
         ssc::random_data_generator::DataGenerator a;
 };
 
