@@ -15,7 +15,7 @@
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
 #include "HydrostaticForceModel.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 #include "yaml_data.hpp"
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"

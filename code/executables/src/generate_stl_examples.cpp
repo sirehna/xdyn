@@ -9,7 +9,7 @@
 #include "file_writer.hpp"
 #include "generate_anthineas.hpp"
 #include "hdb_data.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"
 #include <fstream>

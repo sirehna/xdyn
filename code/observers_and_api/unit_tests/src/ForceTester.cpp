@@ -16,7 +16,7 @@
 #include "DiffractionForceModel.hpp"
 #include "hdb_data.hpp"
 #include "yaml_data.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 
 Sim ForceTester::make_sim(const std::string& yaml, const std::string& stl) const
 {

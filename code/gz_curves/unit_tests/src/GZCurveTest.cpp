@@ -10,7 +10,7 @@
 #include "GZCurve.hpp"
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 #include "yaml_data.hpp"
 #include "make_sim_for_GZ.hpp"
 #include "generate_anthineas.hpp"

@@ -8,7 +8,7 @@
 #include "stl_writerTest.hpp"
 #include "stl_reader.hpp"
 #include "stl_writer.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 #include "base91.hpp"
 #include "TriMeshTestData.hpp"
 

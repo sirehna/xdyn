@@ -9,7 +9,7 @@
 #include "MeshBuilder.hpp"
 #include "MeshIntersectorTest.hpp"
 #include "mesh_manipulations.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 #include "stl_reader.hpp"
 #include "MeshIntersector.hpp"
 #include "generate_anthineas.hpp"

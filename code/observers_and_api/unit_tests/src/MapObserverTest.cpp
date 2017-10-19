@@ -12,7 +12,7 @@
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 
 #define EPS 1E-8
 #define _USE_MATH_DEFINE

@@ -12,7 +12,7 @@
 #include "ResultantForceComputer.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "GZTypes.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 #include "yaml_data.hpp"
 
 #define EPS (1E-10)

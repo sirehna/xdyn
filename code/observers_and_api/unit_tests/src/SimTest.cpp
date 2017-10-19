@@ -23,7 +23,7 @@
 #include "yaml_data.hpp"
 #include "InternalErrorException.hpp"
 #include "SimulatorYamlParser.hpp"
-#include "STL_data.hpp"
+#include "stl_data.hpp"
 #include "simulator_api.hpp"
 #include <ssc/solver.hpp>
 #include "TriMeshTestData.hpp"
