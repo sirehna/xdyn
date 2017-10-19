@@ -608,14 +608,22 @@ directional spreading:
     waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La direction de propagation est donnée par `waves propagating to`.
+La direction de propagation est donnée par `waves propagating to`, dans le
+repère NED (0° correspond à des vagues se propageant du Sud vers le Nord, 45° à
+des vagues se propageant du Sud-Ouest au Nord-Est, -90° à des vagues se
+propageant de l'Est vers l'Ouest). Il n'y a pas de bornes particulières pour
+cette angle (outre la taille maximale des flottants).
 
 ### Cos2s
 
 L'étalement est donné par :
 $$\gamma\mapsto \cos^{2s}\left({\gamma-\gamma_0}\right)$$
 
-où $\gamma_0$ est la direction de propagation.
+où $\gamma_0$ est la direction de propagation, dans le
+repère NED (0° correspond à des vagues se propageant du Sud vers le Nord, 45° à
+des vagues se propageant du Sud-Ouest au Nord-Est, -90° à des vagues se
+propageant de l'Est vers l'Ouest). Il n'y a pas de bornes particulières pour
+cette angle (outre taille maximale des flottants).
 
 Cet étalement est paramétré de la façon suivante :
 
@@ -626,7 +634,7 @@ directional spreading:
     waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`waves propagating to` donne la direction de propagation $\gamma_0$.
+La direction de propagation $\gamma_0$ est donnée par `waves propagating to`.
 
 ## Stretching de la houle
 
