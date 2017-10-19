@@ -13,6 +13,10 @@
 #include "simulator_api.hpp"
 #include "StateMacros.hpp"
 #include "GMForceModel.hpp"
+#include "DiffractionForceModel.hpp"
+#include "hdb_data.hpp"
+#include "yaml_data.hpp"
+#include "STL_data.hpp"
 
 Sim ForceTester::make_sim(const std::string& yaml, const std::string& stl) const
 {
@@ -213,4 +217,24 @@ boost::optional<double> ForceTester::gm(const double x,
         }
     }
     return ret;
+}
+
+DiffractionForceModel get_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents);
+DiffractionForceModel get_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents)
+{
+    const std::string yaml = test_data::anthineas_waves_test();
+    const std::string stl = test_data::single_facet();
+    auto input = SimulatorYamlParser(yaml).parse();
+    YamlBody body = input.bodies.front();
+    body.controlled_forces.clear();
+    body.external_forces.clear();
+
+    input.bodies[0] = body;
+    input.environment.clear();
+    input.environment.push_back(waves);
+
+    const auto sys = get_system(check_input_yaml(input), stl, 0);
+    const auto env = sys.get_env();
+    const YamlDiffraction data = DiffractionForceModel::parse(diffraction_yaml);
+    return DiffractionForceModel(data, body.name, env, hdb_file_contents);
 }
