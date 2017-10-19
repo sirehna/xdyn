@@ -26,7 +26,8 @@ class DiffractionForceModel : public ForceModel
 {
     public:
         typedef YamlDiffraction Input;
-        DiffractionForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& end);
+        DiffractionForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env);
+        DiffractionForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env, const std::string& hdb_file_contents);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         static Input parse(const std::string& yaml);
         static std::string model_name();

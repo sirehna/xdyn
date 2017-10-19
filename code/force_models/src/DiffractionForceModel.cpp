@@ -22,10 +22,18 @@
 
 std::string DiffractionForceModel::model_name() { return "diffraction";}
 
+HDBParser hdb_from_file(const std::string& filename);
+HDBParser hdb_from_file(const std::string& filename)
+{
+    return HDBParser(ssc::text_file_reader::TextFileReader(filename).get_contents());
+}
+
+
 class DiffractionForceModel::Impl
 {
     public:
-        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env_) : initialized(false), env(env_),
+
+        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env_, const HDBParser& hdb) : initialized(false), env(env_),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
         rao_module(),
         rao_phase()
@@ -33,7 +41,6 @@ class DiffractionForceModel::Impl
             if (env.w.use_count()>0)
             {
                 std::stringstream ss;
-                const HDBParser hdb(ssc::text_file_reader::TextFileReader(data.hdb_filename).get_contents());
                 const auto omegas = env.w->get_wave_angular_frequency_for_each_model();
                 const auto omegas_hdb = hdb.get_diffraction_module_omegas();
                 for (auto o:omegas)
@@ -100,7 +107,11 @@ class DiffractionForceModel::Impl
 
 };
 
-DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env) : ForceModel("diffraction", body_name_), pimpl(new Impl(data,env))
+DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env) : ForceModel("diffraction", body_name_), pimpl(new Impl(data,env,hdb_from_file(data.hdb_filename)))
+{
+}
+
+DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents) : ForceModel("diffraction", body_name_), pimpl(new Impl(data,env,HDBParser(hdb_file_contents)))
 {
 }
 
