@@ -20,6 +20,9 @@
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"
 #include "GMForceModel.hpp"
+#include "SimulatorYamlParser.hpp"
+#include "check_input_yaml.hpp"
+#include "simulator_api.hpp"
 
 #define EPS (1E-8)
 
@@ -638,4 +641,23 @@ TEST_F(ForceTests, hydrostatic_plus_froude_krylov)
     ASSERT_NEAR(-1026*0.5*9.81, F.Z(),EPS);
     EXPECT_NEAR(0, F.M(),EPS);
     EXPECT_NEAR(-1026*0.5*9.81*1/36., F.K(),EPS);
+}
+
+DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents)
+{
+    const std::string yaml = test_data::anthineas_waves_test();
+    const std::string stl = test_data::single_facet();
+    auto input = SimulatorYamlParser(yaml).parse();
+    YamlBody body = input.bodies.front();
+    body.controlled_forces.clear();
+    body.external_forces.clear();
+
+    input.bodies[0] = body;
+    input.environment.clear();
+    input.environment.push_back(waves);
+
+    const auto sys = get_system(check_input_yaml(input), stl, 0);
+    const auto env = sys.get_env();
+    const YamlDiffraction data = DiffractionForceModel::parse(diffraction_yaml);
+    return DiffractionForceModel(data, body.name, env, hdb_file_contents);
 }
