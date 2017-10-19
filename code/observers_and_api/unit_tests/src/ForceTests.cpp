@@ -661,3 +661,31 @@ DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& w
     const YamlDiffraction data = DiffractionForceModel::parse(diffraction_yaml);
     return DiffractionForceModel(data, body.name, env, hdb_file_contents);
 }
+
+YamlModel ForceTests::get_regular_wave(const double propagation_angle_in_ned_frame_in_degrees, const double Hs_in_meters, const double omega_in_rad_per_s) const
+{
+    YamlModel wave;
+    wave.model = "waves";
+    std::stringstream ss;
+    ss << "discretization:\n"
+       << "   n: 10\n"
+       << "   omega min: {value: 0.1, unit: rad/s}\n"
+       << "   omega max: {value: 6, unit: rad/s}\n"
+       << "   energy fraction: 0.999\n"
+       << "spectra:\n"
+       << "  - model: airy\n"
+       << "    depth: {value: 100, unit: m}\n"
+       << "    seed of the random data generator: 0\n"
+       << "    stretching:\n"
+       << "      delta: 1\n"
+       << "      h: {unit: m, value: 0}\n"
+       << "    directional spreading:\n"
+       << "       type: dirac\n"
+       << "       waves propagating to: {value: " << propagation_angle_in_ned_frame_in_degrees << ", unit: deg}\n"
+       << "    spectral density:\n"
+       << "       type: dirac\n"
+       << "       Hs: {value: " << Hs_in_meters << ", unit: m}\n"
+       << "       omega0: {value: " << omega_in_rad_per_s << ", unit: rad/s}";
+    wave.yaml = ss.str();
+    return wave;
+}
