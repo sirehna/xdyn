@@ -83,6 +83,11 @@ std::tuple<double,double,double,double> BodyStates::convert(const ssc::kinematic
     return std::make_tuple(0.,0.,0.,0.);
 }
 
+ssc::kinematics::EulerAngles BodyStates::get_angles() const
+{
+    return convert(get_rot_from_ned_to_body(),convention);
+}
+
 ssc::kinematics::EulerAngles BodyStates::get_angles(const YamlRotation& c) const
 {
     return convert(get_rot_from_ned_to_body(),c);

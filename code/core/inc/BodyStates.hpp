@@ -52,6 +52,7 @@ struct BodyStates : AbstractStates<History>
     EPoint g_in_mesh_frame;                                        //!< Unit vertical vector, expressed in the body's mesh frame
     ssc::kinematics::Point hydrodynamic_forces_calculation_point;  //!< Point of expression of hydrodynamic forces (except Froude-Krylov & hydrostatic)
 
+    ssc::kinematics::EulerAngles get_angles() const;
     ssc::kinematics::EulerAngles get_angles(const YamlRotation& c) const;
     ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const size_t idx, const YamlRotation& c) const;
     static ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations);

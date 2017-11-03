@@ -12,7 +12,9 @@
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
 #include "State.hpp"
-
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 #define EPS (1E-10)
 
 BodyTest::BodyTest() : a(ssc::random_data_generator::DataGenerator(21212))
@@ -305,4 +307,29 @@ TEST_F(BodyTest, can_overwrite_history_with_single_value_several_times)
         ASSERT_DOUBLE_EQ(body->get_states().qk(),new_qk);
         ASSERT_EQ(body->get_states().qk.size(),1);
     }
+}
+
+TEST_F(BodyTest, can_compute_euler_angles_from_body_states)
+{
+    double x=a.random<double>();
+    double y=a.random<double>();
+    double z=a.random<double>();
+    double u=a.random<double>();
+    double v=a.random<double>();
+    double w=a.random<double>();
+    double p=a.random<double>();
+    double q=a.random<double>();
+    double r=a.random<double>();
+    double qr=std::sqrt(2.)/2.;
+    double qi=0.5;
+    double qj=0;
+    double qk=0.5;
+    double t=a.random<double>();
+
+    const State new_state(AbstractStates<double>(x, y, z, u, v, w, p, q, r, qr, qi, qj, qk),t);
+
+    body->set_states_history(new_state);
+    ASSERT_DOUBLE_EQ(body->get_states().get_angles().phi*180./PI, std::atan(std::sqrt(2.))*180./PI);
+    ASSERT_DOUBLE_EQ(body->get_states().get_angles().theta*180./PI, std::asin(-1./2.)*180./PI);
+    ASSERT_DOUBLE_EQ(body->get_states().get_angles().psi*180./PI, std::atan(std::sqrt(2.))*180./PI);
 }
