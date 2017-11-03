@@ -384,9 +384,35 @@ t+{RAO^{k}}_{\textrm{phase}}(u,\omega_i,\psi-\psi_j)+\phi_{ij})$$
   l'avant, i.e. houle de l'arrière, et $\pi$ pour une houle se propageant de
   l'avant vers l'arrière, i.e. houle de face).
 
-L'expression précédente est valable au point de calcul hydrodynamique,
-c'est-à-dire le point utilisé pour les calculs AQUA+. Le torseur calculé est
-ensuite déplacé par X-DYN au point de résolution du PFD.
+Les RAO lues depuis le fichier n'étant pas modifiées, l'expression précédente donne un torseur d'effort exprimé dans un repère Z vers le haut : pour l'exprimer dans le repère Z vers le bas d'X-DYN, on effectue le changement de père suivant :
+
+$$ \tau_{\mbox{HDB}} =
+\left[
+\begin{array}{c}
+F_X\\
+F_Y\\
+F_Z\\
+M_X\\
+M_Y\\
+M_Z\\
+\end{array}
+\right]
+$$
+
+$$ \tau_{\mbox{XDYN}} =
+\left[
+\begin{array}{c}
+F_X\\
+-F_Y\\
+-F_Z\\
+M_X\\
+-M_Y\\
+-M_Z\\
+\end{array}
+\right]
+$$
+
+Le torseur calculé est ensuite déplacé par X-DYN au point de résolution du PFD.
 
 ### Paramétrage
 
