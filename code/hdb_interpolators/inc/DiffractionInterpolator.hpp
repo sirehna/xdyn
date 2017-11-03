@@ -50,16 +50,24 @@ class DiffractionInterpolator
         std::vector<std::vector<double> > get_phases_cartesian(const size_t k //<! Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
                                                               );
 
-        std::vector<double> get_modules_flat(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-                                      );
+        /**  \brief Interpolates the RAO's module for a given axis, a wave frequency (*not* an encounter frequency)
+         *    and an incidence (between 0 and π for waves propagating towards port side, π and 2π for waves propagating towards starboard
+         *    0 for waves propagating from aft to fore (heading waves), pi for waves propagating from fore to aft (facing waves))
+          *  \returns module of the rao for the axis, the frequency and the incidence
+          */
+        double interpolate_module(const size_t axis, const double omega, const double beta);
 
-        std::vector<double> get_phases_flat(const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-                                      );
+        /**  \brief Interpolates the RAO's phase for a given axis, a wave frequency (*not* an encounter frequency)
+         *    and an incidence (between 0 and π for waves propagating towards port side, π and 2π for waves propagating towards starboard
+         *    0 for waves propagating from aft to fore (heading waves), pi for waves propagating from fore to aft (facing waves))
+          *  \returns module of the rao for the axis, the frequency and the incidence
+          */
+        double interpolate_phase(const size_t axis, const double omega, const double beta);
 
     private:
         DiffractionInterpolator();
         std::vector<std::vector<double> > get_array_cartesian(Interpolator& i) const;
-        std::vector<double> get_array_flat(Interpolator& i) const;
+    public:
         std::array<Interpolator,6> module; //!< 2D spline interpolation function (omega,psi) for RAO's module
         std::array<Interpolator,6> phase; //!< 2D spline interpolation function (omega,psi) for RAO's phase
         bool mirror;

@@ -495,7 +495,7 @@ TEST_F(AiryTest, RAO_non_regression_test)
     const Airy wave(A, 0.0);
     const std::vector<double> rao_module = {1};// {{1,2,3},{4,5,6},{7,8,9},{0,1,2},{3,4,5},{6,7,8},{9,0,1},{2,3,4},{5,6,7},{8,9,0}};
     const std::vector<double> rao_phase = {9}; //{{9,8,7},{6,5,4},{1,4,7},{8,5,2},{7,5,3},{1,5,9},{4,5,6},{7,8,9},{6,5,4},{4,8,6}};
-    ASSERT_NEAR(-0.013069734104625542, wave.evaluate_rao(4,5,6,rao_module,rao_phase), 1E-6);
+    ASSERT_NEAR(-0.048261600164461897, wave.evaluate_rao(4,5,6,rao_module,rao_phase), 1E-6);
 }
 
 TEST_F(AiryTest, should_respect_dirac_inputs)

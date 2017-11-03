@@ -78,6 +78,60 @@ class HDBParser::Impl
             }
         }
 
+        TimestampedMatrices convert_matrices_from_aquaplus_to_xdyn_frame(TimestampedMatrices matrices) const
+        {
+            for (size_t k = 0 ; k < matrices.size() ; ++k)
+            {
+                matrices[k].second[0][1] = -matrices[k].second[0][1];
+                matrices[k].second[0][2] = -matrices[k].second[0][2];
+                matrices[k].second[0][4] = -matrices[k].second[0][4];
+                matrices[k].second[0][5] = -matrices[k].second[0][5];
+                matrices[k].second[1][0] = -matrices[k].second[1][0];
+                matrices[k].second[1][3] = -matrices[k].second[1][3];
+                matrices[k].second[2][0] = -matrices[k].second[2][0];
+                matrices[k].second[2][3] = -matrices[k].second[2][3];
+                matrices[k].second[3][1] = -matrices[k].second[3][1];
+                matrices[k].second[3][2] = -matrices[k].second[3][2];
+                matrices[k].second[3][4] = -matrices[k].second[3][4];
+                matrices[k].second[3][5] = -matrices[k].second[3][5];
+                matrices[k].second[4][0] = -matrices[k].second[4][0];
+                matrices[k].second[4][3] = -matrices[k].second[4][3];
+                matrices[k].second[5][0] = -matrices[k].second[5][0];
+                matrices[k].second[5][3] = -matrices[k].second[5][3];
+                // We need to transform the matrix into X-DYN's frame (z downwards)
+                /*
+                 *  import sympy
+
+                    m = sympy.Matrix([[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1]])
+                    R = sympy.Matrix([[1,0,0,0,0,0],[0,-1,0,0,0,0],[0,0,-1,0,0,0],[0,0,0,1,0,0],[0,0,0,0,-1,0],[0,0,0,0,0,-1]])
+                    for i in range(1,7):
+                        for j in range(1,7):
+                        exec("m"+str(i)+str(j)+" = sympy.Symbol('m" + str(i) + str(j) + "')")
+                    M = sympy.Matrix([[m11,m12,m13,m14,m15,m16],[m21,m22,m23,m24,m25,m26],[m31,m32,m33,m34,m35,m36],[m41,m42,m43,m44,m45,m46],[m51,m52,m53,m54,m55,m56],[m61,m62,m63,m64,m65,m66]])
+                    M
+                    ⎡m₁₁   -m₁₂  -m₁₃  m₁₄   -m₁₅  -m₁₆⎤
+                    ⎢                                  ⎥
+                    ⎢-m₂₁  m₂₂   m₂₃   -m₂₄  m₂₅   m₂₆ ⎥
+                    ⎢                                  ⎥
+                    ⎢-m₃₁  m₃₂   m₃₃   -m₃₄  m₃₅   m₃₆ ⎥
+                    ⎢                                  ⎥
+                    ⎢m₄₁   -m₄₂  -m₄₃  m₄₄   -m₄₅  -m₄₆⎥
+                    ⎢                                  ⎥
+                    ⎢-m₅₁  m₅₂   m₅₃   -m₅₄  m₅₅   m₅₆ ⎥
+                    ⎢                                  ⎥
+                    ⎣-m₆₁  m₆₂   m₆₃   -m₆₄  m₆₅   m₆₆ ⎦
+                    def f(m):
+                        for i in range(0,6):
+                             for j in range(0,6):
+                                 if m[i, j]<0:
+                                     print("matrices[k].second["+str(i)+"]["+str(j)+"] = -matrices[k].second["+str(i)+"]["+str(j)+"];")
+                    f(sympy.transpose(R)*m*R)
+
+                 */
+            }
+            return matrices;
+        }
+
         TimestampedMatrices get_matrix(const std::string& header, const std::string& matrix) const
         {
             TimestampedMatrices ret;
@@ -90,7 +144,11 @@ class HDBParser::Impl
                     {
                         for (size_t i = 0 ; i < 6 ; ++i)
                         {
-                            if (that_section->header == matrix + "_" + boost::lexical_cast<std::string>(i+1)) fill(ret, i, that_section->values); found_line[i] = true;
+                            if (that_section->header == matrix + "_" + boost::lexical_cast<std::string>(i+1))
+                            {
+                                fill(ret, i, that_section->values);
+                                found_line[i] = true;
+                            }
                         }
                     }
                 }
@@ -102,7 +160,7 @@ class HDBParser::Impl
                     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find key '" << matrix << "_" << i+1 << "' in HDB file");
                 }
             }
-            return ret;
+            return convert_matrices_from_aquaplus_to_xdyn_frame(ret);
         }
 
         RAOData get_rao(const std::string& section_name, const std::string& subsections) const

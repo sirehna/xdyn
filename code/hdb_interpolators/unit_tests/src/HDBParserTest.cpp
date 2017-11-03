@@ -38,16 +38,16 @@ TEST_F(HDBParserTest, can_get_added_mass)
     ASSERT_DOUBLE_EQ(1,Ma.at(0).first);
     ASSERT_EQ(6,Ma.at(0).second.size());
     ASSERT_DOUBLE_EQ(1.097184E+04,Ma.at(0).second.at(0).at(0));
-    ASSERT_DOUBLE_EQ(4.443533E+01,Ma.at(0).second.at(3).at(4));
+    ASSERT_DOUBLE_EQ(-4.443533E+01,Ma.at(0).second.at(3).at(4));
 
     ASSERT_DOUBLE_EQ(2,Ma.at(1).first);
     ASSERT_EQ(6,Ma.at(1).second.size());
-    ASSERT_DOUBLE_EQ(2.102286E+04,Ma.at(1).second.at(1).at(3));
+    ASSERT_DOUBLE_EQ(-2.102286E+04,Ma.at(1).second.at(1).at(3));
     ASSERT_DOUBLE_EQ(2.702315E+05,Ma.at(1).second.at(2).at(4));
 
     ASSERT_DOUBLE_EQ(3,Ma.at(2).first);
     ASSERT_EQ(6,Ma.at(2).second.size());
-    ASSERT_DOUBLE_EQ(7.183531E+01,Ma.at(2).second.at(5).at(0));
+    ASSERT_DOUBLE_EQ(-7.183531E+01,Ma.at(2).second.at(5).at(0));
     ASSERT_DOUBLE_EQ(-8.938050E+01,Ma.at(2).second.at(2).at(1));
 
     ASSERT_DOUBLE_EQ(3.5,Ma.at(3).first);
@@ -90,10 +90,10 @@ TEST_F(HDBParserTest, can_retrieve_initial_values)
     const auto M1 = data.get_added_mass(1);
     ASSERT_EQ(6, M1.cols());
     ASSERT_EQ(6, M1.rows());
-    ASSERT_DOUBLE_EQ(1.503212E+04, (double)M1(2,0));
+    ASSERT_DOUBLE_EQ(-1.503212E+04, (double)M1(2,0));
     ASSERT_DOUBLE_EQ(-1.618101E+02, (double)M1(2,1));
     ASSERT_DOUBLE_EQ(1.781351E+05, (double)M1(2,2));
-    ASSERT_DOUBLE_EQ(-1.053934E+02, (double)M1(2,3));
+    ASSERT_DOUBLE_EQ(1.053934E+02, (double)M1(2,3));
     ASSERT_DOUBLE_EQ(3.267841E+05, (double)M1(2,4));
     ASSERT_DOUBLE_EQ(6.774041E+02, (double)M1(2,5));
 
@@ -101,11 +101,11 @@ TEST_F(HDBParserTest, can_retrieve_initial_values)
     ASSERT_EQ(6, M2.cols());
     ASSERT_EQ(6, M2.rows());
     ASSERT_DOUBLE_EQ(3.032333E+01, (double)M2(3,0));
-    ASSERT_DOUBLE_EQ(2.332197E+04, (double)M2(3,1));
-    ASSERT_DOUBLE_EQ(-5.924372E+01, (double)M2(3,2));
+    ASSERT_DOUBLE_EQ(-2.332197E+04, (double)M2(3,1));
+    ASSERT_DOUBLE_EQ(5.924372E+01, (double)M2(3,2));
     ASSERT_DOUBLE_EQ(2.132689E+05, (double)M2(3,3));
-    ASSERT_DOUBLE_EQ(2.994200E+02, (double)M2(3,4));
-    ASSERT_DOUBLE_EQ(3.943479E+04, (double)M2(3,5));
+    ASSERT_DOUBLE_EQ(-2.994200E+02, (double)M2(3,4));
+    ASSERT_DOUBLE_EQ(-3.943479E+04, (double)M2(3,5));
     //! [HDBDataTest expected output]
 }
 
@@ -115,10 +115,10 @@ TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
     const auto M = data.get_added_mass();
     ASSERT_EQ(6, M.cols());
     ASSERT_EQ(6, M.rows());
-    ASSERT_NEAR(1.503212E+04, (double)M(2,0), EPS);
+    ASSERT_NEAR(-1.503212E+04, (double)M(2,0), EPS);
     ASSERT_NEAR(-1.618101E+02, (double)M(2,1), EPS);
     ASSERT_NEAR(1.781351E+05, (double)M(2,2), EPS);
-    ASSERT_NEAR(-1.053934E+02, (double)M(2,3), EPS);
+    ASSERT_NEAR(1.053934E+02, (double)M(2,3), EPS);
     ASSERT_NEAR(3.267841E+05, (double)M(2,4), EPS);
     ASSERT_NEAR(6.774041E+02, (double)M(2,5), EPS);
 }

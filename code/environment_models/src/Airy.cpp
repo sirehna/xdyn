@@ -72,14 +72,14 @@ double Airy::evaluate_rao(
     const size_t n = rao_module.size();
     if (n != spectrum.k.size())
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "rao size mismatch spectrum size");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "rao size is " << n << ", which does not match spectrum size (" << spectrum.k.size() << ")");
     }
     for (size_t i = 0 ; i < n ; ++i)
     {
         const double rao_a = rao_module[i] * spectrum.a[i];
         const double omega_t = spectrum.omega[i] * t;
         const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        F += rao_a * cos(-omega_t + k_xCosPsi_ySinPsi + rao_phase[i] + spectrum.phase[i]);
+        F -= rao_a * sin(-omega_t + k_xCosPsi_ySinPsi + rao_phase[i] + spectrum.phase[i]);
     }
     return F;
 }

@@ -35,13 +35,13 @@ class DiffractionForceModel::Impl
 
         Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env_, const HDBParser& hdb) : initialized(false), env(env_),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-        rao_module(),
-        rao_phase()
+        rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
+        omegas(),
+        psis()
         {
             if (env.w.use_count()>0)
             {
-                std::stringstream ss;
-                const auto omegas = env.w->get_wave_angular_frequency_for_each_model();
+                omegas = env.w->get_wave_angular_frequency_for_each_model();
                 const auto omegas_hdb = hdb.get_diffraction_module_omegas();
                 for (auto o:omegas)
                 {
@@ -57,17 +57,7 @@ class DiffractionForceModel::Impl
                         }
                     }
                 }
-                const auto psis = env.w->get_wave_directions_for_each_model();
-                const size_t n = omegas.size();
-                for (size_t i = 0 ; i < n ; ++i)
-                {
-                    DiffractionInterpolator radiation(hdb,omegas.at(i),psis.at(i),data.mirror);
-                    for (size_t k = 0 ; k < 6 ; ++k)
-                    {
-                        rao_module.at(k).push_back(radiation.get_modules_flat(k));
-                        rao_phase.at(k).push_back(radiation.get_phases_flat(k));
-                    }
-                }
+                psis = env.w->get_wave_directions_for_each_model();
             }
             else
             {
@@ -76,25 +66,56 @@ class DiffractionForceModel::Impl
 
         }
 
-        ssc::kinematics::Wrench evaluate(const std::string& body_name, const double t)
+        ssc::kinematics::Wrench evaluate(const std::string& body_name, const double t, const double psi)
         {
             ssc::kinematics::Wrench ret;
             ssc::kinematics::Vector6d w;
             const auto T = env.k->get(body_name,"NED");
             const ssc::kinematics::Point H = T*ssc::kinematics::Point(body_name,H0);
-            for (size_t k = 0 ; k < 6 ; ++k)
+            std::array<std::vector<std::vector<double> >, 6 > rao_modules;
+            std::array<std::vector<std::vector<double> >, 6 > rao_phases;
+            if (env.w.use_count()>0)
             {
-                if (env.w.use_count()>0)
+                if (not(omegas.empty()))
                 {
+
+                    for (size_t k = 0 ; k < 6 ; ++k)
+                    {
+                        rao_modules[k].resize(omegas.size());
+                        rao_phases[k].resize(omegas.size());
+                    }
+                }
+                for (size_t k = 0 ; k < 6 ; ++k)
+                {
+                    for (size_t i = 0 ; i < omegas.size() ; ++i)
+                    {
+                        rao_modules[k][i].resize(omegas[i].size());
+                        rao_phases[k][i].resize(omegas[i].size());
+                        for (size_t j = 0 ; j < omegas[i].size() ; ++j)
+                        {
+                            const double beta = psi - psis.at(i).at(j);
+
+                                rao_modules[k][i][j] = rao.interpolate_module(k, omegas[i][j], beta);
+                                rao_phases[k][i][j] = rao.interpolate_phase(k, omegas[i][j], beta);
+                        }
+                    }
                     w((int)k) = env.w->evaluate_rao(H.x(),
                                                     H.y(),
                                                     t,
-                                                    rao_module.at(k),
-                                                    rao_phase.at(k)
-                             );
+                                                    rao_modules[k],
+                                                    rao_phases[k]);
                 }
             }
-            return ssc::kinematics::Wrench(H, w);
+            return ssc::kinematics::Wrench(H, express_aquaplus_wench_in_xdyn_coordinates(w));
+        }
+
+        ssc::kinematics::Vector6d express_aquaplus_wench_in_xdyn_coordinates(ssc::kinematics::Vector6d v) const
+        {
+            v(1) = -v(1);
+            v(2) = -v(2);
+            v(4) = -v(4);
+            v(5) = -v(5);
+            return v;
         }
 
     private:
@@ -102,8 +123,9 @@ class DiffractionForceModel::Impl
         bool initialized;
         EnvironmentAndFrames env;
         Eigen::Vector3d H0;
-        std::array<std::vector<std::vector<double> >, 6> rao_module;
-        std::array<std::vector<std::vector<double> >, 6> rao_phase;
+        DiffractionInterpolator rao;
+        std::vector<std::vector<double> > omegas;
+        std::vector<std::vector<double> > psis;
 
 };
 
@@ -118,7 +140,7 @@ DiffractionForceModel::DiffractionForceModel(const Input& data, const std::strin
 ssc::kinematics::Wrench DiffractionForceModel::operator()(const BodyStates& states, const double t) const
 {
 
-    return pimpl->evaluate(states.name, t);
+    return pimpl->evaluate(states.name, t, states.get_angles().psi);
 }
 
 DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yaml)
