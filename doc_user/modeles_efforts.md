@@ -303,36 +303,90 @@ Pour utiliser ce modèle, on insère la ligne suivante dans la section `external
 
 Les efforts de diffraction sont dus à la modification du champs de pression du
 fait de la présence du navire. Ils sont interpolés à partir de tables
-hydrodynamiques. Comme les efforts de radiation et les efforts de masse
-ajoutée, ces tables sont calculées en résolvant un problème de condition aux
-limites pour le potentiel de vitesse : on utilise donc des codes basés sur des
-méthodes potentielles, tels qu'Aqua+. Les tables sont paramétrées en pulsation,
-incidence et vitesse d'avance (RAO d'efforts du premier ordre). La principale
-différence entre les efforts de radiation et les efforts de diffraction est
-l'écriture de la condition aux limites.
+hydrodynamiques. Comme les efforts de radiation et les efforts de masse ajoutée,
+ces tables sont calculées en résolvant un problème de condition aux limites pour
+le potentiel de vitesse : on utilise donc des codes basés sur des méthodes
+potentielles, tels qu'Aqua+. Les tables (Response Amplitudes Operators ou RAO)
+sont paramétrées en pulsation, incidence et vitesse d'avance. Il s'agit de RAO
+d'efforts du premier ordre). La principale différence entre les efforts de
+radiation et les efforts de diffraction est l'écriture de la condition aux
+limites.
+
+### Conventions
+
+Les RAO dépendent des conventions (repère, origine des phases, provenance vs.
+propagation, signe des angles). Or la convention utilisée ne figure pas dans le
+format HDB. Comme les RAO que l'on utilise actuellement proviennent
+exculsivement du logiciel AQUA+, dans la version actuelle X-DYN suppose que la
+convention utilisée est celle d'AQUA+ (qui est aussi celle du logiciel DIODORE).
+
+![](images/convention_aqua+.svg)
+
+La différence entre la convention de X-DYN et celle d'AQUA+ est que l'axe $z$
+est ascendant pour AQUA+ et descendant pour X-DYN. L'angle de la houle
+représente bien dans les deux cas une direction de propagation (et non de
+provenance). Le potentiel des vitesses de la houle est, dans X-DYN comme dans
+AQUA+ :
+
+$$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+{\cosh(k\cdot h)}\cos(k\cdot(x\cdot
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+
+Toutes les données issues des fichiers HDB d'AQUA+ et DIODORE sont données en
+convention *z vers le haut* : par conséquent, il faut effectuer un changement de
+repère (rotation de $\pi$ autour de l'axe $X$) pour les mettre dans le repère
+d'X-DYN (*z vers le bas*). La matrice de changement de base est :
+
+$$R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]$$
+
+* Pour les vecteurs
+$$\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{X-DYN}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{X-DYN}}$$
+* Pour les matrices (masses ajoutées, amortissements...)
+  Si $M=((m_{ij}))$ désigne une matrice exprimée dans le repère AQUA+ et $M_d$ la même matrice
+  exprimée dans le repère X-DYN, on a :
+  $$M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]$$
+
 
 ### Calcul numérique
 
 Les RAO d'efforts sont lues à partir d'un fichier HDB. Cette table donne, une
 fois interpolée, deux fonctions RAO par axe $k$
 
-$$(\omega,\psi)\mapsto {RAO^{k}}_{\textrm{module}}(\omega,\psi)$$
-$$(\omega,\psi)\mapsto {RAO^{k}}_{\textrm{phase}}(\omega,\psi)$$
+$$(u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{module}}(u,\omega,\beta)$$
+$$(u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{phase}}(u,\omega,\beta)$$
 
-Pour calculer les efforts et les moments, on somme les RAO comme pour le calcul
-de l'élévation de la surface libre :
+* $u$ désigne la composante longitudinale de vitesse d'avance (basse fréquence) projetée dans le repère body,
+* $\omega$ désigne la pulsation de la houle (et non la pulsation de rencontre, puisque dans la formule ci-dessous on fait intervenir $\mathbf{k}\cdot \mathbf{x}$),
+* $\beta$ est l'angle d'incidence entre l'axe $X$ du navire et la direction de propagation de la houle
 
-$$F_k(x_H,y_H,t) = \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
-{RAO^{k}}_{\textrm{module}}(\omega_i,\psi_j)\cdot a_{i,j}
-\cdot\cos(k\cdot(x_H\cdot \cos(\psi_j) + y_H\cdot \sin(\psi_j))-\omega_i\cdot
-t+{RAO^{k}}_{\textrm{phase}}(\omega_i,\psi_j)+\phi_{ij})$$
+Pour calculer les efforts et les moments, pour une houle de direction de propagation $\psi$, on
+somme les RAO comme pour le calcul de l'élévation de la surface libre en suivant la convention AQUA+ :
 
-$x_H$ et $y_H$ désignent les coordonnées du [point de calcul des efforts
-hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique), $t$ est l'instant courant. Les $\omega_i$ et $\psi_j$
-correspondent à la discrétisation du spectre de houle. $\phi_{ij}$ est une
-phase aléatoire (voir le [modèle de la houle d'Airy](#houle-dairy)).
+$$F_k(x_H,y_H,t,u) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+{RAO^{k}}_{\textrm{module}}(u,\omega_i,\psi-\psi_j)\cdot a_{i,j}
+\cdot\sin(k\cdot(x_H\cdot \cos(\psi_j) + y_H\cdot \sin(\psi_j))-\omega_i\cdot
+t+{RAO^{k}}_{\textrm{phase}}(u,\omega_i,\psi-\psi_j)+\phi_{ij})$$
 
-Le torseur calculé est ensuite déplacé au centre de gravité (repère body).
+- $x_H$ et $y_H$ désignent les coordonnées du [point de calcul des efforts
+  hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique),
+- $t$ est l'instant courant.
+- $\omega_i$ et $\psi_j$ correspondent à la discrétisation du spectre
+  de houle. Il est à noter que $\omega_i$ ne correspond par à la pulsation de
+  rencontre du navire avec la houle puisque celle-ci est calculée par AQUA+.
+- $\phi_{ij}$ est une phase aléatoire (voir le [modèle de la houle
+  d'Airy](#houle-dairy)).
+- $u$ est la projection de la vitesse du navire par rapport au repère terrestre
+  NED sur l'axe $X$ du repère body.
+- Le terme $\psi-\psi_j$ correspond au calcul de l'angle d'incidence de la
+  houle, en respectant la convention d'Aqua+, c'est-à-dire entre 0 et $\pi$ pour
+  une houle se propageant vers babord et $\pi$ et $2 \pi$ pour une houle se
+  propageant vers tribord (0 pour une houle se propageant de l'arrière vers
+  l'avant, i.e. houle de l'arrière, et $\pi$ pour une houle se propageant de
+  l'avant vers l'arrière, i.e. houle de face).
+
+L'expression précédente est valable au point de calcul hydrodynamique,
+c'est-à-dire le point utilisé pour les calculs AQUA+. Le torseur calculé est
+ensuite déplacé par X-DYN au point de résolution du PFD.
 
 ### Paramétrage
 
@@ -354,8 +408,15 @@ Le point de calcul n'est pas nécessairement le centre de gravité. En revanche,
 il s'agit nécessairement d'un point fixe dans le repère du solide.
 
 Le paramètre `mirror for 180 to 360` sert à pouvoir ne spécifier que la partie
-de la RAO entre 0$^{\circ}$ et 180$^{\circ}$, quitte à la symétriser pour
-obtenir les points entre 180$^{\circ}$ et 360$^{\circ}$.
+de la RAO entre $0^{\circ}$ et $180^{\circ}$, quitte à la symétriser par rapport à
+l'axe (Ox) pour obtenir les points entre $180^{\circ}$ et $360^{\circ}$.
+
+### Références
+
+- *Notice d'utilisation AQUA+ 1.1/MF/N1*, septembre 1993, G. Delhommeau,
+  ECN/LMF/DHN, pages 4 à 6.
+- [*NEMOH Theory - General Notations and Conventions*](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-general-notations-and-conventions-192970.kjsp?RH=1489593406974), page 2
+- [*19th WEGMT School - Numerical Simulation of Hydrodynamics: Ships and Offshore Structures - Offshore structures - Seakeeping codes AQUADYN and AQUAPLUS, Gérard DELHOMMEAU *](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-general-equations-192973.kjsp?RH=1489593406974), page 10
 
 
 ## Résistance à l'avancement
@@ -1751,5 +1812,3 @@ On obtient dans l'exemple précédent la projection suivant l'axe $X$ du repère
 renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
 même type) ainsi que la projection de ce même effort suivant l'axe $X$ du repère
 NED.
-
-
