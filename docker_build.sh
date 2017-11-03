@@ -40,8 +40,8 @@ sh docker_cmake.sh -Wno-dev \
 sh docker_ninja.sh package
 
 # Build X-DYN container
-cd deploy_xdyn
-./deploy.sh
+cd make_docker_image
+./make_docker_image.sh
 cd ..
 
 # Run all tests
