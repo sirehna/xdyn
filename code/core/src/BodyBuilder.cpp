@@ -102,7 +102,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
                 "The rigid body inertia mass matrix is not symmetric definite positive "
-                << "for body '" << states.name << ": " << std::endl
+                << "for body '" << states.name << "': " << std::endl
                 << "Mrb = " << std::endl
                 << Mrb << std::endl);
     }
@@ -120,7 +120,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
                 "The input added mass is not symmetric"
-                << "for body '" << states.name << ": " << std::endl
+                << " for body '" << states.name << "': " << std::endl
                 << "Ma = " << std::endl
                 << Ma << std::endl);
     }
@@ -129,7 +129,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
                 "The total inertia matrix (rigid body inertia + added mass) is not symmetric definite positive"
-                << "for body '" << states.name << ": " << std::endl
+                << " for body '" << states.name << "': " << std::endl
                 << "Mrb = " << std::endl
                 << Mrb << std::endl
                 << "Ma = " << std::endl
