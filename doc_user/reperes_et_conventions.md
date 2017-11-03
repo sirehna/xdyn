@@ -546,6 +546,36 @@ lance une exception si on le fait).
 Comme le fichier STL, le chemin du fichier HDB est relatif à l'endroit d'où on
 lance l'exécutable.
 
+### Transport des matrices d'inertie
+
+La formule de Huyguens permet de translater les inerties du centre de gravité vers
+un point quelconque. On s'intéresse ici au déplacement et changement de repère
+d'une matrice d'inertie généralisée (inerties propres et inerties ajoutées).
+Par rapport à la formule de Huyguens, la différence vient de ce que l'inertie
+n'est pas identique sur tous les axes (mathématiquement, la matrice peut donc
+être n'importe quelle forme bilinéaire symétrique, positive et définie).
+
+
+Soit
+
+$$S(\lambda)=\left[\begin{array}{ccc} 0&-\lambda_3&\lambda_2\\\lambda_3&0&-\lambda_1\\-\lambda_2&\lambda_1&0\end{array}\right]_{\mathcal{R_0}}$$
+
+la matrice du produit vectoriel par $\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]$ : $\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a$
+
+Pour effectuer un transport d'une matrice 6x6 en coordonnées généralisées (masse, masse ajoutée ou amortissement) d'un point $A$ vers un point $B$, on utilise :
+
+$$M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]$$
+
+Cete formule est une généralisation de la formule de Huyguens.
+
+En combinant avec un changement de base (de la base $a$ vers la base $b$) par la matrice de rotation ${}^a R_b$ de $b$ vers $a$ on obtient l'expression plus générale :
+
+$${}^bM_B=\left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]^\top {}^aM_A \left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]$$
+
+Cette formule permet d'effectuer à la fois le transport d'une matrice d'inertie généralisée 6x6 d'un point $A$ à un point $B$ et le changement de son repère d'expression de $a$ vers $b$.
+
+Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid body shift of rigid body spatial inertia
+
 ### Forçage de degrés de liberté
 
 Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
@@ -750,5 +780,3 @@ Les différentes positions du navire par rapport à la houle sont décrites comm
 - $180^\circ < \gamma - \psi < 270^\circ$ : Houle venant de tribord avant
 - $\gamma - \psi = 270^\circ$ : Houle venant de tribord
 - $270^\circ < \gamma - \psi < 360^\circ$ : Houle venant de bâbord avant
-
-
