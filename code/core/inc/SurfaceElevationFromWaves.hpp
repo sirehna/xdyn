@@ -47,7 +47,7 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
                            ) const;
 
         /**  \brief Calculate radiation forces using first order force RAO
-          *  \returns Force (or torque), depending on the RAO
+          *  \returns Force and torque
           */
         double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
                             const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
