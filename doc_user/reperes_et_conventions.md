@@ -546,7 +546,18 @@ lance une exception si on le fait).
 Comme le fichier STL, le chemin du fichier HDB est relatif à l'endroit d'où on
 lance l'exécutable.
 
-### Transport des matrices d'inertie
+Les fichiers HDB ne spécifient pas leur repère de calcul. Plutôt que de laisser
+l'utilisateur la spécifier (avec les risques d'erreur que cela comporte) ou de la
+détecter automatiquement, on suppose pour X-DYN que les fichiers HDB ont été générés
+soit par DIODORE, soit par AQUA+ qui ont la même convention (z vers le haut).
+Le repère dans lequel sont exprimées toutes les matrices de tous les fichiers HDB
+lus par X-DYN est donc : x longitudinal, y vers babord et z vers le haut.
+Par conséquent, toutes les matrices lues depuis le fichier HDB (masses ajoutées
+et amortissement de radiation) subissent un changement de repère décrit au
+paragraphe suivant.
+
+
+### Transport des matrices d'inertie et d'amortissement lues depuis le fichier HDB
 
 La formule de Huyguens permet de translater les inerties du centre de gravité vers
 un point quelconque. On s'intéresse ici au déplacement et changement de repère
@@ -555,24 +566,109 @@ Par rapport à la formule de Huyguens, la différence vient de ce que l'inertie
 n'est pas identique sur tous les axes (mathématiquement, la matrice peut donc
 être n'importe quelle forme bilinéaire symétrique, positive et définie).
 
-
 Soit
 
 $$S(\lambda)=\left[\begin{array}{ccc} 0&-\lambda_3&\lambda_2\\\lambda_3&0&-\lambda_1\\-\lambda_2&\lambda_1&0\end{array}\right]_{\mathcal{R_0}}$$
 
 la matrice du produit vectoriel par $\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]$ : $\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a$
 
-Pour effectuer un transport d'une matrice 6x6 en coordonnées généralisées (masse, masse ajoutée ou amortissement) d'un point $A$ vers un point $B$, on utilise :
+Pour effectuer un transport d'une matrice 6x6 en coordonnées généralisées
+(masse, masse ajoutée ou amortissement) d'un point $A$ vers un point $B$, on
+utilise :
 
 $$M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]$$
 
 Cete formule est une généralisation de la formule de Huyguens.
 
-En combinant avec un changement de base (de la base $a$ vers la base $b$) par la matrice de rotation ${}^a R_b$ de $b$ vers $a$ on obtient l'expression plus générale :
+En combinant avec un changement de base (de la base $a$ vers la base $b$) par
+la matrice de rotation ${}^a R_b$ de $b$ vers $a$ on obtient l'expression plus
+générale :
 
 $${}^bM_B=\left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]^\top {}^aM_A \left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]$$
 
-Cette formule permet d'effectuer à la fois le transport d'une matrice d'inertie généralisée 6x6 d'un point $A$ à un point $B$ et le changement de son repère d'expression de $a$ vers $b$.
+Cette formule permet d'effectuer à la fois le transport d'une matrice d'inertie
+généralisée 6x6 d'un point $A$ à un point $B$ et le changement de son repère
+d'expression de $a$ vers $b$.
+
+Pour la conversion des fichiers HDB, on suppose qu'il n'y a pas de déplacement à faire
+et donc que la seule opération est le passage d'un repère z vers le haut (HDB) à un repère
+z vers le bas (X-DYN). La formule précédente se simplifie alors en :
+
+$${}^bM_B=\left[
+\begin{array}{cccccc}
+1&0&0&0&0&0\\
+0&-1&0&0&0&0\\
+0&0&-1&0&0&0\\
+0&0&0&1&0&0\\
+0&0&0&0&-1&0\\
+0&0&0&0&0&-1\\
+\end{array}
+\right]^\top {}^aM_A
+  \left[
+\begin{array}{cccccc}
+1&0&0&0&0&0\\
+0&-1&0&0&0&0\\
+0&0&-1&0&0&0\\
+0&0&0&1&0&0\\
+0&0&0&0&-1&0\\
+0&0&0&0&0&-1\\
+ \end{array}
+\right]
+$$
+En prenant la notation
+$$ M_{\mbox{HDB}} =
+\left[
+\begin{array}{cccccc}
+ m_{11} &   m_{12}  &  m_{13}  &  m_{14}  &  m_{15}  &  m_{16}\\
+ m_{21} &   m_{22}  &  m_{23}  &  m_{24}  &  m_{25}  &  m_{26} \\
+ m_{31} &   m_{32}  &  m_{33}  &  m_{34}  &  m_{35}  &  m_{36} \\
+ m_{41} &   m_{42}  &  m_{43}  &  m_{44}  &  m_{45}  &  m_{46}\\
+ m_{51} &   m_{52}  &  m_{53}  &  m_{54}  &  m_{55}  &  m_{56} \\
+ m_{61} &   m_{62}  &  m_{63}  &  m_{64}  &  m_{65}  &  m_{66} \\
+\end{array}
+\right]
+$$
+on obtient :
+$$ M_{\mbox{XDYN}} =
+\left[
+\begin{array}{cccccc}
+ m_{11} &  -m_{12}  & -m_{13}  &  m_{14}  & -m_{15}  & -m_{16}\\
+-m_{21} &   m_{22}  &  m_{23}  & -m_{24}  &  m_{25}  &  m_{26} \\
+-m_{31} &   m_{32}  &  m_{33}  & -m_{34}  &  m_{35}  &  m_{36} \\
+ m_{41} &  -m_{42}  & -m_{43}  &  m_{44}  & -m_{45}  & -m_{46}\\
+-m_{51} &   m_{52}  &  m_{53}  & -m_{54}  &  m_{55}  &  m_{56} \\
+-m_{61} &   m_{62}  &  m_{63}  & -m_{64}  &  m_{65}  &  m_{66} \\
+\end{array}
+\right]
+$$
+
+Pour les torseurs, on obtient le changement suivant :
+$$ \tau_{\mbox{HDB}} =
+\left[
+\begin{array}{c}
+F_X\\
+F_Y\\
+F_Z\\
+M_X\\
+M_Y\\
+M_Z\\
+\end{array}
+\right]
+$$
+
+$$ \tau_{\mbox{XDYN}} =
+\left[
+\begin{array}{c}
+F_X\\
+-F_Y\\
+-F_Z\\
+M_X\\
+-M_Y\\
+-M_Z\\
+\end{array}
+\right]
+$$
+
 
 Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid body shift of rigid body spatial inertia
 
