@@ -116,11 +116,22 @@ Par ailleurs, l'eau étant supposée incompressible, $$\nabla\cdot V=
 \frac{\partial^2\phi}{\partial z^2} = 0$$
 
 Il s'agit d'une équation de Laplace dont la solution s'obtient par la méthode de
-séparation des variables :
+séparation des variables. Plusieurs potentiels peuvent être solution. Par exemple :
+
+- $$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+{\cosh(k\cdot h)}\cos(k\cdot(x\cdot
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+- $$\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+{\cosh(k\cdot h)}\sin(k\cdot(x\cdot
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+
+Ici, nous choisissons :
 
 $$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\cos(k\cdot(x\cdot
 \cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+
+qui est le potentiel utilisé par le logiciel AQUA+.
 
 - $h$ est la profondeur du fluide (hauteur du sol à la surface libre),
 - $\eta_a$ est l'amplitude de la houle (en m),
