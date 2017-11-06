@@ -17,6 +17,7 @@
 #include "HydrostaticForceModel.hpp"
 #include "stl_data.hpp"
 #include "yaml_data.hpp"
+#include "hdb_data.hpp"
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"
 #include "GMForceModel.hpp"
@@ -723,4 +724,27 @@ BodyStates get_whole_body_state_with_psi_equal_to(const double psi)
     states.convention.convention.push_back("x''");
     states.name = "Anthineas";
     return states;
+}
+
+TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_interpolation_in_omega_no_transport)
+{
+    const YamlModel regular_waves_Hs_1_propagating_to_north_omega_equals_4 = get_regular_wave(0, 2, 2*PI/125.+1E-8);
+    const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
+    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_omega_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+
+    const auto states = get_whole_body_state_with_psi_equal_to(0);
+    const double t = 0;
+    const auto tau = F(states, t);
+    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   0.000000):
+    // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
+    const std::vector<double> module = {5.084407E+04,  0.000000E+00,  3.997774E+05,  0.000000E+00,  3.209051E+07,  0.000000E+00};
+    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   0.000000)
+    // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
+    const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
+    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(phase[0]), tau.X(), 1E-5);
+    ASSERT_SMALL_RELATIVE_ERROR(module[1]*sin(phase[1]),  tau.Y(), 1E-5); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(module[2]*sin(phase[2]),  tau.Z(), 1E-5); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(phase[3]), tau.K(), 1E-5);
+    ASSERT_SMALL_RELATIVE_ERROR(module[4]*sin(phase[4]),  tau.M(), 1E-5); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(module[5]*sin(phase[5]),  tau.N(), 1E-5); // Z is down for X-DYN and up for AQUA+
 }
