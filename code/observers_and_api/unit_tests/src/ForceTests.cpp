@@ -675,7 +675,7 @@ YamlModel ForceTests::get_regular_wave(const double propagation_angle_in_ned_fra
        << "spectra:\n"
        << "  - model: airy\n"
        << "    depth: {value: 100, unit: m}\n"
-       << "    seed of the random data generator: 0\n"
+       << "    seed of the random data generator: none\n"
        << "    stretching:\n"
        << "      delta: 1\n"
        << "      h: {unit: m, value: 0}\n"
