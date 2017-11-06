@@ -658,6 +658,8 @@ DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& w
 
     const auto sys = get_system(check_input_yaml(input), stl, 0);
     const auto env = sys.get_env();
+    const ssc::kinematics::Transform T(ssc::kinematics::Point("NED",0,0,0), "Anthineas");
+    env.k->add(T);
     const YamlDiffraction data = DiffractionForceModel::parse(diffraction_yaml);
     return DiffractionForceModel(data, body.name, env, hdb_file_contents);
 }
