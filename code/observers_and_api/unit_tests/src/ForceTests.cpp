@@ -692,6 +692,19 @@ YamlModel ForceTests::get_regular_wave(const double propagation_angle_in_ned_fra
     return wave;
 }
 
+std::string ForceTests::get_diffraction_conf(const double x, const double y, const double z) const
+{
+    std::stringstream ss;
+    ss << "model: diffraction\n"
+           << "hdb: anthineas.hdb\n"
+           << "calculation point in body frame:\n"
+           << "    x: {value: " << x << ", unit: m}\n"
+           << "    y: {value: " << y << ", unit: m}\n"
+           << "    z: {value: " << z << ", unit: m}\n"
+           << "mirror for 180 to 360: true\n";
+    return ss.str();
+}
+
 BodyStates get_whole_body_state_with_psi_equal_to(const double psi);
 BodyStates get_whole_body_state_with_psi_equal_to(const double psi)
 {
