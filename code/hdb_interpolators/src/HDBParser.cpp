@@ -26,11 +26,20 @@
 class HDBParser::Impl
 {
     public:
-        Impl() : omega_rad(), tree(), M(), Br(), Tmin(0), diffraction_module(), diffraction_phase()
+        Impl() : omega_rad(), tree(), M(), Br(), Tmin(0), diffraction_module(), diffraction_phase(), froude_krylov_module(), froude_krylov_phase()
         {
         }
 
-        Impl(const std::string& data) : omega_rad(), tree(hdb::parse(data)), M(), Br(), Tmin(0), diffraction_module(get_diffraction_module()), diffraction_phase(get_diffraction_phase())
+        Impl(const std::string& data)
+        : omega_rad()
+        , tree(hdb::parse(data))
+        , M()
+        , Br()
+        , Tmin(0)
+        , diffraction_module(get_diffraction_module())
+        , diffraction_phase(get_diffraction_phase())
+        , froude_krylov_module(get_froude_krylov_module())
+        , froude_krylov_phase(get_froude_krylov_phase())
         {
             bool allow_queries_outside_bounds;
             const TimestampedMatrices Ma = get_added_mass_array();
@@ -206,10 +215,20 @@ class HDBParser::Impl
 
         RAOData get_diffraction_module() const
         {
-            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
+            return get_rao("DIFFRACTION_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
         }
 
         RAOData get_diffraction_phase() const
+        {
+            return get_rao("DIFFRACTION_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
+        }
+
+        RAOData get_froude_krylov_module() const
+        {
+            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
+        }
+
+        RAOData get_froude_krylov_phase() const
         {
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
         }
@@ -222,6 +241,16 @@ class HDBParser::Impl
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_phase_tables() const
         {
             return diffraction_phase.values;
+        }
+
+        std::array<std::vector<std::vector<double> >,6 > get_froude_krylov_module_tables() const
+        {
+            return froude_krylov_module.values;
+        }
+
+        std::array<std::vector<std::vector<double> >,6 > get_froude_krylov_phase_tables() const
+        {
+            return froude_krylov_phase.values;
         }
 
         TimestampedMatrices get_added_mass_array() const
@@ -278,6 +307,26 @@ class HDBParser::Impl
             return diffraction_module.omega;
         }
 
+        std::vector<double> get_froude_krylov_phase_psis() const
+        {
+            return froude_krylov_phase.psi;
+        }
+
+        std::vector<double> get_froude_krylov_phase_omegas() const
+        {
+            return froude_krylov_phase.omega;
+        }
+
+        std::vector<double> get_froude_krylov_module_psis() const
+        {
+            return froude_krylov_module.psi;
+        }
+
+        std::vector<double> get_froude_krylov_module_omegas() const
+        {
+            return froude_krylov_module.omega;
+        }
+
         std::vector<double> omega_rad;
 
     private:
@@ -301,6 +350,8 @@ class HDBParser::Impl
         double Tmin;
         RAOData diffraction_module;
         RAOData diffraction_phase;
+        RAOData froude_krylov_module;
+        RAOData froude_krylov_phase;
 };
 
 
@@ -368,6 +419,17 @@ std::array<std::vector<std::vector<double> >,6 > HDBParser::get_diffraction_phas
     return pimpl->get_diffraction_phase_tables();
 }
 
+
+std::array<std::vector<std::vector<double> >,6 > HDBParser::get_froude_krylov_module_tables() const
+{
+    return pimpl->get_froude_krylov_module_tables();
+}
+
+std::array<std::vector<std::vector<double> >,6 > HDBParser::get_froude_krylov_phase_tables() const
+{
+    return pimpl->get_froude_krylov_phase_tables();
+}
+
 std::vector<double> HDBParser::get_diffraction_phase_psis() const
 {
     return pimpl->get_diffraction_phase_psis();
@@ -386,4 +448,24 @@ std::vector<double> HDBParser::get_diffraction_module_psis() const
 std::vector<double> HDBParser::get_diffraction_module_omegas() const
 {
     return pimpl->get_diffraction_module_omegas();
+}
+
+std::vector<double> HDBParser::get_froude_krylov_phase_psis() const
+{
+    return pimpl->get_froude_krylov_phase_psis();
+}
+
+std::vector<double> HDBParser::get_froude_krylov_phase_omegas() const
+{
+    return pimpl->get_froude_krylov_phase_omegas();
+}
+
+std::vector<double> HDBParser::get_froude_krylov_module_psis() const
+{
+    return pimpl->get_froude_krylov_module_psis();
+}
+
+std::vector<double> HDBParser::get_froude_krylov_module_omegas() const
+{
+    return pimpl->get_froude_krylov_module_omegas();
 }
