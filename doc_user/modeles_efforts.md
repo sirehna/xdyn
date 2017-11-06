@@ -370,9 +370,11 @@ t+{RAO^{k}}_{\textrm{phase}}(u,\omega_i,\psi-\psi_j)+\phi_{ij})$$
 - $x_H$ et $y_H$ désignent les coordonnées du [point de calcul des efforts
   hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique),
 - $t$ est l'instant courant.
-- $\omega_i$ et $\psi_j$ correspondent à la discrétisation du spectre
-  de houle. Il est à noter que $\omega_i$ ne correspond par à la pulsation de
-  rencontre du navire avec la houle puisque celle-ci est calculée par AQUA+.
+- $a_{i,j}$ est l'amplitude de la houle, soit $$a_{i,j}^2=A(\omega_i,\gamma_j)^2 = 2 S(\omega_i)d\omega D(\gamma_j) d\gamma$$ pour une houle irrégulière
+- $\omega_i$ et $\psi_j$ correspondent à la discrétisation du spectre de houle.
+  Il est à noter que $\omega_i$ ne correspond par à la pulsation de rencontre du
+  navire avec la houle puisque celle-ci est calculée par AQUA+. Le terme
+  $\mathbf{k}\cdot\mathbf{x}$ permet de prendre en compte la vitesse d'avance.
 - $\phi_{ij}$ est une phase aléatoire (voir le [modèle de la houle
   d'Airy](#houle-dairy)).
 - $u$ est la projection de la vitesse du navire par rapport au repère terrestre
@@ -384,7 +386,10 @@ t+{RAO^{k}}_{\textrm{phase}}(u,\omega_i,\psi-\psi_j)+\phi_{ij})$$
   l'avant, i.e. houle de l'arrière, et $\pi$ pour une houle se propageant de
   l'avant vers l'arrière, i.e. houle de face).
 
-Les RAO lues depuis le fichier n'étant pas modifiées, l'expression précédente donne un torseur d'effort exprimé dans un repère Z vers le haut : pour l'exprimer dans le repère Z vers le bas d'X-DYN, on effectue le changement de père suivant :
+Les RAO lues depuis le fichier n'étant pas modifiées, l'expression précédente
+donne un torseur d'effort exprimé dans un repère Z vers le haut et au point de
+calcul de la RAO : pour l'exprimer dans le repère Z vers le bas d'X-DYN, on
+effectue le changement de repère suivant :
 
 $$ \tau_{\mbox{HDB}} =
 \left[
@@ -412,7 +417,8 @@ M_X\\
 \right]
 $$
 
-Le torseur calculé est ensuite déplacé par X-DYN au point de résolution du PFD.
+Le torseur calculé est ensuite déplacé par X-DYN du point de calcul des HDB au
+point de résolution du PFD.
 
 ### Paramétrage
 
