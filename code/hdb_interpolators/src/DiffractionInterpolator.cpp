@@ -6,6 +6,7 @@
  */
 
 #include "DiffractionInterpolator.hpp"
+#include "InternalErrorException.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
@@ -59,14 +60,40 @@ std::vector<std::vector<double> > DiffractionInterpolator::get_phases_cartesian(
     return get_array_cartesian(phase.at(k));
 }
 
-double DiffractionInterpolator::interpolate_module(const size_t axis, const double omega, const double beta)
+double DiffractionInterpolator::interpolate_module(const size_t axis, const double omega, double beta)
 {
-    if (mirror and (beta>PI)) return module.at(axis).f(omega,2*PI-beta);
-                              return module.at(axis).f(omega,beta);
+    double ret = 0;
+    beta = beta - 2*PI * std::floor( beta / (2*PI) );
+    try
+    {
+        if (mirror and (beta>PI)) ret = module.at(axis).f(omega,2*PI-beta);
+                                  ret = module.at(axis).f(omega,beta);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        const char* ax = "XYZKMN";
+        ss << "Error interpolating RAO module for diffraction force: axis " << ax[axis] << ", omega = " << omega << ", beta = " << beta << ": "  << e.what();
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
+    }
+    return ret;
 }
 
-double DiffractionInterpolator::interpolate_phase(const size_t axis, const double omega, const double beta)
+double DiffractionInterpolator::interpolate_phase(const size_t axis, const double omega, double beta)
 {
-    if (mirror and (beta>PI)) return phase.at(axis).f(omega,2*PI-beta);
-                              return phase.at(axis).f(omega,beta);
+    double ret = 0;
+    beta = beta - 2*PI * std::floor( beta / (2*PI) );
+    try
+    {
+        if (mirror and (beta>PI)) ret = phase.at(axis).f(omega,2*PI-beta);
+                                  ret = phase.at(axis).f(omega,beta);
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        const char* ax = "XYZKMN";
+        ss << "Error interpolating RAO phase for diffraction force: axis " << ax[axis] << ", omega = " << omega << ", beta = " << beta << ": "  << e.what();
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
+    }
+    return ret;
 }

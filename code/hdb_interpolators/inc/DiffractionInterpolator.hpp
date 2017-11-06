@@ -55,14 +55,14 @@ class DiffractionInterpolator
          *    0 for waves propagating from aft to fore (heading waves), pi for waves propagating from fore to aft (facing waves))
           *  \returns module of the rao for the axis, the frequency and the incidence
           */
-        double interpolate_module(const size_t axis, const double omega, const double beta);
+        double interpolate_module(const size_t axis, const double omega, double beta);
 
         /**  \brief Interpolates the RAO's phase for a given axis, a wave frequency (*not* an encounter frequency)
          *    and an incidence (between 0 and π for waves propagating towards port side, π and 2π for waves propagating towards starboard
          *    0 for waves propagating from aft to fore (heading waves), pi for waves propagating from fore to aft (facing waves))
           *  \returns module of the rao for the axis, the frequency and the incidence
           */
-        double interpolate_phase(const size_t axis, const double omega, const double beta);
+        double interpolate_phase(const size_t axis, const double omega, double beta);
 
     private:
         DiffractionInterpolator();
