@@ -691,3 +691,23 @@ YamlModel ForceTests::get_regular_wave(const double propagation_angle_in_ned_fra
     wave.yaml = ss.str();
     return wave;
 }
+
+BodyStates get_whole_body_state_with_psi_equal_to(const double psi);
+BodyStates get_whole_body_state_with_psi_equal_to(const double psi)
+{
+    const std::vector<double> s = get_states(0,0,0,0,0,psi);
+    BodyStates states;
+    states.x.record(0,s.at(0));
+    states.y.record(0,s.at(1));
+    states.z.record(0,s.at(2));
+    states.qr.record(0,s.at(9));
+    states.qi.record(0,s.at(10));
+    states.qj.record(0,s.at(11));
+    states.qk.record(0,s.at(12));
+    states.convention.order_by = "angle";
+    states.convention.convention.push_back("z");
+    states.convention.convention.push_back("y'");
+    states.convention.convention.push_back("x''");
+    states.name = "Anthineas";
+    return states;
+}
