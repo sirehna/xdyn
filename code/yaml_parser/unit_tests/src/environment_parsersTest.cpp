@@ -149,8 +149,15 @@ TEST_F(environment_parsersTest, can_parse_cos2s_spreading)
 
 TEST_F(environment_parsersTest, airy_wave_model)
 {
-    const int seed = parse_airy("seed of the random data generator: 1234\n");
+    const boost::optional<int> seed = parse_airy("seed of the random data generator: 1234\n");
+    ASSERT_TRUE(seed);
     ASSERT_EQ(1234, seed);
+}
+
+TEST_F(environment_parsersTest, can_force_seed_to_zero)
+{
+    const boost::optional<int> seed = parse_airy("seed of the random data generator: none\n");
+    ASSERT_FALSE(seed);
 }
 
 TEST_F(environment_parsersTest, can_parse_depth_for_wave_models)

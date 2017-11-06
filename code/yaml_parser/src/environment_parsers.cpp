@@ -266,16 +266,41 @@ YamlCos2s            parse_cos2s(const std::string& yaml)
     return ret;
 }
 
-int                  parse_airy(const std::string& yaml)
+boost::optional<int>                  parse_airy(const std::string& yaml)
 {
-    int ret = 0;
+    boost::optional<int> ret;
     try
     {
         std::stringstream stream(yaml);
         YAML::Parser parser(stream);
         YAML::Node node;
         parser.GetNextDocument(node);
-        ret = (int)try_to_parse_positive_integer(node, "seed of the random data generator");
+        try
+        {
+            ret = (int)try_to_parse_positive_integer(node, "seed of the random data generator");
+        }
+        catch(std::exception& e)
+        {
+            try
+            {
+                std::string none;
+                try_to_parse<std::string>(node, "seed of the random data generator", none);
+                if (none != "none")
+                {
+                    throw(e);
+                }
+                if (ret)
+                {
+                }
+                else
+                {
+                }
+            }
+            catch(...)
+            {
+                throw(e);
+            }
+        }
     }
     catch(std::exception& e)
     {

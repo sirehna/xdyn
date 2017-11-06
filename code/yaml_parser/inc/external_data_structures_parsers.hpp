@@ -26,4 +26,9 @@ void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f);
 void operator >> (const YAML::Node& node, YamlBlockedDOF& b);
 YamlBlockedDOF parse(const std::string& yaml);
 
+template <typename T> void try_to_parse(const YAML::Node& node, const std::string& key, T& value)
+{
+    const YAML::Node * n = node.FindValue(key);
+    if (n) (*n) >> value;
+}
 #endif /* EXTERNAL_DATA_STRUCTURES_PARSERS_HPP_ */

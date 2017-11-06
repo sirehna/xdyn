@@ -375,9 +375,10 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
 - `model` : actuellement, ne peut valoir qu'`airy`.
 - `stretching` : voir le paragraphe ci-dessous.
 - `depth` : profondeur (distance entre le fond et la surface). 0 pour
-l'approximation "profondeur infinie". Utilisé pour le calcul du nombre d'onde.
+  l'approximation "profondeur infinie". Utilisé pour le calcul du nombre d'onde.
 - `seed of the random data generator` : germe utilisé pour la génération des
-phases aléatoires.
+  phases aléatoires. Si l'on donne `none` comme valeur toutes les phases
+  aléatoires seront nulles (utilisé principalement pour les tests).
 - `directional spreading` : étalement directionnel. Cf. infra.
 - `spectral density` : densité spectrale de puissance. Cf. infra.
 

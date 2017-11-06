@@ -33,12 +33,6 @@ size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& 
     return (size_t)x;
 }
 
-template <typename T> void try_to_parse(const YAML::Node& node, const std::string& key, T& value)
-{
-    const YAML::Node * n = node.FindValue(key);
-    if (n) (*n) >> value;
-}
-
 void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::string& name)
 {
     YamlCoordinates c;

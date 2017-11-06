@@ -36,8 +36,15 @@ boost::optional<TR1(shared_ptr)<WaveModel> > WaveModelBuilder<Airy>::try_to_pars
     boost::optional<TR1(shared_ptr)<WaveModel> > ret;
     if (model == "airy")
     {
-        const int seed = parse_airy(yaml);
-        ret.reset(TR1(shared_ptr)<WaveModel>(new Airy(spectrum,seed)));
+        const boost::optional<int> seed = parse_airy(yaml);
+        if (seed)
+        {
+            ret.reset(TR1(shared_ptr)<WaveModel>(new Airy(spectrum,*seed)));
+        }
+        else
+        {
+            ret.reset(TR1(shared_ptr)<WaveModel>(new Airy(spectrum,0.0)));
+        }
     }
     return ret;
 }
