@@ -78,7 +78,7 @@ ForceTester::ForceTester(const std::string& yaml, const std::string& stl) :
     env = sys.get_env();
 }
 
-std::vector<double> ForceTester::set_states(const double x, const double y,
+std::vector<double> get_states(const double x, const double y,
         const double z, const double phi, const double theta, const double psi)
 {
     std::vector<double> states(13, 0);
@@ -91,11 +91,18 @@ std::vector<double> ForceTester::set_states(const double x, const double y,
     c.convention.push_back("z");
     c.convention.push_back("y'");
     c.convention.push_back("x''");
-    const auto quaternion = body->get_quaternions(angle, c);
+    const auto quaternion = BodyStates::convert(angle, c);
     states[QRIDX(0)] = std::get<0>(quaternion);
     states[QIIDX(0)] = std::get<1>(quaternion);
     states[QJIDX(0)] = std::get<2>(quaternion);
     states[QKIDX(0)] = std::get<3>(quaternion);
+    return states;
+}
+
+std::vector<double> ForceTester::set_states(const double x, const double y,
+        const double z, const double phi, const double theta, const double psi)
+{
+    const std::vector<double> states = get_states(x,y,z,phi,theta,psi);
     body->update(env,states,current_instant);
     current_instant += 1;
     return states;

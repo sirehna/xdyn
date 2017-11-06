@@ -11,6 +11,9 @@
 
 #include "Sim.hpp"
 
+std::vector<double> get_states(const double x, const double y,
+        const double z, const double phi, const double theta, const double psi);
+
 class ForceTester
 {
     public:
