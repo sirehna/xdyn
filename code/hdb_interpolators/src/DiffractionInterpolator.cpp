@@ -12,6 +12,14 @@
 #define PI M_PI
 
 #include "HDBParser.hpp"
+#include <algorithm>
+
+std::vector<double> reverse(std::vector<double> t);
+std::vector<double> reverse(std::vector<double> t)
+{
+    std::reverse(t.begin(), t.end());
+    return t;
+}
 
 DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Data read from the HDB file
                                              const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
@@ -27,8 +35,8 @@ DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Dat
     {
         // module.at(i) and phase.at(i) are vectors of vectors: each element in the vector of vectors corresponds to a frequency omega
         // For each omega, we have a vector containing the RAO values for each incidence
-        module.at(i) = Interpolator(data.get_diffraction_module_omegas(),data.get_diffraction_module_psis(),M_module.at(i));
-        phase.at(i) = Interpolator(data.get_diffraction_phase_omegas(),data.get_diffraction_phase_psis(),M_phase.at(i));
+        module.at(i) = Interpolator(reverse(data.get_diffraction_module_omegas()),data.get_diffraction_module_psis(),M_module.at(i));
+        phase.at(i) = Interpolator(reverse(data.get_diffraction_phase_omegas()),data.get_diffraction_phase_psis(),M_phase.at(i));
     }
 }
 

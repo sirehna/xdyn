@@ -665,7 +665,7 @@ DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& w
     return DiffractionForceModel(data, body.name, env, hdb_file_contents);
 }
 
-YamlModel ForceTests::get_regular_wave(const double propagation_angle_in_ned_frame_in_degrees, const double Hs_in_meters, const double omega_in_rad_per_s) const
+YamlModel ForceTests::get_regular_wave(const double propagation_angle_in_ned_frame_in_degrees, const double Hs_in_meters, const double Tp_in_seconds) const
 {
     YamlModel wave;
     wave.model = "waves";
@@ -688,7 +688,7 @@ YamlModel ForceTests::get_regular_wave(const double propagation_angle_in_ned_fra
        << "    spectral density:\n"
        << "       type: dirac\n"
        << "       Hs: {value: " << Hs_in_meters << ", unit: m}\n"
-       << "       omega0: {value: " << omega_in_rad_per_s << ", unit: rad/s}";
+       << "       omega0: {value: " << 2*PI/Tp_in_seconds << ", unit: rad/s}";
     wave.yaml = ss.str();
     return wave;
 }
@@ -728,9 +728,9 @@ BodyStates get_whole_body_state_with_psi_equal_to(const double psi)
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_interpolation_in_omega_no_transport)
 {
-    const YamlModel regular_waves_Hs_1_propagating_to_north_omega_equals_4 = get_regular_wave(0, 2, 2*PI/125.+1E-8);
+    const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(0, 2, 4+1E-5);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_omega_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
 
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 0;
@@ -741,7 +741,8 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_in
     // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   0.000000)
     // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
     const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
-    const double eps = 1E-5;
+    const double eps = 1E-4;
+
     ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(phase[0]), tau.X(), eps);
     ASSERT_SMALL_RELATIVE_ERROR(module[1]*sin(phase[1]),  tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(module[2]*sin(phase[2]),  tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
@@ -752,9 +753,9 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_in
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_interpolation_in_omega_no_transport)
 {
-    const YamlModel regular_waves_Hs_1_propagating_to_north_omega_equals_4 = get_regular_wave(-30, 2, 2*PI/125.+1E-8);
+    const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(-30, 2, 4+1E-5);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_omega_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 0;
     const auto tau = F(states, t);
@@ -764,7 +765,7 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_in
     // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   30.00000)
     // 2.077326E+00 -5.459499E-01  1.525810E+00 -6.670656E-01  1.375271E+00 -5.846877E-01
     const std::vector<double> phase = {2.077326E+00, -5.459499E-01,  1.525810E+00, -6.670656E-01,  1.375271E+00, -5.846877E-01};
-    const double eps = 1E-5;
+    const double eps = 1E-4;
     ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(phase[0]), tau.X(), eps);
     ASSERT_SMALL_RELATIVE_ERROR(module[1]*sin(phase[1]),  tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(module[2]*sin(phase[2]),  tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
@@ -775,9 +776,9 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_in
 
 TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_omega_no_transport)
 {
-    const YamlModel regular_waves_Hs_1_propagating_to_north_omega_equals_4 = get_regular_wave(-15, 2, 2*PI/125.+1E-8);
+    const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(-15, 2, 4+1E-5);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_omega_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 0;
     const auto tau = F(states, t);
@@ -803,7 +804,7 @@ TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_omega
         , (-8.356066E-01+ 1.375271E+00)/2
         , (1.570796E+00-5.846877E-01)/2
         };
-    const double eps = 1E-5;
+    const double eps = 1E-3;
     ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(phase[0]), tau.X(), eps);
     ASSERT_SMALL_RELATIVE_ERROR(module[1]*sin(phase[1]),  tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(module[2]*sin(phase[2]),  tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
