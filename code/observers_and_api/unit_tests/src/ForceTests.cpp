@@ -741,10 +741,11 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_in
     // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   0.000000)
     // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
     const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
-    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(phase[0]), tau.X(), 1E-5);
-    ASSERT_SMALL_RELATIVE_ERROR(module[1]*sin(phase[1]),  tau.Y(), 1E-5); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(module[2]*sin(phase[2]),  tau.Z(), 1E-5); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(phase[3]), tau.K(), 1E-5);
-    ASSERT_SMALL_RELATIVE_ERROR(module[4]*sin(phase[4]),  tau.M(), 1E-5); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(module[5]*sin(phase[5]),  tau.N(), 1E-5); // Z is down for X-DYN and up for AQUA+
+    const double eps = 1E-5;
+    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(phase[0]), tau.X(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(module[1]*sin(phase[1]),  tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(module[2]*sin(phase[2]),  tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(phase[3]), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(module[4]*sin(phase[4]),  tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(module[5]*sin(phase[5]),  tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
