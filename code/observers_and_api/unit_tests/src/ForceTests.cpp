@@ -772,3 +772,42 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_in
     ASSERT_SMALL_RELATIVE_ERROR(module[4]*sin(phase[4]),  tau.M(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(module[5]*sin(phase[5]),  tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
+
+TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_omega_no_transport)
+{
+    const YamlModel regular_waves_Hs_1_propagating_to_north_omega_equals_4 = get_regular_wave(-15, 2, 2*PI/125.+1E-8);
+    const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
+    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_omega_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const auto states = get_whole_body_state_with_psi_equal_to(0);
+    const double t = 0;
+    const auto tau = F(states, t);
+    // Interpolate at 15° using the following lines of the HDB file (see two previous tests):
+    // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
+    // 8.567009E+04  3.284304E+05  5.820626E+05  1.460688E+06  3.140660E+07  2.301511E+07
+    const std::vector<double> module =
+        { (5.084407E+04+8.567009E+04)/2
+        , (0.000000E+00+3.284304E+05)/2
+        , (3.997774E+05+5.820626E+05)/2
+        , (0.000000E+00+1.460688E+06)/2
+        , (3.209051E+07+3.140660E+07)/2
+        , (0.000000E+00+2.301511E+07)/2
+        };
+    // Interpolate at 15° using the following lines of the HDB file (see two previous tests):
+    // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
+    // 2.077326E+00 -5.459499E-01  1.525810E+00 -6.670656E-01  1.375271E+00 -5.846877E-01
+    const std::vector<double> phase =
+        { (-1.135123E+00+2.077326E+00)/2
+        , (1.570796E+00-5.459499E-01)/2
+        , (-8.389206E-01+ 1.525810E+00)/2
+        , (1.570796E+00-6.670656E-01)/2
+        , (-8.356066E-01+ 1.375271E+00)/2
+        , (1.570796E+00-5.846877E-01)/2
+        };
+    const double eps = 1E-5;
+    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(phase[0]), tau.X(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(module[1]*sin(phase[1]),  tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(module[2]*sin(phase[2]),  tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(phase[3]), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(module[4]*sin(phase[4]),  tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(module[5]*sin(phase[5]),  tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+}
