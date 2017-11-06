@@ -56,7 +56,7 @@ ssc::kinematics::EulerAngles BodyStates::convert(const ssc::kinematics::Rotation
     return EulerAngles();
 }
 
-std::tuple<double,double,double,double> BodyStates::convert(const ssc::kinematics::EulerAngles& R, const YamlRotation& rotations) const
+std::tuple<double,double,double,double> BodyStates::convert(const ssc::kinematics::EulerAngles& R, const YamlRotation& rotations)
 {
     using namespace ssc::kinematics;
     if (rotations.order_by == "angle")

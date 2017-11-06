@@ -56,7 +56,7 @@ struct BodyStates : AbstractStates<History>
     ssc::kinematics::EulerAngles get_angles(const YamlRotation& c) const;
     ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const size_t idx, const YamlRotation& c) const;
     static ssc::kinematics::EulerAngles convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations);
-    std::tuple<double,double,double,double> convert(const ssc::kinematics::EulerAngles& R, const YamlRotation& rotations) const;
+    static std::tuple<double,double,double,double> convert(const ssc::kinematics::EulerAngles& R, const YamlRotation& rotations);
     ssc::kinematics::RotationMatrix get_rot_from_ned_to_body() const;
     ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t idx) const;
     YamlRotation convention;  //!< Rotation convention
