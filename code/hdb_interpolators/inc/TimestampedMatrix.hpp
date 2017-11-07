@@ -19,8 +19,8 @@ typedef std::vector<TimestampedMatrix> TimestampedMatrices;
 
 struct RAOData
 {
-    RAOData() : omega(), psi(), values() {}
-    std::vector<double> omega;
+    RAOData() : periods(), psi(), values() {}
+    std::vector<double> periods;
     std::vector<double> psi;
     std::array<std::vector<std::vector<double> >, 6 > values;
 };

@@ -174,7 +174,7 @@ class HDBParser::Impl
 
         RAOData get_rao(const std::string& section_name, const std::string& subsections) const
         {
-            std::set<double> omegas, psi;
+            std::set<double> periods, psi;
             RAOData ret;
             for (auto ms:tree.lists_of_matrix_sections_with_id)
             {
@@ -187,28 +187,28 @@ class HDBParser::Impl
                         {
                             psi.insert(s.id*PI/180.);
                             std::array<std::vector<double>,6> psi_for_each_axis;
-                            size_t omega_idx = 0;
+                            size_t period_idx = 0;
                             for (auto v:s.values)
                             {
-                                omegas.insert(2*PI/v.front());
+                                periods.insert(v.front());
                                 for (size_t j = 0 ; j < 6 ; ++j)
                                 {
-                                    if (ret.values.at(j).size()<omega_idx+1) ret.values.at(j).push_back(std::vector<double>());
-                                    if (ret.values.at(j).at(omega_idx).size()<psi_idx+1) ret.values.at(j).at(omega_idx).resize(psi_idx+1);
-                                    ret.values.at(j).at(omega_idx).at(psi_idx) = v.at(j+1);
+                                    if (ret.values.at(j).size()<period_idx+1) ret.values.at(j).push_back(std::vector<double>());
+                                    if (ret.values.at(j).at(period_idx).size()<psi_idx+1) ret.values.at(j).at(period_idx).resize(psi_idx+1);
+                                    ret.values.at(j).at(period_idx).at(psi_idx) = v.at(j+1);
                                 }
-                                omega_idx++;
+                                period_idx++;
                             }
                             psi_idx++;
                         }
                     }
                 }
             }
-            std::list<double> omega_l(omegas.begin(), omegas.end());
-            omega_l.sort();
-            ret.omega.insert(ret.omega.begin(),omega_l.begin(), omega_l.end());
+            std::list<double> period_list(periods.begin(), periods.end());
+            period_list.sort();
+            ret.periods.insert(ret.periods.begin(),period_list.begin(), period_list.end());
             std::list<double> psi_l(psi.begin(), psi.end());
-            omega_l.sort();
+            period_list.sort();
             ret.psi.insert(ret.psi.begin(),psi_l.begin(), psi_l.end());
             return ret;
         }
@@ -294,7 +294,7 @@ class HDBParser::Impl
 
         std::vector<double> get_diffraction_phase_omegas() const
         {
-            return diffraction_phase.omega;
+            return diffraction_phase.periods;
         }
 
         std::vector<double> get_diffraction_module_psis() const
@@ -304,7 +304,7 @@ class HDBParser::Impl
 
         std::vector<double> get_diffraction_module_omegas() const
         {
-            return diffraction_module.omega;
+            return diffraction_module.periods;
         }
 
         std::vector<double> get_froude_krylov_phase_psis() const
@@ -314,7 +314,7 @@ class HDBParser::Impl
 
         std::vector<double> get_froude_krylov_phase_omegas() const
         {
-            return froude_krylov_phase.omega;
+            return froude_krylov_phase.periods;
         }
 
         std::vector<double> get_froude_krylov_module_psis() const
@@ -324,7 +324,7 @@ class HDBParser::Impl
 
         std::vector<double> get_froude_krylov_module_omegas() const
         {
-            return froude_krylov_module.omega;
+            return froude_krylov_module.periods;
         }
 
         std::vector<double> omega_rad;
@@ -435,7 +435,7 @@ std::vector<double> HDBParser::get_diffraction_phase_psis() const
     return pimpl->get_diffraction_phase_psis();
 }
 
-std::vector<double> HDBParser::get_diffraction_phase_omegas() const
+std::vector<double> HDBParser::get_diffraction_phase_periods() const
 {
     return pimpl->get_diffraction_phase_omegas();
 }
@@ -445,7 +445,7 @@ std::vector<double> HDBParser::get_diffraction_module_psis() const
     return pimpl->get_diffraction_module_psis();
 }
 
-std::vector<double> HDBParser::get_diffraction_module_omegas() const
+std::vector<double> HDBParser::get_diffraction_module_periods() const
 {
     return pimpl->get_diffraction_module_omegas();
 }

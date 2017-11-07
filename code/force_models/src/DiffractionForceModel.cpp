@@ -19,6 +19,7 @@
 #include <ssc/text_file_reader.hpp>
 
 #include <array>
+#define TWOPI 6.283185307179586232
 
 std::string DiffractionForceModel::model_name() { return "diffraction";}
 
@@ -26,6 +27,45 @@ HDBParser hdb_from_file(const std::string& filename);
 HDBParser hdb_from_file(const std::string& filename)
 {
     return HDBParser(ssc::text_file_reader::TextFileReader(filename).get_contents());
+}
+
+void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
+void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound)
+{
+    const double eps = 0.01; // We don't care if we're above or below the bounds by 0.01 s: those are wave frequencies so not very precise.
+    for (auto t:vector_to_check)
+    {
+        for (auto Tp:t)
+        {
+            if (Tp<(min_bound-eps))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "HDB used by DiffractionForceModel only defines the RAO for wave period Tp within [" << min_bound << "," << max_bound << "]"
+                     << " s, but wave spectrum discretization contains Tp = " << Tp
+                     << " s which is below the min bound by " << min_bound-Tp << " s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file ")
+                ;
+            }
+            if (Tp>(max_bound+eps))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "HDB used by DiffractionForceModel only defines the RAO for wave period Tp within [" << min_bound << "," << max_bound << "]"
+                     << " s, but wave spectrum discretization contains Tp = " << Tp
+                     << " s which is above the max bound by " << Tp-max_bound << " s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file ")
+                ;
+            }
+        }
+    }
+}
+
+std::vector<std::vector<double> > convert_to_periods(std::vector<std::vector<double> > angular_frequencies);
+std::vector<std::vector<double> > convert_to_periods(std::vector<std::vector<double> > angular_frequencies)
+{
+    for (auto& omegas:angular_frequencies)
+    {
+        for (auto& omega:omegas)
+        {
+            omega = TWOPI/omega;
+        }
+    }
+    return angular_frequencies;
 }
 
 
@@ -36,27 +76,14 @@ class DiffractionForceModel::Impl
         Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env_, const HDBParser& hdb) : initialized(false), env(env_),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
         rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
-        omegas(),
+        periods(),
         psis()
         {
             if (env.w.use_count()>0)
             {
-                omegas = env.w->get_wave_angular_frequency_for_each_model();
-                const auto omegas_hdb = hdb.get_diffraction_module_omegas();
-                for (auto o:omegas)
-                {
-                    for (auto omega:o)
-                    {
-                        if ((omega<omegas_hdb.front()) or (omega>omegas_hdb.back()))
-                        {
-                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                                    "HDB only defines the RAO for angular frequencies omega within [" << omegas_hdb.front() << "," << omegas_hdb.back() << "] "
-                                 << " Rad/s, but wave spectrum discretization contains omega=" << omega
-                                 << " Rad/s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file"
-                            );
-                        }
-                    }
-                }
+                periods = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
+                const auto hdb_periods = hdb.get_diffraction_module_periods();
+                check_all_omegas_are_within_bounds(hdb_periods.front(), periods, hdb_periods.back());
                 psis = env.w->get_wave_directions_for_each_model();
             }
             else
@@ -76,27 +103,26 @@ class DiffractionForceModel::Impl
             std::array<std::vector<std::vector<double> >, 6 > rao_phases;
             if (env.w.use_count()>0)
             {
-                if (not(omegas.empty()))
+                if (not(periods.empty()))
                 {
 
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
-                        rao_modules[k].resize(omegas.size());
-                        rao_phases[k].resize(omegas.size());
+                        rao_modules[k].resize(periods.size());
+                        rao_phases[k].resize(periods.size());
                     }
                 }
                 for (size_t k = 0 ; k < 6 ; ++k)
                 {
-                    for (size_t i = 0 ; i < omegas.size() ; ++i)
+                    for (size_t i = 0 ; i < periods.size() ; ++i)
                     {
-                        rao_modules[k][i].resize(omegas[i].size());
-                        rao_phases[k][i].resize(omegas[i].size());
-                        for (size_t j = 0 ; j < omegas[i].size() ; ++j)
+                        rao_modules[k][i].resize(periods[i].size());
+                        rao_phases[k][i].resize(periods[i].size());
+                        for (size_t j = 0 ; j < periods[i].size() ; ++j)
                         {
                             const double beta = psi - psis.at(i).at(j);
-
-                                rao_modules[k][i][j] = rao.interpolate_module(k, omegas[i][j], beta);
-                                rao_phases[k][i][j] = rao.interpolate_phase(k, omegas[i][j], beta);
+                                rao_modules[k][i][j] = rao.interpolate_module(k, periods[i][j], beta);
+                                rao_phases[k][i][j] = rao.interpolate_phase(k, periods[i][j], beta);
                         }
                     }
                     w((int)k) = env.w->evaluate_rao(H.x(),
@@ -124,7 +150,7 @@ class DiffractionForceModel::Impl
         EnvironmentAndFrames env;
         Eigen::Vector3d H0;
         DiffractionInterpolator rao;
-        std::vector<std::vector<double> > omegas;
+        std::vector<std::vector<double> > periods;
         std::vector<std::vector<double> > psis;
 
 };

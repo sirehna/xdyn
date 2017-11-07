@@ -30,13 +30,14 @@ DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Dat
     const auto M_module = data.get_diffraction_module_tables();
     const auto M_phase = data.get_diffraction_phase_tables();
 
+    const bool allow_queries_outside_bounds = true;
     // For each axis (X,Y,Z,phi,theta,psi)
     for (size_t i = 0 ; i < 6 ; ++i)
     {
         // module.at(i) and phase.at(i) are vectors of vectors: each element in the vector of vectors corresponds to a frequency omega
         // For each omega, we have a vector containing the RAO values for each incidence
-        module.at(i) = Interpolator(reverse(data.get_diffraction_module_omegas()),data.get_diffraction_module_psis(),M_module.at(i));
-        phase.at(i) = Interpolator(reverse(data.get_diffraction_phase_omegas()),data.get_diffraction_phase_psis(),M_phase.at(i));
+        module.at(i) = Interpolator((data.get_diffraction_module_periods()),data.get_diffraction_module_psis(),M_module.at(i), allow_queries_outside_bounds);
+        phase.at(i) = Interpolator((data.get_diffraction_phase_periods()),data.get_diffraction_phase_psis(),M_phase.at(i), allow_queries_outside_bounds);
     }
 }
 
@@ -48,8 +49,8 @@ std::vector<std::vector<double> > DiffractionInterpolator::get_array_cartesian(I
         std::vector<double> v;
         for (auto psi:psis)
         {
-            if (mirror and (psi>PI)) v.push_back(i.f(omega,2*PI-psi));
-            else                     v.push_back(i.f(omega,psi));
+            if (mirror and (psi>PI)) v.push_back(i.f(2*PI/omega, 2*PI-psi));
+            else                     v.push_back(i.f(2*PI/omega, psi));
         }
         ret.push_back(v);
     }
@@ -74,8 +75,8 @@ double DiffractionInterpolator::interpolate_module(const size_t axis, const doub
     beta = beta - 2*PI * std::floor( beta / (2*PI) );
     try
     {
-        if (mirror and (beta>PI)) ret = module.at(axis).f(omega,2*PI-beta);
-                                  ret = module.at(axis).f(omega,beta);
+        if (mirror and (beta>PI)) ret = module.at(axis).f(2*PI/omega,2*PI-beta);
+                                  ret = module.at(axis).f(2*PI/omega,beta);
     }
     catch(std::exception& e)
     {
@@ -93,8 +94,8 @@ double DiffractionInterpolator::interpolate_phase(const size_t axis, const doubl
     beta = beta - 2*PI * std::floor( beta / (2*PI) );
     try
     {
-        if (mirror and (beta>PI)) ret = phase.at(axis).f(omega,2*PI-beta);
-                                  ret = phase.at(axis).f(omega,beta);
+        if (mirror and (beta>PI)) ret = phase.at(axis).f(2*PI/omega,2*PI-beta);
+                                  ret = phase.at(axis).f(2*PI/omega,beta);
     }
     catch(std::exception& e)
     {
