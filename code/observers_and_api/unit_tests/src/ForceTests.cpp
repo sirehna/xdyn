@@ -711,7 +711,7 @@ std::string ForceTests::get_diffraction_conf(const double x, const double y, con
 BodyStates get_whole_body_state_with_psi_equal_to(const double psi);
 BodyStates get_whole_body_state_with_psi_equal_to(const double psi)
 {
-    const std::vector<double> s = get_states(0,0,0,0,0,psi);
+    const std::vector<double> s = get_states(0,0,0,0,0,psi*PI/180);
     BodyStates states;
     states.x.record(0,s.at(0));
     states.y.record(0,s.at(1));
