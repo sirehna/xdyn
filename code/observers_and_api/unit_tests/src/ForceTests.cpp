@@ -850,3 +850,27 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_perio
     ASSERT_SMALL_RELATIVE_ERROR(module[4]*sin(phase[4]),  tau.M(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(module[5]*sin(phase[5]),  tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
+
+TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport)
+{
+    const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(0, 2, 4);
+    const std::string config_such_that_rao_point_is_not_zero = get_diffraction_conf(1,2,3);
+    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_not_zero, test_data::bug_3210());
+    const auto states = get_whole_body_state_with_psi_equal_to(0);
+    const double t = 0;
+    const auto tau = F(states, t);
+    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   0.000000):
+    // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
+    const std::vector<double> module = {5.084407E+04,  0.000000E+00,  3.997774E+05,  0.000000E+00,  3.209051E+07,  0.000000E+00};
+    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   0.000000)
+    // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
+    const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
+    const double k = (2*PI/4)*(2*PI/4)/9.81;
+    const double eps = 1E-5;
+    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(k+phase[0]), tau.X(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR( module[1]*sin(k+phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[2]*sin(k+phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(k+phase[3]), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR( module[4]*sin(k+phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[5]*sin(k+phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+}
