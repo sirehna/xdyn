@@ -25,6 +25,8 @@
 #include "check_input_yaml.hpp"
 #include "simulator_api.hpp"
 
+#include <ssc/macros.hpp>
+
 #define EPS (1E-8)
 
 #define _USE_MATH_DEFINE
@@ -726,7 +728,7 @@ BodyStates get_whole_body_state_with_psi_equal_to(const double psi)
     return states;
 }
 
-TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_interpolation_in_omega_no_transport)
+TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_interpolation_in_period_no_transport)
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(0, 2, 4);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
@@ -750,7 +752,7 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_in
     ASSERT_DOUBLE_EQ(module[5]*sin(phase[5]),  tau.N()); // Z is down for X-DYN and up for AQUA+
 }
 
-TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_interpolation_in_omega_no_transport)
+TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_interpolation_in_period_no_transport)
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(-30, 2, 4);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
@@ -772,7 +774,7 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_in
     ASSERT_DOUBLE_EQ(module[5]*sin(phase[5]),  tau.N()); // Z is down for X-DYN and up for AQUA+
 }
 
-TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_omega_no_transport)
+TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_period_no_transport)
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(-15, 2, 4);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
@@ -810,7 +812,7 @@ TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_omega
     ASSERT_DOUBLE_EQ(module[5]*sin(phase[5]),  tau.N()); // Z is down for X-DYN and up for AQUA+
 }
 
-TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_omega_no_transport)
+TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_period_no_transport)
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_10 = get_regular_wave(-30, 2, 10);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
