@@ -132,10 +132,10 @@ class DiffractionForceModel::Impl
                                                     rao_phases[k]);
                 }
             }
-            return ssc::kinematics::Wrench(H, express_aquaplus_wench_in_xdyn_coordinates(w));
+            return ssc::kinematics::Wrench(H, express_aquaplus_wrench_in_xdyn_coordinates(w));
         }
 
-        ssc::kinematics::Vector6d express_aquaplus_wench_in_xdyn_coordinates(ssc::kinematics::Vector6d v) const
+        ssc::kinematics::Vector6d express_aquaplus_wrench_in_xdyn_coordinates(ssc::kinematics::Vector6d v) const
         {
             v(1) = -v(1);
             v(2) = -v(2);
