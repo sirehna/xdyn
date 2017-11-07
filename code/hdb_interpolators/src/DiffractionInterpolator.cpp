@@ -69,39 +69,39 @@ std::vector<std::vector<double> > DiffractionInterpolator::get_phases_cartesian(
     return get_array_cartesian(phase.at(k));
 }
 
-double DiffractionInterpolator::interpolate_module(const size_t axis, const double omega, double beta)
+double DiffractionInterpolator::interpolate_module(const size_t axis, const double Tp, double beta)
 {
     double ret = 0;
     beta = beta - 2*PI * std::floor( beta / (2*PI) );
     try
     {
-        if (mirror and (beta>PI)) ret = module.at(axis).f(2*PI/omega,2*PI-beta);
-                                  ret = module.at(axis).f(2*PI/omega,beta);
+        if (mirror and (beta>PI)) ret = module.at(axis).f(Tp,2*PI-beta);
+                                  ret = module.at(axis).f(Tp,beta);
     }
     catch(std::exception& e)
     {
         std::stringstream ss;
         const char* ax = "XYZKMN";
-        ss << "Error interpolating RAO module for diffraction force: axis " << ax[axis] << ", omega = " << omega << ", beta = " << beta << ": "  << e.what();
+        ss << "Error interpolating RAO module for diffraction force: axis " << ax[axis] << ", Tp = " << Tp << " s, beta = " << beta*180/PI << "°: "  << e.what();
         THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     return ret;
 }
 
-double DiffractionInterpolator::interpolate_phase(const size_t axis, const double omega, double beta)
+double DiffractionInterpolator::interpolate_phase(const size_t axis, const double Tp, double beta)
 {
     double ret = 0;
     beta = beta - 2*PI * std::floor( beta / (2*PI) );
     try
     {
-        if (mirror and (beta>PI)) ret = phase.at(axis).f(2*PI/omega,2*PI-beta);
-                                  ret = phase.at(axis).f(2*PI/omega,beta);
+        if (mirror and (beta>PI)) ret = phase.at(axis).f(Tp,2*PI-beta);
+                                  ret = phase.at(axis).f(Tp,beta);
     }
     catch(std::exception& e)
     {
         std::stringstream ss;
         const char* ax = "XYZKMN";
-        ss << "Error interpolating RAO phase for diffraction force: axis " << ax[axis] << ", omega = " << omega << ", beta = " << beta << ": "  << e.what();
+        ss << "Error interpolating RAO phase for diffraction force: axis " << ax[axis] << ", Tp = " << Tp << " s, beta = " << beta*180/PI << "°: "  << e.what();
         THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     return ret;
