@@ -401,14 +401,20 @@ ordre.
   mirror for 180 to 360: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La section correspondante dans le fichier HDB est `DIFFRACTION_FORCES_AND_MOMENTS`.
+La section correspondante dans le fichier HDB est
+`DIFFRACTION_FORCES_AND_MOMENTS`. Il est à noter que le point de calcul ne
+figurant pas dans les fichiers HDB, il doit être renseigné dans le fichier YAML
+(`calculation point in body frame`) mais qu'aucune vérification ne peut être
+faite.
 
-Le point de calcul n'est pas nécessairement le centre de gravité. En revanche,
+Le point de calcul des efforts de diffraction n'est pas nécessairement le centre de gravité, ni même le point de résolution de l'équation de Newton. En revanche,
 il s'agit nécessairement d'un point fixe dans le repère du solide.
 
 Le paramètre `mirror for 180 to 360` sert à pouvoir ne spécifier que la partie
 de la RAO entre $0^{\circ}$ et $180^{\circ}$, quitte à la symétriser par rapport à
-l'axe (Ox) pour obtenir les points entre $180^{\circ}$ et $360^{\circ}$.
+l'axe (Ox) pour obtenir les points entre $180^{\circ}$ et $360^{\circ}$. En
+pratique, cela signifie que l'on prend $RAO(T_p,\beta)=RAO(Tp,2\pi-\beta)$ si
+$\beta>\pi$ et que `mirror for 180 to 360` vaut `true`.
 
 ### Références
 
