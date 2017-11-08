@@ -5,13 +5,13 @@
 Afin de connaître et décrire l'attitude d'un ou plusieurs corps dans l'espace,
 il est nécessaire de les placer par rapport à un repère de référence.
 
-### Repère de référence
+### Repère de référence (NED)
 
 Le repère `NED` (North-East-Down) est utilisé comme repère de référence,
 avec un point de référence $O$ et une base pointant les directions Nord-Est-Bas.
 Il sert à exprimer les déplacements des corps de la simulation.
 
-### Repère navire (mobile ou "body")
+### Repère navire (mobile ou "body" ou "repère de résolution")
 
 Le repère navire correspond au repère attaché au navire lors de la simulation.
 Le point de référence de ce repère correspond généralement au centre de carène
@@ -23,6 +23,11 @@ Les axes du repère navire sont les suivants:
 - $Z$ vers le bas
 
 ![](images/ShipFrame.svg "Repère navire")
+
+On résout les équations du mouvement (principe fondamental de la dynamique) à
+l'origine de ce repère, c'est-à-dire que tous les torseurs d'effort sont
+déplacés au point (0,0,0) du repère "body". De même, les matrices d'inertie et
+de masse ajoutée sont déplacées au point de résolution.
 
 ### Repère NED local
 
