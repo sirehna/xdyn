@@ -312,41 +312,6 @@ d'efforts du premier ordre). La principale différence entre les efforts de
 radiation et les efforts de diffraction est l'écriture de la condition aux
 limites.
 
-### Conventions
-
-Les RAO dépendent des conventions (repère, origine des phases, provenance vs.
-propagation, signe des angles). Or la convention utilisée ne figure pas dans le
-format HDB. Comme les RAO que l'on utilise actuellement proviennent
-exculsivement du logiciel AQUA+, dans la version actuelle X-DYN suppose que la
-convention utilisée est celle d'AQUA+ (qui est aussi celle du logiciel DIODORE).
-
-![](images/convention_aqua+.svg)
-
-La différence entre la convention de X-DYN et celle d'AQUA+ est que l'axe $z$
-est ascendant pour AQUA+ et descendant pour X-DYN. L'angle de la houle
-représente bien dans les deux cas une direction de propagation (et non de
-provenance). Le potentiel des vitesses de la houle est, dans X-DYN comme dans
-AQUA+ :
-
-$$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
-{\cosh(k\cdot h)}\cos(k\cdot(x\cdot
-\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
-
-Toutes les données issues des fichiers HDB d'AQUA+ et DIODORE sont données en
-convention *z vers le haut* : par conséquent, il faut effectuer un changement de
-repère (rotation de $\pi$ autour de l'axe $X$) pour les mettre dans le repère
-d'X-DYN (*z vers le bas*). La matrice de changement de base est :
-
-$$R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]$$
-
-* Pour les vecteurs
-$$\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{X-DYN}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{X-DYN}}$$
-* Pour les matrices (masses ajoutées, amortissements...)
-  Si $M=((m_{ij}))$ désigne une matrice exprimée dans le repère AQUA+ et $M_d$ la même matrice
-  exprimée dans le repère X-DYN, on a :
-  $$M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]$$
-
-
 ### Calcul numérique
 
 Les RAO d'efforts sont lues à partir d'un fichier HDB. Cette table donne, une
@@ -435,6 +400,8 @@ ordre.
       z: {value: 1.418, unit: m}
   mirror for 180 to 360: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La section correspondante dans le fichier HDB est `DIFFRACTION_FORCES_AND_MOMENTS`.
 
 Le point de calcul n'est pas nécessairement le centre de gravité. En revanche,
 il s'agit nécessairement d'un point fixe dans le repère du solide.

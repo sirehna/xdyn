@@ -533,7 +533,7 @@ La matrice de masses ajoutées n'est cependant pas équivalente à une masse sup
 les termes de Coriolis et centripète qui correspondraient ne sont pas pris en compte.
 
 Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
-à partir d'un fichier HDB. Pour cela, on écrit (pour lire depuis le fichier
+à partir d'un fichier de sortie AQUA+ (format HDB). Pour cela, on écrit (pour lire depuis le fichier
 `anthineas.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -545,13 +545,128 @@ Dans ce cas, il ne faut pas spécifier les clefs `frame` et `row` (le programme
 lance une exception si on le fait).
 Comme le fichier STL, le chemin du fichier HDB est relatif à l'endroit d'où on
 lance l'exécutable.
+La section correspondante dans le fichier HDB est `Added_mass_Radiation_Damping`.
+La valeur utilisée est la matrice de masse ajoutée à la période minimale définie
+dans le HDB (aucune extrapolation n'est faite).
 
-Les fichiers HDB ne spécifient pas leur repère de calcul. Plutôt que de laisser
-l'utilisateur la spécifier (avec les risques d'erreur que cela comporte) ou de la
-détecter automatiquement, on suppose pour X-DYN que les fichiers HDB ont été générés
-soit par DIODORE, soit par AQUA+ qui ont la même convention (z vers le haut).
-Le repère dans lequel sont exprimées toutes les matrices de tous les fichiers HDB
-lus par X-DYN est donc : x longitudinal, y vers babord et z vers le haut.
+### Forçage de degrés de liberté
+
+Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
+P, Q, R.
+
+Pour forcer les degrés de liberté, on ajoute la section (facultative) suivante
+à la section `body` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+blocked dof:
+   from CSV:
+     - state: u
+       t: T
+       value: PS
+       interpolation: spline
+       filename: test.csv
+   from YAML:
+     - state: p
+       t: [4.2]
+       value: [5]
+       interpolation: piecewise constant
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Soit les états sont donnés directement dans le fichier YAML, soit ils sont lus
+depuis un fichier CSV.
+- `name`: nom de l'état à forcer. u, v, w, p, q ou r.
+
+Si les valeurs des états sont dans le YAML :
+
+- `value`: Valeur de l'état forcé pour chaque instant
+   (dans l'exemple ci-dessus, u=5 pour t $\geq$ 4.2).
+- `t`: instants auxquels est défini l'état
+- `interpolation`: type d'interpolation à réaliser. `piecewise constant`,
+  `linear` ou `spline`.
+
+Si les valeurs sont lues depuis un fichier CSV :
+
+- `filename`: nom du fichier contenant les valeurs forcées. Le chemin du
+  fichier s'entend relativement à l'endroit d'où est lancé le simulateur.
+- `value`: nom de la colonne contenant les valeurs à lire
+- `t`: nom de la colonne contenant le temps
+- `interpolation`: type d'interpolation à réaliser. `piecewise constant`,
+  `linear` ou `spline`.
+
+Pour les valeurs de t hors de l'intervalle [tmin,tmax], l'état est supposé
+libre (non forcé).
+
+Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
+l'effort permettant de conserver les forçages, en d'autres termes il est
+possible de récupérer
+
+$$(M+M_a)\dot{X_{\textrm{forced}}} - \sum F_i$$
+
+Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
+corps s'appelle 'Anthineas):
+
+- `Fx(blocked states,Anthineas,Anthineas)`
+- `Fy(blocked states,Anthineas,Anthineas)`
+- `Fz(blocked states,Anthineas,Anthineas)`
+- `Mx(blocked states,Anthineas,Anthineas)`
+- `My(blocked states,Anthineas,Anthineas)`
+- `Mz(blocked states,Anthineas,Anthineas)`
+
+Il est à noter que ces efforts sont exprimés dans le repère BODY.
+
+
+## Fichiers HDB d'AQUA+
+
+Les fichiers HDB (Hydrodynamic DataBase) sont générés par les programmes AQUA+ et DIODORE. Ces fichiers
+peuvent être utilisés par X-DYN pour calculer :
+
+- les masses ajoutées (cf. paragraphe précédent)
+- les amortissements de radiation
+- les efforts de diffraction (RAO)
+
+### Conventions des fichiers HDB
+
+Les fichiers HDB ne spécifient ni leur repère de calcul, ni les points
+d'expression. Plutôt que de laisser l'utilisateur la spécifier (avec les risques
+d'erreur que cela comporte) ou de la détecter automatiquement, on suppose pour
+X-DYN que les fichiers HDB ont été générés par AQUA+ (convention "z vers le
+haut"). Le repère dans lequel sont exprimées toutes les matrices de tous les
+fichiers HDB lus par X-DYN est donc : x longitudinal, y vers babord et z vers le
+haut.
+
+![](images/convention_aqua+.svg)
+
+Les RAO dépendent des conventions (repère, origine des phases, provenance vs.
+propagation, signe des angles). Or la convention utilisée ne figure pas dans le
+format HDB. Comme les RAO que l'on utilise actuellement proviennent
+exculsivement du logiciel AQUA+, dans la version actuelle X-DYN suppose que la
+convention utilisée est celle d'AQUA+.
+
+La différence entre la convention de X-DYN et celle d'AQUA+ est que l'axe $z$
+est ascendant pour AQUA+ et descendant pour X-DYN. L'angle de la houle
+représente bien dans les deux cas une direction de propagation (et non de
+provenance). Le potentiel des vitesses de la houle est, dans X-DYN comme dans
+AQUA+ :
+
+$$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+{\cosh(k\cdot h)}\cos(k\cdot(x\cdot
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+
+Toutes les données issues des fichiers HDB sont données en
+convention *z vers le haut* : par conséquent, il faut effectuer un changement de
+repère (rotation de $\pi$ autour de l'axe $X$) pour les mettre dans le repère
+d'X-DYN (*z vers le bas*). La matrice de changement de base est :
+
+$$R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]$$
+
+* Pour les vecteurs
+$$\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{X-DYN}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{X-DYN}}$$
+* Pour les matrices (masses ajoutées, amortissements...)
+  Si $M=((m_{ij}))$ désigne une matrice exprimée dans le repère AQUA+ et $M_d$ la même matrice
+  exprimée dans le repère X-DYN, on a :
+  $$M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]$$
+
+
 Par conséquent, toutes les matrices lues depuis le fichier HDB (masses ajoutées
 et amortissement de radiation) subissent un changement de repère décrit au
 paragraphe suivant.
@@ -672,70 +787,122 @@ $$
 
 Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid body shift of rigid body spatial inertia
 
-### Forçage de degrés de liberté
+### Structure des fichiers HDB
 
-Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
-P, Q, R.
+Les fichiers HDB sont des sorties générées par un code un Fortran 77. Aucune
+spécification formelle de ce format n'existe. Pour pouvoir les importer dans
+X-DYN, leur grammaire EBNF a été déduite de l'analyse de plusieurs fichiers
+(reverse-engineering). Cette grammaire, qui permet de parser tous les fichiers
+HDB qui nous ont été fournis jusqu'ici, peut être représentée comme suit (sans
+garantie d'exhaustivité) :
 
-Pour forcer les degrés de liberté, on ajoute la section (facultative) suivante
-à la section `body` :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-blocked dof:
-   from CSV:
-     - state: u
-       t: T
-       value: PS
-       interpolation: spline
-       filename: test.csv
-   from YAML:
-     - state: p
-       t: [4.2]
-       value: [5]
-       interpolation: piecewise constant
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bnf}
+ast                             = string-key
+                                | value-key
+                                | vector-section
+                                | matrix-section
+                                | list-of-matrix-sections
+                                | list-of-matrix-sections-with-id;
+str                             = character , +extended-char , *" "  , +extended-char;
+header                          = "[" , str , "]";
+string-key                      = header , str , -eol;
+value-key                       = header , double , -eol;
+values                          = double_ , +double , -eol;
+vector-section                  = header , eol , +(double , eol) , -eol;
+matrix-section                  = header , eol , +(*(eol, values)) , -eol;
+list-of-matrix-sections         = header , eol , +matrix-section , -eol;
+section-with-id                 = header , double , eol , *(eol, values) , -eol;
+list-of-matrix-sections-with-id = header , eol , +(header , double , eol , +(*(eol, values)));
+character                       = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+                                | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+                                | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+                                | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+                                | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+                                | "j" | "k" | "l" | "m" | "n" | "O" | "p"
+                                | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+                                | "x" | "y" | "z" | "_";
+extended-char                   = character | "-" | "+"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Soit les états sont donnés directement dans le fichier YAML, soit ils sont lus
-depuis un fichier CSV.
-- `name`: nom de l'état à forcer. u, v, w, p, q ou r.
+Les fichiers HDB sont donc constituées d'une liste d'éléments, ces éléments
+étant pouvant être de type `string-key`, `value-key`, `vector-section`,
+`matrix-section`, `list-of-matrix-sections` ou
+`list-of-matrix-sections-with-id`. X-DYN ne tient pas compte de l'ordre dans
+lequel sont ces éléments (mais aucune garantie ne peut être fournie pour
+d'éventuels autres outils utilisant les HDB).
 
-Si les valeurs des états sont dans le YAML :
+#### Exemple de "string-key"
 
-- `value`: Valeur de l'état forcé pour chaque instant
-   (dans l'exemple ci-dessus, u=5 pour t $\geq$ 4.2).
-- `t`: instants auxquels est défini l'état
-- `interpolation`: type d'interpolation à réaliser. `piecewise constant`,
-  `linear` ou `spline`.
+~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+ [SOFT] AQUA+
+~~~~~~~~~~~~~~~~~~~~~
 
-Si les valeurs sont lues depuis un fichier CSV :
+#### Exemple de "value-key"
 
-- `filename`: nom du fichier contenant les valeurs forcées. Le chemin du
-  fichier s'entend relativement à l'endroit d'où est lancé le simulateur.
-- `value`: nom de la colonne contenant les valeurs à lire
-- `t`: nom de la colonne contenant le temps
-- `interpolation`: type d'interpolation à réaliser. `piecewise constant`,
-  `linear` ou `spline`.
+~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+[FORWARD_SPEED]   0.00
+~~~~~~~~~~~~~~~~~~~~~
 
-Pour les valeurs de t hors de l'intervalle [tmin,tmax], l'état est supposé
-libre (non forcé).
+#### Exemple de "vector-section"
 
-Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
-l'effort permettant de conserver les forçages, en d'autres termes il est
-possible de récupérer
+~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+ [List_calculated_periods]
+   4.00
+  64.00
+ 125.00
+~~~~~~~~~~~~~~~~~~~~~
 
-$$(M+M_a)\dot{X_{\textrm{forced}}} - \sum F_i$$
+#### Exemple de "matrix-section"
 
-Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
-corps s'appelle 'Anthineas):
+~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+[Mass_Inertia_matrix]
+ 8.635000E+06  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+000.000000E+00
+ 0.000000E+00  8.635000E+06  0.000000E+00  0.000000E+00  0.000000E+000.000000E+00
+ 0.000000E+00  0.000000E+00  8.635000E+06  0.000000E+00  0.000000E+000.000000E+00
+ 0.000000E+00  0.000000E+00  0.000000E+00  4.149000E+08  0.000000E+000.000000E+00
+ 0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  1.088000E+100.000000E+00
+ 0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  1.088000E+10
+~~~~~~~~~~~~~~~~~~~~~
 
-- `Fx(blocked states,Anthineas,Anthineas)`
-- `Fy(blocked states,Anthineas,Anthineas)`
-- `Fz(blocked states,Anthineas,Anthineas)`
-- `Mx(blocked states,Anthineas,Anthineas)`
-- `My(blocked states,Anthineas,Anthineas)`
-- `Mz(blocked states,Anthineas,Anthineas)`
+#### Exemple de "list-of-matrix-sections"
 
-Il est à noter que ces efforts sont exprimés dans le repère BODY.
+~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+[Added_mass_Radiation_Damping]
+[ADDED_MASS_LINE_1]
+   4.00  8.770898E+04  0.000000E+00  2.122348E+05  0.000000E+00  1.844677E+07  0.000000E+00
+  64.00  2.356385E+05  0.000000E+00  3.063730E+05  0.000000E+00  6.103379E+07  0.000000E+00
+ 125.00  2.334437E+05  0.000000E+00  3.058729E+05  0.000000E+00  6.044752E+07  0.000000E+00
+[ADDED_MASS_LINE_2]
+   4.00  0.000000E+00  2.406631E+06  0.000000E+00 -1.298266E+06  0.000000E+00  2.894931E+07
+  64.00  0.000000E+00  7.130066E+06  0.000000E+00 -3.516670E+06  0.000000E+00  9.536960E+07
+ 125.00  0.000000E+00  7.100760E+06  0.000000E+00 -3.493418E+06  0.000000E+00  9.499156E+07
+~~~~~~~~~~~~~~~~~~~~~
+
+#### Exemple de "list-of-matrix-sections-with-id"
+
+~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+[FROUDE-KRYLOV_FORCES_AND_MOMENTS]
+[INCIDENCE_EFM_MOD_001]   0.000000    
+  4.00  6.452085E+04  0.000000E+00  3.775068E+05  0.000000E+00  2.630894E+07  0.000000E+00
+ 64.00  8.296234E+04  0.000000E+00  2.098381E+07  0.000000E+00  1.280202E+08  0.000000E+00
+125.00  2.179682E+04  0.000000E+00  2.105635E+07  0.000000E+00  1.258710E+08  0.000000E+00
+[INCIDENCE_EFM_MOD_001]   30.00000    
+  4.00  5.988292E+04  3.453055E+04  5.220861E+05  6.375514E+05  2.533077E+07  1.149621E+06
+ 64.00  7.185571E+04  4.148640E+04  2.098683E+07  7.927488E+04  1.274491E+08  3.394846E+04
+125.00  1.887675E+04  1.089865E+04  2.105658E+07  2.081770E+04  1.258309E+08  2.938749E+03
+[INCIDENCE_EFM_PH_001]   0.000000    
+  4.00  5.079494E-01  1.570796E+00  1.171722E+00  1.570796E+00  1.426003E+00  1.570796E+00
+ 64.00 -3.141362E+00  1.570796E+00 -1.576680E+00  1.570796E+00 -1.768797E+00  1.570796E+00
+125.00 -3.141476E+00  1.570796E+00 -1.572334E+00  1.570796E+00 -1.623406E+00  1.570796E+00
+~~~~~~~~~~~~~~~~~~~~~
+
+### Sections utilisées par X-DYN
+
+Les sections du HDB actuellement utilisées par X-DYN sont :
+
+- `Added_mass_Radiation_Damping` pour les amortissements de radiation et les
+  matrices de masses ajoutées
+- ̀ DIFFRACTION_FORCES_AND_MOMENTS` pour les RAO des efforts de diffraction
 
 ## Repère de calcul hydrodynamique
 
