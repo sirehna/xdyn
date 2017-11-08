@@ -581,7 +581,7 @@ void H5_Tools::read(
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 2 rank data, not" << ndims);
     }
     H5::DataSpace memspace(2, dims_out);
-    double *p = (double*)malloc(dims_out[0] * dims_out[1] * sizeof(double));
+    double *p = (double*)malloc((size_t) (dims_out[0] * dims_out[1]) * sizeof(double));
     dataset.read(p, H5::PredType::NATIVE_DOUBLE, memspace, dataspace);
     for (hsize_t i=0; i<dims_out[0];++i)
     {
@@ -628,7 +628,7 @@ void H5_Tools::read(
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 3 rank data, not" << ndims);
     }
     H5::DataSpace memspace(3, dims_out);
-    double *p = (double*)malloc(dims_out[0] * dims_out[1] * dims_out[2] * sizeof(double));
+    double *p = (double*)malloc((size_t) (dims_out[0] * dims_out[1] * dims_out[2]) * sizeof(double));
     dataset.read(p, H5::PredType::NATIVE_DOUBLE, memspace, dataspace);
     for (hsize_t i=0; i<dims_out[0];++i)
     {
