@@ -29,7 +29,7 @@ DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Dat
 {
     const auto M_module = data.get_diffraction_module_tables();
     const auto M_phase = data.get_diffraction_phase_tables();
-
+    std::reverse(omegas.begin(),omegas.end());
     const bool allow_queries_outside_bounds = true;
     // For each axis (X,Y,Z,phi,theta,psi)
     for (size_t i = 0 ; i < 6 ; ++i)
