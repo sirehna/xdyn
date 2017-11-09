@@ -208,7 +208,7 @@ class HDBParser::Impl
             period_list.sort();
             ret.periods.insert(ret.periods.begin(),period_list.begin(), period_list.end());
             std::list<double> psi_l(psi.begin(), psi.end());
-            period_list.sort();
+            psi_l.sort();
             ret.psi.insert(ret.psi.begin(),psi_l.begin(), psi_l.end());
             return ret;
         }
