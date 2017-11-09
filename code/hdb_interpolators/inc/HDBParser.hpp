@@ -47,9 +47,9 @@ class HDBParser
         std::vector<double> get_diffraction_module_psis() const;
         std::vector<double> get_diffraction_module_periods() const;
         std::vector<double> get_froude_krylov_phase_psis() const;
-        std::vector<double> get_froude_krylov_phase_omegas() const;
+        std::vector<double> get_froude_krylov_phase_periods() const;
         std::vector<double> get_froude_krylov_module_psis() const;
-        std::vector<double> get_froude_krylov_module_omegas() const;
+        std::vector<double> get_froude_krylov_module_periods() const;
 
     protected:
         HDBParser();

@@ -302,7 +302,7 @@ class HDBParser::Impl
             return diffraction_module.psi;
         }
 
-        std::vector<double> get_diffraction_module_omegas() const
+        std::vector<double> get_diffraction_module_periods() const
         {
             return diffraction_module.periods;
         }
@@ -312,7 +312,7 @@ class HDBParser::Impl
             return froude_krylov_phase.psi;
         }
 
-        std::vector<double> get_froude_krylov_phase_omegas() const
+        std::vector<double> get_froude_krylov_phase_periods() const
         {
             return froude_krylov_phase.periods;
         }
@@ -322,7 +322,7 @@ class HDBParser::Impl
             return froude_krylov_module.psi;
         }
 
-        std::vector<double> get_froude_krylov_module_omegas() const
+        std::vector<double> get_froude_krylov_module_periods() const
         {
             return froude_krylov_module.periods;
         }
@@ -447,7 +447,7 @@ std::vector<double> HDBParser::get_diffraction_module_psis() const
 
 std::vector<double> HDBParser::get_diffraction_module_periods() const
 {
-    return pimpl->get_diffraction_module_omegas();
+    return pimpl->get_diffraction_module_periods();
 }
 
 std::vector<double> HDBParser::get_froude_krylov_phase_psis() const
@@ -455,9 +455,9 @@ std::vector<double> HDBParser::get_froude_krylov_phase_psis() const
     return pimpl->get_froude_krylov_phase_psis();
 }
 
-std::vector<double> HDBParser::get_froude_krylov_phase_omegas() const
+std::vector<double> HDBParser::get_froude_krylov_phase_periods() const
 {
-    return pimpl->get_froude_krylov_phase_omegas();
+    return pimpl->get_froude_krylov_phase_periods();
 }
 
 std::vector<double> HDBParser::get_froude_krylov_module_psis() const
@@ -465,7 +465,7 @@ std::vector<double> HDBParser::get_froude_krylov_module_psis() const
     return pimpl->get_froude_krylov_module_psis();
 }
 
-std::vector<double> HDBParser::get_froude_krylov_module_omegas() const
+std::vector<double> HDBParser::get_froude_krylov_module_periods() const
 {
-    return pimpl->get_froude_krylov_module_omegas();
+    return pimpl->get_froude_krylov_module_periods();
 }

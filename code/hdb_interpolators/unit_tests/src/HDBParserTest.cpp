@@ -191,23 +191,23 @@ TEST_F(HDBParserTest, can_retrieve_vector_of_vectors_for_RAOs)
 TEST_F(HDBParserTest, can_retrieve_omegas_for_RAOs)
 {
     HDBParser data(test_data::anthineas_hdb());
-    const std::vector<double> omegas1 = data.get_froude_krylov_phase_omegas();
-    const std::vector<double> omegas2 = data.get_froude_krylov_module_omegas();
-    ASSERT_EQ(6, omegas1.size());
-    ASSERT_EQ(6, omegas2.size());
-    ASSERT_DOUBLE_EQ(2.*PI/4., omegas1[0]);
-    ASSERT_DOUBLE_EQ(2.*PI/3.8, omegas1[1]);
-    ASSERT_DOUBLE_EQ(2.*PI/3.5, omegas1[2]);
-    ASSERT_DOUBLE_EQ(2.*PI/3., omegas1[3]);
-    ASSERT_DOUBLE_EQ(2.*PI/2., omegas1[4]);
-    ASSERT_DOUBLE_EQ(2.*PI/1., omegas1[5]);
-    ASSERT_DOUBLE_EQ(2.*PI/4., omegas2[0]);
-    ASSERT_DOUBLE_EQ(2.*PI/3.8, omegas2[1]);
-    ASSERT_DOUBLE_EQ(2.*PI/3.5, omegas2[2]);
-    ASSERT_DOUBLE_EQ(2.*PI/3., omegas2[3]);
-    ASSERT_DOUBLE_EQ(2.*PI/2., omegas2[4]);
-    ASSERT_DOUBLE_EQ(2.*PI/1., omegas2[5]);
+    const std::vector<double> Tps1 = data.get_froude_krylov_phase_periods();
+    const std::vector<double> Tps2 = data.get_froude_krylov_module_periods();
+    ASSERT_EQ(6, Tps1.size());
+    ASSERT_EQ(6, Tps2.size());
+    ASSERT_DOUBLE_EQ(1., Tps1[0]);
+    ASSERT_DOUBLE_EQ(2., Tps1[1]);
+    ASSERT_DOUBLE_EQ(3., Tps1[2]);
+    ASSERT_DOUBLE_EQ(3.5, Tps1[3]);
+    ASSERT_DOUBLE_EQ(3.8, Tps1[4]);
+    ASSERT_DOUBLE_EQ(4., Tps1[5]);
 
+    ASSERT_DOUBLE_EQ(1., Tps2[0]);
+    ASSERT_DOUBLE_EQ(2., Tps2[1]);
+    ASSERT_DOUBLE_EQ(3., Tps2[2]);
+    ASSERT_DOUBLE_EQ(3.5, Tps2[3]);
+    ASSERT_DOUBLE_EQ(3.8, Tps2[4]);
+    ASSERT_DOUBLE_EQ(4., Tps2[5]);
 }
 
 TEST_F(HDBParserTest, can_retrieve_psis_for_RAOs)
