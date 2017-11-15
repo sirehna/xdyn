@@ -12,7 +12,7 @@ cd ..
 cd ..
 rm -rf ${archiveDir}_`git rev-parse HEAD`.tgz
 cd ${archiveDir}
-tar -czf ${archiveDir}_`git rev-parse HEAD`.tgz code postprocessing doc_user doc_dev
+tar -czf ${archiveDir}_`git rev-parse HEAD`.tgz code postprocessing doc_user doc_dev *docker*
 mv *.tgz ..
 cd ..
 rm -rf ${archiveDir}
