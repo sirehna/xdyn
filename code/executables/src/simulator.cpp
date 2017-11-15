@@ -8,7 +8,7 @@
 #include <exception>
 
 #include <ssc/check_ssc_version.hpp>
-CHECK_SSC_VERSION(6,0)
+CHECK_SSC_VERSION(7,0)
 
 #include <iostream>
 #include "InputData.hpp"
