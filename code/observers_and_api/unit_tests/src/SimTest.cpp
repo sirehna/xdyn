@@ -666,18 +666,4 @@ TEST_F(SimTest, bug_2984)
     ASSERT_NEAR(-sin(4*PI/180.)*69961607.31273420155048, Fz->second.back(), 1E-6);
 
     ASSERT_NEAR(4*PI/180., std::atan2(-Fz->second.back(),Fx->second.back()), 1E-6);
-    /*
-    const auto Mx = m.find("Mx(PSPropRudd,fremm,fremm)");
-    ASSERT_NE(m.end(), Mx);
-    ASSERT_EQ(2, Mx->second.size());
-    ASSERT_NEAR(0, Mx->second.back(), 1E-8);
-    const auto My = m.find("My(PSPropRudd,fremm,fremm)");
-    ASSERT_NE(m.end(), My);
-    ASSERT_EQ(2, My->second.size());
-    ASSERT_NEAR(0, My->second.back(), 1E-8);
-    const auto Mz = m.find("Mz(PSPropRudd,fremm,fremm)");
-    ASSERT_NE(m.end(), Mz);
-    ASSERT_EQ(2, Mz->second.size());
-    ASSERT_NEAR(0, Mz->second.back(), 1E-8);
-    */
 }
