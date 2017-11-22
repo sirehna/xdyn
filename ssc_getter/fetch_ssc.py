@@ -16,8 +16,9 @@ for build in builds:
         if build.ref == target_branch and build.status == "success":
             latest = build
     else:
-        latest_build_date = dateutil.parser.parse(latest.created_at)
-        current_build_date = dateutil.parser.parse(build.created_at)
+        latest_build_date = dateutil.parser.parse(latest.finished_at)
+        current_build_date = dateutil.parser.parse(build.finished_at)
+
         if build.ref == target_branch and build.status == "success" and current_build_date > latest_build_date:
             latest = build
 
@@ -36,11 +37,6 @@ if latest is not None:
     latest.artifacts(streamed=True, action=target)
     del(target)  # flushes data on disk
     print("Downloaded artifacts.zip")
-#    import zipfile
-#    zip_ref = zipfile.ZipFile('artifacts.zip', 'r')
-#    zip_ref.extractall('.')
-#    zip_ref.close()
-#    print("Extracted artifacts.zip")
 else:
     print("No build found so no artefact downloaded")
 

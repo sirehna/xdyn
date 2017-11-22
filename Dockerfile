@@ -82,6 +82,7 @@ RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src
     rm -rf hdf5_source.tar.gz HDF5_SRC HDF5_build
 
 ARG CACHEBUST=1
+RUN rm -rf /opt/share/ssc.deb
 ADD ssc.deb /opt/share/ssc.deb
-
+RUN dpkg -r ssc
 RUN dpkg -i /opt/share/ssc.deb
