@@ -36,8 +36,8 @@ DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Dat
     {
         // module.at(i) and phase.at(i) are vectors of vectors: each element in the vector of vectors corresponds to a frequency omega
         // For each omega, we have a vector containing the RAO values for each incidence
-        module.at(i) = Interpolator((data.get_diffraction_module_periods()),data.get_diffraction_module_psis(),M_module.at(i), allow_queries_outside_bounds);
-        phase.at(i) = Interpolator((data.get_diffraction_phase_periods()),data.get_diffraction_phase_psis(),M_phase.at(i), allow_queries_outside_bounds);
+        module.at(i) = Interpolator(data.get_diffraction_module_periods(),data.get_diffraction_module_psis(),M_module.at(i), allow_queries_outside_bounds);
+        phase.at(i) = Interpolator(data.get_diffraction_phase_periods(),data.get_diffraction_phase_psis(),M_phase.at(i), allow_queries_outside_bounds);
     }
 }
 
