@@ -82,6 +82,7 @@ namespace test_data
     std::string bug_3235();
     std::string bug_3207_yml();
     std::string bug_3230_yml();
+    std::string hos();
 }
 
 #endif /* YAML_DATA_HPP_ */
