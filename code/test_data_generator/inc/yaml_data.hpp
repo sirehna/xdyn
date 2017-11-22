@@ -76,6 +76,7 @@ namespace test_data
     std::string bug_3004();
     std::string bug_3003();
     std::string bug_2984();
+    std::string bug_3217();
 }
 
 #endif /* YAML_DATA_HPP_ */
