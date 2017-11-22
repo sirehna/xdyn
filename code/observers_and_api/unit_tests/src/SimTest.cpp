@@ -667,3 +667,72 @@ TEST_F(SimTest, bug_2984)
 
     ASSERT_NEAR(4*PI/180., std::atan2(-Fz->second.back(),Fx->second.back()), 1E-6);
 }
+
+TEST_F(SimTest, bug_3217_hdb_interpolation_in_direction_incorrect_LONG)
+{
+    const double t0 = 0;
+    const double T = 0.1;
+    const double dt = 0.1;
+    std::ofstream hdb("v00_complet_FK_diffr.hdb");
+    hdb << test_data::bug_3210();
+    std::ofstream stl("anthineas.stl");
+    stl << test_data::cube();
+    const auto yaml = test_data::bug_3217();
+    ListOfObservers observers(parse_output(yaml));
+    ssc::data_source::DataSource command_listener;
+    auto input = SimulatorYamlParser(yaml).parse();
+
+    const auto original_yaml = input.environment.at(0).yaml;
+
+    // Results for 0.001 deg
+    auto sys = get_system(input,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    auto m = get_map(observers);
+    ASSERT_EQ(6, m.size());
+    ASSERT_EQ(2, m["Fx(diffraction,Anthineas,Anthineas)"].size());
+    const double Fx_001 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
+    const double Fy_001 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
+    const double Fz_001 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
+    const double Mx_001 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
+    const double My_001 = m["My(diffraction,Anthineas,Anthineas)"].back();
+    const double Mz_001 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+
+    // Results for 0 deg
+    boost::replace_all(input.environment.at(0).yaml, "value: 0.001", "value: 0");
+    sys = get_system(input,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    m = get_map(observers);
+
+    ASSERT_EQ(6, m.size());
+    ASSERT_EQ(4, m["Fx(diffraction,Anthineas,Anthineas)"].size());
+    const double Fx_0 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
+    const double Fy_0 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
+    const double Fz_0 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
+    const double Mx_0 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
+    const double My_0 = m["My(diffraction,Anthineas,Anthineas)"].back();
+    const double Mz_0 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+
+    // Results for 30 deg
+    input.environment.at(0).yaml = original_yaml;
+    boost::replace_all(input.environment.at(0).yaml, "value: 0.001", "value: 30");
+    sys = get_system(input,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    m = get_map(observers);
+    ASSERT_EQ(6, m.size());
+    ASSERT_EQ(6, m["Fx(diffraction,Anthineas,Anthineas)"].size());
+    const double Fx_30 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
+    const double Fy_30 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
+    const double Fz_30 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
+    const double Mx_30 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
+    const double My_30 = m["My(diffraction,Anthineas,Anthineas)"].back();
+    const double Mz_30 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+
+    // Results at 0.001 deg should be closer to results at 0 deg than to results at 30 deg
+    ASSERT_LT(std::abs(Fx_0-Fx_001),std::abs(Fx_30-Fx_001));
+    ASSERT_LT(std::abs(Fy_0-Fy_001),std::abs(Fy_30-Fy_001));
+    ASSERT_LT(std::abs(Fz_0-Fz_001),std::abs(Fz_30-Fz_001));
+
+    ASSERT_LT(std::abs(Mx_0-Mx_001),std::abs(Mx_30-Mx_001));
+    ASSERT_LT(std::abs(My_0-My_001),std::abs(My_30-My_001));
+    ASSERT_LT(std::abs(Mz_0-Mz_001),std::abs(Mz_30-Mz_001));
+}

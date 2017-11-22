@@ -75,8 +75,9 @@ double DiffractionInterpolator::interpolate_module(const size_t axis, const doub
     beta = beta - 2*PI * std::floor( beta / (2*PI) );
     try
     {
+
         if (mirror and (beta>PI)) ret = module.at(axis).f(Tp,2*PI-beta);
-                                  ret = module.at(axis).f(Tp,beta);
+        else                      ret = module.at(axis).f(Tp,beta);
     }
     catch(std::exception& e)
     {
@@ -95,7 +96,7 @@ double DiffractionInterpolator::interpolate_phase(const size_t axis, const doubl
     try
     {
         if (mirror and (beta>PI)) ret = phase.at(axis).f(Tp,2*PI-beta);
-                                  ret = phase.at(axis).f(Tp,beta);
+        else                      ret = phase.at(axis).f(Tp,beta);
     }
     catch(std::exception& e)
     {
