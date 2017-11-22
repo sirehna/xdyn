@@ -81,6 +81,27 @@ RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src
     cd .. && \
     rm -rf hdf5_source.tar.gz HDF5_SRC HDF5_build
 
+RUN apt-get update -yq && apt-get install --no-install-recommends -y \
+        autoconf \
+        automake \
+        libtool \
+        curl \
+        unzip \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/tmp/* \
+    && rm -rf /var/lib/apt/lists/
+
+RUN git clone https://github.com/google/protobuf.git
+RUN cd protobuf \
+ && git checkout  3.0.x \
+ && ./autogen.sh \
+ && ./configure "CFLAGS=-fPIC" "CXXFLAGS=-fPIC" \
+ && make -j 4\
+ && make check \
+ && make install \
+ && ls /usr/local/lib/libprotobuf.a
+RUN ldconfig
+
 ARG CACHEBUST=1
 RUN rm -rf /opt/share/ssc.deb
 ADD ssc.deb /opt/share/ssc.deb
