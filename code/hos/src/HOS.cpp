@@ -9,6 +9,13 @@
 
 #include "HOS.hpp"
 
+HOS::HOS(const double ,
+         const std::pair<std::size_t,std::size_t> output_mesh_size_,
+         const ssc::kinematics::PointMatrixPtr& output_mesh_) :
+                SurfaceElevationInterface(output_mesh_, output_mesh_size_)
+{
+
+}
 
 double HOS::dynamic_pressure(const double , //!< water density (in kg/m^3)
                                 const double ,   //!< gravity (in m/s^2)
