@@ -114,7 +114,9 @@ RUN cd libzmq \
  && mkdir build \
  && cd build \
  && cmake -DWITH_PERF_TOOL=OFF -DZMQ_BUILD_TESTS=ON -DENABLE_CPACK=OFF -DCMAKE_BUILD_TYPE=Release .. \
- && make -j 4\
+      -DCMAKE_C_FLAGS="-fPIC" \
+      -DCMAKE_CXX_FLAGS="-fPIC" \
+ && make -j 4 \ 
  && make test \
  && make install \
  && ldconfig \
