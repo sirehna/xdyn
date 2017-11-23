@@ -9,10 +9,15 @@
 
 #include "HOS.hpp"
 
+class HOS::Impl
+{
+
+};
+
 HOS::HOS(const double ,
          const std::pair<std::size_t,std::size_t> output_mesh_size_,
          const ssc::kinematics::PointMatrixPtr& output_mesh_) :
-                SurfaceElevationInterface(output_mesh_, output_mesh_size_)
+                SurfaceElevationInterface(output_mesh_, output_mesh_size_), pimpl(new Impl())
 {
 
 }

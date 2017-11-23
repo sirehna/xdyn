@@ -82,5 +82,8 @@ class HOS: public SurfaceElevationInterface
                                 const double t    //!< Current time instant (in seconds)
                                 ) const;
 
+    class Impl;
+    TR1(shared_ptr)<Impl> pimpl;
+
 };
 #endif /* HOS_HPP_ */
