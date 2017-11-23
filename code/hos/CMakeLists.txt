@@ -33,6 +33,7 @@ include_directories(${external_data_structures_INCLUDE_DIRS})
 include_directories(${core_INCLUDE_DIRS})
 include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${PROTOBUF_INCLUDE_DIRS})
+include_directories(${ZeroMQ_INCLUDE_DIR})
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
