@@ -116,11 +116,30 @@ RUN cd libzmq \
  && cmake -DWITH_PERF_TOOL=OFF -DZMQ_BUILD_TESTS=ON -DENABLE_CPACK=OFF -DCMAKE_BUILD_TYPE=Release .. \
       -DCMAKE_C_FLAGS="-fPIC" \
       -DCMAKE_CXX_FLAGS="-fPIC" \
- && make -j 4 \ 
+ && make -j 4 \
+ && echo "if(NOT TARGET libzmq) # in case find_package is called multiple times" >> ZeroMQConfig.cmake \
+ && echo "  add_library(libzmq SHARED IMPORTED)" >> ZeroMQConfig.cmake \
+ && echo "  set_target_properties(libzmq PROPERTIES IMPORTED_LOCATION \${\${PN}_LIBRARY})" >> ZeroMQConfig.cmake \
+ && echo "endif(NOT TARGET libzmq)" >> ZeroMQConfig.cmake \
+ && echo "" >> ZeroMQConfig.cmake \
+ && echo "if(NOT TARGET libzmq-static) # in case find_package is called multiple times" >> ZeroMQConfig.cmake \
+ && echo "  add_library(libzmq-static STATIC IMPORTED)" >> ZeroMQConfig.cmake \
+ && echo "  set_target_properties(libzmq-static PROPERTIES IMPORTED_LOCATION \${\${PN}_STATIC_LIBRARY})" >> ZeroMQConfig.cmake \
+ && echo "endif(NOT TARGET libzmq-static)" >> ZeroMQConfig.cmake \
  && make test \
  && make install \
  && ldconfig \
  && ls /usr/share/cmake-3.0/Modules/
+
+RUN git clone https://github.com/zeromq/cppzmq.git
+RUN cd cppzmq \
+ && git checkout v4.2.2 \
+ && mkdir build \
+ && cd build \
+ && cmake .. \
+      -DCMAKE_C_FLAGS="-fPIC" \
+      -DCMAKE_CXX_FLAGS="-fPIC" \
+ && make -j 4 install
 
 ARG CACHEBUST=1
 RUN rm -rf /opt/share/ssc.deb

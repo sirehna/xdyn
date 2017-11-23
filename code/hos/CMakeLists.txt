@@ -5,7 +5,6 @@ INCLUDE(FindProtobuf)
 FIND_PACKAGE(Protobuf REQUIRED)
 INCLUDE_DIRECTORIES(${PROTOBUF_INCLUDE_DIR})
 PROTOBUF_GENERATE_CPP(PROTO_SRC PROTO_HEADER hos.proto)
-#ADD_LIBRARY(proto ${PROTO_HEADER} ${PROTO_SRC})
 
 set(SRC src/HOS.cpp)
 
@@ -33,7 +32,7 @@ include_directories(${external_data_structures_INCLUDE_DIRS})
 include_directories(${core_INCLUDE_DIRS})
 include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${PROTOBUF_INCLUDE_DIRS})
-include_directories(${ZeroMQ_INCLUDE_DIR})
+include_directories(${cppzmq_INCLUDE_DIR})
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
