@@ -102,6 +102,24 @@ RUN cd protobuf \
  && ls /usr/local/lib/libprotobuf.a
 RUN ldconfig
 
+RUN git clone https://github.com/zeromq/libzmq.git
+
+RUN apt-get update -yq && apt-get install --no-install-recommends -y \
+        pkg-config \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/tmp/* \
+    && rm -rf /var/lib/apt/lists/
+RUN cd libzmq \
+ && git checkout v4.2.2 \
+ && mkdir build \
+ && cd build \
+ && cmake -DWITH_PERF_TOOL=OFF -DZMQ_BUILD_TESTS=ON -DENABLE_CPACK=OFF -DCMAKE_BUILD_TYPE=Release .. \
+ && make -j 4\
+ && make test \
+ && make install \
+ && ldconfig \
+ && ls /usr/share/cmake-3.0/Modules/
+
 ARG CACHEBUST=1
 RUN rm -rf /opt/share/ssc.deb
 ADD ssc.deb /opt/share/ssc.deb
