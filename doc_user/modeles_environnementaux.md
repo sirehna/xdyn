@@ -1005,6 +1005,154 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## HOS
+
+Le modèle HOS (High Order Spectrum) est un modèle numérique de propagation de
+houle développé par l'Ecole Centrale de Nantes (au LHEEA : Laboratoire
+d'Hydrodynamique, Energétique et Environnement Atmosphérique). Ce modèle permet
+de simuler des spectres hautement non-linéaires avec de fortes pentes. Les
+transformées de Fourier rapides sont utilisées pour résoudre les conditions de
+surface libre permettent une résolution plus rapide que des méthodes directes.
+Ce modèle a été validé avec un haut degré de précision sur des cas 2D et 3D. Ce
+code étant sous licence GPL, une interface client-serveur a été développée en
+Python par D-Ice engineering pour ne pas contaminer le code d'X-DYN. Le code HOS
+(en Fortran 95) peut être téléchargé ici :
+[https://github.com/LHEEA/HOS-ocean](https://github.com/LHEEA/HOS-ocean). Une
+description complète du modèle sous-jacent est disponible ici :
+[https://github.com/LHEEA/HOS-ocean/wiki](https://github.com/LHEEA/HOS-ocean/wiki)
+
+
+### Modèle
+
+#### Conditions de surface libre
+
+La méthode HOS est basée sur la théorie potentielle. Le fluide est supposé
+incompressible, non-visqueux et irrotationnel. Sous ces hypothèses, la condition
+de  continuité se ramène à une simple équation de Laplace :
+
+
+$$\nabla \phi^2 + \frac{\partial^2 \phi}{\partial z^2} = 0$$ dans le domaine
+fluide $\mathcal{D}$, $\nabla$ désignant l'opérateur gradient horizontal.
+
+Sur la surface libre, le potentiel de vitesse $\phi^s(x,t) =
+\phi(x,z=\eta(x,t),t)$ et l'élévation de surface libre $\eta$ doivent satisfaire
+les équations suivantes :
+
+-  $\partial_t \eta = (1 + |\nabla \eta|^2) \partial_z \phi - \nabla \phi^s
+  \cdot \nabla \eta$
+- $\partial_t \phi^s = -g \eta - \frac{1}{2} | \nabla \phi^s |^2 + \frac{1}{2}
+  (1 + | \nabla \eta |^2) (\partial_z \phi)^2$
+
+$\frac{\partial \phi}{\partial z}$ est la vitesse verticale et est calculée en
+utilisant la méthode HOS de West *et al.*, 1987.
+
+Les quantités $\phi^s$ and $\eta$ peuvent s'écrire de façon spectrale :
+
+$$\phi(x,y,z,t) = \sum_{i=0}^{\infty} \sum_{i=0}^{\infty} A_{ij}^{\phi}
+\cos(k_{x,i} x) \cos(k_{y,i} y) \frac{\cosh(k_{i,j} |z+h|)}{\cosh(k_{i,j} h)}$$
+
+$$\eta(x,y,z,t) = \sum_{i=0}^{\infty} \sum_{i=0}^{\infty} A_{ij}^{\eta}
+\cos(k_{x,i} x) \cos(k_{y,i} y)$$
+
+avec
+
+- $k_{x,i} = \frac{i \Pi}{L_x}$,
+- $k_{y,j} = \frac{j \Pi}{L_y}$
+- $k_{i,j} = \sqrt{k_{x,i}^2+k_{y,j}^2}$,
+- $L_x$ et $L_y$ désignent la taille du domaine suivant $X$ et Ŷ$,
+  respectivement.
+- Les coefficients $A_{ij}^{\eta}$ et $A_{ij}^{\phi}$ représentent les
+  amplitudes des modes spectraux.
+
+Cette méthode est pseudo-spectrale car les conditions de surface libre sont
+partiellement résolues dans le domaine spacial et spectral. Les transformées de
+Fourier rapides permettent de transformer les quantités d'un domaine à l'autre
+efficacement et avec une bonne précision.
+
+Un développement en séries de Taylor limité à l'ordre $M$ est utilisé pour
+évaluer le potentiel de vitesse $\phi$ et la vitesse orbitale vertical $W$
+autour de $z=0$. Par définition, l'ordre de la méthode HOS est l'ordre $M$ du
+développement limité.
+
+Du fait de l'utilisation des transformées de Fourier rapides, des problèmes de
+repliement de spectre peuvent survenir. Pour limiter cet effet, il faut bien
+choisir le nombre de point $N_d$ en fonction de paramètre d'anti-aliasing $p$
+(fréquence de Nyquist) :
+
+$$N_d = \frac{p+1}{2}N$$
+
+L'anti-aliasing complet est obtenu pour $p=M$. Il est recommandé de l'utiliser
+pour éviter tout problème de recouvrement.
+
+Le schéma d'intégration temporel est un schéma de Runge-Kutta-Cash-Karp d'ordre
+4 avec par adaptatif. La tolérance est en générale comprise entre $10^{-7}$ et
+$10^{-5}$.
+
+Pour une description plus complète de la théorie sous-jacente à la méthode HOS,
+nous invitons le lecteur à se référer à Ducrozet 2013 and Ducrozet *et al.*
+2016.
+
+
+#### Conditions initiales
+
+Afin d'initialiser la simulation, des valeurs initiales pour le potentiel de
+vitesse $\phi$ et l'élévation de surface libre $\eta$ doivent être spécifiées
+sur tout le domaine. Deux profiles de vagues sont intégrées à HOS : un pour la
+houle régulière et un pour la houe irrégulière.
+
+Le profile de houle régulière non-linéaire est basé sur la résolution de
+Reinecker & Fenton (cf. Reinecker *et al.*, 1981). Cette méthode nécessite un
+fichier d'entrée `.cof` contenant les coefficients du profile de houle.
+
+Le profile de houle irrégulière linéaire est défini par la superpositions de
+composantes linéaires de directions et fréquences différentes. L'amplitude de
+chaque composante est calculée à partir d'un spectre directionnel $S(\omega,
+\theta) = F(\omega) \cdot G(\theta)$.
+
+$F(\omega)$ est un spectre de JONSWAP dont définit dans le fichier YAML la
+période de pic $T_p = \frac{2 \pi}{\omega_p}$, la hauteur significative $H_s$
+ainsi que le coefficient de forme $\gamma$.
+
+$$F(\omega) = \alpha_J H_s^2 \omega_p^4 \omega^{-5} \exp \left[ - \frac{5}{4}
+\left( \frac{\omega}{\omega_p} \right)^{-4} \right] \gamma^{ \exp \left[-\frac{
+\left( \omega - \omega_p \right)^2}{2 \sigma^2 \omega_p^2}\right]}$$
+
+avec
+
+$$\sigma = \left\{\begin{array}{ccc} 0.07 & \text{ for } & \omega \lt \omega_p
+\\0.09 & \text{ for } & \omega \ge \omega_p\end{array}\right.$$
+
+$G(\theta)$ désigne l'étalement directionnel :
+
+$$G(\theta) = \frac{1}{\beta} \left[ \cos \left( \frac{\pi \theta}{2 \beta} \right) \right]^2$$
+
+Pour éviter les instabilités dues à la transition entre le modèle linéaire
+initial et les calculs non-linéaires d'HOS, une fonction de relaxation
+exponentielle est utilisée. La période de transistion est définie par sa durée
+$T_a$ et un paramètre $n$ :
+
+$$f(t) = 1 - \exp \left[ - \left( \frac{t}{T_a} \right)^n \right]$$
+
+
+#### Post-traitement
+
+Dans le modèle HOS, les conditions de surface libre sont écrites pour $\phi^s$
+et $\eta$. Cette simplification permet de simuler efficacement la propagation de
+la houle. Cependant pour le calcul des pressions et des vitesses orbitales à
+l'intérieur du domaine, des informations 3D supplémentaires sont nécessaires.
+Ces informations sont calculées durant la simulation de la propagation de la
+houle. Un opérateur $H_2$ est utilisé pour approcher ces quantités avec une
+bonne précision. Les quantités telles que la pression et la vitesse sont ensuite
+reconstruites en post-traitement par transformée de Fourier inverse. Cela permet
+le couplage des résultats du modèle HOS avec des calculs CFD.
+
+Il est à noter que la procédure de reconstruction par FFT donne des quantités
+sur la même grille que celle utilisée par HOS. Pour calculer ces quantités en
+tout point, des interpolations linéaires en temps et en espace sont effectuées.
+
+### Paramétrage
+
+
 ## Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70, 78 pour le stretching
@@ -1016,3 +1164,7 @@ waves:
 - *Air-Sea Interaction: Instruments and Methods*, F. Dobson, L. Hasse, R. Davis, p. 524
 - *Proposed Spectral Form for Fully Developed Wind Seas Based on the Similarity Theory of S. A. Kitaigorodskii*, Pierson, Willard J., Jr. and Moskowitz, Lionel A., Journal of Geophysical Research, Vol. 69, 1964, p.5181-5190
 - http://web.mit.edu/13.42/www/handouts/reading-wavespectra.pdf
+- *Modélisation des processus non-linéaire de génération et de propagation d'états de mer par une approche spectral*, 2013, Guillaume Ducrozet, Ecole Centrale de Nantes
+- *HOS-ocean : Open-source solver for nonlinear waves in open ocean based on High-Order Spectral method*, 2016, Ducrozet, G. and Bonnefoy, F. and Ferrant, P., Computer Physics Communications
+- *A Fourier approximation method for steady waves*, 1981, Rienecker, M.M. and Fenton, J.D., Journal of Fluid Mechanics
+- *A new numerical method for surface hydrodynamics*, 1987, West, B.J. and Brueckner, R.S and Janda, M. and Milder, M. and Milton R.L, Journal of Geophysics Research
