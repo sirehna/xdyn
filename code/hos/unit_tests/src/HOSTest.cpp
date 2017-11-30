@@ -7,6 +7,7 @@
 
 
 #include "HOSTest.hpp"
+#include "HOS.hpp"
 
 HOSTest::HOSTest() : a(ssc::random_data_generator::DataGenerator(892251200))
 {
@@ -27,7 +28,7 @@ void HOSTest::TearDown()
 TEST_F(HOSTest, relative_wave_height)
 {
 //! [HOSTest relative_wave_height example]
-
+    HOS hos(a.random<double>());
 //! [HOSTest relative_wave_height example]
 //! [HOSTest relative_wave_height expected output]
 
