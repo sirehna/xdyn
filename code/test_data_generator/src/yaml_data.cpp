@@ -4787,6 +4787,25 @@ std::string test_data::hos()
        << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
        << "environment models:\n"
        << "  - model: hos\n"
+       << "    length of the domain along x: {value: 80, unit: m}\n"
+       << "    length of the domain along y: {value: 20, unit: m}\n"
+       << "    number of modes per node in x-direction: 128\n"
+       << "    number of modes per node in y-direction: 32\n"
+       << "    non-linearity order: 3\n"
+       << "    anti-aliasing parameter for x-axis: 1\n"
+       << "    anti-aliasing parameter for y-axis: 1\n"
+       << "    tolerance of the RKCK scheme: 1E-7\n"
+       << "    type of error of the RKCK scheme: abs\n"
+       << "    water depth: {value: 35.0, unit: m}\n"
+       << "    directional spectrum used for initialization:\n"
+       << "      jonswap:\n"
+       << "        gamma: 3.3\n"
+       << "        Tp: {value: 10.0, unit: s}\n"
+       << "        Hs: {value: 4.5, unit: m}\n"
+       << "      directional spreading:\n"
+       << "        beta: 0.785398\n"
+       << "    url of the HOS server: tcp://hos-server:5550\n"
+       << "    waves propagating to: {value: 90, unit: deg}\n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: Anthineas\n"
@@ -4869,5 +4888,31 @@ std::string test_data::hos()
        << "   - format: csv\n"
        << "     filename: houle_travers_5m_7s.csv\n"
        << "     data: [t, x(Anthineas), y(Anthineas), z(Anthineas), u(Anthineas), v(Anthineas), w(Anthineas), p(Anthineas), q(Anthineas), r(Anthineas), phi(Anthineas), theta(Anthineas), psi(Anthineas)]\n";
+    return ss.str();
+}
+
+std::string test_data::hos_for_parser_validation_only()
+{
+    std::stringstream ss;
+    ss << "model: hos\n"
+       << "length of the domain along x: {value: 80, unit: m}\n"
+       << "length of the domain along y: {value: 20, unit: m}\n"
+       << "number of modes per node in x-direction: 128\n"
+       << "number of modes per node in y-direction: 32\n"
+       << "non-linearity order: 3\n"
+       << "anti-aliasing parameter for x-axis: 1\n"
+       << "anti-aliasing parameter for y-axis: 2\n"
+       << "tolerance of the RKCK scheme: 1E-7\n"
+       << "type of error of the RKCK scheme: abs\n"
+       << "water depth: {value: 35.0, unit: m}\n"
+       << "directional spectrum used for initialization:\n"
+       << "  jonswap:\n"
+       << "    gamma: 3.3\n"
+       << "    Tp: {value: 10.0, unit: s}\n"
+       << "    Hs: {value: 4.5, unit: m}\n"
+       << "  directional spreading:\n"
+       << "    beta: 0.785398\n"
+       << "url of the HOS server: tcp://hos-server:5550\n"
+       << "waves propagating to: {value: 90, unit: deg}\n";
     return ss.str();
 }
