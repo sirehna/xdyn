@@ -1152,6 +1152,75 @@ tout point, des interpolations linéaires en temps et en espace sont effectuées
 
 ### Paramétrage
 
+~~~~{.yaml}
+- model: hos
+  length of the domain along x: {value: 80, unit: m}
+  length of the domain along y: {value: 20, unit: m}
+  number of modes per node in x-direction: 128
+  number of modes per node in y-direction: 32
+  non-linearity order: 3
+  anti-aliasing parameter for x-axis: 1
+  anti-aliasing parameter for y-axis: 1
+  tolerance of the RKCK scheme: 1E-7
+  type of error of the RKCK scheme: abs
+  water depth: {value: 35.0, unit: m}
+  directional spectrum used for initialization:
+    jonswap:
+      gamma: 3.3
+      Tp: {value: 10.0, unit: s}
+      Hs: {value: 4.5, unit: m}
+    directional spreading:
+      beta: 0.785398
+  url of the HOS server: tcp://hos-server:5550
+  waves propagating to: {value: 90, unit: deg}
+~~~~
+
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+| Clef dans le fichier YAML                | Nom "HOS-Océan" | Description                                                       |
++==========================================+=================+===================================================================+
+|`length of the domain along x`            | `xlen`          | Longueur du domaine de calcul suivant l'axe X (axe de propagation)|
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`length of the domain along y`            | `ylen`          | Longueur du domaine de calcul suivant l'axe Y                     |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`number of modes per node in x-direction` | `n1`            | Nombre de modes par noeud sur l'axe X                             |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`number of modes per node in x-direction` | `n2`            | Nombre de modes par noeud sur l'axe Y                             |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`non-linearity order`                     | `m`             | Ordre de la méthode HOS (ordre du développement de Taylor)        |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`anti-aliasing parameter for x-axis`      | `p1`            | Paramètre d'anti-aliasing (pour l'axe X)                          |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`anti-aliasing parameter for y-axis`      | `p2`            | Paramètre d'anti-aliasing (pour l'axe Y)                          |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`water depth`                             | `depth`         | Profondeur d'eau                                                  |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`gamma`                                   | `gamma`         | Paramètre de forme du spectre de JONSWAP utilisé pour             |
+|                                          |                 | l'initialisation de la simulation                                 |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`beta`                                    | `beta`          | Paramètre de l'étalement directionnel (Dysthe)                    |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`Tp`                                      | `tp_real`       | Période du spectre de JONSWAP utilisé pour l'initialisation de la |
+|                                          |                 | simulation                                                        |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`Hs`                                      | `hs_real`       | Hauteur de houle du spectre de JONSWAP utilisé pour               |
+|                                          |                 | l'initialisation de la simulation                                 |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`tolerance of the RKCK scheme`            | `err`           | L'erreur utilisée pour le schéma d'intégration adaptatif          |
+|                                          |                 | Runge-Kutta - Cash-Karp doit-elle être absolue ('abs') ou relative|
+|                                          |                 | ('rel') ?                                                         |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+| `url of the HOS server`                  |       -         | URL utilisée par X-DYN pour se connecter au serveur 0MQ HOS. Ne   |
+|                                          |                 | correspond pas à l'URL utilisée par le server en interne pour     |
+|                                          |                 | échanger de manière asynchrone entre le code Fortran et le code   |
+|                                          |                 | Python (qui est fixée en dur par X-DYN à "5555")                  |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+| `waves propagating to`                   |       -         | Direction de propagation de la houle. Le code HOS-Océan ne        |
+|                                          |                 | permettant pas de contrôler la direction de propagation (elle est |
+|                                          |                 | codée en dur pour une propagation suivant l'axe X), X-DYN effectue|
+|                                          |                 | un changement de repère avant d'envoyer les requêtes au serveur   |
+|                                          |                 | HOS, puis fait le changement de repère inverse sur les vitesses   |
+|                                          |                 | orbitales                                                         |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
 
 ## Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
