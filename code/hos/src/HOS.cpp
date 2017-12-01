@@ -151,6 +151,7 @@ class HOS::Impl
             message.set_allocated_param(get_params(yaml));
             send(message.SerializeAsString());
             receive();
+            restart_all();
             send_cmd("SND_PARAM");
         }
 
@@ -160,6 +161,16 @@ class HOS::Impl
             cmd.set_flagval(flag);
             send(cmd.SerializeAsString());
             receive();
+        }
+
+        void restart_all()
+        {
+            send_cmd("PROC_STATUS_LAUNCHER");
+            send_cmd("RESTART_LAUNCHER");
+            send_cmd("PROC_STATUS_MODES");
+            send_cmd("RESTART_MODES");
+            send_cmd("PROC_STATUS_POST");
+            send_cmd("RESTART_POST");
         }
 
         Impl(); // Disabled
