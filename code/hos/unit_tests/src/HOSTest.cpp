@@ -26,6 +26,16 @@ void HOSTest::TearDown()
 {
 }
 
+TEST_F(HOSTest, can_set_hos_parameters)
+{
+//! [HOSTest relative_wave_height example]
+    HOS hos(parse_hos(test_data::hos_for_parser_validation_only()));
+//! [HOSTest relative_wave_height example]
+//! [HOSTest relative_wave_height expected output]
+
+//! [HOSTest relative_wave_height expected output]
+}
+
 TEST_F(HOSTest, relative_wave_height)
 {
 //! [HOSTest relative_wave_height example]
