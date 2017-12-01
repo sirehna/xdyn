@@ -110,16 +110,9 @@ class HOS::Impl
         , socket(ctx, ZMQ_REQ)
         {
             socket.connect(yaml.address_brokerHOS);
-            HOSComs::ParamMessage message;
-            message.set_flagval("PARAM");
-            // Transfer ownership of "get_params()" pointer to protobuf, which is now in charge of freeing it
-            // Cf. https://developers.google.com/protocol-buffers/docs/reference/cpp-generated:
-            // "void set_allocated_foo(Bar* bar): Sets the Bar object to the field and frees the previous field value if it exists.
-            // If the Bar pointer is not NULL, the message takes ownership of the allocated Bar object"
-            message.set_allocated_param(get_params(yaml));
-            send(message.SerializeAsString());
             set_socket_not_to_wait_at_close_time();
             set_receive_timeout_in_ms(100);
+            set_param(yaml);
         }
 
         ~Impl()
@@ -145,6 +138,20 @@ class HOS::Impl
         void set_receive_timeout_in_ms(const int timeout_in_ms)
         {
             socket.setsockopt (ZMQ_RCVTIMEO, timeout_in_ms);
+        }
+
+        void set_param(const YamlHOS& yaml)
+        {
+            HOSComs::ParamMessage message;
+            message.set_flagval("PARAM");
+            // Transfer ownership of "get_params()" pointer to protobuf, which is now in charge of freeing it
+            // Cf. https://developers.google.com/protocol-buffers/docs/reference/cpp-generated:
+            // "void set_allocated_foo(Bar* bar): Sets the Bar object to the field and frees the previous field value if it exists.
+            // If the Bar pointer is not NULL, the message takes ownership of the allocated Bar object"
+            message.set_allocated_param(get_params(yaml));
+            send(message.SerializeAsString());
+            receive();
+            send_cmd("SND_PARAM");
         }
 
         void send_cmd(const std::string& flag)
