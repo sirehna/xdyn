@@ -44,17 +44,17 @@ HOSComs::Params* get_params(const YamlHOS& yaml)
 
     // Output files
     params->set_tecplot(11); // Tecplot num version
-    params->set_i_out_dim(0); // output  = 1-dim ; 0-nondim
-    params->set_i_3d(0); // 3d free surface quantities
+    params->set_i_out_dim(1); // output  = 1-dim ; 0-nondim
+    params->set_i_3d(1); // 3d free surface quantities
     params->set_i_a_3d(0); // 3d modes
-    params->set_i_2d(0); // 2d free surface, center line
+    params->set_i_2d(1); // 2d free surface, center line
     params->set_i_prob(0); // wave probes in domain
-    params->set_i_sw(0); // Activate reconstruction 1='yes', 0='no'
+    params->set_i_sw(1); // Activate reconstruction 1='yes', 0='no'
     params->set_qsize_max(999); // Maximum size of the queue in Modes process
 
     // Post-processing
     params->set_i_ana(0); // Wave-by-wave analysis (0 = no wave-by-wave analysis, 2 = 2D wave-by-wave analysis, 3 = 3D wave-by-wave analysis)
-    params->set_i_card(0); // (0 = no output, 1 = velocity and pressure card output, 2 = velocity and pressure card output in boundary fitted coordinates)
+    params->set_i_card(1); // (0 = no output, 1 = velocity and pressure card output, 2 = velocity and pressure card output in boundary fitted coordinates)
     params->set_t_start(1.0); // Start time of the wave-by-wave analysis
     params->set_x_min(2.0*6.28); // Minimum x in velocity and pressure card
     params->set_x_max(10.0*6.28); // Maximum x in velocity and pressure card
@@ -63,7 +63,7 @@ HOSComs::Params* get_params(const YamlHOS& yaml)
     params->set_z_min(-15.0); // Minimum z in velocity and pressure card
     params->set_z_max(5.0); // Maximum z in velocity and pressure card
     params->set_i_zvect(20); // Number of points in z
-    params->set_t_interp(0); // Interpolation 0 ='no' ; 1 ='linear'
+    params->set_t_interp(1); // Interpolation 0 ='no' ; 1 ='linear'
     params->set_i_out_post(0); // Output post-process 0 ='no' ; '1 ='yes'
 
     // Horizontal domain
