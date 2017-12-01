@@ -89,6 +89,21 @@ HOSComs::Params* get_params(const YamlHOS& yaml)
 
 class HOS::Impl
 {
+        zmq::message_t receive()
+        {
+            zmq::message_t msg;
+            socket.recv(&msg);
+            return msg;
+        }
+
+        template <typename T> T receive()
+        {
+            auto msg = receive();
+            T resp;
+            resp.ParseFromArray(msg.data(), msg.size());
+            return resp;
+        }
+
     public:
         Impl(const YamlHOS& yaml)
         : ctx(1)
