@@ -147,6 +147,14 @@ class HOS::Impl
             socket.setsockopt (ZMQ_RCVTIMEO, timeout_in_ms);
         }
 
+        void send_cmd(const std::string& flag)
+        {
+            HOSComs::CmdMessage cmd;
+            cmd.set_flagval(flag);
+            send(cmd.SerializeAsString());
+            receive();
+        }
+
         Impl(); // Disabled
         zmq::context_t ctx;
         zmq::socket_t socket;
