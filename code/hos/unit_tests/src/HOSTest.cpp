@@ -5,9 +5,10 @@
  *      Author: cady
  */
 
-
+#include "environment_parsers.hpp"
 #include "HOSTest.hpp"
 #include "HOS.hpp"
+#include "yaml_data.hpp"
 
 HOSTest::HOSTest() : a(ssc::random_data_generator::DataGenerator(892251200))
 {
@@ -28,7 +29,7 @@ void HOSTest::TearDown()
 TEST_F(HOSTest, relative_wave_height)
 {
 //! [HOSTest relative_wave_height example]
-    HOS hos(a.random<double>());
+    HOS hos(parse_hos(test_data::hos_for_parser_validation_only()));
 //! [HOSTest relative_wave_height example]
 //! [HOSTest relative_wave_height expected output]
 

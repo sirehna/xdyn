@@ -33,6 +33,7 @@ include_directories(${core_INCLUDE_DIRS})
 include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${PROTOBUF_INCLUDE_DIRS})
 include_directories(${cppzmq_INCLUDE_DIR})
+include_directories(${yaml_parser_INCLUDE_DIRS})
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 

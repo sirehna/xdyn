@@ -3,6 +3,7 @@
 
 #include "SurfaceElevationInterface.hpp"
 
+struct YamlHOS;
 
 /** \author cec
  *  \date 22 Nov 2017, 15:59:25
@@ -12,7 +13,7 @@
 class HOS: public SurfaceElevationInterface
 {
     public:
-        HOS(const double dummy,
+        HOS(const YamlHOS& yaml,
             const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
             const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
 
