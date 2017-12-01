@@ -113,6 +113,9 @@ class HOS::Impl
             set_socket_not_to_wait_at_close_time();
             set_receive_timeout_in_ms(100);
             set_param(yaml);
+            send_cmd("RUN");
+            mode_status();
+            sleep(2);
         }
 
         ~Impl()
