@@ -120,6 +120,7 @@ class HOS::Impl
 
         ~Impl()
         {
+            send_cmd("EXIT");
             google::protobuf::ShutdownProtobufLibrary();
         }
 
