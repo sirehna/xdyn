@@ -119,6 +119,7 @@ class HOS::Impl
             message.set_allocated_param(get_params(yaml));
             send(message.SerializeAsString());
             set_socket_not_to_wait_at_close_time();
+            set_receive_timeout_in_ms(100);
         }
 
         ~Impl()
@@ -139,6 +140,11 @@ class HOS::Impl
         {
             const int linger = 0;
             socket.setsockopt (ZMQ_LINGER, linger);
+        }
+
+        void set_receive_timeout_in_ms(const int timeout_in_ms)
+        {
+            socket.setsockopt (ZMQ_RCVTIMEO, timeout_in_ms);
         }
 
         Impl(); // Disabled
