@@ -125,6 +125,19 @@ class HOS::Impl
         }
 
 
+        double eta(const double x, const double y, const double t)
+        {
+            HOSComs::GetMessage message;
+            message.set_flagval("GET_SURF");
+            message.set_time((float)t);
+            message.set_vector_size(2);
+            message.add_pts((float)x);
+            message.add_pts((float)y);
+            send(message.SerializeAsString());
+            auto resp = receive<HOSComs::DataMessage>();
+            return resp.returnvalues(1);
+        }
+
     private:
         bool send(const std::string& msg)
         {
@@ -224,10 +237,10 @@ double HOS::evaluate_rao(const double , //!< x-position of the RAO's calculation
     return 0;
 }
 
-double HOS::wave_height(const double , //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double , //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double   //!< Current instant (in seconds)
-                           ) const
+double HOS::wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                        const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                        const double t  //!< Current instant (in seconds)
+                        ) const
 {
-    return 0;
+    return pimpl->eta(x,y,t);
 }
