@@ -174,3 +174,23 @@ TEST_F(environment_parsersTest, can_parse_stretching_data)
     ASSERT_DOUBLE_EQ(456, yaml.spectra.at(1).stretching.delta);
     ASSERT_DOUBLE_EQ(101, yaml.spectra.at(1).stretching.h);
 }
+
+TEST_F(environment_parsersTest, can_parse_HOS_data)
+{
+    const YamlHOS input = parse_hos(test_data::hos_for_parser_validation_only());
+    ASSERT_EQ("tcp://hos-server:5550", input.address_brokerHOS);
+    ASSERT_FLOAT_EQ(input.beta, 0.785398f);
+    ASSERT_FLOAT_EQ(input.depth, 35);
+    ASSERT_EQ(YamlHOS::ErrorType::ABSOLUTE, input.err);
+    ASSERT_FLOAT_EQ(input.gamma, 3.3f);
+    ASSERT_FLOAT_EQ(input.hs_real, 4.5f);
+    ASSERT_EQ(input.m, 3);
+    ASSERT_EQ(input.n1, 128);
+    ASSERT_EQ(input.n2, 32);
+    ASSERT_EQ(input.p1, 1);
+    ASSERT_EQ(input.p2, 2);
+    ASSERT_FLOAT_EQ(input.toler, 1E-7f);
+    ASSERT_FLOAT_EQ(input.tp_real, 10.0f);
+    ASSERT_FLOAT_EQ(input.xlen, 80.0f);
+    ASSERT_FLOAT_EQ(input.ylen, 20.0f);
+}

@@ -12,6 +12,7 @@
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 #include "InvalidInputException.hpp"
+#include "YamlHOS.hpp"
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g);
 void operator >> (const YAML::Node& node, YamlSpectra& g);
@@ -311,3 +312,55 @@ boost::optional<int>                  parse_airy(const std::string& yaml)
     return ret;
 }
 
+YamlHOS parse_hos(const std::string& yaml)
+{
+    YamlHOS ret;
+    try
+    {
+        std::stringstream stream(yaml);
+        YAML::Parser parser(stream);
+        YAML::Node node;
+        parser.GetNextDocument(node);
+        node["url of the HOS server"] >> ret.address_brokerHOS;
+        node["directional spectrum used for initialization"]["directional spreading"]["beta"] >> ret.beta;
+        double f;
+        ssc::yaml_parser::parse_uv(node["water depth"], f);
+        ret.depth = (float) f;
+        std::string err;
+        node["type of error of the RKCK scheme"] >> err;
+        if (err == "abs")
+        {
+            ret.err = YamlHOS::ErrorType::ABSOLUTE;
+        }
+        else if (err == "rel")
+        {
+            ret.err = YamlHOS::ErrorType::RELATIVE;
+        }
+        else
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid value for 'type of error of the RKCK scheme': was expecting either 'abs' or 'rel' but got '" << err << "'");
+        }
+        node["directional spectrum used for initialization"]["jonswap"]["gamma"] >> ret.gamma;
+        ssc::yaml_parser::parse_uv(node["directional spectrum used for initialization"]["jonswap"]["Hs"], f);
+        ret.hs_real = (float)f;
+        node["non-linearity order"] >> ret.m;
+        node["number of modes per node in x-direction"] >> ret.n1;
+        node["number of modes per node in y-direction"] >> ret.n2;
+        node["anti-aliasing parameter for x-axis"] >> ret.p1;
+        node["anti-aliasing parameter for y-axis"] >> ret.p2;
+        node["tolerance of the RKCK scheme"] >> ret.toler;
+        ssc::yaml_parser::parse_uv(node["directional spectrum used for initialization"]["jonswap"]["Tp"], f);
+        ret.tp_real = (float)f;
+        ssc::yaml_parser::parse_uv(node["length of the domain along x"], f);
+        ret.xlen = (float)f;
+        ssc::yaml_parser::parse_uv(node["length of the domain along y"], f);
+        ret.ylen = (float)f;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing hos ('wave' section in the YAML file): " << e.what();
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+    }
+    return ret;
+}
