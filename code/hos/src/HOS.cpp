@@ -118,6 +118,7 @@ class HOS::Impl
             // If the Bar pointer is not NULL, the message takes ownership of the allocated Bar object"
             message.set_allocated_param(get_params(yaml));
             send(message.SerializeAsString());
+            set_socket_not_to_wait_at_close_time();
         }
 
         ~Impl()
@@ -132,6 +133,12 @@ class HOS::Impl
             zmq::message_t message(msg.size());
             memcpy(message.data(), msg.data(), msg.size());
             return socket.send (message);
+        }
+
+        void set_socket_not_to_wait_at_close_time()
+        {
+            const int linger = 0;
+            socket.setsockopt (ZMQ_LINGER, linger);
         }
 
         Impl(); // Disabled
