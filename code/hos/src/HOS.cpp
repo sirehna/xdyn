@@ -11,6 +11,7 @@
 #include "hos.pb.h"
 #include "zmq.hpp"
 #include "YamlHOS.hpp"
+#include "InternalErrorException.hpp"
 #include <chrono>
 
 
@@ -109,10 +110,11 @@ class HOS::Impl
         Impl(const YamlHOS& yaml)
         : ctx(1)
         , socket(ctx, ZMQ_REQ)
+        , timeout_in_nanoseconds((int)std::floor(yaml.timeout_in_seconds*1E9+0.5))
         {
             socket.connect(yaml.address_brokerHOS);
             set_socket_not_to_wait_at_close_time();
-            set_receive_timeout_in_ms((int)std::floor(yaml.timeout_in_seconds/1000+0.5));
+            set_receive_timeout_in_ms((int)std::floor(timeout_in_nanoseconds/1E6+0.5));
             set_param(yaml);
             send_cmd("RUN");
             mode_status();
@@ -140,7 +142,7 @@ class HOS::Impl
         }
 
     private:
-        HOSComs::DataMessage wait_for_response(const HOSComs::GetMessage& message, const int timeout_in_nanoseconds)
+        HOSComs::DataMessage wait_for_response(const HOSComs::GetMessage& message)
         {
             auto begin = std::chrono::high_resolution_clock::now();
             send(message.SerializeAsString());
@@ -154,6 +156,10 @@ class HOS::Impl
                 resp = receive<HOSComs::DataMessage>();
                 elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
                 counter++;
+            }
+            if ((elapsed_nanoseconds >= timeout_in_nanoseconds) and (resp.flagval() == "WAIT"))
+            {
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Call to HOS timed out after " << elapsed_nanoseconds/1e9 << " seconds.");
             }
             return resp;
         }
@@ -212,6 +218,7 @@ class HOS::Impl
         Impl(); // Disabled
         zmq::context_t ctx;
         zmq::socket_t socket;
+        int timeout_in_nanoseconds;
 
 };
 
