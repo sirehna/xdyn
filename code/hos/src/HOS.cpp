@@ -117,8 +117,6 @@ class HOS::Impl
             set_receive_timeout_in_ms((int)std::floor(timeout_in_nanoseconds/1E6+0.5));
             set_param(yaml);
             send_cmd("RUN");
-            mode_status();
-            sleep(2);
         }
 
         ~Impl()
