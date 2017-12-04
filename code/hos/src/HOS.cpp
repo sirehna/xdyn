@@ -11,6 +11,7 @@
 #include "hos.pb.h"
 #include "zmq.hpp"
 #include "YamlHOS.hpp"
+#include <chrono>
 
 
 HOSComs::Params* get_params(const YamlHOS& yaml);
@@ -139,6 +140,24 @@ class HOS::Impl
         }
 
     private:
+        HOSComs::DataMessage wait_for_response(const HOSComs::GetMessage& message, const int timeout_in_nanoseconds)
+        {
+            auto begin = std::chrono::high_resolution_clock::now();
+            send(message.SerializeAsString());
+            auto resp = receive<HOSComs::DataMessage>();
+            auto end = std::chrono::high_resolution_clock::now();
+            int elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
+            int counter = 0;
+            while ((resp.flagval() == "WAIT") and (elapsed_nanoseconds < timeout_in_nanoseconds))
+            {
+                send(message.SerializeAsString());
+                resp = receive<HOSComs::DataMessage>();
+                elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
+                counter++;
+            }
+            return resp;
+        }
+
         bool send(const std::string& msg)
         {
             zmq::message_t message(msg.size());
