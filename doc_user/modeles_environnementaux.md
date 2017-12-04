@@ -1173,6 +1173,7 @@ tout point, des interpolations linéaires en temps et en espace sont effectuées
       beta: 0.785398
   url of the HOS server: tcp://hos-server:5550
   waves propagating to: {value: 90, unit: deg}
+  timeout: {value: 90, unit: ms}
 ~~~~
 
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
@@ -1220,6 +1221,12 @@ tout point, des interpolations linéaires en temps et en espace sont effectuées
 |                                          |                 | un changement de repère avant d'envoyer les requêtes au serveur   |
 |                                          |                 | HOS, puis fait le changement de repère inverse sur les vitesses   |
 |                                          |                 | orbitales                                                         |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+| `timeout`                                |       -         | Toute requête sera abandonnée au bout de ce temps. Contrôle à la  |
+|                                          |                 | fois le délai d'expiration au niveau ZMQ (̀ ZMQ_RCVTIMEO`) et le   |
+|                                          |                 | délai d'expiration de chaque requête (on renvoie la requête       |
+|                                          |                 | tant que la réponse est flagée `WAIT` et que ce délai d'expiration|
+|                                          |                 | n'est pas atteint).                                               |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 
 ## Références

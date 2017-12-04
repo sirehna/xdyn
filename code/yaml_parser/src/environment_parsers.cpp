@@ -355,6 +355,8 @@ YamlHOS parse_hos(const std::string& yaml)
         ret.xlen = (float)f;
         ssc::yaml_parser::parse_uv(node["length of the domain along y"], f);
         ret.ylen = (float)f;
+        ssc::yaml_parser::parse_uv(node["timeout"], f);
+        ret.timeout_in_seconds = f;
     }
     catch(std::exception& e)
     {

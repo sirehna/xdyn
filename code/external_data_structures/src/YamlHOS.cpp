@@ -25,4 +25,5 @@ YamlHOS::YamlHOS()
 ,tp_real()
 ,hs_real()
 ,address_brokerHOS()
+,timeout_in_seconds()
 {}
