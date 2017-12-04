@@ -111,7 +111,7 @@ class HOS::Impl
         {
             socket.connect(yaml.address_brokerHOS);
             set_socket_not_to_wait_at_close_time();
-            set_receive_timeout_in_ms(100);
+            set_receive_timeout_in_ms((int)std::floor(yaml.timeout_in_seconds/1000+0.5));
             set_param(yaml);
             send_cmd("RUN");
             mode_status();
