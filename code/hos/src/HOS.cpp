@@ -134,9 +134,20 @@ class HOS::Impl
             message.set_vector_size(2);
             message.add_pts((float)x);
             message.add_pts((float)y);
-            send(message.SerializeAsString());
-            auto resp = receive<HOSComs::DataMessage>();
-            return resp.returnvalues(1);
+            try
+            {
+                auto resp = wait_for_response(message);
+                if (not(resp.returnvalues_size()))
+                {
+                    THROW(__PRETTY_FUNCTION__, InternalErrorException, "Expected a array with 2 elements but got 0: cannot extract the wave elevation from what the HOS server returned.");
+                }
+                return resp.returnvalues(1);
+            }
+            catch (const InternalErrorException& exception)
+            {
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calling HOS server 'GET_SURF' (for wave elevation): " << exception.get_message());
+            }
+            return std::nan("");
         }
 
     private:

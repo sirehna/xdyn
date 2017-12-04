@@ -41,6 +41,7 @@ TEST_F(HOSTest, relative_wave_height)
 //! [HOSTest relative_wave_height example]
     HOS hos(parse_hos(test_data::hos_for_parser_validation_only()));
 //! [HOSTest relative_wave_height example]
+    ASSERT_FLOAT_EQ(0.392147, hos.wave_height(0,0,0));
 //! [HOSTest relative_wave_height expected output]
 
 //! [HOSTest relative_wave_height expected output]
