@@ -8,9 +8,9 @@
 
 
 #include "HOS.hpp"
+#include "YamlHOS.hpp"
 #include "hos.pb.h"
 #include "zmq.hpp"
-#include "YamlHOS.hpp"
 #include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
 #include <chrono>
