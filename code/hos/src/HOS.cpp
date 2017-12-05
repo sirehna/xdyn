@@ -230,13 +230,29 @@ class HOS::Impl
 
         void restart_all()
         {
-            send_cmd("PROC_STATUS_LAUNCHER");
-            send_cmd("RESTART_LAUNCHER");
-            send_cmd("PROC_STATUS_MODES");
-            send_cmd("RESTART_MODES");
-            send_cmd("PROC_STATUS_POST");
-            send_cmd("RESTART_POST");
+            restart_if_stopped("LAUNCHER");
+            restart_if_stopped("MODES");
+            restart_if_stopped("POST");
         }
+
+
+        void restart_if_stopped(const std::string& process)
+        {
+            if (status(process) == "OFF")
+            {
+                send_cmd(std::string("RESTART_") + process);
+            }
+        }
+
+        std::string status(const std::string& process)
+        {
+            HOSComs::CmdMessage cmd;
+            cmd.set_flagval(std::string("PROC_STATUS_") + process);
+            send(cmd.SerializeAsString());
+            auto stats = receive<HOSComs::DataMessage>();
+            return stats.ppstat().stat();
+        }
+
 
         Impl(); // Disabled
         zmq::context_t ctx;
