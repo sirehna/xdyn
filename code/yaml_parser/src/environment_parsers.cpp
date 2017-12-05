@@ -430,11 +430,11 @@ YamlHOS parse_hos(const std::string& yaml)
         node["type of error of the RKCK scheme"] >> err;
         if (err == "abs")
         {
-            ret.err = YamlHOS::ErrorType::ABSOLUTE;
+            ret.err = YamlHOS::ERRORTYPE_ABSOLUTE;
         }
         else if (err == "rel")
         {
-            ret.err = YamlHOS::ErrorType::RELATIVE;
+            ret.err = YamlHOS::ERRORTYPE_RELATIVE;
         }
         else
         {

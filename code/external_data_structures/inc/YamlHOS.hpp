@@ -12,7 +12,7 @@
 
 struct YamlHOS
 {
-    enum class ErrorType {ABSOLUTE, RELATIVE};
+    enum ErrorType {ERRORTYPE_ABSOLUTE, ERRORTYPE_RELATIVE};
     YamlHOS();
     int n1;
     int n2;

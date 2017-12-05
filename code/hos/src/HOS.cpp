@@ -76,10 +76,10 @@ HOSComs::Params* get_params(const YamlHOS& yaml)
 
     switch (yaml.err) // Type of error used for the temporal integration scheme (abs for absolute, rel for relative
     {
-        case YamlHOS::ErrorType::ABSOLUTE:
+        case YamlHOS::ERRORTYPE_ABSOLUTE:
             params->set_err("abs");
             break;
-        case YamlHOS::ErrorType::RELATIVE:
+        case YamlHOS::ERRORTYPE_RELATIVE:
             params->set_err("rel");
             break;
         default:

@@ -184,7 +184,7 @@ TEST_F(environment_parsersTest, can_parse_HOS_data)
     ASSERT_EQ("tcp://hos-server:5550", input.address_brokerHOS);
     ASSERT_FLOAT_EQ(input.beta, 0.785398f);
     ASSERT_FLOAT_EQ(input.depth, 35);
-    ASSERT_EQ(YamlHOS::ErrorType::ABSOLUTE, input.err);
+    ASSERT_EQ(YamlHOS::ERRORTYPE_ABSOLUTE, input.err);
     ASSERT_FLOAT_EQ(input.gamma, 3.3f);
     ASSERT_FLOAT_EQ(input.hs_real, 4.5f);
     ASSERT_EQ(input.m, 3);
