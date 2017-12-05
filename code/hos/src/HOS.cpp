@@ -162,6 +162,7 @@ class HOS::Impl
             {
                 send(message.SerializeAsString());
                 resp = receive<HOSComs::DataMessage>();
+                end = std::chrono::high_resolution_clock::now();
                 elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
             }
             if ((elapsed_nanoseconds >= timeout_in_nanoseconds) and (resp.flagval() == "WAIT"))
