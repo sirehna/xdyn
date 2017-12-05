@@ -122,7 +122,7 @@ class DiffractionForceModel::Impl
                         {
                             const double beta = psi - psis.at(i).at(j);
                                 rao_modules[k][i][j] = rao.interpolate_module(k, periods[i][j], beta);
-                                rao_phases[k][i][j] = rao.interpolate_phase(k, periods[i][j], beta);
+                                rao_phases[k][i][j] = -rao.interpolate_phase(k, periods[i][j], beta);
                         }
                     }
                     w((int)k) = env.w->evaluate_rao(H.x(),

@@ -330,7 +330,7 @@ somme les RAO comme pour le calcul de l'élévation de la surface libre en suiva
 $$F_k(x_H,y_H,t,u) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 {RAO^{k}}_{\textrm{module}}(u,\omega_i,\psi-\psi_j)\cdot a_{i,j}
 \cdot\sin(k\cdot(x_H\cdot \cos(\psi_j) + y_H\cdot \sin(\psi_j))-\omega_i\cdot
-t+{RAO^{k}}_{\textrm{phase}}(u,\omega_i,\psi-\psi_j)+\phi_{ij})$$
+t-{RAO^{k}}_{\textrm{phase}}(u,\omega_i,\psi-\psi_j)+\phi_{ij})$$
 
 - $x_H$ et $y_H$ désignent les coordonnées du [point de calcul des efforts
   hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique),
@@ -1817,3 +1817,30 @@ On obtient dans l'exemple précédent la projection suivant l'axe $X$ du repère
 renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
 même type) ainsi que la projection de ce même effort suivant l'axe $X$ du repère
 NED.
+# Modèles d'efforts non-commandés
+
+Les efforts extérieurs (non commandés) sont donnés dans la section `external forces` sous forme
+de liste de modèles ayant ou non des paramètres. La seule clef commune à tous
+les modèles d'effort est `model` : chaque modèle possède sinon sa propre
+paramétrisation (éventuellement aucune paramétrisation). Voici un exemple de
+section `external forces` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+external forces:
+  - model: gravity
+  - model: non-linear hydrostatic (fast)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Le navire est soumis aux efforts suivants :
+
+- La pesanteur,
+- Les efforts hydrostatiques, liés à la pression exercée par le fluide au repos
+  sur la coque,
+- Les efforts hydrodynamiques, provenant d'une part de l'excitation de la houle
+  et d'autre part des phénomènes de radiation/diffraction,
+- Les efforts d'amortissement visqueux, dûs aux frottements de l'eau sur la
+  coque et aux tourbillons.
+
+
+## Efforts de gravité
