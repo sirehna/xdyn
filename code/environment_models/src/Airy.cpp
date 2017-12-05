@@ -79,7 +79,8 @@ double Airy::evaluate_rao(
         const double rao_a = rao_module[i] * spectrum.a[i];
         const double omega_t = spectrum.omega[i] * t;
         const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        F -= rao_a * sin(-omega_t + k_xCosPsi_ySinPsi + rao_phase[i] + spectrum.phase[i]);
+        const double theta = spectrum.phase[i];
+        F -= rao_a * sin(-omega_t + k_xCosPsi_ySinPsi + theta + rao_phase[i]);
     }
     return F;
 }

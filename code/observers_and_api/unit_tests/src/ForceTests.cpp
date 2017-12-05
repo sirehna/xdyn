@@ -744,12 +744,12 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_in
     // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
     const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
 
-    ASSERT_DOUBLE_EQ(-module[0]*sin(phase[0]), tau.X());
-    ASSERT_DOUBLE_EQ( module[1]*sin(phase[1]), tau.Y()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ( module[2]*sin(phase[2]), tau.Z()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ(-module[3]*sin(phase[3]), tau.K());
-    ASSERT_DOUBLE_EQ( module[4]*sin(phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ( module[5]*sin(phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ( module[0]*sin(phase[0]), tau.X());
+    ASSERT_DOUBLE_EQ(-module[1]*sin(phase[1]), tau.Y()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ(-module[2]*sin(phase[2]), tau.Z()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ( module[3]*sin(phase[3]), tau.K());
+    ASSERT_DOUBLE_EQ(-module[4]*sin(phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ(-module[5]*sin(phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_interpolation_in_period_no_transport)
@@ -766,12 +766,12 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_in
     // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   30.00000)
     // 2.077326E+00 -5.459499E-01  1.525810E+00 -6.670656E-01  1.375271E+00 -5.846877E-01
     const std::vector<double> phase = {2.077326E+00, -5.459499E-01,  1.525810E+00, -6.670656E-01,  1.375271E+00, -5.846877E-01};
-    ASSERT_DOUBLE_EQ(-module[0]*sin(phase[0]), tau.X());
-    ASSERT_DOUBLE_EQ( module[1]*sin(phase[1]), tau.Y()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ( module[2]*sin(phase[2]), tau.Z()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ(-module[3]*sin(phase[3]), tau.K());
-    ASSERT_DOUBLE_EQ( module[4]*sin(phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ( module[5]*sin(phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ( module[0]*sin(phase[0]), tau.X());
+    ASSERT_DOUBLE_EQ(-module[1]*sin(phase[1]), tau.Y()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ(-module[2]*sin(phase[2]), tau.Z()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ( module[3]*sin(phase[3]), tau.K());
+    ASSERT_DOUBLE_EQ(-module[4]*sin(phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ(-module[5]*sin(phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_period_no_transport)
@@ -804,12 +804,12 @@ TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_perio
         , (-8.356066E-01+ 1.375271E+00)/2
         , (1.570796E+00-5.846877E-01)/2
         };
-    ASSERT_DOUBLE_EQ(-module[0]*sin(phase[0]), tau.X());
-    ASSERT_DOUBLE_EQ( module[1]*sin(phase[1]), tau.Y()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ( module[2]*sin(phase[2]), tau.Z()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ(-module[3]*sin(phase[3]), tau.K());
-    ASSERT_DOUBLE_EQ( module[4]*sin(phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ( module[5]*sin(phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ( module[0]*sin(phase[0]), tau.X());
+    ASSERT_DOUBLE_EQ(-module[1]*sin(phase[1]), tau.Y()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ(-module[2]*sin(phase[2]), tau.Z()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ( module[3]*sin(phase[3]), tau.K());
+    ASSERT_DOUBLE_EQ(-module[4]*sin(phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ(-module[5]*sin(phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_period_no_transport)
@@ -843,12 +843,12 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_perio
         , (-5.846877E-01*(64.-10.)  -3.053413E+00*(10-4))/(64.-4.)
         };
     const double eps = 1E-6;
-    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(phase[0]), tau.X(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR( module[1]*sin(phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[2]*sin(phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(phase[3]), tau.K(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR( module[4]*sin(phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[5]*sin(phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[0]*sin(phase[0]), tau.X(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[1]*sin(phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[2]*sin(phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(phase[3]), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport)
@@ -867,12 +867,12 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_pe
     const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
     const double k = (2*PI/4)*(2*PI/4)/9.81;
     const double eps = 1E-5;
-    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(k+phase[0]), tau.X(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR( module[1]*sin(k+phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[2]*sin(k+phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(k+phase[3]), tau.K(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR( module[4]*sin(k+phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[5]*sin(k+phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[0]*sin(k+phase[0]), tau.X(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[1]*sin(k+phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[2]*sin(k+phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(k+phase[3]), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k+phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(k+phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport_with_non_zero_t)
@@ -891,12 +891,12 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_pe
     const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
     const double k = (2*PI/4)*(2*PI/4)/9.81;
     const double eps = 1E-4;
-    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(k-2.5*PI+phase[0]), tau.X(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR( module[1]*sin(k-2.5*PI+phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[2]*sin(k-2.5*PI+phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(k-2.5*PI+phase[3]), tau.K(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR( module[4]*sin(k-2.5*PI+phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[5]*sin(k-2.5*PI+phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[0]*sin(k-2.5*PI+phase[0]), tau.X(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[1]*sin(k-2.5*PI+phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[2]*sin(k-2.5*PI+phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(k-2.5*PI+phase[3]), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k-2.5*PI+phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(k-2.5*PI+phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_period_transport_with_non_zero_t)
@@ -931,12 +931,12 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_perio
         };
     const double k = (2*PI/10)*(2*PI/10)/9.81;
     const double eps = 1E-4;
-    ASSERT_SMALL_RELATIVE_ERROR(-module[0]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[0]), tau.X(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR( module[1]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[2]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[3]), tau.K(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR( module[4]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[5]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[0]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[0]), tau.X(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[1]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[2]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[3]), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI+phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_interpolation_with_non_zero_psi_in_incidence_no_interpolation_in_period_no_transport)
@@ -969,10 +969,10 @@ TEST_F(ForceTests, bug_3210_interpolation_with_non_zero_psi_in_incidence_no_inte
         , (-8.356066E-01+ 1.375271E+00)/2
         , (1.570796E+00-5.846877E-01)/2
         };
-    ASSERT_DOUBLE_EQ(-module[0]*sin(phase[0]), tau.X());
-    ASSERT_DOUBLE_EQ( module[1]*sin(phase[1]), tau.Y()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ( module[2]*sin(phase[2]), tau.Z()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ(-module[3]*sin(phase[3]), tau.K());
-    ASSERT_DOUBLE_EQ( module[4]*sin(phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
-    ASSERT_DOUBLE_EQ( module[5]*sin(phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ( module[0]*sin(phase[0]), tau.X());
+    ASSERT_DOUBLE_EQ(-module[1]*sin(phase[1]), tau.Y()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ(-module[2]*sin(phase[2]), tau.Z()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ( module[3]*sin(phase[3]), tau.K());
+    ASSERT_DOUBLE_EQ(-module[4]*sin(phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
+    ASSERT_DOUBLE_EQ(-module[5]*sin(phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
 }

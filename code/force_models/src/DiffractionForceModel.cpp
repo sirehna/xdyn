@@ -137,10 +137,8 @@ class DiffractionForceModel::Impl
 
         ssc::kinematics::Vector6d express_aquaplus_wrench_in_xdyn_coordinates(ssc::kinematics::Vector6d v) const
         {
-            v(1) = -v(1);
-            v(2) = -v(2);
-            v(4) = -v(4);
-            v(5) = -v(5);
+            v(0) *= -1;
+            v(3) *= -1;
             return v;
         }
 
