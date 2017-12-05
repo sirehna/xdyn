@@ -13,11 +13,12 @@ SET(SRC src/HOS.cpp)
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
 IF(NOT(MSVC))
-    SET(CMAKE_CXX_FLAGS "-Werror -pedantic -pedantic-errors -Wextra -Wall -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 -Wpointer-arith -Wmissing-declarations -Wmissing-format-attribute -Wsign-compare -Wundef -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros -std=gnu++0x")
+    SET(CMAKE_CXX_FLAGS "-Werror -pedantic -pedantic-errors -Wextra -Wall -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 -Wpointer-arith -Wmissing-format-attribute -Wsign-compare -Wundef -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros -std=gnu++0x")
     IF(CMAKE_SIZEOF_VOID_P EQUAL 8) # If on a 64 bit machine
         IF(UNIX AND NOT WIN32) # If on Linux
             SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
             SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wstrict-aliasing=2")
+            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
         ENDIF()
     ENDIF()
 ENDIF()
