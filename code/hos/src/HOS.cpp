@@ -158,13 +158,11 @@ class HOS::Impl
             auto resp = receive<HOSComs::DataMessage>();
             auto end = std::chrono::high_resolution_clock::now();
             int elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
-            int counter = 0;
             while ((resp.flagval() == "WAIT") and (elapsed_nanoseconds < timeout_in_nanoseconds))
             {
                 send(message.SerializeAsString());
                 resp = receive<HOSComs::DataMessage>();
                 elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
-                counter++;
             }
             if ((elapsed_nanoseconds >= timeout_in_nanoseconds) and (resp.flagval() == "WAIT"))
             {
