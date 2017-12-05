@@ -209,8 +209,23 @@ class HOS::Impl
         {
             HOSComs::CmdMessage cmd;
             cmd.set_flagval(flag);
+            auto begin = std::chrono::high_resolution_clock::now();
             send(cmd.SerializeAsString());
-            receive();
+            auto reply = receive();
+            auto end = std::chrono::high_resolution_clock::now();
+            int elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
+            std::string rpl = std::string(static_cast<char*>(reply.data()), reply.size());
+            while ((rpl == "") and (elapsed_nanoseconds < timeout_in_nanoseconds))
+            {
+                reply = receive();
+                rpl = std::string(static_cast<char*>(reply.data()), reply.size());
+                end = std::chrono::high_resolution_clock::now();
+                elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
+            }
+            if ((elapsed_nanoseconds >= timeout_in_nanoseconds) and (rpl == ""))
+            {
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Call to HOS timed out when sending command '" << flag << "', after " << elapsed_nanoseconds/1e9 << " seconds.");
+            }
         }
 
         void restart_all()
