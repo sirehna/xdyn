@@ -33,6 +33,7 @@ sh docker_cmake.sh -Wno-dev \
                    -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake \
                    -DHDF5_DIR:PATH=/usr/local/hdf5 \
                    -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 \
+                   -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a \
                    ..
 
 
