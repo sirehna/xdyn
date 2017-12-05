@@ -4915,6 +4915,6 @@ std::string test_data::hos_for_parser_validation_only()
        << "    beta: 0.785398\n"
        << "url of the HOS server: tcp://hos-server:5550\n"
        << "waves propagating to: {value: 90, unit: deg}\n"
-       << "timeout: {value: 80, unit: ms}\n";
+       << "timeout: {value: 2, unit: s}\n";
     return ss.str();
 }
