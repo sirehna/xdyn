@@ -49,7 +49,7 @@ HOSComs::Params* get_params(const YamlHOS& yaml)
     params->set_i_out_dim(1); // output  = 1-dim ; 0-nondim
     params->set_i_3d(1); // 3d free surface quantities
     params->set_i_a_3d(0); // 3d modes
-    params->set_i_2d(1); // 2d free surface, center line
+    params->set_i_2d(0); // 2d free surface, center line
     params->set_i_prob(0); // wave probes in domain
     params->set_i_sw(1); // Activate reconstruction 1='yes', 0='no'
     params->set_qsize_max(999); // Maximum size of the queue in Modes process
