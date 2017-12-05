@@ -5,14 +5,14 @@
  *      Author: cady
  */
 
-#include <sstream>
 
 #include "environment_parsers.hpp"
 #include "external_data_structures_parsers.hpp"
 #include "yaml.h"
-#include <ssc/yaml_parser.hpp>
 #include "InvalidInputException.hpp"
 #include "YamlHOS.hpp"
+#include <ssc/yaml_parser.hpp>
+#include <sstream>
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g);
 void operator >> (const YAML::Node& node, YamlSpectra& g);
