@@ -1,4 +1,5 @@
 #include "simulator_run.hpp"
+#include "ConnexionError.hpp"
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
 #include "NumericalErrorException.hpp"
