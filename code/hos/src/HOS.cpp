@@ -12,6 +12,7 @@
 #include "zmq.hpp"
 #include "YamlHOS.hpp"
 #include "InternalErrorException.hpp"
+#include "ConnexionError.hpp"
 #include <chrono>
 
 
@@ -116,7 +117,14 @@ class HOS::Impl
             set_socket_not_to_wait_at_close_time();
             const int timeout_in_ms = (int)std::floor(timeout_in_nanoseconds/1E6+0.5);
             set_receive_timeout_in_ms(timeout_in_ms);
-            set_param(yaml);
+            try
+            {
+                set_param(yaml);
+            }
+            catch (const zmq::error_t& )
+            {
+                THROW(__PRETTY_FUNCTION__, ConnexionError, "Unable to set HOS parameters: is the HOS server up and running at " << yaml.address_brokerHOS << "?");
+            }
             send_cmd("RUN");
         }
 
