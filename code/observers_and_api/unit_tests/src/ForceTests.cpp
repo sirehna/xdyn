@@ -931,12 +931,13 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_perio
         };
     const double k = (2*PI/10)*(2*PI/10)/9.81;
     const double eps = 1E-4;
+    // Careful of the signs: cf. bug 3227
     ASSERT_SMALL_RELATIVE_ERROR( module[0]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[0]), tau.X(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR(-module[1]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[1]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(-module[2]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[3]), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[3]), tau.K(), eps);
     ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[5]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_interpolation_with_non_zero_psi_in_incidence_no_interpolation_in_period_no_transport)

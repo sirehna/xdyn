@@ -736,3 +736,60 @@ TEST_F(SimTest, bug_3217_hdb_interpolation_in_direction_incorrect_LONG)
     ASSERT_LT(std::abs(My_0-My_001),std::abs(My_30-My_001));
     ASSERT_LT(std::abs(Mz_0-Mz_001),std::abs(Mz_30-Mz_001));
 }
+
+
+TEST_F(SimTest, bug_3227_wave_angle_mirroing_problem_for_diffraction_LONG)
+{
+    const double t0 = 0;
+    const double T = 0.1;
+    const double dt = 0.1;
+    std::ofstream hdb("v00_complet_FK_diffr.hdb");
+    hdb << test_data::bug_3210();
+    std::ofstream stl("anthineas.stl");
+    stl << test_data::cube();
+    const auto yaml = test_data::bug_3227();
+
+    ListOfObservers observers(parse_output(yaml));
+    ssc::data_source::DataSource command_listener;
+    auto input = SimulatorYamlParser(yaml).parse();
+
+    const auto original_yaml = input.environment.at(0).yaml;
+
+    // Results for 30 deg
+    auto sys = get_system(input,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    auto m = get_map(observers);
+    ASSERT_EQ(6, m.size());
+    ASSERT_EQ(2, m["Fx(diffraction,Anthineas,Anthineas)"].size());
+    const double Fx_for_waves_propagating_to_plus_30 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
+    const double Fy_for_waves_propagating_to_plus_30 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
+    const double Fz_for_waves_propagating_to_plus_30 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
+    const double Mx_for_waves_propagating_to_plus_30 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
+    const double My_for_waves_propagating_to_plus_30 = m["My(diffraction,Anthineas,Anthineas)"].back();
+    const double Mz_for_waves_propagating_to_plus_30 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+
+    // Results for -30 deg
+    boost::replace_all(input.environment.at(0).yaml, "value: 30", "value: -30");
+    sys = get_system(input,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    m = get_map(observers);
+
+    ASSERT_EQ(6, m.size());
+    ASSERT_EQ(4, m["Fx(diffraction,Anthineas,Anthineas)"].size());
+    const double Fx_for_waves_propagating_to_minus_30 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
+    const double Fy_for_waves_propagating_to_minus_30 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
+    const double Fz_for_waves_propagating_to_minus_30 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
+    const double Mx_for_waves_propagating_to_minus_30 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
+    const double My_for_waves_propagating_to_minus_30 = m["My(diffraction,Anthineas,Anthineas)"].back();
+    const double Mz_for_waves_propagating_to_minus_30 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+
+    // No sign change for Fx, Fz & My when switching from waves propagating to +30 to waves propagating to -30
+    ASSERT_GE(Fx_for_waves_propagating_to_plus_30*Fx_for_waves_propagating_to_minus_30,0);
+    ASSERT_GE(Fz_for_waves_propagating_to_plus_30*Fz_for_waves_propagating_to_minus_30,0);
+    ASSERT_GE(My_for_waves_propagating_to_plus_30*My_for_waves_propagating_to_minus_30,0);
+
+    // Sign change for Fx, Fz & My when switching from waves propagating to +30 to waves propagating to -30
+    ASSERT_LE(Fy_for_waves_propagating_to_plus_30*Fy_for_waves_propagating_to_minus_30,0);
+    ASSERT_LE(Mx_for_waves_propagating_to_plus_30*Mx_for_waves_propagating_to_minus_30,0);
+    ASSERT_LE(Mz_for_waves_propagating_to_plus_30*Mz_for_waves_propagating_to_minus_30,0);
+}

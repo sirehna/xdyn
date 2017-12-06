@@ -76,8 +76,20 @@ double DiffractionInterpolator::interpolate_module(const size_t axis, const doub
     try
     {
 
-        if (mirror and (beta>PI)) ret = module.at(axis).f(Tp,2*PI-beta);
-        else                      ret = module.at(axis).f(Tp,beta);
+        if (mirror and (beta>PI))
+        {
+            ret = module.at(axis).f(Tp,2*PI-beta);
+            // Cf; bug 3227: when RAO are given from 0 to 180 deg in the HDB file and mirroring option is one,
+            // diffraction force Fy and torques Mx and Mz should have opposite signs
+            if ((axis == 1) or (axis == 3) or (axis == 5))
+            {
+                ret *= -1;
+            }
+        }
+        else
+        {
+            ret = module.at(axis).f(Tp,beta);
+        }
     }
     catch(std::exception& e)
     {
