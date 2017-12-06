@@ -9,10 +9,10 @@
 
 #include "HOS.hpp"
 #include "YamlHOS.hpp"
-#include "hos.pb.h"
-#include "zmq.hpp"
 #include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
+#include "zmq.hpp"
+#include "hos.pb.h"
 #include <chrono>
 #include <unistd.h>
 
