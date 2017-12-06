@@ -188,7 +188,7 @@ class HOS::Impl
 
         void set_receive_timeout_in_ms(const int timeout_in_ms)
         {
-            socket.setsockopt (ZMQ_RCVTIMEO, timeout_in_ms);
+            socket.setsockopt(ZMQ_RCVTIMEO, timeout_in_ms);
         }
 
         void set_param(const YamlHOS& yaml)
