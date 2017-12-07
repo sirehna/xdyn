@@ -150,7 +150,7 @@ class HOS::Impl
                 {
                     THROW(__PRETTY_FUNCTION__, InternalErrorException, "Expected a array with 2 elements but got 0: cannot extract the wave elevation from what the HOS server returned.");
                 }
-                return resp.returnvalues(1);
+                return -resp.returnvalues(1);
             }
             catch (const InternalErrorException& exception)
             {
