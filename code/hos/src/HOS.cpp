@@ -144,6 +144,7 @@ class HOS::Impl
         ~Impl()
         {
             disconnect_if_necessary();
+            google::protobuf::ShutdownProtobufLibrary();
         }
 
 
