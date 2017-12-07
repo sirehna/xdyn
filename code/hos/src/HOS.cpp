@@ -108,14 +108,9 @@ class HOS::Impl
         }
 
     public:
-        Impl()
-        : ctx(1)
-        , socket(ctx, ZMQ_REQ)
-        , timeout_in_nanoseconds()
-        , cos_theta()
-        , sin_theta()
+        static TR1(shared_ptr)<Impl> get_instance()
         {
-
+            return TR1(shared_ptr)<Impl>(new Impl());
         }
 
         void connect(const YamlHOS& yaml)
@@ -273,6 +268,15 @@ class HOS::Impl
             return stats.ppstat().stat();
         }
 
+        Impl()
+        : ctx(1)
+        , socket(ctx, ZMQ_REQ)
+        , timeout_in_nanoseconds()
+        , cos_theta()
+        , sin_theta()
+        {
+
+        }
 
         zmq::context_t ctx;
         zmq::socket_t socket;
@@ -285,7 +289,7 @@ class HOS::Impl
 HOS::HOS(const YamlHOS& yaml ,
          const std::pair<std::size_t,std::size_t> output_mesh_size_,
          const ssc::kinematics::PointMatrixPtr& output_mesh_) :
-                SurfaceElevationInterface(output_mesh_, output_mesh_size_), pimpl(new Impl())
+                SurfaceElevationInterface(output_mesh_, output_mesh_size_), pimpl(Impl::get_instance())
 {
     pimpl->connect(yaml);
 }
