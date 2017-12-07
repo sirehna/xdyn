@@ -112,6 +112,8 @@ class HOS::Impl
         : ctx(1)
         , socket(ctx, ZMQ_REQ)
         , timeout_in_nanoseconds((int)std::floor(yaml.timeout_in_seconds*1E9+0.5))
+        , cos_theta(cos(yaml.direction_of_propagation))
+        , sin_theta(sin(yaml.direction_of_propagation))
         {
             socket.connect(yaml.address_brokerHOS);
             set_socket_not_to_wait_at_close_time();
@@ -131,18 +133,19 @@ class HOS::Impl
         ~Impl()
         {
             send_cmd("EXIT");
-            google::protobuf::ShutdownProtobufLibrary();
         }
 
 
-        double eta(const double x, const double y, const double t)
+        double eta(const double x_ned, const double y_ned, const double t)
         {
+            const double x_hos =  cos_theta*x_ned - sin_theta*y_ned;
+            const double y_hos = -sin_theta*x_ned - cos_theta*y_ned;
             HOSComs::GetMessage message;
             message.set_flagval("GET_SURF");
             message.set_time((float)t);
             message.set_vector_size(2);
-            message.add_pts((float)x);
-            message.add_pts((float)y);
+            message.add_pts((float)x_hos);
+            message.add_pts((float)y_hos);
             try
             {
                 auto resp = wait_for_response(message);
@@ -267,6 +270,8 @@ class HOS::Impl
         zmq::context_t ctx;
         zmq::socket_t socket;
         int timeout_in_nanoseconds;
+        double cos_theta;
+        double sin_theta;
 
 };
 
