@@ -1229,6 +1229,39 @@ tout point, des interpolations linéaires en temps et en espace sont effectuées
 |                                          |                 | n'est pas atteint).                                               |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 
+### Repères
+
+Le modèle HOS est défini selon une convention "Z vers le haut". En outre, le
+code HOS-océan ne permet qu'une propagation suivant l'axe X (on ne contrôle pas
+la direction de propagation). Par conséquent, les opérations suivantes sont faites dans X-DYN :
+
+- Pour tous les calculs HOS, on transforme les entrées X-DYN du repère NED au
+  repère HOS. Cette transformation est définie par une rotation d'angle `waves
+  propagating to` autour de l'axe Z (afin de pouvoir simuler des directions de
+  propagations différentes de l'axe X), puis une rotation de 180 degrés autour
+  de l'axe X (pour le passage en coordonnées "Z vers le haut")
+- Le signe des hauteurs de houle donné par HOS est inversé
+- Les vitesses orbitales données par HOS subissent la transformation HOS->NED,
+  inverse de la transformée précédente
+
+La transformation NED $\rightarrow$ HOS est donnée par :
+
+$${}^{\mbox{HOS}}T_{\mbox{NED}} = R_X(\pi)\cdot R_Z(\theta)$$
+
+où $\theta$ désigne l'angle de propagation renseigné dans le fichier YAML (clef `waves propagating to`)
+
+On a donc :
+
+
+$${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]$$
+
+
+$${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
+
+et la transformation inverse (HOS $\rightarrow$ NED) est égale à la transformation directe :
+
+$${}^{\mbox{NED}}T_{\mbox{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
+
 ## Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70, 78 pour le stretching
