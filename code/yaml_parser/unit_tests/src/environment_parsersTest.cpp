@@ -194,4 +194,5 @@ TEST_F(environment_parsersTest, can_parse_HOS_data)
     ASSERT_FLOAT_EQ(input.xlen, 80.0f);
     ASSERT_FLOAT_EQ(input.ylen, 20.0f);
     ASSERT_DOUBLE_EQ(input.timeout_in_seconds, 2);
+    ASSERT_DOUBLE_EQ(input.direction_of_propagation, PI/2);
 }

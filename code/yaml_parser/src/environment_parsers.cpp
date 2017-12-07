@@ -357,6 +357,8 @@ YamlHOS parse_hos(const std::string& yaml)
         ret.ylen = (float)f;
         ssc::yaml_parser::parse_uv(node["timeout"], f);
         ret.timeout_in_seconds = f;
+        ssc::yaml_parser::parse_uv(node["waves propagating to"], f);
+        ret.direction_of_propagation = f;
     }
     catch(std::exception& e)
     {
