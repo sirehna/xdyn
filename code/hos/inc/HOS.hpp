@@ -17,6 +17,7 @@ class HOS: public SurfaceElevationInterface
             const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
             const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
 
+        ~HOS();
         /**
          *  \section ex1 Example
          *  \snippet hos/unit_tests/src/HOSTest.cpp HOSTest relative_wave_height example

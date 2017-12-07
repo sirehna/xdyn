@@ -110,7 +110,8 @@ class HOS::Impl
     public:
         static TR1(shared_ptr)<Impl> get_instance()
         {
-            return TR1(shared_ptr)<Impl>(new Impl());
+            static TR1(shared_ptr)<Impl> instance(new Impl());
+            return instance;
         }
 
         void connect(const YamlHOS& yaml)
@@ -131,11 +132,18 @@ class HOS::Impl
                 THROW(__PRETTY_FUNCTION__, ConnexionError, "Unable to set HOS parameters: is the HOS server up and running at " << yaml.address_brokerHOS << "?");
             }
             send_cmd("RUN");
+            connected = true;
+        }
+
+        void disconnect_if_necessary()
+        {
+            if (connected) send_cmd("EXIT");
+            connected = false;
         }
 
         ~Impl()
         {
-            send_cmd("EXIT");
+            disconnect_if_necessary();
         }
 
 
@@ -274,6 +282,7 @@ class HOS::Impl
         , timeout_in_nanoseconds()
         , cos_theta()
         , sin_theta()
+        , connected(false)
         {
 
         }
@@ -283,6 +292,7 @@ class HOS::Impl
         int timeout_in_nanoseconds;
         double cos_theta;
         double sin_theta;
+        bool connected;
 
 };
 
@@ -292,6 +302,11 @@ HOS::HOS(const YamlHOS& yaml ,
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_), pimpl(Impl::get_instance())
 {
     pimpl->connect(yaml);
+}
+
+HOS::~HOS()
+{
+    pimpl->disconnect_if_necessary();
 }
 
 double HOS::dynamic_pressure(const double , //!< water density (in kg/m^3)
