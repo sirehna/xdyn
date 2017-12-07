@@ -30,6 +30,7 @@ struct YamlHOS
     float hs_real;
     std::string address_brokerHOS;
     double timeout_in_seconds;
+    double direction_of_propagation;
 };
 
 

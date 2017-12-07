@@ -26,4 +26,5 @@ YamlHOS::YamlHOS()
 ,hs_real()
 ,address_brokerHOS()
 ,timeout_in_seconds()
+,direction_of_propagation()
 {}
