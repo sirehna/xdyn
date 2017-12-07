@@ -85,7 +85,7 @@ class HOS: public SurfaceElevationInterface
                                 ) const;
 
     class Impl;
-    TR1(shared_ptr)<Impl> pimpl;
+    Impl& pimpl;
 
 };
 #endif /* HOS_HPP_ */

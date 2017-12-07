@@ -108,9 +108,9 @@ class HOS::Impl
         }
 
     public:
-        static TR1(shared_ptr)<Impl> get_instance()
+        static Impl& get_instance()
         {
-            static TR1(shared_ptr)<Impl> instance(new Impl());
+            static Impl instance;
             return instance;
         }
 
@@ -301,12 +301,12 @@ HOS::HOS(const YamlHOS& yaml ,
          const ssc::kinematics::PointMatrixPtr& output_mesh_) :
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_), pimpl(Impl::get_instance())
 {
-    pimpl->connect(yaml);
+    pimpl.connect(yaml);
 }
 
 HOS::~HOS()
 {
-    pimpl->disconnect_if_necessary();
+    pimpl.disconnect_if_necessary();
 }
 
 double HOS::dynamic_pressure(const double , //!< water density (in kg/m^3)
@@ -347,5 +347,5 @@ double HOS::wave_height(const double x, //!< x-coordinate of the point, relative
                         const double t  //!< Current instant (in seconds)
                         ) const
 {
-    return pimpl->eta(x,y,t);
+    return pimpl.eta(x,y,t);
 }
