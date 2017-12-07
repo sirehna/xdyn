@@ -108,13 +108,21 @@ class HOS::Impl
         }
 
     public:
-        Impl(const YamlHOS& yaml)
+        Impl()
         : ctx(1)
         , socket(ctx, ZMQ_REQ)
-        , timeout_in_nanoseconds((int)std::floor(yaml.timeout_in_seconds*1E9+0.5))
-        , cos_theta(cos(yaml.direction_of_propagation))
-        , sin_theta(sin(yaml.direction_of_propagation))
+        , timeout_in_nanoseconds()
+        , cos_theta()
+        , sin_theta()
         {
+
+        }
+
+        void connect(const YamlHOS& yaml)
+        {
+            timeout_in_nanoseconds = (int)std::floor(yaml.timeout_in_seconds*1E9+0.5);
+            cos_theta = cos(yaml.direction_of_propagation);
+            sin_theta = sin(yaml.direction_of_propagation);
             socket.connect(yaml.address_brokerHOS);
             set_socket_not_to_wait_at_close_time();
             const int timeout_in_ms = (int)std::floor(timeout_in_nanoseconds/1E6+0.5);
@@ -266,7 +274,6 @@ class HOS::Impl
         }
 
 
-        Impl(); // Disabled
         zmq::context_t ctx;
         zmq::socket_t socket;
         int timeout_in_nanoseconds;
@@ -278,9 +285,9 @@ class HOS::Impl
 HOS::HOS(const YamlHOS& yaml ,
          const std::pair<std::size_t,std::size_t> output_mesh_size_,
          const ssc::kinematics::PointMatrixPtr& output_mesh_) :
-                SurfaceElevationInterface(output_mesh_, output_mesh_size_), pimpl(new Impl(yaml))
+                SurfaceElevationInterface(output_mesh_, output_mesh_size_), pimpl(new Impl())
 {
-
+    pimpl->connect(yaml);
 }
 
 double HOS::dynamic_pressure(const double , //!< water density (in kg/m^3)
