@@ -37,7 +37,7 @@ TEST_F(HOSTest, can_set_hos_parameters)
 //! [HOSTest relative_wave_height expected output]
 }
 
-TEST_F(HOSTest, relative_wave_height)
+TEST_F(HOSTest, relative_wave_height_LONG)
 {
 //! [HOSTest relative_wave_height example]
     HOS hos(parse_hos(test_data::hos_for_parser_validation_only()));
@@ -47,7 +47,7 @@ TEST_F(HOSTest, relative_wave_height)
 //! [HOSTest relative_wave_height expected output]
 }
 
-TEST_F(HOSTest, relative_wave_height_taking_direction_into_account)
+TEST_F(HOSTest, relative_wave_height_taking_direction_into_account_LONG)
 {
     const double t = 0;//a.random<double>().between(0, 5);
     auto yaml = test_data::hos_for_parser_validation_only();
