@@ -835,6 +835,6 @@ TEST_F(SimTest, HOS_LONG)
 {
     const double t0 = 0;
     const double dt = 0.1;
-    const double tend = 10;
+    const double tend = 1;
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::hos(), test_data::cube(), t0, tend, dt);
 }

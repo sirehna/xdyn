@@ -4806,7 +4806,7 @@ std::string test_data::hos()
        << "        beta: 0.785398\n"
        << "    url of the HOS server: tcp://hos-server:5550\n"
        << "    waves propagating to: {value: 90, unit: deg}\n"
-       << "    timeout: {value: 90, unit: ms}\n"
+       << "    timeout: {value: 2, unit: s}\n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: Anthineas\n"
