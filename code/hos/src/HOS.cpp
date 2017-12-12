@@ -152,6 +152,10 @@ class HOS::Impl
 
         double eta(const double x_ned, const double y_ned, const double t)
         {
+            if (not(parameters_are_set_on_server))
+            {
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Need to call HOS::set_parameters first.");
+            }
             const double x_hos =  cos_theta*x_ned - sin_theta*y_ned;
             const double y_hos = -sin_theta*x_ned - cos_theta*y_ned;
             HOSComs::GetMessage message;
@@ -229,6 +233,7 @@ class HOS::Impl
             receive();
             restart_all();
             send_cmd("SND_PARAM");
+            parameters_are_set_on_server = true;
         }
 
         void send_cmd(const std::string& flag)
@@ -286,6 +291,7 @@ class HOS::Impl
         , cos_theta()
         , sin_theta()
         , connected(false)
+        , parameters_are_set_on_server(false)
         {
 
         }
@@ -296,13 +302,25 @@ class HOS::Impl
         double cos_theta;
         double sin_theta;
         bool connected;
+        bool parameters_are_set_on_server;
 
 };
 
-HOS::HOS(const YamlHOS& yaml ,
-         const std::pair<std::size_t,std::size_t> output_mesh_size_,
-         const ssc::kinematics::PointMatrixPtr& output_mesh_) :
+HOS& HOS::get_instance(const std::pair<std::size_t,std::size_t> output_mesh_size, const ssc::kinematics::PointMatrixPtr& output_mesh)
+{
+    static HOS instance(output_mesh_size,output_mesh);
+    return instance;
+}
+
+
+HOS::HOS(const std::pair<std::size_t,std::size_t> output_mesh_size_,
+                const ssc::kinematics::PointMatrixPtr& output_mesh_)
+ :
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_), pimpl(Impl::get_instance())
+{
+}
+
+void HOS::set_param(const YamlHOS& yaml)
 {
     pimpl.connect(yaml);
 }

@@ -13,9 +13,9 @@ struct YamlHOS;
 class HOS: public SurfaceElevationInterface
 {
     public:
-        HOS(const YamlHOS& yaml,
-            const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
-            const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
+        static HOS& get_instance(const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
+                const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
+        void set_param(const YamlHOS& yaml);
 
         ~HOS();
         /**
@@ -57,6 +57,8 @@ class HOS: public SurfaceElevationInterface
                                                ) const;
 
     private:
+        HOS(const std::pair<std::size_t,std::size_t> output_mesh_size,
+                const ssc::kinematics::PointMatrixPtr& output_mesh);
         HOS(); // Disabled
 
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.

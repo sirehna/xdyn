@@ -37,7 +37,8 @@ boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBui
     boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > ret;
     if (model == "hos")
     {
-        TR1(shared_ptr)<SurfaceElevationInterface> p(new HOS(parse_hos(yaml)));
+        TR1(shared_ptr)<HOS> p(new HOS(HOS::get_instance()));
+        p->set_param(parse_hos(yaml));
         ret.reset(p);
     }
     return ret;

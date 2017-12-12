@@ -30,7 +30,8 @@ void HOSTest::TearDown()
 TEST_F(HOSTest, can_set_hos_parameters)
 {
 //! [HOSTest relative_wave_height example]
-    HOS hos(parse_hos(test_data::hos_for_parser_validation_only()));
+    auto hos = HOS::get_instance();
+    hos.set_param(parse_hos(test_data::hos_for_parser_validation_only()));
 //! [HOSTest relative_wave_height example]
 //! [HOSTest relative_wave_height expected output]
 
@@ -40,7 +41,8 @@ TEST_F(HOSTest, can_set_hos_parameters)
 TEST_F(HOSTest, relative_wave_height_LONG)
 {
 //! [HOSTest relative_wave_height example]
-    HOS hos(parse_hos(test_data::hos_for_parser_validation_only()));
+    auto hos = HOS::get_instance();
+    hos.set_param(parse_hos(test_data::hos_for_parser_validation_only()));
 //! [HOSTest relative_wave_height example]
 //! [HOSTest relative_wave_height expected output]
     ASSERT_FLOAT_EQ(-0.39214659, hos.wave_height(0,0,0));
@@ -51,38 +53,26 @@ TEST_F(HOSTest, relative_wave_height_taking_direction_into_account_LONG)
 {
     const double t = 0;//a.random<double>().between(0, 5);
     auto yaml = test_data::hos_for_parser_validation_only();
+    auto hos = HOS::get_instance();
 
-    double hos_at_0_deg_1_0 = 1;
-    double hos_at_0_deg_0_1 = 2;
-    double hos_at_0_deg_minus_1_0 = 3;
-    // Scoped calls so destructors are called: cannot use several clients with same HOS server...
-    {
-        boost::replace_all(yaml,"waves propagating to: {value: 90, unit: deg}","waves propagating to: {value: 0, unit: deg}");
-        HOS hos_at_0_deg(parse_hos(yaml));
-        hos_at_0_deg_1_0 = hos_at_0_deg.wave_height(1,0,t);
-        hos_at_0_deg_0_1 = hos_at_0_deg.wave_height(0,1,t);
-        hos_at_0_deg_minus_1_0 = hos_at_0_deg.wave_height(-1,0,t);
-    }
-    double hos_at_90_deg_minus_1_0 = 4;
-    double hos_at_90_deg_0_1 = 5;
-    {
-        boost::replace_all(yaml,"waves propagating to: {value: 0, unit: deg}","waves propagating to: {value: 90, unit: deg}");
-        HOS hos_at_90_deg(parse_hos(yaml));
-        hos_at_90_deg_minus_1_0 = hos_at_90_deg.wave_height(1,0,t);
-        hos_at_90_deg_0_1 = hos_at_90_deg.wave_height(0,1,t);
-    }
-    double hos_at_180_deg_1_0 = 6;
-    {
-        boost::replace_all(yaml,"waves propagating to: {value: 90, unit: deg}","waves propagating to: {value: 180, unit: deg}");
-        HOS hos_at_180_deg(parse_hos(yaml));
-        hos_at_180_deg_1_0 = hos_at_180_deg.wave_height(1,0,t);
-    }
-    double hos_at_135_deg_sqrt = 7;
-    {
-        boost::replace_all(yaml,"waves propagating to: {value: 180, unit: deg}","waves propagating to: {value: 135, unit: deg}");
-        HOS hos_at_135_deg(parse_hos(yaml));
-        hos_at_135_deg_sqrt = hos_at_135_deg.wave_height(-sqrt(2)/2,sqrt(2)/2,t);
-    }
+    boost::replace_all(yaml,"waves propagating to: {value: 90, unit: deg}","waves propagating to: {value: 0, unit: deg}");
+    hos.set_param(parse_hos(yaml));
+    const double hos_at_0_deg_1_0 = hos.wave_height(1,0,t);
+    const double hos_at_0_deg_0_1 = hos.wave_height(0,1,t);
+    const double hos_at_0_deg_minus_1_0 = hos.wave_height(-1,0,t);
+
+    boost::replace_all(yaml,"waves propagating to: {value: 0, unit: deg}","waves propagating to: {value: 90, unit: deg}");
+    hos.set_param(parse_hos(yaml));
+    const double hos_at_90_deg_minus_1_0 = hos.wave_height(1,0,t);
+    const double hos_at_90_deg_0_1 = hos.wave_height(0,1,t);
+
+    boost::replace_all(yaml,"waves propagating to: {value: 90, unit: deg}","waves propagating to: {value: 180, unit: deg}");
+    hos.set_param(parse_hos(yaml));
+    const double hos_at_180_deg_1_0 = hos.wave_height(1,0,t);
+
+    boost::replace_all(yaml,"waves propagating to: {value: 180, unit: deg}","waves propagating to: {value: 135, unit: deg}");
+    hos.set_param(parse_hos(yaml));
+    const double hos_at_135_deg_sqrt = hos.wave_height(-sqrt(2)/2,sqrt(2)/2,t);
 
     const double EPS=1E-2;
     ASSERT_NEAR(hos_at_0_deg_1_0, hos_at_90_deg_0_1, EPS);
