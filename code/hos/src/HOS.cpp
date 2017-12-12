@@ -14,6 +14,7 @@
 #include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
 #include <chrono>
+#include <unistd.h>
 
 
 HOSComs::Params* get_params(const YamlHOS& yaml);
@@ -137,7 +138,7 @@ class HOS::Impl
 
         void disconnect_if_necessary()
         {
-            if (connected) send_cmd("EXIT");
+            if (connected) {send_cmd("EXIT");sleep(1);}
             connected = false;
         }
 
