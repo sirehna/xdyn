@@ -212,6 +212,45 @@ class HOS::Impl
             return std::nan("");
         }
 
+
+        ssc::kinematics::Point orbital_velocity(const double x_ned, const double y_ned, const double z_ned, const double t)
+        {
+            if (not(parameters_are_set_on_server))
+            {
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Need to call HOS::set_parameters first.");
+            }
+            const double x_hos =  cos_theta*x_ned - sin_theta*y_ned;
+            const double y_hos = -sin_theta*x_ned - cos_theta*y_ned;
+            const double z_hos = -z_ned;
+            HOSComs::GetMessage message;
+            message.set_flagval("GET_FLOW");
+            message.set_time((float)t);
+            message.set_vector_size(3);
+            message.add_pts((float)x_hos);
+            message.add_pts((float)y_hos);
+            message.add_pts((float)z_hos);
+            try
+            {
+                auto resp = wait_for_response(message);
+                if (resp.returnvalues_size() < 8)
+                {
+                    THROW(__PRETTY_FUNCTION__, InternalErrorException, "Expected a array with at least 8 elements but got " << resp.returnvalues_size() << ": cannot extract the dynamic wave pressure from what the HOS server returned.");
+                }
+                const double vx_hos = resp.returnvalues(0);
+                const double vy_hos = resp.returnvalues(1);
+                const double vz_hos = resp.returnvalues(2);
+                const double vx_ned = cos_theta*vx_hos - sin_theta*vy_hos;
+                const double vy_ned = cos_theta*vx_hos - sin_theta*vy_hos;
+                const double vz_ned = -vz_hos;
+                return ssc::kinematics::Point("NED", vx_ned, vy_ned, vz_ned);
+            }
+            catch (const InternalErrorException& exception)
+            {
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calling HOS server 'GET_FLOW' (for dynamic pressure): " << exception.get_message());
+            }
+            return ssc::kinematics::Point("NED", std::nan(""), std::nan(""), std::nan(""));
+        }
+
     private:
         HOSComs::DataMessage wait_for_response(const HOSComs::GetMessage& message)
         {
@@ -375,14 +414,14 @@ double HOS::dynamic_pressure(const double ,   //!< water density (in kg/m^3)
 }
 
 ssc::kinematics::Point HOS::orbital_velocity(const double ,   //!< gravity (in m/s^2)
-                                                const double ,   //!< x-position in the NED frame (in meters)
-                                                const double ,   //!< y-position in the NED frame (in meters)
-                                                const double ,   //!< z-position in the NED frame (in meters)
-                                                const double ,   //!< z-position in the NED frame (in meters)
+                                                const double x_ned,   //!< x-position in the NED frame (in meters)
+                                                const double y_ned,   //!< y-position in the NED frame (in meters)
+                                                const double z_ned,   //!< z-position in the NED frame (in meters)
+                                                const double t,   //!< Current time instant (in seconds)
                                                 const double   //!< Wave elevation at (x,y) in the NED frame (in meters)
                                                ) const
 {
-    return ssc::kinematics::Point("NED", 0, 0, 0);
+    return pimpl.orbital_velocity(x_ned, y_ned, z_ned, t);
 }
 
 double HOS::evaluate_rao(const double , //!< x-position of the RAO's calculation point in the NED frame (in meters)

@@ -56,12 +56,6 @@ class HOS: public SurfaceElevationInterface
                                                 const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
                                                ) const;
 
-    private:
-        HOS(const std::pair<std::size_t,std::size_t> output_mesh_size,
-                const ssc::kinematics::PointMatrixPtr& output_mesh);
-        HOS(); // Disabled
-
-    public:
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (by DNV), "unsteady pressure" (by Faltinsen) or constant pressure contour (by Lloyd)
           *           The dynamic pressure is in fact one of the terms of Bernoulli's equation, which can be derived from the conservation
@@ -86,6 +80,11 @@ class HOS: public SurfaceElevationInterface
                                 const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
                                 const double t    //!< Current time instant (in seconds)
                                 ) const;
+
+    private:
+        HOS(const std::pair<std::size_t,std::size_t> output_mesh_size,
+                const ssc::kinematics::PointMatrixPtr& output_mesh);
+        HOS(); // Disabled
 
     class Impl;
     Impl& pimpl;

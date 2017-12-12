@@ -104,7 +104,20 @@ TEST_F(HOSTest, dynamic_pressure_LONG)
 TEST_F(HOSTest, orbital_velocity_LONG)
 {
     //! [HOSTest orbital_velocity example]
+    const auto yaml = test_data::hos_for_parser_validation_only();
+    auto hos = HOS::get_instance();
+    hos.set_param(parse_hos(yaml));
+    const double rho = 1024;
+    const double x = 1;
+    const double y = 2;
+    const double z = 3;
+    const double eta = 4;
+    const double t = 0.5;
     //! [HOSTest orbital_velocity example]
     //! [HOSTest orbital_velocity expected output]
+    const auto v = hos.orbital_velocity(rho, x, y, z, t, eta);
+    ASSERT_FLOAT_EQ(0.10164127, (float)v.x());
+    ASSERT_FLOAT_EQ(0.10164127, (float)v.y());
+    ASSERT_FLOAT_EQ(-0.11665029, (float)v.z());
     //! [HOSTest orbital_velocity expected output]
 }
