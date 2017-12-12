@@ -27,7 +27,7 @@ void HOSTest::TearDown()
 {
 }
 
-TEST_F(HOSTest, can_set_hos_parameters)
+TEST_F(HOSTest, can_set_hos_parameters_LONG)
 {
 //! [HOSTest relative_wave_height example]
     auto hos = HOS::get_instance();
@@ -82,17 +82,26 @@ TEST_F(HOSTest, relative_wave_height_taking_direction_into_account_LONG)
 
 }
 
-TEST_F(HOSTest, dynamic_pressure)
+TEST_F(HOSTest, dynamic_pressure_LONG)
 {
 //! [HOSTest dynamic_pressure example]
-
+    const auto yaml = test_data::hos_for_parser_validation_only();
+    auto hos = HOS::get_instance();
+    hos.set_param(parse_hos(yaml));
+    const double rho = 1024;
+    const double g = 10;
+    const double x = 1;
+    const double y = 2;
+    const double z = 3;
+    const double eta = 4;
+    const double t = 0.5;
 //! [HOSTest dynamic_pressure example]
 //! [HOSTest dynamic_pressure expected output]
-
+    ASSERT_FLOAT_EQ(0.14270863, hos.dynamic_pressure(rho, g, x, y, z, eta, t));
 //! [HOSTest dynamic_pressure expected output]
 }
 
-TEST_F(HOSTest, orbital_velocity)
+TEST_F(HOSTest, orbital_velocity_LONG)
 {
     //! [HOSTest orbital_velocity example]
     //! [HOSTest orbital_velocity example]

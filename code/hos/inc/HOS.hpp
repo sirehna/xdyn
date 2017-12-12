@@ -61,6 +61,7 @@ class HOS: public SurfaceElevationInterface
                 const ssc::kinematics::PointMatrixPtr& output_mesh);
         HOS(); // Disabled
 
+    public:
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (by DNV), "unsteady pressure" (by Faltinsen) or constant pressure contour (by Lloyd)
           *           The dynamic pressure is in fact one of the terms of Bernoulli's equation, which can be derived from the conservation
