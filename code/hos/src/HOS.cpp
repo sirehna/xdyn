@@ -127,9 +127,9 @@ class HOS::Impl
             {
                 set_param(yaml);
             }
-            catch (const zmq::error_t& )
+            catch (const zmq::error_t& e)
             {
-                THROW(__PRETTY_FUNCTION__, ConnexionError, "Unable to set HOS parameters: is the HOS server up and running at " << yaml.address_brokerHOS << "?");
+                THROW(__PRETTY_FUNCTION__, ConnexionError, "Unable to set HOS parameters: got error '" << e.what() << "' from ZMQ. Is the HOS server up and running at " << yaml.address_brokerHOS << "?");
             }
             send_cmd("RUN");
             connected = true;
