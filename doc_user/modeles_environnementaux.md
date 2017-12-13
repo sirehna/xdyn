@@ -1176,35 +1176,68 @@ tout point, des interpolations linéaires en temps et en espace sont effectuées
   timeout: {value: 90, unit: ms}
 ~~~~
 
+Comme les clients du serveur HOS peuvent bloquer le serveur avec des entrées
+invalides, X-DYN effectue des vérifications sur toutes les données avant envoi
+au serveur.
+
+Le cas échéant, une référence au code HOS-océan est donnée pour justifier
+les bornes imposées par X-DYN.
+
+D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
+
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 | Clef dans le fichier YAML                | Nom "HOS-Océan" | Description                                                       |
 +==========================================+=================+===================================================================+
 |`length of the domain along x`            | `xlen`          | Longueur du domaine de calcul suivant l'axe X (axe de propagation)|
+|                                          |                 | Comprise entre 0 (exclu) et 1000 km.                              |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`length of the domain along y`            | `ylen`          | Longueur du domaine de calcul suivant l'axe Y                     |
+|                                          |                 | Comprise entre 0 (exclu) et 1000 km.                              |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`number of modes per node in x-direction` | `n1`            | Nombre de modes par noeud sur l'axe X                             |
+|`number of modes per node in x-direction` | `n1`            | Nombre de modes par noeud sur l'axe X. Supérieur ou égal à 1      |
+|                                          |                 | (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)) |
+|                                          |                 | Attention : d'autres contraintes moins explicites doivent exister |
+|                                          |                 | (le serveur peut planter en case de valeur invalide) mais elles ne|
+|                                          |                 | sont pas vérifiées par X-DYN.                                     |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`number of modes per node in x-direction` | `n2`            | Nombre de modes par noeud sur l'axe Y                             |
+|`number of modes per node in y-direction` | `n2`            | Nombre de modes par noeud sur l'axe Y. Supérieur ou égal à 1      |
+|                                          |                 | (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)) |
+|                                          |                 | Attention : d'autres contraintes moins explicites doivent exister |
+|                                          |                 | (le serveur peut planter en case de valeur invalide) mais elles ne|
+|                                          |                 | sont pas vérifiées par X-DYN.                                     |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`non-linearity order`                     | `m`             | Ordre de la méthode HOS (ordre du développement de Taylor)        |
+|                                          |                 | On doit avoir                                                     |
+|                                          |                 | $m\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.    |
+|                                          |                 | [`initial_conditions.f90` line 63](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L63) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`anti-aliasing parameter for x-axis`      | `p1`            | Paramètre d'anti-aliasing (pour l'axe X)                          |
+|                                          |                 | Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 67](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L67)) |
+|                                          |                 | On doit également avoir                                           |
+|                                          |                 | $p_1\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.  |
+|                                          |                 | [`initial_conditions.f90` line 64](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L64) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`anti-aliasing parameter for y-axis`      | `p2`            | Paramètre d'anti-aliasing (pour l'axe Y)                          |
+|                                          |                 | Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 71](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L71)) |
+|                                          |                 | On doit également avoir                                           |
+|                                          |                 | $p_2\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.  |
+|                                          |                 | [`initial_conditions.f90` line 65](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L65) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`water depth`                             | `depth`         | Profondeur d'eau                                                  |
+|                                          |                 | Doit être supérieur ou égal à 0 (cf. [`initial_conditions.f90` line 79](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L79)). Une valeur de 1E15 est interprétée dans la modélisation comme l'infini (cf. [`initial_conditions.f90` line 154](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L154)) |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`gamma`                                   | `gamma`         | Paramètre de forme du spectre de JONSWAP utilisé pour             |
-|                                          |                 | l'initialisation de la simulation                                 |
+|                                          |                 | l'initialisation de la simulation. Doit être compris entre 0 et 20|
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`beta`                                    | `beta`          | Paramètre de l'étalement directionnel (Dysthe)                    |
+|`beta`                                    | `beta`          | Paramètre de l'étalement directionnel (Dysthe). Doit être                    |
+|                                          |                 | Doit être strictement positif (cf. [`initial_conditions.f90` line 396](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L396)). |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`Tp`                                      | `tp_real`       | Période du spectre de JONSWAP utilisé pour l'initialisation de la |
 |                                          |                 | simulation                                                        |
+|                                          |                 | Doit être strictement positif (cf. [`initial_conditions.f90` line 155](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L155)). |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`Hs`                                      | `hs_real`       | Hauteur de houle du spectre de JONSWAP utilisé pour               |
-|                                          |                 | l'initialisation de la simulation                                 |
+|                                          |                 | l'initialisation de la simulation. Compris entre 0 (exclus) et 50m|
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`tolerance of the RKCK scheme`            | `err`           | L'erreur utilisée pour le schéma d'intégration adaptatif          |
 |                                          |                 | Runge-Kutta - Cash-Karp doit-elle être absolue ('abs') ou relative|
@@ -1220,13 +1253,17 @@ tout point, des interpolations linéaires en temps et en espace sont effectuées
 |                                          |                 | codée en dur pour une propagation suivant l'axe X), X-DYN effectue|
 |                                          |                 | un changement de repère avant d'envoyer les requêtes au serveur   |
 |                                          |                 | HOS, puis fait le changement de repère inverse sur les vitesses   |
-|                                          |                 | orbitales                                                         |
+|                                          |                 | orbitales.                                                        |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 | `timeout`                                |       -         | Toute requête sera abandonnée au bout de ce temps. Contrôle à la  |
-|                                          |                 | fois le délai d'expiration au niveau ZMQ (̀ ZMQ_RCVTIMEO`) et le   |
+|                                          |                 | fois le délai d'expiration au niveau ZMQ (̀ZMQ_RCVTIMEO) et le     |
 |                                          |                 | délai d'expiration de chaque requête (on renvoie la requête       |
 |                                          |                 | tant que la réponse est flagée `WAIT` et que ce délai d'expiration|
-|                                          |                 | n'est pas atteint).                                               |
+|                                          |                 | n'est pas atteint). Comme cette valeur est convertie dans le code |
+|                                          |                 | en millisecondes (precision du timeout), elle doit être comprise  |
+|                                          |                 | entre 0 (exclu) et 2147 (inclus) secondes. Les unités valides sont|
+|                                          |                 | `s`, `ms`, `us`, `ns`, `min`, `minute`, `minutes`, `second`,      |
+|                                          |                 | `seconds`, `seconde` et `secondes`.                               |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 
 ### Repères
