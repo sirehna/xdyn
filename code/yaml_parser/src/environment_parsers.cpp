@@ -390,7 +390,8 @@ void checks_on_p1_p2_m(const std::string& key, const int value)
 YamlHOS check(const YamlHOS& input);
 YamlHOS check(const YamlHOS& input)
 {
-    checks_on_p1_p2_m("p1",input.p1);
+    checks_on_p1_p2_m("anti-aliasing parameter for x-axis",input.p1);
+    checks_on_p1_p2_m("anti-aliasing parameter for y-axis",input.p2);
     return input;
 }
 
