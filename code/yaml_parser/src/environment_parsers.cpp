@@ -371,6 +371,20 @@ void checks_on_p1_p2_m(const std::string& key, const int value);
 void checks_on_p1_p2_m(const std::string& key, const int value)
 {
     assert_(NE, value, 6, key);
+    assert_(NE, value,10, key);
+    assert_(NE, value,12, key);
+    assert_(NE, value,13, key);
+    assert_(NE, value,16, key);
+    assert_(NE, value,18, key);
+    assert_(NE, value,20, key);
+    assert_(NE, value,21, key);
+    assert_(NE, value,22, key);
+    assert_(NE, value,24, key);
+    assert_(NE, value,25, key);
+    assert_(NE, value,26, key);
+    assert_(NE, value,27, key);
+    assert_(NE, value,28, key);
+    assert_(LT, value,30, key);
 }
 
 YamlHOS check(const YamlHOS& input);
