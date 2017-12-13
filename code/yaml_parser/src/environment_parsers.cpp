@@ -312,6 +312,75 @@ boost::optional<int>                  parse_airy(const std::string& yaml)
     return ret;
 }
 
+enum Comparison {LT,LE,GT,GE,EQ,NE};
+
+template <typename T> bool comparator(const Comparison c, const T& left, const T& right)
+{
+    switch(c)
+    {
+        case LT:
+            return left < right;
+        case LE:
+            return left <= right;
+        case GT:
+            return left > right;
+        case GE:
+            return left >= right;
+        case EQ:
+            return left == right;
+        case NE:
+            return left != right;
+        default:
+            return false;
+    }
+    return false;
+}
+
+std::string opname(const Comparison c);
+std::string opname(const Comparison c)
+{
+    switch(c)
+    {
+        case LT:
+            return "<";
+        case LE:
+            return "<=";
+        case GT:
+            return ">";
+        case GE:
+            return ">=";
+        case EQ:
+            return "=";
+        case NE:
+            return "!=";
+        default:
+            return "";
+    }
+    return "";
+}
+
+template <typename T> void assert_(const Comparison c, const T& value, const T& limit, const std::string& key)
+{
+    if (not(comparator(c, value, limit)))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, key << " should be " << opname(c) << " " << limit << ", but got " << value);
+    }
+}
+
+void checks_on_p1_p2_m(const std::string& key, const int value);
+void checks_on_p1_p2_m(const std::string& key, const int value)
+{
+    assert_(NE, value, 6, key);
+}
+
+YamlHOS check(const YamlHOS& input);
+YamlHOS check(const YamlHOS& input)
+{
+    checks_on_p1_p2_m("p1",input.p1);
+    return input;
+}
+
+
 YamlHOS parse_hos(const std::string& yaml)
 {
     YamlHOS ret;
@@ -366,5 +435,5 @@ YamlHOS parse_hos(const std::string& yaml)
         ss << "Error parsing HOS model parameters ('wave' section in the YAML file): " << e.what();
         THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
-    return ret;
+    return check(ret);
 }

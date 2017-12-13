@@ -10,6 +10,9 @@
 #include "environment_parsersTest.hpp"
 #include "environment_parsers.hpp"
 #include "yaml_data.hpp"
+#include "InvalidInputException.hpp"
+
+#include <boost/algorithm/string.hpp> // replace in string
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -195,4 +198,33 @@ TEST_F(environment_parsersTest, can_parse_HOS_data)
     ASSERT_FLOAT_EQ(input.ylen, 20.0f);
     ASSERT_DOUBLE_EQ(input.timeout_in_seconds, 2);
     ASSERT_DOUBLE_EQ(input.direction_of_propagation, PI/2);
+}
+
+struct HOSYaml
+{
+    HOSYaml() : yaml(test_data::hos_for_parser_validation_only()) {}
+
+    HOSYaml& change(const std::string& parameter_name, const std::string& from, const std::string& to)
+    {
+        std::stringstream sf;
+        sf << parameter_name << ": " << from;
+        std::stringstream st;
+        st << parameter_name << ": " << to;
+        boost::replace_all(this->yaml, sf.str(), st.str());
+        return *this;
+    }
+
+    operator std::string() const
+    {
+        return yaml;
+    }
+
+    private: std::string yaml;
+};
+
+TEST_F(environment_parsersTest, HOS_p1_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("non-linearity order", "3", "29")
+                                    .change("anti-aliasing parameter for y-axis", "1", "29")
+                                    .change("anti-aliasing parameter for x-axis", "1", "6")), InvalidInputException);
 }
