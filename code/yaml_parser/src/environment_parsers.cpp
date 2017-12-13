@@ -363,7 +363,7 @@ YamlHOS parse_hos(const std::string& yaml)
     catch(std::exception& e)
     {
         std::stringstream ss;
-        ss << "Error parsing hos ('wave' section in the YAML file): " << e.what();
+        ss << "Error parsing HOS model parameters ('wave' section in the YAML file): " << e.what();
         THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
     return ret;
