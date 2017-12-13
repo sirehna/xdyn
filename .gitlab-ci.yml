@@ -26,7 +26,42 @@ cleanup_Docker:
      - docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null || true
      - docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null || true
 
-build:
+build:windows:
+   stage: build
+   script:
+     - cd ssc_getter
+     - docker build -f Dockerfile -t get_ssc .
+     - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py
+     - unzip artifacts.zip
+     - rm artifacts.zip
+     - unzip ssc.zip -d /opt/ssc
+     - rm ssc.zip
+     - cd ..
+     - mkdir -p build
+     - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
+          /bin/bash -c "mkdir /opt/share/.wine &&
+                        export WINEPREFIX=/opt/share/.wine &&
+                        wine winecfg &&
+                        cmake -Wno-dev
+                        -G Ninja
+                        -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake
+                        -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
+                        -DCPACK_GENERATOR=ZIP
+                        -DBOOST_ROOT:PATH=/opt/boost
+                        -DBOOST_INCLUDEDIR:PATH=/opt/boost/include
+                        -DBoost_INCLUDE_DIR:PATH=/opt/boost/include
+                        -DBOOST_LIBRARYDIR:PATH=/opt/boost/lib
+                        -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
+                        -DBoost_LIBRARY_DIR_RELEASE:PATH=/opt/boost/lib
+                        -DBoost_DEBUG=1
+                        /opt/share/code"
+     - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
+          /bin/bash -c "mkdir -p /opt/share/.wine && export WINEPREFIX=/opt/share/.wine && wine winecfg && ninja package"
+     - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
+          /bin/bash -c "mkdir -p /opt/share/.wine && export WINEPREFIX=/opt/share/.wine && wine winecfg && wine ./run_all_tests --gtest_filter=*"
+
+
+build:debian:
    stage: build
    script:
      - cd ssc_getter
@@ -51,5 +86,4 @@ build:
      - cp build/xdyn.deb make_docker_image
      - cd make_docker_image
      - ./make_docker_image.sh
-     - cd ..
 
