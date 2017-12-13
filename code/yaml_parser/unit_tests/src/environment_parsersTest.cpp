@@ -410,6 +410,99 @@ TEST_F(environment_parsersTest, HOS_p2_should_be_checked)
                                     .change("anti-aliasing parameter for y-axis", "2", "30")), InvalidInputException);
 }
 
+TEST_F(environment_parsersTest, HOS_m_should_be_checked)
+{
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "1")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "2")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "3")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "4")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "5")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "7")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "8")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "9")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "11")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "14")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "15")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "17")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "19")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "23")));
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                       .change("anti-aliasing parameter for y-axis", "2", "29")
+                                       .change("non-linearity order", "3", "29")));
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "6")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "10")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "12")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "13")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "16")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "18")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "20")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "21")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "22")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "24")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "25")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "26")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "27")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "28")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("anti-aliasing parameter for x-axis", "1", "29")
+                                    .change("anti-aliasing parameter for y-axis", "2", "29")
+                                    .change("non-linearity order", "3", "30")), InvalidInputException);
+}
 
 //TEST_F(environment_parsersTest, HOS_xlen_should_be_checked)
 //{
