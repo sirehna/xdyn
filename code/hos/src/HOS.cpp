@@ -118,13 +118,12 @@ class HOS::Impl
         void connect(const YamlHOS& yaml)
         {
             disconnect_if_necessary();
-            timeout_in_nanoseconds = (int)std::floor(yaml.timeout_in_seconds*1E9+0.5);
+            timeout_in_milliseconds = (int)std::floor(yaml.timeout_in_seconds*1E6+0.5);
             cos_theta = cos(yaml.direction_of_propagation);
             sin_theta = sin(yaml.direction_of_propagation);
             socket.connect(yaml.address_brokerHOS);
             set_socket_not_to_wait_at_close_time();
-            const int timeout_in_ms = (int)std::floor(timeout_in_nanoseconds/1E6+0.5);
-            set_receive_timeout_in_ms(timeout_in_ms);
+            set_receive_timeout_in_ms(timeout_in_milliseconds);
             try
             {
                 set_param(yaml);
@@ -258,17 +257,17 @@ class HOS::Impl
             send(message.SerializeAsString());
             auto resp = receive<HOSComs::DataMessage>();
             auto end = std::chrono::high_resolution_clock::now();
-            int elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
-            while ((resp.flagval() == "WAIT") and (elapsed_nanoseconds < timeout_in_nanoseconds))
+            int elapsed_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count();
+            while ((resp.flagval() == "WAIT") and (elapsed_milliseconds < timeout_in_milliseconds))
             {
                 send(message.SerializeAsString());
                 resp = receive<HOSComs::DataMessage>();
                 end = std::chrono::high_resolution_clock::now();
-                elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
+                elapsed_milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count();
             }
-            if ((elapsed_nanoseconds >= timeout_in_nanoseconds) and (resp.flagval() == "WAIT"))
+            if ((elapsed_milliseconds >= timeout_in_milliseconds) and (resp.flagval() == "WAIT"))
             {
-                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Call to HOS timed out after " << elapsed_nanoseconds/1e9 << " seconds.");
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Call to HOS timed out after " << elapsed_milliseconds/1e6 << " seconds.");
             }
             return resp;
         }
@@ -317,14 +316,14 @@ class HOS::Impl
             auto end = std::chrono::high_resolution_clock::now();
             int elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
             std::string rpl = std::string(static_cast<char*>(reply.data()), reply.size());
-            while ((rpl == "") and (elapsed_nanoseconds < timeout_in_nanoseconds))
+            while ((rpl == "") and (elapsed_nanoseconds < timeout_in_milliseconds))
             {
                 reply = receive();
                 rpl = std::string(static_cast<char*>(reply.data()), reply.size());
                 end = std::chrono::high_resolution_clock::now();
                 elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
             }
-            if ((elapsed_nanoseconds >= timeout_in_nanoseconds) and (rpl == ""))
+            if ((elapsed_nanoseconds >= timeout_in_milliseconds) and (rpl == ""))
             {
                 THROW(__PRETTY_FUNCTION__, InternalErrorException, "Call to HOS timed out when sending command '" << flag << "', after " << elapsed_nanoseconds/1e9 << " seconds.");
             }
@@ -358,7 +357,7 @@ class HOS::Impl
         Impl()
         : ctx(1)
         , socket(ctx, ZMQ_REQ)
-        , timeout_in_nanoseconds()
+        , timeout_in_milliseconds()
         , cos_theta()
         , sin_theta()
         , connected(false)
@@ -369,7 +368,7 @@ class HOS::Impl
 
         zmq::context_t ctx;
         zmq::socket_t socket;
-        int timeout_in_nanoseconds;
+        int timeout_in_milliseconds;
         double cos_theta;
         double sin_theta;
         bool connected;
