@@ -504,9 +504,9 @@ TEST_F(environment_parsersTest, HOS_m_should_be_checked)
                                     .change("non-linearity order", "3", "30")), InvalidInputException);
 }
 
-//TEST_F(environment_parsersTest, HOS_xlen_should_be_checked)
-//{
-//    auto yaml = test_data::hos_for_parser_validation_only();
-//    boost::replace_all(yaml,"anti-aliasing parameter for x-axis: 1","anti-aliasing parameter for x-axis: 4");
-//    ASSERT_THROW(parse_hos(yaml), InvalidInputException);
-//}
+TEST_F(environment_parsersTest, HOS_xlen_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("length of the domain along x", "{value: 80, unit: m}", "{value: 0, unit: m}")), InvalidInputException);
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("length of the domain along x", "{value: 80, unit: m}", "{value: 1000, unit: km}")));
+    ASSERT_THROW(parse_hos(HOSYaml().change("length of the domain along x", "{value: 80, unit: m}", "{value: 1000.0001, unit: km}")), InvalidInputException);
+}

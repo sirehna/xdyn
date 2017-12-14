@@ -393,6 +393,8 @@ YamlHOS check(const YamlHOS& input)
     checks_on_p1_p2_m("anti-aliasing parameter for x-axis",input.p1);
     checks_on_p1_p2_m("anti-aliasing parameter for y-axis",input.p2);
     checks_on_p1_p2_m("non-linearity order",input.m);
+    assert_(GT, input.xlen, (float)0, "length of the domain along x");
+    assert_(LE, input.xlen, (float)1E6, "length of the domain along x");
     return input;
 }
 
