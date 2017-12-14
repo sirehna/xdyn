@@ -395,6 +395,8 @@ YamlHOS check(const YamlHOS& input)
     checks_on_p1_p2_m("non-linearity order",input.m);
     assert_(GT, input.xlen, (float)0, "length of the domain along x");
     assert_(LE, input.xlen, (float)1E6, "length of the domain along x");
+    assert_(GT, input.ylen, (float)0, "length of the domain along y");
+    assert_(LE, input.ylen, (float)1E6, "length of the domain along y");
     return input;
 }
 

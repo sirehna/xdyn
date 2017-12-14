@@ -510,3 +510,10 @@ TEST_F(environment_parsersTest, HOS_xlen_should_be_checked)
     ASSERT_NO_THROW(parse_hos(HOSYaml().change("length of the domain along x", "{value: 80, unit: m}", "{value: 1000, unit: km}")));
     ASSERT_THROW(parse_hos(HOSYaml().change("length of the domain along x", "{value: 80, unit: m}", "{value: 1000.0001, unit: km}")), InvalidInputException);
 }
+
+TEST_F(environment_parsersTest, HOS_ylen_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("length of the domain along y", "{value: 20, unit: m}", "{value: 0, unit: m}")), InvalidInputException);
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("length of the domain along y", "{value: 20, unit: m}", "{value: 1000, unit: km}")));
+    ASSERT_THROW(parse_hos(HOSYaml().change("length of the domain along y", "{value: 20, unit: m}", "{value: 1000.0001, unit: km}")), InvalidInputException);
+}
