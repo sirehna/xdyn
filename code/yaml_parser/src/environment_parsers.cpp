@@ -397,6 +397,17 @@ YamlHOS check(const YamlHOS& input)
     assert_(LE, input.xlen, (float)1E6, "length of the domain along x");
     assert_(GT, input.ylen, (float)0, "length of the domain along y");
     assert_(LE, input.ylen, (float)1E6, "length of the domain along y");
+    assert_(GT, input.n1, 0, "number of modes per node in x-direction");
+    assert_(GT, input.n2, 0, "number of modes per node in y-direction");
+    assert_(GT, input.depth, (float)0, "water depth");
+    assert_(GT, input.gamma, (float)0, "gamma");
+    assert_(LE, input.gamma, (float)20, "gamma");
+    assert_(GT, input.beta, (float)0, "beta");
+    assert_(GT, input.tp_real, (float)0, "Tp");
+    assert_(GT, input.hs_real, (float)0, "Hs");
+    assert_(LE, input.hs_real, (float)50, "Hs");
+    assert_(GT, input.timeout_in_seconds, 0.0, "timeout");
+    assert_(LE, input.timeout_in_seconds, 2147.0, "timeout");
     return input;
 }
 

@@ -517,3 +517,50 @@ TEST_F(environment_parsersTest, HOS_ylen_should_be_checked)
     ASSERT_NO_THROW(parse_hos(HOSYaml().change("length of the domain along y", "{value: 20, unit: m}", "{value: 1000, unit: km}")));
     ASSERT_THROW(parse_hos(HOSYaml().change("length of the domain along y", "{value: 20, unit: m}", "{value: 1000.0001, unit: km}")), InvalidInputException);
 }
+
+
+TEST_F(environment_parsersTest, HOS_n1_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("number of modes per node in x-direction", "128", "0")), InvalidInputException);
+}
+
+TEST_F(environment_parsersTest, HOS_n2_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("number of modes per node in y-direction", "32", "0")), InvalidInputException);
+}
+
+TEST_F(environment_parsersTest, HOS_depth_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("water depth", "{value: 35.0, unit: m}", "{value: -1, unit: m}")), InvalidInputException);
+}
+
+TEST_F(environment_parsersTest, HOS_gamma_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("gamma", "3.3", "-0.1")), InvalidInputException);
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("gamma", "3.3", "20")));
+    ASSERT_THROW(parse_hos(HOSYaml().change("gamma", "3.3", "21")), InvalidInputException);
+}
+
+TEST_F(environment_parsersTest, HOS_beta_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("beta", "0.785398", "0")), InvalidInputException);
+}
+
+TEST_F(environment_parsersTest, HOS_Tp_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("Tp", "{value: 10.0, unit: s}", "{value: 0, unit: s}")), InvalidInputException);
+}
+
+TEST_F(environment_parsersTest, HOS_Hs_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("Hs", "{value: 4.5, unit: m}", "{value: 0, unit: m}")), InvalidInputException);
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("Hs", "{value: 4.5, unit: m}", "{value: 50, unit: m}")));
+    ASSERT_THROW(parse_hos(HOSYaml().change("Hs", "{value: 4.5, unit: m}", "{value: 50.001, unit: m}")), InvalidInputException);
+}
+
+TEST_F(environment_parsersTest, HOS_timeout_should_be_checked)
+{
+    ASSERT_THROW(parse_hos(HOSYaml().change("timeout", "{value: 2, unit: s}", "{value: 2148, unit: s}")), InvalidInputException);
+    ASSERT_THROW(parse_hos(HOSYaml().change("timeout", "{value: 2, unit: s}", "{value: 0, unit: s}")), InvalidInputException);
+    ASSERT_NO_THROW(parse_hos(HOSYaml().change("timeout", "{value: 2, unit: s}", "{value: 2147, unit: s}")));
+}
