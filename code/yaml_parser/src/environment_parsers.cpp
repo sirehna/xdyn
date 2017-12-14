@@ -363,7 +363,7 @@ template <typename T> void assert_(const Comparison c, const T& value, const T& 
 {
     if (not(comparator(c, value, limit)))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, key << " should be " << opname(c) << " " << limit << ", but got " << value);
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error parsing HOS model parameters ('wave' section in the YAML file): '" << key << "' should be " << opname(c) << " " << limit << ", but got " << value);
     }
 }
 
