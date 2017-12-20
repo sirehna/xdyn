@@ -59,7 +59,7 @@ build:windows:
                         -DBoost_FILESYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_filesystem-mt.a
                         -DBoost_SYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_system-mt.a
                         -DBoost_REGEX_LIBRARY:PATH=/opt/boost/lib/libboost_regex-mt.a
-                        -DHDF5_DIR=/opt/HDF5/cmake
+                        -DHDF5_DIR=/opt/HDF5_1_8_20/cmake
                         -DCMAKE_SYSTEM_VERSION=7
                         /opt/share/code"
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
