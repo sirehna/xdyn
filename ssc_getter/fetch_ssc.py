@@ -1,10 +1,12 @@
 import gitlab
 from dateutil.parser import parse
+import logging
 
 import urllib3
 # urllib3\connectionpool.py:858: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+service_name = "ssc-getter"
 
 def get_build_from_commit(builds, commit, **kwargs):
     """
@@ -21,9 +23,8 @@ def get_build_from_commit(builds, commit, **kwargs):
     for build in builds:
         if build.commit is not None and build.commit.id == commit and build.name.startswith(build_type):
             list_build_with_correct_commit.append(build)
-    if verbose:
-        print(len(list_build_with_correct_commit))
-        print(list_build_with_correct_commit)
+    logging.debug(len(list_build_with_correct_commit))
+    logging.debug(list_build_with_correct_commit)
     if list_build_with_correct_commit:
         latest = list_build_with_correct_commit[0]
         for b in list_build_with_correct_commit:
@@ -95,20 +96,20 @@ def fetch_artifact(**kwargs):
         def __call__(self, chunk):
             self._fd.write(chunk)
 
-    print(latest)
+    logging.debug(latest)
     if latest is not None:
         # Download artifact as a stream
         target = Download()
         latest.artifacts(streamed=True, action=target)
         del(target)  # flushes data on disk
-        print("Downloaded artifacts.zip")
+        logging.info("Downloaded artifacts.zip")
     else:
-        print("No build found so no artifact downloaded")
+        logging.error("No build found so no artifact downloaded")
 
 
 def getParser():
     import argparse
-    default_project = 4
+    default_project = 42
     default_commit = None
     default_private_token = 'BvC3JDEocCPxVZN4Wuxd'
     default_build_type = ''
