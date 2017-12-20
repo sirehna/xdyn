@@ -43,6 +43,9 @@ build:windows:
           /bin/bash -c "mkdir /opt/share/.wine &&
                         export WINEPREFIX=/opt/share/.wine &&
                         wine winecfg &&
+                        cp /opt/share/ssc/bin/*.dll . &&
+                        mkdir -p executables &&
+                        cp /opt/share/ssc/bin/*.dll executables/. &&
                         cmake -Wno-dev
                         -G Ninja
                         -Dssc_DIR:PATH=/opt/share/ssc/lib/ssc/cmake
