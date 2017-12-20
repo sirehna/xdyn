@@ -55,6 +55,10 @@ build:windows:
                         -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
                         -DBoost_LIBRARY_DIR_RELEASE:PATH=/opt/boost/lib
                         -DBoost_DEBUG=1
+                        -DBoost_PROGRAM_OPTIONS_LIBRARY:PATH=/opt/boost/lib/libboost_program_options-mt.a
+                        -DBoost_FILESYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_filesystem-mt.a
+                        -DBoost_SYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_system-mt.a
+                        -DBoost_REGEX_LIBRARY:PATH=/opt/boost/lib/libboost_regex-mt.a
                         -DHDF5_DIR=/opt/HDF5/cmake
                         -DCMAKE_SYSTEM_VERSION=7
                         /opt/share/code"
