@@ -46,5 +46,4 @@ cd make_docker_image
 cd ..
 
 # Run all tests
-#sh docker_run_all_tests.sh --gtest_output=xml:run_all_tests.xml 
-
+sh docker_run_all_tests.sh --gtest_output=xml:run_all_tests.xml
