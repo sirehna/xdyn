@@ -73,7 +73,10 @@ build:windows:
                         cp /opt/share/ssc/bin/*.dll . &&
                         wine ./run_all_tests
                             --gtest_filter=-ObserverTests.can_observe_using_a_websocket:RadiationDampingForceModelTest.should_print_debugging_information_if_required_by_yaml_data:ResistanceCurveForceModelTest.should_issue_a_warning_when_speed_is_lower_than_min_speed_specified_in_resistance_curve_table:ResistanceCurveForceModelTest.should_issue_a_warning_when_speed_is_greater_than_max_speed_specified_in_resistance_curve_table:WageningenControlledForceModelTest.Kt_should_issue_a_warning_if_P_D_is_outside_bounds:WageningenControlledForceModelTest.Kt_should_throw_if_J_is_outside_bounds:WageningenControlledForceModelTest.Kq_should_throw_if_P_D_is_outside_bounds:WageningenControlledForceModelTest.Kq_should_throw_if_J_is_outside_bounds:BlockedDOFTest.should_not_throw_if_CSV_file_exists"
-
+   artifacts:
+     when: on_success
+     paths:
+     - xdyn.zip
 
 build:debian:
    stage: build
@@ -100,4 +103,8 @@ build:debian:
      - cp build/xdyn.deb make_docker_image
      - cd make_docker_image
      - ./make_docker_image.sh
+   artifacts:
+     when: on_success
+     paths:
+     - build/xdyn.deb
 
