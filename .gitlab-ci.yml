@@ -52,13 +52,13 @@ build:windows:
                         -Dssc_DIR:PATH=/opt/share/ssc/lib/ssc/cmake
                         -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
                         -DCPACK_GENERATOR=ZIP
+                        -DBoost_DEBUG=0
                         -DBOOST_ROOT:PATH=/opt/boost
                         -DBOOST_INCLUDEDIR:PATH=/opt/boost/include
                         -DBoost_INCLUDE_DIR:PATH=/opt/boost/include
                         -DBOOST_LIBRARYDIR:PATH=/opt/boost/lib
                         -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
                         -DBoost_LIBRARY_DIR_RELEASE:PATH=/opt/boost/lib
-                        -DBoost_DEBUG=1
                         -DBoost_PROGRAM_OPTIONS_LIBRARY:PATH=/opt/boost/lib/libboost_program_options-mt.a
                         -DBoost_FILESYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_filesystem-mt.a
                         -DBoost_SYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_system-mt.a
