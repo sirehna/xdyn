@@ -175,9 +175,13 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         
         )
 
+# Add test program and its dependencies in the installation file
 INSTALL(TARGETS ${TEST_EXE}
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
         )
+GET_TARGET_PROPERTY(MYLIB_LOCATION random_data_generator_shared LOCATION)
+INSTALL(FILES ${MYLIB_LOCATION} DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
+
 
 INCLUDE(CMakeTesting)
 INCLUDE(CMakeDocumentation)
