@@ -175,6 +175,10 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         
         )
 
+INSTALL(TARGETS ${TEST_EXE}
+        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
+        )
+
 INCLUDE(CMakeTesting)
 INCLUDE(CMakeDocumentation)
 INCLUDE(CMakeCustomTargets)
