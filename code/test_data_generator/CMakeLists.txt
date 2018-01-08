@@ -5,6 +5,8 @@ SET(SRC src/hdb_data.cpp
         src/stl_data.cpp
         src/yaml_data.cpp
         src/TriMeshTestData.cpp
+        src/hdb_data_bug_3230.cpp
+        src/yml_data_bug_3230.cpp
     )
 
 INCLUDE_DIRECTORIES(inc)
