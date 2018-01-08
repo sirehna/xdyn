@@ -793,3 +793,27 @@ TEST_F(SimTest, bug_3227_wave_angle_mirroing_problem_for_diffraction_LONG)
     ASSERT_LE(Mx_for_waves_propagating_to_plus_30*Mx_for_waves_propagating_to_minus_30,0);
     ASSERT_LE(Mz_for_waves_propagating_to_plus_30*Mz_for_waves_propagating_to_minus_30,0);
 }
+
+TEST_F(SimTest, bug_3230_advance_speed_not_taken_into_account_properly_for_diffraction_forces_LONG)
+{
+    const double t0 = 0;
+    const double T = 0.1;
+    const double dt = 0.1;
+    std::ofstream hdb("ship_2008.HDB");
+    hdb << test_data::bug_3230_hdb();
+    std::ofstream stl("ship_2008.stl");
+    stl << test_data::cube();
+    const auto yaml = test_data::yml_bug_3230();
+
+    ListOfObservers observers(parse_output(yaml));
+    ssc::data_source::DataSource command_listener;
+    auto input = SimulatorYamlParser(yaml).parse();
+
+
+    auto sys = get_system(input,anthineas_stl,0,command_listener);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    auto m = get_map(observers);
+    ASSERT_EQ(6, m.size());
+    ASSERT_EQ(2, m["Fx(diffraction,ship,ship)"].size());
+    ASSERT_DOUBLE_EQ(53167.137779674224, m["Fx(diffraction,ship,ship)"].at(1));
+}

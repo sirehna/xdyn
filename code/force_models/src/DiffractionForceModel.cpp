@@ -97,7 +97,8 @@ class DiffractionForceModel::Impl
         {
             ssc::kinematics::Wrench ret;
             ssc::kinematics::Vector6d w;
-            const auto T = env.k->get(body_name,"NED");
+            auto T = env.k->get("NED", body_name);
+            T.swap();
             const ssc::kinematics::Point H = T*ssc::kinematics::Point(body_name,H0);
             std::array<std::vector<std::vector<double> >, 6 > rao_modules;
             std::array<std::vector<std::vector<double> >, 6 > rao_phases;
