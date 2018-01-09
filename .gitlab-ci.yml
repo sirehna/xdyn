@@ -55,6 +55,7 @@ build:windows:
                         -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
                         -DBoost_LIBRARY_DIR_RELEASE:PATH=/opt/boost/lib
                         -DBoost_DEBUG=1
+                        -DHDF5_DIR=/opt/HDF5/cmake
                         /opt/share/code"
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
           /bin/bash -c "mkdir -p /opt/share/.wine && export WINEPREFIX=/opt/share/.wine && wine winecfg && ninja package"
