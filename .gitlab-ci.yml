@@ -31,7 +31,7 @@ build:
    script:
      - cd ssc_getter
      - docker build -f Dockerfile -t get_ssc .
-     - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py
+     - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py -c bbb91f4ea9bb6e73e35187d8c3655f7194090869 -b debian
      - unzip artifacts.zip
      - rm artifacts.zip
      - ls -l ssc.deb
