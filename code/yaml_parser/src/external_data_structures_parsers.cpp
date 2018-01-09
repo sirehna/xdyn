@@ -169,10 +169,9 @@ void operator >> (const YAML::Node& node, YamlPoint& p)
     parse_point_with_name(node, p,name);
 }
 
-
 void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
 {
-    if (const YAML::Node *parameter = node.FindValue("from hdb file"))
+    if (const YAML::Node *parameter = node.FindValue("from hdb"))
     {
         if (   node.FindValue("frame")
             or node.FindValue("row 1")

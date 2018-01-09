@@ -313,3 +313,8 @@ TEST_F(SimulatorYamlParserTest, interpolation_type_should_be_valid)
                                  "       interpolation: something\n";
     ASSERT_THROW(parse(invalid_yaml), InvalidInputException);
 }
+
+TEST_F(SimulatorYamlParserTest, bug_3235)
+{
+    ASSERT_NO_THROW(SimulatorYamlParser(test_data::bug_3235()).parse());
+}

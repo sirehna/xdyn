@@ -270,7 +270,7 @@ std::string test_data::added_mass_from_file()
        << "            row 5: [0,0,0,0,8.279e6,0]\n"
        << "            row 6: [0,0,0,0,0,7.676e6]\n"
        << "        added mass matrix at the center of buoyancy projected in the body frame:\n"
-       << "            from hdb file: anthineas.hdb\n"
+       << "            from hdb: anthineas.hdb\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"
