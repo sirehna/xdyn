@@ -15,7 +15,7 @@ def get_build_from_commit(builds, commit, **kwargs):
         build_type = 'build'
     list_build_with_correct_commit = []
     for build in builds:
-        if build.commit.id == commit and build.name.startswith(build_type):
+        if build.commit is not None and build.commit.id == commit and build.name.startswith(build_type):
             list_build_with_correct_commit.append(build)
     if verbose:
         print(len(list_build_with_correct_commit))
