@@ -34,9 +34,10 @@ build:windows:
      - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py -c bbb91f4ea9bb6e73e35187d8c3655f7194090869 -b windows
      - unzip artifacts.zip
      - rm artifacts.zip
-     - unzip ssc.zip -d /opt/ssc
-     - rm ssc.zip
+     - mv ssc.zip ..
      - cd ..
+     - mkdir -p ssc
+     - unzip ssc.zip -d ssc
      - mkdir -p build
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
           /bin/bash -c "mkdir /opt/share/.wine &&
@@ -44,7 +45,7 @@ build:windows:
                         wine winecfg &&
                         cmake -Wno-dev
                         -G Ninja
-                        -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake
+                        -Dssc_DIR:PATH=/opt/share/ssc/lib/ssc/cmake
                         -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
                         -DCPACK_GENERATOR=ZIP
                         -DBOOST_ROOT:PATH=/opt/boost
