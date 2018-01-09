@@ -45,7 +45,8 @@ build:
      - docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn ./run_all_tests --gtest_output=xml:run_all_tests.xml
      - cd spt_getter
      - docker build -f Dockerfile -t get_spt .
-     - docker run -i --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out --net=host get_spt python fetch_spt.py
+     - docker run -i --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out --net=host get_spt python fetch_spt.py -c 44828c3a961044794426d0f4a56bd46600a13897
+
      - rm -rf html spt-0.0.0-py2.py3-none-any.whl
      - unzip artifacts.zip
      - rm artifacts.zip
