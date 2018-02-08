@@ -24,7 +24,8 @@
 class History
 {
     public:
-        History(const double Tmax=0);
+        History(const double Tmax=0 //!< Max. history length (in seconds): anything older than that will be forgotten (i.e. how far back in the past should we be able to go before defaulting to zero)
+                );
 
         /**  \brief Returns the average value integrated between t-length and t, t being the current instant.
          *   \details A trapezoidal integration is used.
