@@ -93,22 +93,22 @@ void Body::update_projection_of_z_in_mesh_frame(const double g,
     states.g_in_mesh_frame = ned2mesh*g_in_NED.v;
 }
 
-#define CHECK(x) if (std::isnan(x)) {THROW(__PRETTY_FUNCTION__,NumericalErrorException,"NaN detected in " QUOTEME(x));}
+#define CHECK(x,y,t) if (std::isnan(x)) {THROW(__PRETTY_FUNCTION__,NumericalErrorException,"NaN detected in state " << y << ", at t = " << t);}
 void Body::update(const EnvironmentAndFrames& env, const StateType& x, const double t)
 {
-    CHECK(*_X(x,idx));
-    CHECK(*_Y(x,idx));
-    CHECK(*_Z(x,idx));
-    CHECK(*_U(x,idx));
-    CHECK(*_V(x,idx));
-    CHECK(*_W(x,idx));
-    CHECK(*_P(x,idx));
-    CHECK(*_Q(x,idx));
-    CHECK(*_R(x,idx));
-    CHECK(*_QR(x,idx));
-    CHECK(*_QI(x,idx));
-    CHECK(*_QJ(x,idx));
-    CHECK(*_QK(x,idx));
+    CHECK(*_X(x,idx),"X",t);
+    CHECK(*_Y(x,idx),"Y",t);
+    CHECK(*_Z(x,idx),"Z",t);
+    CHECK(*_U(x,idx),"U",t);
+    CHECK(*_V(x,idx),"V",t);
+    CHECK(*_W(x,idx),"W",t);
+    CHECK(*_P(x,idx),"P",t);
+    CHECK(*_Q(x,idx),"Q",t);
+    CHECK(*_R(x,idx),"R",t);
+    CHECK(*_QR(x,idx),"QR",t);
+    CHECK(*_QI(x,idx),"QI",t);
+    CHECK(*_QJ(x,idx),"QJ",t);
+    CHECK(*_QK(x,idx),"QK",t);
     update_kinematics(x,env.k);
     update_body_states(x, t);
     update_intersection_with_free_surface(env, t);
