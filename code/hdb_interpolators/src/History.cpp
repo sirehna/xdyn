@@ -12,6 +12,38 @@
 #include "History.hpp"
 #include "InternalErrorException.hpp"
 
+#include <cstdint>
+union Double
+{
+    Double(const double num) : f(num) {}
+    // Portable extraction of components.
+    bool negative() const { return i < 0; }
+    int64_t i;
+    double f;
+};
+
+bool almost_equal(const double a, const double b, const int maxUlpsDiff = 4);
+bool almost_equal(const double a, const double b, const int maxUlpsDiff)
+{
+    const Double uA(a);
+    const Double uB(b);
+
+    // Different signs means they do not match.
+    if (uA.negative() != uB.negative())
+    {
+        // Check for equality to make sure +0==-0
+        if (a == b)
+            return true;
+        return false;
+    }
+
+    // Find the difference in ULPs.
+    if ( std::abs(uA.i - uB.i) <= maxUlpsDiff)
+        return true;
+
+    return false;
+}
+
 History::History(const double Tmax_) : Tmax(Tmax_), L(), oldest_recorded_instant(0)
 {
 }
