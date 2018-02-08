@@ -54,7 +54,7 @@ TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
     History h(1000);
     h.record(0,1);
     h.record(1000,1);
-    RadiationDampingBuilder builder(TypeOfQuadrature::FILON, TypeOfQuadrature::FILON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::GAUSS_KRONROD, TypeOfQuadrature::FILON);
     ASSERT_NEAR(sin(2000.)/2., builder.convolution(h, [](const double t){return cos(2*t);}, 0, 1000), EPS);
 }
 
@@ -273,7 +273,7 @@ TEST_F(RadiationDampingBuilderTest, retardation_function_should_closely_match_an
     size_t N = 100;
     const double omega_min = 0.01;
     const double omega_max = 200;
-    RadiationDampingBuilder builder(TypeOfQuadrature::FILON, TypeOfQuadrature::FILON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::FILON);
     const auto omegas = builder.build_exponential_intervals(omega_min, omega_max, N);
 
     for (auto omega:omegas) vBr.push_back(test_data::analytical_Br(omega));
@@ -319,7 +319,7 @@ TEST_F(RadiationDampingBuilderTest, can_compute_K)
 {
     size_t N = 50;
     const double omega_max = 30;
-    RadiationDampingBuilder builder(TypeOfQuadrature::CLENSHAW_CURTIS, TypeOfQuadrature::CLENSHAW_CURTIS);//SIMPSON);
+    RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::CLENSHAW_CURTIS);//SIMPSON);
     auto taus = builder.build_regular_intervals(2*PI/omega_max,10,N);
     const auto K  = get_interpolated_K();
     for (auto tau:taus) ASSERT_NEAR(test_data::analytical_K(tau), K(tau), 1E-4) << "tau = " << tau;

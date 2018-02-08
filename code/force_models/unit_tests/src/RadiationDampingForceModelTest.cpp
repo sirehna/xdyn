@@ -58,7 +58,7 @@ YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data(const bool sh
     ret.output_Br_and_K = show_debug;
     ret.tau_min = 0.2094395;
     ret.tau_max = 10;
-    ret.type_of_quadrature_for_convolution = TypeOfQuadrature::CLENSHAW_CURTIS;
+    ret.type_of_quadrature_for_convolution = TypeOfQuadrature::SIMPSON;
     ret.type_of_quadrature_for_cos_transform = TypeOfQuadrature::SIMPSON;
     return ret;
 }

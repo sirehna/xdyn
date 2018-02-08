@@ -2278,7 +2278,7 @@ std::string test_data::anthineas_radiation_damping()
        << "      - model: radiation damping\n"
        << "        hdb: anthineas.hdb\n"
        << "        type of quadrature for cos transform: simpson\n"
-       << "        type of quadrature for convolution: clenshaw-curtis\n"
+       << "        type of quadrature for convolution: simpson\n"
        << "        nb of points for retardation function discretization: 50\n"
        << "        omega min: {value: 0, unit: rad/s}\n"
        << "        omega max: {value: 30, unit: rad/s}\n"

@@ -83,13 +83,46 @@ std::function<double(double)> RadiationDampingBuilder::build_retardation_functio
 }
 
 double RadiationDampingBuilder::convolution(const History& h, //!< State history
-                           const std::function<double(double)>& f, //!< Function to convolute with
-                           const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
-                           const double Tmax  //!< End of the convolution
-                           ) const
+                                           const std::function<double(double)>& f, //!< Function to convolute with
+                                           const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
+                                           const double Tmax  //!< End of the convolution
+                                           ) const
 {
     const auto g = [&h, &f](const double tau){return h(tau)*f(tau);};
-    return ssc::integrate::GaussKronrod(g).integrate_f(Tmin, Tmax);
+    const double eps = 1e-2;
+    double out = 0;
+    switch (type_of_quadrature_for_convolution)
+    {
+        case TypeOfQuadrature::GAUSS_KRONROD:
+            out = ssc::integrate::GaussKronrod(g).integrate_f(Tmin, Tmax, eps);
+            break;
+        case TypeOfQuadrature::RECTANGLE:
+            out = ssc::integrate::Rectangle(g).integrate_f(Tmin, Tmax, eps);
+            break;
+        case TypeOfQuadrature::SIMPSON:
+            out = ssc::integrate::Simpson(g).integrate_f(Tmin, Tmax, eps);
+            break;
+        case TypeOfQuadrature::TRAPEZOIDAL:
+            out = ssc::integrate::TrapezoidalIntegration(g).integrate_f(Tmin, Tmax, eps);
+            break;
+        case TypeOfQuadrature::BURCHER:
+            out = ssc::integrate::Burcher(g).integrate_f(Tmin, Tmax, eps);
+            break;
+        case TypeOfQuadrature::CLENSHAW_CURTIS:
+        {
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Clenshaw-Curtis's method is not suitable for convolution: use gauss-kronrod, rectangle, simpson, trapezoidal, or burcher.");
+            break;
+        }
+        case TypeOfQuadrature::FILON:
+        {
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Filon's method is not suitable for convolution: use gauss-kronrod, rectangle, simpson, trapezoidal, or burcher.");
+            break;
+        }
+        default:
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Unknown quadrature type");
+            break;
+    }
+    return out;
 }
 
 std::vector<double> RadiationDampingBuilder::build_regular_intervals(const double first, //!< First value in vector
