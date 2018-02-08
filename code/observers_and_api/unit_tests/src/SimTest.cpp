@@ -817,3 +817,15 @@ TEST_F(SimTest, bug_3230_advance_speed_not_taken_into_account_properly_for_diffr
     ASSERT_EQ(2, m["Fx(diffraction,ship,ship)"].size());
     ASSERT_DOUBLE_EQ(53167.137779674224, m["Fx(diffraction,ship,ship)"].at(1));
 }
+
+TEST_F(SimTest, bug_3207_radiation_damping_crashes_LONG)
+{
+    std::ofstream hdb("bug_3207.hdb");
+    hdb << test_data::bug_3207_hdb();
+    auto input = SimulatorYamlParser(test_data::bug_3207_yml()).parse();
+    const double t0 = 0;
+    const double T = 15;
+    const double dt = 0.2;
+    const auto res = simulate<ssc::solver::RK4Stepper>(input, anthineas_stl, t0, T, dt);
+    ASSERT_EQ(76, res.size());
+}
