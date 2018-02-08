@@ -116,7 +116,7 @@ TEST_F(RadiationDampingForceModelTest, example)
     states.r.record(100, 1);
     Frad = F(states,100);
 
-    const double Fexpected = ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);
+    const double Fexpected = -ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);
     ASSERT_DOUBLE_EQ(Frad.X(),Frad.Y());
     ASSERT_DOUBLE_EQ(Frad.X(),Frad.Z());
     ASSERT_DOUBLE_EQ(Frad.K(),Frad.M());

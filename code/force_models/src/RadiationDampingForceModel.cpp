@@ -151,12 +151,12 @@ class RadiationDampingForceModel::Impl
             ssc::kinematics::Vector6d W;
             const ssc::kinematics::Point H(states.name,H0);
 
-            W(0) = get_convolution_for_axis(0, states.u);
-            W(1) = get_convolution_for_axis(1, states.v);
-            W(2) = get_convolution_for_axis(2, states.w);
-            W(3) = get_convolution_for_axis(3, states.p);
-            W(4) = get_convolution_for_axis(4, states.q);
-            W(5) = get_convolution_for_axis(5, states.r);
+            W(0) = -get_convolution_for_axis(0, states.u);
+            W(1) = -get_convolution_for_axis(1, states.v);
+            W(2) = -get_convolution_for_axis(2, states.w);
+            W(3) = -get_convolution_for_axis(3, states.p);
+            W(4) = -get_convolution_for_axis(4, states.q);
+            W(5) = -get_convolution_for_axis(5, states.r);
             return ssc::kinematics::Wrench(states.name,W);
         }
 
