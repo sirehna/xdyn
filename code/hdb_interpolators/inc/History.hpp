@@ -90,6 +90,9 @@ class History
         double Tmax;
         Container L;
         double oldest_recorded_instant;
+
+    public:
+        History(const Container& L); // For testing purposes only
 };
 
 std::ostream& operator<<(std::ostream& os, const History& h);

@@ -47,6 +47,18 @@ bool almost_equal(const double a, const double b, const int maxUlpsDiff)
 History::History(const double Tmax_) : Tmax(Tmax_), L(), oldest_recorded_instant(0)
 {
 }
+
+double get_tmax(const std::vector<std::pair<double,double> >& L);
+double get_tmax(const std::vector<std::pair<double,double> >& L)
+{
+    if (L.empty()) return 0;
+    return L.back().first - L.front().first;
+}
+
+History::History(const Container& L_) : Tmax(get_tmax(L_)), L(L_), oldest_recorded_instant(L.empty()?0:L.front().first)
+{
+}
+
 #include <ssc/macros.hpp>
 double History::operator()(double tau //!< How far back in history do we need to go (in seconds)?
                           ) const
