@@ -54,7 +54,7 @@ void catch_exceptions(const std::function<void(void)>& f, const std::string& sol
         std::cerr << "The simulation has diverged and cannot continue: " << e.get_message() << std::endl;
         if (solver=="euler")
         {
-            std::cerr << "The simulation used a Euler integration scheme, maybe the simulation can be run with a " << std::endl
+            std::cerr << "The simulation used a Euler integration scheme, maybe the simulation can be run with" << std::endl
                       << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
         }
     }
