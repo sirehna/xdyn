@@ -209,3 +209,20 @@ void Body::set_states_history(const AbstractStates<History>& s)
 {
     states = s;
 }
+
+void Body::reset_history()
+{
+    states.x.reset();
+    states.y.reset();
+    states.z.reset();
+    states.u.reset();
+    states.v.reset();
+    states.w.reset();
+    states.p.reset();
+    states.q.reset();
+    states.r.reset();
+    states.qr.reset();
+    states.qi.reset();
+    states.qj.reset();
+    states.qk.reset();
+}

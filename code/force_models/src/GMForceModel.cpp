@@ -102,6 +102,7 @@ double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const d
 {
     BodyStates new_states = get_shifted_states(states, t);
     BodyWithSurfaceForces body_for_gm(new_states, 0, BlockedDOF(""));
+    body_for_gm.reset_history();
     body_for_gm.update(env, new_states.get_current_state_values(0), t);
     underlying_hs_force_model->update(body_for_gm.get_states(), t);
     return calculate_gz(*underlying_hs_force_model, env);

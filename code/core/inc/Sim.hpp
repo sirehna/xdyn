@@ -62,7 +62,7 @@ class Sim
 
         void set_command_listener(const std::map<std::string, double>& new_commands);
 
-
+        void reset_history();
     private:
         ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);
 

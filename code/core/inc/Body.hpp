@@ -69,6 +69,7 @@ class Body
         BlockedDOF::Vector get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const;
 
         void set_states_history(const AbstractStates<History>& states);
+        void reset_history();
     protected:
         BodyStates states;
 

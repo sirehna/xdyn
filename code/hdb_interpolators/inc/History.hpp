@@ -46,7 +46,7 @@ class History
           *  \details
           *  \snippet hdb_interpolators/unit_tests/src/HistoryTest.cpp HistoryTest record_example
           */
-        void record(const double t, //!< Instant corresponding to the value being added
+        void record(double t, //!< Instant corresponding to the value being added
                     const double val //!< Value to add
                     );
 
@@ -70,6 +70,8 @@ class History
 
         std::pair<double,double> operator[](const int index) const;
         friend std::ostream& operator<<(std::ostream& os, const History& h);
+
+        void reset();
 
     private:
         typedef std::pair<double,double> TimeValue;

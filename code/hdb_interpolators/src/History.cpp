@@ -59,7 +59,6 @@ History::History(const Container& L_) : Tmax(get_tmax(L_)), L(L_), oldest_record
 {
 }
 
-#include <ssc/macros.hpp>
 double History::operator()(double tau //!< How far back in history do we need to go (in seconds)?
                           ) const
 {
@@ -153,15 +152,17 @@ void History::shift_oldest_recorded_instant_if_necessary()
         const double vmin = interpolate_value_in_interval(1, oldest_recorded_instant);
         const size_t idx = find_braketing_position(oldest_recorded_instant);
         L.erase(L.begin(), L.begin() + (long) (idx));
-        if (L.front().first != oldest_recorded_instant)
+        if (not(almost_equal(L.front().first, oldest_recorded_instant,32)))
+        {
             L.insert(L.begin(), std::make_pair(oldest_recorded_instant, vmin));
+        }
     }
 }
 
 void History::add_value_to_history(const double t, const double val)
 {
     const size_t idx = find_braketing_position(t);
-    if ((idx != L.size()) and (L[idx].first == t))
+    if ((idx != L.size()) and (almost_equal(L[idx].first, t)))
     {
         L[idx] = std::make_pair(t, val);
     }
@@ -177,10 +178,30 @@ void History::update_oldest_recorded_instant(const double t)
     oldest_recorded_instant = std::min(oldest_recorded_instant, t);
 }
 
-void History::record(const double t, //!< Instant corresponding to the value being added
+void History::record(double t, //!< Instant corresponding to the value being added
                      const double val //!< Value to add
                     )
 {
+    if (not(L.empty()))
+    {
+        if  (almost_equal(t,L.back().first))
+        {
+            t = L.back().first;
+        }
+        if (t < L.back().first)
+        {
+            THROW(__PRETTY_FUNCTION__
+                 , InternalErrorException
+                 , "history must be recorded in a strictly increasing order: trying to add t = "
+                   << t
+                   <<
+                   ", but the latest timestamp in history is "
+                   << L.back().first
+                   << " (t-thistory.back = "
+                    << t-L.back().first
+                    << ")");
+        }
+    }
     update_oldest_recorded_instant(t);
     add_value_to_history(t, val);
     shift_oldest_recorded_instant_if_necessary();
@@ -198,6 +219,7 @@ double History::get_Tmax() const
 
 double History::get_duration() const
 {
+    if (L.empty()) return 0;
     return L.back().first - L.front().first;
 }
 
@@ -262,4 +284,10 @@ std::pair<double,double> History::operator[](const int index) const
     {
         return L[L.size()+(size_t)index];
     }
+}
+
+void History::reset()
+{
+    L.clear();
+    oldest_recorded_instant = 0;
 }

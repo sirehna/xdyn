@@ -42,6 +42,7 @@ void ResultantForceComputerTest::TearDown()
 
 TEST_F(ResultantForceComputerTest, sim_only_contains_gravity_and_hydrostatic_forces)
 {
+    sim.reset_history();
     const auto s = GZ::make_sim(test_data::stable_cube_example(), test_data::cube());
 
     std::map<std::string,std::vector<ForcePtr> > forces = s.get_forces();
@@ -59,6 +60,7 @@ TEST_F(ResultantForceComputerTest, sim_only_contains_gravity_and_hydrostatic_for
 
 TEST_F(ResultantForceComputerTest, sim_only_contains_default_surface_elevation)
 {
+    sim.reset_history();
     const auto s = GZ::make_sim(test_data::cube_in_waves(), test_data::cube());
     EnvironmentAndFrames env = s.get_env();
     for (size_t i = 0 ; i < 1000 ; ++i)
@@ -72,6 +74,7 @@ TEST_F(ResultantForceComputerTest, sim_only_contains_default_surface_elevation)
 
 TEST_F(ResultantForceComputerTest, can_compute_resultant_force_for_a_cube)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer sum_of_forces(sim);
     const auto F0 = sum_of_forces.resultant(GZ::State(0,0,0)).state;
     ASSERT_NEAR(1000*9.81-1026*0.5*9.81, F0(0),EPS);
@@ -85,6 +88,7 @@ TEST_F(ResultantForceComputerTest, can_compute_resultant_force_for_a_cube)
 
 TEST_F(ResultantForceComputerTest, DISABLED_can_compute_torque_for_a_cube_rotated_on_phi)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer sum_of_forces(sim);
     const auto F = sum_of_forces.resultant(GZ::State(0,PI/3,0)).state;
     ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(PI/3), F(0),EPS);
@@ -94,6 +98,7 @@ TEST_F(ResultantForceComputerTest, DISABLED_can_compute_torque_for_a_cube_rotate
 
 TEST_F(ResultantForceComputerTest, DISABLED_can_compute_torque_for_a_cube_rotated_on_theta)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer sum_of_forces(sim);
     const auto F = sum_of_forces.resultant(GZ::State(0,0,PI/3)).state;
     ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(PI/3), F(0),EPS);
@@ -103,6 +108,7 @@ TEST_F(ResultantForceComputerTest, DISABLED_can_compute_torque_for_a_cube_rotate
 
 TEST_F(ResultantForceComputerTest, DISABLED_can_compute_torque_for_a_cube_rotated_by_a_quarter)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer sum_of_forces(sim);
     const auto F = sum_of_forces.resultant(GZ::State(0,PI/4,0)).state;
     ASSERT_NEAR((1000*9.81-1026*0.5*9.81)*cos(PI/4), F(0),EPS);
@@ -112,6 +118,7 @@ TEST_F(ResultantForceComputerTest, DISABLED_can_compute_torque_for_a_cube_rotate
 
 TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_at_the_surface)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer sum_of_forces(sim);
     const auto F = sum_of_forces.resultant(GZ::State(-0.5,0,0)).state;
     ASSERT_NEAR(1000*9.81, F(0),EPS);
@@ -121,6 +128,7 @@ TEST_F(ResultantForceComputerTest, can_compute_torque_for_a_cube_at_the_surface)
 
 TEST_F(ResultantForceComputerTest, can_compute_resultant_for_half_immersed_cube)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer sum_of_forces(sim);
     const auto F = sum_of_forces.resultant(GZ::State(0,0,0)).state;
     ASSERT_NEAR(1000*9.81-1026*0.5*9.81, F(0),EPS);
@@ -130,6 +138,7 @@ TEST_F(ResultantForceComputerTest, can_compute_resultant_for_half_immersed_cube)
 
 TEST_F(ResultantForceComputerTest, LONG_can_compute_resultant_for_any_angle)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer sum_of_forces(GZ::make_sim(test_data::oscillating_cube_example(), test_data::cube()));
     const size_t n = 100;
     for (size_t i = 0 ; i < n ; ++i)
@@ -145,6 +154,7 @@ TEST_F(ResultantForceComputerTest, LONG_can_compute_resultant_for_any_angle)
 
 TEST_F(ResultantForceComputerTest, DISABLED_can_compute_centre_of_buoyancy_for_a_cube_rotated_on_phi)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer sum_of_forces(sim);
     const double phi = PI/3;
     const auto gz = sum_of_forces.resultant(GZ::State(0,phi,0)).gz;
@@ -153,6 +163,7 @@ TEST_F(ResultantForceComputerTest, DISABLED_can_compute_centre_of_buoyancy_for_a
 
 TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_0)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer cube(sim);
     const GZ::MinMax z = cube.get_zmin_zmax(0);
     ASSERT_DOUBLE_EQ(-0.5, z.min);
@@ -161,6 +172,7 @@ TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_0)
 
 TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_4)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer cube(sim);
     const GZ::MinMax z = cube.get_zmin_zmax(PI/4);
     ASSERT_DOUBLE_EQ(-sqrt(2)/2., z.min);
@@ -169,6 +181,7 @@ TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_4)
 
 TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_3)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer cube(sim);
     const GZ::MinMax z = cube.get_zmin_zmax(PI/3);
     ASSERT_DOUBLE_EQ(-(1+sqrt(3))/4, z.min);
@@ -177,6 +190,7 @@ TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_3)
 
 TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_2)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer cube(sim);
     const GZ::MinMax z = cube.get_zmin_zmax(PI/2);
     ASSERT_DOUBLE_EQ(-0.5, z.min);
@@ -185,6 +199,7 @@ TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_pi_2)
 
 TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_minus_pi_6)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer cube(sim);
     const GZ::MinMax z = cube.get_zmin_zmax(-PI/6);
     ASSERT_DOUBLE_EQ(-(1+sqrt(3))/4, z.min);
@@ -193,6 +208,7 @@ TEST_F(ResultantForceComputerTest, can_get_zmin_and_zmax_for_phi_minus_pi_6)
 
 TEST_F(ResultantForceComputerTest, DISABLED_can_compute_K)
 {
+    sim.reset_history();
     GZ::ResultantForceComputer cube(sim);
     const auto K =  cube.K(Eigen::Vector3d(0,0,0));
 

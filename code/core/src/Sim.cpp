@@ -237,3 +237,10 @@ void Sim::set_command_listener(const std::map<std::string, double>& new_commands
     }
 }
 
+void Sim::reset_history()
+{
+    for (auto body:pimpl->bodies)
+    {
+        body->reset_history();
+    }
+}
