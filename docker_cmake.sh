@@ -1,2 +1,2 @@
 #!/bin/sh
-sh docker.sh cmake
+sh docker.sh cmake `echo $*`
