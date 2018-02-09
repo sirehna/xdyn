@@ -32,7 +32,7 @@ build:windows:
    script:
      - cd ssc_getter
      - docker build -f Dockerfile -t get_ssc .
-     - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py -c bbb91f4ea9bb6e73e35187d8c3655f7194090869 -b windows
+     - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py -c 100bffd649d2b10a4c325f80c5fb192a19209254 -b windows
      - unzip artifacts.zip
      - rm artifacts.zip
      - mv ssc.zip ..
@@ -82,6 +82,11 @@ build:debian:
    script:
      - cd ssc_getter
      - make
+     # - docker build -f Dockerfile -t get_ssc .
+     # - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py -c 100bffd649d2b10a4c325f80c5fb192a19209254 -b debian
+     # - unzip artifacts.zip
+     # - rm artifacts.zip
+     # - md5sum ssc.deb
      - mv ssc.deb ..
      - cd ..
      - mkdir -p build
