@@ -40,3 +40,8 @@ std::vector<ObserverPtr> ListOfObservers::get() const
 {
     return observers;
 }
+
+bool ListOfObservers::empty() const
+{
+    return observers.empty();
+}
