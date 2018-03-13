@@ -267,7 +267,7 @@ class HOS::Impl
             }
             if ((elapsed_milliseconds >= timeout_in_milliseconds) and (resp.flagval() == "WAIT"))
             {
-                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Call to HOS timed out after " << elapsed_milliseconds/1e6 << " seconds.");
+                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Call to HOS timed out after " << elapsed_milliseconds/1e3 << " seconds.");
             }
             return resp;
         }
