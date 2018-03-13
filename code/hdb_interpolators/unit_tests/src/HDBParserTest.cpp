@@ -8,6 +8,7 @@
 #include "HDBParser.hpp"
 #include "HDBParserTest.hpp"
 #include "hdb_data.hpp"
+#include "InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -222,4 +223,11 @@ TEST_F(HDBParserTest, can_retrieve_psis_for_RAOs)
         ASSERT_DOUBLE_EQ(PI/180.*15.*(double)i, psi1[i]);
         ASSERT_DOUBLE_EQ(PI/180.*15.*(double)i, psi2[i]);
     }
+}
+
+TEST_F(HDBParserTest, bug_3238)
+{
+    const HDBParser data(test_data::bug_3238_hdb());
+    ASSERT_THROW(data.get_diffraction_module(), InvalidInputException);
+    ASSERT_THROW(data.get_diffraction_phase(), InvalidInputException);
 }

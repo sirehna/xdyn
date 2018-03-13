@@ -16,12 +16,15 @@
 #define PI M_PI
 
 #include <boost/lexical_cast.hpp>
+#include <boost/variant.hpp>
 
 #include <ssc/interpolation.hpp>
 
 #include "hdb_parser_internal_data_structures.hpp"
 #include "InvalidInputException.hpp"
 #include "hdb_to_ast.hpp"
+
+
 
 class HDBParser::Impl
 {
@@ -172,19 +175,23 @@ class HDBParser::Impl
             return convert_matrices_from_aquaplus_to_xdyn_frame(ret);
         }
 
-        RAOData get_rao(const std::string& section_name, const std::string& subsections) const
+        boost::variant<RAOData,std::string> get_rao(const std::string& section_name, const std::string& subsection_name) const
         {
             std::set<double> periods, psi;
             RAOData ret;
+            bool found_relevant_rao_section = false;
+            bool found_relevant_rao_subsection = false;
             for (auto ms:tree.lists_of_matrix_sections_with_id)
             {
                 if (ms.header == section_name)
                 {
+                    found_relevant_rao_section = true;
                     size_t psi_idx = 0;
                     for (auto s:ms.sections_with_id)
                     {
-                        if (s.header == subsections)
+                        if (s.header == subsection_name)
                         {
+                            found_relevant_rao_subsection = true;
                             psi.insert(s.id*PI/180.);
                             std::array<std::vector<double>,6> psi_for_each_axis;
                             size_t period_idx = 0;
@@ -204,6 +211,15 @@ class HDBParser::Impl
                     }
                 }
             }
+            std::stringstream error_msg;
+            if (not(found_relevant_rao_section))
+            {
+                return std::string("Unable to find section '") + section_name + "' in the RAO file.";
+            }
+            else if (not(found_relevant_rao_subsection))
+            {
+                return std::string("Found section '") + section_name + "' but could not find subsection '" + subsection_name + "' in the RAO file.";
+            }
             std::list<double> period_list(periods.begin(), periods.end());
             period_list.sort();
             ret.periods.insert(ret.periods.begin(),period_list.begin(), period_list.end());
@@ -213,44 +229,64 @@ class HDBParser::Impl
             return ret;
         }
 
-        RAOData get_diffraction_module() const
+        boost::variant<RAOData,std::string> get_diffraction_module() const
         {
             return get_rao("DIFFRACTION_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
         }
 
-        RAOData get_diffraction_phase() const
+        boost::variant<RAOData,std::string> get_diffraction_phase() const
         {
             return get_rao("DIFFRACTION_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
         }
 
-        RAOData get_froude_krylov_module() const
+        boost::variant<RAOData,std::string> get_froude_krylov_module() const
         {
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
         }
 
-        RAOData get_froude_krylov_phase() const
+        boost::variant<RAOData,std::string> get_froude_krylov_phase() const
         {
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
         }
 
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_module_tables() const
         {
-            return diffraction_module.values;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&diffraction_module);
+            return ret->values;
         }
 
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_phase_tables() const
         {
-            return diffraction_phase.values;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&diffraction_phase);
+            return ret->values;
         }
 
         std::array<std::vector<std::vector<double> >,6 > get_froude_krylov_module_tables() const
         {
-            return froude_krylov_module.values;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&froude_krylov_module);
+            return ret->values;
         }
 
         std::array<std::vector<std::vector<double> >,6 > get_froude_krylov_phase_tables() const
         {
-            return froude_krylov_phase.values;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&froude_krylov_phase);
+            return ret->values;
         }
 
         TimestampedMatrices get_added_mass_array() const
@@ -289,42 +325,82 @@ class HDBParser::Impl
 
         std::vector<double> get_diffraction_phase_psis() const
         {
-            return diffraction_phase.psi;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&diffraction_phase);
+            return ret->psi;
         }
 
         std::vector<double> get_diffraction_phase_omegas() const
         {
-            return diffraction_phase.periods;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&diffraction_phase);
+            return ret->periods;
         }
 
         std::vector<double> get_diffraction_module_psis() const
         {
-            return diffraction_module.psi;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&diffraction_module);
+            return ret->psi;
         }
 
         std::vector<double> get_diffraction_module_periods() const
         {
-            return diffraction_module.periods;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&diffraction_module);
+            return ret->periods;
         }
 
         std::vector<double> get_froude_krylov_phase_psis() const
         {
-            return froude_krylov_phase.psi;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&froude_krylov_phase);
+            return ret->psi;
         }
 
         std::vector<double> get_froude_krylov_phase_periods() const
         {
-            return froude_krylov_phase.periods;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&froude_krylov_phase);
+            return ret->periods;
         }
 
         std::vector<double> get_froude_krylov_module_psis() const
         {
-            return froude_krylov_module.psi;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&froude_krylov_module);
+            return ret->psi;
         }
 
         std::vector<double> get_froude_krylov_module_periods() const
         {
-            return froude_krylov_module.periods;
+            if ( std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&froude_krylov_module);
+            return ret->periods;
         }
 
         std::vector<double> omega_rad;
@@ -348,10 +424,10 @@ class HDBParser::Impl
         std::array<std::array<ssc::interpolation::SplineVariableStep,6>,6> M;
         std::array<std::array<std::vector<double>,6>,6> Br;
         double Tmin;
-        RAOData diffraction_module;
-        RAOData diffraction_phase;
-        RAOData froude_krylov_module;
-        RAOData froude_krylov_phase;
+        boost::variant<RAOData,std::string> diffraction_module;
+        boost::variant<RAOData,std::string> diffraction_phase;
+        boost::variant<RAOData,std::string> froude_krylov_module;
+        boost::variant<RAOData,std::string> froude_krylov_phase;
 };
 
 
@@ -379,12 +455,24 @@ TimestampedMatrices HDBParser::get_radiation_damping_array() const
 
 RAOData HDBParser::get_diffraction_module() const
 {
-    return pimpl->get_diffraction_module();
+    auto diff = pimpl->get_diffraction_module();
+    if ( std::string* err = (std::string*)boost::get<std::string>(&diff))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&diff);
+    return *ret;
 }
 
 RAOData HDBParser::get_diffraction_phase() const
 {
-    return pimpl->get_diffraction_phase();
+    auto diff = pimpl->get_diffraction_phase();
+    if ( std::string* err = (std::string*)boost::get<std::string>(&diff))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&diff);
+    return *ret;
 }
 
 Eigen::Matrix<double,6,6> HDBParser::get_added_mass() const
