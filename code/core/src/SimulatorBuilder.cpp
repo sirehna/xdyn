@@ -200,7 +200,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::s
     {
         if (could_parse(controllable_force_parsers, model, body_name, env))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Model '" << model.model << "' is in the wrong section: it's in the 'controlled forces' section whereas it should be in the 'external forces' section.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Model '" << model.model << "' is in the wrong section: it's in the 'external forces' section whereas it should be in the 'controlled forces' section.");
         }
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator, or maybe you put a controlled force (eg. maneuvering, propeller+rudder, etc.) in the 'external forces' section.");
     }
@@ -222,7 +222,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     {
         if (could_parse(force_parsers, model, name, env))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Model '" << model.model << "' is in the wrong section: it's in the 'external forces' section whereas it should be in the 'controlled forces' section.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Model '" << model.model << "' is in the wrong section: it's in the 'controlled forces' section whereas it should be in the 'external forces' section.");
         }
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator.");
     }
