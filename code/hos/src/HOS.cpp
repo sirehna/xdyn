@@ -118,7 +118,7 @@ class HOS::Impl
         void connect(const YamlHOS& yaml)
         {
             disconnect_if_necessary();
-            timeout_in_milliseconds = (int)std::floor(yaml.timeout_in_seconds*1E6+0.5);
+            timeout_in_milliseconds = (int)std::floor(yaml.timeout_in_seconds*1E3+0.5);
             cos_theta = cos(yaml.direction_of_propagation);
             sin_theta = sin(yaml.direction_of_propagation);
             socket.connect(yaml.address_brokerHOS);
