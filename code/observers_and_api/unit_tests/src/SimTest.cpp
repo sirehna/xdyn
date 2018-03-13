@@ -831,7 +831,7 @@ TEST_F(SimTest, bug_3207_radiation_damping_crashes_LONG)
 }
 
 
-TEST_F(SimTest, HOS_LONG)
+TEST_F(SimTest, DISABLED_HOS_LONG)
 {
     const double t0 = 0;
     const double dt = 0.1;
