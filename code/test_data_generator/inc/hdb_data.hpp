@@ -11,6 +11,7 @@ namespace test_data
     std::string bug_3210();
     std::string bug_3230_hdb();
     std::string bug_3207_hdb();
+    std::string bug_3238_hdb();
 }
 
 #endif
