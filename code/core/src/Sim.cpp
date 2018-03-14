@@ -185,7 +185,12 @@ ssc::kinematics::PointMatrix Sim::get_waves(const double t//!< Current instant
 
 void Sim::output(const StateType& x, Observer& obs, const double t) const
 {
-    const auto normalized_x = normalize_quaternions(x);
+    StateType x_with_forced_states;
+    for (auto body: pimpl->bodies)
+    {
+        x_with_forced_states = body->block_states_if_necessary(x,t);
+    }
+    const auto normalized_x = normalize_quaternions(x_with_forced_states);
     for (auto forces:pimpl->forces)
     {
         for (auto force:forces.second) force->feed(obs);

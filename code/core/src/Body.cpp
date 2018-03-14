@@ -67,6 +67,12 @@ void Body::update_kinematics(StateType x, const ssc::kinematics::KinematicsPtr& 
     k->add(get_transform_from_ned_to_local_ned(x));
 }
 
+StateType Body::block_states_if_necessary(StateType x, const double t) const
+{
+    blocked_states.force_states(x,t);
+    return x;
+}
+
 void Body::update_body_states(StateType x, const double t)
 {
     blocked_states.force_states(x,t);
