@@ -388,7 +388,7 @@ bodies: # All bodies have NED as parent frame
     external forces:
       - model: gravity
       - model: non-linear hydrostatic (fast)
-    forced dof:
+    blocked dof:
        from CSV:
          - state: u
            t: T
