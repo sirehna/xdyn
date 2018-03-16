@@ -838,3 +838,24 @@ TEST_F(SimTest, DISABLED_HOS_LONG)
     const double tend = 1;
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::hos(), test_data::cube(), t0, tend, dt);
 }
+
+TEST_F(SimTest, bug_3241_blocked_dof_interpolation_problem_LONG)
+{
+    const double t0 = 0;
+    const double T = 15;
+    const double dt = 0.1;
+    const auto yaml = test_data::bug_3241();
+    ListOfObservers observers(parse_output(yaml));
+    auto input = SimulatorYamlParser(yaml).parse();
+
+    auto sys = get_system(input,anthineas_stl,0);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    auto m = get_map(observers);
+    ASSERT_EQ(1, m.size());
+    ASSERT_EQ(151, m["u(dtmb)"].size());
+    ASSERT_NE(m["u(dtmb)"].at(0),m["u(dtmb)"].at(150));
+    ASSERT_DOUBLE_EQ(1.531,m["u(dtmb)"].at(0));
+    ASSERT_DOUBLE_EQ(1,m["u(dtmb)"].at(50));
+    ASSERT_DOUBLE_EQ(1.5,m["u(dtmb)"].at(100));
+    ASSERT_DOUBLE_EQ(0,m["u(dtmb)"].at(150));
+}
