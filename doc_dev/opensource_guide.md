@@ -35,12 +35,12 @@ Les contributeurs internes à SIREHNA peuvent soit [créer un compte sur GitHub]
 et demander son association au compte SIREHNA, soit (le cas échéant) demander
 l'association de leur compte existant. Nous préconisons plutôt de
 systématiquement créer un nouveau compte afin de bien distinguer les
-contributions faites par le collaborateurs pendant son temps de travail des
+contributions faites par le collaborateur pendant son temps de travail des
 éventuelles contributions faites sur son temps libre.
 
 # Préparation du dépôt
 
-Avant de rendre le dépôt de code public, plusieurs étapes sont nécessaires. Il faut notamment créer trois fichiers à la racine du dépôt :
+Avant de rendre le dépôt de code public, plusieurs étapes sont nécessaires. Il faut notamment créer cinq fichiers à la racine du dépôt :
 
 - Fichier de licence : `LICENSE`
 - Règles pour les rétro-contributions : `CONTRIBUTING.md`
@@ -78,7 +78,7 @@ disponible [ici](https://open-source-guide.18f.gov/making-readmes-readable/).
 
 Ce fichier vient en complément de l'outil de gestion de configuration et donne
 une vue synthétique des derniers changements, contrairement à l'outil de gestion
-de configuration qui en donne le détail. Des règles pour créer un tel fichiers
+de configuration qui en donne le détail. Des règles pour créer un tel fichier
 sont disponibles [ici](http://keepachangelog.com/fr/1.0.0/).
 
 ## Code de conduite
@@ -114,7 +114,10 @@ git fetch github
 # Configuration du projet sur GitHub
 
 Pour tirer pleinement parti de la puissance des outils disponibles via GitHub,
-on peut ajouter des badges au `README` du projet. Ces badges apparaissent sur la page principale du projet et donnent On peut voir une liste (non-exhaustive) de badges [ici](https://github.com/boennemann/badges).
+on peut ajouter des badges au `README` du projet. Ces badges apparaissent sur
+la page principale du projet et informent sur la santé du projet en un clin
+d'oeil. On peut voir une liste (non-exhaustive) de badges
+[ici](https://github.com/boennemann/badges).
 
 Nous proposons de commencer par les badges suivants :
 
