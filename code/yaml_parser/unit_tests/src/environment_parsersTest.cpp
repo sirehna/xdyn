@@ -181,7 +181,7 @@ TEST_F(environment_parsersTest, can_parse_stretching_data)
 TEST_F(environment_parsersTest, can_parse_HOS_data)
 {
     const YamlHOS input = parse_hos(test_data::hos_for_parser_validation_only());
-    ASSERT_EQ("tcp://hos-server:5550", input.address_brokerHOS);
+    ASSERT_EQ("tcp://10.130.102.58:5550", input.address_brokerHOS);
     ASSERT_FLOAT_EQ(input.beta, 0.785398f);
     ASSERT_FLOAT_EQ(input.depth, 35);
     ASSERT_EQ(YamlHOS::ERRORTYPE_ABSOLUTE, input.err);

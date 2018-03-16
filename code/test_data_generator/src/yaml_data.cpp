@@ -4804,7 +4804,7 @@ std::string test_data::hos()
        << "        Hs: {value: 4.5, unit: m}\n"
        << "      directional spreading:\n"
        << "        beta: 0.785398\n"
-       << "    url of the HOS server: tcp://hos-server:5550\n"
+       << "    url of the HOS server: tcp://10.130.102.58:5550\n"
        << "    waves propagating to: {value: 90, unit: deg}\n"
        << "    timeout: {value: 2, unit: s}\n"
        << "# Fixed frame: NED\n"
@@ -4913,7 +4913,7 @@ std::string test_data::hos_for_parser_validation_only()
        << "    Hs: {value: 4.5, unit: m}\n"
        << "  directional spreading:\n"
        << "    beta: 0.785398\n"
-       << "url of the HOS server: tcp://hos-server:5550\n"
+       << "url of the HOS server: tcp://10.130.102.58:5550\n"
        << "waves propagating to: {value: 90, unit: deg}\n"
        << "timeout: {value: 2, unit: s}\n";
     return ss.str();
