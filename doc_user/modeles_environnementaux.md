@@ -1005,6 +1005,300 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## HOS
+
+Le modèle HOS (High Order Spectrum) est un modèle numérique de propagation de
+houle développé par l'Ecole Centrale de Nantes (au LHEEA : Laboratoire
+d'Hydrodynamique, Energétique et Environnement Atmosphérique). Ce modèle permet
+de simuler des spectres hautement non-linéaires avec de fortes pentes. Les
+transformées de Fourier rapides sont utilisées pour résoudre les conditions de
+surface libre permettent une résolution plus rapide que des méthodes directes.
+Ce modèle a été validé avec un haut degré de précision sur des cas 2D et 3D. Ce
+code étant sous licence GPL, une interface client-serveur a été développée en
+Python par D-Ice engineering pour ne pas contaminer le code d'X-DYN. Le code HOS
+(en Fortran 95) peut être téléchargé ici :
+[https://github.com/LHEEA/HOS-ocean](https://github.com/LHEEA/HOS-ocean). Une
+description complète du modèle sous-jacent est disponible ici :
+[https://github.com/LHEEA/HOS-ocean/wiki](https://github.com/LHEEA/HOS-ocean/wiki)
+
+
+### Modèle
+
+#### Conditions de surface libre
+
+La méthode HOS est basée sur la théorie potentielle. Le fluide est supposé
+incompressible, non-visqueux et irrotationnel. Sous ces hypothèses, la condition
+de  continuité se ramène à une simple équation de Laplace :
+
+
+$$\nabla \phi^2 + \frac{\partial^2 \phi}{\partial z^2} = 0$$ dans le domaine
+fluide $\mathcal{D}$, $\nabla$ désignant l'opérateur gradient horizontal.
+
+Sur la surface libre, le potentiel de vitesse $\phi^s(x,t) =
+\phi(x,z=\eta(x,t),t)$ et l'élévation de surface libre $\eta$ doivent satisfaire
+les équations suivantes :
+
+-  $\partial_t \eta = (1 + |\nabla \eta|^2) \partial_z \phi - \nabla \phi^s
+  \cdot \nabla \eta$
+- $\partial_t \phi^s = -g \eta - \frac{1}{2} | \nabla \phi^s |^2 + \frac{1}{2}
+  (1 + | \nabla \eta |^2) (\partial_z \phi)^2$
+
+$\frac{\partial \phi}{\partial z}$ est la vitesse verticale et est calculée en
+utilisant la méthode HOS de West *et al.*, 1987.
+
+Les quantités $\phi^s$ and $\eta$ peuvent s'écrire de façon spectrale :
+
+$$\phi(x,y,z,t) = \sum_{i=0}^{\infty} \sum_{i=0}^{\infty} A_{ij}^{\phi}
+\cos(k_{x,i} x) \cos(k_{y,i} y) \frac{\cosh(k_{i,j} |z+h|)}{\cosh(k_{i,j} h)}$$
+
+$$\eta(x,y,z,t) = \sum_{i=0}^{\infty} \sum_{i=0}^{\infty} A_{ij}^{\eta}
+\cos(k_{x,i} x) \cos(k_{y,i} y)$$
+
+avec
+
+- $k_{x,i} = \frac{i \Pi}{L_x}$,
+- $k_{y,j} = \frac{j \Pi}{L_y}$
+- $k_{i,j} = \sqrt{k_{x,i}^2+k_{y,j}^2}$,
+- $L_x$ et $L_y$ désignent la taille du domaine suivant $X$ et Ŷ$,
+  respectivement.
+- Les coefficients $A_{ij}^{\eta}$ et $A_{ij}^{\phi}$ représentent les
+  amplitudes des modes spectraux.
+
+Cette méthode est pseudo-spectrale car les conditions de surface libre sont
+partiellement résolues dans le domaine spacial et spectral. Les transformées de
+Fourier rapides permettent de transformer les quantités d'un domaine à l'autre
+efficacement et avec une bonne précision.
+
+Un développement en séries de Taylor limité à l'ordre $M$ est utilisé pour
+évaluer le potentiel de vitesse $\phi$ et la vitesse orbitale vertical $W$
+autour de $z=0$. Par définition, l'ordre de la méthode HOS est l'ordre $M$ du
+développement limité.
+
+Du fait de l'utilisation des transformées de Fourier rapides, des problèmes de
+repliement de spectre peuvent survenir. Pour limiter cet effet, il faut bien
+choisir le nombre de point $N_d$ en fonction de paramètre d'anti-aliasing $p$
+(fréquence de Nyquist) :
+
+$$N_d = \frac{p+1}{2}N$$
+
+L'anti-aliasing complet est obtenu pour $p=M$. Il est recommandé de l'utiliser
+pour éviter tout problème de recouvrement.
+
+Le schéma d'intégration temporel est un schéma de Runge-Kutta-Cash-Karp d'ordre
+4 avec par adaptatif. La tolérance est en générale comprise entre $10^{-7}$ et
+$10^{-5}$.
+
+Pour une description plus complète de la théorie sous-jacente à la méthode HOS,
+nous invitons le lecteur à se référer à Ducrozet 2013 and Ducrozet *et al.*
+2016.
+
+
+#### Conditions initiales
+
+Afin d'initialiser la simulation, des valeurs initiales pour le potentiel de
+vitesse $\phi$ et l'élévation de surface libre $\eta$ doivent être spécifiées
+sur tout le domaine. Deux profiles de vagues sont intégrées à HOS : un pour la
+houle régulière et un pour la houe irrégulière.
+
+Le profile de houle régulière non-linéaire est basé sur la résolution de
+Reinecker & Fenton (cf. Reinecker *et al.*, 1981). Cette méthode nécessite un
+fichier d'entrée `.cof` contenant les coefficients du profile de houle.
+
+Le profile de houle irrégulière linéaire est défini par la superpositions de
+composantes linéaires de directions et fréquences différentes. L'amplitude de
+chaque composante est calculée à partir d'un spectre directionnel $S(\omega,
+\theta) = F(\omega) \cdot G(\theta)$.
+
+$F(\omega)$ est un spectre de JONSWAP dont définit dans le fichier YAML la
+période de pic $T_p = \frac{2 \pi}{\omega_p}$, la hauteur significative $H_s$
+ainsi que le coefficient de forme $\gamma$.
+
+$$F(\omega) = \alpha_J H_s^2 \omega_p^4 \omega^{-5} \exp \left[ - \frac{5}{4}
+\left( \frac{\omega}{\omega_p} \right)^{-4} \right] \gamma^{ \exp \left[-\frac{
+\left( \omega - \omega_p \right)^2}{2 \sigma^2 \omega_p^2}\right]}$$
+
+avec
+
+$$\sigma = \left\{\begin{array}{ccc} 0.07 & \text{ for } & \omega \lt \omega_p
+\\0.09 & \text{ for } & \omega \ge \omega_p\end{array}\right.$$
+
+$G(\theta)$ désigne l'étalement directionnel :
+
+$$G(\theta) = \frac{1}{\beta} \left[ \cos \left( \frac{\pi \theta}{2 \beta} \right) \right]^2$$
+
+Pour éviter les instabilités dues à la transition entre le modèle linéaire
+initial et les calculs non-linéaires d'HOS, une fonction de relaxation
+exponentielle est utilisée. La période de transistion est définie par sa durée
+$T_a$ et un paramètre $n$ :
+
+$$f(t) = 1 - \exp \left[ - \left( \frac{t}{T_a} \right)^n \right]$$
+
+
+#### Post-traitement
+
+Dans le modèle HOS, les conditions de surface libre sont écrites pour $\phi^s$
+et $\eta$. Cette simplification permet de simuler efficacement la propagation de
+la houle. Cependant pour le calcul des pressions et des vitesses orbitales à
+l'intérieur du domaine, des informations 3D supplémentaires sont nécessaires.
+Ces informations sont calculées durant la simulation de la propagation de la
+houle. Un opérateur $H_2$ est utilisé pour approcher ces quantités avec une
+bonne précision. Les quantités telles que la pression et la vitesse sont ensuite
+reconstruites en post-traitement par transformée de Fourier inverse. Cela permet
+le couplage des résultats du modèle HOS avec des calculs CFD.
+
+Il est à noter que la procédure de reconstruction par FFT donne des quantités
+sur la même grille que celle utilisée par HOS. Pour calculer ces quantités en
+tout point, des interpolations linéaires en temps et en espace sont effectuées.
+
+### Paramétrage
+
+~~~~{.yaml}
+- model: hos
+  length of the domain along x: {value: 80, unit: m}
+  length of the domain along y: {value: 20, unit: m}
+  number of modes per node in x-direction: 128
+  number of modes per node in y-direction: 32
+  non-linearity order: 3
+  anti-aliasing parameter for x-axis: 1
+  anti-aliasing parameter for y-axis: 1
+  tolerance of the RKCK scheme: 1E-7
+  type of error of the RKCK scheme: abs
+  water depth: {value: 35.0, unit: m}
+  directional spectrum used for initialization:
+    jonswap:
+      gamma: 3.3
+      Tp: {value: 10.0, unit: s}
+      Hs: {value: 4.5, unit: m}
+    directional spreading:
+      beta: 0.785398
+  url of the HOS server: tcp://hos-server:5550
+  waves propagating to: {value: 90, unit: deg}
+  timeout: {value: 90, unit: ms}
+~~~~
+
+Comme les clients du serveur HOS peuvent bloquer le serveur avec des entrées
+invalides, X-DYN effectue des vérifications sur toutes les données avant envoi
+au serveur.
+
+Le cas échéant, une référence au code HOS-océan est donnée pour justifier
+les bornes imposées par X-DYN.
+
+D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
+
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+| Clef dans le fichier YAML                | Nom "HOS-Océan" | Description                                                       |
++==========================================+=================+===================================================================+
+|`length of the domain along x`            | `xlen`          | Longueur du domaine de calcul suivant l'axe X (axe de propagation)|
+|                                          |                 | Comprise entre 0 (exclu) et 1000 km.                              |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`length of the domain along y`            | `ylen`          | Longueur du domaine de calcul suivant l'axe Y                     |
+|                                          |                 | Comprise entre 0 (exclu) et 1000 km.                              |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`number of modes per node in x-direction` | `n1`            | Nombre de modes par noeud sur l'axe X. Supérieur ou égal à 1      |
+|                                          |                 | (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)) |
+|                                          |                 | Attention : d'autres contraintes moins explicites doivent exister |
+|                                          |                 | (le serveur peut planter en case de valeur invalide) mais elles ne|
+|                                          |                 | sont pas vérifiées par X-DYN.                                     |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`number of modes per node in y-direction` | `n2`            | Nombre de modes par noeud sur l'axe Y. Supérieur ou égal à 1      |
+|                                          |                 | (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)) |
+|                                          |                 | Attention : d'autres contraintes moins explicites doivent exister |
+|                                          |                 | (le serveur peut planter en case de valeur invalide) mais elles ne|
+|                                          |                 | sont pas vérifiées par X-DYN.                                     |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`non-linearity order`                     | `m`             | Ordre de la méthode HOS (ordre du développement de Taylor)        |
+|                                          |                 | On doit avoir                                                     |
+|                                          |                 | $m\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.    |
+|                                          |                 | [`initial_conditions.f90` line 63](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L63) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`anti-aliasing parameter for x-axis`      | `p1`            | Paramètre d'anti-aliasing (pour l'axe X)                          |
+|                                          |                 | Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 67](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L67)) |
+|                                          |                 | On doit également avoir                                           |
+|                                          |                 | $p_1\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.  |
+|                                          |                 | [`initial_conditions.f90` line 64](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L64) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`anti-aliasing parameter for y-axis`      | `p2`            | Paramètre d'anti-aliasing (pour l'axe Y)                          |
+|                                          |                 | Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 71](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L71)) |
+|                                          |                 | On doit également avoir                                           |
+|                                          |                 | $p_2\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.  |
+|                                          |                 | [`initial_conditions.f90` line 65](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L65) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`water depth`                             | `depth`         | Profondeur d'eau                                                  |
+|                                          |                 | Doit être supérieur ou égal à 0 (cf. [`initial_conditions.f90` line 79](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L79)). Une valeur de 1E15 est interprétée dans la modélisation comme l'infini (cf. [`initial_conditions.f90` line 154](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L154)) |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`gamma`                                   | `gamma`         | Paramètre de forme du spectre de JONSWAP utilisé pour             |
+|                                          |                 | l'initialisation de la simulation. Doit être compris entre 0 et 20|
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`beta`                                    | `beta`          | Paramètre de l'étalement directionnel (Dysthe). Doit être                    |
+|                                          |                 | Doit être strictement positif (cf. [`initial_conditions.f90` line 396](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L396)). |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`Tp`                                      | `tp_real`       | Période du spectre de JONSWAP utilisé pour l'initialisation de la |
+|                                          |                 | simulation                                                        |
+|                                          |                 | Doit être strictement positif (cf. [`initial_conditions.f90` line 155](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L155)). |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`Hs`                                      | `hs_real`       | Hauteur de houle du spectre de JONSWAP utilisé pour               |
+|                                          |                 | l'initialisation de la simulation. Compris entre 0 (exclus) et 50m|
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+|`tolerance of the RKCK scheme`            | `err`           | L'erreur utilisée pour le schéma d'intégration adaptatif          |
+|                                          |                 | Runge-Kutta - Cash-Karp doit-elle être absolue ('abs') ou relative|
+|                                          |                 | ('rel') ?                                                         |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+| `url of the HOS server`                  |       -         | URL utilisée par X-DYN pour se connecter au serveur 0MQ HOS. Ne   |
+|                                          |                 | correspond pas à l'URL utilisée par le server en interne pour     |
+|                                          |                 | échanger de manière asynchrone entre le code Fortran et le code   |
+|                                          |                 | Python (qui est fixée en dur par X-DYN à "5555")                  |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+| `waves propagating to`                   |       -         | Direction de propagation de la houle. Le code HOS-Océan ne        |
+|                                          |                 | permettant pas de contrôler la direction de propagation (elle est |
+|                                          |                 | codée en dur pour une propagation suivant l'axe X), X-DYN effectue|
+|                                          |                 | un changement de repère avant d'envoyer les requêtes au serveur   |
+|                                          |                 | HOS, puis fait le changement de repère inverse sur les vitesses   |
+|                                          |                 | orbitales.                                                        |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+| `timeout`                                |       -         | Toute requête sera abandonnée au bout de ce temps. Contrôle à la  |
+|                                          |                 | fois le délai d'expiration au niveau ZMQ (̀ZMQ_RCVTIMEO) et le     |
+|                                          |                 | délai d'expiration de chaque requête (on renvoie la requête       |
+|                                          |                 | tant que la réponse est flagée `WAIT` et que ce délai d'expiration|
+|                                          |                 | n'est pas atteint). Comme cette valeur est convertie dans le code |
+|                                          |                 | en millisecondes (precision du timeout), elle doit être comprise  |
+|                                          |                 | entre 0 (exclu) et 2147 (inclus) secondes. Les unités valides sont|
+|                                          |                 | `s`, `ms`, `us`, `ns`, `min`, `minute`, `minutes`, `second`,      |
+|                                          |                 | `seconds`, `seconde` et `secondes`.                               |
++------------------------------------------+-----------------+-------------------------------------------------------------------+
+
+### Repères
+
+Le modèle HOS est défini selon une convention "Z vers le haut". En outre, le
+code HOS-océan ne permet qu'une propagation suivant l'axe X (on ne contrôle pas
+la direction de propagation). Par conséquent, les opérations suivantes sont faites dans X-DYN :
+
+- Pour tous les calculs HOS, on transforme les entrées X-DYN du repère NED au
+  repère HOS. Cette transformation est définie par une rotation d'angle `waves
+  propagating to` autour de l'axe Z (afin de pouvoir simuler des directions de
+  propagations différentes de l'axe X), puis une rotation de 180 degrés autour
+  de l'axe X (pour le passage en coordonnées "Z vers le haut")
+- Le signe des hauteurs de houle donné par HOS est inversé
+- Les vitesses orbitales données par HOS subissent la transformation HOS->NED,
+  inverse de la transformée précédente
+
+La transformation NED $\rightarrow$ HOS est donnée par :
+
+$${}^{\mbox{HOS}}T_{\mbox{NED}} = R_X(\pi)\cdot R_Z(\theta)$$
+
+où $\theta$ désigne l'angle de propagation renseigné dans le fichier YAML (clef `waves propagating to`)
+
+On a donc :
+
+
+$${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]$$
+
+
+$${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
+
+et la transformation inverse (HOS $\rightarrow$ NED) est égale à la transformation directe :
+
+$${}^{\mbox{NED}}T_{\mbox{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
+
 ## Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70, 78 pour le stretching
@@ -1016,3 +1310,7 @@ waves:
 - *Air-Sea Interaction: Instruments and Methods*, F. Dobson, L. Hasse, R. Davis, p. 524
 - *Proposed Spectral Form for Fully Developed Wind Seas Based on the Similarity Theory of S. A. Kitaigorodskii*, Pierson, Willard J., Jr. and Moskowitz, Lionel A., Journal of Geophysical Research, Vol. 69, 1964, p.5181-5190
 - http://web.mit.edu/13.42/www/handouts/reading-wavespectra.pdf
+- *Modélisation des processus non-linéaire de génération et de propagation d'états de mer par une approche spectral*, 2013, Guillaume Ducrozet, Ecole Centrale de Nantes
+- *HOS-ocean : Open-source solver for nonlinear waves in open ocean based on High-Order Spectral method*, 2016, Ducrozet, G. and Bonnefoy, F. and Ferrant, P., Computer Physics Communications
+- *A Fourier approximation method for steady waves*, 1981, Rienecker, M.M. and Fenton, J.D., Journal of Fluid Mechanics
+- *A new numerical method for surface hydrodynamics*, 1987, West, B.J. and Brueckner, R.S and Janda, M. and Milder, M. and Milton R.L, Journal of Geophysics Research

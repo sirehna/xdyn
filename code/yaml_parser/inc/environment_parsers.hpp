@@ -10,6 +10,7 @@
 
 #include "YamlWaveModelInput.hpp"
 #include "YamlSpectraInput.hpp"
+#include "YamlHOS.hpp"
 
 #include <string>
 #include <boost/optional.hpp>
@@ -22,6 +23,7 @@ YamlPiersonMoskowitz parse_pierson_moskowitz(const std::string& yaml);
 YamlBretschneider    parse_bretschneider(const std::string& yaml);
 YamlCos2s            parse_cos2s(const std::string& yaml);
 boost::optional<int> parse_airy(const std::string& yaml);
+YamlHOS              parse_hos(const std::string& yaml);
 
 
 #endif  /* ENVIRONMENT_PARSERS_HPP_ */

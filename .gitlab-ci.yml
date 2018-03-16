@@ -34,13 +34,12 @@ build:
      - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py -c bbb91f4ea9bb6e73e35187d8c3655f7194090869 -b debian
      - unzip artifacts.zip
      - rm artifacts.zip
-     - ls -l ssc.deb
      - md5sum ssc.deb
      - mv ssc.deb ..
      - cd ..
      - mkdir -p build
      - docker build -f Dockerfile -t build-xdyn --build-arg CACHEBUST=$(date +%s) .
-     - docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 /opt/share/code
+     - docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a /opt/share/code
      - docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn /bin/sh -c "cd /opt/share/doc_user/images && make -i > /dev/null 2> /dev/null && cd /build && ninja package"
      - docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn ./run_all_tests --gtest_output=xml:run_all_tests.xml
      - cd spt_getter
@@ -53,8 +52,6 @@ build:
      - rm -rf html
      - mv spt-0.0.0-py2.py3-none-any.whl ../make_docker_image
      - cd ..
-     - ls
-     - pwd
      - cp build/xdyn.deb make_docker_image
      - cd make_docker_image
      - ./make_docker_image.sh

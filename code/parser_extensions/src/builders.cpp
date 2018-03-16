@@ -13,6 +13,7 @@
 #include "discretize.hpp"
 #include "Stretching.hpp"
 #include <boost/foreach.hpp>
+#include "HOS.hpp"
 
 boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
@@ -26,6 +27,18 @@ boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBui
         YamlDefaultWaveModel input = parse_default_wave_model(yaml);
         const auto output_mesh = make_wave_mesh(input.output);
         TR1(shared_ptr)<SurfaceElevationInterface> p(new DefaultSurfaceElevation(input.zwave, output_mesh));
+        ret.reset(p);
+    }
+    return ret;
+}
+
+boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > SurfaceElevationBuilder<HOS>::try_to_parse(const std::string& model, const std::string& yaml) const
+{
+    boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > ret;
+    if (model == "hos")
+    {
+        TR1(shared_ptr)<HOS> p(new HOS(HOS::get_instance()));
+        p->set_param(parse_hos(yaml));
         ret.reset(p);
     }
     return ret;

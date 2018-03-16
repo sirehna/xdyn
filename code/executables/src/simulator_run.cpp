@@ -1,4 +1,5 @@
 #include "simulator_run.hpp"
+#include "ConnexionError.hpp"
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
 #include "NumericalErrorException.hpp"
@@ -7,6 +8,7 @@
 #include "InputData.hpp"
 #include "simulator_api.hpp"
 #include "SurfaceElevationInterface.hpp"
+#include "ConnexionError.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/solver.hpp>
@@ -57,6 +59,10 @@ void catch_exceptions(const std::function<void(void)>& f, const std::string& sol
             std::cerr << "The simulation used a Euler integration scheme, maybe the simulation can be run with" << std::endl
                       << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
         }
+    }
+    catch(const ConnexionError& e)
+    {
+        std::cerr << "This simulation requires X-DYN to connect to a server but there was a problem with that connection: " << e.get_message() << std::endl;
     }
     catch(ssc::exception_handling::Exception& e)
     {

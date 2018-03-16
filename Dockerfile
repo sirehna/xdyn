@@ -35,10 +35,16 @@ RUN apt-get update -yq && apt-get install --no-install-recommends -y \
         pandoc \
         texlive-fonts-recommended texlive-latex-extra lmodern \
         inkscape doxygen dvipng \
-        libssl-dev && \
-    apt-get clean && \
-    rm -rf /tmp/* /var/tmp/* && \
-    rm -rf /var/lib/apt/lists/
+        libssl-dev  \
+        pkg-config \
+        autoconf \
+        automake \
+        libtool \
+        curl \
+        unzip \
+ && apt-get clean \
+ && rm -rf /tmp/* /var/tmp/* \
+ && rm -rf /var/lib/apt/lists/
 
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 100
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 100
@@ -80,6 +86,51 @@ RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src
     make install && \
     cd .. && \
     rm -rf hdf5_source.tar.gz HDF5_SRC HDF5_build
+
+RUN git clone https://github.com/google/protobuf.git
+RUN cd protobuf \
+ && git checkout  3.0.x \
+ && ./autogen.sh \
+ && ./configure "CFLAGS=-fPIC" "CXXFLAGS=-fPIC" \
+ && make -j 4\
+ && make check \
+ && make install \
+ && ls /usr/local/lib/libprotobuf.a
+RUN ldconfig
+
+RUN git clone https://github.com/zeromq/libzmq.git
+
+RUN cd libzmq \
+ && git checkout v4.2.2 \
+ && mkdir build \
+ && cd build \
+ && cmake -DWITH_PERF_TOOL=OFF -DZMQ_BUILD_TESTS=ON -DENABLE_CPACK=OFF -DCMAKE_BUILD_TYPE=Release .. \
+      -DCMAKE_C_FLAGS="-fPIC" \
+      -DCMAKE_CXX_FLAGS="-fPIC" \
+ && make -j 4 \
+ && echo "if(NOT TARGET libzmq) # in case find_package is called multiple times" >> ZeroMQConfig.cmake \
+ && echo "  add_library(libzmq SHARED IMPORTED)" >> ZeroMQConfig.cmake \
+ && echo "  set_target_properties(libzmq PROPERTIES IMPORTED_LOCATION \${\${PN}_LIBRARY})" >> ZeroMQConfig.cmake \
+ && echo "endif(NOT TARGET libzmq)" >> ZeroMQConfig.cmake \
+ && echo "" >> ZeroMQConfig.cmake \
+ && echo "if(NOT TARGET libzmq-static) # in case find_package is called multiple times" >> ZeroMQConfig.cmake \
+ && echo "  add_library(libzmq-static STATIC IMPORTED)" >> ZeroMQConfig.cmake \
+ && echo "  set_target_properties(libzmq-static PROPERTIES IMPORTED_LOCATION \${\${PN}_STATIC_LIBRARY})" >> ZeroMQConfig.cmake \
+ && echo "endif(NOT TARGET libzmq-static)" >> ZeroMQConfig.cmake \
+ && make test \
+ && make install \
+ && ldconfig \
+ && ls /usr/share/cmake-3.0/Modules/
+
+RUN git clone https://github.com/zeromq/cppzmq.git
+RUN cd cppzmq \
+ && git checkout v4.2.2 \
+ && mkdir build \
+ && cd build \
+ && cmake .. \
+      -DCMAKE_C_FLAGS="-fPIC" \
+      -DCMAKE_CXX_FLAGS="-fPIC" \
+ && make -j 4 install
 
 ARG CACHEBUST=1
 RUN rm -rf /opt/share/ssc.deb

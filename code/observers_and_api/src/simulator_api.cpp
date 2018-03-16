@@ -32,6 +32,7 @@
 #include "KtKqForceModel.hpp"
 #include "LinearHydrostaticForceModel.hpp"
 #include "listeners.hpp"
+#include "HOS.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener);
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener)
@@ -63,6 +64,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<RudderForceModel>()
            .can_parse<GMForceModel>()
            .can_parse<KtKqForceModel>()
+           .can_parse<HOS>()
            .can_parse<LinearHydrostaticForceModel>();
     return builder;
 }

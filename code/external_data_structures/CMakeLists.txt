@@ -24,6 +24,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlDiffraction.cpp
         src/YamlState.cpp
         src/YamlSimStepperInfo.cpp
+        src/YamlHOS.cpp
         )
 
 # Using C++ 2011

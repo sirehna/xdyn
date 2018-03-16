@@ -33,6 +33,7 @@ sh docker_cmake.sh -Wno-dev \
                    -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake \
                    -DHDF5_DIR:PATH=/usr/local/hdf5 \
                    -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 \
+                   -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a \
                    ..
 
 
@@ -45,5 +46,4 @@ cd make_docker_image
 cd ..
 
 # Run all tests
-#sh docker_run_all_tests.sh --gtest_output=xml:run_all_tests.xml 
-
+sh docker_run_all_tests.sh --gtest_output=xml:run_all_tests.xml
