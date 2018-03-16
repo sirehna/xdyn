@@ -9,6 +9,7 @@ SET(SRC src/hdb_data.cpp
         src/yml_data_bug_3230.cpp
         src/bug_3235.cpp
         src/bug_3207.cpp
+        src/bug_3238.cpp
     )
 
 INCLUDE_DIRECTORIES(inc)

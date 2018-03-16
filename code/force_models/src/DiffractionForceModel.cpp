@@ -83,7 +83,10 @@ class DiffractionForceModel::Impl
             {
                 periods = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
                 const auto hdb_periods = hdb.get_diffraction_module_periods();
-                check_all_omegas_are_within_bounds(hdb_periods.front(), periods, hdb_periods.back());
+                if (not(hdb_periods.empty()))
+                {
+                    check_all_omegas_are_within_bounds(hdb_periods.front(), periods, hdb_periods.back());
+                }
                 psis = env.w->get_wave_directions_for_each_model();
             }
             else
