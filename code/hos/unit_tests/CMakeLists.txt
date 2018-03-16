@@ -14,7 +14,6 @@ include_directories(${test_macros_SOURCE_DIR})
 include_directories(${external_data_structures_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
 include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
-include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
 include_directories(SYSTEM ${kissfft_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
