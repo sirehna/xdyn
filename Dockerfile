@@ -35,10 +35,16 @@ RUN apt-get update -yq && apt-get install --no-install-recommends -y \
         pandoc \
         texlive-fonts-recommended texlive-latex-extra lmodern \
         inkscape doxygen dvipng \
-        libssl-dev && \
-    apt-get clean && \
-    rm -rf /tmp/* /var/tmp/* && \
-    rm -rf /var/lib/apt/lists/
+        libssl-dev  \
+        pkg-config \
+        autoconf \
+        automake \
+        libtool \
+        curl \
+        unzip \
+ && apt-get clean \
+ && rm -rf /tmp/* /var/tmp/* \
+ && rm -rf /var/lib/apt/lists/
 
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 100
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 100
@@ -81,16 +87,6 @@ RUN wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-1.8.12/src
     cd .. && \
     rm -rf hdf5_source.tar.gz HDF5_SRC HDF5_build
 
-RUN apt-get update -yq && apt-get install --no-install-recommends -y \
-        autoconf \
-        automake \
-        libtool \
-        curl \
-        unzip \
-    && apt-get clean \
-    && rm -rf /tmp/* /var/tmp/* \
-    && rm -rf /var/lib/apt/lists/
-
 RUN git clone https://github.com/google/protobuf.git
 RUN cd protobuf \
  && git checkout  3.0.x \
@@ -104,11 +100,6 @@ RUN ldconfig
 
 RUN git clone https://github.com/zeromq/libzmq.git
 
-RUN apt-get update -yq && apt-get install --no-install-recommends -y \
-        pkg-config \
-    && apt-get clean \
-    && rm -rf /tmp/* /var/tmp/* \
-    && rm -rf /var/lib/apt/lists/
 RUN cd libzmq \
  && git checkout v4.2.2 \
  && mkdir build \
