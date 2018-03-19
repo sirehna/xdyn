@@ -728,6 +728,26 @@ BodyStates get_whole_body_state_with_psi_equal_to(const double psi)
     return states;
 }
 
+BodyStates get_whole_body_state(const double x, const double y, const double z, const double phi, const double theta, const double psi);
+BodyStates get_whole_body_state(const double x, const double y, const double z, const double phi, const double theta, const double psi)
+{
+    const std::vector<double> s = get_states(x,y,z,phi*PI/180,theta*PI/180,psi*PI/180);
+    BodyStates states;
+    states.x.record(0,s.at(0));
+    states.y.record(0,s.at(1));
+    states.z.record(0,s.at(2));
+    states.qr.record(0,s.at(9));
+    states.qi.record(0,s.at(10));
+    states.qj.record(0,s.at(11));
+    states.qk.record(0,s.at(12));
+    states.convention.order_by = "angle";
+    states.convention.convention.push_back("z");
+    states.convention.convention.push_back("y'");
+    states.convention.convention.push_back("x''");
+    states.name = "Anthineas";
+    return states;
+}
+
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_interpolation_in_period_no_transport)
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(0, 2, 4);
@@ -870,9 +890,9 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_pe
     ASSERT_SMALL_RELATIVE_ERROR( module[0]*sin(k-phase[0]), tau.X(), eps);
     ASSERT_SMALL_RELATIVE_ERROR(-module[1]*sin(k-phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(-module[2]*sin(k-phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(k-phase[3]), tau.K(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k-phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(k-phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(k-phase[3])+2*tau.Z()-3*tau.Y(), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k-phase[4])+3*tau.X()-tau.Z(), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(k-phase[5])+tau.Y()-2*tau.X(), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport_with_non_zero_t)
@@ -894,9 +914,9 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_pe
     ASSERT_SMALL_RELATIVE_ERROR( module[0]*sin(k-2.5*PI-phase[0]), tau.X(), eps);
     ASSERT_SMALL_RELATIVE_ERROR(-module[1]*sin(k-2.5*PI-phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(-module[2]*sin(k-2.5*PI-phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(k-2.5*PI-phase[3]), tau.K(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k-2.5*PI-phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(k-2.5*PI-phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[3]*sin(k-2.5*PI-phase[3])+2*tau.Z()-3*tau.Y(), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k-2.5*PI-phase[4])+3*tau.X()-tau.Z(), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[5]*sin(k-2.5*PI-phase[5])+tau.Y()-2*tau.X(), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_period_transport_with_non_zero_t)
@@ -935,9 +955,9 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_perio
     ASSERT_SMALL_RELATIVE_ERROR( module[0]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[0]), tau.X(), eps);
     ASSERT_SMALL_RELATIVE_ERROR( module[1]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[1]), tau.Y(), eps); // Z is down for X-DYN and up for AQUA+
     ASSERT_SMALL_RELATIVE_ERROR(-module[2]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[2]), tau.Z(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[3]), tau.K(), eps);
-    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[4]), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
-    ASSERT_SMALL_RELATIVE_ERROR( module[5]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[5]), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR(-module[3]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[3])+2*tau.Z()-3*tau.Y(), tau.K(), eps);
+    ASSERT_SMALL_RELATIVE_ERROR(-module[4]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[4])+3*tau.X()-tau.Z(), tau.M(), eps); // Z is down for X-DYN and up for AQUA+
+    ASSERT_SMALL_RELATIVE_ERROR( module[5]*sin(k*(cos(PI/6)+2*sin(PI/6))-0.6*PI-phase[5])+tau.Y()-2*tau.X(), tau.N(), eps); // Z is down for X-DYN and up for AQUA+
 }
 
 TEST_F(ForceTests, bug_3210_interpolation_with_non_zero_psi_in_incidence_no_interpolation_in_period_no_transport)
@@ -976,4 +996,18 @@ TEST_F(ForceTests, bug_3210_interpolation_with_non_zero_psi_in_incidence_no_inte
     ASSERT_DOUBLE_EQ( module[3]*sin(-phase[3]), tau.K());
     ASSERT_DOUBLE_EQ(-module[4]*sin(-phase[4]), tau.M()); // Z is down for X-DYN and up for AQUA+
     ASSERT_DOUBLE_EQ(-module[5]*sin(-phase[5]), tau.N()); // Z is down for X-DYN and up for AQUA+
+}
+
+TEST_F(ForceTests, bug_3239_reference_frame_is_incorrect)
+{
+    const double propagation_angle_in_ned_frame_in_degrees = 180;
+    const double Hs_in_meters = 0.0485;
+    const double Tp_in_seconds = 4;
+    const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(propagation_angle_in_ned_frame_in_degrees, Hs_in_meters, Tp_in_seconds);
+    const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(23,29,31);
+    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const auto states = get_whole_body_state(0,0,0,0,0,0);
+    const double t = 0;
+    const auto tau = F(states, t);
+    ASSERT_EQ("Anthineas", tau.get_frame());
 }
