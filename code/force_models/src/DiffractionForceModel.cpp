@@ -14,6 +14,7 @@
 #include "SurfaceElevationInterface.hpp"
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
+#include "yaml2eigen.hpp"
 
 #include <ssc/interpolation.hpp>
 #include <ssc/text_file_reader.hpp>
@@ -73,7 +74,8 @@ class DiffractionForceModel::Impl
 {
     public:
 
-        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env_, const HDBParser& hdb) : initialized(false), env(env_),
+        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env_, const HDBParser& hdb, const std::string& body_name)
+          : initialized(false), env(env_),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
         rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
         periods(),
@@ -93,16 +95,21 @@ class DiffractionForceModel::Impl
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << DiffractionForceModel::model_name << "' needs a wave model, even if it's 'no waves'");
             }
-
+            YamlPosition pos;
+            pos.frame = DiffractionForceModel::model_name();
+            pos.coordinates = data.calculation_point;
+            const auto from_internal_frame_to_a_known_frame = make_transform(pos, body_name, env.rot);
+            env.k->add(from_internal_frame_to_a_known_frame);
         }
 
-        ssc::kinematics::Wrench evaluate(const std::string& body_name, const double t, const double psi)
+        ssc::kinematics::Wrench evaluate(const ssc::kinematics::Point& G, const std::string& body_name, const double t, const double psi)
         {
             ssc::kinematics::Wrench ret;
             ssc::kinematics::Vector6d w;
             auto T = env.k->get("NED", body_name);
             T.swap();
-            const ssc::kinematics::Point H = T*ssc::kinematics::Point(body_name,H0);
+            const ssc::kinematics::Point position_in_ned_for_the_wave_model = T*ssc::kinematics::Point(body_name,H0);
+            ssc::kinematics::Point point_of_application_in_body_frame(body_name,H0);
             std::array<std::vector<std::vector<double> >, 6 > rao_modules;
             std::array<std::vector<std::vector<double> >, 6 > rao_phases;
             if (env.w.use_count()>0)
@@ -129,14 +136,31 @@ class DiffractionForceModel::Impl
                                 rao_phases[k][i][j] = -rao.interpolate_phase(k, periods[i][j], beta);
                         }
                     }
-                    w((int)k) = env.w->evaluate_rao(H.x(),
-                                                    H.y(),
+
+                    w((int)k) = env.w->evaluate_rao(position_in_ned_for_the_wave_model.x(),
+                                                    position_in_ned_for_the_wave_model.y(),
                                                     t,
                                                     rao_modules[k],
                                                     rao_phases[k]);
                 }
             }
-            return ssc::kinematics::Wrench(H, express_aquaplus_wrench_in_xdyn_coordinates(w));
+            const auto ww = express_aquaplus_wrench_in_xdyn_coordinates(w);
+            const Eigen::Vector3d force(ww(0),ww(1),ww(2));
+            const Eigen::Vector3d torque(ww(3),ww(4),ww(5));
+            const auto tau_in_internal_frame = ssc::kinematics::UnsafeWrench(ssc::kinematics::Point(DiffractionForceModel::model_name(), 0, 0, 0), force, torque);
+
+            // Origin of the internal frame is P
+            // G is the point (not the origin) of the body frame where the forces are summed
+            // Ob is the origin of the body frame
+            const auto OP = H0;
+            const auto GO = -G.v;
+            const auto GP = GO + OP;
+            const auto force_in_G_expressed_in_body_frame = force;
+            const auto torque_in_G_expressed_in_body_frame = torque+GP.cross(force);
+
+            const ssc::kinematics::Point GG(body_name, G.x(), G.y(), G.z());
+            const ssc::kinematics::UnsafeWrench tau_in_body_frame_at_G(GG, force_in_G_expressed_in_body_frame, torque_in_G_expressed_in_body_frame);
+            return tau_in_body_frame_at_G;
         }
 
         ssc::kinematics::Vector6d express_aquaplus_wrench_in_xdyn_coordinates(ssc::kinematics::Vector6d v) const
@@ -157,18 +181,20 @@ class DiffractionForceModel::Impl
 
 };
 
-DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env) : ForceModel("diffraction", body_name_), pimpl(new Impl(data,env,hdb_from_file(data.hdb_filename)))
+DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env)
+: ForceModel("diffraction", body_name_), pimpl(new Impl(data,env,hdb_from_file(data.hdb_filename), body_name_))
 {
 }
 
-DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents) : ForceModel("diffraction", body_name_), pimpl(new Impl(data,env,HDBParser(hdb_file_contents)))
+DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents)
+ : ForceModel("diffraction", body_name_), pimpl(new Impl(data,env,HDBParser(hdb_file_contents),body_name_))
 {
 }
 
 ssc::kinematics::Wrench DiffractionForceModel::operator()(const BodyStates& states, const double t) const
 {
 
-    return pimpl->evaluate(states.name, t, states.get_angles().psi);
+    return pimpl->evaluate(states.G, states.name, t, states.get_angles().psi);
 }
 
 DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yaml)
