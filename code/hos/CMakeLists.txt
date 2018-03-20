@@ -8,6 +8,11 @@ PROTOBUF_GENERATE_CPP(PROTO_SRC PROTO_HEADER hos.proto)
 
 SET(SRC src/HOS.cpp)
 
+IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic -Wextra -Wall -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 -Wpointer-arith -Wmissing-declarations -Wmissing-format-attribute -Wsign-compare -Wstrict-aliasing=2 -Wundef -Wconversion")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_C_FLAGS} -Woverloaded-virtual -Weffc++ -Wwrite-strings -Wno-deprecated -Wvariadic-macros")
+ENDIF
+
 # Using C++ 2011
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
@@ -36,7 +41,7 @@ INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${cppzmq_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${yaml_parser_INCLUDE_DIRS})
-
+INCLUDE_DIRECTORIES(SYSTEM ${ZeroMQ_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 
 
