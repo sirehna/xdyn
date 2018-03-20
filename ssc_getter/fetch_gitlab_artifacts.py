@@ -6,7 +6,7 @@ import urllib3
 # Shut the f*** up
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-service_name = "ipopt-getter"
+service_name = "fetch-gitlab-artifacts"
 
 logging.basicConfig(format='%(asctime)s,%(msecs)d [' + service_name + '] - %(levelname)-4s [%(filename)s:%(lineno)d] %(message)s',
     datefmt='%d-%m-%Y:%H:%M:%S',
@@ -61,12 +61,12 @@ def fetch_artifact(**kwargs):
     target_branch = kwargs.get('target_branch', 'master')
     stage = kwargs.get('stage', 'build')
 
+
     # Gitlab API handler
     gl = gitlab.Gitlab('https://gitlab.sirehna.com', private_token, ssl_verify=False)
 
     # Get all builds: you can get the ID from https://gitlab.sirehna.com/root/scientific_computing/edit
     builds = gl.project_builds.list(project_id=project_id, all=True)
-
 
     # Select only successful builds from the target stage, from the target branch
     if commit:
