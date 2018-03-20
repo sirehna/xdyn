@@ -31,8 +31,8 @@ build:windows:
    stage: build
    script:
      - cd ssc_getter
-     - docker build -f Dockerfile -t get_ssc .
-     - docker run -i --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc python3 fetch_ssc.py -c 100bffd649d2b10a4c325f80c5fb192a19209254 -b windows
+     - docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(whoami) -f Dockerfile -t get_ssc .
+     - docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out get_ssc -c 100bffd649d2b10a4c325f80c5fb192a19209254 -b windows
      - unzip artifacts.zip
      - rm artifacts.zip
      - mv ssc.zip ..
