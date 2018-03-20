@@ -108,6 +108,7 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
 # ADD_IMPORTED_LIB(interpolation_static)
 # ADD_IMPORTED_LIB(integrate_static)
 # ADD_IMPORTED_LIB(websocket_static)
+LINK_DIRECTORIES(${ssc_INCLUDE_DIRS}/../lib)
 ADD_IMPORTED_LIB(ssc_static)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
