@@ -70,9 +70,15 @@ def fetch_artifact(**kwargs):
 
     # Select only successful builds from the target stage, from the target branch
     if commit:
-        builds = [b for b in builds if b.status == "success" and b.stage == stage and b.commit is not None and b.commit.id == commit]
+        if build_type:
+            builds = [b for b in builds if b.status == "success" and b.stage == stage and b.commit is not None and b.commit.id == commit and b.name.endswith(build_type)]
+        else:
+            builds = [b for b in builds if b.status == "success" and b.stage == stage and b.commit is not None and b.commit.id == commit]
     else:
-        builds = [b for b in builds if b.status == "success" and b.stage == stage and b.ref == target_branch]
+        if build_type:
+            builds = [b for b in builds if b.status == "success" and b.stage == stage and b.ref == target_branch]
+        else:
+            builds = [b for b in builds if b.status == "success" and b.stage == stage and b.ref == target_branch and b.name.endswith(build_type)]
 
     # Get latest stable build on target branch
     latest = get_latest_successful_build(builds)
