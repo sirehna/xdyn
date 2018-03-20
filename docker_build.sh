@@ -1,18 +1,17 @@
 #!/bin/sh
 
 # Get SSC
-cd ssc_getter
-docker build -f Dockerfile -t get_ssc .
-docker run -it --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out --net=host get_ssc python3 fetch_ssc.py
+cd fetch_gitlab_artifacts
+docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(whoami) -f Dockerfile -t fetch_gitlab_artifacts .
+docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c c6ab16028ccb145fde2ae769f5a86c439efe0e05 --project_id 42 -b debian
 unzip artifacts.zip
 rm artifacts.zip
 mv ssc.deb ..
 cd ..
 
 # Get SPT
-cd spt_getter
-docker build -f Dockerfile -t get_spt .
-docker run -it --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out --net=host get_spt python fetch_spt.py
+cd fetch_gitlab_artifacts
+docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c 44828c3a961044794426d0f4a56bd46600a1 --project_id 4
 unzip artifacts.zip
 rm artifacts.zip
 rm -rf html

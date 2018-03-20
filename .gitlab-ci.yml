@@ -32,7 +32,7 @@ build:windows:
    script:
      - cd fetch_gitlab_artifacts
      - docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(whoami) -f Dockerfile -t fetch_gitlab_artifacts .
-     - docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c c6ab16028ccb145fde2ae769f5a86c439efe0e05 --project_id 42 -b windows
+     - docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b windows
      - unzip artifacts.zip
      - rm artifacts.zip
      - mv ssc.zip ..
@@ -64,6 +64,11 @@ build:windows:
                         -DBoost_SYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_system-mt.a
                         -DBoost_REGEX_LIBRARY:PATH=/opt/boost/lib/libboost_regex-mt.a
                         -DHDF5_DIR=/opt/HDF5_1_8_20/cmake
+                        -Dcppzmq_DIR=/opt/libzmq/share/cmake/cppzmq
+                        -DZeroMQ_DIR=/opt/libzmq/share/cmake/ZeroMQ
+                        -DProtobuf_INCLUDE_DIR=/opt/protobuf/include
+                        -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a
+                        -DProtobuf_PROTOC_EXECUTABLE=/usr/bin/protoc
                         -DCMAKE_SYSTEM_VERSION=7
                         /opt/share/code"
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
@@ -82,7 +87,7 @@ build:debian:
    script:
      - cd fetch_gitlab_artifacts
      - docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(whoami) -f Dockerfile -t fetch_gitlab_artifacts .
-     - docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c c6ab16028ccb145fde2ae769f5a86c439efe0e05 --project_id 42 -b debian
+     - docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b debian
      - unzip artifacts.zip
      - rm artifacts.zip
      - mv ssc.deb ..
