@@ -109,7 +109,7 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
 # ADD_IMPORTED_LIB(integrate_static)
 # ADD_IMPORTED_LIB(websocket_static)
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE gfortran)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${HDF5_CXX_STATIC_LIBRARY} ${HDF5_C_STATIC_LIBRARY})
@@ -172,6 +172,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         binary_stl_data_static
         ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
+        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
         )
 
 # Add test program and its dependencies in the installation file
