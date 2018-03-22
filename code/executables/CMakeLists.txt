@@ -56,6 +56,7 @@ TARGET_LINK_LIBRARIES(xdyn
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
+        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
         )
 
 ADD_EXECUTABLE(test_orbital_velocities_and_dynamic_pressures
@@ -63,7 +64,7 @@ src/test_orbital_velocities_and_dynamic_pressures.cpp)
 
 TARGET_LINK_LIBRARIES(test_orbital_velocities_and_dynamic_pressures
         x-dyn
-        random_data_generator_shared
+        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
         )
 
 ADD_EXECUTABLE(test_hs
@@ -81,21 +82,12 @@ ADD_EXECUTABLE(test_hs
 TARGET_LINK_LIBRARIES(test_hs
         x-dyn
         binary_stl_data_static
+        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
         )
 
 TARGET_LINK_LIBRARIES(test_hs
         yaml-cpp
         gfortran
-        )
-
-TARGET_LINK_LIBRARIES(test_hs
-        numeric_shared
-        kinematics_shared
-        data_source_shared
-        yaml_parser_shared
-        text_file_reader_shared
-        decode_unit_shared
-        csv_file_reader_shared
         )
 
 ADD_EXECUTABLE(yml2test src/yml2test.cpp)
@@ -115,6 +107,7 @@ TARGET_LINK_LIBRARIES(convert_stl_files_to_code
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
+        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
         )
 
 ADD_EXECUTABLE(gz
@@ -129,6 +122,7 @@ TARGET_LINK_LIBRARIES(gz
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
+        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
         )
 
 ADD_EXECUTABLE(generate_yaml_example
@@ -145,8 +139,9 @@ ADD_EXECUTABLE(generate_stl_examples
 TARGET_LINK_LIBRARIES(generate_stl_examples
         binary_stl_data_static
         x-dyn
+        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
         )
-        
+
 ADD_EXECUTABLE(xdyn-server
         src/utilities_for_InputDataSimServer.cpp
         src/utilities_for_simulator.cpp
@@ -159,12 +154,8 @@ TARGET_LINK_LIBRARIES(xdyn-server
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
+        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
         )
-
-
-
-
-        
 
 ################################################################################
 INSTALL(TARGETS xdyn
