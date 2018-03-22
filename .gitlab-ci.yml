@@ -75,8 +75,7 @@ build:windows:
           /bin/bash -c "mkdir -p /opt/share/.wine && export WINEPREFIX=/opt/share/.wine && wine winecfg && ninja package"
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
           /bin/bash -c "mkdir -p /opt/share/.wine && export WINEPREFIX=/opt/share/.wine && wine winecfg &&
-                        cp /opt/share/ssc/bin/*.dll . &&
-                        wine ./run_all_tests"
+          wine ./run_all_tests --gtest_filter=-HOS*:*erver*:*websocket*"
    artifacts:
      when: on_success
      paths:
