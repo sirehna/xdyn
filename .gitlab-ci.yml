@@ -23,33 +23,28 @@ lint:
 cleanup_Docker:
    stage: cleanup_Docker
    script:
-     - docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null || true
-     - docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null || true
+     - pwd
+     # - docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null || true
+     # - docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null || true
 
-build:
+build:windows:
    stage: build
    script:
-     - cd ssc_getter
-     - make
-     - mv ssc.deb ..
-     - cd ..
-     - mkdir -p build
-     - docker build -f Dockerfile -t build-xdyn --build-arg CACHEBUST=$(date +%s) .
-     - docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a /opt/share/code
-     - docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn /bin/sh -c "cd /opt/share/doc_user/images && make -i > /dev/null 2> /dev/null && cd /build && ninja package"
-     - docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd)/build:/build -w /build -v $(pwd):/opt/share -i build-xdyn ./run_all_tests --gtest_output=xml:run_all_tests.xml
-     - cd spt_getter
-     - docker build -f Dockerfile -t get_spt .
-     - docker run -i --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out --net=host get_spt python fetch_spt.py -c 44828c3a961044794426d0f4a56bd46600a13897
+     - make windows
+     - ./run_all_tests_windows.sh --gtest_filter=-HOS*:*erver*:*websocket*:BlockedDOFTest.should_not_throw_if_CSV_file_exists
+     - mv build_windows/xdyn.zip .
+   artifacts:
+     when: on_success
+     paths:
+     - xdyn.zip
 
-     - rm -rf html spt-0.0.0-py2.py3-none-any.whl
-     - unzip artifacts.zip
-     - rm artifacts.zip
-     - rm -rf html
-     - mv spt-0.0.0-py2.py3-none-any.whl ../make_docker_image
-     - cd ..
-     - cp build/xdyn.deb make_docker_image
-     - cd make_docker_image
-     - ./make_docker_image.sh
-     - cd ..
+build:debian:
+   stage: build
+   script:
+     - make debian
+     - ./run_all_tests_debian.sh
+   artifacts:
+     when: on_success
+     paths:
+     - build/xdyn.deb
 

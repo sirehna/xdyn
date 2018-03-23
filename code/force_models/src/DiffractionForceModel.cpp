@@ -155,8 +155,8 @@ class DiffractionForceModel::Impl
             const auto OP = H0;
             const auto GO = -G.v;
             const auto GP = GO + OP;
-            const auto force_in_G_expressed_in_body_frame = force;
-            const auto torque_in_G_expressed_in_body_frame = torque+GP.cross(force);
+            const Eigen::Vector3d force_in_G_expressed_in_body_frame = force;
+            const Eigen::Vector3d torque_in_G_expressed_in_body_frame = torque+GP.cross(force);
 
             const ssc::kinematics::Point GG(body_name, G.x(), G.y(), G.z());
             const ssc::kinematics::UnsafeWrench tau_in_body_frame_at_G(GG, force_in_G_expressed_in_body_frame, torque_in_G_expressed_in_body_frame);

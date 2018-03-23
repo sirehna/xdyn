@@ -1,17 +1,31 @@
 # Install the dependencies of the program
-IF(MSYS)
+IF(MINGW)
+    # Caution: No cross-compiling is taken into account:
+    # If we use a 32 bit compiler, we will get a 32 executable.
+    # The same for 64 bit platform
+    IF(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+        SET(PLATFORM_ABI x64)
+    ELSE()
+        SET(PLATFORM_ABI x86)
+    ENDIF()
+    # 2 Check the exception mechanism
     GET_FILENAME_COMPONENT(MINGW_BIN_PATH ${CMAKE_CXX_COMPILER} PATH)
-    MESSAGE(STATUS "MINGW_BIN_PATH = ${MINGW_BIN_PATH}")
-    LIST(APPEND MINGW_ADDITIONAL_LIB "${MINGW_BIN_PATH}/libgcc_s_dw2-1.dll")
-    LIST(APPEND MINGW_ADDITIONAL_LIB "${MINGW_BIN_PATH}/libgcc_s_sjlj-1.dll")
-    LIST(APPEND MINGW_ADDITIONAL_LIB "${MINGW_BIN_PATH}/libstdc++-6.dll")
-    LIST(APPEND MINGW_ADDITIONAL_LIB "${MINGW_BIN_PATH}/libgfortran-3.dll")
-    LIST(APPEND MINGW_ADDITIONAL_LIB "${MINGW_BIN_PATH}/libwinpthread-1.dll")
-    IF(CMAKE_SIZEOF_VOID_P EQUAL 8) # If on a 64 bit machine
-        LIST(APPEND MINGW_ADDITIONAL_LIB "${MINGW_BIN_PATH}/libgcc_s_seh-1.dll")
+    MESSAGE(STATUS "MINGW BIN PATH = ${MINGW_BIN_PATH}")
+    SET(MINGW_LIB_DIRECTORY "")
+    IF(${PLATFORM_ABI} MATCHES "x64")
+        SET(MINGW_LIB_DIRECTORY "x86_64-w64-mingw32")
+    ELSE()
+        SET(MINGW_LIB_DIRECTORY "i686-w64-mingw32")
+    ENDIF()
+    IF(EXISTS "${MINGW_BIN_PATH}/../${MINGW_LIB_DIRECTORY}/")
+        FILE(GLOB MINGW_DLLS ${MINGW_BIN_PATH}/../${MINGW_LIB_DIRECTORY}/lib/*.dll)
+    ELSE()
+        # Maybe Dlls are present in the mingw bin directory
+        FILE(GLOB MINGW_DLLS ${MINGW_BIN_PATH}/*.dll)
     ENDIF()
     FOREACH(f ${MINGW_ADDITIONAL_LIB})
         IF(EXISTS ${f})
+            MESSAGE(STATUS "MINGW DLL will be installed = ${f}")
             INSTALL(FILES ${f} DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
         ENDIF()
     ENDFOREACH()
@@ -76,4 +90,4 @@ IF(UNIX OR MSYS)
         ##rpm -i --prefix=/home/people/jacquenot/simulateurIrtJv/ simulateurIrtJv_installer_1589M.rpm
     ENDIF(WIN32)
     INCLUDE(CPack)
-ENDIF(UNIX OR MSYS)
+ENDIF()

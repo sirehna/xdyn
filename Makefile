@@ -1,9 +1,60 @@
-all: spt-0.0.0-py2.py3-none-any.whl ssc.deb
-	cp spt-0.0.0-py2.py3-none-any.whl ../make_docker_image
-	mkdir -p build
-	docker network create hos-docker-network 2> /dev/null || true
-	docker build -f Dockerfile -t build-xdyn --build-arg CACHEBUST=$(shell date +%s) .
-	docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd)/build:/build -w /build -v $(shell pwd):/opt/share -i build-xdyn cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a /opt/share/code
-	docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd)/build:/build -w /build -v $(shell pwd):/opt/share -i build-xdyn /bin/sh -c "cd /opt/share/doc_user/images && make -i > /dev/null 2> /dev/null && cd /build && ninja package"
-	docker run --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd)/build:/build -w /build -v $(shell pwd):/opt/share -i --net=hos-docker-network build-xdyn ./run_all_tests --gtest_output=xml:run_all_tests.xml
+all: windows debian
 
+windows: fetch-ssc-windows cmake-windows package-windows
+debian: fetch-ssc-debian cmake-debian package-debian
+
+.PHONY: fetch-ssc-windows cmake-windows package-windows windows
+
+fetch-ssc-windows:
+	./fetch_gitlab_artifacts.sh -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b windows
+	rm -rf ssc_windows
+	mkdir ssc_windows
+	unzip ssc.zip -d ssc_windows
+	rm ssc.zip
+
+cmake-windows:
+	mkdir -p build_windows
+	docker run --name xdyn-cmake-windows --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd):/opt/share -w /opt/share mydockcross/windows-x64 \
+          /bin/bash -c "mkdir -p /opt/share/.wine && \
+                        export WINEPREFIX=/opt/share/.wine && \
+                        wine winecfg && \
+                        mkdir -p executables && \
+                        cd build_windows && \
+                        cmake -Wno-dev \
+                        -G Ninja \
+                        -Dssc_DIR:PATH=/opt/share/ssc_windows/lib/ssc/cmake \
+                        -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
+                        -DCPACK_GENERATOR=ZIP \
+                        -DBoost_DEBUG=0 \
+                        -DBOOST_ROOT:PATH=/opt/boost \
+                        -DBOOST_INCLUDEDIR:PATH=/opt/boost/include \
+                        -DBoost_INCLUDE_DIR:PATH=/opt/boost/include \
+                        -DBOOST_LIBRARYDIR:PATH=/opt/boost/lib \
+                        -DBoost_NO_SYSTEM_PATHS:BOOL=OFF \
+                        -DBoost_LIBRARY_DIR_RELEASE:PATH=/opt/boost/lib \
+                        -DBoost_PROGRAM_OPTIONS_LIBRARY:PATH=/opt/boost/lib/libboost_program_options-mt.a \
+                        -DBoost_FILESYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_filesystem-mt.a \
+                        -DBoost_SYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_system-mt.a \
+                        -DBoost_REGEX_LIBRARY:PATH=/opt/boost/lib/libboost_regex-mt.a \
+                        -DHDF5_DIR=/opt/HDF5_1_8_20/cmake \
+                        -Dcppzmq_DIR=/opt/libzmq/share/cmake/cppzmq \
+                        -DZeroMQ_DIR=/opt/libzmq/share/cmake/ZeroMQ \
+                        -DProtobuf_INCLUDE_DIR=/opt/protobuf/include \
+                        -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a \
+                        -DProtobuf_PROTOC_EXECUTABLE=/usr/bin/protoc \
+                        -DCMAKE_SYSTEM_VERSION=7 \
+                        /opt/share/code"
+
+fetch-ssc-debian:
+	./fetch_gitlab_artifacts.sh -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b debian
+
+package-windows:
+	./ninja_windows.sh package
+
+cmake-debian:
+	mkdir -p build_debian
+	docker build -t build-xdyn-debian --build-arg CACHEBUST=$(date +%s) .
+	docker run --name xdyn-cmake-debian --rm -e LD_LIBRARY_PATH=/opt/ssc/lib -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd)/build_debian:/build -w /build -v $(shell pwd):/opt/share -i build-xdyn-debian cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a /opt/share/code
+
+package-debian:
+	./ninja_debian.sh package

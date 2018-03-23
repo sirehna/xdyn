@@ -12,8 +12,8 @@ ARG USER
 RUN if [ $USER != root ]; then groupadd -g $GID $USER; fi \
  && if [ $USER != root ]; then useradd -m -u $UID -g $GID -s /bin/bash $USER; fi
 
-# Add the scripts doing all the work
-ADD fetch_gitlab_artifacts.sh fetch_gitlab_artifacts.py /
+# Add the Python script doing all the work
+ADD fetch_gitlab_artifacts.py /
 
 # At run time, use group & user created at build time to change permissions of generated artifacts
-ENTRYPOINT ["/bin/sh", "/fetch_gitlab_artifacts.sh"]
+ENTRYPOINT ["python3", "fetch_gitlab_artifacts.py"]

@@ -57,6 +57,10 @@ IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
 ENDIF()
 
+IF (WIN32)
+    SET(SSC_LIB ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+ENDIF()
+
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
@@ -80,7 +84,13 @@ ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
 
-ADD_LIBRARY(${PROJECT_NAME} SHARED
+IF (WIN32)
+    SET(STATICORSHARED STATIC)
+ELSE()
+    SET(STATICORSHARED SHARED)
+ENDIF()
+
+ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:observers_and_api>
         $<TARGET_OBJECTS:parser_extensions>
@@ -96,18 +106,24 @@ ADD_LIBRARY(${PROJECT_NAME} SHARED
         $<TARGET_OBJECTS:hos>
         )
 
-ADD_IMPORTED_LIB(numeric_shared)
-ADD_IMPORTED_LIB(kinematics_shared)
-ADD_IMPORTED_LIB(data_source_shared)
-ADD_IMPORTED_LIB(yaml_parser_shared)
-ADD_IMPORTED_LIB(text_file_reader_shared)
-ADD_IMPORTED_LIB(decode_unit_shared)
-ADD_IMPORTED_LIB(csv_file_reader_shared)
-ADD_IMPORTED_LIB(exception_handling_shared)
-ADD_IMPORTED_LIB(data_source_shared)
-ADD_IMPORTED_LIB(interpolation_shared)
-ADD_IMPORTED_LIB(integrate_shared)
-ADD_IMPORTED_LIB(websocket_shared)
+# ADD_IMPORTED_LIB(numeric_static)
+# ADD_IMPORTED_LIB(kinematics_static)
+# ADD_IMPORTED_LIB(data_source_static)
+# ADD_IMPORTED_LIB(yaml_parser_static)
+# ADD_IMPORTED_LIB(text_file_reader_static)
+# ADD_IMPORTED_LIB(decode_unit_static)
+# ADD_IMPORTED_LIB(csv_file_reader_static)
+# ADD_IMPORTED_LIB(exception_handling_static)
+# ADD_IMPORTED_LIB(data_source_static)
+# ADD_IMPORTED_LIB(interpolation_static)
+# ADD_IMPORTED_LIB(integrate_static)
+# ADD_IMPORTED_LIB(websocket_static)
+
+IF (WIN32)
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+ELSE()
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+ENDIF()
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE gfortran)
@@ -128,18 +144,20 @@ ELSE()
 ENDIF()
 
 IF(WIN32)
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE wsock32 ws2_32)
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC wsock32 ws2_32)
 ELSE()
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE pthread)
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC pthread)
 ENDIF()
 
 IF(UNIX AND NOT(WIN32))
     SET(LIBRARY_OUTPUT_DIRECTORY "lib")
     INSTALL(TARGETS ${PROJECT_NAME}
+            ARCHIVE DESTINATION lib
             LIBRARY DESTINATION lib)
 ELSE()
     INSTALL(TARGETS ${PROJECT_NAME}
             RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
+            ARCHIVE DESTINATION ${LIBRARY_OUTPUT_DIRECTORY}
             LIBRARY DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
 ENDIF()
 #############################################################################
@@ -165,18 +183,24 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:hos_tests>
         )
 
+
+
 TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest      # static
         gmock_main # static
         binary_stl_data_static
         ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
-        random_data_generator_shared
-        
+        ${SSC_LIB}
         )
+
+# Add test program and its dependencies in the installation file
+INSTALL(TARGETS ${TEST_EXE}
+        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
+        )
+
 
 INCLUDE(CMakeTesting)
 INCLUDE(CMakeDocumentation)
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
-
