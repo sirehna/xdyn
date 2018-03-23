@@ -3,7 +3,7 @@
 # Get SSC
 cd fetch_gitlab_artifacts
 docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(whoami) -f Dockerfile -t fetch_gitlab_artifacts .
-docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c c6ab16028ccb145fde2ae769f5a86c439efe0e05 --project_id 42 -b debian
+docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b debian
 unzip artifacts.zip
 rm artifacts.zip
 mv ssc.deb ..
