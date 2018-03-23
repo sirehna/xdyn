@@ -42,7 +42,7 @@ build:debian:
    stage: build
    script:
      - make debian
-     - ./run_all_tests_debian.sh --gtest_output=xml:run_all_tests.xml
+     - ./run_all_tests_debian.sh
    artifacts:
      when: on_success
      paths:

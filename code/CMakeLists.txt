@@ -57,6 +57,10 @@ IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
 ENDIF()
 
+IF (WIN32)
+    SET(SSC_LIB ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+ENDIF()
+
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
@@ -80,7 +84,13 @@ ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
 
-ADD_LIBRARY(${PROJECT_NAME} STATIC
+IF (WIN32)
+    SET(STATICORSHARED STATIC)
+ELSE()
+    SET(STATICORSHARED SHARED)
+ENDIF()
+
+ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:observers_and_api>
         $<TARGET_OBJECTS:parser_extensions>
@@ -109,7 +119,12 @@ ADD_LIBRARY(${PROJECT_NAME} STATIC
 # ADD_IMPORTED_LIB(integrate_static)
 # ADD_IMPORTED_LIB(websocket_static)
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+IF (WIN32)
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+ELSE()
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+ENDIF()
+
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE gfortran)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${HDF5_CXX_STATIC_LIBRARY} ${HDF5_C_STATIC_LIBRARY})
@@ -168,13 +183,15 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:hos_tests>
         )
 
+
+
 TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest      # static
         gmock_main # static
         binary_stl_data_static
         ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
-        ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a
+        ${SSC_LIB}
         )
 
 # Add test program and its dependencies in the installation file
