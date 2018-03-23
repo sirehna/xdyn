@@ -30,26 +30,20 @@ cleanup_Docker:
 build:windows:
    stage: build
    script:
-     - cd fetch_gitlab_artifacts
-     - docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg USER=$(whoami) -f Dockerfile -t fetch_gitlab_artifacts .
-     - docker run -i --rm -e USER=$(whoami) -e UID=$(id -u) -e GID=$(id -g)  -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/out --net=host -w /out fetch_gitlab_artifacts -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b windows
-     - unzip artifacts.zip
-     - rm artifacts.zip
-     - mv ssc.zip ..
-     - cd ..
-     - mkdir -p ssc
-     - unzip ssc.zip -d ssc
-     - mkdir -p build
+     - ./fetch_gitlab_artifacts.sh -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b windows
+     - mkdir -p ssc_windows
+     - unzip ssc.zip -d ssc_windows
+     - mkdir -p build_windows
      - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
           /bin/bash -c "mkdir /opt/share/.wine &&
                         export WINEPREFIX=/opt/share/.wine &&
                         wine winecfg &&
-                        cp /opt/share/ssc/bin/*.dll . &&
+                        cp /opt/share/ssc_windows/bin/*.dll . &&
                         mkdir -p executables &&
-                        cp /opt/share/ssc/bin/*.dll executables/. &&
+                        cp /opt/share/ssc_windows/bin/*.dll executables/. &&
                         cmake -Wno-dev
                         -G Ninja
-                        -Dssc_DIR:PATH=/opt/share/ssc/lib/ssc/cmake
+                        -Dssc_DIR:PATH=/opt/share/ssc_windows/lib/ssc/cmake
                         -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
                         -DCPACK_GENERATOR=ZIP
                         -DBoost_DEBUG=0
