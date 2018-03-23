@@ -1,4 +1,8 @@
-.PHONY: fetch-ssc cmake
+all: windows
+
+windows: fetch-ssc-windows cmake-windows package-windows
+
+.PHONY: fetch-ssc-windows cmake-windows package-windows windows
 
 fetch-ssc-windows:
 	./fetch_gitlab_artifacts.sh -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b windows

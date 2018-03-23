@@ -29,9 +29,7 @@ cleanup_Docker:
 build:windows:
    stage: build
    script:
-     - make fetch-ssc-windows
-     - make cmake-windows
-     - make package-windows
+     - make windows
      - ./run_all_tests_windows.sh --gtest_filter=-HOS*:*erver*:*websocket*:ForceTests.bug_3210_no_interpolation_in_incidence_and_no_incidence_no_interpolation_in_period_no_transport:ForceTests.bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport:ForceTests.bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport_with_non_zero_t:ForceTests.bug_3210_no_interpolation_in_incidence_interpolation_in_period_transport_with_non_zero_t:BlockedDOFTest.should_not_throw_if_CSV_file_exists
      - mv build_windows/xdyn.zip .
    artifacts:
