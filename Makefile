@@ -1,6 +1,7 @@
-all: windows
+all: windows debian
 
 windows: fetch-ssc-windows cmake-windows package-windows
+debian: fetch-ssc-debian cmake-debian package-debian
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows
 
@@ -44,8 +45,16 @@ cmake-windows:
                         -DCMAKE_SYSTEM_VERSION=7 \
                         /opt/share/code"
 
+fetch-ssc-debian:
+	./fetch_gitlab_artifacts.sh -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b debian
 
 package-windows:
 	./ninja_windows.sh package
 
+cmake-debian:
+	mkdir -p build_debian
+	docker build -t build-xdyn-debian --build-arg CACHEBUST=$(date +%s) .
+	docker run --name xdyn-cmake-debian --rm -e LD_LIBRARY_PATH=/opt/ssc/lib -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd)/build_debian:/build -w /build -v $(shell pwd):/opt/share -i build-xdyn-debian cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a /opt/share/code
 
+package-debian:
+	./ninja_debian.sh package
