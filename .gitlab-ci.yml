@@ -29,44 +29,11 @@ cleanup_Docker:
 build:windows:
    stage: build
    script:
-     - ./fetch_gitlab_artifacts.sh -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b windows
-     - mkdir -p ssc_windows
-     - unzip ssc.zip -d ssc_windows
-     - mkdir -p build_windows
-     - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
-          /bin/bash -c "mkdir /opt/share/.wine &&
-                        export WINEPREFIX=/opt/share/.wine &&
-                        wine winecfg &&
-                        mkdir -p executables &&
-                        cd build_windows &&
-                        cmake -Wno-dev
-                        -G Ninja
-                        -Dssc_DIR:PATH=/opt/share/ssc_windows/lib/ssc/cmake
-                        -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
-                        -DCPACK_GENERATOR=ZIP
-                        -DBoost_DEBUG=0
-                        -DBOOST_ROOT:PATH=/opt/boost
-                        -DBOOST_INCLUDEDIR:PATH=/opt/boost/include
-                        -DBoost_INCLUDE_DIR:PATH=/opt/boost/include
-                        -DBOOST_LIBRARYDIR:PATH=/opt/boost/lib
-                        -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
-                        -DBoost_LIBRARY_DIR_RELEASE:PATH=/opt/boost/lib
-                        -DBoost_PROGRAM_OPTIONS_LIBRARY:PATH=/opt/boost/lib/libboost_program_options-mt.a
-                        -DBoost_FILESYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_filesystem-mt.a
-                        -DBoost_SYSTEM_LIBRARY:PATH=/opt/boost/lib/libboost_system-mt.a
-                        -DBoost_REGEX_LIBRARY:PATH=/opt/boost/lib/libboost_regex-mt.a
-                        -DHDF5_DIR=/opt/HDF5_1_8_20/cmake
-                        -Dcppzmq_DIR=/opt/libzmq/share/cmake/cppzmq
-                        -DZeroMQ_DIR=/opt/libzmq/share/cmake/ZeroMQ
-                        -DProtobuf_INCLUDE_DIR=/opt/protobuf/include
-                        -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a
-                        -DProtobuf_PROTOC_EXECUTABLE=/usr/bin/protoc
-                        -DCMAKE_SYSTEM_VERSION=7
-                        /opt/share/code"
-     - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
-          /bin/bash -c "mkdir -p /opt/share/.wine && export WINEPREFIX=/opt/share/.wine && wine winecfg && cd build_windows && ninja package"
-     - docker run --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share mydockcross/windows-x64
-          /bin/bash -c "mkdir -p /opt/share/.wine && export WINEPREFIX=/opt/share/.wine && wine winecfg && cd build_windows && wine ./run_all_tests --gtest_filter=-HOS*:*erver*:*websocket*:ForceTests.bug_3210_no_interpolation_in_incidence_and_no_incidence_no_interpolation_in_period_no_transport:ForceTests.bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport:ForceTests.bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport_with_non_zero_t:ForceTests.bug_3210_no_interpolation_in_incidence_interpolation_in_period_transport_with_non_zero_t:BlockedDOFTest.should_not_throw_if_CSV_file_exists"
+     - make fetch-ssc-windows
+     - make cmake-windows
+     - make package-windows
+     - ./run_all_tests_windows.sh --gtest_filter=-HOS*:*erver*:*websocket*:ForceTests.bug_3210_no_interpolation_in_incidence_and_no_incidence_no_interpolation_in_period_no_transport:ForceTests.bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport:ForceTests.bug_3210_no_interpolation_in_incidence_no_interpolation_in_period_transport_with_non_zero_t:ForceTests.bug_3210_no_interpolation_in_incidence_interpolation_in_period_transport_with_non_zero_t:BlockedDOFTest.should_not_throw_if_CSV_file_exists
+     - mv build_windows/xdyn.zip .
    artifacts:
      when: on_success
      paths:
