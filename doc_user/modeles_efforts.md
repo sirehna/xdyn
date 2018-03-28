@@ -1,10 +1,10 @@
 # Modèles d'efforts non-commandés
 
-Les efforts extérieurs (non commandés) sont donnés dans la section `external forces` sous forme
-de liste de modèles ayant ou non des paramètres. La seule clef commune à tous
-les modèles d'effort est `model` : chaque modèle possède sinon sa propre
-paramétrisation (éventuellement aucune paramétrisation). Voici un exemple de
-section `external forces` :
+Les efforts extérieurs (non commandés) sont donnés dans la section
+`external forces` sous forme de liste de modèles ayant ou non des paramètres.
+La seule clef commune à tous les modèles d'effort est `model` : chaque modèle
+possède sinon sa propre paramétrisation (éventuellement aucune paramétrisation).
+Voici un exemple de section `external forces` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 external forces:
@@ -407,12 +407,13 @@ figurant pas dans les fichiers HDB, il doit être renseigné dans le fichier YAM
 (`calculation point in body frame`) mais qu'aucune vérification ne peut être
 faite.
 
-Le point de calcul des efforts de diffraction n'est pas nécessairement le centre de gravité, ni même le point de résolution de l'équation de Newton. En revanche,
+Le point de calcul des efforts de diffraction n'est pas nécessairement le centre
+de gravité, ni même le point de résolution de l'équation de Newton. En revanche,
 il s'agit nécessairement d'un point fixe dans le repère du solide.
 
 Le paramètre `mirror for 180 to 360` sert à pouvoir ne spécifier que la partie
-de la RAO entre $0^{\circ}$ et $180^{\circ}$, quitte à la symétriser par rapport à
-l'axe (Ox) pour obtenir les points entre $180^{\circ}$ et $360^{\circ}$. En
+de la RAO entre $0^{\circ}$ et $180^{\circ}$, quitte à la symétriser par rapport
+à l'axe (Ox) pour obtenir les points entre $180^{\circ}$ et $360^{\circ}$. En
 pratique, cela signifie que l'on prend $RAO(T_p,\beta)=RAO(Tp,2\pi-\beta)$ si
 $\beta>\pi$ et que `mirror for 180 to 360` vaut `true`.
 
@@ -431,8 +432,8 @@ $\beta>\pi$ et que `mirror for 180 to 360` vaut `true`.
 On suppose la propulsion rectiligne, uniforme et directe, c'est-à-dire
 d'intensité et de direction constantes et située dans le plan ($x$,$y$).
 
-On suppose également qu'il n'y a pas de houle (eau calme), que l'assiette et l'enfoncement du navire sont
-constants et que sa gite est nulle.
+On suppose également qu'il n'y a pas de houle (eau calme), que l'assiette et
+l'enfoncement du navire sont constants et que sa gite est nulle.
 
 On suppose enfin que la résistance à l'avancement est colinéaire à la
 projection sur le plan horizontal de la force propulsive.
@@ -449,8 +450,9 @@ Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique
 que :
 
 - l'eau n'est pas un fluide parfait : elle possède une viscosité qui freine
-l'objet
-- et/ou la surface libre n'est pas à l'équilibre et s'oppose au mouvement du solide.
+  l'objet,
+- et/ou la surface libre n'est pas à l'équilibre et s'oppose au mouvement du
+  solide.
 
 On décompose donc la résistance de remorquage en deux composantes :
 
@@ -578,7 +580,8 @@ paramètres](#amortissement-quadratique).
 
 ### Paramétrage
 
-La paramétrisation des efforts d'amortissement linéaires est faite par une matrice renseignée de la façon suivante :
+La paramétrisation des efforts d'amortissement linéaires est faite par une
+matrice renseignée de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: linear damping
@@ -595,7 +598,8 @@ La paramétrisation des efforts d'amortissement linéaires est faite par une mat
 Cette matrice est la matrice $D_l$ décrite dans [la
 documentation](#efforts-damortissement-visqueux).
 
-La paramétrisation des efforts d'amortissement quadratiques est faite par une matrice renseignée de la façon suivante :
+La paramétrisation des efforts d'amortissement quadratiques est faite par une
+matrice renseignée de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: quadratic damping
@@ -758,9 +762,7 @@ commande est maintenue. Avant la première valeur de temps, on utilise la premi�
 valeur de chaque commande. Ainsi, pour l'exemple présenté ci-dessus, pour toute
 valeur de $t\geq 10$, alors rpm=4000. Pour $t\leq 1$, rpm=3000.
 
-Les [commandes
-attendues](#syntaxe-des-commandes) pour ce
-modèle sont :
+Les [commandes attendues](#syntaxe-des-commandes) pour ce modèle sont :
 
 - La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
 par `rpm`.
@@ -906,16 +908,18 @@ ce modèle dans le simulateur.
 On adopte les notations suivantes :
 
 - $T$ est la poussée de l'hélice en eau libre (en N), c'est-à-dire la norme des
-efforts générés par l'hélice suivant son axe (sans tenir compte de la succion de la coque),
+  efforts générés par l'hélice suivant son axe (sans tenir compte de la succion
+  de la coque),
 - $Q$ est le couple généré par l'hélice en eau libre autour de son axe. Il
   s'exprime en N.m.
 - $n$ est le nombre de tours que l'hélice fait par seconde (en tr/s)
 - $D$ est le diamètre de l'hélice (en m)
 - $rho$ est la densité volumique de l'eau (en kg/m^3)
-- $V_a$ est la vitesse d'avance (en m/s), c'est-à-dire la vitesse de l'écoulement non
-perturbé (à l'infini). Il s'agit d'une vitesse théorique : on se place dans le
-cas où l'hélice est complètement isolée dans un environnement infini (eau
-libre) qui bouge à la vitesse $V_a$ par rapport au sol.
+- $V_a$ est la vitesse d'avance (en m/s), c'est-à-dire la vitesse de
+  l'écoulement non perturbé (à l'infini). Il s'agit d'une vitesse théorique :
+  on se place dans le cas où l'hélice est complètement isolée dans un
+  environnement infini (eau libre) qui bouge à la vitesse $V_a$ par rapport au
+  sol.
 
 Le modèle en eau libre est sujet aux hypothèses suivantes :
 
@@ -941,12 +945,12 @@ pas des équations de Navier-Stokes. Le postulat est, qu'étant données les
 hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
 dépende :
 
-- du diamètre $D$ (en m) de celle-ci
-- de la vitesse $V_a$ d'avance du fluide (en m/s)
-- de la vitesse de rotation $n$ de l'hélice (en Hz)
-- de la densité $\rho$ du fluide (en kg/m^3)
-- de la viscosité $\mu$ du fluide
-- de la pression statique du fluide $p_0-e$ au niveau de l'hélice
+- du diamètre $D$ (en m) de celle-ci,
+- de la vitesse $V_a$ d'avance du fluide (en m/s),
+- de la vitesse de rotation $n$ de l'hélice (en Hz),
+- de la densité $\rho$ du fluide (en kg/m^3),
+- de la viscosité $\mu$ du fluide,
+- de la pression statique du fluide $p_0-e$ au niveau de l'hélice.
 
 On aurait donc :
 
@@ -991,12 +995,12 @@ on peut ensuite dériver la poussée et le couple.
 ### Prise en compte des effets de la coque et du sillage
 
 Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque, la
-vitesse du fluide au niveau de l'hélice $V_a$ n'est pas égale (en valeur absolue) à
-la vitesse du navire par rapport à l'eau $V_s$, autrement dit $V_a\neq V_s$.
-La vitesse d'avance $V_a$ est, en général, très
-difficile à mesurer et l'on suppose qu'elle est proportionnelle à la vitesse du
-navire. On définit donc un coefficient $w$ (pour "wake", soit "sillage" en
-anglais) tel que :
+vitesse du fluide au niveau de l'hélice $V_a$ n'est pas égale (en valeur
+absolue) à la vitesse du navire par rapport à l'eau $V_s$, autrement dit
+$V_a\neq V_s$. La vitesse d'avance $V_a$ est, en général, très difficile à
+mesurer et l'on suppose qu'elle est proportionnelle à la vitesse du navire. On
+définit donc un coefficient $w$ (pour "wake", soit "sillage" en anglais) tel
+que :
 
 $$w=1-\frac{V_a}{V_s}$$
 
@@ -1032,8 +1036,8 @@ $$J = \frac{V_a}{n\cdot D} = \frac{(1-w)\cdot V_s}{n\cdot D}$$
 ### Expression des coefficients $K_T$ et $K_Q$
 
 Afin de rendre les coefficients indépendants de la taille de l'hélice, on
-définit la fraction de surface de l'hélice $A_E/A_0$, où $A_E$ désigne l'aire des
-pales (en m^2) et $A_0= \frac{\pi\cdot D^2}{4}$ est l'aire du disque
+définit la fraction de surface de l'hélice $A_E/A_0$, où $A_E$ désigne l'aire
+des pales (en m^2) et $A_0= \frac{\pi\cdot D^2}{4}$ est l'aire du disque
 circonscrit à l'hélice. Les séries sont valables pour $0.30\leq A_E/A_0\leq
 1.05$.
 
@@ -1081,9 +1085,9 @@ Les conditions sur $Z$ et $\frac{A_E}{A_0}$ touchant des grandeurs constantes
 au cours de la simulation, elles sont vérifiées avant le lancement et la
 simulation ne s'effectuera pas si ces conditions ne sont pas vérifiées.
 
-Si le coefficient d'avance $J$ se situe hors de l'intervalle $\left[0,1.5\right]$, un
-message d'avertissement est affiché et $J$ est saturé pour être ramené
-dans l'intervalle : $J \leftarrow \min(\max(J,0),1.5)$
+Si le coefficient d'avance $J$ se situe hors de l'intervalle
+$\left[0,1.5\right]$, un message d'avertissement est affiché et $J$ est saturé
+pour être ramené dans l'intervalle : $J \leftarrow \min(\max(J,0),1.5)$
 
 La condition sur le pas $P$ est vérifiée en cours de simulation et un message
 d'avertissement est affiché sur la console. Par contre, le pas n'est pas
@@ -1102,8 +1106,9 @@ le navire) est faite dans le sens des $x$ positifs.
 Le sens de rotation de l'hélice doit également être spécifié parce qu'il
 détermine le signe du couple généré par l'hélice sur le navire. On définit ce
 sens de rotation en se plaçant face à l'hélice, en regardant dans la direction
-des $x_{\textrm{hélice}}$ positifs (donc vers l'avant du navire). Autrement dit, l'axe de
-rotation de l'hélice est non pas $x_{\textrm{hélice}}$ mais $-x_{\textrm{hélice}}$.
+des $x_{\textrm{hélice}}$ positifs (donc vers l'avant du navire). Autrement dit,
+l'axe de rotation de l'hélice est non pas $x_{\textrm{hélice}}$ mais
+$-x_{\textrm{hélice}}$.
 Lorsque l'hélice tourne dans le sens **horaire**, elle génère un couple dans le
 sens trigonométrique, soit un couple de signe **négatif** lorsqu'il est exprimé
 dans le repère de l'hélice :
@@ -1111,8 +1116,8 @@ dans le repère de l'hélice :
 ![](images/rotation_helices.svg)
 
 Le torseur des efforts générés par l'hélice et subis par le navire
-(apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
-exprimé dans le repère de l'hélice, est donc :
+(apparaissant donc dans le membre de droite de l'équation fondamentale de la
+dynamique), exprimé dans le repère de l'hélice, est donc :
 
 $$\tau_{\textrm{hélice}} = \left[\begin{array}{c}
 X\\
@@ -1290,12 +1295,12 @@ gravité du corps.
 ### Expression des efforts
 
 L'effort généré suivant l'axe X est $F_x = K_{x}\cdot (x_{\textrm{co}}-x) -
-K_u\cdot u = \sigma_{xx}\ddot{x}$ où $\sigma_{xx}$ désigne le moment d'inertie total
-(inertie propre et inertie ajoutée) autour de l'axe $x$.
+K_u\cdot u = \sigma_{xx}\ddot{x}$ où $\sigma_{xx}$ désigne le moment d'inertie
+total (inertie propre et inertie ajoutée) autour de l'axe $x$.
 L'effort généré suivant l'axe Y est $F_y = K_{y}\cdot (y_{\textrm{co}}-y) -
-K_v\cdot v = \sigma_{yy}\ddot{y}$ où $\sigma_{yy}$ désigne le moment d'inertie total
-(inertie propre et inertie ajoutée) autour de l'aye $y$.
-Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\textrm{co}}-\psi) - K_r\cdot r =
+K_v\cdot v = \sigma_{yy}\ddot{y}$ où $\sigma_{yy}$ désigne le moment d'inertie
+total (inertie propre et inertie ajoutée) autour de l'aye $y$.
+Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\textrm{co}}-\psi)-K_r\cdot r =
 \sigma_{zz}\ddot{\psi}$ où $\sigma_{zz}$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'axe $z$.
 
@@ -1381,8 +1386,8 @@ Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
 
 Ce modèle décrit l'ensemble constitué d'une hélice Wageningen et d'un safran.
 Les deux sont utilisés ensemble car le modèle de safran n'a de sens que
-lorsqu'il est utilisé avec une hélice (il utilise les informations calculées sur le
-sillage).
+lorsqu'il est utilisé avec une hélice (il utilise les informations calculées sur
+le sillage).
 
 ### Expression des efforts
 
@@ -1393,7 +1398,7 @@ La figure suivante illustre l'ensemble modélisé :
 Les efforts sont calculés au point P (de l'hélice) et transportés ensuite au
 centre de gravité. Ils s'écrivent :
 
-$F\textrm{tot}_P = F\textrm{safran}_P + F\textrm{hélice}_P$
+$$F\textrm{tot}_P = F\textrm{safran}_P + F\textrm{hélice}_P$$
 
 L'expression du torseur $F\textrm{hélice}_P$ est donnée dans le modèle "Hélices
 Wageningen série B".
@@ -1407,7 +1412,7 @@ La modélisation choisie sépare les efforts dûs au safran en deux parties :
 - La part provenant de l'immersion dans le sillage de l'hélice
 - La part simplement due à la vitesse du safran en eau libre
 
-$F\textrm{safran} = F\textrm{safran}^{\textrm{sillage}} + F\textrm{safran}^{\textrm{hors sillage}}$
+$$F\textrm{safran} = F\textrm{safran}^{\textrm{sillage}} + F\textrm{safran}^{\textrm{hors sillage}}$$
 
 Dans le repère lié au safran, celui-ci ne crée qu'une résultante suivant les axes X et Y (autrement dit, Fz=0 et Mx=My=Mz=0).
 
@@ -1420,8 +1425,9 @@ $$F_y = +\textrm{Lift}(V_s, C_l, \alpha, S)\cdot\cos(\alpha) - \textrm{Drag}(V_s
 La vitesse $V_s$ et l'aire $S$ sont calculées différemment suivant que l'on
 considère la partie du gouvernail dans le sillage de l'hélice ou celle à
 l'extérieur de ce sillage.
-L'angle d'incidence du fluide par rapport au safran est noté $\alpha$ et est défini par rapport à l'angle d'incidence $a$ du fluide (dans le repère NED) et l'angle
-du safran $\beta$ :
+L'angle d'incidence du fluide par rapport au safran est noté $\alpha$ et est
+défini par rapport à l'angle d'incidence $a$ du fluide (dans le repère NED) et
+l'angle du safran $\beta$ :
 
 ![](images/rudder_angles.svg)
 
@@ -1431,7 +1437,8 @@ $$\textrm{Lift}(V_S, C_l, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cl(\alpha)\cos(\a
 
 $$\textrm{Drag}(V_S, C_d, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cd(\alpha)\cos(\alpha) K_{\textrm{drag}}$$
 
-Le coefficient $\cos(\alpha)$ permet de réduire l'efficacité du gouvernail lorsque $\alpha$ devient important.
+Le coefficient $\cos(\alpha)$ permet de réduire l'efficacité du gouvernail
+lorsque $\alpha$ devient important.
 
 Dans la suite, nous détaillerons le calcul de $V_S$, $C_l$, $C_d$ et $S$ pour
 la partie hors sillage et la partie interne sillage.
@@ -1512,7 +1519,8 @@ fonction de la vitesse $V_a$ :
 
 $$V_2 = \sqrt{V_a^2 + \frac{2T}{\rho A}}$$
 
-or une autre expression de $T$ peut être donnée à partir du modèle de Wageningen :
+or une autre expression de $T$ peut être donnée à partir du modèle de
+Wageningen :
 
 $$T = \rho n^2 D^4 K_T$$
 
@@ -1601,8 +1609,8 @@ $$c = \frac{A_R}{b}$$
 
 On sépare l'aire $A_R$ du safran en deux parties : une partie à l'intérieur du
 sillage et une partie à l'extérieur. La partie à l'intérieur du sillage est
-obtenue en considérant le diamètre du sillage $D_w$ et la partie à l'extérieur en
-faisant la différence avec $A_R$.
+obtenue en considérant le diamètre du sillage $D_w$ et la partie à l'extérieur
+en faisant la différence avec $A_R$.
 
 $$S_{\textrm{sillage}} = \min(A_R, c\cdot D_w)$$
 $$S_{\textrm{hors sillage}} = A_R - S_{\textrm{sillage}}$$
@@ -1657,14 +1665,15 @@ controlled forces:
 On retrouve les paramètres du modèle 'Wageningen' qui ne sont pas décrits à
 nouveau ici (hormis `model`). On a les paramètres supplémentaires suivants :
 
-- `model` : `propeller+rudder` pour ce modèle
-- `rudder area` : $A_R$
-- `rudder height` : $b$
+- `model` : `propeller+rudder` pour ce modèle,
+- `rudder area` : $A_R$,
+- `rudder height` : $b$,
 - `effective aspect ratio`: Paramètre $K_{\Lambda}$ dans le calcul du rapport
-   de forme (pour la formule de Soeding) ci-dessus
-- `lift tuning coefficient`: $K_{\textrm{lift}}$ dans les formules ci-dessus
-- `drag tuning coefficient`: $K_{\textrm{drag}}$ dans les formules ci-dessus
-- `position of rudder in body frame`: coordonnées du point $P$ (cf. schéma ci-dessus), projetées dans le repère "body"
+  de forme (pour la formule de Soeding) ci-dessus,
+- `lift tuning coefficient`: $K_{\textrm{lift}}$ dans les formules ci-dessus,
+- `drag tuning coefficient`: $K_{\textrm{drag}}$ dans les formules ci-dessus,
+- `position of rudder in body frame`: coordonnées du point $P$ (cf. schéma
+  ci-dessus), projetées dans le repère "body".
 
 Ce modèle a trois commandes :
 
@@ -1714,9 +1723,9 @@ NED.
 Le but de ce modèle est de spécifier des courbes d'effort d'hélice $K_t$ et
 $K_q$ en fonction du coefficient d'avance $J$ uniquement.
 Hormis le calcul de $Kt$ et $Kq$, ce modèle est identique au modèle d'hélice
-Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'hélice et subits par le navire
-(apparaissant donc dans le membre de droite de l'équation fondamentale de la dynamique),
-exprimé dans le repère de l'hélice, est donc :
+Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'hélice
+et subis par le navire (apparaissant donc dans le membre de droite de l'équation
+fondamentale de la dynamique), exprimé dans le repère de l'hélice, est donc :
 
 $$\tau_{\textrm{hélice}} = \left[\begin{array}{c}
 X\\
@@ -1771,35 +1780,38 @@ controlled forces:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
-celui renseigné dans le fichier de [commandes
-attendues](#syntaxe-du-fichier-de-commande).
+  celui renseigné dans le fichier de
+  [commandes attendues](#syntaxe-du-fichier-de-commande),
 - `model` : Nom du modèle. Doit être `wageningen B-series` pour utiliser ce
-modèle.
-- `position of propeller frame` : Définition du [repère de
-l'hélice](#expression-des-efforts).
+  modèle,
+- `position of propeller frame` : Définition du
+  [repère de l'hélice](#expression-des-efforts),
 - `frame` : repère dans lequel sont exprimés `x`,`y`,`z`,`phi`,`theta` et `psi`.
-- `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par rapport au centre du repère attaché au maillage et projeté sur ce dernier.
+- `x`,`y`,`z` : projection de la position du centre de poussée de l'hélice par
+  rapport au centre du repère attaché au maillage et projeté sur ce dernier,
 - `phi`,`theta`,`psi` : Définition de la rotation permettant de passer du
-repère attaché au maillage au [repère attaché à
-l'hélice](#expression-des-efforts), en suivant la
-[convention d'angle choisie](#rotations).
-- `wake coefficient` : [coefficient de
-sillage](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
-traduisant la perturbation de l'écoulement par la coque du navire. Entre 0 et 1.
-- `relative rotative efficiency etaR` : [rendement
-d'adaptation](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
-- `thrust deduction factor t` : [coefficient de
-succion](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+  repère attaché au maillage au
+  [repère attaché à l'hélice](#expression-des-efforts), en suivant la
+  [convention d'angle choisie](#rotations),
+- `wake coefficient` :
+  [coefficient de sillage](#prise-en-compte-des-effets-de-la-coque-et-du-sillage)
+  traduisant la perturbation de l'écoulement par la coque du navire.
+  Entre 0 et 1,
+- `relative rotative efficiency etaR` :
+  [rendement d'adaptation](#prise-en-compte-des-effets-de-la-coque-et-du-sillage),
+- `thrust deduction factor t` :
+  [coefficient de succion](#prise-en-compte-des-effets-de-la-coque-et-du-sillage),
 - `rotation` définition du sens de rotation pour générer une poussée positive.
-Utilisé pour calculer le signe du moment généré par l'hélice sur le navire. Les
-valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
-`clockwise`, l'hélice tournera dans le sens horaire (en se plaçant à l'arrière
-du navire et en regardant vers la proue) et génèrera un moment négatif sur le navire (dans le repère de l'hélice). Voir [la
-documentation](#expression-des-efforts).
-- `diameter` : diamètre de l'hélice (en m)
-- `J`: coefficient d'avance. Correspond aux listes Kt et Kq
-- `Kt`: coefficient de poussée en fonction de `J`
-- `Kq`: coefficient de moment en fonction de `J`
+  Utilisé pour calculer le signe du moment généré par l'hélice sur le navire.
+  Les valeurs possibles sont `clockwise` et `anti-clockwise`. Si on choisit
+  `clockwise`, l'hélice tournera dans le sens horaire (en se plaçant à l'arrière
+  du navire et en regardant vers la proue) et génèrera un moment négatif sur le
+  navire (dans le repère de l'hélice). Voir
+  [la documentation](#expression-des-efforts),
+- `diameter` : diamètre de l'hélice (en m),
+- `J`: coefficient d'avance. Correspond aux listes Kt et Kq,
+- `Kt`: coefficient de poussée en fonction de `J`,
+- `Kq`: coefficient de moment en fonction de `J`.
 
 ### Sorties
 
@@ -1813,17 +1825,18 @@ output:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On obtient dans l'exemple précédent la projection suivant l'axe $X$ du repère
-`Anthineas` de l'effort `port side propeller` (correspondant au nom de l'actionneur
-renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
-même type) ainsi que la projection de ce même effort suivant l'axe $X$ du repère
-NED.
+`Anthineas` de l'effort `port side propeller` (correspondant au nom de
+l'actionneur renseigné dans la clef `name` afin de pouvoir définir plusieurs
+actionneurs du même type) ainsi que la projection de ce même effort suivant
+l'axe $X$ du repère NED.
+
 # Modèles d'efforts non-commandés
 
-Les efforts extérieurs (non commandés) sont donnés dans la section `external forces` sous forme
-de liste de modèles ayant ou non des paramètres. La seule clef commune à tous
-les modèles d'effort est `model` : chaque modèle possède sinon sa propre
-paramétrisation (éventuellement aucune paramétrisation). Voici un exemple de
-section `external forces` :
+Les efforts extérieurs (non commandés) sont donnés dans la section
+`external forces` sous forme de liste de modèles ayant ou non des paramètres.
+La seule clef commune à tous les modèles d'effort est `model` : chaque modèle
+possède sinon sa propre paramétrisation (éventuellement aucune paramétrisation).
+Voici un exemple de section `external forces` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 external forces:
@@ -1841,6 +1854,5 @@ Le navire est soumis aux efforts suivants :
   et d'autre part des phénomènes de radiation/diffraction,
 - Les efforts d'amortissement visqueux, dûs aux frottements de l'eau sur la
   coque et aux tourbillons.
-
 
 ## Efforts de gravité
