@@ -1267,7 +1267,7 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 |                                          |                 | orbitales.                                                        |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 | `timeout`                                |       -         | Toute requête sera abandonnée au bout de ce temps. Contrôle à la  |
-|                                          |                 | fois le délai d'expiration au niveau ZMQ (̀ZMQ_RCVTIMEO) et le     |
+|                                          |                 | fois le délai d'expiration au niveau ZMQ (`ZMQ_RCVTIMEO`) et le   |
 |                                          |                 | délai d'expiration de chaque requête (on renvoie la requête       |
 |                                          |                 | tant que la réponse est flagée `WAIT` et que ce délai d'expiration|
 |                                          |                 | n'est pas atteint). Comme cette valeur est convertie dans le code |
