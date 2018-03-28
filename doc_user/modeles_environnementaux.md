@@ -386,7 +386,10 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
 
 ## Densités spectrales de puissance
 
-La formulation des spectres de houles a été développée de façon semi-empirique depuis les années 50. Suivant le spectre, l'état de mer peut être complètement formé (à la limite, le spectre n'a qu'un seul paramètre) ou une combinaison de la houle (swell) et de la mer du vent (wind sea) à six paramètres.
+La formulation des spectres de houles a été développée de façon semi-empirique
+depuis les années 50. Suivant le spectre, l'état de mer peut être complètement
+formé (à la limite, le spectre n'a qu'un seul paramètre) ou une combinaison de
+la houle (swell) et de la mer du vent (wind sea) à six paramètres.
 
 Le choix du spectre dépend donc à la fois du lieu considéré et de l'état de
 mer. Ce choix revêt une grande importance pour la prévision des mouvements des
@@ -394,7 +397,7 @@ plateformes car suivant que l'état de mer est en formation, complètement form�
 ou en atténuation, la réponse du navire va varier.  En effet, un navire peut
 avoir une réponse en pilonnement plus importante sur une mer partiellement
 formée que sur une mer totalement formée car la fréquence modale du spectre est
-plus élevée sur une mer partiellement formée et la fréquence de résonnance du
+plus élevée sur une mer partiellement formée et la fréquence de résonance du
 pilonnement est souvent plus élevée. Pour le roulis, c'est l'inverse : lorsque
 l'état de mer s'atténue, la fréquence d'excitation du roulis étant en général
 plus basse que celle du pilonnement, les mouvements seront amplifiés.
@@ -695,7 +698,7 @@ et ses dérivés. On a donc le choix entre les quatre modèles de stretching sui
 - **absence de stretching** (non-recommandé pour les raisons précédemment
   évoquées), renseigner `h: {value: 0, unit: m}` et `delta: 1`
 - **extrapolation linéaire**, en fixant $h$ à la profondeur d'eau `depth` et $\Delta=1$
-- **modèle de Wheeler**, si $h$ vaut la pronfondeur `depth` et $\Delta=0$
+- **modèle de Wheeler**, si $h$ vaut la profondeur `depth` et $\Delta=0$
 - **delta stretching** pour toute autre valeur
 
 Ce qui suit est une présentation non-exhaustive de quelques modèles de stretching.
@@ -723,7 +726,8 @@ Ce modèle peut être utilisé dans X-Dyn en fixant `h` à la profondeur d'eau
 ### Stretching de Wheeler
 
 On souhaite obtenir les bonnes vitesses orbitales à la surface de l'eau,
-c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle de houle), et au fond (en $z=h$).
+c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle
+de houle), et au fond (en $z=h$).
 
 La vitesse orbitale s'écrit :
 
@@ -781,7 +785,8 @@ l'utiliser dans X-Dyn en fixant $h$ à la profondeur de l'eau `depth` et
 
 ### Stretching de Chakrabarti
 
-Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la fonction $f$
+Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la
+fonction $f$
 
 $$f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}$$
 
@@ -811,13 +816,15 @@ paramètres, on peut retrouver trois modèles de stretching (pas de stretching,
 extrapolation linéaire et modèle de Wheeler) et c'est pour cela qu'il a été
 choisi comme modèle de référence dans X-Dyn.
 
-Tout comme le modèle de Wheeler, on souhaite retrouver la vitesse orbitale à la surface
-au creux et à la crête des vagues, c'est-à-dire en $z=\eta$. Les auteurs de ce modèle,
-Rodenbusch et Forristal, ajoutent deux paramètres au modèle de Wheeler :
+Tout comme le modèle de Wheeler, on souhaite retrouver la vitesse orbitale à la
+surface au creux et à la crête des vagues, c'est-à-dire en $z=\eta$. Les auteurs
+de ce modèle, Rodenbusch et Forristal, ajoutent deux paramètres au modèle de
+Wheeler :
 
 - Un paramètre $h_{\Delta}$ qui contrôle la hauteur d'eau sur laquelle est
   effectuée le stretching
-- Un paramètre $\Delta$ entre 0 et 1 (0 pour le modèle de Wheeler, 1 pour l'extrapolation linéaire)
+- Un paramètre $\Delta$ entre 0 et 1 (0 pour le modèle de Wheeler, 1 pour
+  l'extrapolation linéaire)
 
 $z'$ varie de $h_{\Delta}$ à $\Delta\eta$ lorsque $z$ varie de $h_{\Delta}$ à $\eta$.
 
@@ -827,9 +834,10 @@ On prend donc :
 - Pour $z<h_{\Delta}$, $z' =(z-h_{\Delta})\frac{\Delta\eta-h_{\Delta}}{\eta-h_{\Delta}}+h_{\Delta}$
 
 - Pour $h_{\Delta}=0$ et $\Delta=1$, il n'y a pas de stretching.
-- Si $h_{\Delta}$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le modèle de Wheeler
-- Avec $h_{\Delta}$ valant `depth` et $\Delta=1$ on obtient l'extrapolation linéaire
-
+- Si $h_{\Delta}$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le
+  modèle de Wheeler.
+- Avec $h_{\Delta}$ valant `depth` et $\Delta=1$ on obtient l'extrapolation
+  linéaire.
 
 
 ### Choix du modèle de stretching
@@ -881,11 +889,13 @@ Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAM
      gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La section `stretching` contient les paramètres `h` et `delta` du modèle de delta-stretching :
+La section `stretching` contient les paramètres `h` et `delta` du modèle de
+delta-stretching :
 
 - Pour $h=0$ et $\Delta=1$, il n'y a pas de stretching.
-- Si $h$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le modèle de Wheeler
-- Avec $h$ valant `depth` et $\Delta=1$ on obtient l'extrapolation linéaire
+- Si $h$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le modèle de
+  Wheeler.
+- Avec $h$ valant `depth` et $\Delta=1$ on obtient l'extrapolation linéaire.
 
 ## Discrétisation des spectres et des étalements
 
@@ -933,7 +943,8 @@ fraction` de l'énergie totale.
 
 On peut sortir les hauteurs de houle calculées sur un maillage (défini dans un
 repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
-simulation de houle, sans corps, tel que décrit dans le [tutoriel 3](#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
+simulation de houle, sans corps, tel que décrit dans le
+[tutoriel 3](#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
 
 On définit un maillage (cartésien) sur lequel sera calculé la houle (dans la
 section `environment/model/output`). Par exemple :
@@ -1008,8 +1019,8 @@ waves:
 ## HOS
 
 Le modèle HOS (High Order Spectrum) est un modèle numérique de propagation de
-houle développé par l'Ecole Centrale de Nantes (au LHEEA : Laboratoire
-d'Hydrodynamique, Energétique et Environnement Atmosphérique). Ce modèle permet
+houle développé par l'École Centrale de Nantes (au LHEEA : Laboratoire
+d'Hydrodynamique, Énergétique et Environnement Atmosphérique). Ce modèle permet
 de simuler des spectres hautement non-linéaires avec de fortes pentes. Les
 transformées de Fourier rapides sont utilisées pour résoudre les conditions de
 surface libre permettent une résolution plus rapide que des méthodes directes.
@@ -1028,7 +1039,7 @@ description complète du modèle sous-jacent est disponible ici :
 
 La méthode HOS est basée sur la théorie potentielle. Le fluide est supposé
 incompressible, non-visqueux et irrotationnel. Sous ces hypothèses, la condition
-de  continuité se ramène à une simple équation de Laplace :
+de continuité se ramène à une simple équation de Laplace :
 
 
 $$\nabla \phi^2 + \frac{\partial^2 \phi}{\partial z^2} = 0$$ dans le domaine
@@ -1065,7 +1076,7 @@ avec
   amplitudes des modes spectraux.
 
 Cette méthode est pseudo-spectrale car les conditions de surface libre sont
-partiellement résolues dans le domaine spacial et spectral. Les transformées de
+partiellement résolues dans le domaine spatial et spectral. Les transformées de
 Fourier rapides permettent de transformer les quantités d'un domaine à l'autre
 efficacement et avec une bonne précision.
 
@@ -1128,7 +1139,7 @@ $$G(\theta) = \frac{1}{\beta} \left[ \cos \left( \frac{\pi \theta}{2 \beta} \ri
 
 Pour éviter les instabilités dues à la transition entre le modèle linéaire
 initial et les calculs non-linéaires d'HOS, une fonction de relaxation
-exponentielle est utilisée. La période de transistion est définie par sa durée
+exponentielle est utilisée. La période de transition est définie par sa durée
 $T_a$ et un paramètre $n$ :
 
 $$f(t) = 1 - \exp \left[ - \left( \frac{t}{T_a} \right)^n \right]$$
@@ -1270,7 +1281,8 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 
 Le modèle HOS est défini selon une convention "Z vers le haut". En outre, le
 code HOS-océan ne permet qu'une propagation suivant l'axe X (on ne contrôle pas
-la direction de propagation). Par conséquent, les opérations suivantes sont faites dans X-DYN :
+la direction de propagation). Par conséquent, les opérations suivantes sont
+faites dans X-DYN :
 
 - Pour tous les calculs HOS, on transforme les entrées X-DYN du repère NED au
   repère HOS. Cette transformation est définie par une rotation d'angle `waves
@@ -1285,13 +1297,12 @@ La transformation NED $\rightarrow$ HOS est donnée par :
 
 $${}^{\mbox{HOS}}T_{\mbox{NED}} = R_X(\pi)\cdot R_Z(\theta)$$
 
-où $\theta$ désigne l'angle de propagation renseigné dans le fichier YAML (clef `waves propagating to`)
+où $\theta$ désigne l'angle de propagation renseigné dans le fichier YAML
+(clef `waves propagating to`).
 
 On a donc :
 
-
 $${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]$$
-
 
 $${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
 
