@@ -127,7 +127,7 @@ IF(PANDOC)
                      ${CMAKE_CURRENT_BINARY_DIR}/doc_user_images)
 
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html
-                       COMMAND pandoc -s --toc --mathml -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t html --highlight-style pygments -o doc.html -c stylesheet.css
+                       COMMAND pandoc --standalone --self-contained --toc --mathml -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t html --highlight-style pygments -o doc.html -c stylesheet.css
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
                        DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/stylesheet.css
