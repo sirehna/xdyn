@@ -849,15 +849,15 @@ calcul de la vitesse orbitale).
 
 #### Sans stretching
 
-![](images/waves_without_stretching.svg)
+![](images/waves_without_stretching.png)
 
 #### Extrapolation linéaire
 
-![](images/waves_extrapolation_stretching.svg)
+![](images/waves_extrapolation_stretching.png)
 
 #### Stretching de Wheeler
 
-![](images/waves_wheeler_stretching.svg)
+![](images/waves_wheeler_stretching.png)
 
 
 ### Paramétrisation dans X-Dyn
