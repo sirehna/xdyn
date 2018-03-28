@@ -43,8 +43,9 @@ build:debian:
    script:
      - make debian
      - ./run_all_tests_debian.sh
+     - mv build_debian/xdyn.deb .
    artifacts:
      when: on_success
      paths:
-     - build/xdyn.deb
+     - xdyn.deb
 
