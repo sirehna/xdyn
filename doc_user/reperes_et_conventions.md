@@ -906,8 +906,8 @@ d'éventuels autres outils utilisant les HDB).
 Les sections du HDB actuellement utilisées par X-DYN sont :
 
 - `Added_mass_Radiation_Damping` pour les amortissements de radiation et les
-  matrices de masses ajoutées
-- ̀ DIFFRACTION_FORCES_AND_MOMENTS` pour les RAO des efforts de diffraction
+  matrices de masses ajoutées,
+- `DIFFRACTION_FORCES_AND_MOMENTS` pour les RAO des efforts de diffraction.
 
 ## Repère de calcul hydrodynamique
 
