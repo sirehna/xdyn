@@ -60,6 +60,10 @@ build:doc_pweave:
    script:
      - ls
      - cd doc_user
+     - mkdir -p build_doc
+     - cd build_doc
+     - cp ../../xdyn.deb .
+     - cp ../Dockerfile .
      - docker build . --tag pweave
      - docker run --entrypoint /bin/sh pweave:latest -c "pwd && ls"
      - cd ..
