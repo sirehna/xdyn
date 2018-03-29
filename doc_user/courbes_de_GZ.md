@@ -3,15 +3,15 @@
 ## Stabilité en roulis
 
 Parmi les performances navales, les plus importantes tant du point
-pratique que théorique sont les performances en roulis et en tangage. On s'intéresse ici
-plus particulièrement à la stabilité du navire en roulis. Du point de vue
-réglementaire, la stabilité des navires est soumise à des conditions strictes,
-définies par exemple dans les arrêtés du 28 février 1975 (bateaux non motorisés) et du 2
-septembre 1970 (bateaux motorisés).
+pratique que théorique sont les performances en roulis et en tangage. On
+s'intéresse ici plus particulièrement à la stabilité du navire en roulis. Du
+point de vue réglementaire, la stabilité des navires est soumise à des
+conditions strictes, définies par exemple dans les arrêtés du 28 février 1975
+(bateaux non motorisés) et du 2 septembre 1970 (bateaux motorisés).
 
 On considère un navire partiellement immergé en eau calme (la surface libre
-étant donc plane et horizontale) dont le volume immergé $\Omega$ est délimité par une
-surface appelée "carène" (ou surface mouillée) et notée $\mathcal{C}$.
+étant donc plane et horizontale) dont le volume immergé $\Omega$ est délimité
+par une surface appelée "carène" (ou surface mouillée) et notée $\mathcal{C}$.
 On appelle "flottaison" et l'on note $S$
 l'intersection du volume du navire avec le plan de la surface libre.
 On a donc $\partial\Omega = \mathcal{C}\cup S$.
@@ -40,7 +40,7 @@ centre de carène et $GZ$ est ensuite donné par $GZ(\phi)=y_C(\phi)-y_G$.
 
 #### Calcul de la position d'équilibre à une gîte donnée
 
-Soit $X=(z,\phi,\theta)$ l'etat du système. On suppose le navire soumis aux
+Soit $X=(z,\phi,\theta)$ l'état du système. On suppose le navire soumis aux
 seuls efforts de
 la gravité et de l'hydrostatique. On dénote par $f$ la fonction qui à $X$
 associe la somme des efforts appliqués au système :
@@ -74,8 +74,8 @@ $$K(X_n) \Delta X = \Delta F$$
 
 Pour $1\leq i\leq 3, \sum_{j=1}^3 k_{ij} \Delta x_j = \Delta F_i$.
 
-Si le petit déplacement que l'on considère s'effectue exclusivement suivant l'axe $j$, on
-trouve :
+Si le petit déplacement que l'on considère s'effectue exclusivement suivant
+l'axe $j$, on trouve :
 
 $k_{ij}\Delta x_j = \Delta F_i$ donc
 
