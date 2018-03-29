@@ -113,6 +113,7 @@ IF(PANDOC)
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_00.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
