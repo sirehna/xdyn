@@ -53,3 +53,11 @@ build:doc:
      when: on_success
      paths:
      - doc.html
+
+build:doc_pweave:
+   stage: build
+   script:
+     - cd doc_user
+     - docker build . --tag pweave
+     - docker run -it pweave:latest /bin/sh -c "pwd && ls"
+     - cd ..
