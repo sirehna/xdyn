@@ -13,4 +13,6 @@ RUN wget https://github.com/jgm/pandoc/releases/download/2.1.3/pandoc-2.1.3-linu
     cp bin/* /usr/bin && \
     cd .. && \
     rm -rf pandoc_bin pandoc.tar.gz
+ADD xdyn.deb /
+RUN dpkg -r xdyn && dpkg -i xdyn.deb
 ENTRYPOINT ["pweave"]
