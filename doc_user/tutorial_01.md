@@ -7,7 +7,7 @@ On commence par définir les conventions de rotation :
 {{show(yaml_data, 'rotations convention')}}
 
 Puis l'on donne des [constantes
-environnementales](##constantes-environnementales) :
+environnementales](#constantes-environnementales) :
 
 {{show(yaml_data, 'environmental constants')}}
 
