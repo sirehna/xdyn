@@ -55,7 +55,7 @@ ou si l'on utilise une invite de commande MS-DOS :
 xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
 ~~~~~~~~~~~~~~~~~~~~
 
-En rajoutant l'option -o csv, les sorties se font sur la sortie standard
+En ajoutant l'option -o csv, les sorties se font sur la sortie standard
 (le terminal). Ceci permet de chaîner les traitements (pipe UNIX), par exemple :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
@@ -85,9 +85,10 @@ parsers YAML existent pour de nombreux langages de programmation.
 
 Le fichier YAML comprend quatre sections de haut niveau :
 
-- La section `rotations convention` définit la convention d'angles utilisée,
-- `environmental constants` donne les valeurs de la gravité et la densité de l'eau,
-- Les modèles environnementaux figurent dans `environment models`
+- la section `rotations convention` définit la convention d'angles utilisée,
+- `environmental constants` donne les valeurs de la gravité et la densité de
+  l'eau,
+- les modèles environnementaux figurent dans `environment models`,
 - `bodies` décrit les corps simulés.
 
 ### Remarques sur les unités
@@ -256,19 +257,19 @@ pour afficher les résultats de simulation.
 Voici les fonctions de base pour travailler avec `X-Dyn`.
 
 - `xdyn_run` exécute `X-Dyn` depuis `MatLab`.
-- `xdyn_loadResultsFromHdf5File.m` permet de charger les résultats d'une
+- `xdyn_loadResultsFromHdf5File` permet de charger les résultats d'une
   simulation dans `MatLab`.
-- `xdyn_postProcess.m` lance l'ensemble des post-traitements disponibles.
-- `xdyn_plotStates.m` permet de tracer les états, à partir de résultats de
+- `xdyn_postProcess` lance l'ensemble des post-traitements disponibles.
+- `xdyn_plotStates` permet de tracer les états, à partir de résultats de
   simulations. Cela comprend les positions et les vitesses de chaque corps.
-- `xdyn_plotPositions.m` permet de tracer les positions et les orientations
+- `xdyn_plotPositions` permet de tracer les positions et les orientations
    de chaque corps.
-- `xdyn_plotVelocities.m` permet de tracer les vitesses de translation et de
+- `xdyn_plotVelocities` permet de tracer les vitesses de translation et de
    rotation de chaque corps dans le repère de chaque repère.
-- `xdyn_animate3d.m` permet de lancer une animation 3d d'une simulation avec
+- `xdyn_animate3d` permet de lancer une animation 3d d'une simulation avec
   les objets simulés et le champ de vagues lorsque celui-ci est exporté.
 - `xdyn_extractMatLabScript` permet d'extraire les scripts `MatLab` de
-  dépouillement intégrés dans le fichier de sortie hdf5
+  dépouillement intégrés dans le fichier de sortie hdf5.
 
 Enfin, le fichier `xdyn_demos.m` permet de lancer les différents tutoriels.
 
@@ -284,20 +285,21 @@ de la commande :
 
 # Interface Docker et génération automatique de rapports
 
-`X-Dyn` peut être utilisé sous la forme d'un conteneur [Docker](https://www.docker.com/)
+`X-Dyn` peut être utilisé sous la forme d'un conteneur
+[Docker](https://www.docker.com/)
 ce qui permet de l'exécuter sur n'importe quelle plateforme.
 
-En outre, c'est actuellement le seul moyen d'utiliser le module de génération automatique
-de rapport décrit ci-après.
+En outre, c'est actuellement le seul moyen d'utiliser le module de génération
+automatique de rapport décrit ci-après.
 
-Pour utiliser l'image `X-Dyn`, il faut d'abord installer Docker puis importer l'image
-`x-dyn.tar.gz` en exécutant :
+Pour utiliser l'image `X-Dyn`, il faut d'abord installer Docker puis importer
+l'image `x-dyn.tar.gz` en exécutant :
 
 ~~~~{.bash}
 docker load -i xdyn.tar.gz
 ~~~~
 
-## Lancement d'X-DYN via l'image docker
+## Lancement d'X-DYN via l'image docker
 
 Une fois l'image chargée par la commande précédente, on peut lancer :
 
@@ -305,10 +307,10 @@ Une fois l'image chargée par la commande précédente, on peut lancer :
 docker run -it --rm -v $(pwd):/work -w /work xdyn xdyn
 ~~~~
 
-- Le paramètre `-v $(pwd):/work` permet de faire correspondre le répertoire courant avec le répertoire `/work`du conteneur.
-- Le paramètre ̀ -w /work` précise que le répertoire de travail du conteneur (celui depuis lequel sera exécuté X-DYN) est `/work`.
-- Le premier `xdyn`de la ligne de commande est le nom de l'image Docker.
-- Le second `xdyn` de la ligne de commande est le nom de l'exécutable à lancer.
+- le paramètre `-v $(pwd):/work` permet de faire correspondre le répertoire courant avec le répertoire `/work` du conteneur,
+- le paramètre `-w /work` précise que le répertoire de travail du conteneur (celui depuis lequel sera exécuté X-DYN) est `/work`,
+- le premier `xdyn` de la ligne de commande est le nom de l'image Docker,
+- le second `xdyn` de la ligne de commande est le nom de l'exécutable à lancer.
 
 Si l'on souhaite lancer une simulation, on ajoute les arguments d'X-DYN à la suite :
 
@@ -323,8 +325,8 @@ Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker d'X-D
 ### Principe de fonctionnement
 
 On utilise un fichier modèle de rapport qui contient le texte, les instructions
-de simulation et les instructions graphiques.  Ce fichier est ensuite
-interpréter (lancement des simulations, génération des images), puis converti
+de simulation et les instructions graphiques. Ce fichier est ensuite
+interprété (lancement des simulations, génération des images), puis converti
 grâce à l'outil Pandoc au format de sortie demandé. On peut ainsi générer du
 DOCX, PDF, HTML, LaTeX, ODT, Slidy, Reveal.js... La liste complète des formats
 de sortie est disponible [ici](https://pandoc.org/MANUAL.html#general-options).
@@ -337,11 +339,11 @@ La ligne de commande à utiliser est :
 docker run --rm -it -w /work -v $(pwd):/work xdyn spt_report -p tutorials.md -r tutorials.docx -k
 ~~~~
 
-- Le paramètre `-p gir.md` spécifie le fichier Markdown à utiliser pour le rapport (le modèle).
-- Le paramètre `-r toto.docx` détermine le format de sortie (on peut utiliser
-  aussi les formats PDF et HTML avec `-r toto.pdf` et `-r toto.html`
+- le paramètre `-p gir.md` spécifie le fichier Markdown à utiliser pour le rapport (le modèle).
+- le paramètre `-r my_results.docx` détermine le format de sortie (on peut utiliser
+  aussi les formats PDF et HTML avec `-r my_results.pdf` et `-r my_results.html`
   respectivement).
-- Le flag `-k` stipule que l'on souhaite conserver les fichiers intermédiaires
+- le flag `-k` stipule que l'on souhaite conserver les fichiers intermédiaires
   générés par X-Dyn. Si on l'omet, seul le fichier de sortie sera généré.
 
 ### Syntaxe du fichier modèle
@@ -420,8 +422,8 @@ On commence par définir les conventions de rotation :
 
 {{show(yaml_data, 'rotations convention')}}
 
-Puis l'on donne des [constantes
-environnementales](##constantes-environnementales) :
+Puis l'on donne des
+[constantes environnementales](#constantes-environnementales) :
 
 {{show(yaml_data, 'environmental constants')}}
 

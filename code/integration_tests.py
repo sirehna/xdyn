@@ -6,4 +6,4 @@ def launch(executable, arguments):
     suffix = '.exe' if os.name=='nt' else ''
     return os.system(prefix + executable + suffix + ' ' + arguments)
 
-print(launch('sim', 'tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5'))
+print(launch('xdyn', 'tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5'))

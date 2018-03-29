@@ -102,10 +102,6 @@ IF(PANDOC)
         COMMENT "Generating tutorial SVG images" VERBATIM
         DEPENDS move_stl x-dyn ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/generate_images_for_tutorials.sh
         )
-    FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images/*.svg")
-    FOREACH(f ${files})
-        INSTALL(FILES ${f} DESTINATION doc/images)
-    ENDFOREACH()
 
     SET(DOCUMENTATION_FILES_FULL_PATH
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
@@ -117,6 +113,7 @@ IF(PANDOC)
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_00.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
@@ -127,7 +124,7 @@ IF(PANDOC)
                      ${CMAKE_CURRENT_BINARY_DIR}/doc_user_images)
 
     ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.html
-                       COMMAND pandoc -s --toc --mathml -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t html --highlight-style pygments -o doc.html -c stylesheet.css
+                       COMMAND pandoc --standalone --self-contained --toc --mathml -f markdown ${DOCUMENTATION_FILES_FULL_PATH} -t html --highlight-style pygments -o doc.html -c stylesheet.css
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user
                        DEPENDS ${DOCUMENTATION_FILES_FULL_PATH}
                                ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/stylesheet.css
@@ -154,7 +151,6 @@ IF(PANDOC)
     LIST(APPEND DOC_USER_INSTALL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/doc.pdf)
     ADD_CUSTOM_TARGET(doc_user ALL DEPENDS ${DOC_USER_INSTALL_FILES})
     INSTALL(FILES ${DOC_USER_INSTALL_FILES} DESTINATION doc)
-    INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/stylesheet.css DESTINATION doc)
 ELSE()
     MESSAGE(STATUS "Program PANDOC not found -> No user documentation will be generated")
 ENDIF()
