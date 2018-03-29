@@ -2,6 +2,7 @@ stages:
   - git_submodule
   - lint
   - build
+  - doc
 
 git_submodule:
    stage: git_submodule
@@ -45,8 +46,8 @@ build:debian:
      paths:
      - xdyn.deb
 
-build:doc:
-   stage: build
+doc:
+   stage: doc
    script:
      - make doc
    artifacts:
@@ -57,7 +58,10 @@ build:doc:
 build:doc_pweave:
    stage: build
    script:
+     - ls
      - cd doc_user
      - docker build . --tag pweave
      - docker run --entrypoint /bin/sh pweave:latest -c "pwd && ls"
      - cd ..
+   dependencies:
+     - build:debian
