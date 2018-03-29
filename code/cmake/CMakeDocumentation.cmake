@@ -102,10 +102,6 @@ IF(PANDOC)
         COMMENT "Generating tutorial SVG images" VERBATIM
         DEPENDS move_stl x-dyn ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/generate_images_for_tutorials.sh
         )
-    FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images/*.svg")
-    FOREACH(f ${files})
-        INSTALL(FILES ${f} DESTINATION doc/images)
-    ENDFOREACH()
 
     SET(DOCUMENTATION_FILES_FULL_PATH
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
