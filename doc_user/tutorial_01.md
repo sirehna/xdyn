@@ -1,4 +1,4 @@
-## Tutorial 1: chute libre
+## Tutoriel 1: chute libre
 
 {% set yaml_data = load('tutorial_01_falling_ball.yml') %}
 
