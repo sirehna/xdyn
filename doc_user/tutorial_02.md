@@ -18,21 +18,21 @@ non-amorties en immersion.
 ### Écriture du fichier de configuration du simulateur
 
 Nous documentons ici uniquement les changements par rapport au
-[tutoriel 1](##tutoriel-1-balle-en-chute-libre).
+[tutoriel 1](#tutoriel-1-chute-libre).
 
 L'environnement est défini de la façon suivante :
 
 
 {{show(yaml_data_exact_hs, 'environment models')}}
 
-Comme décrit dans le [documentation du fichier
-d'entrée](##absence-de-houle), ceci signifie que la
+Comme décrit dans la [documentation du fichier
+d'entrée](#absence-de-houle), ceci signifie que la
 surface libre est parfaitement plane et horizontale, à la hauteur $z=0$ dans le
 repère NED.
 
-Par rapport au [tutoriel 1](##tutoriel-1-balle-en-chute-libre), la
+Par rapport au [tutoriel 1](#tutoriel-1-chute-libre), la
 position du repère "body" par rapport au maillage est ici importante puisque
-l'on [fournit un fichier STL](##d%C3%A9finition-du-fichier-de-maillage) :
+l'on [fournit un fichier STL](#d%C3%A9finition-du-fichier-de-maillage) :
 
 {{show(yaml_data_exact_hs, 'bodies/0/position of body frame relative to mesh')}}
 
@@ -50,9 +50,9 @@ ajoutées et la position du centre d'inertie :
 {{show(yaml_data_exact_hs, 'bodies/0/dynamics')}}
 
 On utilise dans un premier temps le [modèle hydrostatique
-approché](##calcul-du-moment) dont la
+approché](#calcul-du-moment) dont la
 documentation est décrite
-[ici](##hydrostatique-non-lin%C3%A9aire) :
+[ici](#hydrostatique-non-lin%C3%A9aire) :
 
 
 {{show(yaml_data_fast_hs, 'bodies/0/external forces')}}
