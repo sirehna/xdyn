@@ -61,11 +61,15 @@ print_yaml_file('tutorial_01_falling_ball.yml')
 
 La simulation peut s'exécuter comme suit :
 
-{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
+```python echo=False, results='raw'
+exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')
+```
 
 Pour avoir des sorties sur la console, on peut faire :
 
-{{exec('xdyn tutorial_01_falling_ball.yml --dt 1 --tend 5 -o tsv')}}
+```python echo=False, results='raw'
+exec('xdyn tutorial_01_falling_ball.yml --dt 1 --tend 5 -o tsv')
+```
 
 `tsv` signifie ici "tab-separated values".
 
@@ -73,15 +77,21 @@ On peut également changer l'instant initial (étant entendu que les conditions
 initiales définies dans le fichier YAML s'appliquent à cet instant initial,
 quel qu'il soit, et non pas à t = 0) :
 
-{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 --tstart 2 -o out.csv')}}
+```python echo=False, results='raw'
+exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 --tstart 2 -o out.csv')
+```
 
 On peut choisir le solveur :
 
-{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rkck -o out.csv')}}
+```python echo=False, results='raw'
+exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rkck -o out.csv')
+```
 
 La liste de toutes les options est disponible en exécutant :
 
-{{exec('xdyn -h')}}
+```python echo=False, results='raw'
+exec('xdyn -h')
+```
 
 ### Résultats
 
