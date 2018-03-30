@@ -12,6 +12,9 @@ from report.ApiJinjaCommands import execCmd
 from report.ApiDataFormatting import load_yaml as fun_load_yaml
 from report.ApiDataFormatting import show as show_yaml
 
+def exec(command_line, working_directory='tuto_execution', verbose=False):
+    print(execCmd(command_line, working_directory=working_directory, verbose=verbose))
+
 def load_yaml(filename):
     return fun_load_yaml(os.path.join('/usr','demos',filename),'r')
 
