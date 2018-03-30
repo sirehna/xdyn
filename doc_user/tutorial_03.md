@@ -22,7 +22,9 @@ machine et par le temps disponible).
 
 ### Écriture du fichier de configuration du simulateur.
 
-{% set yaml_data = load('tutorial_03_waves.yml') %}
+```python echo=False, results='raw'
+yaml_data = load_yaml('tutorial_03_waves.yml')
+```
 
 La section `environment models` est nettement plus fournie que pour les
 tutoriels précédents.
@@ -30,34 +32,47 @@ tutoriels précédents.
 On commence par définir la discrétisation. Actuellement, le nombre de
 pulsations est égal au nombre de directions :
 
-{{show(yaml_data, 'environment models/0/discretization')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'environment models/0/discretization')
+```
 
 On va donc sommer {{yaml_data['environment models'][0]['discretization']['n']}} pulsations et {{yaml_data['environment models'][0]['discretization']['n']}} directions, soit {{yaml_data['environment models'][0]['discretization']['n']*yaml_data['environment models'][0]['discretization']['n']}} points.
 Cependant, la discrétisation spatiale des spectres monochromatiques et des
 dispersions monodirectionnelles est réduite à un point. On spécifie en outre
-que l'on veut représenter {{yaml_data['environment models'][0]['discretization']['energy fraction']*100}}% de l'énergie totale, les autres composantes
-n'étant pas retenues.
+que l'on veut représenter
+{{yaml_data['environment models'][0]['discretization']['energy fraction']*100}}%
+de l'énergie totale, les autres composantes n'étant pas retenues.
 
 Le premier spectre est défini de la façon suivante :
 
-{{show(yaml_data, 'environment models/0/spectra/0')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'environment models/0/spectra/0')
+```
 
 Pour le second spectre, on écrit :
 
-{{show(yaml_data, 'environment models/0/spectra/1')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'environment models/0/spectra/1')
+```
 
 On définit les sorties de la façon suivante :
 
-{{show(yaml_data, 'environment models/0/output')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'environment models/0/output')
+```
 
 En définitive, l'environnement est défini de la façon suivante :
 
 
-{{show(yaml_data, 'environment models')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'environment models')
+```
 
 Comme on ne simule pas de corps, le fichier d'entrée se réduit à :
 
-{{show(yaml_data)}}
+```python echo=False, results='raw'
+print_yaml_file('tutorial_03_waves.yml')
+```
 
 ### Lancement de la simulation
 
