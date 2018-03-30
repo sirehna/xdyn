@@ -20,7 +20,7 @@ On se limite dans cet exemple à deux spectres, mais le simulateur permet d'en
 sommer autant qu'on le souhaite (on n'est limité que par la mémoire de la
 machine et par le temps disponible).
 
-### Écriture du fichier de configuration du simulateur.
+### Écriture du fichier de configuration du simulateur
 
 ```python echo=False, results='raw'
 yaml_data = load_yaml('tutorial_03_waves.yml')
