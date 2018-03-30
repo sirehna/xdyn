@@ -1,42 +1,61 @@
 ## Tutoriel 1: chute libre
 
-{% set yaml_data = load('tutorial_01_falling_ball.yml') %}
+```python echo=False, results='raw'
+yaml_data = load_yaml('tutorial_01_falling_ball.yml')
+```
 
 On commence par définir les conventions de rotation :
 
-{{show(yaml_data, 'rotations convention')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'rotations convention')
+```
 
 Puis l'on donne des [constantes
 environnementales](#constantes-environnementales) :
 
-{{show(yaml_data, 'environmental constants')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'environmental constants')
+```
 
 Aucun modèle d'environnement (houle, vent...) n'est nécessaire pour cette
 simulation :
 
-{{show(yaml_data, 'environment models')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'environment models')
+```
 
 On définit la position du repère "body" par rapport au maillage :
 
-{{show(yaml_data, 'bodies/0/position of body frame relative to mesh')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'bodies/0/position of body frame relative to mesh')
+```
 
 Les conditions initiales sont décrites comme suit :
 
-{{show(yaml_data, 'bodies/0/initial position of body frame relative to NED')}}
-{{show(yaml_data, 'bodies/0/initial velocity of body frame relative to NED')}}
+
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'bodies/0/initial position of body frame relative to NED')
+print_yaml(yaml_data, 'bodies/0/initial velocity of body frame relative to NED')
+```
 
 Les données dynamiques comprennent la masse, la matrice d'inertie, les inerties ajoutées
 et la position du centre d'inertie :
 
-{{show(yaml_data, 'bodies/0/dynamics')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'bodies/0/dynamics')
+```
 
 Seule la gravité agit sur le solide :
 
-{{show(yaml_data, 'bodies/0/external forces')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'bodies/0/external forces')
+```
 
 En définitive, on obtient le fichier suivant :
 
-{{show(yaml_data)}}
+```python echo=False, results='raw'
+print_yaml_file('tutorial_01_falling_ball.yml')
+```
 
 ### Lancement de la simulation
 
