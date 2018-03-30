@@ -78,7 +78,9 @@ print_yaml_file('tutorial_03_waves.yml')
 
 La simulation peut maintenant être lancée comme suit :
 
-{{exec('xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5')}}
+```python echo=False, results='raw'
+exec('xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5')
+```
 
 Le fichier de résultat est ici `tutorial_03_results.h5`.
 
