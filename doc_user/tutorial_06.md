@@ -22,17 +22,25 @@ que l'on nomme `controlled_forces_commands.yml`.
 
 On commence par définir les [caractéristiques du propulseur](#efforts-commandés) :
 
-{% set yaml_data = load('tutorial_06_1D_propulsion.yml') %}
+```python echo=False, results='raw'
+yaml_data = load_yaml('tutorial_06_1D_propulsion.yml')
+```
 
-{{show(yaml_data, 'bodies/0/controlled forces')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'bodies/0/controlled forces')
+```
 
 Les commandes sont définies à la racine du YAML:
 
-{{show(yaml_data, 'commands')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'commands')
+```
 
 En définitive, le fichier d'entrée est :
 
-{{show(yaml_data)}}
+```python echo=False, results='raw'
+print_yaml(yaml_data)
+```
 
 ### Lancement de la simulation
 
