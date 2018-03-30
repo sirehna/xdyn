@@ -67,9 +67,7 @@ build:doc_pweave:
      - docker build . --tag pweave
      - cd ..
      - docker run --entrypoint /bin/sh pweave:latest -c "pwd && ls"
-     - docker run --entrypoint /bin/sh --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/build -w /build pweave:latest -c "pwd && ls && cat introduction.md interfaces.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_*.md > concatenated_doc.md && pweave -f markdown concatenated_doc.md -o doc.md && pandoc --title-prefix=XDYN --standalone --self-contained -t html --toc --toc-depth=3 --mathml --highlight-style pygments -f markdown -V lang=fr doc.md --css stylesheet.css -o doc.html"
-     - ls concatenated_doc.md
-     - ls doc.md
+     - docker run --entrypoint /bin/sh --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/build -w /build pweave:latest -c "./doc_html_pweave.sh"
      - ls doc.html
      - mv doc.html ..
      - cd ..
