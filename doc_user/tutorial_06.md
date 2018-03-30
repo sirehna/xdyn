@@ -13,7 +13,7 @@ efforts suivants :
 - L'amortissement visqueux
 - Un effort de propulsion
 
-### Écriture du fichier de configuration du simulateur.
+### Écriture du fichier de configuration du simulateur
 
 Les deux seuls changements par rapport au tutoriel 2 sont l'ajout d'une section
 [`controlled forces`](#efforts-commandés) et un
