@@ -1,5 +1,17 @@
+# Dockerfile with xdyn, a python interpreter, various python libraries, and
+# pandoc
+#
 FROM python:3.6.4-slim-jessie
-RUN python3 -m pip install numpy matplotlib pweave && \
+RUN python3 -m pip install \
+        h5py \
+        numpy \
+        matplotlib \
+        pandas \
+        pweave \
+        pyyaml \
+        xlrd \
+        xlwt \
+        && \
     mkdir pandoc_bin && \
     cd pandoc_bin && \
     python3 -c 'from urllib.request import urlretrieve; urlretrieve("https://github.com/jgm/pandoc/releases/download/2.1.3/pandoc-2.1.3-linux.tar.gz", filename="pandoc.tar.gz")' && \
