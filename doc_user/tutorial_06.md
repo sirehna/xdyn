@@ -46,7 +46,9 @@ print_yaml(yaml_data)
 
 La simulation peut maintenant être lancée comme suit :
 
-{{exec('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out.csv')}}
+```python echo=False, results='raw'
+exec('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out.csv')
+```
 
 ### Résultats
 
