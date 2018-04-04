@@ -3,8 +3,15 @@
 
 # Description
 
-Le présent programme est un simulateur de corps solides indéformables dans un
-environnement fluide. Il s'agit d'un outil en ligne de commande, c'est-à-dire
+Le présent programme est un simulateur de comportement mécanique de corps solides indéformables dans un
+environnement fluide. Son objet principal est la résolution des équations de mouvements du ou des corps considérés, dans le domaine temporel. 
+Ces équations de mouvement sont construites sur la base d'efforts extérieurs calculés par des modèles spécifiques inclus dans le logiciel, ou 
+pouvant y être ajoutés. Chaque modèle est associé à un jeu de données spécifique. 
+
+Sur le principe, le simulateur permet de traiter n'importe quel problème de mouvement de corps solide. Les premiers modèles d'efforts implémentés 
+et fournis concernent essentiellement le comportement de navires sur houle. 
+
+Concernant le mode de fonctionnement du logiciel, il s'agit d'un outil en ligne de commande, c'est-à-dire
 qu'on le lance depuis un terminal (ou une invite de commande MS DOS).
 
 Le simulateur a été construit pour permettre une utilisation modulaire en ligne
