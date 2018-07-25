@@ -1,7 +1,7 @@
 FROM python:3.4
 
 # Install necessary python packages
-RUN pip3 install python-gitlab==1.5.1 python-dateutil
+RUN pip3 install python-gitlab==1.5.1 python-dateutil==2.7.3
 
 # Need all this cruft so that the generated files can be deleted by Gitlab's CI
 ARG UID
