@@ -1108,14 +1108,14 @@ nous invitons le lecteur à se référer à Ducrozet 2013 and Ducrozet *et al.*
 
 Afin d'initialiser la simulation, des valeurs initiales pour le potentiel de
 vitesse $\phi$ et l'élévation de surface libre $\eta$ doivent être spécifiées
-sur tout le domaine. Deux profiles de vagues sont intégrées à HOS : un pour la
+sur tout le domaine. Deux profils de vagues sont intégrés à HOS : un pour la
 houle régulière et un pour la houe irrégulière.
 
-Le profile de houle régulière non-linéaire est basé sur la résolution de
+Le profil de houle régulière non-linéaire est basé sur la résolution de
 Reinecker & Fenton (cf. Reinecker *et al.*, 1981). Cette méthode nécessite un
-fichier d'entrée `.cof` contenant les coefficients du profile de houle.
+fichier d'entrée `.cof` contenant les coefficients du profil de houle.
 
-Le profile de houle irrégulière linéaire est défini par la superpositions de
+Le profil de houle irrégulière linéaire est défini par la superpositions de
 composantes linéaires de directions et fréquences différentes. L'amplitude de
 chaque composante est calculée à partir d'un spectre directionnel $S(\omega,
 \theta) = F(\omega) \cdot G(\theta)$.
@@ -1205,13 +1205,13 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 |`length of the domain along y`            | `ylen`          | Longueur du domaine de calcul suivant l'axe Y                     |
 |                                          |                 | Comprise entre 0 (exclu) et 1000 km.                              |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`number of modes per node in x-direction` | `n1`            | Nombre de modes par noeud sur l'axe X. Supérieur ou égal à 1      |
+|`number of modes per node in x-direction` | `n1`            | Nombre de modes par nœud sur l'axe X. Supérieur ou égal à 1       |
 |                                          |                 | (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)) |
 |                                          |                 | Attention : d'autres contraintes moins explicites doivent exister |
 |                                          |                 | (le serveur peut planter en case de valeur invalide) mais elles ne|
 |                                          |                 | sont pas vérifiées par X-DYN.                                     |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`number of modes per node in y-direction` | `n2`            | Nombre de modes par noeud sur l'axe Y. Supérieur ou égal à 1      |
+|`number of modes per node in y-direction` | `n2`            | Nombre de modes par nœud sur l'axe Y. Supérieur ou égal à 1       |
 |                                          |                 | (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)) |
 |                                          |                 | Attention : d'autres contraintes moins explicites doivent exister |
 |                                          |                 | (le serveur peut planter en case de valeur invalide) mais elles ne|
@@ -1240,7 +1240,7 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 |`gamma`                                   | `gamma`         | Paramètre de forme du spectre de JONSWAP utilisé pour             |
 |                                          |                 | l'initialisation de la simulation. Doit être compris entre 0 et 20|
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`beta`                                    | `beta`          | Paramètre de l'étalement directionnel (Dysthe). Doit être                    |
+|`beta`                                    | `beta`          | Paramètre de l'étalement directionnel (Dysthe). Doit être         |
 |                                          |                 | Doit être strictement positif (cf. [`initial_conditions.f90` line 396](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L396)). |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 |`Tp`                                      | `tp_real`       | Période du spectre de JONSWAP utilisé pour l'initialisation de la |
@@ -1255,7 +1255,7 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 |                                          |                 | ('rel') ?                                                         |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
 | `url of the HOS server`                  |       -         | URL utilisée par X-DYN pour se connecter au serveur 0MQ HOS. Ne   |
-|                                          |                 | correspond pas à l'URL utilisée par le server en interne pour     |
+|                                          |                 | correspond pas à l'URL utilisée par le serveur en interne pour    |
 |                                          |                 | échanger de manière asynchrone entre le code Fortran et le code   |
 |                                          |                 | Python (qui est fixée en dur par X-DYN à "5555")                  |
 +------------------------------------------+-----------------+-------------------------------------------------------------------+
@@ -1269,9 +1269,9 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 | `timeout`                                |       -         | Toute requête sera abandonnée au bout de ce temps. Contrôle à la  |
 |                                          |                 | fois le délai d'expiration au niveau ZMQ (`ZMQ_RCVTIMEO`) et le   |
 |                                          |                 | délai d'expiration de chaque requête (on renvoie la requête       |
-|                                          |                 | tant que la réponse est flagée `WAIT` et que ce délai d'expiration|
+|                                          |                 | tant que la réponse est flaguée `WAIT` et que ce délai d'expiration|
 |                                          |                 | n'est pas atteint). Comme cette valeur est convertie dans le code |
-|                                          |                 | en millisecondes (precision du timeout), elle doit être comprise  |
+|                                          |                 | en millisecondes (précision du timeout), elle doit être comprise  |
 |                                          |                 | entre 0 (exclu) et 2147 (inclus) secondes. Les unités valides sont|
 |                                          |                 | `s`, `ms`, `us`, `ns`, `min`, `minute`, `minutes`, `second`,      |
 |                                          |                 | `seconds`, `seconde` et `secondes`.                               |
