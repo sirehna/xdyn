@@ -48,6 +48,7 @@ def fetch_artifact(**kwargs):
 
     # Gitlab API handler
     gl = gitlab.Gitlab('https://gitlab.sirehna.com', private_token, ssl_verify=False)
+    print('Gitlab API V{0}'.format(gl.api_version))
     project = gl.projects.get(project_id)
     pipelines = project.pipelines.list(all=True)
     if commit:
