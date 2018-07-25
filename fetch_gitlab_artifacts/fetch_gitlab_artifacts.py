@@ -12,20 +12,6 @@ logging.basicConfig(format='%(asctime)s,%(msecs)d [' + service_name + '] - %(lev
     datefmt='%d-%m-%Y:%H:%M:%S',
     level=logging.INFO)
 
-def get_latest_successful_build(builds):
-    """
-    this function returns the latest successful Gitlab build on the target branch
-    """
-    latest = None
-    for build in builds:
-        if latest is None:
-            latest = build
-        else:
-            latest_build_date = parse(latest.finished_at)
-            current_build_date = parse(build.finished_at)
-            if current_build_date > latest_build_date:
-                latest = build
-    return latest
 
 def download_artifact(latest):
     # Handler for downloads
@@ -59,32 +45,33 @@ def fetch_artifact(**kwargs):
     commit = kwargs.get('commit', None)
     build_type = kwargs.get('build_type', '')
     target_branch = kwargs.get('target_branch', 'master')
-    stage = kwargs.get('stage', 'build')
-
 
     # Gitlab API handler
     gl = gitlab.Gitlab('https://gitlab.sirehna.com', private_token, ssl_verify=False)
-
-    # Get all builds: you can get the ID from https://gitlab.sirehna.com/root/scientific_computing/edit
-    builds = gl.project_builds.list(project_id=project_id, all=True)
-
-    # Select only successful builds from the target stage, from the target branch
+    project = gl.projects.get(project_id)
+    pipelines = project.pipelines.list(all=True)
     if commit:
-        if build_type:
-            builds = [b for b in builds if b.status == "success" and b.stage == stage and b.commit is not None and b.commit.id == commit and b.name.endswith(build_type)]
-        else:
-            builds = [b for b in builds if b.status == "success" and b.stage == stage and b.commit is not None and b.commit.id == commit]
+        pipelines = [p for p in pipelines if p.attributes['sha'] == commit]
+        if len(pipelines) != 1:
+            logging.error("No pipeline found")
+            raise Exception
     else:
-        if build_type:
-            builds = [b for b in builds if b.status == "success" and b.stage == stage and b.ref == target_branch]
-        else:
-            builds = [b for b in builds if b.status == "success" and b.stage == stage and b.ref == target_branch and b.name.endswith(build_type)]
-
-    # Get latest stable build on target branch
-    latest = get_latest_successful_build(builds)
-
+        pipelines = [p for p in pipelines if p.attributes['ref'] == 'master']
+    pipeline = pipelines[0]
+    if pipeline.attributes['status'] != 'success':
+        logging.error("Unsucessful build")
+        raise Exception
+    jobs = pipeline.jobs.list(all=True)
+    job_names = [job.attributes['name'] for job in jobs]
+    search_for_job = 'build:' + build_type
+    jobs = [job for job in jobs if job.attributes['name'] == search_for_job]
+    if len(jobs) != 1:
+        logging.error("Job {0} was not found ".format(search_for_job))
+        raise Exception
+    job = jobs[0]
+    job_for_artifacts = project.jobs.get(job.get_id(), lazy=True)
     # Download latest artifact
-    download_artifact(latest)
+    download_artifact(job_for_artifacts)
 
 
 def command_line_arguments_parser():
@@ -102,7 +89,6 @@ def command_line_arguments_parser():
     pa('-t', '--private_token', default=default_private_token, help='Private token to be used to connect to gitlab. Default is {0}'.format(default_private_token))
     pa('-b', '--build_type', default=default_build_type, help='Build type. Default is "{0}"'.format(default_build_type))
     pa('-a', '--target_branch', default=default_branch, help='Branch of which we want the artifacts. Default is "{0}"'.format(default_branch))
-    pa('-s', '--build_stage', default=default_stage, help='Gitlab build stage (defined in .gitlab-ci.yml). Default is "{0}"'.format(default_stage))
     return parser
 
 
@@ -119,7 +105,5 @@ if __name__ == "__main__":
         commit = args.commit,
         build_type = args.build_type,
         target_branch = args.target_branch,
-        stage = args.build_stage
         )
-
 
