@@ -69,3 +69,9 @@ TEST_F(ConstantForceModelTest, can_parse_Y)
     const auto input = ConstantForceModel::parse(test_data::constant_force());
     ASSERT_DOUBLE_EQ(20e3, input.Y);
 }
+
+TEST_F(ConstantForceModelTest, can_parse_Z)
+{
+    const auto input = ConstantForceModel::parse(test_data::constant_force());
+    ASSERT_DOUBLE_EQ(30e3, input.Z);
+}
