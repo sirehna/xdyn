@@ -38,6 +38,7 @@ ConstantForceModel::Input ConstantForceModel::parse(const std::string& yaml)
     parser.GetNextDocument(node);
     ConstantForceModel::Input ret;
     node["frame"] >> ret.frame;
+    ssc::yaml_parser::parse_uv(node["x"], ret.x);
     return ret;
 }
 

@@ -39,3 +39,9 @@ TEST_F(ConstantForceModelTest, can_parse_reference_frame)
     const auto input = ConstantForceModel::parse(test_data::constant_force());
     ASSERT_EQ("Anthineas", input.frame);
 }
+
+TEST_F(ConstantForceModelTest, can_parse_x)
+{
+    const auto input = ConstantForceModel::parse(test_data::constant_force());
+    ASSERT_DOUBLE_EQ(0.5, input.x);
+}
