@@ -9,6 +9,7 @@
 #include "ConstantForceModel.hpp"
 #include "ConstantForceModelTest.hpp"
 #include "generate_body_for_tests.hpp"
+#include "yaml_data.hpp"
 #include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
@@ -33,6 +34,8 @@ void ConstantForceModelTest::TearDown()
 {
 }
 
-TEST_F(ConstantForceModelTest, example)
+TEST_F(ConstantForceModelTest, can_parse_reference_frame)
 {
+    const auto input = ConstantForceModel::parse(test_data::constant_force());
+    ASSERT_EQ("Anthineas", input.frame);
 }

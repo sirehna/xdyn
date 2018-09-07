@@ -32,7 +32,13 @@ ConstantForceModel::Input::Input() :
 
 ConstantForceModel::Input ConstantForceModel::parse(const std::string& yaml)
 {
-    return ConstantForceModel::Input();
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    ConstantForceModel::Input ret;
+    node["frame"] >> ret.frame;
+    return ret;
 }
 
 ConstantForceModel::ConstantForceModel(const ConstantForceModel::Input& , const std::string& body_name_, const EnvironmentAndFrames& env_) :
