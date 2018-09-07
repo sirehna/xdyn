@@ -4918,3 +4918,20 @@ std::string test_data::hos_for_parser_validation_only()
        << "timeout: {value: 2, unit: s}\n";
     return ss.str();
 }
+
+std::string test_data::constant_force()
+{
+    std::stringstream ss;
+    ss << "model: constant force\n"
+       << "frame: Anthineas\n"
+       << "x: {value: 0.5, unit: m}\n"
+       << "y: {value: -0.2, unit: m}\n"
+       << "z: {value: -440, unit: m}\n"
+       << "X: {value: 10, unit: kN}\n"
+       << "Y: {value: 20, unit: kN}\n"
+       << "Z: {value: 30, unit: kN}\n"
+       << "K: {value: 100, unit: kN*m}\n"
+       << "M: {value: 200, unit: kN*m}\n"
+       << "N: {value: 300, unit: kN*m}\n";
+    return ss.str();
+}
