@@ -41,6 +41,7 @@ ConstantForceModel::Input ConstantForceModel::parse(const std::string& yaml)
     ssc::yaml_parser::parse_uv(node["x"], ret.x);
     ssc::yaml_parser::parse_uv(node["y"], ret.y);
     ssc::yaml_parser::parse_uv(node["z"], ret.z);
+    ssc::yaml_parser::parse_uv(node["X"], ret.X);
     return ret;
 }
 
