@@ -78,16 +78,16 @@ TEST_F(environment_parsersTest, can_parse_wave_spreading_and_spectral_data)
     ASSERT_EQ("dirac",yaml.spectra.at(0).directional_spreading_type);
     ASSERT_EQ("type: dirac\nwaves propagating to:\n  unit: deg\n  value: 90",yaml.spectra.at(0).directional_spreading_yaml);
     ASSERT_EQ("airy",yaml.spectra.at(0).model);
-    ASSERT_EQ("depth:\n  unit: km\n  value: 1.7\ndirectional spreading:\n  type: dirac\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 0\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: m\n    value: 15\n  gamma: 1.2\n  type: jonswap\nstretching:\n  delta: 123\n  h:\n    unit: m\n    value: 100",yaml.spectra.at(0).model_yaml);
+    ASSERT_EQ("depth:\n  unit: km\n  value: 1.7\ndirectional spreading:\n  type: dirac\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 0\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: s\n    value: 15\n  gamma: 1.2\n  type: jonswap\nstretching:\n  delta: 123\n  h:\n    unit: m\n    value: 100",yaml.spectra.at(0).model_yaml);
     ASSERT_EQ("jonswap",yaml.spectra.at(0).spectral_density_type);
-    ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: m\n  value: 15\ngamma: 1.2\ntype: jonswap",yaml.spectra.at(0).spectral_density_yaml);
+    ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: s\n  value: 15\ngamma: 1.2\ntype: jonswap",yaml.spectra.at(0).spectral_density_yaml);
 
     ASSERT_EQ("cos2s",yaml.spectra.at(1).directional_spreading_type);
     ASSERT_EQ("s: 2\ntype: cos2s\nwaves propagating to:\n  unit: deg\n  value: 90",yaml.spectra.at(1).directional_spreading_yaml);
     ASSERT_EQ("airy",yaml.spectra.at(1).model);
-    ASSERT_EQ("depth:\n  unit: m\n  value: 12\ndirectional spreading:\n  s: 2\n  type: cos2s\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 1872\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: m\n    value: 15\n  type: dirac\nstretching:\n  delta: 456\n  h:\n    unit: m\n    value: 101",yaml.spectra.at(1).model_yaml);
+    ASSERT_EQ("depth:\n  unit: m\n  value: 12\ndirectional spreading:\n  s: 2\n  type: cos2s\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 1872\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: s\n    value: 15\n  type: dirac\nstretching:\n  delta: 456\n  h:\n    unit: m\n    value: 101",yaml.spectra.at(1).model_yaml);
     ASSERT_EQ("dirac",yaml.spectra.at(1).spectral_density_type);
-    ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: m\n  value: 15\ntype: dirac",yaml.spectra.at(1).spectral_density_yaml);
+    ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: s\n  value: 15\ntype: dirac",yaml.spectra.at(1).spectral_density_yaml);
 }
 
 TEST_F(environment_parsersTest, can_parse_wave_outputs)
@@ -105,7 +105,7 @@ TEST_F(environment_parsersTest, can_parse_wave_outputs)
 TEST_F(environment_parsersTest, can_parse_jonswap_spectrum)
 {
     const YamlJonswap y = parse_jonswap("Hs: {value: 5, unit: m}\n"
-                                        "Tp: {value: 15, unit: m}\n"
+                                        "Tp: {value: 15, unit: s}\n"
                                         "gamma: 1.2\n");
     ASSERT_DOUBLE_EQ(5, y.Hs);
     ASSERT_DOUBLE_EQ(15, y.Tp);
@@ -123,7 +123,7 @@ TEST_F(environment_parsersTest, can_parse_dirac_spectrum)
 TEST_F(environment_parsersTest, can_parse_pierson_moskowitz_spectrum)
 {
     const YamlPiersonMoskowitz y = parse_pierson_moskowitz("Hs: {value: 5, unit: m}\n"
-                                                           "Tp: {value: 15, unit: m}\n");
+                                                           "Tp: {value: 15, unit: s}\n");
     ASSERT_DOUBLE_EQ(5, y.Hs);
     ASSERT_DOUBLE_EQ(15, y.Tp);
 }
@@ -131,7 +131,7 @@ TEST_F(environment_parsersTest, can_parse_pierson_moskowitz_spectrum)
 TEST_F(environment_parsersTest, can_parse_bretschneider_spectrum)
 {
     const YamlBretschneider y = parse_bretschneider("Hs: {value: 5, unit: m}\n"
-                                                    "Tp: {value: 15, unit: m}\n");
+                                                    "Tp: {value: 15, unit: s}\n");
     ASSERT_DOUBLE_EQ(5, y.Hs);
     ASSERT_DOUBLE_EQ(15, y.Tp);
 }
