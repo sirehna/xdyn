@@ -1,7 +1,6 @@
 stages:
   - git_submodule
   - lint
-  - cleanup_Docker
   - build
 
 git_submodule:
@@ -19,13 +18,6 @@ lint:
        then echo "Tabs found in the lines shown above."; false;
        else echo "Repo passed no-tabs check."; fi &&
        cd ..
-
-cleanup_Docker:
-   stage: cleanup_Docker
-   script:
-     - pwd
-     # - docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null || true
-     # - docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null || true
 
 build:windows:
    stage: build
