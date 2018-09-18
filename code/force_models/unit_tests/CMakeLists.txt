@@ -24,6 +24,7 @@ FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/env_for_tests.cpp
               src/KtKqForceModelTest.cpp
               src/LinearHydrostaticForceModelTest.cpp
+              src/ConstantForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

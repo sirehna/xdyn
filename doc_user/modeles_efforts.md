@@ -677,6 +677,36 @@ d'équilibre renseignées dans le fichier de paramétrage.
 Les coordonnées $(x_i,y_j)$ sont données dans le repère body.
 Les coefficients de la matrice $K$ sont donnés en unité SI.
 
+## Effort constant
+
+### Description
+
+Ce modèle permet d'ajouter au bilan d'efforts un effort constant dans le repère
+choisi.  Par exemple, on peut définir un effort constant dans le repère NED
+pour simuler un effort de vent, ou encore définir un effort constant dans le
+repère body pour approcher un effort de propulsion.
+
+### Paramétrage
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: constant force
+  frame: Anthineas
+  x: {value: 0, unit: m}
+  y: {value: 0, unit: m}
+  z: {value: 0, unit: m}
+  X: {value: 10, unit: kN}
+  Y: {value: 20, unit: kN}
+  Z: {value: 30, unit: kN}
+  K: {value: 100, unit: kN*m}
+  M: {value: 200, unit: kN*m}
+  N: {value: 300, unit: kN*m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Les coordonnées du point d'application de l'effort sont notées `x`, `y` et `z`,
+exprimées dans le repère désigné par `frame`. Les coordonnées `X`, `Y`, `Z`,
+`K`, `M` et `N` du torseur d'effort sont également exprimées dans ce repère.
+
+
 # Efforts commandés
 
 ## Description
