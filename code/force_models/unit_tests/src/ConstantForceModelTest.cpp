@@ -37,7 +37,7 @@ void ConstantForceModelTest::TearDown()
 TEST_F(ConstantForceModelTest, can_parse_reference_frame)
 {
     const auto input = ConstantForceModel::parse(test_data::constant_force());
-    ASSERT_EQ("Anthineas", input.frame);
+    ASSERT_EQ("NED", input.frame);
 }
 
 TEST_F(ConstantForceModelTest, can_parse_x)

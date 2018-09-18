@@ -4923,7 +4923,7 @@ std::string test_data::constant_force()
 {
     std::stringstream ss;
     ss << "model: constant force\n"
-       << "frame: Anthineas\n"
+       << "frame: NED\n"
        << "x: {value: 0.5, unit: m}\n"
        << "y: {value: -0.2, unit: m}\n"
        << "z: {value: -440, unit: m}\n"
