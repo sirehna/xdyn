@@ -39,6 +39,10 @@ class ConstantForceModel : public ForceModel
     private:
         ConstantForceModel();
         EnvironmentAndFrames env;
+        std::string internal_frame;
+        Eigen::Matrix<double, 3, 1> force;
+        Eigen::Matrix<double, 3, 1> torque;
+        Eigen::Matrix<double, 3, 1> point_of_application_in_internal_frame;
 };
 
 
