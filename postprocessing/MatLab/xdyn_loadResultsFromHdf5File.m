@@ -113,24 +113,19 @@ for i=1:nObject
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function states = extractSpectra(filename, name)
+function spectra = extractSpectra(filename, name)
 info = h5info(filename, name);
 outputs = info.Groups;
 nObject = numel(outputs);
-s = cell(1,nObject);
-state = struct('a',s,'k',s,'omega',s,'phase',s);
-states = struct;
+spectra = struct;
 for i=1:nObject
     name = ['spectr' getNameFromHdf5Hierarchy(outputs(i).Name)];
-    states.(name) = state;
-    objectInfos = h5info(filename,[outputs(i).Name]);
+    spectra.(name) = struct;
+    objectInfos = h5info(filename, [outputs(i).Name]);
     varNames = {objectInfos.Datasets(:).Name};
-    cc = {'a', 'k', 'omega', 'phase'};
-    for k = 1:length(cc)
-        c = char(cc(k));
-        if ismember(c,varNames)
-            states.(name).(lower(c)) = h5read(filename, [outputs(i).Name '/' c]);
-        end
+    for k = 1:length(varNames)
+        c = varNames{k};
+        spectra.(name).(lower(c)) = h5read(filename, [outputs(i).Name '/' c]);
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
