@@ -859,3 +859,16 @@ TEST_F(SimTest, bug_3241_blocked_dof_interpolation_problem_LONG)
     ASSERT_DOUBLE_EQ(1.5,m["u(dtmb)"].at(100));
     ASSERT_DOUBLE_EQ(0,m["u(dtmb)"].at(150));
 }
+
+TEST_F(SimTest, issue_20_constant_force)
+{
+    const double t0 = 0;
+    const double T = 15;
+    const double dt = 0.1;
+    const auto yaml = test_data::issue_20();
+    ListOfObservers observers(parse_output(yaml));
+    auto input = SimulatorYamlParser(yaml).parse();
+
+    auto sys = get_system(input,anthineas_stl,0);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+}
