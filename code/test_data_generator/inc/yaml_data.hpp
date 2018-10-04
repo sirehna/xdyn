@@ -86,6 +86,7 @@ namespace test_data
     std::string hos_for_parser_validation_only();
     std::string bug_3241();
     std::string constant_force();
+    std::string issue_20();
 }
 
 #endif /* YAML_DATA_HPP_ */
