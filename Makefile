@@ -1,9 +1,9 @@
-all: windows debian
+all: windows debian doc
 
 windows: fetch-ssc-windows cmake-windows package-windows
 debian: fetch-ssc-debian cmake-debian package-debian
 
-.PHONY: fetch-ssc-windows cmake-windows package-windows windows
+.PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
 
 fetch-ssc-windows:
 	./fetch_gitlab_artifacts.sh -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b windows
@@ -58,3 +58,15 @@ cmake-debian:
 
 package-debian:
 	./ninja_debian.sh package
+
+doc:
+	mkdir -p build_doc
+	cd build_doc && cp ../Dockerfile_doc Dockerfile && cd ..
+	cd build_doc && docker build -t build-xdyn-doc --build-arg CACHEBUST=$(date +%s) . && cd ..
+	docker run --name xdyn-doc --rm \
+        -v /etc/group:/etc/group:ro \
+        -v /etc/passwd:/etc/passwd:ro \
+        -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
+        -v $(shell pwd):/opt/share \
+        -w /opt/share build-xdyn-doc \
+        /bin/bash -c "cd doc_user && cd images && make && cd .. && ./doc_html.sh && mv doc.html .."
