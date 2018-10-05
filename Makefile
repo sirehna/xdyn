@@ -14,7 +14,12 @@ fetch-ssc-windows:
 
 cmake-windows:
 	mkdir -p build_windows
-	docker run --name xdyn-cmake-windows --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd):/opt/share -w /opt/share mydockcross/windows-x64 \
+	docker run --name xdyn-cmake-windows --rm \
+        -v /etc/group:/etc/group:ro \
+        -v /etc/passwd:/etc/passwd:ro \
+        -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
+        -v $(shell pwd):/opt/share \
+        -w /opt/share mydockcross/windows-x64 \
           /bin/bash -c "mkdir -p /opt/share/.wine && \
                         export WINEPREFIX=/opt/share/.wine && \
                         wine winecfg && \
