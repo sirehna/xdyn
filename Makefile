@@ -59,7 +59,23 @@ package-windows:
 cmake-debian:
 	mkdir -p build_debian
 	docker build -t build-xdyn-debian --build-arg CACHEBUST=$(date +%s) .
-	docker run --name xdyn-cmake-debian --rm -e LD_LIBRARY_PATH=/opt/ssc/lib -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd)/build_debian:/build -w /build -v $(shell pwd):/opt/share -i build-xdyn-debian cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a /opt/share/code
+	docker run --name xdyn-cmake-debian --rm \
+        -e LD_LIBRARY_PATH=/opt/ssc/lib \
+        -v /etc/group:/etc/group:ro \
+        -v /etc/passwd:/etc/passwd:ro \
+        -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
+        -v $(shell pwd)/build_debian:/build \
+        -w /build \
+        -v $(shell pwd):/opt/share \
+        -i build-xdyn-debian cmake \
+                -Wno-dev \
+                -G Ninja \
+                -DINSTALL_PREFIX:PATH=/opt/xdyn \
+                -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake \
+                -DHDF5_DIR:PATH=/usr/local/hdf5 \
+                -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 \
+                -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a \
+                /opt/share/code
 
 package-debian:
 	./ninja_debian.sh package
