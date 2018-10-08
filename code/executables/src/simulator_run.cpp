@@ -14,6 +14,8 @@
 #include <ssc/solver.hpp>
 #include <ssc/exception_handling.hpp>
 
+#include "yaml-cpp/exceptions.h"
+
 #include <functional>
 
 void solve(const InputData& input_data, Sim& sys, ListOfObservers& observer)
@@ -67,6 +69,12 @@ void catch_exceptions(const std::function<void(void)>& f, const std::string& sol
     catch(ssc::exception_handling::Exception& e)
     {
         std::cerr << "The following problem was detected:" << std::endl << e.get_message() << std::endl;
+    }
+    catch(const YAML::Exception& e)
+    {
+        std::cerr << "There is a syntax problem with the YAML file: couldn't parse it properly." << std::endl
+                  << "Line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
+                  << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
     }
     catch(std::exception& e)
     {
