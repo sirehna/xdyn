@@ -15,8 +15,6 @@ fetch-ssc-windows:
 cmake-windows:
 	mkdir -p build_windows
 	docker run --name xdyn-cmake-windows --rm \
-        -v /etc/group:/etc/group:ro \
-        -v /etc/passwd:/etc/passwd:ro \
         -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
         -v $(shell pwd):/opt/share \
         -w /opt/share mydockcross/windows-x64 \
@@ -61,8 +59,6 @@ cmake-debian:
 	docker build -t build-xdyn-debian --build-arg CACHEBUST=$(date +%s) .
 	docker run --name xdyn-cmake-debian --rm \
         -e LD_LIBRARY_PATH=/opt/ssc/lib \
-        -v /etc/group:/etc/group:ro \
-        -v /etc/passwd:/etc/passwd:ro \
         -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
         -v $(shell pwd)/build_debian:/build \
         -w /build \
@@ -85,8 +81,6 @@ doc:
 	cd build_doc && cp ../Dockerfile_doc Dockerfile && cd ..
 	cd build_doc && docker build -t build-xdyn-doc --build-arg CACHEBUST=$(date +%s) . && cd ..
 	docker run --name xdyn-doc --rm \
-        -v /etc/group:/etc/group:ro \
-        -v /etc/passwd:/etc/passwd:ro \
         -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
         -v $(shell pwd):/opt/share \
         -w /opt/share build-xdyn-doc \
