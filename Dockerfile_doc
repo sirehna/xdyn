@@ -1,0 +1,39 @@
+FROM debian:9
+
+LABEL maintainer "guillaume.jacquenot@sirehna.com"
+
+ENV BUILD_DEPENDENCIES \
+       dvipng \
+       git \
+       inkscape \
+       make \
+       python3 \
+       python3-matplotlib \
+       python3-pip \
+       python3-setuptools \
+       python3-psutil \
+       python3-wheel \
+       texlive \
+       texlive-latex-extra \
+       wget
+
+RUN apt-get update -yq && \
+    apt-get install --no-install-recommends -y $BUILD_DEPENDENCIES && \
+    apt-get clean && \
+    rm -rf /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists && \
+    python3 -m pip install \
+        pandoc-eqnos \
+        pandoc-fignos \
+        pandoc-tablenos
+
+RUN cd /usr && \
+    wget https://github.com/jgm/pandoc/releases/download/2.2.1/pandoc-2.2.1-linux.tar.gz -O pandoc.tar.gz && \
+    tar -xzf pandoc.tar.gz --strip 1 && \
+    rm -rf pandoc.tar.gz
+
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+
+RUN mkdir -p /opt
+
+WORKDIR /opt

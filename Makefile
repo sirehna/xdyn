@@ -1,9 +1,9 @@
-all: windows debian
+all: windows debian doc
 
 windows: fetch-ssc-windows cmake-windows package-windows
 debian: fetch-ssc-debian cmake-debian package-debian
 
-.PHONY: fetch-ssc-windows cmake-windows package-windows windows
+.PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
 
 fetch-ssc-windows:
 	./fetch_gitlab_artifacts.sh -c e3491f5ad68a11ac0414e496871429f74aacc493 --project_id 42 -b windows
@@ -14,7 +14,10 @@ fetch-ssc-windows:
 
 cmake-windows:
 	mkdir -p build_windows
-	docker run --name xdyn-cmake-windows --rm -v /etc/group:/etc/group:ro  -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd):/opt/share -w /opt/share mydockcross/windows-x64 \
+	docker run --name xdyn-cmake-windows --rm \
+        -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
+        -v $(shell pwd):/opt/share \
+        -w /opt/share mydockcross/windows-x64 \
           /bin/bash -c "mkdir -p /opt/share/.wine && \
                         export WINEPREFIX=/opt/share/.wine && \
                         wine winecfg && \
@@ -54,7 +57,31 @@ package-windows:
 cmake-debian:
 	mkdir -p build_debian
 	docker build -t build-xdyn-debian --build-arg CACHEBUST=$(date +%s) .
-	docker run --name xdyn-cmake-debian --rm -e LD_LIBRARY_PATH=/opt/ssc/lib -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) -v $(shell pwd)/build_debian:/build -w /build -v $(shell pwd):/opt/share -i build-xdyn-debian cmake -Wno-dev -G Ninja -DINSTALL_PREFIX:PATH=/opt/xdyn -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake -DHDF5_DIR:PATH=/usr/local/hdf5 -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a /opt/share/code
+	docker run --name xdyn-cmake-debian --rm \
+        -e LD_LIBRARY_PATH=/opt/ssc/lib \
+        -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
+        -v $(shell pwd)/build_debian:/build \
+        -w /build \
+        -v $(shell pwd):/opt/share \
+        -i build-xdyn-debian cmake \
+                -Wno-dev \
+                -G Ninja \
+                -DINSTALL_PREFIX:PATH=/opt/xdyn \
+                -Dssc_DIR:PATH=/opt/ssc/lib/ssc/cmake \
+                -DHDF5_DIR:PATH=/usr/local/hdf5 \
+                -DBOOST_ROOT:PATH=/usr/local/boost_1_60_0 \
+                -DProtobuf_LIBRARY=/usr/local/lib/libprotobuf.a \
+                /opt/share/code
 
 package-debian:
 	./ninja_debian.sh package
+
+doc:
+	mkdir -p build_doc
+	cd build_doc && cp ../Dockerfile_doc Dockerfile && cd ..
+	cd build_doc && docker build -t build-xdyn-doc --build-arg CACHEBUST=$(date +%s) . && cd ..
+	docker run --name xdyn-doc --rm \
+        -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
+        -v $(shell pwd):/opt/share \
+        -w /opt/share build-xdyn-doc \
+        /bin/bash -c "cd doc_user && cd images && make && cd .. && ./doc_html.sh && mv doc.html .."

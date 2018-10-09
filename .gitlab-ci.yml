@@ -41,3 +41,11 @@ build:debian:
      paths:
      - xdyn.deb
 
+build:doc:
+   stage: build
+   script:
+     - make doc
+   artifacts:
+     when: on_success
+     paths:
+     - doc.html
