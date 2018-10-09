@@ -22,7 +22,7 @@ void hdf5WaveSpectrumObserver(
 {
     const std::string dn(H5_Tools::ensureStringStartsAndEndsWithAPattern(datasetName,"/"));
     H5_Tools::write(h5File, dn+"/elevation",
-            std::string("zeta(x,y,t)=-\\sum_{i=1}^{nfreq}\\sum_{j=1}^{ndir}a_{ij}\\sin(k_i \\cdot(x \\cdot \\cos(\\psi_j)+ y \\cdot \\sin(\\psi_j)) - \\omega_i \\cdot t + \\phi_{i,j})"));
+            std::string("eta(x,y,t)=-\\sum_{i=1}^{nfreq}\\sum_{j=1}^{ndir}a_{ij}\\sin(k_i \\cdot(x \\cdot \\cos(\\gamma_j)+ y \\cdot \\sin(\\gamma_j)) - \\omega_i \\cdot t + \\phi_{i,j})"));
     size_t index = 0;
     for (const auto& ss: s)
     {
@@ -97,7 +97,7 @@ void hdf5WaveSpectrumObserver(
 {
     const std::string dn(H5_Tools::ensureStringStartsAndEndsWithAPattern(datasetName,"/"));
     H5_Tools::write(h5File, dn+"/elevation",
-            std::string("zeta(x,y,t)=-\\sum_{i=1}^{n}a_{i}\\sin(k_i \\cdot(x \\cdot \\cos(\\psi_i)+ y \\cdot \\sin(\\psi_i)) - \\omega_i \\cdot t + \\phi_{i})"));
+            std::string("eta(x,y,t)=-\\sum_{i=1}^{nfreq}a_{i}\\sin(k_i \\cdot(x \\cdot \\cos(\\gamma_i)+ y \\cdot \\sin(\\gamma_i)) - \\omega_i \\cdot t + \\phi_{i})"));
     size_t index = 0;
     for (const auto& ss: s)
     {

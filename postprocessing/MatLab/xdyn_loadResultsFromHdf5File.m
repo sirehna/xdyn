@@ -39,6 +39,8 @@ for i=1:numel(outputs)
     elseif strcmp(name, [outputsGroupName,'/waves'])
         simu.waves = tbx_wave_importWaveElevationFromHdf5(filename, name);
         simu.t = simu.waves.t;
+    elseif strcmp(name, [outputsGroupName,'/spectra'])
+        simu.spectra = extractSpectra(filename, name);
     end
 end
 
@@ -108,6 +110,22 @@ for i=1:nObject
             states.(name).eul(:,2) = h5read(filename, [outputs(i).Name '/THETA']);
             states.(name).eul(:,3) = h5read(filename, [outputs(i).Name '/PSI']);
         end
+    end
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function spectra = extractSpectra(filename, name)
+info = h5info(filename, name);
+outputs = info.Groups;
+nObject = numel(outputs);
+spectra = struct;
+for i=1:nObject
+    name = ['spectr' getNameFromHdf5Hierarchy(outputs(i).Name)];
+    spectra.(name) = struct;
+    objectInfos = h5info(filename, [outputs(i).Name]);
+    varNames = {objectInfos.Datasets(:).Name};
+    for k = 1:length(varNames)
+        c = varNames{k};
+        spectra.(name).(lower(c)) = h5read(filename, [outputs(i).Name '/' c]);
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
