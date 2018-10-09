@@ -55,8 +55,8 @@ doc:
      paths:
      - doc.html
 
-build:doc_pweave:
-   stage: build
+doc:doc_pweave:
+   stage: doc
    script:
      - ls
      - cd doc_user
@@ -67,7 +67,7 @@ build:doc_pweave:
      - docker build . --tag pweave
      - cd ..
      - docker run --entrypoint /bin/sh pweave:latest -c "pwd && ls"
-     - docker run --entrypoint /bin/sh --rm -v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/build -w /build pweave:latest -c "./doc_html_pweave.sh"
+     - docker run --entrypoint /bin/sh --rm -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/build -w /build pweave:latest -c "./doc_html_pweave.sh"
      - ls doc.html
      - mv doc.html ..
      - cd ..
