@@ -1,16 +1,6 @@
 import re
 
 
-text = """
-Equation 1 : $`x=\pi`$
-Equation 2 : $`y=\int x dx`$
-
-```math
-y=\int x dx
-```
-
-"""
-
 def equation_substitution(text):
     eq_inline = re.compile('\$`(.*?)`\$')
     eq_multiline = re.compile('^```math(.*?)^```', re.MULTILINE | re.DOTALL)
@@ -29,6 +19,8 @@ def generate_metadata(**kwargs):
     from textwrap import dedent
     metadata = r"""
     ---
+    title: Simulateur X-Dyn
+    author: Sirehna
     numbersections: true
     eqnos-cleveref: true
     eqnos-plus-name: Eq.
@@ -43,7 +35,8 @@ def convert_file_for_pandoc(filename,
     filename_output):
     if filename_output is None or len(filename_output) == 0:
         filename_output = filename + '.pandoc'
-    content = open(filename, 'r').read()
+    lines = open(filename, 'r').readlines()
+    content = '\n'.join(lines[2:])
     f = open(filename_output, 'w')
     content = equation_substitution2(content)
     content = generate_metadata() + content
