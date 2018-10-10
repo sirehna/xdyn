@@ -1,12 +1,14 @@
 # Dockerfile with xdyn, a python interpreter, various python libraries, and
 # pandoc
 #
-FROM python:3.6.4-slim-jessie
+FROM python:3.7.0-slim-stretch
 RUN python3 -m pip install \
         h5py \
         numpy \
         matplotlib \
         pandas \
+        pandoc-eqnos \
+        pandoc-fignos \
         pweave \
         pyyaml \
         xlrd \
