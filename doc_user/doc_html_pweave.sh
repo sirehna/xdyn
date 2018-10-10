@@ -8,9 +8,18 @@ cd ..
 rm -rf tuto_execution
 cp -rf /usr/demos/. tuto_execution
 pweave -f markdown -k python3 --cache-directory=cache concatenated_doc.pmd -o concatenated_doc.md
-pandoc --title-prefix=XDYN --standalone --self-contained -t html \
-       --toc --toc-depth=3 --mathml --highlight-style pygments \
-       -f markdown -V lang=fr concatenated_doc.md --css stylesheet.css \
+python3 pandoc_layout.py concatenated_doc.md -o concatenated_doc_pandoc.md
+pandoc --title-prefix=XDYN \
+       -t html \
+       --standalone --self-contained \
+       --toc --toc-depth=3 \
+       --mathml \
+       --highlight-style pygments \
+       --filter pandoc-eqnos \
+       --filter pandoc-fignos \
+       -f markdown -V lang=fr \
+       --css stylesheet.css \
+       concatenated_doc_pandoc.md \
        -o doc.html
-rm concatenated_doc.pmd concatenated_doc.md
+rm concatenated_doc.pmd concatenated_doc.md concatenated_doc_pandoc.md
 rm -rf tuto_execution
