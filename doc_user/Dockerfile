@@ -2,6 +2,13 @@
 # pandoc
 #
 FROM python:3.7.0-slim-stretch
+
+# Install gcc to build psutil package used by pandoc-eqnos
+RUN apt-get update && \
+    apt-get install --yes gcc && \
+    python3 -m pip install psutil && \
+    apt-get remove -y gcc
+
 RUN python3 -m pip install \
         h5py \
         numpy \
