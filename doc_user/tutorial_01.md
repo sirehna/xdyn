@@ -78,7 +78,7 @@ initiales définies dans le fichier YAML s'appliquent à cet instant initial,
 quel qu'il soit, et non pas à t = 0) :
 
 ```python echo=False, results='raw'
-exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 --tstart 2 -o out.csv')
+exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tstart 2  --tend 3 -o out.csv')
 ```
 
 On peut choisir le solveur :
