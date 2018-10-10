@@ -84,7 +84,7 @@ exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tstart 2  --tend 3 -o out.cs
 On peut choisir le solveur :
 
 ```python echo=False, results='raw'
-exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rkck -o out.csv')
+exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rk4 -o out.csv')
 ```
 
 La liste de toutes les options est disponible en exécutant :
