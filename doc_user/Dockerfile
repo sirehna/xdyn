@@ -14,7 +14,7 @@ RUN python3 -m pip install \
         && \
     mkdir pandoc_bin && \
     cd pandoc_bin && \
-    python3 -c 'from urllib.request import urlretrieve; urlretrieve("https://github.com/jgm/pandoc/releases/download/2.1.3/pandoc-2.1.3-linux.tar.gz", filename="pandoc.tar.gz")' && \
+    python3 -c 'from urllib.request import urlretrieve; urlretrieve("https://github.com/jgm/pandoc/releases/download/2.3.1/pandoc-2.3.1-linux.tar.gz", filename="pandoc.tar.gz")' && \
     tar -xzf pandoc.tar.gz --strip 1 && \
     ls && \
     cp bin/* /usr/bin && \
