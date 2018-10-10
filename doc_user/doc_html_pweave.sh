@@ -1,6 +1,6 @@
 #!/bin/sh
 # Script to be run from docker container to generate doc with tutorials
-cat introduction.md interfaces.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_*.md > concatenated_doc.pmd
+cat metadata.yaml introduction.md interfaces.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_*.md > concatenated_doc.pmd
 cd images
 python3 spectrum.py
 cd ..
@@ -17,6 +17,7 @@ pandoc --title-prefix=XDYN \
        --highlight-style pygments \
        --filter pandoc-eqnos \
        --filter pandoc-fignos \
+       --number-sections \
        -f markdown -V lang=fr \
        --css stylesheet.css \
        concatenated_doc_pandoc.md \
