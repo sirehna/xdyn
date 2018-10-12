@@ -97,11 +97,10 @@ exec('xdyn -h')
 
 Voici un tracé de l'élévation au cours du temps :
 
-{% set data = csv('out.csv') %}
-{% set plot = prepare_plot_data(data, x = 't', y = 'z(ball)', name='Résultat') %}
+```python echo=False, results='raw'
+data = csv('out.csv')
+plot = prepare_plot_data(data, x='t', y='z(ball)', name='Résultat')
+```
 
 {% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
-
 {{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
-
-
