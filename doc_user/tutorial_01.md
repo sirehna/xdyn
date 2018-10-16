@@ -100,7 +100,6 @@ Voici un tracé de l'élévation au cours du temps :
 ```python echo=False, results='raw'
 data = csv('out.csv')
 plot = prepare_plot_data(data, x='t', y='z(ball)', name='Résultat')
+g = cartesian_graph([plot], x='t (s)', y='Élévation (m)')
+create_layout(graphs=[(g, (0, 0))], title='Élévation au cours du temps')
 ```
-
-{% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
-{{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
