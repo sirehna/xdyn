@@ -36,11 +36,14 @@ pulsations est égal au nombre de directions :
 print_yaml(yaml_data, 'environment models/0/discretization')
 ```
 
-On va donc sommer {{yaml_data['environment models'][0]['discretization']['n']}} pulsations et {{yaml_data['environment models'][0]['discretization']['n']}} directions, soit {{yaml_data['environment models'][0]['discretization']['n']*yaml_data['environment models'][0]['discretization']['n']}} points.
+On va donc sommer <% yaml_data['environment models'][0]['discretization']['n'] %> pulsations et
+<% yaml_data['environment models'][0]['discretization']['n'] %> directions,
+soit <% yaml_data['environment models'][0]['discretization']['n']*yaml_data['environment models'][0]['discretization']['n'] %> points.
 Cependant, la discrétisation spatiale des spectres monochromatiques et des
-dispersions monodirectionnelles est réduite à un point. On spécifie en outre
+dispersions monodirectionnelles est réduite à un point.
+On spécifie en outre
 que l'on veut représenter
-{{yaml_data['environment models'][0]['discretization']['energy fraction']*100}}%
+<%yaml_data['environment models'][0]['discretization']['energy fraction']*100 %> %
 de l'énergie totale, les autres composantes n'étant pas retenues.
 
 Le premier spectre est défini de la façon suivante :
