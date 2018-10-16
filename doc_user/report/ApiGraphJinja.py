@@ -58,7 +58,7 @@ def cartesian_graph(plots, **kwargs):
     return graph
 
 
-def create_layout(size, working_directory, img_format, **kwargs):
+def create_layout(size=(1, 1), working_directory=os.getcwd(), img_format='.svg', **kwargs):
     glayout = GraphFactory.GridLayout(size=size, **kwargs)
     image = GraphFactory.Image(glayout)
     path_image = image.create_image(working_directory, "pict_{}".format(glayout.id), img_format)
