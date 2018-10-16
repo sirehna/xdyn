@@ -4,15 +4,23 @@
 import sys
 import os
 
+import warnings
+import matplotlib
+
+warnings.filterwarnings("ignore", category=matplotlib.MatplotlibDeprecationWarning)
+
 print(os.getcwd())
 print(os.listdir(os.getcwd()))
 print(sys.path)
 print(sys.path.append(os.path.join(os.getcwd())))
+
 from report.ApiJinjaCommands import execCmd
 from report.ApiDataFormatting import load_yaml as fun_load_yaml
 from report.ApiDataFormatting import show as show_yaml
 from report.ApiDataJinja import csv
 from report.ApiGraphJinja import prepare_plot_data
+from report.ApiGraphJinja import cartesian_graph
+from report.ApiGraphJinja import create_layout
 
 
 def exec(command_line, working_directory='tuto_execution', verbose=False):
