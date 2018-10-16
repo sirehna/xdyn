@@ -87,17 +87,20 @@ exec('xdyn tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 -o exact.csv')
 
 Voici les résultats :
 
-{% set fast_data = csv('fast.csv') %}
-{% set exact_data = csv('exact.csv') %}
-{% set fast_plot = prepare_plot_data(fast_data, x = 't', y = 'z(Anthineas)', name='Modèle hydrostatique rapide') %}
-{% set exact_plot = prepare_plot_data(exact_data, x = 't', y = 'z(Anthineas)', name='Modèle hydrostatique exact') %}
-{% set g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='Elévation (m)') %}
-{{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
+```python echo=False, results='raw'
+fast_data = csv('fast.csv')
+exact_data = csv('exact.csv')
+fast_plot = prepare_plot_data(fast_data, x = 't', y = 'z(Anthineas)', name='Modèle hydrostatique rapide')
+exact_plot = prepare_plot_data(exact_data, x = 't', y = 'z(Anthineas)', name='Modèle hydrostatique exact')
+g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='Élévation (m)')
+create_layout(graphs=[(g, (0, 0))], title='Élévation au cours du temps')
+```
 
 On peut également représenter les déplacements suivant l'axe $y$ en exécutant :
 
-{% set fast_plot = prepare_plot_data(fast_data, x = 't', y = 'y(Anthineas)', name='Modèle hydrostatique rapide') %}
-{% set exact_plot = prepare_plot_data(exact_data, x = 't', y = 'y(Anthineas)', name='Modèle hydrostatique exact') %}
-{% set g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='y (m)') %}
-{{layout(size=(1,1),graphs=[(g,(0,0))], title='Embardée au cours du temps')}}
-
+```python echo=True, results='raw'
+fast_plot = prepare_plot_data(fast_data, x = 't', y = 'y(Anthineas)', name='Modèle hydrostatique rapide')
+exact_plot = prepare_plot_data(exact_data, x = 't', y = 'y(Anthineas)', name='Modèle hydrostatique exact')
+g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='y (m)')
+create_layout(graphs=[(g, (0, 0))], title='Embardée au cours du temps')
+```
