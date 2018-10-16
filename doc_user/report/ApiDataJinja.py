@@ -6,11 +6,11 @@ import h5py
 import functools
 
 
-def csv(path_csv, original_path):
+def csv(path_csv, original_path=os.getcwd()):
     return pd.read_csv(os.path.join(original_path, path_csv), sep=',')
 
 
-def h5(path_hdf5, original_path, **data_source):
+def h5(path_hdf5, original_path=os.getcwd(), **data_source):
     df = pd.DataFrame()
     abs_path_hdf5 = os.path.join(original_path, path_hdf5)
     if not os.path.exists(abs_path_hdf5):
@@ -24,13 +24,13 @@ def h5(path_hdf5, original_path, **data_source):
     return df
 
 
-def to_yaml(yaml_data, working_directory, filename="auto_generated.yml"):
+def to_yaml(yaml_data, working_directory=os.getcwd(), filename="auto_generated.yml"):
     with open(os.path.join(working_directory, filename), 'w') as f:
         f.write(yaml.dump(yaml_data))
     return filename
 
 
-def read_excel(path_xls, original_path, **kwargs):
+def read_excel(path_xls, original_path=os.getcwd(), **kwargs):
     return pd.read_excel(os.path.join(original_path, path_xls), **kwargs)
 
 
