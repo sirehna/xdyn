@@ -90,17 +90,17 @@ Voici les résultats :
 ```python echo=False, results='raw'
 fast_data = csv('fast.csv')
 exact_data = csv('exact.csv')
-fast_plot = prepare_plot_data(fast_data, x = 't', y = 'z(Anthineas)', name='Modèle hydrostatique rapide')
-exact_plot = prepare_plot_data(exact_data, x = 't', y = 'z(Anthineas)', name='Modèle hydrostatique exact')
+fast_plot = prepare_plot_data(fast_data, x='t', y='z(Anthineas)', name='Modèle hydrostatique rapide')
+exact_plot = prepare_plot_data(exact_data, x='t', y='z(Anthineas)', name='Modèle hydrostatique exact')
 g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='Élévation (m)')
-create_layout(graphs=[(g, (0, 0))], title='Élévation au cours du temps')
+create_layout(graph=g, title='Élévation au cours du temps')
 ```
 
-On peut également représenter les déplacements suivant l'axe $y$ en exécutant :
+On peut également représenter les déplacements suivant l'axe $y$ :
 
-```python echo=True, results='raw'
-fast_plot = prepare_plot_data(fast_data, x = 't', y = 'y(Anthineas)', name='Modèle hydrostatique rapide')
-exact_plot = prepare_plot_data(exact_data, x = 't', y = 'y(Anthineas)', name='Modèle hydrostatique exact')
+```python echo=False, results='raw'
+fast_plot = prepare_plot_data(fast_data, x='t', y='y(Anthineas)', name='Modèle hydrostatique rapide')
+exact_plot = prepare_plot_data(exact_data, x='t', y='y(Anthineas)', name='Modèle hydrostatique exact')
 g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='y (m)')
-create_layout(graphs=[(g, (0, 0))], title='Embardée au cours du temps')
+create_layout(graph=g, title='Embardée au cours du temps')
 ```
