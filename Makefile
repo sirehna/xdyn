@@ -111,11 +111,11 @@ doc_pweave:
     cd ..
 	cd doc_user && \
     docker run --entrypoint /bin/sh --rm \
-        -u $(shell id -u $USER ):$(shell id -g $USER ) \
+        -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
         -v $(shell pwd):/build \
         -w /build \
         pweave:latest \
-        -c "./doc_html_pweave.sh" && \
+        -c "pwd && ls && ./doc_html_pweave.sh" && \
     ls doc.html && \
     mv doc.html .. && \
     cd ..
