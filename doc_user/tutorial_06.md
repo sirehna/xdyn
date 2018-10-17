@@ -56,5 +56,5 @@ execCommand('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out.csv')
 data = csv('out.csv')
 plot = prepare_plot_data(data, x = 't', y = 'u(Anthineas)', name="Vitesse d'avance")
 g = cartesian_graph([plot], x='t (s)', y='U (m/s)')
-create_layout(graphs=[(g, (0, 0))], title="Vitesse d'avance longitudinale")
+create_layout(graph=g, title="Vitesse d'avance longitudinale")
 ```
