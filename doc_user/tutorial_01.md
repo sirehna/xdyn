@@ -90,7 +90,7 @@ execCommand('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -s rk4 -o out.
 La liste de toutes les options est disponible en exécutant :
 
 ```python echo=False, results='raw'
-execCommand('xdyn -h')
+execCommand('xdyn -h', echo_output=True)
 ```
 
 ### Résultats
@@ -101,5 +101,5 @@ Voici un tracé de l'élévation au cours du temps :
 data = csv('out.csv')
 plot = prepare_plot_data(data, x='t', y='z(ball)', name='Résultat')
 g = cartesian_graph([plot], x='t (s)', y='Élévation (m)')
-create_layout(graphs=[(g, (0, 0))], title='Élévation au cours du temps')
+create_layout(g, title='Élévation au cours du temps')
 ```
