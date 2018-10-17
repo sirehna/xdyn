@@ -99,3 +99,23 @@ doc:
         -v $(shell pwd):/opt/share \
         -w /opt/share build-xdyn-doc \
         /bin/bash -c "cd doc_user && cd images && make && cd .. && ./doc_html.sh && mv doc.html .."
+
+doc_pweave:
+	cd doc_user && \
+    mkdir -p build_doc && \
+    cd build_doc && \
+    cp ../../xdyn.deb . && \
+    cp ../Dockerfile . && \
+    docker build . --tag pweave && \
+    cd .. && \
+    cd ..
+	cd doc_user && \
+    docker run --entrypoint /bin/sh --rm \
+        -u $(shell id -u $USER ):$(shell id -g $USER ) \
+        -v $(shell pwd):/build \
+        -w /build \
+        pweave:latest \
+        -c "./doc_html_pweave.sh" && \
+    ls doc.html && \
+    mv doc.html .. && \
+    cd ..
