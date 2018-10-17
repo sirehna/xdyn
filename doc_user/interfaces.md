@@ -377,7 +377,7 @@ et pour l'intégralité du YAML :
 **Exécution d'une simulation**
 
 ~~~~{.markdown}
-{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
+{{execCommand('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
 ~~~~
 
 **Récupération des données générées**
