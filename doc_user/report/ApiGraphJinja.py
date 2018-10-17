@@ -63,7 +63,7 @@ def create_layout(size=(1, 1), working_directory=os.getcwd(), img_format='.svg',
     image = GraphFactory.Image(glayout)
     path_image = image.create_image(working_directory, "pict_{}".format(glayout.id), img_format)
     relative_path = os.path.split(path_image)[1]
-    return "![{0}]({1})".format(kwargs.get('title', ''), relative_path)
+    return "![{0}]({1}){{#fig:id}}".format(kwargs.get('title', ''), relative_path)
 
 
 def api(params):
