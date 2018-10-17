@@ -79,8 +79,8 @@ print_yaml(yaml_data_fast_hs)
 La simulation peut maintenant être lancée comme suit :
 
 ```python echo=False, results='raw'
-exec('xdyn tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 -o fast.csv')
-exec('xdyn tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 -o exact.csv')
+execCommand('xdyn tutorial_02_fast_hydrostatic.yml --dt 0.1 --tend 10 -o fast.csv')
+execCommand('xdyn tutorial_02_exact_hydrostatic.yml --dt 0.1 --tend 10 -o exact.csv')
 ```
 
 ### Résultats

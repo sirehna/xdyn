@@ -54,7 +54,7 @@ Le fichier de configuration a la forme suivante :
 {{show(yaml_data)}}
 
 On simule 50 secondes par pas de 0.2 seconde :
-{{exec('xdyn '+scenario_filename+' --dt 0.2 --tend 50 -o xdyn.h5')}}
+{{execCommand('xdyn '+scenario_filename+' --dt 0.2 --tend 50 -o xdyn.h5')}}
 
 ## Comparaison avec le simulateur SOS-stabilité
 
@@ -79,7 +79,7 @@ Le fichier de configuration a la forme suivante :
 {{show(yaml_data)}}
 
 On simule 50 secondes par pas de 0.2 secondes :
-{{exec('xdyn '+scenario_filename + ' --dt 0.2 --tend 50 -o xdyn.h5')}}
+{{execCommand('xdyn '+scenario_filename + ' --dt 0.2 --tend 50 -o xdyn.h5')}}
 {% set xdyn_res = h5('xdyn.h5', t='outputs/t', x='outputs/states/Anthineas/X', y='outputs/states/Anthineas/Y', z='outputs/states/Anthineas/Z', phi='outputs/states/Anthineas/PHI', theta='outputs/states/Anthineas/THETA', psi='outputs/states/Anthineas/PSI',
                                 U='outputs/states/Anthineas/U', V='outputs/states/Anthineas/V', W='outputs/states/Anthineas/W', P='outputs/states/Anthineas/P', Q='outputs/states/Anthineas/Q', R='outputs/states/Anthineas/R') %}
 {% set sos_res = xls('reference_data_for_validation/Extinctions_simu/comparaison_extinctionRoulis_phiIni_10_simulateur_SOS.xlsx', sheetname='SOS') %}
@@ -105,7 +105,7 @@ Le fichier de configuration a la forme suivante :
 {{show(yaml_data)}}
 
 On simule 50 secondes par pas de 0.2 secondes :
-{{exec('xdyn '+ scenario_filename+ ' --dt 0.2  --tend 50 -o xdyn.h5')}}
+{{execCommand('xdyn '+ scenario_filename+ ' --dt 0.2  --tend 50 -o xdyn.h5')}}
 {% set xdyn_res = h5('xdyn.h5', t='outputs/t', x='outputs/states/Anthineas/X', y='outputs/states/Anthineas/Y', z='outputs/states/Anthineas/Z', phi='outputs/states/Anthineas/PHI', theta='outputs/states/Anthineas/THETA', psi='outputs/states/Anthineas/PSI',
                                 U='outputs/states/Anthineas/U', V='outputs/states/Anthineas/V', W='outputs/states/Anthineas/W', P='outputs/states/Anthineas/P', Q='outputs/states/Anthineas/Q', R='outputs/states/Anthineas/R') %}
 {% set sos_res = xls('reference_data_for_validation/Extinctions_simu/comparaison_extinctionTangage_thetaIni_10_simulateur_SOS.xlsx', sheetname='SOS') %}
@@ -132,7 +132,7 @@ Le fichier de configuration a la forme suivante :
 {{show(yaml_data)}}
 
 On simule 50 secondes par pas de 0.2 secondes :
-{{exec('xdyn '+ scenario_filename+ ' --dt 0.2  --tend 50 -o xdyn.h5')}}
+{{execCommand('xdyn '+ scenario_filename+ ' --dt 0.2  --tend 50 -o xdyn.h5')}}
 {% set xdyn_res = h5('xdyn.h5', t='outputs/t', U='outputs/states/Anthineas/U') %}
 {% set sos_trials = xls('reference_data_for_validation/AccelerationDeceleration/AnalyseEssaisErdre_201212.xlsx', sheetname='Accélération', skiprows=3) %}
 
@@ -164,7 +164,7 @@ Le fichier de configuration a la forme suivante :
 {{show(yaml_data)}}
 
 On simule 50 secondes par pas de 0.2 secondes :
-{{exec('xdyn '+ scenario_filename+ ' --dt 0.2  --tend 50 -o xdyn.h5')}}
+{{execCommand('xdyn '+ scenario_filename+ ' --dt 0.2  --tend 50 -o xdyn.h5')}}
 {% set xdyn_res = h5('xdyn.h5', t='outputs/t', U='outputs/states/Anthineas/U') %}
 {% set sos_trials = xls('reference_data_for_validation/AccelerationDeceleration/AnalyseEssaisErdre_201212.xlsx', sheetname='Décélération', skiprows=3) %}
 {% set plot_U_xdyn = prepare_plot_data(xdyn_res, name='xdyn', x = 't', y = 'U')%}
@@ -201,7 +201,7 @@ Le fichier de configuration a la forme suivante :
 
 {% set command_filename = 'reference_data_for_validation/Giration/controlled_forces_commands.yml' %}
 On simule 50 secondes par pas de 0.2 secondes :
-{{exec('xdyn '+ scenario_filename+ ' ' + command_filename + ' --dt 0.2  --tend 50 -o xdyn.h5')}}
+{{execCommand('xdyn '+ scenario_filename+ ' ' + command_filename + ' --dt 0.2  --tend 50 -o xdyn.h5')}}
 {% set xdyn_res = h5('xdyn.h5', t='outputs/t', X='outputs/states/Anthineas/X', Y='outputs/states/Anthineas/Y', PSI='outputs/states/Anthineas/PSI', U='outputs/states/Anthineas/U', V='outputs/states/Anthineas/V', R='outputs/states/Anthineas/R') %}
 {% set sos_res = xls('reference_data_for_validation/Giration/comparaison_giration_20150224.xlsx',sheetname='SOS') %}
 
