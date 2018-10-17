@@ -6,8 +6,9 @@ python3 spectrum.py
 cd ..
 # Copy tuto directory to allow write operations for docker run
 rm -rf tuto_execution
+mkdir -p tuto_execution
 cp -rf /usr/demos/. tuto_execution
-pweave -f markdown -k python3 --cache-directory=cache concatenated_doc.pmd -o concatenated_doc.md
+pweave -f markdown -k python3 concatenated_doc.pmd -o concatenated_doc.md
 python3 pandoc_layout.py concatenated_doc.md -o concatenated_doc_pandoc.md
 pandoc --title-prefix=XDYN \
        -t html \
