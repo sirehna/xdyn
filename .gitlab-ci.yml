@@ -49,15 +49,6 @@ build:debian:
 doc:
    stage: doc
    script:
-     - make doc
-   artifacts:
-     when: on_success
-     paths:
-     - doc.html
-
-doc:doc_pweave:
-   stage: doc
-   script:
      - make doc_pweave
    dependencies:
      - build:debian
