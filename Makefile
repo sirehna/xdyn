@@ -109,13 +109,9 @@ doc_pweave:
     docker build . --tag pweave && \
     cd .. && \
     cd ..
-	cd doc_user && \
-    docker run --entrypoint /bin/sh --rm \
+	docker run --entrypoint /bin/sh --rm \
         -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
         -v $(shell pwd):/build \
         -w /build \
         pweave:latest \
-        -c "pwd && ls && ./doc_html_pweave.sh" && \
-    ls doc.html && \
-    mv doc.html .. && \
-    cd ..
+        -c "cd doc_user && pwd && ls && ./doc_html_pweave.sh && mv doc.html .."
