@@ -1,5 +1,7 @@
 # X-DYN
 
+[![License](https://img.shields.io/badge/License-EPL%202.0-blue.svg)](https://opensource.org/licenses/EPL-2.0)
+
 X-DYN is a lightweight ship simulator. More precisely, it simulates the
 mechanical behaviour of a solid body in a fluid environment. Its purpose is to
 solve Newton's second law of motion taking hydrodynamic forces into account.
