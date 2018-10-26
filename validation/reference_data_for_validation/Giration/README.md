@@ -3,7 +3,7 @@ rayon de giration et vitesse Vx et Vy en fonction de l'angle de barre
 (3 différents) et du rpm (3 différents).
 
 La mise en données du simulateur est similaire à ce qui avait été fait pour SOS :
-concaténation des différents cas en 1 seule simlulation -> 9 couples (angle de
+concaténation des différents cas en 1 seule simulation -> 9 couples (angle de
 barre, rpm) différents.
 
 Dans l'ordre :
