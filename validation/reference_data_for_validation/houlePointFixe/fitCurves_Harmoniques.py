@@ -3,7 +3,7 @@
 
 # Import
 import os
-from scipy import * 
+from scipy import *
 from scipy.optimize import leastsq
 
 # Import Graphique
@@ -60,10 +60,10 @@ def fitAndGetInfos(x, y, estimatedExcitationPeriod, findPeriod = True, nbMode = 
     pEnd = plsq[0]
 
     if verbose:
-        print 'Parametres finaux'
+        print('Parametres finaux')
         for i in range(len(pname)):
-            print '\t{:s} = {:.4f} '.format(pname[i], pEnd[i])
-        print ''
+            print('\t{:s} = {:.4f} '.format(pname[i], pEnd[i]))
+        print('')
 
     return [pEnd, x , feval(x, pEnd, nbMode = nbMode), pname]
 
@@ -91,9 +91,9 @@ def fitWavesHarmonic (inputData, estimatedExcitationPeriod, \
     dataName = [d if isString(d) else d[0] if isinstance(d, (list, set, tuple)) else d.filename for d in inputData]
 
     if verbose:
-        print '---------------------------------------'
-        print '{:s} au point ({:.1f},{:.1f})'.format(titleFig['a'], r['x'][xIndexWavePoint], r['y'][yIndexWavePoint])
-        print '---------------------------------------'
+        print('---------------------------------------')
+        print('{:s} au point ({:.1f},{:.1f})'.format(titleFig['a'], r['x'][xIndexWavePoint], r['y'][yIndexWavePoint]))
+        print('---------------------------------------')
 
     # Get time
     wave_time_t = r['timeSignal']
@@ -161,7 +161,7 @@ def fitWavesHarmonic (inputData, estimatedExcitationPeriod, \
         filePost.write('{:s} : \t{:.2f}\n'.format(pname[i], infos[i]))
 
     filePost.close()
-    
+
     # Return wave fit
     res = {}
     res['waveAmplitude'] = signalAmplitude
@@ -246,11 +246,11 @@ def fitSignalHarmonic(inputData, boatName, estimatedExcitationPeriod, \
     # Check yMin and yMax
     if yMin is not None:
         if len(yMin) != nDataFig * len(dataFig[dataFig.keys()[0]]):
-            print 'yMin is not defined correctly (wrong number of values): it will be ignored'
+            print('yMin is not defined correctly (wrong number of values): it will be ignored')
             yMin = None
     if yMax is not None:
         if len(yMax) != nDataFig * len(dataFig[dataFig.keys()[0]]):
-            print 'yMax is not defined correctly (wrong number of values): it will be ignored'
+            print('yMax is not defined correctly (wrong number of values): it will be ignored')
             yMax = None
 
     # Loop on data
@@ -274,9 +274,9 @@ def fitSignalHarmonic(inputData, boatName, estimatedExcitationPeriod, \
 
         for iMotion in range(nMotions):
             if verbose:
-                print '---------------------------------------'
-                print yFigName[index][iMotion]
-                print '---------------------------------------'
+                print('---------------------------------------')
+                print(yFigName[index][iMotion])
+                print('---------------------------------------')
 
             ploti_t = dataFig[index][iMotion]
 
@@ -387,5 +387,5 @@ def fitSignalHarmonic(inputData, boatName, estimatedExcitationPeriod, \
             filePost.write('\n{:s}\n{:s}\n'.format(pname[iCoef+1], signalHarmonicCoefficients[iCoef]))
 
         filePost.close()
-        
+
         return res
