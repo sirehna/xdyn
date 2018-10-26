@@ -92,7 +92,7 @@ To run the Windows tests (using Wine in a Docker container) enter:
 ./run_all_tests_windows.sh
 ~~~~~~~
 
-The tests are written using Google test.  These are both end-to-end tests and
+The tests are written using Google test. These are both end-to-end tests and
 unit tests. The end-to-end tests can be a bit long so you can disable them
 using Google tests filters:
 
@@ -112,8 +112,6 @@ Add additional notes about how to deploy this on a live system
 * [CMake](https://cmake.org/) - Used to compile C++ code for various platforms.
 * [Make](https://www.gnu.org/software/make/) - Used for the one-step build described above.
 * [GCC](http://gcc.gnu.org/) - Compiler used for both the Windows & Linux: Visual Studio is currently **not** supported.
-* [Pandoc](https://pandoc.org/) - To generate the documentation.
-* [SSC](https://github.com/sirehna/ssc) - For websockets, unit decoding, interpolations, kinematics, CSV file reading, exception handling.
 * [Boost](https://www.boost.org/) - For command-line options, regular expressions, filesystem library.
 * [yaml-cpp](https://github.com/jbeder/yaml-cpp) - To parse the input files.
 * [HDF5](https://support.hdfgroup.org/products/hdf5_tools/index.html) - To store the outputs.
@@ -121,6 +119,8 @@ Add additional notes about how to deploy this on a live system
 * [Protobuf](https://developers.google.com/protocol-buffers/) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
 * [ZMQ](http://zeromq.org/) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
 * [CPP ZMQ](https://github.com/zeromq/cppzmq) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
+* [Pandoc](https://pandoc.org/) - To generate the documentation.
+* [SSC](https://github.com/sirehna/ssc) - For websockets, unit decoding, interpolations, kinematics, CSV file reading, exception handling.
 
 ## Contributing
 
@@ -128,7 +128,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to submit
 issues & pull requests to X-DYN.
 Our code of conduct is the [Contributor Covenant](CODE_OF_CONDUCT.md) (original
 version available
-[here](https://www.contributor-covenant.org/version/1/4/code-of-conduct).
+[here](https://www.contributor-covenant.org/version/1/4/code-of-conduct) ).
 
 ## Versioning
 
