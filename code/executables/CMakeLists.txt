@@ -157,12 +157,30 @@ TARGET_LINK_LIBRARIES(xdyn-server
         ${SSC_LIB}
         )
 
+ADD_EXECUTABLE(xdyn-for-me
+        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
+        src/utilities_for_simulator.cpp
+        src/InputDataForME.cpp
+        src/InputData.cpp
+        src/xdyn_for_me.cpp
+
+        )
+
+TARGET_LINK_LIBRARIES(xdyn-for-me
+        x-dyn
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+        boost_program_options_descriptions_static
+        ${SSC_LIB}
+        )
+
 ################################################################################
 INSTALL(TARGETS xdyn
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 INSTALL(TARGETS xdyn-server
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 INSTALL(TARGETS gz
+        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
+INSTALL(TARGETS xdyn-for-me
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
 
