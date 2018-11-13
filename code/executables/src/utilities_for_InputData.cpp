@@ -12,6 +12,7 @@
 
 #include "utilities_for_InputData.hpp"
 #include "InputData.hpp"
+#include "InputDataForME.hpp"
 #include "OptionPrinter.hpp"
 
 std::string description(const std::string& des)
@@ -55,6 +56,17 @@ bool invalid(const InputData& input)
     return false;
 }
 
+bool invalid(const InputDataForME& input)
+{
+    if (input.empty()) return true;
+    if (input.yaml_filenames.empty())
+    {
+        std::cerr << "Error: no input YAML files defined: need at least one." << std::endl;
+        return true;
+    }
+    return false;
+}
+
 po::options_description get_options_description(InputData& input_data)
 {
     po::options_description desc("Options");
@@ -67,6 +79,18 @@ po::options_description get_options_description(InputData& input_data)
         ("tend",       po::value<double>(&input_data.tend),                              "Last time step")
         ("output,o",   po::value<std::string>(&input_data.output_filename),              "Name of the output file where all computed data will be exported.\nPossible values/extensions are csv, tsv, json, hdf5, h5, ws")
         ("waves,w",    po::value<std::string>(&input_data.wave_output),                  "Name of the output file where the wave heights will be stored ('output' section of the YAML file). In case output is made to a HDF5 file or web sockets, this option appends the wave height to the main output")
+        ("debug,d",                                                                      "Used by the application's support team to help error diagnosis. Allows us to pinpoint the exact location in code where the error occurred (do not catch exceptions), eg. for use in a debugger.")
+    ;
+    return desc;
+}
+
+po::options_description get_options_description(InputDataForME& input_data)
+{
+    po::options_description desc("Options");
+    desc.add_options()
+        ("help,h",                                                                       "Show this help message")
+        ("yml,y", po::value<std::vector<std::string> >(&input_data.yaml_filenames),      "Name(s) of the YAML file(s)")
+        ("port,p", po::value<short unsigned int>(&input_data.port),                      "Port number on which to run this websocket server")
         ("debug,d",                                                                      "Used by the application's support team to help error diagnosis. Allows us to pinpoint the exact location in code where the error occurred (do not catch exceptions), eg. for use in a debugger.")
     ;
     return desc;
@@ -106,6 +130,31 @@ int get_input_data(int argc, char **argv, InputData& input_data)
 }
 
 int fill_input_or_display_help(char *argv, InputData& input_data)
+{
+    const po::options_description desc = get_options_description(input_data);
+    print_usage(std::cout, desc, argv, "This is a ship simulator");
+    return EXIT_SUCCESS;
+}
+
+int get_input_data(int argc, char **argv, InputDataForME& input_data)
+{
+    const po::options_description desc = get_options_description(input_data);
+    const BooleanArguments has = parse_input(argc, argv, desc);
+    input_data.catch_exceptions = not(has.debug);
+    if (has.help)
+    {
+        print_usage(std::cout, desc, argv[0], "This is a ship simulator");
+        return EXIT_SUCCESS;
+    }
+    else if (invalid(input_data))
+    {
+        print_usage(std::cout, desc, argv[0], "This is a ship simulator");
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
+}
+
+int fill_input_or_display_help(char *argv, InputDataForME& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     print_usage(std::cout, desc, argv, "This is a ship simulator");

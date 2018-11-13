@@ -18,6 +18,7 @@ struct BooleanArguments
 };
 
 struct InputData;
+
 #include "boost/program_options.hpp"
 namespace po = boost::program_options;
 
@@ -29,5 +30,12 @@ int get_input_data(int argc, char **argv, InputData& input_data);
 int fill_input_or_display_help(char *argv, InputData& input_data);
 std::string description(const std::string& des);
 void copy_stream(const std::ostream& from_stream, std::ostream& to_stream);
+
+// For Model Exchange
+struct InputDataForME;
+bool invalid(const InputDataForME& input);
+po::options_description get_options_description(InputDataForME& input_data);
+int get_input_data(int argc, char **argv, InputDataForME& input_data);
+int fill_input_or_display_help(char *argv, InputDataForME& input_data);
 
 #endif /* UTILITIES_FOR_INPUTDATA_HPP_ */
