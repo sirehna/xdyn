@@ -18,7 +18,15 @@ std::string description(const std::string& des)
 {
     std::stringstream ss;
     ss << des << " created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
-       << "(c) SIREHNA 2014-2015." << std::endl
+       << "(c) 2014-2015, IRT Jules Verne (https://www.irt-jules-verne.fr/)," << std::endl
+       << "               SIREHNA (http://www.sirehna.com/)," << std::endl
+       << "               Naval Group (https://www.naval-group.com/en/)," << std::endl
+       << "               Bureau Veritas (https://www.bureauveritas.fr/)," << std::endl
+       << "               Hydrocean (https://marine-offshore.bureauveritas.com/bvsolutions)," << std::endl
+       << "               STX France (http://chantiers-atlantique.com/en/)," << std::endl
+       << "               LHEEA (https://lheea.ec-nantes.fr/)" << std::endl
+       << "for the initial version." << std::endl
+       << "(c) 2015-2018 SIREHNA & Naval Group for all subsequent versions." << std::endl
        << std::endl
        << "ID: @GIT_SHA1@" << std::endl
        << "SHA of the SSC used: " << LONG_SSC_GIT_SHA << std::endl
