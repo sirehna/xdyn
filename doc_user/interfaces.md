@@ -430,3 +430,160 @@ Puis l'on donne des
 ~~~~
 
 
+## Utilisation de X-DYN en serveur websocket
+
+### Description
+
+Il est possible de lancer X-DYN en tant que serveur, afin de l'intégrer à un
+autre environnement de simulation. L'utilisation d'un serveur plutôt qu'une
+MEX-fonction ou un FMU permet d'exécuter X-DYN sur une autre machine et de
+l'interroger par plusieurs clients.
+
+Il s'agit d'une utilisation en "model exchange" (au sens de la [spécification
+"Functional Mockup
+Interface"](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=2ahUKEwimvuWL6tDeAhUC1hoKHWiwALAQFjABegQIBBAC&url=https%3A%2F%2Fsvn.modelica.org%2Ffmi%2Fbranches%2Fpublic%2Fspecifications%2Fv2.0%2FFMI_for_ModelExchange_and_CoSimulation_v2.0.pdf&usg=AOvVaw2ePLxrLtnb42qW1aLIVoov)),
+par opposition à "X-DYN for Co-simulation". La différence se situe dans
+l'utilisation du solveur : dans le cas de la co-simulation, on utilise le
+solveur interne de X-DYN (le serveur renvoie les états intégrés au pas suivant
+$X(t+dt)$). Dans le cas "model exchange", le serveur renvoie juste la dérivée
+des états $\frac{dX}{dt}$.
+
+### Justification technique
+
+L'utilisation des websockets permet des temps de réponse plus courts (puisque
+c'est un protocole assez léger, comparé au HTTP par exemple). Dans
+l'implémentation actuelle, les messages envoyés sont en JSON, pour offrir un
+bon compromis entre la verbosité (moins que du XML mais plus qu'un format
+binaire) et une utilisation plus aisée qu'un format type Protobuf ou Thrift,
+quitte à sacrifier un peu de performance (taille des messages, temps d'encodage/décodage).
+
+### Lancement
+
+Le serveur est lancé grâce à l'exécutable `xdyn-for-me` (X-DYN for Model Exchange)
+avec un ou plusieurs fichiers YAML en paramètre : une fois lancé, ce
+serveur ne simulera donc qu'une seule configuration de l'environnement et du
+navire. Concrètement, on lance le serveur comme suit :
+
+~~~~{.bash}
+./xdyn-for-me --port 9002 tutorial_01_falling_ball.yml
+~~~~
+
+où `--port` sert à définir le port sur lequel écoute le serveur websocket.
+
+Ensuite, on peut se connecter à l'adresse du serveur pour l'interroger.
+
+### Utilisation avec Chrome
+
+Le navigateur Chrome dispose d'une extension websocket [Simple Websocket
+Client](https://chrome.google.com/webstore/detail/simple-websocket-client/pfdhoblngboilpfeibdedpjgfnlcodoo?hl=en)
+qui permet de faire quelques tests de bon fonctionnement.
+
+### Utilisation avec Matlab
+
+On initie une connexion websocket via MATLAB en utilisant par exemple [MatlabWebSocket](https://github.com/jebej/MatlabWebSocket).
+Il faut également pouvoir encoder et décoder du JSON en MATLAB, par exemple en
+utilisant les fonctions MATLAB [jsondecode et
+jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
+
+### Description des entrées/sorties
+
+  ENTREES             TYPE                                                               DETAIL
+  ------------------- ------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------------
+  Etats               Liste d’éléments de type « état »                                  Historique des états jusqu’au temps courant t
+  Etat                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   Etats navire
+  t                   Flottant                                                           Temps courant de la simulation
+  x                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  y                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  z                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  u                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  v                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  w                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  p                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  q                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  r                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  qr                  Flottant                                                           Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qi                  Flottant                                                           Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qj                  Flottant                                                           Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qk                  Flottant                                                           Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  Etats actionneurs   Liste de clefs-valeurs (dictionnaire)                              Etat des actionneurs au temps t
+
+Exemple:
+
+~~~~{.json}
+[
+  {
+    "t": 0,
+    "x": 0.1,
+    "y": -0.156,
+    "z": 10,
+    "u": 0,
+    "v": 0,
+    "w": 0,
+    "p": 0,
+    "q": 0,
+    "r": 0,
+    "qr": 0,
+    "qi": 0,
+    "qj": 0,
+    "qk": 0,
+    "thruster-states": {
+      "beta": 0.123
+    }
+  },
+  {
+    "t": 0.1,
+    "x": 10.1,
+    "y": 15.6,
+    "z": 1.3,
+    "u": 0.2,
+    "v": 0,
+    "w": 0,
+    "p": 0,
+    "q": 0,
+    "r": 0,
+    "qr": 0.5451,
+    "qi": 0,
+    "qj": 0,
+    "qk": 0,
+    "thruster-states": {
+      "beta": 0.23
+    }
+  }
+]
+~~~~
+
+  SORTIES             TYPE                                                                                                                DETAIL
+  ------------------- ------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------------------------
+  Dérivée des états   Structure contenant dx/dt, dy/dt, dz/dt, du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt, dqr/dt, dqi/dt, dqj/dt, dqk/dt   Dérivée des états navire
+  dx/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe X du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  dy/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Y du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  dz/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Z du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  du/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe X du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  dv/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Y du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  dw/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Z du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  dp/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe X du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  dq/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Y du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  dr/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Z du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  dqr/dt              Flottant                                                                                                            Dérivée par rapport au temps de la partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  dqi/dt              Flottant                                                                                                            Dérivée par rapport au temps de la première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  dqj/dt              Flottant                                                                                                            Dérivée par rapport au temps de la seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  dqk/dt              Flottant                                                                                                            Dérivée par rapport au temps de la troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+
+~~~~{.json}
+{
+  "dx_dt": 0.1,
+  "dy_dt": -0.156,
+  "dz_dt": 10,
+  "du_dt": 0,
+  "dv_dt": 0,
+  "dw_dt": 0,
+  "dp_dt": 0,
+  "dq_dt": 0,
+  "dr_dt": 0,
+  "dqr_dt": 0,
+  "dqi_dt": 0,
+  "dqj_dt": 0,
+  "dqk_dt": 0
+}
+~~~~
+
