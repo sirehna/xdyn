@@ -23,6 +23,7 @@ set(SRC src/simulator_api.cpp
         src/ConfBuilder.cpp
         src/HistoryParser.cpp
         src/SimServer.cpp
+        src/XdynForME.cpp
         )
 
 # Using C++ 2011
