@@ -11,13 +11,13 @@
 CHECK_SSC_VERSION(7,0)
 
 #include <iostream>
-#include "InputData.hpp"
+#include "../inc/XdynCommandLineArguments.hpp"
 #include "utilities_for_InputData.hpp"
 #include "simulator_run.hpp"
 
 
-int run(const InputData& input_data);
-int run(const InputData& input_data)
+int run(const XdynCommandLineArguments& input_data);
+int run(const XdynCommandLineArguments& input_data)
 {
     if (not(input_data.empty())) run_simulation(input_data);
     return EXIT_SUCCESS;
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 {
 
 
-    InputData input_data;
+    XdynCommandLineArguments input_data;
     int error = 0;
     try
     {

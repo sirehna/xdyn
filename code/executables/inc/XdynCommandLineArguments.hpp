@@ -11,9 +11,9 @@
 #include <string>
 #include <vector>
 
-struct InputData
+struct XdynCommandLineArguments
 {
-    InputData();
+    XdynCommandLineArguments();
     std::vector<std::string> yaml_filenames;
     std::string solver;
     std::string output_filename;
@@ -25,7 +25,7 @@ struct InputData
     bool empty() const;
 };
 
-struct InputDataSimServer : InputData
+struct InputDataSimServer : XdynCommandLineArguments
 {
     InputDataSimServer();
     bool empty() const;

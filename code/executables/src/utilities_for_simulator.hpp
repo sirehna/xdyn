@@ -5,9 +5,9 @@
 #include "YamlOutput.hpp"
 #include "ListOfObservers.hpp"
 
-class InputData;
+class XdynCommandLineArguments;
 
-std::vector<YamlOutput> get_observers_description(const std::string& yaml, const InputData& input_data);
-ListOfObservers get_observers(const std::string& yaml, const InputData& input_data);
+std::vector<YamlOutput> get_observers_description(const std::string& yaml, const XdynCommandLineArguments& input_data);
+ListOfObservers get_observers(const std::string& yaml, const XdynCommandLineArguments& input_data);
 
 #endif

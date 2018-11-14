@@ -17,17 +17,17 @@ struct BooleanArguments
     bool debug;
 };
 
-struct InputData;
+struct XdynCommandLineArguments;
 
 #include "boost/program_options.hpp"
 namespace po = boost::program_options;
 
 void print_usage(std::ostream& os, const po::options_description& desc, const std::string& program_name, const std::string& des);
-bool invalid(const InputData& input);
+bool invalid(const XdynCommandLineArguments& input);
 BooleanArguments parse_input(int argc, char **argv, const po::options_description& desc);
-po::options_description get_options_description(InputData& input_data);
-int get_input_data(int argc, char **argv, InputData& input_data);
-int fill_input_or_display_help(char *argv, InputData& input_data);
+po::options_description get_options_description(XdynCommandLineArguments& input_data);
+int get_input_data(int argc, char **argv, XdynCommandLineArguments& input_data);
+int fill_input_or_display_help(char *argv, XdynCommandLineArguments& input_data);
 std::string description(const std::string& des);
 void copy_stream(const std::ostream& from_stream, std::ostream& to_stream);
 

@@ -1,22 +1,22 @@
 #include "YamlOutput.hpp"
-#include "InputData.hpp"
 #include "parse_output.hpp"
 #include "utilities_for_simulator.hpp"
+#include "XdynCommandLineArguments.hpp"
 
 YamlOutput create_a_wave_observer(
-        const InputData& input_data);
+        const XdynCommandLineArguments& input_data);
 
 void add_observers_from_cli(
         const std::string& yaml,
-        const InputData& input_data,
+        const XdynCommandLineArguments& input_data,
         std::vector<YamlOutput>& out);
 
 void add_observers_from_cli_with_output_filename(
         const std::string& yaml,
-        const InputData& input_data,
+        const XdynCommandLineArguments& input_data,
         std::vector<YamlOutput>& out);
 
-YamlOutput create_a_wave_observer(const InputData& input_data)
+YamlOutput create_a_wave_observer(const XdynCommandLineArguments& input_data)
 {
     YamlOutput o;
     o.data = {"waves"};
@@ -27,7 +27,7 @@ YamlOutput create_a_wave_observer(const InputData& input_data)
 
 void add_observers_from_cli_with_output_filename(
         const std::string& yaml,
-        const InputData& input_data,
+        const XdynCommandLineArguments& input_data,
         std::vector<YamlOutput>& out)
 {
     YamlOutput outputterCli = generate_default_outputter_with_all_states_in_it(yaml,input_data.output_filename);
@@ -47,7 +47,7 @@ void add_observers_from_cli_with_output_filename(
 
 void add_observers_from_cli(
         const std::string& yaml,
-        const InputData& input_data,
+        const XdynCommandLineArguments& input_data,
         std::vector<YamlOutput>& out)
 {
     if (not(input_data.output_filename.empty()))
@@ -60,14 +60,14 @@ void add_observers_from_cli(
     }
 }
 
-std::vector<YamlOutput> get_observers_description(const std::string& yaml, const InputData& input_data)
+std::vector<YamlOutput> get_observers_description(const std::string& yaml, const XdynCommandLineArguments& input_data)
 {
     auto out = parse_output(yaml);
     add_observers_from_cli(yaml, input_data, out);
     return out;
 }
 
-ListOfObservers get_observers(const std::string& yaml, const InputData& input_data)
+ListOfObservers get_observers(const std::string& yaml, const XdynCommandLineArguments& input_data)
 {
     auto out = parse_output(yaml);
     add_observers_from_cli(yaml, input_data, out);

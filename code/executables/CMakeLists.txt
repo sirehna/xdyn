@@ -37,17 +37,17 @@ INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
 
 CONFIGURE_FILE(
-        src/utilities_for_InputData.cpp
-        "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
+        src/utilities_for_XdynCommandLineArguments.cpp
+        "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_XdynCommandLineArguments.cpp" @ONLY)
 
 CONFIGURE_FILE(
         src/convert_stl_files_to_code.cpp
         "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
 
 ADD_EXECUTABLE(xdyn
-        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_XdynCommandLineArguments.cpp
         src/utilities_for_simulator.cpp
-        src/InputData.cpp
+        src/XdynCommandLineArguments.cpp
         src/InputDataForME.cpp
         src/simulator_run.cpp
         src/xdyn.cpp
@@ -113,8 +113,8 @@ TARGET_LINK_LIBRARIES(convert_stl_files_to_code
 
 ADD_EXECUTABLE(gz
         src/gz.cpp
-        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
-        src/InputData.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_XdynCommandLineArguments.cpp
+        src/XdynCommandLineArguments.cpp
         src/InputDataForME.cpp
         src/simulator_run.cpp
         src/utilities_for_simulator.cpp
@@ -145,9 +145,9 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         )
 
 ADD_EXECUTABLE(xdyn-for-cs
-        src/utilities_for_InputDataSimServer.cpp
+        src/utilities_for_XdynCommandLineArgumentsSimServer.cpp
         src/utilities_for_simulator.cpp
-        src/InputData.cpp
+        src/XdynCommandLineArguments.cpp
         src/xdyn_for_cs.cpp
 
         )
@@ -160,10 +160,10 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
         )
 
 ADD_EXECUTABLE(xdyn-for-me
-        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_XdynCommandLineArguments.cpp
         src/utilities_for_simulator.cpp
         src/InputDataForME.cpp
-        src/InputData.cpp
+        src/XdynCommandLineArguments.cpp
         src/xdyn_for_me.cpp
 
         )

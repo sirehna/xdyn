@@ -5,7 +5,6 @@
 #include "NumericalErrorException.hpp"
 #include "utilities_for_simulator.hpp"
 #include "listeners.hpp"
-#include "InputData.hpp"
 #include "simulator_api.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "ConnexionError.hpp"
@@ -17,8 +16,9 @@
 #include "yaml-cpp/exceptions.h"
 
 #include <functional>
+#include "../inc/XdynCommandLineArguments.hpp"
 
-void solve(const InputData& input_data, Sim& sys, ListOfObservers& observer)
+void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer)
 {
     if (input_data.solver=="euler")
     {
@@ -133,8 +133,8 @@ void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Si
     }
 }
 
-std::string input_data_serialize(const InputData& inputData);
-std::string input_data_serialize(const InputData& inputData)
+std::string input_data_serialize(const XdynCommandLineArguments& inputData);
+std::string input_data_serialize(const XdynCommandLineArguments& inputData)
 {
     std::stringstream s;
     s << "sim ";
@@ -158,7 +158,7 @@ std::string input_data_serialize(const InputData& inputData)
     return s.str();
 }
 
-void run_simulation(const InputData& input_data)
+void run_simulation(const XdynCommandLineArguments& input_data)
 {
     const auto f = [input_data](){
     {

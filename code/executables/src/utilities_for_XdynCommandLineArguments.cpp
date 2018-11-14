@@ -10,8 +10,8 @@
 
 #include <ssc/check_ssc_version.hpp>
 
+#include "../inc/XdynCommandLineArguments.hpp"
 #include "utilities_for_InputData.hpp"
-#include "InputData.hpp"
 #include "InputDataForME.hpp"
 #include "OptionPrinter.hpp"
 
@@ -35,7 +35,7 @@ std::string description(const std::string& des)
     return ss.str();
 }
 
-bool invalid(const InputData& input)
+bool invalid(const XdynCommandLineArguments& input)
 {
     if (input.empty()) return true;
     if (input.yaml_filenames.empty())
@@ -67,7 +67,7 @@ bool invalid(const InputDataForME& input)
     return false;
 }
 
-po::options_description get_options_description(InputData& input_data)
+po::options_description get_options_description(XdynCommandLineArguments& input_data)
 {
     po::options_description desc("Options");
     desc.add_options()
@@ -111,7 +111,7 @@ BooleanArguments parse_input(int argc, char **argv, const po::options_descriptio
     return ret;
 }
 
-int get_input_data(int argc, char **argv, InputData& input_data)
+int get_input_data(int argc, char **argv, XdynCommandLineArguments& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);
@@ -129,7 +129,7 @@ int get_input_data(int argc, char **argv, InputData& input_data)
     return EXIT_SUCCESS;
 }
 
-int fill_input_or_display_help(char *argv, InputData& input_data)
+int fill_input_or_display_help(char *argv, XdynCommandLineArguments& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     print_usage(std::cout, desc, argv, "This is a ship simulator");
