@@ -144,15 +144,15 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         ${SSC_LIB}
         )
 
-ADD_EXECUTABLE(xdyn-server
+ADD_EXECUTABLE(xdyn-for-cs
         src/utilities_for_InputDataSimServer.cpp
         src/utilities_for_simulator.cpp
         src/InputData.cpp
-        src/simulator_server.cpp
+        src/xdyn_for_cs.cpp
 
         )
 
-TARGET_LINK_LIBRARIES(xdyn-server
+TARGET_LINK_LIBRARIES(xdyn-for-cs
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
@@ -178,7 +178,7 @@ TARGET_LINK_LIBRARIES(xdyn-for-me
 ################################################################################
 INSTALL(TARGETS xdyn
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-INSTALL(TARGETS xdyn-server
+INSTALL(TARGETS xdyn-for-cs
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 INSTALL(TARGETS gz
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
