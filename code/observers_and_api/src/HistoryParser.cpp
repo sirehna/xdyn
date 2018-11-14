@@ -97,7 +97,7 @@ void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo)
 }
 
 
-SimStepperInfos HistoryParser::get_simstepperinfo(const std::string& yaml)
+SimStepperInfos HistoryParser::get_simstepperinfo(const std::string& yaml) const
 {
     YamlSimStepperInfo yinfo = get_yamlsimstepperinfo(yaml);
     SimStepperInfos infos;

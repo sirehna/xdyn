@@ -13,7 +13,7 @@ class HistoryParser
 
         State parse_state_history_yaml(const std::string& yaml, const double Tmax);
         std::string  emit_state_history_yaml(const State& state);
-        SimStepperInfos get_simstepperinfo(const std::string& yaml);
+        SimStepperInfos get_simstepperinfo(const std::string& yaml) const;
     private:
         HistoryParser();
 
