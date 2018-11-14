@@ -73,7 +73,7 @@ TEST_F(SimStepperTest, can_compute_one_step_with_euler_solver)
 //! [SimStepperTest expected output]
 }
 
-TEST_F(SimStepperTest, can_compute_same_one_step_several_times)
+TEST_F(SimStepperTest, can_compute_same_step_several_times)
 {
 //! [SimStepperTest can_compute_one_step_with_euler_solver]
     const double g = 9.81;
