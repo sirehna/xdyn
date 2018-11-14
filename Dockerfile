@@ -1,5 +1,5 @@
 # Build image
-#   docker build -f Dockerfile -t xdyn .
+#   docker build -t xdyn .
 #
 # Delete image
 #   docker rmi xdyn
