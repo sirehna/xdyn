@@ -37,18 +37,18 @@ INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
 
 CONFIGURE_FILE(
-        src/parse_XdynCommandLineArguments.cpp
-        "${CMAKE_CURRENT_BINARY_DIR}/parse_XdynCommandLineArguments.cpp" @ONLY)
+        src/display_command_line_arguments.cpp
+        "${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp" @ONLY)
 
 CONFIGURE_FILE(
         src/convert_stl_files_to_code.cpp
         "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
 
 ADD_EXECUTABLE(xdyn
-        ${CMAKE_CURRENT_BINARY_DIR}/parse_XdynCommandLineArguments.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/parse_XdynCommandLineArguments.cpp
         src/build_observers_description.cpp
         src/XdynCommandLineArguments.cpp
-        src/XdynForMECommandLineArguments.cpp
         src/report_xdyn_exceptions_to_user.cpp
         src/xdyn.cpp
         )
@@ -113,9 +113,9 @@ TARGET_LINK_LIBRARIES(convert_stl_files_to_code
 
 ADD_EXECUTABLE(gz
         src/gz.cpp
-        ${CMAKE_CURRENT_BINARY_DIR}/parse_XdynCommandLineArguments.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/parse_XdynCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
-        src/XdynForMECommandLineArguments.cpp
         src/report_xdyn_exceptions_to_user.cpp
         src/build_observers_description.cpp
         )
@@ -160,10 +160,10 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
         )
 
 ADD_EXECUTABLE(xdyn-for-me
-        ${CMAKE_CURRENT_BINARY_DIR}/parse_XdynCommandLineArguments.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/parse_XdynForMECommandLineArguments.cpp
         src/build_observers_description.cpp
         src/XdynForMECommandLineArguments.cpp
-        src/XdynCommandLineArguments.cpp
         src/xdyn_for_me.cpp
 
         )
