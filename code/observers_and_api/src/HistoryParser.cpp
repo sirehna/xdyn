@@ -87,11 +87,54 @@ std::string  HistoryParser::emit_state_history_yaml(const State& state)
     return generate_history_yaml(ystate);
 }
 
+YamlHistory extract_all_except_last(const YamlHistory& his, const double Tmax);
+YamlHistory extract_all_except_last(const YamlHistory& his, const double Tmax)
+{
+    const size_t n = his.values.size();
+    YamlHistory ret(Tmax);
+    if (n>1)
+    {
+        ret.tau.resize(n-1);
+        ret.values.resize(n-1);
+    }
+    for (size_t i = 0 ; i < n-1 ; ++i)
+    {
+        ret.tau[i] = his.tau[i];
+        ret.values[i] = his.values[i];
+    }
+    return ret;
+}
+
 double extract_last(const YamlHistory& his);
 double extract_last(const YamlHistory& his)
 {
     if (not(his.values.empty())) return his.values.back();
                                  return 0;
+}
+
+YamlState get_all_states_except_last(const YamlState state, const double Tmax);
+YamlState get_all_states_except_last(const YamlState state, const double Tmax)
+{
+    YamlState ret;
+    ret.x = extract_all_except_last(state.x, Tmax);
+    ret.y = extract_all_except_last(state.y, Tmax);
+    ret.z = extract_all_except_last(state.z, Tmax);
+    ret.u = extract_all_except_last(state.u, Tmax);
+    ret.v = extract_all_except_last(state.v, Tmax);
+    ret.w = extract_all_except_last(state.w, Tmax);
+    ret.p = extract_all_except_last(state.p, Tmax);
+    ret.q = extract_all_except_last(state.q, Tmax);
+    ret.r = extract_all_except_last(state.r, Tmax);
+    ret.qr = extract_all_except_last(state.qr, Tmax);
+    ret.qi = extract_all_except_last(state.qi, Tmax);
+    ret.qj = extract_all_except_last(state.qj, Tmax);
+    ret.qk = extract_all_except_last(state.qk, Tmax);
+    ret.t = state.t;
+    if (not(ret.x.tau.empty()))
+    {
+        ret.t -= ret.x.tau.back();
+    }
+    return ret;
 }
 
 StateType get_last_state(const YamlState state);
@@ -119,7 +162,9 @@ void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo)
 {
     info.Dt = yinfo.Dt;
     yinfo.state >> info.full_state_history;
+    const YamlState all_states_except_last = get_all_states_except_last(yinfo.state, info.Dt);
     info.state_at_t = get_last_state(yinfo.state);
+    all_states_except_last >> info.state_history_except_last_point;
     info.commands = yinfo.commands;
 }
 
@@ -127,7 +172,7 @@ void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo)
 SimStepperInfos HistoryParser::get_simstepperinfo(const std::string& yaml) const
 {
     YamlSimStepperInfo yinfo = get_yamlsimstepperinfo(yaml);
-    SimStepperInfos infos;
+    SimStepperInfos infos(yinfo.Dt);
     infos << yinfo;
     return infos;
 }

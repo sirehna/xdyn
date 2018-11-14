@@ -13,7 +13,18 @@ SimStepperInfos::SimStepperInfos()
     : t(0)
     , Dt(0)
     , state_at_t(0)
+    , state_history_except_last_point(0)
     , full_state_history(0)
+    , commands({})
+{
+}
+
+SimStepperInfos::SimStepperInfos(const double Dt_)
+    : t(0)
+    , Dt(Dt_)
+    , state_at_t(0)
+    , state_history_except_last_point(Dt_)
+    , full_state_history(Dt_)
     , commands({})
 {
 }

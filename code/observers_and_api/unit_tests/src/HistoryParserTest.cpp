@@ -173,3 +173,34 @@ TEST_F(HistoryParserTest, can_parse_state_at_t)
     ASSERT_EQ(42, s.state_at_t.at(11));
     ASSERT_EQ(43, s.state_at_t.at(12));
 }
+
+
+
+TEST_F(HistoryParserTest, can_parse_all_states_before_t)
+{
+    const std::string yaml =
+            "Dt: 12\n"
+            "states:\n"
+            "    t: 10.123\n"
+            "    x: [[10, 1.123], [1, 23.98], [0.5, 31]]\n"
+            "    y: [[10, 1.123], [1, 23.98], [0.5, 32]]\n"
+            "    z: [[10, 1.123], [1, 23.98], [0.5, 33]]\n"
+            "    u: [[10, 1.123], [1, 23.98], [0.5, 34]]\n"
+            "    v: [[10, 1.123], [1, 23.98], [0.5, 35]]\n"
+            "    w: [[10, 1.123], [1, 23.98], [0.5, 36]]\n"
+            "    p: [[10, 1.123], [1, 23.98], [0.5, 37]]\n"
+            "    q: [[10, 1.123], [1, 23.98], [0.5, 38]]\n"
+            "    r: [[10, 1.123], [1, 23.98], [0.5, 39]]\n"
+            "    qr: [[10, 1.123], [1, 23.98], [0.5, 40]]\n"
+            "    qi: [[10, 1.123], [1, 23.98], [0.5, 41]]\n"
+            "    qj: [[10, 1.123], [1, 23.98], [0.5, 42]]\n"
+            "    qk: [[10, 1.123], [1, 23.98], [0.5, 43]]\n"
+            "commands:\n"
+            "    a: 3\n"
+            "    b: 5\n"
+            "    c: -12.3\n";
+    const double Tmax = 10;
+    const HistoryParser hparser(Tmax);
+    const SimStepperInfos s = hparser.get_simstepperinfo(yaml);
+    ASSERT_EQ(2, s.state_history_except_last_point.x.size());
+}

@@ -8,9 +8,11 @@
 struct SimStepperInfos
 {
     SimStepperInfos();
+    SimStepperInfos(const double Dt);
     double t;
     double Dt;
     StateType state_at_t;
+    State state_history_except_last_point;
     State full_state_history;
     std::map<std::string, double> commands;
 };
