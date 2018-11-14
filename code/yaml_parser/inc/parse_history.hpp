@@ -1,15 +1,15 @@
 #ifndef YAML_PARSER_INC_PARSE_HISTORY_HPP_
 #define YAML_PARSER_INC_PARSE_HISTORY_HPP_
 
+#include "YamlSimServerInputs.hpp"
 #include "YamlState.hpp"
-#include "YamlSimStepperInfo.hpp"
 
 
 YamlState parse_history_yaml(const std::string& yaml //!< YAML data
                                             );
 
 std::string generate_history_yaml(const YamlState& state);
-YamlSimStepperInfo get_yamlsimstepperinfo(const std::string& yaml);
+YamlSimServerInputs parse_YamlSimServerInputs(const std::string& yaml);
 
 
 

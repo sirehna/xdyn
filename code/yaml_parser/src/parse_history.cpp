@@ -142,21 +142,21 @@ std::string generate_history_yaml(const YamlState& state)
     return e.c_str();
 }
 
-void operator>> (const YAML::Node& node, YamlSimStepperInfo& infos);
-void operator>> (const YAML::Node& node, YamlSimStepperInfo& infos)
+void operator>> (const YAML::Node& node, YamlSimServerInputs& infos);
+void operator>> (const YAML::Node& node, YamlSimServerInputs& infos)
 {
     node["Dt"]       >> infos.Dt;
     node["states"]   >> infos.state;
     node["commands"] >> infos.commands;
 }
 
-YamlSimStepperInfo get_yamlsimstepperinfo(const std::string& yaml)
+YamlSimServerInputs parse_YamlSimServerInputs(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    YamlSimStepperInfo infos;
+    YamlSimServerInputs infos;
     node >> infos;
     return infos;
 }

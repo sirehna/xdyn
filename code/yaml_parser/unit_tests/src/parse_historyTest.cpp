@@ -194,7 +194,7 @@ TEST_F(parse_historyTest, translation_loop)
 
 TEST_F(parse_historyTest, get_info_from_gui)
 {
-    YamlSimStepperInfo yinfos = get_yamlsimstepperinfo(test_data::complete_yaml_message_from_gui());
+    YamlSimServerInputs yinfos = parse_YamlSimServerInputs(test_data::complete_yaml_message_from_gui());
     ASSERT_EQ(yinfos.commands.find("RPM")->second, 1.2);
     ASSERT_EQ(yinfos.commands.find("B1")->second, 0.1);
     ASSERT_EQ(yinfos.state.t, 1234.5);

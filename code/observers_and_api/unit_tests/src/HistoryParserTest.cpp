@@ -97,7 +97,7 @@ TEST_F(HistoryParserTest, can_parse_Dt)
             "    c: -12.3\n";
     const double Tmax = 2;
     const HistoryParser hparser(Tmax);
-    const SimStepperInfos s = hparser.get_simstepperinfo(yaml);
+    const SimServerInputs s = hparser.parse_SimServerInputs(yaml);
     ASSERT_DOUBLE_EQ(12, s.Dt);
 }
 
@@ -126,7 +126,7 @@ TEST_F(HistoryParserTest, can_parse_commands)
             "    c: -12.3\n";
     const double Tmax = 2;
     const HistoryParser hparser(Tmax);
-    const SimStepperInfos s = hparser.get_simstepperinfo(yaml);
+    const SimServerInputs s = hparser.parse_SimServerInputs(yaml);
     ASSERT_DOUBLE_EQ(3, s.commands.at("a"));
     ASSERT_DOUBLE_EQ(5, s.commands.at("b"));
     ASSERT_DOUBLE_EQ(-12.3, s.commands.at("c"));
@@ -157,7 +157,7 @@ TEST_F(HistoryParserTest, can_parse_state_at_t)
             "    c: -12.3\n";
     const double Tmax = 2;
     const HistoryParser hparser(Tmax);
-    const SimStepperInfos s = hparser.get_simstepperinfo(yaml);
+    const SimServerInputs s = hparser.parse_SimServerInputs(yaml);
     ASSERT_EQ(13, s.state_at_t.size());
     ASSERT_EQ(31, s.state_at_t.at(0));
     ASSERT_EQ(32, s.state_at_t.at(1));
@@ -201,6 +201,6 @@ TEST_F(HistoryParserTest, can_parse_all_states_before_t)
             "    c: -12.3\n";
     const double Tmax = 10;
     const HistoryParser hparser(Tmax);
-    const SimStepperInfos s = hparser.get_simstepperinfo(yaml);
+    const SimServerInputs s = hparser.parse_SimServerInputs(yaml);
     ASSERT_EQ(2, s.state_history_except_last_point.x.size());
 }

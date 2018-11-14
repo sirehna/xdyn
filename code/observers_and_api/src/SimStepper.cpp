@@ -9,7 +9,7 @@ SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, co
 {
 }
 
-SimStepperInfos::SimStepperInfos()
+SimServerInputs::SimServerInputs()
     : t(0)
     , Dt(0)
     , state_at_t(0)
@@ -19,7 +19,7 @@ SimStepperInfos::SimStepperInfos()
 {
 }
 
-SimStepperInfos::SimStepperInfos(const double Dt_)
+SimServerInputs::SimServerInputs(const double Dt_)
     : t(0)
     , Dt(Dt_)
     , state_at_t(0)
@@ -29,7 +29,7 @@ SimStepperInfos::SimStepperInfos(const double Dt_)
 {
 }
 
-State SimStepper::step(const SimStepperInfos& infos, double Dt)
+State SimStepper::step(const SimServerInputs& infos, double Dt)
 {
     const double t = infos.t;
     const std::vector<State>states = {infos.full_state_history};

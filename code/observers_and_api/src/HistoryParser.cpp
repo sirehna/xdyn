@@ -157,22 +157,22 @@ StateType get_last_state(const YamlState state)
     return ret;
 }
 
-void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo);
-void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo)
+void operator << (SimServerInputs& inputs, const YamlSimServerInputs& yaml_inputs);
+void operator << (SimServerInputs& inputs, const YamlSimServerInputs& yaml_inputs)
 {
-    info.Dt = yinfo.Dt;
-    yinfo.state >> info.full_state_history;
-    const YamlState all_states_except_last = get_all_states_except_last(yinfo.state, info.Dt);
-    info.state_at_t = get_last_state(yinfo.state);
-    all_states_except_last >> info.state_history_except_last_point;
-    info.commands = yinfo.commands;
+    inputs.Dt = yaml_inputs.Dt;
+    yaml_inputs.state >> inputs.full_state_history;
+    const YamlState all_states_except_last = get_all_states_except_last(yaml_inputs.state, inputs.Dt);
+    inputs.state_at_t = get_last_state(yaml_inputs.state);
+    all_states_except_last >> inputs.state_history_except_last_point;
+    inputs.commands = yaml_inputs.commands;
 }
 
 
-SimStepperInfos HistoryParser::get_simstepperinfo(const std::string& yaml) const
+SimServerInputs HistoryParser::parse_SimServerInputs(const std::string& yaml) const
 {
-    YamlSimStepperInfo yinfo = get_yamlsimstepperinfo(yaml);
-    SimStepperInfos infos(yinfo.Dt);
-    infos << yinfo;
-    return infos;
+    YamlSimServerInputs yaml_inputs = parse_YamlSimServerInputs(yaml);
+    SimServerInputs inputs(yaml_inputs.Dt);
+    inputs << yaml_inputs;
+    return inputs;
 }

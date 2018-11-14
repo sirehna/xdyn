@@ -48,7 +48,7 @@ TEST_F(SimStepperTest, can_compute_one_step_with_euler_solver)
     const double v0 = 0;
     const double w0 = 0;
 
-    SimStepperInfos infos;
+    SimServerInputs infos;
     infos.full_state_history=State(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
     infos.commands={};
     infos.t = t_start;
@@ -92,7 +92,7 @@ TEST_F(SimStepperTest, can_compute_same_step_several_times)
     const double v0 = 0;
     const double w0 = 0;
 
-    SimStepperInfos infos;
+    SimServerInputs infos;
     infos.full_state_history=State(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
     infos.commands={};
     infos.t = t_start;
@@ -136,7 +136,7 @@ TEST_F(SimStepperTest, wrong_solver_must_raise_exception)
     const double v0 = 0;
     const double w0 = 0;
 
-    SimStepperInfos infos;
+    SimServerInputs infos;
     infos.full_state_history=State(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
     infos.commands={};
     infos.t = t_start;

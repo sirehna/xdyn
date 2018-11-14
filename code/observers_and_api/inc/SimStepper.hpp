@@ -5,10 +5,10 @@
 #ifndef OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 #define OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 
-struct SimStepperInfos
+struct SimServerInputs
 {
-    SimStepperInfos();
-    SimStepperInfos(const double Dt);
+    SimServerInputs();
+    SimServerInputs(const double Dt);
     double t;
     double Dt;
     StateType state_at_t;
@@ -22,7 +22,7 @@ class SimStepper
 {
     public:
         SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt);
-        State step(const SimStepperInfos& infos, double Dt);
+        State step(const SimServerInputs& input, double Dt);
 
 
     private:
