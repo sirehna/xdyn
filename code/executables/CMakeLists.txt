@@ -145,9 +145,11 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         )
 
 ADD_EXECUTABLE(xdyn-for-cs
+        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
         src/parse_XdynForCSCommandLineArguments.cpp
         src/build_observers_description.cpp
         src/report_xdyn_exceptions_to_user.cpp
+        src/XdynForCSCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_cs.cpp
 

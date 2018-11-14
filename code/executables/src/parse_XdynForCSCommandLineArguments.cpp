@@ -3,23 +3,11 @@
 
 #include <ssc/check_ssc_version.hpp>
 
+#include "display_command_line_arguments.hpp"
 #include "parse_XdynForCSCommandLineArguments.hpp"
-#include "XdynCommandLineArguments.hpp"
 #include "OptionPrinter.hpp"
 
-std::string description(const std::string& des)
-{
-    std::stringstream ss;
-    ss << des << " created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
-       << "(c) SIREHNA 2014-2015." << std::endl
-       << std::endl
-       << "ID: @GIT_SHA1@" << std::endl
-       << "SHA of the SSC used: " << LONG_SSC_GIT_SHA << std::endl
-       << std::endl;
-    return ss.str();
-}
-
-bool invalid(const InputDataSimServer& input)
+bool invalid(const XdynForCSCommandLineArguments& input)
 {
     if (input.empty()) return true;
     if (input.yaml_filenames.empty())
@@ -40,7 +28,7 @@ bool invalid(const InputDataSimServer& input)
     return false;
 }
 
-po::options_description get_options_description(InputDataSimServer& input_data)
+po::options_description get_options_description(XdynForCSCommandLineArguments& input_data)
 {
     po::options_description desc("Options");
     desc.add_options()
@@ -58,22 +46,7 @@ po::options_description get_options_description(InputDataSimServer& input_data)
     return desc;
 }
 
-BooleanArguments parse_input(int argc, char **argv, const po::options_description& desc)
-{
-    po::positional_options_description p;
-    p.add("yml", -1);
-    po::variables_map vm;
-    po::store(po::command_line_parser(argc, argv).options(desc)
-                                                 .positional(p)
-                                                 .run(), vm);
-    po::notify(vm);
-    BooleanArguments ret;
-    ret.help = vm.count("help")>0;
-    ret.debug = vm.count("debug")>0;
-    return ret;
-}
-
-int get_input_data(int argc, char **argv, InputDataSimServer& input_data)
+int get_input_data(int argc, char **argv, XdynForCSCommandLineArguments& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);
@@ -91,29 +64,9 @@ int get_input_data(int argc, char **argv, InputDataSimServer& input_data)
     return EXIT_SUCCESS;
 }
 
-int display_help(char *argv, InputDataSimServer& input_data)
+int display_help(char *argv, XdynForCSCommandLineArguments& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     print_usage(std::cout, desc, argv, "This is a ship simulator");
     return EXIT_SUCCESS;
 }
-
-void print_usage(std::ostream& os, const po::options_description& desc, const std::string& program_name, const std::string& des)
-{
-    po::positional_options_description positionalOptions;
-    os << description(des) << std::endl;
-    rad::OptionPrinter::printStandardAppDesc(program_name + " <yaml file>",
-                                             os,
-                                             desc,
-                                             &positionalOptions);
-    os << desc << std::endl
-       << std::endl;
-}
-
-void copy_stream(const std::ostream& from_stream, std::ostream& to_stream)
-{
-    to_stream.copyfmt(from_stream);                                  //1
-    to_stream.clear(from_stream.rdstate());                          //2
-    to_stream.basic_ios<char>::rdbuf(from_stream.rdbuf());           //3
-}
-

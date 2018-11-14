@@ -6,7 +6,6 @@
 #include <sstream>
 
 #include "parse_XdynForCSCommandLineArguments.hpp"
-#include "XdynCommandLineArguments.hpp"
 #include "XdynForCS.hpp"
 
 using namespace ssc::websocket;
@@ -32,8 +31,8 @@ struct SimulationMessage : public MessageHandler
     private: TR1(shared_ptr)<SimServer> sim_server;
 };
 
-void start_server(const InputDataSimServer& input_data);
-void start_server(const InputDataSimServer& input_data)
+void start_server(const XdynForCSCommandLineArguments& input_data);
+void start_server(const XdynForCSCommandLineArguments& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
@@ -45,7 +44,7 @@ void start_server(const InputDataSimServer& input_data)
 
 int main(int argc, char** argv)
 {
-    InputDataSimServer input_data;
+    XdynForCSCommandLineArguments input_data;
     if (argc==1) return display_help(argv[0], input_data);
     const int error = get_input_data(argc, argv, input_data);
     if (error)

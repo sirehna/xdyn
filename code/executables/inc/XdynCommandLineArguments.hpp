@@ -25,12 +25,4 @@ struct XdynCommandLineArguments
     bool empty() const;
 };
 
-struct InputDataSimServer : XdynCommandLineArguments
-{
-    InputDataSimServer();
-    bool empty() const;
-    short unsigned int port;
-
-};
-
 #endif /* INPUTDATA_HPP_ */
