@@ -157,6 +157,6 @@ YamlSimStepperInfo get_yamlsimstepperinfo(const std::string& yaml)
     YAML::Node node;
     parser.GetNextDocument(node);
     YamlSimStepperInfo infos;
-    node>>infos;
+    node >> infos;
     return infos;
 }

@@ -76,14 +76,14 @@ State HistoryParser::parse_state_history_yaml(const std::string& yaml, const dou
 {
     const YamlState ystate=parse_history_yaml(yaml);
     State s(Tmax);
-    ystate>>s;
+    ystate >> s;
     return s;
 }
 
 std::string  HistoryParser::emit_state_history_yaml(const State& state)
 {
     YamlState ystate;
-    state>>ystate;
+    state >> ystate;
     return generate_history_yaml(ystate);
 }
 
@@ -118,7 +118,7 @@ void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo);
 void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo)
 {
     info.Dt = yinfo.Dt;
-    yinfo.state>>info.full_state_history;
+    yinfo.state >> info.full_state_history;
     info.state_at_t = get_last_state(yinfo.state);
     info.commands = yinfo.commands;
 }
@@ -128,6 +128,6 @@ SimStepperInfos HistoryParser::get_simstepperinfo(const std::string& yaml) const
 {
     YamlSimStepperInfo yinfo = get_yamlsimstepperinfo(yaml);
     SimStepperInfos infos;
-    infos<<yinfo;
+    infos << yinfo;
     return infos;
 }
