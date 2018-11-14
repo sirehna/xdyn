@@ -1,12 +1,12 @@
 #include "report_xdyn_exceptions_to_user.hpp"
-#include "utilities_for_InputDataSimServer.hpp"
 #include "ssc/websocket/WebSocketServer.hpp"
 #include <ssc/text_file_reader.hpp>
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include <sstream>
 
-#include "../inc/XdynCommandLineArguments.hpp"
+#include "parse_XdynForCSCommandLineArguments.hpp"
+#include "XdynCommandLineArguments.hpp"
 #include "XdynForCS.hpp"
 
 using namespace ssc::websocket;

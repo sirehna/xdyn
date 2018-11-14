@@ -145,7 +145,7 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         )
 
 ADD_EXECUTABLE(xdyn-for-cs
-        src/utilities_for_XdynCommandLineArgumentsSimServer.cpp
+        src/parse_XdynForCSCommandLineArguments.cpp
         src/build_observers_description.cpp
         src/report_xdyn_exceptions_to_user.cpp
         src/XdynCommandLineArguments.cpp

@@ -3,8 +3,8 @@
 
 #include <ssc/check_ssc_version.hpp>
 
-#include "../inc/XdynCommandLineArguments.hpp"
-#include "utilities_for_InputDataSimServer.hpp"
+#include "parse_XdynForCSCommandLineArguments.hpp"
+#include "XdynCommandLineArguments.hpp"
 #include "OptionPrinter.hpp"
 
 std::string description(const std::string& des)
