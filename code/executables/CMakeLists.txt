@@ -49,7 +49,7 @@ ADD_EXECUTABLE(xdyn
         src/build_observers_description.cpp
         src/XdynCommandLineArguments.cpp
         src/InputDataForME.cpp
-        src/simulator_run.cpp
+        src/report_xdyn_exceptions_to_user.cpp
         src/xdyn.cpp
         )
 
@@ -116,7 +116,7 @@ ADD_EXECUTABLE(gz
         ${CMAKE_CURRENT_BINARY_DIR}/parse_XdynCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/InputDataForME.cpp
-        src/simulator_run.cpp
+        src/report_xdyn_exceptions_to_user.cpp
         src/build_observers_description.cpp
         )
 

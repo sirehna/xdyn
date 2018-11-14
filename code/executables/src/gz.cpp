@@ -9,10 +9,9 @@
 #include "GZCurve.hpp"
 #include "make_sim_for_GZ.hpp"
 #include "OptionPrinter.hpp"
-#include "simulator_run.hpp"
-
 #include <ssc/text_file_reader.hpp>
-#include "../inc/parse_XdynCommandLineArguments.hpp"
+#include "parse_XdynCommandLineArguments.hpp"
+#include "report_xdyn_exceptions_to_user.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -122,7 +121,7 @@ int main(int argc, char** argv)
                     write(os, phi*180./PI, calculate.gz(phi), sep);
                 }
             };
-        catch_exceptions(f, "");
+        report_xdyn_exceptions_to_user(f, "");
     }
     return 0;
 }

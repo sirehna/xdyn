@@ -24,11 +24,11 @@
 #include "NumericalErrorException.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
 #include "simulator_api.hpp"
-#include "simulator_run.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "XdynCommandLineArguments.hpp"
 
 #include <ssc/solver.hpp>
+#include "report_xdyn_exceptions_to_user.hpp"
 
 CHECK_SSC_VERSION(7,0)
 
@@ -141,7 +141,7 @@ void run_simulation(const XdynCommandLineArguments& input_data)
         serialize_context_if_necessary_new(observers, sys);
         solve(input_data, sys, observers);
     }};
-    if (input_data.catch_exceptions) catch_exceptions(f, input_data.solver);
+    if (input_data.catch_exceptions) report_xdyn_exceptions_to_user(f, input_data.solver);
     else                             f();
 }
 

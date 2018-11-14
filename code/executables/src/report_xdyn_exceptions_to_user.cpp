@@ -1,4 +1,3 @@
-#include "simulator_run.hpp"
 #include "ConnexionError.hpp"
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
@@ -15,10 +14,12 @@
 #include "yaml-cpp/exceptions.h"
 
 #include <functional>
+
+#include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynCommandLineArguments.hpp"
 #include "build_observers_description.hpp"
 
-void catch_exceptions(const std::function<void(void)>& f, const std::string& solver)
+void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const std::string& solver)
 {
     try
     {
