@@ -12,7 +12,7 @@ SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, co
 SimStepperInfos::SimStepperInfos()
     : t(0)
     , Dt(0)
-    , state(0)
+    , full_state_history(0)
     , commands({})
 {
 }
@@ -20,7 +20,7 @@ SimStepperInfos::SimStepperInfos()
 State SimStepper::step(const SimStepperInfos& infos, double Dt)
 {
     const double t = infos.t;
-    const std::vector<State>states = {infos.state};
+    const std::vector<State>states = {infos.full_state_history};
     sim.set_bodystates(states);
     sim.set_command_listener(infos.commands);
     std::vector<Res> results;

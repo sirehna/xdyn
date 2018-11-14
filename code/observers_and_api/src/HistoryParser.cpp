@@ -91,9 +91,8 @@ void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo);
 void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo)
 {
     info.Dt = yinfo.Dt;
-    yinfo.state>>info.state;
+    yinfo.state>>info.full_state_history;
     info.commands = yinfo.commands;
-
 }
 
 
