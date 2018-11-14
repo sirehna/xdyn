@@ -1,4 +1,4 @@
-#include "SimServer.hpp"
+#include "../inc/XdynForCS.hpp"
 
 SimServer::SimServer(const std::string& yaml_model, const std::string& solver, const double dt)
     : builder(yaml_model)

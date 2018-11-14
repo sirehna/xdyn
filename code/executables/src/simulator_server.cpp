@@ -1,4 +1,3 @@
-#include "SimServer.hpp"
 #include "InputData.hpp"
 #include "utilities_for_InputDataSimServer.hpp"
 #include "ssc/websocket/WebSocketServer.hpp"
@@ -6,6 +5,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include <sstream>
+#include "XdynForCS.hpp"
 
 using namespace ssc::websocket;
 

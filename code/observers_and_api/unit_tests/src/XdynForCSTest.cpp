@@ -1,26 +1,27 @@
-#include "SimServerTest.hpp"
-#include "SimServer.hpp"
 #include "yaml_data.hpp"
 #include <ssc/macros.hpp>
+
+#include "XdynForCS.hpp"
+#include "XdynForCSTest.hpp"
 #define EPS 1E-8
 
-SimServerTest::SimServerTest() : a(ssc::random_data_generator::DataGenerator(123456789))
+XdynForCSTest::XdynForCSTest() : a(ssc::random_data_generator::DataGenerator(123456789))
 {
 }
 
-SimServerTest::~SimServerTest()
+XdynForCSTest::~XdynForCSTest()
 {
 }
 
-void SimServerTest::SetUp()
+void XdynForCSTest::SetUp()
 {
 }
 
-void SimServerTest::TearDown()
+void XdynForCSTest::TearDown()
 {
 }
 
-TEST_F(SimServerTest, test_falling_ball_with_yaml)
+TEST_F(XdynForCSTest, test_falling_ball_with_yaml)
 {
 //! [SimServerTest example]
 
