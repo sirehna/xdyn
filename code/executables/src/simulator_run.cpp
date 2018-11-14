@@ -3,7 +3,6 @@
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
 #include "NumericalErrorException.hpp"
-#include "utilities_for_simulator.hpp"
 #include "listeners.hpp"
 #include "simulator_api.hpp"
 #include "SurfaceElevationInterface.hpp"
@@ -17,6 +16,7 @@
 
 #include <functional>
 #include "../inc/XdynCommandLineArguments.hpp"
+#include "build_observers_description.hpp"
 
 void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer)
 {
@@ -165,7 +165,7 @@ void run_simulation(const XdynCommandLineArguments& input_data)
         const auto yaml_input = ssc::text_file_reader::TextFileReader(input_data.yaml_filenames).get_contents();
         ssc::data_source::DataSource command_listener;
         auto sys = get_system(yaml_input, input_data.tstart);
-        auto observers_description = get_observers_description(yaml_input, input_data);
+        auto observers_description = build_observers_description(yaml_input, input_data);
         ListOfObservers observers(observers_description);
         serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
         serialize_context_if_necessary_new(observers, sys);

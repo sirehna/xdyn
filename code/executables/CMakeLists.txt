@@ -46,7 +46,7 @@ CONFIGURE_FILE(
 
 ADD_EXECUTABLE(xdyn
         ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_XdynCommandLineArguments.cpp
-        src/utilities_for_simulator.cpp
+        src/build_observers_description.cpp
         src/XdynCommandLineArguments.cpp
         src/InputDataForME.cpp
         src/simulator_run.cpp
@@ -117,7 +117,7 @@ ADD_EXECUTABLE(gz
         src/XdynCommandLineArguments.cpp
         src/InputDataForME.cpp
         src/simulator_run.cpp
-        src/utilities_for_simulator.cpp
+        src/build_observers_description.cpp
         )
 
 TARGET_LINK_LIBRARIES(gz
@@ -146,7 +146,7 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
 
 ADD_EXECUTABLE(xdyn-for-cs
         src/utilities_for_XdynCommandLineArgumentsSimServer.cpp
-        src/utilities_for_simulator.cpp
+        src/build_observers_description.cpp
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_cs.cpp
 
@@ -161,7 +161,7 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
 
 ADD_EXECUTABLE(xdyn-for-me
         ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_XdynCommandLineArguments.cpp
-        src/utilities_for_simulator.cpp
+        src/build_observers_description.cpp
         src/InputDataForME.cpp
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_me.cpp

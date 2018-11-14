@@ -1,6 +1,6 @@
+#include "build_observers_description.hpp"
 #include "YamlOutput.hpp"
 #include "parse_output.hpp"
-#include "utilities_for_simulator.hpp"
 #include "XdynCommandLineArguments.hpp"
 
 YamlOutput create_a_wave_observer(
@@ -60,16 +60,16 @@ void add_observers_from_cli(
     }
 }
 
-std::vector<YamlOutput> get_observers_description(const std::string& yaml, const XdynCommandLineArguments& input_data)
+std::vector<YamlOutput> build_observers_description(const std::string& yaml, const XdynCommandLineArguments& input_data)
 {
     auto out = parse_output(yaml);
     add_observers_from_cli(yaml, input_data, out);
     return out;
 }
 
-ListOfObservers get_observers(const std::string& yaml, const XdynCommandLineArguments& input_data)
-{
-    auto out = parse_output(yaml);
-    add_observers_from_cli(yaml, input_data, out);
-    return ListOfObservers(out);
-}
+//ListOfObservers get_observers(const std::string& yaml, const XdynCommandLineArguments& input_data)
+//{
+//    auto out = parse_output(yaml);
+//    add_observers_from_cli(yaml, input_data, out);
+//    return ListOfObservers(out);
+//}
