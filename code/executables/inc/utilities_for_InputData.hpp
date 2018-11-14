@@ -25,7 +25,7 @@ namespace po = boost::program_options;
 void print_usage(std::ostream& os, const po::options_description& desc, const std::string& program_name, const std::string& des);
 bool invalid(const XdynCommandLineArguments& input);
 BooleanArguments parse_input(int argc, char **argv, const po::options_description& desc);
-po::options_description get_options_description(XdynCommandLineArguments& input_data);
+po::options_description attach_command_line_arguments_to_options_description(XdynCommandLineArguments& input_data);
 int parse_command_line_for_xdyn(int argc, char **argv, XdynCommandLineArguments& input_data);
 int fill_input_or_display_help(char *argv, XdynCommandLineArguments& input_data);
 std::string description(const std::string& des);

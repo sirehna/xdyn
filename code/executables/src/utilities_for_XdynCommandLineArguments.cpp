@@ -67,7 +67,7 @@ bool invalid(const InputDataForME& input)
     return false;
 }
 
-po::options_description get_options_description(XdynCommandLineArguments& input_data)
+po::options_description attach_command_line_arguments_to_options_description(XdynCommandLineArguments& input_data)
 {
     po::options_description desc("Options");
     desc.add_options()
@@ -113,7 +113,7 @@ BooleanArguments parse_input(int argc, char **argv, const po::options_descriptio
 
 int parse_command_line_for_xdyn(int argc, char **argv, XdynCommandLineArguments& input_data)
 {
-    const po::options_description desc = get_options_description(input_data);
+    const po::options_description desc = attach_command_line_arguments_to_options_description(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);
     input_data.catch_exceptions = not(has.debug);
     if (has.help)
@@ -131,7 +131,7 @@ int parse_command_line_for_xdyn(int argc, char **argv, XdynCommandLineArguments&
 
 int fill_input_or_display_help(char *argv, XdynCommandLineArguments& input_data)
 {
-    const po::options_description desc = get_options_description(input_data);
+    const po::options_description desc = attach_command_line_arguments_to_options_description(input_data);
     print_usage(std::cout, desc, argv, "This is a ship simulator");
     return EXIT_SUCCESS;
 }
