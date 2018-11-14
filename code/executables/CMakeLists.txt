@@ -50,7 +50,7 @@ ADD_EXECUTABLE(xdyn
         src/InputData.cpp
         src/InputDataForME.cpp
         src/simulator_run.cpp
-        src/simulator.cpp
+        src/xdyn.cpp
         )
 
 TARGET_LINK_LIBRARIES(xdyn
