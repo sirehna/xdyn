@@ -48,6 +48,7 @@ ADD_EXECUTABLE(xdyn
         ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
         src/utilities_for_simulator.cpp
         src/InputData.cpp
+        src/InputDataForME.cpp
         src/simulator_run.cpp
         src/simulator.cpp
         )
@@ -114,6 +115,7 @@ ADD_EXECUTABLE(gz
         src/gz.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
         src/InputData.cpp
+        src/InputDataForME.cpp
         src/simulator_run.cpp
         src/utilities_for_simulator.cpp
         )
