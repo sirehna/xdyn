@@ -109,16 +109,21 @@ StateType Sim::normalize_quaternions(const StateType& all_states
     return normalized;
 }
 
-void Sim::operator()(const StateType& x, StateType& dx_dt, double t)
+void Sim::operator()(const StateType& x, StateType& dxdt, double t)
+{
+    dx_dt(x, dxdt, t);
+    state = normalize_quaternions(x);
+    pimpl->_dx_dt = dxdt;
+}
+
+void Sim::dx_dt(const StateType& x, StateType& dxdt, const double t)
 {
     for (auto body: pimpl->bodies)
     {
         body->update(pimpl->env,x,t);
         const auto Fext = sum_of_forces(x, body, t);
-        body->calculate_state_derivatives(Fext, x, dx_dt, t, pimpl->env);
+        body->calculate_state_derivatives(Fext, x, dxdt, t, pimpl->env);
     }
-    state = normalize_quaternions(x);
-    pimpl->_dx_dt = dx_dt;
 }
 
 void Sim::update_discrete_states()
