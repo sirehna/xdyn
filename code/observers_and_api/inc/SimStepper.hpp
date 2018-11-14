@@ -10,6 +10,7 @@ struct SimStepperInfos
     SimStepperInfos();
     double t;
     double Dt;
+    StateType state_at_t;
     State full_state_history;
     std::map<std::string, double> commands;
 };

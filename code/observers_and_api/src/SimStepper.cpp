@@ -12,6 +12,7 @@ SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, co
 SimStepperInfos::SimStepperInfos()
     : t(0)
     , Dt(0)
+    , state_at_t(0)
     , full_state_history(0)
     , commands({})
 {

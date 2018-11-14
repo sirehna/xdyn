@@ -131,3 +131,45 @@ TEST_F(HistoryParserTest, can_parse_commands)
     ASSERT_DOUBLE_EQ(5, s.commands.at("b"));
     ASSERT_DOUBLE_EQ(-12.3, s.commands.at("c"));
 }
+
+TEST_F(HistoryParserTest, can_parse_state_at_t)
+{
+    const std::string yaml =
+            "Dt: 12\n"
+            "states:\n"
+            "    t: 10.123\n"
+            "    x: [[10, 1.123], [1, 23.98], [0.5, 31]]\n"
+            "    y: [[10, 1.123], [1, 23.98], [0.5, 32]]\n"
+            "    z: [[10, 1.123], [1, 23.98], [0.5, 33]]\n"
+            "    u: [[10, 1.123], [1, 23.98], [0.5, 34]]\n"
+            "    v: [[10, 1.123], [1, 23.98], [0.5, 35]]\n"
+            "    w: [[10, 1.123], [1, 23.98], [0.5, 36]]\n"
+            "    p: [[10, 1.123], [1, 23.98], [0.5, 37]]\n"
+            "    q: [[10, 1.123], [1, 23.98], [0.5, 38]]\n"
+            "    r: [[10, 1.123], [1, 23.98], [0.5, 39]]\n"
+            "    qr: [[10, 1.123], [1, 23.98], [0.5, 40]]\n"
+            "    qi: [[10, 1.123], [1, 23.98], [0.5, 41]]\n"
+            "    qj: [[10, 1.123], [1, 23.98], [0.5, 42]]\n"
+            "    qk: [[10, 1.123], [1, 23.98], [0.5, 43]]\n"
+            "commands:\n"
+            "    a: 3\n"
+            "    b: 5\n"
+            "    c: -12.3\n";
+    const double Tmax = 2;
+    const HistoryParser hparser(Tmax);
+    const SimStepperInfos s = hparser.get_simstepperinfo(yaml);
+    ASSERT_EQ(13, s.state_at_t.size());
+    ASSERT_EQ(31, s.state_at_t.at(0));
+    ASSERT_EQ(32, s.state_at_t.at(1));
+    ASSERT_EQ(33, s.state_at_t.at(2));
+    ASSERT_EQ(34, s.state_at_t.at(3));
+    ASSERT_EQ(35, s.state_at_t.at(4));
+    ASSERT_EQ(36, s.state_at_t.at(5));
+    ASSERT_EQ(37, s.state_at_t.at(6));
+    ASSERT_EQ(38, s.state_at_t.at(7));
+    ASSERT_EQ(39, s.state_at_t.at(8));
+    ASSERT_EQ(40, s.state_at_t.at(9));
+    ASSERT_EQ(41, s.state_at_t.at(10));
+    ASSERT_EQ(42, s.state_at_t.at(11));
+    ASSERT_EQ(43, s.state_at_t.at(12));
+}

@@ -87,11 +87,39 @@ std::string  HistoryParser::emit_state_history_yaml(const State& state)
     return generate_history_yaml(ystate);
 }
 
+double extract_last(const YamlHistory& his);
+double extract_last(const YamlHistory& his)
+{
+    if (not(his.values.empty())) return his.values.back();
+                                 return 0;
+}
+
+StateType get_last_state(const YamlState state);
+StateType get_last_state(const YamlState state)
+{
+    StateType ret(13,0);
+    ret[0] = extract_last(state.x);
+    ret[1] = extract_last(state.y);
+    ret[2] = extract_last(state.z);
+    ret[3] = extract_last(state.u);
+    ret[4] = extract_last(state.v);
+    ret[5] = extract_last(state.w);
+    ret[6] = extract_last(state.p);
+    ret[7] = extract_last(state.q);
+    ret[8] = extract_last(state.r);
+    ret[9] = extract_last(state.qr);
+    ret[10] = extract_last(state.qi);
+    ret[11] = extract_last(state.qj);
+    ret[12] = extract_last(state.qk);
+    return ret;
+}
+
 void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo);
 void operator << (SimStepperInfos& info, const YamlSimStepperInfo& yinfo)
 {
     info.Dt = yinfo.Dt;
     yinfo.state>>info.full_state_history;
+    info.state_at_t = get_last_state(yinfo.state);
     info.commands = yinfo.commands;
 }
 
