@@ -10,8 +10,8 @@
 
 #include <ssc/check_ssc_version.hpp>
 
-#include "../inc/XdynCommandLineArguments.hpp"
-#include "utilities_for_InputData.hpp"
+#include "parse_XdynCommandLineArguments.hpp"
+#include "XdynCommandLineArguments.hpp"
 #include "InputDataForME.hpp"
 #include "OptionPrinter.hpp"
 

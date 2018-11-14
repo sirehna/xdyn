@@ -12,7 +12,7 @@ CHECK_SSC_VERSION(7,0)
 
 #include <iostream>
 #include "../inc/XdynCommandLineArguments.hpp"
-#include "utilities_for_InputData.hpp"
+#include "../inc/parse_XdynCommandLineArguments.hpp"
 #include "simulator_run.hpp"
 
 

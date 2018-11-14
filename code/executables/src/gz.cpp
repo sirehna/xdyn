@@ -9,10 +9,10 @@
 #include "GZCurve.hpp"
 #include "make_sim_for_GZ.hpp"
 #include "OptionPrinter.hpp"
-#include "utilities_for_InputData.hpp"
 #include "simulator_run.hpp"
 
 #include <ssc/text_file_reader.hpp>
+#include "../inc/parse_XdynCommandLineArguments.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

@@ -8,6 +8,7 @@
 #include <ssc/text_file_reader.hpp>
 #include <ssc/websocket.hpp>
 
+#include "../inc/parse_XdynCommandLineArguments.hpp"
 #include "ConfBuilder.hpp"
 #include "HistoryParser.hpp"
 #include "InputDataForME.hpp"
@@ -15,7 +16,6 @@
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
 #include "SimStepper.hpp"
-#include "utilities_for_InputData.hpp"
 #include "XdynForME.hpp"
 
 #define ADDRESS "127.0.0.1"
