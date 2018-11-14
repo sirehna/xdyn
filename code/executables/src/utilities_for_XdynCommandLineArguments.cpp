@@ -111,7 +111,7 @@ BooleanArguments parse_input(int argc, char **argv, const po::options_descriptio
     return ret;
 }
 
-int get_input_data(int argc, char **argv, XdynCommandLineArguments& input_data)
+int parse_command_line_for_xdyn(int argc, char **argv, XdynCommandLineArguments& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);

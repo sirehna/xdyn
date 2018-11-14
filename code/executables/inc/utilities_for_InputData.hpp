@@ -26,7 +26,7 @@ void print_usage(std::ostream& os, const po::options_description& desc, const st
 bool invalid(const XdynCommandLineArguments& input);
 BooleanArguments parse_input(int argc, char **argv, const po::options_description& desc);
 po::options_description get_options_description(XdynCommandLineArguments& input_data);
-int get_input_data(int argc, char **argv, XdynCommandLineArguments& input_data);
+int parse_command_line_for_xdyn(int argc, char **argv, XdynCommandLineArguments& input_data);
 int fill_input_or_display_help(char *argv, XdynCommandLineArguments& input_data);
 std::string description(const std::string& des);
 void copy_stream(const std::ostream& from_stream, std::ostream& to_stream);

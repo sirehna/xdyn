@@ -34,7 +34,7 @@ int main(int argc, char** argv)
     try
     {
         if (argc==1) return fill_input_or_display_help(argv[0], input_data);
-        error = get_input_data(argc, argv, input_data);
+        error = parse_command_line_for_xdyn(argc, argv, input_data);
     }
     catch(boost::program_options::error& e)
     {
