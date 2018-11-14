@@ -11,9 +11,9 @@
 #include <string>
 #include <vector>
 
-struct InputDataForME
+struct XdynForMECommandLineArguments
 {
-    InputDataForME();
+    XdynForMECommandLineArguments();
     std::vector<std::string> yaml_filenames;
     bool catch_exceptions;
     short unsigned int port;

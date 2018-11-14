@@ -48,7 +48,7 @@ ADD_EXECUTABLE(xdyn
         ${CMAKE_CURRENT_BINARY_DIR}/parse_XdynCommandLineArguments.cpp
         src/build_observers_description.cpp
         src/XdynCommandLineArguments.cpp
-        src/InputDataForME.cpp
+        src/XdynForMECommandLineArguments.cpp
         src/report_xdyn_exceptions_to_user.cpp
         src/xdyn.cpp
         )
@@ -115,7 +115,7 @@ ADD_EXECUTABLE(gz
         src/gz.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/parse_XdynCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
-        src/InputDataForME.cpp
+        src/XdynForMECommandLineArguments.cpp
         src/report_xdyn_exceptions_to_user.cpp
         src/build_observers_description.cpp
         )
@@ -162,7 +162,7 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
 ADD_EXECUTABLE(xdyn-for-me
         ${CMAKE_CURRENT_BINARY_DIR}/parse_XdynCommandLineArguments.cpp
         src/build_observers_description.cpp
-        src/InputDataForME.cpp
+        src/XdynForMECommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_me.cpp
 

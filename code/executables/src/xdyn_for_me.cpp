@@ -9,9 +9,9 @@
 #include <ssc/websocket.hpp>
 
 #include "../inc/parse_XdynCommandLineArguments.hpp"
+#include "../inc/XdynForMECommandLineArguments.hpp"
 #include "ConfBuilder.hpp"
 #include "HistoryParser.hpp"
-#include "InputDataForME.hpp"
 #include "ConnexionError.hpp"
 #include "InternalErrorException.hpp"
 #include "MeshException.hpp"
@@ -39,8 +39,8 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
     private: TR1(shared_ptr)<XdynForME> xdyn_for_me;
 };
 
-void start_server(const InputDataForME& input_data);
-void start_server(const InputDataForME& input_data)
+void start_server(const XdynForMECommandLineArguments& input_data);
+void start_server(const XdynForMECommandLineArguments& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
@@ -54,7 +54,7 @@ void start_server(const InputDataForME& input_data)
 
 int main(int argc, char** argv)
 {
-    InputDataForME input_data;
+    XdynForMECommandLineArguments input_data;
     int error = 0;
     try
     {

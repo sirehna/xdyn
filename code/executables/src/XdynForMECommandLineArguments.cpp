@@ -5,15 +5,15 @@
  *      Author: cady
  */
 
-#include "InputDataForME.hpp"
+#include "XdynForMECommandLineArguments.hpp"
 
-InputDataForME::InputDataForME() : yaml_filenames(),
+XdynForMECommandLineArguments::XdynForMECommandLineArguments() : yaml_filenames(),
                          catch_exceptions(false),
                          port(0)
 {
 }
 
-bool InputDataForME::empty() const
+bool XdynForMECommandLineArguments::empty() const
 {
     return yaml_filenames.empty() and (port == 0);
 }
