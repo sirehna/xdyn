@@ -1,3 +1,4 @@
+#include "report_xdyn_exceptions_to_user.hpp"
 #include "utilities_for_InputDataSimServer.hpp"
 #include "ssc/websocket/WebSocketServer.hpp"
 #include <ssc/text_file_reader.hpp>
@@ -53,7 +54,18 @@ int main(int argc, char** argv)
         return error;
     }
     if (input_data.empty()) return EXIT_SUCCESS;
-    start_server(input_data);
+    const auto run = [input_data](){
+    {
+        start_server(input_data);
+    }};
+    if (input_data.catch_exceptions)
+    {
 
+        report_xdyn_exceptions_to_user(run, "");
+    }
+    else
+    {
+        run();
+    }
     return error;
 }
