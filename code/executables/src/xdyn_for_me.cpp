@@ -61,7 +61,7 @@ void start_server(const XdynForMECommandLineArguments& input_data)
     TR1(shared_ptr)<XdynForME> sim_server (new XdynForME(yaml));
     SimulationMessage handler(sim_server);
 
-    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, ADDRESS, input_data.port));
+    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port));
     std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
     signal(SIGINT, inthand);
     while(!stop){}

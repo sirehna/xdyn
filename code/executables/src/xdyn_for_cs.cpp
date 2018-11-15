@@ -41,7 +41,7 @@ void start_server(const XdynForCSCommandLineArguments& input_data)
     TR1(shared_ptr)<SimServer> sim_server (new SimServer(yaml, input_data.solver, input_data.initial_timestep));
     SimulationMessage handler(sim_server);
 
-    new ssc::websocket::Server(handler, ADDRESS, input_data.port);
+    new ssc::websocket::Server(handler, input_data.port);
 }
 
 int main(int argc, char** argv)
