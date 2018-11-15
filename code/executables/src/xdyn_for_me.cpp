@@ -84,7 +84,6 @@ int main(int argc, char** argv)
     }
     if (error)
     {
-        std::cerr <<"A problem occurred while parsing inputs" << std::endl;
         return error;
     }
     const auto run = [input_data](){

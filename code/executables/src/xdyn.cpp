@@ -174,7 +174,6 @@ int main(int argc, char** argv)
     }
     if (error)
     {
-        std::cerr <<"A problem occurred while parsing inputs" << std::endl;
         return error;
     }
     if (input_data.catch_exceptions)

@@ -51,7 +51,6 @@ int main(int argc, char** argv)
     const int error = get_input_data(argc, argv, input_data);
     if (error)
     {
-        std::cerr <<"A problem occurred while parsing inputs"<<std::endl;
         return error;
     }
     if (input_data.empty()) return EXIT_SUCCESS;
