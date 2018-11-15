@@ -1,8 +1,8 @@
-#include "../inc/YamlSimServerInputs.hpp"
+#include "YamlSimServerInputs.hpp"
 
 YamlSimServerInputs::YamlSimServerInputs()
     : Dt()
-    , state()
+    , states()
     , commands()
 {
 }

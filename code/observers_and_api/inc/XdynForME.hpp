@@ -17,12 +17,11 @@ class XdynForME
 {
     public :
         XdynForME(const std::string& yaml_model);
-        std::string calculate_dx_dt(const std::string& raw_yaml) const;
+        std::string calculate_dx_dt(const std::string& raw_yaml);
 
     private :
         XdynForME();
         ConfBuilder builder;
-        HistoryParser parser;
 };
 
 

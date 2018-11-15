@@ -32,26 +32,25 @@ TEST_F(XdynForCSTest, test_falling_ball_with_yaml)
     const double t_end = t_start+Dt;
     const std::string yaml_model = test_data::falling_ball_example();
     const std::string solver = "euler";
-    HistoryParser parser(0);
     SimServer sim_server(yaml_model, solver, dt);
     const std::string input_yaml = test_data::complete_yaml_message_for_falling_ball();
-    const std::string output_yaml = sim_server.play_one_step(input_yaml);
-    State output_state = parser.parse_state_history_yaml(output_yaml, 0.0);
+    const std::vector<Res> outputs = sim_server.play_one_step(input_yaml);
 
 //! [SimServerTest example]
 //! [SimServerTest expected output]
-    ASSERT_NEAR(4.0+1.0*10.0,              output_state.x(), EPS);
-    ASSERT_NEAR(8.0,                       output_state.y(), EPS);
-    ASSERT_NEAR(12.0+g*t_end*(t_end-1.)/2.,output_state.z(), EPS);
-    ASSERT_NEAR(1.0,                       output_state.u(), EPS);
-    ASSERT_NEAR(0.0,                       output_state.v(), EPS);
-    ASSERT_NEAR(0.0+g*t_end,               output_state.w(), EPS);
-    ASSERT_NEAR(0,                         output_state.p(), EPS);
-    ASSERT_NEAR(0,                         output_state.q(), EPS);
-    ASSERT_NEAR(0,                         output_state.r(), EPS);
-    ASSERT_NEAR(1,                         output_state.qr(), EPS);
-    ASSERT_NEAR(0,                         output_state.qi(), EPS);
-    ASSERT_NEAR(0,                         output_state.qj(), EPS);
-    ASSERT_NEAR(0,                         output_state.qk(), EPS);
+    ASSERT_EQ(11, outputs.size());
+    ASSERT_NEAR(4.0+1.0*10.0,              outputs.back().x[0], EPS);
+    ASSERT_NEAR(8.0,                       outputs.back().x[1], EPS);
+    ASSERT_NEAR(12.0+g*t_end*(t_end-1.)/2.,outputs.back().x[2], EPS);
+    ASSERT_NEAR(1.0,                       outputs.back().x[3], EPS);
+    ASSERT_NEAR(0.0,                       outputs.back().x[4], EPS);
+    ASSERT_NEAR(0.0+g*t_end,               outputs.back().x[5], EPS);
+    ASSERT_NEAR(0,                         outputs.back().x[6], EPS);
+    ASSERT_NEAR(0,                         outputs.back().x[7], EPS);
+    ASSERT_NEAR(0,                         outputs.back().x[8], EPS);
+    ASSERT_NEAR(1,                         outputs.back().x[9], EPS);
+    ASSERT_NEAR(0,                         outputs.back().x[10], EPS);
+    ASSERT_NEAR(0,                         outputs.back().x[11], EPS);
+    ASSERT_NEAR(0,                         outputs.back().x[12], EPS);
 //! [SimServerTest expected output]
 }

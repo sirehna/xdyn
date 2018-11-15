@@ -24,6 +24,7 @@ set(SRC src/simulator_api.cpp
         src/HistoryParser.cpp
         src/XdynForCS.cpp
         src/XdynForME.cpp
+        src/SimServerInputs.cpp
         )
 
 # Using C++ 2011

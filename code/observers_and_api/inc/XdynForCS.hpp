@@ -12,14 +12,13 @@ class SimServer
                   const std::string& solver,
                   const double dt);
 
-        std::string play_one_step(const std::string& raw_yaml);
+        std::vector<Res> play_one_step(const std::string& raw_yaml);
 
     private :
         SimServer();
         ConfBuilder builder;
         const double dt;
         SimStepper stepper;
-        HistoryParser parser;
 
 };
 

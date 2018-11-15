@@ -23,6 +23,18 @@
 #define ADDRESS "127.0.0.1"
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 
+// For handling Ctrl+C
+#include <unistd.h>
+#include <cstdio>
+#include <csignal>
+
+volatile sig_atomic_t stop;
+
+void inthand(int);
+void inthand(int)
+{
+    stop = 1;
+}
 
 
 struct SimulationMessage : public ssc::websocket::MessageHandler
@@ -49,10 +61,12 @@ void start_server(const XdynForMECommandLineArguments& input_data)
     TR1(shared_ptr)<XdynForME> sim_server (new XdynForME(yaml));
     SimulationMessage handler(sim_server);
 
-    new ssc::websocket::Server(handler, ADDRESS, input_data.port);
+    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, ADDRESS, input_data.port));
+    std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
+    signal(SIGINT, inthand);
+    while(!stop){}
+    std::cout << "Gracefully stopping the websocket server..." << std::endl;
 }
-
-
 
 int main(int argc, char** argv)
 {

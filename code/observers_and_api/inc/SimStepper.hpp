@@ -1,28 +1,18 @@
+#include "ConfBuilder.hpp"
+#include "Res.hpp"
 #include "Sim.hpp"
 #include "State.hpp"
-#include "ConfBuilder.hpp"
 
 #ifndef OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 #define OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 
-struct SimServerInputs
-{
-    SimServerInputs();
-    SimServerInputs(const double Dt);
-    double t;
-    double Dt;
-    StateType state_at_t;
-    State state_history_except_last_point;
-    State full_state_history;
-    std::map<std::string, double> commands;
-};
-
+class SimServerInputs;
 
 class SimStepper
 {
     public:
         SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt);
-        State step(const SimServerInputs& input, double Dt);
+        std::vector<Res> step(const SimServerInputs& input, double Dt);
 
 
     private:

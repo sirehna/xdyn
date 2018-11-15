@@ -1,5 +1,6 @@
-#include "SimStepper.hpp"
 #include "simulator_api.hpp"
+#include "SimServerInputs.hpp"
+#include "SimStepper.hpp"
 #include "InvalidInputException.hpp"
 
 SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt)
@@ -9,30 +10,11 @@ SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, co
 {
 }
 
-SimServerInputs::SimServerInputs()
-    : t(0)
-    , Dt(0)
-    , state_at_t(0)
-    , state_history_except_last_point(0)
-    , full_state_history(0)
-    , commands({})
-{
-}
-
-SimServerInputs::SimServerInputs(const double Dt_)
-    : t(0)
-    , Dt(Dt_)
-    , state_at_t(0)
-    , state_history_except_last_point(Dt_)
-    , full_state_history(Dt_)
-    , commands({})
-{
-}
-
-State SimStepper::step(const SimServerInputs& infos, double Dt)
+std::vector<Res> SimStepper::step(const SimServerInputs& infos, double Dt)
 {
     const double t = infos.t;
     const std::vector<State>states = {infos.full_state_history};
+    sim.reset_history();
     sim.set_bodystates(states);
     sim.set_command_listener(infos.commands);
     std::vector<Res> results;
@@ -52,6 +34,5 @@ State SimStepper::step(const SimServerInputs& infos, double Dt)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "unknown solver");
     }
-    sim.get_bodies().front()->update_body_states(results.back().x, results.back().t);
-    return State(sim.get_bodies().front()->get_states());
+    return results;
 }

@@ -9,7 +9,9 @@
 #include "SimStepperTest.hpp"
 #include "SimStepper.hpp"
 #include "yaml_data.hpp"
+#include "YamlSimServerInputs.hpp"
 #include "ConfBuilder.hpp"
+#include "SimServerInputs.hpp"
 #include <ssc/macros.hpp>
 #define EPS 1E-8
 
@@ -48,28 +50,31 @@ TEST_F(SimStepperTest, can_compute_one_step_with_euler_solver)
     const double v0 = 0;
     const double w0 = 0;
 
-    SimServerInputs infos;
-    infos.full_state_history=State(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
-    infos.commands={};
-    infos.t = t_start;
+    YamlSimServerInputs y;
+    y.Dt = t_end - t_start;
+    y.states = std::vector<YamlState>(1, YamlState(t_start, x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0));
 
-    const State next_X = simstepper.step(infos, Dt);
+    SimServerInputs infos(y, Dt);
+
+    const std::vector<Res> res = simstepper.step(infos, Dt);
 //! [SimStepperTest example]
 
 //! [SimStepperTest expected output]
-    ASSERT_NEAR(x0+u0*t_end,              next_X.x(), EPS);
-    ASSERT_NEAR(y0,                       next_X.y(), EPS);
-    ASSERT_NEAR(z0+g*t_end*(t_end-1.)/2., next_X.z(), EPS);
-    ASSERT_NEAR(u0,                       next_X.u(), EPS);
-    ASSERT_NEAR(v0,                       next_X.v(), EPS);
-    ASSERT_NEAR(w0+g*t_end,               next_X.w(), EPS);
-    ASSERT_NEAR(0,                        next_X.p(), EPS);
-    ASSERT_NEAR(0,                        next_X.q(), EPS);
-    ASSERT_NEAR(0,                        next_X.r(), EPS);
-    ASSERT_NEAR(1,                        next_X.qr(), EPS);
-    ASSERT_NEAR(0,                        next_X.qi(), EPS);
-    ASSERT_NEAR(0,                        next_X.qj(), EPS);
-    ASSERT_NEAR(0,                        next_X.qk(), EPS);
+    ASSERT_EQ(11, res.size());
+    ASSERT_NEAR(t_end,                    res.back().t, EPS);
+    ASSERT_NEAR(x0+u0*t_end,              res.back().x[0], EPS);
+    ASSERT_NEAR(y0,                       res.back().x[1], EPS);
+    ASSERT_NEAR(z0+g*t_end*(t_end-1.)/2., res.back().x[2], EPS);
+    ASSERT_NEAR(u0,                       res.back().x[3], EPS);
+    ASSERT_NEAR(v0,                       res.back().x[4], EPS);
+    ASSERT_NEAR(w0+g*t_end,               res.back().x[5], EPS);
+    ASSERT_NEAR(0,                        res.back().x[6], EPS);
+    ASSERT_NEAR(0,                        res.back().x[7], EPS);
+    ASSERT_NEAR(0,                        res.back().x[8], EPS);
+    ASSERT_NEAR(1,                        res.back().x[9], EPS);
+    ASSERT_NEAR(0,                        res.back().x[10], EPS);
+    ASSERT_NEAR(0,                        res.back().x[11], EPS);
+    ASSERT_NEAR(0,                        res.back().x[12], EPS);
 //! [SimStepperTest expected output]
 }
 
@@ -92,29 +97,30 @@ TEST_F(SimStepperTest, can_compute_same_step_several_times)
     const double v0 = 0;
     const double w0 = 0;
 
-    SimServerInputs infos;
-    infos.full_state_history=State(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
-    infos.commands={};
-    infos.t = t_start;
-
-    State next_X = simstepper.step(infos, Dt);
-    next_X = simstepper.step(infos, Dt);
+    YamlSimServerInputs y;
+    y.Dt = t_end - t_start;
+    y.states = std::vector<YamlState>(1, YamlState(t_start, x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0));
+    const SimServerInputs infos(y, Dt);
+    std::vector<Res> res = simstepper.step(infos, Dt);
+    res = simstepper.step(infos, Dt);
 //! [SimStepperTest can_compute_one_step_with_euler_solver]
 
 //! [SimStepperTest can_compute_one_step_with_euler_solver output]
-    ASSERT_NEAR(x0+u0*t_end,                             next_X.x(), EPS);
-    ASSERT_NEAR(y0,                                      next_X.y(), EPS);
-    ASSERT_NEAR(z0+g*t_end*(t_end-1.)/2.,                next_X.z(), EPS);
-    ASSERT_NEAR(u0,                                      next_X.u(), EPS);
-    ASSERT_NEAR(v0,                                      next_X.v(), EPS);
-    ASSERT_NEAR(w0+g*t_end,                              next_X.w(), EPS);
-    ASSERT_NEAR(0,                                       next_X.p(), EPS);
-    ASSERT_NEAR(0,                                       next_X.q(), EPS);
-    ASSERT_NEAR(0,                                       next_X.r(), EPS);
-    ASSERT_NEAR(1,                                       next_X.qr(), EPS);
-    ASSERT_NEAR(0,                                       next_X.qi(), EPS);
-    ASSERT_NEAR(0,                                       next_X.qj(), EPS);
-    ASSERT_NEAR(0,                                       next_X.qk(), EPS);
+    ASSERT_EQ(11, res.size());
+    ASSERT_NEAR(t_end,                    res.back().t, EPS);
+    ASSERT_NEAR(x0+u0*t_end,              res.back().x[0], EPS);
+    ASSERT_NEAR(y0,                       res.back().x[1], EPS);
+    ASSERT_NEAR(z0+g*t_end*(t_end-1.)/2., res.back().x[2], EPS);
+    ASSERT_NEAR(u0,                       res.back().x[3], EPS);
+    ASSERT_NEAR(v0,                       res.back().x[4], EPS);
+    ASSERT_NEAR(w0+g*t_end,               res.back().x[5], EPS);
+    ASSERT_NEAR(0,                        res.back().x[6], EPS);
+    ASSERT_NEAR(0,                        res.back().x[7], EPS);
+    ASSERT_NEAR(0,                        res.back().x[8], EPS);
+    ASSERT_NEAR(1,                        res.back().x[9], EPS);
+    ASSERT_NEAR(0,                        res.back().x[10], EPS);
+    ASSERT_NEAR(0,                        res.back().x[11], EPS);
+    ASSERT_NEAR(0,                        res.back().x[12], EPS);
 
 //! [SimStepperTest expected output]
 
@@ -136,15 +142,14 @@ TEST_F(SimStepperTest, wrong_solver_must_raise_exception)
     const double v0 = 0;
     const double w0 = 0;
 
-    SimServerInputs infos;
-    infos.full_state_history=State(AbstractStates<double>(x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,t_start);
-    infos.commands={};
-    infos.t = t_start;
+    YamlSimServerInputs y;
+    y.Dt = Dt;
+    y.states = std::vector<YamlState>(1, YamlState(t_start, x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0));
 
 //! [SimStepperTest wrong_solver_must_raise_exception]
 
 //! [SimStepperTest wrong_solver_must_raise_exception output]
-    ASSERT_THROW(simstepper.step(infos, Dt), InvalidInputException);
+    ASSERT_THROW(simstepper.step(SimServerInputs(y, Dt), Dt), InvalidInputException);
 //! [SimStepperTest expected output]
 }
 

@@ -7,7 +7,7 @@ struct YamlSimServerInputs
 {
     YamlSimServerInputs();
     double Dt;
-    YamlState state;
+    std::vector<YamlState> states;
     std::map<std::string, double> commands;
 };
 

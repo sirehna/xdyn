@@ -5,6 +5,7 @@
 #include TR1INC(memory)
 #include <sstream>
 
+#include "HistoryParser.hpp"
 #include "parse_XdynForCSCommandLineArguments.hpp"
 #include "XdynForCS.hpp"
 
@@ -24,11 +25,12 @@ struct SimulationMessage : public MessageHandler
     {
         COUT(msg.get_payload());
         const std::string input_yaml = msg.get_payload();
-        const std::string output_yaml = sim_server->play_one_step(input_yaml);
+        const std::string output_yaml = emit_state_history_yaml(sim_server->play_one_step(input_yaml));
         msg.send_text(output_yaml);
     }
 
-    private: TR1(shared_ptr)<SimServer> sim_server;
+    private:
+        TR1(shared_ptr)<SimServer> sim_server;
 };
 
 void start_server(const XdynForCSCommandLineArguments& input_data);
