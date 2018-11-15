@@ -234,9 +234,11 @@ void Sim::set_bodystates(const std::vector<State>& states)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "'states' size must be 1");
     }
-
     pimpl->bodies.at(0)->set_states_history(states.at(0));
-    state = states.at(0).get_StateType(0);
+    if (not(states.at(0).x.is_empty()))
+    {
+        state = states.at(0).get_StateType(0);
+    }
 }
 
 void Sim::set_command_listener(const std::map<std::string, double>& new_commands)

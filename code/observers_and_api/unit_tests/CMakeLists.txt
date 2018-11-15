@@ -16,6 +16,7 @@ FILE(GLOB SRC
         src/ConfBuilderTest.cpp
         src/HistoryParserTest.cpp
         src/XdynForCSTest.cpp
+        src/XdynForMETest.cpp
         )
 # ------8<---------------------------------------------->8-----
 
