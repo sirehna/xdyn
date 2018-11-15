@@ -45,12 +45,12 @@ int get_input_data(int argc, char **argv, XdynForMECommandLineArguments& input_d
     input_data.catch_exceptions = not(has.debug);
     if (has.help)
     {
-        print_usage(std::cout, desc, argv[0], "This is a ship simulator");
+        print_usage(std::cout, desc, argv[0], "This is a ship simulator (model exchange version)");
         return EXIT_SUCCESS;
     }
     else if (invalid(input_data))
     {
-        print_usage(std::cout, desc, argv[0], "This is a ship simulator");
+        print_usage(std::cout, desc, argv[0], "\n\nThis is a ship simulator (model exchange version)");
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
