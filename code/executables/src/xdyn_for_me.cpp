@@ -46,28 +46,36 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
     {
         COUT(msg.get_payload());
         const std::string input_yaml = msg.get_payload();
-        SimServerInputs server_inputs = parse_SimServerInputs(input_yaml, xdyn_for_me->get_Tmax());
-        const std::vector<double> dx_dt = xdyn_for_me->calculate_dx_dt(server_inputs);
-        std::stringstream ss;
+        try
+        {
+            SimServerInputs server_inputs = parse_SimServerInputs(input_yaml, xdyn_for_me->get_Tmax());
+            const std::vector<double> dx_dt = xdyn_for_me->calculate_dx_dt(server_inputs);
+            std::stringstream ss;
 
-        ss << "{"
-           << "\"dx_dt\": "  << dx_dt[0] << ","
-           << "\"dy_dt\": "  << dx_dt[1] << ","
-           << "\"dz_dt\": "  << dx_dt[2] << ","
-           << "\"du_dt\": "  << dx_dt[3] << ","
-           << "\"dv_dt\": "  << dx_dt[4] << ","
-           << "\"dw_dt\": "  << dx_dt[5] << ","
-           << "\"dp_dt\": "  << dx_dt[6] << ","
-           << "\"dq_dt\": "  << dx_dt[7] << ","
-           << "\"dr_dt\": "  << dx_dt[8] << ","
-           << "\"dqr_dt\": " << dx_dt[9] << ","
-           << "\"dqi_dt\": " << dx_dt[10] << ","
-           << "\"dqj_dt\": " << dx_dt[11] << ","
-           << "\"dqk_dt\": " << dx_dt[12]
-           << "}";
+            ss << "{"
+               << "\"dx_dt\": "  << dx_dt[0] << ","
+               << "\"dy_dt\": "  << dx_dt[1] << ","
+               << "\"dz_dt\": "  << dx_dt[2] << ","
+               << "\"du_dt\": "  << dx_dt[3] << ","
+               << "\"dv_dt\": "  << dx_dt[4] << ","
+               << "\"dw_dt\": "  << dx_dt[5] << ","
+               << "\"dp_dt\": "  << dx_dt[6] << ","
+               << "\"dq_dt\": "  << dx_dt[7] << ","
+               << "\"dr_dt\": "  << dx_dt[8] << ","
+               << "\"dqr_dt\": " << dx_dt[9] << ","
+               << "\"dqi_dt\": " << dx_dt[10] << ","
+               << "\"dqj_dt\": " << dx_dt[11] << ","
+               << "\"dqk_dt\": " << dx_dt[12]
+               << "}";
 
-        const std::string output_yaml = ss.str();;
-        msg.send_text(output_yaml);
+            const std::string output_yaml = ss.str();;
+            msg.send_text(output_yaml);
+        }
+        catch(const std::exception& e)
+        {
+            msg.send_text(std::string("{\"error\": \"") + e.what() + "\"}");
+        }
+
     }
 
     private: TR1(shared_ptr)<XdynForME> xdyn_for_me;
@@ -92,8 +100,10 @@ int main(int argc, char** argv)
 {
     XdynForMECommandLineArguments input_data;
     int error = 0;
+    COUT("");
     try
     {
+        COUT("");
         if (argc==1) return fill_input_or_display_help(argv[0], input_data);
         error = get_input_data(argc, argv, input_data);
     }
@@ -106,19 +116,23 @@ int main(int argc, char** argv)
     {
         return error;
     }
+    COUT("");
     const auto run = [input_data](){
     {
         start_server(input_data);
     }};
+    COUT("");
     if (input_data.catch_exceptions)
     {
-
+        COUT("");
         report_xdyn_exceptions_to_user(run, "");
     }
     else
     {
+        COUT("");
         run();
     }
+    COUT("");
     return 0;
 }
 

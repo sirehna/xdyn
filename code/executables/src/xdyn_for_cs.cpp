@@ -25,8 +25,15 @@ struct SimulationMessage : public MessageHandler
     {
         COUT(msg.get_payload());
         const std::string input_yaml = msg.get_payload();
-        const std::string output_yaml = emit_state_history_yaml(sim_server->play_one_step(input_yaml));
-        msg.send_text(output_yaml);
+        try
+        {
+            msg.send_text(emit_state_history_yaml(sim_server->play_one_step(input_yaml)));
+        }
+        catch(const std::exception& e)
+        {
+            msg.send_text(std::string("{\"error\": \"") + e.what() + "\"}");
+        }
+
     }
 
     private:
