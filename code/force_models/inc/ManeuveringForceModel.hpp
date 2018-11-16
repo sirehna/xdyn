@@ -37,6 +37,8 @@ class ManeuveringForceModel : public ControllableForceModel
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
         static std::string model_name();
 
+        double get_Tmax() const;
+
     private:
         ManeuveringForceModel();
         std::map<std::string, maneuvering::NodePtr> m;

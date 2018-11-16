@@ -4193,6 +4193,28 @@ std::string test_data::manoeuvring_with_euler_angles_and_quaternions()
     return ss.str();
 }
 
+std::string test_data::man_with_delay()
+{
+    std::stringstream ss;
+    ss << "name: F\n"
+       << "reference frame:\n"
+       << "    frame: ball\n"
+       << "    x: {value: 0, unit: m}\n"
+       << "    y: {value: 0, unit: m}\n"
+       << "    z: {value: 0, unit: m}\n"
+       << "    phi: {value: 0, unit: deg}\n"
+       << "    theta: {value: 0, unit: deg}\n"
+       << "    psi: {value: 0, unit: deg}\n"
+       << "commands: [command1, b, a]\n"
+       << "X: 1E6*(x(t-10) + command1*x(t-9) + 2*b*y(t-8) + z(t-7)/a)\n"
+       << "Y: 2E6*(x(t-9) + 3*command1*x(t-8) + 2*b*y(t-7) + z(t-6)/a)\n"
+       << "Z: 3E6*(x(t-8) + command1*x(t-7) + 4*b*y(t-6) + z(t-5)/a)\n"
+       << "K: 4E6*(x(t-7) + 5*command1*x(t-6) + 2*b*y(t-5) + z(t-4)/a)\n"
+       << "M: 5E6*(x(t-6) + command1*x(t-5) + 2*b*y(t-4) + z(t-3)/a)\n"
+       << "N: 1E6*123*x(t-10)";
+    return ss.str();
+}
+
 std::string test_data::dummy_history()
 {
     std::stringstream ss;
