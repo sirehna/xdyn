@@ -83,3 +83,9 @@ TEST_F(HistoryParserTest, can_parse_all_states_before_t)
     const SimServerInputs s = parse_SimServerInputs(yaml, 100);
     ASSERT_EQ(2, s.state_history_except_last_point.x.size());
 }
+
+TEST_F(HistoryParserTest, t_should_correspond_to_last_value_in_yaml)
+{
+    const SimServerInputs s = parse_SimServerInputs(yaml, 100);
+    ASSERT_DOUBLE_EQ(51.123, s.t);
+}

@@ -57,6 +57,7 @@ SimServerInputs::SimServerInputs(const YamlSimServerInputs& server_inputs, const
         state_at_t[11] = server_inputs.states.back().qj;
         state_at_t[12] = server_inputs.states.back().qk;
         record(full_state_history, server_inputs.states.back());
+        t = server_inputs.states.back().t;
     }
 }
 
