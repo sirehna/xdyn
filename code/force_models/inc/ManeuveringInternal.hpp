@@ -33,6 +33,8 @@ namespace maneuvering
             virtual Function get_lambda() const = 0;
             std::vector<NodePtr> get_children() const;
             virtual void accept(AbstractNodeVisitor& visitor) const = 0;
+            virtual double get_max() const = 0;
+            virtual double get_min() const = 0;
 
         protected:
             std::vector<NodePtr> children;
@@ -66,6 +68,8 @@ namespace maneuvering
             Constant(const double val);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
 
         private:
             double val;
@@ -76,7 +80,6 @@ namespace maneuvering
         public:
             Unary(const NodePtr operand);
 
-        protected:
             NodePtr get_operand() const;
     };
 
@@ -86,6 +89,8 @@ namespace maneuvering
             Cos(const NodePtr& operand);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Sin : public Unary
@@ -94,6 +99,8 @@ namespace maneuvering
             Sin(const NodePtr& operand);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Abs : public Unary
@@ -102,6 +109,8 @@ namespace maneuvering
             Abs(const NodePtr& operand);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Log : public Unary
@@ -110,6 +119,8 @@ namespace maneuvering
             Log(const NodePtr& operand);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Sum : public Binary
@@ -118,6 +129,8 @@ namespace maneuvering
             Sum(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Pow : public Binary
@@ -126,6 +139,8 @@ namespace maneuvering
             Pow(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Exp : public Unary
@@ -134,6 +149,8 @@ namespace maneuvering
             Exp(const NodePtr& operand);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Sqrt : public Unary
@@ -142,6 +159,8 @@ namespace maneuvering
             Sqrt(const NodePtr& operand);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Difference : public Binary
@@ -150,6 +169,8 @@ namespace maneuvering
             Difference(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Divide : public Binary
@@ -158,6 +179,8 @@ namespace maneuvering
             Divide(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class Multiply : public Binary
@@ -166,6 +189,8 @@ namespace maneuvering
             Multiply(const NodePtr& lhs, const NodePtr& rhs);
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     enum class StateType {X, Y, Z, U, V, W, P, Q, R, QR, QI, QJ, QK, PHI, THETA, PSI};
@@ -209,6 +234,17 @@ namespace maneuvering
                             return op(states,ds,t);
                         };
             }
+
+
+            double get_max() const
+            {
+                return 1e15;
+            }
+
+            double get_min() const
+            {
+                return -1e15;
+            }
             void accept(AbstractNodeVisitor& visitor) const;
             YamlRotation rot;
     };
@@ -219,6 +255,8 @@ namespace maneuvering
             Time();
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
+            double get_max() const;
+            double get_min() const;
     };
 
     class UnknownIdentifier : public Nullary
@@ -228,6 +266,8 @@ namespace maneuvering
             Function get_lambda() const;
             void accept(AbstractNodeVisitor& visitor) const;
             std::string get_name() const;
+            double get_max() const;
+            double get_min() const;
 
         private:
             UnknownIdentifier();
@@ -292,6 +332,39 @@ namespace maneuvering
     NodePtr make_state_qk(const NodePtr& operand, const YamlRotation& rot);
     NodePtr make_time();
     NodePtr make_unknown_identifier(const std::string& identifier_name);
+
+    class FindTmax : public AbstractNodeVisitor
+    {
+        public:
+            FindTmax();
+            double get_Tmax() const;
+            void visit(const UnknownIdentifier& f);
+            void visit(const Time& f);
+            void visit(const State<StateType::X>& f);
+            void visit(const State<StateType::Y>& f);
+            void visit(const State<StateType::Z>& f);
+            void visit(const State<StateType::U>& f);
+            void visit(const State<StateType::V>& f);
+            void visit(const State<StateType::W>& f);
+            void visit(const State<StateType::P>& f);
+            void visit(const State<StateType::Q>& f);
+            void visit(const State<StateType::R>& f);
+            void visit(const State<StateType::PHI>& f);
+            void visit(const State<StateType::THETA>& f);
+            void visit(const State<StateType::PSI>& f);
+            void visit(const State<StateType::QR>& f);
+            void visit(const State<StateType::QI>& f);
+            void visit(const State<StateType::QJ>& f);
+            void visit(const State<StateType::QK>& f);
+            void visit(const Binary& f);
+            void visit(const Unary& f);
+            void visit(const Constant& f);
+
+        private:
+            double Tmax;
+    };
 }
+
+
 
 #endif  /* MANEUVERINGINTERNAL_HPP_ */

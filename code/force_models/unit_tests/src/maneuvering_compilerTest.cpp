@@ -145,3 +145,21 @@ TEST_F(maneuvering_compilerTest, can_pretty_print)
     ASSERT_EQ("x(t)+(3)",maneuvering::print("x(t)+3"));
     ASSERT_EQ("(x(t))^(y(t)+(3))",maneuvering::print("x(t)^(y(t)+3)"));
 }
+
+TEST_F(maneuvering_compilerTest, can_get_Tmax)
+{
+    ASSERT_DOUBLE_EQ(0, maneuvering::get_Tmax(maneuvering::compile("0", YamlRotation())));
+    ASSERT_DOUBLE_EQ(0, maneuvering::get_Tmax(maneuvering::compile("3", YamlRotation())));
+    ASSERT_DOUBLE_EQ(0, maneuvering::get_Tmax(maneuvering::compile("x(t)", YamlRotation())));
+    ASSERT_DOUBLE_EQ(0, maneuvering::get_Tmax(maneuvering::compile("x(t)+3", YamlRotation())));
+    ASSERT_DOUBLE_EQ(0, maneuvering::get_Tmax(maneuvering::compile("x(t)+y(t)", YamlRotation())));
+
+    EXPECT_DOUBLE_EQ(0, maneuvering::get_Tmax(maneuvering::compile("x(t+3)", YamlRotation())));
+    EXPECT_DOUBLE_EQ(3, maneuvering::get_Tmax(maneuvering::compile("x(t-3)", YamlRotation())));
+    ASSERT_DOUBLE_EQ(0, maneuvering::get_Tmax(maneuvering::compile("x(t-0)", YamlRotation())));
+    ASSERT_DOUBLE_EQ(4, maneuvering::get_Tmax(maneuvering::compile("x(t-4)+y(t-3)", YamlRotation())));
+    ASSERT_DOUBLE_EQ(16, maneuvering::get_Tmax(maneuvering::compile("x(t-4*4)+y(t-3)", YamlRotation())));
+    EXPECT_DOUBLE_EQ(1, maneuvering::get_Tmax(maneuvering::compile("x(t-sin(4))", YamlRotation())));
+    EXPECT_DOUBLE_EQ(1E15, maneuvering::get_Tmax(maneuvering::compile("x(t-x(t))", YamlRotation())));
+    EXPECT_DOUBLE_EQ(1, maneuvering::get_Tmax(maneuvering::compile("x(t-cos(x(t)))", YamlRotation())));
+}

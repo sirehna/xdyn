@@ -183,6 +183,13 @@ namespace maneuvering
         PrettyPrinter pretty_print;
         return pretty_print(ast);
     }
+
+    double get_Tmax(const NodePtr& node)
+    {
+        FindTmax find_Tmax;
+        node->accept(find_Tmax);
+        return find_Tmax.get_Tmax();
+    }
 }
 
 
