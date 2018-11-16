@@ -3,6 +3,7 @@
 #include "parse_history.hpp"
 #include <vector>
 #include "InvalidInputException.hpp"
+#include "external_data_structures_parsers.hpp"
 
 void operator >> (const YAML::Node& node, YamlState& s);
 void operator >> (const YAML::Node& node, YamlState& s)
@@ -48,7 +49,8 @@ void operator << (YAML::Emitter& out, const YamlState& state)
 void operator>> (const YAML::Node& node, YamlSimServerInputs& infos);
 void operator>> (const YAML::Node& node, YamlSimServerInputs& infos)
 {
-    node["Dt"]       >> infos.Dt;
+    infos.Dt = 0;
+    try_to_parse(node, "Dt", infos.Dt);
     node["states"]   >> infos.states;
     node["commands"] >> infos.commands;
 }

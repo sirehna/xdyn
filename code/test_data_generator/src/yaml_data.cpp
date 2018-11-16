@@ -4232,6 +4232,30 @@ std::string test_data::complete_yaml_message_from_gui()
     return ss.str();
 }
 
+std::string test_data::simserver_message_without_Dt()
+{
+    std::stringstream ss;
+    ss << "states:" << std::endl
+       << "- {t: 1234.5, "
+       << "x: 90, "
+       << "y: 91, "
+       << "z: 92, "
+       << "u: 93, "
+       << "v: 94, "
+       << "w: 95, "
+       << "p: 96, "
+       << "q: 97, "
+       << "r: 98, "
+      << "qr: 99, "
+      << "qi: 100, "
+      << "qj: 101, "
+      << "qk: 102}" << std::endl
+      <<"commands:" << std::endl
+      <<"  RPM: 1.2" << std::endl
+      <<"  B1: 0.1";
+    return ss.str();
+}
+
 std::string test_data::complete_yaml_message_for_falling_ball()
 {
     std::stringstream ss;

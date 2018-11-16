@@ -87,6 +87,7 @@ namespace test_data
     std::string bug_3241();
     std::string constant_force();
     std::string issue_20();
+    std::string simserver_message_without_Dt();
 }
 
 #endif /* YAML_DATA_HPP_ */

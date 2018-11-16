@@ -83,3 +83,9 @@ TEST_F(parse_historyTest, can_parse_commands)
     ASSERT_EQ(yinfos.commands.find("RPM")->second, 1.2);
     ASSERT_EQ(yinfos.commands.find("B1")->second, 0.1);
 }
+
+TEST_F(parse_historyTest, Dt_should_not_be_compulsory)
+{
+    YamlSimServerInputs yinfos = decode_YamlSimServerInputs(test_data::simserver_message_without_Dt());
+    ASSERT_EQ(yinfos.Dt, 0);
+}
