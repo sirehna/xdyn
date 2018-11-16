@@ -87,6 +87,7 @@ namespace test_data
     std::string bug_3241();
     std::string constant_force();
     std::string issue_20();
+    std::string simserver_test_with_commands_and_delay();
     std::string simserver_message_without_Dt();
     std::string man_with_delay();
 }
