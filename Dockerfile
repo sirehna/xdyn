@@ -130,6 +130,13 @@ RUN cd cppzmq \
       -DCMAKE_CXX_FLAGS="-fPIC" \
  && make -j 4 install
 
+RUN git clone https://github.com/miloyip/rapidjson.git tmp \
+ && cd tmp \
+ && git checkout v1.1.0 \
+ && cd .. \
+ && cp -r tmp/include/rapidjson rapidjson \
+ && rm -rf tmp
+
 ARG CACHEBUST=1
 RUN rm -rf /opt/share/ssc.deb
 ADD ssc.deb /opt/share/ssc.deb
