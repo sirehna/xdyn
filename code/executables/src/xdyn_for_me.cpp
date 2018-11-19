@@ -45,15 +45,13 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
     void operator()(const ssc::websocket::Message& msg)
     {
         COUT(msg.get_payload());
-//        const auto outputter = [&msg](const std::string& what) {msg.send_text(std::string("{\"error\": \"") + what + "\"}");};
-
+        const auto outputter = [&msg](const std::string& what) {msg.send_text(std::string("{\"error\": \"") + what + "\"}");};
         const std::string input_yaml = msg.get_payload();
-        try
+        const auto f = [&input_yaml, this, &msg]()
         {
             SimServerInputs server_inputs = parse_SimServerInputs(input_yaml, xdyn_for_me->get_Tmax());
             const std::vector<double> dx_dt = xdyn_for_me->calculate_dx_dt(server_inputs);
             std::stringstream ss;
-
             ss << "{"
                << "\"dx_dt\": "  << dx_dt[0] << ","
                << "\"dy_dt\": "  << dx_dt[1] << ","
@@ -69,15 +67,10 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
                << "\"dqj_dt\": " << dx_dt[11] << ","
                << "\"dqk_dt\": " << dx_dt[12]
                << "}";
-
             const std::string output_yaml = ss.str();;
             msg.send_text(output_yaml);
-        }
-        catch(const std::exception& e)
-        {
-            msg.send_text(std::string("{\"error\": \"") + e.what() + "\"}");
-        }
-
+        };
+        report_xdyn_exceptions_to_user(f, outputter);
     }
 
     private: TR1(shared_ptr)<XdynForME> xdyn_for_me;
