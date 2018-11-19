@@ -95,7 +95,7 @@ void start_server(const XdynForMECommandLineArguments& input_data)
     std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
     signal(SIGINT, inthand);
     while(!stop){}
-    std::cout << "Gracefully stopping the websocket server..." << std::endl;
+    std::cout << std::endl << "Gracefully stopping the websocket server..." << std::endl;
 }
 
 int main(int argc, char** argv)
