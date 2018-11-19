@@ -44,6 +44,18 @@ struct SimulationMessage : public MessageHandler
 };
 
 
+// For handling Ctrl+C
+#include <unistd.h>
+#include <cstdio>
+#include <csignal>
+
+volatile sig_atomic_t stop;
+
+void inthand(int);
+void inthand(int)
+{
+    stop = 1;
+}
 
 void start_server(const XdynForCSCommandLineArguments& input_data);
 void start_server(const XdynForCSCommandLineArguments& input_data)
@@ -52,8 +64,11 @@ void start_server(const XdynForCSCommandLineArguments& input_data)
     const auto yaml = yaml_reader.get_contents();
     TR1(shared_ptr)<SimServer> sim_server (new SimServer(yaml, input_data.solver, input_data.initial_timestep));
     SimulationMessage handler(sim_server);
-
-    new ssc::websocket::Server(handler, input_data.port);
+    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port));
+    std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
+    signal(SIGINT, inthand);
+    while(!stop){}
+    std::cout << "Gracefully stopping the websocket server..." << std::endl;
 }
 
 int main(int argc, char** argv)
