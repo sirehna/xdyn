@@ -2,6 +2,7 @@
 #include "ssc/websocket/WebSocketServer.hpp"
 #include <ssc/text_file_reader.hpp>
 #include <ssc/macros.hpp>
+
 #include TR1INC(memory)
 #include <sstream>
 
@@ -16,6 +17,14 @@ using namespace ssc::websocket;
 #define WEBSOCKET_PORT    1234
 
 
+#include <boost/algorithm/string/replace.hpp>
+std::string escape_newlines(std::string str);
+std::string escape_newlines(std::string str)
+{
+    boost::replace_all(str, "\n", "\\n");
+    return str;
+}
+
 struct SimulationMessage : public MessageHandler
 {
     SimulationMessage(const TR1(shared_ptr)<SimServer>& simserver) : sim_server(simserver)
@@ -25,7 +34,7 @@ struct SimulationMessage : public MessageHandler
     {
         COUT(msg.get_payload());
         const std::string input_yaml = msg.get_payload();
-        const auto outputter = [&msg](const std::string& what) {msg.send_text(std::string("{\"error\": \"") + what + "\"}");};
+        const auto outputter = [&msg](const std::string& what) {msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
         const auto f = [&msg, this, &input_yaml]() {msg.send_text(emit_state_history_yaml(this->sim_server->play_one_step(input_yaml)));};
         report_xdyn_exceptions_to_user(f, outputter);
     }

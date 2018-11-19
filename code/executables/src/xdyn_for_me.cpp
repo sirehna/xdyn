@@ -36,6 +36,13 @@ void inthand(int)
     stop = 1;
 }
 
+#include <boost/algorithm/string/replace.hpp>
+std::string escape_newlines(std::string str);
+std::string escape_newlines(std::string str)
+{
+    boost::replace_all(str, "\n", "\\n");
+    return str;
+}
 
 struct SimulationMessage : public ssc::websocket::MessageHandler
 {
@@ -45,7 +52,7 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
     void operator()(const ssc::websocket::Message& msg)
     {
         COUT(msg.get_payload());
-        const auto outputter = [&msg](const std::string& what) {msg.send_text(std::string("{\"error\": \"") + what + "\"}");};
+        const auto outputter = [&msg](const std::string& what) {msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
         const std::string input_yaml = msg.get_payload();
         const auto f = [&input_yaml, this, &msg]()
         {
