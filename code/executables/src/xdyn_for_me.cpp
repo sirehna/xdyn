@@ -125,7 +125,7 @@ int main(int argc, char** argv)
     if (input_data.catch_exceptions)
     {
         COUT("");
-        report_xdyn_exceptions_to_user(run, "");
+        report_xdyn_exceptions_to_user(run);
     }
     else
     {

@@ -19,7 +19,7 @@
 #include "XdynCommandLineArguments.hpp"
 #include "build_observers_description.hpp"
 
-void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const std::string& solver)
+void report_xdyn_exceptions_to_user(const std::function<void(void)>& f)
 {
     try
     {
@@ -37,11 +37,8 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
     catch(const NumericalErrorException& e)
     {
         std::cerr << "The simulation has diverged and cannot continue: " << e.get_message() << std::endl;
-        if (solver=="euler")
-        {
-            std::cerr << "The simulation used a Euler integration scheme, maybe the simulation can be run with" << std::endl
-                      << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
-        }
+        std::cerr << "Maybe you can use another solver? For example, if you used a Euler integration scheme, maybe the simulation can be run with" << std::endl
+                  << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
     }
     catch(const ConnexionError& e)
     {
