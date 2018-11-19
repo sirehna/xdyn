@@ -10,10 +10,12 @@
 #include <ssc/text_file_reader.hpp>
 #include <ssc/solver.hpp>
 #include <ssc/exception_handling.hpp>
+#include <ssc/json/JSONException.hpp>
 
 #include "yaml-cpp/exceptions.h"
 
 #include <functional>
+
 
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynCommandLineArguments.hpp"
@@ -46,6 +48,11 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
     catch(const ConnexionError& e)
     {
         ss << "This simulation requires X-DYN to connect to a server but there was a problem with that connection: " << e.get_message() << std::endl;
+        outputter(ss.str());
+    }
+    catch(const ssc::json::Exception& e)
+    {
+        ss << "There is a syntax problem with the supplied JSON: " << e.get_message() << std::endl;
         outputter(ss.str());
     }
     catch(ssc::exception_handling::Exception& e)
