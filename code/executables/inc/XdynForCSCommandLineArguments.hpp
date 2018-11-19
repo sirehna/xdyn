@@ -10,12 +10,15 @@
 
 #include "XdynCommandLineArguments.hpp"
 
-struct XdynForCSCommandLineArguments : XdynCommandLineArguments
+struct XdynForCSCommandLineArguments
 {
     XdynForCSCommandLineArguments();
     bool empty() const;
+    std::vector<std::string> yaml_filenames;
+    std::string solver;
+    double initial_timestep;
+    bool catch_exceptions;
     short unsigned int port;
-
 };
 
 

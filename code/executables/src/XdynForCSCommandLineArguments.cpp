@@ -8,13 +8,12 @@
 
 #include "XdynForCSCommandLineArguments.hpp"
 
-XdynForCSCommandLineArguments::XdynForCSCommandLineArguments() : port(0)
+XdynForCSCommandLineArguments::XdynForCSCommandLineArguments() : yaml_filenames(),
+solver(), initial_timestep(), catch_exceptions(), port(0)
 {
 }
 
 bool XdynForCSCommandLineArguments::empty() const
 {
-    return wave_output.empty() and output_filename.empty()
-            and yaml_filenames.empty() and (initial_timestep == 0) and (tstart == 0) and (tend == 0)
-            and (port == 0);
+    return yaml_filenames.empty() and (initial_timestep == 0) and (port == 0);
 }
