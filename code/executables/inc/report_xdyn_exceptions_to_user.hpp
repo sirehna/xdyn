@@ -4,6 +4,6 @@
 #include <functional>
 #include <string>
 
-void report_xdyn_exceptions_to_user(const std::function<void(void)>& f);
+void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const std::function<void(const std::string&)>& outputter);
 
 #endif

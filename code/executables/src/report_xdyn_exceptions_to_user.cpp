@@ -19,16 +19,18 @@
 #include "XdynCommandLineArguments.hpp"
 #include "build_observers_description.hpp"
 
-void report_xdyn_exceptions_to_user(const std::function<void(void)>& f)
+void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const std::function<void(const std::string&)>& outputter)
 {
+    std::stringstream ss;
     try
     {
         f();
     }
     catch(const InternalErrorException& e)
     {
-        std::cerr << "The following error should never arise & is clearly a sign of a bug in the simulator. Please contact the support team." << std::endl
+        ss << "The following error should never arise & is clearly a sign of a bug in the simulator. Please contact the support team." << std::endl
                   << e.what() << std::endl;
+        outputter(ss.str());
     }
     catch(const MeshException& e)
     {
@@ -36,28 +38,33 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f)
     }
     catch(const NumericalErrorException& e)
     {
-        std::cerr << "The simulation has diverged and cannot continue: " << e.get_message() << std::endl;
-        std::cerr << "Maybe you can use another solver? For example, if you used a Euler integration scheme, maybe the simulation can be run with" << std::endl
-                  << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
+        ss << "The simulation has diverged and cannot continue: " << e.get_message() << std::endl;
+        ss << "Maybe you can use another solver? For example, if you used a Euler integration scheme, maybe the simulation can be run with" << std::endl
+           << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
+        outputter(ss.str());
     }
     catch(const ConnexionError& e)
     {
-        std::cerr << "This simulation requires X-DYN to connect to a server but there was a problem with that connection: " << e.get_message() << std::endl;
+        ss << "This simulation requires X-DYN to connect to a server but there was a problem with that connection: " << e.get_message() << std::endl;
+        outputter(ss.str());
     }
     catch(ssc::exception_handling::Exception& e)
     {
-        std::cerr << "The following problem was detected:" << std::endl << e.get_message() << std::endl;
+        ss << "The following problem was detected:" << std::endl << e.get_message() << std::endl;
+        outputter(ss.str());
     }
     catch(const YAML::Exception& e)
     {
-        std::cerr << "There is a syntax problem with the YAML file line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
-                  << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
+        ss << "There is a syntax problem with the YAML file line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
+           << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
+        outputter(ss.str());
     }
     catch(std::exception& e)
     {
-        std::cerr << "Something bad has happened: please send an email to the support team containing the following:" << std::endl
-                  << "- Input YAML file(s) + STL (if needed)" << std::endl
-                  << "- Command-line arguments" << std::endl
-                  << "- The following error message: " << e.what() << std::endl;
+        ss << "Something bad has happened: please send an email to the support team containing the following:" << std::endl
+           << "- Input YAML file(s) + STL (if needed)" << std::endl
+           << "- Command-line arguments" << std::endl
+           << "- The following error message: " << e.what() << std::endl;
+        outputter(ss.str());
     }
 }

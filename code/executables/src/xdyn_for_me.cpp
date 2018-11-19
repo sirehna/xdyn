@@ -45,6 +45,8 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
     void operator()(const ssc::websocket::Message& msg)
     {
         COUT(msg.get_payload());
+//        const auto outputter = [&msg](const std::string& what) {msg.send_text(std::string("{\"error\": \"") + what + "\"}");};
+
         const std::string input_yaml = msg.get_payload();
         try
         {
@@ -125,7 +127,7 @@ int main(int argc, char** argv)
     if (input_data.catch_exceptions)
     {
         COUT("");
-        report_xdyn_exceptions_to_user(run);
+        report_xdyn_exceptions_to_user(run, [](const std::string& s){std::cerr << s;});
     }
     else
     {

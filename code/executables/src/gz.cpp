@@ -124,7 +124,7 @@ int main(int argc, char** argv)
                     write(os, phi*180./PI, calculate.gz(phi), sep);
                 }
             };
-        report_xdyn_exceptions_to_user(f);
+        report_xdyn_exceptions_to_user(f, [](const std::string& s){std::cerr << s;});
     }
     return 0;
 }
