@@ -113,8 +113,8 @@ std::string emit_state_history_yaml(const std::vector<Res>& states)
     return encode_YamlStates(yaml_states);
 }
 
-SimServerInputs parse_SimServerInputs(const std::string& yaml, const double max_history_length)
+SimServerInputs parse_SimServerInputs(const std::string& json, const double max_history_length)
 {
-    const YamlSimServerInputs yaml_inputs = decode_YamlSimServerInputs(yaml);
+    const YamlSimServerInputs yaml_inputs = decode_YamlSimServerInputs(json);
     return SimServerInputs(yaml_inputs, max_history_length);
 }

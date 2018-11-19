@@ -36,13 +36,14 @@ SimServerInputs::SimServerInputs(const YamlSimServerInputs& server_inputs, const
     , full_state_history(max_history_length)
     , commands(server_inputs.commands)
 {
-    for(size_t i=0 ; i< (server_inputs.states.size()-1) ; i++)
-    {
-        record(state_history_except_last_point, server_inputs.states[i]);
-        record(full_state_history, server_inputs.states[i]);
-    }
     if (not(server_inputs.states.empty()))
     {
+        for(size_t i=0 ; i< (server_inputs.states.size()-1) ; i++)
+        {
+            record(state_history_except_last_point, server_inputs.states[i]);
+            record(full_state_history, server_inputs.states[i]);
+        }
+
         state_at_t[0] = server_inputs.states.back().x;
         state_at_t[1] = server_inputs.states.back().y;
         state_at_t[2] = server_inputs.states.back().z;

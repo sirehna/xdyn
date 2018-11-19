@@ -1,3 +1,4 @@
+#include <ssc/json.hpp>
 #include "yaml.h"
 #include "YamlState.hpp"
 #include "parse_history.hpp"
@@ -55,14 +56,58 @@ void operator>> (const YAML::Node& node, YamlSimServerInputs& infos)
     node["commands"] >> infos.commands;
 }
 
-YamlSimServerInputs decode_YamlSimServerInputs(const std::string& yaml)
+YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
 {
-    std::stringstream stream(yaml);
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
+    rapidjson::Document document;
+    ssc::json::parse(json, document);
     YamlSimServerInputs infos;
-    node >> infos;
+    infos.Dt = ssc::json::find_optional_double("Dt", document, 0);
+    if (not(document.HasMember("states")))
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "Missing key 'states' in JSON root.")
+    }
+    if (not(document["states"].IsArray()))
+    {
+      THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "Expecting a JSON array but got '" << ssc::json::dump(document["states"]));
+    }
+    for (rapidjson::Value& v:document["states"].GetArray())
+    {
+        YamlState s;
+        s.t = ssc::json::find_double("t", v);
+        s.x = ssc::json::find_double("x", v);
+        s.y = ssc::json::find_double("y", v);
+        s.z = ssc::json::find_double("z", v);
+        s.u = ssc::json::find_double("u", v);
+        s.v = ssc::json::find_double("v", v);
+        s.w = ssc::json::find_double("w", v);
+        s.p = ssc::json::find_double("p", v);
+        s.q = ssc::json::find_double("q", v);
+        s.r = ssc::json::find_double("r", v);
+        s.qr = ssc::json::find_double("qr", v);
+        s.qi = ssc::json::find_double("qi", v);
+        s.qj = ssc::json::find_double("qj", v);
+        s.qk = ssc::json::find_double("qk", v);
+        infos.states.push_back(s);
+    }
+    if (document.HasMember("commands"))
+    {
+        const rapidjson::Value& commands = document["commands"];
+        if (not(commands.IsObject()) && not(commands.IsNull()))
+        {
+            THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "'commands' should be a JSON object (key-values): got " << ssc::json::print_type(commands))
+        }
+        else
+        {
+            if (not(commands.IsNull()))
+            {
+                for (rapidjson::Value::ConstMemberIterator it = commands.MemberBegin(); it != commands.MemberEnd(); ++it)
+                {
+                    infos.commands[it->name.GetString()] = ssc::json::find_double(it->name.GetString(), commands);
+                }
+            }
+        }
+    }
+
     return infos;
 }
 
