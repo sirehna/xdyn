@@ -37,10 +37,10 @@ void inthand(int)
 }
 
 #include <boost/algorithm/string/replace.hpp>
-std::string escape_newlines(std::string str);
-std::string escape_newlines(std::string str)
+std::string replace_newlines_by_spaces(std::string str);
+std::string replace_newlines_by_spaces(std::string str)
 {
-    boost::replace_all(str, "\n", "\\n");
+    boost::replace_all(str, "\n", " ");
     return str;
 }
 
@@ -56,8 +56,8 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
         {
             std::cout << current_date_time() << " Received: " << input_json << std::endl;
         }
-        const std::function<void(const std::string&)> quiet_error_outputter = [&msg](const std::string& what) {msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
-        const std::function<void(const std::string&)> verbose_error_outputter = [&msg](const std::string& what) {std::cerr << current_date_time() << " Error: " << what << std::endl; msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
+        const std::function<void(const std::string&)> quiet_error_outputter = [&msg](const std::string& what) {msg.send_text(replace_newlines_by_spaces(std::string("{\"error\": \"") + what + "\"}"));};
+        const std::function<void(const std::string&)> verbose_error_outputter = [&msg](const std::string& what) {std::cerr << current_date_time() << " Error: " << what << std::endl; msg.send_text(replace_newlines_by_spaces(std::string("{\"error\": \"") + what + "\"}"));};
         const auto error_outputter = verbose ? verbose_error_outputter : quiet_error_outputter;
         const std::string input_yaml = msg.get_payload();
         const auto f =
