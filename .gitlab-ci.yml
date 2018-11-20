@@ -34,7 +34,7 @@ build:debian:
    stage: build
    script:
      - make debian
-     - ./run_all_tests_debian.sh
+     - ./run_all_tests_debian.sh --gtest_filter=-HOS*
      - mv build_debian/xdyn.deb .
    artifacts:
      when: on_success
