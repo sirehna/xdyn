@@ -14,6 +14,7 @@ struct BooleanArguments
 {
     bool help;
     bool debug;
+    bool verbose;
     bool show_help;
 };
 

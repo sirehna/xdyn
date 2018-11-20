@@ -36,6 +36,7 @@ po::options_description get_options_description(XdynForCSCommandLineArguments& i
         ("yml,y",      po::value<std::vector<std::string> >(&input_data.yaml_filenames), "Name(s) of the YAML file(s)")
         ("solver,s",   po::value<std::string>(&input_data.solver)->default_value("rk4"), "Name of the solver: euler,rk4,rkck for Euler, Runge-Kutta 4 & Runge-Kutta-Cash-Karp respectively.")
         ("dt",         po::value<double>(&input_data.initial_timestep),                  "Initial time step (or value of the fixed time step for fixed step solvers)")
+        ("verbose,v",                                                                    "Display all information received & emitted by the server on the standard output.")
         ("debug,d",                                                                      "Used by the application's support team to help error diagnosis. Allows us to pinpoint the exact location in code where the error occurred (do not catch exceptions), eg. for use in a debugger.")
         ("port,p",     po::value<short unsigned int>(&input_data.port),                  "port for the websocket server")
         ;
@@ -47,6 +48,7 @@ int get_input_data(int argc, char **argv, XdynForCSCommandLineArguments& input_d
     const po::options_description desc = get_options_description(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);
     input_data.catch_exceptions = not(has.debug);
+    input_data.verbose = has.verbose;
     input_data.show_help = has.help;
     if (has.help)
     {
