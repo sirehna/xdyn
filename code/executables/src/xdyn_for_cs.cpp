@@ -76,7 +76,8 @@ int main(int argc, char** argv)
 {
     XdynForCSCommandLineArguments input_data;
     if (argc==1) return display_help(argv[0], input_data);
-    const int error = get_input_data(argc, argv, input_data);
+    int error = 0;
+    report_xdyn_exceptions_to_user([&error,&argc,&argv,&input_data]{error = get_input_data(argc, argv, input_data);}, [](const std::string& s){std::cerr << s;});
     if (error)
     {
         return error;
