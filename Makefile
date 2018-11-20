@@ -6,7 +6,7 @@ debian: fetch-ssc-debian cmake-debian package-debian
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
 
 fetch-ssc-windows:
-	./fetch_gitlab_artifacts.sh -c fb32d57178971560d9ce85d21048b784f779f6b6 --project_id 42 -b windows
+	./fetch_gitlab_artifacts.sh -c d79f2271c954ee01fbc536e162667684adf20079 --project_id 42 -b windows
 	rm -rf ssc_windows
 	mkdir ssc_windows
 	unzip ssc.zip -d ssc_windows
@@ -49,7 +49,7 @@ cmake-windows:
                         /opt/share/code"
 
 fetch-ssc-debian:
-	./fetch_gitlab_artifacts.sh -c fb32d57178971560d9ce85d21048b784f779f6b6 --project_id 42 -b debian
+	./fetch_gitlab_artifacts.sh -c d79f2271c954ee01fbc536e162667684adf20079 --project_id 42 -b debian
 
 package-windows:
 	./ninja_windows.sh package
