@@ -30,7 +30,7 @@
 #include <ssc/solver.hpp>
 #include "report_xdyn_exceptions_to_user.hpp"
 
-CHECK_SSC_VERSION(7,0)
+CHECK_SSC_VERSION(8,0)
 
 void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer);
 void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer)

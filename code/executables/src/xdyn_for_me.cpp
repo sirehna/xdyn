@@ -23,6 +23,9 @@
 #define ADDRESS "127.0.0.1"
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 
+#include <ssc/check_ssc_version.hpp>
+CHECK_SSC_VERSION(8,0)
+
 // For handling Ctrl+C
 #include <unistd.h>
 #include <cstdio>

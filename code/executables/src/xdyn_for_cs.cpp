@@ -17,6 +17,8 @@ using namespace ssc::websocket;
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 #define WEBSOCKET_PORT    1234
 
+#include <ssc/check_ssc_version.hpp>
+CHECK_SSC_VERSION(8,0)
 
 #include <boost/algorithm/string/replace.hpp>
 std::string replace_newlines_by_spaces(std::string str);
