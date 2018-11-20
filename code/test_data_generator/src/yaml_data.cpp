@@ -4369,7 +4369,7 @@ std::string test_data::complete_yaml_message_for_falling_ball()
     std::stringstream ss;
     ss << "{\"Dt\": 10.0, " << std::endl
        << "\"states\":" << std::endl
-       << "[ {\"t\": 0.0, "
+       << "[ {\"t\": 1.87, "
        << "\"x\": 4.0,"
        << "\"y\": 8.0, "
        << "\"z\": 12.0, "
