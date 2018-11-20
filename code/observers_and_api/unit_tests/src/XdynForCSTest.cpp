@@ -33,8 +33,7 @@ TEST_F(XdynForCSTest, test_falling_ball_with_yaml)
     const std::string yaml_model = test_data::falling_ball_example();
     const std::string solver = "euler";
     SimServer sim_server(yaml_model, solver, dt);
-    const std::string input_yaml = test_data::complete_yaml_message_for_falling_ball();
-    const std::vector<YamlState> outputs = sim_server.play_one_step(input_yaml);
+    const std::vector<YamlState> outputs = sim_server.play_one_step(test_data::complete_yaml_message_for_falling_ball());
 
 //! [SimServerTest example]
 //! [SimServerTest expected output]
@@ -54,4 +53,13 @@ TEST_F(XdynForCSTest, test_falling_ball_with_yaml)
     ASSERT_NEAR(0,                         outputs.back().qj, EPS);
     ASSERT_NEAR(0,                         outputs.back().qk, EPS);
 //! [SimServerTest expected output]
+}
+
+TEST_F(XdynForCSTest, should_throw_if_Dt_is_not_strictly_positive)
+{
+    const double dt = 1.0;
+    const std::string yaml_model = test_data::falling_ball_example();
+    const std::string solver = "euler";
+    SimServer sim_server(yaml_model, solver, dt);
+    ASSERT_THROW(sim_server.play_one_step(test_data::invalid_json_for_cs()), InvalidInputException);
 }
