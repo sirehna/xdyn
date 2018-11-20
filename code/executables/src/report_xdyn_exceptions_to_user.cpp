@@ -75,3 +75,20 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
         outputter(ss.str());
     }
 }
+
+
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <ctime>
+
+
+std::string current_date_time()
+{
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
+    return buf;
+}
