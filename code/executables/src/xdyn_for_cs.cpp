@@ -28,20 +28,28 @@ std::string escape_newlines(std::string str)
 
 struct SimulationMessage : public MessageHandler
 {
-    SimulationMessage(const TR1(shared_ptr)<SimServer>& simserver) : sim_server(simserver)
+    SimulationMessage(const TR1(shared_ptr)<SimServer>& simserver, const bool verbose_) : sim_server(simserver), verbose(verbose_)
     {
     }
     void operator()(const Message& msg)
     {
-        COUT(msg.get_payload());
-        const std::string input_yaml = msg.get_payload();
-        const auto outputter = [&msg](const std::string& what) {msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
-        const auto f = [&msg, this, &input_yaml]() {msg.send_text(encode_YamlStates(this->sim_server->play_one_step(input_yaml)));};
-        report_xdyn_exceptions_to_user(f, outputter);
+        const std::string input_json = msg.get_payload();
+        if (verbose)
+        {
+            std::cout << current_date_time() << " Received: " << input_json << std::endl;
+        }
+        const std::function<void(const std::string&)> quiet_error_outputter = [&msg](const std::string& what) {msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
+        const std::function<void(const std::string&)> verbose_error_outputter = [&msg](const std::string& what) {std::cerr << current_date_time() << " Error: " << what << std::endl; msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
+        const auto error_outputter = verbose ? verbose_error_outputter : quiet_error_outputter;
+        const std::function<void(void)> quiet_f = [&msg, this, &input_json]() {msg.send_text(encode_YamlStates(this->sim_server->play_one_step(input_json)));};
+        const std::function<void(void)> verbose_f = [&msg, this, &input_json]() {const std::string json = encode_YamlStates(this->sim_server->play_one_step(input_json)); std::cout << current_date_time() << " Sending: " << json << std::endl; msg.send_text(json);};
+        const std::function<void(void)> f = verbose ? verbose_f : quiet_f;
+        report_xdyn_exceptions_to_user(f, error_outputter);
     }
 
     private:
         TR1(shared_ptr)<SimServer> sim_server;
+        const bool verbose;
 };
 
 
@@ -64,9 +72,10 @@ void start_server(const XdynForCSCommandLineArguments& input_data)
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
     TR1(shared_ptr)<SimServer> sim_server (new SimServer(yaml, input_data.solver, input_data.initial_timestep));
-    SimulationMessage handler(sim_server);
-    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port));
+    SimulationMessage handler(sim_server, input_data.verbose);
     std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
+    const bool verbose = false;
+    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, verbose));
     signal(SIGINT, inthand);
     while(!stop){}
     std::cout << std::endl << "Gracefully stopping the websocket server..." << std::endl;
