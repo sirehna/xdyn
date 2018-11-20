@@ -24,6 +24,9 @@ struct YamlState : AbstractStates<double>
             );
     YamlState();
     double t;
+    double phi;
+    double theta;
+    double psi;
 };
 
 bool operator==(const YamlState& state1, const YamlState& state2);
