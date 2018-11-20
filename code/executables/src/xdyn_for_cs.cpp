@@ -81,7 +81,7 @@ int main(int argc, char** argv)
     {
         return error;
     }
-    if (input_data.empty()) return EXIT_SUCCESS;
+    if (input_data.empty() || input_data.show_help) return EXIT_SUCCESS;
     const auto run = [input_data](){
     {
         start_server(input_data);

@@ -43,6 +43,7 @@ int get_input_data(int argc, char **argv, XdynForMECommandLineArguments& input_d
     const po::options_description desc = get_options_description(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);
     input_data.catch_exceptions = not(has.debug);
+    input_data.show_help = has.help;
     if (has.help)
     {
         print_usage(std::cout, desc, argv[0], "This is a ship simulator (model exchange version)");

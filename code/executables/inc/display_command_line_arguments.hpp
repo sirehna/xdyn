@@ -14,6 +14,7 @@ struct BooleanArguments
 {
     bool help;
     bool debug;
+    bool show_help;
 };
 
 #include "boost/program_options.hpp"

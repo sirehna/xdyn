@@ -19,6 +19,7 @@ struct XdynForCSCommandLineArguments
     double initial_timestep;
     bool catch_exceptions;
     short unsigned int port;
+    bool show_help;
 };
 
 

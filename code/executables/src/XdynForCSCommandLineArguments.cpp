@@ -9,7 +9,7 @@
 #include "XdynForCSCommandLineArguments.hpp"
 
 XdynForCSCommandLineArguments::XdynForCSCommandLineArguments() : yaml_filenames(),
-solver(), initial_timestep(), catch_exceptions(), port(0)
+solver(), initial_timestep(), catch_exceptions(), port(0), show_help(false)
 {
 }
 
