@@ -34,6 +34,11 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
         ss << "The command-line you supplied is not valid:" << std::endl << '\t' << e.what() << std::endl << "Try running the program again with the -h flag to get a list of supported options." << std::endl;
         outputter(ss.str());
     }
+    catch(const InvalidInputException& e)
+    {
+        ss << "The input you provided is invalid & we cannot simulate. " << e.get_message() << std::endl;
+        outputter(ss.str());
+    }
     catch(const InternalErrorException& e)
     {
         ss << "The following error should never arise & is clearly a sign of a bug in the simulator. Please contact the support team." << std::endl
