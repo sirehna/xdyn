@@ -46,15 +46,22 @@ std::string escape_newlines(std::string str)
 
 struct SimulationMessage : public ssc::websocket::MessageHandler
 {
-    SimulationMessage(const TR1(shared_ptr)<XdynForME>& xdyn_for_me_) : xdyn_for_me(xdyn_for_me_)
+    SimulationMessage(const TR1(shared_ptr)<XdynForME>& xdyn_for_me_, const bool verbose_) : xdyn_for_me(xdyn_for_me_), verbose(verbose_)
     {
     }
     void operator()(const ssc::websocket::Message& msg)
     {
-        COUT(msg.get_payload());
-        const auto outputter = [&msg](const std::string& what) {msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
+        const std::string input_json = msg.get_payload();
+        if (verbose)
+        {
+            std::cout << current_date_time() << " Received: " << input_json << std::endl;
+        }
+        const std::function<void(const std::string&)> quiet_error_outputter = [&msg](const std::string& what) {msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
+        const std::function<void(const std::string&)> verbose_error_outputter = [&msg](const std::string& what) {std::cerr << current_date_time() << " Error: " << what << std::endl; msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
+        const auto error_outputter = verbose ? verbose_error_outputter : quiet_error_outputter;
         const std::string input_yaml = msg.get_payload();
-        const auto f = [&input_yaml, this, &msg]()
+        const auto f =
+                [&input_yaml, this, &msg]()
         {
             SimServerInputs server_inputs = parse_SimServerInputs(input_yaml, xdyn_for_me->get_Tmax());
             const std::vector<double> dx_dt = xdyn_for_me->calculate_dx_dt(server_inputs);
@@ -74,13 +81,19 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
                << "\"dqj_dt\": " << dx_dt[11] << ","
                << "\"dqk_dt\": " << dx_dt[12]
                << "}";
-            const std::string output_yaml = ss.str();;
-            msg.send_text(output_yaml);
+            const std::string output_json = ss.str();
+            if (verbose)
+            {
+                std::cout << current_date_time() << " Sending: " << output_json << std::endl;
+            }
+            msg.send_text(output_json);
         };
-        report_xdyn_exceptions_to_user(f, outputter);
+        report_xdyn_exceptions_to_user(f, error_outputter);
     }
 
-    private: TR1(shared_ptr)<XdynForME> xdyn_for_me;
+    private:
+        TR1(shared_ptr)<XdynForME> xdyn_for_me;
+        const bool verbose;
 };
 
 void start_server(const XdynForMECommandLineArguments& input_data);
@@ -89,9 +102,9 @@ void start_server(const XdynForMECommandLineArguments& input_data)
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
     TR1(shared_ptr)<XdynForME> sim_server (new XdynForME(yaml));
-    SimulationMessage handler(sim_server);
-
-    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port));
+    SimulationMessage handler(sim_server, input_data.verbose);
+    const bool verbose = false;
+    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, verbose));
     std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
     signal(SIGINT, inthand);
     while(!stop){}
