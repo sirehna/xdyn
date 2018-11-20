@@ -108,23 +108,18 @@ int main(int argc, char** argv)
     {
         return error;
     }
-    COUT("");
     const auto run = [input_data](){
     {
         start_server(input_data);
     }};
-    COUT("");
     if (input_data.catch_exceptions)
     {
-        COUT("");
         report_xdyn_exceptions_to_user(run, [](const std::string& s){std::cerr << s;});
     }
     else
     {
-        COUT("");
         run();
     }
-    COUT("");
     return 0;
 }
 
