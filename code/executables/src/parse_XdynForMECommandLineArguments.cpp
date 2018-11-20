@@ -59,6 +59,6 @@ int get_input_data(int argc, char **argv, XdynForMECommandLineArguments& input_d
 int fill_input_or_display_help(char *argv, XdynForMECommandLineArguments& input_data)
 {
     const po::options_description desc = get_options_description(input_data);
-    print_usage(std::cout, desc, argv, "This is a ship simulator");
+    print_usage(std::cout, desc, argv, "This is a ship simulator (model exchange server version)");
     return EXIT_SUCCESS;
 }
