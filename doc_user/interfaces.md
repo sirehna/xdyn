@@ -457,7 +457,7 @@ bon compromis entre la verbosité (moins que du XML mais plus qu'un format
 binaire) et une utilisation plus aisée qu'un format type Protobuf ou Thrift,
 quitte à sacrifier un peu de performance (taille des messages, temps d'encodage/décodage).
 
-### Lancement
+### Lancement du serveur "Model Exchange"
 
 Le serveur est lancé grâce à l'exécutable `xdyn-for-me` (X-DYN for Model Exchange)
 avec un ou plusieurs fichiers YAML en paramètre : une fois lancé, ce
@@ -470,7 +470,30 @@ navire. Concrètement, on lance le serveur comme suit :
 
 où `--port` sert à définir le port sur lequel écoute le serveur websocket.
 
+La liste complète des options avec leur description est obtenue en lançant
+l'exécutable avec le flag `-h`.
+
 Ensuite, on peut se connecter à l'adresse du serveur pour l'interroger.
+
+### Lancement du serveur "Co-Simulation"
+
+Le serveur est lancé grâce à l'exécutable `xdyn-for-cs` (X-DYN for
+Co-Simulation) avec un ou plusieurs fichiers YAML en paramètre, un pas de temps
+et un solveur : une fois lancé, ce serveur ne simulera donc qu'une seule
+configuration de l'environnement et du navire, en utilisant un solveur et
+un pas de temps. Concrètement, on lance le serveur comme suit :
+
+~~~~{.bash}
+./xdyn-for-cs --port 9002 tutorial_01_falling_ball.yml --dt 0.1
+~~~~
+
+où `--port` sert à définir le port sur lequel écoute le serveur websocket.
+
+La liste complète des options avec leur description est obtenue en lançant
+l'exécutable avec le flag `-h`.
+
+Ensuite, on peut se connecter à l'adresse du serveur pour l'interroger.
+
 
 ### Utilisation avec Chrome
 
@@ -485,12 +508,13 @@ Il faut également pouvoir encoder et décoder du JSON en MATLAB, par exemple en
 utilisant les fonctions MATLAB [jsondecode et
 jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
 
-### Description des entrées/sorties
+### Description des entrées/sorties pour une utilisation en "Model Exchange" (x -> dx/dt)
 
   ENTREES             TYPE                                                               DETAIL
   ------------------- ------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------------
-  Etats               Liste d’éléments de type « état »                                  Historique des états jusqu’au temps courant t
-  Etat                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   Etats navire
+  `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécesitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
+  `commands`          Liste de clefs-valeurs (dictionnaire)                              Etat des actionneurs au temps t
+  État                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   Etats navire
   t                   Flottant                                                           Temps courant de la simulation
   x                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
   y                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
@@ -505,51 +529,49 @@ jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
   qi                  Flottant                                                           Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
   qj                  Flottant                                                           Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
   qk                  Flottant                                                           Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  Etats actionneurs   Liste de clefs-valeurs (dictionnaire)                              Etat des actionneurs au temps t
 
 Exemple:
 
 ~~~~{.json}
-[
-  {
-    "t": 0,
-    "x": 0.1,
-    "y": -0.156,
-    "z": 10,
-    "u": 0,
-    "v": 0,
-    "w": 0,
-    "p": 0,
-    "q": 0,
-    "r": 0,
-    "qr": 0,
-    "qi": 0,
-    "qj": 0,
-    "qk": 0,
-    "thruster-states": {
-      "beta": 0.123
+{
+  "states": [
+    {
+      "t": 0,
+      "x": 0,
+      "y": 8,
+      "z": 12,
+      "u": 1,
+      "v": 0,
+      "w": 0,
+      "p": 0,
+      "q": 1,
+      "r": 0,
+      "qr": 1,
+      "qi": 0,
+      "qj": 0,
+      "qk": 0
+    },
+    {
+      "t": 0,
+      "x": 0.1,
+      "y": -0.156,
+      "z": 10,
+      "u": 0,
+      "v": 0,
+      "w": 0,
+      "p": 0,
+      "q": 0,
+      "r": 0,
+      "qr": 0,
+      "qi": 0,
+      "qj": 0,
+      "qk": 0,
     }
-  },
-  {
-    "t": 0.1,
-    "x": 10.1,
-    "y": 15.6,
-    "z": 1.3,
-    "u": 0.2,
-    "v": 0,
-    "w": 0,
-    "p": 0,
-    "q": 0,
-    "r": 0,
-    "qr": 0.5451,
-    "qi": 0,
-    "qj": 0,
-    "qk": 0,
-    "thruster-states": {
-      "beta": 0.23
-    }
+  ],
+  "commands": {
+    "beta": 0.1
   }
-]
+}
 ~~~~
 
   SORTIES             TYPE                                                                                                                DETAIL
@@ -585,5 +607,162 @@ Exemple:
   "dqj_dt": 0,
   "dqk_dt": 0
 }
+~~~~
+
+### Description des entrées/sorties pour une utilisation en "Co-Simulation" (x(t) -> [x(t), ...,x(t+Dt)])
+
+  ENTREES             TYPE                                                               DETAIL
+  ------------------- ------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------------
+  `Dt`                Flottant strictement positif                                       Horizon de simulation (en secondes). La simulation s'effectue de t0 à t0 + Dt, où t0 est la date du dernier élément de la
+                                                                                         liste `states`, par pas de `dt`, où `dt` est spécifié sur la ligne de commande. L'état t0 est donc présent à
+                                                                                         la fois dans les entrées et dans les sorties, avec la même valeur.
+  `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécesitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
+  `commands`          Liste de clefs-valeurs (dictionnaire)                              Etat des actionneurs au temps t. Commande au sens de X-DYN (modèle d'effort commandé) au temps t0 (début de la
+                                                                                         simulation, i.e. date du dernier élément de la liste `states`). Le plus souvent, correspond à l'état interne
+                                                                                         d'un modèle d'actionneur (safran ou hélice par exemple) dans X-DYN et dont on souhaite simuler la dynamique
+                                                                                         en dehors d'X-DYN.
+  Etat                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   Etats navire
+  t                   Flottant                                                           Date de l'état
+  x                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  y                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  z                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  u                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  v                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  w                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  p                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  q                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  r                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  qr                  Flottant                                                           Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qi                  Flottant                                                           Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qj                  Flottant                                                           Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qk                  Flottant                                                           Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+
+
+  phi                 Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
+                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
+                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+  theta               Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
+                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
+                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+  psi                 Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
+                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
+                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+
+Exemple:
+
+~~~~{.json}
+{
+  "Dt": 10,
+  "states": [
+    {
+      "t": 0,
+      "x": 0,
+      "y": 8,
+      "z": 12,
+      "u": 1,
+      "v": 0,
+      "w": 0,
+      "p": 0,
+      "q": 1,
+      "r": 0,
+      "qr": 1,
+      "qi": 0,
+      "qj": 0,
+      "qk": 0
+    },
+    {
+      "t": 0,
+      "x": 0.1,
+      "y": -0.156,
+      "z": 10,
+      "u": 0,
+      "v": 0,
+      "w": 0,
+      "p": 0,
+      "q": 0,
+      "r": 0,
+      "qr": 0,
+      "qi": 0,
+      "qj": 0,
+      "qk": 0,
+    }
+  ],
+  "commands": {
+    "beta": 0.1
+  }
+}
+~~~~
+
+  SORTIES             TYPE                                                                                                                DETAIL
+  ------------------- ------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------------------------
+                      Liste d’éléments de type « État augmenté »                         Historique des états de t0 à t0 + Dt par pas de dt.
+  État augmenté       Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   Etats navire, augmentés des angles d'Euler.
+                      et les trois angles phi, theta, psi.
+  t                   Flottant                                                           Date de l'état augmenté
+  x                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  y                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  z                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur entre l’origine du repère NED et l’origine du repère BODY
+  u                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  v                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  w                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  p                   Flottant                                                           Projection sur l’axe X du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  q                   Flottant                                                           Projection sur l’axe Y du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  r                   Flottant                                                           Projection sur l’axe Z du repère NED du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  qr                  Flottant                                                           Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qi                  Flottant                                                           Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qj                  Flottant                                                           Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  qk                  Flottant                                                           Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+  phi                 Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
+                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
+                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+  theta               Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
+                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
+                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+  psi                 Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
+                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
+                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+
+
+~~~~{.json}
+[
+  {
+    "t": 10,
+    "x": 0,
+    "y": 8,
+    "z": 12,
+    "u": 1,
+    "v": 0,
+    "w": 0,
+    "p": 0,
+    "q": 1,
+    "r": 0,
+    "qr": 1,
+    "qi": 0,
+    "qj": 0,
+    "qk": 0,
+    "phi": 0,
+    "theta": 0,
+    "psi": 0
+  },
+  {
+    "t": 10.1,
+    "x": 0.0999968,
+    "y": 8,
+    "z": 12.0491,
+    "u": 0.897068,
+    "v": 0,
+    "w": 1.07593,
+    "p": 0,
+    "q": 1,
+    "r": 0,
+    "qr": 0.99875,
+    "qi": 0,
+    "qj": 0.0499792,
+    "qk": 0,
+    "phi": 0,
+    "theta": 0.1,
+    "psi": 0
+  }
+]
 ~~~~
 
