@@ -18,6 +18,7 @@ struct XdynForMECommandLineArguments
     bool catch_exceptions;
     short unsigned int port;
     bool empty() const;
+    bool verbose;
     bool show_help;
 };
 

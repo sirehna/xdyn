@@ -10,6 +10,7 @@
 XdynForMECommandLineArguments::XdynForMECommandLineArguments() : yaml_filenames(),
                          catch_exceptions(false),
                          port(0),
+                         verbose(false),
                          show_help(false)
 {
 }
