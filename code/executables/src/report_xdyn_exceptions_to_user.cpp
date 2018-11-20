@@ -11,6 +11,7 @@
 #include <ssc/solver.hpp>
 #include <ssc/exception_handling.hpp>
 #include <ssc/json/JSONException.hpp>
+#include <ssc/websocket.hpp>
 
 #include "yaml-cpp/exceptions.h"
 
@@ -49,6 +50,13 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
         ss << "Maybe you can use another solver? For example, if you used a Euler integration scheme, maybe the simulation can be run with" << std::endl
            << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
         outputter(ss.str());
+    }
+    catch(const ssc::websocket::WebSocketException& e)
+    {
+        ss << "Unable to launch the websocket server: maybe the port you specified not available?" << std::endl
+           << " You can run sudo lsof -i :9002 to check which process is using the port (eg. for port 9002 in this case)." << std::endl
+           << "Try specifying a different port number using the -p flag." << std::endl
+           << "The full error message was: " << e.what() << std::endl;
     }
     catch(const ConnexionError& e)
     {
