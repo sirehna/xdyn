@@ -52,22 +52,19 @@ def fetch_artifact(**kwargs):
     project = gl.projects.get(project_id)
     pipelines = project.pipelines.list(all=True)
     if commit:
-        pipelines = [p for p in pipelines if p.attributes['sha'] == commit]
-        if len(pipelines) != 1:
-            logging.error("No pipeline found")
-            raise Exception
+        pipelines = [p for p in pipelines if p.attributes['sha'] == commit and p.attributes['status'] == 'success']
     else:
         pipelines = [p for p in pipelines if p.attributes['ref'] == 'master']
-    pipeline = pipelines[0]
-    if pipeline.attributes['status'] != 'success':
-        logging.error("Unsucessful build")
+    if len(pipelines) < 1:
+        logging.error("No successful pipeline found for the specified commit")
         raise Exception
+    pipeline = pipelines[0]
     jobs = pipeline.jobs.list(all=True)
     job_names = [job.attributes['name'] for job in jobs]
     search_for_job = 'build:' + build_type
     jobs = [job for job in jobs if job.attributes['name'] == search_for_job]
-    if len(jobs) != 1:
-        logging.error("Job {0} was not found ".format(search_for_job))
+    if len(jobs) < 1:
+        logging.error("No job with name {0} was found ".format(search_for_job))
         raise Exception
     job = jobs[0]
     job_for_artifacts = project.jobs.get(job.get_id(), lazy=True)
