@@ -40,8 +40,7 @@ TEST_F(HistoryParserTest, can_emit_state_history_yaml)
             "- {t: 0.123, x: 21, y: 22, z: 23, u: 24, v: 25, w: 26, p: 27, q: 28, r: 29, qr: 30, qi: 31, qj: 32, qk: 33}\n"
             "- {t: 0.456, x: 41, y: 42, z: 43, u: 44, v: 45, w: 46, p: 47, q: 48, r: 49, qr: 50, qi: 51, qj: 52, qk: 53}";
 
-            ;
-    ASSERT_EQ(expected_yaml, emit_state_history_yaml(states));
+    ASSERT_EQ(expected_yaml, emit_state_history_json(states));
 //! [HistoryParserTest expected output]
 }
 

@@ -106,7 +106,7 @@ YamlState convert(const Res& res)
     return ret;
 }
 
-std::string emit_state_history_yaml(const std::vector<Res>& states)
+std::string emit_state_history_json(const std::vector<Res>& states)
 {
     std::vector<YamlState> yaml_states(states.size());
     std::transform(states.begin(), states.end(), yaml_states.begin(), convert);
