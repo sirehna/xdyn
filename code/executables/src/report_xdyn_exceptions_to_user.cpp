@@ -15,7 +15,7 @@
 #include "yaml-cpp/exceptions.h"
 
 #include <functional>
-
+#include <boost/program_options.hpp>
 
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynCommandLineArguments.hpp"
@@ -27,6 +27,11 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
     try
     {
         f();
+    }
+    catch(const boost::program_options::error& e)
+    {
+        ss << "The command-line you supplied is not valid:" << std::endl << '\t' << e.what() << std::endl << "Try running the program again with the -h flag to get a list of supported options." << std::endl;
+        outputter(ss.str());
     }
     catch(const InternalErrorException& e)
     {
