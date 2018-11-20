@@ -121,6 +121,10 @@ int main(int argc, char** argv)
     {
         return error;
     }
+    if (input_data.show_help)
+    {
+        return 0;
+    }
     const auto run = [input_data](){
     {
         start_server(input_data);
