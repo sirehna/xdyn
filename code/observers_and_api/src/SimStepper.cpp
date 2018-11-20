@@ -1,7 +1,9 @@
-#include "simulator_api.hpp"
+#include <functional>
+
+#include "InvalidInputException.hpp"
 #include "SimServerInputs.hpp"
 #include "SimStepper.hpp"
-#include "InvalidInputException.hpp"
+#include "simulator_api.hpp"
 
 SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt)
     : sim(builder.sim)
@@ -10,7 +12,47 @@ SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, co
 {
 }
 
-std::vector<Res> SimStepper::step(const SimServerInputs& infos, double Dt)
+YamlState convert_without_angles(const Res& res);
+YamlState convert_without_angles(const Res& res)
+{
+    YamlState ret;
+    ret.t     = res.t;
+    ret.x     = res.x[0];
+    ret.y     = res.x[1];
+    ret.z     = res.x[2];
+    ret.u     = res.x[3];
+    ret.v     = res.x[4];
+    ret.w     = res.x[5];
+    ret.p     = res.x[6];
+    ret.q     = res.x[7];
+    ret.r     = res.x[8];
+    ret.qr    = res.x[9];
+    ret.qi    = res.x[10];
+    ret.qj    = res.x[11];
+    ret.qk    = res.x[12];
+    ret.phi   = 0;
+    ret.theta = 0;
+    ret.psi   = 0;
+    return ret;
+}
+
+std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body);
+std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body)
+{
+    return [&body](const Res& res)
+            {
+                YamlState ret = convert_without_angles(res);
+                const State new_state(ret,0);
+                body->set_states_history(new_state);
+                const auto angles = body->get_states().get_angles();
+                ret.phi = angles.phi;
+                ret.theta = angles.theta;
+                ret.psi = angles.psi;
+                return ret;
+            };
+}
+
+std::vector<YamlState> SimStepper::step(const SimServerInputs& infos, double Dt)
 {
     const double tstart = infos.t;
     const std::vector<State>states = {infos.full_state_history};
@@ -34,5 +76,14 @@ std::vector<Res> SimStepper::step(const SimServerInputs& infos, double Dt)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "unknown solver");
     }
-    return results;
+    std::vector<YamlState> ret(results.size());
+    if (not(sim.get_bodies().empty()))
+    {
+        std::transform(results.begin(), results.end(), ret.begin(), convert_with_angles(sim.get_bodies().at(0)));
+    }
+    else
+    {
+        std::transform(results.begin(), results.end(), ret.begin(), convert_without_angles);
+    }
+    return ret;
 }

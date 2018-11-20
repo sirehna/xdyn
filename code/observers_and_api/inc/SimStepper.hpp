@@ -1,7 +1,8 @@
 #include "ConfBuilder.hpp"
 #include "Res.hpp"
 #include "Sim.hpp"
-#include "State.hpp"
+#include "YamlState.hpp"
+
 
 #ifndef OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 #define OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
@@ -12,7 +13,7 @@ class SimStepper
 {
     public:
         SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt);
-        std::vector<Res> step(const SimServerInputs& input, double Dt);
+        std::vector<YamlState> step(const SimServerInputs& input, double Dt);
 
 
     private:

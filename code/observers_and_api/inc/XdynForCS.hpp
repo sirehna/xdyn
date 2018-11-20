@@ -12,7 +12,7 @@ class SimServer
                   const std::string& solver,
                   const double dt);
 
-        std::vector<Res> play_one_step(const std::string& raw_yaml);
+        std::vector<YamlState> play_one_step(const std::string& raw_yaml);
 
     private :
         SimServer();

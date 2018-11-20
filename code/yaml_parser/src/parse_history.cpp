@@ -78,7 +78,10 @@ std::string encode_YamlStates(const std::vector<YamlState>& states)
            << "\"qr\": " << states[i].qr << ", "
            << "\"qi\": " << states[i].qi << ", "
            << "\"qj\": " << states[i].qj << ", "
-           << "\"qk\": " << states[i].qk
+           << "\"qk\": " << states[i].qk << ", "
+           << "\"phi\": " << states[i].phi << ", "
+           << "\"theta\": " << states[i].theta << ", "
+           << "\"psi\": " << states[i].psi
            << "}";
         if (i < states.size()-1) ss << ",";
         ss << std::endl;

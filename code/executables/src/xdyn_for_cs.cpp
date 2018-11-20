@@ -1,3 +1,4 @@
+#include "parse_history.hpp"
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "ssc/websocket/WebSocketServer.hpp"
 #include <ssc/text_file_reader.hpp>
@@ -35,7 +36,7 @@ struct SimulationMessage : public MessageHandler
         COUT(msg.get_payload());
         const std::string input_yaml = msg.get_payload();
         const auto outputter = [&msg](const std::string& what) {msg.send_text(escape_newlines(std::string("{\"error\": \"") + what + "\"}"));};
-        const auto f = [&msg, this, &input_yaml]() {msg.send_text(emit_state_history_json(this->sim_server->play_one_step(input_yaml)));};
+        const auto f = [&msg, this, &input_yaml]() {msg.send_text(encode_YamlStates(this->sim_server->play_one_step(input_yaml)));};
         report_xdyn_exceptions_to_user(f, outputter);
     }
 

@@ -85,34 +85,6 @@ void operator >> (const State& state, std::vector<YamlState>& ystates)
     }
 }
 
-YamlState convert(const Res& res);
-YamlState convert(const Res& res)
-{
-    YamlState ret;
-    ret.t = res.t;
-    ret.x = res.x[0];
-    ret.y = res.x[1];
-    ret.z = res.x[2];
-    ret.u = res.x[3];
-    ret.v = res.x[4];
-    ret.w = res.x[5];
-    ret.p = res.x[6];
-    ret.q = res.x[7];
-    ret.r = res.x[8];
-    ret.qr = res.x[9];
-    ret.qi = res.x[10];
-    ret.qj = res.x[11];
-    ret.qk = res.x[12];
-    return ret;
-}
-
-std::string emit_state_history_json(const std::vector<Res>& states)
-{
-    std::vector<YamlState> yaml_states(states.size());
-    std::transform(states.begin(), states.end(), yaml_states.begin(), convert);
-    return encode_YamlStates(yaml_states);
-}
-
 SimServerInputs parse_SimServerInputs(const std::string& json, const double max_history_length)
 {
     const YamlSimServerInputs yaml_inputs = decode_YamlSimServerInputs(json);
