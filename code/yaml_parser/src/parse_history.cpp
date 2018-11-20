@@ -113,7 +113,29 @@ YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
 
 std::string encode_YamlStates(const std::vector<YamlState>& states)
 {
-    YAML::Emitter e;
-    e << states;
-    return e.c_str();
+    std::stringstream ss;
+    ss << "[";
+    for (size_t i = 0 ; i < states.size() ; ++i)
+    {
+        ss << "{"
+           << "\"t\": " << states[i].t << ", "
+           << "\"x\": " << states[i].x << ", "
+           << "\"y\": " << states[i].y << ", "
+           << "\"z\": " << states[i].z << ", "
+           << "\"u\": " << states[i].u << ", "
+           << "\"v\": " << states[i].v << ", "
+           << "\"w\": " << states[i].w << ", "
+           << "\"p\": " << states[i].p << ", "
+           << "\"q\": " << states[i].q << ", "
+           << "\"r\": " << states[i].r << ", "
+           << "\"qr\": " << states[i].qr << ", "
+           << "\"qi\": " << states[i].qi << ", "
+           << "\"qj\": " << states[i].qj << ", "
+           << "\"qk\": " << states[i].qk
+           << "}";
+        if (i < states.size()-1) ss << ",";
+        ss << std::endl;
+    }
+    ss << "]";
+    return ss.str();
 }
