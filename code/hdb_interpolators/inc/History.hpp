@@ -73,6 +73,8 @@ class History
 
         void reset();
 
+        bool is_empty() const;
+
     private:
         typedef std::pair<double,double> TimeValue;
         typedef std::vector<TimeValue> Container;

@@ -61,7 +61,7 @@ TEST_F(ObserverTests, can_observe_using_a_websocket)
 {
 //! [ObserverTests example]
     ListOfStringMessages handler;
-    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, ADDRESS, WEBSOCKET_PORT));
+    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, WEBSOCKET_PORT));
     {
         const auto yaml = test_data::oscillating_cube_example();
         const auto mesh = test_data::cube();

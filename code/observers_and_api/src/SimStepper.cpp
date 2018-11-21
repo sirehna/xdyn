@@ -1,6 +1,9 @@
+#include <functional>
+
+#include "InvalidInputException.hpp"
+#include "SimServerInputs.hpp"
 #include "SimStepper.hpp"
 #include "simulator_api.hpp"
-#include "InvalidInputException.hpp"
 
 SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt)
     : sim(builder.sim)
@@ -9,37 +12,78 @@ SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, co
 {
 }
 
-SimStepperInfos::SimStepperInfos()
-    : t(0)
-    , Dt(0)
-    , state(0)
-    , commands({})
+YamlState convert_without_angles(const Res& res);
+YamlState convert_without_angles(const Res& res)
 {
+    YamlState ret;
+    ret.t     = res.t;
+    ret.x     = res.x[0];
+    ret.y     = res.x[1];
+    ret.z     = res.x[2];
+    ret.u     = res.x[3];
+    ret.v     = res.x[4];
+    ret.w     = res.x[5];
+    ret.p     = res.x[6];
+    ret.q     = res.x[7];
+    ret.r     = res.x[8];
+    ret.qr    = res.x[9];
+    ret.qi    = res.x[10];
+    ret.qj    = res.x[11];
+    ret.qk    = res.x[12];
+    ret.phi   = 0;
+    ret.theta = 0;
+    ret.psi   = 0;
+    return ret;
 }
 
-State SimStepper::step(const SimStepperInfos& infos, double Dt)
+std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body);
+std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body)
 {
-    const double t = infos.t;
-    const std::vector<State>states = {infos.state};
+    return [&body](const Res& res)
+            {
+                YamlState ret = convert_without_angles(res);
+                const State new_state(ret,0);
+                body->set_states_history(new_state);
+                const auto angles = body->get_states().get_angles();
+                ret.phi = angles.phi;
+                ret.theta = angles.theta;
+                ret.psi = angles.psi;
+                return ret;
+            };
+}
+
+std::vector<YamlState> SimStepper::step(const SimServerInputs& infos, double Dt)
+{
+    const double tstart = infos.t;
+    const std::vector<State>states = {infos.full_state_history};
+    sim.reset_history();
     sim.set_bodystates(states);
     sim.set_command_listener(infos.commands);
     std::vector<Res> results;
     if(solver == "euler")
     {
-        results = simulate<ssc::solver::EulerStepper>(sim, t, Dt, dt);
+        results = simulate<ssc::solver::EulerStepper>(sim, tstart, tstart+Dt, dt);
     }
     else if (solver == "rk4")
     {
-        results = simulate<ssc::solver::RK4Stepper>(sim, t, Dt, dt);
+        results = simulate<ssc::solver::RK4Stepper>(sim, tstart, tstart+Dt, dt);
     }
     else if (solver == "rkck")
     {
-        results = simulate<ssc::solver::RKCK>(sim, t, Dt, dt);
+        results = simulate<ssc::solver::RKCK>(sim, tstart, tstart+Dt, dt);
     }
     else
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "unknown solver");
     }
-    sim.get_bodies().front()->update_body_states(results.back().x, results.back().t);
-    return State(sim.get_bodies().front()->get_states());
+    std::vector<YamlState> ret(results.size());
+    if (not(sim.get_bodies().empty()))
+    {
+        std::transform(results.begin(), results.end(), ret.begin(), convert_with_angles(sim.get_bodies().at(0)));
+    }
+    else
+    {
+        std::transform(results.begin(), results.end(), ret.begin(), convert_without_angles);
+    }
+    return ret;
 }

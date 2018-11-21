@@ -1,25 +1,19 @@
-#include "Sim.hpp"
-#include "State.hpp"
 #include "ConfBuilder.hpp"
+#include "Res.hpp"
+#include "Sim.hpp"
+#include "YamlState.hpp"
+
 
 #ifndef OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 #define OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
 
-struct SimStepperInfos
-{
-    SimStepperInfos();
-    double t;
-    double Dt;
-    State state;
-    std::map<std::string, double> commands;
-};
-
+class SimServerInputs;
 
 class SimStepper
 {
     public:
         SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt);
-        State step(const SimStepperInfos& infos, double Dt);
+        std::vector<YamlState> step(const SimServerInputs& input, double Dt);
 
 
     private:

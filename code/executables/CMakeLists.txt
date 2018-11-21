@@ -37,19 +37,20 @@ INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
 
 CONFIGURE_FILE(
-        src/utilities_for_InputData.cpp
-        "${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp" @ONLY)
+        src/display_command_line_arguments.cpp
+        "${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp" @ONLY)
 
 CONFIGURE_FILE(
         src/convert_stl_files_to_code.cpp
         "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
 
 ADD_EXECUTABLE(xdyn
-        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
-        src/utilities_for_simulator.cpp
-        src/InputData.cpp
-        src/simulator_run.cpp
-        src/simulator.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/parse_XdynCommandLineArguments.cpp
+        src/build_observers_description.cpp
+        src/XdynCommandLineArguments.cpp
+        src/report_xdyn_exceptions_to_user.cpp
+        src/xdyn.cpp
         )
 
 TARGET_LINK_LIBRARIES(xdyn
@@ -112,10 +113,11 @@ TARGET_LINK_LIBRARIES(convert_stl_files_to_code
 
 ADD_EXECUTABLE(gz
         src/gz.cpp
-        ${CMAKE_CURRENT_BINARY_DIR}/utilities_for_InputData.cpp
-        src/InputData.cpp
-        src/simulator_run.cpp
-        src/utilities_for_simulator.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/parse_XdynCommandLineArguments.cpp
+        src/XdynCommandLineArguments.cpp
+        src/report_xdyn_exceptions_to_user.cpp
+        src/build_observers_description.cpp
         )
 
 TARGET_LINK_LIBRARIES(gz
@@ -142,15 +144,35 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         ${SSC_LIB}
         )
 
-ADD_EXECUTABLE(xdyn-server
-        src/utilities_for_InputDataSimServer.cpp
-        src/utilities_for_simulator.cpp
-        src/InputData.cpp
-        src/simulator_server.cpp
+ADD_EXECUTABLE(xdyn-for-cs
+        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/parse_XdynForCSCommandLineArguments.cpp
+        src/build_observers_description.cpp
+        src/report_xdyn_exceptions_to_user.cpp
+        src/XdynForCSCommandLineArguments.cpp
+        src/XdynCommandLineArguments.cpp
+        src/xdyn_for_cs.cpp
 
         )
 
-TARGET_LINK_LIBRARIES(xdyn-server
+TARGET_LINK_LIBRARIES(xdyn-for-cs
+        x-dyn
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+        boost_program_options_descriptions_static
+        ${SSC_LIB}
+        )
+
+ADD_EXECUTABLE(xdyn-for-me
+        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/parse_XdynForMECommandLineArguments.cpp
+        src/build_observers_description.cpp
+        src/report_xdyn_exceptions_to_user.cpp
+        src/XdynForMECommandLineArguments.cpp
+        src/xdyn_for_me.cpp
+
+        )
+
+TARGET_LINK_LIBRARIES(xdyn-for-me
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
@@ -160,9 +182,11 @@ TARGET_LINK_LIBRARIES(xdyn-server
 ################################################################################
 INSTALL(TARGETS xdyn
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-INSTALL(TARGETS xdyn-server
+INSTALL(TARGETS xdyn-for-cs
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 INSTALL(TARGETS gz
+        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
+INSTALL(TARGETS xdyn-for-me
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
 

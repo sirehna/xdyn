@@ -23,7 +23,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlWaveModelInput.cpp
         src/YamlDiffraction.cpp
         src/YamlState.cpp
-        src/YamlSimStepperInfo.cpp
+        src/YamlSimServerInputs.cpp
         src/YamlHOS.cpp
         )
 

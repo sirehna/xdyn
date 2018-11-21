@@ -11,9 +11,9 @@
 #include <string>
 #include <vector>
 
-struct InputData
+struct XdynCommandLineArguments
 {
-    InputData();
+    XdynCommandLineArguments();
     std::vector<std::string> yaml_filenames;
     std::string solver;
     std::string output_filename;
@@ -23,14 +23,6 @@ struct InputData
     double tend;
     bool catch_exceptions;
     bool empty() const;
-};
-
-struct InputDataSimServer : InputData
-{
-    InputDataSimServer();
-    bool empty() const;
-    short unsigned int port;
-
 };
 
 #endif /* INPUTDATA_HPP_ */

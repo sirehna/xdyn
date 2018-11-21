@@ -485,3 +485,11 @@ TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_manoeuvring)
     ASSERT_DOUBLE_EQ(states.qi(), (double)F.M());
     ASSERT_DOUBLE_EQ(states.qj()+states.qk(), (double)F.N());
 }
+
+TEST_F(ManeuveringForceModelTest, can_get_Tmax)
+{
+    const auto data = ManeuveringForceModel::parse(test_data::man_with_delay());
+    const auto env = get_env_with_default_rotation_convention();
+    ManeuveringForceModel force(data,"ball", env);
+    ASSERT_DOUBLE_EQ(10, force.get_Tmax());
+}

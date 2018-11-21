@@ -1,24 +1,39 @@
-#include "simulator_run.hpp"
-#include "ConnexionError.hpp"
-#include "InternalErrorException.hpp"
-#include "MeshException.hpp"
-#include "NumericalErrorException.hpp"
-#include "utilities_for_simulator.hpp"
-#include "listeners.hpp"
-#include "InputData.hpp"
-#include "simulator_api.hpp"
-#include "SurfaceElevationInterface.hpp"
-#include "ConnexionError.hpp"
+/*
+ * simulator.cpp
+ *
+ *  Created on: 17 avr. 2014
+ *      Author: cady
+ */
 
-#include <ssc/text_file_reader.hpp>
-#include <ssc/solver.hpp>
-#include <ssc/exception_handling.hpp>
+#include <exception>
+#include <functional>
+#include <iostream>
 
 #include "yaml-cpp/exceptions.h"
 
-#include <functional>
+#include <ssc/check_ssc_version.hpp>
+#include <ssc/text_file_reader.hpp>
 
-void solve(const InputData& input_data, Sim& sys, ListOfObservers& observer)
+#include <ssc/exception_handling.hpp>
+
+#include "build_observers_description.hpp"
+#include "ConnexionError.hpp"
+#include "InternalErrorException.hpp"
+#include "listeners.hpp"
+#include "MeshException.hpp"
+#include "NumericalErrorException.hpp"
+#include "parse_XdynCommandLineArguments.hpp"
+#include "simulator_api.hpp"
+#include "SurfaceElevationInterface.hpp"
+#include "XdynCommandLineArguments.hpp"
+
+#include <ssc/solver.hpp>
+#include "report_xdyn_exceptions_to_user.hpp"
+
+CHECK_SSC_VERSION(8,0)
+
+void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer);
+void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer)
 {
     if (input_data.solver=="euler")
     {
@@ -35,53 +50,6 @@ void solve(const InputData& input_data, Sim& sys, ListOfObservers& observer)
     else
     {
         ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
-    }
-}
-
-void catch_exceptions(const std::function<void(void)>& f, const std::string& solver)
-{
-    try
-    {
-        f();
-    }
-    catch(const InternalErrorException& e)
-    {
-        std::cerr << "The following error should never arise & is clearly a sign of a bug in the simulator. Please contact the support team." << std::endl
-                  << e.what() << std::endl;
-    }
-    catch(const MeshException& e)
-    {
-        std::cerr << "A problem was detected with the STL file (mesh): " << e.get_message() << std::endl;
-    }
-    catch(const NumericalErrorException& e)
-    {
-        std::cerr << "The simulation has diverged and cannot continue: " << e.get_message() << std::endl;
-        if (solver=="euler")
-        {
-            std::cerr << "The simulation used a Euler integration scheme, maybe the simulation can be run with" << std::endl
-                      << "a Runge-Kutta 4 solver (--solver rk4) or a Runge-Kutta-Cash-Karp solver (--solver rkck)"<< std::endl;
-        }
-    }
-    catch(const ConnexionError& e)
-    {
-        std::cerr << "This simulation requires X-DYN to connect to a server but there was a problem with that connection: " << e.get_message() << std::endl;
-    }
-    catch(ssc::exception_handling::Exception& e)
-    {
-        std::cerr << "The following problem was detected:" << std::endl << e.get_message() << std::endl;
-    }
-    catch(const YAML::Exception& e)
-    {
-        std::cerr << "There is a syntax problem with the YAML file: couldn't parse it properly." << std::endl
-                  << "Line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
-                  << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
-    }
-    catch(std::exception& e)
-    {
-        std::cerr << "Something bad has happened: please send an email to the support team containing the following:" << std::endl
-                  << "- Input YAML file(s) + STL (if needed)" << std::endl
-                  << "- Command-line arguments" << std::endl
-                  << "- The following error message: " << e.what() << std::endl;
     }
 }
 
@@ -134,8 +102,8 @@ void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Si
     }
 }
 
-std::string input_data_serialize(const InputData& inputData);
-std::string input_data_serialize(const InputData& inputData)
+std::string input_data_serialize(const XdynCommandLineArguments& inputData);
+std::string input_data_serialize(const XdynCommandLineArguments& inputData)
 {
     std::stringstream s;
     s << "sim ";
@@ -159,19 +127,66 @@ std::string input_data_serialize(const InputData& inputData)
     return s.str();
 }
 
-void run_simulation(const InputData& input_data)
+void run_simulation(const XdynCommandLineArguments& input_data);
+void run_simulation(const XdynCommandLineArguments& input_data)
 {
     const auto f = [input_data](){
     {
         const auto yaml_input = ssc::text_file_reader::TextFileReader(input_data.yaml_filenames).get_contents();
         ssc::data_source::DataSource command_listener;
         auto sys = get_system(yaml_input, input_data.tstart);
-        auto observers_description = get_observers_description(yaml_input, input_data);
+        auto observers_description = build_observers_description(yaml_input, input_data);
         ListOfObservers observers(observers_description);
         serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
         serialize_context_if_necessary_new(observers, sys);
         solve(input_data, sys, observers);
     }};
-    if (input_data.catch_exceptions) catch_exceptions(f, input_data.solver);
+    if (input_data.catch_exceptions) report_xdyn_exceptions_to_user(f, [](const std::string& s){std::cerr << s;} );
     else                             f();
+}
+
+
+
+int run(const XdynCommandLineArguments& input_data);
+int run(const XdynCommandLineArguments& input_data)
+{
+    if (not(input_data.empty())) run_simulation(input_data);
+    return EXIT_SUCCESS;
+}
+
+
+
+int main(int argc, char** argv)
+{
+
+
+    XdynCommandLineArguments input_data;
+    int error = 0;
+    try
+    {
+        if (argc==1) return fill_input_or_display_help(argv[0], input_data);
+        error = parse_command_line_for_xdyn(argc, argv, input_data);
+    }
+    catch(boost::program_options::error& e)
+    {
+      std::cerr << "The command line you supplied is not valid: " << e.what() << std::endl << "Use --help to get the list of available parameters." << std::endl;
+      return -1;
+    }
+    if (error)
+    {
+        return error;
+    }
+    if (input_data.catch_exceptions)
+    {
+        try
+        {
+            return run(input_data);
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << "An internal error has occurred: " << e.what() << std::endl;
+            return -1;
+        }
+    }
+    return run(input_data);
 }

@@ -291,3 +291,8 @@ void History::reset()
     L.clear();
     oldest_recorded_instant = 0;
 }
+
+bool History::is_empty() const
+{
+    return L.size() == 0;
+}

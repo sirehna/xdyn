@@ -34,6 +34,7 @@ class Sim
             const StateType& x,
             const ssc::data_source::DataSource& command_listener);
         void operator()(const StateType& x, StateType& dxdt, double t);
+        void dx_dt(const StateType& x, StateType& dxdt, const double t);
 
         void update_discrete_states();
         void update_continuous_states();

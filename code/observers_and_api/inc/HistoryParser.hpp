@@ -1,25 +1,12 @@
 #ifndef OBSERVERS_AND_API_INC_HISTORYPARSER_HPP_
 #define OBSERVERS_AND_API_INC_HISTORYPARSER_HPP_
-#include "State.hpp"
-#include "SimStepper.hpp"
+
 #include <map>
 
-class HistoryParser
-{
-    public :
-        HistoryParser(const double Tmax);
-        const double Tmax;
+#include "Res.hpp"
+#include "State.hpp"
+#include "SimServerInputs.hpp"
 
-
-        State parse_state_history_yaml(const std::string& yaml, const double Tmax);
-        std::string  emit_state_history_yaml(const State& state);
-        SimStepperInfos get_simstepperinfo(const std::string& yaml);
-    private:
-        HistoryParser();
-
-
-};
-
-
+SimServerInputs parse_SimServerInputs(const std::string& json, const double max_history_length);
 
 #endif /* OBSERVERS_AND_API_INC_HISTORYPARSER_HPP_ */

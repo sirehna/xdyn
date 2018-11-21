@@ -6,13 +6,15 @@
  */
 
 
+
+#include <ssc/text_file_reader.hpp>
+
+#include "display_command_line_arguments.hpp"
 #include "GZCurve.hpp"
 #include "make_sim_for_GZ.hpp"
 #include "OptionPrinter.hpp"
-#include "utilities_for_InputData.hpp"
-#include "simulator_run.hpp"
-
-#include <ssc/text_file_reader.hpp>
+#include "parse_XdynCommandLineArguments.hpp"
+#include "report_xdyn_exceptions_to_user.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -122,7 +124,7 @@ int main(int argc, char** argv)
                     write(os, phi*180./PI, calculate.gz(phi), sep);
                 }
             };
-        catch_exceptions(f, "");
+        report_xdyn_exceptions_to_user(f, [](const std::string& s){std::cerr << s;});
     }
     return 0;
 }

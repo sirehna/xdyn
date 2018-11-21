@@ -47,18 +47,18 @@ State::State(const StateType& state_values, const double t) :
 
 StateType State::get_StateType(const size_t index) const
 {
-    StateType s = {x[(int)index].second,
-                   y[(int)index].second,
-                   z[(int)index].second,
-                   u[(int)index].second,
-                   v[(int)index].second,
-                   w[(int)index].second,
-                   p[(int)index].second,
-                   q[(int)index].second,
-                   r[(int)index].second,
-                   qr[(int)index].second,
-                   qi[(int)index].second,
-                   qj[(int)index].second,
-                   qk[(int)index].second};
-    return s;
+    return StateType({x[(int)index].second,
+                      y[(int)index].second,
+                      z[(int)index].second,
+                      u[(int)index].second,
+                      v[(int)index].second,
+                      w[(int)index].second,
+                      p[(int)index].second,
+                      q[(int)index].second,
+                      r[(int)index].second,
+                      qr[(int)index].second,
+                      qi[(int)index].second,
+                      qj[(int)index].second,
+                      qk[(int)index].second});
 }
+

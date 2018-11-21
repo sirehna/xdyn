@@ -1,5 +1,5 @@
 # Build image
-#   docker build -f Dockerfile -t xdyn .
+#   docker build -t xdyn .
 #
 # Delete image
 #   docker rmi xdyn
@@ -94,8 +94,7 @@ RUN cd protobuf \
  && ./configure "CFLAGS=-fPIC" "CXXFLAGS=-fPIC" \
  && make -j 4\
  && make check \
- && make install \
- && ls /usr/local/lib/libprotobuf.a
+ && make install
 RUN ldconfig
 
 RUN git clone https://github.com/zeromq/libzmq.git
@@ -119,8 +118,7 @@ RUN cd libzmq \
  && echo "endif(NOT TARGET libzmq-static)" >> ZeroMQConfig.cmake \
  && make test \
  && make install \
- && ldconfig \
- && ls /usr/share/cmake-3.0/Modules/
+ && ldconfig
 
 RUN git clone https://github.com/zeromq/cppzmq.git
 RUN cd cppzmq \

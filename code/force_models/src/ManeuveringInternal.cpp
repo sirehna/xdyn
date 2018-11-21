@@ -48,6 +48,16 @@ void Constant::accept(AbstractNodeVisitor& visitor) const
     visitor.visit(*this);
 }
 
+double Constant::get_max() const
+{
+    return val;
+}
+
+double Constant::get_min() const
+{
+    return val;
+}
+
 Unary::Unary(const NodePtr operand) : Node({operand})
 {
 }
@@ -74,6 +84,16 @@ void Cos::accept(AbstractNodeVisitor& visitor) const
     visitor.visit(*this);
 }
 
+double Cos::get_max() const
+{
+    return 1;
+}
+
+double Cos::get_min() const
+{
+    return -1;
+}
+
 Sin::Sin(const NodePtr& operand) : Unary(operand)
 {
 }
@@ -89,6 +109,16 @@ Function Sin::get_lambda() const
 void Sin::accept(AbstractNodeVisitor& visitor) const
 {
     visitor.visit(*this);
+}
+
+double Sin::get_max() const
+{
+    return 1;
+}
+
+double Sin::get_min() const
+{
+    return -1;
 }
 
 Abs::Abs(const NodePtr& operand) : Unary(operand)
@@ -109,8 +139,29 @@ void Abs::accept(AbstractNodeVisitor& visitor) const
     visitor.visit(*this);
 }
 
+double Abs::get_max() const
+{
+    return std::max(std::abs(get_operand()->get_max()), std::abs(get_operand()->get_min()));
+}
+
+double Abs::get_min() const
+{
+    return 0;
+}
+
+
 Log::Log(const NodePtr& operand) : Unary(operand)
 {
+}
+
+double Log::get_max() const
+{
+    return std::log(get_operand()->get_max());
+}
+
+double Log::get_min() const
+{
+    return std::log(get_operand()->get_min());
 }
 
 Function Log::get_lambda() const
@@ -156,6 +207,16 @@ void Sum::accept(AbstractNodeVisitor& visitor) const
     visitor.visit(*this);
 }
 
+double Sum::get_max() const
+{
+    return get_lhs()->get_max() + get_rhs()->get_max();
+}
+
+double Sum::get_min() const
+{
+    return get_lhs()->get_min() + get_rhs()->get_min();
+}
+
 Pow::Pow(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
 {
 }
@@ -175,6 +236,24 @@ void Pow::accept(AbstractNodeVisitor& visitor) const
     visitor.visit(*this);
 }
 
+double Pow::get_min() const
+{
+    const double m1 = std::pow(get_lhs()->get_min(), get_rhs()->get_min());
+    const double m2 = std::pow(get_lhs()->get_min(), get_rhs()->get_max());
+    const double m3 = std::pow(get_lhs()->get_max(), get_rhs()->get_min());
+    const double m4 = std::pow(get_lhs()->get_max(), get_rhs()->get_max());
+    return std::min(std::min(m1,m2),std::min(m3,m4));
+}
+
+double Pow::get_max() const
+{
+    const double m1 = std::pow(get_lhs()->get_min(), get_rhs()->get_min());
+    const double m2 = std::pow(get_lhs()->get_min(), get_rhs()->get_max());
+    const double m3 = std::pow(get_lhs()->get_max(), get_rhs()->get_min());
+    const double m4 = std::pow(get_lhs()->get_max(), get_rhs()->get_max());
+    return std::max(std::max(m1,m2),std::max(m3,m4));
+}
+
 Exp::Exp(const NodePtr& operand) : Unary(operand)
 {
 }
@@ -186,6 +265,16 @@ Function Exp::get_lambda() const
                 const auto op = get_operand()->get_lambda();
                 return std::exp(op(states, ds, t));
             };
+}
+
+double Exp::get_min() const
+{
+    return std::exp(get_operand()->get_min());
+}
+
+double Exp::get_max() const
+{
+    return std::exp(get_operand()->get_max());
 }
 
 void Exp::accept(AbstractNodeVisitor& visitor) const
@@ -211,6 +300,16 @@ void Sqrt::accept(AbstractNodeVisitor& visitor) const
     visitor.visit(*this);
 }
 
+double Sqrt::get_min() const
+{
+    return std::sqrt(get_operand()->get_min());
+}
+
+double Sqrt::get_max() const
+{
+    return std::sqrt(get_operand()->get_max());
+}
+
 Difference::Difference(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
 {
 }
@@ -228,6 +327,16 @@ Function Difference::get_lambda() const
 void Difference::accept(AbstractNodeVisitor& visitor) const
 {
     visitor.visit(*this);
+}
+
+double Difference::get_min() const
+{
+    return get_lhs()->get_min() - get_rhs()->get_max();
+}
+
+double Difference::get_max() const
+{
+    return get_lhs()->get_max() - get_rhs()->get_min();
 }
 
 Divide::Divide(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
@@ -249,6 +358,16 @@ void Divide::accept(AbstractNodeVisitor& visitor) const
     visitor.visit(*this);
 }
 
+double Divide::get_min() const
+{
+    return get_lhs()->get_min()/get_rhs()->get_max();
+}
+
+double Divide::get_max() const
+{
+    return get_lhs()->get_max() / get_rhs()->get_min();
+}
+
 Multiply::Multiply(const NodePtr& lhs_, const NodePtr& rhs_) : Binary(lhs_, rhs_)
 {
 }
@@ -268,6 +387,16 @@ void Multiply::accept(AbstractNodeVisitor& visitor) const
     visitor.visit(*this);
 }
 
+double Multiply::get_min() const
+{
+    return get_lhs()->get_min()*get_rhs()->get_min();
+}
+
+double Multiply::get_max() const
+{
+    return get_lhs()->get_max() * get_rhs()->get_max();
+}
+
 Time::Time()
 {
 }
@@ -283,6 +412,16 @@ Function Time::get_lambda() const
 void Time::accept(AbstractNodeVisitor& visitor) const
 {
     visitor.visit(*this);
+}
+
+double Time::get_min() const
+{
+    return 0;
+}
+
+double Time::get_max() const
+{
+    return 0;
 }
 
 UnknownIdentifier::UnknownIdentifier(const std::string& identifier_name_) : identifier_name(identifier_name_)
@@ -307,6 +446,16 @@ std::string UnknownIdentifier::get_name() const
     return identifier_name;
 }
 
+
+double UnknownIdentifier::get_min() const
+{
+    return 0;
+}
+
+double UnknownIdentifier::get_max() const
+{
+    return 0;
+}
 NodePtr maneuvering::make_constant(const double val)
 {
     return NodePtr(new Constant(val));
@@ -523,4 +672,115 @@ namespace maneuvering
     {
         visitor.visit(*this);
     }
+}
+namespace maneuvering
+{
+    FindTmax::FindTmax() : Tmax(0) {}
+
+    double FindTmax::get_Tmax() const
+    {
+        return Tmax;
+    }
+
+    void FindTmax::visit(const UnknownIdentifier& )
+    {
+    }
+    void FindTmax::visit(const Time& f) {}
+    void FindTmax::visit(const State<StateType::X>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_min());
+    }
+    void FindTmax::visit(const State<StateType::Y>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::Z>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::U>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::V>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::W>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::P>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::Q>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::R>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::PHI>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::THETA>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::PSI>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::QR>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::QI>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::QJ>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const State<StateType::QK>& f)
+    {
+        const auto op = f.get_operand();
+        Tmax = std::max(Tmax, -op->get_max());
+    }
+    void FindTmax::visit(const Binary& f)
+    {
+        auto children  = f.get_children();
+        for (auto child:children)
+        {
+            child->accept(*this);
+        }
+    }
+    void FindTmax::visit(const Unary& f)
+    {
+        auto children  = f.get_children();
+        for (auto child:children)
+        {
+            child->accept(*this);
+        }
+    }
+    void FindTmax::visit(const Constant& ) {}
 }

@@ -2,7 +2,6 @@
 .metadata
 .project
 .settings
-build*
 install*
 RemoteSystemsTempFiles
 debug

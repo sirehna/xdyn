@@ -668,6 +668,91 @@ std::string test_data::falling_ball_example()
     return ss.str();
 }
 
+std::string test_data::simserver_test_with_commands_and_delay()
+{
+    std::stringstream ss;
+    ss << "rotations convention: [psi, theta', phi'']\n"
+       << "\n"
+       << "environmental constants:\n"
+       << "    g: {value: 9.81, unit: m/s^2}\n"
+       << "    rho: {value: 1000, unit: kg/m^3}\n"
+       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << "environment models: []\n"
+       << "\n"
+       << "bodies: # All bodies have NED as parent frame\n"
+       << "  - name: ball\n"
+       << "    position of body frame relative to mesh:\n"
+       << "        frame: mesh\n"
+       << "        x: {value: 0, unit: m}\n"
+       << "        y: {value: 0, unit: m}\n"
+       << "        z: {value: 0, unit: m}\n"
+       << "        phi: {value: 0, unit: rad}\n"
+       << "        theta: {value: 0, unit: rad}\n"
+       << "        psi: {value: 0, unit: rad}\n"
+       << "    initial position of body frame relative to NED:\n"
+       << "        frame: NED\n"
+       << "        x: {value: 0, unit: m}\n"
+       << "        y: {value: 0, unit: m}\n"
+       << "        z: {value: 0, unit: m}\n"
+       << "        phi: {value: 0, unit: rad}\n"
+       << "        theta: {value: 0, unit: rad}\n"
+       << "        psi: {value: 0, unit: rad}\n"
+       << "    initial velocity of body frame relative to NED:\n"
+       << "        frame: ball\n"
+       << "        u: {value: 0, unit: m/s}\n"
+       << "        v: {value: 0, unit: m/s}\n"
+       << "        w: {value: 0, unit: m/s}\n"
+       << "        p: {value: 0, unit: rad/s}\n"
+       << "        q: {value: 0, unit: rad/s}\n"
+       << "        r: {value: 0, unit: rad/s}\n"
+       << "    dynamics:\n"
+       << "        hydrodynamic forces calculation point in body frame:\n"
+       << "            x: {value: 0.696, unit: m}\n"
+       << "            y: {value: 0, unit: m}\n"
+       << "            z: {value: 1.418, unit: m}\n"
+       << "        centre of inertia:\n"
+       << "            frame: ball\n"
+       << "            x: {value: 0, unit: m}\n"
+       << "            y: {value: 0, unit: m}\n"
+       << "            z: {value: 0, unit: m}\n"
+       << "        mass: {value: 1, unit: kg}\n"
+       << "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
+       << "            frame: ball\n"
+       << "            row 1: [1,0,0,0,0,0]\n"
+       << "            row 2: [0,1,0,0,0,0]\n"
+       << "            row 3: [0,0,1,0,0,0]\n"
+       << "            row 4: [0,0,0,1,0,0]\n"
+       << "            row 5: [0,0,0,0,1,0]\n"
+       << "            row 6: [0,0,0,0,0,1]\n"
+       << "        added mass matrix at the center of buoyancy projected in the body frame:\n"
+       << "            frame: ball\n"
+       << "            row 1: [0,0,0,0,0,0]\n"
+       << "            row 2: [0,0,0,0,0,0]\n"
+       << "            row 3: [0,0,0,0,0,0]\n"
+       << "            row 4: [0,0,0,0,0,0]\n"
+       << "            row 5: [0,0,0,0,0,0]\n"
+       << "            row 6: [0,0,0,0,0,0]\n"
+       << "    controlled forces:\n"
+       << "      - model: maneuvering\n"
+       << "        name: F1\n"
+       << "        reference frame:\n"
+       << "            frame: ball\n"
+       << "            x: {value: 0, unit: m}\n"
+       << "            y: {value: 0, unit: m}\n"
+       << "            z: {value: 0, unit: m}\n"
+       << "            phi: {value: 0, unit: deg}\n"
+       << "            theta: {value: 0, unit: deg}\n"
+       << "            psi: {value: 0, unit: deg}\n"
+       << "        commands: [command1, b, a]\n"
+       << "        X: x(t)\n"
+       << "        Y: y(t-10)\n"
+       << "        Z: command1*z(t)\n"
+       << "        K: b*u(t-6)\n"
+       << "        M: v(t-6) + command1*w(t-5) + 2*b*p(t-4) + q(t-3)/a\n"
+       << "        N: 0";
+    return ss.str();
+}
+
 std::string test_data::falling_cube()
 {
     std::stringstream ss;
@@ -4193,74 +4278,136 @@ std::string test_data::manoeuvring_with_euler_angles_and_quaternions()
     return ss.str();
 }
 
+std::string test_data::man_with_delay()
+{
+    std::stringstream ss;
+    ss << "name: F\n"
+       << "reference frame:\n"
+       << "    frame: ball\n"
+       << "    x: {value: 0, unit: m}\n"
+       << "    y: {value: 0, unit: m}\n"
+       << "    z: {value: 0, unit: m}\n"
+       << "    phi: {value: 0, unit: deg}\n"
+       << "    theta: {value: 0, unit: deg}\n"
+       << "    psi: {value: 0, unit: deg}\n"
+       << "commands: [command1, b, a]\n"
+//       << "X: 1E6*(x(t-10) + command1*x(t-9) + 2*b*y(t-8) + z(t-7)/a)\n"
+       << "X: 1E6*(x(t))\n"
+       << "Y: 1E6*(x(t-10))\n"
+       << "Z: 1E6*(command1*x(t))\n"
+       << "K: 1E6*(b*x(t-6)\n"
+       << "M: 1E6*(x(t-6) + command1*x(t-5) + 2*b*y(t-4) + z(t-3)/a)\n"
+       << "N: 0";
+    return ss.str();
+}
+
 std::string test_data::dummy_history()
 {
     std::stringstream ss;
-    ss << "t : 1234.5\n"
-       << "x : [[0.4,10],[0.3,30],[0.2,50],[0.1,70],[0,90]]\n"
-       << "y : [[0.4,11],[0.3,31],[0.2,51],[0.1,71],[0,91]]\n"
-       << "z : [[0.4,12],[0.3,32],[0.2,52],[0.1,72],[0,92]]\n"
-       << "u : [[0.4,13],[0.3,33],[0.2,53],[0.1,73],[0,93]]\n"
-       << "v : [[0.4,14],[0.3,34],[0.2,54],[0.1,74],[0,94]]\n"
-       << "w : [[0.4,15],[0.3,35],[0.2,55],[0.1,75],[0,95]]\n"
-       << "p : [[0.4,16],[0.3,36],[0.2,56],[0.1,76],[0,96]]\n"
-       << "q : [[0.4,17],[0.3,37],[0.2,57],[0.1,77],[0,97]]\n"
-       << "r : [[0.4,18],[0.3,38],[0.2,58],[0.1,78],[0,98]]\n"
-      << "qr : [[0.4,19],[0.3,39],[0.2,59],[0.1,79],[0,99]]\n"
-      << "qi : [[0.4,20],[0.3,40],[0.2,60],[0.1,80],[0,100]]\n"
-      << "qj : [[0.4,21],[0.3,41],[0.2,61],[0.1,81],[0,101]]\n"
-      << "qk : [[0.4,22],[0.3,42],[0.2,62],[0.1,82],[0,102]]\n";
+    ss << "{\"Dt\": 1234.5,\n"
+       << "\"states\":\n"
+       << "[ {\"t\": 0,   \"x\": 90, \"y\": 91, \"z\": 92, \"u\": 93, \"v\": 94, \"w\": 95, \"p\": 96, \"q\": 97, \"r\": 98, \"qr\": 99, \"qi\": 100, \"qj\": 101, \"qk\": 102}\n"
+       << ", {\"t\": 0.1, \"x\": 70, \"y\": 71, \"z\": 72, \"u\": 73, \"v\": 74, \"w\": 75, \"p\": 76, \"q\": 77, \"r\": 78, \"qr\": 79, \"qi\": 80,  \"qj\": 81,  \"qk\": 82}\n"
+       << ", {\"t\": 0.2, \"x\": 50, \"y\": 51, \"z\": 52, \"u\": 53, \"v\": 54, \"w\": 55, \"p\": 56, \"q\": 57, \"r\": 58, \"qr\": 59, \"qi\": 60,  \"qj\": 61,  \"qk\": 62}\n"
+       << ", {\"t\": 0.3, \"x\": 30, \"y\": 31, \"z\": 32, \"u\": 33, \"v\": 34, \"w\": 35, \"p\": 36, \"q\": 37, \"r\": 38, \"qr\": 39, \"qi\": 40,  \"qj\": 41,  \"qk\": 42}\n"
+       << ", {\"t\": 0.4, \"x\": 10, \"y\": 11, \"z\": 12, \"u\": 13, \"v\": 14, \"w\": 15, \"p\": 16, \"q\": 17, \"r\": 18, \"qr\": 19, \"qi\": 20,  \"qj\": 21,  \"qk\": 22}\n"
+       << "], \"commands\": null}";
     return ss.str();
 }
 
 std::string test_data::complete_yaml_message_from_gui()
 {
     std::stringstream ss;
-    ss << "{Dt: 2.0,"
-       << "states: {"
-       << "t: 1234.5, "
-       << "x: [[0,90]], "
-       << "y: [[0,91]], "
-       << "z: [[0,92]], "
-       << "u: [[0,93]], "
-       << "v: [[0,94]], "
-       << "w: [[0,95]], "
-       << "p: [[0,96]], "
-       << "q: [[0,97]], "
-       << "r: [[0,98]], "
-      << "qr: [[0,99]], "
-      << "qi: [[0,100]], "
-      << "qj: [[0,101]], "
-      << "qk: [[0,102]], "
-      <<"}, "
-      <<"commands: {"
-      <<"RPM: 1.2, "
-      <<"B1: 0.1"
-      <<"}}";
+    ss << "{\"Dt\": 2.0, " << std::endl
+       << "\"states\":[" << std::endl
+       << "{\"t\": 1234.5, "
+       << "\"x\": 90, "
+       << "\"y\": 91, "
+       << "\"z\": 92, "
+       << "\"u\": 93, "
+       << "\"v\": 94, "
+       << "\"w\": 95, "
+       << "\"p\": 96, "
+       << "\"q\": 97, "
+       << "\"r\": 98, "
+       << "\"qr\": 99, "
+       << "\"qi\": 100, "
+       << "\"qj\": 101, "
+       << "\"qk\": 102}]" << std::endl
+       <<",\"commands\":" << std::endl
+       <<"  {\"RPM\": 1.2," << std::endl
+       <<"  \"B1\": 0.1}}";
+    return ss.str();
+}
+
+std::string test_data::simserver_message_without_Dt()
+{
+    std::stringstream ss;
+    ss << "{\"states\":[" << std::endl
+       << "{\"t\": 1234.5, "
+       << "\"x\": 90, "
+       << "\"y\": 91, "
+       << "\"z\": 92, "
+       << "\"u\": 93, "
+       << "\"v\": 94, "
+       << "\"w\": 95, "
+       << "\"p\": 96, "
+       << "\"q\": 97, "
+       << "\"r\": 98, "
+      << "\"qr\": 99, "
+      << "\"qi\": 100, "
+      << "\"qj\": 101, "
+      << "\"qk\": 102}]" << std::endl
+      <<",\"commands\":" << std::endl
+      <<"  {\"RPM\": 1.2," << std::endl
+      <<"  \"B1\": 0.1}}";
     return ss.str();
 }
 
 std::string test_data::complete_yaml_message_for_falling_ball()
 {
     std::stringstream ss;
-    ss << "{Dt: 10.0,"
-       << "states: {"
-       << "t: 0.0, "
-       << "x: [[0.0,4.0]], "
-       << "y: [[0.0,8.0]], "
-       << "z: [[0.0,12.0]], "
-       << "u: [[0.0,1.0]], "
-       << "v: [[0.0,0.0]], "
-       << "w: [[0.0,0.0]], "
-       << "p: [[0.0,0.0]], "
-       << "q: [[0.0,0.0]], "
-       << "r: [[0.0,0.0]], "
-      << "qr: [[0.0,1.0]], "
-      << "qi: [[0.0,0.0]], "
-      << "qj: [[0.0,0.0]], "
-      << "qk: [[0.0,0.0]], "
-      <<"}, "
-      <<"commands: null }";
+    ss << "{\"Dt\": 10.0, " << std::endl
+       << "\"states\":" << std::endl
+       << "[ {\"t\": 1.87, "
+       << "\"x\": 4.0,"
+       << "\"y\": 8.0, "
+       << "\"z\": 12.0, "
+       << "\"u\": 1.0, "
+       << "\"v\": 0.0, "
+       << "\"w\": 0.0, "
+       << "\"p\": 0.0, "
+       << "\"q\": 0.0, "
+       << "\"r\": 0.0, "
+      << "\"qr\": 1.0, "
+      << "\"qi\": 0.0, "
+      << "\"qj\": 0.0, "
+      << "\"qk\": 0.0}]" << std::endl
+      <<",\"commands\": null}";
+
+    return ss.str();
+}
+
+std::string test_data::invalid_json_for_cs()
+{
+    std::stringstream ss;
+    ss << "{\"Dt\": 0, " << std::endl
+       << "\"states\":" << std::endl
+       << "[ {\"t\": 1.87, "
+       << "\"x\": 4.0,"
+       << "\"y\": 8.0, "
+       << "\"z\": 12.0, "
+       << "\"u\": 1.0, "
+       << "\"v\": 0.0, "
+       << "\"w\": 0.0, "
+       << "\"p\": 0.0, "
+       << "\"q\": 0.0, "
+       << "\"r\": 0.0, "
+      << "\"qr\": 1.0, "
+      << "\"qi\": 0.0, "
+      << "\"qj\": 0.0, "
+      << "\"qk\": 0.0}]" << std::endl
+      <<",\"commands\": null}";
 
     return ss.str();
 }

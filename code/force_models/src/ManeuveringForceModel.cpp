@@ -100,3 +100,13 @@ ssc::kinematics::Vector6d ManeuveringForceModel::get_force(const BodyStates& sta
     ds->check_out();
     return tau;
 }
+
+double ManeuveringForceModel::get_Tmax() const
+{
+    double Tmax = 0;
+    for (auto it:m)
+    {
+        Tmax = std::max(Tmax, maneuvering::get_Tmax(it.second));
+    }
+    return Tmax;
+}

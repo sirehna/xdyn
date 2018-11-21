@@ -20,6 +20,7 @@ class HistoryParserTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
+        const std::string yaml;
 };
 
 #endif  /* OBSERVERS_AND_API_UNIT_TESTS_INC_HISTORYPARSERTEST_HPP_ */

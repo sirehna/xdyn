@@ -29,40 +29,6 @@ ADD_CUSTOM_COMMAND(
     COMMENT "Checking the tutorials execute OK"
 )
 
-IF(PYTHONINTERP_FOUND AND PY_CX_FREEZE AND PY_TORNADO)
-    ADD_CUSTOM_TARGET(xdynserver
-    DEPENDS ${PROJECT_SOURCE_DIR}/../html/server.py
-            ${PROJECT_SOURCE_DIR}/../html/setup.py
-    )
-    FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_server/server)
-    ADD_CUSTOM_COMMAND(
-        TARGET xdynserver
-        POST_BUILD
-        COMMAND ${PYTHON_EXECUTABLE} setup.py install_exe -d ${CMAKE_CURRENT_BINARY_DIR}/python_server/server
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/../html
-        COMMENT "Generate X-DYN's server"
-    )
-    INSTALL(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/python_server/server"
-            DESTINATION ".")
-    FILE(GLOB files "${CMAKE_CURRENT_BINARY_DIR}/python_server/server/server*")
-    FOREACH(f ${files})
-        INSTALL(FILES ${f} DESTINATION server PERMISSIONS OWNER_EXECUTE)
-    ENDFOREACH()
-    INSTALL(DIRECTORY "${PROJECT_SOURCE_DIR}/../html/css"
-            DESTINATION server)
-    INSTALL(DIRECTORY "${PROJECT_SOURCE_DIR}/../html/static"
-            DESTINATION server)
-    INSTALL(FILES "${PROJECT_SOURCE_DIR}/../html/websocket_test.html"
-            DESTINATION server)
-ELSE()
-    ADD_CUSTOM_TARGET(xdynserver)
-    MESSAGE(STATUS "X-DYN's server will NOT be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
-    ADD_CUSTOM_COMMAND(
-        TARGET xdynserver
-        POST_BUILD
-        COMMENT "X-DYN's server will NOT be built: platform does not meet requirements (Python 3 with cx_freeze and tornado)")
-ENDIF()
-
 ADD_CUSTOM_TARGET(
     archive
     COMMAND export dateSTR=`date +'%Y_%m_%d__%H_%M'` &&

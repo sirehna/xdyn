@@ -15,7 +15,7 @@ class ConfBuilder
     public :
         ConfBuilder(const std::string& yaml_model);
 
-        const Sim sim;
+        Sim sim;
         const double Tmax;
 
 };

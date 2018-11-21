@@ -1,162 +1,91 @@
-#include "yaml.h"
-#include "YamlState.hpp"
+#include <ssc/json.hpp>
+
 #include "parse_history.hpp"
-#include <vector>
-#include "InvalidInputException.hpp"
+#include "YamlState.hpp"
 
-void operator >> (const YAML::Node& node, std::pair<double,double>& v);
-void operator >> (const YAML::Node& node, std::pair<double,double>& v)
+YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
 {
-    if (node.size() != 2)
+    rapidjson::Document document;
+    ssc::json::parse(json, document);
+    YamlSimServerInputs infos;
+    infos.Dt = ssc::json::find_optional_double("Dt", document, 0);
+    if (not(document.HasMember("states")))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "dimension error : in yaml history, sublist size must be 2");
-
+        THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "Missing key 'states' in JSON root.")
     }
-    node[0] >> v.first;
-    node[1] >> v.second;
-}
-
-void operator >> (const YAML::Node& node, std::vector<std::pair<double,double>>& v);
-void operator >> (const YAML::Node& node, std::vector<std::pair<double,double>>& v)
-{
-    v.resize(node.size());
-    for (size_t i = 0 ; i< node.size() ; ++i) node[i] >> v[i];
-}
-
-void operator >> (const YAML::Node& node, YamlHistory& h);
-void operator >> (const YAML::Node& node, YamlHistory& h)
-{
-    std::vector<std::pair<double,double>> valeur;
-    node>>valeur;
-    for(auto i=valeur.begin();i!=valeur.end(); i++)
+    if (not(document["states"].IsArray()))
     {
-        h.tau.push_back(i->first);
-        h.values.push_back(i->second);
+      THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "Expecting a JSON array but got '" << ssc::json::dump(document["states"]));
     }
-
-}
-
-void operator >> (const YAML::Node& node, YamlState& s);
-void operator >> (const YAML::Node& node, YamlState& s)
-{
-    node["t"] >> s.t;
-    node["x"] >> s.x;
-    node["y"] >> s.y;
-    node["z"] >> s.z;
-    node["u"] >> s.u;
-    node["v"] >> s.v;
-    node["w"] >> s.w;
-    node["p"] >> s.p;
-    node["q"] >> s.q;
-    node["r"] >> s.r;
-    node["qr"] >> s.qr;
-    node["qi"] >> s.qi;
-    node["qj"] >> s.qj;
-    node["qk"] >> s.qk;
-}
-
-
-
-YamlState parse_history_yaml(const std::string& yaml)
-{
-    std::stringstream stream(yaml);
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
-    YamlState ret;
-    node >> ret;
-    return ret;
-}
-
-
-void operator << (YAML::Emitter& out, std::pair<double,double>& p);
-void operator << (YAML::Emitter& out, std::pair<double,double>& p)
-{
-    out<<YAML::Flow;
-    out<<YAML::BeginSeq<<p.first<<p.second<<YAML::EndSeq;
-}
-
-void operator << (YAML::Emitter& out, std::vector<std::pair<double,double>>& v);
-void operator << (YAML::Emitter& out, std::vector<std::pair<double,double>>& v)
-{
-    out<<YAML::BeginSeq;
-    for(size_t i=0 ; i<v.size(); i++)
+    for (rapidjson::Value& v:document["states"].GetArray())
     {
-        out<<v[i];
+        YamlState s;
+        s.t = ssc::json::find_double("t", v);
+        s.x = ssc::json::find_double("x", v);
+        s.y = ssc::json::find_double("y", v);
+        s.z = ssc::json::find_double("z", v);
+        s.u = ssc::json::find_double("u", v);
+        s.v = ssc::json::find_double("v", v);
+        s.w = ssc::json::find_double("w", v);
+        s.p = ssc::json::find_double("p", v);
+        s.q = ssc::json::find_double("q", v);
+        s.r = ssc::json::find_double("r", v);
+        s.qr = ssc::json::find_double("qr", v);
+        s.qi = ssc::json::find_double("qi", v);
+        s.qj = ssc::json::find_double("qj", v);
+        s.qk = ssc::json::find_double("qk", v);
+        infos.states.push_back(s);
     }
-    out<<YAML::EndSeq;
-
-}
-
-void operator << (std::vector<std::pair<double,double>>& lists, const YamlHistory& h);
-void operator << (std::vector<std::pair<double,double>>& lists, const YamlHistory& h)
-{
-    for(size_t it=0; it<h.values.size();it++)
+    if (document.HasMember("commands"))
     {
-        std::pair<double,double> p(h.tau[it], h.values[it]);
-        lists.push_back(p);
+        const rapidjson::Value& commands = document["commands"];
+        if (not(commands.IsObject()) && not(commands.IsNull()))
+        {
+            THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "'commands' should be a JSON object (key-values): got " << ssc::json::print_type(commands))
+        }
+        else
+        {
+            if (not(commands.IsNull()))
+            {
+                for (rapidjson::Value::ConstMemberIterator it = commands.MemberBegin(); it != commands.MemberEnd(); ++it)
+                {
+                    infos.commands[it->name.GetString()] = ssc::json::find_double(it->name.GetString(), commands);
+                }
+            }
+        }
     }
-}
 
-void operator << (YAML::Emitter& out, const YamlHistory& h);
-void operator << (YAML::Emitter& out, const YamlHistory& h)
-{
-    std::vector<std::pair<double,double>> lists;
-    lists<<h;
-
-    out<<YAML::BeginSeq;
-    for(size_t it=0; it<lists.size();it++)
-    {
-        out<<lists[it];
-    }
-    out<<YAML::EndSeq;
-}
-
-void operator << (YAML::Emitter& out, const YamlState& state);
-void operator << (YAML::Emitter& out, const YamlState& state)
-{
-    out<<YAML::Flow;
-    out<<YAML::BeginMap;
-    out<<YAML::Key<<"t"<<YAML::Value<<state.t;
-    out<<YAML::Key<<"x"<<YAML::Value<<state.x;
-    out<<YAML::Key<<"y"<<YAML::Value<<state.y;
-    out<<YAML::Key<<"z"<<YAML::Value<<state.z;
-    out<<YAML::Key<<"u"<<YAML::Value<<state.u;
-    out<<YAML::Key<<"v"<<YAML::Value<<state.v;
-    out<<YAML::Key<<"w"<<YAML::Value<<state.w;
-    out<<YAML::Key<<"p"<<YAML::Value<<state.p;
-    out<<YAML::Key<<"q"<<YAML::Value<<state.q;
-    out<<YAML::Key<<"r"<<YAML::Value<<state.r;
-    out<<YAML::Key<<"qr"<<YAML::Value<<state.qr;
-    out<<YAML::Key<<"qi"<<YAML::Value<<state.qi;
-    out<<YAML::Key<<"qj"<<YAML::Value<<state.qj;
-    out<<YAML::Key<<"qk"<<YAML::Value<<state.qk;
-    out<<YAML::EndMap;
-}
-
-
-std::string generate_history_yaml(const YamlState& state)
-{
-    YAML::Emitter e;
-    e<<state;
-    return e.c_str();
-}
-
-void operator>> (const YAML::Node& node, YamlSimStepperInfo& infos);
-void operator>> (const YAML::Node& node, YamlSimStepperInfo& infos)
-{
-    node["Dt"]       >> infos.Dt;
-    node["states"]   >> infos.state;
-    node["commands"] >> infos.commands;
-}
-
-YamlSimStepperInfo get_yamlsimstepperinfo(const std::string& yaml)
-{
-    std::stringstream stream(yaml);
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
-    YamlSimStepperInfo infos;
-    node>>infos;
     return infos;
+}
+
+std::string encode_YamlStates(const std::vector<YamlState>& states)
+{
+    std::stringstream ss;
+    ss << "[";
+    for (size_t i = 0 ; i < states.size() ; ++i)
+    {
+        ss << "{"
+           << "\"t\": " << states[i].t << ", "
+           << "\"x\": " << states[i].x << ", "
+           << "\"y\": " << states[i].y << ", "
+           << "\"z\": " << states[i].z << ", "
+           << "\"u\": " << states[i].u << ", "
+           << "\"v\": " << states[i].v << ", "
+           << "\"w\": " << states[i].w << ", "
+           << "\"p\": " << states[i].p << ", "
+           << "\"q\": " << states[i].q << ", "
+           << "\"r\": " << states[i].r << ", "
+           << "\"qr\": " << states[i].qr << ", "
+           << "\"qi\": " << states[i].qi << ", "
+           << "\"qj\": " << states[i].qj << ", "
+           << "\"qk\": " << states[i].qk << ", "
+           << "\"phi\": " << states[i].phi << ", "
+           << "\"theta\": " << states[i].theta << ", "
+           << "\"psi\": " << states[i].psi
+           << "}";
+        if (i < states.size()-1) ss << ",";
+        ss << std::endl;
+    }
+    ss << "]";
+    return ss.str();
 }
