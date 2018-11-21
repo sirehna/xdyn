@@ -20,6 +20,7 @@ struct XdynForMECommandLineArguments
     bool empty() const;
     bool verbose;
     bool show_help;
+    bool show_websocket_debug_information;
 };
 
 

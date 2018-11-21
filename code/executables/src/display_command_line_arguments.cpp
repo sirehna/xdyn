@@ -44,6 +44,7 @@ BooleanArguments parse_input(int argc, char **argv, const po::options_descriptio
     ret.help = vm.count("help")>0;
     ret.debug = vm.count("debug")>0;
     ret.verbose = vm.count("verbose")>0;
+    ret.show_websocket_debug_information = vm.count("websocket-debug")>0;
     return ret;
 }
 

@@ -76,8 +76,7 @@ void start_server(const XdynForCSCommandLineArguments& input_data)
     TR1(shared_ptr)<SimServer> sim_server (new SimServer(yaml, input_data.solver, input_data.initial_timestep));
     SimulationMessage handler(sim_server, input_data.verbose);
     std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
-    const bool verbose = false;
-    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, verbose));
+    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, input_data.show_websocket_debug_information));
     signal(SIGINT, inthand);
     while(!stop){}
     std::cout << std::endl << "Gracefully stopping the websocket server..." << std::endl;

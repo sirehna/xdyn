@@ -16,6 +16,7 @@ struct BooleanArguments
     bool debug;
     bool verbose;
     bool show_help;
+    bool show_websocket_debug_information;
 };
 
 #include "boost/program_options.hpp"

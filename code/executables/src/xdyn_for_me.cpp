@@ -106,8 +106,7 @@ void start_server(const XdynForMECommandLineArguments& input_data)
     const auto yaml = yaml_reader.get_contents();
     TR1(shared_ptr)<XdynForME> sim_server (new XdynForME(yaml));
     SimulationMessage handler(sim_server, input_data.verbose);
-    const bool verbose = false;
-    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, verbose));
+    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, input_data.show_websocket_debug_information));
     std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
     signal(SIGINT, inthand);
     while(!stop){}

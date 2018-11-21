@@ -21,6 +21,7 @@ struct XdynForCSCommandLineArguments
     short unsigned int port;
     bool verbose;
     bool show_help;
+    bool show_websocket_debug_information;
 };
 
 
