@@ -8,7 +8,10 @@ YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
     rapidjson::Document document;
     ssc::json::parse(json, document);
     YamlSimServerInputs infos;
-    infos.Dt = ssc::json::find_optional_double("Dt", document, 0);
+    if (not(document.IsObject()))
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "JSON should be an object (i.e. within curly braces), but it's not (it's a " << ssc::json::print_type(document) << "). The JSON we're looking at was: " << ssc::json::dump(document));
+    }
     if (not(document.HasMember("states")))
     {
         THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "Missing key 'states' in JSON root.")
@@ -17,6 +20,7 @@ YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
     {
       THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "Expecting a JSON array but got '" << ssc::json::dump(document["states"]));
     }
+    infos.Dt = ssc::json::find_optional_double("Dt", document, 0);
     for (rapidjson::Value& v:document["states"].GetArray())
     {
         YamlState s;
