@@ -5,12 +5,29 @@ debian: fetch-ssc-debian cmake-debian package-debian
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
 
+SSC_PROJECT_NUMBER=42
+GITLAB_JOB_NUMBER_TO_USE_FOR_WINDOWS_SSC=32782
+GITLAB_JOB_NUMBER_TO_USE_FOR_DEBIAN_SSC=32783
+
 fetch-ssc-windows:
-	./fetch_gitlab_artifacts.sh -c d79f2271c954ee01fbc536e162667684adf20079 --project_id 42 -b windows
+	rm -f artifacts.zip
+	# The following requires environment variable 'GITLAB_PRIVATE_TOKEN' to be set to a valid Gitlab token
+	curl -f -k -s -S -L -H "PRIVATE-TOKEN: ${GITLAB_PRIVATE_TOKEN}" https://gitlab.sirehna.com/api/v4/projects/${SSC_PROJECT_NUMBER}/jobs/${GITLAB_JOB_NUMBER_TO_USE_FOR_WINDOWS_SSC}/artifacts -o artifacts.zip
+	rm -f ssc.deb ssc.zip
+	unzip artifacts.zip
+	rm artifacts.zip
 	rm -rf ssc_windows
-	mkdir ssc_windows
+	mkdir -p ssc_windows
 	unzip ssc.zip -d ssc_windows
 	rm ssc.zip
+
+fetch-ssc-debian:
+	rm -f artifacts.zip
+	# The following requires environment variable 'GITLAB_PRIVATE_TOKEN' to be set to a valid Gitlab token
+	curl -f -k -s -S -L -H "PRIVATE-TOKEN: ${GITLAB_PRIVATE_TOKEN}" https://gitlab.sirehna.com/api/v4/projects/${SSC_PROJECT_NUMBER}/jobs/${GITLAB_JOB_NUMBER_TO_USE_FOR_DEBIAN_SSC}/artifacts -o artifacts.zip
+	rm -f ssc.deb ssc.zip
+	unzip artifacts.zip
+	rm artifacts.zip
 
 cmake-windows:
 	mkdir -p build_windows
@@ -47,9 +64,6 @@ cmake-windows:
                         -DProtobuf_PROTOC_EXECUTABLE=/usr/bin/protoc \
                         -DCMAKE_SYSTEM_VERSION=7 \
                         /opt/share/code"
-
-fetch-ssc-debian:
-	./fetch_gitlab_artifacts.sh -c d79f2271c954ee01fbc536e162667684adf20079 --project_id 42 -b debian
 
 package-windows:
 	./ninja_windows.sh package
