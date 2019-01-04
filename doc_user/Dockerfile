@@ -29,8 +29,12 @@ RUN python3 -m pip install \
     cp bin/* /usr/bin && \
     cd .. && \
     rm -rf pandoc_bin pandoc.tar.gz
-ADD report /
-RUN cd /report && python3 setup.py install
+
+RUN mkdir -p /tmp_build/report
+ADD setup.py /tmp_build
+ADD setup.cfg /tmp_build
+ADD report /tmp_build/report
+RUN cd /tmp_build && python setup.py install
 ADD xdyn.deb /
 RUN dpkg -r xdyn && dpkg -i xdyn.deb && \
     ln -s /usr/lib/libgfortran.so.3.0.0 /lib/x86_64-linux-gnu/libgfortran.so.3 && \
