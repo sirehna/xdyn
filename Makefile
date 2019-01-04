@@ -12,7 +12,7 @@ GITLAB_JOB_NUMBER_TO_USE_FOR_DEBIAN_SSC=32783
 fetch-ssc-windows:
 	rm -f artifacts.zip
 	# The following requires environment variable 'GITLAB_PRIVATE_TOKEN' to be set to a valid Gitlab token
-	curl -f -k -s -S -L -H "PRIVATE-TOKEN: ${GITLAB_PRIVATE_TOKEN}" https://gitlab.sirehna.com/api/v4/projects/${SSC_PROJECT_NUMBER}/jobs/${GITLAB_JOB_NUMBER_TO_USE_FOR_WINDOWS_SSC}/artifacts -o artifacts.zip
+	@curl -f -k -s -S -L -H "PRIVATE-TOKEN: ${GITLAB_PRIVATE_TOKEN}" https://gitlab.sirehna.com/api/v4/projects/${SSC_PROJECT_NUMBER}/jobs/${GITLAB_JOB_NUMBER_TO_USE_FOR_WINDOWS_SSC}/artifacts -o artifacts.zip
 	rm -f ssc.deb ssc.zip
 	unzip artifacts.zip
 	rm artifacts.zip
@@ -24,7 +24,7 @@ fetch-ssc-windows:
 fetch-ssc-debian:
 	rm -f artifacts.zip
 	# The following requires environment variable 'GITLAB_PRIVATE_TOKEN' to be set to a valid Gitlab token
-	curl -f -k -s -S -L -H "PRIVATE-TOKEN: ${GITLAB_PRIVATE_TOKEN}" https://gitlab.sirehna.com/api/v4/projects/${SSC_PROJECT_NUMBER}/jobs/${GITLAB_JOB_NUMBER_TO_USE_FOR_DEBIAN_SSC}/artifacts -o artifacts.zip
+	@curl -f -k -s -S -L -H "PRIVATE-TOKEN: ${GITLAB_PRIVATE_TOKEN}" https://gitlab.sirehna.com/api/v4/projects/${SSC_PROJECT_NUMBER}/jobs/${GITLAB_JOB_NUMBER_TO_USE_FOR_DEBIAN_SSC}/artifacts -o artifacts.zip
 	rm -f ssc.deb ssc.zip
 	unzip artifacts.zip
 	rm artifacts.zip
