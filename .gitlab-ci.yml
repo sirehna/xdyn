@@ -21,6 +21,8 @@ lint:
 
 build:windows:
    stage: build
+   before_script:
+     - export GITLAB_PRIVATE_TOKEN=$GITLAB_PRIVATE_TOKEN
    script:
      - make windows
      - ./run_all_tests_windows.sh --gtest_filter=-HOS*:*erver*:*websocket*:BlockedDOFTest.should_not_throw_if_CSV_file_exists
@@ -32,6 +34,8 @@ build:windows:
 
 build:debian:
    stage: build
+   before_script:
+     - export GITLAB_PRIVATE_TOKEN=$GITLAB_PRIVATE_TOKEN
    script:
      - make debian
      - ./run_all_tests_debian.sh --gtest_filter=-HOS*
