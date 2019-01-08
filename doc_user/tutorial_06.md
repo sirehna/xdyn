@@ -13,7 +13,7 @@ efforts suivants :
 - L'amortissement visqueux
 - Un effort de propulsion
 
-### Écriture du fichier de configuration du simulateur.
+### Écriture du fichier de configuration du simulateur
 
 Les deux seuls changements par rapport au tutoriel 2 sont l'ajout d'une section
 [`controlled forces`](#efforts-commandés) et un
@@ -22,30 +22,39 @@ que l'on nomme `controlled_forces_commands.yml`.
 
 On commence par définir les [caractéristiques du propulseur](#efforts-commandés) :
 
-{% set yaml_data = load('tutorial_06_1D_propulsion.yml') %}
+```python echo=False, results='raw'
+yaml_data = load_yaml('tutorial_06_1D_propulsion.yml')
+```
 
-{{show(yaml_data, 'bodies/0/controlled forces')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'bodies/0/controlled forces')
+```
 
 Les commandes sont définies à la racine du YAML:
 
-{{show(yaml_data, 'commands')}}
+```python echo=False, results='raw'
+print_yaml(yaml_data, 'commands')
+```
 
 En définitive, le fichier d'entrée est :
 
-{{show(yaml_data)}}
+```python echo=False, results='raw'
+print_yaml(yaml_data)
+```
 
 ### Lancement de la simulation
 
 La simulation peut maintenant être lancée comme suit :
 
-{{exec('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out.csv')}}
+```python echo=False, results='raw'
+execCommand('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out.csv')
+```
 
 ### Résultats
 
-{% set data = csv('out.csv') %}
-
-{% set plot = prepare_plot_data(data, x = 't', y = 'u(Anthineas)', name="Vitesse d'avance") %}
-{% set g = cartesian_graph([plot], x='t (s)', y='U (m/s)') %}
-{{layout(size=(1,1),graphs=[(g,(0,0))], title="Vitesse d'avance longitudinale")}}
-
-
+```python echo=False, results='raw'
+data = csv('out.csv')
+plot = prepare_plot_data(data, x = 't', y = 'u(Anthineas)', name="Vitesse d'avance")
+g = cartesian_graph([plot], x='t (s)', y='U (m/s)')
+create_layout(graph=g, title="Vitesse d'avance longitudinale")
+```

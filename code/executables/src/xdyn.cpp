@@ -106,7 +106,7 @@ std::string input_data_serialize(const XdynCommandLineArguments& inputData);
 std::string input_data_serialize(const XdynCommandLineArguments& inputData)
 {
     std::stringstream s;
-    s << "sim ";
+    s << "xdyn ";
     if (not inputData.yaml_filenames.empty()) s << "-y ";
     for (const auto& f:inputData.yaml_filenames)
     {

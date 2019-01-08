@@ -339,9 +339,9 @@ La ligne de commande à utiliser est :
 docker run --rm -it -w /work -v $(pwd):/work xdyn spt_report -p tutorials.md -r tutorials.docx -k
 ~~~~
 
-- le paramètre `-p gir.md` spécifie le fichier Markdown à utiliser pour le rapport (le modèle).
-- le paramètre `-r my_results.docx` détermine le format de sortie (on peut utiliser
-  aussi les formats PDF et HTML avec `-r my_results.pdf` et `-r my_results.html`
+- le paramètre `-p tutorials.md` spécifie le fichier Markdown à utiliser pour le rapport (le modèle).
+- le paramètre `-r tutorials.docx` détermine le format de sortie (on peut utiliser
+  aussi les formats PDF et HTML avec `-r tutorials.pdf` et `-r tutorials.html`
   respectivement).
 - le flag `-k` stipule que l'on souhaite conserver les fichiers intermédiaires
   générés par X-Dyn. Si on l'omet, seul le fichier de sortie sera généré.
@@ -377,7 +377,7 @@ et pour l'intégralité du YAML :
 **Exécution d'une simulation**
 
 ~~~~{.markdown}
-{{exec('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
+{{execCommand('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
 ~~~~
 
 **Récupération des données générées**
@@ -395,13 +395,13 @@ et pour l'intégralité du YAML :
 **Définition du type de graph**
 
 ~~~~{.markdown}
-{% set g = cartesian_graph([plot], x='t (s)', y='Elévation (m)') %}
+{% set g = cartesian_graph([plot], x='t (s)', y='Élévation (m)') %}
 ~~~~
 
 **Tracé de la planche**
 
 ~~~~{.markdown}
-{{layout(size=(1,1),graphs=[(g,(0,0))], title='Elévation au cours du temps')}}
+{{layout(size=(1,1),graphs=[(g,(0,0))], title='Élévation au cours du temps')}}
 ~~~~
 
 

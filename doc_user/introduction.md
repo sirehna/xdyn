@@ -1,6 +1,3 @@
-% Simulateur X-Dyn
-% SIREHNA
-
 # Description
 
 Le présent programme est un simulateur de comportement mécanique de corps solides indéformables dans un

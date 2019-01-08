@@ -2,6 +2,7 @@ stages:
   - git_submodule
   - lint
   - build
+  - doc
 
 git_submodule:
    stage: git_submodule
@@ -45,10 +46,12 @@ build:debian:
      paths:
      - xdyn.deb
 
-build:doc:
-   stage: build
+doc:
+   stage: doc
    script:
-     - make doc
+     - make doc_pweave
+   dependencies:
+     - build:debian
    artifacts:
      when: on_success
      paths:

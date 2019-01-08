@@ -333,7 +333,7 @@ $$K_{i,j}(\tau) =
 Cette intégrale est calculée à l'aide d'un schéma d'intégration numérique
 (méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
 
-![](images/radiation_damping_doc.png "Calcul de l'amortissement de radiation")
+![](images/radiation_damping_doc.svg "Calcul de l'amortissement de radiation")
 
 On calcule ensuite les efforts d'amortissement de radiation en prenant en
 compte l'historique sur une période $T$ :

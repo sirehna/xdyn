@@ -8,11 +8,29 @@ import matplotlib
 import math
 import numpy as np
 
+def which(program):
+    """ retur full path to program if found, else return None
+    """
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+    return None
+
+
 matplotlib.use('AGG')
 matplotlib.rc('grid', linewidth = 0.5, linestyle = '--', color = '#bdbdbd')
 matplotlib.rc('xtick', labelsize = 14)
 matplotlib.rc('ytick', labelsize = 14)
-matplotlib.rc('text', usetex = (sys.platform !='win32'))
+latex_program = 'latex' + '.exe' if sys.platform =='win32' else ''
+matplotlib.rc('text', usetex = True if which(latex_program) else False)
 matplotlib.rc('font', **{'family':'serif', 'serif':['Palatino'], 'size':14})
 
 # Must be after matplotlib.use

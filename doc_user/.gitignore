@@ -6,6 +6,9 @@
 *.pdf
 *.log
 *.out
+build
+dist
+report.egg-info
 err.txt
 log.txt
 images/AB2_stability.svg

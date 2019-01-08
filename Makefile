@@ -99,3 +99,9 @@ doc:
         -v $(shell pwd):/opt/share \
         -w /opt/share build-xdyn-doc \
         /bin/bash -c "cd doc_user && cd images && make && cd .. && ./doc_html.sh && mv doc.html .."
+
+doc_pweave:
+	cd doc_user && \
+    cp ../xdyn.deb . && \
+	make && \
+	mv doc.html ..
