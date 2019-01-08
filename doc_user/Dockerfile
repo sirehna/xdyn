@@ -42,10 +42,7 @@ RUN dpkg -r xdyn && dpkg -i xdyn.deb && \
 RUN mkdir -p /testdir && chmod a+rwx /testdir
 RUN echo "#!/bin/bash" > /usr/bin/xdyn-weave \
  && echo "rm -rf /work/tuto_execution" >> /usr/bin/xdyn-weave \
- && echo "mkdir -p /work/tuto_execution" >> /usr/bin/xdyn-weave \
- && echo "cp -rf /usr/demos/. /work/tuto_execution" >> /usr/bin/xdyn-weave \
+ && echo "cp -r /usr/demos /work/tuto_execution" >> /usr/bin/xdyn-weave \
  && echo "pweave \$*" >> /usr/bin/xdyn-weave \
  && chmod a+x /usr/bin/xdyn-weave
-ARG NAME=/usr/bin/xdyn-weave
-RUN ln -s ${NAME} /usr/bin/entrypoint
-ENTRYPOINT ["/usr/bin/entrypoint"]
+ENTRYPOINT ["/usr/bin/xdyn-weave"]
