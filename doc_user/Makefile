@@ -23,7 +23,7 @@ concatenated_doc.md: concatenated_doc.pmd build
 concatenated_doc_pandoc.md: concatenated_doc.md
 	$(xdyn-python3) pandoc_layout.py concatenated_doc.md -o concatenated_doc_pandoc.md
 
-doc.html: concatenated_doc_pandoc.md
+doc.html: concatenated_doc_pandoc.md images
 	$(xdyn-pandoc) --title-prefix=XDYN \
 		   -t html \
 		   --standalone --self-contained \
