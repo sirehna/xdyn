@@ -102,19 +102,6 @@ doc:
 
 doc_pweave:
 	cd doc_user && \
-    mkdir -p build_doc && \
-    cd build_doc && \
-    cp ../../xdyn.deb . && \
-    cp ../Dockerfile . && \
-    cp -rf ../report . && \
-    cp ../setup.py . && \
-    cp ../setup.cfg . && \
-    docker build . --tag xdyn_report && \
-    cd .. && \
-    cd ..
-	docker run --entrypoint /bin/sh --rm \
-        -u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
-        -v $(shell pwd):/build \
-        -w /build \
-        xdyn_report:latest \
-        -c "cd doc_user && pwd && ls && ./doc_html_pweave.sh && mv doc.html .."
+    cp ../xdyn.deb . && \
+	make && \
+	mv doc.html ..
