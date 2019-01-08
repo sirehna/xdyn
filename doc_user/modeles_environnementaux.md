@@ -685,7 +685,7 @@ tandis que celles dans le creux des vagues oscilleront plus lentement : le
 niveau moyen de la mer agit donc comme une frontière entre l'amplification et
 l'atténuation des hautes fréquences, ce qui n'est pas physique.
 
-Pour pallier à cet inconvénient, on peut utiliser des modèles dits de
+Pour pallier cet inconvénient, on peut utiliser des modèles dits de
 "stretching", qui permettent de recaler les vitesses orbitales à l'interface
 eau-air (le sommet ou le creux des vagues) d'une des façons décrites
 ci-dessous. Certaines de ces méthodes reviennent à étirer l'axe $z$ (d'où le
