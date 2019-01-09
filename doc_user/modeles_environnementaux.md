@@ -1,8 +1,6 @@
 # Modèles d'environnement
 
-La section `environment` définit les modèles d'environnement pour la simulation
-à effectuer. Elle permet de prendre en compte des modèles de houle et de vent.
-Elle peut être vide (#tutoriel-1-balle-en-chute-libre)).
+Les modèles d'environnement sont les modèles de houle (et, à terme, de vent, de courant...) utilisés par X-DYN. Actuellement, seuls des modèles de houle sont implémentés. Leur paramétrisation figure dans la section `environment` du fichier YAML d'entrée. Elle peut être vide (par exemple, lors de la simulation simple du [tutoriel 1](#tutoriel-1-balle-en-chute-libre)).
 
 Les modèles de houle interviennent pour le calcul des [efforts
 hydrostatiques](#efforts-hydrostatiques-non-lin%C3%A9aires)
