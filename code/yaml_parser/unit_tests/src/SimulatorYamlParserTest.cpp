@@ -318,3 +318,47 @@ TEST_F(SimulatorYamlParserTest, bug_3235)
 {
     ASSERT_NO_THROW(SimulatorYamlParser(test_data::bug_3235()).parse());
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_rigid_body_inertia_matrix)
+{
+    ASSERT_EQ("body 1", yaml.bodies.at(0).dynamics.rigid_body_inertia.frame);
+    ASSERT_EQ("", yaml.bodies.at(0).dynamics.rigid_body_inertia.hdb_filename);
+    ASSERT_FALSE(yaml.bodies.at(0).dynamics.rigid_body_inertia.read_from_file);
+    ASSERT_EQ(6, yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.size());
+    ASSERT_DOUBLE_EQ(1,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(0));
+    ASSERT_DOUBLE_EQ(2,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(1));
+    ASSERT_DOUBLE_EQ(3,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(2));
+    ASSERT_DOUBLE_EQ(4,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(3));
+    ASSERT_DOUBLE_EQ(5,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(4));
+    ASSERT_DOUBLE_EQ(6,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(5));
+    ASSERT_DOUBLE_EQ(7,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(0));
+    ASSERT_DOUBLE_EQ(2,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(1));
+    ASSERT_DOUBLE_EQ(1,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(2));
+    ASSERT_DOUBLE_EQ(2,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(3));
+    ASSERT_DOUBLE_EQ(11,  yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(4));
+    ASSERT_DOUBLE_EQ(13,  yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(5));
+    ASSERT_DOUBLE_EQ(20,  yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(0));
+    ASSERT_DOUBLE_EQ(30,  yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(1));
+    ASSERT_DOUBLE_EQ(3,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(2));
+    ASSERT_DOUBLE_EQ(80,  yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(3));
+    ASSERT_DOUBLE_EQ(0.9, yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(4));
+    ASSERT_DOUBLE_EQ(0.1, yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(5));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(0));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(1));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(2));
+    ASSERT_DOUBLE_EQ(4,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(3));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(4));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(5));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(0));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(1));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(2));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(3));
+    ASSERT_DOUBLE_EQ(5,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(4));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(5));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(0));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(1));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(2));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(3));
+    ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(4));
+    ASSERT_DOUBLE_EQ(6,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(5));
+}
