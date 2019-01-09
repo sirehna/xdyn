@@ -137,7 +137,8 @@ Add additional notes about how to deploy this on a live system
 * [ZMQ](http://zeromq.org/) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
 * [CPP ZMQ](https://github.com/zeromq/cppzmq) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
 * [Pandoc](https://pandoc.org/) - To generate the documentation.
-* [SSC](https://github.com/sirehna/ssc) - For websockets, unit decoding, interpolations, kinematics, CSV file reading, exception handling.
+* [Pweave](http://mpastell.com/pweave/) - To generate the tutorials.
+* [SSC](https://github.com/sirehna/ssc) - For websockets, units decoding, interpolations, kinematics, CSV file reading and exception handling.
 
 ## Contributing
 
