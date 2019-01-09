@@ -13,6 +13,13 @@ project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf)
 
 (c) 2015-2018 [SIREHNA](http://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
 
+**Disclaimer**: This documentation was written for a French project, with
+French participants, therefore it is in French. It will be translated
+eventually. Also, please note that it is still a work-in-progress and, as such,
+can be incomplete. Despite our best efforts, inaccuracies may remain. However,
+the documentation will continue to evolve as new developments on X-DYN are
+on-going.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your
