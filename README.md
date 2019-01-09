@@ -2,9 +2,9 @@
 
 [![License](https://img.shields.io/badge/License-EPL%202.0-blue.svg)](https://opensource.org/licenses/EPL-2.0)
 
-X-DYN is a lightweight ship simulator. More precisely, it simulates the
-mechanical behaviour of a solid body in a fluid environment. Its purpose is to
-solve Newton's second law of motion taking hydrodynamic forces into account.
+X-DYN is a lightweight ship simulator modelling the dynamic behaviour of a ship a ship at sea, with its actuators, including some non-linear aspects of that behaviour and featuring a customizable maneuvring model.
+It simulates the mechanical behaviour of a solid body in a fluid environment by
+solving Newton's second law of motion, taking hydrodynamic forces into account.
 
 It was developed by SIREHNA during the IRT Jules Verne's ["Bassin Numérique"
 project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf).
