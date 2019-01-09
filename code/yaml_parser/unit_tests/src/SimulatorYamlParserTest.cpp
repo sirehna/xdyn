@@ -76,7 +76,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_bodies)
 {
     ASSERT_EQ(1, yaml.bodies.size());
     ASSERT_EQ("body 1", yaml.bodies.at(0).name);
-    ASSERT_EQ("anthineas.stl", yaml.bodies.at(0).mesh);
+    ASSERT_EQ("test_ship.stl", yaml.bodies.at(0).mesh);
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_position_of_body_frame_relative_to_mesh)
@@ -227,7 +227,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_from_hdb_file)
     const YamlDynamics6x6Matrix M =  yaml.bodies.front().dynamics.added_mass;
     const YamlSimulatorInput input = SimulatorYamlParser(test_data::added_mass_from_file()).parse();
     ASSERT_TRUE(input.bodies.front().dynamics.added_mass.read_from_file);
-    ASSERT_EQ("anthineas.hdb", input.bodies.front().dynamics.added_mass.hdb_filename);
+    ASSERT_EQ("test_ship.hdb", input.bodies.front().dynamics.added_mass.hdb_filename);
 }
 
 TEST_F(SimulatorYamlParserTest, should_not_throw_even_if_no_mesh_is_defined)

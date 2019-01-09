@@ -13,14 +13,14 @@
 #include "stl_data.hpp"
 #include "yaml_data.hpp"
 #include "make_sim_for_GZ.hpp"
-#include "generate_anthineas.hpp"
+#include "generate_test_ship.hpp"
 #include "stl_writer.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
-Sim GZCurveTest::sim = GZ::make_sim(test_data::anthineas_hydrostatic_test("hydrostatic"), test_data::cube());
+Sim GZCurveTest::sim = GZ::make_sim(test_data::test_ship_hydrostatic_test("hydrostatic"), test_data::cube());
 
 #define EPS 1E-10
 
@@ -123,7 +123,7 @@ TEST_F(GZCurveTest, can_calculate_GZ_for_phi_0)
 
 TEST_F(GZCurveTest, LONG_validate_gz_against_python_code)
 {
-    const Sim sim = GZ::make_sim(test_data::anthineas_damping(), write_stl(anthineas()));
+    const Sim sim = GZ::make_sim(test_data::test_ship_damping(), write_stl(test_ship()));
     const GZ::Curve calculate(sim);
 
     ASSERT_SMALL_RELATIVE_ERROR(-7.78E-001, calculate.gz(-70*PI/180.), 0.05);

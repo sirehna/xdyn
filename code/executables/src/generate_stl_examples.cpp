@@ -7,7 +7,7 @@
 
 
 #include "file_writer.hpp"
-#include "generate_anthineas.hpp"
+#include "generate_test_ship.hpp"
 #include "hdb_data.hpp"
 #include "stl_data.hpp"
 #include "stl_writer.hpp"
@@ -25,8 +25,8 @@ int main(int argc, const char* argv[])
     stl["big_cube.stl"]     = test_data::big_cube();
     stl["L.stl"]            = write_stl(L());
     stl["U.stl"]            = write_stl(U());
-    stl["anthineas.stl"]    = write_stl(anthineas());
-    stl["anthineas.hdb"]    = test_data::anthineas_hdb();
+    stl["test_ship.stl"]    = write_stl(test_ship());
+    stl["test_ship.hdb"]    = test_data::test_ship_hdb();
 
     write_files(path, stl);
     return 0;

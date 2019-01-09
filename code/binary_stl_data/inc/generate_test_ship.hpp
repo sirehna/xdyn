@@ -10,6 +10,6 @@
 
 #include "GeometricTypes3d.hpp"
 
-VectorOfVectorOfPoints anthineas();
+VectorOfVectorOfPoints test_ship();
 
 #endif  /* GENERATE_ANTHINEAS_HPP_ */

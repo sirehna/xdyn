@@ -393,7 +393,7 @@ ordre.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: diffraction
-  hdb: anthineas.hdb
+  hdb: test_ship.hdb
   calculation point in body frame:
       x: {value: 0.696, unit: m}
       y: {value: 0, unit: m}
@@ -586,7 +586,7 @@ matrice renseignée de la façon suivante :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: linear damping
   damping matrix at the center of gravity projected in the body frame:
-      frame: Anthineas
+      frame: TestShip
       row 1: [ 0, 0,     0,      0,      0, 0]
       row 2: [ 0, 0,     0,      0,      0, 0]
       row 3: [ 0, 0, 1.9e5,      0,      0, 0]
@@ -604,7 +604,7 @@ matrice renseignée de la façon suivante :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: quadratic damping
   damping matrix at the center of gravity projected in the body frame:
-      frame: Anthineas
+      frame: TestShip
       row 1: [ 0, 0,     0,      0,      0, 0]
       row 2: [ 0, 0,     0,      0,      0, 0]
       row 3: [ 0, 0, 1.9e5,      0,      0, 0]
@@ -690,7 +690,7 @@ repère body pour approcher un effort de propulsion.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: constant force
-  frame: Anthineas
+  frame: TestShip
   x: {value: 0, unit: m}
   y: {value: 0, unit: m}
   z: {value: 0, unit: m}
@@ -727,7 +727,7 @@ controlled forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
-        frame: mesh(Anthineas)
+        frame: mesh(TestShip)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
@@ -744,7 +744,7 @@ controlled forces:
   - name: starboard propeller
     model: wageningen B-series
     position of propeller frame:
-        frame: mesh(Anthineas)
+        frame: mesh(TestShip)
         x: {value: -4, unit: m}
         y: {value: 2, unit: m}
         z: {value: 2, unit: m}
@@ -1193,7 +1193,7 @@ controlled forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
-        frame: mesh(Anthineas)
+        frame: mesh(TestShip)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
@@ -1667,7 +1667,7 @@ controlled forces:
   - name: Prop. & rudder
     model: propeller+rudder
     position of propeller frame:
-        frame: mesh(Anthineas)
+        frame: mesh(TestShip)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
@@ -1728,11 +1728,11 @@ Pour obtenir les sorties d'effort de ce modèle, on écrit par exemple :
 output:
    - format: csv
      filename: propRudd.csv
-     data: [t, 'Fx(Prop. & rudder,Anthineas,Anthineas)', 'Fx(Prop. & rudder,Anthineas,NED)']
+     data: [t, 'Fx(Prop. & rudder,TestShip,TestShip)', 'Fx(Prop. & rudder,TestShip,NED)']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On obtient dans l'exemple précédent la projection suivant l'axe $X$ du repère
-`Anthineas` de l'effort `Prop. & rudder` (correspondant au nom de l'actionneur
+`TestShip` de l'effort `Prop. & rudder` (correspondant au nom de l'actionneur
 renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
 même type) ainsi que la projection de ce même effort suivant l'axe $X$ du repère
 NED.
@@ -1792,7 +1792,7 @@ controlled forces:
   - name: port side propeller
     model: Kt(J) & Kq(J)
     position of propeller frame:
-        frame: mesh(Anthineas)
+        frame: mesh(TestShip)
         x: {value: -4, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
@@ -1851,11 +1851,11 @@ Pour obtenir les sorties d'effort de ce modèle, on écrit par exemple :
 output:
    - format: csv
      filename: prop.csv
-     data: [t, 'Fx(port side propeller,Anthineas,Anthineas)', 'Fx(port side propeller,Anthineas,NED)']
+     data: [t, 'Fx(port side propeller,TestShip,TestShip)', 'Fx(port side propeller,TestShip,NED)']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On obtient dans l'exemple précédent la projection suivant l'axe $X$ du repère
-`Anthineas` de l'effort `port side propeller` (correspondant au nom de
+`TestShip` de l'effort `port side propeller` (correspondant au nom de
 l'actionneur renseigné dans la clef `name` afin de pouvoir définir plusieurs
 actionneurs du même type) ainsi que la projection de ce même effort suivant
 l'axe $X$ du repère NED.

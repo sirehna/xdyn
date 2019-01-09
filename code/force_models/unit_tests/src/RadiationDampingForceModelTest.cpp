@@ -66,7 +66,7 @@ YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data(const bool sh
 TEST_F(RadiationDampingForceModelTest, parser)
 {
     const YamlRadiationDamping r = RadiationDampingForceModel::parse(test_data::radiation_damping(),false).yaml;
-    ASSERT_EQ("anthineas.hdb", r.hdb_filename);
+    ASSERT_EQ("test_ship.hdb", r.hdb_filename);
     ASSERT_EQ(50, r.nb_of_points_for_retardation_function_discretization);
     ASSERT_DOUBLE_EQ(30,r.omega_max);
     ASSERT_EQ(0,r.omega_min);

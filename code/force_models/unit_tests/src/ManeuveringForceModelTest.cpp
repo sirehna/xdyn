@@ -382,8 +382,8 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
     data.frame_of_reference.angle = YamlAngle();
     data.frame_of_reference.coordinates = YamlCoordinates();
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"Anthineas", env);
-    auto states = get_body("Anthineas")->get_states();
+    ManeuveringForceModel force(data,"TestShip", env);
+    auto states = get_body("TestShip")->get_states();
 
     states.x.record(0, 1);
     states.y.record(0, 2);
@@ -402,7 +402,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
     command_listener.set("test(b)", 0.);
     command_listener.set("test(c)", 0.);
     const auto F = force(states, t, command_listener, env.k, states.G);
-    ASSERT_EQ("Anthineas", F.get_frame());
+    ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_DOUBLE_EQ(-93470409.32377005, F.X());
     ASSERT_DOUBLE_EQ(190870415.43062863, F.Y());
     ASSERT_DOUBLE_EQ(0, F.Z());
@@ -418,9 +418,9 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
     data.frame_of_reference.angle = YamlAngle();
     data.frame_of_reference.coordinates = YamlCoordinates();
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"Anthineas", env);
+    ManeuveringForceModel force(data,"TestShip", env);
 
-    auto states = get_body("Anthineas")->get_states();
+    auto states = get_body("TestShip")->get_states();
 
     states.x.record(0, 0.1);
     states.y.record(0, 2.04);
@@ -439,7 +439,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
     command_listener.set("test(b)", 0.);
     command_listener.set("test(c)", 0.);
     const auto F = force(states, t, command_listener, env.k, states.G);
-    ASSERT_EQ("Anthineas", F.get_frame());
+    ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_DOUBLE_EQ(-160307.53008106418, F.X());
     ASSERT_DOUBLE_EQ(349066.3153463915, F.Y());
     ASSERT_DOUBLE_EQ(0, F.Z());
@@ -455,13 +455,13 @@ TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_manoeuvring)
     data.frame_of_reference.angle = YamlAngle();
     data.frame_of_reference.coordinates = YamlCoordinates();
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"Anthineas", env);
+    ManeuveringForceModel force(data,"TestShip", env);
     YamlRotation rot;
     rot.order_by = "angle";
     rot.convention.push_back("z");
     rot.convention.push_back("y'");
     rot.convention.push_back("x''");
-    auto states = get_body("Anthineas")->get_states();
+    auto states = get_body("TestShip")->get_states();
     states.x.record(0, 0.1);
     states.y.record(0, 2.04);
     states.z.record(0, 6.28);

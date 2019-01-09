@@ -332,8 +332,8 @@ Chaque corps comprend :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 bodies: # All bodies have NED as parent frame
-  - name: Anthineas
-    mesh: anthineas.stl
+  - name: TestShip
+    mesh: test_ship.stl
     position of body frame relative to mesh:
         frame: mesh
         x: {value: 9.355, unit: m}
@@ -351,7 +351,7 @@ bodies: # All bodies have NED as parent frame
         theta: {value: -.0058, unit: rad}
         psi: {value: 0, unit: deg}
     initial velocity of body frame relative to NED:
-        frame: Anthineas
+        frame: TestShip
         u: {value: 0, unit: m/s}
         v: {value: 0, unit: m/s}
         w: {value: 0, unit: m/s}
@@ -364,13 +364,13 @@ bodies: # All bodies have NED as parent frame
             y: {value: 0, unit: m}
             z: {value: 1.418, unit: m}
         centre of inertia:
-            frame: Anthineas
+            frame: TestShip
             x: {value: 0.258, unit: m}
             y: {value: 0, unit: m}
             z: {value: 0.432, unit: m}
         mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
         rigid body inertia matrix at the center of buoyancy projected in the body frame:
-            frame: Anthineas
+            frame: TestShip
             row 1: [253310,0,0,0,0,0]
             row 2: [0,253310,0,0,0,0]
             row 3: [0,0,253310,0,0,0]
@@ -378,7 +378,7 @@ bodies: # All bodies have NED as parent frame
             row 5: [0,0,0,0,8.279e6,0]
             row 6: [0,0,0,0,0,7.676e6]
         added mass matrix at the center of buoyancy projected in the body frame:
-            frame: Anthineas
+            frame: TestShip
             row 1: [3.519e4,0,0,0,0,0]
             row 2: [0,3.023e5,0,0,0,0]
             row 3: [0,0,1.980e5,0,0,0]
@@ -474,7 +474,7 @@ La section `centre of inertia` a l'allure suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 centre of inertia:
-    frame: Anthineas
+    frame: TestShip
     x: {value: 0, unit: m}
     y: {value: 0, unit: m}
     z: {value: 0, unit: m}
@@ -503,7 +503,7 @@ de repère (le champ `frame` est requis, et n'est pas utilisé).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rigid body inertia matrix at the center of buoyancy projected in the body frame:
-    frame: Anthineas
+    frame: TestShip
     row 1: [253310,0,0,0,0,0]
     row 2: [0,253310,0,0,0,0]
     row 3: [0,0,253310,0,0,0]
@@ -518,7 +518,7 @@ La matrice de masse ajoutée est définie de la même façon :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 added mass matrix at the center of buoyancy projected in the body frame:
-    frame: Anthineas
+    frame: TestShip
     row 1: [3.519e4,0,0,0,0,0]
     row 2: [0,3.023e5,0,0,0,0]
     row 3: [0,0,1.980e5,0,0,0]
@@ -539,11 +539,11 @@ les termes de Coriolis et centripète qui correspondraient ne sont pas pris en c
 
 Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
 à partir d'un fichier de sortie AQUA+ (format HDB). Pour cela, on écrit (pour lire depuis le fichier
-`anthineas.hdb`) :
+`test_ship.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 added mass matrix at the center of buoyancy projected in the body frame:
-    from hdb file: anthineas.hdb
+    from hdb file: test_ship.hdb
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dans ce cas, il ne faut pas spécifier les clefs `frame` et `row` (le programme
@@ -608,14 +608,14 @@ possible de récupérer
 $$(M+M_a)\dot{X_{\textrm{forced}}} - \sum F_i$$
 
 Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
-corps s'appelle 'Anthineas):
+corps s'appelle 'TestShip):
 
-- `Fx(blocked states,Anthineas,Anthineas)`
-- `Fy(blocked states,Anthineas,Anthineas)`
-- `Fz(blocked states,Anthineas,Anthineas)`
-- `Mx(blocked states,Anthineas,Anthineas)`
-- `My(blocked states,Anthineas,Anthineas)`
-- `Mz(blocked states,Anthineas,Anthineas)`
+- `Fx(blocked states,TestShip,TestShip)`
+- `Fy(blocked states,TestShip,TestShip)`
+- `Fz(blocked states,TestShip,TestShip)`
+- `Mx(blocked states,TestShip,TestShip)`
+- `My(blocked states,TestShip,TestShip)`
+- `Mz(blocked states,TestShip,TestShip)`
 
 Il est à noter que ces efforts sont exprimés dans le repère BODY.
 

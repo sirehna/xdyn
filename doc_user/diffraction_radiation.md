@@ -393,7 +393,7 @@ suivantes sont réalisées :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
-  hdb: anthineas.hdb
+  hdb: test_ship.hdb
   type of quadrature for cos transform: simpson
   type of quadrature for convolution: clenshaw-curtis
   nb of points for retardation function discretization: 50

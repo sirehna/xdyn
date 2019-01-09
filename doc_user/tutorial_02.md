@@ -10,8 +10,7 @@ yaml_data_fast_hs = load_yaml('tutorial_02_fast_hydrostatic.yml')
 ```
 
 ### Description du problème
-Dans cet exemple, nous considérons un navire,
-[l'Anthineas](http://www.marinetraffic.com/en/ais/details/ships/228367000/vessel:ANTHINEAS),
+Dans cet exemple, nous considérons un navire
 soumis uniquement à la pesanteur et aux efforts hydrostatiques, sans
 amortissement. Le navire est lâché sans vitesse initiale au-dessus de la
 surface libre (supposée plane) et va donc réaliser des oscillations
@@ -90,8 +89,8 @@ Voici les résultats :
 ```python echo=False, results='raw'
 fast_data = csv('fast.csv')
 exact_data = csv('exact.csv')
-fast_plot = prepare_plot_data(fast_data, x='t', y='z(Anthineas)', name='Modèle hydrostatique rapide')
-exact_plot = prepare_plot_data(exact_data, x='t', y='z(Anthineas)', name='Modèle hydrostatique exact')
+fast_plot = prepare_plot_data(fast_data, x='t', y='z(TestShip)', name='Modèle hydrostatique rapide')
+exact_plot = prepare_plot_data(exact_data, x='t', y='z(TestShip)', name='Modèle hydrostatique exact')
 g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='Élévation (m)')
 create_layout(graph=g, title='Élévation au cours du temps')
 ```
@@ -99,8 +98,8 @@ create_layout(graph=g, title='Élévation au cours du temps')
 On peut également représenter les déplacements suivant l'axe $y$ :
 
 ```python echo=False, results='raw'
-fast_plot = prepare_plot_data(fast_data, x='t', y='y(Anthineas)', name='Modèle hydrostatique rapide')
-exact_plot = prepare_plot_data(exact_data, x='t', y='y(Anthineas)', name='Modèle hydrostatique exact')
+fast_plot = prepare_plot_data(fast_data, x='t', y='y(TestShip)', name='Modèle hydrostatique rapide')
+exact_plot = prepare_plot_data(exact_data, x='t', y='y(TestShip)', name='Modèle hydrostatique exact')
 g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='y (m)')
 create_layout(graph=g, title='Embardée au cours du temps')
 ```

@@ -199,7 +199,7 @@ Options:
 Exemple :
 
 ~~~~~~~~~~~~~~~~~~~~ {.bash}
-./gz anthineas_in_waves.yml -s anthineas.stl --dphi 10 --phi_max 40
+./gz test_ship_in_waves.yml -s test_ship.stl --dphi 10 --phi_max 40
 Phi [deg]   GZ(phi) [m]
 -40 -0.615127
 -30 -0.432902

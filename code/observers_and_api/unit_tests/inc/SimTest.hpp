@@ -20,7 +20,7 @@ class SimTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
-        static const VectorOfVectorOfPoints anthineas_stl;
+        static const VectorOfVectorOfPoints test_ship_stl;
 };
 
 #endif  /* SIMTEST_HPP_ */

@@ -332,7 +332,7 @@ TEST_F(low_level_hdb_parserTest, vector_rule_should_not_parse_matrix)
 
 TEST_F(low_level_hdb_parserTest, can_parse_file_to_internal_data_structure)
 {
-    const hdb::AST hdb_file = hdb::parse(test_data::anthineas_hdb());
+    const hdb::AST hdb_file = hdb::parse(test_data::test_ship_hdb());
     ASSERT_EQ(1, hdb_file.string_keys.size());
     ASSERT_EQ("AQUA+", hdb_file.string_keys.front().value);
     ASSERT_EQ(5, hdb_file.value_keys.size());

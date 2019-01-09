@@ -3,7 +3,7 @@
 
 #include "hdb_data.hpp"
 
-std::string test_data::anthineas_hdb()
+std::string test_data::test_ship_hdb()
 {
     std::stringstream ss;
     ss << " [SOFT] AQUA+\n"

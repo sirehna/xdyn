@@ -33,7 +33,7 @@ void HDBParserTest::TearDown()
 
 TEST_F(HDBParserTest, can_get_added_mass)
 {
-    const HDBParser builder(test_data::anthineas_hdb());
+    const HDBParser builder(test_data::test_ship_hdb());
     const auto Ma = builder.get_added_mass_array();
     ASSERT_EQ(6,Ma.size());
     ASSERT_DOUBLE_EQ(1,Ma.at(0).first);
@@ -63,7 +63,7 @@ TEST_F(HDBParserTest, can_get_added_mass)
 
 TEST_F(HDBParserTest, can_retrieve_radiation_damping)
 {
-    const HDBParser builder(test_data::anthineas_hdb());
+    const HDBParser builder(test_data::test_ship_hdb());
     const auto Br = builder.get_radiation_damping_array();
     ASSERT_EQ(6,Br.size());
     ASSERT_DOUBLE_EQ(1,  Br.at(0).first);
@@ -84,7 +84,7 @@ TEST_F(HDBParserTest, can_retrieve_radiation_damping)
 TEST_F(HDBParserTest, can_retrieve_initial_values)
 {
     //! [HDBDataTest example]
-    const HDBParser data(test_data::anthineas_hdb());
+    const HDBParser data(test_data::test_ship_hdb());
     //! [HDBDataTest example]
 
     //! [HDBDataTest expected output]
@@ -112,7 +112,7 @@ TEST_F(HDBParserTest, can_retrieve_initial_values)
 
 TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
 {
-    const HDBParser data(test_data::anthineas_hdb());
+    const HDBParser data(test_data::test_ship_hdb());
     const auto M = data.get_added_mass();
     ASSERT_EQ(6, M.cols());
     ASSERT_EQ(6, M.rows());
@@ -126,7 +126,7 @@ TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
 
 TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
 {
-    const HDBParser data(test_data::anthineas_hdb());
+    const HDBParser data(test_data::test_ship_hdb());
     const auto angular_frequencies = data.get_radiation_damping_angular_frequencies();
     ASSERT_EQ(6,        angular_frequencies.size());
     ASSERT_EQ(2*PI/1.,  angular_frequencies.at(5));
@@ -139,7 +139,7 @@ TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
 
 TEST_F(HDBParserTest, can_retrieve_vectors_for_each_element_in_radiation_damping_matrix)
 {
-    const HDBParser data(test_data::anthineas_hdb());
+    const HDBParser data(test_data::test_ship_hdb());
     for (size_t i = 0 ; i < 6 ; ++i)
     {
         for (size_t j = 0 ; j < 6 ; ++j)
@@ -158,7 +158,7 @@ TEST_F(HDBParserTest, can_retrieve_vectors_for_each_element_in_radiation_damping
 
 TEST_F(HDBParserTest, can_retrieve_vector_of_vectors_for_RAOs)
 {
-    HDBParser data(test_data::anthineas_hdb());
+    HDBParser data(test_data::test_ship_hdb());
     const std::array<std::vector<std::vector<double> >,6 > module = data.get_froude_krylov_module_tables();
     const std::array<std::vector<std::vector<double> >,6 > phase = data.get_froude_krylov_phase_tables();
     ASSERT_EQ(6,std::get<0>(module).size());
@@ -191,7 +191,7 @@ TEST_F(HDBParserTest, can_retrieve_vector_of_vectors_for_RAOs)
 
 TEST_F(HDBParserTest, can_retrieve_omegas_for_RAOs)
 {
-    HDBParser data(test_data::anthineas_hdb());
+    HDBParser data(test_data::test_ship_hdb());
     const std::vector<double> Tps1 = data.get_froude_krylov_phase_periods();
     const std::vector<double> Tps2 = data.get_froude_krylov_module_periods();
     ASSERT_EQ(6, Tps1.size());
@@ -213,7 +213,7 @@ TEST_F(HDBParserTest, can_retrieve_omegas_for_RAOs)
 
 TEST_F(HDBParserTest, can_retrieve_psis_for_RAOs)
 {
-    HDBParser data(test_data::anthineas_hdb());
+    HDBParser data(test_data::test_ship_hdb());
     const std::vector<double> psi1 = data.get_froude_krylov_phase_psis();
     const std::vector<double> psi2 = data.get_froude_krylov_module_psis();
     ASSERT_EQ(13, psi1.size());
