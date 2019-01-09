@@ -100,14 +100,30 @@ clef: {value: 65456, unit: km}
 ~~~~~~~~~~~~~~
 
 Les unités ne sont pas vérifiées par le système : le parser se contente de
-convertir toutes les entrées en unité du système international. Ainsi, on
-aurait tout aussi bien pu écrire :
+convertir toutes les entrées en unité du système international avant simulation, sans préjuger de l'homogénéité. Ce décodage est fait en convertissant l'unité en un facteur multiplicatif (en utilisant la liste des unités de l'utilitaire UNIX [units](http://heirloom.cvs.sourceforge.net/viewvc/heirloom/heirloom/units/)) et en multipliant la valeur originale par ce facteur multiplicatif. Par exemple:
+
+~~~~~~~~~~~~~~ {.yaml}
+masse: {value: 10, unit: lb}
+~~~~~~~~~~~~~~
+
+sera vu par xdyn comme:
+
+````{cpp}
+masse = 4.5359237;
+````
+L'exemple précédent :
+
+~~~~~~~~~~~~~~ {.yaml}
+clef: {value: 65456, unit: km}
+~~~~~~~~~~~~~~
+
+aurait tout aussi bien pu être écrit :
 
 ~~~~~~~~~~~~~~ {.yaml}
 clef: {value: 65456, unit: kW}
 ~~~~~~~~~~~~~~
 
-et obtenir exactement le même résultat.
+et on aurait obtenu exactement la même valeur numérique, bien que la grandeur physique ne soit pas la même : on suppose donc que l'utilisateur renseigne des données de façon homogène. En interne, tous les calculs sont faits en unité du système international.
 
 ### Exemple complet
 
