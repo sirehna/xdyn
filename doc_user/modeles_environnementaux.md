@@ -11,12 +11,11 @@ d'autre part (par le biais de la pression dynamique).
 
 ## Constantes environnementales
 
-L'accélération de la pesanteur (dénotée par `g`) et la densité volumique de
-l'eau (`rho`) sont des
-constantes qui interviennent dans plusieurs modèles physiques. Par conséquent,
-plutôt que d'être renseignées au niveau de chaque modèle et risquer ainsi des
-incohérences, elles figurent dans la section `environmental constants` qui a la
-forme suivante :
+L'accélération de la pesanteur (dénotée par `g`), la densité volumique de l'eau
+(`rho`) et sa viscosité `nu` sont des constantes qui interviennent dans
+plusieurs modèles physiques. Par conséquent, plutôt que d'être renseignées au
+niveau de chaque modèle et risquer ainsi des incohérences, elles figurent dans
+la section `environmental constants` qui a la forme suivante :
 
 ~~~~~~~~~~~~~~ {.yaml}
 environmental constants:
@@ -24,6 +23,8 @@ environmental constants:
     rho: {value: 1025, unit: kg/m^3}
     nu: {value: 1.18e-6, unit: m^2/s}
 ~~~~~~~~~~~~~~
+
+Ces trois constantes sont l'ensemble de toutes les constantes environementales actuellement utilisées par les modèles d'X-DYN.
 
 Comme expliqué dans [une section
 précédente](#remarques-sur-les-unit%C3%A9s), les
