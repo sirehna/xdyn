@@ -22,9 +22,19 @@ on-going.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your
-local machine for development and testing purposes. See deployment for notes on
-how to deploy the project on a live system.
+Pre-built binaries of X-DYN are available:
+- [for Windows](https://github.com/sirehna/x-dyn/releases/download/v1.0.0/xdyn.exe)
+- [for Debian](https://github.com/sirehna/x-dyn/releases/download/v1.0.0/xdyn.deb).
+
+There are many other ways of using X-DYN, all of which are described in [the documentation]().
+
+The **models** implemented inside X-DYN are described in detail in [this section]() of the documentation.
+You can also learn how to use X-DYN using the [tutorials]().
+
+## Building X-DYN from source
+
+This section describes what you need to do if you wish to compile X-DYN
+yourself.
 
 ### Prerequisites
 
