@@ -18,6 +18,7 @@ namespace test_data
     std::string full_example();
     std::string full_example_with_diagonal_inertia();
     std::string full_example_with_propulsion();
+    std::string full_example_with_propulsion_and_old_key_name();
     std::string falling_ball_example();
     std::string oscillating_cube_example();
     std::string new_oscillating_cube_example();

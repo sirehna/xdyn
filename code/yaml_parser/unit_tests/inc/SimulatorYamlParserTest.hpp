@@ -15,6 +15,7 @@ class SimulatorYamlParserTest : public ::testing::Test
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
         static const YamlSimulatorInput yaml;
+        static const YamlSimulatorInput old_yaml;
 };
 
 #endif  /* SIMULATORYAMLPARSERTEST_HPP_ */

@@ -15,6 +15,7 @@ using namespace testing; // So we can use 'ElementsAre' unqualified
 #include "InvalidInputException.hpp"
 
 const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
+const YamlSimulatorInput SimulatorYamlParserTest::old_yaml = SimulatorYamlParser(test_data::full_example_with_propulsion_and_old_key_name()).parse();
 
 SimulatorYamlParserTest::SimulatorYamlParserTest() : a(ssc::random_data_generator::DataGenerator(1212))
 {
@@ -361,4 +362,35 @@ TEST_F(SimulatorYamlParserTest, can_parse_rigid_body_inertia_matrix)
     ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(3));
     ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(4));
     ASSERT_DOUBLE_EQ(6,   yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(5));
+}
+
+TEST_F(SimulatorYamlParserTest, can_parse_rigid_body_inertia_matrix_with_old_key_name)
+{
+    ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.frame, old_yaml.bodies.at(0).dynamics.rigid_body_inertia.frame);
+    ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.hdb_filename, old_yaml.bodies.at(0).dynamics.rigid_body_inertia.hdb_filename);
+    ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.read_from_file, old_yaml.bodies.at(0).dynamics.rigid_body_inertia.read_from_file);
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(i));
+    }
 }

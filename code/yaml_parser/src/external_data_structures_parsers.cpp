@@ -157,7 +157,16 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
     ssc::yaml_parser::parse_uv(node["mass"], d.mass);
-    node["rigid body inertia matrix at the center of gravity and projected in the body frame"] >> d.rigid_body_inertia;
+    if (node.FindValue("rigid body inertia matrix at the center of buoyancy projected in the body frame"))
+    {
+        node["rigid body inertia matrix at the center of buoyancy projected in the body frame"] >> d.rigid_body_inertia;
+    }
+    else
+    {
+        node["rigid body inertia matrix at the center of gravity and projected in the body frame"] >> d.rigid_body_inertia;
+    }
+
+
     node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
 }
