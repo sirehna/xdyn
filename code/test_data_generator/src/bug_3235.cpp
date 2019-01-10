@@ -44,7 +44,7 @@ std::string test_data::bug_3235()
        << "            row 4: [0,0,0,1.028,0,0]\n"
        << "            row 5: [0,0,0,0,30.76,0]\n"
        << "            row 6: [0,0,0,0,0,30.76]\n"
-       << "        added mass matrix at the center of buoyancy projected in the body frame:\n"
+       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            from hdb: dtmb_bego.HDB\n"
        << "            # frame: dtmb\n"
        << "            # row 1: [ 6.600E-01, 0.000E+00, -1.497E+00,  0.000E+00, -2.820E+00,  0.000E+00]\n"

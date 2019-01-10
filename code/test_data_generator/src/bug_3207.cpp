@@ -71,7 +71,7 @@ std::string test_data::bug_3207_yml()
        << "            row 4: [0,0,0,1.522e6,0,0]\n"
        << "            row 5: [0,0,0,0,8.279e6,0]\n"
        << "            row 6: [0,0,0,0,0,7.676e6]\n"
-       << "        added mass matrix at the center of buoyancy projected in the body frame:\n"
+       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            frame: TestShip\n"
        << "            row 1: [3.519e4,0,0,0,0,0]\n"
        << "            row 2: [0,3.023e5,0,0,0,0]\n"

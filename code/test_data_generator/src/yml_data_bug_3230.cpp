@@ -44,7 +44,7 @@ std::string test_data::yml_bug_3230()
        << "            row 4: [0,0,0,3.07e8,0,0]\n"
        << "            row 5: [0,0,0,0,6.40e9,0]\n"
        << "            row 6: [0,0,0,0,0,6.40e9]\n"
-       << "        added mass matrix at the center of buoyancy projected in the body frame:\n"
+       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            frame: ship\n"
        << "            # T min Aqua+ (3.5s)\n"
        << "            row 1: [ 5.814E+04, 0.000E+00, -2.021E+05,  0.000E+00, -1.467E+07,  0.000E+00]\n"

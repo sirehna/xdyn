@@ -377,7 +377,7 @@ bodies: # All bodies have NED as parent frame
             row 4: [0,0,0,1.522e6,0,0]
             row 5: [0,0,0,0,8.279e6,0]
             row 6: [0,0,0,0,0,7.676e6]
-        added mass matrix at the center of buoyancy projected in the body frame:
+        added mass matrix at the center of gravity and projected in the body frame:
             frame: TestShip
             row 1: [3.519e4,0,0,0,0,0]
             row 2: [0,3.023e5,0,0,0,0]
@@ -465,7 +465,7 @@ de cinq sous-sections :
 - `mass` contenant la masse du corps considéré
 - `rigid body inertia matrix at the center of gravity and projected in the body
   frame` définissant la matrice d'inertie
-- `added mass matrix at the center of buoyancy projected in the body frame`
+- `added mass matrix at the center of gravity and projected in the body frame`
   pour les masses ajoutées.
 
 #### Position du centre d'inertie
@@ -517,7 +517,7 @@ rigid body inertia matrix at the center of gravity and projected in the body fra
 La matrice de masse ajoutée est définie de la même façon :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-added mass matrix at the center of buoyancy projected in the body frame:
+added mass matrix at the center of gravity and projected in the body frame:
     frame: TestShip
     row 1: [3.519e4,0,0,0,0,0]
     row 2: [0,3.023e5,0,0,0,0]
@@ -542,7 +542,7 @@ Il est également possible d'extrapoler les masses ajoutées à pulsation infini
 `test_ship.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-added mass matrix at the center of buoyancy projected in the body frame:
+added mass matrix at the center of gravity and projected in the body frame:
     from hdb file: test_ship.hdb
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

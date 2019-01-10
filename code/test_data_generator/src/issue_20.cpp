@@ -51,7 +51,7 @@ std::string test_data::issue_20()
        << "            row 4: [0,0,0,7.556e09,0,0]\n"
        << "            row 5: [0,0,0,0,1.764e11,0]\n"
        << "            row 6: [0,0,0,0,0,1.764e11]\n"
-       << "        added mass matrix at the center of buoyancy projected in the body frame:\n"
+       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            frame: kcs\n"
        << "            row 1: [ 7.077294E+05, 0.000000E+00, 1.618488E+06, 0.000000E+00, 2.724195E+08, 0.000000E+00]\n"
        << "            row 2: [ 0.000000E+00, 1.202082E+07, 0.000000E+00, 8.201715E+06, 0.000000E+00, 2.966424E+07]\n"

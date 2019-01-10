@@ -182,11 +182,11 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
 
     try
     {
-        node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
+        node["added mass matrix at the center of gravity and projected in the body frame"] >> d.added_mass;
     }
     catch(const InvalidInputException& e)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of gravity and projected in the body frame': " << e.get_message());
     }
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
 }
