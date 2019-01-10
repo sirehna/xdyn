@@ -159,15 +159,35 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
     ssc::yaml_parser::parse_uv(node["mass"], d.mass);
     if (node.FindValue("rigid body inertia matrix at the center of buoyancy projected in the body frame"))
     {
-        node["rigid body inertia matrix at the center of buoyancy projected in the body frame"] >> d.rigid_body_inertia;
+        try
+        {
+            node["rigid body inertia matrix at the center of buoyancy projected in the body frame"] >> d.rigid_body_inertia;
+        }
+        catch(const InvalidInputException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'rigid body inertia matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+        }
     }
     else
     {
-        node["rigid body inertia matrix at the center of gravity and projected in the body frame"] >> d.rigid_body_inertia;
+        try
+        {
+            node["rigid body inertia matrix at the center of gravity and projected in the body frame"] >> d.rigid_body_inertia;
+        }
+        catch(const InvalidInputException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'rigid body inertia matrix at the center of gravity and projected in the body frame': " << e.get_message());
+        }
     }
 
-
-    node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
+    try
+    {
+        node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
+    }
+    catch(const InvalidInputException& e)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+    }
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
 }
 
@@ -190,7 +210,7 @@ void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
             or node.FindValue("row 5")
             or node.FindValue("row 6"))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': cannot specify both an HDB filename & a matrix.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a matrix.");
         }
         m.read_from_file = true;
         *parameter >> m.hdb_filename;

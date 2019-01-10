@@ -32,7 +32,14 @@ LinearDampingForceModel::Input LinearDampingForceModel::parse(const std::string&
     YAML::Node node;
     parser.GetNextDocument(node);
     YamlDynamics6x6Matrix M;
-    node["damping matrix at the center of gravity projected in the body frame"] >> M;
+    try
+    {
+        node["damping matrix at the center of gravity projected in the body frame"] >> M;
+    }
+    catch(const InvalidInputException& e)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'damping matrix at the center of gravity projected in the body frame': " << e.get_message());
+    }
     for (size_t j = 0 ; j < 6 ; ++j) ret(0,(int)j) = M.row_1[j];
     for (size_t j = 0 ; j < 6 ; ++j) ret(1,(int)j) = M.row_2[j];
     for (size_t j = 0 ; j < 6 ; ++j) ret(2,(int)j) = M.row_3[j];
