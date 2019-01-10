@@ -586,7 +586,6 @@ matrice renseignée de la façon suivante :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: linear damping
   damping matrix at the center of gravity projected in the body frame:
-      frame: TestShip
       row 1: [ 0, 0,     0,      0,      0, 0]
       row 2: [ 0, 0,     0,      0,      0, 0]
       row 3: [ 0, 0, 1.9e5,      0,      0, 0]

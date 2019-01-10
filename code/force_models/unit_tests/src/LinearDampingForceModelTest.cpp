@@ -30,7 +30,6 @@ void LinearDampingForceModelTest::TearDown()
 TEST_F(LinearDampingForceModelTest, parser)
 {
     const std::string yaml = "        damping matrix at the center of gravity projected in the body frame:\n"
-                             "            frame: body 1\n"
                              "            row 1: [  2,   3,   5,   7,  11,  13]\n"
                              "            row 2: [ 17,  19,  23,  29,  31,  37]\n"
                              "            row 3: [ 41,  43,  47,  53,  59,  61]\n"

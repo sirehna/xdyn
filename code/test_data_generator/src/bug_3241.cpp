@@ -98,7 +98,6 @@ std::string test_data::bug_3241()
        << "      - model: non-linear Froude-Krylov\n"
        << "      - model: linear damping\n"
        << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            frame: dtmb\n"
        << "            row 1: [ 0, 0,      0,      0,       0, 0]\n"
        << "            row 2: [ 0, 0,      0,      0,       0, 0]\n"
        << "            row 3: [ 0, 0, 5.83e2,      0,       0, 0]\n"
