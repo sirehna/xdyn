@@ -1,6 +1,6 @@
 # Tutoriels
 
-```python echo=False, results='hidden'
+```python echo=False, results='hidden', name='load-prerequisite-python-modules'
 import sys
 import os
 
