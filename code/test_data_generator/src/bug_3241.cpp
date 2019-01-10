@@ -42,7 +42,6 @@ std::string test_data::bug_3241()
        << "            row 5: [0,0,0,0,46.77,0]\n"
        << "            row 6: [0,0,0,0,0,46.77]\n"
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            frame: dtmb\n"
        << "            # T min Aqua+ (0.51s)\n"
        << "            row 1: [ 8.663E-01, 0.000E+00, -1.911E+00,  0.000E+00, -4.063E+00,  0.000E+00]\n"
        << "            row 2: [ 0.000E+00, 2.096E+01,  0.000E+00,  2.351E-01,  0.000E+00,  5.225E+00]\n"

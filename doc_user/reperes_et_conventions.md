@@ -377,7 +377,6 @@ bodies: # All bodies have NED as parent frame
             row 5: [0,0,0,0,8.279e6,0]
             row 6: [0,0,0,0,0,7.676e6]
         added mass matrix at the center of gravity and projected in the body frame:
-            frame: TestShip
             row 1: [3.519e4,0,0,0,0,0]
             row 2: [0,3.023e5,0,0,0,0]
             row 3: [0,0,1.980e5,0,0,0]
@@ -516,7 +515,6 @@ La matrice de masse ajoutée est définie de la même façon :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 added mass matrix at the center of gravity and projected in the body frame:
-    frame: TestShip
     row 1: [3.519e4,0,0,0,0,0]
     row 2: [0,3.023e5,0,0,0,0]
     row 3: [0,0,1.980e5,0,0,0]

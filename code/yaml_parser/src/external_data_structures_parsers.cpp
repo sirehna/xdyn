@@ -190,7 +190,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of buoyancy projected in the body frame"], d.added_mass, true);
+            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of buoyancy projected in the body frame"], d.added_mass, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
@@ -201,7 +201,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of gravity and projected in the body frame"], d.added_mass, true);
+            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of gravity and projected in the body frame"], d.added_mass, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
