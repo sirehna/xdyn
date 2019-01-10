@@ -369,7 +369,7 @@ bodies: # All bodies have NED as parent frame
             y: {value: 0, unit: m}
             z: {value: 0.432, unit: m}
         mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
-        rigid body inertia matrix at the center of buoyancy projected in the body frame:
+        rigid body inertia matrix at the center of gravity and projected in the body frame:
             frame: TestShip
             row 1: [253310,0,0,0,0,0]
             row 2: [0,253310,0,0,0,0]
@@ -463,7 +463,7 @@ de cinq sous-sections :
   [point de calcul des efforts hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique)
 - `centre of inertia` (si le repère "body" n'est pas au centre de masse)
 - `mass` contenant la masse du corps considéré
-- `rigid body inertia matrix at the center of buoyancy projected in the body
+- `rigid body inertia matrix at the center of gravity and projected in the body
   frame` définissant la matrice d'inertie
 - `added mass matrix at the center of buoyancy projected in the body frame`
   pour les masses ajoutées.
@@ -502,7 +502,7 @@ La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
 de repère (le champ `frame` est requis, et n'est pas utilisé).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rigid body inertia matrix at the center of buoyancy projected in the body frame:
+rigid body inertia matrix at the center of gravity and projected in the body frame:
     frame: TestShip
     row 1: [253310,0,0,0,0,0]
     row 2: [0,253310,0,0,0,0]

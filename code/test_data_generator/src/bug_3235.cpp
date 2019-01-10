@@ -36,7 +36,7 @@ std::string test_data::bug_3235()
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0, unit: m} \n"
        << "        mass: {value: 63.5, unit: kg} # Caution: 'ton' is the british ton which is 907.185 kg\n"
-       << "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
+       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            frame: dtmb\n"
        << "            row 1: [63.5,0,0,0,0,0]\n"
        << "            row 2: [0,63.5,0,0,0,0]\n"
