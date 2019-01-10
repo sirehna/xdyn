@@ -53,13 +53,13 @@ repère NED local sera "NED(nav1)".
 
 ### Attitude navire
 
-L'attitude d'un corps permet de connaître sa position et son orientation par
-rapport à un repère. La position est donnée par le triplet $\left(X,Y,Z\right)$
-et l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
-L'interprétation de ce triplet en termes de rotations autour des axes $x$, $y$, $z$
-dépend de la convention d'orientation choisie.
-L'orientation peut également être exprimée de manière différente notamment avec des
-quaternions (c'est d'ailleurs ainsi qu'elle est exprimée dans le code du simulateur).
+L'attitude d'un corps permet de connaître son orientation par rapport à un
+repère. La position est donnée par le triplet $\left(X,Y,Z\right)$ et
+l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
+L'interprétation de ce triplet en termes de rotations autour des axes $x$, $y$,
+$z$ dépend de la convention de rotation choisie. L'orientation peut également
+être exprimée de manière différente notamment avec des quaternions (c'est
+d'ailleurs ainsi qu'elle est exprimée dans le code d'X-DYN).
 
 ## Conventions d'orientations
 
