@@ -2,8 +2,8 @@
 
 all: doc.html
 
-concatenated_doc.pmd: metadata.yaml introduction.md interfaces.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_*.md
-	cat metadata.yaml introduction.md interfaces.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_*.md > concatenated_doc.pmd
+concatenated_doc.pmd: metadata.yaml tutorial_00.md introduction.md interfaces.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_01.md  tutorial_02.md  tutorial_03.md  tutorial_06.md
+	cat metadata.yaml tutorial_00.md introduction.md interfaces.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_01.md  tutorial_02.md  tutorial_03.md  tutorial_06.md > concatenated_doc.pmd
 
 xdyn-pweave := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/bin/xdyn-weave xweave
 xdyn-pandoc := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/bin/pandoc xweave
