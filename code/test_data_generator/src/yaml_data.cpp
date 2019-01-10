@@ -649,7 +649,7 @@ std::string test_data::full_example_with_propulsion_and_old_key_name()
        << "            row 4: [0,0,0,4,0,0]\n"
        << "            row 5: [0,0,0,0,5,0]\n"
        << "            row 6: [0,0,0,0,0,6]\n"
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
+       << "        added mass matrix at the center of buoyancy projected in the body frame:\n"
        << "            frame: body 1\n"
        << "            row 1: [1,2,3,4,5,6]\n"
        << "            row 2: [-7,2,1,2,11,13]\n"

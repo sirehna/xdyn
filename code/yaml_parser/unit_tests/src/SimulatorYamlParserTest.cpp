@@ -438,3 +438,34 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_inertia_matrix)
     ASSERT_DOUBLE_EQ(0,   yaml.bodies.at(0).dynamics.added_mass.row_6.at(4));
     ASSERT_DOUBLE_EQ(6.3,   yaml.bodies.at(0).dynamics.added_mass.row_6.at(5));
 }
+
+TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_with_old_key_name)
+{
+    ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.frame, old_yaml.bodies.at(0).dynamics.rigid_body_inertia.frame);
+    ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.hdb_filename, old_yaml.bodies.at(0).dynamics.rigid_body_inertia.hdb_filename);
+    ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.read_from_file, old_yaml.bodies.at(0).dynamics.rigid_body_inertia.read_from_file);
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_1.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_2.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_3.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_4.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_5.at(i));
+    }
+    for (size_t i = 0 ; i < 6 ; ++i)
+    {
+        ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(i));
+    }
+}
