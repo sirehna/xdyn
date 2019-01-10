@@ -22,23 +22,23 @@ que l'on nomme `controlled_forces_commands.yml`.
 
 On commence par définir les [caractéristiques du propulseur](#efforts-commandés) :
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_06_load_yaml'
 yaml_data = load_yaml('tutorial_06_1D_propulsion.yml')
 ```
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_06_print_controlled_forces_section'
 print_yaml(yaml_data, 'bodies/0/controlled forces')
 ```
 
 Les commandes sont définies à la racine du YAML:
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_06_print_commands_section'
 print_yaml(yaml_data, 'commands')
 ```
 
 En définitive, le fichier d'entrée est :
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_06_print_full_yaml'
 print_yaml(yaml_data)
 ```
 
@@ -46,13 +46,13 @@ print_yaml(yaml_data)
 
 La simulation peut maintenant être lancée comme suit :
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_06_launch_simulation'
 execCommand('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out.csv')
 ```
 
 ### Résultats
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_06_plot_results'
 data = csv('out.csv')
 plot = prepare_plot_data(data, x = 't', y = 'u(TestShip)', name="Vitesse d'avance")
 g = cartesian_graph([plot], x='t (s)', y='U (m/s)')
