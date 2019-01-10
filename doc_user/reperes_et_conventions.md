@@ -14,7 +14,7 @@ Il sert à exprimer les déplacements des corps de la simulation.
 ### Repère navire (mobile ou "body" ou "repère de résolution")
 
 Le repère navire correspond au repère attaché au navire lors de la simulation.
-Le point de référence de ce repère correspond généralement au centre de carène
+Le point de référence de ce repère correspond généralement au centre de gravité
 du navire.
 Les axes du repère navire sont les suivants:
 
@@ -887,15 +887,15 @@ d'éventuels autres outils utilisant les HDB).
 
 ~~~~~~~~~~~~~~~~~~~~~ {.hdb}
 [FROUDE-KRYLOV_FORCES_AND_MOMENTS]
-[INCIDENCE_EFM_MOD_001]   0.000000    
+[INCIDENCE_EFM_MOD_001]   0.000000
   4.00  6.452085E+04  0.000000E+00  3.775068E+05  0.000000E+00  2.630894E+07  0.000000E+00
  64.00  8.296234E+04  0.000000E+00  2.098381E+07  0.000000E+00  1.280202E+08  0.000000E+00
 125.00  2.179682E+04  0.000000E+00  2.105635E+07  0.000000E+00  1.258710E+08  0.000000E+00
-[INCIDENCE_EFM_MOD_001]   30.00000    
+[INCIDENCE_EFM_MOD_001]   30.00000
   4.00  5.988292E+04  3.453055E+04  5.220861E+05  6.375514E+05  2.533077E+07  1.149621E+06
  64.00  7.185571E+04  4.148640E+04  2.098683E+07  7.927488E+04  1.274491E+08  3.394846E+04
 125.00  1.887675E+04  1.089865E+04  2.105658E+07  2.081770E+04  1.258309E+08  2.938749E+03
-[INCIDENCE_EFM_PH_001]   0.000000    
+[INCIDENCE_EFM_PH_001]   0.000000
   4.00  5.079494E-01  1.570796E+00  1.171722E+00  1.570796E+00  1.426003E+00  1.570796E+00
  64.00 -3.141362E+00  1.570796E+00 -1.576680E+00  1.570796E+00 -1.768797E+00  1.570796E+00
 125.00 -3.141476E+00  1.570796E+00 -1.572334E+00  1.570796E+00 -1.623406E+00  1.570796E+00
