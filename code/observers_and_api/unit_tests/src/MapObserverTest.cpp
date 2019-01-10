@@ -100,7 +100,7 @@ TEST_F(MapObserverTest, blocked_state_force_residuals_should_appear)
     ASSERT_TRUE(m.find("Mx(blocked states,body 1,body 1)") != m.end());
     ASSERT_TRUE(m.find("My(blocked states,body 1,body 1)") != m.end());
     ASSERT_TRUE(m.find("Mz(blocked states,body 1,body 1)") != m.end());
-    ASSERT_SMALL_RELATIVE_ERROR(9681724.8274308443, m["Fx(blocked states,body 1,body 1)"].back(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(14491.978029605258, m["Fx(blocked states,body 1,body 1)"].back(), EPS);
     ASSERT_NEAR(0, m["Fy(blocked states,body 1,body 1)"].back(), 1E-6);
     ASSERT_NEAR(0, m["Fz(blocked states,body 1,body 1)"].back(), 1E-6);
     ASSERT_NEAR(0, m["Mx(blocked states,body 1,body 1)"].back(), 1E-6);

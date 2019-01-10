@@ -128,11 +128,6 @@ TEST_F(BodyBuilderTest, should_be_able_to_detect_inconsistent_inertia_matrix_pas
     ASSERT_TRUE(isSymmetricDefinitePositive(m));
 }
 
-TEST_F(BodyBuilderTest, mass_should_be_correct)
-{
-    ASSERT_DOUBLE_EQ(1E6, body->get_states().m);
-}
-
 TEST_F(BodyBuilderTest, relative_position_should_be_correct)
 {
     ASSERT_DOUBLE_EQ(10,body->get_states().x_relative_to_mesh);

@@ -163,7 +163,6 @@ void operator >> (const YAML::Node& node, YamlSpeed& s)
 void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
-    ssc::yaml_parser::parse_uv(node["mass"], d.mass);
     if (node.FindValue("rigid body inertia matrix at the center of buoyancy projected in the body frame"))
     {
         try

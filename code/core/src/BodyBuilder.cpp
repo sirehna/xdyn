@@ -69,7 +69,6 @@ BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& 
     BodyStates states(Tmax);
     states.name = input.name;
     states.G = make_point(input.dynamics.centre_of_inertia);
-    states.m = input.dynamics.mass;
 
     states.hydrodynamic_forces_calculation_point = make_point(input.dynamics.hydrodynamic_forces_calculation_point_in_body_frame, input.name);
 

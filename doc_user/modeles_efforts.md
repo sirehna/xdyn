@@ -45,8 +45,7 @@ Pour soumettre un solide à la gravité, on écrit :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La valeur de $g$ utilisée est celle définie dans la section [`environmental
-constants`](#constantes-environnementales) et la masse est celle figurant dans
-la section [`mass`](#d%C3%A9finition-de-la-masse-du-solide).
+constants`](#constantes-environnementales) et pour la masse on prend le coeffient $M_{3,3}$ (le terme en Z, donc) de la [matrice d'inertie](#matrice-dinertie).
 
 Un exemple de simulation de solide soumis uniquement à la gravité (chute libre)
 est disponible dans les [tutoriels](#tutoriel-1-balle-en-chute-libre).

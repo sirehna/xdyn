@@ -122,11 +122,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_centre_of_inertia)
     ASSERT_EQ("centre of inertia",yaml.bodies.front().dynamics.centre_of_inertia.name);
 }
 
-TEST_F(SimulatorYamlParserTest, can_parse_mass)
-{
-    ASSERT_DOUBLE_EQ(1E6, yaml.bodies.front().dynamics.mass);
-}
-
 TEST_F(SimulatorYamlParserTest, can_parse_inertia_matrix)
 {
     const YamlDynamics6x6Matrix M = yaml.bodies.front().dynamics.rigid_body_inertia;

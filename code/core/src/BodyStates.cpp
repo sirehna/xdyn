@@ -15,7 +15,6 @@
 BodyStates::BodyStates(const double Tmax) : AbstractStates<History>(Tmax),
 name(),
 G(),
-m(),
 mesh(),
 total_inertia(),
 solid_body_inertia(),

@@ -42,7 +42,6 @@ std::string test_data::issue_20()
        << "            x: {value: 0, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0, unit: m} \n"
-       << "        mass: {value: 53359.600, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg\n"
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [5.3360e7,0,0,0,0,0]\n"
        << "            row 2: [0,5.3360e7,0,0,0,0]\n"
