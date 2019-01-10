@@ -34,7 +34,7 @@ QuadraticDampingForceModel::Input QuadraticDampingForceModel::parse(const std::s
     YamlDynamics6x6Matrix M;
     try
     {
-        node["damping matrix at the center of gravity projected in the body frame"] >> M;
+        parse_YamlDynamics6x6Matrix(node["damping matrix at the center of gravity projected in the body frame"], M, true);
     }
     catch(const InvalidInputException& e)
     {

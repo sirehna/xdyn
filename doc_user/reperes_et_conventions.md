@@ -370,7 +370,6 @@ bodies: # All bodies have NED as parent frame
             z: {value: 0.432, unit: m}
         mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
         rigid body inertia matrix at the center of gravity and projected in the body frame:
-            frame: TestShip
             row 1: [253310,0,0,0,0,0]
             row 2: [0,253310,0,0,0,0]
             row 3: [0,0,253310,0,0,0]
@@ -499,11 +498,10 @@ qui vaut 907.185 kg.
 #### Matrice d'inertie
 
 La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
-de repère (le champ `frame` est requis, et n'est pas utilisé).
+de repère.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rigid body inertia matrix at the center of gravity and projected in the body frame:
-    frame: TestShip
     row 1: [253310,0,0,0,0,0]
     row 2: [0,253310,0,0,0,0]
     row 3: [0,0,253310,0,0,0]
