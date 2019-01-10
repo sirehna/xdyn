@@ -75,7 +75,6 @@ std::string test_data::bug_3235()
        << "            row 6: [ 0, 0,      0,      0,       0, 0]\n"
        << "      - model: quadratic damping\n"
        << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            frame: dtmb\n"
        << "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
        << "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
        << "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
