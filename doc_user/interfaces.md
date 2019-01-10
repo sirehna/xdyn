@@ -226,117 +226,128 @@ Si l'on souhaite lancer une simulation, on ajoute les arguments d'X-DYN à la su
 docker run -it --rm -v $(pwd):/work -w /work xdyn xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
 ~~~~
 
-## Génération automatique de rapports
+## Génération automatique de rapports (X-Weave)
 
 Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker d'X-Dyn.
 
 ### Principe de fonctionnement
 
-On utilise un fichier modèle de rapport qui contient le texte, les instructions
-de simulation et les instructions graphiques. Ce fichier est ensuite
-interprété (lancement des simulations, génération des images), puis converti
-grâce à l'outil Pandoc au format de sortie demandé. On peut ainsi générer du
-DOCX, PDF, HTML, LaTeX, ODT, Slidy, Reveal.js... La liste complète des formats
-de sortie est disponible [ici](https://pandoc.org/MANUAL.html#general-options).
+On utilise [Pweave](http://mpastell.com/pweave/) pour inclure des balises Python
+dans du texte au format [Markdown](https://pandoc.org/MANUAL.html#pandocs-markdown)).
+Par exemple, la présente documentation est générée en utilisant
+ce système, y compris les tutoriels et leurs courbes de résultats.
+
+Grâce à ce générateur (appelé "x-weave"), on peut obtenir des rapports dans le
+format que l'on souhaite (DOCX, PDF, HTML...). Ces rapports peuvent par exemple
+lancer des simulations X-DYN et inclure des courbes à partir de ces résultats.
+
+L'intérêt est que l'on peut gérer le code de ses rapports en configuration (puisque
+c'est du texte), regarder facilement les différences entre deux versions sans
+utiliser d'outil propriétaire et regénérer à la demande une nouvelle version
+du rapport lorsque l'on change les entrées.
+
+X-Weave n'est ni plus ni moins que Pweave dans un containeur Docker avec X-DYN
+pré-installé, ce qui permet de lancer X-DYN depuis Pweave.
 
 ### Ligne de commande
 
 La ligne de commande à utiliser est :
 
 ~~~~{.bash}
-docker run --rm -it -w /work -v $(pwd):/work xdyn spt_report -p tutorials.md -r tutorials.docx -k
+docker run --rm -it -v $(pwd):/work -w /work -u $(id -u):$(id -g) --entrypoint /usr/bin/xdyn-weave sirehna/xweave -f markdown concatenated_doc.pmd -o concatenated_doc.md
 ~~~~
 
-- le paramètre `-p tutorials.md` spécifie le fichier Markdown à utiliser pour le rapport (le modèle).
-- le paramètre `-r tutorials.docx` détermine le format de sortie (on peut utiliser
-  aussi les formats PDF et HTML avec `-r tutorials.pdf` et `-r tutorials.html`
-  respectivement).
-- le flag `-k` stipule que l'on souhaite conserver les fichiers intermédiaires
-  générés par X-Dyn. Si on l'omet, seul le fichier de sortie sera généré.
+- La première partie de la ligne de commande (`docker run --rm -it -v
+    $(pwd):/work -w /work -u $(id -u):$(id -g) --entrypoint /usr/bin/xdyn-weave
+    sirehna/xweave`) contient les arguments passés à Docker pour partager le
+    dossier courant avec le containeur et créer les fichiers de sortie avec les
+    permissions de l'utilisateur courant.
+- La partie après `sirehna/xweave` contient les arguments passés à pweave. Une
+    liste complète de ces arguments peut être obtenue en exécutant `docker run
+    --rm -it -v $(pwd):/work -w /work -u $(id -u):$(id -g) --entrypoint
+    /usr/bin/xdyn-weave sirehna/xweave -h` ou en consultant [la documentation
+    de Pweave](http://mpastell.com/pweave/docs.html).
 
-### Syntaxe du fichier modèle
+On obtient alors un fichier Markdown et (le cas échéant) des images. On peut
+ensuite utiliser [Pandoc](https://pandoc.org/) pour convertir le Markdown au
+format de son choix en utilisant le Pandoc installé dans le containeur X-Weave
+:
 
-Le fichier modèle est un fichier au format Markdown (voir la syntaxe
-[ici](https://pandoc.org/MANUAL.html#pandocs-markdown)) qui spécifie le contenu
-du rapport généré.
-
-La particularité du fichier modèle par rapport à un format Markdown classique
-est que l'on peut inclure des balises contenant du code Python qui sera exécuté
-au moment de la génération du rapport.
-
-**Chargement du fichier YAML**
-
-~~~~{.markdown}
-{% set yaml_data = load('tutorial_01_falling_ball.yml') %}
+~~~~{.bash}
+docker run --rm -it -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/bin/pandoc xweave concatenated_doc_pandoc.md -o doc.html
 ~~~~
 
-**Affichage d'une section du YAML**
+### Commandes Python supplémentaires
 
-~~~~{.markdown}
-{{show(yaml_data, 'bodies/0/initial position of body frame relative to NED')}}
-~~~~
+Par rapport à Pweave "classique", on a inclus quelques fonctions Python pour
+simplifier le travail avec X-DYN.
 
-et pour l'intégralité du YAML :
+#### Chargement du fichier YAML : `load_yaml`
 
-~~~~{.markdown}
-{{show(yaml_data)}}
-~~~~
+L'insertion de la section suivante dans un document X-weave ne génèrera pas de
+sortie. Par contre, dans les sections `python` ultérieures, on pourra utiliser
+les données ainsi chargées.
 
-**Exécution d'une simulation**
+```python echo=False, results='markdown', name='example-load-yaml'
+print(''.join(['~'] * 4) + '{.markdown}')
+print(''.join(['`'] * 3) + 'python')
+print("yaml_data = load_yaml('tutorial_06_1D_propulsion.yml')")
+print(''.join(['`'] * 3))
+print(''.join(['~'] * 4))
+```
 
-~~~~{.markdown}
-{{execCommand('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')}}
-~~~~
+#### Affichage de l'intégratilité du YAML : `print_yaml`
 
-**Récupération des données générées**
-
-~~~~{.markdown}
-{% set data = csv('out.csv') %}
-~~~~
-
-**Définition de la donnée à tracer**
-
-~~~~{.markdown}
-{% set plot = prepare_plot_data(data, x = 't', y = 'z(ball)', name='Résultat') %}
-~~~~
-
-**Définition du type de graph**
-
-~~~~{.markdown}
-{% set g = cartesian_graph([plot], x='t (s)', y='Élévation (m)') %}
-~~~~
-
-**Tracé de la planche**
-
-~~~~{.markdown}
-{{layout(size=(1,1),graphs=[(g,(0,0))], title='Élévation au cours du temps')}}
-~~~~
+Suite au chargement du YAML, on peut vouloir l'afficher dans le document.
+Pour cela, on utilise une section `python` de la forme :
 
 
+```python echo=False, results='markdown', name='example-print-yaml'
+print(''.join(['~'] * 4) + '{.markdown}')
+print(''.join(['`'] * 3) + 'python')
+print("yaml_data = load_yaml('tutorial_06_1D_propulsion.yml')")
+print("")
+print("# Pour afficher l'intégralité du YAML avec de la coloration syntaxique")
+print("print_yaml(yaml_data)")
+print("")
+print("# Pour n'afficher qu'une sous-section du YAML")
+print("print_yaml(yaml_data, 'bodies/0/controlled forces')")
+print(''.join(['`'] * 3))
+print(''.join(['~'] * 4))
+```
 
+#### Exécution d'une simulation
 
+La commande suivante ne produira pas de contenu visible dans le document.  En
+revanche, il sera possible de récupérer et afficher les données ainsi générées.
 
-### Exemple de fichier modèle
+```python echo=False, results='markdown', name='example-run-simulation'
+print(''.join(['~'] * 4) + '{.markdown}')
+print(''.join(['`'] * 3) + 'python')
+print("execCommand('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')")
+print(''.join(['`'] * 3))
+print(''.join(['~'] * 4))
+```
 
-~~~~{.markdown}
-# Tutorials
+#### Tracé des résultats
 
-
-## Tutorial 1: chute libre
-
-{% set yaml_data = load('tutorial_01_falling_ball.yml') %}
-
-On commence par définir les conventions de rotation :
-
-{{show(yaml_data, 'rotations convention')}}
-
-Puis l'on donne des
-[constantes environnementales](#constantes-environnementales) :
-
-{{show(yaml_data, 'environmental constants')}}
-
-~~~~
-
+```python echo=False, results='markdown', name='example-plot-results'
+print(''.join(['~'] * 4) + '{.markdown}')
+print(''.join(['`'] * 3) + 'python')
+print('# Récupération des données générées')
+print("data = csv('out.csv')")
+print('')
+print('# Définition de la donnée à tracer')
+print("plot = prepare_plot_data(data, x = 't', y = 'z(ball)', name='Résultat')")
+print('')
+print('# Définition du type de graph')
+print("g = cartesian_graph([plot], x='t (s)', y='Élévation (m)')")
+print('')
+print('# Tracé de la planche')
+print("create_layout(g, title='Élévation au cours du temps')")
+print(''.join(['`'] * 3))
+print(''.join(['~'] * 4))
+```
 
 ## Utilisation de X-DYN en serveur websocket
 
