@@ -1192,8 +1192,9 @@ Comme les clients du serveur HOS peuvent bloquer le serveur avec des entrées
 invalides, X-DYN effectue des vérifications sur toutes les données avant envoi
 au serveur.
 
-Le cas échéant, une référence au code HOS-océan est donnée pour justifier
-les bornes imposées par X-DYN.
+La paramétrisation de ce modèle dans X-DYN étant issue en grande partie du code
+HOS lui-même, on fournit lorsque c'est possible un lien hypertexte vers le code
+source Fortran d'HOS-océan .
 
 D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 
