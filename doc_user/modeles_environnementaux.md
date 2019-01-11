@@ -909,7 +909,7 @@ aléatoire. On obtient ainsi un signal apériodique.
 
 La performance de l'implémentation des modèles de houle est cruciale : en
 effet, la pression dynamique et la pression statique étant intégrées sur toutes
-les facettes du maillage, ces modèles sont évalués de nombreuses fois par pas
+les facettes du maillage (dans le cas d'un modèle non-linéaire), ces modèles sont évalués de nombreuses fois par pas
 de calcul. Comme le nombre de composantes sommées pour calculer les élévations
 et pressions dynamiques étant potentiellement important, on ne sélectionne
 que les produits $S(\omega_i)D(\gamma_j)$ contribuant de manière significative
@@ -917,8 +917,14 @@ que les produits $S(\omega_i)D(\gamma_j)$ contribuant de manière significative
 Pour ce faire, on classe ces produits par ordre décroissant et l'on sélectionne
 les $n$ premiers de façon à ce que leur somme représente une fraction
 prédéterminée de la puissance totale. De cette manière, on réduit
-considérablement les temps de calcul, tout en gardant une bonne
-représentativité de la physique du problème.
+considérablement les temps de calcul, tout en gardant une bonne représentativité
+de la physique du problème. Cependant, cette technique n'est pas toujours
+applicable, suivant la réponse à laquelle on s'intéresse. En effet, un petit
+corps dans la houle peut avoir une réponse très affectée par les composantes peu
+énergétiques (en relatif). De même, les réponses locales d'un grand corps
+(slamming, efforts sur des appendices, etc.), peuvent être affectées par des
+composantes peu énergétiques.
+
 
 La discrétisation est paramétrée de la façon suivante :
 
