@@ -130,7 +130,7 @@ z_{\textrm{ned}}^{\textrm{(ned)}}\right\|}$$
 
 où $x_{\textrm{body}}^{\textrm{(ned)}}$ désigne les coordonnées du vecteur $x$ du
 repère body, exprimées dans le repère NED et $z_{\textrm{ned}}^{\textrm{(ned)}}$ les
-coordonnées du vecteur $z$ du repère NED exprimées dans le repère NED.
+coordonnées du vecteur $z$ du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) exprimées dans le [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned).
 
 Il se trouve qu'il n'est pas nécessaire de connaître la coordonnée $z$ du
 vecteur GB. En effet,
@@ -145,7 +145,7 @@ On pose
 
 $$GB_{\lambda} = \frac{M\times F}{\left\|F\right\|} + \lambda F$$
 
-Dans le repère NED, on a :
+Dans le [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned), on a :
 
 $$F = \left[\begin{array}{c}0\\0\\f_z\end{array}\right]$$
 $$M = \left[\begin{array}{c}m_x\\m_y\\m_z\end{array}\right]$$

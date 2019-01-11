@@ -3,9 +3,9 @@
 ## Définitions
 
 * On appelle "paramètres de flottaison" et l'on note $X_f$ le triplet d'états
-$X_f=(z,\phi,\theta)$. $z$ est la coordonnée sur l'axe $Z$ du repère NED du
+$X_f=(z,\phi,\theta)$. $z$ est la coordonnée sur l'axe $Z$ du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du
 centre d'inertie $G$ et $\phi$ et $\theta$ sont les deux premiers angles des
-rotations du repère NED vers le repère body. Par définition, le volume immergé
+rotations du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) vers le repère body. Par définition, le volume immergé
 ne dépend que des paramètres de flottaison.
 
 * On appelle "flottaison" la surface délimitée par l'intersection de la coque
@@ -189,5 +189,3 @@ external forces:
 ## Références
 - *Étude sur la flottabilité et la stabilité du navire suivie d’une méthode simple pour le calcul des volumes de carènes et des éléments définissant le navire pour construire les tables hydrostatiques nécessaires aux calculs de stabilité et d’assiette quand on dispose des plans des formes du navire*, Dominique Lavoille, http://vieillemarine.pagesperso-orange.fr/architecture/pages_finales/theorie_navire.pdf
 - *A Treatise on the Stability of Ships*, Edward James Reed, page 89
-
-
