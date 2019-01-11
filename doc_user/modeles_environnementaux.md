@@ -3,10 +3,8 @@
 Les modèles d'environnement sont les modèles de houle (et, à terme, de vent, de courant...) utilisés par X-DYN. Actuellement, seuls des modèles de houle sont implémentés. Leur paramétrisation figure dans la section `environment` du fichier YAML d'entrée. Elle peut être vide (par exemple, lors de la simulation simple du [tutoriel 1](#tutoriel-1-balle-en-chute-libre)).
 
 Les modèles de houle interviennent pour le calcul des [efforts
-hydrostatiques](#efforts-hydrostatiques-non-lin%C3%A9aires)
-(par truchement de l'élévation de la surface libre),
-d'une part, et les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation)
-d'autre part (par le biais de la pression dynamique).
+hydrostatiques non-linéaires](#efforts-hydrostatiques-non-lin%C3%A9aires)
+(par truchement de l'élévation de la surface libre), les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation) (par le biais de la pression dynamique) et le modèle de safran (prise en compte des vitesses orbitales).
 
 
 ## Constantes environnementales
