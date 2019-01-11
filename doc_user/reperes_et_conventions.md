@@ -2,7 +2,7 @@
 
 ## Repères
 
-Afin de connaître et décrire l'attitude d'un ou plusieurs corps dans l'espace,
+Afin de connaître et décrire l'[attitude](#attitude-navire) d'un ou plusieurs corps dans l'espace,
 il est nécessaire de les placer par rapport à un repère de référence.
 
 ### Repère de référence (NED)
@@ -36,7 +36,7 @@ ne sont parfaitement adaptés : en effet, si le maillage sur lequel on
 calcule la houle est lié à NED, le navire finira par sortir de cette zone
 lorsqu'il se déplacera. Si l'on calcule les hauteurs de
 vague dans le repère navire, l'aire de la grille vue dans le repère NED
-va varier en fonction de l'attitude du navire et, à la limite, pour un
+va varier en fonction de l'[attitude](#attitude-navire) du navire et, à la limite, pour un
 navire vertical ($\theta=\pi/2$ par exemple), la projection de la grille
 est un segment.
 
@@ -288,7 +288,7 @@ mouvement. Ces états sont les suivants :
 
 - La position du corps par rapport à l'origine du NED projetée dans le repère
   corps est notée $p^n = [x,y,z]^T$ et est exprimée en mètres.
-- L'attitude du corps est notée $\Theta = [\phi,\theta,\psi]^T$ et est définie
+- L'[attitude](#attitude-navire) du corps est notée $\Theta = [\phi,\theta,\psi]^T$ et est définie
   au paragraphe précédent. En pratique, on utilise plutôt des quaternions
   $q = [q_r, q_i, q_j, q_k]$ en interne dans le simulateur pour l'intégration
   des équations du mouvement, mais les raisonnements présentés dans cette
@@ -1011,9 +1011,9 @@ rotations convention: [psi,phi',theta'']
 Pour plus de détails sur les conventions d'angles et d'axes, se référer à [la
 documentation détaillée](#conventions-dorientations).
 
-Une attitude sera décrite de la manière suivante, avec les champs
+Une [attitude](#attitude-navire) sera décrite de la manière suivante, avec les champs
 
-- `frame` le nom du repère dans laquelle l'attitude est exprimée,
+- `frame` le nom du repère dans laquelle l'[attitude](#attitude-navire) est exprimée,
 - `x` ,`y` ,`z`: le triplet de position où chaque position est
    définie par le dictionnaire des clés `value` et `unit`,
 - `phi` ,`theta` ,`psi`, le triplet d'orientation dont l'interprétation en

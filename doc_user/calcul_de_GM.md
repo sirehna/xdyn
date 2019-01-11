@@ -12,7 +12,7 @@ ne dépend que des paramètres de flottaison.
 et de la surface libre (au repos, pour que cette définition ait un sens).
 
 * On appelle "axe d'inclinaison" l'intersection des flottaisons dans le
-repère "body" pour deux attitudes différentes du corps.
+repère "body" pour deux [[attitudes](#attitude-navire)](#attitude-navire) différentes du corps.
 
 * Un angle d'inclinaison est l'angle d'une rotation autour d'un axe
 d'inclinaison.
