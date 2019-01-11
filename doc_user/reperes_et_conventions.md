@@ -277,8 +277,11 @@ d'angle adoptée.
 ## États navires
 
 Le simulateur est multi-corps en ce sens que plusieurs corps peuvent être
-simulés en même temps. Actuellement, aucun effort d'interaction ni de liaison
-cinématique ne sont implémentés.
+simulés en même temps. Ainsi, on peut modéliser plusieurs corps mécaniquement
+indépendants, avec leurs interactions hydrodynamiques, pourvu que l'on
+implémente le modèle d'interaction (qui peut venir d'un [fichier
+HDB](#fichiers-hdb-daqua) multicorps). Actuellement, aucun effort d'interaction
+ni de liaison cinématique ne sont implémentés.
 
 Chaque corps possède des états, permettant de reconstituer exactement son
 mouvement. Ces états sont les suivants :
