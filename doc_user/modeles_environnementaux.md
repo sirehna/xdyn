@@ -386,20 +386,16 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
 ## Densités spectrales de puissance
 
 La formulation des spectres de houles a été développée de façon semi-empirique
-depuis les années 50. Suivant le spectre, l'état de mer peut être complètement
-formé (à la limite, le spectre n'a qu'un seul paramètre) ou une combinaison de
-la houle (swell) et de la mer du vent (wind sea) à six paramètres.
+depuis les années 50. L'état de mer est définit par un spectre et les paramètres
+de ce spectre (par exemple, la hauteur Hs significative de la houle ou la
+période Tp).
 
-Le choix du spectre dépend donc à la fois du lieu considéré et de l'état de
-mer. Ce choix revêt une grande importance pour la prévision des mouvements des
-plateformes car suivant que l'état de mer est en formation, complètement formé
-ou en atténuation, la réponse du navire va varier.  En effet, un navire peut
-avoir une réponse en pilonnement plus importante sur une mer partiellement
-formée que sur une mer totalement formée car la fréquence modale du spectre est
-plus élevée sur une mer partiellement formée et la fréquence de résonance du
-pilonnement est souvent plus élevée. Pour le roulis, c'est l'inverse : lorsque
-l'état de mer s'atténue, la fréquence d'excitation du roulis étant en général
-plus basse que celle du pilonnement, les mouvements seront amplifiés.
+Le type de spectre utilisé dépend du lieu considéré : par exemple, on utilise en
+général un spectre de JONSWAP pour la mer du Nord. Ce choix revêt une grande
+importance pour la prévision des mouvements des plateformes car suivant que
+l'état de mer est en formation, complètement formé ou en atténuation, la réponse
+du navire va varier. Il faut cependant noter que l'on ne peut pas faire varier
+l'état de mer au cours d'une même simulation.
 
 ### Dirac
 
