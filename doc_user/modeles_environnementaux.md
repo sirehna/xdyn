@@ -429,8 +429,8 @@ spectral density:
 La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
 L'amplitude de la houle sera égale à `Hs/2`.
 
-Ce spectre a uniquement un intérêt pour les phases de validation car il n'est
-pas représentatif de conditions réelles.
+Ce spectre a un intérêt pour l'établissement de fonctions de transfert ou la
+comparaison de réponses sur une houle maitrisée mais il n'est pas réaliste.
 
 ### Bretschneider
 
