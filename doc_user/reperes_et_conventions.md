@@ -248,10 +248,10 @@ représentée sur la figure suivante
 ![](images/EulerFrame_TextIm.svg "Composition de rotations [z,y',x'']")
 
 
-### Convention Paraview
+### Convention ParaView
 
 La convention d'orientation utilisée dans le logiciel
-[Paraview](http://www.paraview.org) est identifiée par id=11 dans le tableau
+[ParaView](http://www.paraview.org) est identifiée par id=11 dans le tableau
 ci-dessus.
 
 Cette composition de rotation se comprend comme une rotation $\psi$ autour de
@@ -1016,7 +1016,7 @@ rotations convention: [psi, theta', phi'']
 
 
 La convention d'orientation utilisée dans le logiciel
-[Paraview](http://www.paraview.org) est donnée par :
+[ParaView](http://www.paraview.org) est donnée par :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rotations convention: [psi,phi',theta'']
