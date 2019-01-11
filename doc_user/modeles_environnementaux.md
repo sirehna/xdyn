@@ -485,7 +485,7 @@ Le signal temporel correspondant a l'allure suivante :
 
 ![](images/spectrumBretschneider.svg)
 
-Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans X-DYN est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -561,7 +561,7 @@ Ce spectre a l'allure suivante :
 
 ![](images/spectrumPiersonMoskowitz.svg)
 
-Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans X-DYN est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -596,7 +596,7 @@ Ce spectre a l'allure suivante :
 
 ![](images/spectrumJonswap.svg)
 
-Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans X-DYN est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -739,7 +739,7 @@ vitesse orbitale au-dessus du niveau de la mer $z=0$ :
 $$\forall z\leq 0, u(x,y,z,t) = u(x,y,0,t)$$
 
 On obtient ainsi une rupture du profil de vitesse, à la fois inesthétique et
-peu physique. Ce modèle n'est pas implémenté dans X-Dyn.
+peu physique. Ce modèle n'est pas implémenté dans X-DYN.
 
 #### Stretching par extrapolation linéaire
 
@@ -747,7 +747,7 @@ Ce modèle revient à prolonger le modèle de vitesse par une tangente :
 
 $$u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)$$
 
-Ce modèle peut être utilisé dans X-Dyn en fixant `h` à la profondeur d'eau
+Ce modèle peut être utilisé dans X-DYN en fixant `h` à la profondeur d'eau
 `depth` et `delta: 1`.
 
 
@@ -808,7 +808,7 @@ vitesses orbitales calculées dans les crêtes sont quelque peu sous-estimées p
 rapport aux mesures de vélocimètres laser.
 
 Ce modèle étant une forme particulière du modèle de delta-stretching, on peut
-l'utiliser dans X-Dyn en fixant $h$ à la profondeur de l'eau `depth` et
+l'utiliser dans X-DYN en fixant $h$ à la profondeur de l'eau `depth` et
 `delta: 0`.
 
 #### Stretching de Chakrabarti
@@ -834,7 +834,7 @@ On constate expérimentalement que, tout comme le modèle de Wheeler, le modèle
 de Chakrabarti sous-estime les vitesses orbitales dans les crêtes.
 
 Ce modèle n'étant pas un dérivé du modèle de delta-stretching, il n'est pas
-accessible dans X-Dyn.
+accessible dans X-DYN.
 
 #### Delta-stretching
 
@@ -842,7 +842,7 @@ Il s'agit d'une généralisation du modèle de Wheeler qui permet de passer
 continument de ce dernier au modèle d'extrapolation linéaire. En jouant sur ses
 paramètres, on peut retrouver trois modèles de stretching (pas de stretching,
 extrapolation linéaire et modèle de Wheeler) et c'est pour cela qu'il a été
-choisi comme modèle de référence dans X-Dyn.
+choisi comme modèle de référence dans X-DYN.
 
 Tout comme le modèle de Wheeler, on souhaite retrouver la vitesse orbitale à la
 surface au creux et à la crête des vagues, c'est-à-dire en $z=\eta$. Les auteurs

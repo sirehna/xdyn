@@ -134,13 +134,13 @@ output:
 
 # Interface MatLab
 
-`X-Dyn` peut être appelé depuis le logiciel `MatLab`.
+`X-DYN` peut être appelé depuis le logiciel `MatLab`.
 Cela présente l'avantage de disposer dans la foulée d'un environnement graphique
 pour afficher les résultats de simulation.
 
-Voici les fonctions de base pour travailler avec `X-Dyn`.
+Voici les fonctions de base pour travailler avec `X-DYN`.
 
-- `xdyn_run` exécute `X-Dyn` depuis `MatLab`.
+- `xdyn_run` exécute `X-DYN` depuis `MatLab`.
 - `xdyn_loadResultsFromHdf5File` permet de charger les résultats d'une
   simulation dans `MatLab`.
 - `xdyn_postProcess` lance l'ensemble des post-traitements disponibles.
@@ -169,7 +169,7 @@ de la commande :
 
 # Interface Docker et génération automatique de rapports
 
-`X-Dyn` peut être utilisé sous la forme d'un conteneur
+`X-DYN` peut être utilisé sous la forme d'un conteneur
 [Docker](https://www.docker.com/)
 ce qui permet de l'exécuter sur n'importe quelle plateforme.
 
@@ -197,7 +197,7 @@ docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn tutorial_01_falling_ba
 
 ## Génération automatique de rapports (X-Weave)
 
-Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker d'X-Dyn.
+Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker d'X-DYN.
 
 ### Principe de fonctionnement
 
