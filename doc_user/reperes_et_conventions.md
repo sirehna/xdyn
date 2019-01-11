@@ -509,6 +509,8 @@ rigid body inertia matrix at the center of gravity and projected in the body fra
     row 6: [0,0,0,0,0,7.676e6]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Les calculs sont réalisés en supposant que les termes $a_{ij}$ de la matrice d'inertie sont en unité SI, c'est-à-dire que pour $1\leq i,j \leq 3$, $a_{ij}$ est en kg et pour $4\leq i,j \leq 6$ $a_{ij}$ est en kg.m.
+
 #### Inerties ajoutées
 
 La matrice de masse ajoutée est définie de la même façon :
