@@ -55,7 +55,7 @@ repère NED local sera "NED(nav1)".
 
 L'attitude d'un corps permet de connaître son orientation par rapport à un
 repère. La position est donnée par le triplet $\left(X,Y,Z\right)$ et
-l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
+l'orientation par un triplet d'angles $\left(\phi,\theta,\psi\right)$.
 L'interprétation de ce triplet en termes de rotations autour des axes $x$, $y$,
 $z$ dépend de la convention de rotation choisie. L'orientation peut également
 être exprimée de manière différente notamment avec des quaternions (c'est
@@ -64,13 +64,13 @@ d'ailleurs ainsi qu'elle est exprimée dans le code d'X-DYN).
 ## Conventions d'orientations
 
 Cette section présente les notations utilisées pour définir l'orientation
-d'un élément dans l'espace à partir d'un triplet de trois angles $(\phi,\theta,\psi)$.
+d'un élément dans l'espace à partir d'un triplet d'angles $(\phi,\theta,\psi)$.
 
 ### Définition d'une orientation
 
 Pour définir la composition de rotations donnant l'orientation
 d'un élément dans l'espace à partir
-d'un triplet de trois angles $\left(\phi,\theta,\psi\right)$,
+d'un triplet d'angles $\left(\phi,\theta,\psi\right)$,
 plusieurs éléments doivent être définis:
 
 - une convention d'angles ou d'axes. Elle permet de définir
