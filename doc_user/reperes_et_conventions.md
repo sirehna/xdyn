@@ -338,7 +338,7 @@ Chaque corps comprend :
  - des données nécessaires pour les calculs cinétiques (section `dynamics`)
  - la liste des efforts auxquels il est soumis (sections `external forces` et
    `controlled forces`).
- - de façon facultative, des états forçés.
+ - de façon facultative, des états forcés.
 
 ### Exemple complet
 
