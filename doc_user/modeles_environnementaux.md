@@ -466,7 +466,7 @@ et
 $$\omega_p=\left(\frac{4}{5}B\right)^{1/4}$$
 
 De plus, on constate empiriquement que les hauteurs de houle sont
-distribuées suivant une loi de Rayleigh (loi de la norme d'un vecteur dont les
+souvent distribuées suivant une loi de Rayleigh (loi de la norme d'un vecteur dont les
 deux composantes suivent une loi normale) de variance $\sigma^2=4 m_0$ et, sous
 cette hypothèse, la hauteur de houle $H_S$ correspondant à deux écarts-types est :
 
