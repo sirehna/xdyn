@@ -335,7 +335,7 @@ Chaque corps comprend :
  - ses conditions initiales (sections
    `initial position of body frame relative to NED` et
    `initial velocity of body frame relative to NED`)
- - des données définissant son comportement dynamique (section `dynamics`)
+ - des données nécessaires pour les calculs cinétiques (section `dynamics`)
  - la liste des efforts auxquels il est soumis (sections `external forces` et
    `controlled forces`).
  - de façon facultative, des états forçés.
