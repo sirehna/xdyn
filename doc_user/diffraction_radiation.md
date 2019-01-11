@@ -273,7 +273,7 @@ La formulation temporelle est :
 $$-F_R = A\frac{d^2X}{dt^2} + \int_{-\infty}^t
 K(t-\tau)\frac{dX}{dt}(\tau)d\tau$$
 
-Les codes potentiels tels qu'Aqua+ ou Diodore fournissent les matrices
+Les codes fréquentiels tels qu'Aqua+ ou Diodore fournissent les matrices
 $M_A(\omega)$ et $B_r(\omega)$ à n'importe quelle fréquence, mais qu'en est-il
 des matrices $A$ et $K$ utilisées par la formulation temporelle ?
 
