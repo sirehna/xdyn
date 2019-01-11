@@ -27,7 +27,12 @@ Ces trois constantes sont l'ensemble de toutes les constantes environementales a
 Comme expliqué dans [une section
 précédente](#remarques-sur-les-unit%C3%A9s), les
 dimensions physiques ne sont pas vérifiées et simplement converties en unités
-du système international.
+du système international. Si X-DYN rencontre une unité inconnue, il produit un
+message d'erreur du type :
+
+~~~~~{.bash}
+unknow unit : hhm
+~~~~~
 
 
 ## Simulation sans houle
