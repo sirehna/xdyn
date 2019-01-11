@@ -481,10 +481,6 @@ On peut ainsi exprimer $A$ et $B$ en fonction de $H_S$ et $T_p$ :
 $$A=\frac{5\pi^4H_S^2}{T_p^ 4}$$
 $$B=\frac{20\pi^4}{T_p^4}$$
 
-Le fait que ce spectre ait deux paramètres permet, en jouant sur la fréquence
-modale $\omega_p$, de l'utiliser pour des états de mer partiellement ou
-totalement développés, voire en atténuation.
-
 Le spectre a l'allure suivante :
 
 ![](images/spectrumBretschneider.svg)
