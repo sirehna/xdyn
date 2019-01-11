@@ -812,7 +812,7 @@ Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid
 ### Structure des fichiers HDB
 
 Les fichiers HDB sont des sorties générées par un code un Fortran 77. Aucune
-spécification formelle de ce format n'existe. Pour pouvoir les importer dans
+spécification formelle de ce format n'a pu être trouvée. Pour pouvoir les importer dans
 X-DYN, leur grammaire EBNF a été déduite de l'analyse de plusieurs fichiers
 (reverse-engineering). Cette grammaire, qui permet de parser tous les fichiers
 HDB qui nous ont été fournis jusqu'ici, peut être représentée comme suit (sans
