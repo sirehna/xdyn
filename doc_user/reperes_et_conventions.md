@@ -245,7 +245,7 @@ on obtient id=33 dans le tableau ci-dessus.
 
 La composition de rotations de ces deux conventions est
 représentée sur la figure suivante
-![](images/AnglesEuler.svg "Composition de rotations [z,y',x'']")
+![](images/EulerFrame_TextIm.svg "Composition de rotations [z,y',x'']")
 
 
 ### Convention Paraview
