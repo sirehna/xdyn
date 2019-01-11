@@ -1025,9 +1025,9 @@ rotations convention: [psi,phi',theta'']
 Pour plus de détails sur les conventions d'angles et d'axes, se référer à [la
 documentation détaillée](#conventions-dorientations).
 
-Une [attitude](#attitude-navire) sera décrite de la manière suivante, avec les champs
+La définition d'un repère dans X-DYN s'effectue à partir d'un repère connu (NED ou body). On définit le changement de coordonnées pour passer d'un repère connu à un nouveau repère de la manière suivante dans le fichier YAML :
 
-- `frame` le nom du repère dans laquelle l'[attitude](#attitude-navire) est exprimée,
+- `frame` le nom du repère connu,
 - `x` ,`y` ,`z`: le triplet de position où chaque position est
    définie par le dictionnaire des clés `value` et `unit`,
 - `phi` ,`theta` ,`psi`, le triplet d'orientation dont l'interprétation en
@@ -1042,6 +1042,8 @@ Une [attitude](#attitude-navire) sera décrite de la manière suivante, avec les
     theta: {value: 0, unit: rad}
     psi: {value: 0, unit: rad}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cette description est en particulier utilisée pour définir le changement de coordonnées entre le repère du maillage et le repère du corps (par la clef [`position of body frame relative to mesh`](#passage-du-rep%C3%A8re-maillage-au-rep%C3%A8re-body)) et la position initiale du corps à simuler (clef [`initial position of body frame relative to NED`](#d%C3%A9finition-des-corps-simul%C3%A9s)).
 
 ## Convention de houle {#section_Direction_houle}
 
