@@ -2,7 +2,7 @@
 
 ## Liste des arguments
 
-```python echo=False, results='verbatim', name='command-line-arguments-1'
+```python echo=False, results='verbatim', name='xdyn-command-line-arguments'
 from subprocess import check_output
 import re
 r=re.compile(r"This is a.*USAGE:", re.DOTALL)
