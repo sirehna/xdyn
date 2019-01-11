@@ -34,7 +34,13 @@ En ajoutant l'option -o csv, les sorties se font sur la sortie standard
 ~~~~~~~~~~~~~~~~~~~~
 
 La commande précédente lance la simulation et génère un tracé (format SVG) à
-l'aide du [script python de post-traitement](https://gitlab.sirehna.com/root/xdyn/blob/master/postprocessing/Python/plot.py) livré avec le simulateur. Des scripts de post-traitement sont livrés avec l'installation du simulateur, pour [Matlab](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/MatLab), [ParaView](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/Paraview) et [Python](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/Python).
+l'aide du
+[script python de post-traitement](https://gitlab.sirehna.com/root/xdyn/blob/master/postprocessing/Python/plot.py)
+livré avec le simulateur. Des scripts de post-traitement sont livrés avec
+l'installation du simulateur, pour
+[Matlab](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/MatLab),
+[ParaView](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/Paraview) et
+[Python](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/Python).
 
 ### Simulation avec un solveur Euler en commençant à t=1
 
