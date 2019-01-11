@@ -388,7 +388,7 @@ HDB](#fichiers-hdb) : son chemin est renseigné dans la clef `hdb`.
   nombreuses étapes et étant extrêmement sensible aux bornes d'intégration et aux
   types d'algorithmes utilisés, nous proposons l'affichage de résultats,
   nommément les amortissements interpolés sur une grille plus fine que celle
-  fournie en entrée (afin de valider les erreurs dues à la discrétisation) et les
+  fournie en entrée (afin de contrôler les erreurs dues à la discrétisation) et les
   fonctions de retard (afin de valider les bornes d'intégration et l'algorithme
   utilisés). Pour activer la verbosité, on met la clef `output Br and K` à
   `true`. Sinon on la met à `false`.
