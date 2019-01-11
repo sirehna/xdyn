@@ -727,8 +727,8 @@ Cette formule permet d'effectuer à la fois le transport d'une matrice d'inertie
 généralisée 6x6 d'un point $A$ à un point $B$ et le changement de son repère
 d'expression de $a$ vers $b$.
 
-Pour la conversion des fichiers HDB, on suppose qu'il n'y a pas de déplacement à faire
-et donc que la seule opération est le passage d'un repère z vers le haut (HDB) à un repère
+La matrice d'inertie est le plus souvent exprimée au centre de gravité. Cependant, rien ne le garantit dans les fichiers HDB. Dans le cas général, il faut donc effectuer un transport, mais on suppose dans X-DYN qu'il n'y a pas de transport à faire
+et donc que la seule opération pour la conversion est le passage d'un repère z vers le haut (HDB) à un repère
 z vers le bas (X-DYN). La formule précédente se simplifie alors en :
 
 $${}^bM_B=\left[
