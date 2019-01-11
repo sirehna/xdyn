@@ -2,7 +2,7 @@
 
 ## Liste des arguments
 
-~~~~~~~~~~~~~~~~~~~~ {.bash}
+~~~~~~~~~~~~~~~~~~~~
 APPEL: xdyn <yaml file> [-hd] [-y ARG] [-s ARG] [dt ARG] [--tstart ARG] [--tend
 ARG] [-o ARG] [-w ARG]
 Options:
