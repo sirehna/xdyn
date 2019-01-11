@@ -481,7 +481,7 @@ On peut ainsi exprimer $A$ et $B$ en fonction de $H_S$ et $T_p$ :
 $$A=\frac{5\pi^4H_S^2}{T_p^ 4}$$
 $$B=\frac{20\pi^4}{T_p^4}$$
 
-Le spectre a l'allure suivante :
+Le signal temporel correspondant a l'allure suivante :
 
 ![](images/spectrumBretschneider.svg)
 
