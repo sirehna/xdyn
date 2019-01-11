@@ -58,7 +58,7 @@ trois steppers sont implémentés :
 $$\hat{X}(t+dt) = X(t) + f(X,t,U,P)\cdot dt$$
 C'est le stepper le plus rapide, mais aussi le moins stable
 numériquement : si cette méthode est appliquée à l'équation différentielle
-$y'=k y$, alors la solution numérique est instable lorsque le produit $h k$
+$y'=k y$, alors la solution numérique est instable lorsque le produit $dt\cdot  k$
 est en-dehors de la région $\left\{z\in\mathbf{C} : \left\|z+1\right\| \leq
 1\right\}$.
 En pratique, il n'est utilisé que pour des tests car les autres steppers
@@ -111,4 +111,3 @@ $$k_5 = dt\cdot f\left(X + \frac{-11}{54}\cdot k_1 + \frac{5}{2}\cdot k_2 +\frac
 $$k_6 = dt\cdot f\left(X + \frac{1631}{55296}\cdot k_1 + \frac{175}{512}\cdot k_2 + \frac{575}{13824}\cdot k_3 + \frac{44275}{110592}\cdot k_4  + \frac{253}{4096}\cdot k_5, t+\frac{7}{8}\cdot dt, U, P\right),$$
 
 ![](images/runge_kutta_cash_karp_stability.svg "Domaine de stabilité de la méthode de Runge-Kutta Cash-Karp")
-
