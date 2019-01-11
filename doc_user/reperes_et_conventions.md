@@ -580,7 +580,8 @@ blocked dof:
 
 Soit les états sont donnés directement dans le fichier YAML, soit ils sont lus
 depuis un fichier CSV.
-- `name`: nom de l'état à forcer. u, v, w, p, q ou r.
+
+- `state`: nom de l'état à forcer. u, v, w, p, q ou r.
 
 Si les valeurs des états sont dans le YAML :
 
@@ -606,7 +607,7 @@ Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
 l'effort permettant de conserver les forçages, en d'autres termes il est
 possible de récupérer
 
-$$(M+M_a)\dot{X_{\textrm{forced}}} - \sum F_i$$
+$$(M+M_a)\dot{X_{\textrm{blocked}}} - \sum F_i$$
 
 Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
 corps s'appelle 'TestShip):
