@@ -313,7 +313,8 @@ limites.
 
 ### Calcul numérique
 
-Les RAO d'efforts sont lues à partir d'un fichier HDB. Cette table donne, une
+Les RAO d'efforts sont lues à partir d'un [fichier
+HDB](#fichiers-hdb). Cette table donne, une
 fois interpolée, deux fonctions RAO par axe $k$
 
 $$(u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{module}}(u,\omega,\beta)$$
@@ -381,13 +382,13 @@ M_X\\
 \right]
 $$
 
-Le torseur calculé est ensuite déplacé par X-DYN du point de calcul des HDB au
-point de résolution du PFD.
+Le torseur calculé est ensuite déplacé par X-DYN du point de calcul des
+[fichiers HDB](#fichiers-hdb) au point de résolution du bilan des efforts.
 
 ### Paramétrage
 
 Pour utiliser ce modèle, on écrit `model: diffraction`. Le seul paramètre de ce
-modèle est le chemin vers le fichier HDB contenant les RAO d'effort du premier
+modèle est le chemin vers le [fichier HDB](#fichiers-hdb) contenant les RAO d'effort du premier
 ordre.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -400,9 +401,10 @@ ordre.
   mirror for 180 to 360: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La section correspondante dans le fichier HDB est
+La section correspondante dans le [fichier HDB](#fichiers-hdb) est
 `DIFFRACTION_FORCES_AND_MOMENTS`. Il est à noter que le point de calcul ne
-figurant pas dans les fichiers HDB, il doit être renseigné dans le fichier YAML
+figurant pas dans les [fichiers
+HDB](#fichiers-hdb), il doit être renseigné dans le fichier YAML
 (`calculation point in body frame`) mais qu'aucune vérification ne peut être
 faite.
 

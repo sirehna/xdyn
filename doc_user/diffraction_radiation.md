@@ -321,11 +321,11 @@ $$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
 
 ## Calcul numérique des amortissements de radiation
 
-En pratique, on utilise en entrée du simulateur les fichiers HDB de Diodore,
-qui contiennent les matrices d'amortissement de radiation à différentes
-pulsations. Ces fichiers sont utilisés dans une table d'interpolation (soit une
-interpolation linéaire par morceaux, soit des splines) puis on évalue
-l'intégrale suivante pour différentes valeurs de $\tau$ :
+En pratique, on utilise en entrée du simulateur les [fichiers
+HDB](#fichiers-hdb), qui contiennent les matrices d'amortissement de radiation à
+différentes pulsations. Ces fichiers sont utilisés dans une table
+d'interpolation (soit une interpolation linéaire par morceaux, soit des splines)
+puis on évalue l'intégrale suivante pour différentes valeurs de $\tau$ :
 
 $$K_{i,j}(\tau) =
 \frac{2}{\pi}\int_{\omega_{\textrm{min}}}^{\omega_{\textrm{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega$$
@@ -347,12 +347,14 @@ de repère est nécessaire pour les exprimer dans le repère "body".
 ### Paramétrage
 
 Pour utiliser ce modèle, on écrit `model: radiation damping`.
-Les matrices d'amortissement de radiation sont lues depuis un fichier HDB
+Les matrices d'amortissement de radiation sont lues depuis un [fichier
+HDB](#fichiers-hdb)
 (format Diodore). Ce fichier contient les matrices $B_r$ pour différentes
 périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
 suivantes sont réalisées :
 
-- Lecture du fichier HDB : son chemin est renseigné dans la clef `hdb`.
+- Lecture du [fichier
+HDB](#fichiers-hdb) : son chemin est renseigné dans la clef `hdb`.
 - Interpolation des matrices de fonction d'amortissement : on utilise des
   splines dites "naturelles", c'est-à-dire
   dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
@@ -552,7 +554,8 @@ Subroutine Package for Automatic Integration**; Springer Verlag.
 
 Dans le simulateur, la matrice de masses ajoutées est soit lue directement
 depuis le fichier YAML, soit calculée à partir d'un fichier DIODORE (extension
-HDB). Les fichiers HDB contenant les masses ajoutées à plusieurs périodes, on
+HDB). Les fichiers HDB[fichiers
+HDB](#fichiers-hdb) contenant les masses ajoutées à plusieurs périodes, on
 choisit la première, c'est-à-dire la matrice correspondant à la période la plus
 faible. On ne fait pas d'interpolation en zéro car une telle interpolation ne
 garantit pas la symétrie et le caractère positif et défini de la matrice (les
@@ -567,4 +570,3 @@ sens.
   Its Mobile Device Application*, 2011, Zayar Thein, Department of Shipping and
   Marine Technology, CHALMERS UNIVERSITY OF TECHNOLOGY, Göteborg, Sweden,
   page 18.
-

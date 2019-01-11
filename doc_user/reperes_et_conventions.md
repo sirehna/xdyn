@@ -538,9 +538,9 @@ de l'équation fondamentale de la dynamique).
 La matrice de masses ajoutées n'est cependant pas équivalente à une masse supplémentaire, car
 les termes de Coriolis et centripète qui correspondraient ne sont pas pris en compte.
 
-Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
-à partir d'un fichier de sortie AQUA+ (format HDB). Pour cela, on écrit (pour lire depuis le fichier
-`test_ship.hdb`) :
+Il est également possible d'extrapoler les masses ajoutées à pulsation infinie à
+partir d'un [fichier HDB](#fichiers-hdb). Pour cela, on écrit (pour lire depuis
+le fichier `test_ship.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 added mass matrix at the center of gravity and projected in the body frame:
@@ -549,11 +549,11 @@ added mass matrix at the center of gravity and projected in the body frame:
 
 Dans ce cas, il ne faut pas spécifier les clefs `frame` et `row` (le programme
 lance une exception si on le fait).
-Comme le fichier STL, le chemin du fichier HDB est relatif à l'endroit d'où on
+Comme le fichier STL, le chemin du [fichier HDB](#fichiers-hdb) est relatif à l'endroit d'où on
 lance l'exécutable.
-La section correspondante dans le fichier HDB est `Added_mass_Radiation_Damping`.
+La section correspondante dans le [fichier HDB](#fichiers-hdb) est `Added_mass_Radiation_Damping`.
 La valeur utilisée est la matrice de masse ajoutée à la période minimale définie
-dans le HDB (aucune extrapolation n'est faite).
+dans le [fichier HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
 
 ### Forçage de degrés de liberté
 
@@ -948,9 +948,9 @@ coordonnées dans le repère NED en coordonnées du même point exprimées dans 
 repère de calcul hydrodynamique.
 
 Il convient de distinguer ce repère de celui utilisé dans la base de données
-hydrodynamiques (fichiers HDB de Diodore), utilisé pour l'expression des
-matrices d'amortissement de radiation, les RAO d'effort (diffraction) et les
-masses ajoutées.
+hydrodynamiques ([fichiers HDB](#fichiers-hdb)), utilisé pour l'expression des
+matrices d'amortissement de radiation, les RAO d'effort (pour le calcul des
+efforts de diffraction) et les masses ajoutées.
 
 
 ## Rotations et constantes environnementales
