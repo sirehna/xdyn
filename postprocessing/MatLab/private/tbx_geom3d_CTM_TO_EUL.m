@@ -35,11 +35,6 @@ function varargout = tbx_geom3d_CTM_TO_EUL(c,order,epsilon)
 % SIREHNA
 % NC
 % 24/03/04
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_geom3d_CTM_TO_EUL.m 1094 2013-11-19 14:27:21Z gj $
-% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/geom3D/tbx_geom3d_CTM_TO_EUL.m $
-%==========================================================================
 
 if nargin < 3
     epsilon = 1e-13;

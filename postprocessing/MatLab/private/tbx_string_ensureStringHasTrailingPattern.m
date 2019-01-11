@@ -19,11 +19,6 @@ function str = tbx_string_ensureStringHasTrailingPattern(str,trailingPattern)
 %
 % SIREHNA
 % GJ
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_string_ensureStringHasTrailingPattern.m 585 2011-11-28 08:16:23Z gj $
-% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/string/tbx_string_ensureStringHasTrailingPattern.m $
-%==========================================================================
 if ischar(str)
     str = ensureStringHasTrailingPattern(str,trailingPattern);
 elseif iscell(str)

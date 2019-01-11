@@ -23,11 +23,6 @@ function ctm = tbx_geom3d_QUA_TO_CTM(q0,q1,q2,q3)
 % SIREHNA
 % NC
 % 24/03/04
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_geom3d_QUA_TO_CTM.m 772 2012-12-03 19:45:48Z gj $
-% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/geom3D/tbx_geom3d_QUA_TO_CTM.m $
-%==========================================================================
 if(nargin == 1)
     q = q0;
     n = numel(q);

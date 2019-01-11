@@ -19,11 +19,6 @@ function str = tbx_string_join(str, delimiter)
 %
 % SIREHNA
 % GJ
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_string_join.m 1568 2016-07-08 09:07:04Z gj $
-% SVN $HeadURL: https://svn.sirehna.com/matlab_toolbox/string/tbx_string_join.m $
-%==========================================================================
 if nargin == 1
     delimiter = ' ';
 end
