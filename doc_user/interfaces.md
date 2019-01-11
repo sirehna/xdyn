@@ -39,7 +39,6 @@ l'aide du
 livré avec le simulateur. Des scripts de post-traitement sont livrés avec
 l'installation du simulateur, pour
 [Matlab](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/MatLab),
-[ParaView](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/Paraview) et
 [Python](https://gitlab.sirehna.com/root/xdyn/tree/master/postprocessing/Python).
 
 ### Simulation avec un solveur Euler en commençant à t=1
