@@ -171,30 +171,23 @@ ce qui permet de l'exécuter sur n'importe quelle plateforme.
 En outre, c'est actuellement le seul moyen d'utiliser le module de génération
 automatique de rapport décrit ci-après.
 
-Pour utiliser l'image `X-Dyn`, il faut d'abord installer Docker puis importer
-l'image `x-dyn.tar.gz` en exécutant :
-
-~~~~{.bash}
-docker load -i xdyn.tar.gz
-~~~~
-
 ## Lancement d'X-DYN via l'image docker
 
 Une fois l'image chargée par la commande précédente, on peut lancer :
 
 ~~~~{.bash}
-docker run -it --rm -v $(pwd):/work -w /work xdyn xdyn
+docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn xdyn
 ~~~~
 
 - le paramètre `-v $(pwd):/work` permet de faire correspondre le répertoire courant avec le répertoire `/work` du conteneur,
 - le paramètre `-w /work` précise que le répertoire de travail du conteneur (celui depuis lequel sera exécuté X-DYN) est `/work`,
-- le premier `xdyn` de la ligne de commande est le nom de l'image Docker,
-- le second `xdyn` de la ligne de commande est le nom de l'exécutable à lancer.
+- `sirehna/xdyn` de la ligne de commande est le nom de l'image Docker.
+
 
 Si l'on souhaite lancer une simulation, on ajoute les arguments d'X-DYN à la suite :
 
 ~~~~{.bash}
-docker run -it --rm -v $(pwd):/work -w /work xdyn xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
+docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
 ~~~~
 
 ## Génération automatique de rapports (X-Weave)
