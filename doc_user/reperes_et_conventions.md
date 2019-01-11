@@ -621,10 +621,12 @@ corps s'appelle 'TestShip):
 Il est à noter que ces efforts sont exprimés dans le repère BODY.
 
 
-## Fichiers HDB d'AQUA+
+## Fichiers HDB
 
-Les fichiers HDB (Hydrodynamic DataBase) sont générés par les programmes AQUA+ et DIODORE. Ces fichiers
-peuvent être utilisés par X-DYN pour calculer :
+Le format HDB (Hydrodynamic DataBase) est le format standard du logiciel
+[Diodore](http://www.principia-group.com/blog/product/diodore/). Le logiciel
+AQUA+ (développé et utilisé en interne par l'Ecole Centrale de Nantes et SIREHNA, dont des parties ont été reprises dans logiciel [NEMOH](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-presentation-192863.kjsp)) dispose également d'une sortie permettant de créer un fichier HDB. Ces
+fichiers peuvent être utilisés par X-DYN pour calculer :
 
 - les masses ajoutées (cf. paragraphe précédent)
 - les amortissements de radiation
