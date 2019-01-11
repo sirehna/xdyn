@@ -630,7 +630,7 @@ fichiers peuvent être utilisés par X-DYN pour calculer :
 
 - les masses ajoutées (cf. paragraphe précédent)
 - les amortissements de radiation
-- les efforts de diffraction (RAO)
+- les efforts de diffraction, calculés à partir de fonctions de transfert ([RAO](#efforts-de-diffraction))
 
 ### Conventions des fichiers HDB
 
@@ -647,7 +647,7 @@ haut.
 Les RAO dépendent des conventions (repère, origine des phases, provenance vs.
 propagation, signe des angles). Or la convention utilisée ne figure pas dans le
 format HDB. Comme les RAO que l'on utilise actuellement proviennent
-exculsivement du logiciel AQUA+, dans la version actuelle X-DYN suppose que la
+exclusivement du logiciel AQUA+, dans la version actuelle X-DYN suppose que la
 convention utilisée est celle d'AQUA+.
 
 La différence entre la convention de X-DYN et celle d'AQUA+ est que l'axe $z$

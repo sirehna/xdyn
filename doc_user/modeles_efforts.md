@@ -305,7 +305,7 @@ fait de la présence du navire. Ils sont interpolés à partir de tables
 hydrodynamiques. Comme les efforts de radiation et les efforts de masse ajoutée,
 ces tables sont calculées en résolvant un problème de condition aux limites pour
 le potentiel de vitesse : on utilise donc des codes basés sur des méthodes
-potentielles, tels qu'Aqua+. Les tables (Response Amplitudes Operators ou RAO)
+potentielles, tels qu'Aqua+. Les fonctions de transfert (Response Amplitudes Operators ou RAO)
 sont paramétrées en pulsation, incidence et vitesse d'avance. Il s'agit de RAO
 d'efforts du premier ordre). La principale différence entre les efforts de
 radiation et les efforts de diffraction est l'écriture de la condition aux
