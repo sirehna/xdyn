@@ -177,40 +177,29 @@ $$
 
 ## Outil de calcul de $GZ$
 
-Parallèlement au simulateur, un autre exécutable appelé `gz` permet de calculer
-$GZ$ en fonction de la gîte $\phi$.
+L'installation d'X-DYN contient, outre l'exécutable `xdyn`, un autre exécutable appelé `gz`, permettant de calculer
+des courbes de stabilité statique, aussi communément appelée courbe en "GZ", en fonction de la gîte $\phi$.
 
 Cet outil prend en entrée des paramètres de ligne de commande et un fichier
 YAML au même format que celui pour le simulateur. Contrairement au
 simulateur, l'outil `gz` n'utilise ni les conditions initiales, ni les sorties,
 ni les efforts extérieurs spécifiés dans le fichier YAML.
 
-~~~~~~~~~~~~~~~~~~~~ {.bash}
-APPEL: ./gz <yaml file> [-h] [-y ARG] [-s ARG] [--dphi ARG] [--phi_max ARG]
-Options:
-  -h [ --help ]         Afficher le message d'aide (en anglais)
-  -y [ --yml ] arg      Nom du (ou des) fichier(s) YAML (le flag est facultatif)
-  -s [ --stl ] arg      Nom du fichier STL
-  --dphi arg            Pas de calcul en roulis (en degrés)
-  --phi_max arg         Angle de roulis maximal (en degrés)
-  -c [ --csv ] arg      Nom du fichier de sortie (format CSV). Facultatif.
-~~~~~~~~~~~~~~~~~~~~
+```python echo=False, results='verbatim', name='gz-command-line-arguments'
+from subprocess import check_output
+import re
+r=re.compile(r"Righting.*USAGE:", re.DOTALL)
+print(re.sub(r,"", check_output(['gz']).decode('utf-8')))
+```
 
 Exemple :
 
-~~~~~~~~~~~~~~~~~~~~ {.bash}
-./gz test_ship_in_waves.yml -s test_ship.stl --dphi 10 --phi_max 40
-Phi [deg]   GZ(phi) [m]
--40 -0.615127
--30 -0.432902
--20 -0.269154
--10 -0.129381
-0   0.000617987
-10  0.130468
-20  0.269942
-30  0.433329
-40  0.615116
-~~~~~~~~~~~~~~~~~~~~
+```python echo=False, results='verbatim', name='gz-example'
+from subprocess import check_output
+cmd = ['gz', 'tuto_execution/test_ship_in_waves.yml', '-s', 'tuto_execution/test_ship.stl',  '--dphi',  '10',  '--phi_max',  '40']
+print(' '.join(cmd))
+print(check_output(cmd).decode('utf-8'))
+```
 
 ## Références
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 398
