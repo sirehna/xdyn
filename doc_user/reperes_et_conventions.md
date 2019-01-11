@@ -274,6 +274,15 @@ qui, au prix de l'ajout d'un état supplémentaire permettent de définir les
 rotations sans ambiguïté et de façon unique, quelle que soit la convention
 d'angle adoptée.
 
+Lors des calculs de tenue à la mer (avec une formulation fréquentielle), on
+utilise souvent un repère linéarisé. Ce repère, qui peut être impliqué lors du
+lien avec les [bases de données hydrodynamiques](#fichiers-hdb-daqua) issues du
+fréquentiel, est calculé de la façon suivante. En faisant l'hypothèse que les
+mouvements sont faibles, on effectue un développement des rotations limité au
+premier ordre et ainsi elles peuvent être exprimées indépendammant par rapport
+aux axes principaux liés à la posiiton moyenne du navire, dans n'importe quel
+ordre. Ce repère n'est pas utilisé dans la version actuelle d'X-DYN.
+
 ## États navires
 
 Le simulateur est multi-corps en ce sens que plusieurs corps peuvent être
