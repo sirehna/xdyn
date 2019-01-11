@@ -463,7 +463,7 @@ navire.
 
 En pratique, on effectue une interpolation par spline cubique de la résistance
 à l'avancement en fonction de la vitesse du solide par rapport au repère NED
-projetée sur l'axe X du repère body (que l'on note $u$). Si $f:u\mapsto R=f(u)$
+projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $u$). Si $f:u\mapsto R=f(u)$
 désigne la fonction d'interpolation, le torseur des efforts, exprimé au [point
 de calcul
 hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
@@ -478,7 +478,7 @@ curve`](#r%C3%A9sistance-%C3%A0-lavancement).
 
 Les efforts de résistance à l'avancement sont renseignés en fonction de la
 vitesse d'avance (axe longitudinal uniquement), c'est-à-dire la projection
-suivant l'axe $x$ du repère body de la vitesse du navire par rapport au repère
+suivant l'axe $x$ du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) de la vitesse du navire par rapport au repère
 NED. L'interpolation est faite en utilisant des splines cubiques.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -1180,7 +1180,7 @@ derrière l'hélice et en regardant vers l'avant du navire) et +1 si elle tourne
 dans le sens trigonométrique.
 
 Ce torseur est ensuite déplacé (changement de point d'application et changement
-de coordonnées) dans le repère body afin d'être sommé avec les autres lors du
+de coordonnées) dans le [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) afin d'être sommé avec les autres lors du
 bilan des efforts.
 
 ### Paramétrage

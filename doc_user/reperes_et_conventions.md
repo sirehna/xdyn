@@ -321,7 +321,7 @@ Chaque corps comprend :
 
  - un nom (section `name`)
  - éventuellement un maillage (section `mesh`)
- - la position du repère body par rapport au maillage (section
+ - la position du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) par rapport au maillage (section
   `position of body frame relative to mesh`)
  - ses conditions initiales (sections
    `initial position of body frame relative to NED` et
@@ -441,7 +441,7 @@ L'origine du repère "body" (qui est le repère dans lequel est réalisé le bil
 des efforts) est spécifiée par rapport au repère du maillage. En pratique, $x,y,z$
 peuvent définir la position du centre de gravité dans le repère maillage et
 $\phi,\theta,\psi$ définissent la rotation permettant de passer du repère
-maillage au repère body (suivant la convention choisie dans la [section
+maillage au [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (suivant la convention choisie dans la [section
 `rotations`](#rotations)).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -941,7 +941,7 @@ hydrodynamic forces calculation point in body frame:
 
 
 On note ${}^{\textrm{local}}T_{\textrm{body}}$ la transformation permettant de
-convertir des coordonnées dans le repère body en coordonnées du même point
+convertir des coordonnées dans le [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) en coordonnées du même point
 exprimées dans le repère de calcul hydrodynamique.
 ${}^{\textrm{local}}T_{\textrm{NED}}$ est celle permettant de convertir des
 coordonnées dans le repère NED en coordonnées du même point exprimées dans le
