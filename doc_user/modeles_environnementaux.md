@@ -648,57 +648,90 @@ La direction de propagation $\gamma_0$ est donnée par `waves propagating to`.
 
 ## Stretching de la houle
 
-Sous les hypothèses précédentes, la vitesse orbitale des particules d'eau
-par rapport au référentiel NED (projetée sur l'axe $X$ du repère BODY) s'écrit :
+### Description
+
+La formulation d'Airy n'est pas valable au-dessus du plan $z=0$. Cela signifie
+que l'on ne peut pas l'utiliser dans une formulation non-linéaire où l'on
+cherche à connaître les pressions dynamiques et les vitesses orbitales pour
+$z<0$. Les modèles de stretching sont une solution de contournement qui consiste à
+prendre comme référence non pas le plan $z=0$ mais la surface libre déformée.
+
+### Utilisation dans X-DYN
+
+Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAML du type :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: airy
+  depth: {value: 100, unit: m}
+  seed of the random data generator: 0
+  stretching:
+     delta: 0
+     h: {unit: m, value: 100}
+  directional spreading:
+     type: dirac
+     waves propagating to: {value: 90, unit: deg}
+  spectral density:
+     type: jonswap
+     Hs: {value: 5, unit: m}
+     Tp: {value: 15, unit: s}
+     gamma: 1.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dans X-DYN, le stretching est renseigné dans la section `stretching` des modèles de houle. Le seul modèle de stretching implémenté est le [delta-stretching](#delta-stretching) et ses dérivés (absence de stretching, extrapolation linéaire et modèle de Wheeler). La section `stretching` contient les paramètres `h` et `delta` du modèle de
+delta-stretching :
+
+- absence de stretching : possible si l'on sur une modélisation linéaire. Renseigner `h: {value: 0, unit: m}` et `delta: 1`
+- [extrapolation linéaire](#stretching-par-extrapolation-lin%C3%A9aire), en fixant $h$ à la profondeur d'eau `depth` et $\Delta=1$
+- [modèle de Wheeler](#stretching-de-wheeler), si $h$ vaut la profondeur `depth` et $\Delta=0$
+- [delta stretching](#delta-stretching) pour toute autre valeur
+
+### Justification théoriques
+
+Sous les hypothèses du modèle de [houle irrégulière linéaire](#houle-irr%C3%A9guli%C3%A8re) détaillées ci-dessus, la vitesse
+orbitale des particules d'eau par rapport au référentiel NED (projetée sur l'axe
+$X$ du repère BODY) s'écrit :
 
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 \frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$ {#eq:}
+
 
 qui, en profondeur infinie, s'écrit :
-
 $$u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 e^{-k_i z}
 \cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$ {#eq:}
 
-La valeur du terme $e^{-k_i z}$ est inférieure à 1 pour les points en-dessous
-du niveau moyen (surface $z=0$), mais elle croît rapidement pour les points situés
-au-dessus de ce plan, et ce d'autant plus que le nombre d'onde $k$ est grand,
-tandis qu'elle décroît en-dessous du niveau moyen de la mer. Ainsi, pour deux
-points proches sur la surface libre (non-horizontale) l'un à $z>0$ et l'autre
-à $z<0$, la vitesse orbitale sera très différente : les contributions des
-composantes haute fréquence de la houle seront fortement amplifiées pour le point
-à $z>0$ et fortement atténuées pour le point à $z<0$.
-Les particules au-dessus du niveau moyen de la mer (notamment sur
-la crête des vagues) seront ainsi vues comme oscillant à des fréquences élevées
-tandis que celles dans le creux des vagues oscilleront plus lentement : le
-niveau moyen de la mer agit donc comme une frontière entre l'amplification et
-l'atténuation des hautes fréquences, ce qui n'est pas physique.
+Cette expression est basée sur la théorie linéaire, qui suppose *a priori* la surface libre plane, y compris pour le calcul de la déformation de surface libre, qui est une grandeur comme les autres (pressions, vitesses, potentiel), résultat de la résolution du problème.
 
-Pour pallier cet inconvénient, on peut utiliser des modèles dits de
-"stretching", qui permettent de recaler les vitesses orbitales à l'interface
-eau-air (le sommet ou le creux des vagues) d'une des façons décrites
-ci-dessous. Certaines de ces méthodes reviennent à étirer l'axe $z$ (d'où le
-nom de stretching).
+Une difficulté survient quand on veut exploiter cette formule dans une
+modélisation non-linéaire, c'est-à-à dire en modélisant réellement la
+déformation de la  surface libre. En effet, la valeur du terme $e^{-k_i z}$ est
+inférieure à 1 pour les points en-dessous du niveau moyen (surface $z=0$), mais
+elle croît rapidement pour les points situés au-dessus de ce plan, et ce
+d'autant plus que le nombre d'onde $k$ est grand, tandis qu'elle décroît
+en-dessous du niveau moyen de la mer. Ainsi, pour deux points proches sur la
+surface libre (non-horizontale) l'un à $z>0$ et l'autre à $z<0$, la vitesse
+orbitale sera très différente : les contributions des composantes haute
+fréquence de la houle seront fortement amplifiées pour le point à $z>0$ et
+fortement atténuées pour le point à $z<0$. Les particules au-dessus du niveau
+moyen de la mer (notamment sur la crête des vagues) seront ainsi vues comme
+oscillant à des fréquences élevées tandis que celles dans le creux des vagues
+oscilleront plus lentement : le niveau moyen de la mer agit donc comme une
+frontière entre l'amplification et l'atténuation des hautes fréquences, ce qui
+n'est pas physique.
 
-Dans X-Dyn, le stretching est renseigné dans la section `stretching` des
-modèles de houle. Le seul modèle de stretching implémenté est le delta-stretching
-et ses dérivés. On a donc le choix entre les quatre modèles de stretching suivants :
+Les grandeurs linéaires ne sont donc pas définies dans les zones déformées. Pour
+pallier cet inconvénient, on peut utiliser des modèles dits de "stretching", qui
+permettent de recaler les vitesses orbitales à l'interface eau-air (le sommet ou
+le creux des vagues) d'une des façons décrites ci-dessous. Certaines de ces
+méthodes reviennent à étirer l'axe $z$ (d'où le nom de stretching). Ce qui suit est une présentation non-exhaustive de quelques modèles de stretching.
 
-- **absence de stretching** (non-recommandé pour les raisons précédemment
-  évoquées), renseigner `h: {value: 0, unit: m}` et `delta: 1`
-- **extrapolation linéaire**, en fixant $h$ à la profondeur d'eau `depth` et $\Delta=1$
-- **modèle de Wheeler**, si $h$ vaut la profondeur `depth` et $\Delta=0$
-- **delta stretching** pour toute autre valeur
-
-Ce qui suit est une présentation non-exhaustive de quelques modèles de stretching.
-
-### Stretching linéaire sans extrapolation
+#### Stretching linéaire sans extrapolation
 
 Outre l'absence de stretching, le modèle le plus simple revient à bloquer la
 vitesse orbitale au-dessus du niveau de la mer $z=0$ :
@@ -708,7 +741,7 @@ $$\forall z\leq 0, u(x,y,z,t) = u(x,y,0,t)$$
 On obtient ainsi une rupture du profil de vitesse, à la fois inesthétique et
 peu physique. Ce modèle n'est pas implémenté dans X-Dyn.
 
-### Stretching par extrapolation linéaire
+#### Stretching par extrapolation linéaire
 
 Ce modèle revient à prolonger le modèle de vitesse par une tangente :
 
@@ -718,7 +751,7 @@ Ce modèle peut être utilisé dans X-Dyn en fixant `h` à la profondeur d'eau
 `depth` et `delta: 1`.
 
 
-### Stretching de Wheeler
+#### Stretching de Wheeler
 
 On souhaite obtenir les bonnes vitesses orbitales à la surface de l'eau,
 c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle
@@ -778,7 +811,7 @@ Ce modèle étant une forme particulière du modèle de delta-stretching, on peu
 l'utiliser dans X-Dyn en fixant $h$ à la profondeur de l'eau `depth` et
 `delta: 0`.
 
-### Stretching de Chakrabarti
+#### Stretching de Chakrabarti
 
 Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la
 fonction $f$
@@ -803,7 +836,7 @@ de Chakrabarti sous-estime les vitesses orbitales dans les crêtes.
 Ce modèle n'étant pas un dérivé du modèle de delta-stretching, il n'est pas
 accessible dans X-Dyn.
 
-### Delta-stretching
+#### Delta-stretching
 
 Il s'agit d'une généralisation du modèle de Wheeler qui permet de passer
 continument de ce dernier au modèle d'extrapolation linéaire. En jouant sur ses
@@ -835,7 +868,7 @@ On prend donc :
   linéaire.
 
 
-### Choix du modèle de stretching
+#### Choix du modèle de stretching
 
 Comme les modèles de stretching n'ont pas vraiment de justification théorique,
 la seule manière de les choisir est de comparer directement avec les profils de
@@ -850,47 +883,17 @@ Les trois graphes ci-dessous montrent l'influence du modèle de stretching sur l
 pression dynamique (et montrent aussi qu'il n'est pas pris en compte dans le
 calcul de la vitesse orbitale).
 
-#### Sans stretching
+##### Sans stretching
 
 ![](images/waves_without_stretching.png)
 
-#### Extrapolation linéaire
+##### Extrapolation linéaire
 
 ![](images/waves_extrapolation_stretching.png)
 
-#### Stretching de Wheeler
+##### Stretching de Wheeler
 
 ![](images/waves_wheeler_stretching.png)
-
-
-### Paramétrisation dans X-Dyn
-
-Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAML du type :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- model: airy
-  depth: {value: 100, unit: m}
-  seed of the random data generator: 0
-  stretching:
-     delta: 0
-     h: {unit: m, value: 100}
-  directional spreading:
-     type: dirac
-     waves propagating to: {value: 90, unit: deg}
-  spectral density:
-     type: jonswap
-     Hs: {value: 5, unit: m}
-     Tp: {value: 15, unit: s}
-     gamma: 1.2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-La section `stretching` contient les paramètres `h` et `delta` du modèle de
-delta-stretching :
-
-- Pour $h=0$ et $\Delta=1$, il n'y a pas de stretching.
-- Si $h$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le modèle de
-  Wheeler.
-- Avec $h$ valant `depth` et $\Delta=1$ on obtient l'extrapolation linéaire.
 
 ## Discrétisation des spectres et des étalements
 
