@@ -71,9 +71,9 @@ if(makeSVG)
     x11()
 }
 
-idx = 2*c(1:(length(data$x)/2))
-plot(data$x,data$eta, type='l', xlab="X [m]", ylab="Z (down) [m]", lwd=3, col='chartreuse4')
-quiver(x=data$x[idx],y=data$eta[idx], u=data$usurf[idx], v=data$wsurf[idx], scale=0.2, lwd=2, col='blue')
+idx = 2*c(1:(length(data$x)/2)) # Less arrows (1 in two)
+plot(data$x,data$eta, type='l', xlab="X [m]", ylab="Z positive downwards [m]", lwd=3, col='chartreuse4', asp=1, ylim = rev(range(data$eta)))
+arrows(x0=data$x[idx],y0=data$eta[idx], x1=data$x[idx]+data$usurf[idx], y1=data$eta[idx]+data$wsurf[idx], length=0.1, lwd=2, col='blue')
 grid()
 title(paste("Orbital velocities for delta [-] = ", data$delta, ", h [m] = ", data$h, ", Hs [m] = ",data$Hs,", Tp [s] = ", data$Tp, ", psi [deg] = ", data$psi, sep=''))
 if(makeSVG)
