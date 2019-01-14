@@ -99,8 +99,4 @@ Dans le groupe "outputs", on trouve un groupe "waves" qui contient quatre jeux d
 
 La description de ce fichier est faite [dans la documentation des fichiers YAML](#sorties).
 
-On peut aussi simuler les vagues dans un autre référentiel que le référentiel
-NED (par exemple le référentiel associé à un solide) et l'on obtient alors des
-coordonnées changeantes au cours du temps (et donc des valeurs `x` et `y` à
-chaque pas de temps). Pour cela, il faut bien évidemment définir un solide à
-simuler.
+On peut obtenir les élévations dans n'importe quel repère de X-DYN (NED ou lié à un solide). Si le repère est lié à un solide on obtient des coordonnées x et y changeantes au cours du temps.
