@@ -703,7 +703,7 @@ le type de modèle utilisé).
 Les commandes sont spécifiées en YAML, soit dans le même fichier que les
 modèles d'effort, soit dans un fichier à part (plus modulaire).
 
-Voici un exemple de section `efforts commandés` :
+Voici un exemple de section `efforts commandés`, qui correspond au modèle d'hélice décrit [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 controlled forces:
@@ -865,6 +865,53 @@ soit par exemple `PropRudd(rpm)`)
 `X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
 body), exprimé au point d'application défini ci-dessus.
 
+Voici un exemple (très simplifié) de modèle de manoeuvrabilité qui utilise les commandes d'un modèle d'hélice + safran qui illustre la syntaxe pour utiliser dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
+
+~~~~{.yaml}
+- name: SBPropRudd
+  model: propeller+rudder
+  position of propeller frame:
+      frame: test
+      x: {value: -53.155, unit: m}
+      y: {value: 3.750, unit: m}
+      z: {value: 6.573, unit: m}
+      phi: {value: 0, unit: rad}
+      theta: {value: 4., unit: deg}
+      psi: {value: 0, unit: deg}
+  wake coefficient w: 0.066
+  relative rotative efficiency etaR: 0.99
+  thrust deduction factor t: 0.18
+  rotation: anti-clockwise
+  number of blades: 4
+  blade area ratio AE/A0: 0.809
+  diameter: {value: 4.65, unit: m}
+  rudder area: {value: 10.8, unit: m^2}
+  rudder height: {value: 4.171, unit: m}
+  effective aspect ratio factor: 1.7
+  lift tuning coefficient: 1.
+  drag tuning coefficient: 1.
+  position of rudder in body frame:
+      x: {value: -57.36, unit: m}
+      y: {value: 4.40, unit: m}
+      z: {value: 4.26, unit: m}
+- model: maneuvering
+  name: man
+  reference frame:
+      frame: fremm
+      x: {value: 0, unit: m}
+      y: {value: 0, unit: m}
+      z: {value: 2.22, unit: m}
+      phi: {value: 0, unit: deg}
+      theta: {value: 0, unit: deg}
+      psi: {value: 0, unit: deg}
+  X: 0.5*SBPropRudd(rpm)^2
+  Y: 0
+  Z: 0
+  K: 0
+  M: 0
+  N: 0
+~~~~
+
 Toutes les valeurs sont supposées en unité du système international. Le modèle
 nécessite de spécifier X, Y, Z, K, M et N, les autres clefs pouvant être
 quelconques. Des variables accessoires (telles
@@ -874,12 +921,24 @@ infère l'ordre d'évaluation, autrement dit, une expression n'est évaluée que
 lorque toutes les expressions dont elle dépend l'ont été (quel que soit l'ordre
 dans lequel elles ont été déclarées).
 
+Les expressions `g`, `nu` et `rho` sont utilisables et leurs valeurs sont celles renseignées dans la section `environmental constants` du fichier YAML.
+
 On peut évaluer ces valeurs retardées des états x,y,z,u,v,w,p,q,r en écrivant
 `x(t-tau)` (par exemple) ou `tau` désigne une expression dont la valeur est
-positive. `t` désigne implicitement l'instant courant.
+positive. `t` désigne implicitement l'instant courant. La longueur maximale de
+l'historique est calculée juste après la lecture du fichier YAML d'entrée et
+avant la simulation, en fonction des modèles d'effort utilisés, de la façon
+suivante :
 
-Les valeurs de `g`, `nu` et `rho` sont utilisables et leurs valeurs sont celles
-renseignées dans la section `environmental constants` du fichier YAML.
+- Chaque modèle d'effort connaît la durée maximale d'historique dont il a besoin, en fonction de ses paramètres d'entrée
+- La durée maximale de l'historique est prise comme le maximum des durées
+d'historique nécessaire à chaque modèle d'effort
+- La plupart des modèles d'effort (gravité, hydrostatique, résistance à l'avancement...) n'ont pas besoin d'historique et donc ont une durée nécessaire
+de 0 seconde
+- les seuls modèle d'effort nécessitant un historique sont les [amortissements de radiation](#calcul-num%C3%A9rique-des-amortissements-de-radiation) (la longueur nécessaire est donnée par la clef `tau max`) et, éventuellement, les [efforts de manoeuvrabilitié](#mod%C3%A8les-de-man%C5%93uvrabilit%C3%A9),  lorsque l'on utilise des variables retardées telles que `x(t-23)`. Dans ce cas, la durée maximale d'historique nécessaire est obtenue en analysant l'expression formelle : par exemple, `M: 1E6*(x(t-6) + command1*x(t-5) + 2*b*y(t-4) + z(t-3)/a)` nécessitera au moins 6 secondes d'historique pour `x`, 4 pour `y` et 3 pour `z`.
+
+
+
 
 ### Grammaire
 
@@ -908,11 +967,11 @@ identifier          = alpha (alphanum | '_')*
 
 En 1937, l'ingénieur néerlandais L. Troost, alors employé du Maritime Research
 Institue Netherlands (MARIN) basé à Wageningen (Pays-Bas), créa les hélices
-Wageningen série B dont la forme est simple et les performances bonnes. Afin
-d'établir une base pour la conception d'hélices, il publia en 1938 puis en 1940
-une série de tests systématiques en eau libre de 120 hélices "série B", qui
-sont, à ce jour, les séries de test en eau libre les plus connus, bien que
-d'autres instituts de recherche en aient réalisés d'autres par la suite.
+Wageningen série B. Afin d'établir une base pour la conception d'hélices, il
+publia en 1938 puis en 1940 une série de tests systématiques en eau libre de 120
+hélices "série B", qui sont, à ce jour, les séries de test en eau libre les plus
+connus, bien que d'autres instituts de recherche en aient réalisés d'autres par
+la suite.
 
 En 1975, Oosterveld et Ossannen utilisèrent une régression statistique pour
 établir le modèle polynomial des hélices Wageningen présenté ici.
@@ -957,7 +1016,7 @@ avant (c'est-à-dire pour $n$ positif ou nul).
 
 ### Dérivation du modèle en eau libre
 
-Le modèle en eau libre est un modèle empirique dans la mesure où il ne dérive
+Le modèle en eau libre est un modèle empirique qui ne dérive
 pas des équations de Navier-Stokes. Le postulat est, qu'étant données les
 hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
 dépende :
@@ -1028,14 +1087,13 @@ exemple dans Carlton, pages 70, 72, 73 et 74.
 En outre, l'hélice accroît la [résistance à
 l'avancement](#r%C3%A9sistance-%C3%A0-lavancement)
 : en effet, elle diminue la pression à l'arrière du navire, ce qui augmente la
-poussée nécessaire pour la propulsion. L'hélice accélérant le fluide, il existe
-des frottements supplémentaires sur la coque. Pour prendre en compte ces
+poussée nécessaire pour la propulsion. L'hélice accélérant le fluide, elle induit une pression supplémentaire sur la coque. Pour prendre en compte ces
 phénomènes, on introduit le coefficient de succion $t$ tel que :
 
 $$t = 1 - \frac{R_v}{T_p}$$
 
-où $R_v$ est la résistance à l'avancement (en N) à une vitesse $V_S$, sans
-hélice, et $T_p$ est la somme des poussées de tous les actionneurs (également
+où $R_v$ est la résistance de remorquage (en N) à une vitesse $V_S$, sans
+hélice, et $T_p$ est la somme des poussées des hélices (également
 en N) lorsque le navire va à la vitesse $V_S$ en utilisant l'hélice.
 
 La poussée réelle $T_b$ est alors définie par :
@@ -1403,8 +1461,7 @@ Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
 
 Ce modèle décrit l'ensemble constitué d'une hélice Wageningen et d'un safran.
 Les deux sont utilisés ensemble car le modèle de safran n'a de sens que
-lorsqu'il est utilisé avec une hélice (il utilise les informations calculées sur
-le sillage).
+lorsqu'il est utilisé avec une hélice (il prend en compte le sillage de l'hélice pour calculer les efforts dûs au safran).
 
 ### Expression des efforts
 
