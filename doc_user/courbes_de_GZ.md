@@ -45,32 +45,56 @@ seuls efforts de
 la gravité et de l'hydrostatique. On dénote par $f$ la fonction qui à $X$
 associe la somme des efforts appliqués au système :
 
-$$f(X) = F_{\textrm{hs}}(X) + m\cdot \mathbf{g}$$
+
+```math
+f(X) = F_{\textrm{hs}}(X) + m\cdot \mathbf{g}
+```
+
 
 où $m$ désigne la masse du système et $\mathbf{g}$ est le vecteur
 accélération de la pesanteur.
 
 Lorsque le système est à l'équilibre, on a :
 
-$$f(X_{\textrm{eq}})=0$$
+
+```math
+f(X_{\textrm{eq}})=0
+```
+
 
 Pour résoudre cette équation, on peut par exemple utiliser la méthode de
 Newton-Raphson :
 
 ![](images/newton_raphson.svg)
 
-$$X_{n+1} = X_n - f'(X_n)^{-1}f(X_n)$$
 
-On note $$K(X) = \frac{\partial f}{\partial X}(X)$$
+```math
+X_{n+1} = X_n - f'(X_n)^{-1}f(X_n)
+```
 
-$$X_{n+1} = X_n - K^{-1}(X_n)f(X_n)$$
+
+On note 
+```math
+K(X) = \frac{\partial f}{\partial X}(X)
+```
+
+
+
+```math
+X_{n+1} = X_n - K^{-1}(X_n)f(X_n)
+```
+
 
 La matrice $K(X_n)$ est estimée numériquement en linéarisant $f$ autour de
 $X_n$. Soit $\Delta X$ un petit déplacement autour de $X_n$ et $\Delta F =
 (\Delta F_z, \Delta M_{\phi}, \Delta M_{\theta})$ la
 variation d'effort correspondante.
 
-$$K(X_n) \Delta X = \Delta F$$
+
+```math
+K(X_n) \Delta X = \Delta F
+```
+
 
 Pour $1\leq i\leq 3, \sum_{j=1}^3 k_{ij} \Delta x_j = \Delta F_i$.
 
@@ -79,7 +103,11 @@ l'axe $j$, on trouve :
 
 $k_{ij}\Delta x_j = \Delta F_i$ donc
 
-$$k_{ij} = \frac{\Delta F_i}{\Delta x_j}$$
+
+```math
+k_{ij} = \frac{\Delta F_i}{\Delta x_j}
+```
+
 
 En pratique, pour évaluer les termes de la matrice $K(X_n)$, on considère
 séparément trois petits déplacements autour de $X_n$ (un par axe) et l'on
@@ -103,15 +131,31 @@ délimité par le maillage. Le centre de carène est calculé de la façon suiva
 Soit $P_1,P_2,P_3$ les trois sommets d'un des triangles. Le volume élémentaire
 $dV$ associé à ce triangle est le déterminant des vecteurs $P_1,P_2,P_3$ :
 
-$$dV=\textrm{det}(P_1,P_2,P_3)$$
+
+```math
+dV=\textrm{det}(P_1,P_2,P_3)
+```
+
 
 Les coordonnées du centre (par rapport à l'origine choisie pour les tétraèdres) sont données par :
 
-$$x_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{x(P_1)+x(P_2)+x(P_3)}{4}dV$$
 
-$$y_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{y(P_1)+y(P_2)+y(P_3)}{4}dV$$
+```math
+x_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{x(P_1)+x(P_2)+x(P_3)}{4}dV
+```
 
-$$z_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{z(P_1)+z(P_2)+z(P_3)}{4}dV$$
+
+
+```math
+y_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{y(P_1)+y(P_2)+y(P_3)}{4}dV
+```
+
+
+
+```math
+z_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{z(P_1)+z(P_2)+z(P_3)}{4}dV
+```
+
 
 #### Autre méthode de calcul
 
@@ -119,7 +163,11 @@ Une méthode plus simple car ne nécessitant pas le calcul explicite du centre d
 carène est de projeter le vecteur $GB$ sur le vecteur $y$ du plan vertical
 attaché au corps :
 
-$$GZ = y\cdot GB$$
+
+```math
+GZ = y\cdot GB
+```
+
 
 or
 
@@ -143,20 +191,40 @@ l'effort hydrostatique.
 
 On pose
 
-$$GB_{\lambda} = \frac{M\times F}{\left\|F\right\|} + \lambda F$$
+
+```math
+GB_{\lambda} = \frac{M\times F}{\left\|F\right\|} + \lambda F
+```
+
 
 Dans le [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned), on a :
 
-$$F = \left[\begin{array}{c}0\\0\\f_z\end{array}\right]$$
-$$M = \left[\begin{array}{c}m_x\\m_y\\m_z\end{array}\right]$$
+
+```math
+F = \left[\begin{array}{c}0\\0\\f_z\end{array}\right]
+```
+
+
+```math
+M = \left[\begin{array}{c}m_x\\m_y\\m_z\end{array}\right]
+```
+
 
 donc
 
-$$GB_{\lambda} = \left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]$$
+
+```math
+GB_{\lambda} = \left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]
+```
+
 
 où l'on a noté
 
-$$M\times F = \left[\begin{array}{c}mf_x\\mf_y\\mf_z\end{array}\right]$$
+
+```math
+M\times F = \left[\begin{array}{c}mf_x\\mf_y\\mf_z\end{array}\right]
+```
+
 
 $$GZ_{\lambda} = y\cdot GB_{\lambda} =
 \left[\begin{array}{c}x\\y\\z\end{array}\right]\times

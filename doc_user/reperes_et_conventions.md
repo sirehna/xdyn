@@ -545,7 +545,11 @@ Elle figure dans la section `dynamics` et non dans la section `external forces`
 (bien qu'il s'agisse d'un modèle effort, proportionnel à l'accélération)
 parce que ce modèle d'effort fait l'objet d'un traitement particulier : il
 figure dans le membre de gauche de l'équation fondamentale de la dynamique
-$$M\ddot{X} = \sum F_i$$ pour des raisons de stabilité numérique (l'effort
+
+```math
+M\ddot{X} = \sum F_i
+```
+ pour des raisons de stabilité numérique (l'effort
 dépend des accélérations qui doivent justement être calculées par la résolution
 de l'équation fondamentale de la dynamique).
 La matrice de masses ajoutées n'est cependant pas équivalente à une masse supplémentaire, car
@@ -620,7 +624,11 @@ Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
 l'effort permettant de conserver les forçages, en d'autres termes il est
 possible de récupérer
 
-$$(M+M_a)\dot{X_{\textrm{blocked}}} - \sum F_i$$
+
+```math
+(M+M_a)\dot{X_{\textrm{blocked}}} - \sum F_i
+```
+
 
 Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
 corps s'appelle 'TestShip):
@@ -679,14 +687,26 @@ convention *z vers le haut* : par conséquent, il faut effectuer un changement d
 repère (rotation de $\pi$ autour de l'axe $X$) pour les mettre dans le repère
 d'X-DYN (*z vers le bas*). La matrice de changement de base est :
 
-$$R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]$$
+
+```math
+R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]
+```
+
 
 * Pour les vecteurs
-$$\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{X-DYN}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{X-DYN}}$$
+
+```math
+\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{X-DYN}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{X-DYN}}
+```
+
 * Pour les matrices (masses ajoutées, amortissements...)
   Si $M=((m_{ij}))$ désigne une matrice exprimée dans le repère AQUA+ et $M_d$ la même matrice
   exprimée dans le repère X-DYN, on a :
-  $$M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]$$
+  
+```math
+M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]
+```
+
 
 
 Par conséquent, toutes les matrices lues depuis le fichier HDB (masses ajoutées
@@ -705,7 +725,11 @@ n'est pas identique sur tous les axes (mathématiquement, la matrice peut donc
 
 Soit
 
-$$S(\lambda)=\left[\begin{array}{ccc} 0&-\lambda_3&\lambda_2\\\lambda_3&0&-\lambda_1\\-\lambda_2&\lambda_1&0\end{array}\right]_{\mathcal{R_0}}$$
+
+```math
+S(\lambda)=\left[\begin{array}{ccc} 0&-\lambda_3&\lambda_2\\\lambda_3&0&-\lambda_1\\-\lambda_2&\lambda_1&0\end{array}\right]_{\mathcal{R_0}}
+```
+
 
 la matrice du produit vectoriel par $\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]$ : $\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a$
 
@@ -713,7 +737,11 @@ Pour effectuer un transport d'une matrice 6x6 en coordonnées généralisées
 (masse, masse ajoutée ou amortissement) d'un point $A$ vers un point $B$, on
 utilise :
 
-$$M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]$$
+
+```math
+M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]
+```
+
 
 Cete formule est une généralisation de la formule de Huyguens.
 
@@ -721,7 +749,11 @@ En combinant avec un changement de base (de la base $a$ vers la base $b$) par
 la matrice de rotation ${}^a R_b$ de $b$ vers $a$ on obtient l'expression plus
 générale :
 
-$${}^bM_B=\left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]^\top {}^aM_A \left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]$$
+
+```math
+{}^bM_B=\left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]^\top {}^aM_A \left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]
+```
+
 
 Cette formule permet d'effectuer à la fois le transport d'une matrice d'inertie
 généralisée 6x6 d'un point $A$ à un point $B$ et le changement de son repère

@@ -71,7 +71,11 @@ de Poincaré) que la vitesse dérive d'un potentiel que l'on appelle
 $\phi:(x,y,z,t)\mapsto\phi(x,y,z,t)$. Par définition, la vitesse en tout
 point de l'écoulement est donc donnée par :
 
-$$V(x,y,z,t) = \textrm{grad}{\phi(x,y,z,t)}$$
+
+```math
+V(x,y,z,t) = \textrm{grad}{\phi(x,y,z,t)}
+```
+
 
 La pression $p$ vérifie l'équation de Bernoulli :
 
@@ -86,7 +90,11 @@ $$p_0 + \rho g z -\rho\frac{\partial\phi}{\partial t} +
 
 soit
 
-$$g z -\frac{\partial\phi}{\partial t} + \frac{1}{2} V\cdot V = 0$$
+
+```math
+g z -\frac{\partial\phi}{\partial t} + \frac{1}{2} V\cdot V = 0
+```
+
 
 Le terme $\rho g z$ représente la pression hydrostatique et le terme
 $-\rho\frac{\partial\phi}{\partial t}$ est la pression dynamique.
@@ -98,7 +106,11 @@ On peut définir la fonction $F(x,y,z,t)=z-\eta(x,y,t)$
 Pour une particule sur la surface libre, $F(x,y,z,t)=0$ ce qui implique que sa
 dérivée particulaire est nulle :
 
-$$\frac{DF}{Dt} = \frac{\partial F}{\partial t} + V\cdot \nabla F = 0$$
+
+```math
+\frac{DF}{Dt} = \frac{\partial F}{\partial t} + V\cdot \nabla F = 0
+```
+
 
 soit
 
@@ -110,8 +122,16 @@ C'est la deuxième condition de surface libre.
 
 En linéarisant ces deux conditions de surface libre, on obtient :
 
-$$\frac{\partial \eta}{\partial t} = \frac{\partial\phi}{\partial z}$$
-$$g\eta - \frac{\partial\phi}{\partial t} = 0$$
+
+```math
+\frac{\partial \eta}{\partial t} = \frac{\partial\phi}{\partial z}
+```
+
+
+```math
+g\eta - \frac{\partial\phi}{\partial t} = 0
+```
+
 
 Par ailleurs, l'eau étant supposée incompressible, $$\nabla\cdot V=
 \frac{\partial^2\phi}{\partial x^2} +  \frac{\partial^2\phi}{\partial y^2} +
@@ -144,13 +164,21 @@ qui est le potentiel utilisé par le logiciel AQUA+.
 
 Il existe une relation entre $k$ et $\omega$, appelée relation de dispersion, et qui s'écrit :
 
-$$\omega^2 = g\cdot k \cdot \tanh(k\cdot h)$$
+
+```math
+\omega^2 = g\cdot k \cdot \tanh(k\cdot h)
+```
+
 
 où $h$ désigne la profondeur d'eau et $g$ l'accélération de la pesanteur.
 
 En profondeur infinie ($k\cdot h > 3$), cette relation tend vers :
 
-$$\omega^2 \sim g\cdot k$$
+
+```math
+\omega^2 \sim g\cdot k
+```
+
 
 ### Élévation de la houle
 
@@ -167,31 +195,55 @@ L'élévation $\eta$ de la houle en un point $(x,y)$ est un signal temporel
 $\eta(t)$. Par définition du plan $z=0$ (élévation moyenne de la houle), ce signal $\eta$ est centré.
 On le suppose également stationnaire, ce qui implique que sa fonction d'auto-corrélation $R$ ne dépend que de $\tau$:
 
-$$R(\tau)=\mathbf{E} (\eta(t)\eta(t+\tau))$$
+
+```math
+R(\tau)=\mathbf{E} (\eta(t)\eta(t+\tau))
+```
+
 
 La densité spectrale de puissance $G$ de $\eta$ est égale à la transformée de
 Fourier de sa fonction d'auto-corrélation $R$. Comme $R$ est paire et réelle,
 $G$ aussi et on ne considère usuellement que la partie positive (one-sided) en
 définissant la densité spectrale $S$ telle que :
 
-$$S(\omega)=\left\{\begin{array}{cc}2G(\omega),&\omega\geq 0\\0,&\omega<0\end{array}\right.$$
+
+```math
+S(\omega)=\left\{\begin{array}{cc}2G(\omega),&\omega\geq 0\\0,&\omega<0\end{array}\right.
+```
+
 
 On a :
 
-$$R(\tau) = \frac{1}{2}  \sum_{i=1}^{nfreq} A(\omega_i)^2 \cos(\omega_i \tau)$$
+
+```math
+R(\tau) = \frac{1}{2}  \sum_{i=1}^{nfreq} A(\omega_i)^2 \cos(\omega_i \tau)
+```
+
 
 or on a également :
 
-$$R(\tau) = \int_0^\infty S(\omega) \cos(\omega\tau)d\omega$$
+
+```math
+R(\tau) = \int_0^\infty S(\omega) \cos(\omega\tau)d\omega
+```
+
 
 d'où, par identification :
 
-$$A(\omega_i)^2=2 S(\omega_i)d\omega_i$$
+
+```math
+A(\omega_i)^2=2 S(\omega_i)d\omega_i
+```
+
 
 On peut généraliser cette formulation en faisant intervenir l'étalement
 directionnel $D(\gamma)$ de la houle :
 
-$$A(\omega,\gamma)^2 = 2 S(\omega)d\omega D(\gamma) d\gamma$$
+
+```math
+A(\omega,\gamma)^2 = 2 S(\omega)d\omega D(\gamma) d\gamma
+```
+
 
 On obtient, en définitive :
 
@@ -206,7 +258,11 @@ incidente), utilisée par le modèle de
 la pression totale moins la pression hydrostatique $\rho g z$ et son
 expression se déduit de la première condition de surface libre linéarisée :
 
-$$p_{\textrm{dyn}} = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
+
+```math
+p_{\textrm{dyn}} = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}
+```
+
 
 soit
 
@@ -220,7 +276,11 @@ $$p_{\textrm{dyn}} = \rho\cdot g
 
 Lorsque la profondeur $h$ est très grande devant $z$, les cosinus hyperboliques sont équivalents à des exponentielles :
 
-$$\cosh x\sim_{x\infty} \frac{e^x}{2}$$
+
+```math
+\cosh x\sim_{x\infty} \frac{e^x}{2}
+```
+
 
 
 on obtient donc :
@@ -238,31 +298,67 @@ Le raisonnement s'exprime simplement pour une seule fréquence et une seule dire
 
 Pour une seule fréquence et une seule direction, on a :
 
-$$p_{\textrm{tot}} = \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta$$
+
+```math
+p_{\textrm{tot}} = \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta
+```
+
 
 Sous la surface libre, c'est-à-dire pour $z>0$, on a $h-z<h$ donc
-$$0<\frac{\cosh(k(h-z))}{\cosh(k h)}\leq 1$$
+
+```math
+0<\frac{\cosh(k(h-z))}{\cosh(k h)}\leq 1
+```
+
 
 donc
 
-$$ \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta \geq \rho g \left(z - \eta\right)$$
 
-or pour le calcul, on considère toujours la partie immergée de la coque donc $z\geq\eta$, d'où $$p_{\textrm{tot}} \geq 0$$
+```math
+ \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta \geq \rho g \left(z - \eta\right)
+```
+
+
+or pour le calcul, on considère toujours la partie immergée de la coque donc $z\geq\eta$, d'où 
+```math
+p_{\textrm{tot}} \geq 0
+```
+
 
 Au-dessus de la surface libre, on a $\eta\leq z\leq 0$ donc $h-z\geq h$ et
 
-$$ \frac{\cosh(k(h-z))}{\cosh(k h)}\geq 1$$
+
+```math
+ \frac{\cosh(k(h-z))}{\cosh(k h)}\geq 1
+```
+
 
 Or
 
-$$p_{\textrm{tot}} = \rho g \cdot \left(z -  \frac{\cosh(k(h-z))}{\cosh(k h)} \eta\right)\geq \rho g \eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)$$
 
-Comme $$1-  \frac{\cosh(k(h-z))}{\cosh(k h)} \leq 0$$ et $\eta\leq z \leq 0$ (on est sous l'eau),
-$$\eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)\geq 0$$
+```math
+p_{\textrm{tot}} = \rho g \cdot \left(z -  \frac{\cosh(k(h-z))}{\cosh(k h)} \eta\right)\geq \rho g \eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)
+```
+
+
+Comme 
+```math
+1-  \frac{\cosh(k(h-z))}{\cosh(k h)} \leq 0
+```
+ et $\eta\leq z \leq 0$ (on est sous l'eau),
+
+```math
+\eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)\geq 0
+```
+
 
 et donc
 
-$$p_{\textrm{tot}}\geq 0$$
+
+```math
+p_{\textrm{tot}}\geq 0
+```
+
 
 
 
@@ -275,7 +371,11 @@ On peut le généraliser pour plusieurs fréquences et plusieurs directions.
 
 En notant
 
-$$a_{i,j} = A(\omega_i, \gamma_j) = \sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}$$
+
+```math
+a_{i,j} = A(\omega_i, \gamma_j) = \sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
+```
+
 
 le potentiel de houle irrégulière s'écrit:
 
@@ -438,15 +538,27 @@ de mer partiellement ou totalement développés a été proposée en 1959 par Br
 Initialement, la dépendance à la période de la houle était mise en exergue
 et s'exprimait sous la forme :
 
-$$S(T)=\alpha\cdot T^3\cdot e^{-\beta T^4}$$
+
+```math
+S(T)=\alpha\cdot T^3\cdot e^{-\beta T^4}
+```
+
 
 Aujourd'hui, on préfère une formulation fréquentielle :
 
-$$ S\left(\omega=\frac{2\pi}{T}\right) = \frac{A}{\omega^5}\cdot e^{-\frac{B}{\omega^4}}$$
+
+```math
+ S\left(\omega=\frac{2\pi}{T}\right) = \frac{A}{\omega^5}\cdot e^{-\frac{B}{\omega^4}}
+```
+
 
 Le moment d'ordre 0 permet d'obtenir une relation entre $A$ et $B$ :
 
-$$m_0 = \int_0^\infty S(\omega) d\omega = \left[-e^{-\frac{B}{\omega^4}}\right]^\infty_0=\frac{A}{4B}$$
+
+```math
+m_0 = \int_0^\infty S(\omega) d\omega = \left[-e^{-\frac{B}{\omega^4}}\right]^\infty_0=\frac{A}{4B}
+```
+
 
 d'où
 
@@ -454,22 +566,38 @@ $A=4m_0 B$
 
 Par ailleurs, la dérivée première du spectre s'annule pour une période $\omega_p$ :
 
-$$ \frac{d}{d\omega}S(\omega) = \frac{A}{\omega^6}e^{-\frac{B}{\omega^4}}\left(\frac{4B}{\omega^4}-5\right)$$
+
+```math
+ \frac{d}{d\omega}S(\omega) = \frac{A}{\omega^6}e^{-\frac{B}{\omega^4}}\left(\frac{4B}{\omega^4}-5\right)
+```
+
 
 d'où
 
-$$B=\frac{5}{4}\omega_p^4$$
+
+```math
+B=\frac{5}{4}\omega_p^4
+```
+
 
 et
 
-$$\omega_p=\left(\frac{4}{5}B\right)^{1/4}$$
+
+```math
+\omega_p=\left(\frac{4}{5}B\right)^{1/4}
+```
+
 
 De plus, on constate empiriquement que les hauteurs de houle sont
 souvent distribuées suivant une loi de Rayleigh (loi de la norme d'un vecteur dont les
 deux composantes suivent une loi normale) de variance $\sigma^2=4 m_0$ et, sous
 cette hypothèse, la hauteur de houle $H_S$ correspondant à deux écarts-types est :
 
-$$H_S = 2\sigma = 4\sqrt{m_0}$$
+
+```math
+H_S = 2\sigma = 4\sqrt{m_0}
+```
+
 
 En outre,
 
@@ -477,8 +605,16 @@ $\omega_p=\frac{2\pi}{T_p}$
 
 On peut ainsi exprimer $A$ et $B$ en fonction de $H_S$ et $T_p$ :
 
-$$A=\frac{5\pi^4H_S^2}{T_p^ 4}$$
-$$B=\frac{20\pi^4}{T_p^4}$$
+
+```math
+A=\frac{5\pi^4H_S^2}{T_p^ 4}
+```
+
+
+```math
+B=\frac{20\pi^4}{T_p^4}
+```
+
 
 Le signal temporel correspondant a l'allure suivante :
 
@@ -507,7 +643,11 @@ nombre d'enregistrements en Atlantique Nord. Seuls les enregistrements pour des
 mers complètement développés ayant été considérés, c'est un spectre adapté à de
 tels états de mer. Il s'écrit sous la forme :
 
-$$S(\omega) = \frac{\alpha\cdot g^2}{\omega^5} \exp{\left(-\beta\left[\frac{g}{U_{19.5}\omega}\right]^4\right)}$$
+
+```math
+S(\omega) = \frac{\alpha\cdot g^2}{\omega^5} \exp{\left(-\beta\left[\frac{g}{U_{19.5}\omega}\right]^4\right)}
+```
+
 
 où $\alpha = 8.1\cdot 10^{-3}$ désigne la constante de Phillips, $g$ l'accélération de
 la gravité terrestre, $U_{19.5}$ la vitesse du vent à 19.5 mètres au-dessus du
@@ -515,30 +655,54 @@ niveau de la mer et $\beta$ vaut 0.74.
 
 Ce spectre est un cas particulier du spectre de Bretschneider en prenant
 
-$$A=8.1\cdot 10^{-3}\cdot g^2$$
+
+```math
+A=8.1\cdot 10^{-3}\cdot g^2
+```
+
 et
-$$B=0.74\left(\frac{g}{U_{19.5}}\right)^4$$
+
+```math
+B=0.74\left(\frac{g}{U_{19.5}}\right)^4
+```
+
 
 Par la suite, les données de Pierson et Moskowitz ont été ré-analysées pour
 établir la relation empirique suivante entre la vitesse du vent et la pulsation
 modale de la houle :
 
-$$0.74 \left(\frac{g}{U_{19.5}}\right)^4=\frac{5}{4}\omega_0^4$$
+
+```math
+0.74 \left(\frac{g}{U_{19.5}}\right)^4=\frac{5}{4}\omega_0^4
+```
+
 
 d'où
 
-$$\omega_p=0.877\frac{g}{U_{19.5}}$$
+
+```math
+\omega_p=0.877\frac{g}{U_{19.5}}
+```
+
 
 On peut obtenir une expression de la période de pic $\omega_p$ uniquement en
 fonction de $H_S$ en se servant des relations suivantes, établies pour le
 spectre de Bretschneider :
 
-$m_0=\frac{A}{4B}$ et $$\omega_p=\left(\frac{4}{5}B\right)^{1/4}$$
+$m_0=\frac{A}{4B}$ et 
+```math
+\omega_p=\left(\frac{4}{5}B\right)^{1/4}
+```
+
 
 
 En supposant que les hauteurs de houle suivent une distribution de Rayleigh, on a:
 
-$$H_S=4\sqrt{m_0}=4\sqrt{\frac{A}{4B}}$$
+
+```math
+H_S=4\sqrt{m_0}=4\sqrt{\frac{A}{4B}}
+```
+
 
 d'où
 
@@ -548,7 +712,11 @@ $\omega_p=\left(\frac{4}{5}B\right)^{1/4}=\left(\frac{4A}{5H_S^2}\right)^{1/4}=\
 
 soit
 
-$$\omega_p=0.4\sqrt{\frac{g}{H_S}}$$
+
+```math
+\omega_p=0.4\sqrt{\frac{g}{H_S}}
+```
+
 
 Ce spectre était le spectre de référence pendant de nombreuses années mais
 il n'est valable que pour des états de mer complètement développés et des mers
@@ -581,15 +749,27 @@ des vagues sur un fetch limité d'une part, et, d'autre part, l'atténuation des
 vagues par petits fonds. Ce spectre est souvent utilisé par l'industrie
 offshore en mer du Nord.
 
-$$S(\omega)=(1-0.287 \log(\gamma))\frac{5}{16}\frac{\alpha}{\omega}H_S^2 e^{-1.25\left(\frac{\omega_0}{\omega}\right)^4}\gamma^r$$
+
+```math
+S(\omega)=(1-0.287 \log(\gamma))\frac{5}{16}\frac{\alpha}{\omega}H_S^2 e^{-1.25\left(\frac{\omega_0}{\omega}\right)^4}\gamma^r
+```
+
 
 avec
 
-$$r=e^{-0.5\left(\frac{\omega-\omega_0}{\sigma\omega_0}\right)^2}$$
+
+```math
+r=e^{-0.5\left(\frac{\omega-\omega_0}{\sigma\omega_0}\right)^2}
+```
+
 
 et
 
-$$\sigma=\left\{\begin{eqnarray}0.07,\omega\leq\omega_0\\0.09,\omega>\omega_0\end{eqnarray}\right.$$
+
+```math
+\sigma=\left\{\begin{eqnarray}0.07,\omega\leq\omega_0\\0.09,\omega>\omega_0\end{eqnarray}\right.
+```
+
 
 Ce spectre a l'allure suivante :
 
@@ -626,7 +806,11 @@ cette angle (outre la taille maximale des flottants).
 ### Cos2s
 
 L'étalement est donné par :
-$$\gamma\mapsto \cos^{2s}\left({\gamma-\gamma_0}\right)$$
+
+```math
+\gamma\mapsto \cos^{2s}\left({\gamma-\gamma_0}\right)
+```
+
 
 où $\gamma_0$ est la direction de propagation, dans le
 repère NED (0° correspond à des vagues se propageant du Sud vers le Nord, 45° à
@@ -735,7 +919,11 @@ méthodes reviennent à étirer l'axe $z$ (d'où le nom de stretching). Ce qui s
 Outre l'absence de stretching, le modèle le plus simple revient à bloquer la
 vitesse orbitale au-dessus du niveau de la mer $z=0$ :
 
-$$\forall z\leq 0, u(x,y,z,t) = u(x,y,0,t)$$
+
+```math
+\forall z\leq 0, u(x,y,z,t) = u(x,y,0,t)
+```
+
 
 On obtient ainsi une rupture du profil de vitesse, à la fois inesthétique et
 peu physique. Ce modèle n'est pas implémenté dans X-DYN.
@@ -744,7 +932,11 @@ peu physique. Ce modèle n'est pas implémenté dans X-DYN.
 
 Ce modèle revient à prolonger le modèle de vitesse par une tangente :
 
-$$u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)$$
+
+```math
+u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)
+```
+
 
 Ce modèle peut être utilisé dans X-DYN en fixant `h` à la profondeur d'eau
 `depth` et `delta: 1`.
@@ -767,22 +959,42 @@ f(z)
 
 avec
 
-$$f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}$$
+
+```math
+f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}
+```
+
 
 On cherche donc une fonction $g$ telle que :
 
-$$g(z=\eta)=f(0)$$
-$$g(z=h)=f(h)$$
+
+```math
+g(z=\eta)=f(0)
+```
+
+
+```math
+g(z=h)=f(h)
+```
+
 
 On peut construire une telle fonction en prenant
 
-$$g(z) = f(z'(z))$$
+
+```math
+g(z) = f(z'(z))
+```
+
 
 avec $z'(\eta)=0$ et $z'(h)=h$.
 
 On peut par exemple choisir une fonction $z\mapsto z'$ linéaire :
 
-$$z'(z)=\frac{h}{h-\eta}(z-\eta)$$
+
+```math
+z'(z)=\frac{h}{h-\eta}(z-\eta)
+```
+
 
 ce qui donne le profil de vitesse (projetée ici sur l'axe $X$ du repère body) :
 
@@ -815,7 +1027,11 @@ l'utiliser dans X-DYN en fixant $h$ à la profondeur de l'eau `depth` et
 Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la
 fonction $f$
 
-$$f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}$$
+
+```math
+f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}
+```
+
 
 On remplace $\cosh(k\cdot h)$ par $\cosh(k\cdot (h+\eta(x,y,t)))$.
 Sur l'axe $X$ du repère body, par exemple, on obtient ainsi le profil :
@@ -1045,7 +1261,11 @@ incompressible, non-visqueux et irrotationnel. Sous ces hypothèses, la conditio
 de continuité se ramène à une simple équation de Laplace :
 
 
-$$\nabla \phi^2 + \frac{\partial^2 \phi}{\partial z^2} = 0$$ dans le domaine
+
+```math
+\nabla \phi^2 + \frac{\partial^2 \phi}{\partial z^2} = 0
+```
+ dans le domaine
 fluide $\mathcal{D}$, $\nabla$ désignant l'opérateur gradient horizontal.
 
 Sur la surface libre, le potentiel de vitesse $\phi^s(x,t) =
@@ -1093,7 +1313,11 @@ repliement de spectre peuvent survenir. Pour limiter cet effet, il faut bien
 choisir le nombre de point $N_d$ en fonction de paramètre d'anti-aliasing $p$
 (fréquence de Nyquist) :
 
-$$N_d = \frac{p+1}{2}N$$
+
+```math
+N_d = \frac{p+1}{2}N
+```
+
 
 L'anti-aliasing complet est obtenu pour $p=M$. Il est recommandé de l'utiliser
 pour éviter tout problème de recouvrement.
@@ -1138,14 +1362,22 @@ $$\sigma = \left\{\begin{array}{ccc} 0.07 & \text{ for } & \omega \lt \omega_p
 
 $G(\theta)$ désigne l'étalement directionnel :
 
-$$G(\theta) = \frac{1}{\beta} \left[ \cos \left( \frac{\pi \theta}{2 \beta} \right) \right]^2$$
+
+```math
+G(\theta) = \frac{1}{\beta} \left[ \cos \left( \frac{\pi \theta}{2 \beta} \right) \right]^2
+```
+
 
 Pour éviter les instabilités dues à la transition entre le modèle linéaire
 initial et les calculs non-linéaires d'HOS, une fonction de relaxation
 exponentielle est utilisée. La période de transition est définie par sa durée
 $T_a$ et un paramètre $n$ :
 
-$$f(t) = 1 - \exp \left[ - \left( \frac{t}{T_a} \right)^n \right]$$
+
+```math
+f(t) = 1 - \exp \left[ - \left( \frac{t}{T_a} \right)^n \right]
+```
+
 
 
 #### Post-traitement
@@ -1300,20 +1532,36 @@ faites dans X-DYN :
 
 La transformation NED $\rightarrow$ HOS est donnée par :
 
-$${}^{\mbox{HOS}}T_{\mbox{NED}} = R_X(\pi)\cdot R_Z(\theta)$$
+
+```math
+{}^{\mbox{HOS}}T_{\mbox{NED}} = R_X(\pi)\cdot R_Z(\theta)
+```
+
 
 où $\theta$ désigne l'angle de propagation renseigné dans le fichier YAML
 (clef `waves propagating to`).
 
 On a donc :
 
-$${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]$$
 
-$${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
+```math
+{}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]
+```
+
+
+
+```math
+{}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]
+```
+
 
 et la transformation inverse (HOS $\rightarrow$ NED) est égale à la transformation directe :
 
-$${}^{\mbox{NED}}T_{\mbox{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
+
+```math
+{}^{\mbox{NED}}T_{\mbox{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]
+```
+
 
 ## Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47

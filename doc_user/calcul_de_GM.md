@@ -23,7 +23,11 @@ autre modèle hydrostatique.
 Le modèle évalue GZ pour l'état courant et modifie ensuite l'angle $\theta$
 d'une valeur d$\theta$ spécifiée en paramètre puis approche GM par
 
-$$GM = \frac{GZ(\theta+d\theta)-GZ(\theta)}{d\theta}$$
+
+```math
+GM = \frac{GZ(\theta+d\theta)-GZ(\theta)}{d\theta}
+```
+
 
 Voici un exemple de paramétrisation :
 
@@ -65,7 +69,11 @@ le point métacentrique est à l'intersection des droites d'action des efforts
 hydrostatiques (et non plus simplement de leur projection). On peut alors
 écrire :
 
-$$GZ = GM\sin(\alpha)$$ où $\alpha$ désigne l'angle de la rotation isocarène.
+
+```math
+GZ = GM\sin(\alpha)
+```
+ où $\alpha$ désigne l'angle de la rotation isocarène.
 
 Lorsque l'angle d'inclinaison $\alpha$ tend vers 0, le point métacentrique $H$
 tend vers un point appelé métacentre.
@@ -159,29 +167,57 @@ $X_1=(z_2,\phi_1,\theta_1)$ sont isocarènes.
 
 Le couple de rappel $M_r$ est par définition :
 
-$$M_r = F_{\textrm{HS}} \cdot GZ = F_{\textrm{HS}} \cdot GM\cdot \sin(\theta)$$
+
+```math
+M_r = F_{\textrm{HS}} \cdot GZ = F_{\textrm{HS}} \cdot GM\cdot \sin(\theta)
+```
+
 
 Pour de petites variations isocarènes de $\theta$, le volume ne variant pas,
 $F_{\textrm{HS}}$ est constante donc
 
-$$dMr = F_{\textrm{HS}}\cdot(\sin(\theta)dGM + GM\cdot\cos(\theta)d\theta)$$
 
-or $$dMr = F_{\textrm{HS}}\cdot dGZ$$
+```math
+dMr = F_{\textrm{HS}}\cdot(\sin(\theta)dGM + GM\cdot\cos(\theta)d\theta)
+```
+
+
+or 
+```math
+dMr = F_{\textrm{HS}}\cdot dGZ
+```
+
 d'où
 
-$$dGZ = \sin(\theta)dGM + GM\cdot\cos(\theta)d\theta$$
+
+```math
+dGZ = \sin(\theta)dGM + GM\cdot\cos(\theta)d\theta
+```
+
 
 Comme $GM$ est constant,
 
-$$dGZ \sim GM d\theta$$
+
+```math
+dGZ \sim GM d\theta
+```
+
 
 donc
 
-$$GM\sim \frac{dGZ}{d\theta}$$
+
+```math
+GM\sim \frac{dGZ}{d\theta}
+```
+
 
 On a également le théorème de Bouguer :
 
-$$GM\sim \frac{I_{Oxx}}{V}$$
+
+```math
+GM\sim \frac{I_{Oxx}}{V}
+```
+
 
 ### Extension : utilisation du GM en dynamique
 
@@ -189,7 +225,11 @@ Pour utiliser le concept de métacentre pour un navire réel sur houle,
 il faut s'affranchir des hypothèses précédentes (planéité de la surface libre,
 petites rotations isocarènes, symétries). On pose alors comme définition (et non plus un approximation au premier ordre) :
 
-$$GM=\frac{dGZ}{d\theta}$$
+
+```math
+GM=\frac{dGZ}{d\theta}
+```
+
 
 Définit ainsi, le $GM$ donne donc une indication sur la stabilité du couple de rappel
 hydrostatique : plus le $GM$ est important pour un volume de carène donné, plus

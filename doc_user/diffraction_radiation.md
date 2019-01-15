@@ -14,7 +14,11 @@ de Poincaré) que la vitesse dérive d'un potentiel que l'on appelle
 $\Phi_T:(x,y,z,t)\mapsto\Phi_T(x,y,z,t)$. Par définition, la vitesse en tout
 point de l'écoulement est donc donnée par :
 
-$$V(x,y,z,t) = \textrm{grad}{\Phi_T(x,y,z,t)}$$
+
+```math
+V(x,y,z,t) = \textrm{grad}{\Phi_T(x,y,z,t)}
+```
+
 
 Le potentiel de la houle incidente est connu si l'on se place dans le cadre de
 la théorie linéaire de Stokes. On désignera par $\Phi_I$ ce potentiel. On a en
@@ -31,7 +35,11 @@ la pesanteur.
 
 On pose :
 
-$$\Phi_P := \Phi_T-\Phi_I$$
+
+```math
+\Phi_P := \Phi_T-\Phi_I
+```
+
 
 que l'on nomme "potentiel d'interaction entre la houle et l'obstacle". C'est ce
 potentiel qui nous intéresse ici puisque c'est la seule indéterminée.
@@ -39,7 +47,11 @@ potentiel qui nous intéresse ici puisque c'est la seule indéterminée.
 On contraint $\Phi_P$ à être une fonction harmonique du temps de pulsation
 $\omega$ :
 
-$$\Phi_P(x,y,z,t) = \Re{\Psi_P e^{-i\omega t}}$$
+
+```math
+\Phi_P(x,y,z,t) = \Re{\Psi_P e^{-i\omega t}}
+```
+
 
 
 ## Conditions satisfaites par le potentiel d'interaction entre la houle et l'obstacle
@@ -70,7 +82,11 @@ Le potentiel inconnu $\Phi_P$ doit satisfaire les conditions suivantes :
 ## Résolution
 
 Si l'on suppose l'obstacle fixe, la condition (5) s'écrit :
-$$ \frac{\partial \Psi_P}{\partial n} = - \frac{\partial \Psi_I}{\partial n}$$
+
+```math
+ \frac{\partial \Psi_P}{\partial n} = - \frac{\partial \Psi_I}{\partial n}
+```
+
 Cette condition traduit la réflexion (ou diffraction) de la houle incidente sur
 l'obstacle fixe. Un potentiel $\Psi_{\textrm{PD}}$ vérifiant les conditions (1) à
 (4) et la condition de diffraction est appelé potentiel de diffraction.
@@ -101,8 +117,16 @@ t}\right]$$
 
 Les efforts hydrodynamiques s'écrivent :
 
-$$F_{\textrm{hd}} = \rho \frac{d}{dt} \int_{C}\Phi_T dS$$
-$$= \rho \frac{d}{dt} \int_{C}\Phi_I+\Phi_{\textrm{PD}}+\Phi_{\textrm{PR}} dS$$
+
+```math
+F_{\textrm{hd}} = \rho \frac{d}{dt} \int_{C}\Phi_T dS
+```
+
+
+```math
+= \rho \frac{d}{dt} \int_{C}\Phi_I+\Phi_{\textrm{PD}}+\Phi_{\textrm{PR}} dS
+```
+
 
 On appelle $F_{\textrm{FK}}=\rho \frac{d}{dt} \int_{C}\Phi_I dS$ "efforts de
 Froude-Krylov" et $F_D = \rho \frac{d}{dt} \int_{C}\Phi_{\textrm{PD}} dS$ "efforts de
@@ -110,17 +134,33 @@ diffraction". Ensemble ils constituent les efforts d'excitation de la houle
 $F_E$. Les efforts $\rho \frac{d}{dt} \int_{C}\Phi_{\textrm{PR}} dS$ sont nommés
 "efforts de radiation" et sont désignés par $F_R$. On a donc :
 
-$$F_{\textrm{hd}} = F_E + F_R$$
+
+```math
+F_{\textrm{hd}} = F_E + F_R
+```
+
 
 ## Calcul des efforts de radiation
 
 On a, pour l'axe $k$ :
 
-$$ F_{\textrm{R}_k} = \rho \frac{\partial}{\partial t} \int_C \Phi_{\textrm{PR}}n_k dS$$
 
-$$= \rho \frac{\partial}{\partial t} \Re \int_C \sum_j \Psi_{\textrm{PR}_j} f_je^{-i\omega t} n_k dS$$
+```math
+ F_{\textrm{R}_k} = \rho \frac{\partial}{\partial t} \int_C \Phi_{\textrm{PR}}n_k dS
+```
 
-$$= \rho \Re \int_C \sum_j -i\omega  \Psi_{\textrm{PR}_j} f_j e^{-i\omega t} n_k dS$$
+
+
+```math
+= \rho \frac{\partial}{\partial t} \Re \int_C \sum_j \Psi_{\textrm{PR}_j} f_je^{-i\omega t} n_k dS
+```
+
+
+
+```math
+= \rho \Re \int_C \sum_j -i\omega  \Psi_{\textrm{PR}_j} f_j e^{-i\omega t} n_k dS
+```
+
 
 On décompose $\Psi_{\textrm{PR}_j}$ en sa partie réelle et sa partie imaginaire :
 $\Psi_{\textrm{PR}_j} = \Psi_j^R + i \Psi_j^I$
@@ -134,11 +174,19 @@ f_j e^{-i\omega t} \Psi_j^I n_k dS$$
 
 On remarque que
 
-$$-i\omega f_j e^{-i\omega t} \Psi_j^R = \frac{\partial}{\partial t}(f_je^{-i\omega t})$$
+
+```math
+-i\omega f_j e^{-i\omega t} \Psi_j^R = \frac{\partial}{\partial t}(f_je^{-i\omega t})
+```
+
 
  donc
 
-$$ F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \omega f_j e^{-i\omega t} \Psi_j^I + \sum_j \frac{\partial}{\partial t} f_j e^{-i\omega t}\Psi_j^R n_k dS$$
+
+```math
+ F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \omega f_j e^{-i\omega t} \Psi_j^I + \sum_j \frac{\partial}{\partial t} f_j e^{-i\omega t}\Psi_j^R n_k dS
+```
+
 
 $$ = \rho\omega \sum_j\Re (f_j e^{-i\omega t})\int_C \Psi_j^I
 n_k dS + \rho \sum_j \frac{d}{dt}\Re(f_j
@@ -152,7 +200,11 @@ $$ F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I n_k dS + \rho \sum_j
 Or d'après la condition (5) écrite pour les potentiels élémentaires de
 rayonnement,
 
-$$n_k = \frac{\partial \Psi_k^R}{\partial n}$$
+
+```math
+n_k = \frac{\partial \Psi_k^R}{\partial n}
+```
+
 
 On a donc :
 
@@ -162,9 +214,17 @@ $$ F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
 
 On pose :
 
-$${M_A}_{jk}(\omega) = -\rho \int_C \Psi_j^R \frac{\partial \Psi_k^R}{\partial n} dS \textrm{ (en kg)}$$
 
-$${B_r}_{jk}(\omega) = -\rho \omega \int_C \Psi_j^I \frac{\partial \Psi_k^R}{\partial n} dS \textrm{ (en kg/s)}$$
+```math
+{M_A}_{jk}(\omega) = -\rho \int_C \Psi_j^R \frac{\partial \Psi_k^R}{\partial n} dS \textrm{ (en kg)}
+```
+
+
+
+```math
+{B_r}_{jk}(\omega) = -\rho \omega \int_C \Psi_j^I \frac{\partial \Psi_k^R}{\partial n} dS \textrm{ (en kg/s)}
+```
+
 
 On appelle $M_A$ matrice des masses ajoutées (qui vient de ce que le solide
 déplace le fluide) et $B_r$ matrice des
@@ -199,7 +259,11 @@ $$2Ec = \rho\int_{\omega} (\nabla \Phi)^2 dV = \rho \int_{\partial \Omega} \Phi
 
 Lorsque l'on écrit le bilan des efforts appliqués au solide, on a :
 
-$$(M+M_A(\omega)) \ddot{X} + B_r(\omega) \dot{X} = F_{\textrm{autres}}$$
+
+```math
+(M+M_A(\omega)) \ddot{X} + B_r(\omega) \dot{X} = F_{\textrm{autres}}
+```
+
 
 Bien que cette équation ressemble à une équation différentielle, il n'en est
 rien car elle ne décrit que les mouvements en régime établi sinusoïdal : cette
@@ -225,18 +289,30 @@ décompose en deux composantes :
 
 On a donc, pour une excitation impulsionnelle de l'axe $j$ :
 
-$$\Theta = v_j\Psi_j + \phi_j(t)\Delta x_j$$
+
+```math
+\Theta = v_j\Psi_j + \phi_j(t)\Delta x_j
+```
+
 
 Le potentiel de vitesse dû à un mouvement arbitraire suivant l'axe $j$ s'écrit
 alors :
 
-$$\Theta = \dot{x}\Psi_j + \int_{-\infty}^t \phi_j(t-\tau)\dot{x_j}(\tau)d\tau$$
+
+```math
+\Theta = \dot{x}\Psi_j + \int_{-\infty}^t \phi_j(t-\tau)\dot{x_j}(\tau)d\tau
+```
+
 
 Les efforts agissant sur la carène suivant l'axe $k$ du fait d'une excitation
 de l'axe $j$ peuvent s'exprimer en fonction de la pression dynamique de
 l'écoulement :
 
-$$F_{jk} = -\int_S p_j n_k dS$$
+
+```math
+F_{jk} = -\int_S p_j n_k dS
+```
+
 
 Or par définition, $p = \frac{\partial \Theta}{\partial t}$
 
@@ -253,9 +329,17 @@ t}n_k dS \dot{x_j}(\tau)d\tau$
 
 On pose :
 
-$$A_{jk} = \rho\int_C\psi_j n_k dS \textrm{ (masses ajoutées)}$$
 
-$$K_{jk}(t) = \rho\int_C\frac{\partial\phi_j(t)}{\partial t}n_k dS \textrm{ (fonctions de retard)}$$
+```math
+A_{jk} = \rho\int_C\psi_j n_k dS \textrm{ (masses ajoutées)}
+```
+
+
+
+```math
+K_{jk}(t) = \rho\int_C\frac{\partial\phi_j(t)}{\partial t}n_k dS \textrm{ (fonctions de retard)}
+```
+
 
 On a alors :
 
@@ -266,7 +350,11 @@ d\tau$$
 
 La formulation fréquentielle s'écrit :
 
-$$ -F_R = M_A(\omega)\frac{d^2X}{dt^2} + B_r(\omega)\frac{dX}{dt}$$
+
+```math
+ -F_R = M_A(\omega)\frac{d^2X}{dt^2} + B_r(\omega)\frac{dX}{dt}
+```
+
 
 La formulation temporelle est :
 
@@ -309,15 +397,27 @@ Les relations suivantes doivent donc être valables pour tout $\omega$ :
 
 $$M_A(\omega) = A-\frac{1}{\omega}\int_0^{+\infty}K(\tau)\sin(\omega\tau)
 d\tau$$
-$$B_r(\omega)=\int_0^{+\infty}K(\tau)\cos(\omega\tau)d\tau$$
+
+```math
+B_r(\omega)=\int_0^{+\infty}K(\tau)\cos(\omega\tau)d\tau
+```
+
 
 En faisant tendre $\omega$ vers l'infini, on a :
 
-$$A = M_A(\infty) = \lim_{\omega\rightarrow\infty}M_A(\omega)$$
+
+```math
+A = M_A(\infty) = \lim_{\omega\rightarrow\infty}M_A(\omega)
+```
+
 
 $K$ est obtenu en prenant la transformée de Fourier inverse de $B_r$ :
 
-$$K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau$$
+
+```math
+K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau
+```
+
 
 ## Calcul numérique des amortissements de radiation
 
@@ -338,7 +438,11 @@ Cette intégrale est calculée à l'aide d'un schéma d'intégration numérique
 On calcule ensuite les efforts d'amortissement de radiation en prenant en
 compte l'historique sur une période $T$ :
 
-$$F_{\textrm{rad}}(t)\sim\int_0^{T}\dot{X}(t-\tau)K_r(\tau)d\tau$$
+
+```math
+F_{\textrm{rad}}(t)\sim\int_0^{T}\dot{X}(t-\tau)K_r(\tau)d\tau
+```
+
 
 Il est important de noter que ces efforts sont exprimés dans le [repère de
 calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique) : un changement
@@ -412,7 +516,11 @@ C’est la méthode la plus simple qui consiste à interpoler la fonction
 $f$ à intégrer par une fonction constante (polynôme de degré 0).
 
 Si $x_i$ est le point d’interpolation, la formule est la suivante :
-:$$I(f) = (b-a) f(x_i)$$
+:
+```math
+I(f) = (b-a) f(x_i)
+```
+
 
 Le choix de $x_i$ influence l’erreur $E(f) = I - I(f)$
 :
@@ -499,22 +607,42 @@ ajoutant aux $n$ points de la quadrature de Gauss $n+1$ zéros des polylônmes d
 Stieltjes-Wigert. Les polynômes de Stieltjes-Wigert sont des polynômes
 orthogonaux pour la fonction de poids :
 
-$$w(x)=\pi^{-1/2}\cdot k\cdot x^{k^2\log(x)},x\in\mathbf{R}_+^*, k>0$$
 
-On pose $$q_k=e^{-\frac{1}{2k^2}}$$
+```math
+w(x)=\pi^{-1/2}\cdot k\cdot x^{k^2\log(x)},x\in\mathbf{R}_+^*, k>0
+```
+
+
+On pose 
+```math
+q_k=e^{-\frac{1}{2k^2}}
+```
+
 
 Les polynômes de Stieltjes-Wigert s'écrivent alors :
 
-$$p_0(x)=q^{1/4}$$
+
+```math
+p_0(x)=q^{1/4}
+```
+
 et
 $$p_{n,k}(x) = \frac{(-1)^n q_k^{\frac{n}{2} +
 \frac{1}{4}}}{\sqrt{(q_k;q_k)_n}}\sum_{\nu=0}^n\left[\begin{array}{c}n\\\nu\end{array}\right]q_k^{\nu^2}(-\sqrt{q_k}x)^\nu$$
 
 où
 
-$$k\in[1,n]$$
 
-$$\left[\begin{array}{c}n\\\nu\end{array}\right]=\prod_{i=0}^{\nu-1}\frac{1-q^{n-i}}{1-q^{i+1}}$$
+```math
+k\in[1,n]
+```
+
+
+
+```math
+\left[\begin{array}{c}n\\\nu\end{array}\right]=\prod_{i=0}^{\nu-1}\frac{1-q^{n-i}}{1-q^{i+1}}
+```
+
 
 avec $q$ le symbole de Pochhammer
 
