@@ -92,8 +92,7 @@ l'obstacle fixe. Un potentiel $`\Psi_{\textrm{PD}}`$ vérifiant les conditions (
 (4) et la condition de diffraction est appelé potentiel de diffraction.
 
 Si l'on ne considère qu'on mouvement oscillatoire élémentaire de l'obstacle
-suivant son $`j`$-ème degré de liberté, la condition (5) s'écrit : $`
-\frac{\partial \Psi_P}{\partial n} = n_j`$. Un potentiel $`\Psi_{PR_j}`$
+suivant son $`j`$-ème degré de liberté, la condition (5) s'écrit : $`\frac{\partial \Psi_P}{\partial n} = n_j`$. Un potentiel $`\Psi_{PR_j}`$
 vérifiant les conditions (1) à (4) et cette condition-ci est appelé $`j`$-ème
 potentiel élémentaire de rayonnement et correspond au mouvement engendré par ce
 mouvement oscillatoire élémentaire de l'obstacle.
@@ -102,8 +101,10 @@ En définitive, la solution complète $`\Phi_D`$ du problème de
 diffraction-rayonnement obtenue par superposition de la solution "obstacle
 fixe" et des solutions oscillatoires élémentaires peut s'écrire :
 
-$` \Phi_D = \Re\left[\Psi_{\textrm{PD}}e^{-i\omega t} + \sum_{j=1}^6
-f_j\Psi_{\textrm{PR}_j} e^{-i\omega t}\right]`$
+```math
+\Phi_D = \Re\left[\Psi_{\textrm{PD}}e^{-i\omega t} + \sum_{j=1}^6
+f_j\Psi_{\textrm{PR}_j} e^{-i\omega t}\right]
+```
 
 en adoptant les notations suivantes :
 
@@ -167,10 +168,12 @@ $`\Psi_{\textrm{PR}_j} = \Psi_j^R + i \Psi_j^I`$
 
 On a alors :
 
-$` F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \Re(-i\omega \Psi_j^R + \omega \Psi_j^I)
-f_j e^{-i\omega t} n_k dS`$
-$` = \rho \Re \int_C \sum_j -i\omega f_j e^{-i\omega t} \Psi_j^R + \sum_j \omega
-f_j e^{-i\omega t} \Psi_j^I n_k dS`$
+```math
+F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \Re(-i\omega \Psi_j^R + \omega \Psi_j^I)
+f_j e^{-i\omega t} n_k dS
+ = \rho \Re \int_C \sum_j -i\omega f_j e^{-i\omega t} \Psi_j^R + \sum_j \omega
+f_j e^{-i\omega t} \Psi_j^I n_k dS
+```
 
 On remarque que
 
@@ -185,12 +188,10 @@ On remarque que
 
 ```math
  F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \omega f_j e^{-i\omega t} \Psi_j^I + \sum_j \frac{\partial}{\partial t} f_j e^{-i\omega t}\Psi_j^R n_k dS
-```
-
-
-$` = \rho\omega \sum_j\Re (f_j e^{-i\omega t})\int_C \Psi_j^I
+= \rho\omega \sum_j\Re (f_j e^{-i\omega t})\int_C \Psi_j^I
 n_k dS + \rho \sum_j \frac{d}{dt}\Re(f_j
-e^{-i\omega t})\int_C\Psi_j^R n_k dS`$
+e^{-i\omega t})\int_C\Psi_j^R n_k dS
+```
 
 On pose $`U_j=\Re(f_j e^{-i\omega t})`$
 
@@ -208,9 +209,11 @@ n_k = \frac{\partial \Psi_k^R}{\partial n}
 
 On a donc :
 
-$` F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
+```math
+F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
 \Psi_k^R}{\partial n} dS + \rho \sum_j
-\frac{dU_j}{dt}\int_C \Psi_j^R  \frac{\partial \Psi_k^R}{\partial n} dS`$
+\frac{dU_j}{dt}\int_C \Psi_j^R  \frac{\partial \Psi_k^R}{\partial n} dS
+```
 
 On pose :
 

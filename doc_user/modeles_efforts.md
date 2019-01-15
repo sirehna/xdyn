@@ -403,7 +403,8 @@ donne un torseur d'effort exprimé dans un repère Z vers le haut et au point de
 calcul de la RAO : pour l'exprimer dans le repère Z vers le bas d'X-DYN, on
 effectue le changement de repère suivant :
 
-$` \tau_{\mbox{HDB}} =
+```math
+\tau_{\mbox{HDB}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -414,9 +415,10 @@ M_Y\\
 M_Z\\
 \end{array}
 \right]
-`$
+```
 
-$` \tau_{\mbox{XDYN}} =
+```math
+\tau_{\mbox{XDYN}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -427,7 +429,7 @@ M_X\\
 -M_Z\\
 \end{array}
 \right]
-`$
+```
 
 Le torseur calculé est ensuite déplacé par X-DYN du point de calcul des
 [fichiers HDB](#fichiers-hdb) au point de résolution du bilan des efforts.
@@ -1330,24 +1332,30 @@ Le torseur des efforts générés par l'hélice et subis par le navire
 (apparaissant donc dans le membre de droite de l'équation fondamentale de la
 dynamique), exprimé dans le repère de l'hélice, est donc :
 
-$`\tau_{\textrm{hélice}} = \left[\begin{array}{c}
+```math
+\tau_{\textrm{hélice}} = \left[\begin{array}{c}
 X\\
 Y\\
 Z\\
 K\\
 M\\
 N
-\end{array}\right]_{\textrm{hélice}}`$
+\end{array}\right]_{\textrm{hélice}}
+```
 
-$`= \left[\begin{array}{c}
+```math
+= \left[\begin{array}{c}
            T_b\\
            0\\
            0\\
            \kappa Q_b\\
            0\\
            0
-\end{array}\right]_{\textrm{hélice}}`$
-$`= \left[\begin{array}{c}
+\end{array}\right]_{\textrm{hélice}}
+```
+
+```math
+= \left[\begin{array}{c}
            (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, A_E/A_0, Z, P/D)\\
            0\\
            0\\
@@ -1355,7 +1363,7 @@ $`= \left[\begin{array}{c}
 A_E/A_0, Z, P/D)\\
            0\\
            0\end{array}\right]_{\textrm{hélice}}
-`$
+```
 
 $`\kappa`$ vaut -1 si l'hélice tourne dans le sens horaire (en se plaçant
 derrière l'hélice et en regardant vers l'avant du navire) et +1 si elle tourne
@@ -2163,31 +2171,37 @@ Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'h
 et subis par le navire (apparaissant donc dans le membre de droite de l'équation
 fondamentale de la dynamique), exprimé dans le repère de l'hélice, est donc :
 
-$`\tau_{\textrm{hélice}} = \left[\begin{array}{c}
+```math
+\tau_{\textrm{hélice}} = \left[\begin{array}{c}
 X\\
 Y\\
 Z\\
 K\\
 M\\
 N
-\end{array}\right]_{\textrm{hélice}}`$
+\end{array}\right]_{\textrm{hélice}}
+```
 
-$`= \left[\begin{array}{c}
+```math
+= \left[\begin{array}{c}
            T_b\\
            0\\
            0\\
            \kappa Q_b\\
            0\\
            0
-\end{array}\right]_{\textrm{hélice}}`$
-$`= \left[\begin{array}{c}
+\end{array}\right]_{\textrm{hélice}}
+```
+
+```math
+= \left[\begin{array}{c}
            (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J)\\
            0\\
            0\\
            \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J)\\
            0\\
            0\end{array}\right]_{\textrm{hélice}}
-`$
+```
 
 ### Paramétrage
 

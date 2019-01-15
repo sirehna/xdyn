@@ -237,9 +237,10 @@ m_y}{f_z}`$
 
 soit, avec les conventions de rotation usuelles :
 
-$` GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
+```math
+GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
 \sin(\psi)\cdot\cos(\theta)\cdot m_y}{f_z\left\|x_{\textrm{body}}^{\textrm{(ned)}}\right\|}
-`$
+```
 
 
 ## Outil de calcul de $`GZ`$

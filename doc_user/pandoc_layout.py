@@ -6,6 +6,8 @@ def equation_substitution(text):
     eq_multiline = re.compile('^```math(.*?)^```', re.MULTILINE | re.DOTALL)
     new_text = re.sub(eq_inline, r'$\1$', text)
     new_text = re.sub(eq_multiline, r'$$\1$$  {#eq:}', new_text)
+    new_text = new_text.replace('$`','$')
+    new_text = new_text.replace('`$','$')
     return new_text
 
 
@@ -21,7 +23,7 @@ def convert_file_for_pandoc(filename,
         filename_output = filename + '.pandoc'
     content = open(filename, 'r').read()
     f = open(filename_output, 'w')
-    content = equation_substitution2(content)
+    content = equation_substitution(content)
     f.write(content)
     f.close()
 

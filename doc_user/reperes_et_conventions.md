@@ -763,7 +763,8 @@ La matrice d'inertie est le plus souvent exprimée au centre de gravité. Cepend
 et donc que la seule opération pour la conversion est le passage d'un repère z vers le haut (HDB) à un repère
 z vers le bas (X-DYN). La formule précédente se simplifie alors en :
 
-$`{}^bM_B=\left[
+```math
+{}^bM_B=\left[
 \begin{array}{cccccc}
 1&0&0&0&0&0\\
 0&-1&0&0&0&0\\
@@ -783,9 +784,12 @@ $`{}^bM_B=\left[
 0&0&0&0&0&-1\\
  \end{array}
 \right]
-`$
+```
+
 En prenant la notation
-$` M_{\mbox{HDB}} =
+
+```math
+M_{\mbox{HDB}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &   m_{12}  &  m_{13}  &  m_{14}  &  m_{15}  &  m_{16}\\
@@ -796,9 +800,12 @@ $` M_{\mbox{HDB}} =
  m_{61} &   m_{62}  &  m_{63}  &  m_{64}  &  m_{65}  &  m_{66} \\
 \end{array}
 \right]
-`$
+```
+
 on obtient :
-$` M_{\mbox{XDYN}} =
+
+```math
+M_{\mbox{XDYN}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &  -m_{12}  & -m_{13}  &  m_{14}  & -m_{15}  & -m_{16}\\
@@ -809,10 +816,12 @@ $` M_{\mbox{XDYN}} =
 -m_{61} &   m_{62}  &  m_{63}  & -m_{64}  &  m_{65}  &  m_{66} \\
 \end{array}
 \right]
-`$
+```
 
 Pour les torseurs, on obtient le changement suivant :
-$` \tau_{\mbox{HDB}} =
+
+```math
+\tau_{\mbox{HDB}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -823,9 +832,10 @@ M_Y\\
 M_Z\\
 \end{array}
 \right]
-`$
+```
 
-$` \tau_{\mbox{XDYN}} =
+```math
+\tau_{\mbox{XDYN}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -836,7 +846,7 @@ M_X\\
 -M_Z\\
 \end{array}
 \right]
-`$
+```
 
 
 Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid body shift of rigid body spatial inertia

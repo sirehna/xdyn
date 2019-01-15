@@ -511,7 +511,7 @@ $`\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
 
 $`\omega_0 = 2\pi f`$ est la pulsation (en Rad/s) de la houle.
 
-Ce spectre a l'allure suivante :
+Le signal temporel correspondant a l'allure suivante :
 
 ![](images/waveMonochromatique.svg)
 
@@ -616,7 +616,7 @@ B=\frac{20\pi^4}{T_p^4}
 ```
 
 
-Le signal temporel correspondant a l'allure suivante :
+Ce spectre a l'allure suivante :
 
 ![](images/spectrumBretschneider.svg)
 
@@ -1293,7 +1293,7 @@ avec
 - $`k_{x,i} = \frac{i \Pi}{L_x}`$,
 - $`k_{y,j} = \frac{j \Pi}{L_y}`$
 - $`k_{i,j} = \sqrt{k_{x,i}^2+k_{y,j}^2}`$,
-- $`L_x`$ et $`L_y`$ désignent la taille du domaine suivant $`X`$ et Ŷ$,
+- $`L_x`$ et $`L_y`$ désignent la taille du domaine suivant $`X`$ et $`Y`$,
   respectivement.
 - Les coefficients $`A_{ij}^{\eta}`$ et $`A_{ij}^{\phi}`$ représentent les
   amplitudes des modes spectraux.
