@@ -29,7 +29,7 @@ print_yaml(yaml_data_exact_hs, 'environment models')
 
 Comme décrit dans la [documentation du fichier
 d'entrée](#absence-de-houle), ceci signifie que la
-surface libre est parfaitement plane et horizontale, à la hauteur $z=0$ dans le
+surface libre est parfaitement plane et horizontale, à la hauteur $`z=0`$ dans le
 repère NED.
 
 Par rapport au [tutoriel 1](#tutoriel-1-chute-libre), la
@@ -95,7 +95,7 @@ g = cartesian_graph([fast_plot, exact_plot], x='t (s)', y='Élévation (m)')
 create_layout(graph=g, title='Élévation au cours du temps')
 ```
 
-On peut également représenter les déplacements suivant l'axe $y$ :
+On peut également représenter les déplacements suivant l'axe $`y`$ :
 
 ```python echo=False, results='raw', name='tutorial_02_plot_y'
 fast_plot = prepare_plot_data(fast_data, x='t', y='y(TestShip)', name='Modèle hydrostatique rapide')

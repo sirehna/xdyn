@@ -333,8 +333,8 @@ Interface"](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=
 par opposition à "X-DYN for Co-simulation". La différence se situe dans
 l'utilisation du solveur : dans le cas de la co-simulation, on utilise le
 solveur interne de X-DYN (le serveur renvoie les états intégrés au pas suivant
-$X(t+dt)$). Dans le cas "model exchange", le serveur renvoie juste la dérivée
-des états $\frac{dX}{dt}$.
+$`X(t+dt)`$). Dans le cas "model exchange", le serveur renvoie juste la dérivée
+des états $`\frac{dX}{dt}`$.
 
 ### Justification technique
 

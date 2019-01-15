@@ -10,39 +10,39 @@ conditions strictes, définies par exemple dans les arrêtés du 28 février 197
 (bateaux non motorisés) et du 2 septembre 1970 (bateaux motorisés).
 
 On considère un navire partiellement immergé en eau calme (la surface libre
-étant donc plane et horizontale) dont le volume immergé $\Omega$ est délimité
-par une surface appelée "carène" (ou surface mouillée) et notée $\mathcal{C}$.
-On appelle "flottaison" et l'on note $S$
+étant donc plane et horizontale) dont le volume immergé $`\Omega`$ est délimité
+par une surface appelée "carène" (ou surface mouillée) et notée $`\mathcal{C}`$.
+On appelle "flottaison" et l'on note $`S`$
 l'intersection du volume du navire avec le plan de la surface libre.
 On a donc $\partial\Omega = \mathcal{C}\cup S$.
-On note $G$ le centre de gravité du navire et $C$ le centre de $\Omega$ (appelé
+On note $`G`$ le centre de gravité du navire et $`C`$ le centre de $`\Omega`$ (appelé
 "centre de carène").
 
-Les axes $Y$ et $Z$ du [repère "body"](#reperes-et-conventions) sont notés
-respectivement $y$ et $z$. La situation peut être représentée par la figure
+Les axes $`Y`$ et $`Z`$ du [repère "body"](#reperes-et-conventions) sont notés
+respectivement $`y`$ et $`z`$. La situation peut être représentée par la figure
 suivante :
 
 ![](images/gz.svg)
 
-La distance algébrique $GZ=y_C-y_G$ est le bras de levier du couple de rappel
+La distance algébrique $`GZ=y_C-y_G`$ est le bras de levier du couple de rappel
 hydrostatique. Celui-ci doit être suffisant pour redresser le navire. Une
 condition nécessaire et suffisante pour que le couple de rappel
-hydrostatique soit un couple de redressement est que le point métacentrique $E$
-soit situé au-dessus du centre de gravité $G$. Le point $E$ est à
-l'intersection de la droite $Cz$ et de la droite $C_0 z$.
+hydrostatique soit un couple de redressement est que le point métacentrique $`E`$
+soit situé au-dessus du centre de gravité $`G`$. Le point $`E`$ est à
+l'intersection de la droite $`Cz`$ et de la droite $C_0 z$.
 
-### Algorithme de calcul de $GZ$
+### Algorithme de calcul de $`GZ`$
 
-Pour calculer $GZ(\phi)$, il faut connaître la position du centre de carène
-pour une position d'équilibre à un angle de gîte $\phi$. On commence donc
+Pour calculer $`GZ(\phi)`$, il faut connaître la position du centre de carène
+pour une position d'équilibre à un angle de gîte $`\phi`$. On commence donc
 par calculer la position d'équilibre pour une gîte donnée, puis on calcule le
-centre de carène et $GZ$ est ensuite donné par $GZ(\phi)=y_C(\phi)-y_G$.
+centre de carène et $`GZ`$ est ensuite donné par $`GZ(\phi)=y_C(\phi)-y_G`$.
 
 #### Calcul de la position d'équilibre à une gîte donnée
 
-Soit $X=(z,\phi,\theta)$ l'état du système. On suppose le navire soumis aux
+Soit $`X=(z,\phi,\theta)`$ l'état du système. On suppose le navire soumis aux
 seuls efforts de
-la gravité et de l'hydrostatique. On dénote par $f$ la fonction qui à $X$
+la gravité et de l'hydrostatique. On dénote par $`f`$ la fonction qui à $`X`$
 associe la somme des efforts appliqués au système :
 
 
@@ -51,7 +51,7 @@ f(X) = F_{\textrm{hs}}(X) + m\cdot \mathbf{g}
 ```
 
 
-où $m$ désigne la masse du système et $\mathbf{g}$ est le vecteur
+où $`m`$ désigne la masse du système et $`\mathbf{g}`$ est le vecteur
 accélération de la pesanteur.
 
 Lorsque le système est à l'équilibre, on a :
@@ -85,8 +85,8 @@ X_{n+1} = X_n - K^{-1}(X_n)f(X_n)
 ```
 
 
-La matrice $K(X_n)$ est estimée numériquement en linéarisant $f$ autour de
-$X_n$. Soit $\Delta X$ un petit déplacement autour de $X_n$ et $\Delta F =
+La matrice $`K(X_n)`$ est estimée numériquement en linéarisant $`f`$ autour de
+$`X_n`$. Soit $\Delta X$ un petit déplacement autour de $`X_n`$ et $\Delta F =
 (\Delta F_z, \Delta M_{\phi}, \Delta M_{\theta})$ la
 variation d'effort correspondante.
 
@@ -99,7 +99,7 @@ K(X_n) \Delta X = \Delta F
 Pour $1\leq i\leq 3, \sum_{j=1}^3 k_{ij} \Delta x_j = \Delta F_i$.
 
 Si le petit déplacement que l'on considère s'effectue exclusivement suivant
-l'axe $j$, on trouve :
+l'axe $`j`$, on trouve :
 
 $k_{ij}\Delta x_j = \Delta F_i$ donc
 
@@ -109,15 +109,15 @@ k_{ij} = \frac{\Delta F_i}{\Delta x_j}
 ```
 
 
-En pratique, pour évaluer les termes de la matrice $K(X_n)$, on considère
-séparément trois petits déplacements autour de $X_n$ (un par axe) et l'on
-utilise la formule précédente pour évaluer les termes $k_{ij}$ trois par trois.
+En pratique, pour évaluer les termes de la matrice $`K(X_n)`$, on considère
+séparément trois petits déplacements autour de $`X_n`$ (un par axe) et l'on
+utilise la formule précédente pour évaluer les termes $`k_{ij}`$ trois par trois.
 
-Une simplification possible est de considérer que la matrice $K$ varie peu et
+Une simplification possible est de considérer que la matrice $`K`$ varie peu et
 donc de ne l'évaluer qu'une seule fois (plutôt qu'à chaque étape de
 l'algorithme de Newton-Raphson).
 
-#### Calcul du centre de carène $C$
+#### Calcul du centre de carène $`C`$
 
 La carène est discrétisée par des polygones. Pour calculer son centre de masse,
 on transforme ces polygones en triangles et, pour chaque triangle, on calcule
@@ -128,8 +128,8 @@ le volume (algébrique) du tétraèdre de base ce triangle et de sommet l'origin
 En effectuant la somme de ces volumes élémentaires on retrouve le volume
 délimité par le maillage. Le centre de carène est calculé de la façon suivante.
 
-Soit $P_1,P_2,P_3$ les trois sommets d'un des triangles. Le volume élémentaire
-$dV$ associé à ce triangle est le déterminant des vecteurs $P_1,P_2,P_3$ :
+Soit $`P_1,P_2,P_3`$ les trois sommets d'un des triangles. Le volume élémentaire
+$`dV`$ associé à ce triangle est le déterminant des vecteurs $`P_1,P_2,P_3`$ :
 
 
 ```math
@@ -160,7 +160,7 @@ z_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{z(P_1)+z(P_2)+
 #### Autre méthode de calcul
 
 Une méthode plus simple car ne nécessitant pas le calcul explicite du centre de
-carène est de projeter le vecteur $GB$ sur le vecteur $y$ du plan vertical
+carène est de projeter le vecteur $`GB`$ sur le vecteur $`y`$ du plan vertical
 attaché au corps :
 
 
@@ -171,22 +171,22 @@ GZ = y\cdot GB
 
 or
 
-$$y = \frac{x_{\textrm{body}}^{\textrm{(ned)}} \times
+$``$y = \frac{x_{\textrm{body}}^{\textrm{(ned)}} \times
 z_{\textrm{ned}}^{\textrm{(ned)}}}{\left\|x_{\textrm{body}}^{\textrm{(ned)}} \times
-z_{\textrm{ned}}^{\textrm{(ned)}}\right\|}$$
+z_{\textrm{ned}}^{\textrm{(ned)}}\right\|}$``$
 
 
-où $x_{\textrm{body}}^{\textrm{(ned)}}$ désigne les coordonnées du vecteur $x$ du
-repère body, exprimées dans le repère NED et $z_{\textrm{ned}}^{\textrm{(ned)}}$ les
-coordonnées du vecteur $z$ du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) exprimées dans le [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned).
+où $`x_{\textrm{body}}^{\textrm{(ned)}}`$ désigne les coordonnées du vecteur $`x`$ du
+repère body, exprimées dans le repère NED et $`z_{\textrm{ned}}^{\textrm{(ned)}}`$ les
+coordonnées du vecteur $`z`$ du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) exprimées dans le [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned).
 
-Il se trouve qu'il n'est pas nécessaire de connaître la coordonnée $z$ du
+Il se trouve qu'il n'est pas nécessaire de connaître la coordonnée $`z`$ du
 vecteur GB. En effet,
 
-$$\exists \lambda_0\in\mathbf{R} : GB = \frac{M\times
-F}{\left\|F\right\|} + \lambda_0 F$$
+$``$\exists \lambda_0\in\mathbf{R} : GB = \frac{M\times
+F}{\left\|F\right\|} + \lambda_0 F$``$
 
-où $M$ est le moment en $G$ de l'effort hydrostatique et $F$ la résultante de
+où $`M`$ est le moment en $`G`$ de l'effort hydrostatique et $`F`$ la résultante de
 l'effort hydrostatique.
 
 On pose
@@ -226,27 +226,27 @@ M\times F = \left[\begin{array}{c}mf_x\\mf_y\\mf_z\end{array}\right]
 ```
 
 
-$$GZ_{\lambda} = y\cdot GB_{\lambda} =
+$``$GZ_{\lambda} = y\cdot GB_{\lambda} =
 \left[\begin{array}{c}x\\y\\z\end{array}\right]\times
 \left[\begin{array}{c}0\\0\\1\end{array}\right]\cdot
-\left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]$$
+\left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]$``$
 
 d'où
 
-$$\forall \lambda\in\mathbf{R}, GZ_{\lambda} = \frac{x m_x}{f_z} + \frac{y
-m_y}{f_z}$$
+$``$\forall \lambda\in\mathbf{R}, GZ_{\lambda} = \frac{x m_x}{f_z} + \frac{y
+m_y}{f_z}$``$
 
 soit, avec les conventions de rotation usuelles :
 
-$$ GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
+$``$ GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
 \sin(\psi)\cdot\cos(\theta)\cdot m_y}{f_z\left\|x_{\textrm{body}}^{\textrm{(ned)}}\right\|}
-$$
+$``$
 
 
-## Outil de calcul de $GZ$
+## Outil de calcul de $`GZ`$
 
 L'installation d'X-DYN contient, outre l'exécutable `xdyn`, un autre exécutable appelé `gz`, permettant de calculer
-des courbes de stabilité statique, aussi communément appelée courbe en "GZ", en fonction de la gîte $\phi$.
+des courbes de stabilité statique, aussi communément appelée courbe en "GZ", en fonction de la gîte $`\phi`$.
 
 Cet outil prend en entrée des paramètres de ligne de commande et un fichier
 YAML au même format que celui pour le simulateur. Contrairement au

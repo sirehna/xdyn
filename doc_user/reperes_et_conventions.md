@@ -8,7 +8,7 @@ il est nécessaire de les placer par rapport à un repère de référence.
 ### Repère de référence (NED)
 
 Le repère `NED` (North-East-Down) est utilisé comme repère de référence,
-avec un point de référence $O$ et une base pointant les directions Nord-Est-Bas.
+avec un point de référence $`O`$ et une base pointant les directions Nord-Est-Bas.
 Il sert à exprimer les déplacements des corps de la simulation.
 
 ### Repère navire (mobile ou "body" ou "repère de résolution")
@@ -18,9 +18,9 @@ Le point de référence de ce repère correspond généralement au centre de gra
 du navire.
 Les axes du repère navire sont les suivants:
 
-- $X$ vers l'avant
-- $Y$ sur tribord
-- $Z$ vers le bas
+- $`X`$ vers l'avant
+- $`Y`$ sur tribord
+- $`Z`$ vers le bas
 
 ![](images/ShipFrame.svg "Repère navire")
 
@@ -37,7 +37,7 @@ calcule la houle est lié à NED, le navire finira par sortir de cette zone
 lorsqu'il se déplacera. Si l'on calcule les hauteurs de
 vague dans le repère navire, l'aire de la grille vue dans le repère NED
 va varier en fonction de l'[attitude](#attitude-navire) du navire et, à la limite, pour un
-navire vertical ($\theta=\pi/2$ par exemple), la projection de la grille
+navire vertical ($`\theta=\pi/2`$ par exemple), la projection de la grille
 est un segment.
 
 On définit donc un NED "local", c'est-à-dire un repère centré au même point
@@ -54,23 +54,23 @@ repère NED local sera "NED(nav1)".
 ### Attitude navire
 
 L'attitude d'un corps permet de connaître son orientation par rapport à un
-repère. La position est donnée par le triplet $\left(X,Y,Z\right)$ et
-l'orientation par un triplet d'angles $\left(\phi,\theta,\psi\right)$.
-L'interprétation de ce triplet en termes de rotations autour des axes $x$, $y$,
-$z$ dépend de la convention de rotation choisie. L'orientation peut également
+repère. La position est donnée par le triplet $`\left(X,Y,Z\right)`$ et
+l'orientation par un triplet d'angles $`\left(\phi,\theta,\psi\right)`$.
+L'interprétation de ce triplet en termes de rotations autour des axes $`x`$, $`y`$,
+$`z`$ dépend de la convention de rotation choisie. L'orientation peut également
 être exprimée de manière différente notamment avec des quaternions (c'est
 d'ailleurs ainsi qu'elle est exprimée dans le code d'X-DYN).
 
 ## Conventions d'orientations
 
 Cette section présente les notations utilisées pour définir l'orientation
-d'un élément dans l'espace à partir d'un triplet d'angles $(\phi,\theta,\psi)$.
+d'un élément dans l'espace à partir d'un triplet d'angles $`(\phi,\theta,\psi)`$.
 
 ### Définition d'une orientation
 
 Pour définir la composition de rotations donnant l'orientation
 d'un élément dans l'espace à partir
-d'un triplet d'angles $\left(\phi,\theta,\psi\right)$,
+d'un triplet d'angles $`\left(\phi,\theta,\psi\right)`$,
 plusieurs éléments doivent être définis:
 
 - une convention d'angles ou d'axes. Elle permet de définir
@@ -87,27 +87,27 @@ plusieurs éléments doivent être définis:
 ### Énumération des conventions possibles
 
 Si on choisit une convention d'angles, alors chaque angle du triplet définit
-respectivement une rotation autour d'un axe $X$, $Y$ ou $Z$.
+respectivement une rotation autour d'un axe $`X`$, $`Y`$ ou $`Z`$.
 Les axes ne peuvent être répétés.
 Il est possible de définir 6 conventions d'angles, qui correspondent à
-la permutation des trois axes: $XYZ$ ,$XZY$ ,$YXZ$ ,$YZX$ ,$ZXY$ ,$ZYX$.
-Par exemple la rotation $R_{YZX}$ appliquée au triplet
-$\left(\phi,\theta,\psi\right)$ s'interprétera comme une rotation de
-$R_{Y}\left(\theta\right)$, suivie de la rotation $R_{Z}\left(\psi\right)$,
-et terminée par la rotation $R_{X}\left(\phi\right)$.
+la permutation des trois axes: $`XYZ`$ ,$`XZY`$ ,$`YXZ`$ ,$`YZX`$ ,$`ZXY`$ ,$`ZYX`$.
+Par exemple la rotation $`R_{YZX}`$ appliquée au triplet
+$`\left(\phi,\theta,\psi\right)`$ s'interprétera comme une rotation de
+$`R_{Y}\left(\theta\right)`$, suivie de la rotation $`R_{Z}\left(\psi\right)`$,
+et terminée par la rotation $`R_{X}\left(\phi\right)`$.
 
 Si on choisit une convention d'axes, alors on modifie l'ordre des axes
 sur lesquels appliquer successivement les rotations.
 Des répétitions des axes sont alors possibles, si elles ne se suivent pas.
-Par exemple, $XYX$ sera valide, mais pas $XXY$.
+Par exemple, $`XYX`$ sera valide, mais pas $`XXY`$.
 Par exemple, une convention ZXY définit une composition de rotations.
 Il est possible de définir 12 conventions d'axes:
-$XYX$, $XYZ$, $XZX$, $XZY$, $YXY$, $YXZ$,
-$YZX$, $YZY$, $ZXY$, $ZXZ$, $ZYX$, $ZYZ$.
-Par exemple la rotation $R_{YZX}$ appliquée au triplet
-$\left(\phi,\theta,\psi\right)$ s'interprétera comme une rotation de
-$R_{Y}\left(\phi\right)$, suivie de la rotation $R_{Z}\left(\theta\right)$, et
-terminée par la rotation $R_{X}\left(\psi\right)$.
+$`XYX`$, $`XYZ`$, $`XZX`$, $`XZY`$, $`YXY`$, $`YXZ`$,
+$`YZX`$, $`YZY`$, $`ZXY`$, $`ZXZ`$, $`ZYX`$, $`ZYZ`$.
+Par exemple la rotation $`R_{YZX}`$ appliquée au triplet
+$`\left(\phi,\theta,\psi\right)`$ s'interprétera comme une rotation de
+$`R_{Y}\left(\phi\right)`$, suivie de la rotation $`R_{Z}\left(\theta\right)`$, et
+terminée par la rotation $`R_{X}\left(\psi\right)`$.
 
 Avec ces conventions d'angles et d'axes, il existe déjà 18 combinaisons.
 Ce nombre est doublé du fait que la composition de rotations peut être interne
@@ -125,86 +125,86 @@ Les deux tableaux suivants présentent les 36 conventions possibles :
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
 | id | Ordre |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
 +====+=======+=============+===============+===================================+========================+
-|  1 | angle |  x y z      |    Extrinsic  | $R_Z(\psi).R_Y(\theta).R_X(\phi)$ |                        |
+|  1 | angle |  x y z      |    Extrinsic  | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  2 | angle |  x z y      |    Extrinsic  | $R_Y(\theta).R_Z(\psi).R_X(\phi)$ |                        |
+|  2 | angle |  x z y      |    Extrinsic  | $`R_Y(\theta).R_Z(\psi).R_X(\phi)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  3 | angle |  y x z      |    Extrinsic  | $R_Z(\psi).R_X(\phi).R_Y(\theta)$ |                        |
+|  3 | angle |  y x z      |    Extrinsic  | $`R_Z(\psi).R_X(\phi).R_Y(\theta)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  4 | angle |  y z x      |    Extrinsic  | $R_X(\phi).R_Z(\psi).R_Y(\theta)$ |                        |
+|  4 | angle |  y z x      |    Extrinsic  | $`R_X(\phi).R_Z(\psi).R_Y(\theta)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  5 | angle |  z x y      |    Extrinsic  | $R_Y(\theta).R_X(\phi).R_Z(\psi)$ |                        |
+|  5 | angle |  z x y      |    Extrinsic  | $`R_Y(\theta).R_X(\phi).R_Z(\psi)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  6 | angle |  z y x      |    Extrinsic  | $R_X(\phi).R_Y(\theta).R_Z(\psi)$ |                        |
+|  6 | angle |  z y x      |    Extrinsic  | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  7 | angle |  x y' z''   |    Intrinsic  | $R_X(\phi).R_Y(\theta).R_Z(\psi)$ |                        |
+|  7 | angle |  x y' z''   |    Intrinsic  | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  8 | angle |  x z' y''   |    Intrinsic  | $R_X(\phi).R_Z(\psi).R_Y(\theta)$ |                        |
+|  8 | angle |  x z' y''   |    Intrinsic  | $`R_X(\phi).R_Z(\psi).R_Y(\theta)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  9 | angle |  y x' z''   |    Intrinsic  | $R_Y(\theta).R_X(\phi).R_Z(\psi)$ |                        |
+|  9 | angle |  y x' z''   |    Intrinsic  | $`R_Y(\theta).R_X(\phi).R_Z(\psi)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 10 | angle |  y z' x''   |    Intrinsic  | $R_Y(\theta).R_Z(\psi).R_X(\phi)$ |                        |
+| 10 | angle |  y z' x''   |    Intrinsic  | $`R_Y(\theta).R_Z(\psi).R_X(\phi)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 11 | angle |  z x' y''   |    Intrinsic  | $R_Z(\psi).R_X(\phi).R_Y(\theta)$ |                        |
+| 11 | angle |  z x' y''   |    Intrinsic  | $`R_Z(\psi).R_X(\phi).R_Y(\theta)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 12 | angle |  z y' x''   |    Intrinsic  | $R_Z(\psi).R_Y(\theta).R_X(\phi)$ |                        |
+| 12 | angle |  z y' x''   |    Intrinsic  | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ |                        |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
 
 
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
 | id | Order |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
 +====+=======+=============+===============+===================================+========================+
-| 13 | axis  |  x y x      |    Extrinsic  | $R_X(\psi).R_Y(\theta).R_X(\phi)$ | Euler                  |
+| 13 | axis  |  x y x      |    Extrinsic  | $`R_X(\psi).R_Y(\theta).R_X(\phi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 14 | axis  |  x y z      |    Extrinsic  | $R_Z(\psi).R_Y(\theta).R_X(\phi)$ | Cardan - Tait - Bryan  |
+| 14 | axis  |  x y z      |    Extrinsic  | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 15 | axis  |  x z x      |    Extrinsic  | $R_X(\psi).R_Z(\theta).R_X(\phi)$ | Euler                  |
+| 15 | axis  |  x z x      |    Extrinsic  | $`R_X(\psi).R_Z(\theta).R_X(\phi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 16 | axis  |  x z y      |    Extrinsic  | $R_Y(\psi).R_Z(\theta).R_X(\phi)$ | Cardan - Tait - Bryan  |
+| 16 | axis  |  x z y      |    Extrinsic  | $`R_Y(\psi).R_Z(\theta).R_X(\phi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 17 | axis  |  y x y      |    Extrinsic  | $R_Y(\psi).R_X(\theta).R_Y(\phi)$ | Euler                  |
+| 17 | axis  |  y x y      |    Extrinsic  | $`R_Y(\psi).R_X(\theta).R_Y(\phi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 18 | axis  |  y x z      |    Extrinsic  | $R_Z(\psi).R_X(\theta).R_Y(\phi)$ | Cardan - Tait - Bryan  |
+| 18 | axis  |  y x z      |    Extrinsic  | $`R_Z(\psi).R_X(\theta).R_Y(\phi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 19 | axis  |  y z x      |    Extrinsic  | $R_X(\psi).R_Z(\theta).R_Y(\phi)$ | Euler                  |
+| 19 | axis  |  y z x      |    Extrinsic  | $`R_X(\psi).R_Z(\theta).R_Y(\phi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 20 | axis  |  y z y      |    Extrinsic  | $R_Y(\psi).R_Z(\theta).R_Y(\phi)$ | Cardan - Tait - Bryan  |
+| 20 | axis  |  y z y      |    Extrinsic  | $`R_Y(\psi).R_Z(\theta).R_Y(\phi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 21 | axis  |  z x y      |    Extrinsic  | $R_Y(\psi).R_X(\theta).R_Z(\phi)$ | Euler                  |
+| 21 | axis  |  z x y      |    Extrinsic  | $`R_Y(\psi).R_X(\theta).R_Z(\phi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 22 | axis  |  z x z      |    Extrinsic  | $R_Z(\psi).R_X(\theta).R_Z(\phi)$ | Cardan - Tait - Bryan  |
+| 22 | axis  |  z x z      |    Extrinsic  | $`R_Z(\psi).R_X(\theta).R_Z(\phi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 23 | axis  |  z y x      |    Extrinsic  | $R_X(\psi).R_Y(\theta).R_Z(\phi)$ | Euler                  |
+| 23 | axis  |  z y x      |    Extrinsic  | $`R_X(\psi).R_Y(\theta).R_Z(\phi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 24 | axis  |  z y z      |    Extrinsic  | $R_Z(\psi).R_Y(\theta).R_Z(\phi)$ | Cardan - Tait - Bryan  |
+| 24 | axis  |  z y z      |    Extrinsic  | $`R_Z(\psi).R_Y(\theta).R_Z(\phi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 25 | axis  |  x y' x''   |    Intrinsic  | $R_X(\phi).R_Y(\theta).R_X(\psi)$ | Euler                  |
+| 25 | axis  |  x y' x''   |    Intrinsic  | $`R_X(\phi).R_Y(\theta).R_X(\psi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 26 | axis  |  x y' z''   |    Intrinsic  | $R_X(\phi).R_Y(\theta).R_Z(\psi)$ | Cardan - Tait - Bryan  |
+| 26 | axis  |  x y' z''   |    Intrinsic  | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 27 | axis  |  x z' x''   |    Intrinsic  | $R_X(\phi).R_Z(\theta).R_X(\psi)$ | Euler                  |
+| 27 | axis  |  x z' x''   |    Intrinsic  | $`R_X(\phi).R_Z(\theta).R_X(\psi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 28 | axis  |  x z' y''   |    Intrinsic  | $R_X(\phi).R_Z(\theta).R_Y(\psi)$ | Cardan - Tait - Bryan  |
+| 28 | axis  |  x z' y''   |    Intrinsic  | $`R_X(\phi).R_Z(\theta).R_Y(\psi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 29 | axis  |  y x' y''   |    Intrinsic  | $R_Y(\phi).R_X(\theta).R_Y(\psi)$ | Euler                  |
+| 29 | axis  |  y x' y''   |    Intrinsic  | $`R_Y(\phi).R_X(\theta).R_Y(\psi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 30 | axis  |  y x' z''   |    Intrinsic  | $R_Y(\phi).R_X(\theta).R_Z(\psi)$ | Cardan - Tait - Bryan  |
+| 30 | axis  |  y x' z''   |    Intrinsic  | $`R_Y(\phi).R_X(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 31 | axis  |  y z' x''   |    Intrinsic  | $R_Y(\phi).R_Z(\theta).R_X(\psi)$ | Euler                  |
+| 31 | axis  |  y z' x''   |    Intrinsic  | $`R_Y(\phi).R_Z(\theta).R_X(\psi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 32 | axis  |  y z' y''   |    Intrinsic  | $R_Y(\phi).R_Z(\theta).R_Y(\psi)$ | Cardan - Tait - Bryan  |
+| 32 | axis  |  y z' y''   |    Intrinsic  | $`R_Y(\phi).R_Z(\theta).R_Y(\psi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 33 | axis  |  z x' y''   |    Intrinsic  | $R_Z(\phi).R_X(\theta).R_Y(\psi)$ | Euler                  |
+| 33 | axis  |  z x' y''   |    Intrinsic  | $`R_Z(\phi).R_X(\theta).R_Y(\psi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 34 | axis  |  z x' z''   |    Intrinsic  | $R_Z(\phi).R_X(\theta).R_Z(\psi)$ | Cardan - Tait - Bryan  |
+| 34 | axis  |  z x' z''   |    Intrinsic  | $`R_Z(\phi).R_X(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 35 | axis  |  z y' x''   |    Intrinsic  | $R_Z(\phi).R_Y(\theta).R_X(\psi)$ | Euler                  |
+| 35 | axis  |  z y' x''   |    Intrinsic  | $`R_Z(\phi).R_Y(\theta).R_X(\psi)`$ | Euler                  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 36 | axis  |  z y' z''   |    Intrinsic  | $R_Z(\phi).R_Y(\theta).R_Z(\psi)$ | Cardan - Tait - Bryan  |
+| 36 | axis  |  z y' z''   |    Intrinsic  | $`R_Z(\phi).R_Y(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
 
 
-où les matrices de rotation autour des trois axes $X$, $Y$ et $Z$ s'écrivent
+où les matrices de rotation autour des trois axes $`X`$, $`Y`$ et $`Z`$ s'écrivent
 
 $R_X \left( \alpha \right) = \left[\begin{array}{ccc}
 1 & 0 & 0\\
@@ -236,9 +236,9 @@ exprimée par le triplet (Roulis, Tangage, Lacet) régulièrement utilisée est
 référencée id=12 dans le tableau ci-dessus.
 
 Elle se comprend de la manière suivante, on effectue une rotation de
-l'angle de lacet autour de l'axe $Z$, suivie d'une rotation de
-l'angle d'assiette autour du nouvel axe $Y'$ suivie d'une rotation de
-l'angle de roulis autour du nouvel axe $X''$.
+l'angle de lacet autour de l'axe $`Z`$, suivie d'une rotation de
+l'angle d'assiette autour du nouvel axe $`Y'`$ suivie d'une rotation de
+l'angle de roulis autour du nouvel axe $`X''`$.
 
 Si on exprime ce triplet de la manière suivante (Lacet, Roulis, Tangage),
 on obtient id=33 dans le tableau ci-dessus.
@@ -254,9 +254,9 @@ La convention d'orientation utilisée dans le logiciel
 [ParaView](http://www.paraview.org) est identifiée par id=11 dans le tableau
 ci-dessus.
 
-Cette composition de rotation se comprend comme une rotation $\psi$ autour de
-l'axe $Z$, suivie d'une rotation $\theta$ autour du nouvel axe $X'$ et
-finalement d'une rotation $\phi$ autour du nouvel axe $Y''$.
+Cette composition de rotation se comprend comme une rotation $`\psi`$ autour de
+l'axe $`Z`$, suivie d'une rotation $`\theta`$ autour du nouvel axe $`X'`$ et
+finalement d'une rotation $`\phi`$ autour du nouvel axe $`Y''`$.
 
 
 ## Quaternions
@@ -447,9 +447,9 @@ mesh: ../m.stl
 #### Passage du repère maillage au repère body
 
 L'origine du repère "body" (qui est le repère dans lequel est réalisé le bilan
-des efforts) est spécifiée par rapport au repère du maillage. En pratique, $x,y,z$
+des efforts) est spécifiée par rapport au repère du maillage. En pratique, $`x,y,z`$
 peuvent définir la position du centre de gravité dans le repère maillage et
-$\phi,\theta,\psi$ définissent la rotation permettant de passer du repère
+$`\phi,\theta,\psi`$ définissent la rotation permettant de passer du repère
 maillage au [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (suivant la convention choisie dans la [section
 `rotations`](#rotations)).
 
@@ -522,10 +522,10 @@ rigid body inertia matrix at the center of gravity and projected in the body fra
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Les calculs sont réalisés en supposant que les termes $a_{ij}$ de la matrice d'inertie sont en unité SI, c'est-à-dire:
-- en $\texttt{kg}$ pour les termes $a_{ij}$ avec $1\leq i,j \leq 3$,
-- en $\texttt{kg}\times\texttt{m}^2$ pour les termes $a_{ij}$ avec $4\leq i,j \leq 6$,
-- en $\texttt{kg}\times\texttt{m}$ pour les deux blocs 3x3 extra-diagonaux représentant les termes croisés de la matrice d'inertie.
+Les calculs sont réalisés en supposant que les termes $`a_{ij}`$ de la matrice d'inertie sont en unité SI, c'est-à-dire:
+- en $`\texttt{kg}`$ pour les termes $`a_{ij}`$ avec $1\leq i,j \leq 3$,
+- en $`\texttt{kg}\times\texttt{m}^2`$ pour les termes $`a_{ij}`$ avec $4\leq i,j \leq 6$,
+- en $`\texttt{kg}\times\texttt{m}`$ pour les deux blocs 3x3 extra-diagonaux représentant les termes croisés de la matrice d'inertie.
 
 #### Inerties ajoutées
 
@@ -603,7 +603,7 @@ depuis un fichier CSV.
 Si les valeurs des états sont dans le YAML :
 
 - `value`: Valeur de l'état forcé pour chaque instant
-   (dans l'exemple ci-dessus, u=5 pour t $\geq$ 4.2).
+   (dans l'exemple ci-dessus, u=5 pour t $`\geq`$ 4.2).
 - `t`: instants auxquels est défini l'état
 - `interpolation`: type d'interpolation à réaliser. `piecewise constant`,
   `linear` ou `spline`.
@@ -672,19 +672,19 @@ format HDB. Comme les RAO que l'on utilise actuellement proviennent
 exclusivement du logiciel AQUA+, dans la version actuelle X-DYN suppose que la
 convention utilisée est celle d'AQUA+.
 
-La différence entre la convention de X-DYN et celle d'AQUA+ est que l'axe $z$
+La différence entre la convention de X-DYN et celle d'AQUA+ est que l'axe $`z`$
 est ascendant pour AQUA+ et descendant pour X-DYN. L'angle de la houle
 représente bien dans les deux cas une direction de propagation (et non de
 provenance). Le potentiel des vitesses de la houle est, dans X-DYN comme dans
 AQUA+ :
 
-$$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+$``$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\cos(k\cdot(x\cdot
-\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$``$
 
 Toutes les données issues des fichiers HDB sont données en
 convention *z vers le haut* : par conséquent, il faut effectuer un changement de
-repère (rotation de $\pi$ autour de l'axe $X$) pour les mettre dans le repère
+repère (rotation de $`\pi`$ autour de l'axe $`X`$) pour les mettre dans le repère
 d'X-DYN (*z vers le bas*). La matrice de changement de base est :
 
 
@@ -700,7 +700,7 @@ R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]
 ```
 
 * Pour les matrices (masses ajoutées, amortissements...)
-  Si $M=((m_{ij}))$ désigne une matrice exprimée dans le repère AQUA+ et $M_d$ la même matrice
+  Si $`M=((m_{ij}))`$ désigne une matrice exprimée dans le repère AQUA+ et $`M_d`$ la même matrice
   exprimée dans le repère X-DYN, on a :
   
 ```math
@@ -731,10 +731,10 @@ S(\lambda)=\left[\begin{array}{ccc} 0&-\lambda_3&\lambda_2\\\lambda_3&0&-\lambd
 ```
 
 
-la matrice du produit vectoriel par $\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]$ : $\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a$
+la matrice du produit vectoriel par $`\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]`$ : $\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a$
 
 Pour effectuer un transport d'une matrice 6x6 en coordonnées généralisées
-(masse, masse ajoutée ou amortissement) d'un point $A$ vers un point $B$, on
+(masse, masse ajoutée ou amortissement) d'un point $`A`$ vers un point $`B`$, on
 utilise :
 
 
@@ -745,8 +745,8 @@ M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{
 
 Cete formule est une généralisation de la formule de Huyguens.
 
-En combinant avec un changement de base (de la base $a$ vers la base $b$) par
-la matrice de rotation ${}^a R_b$ de $b$ vers $a$ on obtient l'expression plus
+En combinant avec un changement de base (de la base $`a`$ vers la base $`b`$) par
+la matrice de rotation ${}^a R_b$ de $`b`$ vers $`a`$ on obtient l'expression plus
 générale :
 
 
@@ -756,14 +756,14 @@ générale :
 
 
 Cette formule permet d'effectuer à la fois le transport d'une matrice d'inertie
-généralisée 6x6 d'un point $A$ à un point $B$ et le changement de son repère
-d'expression de $a$ vers $b$.
+généralisée 6x6 d'un point $`A`$ à un point $`B`$ et le changement de son repère
+d'expression de $`a`$ vers $`b`$.
 
 La matrice d'inertie est le plus souvent exprimée au centre de gravité. Cependant, rien ne le garantit dans les fichiers HDB. Dans le cas général, il faut donc effectuer un transport, mais on suppose dans X-DYN qu'il n'y a pas de transport à faire
 et donc que la seule opération pour la conversion est le passage d'un repère z vers le haut (HDB) à un repère
 z vers le bas (X-DYN). La formule précédente se simplifie alors en :
 
-$${}^bM_B=\left[
+$``${}^bM_B=\left[
 \begin{array}{cccccc}
 1&0&0&0&0&0\\
 0&-1&0&0&0&0\\
@@ -783,9 +783,9 @@ $${}^bM_B=\left[
 0&0&0&0&0&-1\\
  \end{array}
 \right]
-$$
+$``$
 En prenant la notation
-$$ M_{\mbox{HDB}} =
+$``$ M_{\mbox{HDB}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &   m_{12}  &  m_{13}  &  m_{14}  &  m_{15}  &  m_{16}\\
@@ -796,9 +796,9 @@ $$ M_{\mbox{HDB}} =
  m_{61} &   m_{62}  &  m_{63}  &  m_{64}  &  m_{65}  &  m_{66} \\
 \end{array}
 \right]
-$$
+$``$
 on obtient :
-$$ M_{\mbox{XDYN}} =
+$``$ M_{\mbox{XDYN}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &  -m_{12}  & -m_{13}  &  m_{14}  & -m_{15}  & -m_{16}\\
@@ -809,10 +809,10 @@ $$ M_{\mbox{XDYN}} =
 -m_{61} &   m_{62}  &  m_{63}  & -m_{64}  &  m_{65}  &  m_{66} \\
 \end{array}
 \right]
-$$
+$``$
 
 Pour les torseurs, on obtient le changement suivant :
-$$ \tau_{\mbox{HDB}} =
+$``$ \tau_{\mbox{HDB}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -823,9 +823,9 @@ M_Y\\
 M_Z\\
 \end{array}
 \right]
-$$
+$``$
 
-$$ \tau_{\mbox{XDYN}} =
+$``$ \tau_{\mbox{XDYN}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -836,7 +836,7 @@ M_X\\
 -M_Z\\
 \end{array}
 \right]
-$$
+$``$
 
 
 Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid body shift of rigid body spatial inertia
@@ -968,11 +968,11 @@ sont calculés dans un repère appelé **repère de calcul hydrodynamique**, qui
 est un repère translaté par rapport au repère body. Le centre de ce repère est
 un point défini (dans le repère body) de la façon suivante :
 
-- Son abscisse $x$ est celle du centre de la surface résultant de la projection
-du maillage sur le plan $(x,z)$
-- Son ordonnée $y$ vaut zéro
-- Son altitude $z$ est celle du centre de la surface résultant de la projection
-du maillage sur le plan $(x,y)$
+- Son abscisse $`x`$ est celle du centre de la surface résultant de la projection
+du maillage sur le plan $`(x,z)`$
+- Son ordonnée $`y`$ vaut zéro
+- Son altitude $`z`$ est celle du centre de la surface résultant de la projection
+du maillage sur le plan $`(x,y)`$
 
 Ce point est, en général, distinct du centre de gravité et du centre de volume.
 Il est défini dans la section `dynamics/hydrodynamic forces calculation point
@@ -986,10 +986,10 @@ hydrodynamic forces calculation point in body frame:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-On note ${}^{\textrm{local}}T_{\textrm{body}}$ la transformation permettant de
+On note $`{}^{\textrm{local}}T_{\textrm{body}}`$ la transformation permettant de
 convertir des coordonnées dans le [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) en coordonnées du même point
 exprimées dans le repère de calcul hydrodynamique.
-${}^{\textrm{local}}T_{\textrm{NED}}$ est celle permettant de convertir des
+$`{}^{\textrm{local}}T_{\textrm{NED}}`$ est celle permettant de convertir des
 coordonnées dans le repère NED en coordonnées du même point exprimées dans le
 repère de calcul hydrodynamique.
 
@@ -1013,9 +1013,9 @@ rotations convention: [psi,theta',phi'']
 
 Cette ligne s'interprète de la façon suivante : étant donné un triplet $(\phi,
 \theta, \psi)$, on construit les matrices de rotation en effectuant d'abord une
-rotation d'angle $\psi$ autour de l'axe Z, ensuite une rotation d'angle
-$\theta$ autour de l'axe Y du repère précédemment transformé, puis une rotation
-d'angle $\phi$ autour de l'axe X du repère ainsi obtenu.
+rotation d'angle $`\psi`$ autour de l'axe Z, ensuite une rotation d'angle
+$`\theta`$ autour de l'axe Y du repère précédemment transformé, puis une rotation
+d'angle $`\phi`$ autour de l'axe X du repère ainsi obtenu.
 
 Si l'on avait noté :
 
@@ -1023,8 +1023,8 @@ Si l'on avait noté :
 rotations convention: [z,y',x'']
 ~~~~~~~~~~~~~~
 
-on aurait d'abord une rotation d'angle $\phi$ autour de l'axe Z, puis une
-rotation d'angle $\theta$ autour du nouvel axe Y, puis une rotation $\psi$
+on aurait d'abord une rotation d'angle $`\phi`$ autour de l'axe Z, puis une
+rotation d'angle $`\theta`$ autour du nouvel axe Y, puis une rotation $`\psi`$
 autour du nouvel axe X.
 
 Des apostrophes sont utilisées pour indiquer des compositions de rotations
@@ -1039,7 +1039,7 @@ La liste `rotations convention` comporte toujours trois éléments. Le deuxième
 deux autres, soit égal au premier.
 
 La convention des angles aéronautiques, fréquemment (et abusivement) dénotée
-"angles d'Euler" (lacet $\psi$, tangage $\theta$, roulis $\phi$), se définit de
+"angles d'Euler" (lacet $`\psi`$, tangage $`\theta`$, roulis $`\phi`$), se définit de
 la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -1079,8 +1079,8 @@ Cette description est en particulier utilisée pour définir le changement de co
 
 ## Convention de houle {#section_Direction_houle}
 
-X-DYN utilise la convention $Z$ vers le bas pour l'amplitude.
-L'azimuth ou la direction de houle que l'on note $\gamma$ représente la
+X-DYN utilise la convention $`Z`$ vers le bas pour l'amplitude.
+L'azimuth ou la direction de houle que l'on note $`\gamma`$ représente la
 direction de propagation de la houle.
 
 Ainsi une direction nulle indique une

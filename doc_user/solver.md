@@ -5,7 +5,7 @@ différentielles ordinaires.
 
 ## Formulation du problème
 
-Soit $n\in\mathbf{N}^*$, $p\in\mathbf{N}$, $m\in\mathbf{N}$.
+Soit $`n\in\mathbf{N}^*`$, $`p\in\mathbf{N}`$, $`m\in\mathbf{N}`$.
 On appelle *modèle* une fonction
 
 ```math
@@ -13,18 +13,18 @@ f:\mathbf{R}^n\times\mathbf{R}^m\times\mathbf{R}\times\mathbf{R}^p\rightarrow\ma
 ```
 
 
-- $n$ est appelé "nombre d'états"
-- $p$ désigne le nombre de paramètres du système
-- $m$ est le nombre d'entrées du système
+- $`n`$ est appelé "nombre d'états"
+- $`p`$ désigne le nombre de paramètres du système
+- $`m`$ est le nombre d'entrées du système
 
 Une fonction dérivable $X:t\in\mathbf{R}\mapsto X(t)\in\mathbf{R}^n$ est
 appelée *vecteur d'états* de ce système: ce sont les variables qui
 résument toutes les informations calculées par le modèle (par exemple,
 position, attitude, vitesse angulaire et vitesse de rotation).
 
-$U\in\mathbf{R}^m$ sont les *entrées* du système (par exemple des commandes).
+$`U\in\mathbf{R}^m`$ sont les *entrées* du système (par exemple des commandes).
 
-$P\in\mathbf{R}^p$ sont les paramètres du système, c'est-à-dire les constantes.
+$`P\in\mathbf{R}^p`$ sont les paramètres du système, c'est-à-dire les constantes.
 
 L'équation différentielle que l'on souhaite intégrer est :
 
@@ -38,11 +38,11 @@ L'équation différentielle que l'on souhaite intégrer est :
 
 Le solveur comprend cinq éléments :
 
-- un *stepper* qui calcule, pour un pas d'intégration $dt$, $X(t+dt)$ en
-fonction de $f$, $X$, $U$, $t$ et $P$.
+- un *stepper* qui calcule, pour un pas d'intégration $`dt`$, $`X(t+dt)`$ en
+fonction de $`f`$, $`X`$, $`U`$, $`t`$ et $`P`$.
 - un *scheduler* qui calcule le prochain pas de temps (et donc le pas
-d'intégration $dt$ en tenant compte d'éventuels évènements (discontinuités de
-la fonction $f$)).
+d'intégration $`dt`$ en tenant compte d'éventuels évènements (discontinuités de
+la fonction $`f`$)).
 - un *event handler* qui s'occupe de la localisation et du traitement des
 évènements. C'est ce composant qui détermine quelles sont les actions à
 réaliser lorsqu'un évènement est détecté (redémarrage du solveur, arrêt,
@@ -50,7 +50,7 @@ changement des états...).
 - un *observer* dont la fonction est de réaliser des actions en cours de
 simulation (par exemple, exporter des états vers un fichier ou vers un système
 de visualisation).
-- un *system* qui implémente le calcul de la fonction $f$.
+- un *system* qui implémente le calcul de la fonction $`f`$.
 
 La figure suivante illustre les interactions entre ces composants.
 
@@ -58,7 +58,7 @@ La figure suivante illustre les interactions entre ces composants.
 
 ## Steppers
 
-Les steppers réalisent l'intégration de $f$ sur un pas de temps. Actuellement,
+Les steppers réalisent l'intégration de $`f`$ sur un pas de temps. Actuellement,
 trois steppers sont implémentés :
 
 ### Euler
@@ -117,16 +117,16 @@ C'est un stepper très utilisé dans l'ingénierie.
 C'est une méthode à pas adaptatif qui permet d'estimer l'erreur d'intégration.
 L'estimation de l'erreur est utilisée pour contrôler le pas d'intégration du schéma.
 
-$$\hat{X}(t+dt) = X(t) + \frac{37}{378}\cdot k_1 + \frac{250}{621}\cdot k_3 +
-\frac{125}{594}\cdot k_4 + \frac{512}{1771}\cdot k_6$$
+$``$\hat{X}(t+dt) = X(t) + \frac{37}{378}\cdot k_1 + \frac{250}{621}\cdot k_3 +
+\frac{125}{594}\cdot k_4 + \frac{512}{1771}\cdot k_6$``$
 
 L'erreur commise est approchée par la relation suivante
 
-$$e(t+dt) = \left(\frac{37}{378} - \frac{2825}{27648}\right)\cdot k_1 +
+$``$e(t+dt) = \left(\frac{37}{378} - \frac{2825}{27648}\right)\cdot k_1 +
             \left(\frac{250}{621} - \frac{18575}{48384}\right)\cdot k_3 +
             \left(\frac{125}{594} - \frac{13525}{55296}\right)\cdot k_4 +
             \left(- \frac{277}{14336}\right)\cdot k_5 +
-            \left(\frac{512}{1771} - \frac{1}{4}\right)\cdot k_6$$
+            \left(\frac{512}{1771} - \frac{1}{4}\right)\cdot k_6$``$
 
 avec
 
