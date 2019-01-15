@@ -13,17 +13,6 @@ external forces:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Le navire est soumis aux efforts suivants :
-
-- La pesanteur,
-- Les efforts hydrostatiques, liés à la pression exercée par le fluide au repos
-  sur la coque,
-- Les efforts hydrodynamiques, provenant d'une part de l'excitation de la houle
-  et d'autre part des phénomènes de radiation/diffraction,
-- Les efforts d'amortissement visqueux, dûs aux frottements de l'eau sur la
-  coque et aux tourbillons.
-
-
 ## Efforts de gravité
 
 ### Description
@@ -80,7 +69,7 @@ décrit [ici](#).
 Un exemple d'utilisation est présenté dans les
 [tutoriels](#tutoriel-2-oscillations-en-immersion).
 
-### Calcul de la résultante
+### Calcul de la résultante des efforts hydrostatiques intégrés sur la coque
 
 Pour évaluer numériquement cette intégrale, il faut discrétiser la carène au
 moyen d'un maillage surfacique. La définition de ce maillage est faite
@@ -109,7 +98,7 @@ et une sous-facette immergée, la situation est la suivante :
 La surface libre est représentée en bleu. Les vrais points d'intersection sont
 P' et Q', mais comme le calcul de la fonction $\eta$ représentant l'élévation
 de la surface libre est coûteux, on calcule les points P et Q, barycentres
-respectifs des segments [AC] et [AD], affectés des coefficients correspondant à
+respectifs des segments [AC] et [BC], affectés des coefficients correspondant à
 la hauteur d'eau au-dessus d'eux. Cela revient à approcher la surface libre
 par un plan orthogonal à la facette et passant par P et Q. Cette approximation
 est d'autant plus juste que les mailles sont petites par rapport à la longueur
@@ -125,7 +114,7 @@ $$\epsilon(k,L) \sim 1-\cos\left(k\cdot\frac{L}{2}\right) \sim \frac{k^2\cdot L^
 où $k$ désigne le nombre d'onde et $L$ la dimension caractéristique de la
 maille.
 
-### Calcul du moment
+### Calcul du moment hydrostatique
 
 Pour le calcul du moment, il faut connaître le point d'application de chaque
 force élémentaire qui se situe en général en-dessous du centroïde de la facette
@@ -209,7 +198,7 @@ temps de calcul (on peut constater un ordre de grandeur par rapport au modèle
 ### Nouveau modèle hydrostatique
 
 Ce modèle utilise une approche différente : au lieu d'intégrer les efforts sur
-toutes les facettes, on calcule le volume immergé et son centroïde et l'on
+toutes les facettes, on calcule le volume immergé du maillage complet et son centroïde et l'on
 écrit :
 
 $$F_{\textrm{hs}} = \rho\cdot V\cdot \mathbf{g}$$
@@ -307,9 +296,7 @@ ces tables sont calculées en résolvant un problème de condition aux limites p
 le potentiel de vitesse : on utilise donc des codes basés sur des méthodes
 potentielles, tels qu'Aqua+. Les fonctions de transfert (Response Amplitudes Operators ou RAO)
 sont paramétrées en pulsation, incidence et vitesse d'avance. Il s'agit de RAO
-d'efforts du premier ordre). La principale différence entre les efforts de
-radiation et les efforts de diffraction est l'écriture de la condition aux
-limites.
+d'efforts du premier ordre). Les efforts de diffraction sont dûs à la diffraction de la houle par le corps fixe, tandis que les amortissements de radiation proviennent de la dissipation de l'énergie du corps lors de son mouvement, par la création de vagues. Cette différence se traduit uniquement par une différence de conditions aux limites dans la modélisation potentielle.
 
 ### Calcul numérique
 
@@ -320,7 +307,7 @@ fois interpolée, deux fonctions RAO par axe $k$
 $$(u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{module}}(u,\omega,\beta)$$
 $$(u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{phase}}(u,\omega,\beta)$$
 
-* $u$ désigne la composante longitudinale de vitesse d'avance (basse fréquence) projetée dans le repère body,
+* $u$ désigne la composante longitudinale de vitesse d'avance (basse fréquence) projetée dans le repère body (une limitation actuelle d'X-DYN est que l'on utilise pour ces calculs non pas la vitesse basse fréquence mais la vitesse instantanée),
 * $\omega$ désigne la pulsation de la houle (et non la pulsation de rencontre, puisque dans la formule ci-dessous on fait intervenir $\mathbf{k}\cdot \mathbf{x}$),
 * $\beta$ est l'angle d'incidence entre l'axe $X$ du navire et la direction de propagation de la houle
 
@@ -461,12 +448,11 @@ On décompose donc la résistance de remorquage en deux composantes :
 - la résistance de vagues, due à la création d'un champs de vague par le
 navire.
 
-En pratique, on effectue une interpolation par spline cubique de la résistance
-à l'avancement en fonction de la vitesse du solide par rapport au repère NED
-projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $u$). Si $f:u\mapsto R=f(u)$
-désigne la fonction d'interpolation, le torseur des efforts, exprimé au [point
-de calcul
-hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
+En pratique, on effectue une interpolation de la courbe de résistance à l'avancement en fonction de la vitesse du solide par rapport au repère NED
+projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $u$). La courbe de résistance à l'avancement est obtenue au préalable (et non calculée par X-DYN) et renseignée dans le fichier YAML.
+
+Si $f:u\mapsto R=f(u)$ désigne la fonction d'interpolation de la courbe de résistance à l'avancement, le torseur des efforts, exprimé au [point
+de calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
 est :
 
 $$\tau_{\textrm{res}} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]$$
@@ -514,8 +500,7 @@ sont ces derniers qui nous intéressent dans cette section.
 Les amortissements non-visqueux (radiation) sont, par nature, linéaires par
 rapport à la vitesse. Les amortissements visqueux sont, eux, quadratiques. Le
 modèle d'amortissement linéaire ne doit être utilisé que pour prendre en compte
-les efforts dissipatifs de radiations, si ceux-ci ne sont pas modélisés par
-ailleurs. Suivant les axes, certains termes prédominent par rapport aux autres.
+les efforts dissipatifs de radiations, si ceux-ci ne sont pas déjà obtenus par le calcul fréquentiel (par le modèle d'amortissement de radiation qui utilise la base de donnée hydro du fichier HDB). Suivant les axes, certains termes prédominent par rapport aux autres.
 Ainsi, en roulis, l'amortissement quadratique est prépondérant par rapport à
 l'amortissement linéaire, tandis qu'en tangage c'est l'inverse.
 
@@ -526,10 +511,10 @@ schémas d'intégration numériques explicites (type Runge-Kutta par exemple).
 Lorsque l'on utilise conjointement les modèles d'amortissement en cavalement et
 de résistance à l'avancement, il convient de prendre des précautions
 supplémentaires afin de ne pas modéliser deux fois le même phénomène physique.
-On décompose donc la vitesse longitudinale en une composante basse fréquence
+Il faut donc décomposer la vitesse longitudinale en une composante basse fréquence
 (utilisée par le modèle de [résistance à
 l'avancement](#r%C3%A9sistance-%C3%A0-lavancement))
-et une composante haute fréquence (pour le modèle d'amortissement).
+et une composante haute fréquence (pour le modèle d'amortissement). Cette décomposition n'est pas encore implémentée dans X-DYN.
 
 ### Modélisation
 
@@ -550,7 +535,7 @@ $$\nu_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}} \nu_b -
 
 $$\omega_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}}\omega_{nb}^b$$
 
-Si les efforts de radiation ne sont par modélisés par ailleurs, les
+Si les efforts de radiation ne sont par si ceux-ci sont déjà obtenus par le calcul fréquentiel (par le modèle d'amortissement de radiation qui utilise la base de donnée hydro du fichier HDB), les
 amortissements linéaires s'écrivent (dans le [repère de calcul
 hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique)) :
 
@@ -629,8 +614,7 @@ documentation](#efforts-damortissement-visqueux).
 ### Description
 
 Le modèle d'efforts hydrostatiques linéaires est beaucoup plus rapide à
-calculer que son homologue non-linéaire puisqu'il ne nécessite que quatre
-calculs de hauteur de houle.
+calculer que son homologue non-linéaire.
 
 ![](images/linear_hydrostatics.svg)
 
@@ -710,7 +694,7 @@ exprimées dans le repère désigné par `frame`. Les coordonnées `X`, `Y`, `Z`
 
 ## Description
 
-Les efforts contrôlés correspondent aux efforts de propulsion, de safran et de
+Les efforts commandés correspondent, par exemple, aux efforts de propulsion, de safran et de
 foil. Ils sont décrits dans la section `controlled forces`. Les seules clefs
 YAML communes à tous les efforts commandés sont `name` (qui est un identifiant
 choisi par l'utilisateur) et `model` (qui est une chaîne servant à identifier
@@ -759,10 +743,12 @@ controlled forces:
     diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Les commandes sont définies dans la section `commands` décrite ci-après.
+
 ### Syntaxe des commandes
 
 La section `commands` spécifie de manière statique les commandes reçues par
-les modèles d'efforts commandés. Les
+les modèles d'efforts commandés. Les paramètres pouvant être commandés dépendent de chaque modèle d'effort : tous les paramètres ne peuvent pas forcément être commandés. Les
 commandes à chaque instant sont connues lors du lancement de la simulation.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -776,6 +762,8 @@ commands:
     rpm: {unit: rpm, values: [3000, 3000, 4000]}
     P/D: {unit: 1, values: [0.7,0.7,0.8]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Il s'agit ici d'un modèle d'hélice dont la description complète est [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b).
 
 La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans
 la section `controlled forces`. Pour chaque effort contrôlé (identifié par
