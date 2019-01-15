@@ -144,8 +144,8 @@ Pour calculer le point d'application, on définit les notations suivantes :
 ![](images/hydrostatic_2.svg)
 
 On désigne par $`t_R`$ et $`u_R`$ les coordonnées du point d'application des
-efforts dans le plan ($`t$,$u`$) et $`t_G`$ et $`u_G`$ les coordonnées du centroïde
-de la facette dans ce même repère. Le repère ($`t`$, $`u`$) est centré au centroïde
+efforts dans le plan ($`t,u`$) et $`t_G`$ et $`u_G`$ les coordonnées du centroïde
+de la facette dans ce même repère. Le repère ($`t, u`$) est centré au centroïde
 de la facette.
 
 Les efforts hydrostatiques s'écrivent :
