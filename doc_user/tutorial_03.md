@@ -30,7 +30,7 @@ La section `environment models` est nettement plus fournie que pour les
 tutoriels précédents.
 
 On commence par définir la discrétisation. Actuellement, le nombre de
-pulsations est égal au nombre de directions :
+pulsations est égal au nombre de directions : il s'agit d'une limitation du code.
 
 ```python echo=False, results='raw', name='tutorial_03_print_wave_discretization'
 print_yaml(yaml_data, 'environment models/0/discretization')
