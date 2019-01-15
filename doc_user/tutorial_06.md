@@ -5,13 +5,15 @@ tutoriel, nous simulons un propulseur.
 
 ### Description du problème
 
-Le navire évolue dans un environnement sans houle. Il est soumis aux quatre
+Le navire évolue dans un environnement sans houle. Il est soumis aux six
 efforts suivants :
 
 - La pesanteur
 - Les efforts hydrostatiques (rapides et non exacts)
 - L'amortissement visqueux
 - Un effort de propulsion
+- résistance à l'avancement 
+- effort de propulsion dû à une hélice
 
 ### Écriture du fichier de configuration du simulateur
 
