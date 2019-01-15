@@ -24,10 +24,10 @@ Le potentiel de la houle incidente est connu si l'on se place dans le cadre de
 la théorie linéaire de Stokes. On désignera par $`\Phi_I`$ ce potentiel. On a en
 effet :
 
-$``$\Phi_I(y,z,t) = \frac{g H}{2 \omega}
-\frac{\cosh(k(z-h))}{\cosh(kh)}\cos(ky-\omega t)$``$
+$`\Phi_I(y,z,t) = \frac{g H}{2 \omega}
+\frac{\cosh(k(z-h))}{\cosh(kh)}\cos(ky-\omega t)`$
 
-avec : $\omega^2 = g\cdot k\cdot \tanh(kh)$
+avec : $`\omega^2 = g\cdot k\cdot \tanh(kh)`$
 
 où $`k`$ désigne le nombre d'onde, $`\omega`$ la pulsation de la houle, $`h`$ la
 profondeur d'eau, $`H`$ la double amplitude (ou creux) et $`g`$ l'accélération de
@@ -59,23 +59,23 @@ $`\omega`$ :
 Le potentiel inconnu $`\Phi_P`$ doit satisfaire les conditions suivantes :
 
 1. Le fluide étant incompressible et l'écoulement irrotationnel, $`\Phi_P`$
-   vérifie l'équation de Laplace $\Delta \Phi_P = 0$.
+   vérifie l'équation de Laplace $`\Delta \Phi_P = 0`$.
 2. Si l'on suppose l'obstacle immobile, la condition de surface libre s'écrit :
-   $``$\left[g\cdot\frac{\partial \Psi_P}{\partial z} + \omega^2
-   \Psi_P\right](x,y,0,t) = 0$``$
+   $`\left[g\cdot\frac{\partial \Psi_P}{\partial z} + \omega^2
+   \Psi_P\right](x,y,0,t) = 0`$
 3. Le potentiel étant indéterminé si l'on n'impose pas une condition sur le sens
    de propagation de l'énergie, on imposera la condition de rayonnement de
    Sommerfeld (phénomène divergent ; l'énergie s'éloigne de l'obstacle) :
-   $\sqrt{r}\lvert{\partial \Psi_P}{\partial r} - i \lvert k\rvert\Psi_P\rvert
-   \rightarrow 0$ quand $r=\sqrt{x^2 + y^2}\rightarrow \infty$ (condition de
+   $`\sqrt{r}\lvert{\partial \Psi_P}{\partial r} - i \lvert k\rvert\Psi_P\rvert
+   \rightarrow 0`$ quand $`r=\sqrt{x^2 + y^2}\rightarrow \infty`$ (condition de
    rayonnement à l'infini). Cette condition exprime que, au loin, les ondes de
    diffraction-radiation ont pour nombre d'onde $`k`$, se propagent dans la
    direction radiale et leur amplitude décroît comme $`1/\sqrt{r}`$.
 4. Le fond étant imperméable, la composante suivant $`z`$ de la vitesse y est
-   nulle : $V_z(x,y,h,t) = \frac{\partial \Phi_P}{\partial z}(x,y,h,t) = 0$ et
-   par là même : $\frac{\partial \Psi_P}{\partial z}(x,y,h) = 0$.
-5. L'obstacle étant imperméable, $(\textrm{grad} \Psi_P) \cdot n = \frac{\partial
-   \Psi_P}{\partial n} = -(\textrm{grad} \Psi_I) \cdot n + V_o \cdot n$
+   nulle : $`V_z(x,y,h,t) = \frac{\partial \Phi_P}{\partial z}(x,y,h,t) = 0`$ et
+   par là même : $`\frac{\partial \Psi_P}{\partial z}(x,y,h) = 0`$.
+5. L'obstacle étant imperméable, $`(\textrm{grad} \Psi_P) \cdot n = \frac{\partial
+   \Psi_P}{\partial n} = -(\textrm{grad} \Psi_I) \cdot n + V_o \cdot n`$
    où $`V_o`$ est la vitesse normale de l'obstacle en
    un point $`P`$ et $`n`$ est la normale extérieure à l'obstacle.
 
@@ -92,8 +92,8 @@ l'obstacle fixe. Un potentiel $`\Psi_{\textrm{PD}}`$ vérifiant les conditions (
 (4) et la condition de diffraction est appelé potentiel de diffraction.
 
 Si l'on ne considère qu'on mouvement oscillatoire élémentaire de l'obstacle
-suivant son $`j`$-ème degré de liberté, la condition (5) s'écrit : $``$
-\frac{\partial \Psi_P}{\partial n} = n_j$``$. Un potentiel $`\Psi_{PR_j}`$
+suivant son $`j`$-ème degré de liberté, la condition (5) s'écrit : $`
+\frac{\partial \Psi_P}{\partial n} = n_j`$. Un potentiel $`\Psi_{PR_j}`$
 vérifiant les conditions (1) à (4) et cette condition-ci est appelé $`j`$-ème
 potentiel élémentaire de rayonnement et correspond au mouvement engendré par ce
 mouvement oscillatoire élémentaire de l'obstacle.
@@ -102,8 +102,8 @@ En définitive, la solution complète $`\Phi_D`$ du problème de
 diffraction-rayonnement obtenue par superposition de la solution "obstacle
 fixe" et des solutions oscillatoires élémentaires peut s'écrire :
 
-$``$ \Phi_D = \Re\left[\Psi_{\textrm{PD}}e^{-i\omega t} + \sum_{j=1}^6
-f_j\Psi_{\textrm{PR}_j} e^{-i\omega t}\right]$``$
+$` \Phi_D = \Re\left[\Psi_{\textrm{PD}}e^{-i\omega t} + \sum_{j=1}^6
+f_j\Psi_{\textrm{PR}_j} e^{-i\omega t}\right]`$
 
 en adoptant les notations suivantes :
 
@@ -112,8 +112,8 @@ en adoptant les notations suivantes :
 
 ## Expression des efforts hydrodynamiques
 
-On pose $``$\Phi_{\textrm{PR}} =  \Re\left[\sum_{j=1}^6 f_j \Psi_{PR_j} e^{-i\omega
-t}\right]$``$
+On pose $`\Phi_{\textrm{PR}} =  \Re\left[\sum_{j=1}^6 f_j \Psi_{PR_j} e^{-i\omega
+t}\right]`$
 
 Les efforts hydrodynamiques s'écrivent :
 
@@ -128,10 +128,10 @@ F_{\textrm{hd}} = \rho \frac{d}{dt} \int_{C}\Phi_T dS
 ```
 
 
-On appelle $F_{\textrm{FK}}=\rho \frac{d}{dt} \int_{C}\Phi_I dS$ "efforts de
-Froude-Krylov" et $F_D = \rho \frac{d}{dt} \int_{C}\Phi_{\textrm{PD}} dS$ "efforts de
+On appelle $`F_{\textrm{FK}}=\rho \frac{d}{dt} \int_{C}\Phi_I dS`$ "efforts de
+Froude-Krylov" et $`F_D = \rho \frac{d}{dt} \int_{C}\Phi_{\textrm{PD}} dS`$ "efforts de
 diffraction". Ensemble ils constituent les efforts d'excitation de la houle
-$`F_E`$. Les efforts $\rho \frac{d}{dt} \int_{C}\Phi_{\textrm{PR}} dS$ sont nommés
+$`F_E`$. Les efforts $`\rho \frac{d}{dt} \int_{C}\Phi_{\textrm{PR}} dS`$ sont nommés
 "efforts de radiation" et sont désignés par $`F_R`$. On a donc :
 
 
@@ -163,14 +163,14 @@ On a, pour l'axe $`k`$ :
 
 
 On décompose $`\Psi_{\textrm{PR}_j}`$ en sa partie réelle et sa partie imaginaire :
-$\Psi_{\textrm{PR}_j} = \Psi_j^R + i \Psi_j^I$
+$`\Psi_{\textrm{PR}_j} = \Psi_j^R + i \Psi_j^I`$
 
 On a alors :
 
-$``$ F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \Re(-i\omega \Psi_j^R + \omega \Psi_j^I)
-f_j e^{-i\omega t} n_k dS$``$
-$``$ = \rho \Re \int_C \sum_j -i\omega f_j e^{-i\omega t} \Psi_j^R + \sum_j \omega
-f_j e^{-i\omega t} \Psi_j^I n_k dS$``$
+$` F_{\textrm{R}_k} = \rho \Re \int_C \sum_j \Re(-i\omega \Psi_j^R + \omega \Psi_j^I)
+f_j e^{-i\omega t} n_k dS`$
+$` = \rho \Re \int_C \sum_j -i\omega f_j e^{-i\omega t} \Psi_j^R + \sum_j \omega
+f_j e^{-i\omega t} \Psi_j^I n_k dS`$
 
 On remarque que
 
@@ -188,14 +188,14 @@ On remarque que
 ```
 
 
-$``$ = \rho\omega \sum_j\Re (f_j e^{-i\omega t})\int_C \Psi_j^I
+$` = \rho\omega \sum_j\Re (f_j e^{-i\omega t})\int_C \Psi_j^I
 n_k dS + \rho \sum_j \frac{d}{dt}\Re(f_j
-e^{-i\omega t})\int_C\Psi_j^R n_k dS$``$
+e^{-i\omega t})\int_C\Psi_j^R n_k dS`$
 
-On pose $U_j=\Re(f_j e^{-i\omega t})$
+On pose $`U_j=\Re(f_j e^{-i\omega t})`$
 
-$``$ F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I n_k dS + \rho \sum_j
-\frac{dU_j}{dt}\int_C \Psi_j^R n_k dS$``$
+$`F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I n_k dS + \rho \sum_j
+\frac{dU_j}{dt}\int_C \Psi_j^R n_k dS`$
 
 Or d'après la condition (5) écrite pour les potentiels élémentaires de
 rayonnement,
@@ -208,9 +208,9 @@ n_k = \frac{\partial \Psi_k^R}{\partial n}
 
 On a donc :
 
-$``$ F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
+$` F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I  \frac{\partial
 \Psi_k^R}{\partial n} dS + \rho \sum_j
-\frac{dU_j}{dt}\int_C \Psi_j^R  \frac{\partial \Psi_k^R}{\partial n} dS$``$
+\frac{dU_j}{dt}\int_C \Psi_j^R  \frac{\partial \Psi_k^R}{\partial n} dS`$
 
 On pose :
 
@@ -233,14 +233,14 @@ dispersion d'énergie par les vagues générées par le solide).
 
 On a alors :
 
-$``$F_{\textrm{R}_k} = -\left(\sum_j U_j {B_r}_{jk}(\omega) + \sum_j \frac{dU_j}{dt}
-{M_A}_{jk}(\omega)\right)$``$
+$`F_{\textrm{R}_k} = -\left(\sum_j U_j {B_r}_{jk}(\omega) + \sum_j \frac{dU_j}{dt}
+{M_A}_{jk}(\omega)\right)`$
 
 En prenant $`U=d\eta/dt`$, on obtient une formulation vectorielle des efforts dans
 le domaine fréquentiel :
 
-$``$F_{\textrm{R}}(t) = -\left(M_A(\omega)\frac{d^2\eta(t)}{dt^2} + B_r(\omega)
-\frac{d\eta(t)}{dt}\right)$``$
+$`F_{\textrm{R}}(t) = -\left(M_A(\omega)\frac{d^2\eta(t)}{dt^2} + B_r(\omega)
+\frac{d\eta(t)}{dt}\right)`$
 
 ## Propriétés
 
@@ -250,9 +250,9 @@ est définie positive : on peut donc considérer $`M_A`$ comme une matrice d'ine
 que l'on appelle "inertie ajoutée". On peut aussi retrouver l'expression de $`M_A`$
 de l'évaluation de l'énergie cinétique du fluide :
 
-$``$2Ec = \rho\int_{\omega} (\nabla \Phi)^2 dV = \rho \int_{\partial \Omega} \Phi
+$`2Ec = \rho\int_{\omega} (\nabla \Phi)^2 dV = \rho \int_{\partial \Omega} \Phi
 \frac{\partial \Phi}{\partial n} dS = \rho f_k f_l \int_{\partial \Omega}\Phi_k
-\frac{\partial \Phi_l}{\partial n} dS = \rho {M_A}_{kl} f_k f_l$``$
+\frac{\partial \Phi_l}{\partial n} dS = \rho {M_A}_{kl} f_k f_l`$
 
 
 ## Écriture en temporel
@@ -314,12 +314,12 @@ F_{jk} = -\int_S p_j n_k dS
 ```
 
 
-Or par définition, $p = \frac{\partial \Theta}{\partial t}$
+Or par définition, $`p = \frac{\partial \Theta}{\partial t}`$
 
 En dérivant sous le signe intégral on obtient :
 
-$``$\frac{\partial \Theta}{\partial t} = \ddot{x_j}\Psi_j + \int_{-\infty}^t
-\frac{\partial \phi_j(t-\tau)}{\partial t}\dot{x_j}(\tau)d\tau$``$
+$`\frac{\partial \Theta}{\partial t} = \ddot{x_j}\Psi_j + \int_{-\infty}^t
+\frac{\partial \phi_j(t-\tau)}{\partial t}\dot{x_j}(\tau)d\tau`$
 
 Il en découle :
 
@@ -343,8 +343,8 @@ K_{jk}(t) = \rho\int_C\frac{\partial\phi_j(t)}{\partial t}n_k dS \textrm{ (fonct
 
 On a alors :
 
-$``$-F_{jk} = \ddot{x_j}A_{jk} + \int_{-\infty}^t K(t-\tau)\dot{x_j}(\tau)
-d\tau$``$
+$`-F_{jk} = \ddot{x_j}A_{jk} + \int_{-\infty}^t K(t-\tau)\dot{x_j}(\tau)
+d\tau`$
 
 ## Relation entre les formulations temporelle et fréquentielle
 
@@ -358,8 +358,8 @@ La formulation fréquentielle s'écrit :
 
 La formulation temporelle est :
 
-$``$-F_R = A\frac{d^2X}{dt^2} + \int_{-\infty}^t
-K(t-\tau)\frac{dX}{dt}(\tau)d\tau$``$
+$`-F_R = A\frac{d^2X}{dt^2} + \int_{-\infty}^t
+K(t-\tau)\frac{dX}{dt}(\tau)d\tau`$
 
 Les codes fréquentiels tels qu'Aqua+ ou Diodore fournissent les matrices
 $`M_A(\omega)`$ et $`B_r(\omega)`$ à n'importe quelle fréquence, mais qu'en est-il
@@ -370,33 +370,33 @@ les matrices $`A`$ et $`K`$ en fonction des matrices $`M_A`$ et $`B_r`$.
 Pour ce faire, il considère que le mouvement du solide est oscillant de période
 $`\omega`$ :
 
-$X(t) = \cos(\omega t)$
+$`X(t) = \cos(\omega t)`$
 
 En substituant dans la formulation fréquentielle, on obtient :
 
-$``$F_R = \omega^2 M_A(\omega) \cos(\omega t) + \omega B_r(\omega) \sin(\omega
-t)$``$
+$`F_R = \omega^2 M_A(\omega) \cos(\omega t) + \omega B_r(\omega) \sin(\omega
+t)`$
 
 En ce qui concerne la formulation temporelle, on a :
 
 $F_R = \omega^2 A \cos(\omega t) + \omega \int_{-\infty}^t K(t-\tau)
 \sin(\omega\tau)d\tau$
 
-En effectuant le changement de variable $\tau\leftarrow t-\tau$ on a :
+En effectuant le changement de variable $`\tau\leftarrow t-\tau`$ on a :
 
-$F_R = \omega^2 A \cos(\omega t) + \omega \int_0^{+\infty} K(\tau)
-\sin(\omega(t-\tau))d\tau$
+$`F_R = \omega^2 A \cos(\omega t) + \omega \int_0^{+\infty} K(\tau)
+\sin(\omega(t-\tau))d\tau`$
 
 En développant $`\sin(\omega(t-\tau)`$ on obtient :
 
-$``$F_R = \omega^2\left[A - \frac{1}{\omega}\int_0^{\infty}
+$`F_R = \omega^2\left[A - \frac{1}{\omega}\int_0^{\infty}
 K(\tau)\sin(\omega\tau)d\tau\right]\cos(\omega t) +
-\omega\int_0^{+\infty}K(\tau)\cos(\omega\tau)d\tau \sin(\omega t)$``$
+\omega\int_0^{+\infty}K(\tau)\cos(\omega\tau)d\tau \sin(\omega t)`$
 
 Les relations suivantes doivent donc être valables pour tout $`\omega`$ :
 
-$``$M_A(\omega) = A-\frac{1}{\omega}\int_0^{+\infty}K(\tau)\sin(\omega\tau)
-d\tau$``$
+$`M_A(\omega) = A-\frac{1}{\omega}\int_0^{+\infty}K(\tau)\sin(\omega\tau)
+d\tau`$
 
 ```math
 B_r(\omega)=\int_0^{+\infty}K(\tau)\cos(\omega\tau)d\tau
@@ -427,8 +427,8 @@ différentes pulsations. Ces fichiers sont utilisés dans une table
 d'interpolation (soit une interpolation linéaire par morceaux, soit des splines)
 puis on évalue l'intégrale suivante pour différentes valeurs de $`\tau`$ :
 
-$``$K_{i,j}(\tau) =
-\frac{2}{\pi}\int_{\omega_{\textrm{min}}}^{\omega_{\textrm{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega$``$
+$`K_{i,j}(\tau) =
+\frac{2}{\pi}\int_{\omega_{\textrm{min}}}^{\omega_{\textrm{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega`$
 
 Cette intégrale est calculée à l'aide d'un schéma d'intégration numérique
 (méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
@@ -522,18 +522,18 @@ I(f) = (b-a) f(x_i)
 ```
 
 
-Le choix de $`x_i`$ influence l’erreur $E(f) = I - I(f)$
+Le choix de $`x_i`$ influence l’erreur $`E(f) = I - I(f)`$
 :
-- Si $x_i = a$ ou $x_i = b$, l’erreur est donnée
-  par $``$E(f) = \frac{(b-a)^2}{2} f'(\eta), \quad \eta \in
-  [a,b]$``$ C’est la ''méthode du rectangle'' qui est d’ordre
+- Si $`x_i = a`$ ou $`x_i = b`$, l’erreur est donnée
+  par $`E(f) = \frac{(b-a)^2}{2} f'(\eta), \quad \eta \in
+  [a,b]`$ C’est la ''méthode du rectangle'' qui est d’ordre
   0.
-- Si $\xi = (a+b)/2\,$, l’erreur est donnée par $E(f) =
-  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]$. Il s’agit
+- Si $`\xi = (a+b)/2`$, l’erreur est donnée par $`E(f) =
+  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]`$. Il s’agit
   de la méthode du point médian qui est d’ordre 1.
 
 Ainsi, le choix du point milieu améliore l’ordre de la méthode : celle du
-rectangle est exacte (c’est-à-dire $E(f) = 0$) pour les fonctions
+rectangle est exacte (c’est-à-dire $`E(f) = 0`$) pour les fonctions
 constantes alors que celle du point milieu est exacte pour les polynômes de
 degré 1. Ceci s’explique par le fait que l’écart d’intégration de la méthode du
 point milieu donne lieu à deux erreurs d’évaluation, de valeurs absolues
@@ -551,13 +551,13 @@ Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_rectangle
 ### Méthode des trapèzes
 
 En interpolant $`f`$ par un polynôme de degré 1, les deux points
-d'interpolation $(a, f(a))$ et $(b, f(b))$ suffisent
+d'interpolation $`(a, f(a))`$ et $`(b, f(b))`$ suffisent
 à tracer un segment dont l’intégrale correspond à l’aire d’un trapèze,
 justifiant le nom de méthode des trapèzes qui est d’ordre 1 :
-:$I(f) = (b-a) \frac{f(a) + f(b)}{2}$
+:$`I(f) = (b-a) \frac{f(a) + f(b)}{2}`$
 
 L’erreur est donnée par
-:$E(f) = - \frac{(b-a)^3}{12} f''(\eta), \quad \eta \in [a,b]$
+:$`E(f) = - \frac{(b-a)^3}{12} f''(\eta), \quad \eta \in [a,b]`$
 
 Conformément aux expressions de l’erreur, la méthode des trapèzes est souvent
 moins performante que celle du point milieu.
@@ -574,13 +574,13 @@ Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_trap%C3%A
 En interpolant $`f`$ par un polynôme de degré 2 (3 degrés de liberté),
 3 points (ou conditions) sont nécessaires pour le caractériser : les valeurs
 aux extrémités $`a`$, $`b`$, et celle choisie en leur milieu
-$x_{1/2} = (a + b) / 2$. La méthode de Simpson est basée sur un
+$`x_{1/2} = (a + b) / 2`$. La méthode de Simpson est basée sur un
 polynôme de degré 2 (intégrale d’une parabole), tout en restant exacte pour des
 polynômes de degré 3 ; elle est donc d’ordre 3 :
-:$I(f) = \frac{(b-a)}{6} [ f(a) + 4 f(x_{1/2}) + f(b) ]$
+:$`I(f) = \frac{(b-a)}{6} [ f(a) + 4 f(x_{1/2}) + f(b) ]`$
 
 L’erreur globale est donnée par
-:$E(f) = - \frac{(b-a)^5}{2880} f^{(4)}(\eta), \quad \eta \in [a,b]$
+:$`E(f) = - \frac{(b-a)^5}{2880} f^{(4)}(\eta), \quad \eta \in [a,b]`$
 
 Remarque : comme la méthode du point médian qui caractérise un polynôme de
 degré 0 et qui reste exacte pour tout polynôme de degré 1, la méthode de
@@ -613,7 +613,7 @@ w(x)=\pi^{-1/2}\cdot k\cdot x^{k^2\log(x)},x\in\mathbf{R}_+^*, k>0
 ```
 
 
-On pose 
+On pose
 ```math
 q_k=e^{-\frac{1}{2k^2}}
 ```
@@ -627,8 +627,8 @@ p_0(x)=q^{1/4}
 ```
 
 et
-$``$p_{n,k}(x) = \frac{(-1)^n q_k^{\frac{n}{2} +
-\frac{1}{4}}}{\sqrt{(q_k;q_k)_n}}\sum_{\nu=0}^n\left[\begin{array}{c}n\\\nu\end{array}\right]q_k^{\nu^2}(-\sqrt{q_k}x)^\nu$``$
+$`p_{n,k}(x) = \frac{(-1)^n q_k^{\frac{n}{2} +
+\frac{1}{4}}}{\sqrt{(q_k;q_k)_n}}\sum_{\nu=0}^n\left[\begin{array}{c}n\\\nu\end{array}\right]q_k^{\nu^2}(-\sqrt{q_k}x)^\nu`$
 
 où
 
@@ -646,12 +646,12 @@ k\in[1,n]
 
 avec $`q`$ le symbole de Pochhammer
 
-$``$(q;a)_n=\left\{\begin{array}{c}
+$`(q;a)_n=\left\{\begin{array}{c}
           \prod_{j=0}^{n-1}(1-qa^j),n>0\\
           1,n=0\\
           \prod_{j=0}^{|n|}(1-qa^j),n<0\\
           \prod_{j=0}^{\infty}(1-qa^j),n=\infty
-          \end{array}\right.$``$
+          \end{array}\right.`$
 
 (coefficient $`q`$-binomial)
 

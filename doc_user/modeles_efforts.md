@@ -19,7 +19,7 @@ external forces:
 
 Le poids est donné dans le repère NED par :
 
-$F_P = m \cdot g \mathbf{u_z}$
+$`F_P = m \cdot g \mathbf{u_z}`$
 
 où $`m`$ désigne la masse du navire (en kg), $`g`$ l'accélération de la pesanteur
 (en m/s^2) et $`\mathbf{u_z}`$ le vecteur unitaire vertical, exprimé dans le
@@ -63,7 +63,7 @@ la surface immergée totale :
 
 
 ```math
-\textbf{F}_{\textrm{HS}} = \int_{S}p_{\textrm{HS}}(z)\cdot \textbf{n} dS 
+\textbf{F}_{\textrm{HS}} = \int_{S}p_{\textrm{HS}}(z)\cdot \textbf{n} dS
 ```
 
 
@@ -194,7 +194,7 @@ t_R = \frac{\int_S t^2 dS}{t_G S}
 ```
 
 
-Or $\int_S t^2 dS = I_t(G) + S\cdot t_G^2$ donc
+Or $`\int_S t^2 dS = I_t(G) + S\cdot t_G^2`$ donc
 
 où $`I_t(G)`$ est le second moment d'inertie de la surface par rapport à l'axe
 parallèle à $`t`$ et passant par $`G`$.
@@ -303,8 +303,8 @@ calculés en intégrant la pression dynamique (champs de pression de la houle
 incidente) sur la carène. En pratique, ils peuvent être négligés dès que le
 corps est à plus d'une-demi longueur d'onde de profondeur :
 
-$``$\mathbf{F}_{\textrm{FK}}(t)=\int_{P=(x,y,z)\in S}
-p_{\textrm{dyn}}(x,y,z,t)dS(P)$``$
+$`\mathbf{F}_{\textrm{FK}}(t)=\int_{P=(x,y,z)\in S}
+p_{\textrm{dyn}}(x,y,z,t)dS(P)`$
 
 L'expression de la pression dynamique dépend du modèle de houle utilisé et est
 décrite [ici](#modèles-de-houle-1) (pour la houle d'Airy).
@@ -364,21 +364,21 @@ fois interpolée, deux fonctions RAO par axe $`k`$
 
 
 * $`u`$ désigne la composante longitudinale de vitesse d'avance (basse fréquence) projetée dans le repère body (une limitation actuelle d'X-DYN est que l'on utilise pour ces calculs non pas la vitesse basse fréquence mais la vitesse instantanée),
-* $`\omega`$ désigne la pulsation de la houle (et non la pulsation de rencontre, puisque dans la formule ci-dessous on fait intervenir $\mathbf{k}\cdot \mathbf{x}$),
+* $`\omega`$ désigne la pulsation de la houle (et non la pulsation de rencontre, puisque dans la formule ci-dessous on fait intervenir $`\mathbf{k}\cdot \mathbf{x}`$),
 * $`\beta`$ est l'angle d'incidence entre l'axe $`X`$ du navire et la direction de propagation de la houle
 
 Pour calculer les efforts et les moments, pour une houle de direction de propagation $`\psi`$, on
 somme les RAO comme pour le calcul de l'élévation de la surface libre en suivant la convention AQUA+ :
 
-$``$F_k(x_H,y_H,t,u) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+$`F_k(x_H,y_H,t,u) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 {RAO^{k}}_{\textrm{module}}(u,\omega_i,\psi-\psi_j)\cdot a_{i,j}
 \cdot\sin(k\cdot(x_H\cdot \cos(\psi_j) + y_H\cdot \sin(\psi_j))-\omega_i\cdot
-t-{RAO^{k}}_{\textrm{phase}}(u,\omega_i,\psi-\psi_j)+\phi_{ij})$``$
+t-{RAO^{k}}_{\textrm{phase}}(u,\omega_i,\psi-\psi_j)+\phi_{ij})`$
 
 - $`x_H`$ et $`y_H`$ désignent les coordonnées du [point de calcul des efforts
   hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique),
 - $`t`$ est l'instant courant.
-- $`a_{i,j}`$ est l'amplitude de la houle, soit 
+- $`a_{i,j}`$ est l'amplitude de la houle, soit
 ```math
 a_{i,j}^2=A(\omega_i,\gamma_j)^2 = 2 S(\omega_i)d\omega D(\gamma_j) d\gamma
 ```
@@ -393,7 +393,7 @@ a_{i,j}^2=A(\omega_i,\gamma_j)^2 = 2 S(\omega_i)d\omega D(\gamma_j) d\gamma
   NED sur l'axe $`X`$ du repère body.
 - Le terme $`\psi-\psi_j`$ correspond au calcul de l'angle d'incidence de la
   houle, en respectant la convention d'Aqua+, c'est-à-dire entre 0 et $`\pi`$ pour
-  une houle se propageant vers babord et $`\pi`$ et $2 \pi$ pour une houle se
+  une houle se propageant vers babord et $`\pi`$ et $`2 \pi`$ pour une houle se
   propageant vers tribord (0 pour une houle se propageant de l'arrière vers
   l'avant, i.e. houle de l'arrière, et $`\pi`$ pour une houle se propageant de
   l'avant vers l'arrière, i.e. houle de face).
@@ -403,7 +403,7 @@ donne un torseur d'effort exprimé dans un repère Z vers le haut et au point de
 calcul de la RAO : pour l'exprimer dans le repère Z vers le bas d'X-DYN, on
 effectue le changement de repère suivant :
 
-$``$ \tau_{\mbox{HDB}} =
+$` \tau_{\mbox{HDB}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -414,9 +414,9 @@ M_Y\\
 M_Z\\
 \end{array}
 \right]
-$``$
+`$
 
-$``$ \tau_{\mbox{XDYN}} =
+$` \tau_{\mbox{XDYN}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -427,7 +427,7 @@ M_X\\
 -M_Z\\
 \end{array}
 \right]
-$``$
+`$
 
 Le torseur calculé est ensuite déplacé par X-DYN du point de calcul des
 [fichiers HDB](#fichiers-hdb) au point de résolution du bilan des efforts.
@@ -511,7 +511,7 @@ navire.
 En pratique, on effectue une interpolation de la courbe de résistance à l'avancement en fonction de la vitesse du solide par rapport au repère NED
 projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $`u`$). La courbe de résistance à l'avancement est obtenue au préalable (et non calculée par X-DYN) et renseignée dans le fichier YAML.
 
-Si $f:u\mapsto R=f(u)$ désigne la fonction d'interpolation de la courbe de résistance à l'avancement, le torseur des efforts, exprimé au [point
+Si $`f:u\mapsto R=f(u)`$ désigne la fonction d'interpolation de la courbe de résistance à l'avancement, le torseur des efforts, exprimé au [point
 de calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
 est :
 
@@ -589,13 +589,13 @@ hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique).
 La vitesse du courant (vitesse de l'eau par rapport au repère NED, projetée
 dans le repère NED) est notée :
 
-$``$V_{\textrm{eau/sol}} =
-\left[\begin{array}{c}U_{\textrm{courant}}\\V_{\textrm{courant}}\\0\end{array}\right]$``$
+$`V_{\textrm{eau/sol}} =
+\left[\begin{array}{c}U_{\textrm{courant}}\\V_{\textrm{courant}}\\0\end{array}\right]`$
 
 On définit :
 
-$``$\nu_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}} \nu_b -
-{}^{\textrm{local}}T_{\textrm{NED}}V_{\textrm{eau/sol}}$``$
+$`\nu_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}} \nu_b -
+{}^{\textrm{local}}T_{\textrm{NED}}V_{\textrm{eau/sol}}`$
 
 
 ```math
@@ -626,7 +626,7 @@ F_{\textrm{aq}}=-D_q(\nu_{\textrm{local}})\left[\begin{array}{c}\nu_{\textrm{loc
 
 où
 
-$``$D_q(\nu_{\textrm{local}}) = \left[
+$`D_q(\nu_{\textrm{local}}) = \left[
 \begin{array}{cccccc}
 d_{11}\cdot|u_{\textrm{local}}| & d_{12}\cdot |v_{\textrm{local}}| & d_{13}\cdot |w_{\textrm{local}}| & d_{14}\cdot |p_{\textrm{local}}| & d_{15}\cdot |q_{\textrm{local}}| & d_{16}\cdot |r_{\textrm{local}}|\\
 d_{21}\cdot|u_{\textrm{local}}| & d_{22}\cdot |v_{\textrm{local}}| & d_{23}\cdot |w_{\textrm{local}}| & d_{24}\cdot |p_{\textrm{local}}| & d_{25}\cdot |q_{\textrm{local}}| & d_{26}\cdot |r_{\textrm{local}}|\\
@@ -634,7 +634,7 @@ d_{31}\cdot|u_{\textrm{local}}| & d_{32}\cdot |v_{\textrm{local}}| & d_{33}\cdot
 d_{41}\cdot|u_{\textrm{local}}| & d_{42}\cdot |v_{\textrm{local}}| & d_{43}\cdot |w_{\textrm{local}}| & d_{44}\cdot |p_{\textrm{local}}| & d_{45}\cdot |q_{\textrm{local}}| & d_{46}\cdot |r_{\textrm{local}}|\\
 d_{51}\cdot|u_{\textrm{local}}| & d_{52}\cdot |v_{\textrm{local}}| & d_{53}\cdot |w_{\textrm{local}}| & d_{54}\cdot |p_{\textrm{local}}| & d_{55}\cdot |q_{\textrm{local}}| & d_{56}\cdot |r_{\textrm{local}}|\\
 d_{61}\cdot|u_{\textrm{local}}| & d_{62}\cdot |v_{\textrm{local}}| & d_{63}\cdot |w_{\textrm{local}}| & d_{64}\cdot |p_{\textrm{local}}| & d_{65}\cdot |q_{\textrm{local}}| & d_{66}\cdot |r_{\textrm{local}}|\\
-\end{array}\right]$``$
+\end{array}\right]`$
 
 les $`((d_{ij}))`$ étant les coefficients de la matrice d'amortissement
 quadratique lue depuis [le fichier de
@@ -701,20 +701,20 @@ On utilise les variables suivantes :
 \overline{z} = \frac{1}{4}\sum_{i=1}^4 z_i^h
 ```
 
-$``$\overline{\phi} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_1^h)}{d_{12}} +
-\frac{\textrm{atan}(z_4^h-z_3^h)}{d_{43}}\right)$``$
-$``$\overline{\theta} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_4^h)}{d_{24}} +
-\frac{\textrm{atan}(z_1^h-z_3^h)}{d_{13}}\right)$``$
+$`\overline{\phi} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_1^h)}{d_{12}} +
+\frac{\textrm{atan}(z_4^h-z_3^h)}{d_{43}}\right)`$
+$`\overline{\theta} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_4^h)}{d_{24}} +
+\frac{\textrm{atan}(z_1^h-z_3^h)}{d_{13}}\right)`$
 
-où $d_{ij} = \sqrt{(x^h_i-x^h_j)^2 + (y^h_i-y^h_j)}$ est la distance entre deux
+où $`d_{ij} = \sqrt{(x^h_i-x^h_j)^2 + (y^h_i-y^h_j)}`$ est la distance entre deux
 points de mesure.
 
 Le torseur d'effort est donné dans le repère NED par :
 
-$``$F_{\textrm{hs}} = K_{3\times 3}
-\left[\begin{array}{c}z-\overline{z}-z_{\textrm{eq}}\\\theta-\overline{\theta}-\theta_{\textrm{eq}}\\\psi-\overline{\psi}-\psi_{\textrm{eq}}\end{array}\right]$``$
+$`F_{\textrm{hs}} = K_{3\times 3}
+\left[\begin{array}{c}z-\overline{z}-z_{\textrm{eq}}\\\theta-\overline{\theta}-\theta_{\textrm{eq}}\\\psi-\overline{\psi}-\psi_{\textrm{eq}}\end{array}\right]`$
 
-$z_{\textrm{eq}}, \theta_{\textrm{eq}}, \psi_{\textrm{eq}}$ sont les valeurs
+$`z_{\textrm{eq}}, \theta_{\textrm{eq}}, \psi_{\textrm{eq}}`$ sont les valeurs
 d'équilibre renseignées dans le fichier de paramétrage.
 
 ### Paramétrage
@@ -857,7 +857,7 @@ les clefs inutilisées sont simplement ignorées.
 Au-delà de la dernière valeur de temps renseignée, la dernière valeur de chaque
 commande est maintenue. Avant la première valeur de temps, on utilise la première
 valeur de chaque commande. Ainsi, pour l'exemple présenté ci-dessus, pour toute
-valeur de $t\geq 10$, alors rpm=4000. Pour $t\leq 1$, rpm=3000.
+valeur de $`t\geq 10`$, alors rpm=4000. Pour $`t\leq 1`$, rpm=3000.
 
 Les [commandes attendues](#syntaxe-des-commandes) pour ce modèle sont :
 
@@ -1189,7 +1189,7 @@ on peut ensuite dériver la poussée et le couple.
 Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque, la
 vitesse du fluide au niveau de l'hélice $`V_a`$ n'est pas égale (en valeur
 absolue) à la vitesse du navire par rapport à l'eau $`V_s`$, autrement dit
-$V_a\neq V_s$. La vitesse d'avance $`V_a`$ est, en général, très difficile à
+$`V_a\neq V_s`$. La vitesse d'avance $`V_a`$ est, en général, très difficile à
 mesurer et l'on suppose qu'elle est proportionnelle à la vitesse du navire. On
 définit donc un coefficient $`w`$ (pour "wake", soit "sillage" en anglais) tel
 que :
@@ -1248,7 +1248,7 @@ J = \frac{V_a}{n\cdot D} = \frac{(1-w)\cdot V_s}{n\cdot D}
 
 Afin de rendre les coefficients indépendants de la taille de l'hélice, on
 définit la fraction de surface de l'hélice $`A_E/A_0`$, où $`A_E`$ désigne l'aire
-des pales (en m^2) et $A_0= \frac{\pi\cdot D^2}{4}$ est l'aire du disque
+des pales (en m^2) et $`A_0= \frac{\pi\cdot D^2}{4}`$ est l'aire du disque
 circonscrit à l'hélice. Les séries sont valables pour $0.30\leq A_E/A_0\leq
 1.05$.
 
@@ -1259,27 +1259,27 @@ séries B de Wageningen utilisent le pas **de face**, mais il existe d'autres
 conventions. Les séries sont paramétrés en $`P/D`$ et l'on suppose que $0.5\leq
 P/D\leq 1.4$.
 
-On note $2\leq Z\leq 7$ le nombre de pales de l'hélice.
+On note $`2\leq Z\leq 7`$ le nombre de pales de l'hélice.
 
 Les coefficients des polynômes pour $`K_T`$ et $`K_Q`$ sont notés $`C_i^T`$
-et $`C_i^Q`$ respectivement, où $`i`$ est un entier tel que $1 \leq i \leq 47$.
+et $`C_i^Q`$ respectivement, où $`i`$ est un entier tel que $`1 \leq i \leq 47`$.
 $`s(i)`$, $`s'(i)`$, $`t(i)`$, $`t'(i)`$, $`u(i)`$, $`u'(i)`$, $`v(i)`$ et $`v'(i)`$ sont des
 exposants entre 0 et 6.
 
-$``$K_T(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^T \cdot J^{s(i)}\cdot
-(P/D)^{t(i)}\cdot (A_E/A_0)^{u(i)}\cdot Z^{v(i)}$``$
-$``$K_Q(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^Q \cdot J^{s'(i)}\cdot
-(P/D)^{t'(i)}\cdot (A_E/A_0)^{u'(i)}\cdot Z^{v'(i)}$``$
+$`K_T(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^T \cdot J^{s(i)}\cdot
+(P/D)^{t(i)}\cdot (A_E/A_0)^{u(i)}\cdot Z^{v(i)}`$
+$`K_Q(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^Q \cdot J^{s'(i)}\cdot
+(P/D)^{t'(i)}\cdot (A_E/A_0)^{u'(i)}\cdot Z^{v'(i)}`$
 
 Les coefficients $`C_k^T`$ et $`C_k^Q`$ sont définis pour un nombre de Reynolds
-$R_n=2\times 10^6$, mais le modèle a été étendu pour des nombres de Reynolds
-entre $2\times 10^6$ et $2\times 10^9$ en introduisant des termes $\Delta K_T$
-et $\Delta K_Q$ supplémentaires :
+$`R_n=2\times 10^6`$, mais le modèle a été étendu pour des nombres de Reynolds
+entre $`2\times 10^6`$ et $`2\times 10^9`$ en introduisant des termes $`\Delta K_T`$
+et $`\Delta K_Q`$ supplémentaires :
 
-$``$K_T(J, P/D, A_E/A_0, Z, R_n) = K_T(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
-K_T(J, P/D, A_E/A_0, Z, R_n)$``$
-$``$K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
-K_Q(J, P/D, A_E/A_0, Z, R_n)$``$
+$`K_T(J, P/D, A_E/A_0, Z, R_n) = K_T(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
+K_T(J, P/D, A_E/A_0, Z, R_n)`$
+$`K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
+K_Q(J, P/D, A_E/A_0, Z, R_n)`$
 
 ### Domaine de validité
 
@@ -1290,7 +1290,7 @@ suivantes sont vérifiées :
 - Le ratio $`\frac{A_E}{A_0}`$ doit être situé dans l'intervalle
   $`\left[0.3,1.05\right]`$. La simulation ne se lancera pas sinon.
 - Le pas de l'hélice $`P`$ doit vérifier $`P/D\in\left[0.5,1.4\right]`$
-- Le coefficient d'avance $`J`$ est tel que $0\leq J\leq 1.5$
+- Le coefficient d'avance $`J`$ est tel que $`0\leq J\leq 1.5`$
 
 Les conditions sur $`Z`$ et $`\frac{A_E}{A_0}`$ touchant des grandeurs constantes
 au cours de la simulation, elles sont vérifiées avant le lancement et la
@@ -1298,7 +1298,7 @@ simulation ne s'effectuera pas si ces conditions ne sont pas vérifiées.
 
 Si le coefficient d'avance $`J`$ se situe hors de l'intervalle
 $`\left[0,1.5\right]`$, un message d'avertissement est affiché et $`J`$ est saturé
-pour être ramené dans l'intervalle : $J \leftarrow \min(\max(J,0),1.5)$
+pour être ramené dans l'intervalle : $`J \leftarrow \min(\max(J,0),1.5)`$
 
 La condition sur le pas $`P`$ est vérifiée en cours de simulation et un message
 d'avertissement est affiché sur la console. Par contre, le pas n'est pas
@@ -1330,24 +1330,24 @@ Le torseur des efforts générés par l'hélice et subis par le navire
 (apparaissant donc dans le membre de droite de l'équation fondamentale de la
 dynamique), exprimé dans le repère de l'hélice, est donc :
 
-$``$\tau_{\textrm{hélice}} = \left[\begin{array}{c}
+$`\tau_{\textrm{hélice}} = \left[\begin{array}{c}
 X\\
 Y\\
 Z\\
 K\\
 M\\
 N
-\end{array}\right]_{\textrm{hélice}}$``$
+\end{array}\right]_{\textrm{hélice}}`$
 
-$``$= \left[\begin{array}{c}
+$`= \left[\begin{array}{c}
            T_b\\
            0\\
            0\\
            \kappa Q_b\\
            0\\
            0
-\end{array}\right]_{\textrm{hélice}}$``$
-$``$= \left[\begin{array}{c}
+\end{array}\right]_{\textrm{hélice}}`$
+$`= \left[\begin{array}{c}
            (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, A_E/A_0, Z, P/D)\\
            0\\
            0\\
@@ -1355,7 +1355,7 @@ $``$= \left[\begin{array}{c}
 A_E/A_0, Z, P/D)\\
            0\\
            0\end{array}\right]_{\textrm{hélice}}
-$``$
+`$
 
 $`\kappa`$ vaut -1 si l'hélice tourne dans le sens horaire (en se plaçant
 derrière l'hélice et en regardant vers l'avant du navire) et +1 si elle tourne
@@ -1465,9 +1465,7 @@ p^2 + 2\zeta\omega_0 p + \omega_0^2 = 0
 d'où
 
 
-```math
-K_{\psi} = \sigma_{zz} \omega_0^2$``$ et $``$K_r= 2\zeta\omega_0\sigma_{zz}
-```
+$`K_{\psi} = \sigma_{zz} \omega_0^2`$ et $`K_r= 2\zeta\omega_0\sigma_{zz}`$
 
 
 On peut exprimer ces gains en fonction de l'amortissement $`\zeta`$ et du temps de
@@ -1489,7 +1487,7 @@ Si l'on suppose que $`r=0`$, pour $`\psi<\psi_{\textrm{co}}`$, le moment génér
 être positif, donc $`K_{\psi}\cdot(\psi_{\textrm{co}}-\psi)>0`$. Par conséquent,
 $`K_{\psi}>0`$.
 De même, en prenant $`r<0`$ et $`\psi=\psi_{\textrm{co}}`$, le moment généré doit
-être positif pour contrer la vitesse $`r`$, donc $-K_r\cdot r>0$, d'où $`K_r>0`$.
+être positif pour contrer la vitesse $`r`$, donc $`-K_r\cdot r>0`$, d'où $`K_r>0`$.
 
 ### Paramétrage
 
@@ -1578,21 +1576,15 @@ p^2 + 2\zeta_{psi}\omega_{\psi} p + \omega_{\psi}^2 = 0
 d'où
 
 
-```math
-K_{x} = \sigma_{xx} \omega_x^2$``$ et $``$K_u= 2\zeta_x\omega_x\sigma_{xx}
-```
+$`K_{x} = \sigma_{xx} \omega_x^2`$ et $`K_u= 2\zeta_x\omega_x\sigma_{xx}`$
 
 
 
-```math
-K_{y} = \sigma_{yy} \omega_y^2$``$ et $``$K_v= 2\zeta_y\omega_y\sigma_{yy}
-```
+$`K_{y} = \sigma_{yy} \omega_y^2$ et $`K_v= 2\zeta_y\omega_y\sigma_{yy}`$
 
 
 
-```math
-K_{\psi} = \sigma_{zz} \omega_{\psi}^2$``$ et $``$K_r= 2\zeta\omega_{\psi}\sigma_{zz}
-```
+$`K_{\psi} = \sigma_{zz} \omega_{\psi}^2`$ et $`K_r= 2\zeta\omega_{\psi}\sigma_{zz}`$
 
 
 On peut exprimer ces gains en fonction de l'amortissement $`\zeta`$ et du temps de
@@ -1639,7 +1631,7 @@ Si l'on suppose que $`r=0`$, pour $`\psi<\psi_{\textrm{co}}`$, le moment génér
 être positif, donc $`K_{\psi}\cdot(\psi_{\textrm{co}}-\psi)>0`$. Par conséquent,
 $`K_{\psi}>0`$.
 De même, en prenant $`r<0`$ et $`\psi=\psi_{\textrm{co}}`$, le moment généré doit
-être positif pour contrer la vitesse $`r`$, donc $-K_r\cdot r>0$, d'où $`K_r>0`$.
+être positif pour contrer la vitesse $`r`$, donc $`-K_r\cdot r>0`$, d'où $`K_r>0`$.
 
 ### Paramétrage
 
@@ -1844,7 +1836,7 @@ V_2 = \sqrt{V_a^2 + \frac{2T}{\rho A}}
 La vitesse $`V_1`$ au niveau du safran peut être déduite de l'égalité de deux
 expressions de $`T`$ :
 
-- D'une part, $T = \rho A V_1 (V_2 - V_a)$
+- D'une part, $`T = \rho A V_1 (V_2 - V_a)`$
 - Mais d'autre part, $T = \frac{1}{2}\rho A (V_2^2-V_a^2) = \frac{1}{2}\rho
   A(V_2 - V_a)(V_2+V_a)$
 
@@ -1870,8 +1862,8 @@ u_{RS} = V_a + K_R(V_2-V_a)
 
 avec
 
-$``$Kr =
-0.5+\frac{0.5}{1+\frac{0.15}{\left|\frac{\Delta_x}{D}\right|}}$``$
+$`Kr =
+0.5+\frac{0.5}{1+\frac{0.15}{\left|\frac{\Delta_x}{D}\right|}}`$
 
 $`\Delta_x`$ désigne la distance entre l'hélide et le safran (suivant l'axe $`x`$)
 et $`D`$ est le diamètre de l'hélice.
@@ -1918,10 +1910,10 @@ donc
 
 d'où
 
-$``$u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + \frac{8 K_T}{\pi J^2}} -
-1\right)\right)$``$
+$`u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + \frac{8 K_T}{\pi J^2}} -
+1\right)\right)`$
 
-On pose 
+On pose
 ```math
 C_{Th} = \frac{8}{\pi} \frac{K_T}{J^2}
 ```
@@ -1952,8 +1944,8 @@ RF = 1-0.135\sqrt{C_{Th}}
 
 La vitesse dans le sillage de l'hélice s'exprime donc (dans le repère "body") :
 
-$``$V_S = \left[\begin{array}{c}RF\cdot V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}}
-- 1\right)\right)\\ v\\0\end{array}\right]$``$
+$`V_S = \left[\begin{array}{c}RF\cdot V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}}
+- 1\right)\right)\\ v\\0\end{array}\right]`$
 
 La vitesse hors du sillage est simplement :
 
@@ -1963,7 +1955,7 @@ V_S = \left[\begin{array}{c}V_a\\ v\\0\end{array}\right]
 ```
 
 
-où $V_a = (1-w)\cdot u$, $`w`$ désignant le coefficient de sillage.
+où $`V_a = (1-w)\cdot u`$, $`w`$ désignant le coefficient de sillage.
 
 #### Calcul de $`C_l`$
 
@@ -2070,8 +2062,8 @@ u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}} - 1\right)\right)
 
 d'où
 
-$``$\frac{D_w}{D_{\textrm{hélice}}} =
-\sqrt{\frac{1+0.5(\sqrt{1+C_{Th}}-1)}{1+K_R(\sqrt{1+C_{Th}}-1)}}$``$
+$`\frac{D_w}{D_{\textrm{hélice}}} =
+\sqrt{\frac{1+0.5(\sqrt{1+C_{Th}}-1)}{1+K_R(\sqrt{1+C_{Th}}-1)}}`$
 
 
 ### Paramétrage
@@ -2171,31 +2163,31 @@ Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'h
 et subis par le navire (apparaissant donc dans le membre de droite de l'équation
 fondamentale de la dynamique), exprimé dans le repère de l'hélice, est donc :
 
-$``$\tau_{\textrm{hélice}} = \left[\begin{array}{c}
+$`\tau_{\textrm{hélice}} = \left[\begin{array}{c}
 X\\
 Y\\
 Z\\
 K\\
 M\\
 N
-\end{array}\right]_{\textrm{hélice}}$``$
+\end{array}\right]_{\textrm{hélice}}`$
 
-$``$= \left[\begin{array}{c}
+$`= \left[\begin{array}{c}
            T_b\\
            0\\
            0\\
            \kappa Q_b\\
            0\\
            0
-\end{array}\right]_{\textrm{hélice}}$``$
-$``$= \left[\begin{array}{c}
+\end{array}\right]_{\textrm{hélice}}`$
+$`= \left[\begin{array}{c}
            (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J)\\
            0\\
            0\\
            \kappa \cdot \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J)\\
            0\\
            0\end{array}\right]_{\textrm{hélice}}
-$``$
+`$
 
 ### Paramétrage
 

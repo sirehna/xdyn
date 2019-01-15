@@ -14,7 +14,7 @@ On considère un navire partiellement immergé en eau calme (la surface libre
 par une surface appelée "carène" (ou surface mouillée) et notée $`\mathcal{C}`$.
 On appelle "flottaison" et l'on note $`S`$
 l'intersection du volume du navire avec le plan de la surface libre.
-On a donc $\partial\Omega = \mathcal{C}\cup S$.
+On a donc $`\partial\Omega = \mathcal{C}\cup S`$.
 On note $`G`$ le centre de gravité du navire et $`C`$ le centre de $`\Omega`$ (appelé
 "centre de carène").
 
@@ -29,7 +29,7 @@ hydrostatique. Celui-ci doit être suffisant pour redresser le navire. Une
 condition nécessaire et suffisante pour que le couple de rappel
 hydrostatique soit un couple de redressement est que le point métacentrique $`E`$
 soit situé au-dessus du centre de gravité $`G`$. Le point $`E`$ est à
-l'intersection de la droite $`Cz`$ et de la droite $C_0 z$.
+l'intersection de la droite $`Cz`$ et de la droite $`C_0 z`$.
 
 ### Algorithme de calcul de $`GZ`$
 
@@ -73,7 +73,7 @@ X_{n+1} = X_n - f'(X_n)^{-1}f(X_n)
 ```
 
 
-On note 
+On note
 ```math
 K(X) = \frac{\partial f}{\partial X}(X)
 ```
@@ -86,8 +86,7 @@ X_{n+1} = X_n - K^{-1}(X_n)f(X_n)
 
 
 La matrice $`K(X_n)`$ est estimée numériquement en linéarisant $`f`$ autour de
-$`X_n`$. Soit $\Delta X$ un petit déplacement autour de $`X_n`$ et $\Delta F =
-(\Delta F_z, \Delta M_{\phi}, \Delta M_{\theta})$ la
+$`X_n`$. Soit $`\Delta X`$ un petit déplacement autour de $`X_n`$ et $`\Delta F = (\Delta F_z, \Delta M_{\phi}, \Delta M_{\theta})`$ la
 variation d'effort correspondante.
 
 
@@ -96,12 +95,12 @@ K(X_n) \Delta X = \Delta F
 ```
 
 
-Pour $1\leq i\leq 3, \sum_{j=1}^3 k_{ij} \Delta x_j = \Delta F_i$.
+Pour $`1\leq i\leq 3, \sum_{j=1}^3 k_{ij} \Delta x_j = \Delta F_i`$.
 
 Si le petit déplacement que l'on considère s'effectue exclusivement suivant
 l'axe $`j`$, on trouve :
 
-$k_{ij}\Delta x_j = \Delta F_i$ donc
+$`k_{ij}\Delta x_j = \Delta F_i`$ donc
 
 
 ```math
@@ -171,9 +170,9 @@ GZ = y\cdot GB
 
 or
 
-$``$y = \frac{x_{\textrm{body}}^{\textrm{(ned)}} \times
+$`y = \frac{x_{\textrm{body}}^{\textrm{(ned)}} \times
 z_{\textrm{ned}}^{\textrm{(ned)}}}{\left\|x_{\textrm{body}}^{\textrm{(ned)}} \times
-z_{\textrm{ned}}^{\textrm{(ned)}}\right\|}$``$
+z_{\textrm{ned}}^{\textrm{(ned)}}\right\|}`$
 
 
 où $`x_{\textrm{body}}^{\textrm{(ned)}}`$ désigne les coordonnées du vecteur $`x`$ du
@@ -183,8 +182,8 @@ coordonnées du vecteur $`z`$ du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9ren
 Il se trouve qu'il n'est pas nécessaire de connaître la coordonnée $`z`$ du
 vecteur GB. En effet,
 
-$``$\exists \lambda_0\in\mathbf{R} : GB = \frac{M\times
-F}{\left\|F\right\|} + \lambda_0 F$``$
+$`\exists \lambda_0\in\mathbf{R} : GB = \frac{M\times
+F}{\left\|F\right\|} + \lambda_0 F`$
 
 où $`M`$ est le moment en $`G`$ de l'effort hydrostatique et $`F`$ la résultante de
 l'effort hydrostatique.
@@ -226,21 +225,21 @@ M\times F = \left[\begin{array}{c}mf_x\\mf_y\\mf_z\end{array}\right]
 ```
 
 
-$``$GZ_{\lambda} = y\cdot GB_{\lambda} =
+$`GZ_{\lambda} = y\cdot GB_{\lambda} =
 \left[\begin{array}{c}x\\y\\z\end{array}\right]\times
 \left[\begin{array}{c}0\\0\\1\end{array}\right]\cdot
-\left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]$``$
+\left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]`$
 
 d'où
 
-$``$\forall \lambda\in\mathbf{R}, GZ_{\lambda} = \frac{x m_x}{f_z} + \frac{y
-m_y}{f_z}$``$
+$`\forall \lambda\in\mathbf{R}, GZ_{\lambda} = \frac{x m_x}{f_z} + \frac{y
+m_y}{f_z}`$
 
 soit, avec les conventions de rotation usuelles :
 
-$``$ GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
+$` GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
 \sin(\psi)\cdot\cos(\theta)\cdot m_y}{f_z\left\|x_{\textrm{body}}^{\textrm{(ned)}}\right\|}
-$``$
+`$
 
 
 ## Outil de calcul de $`GZ`$

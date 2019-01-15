@@ -17,7 +17,7 @@ f:\mathbf{R}^n\times\mathbf{R}^m\times\mathbf{R}\times\mathbf{R}^p\rightarrow\ma
 - $`p`$ désigne le nombre de paramètres du système
 - $`m`$ est le nombre d'entrées du système
 
-Une fonction dérivable $X:t\in\mathbf{R}\mapsto X(t)\in\mathbf{R}^n$ est
+Une fonction dérivable $`X:t\in\mathbf{R}\mapsto X(t)\in\mathbf{R}^n`$ est
 appelée *vecteur d'états* de ce système: ce sont les variables qui
 résument toutes les informations calculées par le modèle (par exemple,
 position, attitude, vitesse angulaire et vitesse de rotation).
@@ -70,9 +70,9 @@ trois steppers sont implémentés :
 
 C'est le stepper le plus rapide, mais aussi le moins stable
 numériquement : si cette méthode est appliquée à l'équation différentielle
-$y'=k y$, alors la solution numérique est instable lorsque le produit $dt\cdot  k$
-est en-dehors de la région $\left\{z\in\mathbf{C} : \left\|z+1\right\| \leq
-1\right\}$.
+$`y'=k\cdot y`$, alors la solution numérique est instable lorsque le produit $`dt\cdot k`$
+est en-dehors de la région $`\left\{z\in\mathbf{C} : \left\|z+1\right\| \leq
+1\right\}`$.
 En pratique, il n'est utilisé que pour des tests car les autres steppers
 montrent de meilleures performances.
 
@@ -117,16 +117,16 @@ C'est un stepper très utilisé dans l'ingénierie.
 C'est une méthode à pas adaptatif qui permet d'estimer l'erreur d'intégration.
 L'estimation de l'erreur est utilisée pour contrôler le pas d'intégration du schéma.
 
-$``$\hat{X}(t+dt) = X(t) + \frac{37}{378}\cdot k_1 + \frac{250}{621}\cdot k_3 +
-\frac{125}{594}\cdot k_4 + \frac{512}{1771}\cdot k_6$``$
+$`\hat{X}(t+dt) = X(t) + \frac{37}{378}\cdot k_1 + \frac{250}{621}\cdot k_3 +
+\frac{125}{594}\cdot k_4 + \frac{512}{1771}\cdot k_6`$
 
 L'erreur commise est approchée par la relation suivante
 
-$``$e(t+dt) = \left(\frac{37}{378} - \frac{2825}{27648}\right)\cdot k_1 +
+$`e(t+dt) = \left(\frac{37}{378} - \frac{2825}{27648}\right)\cdot k_1 +
             \left(\frac{250}{621} - \frac{18575}{48384}\right)\cdot k_3 +
             \left(\frac{125}{594} - \frac{13525}{55296}\right)\cdot k_4 +
             \left(- \frac{277}{14336}\right)\cdot k_5 +
-            \left(\frac{512}{1771} - \frac{1}{4}\right)\cdot k_6$``$
+            \left(\frac{512}{1771} - \frac{1}{4}\right)\cdot k_6`$
 
 avec
 

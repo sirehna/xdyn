@@ -158,8 +158,8 @@ immergé. On note $`I`$ l'intervalle $`[0,V_{\textrm{max}}]`$.
 On note $`V_z`$ l'application partielle $V_z:z\mapsto
 V(z,\phi_1,\theta_1)$. $`V`$ étant continue par hypothèse, $`V_z`$ l'est aussi.
 Par ailleurs, on sait que $`V_z(-\infty)=0`$ et $`V_z(+\infty)=V_{\textrm{max}}`$
-donc d'après le théorème des valeurs intermédiaires, $\forall V_0\in I,
-\exists z_2:V_z(z_2)=V_0$ ce qui signifie que $`X_0=(z_0,\phi_0,\theta_0)`$ et
+donc d'après le théorème des valeurs intermédiaires, $`\forall V_0\in I,
+\exists z_2:V_z(z_2)=V_0`$ ce qui signifie que $`X_0=(z_0,\phi_0,\theta_0)`$ et
 $`X_1=(z_2,\phi_1,\theta_1)`$ sont isocarènes.
 
 
@@ -182,7 +182,7 @@ dMr = F_{\textrm{HS}}\cdot(\sin(\theta)dGM + GM\cdot\cos(\theta)d\theta)
 ```
 
 
-or 
+or
 ```math
 dMr = F_{\textrm{HS}}\cdot dGZ
 ```

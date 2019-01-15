@@ -206,23 +206,23 @@ Les deux tableaux suivants présentent les 36 conventions possibles :
 
 où les matrices de rotation autour des trois axes $`X`$, $`Y`$ et $`Z`$ s'écrivent
 
-$R_X \left( \alpha \right) = \left[\begin{array}{ccc}
+$`R_X \left( \alpha \right) = \left[\begin{array}{ccc}
 1 & 0 & 0\\
 0 & +\cos \left( \alpha \right) & -\sin \left( \alpha \right)\\
 0 & +\sin \left( \alpha \right) & +\cos \left( \alpha \right)
-\end{array}\right]$
+\end{array}\right]`$
 
-$R_Y \left( \alpha \right) = \left[\begin{array}{ccc}
+$`R_Y \left( \alpha \right) = \left[\begin{array}{ccc}
 +\cos\left( \alpha \right) & 0 & +\sin \left( \alpha \right) \\
 0 & 1 & 0 \\
 -\sin\left( \alpha \right) & 0 & +\cos \left( \alpha \right) \\
-\end{array}\right]$
+\end{array}\right]`$
 
-$R_Z \left( \alpha \right) = \left[\begin{array}{ccc}
+$`R_Z \left( \alpha \right) = \left[\begin{array}{ccc}
 +\cos \left( \alpha \right) & -\sin \left( \alpha \right) & 0 \\
 +\sin \left( \alpha \right) & +\cos \left( \alpha \right) & 0 \\
 0 & 0 & 1 \\
-\end{array}\right]$
+\end{array}\right]`$
 
 ## Conventions couramment utilisées
 
@@ -296,22 +296,22 @@ Chaque corps possède des états, permettant de reconstituer exactement son
 mouvement. Ces états sont les suivants :
 
 - La position du corps par rapport à l'origine du NED projetée dans le repère
-  corps est notée $p^n = [x,y,z]^T$ et est exprimée en mètres.
-- L'[attitude](#attitude-navire) du corps est notée $\Theta = [\phi,\theta,\psi]^T$ et est définie
+  corps est notée $`p^n = [x,y,z]^T`$ et est exprimée en mètres.
+- L'[attitude](#attitude-navire) du corps est notée $`\Theta = [\phi,\theta,\psi]^T`$ et est définie
   au paragraphe précédent. En pratique, on utilise plutôt des quaternions
-  $q = [q_r, q_i, q_j, q_k]$ en interne dans le simulateur pour l'intégration
+  $`q = [q_r, q_i, q_j, q_k]`$ en interne dans le simulateur pour l'intégration
   des équations du mouvement, mais les raisonnements présentés dans cette
   documentation se transposent aisément.
 - La vitesse de translation du corps par rapport au repère fixe NED, projetée
-  dans le repère du corps (ou "body") est notée $v^b = [u,v,w]^T$ et s'exprime
+  dans le repère du corps (ou "body") est notée $`v^b = [u,v,w]^T`$ et s'exprime
   en m/s.
 - Le vecteur vitesse de rotation du repère "body" par rapport au repère NED,
-  projeté dans le repère "body", est noté $\omega_{nb}^b = [p,q,r]^T$
+  projeté dans le repère "body", est noté $`\omega_{nb}^b = [p,q,r]^T`$
   et s'exprime en rad/s.
 - Les efforts appliqués au navire et projetés dans le repère "body" sont notés :
-  $f^b = [X,Y,Z]^T$. Ils s'expriment en N.
+  $`f^b = [X,Y,Z]^T`$. Ils s'expriment en N.
 - Les moments appliqués au navire et projetés dans le repère "body" sont notés :
-  $m^b = [K,M,N]^T$. Ils s'expriment en N.m.
+  $`m^b = [K,M,N]^T`$. Ils s'expriment en N.m.
 
 ## Définition des corps simulés
 
@@ -523,8 +523,8 @@ rigid body inertia matrix at the center of gravity and projected in the body fra
 
 
 Les calculs sont réalisés en supposant que les termes $`a_{ij}`$ de la matrice d'inertie sont en unité SI, c'est-à-dire:
-- en $`\texttt{kg}`$ pour les termes $`a_{ij}`$ avec $1\leq i,j \leq 3$,
-- en $`\texttt{kg}\times\texttt{m}^2`$ pour les termes $`a_{ij}`$ avec $4\leq i,j \leq 6$,
+- en $`\texttt{kg}`$ pour les termes $`a_{ij}`$ avec $`1\leq i,j \leq 3`$,
+- en $`\texttt{kg}\times\texttt{m}^2`$ pour les termes $`a_{ij}`$ avec $`4\leq i,j \leq 6`$,
 - en $`\texttt{kg}\times\texttt{m}`$ pour les deux blocs 3x3 extra-diagonaux représentant les termes croisés de la matrice d'inertie.
 
 #### Inerties ajoutées
@@ -678,9 +678,9 @@ représente bien dans les deux cas une direction de propagation (et non de
 provenance). Le potentiel des vitesses de la houle est, dans X-DYN comme dans
 AQUA+ :
 
-$``$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+$`\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\cos(k\cdot(x\cdot
-\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$``$
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)`$
 
 Toutes les données issues des fichiers HDB sont données en
 convention *z vers le haut* : par conséquent, il faut effectuer un changement de
@@ -702,7 +702,7 @@ R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]
 * Pour les matrices (masses ajoutées, amortissements...)
   Si $`M=((m_{ij}))`$ désigne une matrice exprimée dans le repère AQUA+ et $`M_d`$ la même matrice
   exprimée dans le repère X-DYN, on a :
-  
+
 ```math
 M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]
 ```
@@ -731,7 +731,7 @@ S(\lambda)=\left[\begin{array}{ccc} 0&-\lambda_3&\lambda_2\\\lambda_3&0&-\lambd
 ```
 
 
-la matrice du produit vectoriel par $`\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]`$ : $\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a$
+la matrice du produit vectoriel par $`\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]`$ : $`\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a`$
 
 Pour effectuer un transport d'une matrice 6x6 en coordonnées généralisées
 (masse, masse ajoutée ou amortissement) d'un point $`A`$ vers un point $`B`$, on
@@ -746,7 +746,7 @@ M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{
 Cete formule est une généralisation de la formule de Huyguens.
 
 En combinant avec un changement de base (de la base $`a`$ vers la base $`b`$) par
-la matrice de rotation ${}^a R_b$ de $`b`$ vers $`a`$ on obtient l'expression plus
+la matrice de rotation $`{}^a R_b`$ de $`b`$ vers $`a`$ on obtient l'expression plus
 générale :
 
 
@@ -763,7 +763,7 @@ La matrice d'inertie est le plus souvent exprimée au centre de gravité. Cepend
 et donc que la seule opération pour la conversion est le passage d'un repère z vers le haut (HDB) à un repère
 z vers le bas (X-DYN). La formule précédente se simplifie alors en :
 
-$``${}^bM_B=\left[
+$`{}^bM_B=\left[
 \begin{array}{cccccc}
 1&0&0&0&0&0\\
 0&-1&0&0&0&0\\
@@ -783,9 +783,9 @@ $``${}^bM_B=\left[
 0&0&0&0&0&-1\\
  \end{array}
 \right]
-$``$
+`$
 En prenant la notation
-$``$ M_{\mbox{HDB}} =
+$` M_{\mbox{HDB}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &   m_{12}  &  m_{13}  &  m_{14}  &  m_{15}  &  m_{16}\\
@@ -796,9 +796,9 @@ $``$ M_{\mbox{HDB}} =
  m_{61} &   m_{62}  &  m_{63}  &  m_{64}  &  m_{65}  &  m_{66} \\
 \end{array}
 \right]
-$``$
+`$
 on obtient :
-$``$ M_{\mbox{XDYN}} =
+$` M_{\mbox{XDYN}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &  -m_{12}  & -m_{13}  &  m_{14}  & -m_{15}  & -m_{16}\\
@@ -809,10 +809,10 @@ $``$ M_{\mbox{XDYN}} =
 -m_{61} &   m_{62}  &  m_{63}  & -m_{64}  &  m_{65}  &  m_{66} \\
 \end{array}
 \right]
-$``$
+`$
 
 Pour les torseurs, on obtient le changement suivant :
-$``$ \tau_{\mbox{HDB}} =
+$` \tau_{\mbox{HDB}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -823,9 +823,9 @@ M_Y\\
 M_Z\\
 \end{array}
 \right]
-$``$
+`$
 
-$``$ \tau_{\mbox{XDYN}} =
+$` \tau_{\mbox{XDYN}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -836,7 +836,7 @@ M_X\\
 -M_Z\\
 \end{array}
 \right]
-$``$
+`$
 
 
 Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid body shift of rigid body spatial inertia
@@ -1004,7 +1004,7 @@ efforts de diffraction) et les masses ajoutées.
 ### Rotations
 
 La convention de rotation permet de retrouver la matrice de rotation d'un
-repère par rapport à un autre, étant donné un triplet $(\phi, \theta, \psi)$.
+repère par rapport à un autre, étant donné un triplet $`(\phi, \theta, \psi)`$.
 La convention utilisée est décrite dans la section `rotations` :
 
 ~~~~~~~~~~~~~~ {.yaml}
@@ -1091,11 +1091,11 @@ Une direction de 90° représente une propagation de l'ouest vers l'est.
 
 Les différentes positions du navire par rapport à la houle sont décrites comme suit :
 
-- $\gamma - \psi = 0^\circ$ : navire dos à la houle, houle de l'arrière
-- $0^\circ < \gamma - \psi < 90^\circ$ : Houle venant de bâbord arrière
-- $\gamma - \psi = 90^\circ$ : Houle venant de bâbord
-- $90^\circ < \gamma - \psi < 180^\circ$ : Houle venant de tribord arrière
-- $\gamma - \psi = 180^\circ$: navire cap à la houle, houle de l'avant
-- $180^\circ < \gamma - \psi < 270^\circ$ : Houle venant de tribord avant
-- $\gamma - \psi = 270^\circ$ : Houle venant de tribord
-- $270^\circ < \gamma - \psi < 360^\circ$ : Houle venant de bâbord avant
+- $`\gamma - \psi = 0^\circ`$ : navire dos à la houle, houle de l'arrière
+- $`0^\circ < \gamma - \psi < 90^\circ`$ : Houle venant de bâbord arrière
+- $`\gamma - \psi = 90^\circ`$ : Houle venant de bâbord
+- $`90^\circ < \gamma - \psi < 180^\circ`$ : Houle venant de tribord arrière
+- $`\gamma - \psi = 180^\circ`$: navire cap à la houle, houle de l'avant
+- $`180^\circ < \gamma - \psi < 270^\circ`$ : Houle venant de tribord avant
+- $`\gamma - \psi = 270^\circ`$ : Houle venant de tribord
+- $`270^\circ < \gamma - \psi < 360^\circ`$ : Houle venant de bâbord avant
