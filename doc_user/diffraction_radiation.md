@@ -323,9 +323,9 @@ $`\frac{\partial \Theta}{\partial t} = \ddot{x_j}\Psi_j + \int_{-\infty}^t
 
 Il en découle :
 
-$-F_{jk} = \rho\int_C\ddot{x_j}\psi_j n_k dS +
+$`-F_{jk} = \rho\int_C\ddot{x_j}\psi_j n_k dS +
 \rho\int_{-\infty}^t\int_C\frac{\partial \phi_j(t-\tau)}{\partial
-t}n_k dS \dot{x_j}(\tau)d\tau$
+t}n_k dS \dot{x_j}(\tau)d\tau`$
 
 On pose :
 
@@ -379,8 +379,8 @@ t)`$
 
 En ce qui concerne la formulation temporelle, on a :
 
-$F_R = \omega^2 A \cos(\omega t) + \omega \int_{-\infty}^t K(t-\tau)
-\sin(\omega\tau)d\tau$
+$`F_R = \omega^2 A \cos(\omega t) + \omega \int_{-\infty}^t K(t-\tau)
+\sin(\omega\tau)d\tau`$
 
 En effectuant le changement de variable $`\tau\leftarrow t-\tau`$ on a :
 
