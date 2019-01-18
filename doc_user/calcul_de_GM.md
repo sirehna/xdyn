@@ -82,13 +82,16 @@ tend vers un point appelé métacentre.
 ### Définitions
 
 #### Plan de flottaison
+
 Plan de la surface libre du liquide au repos.
 
 
 #### Flottaison
+
 Intersection du flotteur et du plan de flottaison
 
 #### Ligne de flottaison
+
 Périmètre de la flottaison
 
 #### Centre de flottaison
