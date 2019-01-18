@@ -76,7 +76,11 @@ clef: {value: 65456, unit: km}
 ~~~~~~~~~~~~~~
 
 Les unités ne sont pas vérifiées par le système : le parser se contente de
-convertir toutes les entrées en unité du système international avant simulation, sans préjuger de l'homogénéité. Ce décodage est fait en convertissant l'unité en un facteur multiplicatif (en utilisant la liste des unités de l'utilitaire UNIX [units](http://heirloom.cvs.sourceforge.net/viewvc/heirloom/heirloom/units/)) et en multipliant la valeur originale par ce facteur multiplicatif. Par exemple:
+convertir toutes les entrées en unité du système international avant simulation,
+sans préjuger de l'homogénéité. Ce décodage est fait en convertissant l'unité
+en un facteur multiplicatif (en utilisant la liste des unités de l'utilitaire UNIX
+[units](http://heirloom.cvs.sourceforge.net/viewvc/heirloom/heirloom/units/)) et
+en multipliant la valeur originale par ce facteur multiplicatif. Par exemple:
 
 ~~~~~~~~~~~~~~ {.yaml}
 masse: {value: 10, unit: lb}
@@ -99,7 +103,10 @@ aurait tout aussi bien pu être écrit :
 clef: {value: 65456, unit: kW}
 ~~~~~~~~~~~~~~
 
-et on aurait obtenu exactement la même valeur numérique, bien que la grandeur physique ne soit pas la même : on suppose donc que l'utilisateur renseigne des données de façon homogène. En interne, tous les calculs sont faits en unité du système international.
+et on aurait obtenu exactement la même valeur numérique, bien que la grandeur
+physique ne soit pas la même : on suppose donc que l'utilisateur renseigne des
+données de façon homogène. En interne, tous les calculs sont faits en unité du
+système international.
 
 ## Sorties
 
@@ -114,7 +121,7 @@ output:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `format` : `csv` pour un fichier texte dont les colonnes sont séparées par
-  une virgule ou `hdf5` pour le format des fichiers .mat de Matlab (HDF5)
+  une virgule ou `hdf5` pour le format des fichiers .mat de MatLab (HDF5)
 - `filename` : nom du fichier de sortie
 - `data` : liste des colonnes à écrire. Le temps est noté `t`, et les états
   sont `x(body)`, `y(body)` `z(body)`, `u(body)`, `v(body)`, `w(body)`,
@@ -265,7 +272,7 @@ print(''.join(['`'] * 3))
 print(''.join(['~'] * 4))
 ```
 
-#### Affichage de l'intégratilité du YAML : `print_yaml`
+#### Affichage de l'intégrabilité du YAML : `print_yaml`
 
 Suite au chargement du YAML, on peut vouloir l'afficher dans le document.
 Pour cela, on utilise une section `python` de la forme :
@@ -287,7 +294,7 @@ print(''.join(['~'] * 4))
 
 #### Exécution d'une simulation
 
-La commande suivante ne produira pas de contenu visible dans le document.  En
+La commande suivante ne produira pas de contenu visible dans le document. En
 revanche, il sera possible de récupérer et afficher les données ainsi générées.
 
 ```python echo=False, results='markdown', name='example-run-simulation'
@@ -400,9 +407,9 @@ jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
 
   ENTREES             TYPE                                                               DETAIL
   ------------------- ------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------------
-  `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécesitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
-  `commands`          Liste de clefs-valeurs (dictionnaire)                              Etat des actionneurs au temps t
-  État                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   Etats navire
+  `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
+  `commands`          Liste de clefs-valeurs (dictionnaire)                              État des actionneurs au temps t
+  État                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   États navire
   t                   Flottant                                                           Temps courant de la simulation
   x                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution)
   y                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
@@ -504,12 +511,12 @@ Exemple:
   `Dt`                Flottant strictement positif                                       Horizon de simulation (en secondes). La simulation s'effectue de t0 à t0 + Dt, où t0 est la date du dernier élément de la
                                                                                          liste `states`, par pas de `dt`, où `dt` est spécifié sur la ligne de commande. L'état t0 est donc présent à
                                                                                          la fois dans les entrées et dans les sorties, avec la même valeur.
-  `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécesitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
-  `commands`          Liste de clefs-valeurs (dictionnaire)                              Etat des actionneurs au temps t. Commande au sens de X-DYN (modèle d'effort commandé) au temps t0 (début de la
+  `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
+  `commands`          Liste de clefs-valeurs (dictionnaire)                              État des actionneurs au temps t. Commande au sens de X-DYN (modèle d'effort commandé) au temps t0 (début de la
                                                                                          simulation, i.e. date du dernier élément de la liste `states`). Le plus souvent, correspond à l'état interne
                                                                                          d'un modèle d'actionneur (safran ou hélice par exemple) dans X-DYN et dont on souhaite simuler la dynamique
                                                                                          en dehors d'X-DYN.
-  Etat                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   Etats navire
+  État                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   États navire
   t                   Flottant                                                           Date de l'état
   x                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
   y                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
@@ -583,19 +590,19 @@ Exemple:
 
   SORTIES             TYPE                                                                                                                DETAIL
   ------------------- ------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------------------------
-                      Liste d’éléments de type « État augmenté »                         Historique des états de t0 à t0 + Dt par pas de dt.
-  État augmenté       Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   Etats navire, augmentés des angles d'Euler.
+                      Liste d'éléments de type « État augmenté »                         Historique des états de t0 à t0 + Dt par pas de dt.
+  État augmenté       Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   États navire, augmentés des angles d'Euler.
                       et les trois angles phi, theta, psi.
   t                   Flottant                                                           Date de l'état augmenté
-  x                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  y                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  z                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  u                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  v                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  w                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  p                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  q                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  r                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  x                   Flottant                                                           Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY
+  y                   Flottant                                                           Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY
+  z                   Flottant                                                           Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY
+  u                   Flottant                                                           Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  v                   Flottant                                                           Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  w                   Flottant                                                           Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
+  p                   Flottant                                                           Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  q                   Flottant                                                           Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
+  r                   Flottant                                                           Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
   qr                  Flottant                                                           Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
   qi                  Flottant                                                           Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
   qj                  Flottant                                                           Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
