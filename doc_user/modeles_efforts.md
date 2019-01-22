@@ -1609,7 +1609,7 @@ où $K_{\Lambda}$ est un paramètre renseigné par l'utilisateur.
 On utilise la formule de Soeding (cf. *Manoeuvring Technical Manual*, éq. 1.2.8
 p.77 et éq. 1.2.48 p.97) :
 
-$$Cl(\alpha) = 2\pi\frac{\Lambda(\Lambda+1)}{(\Lambda+2)^2\sin(\alpha)}$$
+$$Cl(\alpha) = 2\pi\frac{\Lambda(\Lambda+1)}{(\Lambda+2)^2}*sin(\alpha)$$
 
 #### Calcul de $C_d$
 
