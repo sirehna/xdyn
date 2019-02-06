@@ -413,27 +413,31 @@ jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
 
 ### Description des entrées/sorties pour une utilisation en "Model Exchange" (x -> dx/dt)<comment>[JJM] çà veut dire quoi ? on se contente de calculer les efforts à partir des états ? </comment>
 
-  ENTREES             TYPE                                                               DETAIL <comment>[JJM] je ne sais pas si çà doit ressembler à un tableau, mais ce n'est pas le cas, avec visual code... </comment>
-  ------------------- ------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------------
-  `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
-  `commands`          Liste de clefs-valeurs (dictionnaire)                              État des actionneurs au temps t
-  État                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   États navire
-  t                   Flottant                                                           Temps courant de la simulation
-  x                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution)
-  y                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  z                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  u                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  v                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  w                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  p                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  q                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  r                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  qr                  Flottant                                                           Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qi                  Flottant                                                           Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qj                  Flottant                                                           Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qk                  Flottant                                                           Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+| Entrées    | Type                                                             | Détail                                                                                                                                                                                                                                                                  |
+| ---------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `states`   | Liste d’éléments de type « État »                                | Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.                                                                                                                    |
+| `commands` | Liste de clefs-valeurs (dictionnaire)                            | État des actionneurs au temps t                                                                                                                                                                                                                                         |
 
-Exemple:
+Chaque élément de type « État » est composé des éléments suivants:
+
+| État       | Type      | Détail                                                                                                                                                                                                                                                                  |
+| ---------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| t          | Flottant  | Temps courant de la simulation                                                                                                                                                                                                                                          |
+| x          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) |
+| y          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY                                                                         |
+| z          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY                                                                         |
+| u          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                                                                                             |
+| v          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                                                                                             |
+| w          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                                                                                             |
+| p          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                                                                                                 |
+| q          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                                                                                                 |
+| r          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                                                                                                 |
+| qr         | Flottant  | Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                                                                                             |
+| qi         | Flottant  | Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                                                                                |
+| qj         | Flottant  | Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                                                                                 |
+| qk         | Flottant  | Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                                                                               |
+
+Exemple d'entrée:
 
 ~~~~{.json}
 {
@@ -455,7 +459,7 @@ Exemple:
       "qk": 0
     },
     {
-      "t": 0,
+      "t": 0.1,
       "x": 0.1,
       "y": -0.156,
       "z": 10,
@@ -477,22 +481,27 @@ Exemple:
 }
 ~~~~
 
-  SORTIES             TYPE                                                                                                                DETAIL<comment>[JJM] idem </comment>
-  ------------------- ------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------------------------
-  Dérivée des états   Structure contenant dx/dt, dy/dt, dz/dt, du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt, dqr/dt, dqi/dt, dqj/dt, dqk/dt   Dérivée des états navire
-  dx/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  dy/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  dz/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  du/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  dv/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  dw/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  dp/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  dq/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  dr/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  dqr/dt              Flottant                                                                                                            Dérivée par rapport au temps de la partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  dqi/dt              Flottant                                                                                                            Dérivée par rapport au temps de la première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  dqj/dt              Flottant                                                                                                            Dérivée par rapport au temps de la seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  dqk/dt              Flottant                                                                                                            Dérivée par rapport au temps de la troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+La sortie du "Model Exchange" correspond à la dérivée des états
+à savoir `dx/dt`, `dy/dt`, `dz/dt`, `du/dt`, `dv/dt`, `dw/dt`,
+`dp/dt`, `dq/dt`, `dr/dt`, `dqr/dt`, `dqi/dt`, `dqj/dt`, `dqk/dt`.
+
+| Sorties           | Type      | Détail                                                                                                                                                                                                                             |
+| ----------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| dx/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY |
+| dy/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY |
+| dz/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY |
+| du/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                     |
+| dv/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                     |
+| dw/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                     |
+| dp/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                         |
+| dq/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                         |
+| dr/dt             | Flottant  | Dérivée par rapport au temps de la projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                         |
+| dqr/dt            | Flottant  | Dérivée par rapport au temps de la partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                     |
+| dqi/dt            | Flottant  | Dérivée par rapport au temps de la première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                        |
+| dqj/dt            | Flottant  | Dérivée par rapport au temps de la seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                         |
+| dqk/dt            | Flottant  | Dérivée par rapport au temps de la troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                       |
+
+Exemple de sortie:
 
 ~~~~{.json}
 {
@@ -514,44 +523,39 @@ Exemple:
 
 ### Description des entrées/sorties pour une utilisation en "Co-Simulation" (x(t) -> [x(t), ...,x(t+Dt)])
 
-  ENTREES             TYPE                                                               DETAIL <comment>[JJM] idem. </comment>
-  ------------------- ------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------------
-  `Dt`                Flottant strictement positif                                       Horizon de simulation (en secondes). La simulation s'effectue de t0 à t0 + Dt, où t0 est la date du dernier élément de la
-                                                                                         liste `states`, par pas de `dt`, où `dt` est spécifié sur la ligne de commande. L'état t0 est donc présent à
-                                                                                         la fois dans les entrées et dans les sorties, avec la même valeur.
-  `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
-  `commands`          Liste de clefs-valeurs (dictionnaire)                              État des actionneurs au temps t. Commande au sens de X-DYN (modèle d'effort commandé) au temps t0 (début de la
-                                                                                         simulation, i.e. date du dernier élément de la liste `states`). Le plus souvent, correspond à l'état interne
-                                                                                         d'un modèle d'actionneur (safran ou hélice par exemple) dans X-DYN et dont on souhaite simuler la dynamique
-                                                                                         en dehors d'X-DYN.
-  État                Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   États navire
-  t                   Flottant                                                           Date de l'état
-  x                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  y                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  z                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
-  u                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  v                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  w                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  p                   Flottant                                                           Projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  q                   Flottant                                                           Projection sur l’axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  r                   Flottant                                                           Projection sur l’axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  qr                  Flottant                                                           Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qi                  Flottant                                                           Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qj                  Flottant                                                           Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qk                  Flottant                                                           Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
+| Entrées    | Type                                                             | Détail                                                                                                                                                                                          |
+| ---------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Dt`       | Flottant strictement positif                                     | Horizon de simulation (en secondes). La simulation s'effectue de t0 à t0 + Dt, où t0 est la date du dernier élément de la                                                                       |
+|            |                                                                  | liste `states`, par pas de `dt`, où `dt` est spécifié sur la ligne de commande. L'état t0 est donc présent à                                                                                    |
+|            |                                                                  | la fois dans les entrées et dans les sorties, avec la même valeur.                                                                                                                              |
+| `states`   | Liste d’éléments de type « État »                                | Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.                                            |
+| `commands` | Liste de clefs-valeurs (dictionnaire)                            | État des actionneurs au temps t. Commande au sens de X-DYN (modèle d'effort commandé) au temps t0 (début de la                                                                                  |
+|            |                                                                  | simulation, i.e. date du dernier élément de la liste `states`). Le plus souvent, correspond à l'état interne                                                                                    |
+|            |                                                                  | d'un modèle d'actionneur (safran ou hélice par exemple) dans X-DYN et dont on souhaite simuler la dynamique                                                                                     |
+|            |                                                                  | en dehors d'X-DYN.
+
+Chaque élément de type « État » est composé des éléments suivants:
+
+| État       | Type      | Détail                                                                                                                                                                                          |
+| ---------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| t          | Flottant  | Date de l'état                                                                                                                                                                                  |
+| x          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY |
+| y          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY |
+| z          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY |
+| u          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                     |
+| v          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                     |
+| w          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                     |
+| p          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                         |
+| q          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                         |
+| r          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                         |
+| qr         | Flottant  | Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                     |
+| qi         | Flottant  | Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                        |
+| qj         | Flottant  | Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                         |
+| qk         | Flottant  | Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                       |
 
 
-  phi                 Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
-                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
-                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
-  theta               Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
-                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
-                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
-  psi                 Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
-                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
-                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
 
-Exemple:
+Exemple d'entrée:
 
 ~~~~{.json}
 {
@@ -596,35 +600,34 @@ Exemple:
 }
 ~~~~
 
-  SORTIES             TYPE                                                                                                                DETAIL<comment>[JJM]  </comment>
-  ------------------- ------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------------------------
-                      Liste d'éléments de type « État augmenté »                         Historique des états de t0 à t0 + Dt par pas de dt.
-  État augmenté       Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   États navire, augmentés des angles d'Euler.
-                      et les trois angles phi, theta, psi.
-  t                   Flottant                                                           Date de l'état augmenté
-  x                   Flottant                                                           Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY
-  y                   Flottant                                                           Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY
-  z                   Flottant                                                           Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY
-  u                   Flottant                                                           Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  v                   Flottant                                                           Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  w                   Flottant                                                           Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).
-  p                   Flottant                                                           Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  q                   Flottant                                                           Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  r                   Flottant                                                           Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).
-  qr                  Flottant                                                           Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qi                  Flottant                                                           Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qj                  Flottant                                                           Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  qk                  Flottant                                                           Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)
-  phi                 Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
-                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
-                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
-  theta               Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
-                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
-                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
-  psi                 Flottant                                                           Angle d'Euler. Sa signification exacte dépend de la convention d'angle choisie dans le fichier YAML d'entrée
-                                                                                         de X-DYN (voir la section correspondante dans la documentation). Cette sortie est fournie pour faciliter le
-                                                                                         travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+La sortie est une liste d'éléments de type « État augmenté » contenant l'historique des états de t0 à t0 + Dt par pas de dt.
 
+| État       | Type      | Détail                                                                                                                                                                                          |
+| ---------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| t          | Flottant  | Date de l'état augmenté                                                                                                                                                                           |
+| x          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY   |
+| y          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY   |
+| z          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY   |
+| u          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                       |
+| v          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                       |
+| w          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                       |
+| p          | Flottant  | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                           |
+| q          | Flottant  | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                           |
+| r          | Flottant  | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                           |
+| qr         | Flottant  | Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                       |
+| qi         | Flottant  | Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                          |
+| qj         | Flottant  | Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                           |
+| qk         | Flottant  | Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                         |
+| phi        | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                             |
+| theta      | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                             |
+| psi        | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                             |
+
+La signification exacte des angles d'Euler dépend de la convention d'angle
+choisie dans le fichier YAML d'entrée de X-DYN (voir la section correspondante
+dans la documentation). Cette sortie est fournie pour faciliter
+le travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+
+Exemple de sortie:
 
 ~~~~{.json}
 [
