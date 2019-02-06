@@ -1,11 +1,12 @@
 # Métacentre
 
-## Description
+## Définitions
+(définitions valables dans ce chapitre)
 
 Le métacentre $`M`$ est un point définit comme l'intersection des axes d'application de la force d'Archimède pour de petites variations d'inclinaison.
 La distance algébrique entre le centre de gravité $`G`$ d'un navire et son métacentre $`M`$, notée $`\overline{GM}`$, permet de caractériser la stabilité d'un navire :
 
-- Une valeur faible ou négative de $`\overline{GM}`$ correspond à un navire "mou", c'est-à-dire plus facile à incliner et qui n’aura pas tendance à revenir rapidement à sa position droite. Un navire mou aura plus de risque de chavirer lors de conditions environnementales adverses.
+- Une valeur faible ou négative de $`\overline{GM}`$ correspond à un navire "mou", c'est-à-dire plus facile à incliner et qui n'aura pas tendance à revenir rapidement à sa position droite. Un navire mou aura plus de risque de chavirer lors de conditions environnementales adverses.
 - Une valeur forte de $`\overline{GM}`$ correspond à un navire "raide", c'est-à-dire un navire assez difficile à faire gîter et qui sera soumis à un  roulis  rapide, potentiellement inconfortable pour les passagers et l'équipage.
 
 ## Utilisation dans X-DYN
@@ -23,11 +24,9 @@ autre modèle hydrostatique.
 Le modèle évalue GZ pour l'état courant et modifie ensuite l'angle $`\theta`$
 d'une valeur d$`\theta`$ spécifiée en paramètre puis approche GM par
 
-
 ```math
 GM = \frac{GZ(\theta+d\theta)-GZ(\theta)}{d\theta}
 ```
-
 
 Voici un exemple de paramétrisation :
 
@@ -42,8 +41,8 @@ external forces:
 
 Le métacentre est définit comme l'intersection des axes d'application de la force
 d'Archimède pour de petites variations d'inclinaison, ou, autrement dit, le
-point où la résultante de la pression que l’eau exerce sur le navire (gîté,
-c’est-à-dire incliné) rencontre le plan médian de celui-ci. Pour que cette
+point où la résultante de la pression que l'eau exerce sur le navire (gîté,
+c'est-à-dire incliné) rencontre le plan médian de celui-ci. Pour que cette
 définition ait un sens, il convient de préciser dans quelles conditions ces axes
 se coupent.
 
@@ -95,11 +94,14 @@ Intersection du flotteur et du plan de flottaison
 Périmètre de la flottaison
 
 #### Centre de flottaison
-Centre de gravité de la flottaison.
+
+Centre de gravité de la flottaison
 
 #### Carène
 
-Partie immergée du flotteur, située au-dessous du plan de flottaison. Son centre de gravité $`C`$ est appelé "centre de carène". C'est le point d'application des efforts hydrostatiques.
+Partie immergée du flotteur, située au-dessous du plan de flottaison.
+Son centre de gravité $`C`$ est appelé "centre de carène".
+C'est le point d'application des efforts hydrostatiques.
 
 #### Flottaisons isocarènes
 
@@ -185,43 +187,35 @@ $`F_{\textrm{HS}}`$ est constante donc
 dMr = F_{\textrm{HS}}\cdot(\sin(\theta)dGM + GM\cdot\cos(\theta)d\theta)
 ```
 
-
 or
+
 ```math
 dMr = F_{\textrm{HS}}\cdot dGZ
 ```
 
 d'où
 
-
 ```math
 dGZ = \sin(\theta)dGM + GM\cdot\cos(\theta)d\theta
 ```
 
-
 Comme $`GM`$ est constant,
-
 
 ```math
 dGZ \sim GM d\theta
 ```
 
-
 donc
-
 
 ```math
 GM\sim \frac{dGZ}{d\theta}
 ```
 
-
 On a également le théorème de Bouguer :
-
 
 ```math
 GM\sim \frac{I_{Oxx}}{V}
 ```
-
 
 ### Extension : utilisation du GM en dynamique
 
@@ -234,15 +228,17 @@ petites rotations isocarènes, symétries). On pose alors comme définition (et 
 GM=\frac{dGZ}{d\theta}
 ```
 
-
-Définit ainsi, le $`GM`$ donne donc une indication sur la stabilité du couple de rappel
-hydrostatique : plus le $`GM`$ est important pour un volume de carène donné, plus
+Le $GM$ donne donc une indication sur le taux de variation du couple de rappel
+hydrostatique : plus le $GM$ est important pour un volume de carène donné, plus
 le moment de rappel aura tendance à varier rapidement pour de faibles
-changements d'inclinaison $`\theta`$.
+changements d'inclinaison $\theta$.
+
 
 ## Bibliographie
 
-- *Theoretical Naval Architecture*,  Samuel James Pope Thearle, ISBN 978-1236765673
+- *Theoretical Naval Architecture*, Samuel James Pope Thearle, ISBN 978-1236765673
 - *A Treatise on the Stability of Ships*, Edward James Reed, page 89
-- [*Mécanique des fluides: équations générales et statique des fluides*](https://cel.archives-ouvertes.fr/cel-00851021/document), Pierre Guével, Ecole nationale supérieure de mécanique - Université de Nantes, 1969, page 113
-- *Hydrodynamique navale : théorie et modèles*, 2009, A. Bovis, Presses de l'ENSTA, p. 80
+- [*Mécanique des fluides: équations générales et statique des fluides*](https://cel.archives-ouvertes.fr/cel-00851021/document), Pierre Guével, École nationale supérieure de mécanique - Université de Nantes, 1969, page 113
+- *Hydrodynamique navale : théorie et modèles*, 2009, Alain Bovis, Presses de l'ENSTA, page 80
+
+<comment>[JJM] Relu </comment>
