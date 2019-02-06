@@ -1,13 +1,22 @@
 # Métacentre
 
 ## Définitions
+
 (définitions valables dans ce chapitre)
 
-Le métacentre $`M`$ est un point définit comme l'intersection des axes d'application de la force d'Archimède pour de petites variations d'inclinaison.
-La distance algébrique entre le centre de gravité $`G`$ d'un navire et son métacentre $`M`$, notée $`\overline{GM}`$, permet de caractériser la stabilité d'un navire :
+Le métacentre $`M`$ est un point définit comme l'intersection des axes
+d'application de la force d'Archimède pour de petites variations d'inclinaison.
+La distance algébrique entre le centre de gravité $`G`$ d'un navire et son
+métacentre $`M`$, notée $`\overline{GM}`$, permet de caractériser la stabilité
+d'un navire :
 
-- Une valeur faible ou négative de $`\overline{GM}`$ correspond à un navire "mou", c'est-à-dire plus facile à incliner et qui n'aura pas tendance à revenir rapidement à sa position droite. Un navire mou aura plus de risque de chavirer lors de conditions environnementales adverses.
-- Une valeur forte de $`\overline{GM}`$ correspond à un navire "raide", c'est-à-dire un navire assez difficile à faire gîter et qui sera soumis à un  roulis  rapide, potentiellement inconfortable pour les passagers et l'équipage.
+- Une valeur faible ou négative de $`\overline{GM}`$ correspond à un navire "mou",
+  c'est-à-dire plus facile à incliner et qui n'aura pas tendance à revenir
+  rapidement à sa position droite. Un navire mou aura plus de risque de
+  chavirer lors de conditions environnementales adverses.
+- Une valeur forte de $`\overline{GM}`$ correspond à un navire "raide",
+  c'est-à-dire un navire assez difficile à faire gîter et qui sera soumis à un
+  roulis rapide, potentiellement inconfortable pour les passagers et l'équipage.
 
 ## Utilisation dans X-DYN
 
@@ -82,8 +91,7 @@ tend vers un point appelé métacentre.
 
 #### Plan de flottaison
 
-Plan de la surface libre du liquide au repos.
-
+Plan de la surface libre du liquide au repos
 
 #### Flottaison
 
@@ -105,7 +113,8 @@ C'est le point d'application des efforts hydrostatiques.
 
 #### Flottaisons isocarènes
 
-Flottaisons limitant des carènes de même volume. On peut démontrer qu'il [existe une flottaison isocarène]().
+Flottaisons limitant des carènes de même volume. On peut démontrer
+qu'il [existe une flottaison isocarène]().
 
 #### Axe d'inclinaison
 
@@ -156,10 +165,10 @@ isocarènes sont les normales à une même surface qui est la surface de poussé
 Pour toute position de navire, il existe une position isocarène.
 
 Soit en effet
-$`X_0=(z_0,\phi_0,\theta_0)`$ et $`X_1=(z_1,\phi_1,\theta_1)`$ deux paramètres de
-flottaison tels que $`\phi_0\neq\phi_1`$ et $`\theta_0\neq\theta_1`$.
-Soit $`V_{\textrm{max}}`$ le volume de la carène lorsque le navire est totalement
-immergé. On note $`I`$ l'intervalle $`[0,V_{\textrm{max}}]`$.
+$`X_0=(z_0,\phi_0,\theta_0)`$ et $`X_1=(z_1,\phi_1,\theta_1)`$ deux paramètres
+de flottaison tels que $`\phi_0\neq\phi_1`$ et $`\theta_0\neq\theta_1`$.
+Soit $`V_{\textrm{max}}`$ le volume de la carène lorsque le navire est
+totalement immergé. On note $`I`$ l'intervalle $`[0,V_{\textrm{max}}]`$.
 
 On note $`V_z`$ l'application partielle $`V_z:z\mapsto
 V(z,\phi_1,\theta_1)`$. $`V`$ étant continue par hypothèse, $`V_z`$ l'est aussi.
@@ -178,10 +187,8 @@ Le couple de rappel $`M_r`$ est par définition :
 M_r = F_{\textrm{HS}} \cdot GZ = F_{\textrm{HS}} \cdot GM\cdot \sin(\theta)
 ```
 
-
 Pour de petites variations isocarènes de $`\theta`$, le volume ne variant pas,
 $`F_{\textrm{HS}}`$ est constante donc
-
 
 ```math
 dMr = F_{\textrm{HS}}\cdot(\sin(\theta)dGM + GM\cdot\cos(\theta)d\theta)
@@ -221,18 +228,18 @@ GM\sim \frac{I_{Oxx}}{V}
 
 Pour utiliser le concept de métacentre pour un navire réel sur houle,
 il faut s'affranchir des hypothèses précédentes (planéité de la surface libre,
-petites rotations isocarènes, symétries). On pose alors comme définition (et non plus un approximation au premier ordre) :
+petites rotations isocarènes, symétries). On pose alors comme définition
+(et non plus un approximation au premier ordre) :
 
 
 ```math
 GM=\frac{dGZ}{d\theta}
 ```
 
-Le $GM$ donne donc une indication sur le taux de variation du couple de rappel
-hydrostatique : plus le $GM$ est important pour un volume de carène donné, plus
-le moment de rappel aura tendance à varier rapidement pour de faibles
-changements d'inclinaison $\theta$.
-
+Le $`GM`$ donne donc une indication sur le taux de variation du couple de rappel
+hydrostatique : plus le $`GM`$ est important pour un volume de carène donné,
+plus le moment de rappel aura tendance à varier rapidement pour de faibles
+changements d'inclinaison $`\theta`$.
 
 ## Bibliographie
 
