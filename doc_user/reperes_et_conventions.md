@@ -121,7 +121,7 @@ qu'il est possible de définir.
 ### Synthèse des différentes conventions
 
 Les deux tableaux suivants présentent les 36 conventions possibles :
-
+<comment>[JJM] Pas lisible chez moi </comment>
 +----+-------+-------------+---------------+-----------------------------------+------------------------+
 | id | Ordre |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
 +====+=======+=============+===============+===================================+========================+
@@ -508,6 +508,10 @@ qui vaut 907.185 kg.
 
 #### Matrice d'inertie
 
+<comment>[JJM] Anthineas ? </comment>
+
+<comment>[JJM] Et toujours la même question : pourquoi la matrice d'inertie n'est-elle pas exprimée par rapport au CdG (son point d'expression naturel) ?  </comment>
+
 La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
 de repère.
 
@@ -542,7 +546,7 @@ added mass matrix at the center of gravity and projected in the body frame:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Elle figure dans la section `dynamics` et non dans la section `external forces`
-(bien qu'il s'agisse d'un modèle effort, proportionnel à l'accélération)
+(bien qu'il s'agisse d'un modèle d'effort, proportionnel à l'accélération)
 parce que ce modèle d'effort fait l'objet d'un traitement particulier : il
 figure dans le membre de gauche de l'équation fondamentale de la dynamique
 
@@ -575,7 +579,7 @@ dans le [fichier HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
 ### Forçage de degrés de liberté
 
 Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
-P, Q, R.
+P, Q, R. <comment>[JJM] pour tous les corps ? </comment>
 
 Pour forcer les degrés de liberté, on ajoute la section (facultative) suivante
 à la section `body` :
@@ -643,7 +647,7 @@ corps s'appelle 'TestShip):
 Il est à noter que ces efforts sont exprimés dans le repère BODY.
 
 
-## Fichiers HDB
+## Fichiers HDB issus d'un calcul fréquentiel
 
 Le format HDB (Hydrodynamic DataBase) est le format standard du logiciel
 [Diodore](http://www.principia-group.com/blog/product/diodore/). Le logiciel
@@ -659,7 +663,7 @@ fichiers peuvent être utilisés par X-DYN pour calculer :
 Les fichiers HDB ne spécifient ni leur repère de calcul, ni les points
 d'expression. Plutôt que de laisser l'utilisateur la spécifier (avec les risques
 d'erreur que cela comporte) ou de la détecter automatiquement, on suppose pour
-X-DYN que les fichiers HDB ont été générés par AQUA+ (convention "z vers le
+X-DYN que les fichiers HDB ont été générés avec les conventions du logiciel AQUA+ (convention "z vers le
 haut"). Le repère dans lequel sont exprimées toutes les matrices de tous les
 fichiers HDB lus par X-DYN est donc : x longitudinal, y vers babord et z vers le
 haut.
@@ -716,10 +720,10 @@ paragraphe suivant.
 
 ### Transport des matrices d'inertie et d'amortissement lues depuis le fichier HDB
 
-La formule de Huyguens permet de translater les inerties du centre de gravité vers
-un point quelconque. On s'intéresse ici au déplacement et changement de repère
+La formule de Huygens permet de translater les inerties du centre de gravité vers
+un point quelconque. On s'intéresse ici au déplacement et au changement de repère
 d'une matrice d'inertie généralisée (inerties propres et inerties ajoutées).
-Par rapport à la formule de Huyguens, la différence vient de ce que l'inertie
+Par rapport à la formule de Huygens, la différence vient de ce que l'inertie
 n'est pas identique sur tous les axes (mathématiquement, la matrice peut donc
 être n'importe quelle forme bilinéaire symétrique, positive et définie).
 
@@ -743,7 +747,7 @@ M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{
 ```
 
 
-Cete formule est une généralisation de la formule de Huyguens.
+Cette formule est une généralisation de la formule de Huygens.
 
 En combinant avec un changement de base (de la base $`a`$ vers la base $`b`$) par
 la matrice de rotation $`{}^a R_b`$ de $`b`$ vers $`a`$ on obtient l'expression plus
@@ -853,8 +857,8 @@ Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid
 
 ### Structure des fichiers HDB
 
-Les fichiers HDB sont des sorties générées par un code un Fortran 77. Aucune
-spécification formelle de ce format n'a pu être trouvée. Pour pouvoir les importer dans
+Les fichiers HDB sont des sorties générées par un code Fortran 77. Aucune
+spécification formelle de ce format n'a été trouvée. Pour pouvoir les importer dans
 X-DYN, leur grammaire EBNF a été déduite de l'analyse de plusieurs fichiers
 (reverse-engineering). Cette grammaire, qui permet de parser tous les fichiers
 HDB qui nous ont été fournis jusqu'ici, peut être représentée comme suit (sans
@@ -1109,3 +1113,5 @@ Les différentes positions du navire par rapport à la houle sont décrites comm
 - $`180^\circ < \gamma - \psi < 270^\circ`$ : Houle venant de tribord avant
 - $`\gamma - \psi = 270^\circ`$ : Houle venant de tribord
 - $`270^\circ < \gamma - \psi < 360^\circ`$ : Houle venant de bâbord avant
+
+<comment>[JJM] Relu </comment>
