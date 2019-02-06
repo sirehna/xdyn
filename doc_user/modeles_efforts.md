@@ -1,3 +1,5 @@
+<comment>[JJM] En lisant, je vois que le document contient les efforts non-commandés et commandés, or le titre ci-dessous fait penser que c'est le titre du document. Peut-on mettre une introduction pour expliquer ce que contient le document ? </comment>
+
 # Modèles d'efforts non-commandés
 
 Les efforts extérieurs (non commandés) sont donnés dans la section
@@ -297,9 +299,9 @@ NISTOR
 ### Description
 
 Les efforts de Froude-Krylov constituent une partie des efforts d'excitation
-dus à la houle. Ils correspondent aux efforts générés par le champs de pression
+dus à la houle. Ils correspondent aux efforts générés par le champ de pression
 de la houle, en supposant que le navire ne perturbe pas l'écoulement. Ils sont
-calculés en intégrant la pression dynamique (champs de pression de la houle
+calculés en intégrant la pression dynamique (champ de pression de la houle
 incidente) sur la carène. En pratique, ils peuvent être négligés dès que le
 corps est à plus d'une-demi longueur d'onde de profondeur :
 
@@ -342,9 +344,12 @@ fait de la présence du navire. Ils sont interpolés à partir de tables
 hydrodynamiques. Comme les efforts de radiation et les efforts de masse ajoutée,
 ces tables sont calculées en résolvant un problème de condition aux limites pour
 le potentiel de vitesse : on utilise donc des codes basés sur des méthodes
-potentielles, tels qu'Aqua+. Les fonctions de transfert (Response Amplitudes Operators ou RAO)
+potentielles, tels qu'Aqua+.
+<comment>[GJ] Fin de paragraphe à faire relire par JJM</comment>
+Les tables contiennent les fonctions de transfert des efforts (Response Amplitudes Operators ou RAO) et
 sont paramétrées en pulsation, incidence et vitesse d'avance. Il s'agit de RAO
 d'efforts du premier ordre). Les efforts de diffraction sont dûs à la diffraction de la houle par le corps fixe, tandis que les amortissements de radiation proviennent de la dissipation de l'énergie du corps lors de son mouvement, par la création de vagues. Cette différence se traduit uniquement par une différence de conditions aux limites dans la modélisation potentielle.
+<comment>[JJM] euh... la principale différence est que l'un est lié à la perturbation de la houle incidente et l'autre lié à la génération d'ondes par le mouvement  du navire. La condition aux limites différente concerne la résolution du problème en potentiel... Et accessoirement, pour utiliser les efforts de radiation, il faut multiplier les infos des tables par les mouvements du navire. Peut-être pas la peine d'en parler ici, dans les efforts de diffraction. </comment>
 
 ### Calcul numérique
 
@@ -352,16 +357,13 @@ Les RAO d'efforts sont lues à partir d'un [fichier
 HDB](#fichiers-hdb). Cette table donne, une
 fois interpolée, deux fonctions RAO par axe $`k`$
 
-
 ```math
 (u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{module}}(u,\omega,\beta)
 ```
 
-
 ```math
 (u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{phase}}(u,\omega,\beta)
 ```
-
 
 * $`u`$ désigne la composante longitudinale de vitesse d'avance (basse fréquence) projetée dans le repère body (une limitation actuelle d'X-DYN est que l'on utilise pour ces calculs non pas la vitesse basse fréquence mais la vitesse instantanée),
 * $`\omega`$ désigne la pulsation de la houle (et non la pulsation de rencontre, puisque dans la formule ci-dessous on fait intervenir $`\mathbf{k}\cdot \mathbf{x}`$),
@@ -479,11 +481,11 @@ $`\beta>\pi`$ et que `mirror for 180 to 360` vaut `true`.
 
 ### Hypothèses
 
-On suppose la propulsion rectiligne, uniforme et directe, c'est-à-dire
-d'intensité et de direction constantes et située dans le plan ($`x$,$y`$).
+On suppose la propulsion rectiligne, uniforme et directe<comment>[JJM] ? </comment>, c'est-à-dire
+d'intensité et de direction constantes et située dans le plan ($`x`$, $`y`$)<comment>[JJM]   c'est le repère lié au corps ?</comment>.
 
-On suppose également qu'il n'y a pas de houle (eau calme), que l'assiette et
-l'enfoncement du navire sont constants et que sa gite est nulle.
+On suppose également qu'il n'y a pas de houle (eau initialement calme), que l'assiette et
+l'enfoncement du navire sont constants et que sa gite est nulle.<comment>[JJM]   il faudrait interpoler l'enfoncement et l'assiette en même temps que la résistance, ce n'est pas compliqué, et l'information est normalement connue, quelle que soit l'origine (essais ou calculs) </comment>
 
 On suppose enfin que la résistance à l'avancement est colinéaire à la
 projection sur le plan horizontal de la force propulsive.
@@ -495,33 +497,35 @@ cette vitesse en eau calme.
 ### Modélisation
 
 Le paradoxe d'Alembert est que lorsque l'on remorque un objet
-immergé dans un fluide supposé parfait, sa résistance est nulle.
+immergé dans un fluide supposé parfait<comment>[JJM] et en milieu infini </comment>, sa résistance est nulle.
 Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique
 que :
 
 - l'eau n'est pas un fluide parfait : elle possède une viscosité qui freine
-  l'objet,
+  l'objet par frottement et par production de structures turbulentes,
 - et/ou la surface libre n'est pas à l'équilibre et s'oppose au mouvement du
   solide.
 
 On décompose donc la résistance de remorquage en deux composantes :
 
-- la résistance visqueuse, liée au frottement de l'eau sur la carène ;
+- la résistance visqueuse, liée au frottement de l'eau sur la carène et aux pressions liées aux détachements ou structures turbulentes ;
 - la résistance de vagues, due à la création d'un champs de vague par le
 navire.
 
-En pratique, on effectue une interpolation de la courbe de résistance à l'avancement en fonction de la vitesse du solide par rapport au repère NED
-projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $`u`$). La courbe de résistance à l'avancement est obtenue au préalable (et non calculée par X-DYN) et renseignée dans le fichier YAML.
+<comment>[JJM] je ne comprends pas trop l'intérêt des § précédent, vis-à-vis de la suite. </comment>
 
-Si $`f:u\mapsto R=f(u)`$ désigne la fonction d'interpolation de la courbe de résistance à l'avancement, le torseur des efforts, exprimé au [point
-de calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
+En pratique, on effectue une interpolation de la courbe de résistance
+à l'avancement en fonction de la vitesse du solide par rapport au repère NED
+projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $`u`$).
+La courbe de résistance à l'avancement est obtenue au préalable (et non calculée par X-DYN) et renseignée dans le fichier YAML.
+
+Si $`f:u\mapsto R=f(u)`$ désigne la fonction d'interpolation de la courbe de résistance à l'avancement,
+le torseur des efforts, exprimé au [point de calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
 est :
-
 
 ```math
 \tau_{\textrm{res}} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]
 ```
-
 
 ### Paramétrage
 
@@ -557,18 +561,18 @@ Les mouvements d'un solide évoluant dans un fluide sont amortis du fait de
 l'énergie que ce solide communique au fluide. Ces efforts dissipatifs
 proviennent d'une part des vagues générées par les mouvements du fluide (et qui
 correspondent aux [amortissements de
-radiation](#calcul-des-efforts-dexcitation)),
-et d'autre part des amortissements visqueux dus au frottement du fluide sur la
+radiation](#calcul-des-efforts-dexcitation))<comment>[JJM] Pourquoi "amortissement de radiation" pointe sur "efforts d'excitation" ? </comment>,
+et d'autre part des amortissements visqueux dus au cisaillement du fluide sur la
 coque (apparition d'un sillage tourbillonnaire ou turbulent qui dissipe de
-l'énergie de manière purement mécanique, essentiellement sur l'axe roulis). Ce
+l'énergie, essentiellement sur l'axe roulis). Ce
 sont ces derniers qui nous intéressent dans cette section.
 
 Les amortissements non-visqueux (radiation) sont, par nature, linéaires par
-rapport à la vitesse. Les amortissements visqueux sont, eux, quadratiques. Le
+rapport à la vitesse<comment>[JJM] Pas par nature, mais du fait de la modélisation utilisée pour les obtenir </comment>. Les amortissements visqueux sont, eux, quadratiques <comment>[JJM] là encore, c'est une modélisation, qui se rapproche certes de la réalité, mais pas forcément et par toujours </comment>. Le
 modèle d'amortissement linéaire ne doit être utilisé que pour prendre en compte
-les efforts dissipatifs de radiations, si ceux-ci ne sont pas déjà obtenus par le calcul fréquentiel (par le modèle d'amortissement de radiation qui utilise la base de donnée hydro du fichier HDB). Suivant les axes, certains termes prédominent par rapport aux autres.
+les efforts dissipatifs de radiation, si ceux-ci ne sont pas déjà obtenus par le calcul fréquentiel (par le modèle d'amortissement de radiation qui utilise la base de donnée hydro du fichier HDB). Suivant les axes, certains termes prédominent par rapport aux autres.
 Ainsi, en roulis, l'amortissement quadratique est prépondérant par rapport à
-l'amortissement linéaire, tandis qu'en tangage c'est l'inverse.
+l'amortissement linéaire <comment>[JJM] à mon avis çà dépend de l'amplitude du mouvement, le linéaire est prépondérant pour les petits mouvements, le quadratique pour les grands... Pourquoi on dit çà ici ? Ca ne sert peut-être pas à grand chose. </comment>, tandis qu'en tangage c'est l'inverse.<comment>[JJM]  </comment>
 
 Outre leur signification physique, les termes amortissements ont également une
 incidence sur la simulation dans la mesure où ils ont tendance à stabiliser les
@@ -580,7 +584,8 @@ supplémentaires afin de ne pas modéliser deux fois le même phénomène physiq
 Il faut donc décomposer la vitesse longitudinale en une composante basse fréquence
 (utilisée par le modèle de [résistance à
 l'avancement](#r%C3%A9sistance-%C3%A0-lavancement))
-et une composante haute fréquence (pour le modèle d'amortissement). Cette décomposition n'est pas encore implémentée dans X-DYN.
+et une composante haute fréquence (pour le modèle d'amortissement).
+Cette décomposition n'est pas encore implémentée dans X-DYN.
 
 ### Modélisation
 
@@ -604,27 +609,22 @@ $`\nu_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}} \nu_b -
 \omega_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}}\omega_{nb}^b
 ```
 
-
 Si les efforts de radiation ne sont par si ceux-ci sont déjà obtenus par le calcul fréquentiel (par le modèle d'amortissement de radiation qui utilise la base de donnée hydro du fichier HDB), les
 amortissements linéaires s'écrivent (dans le [repère de calcul
 hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique)) :
 
-
 ```math
 F_{\textrm{al}}=-D_l\left[\begin{array}{c}\nu_{\textrm{local}}\\\omega_{\textrm{local}}\end{array}\right]_{\textrm{local}}
 ```
-
 
 où $`D_l`$ est la matrice d'amortissement linéaire lue depuis [le fichier de
 paramètres](#amortissement-linéaire).
 
 Pour les amortissements quadratiques :
 
-
 ```math
 F_{\textrm{aq}}=-D_q(\nu_{\textrm{local}})\left[\begin{array}{c}\nu_{\textrm{local}}\\\omega_{\textrm{local}}\end{array}\right]_{\textrm{local}}
 ```
-
 
 où
 
@@ -692,7 +692,7 @@ documentation](#efforts-damortissement-visqueux).
 ### Description
 
 Le modèle d'efforts hydrostatiques linéaires est beaucoup plus rapide à
-calculer que son homologue non-linéaire.
+calculer que son homologue non-linéaire. <comment>[JJM] Habituellement les efforts hydrostatiques linéaires sont juste calculés à partir d'une matrice hydrostatique donnée en entrée (ou éventuellement calculée à partir des données de cdg et géométriques). L'implémentation à 4 points est très spécifique, et je ne suis pas sûs qu'elle présente un intérêt particulier. Si on veut garder çà, il faudrait juste mettre une petite phrase d'explication sur le pourquoi. </comment>
 
 ![](images/linear_hydrostatics.svg)
 
@@ -770,7 +770,6 @@ repère body pour approcher un effort de propulsion.
 Les coordonnées du point d'application de l'effort sont notées `x`, `y` et `z`,
 exprimées dans le repère désigné par `frame`. Les coordonnées `X`, `Y`, `Z`,
 `K`, `M` et `N` du torseur d'effort sont également exprimées dans ce repère.
-
 
 # Efforts commandés
 
@@ -1052,7 +1051,7 @@ Institue Netherlands (MARIN) basé à Wageningen (Pays-Bas), créa les hélices
 Wageningen série B. Afin d'établir une base pour la conception d'hélices, il
 publia en 1938 puis en 1940 une série de tests systématiques en eau libre de 120
 hélices "série B", qui sont, à ce jour, les séries de test en eau libre les plus
-connus, bien que d'autres instituts de recherche en aient réalisés d'autres par
+connus, bien que MARIN et d'autres instituts de recherche en aient réalisés d'autres par
 la suite.
 
 En 1975, Oosterveld et Ossannen utilisèrent une régression statistique pour
@@ -1069,25 +1068,19 @@ On adopte les notations suivantes :
   efforts générés par l'hélice suivant son axe (sans tenir compte de la succion
   de la coque),
 - $`Q`$ est le couple généré par l'hélice en eau libre autour de son axe. Il
-  s'exprime en N.m.
-- $`n`$ est le nombre de tours que l'hélice fait par seconde (en tr/s)
-- $`D`$ est le diamètre de l'hélice (en m)
-- $`rho`$ est la densité volumique de l'eau (en kg/m^3)
-- $`V_a`$ est la vitesse d'avance (en m/s), c'est-à-dire la vitesse de
-  l'écoulement non perturbé (à l'infini). Il s'agit d'une vitesse théorique :
-  on se place dans le cas où l'hélice est complètement isolée dans un
-  environnement infini (eau libre) qui bouge à la vitesse $`V_a`$ par rapport au
-  sol.
+  s'exprime en N.m,
+- $`n`$ est le nombre de tours que l'hélice fait par seconde (en tr/s),
+- $`D`$ est le diamètre de l'hélice (en m),
+- $`rho`$ est la densité volumique de l'eau (en kg/m^3),
+- $`V_a`$ est la vitesse de l'écoulement non perturbé en amont de l'hélice, pour la configuration en eau libre (en m/s).
 
 Le modèle en eau libre est sujet aux hypothèses suivantes :
 
+- on ne tient pas compte des interactions entre l'hélice et la coque
+  (perturbation du fluide en amont de l'hélice),
+- ni des intéreactions  entre l'hélice et la surface libre,
 - on néglige les effets de la houle (notamment sa vitesse orbitale et le champs
   de pression qu'elle génère) et des courants océaniques,
-- on ne tient pas compte des interactions entre l'hélice et la coque
-  (perturbation du fluide en amont de l'hélice) et entre l'hélice et la surface
-  libre. On suppose ainsi que l'hélice ne crée pas de vagues, donc qu'elle ne
-  dissipe pas d'énergie à la
-  surface).
 
 L'intérêt de ce modèle est qu'il est paramétrique et permet de représenter les
 performances de l'hélice sous forme adimensionnelle. On peut ainsi appliquer le
@@ -1098,93 +1091,76 @@ avant (c'est-à-dire pour $`n`$ positif ou nul).
 
 ### Dérivation du modèle en eau libre
 
-Le modèle en eau libre est un modèle empirique qui ne dérive
-pas des équations de Navier-Stokes. Le postulat est, qu'étant données les
+Le modèle en eau libre est un modèle basé sur des considérations physiques <comment>[JJM] les coefs de ce modèle peuvent aussi bien être obtenues expérimentalement, que numériquement par résolution des équations de NS... </comment>. Le postulat est, qu'étant données les
 hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
 dépende :
 
 - du diamètre $`D`$ (en m) de celle-ci,
 - de la vitesse $`V_a`$ d'avance du fluide (en m/s),
-- de la vitesse de rotation $`n`$ de l'hélice (en Hz),
+- de la vitesse de rotation $`n`$ de l'hélice (en tr/s),
 - de la densité $`\rho`$ du fluide (en kg/m^3),
-- de la viscosité $`\mu`$ du fluide,
+- de la viscosité dynamique $`\mu`$ du fluide (en kg/(m.s)),
 - de la pression statique du fluide $`p_0-e`$ au niveau de l'hélice.
 
 On aurait donc :
-
 
 ```math
 T_0 \propto \rho^a\cdot D^b\cdot V_a^c \cdot n^d \cdot \mu^f\cdot(p_0-e)^g
 ```
 
-
 En effectuant l'analyse dimensionnelle pour exprimer $`a`$, $`b`$ et $`d`$ en
 fonction des autres coefficients, on trouve :
-
 
 ```math
 T_0 \propto \rho^{1-f-g}\cdot D^{4-c-2f-g}\cdot V_a^c \cdot n^{2-c-f-2g} \cdot \mu^f\cdot(p_0-e)^g
 ```
 
-
 Soit, en regroupant les termes de même puissance :
-
 
 ```math
 T_0 \propto \rho\cdot n^2\cdot D^4\cdot \left(\frac{V_a}{n\cdot D}\right)^c \cdot\left(\frac{\mu}{\rho\cdot n\cdot D^2}\right)^f\cdot\left(\frac{p_0-e}{\rho\cdot n^2\cdot D^2}\right)^g
 ```
 
-
 On définit le coefficient de poussée :
-
 
 ```math
 K_T = \frac{T_0}{\rho\cdot n^2\cdot D^4}
 ```
 
-
 Le coefficient d'avance $`J`$ est défini par :
-
 
 ```math
 J=\frac{V_a}{n\cdot D}
 ```
 
-
 Le nombre de Reynolds $`R_n`$ s'exprime ici :
-
 
 ```math
 R_n = \frac{\rho \cdot n\cdot D^2}{\mu}
 ```
 
-
 et le nombre de cavitation $`\sigma_0`$ est :
-
 
 ```math
 \sigma_0=\frac{p_0-e}{\frac{1}{2}\rho\cdot n^2\cdot D^2}
 ```
 
-
 donc il existe une fonction $`f`$ telle que
-
 
 ```math
 K_T = f(J,R_n,\sigma_0)
 ```
 
-
 De même, pour le couple $`Q`$, on définit le coefficient de couple $`K_Q`$ par :
-
 
 ```math
 K_Q = \frac{Q_0}{\rho\cdot n^2\cdot D^5}
 ```
 
-
 Le modèle en eau libre consiste à expliciter les fonctions $`K_T`$ et $`K_Q`$, dont
 on peut ensuite dériver la poussée et le couple.
+
+<comment>[JJM] je n'ai pas trop compris l'objet / l'apport de ce paragraphe... </comment>
 
 ### Prise en compte des effets de la coque et du sillage
 
@@ -1192,7 +1168,7 @@ Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque, la
 vitesse du fluide au niveau de l'hélice $`V_a`$ n'est pas égale (en valeur
 absolue) à la vitesse du navire par rapport à l'eau $`V_s`$, autrement dit
 $`V_a\neq V_s`$. La vitesse d'avance $`V_a`$ est, en général, très difficile à
-mesurer et l'on suppose qu'elle est proportionnelle à la vitesse du navire. On
+connaître et l'on suppose qu'elle est proportionnelle à la vitesse du navire. On
 définit donc un coefficient $`w`$ (pour "wake", soit "sillage" en anglais) tel
 que :
 
@@ -1206,17 +1182,15 @@ $`w`$ est constant en régime permanent, lorsque l'hélice opère dans les
 conditions nominales. Des ordres de grandeurs de ce coefficient sont donnés par
 exemple dans Carlton, pages 70, 72, 73 et 74.
 
-En outre, l'hélice accroît la [résistance à
-l'avancement](#r%C3%A9sistance-%C3%A0-lavancement)
-: en effet, elle diminue la pression à l'arrière du navire, ce qui augmente la
-poussée nécessaire pour la propulsion. L'hélice accélérant le fluide, elle induit une pression supplémentaire sur la coque. Pour prendre en compte ces
-phénomènes, on introduit le coefficient de succion $`t`$ tel que :
-
+En outre, l'hélice diminue la pression à l'arrière du navire, ce qui accroît sa [résistance à
+l'avancement](#r%C3%A9sistance-%C3%A0-lavancement).
+<comment>[JJM] l'explication physique n'était pas juste </comment>
+<comment>[JJM] c'est dommage, mais tout ceci fait l'objet maintenant de texte dans les procédés de calcul... Donc redondant (mais ce n'était pas le cas quand tu as rédigé). </comment>
+Pour prendre en compte ces phénomènes, on introduit le coefficient de succion $`t`$ tel que :
 
 ```math
 t = 1 - \frac{R_v}{T_p}
 ```
-
 
 où $`R_v`$ est la résistance de remorquage (en N) à une vitesse $`V_S`$, sans
 hélice, et $`T_p`$ est la somme des poussées des hélices (également
@@ -1224,27 +1198,21 @@ en N) lorsque le navire va à la vitesse $`V_S`$ en utilisant l'hélice.
 
 La poussée réelle $`T_b`$ est alors définie par :
 
-
 ```math
 T_b = (1-t)\cdot T_0 = (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J, R_n,\sigma_0)
 ```
 
-
 et le couple réel est
-
 
 ```math
 Q_b = \eta_R\cdot Q_0 = \eta_R\cdot \rho\cdot n^2\cdot D^5 \cdot K_Q(J, R_n,\sigma_0)
 ```
 
-
 où $`\eta_R`$ est appelé **rendement d'adaptation**
-
 
 ```math
 J = \frac{V_a}{n\cdot D} = \frac{(1-w)\cdot V_s}{n\cdot D}
 ```
-
 
 ### Expression des coefficients $`K_T`$ et $`K_Q`$
 
@@ -1258,8 +1226,8 @@ On définit également le pas $`P`$ de l'hélice, un paramètre géométrique qu
 traduit la distance théorique parcourue par l'hélice en une révolution. Cette
 distance varie en fonction de la ligne de référence que l'on choisit. Les
 séries B de Wageningen utilisent le pas **de face**, mais il existe d'autres
-conventions. Les séries sont paramétrés en $`P/D`$ et l'on suppose que $0.5\leq
-P/D\leq 1.4$.
+conventions. Les séries sont paramétrés en $`P/D`$ et l'on suppose que
+$`0.5\leq P/D\leq 1.4`$.
 
 On note $`2\leq Z\leq 7`$ le nombre de pales de l'hélice.
 
@@ -1270,6 +1238,7 @@ exposants entre 0 et 6.
 
 $`K_T(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^T \cdot J^{s(i)}\cdot
 (P/D)^{t(i)}\cdot (A_E/A_0)^{u(i)}\cdot Z^{v(i)}`$
+
 $`K_Q(J, P/D, A_E/A_0, Z, R_n=2\times 10^6) = \sum_{i=1}^47 C_k^Q \cdot J^{s'(i)}\cdot
 (P/D)^{t'(i)}\cdot (A_E/A_0)^{u'(i)}\cdot Z^{v'(i)}`$
 
@@ -1280,12 +1249,15 @@ et $`\Delta K_Q`$ supplémentaires :
 
 $`K_T(J, P/D, A_E/A_0, Z, R_n) = K_T(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
 K_T(J, P/D, A_E/A_0, Z, R_n)`$
+
 $`K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
 K_Q(J, P/D, A_E/A_0, Z, R_n)`$
 
+<comment>[JJM] pas vérifié grand chose dans les équations (ne passent pas) </comment>
+
 ### Domaine de validité
 
-Le modèle de Wageningen ne devrait être utilisé que lorsque les hypothèses
+Le modèle<comment>[JJM] des séries B ? </comment> de Wageningen ne devrait être utilisé que lorsque les hypothèses
 suivantes sont vérifiées :
 
 - Le nombre de pales $`Z`$ doit être compris entre 2 (inclus) et 7 (inclus).
@@ -1318,7 +1290,7 @@ le navire) est faite dans le sens des $`x`$ positifs.
 
 Le sens de rotation de l'hélice doit également être spécifié parce qu'il
 détermine le signe du couple généré par l'hélice sur le navire. On définit ce
-sens de rotation en se plaçant face à l'hélice, en regardant dans la direction
+sens de rotation en se plaçant derrière à l'hélice, en regardant dans la direction
 des $`x_{\textrm{hélice}}`$ positifs (donc vers l'avant du navire). Autrement dit,
 l'axe de rotation de l'hélice est non pas $`x_{\textrm{hélice}}`$ mais
 $`-x_{\textrm{hélice}}`$.
@@ -1429,7 +1401,7 @@ navire (dans le repère de l'hélice). Voir la [documentation](#expression-des-e
 - `blade area ratio AE/A0` : [fraction de
 surface](#expression-des-coefficients-k_t-et-k_q) de l'hélice.
 - `diameter` : diamètre de l'hélice.
-
+<comment>[JJM] je n'ai pas pu vérifier les liens. </comment>
 ### Références
 
 - *Marine Propellers and Propulsion*, 2007, John Carlton, Butterworth-Heinermann, ISBN 978-07506-8150-6, page 89, 103
@@ -1444,8 +1416,8 @@ surface](#expression-des-coefficients-k_t-et-k_q) de l'hélice.
 
 ### Description
 
-Le but de ce contrôleur est de pouvoir réaliser des simulations sous houle (par
-exemple pour calculer des RAO d'effort) en limitant les variations de cap. Ce
+Le but de ce contrôleur est de pouvoir réaliser des simulations sur houle (par
+exemple pour calculer des RAO d'effort<comment>[JJM] le simulateur calcule les RAO d'efforts ? Bizarre. mouvements ? </comment>) en limitant les variations de cap. Ce
 contrôleur génère directement un moment au centre de gravité du corps.
 
 ### Expression des efforts
@@ -1524,8 +1496,8 @@ Ce modèle n'a qu'une seule commande, le cap `psi_co` :
 
 ### Description
 
-Le but de ce contrôleur est de pouvoir réaliser des simulations sous houle (par
-exemple pour calculer des RAO d'effort) en limitant les variations de cap et de
+Le but de ce contrôleur est de pouvoir réaliser des simulations sur houle (par
+exemple pour calculer des RAO d'effort<comment>[JJM]  </comment>) en limitant les variations de cap et de
 position. Ce contrôleur génère directement un moment et un effort au centre de
 gravité du corps.
 
@@ -1603,36 +1575,25 @@ réponse $`T`$ donné par $`T=\frac{2\pi}{\omega}`$.
 K_{x} = \sigma_{xx}\left(\frac{2\pi}{T_x}\right)^2
 ```
 
-
-
 ```math
 K_{u} = 2\zeta\sigma_{xx}\frac{2\pi}{T_x}
 ```
-
-
 
 ```math
 K_{y} = \sigma_{yy}\left(\frac{2\pi}{T_y}\right)^2
 ```
 
-
-
 ```math
 K_{v} = 2\zeta\sigma_{yy}\frac{2\pi}{T_y}
 ```
-
-
 
 ```math
 K_{\psi} = \sigma_{zz}\left(\frac{2\pi}{T_{\psi}}\right)^2
 ```
 
-
-
 ```math
 K_{r} = 2\zeta\sigma_{zz}\frac{2\pi}{T_{\psi}}
 ```
-
 
 Le cap $`\psi_{\textrm{co}}`$ est donné dans le repère NED.
 Si l'on suppose que $`r=0`$, pour $`\psi<\psi_{\textrm{co}}`$, le moment généré doit
@@ -1676,7 +1637,7 @@ Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
 ### Description
 
 Ce modèle décrit l'ensemble constitué d'une hélice Wageningen et d'un safran.
-Les deux sont utilisés ensemble car le modèle de safran n'a de sens que
+Les deux sont utilisés ensemble car le modèle de safran n'a de sens <comment>[JJM] Pourquoi ? On peut très bien avoir des safrans qui ne sont pas derrière des hélices. Le modèle ne le permet pas ? Ca ne doit pas être trop compliqué... </comment> que
 lorsqu'il est utilisé avec une hélice (il prend en compte le sillage de l'hélice pour calculer les efforts dûs au safran).
 
 ### Expression des efforts
@@ -1688,20 +1649,18 @@ La figure suivante illustre l'ensemble modélisé :
 Les efforts sont calculés au point P (de l'hélice) et transportés ensuite au
 centre de gravité. Ils s'écrivent :
 
-
 ```math
 F\textrm{tot}_P = F\textrm{safran}_P + F\textrm{hélice}_P
 ```
-
 
 L'expression du torseur $`F\textrm{hélice}_P`$ est donnée dans le modèle "Hélices
 Wageningen série B".
 
 Les efforts dûs au safran seront calculés au point R puis le torseur sera
-déplacé au point P. Dans la suite, on notera simplement $`F\textrm{safran}`$ le
+déplacé au point P<comment>[JJM] Pourquoi au point P, et pas au centre de calcul des efforts globaux ? </comment>. Dans la suite, on notera simplement $`F\textrm{safran}`$ le
 torseur au point R.
 
-La modélisation choisie sépare les efforts dûs au safran en deux parties :
+La modélisation choisie sépare les efforts dus au safran en deux parties :
 
 - La part provenant de l'immersion dans le sillage de l'hélice
 - La part simplement due à la vitesse du safran en eau libre
@@ -1742,18 +1701,13 @@ l'angle du safran $`\beta`$ :
 \alpha = \beta - a(V_S) = \beta - atan2({V_S}_x, {V_S}_y)
 ```
 
-
-
 ```math
 \textrm{Lift}(V_S, C_l, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cl(\alpha)\cos(\alpha) K_{\textrm{lift}}
 ```
 
-
-
 ```math
 \textrm{Drag}(V_S, C_d, \alpha, S) = \frac{1}{2}\rho S V_S^2 Cd(\alpha)\cos(\alpha) K_{\textrm{drag}}
 ```
-
 
 Le coefficient $`\cos(\alpha)`$ permet de réduire l'efficacité du gouvernail
 lorsque $`\alpha`$ devient important.
@@ -1767,11 +1721,9 @@ Les notations utilisées figurent sur le schéma ci-dessus.
 La poussée $`T`$ générée par l'hélice est égale à la variation de la quantité de
 mouvement :
 
-
 ```math
  T = \rho\cdot A\cdot V_1\cdot(V_2 - V_a)
 ```
-
 
 (équation 3.31 *Marine Rudders & Control Surfaces* p. 49).
 
@@ -1783,63 +1735,48 @@ l'aire du disque :
  T = A\cdot(P_1'-P_1)
 ```
 
-
 On écrit l'équation de Bernoulli en amont du safran, entre $`P_0`$ et $`P_1`$, puis
 en aval du safran, entre $`P_1'`$ et $`P_2`$ :
-
 
 ```math
 P_0 + \frac{1}{2}\rho V_a^2 = P_1 + \frac{1}{2}\rho V_1^2
 ```
 
-
-
 ```math
 P_1' + \frac{1}{2}\rho V_1^2 = P_2 + \frac{1}{2}\rho V_2^2
 ```
 
-
 d'où
-
 
 ```math
 P_1' = P_2 + \frac{1}{2}\rho V_2^2 - \frac{1}{2}\rho V_1^2
 ```
 
-
-
 ```math
 P_1 = P_0 + \frac{1}{2}\rho V_a^2 - \frac{1}{2}\rho V_1^2
 ```
 
-
 puis
-
 
 ```math
 P_1'-P_1 = P_2-P_0 + \frac{1}{2}\rho(V_2^2-V_a^2)
 ```
 
-
 Les pressions $`P_2`$ et $`P_0`$ correspondent à des écoulements non-perturbés (très
 en amont et très en aval du couple (safran,hélice)). Par conséquent, ces deux
 pressions sont égales :
-
 
 ```math
  T = A\cdot(P_1'-P_1) = \frac{1}{2}\rho A(V_2^2-V_a^2)
 ```
 
-
 (équation 3.32 *Marine Rudders & Control Surfaces* p. 49)
 
 On en déduit l'expression de $`V_2`$ :
 
-
 ```math
 V_2 = \sqrt{V_a^2 + \frac{2T}{\rho A}}
 ```
-
 
 La vitesse $`V_1`$ au niveau du safran peut être déduite de l'égalité de deux
 expressions de $`T`$ :
@@ -1850,11 +1787,9 @@ expressions de $`T`$ :
 
 On en déduit :
 
-
 ```math
 V_1 = \frac{1}{2}(V_a + V_2) = V_a + \frac{1}{2}(V_2-V_a)
 ```
-
 
 Les calculs de $`V_0`$ et de $`V_2`$ étant fait en régime stationnaire, cette
 expression de la vitesse $`V_1`$ ne tient pas compte de l'accélération du fluide
@@ -1862,11 +1797,9 @@ entre l'hélice et le safran. On modélise l'effet de cette accélération par u
 facteur $`K_R`$ appelé "facteur de contraction" (cf. *Marine Rudders & Control
 Surfaces* eq. 3.37 p.51). On obtient ainsi une vitesse $`u_{RS}`$ telle que :
 
-
 ```math
 u_{RS} = V_a + K_R(V_2-V_a)
 ```
-
 
 avec
 
@@ -1879,42 +1812,31 @@ et $`D`$ est le diamètre de l'hélice.
 Afin de factoriser cette expression, on peut exprimer la vitesse $`V_2`$ en
 fonction de la vitesse $`V_a`$ :
 
-
 ```math
 V_2 = \sqrt{V_a^2 + \frac{2T}{\rho A}}
 ```
 
-
 or une autre expression de $`T`$ peut être donnée à partir du modèle de
 Wageningen :
-
 
 ```math
 T = \rho n^2 D^4 K_T
 ```
 
-
-
 ```math
 \frac{2T}{\rho A} = \frac{8}{\pi} n^2 D^2 K_T
 ```
-
-
 mais le paramètre d'avance $`J`$ s'écrit :
-
 
 ```math
 J = \frac{V_a}{n D}
 ```
 
-
 donc
-
 
 ```math
 \frac{2T}{\rho A} = \frac{8}{\pi} \frac{K_T}{J^2} V_a^2
 ```
-
 
 d'où
 
@@ -1922,16 +1844,14 @@ $`u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + \frac{8 K_T}{\pi J^2}} -
 1\right)\right)`$
 
 On pose
+
 ```math
 C_{Th} = \frac{8}{\pi} \frac{K_T}{J^2}
 ```
 
-
-
 ```math
 u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}} - 1\right)\right)
 ```
-
 
 Cette vitesse $`u_{RS}`$ a été calculée en faisant les hypothèses suivantes :
 
@@ -1944,11 +1864,9 @@ mesures réalisées lors d'essais. C'est pourquoi on multiplie la vitesse $`u_{R
 par un facteur $`RF`$ appelé "facteur de réduction" (cf. eq 11.1 p.? 371 *Marine
 Rudders & Control Surfaces*) :
 
-
 ```math
 RF = 1-0.135\sqrt{C_{Th}}
 ```
-
 
 La vitesse dans le sillage de l'hélice s'exprime donc (dans le repère "body") :
 
@@ -1957,11 +1875,9 @@ $`V_S = \left[\begin{array}{c}RF\cdot V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}}
 
 La vitesse hors du sillage est simplement :
 
-
 ```math
 V_S = \left[\begin{array}{c}V_a\\ v\\0\end{array}\right]
 ```
-
 
 où $`V_a = (1-w)\cdot u`$, $`w`$ désignant le coefficient de sillage.
 
@@ -1970,11 +1886,9 @@ où $`V_a = (1-w)\cdot u`$, $`w`$ désignant le coefficient de sillage.
 On introduit le rapport de forme $`\Lambda`$ (cf. *Manoeuvring Technical Manual*
 p. 76)
 
-
 ```math
 \Lambda = K_{\Lambda}\frac{b^2}{A_R}
 ```
-
 
 où $`K_{\Lambda}`$ est un paramètre renseigné par l'utilisateur.
 
@@ -1993,25 +1907,20 @@ On utilise la formule suivante (cf. *Maneuvering Technical Manual*, p. 78 eq. 1.
 C_d = 1.1 \frac{Cl^2}{\pi \Lambda} + Cd_0
 ```
 
-
 Le coefficient de résistance $`Cd_0`$ vaut :
-
 
 ```math
 Cd_0 = 2.5 C_f
 ```
-
 
 (cf. *Maneuvering Technical Manual*, p. 78 (§ *for Cd0*))
 
 $`C_f`$ est un coefficient ITTC que l'on trouve par exemple dans *Marine rudders
 and Control Surfaces*, p.31 éq. 3.18 :
 
-
 ```math
 Cf = \frac{0.075}{\left(\frac{\log(R_n)}{log(10.0)}-2\right)^2}
 ```
-
 
 Le nombre de Reynolds $`R_n`$ du safran est donné par (cf. *Maneuvering Technical
 Manual*, p. 78 éq. 1.2.12) :
@@ -2020,14 +1929,11 @@ Manual*, p. 78 éq. 1.2.12) :
 Rn = Vs  \frac{c}{\nu}
 ```
 
-
 où la corde $`c`$ du safran vaut :
-
 
 ```math
 c = \frac{A_R}{b}
 ```
-
 
 #### Calcul de $`S`$
 
@@ -2035,7 +1941,6 @@ On sépare l'aire $`A_R`$ du safran en deux parties : une partie à l'intérieur
 sillage et une partie à l'extérieur. La partie à l'intérieur du sillage est
 obtenue en considérant le diamètre du sillage $`D_w`$ et la partie à l'extérieur
 en faisant la différence avec $`A_R`$.
-
 
 ```math
 S_{\textrm{sillage}} = \min(A_R, c\cdot D_w)
@@ -2046,33 +1951,26 @@ S_{\textrm{sillage}} = \min(A_R, c\cdot D_w)
 S_{\textrm{hors sillage}} = A_R - S_{\textrm{sillage}}
 ```
 
-
 où $`c`$ est la corde calculée ci-dessus.
 
 Le diamètre $`D_w`$ du sillage est défini par :
-
 
 ```math
 \frac{D_w}{D_{\textrm{hélice}}} = \sqrt{\frac{V_1}{u_{RS}}}
 ```
 
-
-
 ```math
 V_1 = V_a\left(1 + 0.5 \left(\sqrt{1 + C_{Th}} - 1\right)\right)
 ```
-
 
 ```math
 u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}} - 1\right)\right)
 ```
 
-
 d'où
 
 $`\frac{D_w}{D_{\textrm{hélice}}} =
 \sqrt{\frac{1+0.5(\sqrt{1+C_{Th}}-1)}{1+K_R(\sqrt{1+C_{Th}}-1)}}`$
-
 
 ### Paramétrage
 
@@ -2151,14 +2049,14 @@ renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
 même type) ainsi que la projection de ce même effort suivant l'axe $`X`$ du repère
 NED.
 
+<comment>[JJM] Tout ceci a été vérifié/validé comment ? C'est documenté qque part ? </comment>
+
 ### Références
 
 - *Marine Rudders & Control Surfaces, Principles, Data, Design &
   Applications*, Anthony F. Molland & Stephen R. Turnock, published by Elsevier
   Ltd., 2007, ISBN: 978-0-75-066944-3
 - *Maneuvoeuvring Technical Manual*, Seehafen Verlag, 1993, ISBN 3-87743-902-0
-
-
 
 ## Modèle Kt(J) & Kq(J)
 
@@ -2280,6 +2178,8 @@ l'actionneur renseigné dans la clef `name` afin de pouvoir définir plusieurs
 actionneurs du même type) ainsi que la projection de ce même effort suivant
 l'axe $`X`$ du repère NED.
 
+<comment>[JJM] A partir d'ici, c'est une redite du début, non ? </comment>
+
 # Modèles d'efforts non-commandés
 
 Les efforts extérieurs (non commandés) sont donnés dans la section
@@ -2294,7 +2194,6 @@ external forces:
   - model: non-linear hydrostatic (fast)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 Le navire est soumis aux efforts suivants :
 
 - La pesanteur,
@@ -2306,3 +2205,5 @@ Le navire est soumis aux efforts suivants :
   coque et aux tourbillons.
 
 ## Efforts de gravité
+
+<comment>[JJM] Relu </comment>
