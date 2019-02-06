@@ -1,6 +1,6 @@
 # Fonctionnement du solveur
 
-Au coeur du simulateur, le solveur réalise l'intégration temporelle des équations
+Au cœur du simulateur, le solveur réalise l'intégration temporelle des équations
 différentielles ordinaires.
 
 ## Formulation du problème
@@ -11,7 +11,6 @@ On appelle *modèle* une fonction
 ```math
 f:\mathbf{R}^n\times\mathbf{R}^m\times\mathbf{R}\times\mathbf{R}^p\rightarrow\mathbf{R}^n
 ```
-
 
 - $`n`$ est appelé "nombre d'états"
 - $`p`$ désigne le nombre de paramètres du système
@@ -28,11 +27,9 @@ $`P\in\mathbf{R}^p`$ sont les paramètres du système, c'est-à-dire les constan
 
 L'équation différentielle que l'on souhaite intégrer est :
 
-
 ```math
 \dot{X} = \frac{dX(t)}{dt} = f(X,U,t,P)
 ```
-
 
 ## Architecture générale
 
@@ -130,40 +127,29 @@ $`e(t+dt) = \left(\frac{37}{378} - \frac{2825}{27648}\right)\cdot k_1 +
 
 avec
 
-
 ```math
 k_1 = dt\cdot f\left(X, t, U, P\right),
 ```
-
-
 
 ```math
 k_2 = dt\cdot f\left(X + \frac{1}{5}\cdot k_1, t+\frac{1}{5}\cdot dt, U, P\right),
 ```
 
-
-
 ```math
 k_3 = dt\cdot f\left(X + \frac{3}{40}\cdot k_1 + \frac{9}{40}\cdot k_2, t+\frac{3}{10}\cdot dt, U, P\right),
 ```
-
-
 
 ```math
 k_4 = dt\cdot f\left(X + \frac{3}{10}\cdot k_1 + \frac{-9}{10}\cdot k_2 + \frac{6}{5}\cdot k_3, t+\frac{3}{5}\cdot dt, U, P\right),
 ```
 
-
-
 ```math
 k_5 = dt\cdot f\left(X + \frac{-11}{54}\cdot k_1 + \frac{5}{2}\cdot k_2 +\frac{-70}{27}\cdot k_3+ \frac{35}{27}\cdot k_4, t+ dt, U, P\right),
 ```
-
-
 
 ```math
 k_6 = dt\cdot f\left(X + \frac{1631}{55296}\cdot k_1 + \frac{175}{512}\cdot k_2 + \frac{575}{13824}\cdot k_3 + \frac{44275}{110592}\cdot k_4  + \frac{253}{4096}\cdot k_5, t+\frac{7}{8}\cdot dt, U, P\right),
 ```
 
-
 ![](images/runge_kutta_cash_karp_stability.svg "Domaine de stabilité de la méthode de Runge-Kutta Cash-Karp")
+<comment>[JJM] Relu (en fait, non...) </comment>
