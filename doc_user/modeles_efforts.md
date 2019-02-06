@@ -167,34 +167,26 @@ d'où
 ```
 
 
-Or
-
-$\int_S t dS = \int\int t dt du = \int du\int t dt = U\cdot\frac{T^2}{2} =
-UT\cdot\frac{T}{2} = S\cdot t_G$
+Or $`\int_S t dS = \int\int t dt du = \int du\int t dt = U\cdot\frac{T^2}{2} =
+UT\cdot\frac{T}{2} = S\cdot t_G`$
 
 d'où
-
 
 ```math
 \textbf{F}_{\textrm{HS}} = \rho\cdot g\cdot t_G \cdot S \textbf{n}
 ```
 
-
 $`t_R`$ doit vérifier :
-
 
 ```math
 \int_S t dF = F\cdot t_R
 ```
 
-
 soit
-
 
 ```math
 t_R = \frac{\int_S t^2 dS}{t_G S}
 ```
-
 
 Or $`\int_S t^2 dS = I_t(G) + S\cdot t_G^2`$ donc
 
@@ -203,27 +195,21 @@ parallèle à $`t`$ et passant par $`G`$.
 
 On a donc :
 
-
 ```math
 t_R = t_G + \frac{I_t(G)}{t_G\cdot S}
 ```
 
-
 De même, on trouve :
-
 
 ```math
 u_R = u_G + \frac{I_u(G)}{t_G\cdot S}
 ```
 
-
 or $`u_G=0`$ par définition du repère $`(t,u)`$, donc
-
 
 ```math
 u_R = \frac{I_u(G)}{t_G\cdot S}
 ```
-
 
 En pratique, on constate lors de simulations que les deux modèles sont assez
 proches sur l'axe $`z`$ puisque l'amplitude de la force est identique dans les
@@ -244,9 +230,8 @@ temps de calcul (on peut constater un ordre de grandeur par rapport au modèle
 ### Nouveau modèle hydrostatique
 
 Ce modèle utilise une approche différente : au lieu d'intégrer les efforts sur
-toutes les facettes, on calcule le volume immergé du maillage complet et son centroïde et l'on
-écrit :
-
+toutes les facettes, on calcule le volume immergé du maillage complet et son
+centroïde et l'on écrit :
 
 ```math
 F_{\textrm{hs}} = \rho\cdot V\cdot \mathbf{g}
@@ -406,7 +391,7 @@ calcul de la RAO : pour l'exprimer dans le repère Z vers le bas d'X-DYN, on
 effectue le changement de repère suivant :
 
 ```math
-\tau_{\mbox{HDB}} =
+\tau_{\textrm{HDB}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -420,7 +405,7 @@ M_Z\\
 ```
 
 ```math
-\tau_{\mbox{XDYN}} =
+\tau_{\textrm{XDYN}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -601,9 +586,10 @@ $`V_{\textrm{eau/sol}} =
 
 On définit :
 
-$`\nu_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}} \nu_b -
-{}^{\textrm{local}}T_{\textrm{NED}}V_{\textrm{eau/sol}}`$
-
+```math
+\nu_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}} \nu_b -
+{}^{\textrm{local}}T_{\textrm{NED}}V_{\textrm{eau/sol}}
+```
 
 ```math
 \omega_{\textrm{local}} = {}^{\textrm{local}}T_{\textrm{body}}\omega_{nb}^b
@@ -638,7 +624,7 @@ d_{51}\cdot|u_{\textrm{local}}| & d_{52}\cdot |v_{\textrm{local}}| & d_{53}\cdot
 d_{61}\cdot|u_{\textrm{local}}| & d_{62}\cdot |v_{\textrm{local}}| & d_{63}\cdot |w_{\textrm{local}}| & d_{64}\cdot |p_{\textrm{local}}| & d_{65}\cdot |q_{\textrm{local}}| & d_{66}\cdot |r_{\textrm{local}}|\\
 \end{array}\right]`$
 
-les $`((d_{ij}))`$ étant les coefficients de la matrice d'amortissement
+les $`(d_{ij})`$ étant les coefficients de la matrice d'amortissement
 quadratique lue depuis [le fichier de
 paramètres](#amortissement-quadratique).
 
@@ -675,7 +661,7 @@ matrice renseignée de la façon suivante :
       row 6: [ 0, 0,     0,      0,      0, 0]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cette matrice est la matrice $`((d_{ij}))`$ décrite dans [la
+Cette matrice est la matrice $`(d_{ij})`$ décrite dans [la
 documentation](#efforts-damortissement-visqueux).
 
 
@@ -1503,73 +1489,54 @@ gravité du corps.
 
 ### Expression des efforts
 
-L'effort généré suivant l'axe X est $F_x = K_{x}\cdot (x_{\textrm{co}}-x) -
-K_u\cdot u = \sigma_{xx}\ddot{x}$ où $`\sigma_{xx}`$ désigne le moment d'inertie
+L'effort généré suivant l'axe X est $`F_x = K_{x}\cdot (x_{\textrm{co}}-x) -
+K_u\cdot u = \sigma_{xx}\ddot{x}`$ où $`\sigma_{xx}`$ désigne le moment d'inertie
 total (inertie propre et inertie ajoutée) autour de l'axe $`x`$.
-L'effort généré suivant l'axe Y est $F_y = K_{y}\cdot (y_{\textrm{co}}-y) -
-K_v\cdot v = \sigma_{yy}\ddot{y}$ où $`\sigma_{yy}`$ désigne le moment d'inertie
-total (inertie propre et inertie ajoutée) autour de l'aye $`y`$.
-Le moment généré est $M_z = K_{\psi}\cdot (\psi_{\textrm{co}}-\psi)-K_r\cdot r =
-\sigma_{zz}\ddot{\psi}$ où $`\sigma_{zz}`$ désigne le moment d'inertie total
+L'effort généré suivant l'axe Y est $`F_y = K_{y}\cdot (y_{\textrm{co}}-y) -
+K_v\cdot v = \sigma_{yy}\ddot{y}`$ où $`\sigma_{yy}`$ désigne le moment d'inertie
+total (inertie propre et inertie ajoutée) autour de l'axe $`y`$.
+Le moment généré est $`M_z = K_{\psi}\cdot (\psi_{\textrm{co}}-\psi)-K_r\cdot r =
+\sigma_{zz}\ddot{\psi}`$ où $`\sigma_{zz}`$ désigne le moment d'inertie total
 (inertie propre et inertie ajoutée) autour de l'axe $`z`$.
 
 Dans le domaine de Laplace, les équations du contrôleur s'écrivent :
-
 
 ```math
 \sigma_{xx}p^2 + K_u p + K_{x} = 0
 ```
 
-
-
 ```math
 \sigma_{yy}p^2 + K_u p + K_{y} = 0
 ```
-
-
 
 ```math
 \sigma_{zz}p^2 + K_r p + K_{\psi} = 0
 ```
 
-
 ou encore, sous forme canonique :
-
 
 ```math
 p^2 + 2\zeta_x\omega_x p + \omega_x^2 = 0
 ```
 
-
-
 ```math
 p^2 + 2\zeta_y\omega_y p + \omega_y^2 = 0
 ```
-
-
 
 ```math
 p^2 + 2\zeta_{psi}\omega_{\psi} p + \omega_{\psi}^2 = 0
 ```
 
-
 d'où
-
 
 $`K_{x} = \sigma_{xx} \omega_x^2`$ et $`K_u= 2\zeta_x\omega_x\sigma_{xx}`$
 
-
-
-$`K_{y} = \sigma_{yy} \omega_y^2$ et $`K_v= 2\zeta_y\omega_y\sigma_{yy}`$
-
-
+$`K_{y} = \sigma_{yy} \omega_y^2`$ et $`K_v= 2\zeta_y\omega_y\sigma_{yy}`$
 
 $`K_{\psi} = \sigma_{zz} \omega_{\psi}^2`$ et $`K_r= 2\zeta\omega_{\psi}\sigma_{zz}`$
 
-
 On peut exprimer ces gains en fonction de l'amortissement $`\zeta`$ et du temps de
 réponse $`T`$ donné par $`T=\frac{2\pi}{\omega}`$.
-
 
 ```math
 K_{x} = \sigma_{xx}\left(\frac{2\pi}{T_x}\right)^2
@@ -1782,8 +1749,8 @@ La vitesse $`V_1`$ au niveau du safran peut être déduite de l'égalité de deu
 expressions de $`T`$ :
 
 - D'une part, $`T = \rho A V_1 (V_2 - V_a)`$
-- Mais d'autre part, $T = \frac{1}{2}\rho A (V_2^2-V_a^2) = \frac{1}{2}\rho
-  A(V_2 - V_a)(V_2+V_a)$
+- Mais d'autre part, $`T = \frac{1}{2}\rho A (V_2^2-V_a^2) = \frac{1}{2}\rho
+  A(V_2 - V_a)(V_2+V_a)`$
 
 On en déduit :
 
@@ -1803,8 +1770,9 @@ u_{RS} = V_a + K_R(V_2-V_a)
 
 avec
 
-$`Kr =
-0.5+\frac{0.5}{1+\frac{0.15}{\left|\frac{\Delta_x}{D}\right|}}`$
+```math
+Kr = 0.5+\frac{0.5}{1+\frac{0.15}{\left|\frac{\Delta_x}{D}\right|}}
+```
 
 $`\Delta_x`$ désigne la distance entre l'hélide et le safran (suivant l'axe $`x`$)
 et $`D`$ est le diamètre de l'hélice.
@@ -1840,8 +1808,10 @@ donc
 
 d'où
 
-$`u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + \frac{8 K_T}{\pi J^2}} -
-1\right)\right)`$
+```math
+u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + \frac{8 K_T}{\pi J^2}} -
+1\right)\right)
+```
 
 On pose
 
@@ -1870,8 +1840,10 @@ RF = 1-0.135\sqrt{C_{Th}}
 
 La vitesse dans le sillage de l'hélice s'exprime donc (dans le repère "body") :
 
-$`V_S = \left[\begin{array}{c}RF\cdot V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}}
-- 1\right)\right)\\ v\\0\end{array}\right]`$
+```math
+V_S = \left[\begin{array}{c}RF\cdot V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}}
+- 1\right)\right)\\ v\\0\end{array}\right]
+```
 
 La vitesse hors du sillage est simplement :
 
@@ -1969,8 +1941,10 @@ u_{RS} = V_a\left(1 + K_R \left(\sqrt{1 + C_{Th}} - 1\right)\right)
 
 d'où
 
-$`\frac{D_w}{D_{\textrm{hélice}}} =
-\sqrt{\frac{1+0.5(\sqrt{1+C_{Th}}-1)}{1+K_R(\sqrt{1+C_{Th}}-1)}}`$
+```math
+\frac{D_w}{D_{\textrm{hélice}}} =
+\sqrt{\frac{1+0.5(\sqrt{1+C_{Th}}-1)}{1+K_R(\sqrt{1+C_{Th}}-1)}}
+```
 
 ### Paramétrage
 
@@ -2078,9 +2052,6 @@ K\\
 M\\
 N
 \end{array}\right]_{\textrm{hélice}}
-```
-
-```math
 = \left[\begin{array}{c}
            T_b\\
            0\\
@@ -2089,9 +2060,6 @@ N
            0\\
            0
 \end{array}\right]_{\textrm{hélice}}
-```
-
-```math
 = \left[\begin{array}{c}
            (1-t)\cdot \rho\cdot n^2\cdot D^4 \cdot K_T(J)\\
            0\\
