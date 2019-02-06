@@ -27,7 +27,7 @@ En utilisant [ce
 guide](https://help.github.com/articles/creating-a-new-organization-from-scratch/),
 on crée un compte SIREHNA afin que les développeurs appartenant à la société
 soient identifiés comme tels. Ce compte sera administré par l'administrateur
-système de SIREHNA (Bruno PAGEAUD).
+système de SIREHNA (Bruno PAGEAUD<comment>[JJM] Je ne sais pas si c'est prudent de mettre des noms dans ces documents. On ne pensera pas forcément à les mettre à jour en cas de changement ? </comment>).
 
 ## Création ou association des comptes utilisateurs
 
@@ -129,3 +129,5 @@ Nous proposons de commencer par les badges suivants :
 | Analyse des failles de sécurité, des violation de licence et des dépendances obsolètes | [VersionEye](https://www.versioneye.com/) | [![VersionEye](https://img.shields.io/versioneye/d/ruby/rails.svg?style=plastic)]()
 | Couverture de tests et analyse statique de code | [Code Climate](https://codeclimate.com/product) | [![Code Climate](https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg?style=plastic)]()
 | Lien avec Docker hub | [Docker Hub](https://hub.docker.com/) | [![Docker Build Status](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg?style=plastic)]()
+
+<comment>[JJM] Balayé </comment>
