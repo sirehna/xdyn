@@ -1,3 +1,5 @@
+<comment>[JJM] Pourquoi ce fichier s'appelle t'il interfaces ? Une petit § d'explication ?</comment>
+
 # Ligne de commande
 
 ## Liste des arguments
@@ -12,7 +14,6 @@ print(re.sub(r,"", check_output(['xdyn']).decode('utf-8')))
 ## Exemples
 
 Les exemples suivants peuvent être lancés à partir du répertoire `demos`:
-
 
 ### Simulation avec un solveur Runge-Kutta d'ordre 4 en commençant à t=0
 
@@ -183,6 +184,13 @@ ce qui permet de l'exécuter sur n'importe quelle plateforme.
 En outre, c'est actuellement le seul moyen d'utiliser le module de génération
 automatique de rapport décrit ci-après.
 
+Pour utiliser l'image `X-Dyn`, il faut d'abord installer Docker puis importer
+l'image `x-dyn.tar.gz` en exécutant :<comment>[JJM] ce n'est pas un peu embêtant d'avoir différentes écritures: X-Dyn, x-dyn, xdyn, X-DYN...rien que sur ces 4 lignes ? Ou bien il y a une convention. </comment>
+
+~~~~{.bash}
+docker load -i xdyn.tar.gz
+~~~~
+
 ## Lancement d'X-DYN via l'image docker
 
 Une fois l'image chargée par la commande précédente, on peut lancer :
@@ -331,7 +339,7 @@ print(''.join(['~'] * 4))
 
 Il est possible de lancer X-DYN en tant que serveur, afin de l'intégrer à un
 autre environnement de simulation. L'utilisation d'un serveur plutôt qu'une
-MEX-fonction ou un FMU permet d'exécuter X-DYN sur une autre machine et de
+MEX-fonction (*MATLAB executable* - fonction) ou un FMU (*Functional Mock-up Unit*) <comment>[JJM] tout çà est défini quelque part, ou censé être connu du lecteur ? </comment>permet d'exécuter X-DYN sur une autre machine et de
 l'interroger par plusieurs clients.
 
 Il s'agit d'une utilisation en "model exchange" (au sens de la [spécification
@@ -340,7 +348,7 @@ Interface"](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=
 par opposition à "X-DYN for Co-simulation". La différence se situe dans
 l'utilisation du solveur : dans le cas de la co-simulation, on utilise le
 solveur interne de X-DYN (le serveur renvoie les états intégrés au pas suivant
-$`X(t+dt)`$). Dans le cas "model exchange", le serveur renvoie juste la dérivée
+$`X(t+dt)`$). Dans le cas "model exchange", le serveur renvoie la dérivée
 des états $`\frac{dX}{dt}`$.
 
 ### Justification technique
@@ -349,7 +357,7 @@ L'utilisation des websockets permet des temps de réponse plus courts (puisque
 c'est un protocole assez léger, comparé au HTTP par exemple). Dans
 l'implémentation actuelle, les messages envoyés sont en JSON, pour offrir un
 bon compromis entre la verbosité (moins que du XML mais plus qu'un format
-binaire) et une utilisation plus aisée qu'un format type Protobuf ou Thrift,
+binaire) et une utilisation plus aisée qu'un format type Protobuf ou Thrift<comment>[JJM] idem... </comment>,
 quitte à sacrifier un peu de performance (taille des messages, temps d'encodage/décodage).
 
 ### Lancement du serveur "Model Exchange"
@@ -403,9 +411,9 @@ Il faut également pouvoir encoder et décoder du JSON en MATLAB, par exemple en
 utilisant les fonctions MATLAB [jsondecode et
 jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
 
-### Description des entrées/sorties pour une utilisation en "Model Exchange" (x -> dx/dt)
+### Description des entrées/sorties pour une utilisation en "Model Exchange" (x -> dx/dt)<comment>[JJM] çà veut dire quoi ? on se contente de calculer les efforts à partir des états ? </comment>
 
-  ENTREES             TYPE                                                               DETAIL
+  ENTREES             TYPE                                                               DETAIL <comment>[JJM] je ne sais pas si çà doit ressembler à un tableau, mais ce n'est pas le cas, avec visual code... </comment>
   ------------------- ------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------------
   `states`            Liste d’éléments de type « État »                                  Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.
   `commands`          Liste de clefs-valeurs (dictionnaire)                              État des actionneurs au temps t
@@ -469,7 +477,7 @@ Exemple:
 }
 ~~~~
 
-  SORTIES             TYPE                                                                                                                DETAIL
+  SORTIES             TYPE                                                                                                                DETAIL<comment>[JJM] idem </comment>
   ------------------- ------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------------------------
   Dérivée des états   Structure contenant dx/dt, dy/dt, dz/dt, du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt, dqr/dt, dqi/dt, dqj/dt, dqk/dt   Dérivée des états navire
   dx/dt               Flottant                                                                                                            Dérivée par rapport au temps de la projection sur l’axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l’origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l’origine du repère BODY
@@ -506,7 +514,7 @@ Exemple:
 
 ### Description des entrées/sorties pour une utilisation en "Co-Simulation" (x(t) -> [x(t), ...,x(t+Dt)])
 
-  ENTREES             TYPE                                                               DETAIL
+  ENTREES             TYPE                                                               DETAIL <comment>[JJM] idem. </comment>
   ------------------- ------------------------------------------------------------------ --------------------------------------------------------------------------------------------------------------
   `Dt`                Flottant strictement positif                                       Horizon de simulation (en secondes). La simulation s'effectue de t0 à t0 + Dt, où t0 est la date du dernier élément de la
                                                                                          liste `states`, par pas de `dt`, où `dt` est spécifié sur la ligne de commande. L'état t0 est donc présent à
@@ -588,7 +596,7 @@ Exemple:
 }
 ~~~~
 
-  SORTIES             TYPE                                                                                                                DETAIL
+  SORTIES             TYPE                                                                                                                DETAIL<comment>[JJM]  </comment>
   ------------------- ------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------------------------------------------------------------------------
                       Liste d'éléments de type « État augmenté »                         Historique des états de t0 à t0 + Dt par pas de dt.
   État augmenté       Structure contenant t, x, y, z, u, v, w, p, q, r, qr, qi, qj, qk   États navire, augmentés des angles d'Euler.
@@ -660,3 +668,5 @@ Exemple:
   }
 ]
 ~~~~
+
+<comment>[JJM] relu </comment>
