@@ -1,11 +1,26 @@
 # Modélisation des efforts de diffraction et de radiation
 
-Cette section propose une décomposition des efforts hydrodynamiques comme
-représentée sur le schéma suivant :
+Cette section propose une décomposition des efforts hydrodynamiques suivant un schéma classiquement utilisé pour la résolution des problèmes de tenue à la mer. Les efforts hydrodynamiques sont alors supposés constitués de la somme  des :
+- efforts d'excitation résultant des pressions appliquées sur la coque, supposée fixe, par la houle incidente (efforts de Froude-Krylov) et la houle modifiée par le présence du corps (supposé fixe), ou diffraction.
+    - la formulation temporelle considérée ici permet en outre d'aller plus loin dans la modélisation des efforts de Froude-Kryolv, en intégrant les pressions de houle incidente sur la géométrie exacte du corps en mouvement par rapport à la surface libre déformée (houle incidente seulement).
+- efforts liés aux mouvements du navire en eau initialement calme (sans houle), et à la génération de vagues associée (radiation). Ces efforts sont aux même constitués
+    -  de composantes en phase avec l'accélération du corps, et assimilables à des termes inertiels. Ces termes sont d'un ordre de grandeur proche des termes d'inertie mécanique, et doivent être associés à ceux-ci (dans le membre de gauche de l'équation des mouvements à résoudre) afin d'éviter les instabilités numériques qui apparaissent si on les considère comme des efforts extérieurs.
+    - de composantes en phase avec les vitesses du corps, correspondant à des termes d'amortissement. Ces termes peuvent être exprimés dans le domaine temporel à partir de formulations impulsionnelles, faisant appel à des informations issues d'un calcul fréquentiel.
+- ces termes d'amortissement sont uniquement d'origine potentielle, et ne sont pas suffisant pour représenter la physique des amortissements pour certaines degrés de liberté, correspondant notamment aux résonances mécaniques. Il est alors nécessaire d'ajouter un amortissement d'orignie visqueuse, qui peut être calcul de différentes manières.
+
+
 
 ![](images/efforts_hydros.svg)
 
+<comment>[JJM] Image non visible </comment>
+
+<comment>[JJM] Il n'y a pas de rasion de mentionner diodore plus qu'autre chose dans le schéma. Résolution fréquentielle linéaire, quel que soit l'outil </comment>
+
+<comment>[JJM] Ci-après, formules... </comment>
+
 ## Potentiel d'interaction entre la houle et l'obstacle
+
+<comment>[JJM] Je ne vois pas trop l'intérêt de reformuler toute la résolution potentielle, ce qui est fait dans plein de références, le calcul n'étant pas fait dans x-dyn. En revanche, il est intéressant de préciser  la formulation temporelle retenue et la manière dont elle est implémentée  </comment>
 
 On suppose l'eau non visqueuse, incompressible, homogène et isotrope et l'on
 considère un écoulement irrotationnel.
@@ -199,7 +214,7 @@ $`F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I n_k dS + \rho \sum_j
 \frac{dU_j}{dt}\int_C \Psi_j^R n_k dS`$
 
 Or d'après la condition (5) écrite pour les potentiels élémentaires de
-rayonnement,
+rayonnement<comment>[JJM] il faudra choisir, radiation ou rayonnement </comment>,
 
 
 ```math
@@ -256,6 +271,7 @@ de l'évaluation de l'énergie cinétique du fluide :
 $`2Ec = \rho\int_{\omega} (\nabla \Phi)^2 dV = \rho \int_{\partial \Omega} \Phi
 \frac{\partial \Phi}{\partial n} dS = \rho f_k f_l \int_{\partial \Omega}\Phi_k
 \frac{\partial \Phi_l}{\partial n} dS = \rho {M_A}_{kl} f_k f_l`$
+
 
 
 ## Écriture en temporel
@@ -364,13 +380,13 @@ La formulation temporelle est :
 $`-F_R = A\frac{d^2X}{dt^2} + \int_{-\infty}^t
 K(t-\tau)\frac{dX}{dt}(\tau)d\tau`$
 
-Les codes fréquentiels tels qu'Aqua+ ou Diodore fournissent les matrices
+Les codes potentiels fournissent les matrices
 $`M_A(\omega)`$ et $`B_r(\omega)`$ à n'importe quelle fréquence, mais qu'en est-il
 des matrices $`A`$ et $`K`$ utilisées par la formulation temporelle ?
 
 Deux ans après Cummins, en 1964, Ogilvie propose une méthode pour déterminer
 les matrices $`A`$ et $`K`$ en fonction des matrices $`M_A`$ et $`B_r`$.
-Pour ce faire, il considère que le mouvement du solide est oscillant de période
+Pour ce faire, il considère que le mouvement du solide est oscillant de période<comment>[JJM] Pulsation ? </comment>
 $`\omega`$ :
 
 $`X(t) = \cos(\omega t)`$
@@ -424,14 +440,16 @@ K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau
 
 ## Calcul numérique des amortissements de radiation
 
-En pratique, on utilise en entrée du simulateur les [fichiers
-HDB](#fichiers-hdb), qui contiennent les matrices d'amortissement de radiation à
+En pratique, on utilise en entrée du simulateur les [fichiers HDB](#fichiers-hdb)
+(convention d'écriture de base hydrodynamique issue originellement de Diodore),
+qui contiennent les matrices d'amortissement de radiation à
 différentes pulsations. Ces fichiers sont utilisés dans une table
 d'interpolation (soit une interpolation linéaire par morceaux, soit des splines)
 puis on évalue l'intégrale suivante pour différentes valeurs de $`\tau`$ :
 
-$`K_{i,j}(\tau) =
-\frac{2}{\pi}\int_{\omega_{\textrm{min}}}^{\omega_{\textrm{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega`$
+```math
+K_{i,j}(\tau) = \frac{2}{\pi}\int_{\omega_{\textrm{min}}}^{\omega_{\textrm{max}}}B_{i,j}(\omega)\cdot\cos(\omega\tau)d\omega
+```
 
 Cette intégrale est calculée à l'aide d'un schéma d'intégration numérique
 (méthode des rectangles, des trapèzes, règle de Simpson ou Gauss-Kronrod).
@@ -460,8 +478,7 @@ HDB](#fichiers-hdb)
 périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
 suivantes sont réalisées :
 
-- Lecture du [fichier
-HDB](#fichiers-hdb) : son chemin est renseigné dans la clef `hdb`.
+- Lecture du [fichier HDB](#fichiers-hdb) : son chemin est renseigné dans la clef `hdb`.
 - Interpolation des matrices de fonction d'amortissement : on utilise des
   splines dites "naturelles", c'est-à-dire
   dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
@@ -515,31 +532,31 @@ HDB](#fichiers-hdb) : son chemin est renseigné dans la clef `hdb`.
 
 ### Méthode des rectangles
 
-C’est la méthode la plus simple qui consiste à interpoler la fonction
+C'est la méthode la plus simple qui consiste à interpoler la fonction
 $`f`$ à intégrer par une fonction constante (polynôme de degré 0).
 
-Si $`x_i`$ est le point d’interpolation, la formule est la suivante :
-:
+Si $`x_i`$ est le point d'interpolation, la formule est la suivante :
+
 ```math
 I(f) = (b-a) f(x_i)
 ```
 
 
-Le choix de $`x_i`$ influence l’erreur $`E(f) = I - I(f)`$
+Le choix de $`x_i`$ influence l'erreur $`E(f) = I - I(f)`$
 :
-- Si $`x_i = a`$ ou $`x_i = b`$, l’erreur est donnée
+- Si $`x_i = a`$ ou $`x_i = b`$, l'erreur est donnée
   par $`E(f) = \frac{(b-a)^2}{2} f'(\eta), \quad \eta \in
-  [a,b]`$ C’est la ''méthode du rectangle'' qui est d’ordre
+  [a,b]`$ C'est la ''méthode du rectangle'' qui est d'ordre
   0.
-- Si $`\xi = (a+b)/2`$, l’erreur est donnée par $`E(f) =
-  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]`$. Il s’agit
-  de la méthode du point médian qui est d’ordre 1.
+- Si $`\xi = (a+b)/2`$, l'erreur est donnée par $`E(f) =
+  \frac{(b-a)^3}{24} f''(\eta), \quad \eta \in [a,b]`$. Il s'agit
+  de la méthode du point médian qui est d'ordre 1.
 
-Ainsi, le choix du point milieu améliore l’ordre de la méthode : celle du
-rectangle est exacte (c’est-à-dire $`E(f) = 0`$) pour les fonctions
+Ainsi, le choix du point milieu améliore l'ordre de la méthode : celle du
+rectangle est exacte (c'est-à-dire $`E(f) = 0`$) pour les fonctions
 constantes alors que celle du point milieu est exacte pour les polynômes de
-degré 1. Ceci s’explique par le fait que l’écart d’intégration de la méthode du
-point milieu donne lieu à deux erreurs d’évaluation, de valeurs absolues
+degré 1. Ceci s'explique par le fait que l'écart d'intégration de la méthode du
+point milieu donne lieu à deux erreurs d'évaluation, de valeurs absolues
 environ égales et de signes opposés.
 
 [Source :
@@ -555,14 +572,14 @@ Wikipedia](http://commons.wikimedia.org/wiki/File:Int%C3%A9gration_num_rectangle
 
 En interpolant $`f`$ par un polynôme de degré 1, les deux points
 d'interpolation $`(a, f(a))`$ et $`(b, f(b))`$ suffisent
-à tracer un segment dont l’intégrale correspond à l’aire d’un trapèze,
-justifiant le nom de méthode des trapèzes qui est d’ordre 1 :
+à tracer un segment dont l'intégrale correspond à l'aire d'un trapèze,
+justifiant le nom de méthode des trapèzes qui est d'ordre 1 :
 :$`I(f) = (b-a) \frac{f(a) + f(b)}{2}`$
 
-L’erreur est donnée par
-:$`E(f) = - \frac{(b-a)^3}{12} f''(\eta), \quad \eta \in [a,b]`$
+L'erreur est donnée par:
+$`E(f) = - \frac{(b-a)^3}{12} f''(\eta), \quad \eta \in [a,b]`$
 
-Conformément aux expressions de l’erreur, la méthode des trapèzes est souvent
+Conformément aux expressions de l'erreur, la méthode des trapèzes est souvent
 moins performante que celle du point milieu.
 
 [Source :
@@ -578,18 +595,18 @@ En interpolant $`f`$ par un polynôme de degré 2 (3 degrés de liberté),
 3 points (ou conditions) sont nécessaires pour le caractériser : les valeurs
 aux extrémités $`a`$, $`b`$, et celle choisie en leur milieu
 $`x_{1/2} = (a + b) / 2`$. La méthode de Simpson est basée sur un
-polynôme de degré 2 (intégrale d’une parabole), tout en restant exacte pour des
-polynômes de degré 3 ; elle est donc d’ordre 3 :
+polynôme de degré 2 (intégrale d'une parabole), tout en restant exacte pour des
+polynômes de degré 3 ; elle est donc d'ordre 3 :
 :$`I(f) = \frac{(b-a)}{6} [ f(a) + 4 f(x_{1/2}) + f(b) ]`$
 
-L’erreur globale est donnée par
+L'erreur globale est donnée par
 :$`E(f) = - \frac{(b-a)^5}{2880} f^{(4)}(\eta), \quad \eta \in [a,b]`$
 
 Remarque : comme la méthode du point médian qui caractérise un polynôme de
 degré 0 et qui reste exacte pour tout polynôme de degré 1, la méthode de
 Simpson caractérise un polynôme de degré 2 et reste exacte pour tout polynôme
-de degré 3. Il s’agit d’une sorte d’"anomalie" où se produisent des
-compensations bénéfiques à l’ordre de la méthode.
+de degré 3. Il s'agit d'une sorte d'"anomalie" où se produisent des
+compensations bénéfiques à l'ordre de la méthode.
 
 [Source :
 Wikipedia](http://fr.wikipedia.org/wiki/Calcul_num%C3%A9rique_d%27une_int%C3%A9grale#Formule_de_Simpson)
@@ -610,17 +627,15 @@ ajoutant aux $`n`$ points de la quadrature de Gauss $`n+1`$ zéros des polylônm
 Stieltjes-Wigert. Les polynômes de Stieltjes-Wigert sont des polynômes
 orthogonaux pour la fonction de poids :
 
-
 ```math
 w(x)=\pi^{-1/2}\cdot k\cdot x^{k^2\log(x)},x\in\mathbf{R}_+^*, k>0
 ```
 
-
 On pose
+
 ```math
 q_k=e^{-\frac{1}{2k^2}}
 ```
-
 
 Les polynômes de Stieltjes-Wigert s'écrivent alors :
 
@@ -635,17 +650,13 @@ $`p_{n,k}(x) = \frac{(-1)^n q_k^{\frac{n}{2} +
 
 où
 
-
 ```math
 k\in[1,n]
 ```
 
-
-
 ```math
 \left[\begin{array}{c}n\\\nu\end{array}\right]=\prod_{i=0}^{\nu-1}\frac{1-q^{n-i}}{1-q^{i+1}}
 ```
-
 
 avec $`q`$ le symbole de Pochhammer
 
@@ -677,6 +688,8 @@ Subroutine Package for Automatic Integration**; Springer Verlag.
 
 ### Méthode de Filon
 
+<comment>[JJM] Intérêt de laisser çà si on ne le développe pas, voire si on ne l'utilise pas ? Idem ci-dessous. </comment>
+
 ### Méthode de Clenshaw-Curtis
 
 ### Méthode de Burcher
@@ -687,7 +700,7 @@ Dans le simulateur, la matrice de masses ajoutées est soit lue directement
 depuis le fichier YAML, soit extraite et interpolée linéairement à partir d'un
 [fichier HDB](#fichiers-hdb). Pour le calcul des efforts d'amortissement de
 radiation, on a besoin de la masse ajoutée à fréquence infinie. Afin de garantir
-la symmétrie et le caractère positif et défini des la matrice (les coefficients
+la symmétrie et le caractère positif et défini de la matrice (les coefficients
 ont tendance à osciller fortement au voisinage de $`T=0`$), on n'extrapole pas les
 données du [fichiers HDB](#fichiers-hdb) en zéro : on utilise directement les
 valeurs lues dans le fichier HDB pour la période la plus faible. On suppose que
