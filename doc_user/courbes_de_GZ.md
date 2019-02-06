@@ -2,12 +2,8 @@
 
 ## Stabilité en roulis
 
-Parmi les performances navales, les plus importantes tant du point
-pratique que théorique sont les performances en roulis et en tangage. On
-s'intéresse ici plus particulièrement à la stabilité du navire en roulis. Du
-point de vue réglementaire, la stabilité des navires est soumise à des
-conditions strictes, définies par exemple dans les arrêtés du 28 février 1975
-(bateaux non motorisés) et du 2 septembre 1970 (bateaux motorisés).
+On s'intéresse ici à la stabilité du navire en roulis qui constitue une condition
+de base pour la sécurité du navire, et fait l'objet de réglementations strictes.
 
 On considère un navire partiellement immergé en eau calme (la surface libre
 étant donc plane et horizontale) dont le volume immergé $`\Omega`$ est délimité
@@ -42,7 +38,7 @@ centre de carène et $`GZ`$ est ensuite donné par $`GZ(\phi)=y_C(\phi)-y_G`$.
 
 Soit $`X=(z,\phi,\theta)`$ l'état du système. On suppose le navire soumis aux
 seuls efforts de
-la gravité et de l'hydrostatique. On dénote par $`f`$ la fonction qui à $`X`$
+la gravité et de l'hydrostatique. On note $`f`$ la fonction qui à $`X`$
 associe la somme des efforts appliqués au système :
 
 
@@ -50,50 +46,41 @@ associe la somme des efforts appliqués au système :
 f(X) = F_{\textrm{hs}}(X) + m\cdot \mathbf{g}
 ```
 
-
 où $`m`$ désigne la masse du système et $`\mathbf{g}`$ est le vecteur
 accélération de la pesanteur.
 
 Lorsque le système est à l'équilibre, on a :
 
-
 ```math
 f(X_{\textrm{eq}})=0
 ```
-
 
 Pour résoudre cette équation, on peut par exemple utiliser la méthode de
 Newton-Raphson :
 
 ![](images/newton_raphson.svg)
 
-
 ```math
 X_{n+1} = X_n - f'(X_n)^{-1}f(X_n)
 ```
-
 
 On note
 ```math
 K(X) = \frac{\partial f}{\partial X}(X)
 ```
 
-
-
 ```math
 X_{n+1} = X_n - K^{-1}(X_n)f(X_n)
 ```
 
-
 La matrice $`K(X_n)`$ est estimée numériquement en linéarisant $`f`$ autour de
-$`X_n`$. Soit $`\Delta X`$ un petit déplacement autour de $`X_n`$ et $`\Delta F = (\Delta F_z, \Delta M_{\phi}, \Delta M_{\theta})`$ la
+$`X_n`$. Soit $`\Delta X`$ un petit déplacement autour de $`X_n`$ et
+$`\Delta F = (\Delta F_z, \Delta M_{\phi}, \Delta M_{\theta})`$ la
 variation d'effort correspondante.
-
 
 ```math
 K(X_n) \Delta X = \Delta F
 ```
-
 
 Pour $`1\leq i\leq 3, \sum_{j=1}^3 k_{ij} \Delta x_j = \Delta F_i`$.
 
@@ -107,7 +94,6 @@ $`k_{ij}\Delta x_j = \Delta F_i`$ donc
 k_{ij} = \frac{\Delta F_i}{\Delta x_j}
 ```
 
-
 En pratique, pour évaluer les termes de la matrice $`K(X_n)`$, on considère
 séparément trois petits déplacements autour de $`X_n`$ (un par axe) et l'on
 utilise la formule précédente pour évaluer les termes $`k_{ij}`$ trois par trois.
@@ -118,7 +104,7 @@ l'algorithme de Newton-Raphson).
 
 #### Calcul du centre de carène $`C`$
 
-La carène est discrétisée par des polygones. Pour calculer son centre de masse,
+La carène est discrétisée par des polygones. Pour calculer son centre de volume,
 on transforme ces polygones en triangles et, pour chaque triangle, on calcule
 le volume (algébrique) du tétraèdre de base ce triangle et de sommet l'origine.
 
@@ -130,31 +116,23 @@ délimité par le maillage. Le centre de carène est calculé de la façon suiva
 Soit $`P_1,P_2,P_3`$ les trois sommets d'un des triangles. Le volume élémentaire
 $`dV`$ associé à ce triangle est le déterminant des vecteurs $`P_1,P_2,P_3`$ :
 
-
 ```math
 dV=\textrm{det}(P_1,P_2,P_3)
 ```
 
-
 Les coordonnées du centre (par rapport à l'origine choisie pour les tétraèdres) sont données par :
-
 
 ```math
 x_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{x(P_1)+x(P_2)+x(P_3)}{4}dV
 ```
 
-
-
 ```math
 y_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{y(P_1)+y(P_2)+y(P_3)}{4}dV
 ```
 
-
-
 ```math
 z_C = \frac{1}{\sum_{\textrm{facet}}dV}\sum_{\textrm{facet}}\frac{z(P_1)+z(P_2)+z(P_3)}{4}dV
 ```
-
 
 #### Autre méthode de calcul
 
@@ -162,11 +140,9 @@ Une méthode plus simple car ne nécessitant pas le calcul explicite du centre d
 carène est de projeter le vecteur $`GB`$ sur le vecteur $`y`$ du plan vertical
 attaché au corps :
 
-
 ```math
 GZ = y\cdot GB
 ```
-
 
 or
 
@@ -190,32 +166,25 @@ l'effort hydrostatique.
 
 On pose
 
-
 ```math
 GB_{\lambda} = \frac{M\times F}{\left\|F\right\|} + \lambda F
 ```
 
-
 Dans le [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned), on a :
-
 
 ```math
 F = \left[\begin{array}{c}0\\0\\f_z\end{array}\right]
 ```
 
-
 ```math
 M = \left[\begin{array}{c}m_x\\m_y\\m_z\end{array}\right]
 ```
 
-
 donc
-
 
 ```math
 GB_{\lambda} = \left[\begin{array}{c}mf_x\\mf_y\\mf_z+\lambda F\end{array}\right]
 ```
-
 
 où l'on a noté
 
@@ -223,7 +192,6 @@ où l'on a noté
 ```math
 M\times F = \left[\begin{array}{c}mf_x\\mf_y\\mf_z\end{array}\right]
 ```
-
 
 $`GZ_{\lambda} = y\cdot GB_{\lambda} =
 \left[\begin{array}{c}x\\y\\z\end{array}\right]\times
@@ -241,7 +209,6 @@ soit, avec les conventions de rotation usuelles :
 GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
 \sin(\psi)\cdot\cos(\theta)\cdot m_y}{f_z\left\|x_{\textrm{body}}^{\textrm{(ned)}}\right\|}
 ```
-
 
 ## Outil de calcul de $`GZ`$
 
@@ -264,7 +231,7 @@ Exemple :
 
 ```python echo=False, results='verbatim', name='gz-example'
 from subprocess import check_output
-cmd = ['gz', 'tuto_execution/test_ship_in_waves.yml', '-s', 'tuto_execution/test_ship.stl',  '--dphi',  '10',  '--phi_max',  '40']
+cmd = ['gz', 'tuto_execution/test_ship_in_waves.yml', '-s', 'tuto_execution/test_ship.stl', '--dphi',  '10', '--phi_max', '40']
 print(' '.join(cmd))
 print(check_output(cmd).decode('utf-8'))
 ```
@@ -272,6 +239,8 @@ print(check_output(cmd).decode('utf-8'))
 ## Références
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 398
 - *Seakeeping: Ship Behaviour in Rough Weather*, 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, ISBN 0-7458-0230-3, page 191
-- *Dynamique du Navire*, 1986, P. Devauchelle, Bibliothèque de L'Institut Français d'Aide à la Formation Professionnelle Maritime, ISBN 2-225-80669-1, p. 168
-- *Hydrodynamique navale : théorie et modèles*, 2009, A. Bovis, Presses de l'ENSTA, p. 79
-- *Stabilité des bateaux - examen d'un dossier*, CETMEF, décembre 2012, p.11
+- *Dynamique du Navire*, 1986, Pierre Devauchelle, Bibliothèque de L'Institut Français d'Aide à la Formation Professionnelle Maritime, ISBN 2-225-80669-1, page 168
+- *Hydrodynamique navale : théorie et modèles*, 2009, Alain Bovis, Presses de l'ENSTA, page 79
+- *Stabilité des bateaux - examen d'un dossier*, CETMEF, décembre 2012, page 11
+
+<comment>[JJM] Relu. Mais pas facile à lire sans les formules</comment>
