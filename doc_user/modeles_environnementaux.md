@@ -546,7 +546,9 @@ m_0 = \int_0^\infty S(\omega) d\omega = \left[-e^{-\frac{B}{\omega^4}}\right]^\i
 
 d'où
 
-$`A=4m_0 B`$
+```math
+A=4m_0 B
+```
 
 Par ailleurs, la dérivée première du spectre s'annule pour une période $`\omega_p`$ :
 
@@ -723,7 +725,7 @@ r=e^{-0.5\left(\frac{\omega-\omega_0}{\sigma\omega_0}\right)^2}
 et
 
 ```math
-\sigma=\left\{\begin{eqnarray}0.07,\omega\leq\omega_0\\0.09,\omega>\omega_0\end{eqnarray}\right.
+\sigma=\left\{\begin{array}{l}0.07,\omega\leq\omega_0\\0.09,\omega>\omega_0\end{array}\right.
 ```
 
 Ce spectre a l'allure suivante :
@@ -1497,7 +1499,7 @@ faites dans X-DYN :
 La transformation NED $`\rightarrow`$ HOS est donnée par :
 
 ```math
-{}^{\mbox{HOS}}T_{\mbox{NED}} = R_X(\pi)\cdot R_Z(\theta)
+{}^{\textrm{HOS}}T_{\textrm{NED}} = R_X(\pi)\cdot R_Z(\theta)
 ```
 
 où $`\theta`$ désigne l'angle de propagation renseigné dans le fichier YAML
@@ -1506,17 +1508,17 @@ où $`\theta`$ désigne l'angle de propagation renseigné dans le fichier YAML
 On a donc :
 
 ```math
-{}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]
+{}^{\textrm{HOS}}T_{\textrm{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]
 ```
 
 ```math
-{}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]
+{}^{\textrm{HOS}}T_{\textrm{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]
 ```
 
 et la transformation inverse (HOS $`\rightarrow`$ NED) est égale à la transformation directe :
 
 ```math
-{}^{\mbox{NED}}T_{\mbox{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]
+{}^{\textrm{NED}}T_{\textrm{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]
 ```
 
 
