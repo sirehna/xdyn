@@ -17,6 +17,7 @@ set(H,'WindowKeyPressFcn',@funPauseCallback);
 set(H,'UserData',false);
 dt = scale * (simu.t(2) - simu.t(1));
 ti = title('X-DYN');
+set(gca,'ydir','reverse');
 set(gca,'zdir','reverse');
 hold on
 axis equal
