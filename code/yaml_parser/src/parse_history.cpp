@@ -1,7 +1,7 @@
-#include <ssc/json.hpp>
-
 #include "parse_history.hpp"
+
 #include "YamlState.hpp"
+#include <ssc/json.hpp>
 
 YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
 {
