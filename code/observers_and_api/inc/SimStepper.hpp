@@ -1,11 +1,13 @@
+#ifndef OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
+#define OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
+
+
 #include "ConfBuilder.hpp"
-#include "Res.hpp"
 #include "Sim.hpp"
 #include "YamlState.hpp"
 
-
-#ifndef OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
-#define OBSERVERS_AND_API_INC_SIMSTEPPER_HPP_
+#include <string>
+#include <vector>
 
 class SimServerInputs;
 
