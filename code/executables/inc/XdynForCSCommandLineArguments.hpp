@@ -8,7 +8,8 @@
 #ifndef EXECUTABLES_INC_XDYNFORCSCOMMANDLINEARGUMENTS_HPP_
 #define EXECUTABLES_INC_XDYNFORCSCOMMANDLINEARGUMENTS_HPP_
 
-#include "XdynCommandLineArguments.hpp"
+#include <string>
+#include <vector>
 
 struct XdynForCSCommandLineArguments
 {
@@ -23,6 +24,5 @@ struct XdynForCSCommandLineArguments
     bool show_help;
     bool show_websocket_debug_information;
 };
-
 
 #endif /* EXECUTABLES_INC_XDYNFORCSCOMMANDLINEARGUMENTS_HPP_ */
