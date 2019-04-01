@@ -1,26 +1,20 @@
-#include "ConnexionError.hpp"
+#include "report_xdyn_exceptions_to_user.hpp"
+
 #include "InternalErrorException.hpp"
+#include "ConnexionError.hpp"
 #include "MeshException.hpp"
 #include "NumericalErrorException.hpp"
+#include "yaml-cpp/exceptions.h"
 #include "listeners.hpp"
 #include "simulator_api.hpp"
-#include "SurfaceElevationInterface.hpp"
-#include "ConnexionError.hpp"
 
-#include <ssc/text_file_reader.hpp>
-#include <ssc/solver.hpp>
 #include <ssc/exception_handling.hpp>
 #include <ssc/json/JSONException.hpp>
+#include <ssc/solver.hpp>
 #include <ssc/websocket.hpp>
-
-#include "yaml-cpp/exceptions.h"
 
 #include <functional>
 #include <boost/program_options.hpp>
-
-#include "report_xdyn_exceptions_to_user.hpp"
-#include "XdynCommandLineArguments.hpp"
-#include "build_observers_description.hpp"
 
 void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const std::function<void(const std::string&)>& outputter)
 {
