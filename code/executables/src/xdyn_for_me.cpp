@@ -5,20 +5,16 @@
  *      Author: cady
  */
 
-#include <ssc/text_file_reader.hpp>
-#include <ssc/websocket.hpp>
+#include "XdynForME.hpp"
 
 #include "display_command_line_arguments.hpp"
-#include "ConfBuilder.hpp"
-#include "ConnexionError.hpp"
 #include "HistoryParser.hpp"
-#include "InternalErrorException.hpp"
-#include "MeshException.hpp"
 #include "parse_XdynForMECommandLineArguments.hpp"
 #include "report_xdyn_exceptions_to_user.hpp"
-#include "SimStepper.hpp"
-#include "XdynForME.hpp"
 #include "XdynForMECommandLineArguments.hpp"
+
+#include <ssc/text_file_reader.hpp>
+#include <ssc/websocket.hpp>
 
 #define ADDRESS "127.0.0.1"
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS

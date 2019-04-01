@@ -1,9 +1,9 @@
+#ifndef OBSERVERS_AND_API_INC_SIMSERVER_HPP_
+#define OBSERVERS_AND_API_INC_SIMSERVER_HPP_
+
 #include "ConfBuilder.hpp"
 #include "SimStepper.hpp"
 #include "HistoryParser.hpp"
-
-#ifndef OBSERVERS_AND_API_INC_SIMSERVER_HPP_
-#define OBSERVERS_AND_API_INC_SIMSERVER_HPP_
 
 class SimServer
 {
@@ -19,9 +19,6 @@ class SimServer
         ConfBuilder builder;
         const double dt;
         SimStepper stepper;
-
 };
-
-
 
 #endif /* OBSERVERS_AND_API_INC_SIMSERVER_HPP_ */

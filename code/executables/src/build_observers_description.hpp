@@ -2,6 +2,7 @@
 #define UTILITIES_FOR_SIMULATOR_HPP_
 
 #include <string>
+#include <vector>
 #include "YamlOutput.hpp"
 #include "ListOfObservers.hpp"
 

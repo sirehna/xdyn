@@ -1,11 +1,11 @@
-#include <algorithm>
-
-#include "History.hpp"
 #include "HistoryParser.hpp"
+#include "History.hpp"
 #include "InternalErrorException.hpp"
 #include "parse_history.hpp"
 #include "SimServerInputs.hpp"
 #include "YamlState.hpp"
+
+#include <algorithm>
 
 void check_state_history_size(const State& state);
 void check_state_history_size(const State& state)
