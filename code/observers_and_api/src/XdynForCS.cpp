@@ -1,6 +1,6 @@
+#include "XdynForCS.hpp"
 #include "HistoryParser.hpp"
 #include "SimServerInputs.hpp"
-#include "XdynForCS.hpp"
 
 SimServer::SimServer(const std::string& yaml_model, const std::string& solver, const double dt)
     : builder(yaml_model)
