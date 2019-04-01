@@ -11,6 +11,7 @@
 struct YamlSimServerInputs;
 
 #include <map>
+#include <string>
 #include "State.hpp"
 
 struct SimServerInputs
