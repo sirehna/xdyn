@@ -273,11 +273,11 @@ sortie. Par contre, dans les sections `python` ultérieures, on pourra utiliser
 les données ainsi chargées.
 
 ```python echo=False, results='markdown', name='example-load-yaml'
-print(''.join(['~'] * 4) + '{.markdown}')
-print(''.join(['`'] * 3) + 'python')
+print('~' * 4 + '{.markdown}')
+print('`' * 3 + 'python')
 print("yaml_data = load_yaml('tutorial_06_1D_propulsion.yml')")
-print(''.join(['`'] * 3))
-print(''.join(['~'] * 4))
+print('`' * 3)
+print('~' * 4)
 ```
 
 #### Affichage de l'intégrabilité du YAML : `print_yaml`
@@ -287,8 +287,8 @@ Pour cela, on utilise une section `python` de la forme :
 
 
 ```python echo=False, results='markdown', name='example-print-yaml'
-print(''.join(['~'] * 4) + '{.markdown}')
-print(''.join(['`'] * 3) + 'python')
+print('~' * 4 + '{.markdown}')
+print('`' * 3 + 'python')
 print("yaml_data = load_yaml('tutorial_06_1D_propulsion.yml')")
 print("")
 print("# Pour afficher l'intégralité du YAML avec de la coloration syntaxique")
@@ -296,8 +296,8 @@ print("print_yaml(yaml_data)")
 print("")
 print("# Pour n'afficher qu'une sous-section du YAML")
 print("print_yaml(yaml_data, 'bodies/0/controlled forces')")
-print(''.join(['`'] * 3))
-print(''.join(['~'] * 4))
+print('`' * 3)
+print('~' * 4)
 ```
 
 #### Exécution d'une simulation
@@ -306,18 +306,18 @@ La commande suivante ne produira pas de contenu visible dans le document. En
 revanche, il sera possible de récupérer et afficher les données ainsi générées.
 
 ```python echo=False, results='markdown', name='example-run-simulation'
-print(''.join(['~'] * 4) + '{.markdown}')
-print(''.join(['`'] * 3) + 'python')
+print('~' * 4 + '{.markdown}')
+print('`' * 3 + 'python')
 print("execCommand('xdyn tutorial_01_falling_ball.yml --dt 0.01 --tend 1 -o out.csv')")
-print(''.join(['`'] * 3))
-print(''.join(['~'] * 4))
+print('`' * 3)
+print('~' * 4)
 ```
 
 #### Tracé des résultats
 
 ```python echo=False, results='markdown', name='example-plot-results'
-print(''.join(['~'] * 4) + '{.markdown}')
-print(''.join(['`'] * 3) + 'python')
+print('~' * 4 + '{.markdown}')
+print('`' * 3 + 'python')
 print('# Récupération des données générées')
 print("data = csv('out.csv')")
 print('')
@@ -329,8 +329,8 @@ print("g = cartesian_graph([plot], x='t (s)', y='Élévation (m)')")
 print('')
 print('# Tracé de la planche')
 print("create_layout(g, title='Élévation au cours du temps')")
-print(''.join(['`'] * 3))
-print(''.join(['~'] * 4))
+print('`' * 3)
+print('~' * 4)
 ```
 
 ## Utilisation de X-DYN en serveur websocket
