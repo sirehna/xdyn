@@ -121,87 +121,49 @@ qu'il est possible de définir.
 ### Synthèse des différentes conventions
 
 Les deux tableaux suivants présentent les 36 conventions possibles :
-<comment>[JJM] Pas lisible chez moi </comment>
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| id | Ordre |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
-+====+=======+=============+===============+===================================+========================+
-|  1 | angle |  x y z      |    Extrinsic  | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  2 | angle |  x z y      |    Extrinsic  | $`R_Y(\theta).R_Z(\psi).R_X(\phi)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  3 | angle |  y x z      |    Extrinsic  | $`R_Z(\psi).R_X(\phi).R_Y(\theta)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  4 | angle |  y z x      |    Extrinsic  | $`R_X(\phi).R_Z(\psi).R_Y(\theta)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  5 | angle |  z x y      |    Extrinsic  | $`R_Y(\theta).R_X(\phi).R_Z(\psi)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  6 | angle |  z y x      |    Extrinsic  | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  7 | angle |  x y' z''   |    Intrinsic  | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  8 | angle |  x z' y''   |    Intrinsic  | $`R_X(\phi).R_Z(\psi).R_Y(\theta)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  9 | angle |  y x' z''   |    Intrinsic  | $`R_Y(\theta).R_X(\phi).R_Z(\psi)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 10 | angle |  y z' x''   |    Intrinsic  | $`R_Y(\theta).R_Z(\psi).R_X(\phi)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 11 | angle |  z x' y''   |    Intrinsic  | $`R_Z(\psi).R_X(\phi).R_Y(\theta)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 12 | angle |  z y' x''   |    Intrinsic  | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
+
+| id | Ordre | Convention | Composition |       Matrice de rotation           |     Remarques          |
+|----|-------|------------|-------------|-------------------------------------|------------------------|
+|  1 | angle | x y z      | Extrinsic   | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ |                        |
+|  2 | angle | x z y      | Extrinsic   | $`R_Y(\theta).R_Z(\psi).R_X(\phi)`$ |                        |
+|  3 | angle | y x z      | Extrinsic   | $`R_Z(\psi).R_X(\phi).R_Y(\theta)`$ |                        |
+|  4 | angle | y z x      | Extrinsic   | $`R_X(\phi).R_Z(\psi).R_Y(\theta)`$ |                        |
+|  5 | angle | z x y      | Extrinsic   | $`R_Y(\theta).R_X(\phi).R_Z(\psi)`$ |                        |
+|  6 | angle | z y x      | Extrinsic   | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ |                        |
+|  7 | angle | x y' z''   | Intrinsic   | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ |                        |
+|  8 | angle | x z' y''   | Intrinsic   | $`R_X(\phi).R_Z(\psi).R_Y(\theta)`$ |                        |
+|  9 | angle | y x' z''   | Intrinsic   | $`R_Y(\theta).R_X(\phi).R_Z(\psi)`$ |                        |
+| 10 | angle | y z' x''   | Intrinsic   | $`R_Y(\theta).R_Z(\psi).R_X(\phi)`$ |                        |
+| 11 | angle | z x' y''   | Intrinsic   | $`R_Z(\psi).R_X(\phi).R_Y(\theta)`$ |                        |
+| 12 | angle | z y' x''   | Intrinsic   | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ |                        |
 
 
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| id | Order |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
-+====+=======+=============+===============+===================================+========================+
-| 13 | axis  |  x y x      |    Extrinsic  | $`R_X(\psi).R_Y(\theta).R_X(\phi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 14 | axis  |  x y z      |    Extrinsic  | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 15 | axis  |  x z x      |    Extrinsic  | $`R_X(\psi).R_Z(\theta).R_X(\phi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 16 | axis  |  x z y      |    Extrinsic  | $`R_Y(\psi).R_Z(\theta).R_X(\phi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 17 | axis  |  y x y      |    Extrinsic  | $`R_Y(\psi).R_X(\theta).R_Y(\phi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 18 | axis  |  y x z      |    Extrinsic  | $`R_Z(\psi).R_X(\theta).R_Y(\phi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 19 | axis  |  y z x      |    Extrinsic  | $`R_X(\psi).R_Z(\theta).R_Y(\phi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 20 | axis  |  y z y      |    Extrinsic  | $`R_Y(\psi).R_Z(\theta).R_Y(\phi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 21 | axis  |  z x y      |    Extrinsic  | $`R_Y(\psi).R_X(\theta).R_Z(\phi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 22 | axis  |  z x z      |    Extrinsic  | $`R_Z(\psi).R_X(\theta).R_Z(\phi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 23 | axis  |  z y x      |    Extrinsic  | $`R_X(\psi).R_Y(\theta).R_Z(\phi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 24 | axis  |  z y z      |    Extrinsic  | $`R_Z(\psi).R_Y(\theta).R_Z(\phi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 25 | axis  |  x y' x''   |    Intrinsic  | $`R_X(\phi).R_Y(\theta).R_X(\psi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 26 | axis  |  x y' z''   |    Intrinsic  | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 27 | axis  |  x z' x''   |    Intrinsic  | $`R_X(\phi).R_Z(\theta).R_X(\psi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 28 | axis  |  x z' y''   |    Intrinsic  | $`R_X(\phi).R_Z(\theta).R_Y(\psi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 29 | axis  |  y x' y''   |    Intrinsic  | $`R_Y(\phi).R_X(\theta).R_Y(\psi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 30 | axis  |  y x' z''   |    Intrinsic  | $`R_Y(\phi).R_X(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 31 | axis  |  y z' x''   |    Intrinsic  | $`R_Y(\phi).R_Z(\theta).R_X(\psi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 32 | axis  |  y z' y''   |    Intrinsic  | $`R_Y(\phi).R_Z(\theta).R_Y(\psi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 33 | axis  |  z x' y''   |    Intrinsic  | $`R_Z(\phi).R_X(\theta).R_Y(\psi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 34 | axis  |  z x' z''   |    Intrinsic  | $`R_Z(\phi).R_X(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 35 | axis  |  z y' x''   |    Intrinsic  | $`R_Z(\phi).R_Y(\theta).R_X(\psi)`$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 36 | axis  |  z y' z''   |    Intrinsic  | $`R_Z(\phi).R_Y(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
+| id | Ordre | Convention | Composition |       Matrice de rotation           |     Remarques          |
+|----|-------|------------|-------------|-------------------------------------|------------------------|
+| 13 | axis  | x y x      | Extrinsic   | $`R_X(\psi).R_Y(\theta).R_X(\phi)`$ | Euler                  |
+| 14 | axis  | x y z      | Extrinsic   | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ | Cardan - Tait - Bryan  |
+| 15 | axis  | x z x      | Extrinsic   | $`R_X(\psi).R_Z(\theta).R_X(\phi)`$ | Euler                  |
+| 16 | axis  | x z y      | Extrinsic   | $`R_Y(\psi).R_Z(\theta).R_X(\phi)`$ | Cardan - Tait - Bryan  |
+| 17 | axis  | y x y      | Extrinsic   | $`R_Y(\psi).R_X(\theta).R_Y(\phi)`$ | Euler                  |
+| 18 | axis  | y x z      | Extrinsic   | $`R_Z(\psi).R_X(\theta).R_Y(\phi)`$ | Cardan - Tait - Bryan  |
+| 19 | axis  | y z x      | Extrinsic   | $`R_X(\psi).R_Z(\theta).R_Y(\phi)`$ | Euler                  |
+| 20 | axis  | y z y      | Extrinsic   | $`R_Y(\psi).R_Z(\theta).R_Y(\phi)`$ | Cardan - Tait - Bryan  |
+| 21 | axis  | z x y      | Extrinsic   | $`R_Y(\psi).R_X(\theta).R_Z(\phi)`$ | Euler                  |
+| 22 | axis  | z x z      | Extrinsic   | $`R_Z(\psi).R_X(\theta).R_Z(\phi)`$ | Cardan - Tait - Bryan  |
+| 23 | axis  | z y x      | Extrinsic   | $`R_X(\psi).R_Y(\theta).R_Z(\phi)`$ | Euler                  |
+| 24 | axis  | z y z      | Extrinsic   | $`R_Z(\psi).R_Y(\theta).R_Z(\phi)`$ | Cardan - Tait - Bryan  |
+| 25 | axis  | x y' x''   | Intrinsic   | $`R_X(\phi).R_Y(\theta).R_X(\psi)`$ | Euler                  |
+| 26 | axis  | x y' z''   | Intrinsic   | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
+| 27 | axis  | x z' x''   | Intrinsic   | $`R_X(\phi).R_Z(\theta).R_X(\psi)`$ | Euler                  |
+| 28 | axis  | x z' y''   | Intrinsic   | $`R_X(\phi).R_Z(\theta).R_Y(\psi)`$ | Cardan - Tait - Bryan  |
+| 29 | axis  | y x' y''   | Intrinsic   | $`R_Y(\phi).R_X(\theta).R_Y(\psi)`$ | Euler                  |
+| 30 | axis  | y x' z''   | Intrinsic   | $`R_Y(\phi).R_X(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
+| 31 | axis  | y z' x''   | Intrinsic   | $`R_Y(\phi).R_Z(\theta).R_X(\psi)`$ | Euler                  |
+| 32 | axis  | y z' y''   | Intrinsic   | $`R_Y(\phi).R_Z(\theta).R_Y(\psi)`$ | Cardan - Tait - Bryan  |
+| 33 | axis  | z x' y''   | Intrinsic   | $`R_Z(\phi).R_X(\theta).R_Y(\psi)`$ | Euler                  |
+| 34 | axis  | z x' z''   | Intrinsic   | $`R_Z(\phi).R_X(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
+| 35 | axis  | z y' x''   | Intrinsic   | $`R_Z(\phi).R_Y(\theta).R_X(\psi)`$ | Euler                  |
+| 36 | axis  | z y' z''   | Intrinsic   | $`R_Z(\phi).R_Y(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
 
 
 où les matrices de rotation autour des trois axes $`X`$, $`Y`$ et $`Z`$ s'écrivent
