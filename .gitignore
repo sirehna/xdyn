@@ -1,6 +1,9 @@
 build
 build*32
 build*64
+build_debian
+build_windows
+build_doc
 install
 install*32
 install*64
@@ -8,6 +11,8 @@ Debug
 debug
 gcc
 clang
+ssc_debian
+ssc_windows
 .cproject
 .pydevproject
 .metadata
@@ -31,3 +36,5 @@ __pycache__
 **.jpeg
 **.jpg
 **.emf
+.wine
+
