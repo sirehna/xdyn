@@ -264,13 +264,13 @@ p_{\textrm{dyn}} = \rho\cdot g
 Lorsque la profondeur $`h`$ est très grande devant $`z`$, les cosinus hyperboliques sont équivalents à des exponentielles :
 
 ```math
-\cosh x\sim_{x\infty} \frac{e^x}{2}
+\mathop {\lim }\limits_{x \to \infty } \cosh x = \frac{{e^x }}{2}
 ```
 
 on obtient donc :
 
 ```math
-p_{\textrm{dyn}} \sim_{h\infty} \rho\cdot g
+p_{\textrm{dyn}}\mathop  \approx \limits_{x \to \infty } \rho\cdot g
 \sum_{i=1}^{nfreq}A(\omega_i,\gamma)
 e^{-k_i\cdot z}\sin(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
 \sin(\gamma))-\omega_i\cdot t+\phi_{i})
@@ -407,28 +407,34 @@ a_{i,j}
 #### En profondeur infinie
 
 Lorsque $`k_i\cdot h >3`$, les cosinus hyperboliques peuvent être considérés comme
-équivalents à des exponentielles (erreur relative inférieure à $2.5\times
-10^{-3}$). On peut donc utiliser l'approximation suivante:
+équivalents à des exponentielles (erreur relative inférieure à
+$`2.5\times 10^{-3}`$). On peut donc utiliser l'approximation suivante:
 
-$`u = g
+```math
+u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 e^{-k_i z}
 \cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})`$
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
 
-$`v = g
+```math
+v = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 e^{-k_i z}
 \cdot\sin(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})`$
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
 
-$`w = g
+```math
+w = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 e^{-k_i z}
-\cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})`$
+\cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
 
 #### Évolution de la vitesse orbitale sur la surface libre
 
@@ -497,7 +503,7 @@ correspond à une houle monochromatique, c'est-à-dire à une seule fonction sin
 ```math
 \omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
 \left\{\begin{array}{l}0, \textrm{si }\omega\neq \omega_0\\1, \textrm{si }
-\omega=\omega_0\end{array}\right.`
+\omega=\omega_0\end{array}\right.
 ```
 
 $`\omega_0 = 2\pi f`$ est la pulsation (en Rad/s) de la houle.
@@ -578,9 +584,7 @@ cette hypothèse, la hauteur de houle $`H_S`$ correspondant à deux écarts-type
 H_S = 2\sigma = 4\sqrt{m_0}
 ```
 
-En outre,
-
-$`\omega_p=\frac{2\pi}{T_p}`$
+En outre, $`\omega_p=\frac{2\pi}{T_p}`$
 
 On peut ainsi exprimer $`A`$ et $`B`$ en fonction de $`H_S`$ et $`T_p`$ :
 
@@ -1233,14 +1237,13 @@ de continuité se ramène à une simple équation de Laplace :
 dans le domaine
 fluide $`\mathcal{D}`$, $`\nabla`$ désignant l'opérateur gradient horizontal.
 
-Sur la surface libre, le potentiel de vitesse $\phi^s(x,t) =
-\phi(x,z=\eta(x,t),t)$ et l'élévation de surface libre $`\eta`$ doivent satisfaire
+Sur la surface libre, le potentiel de vitesse
+$`\phi^s(x,t) = \phi(x,z=\eta(x,t),t)`$
+et l'élévation de surface libre $`\eta`$ doivent satisfaire
 les équations suivantes :
 
-- $`\partial_t \eta = (1 + |\nabla \eta|^2) \partial_z \phi - \nabla \phi^s
-  \cdot \nabla \eta`$
-- $`\partial_t \phi^s = -g \eta - \frac{1}{2} | \nabla \phi^s |^2 + \frac{1}{2}
-  (1 + | \nabla \eta |^2) (\partial_z \phi)^2`$
+- $`\partial_t \eta = (1 + |\nabla \eta|^2) \partial_z \phi - \nabla \phi^s\cdot \nabla \eta`$
+- $`\partial_t \phi^s = -g \eta - \frac{1}{2} | \nabla \phi^s |^2 + \frac{1}{2}(1 + | \nabla \eta |^2) (\partial_z \phi)^2`$
 
 $`\frac{\partial \phi}{\partial z}`$ est la vitesse verticale et est calculée en
 utilisant la méthode HOS de West *et al.*, 1987.
@@ -1311,8 +1314,8 @@ fichier d'entrée `.cof` contenant les coefficients du profil de houle.
 
 Le profil de houle irrégulière linéaire est défini par la superpositions de
 composantes linéaires de directions et fréquences différentes. L'amplitude de
-chaque composante est calculée à partir d'un spectre directionnel $S(\omega,
-\theta) = F(\omega) \cdot G(\theta)$.
+chaque composante est calculée à partir d'un spectre directionnel
+$`S(\omega, \theta) = F(\omega) \cdot G(\theta)`$.
 
 $`F(\omega)`$ est un spectre de JONSWAP dont définit dans le fichier YAML la
 période de pic $`T_p = \frac{2 \pi}{\omega_p}`$, la hauteur significative $`H_s`$
