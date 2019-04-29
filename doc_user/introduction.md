@@ -30,11 +30,8 @@ entrées et sorties du simulateur :
 
 ![](images/simulator_overview.svg)
 
-<comment>[JJM] L'image n'apparait pas sous gitlab (vectoriel ?), ni quand on clique sur la pseudo-miniature qui apparait dans le texte  </comment>
-
 Parallèlement à la présente documentation utilisateur, il existe également une
 documentation d'implémentation décrivant l'architecture logicielle et
 détaillant les API pour faciliter la maintenance du code (correctifs et
 ajouts de fonctionnalités).
 
-<comment>[JJM] Relu </comment> 
