@@ -14,8 +14,6 @@ Cette section propose une décomposition des efforts hydrodynamiques suivant un 
 
 ## Potentiel d'interaction entre la houle et l'obstacle
 
-<comment>[JJM] Je ne vois pas trop l'intérêt de reformuler toute la résolution potentielle, ce qui est fait dans plein de références, le calcul n'étant pas fait dans x-dyn. En revanche, il est intéressant de préciser  la formulation temporelle retenue et la manière dont elle est implémentée  </comment>
-
 On suppose l'eau non visqueuse, incompressible, homogène et isotrope et l'on
 considère un écoulement irrotationnel.
 Supposer l'écoulement irrotationnel implique (d'après le lemme
