@@ -53,7 +53,6 @@ script:
         cp -rf /opt/yaml_cpp /opt/share/xdyn/yaml-cpp &&
         rm -rf /opt/share/code/eigen3-hdf5 &&
         git clone https://github.com/garrison/eigen3-hdf5 &&
-        cp -rf /opt/eigen3-hdf5 /opt/share/xdyn/google-test &&
         rm -rf /opt/share/code/gcovr &&
         rm -rf /opt/share/code/google-test &&
         cp -rf /opt/googletest /opt/share/xdyn/google-test &&
