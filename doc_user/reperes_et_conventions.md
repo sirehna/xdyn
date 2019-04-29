@@ -2,25 +2,25 @@
 
 ## Repères
 
-Afin de connaître et décrire l'attitude d'un ou plusieurs corps dans l'espace,
+Afin de connaître et décrire l'[attitude](#attitude-navire) d'un ou plusieurs corps dans l'espace,
 il est nécessaire de les placer par rapport à un repère de référence.
 
 ### Repère de référence (NED)
 
 Le repère `NED` (North-East-Down) est utilisé comme repère de référence,
-avec un point de référence $O$ et une base pointant les directions Nord-Est-Bas.
+avec un point de référence $`O`$ et une base pointant les directions Nord-Est-Bas.
 Il sert à exprimer les déplacements des corps de la simulation.
 
 ### Repère navire (mobile ou "body" ou "repère de résolution")
 
 Le repère navire correspond au repère attaché au navire lors de la simulation.
-Le point de référence de ce repère correspond généralement au centre de carène
+Le point de référence de ce repère correspond généralement au centre de gravité
 du navire.
 Les axes du repère navire sont les suivants:
 
-- $X$ vers l'avant
-- $Y$ sur tribord
-- $Z$ vers le bas
+- $`X`$ vers l'avant
+- $`Y`$ sur tribord
+- $`Z`$ vers le bas
 
 ![](images/ShipFrame.svg "Repère navire")
 
@@ -36,8 +36,8 @@ ne sont parfaitement adaptés : en effet, si le maillage sur lequel on
 calcule la houle est lié à NED, le navire finira par sortir de cette zone
 lorsqu'il se déplacera. Si l'on calcule les hauteurs de
 vague dans le repère navire, l'aire de la grille vue dans le repère NED
-va varier en fonction de l'attitude du navire et, à la limite, pour un
-navire vertical ($\theta=\pi/2$ par exemple), la projection de la grille
+va varier en fonction de l'[attitude](#attitude-navire) du navire et, à la limite, pour un
+navire vertical ($`\theta=\pi/2`$ par exemple), la projection de la grille
 est un segment.
 
 On définit donc un NED "local", c'est-à-dire un repère centré au même point
@@ -53,24 +53,24 @@ repère NED local sera "NED(nav1)".
 
 ### Attitude navire
 
-L'attitude d'un corps permet de connaître sa position et son orientation par
-rapport à un repère. La position est donnée par le triplet $\left(X,Y,Z\right)$
-et l'orientation par un triplet de trois angles $\left(\phi,\theta,\psi\right)$.
-L'interprétation de ce triplet en termes de rotations autour des axes $x$, $y$, $z$
-dépend de la convention d'orientation choisie.
-L'orientation peut également être exprimée de manière différente notamment avec des
-quaternions (c'est d'ailleurs ainsi qu'elle est exprimée dans le code du simulateur).
+L'attitude d'un corps permet de connaître son orientation par rapport à un
+repère. La position est donnée par le triplet $`\left(X,Y,Z\right)`$ et
+l'orientation par un triplet d'angles $`\left(\phi,\theta,\psi\right)`$.
+L'interprétation de ce triplet en termes de rotations autour des axes $`x`$, $`y`$,
+$`z`$ dépend de la convention de rotation choisie. L'orientation peut également
+être exprimée de manière différente notamment avec des quaternions (c'est
+d'ailleurs ainsi qu'elle est exprimée dans le code d'xdyn).
 
 ## Conventions d'orientations
 
 Cette section présente les notations utilisées pour définir l'orientation
-d'un élément dans l'espace à partir d'un triplet de trois angles $(\phi,\theta,\psi)$.
+d'un élément dans l'espace à partir d'un triplet d'angles $`(\phi,\theta,\psi)`$.
 
 ### Définition d'une orientation
 
 Pour définir la composition de rotations donnant l'orientation
 d'un élément dans l'espace à partir
-d'un triplet de trois angles $\left(\phi,\theta,\psi\right)$,
+d'un triplet d'angles $`\left(\phi,\theta,\psi\right)`$,
 plusieurs éléments doivent être définis:
 
 - une convention d'angles ou d'axes. Elle permet de définir
@@ -87,27 +87,27 @@ plusieurs éléments doivent être définis:
 ### Énumération des conventions possibles
 
 Si on choisit une convention d'angles, alors chaque angle du triplet définit
-respectivement une rotation autour d'un axe $X$, $Y$ ou $Z$.
+respectivement une rotation autour d'un axe $`X`$, $`Y`$ ou $`Z`$.
 Les axes ne peuvent être répétés.
 Il est possible de définir 6 conventions d'angles, qui correspondent à
-la permutation des trois axes: $XYZ$ ,$XZY$ ,$YXZ$ ,$YZX$ ,$ZXY$ ,$ZYX$.
-Par exemple la rotation $R_{YZX}$ appliquée au triplet
-$\left(\phi,\theta,\psi\right)$ s'interprétera comme une rotation de
-$R_{Y}\left(\theta\right)$, suivie de la rotation $R_{Z}\left(\psi\right)$,
-et terminée par la rotation $R_{X}\left(\phi\right)$.
+la permutation des trois axes: $`XYZ`$ ,$`XZY`$ ,$`YXZ`$ ,$`YZX`$ ,$`ZXY`$ ,$`ZYX`$.
+Par exemple la rotation $`R_{YZX}`$ appliquée au triplet
+$`\left(\phi,\theta,\psi\right)`$ s'interprétera comme une rotation de
+$`R_{Y}\left(\theta\right)`$, suivie de la rotation $`R_{Z}\left(\psi\right)`$,
+et terminée par la rotation $`R_{X}\left(\phi\right)`$.
 
 Si on choisit une convention d'axes, alors on modifie l'ordre des axes
 sur lesquels appliquer successivement les rotations.
 Des répétitions des axes sont alors possibles, si elles ne se suivent pas.
-Par exemple, $XYX$ sera valide, mais pas $XXY$.
+Par exemple, $`XYX`$ sera valide, mais pas $`XXY`$.
 Par exemple, une convention ZXY définit une composition de rotations.
 Il est possible de définir 12 conventions d'axes:
-$XYX$, $XYZ$, $XZX$, $XZY$, $YXY$, $YXZ$,
-$YZX$, $YZY$, $ZXY$, $ZXZ$, $ZYX$, $ZYZ$.
-Par exemple la rotation $R_{YZX}$ appliquée au triplet
-$\left(\phi,\theta,\psi\right)$ s'interprétera comme une rotation de
-$R_{Y}\left(\phi\right)$, suivie de la rotation $R_{Z}\left(\theta\right)$, et
-terminée par la rotation $R_{X}\left(\psi\right)$.
+$`XYX`$, $`XYZ`$, $`XZX`$, $`XZY`$, $`YXY`$, $`YXZ`$,
+$`YZX`$, $`YZY`$, $`ZXY`$, $`ZXZ`$, $`ZYX`$, $`ZYZ`$.
+Par exemple la rotation $`R_{YZX}`$ appliquée au triplet
+$`\left(\phi,\theta,\psi\right)`$ s'interprétera comme une rotation de
+$`R_{Y}\left(\phi\right)`$, suivie de la rotation $`R_{Z}\left(\theta\right)`$, et
+terminée par la rotation $`R_{X}\left(\psi\right)`$.
 
 Avec ces conventions d'angles et d'axes, il existe déjà 18 combinaisons.
 Ce nombre est doublé du fait que la composition de rotations peut être interne
@@ -122,107 +122,69 @@ qu'il est possible de définir.
 
 Les deux tableaux suivants présentent les 36 conventions possibles :
 
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| id | Ordre |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
-+====+=======+=============+===============+===================================+========================+
-|  1 | angle |  x y z      |    Extrinsic  | $R_Z(\psi).R_Y(\theta).R_X(\phi)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  2 | angle |  x z y      |    Extrinsic  | $R_Y(\theta).R_Z(\psi).R_X(\phi)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  3 | angle |  y x z      |    Extrinsic  | $R_Z(\psi).R_X(\phi).R_Y(\theta)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  4 | angle |  y z x      |    Extrinsic  | $R_X(\phi).R_Z(\psi).R_Y(\theta)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  5 | angle |  z x y      |    Extrinsic  | $R_Y(\theta).R_X(\phi).R_Z(\psi)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  6 | angle |  z y x      |    Extrinsic  | $R_X(\phi).R_Y(\theta).R_Z(\psi)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  7 | angle |  x y' z''   |    Intrinsic  | $R_X(\phi).R_Y(\theta).R_Z(\psi)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  8 | angle |  x z' y''   |    Intrinsic  | $R_X(\phi).R_Z(\psi).R_Y(\theta)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-|  9 | angle |  y x' z''   |    Intrinsic  | $R_Y(\theta).R_X(\phi).R_Z(\psi)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 10 | angle |  y z' x''   |    Intrinsic  | $R_Y(\theta).R_Z(\psi).R_X(\phi)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 11 | angle |  z x' y''   |    Intrinsic  | $R_Z(\psi).R_X(\phi).R_Y(\theta)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 12 | angle |  z y' x''   |    Intrinsic  | $R_Z(\psi).R_Y(\theta).R_X(\phi)$ |                        |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
+| id | Ordre | Convention | Composition |       Matrice de rotation           |     Remarques          |
+|----|-------|------------|-------------|-------------------------------------|------------------------|
+|  1 | angle | x y z      | Extrinsic   | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ |                        |
+|  2 | angle | x z y      | Extrinsic   | $`R_Y(\theta).R_Z(\psi).R_X(\phi)`$ |                        |
+|  3 | angle | y x z      | Extrinsic   | $`R_Z(\psi).R_X(\phi).R_Y(\theta)`$ |                        |
+|  4 | angle | y z x      | Extrinsic   | $`R_X(\phi).R_Z(\psi).R_Y(\theta)`$ |                        |
+|  5 | angle | z x y      | Extrinsic   | $`R_Y(\theta).R_X(\phi).R_Z(\psi)`$ |                        |
+|  6 | angle | z y x      | Extrinsic   | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ |                        |
+|  7 | angle | x y' z''   | Intrinsic   | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ |                        |
+|  8 | angle | x z' y''   | Intrinsic   | $`R_X(\phi).R_Z(\psi).R_Y(\theta)`$ |                        |
+|  9 | angle | y x' z''   | Intrinsic   | $`R_Y(\theta).R_X(\phi).R_Z(\psi)`$ |                        |
+| 10 | angle | y z' x''   | Intrinsic   | $`R_Y(\theta).R_Z(\psi).R_X(\phi)`$ |                        |
+| 11 | angle | z x' y''   | Intrinsic   | $`R_Z(\psi).R_X(\phi).R_Y(\theta)`$ |                        |
+| 12 | angle | z y' x''   | Intrinsic   | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ |                        |
 
 
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| id | Order |  Convention |   Composition |       Matrice de rotation         |     Remarques          |
-+====+=======+=============+===============+===================================+========================+
-| 13 | axis  |  x y x      |    Extrinsic  | $R_X(\psi).R_Y(\theta).R_X(\phi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 14 | axis  |  x y z      |    Extrinsic  | $R_Z(\psi).R_Y(\theta).R_X(\phi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 15 | axis  |  x z x      |    Extrinsic  | $R_X(\psi).R_Z(\theta).R_X(\phi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 16 | axis  |  x z y      |    Extrinsic  | $R_Y(\psi).R_Z(\theta).R_X(\phi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 17 | axis  |  y x y      |    Extrinsic  | $R_Y(\psi).R_X(\theta).R_Y(\phi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 18 | axis  |  y x z      |    Extrinsic  | $R_Z(\psi).R_X(\theta).R_Y(\phi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 19 | axis  |  y z x      |    Extrinsic  | $R_X(\psi).R_Z(\theta).R_Y(\phi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 20 | axis  |  y z y      |    Extrinsic  | $R_Y(\psi).R_Z(\theta).R_Y(\phi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 21 | axis  |  z x y      |    Extrinsic  | $R_Y(\psi).R_X(\theta).R_Z(\phi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 22 | axis  |  z x z      |    Extrinsic  | $R_Z(\psi).R_X(\theta).R_Z(\phi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 23 | axis  |  z y x      |    Extrinsic  | $R_X(\psi).R_Y(\theta).R_Z(\phi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 24 | axis  |  z y z      |    Extrinsic  | $R_Z(\psi).R_Y(\theta).R_Z(\phi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 25 | axis  |  x y' x''   |    Intrinsic  | $R_X(\phi).R_Y(\theta).R_X(\psi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 26 | axis  |  x y' z''   |    Intrinsic  | $R_X(\phi).R_Y(\theta).R_Z(\psi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 27 | axis  |  x z' x''   |    Intrinsic  | $R_X(\phi).R_Z(\theta).R_X(\psi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 28 | axis  |  x z' y''   |    Intrinsic  | $R_X(\phi).R_Z(\theta).R_Y(\psi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 29 | axis  |  y x' y''   |    Intrinsic  | $R_Y(\phi).R_X(\theta).R_Y(\psi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 30 | axis  |  y x' z''   |    Intrinsic  | $R_Y(\phi).R_X(\theta).R_Z(\psi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 31 | axis  |  y z' x''   |    Intrinsic  | $R_Y(\phi).R_Z(\theta).R_X(\psi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 32 | axis  |  y z' y''   |    Intrinsic  | $R_Y(\phi).R_Z(\theta).R_Y(\psi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 33 | axis  |  z x' y''   |    Intrinsic  | $R_Z(\phi).R_X(\theta).R_Y(\psi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 34 | axis  |  z x' z''   |    Intrinsic  | $R_Z(\phi).R_X(\theta).R_Z(\psi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 35 | axis  |  z y' x''   |    Intrinsic  | $R_Z(\phi).R_Y(\theta).R_X(\psi)$ | Euler                  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
-| 36 | axis  |  z y' z''   |    Intrinsic  | $R_Z(\phi).R_Y(\theta).R_Z(\psi)$ | Cardan - Tait - Bryan  |
-+----+-------+-------------+---------------+-----------------------------------+------------------------+
+| id | Ordre | Convention | Composition |       Matrice de rotation           |     Remarques          |
+|----|-------|------------|-------------|-------------------------------------|------------------------|
+| 13 | axis  | x y x      | Extrinsic   | $`R_X(\psi).R_Y(\theta).R_X(\phi)`$ | Euler                  |
+| 14 | axis  | x y z      | Extrinsic   | $`R_Z(\psi).R_Y(\theta).R_X(\phi)`$ | Cardan - Tait - Bryan  |
+| 15 | axis  | x z x      | Extrinsic   | $`R_X(\psi).R_Z(\theta).R_X(\phi)`$ | Euler                  |
+| 16 | axis  | x z y      | Extrinsic   | $`R_Y(\psi).R_Z(\theta).R_X(\phi)`$ | Cardan - Tait - Bryan  |
+| 17 | axis  | y x y      | Extrinsic   | $`R_Y(\psi).R_X(\theta).R_Y(\phi)`$ | Euler                  |
+| 18 | axis  | y x z      | Extrinsic   | $`R_Z(\psi).R_X(\theta).R_Y(\phi)`$ | Cardan - Tait - Bryan  |
+| 19 | axis  | y z x      | Extrinsic   | $`R_X(\psi).R_Z(\theta).R_Y(\phi)`$ | Euler                  |
+| 20 | axis  | y z y      | Extrinsic   | $`R_Y(\psi).R_Z(\theta).R_Y(\phi)`$ | Cardan - Tait - Bryan  |
+| 21 | axis  | z x y      | Extrinsic   | $`R_Y(\psi).R_X(\theta).R_Z(\phi)`$ | Euler                  |
+| 22 | axis  | z x z      | Extrinsic   | $`R_Z(\psi).R_X(\theta).R_Z(\phi)`$ | Cardan - Tait - Bryan  |
+| 23 | axis  | z y x      | Extrinsic   | $`R_X(\psi).R_Y(\theta).R_Z(\phi)`$ | Euler                  |
+| 24 | axis  | z y z      | Extrinsic   | $`R_Z(\psi).R_Y(\theta).R_Z(\phi)`$ | Cardan - Tait - Bryan  |
+| 25 | axis  | x y' x''   | Intrinsic   | $`R_X(\phi).R_Y(\theta).R_X(\psi)`$ | Euler                  |
+| 26 | axis  | x y' z''   | Intrinsic   | $`R_X(\phi).R_Y(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
+| 27 | axis  | x z' x''   | Intrinsic   | $`R_X(\phi).R_Z(\theta).R_X(\psi)`$ | Euler                  |
+| 28 | axis  | x z' y''   | Intrinsic   | $`R_X(\phi).R_Z(\theta).R_Y(\psi)`$ | Cardan - Tait - Bryan  |
+| 29 | axis  | y x' y''   | Intrinsic   | $`R_Y(\phi).R_X(\theta).R_Y(\psi)`$ | Euler                  |
+| 30 | axis  | y x' z''   | Intrinsic   | $`R_Y(\phi).R_X(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
+| 31 | axis  | y z' x''   | Intrinsic   | $`R_Y(\phi).R_Z(\theta).R_X(\psi)`$ | Euler                  |
+| 32 | axis  | y z' y''   | Intrinsic   | $`R_Y(\phi).R_Z(\theta).R_Y(\psi)`$ | Cardan - Tait - Bryan  |
+| 33 | axis  | z x' y''   | Intrinsic   | $`R_Z(\phi).R_X(\theta).R_Y(\psi)`$ | Euler                  |
+| 34 | axis  | z x' z''   | Intrinsic   | $`R_Z(\phi).R_X(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
+| 35 | axis  | z y' x''   | Intrinsic   | $`R_Z(\phi).R_Y(\theta).R_X(\psi)`$ | Euler                  |
+| 36 | axis  | z y' z''   | Intrinsic   | $`R_Z(\phi).R_Y(\theta).R_Z(\psi)`$ | Cardan - Tait - Bryan  |
 
 
-où les matrices de rotation autour des trois axes $X$, $Y$ et $Z$ s'écrivent
+où les matrices de rotation autour des trois axes $`X`$, $`Y`$ et $`Z`$ s'écrivent
 
-$R_X \left( \alpha \right) = \left[\begin{array}{ccc}
+$`R_X \left( \alpha \right) = \left[\begin{array}{ccc}
 1 & 0 & 0\\
 0 & +\cos \left( \alpha \right) & -\sin \left( \alpha \right)\\
 0 & +\sin \left( \alpha \right) & +\cos \left( \alpha \right)
-\end{array}\right]$
+\end{array}\right]`$
 
-$R_Y \left( \alpha \right) = \left[\begin{array}{ccc}
+$`R_Y \left( \alpha \right) = \left[\begin{array}{ccc}
 +\cos\left( \alpha \right) & 0 & +\sin \left( \alpha \right) \\
 0 & 1 & 0 \\
 -\sin\left( \alpha \right) & 0 & +\cos \left( \alpha \right) \\
-\end{array}\right]$
+\end{array}\right]`$
 
-$R_Z \left( \alpha \right) = \left[\begin{array}{ccc}
+$`R_Z \left( \alpha \right) = \left[\begin{array}{ccc}
 +\cos \left( \alpha \right) & -\sin \left( \alpha \right) & 0 \\
 +\sin \left( \alpha \right) & +\cos \left( \alpha \right) & 0 \\
 0 & 0 & 1 \\
-\end{array}\right]$
+\end{array}\right]`$
 
 ## Conventions couramment utilisées
 
@@ -236,27 +198,27 @@ exprimée par le triplet (Roulis, Tangage, Lacet) régulièrement utilisée est
 référencée id=12 dans le tableau ci-dessus.
 
 Elle se comprend de la manière suivante, on effectue une rotation de
-l'angle de lacet autour de l'axe $Z$, suivie d'une rotation de
-l'angle d'assiette autour du nouvel axe $Y'$ suivie d'une rotation de
-l'angle de roulis autour du nouvel axe $X''$.
+l'angle de lacet autour de l'axe $`Z`$, suivie d'une rotation de
+l'angle d'assiette autour du nouvel axe $`Y'`$ suivie d'une rotation de
+l'angle de roulis autour du nouvel axe $`X''`$.
 
 Si on exprime ce triplet de la manière suivante (Lacet, Roulis, Tangage),
 on obtient id=33 dans le tableau ci-dessus.
 
 La composition de rotations de ces deux conventions est
 représentée sur la figure suivante
-![](images/AnglesEuler.svg "Composition de rotations [z,y',x'']")
+![](images/EulerFrame_TextIm.svg "Composition de rotations [z,y',x'']")
 
 
-### Convention Paraview
+### Convention ParaView
 
 La convention d'orientation utilisée dans le logiciel
-[Paraview](http://www.paraview.org) est identifiée par id=11 dans le tableau
+[ParaView](http://www.paraview.org) est identifiée par id=11 dans le tableau
 ci-dessus.
 
-Cette composition de rotation se comprend comme une rotation $\psi$ autour de
-l'axe $Z$, suivie d'une rotation $\theta$ autour du nouvel axe $X'$ et
-finalement d'une rotation $\phi$ autour du nouvel axe $Y''$.
+Cette composition de rotation se comprend comme une rotation $`\psi`$ autour de
+l'axe $`Z`$, suivie d'une rotation $`\theta`$ autour du nouvel axe $`X'`$ et
+finalement d'une rotation $`\phi`$ autour du nouvel axe $`Y''`$.
 
 
 ## Quaternions
@@ -274,32 +236,44 @@ qui, au prix de l'ajout d'un état supplémentaire permettent de définir les
 rotations sans ambiguïté et de façon unique, quelle que soit la convention
 d'angle adoptée.
 
+Lors des calculs de tenue à la mer (avec une formulation fréquentielle), on
+utilise souvent un repère linéarisé. Ce repère, qui peut être impliqué lors du
+lien avec les [bases de données hydrodynamiques](#fichiers-hdb-daqua) issues du
+fréquentiel, est calculé de la façon suivante. En faisant l'hypothèse que les
+mouvements sont faibles, on effectue un développement des rotations limité au
+premier ordre et ainsi elles peuvent être exprimées indépendammant par rapport
+aux axes principaux liés à la posiiton moyenne du navire, dans n'importe quel
+ordre. Ce repère n'est pas utilisé dans la version actuelle d'xdyn.
+
 ## États navires
 
 Le simulateur est multi-corps en ce sens que plusieurs corps peuvent être
-simulés en même temps. Actuellement, aucun effort d'interaction ni de liaison
-cinématique ne sont implémentés.
+simulés en même temps. Ainsi, on peut modéliser plusieurs corps mécaniquement
+indépendants, avec leurs interactions hydrodynamiques, pourvu que l'on
+implémente le modèle d'interaction (qui peut venir d'un [fichier
+HDB](#fichiers-hdb-daqua) multicorps). Actuellement, aucun effort d'interaction
+ni de liaison cinématique ne sont implémentés.
 
 Chaque corps possède des états, permettant de reconstituer exactement son
 mouvement. Ces états sont les suivants :
 
 - La position du corps par rapport à l'origine du NED projetée dans le repère
-  corps est notée $p^n = [x,y,z]^T$ et est exprimée en mètres.
-- L'attitude du corps est notée $\Theta = [\phi,\theta,\psi]^T$ et est définie
+  corps est notée $`p^n = [x,y,z]^T`$ et est exprimée en mètres.
+- L'[attitude](#attitude-navire) du corps est notée $`\Theta = [\phi,\theta,\psi]^T`$ et est définie
   au paragraphe précédent. En pratique, on utilise plutôt des quaternions
-  $q = [q_r, q_i, q_j, q_k]$ en interne dans le simulateur pour l'intégration
+  $`q = [q_r, q_i, q_j, q_k]`$ en interne dans le simulateur pour l'intégration
   des équations du mouvement, mais les raisonnements présentés dans cette
   documentation se transposent aisément.
 - La vitesse de translation du corps par rapport au repère fixe NED, projetée
-  dans le repère du corps (ou "body") est notée $v^b = [u,v,w]^T$ et s'exprime
+  dans le repère du corps (ou "body") est notée $`v^b = [u,v,w]^T`$ et s'exprime
   en m/s.
 - Le vecteur vitesse de rotation du repère "body" par rapport au repère NED,
-  projeté dans le repère "body", est noté $\omega_{nb}^b = [p,q,r]^T$
+  projeté dans le repère "body", est noté $`\omega_{nb}^b = [p,q,r]^T`$
   et s'exprime en rad/s.
 - Les efforts appliqués au navire et projetés dans le repère "body" sont notés :
-  $f^b = [X,Y,Z]^T$. Ils s'expriment en N.
+  $`f^b = [X,Y,Z]^T`$. Ils s'expriment en N.
 - Les moments appliqués au navire et projetés dans le repère "body" sont notés :
-  $m^b = [K,M,N]^T$. Ils s'expriment en N.m.
+  $`m^b = [K,M,N]^T`$. Ils s'expriment en N.m.
 
 ## Définition des corps simulés
 
@@ -318,22 +292,22 @@ Chaque corps comprend :
 
  - un nom (section `name`)
  - éventuellement un maillage (section `mesh`)
- - la position du repère body par rapport au maillage (section
+ - la position du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) par rapport au maillage (section
   `position of body frame relative to mesh`)
  - ses conditions initiales (sections
    `initial position of body frame relative to NED` et
    `initial velocity of body frame relative to NED`)
- - des données définissant son comportement dynamique (section `dynamics`)
+ - des données nécessaires pour les calculs cinétiques (section `dynamics`)
  - la liste des efforts auxquels il est soumis (sections `external forces` et
    `controlled forces`).
- - de façon facultative, des états forçés.
+ - de façon facultative, des états forcés.
 
 ### Exemple complet
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 bodies: # All bodies have NED as parent frame
-  - name: Anthineas
-    mesh: anthineas.stl
+  - name: TestShip
+    mesh: test_ship.stl
     position of body frame relative to mesh:
         frame: mesh
         x: {value: 9.355, unit: m}
@@ -351,7 +325,7 @@ bodies: # All bodies have NED as parent frame
         theta: {value: -.0058, unit: rad}
         psi: {value: 0, unit: deg}
     initial velocity of body frame relative to NED:
-        frame: Anthineas
+        frame: TestShip
         u: {value: 0, unit: m/s}
         v: {value: 0, unit: m/s}
         w: {value: 0, unit: m/s}
@@ -364,21 +338,19 @@ bodies: # All bodies have NED as parent frame
             y: {value: 0, unit: m}
             z: {value: 1.418, unit: m}
         centre of inertia:
-            frame: Anthineas
+            frame: TestShip
             x: {value: 0.258, unit: m}
             y: {value: 0, unit: m}
             z: {value: 0.432, unit: m}
         mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
-        rigid body inertia matrix at the center of buoyancy projected in the body frame:
-            frame: Anthineas
+        rigid body inertia matrix at the center of gravity and projected in the body frame:
             row 1: [253310,0,0,0,0,0]
             row 2: [0,253310,0,0,0,0]
             row 3: [0,0,253310,0,0,0]
             row 4: [0,0,0,1.522e6,0,0]
             row 5: [0,0,0,0,8.279e6,0]
             row 6: [0,0,0,0,0,7.676e6]
-        added mass matrix at the center of buoyancy projected in the body frame:
-            frame: Anthineas
+        added mass matrix at the center of gravity and projected in the body frame:
             row 1: [3.519e4,0,0,0,0,0]
             row 2: [0,3.023e5,0,0,0,0]
             row 3: [0,0,1.980e5,0,0,0]
@@ -437,10 +409,10 @@ mesh: ../m.stl
 #### Passage du repère maillage au repère body
 
 L'origine du repère "body" (qui est le repère dans lequel est réalisé le bilan
-des efforts) est spécifiée par rapport au repère du maillage. En pratique, $x,y,z$
+des efforts) est spécifiée par rapport au repère du maillage. En pratique, $`x,y,z`$
 peuvent définir la position du centre de gravité dans le repère maillage et
-$\phi,\theta,\psi$ définissent la rotation permettant de passer du repère
-maillage au repère body (suivant la convention choisie dans la [section
+$`\phi,\theta,\psi`$ définissent la rotation permettant de passer du repère
+maillage au [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (suivant la convention choisie dans la [section
 `rotations`](#rotations)).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -463,9 +435,9 @@ de cinq sous-sections :
   [point de calcul des efforts hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique)
 - `centre of inertia` (si le repère "body" n'est pas au centre de masse)
 - `mass` contenant la masse du corps considéré
-- `rigid body inertia matrix at the center of buoyancy projected in the body
+- `rigid body inertia matrix at the center of gravity and projected in the body
   frame` définissant la matrice d'inertie
-- `added mass matrix at the center of buoyancy projected in the body frame`
+- `added mass matrix at the center of gravity and projected in the body frame`
   pour les masses ajoutées.
 
 #### Position du centre d'inertie
@@ -474,7 +446,7 @@ La section `centre of inertia` a l'allure suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 centre of inertia:
-    frame: Anthineas
+    frame: TestShip
     x: {value: 0, unit: m}
     y: {value: 0, unit: m}
     z: {value: 0, unit: m}
@@ -498,12 +470,15 @@ qui vaut 907.185 kg.
 
 #### Matrice d'inertie
 
+<comment>[JJM] Anthineas ? </comment>
+
+<comment>[JJM] Et toujours la même question : pourquoi la matrice d'inertie n'est-elle pas exprimée par rapport au CdG (son point d'expression naturel) ?  </comment>
+
 La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
-de repère (le champ `frame` est requis, et n'est pas utilisé).
+de repère.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-rigid body inertia matrix at the center of buoyancy projected in the body frame:
-    frame: Anthineas
+rigid body inertia matrix at the center of gravity and projected in the body frame:
     row 1: [253310,0,0,0,0,0]
     row 2: [0,253310,0,0,0,0]
     row 3: [0,0,253310,0,0,0]
@@ -512,13 +487,18 @@ rigid body inertia matrix at the center of buoyancy projected in the body frame:
     row 6: [0,0,0,0,0,7.676e6]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+Les calculs sont réalisés en supposant que les termes $`a_{ij}`$ de la matrice d'inertie sont en unité SI, c'est-à-dire:
+- en $`\texttt{kg}`$ pour les termes $`a_{ij}`$ avec $`1\leq i,j \leq 3`$,
+- en $`\texttt{kg}\times\texttt{m}^2`$ pour les termes $`a_{ij}`$ avec $`4\leq i,j \leq 6`$,
+- en $`\texttt{kg}\times\texttt{m}`$ pour les deux blocs 3x3 extra-diagonaux représentant les termes croisés de la matrice d'inertie.
+
 #### Inerties ajoutées
 
 La matrice de masse ajoutée est définie de la même façon :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-added mass matrix at the center of buoyancy projected in the body frame:
-    frame: Anthineas
+added mass matrix at the center of gravity and projected in the body frame:
     row 1: [3.519e4,0,0,0,0,0]
     row 2: [0,3.023e5,0,0,0,0]
     row 3: [0,0,1.980e5,0,0,0]
@@ -528,36 +508,40 @@ added mass matrix at the center of buoyancy projected in the body frame:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Elle figure dans la section `dynamics` et non dans la section `external forces`
-(bien qu'il s'agisse d'un modèle effort, proportionnel à l'accélération)
+(bien qu'il s'agisse d'un modèle d'effort, proportionnel à l'accélération)
 parce que ce modèle d'effort fait l'objet d'un traitement particulier : il
 figure dans le membre de gauche de l'équation fondamentale de la dynamique
-$$M\ddot{X} = \sum F_i$$ pour des raisons de stabilité numérique (l'effort
+
+```math
+M\ddot{X} = \sum F_i
+```
+ pour des raisons de stabilité numérique (l'effort
 dépend des accélérations qui doivent justement être calculées par la résolution
 de l'équation fondamentale de la dynamique).
 La matrice de masses ajoutées n'est cependant pas équivalente à une masse supplémentaire, car
 les termes de Coriolis et centripète qui correspondraient ne sont pas pris en compte.
 
-Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
-à partir d'un fichier de sortie AQUA+ (format HDB). Pour cela, on écrit (pour lire depuis le fichier
-`anthineas.hdb`) :
+Il est également possible d'extrapoler les masses ajoutées à pulsation infinie à
+partir d'un [fichier HDB](#fichiers-hdb). Pour cela, on écrit (pour lire depuis
+le fichier `test_ship.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-added mass matrix at the center of buoyancy projected in the body frame:
-    from hdb file: anthineas.hdb
+added mass matrix at the center of gravity and projected in the body frame:
+    from hdb file: test_ship.hdb
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dans ce cas, il ne faut pas spécifier les clefs `frame` et `row` (le programme
 lance une exception si on le fait).
-Comme le fichier STL, le chemin du fichier HDB est relatif à l'endroit d'où on
+Comme le fichier STL, le chemin du [fichier HDB](#fichiers-hdb) est relatif à l'endroit d'où on
 lance l'exécutable.
-La section correspondante dans le fichier HDB est `Added_mass_Radiation_Damping`.
+La section correspondante dans le [fichier HDB](#fichiers-hdb) est `Added_mass_Radiation_Damping`.
 La valeur utilisée est la matrice de masse ajoutée à la période minimale définie
-dans le HDB (aucune extrapolation n'est faite).
+dans le [fichier HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
 
 ### Forçage de degrés de liberté
 
 Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
-P, Q, R.
+P, Q, R. <comment>[JJM] pour tous les corps ? </comment>
 
 Pour forcer les degrés de liberté, on ajoute la section (facultative) suivante
 à la section `body` :
@@ -579,12 +563,13 @@ blocked dof:
 
 Soit les états sont donnés directement dans le fichier YAML, soit ils sont lus
 depuis un fichier CSV.
-- `name`: nom de l'état à forcer. u, v, w, p, q ou r.
+
+- `state`: nom de l'état à forcer. u, v, w, p, q ou r.
 
 Si les valeurs des états sont dans le YAML :
 
 - `value`: Valeur de l'état forcé pour chaque instant
-   (dans l'exemple ci-dessus, u=5 pour t $\geq$ 4.2).
+   (dans l'exemple ci-dessus, u=5 pour t $`\geq`$ 4.2).
 - `t`: instants auxquels est défini l'état
 - `interpolation`: type d'interpolation à réaliser. `piecewise constant`,
   `linear` ou `spline`.
@@ -605,38 +590,44 @@ Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
 l'effort permettant de conserver les forçages, en d'autres termes il est
 possible de récupérer
 
-$$(M+M_a)\dot{X_{\textrm{forced}}} - \sum F_i$$
+
+```math
+(M+M_a)\dot{X_{\textrm{blocked}}} - \sum F_i
+```
+
 
 Pour ce faire, on utilise dans la section 'output' les clefs suivantes (si le
-corps s'appelle 'Anthineas):
+corps s'appelle 'TestShip):
 
-- `Fx(blocked states,Anthineas,Anthineas)`
-- `Fy(blocked states,Anthineas,Anthineas)`
-- `Fz(blocked states,Anthineas,Anthineas)`
-- `Mx(blocked states,Anthineas,Anthineas)`
-- `My(blocked states,Anthineas,Anthineas)`
-- `Mz(blocked states,Anthineas,Anthineas)`
+- `Fx(blocked states,TestShip,TestShip)`
+- `Fy(blocked states,TestShip,TestShip)`
+- `Fz(blocked states,TestShip,TestShip)`
+- `Mx(blocked states,TestShip,TestShip)`
+- `My(blocked states,TestShip,TestShip)`
+- `Mz(blocked states,TestShip,TestShip)`
 
 Il est à noter que ces efforts sont exprimés dans le repère BODY.
 
 
-## Fichiers HDB d'AQUA+
+## Fichiers HDB issus d'un calcul fréquentiel
 
-Les fichiers HDB (Hydrodynamic DataBase) sont générés par les programmes AQUA+ et DIODORE. Ces fichiers
-peuvent être utilisés par X-DYN pour calculer :
+Le format HDB (Hydrodynamic DataBase) est le format standard du logiciel
+[Diodore](http://www.principia-group.com/blog/product/diodore/). Le logiciel
+AQUA+ (développé et utilisé en interne par l'Ecole Centrale de Nantes et SIREHNA, dont des parties ont été reprises dans logiciel [NEMOH](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-presentation-192863.kjsp)) dispose également d'une sortie permettant de créer un fichier HDB. Ces
+fichiers peuvent être utilisés par xdyn pour calculer :
 
 - les masses ajoutées (cf. paragraphe précédent)
 - les amortissements de radiation
-- les efforts de diffraction (RAO)
+- les efforts de diffraction, calculés à partir de fonctions de transfert ([RAO](#efforts-de-diffraction))
 
 ### Conventions des fichiers HDB
 
 Les fichiers HDB ne spécifient ni leur repère de calcul, ni les points
 d'expression. Plutôt que de laisser l'utilisateur la spécifier (avec les risques
 d'erreur que cela comporte) ou de la détecter automatiquement, on suppose pour
-X-DYN que les fichiers HDB ont été générés par AQUA+ (convention "z vers le
+xdyn que les fichiers HDB ont été générés avec les conventions du logiciel AQUA+ (convention "z vers le
 haut"). Le repère dans lequel sont exprimées toutes les matrices de tous les
-fichiers HDB lus par X-DYN est donc : x longitudinal, y vers babord et z vers le
+fichiers HDB lus par xdyn est donc : x longitudinal, y vers babord et z vers le
 haut.
 
 ![](images/convention_aqua+.svg)
@@ -644,32 +635,44 @@ haut.
 Les RAO dépendent des conventions (repère, origine des phases, provenance vs.
 propagation, signe des angles). Or la convention utilisée ne figure pas dans le
 format HDB. Comme les RAO que l'on utilise actuellement proviennent
-exculsivement du logiciel AQUA+, dans la version actuelle X-DYN suppose que la
+exclusivement du logiciel AQUA+, dans la version actuelle xdyn suppose que la
 convention utilisée est celle d'AQUA+.
 
-La différence entre la convention de X-DYN et celle d'AQUA+ est que l'axe $z$
-est ascendant pour AQUA+ et descendant pour X-DYN. L'angle de la houle
+La différence entre la convention de xdyn et celle d'AQUA+ est que l'axe $`z`$
+est ascendant pour AQUA+ et descendant pour xdyn. L'angle de la houle
 représente bien dans les deux cas une direction de propagation (et non de
-provenance). Le potentiel des vitesses de la houle est, dans X-DYN comme dans
+provenance). Le potentiel des vitesses de la houle est, dans xdyn comme dans
 AQUA+ :
 
-$$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+$`\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\cos(k\cdot(x\cdot
-\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)`$
 
 Toutes les données issues des fichiers HDB sont données en
 convention *z vers le haut* : par conséquent, il faut effectuer un changement de
-repère (rotation de $\pi$ autour de l'axe $X$) pour les mettre dans le repère
-d'X-DYN (*z vers le bas*). La matrice de changement de base est :
+repère (rotation de $`\pi`$ autour de l'axe $`X`$) pour les mettre dans le repère
+d'xdyn (*z vers le bas*). La matrice de changement de base est :
 
-$$R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]$$
+
+```math
+R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]
+```
+
 
 * Pour les vecteurs
-$$\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{X-DYN}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{X-DYN}}$$
+
+```math
+\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{xdyn}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{xdyn}}
+```
+
 * Pour les matrices (masses ajoutées, amortissements...)
-  Si $M=((m_{ij}))$ désigne une matrice exprimée dans le repère AQUA+ et $M_d$ la même matrice
-  exprimée dans le repère X-DYN, on a :
-  $$M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]$$
+  Si $`M=((m_{ij}))`$ désigne une matrice exprimée dans le repère AQUA+ et $`M_d`$ la même matrice
+  exprimée dans le repère xdyn, on a :
+
+```math
+M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]
+```
+
 
 
 Par conséquent, toutes les matrices lues depuis le fichier HDB (masses ajoutées
@@ -679,42 +682,55 @@ paragraphe suivant.
 
 ### Transport des matrices d'inertie et d'amortissement lues depuis le fichier HDB
 
-La formule de Huyguens permet de translater les inerties du centre de gravité vers
-un point quelconque. On s'intéresse ici au déplacement et changement de repère
+La formule de Huygens permet de translater les inerties du centre de gravité vers
+un point quelconque. On s'intéresse ici au déplacement et au changement de repère
 d'une matrice d'inertie généralisée (inerties propres et inerties ajoutées).
-Par rapport à la formule de Huyguens, la différence vient de ce que l'inertie
+Par rapport à la formule de Huygens, la différence vient de ce que l'inertie
 n'est pas identique sur tous les axes (mathématiquement, la matrice peut donc
 être n'importe quelle forme bilinéaire symétrique, positive et définie).
 
 Soit
 
-$$S(\lambda)=\left[\begin{array}{ccc} 0&-\lambda_3&\lambda_2\\\lambda_3&0&-\lambda_1\\-\lambda_2&\lambda_1&0\end{array}\right]_{\mathcal{R_0}}$$
 
-la matrice du produit vectoriel par $\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]$ : $\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a$
+```math
+S(\lambda)=\left[\begin{array}{ccc} 0&-\lambda_3&\lambda_2\\\lambda_3&0&-\lambda_1\\-\lambda_2&\lambda_1&0\end{array}\right]_{\mathcal{R_0}}
+```
+
+
+la matrice du produit vectoriel par $`\lambda^\top=[\lambda_1,\lambda_2,\lambda_3]`$ : $`\forall a\in\mathcal{R_0},\lambda\times a = S(\lambda) a`$
 
 Pour effectuer un transport d'une matrice 6x6 en coordonnées généralisées
-(masse, masse ajoutée ou amortissement) d'un point $A$ vers un point $B$, on
+(masse, masse ajoutée ou amortissement) d'un point $`A`$ vers un point $`B`$, on
 utilise :
 
-$$M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]$$
 
-Cete formule est une généralisation de la formule de Huyguens.
+```math
+M_B=\left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]^\top M_A \left[\begin{array}{cc}I&S(AB)\\0&I\end{array}\right]
+```
 
-En combinant avec un changement de base (de la base $a$ vers la base $b$) par
-la matrice de rotation ${}^a R_b$ de $b$ vers $a$ on obtient l'expression plus
+
+Cette formule est une généralisation de la formule de Huygens.
+
+En combinant avec un changement de base (de la base $`a`$ vers la base $`b`$) par
+la matrice de rotation $`{}^a R_b`$ de $`b`$ vers $`a`$ on obtient l'expression plus
 générale :
 
-$${}^bM_B=\left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]^\top {}^aM_A \left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]$$
+
+```math
+{}^bM_B=\left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]^\top {}^aM_A \left[\begin{array}{cc}{}^a R_b&S(AB){}^a R_b\\0&{}^a R_b\end{array}\right]
+```
+
 
 Cette formule permet d'effectuer à la fois le transport d'une matrice d'inertie
-généralisée 6x6 d'un point $A$ à un point $B$ et le changement de son repère
-d'expression de $a$ vers $b$.
+généralisée 6x6 d'un point $`A`$ à un point $`B`$ et le changement de son repère
+d'expression de $`a`$ vers $`b`$.
 
-Pour la conversion des fichiers HDB, on suppose qu'il n'y a pas de déplacement à faire
-et donc que la seule opération est le passage d'un repère z vers le haut (HDB) à un repère
-z vers le bas (X-DYN). La formule précédente se simplifie alors en :
+La matrice d'inertie est le plus souvent exprimée au centre de gravité. Cependant, rien ne le garantit dans les fichiers HDB. Dans le cas général, il faut donc effectuer un transport, mais on suppose dans xdyn qu'il n'y a pas de transport à faire
+et donc que la seule opération pour la conversion est le passage d'un repère z vers le haut (HDB) à un repère
+z vers le bas (xdyn). La formule précédente se simplifie alors en :
 
-$${}^bM_B=\left[
+```math
+{}^bM_B=\left[
 \begin{array}{cccccc}
 1&0&0&0&0&0\\
 0&-1&0&0&0&0\\
@@ -734,9 +750,12 @@ $${}^bM_B=\left[
 0&0&0&0&0&-1\\
  \end{array}
 \right]
-$$
+```
+
 En prenant la notation
-$$ M_{\mbox{HDB}} =
+
+```math
+M_{\mbox{HDB}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &   m_{12}  &  m_{13}  &  m_{14}  &  m_{15}  &  m_{16}\\
@@ -747,9 +766,12 @@ $$ M_{\mbox{HDB}} =
  m_{61} &   m_{62}  &  m_{63}  &  m_{64}  &  m_{65}  &  m_{66} \\
 \end{array}
 \right]
-$$
+```
+
 on obtient :
-$$ M_{\mbox{XDYN}} =
+
+```math
+M_{\mbox{xdyn}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &  -m_{12}  & -m_{13}  &  m_{14}  & -m_{15}  & -m_{16}\\
@@ -760,10 +782,12 @@ $$ M_{\mbox{XDYN}} =
 -m_{61} &   m_{62}  &  m_{63}  & -m_{64}  &  m_{65}  &  m_{66} \\
 \end{array}
 \right]
-$$
+```
 
 Pour les torseurs, on obtient le changement suivant :
-$$ \tau_{\mbox{HDB}} =
+
+```math
+\tau_{\mbox{HDB}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -774,9 +798,10 @@ M_Y\\
 M_Z\\
 \end{array}
 \right]
-$$
+```
 
-$$ \tau_{\mbox{XDYN}} =
+```math
+\tau_{\mbox{xdyn}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -787,16 +812,16 @@ M_X\\
 -M_Z\\
 \end{array}
 \right]
-$$
+```
 
 
 Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid body shift of rigid body spatial inertia
 
 ### Structure des fichiers HDB
 
-Les fichiers HDB sont des sorties générées par un code un Fortran 77. Aucune
-spécification formelle de ce format n'existe. Pour pouvoir les importer dans
-X-DYN, leur grammaire EBNF a été déduite de l'analyse de plusieurs fichiers
+Les fichiers HDB sont des sorties générées par un code Fortran 77. Aucune
+spécification formelle de ce format n'a été trouvée. Pour pouvoir les importer dans
+xdyn, leur grammaire EBNF a été déduite de l'analyse de plusieurs fichiers
 (reverse-engineering). Cette grammaire, qui permet de parser tous les fichiers
 HDB qui nous ont été fournis jusqu'ici, peut être représentée comme suit (sans
 garantie d'exhaustivité) :
@@ -832,7 +857,7 @@ extended-char                   = character | "-" | "+"
 Les fichiers HDB sont donc constituées d'une liste d'éléments, ces éléments
 étant pouvant être de type `string-key`, `value-key`, `vector-section`,
 `matrix-section`, `list-of-matrix-sections` ou
-`list-of-matrix-sections-with-id`. X-DYN ne tient pas compte de l'ordre dans
+`list-of-matrix-sections-with-id`. xdyn ne tient pas compte de l'ordre dans
 lequel sont ces éléments (mais aucune garantie ne peut être fournie pour
 d'éventuels autres outils utilisant les HDB).
 
@@ -887,23 +912,23 @@ d'éventuels autres outils utilisant les HDB).
 
 ~~~~~~~~~~~~~~~~~~~~~ {.hdb}
 [FROUDE-KRYLOV_FORCES_AND_MOMENTS]
-[INCIDENCE_EFM_MOD_001]   0.000000    
+[INCIDENCE_EFM_MOD_001]   0.000000
   4.00  6.452085E+04  0.000000E+00  3.775068E+05  0.000000E+00  2.630894E+07  0.000000E+00
  64.00  8.296234E+04  0.000000E+00  2.098381E+07  0.000000E+00  1.280202E+08  0.000000E+00
 125.00  2.179682E+04  0.000000E+00  2.105635E+07  0.000000E+00  1.258710E+08  0.000000E+00
-[INCIDENCE_EFM_MOD_001]   30.00000    
+[INCIDENCE_EFM_MOD_001]   30.00000
   4.00  5.988292E+04  3.453055E+04  5.220861E+05  6.375514E+05  2.533077E+07  1.149621E+06
  64.00  7.185571E+04  4.148640E+04  2.098683E+07  7.927488E+04  1.274491E+08  3.394846E+04
 125.00  1.887675E+04  1.089865E+04  2.105658E+07  2.081770E+04  1.258309E+08  2.938749E+03
-[INCIDENCE_EFM_PH_001]   0.000000    
+[INCIDENCE_EFM_PH_001]   0.000000
   4.00  5.079494E-01  1.570796E+00  1.171722E+00  1.570796E+00  1.426003E+00  1.570796E+00
  64.00 -3.141362E+00  1.570796E+00 -1.576680E+00  1.570796E+00 -1.768797E+00  1.570796E+00
 125.00 -3.141476E+00  1.570796E+00 -1.572334E+00  1.570796E+00 -1.623406E+00  1.570796E+00
 ~~~~~~~~~~~~~~~~~~~~~
 
-### Sections utilisées par X-DYN
+### Sections utilisées par xdyn
 
-Les sections du HDB actuellement utilisées par X-DYN sont :
+Les sections du HDB actuellement utilisées par xdyn sont :
 
 - `Added_mass_Radiation_Damping` pour les amortissements de radiation et les
   matrices de masses ajoutées,
@@ -919,11 +944,11 @@ sont calculés dans un repère appelé **repère de calcul hydrodynamique**, qui
 est un repère translaté par rapport au repère body. Le centre de ce repère est
 un point défini (dans le repère body) de la façon suivante :
 
-- Son abscisse $x$ est celle du centre de la surface résultant de la projection
-du maillage sur le plan $(x,z)$
-- Son ordonnée $y$ vaut zéro
-- Son altitude $z$ est celle du centre de la surface résultant de la projection
-du maillage sur le plan $(x,y)$
+- Son abscisse $`x`$ est celle du centre de la surface résultant de la projection
+du maillage sur le plan $`(x,z)`$
+- Son ordonnée $`y`$ vaut zéro
+- Son altitude $`z`$ est celle du centre de la surface résultant de la projection
+du maillage sur le plan $`(x,y)`$
 
 Ce point est, en général, distinct du centre de gravité et du centre de volume.
 Il est défini dans la section `dynamics/hydrodynamic forces calculation point
@@ -937,17 +962,17 @@ hydrodynamic forces calculation point in body frame:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-On note ${}^{\textrm{local}}T_{\textrm{body}}$ la transformation permettant de
-convertir des coordonnées dans le repère body en coordonnées du même point
+On note $`{}^{\textrm{local}}T_{\textrm{body}}`$ la transformation permettant de
+convertir des coordonnées dans le [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) en coordonnées du même point
 exprimées dans le repère de calcul hydrodynamique.
-${}^{\textrm{local}}T_{\textrm{NED}}$ est celle permettant de convertir des
+$`{}^{\textrm{local}}T_{\textrm{NED}}`$ est celle permettant de convertir des
 coordonnées dans le repère NED en coordonnées du même point exprimées dans le
 repère de calcul hydrodynamique.
 
 Il convient de distinguer ce repère de celui utilisé dans la base de données
-hydrodynamiques (fichiers HDB de Diodore), utilisé pour l'expression des
-matrices d'amortissement de radiation, les RAO d'effort (diffraction) et les
-masses ajoutées.
+hydrodynamiques ([fichiers HDB](#fichiers-hdb)), utilisé pour l'expression des
+matrices d'amortissement de radiation, les RAO d'effort (pour le calcul des
+efforts de diffraction) et les masses ajoutées.
 
 
 ## Rotations et constantes environnementales
@@ -955,7 +980,7 @@ masses ajoutées.
 ### Rotations
 
 La convention de rotation permet de retrouver la matrice de rotation d'un
-repère par rapport à un autre, étant donné un triplet $(\phi, \theta, \psi)$.
+repère par rapport à un autre, étant donné un triplet $`(\phi, \theta, \psi)`$.
 La convention utilisée est décrite dans la section `rotations` :
 
 ~~~~~~~~~~~~~~ {.yaml}
@@ -964,9 +989,9 @@ rotations convention: [psi,theta',phi'']
 
 Cette ligne s'interprète de la façon suivante : étant donné un triplet $(\phi,
 \theta, \psi)$, on construit les matrices de rotation en effectuant d'abord une
-rotation d'angle $\psi$ autour de l'axe Z, ensuite une rotation d'angle
-$\theta$ autour de l'axe Y du repère précédemment transformé, puis une rotation
-d'angle $\phi$ autour de l'axe X du repère ainsi obtenu.
+rotation d'angle $`\psi`$ autour de l'axe Z, ensuite une rotation d'angle
+$`\theta`$ autour de l'axe Y du repère précédemment transformé, puis une rotation
+d'angle $`\phi`$ autour de l'axe X du repère ainsi obtenu.
 
 Si l'on avait noté :
 
@@ -974,8 +999,8 @@ Si l'on avait noté :
 rotations convention: [z,y',x'']
 ~~~~~~~~~~~~~~
 
-on aurait d'abord une rotation d'angle $\phi$ autour de l'axe Z, puis une
-rotation d'angle $\theta$ autour du nouvel axe Y, puis une rotation $\psi$
+on aurait d'abord une rotation d'angle $`\phi`$ autour de l'axe Z, puis une
+rotation d'angle $`\theta`$ autour du nouvel axe Y, puis une rotation $`\psi`$
 autour du nouvel axe X.
 
 Des apostrophes sont utilisées pour indiquer des compositions de rotations
@@ -990,7 +1015,7 @@ La liste `rotations convention` comporte toujours trois éléments. Le deuxième
 deux autres, soit égal au premier.
 
 La convention des angles aéronautiques, fréquemment (et abusivement) dénotée
-"angles d'Euler" (lacet $\psi$, tangage $\theta$, roulis $\phi$), se définit de
+"angles d'Euler" (lacet $`\psi`$, tangage $`\theta`$, roulis $`\phi`$), se définit de
 la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -999,7 +1024,7 @@ rotations convention: [psi, theta', phi'']
 
 
 La convention d'orientation utilisée dans le logiciel
-[Paraview](http://www.paraview.org) est donnée par :
+[ParaView](http://www.paraview.org) est donnée par :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 rotations convention: [psi,phi',theta'']
@@ -1008,9 +1033,9 @@ rotations convention: [psi,phi',theta'']
 Pour plus de détails sur les conventions d'angles et d'axes, se référer à [la
 documentation détaillée](#conventions-dorientations).
 
-Une attitude sera décrite de la manière suivante, avec les champs
+La définition d'un repère dans xdyn s'effectue à partir d'un repère connu (NED ou body). On définit le changement de coordonnées pour passer d'un repère connu à un nouveau repère de la manière suivante dans le fichier YAML :
 
-- `frame` le nom du repère dans laquelle l'attitude est exprimée,
+- `frame` le nom du repère connu,
 - `x` ,`y` ,`z`: le triplet de position où chaque position est
    définie par le dictionnaire des clés `value` et `unit`,
 - `phi` ,`theta` ,`psi`, le triplet d'orientation dont l'interprétation en
@@ -1026,10 +1051,12 @@ Une attitude sera décrite de la manière suivante, avec les champs
     psi: {value: 0, unit: rad}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Cette description est en particulier utilisée pour définir le changement de coordonnées entre le repère du maillage et le repère du corps (par la clef [`position of body frame relative to mesh`](#passage-du-rep%C3%A8re-maillage-au-rep%C3%A8re-body)) et la position initiale du corps à simuler (clef [`initial position of body frame relative to NED`](#d%C3%A9finition-des-corps-simul%C3%A9s)).
+
 ## Convention de houle {#section_Direction_houle}
 
-X-DYN utilise la convention $Z$ vers le bas pour l'amplitude.
-L'azimuth ou la direction de houle que l'on note $\gamma$ représente la
+xdyn utilise la convention $`Z`$ vers le bas pour l'amplitude.
+L'azimuth ou la direction de houle que l'on note $`\gamma`$ représente la
 direction de propagation de la houle.
 
 Ainsi une direction nulle indique une
@@ -1040,11 +1067,13 @@ Une direction de 90° représente une propagation de l'ouest vers l'est.
 
 Les différentes positions du navire par rapport à la houle sont décrites comme suit :
 
-- $\gamma - \psi = 0^\circ$ : navire dos à la houle, houle de l'arrière
-- $0^\circ < \gamma - \psi < 90^\circ$ : Houle venant de bâbord arrière
-- $\gamma - \psi = 90^\circ$ : Houle venant de bâbord
-- $90^\circ < \gamma - \psi < 180^\circ$ : Houle venant de tribord arrière
-- $\gamma - \psi = 180^\circ$: navire cap à la houle, houle de l'avant
-- $180^\circ < \gamma - \psi < 270^\circ$ : Houle venant de tribord avant
-- $\gamma - \psi = 270^\circ$ : Houle venant de tribord
-- $270^\circ < \gamma - \psi < 360^\circ$ : Houle venant de bâbord avant
+- $`\gamma - \psi = 0^\circ`$ : navire dos à la houle, houle de l'arrière
+- $`0^\circ < \gamma - \psi < 90^\circ`$ : Houle venant de bâbord arrière
+- $`\gamma - \psi = 90^\circ`$ : Houle venant de bâbord
+- $`90^\circ < \gamma - \psi < 180^\circ`$ : Houle venant de tribord arrière
+- $`\gamma - \psi = 180^\circ`$: navire cap à la houle, houle de l'avant
+- $`180^\circ < \gamma - \psi < 270^\circ`$ : Houle venant de tribord avant
+- $`\gamma - \psi = 270^\circ`$ : Houle venant de tribord
+- $`270^\circ < \gamma - \psi < 360^\circ`$ : Houle venant de bâbord avant
+
+<comment>[JJM] Relu </comment>

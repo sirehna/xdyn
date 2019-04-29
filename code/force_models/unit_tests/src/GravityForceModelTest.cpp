@@ -43,7 +43,7 @@ TEST_F(GravityForceModelTest, example)
     GravityForceModel F(BODY, env);
     ASSERT_EQ("gravity", F.model_name());
     BodyStates states = get_body(BODY)->get_states();
-    states.m = 100;
+    states.solid_body_inertia->operator()(2,2) = 100;
 
     const ssc::kinematics::Wrench f = F(states, a.random<double>());
 //! [GravityForceModelTest example]
@@ -96,7 +96,7 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     env.k->add(Transform(rot, "NED", BODY));
     GravityForceModel F(BODY, env);
     BodyStates states = get_body(BODY)->get_states();
-    states.m = 100;
+    states.solid_body_inertia->operator()(2,2) = 100;
 
     const Wrench f = F(states,a.random<double>());
     ASSERT_EQ(BODY, f.get_frame());
@@ -128,7 +128,7 @@ TEST_F(GravityForceModelTest, potential_energy)
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
     GravityForceModel F(BODY, env);
     BodyStates states = get_body(BODY)->get_states();
-    states.m = 100;
+    states.solid_body_inertia->operator()(2,2) = 100;
 
     ASSERT_DOUBLE_EQ(0, F.potential_energy(states, x));
     x[2] = 123.;

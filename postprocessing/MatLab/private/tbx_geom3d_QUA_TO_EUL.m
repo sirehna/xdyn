@@ -54,11 +54,6 @@ function varargout = tbx_geom3d_QUA_TO_EUL(q0,q1,q2,q3,order,epsilon)
 % SIREHNA
 % NC
 % 24/03/04
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_geom3d_QUA_TO_EUL.m 937 2013-04-30 09:56:50Z gj $
-% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/geom3D/tbx_geom3d_QUA_TO_EUL.m $
-%==========================================================================
 if nargin == 1
     qua = q0;
     order = 321;

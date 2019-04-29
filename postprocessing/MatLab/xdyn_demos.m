@@ -23,7 +23,7 @@ function xdyn_demos(demosId)
 %   xdyn_demos({'tutorial_stable_cube_test', 'tutorial_05_froude_krylov'})
 
 if nargin == 0
-    demosId = 1:11;
+    demosId = 1:10;
 end
 if ischar(demosId)
     demosId = {demosId};
@@ -55,8 +55,6 @@ for i = 1:numel(demosId)
             tutorial_06_propulsion;
         case {10, 'tutorial_07_radiation_damping'}
             tutorial_07_radiation_damping;
-        case {11, 'tutorial_08_diffraction'}
-            tutorial_08_diffraction;
         otherwise
             error
     end
@@ -225,19 +223,3 @@ param.outputFilename    = 'tutorial_07_radiation_damping.h5';
 importResults = true;
 verbose = true;
 xdyn_postProcess(xdyn_run(param, importResults, verbose), true);
-
-function tutorial_08_diffraction
-disp('');
-disp('Tutorial 08 diffraction');
-disp('');
-param = struct;
-param.solver            = 'rk4';
-param.dt                = 0.01;
-param.tstart            = 0.0;
-param.tend              = 10.0;
-param.yaml              = '../demos/tutorial_08_diffraction.yml';
-param.outputFilename    = 'tutorial_08_diffraction.h5';
-importResults = true;
-verbose = true;
-xdyn_postProcess(xdyn_run(param, importResults, verbose), true);
-

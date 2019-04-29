@@ -22,7 +22,7 @@ machine et par le temps disponible).
 
 ### Écriture du fichier de configuration du simulateur
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_03_load_yaml'
 yaml_data = load_yaml('tutorial_03_waves.yml')
 ```
 
@@ -30,9 +30,9 @@ La section `environment models` est nettement plus fournie que pour les
 tutoriels précédents.
 
 On commence par définir la discrétisation. Actuellement, le nombre de
-pulsations est égal au nombre de directions :
+pulsations est égal au nombre de directions : il s'agit d'une limitation du code.
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_03_print_wave_discretization'
 print_yaml(yaml_data, 'environment models/0/discretization')
 ```
 
@@ -48,32 +48,32 @@ de l'énergie totale, les autres composantes n'étant pas retenues.
 
 Le premier spectre est défini de la façon suivante :
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_03_print_first_spectrum'
 print_yaml(yaml_data, 'environment models/0/spectra/0')
 ```
 
 Pour le second spectre, on écrit :
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_03_print_second_spectrum'
 print_yaml(yaml_data, 'environment models/0/spectra/1')
 ```
 
 On définit les sorties de la façon suivante :
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_03_print_outputs_section'
 print_yaml(yaml_data, 'environment models/0/output')
 ```
 
 En définitive, l'environnement est défini de la façon suivante :
 
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_03_print_environment_yaml'
 print_yaml(yaml_data, 'environment models')
 ```
 
 Comme on ne simule pas de corps, le fichier d'entrée se réduit à :
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_03_print_full_yaml'
 print_yaml_file('tutorial_03_waves.yml')
 ```
 
@@ -81,7 +81,7 @@ print_yaml_file('tutorial_03_waves.yml')
 
 La simulation peut maintenant être lancée comme suit :
 
-```python echo=False, results='raw'
+```python echo=False, results='raw', name='tutorial_03_launch_simulation'
 execCommand('xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5')
 ```
 
@@ -99,9 +99,4 @@ Dans le groupe "outputs", on trouve un groupe "waves" qui contient quatre jeux d
 
 La description de ce fichier est faite [dans la documentation des fichiers YAML](#sorties).
 
-On peut aussi simuler les vagues dans un autre référentiel que le référentiel
-NED (par exemple le référentiel associé à un solide) et l'on obtient alors des
-coordonnées changeantes au cours du temps (et donc des valeurs `x` et `y` à
-chaque pas de temps). Pour cela, il faut bien évidemment définir un solide à
-simuler.
-
+On peut obtenir les élévations dans n'importe quel repère de xdyn (NED ou lié à un solide). Si le repère est lié à un solide on obtient des coordonnées x et y changeantes au cours du temps.

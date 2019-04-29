@@ -23,11 +23,8 @@ function wavesElevation = tbx_wave_importWaveElevationFromHdf5(hdf5File, hdf5Gro
 %
 % See also tbx_wave_exportWaveElevationToHdf5, tbx_wave_animate
 %
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_wave_importWaveElevationFromHdf5.m 1384 2015-07-20 08:08:25Z gj $
-% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/wave/tbx_wave_importWaveElevationFromHdf5.m $
-%==========================================================================
+% SIREHNA
+% GJ
 if nargin < 3
     castToDouble = false;
     if nargin < 2

@@ -35,4 +35,3 @@ documentation d'implémentation décrivant l'architecture logicielle et
 détaillant les API pour faciliter la maintenance du code (correctifs et
 ajouts de fonctionnalités).
 
-

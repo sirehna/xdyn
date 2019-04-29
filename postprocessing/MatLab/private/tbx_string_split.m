@@ -24,11 +24,6 @@ function str = tbx_string_split(str,delimiters)
 %
 % SIREHNA
 % GJ
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_string_split.m 940 2013-05-06 16:24:36Z gj $
-% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/string/tbx_string_split.m $
-%==========================================================================
 if nargin == 1
     delimiters = ',;';
 end

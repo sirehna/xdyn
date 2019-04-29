@@ -1,24 +1,20 @@
 # Modèles d'environnement
 
-La section `environment` définit les modèles d'environnement pour la simulation
-à effectuer. Elle permet de prendre en compte des modèles de houle et de vent.
-Elle peut être vide (#tutoriel-1-balle-en-chute-libre)).
+Les modèles d'environnement sont les modèles de houle (et, à terme, de vent, de courant...) utilisés par xdyn. Actuellement, seuls des modèles de houle sont implémentés. Leur paramétrisation figure dans la section `environment` du fichier YAML d'entrée. Elle peut être vide (par exemple, lors de la simulation simple du [tutoriel 1](#tutoriel-1-balle-en-chute-libre)).
 
 Les modèles de houle interviennent pour le calcul des [efforts
-hydrostatiques](#efforts-hydrostatiques-non-lin%C3%A9aires)
-(par truchement de l'élévation de la surface libre),
-d'une part, et les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation)
-d'autre part (par le biais de la pression dynamique).
-
+hydrostatiques non-linéaires](#efforts-hydrostatiques-non-lin%C3%A9aires)
+(par le truchement de l'élévation de la surface libre), les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation)
+(par le biais de la pression dynamique), le calcul des efforts de diffraction (via le fréquentiel)
+et le modèle de safran (prise en compte des vitesses orbitales).
 
 ## Constantes environnementales
 
-L'accélération de la pesanteur (dénotée par `g`) et la densité volumique de
-l'eau (`rho`) sont des
-constantes qui interviennent dans plusieurs modèles physiques. Par conséquent,
-plutôt que d'être renseignées au niveau de chaque modèle et risquer ainsi des
-incohérences, elles figurent dans la section `environmental constants` qui a la
-forme suivante :
+L'accélération de la pesanteur (dénotée par `g`), la densité volumique de l'eau
+(`rho`) et sa viscosité `nu` sont des constantes qui interviennent dans
+plusieurs modèles physiques. Par conséquent, plutôt que d'être renseignées au
+niveau de chaque modèle et risquer ainsi des incohérences, elles figurent dans
+la section `environmental constants` qui a la forme suivante :
 
 ~~~~~~~~~~~~~~ {.yaml}
 environmental constants:
@@ -27,10 +23,18 @@ environmental constants:
     nu: {value: 1.18e-6, unit: m^2/s}
 ~~~~~~~~~~~~~~
 
+Ces trois constantes sont l'ensemble de toutes les constantes environnementales
+actuellement utilisées par les modèles d'xdyn.
+
 Comme expliqué dans [une section
 précédente](#remarques-sur-les-unit%C3%A9s), les
 dimensions physiques ne sont pas vérifiées et simplement converties en unités
-du système international.
+du système international. Si xdyn rencontre une unité inconnue, il produit un
+message d'erreur du type :
+
+~~~~~{.bash}
+unknow unit : hhm
+~~~~~
 
 
 ## Simulation sans houle
@@ -59,174 +63,218 @@ on commence par le cas d'une houle monochromatique et monodirectionnelle.
 
 ### Expression du potentiel de vitesse de la houle
 
-Soit $V(x,y,z,t)=(u,v,w)$ la vitesse du fluide au point de coordonnées $(x,y,z)$
-(dans le repère NED) et à l'instant $t$.
+Soit $`V(x,y,z,t)=(u,v,w)`$ la vitesse du fluide au point de coordonnées $`(x,y,z)`$
+(dans le repère NED) et à l'instant $`t`$.
 
 On suppose l'eau non visqueuse, incompressible, homogène et isotrope et l'on
 considère un écoulement irrotationnel.
 Supposer l'écoulement irrotationnel implique (d'après le lemme
 de Poincaré) que la vitesse dérive d'un potentiel que l'on appelle
-$\phi:(x,y,z,t)\mapsto\phi(x,y,z,t)$. Par définition, la vitesse en tout
+$`\phi:(x,y,z,t)\mapsto\phi(x,y,z,t)`$. Par définition, la vitesse en tout
 point de l'écoulement est donc donnée par :
 
-$$V(x,y,z,t) = \textrm{grad}{\phi(x,y,z,t)}$$
 
-La pression $p$ vérifie l'équation de Bernoulli :
+```math
+V(x,y,z,t) = \textrm{grad}{\phi(x,y,z,t)}
+```
 
-$$p + \rho g z -\rho\frac{\partial\phi}{\partial t} +
-\frac{\rho}{2} V\cdot V = C(t)$$
+La pression $`p`$ vérifie l'équation de Bernoulli :
 
-où $C:t\mapsto C(t)$ est une fonction du temps arbitraire, donc l'équation est
-en particulier valable pour $C(t)=p_0$ (pression atmosphérique à la surface) :
+```math
+p + \rho g z -\rho\frac{\partial\phi}{\partial t} +
+\frac{\rho}{2} V\cdot V = C(t)
+```
 
-$$p_0 + \rho g z -\rho\frac{\partial\phi}{\partial t} +
-\frac{\rho}{2} V\cdot V = p_0$$
+où $`C:t\mapsto C(t)`$ est une fonction du temps arbitraire, donc l'équation est
+en particulier valable pour $`C(t)=p_0`$ (pression atmosphérique à la surface) :
+
+```math
+p_0 + \rho g z -\rho\frac{\partial\phi}{\partial t} +
+\frac{\rho}{2} V\cdot V = p_0
+```
 
 soit
 
-$$g z -\frac{\partial\phi}{\partial t} + \frac{1}{2} V\cdot V = 0$$
+```math
+g z -\frac{\partial\phi}{\partial t} + \frac{1}{2} V\cdot V = 0
+```
 
-Le terme $\rho g z$ représente la pression hydrostatique et le terme
-$-\rho\frac{\partial\phi}{\partial t}$ est la pression dynamique.
+Le terme $`\rho g z`$ représente la pression hydrostatique et le terme
+$`-\rho\frac{\partial\phi}{\partial t}`$ est la pression dynamique.
 
 Il s'agit de la première condition de surface libre.
 
-On peut définir la fonction $F(x,y,z,t)=z-\eta(x,y,t)$
+On peut définir la fonction $`F(x,y,z,t)=z-\eta(x,y,t)`$
 
-Pour une particule sur la surface libre, $F(x,y,z,t)=0$ ce qui implique que sa
+Pour une particule sur la surface libre, $`F(x,y,z,t)=0`$ ce qui implique que sa
 dérivée particulaire est nulle :
 
-$$\frac{DF}{Dt} = \frac{\partial F}{\partial t} + V\cdot \nabla F = 0$$
+```math
+\frac{DF}{Dt} = \frac{\partial F}{\partial t} + V\cdot \nabla F = 0
+```
 
 soit
 
 $\frac{\partial\eta}{\partial t} + \frac{\phi}{\partial x}\frac{\partial
 \eta}{\partial x} + \frac{\phi}{\partial x}\frac{\partial\eta}{\partial y} -
-\frac{\partial\phi}{\partial z} = 0$ sur $z=\eta(x,y,t)$.
+\frac{\partial\phi}{\partial z} = 0$ sur $`z=\eta(x,y,t)`$.
 
 C'est la deuxième condition de surface libre.
 
 En linéarisant ces deux conditions de surface libre, on obtient :
 
-$$\frac{\partial \eta}{\partial t} = \frac{\partial\phi}{\partial z}$$
-$$g\eta - \frac{\partial\phi}{\partial t} = 0$$
+```math
+\frac{\partial \eta}{\partial t} = \frac{\partial\phi}{\partial z}
+```
 
-Par ailleurs, l'eau étant supposée incompressible, $$\nabla\cdot V=
-\frac{\partial^2\phi}{\partial x^2} +  \frac{\partial^2\phi}{\partial y^2} +
-\frac{\partial^2\phi}{\partial z^2} = 0$$
+```math
+g\eta - \frac{\partial\phi}{\partial t} = 0
+```
+
+Par ailleurs, l'eau étant supposée incompressible, $`\nabla\cdot V=
+\frac{\partial^2\phi}{\partial x^2} + \frac{\partial^2\phi}{\partial y^2} +
+\frac{\partial^2\phi}{\partial z^2} = 0`$
 
 Il s'agit d'une équation de Laplace dont la solution s'obtient par la méthode de
 séparation des variables. Plusieurs potentiels peuvent être solution. Par exemple :
 
-- $$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+- $`\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\cos(k\cdot(x\cdot
-\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
-- $$\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)`$
+- $`\phi(x,y,z,t) = \frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\sin(k\cdot(x\cdot
-\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)`$
 
 Ici, nous choisissons :
 
-$$\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
+```math
+\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k\cdot h)}\cos(k\cdot(x\cdot
-\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)$$
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega\cdot t+\phi)
+```
 
 qui est le potentiel utilisé par le logiciel AQUA+.
 
-- $h$ est la profondeur du fluide (hauteur du sol à la surface libre),
-- $\eta_a$ est l'amplitude de la houle (en m),
-- $x,y,z$ sont les coordonnées du point considéré, exprimées dans le repère NED,
-- $k$ est le nombre d'onde, traduisant la périodicité spatiale.
+- $`h`$ est la profondeur du fluide (hauteur du sol à la surface libre),
+- $`\eta_a`$ est l'amplitude de la houle (en m),
+- $`x,y,z`$ sont les coordonnées du point considéré, exprimées dans le repère NED,
+- $`k`$ est le nombre d'onde, traduisant la périodicité spatiale.
 
 ### Relation entre le nombre d'onde et la pulsation
 
-Il existe une relation entre $k$ et $\omega$, appelée relation de dispersion, et qui s'écrit :
+Il existe une relation entre $`k`$ et $`\omega`$, appelée relation de dispersion, et qui s'écrit :
 
-$$\omega^2 = g\cdot k \cdot \tanh(k\cdot h)$$
+```math
+\omega^2 = g\cdot k \cdot \tanh(k\cdot h)
+```
 
-où $h$ désigne la profondeur d'eau et $g$ l'accélération de la pesanteur.
+où $`h`$ désigne la profondeur d'eau et $`g`$ l'accélération de la pesanteur.
 
-En profondeur infinie ($k\cdot h > 3$), cette relation tend vers :
+En profondeur infinie ($`k\cdot h > 3`$), cette relation tend vers :
 
-$$\omega^2 \sim g\cdot k$$
+
+```math
+\omega^2 \sim g\cdot k
+```
 
 ### Élévation de la houle
 
 L'élévation de la houle découle de la deuxième condition de surface libre :
 
-$$\eta(x,y,t) = +\frac{1}{g} \frac{\partial\phi(x,y,z=0,t)}{\partial t}
+$`\eta(x,y,t) = +\frac{1}{g} \frac{\partial\phi(x,y,z=0,t)}{\partial t}
 =-\sum_{i=1}^{nfreq} A(\omega_i) \sin(k_i\cdot(x\cdot \cos(\gamma)+
-y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
+y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})`$
 
-où $\gamma$ désigne la direction de provenance de la houle, définie à la section
+où $`\gamma`$ désigne la direction de provenance de la houle, définie à la section
 [convention de houle](#section_Direction_houle).
 
-L'élévation $\eta$ de la houle en un point $(x,y)$ est un signal temporel
-$\eta(t)$. Par définition du plan $z=0$ (élévation moyenne de la houle), ce signal $\eta$ est centré.
-On le suppose également stationnaire, ce qui implique que sa fonction d'auto-corrélation $R$ ne dépend que de $\tau$:
+L'élévation $`\eta`$ de la houle en un point $`(x,y)`$ est un signal temporel
+$`\eta(t)`$. Par définition du plan $`z=0`$ (élévation moyenne de la houle), ce signal $`\eta`$ est centré.
+On le suppose également stationnaire, ce qui implique que sa fonction d'auto-corrélation $`R`$ ne dépend que de $`\tau`$:
 
-$$R(\tau)=\mathbf{E} (\eta(t)\eta(t+\tau))$$
+```math
+R(\tau)=\mathbf{E} (\eta(t)\eta(t+\tau))
+```
 
-La densité spectrale de puissance $G$ de $\eta$ est égale à la transformée de
-Fourier de sa fonction d'auto-corrélation $R$. Comme $R$ est paire et réelle,
-$G$ aussi et on ne considère usuellement que la partie positive (one-sided) en
-définissant la densité spectrale $S$ telle que :
+La densité spectrale de puissance $`G`$ de $`\eta`$ est égale à la transformée de
+Fourier de sa fonction d'auto-corrélation $`R`$. Comme $`R`$ est paire et réelle,
+$`G`$ aussi et on ne considère usuellement que la partie positive (one-sided) en
+définissant la densité spectrale $`S`$ telle que :
 
-$$S(\omega)=\left\{\begin{array}{cc}2G(\omega),&\omega\geq 0\\0,&\omega<0\end{array}\right.$$
+```math
+S(\omega)=\left\{\begin{array}{cc}2G(\omega),&\omega\geq 0\\0,&\omega<0\end{array}\right.
+```
 
 On a :
 
-$$R(\tau) = \frac{1}{2}  \sum_{i=1}^{nfreq} A(\omega_i)^2 \cos(\omega_i \tau)$$
+```math
+R(\tau) = \frac{1}{2}  \sum_{i=1}^{nfreq} A(\omega_i)^2 \cos(\omega_i \tau)
+```
 
 or on a également :
 
-$$R(\tau) = \int_0^\infty S(\omega) \cos(\omega\tau)d\omega$$
+```math
+R(\tau) = \int_0^\infty S(\omega) \cos(\omega\tau)d\omega
+```
 
 d'où, par identification :
 
-$$A(\omega_i)^2=2 S(\omega_i)d\omega_i$$
+```math
+A(\omega_i)^2=2 S(\omega_i)d\omega_i
+```
 
 On peut généraliser cette formulation en faisant intervenir l'étalement
-directionnel $D(\gamma)$ de la houle :
+directionnel $`D(\gamma)`$ de la houle :
 
-$$A(\omega,\gamma)^2 = 2 S(\omega)d\omega D(\gamma) d\gamma$$
+```math
+A(\omega,\gamma)^2 = 2 S(\omega)d\omega D(\gamma) d\gamma
+```
 
 On obtient, en définitive :
 
-$$\eta(x,y,t) = -\sum_{i=1}^{nfreq} \sqrt{2 S(\omega_i)d\omega D(\gamma) d\gamma} \sin(k_i\cdot(x\cdot \cos(\gamma)+
-y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
+```math
+\eta(x,y,t) = -\sum_{i=1}^{nfreq} \sqrt{2 S(\omega_i)d\omega D(\gamma) d\gamma} \sin(k_i\cdot(x\cdot \cos(\gamma)+
+y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})
+```
 
 ### Pression dynamique
 
 L'expression de la pression dynamique (champs de pression de la houle
 incidente), utilisée par le modèle de
 [Froude-Krylov](#calcul-des-efforts-dexcitation), est définie comme
-la pression totale moins la pression hydrostatique $\rho g z$ et son
+la pression totale moins la pression hydrostatique $`\rho g z`$ et son
 expression se déduit de la première condition de surface libre linéarisée :
 
-$$p_{\textrm{dyn}} = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}$$
+```math
+p_{\textrm{dyn}} = -\rho \frac{\partial \Phi(x,y,z,t)}{\partial t}
+```
 
 soit
 
-$$p_{\textrm{dyn}} = \rho\cdot g
+```math
+p_{\textrm{dyn}} = \rho\cdot g
 \sum_{i=1}^{nfreq}A(\omega_i,\gamma)
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
-\sin(\gamma)+ y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
+\sin(\gamma)+ y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})
+```
 
-- $g$ désigne l'accélération de la pesanteur (9.81 $m/s^2$)
-- $\rho$ est la densité volumique du fluide (en $kg/m^3$)
+- $`g`$ désigne l'accélération de la pesanteur (9.81 $`m/s^2`$)
+- $`\rho`$ est la densité volumique du fluide (en $`kg/m^3`$)
 
-Lorsque la profondeur $h$ est très grande devant $z$, les cosinus hyperboliques sont équivalents à des exponentielles :
+Lorsque la profondeur $`h`$ est très grande devant $`z`$, les cosinus hyperboliques sont équivalents à des exponentielles :
 
-$$\cosh x\sim_{x\infty} \frac{e^x}{2}$$
-
+```math
+\mathop {\lim }\limits_{x \to \infty } \cosh x = \frac{{e^x }}{2}
+```
 
 on obtient donc :
 
-$$p_{\textrm{dyn}} \sim_{h\infty} \rho\cdot g
+```math
+p_{\textrm{dyn}}\mathop  \approx \limits_{x \to \infty } \rho\cdot g
 \sum_{i=1}^{nfreq}A(\omega_i,\gamma)
 e^{-k_i\cdot z}\sin(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
-\sin(\gamma))-\omega_i\cdot t+\phi_{i})$$
+\sin(\gamma))-\omega_i\cdot t+\phi_{i})
+```
 
 ### Pression totale
 
@@ -236,33 +284,56 @@ Le raisonnement s'exprime simplement pour une seule fréquence et une seule dire
 
 Pour une seule fréquence et une seule direction, on a :
 
-$$p_{\textrm{tot}} = \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta$$
+```math
+p_{\textrm{tot}} = \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta
+```
 
-Sous la surface libre, c'est-à-dire pour $z>0$, on a $h-z<h$ donc
-$$0<\frac{\cosh(k(h-z))}{\cosh(k h)}\leq 1$$
+Sous la surface libre, c'est-à-dire pour $`z>0`$, on a $`h-z<h`$ donc
+
+```math
+0<\frac{\cosh(k(h-z))}{\cosh(k h)}\leq 1
+```
 
 donc
 
-$$ \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta \geq \rho g \left(z - \eta\right)$$
+```math
+ \rho g z - \rho g \frac{\cosh(k(h-z))}{\cosh(k h)}\eta \geq \rho g \left(z - \eta\right)
+```
 
-or pour le calcul, on considère toujours la partie immergée de la coque donc $z\geq\eta$, d'où $$p_{\textrm{tot}} \geq 0$$
 
-Au-dessus de la surface libre, on a $\eta\leq z\leq 0$ donc $h-z\geq h$ et
+or pour le calcul, on considère toujours la partie immergée de la coque donc $`z\geq\eta`$, d'où
+```math
+p_{\textrm{tot}} \geq 0
+```
 
-$$ \frac{\cosh(k(h-z))}{\cosh(k h)}\geq 1$$
+Au-dessus de la surface libre, on a $`\eta\leq z\leq 0`$ donc $`h-z\geq h`$ et
+
+```math
+ \frac{\cosh(k(h-z))}{\cosh(k h)}\geq 1
+```
 
 Or
 
-$$p_{\textrm{tot}} = \rho g \cdot \left(z -  \frac{\cosh(k(h-z))}{\cosh(k h)} \eta\right)\geq \rho g \eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)$$
+```math
+p_{\textrm{tot}} = \rho g \cdot \left(z -  \frac{\cosh(k(h-z))}{\cosh(k h)} \eta\right)\geq \rho g \eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)
+```
 
-Comme $$1-  \frac{\cosh(k(h-z))}{\cosh(k h)} \leq 0$$ et $\eta\leq z \leq 0$ (on est sous l'eau),
-$$\eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)\geq 0$$
+Comme
+
+```math
+1-  \frac{\cosh(k(h-z))}{\cosh(k h)} \leq 0
+```
+ et $`\eta\leq z \leq 0`$ (on est sous l'eau),
+
+```math
+\eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)\geq 0
+```
 
 et donc
 
-$$p_{\textrm{tot}}\geq 0$$
-
-
+```math
+p_{\textrm{tot}}\geq 0
+```
 
 
 ### Houle irrégulière
@@ -273,78 +344,103 @@ On peut le généraliser pour plusieurs fréquences et plusieurs directions.
 
 En notant
 
-$$a_{i,j} = A(\omega_i, \gamma_j) = \sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}$$
+```math
+a_{i,j} = A(\omega_i, \gamma_j) = \sqrt{2 S(\omega_i)d\omega D(\gamma_j)d\gamma}
+```
 
 le potentiel de houle irrégulière s'écrit:
 
-$$\phi(x,y,z,t) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir} a_{i,j} \cdot \frac{g}{\omega_i}\frac{\cosh(k\cdot(h-z))}
+```math
+\phi(x,y,z,t) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir} a_{i,j} \cdot \frac{g}{\omega_i}\frac{\cosh(k\cdot(h-z))}
 {\cosh(k_i\cdot h)}\cos(k_i\cdot(x\cdot
-\cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
 
-On en déduit l'expression de l'élévation $\eta$ :
+On en déduit l'expression de l'élévation $`\eta`$ :
 
-$$\eta(x,y,t) = \frac{1}{g}\frac{\partial\phi}{\partial t} = -
+```math
+\eta(x,y,t) = \frac{1}{g}\frac{\partial\phi}{\partial t} = -
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 a_{i,j}\sin(k_i\cdot(x\cdot \cos(\gamma_j)
-+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
++ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
 
-ainsi que l'expression de la pression dynamique $p_{\textrm{dyn}}$ :
+ainsi que l'expression de la pression dynamique $`p_{\textrm{dyn}}`$ :
 
-$$p_{\textrm{dyn}}(x,y,z,t) = \rho\cdot g
+```math
+p_{\textrm{dyn}}(x,y,z,t) = \rho\cdot g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 a_{i,j}\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
-\cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
 
 ### Vitesse orbitale
 
 #### En profondeur finie
-La vitesse $V(x,y,z,t) = (u,v,w)$ orbitale de la houle est définie par :
 
-$$u = \frac{\partial \phi}{\partial x} = g
+La vitesse $`V(x,y,z,t) = (u,v,w)`$ orbitale de la houle est définie par :
+
+```math
+u = \frac{\partial \phi}{\partial x} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cdot\cos(\gamma_j)
-\sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-$$v = \frac{\partial \phi}{\partial y} = g
+\sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+```math
+v = \frac{\partial \phi}{\partial y} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\cdot\sin(\gamma_j)
-\sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-$$w = \frac{\partial \phi}{\partial z} = g
+\sin(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+```math
+w = \frac{\partial \phi}{\partial z} = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 \frac{\sinh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}
-\cos(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\cos(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
 
 #### En profondeur infinie
 
-Lorsque $k_i\cdot h >3$, les cosinus hyperboliques peuvent être considérés comme
-équivalents à des exponentielles (erreur relative inférieure à $2.5\times
-10^{-3}$). On peut donc utiliser l'approximation suivante:
+Lorsque $`k_i\cdot h >3`$, les cosinus hyperboliques peuvent être considérés comme
+équivalents à des exponentielles (erreur relative inférieure à
+$`2.5\times 10^{-3}`$). On peut donc utiliser l'approximation suivante:
 
-$$u = g
+```math
+u = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 e^{-k_i z}
 \cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-$$v = g
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+```math
+v = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 e^{-k_i z}
 \cdot\sin(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-$$w = g
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+```math
+w = g
 \sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
 a_{i,j}
 e^{-k_i z}
-\cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
+\cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
 
 #### Évolution de la vitesse orbitale sur la surface libre
 
 L'expression de l'élévation de la surface libre contient un terme en sinus.
-Les vitesses orbitales en $u$ et en $w$ contiennent des termes en cosinus et
-sont donc déphasées par rapport à l'élévation. La composante $v$ de la vitesse
+Les vitesses orbitales en $`u`$ et en $`w`$ contiennent des termes en cosinus et
+sont donc déphasées par rapport à l'élévation. La composante $`v`$ de la vitesse
 orbitale, en revanche, est en phase avec l'élévation. Le schéma suivant représente
 l'élévation de la houle (en vert) avec les vecteurs vitesse orbitale (en bleu)
 en plusieurs points de la surface libre dans le plan (X,Z) :
@@ -375,14 +471,14 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
 - `model` : actuellement, ne peut valoir qu'`airy`.
 - `stretching` : voir le paragraphe ci-dessous.
 - `depth` : profondeur (distance entre le fond et la surface). 0 pour
-  l'approximation "profondeur infinie". Utilisé pour le calcul du nombre d'onde.
+  l'approximation "profondeur infinie". Utilisé pour le calcul du nombre
+  d'onde et donc pour le calcul de l'élévation de la surface libre,
+  des pressions dynamiques et des vitesses orbitales.
 - `seed of the random data generator` : germe utilisé pour la génération des
   phases aléatoires. Si l'on donne `none` comme valeur toutes les phases
   aléatoires seront nulles (utilisé principalement pour les tests).
 - `directional spreading` : étalement directionnel. Cf. infra.
 - `spectral density` : densité spectrale de puissance. Cf. infra.
-
-
 
 ## Densités spectrales de puissance
 
@@ -393,27 +489,24 @@ la houle (swell) et de la mer du vent (wind sea) à six paramètres.
 
 Le choix du spectre dépend donc à la fois du lieu considéré et de l'état de
 mer. Ce choix revêt une grande importance pour la prévision des mouvements des
-plateformes car suivant que l'état de mer est en formation, complètement formé
-ou en atténuation, la réponse du navire va varier.  En effet, un navire peut
-avoir une réponse en pilonnement plus importante sur une mer partiellement
-formée que sur une mer totalement formée car la fréquence modale du spectre est
-plus élevée sur une mer partiellement formée et la fréquence de résonance du
-pilonnement est souvent plus élevée. Pour le roulis, c'est l'inverse : lorsque
-l'état de mer s'atténue, la fréquence d'excitation du roulis étant en général
-plus basse que celle du pilonnement, les mouvements seront amplifiés.
+plateformes la réponse du navire va varier suivant le type d'état de mer.
+Il faut noter que l'on ne peut pas faire varier
+l'état de mer au cours d'une même simulation.
 
 ### Dirac
 
 La plus simple densité spectrale de puissance est aussi la moins réaliste car elle
 correspond à une houle monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
 
-$$\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
+```math
+\omega_0\in\mathbb{R}^+,\forall \omega\in\mathbb{R}^+, S(\omega) =
 \left\{\begin{array}{l}0, \textrm{si }\omega\neq \omega_0\\1, \textrm{si }
-\omega=\omega_0\end{array}\right.$$
+\omega=\omega_0\end{array}\right.
+```
 
-$\omega_0 = 2\pi f$ est la pulsation (en Rad/s) de la houle.
+$`\omega_0 = 2\pi f`$ est la pulsation (en Rad/s) de la houle.
 
-Ce spectre a l'allure suivante :
+Le signal temporel correspondant a l'allure suivante :
 
 ![](images/waveMonochromatique.svg)
 
@@ -430,8 +523,8 @@ spectral density:
 La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
 L'amplitude de la houle sera égale à `Hs/2`.
 
-Ce spectre a uniquement un intérêt pour les phases de validation car il n'est
-pas représentatif de conditions réelles.
+Ce spectre a essentiellement un intérêt pour l'établissement de fonctions de transfert ou la
+comparaison de réponses sur une houle maitrisée mais il n'est pas représentatif de conditions réelles.
 
 ### Bretschneider
 
@@ -440,57 +533,72 @@ de mer partiellement ou totalement développés a été proposée en 1959 par Br
 Initialement, la dépendance à la période de la houle était mise en exergue
 et s'exprimait sous la forme :
 
-$$S(T)=\alpha\cdot T^3\cdot e^{-\beta T^4}$$
+```math
+S(T)=\alpha\cdot T^3\cdot e^{-\beta T^4}
+```
 
 Aujourd'hui, on préfère une formulation fréquentielle :
 
-$$ S\left(\omega=\frac{2\pi}{T}\right) = \frac{A}{\omega^5}\cdot e^{-\frac{B}{\omega^4}}$$
+```math
+ S\left(\omega=\frac{2\pi}{T}\right) = \frac{A}{\omega^5}\cdot e^{-\frac{B}{\omega^4}}
+```
 
-Le moment d'ordre 0 permet d'obtenir une relation entre $A$ et $B$ :
+Le moment d'ordre 0 permet d'obtenir une relation entre $`A`$ et $`B`$ :
 
-$$m_0 = \int_0^\infty S(\omega) d\omega = \left[-e^{-\frac{B}{\omega^4}}\right]^\infty_0=\frac{A}{4B}$$
-
-d'où
-
-$A=4m_0 B$
-
-Par ailleurs, la dérivée première du spectre s'annule pour une période $\omega_p$ :
-
-$$ \frac{d}{d\omega}S(\omega) = \frac{A}{\omega^6}e^{-\frac{B}{\omega^4}}\left(\frac{4B}{\omega^4}-5\right)$$
+```math
+m_0 = \int_0^\infty S(\omega) d\omega = \left[-e^{-\frac{B}{\omega^4}}\right]^\infty_0=\frac{A}{4B}
+```
 
 d'où
 
-$$B=\frac{5}{4}\omega_p^4$$
+```math
+A=4m_0 B
+```
+
+Par ailleurs, la dérivée première du spectre s'annule pour une période $`\omega_p`$ :
+
+```math
+ \frac{d}{d\omega}S(\omega) = \frac{A}{\omega^6}e^{-\frac{B}{\omega^4}}\left(\frac{4B}{\omega^4}-5\right)
+```
+
+d'où
+
+```math
+B=\frac{5}{4}\omega_p^4
+```
 
 et
 
-$$\omega_p=\left(\frac{4}{5}B\right)^{1/4}$$
+```math
+\omega_p=\left(\frac{4}{5}B\right)^{1/4}
+```
 
 De plus, on constate empiriquement que les hauteurs de houle sont
-distribuées suivant une loi de Rayleigh (loi de la norme d'un vecteur dont les
-deux composantes suivent une loi normale) de variance $\sigma^2=4 m_0$ et, sous
-cette hypothèse, la hauteur de houle $H_S$ correspondant à deux écarts-types est :
+souvent distribuées suivant une loi de Rayleigh (loi de la norme d'un vecteur dont les
+deux composantes suivent une loi normale) de variance $`\sigma^2=4 m_0`$ et, sous
+cette hypothèse, la hauteur de houle $`H_S`$ correspondant à deux écarts-types est :
 
-$$H_S = 2\sigma = 4\sqrt{m_0}$$
+```math
+H_S = 2\sigma = 4\sqrt{m_0}
+```
 
-En outre,
+En outre, $`\omega_p=\frac{2\pi}{T_p}`$
 
-$\omega_p=\frac{2\pi}{T_p}$
+On peut ainsi exprimer $`A`$ et $`B`$ en fonction de $`H_S`$ et $`T_p`$ :
 
-On peut ainsi exprimer $A$ et $B$ en fonction de $H_S$ et $T_p$ :
+```math
+A=\frac{5\pi^4H_S^2}{T_p^ 4}
+```
 
-$$A=\frac{5\pi^4H_S^2}{T_p^ 4}$$
-$$B=\frac{20\pi^4}{T_p^4}$$
+```math
+B=\frac{20\pi^4}{T_p^4}
+```
 
-Le fait que ce spectre ait deux paramètres permet, en jouant sur la fréquence
-modale $\omega_p$, de l'utiliser pour des états de mer partiellement ou
-totalement développés, voire en atténuation.
-
-Le spectre a l'allure suivante :
+Ce spectre a l'allure suivante :
 
 ![](images/spectrumBretschneider.svg)
 
-Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -501,7 +609,7 @@ spectral density:
 
 ### Pierson-Moskowitz
 
-A la fin des années 40, plusieurs navires météorologiques étaient stationnés
+À la fin des années 40, plusieurs navires météorologiques étaient stationnés
 dans l'océan Pacifique et l'Atlantique Nord. Ces navires notaient la météo
 quotidiennement sous forme d'un code météo. En 1961, Tucker créa une méthode
 pour obtenir des estimations quantitatives à partir de ces enregistrements en
@@ -510,51 +618,71 @@ observations météo de plusieurs stations à terre. En 1964, Willard Pierson et
 Lionel Moskowitz à l'université de New York, ont
 préparé un rapport pour l'U.S. Naval Oceanographic Office analysant un grand
 nombre d'enregistrements en Atlantique Nord. Seuls les enregistrements pour des
-mers complètement développés ayant été considérés, c'est un spectre adapté à de
+mers complètement développées ayant été considérés, c'est un spectre adapté à de
 tels états de mer. Il s'écrit sous la forme :
 
-$$S(\omega) = \frac{\alpha\cdot g^2}{\omega^5} \exp{\left(-\beta\left[\frac{g}{U_{19.5}\omega}\right]^4\right)}$$
+```math
+S(\omega) = \frac{\alpha\cdot g^2}{\omega^5} \exp{\left(-\beta\left[\frac{g}{U_{19.5}\omega}\right]^4\right)}
+```
 
-où $\alpha = 8.1\cdot 10^{-3}$ désigne la constante de Phillips, $g$ l'accélération de
-la gravité terrestre, $U_{19.5}$ la vitesse du vent à 19.5 mètres au-dessus du
-niveau de la mer et $\beta$ vaut 0.74.
+où $`\alpha = 8.1\cdot 10^{-3}`$ désigne la constante de Phillips, $`g`$ l'accélération de
+la gravité terrestre, $`U_{19.5}`$ la vitesse du vent à 19.5 mètres au-dessus du
+niveau de la mer et $`\beta`$ vaut 0.74.
 
 Ce spectre est un cas particulier du spectre de Bretschneider en prenant
 
-$$A=8.1\cdot 10^{-3}\cdot g^2$$
+```math
+A=8.1\cdot 10^{-3}\cdot g^2
+```
+
 et
-$$B=0.74\left(\frac{g}{U_{19.5}}\right)^4$$
+
+```math
+B=0.74\left(\frac{g}{U_{19.5}}\right)^4
+```
 
 Par la suite, les données de Pierson et Moskowitz ont été ré-analysées pour
 établir la relation empirique suivante entre la vitesse du vent et la pulsation
 modale de la houle :
 
-$$0.74 \left(\frac{g}{U_{19.5}}\right)^4=\frac{5}{4}\omega_0^4$$
+```math
+0.74 \left(\frac{g}{U_{19.5}}\right)^4=\frac{5}{4}\omega_0^4
+```
 
 d'où
 
-$$\omega_p=0.877\frac{g}{U_{19.5}}$$
+```math
+\omega_p=0.877\frac{g}{U_{19.5}}
+```
 
-On peut obtenir une expression de la période de pic $\omega_p$ uniquement en
-fonction de $H_S$ en se servant des relations suivantes, établies pour le
+On peut obtenir une expression de la période de pic $`\omega_p`$ uniquement en
+fonction de $`H_S`$ en se servant des relations suivantes, établies pour le
 spectre de Bretschneider :
 
-$m_0=\frac{A}{4B}$ et $$\omega_p=\left(\frac{4}{5}B\right)^{1/4}$$
-
+- $`m_0=\frac{A}{4B}`$
+- $`\omega_p=\left(\frac{4}{5}B\right)^{1/4}`$
 
 En supposant que les hauteurs de houle suivent une distribution de Rayleigh, on a:
 
-$$H_S=4\sqrt{m_0}=4\sqrt{\frac{A}{4B}}$$
+```math
+H_S=4\sqrt{m_0}=4\sqrt{\frac{A}{4B}}
+```
 
 d'où
 
-$B=\frac{4 A}{H_S^2}$
+```math
+B=\frac{4 A}{H_S^2}
+```
 
-$\omega_p=\left(\frac{4}{5}B\right)^{1/4}=\left(\frac{4A}{5H_S^2}\right)^{1/4}=\left(\frac{16}{5}\cdot 8.1\cdot 10^{-3}\right)^{1/4}\sqrt{\frac{g}{H_S}}$
+```math
+\omega_p=\left(\frac{4}{5}B\right)^{1/4}=\left(\frac{4A}{5H_S^2}\right)^{1/4}=\left(\frac{16}{5}\cdot 8.1\cdot 10^{-3}\right)^{1/4}\sqrt{\frac{g}{H_S}}
+```
 
 soit
 
-$$\omega_p=0.4\sqrt{\frac{g}{H_S}}$$
+```math
+\omega_p=0.4\sqrt{\frac{g}{H_S}}
+```
 
 Ce spectre était le spectre de référence pendant de nombreuses années mais
 il n'est valable que pour des états de mer complètement développés et des mers
@@ -566,7 +694,7 @@ Ce spectre a l'allure suivante :
 
 ![](images/spectrumPiersonMoskowitz.svg)
 
-Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -581,27 +709,33 @@ Le spectre JONSWAP (Joint North Sea Wave Project) a été proposé en
 1973 par Hasselmann et al. après avoir dépouillé des mesures faites lors
 de la formation de tempêtes en Mer du Nord. Plus de 2000 spectres ont ainsi été
 mesurés et une méthode des moindres carrés a été utilisée pour obtenir une
-formulation spectrale. Il est valable pour des fetchs limités des vitesses de vent uniformes.
-L'importance de ce spectre vient de ce qu'il prenne en compte le développement
+formulation spectrale. Il est valable pour des fetchs limités et des vitesses de vent uniformes.
+L'importance de ce spectre vient de ce qu'il prend en compte le développement
 des vagues sur un fetch limité d'une part, et, d'autre part, l'atténuation des
 vagues par petits fonds. Ce spectre est souvent utilisé par l'industrie
 offshore en mer du Nord.
 
-$$S(\omega)=(1-0.287 \log(\gamma))\frac{5}{16}\frac{\alpha}{\omega}H_S^2 e^{-1.25\left(\frac{\omega_0}{\omega}\right)^4}\gamma^r$$
+```math
+S(\omega)=(1-0.287 \log(\gamma))\frac{5}{16}\frac{\alpha}{\omega}H_S^2 e^{-1.25\left(\frac{\omega_0}{\omega}\right)^4}\gamma^r
+```
 
 avec
 
-$$r=e^{-0.5\left(\frac{\omega-\omega_0}{\sigma\omega_0}\right)^2}$$
+```math
+r=e^{-0.5\left(\frac{\omega-\omega_0}{\sigma\omega_0}\right)^2}
+```
 
 et
 
-$$\sigma=\left\{\begin{eqnarray}0.07,\omega\leq\omega_0\\0.09,\omega>\omega_0\end{eqnarray}\right.$$
+```math
+\sigma=\left\{\begin{array}{l}0.07,\omega\leq\omega_0\\0.09,\omega>\omega_0\end{array}\right.
+```
 
 Ce spectre a l'allure suivante :
 
 ![](images/spectrumJonswap.svg)
 
-Sa paramétrisation dans X-Dyn est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -632,13 +766,16 @@ cette angle (outre la taille maximale des flottants).
 ### Cos2s
 
 L'étalement est donné par :
-$$\gamma\mapsto \cos^{2s}\left({\gamma-\gamma_0}\right)$$
 
-où $\gamma_0$ est la direction de propagation, dans le
+```math
+\gamma\mapsto \cos^{2s}\left({\gamma-\gamma_0}\right)
+```
+
+où $`\gamma_0`$ est la direction de propagation, dans le
 repère NED (0° correspond à des vagues se propageant du Sud vers le Nord, 45° à
 des vagues se propageant du Sud-Ouest au Nord-Est, -90° à des vagues se
 propageant de l'Est vers l'Ouest). Il n'y a pas de bornes particulières pour
-cette angle (outre taille maximale des flottants).
+cet angle (outre la taille maximale des flottants).
 
 Cet étalement est paramétré de la façon suivante :
 
@@ -649,226 +786,19 @@ directional spreading:
     waves propagating to: {value: 90, unit: deg}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La direction de propagation $\gamma_0$ est donnée par `waves propagating to`.
+La direction de propagation $`\gamma_0`$ est donnée par `waves propagating to`.
 
 ## Stretching de la houle
 
-Sous les hypothèses précédentes, la vitesse orbitale des particules d'eau
-par rapport au référentiel NED (projetée sur l'axe $X$ du repère BODY) s'écrit :
-
-$$u = g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-a_{i,j}
-\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-
-qui, en profondeur infinie, s'écrit :
-
-$$u = g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-a_{i,j}
-e^{-k_i z}
-\cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-
-La valeur du terme $e^{-k_i z}$ est inférieure à 1 pour les points en-dessous
-du niveau moyen (surface $z=0$), mais elle croît rapidement pour les points situés
-au-dessus de ce plan, et ce d'autant plus que le nombre d'onde $k$ est grand,
-tandis qu'elle décroît en-dessous du niveau moyen de la mer. Ainsi, pour deux
-points proches sur la surface libre (non-horizontale) l'un à $z>0$ et l'autre
-à $z<0$, la vitesse orbitale sera très différente : les contributions des
-composantes haute fréquence de la houle seront fortement amplifiées pour le point
-à $z>0$ et fortement atténuées pour le point à $z<0$.
-Les particules au-dessus du niveau moyen de la mer (notamment sur
-la crête des vagues) seront ainsi vues comme oscillant à des fréquences élevées
-tandis que celles dans le creux des vagues oscilleront plus lentement : le
-niveau moyen de la mer agit donc comme une frontière entre l'amplification et
-l'atténuation des hautes fréquences, ce qui n'est pas physique.
-
-Pour pallier cet inconvénient, on peut utiliser des modèles dits de
-"stretching", qui permettent de recaler les vitesses orbitales à l'interface
-eau-air (le sommet ou le creux des vagues) d'une des façons décrites
-ci-dessous. Certaines de ces méthodes reviennent à étirer l'axe $z$ (d'où le
-nom de stretching).
-
-Dans X-Dyn, le stretching est renseigné dans la section `stretching` des
-modèles de houle. Le seul modèle de stretching implémenté est le delta-stretching
-et ses dérivés. On a donc le choix entre les quatre modèles de stretching suivants :
-
-- **absence de stretching** (non-recommandé pour les raisons précédemment
-  évoquées), renseigner `h: {value: 0, unit: m}` et `delta: 1`
-- **extrapolation linéaire**, en fixant $h$ à la profondeur d'eau `depth` et $\Delta=1$
-- **modèle de Wheeler**, si $h$ vaut la profondeur `depth` et $\Delta=0$
-- **delta stretching** pour toute autre valeur
-
-Ce qui suit est une présentation non-exhaustive de quelques modèles de stretching.
-
-### Stretching linéaire sans extrapolation
-
-Outre l'absence de stretching, le modèle le plus simple revient à bloquer la
-vitesse orbitale au-dessus du niveau de la mer $z=0$ :
-
-$$\forall z\leq 0, u(x,y,z,t) = u(x,y,0,t)$$
-
-On obtient ainsi une rupture du profil de vitesse, à la fois inesthétique et
-peu physique. Ce modèle n'est pas implémenté dans X-Dyn.
-
-### Stretching par extrapolation linéaire
-
-Ce modèle revient à prolonger le modèle de vitesse par une tangente :
-
-$$u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)$$
-
-Ce modèle peut être utilisé dans X-Dyn en fixant `h` à la profondeur d'eau
-`depth` et `delta: 1`.
-
-
-### Stretching de Wheeler
-
-On souhaite obtenir les bonnes vitesses orbitales à la surface de l'eau,
-c'est-à-dire en $z=\eta$ ($\eta$ désignant la hauteur d'eau donnée par le modèle
-de houle), et au fond (en $z=h$).
-
-La vitesse orbitale s'écrit :
-
-$$u = g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-a_{i,j}
-f(z)
-\cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-
-avec
-
-$$f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}$$
-
-On cherche donc une fonction $g$ telle que :
-
-$$g(z=\eta)=f(0)$$
-$$g(z=h)=f(h)$$
-
-On peut construire une telle fonction en prenant
-
-$$g(z) = f(z'(z))$$
-
-avec $z'(\eta)=0$ et $z'(h)=h$.
-
-On peut par exemple choisir une fonction $z\mapsto z'$ linéaire :
-
-$$z'(z)=\frac{h}{h-\eta}(z-\eta)$$
-
-ce qui donne le profil de vitesse (projetée ici sur l'axe $X$ du repère body) :
-
-$$u = g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-a_{i,j}
-\frac{\cosh\left(k\cdot h\frac{h-z}{h-\eta(x,y,t)}\right)}{\cosh(k\cdot h)}
-\cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-
-La vitesse orbitale sur les autres axes est donnée par des formules similaires.
-
-Dans ce modèle, la masse n'est pas conservée car le laplacien du potentiel de
-vitesse n'est pas nul. Il n'y a donc pas de justification théorique à ce modèle
-de stretching. Son utilisation découle plus de son intérêt pratique : on
-constate expérimentalement que les vitesses orbitales calculées sans stretching
-sont plus loin des résultats expérimentaux que celles calculées avec
-stretching.
-
-Dans le cas du modèle de Wheeler, des campagnes d'essais montrent que les
-vitesses orbitales calculées dans les crêtes sont quelque peu sous-estimées par
-rapport aux mesures de vélocimètres laser.
-
-Ce modèle étant une forme particulière du modèle de delta-stretching, on peut
-l'utiliser dans X-Dyn en fixant $h$ à la profondeur de l'eau `depth` et
-`delta: 0`.
-
-### Stretching de Chakrabarti
-
-Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la
-fonction $f$
-
-$$f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}$$
-
-On remplace $\cosh(k\cdot h)$ par $\cosh(k\cdot (h+\eta(x,y,t)))$.
-Sur l'axe $X$ du repère body, par exemple, on obtient ainsi le profil :
-
-$$u = g
-\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
-a_{i,j}
-\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot (h+\eta(x,y,t)))}
-\cdot\cos(\gamma_j)
-\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})$$
-
-La vitesse sur les autres axes est donnée par des formules similaires.
-
-On constate expérimentalement que, tout comme le modèle de Wheeler, le modèle
-de Chakrabarti sous-estime les vitesses orbitales dans les crêtes.
-
-Ce modèle n'étant pas un dérivé du modèle de delta-stretching, il n'est pas
-accessible dans X-Dyn.
-
-### Delta-stretching
-
-Il s'agit d'une généralisation du modèle de Wheeler qui permet de passer
-continument de ce dernier au modèle d'extrapolation linéaire. En jouant sur ses
-paramètres, on peut retrouver trois modèles de stretching (pas de stretching,
-extrapolation linéaire et modèle de Wheeler) et c'est pour cela qu'il a été
-choisi comme modèle de référence dans X-Dyn.
-
-Tout comme le modèle de Wheeler, on souhaite retrouver la vitesse orbitale à la
-surface au creux et à la crête des vagues, c'est-à-dire en $z=\eta$. Les auteurs
-de ce modèle, Rodenbusch et Forristal, ajoutent deux paramètres au modèle de
-Wheeler :
-
-- Un paramètre $h_{\Delta}$ qui contrôle la hauteur d'eau sur laquelle est
-  effectuée le stretching
-- Un paramètre $\Delta$ entre 0 et 1 (0 pour le modèle de Wheeler, 1 pour
-  l'extrapolation linéaire)
-
-$z'$ varie de $h_{\Delta}$ à $\Delta\eta$ lorsque $z$ varie de $h_{\Delta}$ à $\eta$.
-
-On prend donc :
-
-- Pour $z>h_{\Delta}$, $z'=z$
-- Pour $z<h_{\Delta}$, $z' =(z-h_{\Delta})\frac{\Delta\eta-h_{\Delta}}{\eta-h_{\Delta}}+h_{\Delta}$
-
-- Pour $h_{\Delta}=0$ et $\Delta=1$, il n'y a pas de stretching.
-- Si $h_{\Delta}$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le
-  modèle de Wheeler.
-- Avec $h_{\Delta}$ valant `depth` et $\Delta=1$ on obtient l'extrapolation
-  linéaire.
-
-
-### Choix du modèle de stretching
-
-Comme les modèles de stretching n'ont pas vraiment de justification théorique,
-la seule manière de les choisir est de comparer directement avec les profils de
-vitesse mesurés (par exemple à l'aide de vélocimètres laser). Les campagnes
-d'essai réalisées jusqu'à présent n'ont pas permis de choisir de façon
-catégorique un modèle de stretching plutôt qu'un autre. Ceci vient à la fois de
-la difficulté de réaliser l'expérimentation en conditions contrôlées et
-d'obtenir une mesure fiable, mais aussi de l'importance des phénomènes
-non-linéaires, absents des modèles de stretching.
-
-Les trois graphes ci-dessous montrent l'influence du modèle de stretching sur la
-pression dynamique (et montrent aussi qu'il n'est pas pris en compte dans le
-calcul de la vitesse orbitale).
-
-#### Sans stretching
-
-![](images/waves_without_stretching.png)
-
-#### Extrapolation linéaire
-
-![](images/waves_extrapolation_stretching.png)
-
-#### Stretching de Wheeler
-
-![](images/waves_wheeler_stretching.png)
-
-
-### Paramétrisation dans X-Dyn
+### Description
+
+La formulation d'Airy n'est pas valable au-dessus du plan $`z=0`$. Cela signifie
+que l'on ne peut pas l'utiliser dans une formulation non-linéaire où l'on
+cherche à connaître les pressions dynamiques et les vitesses orbitales pour
+$`z<0`$. Les modèles de stretching sont une solution de contournement qui consiste à
+prendre comme référence non pas le plan $`z=0`$ mais la surface libre déformée.
+
+### Utilisation dans xdyn
 
 Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAML du type :
 
@@ -889,13 +819,262 @@ Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAM
      gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Dans xdyn, le stretching est renseigné dans la section `stretching` des modèles de houle.
+Le seul modèle de stretching implémenté est le [delta-stretching](#delta-stretching) et ses dérivés (absence de stretching, extrapolation linéaire et modèle de Wheeler).
 La section `stretching` contient les paramètres `h` et `delta` du modèle de
-delta-stretching :
+delta-stretching:
 
-- Pour $h=0$ et $\Delta=1$, il n'y a pas de stretching.
-- Si $h$ vaut la profondeur `depth` et $\Delta=0$, on retrouve le modèle de
-  Wheeler.
-- Avec $h$ valant `depth` et $\Delta=1$ on obtient l'extrapolation linéaire.
+- absence de stretching : possible si l'on est sur une modélisation linéaire.
+  Renseigner `h: {value: 0, unit: m}` et `delta: 1`.
+  Non-recommandé dès lors qu'on utilise des modèles faisant appel aux vitesses orbitales (pour des raisons évoquées ci-après),
+- [extrapolation linéaire](#stretching-par-extrapolation-lin%C3%A9aire), en fixant $`h`$ à la profondeur d'eau `depth` et $`\Delta=1`$,
+- [modèle de Wheeler](#stretching-de-wheeler), si $`h`$ vaut la profondeur `depth` et $`\Delta=0`$,
+- [delta stretching](#delta-stretching) pour toute autre valeur.
+
+### Justifications théoriques
+
+Sous les hypothèses du modèle de [houle irrégulière linéaire](#houle-irr%C3%A9guli%C3%A8re) détaillées ci-dessus, la vitesse
+orbitale des particules d'eau par rapport au référentiel NED (projetée sur l'axe
+$`X`$ du repère BODY) s'écrit :
+
+```math
+u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+a_{i,j}
+\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+qui, en profondeur infinie, s'écrit :
+
+```math
+u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+a_{i,j}
+e^{-k_i z}
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+Cette expression est basée sur la théorie linéaire, qui suppose *a priori* la surface
+libre plane, y compris pour le calcul de la déformation de surface libre, qui est
+une grandeur comme les autres (pressions, vitesses, potentiel), résultat de la
+résolution du problème.
+
+La formulation mathématique du problème qui conduit aux expressions ci-dessus
+n'est pas valable pour les z>0 (linéarisation de la condition de surface
+libre).  Une difficulté survient quand on veut exploiter cette formule dans une
+modélisation non-linéaire, c'est-à-à dire en modélisant réellement la
+déformation de la  surface libre. En effet, la valeur du terme $`e^{-k_i z}`$
+est inférieure à 1 pour les points en-dessous du niveau moyen (surface
+$`z=0`$), mais elle croît rapidement pour les points situés au-dessus de ce
+plan , et ce d'autant plus que le nombre d'onde $`k`$ est grand, tandis qu'elle
+décroît en-dessous du niveau moyen de la mer. Ainsi, pour deux points proches
+sur la surface libre (non-horizontale) l'un à $`z>0`$ et l'autre à $`z<0`$, la
+vitesse orbitale sera très différente : les contributions des composantes haute
+fréquence de la houle seront fortement amplifiées pour le point à $`z>0`$ et
+fortement atténuées pour le point à $`z<0`$. Les particules au-dessus du niveau
+moyen de la mer (notamment sur la crête des vagues) seront ainsi vues comme
+oscillant à des fréquences élevées tandis que celles dans le creux des vagues
+oscilleront plus lentement : le niveau moyen de la mer agit donc comme une
+frontière entre l'amplification et l'atténuation des hautes fréquences, ce qui
+n'est pas physique (mais cohérent avec la modélisation linéarisée initiale).
+
+Les grandeurs linéaires ne sont donc pas définies dans les zones déformées. Pour
+pallier cet inconvénient, on peut utiliser des modèles dits de "stretching", qui
+permettent de recaler les vitesses orbitales à l'interface eau-air (le sommet ou
+le creux des vagues) d'une des façons décrites ci-dessous. Certaines de ces
+méthodes reviennent à étirer l'axe $`z`$ (d'où le nom de stretching).
+Ce qui suit est une présentation non-exhaustive de quelques modèles de
+stretching (extrapolation linéaire, modèle de Wheeler et delta-stretching).
+
+#### Stretching linéaire sans extrapolation
+
+Outre l'absence de stretching, le modèle le plus simple revient à bloquer la
+vitesse orbitale au-dessus du niveau de la mer $`z=0`$ :
+
+```math
+\forall z\leq 0, u(x,y,z,t) = u(x,y,0,t)
+```
+
+On obtient ainsi une rupture du profil de vitesse
+peu physique. Ce modèle n'est pas implémenté dans xdyn.
+
+#### Stretching par extrapolation linéaire
+
+Ce modèle revient à prolonger le modèle de vitesse par une tangente :
+
+```math
+u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)
+```
+
+Ce modèle peut être utilisé dans xdyn en fixant `h` à la profondeur d'eau
+`depth` et `delta: 1`.
+
+#### Stretching de Wheeler
+
+
+La vitesse orbitale s'écrit :
+
+```math
+u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+a_{i,j}
+f(z)
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+avec
+
+```math
+f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}
+```
+
+
+On souhaite après stretching retrouver les valeurs de vitesse orbitales données par $`f`$ à la surface (en $`z=\eta`$xi, $`\eta`$ désignant la hauteur d'eau donnée par le
+modèle de houle) et au fond (en $`z=h`$):
+
+On cherche donc une fonction $`g`$ telle que :
+
+```math
+g(z=\eta)=f(0)
+```
+
+```math
+g(z=h)=f(h)
+```
+
+On peut construire une telle fonction en prenant
+
+```math
+g(z) = f(z'(z))
+```
+
+avec $`z'(\eta)=0`$ et $`z'(h)=h`$.
+
+On peut par exemple choisir une fonction $`z\mapsto z'`$ linéaire :
+
+```math
+z'(z)=\frac{h}{h-\eta}(z-\eta)
+```
+
+ce qui donne le profil de vitesse (projetée ici sur l'axe $`X`$ du repère body) :
+
+```math
+u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+a_{i,j}
+\frac{\cosh\left(k\cdot h\frac{h-z}{h-\eta(x,y,t)}\right)}{\cosh(k\cdot h)}
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+La vitesse orbitale sur les autres axes est donnée par des formules similaires.
+
+Dans ce modèle, la masse n'est pas conservée car le laplacien du potentiel de
+vitesse n'est pas nul. Il n'y a donc pas de justification théorique à ce modèle
+de stretching. Son utilisation découle plus de son intérêt pratique : on
+constate expérimentalement que les vitesses orbitales calculées sans stretching
+sont plus loin des résultats expérimentaux que celles calculées avec
+stretching.
+
+Dans le cas du modèle de Wheeler, des campagnes d'essais montrent que les
+vitesses orbitales calculées dans les crêtes sont quelque peu sous-estimées par
+rapport aux mesures.
+
+Ce modèle étant une forme particulière du modèle de delta-stretching, on peut
+l'utiliser dans xdyn en fixant $`h`$ à la profondeur de l'eau `depth` et
+`delta: 0`.
+
+#### Stretching de Chakrabarti
+
+Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la
+fonction $`f`$
+
+```math
+f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}
+```
+
+On remplace $`\cosh(k\cdot h)`$ par $`\cosh(k\cdot (h+\eta(x,y,t)))`$.
+Sur l'axe $`X`$ du repère body, par exemple, on obtient ainsi le profil :
+
+```math
+u = g
+\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}\frac{k_i}{\omega_i}
+a_{i,j}
+\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot (h+\eta(x,y,t)))}
+\cdot\cos(\gamma_j)
+\sin(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
+```
+
+La vitesse sur les autres axes est donnée par des formules similaires.
+
+On constate expérimentalement que, tout comme le modèle de Wheeler, le modèle
+de Chakrabarti sous-estime les vitesses orbitales dans les crêtes.
+
+Ce modèle n'étant pas un dérivé du modèle de delta-stretching, il n'est pas
+accessible dans xdyn.
+
+#### Delta-stretching
+
+Il s'agit d'une généralisation du modèle de Wheeler qui permet de passer
+continument de ce dernier au modèle d'extrapolation linéaire. En jouant sur ses
+paramètres, on peut retrouver trois modèles de stretching (pas de stretching,
+extrapolation linéaire et modèle de Wheeler) et c'est pour cela qu'il a été
+choisi comme modèle de référence dans xdyn.
+
+Tout comme le modèle de Wheeler, on souhaite retrouver la vitesse orbitale à la
+surface au creux et à la crête des vagues, c'est-à-dire en $`z=\eta`$. Les auteurs
+de ce modèle, Rodenbusch et Forristal, ajoutent deux paramètres au modèle de
+Wheeler :
+
+- Un paramètre $`h_{\Delta}`$ qui contrôle la hauteur d'eau sur laquelle est
+  effectuée le stretching
+- Un paramètre $`\Delta`$ entre 0 et 1 (0 pour le modèle de Wheeler, 1 pour
+  l'extrapolation linéaire)
+
+$`z'`$ varie de $`h_{\Delta}`$ à $`\Delta\eta`$ lorsque $`z`$ varie de $`h_{\Delta}`$ à $`\eta`$.
+
+On prend donc :
+
+- Pour $`z>h_{\Delta}`$, $`z'=z`$
+- Pour $`z<h_{\Delta}`$, $`z' =(z-h_{\Delta})\frac{\Delta\eta-h_{\Delta}}{\eta-h_{\Delta}}+h_{\Delta}`$
+
+- Pour $`h_{\Delta}=0`$ et $`\Delta=1`$, il n'y a pas de stretching.
+- Si $`h_{\Delta}`$ vaut la profondeur `depth` et $`\Delta=0`$, on retrouve le
+  modèle de Wheeler.
+- Avec $`h_{\Delta}`$ valant `depth` et $`\Delta=1`$ on obtient l'extrapolation
+  linéaire.
+
+
+#### Choix du modèle de stretching
+
+Comme les modèles de stretching n'ont pas vraiment de justification théorique,
+la seule manière de les choisir est de comparer directement avec les profils de
+vitesse mesurés. Les campagnes
+d'essai réalisées jusqu'à présent n'ont pas permis de choisir de façon
+catégorique un modèle de stretching plutôt qu'un autre. Ceci vient à la fois de
+la difficulté de réaliser l'expérimentation en conditions contrôlées et
+d'obtenir une mesure fiable, mais aussi de l'importance des phénomènes
+non-linéaires, absents des modèles de stretching.
+
+Les trois graphes ci-dessous montrent l'influence du modèle de stretching sur la
+pression dynamique (et montrent aussi qu'il n'est pas pris en compte dans le
+calcul de la vitesse orbitale).
+
+##### Sans stretching
+
+![](images/waves_without_stretching.png)
+
+##### Extrapolation linéaire
+
+![](images/waves_extrapolation_stretching.png)
+
+##### Stretching de Wheeler
+
+![](images/waves_wheeler_stretching.png)
+
 
 ## Discrétisation des spectres et des étalements
 
@@ -910,16 +1089,23 @@ aléatoire. On obtient ainsi un signal apériodique.
 
 La performance de l'implémentation des modèles de houle est cruciale : en
 effet, la pression dynamique et la pression statique étant intégrées sur toutes
-les facettes du maillage, ces modèles sont évalués de nombreuses fois par pas
+les facettes du maillage (dans le cas d'un modèle non-linéaire), ces modèles sont évalués de nombreuses fois par pas
 de calcul. Comme le nombre de composantes sommées pour calculer les élévations
-et pressions dynamiques étant potentiellement important, on ne sélectionne
-que les produits $S(\omega_i)D(\gamma_j)$ contribuant de manière significative
+et pressions dynamiques est potentiellement important, on ne sélectionne
+que les produits $`S(\omega_i)D(\gamma_j)`$ contribuant de manière significative
 à l'énergie totale.
 Pour ce faire, on classe ces produits par ordre décroissant et l'on sélectionne
-les $n$ premiers de façon à ce que leur somme représente une fraction
+les $`n`$ premiers de façon à ce que leur somme représente une fraction
 prédéterminée de la puissance totale. De cette manière, on réduit
-considérablement les temps de calcul, tout en gardant une bonne
-représentativité de la physique du problème.
+considérablement les temps de calcul, tout en gardant une bonne représentativité
+de la physique du problème. Cependant, cette technique n'est pas toujours
+applicable, suivant la réponse à laquelle on s'intéresse. En effet, un petit
+corps dans la houle peut avoir une réponse très affectée par les composantes
+peu énergétiques (en relatif), par exemple pour des problèmes de mouille ou
+d'impact. De même, les réponses locales d'un grand corps (slamming, efforts sur
+des appendices, etc.), peuvent être affectées par des composantes peu
+énergétiques.
+
 
 La discrétisation est paramétrée de la façon suivante :
 
@@ -935,7 +1121,7 @@ discretization:
 - `omega min` : pulsation minimale (incluse)
 - `omega max` : pulsation maximale (incluse)
 - `energy fraction` : les produits de spectre de puissance et d'étalement
-directionnel $S_i\cdot D_j$ sont classés par ordre décroissant. On calcule la
+directionnel $`S_i\cdot D_j`$ sont classés par ordre décroissant. On calcule la
 somme cumulative et l'on s'arrête lorsque l'énergie accumulée vaut `energy
 fraction` de l'énergie totale.
 
@@ -946,7 +1132,7 @@ repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
 simulation de houle, sans corps, tel que décrit dans le
 [tutoriel 3](#tutoriel-3-g%C3%A9n%C3%A9ration-de-houle-sur-un-maillage).
 
-On définit un maillage (cartésien) sur lequel sera calculé la houle (dans la
+On définit un maillage (cartésien) sur lequel sera calculée la houle (dans la
 section `environment/model/output`). Par exemple :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -993,7 +1179,7 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`x` et `y` désignent les coordonnées (exprimée en mètres) dans le repère choisi
+`x` et `y` désignent les coordonnées (exprimées en mètres) dans le repère choisi
 (ici il s'agit du NED) des points du maillage.
 `t` désigne l'instant auquel les hauteurs de houle ont été calculées.
 `z` est la hauteur de houle, c'est-à-dire la distance entre un point de
@@ -1021,12 +1207,12 @@ waves:
 Le modèle HOS (High Order Spectrum) est un modèle numérique de propagation de
 houle développé par l'École Centrale de Nantes (au LHEEA : Laboratoire
 d'Hydrodynamique, Énergétique et Environnement Atmosphérique). Ce modèle permet
-de simuler des spectres hautement non-linéaires avec de fortes pentes. Les
-transformées de Fourier rapides sont utilisées pour résoudre les conditions de
+de simuler des spectres hautement non-linéaires avec de fortes cambrures. Les
+transformées de Fourier rapides utilisées pour résoudre les conditions de
 surface libre permettent une résolution plus rapide que des méthodes directes.
 Ce modèle a été validé avec un haut degré de précision sur des cas 2D et 3D. Ce
 code étant sous licence GPL, une interface client-serveur a été développée en
-Python par D-Ice engineering pour ne pas contaminer le code d'X-DYN. Le code HOS
+Python par D-Ice engineering pour ne pas contaminer le code d'xdyn. Le code HOS
 (en Fortran 95) peut être téléchargé ici :
 [https://github.com/LHEEA/HOS-ocean](https://github.com/LHEEA/HOS-ocean). Une
 description complète du modèle sous-jacent est disponible ici :
@@ -1041,38 +1227,44 @@ La méthode HOS est basée sur la théorie potentielle. Le fluide est supposé
 incompressible, non-visqueux et irrotationnel. Sous ces hypothèses, la condition
 de continuité se ramène à une simple équation de Laplace :
 
+```math
+\nabla \phi^2 + \frac{\partial^2 \phi}{\partial z^2} = 0
+```
 
-$$\nabla \phi^2 + \frac{\partial^2 \phi}{\partial z^2} = 0$$ dans le domaine
-fluide $\mathcal{D}$, $\nabla$ désignant l'opérateur gradient horizontal.
+dans le domaine
+fluide $`\mathcal{D}`$, $`\nabla`$ désignant l'opérateur gradient horizontal.
 
-Sur la surface libre, le potentiel de vitesse $\phi^s(x,t) =
-\phi(x,z=\eta(x,t),t)$ et l'élévation de surface libre $\eta$ doivent satisfaire
+Sur la surface libre, le potentiel de vitesse
+$`\phi^s(x,t) = \phi(x,z=\eta(x,t),t)`$
+et l'élévation de surface libre $`\eta`$ doivent satisfaire
 les équations suivantes :
 
--  $\partial_t \eta = (1 + |\nabla \eta|^2) \partial_z \phi - \nabla \phi^s
-  \cdot \nabla \eta$
-- $\partial_t \phi^s = -g \eta - \frac{1}{2} | \nabla \phi^s |^2 + \frac{1}{2}
-  (1 + | \nabla \eta |^2) (\partial_z \phi)^2$
+- $`\partial_t \eta = (1 + |\nabla \eta|^2) \partial_z \phi - \nabla \phi^s\cdot \nabla \eta`$
+- $`\partial_t \phi^s = -g \eta - \frac{1}{2} | \nabla \phi^s |^2 + \frac{1}{2}(1 + | \nabla \eta |^2) (\partial_z \phi)^2`$
 
-$\frac{\partial \phi}{\partial z}$ est la vitesse verticale et est calculée en
+$`\frac{\partial \phi}{\partial z}`$ est la vitesse verticale et est calculée en
 utilisant la méthode HOS de West *et al.*, 1987.
 
-Les quantités $\phi^s$ and $\eta$ peuvent s'écrire de façon spectrale :
+Les quantités $`\phi^s`$ and $`\eta`$ peuvent s'écrire de façon spectrale :
 
-$$\phi(x,y,z,t) = \sum_{i=0}^{\infty} \sum_{i=0}^{\infty} A_{ij}^{\phi}
-\cos(k_{x,i} x) \cos(k_{y,i} y) \frac{\cosh(k_{i,j} |z+h|)}{\cosh(k_{i,j} h)}$$
+```math
+\phi(x,y,z,t) = \sum_{i=0}^{\infty} \sum_{i=0}^{\infty} A_{ij}^{\phi}
+\cos(k_{x,i} x) \cos(k_{y,i} y) \frac{\cosh(k_{i,j} |z+h|)}{\cosh(k_{i,j} h)}
+```
 
-$$\eta(x,y,z,t) = \sum_{i=0}^{\infty} \sum_{i=0}^{\infty} A_{ij}^{\eta}
-\cos(k_{x,i} x) \cos(k_{y,i} y)$$
+```math
+\eta(x,y,z,t) = \sum_{i=0}^{\infty} \sum_{i=0}^{\infty} A_{ij}^{\eta}
+\cos(k_{x,i} x) \cos(k_{y,i} y)
+```
 
 avec
 
-- $k_{x,i} = \frac{i \Pi}{L_x}$,
-- $k_{y,j} = \frac{j \Pi}{L_y}$
-- $k_{i,j} = \sqrt{k_{x,i}^2+k_{y,j}^2}$,
-- $L_x$ et $L_y$ désignent la taille du domaine suivant $X$ et Ŷ$,
+- $`k_{x,i} = \frac{i \Pi}{L_x}`$,
+- $`k_{y,j} = \frac{j \Pi}{L_y}`$
+- $`k_{i,j} = \sqrt{k_{x,i}^2+k_{y,j}^2}`$,
+- $`L_x`$ et $`L_y`$ désignent la taille du domaine suivant $`X`$ et $`Y`$,
   respectivement.
-- Les coefficients $A_{ij}^{\eta}$ et $A_{ij}^{\phi}$ représentent les
+- Les coefficients $`A_{ij}^{\eta}`$ et $`A_{ij}^{\phi}`$ représentent les
   amplitudes des modes spectraux.
 
 Cette méthode est pseudo-spectrale car les conditions de surface libre sont
@@ -1080,24 +1272,26 @@ partiellement résolues dans le domaine spatial et spectral. Les transformées d
 Fourier rapides permettent de transformer les quantités d'un domaine à l'autre
 efficacement et avec une bonne précision.
 
-Un développement en séries de Taylor limité à l'ordre $M$ est utilisé pour
-évaluer le potentiel de vitesse $\phi$ et la vitesse orbitale vertical $W$
-autour de $z=0$. Par définition, l'ordre de la méthode HOS est l'ordre $M$ du
+Un développement en séries de Taylor limité à l'ordre $`M`$ est utilisé pour
+évaluer le potentiel de vitesse $`\phi`$ et la vitesse orbitale vertical $`W`$
+autour de $`z=0`$. Par définition, l'ordre de la méthode HOS est l'ordre $`M`$ du
 développement limité.
 
 Du fait de l'utilisation des transformées de Fourier rapides, des problèmes de
 repliement de spectre peuvent survenir. Pour limiter cet effet, il faut bien
-choisir le nombre de point $N_d$ en fonction de paramètre d'anti-aliasing $p$
+choisir le nombre de point $`N_d`$ en fonction de paramètre d'anti-aliasing $`p`$
 (fréquence de Nyquist) :
 
-$$N_d = \frac{p+1}{2}N$$
+```math
+N_d = \frac{p+1}{2}N
+```
 
-L'anti-aliasing complet est obtenu pour $p=M$. Il est recommandé de l'utiliser
+L'anti-aliasing complet est obtenu pour $`p=M`$. Il est recommandé de l'utiliser
 pour éviter tout problème de recouvrement.
 
 Le schéma d'intégration temporel est un schéma de Runge-Kutta-Cash-Karp d'ordre
-4 avec par adaptatif. La tolérance est en générale comprise entre $10^{-7}$ et
-$10^{-5}$.
+4 avec par adaptatif. La tolérance est en générale comprise entre $`10^{-7}`$ et
+$`10^{-5}`$.
 
 Pour une description plus complète de la théorie sous-jacente à la méthode HOS,
 nous invitons le lecteur à se référer à Ducrozet 2013 and Ducrozet *et al.*
@@ -1107,7 +1301,7 @@ nous invitons le lecteur à se référer à Ducrozet 2013 and Ducrozet *et al.*
 #### Conditions initiales
 
 Afin d'initialiser la simulation, des valeurs initiales pour le potentiel de
-vitesse $\phi$ et l'élévation de surface libre $\eta$ doivent être spécifiées
+vitesse $`\phi`$ et l'élévation de surface libre $`\eta`$ doivent être spécifiées
 sur tout le domaine. Deux profils de vagues sont intégrés à HOS : un pour la
 houle régulière et un pour la houe irrégulière.
 
@@ -1117,42 +1311,49 @@ fichier d'entrée `.cof` contenant les coefficients du profil de houle.
 
 Le profil de houle irrégulière linéaire est défini par la superpositions de
 composantes linéaires de directions et fréquences différentes. L'amplitude de
-chaque composante est calculée à partir d'un spectre directionnel $S(\omega,
-\theta) = F(\omega) \cdot G(\theta)$.
+chaque composante est calculée à partir d'un spectre directionnel
+$`S(\omega, \theta) = F(\omega) \cdot G(\theta)`$.
 
-$F(\omega)$ est un spectre de JONSWAP dont définit dans le fichier YAML la
-période de pic $T_p = \frac{2 \pi}{\omega_p}$, la hauteur significative $H_s$
-ainsi que le coefficient de forme $\gamma$.
+$`F(\omega)`$ est un spectre de JONSWAP dont définit dans le fichier YAML la
+période de pic $`T_p = \frac{2 \pi}{\omega_p}`$, la hauteur significative $`H_s`$
+ainsi que le coefficient de forme $`\gamma`$.
 
-$$F(\omega) = \alpha_J H_s^2 \omega_p^4 \omega^{-5} \exp \left[ - \frac{5}{4}
+```math
+F(\omega) = \alpha_J H_s^2 \omega_p^4 \omega^{-5} \exp \left[ - \frac{5}{4}
 \left( \frac{\omega}{\omega_p} \right)^{-4} \right] \gamma^{ \exp \left[-\frac{
-\left( \omega - \omega_p \right)^2}{2 \sigma^2 \omega_p^2}\right]}$$
+\left( \omega - \omega_p \right)^2}{2 \sigma^2 \omega_p^2}\right]}
+```
 
 avec
 
-$$\sigma = \left\{\begin{array}{ccc} 0.07 & \text{ for } & \omega \lt \omega_p
-\\0.09 & \text{ for } & \omega \ge \omega_p\end{array}\right.$$
+```math
+\sigma = \left\{\begin{array}{ccc} 0.07 & \text{ for } & \omega \lt \omega_p
+\\0.09 & \text{ for } & \omega \ge \omega_p\end{array}\right.
+```
 
-$G(\theta)$ désigne l'étalement directionnel :
+$`G(\theta)`$ désigne l'étalement directionnel :
 
-$$G(\theta) = \frac{1}{\beta} \left[ \cos \left( \frac{\pi \theta}{2 \beta} \right) \right]^2$$
+```math
+G(\theta) = \frac{1}{\beta} \left[ \cos \left( \frac{\pi \theta}{2 \beta} \right) \right]^2
+```
 
 Pour éviter les instabilités dues à la transition entre le modèle linéaire
 initial et les calculs non-linéaires d'HOS, une fonction de relaxation
 exponentielle est utilisée. La période de transition est définie par sa durée
-$T_a$ et un paramètre $n$ :
+$`T_a`$ et un paramètre $`n`$ :
 
-$$f(t) = 1 - \exp \left[ - \left( \frac{t}{T_a} \right)^n \right]$$
-
+```math
+f(t) = 1 - \exp \left[ - \left( \frac{t}{T_a} \right)^n \right]
+```
 
 #### Post-traitement
 
-Dans le modèle HOS, les conditions de surface libre sont écrites pour $\phi^s$
-et $\eta$. Cette simplification permet de simuler efficacement la propagation de
+Dans le modèle HOS, les conditions de surface libre sont écrites pour $`\phi^s`$
+et $`\eta`$. Cette simplification permet de simuler efficacement la propagation de
 la houle. Cependant pour le calcul des pressions et des vitesses orbitales à
 l'intérieur du domaine, des informations 3D supplémentaires sont nécessaires.
 Ces informations sont calculées durant la simulation de la propagation de la
-houle. Un opérateur $H_2$ est utilisé pour approcher ces quantités avec une
+houle. Un opérateur $`H_2`$ est utilisé pour approcher ces quantités avec une
 bonne précision. Les quantités telles que la pression et la vitesse sont ensuite
 reconstruites en post-traitement par transformée de Fourier inverse. Cela permet
 le couplage des résultats du modèle HOS avec des calculs CFD.
@@ -1188,103 +1389,43 @@ tout point, des interpolations linéaires en temps et en espace sont effectuées
 ~~~~
 
 Comme les clients du serveur HOS peuvent bloquer le serveur avec des entrées
-invalides, X-DYN effectue des vérifications sur toutes les données avant envoi
+invalides, xdyn effectue des vérifications sur toutes les données avant envoi
 au serveur.
 
-Le cas échéant, une référence au code HOS-océan est donnée pour justifier
-les bornes imposées par X-DYN.
+La paramétrisation de ce modèle dans xdyn étant issue en grande partie du code
+HOS lui-même, on fournit lorsque c'est possible un lien hypertexte vers le code
+source Fortran d'HOS-océan .
 
 D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-| Clef dans le fichier YAML                | Nom "HOS-Océan" | Description                                                       |
-+==========================================+=================+===================================================================+
-|`length of the domain along x`            | `xlen`          | Longueur du domaine de calcul suivant l'axe X (axe de propagation)|
-|                                          |                 | Comprise entre 0 (exclu) et 1000 km.                              |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`length of the domain along y`            | `ylen`          | Longueur du domaine de calcul suivant l'axe Y                     |
-|                                          |                 | Comprise entre 0 (exclu) et 1000 km.                              |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`number of modes per node in x-direction` | `n1`            | Nombre de modes par nœud sur l'axe X. Supérieur ou égal à 1       |
-|                                          |                 | (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)) |
-|                                          |                 | Attention : d'autres contraintes moins explicites doivent exister |
-|                                          |                 | (le serveur peut planter en case de valeur invalide) mais elles ne|
-|                                          |                 | sont pas vérifiées par X-DYN.                                     |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`number of modes per node in y-direction` | `n2`            | Nombre de modes par nœud sur l'axe Y. Supérieur ou égal à 1       |
-|                                          |                 | (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)) |
-|                                          |                 | Attention : d'autres contraintes moins explicites doivent exister |
-|                                          |                 | (le serveur peut planter en case de valeur invalide) mais elles ne|
-|                                          |                 | sont pas vérifiées par X-DYN.                                     |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`non-linearity order`                     | `m`             | Ordre de la méthode HOS (ordre du développement de Taylor)        |
-|                                          |                 | On doit avoir                                                     |
-|                                          |                 | $m\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.    |
-|                                          |                 | [`initial_conditions.f90` line 63](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L63) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`anti-aliasing parameter for x-axis`      | `p1`            | Paramètre d'anti-aliasing (pour l'axe X)                          |
-|                                          |                 | Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 67](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L67)) |
-|                                          |                 | On doit également avoir                                           |
-|                                          |                 | $p_1\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.  |
-|                                          |                 | [`initial_conditions.f90` line 64](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L64) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`anti-aliasing parameter for y-axis`      | `p2`            | Paramètre d'anti-aliasing (pour l'axe Y)                          |
-|                                          |                 | Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 71](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L71)) |
-|                                          |                 | On doit également avoir                                           |
-|                                          |                 | $p_2\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}$ (cf.  |
-|                                          |                 | [`initial_conditions.f90` line 65](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L65) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))|
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`water depth`                             | `depth`         | Profondeur d'eau                                                  |
-|                                          |                 | Doit être supérieur ou égal à 0 (cf. [`initial_conditions.f90` line 79](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L79)). Une valeur de 1E15 est interprétée dans la modélisation comme l'infini (cf. [`initial_conditions.f90` line 154](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L154)) |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`gamma`                                   | `gamma`         | Paramètre de forme du spectre de JONSWAP utilisé pour             |
-|                                          |                 | l'initialisation de la simulation. Doit être compris entre 0 et 20|
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`beta`                                    | `beta`          | Paramètre de l'étalement directionnel (Dysthe). Doit être         |
-|                                          |                 | Doit être strictement positif (cf. [`initial_conditions.f90` line 396](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L396)). |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`Tp`                                      | `tp_real`       | Période du spectre de JONSWAP utilisé pour l'initialisation de la |
-|                                          |                 | simulation                                                        |
-|                                          |                 | Doit être strictement positif (cf. [`initial_conditions.f90` line 155](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L155)). |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`Hs`                                      | `hs_real`       | Hauteur de houle du spectre de JONSWAP utilisé pour               |
-|                                          |                 | l'initialisation de la simulation. Compris entre 0 (exclus) et 50m|
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-|`tolerance of the RKCK scheme`            | `err`           | L'erreur utilisée pour le schéma d'intégration adaptatif          |
-|                                          |                 | Runge-Kutta - Cash-Karp doit-elle être absolue ('abs') ou relative|
-|                                          |                 | ('rel') ?                                                         |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-| `url of the HOS server`                  |       -         | URL utilisée par X-DYN pour se connecter au serveur 0MQ HOS. Ne   |
-|                                          |                 | correspond pas à l'URL utilisée par le serveur en interne pour    |
-|                                          |                 | échanger de manière asynchrone entre le code Fortran et le code   |
-|                                          |                 | Python (qui est fixée en dur par X-DYN à "5555")                  |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-| `waves propagating to`                   |       -         | Direction de propagation de la houle. Le code HOS-Océan ne        |
-|                                          |                 | permettant pas de contrôler la direction de propagation (elle est |
-|                                          |                 | codée en dur pour une propagation suivant l'axe X), X-DYN effectue|
-|                                          |                 | un changement de repère avant d'envoyer les requêtes au serveur   |
-|                                          |                 | HOS, puis fait le changement de repère inverse sur les vitesses   |
-|                                          |                 | orbitales.                                                        |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
-| `timeout`                                |       -         | Toute requête sera abandonnée au bout de ce temps. Contrôle à la  |
-|                                          |                 | fois le délai d'expiration au niveau ZMQ (`ZMQ_RCVTIMEO`) et le   |
-|                                          |                 | délai d'expiration de chaque requête (on renvoie la requête       |
-|                                          |                 | tant que la réponse est flaguée `WAIT` et que ce délai d'expiration|
-|                                          |                 | n'est pas atteint). Comme cette valeur est convertie dans le code |
-|                                          |                 | en millisecondes (précision du timeout), elle doit être comprise  |
-|                                          |                 | entre 0 (exclu) et 2147 (inclus) secondes. Les unités valides sont|
-|                                          |                 | `s`, `ms`, `us`, `ns`, `min`, `minute`, `minutes`, `second`,      |
-|                                          |                 | `seconds`, `seconde` et `secondes`.                               |
-+------------------------------------------+-----------------+-------------------------------------------------------------------+
+| Clef dans le fichier YAML                | Nom "HOS-Océan" | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ---------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|`length of the domain along x`            | `xlen`          | Longueur du domaine de calcul suivant l'axe X (axe de propagation). Comprise entre 0 (exclu) et 1000 km.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|`length of the domain along y`            | `ylen`          | Longueur du domaine de calcul suivant l'axe Y.Comprise entre 0 (exclu) et 1000 km.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|`number of modes per node in x-direction` | `n1`            | Nombre de modes par nœud sur l'axe X. Supérieur ou égal à 1. (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)). Attention : d'autres contraintes moins explicites doivent exister (le serveur peut planter en case de valeur invalide) mais elles ne sont pas vérifiées par xdyn.                                     |                                                                                                                                                                                                                              |
+|`number of modes per node in y-direction` | `n2`            | Nombre de modes par nœud sur l'axe Y. Supérieur ou égal à 1  (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)). Attention : d'autres contraintes moins explicites doivent exister (le serveur peut planter en case de valeur invalide) mais elles ne sont pas vérifiées par xdyn.                                     |                                                                                                                                                                                                                              |
+|`non-linearity order`                     | `m`             | Ordre de la méthode HOS (ordre du développement de Taylor). On doit avoir $`m\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}`$ (cf. [`initial_conditions.f90` line 63](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L63) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))                                                                                                                                                                                                 |
+|`anti-aliasing parameter for x-axis`      | `p1`            | Paramètre d'anti-aliasing (pour l'axe X). Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 67](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L67)). On doit également avoir $`p_1\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}`$ (cf. [`initial_conditions.f90` line 64](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L64) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))   |
+|`anti-aliasing parameter for y-axis`      | `p2`            | Paramètre d'anti-aliasing (pour l'axe Y). Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 71](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L71)). On doit également avoir $`p_2\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}`$ (cf. [`initial_conditions.f90` line 65](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L65) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))   |
+|`water depth`                             | `depth`         | Profondeur d'eau. Doit être supérieur ou égal à 0 (cf. [`initial_conditions.f90` line 79](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L79)). Une valeur égale à 1E15 est interprétée dans la modélisation comme l'infini (cf. [`initial_conditions.f90` line 154](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L154))                                                                                                                                                                                                     |
+|`gamma`                                   | `gamma`         | Paramètre de forme du spectre de JONSWAP utilisé pour l'initialisation de la simulation. Doit être compris entre 0 et 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|`beta`                                    | `beta`          | Paramètre de l'étalement directionnel (Dysthe). Doit être strictement positif (cf. [`initial_conditions.f90` line 396](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L396)).                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|`Tp`                                      | `tp_real`       | Période du spectre de JONSWAP utilisé pour l'initialisation de la simulation. Doit être strictement positif (cf. [`initial_conditions.f90` line 155](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L155)).                                                                                                                                                                                                                                                                                                                                                                                        |
+|`Hs`                                      | `hs_real`       | Hauteur de houle du spectre de JONSWAP utilisé pour l'initialisation de la simulation. Compris entre 0 (exclus) et 50m                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|`tolerance of the RKCK scheme`            | `err`           | L'erreur utilisée pour le schéma d'intégration adaptatif Runge-Kutta - Cash-Karp doit-elle être absolue ('abs') ou relative ('rel') ?                                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `url of the HOS server`                  |       -         | URL utilisée par xdyn pour se connecter au serveur 0MQ HOS. Ne correspond pas à l'URL utilisée par le serveur en interne pour échanger de manière asynchrone entre le code Fortran et le code Python (qui est fixée en dur par xdyn à "5555")                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `waves propagating to`                   |       -         | Direction de propagation de la houle. Le code HOS-Océan ne permettant pas de contrôler la direction de propagation (elle est codée en dur pour une propagation suivant l'axe X), xdyn effectue un changement de repère avant d'envoyer les requêtes au serveur HOS, puis fait le changement de repère inverse sur les vitesses orbitales.                                                                                                                                                                                                                                                                                                                             |
+| `timeout`                                |       -         | Toute requête sera abandonnée au bout de ce temps. Contrôle à la fois le délai d'expiration au niveau ZMQ (`ZMQ_RCVTIMEO`) et le délai d'expiration de chaque requête (on renvoie la requête tant que la réponse est flaguée `WAIT` et que ce délai d'expiration n'est pas atteint). Comme cette valeur est convertie dans le code en millisecondes (précision du timeout), elle doit être comprise entre 0 (exclu) et 2147 (inclus) secondes. Les unités valides sont `s`, `ms`, `us`, `ns`, `min`, `minute`, `minutes`, `second`, `seconds`, `seconde` et `secondes`.                                                                                                |
+
 
 ### Repères
 
 Le modèle HOS est défini selon une convention "Z vers le haut". En outre, le
 code HOS-océan ne permet qu'une propagation suivant l'axe X (on ne contrôle pas
 la direction de propagation). Par conséquent, les opérations suivantes sont
-faites dans X-DYN :
+faites dans xdyn :
 
-- Pour tous les calculs HOS, on transforme les entrées X-DYN du repère NED au
+- Pour tous les calculs HOS, on transforme les entrées xdyn du repère NED au
   repère HOS. Cette transformation est définie par une rotation d'angle `waves
   propagating to` autour de l'axe Z (afin de pouvoir simuler des directions de
   propagations différentes de l'axe X), puis une rotation de 180 degrés autour
@@ -1293,22 +1434,31 @@ faites dans X-DYN :
 - Les vitesses orbitales données par HOS subissent la transformation HOS->NED,
   inverse de la transformée précédente
 
-La transformation NED $\rightarrow$ HOS est donnée par :
+La transformation NED $`\rightarrow`$ HOS est donnée par :
 
-$${}^{\mbox{HOS}}T_{\mbox{NED}} = R_X(\pi)\cdot R_Z(\theta)$$
+```math
+{}^{\textrm{HOS}}T_{\textrm{NED}} = R_X(\pi)\cdot R_Z(\theta)
+```
 
-où $\theta$ désigne l'angle de propagation renseigné dans le fichier YAML
+où $`\theta`$ désigne l'angle de propagation renseigné dans le fichier YAML
 (clef `waves propagating to`).
 
 On a donc :
 
-$${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]$$
+```math
+{}^{\textrm{HOS}}T_{\textrm{NED}} = \left[\begin{array}{ccc}1&0&0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\\sin(\theta)&\cos(\theta)&0\\0&0&1\end{array}\right]
+```
 
-$${}^{\mbox{HOS}}T_{\mbox{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
+```math
+{}^{\textrm{HOS}}T_{\textrm{NED}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]
+```
 
-et la transformation inverse (HOS $\rightarrow$ NED) est égale à la transformation directe :
+et la transformation inverse (HOS $`\rightarrow`$ NED) est égale à la transformation directe :
 
-$${}^{\mbox{NED}}T_{\mbox{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]$$
+```math
+{}^{\textrm{NED}}T_{\textrm{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\theta)&0\\-\sin(\theta)&-\cos(\theta)&0\\0&0&-1\end{array}\right]
+```
+
 
 ## Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
@@ -1325,3 +1475,4 @@ $${}^{\mbox{NED}}T_{\mbox{HOS}} = \left[\begin{array}{ccc}\cos(\theta)&-\sin(\th
 - *HOS-ocean : Open-source solver for nonlinear waves in open ocean based on High-Order Spectral method*, 2016, Ducrozet, G. and Bonnefoy, F. and Ferrant, P., Computer Physics Communications
 - *A Fourier approximation method for steady waves*, 1981, Rienecker, M.M. and Fenton, J.D., Journal of Fluid Mechanics
 - *A new numerical method for surface hydrodynamics*, 1987, West, B.J. and Brueckner, R.S and Janda, M. and Milder, M. and Milton R.L, Journal of Geophysics Research
+

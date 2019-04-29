@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.8)
 project(binary_stl_data)
 
-set(SRC src/generate_anthineas.cpp
+set(SRC src/generate_test_ship.cpp
         )
 
 IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") # Otherwise CLang generates fatal error: string literal of length 253876 exceeds maximum length 65536 that C++ compilers are required to support 

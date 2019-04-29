@@ -2,21 +2,41 @@
 
 [![License](https://img.shields.io/badge/License-EPL%202.0-blue.svg)](https://opensource.org/licenses/EPL-2.0)
 
-X-DYN is a lightweight ship simulator. More precisely, it simulates the
-mechanical behaviour of a solid body in a fluid environment. Its purpose is to
-solve Newton's second law of motion taking hydrodynamic forces into account.
+X-DYN is a lightweight ship simulator modelling the dynamic behaviour of a ship a ship at sea, with its actuators, including some non-linear aspects of that behaviour and featuring a customizable maneuvring model.
+It simulates the mechanical behaviour of a solid body in a fluid environment by
+solving Newton's second law of motion, taking hydrodynamic forces into account.
 
-It was developed by SIREHNA during the IRT Jules Verne's ["Bassin Numérique"
+It was developed by SIREHNA through both self-funded projects and various collaborative projects, including the IRT Jules Verne's ["Bassin Numérique"
 project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf).
 
 (c) 2014-2015, [IRT Jules Verne](https://www.irt-jules-verne.fr/), [SIREHNA](http://www.sirehna.com/), [Naval Group](https://www.naval-group.com/en/), [Bureau Veritas](https://www.bureauveritas.fr/), [Hydrocean](https://marine-offshore.bureauveritas.com/bvsolutions), [STX France](http://chantiers-atlantique.com/en/), [LHEEA](https://lheea.ec-nantes.fr/) for the initial version.
 
 (c) 2015-2018 [SIREHNA](http://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
 
+**Disclaimer**: This documentation was written for a French project, with
+French participants, therefore it is in French. It will be translated
+eventually. Also, please note that it is still a work-in-progress and, as such,
+can be incomplete. Despite our best efforts, inaccuracies may remain. However,
+the documentation will continue to evolve as new developments on X-DYN are
+on-going.
+
 ## Getting Started
 
+Pre-built binaries of X-DYN are available:
+- [for Windows](https://github.com/sirehna/x-dyn/releases/download/v1.0.0/xdyn.exe)
+- [for Debian](https://github.com/sirehna/x-dyn/releases/download/v1.0.0/xdyn.deb).
+
+There are many other ways of using X-DYN, all of which are described in [the documentation]().
+
+The **models** implemented inside X-DYN are described in detail in [this section]() of the documentation.
+You can also learn how to use X-DYN using the [tutorials]().
+
+## Building X-DYN from source
+
+This section describes what you need to do if you wish to compile X-DYN
+yourself.
 These instructions will get you a copy of the project up and running on your
-local machine for development and testing purposes. See deployment for notes on
+local machine for development and testing purposes. See deployment<comment>[JJM] ? </comment> for notes on
 how to deploy the project on a live system.
 
 ### Prerequisites
@@ -105,13 +125,13 @@ options](https://github.com/google/googletest/blob/master/googletest/docs/advanc
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Add additional notes about how to deploy this on a live system <comment>[JJM] ? </comment>
 
 ## Built With
 
 * [CMake](https://cmake.org/) - Used to compile C++ code for various platforms.
 * [Make](https://www.gnu.org/software/make/) - Used for the one-step build described above.
-* [GCC](http://gcc.gnu.org/) - Compiler used for both the Windows & Linux: Visual Studio is currently **not** supported.
+* [GCC](http://gcc.gnu.org/) - Compiler used for both the Windows & Linux: Visual Studio is currently **not** supported.<comment>[JJM] On sait si on gagnerait en temps de calcul si on l'utilisait ? </comment>
 * [Boost](https://www.boost.org/) - For command-line options, regular expressions, filesystem library.
 * [yaml-cpp](https://github.com/jbeder/yaml-cpp) - To parse the input files.
 * [HDF5](https://support.hdfgroup.org/products/hdf5_tools/index.html) - To store the outputs.
@@ -120,7 +140,8 @@ Add additional notes about how to deploy this on a live system
 * [ZMQ](http://zeromq.org/) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
 * [CPP ZMQ](https://github.com/zeromq/cppzmq) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
 * [Pandoc](https://pandoc.org/) - To generate the documentation.
-* [SSC](https://github.com/sirehna/ssc) - For websockets, unit decoding, interpolations, kinematics, CSV file reading, exception handling.
+* [Pweave](http://mpastell.com/pweave/) - To generate the tutorials.
+* [SSC](https://github.com/sirehna/ssc) - For websockets, units decoding, interpolations, kinematics, CSV file reading and exception handling.
 
 ## Contributing
 
@@ -139,8 +160,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * [Charles-Edouard CADY](https://github.com/CharlesEdouardCady)
 * [Guillaume JACQUENOT](https://github.com/GuillaumeJacquenot)
 
-See also the list of [contributors](https://github.com/sirehna/xdyn/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/sirehna/xdyn/contributors) <comment>[JJM] 404 </comment> who participated in this project.
 
 ## License
 
 This project is licensed under the Eclipse Public License (version 2) - see the [LICENSE.md](LICENSE.md) file for details.
+
+<comment>[JJM] Relu </comment>

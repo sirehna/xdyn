@@ -38,7 +38,6 @@ struct BodyStates : AbstractStates<History>
     BodyStates& operator=(const AbstractStates<History>& rhs);
     std::string name;                                              //!< Body's name
     ssc::kinematics::Point G;                                      //!< Position of the ship's centre of gravity
-    double m;                                                      //!< Total mass of the body (in kg)
     MeshPtr mesh;                                                  //!< Vertices & edges of the body's mesh
     MatrixPtr total_inertia;                                       //!< 6x6 matrix corresponding to the sum of the rigid body inertia + added mass expressed in the body frame
     MatrixPtr solid_body_inertia;                                  //!< 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame

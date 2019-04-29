@@ -496,7 +496,7 @@ pour le réaliser.
 
 Ce calcul est dévolu à la classe `Body` (méthode
 `Body::calculate_state_derivatives`). La seule particularité de ce calcul est la
-dernière étape : le forçage des états. Comme l'algorithme d'intégration temporel
+dernière étape : le forçage des états. Comme l'algorithme d'intégration temporelle
 utilisé dans le simulateur ne fait pas de résolution sous contrainte, on ne peut
 pas forcer tous les états et l'on ne fait que forcer les dérivées. Ce forçage
 est de la responsabilité de la classe `BlockedDOF` définie dans le module
@@ -520,7 +520,7 @@ non-commandé) et tous les corps simulés (pour récupérer les états). En outr
 elle se charge de calculer la différence entre la somme des efforts calculés et
 les efforts qu'il faut réellement appliquer pour maintenir les forçages.
 
-# Architecture de l'interface graphique
+# Architecture de l'interface graphique<comment>[JJM] il y a une interface graphique ? </comment>
 
 L'interface graphique est réalisée en HTML5 (Javascript + HTML + CSS). Voici les
 raisons de ce choix :
@@ -552,7 +552,7 @@ Le fonctionnement de l'interface graphique s'articule autour de trois éléments
 
 La classe `WebSocketObserver` est définie dans le module `observers_and_api`.
 Elle se connecte à un websocket existant (elle ne crée pas de websocket) et
-envoie les données sous format YAML. Voici un exemple de trame émise :
+envoie les données sous format YAML. Voici un exemple de trame émise :<comment>[JJM] Anthineas </comment>
 
 ~~~~~~~~~~~~~ {.yaml}
 {
@@ -588,7 +588,7 @@ Le code HTML5 comprend :
   de communication avec le simulateur et le fichier `realtime_plot.js` les
   fonctions de tracé
 
-## Fonctionnement du serveur Python
+## Fonctionnement du serveur Python<comment>[JJM] il me semble que python n'est pas référencé dans l'ensemble des outils utilisés, dans le document...je ne me souviens plus </comment>
 
 Le serveur a été écrit en Python en utilisant la bibliothèque `tornado` car
 c'était le langage qui minimisait la quantité de code à écrire et les opérations
@@ -1300,7 +1300,7 @@ pourraient être considérées :
 
 ## Modèles supplémentaires
 
-- Hollenbach résistance à l'avancement
+- Hollenbach résistance à l'avancement<comment>[JJM] pourquoi çà particulièrement ? Il en existe plein. Ca ne me parait pas très prioritaire </comment>
 - Modèle de houle régulière non-linéaire
 - Vent (spectre de Harris)
 - Variation des conditions environnementales suivant un scénario
@@ -1309,9 +1309,11 @@ pourraient être considérées :
 - Faciliter la maintenance des observateurs en leur ajoutant la responsabilité
   de reconnaître le format de sortie à partir de l'extension de fichier.
 
-## Aspects multi-corps
+<comment>[JJM] je rajouterais la prise en compte des efforts du second ordre sur houle, et sans doute d'autres choses (regarder la liste des développements intéressants identifiés) </comment>
 
-- Liaisons cinématiques (permet de simuler le déplacement d'objets amarés au
+## Aspects multi-corps <comment>[JJM] sans doute très ambitieux, pertinent ? </comment>
+
+- Liaisons cinématiques (permet de simuler le déplacement d'objets liés au
   navire)
 - Détection des collisions
 - Intégration d'un système algébro-différentiel (permet de forcer proprement les
@@ -1330,3 +1332,7 @@ pourraient être considérées :
 - La vitesse d'exécution des modèles de manœuvrabilité peut être améliorée :
   actuellement, ils sont interprétés, mais il est possible de les compiler
   dynamiquement pour atteindre les performances d'un code natif.
+
+<comment>[JJM] Rien concernant le lien avec divers systèmes/applications : simulateurs visuels, pilotes-systèmes embarqués HIL, etc. Tu considères que çà ne demande pas de développement parce que le logiciel est déjà conçu pour ?  </comment>
+
+<comment>[JJM] Document balayé, par curiosité principalement... Impressionnant. Mais çà fait un peu peur aussi, j'ai l'impression qu'il faut réellement des développeurs professionnels pour maintenir et faire évoluer l'outil, même à la marge... </comment>

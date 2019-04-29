@@ -12,7 +12,7 @@
 #include "stl_data.hpp"
 #include "stl_reader.hpp"
 #include "MeshIntersector.hpp"
-#include "generate_anthineas.hpp"
+#include "generate_test_ship.hpp"
 
 #define EPS 1E-6
 
@@ -596,7 +596,7 @@ TEST_F(MeshIntersectorTest, can_compute_the_volume_of_a_partially_immersed_cube)
 
 TEST_F(MeshIntersectorTest, LONG_can_compute_the_volume_of_the_anthineas)
 {
-    MeshIntersector intersector(anthineas());
+    MeshIntersector intersector(test_ship());
     const std::vector<double> dz(intersector.mesh->total_number_of_nodes,1);
     intersector.update_intersection_with_free_surface(dz,dz);
     ASSERT_NEAR(601.726, intersector.emerged_volume()+intersector.immersed_volume(), 1E-3);

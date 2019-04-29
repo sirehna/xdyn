@@ -26,7 +26,7 @@ struct GZ::Curve::Impl
         sim.get_bodies().front()->update(sim.get_env(),x,0);
         const double total_volume = sim.get_bodies().front()->get_states().intersector->emerged_volume() +  sim.get_bodies().front()->get_states().intersector->immersed_volume();
         const double weight_of_water_displaced_by_fully_immersed_body = sim.get_env().rho*total_volume;
-        const double body_mass = sim.get_bodies().front()->get_states().m;
+        const double body_mass = sim.get_bodies().front()->get_states().solid_body_inertia->operator()(2,2);
         if (body_mass > weight_of_water_displaced_by_fully_immersed_body)
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "The body is denser than water & will sink: weight of water displaced by fully immersed_body is " << weight_of_water_displaced_by_fully_immersed_body << " kg, but body mass is " << body_mass << " kg.");

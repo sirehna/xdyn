@@ -10,7 +10,7 @@
 
 #include "ForceTester.hpp"
 #include "ForceTests.hpp"
-#include "generate_anthineas.hpp"
+#include "generate_test_ship.hpp"
 #include "GravityForceModel.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
@@ -73,9 +73,9 @@ TEST_F(ForceTests, LONG_fast_hydrostatic_should_only_be_along_z)
     }
 }
 
-TEST_F(ForceTests, DISABLED_fast_hydrostatic_should_only_be_along_z_for_anthineas)
+TEST_F(ForceTests, DISABLED_fast_hydrostatic_should_only_be_along_z_for_test_ship)
 {
-    ForceTester test(test_data::oscillating_cube_example(), anthineas());
+    ForceTester test(test_data::oscillating_cube_example(), test_ship());
 
     test.add<FastHydrostaticForceModel>();
     const size_t n = 100;
@@ -102,7 +102,7 @@ TEST_F(ForceTests, DISABLED_fast_hydrostatic_should_only_be_along_z_for_anthinea
 
 TEST_F(ForceTests, LONG_rotation_around_z_should_not_change_anything_for_fast_hydrostatic)
 {
-    ForceTester test(test_data::oscillating_cube_example(), anthineas());
+    ForceTester test(test_data::oscillating_cube_example(), test_ship());
 
     test.add<FastHydrostaticForceModel>();
     const size_t n = 100;
@@ -208,9 +208,9 @@ TEST_F(ForceTests, LONG_exact_hydrostatic_should_only_be_along_z)
     }
 }
 
-TEST_F(ForceTests, DISABLED_exact_hydrostatic_should_only_be_along_z_for_anthineas)
+TEST_F(ForceTests, DISABLED_exact_hydrostatic_should_only_be_along_z_for_test_ship)
 {
-    ForceTester test(test_data::anthineas_exact_hydrostatic_test(), anthineas());
+    ForceTester test(test_data::test_ship_exact_hydrostatic_test(), test_ship());
 
     test.add<ExactHydrostaticForceModel>();
     const size_t n = 100;
@@ -237,7 +237,7 @@ TEST_F(ForceTests, DISABLED_exact_hydrostatic_should_only_be_along_z_for_anthine
 
 TEST_F(ForceTests, LONG_rotation_around_z_should_not_change_anything_for_exact_hydrostatic)
 {
-    ForceTester test(test_data::oscillating_cube_example(), anthineas());
+    ForceTester test(test_data::oscillating_cube_example(), test_ship());
 
     test.add<ExactHydrostaticForceModel>();
     const size_t n = 100;
@@ -343,9 +343,9 @@ TEST_F(ForceTests, LONG_new_hydrostatic_should_only_be_along_z)
     }
 }
 
-TEST_F(ForceTests, LONG_new_hydrostatic_should_only_be_along_z_for_anthineas)
+TEST_F(ForceTests, LONG_new_hydrostatic_should_only_be_along_z_for_test_ship)
 {
-    ForceTester test(test_data::oscillating_cube_example(), anthineas());
+    ForceTester test(test_data::oscillating_cube_example(), test_ship());
 
     test.add<HydrostaticForceModel>();
     const size_t n = 100;
@@ -372,7 +372,7 @@ TEST_F(ForceTests, LONG_new_hydrostatic_should_only_be_along_z_for_anthineas)
 
 TEST_F(ForceTests, LONG_rotation_around_z_should_not_change_anything_for_new_hydrostatic)
 {
-    ForceTester test(test_data::oscillating_cube_example(), anthineas());
+    ForceTester test(test_data::oscillating_cube_example(), test_ship());
 
     test.add<HydrostaticForceModel>();
     const size_t n = 100;
@@ -523,9 +523,9 @@ TEST_F(ForceTests, can_compute_torque_for_a_cube_rotated_on_theta)
     EXPECT_NEAR(-1026*0.5*9.81*1/36., F.M(),EPS);
 }
 
-TEST_F(ForceTests, LONG_validation_of_anthineas_volume_against_VTK)
+TEST_F(ForceTests, LONG_validation_of_test_ship_volume_against_VTK)
 {
-    ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
+    ForceTester test(test_data::test_ship_damping(), write_stl(test_ship()));
     ASSERT_NEAR(ANTHINEAS_VOLUME, test.emerged_volume(0,0,-100,0,0,0), 1E-4);
     ASSERT_NEAR(ANTHINEAS_VOLUME, test.immersed_volume(0,0,100,0,0,0), 1E-4);
 }
@@ -550,7 +550,7 @@ TEST_F(ForceTests, validation_of_L_volume_against_VTK)
 
 TEST_F(ForceTests, LONG_immersed_and_emerged_surfaces_are_correct)
 {
-    ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
+    ForceTester test(test_data::test_ship_damping(), write_stl(test_ship()));
     double immersed_surface = test.immersed_surface(0,0,1,-PI/2,0,0);
     double emerged_surface = test.emerged_surface(0,0,1,-PI/2,0,0);
     ASSERT_NEAR(495.51109419742073214, immersed_surface+emerged_surface, 1E-10);
@@ -603,7 +603,7 @@ TEST_F(ForceTests, DISABLED_center_of_buoyancy_cube)
 TEST_F(ForceTests, DISABLED_LONG_bug_detected_in_GZ)
 {
     const double eps = 1.0103e-12;
-    ForceTester test(test_data::anthineas_damping(), write_stl(anthineas()));
+    ForceTester test(test_data::test_ship_damping(), write_stl(test_ship()));
     test.immersed_volume(0,0,-eps/2,-PI/2,0,0);
     const double V1_immersed = test.immersed_volume(0,0,-eps/2,-PI/2,0,0);
     const double V1_emerged = test.immersed_volume(0,0,-eps/2,-PI/2,0,0);
@@ -648,7 +648,7 @@ TEST_F(ForceTests, hydrostatic_plus_froude_krylov)
 
 DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents) const
 {
-    const std::string yaml = test_data::anthineas_waves_test();
+    const std::string yaml = test_data::test_ship_waves_test();
     const std::string stl = test_data::single_facet();
     auto input = SimulatorYamlParser(yaml).parse();
     YamlBody body = input.bodies.front();
@@ -699,7 +699,7 @@ std::string ForceTests::get_diffraction_conf(const double x, const double y, con
 {
     std::stringstream ss;
     ss << "model: diffraction\n"
-           << "hdb: anthineas.hdb\n"
+           << "hdb: test_ship.hdb\n"
            << "calculation point in body frame:\n"
            << "    x: {value: " << x << ", unit: m}\n"
            << "    y: {value: " << y << ", unit: m}\n"

@@ -13,7 +13,7 @@
 #include "YamlRotation.hpp"
 #include "BodyBuilder.hpp"
 #include "GeometricTypes3d.hpp"
-#include "generate_anthineas.hpp"
+#include "generate_test_ship.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "discretize.hpp"
@@ -88,7 +88,7 @@ EnvironmentAndFrames get_env()
 void test(const ForceModel& F, const EnvironmentAndFrames& env, const size_t n);
 void test(const ForceModel& F, const EnvironmentAndFrames& env, size_t n)
 {
-    BodyPtr body = get_body(BODY, anthineas());
+    BodyPtr body = get_body(BODY, test_ship());
     const double t = 0;
     body->update_intersection_with_free_surface(env, t);
     ssc::kinematics::Wrench Fhs;

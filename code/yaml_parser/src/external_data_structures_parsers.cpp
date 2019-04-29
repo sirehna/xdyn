@@ -104,10 +104,17 @@ void operator >> (const YAML::Node& node, YamlBody& b)
     try_to_parse(node, "mesh", b.mesh);
     try_to_parse(node, "external forces", b.external_forces);
     try_to_parse(node, "controlled forces", b.controlled_forces);
-    node["position of body frame relative to mesh"]             >> b.position_of_body_frame_relative_to_mesh;
-    node["initial position of body frame relative to NED"]      >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
-    node["initial velocity of body frame relative to NED"]      >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
-    node["dynamics"]                                            >> b.dynamics;
+    try
+    {
+        node["position of body frame relative to mesh"]             >> b.position_of_body_frame_relative_to_mesh;
+        node["initial position of body frame relative to NED"]      >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
+        node["initial velocity of body frame relative to NED"]      >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
+        node["dynamics"]                                            >> b.dynamics;
+    }
+    catch (const InvalidInputException& e)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error parsing 'body' section (body '" << b.name << "'): " << e.get_message());
+    }
     try_to_parse(node, "blocked dof", b.blocked_dof);
 }
 
@@ -156,9 +163,50 @@ void operator >> (const YAML::Node& node, YamlSpeed& s)
 void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
-    ssc::yaml_parser::parse_uv(node["mass"], d.mass);
-    node["rigid body inertia matrix at the center of buoyancy projected in the body frame"] >> d.rigid_body_inertia;
-    node["added mass matrix at the center of buoyancy projected in the body frame"] >> d.added_mass;
+    if (node.FindValue("rigid body inertia matrix at the center of buoyancy projected in the body frame"))
+    {
+        try
+        {
+            parse_YamlDynamics6x6Matrix(node["rigid body inertia matrix at the center of buoyancy projected in the body frame"], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
+        }
+        catch(const InvalidInputException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'rigid body inertia matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+        }
+    }
+    else
+    {
+        try
+        {
+            parse_YamlDynamics6x6Matrix(node["rigid body inertia matrix at the center of gravity and projected in the body frame"], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
+        }
+        catch(const InvalidInputException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'rigid body inertia matrix at the center of gravity and projected in the body frame': " << e.get_message());
+        }
+    }
+    if (node.FindValue("added mass matrix at the center of buoyancy projected in the body frame"))
+    {
+        try
+        {
+            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of buoyancy projected in the body frame"], d.added_mass, false, d.centre_of_inertia.frame);
+        }
+        catch(const InvalidInputException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+        }
+    }
+    else
+    {
+        try
+        {
+            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of gravity and projected in the body frame"], d.added_mass, false, d.centre_of_inertia.frame);
+        }
+        catch(const InvalidInputException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of gravity and projected in the body frame': " << e.get_message());
+        }
+    }
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
 }
 
@@ -169,26 +217,32 @@ void operator >> (const YAML::Node& node, YamlPoint& p)
     parse_point_with_name(node, p,name);
 }
 
-void operator >> (const YAML::Node& node, YamlDynamics6x6Matrix& m)
+void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& m, const bool parse_frame, const std::string& frame_name)
 {
     if (const YAML::Node *parameter = node.FindValue("from hdb"))
     {
-        if (   node.FindValue("frame")
-            or node.FindValue("row 1")
+        if (   node.FindValue("row 1")
             or node.FindValue("row 2")
             or node.FindValue("row 3")
             or node.FindValue("row 4")
             or node.FindValue("row 5")
             or node.FindValue("row 6"))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': cannot specify both an HDB filename & a matrix.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a matrix.");
         }
         m.read_from_file = true;
         *parameter >> m.hdb_filename;
     }
     else
     {
-        node["frame"] >> m.frame;
+        if (parse_frame)
+        {
+            node["frame"] >> m.frame;
+        }
+        else
+        {
+            m.frame = frame_name;
+        }
         node["row 1"] >> m.row_1;
         node["row 2"] >> m.row_2;
         node["row 3"] >> m.row_3;

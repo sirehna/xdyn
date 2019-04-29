@@ -27,7 +27,7 @@
 #include "simulator_api.hpp"
 #include <ssc/solver.hpp>
 #include "TriMeshTestData.hpp"
-#include "generate_anthineas.hpp"
+#include "generate_test_ship.hpp"
 #include "hdb_data.hpp"
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
@@ -37,7 +37,7 @@
 #define SQUARE(x) ((x)*(x))
 #define DEG (atan(1.)/45.)
 
-const VectorOfVectorOfPoints SimTest::anthineas_stl = anthineas();
+const VectorOfVectorOfPoints SimTest::test_ship_stl = test_ship();
 
 SimTest::SimTest() : a(ssc::random_data_generator::DataGenerator(42222))
 {
@@ -181,10 +181,10 @@ TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
     }
 }
 
-TEST_F(SimTest, LONG_hydrostatic_test_on_anthineas)
+TEST_F(SimTest, LONG_hydrostatic_test_on_test_ship)
 {
-    const auto yaml = SimulatorYamlParser(test_data::anthineas_fast_hydrostatic_test()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
+    const auto yaml = SimulatorYamlParser(test_data::test_ship_fast_hydrostatic_test()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 4.79, 0.479);
     ASSERT_EQ(11, res.size());
     ASSERT_NEAR(0, res[0].x[XIDX(0)], EPS);
     ASSERT_NEAR(0, res[0].x[YIDX(0)], EPS);
@@ -202,10 +202,10 @@ TEST_F(SimTest, LONG_hydrostatic_test_on_anthineas)
     }
 }
 
-TEST_F(SimTest, LONG_exact_hydrostatic_test_on_anthineas)
+TEST_F(SimTest, LONG_exact_hydrostatic_test_on_test_ship)
 {
-    const auto yaml = SimulatorYamlParser(test_data::anthineas_exact_hydrostatic_test()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 0.4);
+    const auto yaml = SimulatorYamlParser(test_data::test_ship_exact_hydrostatic_test()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 0.1, 0.4);
 }
 
 TEST_F(SimTest, should_throw_if_wave_output_mesh_does_not_exist)
@@ -271,10 +271,10 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
     }
 }
 
-TEST_F(SimTest, LONG_waves_test_on_anthineas)
+TEST_F(SimTest, LONG_waves_test_on_test_ship)
 {
-    const auto yaml = SimulatorYamlParser(test_data::anthineas_waves_test()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
+    const auto yaml = SimulatorYamlParser(test_data::test_ship_waves_test()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 4.79, 0.479);
     ASSERT_EQ(11, res.size());
     ASSERT_NEAR(0, res[0].x[XIDX(0)], EPS);
     ASSERT_NEAR(0, res[0].x[YIDX(0)], EPS);
@@ -284,14 +284,14 @@ TEST_F(SimTest, LONG_waves_test_on_anthineas)
 
 TEST_F(SimTest, LONG_froude_krylov)
 {
-    const auto yaml = SimulatorYamlParser(test_data::anthineas_froude_krylov()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 4.79, 0.479);
+    const auto yaml = SimulatorYamlParser(test_data::test_ship_froude_krylov()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 4.79, 0.479);
 }
 
-TEST_F(SimTest, LONG_anthineas_damping)
+TEST_F(SimTest, LONG_test_ship_damping)
 {
-    const auto yaml = SimulatorYamlParser(test_data::anthineas_damping()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 20, 1);
+    const auto yaml = SimulatorYamlParser(test_data::test_ship_damping()).parse();
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 20, 1);
     ASSERT_EQ(21, res.size());
     ASSERT_FALSE(std::isnan(res.back().x[ZIDX(0)]));
     ASSERT_EQ(res.back().x[ZIDX(0)],res.back().x[ZIDX(0)]); // Check if nan
@@ -300,7 +300,7 @@ TEST_F(SimTest, LONG_anthineas_damping)
 TEST_F(SimTest, DISABLED_LONG_bug_2655)
 {
     const auto yaml = SimulatorYamlParser(test_data::bug_2655()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 1.4, 0.1);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 1.4, 0.1);
     ASSERT_EQ(15, res.size());
     ASSERT_NEAR(-0.228388, res.back().x[WIDX(0)], 1e-6);
 }
@@ -312,7 +312,7 @@ TEST_F(SimTest, LONG_propulsion_and_resistance)
     commands.set<double>("propeller(rpm)", 100*(2*PI)/60.);
     commands.set<double>("propeller(P/D)", 1.064935);
     const size_t N = 250;
-    const auto res = simulate<ssc::solver::EulerStepper>(yaml, anthineas_stl, 0, N, 1, commands);
+    const auto res = simulate<ssc::solver::EulerStepper>(yaml, test_ship_stl, 0, N, 1, commands);
     ASSERT_EQ(N+1, res.size());
     for (size_t i = 0 ; i <= N ; ++i)
     {
@@ -335,13 +335,13 @@ TEST_F(SimTest, DISABLED_LONG_bug_2641)
     ssc::data_source::DataSource commands;
     commands.set<double>("propeller(rpm)", 5*(2*PI));
     commands.set<double>("propeller(P/D)", 0.67);
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 5, 1, commands);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 5, 1, commands);
     ASSERT_LT(res.back().x[VIDX(0)], -0.003);
 }
 
 TEST_F(SimTest, bug_in_exact_hydrostatic)
 {
-    const auto yaml = SimulatorYamlParser(test_data::anthineas_exact_hydrostatic_test()).parse();
+    const auto yaml = SimulatorYamlParser(test_data::test_ship_exact_hydrostatic_test()).parse();
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::bug_in_exact_hydrostatic(), test_data::cube(), 0, 0.1, 0.4);
     for (auto r:res)
     {
@@ -379,16 +379,16 @@ TEST_F(SimTest, rolling_cube_with_big_mesh)
     }
     ASSERT_EQ(11, phi.size());
     ASSERT_NEAR(0.43633231299858238339, phi[0],1e-6);
-    ASSERT_NEAR(0.43700828067963098933, phi[1],1e-6);
-    ASSERT_NEAR(0.43903680991706939274, phi[2],1e-6);
-    ASSERT_NEAR(0.44241973378965104846, phi[3],1e-6);
-    ASSERT_NEAR(0.44715995408222602991, phi[4],1e-6);
-    ASSERT_NEAR(0.45326120625305410528, phi[5],1e-6);
-    ASSERT_NEAR(0.46072772026846647853, phi[6],1e-6);
-    ASSERT_NEAR(0.46956376697152346633, phi[7],1e-6);
-    ASSERT_NEAR(0.479773076406918908  , phi[8],1e-6);
-    ASSERT_NEAR(0.49135811108789601009, phi[9],1e-6);
-    ASSERT_NEAR(0.50431917355733746344, phi[10],1e-6);
+    ASSERT_NEAR(0.43768435305033482, phi[1],1e-6);
+    ASSERT_NEAR(0.44174294754506388, phi[2],1e-6);
+    ASSERT_NEAR(0.44851515262040759, phi[3],1e-6);
+    ASSERT_NEAR(0.45801148069658759, phi[4],1e-6);
+    ASSERT_NEAR(0.47024394765573296, phi[5],1e-6);
+    ASSERT_NEAR(0.48522317379612806, phi[6],1e-6);
+    ASSERT_NEAR(0.50295436708778729, phi[7],1e-6);
+    ASSERT_NEAR(0.52343196026884675, phi[8],1e-6);
+    ASSERT_NEAR(0.54663261284397258, phi[9],1e-6);
+    ASSERT_NEAR(0.57250622838907383, phi[10],1e-6);
 }
 
 TEST_F(SimTest, LONG_bug_2714_heading_keeping)
@@ -396,7 +396,7 @@ TEST_F(SimTest, LONG_bug_2714_heading_keeping)
     ssc::data_source::DataSource command_listener;
     command_listener.set<double>("controller(psi_co)", 0);
     const auto yaml = SimulatorYamlParser(test_data::bug_2714_heading_keeping()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 0.1, command_listener);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 0.1, 0.1, command_listener);
     ASSERT_EQ(2, res.size());
 }
 
@@ -407,7 +407,7 @@ TEST_F(SimTest, LONG_bug_2714_station_keeping)
     command_listener.set<double>("controller(y_co)", 0);
     command_listener.set<double>("controller(psi_co)", 0);
     const auto yaml = SimulatorYamlParser(test_data::bug_2714_station_keeping()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, anthineas_stl, 0, 0.1, 0.1, command_listener);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 0.1, 0.1, command_listener);
     ASSERT_EQ(2, res.size());
 }
 
@@ -419,7 +419,7 @@ TEST_F(SimTest, LONG_bug_2732)
     command_listener.set<double>("Prop. & rudder(rpm)", 50);
     command_listener.set<double>("Prop. & rudder(P/D)", 1);
     command_listener.set<double>("Prop. & rudder(beta)", 0);
-    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    auto sys = get_system(yaml,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.4, observer);
     ASSERT_NO_THROW(ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.4, observer));
 }
@@ -432,11 +432,11 @@ TEST_F(SimTest, LONG_bug_2838)
     command_listener.set<double>("PropRudd(rpm)", 50);
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0);
-    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    auto sys = get_system(yaml,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(2, m.size());
-    const auto it = m.find("Mz(PropRudd,Anthineas,Anthineas)");
+    const auto it = m.find("Mz(PropRudd,TestShip,TestShip)");
     ASSERT_NE(m.end(), it);
     ASSERT_EQ(5, it->second.size());
     ASSERT_GT(std::abs(it->second.back()), 0);
@@ -450,11 +450,11 @@ TEST_F(SimTest, LONG_bug_2845)
     command_listener.set<double>("PropRudd(rpm)", 50);
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0.8);
-    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    auto sys = get_system(yaml,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(3, m.size());
-    const auto it = m.find("Mz(PropRudd,Anthineas,Anthineas)");
+    const auto it = m.find("Mz(PropRudd,TestShip,TestShip)");
     ASSERT_NE(m.end(), it);
     ASSERT_EQ(5, it->second.size());
     ASSERT_NEAR(0, it->second.back(), 1E-8);
@@ -468,11 +468,11 @@ TEST_F(SimTest, LONG_can_retrieve_maneuvering_force)
     command_listener.set<double>("PropRudd(rpm)", 50);
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0.8);
-    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    auto sys = get_system(yaml,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(3, m.size());
-    const auto it = m.find("Fx(Fman,Anthineas,Anthineas)");
+    const auto it = m.find("Fx(Fman,TestShip,TestShip)");
     ASSERT_NE(m.end(), it);
     ASSERT_EQ(5, it->second.size());
 }
@@ -486,12 +486,12 @@ TEST_F(SimTest, LONG_can_use_commands_in_maneuvering_model)
     command_listener.set<double>("PropRudd(rpm)", 50);
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0.8);
-    auto sys = get_system(yaml,anthineas_stl,0,command_listener);
+    auto sys = get_system(yaml,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
     command_listener.check_out();
     const auto m = get_map(observer);
     ASSERT_EQ(4, m.size());
-    const auto it = m.find("Fx(F1,Anthineas,Anthineas)");
+    const auto it = m.find("Fx(F1,TestShip,TestShip)");
     ASSERT_NE(m.end(), it);
     ASSERT_EQ(5, it->second.size());
     ASSERT_NEAR(50, it->second.at(1), 1E-8);
@@ -501,7 +501,7 @@ TEST_F(SimTest, linear_hydrostatics_without_waves)
 {
     const double T = 10;
     const double dt = 0.1;
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_linear_hydrostatics_without_waves(), test_data::cube(), 0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_linear_hydrostatics_without_waves(), test_data::cube(), 0, T, dt);
 
     const double k = 100002.8;
     const double m = 253310;
@@ -527,7 +527,7 @@ TEST_F(SimTest, LONG_linear_hydrostatics_with_waves)
 {
     const double T = 20;
     const double dt = 0.1;
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_linear_hydrostatics_with_waves(), test_data::cube(), 0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_linear_hydrostatics_with_waves(), test_data::cube(), 0, T, dt);
 
     const double eps = 1E-3;
     EXPECT_NEAR(1      , res.at(0).x[ZIDX(0)], eps);
@@ -550,15 +550,15 @@ TEST_F(SimTest, LONG_can_simulate_radiation_damping)
 {
     const double T = 12;
     const double dt = 0.2;
-    std::ofstream of("anthineas.hdb");
-    of << test_data::anthineas_hdb();
+    std::ofstream of("test_ship.hdb");
+    of << test_data::test_ship_hdb();
     ssc::data_source::DataSource command_listener;
     command_listener.check_in(__PRETTY_FUNCTION__);
     command_listener.set<double>("propeller(rpm)", 50);
     command_listener.set<double>("propeller(P/D)", 1);
     command_listener.set<double>("propeller(beta)", 0.8);
     command_listener.check_out();
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::anthineas_radiation_damping(), test_data::cube(), 0, T, dt, command_listener);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_radiation_damping(), test_data::cube(), 0, T, dt, command_listener);
     ASSERT_NEAR(0.65842512818042176, res.at(5).x[XIDX(0)], 1E-3);
 }
 
@@ -648,7 +648,7 @@ TEST_F(SimTest, bug_2984)
     command_listener.set<double>("propeller(P/D)", 1);
     command_listener.set<double>("propeller(beta)", 0);
 
-    auto sys = get_system(input,anthineas_stl,0,command_listener);
+    auto sys = get_system(input,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.1, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(6, m.size());
@@ -675,7 +675,7 @@ TEST_F(SimTest, bug_3217_hdb_interpolation_in_direction_incorrect_LONG)
     const double dt = 0.1;
     std::ofstream hdb("v00_complet_FK_diffr.hdb");
     hdb << test_data::bug_3210();
-    std::ofstream stl("anthineas.stl");
+    std::ofstream stl("test_ship.stl");
     stl << test_data::cube();
     const auto yaml = test_data::bug_3217();
     ListOfObservers observers(parse_output(yaml));
@@ -685,47 +685,47 @@ TEST_F(SimTest, bug_3217_hdb_interpolation_in_direction_incorrect_LONG)
     const auto original_yaml = input.environment.at(0).yaml;
 
     // Results for 0.001 deg
-    auto sys = get_system(input,anthineas_stl,0,command_listener);
+    auto sys = get_system(input,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
     auto m = get_map(observers);
     ASSERT_EQ(6, m.size());
-    ASSERT_EQ(2, m["Fx(diffraction,Anthineas,Anthineas)"].size());
-    const double Fx_001 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
-    const double Fy_001 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
-    const double Fz_001 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
-    const double Mx_001 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
-    const double My_001 = m["My(diffraction,Anthineas,Anthineas)"].back();
-    const double Mz_001 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+    ASSERT_EQ(2, m["Fx(diffraction,TestShip,TestShip)"].size());
+    const double Fx_001 = m["Fx(diffraction,TestShip,TestShip)"].back();
+    const double Fy_001 = m["Fy(diffraction,TestShip,TestShip)"].back();
+    const double Fz_001 = m["Fz(diffraction,TestShip,TestShip)"].back();
+    const double Mx_001 = m["Mx(diffraction,TestShip,TestShip)"].back();
+    const double My_001 = m["My(diffraction,TestShip,TestShip)"].back();
+    const double Mz_001 = m["Mz(diffraction,TestShip,TestShip)"].back();
 
     // Results for 0 deg
     boost::replace_all(input.environment.at(0).yaml, "value: 0.001", "value: 0");
-    sys = get_system(input,anthineas_stl,0,command_listener);
+    sys = get_system(input,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
     m = get_map(observers);
 
     ASSERT_EQ(6, m.size());
-    ASSERT_EQ(4, m["Fx(diffraction,Anthineas,Anthineas)"].size());
-    const double Fx_0 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
-    const double Fy_0 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
-    const double Fz_0 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
-    const double Mx_0 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
-    const double My_0 = m["My(diffraction,Anthineas,Anthineas)"].back();
-    const double Mz_0 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+    ASSERT_EQ(4, m["Fx(diffraction,TestShip,TestShip)"].size());
+    const double Fx_0 = m["Fx(diffraction,TestShip,TestShip)"].back();
+    const double Fy_0 = m["Fy(diffraction,TestShip,TestShip)"].back();
+    const double Fz_0 = m["Fz(diffraction,TestShip,TestShip)"].back();
+    const double Mx_0 = m["Mx(diffraction,TestShip,TestShip)"].back();
+    const double My_0 = m["My(diffraction,TestShip,TestShip)"].back();
+    const double Mz_0 = m["Mz(diffraction,TestShip,TestShip)"].back();
 
     // Results for 30 deg
     input.environment.at(0).yaml = original_yaml;
     boost::replace_all(input.environment.at(0).yaml, "value: 0.001", "value: 30");
-    sys = get_system(input,anthineas_stl,0,command_listener);
+    sys = get_system(input,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
     m = get_map(observers);
     ASSERT_EQ(6, m.size());
-    ASSERT_EQ(6, m["Fx(diffraction,Anthineas,Anthineas)"].size());
-    const double Fx_30 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
-    const double Fy_30 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
-    const double Fz_30 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
-    const double Mx_30 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
-    const double My_30 = m["My(diffraction,Anthineas,Anthineas)"].back();
-    const double Mz_30 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+    ASSERT_EQ(6, m["Fx(diffraction,TestShip,TestShip)"].size());
+    const double Fx_30 = m["Fx(diffraction,TestShip,TestShip)"].back();
+    const double Fy_30 = m["Fy(diffraction,TestShip,TestShip)"].back();
+    const double Fz_30 = m["Fz(diffraction,TestShip,TestShip)"].back();
+    const double Mx_30 = m["Mx(diffraction,TestShip,TestShip)"].back();
+    const double My_30 = m["My(diffraction,TestShip,TestShip)"].back();
+    const double Mz_30 = m["Mz(diffraction,TestShip,TestShip)"].back();
 
     // Results at 0.001 deg should be closer to results at 0 deg than to results at 30 deg
     ASSERT_LT(std::abs(Fx_0-Fx_001),std::abs(Fx_30-Fx_001));
@@ -745,7 +745,7 @@ TEST_F(SimTest, bug_3227_wave_angle_mirroing_problem_for_diffraction_LONG)
     const double dt = 0.1;
     std::ofstream hdb("v00_complet_FK_diffr.hdb");
     hdb << test_data::bug_3210();
-    std::ofstream stl("anthineas.stl");
+    std::ofstream stl("test_ship.stl");
     stl << test_data::cube();
     const auto yaml = test_data::bug_3227();
 
@@ -756,32 +756,32 @@ TEST_F(SimTest, bug_3227_wave_angle_mirroing_problem_for_diffraction_LONG)
     const auto original_yaml = input.environment.at(0).yaml;
 
     // Results for 30 deg
-    auto sys = get_system(input,anthineas_stl,0,command_listener);
+    auto sys = get_system(input,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
     auto m = get_map(observers);
     ASSERT_EQ(6, m.size());
-    ASSERT_EQ(2, m["Fx(diffraction,Anthineas,Anthineas)"].size());
-    const double Fx_for_waves_propagating_to_plus_30 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
-    const double Fy_for_waves_propagating_to_plus_30 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
-    const double Fz_for_waves_propagating_to_plus_30 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
-    const double Mx_for_waves_propagating_to_plus_30 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
-    const double My_for_waves_propagating_to_plus_30 = m["My(diffraction,Anthineas,Anthineas)"].back();
-    const double Mz_for_waves_propagating_to_plus_30 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+    ASSERT_EQ(2, m["Fx(diffraction,TestShip,TestShip)"].size());
+    const double Fx_for_waves_propagating_to_plus_30 = m["Fx(diffraction,TestShip,TestShip)"].back();
+    const double Fy_for_waves_propagating_to_plus_30 = m["Fy(diffraction,TestShip,TestShip)"].back();
+    const double Fz_for_waves_propagating_to_plus_30 = m["Fz(diffraction,TestShip,TestShip)"].back();
+    const double Mx_for_waves_propagating_to_plus_30 = m["Mx(diffraction,TestShip,TestShip)"].back();
+    const double My_for_waves_propagating_to_plus_30 = m["My(diffraction,TestShip,TestShip)"].back();
+    const double Mz_for_waves_propagating_to_plus_30 = m["Mz(diffraction,TestShip,TestShip)"].back();
 
     // Results for -30 deg
     boost::replace_all(input.environment.at(0).yaml, "value: 30", "value: -30");
-    sys = get_system(input,anthineas_stl,0,command_listener);
+    sys = get_system(input,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
     m = get_map(observers);
 
     ASSERT_EQ(6, m.size());
-    ASSERT_EQ(4, m["Fx(diffraction,Anthineas,Anthineas)"].size());
-    const double Fx_for_waves_propagating_to_minus_30 = m["Fx(diffraction,Anthineas,Anthineas)"].back();
-    const double Fy_for_waves_propagating_to_minus_30 = m["Fy(diffraction,Anthineas,Anthineas)"].back();
-    const double Fz_for_waves_propagating_to_minus_30 = m["Fz(diffraction,Anthineas,Anthineas)"].back();
-    const double Mx_for_waves_propagating_to_minus_30 = m["Mx(diffraction,Anthineas,Anthineas)"].back();
-    const double My_for_waves_propagating_to_minus_30 = m["My(diffraction,Anthineas,Anthineas)"].back();
-    const double Mz_for_waves_propagating_to_minus_30 = m["Mz(diffraction,Anthineas,Anthineas)"].back();
+    ASSERT_EQ(4, m["Fx(diffraction,TestShip,TestShip)"].size());
+    const double Fx_for_waves_propagating_to_minus_30 = m["Fx(diffraction,TestShip,TestShip)"].back();
+    const double Fy_for_waves_propagating_to_minus_30 = m["Fy(diffraction,TestShip,TestShip)"].back();
+    const double Fz_for_waves_propagating_to_minus_30 = m["Fz(diffraction,TestShip,TestShip)"].back();
+    const double Mx_for_waves_propagating_to_minus_30 = m["Mx(diffraction,TestShip,TestShip)"].back();
+    const double My_for_waves_propagating_to_minus_30 = m["My(diffraction,TestShip,TestShip)"].back();
+    const double Mz_for_waves_propagating_to_minus_30 = m["Mz(diffraction,TestShip,TestShip)"].back();
 
     // No sign change for Fx, Fz & My when switching from waves propagating to +30 to waves propagating to -30
     ASSERT_GE(Fx_for_waves_propagating_to_plus_30*Fx_for_waves_propagating_to_minus_30,0);
@@ -810,7 +810,7 @@ TEST_F(SimTest, bug_3230_advance_speed_not_taken_into_account_properly_for_diffr
     auto input = SimulatorYamlParser(yaml).parse();
 
 
-    auto sys = get_system(input,anthineas_stl,0,command_listener);
+    auto sys = get_system(input,test_ship_stl,0,command_listener);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
     auto m = get_map(observers);
     ASSERT_EQ(6, m.size());
@@ -826,7 +826,7 @@ TEST_F(SimTest, bug_3207_radiation_damping_crashes_LONG)
     const double t0 = 0;
     const double T = 15;
     const double dt = 0.2;
-    const auto res = simulate<ssc::solver::RK4Stepper>(input, anthineas_stl, t0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(input, test_ship_stl, t0, T, dt);
     ASSERT_EQ(76, res.size());
 }
 
@@ -848,7 +848,7 @@ TEST_F(SimTest, bug_3241_blocked_dof_interpolation_problem_LONG)
     ListOfObservers observers(parse_output(yaml));
     auto input = SimulatorYamlParser(yaml).parse();
 
-    auto sys = get_system(input,anthineas_stl,0);
+    auto sys = get_system(input,test_ship_stl,0);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
     auto m = get_map(observers);
     ASSERT_EQ(1, m.size());
@@ -869,6 +869,6 @@ TEST_F(SimTest, issue_20_constant_force)
     ListOfObservers observers(parse_output(yaml));
     auto input = SimulatorYamlParser(yaml).parse();
 
-    auto sys = get_system(input,anthineas_stl,0);
+    auto sys = get_system(input,test_ship_stl,0);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
 }

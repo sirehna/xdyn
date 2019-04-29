@@ -21,11 +21,6 @@ function varargout = tbx_geom3d_CTM_TO_QUA(c)
 % SIREHNA
 % NC
 % 24/03/04
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_geom3d_CTM_TO_QUA.m 1094 2013-11-19 14:27:21Z gj $
-% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/geom3D/tbx_geom3d_CTM_TO_QUA.m $
-%==========================================================================
 s0=+c(1,1)+c(2,2)+c(3,3);
 s1=+c(1,1)-c(2,2)-c(3,3);
 s2=-c(1,1)+c(2,2)-c(3,3);

@@ -19,11 +19,6 @@ function str = tbx_string_ensureStringHasHeadingPattern(str,headingPattern)
 %
 % SIREHNA
 % GJ
-%==========================================================================
-% SVN info
-% SVN $Id: tbx_string_ensureStringHasHeadingPattern.m 1104 2013-12-06 10:49:06Z gj $
-% SVN $HeadURL: http://130.66.124.6/svn/matlab_toolbox/string/tbx_string_ensureStringHasHeadingPattern.m $
-%==========================================================================
 if ischar(str)
     str = ensureStringHasHeadingPattern(str,headingPattern);
 elseif iscell(str)
