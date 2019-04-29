@@ -57,43 +57,45 @@ script:
         rm -rf /opt/share/code/gcovr &&
         rm -rf /opt/share/code/google-test &&
         cp -rf /opt/googletest /opt/share/xdyn/google-test &&
-        rm -rf /opt/share/code/eigen
-        cp -rf /opt/eigen /opt/share/xdyn/eigen &&
-        cd /opt/share/xdyn &&
-        mkdir -p $BUILD_DIR &&
-        cd $BUILD_DIR &&
-        if [[ $BUILD_DIR == build_win ]];
-        then
-        mkdir /opt/share/.wine;
-        export WINEPREFIX=/opt/share/.wine;
-        wine winecfg;
-        fi &&
-        cmake -Wno-dev
-          -G Ninja
-          -DCPACK_GENERATOR=$CPACK_GENERATOR
-          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-          -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
-          -DBOOST_ROOT:PATH=$BOOST_ROOT
-          -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
-          -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
-          -DBOOST_LIBRARYDIR:PATH=$BOOST_ROOT/lib
-          -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
-          -DBoost_LIBRARY_DIR_RELEASE:PATH=$BOOST_ROOT/lib
-          /opt/share/xdyn &&
-        ninja package &&
-        if [[ $BUILD_DIR == build_win ]];
-        then
-        wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*;
-        else
-        ./run_all_tests;
-        fi &&
-        if [[ $BUILD_TYPE == Coverage ]];
-        then
-        echo Coverage;
-        gprof run_all_tests gmon.out > gprof_res.txt;
-        bash <(curl -s https://codecov.io/bash);
-        fi
+        rm -rf /opt/share/code/eigen &&
+        cp -rf /opt/eigen /opt/share/xdyn/eigen
         "
+
+#       cd /opt/share/xdyn &&
+#       mkdir -p $BUILD_DIR &&
+#       cd $BUILD_DIR &&
+#       if [[ $BUILD_DIR == build_win ]];
+#       then
+#       mkdir /opt/share/.wine;
+#       export WINEPREFIX=/opt/share/.wine;
+#       wine winecfg;
+#       fi &&
+#       cmake -Wno-dev
+#         -G Ninja
+#         -DCPACK_GENERATOR=$CPACK_GENERATOR
+#         -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+#         -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
+#         -DBOOST_ROOT:PATH=$BOOST_ROOT
+#         -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
+#         -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
+#         -DBOOST_LIBRARYDIR:PATH=$BOOST_ROOT/lib
+#         -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
+#         -DBoost_LIBRARY_DIR_RELEASE:PATH=$BOOST_ROOT/lib
+#         /opt/share/xdyn &&
+#       ninja package &&
+#       if [[ $BUILD_DIR == build_win ]];
+#       then
+#       wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*;
+#       else
+#       ./run_all_tests;
+#       fi &&
+#       if [[ $BUILD_TYPE == Coverage ]];
+#       then
+#       echo Coverage;
+#       gprof run_all_tests gmon.out > gprof_res.txt;
+#       bash <(curl -s https://codecov.io/bash);
+#       fi
+
 
 after_success:
 - |
