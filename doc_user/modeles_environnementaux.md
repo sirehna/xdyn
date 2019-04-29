@@ -5,7 +5,7 @@ Les modèles d'environnement sont les modèles de houle (et, à terme, de vent, 
 Les modèles de houle interviennent pour le calcul des [efforts
 hydrostatiques non-linéaires](#efforts-hydrostatiques-non-lin%C3%A9aires)
 (par le truchement de l'élévation de la surface libre), les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation)
-(par le biais de la pression dynamique) <comment>[JJM] et aussi pour le calcul des efforts de diffraction via le fréquentiel, non ?  </comment>
+(par le biais de la pression dynamique), le calcul des efforts de diffraction (via le fréquentiel)
 et le modèle de safran (prise en compte des vitesses orbitales).
 
 ## Constantes environnementales
@@ -186,7 +186,7 @@ $`\eta(x,y,t) = +\frac{1}{g} \frac{\partial\phi(x,y,z=0,t)}{\partial t}
 y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})`$
 
 où $`\gamma`$ désigne la direction de provenance de la houle, définie à la section
-[convention de houle](#section_Direction_houle).<comment>[JJM] je ne sais pas trop pourquoi tu n'utilises pas les notations habituelles dans notre environnement, mais tant pis </comment>
+[convention de houle](#section_Direction_houle).
 
 L'élévation $`\eta`$ de la houle en un point $`(x,y)`$ est un signal temporel
 $`\eta(t)`$. Par définition du plan $`z=0`$ (élévation moyenne de la houle), ce signal $`\eta`$ est centré.
@@ -339,7 +339,7 @@ p_{\textrm{tot}}\geq 0
 ### Houle irrégulière
 
 Le potentiel de vitesse de la houle a été jusqu'ici exprimé pour une seule
-fréquenc<comment>[JJM] pourtant tu parles plus haut de densité spectrale...? </comment>e et une seule direction.
+fréquence et une seule direction.
 On peut le généraliser pour plusieurs fréquences et plusieurs directions.
 
 En notant
@@ -479,8 +479,6 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
   aléatoires seront nulles (utilisé principalement pour les tests).
 - `directional spreading` : étalement directionnel. Cf. infra.
 - `spectral density` : densité spectrale de puissance. Cf. infra.
-
-<comment>[JJM] pas p vérifier les formules... </comment>
 
 ## Densités spectrales de puissance
 
@@ -863,33 +861,32 @@ libre plane, y compris pour le calcul de la déformation de surface libre, qui e
 une grandeur comme les autres (pressions, vitesses, potentiel), résultat de la
 résolution du problème.
 
-Une difficulté survient quand on veut exploiter cette formule dans une
+La formulation mathématique du problème qui conduit aux expressions ci-dessus
+n'est pas valable pour les z>0 (linéarisation de la condition de surface
+libre).  Une difficulté survient quand on veut exploiter cette formule dans une
 modélisation non-linéaire, c'est-à-à dire en modélisant réellement la
-déformation de la  surface libre. En effet, la valeur du terme $`e^{-k_i z}`$ est
-inférieure à 1 pour les points en-dessous du niveau moyen (surface $`z=0`$), mais
-elle croît rapidement pour les points situés au-dessus de ce plan
-<comment>[JJM] la formulation mathématique du pb qui conduit aux expressions ci-dessus n'est pas valable pour les z>0 il me semble (linéarisation de la condition de surface libre) </comment>
-, et ce
-d'autant plus que le nombre d'onde $`k`$ est grand, tandis qu'elle décroît
-en-dessous du niveau moyen de la mer. Ainsi, pour deux points proches sur la
-surface libre (non-horizontale) l'un à $`z>0`$ et l'autre à $`z<0`$, la vitesse
-orbitale sera très différente : les contributions des composantes haute
+déformation de la  surface libre. En effet, la valeur du terme $`e^{-k_i z}`$
+est inférieure à 1 pour les points en-dessous du niveau moyen (surface
+$`z=0`$), mais elle croît rapidement pour les points situés au-dessus de ce
+plan , et ce d'autant plus que le nombre d'onde $`k`$ est grand, tandis qu'elle
+décroît en-dessous du niveau moyen de la mer. Ainsi, pour deux points proches
+sur la surface libre (non-horizontale) l'un à $`z>0`$ et l'autre à $`z<0`$, la
+vitesse orbitale sera très différente : les contributions des composantes haute
 fréquence de la houle seront fortement amplifiées pour le point à $`z>0`$ et
 fortement atténuées pour le point à $`z<0`$. Les particules au-dessus du niveau
 moyen de la mer (notamment sur la crête des vagues) seront ainsi vues comme
 oscillant à des fréquences élevées tandis que celles dans le creux des vagues
 oscilleront plus lentement : le niveau moyen de la mer agit donc comme une
 frontière entre l'amplification et l'atténuation des hautes fréquences, ce qui
-n'est pas physique.
-<comment>[JJM] mais cohérent avec la modélisation linéarisée initiale </comment>
+n'est pas physique (mais cohérent avec la modélisation linéarisée initiale).
 
 Les grandeurs linéaires ne sont donc pas définies dans les zones déformées. Pour
 pallier cet inconvénient, on peut utiliser des modèles dits de "stretching", qui
 permettent de recaler les vitesses orbitales à l'interface eau-air (le sommet ou
 le creux des vagues) d'une des façons décrites ci-dessous. Certaines de ces
 méthodes reviennent à étirer l'axe $`z`$ (d'où le nom de stretching).
-Ce qui suit est une présentation non-exhaustive de quelques modèles de stretching.
-<comment>[JJM] dont les 3 précédents ? </comment>
+Ce qui suit est une présentation non-exhaustive de quelques modèles de
+stretching (extrapolation linéaire, modèle de Wheeler et delta-stretching).
 
 #### Stretching linéaire sans extrapolation
 
@@ -912,13 +909,10 @@ u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)
 ```
 
 Ce modèle peut être utilisé dans xdyn en fixant `h` à la profondeur d'eau
-`depth` <comment>[JJM] je ne comprends pas trop ce que vient faire la profondeur d'eau ? </comment> et `delta: 1`.
+`depth` et `delta: 1`.
 
 #### Stretching de Wheeler
 
-On souhaite obtenir les bonnes <comment>[JJM] Ca veut dire quoi ? </comment> vitesses orbitales à la surface de l'eau,
-c'est-à-dire en $`z=\eta`$ ($`\eta`$ désignant la hauteur d'eau donnée par le modèle
-de houle), et au fond (en $`z=h`$).
 
 La vitesse orbitale s'écrit :
 
@@ -936,6 +930,10 @@ avec
 ```math
 f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}
 ```
+
+
+On souhaite après stretching retrouver les valeurs de vitesse orbitales données par $`f`$ à la surface (en $`z=\eta`$xi, $`\eta`$ désignant la hauteur d'eau donnée par le
+modèle de houle) et au fond (en $`z=h`$):
 
 On cherche donc une fonction $`g`$ telle que :
 
@@ -976,10 +974,10 @@ La vitesse orbitale sur les autres axes est donnée par des formules similaires.
 
 Dans ce modèle, la masse n'est pas conservée car le laplacien du potentiel de
 vitesse n'est pas nul. Il n'y a donc pas de justification théorique à ce modèle
-de stretching <comment>[JJM] Et donc pas de "bonnes valeurs" </comment>. Son utilisation découle plus de son intérêt pratique : on
+de stretching. Son utilisation découle plus de son intérêt pratique : on
 constate expérimentalement que les vitesses orbitales calculées sans stretching
 sont plus loin des résultats expérimentaux que celles calculées avec
-stretching. <comment>[JJM] ok </comment>
+stretching.
 
 Dans le cas du modèle de Wheeler, des campagnes d'essais montrent que les
 vitesses orbitales calculées dans les crêtes sont quelque peu sous-estimées par
@@ -992,7 +990,7 @@ l'utiliser dans xdyn en fixant $`h`$ à la profondeur de l'eau `depth` et
 #### Stretching de Chakrabarti
 
 Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la
-fonction $`f`$ <comment>[JJM] Ca marche comment en profondeur infinie ? </comment>
+fonction $`f`$
 
 ```math
 f(z)=\frac{\cosh(k\cdot(h-z))}{\cosh(k\cdot h)}
@@ -1077,7 +1075,6 @@ calcul de la vitesse orbitale).
 
 ![](images/waves_wheeler_stretching.png)
 
-<comment>[JJM] on voit des différences entre les figures ? </comment>
 
 ## Discrétisation des spectres et des étalements
 
@@ -1097,17 +1094,17 @@ de calcul. Comme le nombre de composantes sommées pour calculer les élévation
 et pressions dynamiques est potentiellement important, on ne sélectionne
 que les produits $`S(\omega_i)D(\gamma_j)`$ contribuant de manière significative
 à l'énergie totale.
-<comment>[JJM] attention, çà dépend des applications. On peut très bien avoir des applications où on s'intéresse à des houles peu énergétiques. Ex : hauteurs relatives entre un point du navire et la houle, pour des problèmes de mouille ou d'impact par exemple... Il faudrait pouvoir le faire. </comment>
 Pour ce faire, on classe ces produits par ordre décroissant et l'on sélectionne
 les $`n`$ premiers de façon à ce que leur somme représente une fraction
 prédéterminée de la puissance totale. De cette manière, on réduit
 considérablement les temps de calcul, tout en gardant une bonne représentativité
 de la physique du problème. Cependant, cette technique n'est pas toujours
 applicable, suivant la réponse à laquelle on s'intéresse. En effet, un petit
-corps dans la houle peut avoir une réponse très affectée par les composantes peu
-énergétiques (en relatif). De même, les réponses locales d'un grand corps
-(slamming, efforts sur des appendices, etc.), peuvent être affectées par des
-composantes peu énergétiques.
+corps dans la houle peut avoir une réponse très affectée par les composantes
+peu énergétiques (en relatif), par exemple pour des problèmes de mouille ou
+d'impact. De même, les réponses locales d'un grand corps (slamming, efforts sur
+des appendices, etc.), peuvent être affectées par des composantes peu
+énergétiques.
 
 
 La discrétisation est paramétrée de la façon suivante :
@@ -1222,7 +1219,7 @@ description complète du modèle sous-jacent est disponible ici :
 [https://github.com/LHEEA/HOS-ocean/wiki](https://github.com/LHEEA/HOS-ocean/wiki)
 
 
-### Modèle<comment>[JJM] Ca sert à quoi de le décrire ici, s'il est correctement décrit dans les références ci-dessus ? </comment>
+### Modèle
 
 #### Conditions de surface libre
 
@@ -1479,4 +1476,3 @@ et la transformation inverse (HOS $`\rightarrow`$ NED) est égale à la transfor
 - *A Fourier approximation method for steady waves*, 1981, Rienecker, M.M. and Fenton, J.D., Journal of Fluid Mechanics
 - *A new numerical method for surface hydrodynamics*, 1987, West, B.J. and Brueckner, R.S and Janda, M. and Milder, M. and Milton R.L, Journal of Geophysics Research
 
-<comment>[JJM] Relu </comment>
