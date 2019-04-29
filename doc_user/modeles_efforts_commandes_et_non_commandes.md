@@ -474,8 +474,9 @@ située dans le plan ($`x`$, $`y`$) du repère NED.
 
 On suppose également qu'il n'y a pas de houle (eau initialement calme), que
 l'assiette et l'enfoncement du navire sont constants et que sa gite est nulle.
-Dans le cas contraire, il faudrait interpoler la résistance en fonction de la
-vitesse, l'enfoncement et l'assiette, mais ce modèle ne le permet pas
+Dans le cas contraire, il faudrait interpoler la résistance suivant X en
+fonction de la vitesse, mais aussi l'effort vertical et le moment de tangage,
+mais ce modèle ne le permet pas.
 
 On suppose enfin que la résistance à l'avancement est colinéaire à la
 projection sur le plan horizontal de la force propulsive.
