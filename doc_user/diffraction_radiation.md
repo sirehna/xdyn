@@ -678,14 +678,6 @@ p. 33, 1975.
 - R. Piessens, E. deDoncker–Kapenga, C. Uberhuber, D. Kahaner (1983) **Quadpack: a
 Subroutine Package for Automatic Integration**; Springer Verlag.
 
-### Méthode de Filon
-
-<comment>[JJM] Intérêt de laisser çà si on ne le développe pas, voire si on ne l'utilise pas ? Idem ci-dessous. </comment>
-
-### Méthode de Clenshaw-Curtis
-
-### Méthode de Burcher
-
 ## Calcul des matrices de masse ajoutée
 
 Dans le simulateur, la matrice de masses ajoutées est soit lue directement
