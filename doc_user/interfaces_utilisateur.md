@@ -674,5 +674,3 @@ Exemple de sortie:
   }
 ]
 ~~~~
-
-<comment>[JJM] relu </comment>

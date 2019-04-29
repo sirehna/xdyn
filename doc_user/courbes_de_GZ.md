@@ -242,5 +242,3 @@ print(check_output(cmd).decode('utf-8'))
 - *Dynamique du Navire*, 1986, Pierre Devauchelle, Bibliothèque de L'Institut Français d'Aide à la Formation Professionnelle Maritime, ISBN 2-225-80669-1, page 168
 - *Hydrodynamique navale : théorie et modèles*, 2009, Alain Bovis, Presses de l'ENSTA, page 79
 - *Stabilité des bateaux - examen d'un dossier*, CETMEF, décembre 2012, page 11
-
-<comment>[JJM] Relu. Mais pas facile à lire sans les formules</comment>

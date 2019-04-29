@@ -247,5 +247,3 @@ changements d'inclinaison $`\theta`$.
 - *A Treatise on the Stability of Ships*, Edward James Reed, page 89
 - [*Mécanique des fluides: équations générales et statique des fluides*](https://cel.archives-ouvertes.fr/cel-00851021/document), Pierre Guével, École nationale supérieure de mécanique - Université de Nantes, 1969, page 113
 - *Hydrodynamique navale : théorie et modèles*, 2009, Alain Bovis, Presses de l'ENSTA, page 80
-
-<comment>[JJM] Relu </comment>
