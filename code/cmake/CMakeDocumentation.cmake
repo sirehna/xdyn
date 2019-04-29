@@ -105,7 +105,7 @@ IF(PANDOC)
 
     SET(DOCUMENTATION_FILES_FULL_PATH
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/introduction.md
-           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/interfaces_utilisateur.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/reperes_et_conventions.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_environnementaux.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/calcul_de_GM.md

@@ -2,7 +2,7 @@
 
 all: build doc.html
 
-concatenated_doc.pmd: metadata.yaml init.md introduction.md interfaces.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_00.md tutorial_01.md tutorial_02.md tutorial_03.md tutorial_06.md concatenate.sh
+concatenated_doc.pmd: metadata.yaml init.md introduction.md interfaces_utilisateur.md reperes_et_conventions.md modeles_environnementaux.md calcul_de_GM.md courbes_de_GZ.md solver.md diffraction_radiation.md modeles_efforts.md tutorial_00.md tutorial_01.md tutorial_02.md tutorial_03.md tutorial_06.md concatenate.sh
 	./concatenate.sh
 
 xdyn-pweave := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/bin/xdyn-weave xweave

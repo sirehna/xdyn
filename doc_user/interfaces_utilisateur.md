@@ -1,4 +1,3 @@
-<comment>[JJM] Pourquoi ce fichier s'appelle t'il interfaces ? Une petit § d'explication ?</comment>
 
 # Ligne de commande
 
