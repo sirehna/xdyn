@@ -42,6 +42,14 @@ script:
      -w /opt/share \
      $DOCKER_IMAGE \
      /bin/bash -c \
+       "ls"
+  - docker run $ci_env \
+     --rm \
+     -u $( id -u $USER ):$( id -g $USER ) \
+     -v $(pwd):/opt/share \
+     -w /opt/share \
+     $DOCKER_IMAGE \
+     /bin/bash -c \
        "if [[ $BUILD_DIR == build_win ]];
         then
         echo win;
