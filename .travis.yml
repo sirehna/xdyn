@@ -22,6 +22,7 @@ matrix:
         - BUILD_DIR=build_deb9
         - CPACK_GENERATOR=DEB
         - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820
+        - SSC_BINARY=https://github.com/sirehna/ssc/releases/download/v8.0.1/ssc_binary_debian9_amd64.deb
         - BOOST_ROOT=/opt/boost
 
 before_install:
@@ -40,7 +41,8 @@ script:
      -w /opt/share \
      $DOCKER_IMAGE \
      /bin/bash -c \
-       "rm -rf /opt/share/ssc/google-test &&
+       "wget $SSC_BINARY &&
+        rm -rf /opt/share/ssc/google-test &&
         cp -rf /opt/googletest /opt/share/ssc/google-test &&
         rm -rf /opt/share/ssc/eigen &&
         cp -rf /opt/eigen /opt/share/ssc/eigen &&
