@@ -378,7 +378,7 @@ des matrices $`A`$ et $`K`$ utilisées par la formulation temporelle ?
 
 Deux ans après Cummins, en 1964, Ogilvie propose une méthode pour déterminer
 les matrices $`A`$ et $`K`$ en fonction des matrices $`M_A`$ et $`B_r`$.
-Pour ce faire, il considère que le mouvement du solide est oscillant de période<comment>[JJM] Pulsation ? </comment>
+Pour ce faire, il considère que le mouvement du solide est oscillant de pulsation
 $`\omega`$ :
 
 $`X(t) = \cos(\omega t)`$
