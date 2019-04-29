@@ -411,7 +411,11 @@ Il faut également pouvoir encoder et décoder du JSON en MATLAB, par exemple en
 utilisant les fonctions MATLAB [jsondecode et
 jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
 
-### Description des entrées/sorties pour une utilisation en "Model Exchange" (x -> dx/dt)<comment>[JJM] çà veut dire quoi ? on se contente de calculer les efforts à partir des états ? </comment>
+### Description des entrées/sorties pour une utilisation en "Model Exchange" (x -> dx/dt)
+
+Dans ce mode, xdyn calcule uniquement la dérivée des 13 états navire mais
+n'effectue pas l'intégration numérique, ce qui permet d'utiliser un solveur
+externe, par exemple Matlab ou Simulink.
 
 | Entrées    | Type                                                             | Détail                                                                                                                                                                                                                                                                  |
 | ---------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
