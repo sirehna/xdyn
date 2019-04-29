@@ -1,0 +1,170 @@
+sudo: false
+dist: trusty
+
+language: c++
+
+git:
+  submodules: false
+
+services:
+  - docker
+
+env:
+  global:
+  - DOCKER_USERNAME=charlesedouardcady
+  - secure: "NsDSu4SvdqoWVGjSySY8RzUSZq3HUcx7EhJrycgqoOXcFHoGxL3eejthqQGdjgJEuwnQrCDAIPr3pBBWqS9Yb/LWMx62Rhjpsdc+P/1raytZY35zn9gBhW7/6O6kgkKqEbVs3q6ILsU1WTgpn4lDHkVxz/u5KnEu5O2yyP9s0zLTEsooXx4/Q3RQfKZ1FWDtdQYLlnsHn7WsIRhUldFYu2sucBSs72LgSUsZ/A8nrD6LsqT6rpFSpIFofPiXntCDjnD9W4vzBtxUa7Dd8gT3iG4Btnp4CtJ9wfAnYr+sWLR46AB4TZ1u3qlUKh9YorL+HzHV1h/1aMbTUpOiEB7Prdxb7yx08mvIlvgisELdpFGLj3KoKzOS5zOZgRuPnoFi4ukKPZpIsFcXceFuksyVVpZ3yJHJNDWLR+oE1cRh1shc1l5/ljaaeIIdoO+Si41PygFC8xn7hHQyjDMHKH1E8RKF55d0lDAvHvQi0bRMycsSz3ik2zYez5CZOzsvwzBW2vJXPgCUSPjq5BGlOcwerT9yfivZVhZR3RF6MLaeQx+vZZURQn+fNCgY1f4EySfmzn26vFtgHMPcdSwVmOiewhcmKmYE3QMmoBxAUAbK2IwgjcSh3szQFLOQ1SOGxI1hLn8uFYZvNFUIFs0hTXfJyw5pmnSe2bzcQLxtE5llUSc="
+
+matrix:
+  include:
+    - name: "Debian 9 release"
+      env:
+        - BUILD_TYPE=Release
+        - BUILD_DIR=build_deb9
+        - CPACK_GENERATOR=DEB
+        - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820
+        - BOOST_ROOT=/opt/boost
+
+before_install:
+  - docker pull $DOCKER_IMAGE || true
+
+script:
+  - if [[ $BUILD_TYPE == "Coverage" ]];
+    then
+    ci_env=`bash <(curl -s https://codecov.io/env)`;
+    else
+    ci_env=;
+    fi
+  - docker run $ci_env --rm \
+     -u $( id -u $USER ):$( id -g $USER ) \
+     -v $(pwd):/opt/share \
+     -w /opt/share \
+     $DOCKER_IMAGE \
+     /bin/bash -c \
+       "rm -rf /opt/share/ssc/google-test &&
+        cp -rf /opt/googletest /opt/share/ssc/google-test &&
+        rm -rf /opt/share/ssc/eigen &&
+        cp -rf /opt/eigen /opt/share/ssc/eigen &&
+        rm -rf /opt/share/ssc/yaml-cpp &&
+        cp -rf /opt/yaml_cpp /opt/share/ssc/yaml-cpp &&
+        cp /opt/share/ssc/CMakeLists_yaml_cpp.txt /opt/share/ssc/yaml-cpp/CMakeLists.txt &&
+        rm -rf /opt/share/ssc/websocketpp &&
+        cp -rf /opt/websocketpp /opt/share/ssc/websocketpp &&
+        rm -rf /opt/share/ssc/f2c &&
+        cp -rf /opt/libf2c /opt/share/ssc/f2c &&
+        cd /opt/share/ssc/f2c &&
+        sed 's/typedef long int integer/typedef int integer/g' f2c.h0 > f2c.h &&
+        cp signal1.h0 signal1.h &&
+        cp sysdep1.h0 sysdep1.h &&
+        cd .. &&
+        cp CMakeLists_f2c.txt f2c/CMakeLists.txt &&
+        rm -rf /opt/share/ssc/geographiclib &&
+        cp -rf /opt/geographiclib /opt/share/ssc/geographiclib &&
+        cp /opt/share/ssc/CMakeLists_geographiclib.txt /opt/share/ssc/geographiclib/CMakeLists.txt &&
+        cd /opt/share/ssc/geographiclib &&
+        echo add_library \(Geographic_object OBJECT \\\${SOURCES} \\\${HEADERS}\) >> src/CMakeLists.txt &&
+        cd /opt/share/ssc &&
+        mkdir -p $BUILD_DIR &&
+        cd $BUILD_DIR &&
+        if [[ $BUILD_DIR == build_win ]];
+        then
+        mkdir /opt/share/.wine;
+        export WINEPREFIX=/opt/share/.wine;
+        wine winecfg;
+        fi &&
+        cmake -Wno-dev
+          -G Ninja
+          -DCPACK_GENERATOR=$CPACK_GENERATOR
+          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+          -DCMAKE_INSTALL_PREFIX:PATH=/opt/ssc
+          -DBOOST_ROOT:PATH=$BOOST_ROOT
+          -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
+          -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
+          -DBOOST_LIBRARYDIR:PATH=$BOOST_ROOT/lib
+          -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
+          -DBoost_LIBRARY_DIR_RELEASE:PATH=$BOOST_ROOT/lib
+          -DIPOPT_ROOT:PATH=/opt/CoinIpopt
+          -DCOIN_BLAS:PATH=/opt/CoinIpopt/lib/libcoinblas.a
+          -DCOIN_LAPACK:PATH=/opt/CoinIpopt/lib/libcoinlapack.a
+          -DCOIN_MUMPS:PATH=/opt/CoinIpopt/lib/libcoinmumps.a
+          -DCOIN_IPOPT:PATH=/opt/CoinIpopt/lib/libipopt.a
+          -DIPOPT_INCLUDE_DIRS:PATH=/opt/CoinIpopt/include/coin
+          -DIPOPT_LIB_DYNAMIC=\"gfortran;gcc;quadmath;m\"
+          /opt/share/ssc &&
+        ninja package &&
+        if [[ $BUILD_DIR == build_win ]];
+        then
+        wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*;
+        else
+        ./run_all_tests;
+        fi &&
+        if [[ $BUILD_TYPE == Coverage ]];
+        then
+        echo Coverage;
+        gprof run_all_tests gmon.out > gprof_res.txt;
+        bash <(curl -s https://codecov.io/bash);
+        fi
+        "
+
+after_success:
+- |
+    echo "TRAVIS_BRANCH  $TRAVIS_BRANCH"
+    echo "TRAVIS_TAG     $TRAVIS_TAG"
+    echo "BUILD_TYPE     $BUILD_TYPE"
+    echo "BUILD_DIR      $BUILD_DIR"
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb8" ];
+  then
+  echo "Pushing ssc docker image to dockerhub";
+  docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
+  cp ssc/$BUILD_DIR/ssc.deb ci/ssc_deb/.;
+  cd ci;
+  cd ssc_deb;
+  docker build --tag sirehna/ssc -f Dockerfile .;
+  docker push sirehna/ssc;
+  cd ..;
+  cd ..;
+  fi
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb8" ];
+  then
+  echo "Fetching generated deb";
+  ls -altr ssc/$BUILD_DIR/ssc.deb;
+  shasum -a256 ssc/$BUILD_DIR/ssc.deb;
+  cp ssc/$BUILD_DIR/ssc.deb ssc_binary_debian8_amd64.deb;
+  fi
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb9" ];
+  then
+  echo "Fetching generated deb";
+  ls -altr ssc/$BUILD_DIR/ssc.deb;
+  shasum -a256 ssc/$BUILD_DIR/ssc.deb;
+  cp ssc/$BUILD_DIR/ssc.deb ssc_binary_debian9_amd64.deb;
+  fi
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_win" ];
+  then
+  echo "Fetching generated zip";
+  ls -altr ssc/build_win/ssc.zip;
+  shasum -a256 ssc/build_win/ssc.zip;
+  cp ssc/build_win/ssc.zip ssc_binary_windows_64.zip;
+  fi
+
+# travis setup releases
+# https://docs.travis-ci.com/user/deployment
+# https://docs.travis-ci.com/user/deployment#conditional-releases-with-on
+before_deploy:
+- ls -altr ssc_binary_*;
+# - ls -altr ssc_binary_debian8_amd64.deb;
+# - ls -altr ssc_binary_windows_64.zip;
+deploy:
+  provider: releases
+  api_key:
+    secure: LIR/zJafApdZ/cAjZ92rLKQ6oculifEb2+FJXxGeU4L8AK6LVcw6EVn5Q9GjGQvjMNFf0Iqw/Ca7noFGjqPp2WdGzz8ghgkW9dSFnKGf9QztkNS+2h5Jm3SN3wCj/aAzvVdF/8zToaRoNj0TaZWjJ5WtFbfQNzoyqrJvYZ+Uz3O+WdxpHsMIKocWm/nSMxwHHnzDaY1BNZ+MShl7x8kJUBatszv9yxi2JDBNUABidwLyyJb6OeC6lJBpd9yog3Vm613Z3wz6Q6ffds3tqpdJfL5aDm0JTn2T3NF7FSYrQ/oZ7DJkMiZFa/e9wyAxDJ1V7skFByyJvAgnKKvXZydN/nvwNaXuQ15VqjZUoD4u+b/3ROhITH8sDOxdloZMCUfqQRkxPaveWeVn0Y+9k+N2psE4amFqRLT3NaK9c5zAPIsZ8HRwZNkfeIWT/FpuM9efGpmD5Xzpm11nCnOVgWu5v+8MDcY19ACui8IoMUVUXpSieWCb/VU5hNd2XD9Cyqh9SLKIjzgluVG7X/EeIDOA8SnQ0/+YaOp+j919JnVLy4sN/ZA2b4BARbBnptkTyvMotekImPDVbuL7fr7Q41cf0NkfZJHfpHy8feBLD9B8/uOEy2IdVsItI9NhO7UeMCet1GeBumq2C1iYmyfrE5TJfJsNv9N4O/QX3theT0ycG3w=
+  skip_cleanup: true
+  file_glob: true
+  file:
+    - ssc_binary_*
+  #file:
+  #  - ssc_binary_debian8_amd64.deb
+  #  - ssc_binary_windows_64.zip
+  on:
+    tags: true
+    repo: sirehna/ssc
+    branch: master
+    condition: $BUILD_TYPE = Release
