@@ -59,7 +59,7 @@ l'orientation par un triplet d'angles $`\left(\phi,\theta,\psi\right)`$.
 L'interprétation de ce triplet en termes de rotations autour des axes $`x`$, $`y`$,
 $`z`$ dépend de la convention de rotation choisie. L'orientation peut également
 être exprimée de manière différente notamment avec des quaternions (c'est
-d'ailleurs ainsi qu'elle est exprimée dans le code d'X-DYN).
+d'ailleurs ainsi qu'elle est exprimée dans le code d'xdyn).
 
 ## Conventions d'orientations
 
@@ -243,7 +243,7 @@ fréquentiel, est calculé de la façon suivante. En faisant l'hypothèse que le
 mouvements sont faibles, on effectue un développement des rotations limité au
 premier ordre et ainsi elles peuvent être exprimées indépendammant par rapport
 aux axes principaux liés à la posiiton moyenne du navire, dans n'importe quel
-ordre. Ce repère n'est pas utilisé dans la version actuelle d'X-DYN.
+ordre. Ce repère n'est pas utilisé dans la version actuelle d'xdyn.
 
 ## États navires
 
@@ -614,7 +614,7 @@ Il est à noter que ces efforts sont exprimés dans le repère BODY.
 Le format HDB (Hydrodynamic DataBase) est le format standard du logiciel
 [Diodore](http://www.principia-group.com/blog/product/diodore/). Le logiciel
 AQUA+ (développé et utilisé en interne par l'Ecole Centrale de Nantes et SIREHNA, dont des parties ont été reprises dans logiciel [NEMOH](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-presentation-192863.kjsp)) dispose également d'une sortie permettant de créer un fichier HDB. Ces
-fichiers peuvent être utilisés par X-DYN pour calculer :
+fichiers peuvent être utilisés par xdyn pour calculer :
 
 - les masses ajoutées (cf. paragraphe précédent)
 - les amortissements de radiation
@@ -625,9 +625,9 @@ fichiers peuvent être utilisés par X-DYN pour calculer :
 Les fichiers HDB ne spécifient ni leur repère de calcul, ni les points
 d'expression. Plutôt que de laisser l'utilisateur la spécifier (avec les risques
 d'erreur que cela comporte) ou de la détecter automatiquement, on suppose pour
-X-DYN que les fichiers HDB ont été générés avec les conventions du logiciel AQUA+ (convention "z vers le
+xdyn que les fichiers HDB ont été générés avec les conventions du logiciel AQUA+ (convention "z vers le
 haut"). Le repère dans lequel sont exprimées toutes les matrices de tous les
-fichiers HDB lus par X-DYN est donc : x longitudinal, y vers babord et z vers le
+fichiers HDB lus par xdyn est donc : x longitudinal, y vers babord et z vers le
 haut.
 
 ![](images/convention_aqua+.svg)
@@ -635,13 +635,13 @@ haut.
 Les RAO dépendent des conventions (repère, origine des phases, provenance vs.
 propagation, signe des angles). Or la convention utilisée ne figure pas dans le
 format HDB. Comme les RAO que l'on utilise actuellement proviennent
-exclusivement du logiciel AQUA+, dans la version actuelle X-DYN suppose que la
+exclusivement du logiciel AQUA+, dans la version actuelle xdyn suppose que la
 convention utilisée est celle d'AQUA+.
 
-La différence entre la convention de X-DYN et celle d'AQUA+ est que l'axe $`z`$
-est ascendant pour AQUA+ et descendant pour X-DYN. L'angle de la houle
+La différence entre la convention de xdyn et celle d'AQUA+ est que l'axe $`z`$
+est ascendant pour AQUA+ et descendant pour xdyn. L'angle de la houle
 représente bien dans les deux cas une direction de propagation (et non de
-provenance). Le potentiel des vitesses de la houle est, dans X-DYN comme dans
+provenance). Le potentiel des vitesses de la houle est, dans xdyn comme dans
 AQUA+ :
 
 $`\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
@@ -651,7 +651,7 @@ $`\phi(x,y,z,t) = -\frac{g\eta_a}{\omega}\frac{\cosh(k\cdot(h-z))}
 Toutes les données issues des fichiers HDB sont données en
 convention *z vers le haut* : par conséquent, il faut effectuer un changement de
 repère (rotation de $`\pi`$ autour de l'axe $`X`$) pour les mettre dans le repère
-d'X-DYN (*z vers le bas*). La matrice de changement de base est :
+d'xdyn (*z vers le bas*). La matrice de changement de base est :
 
 
 ```math
@@ -662,12 +662,12 @@ R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]
 * Pour les vecteurs
 
 ```math
-\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{X-DYN}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{X-DYN}}
+\left[\begin{array}{c}x_d\\y_d\\z_d\\\end{array}\right]_{\mbox{xdyn}}=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]\left[\begin{array}{c}x_a\\y_a\\z_a\\\end{array}\right]_{\mbox{AQUA+}} =\left[\begin{array}{c}x_a\\-y_a\\-z_a\\\end{array}\right]_{\mbox{xdyn}}
 ```
 
 * Pour les matrices (masses ajoutées, amortissements...)
   Si $`M=((m_{ij}))`$ désigne une matrice exprimée dans le repère AQUA+ et $`M_d`$ la même matrice
-  exprimée dans le repère X-DYN, on a :
+  exprimée dans le repère xdyn, on a :
 
 ```math
 M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]
@@ -725,9 +725,9 @@ Cette formule permet d'effectuer à la fois le transport d'une matrice d'inertie
 généralisée 6x6 d'un point $`A`$ à un point $`B`$ et le changement de son repère
 d'expression de $`a`$ vers $`b`$.
 
-La matrice d'inertie est le plus souvent exprimée au centre de gravité. Cependant, rien ne le garantit dans les fichiers HDB. Dans le cas général, il faut donc effectuer un transport, mais on suppose dans X-DYN qu'il n'y a pas de transport à faire
+La matrice d'inertie est le plus souvent exprimée au centre de gravité. Cependant, rien ne le garantit dans les fichiers HDB. Dans le cas général, il faut donc effectuer un transport, mais on suppose dans xdyn qu'il n'y a pas de transport à faire
 et donc que la seule opération pour la conversion est le passage d'un repère z vers le haut (HDB) à un repère
-z vers le bas (X-DYN). La formule précédente se simplifie alors en :
+z vers le bas (xdyn). La formule précédente se simplifie alors en :
 
 ```math
 {}^bM_B=\left[
@@ -771,7 +771,7 @@ M_{\mbox{HDB}} =
 on obtient :
 
 ```math
-M_{\mbox{XDYN}} =
+M_{\mbox{xdyn}} =
 \left[
 \begin{array}{cccccc}
  m_{11} &  -m_{12}  & -m_{13}  &  m_{14}  & -m_{15}  & -m_{16}\\
@@ -801,7 +801,7 @@ M_Z\\
 ```
 
 ```math
-\tau_{\mbox{XDYN}} =
+\tau_{\mbox{xdyn}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -821,7 +821,7 @@ Cf. *SimBody Theory Manual*, Release 3.1, March, 2013, page 137, §12.3.1, Rigid
 
 Les fichiers HDB sont des sorties générées par un code Fortran 77. Aucune
 spécification formelle de ce format n'a été trouvée. Pour pouvoir les importer dans
-X-DYN, leur grammaire EBNF a été déduite de l'analyse de plusieurs fichiers
+xdyn, leur grammaire EBNF a été déduite de l'analyse de plusieurs fichiers
 (reverse-engineering). Cette grammaire, qui permet de parser tous les fichiers
 HDB qui nous ont été fournis jusqu'ici, peut être représentée comme suit (sans
 garantie d'exhaustivité) :
@@ -857,7 +857,7 @@ extended-char                   = character | "-" | "+"
 Les fichiers HDB sont donc constituées d'une liste d'éléments, ces éléments
 étant pouvant être de type `string-key`, `value-key`, `vector-section`,
 `matrix-section`, `list-of-matrix-sections` ou
-`list-of-matrix-sections-with-id`. X-DYN ne tient pas compte de l'ordre dans
+`list-of-matrix-sections-with-id`. xdyn ne tient pas compte de l'ordre dans
 lequel sont ces éléments (mais aucune garantie ne peut être fournie pour
 d'éventuels autres outils utilisant les HDB).
 
@@ -926,9 +926,9 @@ d'éventuels autres outils utilisant les HDB).
 125.00 -3.141476E+00  1.570796E+00 -1.572334E+00  1.570796E+00 -1.623406E+00  1.570796E+00
 ~~~~~~~~~~~~~~~~~~~~~
 
-### Sections utilisées par X-DYN
+### Sections utilisées par xdyn
 
-Les sections du HDB actuellement utilisées par X-DYN sont :
+Les sections du HDB actuellement utilisées par xdyn sont :
 
 - `Added_mass_Radiation_Damping` pour les amortissements de radiation et les
   matrices de masses ajoutées,
@@ -1033,7 +1033,7 @@ rotations convention: [psi,phi',theta'']
 Pour plus de détails sur les conventions d'angles et d'axes, se référer à [la
 documentation détaillée](#conventions-dorientations).
 
-La définition d'un repère dans X-DYN s'effectue à partir d'un repère connu (NED ou body). On définit le changement de coordonnées pour passer d'un repère connu à un nouveau repère de la manière suivante dans le fichier YAML :
+La définition d'un repère dans xdyn s'effectue à partir d'un repère connu (NED ou body). On définit le changement de coordonnées pour passer d'un repère connu à un nouveau repère de la manière suivante dans le fichier YAML :
 
 - `frame` le nom du repère connu,
 - `x` ,`y` ,`z`: le triplet de position où chaque position est
@@ -1055,7 +1055,7 @@ Cette description est en particulier utilisée pour définir le changement de co
 
 ## Convention de houle {#section_Direction_houle}
 
-X-DYN utilise la convention $`Z`$ vers le bas pour l'amplitude.
+xdyn utilise la convention $`Z`$ vers le bas pour l'amplitude.
 L'azimuth ou la direction de houle que l'on note $`\gamma`$ représente la
 direction de propagation de la houle.
 

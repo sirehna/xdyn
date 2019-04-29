@@ -1,6 +1,6 @@
 # Modèles d'environnement
 
-Les modèles d'environnement sont les modèles de houle (et, à terme, de vent, de courant...) utilisés par X-DYN. Actuellement, seuls des modèles de houle sont implémentés. Leur paramétrisation figure dans la section `environment` du fichier YAML d'entrée. Elle peut être vide (par exemple, lors de la simulation simple du [tutoriel 1](#tutoriel-1-balle-en-chute-libre)).
+Les modèles d'environnement sont les modèles de houle (et, à terme, de vent, de courant...) utilisés par xdyn. Actuellement, seuls des modèles de houle sont implémentés. Leur paramétrisation figure dans la section `environment` du fichier YAML d'entrée. Elle peut être vide (par exemple, lors de la simulation simple du [tutoriel 1](#tutoriel-1-balle-en-chute-libre)).
 
 Les modèles de houle interviennent pour le calcul des [efforts
 hydrostatiques non-linéaires](#efforts-hydrostatiques-non-lin%C3%A9aires)
@@ -24,12 +24,12 @@ environmental constants:
 ~~~~~~~~~~~~~~
 
 Ces trois constantes sont l'ensemble de toutes les constantes environnementales
-actuellement utilisées par les modèles d'X-DYN.
+actuellement utilisées par les modèles d'xdyn.
 
 Comme expliqué dans [une section
 précédente](#remarques-sur-les-unit%C3%A9s), les
 dimensions physiques ne sont pas vérifiées et simplement converties en unités
-du système international. Si X-DYN rencontre une unité inconnue, il produit un
+du système international. Si xdyn rencontre une unité inconnue, il produit un
 message d'erreur du type :
 
 ~~~~~{.bash}
@@ -600,7 +600,7 @@ Ce spectre a l'allure suivante :
 
 ![](images/spectrumBretschneider.svg)
 
-Sa paramétrisation dans X-DYN est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -696,7 +696,7 @@ Ce spectre a l'allure suivante :
 
 ![](images/spectrumPiersonMoskowitz.svg)
 
-Sa paramétrisation dans X-DYN est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -737,7 +737,7 @@ Ce spectre a l'allure suivante :
 
 ![](images/spectrumJonswap.svg)
 
-Sa paramétrisation dans X-DYN est réalisée au moyen du YAML suivant :
+Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 spectral density:
@@ -800,7 +800,7 @@ cherche à connaître les pressions dynamiques et les vitesses orbitales pour
 $`z<0`$. Les modèles de stretching sont une solution de contournement qui consiste à
 prendre comme référence non pas le plan $`z=0`$ mais la surface libre déformée.
 
-### Utilisation dans X-DYN
+### Utilisation dans xdyn
 
 Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAML du type :
 
@@ -821,7 +821,7 @@ Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAM
      gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dans X-DYN, le stretching est renseigné dans la section `stretching` des modèles de houle.
+Dans xdyn, le stretching est renseigné dans la section `stretching` des modèles de houle.
 Le seul modèle de stretching implémenté est le [delta-stretching](#delta-stretching) et ses dérivés (absence de stretching, extrapolation linéaire et modèle de Wheeler).
 La section `stretching` contient les paramètres `h` et `delta` du modèle de
 delta-stretching:
@@ -901,7 +901,7 @@ vitesse orbitale au-dessus du niveau de la mer $`z=0`$ :
 ```
 
 On obtient ainsi une rupture du profil de vitesse
-peu physique. Ce modèle n'est pas implémenté dans X-DYN.
+peu physique. Ce modèle n'est pas implémenté dans xdyn.
 
 #### Stretching par extrapolation linéaire
 
@@ -911,7 +911,7 @@ Ce modèle revient à prolonger le modèle de vitesse par une tangente :
 u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)
 ```
 
-Ce modèle peut être utilisé dans X-DYN en fixant `h` à la profondeur d'eau
+Ce modèle peut être utilisé dans xdyn en fixant `h` à la profondeur d'eau
 `depth` <comment>[JJM] je ne comprends pas trop ce que vient faire la profondeur d'eau ? </comment> et `delta: 1`.
 
 #### Stretching de Wheeler
@@ -986,7 +986,7 @@ vitesses orbitales calculées dans les crêtes sont quelque peu sous-estimées p
 rapport aux mesures.
 
 Ce modèle étant une forme particulière du modèle de delta-stretching, on peut
-l'utiliser dans X-DYN en fixant $`h`$ à la profondeur de l'eau `depth` et
+l'utiliser dans xdyn en fixant $`h`$ à la profondeur de l'eau `depth` et
 `delta: 0`.
 
 #### Stretching de Chakrabarti
@@ -1016,7 +1016,7 @@ On constate expérimentalement que, tout comme le modèle de Wheeler, le modèle
 de Chakrabarti sous-estime les vitesses orbitales dans les crêtes.
 
 Ce modèle n'étant pas un dérivé du modèle de delta-stretching, il n'est pas
-accessible dans X-DYN.
+accessible dans xdyn.
 
 #### Delta-stretching
 
@@ -1024,7 +1024,7 @@ Il s'agit d'une généralisation du modèle de Wheeler qui permet de passer
 continument de ce dernier au modèle d'extrapolation linéaire. En jouant sur ses
 paramètres, on peut retrouver trois modèles de stretching (pas de stretching,
 extrapolation linéaire et modèle de Wheeler) et c'est pour cela qu'il a été
-choisi comme modèle de référence dans X-DYN.
+choisi comme modèle de référence dans xdyn.
 
 Tout comme le modèle de Wheeler, on souhaite retrouver la vitesse orbitale à la
 surface au creux et à la crête des vagues, c'est-à-dire en $`z=\eta`$. Les auteurs
@@ -1215,7 +1215,7 @@ transformées de Fourier rapides utilisées pour résoudre les conditions de
 surface libre permettent une résolution plus rapide que des méthodes directes.
 Ce modèle a été validé avec un haut degré de précision sur des cas 2D et 3D. Ce
 code étant sous licence GPL, une interface client-serveur a été développée en
-Python par D-Ice engineering pour ne pas contaminer le code d'X-DYN. Le code HOS
+Python par D-Ice engineering pour ne pas contaminer le code d'xdyn. Le code HOS
 (en Fortran 95) peut être téléchargé ici :
 [https://github.com/LHEEA/HOS-ocean](https://github.com/LHEEA/HOS-ocean). Une
 description complète du modèle sous-jacent est disponible ici :
@@ -1392,10 +1392,10 @@ tout point, des interpolations linéaires en temps et en espace sont effectuées
 ~~~~
 
 Comme les clients du serveur HOS peuvent bloquer le serveur avec des entrées
-invalides, X-DYN effectue des vérifications sur toutes les données avant envoi
+invalides, xdyn effectue des vérifications sur toutes les données avant envoi
 au serveur.
 
-La paramétrisation de ce modèle dans X-DYN étant issue en grande partie du code
+La paramétrisation de ce modèle dans xdyn étant issue en grande partie du code
 HOS lui-même, on fournit lorsque c'est possible un lien hypertexte vers le code
 source Fortran d'HOS-océan .
 
@@ -1405,8 +1405,8 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 | ---------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 |`length of the domain along x`            | `xlen`          | Longueur du domaine de calcul suivant l'axe X (axe de propagation). Comprise entre 0 (exclu) et 1000 km.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 |`length of the domain along y`            | `ylen`          | Longueur du domaine de calcul suivant l'axe Y.Comprise entre 0 (exclu) et 1000 km.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-|`number of modes per node in x-direction` | `n1`            | Nombre de modes par nœud sur l'axe X. Supérieur ou égal à 1. (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)). Attention : d'autres contraintes moins explicites doivent exister (le serveur peut planter en case de valeur invalide) mais elles ne sont pas vérifiées par X-DYN.                                     |                                                                                                                                                                                                                              |
-|`number of modes per node in y-direction` | `n2`            | Nombre de modes par nœud sur l'axe Y. Supérieur ou égal à 1  (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)). Attention : d'autres contraintes moins explicites doivent exister (le serveur peut planter en case de valeur invalide) mais elles ne sont pas vérifiées par X-DYN.                                     |                                                                                                                                                                                                                              |
+|`number of modes per node in x-direction` | `n1`            | Nombre de modes par nœud sur l'axe X. Supérieur ou égal à 1. (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)). Attention : d'autres contraintes moins explicites doivent exister (le serveur peut planter en case de valeur invalide) mais elles ne sont pas vérifiées par xdyn.                                     |                                                                                                                                                                                                                              |
+|`number of modes per node in y-direction` | `n2`            | Nombre de modes par nœud sur l'axe Y. Supérieur ou égal à 1  (cf. [`initial_conditions.f90` line 195](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L195)). Attention : d'autres contraintes moins explicites doivent exister (le serveur peut planter en case de valeur invalide) mais elles ne sont pas vérifiées par xdyn.                                     |                                                                                                                                                                                                                              |
 |`non-linearity order`                     | `m`             | Ordre de la méthode HOS (ordre du développement de Taylor). On doit avoir $`m\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}`$ (cf. [`initial_conditions.f90` line 63](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L63) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))                                                                                                                                                                                                 |
 |`anti-aliasing parameter for x-axis`      | `p1`            | Paramètre d'anti-aliasing (pour l'axe X). Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 67](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L67)). On doit également avoir $`p_1\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}`$ (cf. [`initial_conditions.f90` line 64](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L64) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))   |
 |`anti-aliasing parameter for y-axis`      | `p2`            | Paramètre d'anti-aliasing (pour l'axe Y). Doit être inférieur ou égal à `m` (cf. [`initial_conditions.f90` line 71](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L71)). On doit également avoir $`p_2\in\left\{1,2,3,4,5,7,8,9,11,14,15,17,19,23,29\right\}`$ (cf. [`initial_conditions.f90` line 65](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L65) et [`initial_conditions.f90` line 371](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L371))   |
@@ -1416,8 +1416,8 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 |`Tp`                                      | `tp_real`       | Période du spectre de JONSWAP utilisé pour l'initialisation de la simulation. Doit être strictement positif (cf. [`initial_conditions.f90` line 155](https://github.com/LHEEA/HOS-ocean/blob/184fb148bd03af72e5f129371d17735541e20d7e/sources/HOS/initial_condition.f90#L155)).                                                                                                                                                                                                                                                                                                                                                                                        |
 |`Hs`                                      | `hs_real`       | Hauteur de houle du spectre de JONSWAP utilisé pour l'initialisation de la simulation. Compris entre 0 (exclus) et 50m                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 |`tolerance of the RKCK scheme`            | `err`           | L'erreur utilisée pour le schéma d'intégration adaptatif Runge-Kutta - Cash-Karp doit-elle être absolue ('abs') ou relative ('rel') ?                                                         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `url of the HOS server`                  |       -         | URL utilisée par X-DYN pour se connecter au serveur 0MQ HOS. Ne correspond pas à l'URL utilisée par le serveur en interne pour échanger de manière asynchrone entre le code Fortran et le code Python (qui est fixée en dur par X-DYN à "5555")                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `waves propagating to`                   |       -         | Direction de propagation de la houle. Le code HOS-Océan ne permettant pas de contrôler la direction de propagation (elle est codée en dur pour une propagation suivant l'axe X), X-DYN effectue un changement de repère avant d'envoyer les requêtes au serveur HOS, puis fait le changement de repère inverse sur les vitesses orbitales.                                                                                                                                                                                                                                                                                                                             |
+| `url of the HOS server`                  |       -         | URL utilisée par xdyn pour se connecter au serveur 0MQ HOS. Ne correspond pas à l'URL utilisée par le serveur en interne pour échanger de manière asynchrone entre le code Fortran et le code Python (qui est fixée en dur par xdyn à "5555")                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `waves propagating to`                   |       -         | Direction de propagation de la houle. Le code HOS-Océan ne permettant pas de contrôler la direction de propagation (elle est codée en dur pour une propagation suivant l'axe X), xdyn effectue un changement de repère avant d'envoyer les requêtes au serveur HOS, puis fait le changement de repère inverse sur les vitesses orbitales.                                                                                                                                                                                                                                                                                                                             |
 | `timeout`                                |       -         | Toute requête sera abandonnée au bout de ce temps. Contrôle à la fois le délai d'expiration au niveau ZMQ (`ZMQ_RCVTIMEO`) et le délai d'expiration de chaque requête (on renvoie la requête tant que la réponse est flaguée `WAIT` et que ce délai d'expiration n'est pas atteint). Comme cette valeur est convertie dans le code en millisecondes (précision du timeout), elle doit être comprise entre 0 (exclu) et 2147 (inclus) secondes. Les unités valides sont `s`, `ms`, `us`, `ns`, `min`, `minute`, `minutes`, `second`, `seconds`, `seconde` et `secondes`.                                                                                                |
 
 
@@ -1426,9 +1426,9 @@ D'autres bornes (plus arbitraires) sont ajoutées de façon préventive.
 Le modèle HOS est défini selon une convention "Z vers le haut". En outre, le
 code HOS-océan ne permet qu'une propagation suivant l'axe X (on ne contrôle pas
 la direction de propagation). Par conséquent, les opérations suivantes sont
-faites dans X-DYN :
+faites dans xdyn :
 
-- Pour tous les calculs HOS, on transforme les entrées X-DYN du repère NED au
+- Pour tous les calculs HOS, on transforme les entrées xdyn du repère NED au
   repère HOS. Cette transformation est définie par une rotation d'angle `waves
   propagating to` autour de l'axe Z (afin de pouvoir simuler des directions de
   propagations différentes de l'axe X), puis une rotation de 180 degrés autour

@@ -18,7 +18,7 @@ d'un navire :
   c'est-à-dire un navire assez difficile à faire gîter et qui sera soumis à un
   roulis rapide, potentiellement inconfortable pour les passagers et l'équipage.
 
-## Utilisation dans X-DYN
+## Utilisation dans xdyn
 
 Le calcul du GM est réalisé par le simulateur à l'aide d'un modèle d'effort
 particulier appelé "GM". Ce modèle se contente de calculer GZ pour deux

@@ -141,13 +141,13 @@ output:
 
 # Interface MatLab
 
-`X-DYN` peut être appelé depuis le logiciel `MatLab`.
+`xdyn` peut être appelé depuis le logiciel `MatLab`.
 Cela présente l'avantage de disposer dans la foulée d'un environnement graphique
 pour afficher les résultats de simulation.
 
-Voici les fonctions de base pour travailler avec `X-DYN`.
+Voici les fonctions de base pour travailler avec `xdyn`.
 
-- `xdyn_run` exécute `X-DYN` depuis `MatLab`.
+- `xdyn_run` exécute `xdyn` depuis `MatLab`.
 - `xdyn_loadResultsFromHdf5File` permet de charger les résultats d'une
   simulation dans `MatLab`.
 - `xdyn_postProcess` lance l'ensemble des post-traitements disponibles.
@@ -176,21 +176,21 @@ de la commande :
 
 # Interface Docker et génération automatique de rapports
 
-`X-DYN` peut être utilisé sous la forme d'un conteneur
+`xdyn` peut être utilisé sous la forme d'un conteneur
 [Docker](https://www.docker.com/)
 ce qui permet de l'exécuter sur n'importe quelle plateforme.
 
 En outre, c'est actuellement le seul moyen d'utiliser le module de génération
 automatique de rapport décrit ci-après.
 
-Pour utiliser l'image `X-Dyn`, il faut d'abord installer Docker puis importer
-l'image `x-dyn.tar.gz` en exécutant :<comment>[JJM] ce n'est pas un peu embêtant d'avoir différentes écritures: X-Dyn, x-dyn, xdyn, X-DYN...rien que sur ces 4 lignes ? Ou bien il y a une convention. </comment>
+Pour utiliser l'image `xdyn`, il faut d'abord installer Docker puis importer
+l'image `x-dyn.tar.gz` en exécutant :
 
 ~~~~{.bash}
 docker load -i xdyn.tar.gz
 ~~~~
 
-## Lancement d'X-DYN via l'image docker
+## Lancement d'xdyn via l'image docker
 
 Une fois l'image chargée par la commande précédente, on peut lancer :
 
@@ -199,11 +199,11 @@ docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn xdyn
 ~~~~
 
 - le paramètre `-v $(pwd):/work` permet de faire correspondre le répertoire courant avec le répertoire `/work` du conteneur,
-- le paramètre `-w /work` précise que le répertoire de travail du conteneur (celui depuis lequel sera exécuté X-DYN) est `/work`,
+- le paramètre `-w /work` précise que le répertoire de travail du conteneur (celui depuis lequel sera exécuté xdyn) est `/work`,
 - `sirehna/xdyn` de la ligne de commande est le nom de l'image Docker.
 
 
-Si l'on souhaite lancer une simulation, on ajoute les arguments d'X-DYN à la suite :
+Si l'on souhaite lancer une simulation, on ajoute les arguments d'xdyn à la suite :
 
 ~~~~{.bash}
 docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
@@ -211,7 +211,7 @@ docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn tutorial_01_falling_ba
 
 ## Génération automatique de rapports (X-Weave)
 
-Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker d'X-DYN.
+Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker d'xdyn.
 
 ### Principe de fonctionnement
 
@@ -222,15 +222,15 @@ ce système, y compris les tutoriels et leurs courbes de résultats.
 
 Grâce à ce générateur (appelé "x-weave"), on peut obtenir des rapports dans le
 format que l'on souhaite (DOCX, PDF, HTML...). Ces rapports peuvent par exemple
-lancer des simulations X-DYN et inclure des courbes à partir de ces résultats.
+lancer des simulations xdyn et inclure des courbes à partir de ces résultats.
 
 L'intérêt est que l'on peut gérer le code de ses rapports en configuration (puisque
 c'est du texte), regarder facilement les différences entre deux versions sans
 utiliser d'outil propriétaire et regénérer à la demande une nouvelle version
 du rapport lorsque l'on change les entrées.
 
-X-Weave n'est ni plus ni moins que Pweave dans un containeur Docker avec X-DYN
-pré-installé, ce qui permet de lancer X-DYN depuis Pweave.
+X-Weave n'est ni plus ni moins que Pweave dans un containeur Docker avec xdyn
+pré-installé, ce qui permet de lancer xdyn depuis Pweave.
 
 ### Ligne de commande
 
@@ -263,7 +263,7 @@ docker run --rm -it -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id 
 ### Commandes Python supplémentaires
 
 Par rapport à Pweave "classique", on a inclus quelques fonctions Python pour
-simplifier le travail avec X-DYN.
+simplifier le travail avec xdyn.
 
 #### Chargement du fichier YAML : `load_yaml`
 
@@ -332,21 +332,21 @@ print('`' * 3)
 print('~' * 4)
 ```
 
-## Utilisation de X-DYN en serveur websocket
+## Utilisation de xdyn en serveur websocket
 
 ### Description
 
-Il est possible de lancer X-DYN en tant que serveur, afin de l'intégrer à un
+Il est possible de lancer xdyn en tant que serveur, afin de l'intégrer à un
 autre environnement de simulation. L'utilisation d'un serveur plutôt qu'une
-MEX-fonction (*MATLAB executable* - fonction) ou un FMU (*Functional Mock-up Unit*) <comment>[JJM] tout çà est défini quelque part, ou censé être connu du lecteur ? </comment>permet d'exécuter X-DYN sur une autre machine et de
+MEX-fonction (*MATLAB executable* - fonction) ou un FMU (*Functional Mock-up Unit*) <comment>[JJM] tout çà est défini quelque part, ou censé être connu du lecteur ? </comment>permet d'exécuter xdyn sur une autre machine et de
 l'interroger par plusieurs clients.
 
 Il s'agit d'une utilisation en "model exchange" (au sens de la [spécification
 "Functional Mockup
 Interface"](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=2ahUKEwimvuWL6tDeAhUC1hoKHWiwALAQFjABegQIBBAC&url=https%3A%2F%2Fsvn.modelica.org%2Ffmi%2Fbranches%2Fpublic%2Fspecifications%2Fv2.0%2FFMI_for_ModelExchange_and_CoSimulation_v2.0.pdf&usg=AOvVaw2ePLxrLtnb42qW1aLIVoov)),
-par opposition à "X-DYN for Co-simulation". La différence se situe dans
+par opposition à "xdyn for Co-simulation". La différence se situe dans
 l'utilisation du solveur : dans le cas de la co-simulation, on utilise le
-solveur interne de X-DYN (le serveur renvoie les états intégrés au pas suivant
+solveur interne de xdyn (le serveur renvoie les états intégrés au pas suivant
 $`X(t+dt)`$). Dans le cas "model exchange", le serveur renvoie la dérivée
 des états $`\frac{dX}{dt}`$.
 
@@ -361,7 +361,7 @@ quitte à sacrifier un peu de performance (taille des messages, temps d'encodage
 
 ### Lancement du serveur "Model Exchange"
 
-Le serveur est lancé grâce à l'exécutable `xdyn-for-me` (X-DYN for Model Exchange)
+Le serveur est lancé grâce à l'exécutable `xdyn-for-me` (xdyn for Model Exchange)
 avec un ou plusieurs fichiers YAML en paramètre : une fois lancé, ce
 serveur ne simulera donc qu'une seule configuration de l'environnement et du
 navire. Concrètement, on lance le serveur comme suit :
@@ -379,7 +379,7 @@ Ensuite, on peut se connecter à l'adresse du serveur pour l'interroger.
 
 ### Lancement du serveur "Co-Simulation"
 
-Le serveur est lancé grâce à l'exécutable `xdyn-for-cs` (X-DYN for
+Le serveur est lancé grâce à l'exécutable `xdyn-for-cs` (xdyn for
 Co-Simulation) avec un ou plusieurs fichiers YAML en paramètre, un pas de temps
 et un solveur : une fois lancé, ce serveur ne simulera donc qu'une seule
 configuration de l'environnement et du navire, en utilisant un solveur et
@@ -529,10 +529,10 @@ Exemple de sortie:
 |            |                                        | liste `states`, par pas de `dt`, où `dt` est spécifié sur la ligne de commande. L'état t0 est donc présent à                                            |
 |            |                                        | la fois dans les entrées et dans les sorties, avec la même valeur.                                                                                      |
 | `states`   | Liste d'éléments de type « État »      | Historique des états jusqu'au temps courant `t`. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.  |
-| `commands` | Liste de clefs-valeurs (dictionnaire)  | État des actionneurs au temps `t`. Commande au sens de X-DYN (modèle d'effort commandé) au temps t0 (début de la                                        |
+| `commands` | Liste de clefs-valeurs (dictionnaire)  | État des actionneurs au temps `t`. Commande au sens de xdyn (modèle d'effort commandé) au temps t0 (début de la                                        |
 |            |                                        | simulation, i.e. date du dernier élément de la liste `states`). Le plus souvent, correspond à l'état interne                                            |
-|            |                                        | d'un modèle d'actionneur (safran ou hélice par exemple) dans X-DYN et dont on souhaite simuler la dynamique                                             |
-|            |                                        | en dehors d'X-DYN.
+|            |                                        | d'un modèle d'actionneur (safran ou hélice par exemple) dans xdyn et dont on souhaite simuler la dynamique                                             |
+|            |                                        | en dehors d'xdyn.
 
 Chaque élément de type « État » est composé des éléments suivants:
 
@@ -622,9 +622,9 @@ l'historique des états de `t0` à `t0 + Dt` par pas de `dt`.
 | `psi`    | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                           |
 
 La signification exacte des angles d'Euler dépend de la convention d'angle
-choisie dans le fichier YAML d'entrée de X-DYN (voir la section correspondante
+choisie dans le fichier YAML d'entrée de xdyn (voir la section correspondante
 dans la documentation). Cette sortie est fournie pour faciliter
-le travail du client du serveur, mais n'est pas utilisée en interne par X-DYN.
+le travail du client du serveur, mais n'est pas utilisée en interne par xdyn.
 
 Exemple de sortie:
 

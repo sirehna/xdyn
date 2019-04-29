@@ -350,7 +350,7 @@ fois interpolée, deux fonctions RAO par axe $`k`$
 (u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{phase}}(u,\omega,\beta)
 ```
 
-* $`u`$ désigne la composante longitudinale de vitesse d'avance (basse fréquence) projetée dans le repère body (une limitation actuelle d'X-DYN est que l'on utilise pour ces calculs non pas la vitesse basse fréquence mais la vitesse instantanée),
+* $`u`$ désigne la composante longitudinale de vitesse d'avance (basse fréquence) projetée dans le repère body (une limitation actuelle d'xdyn est que l'on utilise pour ces calculs non pas la vitesse basse fréquence mais la vitesse instantanée),
 * $`\omega`$ désigne la pulsation de la houle (et non la pulsation de rencontre, puisque dans la formule ci-dessous on fait intervenir $`\mathbf{k}\cdot \mathbf{x}`$),
 * $`\beta`$ est l'angle d'incidence entre l'axe $`X`$ du navire et la direction de propagation de la houle
 
@@ -387,7 +387,7 @@ a_{i,j}^2=A(\omega_i,\gamma_j)^2 = 2 S(\omega_i)d\omega D(\gamma_j) d\gamma
 
 Les RAO lues depuis le fichier n'étant pas modifiées, l'expression précédente
 donne un torseur d'effort exprimé dans un repère Z vers le haut et au point de
-calcul de la RAO : pour l'exprimer dans le repère Z vers le bas d'X-DYN, on
+calcul de la RAO : pour l'exprimer dans le repère Z vers le bas d'xdyn, on
 effectue le changement de repère suivant :
 
 ```math
@@ -405,7 +405,7 @@ M_Z\\
 ```
 
 ```math
-\tau_{\textrm{XDYN}} =
+\tau_{\textrm{xdyn}} =
 \left[
 \begin{array}{c}
 F_X\\
@@ -418,7 +418,7 @@ M_X\\
 \right]
 ```
 
-Le torseur calculé est ensuite déplacé par X-DYN du point de calcul des
+Le torseur calculé est ensuite déplacé par xdyn du point de calcul des
 [fichiers HDB](#fichiers-hdb) au point de résolution du bilan des efforts.
 
 ### Paramétrage
@@ -502,7 +502,7 @@ navire.
 En pratique, on effectue une interpolation de la courbe de résistance
 à l'avancement en fonction de la vitesse du solide par rapport au repère NED
 projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $`u`$).
-La courbe de résistance à l'avancement est obtenue au préalable (et non calculée par X-DYN) et renseignée dans le fichier YAML.
+La courbe de résistance à l'avancement est obtenue au préalable (et non calculée par xdyn) et renseignée dans le fichier YAML.
 
 Si $`f:u\mapsto R=f(u)`$ désigne la fonction d'interpolation de la courbe de résistance à l'avancement,
 le torseur des efforts, exprimé au [point de calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
@@ -570,7 +570,7 @@ Il faut donc décomposer la vitesse longitudinale en une composante basse fréqu
 (utilisée par le modèle de [résistance à
 l'avancement](#r%C3%A9sistance-%C3%A0-lavancement))
 et une composante haute fréquence (pour le modèle d'amortissement).
-Cette décomposition n'est pas encore implémentée dans X-DYN.
+Cette décomposition n'est pas encore implémentée dans xdyn.
 
 ### Modélisation
 

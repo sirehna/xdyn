@@ -212,7 +212,7 @@ GZ = \frac{\cos(\psi)\cdot\cos(\theta)\cdot m_x +
 
 ## Outil de calcul de $`GZ`$
 
-L'installation d'X-DYN contient, outre l'exécutable `xdyn`, un autre exécutable appelé `gz`, permettant de calculer
+L'installation d'xdyn contient, outre l'exécutable `xdyn`, un autre exécutable appelé `gz`, permettant de calculer
 des courbes de stabilité statique, aussi communément appelée courbe en "GZ", en fonction de la gîte $`\phi`$.
 
 Cet outil prend en entrée des paramètres de ligne de commande et un fichier
