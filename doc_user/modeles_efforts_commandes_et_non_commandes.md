@@ -684,9 +684,9 @@ documentation](#efforts-damortissement-visqueux).
 Le modèle d'efforts hydrostatiques linéaires est beaucoup plus rapide à
 calculer que son homologue non-linéaire. Habituellement, les efforts
 hydrostatiques linéaires sont juste calculés à partir d'une matrice
-hydrostatique donnée en entrée (ou éventuellement calculée à partir des données
-de cdg et géométriques). L'implémentation à quatre points présentée ici est
-très spécifique.
+hydrostatique donnée en entrée (ou éventuellement calculée à partir de la
+position du centre de gravité et des données géométriques). L'implémentation à
+quatre points présentée ici est très spécifique.
 
 ![](images/linear_hydrostatics.svg)
 
