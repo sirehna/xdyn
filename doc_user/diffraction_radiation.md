@@ -12,12 +12,6 @@ Cette section propose une décomposition des efforts hydrodynamiques suivant un 
 
 ![](images/efforts_hydros.svg)
 
-<comment>[JJM] Image non visible </comment>
-
-<comment>[JJM] Il n'y a pas de rasion de mentionner diodore plus qu'autre chose dans le schéma. Résolution fréquentielle linéaire, quel que soit l'outil </comment>
-
-<comment>[JJM] Ci-après, formules... </comment>
-
 ## Potentiel d'interaction entre la houle et l'obstacle
 
 <comment>[JJM] Je ne vois pas trop l'intérêt de reformuler toute la résolution potentielle, ce qui est fait dans plein de références, le calcul n'étant pas fait dans x-dyn. En revanche, il est intéressant de préciser  la formulation temporelle retenue et la manière dont elle est implémentée  </comment>
