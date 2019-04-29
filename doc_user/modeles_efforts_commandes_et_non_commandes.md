@@ -469,25 +469,27 @@ $`\beta>\pi`$ et que `mirror for 180 to 360` vaut `true`.
 
 ### Hypothèses
 
-On suppose la propulsion rectiligne, uniforme et directe<comment>[JJM] ? </comment>, c'est-à-dire
-d'intensité et de direction constantes et située dans le plan ($`x`$, $`y`$)<comment>[JJM]   c'est le repère lié au corps ?</comment>.
+On suppose la propulsion rectiligne, d'intensité et de direction constantes et
+située dans le plan ($`x`$, $`y`$) du repère NED.
 
-On suppose également qu'il n'y a pas de houle (eau initialement calme), que l'assiette et
-l'enfoncement du navire sont constants et que sa gite est nulle.<comment>[JJM]   il faudrait interpoler l'enfoncement et l'assiette en même temps que la résistance, ce n'est pas compliqué, et l'information est normalement connue, quelle que soit l'origine (essais ou calculs) </comment>
+On suppose également qu'il n'y a pas de houle (eau initialement calme), que
+l'assiette et l'enfoncement du navire sont constants et que sa gite est nulle.
+Dans le cas contraire, il faudrait interpoler la résistance en fonction de la
+vitesse, l'enfoncement et l'assiette, mais ce modèle ne le permet pas
 
 On suppose enfin que la résistance à l'avancement est colinéaire à la
 projection sur le plan horizontal de la force propulsive.
 
 Étant données ces hypothèses, on parle de __résistance de remorquage__ à une
-vitesse donnée et on note $`R_T`$ la force nécessaire pour remorquer le navire à
-cette vitesse en eau calme.
+vitesse donnée et on note $`R_T`$ la force nécessaire pour remorquer le navire
+à cette vitesse en eau calme.
 
 ### Modélisation
 
-Le paradoxe d'Alembert est que lorsque l'on remorque un objet
-immergé dans un fluide supposé parfait<comment>[JJM] et en milieu infini </comment>, sa résistance est nulle.
-Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique
-que :
+Le paradoxe d'Alembert est que lorsque l'on remorque un objet immergé dans un
+fluide supposé parfait et en milieu infini, sa résistance est nulle.
+Expérimentalement, bien sûr, on ne constate pas ce phénomène. Cela implique que
+:
 
 - l'eau n'est pas un fluide parfait : elle possède une viscosité qui freine
   l'objet par frottement et par production de structures turbulentes,
@@ -496,11 +498,10 @@ que :
 
 On décompose donc la résistance de remorquage en deux composantes :
 
-- la résistance visqueuse, liée au frottement de l'eau sur la carène et aux pressions liées aux détachements ou structures turbulentes ;
+- la résistance visqueuse, liée au frottement de l'eau sur la carène et aux
+  pressions liées aux détachements ou structures turbulentes ;
 - la résistance de vagues, due à la création d'un champs de vague par le
-navire.
-
-<comment>[JJM] je ne comprends pas trop l'intérêt des § précédent, vis-à-vis de la suite. </comment>
+  navire.
 
 En pratique, on effectue une interpolation de la courbe de résistance
 à l'avancement en fonction de la vitesse du solide par rapport au repère NED
@@ -549,18 +550,17 @@ Les mouvements d'un solide évoluant dans un fluide sont amortis du fait de
 l'énergie que ce solide communique au fluide. Ces efforts dissipatifs
 proviennent d'une part des vagues générées par les mouvements du fluide (et qui
 correspondent aux [amortissements de
-radiation](#calcul-des-efforts-dexcitation))<comment>[JJM] Pourquoi "amortissement de radiation" pointe sur "efforts d'excitation" ? </comment>,
+radiation](#calcul-des-efforts-de-radiation)),
 et d'autre part des amortissements visqueux dus au cisaillement du fluide sur la
 coque (apparition d'un sillage tourbillonnaire ou turbulent qui dissipe de
 l'énergie, essentiellement sur l'axe roulis). Ce
 sont ces derniers qui nous intéressent dans cette section.
 
-Les amortissements non-visqueux (radiation) sont, par nature, linéaires par
-rapport à la vitesse<comment>[JJM] Pas par nature, mais du fait de la modélisation utilisée pour les obtenir </comment>. Les amortissements visqueux sont, eux, quadratiques <comment>[JJM] là encore, c'est une modélisation, qui se rapproche certes de la réalité, mais pas forcément et par toujours </comment>. Le
+Les amortissements non-visqueux (radiation) sont, du fait de la modélisation utilisée pour les obtenir, linéaires par
+rapport à la vitesse. Les amortissements visqueux sont, eux, fréquemment modélisés par une loi quadratique de la vitesse. Le
 modèle d'amortissement linéaire ne doit être utilisé que pour prendre en compte
 les efforts dissipatifs de radiation, si ceux-ci ne sont pas déjà obtenus par le calcul fréquentiel (par le modèle d'amortissement de radiation qui utilise la base de donnée hydro du fichier HDB). Suivant les axes, certains termes prédominent par rapport aux autres.
-Ainsi, en roulis, l'amortissement quadratique est prépondérant par rapport à
-l'amortissement linéaire <comment>[JJM] à mon avis çà dépend de l'amplitude du mouvement, le linéaire est prépondérant pour les petits mouvements, le quadratique pour les grands... Pourquoi on dit çà ici ? Ca ne sert peut-être pas à grand chose. </comment>, tandis qu'en tangage c'est l'inverse.<comment>[JJM]  </comment>
+Pour les mouvements de petites amplitudes, les efforts linéaires sont prépondérant. Pour les grands mouvements, c'est l'inverse.
 
 Outre leur signification physique, les termes amortissements ont également une
 incidence sur la simulation dans la mesure où ils ont tendance à stabiliser les
@@ -681,7 +681,11 @@ documentation](#efforts-damortissement-visqueux).
 ### Description
 
 Le modèle d'efforts hydrostatiques linéaires est beaucoup plus rapide à
-calculer que son homologue non-linéaire. <comment>[JJM] Habituellement les efforts hydrostatiques linéaires sont juste calculés à partir d'une matrice hydrostatique donnée en entrée (ou éventuellement calculée à partir des données de cdg et géométriques). L'implémentation à 4 points est très spécifique, et je ne suis pas sûs qu'elle présente un intérêt particulier. Si on veut garder çà, il faudrait juste mettre une petite phrase d'explication sur le pourquoi. </comment>
+calculer que son homologue non-linéaire. Habituellement, les efforts
+hydrostatiques linéaires sont juste calculés à partir d'une matrice
+hydrostatique donnée en entrée (ou éventuellement calculée à partir des données
+de cdg et géométriques). L'implémentation à quatre points présentée ici est
+très spécifique.
 
 ![](images/linear_hydrostatics.svg)
 
@@ -1080,9 +1084,11 @@ avant (c'est-à-dire pour $`n`$ positif ou nul).
 
 ### Dérivation du modèle en eau libre
 
-Le modèle en eau libre est un modèle basé sur des considérations physiques <comment>[JJM] les coefs de ce modèle peuvent aussi bien être obtenues expérimentalement, que numériquement par résolution des équations de NS... </comment>. Le postulat est, qu'étant données les
-hypothèses ci-dessus, on peut s'attendre à ce que la poussée de l'hélice
-dépende :
+Le modèle en eau libre est un modèle basé sur des considérations physiques,
+dont les coefficients peuvent aussi bien être obtenus expérimentalement, que
+numériquement par résolution des équations de Navier-Stokes. Le postulat est,
+qu'étant données les hypothèses ci-dessus, on peut s'attendre à ce que la
+poussée de l'hélice dépende :
 
 - du diamètre $`D`$ (en m) de celle-ci,
 - de la vitesse $`V_a`$ d'avance du fluide (en m/s),
@@ -1149,8 +1155,6 @@ K_Q = \frac{Q_0}{\rho\cdot n^2\cdot D^5}
 Le modèle en eau libre consiste à expliciter les fonctions $`K_T`$ et $`K_Q`$, dont
 on peut ensuite dériver la poussée et le couple.
 
-<comment>[JJM] je n'ai pas trop compris l'objet / l'apport de ce paragraphe... </comment>
-
 ### Prise en compte des effets de la coque et du sillage
 
 Lorsque l'écoulement au niveau de l'hélice a été perturbé par la coque, la
@@ -1173,8 +1177,7 @@ exemple dans Carlton, pages 70, 72, 73 et 74.
 
 En outre, l'hélice diminue la pression à l'arrière du navire, ce qui accroît sa [résistance à
 l'avancement](#r%C3%A9sistance-%C3%A0-lavancement).
-<comment>[JJM] l'explication physique n'était pas juste </comment>
-<comment>[JJM] c'est dommage, mais tout ceci fait l'objet maintenant de texte dans les procédés de calcul... Donc redondant (mais ce n'était pas le cas quand tu as rédigé). </comment>
+
 Pour prendre en compte ces phénomènes, on introduit le coefficient de succion $`t`$ tel que :
 
 ```math
@@ -1242,11 +1245,9 @@ K_T(J, P/D, A_E/A_0, Z, R_n)`$
 $`K_Q(J, P/D, A_E/A_0, Z, R_n) = K_Q(J, P/D, A_E/A_0, Z, 2\times 10^6) + \Delta
 K_Q(J, P/D, A_E/A_0, Z, R_n)`$
 
-<comment>[JJM] pas vérifié grand chose dans les équations (ne passent pas) </comment>
-
 ### Domaine de validité
 
-Le modèle<comment>[JJM] des séries B ? </comment> de Wageningen ne devrait être utilisé que lorsque les hypothèses
+Le modèle des séries B de Wageningen ne devrait être utilisé que lorsque les hypothèses
 suivantes sont vérifiées :
 
 - Le nombre de pales $`Z`$ doit être compris entre 2 (inclus) et 7 (inclus).
@@ -1390,7 +1391,7 @@ navire (dans le repère de l'hélice). Voir la [documentation](#expression-des-e
 - `blade area ratio AE/A0` : [fraction de
 surface](#expression-des-coefficients-k_t-et-k_q) de l'hélice.
 - `diameter` : diamètre de l'hélice.
-<comment>[JJM] je n'ai pas pu vérifier les liens. </comment>
+
 ### Références
 
 - *Marine Propellers and Propulsion*, 2007, John Carlton, Butterworth-Heinermann, ISBN 978-07506-8150-6, page 89, 103
@@ -1406,7 +1407,8 @@ surface](#expression-des-coefficients-k_t-et-k_q) de l'hélice.
 ### Description
 
 Le but de ce contrôleur est de pouvoir réaliser des simulations sur houle (par
-exemple pour calculer des RAO d'effort<comment>[JJM] le simulateur calcule les RAO d'efforts ? Bizarre. mouvements ? </comment>) en limitant les variations de cap. Ce
+exemple pour calculer des RAO de mouvements en post-traitant les résultats
+temporels d'xdyn) en limitant les variations de cap. Ce
 contrôleur génère directement un moment au centre de gravité du corps.
 
 ### Expression des efforts
@@ -1486,8 +1488,9 @@ Ce modèle n'a qu'une seule commande, le cap `psi_co` :
 ### Description
 
 Le but de ce contrôleur est de pouvoir réaliser des simulations sur houle (par
-exemple pour calculer des RAO d'effort<comment>[JJM]  </comment>) en limitant les variations de cap et de
-position. Ce contrôleur génère directement un moment et un effort au centre de
+exemple pour calculer des RAO de mouvement en post-traitant les résultats
+temporels d'xdyn) en limitant les variations de cap et de position. Ce
+contrôleur génère directement un moment et un effort au centre de
 gravité du corps.
 
 ### Expression des efforts
@@ -1607,8 +1610,9 @@ Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
 ### Description
 
 Ce modèle décrit l'ensemble constitué d'une hélice Wageningen et d'un safran.
-Les deux sont utilisés ensemble car le modèle de safran n'a de sens <comment>[JJM] Pourquoi ? On peut très bien avoir des safrans qui ne sont pas derrière des hélices. Le modèle ne le permet pas ? Ca ne doit pas être trop compliqué... </comment> que
-lorsqu'il est utilisé avec une hélice (il prend en compte le sillage de l'hélice pour calculer les efforts dûs au safran).
+Les deux sont utilisés ensemble car le modèle de safran utilise le sillage de
+l'hélice pour calculer les efforts dûs au safran (ce modèle fait donc
+l'hypothèse que le safran est situé en aval de l'hélice)
 
 ### Expression des efforts
 
@@ -1627,7 +1631,7 @@ L'expression du torseur $`F\textrm{hélice}_P`$ est donnée dans le modèle "Hé
 Wageningen série B".
 
 Les efforts dûs au safran seront calculés au point R puis le torseur sera
-déplacé au point P<comment>[JJM] Pourquoi au point P, et pas au centre de calcul des efforts globaux ? </comment>. Dans la suite, on notera simplement $`F\textrm{safran}`$ le
+déplacé au centre de gravité. Dans la suite, on notera simplement $`F\textrm{safran}`$ le
 torseur au point R.
 
 La modélisation choisie sépare les efforts dus au safran en deux parties :
@@ -2026,8 +2030,6 @@ renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
 même type) ainsi que la projection de ce même effort suivant l'axe $`X`$ du repère
 NED.
 
-<comment>[JJM] Tout ceci a été vérifié/validé comment ? C'est documenté qque part ? </comment>
-
 ### Références
 
 - *Marine Rudders & Control Surfaces, Principles, Data, Design &
@@ -2149,32 +2151,4 @@ l'actionneur renseigné dans la clef `name` afin de pouvoir définir plusieurs
 actionneurs du même type) ainsi que la projection de ce même effort suivant
 l'axe $`X`$ du repère NED.
 
-<comment>[JJM] A partir d'ici, c'est une redite du début, non ? </comment>
 
-# Modèles d'efforts non-commandés
-
-Les efforts extérieurs (non commandés) sont donnés dans la section
-`external forces` sous forme de liste de modèles ayant ou non des paramètres.
-La seule clef commune à tous les modèles d'effort est `model` : chaque modèle
-possède sinon sa propre paramétrisation (éventuellement aucune paramétrisation).
-Voici un exemple de section `external forces` :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-external forces:
-  - model: gravity
-  - model: non-linear hydrostatic (fast)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Le navire est soumis aux efforts suivants :
-
-- La pesanteur,
-- Les efforts hydrostatiques, liés à la pression exercée par le fluide au repos
-  sur la coque,
-- Les efforts hydrodynamiques, provenant d'une part de l'excitation de la houle
-  et d'autre part des phénomènes de radiation/diffraction,
-- Les efforts d'amortissement visqueux, dûs aux frottements de l'eau sur la
-  coque et aux tourbillons.
-
-## Efforts de gravité
-
-<comment>[JJM] Relu </comment>
