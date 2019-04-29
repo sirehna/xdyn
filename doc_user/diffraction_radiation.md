@@ -71,11 +71,11 @@ Le potentiel inconnu $`\Phi_P`$ doit satisfaire les conditions suivantes :
    $`\left[g\cdot\frac{\partial \Psi_P}{\partial z} + \omega^2
    \Psi_P\right](x,y,0,t) = 0`$
 3. Le potentiel étant indéterminé si l'on n'impose pas une condition sur le sens
-   de propagation de l'énergie, on imposera la condition de rayonnement de
+   de propagation de l'énergie, on imposera la condition de radiation de
    Sommerfeld (phénomène divergent ; l'énergie s'éloigne de l'obstacle) :
    $`\sqrt{r}\lvert{\partial \Psi_P}{\partial r} - i \lvert k\rvert\Psi_P\rvert
    \rightarrow 0`$ quand $`r=\sqrt{x^2 + y^2}\rightarrow \infty`$ (condition de
-   rayonnement à l'infini). Cette condition exprime que, au loin, les ondes de
+   radiation à l'infini). Cette condition exprime que, au loin, les ondes de
    diffraction-radiation ont pour nombre d'onde $`k`$, se propagent dans la
    direction radiale et leur amplitude décroît comme $`1/\sqrt{r}`$.
 4. Le fond étant imperméable, la composante suivant $`z`$ de la vitesse y est
@@ -101,11 +101,11 @@ l'obstacle fixe. Un potentiel $`\Psi_{\textrm{PD}}`$ vérifiant les conditions (
 Si l'on ne considère qu'on mouvement oscillatoire élémentaire de l'obstacle
 suivant son $`j`$-ème degré de liberté, la condition (5) s'écrit : $`\frac{\partial \Psi_P}{\partial n} = n_j`$. Un potentiel $`\Psi_{PR_j}`$
 vérifiant les conditions (1) à (4) et cette condition-ci est appelé $`j`$-ème
-potentiel élémentaire de rayonnement et correspond au mouvement engendré par ce
+potentiel élémentaire de radiation et correspond au mouvement engendré par ce
 mouvement oscillatoire élémentaire de l'obstacle.
 
 En définitive, la solution complète $`\Phi_D`$ du problème de
-diffraction-rayonnement obtenue par superposition de la solution "obstacle
+diffraction-radiation obtenue par superposition de la solution "obstacle
 fixe" et des solutions oscillatoires élémentaires peut s'écrire :
 
 ```math
@@ -206,7 +206,7 @@ $`F_{\textrm{R}_k} = \rho\omega \sum_j U_j\int_C\Psi_j^I n_k dS + \rho \sum_j
 \frac{dU_j}{dt}\int_C \Psi_j^R n_k dS`$
 
 Or d'après la condition (5) écrite pour les potentiels élémentaires de
-rayonnement<comment>[JJM] il faudra choisir, radiation ou rayonnement </comment>,
+radiation,
 
 
 ```math
