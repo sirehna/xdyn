@@ -329,11 +329,15 @@ hydrodynamiques. Comme les efforts de radiation et les efforts de masse ajoutée
 ces tables sont calculées en résolvant un problème de condition aux limites pour
 le potentiel de vitesse : on utilise donc des codes basés sur des méthodes
 potentielles, tels qu'Aqua+.
-<comment>[GJ] Fin de paragraphe à faire relire par JJM</comment>
-Les tables contiennent les fonctions de transfert des efforts (Response Amplitudes Operators ou RAO) et
-sont paramétrées en pulsation, incidence et vitesse d'avance. Il s'agit de RAO
-d'efforts du premier ordre). Les efforts de diffraction sont dûs à la diffraction de la houle par le corps fixe, tandis que les amortissements de radiation proviennent de la dissipation de l'énergie du corps lors de son mouvement, par la création de vagues. Cette différence se traduit uniquement par une différence de conditions aux limites dans la modélisation potentielle.
-<comment>[JJM] euh... la principale différence est que l'un est lié à la perturbation de la houle incidente et l'autre lié à la génération d'ondes par le mouvement  du navire. La condition aux limites différente concerne la résolution du problème en potentiel... Et accessoirement, pour utiliser les efforts de radiation, il faut multiplier les infos des tables par les mouvements du navire. Peut-être pas la peine d'en parler ici, dans les efforts de diffraction. </comment>
+
+Les tables contiennent les fonctions de transfert des efforts (Response
+Amplitudes Operators ou RAO) et sont paramétrées en pulsation, incidence et
+vitesse d'avance. Il s'agit de RAO d'efforts du premier ordre). Les efforts de
+diffraction sont dûs à la diffraction de la houle par le corps fixe, tandis que
+les amortissements de radiation proviennent de la dissipation de l'énergie du
+corps lors de son mouvement, par la création de vagues. Cette différence se
+traduit uniquement par une différence de conditions aux limites dans la
+modélisation potentielle.
 
 ### Calcul numérique
 
