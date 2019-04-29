@@ -43,7 +43,7 @@ script:
         echo win;
         else
         wget $SSC_BINARY -O ssc.deb;
-        dpkg -i ssc.deb;
+        sudo dpkg -i ssc.deb;
         fi &&
         rm -rf /opt/share/code/yaml-cpp &&
         cp -rf /opt/yaml_cpp /opt/share/xdyn/yaml-cpp &&
