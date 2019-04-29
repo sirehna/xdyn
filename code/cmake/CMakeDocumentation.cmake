@@ -112,7 +112,7 @@ IF(PANDOC)
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/courbes_de_GZ.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/solver.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/diffraction_radiation.md
-           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/modeles_efforts_commandes_et_non_commandes.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_00.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_01.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md

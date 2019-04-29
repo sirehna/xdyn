@@ -1,4 +1,3 @@
-<comment>[JJM] En lisant, je vois que le document contient les efforts non-commandés et commandés, or le titre ci-dessous fait penser que c'est le titre du document. Peut-on mettre une introduction pour expliquer ce que contient le document ? </comment>
 
 # Modèles d'efforts non-commandés
 
