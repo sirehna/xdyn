@@ -333,7 +333,7 @@ potentielles, tels qu'Aqua+.
 Les tables contiennent les fonctions de transfert des efforts (Response
 Amplitudes Operators ou RAO) et sont paramétrées en pulsation, incidence et
 vitesse d'avance. Il s'agit de RAO d'efforts du premier ordre). Les efforts de
-diffraction sont dûs à la diffraction de la houle par le corps fixe, tandis que
+diffraction sont dus à la diffraction de la houle par le corps fixe, tandis que
 les amortissements de radiation proviennent de la dissipation de l'énergie du
 corps lors de son mouvement, par la création de vagues. Cette différence se
 traduit uniquement par une différence de conditions aux limites dans la
@@ -1611,7 +1611,7 @@ Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
 
 Ce modèle décrit l'ensemble constitué d'une hélice Wageningen et d'un safran.
 Les deux sont utilisés ensemble car le modèle de safran utilise le sillage de
-l'hélice pour calculer les efforts dûs au safran (ce modèle fait donc
+l'hélice pour calculer les efforts dus au safran (ce modèle fait donc
 l'hypothèse que le safran est situé en aval de l'hélice)
 
 ### Expression des efforts
@@ -1630,7 +1630,7 @@ F\textrm{tot}_P = F\textrm{safran}_P + F\textrm{hélice}_P
 L'expression du torseur $`F\textrm{hélice}_P`$ est donnée dans le modèle "Hélices
 Wageningen série B".
 
-Les efforts dûs au safran seront calculés au point R puis le torseur sera
+Les efforts dus au safran seront calculés au point R puis le torseur sera
 déplacé au centre de gravité. Dans la suite, on notera simplement $`F\textrm{safran}`$ le
 torseur au point R.
 
