@@ -35,36 +35,24 @@ script:
     else
     ci_env=;
     fi
-  - docker run $ci_env --rm \
+  - docker run $ci_env \
+     --rm \
      -u $( id -u $USER ):$( id -g $USER ) \
      -v $(pwd):/opt/share \
      -w /opt/share \
      $DOCKER_IMAGE \
      /bin/bash -c \
        "wget $SSC_BINARY &&
-        rm -rf /opt/share/ssc/google-test &&
-        cp -rf /opt/googletest /opt/share/ssc/google-test &&
-        rm -rf /opt/share/ssc/eigen &&
-        cp -rf /opt/eigen /opt/share/ssc/eigen &&
-        rm -rf /opt/share/ssc/yaml-cpp &&
-        cp -rf /opt/yaml_cpp /opt/share/ssc/yaml-cpp &&
-        cp /opt/share/ssc/CMakeLists_yaml_cpp.txt /opt/share/ssc/yaml-cpp/CMakeLists.txt &&
-        rm -rf /opt/share/ssc/websocketpp &&
-        cp -rf /opt/websocketpp /opt/share/ssc/websocketpp &&
-        rm -rf /opt/share/ssc/f2c &&
-        cp -rf /opt/libf2c /opt/share/ssc/f2c &&
-        cd /opt/share/ssc/f2c &&
-        sed 's/typedef long int integer/typedef int integer/g' f2c.h0 > f2c.h &&
-        cp signal1.h0 signal1.h &&
-        cp sysdep1.h0 sysdep1.h &&
-        cd .. &&
-        cp CMakeLists_f2c.txt f2c/CMakeLists.txt &&
-        rm -rf /opt/share/ssc/geographiclib &&
-        cp -rf /opt/geographiclib /opt/share/ssc/geographiclib &&
-        cp /opt/share/ssc/CMakeLists_geographiclib.txt /opt/share/ssc/geographiclib/CMakeLists.txt &&
-        cd /opt/share/ssc/geographiclib &&
-        echo add_library \(Geographic_object OBJECT \\\${SOURCES} \\\${HEADERS}\) >> src/CMakeLists.txt &&
-        cd /opt/share/ssc &&
+        rm -rf /opt/share/code/yaml-cpp &&
+        cp -rf /opt/yaml_cpp /opt/share/xdyn/yaml-cpp &&
+        rm -rf /opt/share/code/eigen3-hdf5 &&
+        cp -rf /opt/eigen3-hdf5 /opt/share/xdyn/google-test &&
+        rm -rf /opt/share/code/gcovr &&
+        rm -rf /opt/share/code/google-test &&
+        cp -rf /opt/googletest /opt/share/xdyn/google-test &&
+        rm -rf /opt/share/code/eigen
+        cp -rf /opt/eigen /opt/share/xdyn/eigen &&
+        cd /opt/share/xdyn &&
         mkdir -p $BUILD_DIR &&
         cd $BUILD_DIR &&
         if [[ $BUILD_DIR == build_win ]];
@@ -77,21 +65,14 @@ script:
           -G Ninja
           -DCPACK_GENERATOR=$CPACK_GENERATOR
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-          -DCMAKE_INSTALL_PREFIX:PATH=/opt/ssc
+          -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
           -DBOOST_ROOT:PATH=$BOOST_ROOT
           -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
           -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
           -DBOOST_LIBRARYDIR:PATH=$BOOST_ROOT/lib
           -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
           -DBoost_LIBRARY_DIR_RELEASE:PATH=$BOOST_ROOT/lib
-          -DIPOPT_ROOT:PATH=/opt/CoinIpopt
-          -DCOIN_BLAS:PATH=/opt/CoinIpopt/lib/libcoinblas.a
-          -DCOIN_LAPACK:PATH=/opt/CoinIpopt/lib/libcoinlapack.a
-          -DCOIN_MUMPS:PATH=/opt/CoinIpopt/lib/libcoinmumps.a
-          -DCOIN_IPOPT:PATH=/opt/CoinIpopt/lib/libipopt.a
-          -DIPOPT_INCLUDE_DIRS:PATH=/opt/CoinIpopt/include/coin
-          -DIPOPT_LIB_DYNAMIC=\"gfortran;gcc;quadmath;m\"
-          /opt/share/ssc &&
+          /opt/share/xdyn &&
         ninja package &&
         if [[ $BUILD_DIR == build_win ]];
         then
