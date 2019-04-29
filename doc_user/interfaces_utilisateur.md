@@ -338,7 +338,7 @@ print('~' * 4)
 
 Il est possible de lancer xdyn en tant que serveur, afin de l'intégrer à un
 autre environnement de simulation. L'utilisation d'un serveur plutôt qu'une
-MEX-fonction (*MATLAB executable* - fonction) ou un FMU (*Functional Mock-up Unit*) <comment>[JJM] tout çà est défini quelque part, ou censé être connu du lecteur ? </comment>permet d'exécuter xdyn sur une autre machine et de
+[MEX-fonction](https://www.mathworks.com/help/matlab/matlab_external/introducing-mex-files.html) (*MATLAB executable* - fonction) ou un [FMU](https://fmi-standard.org/) (*Functional Mock-up Unit*) permet d'exécuter xdyn sur une autre machine et de
 l'interroger par plusieurs clients.
 
 Il s'agit d'une utilisation en "model exchange" (au sens de la [spécification
@@ -356,7 +356,7 @@ L'utilisation des websockets permet des temps de réponse plus courts (puisque
 c'est un protocole assez léger, comparé au HTTP par exemple). Dans
 l'implémentation actuelle, les messages envoyés sont en JSON, pour offrir un
 bon compromis entre la verbosité (moins que du XML mais plus qu'un format
-binaire) et une utilisation plus aisée qu'un format type Protobuf ou Thrift<comment>[JJM] idem... </comment>,
+binaire) et une utilisation plus aisée qu'un format type [Protobuf](https://developers.google.com/protocol-buffers/) ou [Thrift](https://thrift.apache.org/),
 quitte à sacrifier un peu de performance (taille des messages, temps d'encodage/décodage).
 
 ### Lancement du serveur "Model Exchange"
