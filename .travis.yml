@@ -71,9 +71,9 @@ script:
         ninja package &&
         if [[ $BUILD_DIR == build_win ]];
         then
-        wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*;
+        wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*:HOSTest*;
         else
-        ./run_all_tests;
+        ./run_all_tests --gtest_filter=-HOSTest*;
         fi &&
         if [[ $BUILD_TYPE == Coverage ]];
         then
