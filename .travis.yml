@@ -21,8 +21,7 @@ matrix:
         - BUILD_TYPE=Release
         - BUILD_DIR=build_deb9
         - CPACK_GENERATOR=DEB
-        - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820
-        - SSC_BINARY=https://github.com/sirehna/ssc/releases/download/v8.0.1/ssc_binary_debian9_amd64.deb
+        - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820-xdyn
         - BOOST_ROOT=/opt/boost
 
 before_install:
@@ -38,17 +37,10 @@ script:
   - docker run $ci_env --rm -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share $DOCKER_IMAGE /bin/bash -c \
        "ls"
   - docker run $ci_env --rm -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share $DOCKER_IMAGE /bin/bash -c \
-       "if [[ $BUILD_DIR == build_win ]];
-        then
-        echo win;
-        else
-        wget $SSC_BINARY -O ssc.deb;
-        sudo dpkg -i ssc.deb;
-        fi &&
-        rm -rf /opt/share/code/yaml-cpp &&
+       "rm -rf /opt/share/code/yaml-cpp &&
         cp -rf /opt/yaml_cpp /opt/share/xdyn/yaml-cpp &&
         rm -rf /opt/share/code/eigen3-hdf5 &&
-        git clone https://github.com/garrison/eigen3-hdf5 &&
+        cp -rf /opt/eigen3-hdf5 /opt/share/xdyn/eigen3-hdf5 &&
         rm -rf /opt/share/code/gcovr &&
         rm -rf /opt/share/code/google-test &&
         cp -rf /opt/googletest /opt/share/xdyn/google-test &&
