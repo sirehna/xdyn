@@ -36,8 +36,11 @@ double DiracSpectralDensity::operator()(const double omega) const
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega should be greater than 0: got " << omega);
     }
-    if (fabs(omega-omega0)<1E-15) return Hs*Hs/8;
-                                  return 0;
+    if (fabs(omega-omega0)<1E-15)
+    {
+        return Hs*Hs/8;
+    }
+    return 0.0;
 }
 
 std::vector<double> DiracSpectralDensity::get_angular_frequencies(const double,
