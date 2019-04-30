@@ -479,8 +479,11 @@ CenterOfMass MeshIntersector::center_of_mass(const Facet& f) const
         yCenter += ((P1(1) + P2(1) + P3(1)) / 4) * currentVolume;
         zCenter += ((P1(2) + P2(2) + P3(2)) / 4) * currentVolume;
     }
-    if (totalVolume!=0) return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
-                        return CenterOfMass(EPoint(0,0,0), 0);
+    if (totalVolume!=0)
+    {
+        return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
+    }
+    return CenterOfMass(EPoint(0,0,0), 0);
 }
 
 double MeshIntersector::facet_volume(const Facet& f) const
