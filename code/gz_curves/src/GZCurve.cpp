@@ -5,15 +5,14 @@
  *      Author: cady
  */
 
-#include <cmath>
-#include <sstream>
-
 #include "GZCurve.hpp"
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
 #include "gz_newton_raphson.hpp"
 #include "ResultantForceComputer.hpp"
 #include "Sim.hpp"
+#include <cmath>
+#include <sstream>
 
 struct GZ::Curve::Impl
 {
@@ -75,7 +74,7 @@ GZ::State GZ::Curve::get_Xeq() const
 {
     const double z0 = zeq(0,0);
     const GZ::State x0(z0, 0, 0);
-    const auto g = GZ::newton_raphson(x0, pimpl->f, pimpl->k, 100, 1E-6);
+    GZ::newton_raphson(x0, pimpl->f, pimpl->k, 100, 1E-6);
     return x0;
 }
 
@@ -116,7 +115,7 @@ double GZ::Curve::zeq(const double phi, const double theta) const
     while (delta(z)>1E-10)
     {
         const double z0 = average(z);
-        double FZ0 = pimpl->FZ(average(z),phi,theta);
+        const double FZ0 = pimpl->FZ(average(z),phi,theta);
         z = (FZ0 < 0) ? MinMax(z.min,z0) : MinMax(z0,z.max);
     }
     return average(z);
