@@ -13,7 +13,7 @@
 
 size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& key)
 {
-    double x;
+    int x;
     try
     {
         node[key] >> x;
@@ -24,7 +24,7 @@ size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& 
         ss << "Error trying to parse key '" << key << "' (" << e.msg << ")";
         throw YAML::Exception(node.GetMark(), ss.str());
     }
-    if (x != (size_t)x)
+    if (x < 0)
     {
         std::stringstream ss;
         ss << "Expected a positive integer for key '" << key << "', but got " << x;
