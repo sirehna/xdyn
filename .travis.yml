@@ -38,14 +38,14 @@ script:
        "ls"
   - docker run $ci_env --rm -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share $DOCKER_IMAGE /bin/bash -c \
        "rm -rf /opt/share/code/yaml-cpp &&
-        cp -rf /opt/yaml_cpp /opt/share/xdyn/yaml-cpp &&
+        cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&
         rm -rf /opt/share/code/eigen3-hdf5 &&
-        cp -rf /opt/eigen3-hdf5 /opt/share/xdyn/eigen3-hdf5 &&
+        cp -rf /opt/eigen3-hdf5 /opt/share/code/eigen3-hdf5 &&
         rm -rf /opt/share/code/gcovr &&
         rm -rf /opt/share/code/google-test &&
-        cp -rf /opt/googletest /opt/share/xdyn/google-test &&
+        cp -rf /opt/googletest /opt/share/code/google-test &&
         rm -rf /opt/share/code/eigen &&
-        cp -rf /opt/eigen /opt/share/xdyn/eigen
+        cp -rf /opt/eigen /opt/share/code/eigen
         "
 
 #       cd /opt/share/xdyn &&
