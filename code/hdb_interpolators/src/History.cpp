@@ -5,14 +5,13 @@
  *      Author: cady
  */
 
+#include "History.hpp"
+#include "InternalErrorException.hpp"
 #include <cmath>
+#include <cstdint>
 #include <iterator>
 #include <sstream>
 
-#include "History.hpp"
-#include "InternalErrorException.hpp"
-
-#include <cstdint>
 union Double
 {
     Double(const double num) : f(num) {}
