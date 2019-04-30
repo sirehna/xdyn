@@ -194,11 +194,12 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         ${SSC_LIB}
         )
 
-# Add test program and its dependencies in the installation file
-INSTALL(TARGETS ${TEST_EXE}
-        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
-        )
-
+MESSAGE(STATUS "CMAKE_BUILD_TYPE_UPPER : ${CMAKE_BUILD_TYPE_UPPER}")
+IF(CMAKE_BUILD_TYPE_UPPER MATCHES COVERAGE)
+    MESSAGE(STATUS "Adding coverage")
+    FIND_PACKAGE(codecov)
+    add_coverage(${TEST_EXE})
+ENDIF()
 
 INCLUDE(CMakeTesting)
 INCLUDE(CMakeDocumentation)
