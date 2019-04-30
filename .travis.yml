@@ -23,13 +23,20 @@ matrix:
         - CPACK_GENERATOR=DEB
         - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820-xdyn
         - BOOST_ROOT=/opt/boost
-    - name: "Debian 9 release GCC 820"
+    - name: "Debian 9 coverage GCC 820"
       env:
         - BUILD_TYPE=Coverage
         - BUILD_DIR=build_deb9
         - CPACK_GENERATOR=DEB
         - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820-xdyn
         - BOOST_ROOT=/opt/boost
+    - name: "Windows cross compilation Gcc 5.4.0 release"
+      env:
+        - BUILD_TYPE=Release
+        - BUILD_DIR=build_win
+        - CPACK_GENERATOR=ZIP
+        - DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads
+        - BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
 
 before_install:
   - docker pull $DOCKER_IMAGE || true
