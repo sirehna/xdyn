@@ -104,45 +104,46 @@ after_success:
     echo "BUILD_DIR      $BUILD_DIR"
 - if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb8" ];
   then
-  echo "Pushing ssc docker image to dockerhub";
-  docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
-  cp ssc/$BUILD_DIR/ssc.deb ci/ssc_deb/.;
+  echo "Pushing xdyn docker image to dockerhub";
+  cp code/$BUILD_DIR/xdyn.deb ci/xdyn_deb/.;
   cd ci;
-  cd ssc_deb;
-  docker build --tag sirehna/ssc -f Dockerfile .;
-  docker push sirehna/ssc;
+  cd xdyn_deb;
+  docker build --tag sirehna/xdyn -f Dockerfile .;
+  docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
+  docker push sirehna/xdyn;
   cd ..;
   cd ..;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb8" ];
   then
   echo "Fetching generated deb";
-  ls -altr ssc/$BUILD_DIR/ssc.deb;
-  shasum -a256 ssc/$BUILD_DIR/ssc.deb;
-  cp ssc/$BUILD_DIR/ssc.deb ssc_binary_debian8_amd64.deb;
+  ls -altr code/$BUILD_DIR/xdyn.deb;
+  shasum -a256 code/$BUILD_DIR/xdyn.deb;
+  cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian9_amd64.deb;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb9" ];
   then
   echo "Fetching generated deb";
-  ls -altr ssc/$BUILD_DIR/ssc.deb;
-  shasum -a256 ssc/$BUILD_DIR/ssc.deb;
-  cp ssc/$BUILD_DIR/ssc.deb ssc_binary_debian9_amd64.deb;
+  ls -altr code/$BUILD_DIR/xdyn.deb;
+  shasum -a256 code/$BUILD_DIR/xdyn.deb;
+  cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian9_amd64.deb;
+  /opt/share/code/build_deb9/xdyn.deb
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_win" ];
   then
   echo "Fetching generated zip";
-  ls -altr ssc/build_win/ssc.zip;
-  shasum -a256 ssc/build_win/ssc.zip;
-  cp ssc/build_win/ssc.zip ssc_binary_windows_64.zip;
+  ls -altr code/build_win/xdyn.zip;
+  shasum -a256 code/build_win/xdyn.zip;
+  cd code/build_win/xdyn.zip xdyn_binary_windows_64.zip;
   fi
 
 # travis setup releases
 # https://docs.travis-ci.com/user/deployment
 # https://docs.travis-ci.com/user/deployment#conditional-releases-with-on
 before_deploy:
-- ls -altr ssc_binary_*;
-# - ls -altr ssc_binary_debian8_amd64.deb;
-# - ls -altr ssc_binary_windows_64.zip;
+- ls -altr xdyn_binary_*;
+# - ls -altr xdyn_binary_debian8_amd64.deb;
+# - ls -altr xdyn_binary_windows_64.zip;
 deploy:
   provider: releases
   api_key:
@@ -150,12 +151,12 @@ deploy:
   skip_cleanup: true
   file_glob: true
   file:
-    - ssc_binary_*
+    - xdyn_binary_*
   #file:
-  #  - ssc_binary_debian8_amd64.deb
-  #  - ssc_binary_windows_64.zip
+  #  - xdyn_binary_debian8_amd64.deb
+  #  - xdyn_binary_windows_64.zip
   on:
     tags: true
-    repo: sirehna/ssc
+    repo: sirehna/xdyn
     branch: master
     condition: $BUILD_TYPE = Release
