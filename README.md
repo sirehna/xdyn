@@ -36,7 +36,7 @@ You can also learn how to use X-DYN using the [tutorials]().
 This section describes what you need to do if you wish to compile X-DYN
 yourself.
 These instructions will get you a copy of the project up and running on your
-local machine for development and testing purposes. See deployment<comment>[JJM] ? </comment> for notes on
+local machine for development and testing purposes. See deployment for notes on
 how to deploy the project on a live system.
 
 ### Prerequisites
@@ -125,13 +125,13 @@ options](https://github.com/google/googletest/blob/master/googletest/docs/advanc
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system <comment>[JJM] ? </comment>
+Add additional notes about how to deploy this on a live system.
 
 ## Built With
 
 * [CMake](https://cmake.org/) - Used to compile C++ code for various platforms.
 * [Make](https://www.gnu.org/software/make/) - Used for the one-step build described above.
-* [GCC](http://gcc.gnu.org/) - Compiler used for both the Windows & Linux: Visual Studio is currently **not** supported.<comment>[JJM] On sait si on gagnerait en temps de calcul si on l'utilisait ? </comment>
+* [GCC](http://gcc.gnu.org/) - Compiler used for both the Windows & Linux: Visual Studio is currently **not** supported.
 * [Boost](https://www.boost.org/) - For command-line options, regular expressions, filesystem library.
 * [yaml-cpp](https://github.com/jbeder/yaml-cpp) - To parse the input files.
 * [HDF5](https://support.hdfgroup.org/products/hdf5_tools/index.html) - To store the outputs.
@@ -160,10 +160,8 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * [Charles-Edouard CADY](https://github.com/CharlesEdouardCady)
 * [Guillaume JACQUENOT](https://github.com/GuillaumeJacquenot)
 
-See also the list of [contributors](https://github.com/sirehna/xdyn/contributors) <comment>[JJM] 404 </comment> who participated in this project.
+See also the list of [contributors](https://github.com/sirehna/xdyn/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the Eclipse Public License (version 2) - see the [LICENSE.md](LICENSE.md) file for details.
-
-<comment>[JJM] Relu </comment>
