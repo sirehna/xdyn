@@ -92,7 +92,7 @@ script:
         if [[ $BUILD_TYPE == Coverage ]];
         then
         echo Coverage;
-        gprof run_all_tests gmon.out > gprof_res.txt;
+        gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;
         bash <(curl -s https://codecov.io/bash);
         fi"
 
