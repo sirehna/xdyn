@@ -39,7 +39,7 @@ script:
   - docker run $ci_env --rm -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share $DOCKER_IMAGE /bin/bash -c \
        "rm -rf /opt/share/code/yaml-cpp &&
         cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&
-        cp /opt/share/CMakeLists_yaml_cpp.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&
+        cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&
         rm -rf /opt/share/code/eigen3-hdf5 &&
         cp -rf /opt/eigen3-hdf5 /opt/share/code/eigen3-hdf5 &&
         rm -rf /opt/share/code/gcovr &&
