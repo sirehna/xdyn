@@ -385,10 +385,19 @@ bool MeshIntersector::has(const Facet& f, //!< Facet to check
 bool MeshIntersector::has(const Facet& f //!< Facet to check
                          ) const
 {
-    if (f.vertex_index.empty())                   return false;
-    if (has(f, begin_immersed(), end_immersed())) return true;
-    if (has(f, begin_emerged(), end_emerged()))   return true;
-                                                  return false;
+    if (f.vertex_index.empty())
+    {
+        return false;
+    }    
+    if (has(f, begin_immersed(), end_immersed()))
+    {
+        return true;
+    }
+    if (has(f, begin_emerged(), end_emerged()))
+    {
+        return true;
+    }
+    return false;
 }
 using namespace ssc::kinematics;
 RotationMatrix rot_(const double phi, const double theta, const double psi);
