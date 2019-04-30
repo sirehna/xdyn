@@ -1,13 +1,12 @@
-#include <algorithm> //std::all_of
-#include <numeric> //std::accumulate
-
+#include "MeshIntersector.hpp"
 #include "ClosingFacetComputer.hpp"
 #include "MeshBuilder.hpp"
-#include "MeshIntersector.hpp"
 #include "InternalErrorException.hpp"
 #include "mesh_manipulations.hpp"
 #include "2DMeshDisplay.hpp"
 #include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
+#include <algorithm> //std::all_of
+#include <numeric> //std::accumulate
 
 Facet flip(Facet facet);
 Facet flip(Facet facet)
