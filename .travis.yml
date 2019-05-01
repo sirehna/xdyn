@@ -23,6 +23,7 @@ matrix:
         - CPACK_GENERATOR=DEB
         - DOCKER_IMAGE=sirehna/base-image-debian8-gcc492-xdyn
         - BOOST_ROOT=/opt/boost
+        - SSC_ROOT=/opt/ssc
     - name: "Debian 8 coverage"
       env:
         - BUILD_TYPE=Coverage
@@ -30,6 +31,7 @@ matrix:
         - CPACK_GENERATOR=DEB
         - DOCKER_IMAGE=sirehna/base-image-debian8-gcc492-xdyn
         - BOOST_ROOT=/opt/boost
+        - SSC_ROOT=/opt/ssc
     - name: "Debian 9 release GCC 6"
       env:
         - BUILD_TYPE=Release
@@ -37,6 +39,7 @@ matrix:
         - CPACK_GENERATOR=DEB
         - DOCKER_IMAGE=sirehna/base-image-debian9-gcc6-xdyn
         - BOOST_ROOT=/opt/boost
+        - SSC_ROOT=/opt/ssc
     - name: "Debian 9 release GCC 820"
       env:
         - BUILD_TYPE=Release
@@ -44,6 +47,7 @@ matrix:
         - CPACK_GENERATOR=DEB
         - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820-xdyn
         - BOOST_ROOT=/opt/boost
+        - SSC_ROOT=/opt/ssc
     #- name: "Debian 9 coverage GCC 820"
     #  env:
     #    - BUILD_TYPE=Coverage
@@ -96,6 +100,7 @@ script:
           -DCPACK_GENERATOR=$CPACK_GENERATOR
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE
           -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
+          -DSSC_ROOT=$SSC_ROOT
           -DBOOST_ROOT:PATH=$BOOST_ROOT
           -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
           -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
