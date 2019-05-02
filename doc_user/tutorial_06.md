@@ -12,7 +12,7 @@ efforts suivants :
 - Les efforts hydrostatiques (rapides et non exacts)
 - L'amortissement visqueux
 - Un effort de propulsion
-- résistance à l'avancement 
+- résistance à l'avancement
 - effort de propulsion dû à une hélice
 
 ### Écriture du fichier de configuration du simulateur
@@ -60,4 +60,4 @@ plot = prepare_plot_data(data, x = 't', y = 'u(TestShip)', name="Vitesse d'avanc
 g = cartesian_graph([plot], x='t (s)', y='U (m/s)')
 create_layout(graph=g, title="Vitesse d'avance longitudinale")
 ```
-<comment>[JJM] Je ne comprends pas trop comment s'inscrivent les tutoriels dans l'ensemble. Y en a t'il une liste / description quelque part ? </comment>
+<comment>[] Je ne comprends pas trop comment s'inscrivent les tutoriels dans l'ensemble. Y en a t'il une liste / description quelque part ? </comment>
