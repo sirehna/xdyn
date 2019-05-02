@@ -1075,5 +1075,3 @@ Les différentes positions du navire par rapport à la houle sont décrites comm
 - $`180^\circ < \gamma - \psi < 270^\circ`$ : Houle venant de tribord avant
 - $`\gamma - \psi = 270^\circ`$ : Houle venant de tribord
 - $`270^\circ < \gamma - \psi < 360^\circ`$ : Houle venant de bâbord avant
-
-<comment>[JJM] Relu </comment>
