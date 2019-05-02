@@ -4,7 +4,7 @@
 
 (définitions valables dans ce chapitre)
 
-Le métacentre $`M`$ est un point définit comme l'intersection des axes
+Le métacentre $`M`$ est un point défini comme l'intersection des axes
 d'application de la force d'Archimède pour de petites variations d'inclinaison.
 La distance algébrique entre le centre de gravité $`G`$ d'un navire et son
 métacentre $`M`$, notée $`\overline{GM}`$, permet de caractériser la stabilité
@@ -48,7 +48,7 @@ external forces:
 
 ## Fondements théoriques
 
-Le métacentre est définit comme l'intersection des axes d'application de la force
+Le métacentre est défini comme l'intersection des axes d'application de la force
 d'Archimède pour de petites variations d'inclinaison, ou, autrement dit, le
 point où la résultante de la pression que l'eau exerce sur le navire (gîté,
 c'est-à-dire incliné) rencontre le plan médian de celui-ci. Pour que cette
