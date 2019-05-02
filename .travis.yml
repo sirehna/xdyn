@@ -16,6 +16,14 @@ env:
 
 matrix:
   include:
+    - name: "Debian 8 release GCC 492"
+      env:
+        - BUILD_TYPE=Release
+        - BUILD_DIR=build_deb8
+        - CPACK_GENERATOR=DEB
+        - DOCKER_IMAGE=sirehna/base-image-debian8-gcc492-xdyn
+        - BOOST_ROOT=/opt/boost
+        - SSC_ROOT=/opt/ssc
     - name: "Debian 9 release GCC 6"
       env:
         - BUILD_TYPE=Release
