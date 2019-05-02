@@ -3,6 +3,8 @@ PROJECT(x-dyn)
 SET(DESCRIPTION "X-DYN : Simulateur 6ddl de navires")
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 #############################################################################
+OPTION(BUILD_DOCUMENTATION "Boolen used to build xdyn documentation" ON)
+#############################################################################
 # User configuration
 IF(NOT DEFINED CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug)
@@ -196,12 +198,15 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
 
 MESSAGE(STATUS "CMAKE_BUILD_TYPE_UPPER : ${CMAKE_BUILD_TYPE_UPPER}")
 IF(CMAKE_BUILD_TYPE_UPPER MATCHES COVERAGE)
-    MESSAGE(STATUS "Adding coverage")
-    FIND_PACKAGE(codecov)
-    add_coverage(${TEST_EXE})
+MESSAGE(STATUS "Adding coverage")
+FIND_PACKAGE(codecov)
+add_coverage(${TEST_EXE})
 ENDIF()
 
 INCLUDE(CMakeTesting)
-INCLUDE(CMakeDocumentation)
+IF(BUILD_DOCUMENTATION)
+    MESSAGE(STATUS "Build documentation")
+    INCLUDE(CMakeDocumentation)
+ENDIF()
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
