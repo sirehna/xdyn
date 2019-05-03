@@ -52,20 +52,15 @@ matrix:
         - BOOST_ROOT=/opt/boost
         - SSC_ROOT=/opt/ssc
         - BUILD_DOCUMENTATION=True
-    #- name: "Debian 9 coverage GCC 820"
-    #  env:
-    #    - BUILD_TYPE=Coverage
-    #    - BUILD_DIR=build_deb9
-    #    - CPACK_GENERATOR=DEB
-    #    - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820-xdyn
-    #    - BOOST_ROOT=/opt/boost
-    #- name: "Windows cross compilation Gcc 5.4.0 release"
-    #  env:
-    #    - BUILD_TYPE=Release
-    #    - BUILD_DIR=build_win
-    #    - CPACK_GENERATOR=ZIP
-    #    - DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads
-    #    - BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
+    - name: "Windows cross compilation Gcc 5.4.0 release"
+      env:
+        - BUILD_TYPE=Release
+        - BUILD_DIR=build_win
+        - CPACK_GENERATOR=ZIP
+        - DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads-ssc-xdyn
+        - BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
+        - SSC_ROOT=/opt/ssc
+        - BUILD_DOCUMENTATION=False
 
 before_install:
   - docker pull $DOCKER_IMAGE || true
