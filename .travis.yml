@@ -24,6 +24,7 @@ matrix:
         - DOCKER_IMAGE=sirehna/base-image-debian8-gcc492-xdyn
         - BOOST_ROOT=/opt/boost
         - SSC_ROOT=/opt/ssc
+        - HDF5_DIR=/usr/local/hdf5/share/cmake
         - BUILD_DOCUMENTATION=False
     - name: "Debian 9 release GCC 6"
       env:
@@ -33,6 +34,7 @@ matrix:
         - DOCKER_IMAGE=sirehna/base-image-debian9-gcc6-xdyn
         - BOOST_ROOT=/opt/boost
         - SSC_ROOT=/opt/ssc
+        - HDF5_DIR=/usr/local/hdf5/share/cmake
         - BUILD_DOCUMENTATION=True
     - name: "Debian 9 coverage GCC 6"
       env:
@@ -42,6 +44,7 @@ matrix:
         - DOCKER_IMAGE=sirehna/base-image-debian9-gcc6-xdyn
         - BOOST_ROOT=/opt/boost
         - SSC_ROOT=/opt/ssc
+        - HDF5_DIR=/usr/local/hdf5/share/cmake
         - BUILD_DOCUMENTATION=False
     - name: "Debian 9 release GCC 820"
       env:
@@ -51,6 +54,7 @@ matrix:
         - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820-xdyn
         - BOOST_ROOT=/opt/boost
         - SSC_ROOT=/opt/ssc
+        - HDF5_DIR=/usr/local/hdf5/share/cmake
         - BUILD_DOCUMENTATION=True
     - name: "Windows cross compilation Gcc 5.4.0 release"
       env:
@@ -60,6 +64,7 @@ matrix:
         - DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads-ssc-xdyn
         - BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
         - SSC_ROOT=/opt/ssc
+        - HDF5_DIR=/opt/HDF5_1_8_20/cmake
         - BUILD_DOCUMENTATION=False
 
 before_install:
@@ -101,6 +106,7 @@ script:
           -DCMAKE_BUILD_TYPE=$BUILD_TYPE
           -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
           -DSSC_ROOT=$SSC_ROOT
+          -DHDF5_DIR=$HDF5_DIR
           -DBOOST_ROOT:PATH=$BOOST_ROOT
           -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
           -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
