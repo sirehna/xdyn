@@ -520,7 +520,7 @@ non-commandé) et tous les corps simulés (pour récupérer les états). En outr
 elle se charge de calculer la différence entre la somme des efforts calculés et
 les efforts qu'il faut réellement appliquer pour maintenir les forçages.
 
-# Architecture de l'interface graphique<comment>[JJM] il y a une interface graphique ? </comment>
+# Architecture de l'interface graphique
 
 L'interface graphique est réalisée en HTML5 (Javascript + HTML + CSS). Voici les
 raisons de ce choix :
@@ -552,23 +552,23 @@ Le fonctionnement de l'interface graphique s'articule autour de trois éléments
 
 La classe `WebSocketObserver` est définie dans le module `observers_and_api`.
 Elle se connecte à un websocket existant (elle ne crée pas de websocket) et
-envoie les données sous format YAML. Voici un exemple de trame émise :<comment>[JJM] Anthineas </comment>
+envoie les données sous format YAML. Voici un exemple de trame émise :
 
 ~~~~~~~~~~~~~ {.yaml}
 {
-'x(Anthineas)': 23.4,
-'y(Anthineas)': 121.4,
-'z(Anthineas)': 0.4,
-'u(Anthineas)': 0.4,
-'v(Anthineas)': 0.7,
-'w(Anthineas)': 0.1,
-'p(Anthineas)': 0.07,
-'q(Anthineas)': 0.4,
-'r(Anthineas)': 0.121,
-'qr(Anthineas)': 1,
-'qi(Anthineas)': 0,
-'qj(Anthineas)': 0,
-'qk(Anthineas)': 1
+'x(TestShip)': 23.4,
+'y(TestShip)': 121.4,
+'z(TestShip)': 0.4,
+'u(TestShip)': 0.4,
+'v(TestShip)': 0.7,
+'w(TestShip)': 0.1,
+'p(TestShip)': 0.07,
+'q(TestShip)': 0.4,
+'r(TestShip)': 0.121,
+'qr(TestShip)': 1,
+'qi(TestShip)': 0,
+'qj(TestShip)': 0,
+'qk(TestShip)': 1
 }
 ~~~~~~~~~~~~~
 
@@ -588,7 +588,7 @@ Le code HTML5 comprend :
   de communication avec le simulateur et le fichier `realtime_plot.js` les
   fonctions de tracé
 
-## Fonctionnement du serveur Python<comment>[JJM] il me semble que python n'est pas référencé dans l'ensemble des outils utilisés, dans le document...je ne me souviens plus </comment>
+## Fonctionnement du serveur Python
 
 Le serveur a été écrit en Python en utilisant la bibliothèque `tornado` car
 c'était le langage qui minimisait la quantité de code à écrire et les opérations
@@ -1300,7 +1300,6 @@ pourraient être considérées :
 
 ## Modèles supplémentaires
 
-- Hollenbach résistance à l'avancement<comment>[JJM] pourquoi çà particulièrement ? Il en existe plein. Ca ne me parait pas très prioritaire </comment>
 - Modèle de houle régulière non-linéaire
 - Vent (spectre de Harris)
 - Variation des conditions environnementales suivant un scénario
@@ -1308,10 +1307,9 @@ pourraient être considérées :
   de leurs parseurs sur celui des modèles d'effort
 - Faciliter la maintenance des observateurs en leur ajoutant la responsabilité
   de reconnaître le format de sortie à partir de l'extension de fichier.
+- prise en compte des efforts du second ordre sur houle
 
-<comment>[JJM] je rajouterais la prise en compte des efforts du second ordre sur houle, et sans doute d'autres choses (regarder la liste des développements intéressants identifiés) </comment>
-
-## Aspects multi-corps <comment>[JJM] sans doute très ambitieux, pertinent ? </comment>
+## Aspects multi-corps
 
 - Liaisons cinématiques (permet de simuler le déplacement d'objets liés au
   navire)
@@ -1333,6 +1331,3 @@ pourraient être considérées :
   actuellement, ils sont interprétés, mais il est possible de les compiler
   dynamiquement pour atteindre les performances d'un code natif.
 
-<comment>[JJM] Rien concernant le lien avec divers systèmes/applications : simulateurs visuels, pilotes-systèmes embarqués HIL, etc. Tu considères que çà ne demande pas de développement parce que le logiciel est déjà conçu pour ?  </comment>
-
-<comment>[JJM] Document balayé, par curiosité principalement... Impressionnant. Mais çà fait un peu peur aussi, j'ai l'impression qu'il faut réellement des développeurs professionnels pour maintenir et faire évoluer l'outil, même à la marge... </comment>
