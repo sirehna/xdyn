@@ -126,6 +126,7 @@ script:
           -DProtobuf_INCLUDE_DIR=/opt/protobuf/include
           -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a
           -DProtobuf_PROTOC_EXECUTABLE=/usr/bin/protoc
+          -DCMAKE_SYSTEM_VERSION=7
           /opt/share/code;
         else
         cmake -Wno-dev
