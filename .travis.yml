@@ -123,9 +123,11 @@ script:
           -DBoost_REGEX_LIBRARY:PATH=$BOOST_ROOT/lib/libboost_regex-mt.a
           -Dcppzmq_DIR=/opt/libzmq/share/cmake/cppzmq
           -DZeroMQ_DIR=/opt/libzmq/share/cmake/ZeroMQ
+          -DProtobuf_USE_STATIC_LIBS:BOOL=True
           -DProtobuf_INCLUDE_DIR=/opt/protobuf/include
           -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a
-          -DProtobuf_PROTOC_EXECUTABLE=/usr/bin/protoc
+          -DProtobuf_PROTOC_EXECUTABLE:PATH=/usr/bin/protoc
+          -DPROTOBUF_PROTOC_EXECUTABLE:PATH=/usr/bin/protoc
           -DCMAKE_SYSTEM_VERSION=7
           /opt/share/code;
         else
