@@ -470,10 +470,6 @@ qui vaut 907.185 kg.
 
 #### Matrice d'inertie
 
-<comment>[JJM] Anthineas ? </comment>
-
-<comment>[JJM] Et toujours la même question : pourquoi la matrice d'inertie n'est-elle pas exprimée par rapport au CdG (son point d'expression naturel) ?  </comment>
-
 La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
 de repère.
 
@@ -541,7 +537,7 @@ dans le [fichier HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
 ### Forçage de degrés de liberté
 
 Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
-P, Q, R. <comment>[JJM] pour tous les corps ? </comment>
+P, Q, R pour chaque corps.
 
 Pour forcer les degrés de liberté, on ajoute la section (facultative) suivante
 à la section `body` :
