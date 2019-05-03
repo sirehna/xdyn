@@ -145,6 +145,7 @@ script:
           /opt/share/code;
         fi &&
         ninja package &&
+        ls &&
         if [[ $BUILD_DIR == build_win ]];
         then
         wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*:HOSTest*;
