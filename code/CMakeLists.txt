@@ -59,10 +59,6 @@ IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
 ENDIF()
 
-IF (WIN32)
-    SET(SSC_LIB ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
-ENDIF()
-
 #############################################################################
 # Compilation part
 INCLUDE(CMakeCompilationOptions)
@@ -193,7 +189,6 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         binary_stl_data_static
         ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
-        ${SSC_LIB}
         )
 
 MESSAGE(STATUS "CMAKE_BUILD_TYPE_UPPER : ${CMAKE_BUILD_TYPE_UPPER}")

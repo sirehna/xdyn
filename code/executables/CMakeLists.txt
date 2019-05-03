@@ -57,7 +57,6 @@ TARGET_LINK_LIBRARIES(xdyn
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
-        ${SSC_LIB}
         )
 
 ADD_EXECUTABLE(test_orbital_velocities_and_dynamic_pressures
@@ -65,7 +64,6 @@ src/test_orbital_velocities_and_dynamic_pressures.cpp)
 
 TARGET_LINK_LIBRARIES(test_orbital_velocities_and_dynamic_pressures
         x-dyn
-        ${SSC_LIB}
         )
 
 ADD_EXECUTABLE(test_hs
@@ -83,7 +81,6 @@ ADD_EXECUTABLE(test_hs
 TARGET_LINK_LIBRARIES(test_hs
         x-dyn
         binary_stl_data_static
-        ${SSC_LIB}
         )
 
 TARGET_LINK_LIBRARIES(test_hs
@@ -108,7 +105,6 @@ TARGET_LINK_LIBRARIES(convert_stl_files_to_code
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
-        ${SSC_LIB}
         )
 
 ADD_EXECUTABLE(gz
@@ -124,7 +120,6 @@ TARGET_LINK_LIBRARIES(gz
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
-        ${SSC_LIB}
         )
 
 ADD_EXECUTABLE(generate_yaml_example
@@ -141,7 +136,6 @@ ADD_EXECUTABLE(generate_stl_examples
 TARGET_LINK_LIBRARIES(generate_stl_examples
         binary_stl_data_static
         x-dyn
-        ${SSC_LIB}
         )
 
 ADD_EXECUTABLE(xdyn-for-cs
@@ -159,7 +153,6 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
-        ${SSC_LIB}
         )
 
 ADD_EXECUTABLE(xdyn-for-me
@@ -176,7 +169,6 @@ TARGET_LINK_LIBRARIES(xdyn-for-me
         x-dyn
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
         boost_program_options_descriptions_static
-        ${SSC_LIB}
         )
 
 ################################################################################
