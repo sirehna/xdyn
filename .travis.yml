@@ -66,6 +66,7 @@ matrix:
         - SSC_ROOT=/opt/ssc
         - HDF5_DIR=/opt/HDF5_1_8_20/cmake
         - BUILD_DOCUMENTATION=False
+        - BUILD_DOCUMENTATION=False
 
 before_install:
   - docker pull $DOCKER_IMAGE || true
@@ -99,6 +100,8 @@ script:
         export WINEPREFIX=/opt/share/.wine;
         wine winecfg;
         fi &&
+        if [[ $BUILD_DIR == build_win ]];
+        then
         cmake -Wno-dev
           -G Ninja
           -DBUILD_DOCUMENTATION:BOOL=$BUILD_DOCUMENTATION
@@ -113,7 +116,29 @@ script:
           -DBOOST_LIBRARYDIR:PATH=$BOOST_ROOT/lib
           -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
           -DBoost_LIBRARY_DIR_RELEASE:PATH=$BOOST_ROOT/lib
-          /opt/share/code &&
+          -Dcppzmq_DIR=/opt/libzmq/share/cmake/cppzmq
+          -DZeroMQ_DIR=/opt/libzmq/share/cmake/ZeroMQ
+          -DProtobuf_INCLUDE_DIR=/opt/protobuf/include
+          -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a
+          -DProtobuf_PROTOC_EXECUTABLE=/usr/bin/protoc
+          /opt/share/code;
+        else
+        cmake -Wno-dev
+          -G Ninja
+          -DBUILD_DOCUMENTATION:BOOL=$BUILD_DOCUMENTATION
+          -DCPACK_GENERATOR=$CPACK_GENERATOR
+          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+          -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
+          -DSSC_ROOT=$SSC_ROOT
+          -DHDF5_DIR=$HDF5_DIR
+          -DBOOST_ROOT:PATH=$BOOST_ROOT
+          -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
+          -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
+          -DBOOST_LIBRARYDIR:PATH=$BOOST_ROOT/lib
+          -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
+          -DBoost_LIBRARY_DIR_RELEASE:PATH=$BOOST_ROOT/lib
+          /opt/share/code;
+        fi &&
         ninja package &&
         if [[ $BUILD_DIR == build_win ]];
         then
