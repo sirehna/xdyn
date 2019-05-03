@@ -165,7 +165,7 @@ after_success:
     echo "TRAVIS_TAG     $TRAVIS_TAG"
     echo "BUILD_TYPE     $BUILD_TYPE"
     echo "BUILD_DIR      $BUILD_DIR"
-- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb8" ];
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb9" ];
   then
   echo "Pushing xdyn docker image to dockerhub";
   cp code/$BUILD_DIR/xdyn.deb ci/xdyn_deb/.;
