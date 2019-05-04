@@ -125,7 +125,7 @@ script:
           -DProtobuf_USE_STATIC_LIBS:BOOL=True
           -DProtobuf_INCLUDE_DIR=/opt/protobuf/include
           -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a
-          -DProtobuf_PROTOC_EXECUTABLE:PATH=/usr/bin/protoc_silent_error
+          -DProtobuf_PROTOC_EXECUTABLE:PATH=/usr/bin/protoc
           -DCMAKE_SYSTEM_VERSION=7
           /opt/share/code;
         else
