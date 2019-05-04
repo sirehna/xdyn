@@ -185,7 +185,7 @@ after_success:
   echo "Fetching generated deb";
   ls -altr code/$BUILD_DIR/xdyn.deb;
   shasum -a256 code/$BUILD_DIR/xdyn.deb;
-  cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian9_amd64.deb;
+  cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian8_amd64.deb;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb9" ];
   then
@@ -193,7 +193,7 @@ after_success:
   ls -altr code/$BUILD_DIR/xdyn.deb;
   shasum -a256 code/$BUILD_DIR/xdyn.deb;
   cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian9_amd64.deb;
-  /opt/share/code/build_deb9/xdyn.deb
+  cp doc_user/doc.html xdyn_doc_user.html;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_win" ];
   then
@@ -208,6 +208,7 @@ after_success:
 # https://docs.travis-ci.com/user/deployment#conditional-releases-with-on
 before_deploy:
 - ls -altr xdyn_binary_*;
+- ls -altr xdyn_doc_user*;
 # - ls -altr xdyn_binary_debian8_amd64.deb;
 # - ls -altr xdyn_binary_windows_64.zip;
 deploy:
@@ -218,6 +219,7 @@ deploy:
   file_glob: true
   file:
     - xdyn_binary_*
+    - xdyn_doc_user*
   #file:
   #  - xdyn_binary_debian8_amd64.deb
   #  - xdyn_binary_windows_64.zip
