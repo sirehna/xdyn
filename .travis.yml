@@ -86,7 +86,6 @@ script:
         cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&
         rm -rf /opt/share/code/eigen3-hdf5 &&
         cp -rf /opt/eigen3-hdf5 /opt/share/code/eigen3-hdf5 &&
-        rm -rf /opt/share/code/gcovr &&
         rm -rf /opt/share/code/google-test &&
         cp -rf /opt/googletest /opt/share/code/google-test &&
         rm -rf /opt/share/code/eigen &&
