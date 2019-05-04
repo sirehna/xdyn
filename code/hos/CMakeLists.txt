@@ -3,14 +3,6 @@ PROJECT(hos)
 
 FIND_PACKAGE(Protobuf REQUIRED)
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
-GET_TARGET_PROPERTY(check_protoc_location protobuf::protoc IMPORTED_LOCATION)
-MESSAGE(STATUS "check_protoc_location ${check_protoc_location}")
-if (NOT check_protoc_location)
-    SET_TARGET_PROPERTIES(protobuf::protoc PROPERTIES
-        IMPORTED_LOCATION "${Protobuf_PROTOC_EXECUTABLE}")
-    GET_TARGET_PROPERTY(check_protoc_location2 protobuf::protoc IMPORTED_LOCATION)
-    MESSAGE(STATUS "check_protoc_location ${check_protoc_location2}")
-ENDIF()
 
 PROTOBUF_GENERATE_CPP(PROTO_SRC PROTO_HEADER hos.proto)
 
