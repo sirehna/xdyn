@@ -152,6 +152,8 @@ script:
         wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*:HOSTest*;
         else
         ./run_all_tests --gtest_filter=-HOSTest*;
+        ldd run_all_tests;
+        ldd executables/xdyn;
         fi &&
         if [[ $BUILD_TYPE == Coverage ]];
         then
