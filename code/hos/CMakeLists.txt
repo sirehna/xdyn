@@ -3,6 +3,20 @@ PROJECT(hos)
 
 FIND_PACKAGE(Protobuf REQUIRED)
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
+
+IF(Protobuf_PROTOC_EXECUTABLE)
+    MESSAGE(STATUS "Protobuf_PROTOC_EXECUTABLE ${Protobuf_PROTOC_EXECUTABLE}")
+    IF(NOT TARGET protobuf::protoc)
+        MESSAGE(STATUS "Create protobuf::protoc")
+        ADD_EXECUTABLE(protobuf::protoc IMPORTED)
+        IF(EXISTS "${Protobuf_PROTOC_EXECUTABLE}")
+            MESSAGE(STATUS "Set target properties")
+            SET_TARGET_PROPERTIES(protobuf::protoc PROPERTIES
+                                  IMPORTED_LOCATION "${Protobuf_PROTOC_EXECUTABLE}")
+        ENDIF()
+    ENDIF()
+ENDIF()
+
 PROTOBUF_GENERATE_CPP(PROTO_SRC PROTO_HEADER hos.proto)
 
 SET(SRC src/HOS.cpp)
