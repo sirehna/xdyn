@@ -148,7 +148,7 @@ script:
         ls &&
         if [[ $BUILD_DIR == build_win ]];
         then
-        wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*:HOSTest*;
+        wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*:HOSTest*:*_websocket;
         else
         ./run_all_tests --gtest_filter=-HOSTest*;
         ldd run_all_tests;
