@@ -42,7 +42,7 @@ xdyn-python3 := docker run -t \
 images: images/spectrum.py
 	cd images && \
 	docker run -t \
-	    -v $(shell pwd)/images:/work \
+	    -v $(shell pwd)/images:/work:rw \
 	    -w /work \
 	    -u $(shell id -u):$(shell id -g) \
 	    --entrypoint /usr/local/bin/python3 \
