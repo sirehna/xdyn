@@ -3,9 +3,15 @@
 #
 FROM python:3.7.3-slim-stretch
 
-# Install gcc to build psutil package used by pandoc-eqnos
+# Install
+# - gcc to build psutil package used by pandoc-eqnos
+# - libgfortran3 as a dependency for xdyn
 RUN apt-get update && \
-    apt-get install --yes gcc && \
+    apt-get install --yes \
+        gcc && \
+    apt-get install --yes \
+        libgfortran3 \
+        libquadmath0 && \
     python3 -m pip install psutil && \
     apt-get remove -y gcc
 
@@ -34,7 +40,7 @@ RUN mkdir -p /tmp_build/report
 ADD setup.py /tmp_build
 ADD setup.cfg /tmp_build
 ADD report /tmp_build/report
-RUN cd /tmp_build && python setup.py install
+RUN cd /tmp_build && python3 setup.py install
 ADD xdyn.deb /
 RUN dpkg -r xdyn && \
     dpkg -i xdyn.deb && \
