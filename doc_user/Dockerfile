@@ -17,6 +17,7 @@ RUN apt-get update && \
 
 RUN python3 -m pip install \
         h5py \
+        ipython==7.2.0 \
         numpy \
         matplotlib \
         pandas \
