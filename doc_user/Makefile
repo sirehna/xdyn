@@ -26,7 +26,7 @@ xdyn-python3 := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$
 
 images: images/spectrum.py
 	cd images && \
-    $(xdyn-python3) spectrum.py && \
+    docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/local/bin/python3 xweave spectrum.py && \
     cd ..
 
 build:
