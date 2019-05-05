@@ -45,8 +45,6 @@ RUN cd /tmp_build && python3 setup.py install
 ADD xdyn.deb /
 RUN dpkg -r xdyn && \
     dpkg -i xdyn.deb && \
-    ln -s /usr/lib/libgfortran.so.3.0.0 /lib/x86_64-linux-gnu/libgfortran.so.3 && \
-    ln -s /usr/lib/libquadmath.so.0.0.0 /lib/x86_64-linux-gnu/libquadmath.so.0 && \
     xdyn --help
 RUN mkdir -p /testdir && \
     chmod a+rwx /testdir
