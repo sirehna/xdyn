@@ -25,7 +25,13 @@ xdyn-pandoc := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(
 xdyn-python3 := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/local/bin/python3 xweave
 
 images: images/spectrum.py
-	cd images && docker run -t -v $(shell pwd)/images:/work -w /work -u $(shell id -u):$(shell id -g) xdyn-python3 spectrum.py && cd ..
+	cd images && \
+    docker run -t \
+        -v $(shell pwd)/images:/work \
+        -w /work \
+        -u $(shell id -u):$(shell id -g) \
+        xdyn-python3 spectrum.py && \
+    cd ..
 
 build:
 	docker build --tag xweave .
