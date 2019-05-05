@@ -3,6 +3,7 @@ build*32
 build*64
 build_debian
 build_windows
+code/build_*
 build_doc
 install
 install*32
