@@ -20,14 +20,35 @@ concatenated_doc.pmd: \
     concatenate.sh
 	./concatenate.sh
 
-xdyn-pweave := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/bin/xdyn-weave xweave
-xdyn-pandoc := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/bin/pandoc xweave
-xdyn-python3 := docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/local/bin/python3 xweave
+xdyn-pweave := docker run -t \
+               -v $(shell pwd):/work \
+               -w /work \
+               -u $(shell id -u):$(shell id -g) \
+               --entrypoint /usr/bin/xdyn-weave \
+               xweave
+xdyn-pandoc := docker run -t \
+               -v $(shell pwd):/work \
+               -w /work \
+               -u $(shell id -u):$(shell id -g) \
+               --entrypoint /usr/bin/pandoc \
+               xweave
+xdyn-python3 := docker run -t \
+               -v $(shell pwd):/work \
+               -w /work \
+               -u $(shell id -u):$(shell id -g) \
+               --entrypoint /usr/local/bin/python3 \
+               xweave
 
 images: images/spectrum.py
 	cd images && \
-    docker run -t -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/local/bin/python3 xweave spectrum.py && \
-    cd ..
+	docker run -t \
+	    -v $(shell pwd):/work \
+	    -w /work \
+	    -u $(shell id -u):$(shell id -g) \
+	    --entrypoint /usr/local/bin/python3 \
+	    xweave \
+	    spectrum.py && \
+	cd ..
 
 build:
 	docker build --tag xweave .
@@ -40,18 +61,18 @@ concatenated_doc_pandoc.md: concatenated_doc.md pandoc_layout.py
 
 doc.html: concatenated_doc_pandoc.md images
 	$(xdyn-pandoc) --title-prefix=XDYN \
-		   -t html \
-		   --standalone --self-contained \
-		   --toc --toc-depth=3 \
-		   --mathml \
-		   --highlight-style pygments \
-		   --filter pandoc-eqnos \
-		   --filter pandoc-fignos \
-		   --number-sections \
-		   -f markdown -V lang=fr \
-		   --css stylesheet.css \
-		   concatenated_doc_pandoc.md \
-		   -o doc.html
+	    -t html \
+	    --standalone --self-contained \
+	    --toc --toc-depth=3 \
+	    --mathml \
+	    --highlight-style pygments \
+	    --filter pandoc-eqnos \
+	    --filter pandoc-fignos \
+	    --number-sections \
+	    -f markdown -V lang=fr \
+	    --css stylesheet.css \
+	    concatenated_doc_pandoc.md \
+	    -o doc.html
 
 clean:
 	rm -f concatenated_doc.pmd concatenated_doc.md concatenated_doc_pandoc.md doc.html
