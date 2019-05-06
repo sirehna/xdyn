@@ -16,9 +16,9 @@ concatenated_doc.pmd: \
     tutorial_01.md \
     tutorial_02.md \
     tutorial_03.md \
-    tutorial_06.md \
-    concatenate.sh
-	./concatenate.sh
+    tutorial_06.md
+	rm -f concatenated_doc.pmd
+	for f in $^ ; do (cat $$f; echo "")  >> concatenated_doc.pmd ; done
 
 xdyn-pweave := docker run -t \
                -v $(shell pwd):/work \
