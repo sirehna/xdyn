@@ -26,8 +26,7 @@ build:windows:
      - export GITLAB_PRIVATE_TOKEN=$GITLAB_PRIVATE_TOKEN
    script:
      - make windows
-     - ./run_all_tests_windows.sh --gtest_filter=-HOS*:*erver*:*websocket*:BlockedDOFTest.should_not_throw_if_CSV_file_exists
-     - mv build_windows/xdyn.zip .
+     - mv build_win/xdyn.zip .
    artifacts:
      when: on_success
      paths:
@@ -39,8 +38,7 @@ build:debian:
      - export GITLAB_PRIVATE_TOKEN=$GITLAB_PRIVATE_TOKEN
    script:
      - make debian
-     - ./run_all_tests_debian.sh --gtest_filter=-HOS*
-     - mv build_debian/xdyn.deb .
+     - mv build_deb9_gcc820/xdyn.deb .
    artifacts:
      when: on_success
      paths:

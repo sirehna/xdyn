@@ -18,148 +18,25 @@ matrix:
   include:
     - name: "Debian 8 release GCC 492"
       env:
-        - BUILD_TYPE=Release
-        - BUILD_DIR=build_deb8
-        - CPACK_GENERATOR=DEB
-        - DOCKER_IMAGE=sirehna/base-image-debian8-gcc492-xdyn
-        - BOOST_ROOT=/opt/boost
-        - SSC_ROOT=/opt/ssc
-        - HDF5_DIR=/usr/local/hdf5/share/cmake
-        - BUILD_DOCUMENTATION=False
+        - TARGET=debian_8_release_gcc_492
     - name: "Debian 9 release GCC 6"
       env:
-        - BUILD_TYPE=Release
-        - BUILD_DIR=build_deb9
-        - CPACK_GENERATOR=DEB
-        - DOCKER_IMAGE=sirehna/base-image-debian9-gcc6-xdyn
-        - BOOST_ROOT=/opt/boost
-        - SSC_ROOT=/opt/ssc
-        - HDF5_DIR=/usr/local/hdf5/share/cmake
-        - BUILD_DOCUMENTATION=True
+        - TARGET=debian_9_release_gcc_6
     - name: "Debian 9 coverage GCC 6"
       env:
-        - BUILD_TYPE=Coverage
-        - BUILD_DIR=build_deb9
-        - CPACK_GENERATOR=DEB
-        - DOCKER_IMAGE=sirehna/base-image-debian9-gcc6-xdyn
-        - BOOST_ROOT=/opt/boost
-        - SSC_ROOT=/opt/ssc
-        - HDF5_DIR=/usr/local/hdf5/share/cmake
-        - BUILD_DOCUMENTATION=False
+        - TARGET=debian_9_coverage_gcc_6
     - name: "Debian 9 release GCC 820"
       env:
-        - BUILD_TYPE=Release
-        - BUILD_DIR=build_deb9_gcc820
-        - CPACK_GENERATOR=DEB
-        - DOCKER_IMAGE=sirehna/base-image-debian9-gcc820-xdyn
-        - BOOST_ROOT=/opt/boost
-        - SSC_ROOT=/opt/ssc
-        - HDF5_DIR=/usr/local/hdf5/share/cmake
-        - BUILD_DOCUMENTATION=True
+        - TARGET=debian_9_release_gcc_82
     - name: "Windows cross compilation Gcc 5.4.0 release"
       env:
-        - BUILD_TYPE=Release
-        - BUILD_DIR=build_win
-        - CPACK_GENERATOR=ZIP
-        - DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads-ssc-xdyn
-        - BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
-        - SSC_ROOT=/opt/ssc
-        - HDF5_DIR=/opt/HDF5_1_8_20/cmake
-        - BUILD_DOCUMENTATION=False
+        - TARGET=windows_gcc_54
 
 before_install:
   - docker pull $DOCKER_IMAGE || true
 
 script:
-  - if [[ $BUILD_TYPE == "Coverage" ]];
-    then
-    ci_env=`bash <(curl -s https://codecov.io/env)`;
-    else
-    ci_env=;
-    fi
-  - docker run $ci_env --rm -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share $DOCKER_IMAGE /bin/bash -c \
-       "ls"
-  - docker run $ci_env --rm -u $( id -u $USER ):$( id -g $USER ) -v $(pwd):/opt/share -w /opt/share $DOCKER_IMAGE /bin/bash -c \
-       "rm -rf /opt/share/code/yaml-cpp &&
-        cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&
-        cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&
-        rm -rf /opt/share/code/eigen3-hdf5 &&
-        cp -rf /opt/eigen3-hdf5 /opt/share/code/eigen3-hdf5 &&
-        rm -rf /opt/share/code/google-test &&
-        cp -rf /opt/googletest /opt/share/code/google-test &&
-        rm -rf /opt/share/code/eigen &&
-        cp -rf /opt/eigen /opt/share/code/eigen &&
-        cd /opt/share/code &&
-        mkdir -p $BUILD_DIR &&
-        cd $BUILD_DIR &&
-        if [[ $BUILD_DIR == build_win ]];
-        then
-        mkdir /opt/share/.wine;
-        export WINEPREFIX=/opt/share/.wine;
-        wine winecfg;
-        fi &&
-        if [[ $BUILD_DIR == build_win ]];
-        then
-        cmake -Wno-dev
-          -G Ninja
-          -DBUILD_DOCUMENTATION:BOOL=$BUILD_DOCUMENTATION
-          -DCPACK_GENERATOR=$CPACK_GENERATOR
-          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-          -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
-          -DSSC_ROOT=$SSC_ROOT
-          -DHDF5_DIR=$HDF5_DIR
-          -DBoost_DEBUG=0
-          -DBOOST_ROOT:PATH=$BOOST_ROOT
-          -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
-          -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
-          -DBOOST_LIBRARYDIR:PATH=$BOOST_ROOT/lib
-          -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
-          -DBoost_LIBRARY_DIR_RELEASE:PATH=$BOOST_ROOT/lib
-          -DBoost_PROGRAM_OPTIONS_LIBRARY:PATH=$BOOST_ROOT/lib/libboost_program_options-mt.a
-          -DBoost_FILESYSTEM_LIBRARY:PATH=$BOOST_ROOT/lib/libboost_filesystem-mt.a
-          -DBoost_SYSTEM_LIBRARY:PATH=$BOOST_ROOT/lib/libboost_system-mt.a
-          -DBoost_REGEX_LIBRARY:PATH=$BOOST_ROOT/lib/libboost_regex-mt.a
-          -Dcppzmq_DIR=/opt/libzmq/share/cmake/cppzmq
-          -DZeroMQ_DIR=/opt/libzmq/share/cmake/ZeroMQ
-          -DProtobuf_USE_STATIC_LIBS:BOOL=True
-          -DProtobuf_INCLUDE_DIR=/opt/protobuf/include
-          -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a
-          -DProtobuf_PROTOC_EXECUTABLE:PATH=/usr/bin/protoc
-          -DCMAKE_SYSTEM_VERSION=7
-          /opt/share/code;
-        else
-        cmake -Wno-dev
-          -G Ninja
-          -DBUILD_DOCUMENTATION:BOOL=$BUILD_DOCUMENTATION
-          -DCPACK_GENERATOR=$CPACK_GENERATOR
-          -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-          -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn
-          -DSSC_ROOT=$SSC_ROOT
-          -DHDF5_DIR=$HDF5_DIR
-          -DBOOST_ROOT:PATH=$BOOST_ROOT
-          -DBOOST_INCLUDEDIR:PATH=$BOOST_ROOT/include
-          -DBoost_INCLUDE_DIR:PATH=$BOOST_ROOT/include
-          -DBOOST_LIBRARYDIR:PATH=$BOOST_ROOT/lib
-          -DBoost_NO_SYSTEM_PATHS:BOOL=OFF
-          -DBoost_LIBRARY_DIR_RELEASE:PATH=$BOOST_ROOT/lib
-          /opt/share/code;
-        fi &&
-        ninja package &&
-        ls &&
-        if [[ $BUILD_DIR == build_win ]];
-        then
-        wine ./run_all_tests --gtest_filter=-WebSocketObserverTest*:HOSTest*:*_websocket;
-        else
-        ./run_all_tests --gtest_filter=-HOSTest*;
-        ldd run_all_tests;
-        ldd executables/xdyn;
-        fi &&
-        if [[ $BUILD_TYPE == Coverage ]];
-        then
-        echo Coverage;
-        gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;
-        bash <(curl -s https://codecov.io/bash);
-        fi"
+  - make $TARGET
 
 after_success:
 - |
