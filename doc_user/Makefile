@@ -75,4 +75,8 @@ doc.html: concatenated_doc_pandoc.md images
 	    -o doc.html
 
 clean:
-	rm -f concatenated_doc.pmd concatenated_doc.md concatenated_doc_pandoc.md doc.html
+	rm -f \
+	      concatenated_doc.pmd \
+	      concatenated_doc.md \
+	      concatenated_doc_pandoc.md  \
+	      doc.html
