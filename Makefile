@@ -107,12 +107,7 @@ build-windows:
            /opt/share/code &&\
             ninja package \
             &&\
-            if [[ $(BUILD_DIR) == build_win ]];\
-            then\
             wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists;\
-            else\
-            ./run_all_tests --gtest_filter=-HOSTest*;\
-            fi &&\
             if [[ $(BUILD_TYPE) == Coverage ]];\
             then\
             echo Coverage;\
@@ -152,12 +147,7 @@ build-debian:
            /opt/share/code &&\
             ninja package \
             &&\
-            if [[ $(BUILD_DIR) == build_win ]];\
-            then\
-            wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists;\
-            else\
             ./run_all_tests --gtest_filter=-HOSTest*;\
-            fi &&\
             if [[ $(BUILD_TYPE) == Coverage ]];\
             then\
             echo Coverage;\
