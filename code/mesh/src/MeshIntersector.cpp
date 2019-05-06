@@ -1,13 +1,12 @@
-#include <algorithm> //std::all_of
-#include <numeric> //std::accumulate
-
+#include "MeshIntersector.hpp"
 #include "ClosingFacetComputer.hpp"
 #include "MeshBuilder.hpp"
-#include "MeshIntersector.hpp"
 #include "InternalErrorException.hpp"
 #include "mesh_manipulations.hpp"
 #include "2DMeshDisplay.hpp"
 #include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
+#include <algorithm> //std::all_of
+#include <numeric> //std::accumulate
 
 Facet flip(Facet facet);
 Facet flip(Facet facet)
@@ -385,10 +384,19 @@ bool MeshIntersector::has(const Facet& f, //!< Facet to check
 bool MeshIntersector::has(const Facet& f //!< Facet to check
                          ) const
 {
-    if (f.vertex_index.empty())                   return false;
-    if (has(f, begin_immersed(), end_immersed())) return true;
-    if (has(f, begin_emerged(), end_emerged()))   return true;
-                                                  return false;
+    if (f.vertex_index.empty())
+    {
+        return false;
+    }    
+    if (has(f, begin_immersed(), end_immersed()))
+    {
+        return true;
+    }
+    if (has(f, begin_emerged(), end_emerged()))
+    {
+        return true;
+    }
+    return false;
 }
 using namespace ssc::kinematics;
 RotationMatrix rot_(const double phi, const double theta, const double psi);
@@ -471,8 +479,11 @@ CenterOfMass MeshIntersector::center_of_mass(const Facet& f) const
         yCenter += ((P1(1) + P2(1) + P3(1)) / 4) * currentVolume;
         zCenter += ((P1(2) + P2(2) + P3(2)) / 4) * currentVolume;
     }
-    if (totalVolume!=0) return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
-                        return CenterOfMass(EPoint(0,0,0), 0);
+    if (totalVolume!=0)
+    {
+        return CenterOfMass(EPoint(xCenter/totalVolume,yCenter/totalVolume,zCenter/totalVolume), totalVolume);
+    }
+    return CenterOfMass(EPoint(0,0,0), 0);
 }
 
 double MeshIntersector::facet_volume(const Facet& f) const

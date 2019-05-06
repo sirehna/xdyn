@@ -29,7 +29,13 @@ double Stretching::rescaled_z(const double z, //!< z value we wish to rescale (i
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "ksi (wave height, in meters) was NaN");
     }
-    if (h == 0) return z; // No stretching if h = 0
-    if (z > h)  return z;
-                return (z-h)*(delta*ksi-h)/(ksi-h)+h;
+    if (h == 0)
+    {
+        return z; // No stretching if h = 0
+    }
+    if (z > h)
+    {
+        return z;
+    }
+    return (z-h)*(delta*ksi-h)/(ksi-h)+h;
 }

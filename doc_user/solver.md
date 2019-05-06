@@ -152,4 +152,3 @@ k_6 = dt\cdot f\left(X + \frac{1631}{55296}\cdot k_1 + \frac{175}{512}\cdot k_2 
 ```
 
 ![](images/runge_kutta_cash_karp_stability.svg "Domaine de stabilité de la méthode de Runge-Kutta Cash-Karp")
-<comment>[JJM] Relu (en fait, non...) </comment>

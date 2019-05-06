@@ -1,0 +1,106 @@
+sudo: false
+dist: trusty
+
+language: c++
+
+git:
+  submodules: false
+
+services:
+  - docker
+
+env:
+  global:
+  - DOCKER_USERNAME=charlesedouardcady
+  - secure: "NsDSu4SvdqoWVGjSySY8RzUSZq3HUcx7EhJrycgqoOXcFHoGxL3eejthqQGdjgJEuwnQrCDAIPr3pBBWqS9Yb/LWMx62Rhjpsdc+P/1raytZY35zn9gBhW7/6O6kgkKqEbVs3q6ILsU1WTgpn4lDHkVxz/u5KnEu5O2yyP9s0zLTEsooXx4/Q3RQfKZ1FWDtdQYLlnsHn7WsIRhUldFYu2sucBSs72LgSUsZ/A8nrD6LsqT6rpFSpIFofPiXntCDjnD9W4vzBtxUa7Dd8gT3iG4Btnp4CtJ9wfAnYr+sWLR46AB4TZ1u3qlUKh9YorL+HzHV1h/1aMbTUpOiEB7Prdxb7yx08mvIlvgisELdpFGLj3KoKzOS5zOZgRuPnoFi4ukKPZpIsFcXceFuksyVVpZ3yJHJNDWLR+oE1cRh1shc1l5/ljaaeIIdoO+Si41PygFC8xn7hHQyjDMHKH1E8RKF55d0lDAvHvQi0bRMycsSz3ik2zYez5CZOzsvwzBW2vJXPgCUSPjq5BGlOcwerT9yfivZVhZR3RF6MLaeQx+vZZURQn+fNCgY1f4EySfmzn26vFtgHMPcdSwVmOiewhcmKmYE3QMmoBxAUAbK2IwgjcSh3szQFLOQ1SOGxI1hLn8uFYZvNFUIFs0hTXfJyw5pmnSe2bzcQLxtE5llUSc="
+
+matrix:
+  include:
+    - name: "Debian 8 release GCC 492"
+      env:
+        - TARGET=debian_8_release_gcc_492
+    - name: "Debian 9 release GCC 6"
+      env:
+        - TARGET=debian_9_release_gcc_6
+    - name: "Debian 9 coverage GCC 6"
+      env:
+        - TARGET=debian_9_coverage_gcc_6
+    - name: "Debian 9 release GCC 820"
+      env:
+        - TARGET=debian_9_release_gcc_82
+    - name: "Windows cross compilation Gcc 5.4.0 release"
+      env:
+        - TARGET=windows_gcc_54
+
+before_install:
+  - docker pull $DOCKER_IMAGE || true
+
+script:
+  - make $TARGET
+
+after_success:
+- |
+    echo "TRAVIS_BRANCH  $TRAVIS_BRANCH"
+    echo "TRAVIS_TAG     $TRAVIS_TAG"
+    echo "BUILD_TYPE     $BUILD_TYPE"
+    echo "BUILD_DIR      $BUILD_DIR"
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb9" ];
+  then
+  echo "Pushing xdyn docker image to dockerhub";
+  cp code/$BUILD_DIR/xdyn.deb ci/xdyn_deb/.;
+  cd ci;
+  cd xdyn_deb;
+  docker build --tag sirehna/xdyn -f Dockerfile .;
+  docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
+  docker push sirehna/xdyn;
+  cd ..;
+  cd ..;
+  fi
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb8" ];
+  then
+  echo "Fetching generated deb";
+  ls -altr code/$BUILD_DIR/xdyn.deb;
+  shasum -a256 code/$BUILD_DIR/xdyn.deb;
+  cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian8_amd64.deb;
+  fi
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb9" ];
+  then
+  echo "Fetching generated deb";
+  ls -altr code/$BUILD_DIR/xdyn.deb;
+  shasum -a256 code/$BUILD_DIR/xdyn.deb;
+  cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian9_amd64.deb;
+  cp doc_user/doc.html xdyn_doc_user.html;
+  fi
+- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_win" ];
+  then
+  echo "Fetching generated zip";
+  ls -altr code/build_win/xdyn.zip;
+  shasum -a256 code/build_win/xdyn.zip;
+  cd code/build_win/xdyn.zip xdyn_binary_windows_64.zip;
+  fi
+
+# travis setup releases
+# https://docs.travis-ci.com/user/deployment
+# https://docs.travis-ci.com/user/deployment#conditional-releases-with-on
+before_deploy:
+- ls -altr xdyn_binary_*;
+- ls -altr xdyn_doc_user*;
+# - ls -altr xdyn_binary_debian8_amd64.deb;
+# - ls -altr xdyn_binary_windows_64.zip;
+deploy:
+  provider: releases
+  api_key:
+    secure: LIR/zJafApdZ/cAjZ92rLKQ6oculifEb2+FJXxGeU4L8AK6LVcw6EVn5Q9GjGQvjMNFf0Iqw/Ca7noFGjqPp2WdGzz8ghgkW9dSFnKGf9QztkNS+2h5Jm3SN3wCj/aAzvVdF/8zToaRoNj0TaZWjJ5WtFbfQNzoyqrJvYZ+Uz3O+WdxpHsMIKocWm/nSMxwHHnzDaY1BNZ+MShl7x8kJUBatszv9yxi2JDBNUABidwLyyJb6OeC6lJBpd9yog3Vm613Z3wz6Q6ffds3tqpdJfL5aDm0JTn2T3NF7FSYrQ/oZ7DJkMiZFa/e9wyAxDJ1V7skFByyJvAgnKKvXZydN/nvwNaXuQ15VqjZUoD4u+b/3ROhITH8sDOxdloZMCUfqQRkxPaveWeVn0Y+9k+N2psE4amFqRLT3NaK9c5zAPIsZ8HRwZNkfeIWT/FpuM9efGpmD5Xzpm11nCnOVgWu5v+8MDcY19ACui8IoMUVUXpSieWCb/VU5hNd2XD9Cyqh9SLKIjzgluVG7X/EeIDOA8SnQ0/+YaOp+j919JnVLy4sN/ZA2b4BARbBnptkTyvMotekImPDVbuL7fr7Q41cf0NkfZJHfpHy8feBLD9B8/uOEy2IdVsItI9NhO7UeMCet1GeBumq2C1iYmyfrE5TJfJsNv9N4O/QX3theT0ycG3w=
+  skip_cleanup: true
+  file_glob: true
+  file:
+    - xdyn_binary_*
+    - xdyn_doc_user*
+  #file:
+  #  - xdyn_binary_debian8_amd64.deb
+  #  - xdyn_binary_windows_64.zip
+  on:
+    tags: true
+    repo: sirehna/xdyn
+    branch: master
+    condition: $BUILD_TYPE = Release

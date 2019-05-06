@@ -47,7 +47,7 @@ def plot_speed(xdyn_res, sos_res):
 ## Scénario
 
 ```python echo=False, results='hidden'
-scenario_filename = 'reference_data_for_validation/Extinctions_simu/anthineas_amortissementPilonnement_sans_controleur.yml'
+scenario_filename = 'reference_data_for_validation/Extinctions_simu/test_ship_amortissementPilonnement_sans_controleur.yml'
 ```
 
 ## Configuration de X-DYN
@@ -98,7 +98,7 @@ plot_speed(xdyn_res, sos_res)
 ## Scénario
 
 ```python echo=False, results='raw'
-scenario_filename = 'reference_data_for_validation/Extinctions_simu/anthineas_amortissementRoulis_sans_controleur.yml'
+scenario_filename = 'reference_data_for_validation/Extinctions_simu/test_ship_amortissementRoulis_sans_controleur.yml'
 ```
 
 ## Configuration de X-DYN
@@ -150,7 +150,7 @@ plot_speed(xdyn_res, sos_res)
 ## Scénario
 
 ```python echo=False, results='raw'
-scenario_filename = 'reference_data_for_validation/Extinctions_simu/anthineas_amortissementTangage_sans_controleur.yml'
+scenario_filename = 'reference_data_for_validation/Extinctions_simu/test_ship_amortissementTangage_sans_controleur.yml'
 ```
 
 
@@ -202,7 +202,7 @@ plot_speed(xdyn_res, sos_res)
 ## Scénario
 
 ```python echo=False, results='raw'
-scenario_filename = 'reference_data_for_validation/AccelerationDeceleration/anthineas_acceleration.yml'
+scenario_filename = 'reference_data_for_validation/AccelerationDeceleration/test_ship_acceleration.yml'
 ```
 
 ## Configuration de X-DYN
@@ -246,7 +246,7 @@ layout(size=(1,1), graphs=[(graph_U, (0,0))], title="Accélération")
 ## Scénario
 
 ```python echo=False, results='raw'
-scenario_filename = 'reference_data_for_validation/AccelerationDeceleration/anthineas_deceleration.yml'
+scenario_filename = 'reference_data_for_validation/AccelerationDeceleration/test_ship_deceleration.yml'
 ```
 
 ## Configuration de X-DYN
@@ -298,7 +298,7 @@ layout(size=(1,1), graphs=[(graph_U, (0,0))], title="Décélération")
 ## Scénario
 
 ```python echo=False, results='raw'
-scenario_filename = 'reference_data_for_validation/Giration/anthineas_giration.yml'
+scenario_filename = 'reference_data_for_validation/Giration/test_ship_giration.yml'
 ```
 
 ## Configuration de X-DYN

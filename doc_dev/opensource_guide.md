@@ -1,8 +1,8 @@
-
-
 L'objectif de la présente note est de donner les étapes nécessaires à la
-création d'un dépôt de code open source. Ceci implique d'utiliser un dépôt de code publique et de préparer le dépôt pour les contributions extérieures.
+création d'un dépôt de code open source.
 
+Ceci implique d'utiliser un dépôt de code public et
+de préparer le dépôt pour les contributions extérieures.
 
 # Pré-requis
 
@@ -17,7 +17,8 @@ gestion des branches...) et s'intègre avec de nombreux outils.
 ## Choix d'un dépôt public
 
 Pour rendre le code accessible, il faut le stocker sur un dépôt public. Le choix
-s'est porté sur [GitHub](https://github.com/), du fait de sa très grande popularité et de l'intégration
+s'est porté sur [GitHub](https://github.com/), du fait de sa très grande
+popularité et de l'intégration
 qu'il propose avec de nombreux outils (analyse statique de code, couverture de
 tests, intégration et déploiement continus, etc.).
 
@@ -27,7 +28,7 @@ En utilisant [ce
 guide](https://help.github.com/articles/creating-a-new-organization-from-scratch/),
 on crée un compte SIREHNA afin que les développeurs appartenant à la société
 soient identifiés comme tels. Ce compte sera administré par l'administrateur
-système de SIREHNA (Bruno PAGEAUD<comment>[JJM] Je ne sais pas si c'est prudent de mettre des noms dans ces documents. On ne pensera pas forcément à les mettre à jour en cas de changement ? </comment>).
+système de SIREHNA.
 
 ## Création ou association des comptes utilisateurs
 
@@ -40,7 +41,9 @@ contributions faites par le collaborateur pendant son temps de travail des
 
 # Préparation du dépôt
 
-Avant de rendre le dépôt de code public, plusieurs étapes sont nécessaires. Il faut notamment créer cinq fichiers à la racine du dépôt :
+Avant de rendre le dépôt de code public, plusieurs étapes
+sont nécessaires. Il faut notamment créer cinq fichiers à
+la racine du dépôt :
 
 - Fichier de licence : `LICENSE`
 - Règles pour les rétro-contributions : `CONTRIBUTING.md`
@@ -86,7 +89,8 @@ sont disponibles [ici](http://keepachangelog.com/fr/1.0.0/).
 Afin de normaliser les règles d'échanges dans la communauté libre que l'on crée,
 il est préférable d'utiliser un code de conduite. Ce code de conduite définit
 les comportements acceptables et non-acceptables et les règles de bienséances.
-Un exemple d'un tel code de conduite est le [contributor covenant](https://www.contributor-covenant.org/).
+Un exemple d'un tel code de conduite est le
+[contributor covenant](https://www.contributor-covenant.org/).
 
 ## Upload sur GitHub
 
@@ -129,5 +133,3 @@ Nous proposons de commencer par les badges suivants :
 | Analyse des failles de sécurité, des violation de licence et des dépendances obsolètes | [VersionEye](https://www.versioneye.com/) | [![VersionEye](https://img.shields.io/versioneye/d/ruby/rails.svg?style=plastic)]()
 | Couverture de tests et analyse statique de code | [Code Climate](https://codeclimate.com/product) | [![Code Climate](https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg?style=plastic)]()
 | Lien avec Docker hub | [Docker Hub](https://hub.docker.com/) | [![Docker Build Status](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg?style=plastic)]()
-
-<comment>[JJM] Balayé </comment>

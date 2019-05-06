@@ -3,6 +3,8 @@ PROJECT(x-dyn)
 SET(DESCRIPTION "X-DYN : Simulateur 6ddl de navires")
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 #############################################################################
+OPTION(BUILD_DOCUMENTATION "Boolen used to build xdyn documentation" ON)
+#############################################################################
 # User configuration
 IF(NOT DEFINED CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug)
@@ -55,10 +57,6 @@ FIND_PACKAGE(Boost 1.53 COMPONENTS program_options filesystem system regex REQUI
 IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_INCLUDE_DIRS  : ${Boost_INCLUDE_DIRS}")
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
-ENDIF()
-
-IF (WIN32)
-    SET(SSC_LIB ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
 ENDIF()
 
 #############################################################################
@@ -191,16 +189,19 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         binary_stl_data_static
         ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
-        ${SSC_LIB}
         )
 
-# Add test program and its dependencies in the installation file
-INSTALL(TARGETS ${TEST_EXE}
-        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY}
-        )
-
+MESSAGE(STATUS "CMAKE_BUILD_TYPE_UPPER : ${CMAKE_BUILD_TYPE_UPPER}")
+IF(CMAKE_BUILD_TYPE_UPPER MATCHES COVERAGE)
+MESSAGE(STATUS "Adding coverage")
+FIND_PACKAGE(codecov)
+add_coverage(${TEST_EXE})
+ENDIF()
 
 INCLUDE(CMakeTesting)
-INCLUDE(CMakeDocumentation)
+IF(BUILD_DOCUMENTATION)
+    MESSAGE(STATUS "Build documentation")
+    INCLUDE(CMakeDocumentation)
+ENDIF()
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)

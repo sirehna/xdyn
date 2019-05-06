@@ -16,8 +16,11 @@ DiracDirectionalSpreading::DiracDirectionalSpreading(const double psi0_) : WaveD
 
 double DiracDirectionalSpreading::operator()(const double psi) const
 {
-    if (fabs(psi-psi0)<1E-15) return 1;
-                              return 0;
+    if (fabs(psi-psi0)<1E-15)
+    {
+        return 1.0;
+    }
+    return 0.0;
 }
 
 WaveDirectionalSpreading* DiracDirectionalSpreading::clone() const
