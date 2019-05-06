@@ -22,11 +22,9 @@ lint:
 
 build:windows:
    stage: build
-   before_script:
-     - export GITLAB_PRIVATE_TOKEN=$GITLAB_PRIVATE_TOKEN
    script:
      - make windows
-     - mv build_win/xdyn.zip .
+     - mv code/build_win/xdyn.zip .
    artifacts:
      when: on_success
      paths:
@@ -34,11 +32,9 @@ build:windows:
 
 build:debian:
    stage: build
-   before_script:
-     - export GITLAB_PRIVATE_TOKEN=$GITLAB_PRIVATE_TOKEN
    script:
      - make debian
-     - mv build_deb9_gcc820/xdyn.deb .
+     - mv code/build_deb9_gcc820/xdyn.deb .
    artifacts:
      when: on_success
      paths:
