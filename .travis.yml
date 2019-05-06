@@ -42,12 +42,11 @@ after_success:
 - |
     echo "TRAVIS_BRANCH  $TRAVIS_BRANCH"
     echo "TRAVIS_TAG     $TRAVIS_TAG"
-    echo "BUILD_TYPE     $BUILD_TYPE"
-    echo "BUILD_DIR      $BUILD_DIR"
-- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb9" ];
+    echo "TARGET         $TARGET"
+- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_9_release_gcc_6" ];
   then
   echo "Pushing xdyn docker image to dockerhub";
-  cp code/$BUILD_DIR/xdyn.deb ci/xdyn_deb/.;
+  cp code/build_deb9/xdyn.deb ci/xdyn_deb/.;
   cd ci;
   cd xdyn_deb;
   docker build --tag sirehna/xdyn -f Dockerfile .;
@@ -56,22 +55,22 @@ after_success:
   cd ..;
   cd ..;
   fi
-- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb8" ];
+- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_8_release_gcc_492" ];
   then
   echo "Fetching generated deb";
-  ls -altr code/$BUILD_DIR/xdyn.deb;
-  shasum -a256 code/$BUILD_DIR/xdyn.deb;
-  cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian8_amd64.deb;
+  ls -altr code/build_deb8/xdyn.deb;
+  shasum -a256 code/build_deb8/xdyn.deb;
+  cp code/build_deb8/xdyn.deb xdyn_binary_debian8_amd64.deb;
   fi
-- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_deb9" ];
+- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_9_release_gcc_6" ];
   then
   echo "Fetching generated deb";
-  ls -altr code/$BUILD_DIR/xdyn.deb;
-  shasum -a256 code/$BUILD_DIR/xdyn.deb;
-  cp code/$BUILD_DIR/xdyn.deb xdyn_binary_debian9_amd64.deb;
+  ls -altr code/build_deb9/xdyn.deb;
+  shasum -a256 code/build_deb9/xdyn.deb;
+  cp code/build_deb9/xdyn.deb xdyn_binary_debian9_amd64.deb;
   cp doc_user/doc.html xdyn_doc_user.html;
   fi
-- if [ "$TRAVIS_TAG" ] && [ "$BUILD_TYPE" == "Release" ] && [ "$BUILD_DIR" == "build_win" ];
+- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gcc_54" ];
   then
   echo "Fetching generated zip";
   ls -altr code/build_win/xdyn.zip;
@@ -103,4 +102,3 @@ deploy:
     tags: true
     repo: sirehna/xdyn
     branch: master
-    condition: $BUILD_TYPE = Release
