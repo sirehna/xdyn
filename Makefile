@@ -1,7 +1,7 @@
 all: windows debian doc
 
 windows: windows_gcc_54
-debian: debian_9_release_gcc_82
+debian: debian_9_release_gcc_6
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
 
