@@ -28,7 +28,6 @@ debian_9_release_gcc_6: BOOST_ROOT = /opt/boost
 debian_9_release_gcc_6: SSC_ROOT = /opt/ssc
 debian_9_release_gcc_6: BUILD_DOCUMENTATION = True
 debian_9_release_gcc_6: ci_env=
-debian_9_release_gcc_6: CONTAINER_NAME=build-debian-9-release-gcc-6
 debian_9_release_gcc_6: build-debian
 
 debian_9_coverage_gcc_6: BUILD_TYPE = Coverage
@@ -39,7 +38,6 @@ debian_9_coverage_gcc_6: BOOST_ROOT = /opt/boost
 debian_9_coverage_gcc_6: SSC_ROOT = /opt/ssc
 debian_9_coverage_gcc_6: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_9_coverage_gcc_6: ci_env=$(shell bash <(curl -s https://codecov.io/env))
-debian_9_coverage_gcc_6: CONTAINER_NAME=build-debian-9-coverage-gcc-6
 debian_9_coverage_gcc_6: build-debian
 
 debian_9_release_gcc_82: BUILD_TYPE = Release
@@ -50,7 +48,6 @@ debian_9_release_gcc_82: BOOST_ROOT = /opt/boost
 debian_9_release_gcc_82: SSC_ROOT = /opt/ssc
 debian_9_release_gcc_82: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_9_release_gcc_82: ci_env=
-debian_9_release_gcc_82: CONTAINER_NAME=build-debian-9-release-gcc-82
 debian_9_release_gcc_82: build-debian
 
 windows_gcc_54: BUILD_TYPE=Release
@@ -61,23 +58,10 @@ windows_gcc_54: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
 windows_gcc_54: SSC_ROOT=/opt/ssc
 windows_gcc_54: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 windows_gcc_54: ci_env=
-windows_gcc_54: CONTAINER_NAME=build-windows-gcc-54
 windows_gcc_54: build-windows
 
-start-container:
-	docker run -d -t --name $(CONTAINER_NAME) -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash
-
-stop-container:
-	docker rm -f $(CONTAINER_NAME) || true
-
-restart-container: stop-container start-container
-
-build-windows: restart-container initialize-submodules cmake-windows stop-container
-
-build-debian: restart-container initialize-submodules cmake-debian stop-container
-
-initialize-submodules:
-	docker exec -u $(shell id -u ):$(shell id -g ) -w /opt/share $(CONTAINER_NAME) /bin/bash -c \
+build-windows:
+		docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
            "rm -rf /opt/share/code/yaml-cpp &&\
             cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&\
             cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&\
@@ -87,20 +71,9 @@ initialize-submodules:
             rm -rf /opt/share/code/google-test &&\
             cp -rf /opt/googletest /opt/share/code/google-test &&\
             rm -rf /opt/share/code/eigen &&\
-            cp -rf /opt/eigen /opt/share/code/eigen"
-
-coverage:
-	docker exec -u $(shell id -u ):$(shell id -g ) -w /opt/share $(CONTAINER_NAME) /bin/bash -c \
-            "if [[ $(BUILD_TYPE) == Coverage ]];\
-            then\
-            echo Coverage;\
-            gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
-            bash <(curl -s https://codecov.io/bash);\
-            fi"
-
-cmake-windows:
-	docker exec -u $(shell id -u ):$(shell id -g ) -w /opt/share $(CONTAINER_NAME) /bin/bash -c \
-           "mkdir -p $(BUILD_DIR) &&\
+            cp -rf /opt/eigen /opt/share/code/eigen &&\
+            cd /opt/share/code &&\
+            mkdir -p $(BUILD_DIR) &&\
             cd $(BUILD_DIR) &&\
             mkdir -p /opt/share/.wine;\
             export WINEPREFIX=/opt/share/.wine;\
@@ -134,12 +107,33 @@ cmake-windows:
            /opt/share/code &&\
             ninja package \
             &&\
+            if [[ $(BUILD_DIR) == build_win ]];\
+            then\
             wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists;\
+            else\
+            ./run_all_tests --gtest_filter=-HOSTest*;\
+            fi &&\
+            if [[ $(BUILD_TYPE) == Coverage ]];\
+            then\
+            echo Coverage;\
+            gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
+            bash <(curl -s https://codecov.io/bash);\
             fi"
 
-cmake-debian:
-	docker exec -u $(shell id -u ):$(shell id -g ) -w /opt/share $(CONTAINER_NAME) /bin/bash -c \
-            "mkdir -p $(BUILD_DIR) &&\
+build-debian:
+		docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
+           "rm -rf /opt/share/code/yaml-cpp &&\
+            cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&\
+            cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&\
+            rm -rf /opt/share/code/eigen3-hdf5 &&\
+            cp -rf /opt/eigen3-hdf5 /opt/share/code/eigen3-hdf5 &&\
+            rm -rf /opt/share/code/gcovr &&\
+            rm -rf /opt/share/code/google-test &&\
+            cp -rf /opt/googletest /opt/share/code/google-test &&\
+            rm -rf /opt/share/code/eigen &&\
+            cp -rf /opt/eigen /opt/share/code/eigen &&\
+            cd /opt/share/code &&\
+            mkdir -p $(BUILD_DIR) &&\
             cd $(BUILD_DIR) &&\
             cmake -Wno-dev \
            -G Ninja \
@@ -158,7 +152,12 @@ cmake-debian:
            /opt/share/code &&\
             ninja package \
             &&\
+            if [[ $(BUILD_DIR) == build_win ]];\
+            then\
+            wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists;\
+            else\
             ./run_all_tests --gtest_filter=-HOSTest*;\
+            fi &&\
             if [[ $(BUILD_TYPE) == Coverage ]];\
             then\
             echo Coverage;\
