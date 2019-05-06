@@ -33,7 +33,7 @@ matrix:
         - TARGET=windows_gcc_54
 
 before_install:
-  - docker pull $DOCKER_IMAGE || true
+  - echo "A 'docker pull' command will be performed with the script section"
 
 script:
   - make $TARGET
