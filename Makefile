@@ -134,6 +134,7 @@ build-debian:
            -DSSC_ROOT=$(SSC_ROOT)\
            -DHDF5_DIR=$(HDF5_DIR)\
            -DBOOST_ROOT:PATH=$(BOOST_ROOT)\
+           -DProtobuf_USE_STATIC_LIBS:BOOL=True \
            /opt/share/code &&\
             ninja package \
             &&\
