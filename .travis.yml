@@ -39,6 +39,7 @@ script:
   - make $TARGET
   - if [ "$TARGET" == "debian_9_release_gcc_6" ];
     then
+    echo "Create user doc with the associated docker image";
     cp code/build_deb9/xdyn.deb .;
     make doc_pweave;
     mv doc.html xdyn_doc_user.html;
@@ -52,14 +53,10 @@ after_success:
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_9_release_gcc_6" ];
   then
   echo "Pushing xdyn docker image to dockerhub";
-  cp code/build_deb9/xdyn.deb ci/xdyn_deb/.;
-  cd ci;
-  cd xdyn_deb;
-  docker build --tag sirehna/xdyn -f Dockerfile .;
+  docker images;
+  docker tag xweave sirehna/xdyn;
   docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
   docker push sirehna/xdyn;
-  cd ..;
-  cd ..;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_8_release_gcc_492" ];
   then
@@ -74,7 +71,6 @@ after_success:
   ls -altr code/build_deb9/xdyn.deb;
   shasum -a256 code/build_deb9/xdyn.deb;
   cp code/build_deb9/xdyn.deb xdyn_binary_debian9_amd64.deb;
-  cp doc_user/doc.html xdyn_doc_user.html;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gcc_54" ];
   then
