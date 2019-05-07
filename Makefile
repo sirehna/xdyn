@@ -30,7 +30,7 @@ debian_9_coverage_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
 debian_9_coverage_gcc_6: BOOST_ROOT = /opt/boost
 debian_9_coverage_gcc_6: SSC_ROOT = /opt/ssc
 debian_9_coverage_gcc_6: HDF5_DIR = /usr/local/hdf5/share/cmake
-debian_9_coverage_gcc_6: ci_env=$(shell bash <(curl -s https://codecov.io/env))
+debian_9_coverage_gcc_6: ci_env=`bash <(curl -s https://codecov.io/env)`
 debian_9_coverage_gcc_6: build-debian
 
 debian_9_release_gcc_82: BUILD_TYPE = Release
@@ -54,7 +54,7 @@ windows_gcc_54: ci_env=
 windows_gcc_54: build-windows
 
 build-windows:
-		docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
+		docker run --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
            "rm -rf /opt/share/code/yaml-cpp &&\
             cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&\
             cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&\
@@ -101,6 +101,7 @@ build-windows:
             ninja package && \
             wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists"
 
+build-debian: SHELL:=/bin/bash
 build-debian:
 		docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
            "rm -rf /opt/share/code/yaml-cpp &&\
