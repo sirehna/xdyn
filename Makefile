@@ -134,11 +134,6 @@ build-debian:
            -DSSC_ROOT=$(SSC_ROOT)\
            -DHDF5_DIR=$(HDF5_DIR)\
            -DBOOST_ROOT:PATH=$(BOOST_ROOT)\
-           -DBOOST_INCLUDEDIR:PATH=$(BOOST_ROOT)/include\
-           -DBoost_INCLUDE_DIR:PATH=$(BOOST_ROOT)/include\
-           -DBOOST_LIBRARYDIR:PATH=$(BOOST_ROOT)/lib\
-           -DBoost_NO_SYSTEM_PATHS:BOOL=OFF\
-           -DBoost_LIBRARY_DIR_RELEASE:PATH=$(BOOST_ROOT)/lib\
            /opt/share/code &&\
             ninja package \
             &&\
