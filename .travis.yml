@@ -43,6 +43,7 @@ script:
     cp code/build_deb9/xdyn.deb .;
     make doc_pweave;
     mv doc.html xdyn_doc_user.html;
+    docker build --tag xdyn .;
     fi
 
 after_success:
@@ -54,9 +55,11 @@ after_success:
   then
   echo "Pushing xdyn docker image to dockerhub";
   docker images;
-  docker tag xweave sirehna/xdyn;
+  docker tag xweave sirehna/xweave;
+  docker tag xdyn sirehna/xdyn;
   docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
   docker push sirehna/xdyn;
+  docker push sirehna/xweave;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_8_release_gcc_492" ];
   then
