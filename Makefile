@@ -5,11 +5,6 @@ debian: debian_9_release_gcc_82
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
 
-SSC_PROJECT_NUMBER=42
-GITLAB_JOB_NUMBER_TO_USE_FOR_WINDOWS_SSC=32782
-GITLAB_JOB_NUMBER_TO_USE_FOR_DEBIAN_SSC=32783
-
-
 debian_8_release_gcc_492: BUILD_TYPE = Release
 debian_8_release_gcc_492: BUILD_DIR = build_deb8
 debian_8_release_gcc_492: CPACK_GENERATOR = DEB
