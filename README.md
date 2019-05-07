@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-EPL%202.0-blue.svg)](https://opensource.org/licenses/EPL-2.0)
 [![Build Status](https://travis-ci.org/sirehna/xdyn.svg?branch=master)](https://travis-ci.org/sirehna/xdyn)
 [![codecov](https://codecov.io/gh/sirehna/xdyn/branch/master/graph/badge.svg)](https://codecov.io/gh/sirehna/xdyn)
-
+[![](https://images.microbadger.com/badges/image/sirehna/xdyn.svg)](https://microbadger.com/images/sirehna/xdyn "xdyn layers")
 
 X-DYN is a lightweight ship simulator modelling the dynamic behaviour of a ship a ship at sea, with its actuators, including some non-linear aspects of that behaviour and featuring a customizable maneuvring model.
 It simulates the mechanical behaviour of a solid body in a fluid environment by
