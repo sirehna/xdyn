@@ -80,7 +80,7 @@ after_success:
   echo "Fetching generated zip";
   ls -altr code/build_win/xdyn.zip;
   shasum -a256 code/build_win/xdyn.zip;
-  cd code/build_win/xdyn.zip xdyn_binary_windows_64.zip;
+  cp code/build_win/xdyn.zip xdyn_binary_windows_64.zip;
   fi
 
 # travis setup releases
