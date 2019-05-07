@@ -183,11 +183,18 @@ ce qui permet de l'exécuter sur n'importe quelle plateforme.
 En outre, c'est actuellement le seul moyen d'utiliser le module de génération
 automatique de rapport décrit ci-après.
 
-Pour utiliser l'image `xdyn`, il faut d'abord installer Docker puis importer
-l'image `x-dyn.tar.gz` en exécutant :
+Pour utiliser l'image `xdyn`, il faut d'abord installer Docker puis récupérer
+l'image `sirehna/xdyn` en exécutant :
 
 ~~~~{.bash}
-docker load -i xdyn.tar.gz
+docker pull sirehna/xdyn
+~~~~
+
+Pour utiliser l'image `xdyn` avec son environnement de post-traitement,
+on récupérera l'image `sirehna/xweave` en exécutant :
+
+~~~~{.bash}
+docker pull sirehna/xweave
 ~~~~
 
 ## Lancement d'xdyn via l'image docker
@@ -195,13 +202,12 @@ docker load -i xdyn.tar.gz
 Une fois l'image chargée par la commande précédente, on peut lancer :
 
 ~~~~{.bash}
-docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn xdyn
+docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn
 ~~~~
 
 - le paramètre `-v $(pwd):/work` permet de faire correspondre le répertoire courant avec le répertoire `/work` du conteneur,
 - le paramètre `-w /work` précise que le répertoire de travail du conteneur (celui depuis lequel sera exécuté xdyn) est `/work`,
-- `sirehna/xdyn` de la ligne de commande est le nom de l'image Docker.
-
+- `sirehna/xdyn` correspond au nom de l'image Docker,
 
 Si l'on souhaite lancer une simulation, on ajoute les arguments d'xdyn à la suite :
 
@@ -211,7 +217,9 @@ docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn tutorial_01_falling_ba
 
 ## Génération automatique de rapports (X-Weave)
 
-Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker d'xdyn.
+Cette fonctionnalité n'est accessible qu'en utilisant le conteneur Docker
+`sirehna/xweave`.
+
 
 ### Principe de fonctionnement
 
