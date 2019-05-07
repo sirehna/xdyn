@@ -39,8 +39,9 @@ script:
   - make $TARGET
   - if [ "$TARGET" == "debian_9_release_gcc_6" ];
     then
+    cp code/build_deb9/xdyn.deb .;
     make doc_pweave;
-    cp doc_user/doc.html xdyn_doc_user.html;
+    mv doc.html xdyn_doc_user.html;
     fi
 
 after_success:
