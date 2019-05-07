@@ -34,7 +34,7 @@ build:debian:
    stage: build
    script:
      - make debian
-     - mv code/build_deb9_gcc820/xdyn.deb .
+     - mv code/build_deb9/xdyn.deb .
    artifacts:
      when: on_success
      paths:

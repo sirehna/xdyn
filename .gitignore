@@ -26,6 +26,7 @@ ssc_windows
 *.tgz
 *.bz2
 ssc.deb
+xdyn.deb
 __pycache__
 **.hdf5
 **.h5

@@ -1,16 +1,23 @@
 # Dockerfile with xdyn, a python interpreter, various python libraries, and
 # pandoc
 #
-FROM python:3.7.2-slim-stretch
+FROM python:3.7.3-slim-stretch
 
-# Install gcc to build psutil package used by pandoc-eqnos
+# Install
+# - gcc to build psutil package used by pandoc-eqnos
+# - libgfortran3 as a dependency for xdyn
 RUN apt-get update && \
-    apt-get install --yes gcc && \
+    apt-get install --yes \
+        gcc && \
+    apt-get install --yes \
+        libgfortran3 \
+        libquadmath0 && \
     python3 -m pip install psutil && \
     apt-get remove -y gcc
 
 RUN python3 -m pip install \
         h5py \
+        ipython==7.2.0 \
         numpy \
         matplotlib \
         pandas \
@@ -23,7 +30,7 @@ RUN python3 -m pip install \
         && \
     mkdir pandoc_bin && \
     cd pandoc_bin && \
-    python3 -c 'from urllib.request import urlretrieve; urlretrieve("https://github.com/jgm/pandoc/releases/download/2.5/pandoc-2.5-linux.tar.gz", filename="pandoc.tar.gz")' && \
+    python3 -c 'from urllib.request import urlretrieve; urlretrieve("https://github.com/jgm/pandoc/releases/download/2.7.2/pandoc-2.7.2-linux.tar.gz", filename="pandoc.tar.gz")' && \
     tar -xzf pandoc.tar.gz --strip 1 && \
     ls && \
     cp bin/* /usr/bin && \
@@ -34,12 +41,13 @@ RUN mkdir -p /tmp_build/report
 ADD setup.py /tmp_build
 ADD setup.cfg /tmp_build
 ADD report /tmp_build/report
-RUN cd /tmp_build && python setup.py install
+RUN cd /tmp_build && python3 setup.py install
 ADD xdyn.deb /
-RUN dpkg -r xdyn && dpkg -i xdyn.deb && \
-    ln -s /usr/lib/libgfortran.so.3.0.0 /lib/x86_64-linux-gnu/libgfortran.so.3 && \
-    ln -s /usr/lib/libquadmath.so.0.0.0 /lib/x86_64-linux-gnu/libquadmath.so.0
-RUN mkdir -p /testdir && chmod a+rwx /testdir
+RUN dpkg -r xdyn && \
+    dpkg -i xdyn.deb && \
+    xdyn --help
+RUN mkdir -p /testdir && \
+    chmod a+rwx /testdir
 RUN echo "#!/bin/bash" > /usr/bin/xdyn-weave \
  && echo "rm -rf /work/tuto_execution" >> /usr/bin/xdyn-weave \
  && echo "cp -r /usr/demos /work/tuto_execution" >> /usr/bin/xdyn-weave \

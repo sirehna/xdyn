@@ -1,14 +1,9 @@
 all: windows debian doc
 
 windows: windows_gcc_54
-debian: debian_9_release_gcc_82
+debian: debian_9_release_gcc_6
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
-
-SSC_PROJECT_NUMBER=42
-GITLAB_JOB_NUMBER_TO_USE_FOR_WINDOWS_SSC=32782
-GITLAB_JOB_NUMBER_TO_USE_FOR_DEBIAN_SSC=32783
-
 
 debian_8_release_gcc_492: BUILD_TYPE = Release
 debian_8_release_gcc_492: BUILD_DIR = build_deb8
@@ -139,11 +134,7 @@ build-debian:
            -DSSC_ROOT=$(SSC_ROOT)\
            -DHDF5_DIR=$(HDF5_DIR)\
            -DBOOST_ROOT:PATH=$(BOOST_ROOT)\
-           -DBOOST_INCLUDEDIR:PATH=$(BOOST_ROOT)/include\
-           -DBoost_INCLUDE_DIR:PATH=$(BOOST_ROOT)/include\
-           -DBOOST_LIBRARYDIR:PATH=$(BOOST_ROOT)/lib\
-           -DBoost_NO_SYSTEM_PATHS:BOOL=OFF\
-           -DBoost_LIBRARY_DIR_RELEASE:PATH=$(BOOST_ROOT)/lib\
+           -DProtobuf_USE_STATIC_LIBS:BOOL=True \
            /opt/share/code &&\
             ninja package \
             &&\
