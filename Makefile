@@ -11,7 +11,6 @@ debian_8_release_gcc_492: CPACK_GENERATOR = DEB
 debian_8_release_gcc_492: DOCKER_IMAGE = sirehna/base-image-debian8-gcc492-xdyn
 debian_8_release_gcc_492: BOOST_ROOT = /opt/boost
 debian_8_release_gcc_492: SSC_ROOT = /opt/ssc
-debian_8_release_gcc_492: BUILD_DOCUMENTATION = False
 debian_8_release_gcc_492: ci_env=
 debian_8_release_gcc_492: build-debian
 
@@ -21,7 +20,6 @@ debian_9_release_gcc_6: CPACK_GENERATOR = DEB
 debian_9_release_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
 debian_9_release_gcc_6: BOOST_ROOT = /opt/boost
 debian_9_release_gcc_6: SSC_ROOT = /opt/ssc
-debian_9_release_gcc_6: BUILD_DOCUMENTATION = True
 debian_9_release_gcc_6: ci_env=
 debian_9_release_gcc_6: build-debian
 
@@ -75,7 +73,7 @@ build-windows:
             wine winecfg;\
             cmake -Wno-dev\
             -G Ninja \
-              -DBUILD_DOCUMENTATION:BOOL=$(BUILD_DOCUMENTATION) \
+              -DBUILD_DOCUMENTATION:BOOL=False \
               -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
               -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
               -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
@@ -99,16 +97,9 @@ build-windows:
               -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a \
               -DProtobuf_PROTOC_EXECUTABLE:PATH=/usr/bin/protoc \
               -DCMAKE_SYSTEM_VERSION=7 \
-           /opt/share/code &&\
-            ninja package \
-            &&\
-            wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists;\
-            if [[ $(BUILD_TYPE) == Coverage ]];\
-            then\
-            echo Coverage;\
-            gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
-            bash <(curl -s https://codecov.io/bash);\
-            fi"
+            /opt/share/code && \
+            ninja package && \
+            wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists"
 
 build-debian:
 		docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
@@ -126,18 +117,17 @@ build-debian:
             mkdir -p $(BUILD_DIR) &&\
             cd $(BUILD_DIR) &&\
             cmake -Wno-dev \
-           -G Ninja \
-           -DBUILD_DOCUMENTATION:BOOL=$(BUILD_DOCUMENTATION)\
-           -DCPACK_GENERATOR=$(CPACK_GENERATOR)\
-           -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)\
-           -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn\
-           -DSSC_ROOT=$(SSC_ROOT)\
-           -DHDF5_DIR=$(HDF5_DIR)\
-           -DBOOST_ROOT:PATH=$(BOOST_ROOT)\
-           -DProtobuf_USE_STATIC_LIBS:BOOL=True \
-           /opt/share/code &&\
-            ninja package \
-            &&\
+             -G Ninja \
+             -DBUILD_DOCUMENTATION:BOOL=False \
+             -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
+             -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
+             -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
+             -DSSC_ROOT=$(SSC_ROOT) \
+             -DHDF5_DIR=$(HDF5_DIR) \
+             -DBOOST_ROOT:PATH=$(BOOST_ROOT) \
+             -DProtobuf_USE_STATIC_LIBS:BOOL=True \
+            /opt/share/code && \
+            ninja package && \
             ./run_all_tests --gtest_filter=-HOSTest*;\
             if [[ $(BUILD_TYPE) == Coverage ]];\
             then\
