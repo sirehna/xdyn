@@ -5,9 +5,8 @@ docker run $TERMINAL \
     --security-opt seccomp=unconfined \
     --rm \
     -u $( id -u $USER ):$( id -g $USER ) \
-    -v $(pwd)/build_debian:/build \
+    -v $(pwd)/code/build_deb9:/build \
     -w /build \
-    -v $(pwd):/opt/share \
     -t \
     sirehna/base-image-debian9-gcc6-xdyn \
-    ./run_all_tests `echo $*`
+    /bin/bash -c "export LD_LIBRARY_PATH=/build; ./run_all_tests --gtest_filter=-HOSTest* `echo $*`"
