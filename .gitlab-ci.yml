@@ -24,7 +24,7 @@ build:windows:
    stage: build
    script:
      - make windows
-     - mv code/build_win/xdyn.zip .
+     - mv build_win/xdyn.zip .
    artifacts:
      when: on_success
      paths:
@@ -34,7 +34,7 @@ build:debian:
    stage: build
    script:
      - make debian
-     - mv code/build_deb9/xdyn.deb .
+     - mv build_deb9/xdyn.deb .
    artifacts:
      when: on_success
      paths:

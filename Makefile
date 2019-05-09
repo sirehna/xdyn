@@ -65,7 +65,7 @@ build-windows:
             cp -rf /opt/googletest /opt/share/code/google-test &&\
             rm -rf /opt/share/code/eigen &&\
             cp -rf /opt/eigen /opt/share/code/eigen &&\
-            cd /opt/share/code &&\
+            cd /opt/share &&\
             mkdir -p $(BUILD_DIR) &&\
             cd $(BUILD_DIR) &&\
             mkdir -p /opt/share/.wine;\
@@ -114,7 +114,7 @@ build-debian:
             cp -rf /opt/googletest /opt/share/code/google-test &&\
             rm -rf /opt/share/code/eigen &&\
             cp -rf /opt/eigen /opt/share/code/eigen &&\
-            cd /opt/share/code &&\
+            cd /opt/share &&\
             mkdir -p $(BUILD_DIR) &&\
             cd $(BUILD_DIR) &&\
             cmake -Wno-dev \
