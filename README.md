@@ -97,7 +97,7 @@ If you wish to build only part of the project, use:
 ./ninja_windows.sh package
 ~~~~~~~
 
-for example, to build the Windows package (ZIP file containing the XDYN executable)
+for example, to build the Windows package (ZIP file containing the xdyn executable)
 
 or
 
