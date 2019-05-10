@@ -11,14 +11,12 @@ services:
 
 env:
   global:
-  - DOCKER_USERNAME=charlesedouardcady
-  - secure: "NsDSu4SvdqoWVGjSySY8RzUSZq3HUcx7EhJrycgqoOXcFHoGxL3eejthqQGdjgJEuwnQrCDAIPr3pBBWqS9Yb/LWMx62Rhjpsdc+P/1raytZY35zn9gBhW7/6O6kgkKqEbVs3q6ILsU1WTgpn4lDHkVxz/u5KnEu5O2yyP9s0zLTEsooXx4/Q3RQfKZ1FWDtdQYLlnsHn7WsIRhUldFYu2sucBSs72LgSUsZ/A8nrD6LsqT6rpFSpIFofPiXntCDjnD9W4vzBtxUa7Dd8gT3iG4Btnp4CtJ9wfAnYr+sWLR46AB4TZ1u3qlUKh9YorL+HzHV1h/1aMbTUpOiEB7Prdxb7yx08mvIlvgisELdpFGLj3KoKzOS5zOZgRuPnoFi4ukKPZpIsFcXceFuksyVVpZ3yJHJNDWLR+oE1cRh1shc1l5/ljaaeIIdoO+Si41PygFC8xn7hHQyjDMHKH1E8RKF55d0lDAvHvQi0bRMycsSz3ik2zYez5CZOzsvwzBW2vJXPgCUSPjq5BGlOcwerT9yfivZVhZR3RF6MLaeQx+vZZURQn+fNCgY1f4EySfmzn26vFtgHMPcdSwVmOiewhcmKmYE3QMmoBxAUAbK2IwgjcSh3szQFLOQ1SOGxI1hLn8uFYZvNFUIFs0hTXfJyw5pmnSe2bzcQLxtE5llUSc="
+  - DOCKER_USERNAME=guillaumejacquenot
+  - secure: "u4AM4AU5/O6i9LqUg8lBMXn4IrMOqvCP6Vdo70q09mpAKZ+Y8eeLhHmeyKJ3zO796C3E8yfjIw2XlfQvFies/54D1O9ihz2EoPo7kN/38qqrg5AwO+U893vrn8N4mty3HKjn++GOpd3V2OKc6WduNcJVeaCHSCpjpthaaOuJMuvlQHwpbfc3Li0o+7xMdK5r5g3rW7OfzfAnG56zW6balkiEs3K9L1NeBp7geJJ8avUEpzSHfRADgGf8DFBNP6ZP/9CdGGLQ9koTizHS/ysJG1CkT+s1vKpjUpj1bc+2xM1d0UpxbiRd13hpTj2G3RXPxHb/luzLkry8EapBGGO3Xby3CwDrRKnrLYzVkGR1X438huJi8/ratFs3QpAs8/hA6KEPO8GGCVJxAkLWlc4a7nEvczLggsFWKvDccNhjp5JSgUVOUbRMKkG8tPqK2+xWYmyQkBYvNPWhv1rKg3Azw1EA7+DXA2+XBzf2m1iC9hWLKQv/s7JBXafk7+G3dcm2KXe2LGKMgsbHhGVl15sNoEFoeWrAy7F0ELDI3jqwcRQno94ZV8boFPJEhgYpqpPtc7JG0aS/mquSX7cUH/wKk6Kn1DV3G9NzWDOOVKFvD9dDs0VYgzbbWWDkUI/0fcdAn+DM40ajCzSwHMRvbeQQux/hyLK4j/HS+YVSdpgxhPw="
+  - secure: "lSX31RH24XIeWXIrXbvY6Gyzr4XYccjL/cnQI5jY8k2qq74S4aiRv9rUqh8JHX4uu3x2t3+S6iYNFFkBRdrGKelGNOu9hmibNiQ7I8+z9j7sAMqVMYxeIsmtlKvXePpuZe3p2QBIvx2aqfsy64ReYuaMOjgEKA1SnGiR+C8qVjbOF0ATyDWxbLVEqR6G9dSQkuKm63mCe5Bvn6JrvU2s5rzqGS4nJVWMVrh0R/PNCKQKzWaY2bwnnB+w+OzoOyoVln4IYh5BmNlbnQoMdLEKeNOYWK6g+VemtYJZlwOT26rM2pM2AJ9apDF11WSwQsX+YC5xfqX6x9pkldS3EcZ9d2o6bXe0tct1MUeS09jU0uCei2ucM4H90t1DgIEbgDSxg2Of2Jwrw7rwNoehbC1pFciovjgQt/UmgwCv+w04J2L7/1eRWyMiBiNlr/nrKryBqAvmGDinLoAPXaCFPuJqcc0ok8v6H42V6mZ6e5oj3TkG3Jfk2mm2v2K3Dharjs67YsYwrl+puCRcamgdej4thK9VM68DKgUxNe7Z9f/SR0EhS6eNAlFyK7NvTmVQBj9J/IWZmHXu6IPblIXmExY7cgTmyJ51dLDIqIBNjz2zjnihTY9rs6Xqb+7hWjWLI8xhRLgYsuueR3QTy7TNk5n8Id6UF2zUJP/rWU8R7UjWYn8="
 
 matrix:
   include:
-    - name: "Debian 8 release GCC 492"
-      env:
-        - TARGET=debian_8_release_gcc_492
     - name: "Debian 9 release GCC 6"
       env:
         - TARGET=debian_9_release_gcc_6
@@ -41,7 +39,6 @@ script:
     then
     echo "Create user doc with the associated docker image";
     cp build_deb9/xdyn.deb .;
-    make doc_pweave;
     mv doc.html xdyn_doc_user.html;
     docker build --tag xdyn .;
     fi
@@ -82,6 +79,11 @@ after_success:
   shasum -a256 build_win/xdyn.zip;
   cp build_win/xdyn.zip xdyn_binary_windows_64.zip;
   fi
+- make doc
+  if [ "$TRAVIS_BRANCH" == "master" ];
+  then
+  mkdir -p public &&  mv doc.html public/index.html;
+  fi
 
 # travis setup releases
 # https://docs.travis-ci.com/user/deployment
@@ -92,14 +94,14 @@ before_deploy:
 # - ls -altr xdyn_binary_debian8_amd64.deb;
 # - ls -altr xdyn_binary_windows_64.zip;
 deploy:
-  provider: releases
+- provider: releases
   api_key:
-    secure: LIR/zJafApdZ/cAjZ92rLKQ6oculifEb2+FJXxGeU4L8AK6LVcw6EVn5Q9GjGQvjMNFf0Iqw/Ca7noFGjqPp2WdGzz8ghgkW9dSFnKGf9QztkNS+2h5Jm3SN3wCj/aAzvVdF/8zToaRoNj0TaZWjJ5WtFbfQNzoyqrJvYZ+Uz3O+WdxpHsMIKocWm/nSMxwHHnzDaY1BNZ+MShl7x8kJUBatszv9yxi2JDBNUABidwLyyJb6OeC6lJBpd9yog3Vm613Z3wz6Q6ffds3tqpdJfL5aDm0JTn2T3NF7FSYrQ/oZ7DJkMiZFa/e9wyAxDJ1V7skFByyJvAgnKKvXZydN/nvwNaXuQ15VqjZUoD4u+b/3ROhITH8sDOxdloZMCUfqQRkxPaveWeVn0Y+9k+N2psE4amFqRLT3NaK9c5zAPIsZ8HRwZNkfeIWT/FpuM9efGpmD5Xzpm11nCnOVgWu5v+8MDcY19ACui8IoMUVUXpSieWCb/VU5hNd2XD9Cyqh9SLKIjzgluVG7X/EeIDOA8SnQ0/+YaOp+j919JnVLy4sN/ZA2b4BARbBnptkTyvMotekImPDVbuL7fr7Q41cf0NkfZJHfpHy8feBLD9B8/uOEy2IdVsItI9NhO7UeMCet1GeBumq2C1iYmyfrE5TJfJsNv9N4O/QX3theT0ycG3w=
+    secure: FjoYH/qo1sFqUdZ+SbBrE5dH3qzNKAYGh167TZKv3JicS3OLoFbz3OS96QNYg/IUwg60PPDqxY35LUyxxw72CCvCcGQbbacJBA3K4mtcyxofYKFmh4OifKrP2lqSOzp3KY3W7hL49PIwrNYEychiZ5cCXWWoanD+4tgiSXfkaQ9ZtGt2a6mw2zRl/aOmK0Yx19IJP3+J+fV5DZouMj7XuSZ2w8ETVl1XvdytKWOb1mDPsvUBNFA/sfdv5LldQLL5hKh6q457dK9+oJ8iGpekm6Gau0HpcMFIzRXDikDqCMmHA8NalIlhTc45291W5O3j1xMj4HSzhHCdBzzVyjgOQSJpNVzWpbb8TmmgRYhNHkGz9uLW0ggdGlL+s1rIzmc193YQuJuEiNp9ud7xUucuA4TT9YNslCukYu6D6Q7fVVtitOQm72nhPML0FoUMJdOfy+PJFgV4Tu8/xne4ilqDqu9m3AQBX0tgqWpnk/LPXbCj1VYypWHEg0y8EjjeBPc08FTmyOmwZQnjMB0Ibg1stkUNyaZkyUPFNbLxRjKMCAar7eif+rGhW2TP3IHyZcAs9obcXWWlqNYidF5ul1XJ3Wht0DKaw4Tbji3Rktzu1BelcDVVCPoGbyli5pW7YpfR9yueWaaMNEl0JZMij/cF1uxDfm7OyBcXUOrxDoTS4II=
   skip_cleanup: true
   file_glob: true
   file:
     - xdyn_binary_*
-    - xdyn_doc_user*
+    - doc.html
   #file:
   #  - xdyn_binary_debian8_amd64.deb
   #  - xdyn_binary_windows_64.zip
@@ -107,3 +109,20 @@ deploy:
     tags: true
     repo: sirehna/xdyn
     branch: master
+- provider: pages
+  skip-cleanup: true
+  local-dir: public
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  on:
+    branch: master
+sudo: false
+dist: trusty
+language: c++
+git:
+  submodules: false
+services:
+- docker
+env:
+  global:
+  - DOCKER_USERNAME=guillaumejacquenot
