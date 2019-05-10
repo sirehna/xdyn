@@ -79,7 +79,7 @@ after_success:
   shasum -a256 build_win/xdyn.zip;
   cp build_win/xdyn.zip xdyn_binary_windows_64.zip;
   fi
-- make doc
+- make doc;
   if [ "$TRAVIS_BRANCH" == "master" ];
   then
   mkdir -p public &&  mv doc.html public/index.html;
