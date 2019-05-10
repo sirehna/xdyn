@@ -16,9 +16,6 @@ env:
 
 matrix:
   include:
-    - name: "Debian 8 release GCC 492"
-      env:
-        - TARGET=debian_8_release_gcc_492
     - name: "Debian 9 release GCC 6"
       env:
         - TARGET=debian_9_release_gcc_6
