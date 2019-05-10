@@ -1,16 +1,1 @@
-[submodule "code/yaml-cpp"]
-	path = code/yaml-cpp
-	url = ../../ThirdParty/yaml-cpp.git
-[submodule "code/eigen3-hdf5"]
-	path = code/eigen3-hdf5
-	url = ../../ThirdParty/eigen3-hdf5
-[submodule "code/gcovr"]
-	path = code/gcovr
-	url = ../../ThirdParty/gcovr.git
-[submodule "code/google-test"]
-	path = code/google-test
-	url = ../../ThirdParty/google-test.git
-[submodule "code/eigen"]
-	path = code/eigen
-	url = ../../ThirdParty/eigen.git
 	

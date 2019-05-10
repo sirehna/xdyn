@@ -58,13 +58,6 @@ build-windows:
            "rm -rf /opt/share/code/yaml-cpp &&\
             cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&\
             cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&\
-            rm -rf /opt/share/code/eigen3-hdf5 &&\
-            cp -rf /opt/eigen3-hdf5 /opt/share/code/eigen3-hdf5 &&\
-            rm -rf /opt/share/code/gcovr &&\
-            rm -rf /opt/share/code/google-test &&\
-            cp -rf /opt/googletest /opt/share/code/google-test &&\
-            rm -rf /opt/share/code/eigen &&\
-            cp -rf /opt/eigen /opt/share/code/eigen &&\
             cd /opt/share &&\
             mkdir -p $(BUILD_DIR) &&\
             cd $(BUILD_DIR) &&\
@@ -73,6 +66,7 @@ build-windows:
             wine winecfg;\
             cmake -Wno-dev\
             -G Ninja \
+              -DTHIRD_PARTY_DIRECTORY=/opt \
               -DBUILD_DOCUMENTATION:BOOL=False \
               -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
               -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
@@ -107,18 +101,12 @@ build-debian:
            "rm -rf /opt/share/code/yaml-cpp &&\
             cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&\
             cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt &&\
-            rm -rf /opt/share/code/eigen3-hdf5 &&\
-            cp -rf /opt/eigen3-hdf5 /opt/share/code/eigen3-hdf5 &&\
-            rm -rf /opt/share/code/gcovr &&\
-            rm -rf /opt/share/code/google-test &&\
-            cp -rf /opt/googletest /opt/share/code/google-test &&\
-            rm -rf /opt/share/code/eigen &&\
-            cp -rf /opt/eigen /opt/share/code/eigen &&\
             cd /opt/share &&\
             mkdir -p $(BUILD_DIR) &&\
             cd $(BUILD_DIR) &&\
             cmake -Wno-dev \
              -G Ninja \
+              -DTHIRD_PARTY_DIRECTORY=/opt/ \
              -DBUILD_DOCUMENTATION:BOOL=False \
              -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
              -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
