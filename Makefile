@@ -136,18 +136,15 @@ test-debian:
             bash <(curl -s https://codecov.io/bash);\
             fi"
 
-doc:
-	mkdir -p build_doc
-	cd build_doc && cp ../Dockerfile_doc Dockerfile && cd ..
-	cd build_doc && docker build -t build-xdyn-doc --build-arg CACHEBUST=$(date +%s) . && cd ..
-	docker run --name xdyn-doc --rm \
-		-u $(shell id -u ${USER} ):$(shell id -g ${USER} ) \
-		-v $(shell pwd):/opt/share \
-		-w /opt/share build-xdyn-doc \
-		/bin/bash -c "cd doc_user && cd images && make && cd .. && ./doc_html.sh && mv doc.html .."
-
-doc_pweave:
+doc: BUILD_TYPE = Release
+doc: BUILD_DIR = build_deb9
+doc: CPACK_GENERATOR = DEB
+doc: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
+doc: BOOST_ROOT = /opt/boost
+doc: SSC_ROOT = /opt/ssc
+doc: ci_env=
+doc: build-debian
 	cd doc_user && \
-	cp ../xdyn.deb . && \
+	cp ../$(BUILD_DIR)/xdyn.deb . && \
 	make && \
 	mv doc.html ..
