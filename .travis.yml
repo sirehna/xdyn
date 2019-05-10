@@ -40,7 +40,7 @@ script:
   - if [ "$TARGET" == "debian_9_release_gcc_6" ];
     then
     echo "Create user doc with the associated docker image";
-    cp code/build_deb9/xdyn.deb .;
+    cp build_deb9/xdyn.deb .;
     make doc_pweave;
     mv doc.html xdyn_doc_user.html;
     docker build --tag xdyn .;
@@ -64,23 +64,23 @@ after_success:
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_8_release_gcc_492" ];
   then
   echo "Fetching generated deb";
-  ls -altr code/build_deb8/xdyn.deb;
-  shasum -a256 code/build_deb8/xdyn.deb;
-  cp code/build_deb8/xdyn.deb xdyn_binary_debian8_amd64.deb;
+  ls -altr build_deb8/xdyn.deb;
+  shasum -a256 build_deb8/xdyn.deb;
+  cp build_deb8/xdyn.deb xdyn_binary_debian8_amd64.deb;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_9_release_gcc_6" ];
   then
   echo "Fetching generated deb";
-  ls -altr code/build_deb9/xdyn.deb;
-  shasum -a256 code/build_deb9/xdyn.deb;
-  cp code/build_deb9/xdyn.deb xdyn_binary_debian9_amd64.deb;
+  ls -altr build_deb9/xdyn.deb;
+  shasum -a256 build_deb9/xdyn.deb;
+  cp build_deb9/xdyn.deb xdyn_binary_debian9_amd64.deb;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gcc_54" ];
   then
   echo "Fetching generated zip";
-  ls -altr code/build_win/xdyn.zip;
-  shasum -a256 code/build_win/xdyn.zip;
-  cp code/build_win/xdyn.zip xdyn_binary_windows_64.zip;
+  ls -altr build_win/xdyn.zip;
+  shasum -a256 build_win/xdyn.zip;
+  cp build_win/xdyn.zip xdyn_binary_windows_64.zip;
   fi
 
 # travis setup releases
