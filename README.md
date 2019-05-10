@@ -29,7 +29,15 @@ Pre-built binaries of X-DYN are available:
 - [for Windows](https://github.com/sirehna/x-dyn/releases/download/v1.0.0/xdyn.exe)
 - [for Debian](https://github.com/sirehna/x-dyn/releases/download/v1.0.0/xdyn.deb).
 
+The easiest way to run xdyn is to use [Docker](https://www.docker.com/):
+
+~~~~~~~{.bash}
+docker run sirehna/xdyn
+~~~~~~~
+
 There are many other ways of using X-DYN, all of which are described in [the documentation]().
+
+This does not require installing or downloading anything except Docker itself.
 
 The **models** implemented inside X-DYN are described in detail in [this section]() of the documentation.
 You can also learn how to use X-DYN using the [tutorials]().
