@@ -16,7 +16,8 @@ project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf)
 
 (c) 2015-2018 [SIREHNA](http://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
 
-**Disclaimer**: This documentation was written for a French project, with
+**Disclaimer**: [Documentation](https://sirehna.github.io/xdyn)
+was written for a French project, with
 French participants, therefore it is in French. It will be translated
 eventually. Also, please note that it is still a work-in-progress and, as such,
 can be incomplete. Despite our best efforts, inaccuracies may remain. However,
@@ -37,10 +38,16 @@ Pre-built binaries of xdyn are also available:
 - [for Debian 9](https://github.com/sirehna/xdyn/releases/latest/download/xdyn_binary_debian9_amd64.deb)
 - [for Windows](https://github.com/sirehna/xdyn/releases/latest/download/xdyn_binary_windows_64.zip)
 
-There are many other ways of using xdyn, all of which are described in [the documentation]().
+There are many other ways of using xdyn, all of which are described
+in [the documentation](https://sirehna.github.io/xdyn).
 
-The **models** implemented inside xdyn are described in detail in [this section]() of the documentation.
-You can also learn how to use xdyn using the [tutorials]().
+The **models** implemented inside xdyn are described in detail from
+[section 11](https://sirehna.github.io/xdyn/#modélisation-des-efforts-de-diffraction-et-de-radiation)
+to
+[section 13](https://sirehna.github.io/xdyn/#efforts-commandés)
+of the documentation.
+You can also learn how to use xdyn using the
+[tutorials](https://sirehna.github.io/xdyn/#tutoriels).
 
 ## Building xdyn from source
 
