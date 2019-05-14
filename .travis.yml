@@ -37,9 +37,15 @@ script:
   - make $TARGET
   - if [ "$TARGET" == "debian_9_release_gcc_6" ];
     then
-    echo "Create user doc with the associated docker image";
+    echo "Generate documentation";
+    make doc;
+    cp doc.html xdyn_doc_user.html;
+    mkdir -p public && cp doc.html public/index.html;
+    fi
+  - if [ "$TARGET" == "debian_9_release_gcc_6" ];
+    then
+    echo "Create xdyn docker container";
     cp build_deb9/xdyn.deb .;
-    mv doc.html xdyn_doc_user.html;
     docker build --tag xdyn .;
     fi
 
@@ -79,11 +85,6 @@ after_success:
   shasum -a256 build_win/xdyn.zip;
   cp build_win/xdyn.zip xdyn_binary_windows_64.zip;
   fi
-- make doc;
-  if [ "$TRAVIS_BRANCH" == "master" ];
-  then
-  mkdir -p public &&  mv doc.html public/index.html;
-  fi
 
 # travis setup releases
 # https://docs.travis-ci.com/user/deployment
@@ -101,7 +102,7 @@ deploy:
   file_glob: true
   file:
     - xdyn_binary_*
-    - doc.html
+    - xdyn_doc_user*
   #file:
   #  - xdyn_binary_debian8_amd64.deb
   #  - xdyn_binary_windows_64.zip
@@ -115,4 +116,7 @@ deploy:
   github-token: $GITHUB_TOKEN
   keep-history: true
   on:
+    tags: true
+    repo: sirehna/xdyn
     branch: master
+    condition: $TARGET = debian_9_release_gcc_6
