@@ -116,13 +116,3 @@ deploy:
   keep-history: true
   on:
     branch: master
-sudo: false
-dist: trusty
-language: c++
-git:
-  submodules: false
-services:
-- docker
-env:
-  global:
-  - DOCKER_USERNAME=guillaumejacquenot
