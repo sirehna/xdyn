@@ -241,8 +241,8 @@ utilise souvent un repère linéarisé. Ce repère, qui peut être impliqué lor
 lien avec les [bases de données hydrodynamiques](#fichiers-hdb-daqua) issues du
 fréquentiel, est calculé de la façon suivante. En faisant l'hypothèse que les
 mouvements sont faibles, on effectue un développement des rotations limité au
-premier ordre et ainsi elles peuvent être exprimées indépendammant par rapport
-aux axes principaux liés à la posiiton moyenne du navire, dans n'importe quel
+premier ordre et ainsi elles peuvent être exprimées indépendamment par rapport
+aux axes principaux liés à la position moyenne du navire, dans n'importe quel
 ordre. Ce repère n'est pas utilisé dans la version actuelle d'xdyn.
 
 ## États navires
@@ -609,7 +609,10 @@ Il est à noter que ces efforts sont exprimés dans le repère BODY.
 
 Le format HDB (Hydrodynamic DataBase) est le format standard du logiciel
 [Diodore](http://www.principia-group.com/blog/product/diodore/). Le logiciel
-AQUA+ (développé et utilisé en interne par l'Ecole Centrale de Nantes et SIREHNA, dont des parties ont été reprises dans logiciel [NEMOH](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-presentation-192863.kjsp)) dispose également d'une sortie permettant de créer un fichier HDB. Ces
+AQUA+ (développé et utilisé en interne par l'École Centrale de Nantes et SIREHNA,
+dont des parties ont été reprises dans logiciel
+[NEMOH](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-presentation-192863.kjsp))
+dispose également d'une sortie permettant de créer un fichier HDB. Ces
 fichiers peuvent être utilisés par xdyn pour calculer :
 
 - les masses ajoutées (cf. paragraphe précédent)
