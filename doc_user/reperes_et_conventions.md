@@ -629,7 +629,7 @@ d'expression. Plutôt que de laisser l'utilisateur la spécifier (avec les risqu
 d'erreur que cela comporte) ou de la détecter automatiquement, on suppose pour
 xdyn que les fichiers HDB ont été générés avec les conventions du logiciel AQUA+ (convention "z vers le
 haut"). Le repère dans lequel sont exprimées toutes les matrices de tous les
-fichiers HDB lus par xdyn est donc : x longitudinal, y vers babord et z vers le
+fichiers HDB lus par xdyn est donc : x longitudinal, y vers bâbord et z vers le
 haut.
 
 ![](images/convention_aqua+.svg)
