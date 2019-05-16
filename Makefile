@@ -128,7 +128,7 @@ test-debian: SHELL:=/bin/bash
 test-debian:
 	docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
            "cd $(BUILD_DIR) &&\
-            ./run_all_tests --gtest_filter=-HOSTest*;\
+            ./run_all_tests --gtest_filter=-HOSTest* &&\
             if [[ $(BUILD_TYPE) == Coverage ]];\
             then\
             echo Coverage;\
