@@ -3,7 +3,7 @@ PROJECT(x-dyn)
 SET(DESCRIPTION "X-DYN : Simulateur 6ddl de navires")
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 #############################################################################
-OPTION(BUILD_DOCUMENTATION "Boolen used to build xdyn documentation" ON)
+OPTION(BUILD_DOCUMENTATION "Boolean used to build xdyn documentation" ON)
 OPTION(THIRD_PARTY_DIRECTORY "Where should CMake look for (former submodules) eigen, eigen3-hdf5, etc... ?" ${CMAKE_CURRENT_SOURCE_DIR})
 #############################################################################
 # User configuration
