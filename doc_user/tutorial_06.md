@@ -5,22 +5,23 @@ tutoriel, nous simulons un propulseur.
 
 ### Description du problème
 
-Le navire évolue dans un environnement sans houle. Il est soumis aux six
+Le navire évolue dans un environnement sans houle. Il est soumis aux cinq
 efforts suivants :
 
 - La pesanteur
 - Les efforts hydrostatiques (rapides et non exacts)
 - L'amortissement visqueux
-- Un effort de propulsion
-- résistance à l'avancement
-- effort de propulsion dû à une hélice
+- Un effort de propulsion dû à une hélice
+- La résistance à l'avancement
+
+On peut aussi se contenter des 2 seuls efforts de résistance et de propulsion.
 
 ### Écriture du fichier de configuration du simulateur
 
-Les deux seuls changements par rapport au tutoriel 2 sont l'ajout d'une section
-[`controlled forces`](#efforts-commandés) et un
-[fichier supplémentaire de commandes](#syntaxe-du-fichier-de-commande)
-que l'on nomme `controlled_forces_commands.yml`.
+Les changements par rapport au tutoriel 2 sont les ajouts des efforts d'amortissement
+et de résistance, d'une section 
+[`controlled forces`](#efforts-commandés) et d'une section
+[`commands`](#syntaxe-des-commandes).
 
 On commence par définir les [caractéristiques du propulseur](#efforts-commandés) :
 
@@ -49,10 +50,13 @@ print_yaml(yaml_data)
 La simulation peut maintenant être lancée comme suit :
 
 ```python echo=False, results='raw', name='tutorial_06_launch_simulation'
-execCommand('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out.csv')
+execCommand('xdyn tutorial_06_propulsion.yml --dt 0.1 --tend 20 -o out.csv')
+execCommand('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out_1D.csv')
 ```
 
 ### Résultats
+
+Voici l'évolution temporelle de la vitesse pour la cas 1D :
 
 ```python echo=False, results='raw', name='tutorial_06_plot_results'
 data = csv('out.csv')

@@ -60,7 +60,11 @@ TEST_F(listenersTest, example)
 
 TEST_F(listenersTest, can_parse_simple_track_keeping_commands)
 {
-    auto ds = make_command_listener(parse_command_yaml(test_data::controlled_forces()));
+    const std::string commands =
+          "  - name: controller\n"
+          "    t: [0,1,3,10]\n"
+          "    psi_co: {unit: rad, values: [0.25, 0.30, 0.40, 0]}\n";
+    auto ds = make_command_listener(parse_command_yaml(test_data::controlled_forces()+commands));
     ds.check_in("listenersTest (can_parse_simple_track_keeping_commands)");
     ds.set<double>("t", 0);
     ASSERT_NEAR(0.25, ds.get<double>("controller(psi_co)"),EPS);

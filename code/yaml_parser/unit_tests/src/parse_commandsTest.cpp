@@ -28,7 +28,11 @@ void parse_commandsTest::TearDown()
 TEST_F(parse_commandsTest, example)
 {
 //! [parse_commandsTest example]
-    std::vector<YamlCommands> commands = parse_command_yaml(test_data::controlled_forces());
+    const std::string commands_yaml =
+          "  - name: controller\n"
+          "    t: [0,1,3,10]\n"
+          "    psi_co: {unit: rad, values: [0.25, 0.30, 0.40, 0]}\n";
+    std::vector<YamlCommands> commands = parse_command_yaml(test_data::controlled_forces()+commands_yaml);
     ASSERT_EQ(2, commands.size());
     ASSERT_EQ("propeller", commands[0].name);
     ASSERT_EQ(4, commands[0].t.size());

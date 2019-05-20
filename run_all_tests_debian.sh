@@ -5,7 +5,7 @@ docker run $TERMINAL \
     --security-opt seccomp=unconfined \
     --rm \
     -u $( id -u $USER ):$( id -g $USER ) \
-    -v $(pwd)/code/build_deb9:/build \
+    -v $(pwd)/build_deb9:/build \
     -w /build \
     -t \
     sirehna/base-image-debian9-gcc6-xdyn \
