@@ -26,7 +26,7 @@ matrix:
     - name: "Debian 9 release GCC 820"
       env:
         - TARGET=debian_9_release_gcc_82
-    - name: "Windows cross compilation Gcc 5.4.0 release"
+    - name: "Windows cross compilation Gcc 5.4.0 Win32Threads release"
       env:
         - TARGET=windows_gcc_54
 
