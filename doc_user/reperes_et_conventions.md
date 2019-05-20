@@ -241,8 +241,8 @@ utilise souvent un repère linéarisé. Ce repère, qui peut être impliqué lor
 lien avec les [bases de données hydrodynamiques](#fichiers-hdb-daqua) issues du
 fréquentiel, est calculé de la façon suivante. En faisant l'hypothèse que les
 mouvements sont faibles, on effectue un développement des rotations limité au
-premier ordre et ainsi elles peuvent être exprimées indépendammant par rapport
-aux axes principaux liés à la posiiton moyenne du navire, dans n'importe quel
+premier ordre et ainsi elles peuvent être exprimées indépendamment par rapport
+aux axes principaux liés à la position moyenne du navire, dans n'importe quel
 ordre. Ce repère n'est pas utilisé dans la version actuelle d'xdyn.
 
 ## États navires
@@ -484,10 +484,13 @@ rigid body inertia matrix at the center of gravity and projected in the body fra
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-Les calculs sont réalisés en supposant que les termes $`a_{ij}`$ de la matrice d'inertie sont en unité SI, c'est-à-dire:
+Les calculs sont réalisés en supposant que les termes $`a_{ij}`$ de la matrice
+d'inertie sont en unité SI, c'est-à-dire:
+
 - en $`\texttt{kg}`$ pour les termes $`a_{ij}`$ avec $`1\leq i,j \leq 3`$,
 - en $`\texttt{kg}\times\texttt{m}^2`$ pour les termes $`a_{ij}`$ avec $`4\leq i,j \leq 6`$,
-- en $`\texttt{kg}\times\texttt{m}`$ pour les deux blocs 3x3 extra-diagonaux représentant les termes croisés de la matrice d'inertie.
+- en $`\texttt{kg}\times\texttt{m}`$ pour les deux blocs 3x3 extra-diagonaux
+  représentant les termes croisés de la matrice d'inertie.
 
 #### Inerties ajoutées
 
@@ -609,7 +612,10 @@ Il est à noter que ces efforts sont exprimés dans le repère BODY.
 
 Le format HDB (Hydrodynamic DataBase) est le format standard du logiciel
 [Diodore](http://www.principia-group.com/blog/product/diodore/). Le logiciel
-AQUA+ (développé et utilisé en interne par l'Ecole Centrale de Nantes et SIREHNA, dont des parties ont été reprises dans logiciel [NEMOH](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-presentation-192863.kjsp)) dispose également d'une sortie permettant de créer un fichier HDB. Ces
+AQUA+ (développé et utilisé en interne par l'École Centrale de Nantes et SIREHNA,
+dont des parties ont été reprises dans logiciel
+[NEMOH](https://lheea.ec-nantes.fr/logiciels-et-brevets/nemoh-presentation-192863.kjsp))
+dispose également d'une sortie permettant de créer un fichier HDB. Ces
 fichiers peuvent être utilisés par xdyn pour calculer :
 
 - les masses ajoutées (cf. paragraphe précédent)
@@ -623,7 +629,7 @@ d'expression. Plutôt que de laisser l'utilisateur la spécifier (avec les risqu
 d'erreur que cela comporte) ou de la détecter automatiquement, on suppose pour
 xdyn que les fichiers HDB ont été générés avec les conventions du logiciel AQUA+ (convention "z vers le
 haut"). Le repère dans lequel sont exprimées toutes les matrices de tous les
-fichiers HDB lus par xdyn est donc : x longitudinal, y vers babord et z vers le
+fichiers HDB lus par xdyn est donc : x longitudinal, y vers bâbord et z vers le
 haut.
 
 ![](images/convention_aqua+.svg)

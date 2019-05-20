@@ -40,7 +40,7 @@ RUN echo "#!/bin/sh" > /usr/bin/xdyn_cli.sh && \
     echo "    echo \"  # Copy tutorials in local directory\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"  mkdir xdyn_demos\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"  cd xdyn_demos\"" >> /usr/bin/xdyn_cli.sh && \
-    echo "    echo \"  docker run --rm -u \\\`id -u\\\`:\\\`id -g\\\` -v \\\`pwd\\\`:/xdyn_demos --entrypoint /bin/bash sirehna/xdyn -c \\\"cp -rf /usr/demos/\* /xdyn_demos/.\\\"\"" >> /usr/bin/xdyn_cli.sh && \
+    echo "    echo \"  docker run --rm -u \\\`id -u\\\`:\\\`id -g\\\` -v \\\`pwd\\\`:/xdyn_demos --entrypoint /bin/bash sirehna/xdyn -c \\\"cp -rf /usr/demos/* /xdyn_demos/.\\\"\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"  # List all tutorials\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"  ls tuto*.yml\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"  # Run tutorial tutorial_01_falling_ball\"" >> /usr/bin/xdyn_cli.sh && \

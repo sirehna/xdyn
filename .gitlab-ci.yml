@@ -36,7 +36,8 @@ build:debian:
 doc:
    stage: doc
    script:
-     - make doc
+     - mkdir -p build_deb9 && cp xdyn.deb build_deb9/.
+     - make doc -W build-debian
    dependencies:
      - build:debian
    artifacts:
