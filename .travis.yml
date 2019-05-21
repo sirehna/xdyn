@@ -29,6 +29,9 @@ matrix:
     - name: "Windows cross compilation Gcc 5.4.0 Win32Threads release"
       env:
         - TARGET=windows_gcc_54
+    - name: "Windows cross compilation Gcc X PosixThreads release"
+      env:
+        - TARGET=windows_gccx_posix
 
 before_install:
   - echo "A 'docker pull' command will be performed with the script section"
@@ -84,6 +87,13 @@ after_success:
   ls -altr build_win/xdyn.zip;
   shasum -a256 build_win/xdyn.zip;
   cp build_win/xdyn.zip xdyn_binary_windows_64.zip;
+  fi
+- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gccx_posix" ];
+  then
+  echo "Fetching generated zip";
+  ls -altr build_win_posix/xdyn.zip;
+  shasum -a256 build_win_posix/xdyn.zip;
+  cp build_win_posix/xdyn.zip xdyn_binary_windows_64_posix.zip;
   fi
 
 # travis setup releases
