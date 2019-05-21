@@ -11,6 +11,7 @@ ELSE()
         SET(ssc_INCLUDE_DIRS "${ssc_INCLUDE_DIRS}/.." CACHE PATH "Path to SSC include directory")
     ENDIF()
 ENDIF()
+SET(ssc_STATIC_LIB "${ssc_INCLUDE_DIRS}/../lib/libssc_static.a" CACHE PATH "Path to SSC static library")
 
 IF(ssc_FOUND)
     MESSAGE(STATUS "SSC : ssc_INCLUDE_DIRS = ${ssc_INCLUDE_DIRS}")
