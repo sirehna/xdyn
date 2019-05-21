@@ -5,6 +5,27 @@ debian: debian_9_release_gcc_6
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
 
+
+
+cmake-debian: BUILD_TYPE = Release
+cmake-debian: BUILD_DIR = build_deb8
+cmake-debian: CPACK_GENERATOR = DEB
+cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian8-gcc492-xdyn
+cmake-debian: BOOST_ROOT = /opt/boost
+cmake-debian: SSC_ROOT = /opt/ssc
+cmake-debian: ci_env=
+cmake-debian: cmake-debian-target
+
+cmake-windows: BUILD_TYPE=Release
+cmake-windows: BUILD_DIR=build_win
+cmake-windows: CPACK_GENERATOR=ZIP
+cmake-windows: DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads-ssc-xdyn
+cmake-windows: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
+cmake-windows: SSC_ROOT=/opt/ssc
+cmake-windows: HDF5_DIR=/opt/HDF5_1_8_20/cmake
+cmake-windows: ci_env=
+cmake-windows: cmake-windows-target
+
 debian_8_release_gcc_492: BUILD_TYPE = Release
 debian_8_release_gcc_492: BUILD_DIR = build_deb8
 debian_8_release_gcc_492: CPACK_GENERATOR = DEB
@@ -12,7 +33,7 @@ debian_8_release_gcc_492: DOCKER_IMAGE = sirehna/base-image-debian8-gcc492-xdyn
 debian_8_release_gcc_492: BOOST_ROOT = /opt/boost
 debian_8_release_gcc_492: SSC_ROOT = /opt/ssc
 debian_8_release_gcc_492: ci_env=
-debian_8_release_gcc_492: build-debian test-debian
+debian_8_release_gcc_492: cmake-debian-target build-debian test-debian
 
 debian_9_release_gcc_6: BUILD_TYPE = Release
 debian_9_release_gcc_6: BUILD_DIR = build_deb9
@@ -21,7 +42,7 @@ debian_9_release_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
 debian_9_release_gcc_6: BOOST_ROOT = /opt/boost
 debian_9_release_gcc_6: SSC_ROOT = /opt/ssc
 debian_9_release_gcc_6: ci_env=
-debian_9_release_gcc_6: build-debian test-debian
+debian_9_release_gcc_6: cmake-debian-target build-debian test-debian
 
 debian_9_coverage_gcc_6: BUILD_TYPE = Coverage
 debian_9_coverage_gcc_6: BUILD_DIR = build_deb9
@@ -31,7 +52,7 @@ debian_9_coverage_gcc_6: BOOST_ROOT = /opt/boost
 debian_9_coverage_gcc_6: SSC_ROOT = /opt/ssc
 debian_9_coverage_gcc_6: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_9_coverage_gcc_6: ci_env=`bash <(curl -s https://codecov.io/env)`
-debian_9_coverage_gcc_6: build-debian test-debian
+debian_9_coverage_gcc_6: cmake-debian-target build-debian test-debian
 
 debian_9_release_gcc_82: BUILD_TYPE = Release
 debian_9_release_gcc_82: BUILD_DIR = build_deb9_gcc820
@@ -41,7 +62,7 @@ debian_9_release_gcc_82: BOOST_ROOT = /opt/boost
 debian_9_release_gcc_82: SSC_ROOT = /opt/ssc
 debian_9_release_gcc_82: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_9_release_gcc_82: ci_env=
-debian_9_release_gcc_82: build-debian test-debian
+debian_9_release_gcc_82: cmake-debian-target build-debian test-debian
 
 windows_gcc_54: BUILD_TYPE=Release
 windows_gcc_54: BUILD_DIR=build_win
@@ -51,7 +72,7 @@ windows_gcc_54: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
 windows_gcc_54: SSC_ROOT=/opt/ssc
 windows_gcc_54: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 windows_gcc_54: ci_env=
-windows_gcc_54: build-windows test-windows
+windows_gcc_54: cmake-windows-target build-windows test-windows
 
 code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
 		docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
@@ -59,7 +80,7 @@ code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
             cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&\
             cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt"
 
-build-windows: code/yaml-cpp/CMakeLists.txt
+cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 		docker run --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
            "cd /opt/share &&\
             mkdir -p $(BUILD_DIR) &&\
@@ -94,7 +115,18 @@ build-windows: code/yaml-cpp/CMakeLists.txt
               -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a \
               -DProtobuf_PROTOC_EXECUTABLE:PATH=/usr/bin/protoc \
               -DCMAKE_SYSTEM_VERSION=7 \
-            /opt/share/code && \
+            /opt/share/code"
+
+
+
+build-windows:
+		docker run --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
+           "cd /opt/share &&\
+            mkdir -p $(BUILD_DIR) &&\
+            cd $(BUILD_DIR) &&\
+            mkdir -p /opt/share/.wine;\
+            export WINEPREFIX=/opt/share/.wine;\
+            wine winecfg;\
             ninja package"
 
 test-windows:
@@ -105,8 +137,8 @@ test-windows:
             wine winecfg;\
             wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists"
 
-build-debian: SHELL:=/bin/bash
-build-debian: code/yaml-cpp/CMakeLists.txt
+cmake-debian-target: SHELL:=/bin/bash
+cmake-debian-target: code/yaml-cpp/CMakeLists.txt
 	docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
            "cd /opt/share &&\
             mkdir -p $(BUILD_DIR) &&\
@@ -122,7 +154,16 @@ build-debian: code/yaml-cpp/CMakeLists.txt
              -DHDF5_DIR=$(HDF5_DIR) \
              -DBOOST_ROOT:PATH=$(BOOST_ROOT) \
              -DProtobuf_USE_STATIC_LIBS:BOOL=True \
-            /opt/share/code && ninja package"
+            /opt/share/code"
+
+
+build-debian: SHELL:=/bin/bash
+build-debian:
+	docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
+           "cd /opt/share &&\
+            mkdir -p $(BUILD_DIR) &&\
+            cd $(BUILD_DIR) &&\
+            ninja package"
 
 test-debian: SHELL:=/bin/bash
 test-debian:
