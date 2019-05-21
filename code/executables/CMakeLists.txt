@@ -60,7 +60,8 @@ TARGET_LINK_LIBRARIES(xdyn
         )
 
 ADD_EXECUTABLE(test_orbital_velocities_and_dynamic_pressures
-src/test_orbital_velocities_and_dynamic_pressures.cpp)
+        src/test_orbital_velocities_and_dynamic_pressures.cpp
+        )
 
 TARGET_LINK_LIBRARIES(test_orbital_velocities_and_dynamic_pressures
         x-dyn
@@ -76,7 +77,8 @@ ADD_EXECUTABLE(test_hs
         $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:yaml_parser>
-        $<TARGET_OBJECTS:external_data_structures>)
+        $<TARGET_OBJECTS:external_data_structures>
+        )
 
 TARGET_LINK_LIBRARIES(test_hs
         x-dyn
@@ -93,8 +95,7 @@ ADD_EXECUTABLE(yml2test src/yml2test.cpp)
 ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp)
 
 TARGET_LINK_LIBRARIES(quat2eul
-        exception_handling_shared
-        kinematics_shared
+        ${ssc_STATIC_LIB}
         )
 
 ADD_EXECUTABLE(convert_stl_files_to_code
@@ -146,7 +147,6 @@ ADD_EXECUTABLE(xdyn-for-cs
         src/XdynForCSCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_cs.cpp
-
         )
 
 TARGET_LINK_LIBRARIES(xdyn-for-cs
@@ -162,7 +162,6 @@ ADD_EXECUTABLE(xdyn-for-me
         src/report_xdyn_exceptions_to_user.cpp
         src/XdynForMECommandLineArguments.cpp
         src/xdyn_for_me.cpp
-
         )
 
 TARGET_LINK_LIBRARIES(xdyn-for-me
