@@ -1,10 +1,9 @@
 all: windows debian doc
 
-windows: windows_gcc_54
+windows: windows_gccx_posix
 debian: debian_9_release_gcc_6
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
-
 
 
 cmake-debian: BUILD_TYPE = Release
