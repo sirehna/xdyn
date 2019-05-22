@@ -17,7 +17,7 @@ build:windows:
    stage: build
    script:
      - make windows
-     - mv build_win/xdyn.zip .
+     - mv build_win_posix/xdyn.zip .
    artifacts:
      when: on_success
      paths:
