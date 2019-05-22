@@ -1,10 +1,9 @@
 all: windows debian doc
 
-windows: windows_gcc_54
+windows: windows_gccx_posix
 debian: debian_9_release_gcc_6
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
-
 
 
 cmake-debian: BUILD_TYPE = Release
@@ -73,6 +72,16 @@ windows_gcc_54: SSC_ROOT=/opt/ssc
 windows_gcc_54: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 windows_gcc_54: ci_env=
 windows_gcc_54: cmake-windows-target build-windows test-windows
+
+windows_gccx_posix: BUILD_TYPE=Release
+windows_gccx_posix: BUILD_DIR=build_win_posix
+windows_gccx_posix: CPACK_GENERATOR=ZIP
+windows_gccx_posix: DOCKER_IMAGE=sirehna/base-image-win64-gccx-posixthreads-ssc-xdyn
+windows_gccx_posix: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static.posix
+windows_gccx_posix: SSC_ROOT=/opt/ssc
+windows_gccx_posix: HDF5_DIR=/opt/HDF5_1_8_20/cmake
+windows_gccx_posix: ci_env=
+windows_gccx_posix: cmake-windows-target build-windows test-windows
 
 code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
 		docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \

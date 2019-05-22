@@ -105,23 +105,10 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:hos>
         )
 
-# ADD_IMPORTED_LIB(numeric_static)
-# ADD_IMPORTED_LIB(kinematics_static)
-# ADD_IMPORTED_LIB(data_source_static)
-# ADD_IMPORTED_LIB(yaml_parser_static)
-# ADD_IMPORTED_LIB(text_file_reader_static)
-# ADD_IMPORTED_LIB(decode_unit_static)
-# ADD_IMPORTED_LIB(csv_file_reader_static)
-# ADD_IMPORTED_LIB(exception_handling_static)
-# ADD_IMPORTED_LIB(data_source_static)
-# ADD_IMPORTED_LIB(interpolation_static)
-# ADD_IMPORTED_LIB(integrate_static)
-# ADD_IMPORTED_LIB(websocket_static)
-
 IF (WIN32)
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${ssc_STATIC_LIB})
 ELSE()
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC ${ssc_INCLUDE_DIRS}/../lib/libssc_static.a)
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC ${ssc_STATIC_LIB})
 ENDIF()
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
@@ -181,8 +168,6 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:gz_curves_tests>
         $<TARGET_OBJECTS:hos_tests>
         )
-
-
 
 TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest      # static
