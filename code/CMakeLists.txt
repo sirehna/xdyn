@@ -77,7 +77,6 @@ ADD_SUBDIRECTORY(boost_program_options_descriptions)
 ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(force_models)
-ADD_SUBDIRECTORY(hos)
 ADD_SUBDIRECTORY(parser_extensions)
 ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
@@ -102,7 +101,6 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:hdb_interpolators>
         $<TARGET_OBJECTS:interface_hdf5>
         $<TARGET_OBJECTS:gz_curves>
-        $<TARGET_OBJECTS:hos>
         )
 
 IF (WIN32)
@@ -166,7 +164,6 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:interface_hdf5_tests>
         $<TARGET_OBJECTS:observers_and_api_tests>
         $<TARGET_OBJECTS:gz_curves_tests>
-        $<TARGET_OBJECTS:hos_tests>
         )
 
 TARGET_LINK_LIBRARIES(${TEST_EXE}

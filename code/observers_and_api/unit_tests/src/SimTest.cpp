@@ -830,15 +830,6 @@ TEST_F(SimTest, bug_3207_radiation_damping_crashes_LONG)
     ASSERT_EQ(76, res.size());
 }
 
-
-TEST_F(SimTest, DISABLED_HOS_LONG)
-{
-    const double t0 = 0;
-    const double dt = 0.1;
-    const double tend = 1;
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::hos(), test_data::cube(), t0, tend, dt);
-}
-
 TEST_F(SimTest, bug_3241_blocked_dof_interpolation_problem_LONG)
 {
     const double t0 = 0;

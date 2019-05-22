@@ -154,9 +154,6 @@ Add additional notes about how to deploy this on a live system.
 * [yaml-cpp](https://github.com/jbeder/yaml-cpp) - To parse the input files.
 * [HDF5](https://support.hdfgroup.org/products/hdf5_tools/index.html) - To store the outputs.
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) - For matrix manipulations.
-* [Protobuf](https://developers.google.com/protocol-buffers/) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
-* [ZMQ](http://zeromq.org/) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
-* [CPP ZMQ](https://github.com/zeromq/cppzmq) - To communicate with a [HOS wave model server](https://github.com/LHEEA/HOS-ocean).
 * [Pandoc](https://pandoc.org/) - To generate the documentation.
 * [Pweave](http://mpastell.com/pweave/) - To generate the tutorials.
 * [SSC](https://github.com/sirehna/ssc) - For websockets, units decoding, interpolations, kinematics, CSV file reading and exception handling.

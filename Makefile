@@ -63,16 +63,6 @@ debian_9_release_gcc_82: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_9_release_gcc_82: ci_env=
 debian_9_release_gcc_82: cmake-debian-target build-debian test-debian
 
-windows_gcc_54: BUILD_TYPE=Release
-windows_gcc_54: BUILD_DIR=build_win
-windows_gcc_54: CPACK_GENERATOR=ZIP
-windows_gcc_54: DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads-ssc-xdyn
-windows_gcc_54: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
-windows_gcc_54: SSC_ROOT=/opt/ssc
-windows_gcc_54: HDF5_DIR=/opt/HDF5_1_8_20/cmake
-windows_gcc_54: ci_env=
-windows_gcc_54: cmake-windows-target build-windows test-windows
-
 windows_gccx_posix: BUILD_TYPE=Release
 windows_gccx_posix: BUILD_DIR=build_win_posix
 windows_gccx_posix: CPACK_GENERATOR=ZIP
