@@ -26,9 +26,6 @@ matrix:
     - name: "Debian 9 release GCC 820"
       env:
         - TARGET=debian_9_release_gcc_82
-    - name: "Windows cross compilation Gcc 5.4.0 Win32Threads release"
-      env:
-        - TARGET=windows_gcc_54
     - name: "Windows cross compilation Gcc X PosixThreads release"
       env:
         - TARGET=windows_gccx_posix
@@ -80,13 +77,6 @@ after_success:
   ls -altr build_deb9/xdyn.deb;
   shasum -a256 build_deb9/xdyn.deb;
   cp build_deb9/xdyn.deb xdyn_binary_debian9_amd64.deb;
-  fi
-- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gcc_54" ];
-  then
-  echo "Fetching generated zip";
-  ls -altr build_win/xdyn.zip;
-  shasum -a256 build_win/xdyn.zip;
-  cp build_win/xdyn.zip xdyn_binary_windows_64_win32thread.zip;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gccx_posix" ];
   then
