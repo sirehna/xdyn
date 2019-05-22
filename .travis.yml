@@ -86,14 +86,14 @@ after_success:
   echo "Fetching generated zip";
   ls -altr build_win/xdyn.zip;
   shasum -a256 build_win/xdyn.zip;
-  cp build_win/xdyn.zip xdyn_binary_windows_64.zip;
+  cp build_win/xdyn.zip xdyn_binary_windows_64_win32thread.zip;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gccx_posix" ];
   then
   echo "Fetching generated zip";
   ls -altr build_win_posix/xdyn.zip;
   shasum -a256 build_win_posix/xdyn.zip;
-  cp build_win_posix/xdyn.zip xdyn_binary_windows_64_posix.zip;
+  cp build_win_posix/xdyn.zip xdyn_binary_windows_64_posixthread.zip;
   fi
 
 # travis setup releases
