@@ -107,8 +107,6 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
               -DBoost_FILESYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_filesystem-mt.a \
               -DBoost_SYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_system-mt.a \
               -DBoost_REGEX_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_regex-mt.a \
-              -Dcppzmq_DIR=/opt/libzmq/share/cmake/cppzmq \
-              -DZeroMQ_DIR=/opt/libzmq/share/cmake/ZeroMQ \
               -DProtobuf_USE_STATIC_LIBS:BOOL=True \
               -DProtobuf_INCLUDE_DIR=/opt/protobuf/include \
               -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a \
