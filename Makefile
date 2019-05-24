@@ -142,7 +142,7 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
             cd $(BUILD_DIR) &&\
             cmake -Wno-dev \
              -G Ninja \
-              -DTHIRD_PARTY_DIRECTORY=/opt/ \
+             -DTHIRD_PARTY_DIRECTORY=/opt/ \
              -DBUILD_DOCUMENTATION:BOOL=False \
              -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
              -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
