@@ -37,7 +37,6 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
 #############################################################################
 # External libraries
 INCLUDE(CMakeOutputDirectories)
-INCLUDE(CMakePython)
 INCLUDE(CMakeGMock)
 INCLUDE(CMakeSSC)
 INCLUDE(CMakeYamlCpp)
