@@ -107,12 +107,6 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
               -DBoost_FILESYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_filesystem-mt.a \
               -DBoost_SYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_system-mt.a \
               -DBoost_REGEX_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_regex-mt.a \
-              -Dcppzmq_DIR=/opt/libzmq/share/cmake/cppzmq \
-              -DZeroMQ_DIR=/opt/libzmq/share/cmake/ZeroMQ \
-              -DProtobuf_USE_STATIC_LIBS:BOOL=True \
-              -DProtobuf_INCLUDE_DIR=/opt/protobuf/include \
-              -DProtobuf_LIBRARY=/opt/protobuf/lib/libprotobuf.a \
-              -DProtobuf_PROTOC_EXECUTABLE:PATH=/usr/bin/protoc \
               -DCMAKE_SYSTEM_VERSION=7 \
             /opt/share/code"
 
@@ -144,7 +138,7 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
             cd $(BUILD_DIR) &&\
             cmake -Wno-dev \
              -G Ninja \
-              -DTHIRD_PARTY_DIRECTORY=/opt/ \
+             -DTHIRD_PARTY_DIRECTORY=/opt/ \
              -DBUILD_DOCUMENTATION:BOOL=False \
              -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
              -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
@@ -152,7 +146,6 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
              -DSSC_ROOT=$(SSC_ROOT) \
              -DHDF5_DIR=$(HDF5_DIR) \
              -DBOOST_ROOT:PATH=$(BOOST_ROOT) \
-             -DProtobuf_USE_STATIC_LIBS:BOOL=True \
             /opt/share/code"
 
 
