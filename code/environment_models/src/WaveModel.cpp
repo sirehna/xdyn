@@ -9,7 +9,9 @@
 #include "InternalErrorException.hpp"
 #include <cmath> // For isnan
 
-WaveModel::WaveModel(const FlatDiscreteDirectionalWaveSpectrum& spectrum_) : spectrum(spectrum_)
+WaveModel::WaveModel(
+    const FlatDiscreteDirectionalWaveSpectrum& spectrum_) :
+        spectrum(spectrum_)
 {
     if (spectrum.omega.empty())
     {

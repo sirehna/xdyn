@@ -1,11 +1,12 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
-#include <vector>
 #include "GeometricTypes3d.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
+
+#include <vector>
 
 /**
  * \author gj
@@ -30,7 +31,7 @@ public:
     /** \brief add an edge
      * \return the edge index
      */
-    size_t add_edge(const size_t first_vertex_index,const size_t last_vertex_index);
+    size_t add_edge(const size_t first_vertex_index, const size_t last_vertex_index);
 
     /** \brief add an vertex
      * \return the vertex index

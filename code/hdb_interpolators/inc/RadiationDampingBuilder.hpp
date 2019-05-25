@@ -44,17 +44,18 @@ class RadiationDampingBuilder
                 const std::vector<double>& taus,            //!<
                 const double eps,                           //!< When to truncate (0 for no truncation)
                 const double omega_min,
-                double omega_max
+                const double omega_max
                 ) const;
         /**  \brief Computes the convolution of a function with state history, over a certain time
           *  \returns \f$\int_0^T h(t-\tau)*f(\tau) d\tau\f$
           *  \snippet hdb_interpolators/unit_tests/src/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest method_example
           */
-        double convolution(const History& h, //!< State history
-                           const std::function<double(double)>& f, //!< Function to convolute with
-                           const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
-                           const double Tmax  //!< End of the convolution
-                           ) const;
+        double convolution(
+                const History& h, //!< State history
+                const std::function<double(double)>& f, //!< Function to convolute with
+                const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
+                const double Tmax  //!< End of the convolution
+                ) const;
 
         /**  \brief Build a vector of n regularly incremented doubles from xmin to xmax. First value is xmin last is xmax.
           */

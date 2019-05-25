@@ -16,34 +16,37 @@ Facet flip(Facet facet)
     return facet;
 }
 
-MeshIntersector::MeshIntersector(const VectorOfVectorOfPoints& mesh_, const bool check_orientation) :
- mesh(MeshPtr(new Mesh(MeshBuilder(mesh_, check_orientation).build())))
-,all_relative_immersions()
-,all_absolute_wave_elevations()
-,all_absolute_immersions()
-,index_of_emerged_facets()
-,index_of_immersed_facets()
-,index_of_facets_exactly_on_the_surface()
-,index_of_edges_exactly_on_surface()
-,need_to_update_closing_facet(true)
+MeshIntersector::MeshIntersector(
+    const VectorOfVectorOfPoints& mesh_,
+    const bool check_orientation) :
+        mesh(MeshPtr(new Mesh(MeshBuilder(mesh_, check_orientation).build()))),
+        all_relative_immersions(),
+        all_absolute_wave_elevations(),
+        all_absolute_immersions(),
+        index_of_emerged_facets(),
+        index_of_immersed_facets(),
+        index_of_facets_exactly_on_the_surface(),
+        index_of_edges_exactly_on_surface(),
+        need_to_update_closing_facet(true)
 {}
 
-MeshIntersector::MeshIntersector(const MeshPtr mesh_)
-        :mesh(mesh_)
-        ,all_relative_immersions()
-        ,all_absolute_wave_elevations()
-        ,all_absolute_immersions()
-        ,index_of_emerged_facets()
-        ,index_of_immersed_facets()
-        ,index_of_facets_exactly_on_the_surface()
-        ,index_of_edges_exactly_on_surface()
-        ,need_to_update_closing_facet(true)
+MeshIntersector::MeshIntersector(
+    const MeshPtr mesh_):
+        mesh(mesh_),
+        all_relative_immersions(),
+        all_absolute_wave_elevations(),
+        all_absolute_immersions(),
+        index_of_emerged_facets(),
+        index_of_immersed_facets(),
+        index_of_facets_exactly_on_the_surface(),
+        index_of_edges_exactly_on_surface(),
+        need_to_update_closing_facet(true)
 {}
 
 void MeshIntersector::find_intersection_with_free_surface(
-        std::vector<size_t>& split_edges,
-        std::vector<int>& edges_immersion_status,
-        std::vector<bool>& facet_crosses_free_surface)
+    std::vector<size_t>& split_edges,
+    std::vector<int>& edges_immersion_status,
+    std::vector<bool>& facet_crosses_free_surface)
 {
     for (size_t edge_index = 0; edge_index < mesh->nb_of_static_edges; ++edge_index)
     {
@@ -68,9 +71,9 @@ void MeshIntersector::find_intersection_with_free_surface(
 }
 
 void MeshIntersector::classify_or_split(
-        const std::vector<size_t>& split_edges,
-        const std::vector<bool>& facet_crosses_free_surface,
-        std::vector<int>& edges_immersion_status)
+    const std::vector<size_t>& split_edges,
+    const std::vector<bool>& facet_crosses_free_surface,
+    std::vector<int>& edges_immersion_status)
 {
     // Iterate on each facet to classify and/or split
     for (size_t facet_index = 0 ; facet_index < mesh->nb_of_static_facets ; ++facet_index)
@@ -88,7 +91,9 @@ void MeshIntersector::classify_or_split(
     }
 }
 
-void MeshIntersector::classify_facet(const size_t facet_index, const std::vector<int>& edges_immersion_status)
+void MeshIntersector::classify_facet(
+    const size_t facet_index,
+    const std::vector<int>& edges_immersion_status)
 {
     // Each edge contains exactly two nodes: as the edge does not cross the free
     // surface in this branch of the 'if' statement, the immersion status of both
@@ -113,9 +118,10 @@ void MeshIntersector::reset_dynamic_members()
     index_of_edges_exactly_on_surface.clear();
 }
 
-void MeshIntersector::update_intersection_with_free_surface(const std::vector<double>& relative_immersions,
-        const std::vector<double>& absolute_wave_elevations  //!< z coordinate in NED frame of the free surface for each point in mesh
-        )
+void MeshIntersector::update_intersection_with_free_surface(
+    const std::vector<double>& relative_immersions,
+    const std::vector<double>& absolute_wave_elevations  //!< z coordinate in NED frame of the free surface for each point in mesh
+    )
 {
     all_relative_immersions = relative_immersions;
     if (std::any_of(relative_immersions.begin(),relative_immersions.end(), [](const double x){return std::isnan(x);}))
@@ -167,10 +173,10 @@ void MeshIntersector::build_closing_edge()
 }
 
 void MeshIntersector::split_partially_immersed_facet_and_classify(
-        size_t facet_index,                             //!< index of facet to split
-        const std::vector<int>& edges_immersion_status, //!< immersion status of each edge
-        const std::vector<size_t>& split_edges          //!< replacement map for split edges
-        )
+    size_t facet_index,                             //!< index of facet to split
+    const std::vector<int>& edges_immersion_status, //!< immersion status of each edge
+    const std::vector<size_t>& split_edges          //!< replacement map for split edges
+    )
 {
     const std::vector<size_t> oriented_edges_of_this_facet = mesh->oriented_edges_per_facet[facet_index];
     std::vector<size_t> emerged_edges;
@@ -253,9 +259,9 @@ void MeshIntersector::split_partially_immersed_facet_and_classify(
 }
 
 size_t MeshIntersector::split_partially_immersed_edge(
-        const size_t edge_index ,                //!< the index of edge to be split
-        std::vector<int> &edges_immersion_status //!< the immersion status of each edge
-        )
+    const size_t edge_index ,                //!< the index of edge to be split
+    std::vector<int> &edges_immersion_status //!< the immersion status of each edge
+    )
 {
     size_t first_vertex_index = mesh->edges[0][edge_index];
     size_t last_vertex_index  = mesh->edges[1][edge_index];
@@ -296,7 +302,11 @@ std::vector<double> MeshIntersector::immersions_of_facet(size_t facet_index) con
     return z;
 }
 
-EPoint MeshIntersector::edge_intersection(const EPoint& A, const double dzA, const EPoint& B, const double dzB)
+EPoint MeshIntersector::edge_intersection(
+    const EPoint& A,
+    const double dzA,
+    const EPoint& B,
+    const double dzB)
 {
     const double xA = A(0);
     const double xB = B(0);
@@ -312,9 +322,9 @@ EPoint MeshIntersector::edge_intersection(const EPoint& A, const double dzA, con
 }
 
 int MeshIntersector::get_edge_immersion_status(
-        const double z0, //!< Relative immersion of first vertex (in m)
-        const double z1  //!< Relative immersion of second vertex (in m)
-        )
+    const double z0, //!< Relative immersion of first vertex (in m)
+    const double z1  //!< Relative immersion of second vertex (in m)
+    )
 {
     bool first_is_immersed  = z0 > 0;
     bool second_is_immersed = z1 > 0;
@@ -348,10 +358,11 @@ bool MeshIntersector::both_ends_just_touch_free_surface(int status)
     return status==0;
 }
 
-bool MeshIntersector::has(const Facet& f, //!< Facet to check
-                          const FacetIterator& begin,
-                          const FacetIterator& end
-                         ) const
+bool MeshIntersector::has(
+    const Facet& f, //!< Facet to check
+    const FacetIterator& begin,
+    const FacetIterator& end
+    ) const
 {
     if (f.vertex_index.empty()) return false;
 
@@ -381,13 +392,14 @@ bool MeshIntersector::has(const Facet& f, //!< Facet to check
     return true;
 }
 
-bool MeshIntersector::has(const Facet& f //!< Facet to check
-                         ) const
+bool MeshIntersector::has(
+    const Facet& f //!< Facet to check
+    ) const
 {
     if (f.vertex_index.empty())
     {
         return false;
-    }    
+    }
     if (has(f, begin_immersed(), end_immersed()))
     {
         return true;
@@ -415,7 +427,10 @@ CenterOfMass MeshIntersector::center_of_mass_emerged()
     return center_of_mass(begin_emerged(), end_emerged(), false);
 }
 
-CenterOfMass MeshIntersector::center_of_mass(const FacetIterator& begin, const FacetIterator& end, const bool immersed)
+CenterOfMass MeshIntersector::center_of_mass(
+    const FacetIterator& begin,
+    const FacetIterator& end,
+    const bool immersed)
 {
     if (need_to_update_closing_facet) build_closing_edge();
     CenterOfMass ret(EPoint(0,0,0), 0);
@@ -451,7 +466,12 @@ Eigen::MatrixXd MeshIntersector::convert(const Facet& f) const
     return ret;
 }
 
-Facet MeshIntersector::make(const Facet& f, const size_t i1, const size_t i2, const size_t i3) const
+Facet MeshIntersector::make(
+    const Facet& f,
+    const size_t i1,
+    const size_t i2,
+    const size_t i3
+    ) const
 {
     Facet f_;
     f_.vertex_index.push_back(i1);
@@ -495,7 +515,10 @@ double MeshIntersector::facet_volume(const Facet& f) const
     return (f.area * height) / 3.0;
 }
 
-double MeshIntersector::volume(const FacetIterator& begin, const FacetIterator& end) const
+double MeshIntersector::volume(
+    const FacetIterator& begin,
+    const FacetIterator& end
+    ) const
 {
     double volume = 0;
     size_t n = 0;
@@ -541,7 +564,11 @@ double MeshIntersector::emerged_volume()
     return fabs(V);
 }
 
-std::string MeshIntersector::display_facet_in_NED(const Facet& facet, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const
+std::string MeshIntersector::display_facet_in_NED(
+    const Facet& facet,
+    const EPoint& mesh_center_in_NED_frame,
+    const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh
+    ) const
 {
     std::stringstream ss;
     ss << "Facet:" << std::endl
@@ -560,7 +587,11 @@ std::string MeshIntersector::display_facet_in_NED(const Facet& facet, const EPoi
     return ss.str();
 }
 
-std::string MeshIntersector::display_edge_in_NED(const size_t edge_idx, const EPoint& mesh_center_in_NED_frame, const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh) const
+std::string MeshIntersector::display_edge_in_NED(
+    const size_t edge_idx,
+    const EPoint& mesh_center_in_NED_frame,
+    const ssc::kinematics::RotationMatrix& R_from_ned_to_mesh
+    ) const
 {
     std::stringstream ss;
     ss << "Edge:" << std::endl;
@@ -573,7 +604,9 @@ std::string MeshIntersector::display_edge_in_NED(const size_t edge_idx, const EP
     return ss.str();
 }
 
-VectorOfVectorOfPoints MeshIntersector::serialize(const FacetIterator& begin, const FacetIterator& end) const
+VectorOfVectorOfPoints MeshIntersector::serialize(
+    const FacetIterator& begin,
+    const FacetIterator& end) const
 {
     VectorOfVectorOfPoints ret;
     for (auto it = begin ; it != end ; ++it)

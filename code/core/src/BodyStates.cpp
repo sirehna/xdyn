@@ -12,22 +12,23 @@
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
 
-BodyStates::BodyStates(const double Tmax) : AbstractStates<History>(Tmax),
-name(),
-G(),
-mesh(),
-total_inertia(),
-solid_body_inertia(),
-inverse_of_the_total_inertia(),
-x_relative_to_mesh(),
-y_relative_to_mesh(),
-z_relative_to_mesh(),
-mesh_to_body(),
-M(),
-intersector(),
-g_in_mesh_frame(),
-hydrodynamic_forces_calculation_point(),
-convention()
+BodyStates::BodyStates(const double Tmax) :
+    AbstractStates<History>(Tmax),
+    name(),
+    G(),
+    mesh(),
+    total_inertia(),
+    solid_body_inertia(),
+    inverse_of_the_total_inertia(),
+    x_relative_to_mesh(),
+    y_relative_to_mesh(),
+    z_relative_to_mesh(),
+    mesh_to_body(),
+    M(),
+    intersector(),
+    g_in_mesh_frame(),
+    hydrodynamic_forces_calculation_point(),
+    convention()
 {
 }
 
@@ -37,7 +38,9 @@ BodyStates& BodyStates::operator=(const AbstractStates<History>& rhs)
     return *this;
 }
 
-ssc::kinematics::EulerAngles BodyStates::convert(const ssc::kinematics::RotationMatrix& R, const YamlRotation& rotations)
+ssc::kinematics::EulerAngles BodyStates::convert(
+    const ssc::kinematics::RotationMatrix& R,
+    const YamlRotation& rotations)
 {
     using namespace ssc::kinematics;
     if (rotations.order_by == "angle")
@@ -55,14 +58,16 @@ ssc::kinematics::EulerAngles BodyStates::convert(const ssc::kinematics::Rotation
     return EulerAngles();
 }
 
-std::tuple<double,double,double,double> BodyStates::convert(const ssc::kinematics::EulerAngles& R, const YamlRotation& rotations)
+std::tuple<double,double,double,double> BodyStates::convert(
+    const ssc::kinematics::EulerAngles& R,
+    const YamlRotation& rotations)
 {
     using namespace ssc::kinematics;
     if (rotations.order_by == "angle")
     {
         if (match(rotations.convention, "z", "y'", "x''"))
         {
-            Eigen::Quaternion<double> quat(rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R));
+            const Eigen::Quaternion<double> quat(rotation_matrix<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R));
             std::tuple<double,double,double,double> ret;
             std::get<0>(ret) = quat.w();
             std::get<1>(ret) = quat.x();
@@ -92,7 +97,10 @@ ssc::kinematics::EulerAngles BodyStates::get_angles(const YamlRotation& c) const
     return convert(get_rot_from_ned_to_body(),c);
 }
 
-ssc::kinematics::EulerAngles BodyStates::get_angles(const StateType& all_states, const size_t idx, const YamlRotation& c) const
+ssc::kinematics::EulerAngles BodyStates::get_angles(
+    const StateType& all_states,
+    const size_t idx,
+    const YamlRotation& c) const
 {
     return convert(get_rot_from_ned_to(all_states,idx),c);
 }
@@ -102,7 +110,10 @@ ssc::kinematics::RotationMatrix BodyStates::get_rot_from_ned_to_body() const
     return Eigen::Quaternion<double>(qr(),qi(),qj(),qk()).matrix();
 }
 
-ssc::kinematics::RotationMatrix BodyStates::get_rot_from_ned_to(const StateType& x, const size_t idx) const
+ssc::kinematics::RotationMatrix BodyStates::get_rot_from_ned_to(
+    const StateType& x,
+    const size_t idx
+    ) const
 {
     return Eigen::Quaternion<double>(*_QR(x,idx),*_QI(x,idx),*_QJ(x,idx),*_QK(x,idx)).matrix();
 }

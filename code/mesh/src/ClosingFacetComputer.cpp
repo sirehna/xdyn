@@ -1,3 +1,14 @@
+
+#include "ClosingFacetComputer.hpp"
+#include "InternalErrorException.hpp"
+
+#include <ssc/macros.hpp>
+#include TR1INC(unordered_map)
+#include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
+
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/connected_components.hpp>
+
 #include <algorithm> // std::copy_if
 #include <iterator> // std::back_inserter
 #include <set>
@@ -6,17 +17,6 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/connected_components.hpp>
-
-#include "ClosingFacetComputer.hpp"
-#include "InternalErrorException.hpp"
-
-#include <ssc/macros.hpp>
-#include TR1INC(unordered_map)
-
-#include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
 
 void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges& edges, const std::string& function, const size_t line);
 void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges& edges, const std::string& function, const size_t line)
@@ -36,7 +36,10 @@ void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges&
     }
 }
 
-ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const ListOfEdges& edges_, std::vector<size_t> index_of_relevant_edges) :
+ClosingFacetComputer::ClosingFacetComputer(
+    const Eigen::Matrix3Xd& mesh_,
+    const ListOfEdges& edges_,
+    std::vector<size_t> index_of_relevant_edges) :
         mesh(&mesh_),
         edges(),
         node_idx_in_mesh(),
@@ -67,7 +70,10 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const 
     node_to_connected_edges = get_node_to_connected_edges(edges);
 }
 
-ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd* mesh_, const ListOfEdges& edges_, std::vector<size_t> index_of_relevant_edges) :
+ClosingFacetComputer::ClosingFacetComputer(
+    const Eigen::Matrix3Xd* mesh_,
+    const ListOfEdges& edges_,
+    std::vector<size_t> index_of_relevant_edges) :
         mesh(mesh_),
         edges(),
         node_idx_in_mesh(),

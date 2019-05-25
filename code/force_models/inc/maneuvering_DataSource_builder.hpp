@@ -14,9 +14,10 @@
 
 namespace maneuvering
 {
-    void build_ds(ssc::data_source::DataSource& ds, const std::map<std::string, NodePtr>& nodes, const std::map<std::string, double>& commands=std::map<std::string, double>());
+    void build_ds(
+        ssc::data_source::DataSource& ds,
+        const std::map<std::string, NodePtr>& nodes,
+        const std::map<std::string, double>& commands=std::map<std::string, double>());
 }
-
-
 
 #endif /* MANEUVERING_DATASOURCE_BUILDER_HPP_ */

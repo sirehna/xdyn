@@ -5,11 +5,11 @@
  *      Author: cady
  */
 
-#include <boost/algorithm/string/predicate.hpp>
-#include "yaml.h"
+#include "parse_output.hpp"
 #include "InvalidInputException.hpp"
 #include "parse_address.hpp"
-#include "parse_output.hpp"
+#include "yaml.h"
+#include <boost/algorithm/string/predicate.hpp>
 
 void operator >> (const YAML::Node& node, YamlOutput& f);
 std::string customize(const std::string& var_name, const std::string& body_name);

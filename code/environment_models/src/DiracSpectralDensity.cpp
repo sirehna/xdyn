@@ -13,7 +13,11 @@
 #include <sstream>
 
 
-DiracSpectralDensity::DiracSpectralDensity(const double omega0_, const double Hs_) : omega0(omega0_), Hs(Hs_)
+DiracSpectralDensity::DiracSpectralDensity(
+    const double omega0_,
+    const double Hs_) :
+        omega0(omega0_),
+        Hs(Hs_)
 {
     if (Hs<0)
     {
@@ -43,10 +47,11 @@ double DiracSpectralDensity::operator()(const double omega) const
     return 0.0;
 }
 
-std::vector<double> DiracSpectralDensity::get_angular_frequencies(const double,
-                                                                  const double,
-                                                                  const size_t
-                                                                  ) const
+std::vector<double> DiracSpectralDensity::get_angular_frequencies(
+    const double,
+    const double,
+    const size_t
+    ) const
 {
     return std::vector<double>(1, omega0);
 }

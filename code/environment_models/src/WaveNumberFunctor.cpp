@@ -7,16 +7,17 @@
 
 #include "WaveNumberFunctor.hpp"
 
-#include <math.h>
+#include <cmath>
 
-
-WaveNumberFunctor::WaveNumberFunctor(const double h_,    //!< Water depth (in meters)
-                  const double omega_ //!< Angular frequency (in rad/s)
-                  ) : h(h_), h2(h*h), omega2(omega_*omega_), g(9.81)
+WaveNumberFunctor::WaveNumberFunctor(
+    const double h_,    //!< Water depth (in meters)
+    const double omega_ //!< Angular frequency (in rad/s)
+    ) : h(h_), h2(h*h), omega2(omega_*omega_), g(9.81)
 {
 }
 
-boost::math::tuple<double, double, double> WaveNumberFunctor::operator()(const double& k) const
+boost::math::tuple<double, double, double>
+WaveNumberFunctor::operator()(const double& k) const
 {
     const double gk = g*k;
     const double tkh = tanh(k * h);

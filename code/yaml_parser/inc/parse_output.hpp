@@ -8,10 +8,9 @@
 #ifndef PARSE_OUTPUT_HPP_
 #define PARSE_OUTPUT_HPP_
 
+#include "YamlOutput.hpp"
 #include <string>
 #include <vector>
-
-#include "YamlOutput.hpp"
 
 std::string get_format(const std::string& filename);
 std::string get_format_for_wave_observer(const std::string& filename);

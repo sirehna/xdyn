@@ -10,10 +10,9 @@
 #include "WaveNumberFunctor.hpp"
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
-#include <cmath> // For isnan
-
-#include <limits>
 #include <boost/math/tools/roots.hpp>
+#include <cmath> // For isnan
+#include <limits>
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
@@ -28,10 +27,11 @@ WaveSpectralDensity::~WaveSpectralDensity()
 {
 }
 
-std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
-                                                                 const double omega_max, //!< Minimum angular frequency (in rad/s)
-                                                                 const size_t n          //!< Number of angular frequencies to return
-                                                                ) const
+std::vector<double> WaveSpectralDensity::get_angular_frequencies(
+    const double omega_min, //!< Minimum angular frequency (in rad/s)
+    const double omega_max, //!< Maximum angular frequency (in rad/s)
+    const size_t n          //!< Number of angular frequencies to return
+    ) const
 {
     if (std::isinf(omega_min))
     {
@@ -88,15 +88,17 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
     return omega;
 }
 
-double WaveSpectralDensity::get_wave_number(const double omega //!< Angular frequency (in radians)
-                                           ) const
+double WaveSpectralDensity::get_wave_number(
+    const double omega //!< Angular frequency (in radians)
+    ) const
 {
     return omega*omega/9.81;
 }
 
-double WaveSpectralDensity::get_wave_number(const double omega, //!< Angular frequency (in radians)
-                                            const double h      //!< Depth (in meters)
-                                           ) const
+double WaveSpectralDensity::get_wave_number(
+    const double omega, //!< Angular frequency (in radians)
+    const double h      //!< Depth (in meters)
+    ) const
 {
     if (std::isinf(omega))
     {

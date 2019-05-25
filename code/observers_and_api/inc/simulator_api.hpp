@@ -1,13 +1,12 @@
 #ifndef SIMULATORAPI_HPP_
 #define SIMULATORAPI_HPP_
 
-#include <map>
-#include <string>
-
 #include "Sim.hpp"
 #include "SimulatorBuilder.hpp"
 #include "SimObserver.hpp"
 #include <ssc/solver.hpp>
+#include <map>
+#include <string>
 
 struct YamlSimulatorInput;
 

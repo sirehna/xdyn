@@ -9,11 +9,12 @@
 #include "MeshException.hpp"
 #include "InternalErrorException.hpp"
 
-double area(const Matrix3x& M, //!< Matrix containing (amongst others), the points of interest
-            const int idxA,    //!< Index of the column containing the first point
-            const int idxB,    //!< Index of the column containing the second point
-            const int idxC     //!< Index of the column containing the third point
-            )
+double area(
+    const Matrix3x& M, //!< Matrix containing (amongst others), the points of interest
+    const int idxA,    //!< Index of the column containing the first point
+    const int idxB,    //!< Index of the column containing the second point
+    const int idxC     //!< Index of the column containing the third point
+    )
 {
     const double x1 = M(0,idxB)-M(0,idxA);
     const double x2 = M(1,idxB)-M(1,idxA);
@@ -71,8 +72,9 @@ Eigen::Vector3d barycenter(const Matrix3x& p, const std::vector<size_t> &vertex_
     return Eigen::Vector3d(x/double(n),y/double(n),z/double(n));
 }
 
-Eigen::Vector3d barycenter(const VectorOfVectorOfPoints& points //!< List of points
-                          )
+Eigen::Vector3d barycenter(
+    const VectorOfVectorOfPoints& points //!< List of points
+    )
 {
     double x = 0;
     double y = 0;
@@ -120,9 +122,10 @@ Eigen::Vector3d unit_normal(const Matrix3x& points)
     return Eigen::Vector3d(A/norm,B/norm,C/norm);
 }
 
-Eigen::Vector3d unit_normal(const Matrix3x& points, //!< Polygon for which the unit normal vector is computed
-                            const std::vector<size_t> &vertex_index
-                           )
+Eigen::Vector3d unit_normal(
+    const Matrix3x& points, //!< Polygon for which the unit normal vector is computed
+    const std::vector<size_t> &vertex_index
+    )
 {
     if (vertex_index.size() < 3)
     {
@@ -147,8 +150,9 @@ Eigen::Vector3d unit_normal(const Matrix3x& points, //!< Polygon for which the u
     return Eigen::Vector3d(A/norm,B/norm,C/norm);
 }
 
-Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
-                                 )
+Eigen::Vector3d centre_of_gravity(
+    const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
+    )
 {
     const int n = (int)polygon.cols();
     Eigen::Vector3d areas_times_points(0,0,0);
@@ -246,8 +250,8 @@ Eigen::Matrix3d inertia_of_triangle(
 }
 
 Eigen::Matrix3d inertia_of_polygon(
-        const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
-        )
+    const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
+    )
 {
     const int nVertices = (int)verticesInR1.cols();
     if (nVertices < 3) return Eigen::Matrix3d();
@@ -266,9 +270,9 @@ Eigen::Matrix3d inertia_of_polygon(
 }
 
 double average_immersion(
-        const std::vector<size_t>& idx,    //!< Indices of the points
-        const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
-        )
+    const std::vector<size_t>& idx,    //!< Indices of the points
+    const std::vector<double>& delta_z //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
+    )
 {
     const size_t n = idx.size();
     double average = 0;

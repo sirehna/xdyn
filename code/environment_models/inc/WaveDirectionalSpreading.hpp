@@ -31,8 +31,9 @@ class WaveDirectionalSpreading
 {
     public:
         WaveDirectionalSpreading();
-        WaveDirectionalSpreading(const double psi0 //!< Primary wave direction (NED, "coming from") in radians
-                                );
+        WaveDirectionalSpreading(
+            const double psi0 //!< Primary wave direction (NED, "coming from") in radians
+            );
         virtual ~WaveDirectionalSpreading();
 
         /**  \author cec
@@ -45,8 +46,9 @@ class WaveDirectionalSpreading
           *  \returns Density (between 0 and 1, no unit)
           *  \snippet environment_models/unit_tests/src/WaveDirectionalSpreadingTest.cpp WaveDirectionalSpreadingTest method_example
           */
-        virtual double operator()(const double psi //!< Primary wave direction in radians.
-                                 ) const = 0;
+        virtual double operator()(
+            const double psi //!< Primary wave direction in radians.
+            ) const = 0;
 
         virtual WaveDirectionalSpreading* clone() const = 0;
 
@@ -55,8 +57,9 @@ class WaveDirectionalSpreading
           *  \details Returns n directions between 0 (included) and 2 pi (excluded)
           *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
           */
-        virtual std::vector<double> get_directions(const size_t n          //!< Number of angles to return
-                                                   ) const;
+        virtual std::vector<double> get_directions(
+            const size_t n  //!< Number of angles to return
+            ) const;
 
         SumOfWaveDirectionalSpreadings operator+(const WaveDirectionalSpreading& w) const;
 

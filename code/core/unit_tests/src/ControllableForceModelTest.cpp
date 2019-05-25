@@ -5,11 +5,10 @@
  *      Author: cady
  */
 
-#include <ssc/data_source.hpp>
-
 #include "ControllableForceModelTest.hpp"
 #include "ControllableForceModel.hpp"
 #include "random_kinematics.hpp"
+#include <ssc/data_source.hpp>
 
 EnvironmentAndFrames get_env(ssc::random_data_generator::DataGenerator& a);
 EnvironmentAndFrames get_env(ssc::random_data_generator::DataGenerator& a)
@@ -31,7 +30,10 @@ class RandomControllableForce : public ControllableForceModel
         {
         }
 
-        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
+        ssc::kinematics::Vector6d get_force(
+            const BodyStates&,
+            const double,
+            std::map<std::string, double>) const
         {
             ssc::kinematics::Vector6d ret;
             ret(0) = a.random<double>().between(2,3);

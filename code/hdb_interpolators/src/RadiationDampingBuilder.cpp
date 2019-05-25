@@ -5,31 +5,35 @@
  *      Author: cady
  */
 
-#include <algorithm>    // std::reverse
 
-#include <boost/math/tools/roots.hpp>
 
+#include "RadiationDampingBuilder.hpp"
+#include "InternalErrorException.hpp"
+#include "History.hpp"
 #include <ssc/macros/tr1_macros.hpp>
 #include <ssc/interpolation.hpp>
 #include <ssc/integrate.hpp>
 typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 
+#include <boost/math/tools/roots.hpp>
+#include <algorithm>    // std::reverse
+
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
-#include "History.hpp"
-#include "InternalErrorException.hpp"
-#include "RadiationDampingBuilder.hpp"
 
-RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfQuadrature& type_of_quadrature_for_convolution_, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
-                                                 const TypeOfQuadrature& type_of_quadrature_for_cos_transform_ //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
-        ): type_of_quadrature_for_convolution(type_of_quadrature_for_convolution_),
-           type_of_quadrature_for_cos_transform(type_of_quadrature_for_cos_transform_)
+RadiationDampingBuilder::RadiationDampingBuilder(
+    const TypeOfQuadrature& type_of_quadrature_for_convolution_, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
+    const TypeOfQuadrature& type_of_quadrature_for_cos_transform_ //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
+    ): type_of_quadrature_for_convolution(type_of_quadrature_for_convolution_),
+       type_of_quadrature_for_cos_transform(type_of_quadrature_for_cos_transform_)
 {
 }
 
-std::function<double(double)> RadiationDampingBuilder::build_interpolator(const std::vector<double>& x, const std::vector<double>& y) const
+std::function<double(double)> RadiationDampingBuilder::build_interpolator(
+    const std::vector<double>& x,
+    const std::vector<double>& y) const
 {
     InterpolatorPtr i;
     const bool allow_queries_outside_bounds = true;
@@ -38,7 +42,12 @@ std::function<double(double)> RadiationDampingBuilder::build_interpolator(const 
     return ret;
 }
 
-double RadiationDampingBuilder::cos_transform(const std::function<double(double)>& Br, const double a, const double b, const double tau) const
+double RadiationDampingBuilder::cos_transform(
+    const std::function<double(double)>& Br,
+    const double a,
+    const double b,
+    const double tau
+    ) const
 {
     const auto f_cos = [Br,tau](const double omega){return Br(omega)*cos(omega*tau);};
     switch (type_of_quadrature_for_cos_transform)
@@ -71,7 +80,13 @@ double RadiationDampingBuilder::cos_transform(const std::function<double(double)
     return 0;
 }
 
-std::function<double(double)> RadiationDampingBuilder::build_retardation_function(const std::function<double(double)>& Br, const std::vector<double>& taus, const double eps, const double omega_min, double omega_max) const
+std::function<double(double)> RadiationDampingBuilder::build_retardation_function(
+    const std::function<double(double)>& Br,
+    const std::vector<double>& taus,
+    const double eps,
+    const double omega_min,
+    double omega_max
+    ) const
 {
     omega_max = find_integration_bound(Br, omega_min, omega_max, eps);
     std::vector<double> y;
@@ -82,11 +97,12 @@ std::function<double(double)> RadiationDampingBuilder::build_retardation_functio
     return build_interpolator(taus, y);
 }
 
-double RadiationDampingBuilder::convolution(const History& h, //!< State history
-                                           const std::function<double(double)>& f, //!< Function to convolute with
-                                           const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
-                                           const double Tmax  //!< End of the convolution
-                                           ) const
+double RadiationDampingBuilder::convolution(
+    const History& h, //!< State history
+    const std::function<double(double)>& f, //!< Function to convolute with
+    const double Tmin, //!< Beginning of the convolution (because retardation function may not be defined for T=0)
+    const double Tmax  //!< End of the convolution
+    ) const
 {
     const auto g = [&h, &f](const double tau){return h(tau)*f(tau);};
     const double eps = 1e-2;
@@ -125,10 +141,11 @@ double RadiationDampingBuilder::convolution(const History& h, //!< State history
     return out;
 }
 
-std::vector<double> RadiationDampingBuilder::build_regular_intervals(const double first, //!< First value in vector
-                                                    const double last, //!< Last value in vector
-                                                    const size_t n //!< Number of values to return
-                                                    ) const
+std::vector<double> RadiationDampingBuilder::build_regular_intervals(
+    const double first, //!< First value in vector
+    const double last, //!< Last value in vector
+    const size_t n //!< Number of values to return
+    ) const
 {
     std::vector<double> ret(n);
     for (size_t i = 0 ; i < n ; ++i)
@@ -138,10 +155,11 @@ std::vector<double> RadiationDampingBuilder::build_regular_intervals(const doubl
     return ret;
 }
 
-std::vector<double> RadiationDampingBuilder::build_exponential_intervals(const double first, //!< First value in vector
-                                                    const double last, //!< Last value in vector
-                                                    const size_t n //!< Number of values to return
-                                                    ) const
+std::vector<double> RadiationDampingBuilder::build_exponential_intervals(
+    const double first, //!< First value in vector
+    const double last, //!< Last value in vector
+    const size_t n //!< Number of values to return
+    ) const
 {
     std::vector<double> ret(n);
     const double sgn = first < last ? 1 : -1;
@@ -153,21 +171,23 @@ std::vector<double> RadiationDampingBuilder::build_exponential_intervals(const d
     return ret;
 }
 
-std::vector<double> RadiationDampingBuilder::build_exponential_intervals_reversed(const double first, //!< First value in vector
-                                                    const double last, //!< Last value in vector
-                                                    const size_t n //!< Number of values to return
-                                                    ) const
+std::vector<double> RadiationDampingBuilder::build_exponential_intervals_reversed(
+    const double first, //!< First value in vector
+    const double last, //!< Last value in vector
+    const size_t n //!< Number of values to return
+    ) const
 {
     std::vector<double> ret = build_exponential_intervals(last, first, n);
     std::reverse(ret.begin(),ret.end());
     return ret;
 }
 
-double RadiationDampingBuilder::find_integration_bound(const std::function<double(double)>& f, //!< Function to integrate
-                                                       const double omega_min,                 //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
-                                                       const double omega_max,                 //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
-                                                       const double eps                        //!< Integration error (compared to full integration from omega_min up to omega_max)
-                                                       ) const
+double RadiationDampingBuilder::find_integration_bound(
+    const std::function<double(double)>& f, //!< Function to integrate
+    const double omega_min,                 //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
+    const double omega_max,                 //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
+    const double eps                        //!< Integration error (compared to full integration from omega_min up to omega_max)
+    ) const
 {
     boost::math::tools::eps_tolerance<double> tol(30);
     if (std::abs(f(omega_max))>eps) return omega_max;
@@ -177,11 +197,12 @@ double RadiationDampingBuilder::find_integration_bound(const std::function<doubl
     return boost::math::tools::toms748_solve(g, omega_min, omega_max, tol, max_iter).first;
 }
 
-double RadiationDampingBuilder::find_r_bound(const std::function<double(double)>& f, //!< Function to integrate
-                                                       const double omega_min,       //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
-                                                       const double omega_max,       //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
-                                                       const double r                //!< How much of the total integral between omega_min & omega_max do we wish to represent?
-                                                       ) const
+double RadiationDampingBuilder::find_r_bound(
+    const std::function<double(double)>& f, //!< Function to integrate
+    const double omega_min,       //!< Lower bound of the integration (returned omega is necessarily greater than omega_min)
+    const double omega_max,       //!< Upper bound of the integration (returned omega is necessarily lower than omega_min)
+    const double r                //!< How much of the total integral between omega_min & omega_max do we wish to represent?
+    ) const
 {
     boost::math::tools::eps_tolerance<double> tol(30);
     const double I0 = cos_transform(f, omega_min, omega_max, 0);

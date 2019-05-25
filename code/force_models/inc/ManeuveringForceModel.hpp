@@ -32,9 +32,16 @@ class ManeuveringForceModel : public ControllableForceModel
             std::vector<std::string> commands;
             std::map<std::string, std::string> var2expr;
         };
-        ManeuveringForceModel(const Yaml& data, const std::string& body_name, const EnvironmentAndFrames& env);
+        ManeuveringForceModel(
+            const Yaml& data,
+            const std::string& body_name,
+            const EnvironmentAndFrames& env);
         static Yaml parse(const std::string& yaml);
-        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
+        ssc::kinematics::Vector6d get_force(
+            const BodyStates& states,
+            const double t,
+            std::map<std::string,double> commands
+            ) const;
         static std::string model_name();
 
         double get_Tmax() const;

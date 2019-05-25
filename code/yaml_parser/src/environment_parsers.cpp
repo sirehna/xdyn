@@ -141,7 +141,7 @@ void operator >> (const YAML::Node& node, YamlWaveOutput& g)
 }
 
 
-YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
+YamlDiracDirection parse_wave_dirac_direction(const std::string& yaml)
 {
     YamlDiracDirection ret;
     try
@@ -161,7 +161,7 @@ YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
 return ret;
 }
 
-YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml)
+YamlDiracSpectrum parse_wave_dirac_spectrum(const std::string& yaml)
 {
     YamlDiracSpectrum ret;
     try
@@ -182,7 +182,7 @@ YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml)
     return ret;
 }
 
-YamlJonswap          parse_jonswap(const std::string& yaml)
+YamlJonswap parse_jonswap(const std::string& yaml)
 {
     YamlJonswap ret;
     try
@@ -225,7 +225,7 @@ YamlPiersonMoskowitz parse_pierson_moskowitz(const std::string& yaml)
     return ret;
 }
 
-YamlBretschneider    parse_bretschneider(const std::string& yaml)
+YamlBretschneider parse_bretschneider(const std::string& yaml)
 {
     YamlBretschneider ret;
     try
@@ -246,7 +246,7 @@ YamlBretschneider    parse_bretschneider(const std::string& yaml)
     return ret;
 }
 
-YamlCos2s            parse_cos2s(const std::string& yaml)
+YamlCos2s parse_cos2s(const std::string& yaml)
 {
     YamlCos2s ret;
     try
@@ -267,7 +267,7 @@ YamlCos2s            parse_cos2s(const std::string& yaml)
     return ret;
 }
 
-boost::optional<int>                  parse_airy(const std::string& yaml)
+boost::optional<int> parse_airy(const std::string& yaml)
 {
     boost::optional<int> ret;
     try

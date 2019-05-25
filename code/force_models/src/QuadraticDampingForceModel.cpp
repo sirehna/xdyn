@@ -5,13 +5,12 @@
  *      Author: jacquenot
  */
 
-#include <Eigen/Dense>
-#include <ssc/kinematics.hpp>
-#include "Body.hpp"
 #include "QuadraticDampingForceModel.hpp"
-
+#include "Body.hpp"
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
+#include <ssc/kinematics.hpp>
+#include <Eigen/Dense>
 
 std::string QuadraticDampingForceModel::model_name() {return "quadratic damping";}
 

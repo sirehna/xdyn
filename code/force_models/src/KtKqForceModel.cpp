@@ -4,12 +4,11 @@
  *  Created on: Jun 27, 2015
  *      Author: cady
  */
+#include "KtKqForceModel.hpp"
+#include "external_data_structures_parsers.hpp"
+#include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 #include <ssc/interpolation.hpp>
-#include "external_data_structures_parsers.hpp"
-
-#include "KtKqForceModel.hpp"
-#include "yaml.h"
 
 std::string KtKqForceModel::model_name() {return "Kt(J) & Kq(J)";}
 

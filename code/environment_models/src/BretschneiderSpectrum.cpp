@@ -15,9 +15,10 @@
 #define POW2(x) ((x)*(x))
 #define POW4(x) (POW2(POW2(x)))
 
-BretschneiderSpectrum::BretschneiderSpectrum(const double Hs_,   //!< Significant wave height (in meters)
-                                             const double Tp_    //!< Mean wave period (in seconds)
-                                             ) : Hs2(Hs_*Hs_), Tp(Tp_), omega0(2.*PI)
+BretschneiderSpectrum::BretschneiderSpectrum(
+    const double Hs_,   //!< Significant wave height (in meters)
+    const double Tp_    //!< Mean wave period (in seconds)
+    ) : Hs2(Hs_*Hs_), Tp(Tp_), omega0(2.*PI)
 {
     if (Hs_<0)
     {

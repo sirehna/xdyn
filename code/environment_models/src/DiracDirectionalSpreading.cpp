@@ -10,7 +10,8 @@
 #include <cmath>
 
 
-DiracDirectionalSpreading::DiracDirectionalSpreading(const double psi0_) : WaveDirectionalSpreading(psi0_)
+DiracDirectionalSpreading::DiracDirectionalSpreading(
+    const double psi0_) : WaveDirectionalSpreading(psi0_)
 {
 }
 

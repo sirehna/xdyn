@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "EnvironmentAndFrames.hpp"
 #include "GravityForceModel.hpp"
+#include "EnvironmentAndFrames.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "Body.hpp"
 

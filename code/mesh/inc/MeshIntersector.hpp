@@ -1,12 +1,10 @@
 #ifndef MESH_INTERSECTOR_HPP
 #define MESH_INTERSECTOR_HPP
 
-#include <set>
-
-#include <ssc/kinematics.hpp>
-
 #include "CenterOfMass.hpp"
 #include "Mesh.hpp"
+#include <ssc/kinematics.hpp>
+#include <set>
 
 class FacetIterator
 {

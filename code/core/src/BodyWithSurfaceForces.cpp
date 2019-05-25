@@ -9,16 +9,24 @@
 #include "EnvironmentAndFrames.hpp"
 #include "SurfaceElevationInterface.hpp"
 
-BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i, const BlockedDOF& blocked_states_) : Body(i, blocked_states_)
+BodyWithSurfaceForces::BodyWithSurfaceForces(
+    const size_t i,
+    const BlockedDOF& blocked_states_) :
+        Body(i, blocked_states_)
 {
 }
 
-BodyWithSurfaceForces::BodyWithSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : Body(s, i, blocked_states_)
+BodyWithSurfaceForces::BodyWithSurfaceForces(
+    const BodyStates& s,
+    const size_t i,
+    const BlockedDOF& blocked_states_) :
+        Body(s, i, blocked_states_)
 {
 }
 
-void BodyWithSurfaceForces::update_intersection_with_free_surface(const EnvironmentAndFrames& env,
-                                    const double t)
+void BodyWithSurfaceForces::update_intersection_with_free_surface(
+    const EnvironmentAndFrames& env,
+    const double t)
 {
     if (env.w.use_count())
     {

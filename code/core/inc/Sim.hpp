@@ -8,9 +8,6 @@
 #ifndef SIM_HPP_
 #define SIM_HPP_
 
-#include <vector>
-#include <ssc/data_source.hpp>
-#include <ssc/kinematics.hpp>
 #include "Body.hpp"
 #include "StateMacros.hpp"
 #include "EnvironmentAndFrames.hpp"
@@ -18,6 +15,11 @@
 #include "ControllableForceModel.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include "State.hpp"
+#include <ssc/data_source.hpp>
+#include <ssc/kinematics.hpp>
+#include <map>
+#include <string>
+#include <vector>
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
@@ -48,8 +50,9 @@ class Sim
           *           the z coordinate being the wave height (in meters)
           *  \snippet simulator/unit_tests/src/SimTest.cpp SimTest get_waves_example
           */
-        ssc::kinematics::PointMatrix get_waves(const double t            //!< Current instant
-                                              ) const;
+        ssc::kinematics::PointMatrix get_waves(
+            const double t            //!< Current instant
+            ) const;
 
         StateType state;
 
@@ -65,15 +68,19 @@ class Sim
 
         void reset_history();
     private:
-        ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);
+        ssc::kinematics::UnsafeWrench sum_of_forces(
+            const StateType& x,
+            const BodyPtr& body,
+            const double t);
 
         /**  \brief Make sure quaternions can be converted to Euler angles
           *  \details Normalization takes place at each time step, which is not
           *  ideal because it means the model does not see the state values set
           *  by the stepper.
           */
-        StateType normalize_quaternions(const StateType& all_states
-                                       ) const;
+        StateType normalize_quaternions(
+            const StateType& all_states
+            ) const;
 
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;

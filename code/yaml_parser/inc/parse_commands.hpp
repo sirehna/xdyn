@@ -14,10 +14,9 @@
 /**  \brief Parses the commands for use by controlled forces.
   *  \snippet simulator_yaml_parser/unit_tests/src/parse_commandsTest.cpp parse_commandsTest example
   */
-std::vector<YamlCommands> parse_command_yaml(const std::string& yaml //!< YAML data
-                                            );
-
-
+std::vector<YamlCommands> parse_command_yaml(
+    const std::string& yaml //!< YAML data
+    );
 
 void operator >> (const YAML::Node& node, YamlCommands& c);
 

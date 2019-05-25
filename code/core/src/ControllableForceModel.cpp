@@ -17,14 +17,19 @@
 #include <cmath>
 #define PI M_PI
 
-ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-    env(env_),
-    commands(commands_),
-    name(name_),
-    body_name(body_name_),
-    position_of_frame(internal_frame),
-    latest_force_in_body_frame(),
-    from_internal_frame_to_a_known_frame(make_transform(position_of_frame, name, env.rot))
+ControllableForceModel::ControllableForceModel(
+    const std::string& name_,
+    const std::vector<std::string>& commands_,
+    const YamlPosition& internal_frame,
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env_) :
+        env(env_),
+        commands(commands_),
+        name(name_),
+        body_name(body_name_),
+        position_of_frame(internal_frame),
+        latest_force_in_body_frame(),
+        from_internal_frame_to_a_known_frame(make_transform(position_of_frame, name, env.rot))
 {
     env.k->add(from_internal_frame_to_a_known_frame);
 }
@@ -38,7 +43,10 @@ std::string ControllableForceModel::get_name() const
     return name;
 }
 
-std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_source::DataSource& command_listener, const double t) const
+std::map<std::string,double> ControllableForceModel::get_commands(
+    ssc::data_source::DataSource& command_listener,
+    const double t
+    ) const
 {
     std::map<std::string,double> ret;
     for (auto that_command = commands.begin() ; that_command != commands.end() ; ++that_command)
@@ -50,18 +58,22 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
     return ret;
 }
 
-ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener, const ssc::kinematics::KinematicsPtr& k, const ssc::kinematics::Point& G)
+ssc::kinematics::Wrench ControllableForceModel::operator()(
+    const BodyStates& states,
+    const double t,
+    ssc::data_source::DataSource& command_listener,
+    const ssc::kinematics::KinematicsPtr& k,
+    const ssc::kinematics::Point& G)
 {
-    const auto F = get_force(states,t,get_commands(command_listener,t));
+    const auto F = get_force(states, t, get_commands(command_listener, t));
     const Eigen::Vector3d force(F(0),F(1),F(2));
     const Eigen::Vector3d torque(F(3),F(4),F(5));
     const auto tau_in_internal_frame = ssc::kinematics::UnsafeWrench(ssc::kinematics::Point(name, 0, 0, 0), force, torque);
-    ssc::kinematics::Transform T = k->get(body_name, name);
+    const ssc::kinematics::Transform T = k->get(body_name, name);
 
     // Origin of the internal frame is P
     // G is the point (not the origin) of the body frame where the forces are summed
     // Ob is the origin of the body frame
-
 
     const auto rot_from_internal_frame_to_body_frame = T.get_rot();
     const auto OP = T.get_point().v;
@@ -76,7 +88,11 @@ ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& sta
     return tau_in_body_frame_at_G;
 }
 
-double ControllableForceModel::get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const
+double ControllableForceModel::get_command(
+    const std::string& command_name,
+    ssc::data_source::DataSource& command_listener,
+    const double t
+    ) const
 {
     double ret = 0;
     try
@@ -88,15 +104,19 @@ double ControllableForceModel::get_command(const std::string& command_name, ssc:
     }
     catch (const ssc::data_source::DataSourceException& e)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "Unable to retrieve command '" << command_name << "' for '" << name << "': " << e.get_message()
-                << " Check that the YAML file containing the commands was supplied to the simulator & that the command exists in that file."
-                );
+        THROW(__PRETTY_FUNCTION__,
+              InvalidInputException,
+              "Unable to retrieve command '" << command_name << "' for '" << name << "': " << e.get_message()
+              << " Check that the YAML file containing the commands was supplied to the simulator & that the command exists in that file."
+             );
     }
     return ret;
 }
 
-void ControllableForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, const ssc::kinematics::Point& G) const
+void ControllableForceModel::feed(
+    Observer& observer,
+    ssc::kinematics::KinematicsPtr& k,
+    const ssc::kinematics::Point& G) const
 {
     // G is the point in which 'latest_force_in_body_frame' is expressed (sum of forces)
     // O is the origin of the NED frame

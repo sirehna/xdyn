@@ -31,8 +31,9 @@ class WaveSpectralDensity
           *  \returns Amplitude of the power spectrum (in m^2 s)
           *  \snippet environment_models/unit_tests/src/WaveSpectrumTest.cpp WaveSpectrumTest get_example
           */
-        virtual double operator()(const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
-                          ) const= 0;
+        virtual double operator()(
+            const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
+            ) const= 0;
 
         virtual WaveSpectralDensity* clone() const = 0;
 
@@ -43,10 +44,11 @@ class WaveSpectralDensity
           *         and omega_max (also included)
           *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
           */
-        virtual std::vector<double> get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
-                                                            const double omega_max, //!< Minimum angular frequency (in rad/s)
-                                                            const size_t n          //!< Number of angular frequencies to return
-                                                            ) const;
+        virtual std::vector<double> get_angular_frequencies(
+            const double omega_min, //!< Minimum angular frequency (in rad/s)
+            const double omega_max, //!< Maximum angular frequency (in rad/s)
+            const size_t n          //!< Number of angular frequencies to return
+            ) const;
 
         /**  \brief Compute wave number, in infinite depth.
           *  \returns \f$\frac{omega^2}{g}\f$
@@ -56,8 +58,9 @@ class WaveSpectralDensity
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 107
           *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
           */
-        double get_wave_number(const double omega //!< Angular frequency (in radians)
-                             ) const;
+        double get_wave_number(
+            const double omega //!< Angular frequency (in radians)
+            ) const;
 
         /**  \brief Compute wave number, in finite depth.
           *  \returns Solution of \f$omega^2=g\cdot k\cdot \tanh{kh}$\f
@@ -67,9 +70,10 @@ class WaveSpectralDensity
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.18, page 107
           *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
           */
-        double get_wave_number(const double omega, //!< Angular frequency (in radians)
-                               const double h      //!< Depth (in meters)
-                             ) const;
+        double get_wave_number(
+            const double omega, //!< Angular frequency (in radians)
+            const double h      //!< Depth (in meters)
+            ) const;
 };
 
 #endif /* WAVESPECTRALDENSITY_HPP_ */

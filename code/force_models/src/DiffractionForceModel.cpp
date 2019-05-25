@@ -30,8 +30,14 @@ HDBParser hdb_from_file(const std::string& filename)
     return HDBParser(ssc::text_file_reader::TextFileReader(filename).get_contents());
 }
 
-void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
-void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound)
+void check_all_omegas_are_within_bounds(
+    const double min_bound,
+    const std::vector<std::vector<double> >& vector_to_check,
+    const double max_bound);
+void check_all_omegas_are_within_bounds(
+    const double min_bound,
+    const std::vector<std::vector<double> >& vector_to_check,
+    const double max_bound)
 {
     const double eps = 0.01; // We don't care if we're above or below the bounds by 0.01 s: those are wave frequencies so not very precise.
     for (auto t:vector_to_check)
@@ -40,7 +46,9 @@ void check_all_omegas_are_within_bounds(const double min_bound, const std::vecto
         {
             if (Tp<(min_bound-eps))
             {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "HDB used by DiffractionForceModel only defines the RAO for wave period Tp within [" << min_bound << "," << max_bound << "]"
+                THROW(__PRETTY_FUNCTION__,
+                      InvalidInputException,
+                      "HDB used by DiffractionForceModel only defines the RAO for wave period Tp within [" << min_bound << "," << max_bound << "]"
                      << " s, but wave spectrum discretization contains Tp = " << Tp
                      << " s which is below the min bound by " << min_bound-Tp << " s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file ")
                 ;
@@ -116,7 +124,6 @@ class DiffractionForceModel::Impl
             {
                 if (not(periods.empty()))
                 {
-
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
                         rao_modules[k].resize(periods.size());
@@ -132,8 +139,8 @@ class DiffractionForceModel::Impl
                         for (size_t j = 0 ; j < periods[i].size() ; ++j)
                         {
                             const double beta = psi - psis.at(i).at(j);
-                                rao_modules[k][i][j] = rao.interpolate_module(k, periods[i][j], beta);
-                                rao_phases[k][i][j] = -rao.interpolate_phase(k, periods[i][j], beta);
+                            rao_modules[k][i][j] = rao.interpolate_module(k, periods[i][j], beta);
+                            rao_phases[k][i][j] = -rao.interpolate_phase(k, periods[i][j], beta);
                         }
                     }
 
@@ -181,13 +188,22 @@ class DiffractionForceModel::Impl
 
 };
 
-DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env)
-: ForceModel("diffraction", body_name_), pimpl(new Impl(data,env,hdb_from_file(data.hdb_filename), body_name_))
+DiffractionForceModel::DiffractionForceModel(
+    const YamlDiffraction& data,
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env):
+        ForceModel("diffraction", body_name_),
+        pimpl(new Impl(data, env, hdb_from_file(data.hdb_filename), body_name_))
 {
 }
 
-DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents)
- : ForceModel("diffraction", body_name_), pimpl(new Impl(data,env,HDBParser(hdb_file_contents),body_name_))
+DiffractionForceModel::DiffractionForceModel(
+    const Input& data,
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env,
+    const std::string& hdb_file_contents):
+        ForceModel("diffraction", body_name_),
+        pimpl(new Impl(data, env, HDBParser(hdb_file_contents), body_name_))
 {
 }
 

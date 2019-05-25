@@ -6,13 +6,11 @@
  */
 
 
-#include <fstream>
-
-#include <boost/filesystem.hpp> // For boost::filesystem::unique_path
-
+#include "BlockedDOFTest.hpp"
 #include "BlockedDOF.hpp"
 #include "InvalidInputException.hpp"
-#include "BlockedDOFTest.hpp"
+#include <boost/filesystem.hpp> // For boost::filesystem::unique_path
+#include <fstream>
 
 BlockedDOFTest::BlockedDOFTest() : a(ssc::random_data_generator::DataGenerator(854512))
 {

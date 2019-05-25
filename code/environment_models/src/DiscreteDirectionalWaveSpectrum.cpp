@@ -8,29 +8,29 @@
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 
 FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
-                    a(),
-                    omega(),
-                    psi(),
-                    cos_psi(),
-                    sin_psi(),
-                    k(),
-                    phase(),
-                    pdyn_factor(),
-                    pdyn_factor_sh()
+    a(),
+    omega(),
+    psi(),
+    cos_psi(),
+    sin_psi(),
+    k(),
+    phase(),
+    pdyn_factor(),
+    pdyn_factor_sh()
 {
 }
 
 DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :
-                    Si(),
-                    Dj(),
-                    omega(),
-                    psi(),
-                    k(),
-                    phase(),
-                    domega(1),
-                    dpsi(1),
-                    pdyn_factor(),
-                    pdyn_factor_sh()
+    Si(),
+    Dj(),
+    omega(),
+    psi(),
+    k(),
+    phase(),
+    domega(1),
+    dpsi(1),
+    pdyn_factor(),
+    pdyn_factor_sh()
 {
 }
 

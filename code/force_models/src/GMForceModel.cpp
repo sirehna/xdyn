@@ -5,10 +5,8 @@
  *      Author: cady
  */
 
-#include "calculate_gz.hpp"
 #include "GMForceModel.hpp"
-#include "yaml.h"
-#include <ssc/yaml_parser.hpp>
+#include "calculate_gz.hpp"
 #include "environment_parsers.hpp"
 #include "Body.hpp"
 #include "ExactHydrostaticForceModel.hpp"
@@ -17,6 +15,8 @@
 #include "Observer.hpp"
 #include "InvalidInputException.hpp"
 #include "BodyWithSurfaceForces.hpp"
+#include "yaml.h"
+#include <ssc/yaml_parser.hpp>
 
 std::string GMForceModel::model_name(){return "GM";}
 

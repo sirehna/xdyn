@@ -31,9 +31,10 @@ class PiersonMoskowitzSpectrum : public JonswapSpectrum
           *  \brief PiersonMoskowitzSpectrum only constructor
           *  \details Default constructor was disabled by making it private & providing no implementation
           */
-        PiersonMoskowitzSpectrum(const double Hs,   //!< Significant wave height (in meters)
-                                 const double Tp    //!< Mean wave period (in seconds));
-                                );
+        PiersonMoskowitzSpectrum(
+              const double Hs,   //!< Significant wave height (in meters)
+              const double Tp    //!< Mean wave period (in seconds));
+              );
 
         WaveSpectralDensity* clone() const;
 

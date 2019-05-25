@@ -14,12 +14,13 @@
 #include <ssc/kinematics.hpp>
 using namespace ssc::kinematics;
 
-EnvironmentAndFrames::EnvironmentAndFrames() : w(),
-                                               k(KinematicsPtr(new Kinematics())),
-                                               rho(0),
-                                               nu(0),
-                                               g(0),
-                                               rot()
+EnvironmentAndFrames::EnvironmentAndFrames() :
+    w(),
+    k(KinematicsPtr(new Kinematics())),
+    rho(0),
+    nu(0),
+    g(0),
+    rot()
 {
     if (rho<0.0)
     {
@@ -36,8 +37,10 @@ EnvironmentAndFrames::EnvironmentAndFrames() : w(),
 }
 
 void EnvironmentAndFrames::feed(
-        Observer& observer, double t,
-        const std::vector<BodyPtr>& bodies, const StateType& state) const
+    Observer& observer, double t,
+    const std::vector<BodyPtr>& bodies,
+    const StateType& state
+    ) const
 {
     try
     {

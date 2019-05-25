@@ -13,6 +13,8 @@
 
 #include "WaveSpectralDensity.hpp"
 
+typedef TR1(shared_ptr)<WaveSpectralDensity> WaveSpectralDensityPtr;
+
 /** \brief Class returned when summing two WaveSpectralDensity objects
  *  \details
  *  \addtogroup waves
@@ -29,8 +31,9 @@ class SumOfWaveSpectralDensities : public WaveSpectralDensity
         SumOfWaveSpectralDensities(const WaveSpectralDensity& w);
         SumOfWaveSpectralDensities(const WaveSpectralDensity& w1, const WaveSpectralDensity& w2);
         SumOfWaveSpectralDensities(const std::vector<WaveSpectralDensity>& ws);
-        double operator()(const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
-                                  ) const;
+        double operator()(
+            const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
+            ) const;
 
         WaveSpectralDensity* clone() const;
 
@@ -38,13 +41,14 @@ class SumOfWaveSpectralDensities : public WaveSpectralDensity
           *         and omega_max (also included)
           *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
           */
-        std::vector<double> get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
-                                                    const double omega_max, //!< Minimum angular frequency (in rad/s)
-                                                    const size_t n          //!< Number of angular frequencies to return
-                                                    ) const;
+        std::vector<double> get_angular_frequencies(
+            const double omega_min, //!< Minimum angular frequency (in rad/s)
+            const double omega_max, //!< Maximum angular frequency (in rad/s)
+            const size_t n          //!< Number of angular frequencies to return
+            ) const;
 
     private:
-        std::vector<TR1(shared_ptr)<WaveSpectralDensity> > terms;
+        std::vector<WaveSpectralDensityPtr> terms;
 };
 
 #endif /* SUMOFWAVESPECTRALDENSITIES_HPP_ */

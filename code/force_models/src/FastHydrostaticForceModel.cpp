@@ -1,12 +1,12 @@
 /*
- * HydrostaticForceModel.cpp
+ * FastHydrostaticForceModel.cpp
  *
  *  Created on: Jun 16, 2014
  *      Author: cady
  */
 
-#include "Body.hpp"
 #include "FastHydrostaticForceModel.hpp"
+#include "Body.hpp"
 #include "calculate_gz.hpp"
 #include "mesh_manipulations.hpp"
 #include "Observer.hpp"

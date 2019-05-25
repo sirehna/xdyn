@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
+#include "ManeuveringForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "external_data_structures_parsers.hpp"
-#include "ManeuveringForceModel.hpp"
 #include "maneuvering_compiler.hpp"
 #include "maneuvering_DataSource_builder.hpp"
 #include "yaml.h"
@@ -83,7 +83,11 @@ ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string
     maneuvering::build_ds(*ds, m);
 }
 
-ssc::kinematics::Vector6d ManeuveringForceModel::get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
+ssc::kinematics::Vector6d ManeuveringForceModel::get_force(
+    const BodyStates& states,
+    const double t,
+    std::map<std::string,double> commands
+    ) const
 {
     ds->check_in(__PRETTY_FUNCTION__);
     ds->set("states", states);

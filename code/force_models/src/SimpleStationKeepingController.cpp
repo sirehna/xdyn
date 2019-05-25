@@ -30,7 +30,8 @@ SimpleStationKeepingController::Yaml::Yaml() :
 {
 }
 
-SimpleStationKeepingController::Yaml SimpleStationKeepingController::parse(const std::string& yaml)
+SimpleStationKeepingController::Yaml SimpleStationKeepingController::parse(
+    const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
@@ -47,7 +48,10 @@ SimpleStationKeepingController::Yaml SimpleStationKeepingController::parse(const
     return ret;
 }
 
-SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+SimpleStationKeepingController::SimpleStationKeepingController(
+    const Yaml& input,
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env_) :
         ControllableForceModel(input.name, {"x_co", "y_co", "psi_co"}, YamlPosition(YamlCoordinates(),YamlAngle(), body_name_), body_name_, env_),
         ksi_x(input.ksi_x),
         omega_x(2*PI/input.T_x),
@@ -60,7 +64,10 @@ SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input
 
 }
 
-ssc::kinematics::Vector6d SimpleStationKeepingController::get_force(const BodyStates& states, const double , std::map<std::string,double> commands) const
+ssc::kinematics::Vector6d SimpleStationKeepingController::get_force(
+    const BodyStates& states,
+    const double,
+    std::map<std::string,double> commands) const
 {
     ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
 

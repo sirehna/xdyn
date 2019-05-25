@@ -1,10 +1,10 @@
 #ifndef MESHBUILDER_HPP
 #define MESHBUILDER_HPP
 
-#include <map>
 #include "GeometricTypes3d.hpp"
 #include "MeshNumeric.hpp"
 #include "Mesh.hpp"
+#include <map>
 
 struct Vector3dComparator
 {

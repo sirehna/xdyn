@@ -11,15 +11,17 @@
 #include <ssc/macros.hpp>
 #include <cmath> // For isnan
 
-Stretching::Stretching(const YamlStretching& input //!< Usually read from YAML
-                  )
+Stretching::Stretching(
+    const YamlStretching& input //!< Usually read from YAML
+    )
 : delta(input.delta)
 , h(input.h)
 {}
 
-double Stretching::rescaled_z(const double z, //!< z value we wish to rescale (in meters)
-                              const double ksi //!< Wave height (in meters), z being oriented downwards
-                             ) const
+double Stretching::rescaled_z(
+    const double z, //!< z value we wish to rescale (in meters)
+    const double ksi //!< Wave height (in meters), z being oriented downwards
+    ) const
 {
     if (std::isnan(z))
     {

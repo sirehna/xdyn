@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "Body.hpp"
 #include "FroudeKrylovForceModel.hpp"
+#include "Body.hpp"
 #include "SurfaceElevationInterface.hpp"
 
 std::string FroudeKrylovForceModel::model_name() {return "non-linear Froude-Krylov";}

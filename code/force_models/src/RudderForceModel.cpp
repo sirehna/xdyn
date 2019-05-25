@@ -23,52 +23,58 @@
 std::string RudderForceModel::model_name() {return "propeller+rudder";}
 
 RudderForceModel::Yaml::Yaml() :
-                Ar(0),
-                b(0),
-                effective_aspect_ratio_factor(0),
-                lift_coeff(0),
-                drag_coeff(0),
-                position_of_the_rudder_frame_in_the_body_frame()
+    Ar(0),
+    b(0),
+    effective_aspect_ratio_factor(0),
+    lift_coeff(0),
+    drag_coeff(0),
+    position_of_the_rudder_frame_in_the_body_frame()
 {
 }
 
 RudderForceModel::Yaml::Yaml(const WageningenControlledForceModel::Yaml& yaml) :
-                        WageningenControlledForceModel::Yaml(yaml),
-                        Ar(0),
-                        b(0),
-                        effective_aspect_ratio_factor(0),
-                        lift_coeff(0),
-                        drag_coeff(0),
-                        position_of_the_rudder_frame_in_the_body_frame()
+    WageningenControlledForceModel::Yaml(yaml),
+    Ar(0),
+    b(0),
+    effective_aspect_ratio_factor(0),
+    lift_coeff(0),
+    drag_coeff(0),
+    position_of_the_rudder_frame_in_the_body_frame()
 {
 }
 
-RudderForceModel::RudderModel::RudderModel(const Yaml& parameters_, const double rho_, const double nu_) :
-                                           parameters(parameters_),
-                                           chord(parameters.Ar/parameters.b),
-                                           lambda(parameters.effective_aspect_ratio_factor * parameters.b*parameters.b / parameters.Ar),
-                                           D(parameters_.diameter),
-                                           Kr(),
-                                           rho(rho_),
-                                           nu(nu_),
-                                           translation_from_rudder_to_propeller(parameters.position_of_propeller_frame.coordinates.x - parameters.position_of_the_rudder_frame_in_the_body_frame.x,
-                                                                                parameters.position_of_propeller_frame.coordinates.y - parameters.position_of_the_rudder_frame_in_the_body_frame.y,
-                                                                                parameters.position_of_propeller_frame.coordinates.z - parameters.position_of_the_rudder_frame_in_the_body_frame.z)
+RudderForceModel::RudderModel::RudderModel(
+    const Yaml& parameters_,
+    const double rho_,
+    const double nu_) :
+        parameters(parameters_),
+        chord(parameters.Ar/parameters.b),
+        lambda(parameters.effective_aspect_ratio_factor * parameters.b*parameters.b / parameters.Ar),
+        D(parameters_.diameter),
+        Kr(),
+        rho(rho_),
+        nu(nu_),
+        translation_from_rudder_to_propeller(
+            parameters.position_of_propeller_frame.coordinates.x - parameters.position_of_the_rudder_frame_in_the_body_frame.x,
+            parameters.position_of_propeller_frame.coordinates.y - parameters.position_of_the_rudder_frame_in_the_body_frame.y,
+            parameters.position_of_propeller_frame.coordinates.z - parameters.position_of_the_rudder_frame_in_the_body_frame.z)
 {
     const double distance_between_rudder_and_screw = std::abs(parameters_.position_of_propeller_frame.coordinates.x - parameters_.position_of_the_rudder_frame_in_the_body_frame.x);
     Kr = 0.5+0.5/(1+0.15/std::abs(distance_between_rudder_and_screw/parameters_.diameter));
 }
 
-double RudderForceModel::RudderModel::get_angle_of_attack(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
-                                                          const double fluid_angle   //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
-                                                          ) const
+double RudderForceModel::RudderModel::get_angle_of_attack(
+    const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
+    const double fluid_angle   //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+    ) const
 {
     return rudder_angle-fluid_angle;
 }
 
-double RudderForceModel::RudderModel::get_Cd(const double Vs, //!< Norm of the speed of the ship relative to the fluid
-                                             const double Cl  //!< Rudder lift coefficient (non-dimensional)
-                                             ) const
+double RudderForceModel::RudderModel::get_Cd(
+    const double Vs, //!< Norm of the speed of the ship relative to the fluid
+    const double Cl  //!< Rudder lift coefficient (non-dimensional)
+    ) const
 {
     // Reynolds number of the rudder (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 78 eq. 1.2.12)
     const double Rn = Vs * chord / nu;
@@ -80,34 +86,39 @@ double RudderForceModel::RudderModel::get_Cd(const double Vs, //!< Norm of the s
     return 1.1 * Cl*Cl / (PI * lambda) + Cd0;
 }
 
-double RudderForceModel::RudderModel::get_Cl(const double alpha_wake //!< Angle of rudder wrt the fluid (in radian)
-                                            ) const
+double RudderForceModel::RudderModel::get_Cl(
+    const double alpha_wake //!< Angle of rudder wrt the fluid (in radian)
+    ) const
 {
     return 2 * PI * lambda * (lambda + 1) / (lambda + 2) / (lambda + 2) * sin(alpha_wake);
 }
 
-double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the speed of the ship relative to the fluid
-                                               const double Cl,//!< Rudder lift coefficient (non-dimensional)
-                                               const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
-                                               const double area   //!< Rudder area (in or outside wake) in m^2
-                                               ) const
+double RudderForceModel::RudderModel::get_lift(
+    const double Vs,//!< Norm of the speed of the ship relative to the fluid
+    const double Cl,//!< Rudder lift coefficient (non-dimensional)
+    const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
+    const double area   //!< Rudder area (in or outside wake) in m^2
+    ) const
 {
     return 0.5 * rho * area * Vs*Vs * Cl * cos(alpha) * parameters.lift_coeff;
 }
 
-double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the speed of the ship relative to the fluid
-                                               const double Cl,//!< Rudder lift coefficient (non-dimensional)
-                                               const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
-                                               const double area   //!< Rudder area (in or outside wake) in m^2
-                                               ) const
+double RudderForceModel::RudderModel::get_drag(
+    const double Vs,    //!< Norm of the speed of the ship relative to the fluid
+    const double Cl,    //!< Rudder lift coefficient (non-dimensional)
+    const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
+    const double area   //!< Rudder area (in or outside wake) in m^2
+    ) const
 {
     return 0.5 * rho * area * Vs*Vs * Cl * parameters.drag_coeff;
 }
 
-ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double lift, //!< Norm of the lift (in N)
-                                                                   const double drag, //!< Norm of the drag (in N)
-                                                                   const double angle //!< Angle between the fluid & the rudder (in radian)
-                                    ) const
+ssc::kinematics::Vector6d
+RudderForceModel::RudderModel::get_force(
+        const double lift, //!< Norm of the lift (in N)
+        const double drag, //!< Norm of the drag (in N)
+        const double angle //!< Angle between the fluid & the rudder (in radian)
+        ) const
 {
     ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
     const Eigen::Vector3d f(- lift * sin (angle) - drag * cos (angle),
@@ -124,11 +135,13 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_force(const double 
     return ret;
 }
 
-RudderForceModel::InOutWake<ssc::kinematics::Point> RudderForceModel::RudderModel::get_vs(const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
-                                                                                          const double Va,  //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
-                                                                                          const double v,   //!< Projection of the ship speed (relative to the current) on the Y-axis of the ship's reference frame (m/s)
-                                                                                          const double T    //!< Propeller thrust (in N)
-                                                                                          ) const
+RudderForceModel::InOutWake<ssc::kinematics::Point>
+RudderForceModel::RudderModel::get_vs(
+        const double CTh, //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+        const double Va,  //!< Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
+        const double v,   //!< Projection of the ship speed (relative to the current) on the Y-axis of the ship's reference frame (m/s)
+        const double T    //!< Propeller thrust (in N)
+        ) const
 {
     RudderForceModel::InOutWake<ssc::kinematics::Point> Vs;
     // Reduction factor (cf. "Marine rudders and Control Surfaces", p.371, eq 11.1)
@@ -143,8 +156,10 @@ RudderForceModel::InOutWake<ssc::kinematics::Point> RudderForceModel::RudderMode
     return Vs;
 }
 
-RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_fluid_angle(const RudderForceModel::InOutWake<ssc::kinematics::Point>& Vs   //!< Ship speed relative to the fluid, inside & outside wake
-                                              ) const
+RudderForceModel::InOutWake<double>
+RudderForceModel::RudderModel::get_fluid_angle(
+        const RudderForceModel::InOutWake<ssc::kinematics::Point>& Vs   //!< Ship speed relative to the fluid, inside & outside wake
+        ) const
 {
     RudderForceModel::InOutWake<double> angle;
     angle.in_wake      = atan2(Vs.in_wake.y(), Vs.in_wake.x());
@@ -152,11 +167,13 @@ RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_fluid_ang
     return angle;
 }
 
-RudderForceModel::InOutWake<ssc::kinematics::Vector6d> RudderForceModel::RudderModel::get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
-                                                                                                 const RudderForceModel::InOutWake<double>& fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
-                                                                                                 const RudderForceModel::InOutWake<ssc::kinematics::Point>& Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
-                                                                                                 const RudderForceModel::InOutWake<double>& area          //!< Rudder area (in or outside wake) in m^2
-                                                                    ) const
+RudderForceModel::InOutWake<ssc::kinematics::Vector6d>
+RudderForceModel::RudderModel::get_wrench(
+        const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
+        const RudderForceModel::InOutWake<double>& fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+        const RudderForceModel::InOutWake<ssc::kinematics::Point>& Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
+        const RudderForceModel::InOutWake<double>& area          //!< Rudder area (in or outside wake) in m^2
+        ) const
 {
     RudderForceModel::InOutWake<ssc::kinematics::Vector6d> ret;
     ret.in_wake = get_wrench(rudder_angle, fluid_angle.in_wake, (double)Vs.in_wake.v.norm(), area.in_wake);
@@ -164,11 +181,13 @@ RudderForceModel::InOutWake<ssc::kinematics::Vector6d> RudderForceModel::RudderM
     return ret;
 }
 
-ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
-                                                                    const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
-                                                                    const double Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
-                                                                    const double area          //!< Rudder area (in or outside wake) in m^2
-                                                             ) const
+ssc::kinematics::Vector6d
+RudderForceModel::RudderModel::get_wrench(
+        const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
+        const double fluid_angle,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+        const double Vs,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
+        const double area          //!< Rudder area (in or outside wake) in m^2
+    ) const
 {
     const double alpha = get_angle_of_attack(rudder_angle, fluid_angle);
     const double Cl = get_Cl(alpha);
@@ -178,8 +197,10 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double
     return get_force(lift, drag, fluid_angle);
 }
 
-RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_Ar(const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
-                                                          ) const
+RudderForceModel::InOutWake<double>
+RudderForceModel::RudderModel::get_Ar(
+    const double CTh //!< Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+    ) const
 {
     InOutWake<double> ar;
     // Jet speed coefficient, "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 96 eq. 1.2.44
@@ -190,20 +211,28 @@ RudderForceModel::InOutWake<double> RudderForceModel::RudderModel::get_Ar(const 
     return ar;
 }
 
-RudderForceModel::RudderForceModel(const Yaml& input_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(input_.name,{"rpm","P/D","beta"},input_.position_of_propeller_frame, body_name_, env_),
+RudderForceModel::RudderForceModel(
+    const Yaml& input_,
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env_):
+        ControllableForceModel(input_.name, {"rpm", "P/D", "beta"}, input_.position_of_propeller_frame, body_name_, env_),
         propulsion(WageningenControlledForceModel(input_, body_name_, env)),
         rudder_position(ssc::kinematics::Point(make_point(input_.position_of_propeller_frame.coordinates, input_.position_of_propeller_frame.frame))),
         model(input_, env_.rho, env_.nu),
-        translation_from_rudder_to_propeller(rudder_position.get_frame(),
-                                             input_.position_of_propeller_frame.coordinates.x - rudder_position.x(),
-                                             input_.position_of_propeller_frame.coordinates.y - rudder_position.y(),
-                                             input_.position_of_propeller_frame.coordinates.z - rudder_position.z()),
+        translation_from_rudder_to_propeller(
+            rudder_position.get_frame(),
+            input_.position_of_propeller_frame.coordinates.x - rudder_position.x(),
+            input_.position_of_propeller_frame.coordinates.y - rudder_position.y(),
+            input_.position_of_propeller_frame.coordinates.z - rudder_position.z()),
         w(input_.wake_coefficient)
 {
 }
 
-ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(const BodyStates& states, const double t, std::map<std::string,double> commands, const double T) const
+ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(
+    const BodyStates& states,
+    const double t,
+    std::map<std::string, double> commands,
+    const double T) const
 {
     const double Va = states.u()*(1-w); // Cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag p. 96, eq. 1.2.41
     const double DVa = model.get_D()*Va;
@@ -218,7 +247,12 @@ ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(const BodyStates& s
     return w.in_wake + w.outside_wake;
 }
 
-ssc::kinematics::Vector6d RudderForceModel::get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
+ssc::kinematics::Vector6d
+RudderForceModel::get_force(
+    const BodyStates& states,
+    const double t,
+    std::map<std::string,double> commands
+    ) const
 {
     const ssc::kinematics::Vector6d propeller_force = propulsion.get_force(states,t,commands);
     const ssc::kinematics::Vector6d rudder_force = get_rudder_force(states, t, commands, (double)propeller_force.norm());
@@ -230,7 +264,10 @@ ssc::kinematics::Vector6d RudderForceModel::get_force(const BodyStates& states, 
     return Ftot.to_vector();
 }
 
-ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states, const double t) const
+ssc::kinematics::Point RudderForceModel::get_ship_speed(
+    const BodyStates& states,
+    const double t
+    ) const
 {
     const auto Tbody2ned = env.k->get(rudder_position.get_frame(),"NED");
     const ssc::kinematics::Point P_ = Tbody2ned*rudder_position;

@@ -28,10 +28,11 @@ class JonswapSpectrum : public WaveSpectralDensity
           *  \brief JonswapSpectrum's only constructor
           *  \details Default constructor was disabled by making it private & providing no implementation
           */
-        JonswapSpectrum(const double Hs,   //!< Significant wave height (in meters)
-                        const double Tp,   //!< Mean wave period (in seconds)
-                        const double gamma //!< Non-dimensional peak shape parameter
-                        );
+        JonswapSpectrum(
+            const double Hs,   //!< Significant wave height (in meters)
+            const double Tp,   //!< Mean wave period (in seconds)
+            const double gamma //!< Non-dimensional peak shape parameter
+            );
 
         /**  \author cec
           *  \date Jul 30, 2014, 9:40:33 AM
@@ -39,8 +40,9 @@ class JonswapSpectrum : public WaveSpectralDensity
           *  \returns Amplitude of the power spectrum (in m^2 s)
           *  \snippet environment_models/unit_tests/src/JonswapSpectrumTest.cpp JonswaSpectrumTest example
           */
-        double operator()(const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
-                         ) const;
+        double operator()(
+            const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
+            ) const;
 
         WaveSpectralDensity* clone() const;
 

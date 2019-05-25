@@ -13,6 +13,8 @@
 
 #include "WaveDirectionalSpreading.hpp"
 
+typedef TR1(shared_ptr)<WaveDirectionalSpreading> WaveDirectionalSpreadingPtr;
+
 /** \brief
  *  \details
  *  \addtogroup waves
@@ -25,9 +27,13 @@
 class SumOfWaveDirectionalSpreadings : public WaveDirectionalSpreading
 {
     public:
-        SumOfWaveDirectionalSpreadings(const WaveDirectionalSpreading& s);
-        SumOfWaveDirectionalSpreadings(const WaveDirectionalSpreading& s1, const WaveDirectionalSpreading& s2);
-        SumOfWaveDirectionalSpreadings(const std::vector<WaveDirectionalSpreading>& s);
+        SumOfWaveDirectionalSpreadings(
+            const WaveDirectionalSpreading& s);
+        SumOfWaveDirectionalSpreadings(
+            const WaveDirectionalSpreading& s1,
+            const WaveDirectionalSpreading& s2);
+        SumOfWaveDirectionalSpreadings(
+            const std::vector<WaveDirectionalSpreading>& s);
 
         double operator()(const double psi) const;
         WaveDirectionalSpreading* clone() const;
@@ -35,7 +41,7 @@ class SumOfWaveDirectionalSpreadings : public WaveDirectionalSpreading
 
     private:
         SumOfWaveDirectionalSpreadings(); // Disabled
-        std::vector<TR1(shared_ptr)<WaveDirectionalSpreading> > terms;
+        std::vector<WaveDirectionalSpreadingPtr> terms;
 };
 
 #endif /* SUMOFWAVEDIRECTIONALSPREADINGS_HPP_ */

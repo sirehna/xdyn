@@ -6,8 +6,8 @@
  */
 
 
-#include "ManeuveringInternal.hpp"
 #include "maneuvering_compiler.hpp"
+#include "ManeuveringInternal.hpp"
 #include "maneuvering_grammar.hpp"
 
 using namespace maneuvering;

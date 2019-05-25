@@ -10,16 +10,25 @@
 #include "Sim.hpp"
 #include "SurfaceElevationGrid.hpp"
 
-Observer::Observer(const std::vector<std::string>& data_) : initialized(false), stuff_to_write(data_), serialize(), initialize()
+Observer::Observer(
+    const std::vector<std::string>& data_) :
+        initialized(false),
+        stuff_to_write(data_),
+        serialize(),
+        initialize()
 {
 }
 
-std::function<void()> Observer::get_serializer(const SurfaceElevationGrid& , const DataAddressing& )
+std::function<void()> Observer::get_serializer(
+    const SurfaceElevationGrid&,
+    const DataAddressing&)
 {
     return [](){};
 }
 
-std::function<void()> Observer::get_initializer(const SurfaceElevationGrid& , const DataAddressing& )
+std::function<void()> Observer::get_initializer(
+    const SurfaceElevationGrid&,
+    const DataAddressing&)
 {
     return [](){};
 }
@@ -47,7 +56,9 @@ void Observer::initialize_everything_if_necessary()
             auto initialize_stuff = initialize.find(stuff);
             if (initialize_stuff == initialize.end())
             {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
+                THROW(__PRETTY_FUNCTION__,
+                      InvalidInputException,
+                      "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
             }
             initialize_stuff->second();
             if (i<(n-1)) flush_value_during_initialization();
@@ -68,7 +79,9 @@ void Observer::serialize_everything()
         auto serialize_stuff = serialize.find(stuff);
         if (serialize_stuff == serialize.end())
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
+            THROW(__PRETTY_FUNCTION__,
+                  InvalidInputException,
+                  "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
         }
         serialize_stuff->second();
         if (i<(n-1)) flush_value_during_write();
@@ -86,8 +99,12 @@ void Observer::flush_value_during_initialization()
     flush_value_during_write();
 }
 
-void Observer::write_before_simulation(const std::vector<DiscreteDirectionalWaveSpectrum>& , const DataAddressing& )
+void Observer::write_before_simulation(
+    const std::vector<DiscreteDirectionalWaveSpectrum>&,
+    const DataAddressing&)
 {}
 
-void Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& , const DataAddressing& )
+void Observer::write_before_simulation(
+    const std::vector<FlatDiscreteDirectionalWaveSpectrum>&,
+    const DataAddressing&)
 {}

@@ -10,22 +10,29 @@
 #include <list>
 #include <set>
 
-
-SumOfWaveSpectralDensities::SumOfWaveSpectralDensities() : terms(std::vector<TR1(shared_ptr)<WaveSpectralDensity> >())
+SumOfWaveSpectralDensities::SumOfWaveSpectralDensities() :
+    terms(std::vector<WaveSpectralDensityPtr>())
 {
 }
 
-SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(const WaveSpectralDensity& w) : terms(std::vector<TR1(shared_ptr)<WaveSpectralDensity> >(1, TR1(shared_ptr)<WaveSpectralDensity>(w.clone())))
+SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(
+    const WaveSpectralDensity& w) :
+        terms(std::vector<WaveSpectralDensityPtr>(1, WaveSpectralDensityPtr(w.clone())))
 {
 }
 
-SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(const WaveSpectralDensity& w1, const WaveSpectralDensity& w2) : terms(std::vector<TR1(shared_ptr)<WaveSpectralDensity> >())
+SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(
+    const WaveSpectralDensity& w1,
+    const WaveSpectralDensity& w2) :
+        terms(std::vector<WaveSpectralDensityPtr>())
 {
     terms.push_back(TR1(shared_ptr)<WaveSpectralDensity>(w1.clone()));
     terms.push_back(TR1(shared_ptr)<WaveSpectralDensity>(w2.clone()));
 }
 
-SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(const std::vector<WaveSpectralDensity>& ws) : terms(std::vector<TR1(shared_ptr)<WaveSpectralDensity> >())
+SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(
+    const std::vector<WaveSpectralDensity>& ws) :
+        terms(std::vector<WaveSpectralDensityPtr>())
 {
     for (auto t = ws.begin() ; t != ws.end() ; ++t)
     {
@@ -34,8 +41,9 @@ SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(const std::vector<WaveSpe
 }
 
 
-double SumOfWaveSpectralDensities::operator()(const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
-                                  ) const
+double SumOfWaveSpectralDensities::operator()(
+    const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
+    ) const
 {
     double ret = 0;
     for (auto t = terms.begin() ; t != terms.end() ; ++t)
@@ -54,10 +62,11 @@ WaveSpectralDensity* SumOfWaveSpectralDensities::clone() const
   *         and omega_max (also included)
   *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
   */
-std::vector<double> SumOfWaveSpectralDensities::get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
-                                            const double omega_max, //!< Minimum angular frequency (in rad/s)
-                                            const size_t n          //!< Number of angular frequencies to return
-                                            ) const
+std::vector<double> SumOfWaveSpectralDensities::get_angular_frequencies(
+    const double omega_min, //!< Minimum angular frequency (in rad/s)
+    const double omega_max, //!< Maximum angular frequency (in rad/s)
+    const size_t n          //!< Number of angular frequencies to return
+    ) const
 {
     std::set<double> S;
     for (auto t = terms.begin() ; t != terms.end() ; ++t)

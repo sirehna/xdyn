@@ -6,11 +6,11 @@
  */
 
 #include "SimulatorYamlParser.hpp"
-#include "yaml.h"
 #include "InvalidInputException.hpp"
-#include <ssc/yaml_parser.hpp>
 #include "external_data_structures_parsers.hpp"
 #include "parse_commands.hpp"
+#include "yaml.h"
+#include <ssc/yaml_parser.hpp>
 
 SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
 {

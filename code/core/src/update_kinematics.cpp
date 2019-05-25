@@ -16,7 +16,9 @@
 
 #define SQUARE(x) ((x)*(x))
 
-StateType get_initial_states(const YamlRotation& convention, const std::vector<YamlBody>& bodies)
+StateType get_initial_states(
+    const YamlRotation& convention,
+    const std::vector<YamlBody>& bodies)
 {
     StateType ret(13*bodies.size(),0);
     BodyBuilder builder(convention);

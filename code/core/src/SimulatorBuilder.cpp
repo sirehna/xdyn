@@ -14,21 +14,28 @@
 
 #include <ssc/text_file_reader.hpp>
 
-SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const double t0_, const ssc::data_source::DataSource& command_listener_) :
-                                        input(input_),
-                                        builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
-                                        force_parsers(),
-                                        controllable_force_parsers(),
-                                        surface_elevation_parsers(),
-                                        wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
-                                        directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
-                                        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
-                                        command_listener(command_listener_),
-                                        t0(t0_)
+SimulatorBuilder::SimulatorBuilder(
+    const YamlSimulatorInput& input_,
+    const double t0_,
+    const ssc::data_source::DataSource& command_listener_) :
+        input(input_),
+        builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
+        force_parsers(),
+        controllable_force_parsers(),
+        surface_elevation_parsers(),
+        wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
+        directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
+        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
+        command_listener(command_listener_),
+        t0(t0_)
 {
 }
 
-std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces, std::map<std::string,double> history_length) const
+std::vector<BodyPtr> SimulatorBuilder::get_bodies(
+    const MeshMap& meshes,
+    const std::vector<bool>& bodies_contain_surface_forces,
+    std::map<std::string,double> history_length
+    ) const
 {
     std::vector<BodyPtr> ret;
     size_t i = 0;
@@ -48,7 +55,10 @@ std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const s
     return ret;
 }
 
-void SimulatorBuilder::add_initial_transforms(const std::vector<BodyPtr>& bodies, ssc::kinematics::KinematicsPtr& k) const
+void SimulatorBuilder::add_initial_transforms(
+    const std::vector<BodyPtr>& bodies,
+    ssc::kinematics::KinematicsPtr& k
+    ) const
 {
     const StateType x = ::get_initial_states(input.rotations, input.bodies);
     for (size_t i = 0; i < bodies.size(); ++i)
@@ -101,7 +111,9 @@ SurfaceElevationPtr SimulatorBuilder::get_wave() const
     return ret;
 }
 
-std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
+std::vector<ListOfForces> SimulatorBuilder::get_forces(
+    const EnvironmentAndFrames& env
+    ) const
 {
     std::vector<ListOfForces> forces;
     for (const auto body:input.bodies)
@@ -111,7 +123,10 @@ std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrame
     return forces;
 }
 
-std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std::vector<ListOfForces>& forces_for_all_bodies, const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies) const
+std::map<std::string, double> SimulatorBuilder::get_max_history_length(
+    const std::vector<ListOfForces>& forces_for_all_bodies,
+    const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies
+    ) const
 {
     std::map<std::string, double> ret;
     for (const auto forces:forces_for_all_bodies)
@@ -139,7 +154,10 @@ std::vector<ListOfControlledForces> SimulatorBuilder::get_controlled_forces(cons
     return forces;
 }
 
-ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
+ListOfForces SimulatorBuilder::forces_from(
+    const YamlBody& body,
+    const EnvironmentAndFrames& env
+    ) const
 {
     ListOfForces ret;
     for (auto that_force_model = body.external_forces.begin() ; that_force_model!= body.external_forces.end() ; ++that_force_model)
@@ -149,7 +167,10 @@ ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const Environme
     return ret;
 }
 
-ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
+ListOfControlledForces SimulatorBuilder::controlled_forces_from(
+    const YamlBody& body,
+    const EnvironmentAndFrames& env
+    ) const
 {
     ListOfControlledForces ret;
     for (auto that_force_model = body.controlled_forces.begin() ; that_force_model!= body.controlled_forces.end() ; ++that_force_model)
@@ -159,7 +180,11 @@ ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& 
     return ret;
 }
 
-template <typename T> bool could_parse(const std::vector<T>& parsers, const YamlModel& model, const std::string& body_name, const EnvironmentAndFrames& env)
+template <typename T> bool could_parse(
+    const std::vector<T>& parsers,
+    const YamlModel& model,
+    const std::string& body_name,
+    const EnvironmentAndFrames& env)
 {
     try
     {
@@ -183,7 +208,12 @@ template <typename T> bool could_parse(const std::vector<T>& parsers, const Yaml
     return false;
 }
 
-void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::string& body_name, const EnvironmentAndFrames& env) const
+void SimulatorBuilder::add(
+    const YamlModel& model,
+    ListOfForces& L,
+    const std::string& body_name,
+    const EnvironmentAndFrames& env
+    ) const
 {
     bool parsed = false;
     for (auto try_to_parse:force_parsers)
@@ -206,7 +236,12 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::s
     }
 }
 
-void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, const std::string& name, const EnvironmentAndFrames& env) const
+void SimulatorBuilder::add(
+    const YamlModel& model,
+    ListOfControlledForces& L,
+    const std::string& name,
+    const EnvironmentAndFrames& env
+    ) const
 {
     bool parsed = false;
     for (auto try_to_parse:controllable_force_parsers)
@@ -228,7 +263,9 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     }
 }
 
-std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(const std::vector<ListOfForces>& forces) const
+std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(
+    const std::vector<ListOfForces>& forces
+    ) const
 {
     std::vector<bool> ret;
     for (auto forces_acting_on_body:forces)

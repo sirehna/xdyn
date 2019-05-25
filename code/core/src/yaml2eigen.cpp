@@ -16,7 +16,9 @@
 
 #include <ssc/exception_handling.hpp>
 
-ssc::kinematics::RotationMatrix angle2matrix(const YamlAngle& a, const YamlRotation& rotations)
+ssc::kinematics::RotationMatrix angle2matrix(
+    const YamlAngle& a,
+    const YamlRotation& rotations)
 {
     const ssc::kinematics::EulerAngles e(a.phi, a.theta, a.psi);
 
@@ -35,12 +37,20 @@ ssc::kinematics::RotationMatrix angle2matrix(const YamlAngle& a, const YamlRotat
     return ssc::kinematics::RotationMatrix();
 }
 
-bool match(const std::vector<std::string>& convention, const std::string& first, const std::string& second, const std::string& third)
+bool match(
+    const std::vector<std::string>& convention,
+    const std::string& first,
+    const std::string& second,
+    const std::string& third)
 {
-    return (convention.at(0) == first) and (convention.at(1) == second) and (convention.at(2) == third);
+    return (convention.at(0) == first) and
+           (convention.at(1) == second) and
+           (convention.at(2) == third);
 }
 
-ssc::kinematics::Point make_point(const YamlCoordinates& point, const std::string& frame)
+ssc::kinematics::Point make_point(
+    const YamlCoordinates& point,
+    const std::string& frame)
 {
     return ssc::kinematics::Point(frame,
                                   point.x,
@@ -53,7 +63,10 @@ ssc::kinematics::Point make_point(const YamlPoint& point)
     return make_point(point, point.frame);
 }
 
-ssc::kinematics::Transform make_transform(const YamlPosition& p, const std::string& to_frame, const YamlRotation& rotations)
+ssc::kinematics::Transform make_transform(
+    const YamlPosition& p,
+    const std::string& to_frame,
+    const YamlRotation& rotations)
 {
     const ssc::kinematics::Point translation = make_point(p.coordinates, p.frame);
     const ssc::kinematics::RotationMatrix rotation = angle2matrix(p.angle, rotations);

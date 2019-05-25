@@ -19,19 +19,19 @@
 #include <cmath> // For isnan
 
 DiscreteDirectionalWaveSpectrum common(
-        const WaveSpectralDensity& S,      //!< Frequency spectrum
-        const WaveDirectionalSpreading& D, //!< Spatial spectrum
-        const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
-        const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
-        );
+    const WaveSpectralDensity& S,      //!< Frequency spectrum
+    const WaveDirectionalSpreading& D, //!< Spatial spectrum
+    const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
+    const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
+    const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+    );
 DiscreteDirectionalWaveSpectrum common(
-        const WaveSpectralDensity& S,      //!< Frequency spectrum
-        const WaveDirectionalSpreading& D, //!< Spatial spectrum
-        const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
-        const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
-        )
+    const WaveSpectralDensity& S,      //!< Frequency spectrum
+    const WaveDirectionalSpreading& D, //!< Spatial spectrum
+    const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
+    const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
+    const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+    )
 {
     DiscreteDirectionalWaveSpectrum ret;
     ret.omega = S.get_angular_frequencies(omega_min, omega_max, nfreq);
@@ -46,13 +46,13 @@ DiscreteDirectionalWaveSpectrum common(
 }
 
 DiscreteDirectionalWaveSpectrum discretize(
-        const WaveSpectralDensity& S,      //!< Frequency spectrum
-        const WaveDirectionalSpreading& D, //!< Spatial spectrum
-        const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
-        const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-        const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-        )
+    const WaveSpectralDensity& S,      //!< Frequency spectrum
+    const WaveDirectionalSpreading& D, //!< Spatial spectrum
+    const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
+    const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
+    const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+    const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+    )
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     ret.k.reserve(ret.omega.size());
@@ -69,14 +69,14 @@ DiscreteDirectionalWaveSpectrum discretize(
   *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest discretize_example
   */
 DiscreteDirectionalWaveSpectrum discretize(
-        const WaveSpectralDensity& S,      //!< Frequency spectrum
-        const WaveDirectionalSpreading& D, //!< Spatial spectrum
-        const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
-        const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-        const double h,                    //!< Water depth (in meters)
-        const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-        )
+    const WaveSpectralDensity& S,      //!< Frequency spectrum
+    const WaveDirectionalSpreading& D, //!< Spatial spectrum
+    const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
+    const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
+    const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+    const double h,                    //!< Water depth (in meters)
+    const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+    )
 {
     DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
     ret.k.reserve(ret.omega.size());
@@ -95,8 +95,8 @@ DiscreteDirectionalWaveSpectrum discretize(
 }
 
 typedef std::pair<double,size_t> ValIdx;
-bool comparator ( const ValIdx& l, const ValIdx& r);
-bool comparator ( const ValIdx& l, const ValIdx& r)
+bool comparator(const ValIdx& l, const ValIdx& r);
+bool comparator(const ValIdx& l, const ValIdx& r)
    { return l.first > r.first; }
 
 /**
@@ -106,8 +106,8 @@ bool comparator ( const ValIdx& l, const ValIdx& r)
  * If we filter and discard some rays, we should also take into account rao...
  */
 FlatDiscreteDirectionalWaveSpectrum flatten(
-        const DiscreteDirectionalWaveSpectrum& spectrum //!< Spectrum to flatten
-        )
+    const DiscreteDirectionalWaveSpectrum& spectrum //!< Spectrum to flatten
+    )
 {
     FlatDiscreteDirectionalWaveSpectrum ret;
     const size_t nOmega = spectrum.omega.size();
@@ -140,9 +140,9 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
  * \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
  */
 FlatDiscreteDirectionalWaveSpectrum filter(
-        const FlatDiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to filter
-        const double ratio //!< Between 0 & 1: where should we cut off the spectra?
-        )
+    const FlatDiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to filter
+    const double ratio //!< Between 0 & 1: where should we cut off the spectra?
+    )
 {
     double S = 0;
     double a = 0;
@@ -176,11 +176,12 @@ FlatDiscreteDirectionalWaveSpectrum filter(
     return ret;
 }
 
-double dynamic_pressure_factor(const double k,              //!< Wave number (in 1/m)
-                               const double z,              //!< z-position in the NED frame (in meters)
-                               const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
-                               const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-                              )
+double dynamic_pressure_factor(
+    const double k,              //!< Wave number (in 1/m)
+    const double z,              //!< z-position in the NED frame (in meters)
+    const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+    const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+    )
 {
     if (std::isnan(z))
     {
@@ -194,12 +195,13 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
     return exp(-k*stretching.rescaled_z(z,eta));
 }
 
-double dynamic_pressure_factor(const double k,              //!< Wave number (in 1/m)
-                               const double z,              //!< z-position in the NED frame (in meters)
-                               const double h,              //!< Average water depth (in meters)
-                               const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
-                               const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-                              )
+double dynamic_pressure_factor(
+    const double k,              //!< Wave number (in 1/m)
+    const double z,              //!< z-position in the NED frame (in meters)
+    const double h,              //!< Average water depth (in meters)
+    const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+    const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+    )
 {
     if (std::isnan(z))
     {
@@ -214,12 +216,13 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
     return cosh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
 }
 
-double dynamic_pressure_factor_sh(const double k,              //!< Wave number (in 1/m)
-                                  const double z,              //!< z-position in the NED frame (in meters)
-                                  const double h,              //!< Average water depth (in meters)
-                                  const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
-                                  const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-                              )
+double dynamic_pressure_factor_sh(
+    const double k,              //!< Wave number (in 1/m)
+    const double z,              //!< z-position in the NED frame (in meters)
+    const double h,              //!< Average water depth (in meters)
+    const double eta,            //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+    const Stretching& stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+)
 {
     if (eta != 0 && z<eta) return 0;
     if (z>h) return 0;

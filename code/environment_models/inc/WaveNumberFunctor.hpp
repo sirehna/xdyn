@@ -25,9 +25,10 @@
 class WaveNumberFunctor
 {
     public:
-        WaveNumberFunctor(const double h,    //!< Water depth (in meters)
-                          const double omega //!< Angular frequency (in rad/s)
-                          );
+        WaveNumberFunctor(
+            const double h,    //!< Water depth (in meters)
+            const double omega //!< Angular frequency (in rad/s)
+            );
 
         boost::math::tuple<double, double, double> operator()(const double& k) const;
 

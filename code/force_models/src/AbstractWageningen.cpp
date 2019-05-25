@@ -47,26 +47,34 @@ AbstractWageningen::Yaml AbstractWageningen::parse(const std::string& yaml)
     return ret;
 }
 
-double AbstractWageningen::advance_ratio(const BodyStates& states, std::map<std::string,double>& commands) const
+double AbstractWageningen::advance_ratio(
+    const BodyStates& states,
+    std::map<std::string,double>& commands) const
 {
     const double Va = fabs(states.u());
     const double n = commands["rpm"]/(2*PI);
     return (1-w)*Va/n/D;
 }
 
-AbstractWageningen::AbstractWageningen(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-            ControllableForceModel(input.name,{"rpm"},input.position_of_propeller_frame, body_name_, env_),
-            w(input.wake_coefficient),
-            eta_R(input.relative_rotative_efficiency),
-            t(input.thrust_deduction_factor),
-            kappa(input.rotating_clockwise ? -1 : 1),
-            D(input.diameter),
-            D4(D*D*D*D),
-            D5(D4*D)
+AbstractWageningen::AbstractWageningen(
+    const Yaml& input,
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env_) :
+        ControllableForceModel(input.name,{"rpm"},input.position_of_propeller_frame, body_name_, env_),
+        w(input.wake_coefficient),
+        eta_R(input.relative_rotative_efficiency),
+        t(input.thrust_deduction_factor),
+        kappa(input.rotating_clockwise ? -1 : 1),
+        D(input.diameter),
+        D4(D*D*D*D),
+        D5(D4*D)
 {
 }
 
-ssc::kinematics::Vector6d AbstractWageningen::get_force(const BodyStates& states, const double , std::map<std::string,double> commands) const
+ssc::kinematics::Vector6d AbstractWageningen::get_force(
+    const BodyStates& states,
+    const double,
+    std::map<std::string, double> commands) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     const double n2 = commands["rpm"]*commands["rpm"]/(4*PI*PI); // In turns per second (Hz)

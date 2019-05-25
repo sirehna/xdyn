@@ -38,12 +38,12 @@ PointType compute_position_in_NED_frame(
 }
 
 SurfaceElevationInterface::SurfaceElevationInterface(
-        const ssc::kinematics::PointMatrixPtr& output_mesh_,
-        const std::pair<std::size_t,std::size_t>& output_mesh_size_) :
-                output_mesh(output_mesh_),
-                output_mesh_size(output_mesh_size_),
-                relative_wave_height_for_each_point_in_mesh(),
-                surface_elevation_for_each_point_in_mesh()
+    const ssc::kinematics::PointMatrixPtr& output_mesh_,
+    const std::pair<std::size_t,std::size_t>& output_mesh_size_) :
+            output_mesh(output_mesh_),
+            output_mesh_size(output_mesh_size_),
+            relative_wave_height_for_each_point_in_mesh(),
+            surface_elevation_for_each_point_in_mesh()
 {
 }
 
@@ -52,9 +52,9 @@ SurfaceElevationInterface::~SurfaceElevationInterface()
 }
 
 ssc::kinematics::PointMatrix SurfaceElevationInterface::get_points_on_free_surface(
-        const double t,
-        const ssc::kinematics::PointMatrixPtr& Mned
-        ) const
+    const double t,
+    const ssc::kinematics::PointMatrixPtr& Mned
+    ) const
 {
     if (Mned->get_frame()!="NED")
     {
@@ -81,10 +81,10 @@ std::vector<double> SurfaceElevationInterface::get_surface_elevation() const
 }
 
 void SurfaceElevationInterface::update_surface_elevation(
-        const ssc::kinematics::PointMatrixPtr& P,       //!< Points for which to compute the relative wave height
-        const ssc::kinematics::KinematicsPtr& k,        //!< Object used to compute the transforms to the NED frame
-        const double t                                  //!< Current instant (in seconds)
-        )
+    const ssc::kinematics::PointMatrixPtr& P,       //!< Points for which to compute the relative wave height
+    const ssc::kinematics::KinematicsPtr& k,        //!< Object used to compute the transforms to the NED frame
+    const double t                                  //!< Current instant (in seconds)
+    )
 {
     const int n = (int)P->m.cols();
     if (n<=0) return;
@@ -99,24 +99,24 @@ void SurfaceElevationInterface::update_surface_elevation(
 }
 
 double SurfaceElevationInterface::evaluate_rao(
-        const double , //!< x-position of the RAO's calculation point in the NED frame (in meters)
-        const double , //!< y-position of the RAO's calculation point in the NED frame (in meters)
-        const double , //!< Current time instant (in seconds)
-        const std::vector<std::vector<double> >& , //!< Module of the RAO
-        const std::vector<std::vector<double> >&  //!< Phase of the RAO
-        ) const
+    const double , //!< x-position of the RAO's calculation point in the NED frame (in meters)
+    const double , //!< y-position of the RAO's calculation point in the NED frame (in meters)
+    const double , //!< Current time instant (in seconds)
+    const std::vector<std::vector<double> >& , //!< Module of the RAO
+    const std::vector<std::vector<double> >&  //!< Phase of the RAO
+    ) const
 {
     return 0;
 }
 
 ssc::kinematics::Point SurfaceElevationInterface::orbital_velocity(
-        const double ,   //!< gravity (in m/s^2)
-        const double ,   //!< x-position in the NED frame (in meters)
-        const double ,   //!< y-position in the NED frame (in meters)
-        const double ,   //!< z-position in the NED frame (in meters)
-        const double ,   //!< current instant (in seconds)
-        const double     //!< Wave elevation at (x,y) in the NED frame (in meters)
-        ) const
+    const double ,   //!< gravity (in m/s^2)
+    const double ,   //!< x-position in the NED frame (in meters)
+    const double ,   //!< y-position in the NED frame (in meters)
+    const double ,   //!< z-position in the NED frame (in meters)
+    const double ,   //!< current instant (in seconds)
+    const double     //!< Wave elevation at (x,y) in the NED frame (in meters)
+    ) const
 {
     return ssc::kinematics::Point("NED", 0, 0, 0);
 }
@@ -132,29 +132,29 @@ std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_angular_fr
 }
 
 double SurfaceElevationInterface::get_dynamic_pressure(
-        const double rho,                           //!< Water density (in kg/m^3)
-        const double g,                             //!< Gravity (in m/s^2)
-        const ssc::kinematics::Point& P,            //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
-        const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
-        const double eta,                           //!< Wave elevation at P in the NED frame (in meters)
-        const double t                              //!< Current instant (in seconds)
-        ) const
+    const double rho,                       //!< Water density (in kg/m^3)
+    const double g,                         //!< Gravity (in m/s^2)
+    const ssc::kinematics::Point& P,        //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
+    const ssc::kinematics::KinematicsPtr& k,//!< Object used to compute the transforms to the NED frame
+    const double eta,                       //!< Wave elevation at P in the NED frame (in meters)
+    const double t                          //!< Current instant (in seconds)
+    ) const
 {
     const ssc::kinematics::Point OP = compute_position_in_NED_frame(P, k);
     return dynamic_pressure(rho, g, OP.x(),OP.y(),OP.z(),eta,t);
 }
 
 ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NED_frame(
-        const ssc::kinematics::KinematicsPtr& k) const
+    const ssc::kinematics::KinematicsPtr& k) const
 {
     using namespace ssc::kinematics;
     return PointMatrixPtr(new PointMatrix(compute_position_in_NED_frame(*output_mesh,k)));
 }
 
 ssc::kinematics::PointMatrix SurfaceElevationInterface::get_waves_on_mesh(
-        const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
-        const double t                           //!< Current instant (in seconds)
-        ) const
+    const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+    const double t                           //!< Current instant (in seconds)
+    ) const
 {
     if (output_mesh->m.cols()==0) return ssc::kinematics::PointMatrix("NED",0);
     return get_points_on_free_surface(t, get_output_mesh_in_NED_frame(k));

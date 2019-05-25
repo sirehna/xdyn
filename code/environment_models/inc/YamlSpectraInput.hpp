@@ -4,7 +4,7 @@
 struct YamlAiry
 {
     YamlAiry();
-    int seed; // Random generator ssed (to generate the random phases)
+    int seed; // Random generator seed (to generate the random phases)
 };
 
 struct YamlDiracDirectionalSpreading

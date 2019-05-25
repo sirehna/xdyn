@@ -1,19 +1,17 @@
 /*
- * DampingForceModel.cpp
+ * HydrostaticForceModel.cpp
  *
  *  Created on: Oct 17, 2014
  *      Author: cady
  */
 
-#include <Eigen/Dense>
-
-#include <ssc/kinematics.hpp>
-
+#include "HydrostaticForceModel.hpp"
 #include "Body.hpp"
 #include "calculate_gz.hpp"
-#include "HydrostaticForceModel.hpp"
 #include "Observer.hpp"
 #include "QuadraticDampingForceModel.hpp"
+#include <ssc/kinematics.hpp>
+#include <Eigen/Dense>
 
 std::string HydrostaticForceModel::model_name(){return "hydrostatic";}
 

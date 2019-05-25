@@ -16,10 +16,13 @@
 #define POW2(x) ((x)*(x))
 #define POW4(x) (POW2(POW2(x)))
 
-JonswapSpectrum::JonswapSpectrum(const double Hs,const double Tp_,const double gamma_) :
-                                   Hs2(Hs*Hs), Tp(Tp_),gamma(gamma_),
-                                   omega0(2.*PI), sigma_a(0.07),
-                                   sigma_b(0.09), coeff(0)
+JonswapSpectrum::JonswapSpectrum(
+    const double Hs,
+    const double Tp_,
+    const double gamma_) :
+        Hs2(Hs*Hs), Tp(Tp_),gamma(gamma_),
+        omega0(2.*PI), sigma_a(0.07),
+        sigma_b(0.09), coeff(0)
 {
     if (Hs<0)
     {

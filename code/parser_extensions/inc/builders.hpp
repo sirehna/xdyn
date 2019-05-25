@@ -20,13 +20,20 @@
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
 
+typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationInterfacePtr;
+typedef TR1(shared_ptr)<WaveSpectralDensity> WaveSpectralDensityPtr;
+typedef TR1(shared_ptr)<WaveDirectionalSpreading> WaveDirectionalSpreadingPtr;
+
 template <>
 class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevationBuilderInterface
 {
     public:
-        SurfaceElevationBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
-                                const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
-        boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        SurfaceElevationBuilder(
+            const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
+            const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
+        boost::optional<SurfaceElevationInterfacePtr> try_to_parse(
+            const std::string& model,
+            const std::string& yaml) const;
 };
 
 struct YamlDiscretization;
@@ -36,16 +43,21 @@ template <>
 class SurfaceElevationBuilder<SurfaceElevationFromWaves> : public SurfaceElevationBuilderInterface
 {
     public:
-        SurfaceElevationBuilder(const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
-                    const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
-        boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        SurfaceElevationBuilder(
+            const TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >& directional_spreading_parsers_,
+            const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_);
+        boost::optional<SurfaceElevationInterfacePtr> try_to_parse(
+            const std::string& model,
+            const std::string& yaml) const;
 
     private:
         SurfaceElevationBuilder();
-        TR1(shared_ptr)<WaveModel> parse_wave_model(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const;
-        DiscreteDirectionalWaveSpectrum parse_directional_spectrum(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const;
-        TR1(shared_ptr)<WaveSpectralDensity> parse_spectral_density(const YamlSpectra& spectrum) const;
-        TR1(shared_ptr)<WaveDirectionalSpreading> parse_directional_spreading(const YamlSpectra& spectrum) const;
+        WaveModelPtr parse_wave_model(
+            const YamlDiscretization& discretization, const YamlSpectra& spectrum) const;
+        DiscreteDirectionalWaveSpectrum parse_directional_spectrum(
+            const YamlDiscretization& discretization, const YamlSpectra& spectrum) const;
+        WaveSpectralDensityPtr parse_spectral_density(const YamlSpectra& spectrum) const;
+        WaveDirectionalSpreadingPtr parse_directional_spreading(const YamlSpectra& spectrum) const;
 };
 
 class HOS;
@@ -54,7 +66,10 @@ class SurfaceElevationBuilder<HOS> : public SurfaceElevationBuilderInterface
 {
     public:
         SurfaceElevationBuilder();
-        boost::optional<TR1(shared_ptr)<SurfaceElevationInterface> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<SurfaceElevationInterfacePtr> try_to_parse(
+            const std::string& model,
+            const std::string& yaml
+            ) const;
 
 };
 
@@ -63,7 +78,11 @@ class WaveModelBuilder<Airy> : public WaveModelBuilderInterface
 {
     public:
         WaveModelBuilder();
-        boost::optional<TR1(shared_ptr)<WaveModel> > try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const;
+        boost::optional<WaveModelPtr > try_to_parse(
+            const std::string& model,
+            const DiscreteDirectionalWaveSpectrum& spectrum,
+            const std::string& yaml
+            ) const;
 };
 
 template <>
@@ -71,7 +90,10 @@ class SpectrumBuilder<BretschneiderSpectrum> : public SpectrumBuilderInterface
 {
     public:
         SpectrumBuilder();
-        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<WaveSpectralDensityPtr > try_to_parse(
+            const std::string& model,
+            const std::string& yaml
+            ) const;
 };
 
 template <>
@@ -79,7 +101,10 @@ class SpectrumBuilder<JonswapSpectrum> : public SpectrumBuilderInterface
 {
     public:
         SpectrumBuilder();
-        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<WaveSpectralDensityPtr > try_to_parse(
+            const std::string& model,
+            const std::string& yaml
+            ) const;
 };
 
 template <>
@@ -87,7 +112,10 @@ class SpectrumBuilder<PiersonMoskowitzSpectrum> : public SpectrumBuilderInterfac
 {
     public:
         SpectrumBuilder();
-        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<WaveSpectralDensityPtr > try_to_parse(
+            const std::string& model,
+            const std::string& yaml
+            ) const;
 };
 
 template <>
@@ -95,7 +123,10 @@ class SpectrumBuilder<DiracSpectralDensity> : public SpectrumBuilderInterface
 {
     public:
         SpectrumBuilder();
-        boost::optional<TR1(shared_ptr)<WaveSpectralDensity> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<WaveSpectralDensityPtr > try_to_parse(
+            const std::string& model,
+            const std::string& yaml
+            ) const;
 };
 
 template <>
@@ -103,7 +134,10 @@ class DirectionalSpreadingBuilder<DiracDirectionalSpreading> : public Directiona
 {
     public:
         DirectionalSpreadingBuilder() : DirectionalSpreadingBuilderInterface(){}
-        boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<WaveDirectionalSpreadingPtr > try_to_parse(
+            const std::string& model,
+            const std::string& yaml
+            ) const;
 };
 
 template <>
@@ -111,7 +145,10 @@ class DirectionalSpreadingBuilder<Cos2sDirectionalSpreading> : public Directiona
 {
     public:
         DirectionalSpreadingBuilder() : DirectionalSpreadingBuilderInterface(){}
-        boost::optional<TR1(shared_ptr)<WaveDirectionalSpreading> > try_to_parse(const std::string& model, const std::string& yaml) const;
+        boost::optional<WaveDirectionalSpreadingPtr > try_to_parse(
+            const std::string& model,
+            const std::string& yaml
+            ) const;
 };
 
 #endif /* BUILDERS_HPP_ */

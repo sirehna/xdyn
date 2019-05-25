@@ -5,10 +5,14 @@
  *      Author: cady
  */
 
-
 #include "2DMeshDisplay.hpp"
 
-XY<Range> get_min_max(const Eigen::Matrix3Xd M)
+#define X_CANVAS_SIZE 30
+#define Y_CANVAS_SIZE 15
+#define DOT_CHAR '*'
+#define POINT_CHAR 'X'
+
+XY<Range> get_min_max(const Eigen::Matrix3Xd& M)
 {
     XY<Range> range;
     if ((M.cols()>0) and (M.rows()>0))
@@ -42,7 +46,9 @@ Eigen::Matrix3Xi convert(const Eigen::Matrix3Xd& M)
     return ret;
 }
 
-std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetComputer::ListOfEdges& edges)
+std::vector<Line> make_lines(
+    const Eigen::Matrix3Xi& mesh,
+    const ClosingFacetComputer::ListOfEdges& edges)
 {
     std::vector<Line> ret;
     for (const auto edge:edges)
@@ -75,7 +81,10 @@ std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetCom
     return ret;
 }
 
-std::vector<std::string> make_mesh(const Eigen::Matrix3Xi& M, const std::vector<Line>& lines, const std::set<size_t>& idx_to_display)
+std::vector<std::string> make_mesh(
+    const Eigen::Matrix3Xi& M,
+    const std::vector<Line>& lines,
+    const std::set<size_t>& idx_to_display)
 {
     const std::string spaces(X_CANVAS_SIZE+1, ' ');
     std::vector<std::string> canvas(Y_CANVAS_SIZE+1, spaces);

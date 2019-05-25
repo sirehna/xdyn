@@ -18,19 +18,25 @@
 #define PI M_PI
 
 
-Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(flatten(spectrum_)),
-phase(std::vector<std::vector<double> >()),
-rng(),
-generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
+Airy::Airy(
+    const DiscreteDirectionalWaveSpectrum& spectrum_,
+    const double constant_random_phase) :
+        WaveModel(flatten(spectrum_)),
+        phase(std::vector<std::vector<double> >()),
+        rng(),
+        generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 {
     const size_t n = spectrum.psi.size();
     spectrum.phase = std::vector<double> (n, constant_random_phase);
 }
 
-Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(flatten(spectrum_)),
-phase(std::vector<std::vector<double> >()),
-rng(boost::mt19937((unsigned int)random_number_generator_seed)),
-generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
+Airy::Airy(
+    const DiscreteDirectionalWaveSpectrum& spectrum_,
+    const int random_number_generator_seed) :
+        WaveModel(flatten(spectrum_)),
+        phase(std::vector<std::vector<double> >()),
+        rng(boost::mt19937((unsigned int)random_number_generator_seed)),
+        generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 {
     const size_t n = spectrum.psi.size();
     for (size_t i = 0 ; i < n ; ++i)
@@ -39,19 +45,25 @@ generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
     }
 }
 
-Airy::Airy(const FlatDiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(spectrum_),
-phase(std::vector<std::vector<double> >()),
-rng(),
-generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
+Airy::Airy(
+    const FlatDiscreteDirectionalWaveSpectrum& spectrum_,
+    const double constant_random_phase) :
+        WaveModel(spectrum_),
+        phase(std::vector<std::vector<double> >()),
+        rng(),
+        generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 {
     const size_t n = spectrum.psi.size();
     spectrum.phase = std::vector<double> (n, constant_random_phase);
 }
 
-Airy::Airy(const FlatDiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(spectrum_),
-phase(std::vector<std::vector<double> >()),
-rng(boost::mt19937((unsigned int)random_number_generator_seed)),
-generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
+Airy::Airy(
+    const FlatDiscreteDirectionalWaveSpectrum& spectrum_,
+    const int random_number_generator_seed) :
+        WaveModel(spectrum_),
+        phase(std::vector<std::vector<double> >()),
+        rng(boost::mt19937((unsigned int)random_number_generator_seed)),
+        generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 {
     const size_t n = spectrum.psi.size();
     for (size_t i = 0 ; i < n ; ++i)
@@ -61,12 +73,12 @@ generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 }
 
 double Airy::evaluate_rao(
-        const double x,                           //!< x-position of the RAO's calculation point in the NED frame (in meters)
-        const double y,                           //!< y-position of the RAO's calculation point in the NED frame (in meters)
-        const double t,                           //!< Current time instant (in seconds)
-        const std::vector<double>& rao_module,    //!< Module of the RAO
-        const std::vector<double>& rao_phase      //!< Phase of the RAO
-        ) const
+    const double x,                           //!< x-position of the RAO's calculation point in the NED frame (in meters)
+    const double y,                           //!< y-position of the RAO's calculation point in the NED frame (in meters)
+    const double t,                           //!< Current time instant (in seconds)
+    const std::vector<double>& rao_module,    //!< Module of the RAO
+    const std::vector<double>& rao_phase      //!< Phase of the RAO
+    ) const
 {
     double F = 0;
     const size_t n = rao_module.size();
@@ -86,10 +98,10 @@ double Airy::evaluate_rao(
 }
 
 double Airy::elevation(
-        const double x,     //!< x-position in the NED frame (in meters)
-        const double y,     //!< y-position in the NED frame (in meters)
-        const double t      //!< Current time instant (in seconds)
-        ) const
+    const double x,     //!< x-position in the NED frame (in meters)
+    const double y,     //!< y-position in the NED frame (in meters)
+    const double t      //!< Current time instant (in seconds)
+    ) const
 {
     double zeta = 0;
     const size_t n = spectrum.psi.size();
@@ -105,14 +117,14 @@ double Airy::elevation(
 }
 
 double Airy::dynamic_pressure(
-        const double rho, //!< water density (in kg/m^3)
-        const double g,   //!< gravity (in m/s^2)
-        const double x,   //!< x-position in the NED frame (in meters)
-        const double y,   //!< y-position in the NED frame (in meters)
-        const double z,   //!< z-position in the NED frame (in meters)
-        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-        const double t    //!< Current time instant (in seconds)
-        ) const
+    const double rho, //!< water density (in kg/m^3)
+    const double g,   //!< gravity (in m/s^2)
+    const double x,   //!< x-position in the NED frame (in meters)
+    const double y,   //!< y-position in the NED frame (in meters)
+    const double z,   //!< z-position in the NED frame (in meters)
+    const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
+    const double t    //!< Current time instant (in seconds)
+    ) const
 {
     if (std::isnan(z))
     {
@@ -140,13 +152,13 @@ double Airy::dynamic_pressure(
 }
 
 ssc::kinematics::Point Airy::orbital_velocity(
-        const double g,   //!< gravity (in m/s^2)
-        const double x,   //!< x-position in the NED frame (in meters)
-        const double y,   //!< y-position in the NED frame (in meters)
-        const double z,   //!< z-position in the NED frame (in meters)
-        const double t,   //!< Current time instant (in seconds)
-        const double eta  //!< Wave height at x,y,t (in meters)
-        ) const
+    const double g,   //!< gravity (in m/s^2)
+    const double x,   //!< x-position in the NED frame (in meters)
+    const double y,   //!< y-position in the NED frame (in meters)
+    const double z,   //!< z-position in the NED frame (in meters)
+    const double t,   //!< Current time instant (in seconds)
+    const double eta  //!< Wave height at x,y,t (in meters)
+    ) const
 {
     double u = 0;
     double v = 0;

@@ -33,12 +33,13 @@ class WaveModel
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force (or torque), depending on the RAO
           */
-        virtual double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                                    const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                                    const double t, //!< Current time instant (in seconds)
-                                    const std::vector<double>& rao_module, //!< Module of the RAO
-                                    const std::vector<double>& rao_phase //!< Phase of the RAO
-                                     ) const = 0;
+        virtual double evaluate_rao(
+            const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+            const double t, //!< Current time instant (in seconds)
+            const std::vector<double>& rao_module, //!< Module of the RAO
+            const std::vector<double>& rao_phase //!< Phase of the RAO
+              ) const = 0;
 
         /**  \author cec
           *  \date Aug 1, 2014, 3:24:45 PM
@@ -46,23 +47,25 @@ class WaveModel
           *  \returns Elevation of a point at a given instant, in meters.
           *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
           */
-        virtual double elevation(const double x,//!< x-position in the NED frame (in meters)
-                         const double y,//!< y-position in the NED frame (in meters)
-                         const double t //!< Current time instant (in seconds)
-                         ) const = 0;
+        virtual double elevation(
+            const double x,//!< x-position in the NED frame (in meters)
+            const double y,//!< y-position in the NED frame (in meters)
+            const double t //!< Current time instant (in seconds)
+            ) const = 0;
 
         /**  \author cec
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at a given point & instant, in m/s
           */
-        virtual ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                                        const double x,   //!< x-position in the NED frame (in meters)
-                                                        const double y,   //!< y-position in the NED frame (in meters)
-                                                        const double z,   //!< z-position in the NED frame (in meters)
-                                                        const double t,   //!< Current time instant (in seconds)
-                                                        const double eta  //!< Wave height at x,y,t (in meters)
-                                                        ) const = 0;
+        virtual ssc::kinematics::Point orbital_velocity(
+            const double g,   //!< gravity (in m/s^2)
+            const double x,   //!< x-position in the NED frame (in meters)
+            const double y,   //!< y-position in the NED frame (in meters)
+            const double z,   //!< z-position in the NED frame (in meters)
+            const double t,   //!< Current time instant (in seconds)
+            const double eta  //!< Wave height at x,y,t (in meters)
+            ) const = 0;
 
         /**  \brief Pressure induced by waves
           *  \returns Pressure (in Pa) induced by the waves, at a given point in the fluid
@@ -71,14 +74,15 @@ class WaveModel
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
           *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
-        virtual double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
-                                        const double g,   //!< gravity (in m/s^2)
-                                        const double x,   //!< x-position in the NED frame (in meters)
-                                        const double y,   //!< y-position in the NED frame (in meters)
-                                        const double z,   //!< z-position in the NED frame (in meters)
-                                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                        const double t    //!< Current time instant (in seconds)
-                                        ) const = 0;
+        virtual double dynamic_pressure(
+            const double rho, //!< water density (in kg/m^3)
+            const double g,   //!< gravity (in m/s^2)
+            const double x,   //!< x-position in the NED frame (in meters)
+            const double y,   //!< y-position in the NED frame (in meters)
+            const double z,   //!< z-position in the NED frame (in meters)
+            const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
+            const double t    //!< Current time instant (in seconds)
+            ) const = 0;
 
         /**  \returns List of angular frequencies for which the spectra will be calculated.
           *  \details Needed by the RAOs (RadiationForceModel)

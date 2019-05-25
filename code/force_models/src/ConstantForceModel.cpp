@@ -10,7 +10,6 @@
 
 #include "Body.hpp"
 #include "yaml.h"
-#include <ssc/macros.hpp>
 #include <ssc/yaml_parser.hpp>
 
 #include <ssc/kinematics.hpp>
@@ -51,7 +50,10 @@ ConstantForceModel::Input ConstantForceModel::parse(const std::string& yaml)
     return ret;
 }
 
-ConstantForceModel::ConstantForceModel(const ConstantForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+ConstantForceModel::ConstantForceModel(
+    const ConstantForceModel::Input& input,
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env_) :
         ForceModel(model_name(), body_name_),
         env(env_),
         internal_frame(input.frame),
@@ -86,4 +88,3 @@ ssc::kinematics::Wrench ConstantForceModel::operator()(const BodyStates& states,
     const ssc::kinematics::Wrench tau_in_body_frame_at_G(states.G, force_in_G_expressed_in_body_frame, torque_in_G_expressed_in_body_frame);
     return tau_in_body_frame_at_G;
 }
-

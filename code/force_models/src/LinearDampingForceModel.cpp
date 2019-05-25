@@ -5,13 +5,12 @@
  *      Author: cady
  */
 
-#include <Eigen/Dense>
-#include "yaml.h"
-
-#include <ssc/kinematics.hpp>
-#include "Body.hpp"
 #include "LinearDampingForceModel.hpp"
+#include "Body.hpp"
 #include "external_data_structures_parsers.hpp"
+#include "yaml.h"
+#include <ssc/kinematics.hpp>
+#include <Eigen/Dense>
 
 std::string LinearDampingForceModel::model_name() {return "linear damping";}
 

@@ -5,10 +5,9 @@
  *      Author: cady
  */
 
-#include <sstream>
-
 #include "check_input_yaml.hpp"
 #include "InvalidInputException.hpp"
+#include <sstream>
 
 void check_rotations(const YamlRotation& input);
 void throw_if_any_errors_were_detected(const std::string& caller, const std::stringstream& ss);
@@ -58,11 +57,11 @@ void check_rotations(const YamlRotation& input)
     if (not(is_an_axis(input.convention.at(2))))
     {
         errors << "Third element of 'rotations/conventions' must be an axis name: got '" << input.convention.at(2) << "'" << std::endl;
-    }    
+    }
     if ((input.order_by != "angle") and (input.order_by != "axis"))
     {
         errors << "'rotations/order by' must be either 'angle' or 'axis': got '" << input.order_by << "'" << std::endl;
-    }        
+    }
     throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
 }
 

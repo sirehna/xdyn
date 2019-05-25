@@ -46,7 +46,11 @@ class Sim::Impl
             feed_sum_of_forces(observer, sum_of_forces_in_NED_frame[body_name], body_name, "NED");
         }
 
-        void feed_sum_of_forces(Observer& observer, ssc::kinematics::UnsafeWrench& W, const std::string& body_name, const std::string& frame)
+        void feed_sum_of_forces(
+            Observer& observer,
+            ssc::kinematics::UnsafeWrench& W,
+            const std::string& body_name,
+            const std::string& frame)
         {
             observer.write(W.X(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"Fx"},std::string("Fx(sum of forces,")+body_name+","+frame+")"));
             observer.write(W.Y(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"Fy"},std::string("Fy(sum of forces,")+body_name+","+frame+")"));
@@ -82,17 +86,21 @@ EnvironmentAndFrames Sim::get_env() const
     return pimpl->env;
 }
 
-Sim::Sim(const std::vector<BodyPtr>& bodies,
-         const std::vector<ListOfForces>& forces,
-         const std::vector<ListOfControlledForces>& controlled_forces,
-         const EnvironmentAndFrames& env,
-         const StateType& x,
-         const ssc::data_source::DataSource& command_listener) : state(x), pimpl(new Impl(bodies, forces, controlled_forces, env, x, command_listener))
+Sim::Sim(
+    const std::vector<BodyPtr>& bodies,
+    const std::vector<ListOfForces>& forces,
+    const std::vector<ListOfControlledForces>& controlled_forces,
+    const EnvironmentAndFrames& env,
+    const StateType& x,
+    const ssc::data_source::DataSource& command_listener) :
+        state(x),
+        pimpl(new Impl(bodies, forces, controlled_forces, env, x, command_listener))
 {
 }
 
-StateType Sim::normalize_quaternions(const StateType& all_states
-                                    ) const
+StateType Sim::normalize_quaternions(
+    const StateType& all_states
+    ) const
 {
     StateType normalized = all_states;
     for (size_t i = 0 ; i < pimpl->bodies.size() ; ++i)
@@ -134,7 +142,10 @@ void Sim::update_continuous_states()
 {
 }
 
-ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyPtr& body, const double t)
+ssc::kinematics::UnsafeWrench Sim::sum_of_forces(
+    const StateType& x,
+    const BodyPtr& body,
+    const double t)
 {
     const Eigen::Vector3d uvw = body->get_uvw(x);
     const Eigen::Vector3d pqr = body->get_pqr(x);
@@ -167,8 +178,9 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     return pimpl->sum_of_forces_in_body_frame[body->get_name()];
 }
 
-ssc::kinematics::PointMatrix Sim::get_waves(const double t//!< Current instant
-                                                  ) const
+ssc::kinematics::PointMatrix Sim::get_waves(
+    const double t//!< Current instant
+    ) const
 {
     try
     {
