@@ -12,6 +12,7 @@
 #include TR1INC(memory)
 #include <boost/optional/optional.hpp>
 #include <string>
+#include <vector>
 
 struct DiscreteDirectionalWaveSpectrum;
 class WaveModel;
