@@ -8,7 +8,7 @@
 #ifndef WAVENUMBERFUNCTOR_HPP_
 #define WAVENUMBERFUNCTOR_HPP_
 
-#include <boost/math/tools/tuple.hpp>
+#include <tuple>
 
 /** \author cec
  *  \date Jul 31, 2014, 4:25:23 PM
@@ -30,7 +30,7 @@ class WaveNumberFunctor
             const double omega //!< Angular frequency (in rad/s)
             );
 
-        boost::math::tuple<double, double, double> operator()(const double& k) const;
+        std::tuple<double, double, double> operator()(const double& k) const;
 
     private:
         double h;

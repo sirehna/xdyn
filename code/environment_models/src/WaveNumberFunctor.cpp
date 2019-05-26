@@ -16,7 +16,7 @@ WaveNumberFunctor::WaveNumberFunctor(
 {
 }
 
-boost::math::tuple<double, double, double>
+std::tuple<double, double, double>
 WaveNumberFunctor::operator()(const double& k) const
 {
     const double gk = g*k;
@@ -26,6 +26,6 @@ WaveNumberFunctor::operator()(const double& k) const
     const double df = g * tkh + gk * (1 - t3) * h;
     const double t4 = 1 - t3;
     const double d2f = 2 * g * t4 * h - 2 * gk * tkh * t4 * h2;
-    return boost::math::make_tuple(f, df, d2f);
+    return std::make_tuple(f, df, d2f);
 }
 
