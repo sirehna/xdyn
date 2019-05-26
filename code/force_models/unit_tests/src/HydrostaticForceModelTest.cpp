@@ -42,7 +42,7 @@ EnvironmentAndFrames HydrostaticForceModelTest::get_environment_and_frames() con
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    ssc::kinematics::PointMatrixPtr mesh;
     env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
     return env;
 }
@@ -124,7 +124,7 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     const ssc::kinematics::Point G("NED",0,0,0);
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    ssc::kinematics::PointMatrixPtr mesh;
     env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
     const auto points = two_triangles_immerged();
@@ -209,7 +209,7 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_fast)
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    ssc::kinematics::PointMatrixPtr mesh;
     env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
     BodyStates states = get_body(BODY, unit_cube())->get_states();
@@ -232,7 +232,7 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_exact)
     const ssc::kinematics::Point G("NED",0,2,2./3.);
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), "mesh(" BODY ")"));
     env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), BODY));
-    TR1(shared_ptr)<ssc::kinematics::PointMatrix> mesh;
+    ssc::kinematics::PointMatrixPtr mesh;
     env.w = SurfaceElevationPtr(new DefaultSurfaceElevation(0, mesh));
 
     BodyStates states = get_body(BODY, unit_cube())->get_states();

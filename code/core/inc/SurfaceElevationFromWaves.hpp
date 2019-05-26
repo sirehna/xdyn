@@ -27,13 +27,13 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
 {
     public:
         SurfaceElevationFromWaves(
-                const std::vector<WaveModelPtr>& models,
-                const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
-                const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
+            const std::vector<WaveModelPtr>& models,
+            const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
+            const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
         SurfaceElevationFromWaves(
-                const WaveModelPtr& model,
-                const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
-                const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
+            const WaveModelPtr& model,
+            const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
+            const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
 
         /**
          *  \section ex1 Example
@@ -41,33 +41,36 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
          *  \section ex2 Expected output
          *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
          *  */
-        double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double t  //!< Current instant (in seconds)
-                           ) const;
+        double wave_height(
+            const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+            const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+            const double t  //!< Current instant (in seconds)
+            ) const;
 
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force and torque
           */
-        double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                            const double t, //!< Current time instant (in seconds)
-                            const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO
-                            const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
-                             ) const;
+        double evaluate_rao(
+            const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+            const double t, //!< Current time instant (in seconds)
+            const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO
+            const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
+            ) const;
 
         /**  \author cec
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at a given point & instant, in m/s
           */
-        ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                                const double x,   //!< x-position in the NED frame (in meters)
-                                                const double y,   //!< y-position in the NED frame (in meters)
-                                                const double z,   //!< z-position in the NED frame (in meters)
-                                                const double t,   //!< z-position in the NED frame (in meters)
-                                                const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                               ) const;
+        ssc::kinematics::Point orbital_velocity(
+            const double g,   //!< gravity (in m/s^2)
+            const double x,   //!< x-position in the NED frame (in meters)
+            const double y,   //!< y-position in the NED frame (in meters)
+            const double z,   //!< z-position in the NED frame (in meters)
+            const double t,   //!< z-position in the NED frame (in meters)
+            const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
+            ) const;
 
         std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
 
@@ -95,14 +98,15 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
          *  \section ex2 Expected output
          *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure expected output
          *  */
-        double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
-                                const double g,   //!< gravity (in m/s^2)
-                                const double x,   //!< x-position in the NED frame (in meters)
-                                const double y,   //!< y-position in the NED frame (in meters)
-                                const double z,   //!< z-position in the NED frame (in meters)
-                                const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                const double t    //!< Current time instant (in seconds)
-                                ) const;
+        double dynamic_pressure(
+            const double rho, //!< water density (in kg/m^3)
+            const double g,   //!< gravity (in m/s^2)
+            const double x,   //!< x-position in the NED frame (in meters)
+            const double y,   //!< y-position in the NED frame (in meters)
+            const double z,   //!< z-position in the NED frame (in meters)
+            const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
+            const double t    //!< Current time instant (in seconds)
+            ) const;
 
         std::vector<WaveModelPtr> models;
 };

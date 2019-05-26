@@ -14,7 +14,9 @@
 #define BODY "body 1"
 
 class WaveModel;
+typedef TR1(shared_ptr)<WaveModel> WaveModelPtr;
 
-EnvironmentAndFrames get_environment_and_frames(const TR1(shared_ptr)<WaveModel>& wave_model);
+EnvironmentAndFrames get_environment_and_frames(
+    const WaveModelPtr& wave_model);
 
 #endif  /* ENV_FOR_TESTS_HPP_ */

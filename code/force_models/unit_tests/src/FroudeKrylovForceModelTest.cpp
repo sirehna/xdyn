@@ -168,7 +168,7 @@ TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
     const Stretching ss(ys);
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
 
-    const EnvironmentAndFrames env = get_environment_and_frames(TR1(shared_ptr)<WaveModel>(new Airy(A, phi)));
+    const EnvironmentAndFrames env = get_environment_and_frames(WaveModelPtr(new Airy(A, phi)));
 
     BodyStates states = get_body(BODY, cube(0.2,0,0,0.2))->get_states();
     states.G = ssc::kinematics::Point("NED",0,0,0.2);

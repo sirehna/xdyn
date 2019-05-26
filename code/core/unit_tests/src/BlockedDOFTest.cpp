@@ -30,41 +30,43 @@ void BlockedDOFTest::TearDown()
 
 TEST_F(BlockedDOFTest, should_throw_if_forcing_same_state_twice)
 {
-    const std::string yaml1 = "blocked dof:\n"
-                             "   from CSV:\n"
-                             "     - state: u\n"
-                             "       t: T\n"
-                             "       value: PS\n"
-                             "       interpolation: spline\n"
-                             "       filename: test.csv\n"
-                             "     - state: u\n"
-                             "       t: T\n"
-                             "       value: PS\n"
-                             "       interpolation: spline\n"
-                             "       filename: test.csv\n";
+    const std::string yaml1 =
+        "blocked dof:\n"
+        "   from CSV:\n"
+        "     - state: u\n"
+        "       t: T\n"
+        "       value: PS\n"
+        "       interpolation: spline\n"
+        "       filename: test.csv\n"
+        "     - state: u\n"
+        "       t: T\n"
+        "       value: PS\n"
+        "       interpolation: spline\n"
+        "       filename: test.csv\n";
     const std::string yaml2 =
-                             "blocked dof:\n"
-                             "   from YAML:\n"
-                             "     - state: p\n"
-                             "       t: [4.2]\n"
-                             "       value: [5]\n"
-                             "       interpolation: piecewise constant\n"
-                             "     - state: p\n"
-                             "       t: [4.2]\n"
-                             "       value: [5]\n"
-                             "       interpolation: piecewise constant\n";
-    const std::string yaml3 = "blocked dof:\n"
-                             "   from CSV:\n"
-                             "     - state: u\n"
-                             "       t: T\n"
-                             "       value: PS\n"
-                             "       interpolation: spline\n"
-                             "       filename: test.csv\n"
-                             "   from YAML:\n"
-                             "     - state: u\n"
-                             "       t: [4.2]\n"
-                             "       value: [5]\n"
-                             "       interpolation: piecewise constant\n";
+        "blocked dof:\n"
+        "   from YAML:\n"
+        "     - state: p\n"
+        "       t: [4.2]\n"
+        "       value: [5]\n"
+        "       interpolation: piecewise constant\n"
+        "     - state: p\n"
+        "       t: [4.2]\n"
+        "       value: [5]\n"
+        "       interpolation: piecewise constant\n";
+    const std::string yaml3 =
+        "blocked dof:\n"
+        "   from CSV:\n"
+        "     - state: u\n"
+        "       t: T\n"
+        "       value: PS\n"
+        "       interpolation: spline\n"
+        "       filename: test.csv\n"
+        "   from YAML:\n"
+        "     - state: u\n"
+        "       t: [4.2]\n"
+        "       value: [5]\n"
+        "       interpolation: piecewise constant\n";
 
     ASSERT_THROW(BlockedDOF b(yaml1), InvalidInputException);
     ASSERT_THROW(BlockedDOF b(yaml2), InvalidInputException);
@@ -74,36 +76,37 @@ TEST_F(BlockedDOFTest, should_throw_if_forcing_same_state_twice)
 TEST_F(BlockedDOFTest, should_throw_if_not_as_many_values_as_instants)
 {
     const std::string invalid_yaml =
-                             "blocked dof:\n"
-                             "   from YAML:\n"
-                             "     - state: p\n"
-                             "       t: [4.2,5]\n"
-                             "       value: [5]\n"
-                             "       interpolation: piecewise constant\n";
+        "blocked dof:\n"
+        "   from YAML:\n"
+        "     - state: p\n"
+        "       t: [4.2,5]\n"
+        "       value: [5]\n"
+        "       interpolation: piecewise constant\n";
     ASSERT_THROW(BlockedDOF b(invalid_yaml), InvalidInputException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_t_not_strictly_increasing)
 {
     const std::string invalid_yaml =
-                             "blocked dof:\n"
-                             "   from YAML:\n"
-                             "     - state: p\n"
-                             "       t: [5,4.2]\n"
-                             "       value: [5,6]\n"
-                             "       interpolation: piecewise constant\n";
+        "blocked dof:\n"
+        "   from YAML:\n"
+        "     - state: p\n"
+        "       t: [5,4.2]\n"
+        "       value: [5,6]\n"
+        "       interpolation: piecewise constant\n";
     ASSERT_THROW(BlockedDOF b(invalid_yaml), InvalidInputException);
 }
 
 TEST_F(BlockedDOFTest, should_throw_if_CSV_file_does_not_exist)
 {
-    const std::string yaml = "blocked dof:\n"
-                             "   from CSV:\n"
-                             "     - state: u\n"
-                             "       t: T\n"
-                             "       value: PS\n"
-                             "       interpolation: spline\n"
-                             "       filename: test.csv\n";
+    const std::string yaml =
+        "blocked dof:\n"
+        "   from CSV:\n"
+        "     - state: u\n"
+        "       t: T\n"
+        "       value: PS\n"
+        "       interpolation: spline\n"
+        "       filename: test.csv\n";
     ASSERT_THROW(BlockedDOF b(yaml), InvalidInputException);
 }
 
@@ -141,13 +144,14 @@ struct TmpFile
 TEST_F(BlockedDOFTest, should_not_throw_if_CSV_file_exists)
 {
     TmpFile csv_file;
-    const std::string yaml = "blocked dof"
-                             "   from CSV:\n"
-                             "     - state: u\n"
-                             "       t: T\n"
-                             "       value: PS\n"
-                             "       interpolation: spline\n"
-                             "       filename: " + csv_file.get_filename();
+    const std::string yaml =
+        "blocked dof"
+        "   from CSV:\n"
+        "     - state: u\n"
+        "       t: T\n"
+        "       value: PS\n"
+        "       interpolation: spline\n"
+        "       filename: " + csv_file.get_filename();
     const std::string csv = "T,PS\n"
                             "1,2\n";
     csv_file << csv;
@@ -156,12 +160,13 @@ TEST_F(BlockedDOFTest, should_not_throw_if_CSV_file_exists)
 
 TEST_F(BlockedDOFTest, piecewise_constant_should_work)
 {
-    const std::string yaml = "blocked dof:\n"
-                             "   from YAML:\n"
-                             "     - state: p\n"
-                             "       t: [1,4.2,5]\n"
-                             "       value: [1,2,3]\n"
-                             "       interpolation: piecewise constant\n";
+    const std::string yaml =
+        "blocked dof:\n"
+        "   from YAML:\n"
+        "     - state: p\n"
+        "       t: [1,4.2,5]\n"
+        "       value: [1,2,3]\n"
+        "       interpolation: piecewise constant\n";
     StateType x(13);
     const BlockedDOF blocker(yaml);
     blocker.force_states(x,1);
@@ -178,12 +183,13 @@ TEST_F(BlockedDOFTest, piecewise_constant_should_work)
 
 TEST_F(BlockedDOFTest, linear_should_work)
 {
-    const std::string yaml = "blocked dof:\n"
-                             "   from YAML:\n"
-                             "     - state: u\n"
-                             "       t: [1,4.2,5]\n"
-                             "       value: [1,2,3]\n"
-                             "       interpolation: linear\n";
+    const std::string yaml =
+        "blocked dof:\n"
+        "   from YAML:\n"
+        "     - state: u\n"
+        "       t: [1,4.2,5]\n"
+        "       value: [1,2,3]\n"
+        "       interpolation: linear\n";
     StateType x(13);
     const BlockedDOF blocker(yaml);
     blocker.force_states(x,1);
@@ -200,12 +206,13 @@ TEST_F(BlockedDOFTest, linear_should_work)
 
 TEST_F(BlockedDOFTest, spline_should_work)
 {
-    const std::string yaml = "blocked dof:\n"
-                             "   from YAML:\n"
-                             "     - state: q\n"
-                             "       t: [1,4.2,5]\n"
-                             "       value: [1,2,3]\n"
-                             "       interpolation: spline\n";
+    const std::string yaml =
+        "blocked dof:\n"
+        "   from YAML:\n"
+        "     - state: q\n"
+        "       t: [1,4.2,5]\n"
+        "       value: [1,2,3]\n"
+        "       interpolation: spline\n";
     StateType x(13);
     const BlockedDOF blocker(yaml);
     blocker.force_states(x,1);
@@ -222,12 +229,13 @@ TEST_F(BlockedDOFTest, spline_should_work)
 
 TEST_F(BlockedDOFTest, blocked_derivative_should_work)
 {
-    const std::string yaml = "blocked dof:\n"
-                             "   from YAML:\n"
-                             "     - state: u\n"
-                             "       t: [1,4.2,5]\n"
-                             "       value: [1,2,3]\n"
-                             "       interpolation: linear\n";
+    const std::string yaml =
+        "blocked dof:\n"
+        "   from YAML:\n"
+        "     - state: u\n"
+        "       t: [1,4.2,5]\n"
+        "       value: [1,2,3]\n"
+        "       interpolation: linear\n";
     StateType dx_dt(13);
     const BlockedDOF blocker(yaml);
     blocker.force_state_derivatives(dx_dt,1);
@@ -244,12 +252,13 @@ TEST_F(BlockedDOFTest, blocked_derivative_should_work)
 
 TEST_F(BlockedDOFTest, force_delta)
 {
-    const std::string yaml = "blocked dof:\n"
-                             "   from YAML:\n"
-                             "     - state: u\n"
-                             "       t: [1,4.2,5]\n"
-                             "       value: [1,2,3]\n"
-                             "       interpolation: linear\n";
+    const std::string yaml =
+        "blocked dof:\n"
+        "   from YAML:\n"
+        "     - state: u\n"
+        "       t: [1,4.2,5]\n"
+        "       value: [1,2,3]\n"
+        "       interpolation: linear\n";
     const StateType dx_dt = {10,11,12,13,14,15,16,17,18,19,20,21,23};
     const BlockedDOF blocker(yaml);
     Eigen::Matrix<double,6,6> total_inertia;

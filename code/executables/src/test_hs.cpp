@@ -50,8 +50,8 @@ BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points)
     return BodyBuilder(rot).build(name, points, 0, 0, rot, 0);
 }
 
-TR1(shared_ptr)<WaveModel> get_wave_model();
-TR1(shared_ptr)<WaveModel> get_wave_model()
+WaveModelPtr get_wave_model();
+WaveModelPtr get_wave_model()
 {
     const double psi0 = PI/4;
     const double Hs = 3;
@@ -66,7 +66,7 @@ TR1(shared_ptr)<WaveModel> get_wave_model()
     const Stretching ss(ys);
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ss);
     int random_seed = 0;
-    return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
+    return WaveModelPtr(new Airy(A, random_seed));
 }
 
 EnvironmentAndFrames get_env();
