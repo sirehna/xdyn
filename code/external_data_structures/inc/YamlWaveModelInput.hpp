@@ -8,7 +8,6 @@
 #ifndef YAMLWAVEMODELINPUT_HPP_
 #define YAMLWAVEMODELINPUT_HPP_
 
-#include <cstdlib> // For size_t
 #include <string>
 #include <vector>
 
