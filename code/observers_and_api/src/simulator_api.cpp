@@ -1,6 +1,6 @@
+#include "simulator_api.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "check_input_yaml.hpp"
-#include "simulator_api.hpp"
 
 #include "Airy.hpp"
 #include "BretschneiderSpectrum.hpp"
@@ -34,8 +34,14 @@
 #include "listeners.hpp"
 #include "ConstantForceModel.hpp"
 
-SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener);
-SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener)
+SimulatorBuilder get_builder(
+    const YamlSimulatorInput& yaml,
+    const double t0,
+    const ssc::data_source::DataSource& command_listener);
+SimulatorBuilder get_builder(
+    const YamlSimulatorInput& yaml,
+    const double t0,
+    const ssc::data_source::DataSource& command_listener)
 {
     SimulatorBuilder builder(yaml, t0, command_listener);
     builder.can_parse<DefaultSurfaceElevation>()
@@ -69,13 +75,18 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
     return builder;
 }
 
-Sim get_system(const YamlSimulatorInput& input, const double t0)
+Sim get_system(
+    const YamlSimulatorInput& input,
+    const double t0)
 {
     const ssc::data_source::DataSource command_listener = make_command_listener(input.commands);
     return get_builder(input, t0, command_listener).build();
 }
 
-Sim get_system(const YamlSimulatorInput& input, const std::string& mesh, const double t0)
+Sim get_system(
+    const YamlSimulatorInput& input,
+    const std::string& mesh,
+    const double t0)
 {
     const auto name = input.bodies.front().name;
     MeshMap meshes;
@@ -83,12 +94,19 @@ Sim get_system(const YamlSimulatorInput& input, const std::string& mesh, const d
     return get_system(input, meshes, t0);
 }
 
-Sim get_system(const std::string& input, const std::string& mesh, const double t0, ssc::data_source::DataSource& commands)
+Sim get_system(
+    const std::string& input,
+    const std::string& mesh,
+    const double t0,
+    ssc::data_source::DataSource& commands)
 {
     return get_system(input, read_stl(mesh), t0, commands);
 }
 
-Sim get_system(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& mesh, const double t0)
+Sim get_system(
+    const YamlSimulatorInput& input,
+    const VectorOfVectorOfPoints& mesh,
+    const double t0)
 {
     const auto name = input.bodies.front().name;
     MeshMap meshes;
@@ -96,12 +114,20 @@ Sim get_system(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& me
     return get_system(input, meshes, t0);
 }
 
-Sim get_system(const std::string& input, const VectorOfVectorOfPoints& mesh, const double t0, ssc::data_source::DataSource& commands)
+Sim get_system(
+    const std::string& input,
+    const VectorOfVectorOfPoints& mesh,
+    const double t0,
+    ssc::data_source::DataSource& commands)
 {
     return get_system(SimulatorYamlParser(input).parse(), mesh, t0, commands);
 }
 
-Sim get_system(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& mesh, const double t0, ssc::data_source::DataSource& command_listener)
+Sim get_system(
+    const YamlSimulatorInput& input,
+    const VectorOfVectorOfPoints& mesh,
+    const double t0,
+    ssc::data_source::DataSource& command_listener)
 {
     const auto name = input.bodies.empty() ? "" : input.bodies.front().name;
     MeshMap meshes;
@@ -109,7 +135,10 @@ Sim get_system(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& me
     return get_builder(input, t0, command_listener).build(meshes);
 }
 
-Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, const double t0)
+Sim get_system(
+    const std::string& yaml,
+    const VectorOfVectorOfPoints& mesh,
+    const double t0)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
     const auto name = input.bodies.empty() ? "" : input.bodies.front().name;
@@ -118,31 +147,44 @@ Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, cons
     return get_system(input, meshes, t0);
 }
 
-Sim get_system(const YamlSimulatorInput& input, const MeshMap& meshes, const double t0)
+Sim get_system(
+    const YamlSimulatorInput& input,
+    const MeshMap& meshes,
+    const double t0)
 {
     const ssc::data_source::DataSource command_listener = make_command_listener(input.commands);
     return get_builder(input, t0, command_listener).build(meshes);
 }
 
-Sim get_system(const std::string& yaml, const double t0)
+Sim get_system(
+    const std::string& yaml,
+    const double t0)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
     return get_system(input, t0);
 }
 
-Sim get_system(const std::string& yaml, const std::string& mesh, const double t0)
+Sim get_system(
+    const std::string& yaml,
+    const std::string& mesh,
+    const double t0)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
     return get_system(check_input_yaml(input), mesh, t0);
 }
 
-Sim get_system(const std::string& yaml, const MeshMap& meshes, const double t0)
+Sim get_system(
+    const std::string& yaml,
+    const MeshMap& meshes,
+    const double t0)
 {
     const auto input = SimulatorYamlParser(yaml).parse();
     return get_system(check_input_yaml(input), meshes, t0);
 }
 
-MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh)
+MeshMap make_mesh_map(
+    const YamlSimulatorInput& yaml,
+    const std::string& mesh)
 {
     const auto name = yaml.bodies.front().name;
     MeshMap meshes;

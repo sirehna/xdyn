@@ -34,20 +34,20 @@ DictObserver::~DictObserver()
 std::function<void()> DictObserver::get_serializer(const double val, const DataAddressing& d)
 {
     return [this,d,val]()
-                      {
-                        DictMapKeyVar j = extractKeyVarFromString(d.name);
-                        if (not j.first.empty())
-                        {
-                            if (j.second.empty())
-                            {
-                                dictMap1[j.first] = val;
-                            }
-                            else
-                            {
-                                dictMap2[j.first][j.second] = val;
-                            }
-                        }
-                      };
+        {
+            DictMapKeyVar j = extractKeyVarFromString(d.name);
+            if (not j.first.empty())
+            {
+                if (j.second.empty())
+                {
+                    dictMap1[j.first] = val;
+                }
+                else
+                {
+                    dictMap2[j.first][j.second] = val;
+                }
+            }
+        };
 }
 
 std::function<void()> DictObserver::get_initializer(const double, const DataAddressing&)
@@ -55,7 +55,9 @@ std::function<void()> DictObserver::get_initializer(const double, const DataAddr
     return [this](){};
 }
 
-std::function<void()> DictObserver::get_serializer(const SurfaceElevationGrid& s, const DataAddressing&)
+std::function<void()> DictObserver::get_serializer(
+    const SurfaceElevationGrid& s,
+    const DataAddressing&)
 {
     return [this,s](){
         const size_t nx = (size_t)s.x.size();
@@ -72,7 +74,7 @@ std::function<void()> DictObserver::get_serializer(const SurfaceElevationGrid& s
         if (n>0) ssSurfaceElevationGrid << "\"waves\":{\"nx\":" << nx <<",\"ny\":" << ny
                                         << ",\"xmin\":"<< xmin << ",\"xmax\":"<< xmax
                                         << ",\"ymin\":"<< ymin << ",\"ymax\":"<< ymax
-                                        <<",\"z\":'"<<base<91>::encode(sizeof(float)*n,&v[0])<<"'}";
+                                        << ",\"z\":'"<<base<91>::encode(sizeof(float)*n,&v[0])<<"'}";
     };
 }
 

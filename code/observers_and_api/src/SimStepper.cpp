@@ -1,9 +1,8 @@
-#include <functional>
-
+#include "SimStepper.hpp"
 #include "InvalidInputException.hpp"
 #include "SimServerInputs.hpp"
-#include "SimStepper.hpp"
 #include "simulator_api.hpp"
+#include <functional>
 
 SimStepper::SimStepper(const ConfBuilder& builder, const std::string& solver, const double dt)
     : sim(builder.sim)

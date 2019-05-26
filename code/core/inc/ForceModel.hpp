@@ -8,19 +8,16 @@
 #ifndef FORCEMODEL_HPP_
 #define FORCEMODEL_HPP_
 
-#include <functional>
-#include <vector>
-#include <ssc/kinematics.hpp>
+#include "YamlBody.hpp"
+#include "InvalidInputException.hpp"
 #include "yaml-cpp/exceptions.h"
-
-#include <boost/optional/optional.hpp>
-#include <boost/utility/enable_if.hpp>
-
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
-
-#include "InvalidInputException.hpp"
-#include "YamlBody.hpp"
+#include <ssc/kinematics.hpp>
+#include <boost/optional/optional.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <functional>
+#include <vector>
 
 struct BodyStates;
 struct EnvironmentAndFrames;

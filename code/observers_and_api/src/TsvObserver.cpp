@@ -1,9 +1,8 @@
+#include "TsvObserver.hpp"
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-
-#include "TsvObserver.hpp"
 
 #define PRECISION 3
 #define WIDTH (PRECISION+6)

@@ -4,15 +4,15 @@
  *  Created on: Jan 12, 2015
  *      Author: cady
  */
-
+#include "CsvObserver.hpp"
+#include <boost/algorithm/string.hpp>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <boost/algorithm/string.hpp>
 
-#include "CsvObserver.hpp"
-
-CsvObserver::CsvObserver(const std::string& filename, const std::vector<std::string>& d) :
+CsvObserver::CsvObserver(
+    const std::string& filename,
+    const std::vector<std::string>& d):
         Observer(d),
         output_to_file(not(filename.empty())),
         os(output_to_file ? *(new std::ofstream(filename)) : std::cout)

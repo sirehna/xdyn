@@ -5,9 +5,8 @@
  *      Author: cady
  */
 
-
-#include "SimServerInputs.hpp"
 #include "XdynForME.hpp"
+#include "SimServerInputs.hpp"
 
 XdynForME::XdynForME(const std::string& yaml_model) :builder(yaml_model)
 {
