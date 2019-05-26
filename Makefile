@@ -132,7 +132,7 @@ test-windows:
             mkdir -p /opt/share/.wine;\
             export WINEPREFIX=/opt/share/.wine;\
             wine winecfg;\
-            wine ./run_all_tests --gtest_filter=-*ocket*:HOSTest*:*ot_throw_if_CSV_file_exists"
+            wine ./run_all_tests --gtest_filter=-*ocket*:*ot_throw_if_CSV_file_exists"
 
 cmake-debian-target: SHELL:=/bin/bash
 cmake-debian-target: code/yaml-cpp/CMakeLists.txt
@@ -166,7 +166,7 @@ test-debian: SHELL:=/bin/bash
 test-debian:
 	docker run $(ci_env) --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
            "cd $(BUILD_DIR) &&\
-            ./run_all_tests --gtest_filter=-HOSTest* &&\
+            ./run_all_tests &&\
             if [[ $(BUILD_TYPE) == Coverage ]];\
             then\
             echo Coverage;\

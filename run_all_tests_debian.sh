@@ -9,4 +9,4 @@ docker run $TERMINAL \
     -w /build \
     -t \
     sirehna/base-image-debian9-gcc6-xdyn \
-    /bin/bash -c "export LD_LIBRARY_PATH=/build; ./run_all_tests --gtest_filter=-HOSTest* `echo $*`"
+    /bin/bash -c "export LD_LIBRARY_PATH=/build; ./run_all_tests `echo $*`"

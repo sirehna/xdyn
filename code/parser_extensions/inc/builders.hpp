@@ -60,19 +60,6 @@ class SurfaceElevationBuilder<SurfaceElevationFromWaves> : public SurfaceElevati
         WaveDirectionalSpreadingPtr parse_directional_spreading(const YamlSpectra& spectrum) const;
 };
 
-class HOS;
-template <>
-class SurfaceElevationBuilder<HOS> : public SurfaceElevationBuilderInterface
-{
-    public:
-        SurfaceElevationBuilder();
-        boost::optional<SurfaceElevationInterfacePtr> try_to_parse(
-            const std::string& model,
-            const std::string& yaml
-            ) const;
-
-};
-
 template <>
 class WaveModelBuilder<Airy> : public WaveModelBuilderInterface
 {
