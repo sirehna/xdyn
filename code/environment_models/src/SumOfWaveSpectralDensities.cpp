@@ -26,8 +26,8 @@ SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(
     const WaveSpectralDensity& w2) :
         terms(std::vector<WaveSpectralDensityPtr>())
 {
-    terms.push_back(TR1(shared_ptr)<WaveSpectralDensity>(w1.clone()));
-    terms.push_back(TR1(shared_ptr)<WaveSpectralDensity>(w2.clone()));
+    terms.push_back(WaveSpectralDensityPtr(w1.clone()));
+    terms.push_back(WaveSpectralDensityPtr(w2.clone()));
 }
 
 SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(
@@ -36,7 +36,7 @@ SumOfWaveSpectralDensities::SumOfWaveSpectralDensities(
 {
     for (auto t = ws.begin() ; t != ws.end() ; ++t)
     {
-        terms.push_back(TR1(shared_ptr)<WaveSpectralDensity>(t->clone()));
+        terms.push_back(WaveSpectralDensityPtr(t->clone()));
     }
 }
 
