@@ -1,11 +1,10 @@
 #ifndef JSONOBSERVER_HPP_
 #define JSONOBSERVER_HPP_
 
+#include "DictObserver.hpp"
 #include <string>
 #include <vector>
 #include <ostream>
-
-#include "DictObserver.hpp"
 
 class JsonObserver : public DictObserver
 {

@@ -8,20 +8,16 @@
 #ifndef BLOCKEDDOF_HPP_
 #define BLOCKEDDOF_HPP_
 
-#include <map>
-#include <string>
-#include <vector>
-
-#include <Eigen/Dense>
-
+#include "YamlBody.hpp"
+#include "StateMacros.hpp"
 #include <ssc/interpolation.hpp>
 #include <ssc/kinematics.hpp>
 #include <ssc/macros/tr1_macros.hpp>
-
 #include TR1INC(memory)
-
-#include "YamlBody.hpp"
-#include "StateMacros.hpp"
+#include <Eigen/Dense>
+#include <map>
+#include <string>
+#include <vector>
 
 class BlockedDOF
 {

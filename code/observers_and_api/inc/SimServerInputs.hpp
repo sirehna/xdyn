@@ -10,9 +10,9 @@
 
 struct YamlSimServerInputs;
 
+#include "State.hpp"
 #include <map>
 #include <string>
-#include "State.hpp"
 
 struct SimServerInputs
 {
