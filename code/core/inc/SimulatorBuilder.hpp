@@ -168,10 +168,12 @@ class SimulatorBuilder
         /**  \brief Create a Kinematics object with transforms from NED to each body
           *  \returns KinematicsPtr containing the initial transforms
           */
-        void add_initial_transforms(const std::vector<BodyPtr>& bodies, //!< Bodies containing the initial coordinates
-                                    ssc::kinematics::KinematicsPtr& k) const;
+        void add_initial_transforms(
+            const std::vector<BodyPtr>& bodies, //!< Bodies containing the initial coordinates
+            ssc::kinematics::KinematicsPtr& k) const;
 
-        std::vector<bool> are_there_surface_forces_acting_on_body(const std::vector<ListOfForces>& forces) const;
+        std::vector<bool> are_there_surface_forces_acting_on_body(
+            const std::vector<ListOfForces>& forces) const;
 
     private:
         SimulatorBuilder(); // Disabled
