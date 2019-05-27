@@ -65,7 +65,7 @@ int main(int , char** )
     {
         x.at(i) = xmin + (xmax - xmin)* ((double)i)/((double)nx - 1.);
     }
-    eta = wave.elevation_vectorized(x, y, t);
+    eta = wave.elevation(x, y, t);
 
     for (size_t i = 0 ; i < nx ; ++i)
     {

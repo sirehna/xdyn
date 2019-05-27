@@ -46,7 +46,7 @@ class WaveModel
           *  \returns Elevations of a list of points at a given instant, in meters.
           *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
           */
-        virtual std::vector<double> elevation_vectorized(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
+        virtual std::vector<double> elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
                                               const std::vector<double> &y, //!< y-positions in the NED frame (in meters)
                                               const double t                //!< Current time instant (in seconds)
                                               ) const = 0;

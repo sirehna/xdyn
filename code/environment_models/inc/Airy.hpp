@@ -50,7 +50,7 @@ class Airy : public WaveModel
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
           *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
-        std::vector<double> elevation_vectorized(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
+        std::vector<double> elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
                                       const std::vector<double> &y,            //!< y-positions in the NED frame (in meters)
                                       const double t                           //!< Current time instant (in seconds)
                                       ) const;
