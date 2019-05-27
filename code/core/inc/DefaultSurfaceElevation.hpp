@@ -38,11 +38,6 @@ class DefaultSurfaceElevation : public SurfaceElevationInterface
           *  \returns zwave;
           *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest wave_height_example
           */
-        double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double t  //!< Current instant (in seconds)
-                           ) const;
-
         std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                         const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                         const double t                //!< Current instant (in seconds)

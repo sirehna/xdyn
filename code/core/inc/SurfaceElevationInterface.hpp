@@ -139,19 +139,6 @@ class SurfaceElevationInterface
                 ) const;
 
         /**  \brief Surface elevation
-              *  \returns Surface elevation of a point at a given instant, in meters.
-              *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-              *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
-              *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 29
-              *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
-              *  \returns zwave - z
-              */
-        virtual double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                   const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                   const double t  //!< Current instant (in seconds)
-                                   ) const = 0;
-
-        /**  \brief Surface elevation
               *  \returns Surface elevations of a list of points at a given instant, in meters.
               *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
               *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76

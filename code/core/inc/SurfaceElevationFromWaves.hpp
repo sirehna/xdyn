@@ -41,11 +41,6 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
          *  \section ex2 Expected output
          *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
          *  */
-        double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double t  //!< Current instant (in seconds)
-                           ) const;
-
         std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                         const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                         const double t                //!< Current instant (in seconds)

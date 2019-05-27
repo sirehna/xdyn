@@ -16,11 +16,6 @@ DefaultSurfaceElevation::DefaultSurfaceElevation(
 {
 }
 
-double DefaultSurfaceElevation::wave_height(const double , const double , const double ) const
-{
-    return zwave;
-}
-
 std::vector<double> DefaultSurfaceElevation::wave_height(const std::vector<double> &x, const std::vector<double> &y, const double) const
 {
     if (x.size() != y.size()) {
