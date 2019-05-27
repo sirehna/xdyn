@@ -63,9 +63,17 @@ ssc::kinematics::PointMatrix SurfaceElevationInterface::get_points_on_free_surfa
         THROW(__PRETTY_FUNCTION__,ssc::exception_handling::Exception,ss.str());
     }
     ssc::kinematics::PointMatrix ret(*Mned);
+    std::vector<double> x((size_t)Mned->m.cols());
+    std::vector<double> y((size_t)Mned->m.cols());
     for (int i = 0 ; i < Mned->m.cols() ; ++i)
     {
-        ret.m(2,i) = wave_height((double)ret.m(0,i), (double)ret.m(1,i),t);
+        x.at((size_t)i) = (double)ret.m(0, i);
+        y.at((size_t)i) = (double)ret.m(1, i);
+    }
+    std::vector<double> wave_height_ = wave_height(x, y, t);
+    for (int i = 0; i < Mned->m.cols(); ++i)
+    {
+        ret.m(2, i) = wave_height_.at((size_t)i);
     }
     return ret;
 }
@@ -90,11 +98,18 @@ void SurfaceElevationInterface::update_surface_elevation(
     if (n<=0) return;
     const ssc::kinematics::PointMatrix OP = compute_position_in_NED_frame(*P, k);
     relative_wave_height_for_each_point_in_mesh.resize((size_t)n);
-    surface_elevation_for_each_point_in_mesh.resize((size_t)n);
+
+    std::vector<double> x((size_t)n);
+    std::vector<double> y((size_t)n);
+    for (int i = 0; i < n; ++i)
+    {
+        x.at((size_t)i) = (double)OP.m(0, i);
+        y.at((size_t)i) = (double)OP.m(1, i);
+    }
+    surface_elevation_for_each_point_in_mesh = wave_height(x, y, t);
     for (int i = 0 ; i < n ; ++i)
     {
-        surface_elevation_for_each_point_in_mesh[(size_t)i] = wave_height((double)OP.m(0,i),(double)OP.m(1,i),t);
-        relative_wave_height_for_each_point_in_mesh[(size_t)i] = (double)OP.m(2,i) - surface_elevation_for_each_point_in_mesh[(size_t)i];
+        relative_wave_height_for_each_point_in_mesh.at((size_t)i) = (double)OP.m(2,i) - surface_elevation_for_each_point_in_mesh.at((size_t)i);
     }
 }
 
