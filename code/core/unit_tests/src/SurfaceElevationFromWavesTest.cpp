@@ -104,9 +104,9 @@ TEST_F(SurfaceElevationFromWavesTest, relative_wave_height)
     for (double t = 0 ; t < 30 ; t+=0.1)
     {
         const ssc::kinematics::Point P("NED", a.random<double>(), a.random<double>(), a.random<double>());
-        const double x = P.x();
-        const double y = P.y();
-        ASSERT_NEAR(-Hs/2*sin(-2*PI/Tp*t + k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.wave_height(x, y, t), 1E-5);
+        const std::vector<double> x{P.x()};
+        const std::vector<double> y{P.y()};
+        ASSERT_NEAR(-Hs/2*sin(-2*PI/Tp*t + k_*(x.at(0)*cos(psi0)+y.at(0)*sin(psi0)) +phi), wave.wave_height(x, y, t).at(0), 1E-5);
     }
 //! [SurfaceElevationFromWavesTest relative_wave_height expected output]
 }
@@ -197,40 +197,45 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure_plus_hydrostatic)
     const double phi = 0;//-PI;
     SurfaceElevationFromWaves wave(get_model(Hs, 2*PI/omega0, phi, h));
 
-    const double t = 0;
-    const double EPS = 1E-4;
+    const ssc::kinematics::Point P1("NED", PI / 2, 0, -1);
+    const ssc::kinematics::Point P2("NED", PI / 2, 0, -0.5);
+    const ssc::kinematics::Point P3("NED", PI / 2, 0, 0);
+    const ssc::kinematics::Point P4("NED", PI, 0, 0);
+    const ssc::kinematics::Point P5("NED", 3 * PI / 2, 0, 1 + 1E-10);
 
-    const ssc::kinematics::Point P1("NED", PI/2, 0, -1);
+    const std::vector<double> x{P1.x(), P2.x(), P3.x(), P4.x(), P5.x()};
+    const std::vector<double> y{P1.y(), P2.y(), P3.y(), P4.y(), P5.y()};
+    const double t = 0;
+
+    std::vector<double> wave_height = wave.wave_height(x, y, t);
+    
+    const double EPS = 1E-4;
     const double phs1 = rho*g*P1.z();
-    const double pdyn1 = wave.get_dynamic_pressure(rho, g, P1, k, wave.wave_height(P1.x(), P1.y(), t), t);
+    const double pdyn1 = wave.get_dynamic_pressure(rho, g, P1, k, wave_height.at(0), t);
     ASSERT_NEAR(-rho*g, phs1, EPS);
     ASSERT_NEAR(rho*g*(cosh(h+1)/cosh(h)), pdyn1, EPS);
     ASSERT_NEAR(rho*g*(cosh(h+1)/cosh(h) - 1), phs1 + pdyn1, EPS);
 
-    const ssc::kinematics::Point P2("NED", PI/2, 0, -0.5);
     const double phs2 = rho*g*P2.z();
-    const double pdyn2 = wave.get_dynamic_pressure(rho, g, P2, k, wave.wave_height(P2.x(), P2.y(), t), t);
+    const double pdyn2 = wave.get_dynamic_pressure(rho, g, P2, k, wave_height.at(1), t);
     ASSERT_NEAR(-rho*g*0.5, phs2, EPS);
     ASSERT_NEAR(rho*g*(cosh(h+0.5)/cosh(h)), pdyn2, EPS);
     ASSERT_NEAR(rho*g*(cosh(h+0.5)/cosh(h) - 0.5), phs2 + pdyn2, EPS);
 
-    const ssc::kinematics::Point P3("NED", PI/2, 0, 0);
     const double phs3 = rho*g*P3.z();
-    const double pdyn3 = wave.get_dynamic_pressure(rho, g, P3, k, wave.wave_height(P3.x(), P3.y(), t), t);
+    const double pdyn3 = wave.get_dynamic_pressure(rho, g, P3, k, wave_height.at(2), t);
     ASSERT_NEAR(0, phs3, EPS);
     ASSERT_NEAR(rho*g, pdyn3, EPS);
     ASSERT_NEAR(rho*g, phs3 + pdyn3, EPS);
 
-    const ssc::kinematics::Point P4("NED", PI, 0, 0);
     const double phs4 = rho*g*P4.z();
-    const double pdyn4 = wave.get_dynamic_pressure(rho, g, P4, k, wave.wave_height(P4.x(), P4.y(), t), t);
+    const double pdyn4 = wave.get_dynamic_pressure(rho, g, P4, k, wave_height.at(3), t);
     ASSERT_NEAR(0, phs4, EPS);
     ASSERT_NEAR(0, pdyn4, EPS);
     ASSERT_NEAR(0, phs4 + pdyn4, EPS);
 
-    const ssc::kinematics::Point P5("NED", 3*PI/2, 0, 1+1E-10);
     const double phs5 = rho*g*P5.z();
-    const double pdyn5 = wave.get_dynamic_pressure(rho, g, P5, k, wave.wave_height(P5.x(), P5.y(), t), t);
+    const double pdyn5 = wave.get_dynamic_pressure(rho, g, P5, k, wave_height.at(4), t);
     ASSERT_NEAR(rho*g, phs5, EPS);
     ASSERT_NEAR(-rho*g*(cosh(h-1)/cosh(h)), pdyn5, EPS);
     ASSERT_NEAR(rho*g*(1-cosh(h-1)/cosh(h)), phs5 + pdyn5, EPS);
