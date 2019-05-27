@@ -24,6 +24,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlDiffraction.cpp
         src/YamlState.cpp
         src/YamlSimServerInputs.cpp
+        src/YamlGRPC.cpp
         src/YamlWaveOutput.cpp
         )
 
