@@ -8,8 +8,9 @@
 #ifndef YAMLWAVEMODELINPUT_HPP_
 #define YAMLWAVEMODELINPUT_HPP_
 
-#include <string>
 #include <vector>
+
+#include "YamlWaveOutput.hpp"
 
 struct YamlDiscretization
 {
@@ -38,18 +39,6 @@ struct YamlSpectra
     std::string spectral_density_yaml;      //!< Spectral model parameters in YAML format
     double depth;                           //!< Water depth (in meters): 0 for infinite depth
     YamlStretching stretching;              //!< Stretching model for orbital wave velocities (delta-stretching model)
-};
-
-struct YamlWaveOutput
-{
-    YamlWaveOutput();
-    std::string frame_of_reference;  //!< Name of the frame of reference the x & y coordinates are expressed in
-    double xmin;                     //!< Minimum x value (in meters) of the points in the output mesh
-    double xmax;                     //!< Maximum x value (in meters) of the points in the output mesh
-    size_t nx;                       //!< Discretization of the mesh along the x axis (number of different x values)
-    double ymin;                     //!< Minimum y value (in meters) of the points in the output mesh
-    double ymax;                     //!< Maximum y value (in meters) of the points in the output mesh
-    size_t ny;                       //!< Discretization of the mesh along the y axis (number of different x values)
 };
 
 struct YamlWaveModel
