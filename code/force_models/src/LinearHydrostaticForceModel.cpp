@@ -101,16 +101,20 @@ double LinearHydrostaticForceModel::compute_thetabar(const std::vector<double>& 
 std::vector<double> LinearHydrostaticForceModel::get_zH(const double t) const
 {
     std::vector<double> ret;
+    std::vector<double> x(4);
+    std::vector<double> y(4);
     auto T = env.k->get("NED", P1.get_frame());
     T.swap();
     auto P_ = T*P1;
-    ret.push_back(env.w->wave_height(P_.x(), P_.y(), t));
+    x.at(0) = P_.x(); y.at(0) = P_.y();
     P_ = T*P2;
-    ret.push_back(env.w->wave_height(P_.x(), P_.y(), t));
+    x.at(1) = P_.x(); y.at(1) = P_.y();
     P_ = T*P3;
-    ret.push_back(env.w->wave_height(P_.x(), P_.y(), t));
+    x.at(2) = P_.x(); y.at(2) = P_.y();
     P_ = T*P4;
-    ret.push_back(env.w->wave_height(P_.x(), P_.y(), t));
+    x.at(3) = P_.x(); y.at(3) = P_.y();
+
+    ret = env.w->wave_height(x, y, t);
     return ret;
 }
 
