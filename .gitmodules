@@ -1,4 +1,4 @@
 	
 [submodule "code/waves_grpc"]
 	path = code/waves_grpc
-	url = ../../demo_docker_grpc.git
+	url = ../../sirehna/demo_docker_grpc.git
