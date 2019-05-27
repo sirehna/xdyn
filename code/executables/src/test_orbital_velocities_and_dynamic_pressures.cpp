@@ -46,7 +46,6 @@ int main(int , char** )
     const double xmax = 20;
     const double zmin = -2;
     const double zmax = 30;
-    const double y = 0;
 
     const size_t nx = 80;
     const size_t nz = 640;
@@ -57,6 +56,7 @@ int main(int , char** )
     std::vector<double> vorb(nx*nz);
     std::vector<double> worb(nx*nz);
     std::vector<double> x(nx);
+    std::vector<double> y(nx, 0);
     std::vector<double> z(nz);
     std::vector<double> eta(nx); //!< wave elevation
     std::vector<double> usurf(nx); //!< u-component of the orbital velocity, taken on the air-water interface (free surface)
@@ -64,15 +64,19 @@ int main(int , char** )
     for (size_t i = 0 ; i < nx ; ++i)
     {
         x.at(i) = xmin + (xmax - xmin)* ((double)i)/((double)nx - 1.);
-        eta.at(i) = wave.elevation(x.at(i), y, t);
-        const ssc::kinematics::Point Vsurf = wave.orbital_velocity(g,x.at(i),y,eta.at(i),t,eta.at(i));
+    }
+    eta = wave.elevation_vectorized(x, y, t);
+
+    for (size_t i = 0 ; i < nx ; ++i)
+    {
+        const ssc::kinematics::Point Vsurf = wave.orbital_velocity(g, x.at(i), y.at(i), eta.at(i), t, eta.at(i));
         usurf.at(i) = Vsurf.v(0);
         wsurf.at(i) = Vsurf.v(2);
         for (size_t j = 0 ; j < nz ; ++j)
         {
             z.at(j) = zmin + (zmax - zmin)* ((double)j)/((double)nz - 1.);
-            pdyn.at(nz*i+j) = wave.dynamic_pressure(rho, g, x.at(i), y, z.at(j), eta.at(i), t);
-            const ssc::kinematics::Point V = wave.orbital_velocity(g,x.at(i),y,z.at(j),t,eta.at(i));
+            pdyn.at(nz * i + j) = wave.dynamic_pressure(rho, g, x.at(i), y.at(i), z.at(j), eta.at(i), t);
+            const ssc::kinematics::Point V = wave.orbital_velocity(g, x.at(i), y.at(i), z.at(j), t, eta.at(i));
             uorb.at(nz*i+j) = V.v(0);
             vorb.at(nz*i+j) = V.v(1);
             worb.at(nz*i+j) = V.v(2);
