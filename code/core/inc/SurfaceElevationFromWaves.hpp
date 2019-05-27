@@ -46,6 +46,11 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
                            const double t  //!< Current instant (in seconds)
                            ) const;
 
+        std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                        const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                        const double t                //!< Current instant (in seconds)
+                                        ) const;
+
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force and torque
           */

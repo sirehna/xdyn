@@ -6,6 +6,7 @@
  */
 
 #include "SurfaceElevationFromWaves.hpp"
+#include "InternalErrorException.hpp"
 
 #include <ssc/exception_handling.hpp>
 
@@ -41,8 +42,29 @@ double SurfaceElevationFromWaves::wave_height(const double x, //!< x-coordinate 
                                               const double t  //!< Current instant (in seconds)
                                          ) const
 {
-    double zwave = 0;
-    for (const auto model:models) zwave += model->elevation(x,y,t);
+    return wave_height(std::vector<double>{x}, std::vector<double>{y}, t).at(0);
+}
+
+std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                                           const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                                           const double t                //!< Current instant (in seconds)
+                                                           ) const
+{
+    if (x.size() != y.size())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating surface elevation from waves: the x and y vectors don't have the same size (size of x: " << x.size() << ", size of y: " << y.size() << ")");
+    }
+    std::vector<double> zwave(x.size(), 0);
+
+    for (const auto model:models)
+    {
+        const std::vector<double> model_wave_height = model->elevation_vectorized(x, y, t);
+        for (size_t i = 0; i < model_wave_height.size(); ++i)
+        {
+            zwave.at(i) += model_wave_height.at(i);
+        }
+    }
+
     return zwave;
 }
 
