@@ -85,15 +85,6 @@ double Airy::evaluate_rao(
     return F;
 }
 
-double Airy::elevation(
-        const double x,     //!< x-position in the NED frame (in meters)
-        const double y,     //!< y-position in the NED frame (in meters)
-        const double t      //!< Current time instant (in seconds)
-        ) const
-{
-    return elevation_vectorized(std::vector<double>{x}, std::vector<double>{y}, t).at(0);
-}
-
 std::vector<double> Airy::elevation_vectorized(
     const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
     const std::vector<double> &y, //!< y-positions in the NED frame (in meters)

@@ -40,17 +40,6 @@ class WaveModel
                                     const std::vector<double>& rao_phase //!< Phase of the RAO
                                      ) const = 0;
 
-        /**  \author cec
-          *  \date Aug 1, 2014, 3:24:45 PM
-          *  \brief Surface elevation
-          *  \returns Elevation of a point at a given instant, in meters.
-          *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
-          */
-        virtual double elevation(const double x, //!< x-position in the NED frame (in meters)
-                                 const double y, //!< y-position in the NED frame (in meters)
-                                 const double t  //!< Current time instant (in seconds)
-                                 ) const = 0;
-
         /**  \author lli
           *  \date Aug 1, 2014, 3:24:45 PM
           *  \brief Surface elevation
