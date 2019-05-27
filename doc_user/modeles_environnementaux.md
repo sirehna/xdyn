@@ -1202,6 +1202,72 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Utilisation d'un modèle de houle distant
+
+xdyn permet d'utiliser des modèles de houle sur un serveur distant. L'intérêt
+est que l'on peut ainsi mettre en oeuvre des modèles de houle qui ne sont pas
+implémentés dans le code d'xdyn sans intervenir sur le code source d'xdyn en
+C++.
+
+### Technologie utilisée
+
+La technologie utilisée pour ce faire s'appelle "[gRPC](https://grpc.io/)" et
+permet de définir rapidement des services en C++, Java, Python, Ruby, Node.js,
+C#, Go, PHP ou Objective-C. Le code d'interfaçage est généré automatiquement
+pour des clients écrits dans chacun de ces langages (dans le cas d'xdyn, du
+C++). On obtient ainsi :
+
+- Une définition d'interface unique et validée par un compilateur
+- Des interfaces client/serveur générées (aucun risque d'erreur sur ce point)
+- Une interopérabilité entre des systèmes écrits dans des langages différents
+- Un protocole de communication rapide.
+
+Ainsi, les modèles de houle externes qui respectent cette interface peuvent être
+utilisés en Python, Matlab (via l'API Java de gRPC).
+
+### Interface pour les modèles de houle
+
+Le fichier de définition de l'interface des modèles de houle est disponible à
+l'adresse suivante :
+
+[https://gitlab.sirehna.com/sirehna/demo_docker_grpc/blob/master/waves.proto](https://gitlab.sirehna.com/sirehna/demo_docker_grpc/blob/master/waves.proto)
+
+Ce fichier est nécessaire si l'on souhaite écrire un modèle de houle externe
+(un serveur de houle) appelable par xdyn.  Il n'est pas nécessaire pour
+utiliser un modèle de houle déjà écrit (mais il est utilisé lors de la compilation
+d'xdyn lui-même).
+
+### Paramétrage dans xdyn
+
+Un modèle sans paramètre tournant sur un serveur accessible à l'adresse
+http://localhost:50001 est paramétré comme suit :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: grpc
+  url: http://localhost:50001
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Si le modèle de houle contient des paramètres, ceux-ci doivent figurer à la suite
+dans le fichier YAML d'xdyn et ils sont transmis directement au serveur sans être
+interprêtés par xdyn. Par exemple, un modèle d'Airy pourrait être paramétré de la façon
+suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: grpc
+  url: http://localhost:50001
+  Hs: {value: 5, unit: m}
+  Tp: {value: 15, unit: s}
+  gamma: 1.2
+  seed of the random data generator: 0
+  waves propagating to: {value: 90, unit: deg}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Exemple d'utilisation
+
+Le [tutoriel 7](#tutoriel-7-utilisation-dun-modèle-de-houle-distant) détaille
+la mise en oeuvre de la simulation.
+
+
 ## Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70, 78 pour le stretching
