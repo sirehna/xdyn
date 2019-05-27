@@ -91,16 +91,33 @@ double Airy::elevation(
         const double t      //!< Current time instant (in seconds)
         ) const
 {
-    double zeta = 0;
-    const size_t n = spectrum.psi.size();
-    for (size_t i = 0 ; i < n ; ++i)
+    return elevation_vectorized(std::vector<double>{x}, std::vector<double>{y}, t).at(0);
+}
+
+std::vector<double> Airy::elevation_vectorized(
+    const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
+    const std::vector<double> &y, //!< y-positions in the NED frame (in meters)
+    const double t                //!< Current time instant (in seconds)
+    ) const
+{
+    if (x.size() != y.size())
     {
-        const double a = spectrum.a[i];
-        const double omega_t = spectrum.omega[i] * t;
-        const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        const double theta = spectrum.phase[i];
-        zeta -= a * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating Airy surface elevation: the x and y vectors don't have the same size (size of x: " << x.size() << ", size of y: " << y.size() << ")");
     }
+    std::vector<double> zeta(x.size());
+    const size_t n = spectrum.psi.size();
+
+    for (size_t j = 0; j < zeta.size(); ++j) {
+        for (size_t i = 0 ; i < n ; ++i)
+        {
+            const double a = spectrum.a[i];
+            const double omega_t = spectrum.omega[i] * t;
+            const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x.at(j) * spectrum.cos_psi[i] + y.at(j) * spectrum.sin_psi[i]);
+            const double theta = spectrum.phase[i];
+            zeta.at(j) -= a * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
+        }
+    }
+
     return zeta;
 }
 
