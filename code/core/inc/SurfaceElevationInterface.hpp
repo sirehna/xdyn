@@ -146,13 +146,26 @@ class SurfaceElevationInterface
               *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
               *  \returns zwave - z
               */
-            virtual double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                       const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                                       const double t //!< Current instant (in seconds)
-                                       ) const = 0;
+        virtual double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                                   const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
+                                   const double t  //!< Current instant (in seconds)
+                                   ) const = 0;
 
-            virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
-    private:
+        /**  \brief Surface elevation
+              *  \returns Surface elevations of a list of points at a given instant, in meters.
+              *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+              *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
+              *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 29
+              *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
+              *  \returns zwave - z
+              */
+        virtual std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                                const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                                const double t                //!< Current instant (in seconds)
+                                                ) const = 0;
+
+        virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
+      private:
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (DNV), "unsteady pressure" (Faltinsen) or constant pressure contour (Lloyd)
           *           The dynamic pressure is in fact one of the terms of Bernoulli's equation, which can be derived from the conservation
