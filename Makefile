@@ -7,9 +7,9 @@ debian: debian_9_release_gcc_6
 
 
 cmake-debian: BUILD_TYPE = Release
-cmake-debian: BUILD_DIR = build_deb8
+cmake-debian: BUILD_DIR = build_deb9
 cmake-debian: CPACK_GENERATOR = DEB
-cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian8-gcc492-xdyn
+cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
 cmake-debian: BOOST_ROOT = /opt/boost
 cmake-debian: SSC_ROOT = /opt/ssc
 cmake-debian: ci_env=
