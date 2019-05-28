@@ -80,6 +80,22 @@ class WaveModel
                                         const double t    //!< Current time instant (in seconds)
                                         ) const = 0;
 
+        /**  \brief Pressure induced by waves
+          *  \returns Pressure (in Pa) induced by the waves, at given points in the fluid
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
+          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
+          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
+          */
+        virtual std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
+                                                     const double g,                 //!< gravity (in m/s^2)
+                                                     const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+                                                     const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+                                                     const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+                                                     const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                     const double t                  //!< Current time instant (in seconds)
+                                                     ) const = 0;
+
         /**  \returns List of angular frequencies for which the spectra will be calculated.
           *  \details Needed by the RAOs (RadiationForceModel)
           */
