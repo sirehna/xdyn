@@ -174,6 +174,15 @@ class SurfaceElevationInterface
                                         const double t    //!< Current time instant (in seconds)
                                         ) const = 0;
 
+        virtual std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
+                                                     const double g,                 //!< gravity (in m/s^2)
+                                                     const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+                                                     const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+                                                     const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+                                                     const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                     const double t                  //!< Current time instant (in seconds)
+                                                     ) const = 0;
+
         /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
           */
         ssc::kinematics::PointMatrixPtr get_output_mesh_in_NED_frame(const ssc::kinematics::KinematicsPtr& k //!< Object used to compute the transforms to the NED frame
