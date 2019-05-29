@@ -146,19 +146,6 @@ std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_angular_fr
     return std::vector<std::vector<double> >();
 }
 
-double SurfaceElevationInterface::get_dynamic_pressure(
-        const double rho,                           //!< Water density (in kg/m^3)
-        const double g,                             //!< Gravity (in m/s^2)
-        const ssc::kinematics::Point& P,            //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
-        const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
-        const double eta,                           //!< Wave elevation at P in the NED frame (in meters)
-        const double t                              //!< Current instant (in seconds)
-        ) const
-{
-    const ssc::kinematics::Point OP = compute_position_in_NED_frame(P, k);
-    return dynamic_pressure(rho, g, std::vector<double>{OP.x()}, std::vector<double>{OP.y()}, std::vector<double>{OP.z()}, std::vector<double>{eta}, t).at(0);
-}
-
 std::vector<double> SurfaceElevationInterface::get_dynamic_pressure(
     const double rho,                             //!< Water density (in kg/m^3)
     const double g,                               //!< Gravity (in m/s^2)
