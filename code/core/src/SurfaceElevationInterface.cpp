@@ -155,7 +155,7 @@ double SurfaceElevationInterface::get_dynamic_pressure(
         ) const
 {
     const ssc::kinematics::Point OP = compute_position_in_NED_frame(P, k);
-    return dynamic_pressure(rho, g, OP.x(),OP.y(),OP.z(),eta,t);
+    return dynamic_pressure(rho, g, std::vector<double>{OP.x()}, std::vector<double>{OP.y()}, std::vector<double>{OP.z()}, std::vector<double>{eta}, t).at(0);
 }
 
 ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NED_frame(
