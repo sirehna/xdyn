@@ -52,7 +52,7 @@ SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet
         eta += states.intersector->all_absolute_wave_elevations.at(*it);
     }
     if (not(that_facet->vertex_index.empty())) eta /= (double)that_facet->vertex_index.size();
-    const double pdyn = env.w->get_dynamic_pressure(env.rho,env.g,C,env.k,eta,t);
+    const double pdyn = env.w->get_dynamic_pressure(env.rho, env.g, std::vector<ssc::kinematics::Point>{C}, env.k, std::vector<double>{eta}, t).at(0);
     return DF(-pdyn*dS,C.v);
 }
 
