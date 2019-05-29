@@ -8,12 +8,11 @@
 #ifndef WAVEMODELBUILDER_HPP_
 #define WAVEMODELBUILDER_HPP_
 
-#include <string>
-
-#include <boost/optional/optional.hpp>
-
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
+#include <boost/optional/optional.hpp>
+#include <string>
+#include <vector>
 
 class WaveModel;
 struct DiscreteDirectionalWaveSpectrum;
