@@ -6,6 +6,7 @@
  */
 
 #include "SurfaceElevationInterface.hpp"
+#include "InternalErrorException.hpp"
 #include <ssc/exception_handling.hpp>
 #include <string>
 
@@ -156,6 +157,32 @@ double SurfaceElevationInterface::get_dynamic_pressure(
 {
     const ssc::kinematics::Point OP = compute_position_in_NED_frame(P, k);
     return dynamic_pressure(rho, g, std::vector<double>{OP.x()}, std::vector<double>{OP.y()}, std::vector<double>{OP.z()}, std::vector<double>{eta}, t).at(0);
+}
+
+std::vector<double> SurfaceElevationInterface::get_dynamic_pressure(
+    const double rho,                             //!< Water density (in kg/m^3)
+    const double g,                               //!< Gravity (in m/s^2)
+    const std::vector<ssc::kinematics::Point> &P, //!< Positions of points P, relative to the centre of the NED frame, but projected in any frame
+    const ssc::kinematics::KinematicsPtr &k,      //!< Object used to compute the transforms to the NED frame
+    const std::vector<double> &eta,               //!< Wave elevations at P in the NED frame (in meters)
+    const double t                                //!< Current instant (in seconds)
+    ) const
+{
+    if (P.size() != eta.size())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException,
+            "Error when getting dynamic pression: the vector of positions of points P and the vector of their corresponding wave elevations don't have the same size (size of P: "
+                << P.size() << ", size of eta: " << eta.size() << ")")
+    }
+    const size_t n = P.size();
+    std::vector<double> x(n), y(n), z(n);
+    for (size_t i = 0; i < n; ++i) {
+        const ssc::kinematics::Point OP = compute_position_in_NED_frame(P.at(i), k);
+        x.at(i) = OP.x();
+        y.at(i) = OP.y();
+        z.at(i) = OP.z();
+    }
+    return dynamic_pressure(rho, g, x, y, z, eta, t);
 }
 
 ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NED_frame(
