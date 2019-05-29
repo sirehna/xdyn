@@ -112,41 +112,6 @@ std::vector<double> Airy::elevation(
     return zeta;
 }
 
-double Airy::dynamic_pressure(
-        const double rho, //!< water density (in kg/m^3)
-        const double g,   //!< gravity (in m/s^2)
-        const double x,   //!< x-position in the NED frame (in meters)
-        const double y,   //!< y-position in the NED frame (in meters)
-        const double z,   //!< z-position in the NED frame (in meters)
-        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-        const double t    //!< Current time instant (in seconds)
-        ) const
-{
-    if (std::isnan(z))
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "z (value to rescale, in meters) was NaN");
-    }
-    if (std::isnan(eta))
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "eta (wave height, in meters) was NaN");
-    }
-    double p = 0;
-    if (z<eta) return 0;
-    const size_t n = spectrum.psi.size();
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        const double a = spectrum.a[i];
-        const double k = spectrum.k[i];
-        const double omega_t = spectrum.omega[i] * t;
-        const double pdyn_fact = spectrum.pdyn_factor(k, z, eta);
-        const double k_xCosPsi_ySinPsi = k * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        const double theta = spectrum.phase[i];
-        p += a * pdyn_fact * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
-    }
-    p *= rho*g;
-    return p;
-}
-
 std::vector<double> Airy::dynamic_pressure(
     const double rho,               //!< water density (in kg/m^3)
     const double g,                 //!< gravity (in m/s^2)

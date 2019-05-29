@@ -65,22 +65,6 @@ class WaveModel
                                                         ) const = 0;
 
         /**  \brief Pressure induced by waves
-          *  \returns Pressure (in Pa) induced by the waves, at a given point in the fluid
-          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
-          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
-          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
-          */
-        virtual double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
-                                        const double g,   //!< gravity (in m/s^2)
-                                        const double x,   //!< x-position in the NED frame (in meters)
-                                        const double y,   //!< y-position in the NED frame (in meters)
-                                        const double z,   //!< z-position in the NED frame (in meters)
-                                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                        const double t    //!< Current time instant (in seconds)
-                                        ) const = 0;
-
-        /**  \brief Pressure induced by waves
           *  \returns Pressure (in Pa) induced by the waves, at given points in the fluid
           *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
           *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
