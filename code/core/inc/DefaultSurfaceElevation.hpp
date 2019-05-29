@@ -27,9 +27,9 @@
 class DefaultSurfaceElevation : public SurfaceElevationInterface
 {
     public:
-        DefaultSurfaceElevation(const double wave_height,
-                                const ssc::kinematics::PointMatrixPtr& output_mesh,
-                                const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0));
+      DefaultSurfaceElevation(const double wave_height,
+                              const ssc::kinematics::PointMatrixPtr& output_mesh,
+                              const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0));
 
     private:
         DefaultSurfaceElevation(); // Disabled
@@ -38,10 +38,10 @@ class DefaultSurfaceElevation : public SurfaceElevationInterface
           *  \returns zwave;
           *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest wave_height_example
           */
-        double wave_height(const double x, //!< x-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double y, //!< y-coordinate of the point, relative to the centre of the NED frame, projected in the NED frame
-                           const double t //!< Current instant (in seconds)
-                           ) const;
+        std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                        const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                        const double t                //!< Current instant (in seconds)
+                                        ) const;
 
         double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
                                 const double g,   //!< gravity (in m/s^2)

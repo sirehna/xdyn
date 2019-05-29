@@ -100,18 +100,16 @@ double LinearHydrostaticForceModel::compute_thetabar(const std::vector<double>& 
 
 std::vector<double> LinearHydrostaticForceModel::get_zH(const double t) const
 {
-    std::vector<double> ret;
     auto T = env.k->get("NED", P1.get_frame());
     T.swap();
-    auto P_ = T*P1;
-    ret.push_back(env.w->wave_height(P_.x(), P_.y(), t));
-    P_ = T*P2;
-    ret.push_back(env.w->wave_height(P_.x(), P_.y(), t));
-    P_ = T*P3;
-    ret.push_back(env.w->wave_height(P_.x(), P_.y(), t));
-    P_ = T*P4;
-    ret.push_back(env.w->wave_height(P_.x(), P_.y(), t));
-    return ret;
+    const auto P1_ned = T * P1;
+    const auto P2_ned = T * P2;
+    const auto P3_ned = T * P3;
+    const auto P4_ned = T * P4;
+    const std::vector<double> x({P1_ned.x(), P2_ned.x(), P3_ned.x(), P4_ned.x()});
+    const std::vector<double> y({P1_ned.y(), P2_ned.y(), P3_ned.y(), P4_ned.y()});
+
+    return env.w->wave_height(x, y, t);
 }
 
 ssc::kinematics::Wrench LinearHydrostaticForceModel::operator()(const BodyStates& states, const double t) const

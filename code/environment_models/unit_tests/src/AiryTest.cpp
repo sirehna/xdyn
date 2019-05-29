@@ -59,15 +59,15 @@ TEST_F(AiryTest, single_frequency_single_direction_at_one_point)
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
-    const double x = a.random<double>();
-    const double y = a.random<double>();
+    const std::vector<double> x{a.random<double>()};
+    const std::vector<double> y{a.random<double>()};
     const double phi = 3.4482969340598712549;
     const double k = 4.*PI*PI/Tp/Tp/9.81;
     //! [AiryTest example]
     //! [AiryTest expected output]
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
-        ASSERT_NEAR(-Hs/2*sin(-2*PI/Tp*t+k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
+        ASSERT_NEAR(-Hs/2*sin(-2*PI/Tp*t+k*(x.at(0)*cos(psi0)+y.at(0)*sin(psi0)) +phi), wave.elevation(x,y,t).at(0), 1E-6);
     }
     //! [AiryTest expected output]
 }
@@ -89,13 +89,13 @@ TEST_F(AiryTest, two_frequencies_single_direction_at_one_point)
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
-    const double x = a.random<double>();
-    const double y = a.random<double>();
+    const std::vector<double> x{a.random<double>()};
+    const std::vector<double> y{a.random<double>()};
     const double phi = 3.4482969340598712549;
     const double k = 4.*PI*PI/Tp/Tp/9.81;
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
-        ASSERT_NEAR(-Hs/sqrt(2)*sin(-2*PI/Tp*t + k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
+        ASSERT_NEAR(-Hs/sqrt(2)*sin(-2*PI/Tp*t + k*(x.at(0)*cos(psi0)+y.at(0)*sin(psi0)) +phi), wave.elevation(x,y,t).at(0), 1E-6);
     }
 }
 
@@ -116,13 +116,13 @@ TEST_F(AiryTest, one_frequency_two_directions_at_one_point)
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
-    const double x = a.random<double>();
-    const double y = a.random<double>();
+    const std::vector<double> x{a.random<double>()};
+    const std::vector<double> y{a.random<double>()};
     const double phi = 3.4482969340598712549;
     const double k = 4.*PI*PI/Tp/Tp/9.81;
     for (double t = 0 ; t < 3*Tp ; t+=0.1)
     {
-        ASSERT_NEAR(-Hs/sqrt(2)*sin(-2*PI/Tp*t + k*(x*cos(psi0)+y*sin(psi0)) +phi), wave.elevation(x,y,t), 1E-6);
+        ASSERT_NEAR(-Hs/sqrt(2)*sin(-2*PI/Tp*t + k*(x.at(0)*cos(psi0)+y.at(0)*sin(psi0)) +phi), wave.elevation(x,y,t).at(0), 1E-6);
     }
 }
 
@@ -143,11 +143,11 @@ TEST_F(AiryTest, bug)
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
-    const double x = 0;
-    const double y = 0;
+    const std::vector<double> x{0};
+    const std::vector<double> y{0};
     const double t = 0;
 
-    ASSERT_LT(fabs(wave.elevation(x,y,t)), 5);
+    ASSERT_LT(fabs(wave.elevation(x,y,t).at(0)), 5);
 
 }
 
@@ -224,16 +224,16 @@ TEST_F(AiryTest, should_be_able_to_reproduce_results_from_sos_stab)
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
     const Airy wave(A, phi);
 
-    double x=-0.1; double y=0;
-    EXPECT_NEAR(0.022754911240680714, wave.elevation(x,y,t), BIG_EPS);
-    x=0.1;y=0;
-    EXPECT_NEAR(0.021310005003521912, wave.elevation(x,y,t), BIG_EPS);
-    x=0;y=-0.1;
-    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t), BIG_EPS);
-    x=0;y=0.1;
-    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t), BIG_EPS);
-    x=0;y=0;
-    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t), BIG_EPS);
+    std::vector<double> x{-0.1}; std::vector<double> y{0};
+    EXPECT_NEAR(0.022754911240680714, wave.elevation(x,y,t).at(0), BIG_EPS);
+    x.at(0)=0.1;y.at(0)=0;
+    EXPECT_NEAR(0.021310005003521912, wave.elevation(x,y,t).at(0), BIG_EPS);
+    x.at(0)=0;y.at(0)=-0.1;
+    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t).at(0), BIG_EPS);
+    x.at(0)=0;y.at(0)=0.1;
+    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t).at(0), BIG_EPS);
+    x.at(0)=0;y.at(0)=0;
+    EXPECT_NEAR(0.022035312958930367, wave.elevation(x,y,t).at(0), BIG_EPS);
 }
 
 TEST_F(AiryTest, dynamic_pressure_compare_with_sos_stab)
@@ -257,18 +257,19 @@ TEST_F(AiryTest, dynamic_pressure_compare_with_sos_stab)
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
     const Airy wave(A, phi);
 
-    double x=-0.1; double y=0; double z=0.2; double eta = wave.elevation(x,y,t);
-    EXPECT_NEAR(-0.022033996863949721, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
-    x=0.1;y=0;z=0.2; eta = wave.elevation(x,y,t);
-    EXPECT_NEAR(-0.020634867719409668, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
-    x=0;y=-0.1;z=0.2; eta = wave.elevation(x,y,t);
-    EXPECT_NEAR(-0.021337196682411571, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
-    x=0;y=0.1;z=0.2;eta = wave.elevation(x,y,t);
-    EXPECT_NEAR(-0.021337196682411571, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
-    x=0;y=0;z=0.1;eta = wave.elevation(x,y,t);
-    EXPECT_NEAR(-0.021683445449540293, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
-    x=0;y=0;z=0.3;eta = wave.elevation(x,y,t);
-    EXPECT_NEAR(-0.020996476935521684, wave.dynamic_pressure(rho,g,x,y,z,eta,t)/rho/g, BIG_EPS);
+    std::vector<double> x{-0.1}; std::vector<double> y{0};
+    double z=0.2; double eta = wave.elevation(x,y,t).at(0);
+    EXPECT_NEAR(-0.022033996863949721, wave.dynamic_pressure(rho,g,x.at(0),y.at(0),z,eta,t)/rho/g, BIG_EPS);
+    x.at(0)=0.1;y.at(0)=0;z=0.2; eta = wave.elevation(x,y,t).at(0);
+    EXPECT_NEAR(-0.020634867719409668, wave.dynamic_pressure(rho,g,x.at(0),y.at(0),z,eta,t)/rho/g, BIG_EPS);
+    x.at(0)=0;y.at(0)=-0.1;z=0.2; eta = wave.elevation(x,y,t).at(0);
+    EXPECT_NEAR(-0.021337196682411571, wave.dynamic_pressure(rho,g,x.at(0),y.at(0),z,eta,t)/rho/g, BIG_EPS);
+    x.at(0)=0;y.at(0)=0.1;z=0.2;eta = wave.elevation(x,y,t).at(0);
+    EXPECT_NEAR(-0.021337196682411571, wave.dynamic_pressure(rho,g,x.at(0),y.at(0),z,eta,t)/rho/g, BIG_EPS);
+    x.at(0)=0;y.at(0)=0;z=0.1;eta = wave.elevation(x,y,t).at(0);
+    EXPECT_NEAR(-0.021683445449540293, wave.dynamic_pressure(rho,g,x.at(0),y.at(0),z,eta,t)/rho/g, BIG_EPS);
+    x.at(0)=0;y.at(0)=0;z=0.3;eta = wave.elevation(x,y,t).at(0);
+    EXPECT_NEAR(-0.020996476935521684, wave.dynamic_pressure(rho,g,x.at(0),y.at(0),z,eta,t)/rho/g, BIG_EPS);
 }
 
 TEST_F(AiryTest, norm_of_orbital_velocity_should_only_depend_on_z)
@@ -424,11 +425,11 @@ TEST_F(AiryTest, orbital_velocity_and_elevation_should_have_opposite_signs)
     {
         const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
         const Airy wave(A, a.random<double>().between(-PI,PI));
-        const double x=a.random<double>().between(-100,100);
-        const double y=a.random<double>().between(-100,100);
+        const std::vector<double> x{a.random<double>().between(-100,100)};
+        const std::vector<double> y{a.random<double>().between(-100,100)};
         const double z=a.random<double>().between(2,5);
-        const ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t,0);
-        const double eta = wave.elevation(x,y,t);
+        const ssc::kinematics::Point V = wave.orbital_velocity(g, x.at(0), y.at(0), z, t, 0);
+        const double eta = wave.elevation(x, y, t).at(0);
         ASSERT_LE(V.x()*eta,0);
         ASSERT_LE(V.y()*eta,0);
     }
@@ -554,18 +555,17 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const Airy wave(A, random_phase);
     const double k = S.get_wave_number(omega0,h);
 
-    const double x = a.random<double>().between(-10,10);
-    const double y = a.random<double>().between(-10,10);
+    const std::vector<double> x{a.random<double>().between(-10, 10)};
+    const std::vector<double> y{a.random<double>().between(-10, 10)};
 
     const double z1 = 1;
     const double z2 = 30;
 
-
-    const double eta = wave.elevation(x,y,t);
-    const ssc::kinematics::Point V1 = wave.orbital_velocity(g,x,y,z1,t,eta);
-    const ssc::kinematics::Point V2 = wave.orbital_velocity(g,x,y,z2,t,eta);
-    const double pdyn1 = wave.dynamic_pressure(rho, g, x, y, z1, eta, t);
-    const double pdyn2 = wave.dynamic_pressure(rho, g, x, y, z2, eta, t);
+    const double eta = wave.elevation(x, y, t).at(0);
+    const ssc::kinematics::Point V1 = wave.orbital_velocity(g, x.at(0), y.at(0), z1, t, eta);
+    const ssc::kinematics::Point V2 = wave.orbital_velocity(g, x.at(0), y.at(0), z2, t, eta);
+    const double pdyn1 = wave.dynamic_pressure(rho, g, x.at(0), y.at(0), z1, eta, t);
+    const double pdyn2 = wave.dynamic_pressure(rho, g, x.at(0), y.at(0), z2, eta, t);
 
     const double eps=1E-6;
 
@@ -605,17 +605,17 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const Airy wave(A, random_phase);
     const double k = S.get_wave_number(omega0);
 
-    const double x = a.random<double>().between(-10,10);
-    const double y = a.random<double>().between(-10,10);
+    const std::vector<double> x{a.random<double>().between(-10, 10)};
+    const std::vector<double> y{a.random<double>().between(-10, 10)};
 
     const double z1 = 4;
     const double z2 = 30;
 
-    const double eta = wave.elevation(x,y,t);
-    const ssc::kinematics::Point V1 = wave.orbital_velocity(g,x,y,z1,t,eta);
-    const ssc::kinematics::Point V2 = wave.orbital_velocity(g,x,y,z2,t,eta);
-    const double pdyn1 = wave.dynamic_pressure(rho, g, x, y, z1, eta, t);
-    const double pdyn2 = wave.dynamic_pressure(rho, g, x, y, z2, eta, t);
+    const double eta = wave.elevation(x, y, t).at(0);
+    const ssc::kinematics::Point V1 = wave.orbital_velocity(g, x.at(0), y.at(0), z1, t, eta);
+    const ssc::kinematics::Point V2 = wave.orbital_velocity(g, x.at(0), y.at(0), z2, t, eta);
+    const double pdyn1 = wave.dynamic_pressure(rho, g, x.at(0), y.at(0), z1, eta, t);
+    const double pdyn2 = wave.dynamic_pressure(rho, g, x.at(0), y.at(0), z2, eta, t);
     const double ptot1 = rho*g*z1+pdyn1;
     const double ptot2 = rho*g*z2+pdyn2;
 
@@ -661,11 +661,11 @@ TEST_F(AiryTest, total_pressure_should_always_be_positive_in_finite_depth)
     const size_t n = 100;
     for (size_t i = 0 ; i < n ; ++i)
     {
-        const double x = a.random<double>().between(-100,100);
-        const double y = a.random<double>().between(-100,100);
-        const double eta = wave.elevation(x,y,t);
+        const std::vector<double> x{a.random<double>().between(-100, 100)};
+        const std::vector<double> y{a.random<double>().between(-100, 100)};
+        const double eta = wave.elevation(x, y, t).at(0);
         const double z = eta + (h-eta)*((double)i)/((double)(n-1));
-        ASSERT_LE(0, rho*g*z+wave.dynamic_pressure(rho,g,x,y,z,eta,t));
+        ASSERT_LE(0, rho * g * z + wave.dynamic_pressure(rho, g, x.at(0), y.at(0), z, eta, t));
     }
 }
 
@@ -696,11 +696,11 @@ TEST_F(AiryTest, total_pressure_should_always_be_positive_in_infinite_depth)
     const size_t n = 100;
     for (size_t i = 0 ; i < n ; ++i)
     {
-        const double x = a.random<double>().between(-100,100);
-        const double y = a.random<double>().between(-100,100);
-        const double eta = wave.elevation(x,y,t);
+        const std::vector<double> x{a.random<double>().between(-100, 100)};
+        const std::vector<double> y{a.random<double>().between(-100, 100)};
+        const double eta = wave.elevation(x, y, t).at(0);
         const double z = eta + (10000-eta)*((double)i)/((double)(n-1));
-        ASSERT_LE(0, rho*g*z+wave.dynamic_pressure(rho,g,x,y,z,eta,t));
+        ASSERT_LE(0, rho * g * z + wave.dynamic_pressure(rho, g, x.at(0), y.at(0), z, eta, t));
     }
 }
 
@@ -731,14 +731,14 @@ TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_wat
 
     for (size_t i = 0 ; i < 100 ; ++i)
     {
-        const double x = a.random<double>().between(-100,100);
-        const double y = a.random<double>().between(-100,100);
-        const double eta = wave.elevation(x,y,t);
-        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho,g,x,y,eta-0.1,eta,t));
-        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho,g,x,y,h+0.1,eta,t));
-        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g,x,y,eta-0.1,t,eta).v.norm());
-        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g,x,y,h+0.1,t,eta).v.norm());
-        const auto V = wave.orbital_velocity(g,x,y,h,t,eta).v;
+        const std::vector<double> x{a.random<double>().between(-100, 100)};
+        const std::vector<double> y{a.random<double>().between(-100, 100)};
+        const double eta = wave.elevation(x, y, t).at(0);
+        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho, g, x.at(0), y.at(0), eta - 0.1, eta, t));
+        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho, g, x.at(0), y.at(0), h + 0.1, eta, t));
+        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g, x.at(0), y.at(0), eta - 0.1, t, eta).v.norm());
+        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g, x.at(0), y.at(0), h + 0.1, t, eta).v.norm());
+        const auto V = wave.orbital_velocity(g, x.at(0), y.at(0), h, t, eta).v;
         ASSERT_DOUBLE_EQ(0, (double)V(2)); // Sea bed is impervious
     }
 }
@@ -769,10 +769,10 @@ TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_above_water
 
     for (size_t i = 0 ; i < 100 ; ++i)
     {
-        const double x = a.random<double>().between(-100,100);
-        const double y = a.random<double>().between(-100,100);
-        const double eta = wave.elevation(x,y,t);
-        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho,g,x,y,eta-0.1,eta,t));
-        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g,x,y,eta-0.1,t,eta).v.norm());
+        const std::vector<double> x{a.random<double>().between(-100, 100)};
+        const std::vector<double> y{a.random<double>().between(-100, 100)};
+        const double eta = wave.elevation(x, y, t).at(0);
+        ASSERT_DOUBLE_EQ(0, wave.dynamic_pressure(rho, g, x.at(0), y.at(0), eta - 0.1, eta, t));
+        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g, x.at(0), y.at(0), eta - 0.1, t, eta).v.norm());
     }
 }
