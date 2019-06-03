@@ -8,26 +8,48 @@ set(SRC src/SurfaceElevationFromGRPC.cpp
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
-
+IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    UNSET(CMAKE_CXX_FLAGS)
+    SET(CMAKE_CXX_FLAGS "-std=gnu++0x")
+    IF(MINGW)
+        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pedantic -pedantic-errors -Wextra -Wall -Wfatal-errors ")
+        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable ")
+        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wpointer-arith -Wmissing-format-attribute -Wsign-compare -Wundef ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual -Wwrite-strings -Wno-deprecated -Wvariadic-macros")
+    ELSE()
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pedantic -pedantic-errors -Wextra -Wall -Wunused-function")
+        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wpointer-arith -Wmissing-format-attribute -Wsign-compare -Wundef ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros")
+        IF(CMAKE_SIZEOF_VOID_P EQUAL 8) # If on a 64 bit machine
+            IF(UNIX AND NOT WIN32) # If on Linux
+                SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+                # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
+                # SET(REQUIRED_GCC_VERSION_FOR_FLAG_STRICT_ALIASING 8.0.0)
+                # IF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL ${REQUIRED_GCC_VERSION_FOR_FLAG_STRICT_ALIASING})
+                #     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wstrict-aliasing=2")
+                #     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wstrict-aliasing=2")
+                # ENDIF()
+            ENDIF()
+        ENDIF()
+    ENDIF()
+ELSE()
+    SET(CMAKE_CXX_FLAGS "")
+ENDIF()
 
 include_directories(inc)
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
-include_directories(${external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
 
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 
 # gRPC
-INCLUDE(CMakeProtoBuf)
-INCLUDE(CMakeGRPC)
-SET(CMAKE_C_FLAGS "-fPIC")
-SET(CMAKE_CXX_FLAGS "-fPIC")
-if(NOT(MSVC))
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-endif()
 SET(waves_proto ${CMAKE_CURRENT_SOURCE_DIR}/../waves_grpc/waves.proto)
 GET_FILENAME_COMPONENT(waves_proto_path "${waves_proto}" PATH)
 
@@ -48,7 +70,7 @@ ADD_CUSTOM_COMMAND(
       DEPENDS "${waves_proto}")
 
 
-include_directories(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
 
 
 add_library (${PROJECT_NAME} OBJECT ${SRC} ${waves_proto_srcs} ${waves_grpc_srcs})

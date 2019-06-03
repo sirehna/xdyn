@@ -168,7 +168,7 @@ class SurfaceElevationFromGRPC::Impl
             XYZTGrid request;
             *request.mutable_x() = {x.begin(),x.end()};
             *request.mutable_y() = {y.begin(),y.end()};
-            *request.mutable_z() = {y.begin(),y.end()};
+            *request.mutable_z() = {z.begin(),z.end()};
             request.set_t(t);
             grpc::ClientContext context;
             DynamicPressuresResponse response;
@@ -226,11 +226,11 @@ SurfaceElevationFromGRPC::SurfaceElevationFromGRPC(const YamlGRPC& yaml, const s
 {
 }
 
-double SurfaceElevationFromGRPC::evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                                   const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                                   const double t, //!< Current time instant (in seconds)
-                                   const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO
-                                   const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
+double SurfaceElevationFromGRPC::evaluate_rao(const double , //!< x-position of the RAO's calculation point in the NED frame (in meters)
+                                   const double , //!< y-position of the RAO's calculation point in the NED frame (in meters)
+                                   const double , //!< Current time instant (in seconds)
+                                   const std::vector<std::vector<double> >& , //!< Module of the RAO
+                                   const std::vector<std::vector<double> >&  //!< Phase of the RAO
                              ) const
 {
     THROW(__PRETTY_FUNCTION__, GRPCError, "Asked to evaluate RAO for gRPC wave model but this is not implemented yet. Try disabling the diffraction force model.");
