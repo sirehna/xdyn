@@ -16,7 +16,7 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(
         const std::pair<std::size_t,std::size_t> output_mesh_size_,
         const ssc::kinematics::PointMatrixPtr& output_mesh_) :
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_),
-                models(models_)
+                directional_spectra(models_)
 {
     if(output_mesh_size_.first*output_mesh_size_.second != (std::size_t)output_mesh_->m.cols())
     {
@@ -29,7 +29,7 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(
         const std::pair<std::size_t,std::size_t> output_mesh_size_,
         const ssc::kinematics::PointMatrixPtr& output_mesh_) :
                 SurfaceElevationInterface(output_mesh_, output_mesh_size_),
-                models(std::vector<TR1(shared_ptr)<WaveModel> >(1,model))
+                directional_spectra(std::vector<WaveModelPtr>(1,model))
 {
     if(output_mesh_size_.first*output_mesh_size_.second != (std::size_t)output_mesh_->m.cols())
     {
@@ -48,12 +48,12 @@ std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<dou
     }
     std::vector<double> zwave(x.size(), 0);
 
-    for (const auto model:models)
+    for (const auto directional_spectrum:directional_spectra)
     {
-        const std::vector<double> model_wave_height = model->get_elevation(x, y, t);
-        for (size_t i = 0; i < model_wave_height.size(); ++i)
+        const std::vector<double> wave_heights = directional_spectrum->get_elevation(x, y, t);
+        for (size_t i = 0; i < wave_heights.size(); ++i)
         {
-            zwave.at(i) += model_wave_height.at(i);
+            zwave.at(i) += wave_heights.at(i);
         }
     }
 
@@ -64,13 +64,19 @@ double SurfaceElevationFromWaves::evaluate_rao(const double x, //!< x-position o
                     const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
                     const double t, //!< Current time instant (in seconds)
                     const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO
-                    const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
+                    const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO rao_phase[omega_idx][incidence_idx], cf. DiffractionInterpolator's constructor
                      ) const
 {
     double rao = 0;
-    for (size_t i = 0 ; i < models.size() ; ++i)
+    // Each model should correspond to a wave propagation direction
+    // The RAOs from the HDB file are interpolated by hdb_interpolators/DiffractionInterpolator
+    // called by class DiffractionForceModel::Impl's constructor. This ensures that
+    // the first dimension of rao_module & rao_phase (i.e. the number of wave directions)
+    // corresponds to the number of directions of the wave models and that the RAO
+    // values are properly interpolated.
+    for (size_t wave_propagation_direction_idx = 0 ; wave_propagation_direction_idx < directional_spectra.size() ; ++wave_propagation_direction_idx)
     {
-        rao += models.at(i)->evaluate_rao(x,y,t,rao_module.at(i),rao_phase.at(i));
+        rao += directional_spectra.at(wave_propagation_direction_idx)->evaluate_rao(x,y,t,rao_module.at(wave_propagation_direction_idx),rao_phase.at(wave_propagation_direction_idx));
     }
     return rao;
 }
@@ -78,7 +84,7 @@ double SurfaceElevationFromWaves::evaluate_rao(const double x, //!< x-position o
 std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions_for_each_model() const
 {
     std::vector<std::vector<double> > ret;
-    for (auto model:models)
+    for (auto model:directional_spectra)
     {
         ret.push_back(model->get_psis());
     }
@@ -88,7 +94,7 @@ std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions
 std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_angular_frequency_for_each_model() const
 {
     std::vector<std::vector<double> > ret;
-    for (auto model:models)
+    for (auto model:directional_spectra)
     {
         ret.push_back(model->get_omegas());
     }
@@ -105,12 +111,12 @@ std::vector<double> SurfaceElevationFromWaves::dynamic_pressure(const double rho
                                                                 ) const
 {
     std::vector<double> pdyn(x.size(), 0);
-    for (const auto model : models)
+    for (const auto spectrum : directional_spectra)
     {
-        std::vector<double> dynamic_pressure_for_model = model->get_dynamic_pressure(rho, g, x, y, z, eta, t);
+        std::vector<double> dynamic_pressure_for_spectrum = spectrum->get_dynamic_pressure(rho, g, x, y, z, eta, t);
         for (size_t i = 0; i < pdyn.size(); ++i)
         {
-            pdyn[i] += dynamic_pressure_for_model.at(i);
+            pdyn[i] += dynamic_pressure_for_spectrum.at(i);
         }
     }
     return pdyn;
@@ -125,7 +131,7 @@ ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double 
                                                                    ) const
 {
     ssc::kinematics::Point Vwaves("NED", 0, 0, 0);
-    for (auto model:models)
+    for (auto model:directional_spectra)
     {
         auto vw = model->orbital_velocity(g, x, y, z, t, eta);
         Vwaves.x() += vw.x();
@@ -138,8 +144,8 @@ ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double 
 void SurfaceElevationFromWaves::serialize_wave_spectra_before_simulation(ObserverPtr& observer) const
 {
     std::vector<FlatDiscreteDirectionalWaveSpectrum> spectra;
-    spectra.reserve(models.size());
-    for (const auto model:models) spectra.push_back(model->get_spectrum());
+    spectra.reserve(directional_spectra.size());
+    for (const auto spectrum:directional_spectra) spectra.push_back(spectrum->get_spectrum());
     const DataAddressing address;
     observer->write_before_simulation(spectra, address);
 }

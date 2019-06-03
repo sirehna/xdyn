@@ -73,7 +73,7 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
 
         std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
 
-        std::vector<WaveModelPtr> get_models() const {return models;};
+        std::vector<WaveModelPtr> get_models() const {return directional_spectra;};
 
         void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
     private:
@@ -104,6 +104,6 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
                                              const double t                  //!< Current time instant (in seconds)
                                              ) const;
 
-        std::vector<WaveModelPtr> models;
+        std::vector<WaveModelPtr> directional_spectra;
 };
 #endif /* SURFACEELEVATIONFROMWAVES_HPP_ */
