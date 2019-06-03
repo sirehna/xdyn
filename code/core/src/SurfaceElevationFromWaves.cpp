@@ -76,7 +76,9 @@ double SurfaceElevationFromWaves::evaluate_rao(const double x, //!< x-position o
     // values are properly interpolated.
     for (size_t wave_propagation_direction_idx = 0 ; wave_propagation_direction_idx < directional_spectra.size() ; ++wave_propagation_direction_idx)
     {
-        rao += directional_spectra.at(wave_propagation_direction_idx)->evaluate_rao(x,y,t,rao_module.at(wave_propagation_direction_idx),rao_phase.at(wave_propagation_direction_idx));
+        const auto rao_module_for_each_frequency = rao_module.at(wave_propagation_direction_idx);
+        const auto rao_phase_for_each_frequency = rao_phase.at(wave_propagation_direction_idx);
+        rao += directional_spectra.at(wave_propagation_direction_idx)->evaluate_rao(x,y,t,rao_module_for_each_frequency,rao_phase_for_each_frequency);
     }
     return rao;
 }

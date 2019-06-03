@@ -116,24 +116,27 @@ class DiffractionForceModel::Impl
             {
                 if (not(periods.empty()))
                 {
-
+                    // Resize for each degree of freedom
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
                         rao_modules[k].resize(periods.size());
                         rao_phases[k].resize(periods.size());
                     }
                 }
-                for (size_t k = 0 ; k < 6 ; ++k)
+                for (size_t k = 0 ; k < 6 ; ++k) // For each degree of freedom (X, Y, Z, K, M, N)
                 {
-                    for (size_t i = 0 ; i < periods.size() ; ++i)
+                    for (size_t i = 0 ; i < periods.size() ; ++i) // For each period Tp
                     {
                         rao_modules[k][i].resize(periods[i].size());
                         rao_phases[k][i].resize(periods[i].size());
-                        for (size_t j = 0 ; j < periods[i].size() ; ++j)
+                        for (size_t j = 0 ; j < psis[i].size() ; ++j) // For each incidence psi
                         {
+                            // Wave incidence
                             const double beta = psi - psis.at(i).at(j);
-                                rao_modules[k][i][j] = rao.interpolate_module(k, periods[i][j], beta);
-                                rao_phases[k][i][j] = -rao.interpolate_phase(k, periods[i][j], beta);
+                            // Interpolate RAO module for this axis k, period i and incidence j
+                            rao_modules[k][i][j] = rao.interpolate_module(k, periods[i][j], beta);
+                            // Interpolate RAO phase for this axis k, period i and incidence j
+                            rao_phases[k][i][j] = -rao.interpolate_phase(k, periods[i][j], beta);
                         }
                     }
 
