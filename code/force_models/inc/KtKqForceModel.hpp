@@ -32,8 +32,8 @@ class KtKqForceModel : public AbstractWageningen
         KtKqForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
         static Yaml parse(const std::string& yaml);
 
-        double get_Kt(const double P_D, const double J) const;
-        double get_Kq(const double P_D, const double J) const;
+        double get_Kt(const std::map<std::string,double>& commands, const double J) const;
+        double get_Kq(const std::map<std::string,double>& commands, const double J) const;
 
         static std::string model_name();
     private:

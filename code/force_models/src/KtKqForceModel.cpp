@@ -64,12 +64,12 @@ KtKqForceModel::KtKqForceModel(const Yaml& input, const std::string& body_name_,
 {
 }
 
-double KtKqForceModel::get_Kt(const double , const double J) const
+double KtKqForceModel::get_Kt(const std::map<std::string,double>&, const double J) const
 {
     return pimpl->Kt.f(J);
 }
 
-double KtKqForceModel::get_Kq(const double P_D, const double J) const
+double KtKqForceModel::get_Kq(const std::map<std::string,double>&, const double J) const
 {
     return pimpl->Kq.f(J);
 }

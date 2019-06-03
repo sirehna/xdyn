@@ -34,10 +34,10 @@ class AbstractWageningen : public ControllableForceModel
             double diameter;
         };
         AbstractWageningen(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        virtual double get_Kt(const double P_D, const double J) const = 0;
-        virtual double get_Kq(const double P_D, const double J) const = 0;
-        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const;
-        double advance_ratio(const BodyStates& states, std::map<std::string,double>& commands) const;
+        virtual double get_Kt(const std::map<std::string,double>& commands, const double J) const = 0;
+        virtual double get_Kq(const std::map<std::string,double>& commands, const double J) const = 0;
+        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands) const;
+        double advance_ratio(const BodyStates& states, const std::map<std::string,double>& commands) const;
         static Yaml parse(const std::string& yaml);
 
     private:

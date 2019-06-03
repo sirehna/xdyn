@@ -32,13 +32,15 @@ WageningenControlledForceModel::Yaml::Yaml(const AbstractWageningen::Yaml& y) :
 {
 }
 
-double WageningenControlledForceModel::get_Kt(const double P_D, const double J) const
+double WageningenControlledForceModel::get_Kt(const std::map<std::string,double>& commands, const double J) const
 {
+    const double P_D = commands.at("P/D");
     return Kt(Z, AE_A0, P_D, J);
 }
 
-double WageningenControlledForceModel::get_Kq(const double P_D, const double J) const
+double WageningenControlledForceModel::get_Kq(const std::map<std::string,double>& commands, const double J) const
 {
+    const double P_D = commands.at("P/D");
     return Kq(Z, AE_A0, P_D, J);
 }
 
