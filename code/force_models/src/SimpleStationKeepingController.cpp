@@ -60,14 +60,14 @@ SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input
 
 }
 
-ssc::kinematics::Vector6d SimpleStationKeepingController::get_force(const BodyStates& states, const double , std::map<std::string,double> commands) const
+ssc::kinematics::Vector6d SimpleStationKeepingController::get_force(const BodyStates& states, const double, const std::map<std::string,double>& commands) const
 {
     ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
 
     const auto angles = states.get_angles(rotation_convention);
-    const double delta_x = commands["x_co"] - states.x();
-    const double delta_y = commands["y_co"] - states.y();
-    const double delta_psi = commands["psi_co"] - angles.psi;
+    const double delta_x = commands.at("x_co") - states.x();
+    const double delta_y = commands.at("y_co") - states.y();
+    const double delta_psi = commands.at("psi_co") - angles.psi;
     const double sigma_xx = states.total_inertia->operator()(0,0);
     const double sigma_yy = states.total_inertia->operator()(1,1);
     const double sigma_psipsi = states.total_inertia->operator()(5,5);

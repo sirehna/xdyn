@@ -43,12 +43,12 @@ SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Yaml& input
 {
 }
 
-ssc::kinematics::Vector6d SimpleHeadingKeepingController::get_force(const BodyStates& states, const double , std::map<std::string,double> commands) const
+ssc::kinematics::Vector6d SimpleHeadingKeepingController::get_force(const BodyStates& states, const double, const std::map<std::string,double>& commands) const
 {
     ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
 
     const auto angles = states.get_angles(rotation_convention);
-    const double delta_psi = commands["psi_co"] - angles.psi;
+    const double delta_psi = commands.at("psi_co") - angles.psi;
     const double sigma_zz = states.total_inertia->operator()(2,2);
     const double K_psi = sigma_zz*omega0*omega0;
     const double K_r = 2*ksi*omega0*sigma_zz;

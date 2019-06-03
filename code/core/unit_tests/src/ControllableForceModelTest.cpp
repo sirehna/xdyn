@@ -31,7 +31,7 @@ class RandomControllableForce : public ControllableForceModel
         {
         }
 
-        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, std::map<std::string,double> commands) const
+        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands) const
         {
             ssc::kinematics::Vector6d ret;
             ret(0) = a.random<double>().between(2,3);
