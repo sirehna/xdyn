@@ -70,9 +70,8 @@ ssc::kinematics::Vector6d AbstractWageningen::get_force(const BodyStates& states
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     const double n2 = commands["rpm"]*commands["rpm"]/(4*PI*PI); // In turns per second (Hz)
-    const double P_D = commands["P/D"];
     const double J = advance_ratio(states, commands);
-    tau(0) = (1-t)*env.rho*n2*D4*get_Kt(P_D, J);
-    tau(3) = kappa*eta_R*env.rho*n2*D5*get_Kq(P_D, J);
+    tau(0) = (1-t)*env.rho*n2*D4*get_Kt(commands, J);
+    tau(3) = kappa*eta_R*env.rho*n2*D5*get_Kq(commands, J);
     return tau;
 }
