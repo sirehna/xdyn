@@ -78,18 +78,18 @@ class DiffractionForceModel::Impl
           : initialized(false), env(env_),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
         rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
-        periods(),
+        periods_for_each_direction(),
         psis()
         {
             if (env.w.use_count()>0)
             {
                 // For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
                 // periods[direction][omega]
-                periods = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
+                periods_for_each_direction = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
                 const auto hdb_periods = hdb.get_diffraction_module_periods();
                 if (not(hdb_periods.empty()))
                 {
-                    check_all_omegas_are_within_bounds(hdb_periods.front(), periods, hdb_periods.back());
+                    check_all_omegas_are_within_bounds(hdb_periods.front(), periods_for_each_direction, hdb_periods.back());
                 }
                 psis = env.w->get_wave_directions_for_each_model();
             }
@@ -116,29 +116,29 @@ class DiffractionForceModel::Impl
             std::array<std::vector<std::vector<double> >, 6 > rao_phases;
             if (env.w.use_count()>0)
             {
-                if (not(periods.empty()))
+                if (not(periods_for_each_direction.empty()))
                 {
                     // Resize for each degree of freedom
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
-                        rao_modules[k].resize(periods.size());
-                        rao_phases[k].resize(periods.size());
+                        rao_modules[k].resize(periods_for_each_direction.size());
+                        rao_phases[k].resize(periods_for_each_direction.size());
                     }
                 }
                 for (size_t k = 0 ; k < 6 ; ++k) // For each degree of freedom (X, Y, Z, K, M, N)
                 {
-                    for (size_t i = 0 ; i < periods.size() ; ++i) // For each period Tp
+                    for (size_t i = 0 ; i < periods_for_each_direction.size() ; ++i) // For each period Tp
                     {
-                        rao_modules[k][i].resize(periods[i].size());
-                        rao_phases[k][i].resize(periods[i].size());
+                        rao_modules[k][i].resize(periods_for_each_direction[i].size());
+                        rao_phases[k][i].resize(periods_for_each_direction[i].size());
                         for (size_t j = 0 ; j < psis[i].size() ; ++j) // For each incidence psi
                         {
                             // Wave incidence
                             const double beta = psi - psis.at(i).at(j);
                             // Interpolate RAO module for this axis k, period i and incidence j
-                            rao_modules[k][i][j] = rao.interpolate_module(k, periods[i][j], beta);
+                            rao_modules[k][i][j] = rao.interpolate_module(k, periods_for_each_direction[i][j], beta);
                             // Interpolate RAO phase for this axis k, period i and incidence j
-                            rao_phases[k][i][j] = -rao.interpolate_phase(k, periods[i][j], beta);
+                            rao_phases[k][i][j] = -rao.interpolate_phase(k, periods_for_each_direction[i][j], beta);
                         }
                     }
 
@@ -181,7 +181,7 @@ class DiffractionForceModel::Impl
         EnvironmentAndFrames env;
         Eigen::Vector3d H0;
         DiffractionInterpolator rao;
-        std::vector<std::vector<double> > periods;
+        std::vector<std::vector<double> > periods_for_each_direction;
         std::vector<std::vector<double> > psis;
 
 };
