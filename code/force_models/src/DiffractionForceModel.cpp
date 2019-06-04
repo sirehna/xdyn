@@ -83,6 +83,8 @@ class DiffractionForceModel::Impl
         {
             if (env.w.use_count()>0)
             {
+                // For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
+                // periods[direction][omega]
                 periods = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
                 const auto hdb_periods = hdb.get_diffraction_module_periods();
                 if (not(hdb_periods.empty()))
