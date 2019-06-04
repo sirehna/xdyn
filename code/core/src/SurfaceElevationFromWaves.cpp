@@ -83,6 +83,8 @@ double SurfaceElevationFromWaves::evaluate_rao(const double x, //!< x-position o
     return rao;
 }
 
+// For each spectrum, the wave propagation directions
+// Usually, a vector of vectors of size 1: {{psi_1},{psi_2},...,{psi_n}}
 std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions_for_each_model() const
 {
     std::vector<std::vector<double> > ret;
@@ -93,6 +95,8 @@ std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions
     return ret;
 }
 
+// For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
+// v[direction][omega]
 std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_angular_frequency_for_each_model() const
 {
     std::vector<std::vector<double> > ret;
