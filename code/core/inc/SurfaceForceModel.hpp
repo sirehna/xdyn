@@ -62,10 +62,11 @@ class SurfaceForceModel : public ForceModel
         virtual ~SurfaceForceModel();
         virtual ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         virtual DF dF(const FacetIterator& that_facet,
+                      const size_t that_facet_index,
                       const EnvironmentAndFrames& env,
                       const BodyStates& states,
                       const double t
-                      ) const = 0;
+                     ) const = 0;
 
     /**  \brief Compute potential energy of the hydrostatic force model
       */

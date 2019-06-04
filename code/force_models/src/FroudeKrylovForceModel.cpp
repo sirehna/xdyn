@@ -74,7 +74,7 @@ ssc::kinematics::Wrench FroudeKrylovForceModel::operator()(const BodyStates &sta
     return F;
 }
 
-SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double t) const
+SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet, const size_t that_facet_index, const EnvironmentAndFrames& env, const BodyStates& states, const double t) const
 {
     const EPoint dS = that_facet->area*that_facet->unit_normal;
     const ssc::kinematics::Point C(states.M->get_frame(), that_facet->centre_of_gravity);

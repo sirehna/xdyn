@@ -31,10 +31,11 @@ class GMForceModel : public ImmersedSurfaceForceModel
         };
         GMForceModel(const Yaml& data, const std::string& body_name, const EnvironmentAndFrames& env);
         DF dF(const FacetIterator& that_facet,
-                      const EnvironmentAndFrames& env,
-                      const BodyStates& states,
-                      const double t
-                      ) const;
+              const size_t that_facet_index,
+              const EnvironmentAndFrames& env,
+              const BodyStates& states,
+              const double t
+              ) const;
         static Yaml parse(const std::string& yaml);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         void extra_observations(Observer& ) const;

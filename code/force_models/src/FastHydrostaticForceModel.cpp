@@ -35,7 +35,7 @@ std::string FastHydrostaticForceModel::get_name() const
     return this->model_name();
 }
 
-SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double) const
+SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const size_t that_facet_index, const EnvironmentAndFrames& env, const BodyStates& states, const double) const
 {
     if (that_facet->area == 0) return DF(EPoint(0,0,0),EPoint(0,0,0));
     const double zG = zg_calculator->get_zG_in_NED(that_facet->centre_of_gravity);
