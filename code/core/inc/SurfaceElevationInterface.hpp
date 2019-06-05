@@ -95,12 +95,12 @@ class SurfaceElevationInterface
           *  \returns Pdyn (in Pascal)
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
-        std::vector<double> get_dynamic_pressure(const double rho,                             //!< Water density (in kg/m^3)
-                                                 const double g,                               //!< Gravity (in m/s^2)
-                                                 const std::vector<ssc::kinematics::Point> &P, //!< Positions of points P, relative to the centre of the NED frame, but projected in any frame
-                                                 const ssc::kinematics::KinematicsPtr &k,      //!< Object used to compute the transforms to the NED frame
-                                                 const std::vector<double> &eta,               //!< Wave elevation at P in the NED frame (in meters)
-                                                 const double t                                //!< Current instant (in seconds)
+        std::vector<double> get_dynamic_pressure(const double rho,                        //!< Water density (in kg/m^3)
+                                                 const double g,                          //!< Gravity (in m/s^2)
+                                                 const ssc::kinematics::PointMatrix& P,   //!< Positions of points P, relative to the centre of the NED frame, but projected in any frame
+                                                 const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+                                                 const std::vector<double>& eta,          //!< Wave elevation at P in the NED frame (in meters)
+                                                 const double t                           //!< Current instant (in seconds)
                                                  ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.

@@ -27,13 +27,10 @@ std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const E
                                    const BodyStates &states,
                                    const double t) const
 {
-    // Compute dynamic pressure for all facets
-    std::vector<ssc::kinematics::Point> C;
+    // Compute average elevation for each facet
     std::vector<double> average_eta_per_facet;
     for (auto that_facet = begin_facet; that_facet != end_facet; ++that_facet)
     {
-        C.push_back(ssc::kinematics::Point(states.M->get_frame(), that_facet->centre_of_gravity));
-        // Compute average elevation for each facet
         double eta_facet = 0;
         for (auto it = that_facet->vertex_index.begin(); it != that_facet->vertex_index.end(); ++it)
         {
@@ -43,7 +40,18 @@ std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const E
             eta_facet /= (double)that_facet->vertex_index.size();
         average_eta_per_facet.push_back(eta_facet);
     }
-    const std::vector<double> pdyn = env.w->get_dynamic_pressure(env.rho, env.g, C, env.k, average_eta_per_facet, t);
+
+    ssc::kinematics::PointMatrix M(states.M->get_frame(), average_eta_per_facet.size());
+    size_t that_facet_index = 0;
+    for (auto that_facet = begin_facet; that_facet != end_facet; ++that_facet)
+    {
+        M.m(0, that_facet_index) = that_facet->centre_of_gravity.x();
+        M.m(1, that_facet_index) = that_facet->centre_of_gravity.y();
+        M.m(2, that_facet_index) = that_facet->centre_of_gravity.z();
+        ++that_facet_index;
+    }
+    // Compute dynamic pressure for all facets
+    const std::vector<double> pdyn = env.w->get_dynamic_pressure(env.rho, env.g, M, env.k, average_eta_per_facet, t);
 
     return [pdyn](const FacetIterator &that_facet,
                   const size_t that_facet_index,

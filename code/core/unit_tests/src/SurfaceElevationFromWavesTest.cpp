@@ -125,12 +125,14 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
 //! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
     for (double t = 0 ; t < 30 ; t+=0.1)
     {
-        const std::vector<ssc::kinematics::Point> P{ssc::kinematics::Point("NED", a.random<double>().between(-100,100), a.random<double>().between(-100,100), 6)};
+
+        const ssc::kinematics::Point Q("NED", a.random<double>().between(-100, 100), a.random<double>().between(-100, 100), 6);
+        ssc::kinematics::PointMatrix P(Q.v, "NED");
         const double rho = a.random<double>().between(0,100);
         const double g = a.random<double>().between(0,10);
-        const double x = P.at(0).x();
-        const double y = P.at(0).y();
-        const double z = P.at(0).z();
+        const double x = P.m(0,0);
+        const double y = P.m(1,0);
+        const double z = P.m(2,0);
 
         ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*sin(-2*PI/Tp*t + k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, std::vector<double>{0}, t).at(0), 1E-6) << "t = " << t;
     }
@@ -202,14 +204,20 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure_plus_hydrostatic)
     const ssc::kinematics::Point P3("NED", PI / 2, 0, 0);
     const ssc::kinematics::Point P4("NED", PI, 0, 0);
     const ssc::kinematics::Point P5("NED", 3 * PI / 2, 0, 1 + 1E-10);
-    const std::vector<ssc::kinematics::Point> P{P1, P2, P3, P4, P5};
+
+    ssc::kinematics::PointMatrix M("NED", 5);
+    M.m(0, 0) = P1.x(); M.m(1, 0) = P1.y(); M.m(2, 0) = P1.z();
+    M.m(0, 1) = P2.x(); M.m(1, 1) = P2.y(); M.m(2, 1) = P2.z();
+    M.m(0, 2) = P3.x(); M.m(1, 2) = P3.y(); M.m(2, 2) = P3.z();
+    M.m(0, 3) = P4.x(); M.m(1, 3) = P4.y(); M.m(2, 3) = P4.z();
+    M.m(0, 4) = P5.x(); M.m(1, 4) = P5.y(); M.m(2, 4) = P5.z();
 
     const std::vector<double> x{P1.x(), P2.x(), P3.x(), P4.x(), P5.x()};
     const std::vector<double> y{P1.y(), P2.y(), P3.y(), P4.y(), P5.y()};
     const double t = 0;
 
     const std::vector<double> wave_height = wave.wave_height(x, y, t);
-    const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, P, k, wave_height, t);
+    const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, M, k, wave_height, t);
 
     const double EPS = 1E-4;
     const double phs1 = rho*g*P1.z();
