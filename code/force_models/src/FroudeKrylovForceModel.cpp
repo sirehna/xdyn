@@ -20,20 +20,6 @@ FroudeKrylovForceModel::FroudeKrylovForceModel(const std::string& body_name_, co
     }
 }
 
-SurfaceForceModel::DF FroudeKrylovForceModel::dF(const FacetIterator& that_facet, const size_t that_facet_index, const EnvironmentAndFrames& env, const BodyStates& states, const double t) const
-{
-    const EPoint dS = that_facet->area*that_facet->unit_normal;
-    const ssc::kinematics::Point C(states.M->get_frame(), that_facet->centre_of_gravity);
-    double eta = 0;
-    for (auto it = that_facet->vertex_index.begin() ; it != that_facet->vertex_index.end() ; ++it)
-    {
-        eta += states.intersector->all_absolute_wave_elevations.at(*it);
-    }
-    if (not(that_facet->vertex_index.empty())) eta /= (double)that_facet->vertex_index.size();
-    const double pdyn = env.w->get_dynamic_pressure(env.rho, env.g, std::vector<ssc::kinematics::Point>{C}, env.k, std::vector<double>{eta}, t).at(0);
-    return DF(-pdyn*dS,C.v);
-}
-
 std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const EnvironmentAndFrames &, const BodyStates &, const double)>
     FroudeKrylovForceModel::get_dF(const FacetIterator &begin_facet,
                                    const FacetIterator &end_facet,

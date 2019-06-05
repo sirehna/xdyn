@@ -23,12 +23,6 @@ class FroudeKrylovForceModel : public ImmersedSurfaceForceModel
 {
     public:
         FroudeKrylovForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
-        DF dF(const FacetIterator& that_facet,
-              const size_t that_facet_index,
-              const EnvironmentAndFrames& env,
-              const BodyStates& states,
-              const double t
-             ) const;
         std::function<DF(const FacetIterator &,
                          const size_t,
                          const EnvironmentAndFrames &,
