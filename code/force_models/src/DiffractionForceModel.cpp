@@ -132,14 +132,14 @@ class DiffractionForceModel::Impl
                     {
                         rao_modules[degree_of_freedom_idx][direction_idx].resize(periods_for_each_direction[direction_idx].size());
                         rao_phases[degree_of_freedom_idx][direction_idx].resize(periods_for_each_direction[direction_idx].size());
-                        for (size_t j = 0 ; j < psis[direction_idx].size() ; ++j) // For each incidence psi
+                        for (size_t period_idx = 0 ; period_idx < psis[direction_idx].size() ; ++period_idx) // For each period
                         {
                             // Wave incidence
-                            const double beta = psi - psis.at(direction_idx).at(j);
+                            const double beta = psi - psis.at(direction_idx).at(period_idx);
                             // Interpolate RAO module for this axis, period and incidence
-                            rao_modules[degree_of_freedom_idx][direction_idx][j] = rao.interpolate_module(degree_of_freedom_idx, periods_for_each_direction[direction_idx][j], beta);
+                            rao_modules[degree_of_freedom_idx][direction_idx][period_idx] = rao.interpolate_module(degree_of_freedom_idx, periods_for_each_direction[direction_idx][period_idx], beta);
                             // Interpolate RAO phase for this axis, period and incidence
-                            rao_phases[degree_of_freedom_idx][direction_idx][j] = -rao.interpolate_phase(degree_of_freedom_idx, periods_for_each_direction[direction_idx][j], beta);
+                            rao_phases[degree_of_freedom_idx][direction_idx][period_idx] = -rao.interpolate_phase(degree_of_freedom_idx, periods_for_each_direction[direction_idx][period_idx], beta);
                         }
                     }
 
