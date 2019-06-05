@@ -126,28 +126,28 @@ class DiffractionForceModel::Impl
                         rao_phases[k].resize(nb_of_directions);
                     }
                 }
-                for (size_t k = 0 ; k < 6 ; ++k) // For each degree of freedom (X, Y, Z, K, M, N)
+                for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
                 {
                     for (size_t i = 0 ; i < nb_of_directions ; ++i) // For each direction
                     {
-                        rao_modules[k][i].resize(periods_for_each_direction[i].size());
-                        rao_phases[k][i].resize(periods_for_each_direction[i].size());
+                        rao_modules[degree_of_freedom_idx][i].resize(periods_for_each_direction[i].size());
+                        rao_phases[degree_of_freedom_idx][i].resize(periods_for_each_direction[i].size());
                         for (size_t j = 0 ; j < psis[i].size() ; ++j) // For each incidence psi
                         {
                             // Wave incidence
                             const double beta = psi - psis.at(i).at(j);
                             // Interpolate RAO module for this axis k, period i and incidence j
-                            rao_modules[k][i][j] = rao.interpolate_module(k, periods_for_each_direction[i][j], beta);
+                            rao_modules[degree_of_freedom_idx][i][j] = rao.interpolate_module(k, periods_for_each_direction[i][j], beta);
                             // Interpolate RAO phase for this axis k, period i and incidence j
-                            rao_phases[k][i][j] = -rao.interpolate_phase(k, periods_for_each_direction[i][j], beta);
+                            rao_phases[degree_of_freedom_idx][i][j] = -rao.interpolate_phase(k, periods_for_each_direction[i][j], beta);
                         }
                     }
 
-                    w((int)k) = env.w->evaluate_rao(position_in_ned_for_the_wave_model.x(),
+                    w((int)degree_of_freedom_idx) = env.w->evaluate_rao(position_in_ned_for_the_wave_model.x(),
                                                     position_in_ned_for_the_wave_model.y(),
                                                     t,
-                                                    rao_modules[k],
-                                                    rao_phases[k]);
+                                                    rao_modules[degree_of_freedom_idx],
+                                                    rao_phases[degree_of_freedom_idx]);
                 }
             }
             const auto ww = express_aquaplus_wrench_in_xdyn_coordinates(w);
