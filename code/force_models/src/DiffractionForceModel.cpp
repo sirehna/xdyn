@@ -116,18 +116,19 @@ class DiffractionForceModel::Impl
             std::array<std::vector<std::vector<double> >, 6 > rao_phases;
             if (env.w.use_count()>0)
             {
+                const size_t nb_of_directions = periods_for_each_direction.size();
                 if (not(periods_for_each_direction.empty()))
                 {
                     // Resize for each degree of freedom
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
-                        rao_modules[k].resize(periods_for_each_direction.size());
-                        rao_phases[k].resize(periods_for_each_direction.size());
+                        rao_modules[k].resize(nb_of_directions);
+                        rao_phases[k].resize(nb_of_directions);
                     }
                 }
                 for (size_t k = 0 ; k < 6 ; ++k) // For each degree of freedom (X, Y, Z, K, M, N)
                 {
-                    for (size_t i = 0 ; i < periods_for_each_direction.size() ; ++i) // For each period Tp
+                    for (size_t i = 0 ; i < nb_of_directions ; ++i) // For each direction
                     {
                         rao_modules[k][i].resize(periods_for_each_direction[i].size());
                         rao_phases[k][i].resize(periods_for_each_direction[i].size());
