@@ -24,12 +24,10 @@ class ImmersedSurfaceForceModel : public SurfaceForceModel
         ImmersedSurfaceForceModel(const std::string& name, const std::string& body_name, const EnvironmentAndFrames& env);
         virtual ~ImmersedSurfaceForceModel();
 
-    protected:
-        FacetIterator begin(const MeshIntersectorPtr &intersector) const;
-        FacetIterator end(const MeshIntersectorPtr &intersector) const;
-
     private:
         ImmersedSurfaceForceModel();
+        FacetIterator begin(const MeshIntersectorPtr& intersector) const;
+        FacetIterator end(const MeshIntersectorPtr& intersector) const;
 };
 
 #endif /* IMMERSEDSURFACEFORCEMODEL_HPP_ */

@@ -23,7 +23,6 @@ class FroudeKrylovForceModel : public ImmersedSurfaceForceModel
 {
     public:
         FroudeKrylovForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
-        virtual ssc::kinematics::Wrench operator()(const BodyStates &states, const double t) const;
         DF dF(const FacetIterator& that_facet,
               const size_t that_facet_index,
               const EnvironmentAndFrames& env,

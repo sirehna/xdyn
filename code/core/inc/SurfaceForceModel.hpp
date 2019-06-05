@@ -60,7 +60,7 @@ class SurfaceForceModel : public ForceModel
 
         SurfaceForceModel(const std::string& name, const std::string& body_name_, const EnvironmentAndFrames& env);
         virtual ~SurfaceForceModel();
-        virtual ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
         virtual DF dF(const FacetIterator& that_facet,
                       const size_t that_facet_index,
                       const EnvironmentAndFrames& env,
