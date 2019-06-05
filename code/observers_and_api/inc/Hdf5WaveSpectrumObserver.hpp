@@ -8,27 +8,6 @@
 #include "H5Cpp.h"
 
 void hdf5WaveSpectrumObserver(
-        const H5::H5File& h5File,
-        const std::string& datasetName,
-        const DiscreteDirectionalWaveSpectrum& s);
-
-void hdf5WaveSpectrumObserver(
-        const std::string& fileName,
-        const std::string& datasetName,
-        const DiscreteDirectionalWaveSpectrum& s);
-
-void hdf5WaveSpectrumObserver(
-        const H5::H5File& h5File,
-        const std::string& datasetName,
-        const std::vector<DiscreteDirectionalWaveSpectrum>& s);
-
-void hdf5WaveSpectrumObserver(
-        const std::string& fileName,
-        const std::string& datasetName,
-        const std::vector<DiscreteDirectionalWaveSpectrum>& s);
-
-////////////////////////////////////////////////////////////////////////////////
-void hdf5WaveSpectrumObserver(
         const std::string& fileName,
         const std::string& datasetName,
         const std::vector<FlatDiscreteDirectionalWaveSpectrum>& s);
