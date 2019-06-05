@@ -139,3 +139,20 @@ GMForceModel::DF GMForceModel::dF(const FacetIterator& ,
 {
     return GMForceModel::DF(EPoint(),EPoint());
 }
+
+std::function<GMForceModel::DF(const FacetIterator &, const size_t, const EnvironmentAndFrames &, const BodyStates &, const double)>
+    GMForceModel::get_dF(const FacetIterator& begin_facet,
+                         const FacetIterator& end_facet,
+                         const EnvironmentAndFrames& env,
+                         const BodyStates& states,
+                         const double t) const
+{
+    return [](const FacetIterator &,
+              const size_t,
+              const EnvironmentAndFrames &,
+              const BodyStates &,
+              const double t)
+    {
+        return GMForceModel::DF(EPoint(), EPoint());
+    };
+}

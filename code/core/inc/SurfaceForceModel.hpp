@@ -67,6 +67,17 @@ class SurfaceForceModel : public ForceModel
                       const BodyStates& states,
                       const double t
                      ) const = 0;
+        virtual std::function<DF(const FacetIterator &,
+                                 const size_t,
+                                 const EnvironmentAndFrames &,
+                                 const BodyStates &,
+                                 const double
+                                )> get_dF(const FacetIterator &begin_facet,
+                                          const FacetIterator &end_facet,
+                                          const EnvironmentAndFrames &env,
+                                          const BodyStates &states,
+                                          const double t
+                                         ) const = 0;
 
     /**  \brief Compute potential energy of the hydrostatic force model
       */

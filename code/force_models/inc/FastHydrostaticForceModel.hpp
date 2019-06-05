@@ -20,7 +20,17 @@ class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
               const BodyStates& states,
               const double t
               ) const;
-
+        std::function<DF(const FacetIterator &,
+                         const size_t,
+                         const EnvironmentAndFrames &,
+                         const BodyStates &,
+                         const double
+                        )> get_dF(const FacetIterator& begin_facet,
+                                  const FacetIterator& end_facet,
+                                  const EnvironmentAndFrames& env,
+                                  const BodyStates& states,
+                                  const double t
+                                 ) const;
         std::string get_name() const;
         static std::string model_name();
         double gz() const;
