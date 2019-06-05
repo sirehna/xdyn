@@ -128,18 +128,18 @@ class DiffractionForceModel::Impl
                 }
                 for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
                 {
-                    for (size_t i = 0 ; i < nb_of_directions ; ++i) // For each direction
+                    for (size_t direction_idx = 0 ; direction_idx < nb_of_directions ; ++direction_idx) // For each direction
                     {
-                        rao_modules[degree_of_freedom_idx][i].resize(periods_for_each_direction[i].size());
-                        rao_phases[degree_of_freedom_idx][i].resize(periods_for_each_direction[i].size());
-                        for (size_t j = 0 ; j < psis[i].size() ; ++j) // For each incidence psi
+                        rao_modules[degree_of_freedom_idx][direction_idx].resize(periods_for_each_direction[direction_idx].size());
+                        rao_phases[degree_of_freedom_idx][direction_idx].resize(periods_for_each_direction[direction_idx].size());
+                        for (size_t j = 0 ; j < psis[direction_idx].size() ; ++j) // For each incidence psi
                         {
                             // Wave incidence
-                            const double beta = psi - psis.at(i).at(j);
-                            // Interpolate RAO module for this axis k, period i and incidence j
-                            rao_modules[degree_of_freedom_idx][i][j] = rao.interpolate_module(k, periods_for_each_direction[i][j], beta);
-                            // Interpolate RAO phase for this axis k, period i and incidence j
-                            rao_phases[degree_of_freedom_idx][i][j] = -rao.interpolate_phase(k, periods_for_each_direction[i][j], beta);
+                            const double beta = psi - psis.at(direction_idx).at(j);
+                            // Interpolate RAO module for this axis, period and incidence
+                            rao_modules[degree_of_freedom_idx][direction_idx][j] = rao.interpolate_module(degree_of_freedom_idx, periods_for_each_direction[direction_idx][j], beta);
+                            // Interpolate RAO phase for this axis, period and incidence
+                            rao_phases[degree_of_freedom_idx][direction_idx][j] = -rao.interpolate_phase(degree_of_freedom_idx, periods_for_each_direction[direction_idx][j], beta);
                         }
                     }
 
