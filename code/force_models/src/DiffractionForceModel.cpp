@@ -116,30 +116,31 @@ class DiffractionForceModel::Impl
             std::array<std::vector<std::vector<double> >, 6 > rao_phases;
             if (env.w.use_count()>0)
             {
-                const size_t nb_of_directions = periods_for_each_direction.size();
+                const size_t nb_of_spectra = periods_for_each_direction.size();
                 if (not(periods_for_each_direction.empty()))
                 {
                     // Resize for each degree of freedom
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
-                        rao_modules[k].resize(nb_of_directions);
-                        rao_phases[k].resize(nb_of_directions);
+                        rao_modules[k].resize(nb_of_spectra);
+                        rao_phases[k].resize(nb_of_spectra);
                     }
                 }
                 for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
                 {
-                    for (size_t direction_idx = 0 ; direction_idx < nb_of_directions ; ++direction_idx) // For each direction
+                    for (size_t spectrum_idx = 0 ; spectrum_idx < nb_of_spectra ; ++spectrum_idx) // For each directional spectrum
                     {
-                        rao_modules[degree_of_freedom_idx][direction_idx].resize(periods_for_each_direction[direction_idx].size());
-                        rao_phases[degree_of_freedom_idx][direction_idx].resize(periods_for_each_direction[direction_idx].size());
-                        for (size_t period_idx = 0 ; period_idx < psis[direction_idx].size() ; ++period_idx) // For each period
+                        const size_t nb_of_period_incidence_pairs = periods_for_each_direction[spectrum_idx].size();
+                        rao_modules[degree_of_freedom_idx][spectrum_idx].resize(nb_of_period_incidence_pairs);
+                        rao_phases[degree_of_freedom_idx][spectrum_idx].resize(nb_of_period_incidence_pairs);
+                        for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
                         {
                             // Wave incidence
-                            const double beta = psi - psis.at(direction_idx).at(period_idx);
+                            const double beta = psi - psis.at(spectrum_idx).at(omega_beta_idx);
                             // Interpolate RAO module for this axis, period and incidence
-                            rao_modules[degree_of_freedom_idx][direction_idx][period_idx] = rao.interpolate_module(degree_of_freedom_idx, periods_for_each_direction[direction_idx][period_idx], beta);
+                            rao_modules[degree_of_freedom_idx][spectrum_idx][omega_beta_idx] = rao.interpolate_module(degree_of_freedom_idx, periods_for_each_direction[spectrum_idx][omega_beta_idx], beta);
                             // Interpolate RAO phase for this axis, period and incidence
-                            rao_phases[degree_of_freedom_idx][direction_idx][period_idx] = -rao.interpolate_phase(degree_of_freedom_idx, periods_for_each_direction[direction_idx][period_idx], beta);
+                            rao_phases[degree_of_freedom_idx][spectrum_idx][omega_beta_idx] = -rao.interpolate_phase(degree_of_freedom_idx, periods_for_each_direction[spectrum_idx][omega_beta_idx], beta);
                         }
                     }
 
