@@ -225,39 +225,39 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh)
     ASSERT_EQ(10, w.m.cols());
     ASSERT_DOUBLE_EQ(1, (double)w.m(0,0));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,0));
-    EXPECT_NEAR(-1.8616294581857908, (double)w.m(2,0), 1E-5);
+    EXPECT_NEAR(-2.0378067059984941, (double)w.m(2,0), 1E-5);
 
     ASSERT_DOUBLE_EQ(2, (double)w.m(0,1));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,1));
-    EXPECT_NEAR(-1.8616230500793978, (double)w.m(2,1), 1E-5);
+    EXPECT_NEAR(-2.0378386276758222, (double)w.m(2,1), 1E-5);
 
     ASSERT_DOUBLE_EQ(3, (double)w.m(0,2));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,2));
-    EXPECT_NEAR(-1.8616163424638175, (double)w.m(2,2), 1E-5);
+    EXPECT_NEAR(-2.0378702477809414, (double)w.m(2,2), 1E-5);
 
     ASSERT_DOUBLE_EQ(4, (double)w.m(0,3));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,3));
-    EXPECT_NEAR(-1.8616092729714091, (double)w.m(2,3), 1E-5);
+    EXPECT_NEAR(-2.0379014849156922, (double)w.m(2,3), 1E-5);
 
     ASSERT_DOUBLE_EQ(5, (double)w.m(0,4));
     ASSERT_DOUBLE_EQ(1, (double)w.m(1,4));
-    EXPECT_NEAR(-1.8616022355954391, (double)w.m(2,4), 1E-5);
+    EXPECT_NEAR(-2.0379327524655073, (double)w.m(2,4), 1E-5);
 
     ASSERT_DOUBLE_EQ(1, (double)w.m(0,5));
     ASSERT_DOUBLE_EQ(2, (double)w.m(1,5));
-    EXPECT_NEAR(-1.9778860402171832, (double)w.m(2,5), 1E-5);
+    EXPECT_NEAR(-2.153434682791282, (double)w.m(2,5), 1E-5);
 
     ASSERT_DOUBLE_EQ(2, (double)w.m(0,6));
     ASSERT_DOUBLE_EQ(2, (double)w.m(1,6));
-    EXPECT_NEAR(-1.9778795395339417, (double)w.m(2,6), 1E-5);
+    EXPECT_NEAR(-2.1534665123716255, (double)w.m(2,6), 1E-5);
 
     ASSERT_DOUBLE_EQ(3, (double)w.m(0,7));
     ASSERT_DOUBLE_EQ(2, (double)w.m(1,7));
-    EXPECT_NEAR(-1.9778731939201069, (double)w.m(2,7), 1E-5);
+    EXPECT_NEAR(-2.15349849459108, (double)w.m(2,7), 1E-5);
 
     ASSERT_DOUBLE_EQ(4, (double)w.m(0,8));
     ASSERT_DOUBLE_EQ(2, (double)w.m(1,8));
-    EXPECT_NEAR(-1.9778666328005694, (double)w.m(2,8), 1E-5);
+    EXPECT_NEAR(-2.1535302409459436, (double)w.m(2,8), 1E-5);
 }
 
 TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)

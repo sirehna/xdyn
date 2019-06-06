@@ -120,11 +120,11 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
         {
             if (i == 0)
             {
-                domega = (spectrum.omega.at(1)-spectrum.omega.at(0));
+                domega = (spectrum.omega.at(1)-spectrum.omega.at(0))/2;
             }
             else if (i == nOmega - 1)
             {
-                domega = (spectrum.omega.at(nOmega-1)-spectrum.omega.at(nOmega-2));
+                domega = (spectrum.omega.at(nOmega-1)-spectrum.omega.at(nOmega-2))/2;
             }
             else
             {
@@ -141,11 +141,11 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
             {
                 if (j == 0)
                 {
-                    dpsi = (spectrum.psi.at(1)-spectrum.psi.at(0));
+                    dpsi = (spectrum.psi.at(1)-spectrum.psi.at(0))/2;
                 }
                 else if (j == nPsi - 1)
                 {
-                    dpsi = (spectrum.psi.at(nPsi-1)-spectrum.psi.at(nPsi-2));
+                    dpsi = (spectrum.psi.at(nPsi-1)-spectrum.psi.at(nPsi-2))/2;
                 }
                 else
                 {

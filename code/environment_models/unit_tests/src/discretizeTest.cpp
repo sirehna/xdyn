@@ -248,8 +248,8 @@ TEST_F(discretizeTest, filtering_with_a_ratio_of_1_should_merely_sort_the_spectr
     // Si.Dj     =   20    16    15    12    12     9     8
     // for (i,j) = (2,1) (2,2) (0,1) (0,2) (2,3) (0,3) (1,2)
 
-    const auto domega = [](const size_t ){return 1;};
-    const auto dpsi = [](const size_t ){return 1;};
+    const auto domega = [](const size_t i){return ((i==0) || (i==2)) ? 0.5 : 1;};
+    const auto dpsi = [](const size_t j){return ((j==0) || (j==3)) ? 0.5 : 1;};
 
     FlatDiscreteDirectionalWaveSpectrum s_ori = flatten(d);
     EXPECT_EQ(12, s_ori.a.size());
@@ -263,8 +263,8 @@ TEST_F(discretizeTest, filtering_with_a_ratio_of_1_should_merely_sort_the_spectr
     const FlatDiscreteDirectionalWaveSpectrum s = filter(s_ori, 1);
     EXPECT_EQ(12, s.a.size());
 
-    const std::vector<size_t> i = {2,2,0,0,2,1,0,1,1,2,0,1};
-    const std::vector<size_t> j = {1,2,1,2,3,1,3,2,3,0,0,0};
+    const std::vector<size_t> i = {1,2,1,2,0,0,1,2,0,1,2,0};
+    const std::vector<size_t> j = {1,1,2,2,1,2,3,3,3,0,0,0};
 
     for (size_t k = 0 ; k < 12; ++k)
     {
