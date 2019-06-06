@@ -262,101 +262,75 @@ TEST_F(discretizeTest, filtering_with_a_ratio_of_1_should_merely_sort_the_spectr
     EXPECT_EQ(12, s_ori.k.size());
     EXPECT_EQ(0, s_ori.phase.size());
 
-    FlatDiscreteDirectionalWaveSpectrum s = filter(s_ori, 0.0);
-    EXPECT_EQ(0, s.a.size());
+    const FlatDiscreteDirectionalWaveSpectrum s = filter(s_ori, 1);
+    EXPECT_EQ(12, s.a.size());
 
-    s = filter(s_ori, 0.17);
-    EXPECT_EQ(1, s.a.size());
     size_t i = 2;
     size_t j = 1;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[0]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[0]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[0]);
 
-
-
-    s = filter(s_ori, 0.30);
-    EXPECT_EQ(2, s.a.size());
     i = 2;
     j = 2;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[1]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[1]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[1]);
 
-    s = filter(s_ori, 0.43);
-    EXPECT_EQ(3, s.a.size());
     i = 0;
     j = 1;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[2]);
     EXPECT_DOUBLE_EQ(0, s.omega[2]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[2]);
 
-    s = filter(s_ori, 0.53);
-    EXPECT_EQ(4, s.a.size());
     i = 0;
     j = 2;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[3]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[3]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[3]);
 
-    s = filter(s_ori, 0.64);
-    EXPECT_EQ(5, s.a.size());
     i = 2;
     j = 3;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[4]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[4]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[4]);
 
-    s = filter(s_ori, 0.72);
-    EXPECT_EQ(6, s.a.size());
     i = 1;
     j = 1;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[5]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[5]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[5]);
 
-    s = filter(s_ori, 0.80);
-    EXPECT_EQ(7, s.a.size());
     i = 0;
     j = 3;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[6]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[6]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[6]);
 
-    s = filter(s_ori, 0.87);
-    EXPECT_EQ(8, s.a.size());
     i = 1;
     j = 2;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[7]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[7]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[7]);
 
-    s = filter(s_ori, 0.92);
-    EXPECT_EQ(9, s.a.size());
     i = 1;
     j = 3;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[8]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[8]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[8]);
 
-    s = filter(s_ori, 0.95);
-    EXPECT_EQ(10, s.a.size());
     i = 2;
     j = 0;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[9]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[9]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[9]);
 
-    s = filter(s_ori, 0.98);
-    EXPECT_EQ(11, s.a.size());
     i = 0;
     j = 0;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[10]);
     EXPECT_DOUBLE_EQ(d.omega[i], s.omega[10]);
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[10]);
 
-    s = filter(s_ori, 1.0);
-    EXPECT_EQ(12, s.a.size());
     i = 1;
     j = 0;
     EXPECT_DOUBLE_EQ(sqrt(2*domega(i)*dpsi(j)*d.Si[i]*d.Dj[j]), s.a[11]);
