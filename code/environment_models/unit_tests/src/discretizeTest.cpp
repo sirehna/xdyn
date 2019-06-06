@@ -381,6 +381,54 @@ TEST_F(discretizeTest, filtering_with_a_ratio_of_1_should_merely_sort_the_spectr
     EXPECT_DOUBLE_EQ(d.psi[j], s.psi[11]);
 }
 
+TEST_F(discretizeTest, filtering_with_a_ratio_of_r_should_give_us_at_least_a_ratio_r_of_the_energy)
+{
+    DiscreteDirectionalWaveSpectrum d;
+    d.Si = a.random_vector_of<double>().of_size(3);
+    d.Dj = a.random_vector_of<double>().of_size(4);
+    d.k = a.random_vector_of<double>().of_size(3);
+    d.omega = a.random_vector_of<double>().of_size(3);
+    d.phase = std::vector<std::vector<double> >(3,std::vector<double>(4,0));
+    d.psi = a.random_vector_of<double>().of_size(4);
+    d.domega = 1.0;
+    d.dpsi = 1.0;
+
+    d.omega[0] = 0;
+    d.omega[1] = 1;
+    d.omega[2] = 2;
+    d.psi[0] = 10;
+    d.psi[1] = 11;
+    d.psi[2] = 12;
+    d.psi[3] = 13;
+
+    d.Dj[0] = 1;
+    d.Dj[1] = 5;
+    d.Dj[2] = 4;
+    d.Dj[3] = 3;
+
+    d.Si[0] = 3;
+    d.Si[1] = 2;
+    d.Si[2] = 4;
+
+    FlatDiscreteDirectionalWaveSpectrum s_ori = flatten(d);
+    double original_energy = 0;
+    for (const double a : s_ori.a)
+    {
+        original_energy += a*a;
+    }
+    for (size_t r = 0 ; r <= 100 ; ++r)
+    {
+        const double ratio = ((double)r)/100.;
+        const FlatDiscreteDirectionalWaveSpectrum s = filter(s_ori, ratio);
+        double energy = 0;
+        for (const double a : s.a)
+        {
+            energy += a*a;
+        }
+        EXPECT_GE(energy, ratio*original_energy);
+    }
+}
+
 TEST_F(discretizeTest, dynamic_pressure_factor)
 {
     //! [discretizeTest dynamic_pressure_factor example]
