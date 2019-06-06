@@ -21,6 +21,8 @@ class SurfaceElevationFromGRPC : public SurfaceElevationInterface
         SurfaceElevationFromGRPC(const YamlGRPC& yaml, const ssc::kinematics::PointMatrixPtr& output_mesh);
 
 
+        std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
+        std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force (or torque), depending on the RAO
           */

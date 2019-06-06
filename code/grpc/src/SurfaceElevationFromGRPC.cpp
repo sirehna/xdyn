@@ -5,6 +5,7 @@
  *      Author: cady
  */
 #include <algorithm>
+#include <cmath> // For cos, sin
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -13,8 +14,9 @@
 #include <grpcpp/grpcpp.h>
 #include "waves.grpc.pb.h"
 
+#include "discretize.hpp"
 #include "SurfaceElevationFromGRPC.hpp"
-
+#include "InternalErrorException.hpp"
 #include "GRPCError.hpp"
 #include "YamlGRPC.hpp"
 
@@ -214,6 +216,71 @@ class SurfaceElevationFromGRPC::Impl
             return ret;
         }
 
+        FlatDiscreteDirectionalWaveSpectrum spectrum(const double t)
+        {
+            SpectrumRequest request;
+            request.set_t(t);
+            grpc::ClientContext context;
+            SpectrumResponse response;
+            const grpc::Status status = stub->spectrum(&context, request, &response);
+            throw_if_invalid_status(status);
+            DiscreteDirectionalWaveSpectrum s;
+            s.Si.reserve(response.si_size());
+            std::copy(response.si().begin(), response.si().end(), std::back_inserter(s.Si));
+            s.Dj.reserve(response.dj_size());
+            std::copy(response.dj().begin(), response.dj().end(), std::back_inserter(s.Dj));
+            s.omega.reserve(response.omega_size());
+            std::copy(response.omega().begin(), response.omega().end(), std::back_inserter(s.omega));
+            s.psi.reserve(response.psi_size());
+            std::copy(response.psi().begin(), response.psi().end(), std::back_inserter(s.psi));
+            s.k.reserve(response.k_size());
+            std::copy(response.k().begin(), response.k().end(), std::back_inserter(s.k));
+            if (response.phase_size())
+            {
+                s.phase.resize(response.phase_size());
+                for (int i = 0 ; i < response.phase_size() ; ++i)
+                {
+                    s.phase[i].reserve(response.phase(i).phase_size());
+                    std::copy(response.phase(i).phase().begin(), response.phase(i).phase().end(), std::back_inserter(s.phase[i]));
+                }
+            }
+            return flatten(s);
+        }
+
+        std::vector<std::vector<double> > get_wave_directions_for_each_model()
+        {
+            DirectionsRequest request;
+            grpc::ClientContext context;
+            Directions response;
+            const grpc::Status status = stub->directions_for_rao(&context, request, &response);
+            throw_if_invalid_status(status);
+            std::vector<std::vector<double> > wave_directions;
+            if (response.psis_size())
+            {
+                wave_directions.resize(1);
+                wave_directions[0].reserve(response.psis_size());
+                std::copy(response.psis().begin(), response.psis().end(), std::back_inserter(wave_directions[0]));
+            }
+            return wave_directions;
+        }
+
+        std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model()
+        {
+            AngularFrequenciesRequest request;
+            grpc::ClientContext context;
+            AngularFrequencies response;
+            const grpc::Status status = stub->angular_frequencies_for_rao(&context, request, &response);
+            throw_if_invalid_status(status);
+            std::vector<std::vector<double> > omegas;
+            if (response.omegas_size())
+            {
+                omegas.resize(1);
+                omegas[0].reserve(response.omegas_size());
+                std::copy(response.omegas().begin(), response.omegas().end(), std::back_inserter(omegas[0]));
+            }
+            return omegas;
+        }
+
     private:
         Impl();
         std::string url;
@@ -226,15 +293,56 @@ SurfaceElevationFromGRPC::SurfaceElevationFromGRPC(const YamlGRPC& yaml, const s
 {
 }
 
-double SurfaceElevationFromGRPC::evaluate_rao(const double , //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                                   const double , //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                                   const double , //!< Current time instant (in seconds)
-                                   const std::vector<std::vector<double> >& , //!< Module of the RAO
-                                   const std::vector<std::vector<double> >&  //!< Phase of the RAO
+std::vector<std::vector<double> > SurfaceElevationFromGRPC::get_wave_directions_for_each_model() const
+{
+    return pimpl->get_wave_directions_for_each_model();
+}
+
+std::vector<std::vector<double> > SurfaceElevationFromGRPC::get_wave_angular_frequency_for_each_model() const
+{
+    return pimpl->get_wave_angular_frequency_for_each_model();
+}
+
+double SurfaceElevationFromGRPC::evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+                                              const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+                                              const double t, //!< Current time instant (in seconds)
+                                              const std::vector<std::vector<double> >& rao_modules, //!< Module of the RAO (spectrum_index, flattened_omega_x_psi_index)
+                                              const std::vector<std::vector<double> >& rao_phases //!< Phase of the RAO (spectrum_index, flattened_omega_x_psi_index)
                              ) const
 {
-    THROW(__PRETTY_FUNCTION__, GRPCError, "Asked to evaluate RAO for gRPC wave model but this is not implemented yet. Try disabling the diffraction force model.");
-    return 0;
+    // The RAOs from the HDB file are interpolated by hdb_interpolators/DiffractionInterpolator
+    // called by class DiffractionForceModel::Impl's constructor which ensures that the first
+    // dimension of rao_phase & rao_module is the index of the directional spectrum and the
+    // second index is the position in the "flattened" (omega,psi) matrix. The RAO's are interpolated
+    // at the periods and incidences specified by each wave directional spectrum.
+    if (rao_modules.size() != 1)
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "RAO module should be of size 1xn: there is only one \"direction spectrum\" for gRPC wave models.");
+    }
+    if (rao_phases.size() != 1)
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "RAO module should be of size 1xn: there is only one \"direction spectrum\" for gRPC wave models.");
+    }
+    const std::vector<double> rao_module_for_each_frequency_and_incidence = rao_modules.front();
+    const std::vector<double> rao_phase_for_each_frequency_and_incidence = rao_phases.front();
+    const size_t nb_of_omegas_x_nb_of_directions = rao_module_for_each_frequency_and_incidence.size();
+    const auto spectrum = pimpl->spectrum(t);
+    if (nb_of_omegas_x_nb_of_directions != spectrum.k.size())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Number of angular frequencies times number of incidences in HDB RAO is " << nb_of_omegas_x_nb_of_directions << ", which does not match spectrum size (" << spectrum.k.size() << " (omega,psi) pairs)");
+    }
+    double F = 0;
+    for (size_t i = 0 ; i < nb_of_omegas_x_nb_of_directions ; ++i) // For each (omega,beta) pair
+    {
+        const double rao_amplitude = rao_module_for_each_frequency_and_incidence[i] * spectrum.a[i];
+        const double omega_t = spectrum.omega[i] * t;
+        const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
+        const double theta = spectrum.phase[i];
+        F -= rao_amplitude * sin(-omega_t + k_xCosPsi_ySinPsi + theta + rao_phase_for_each_frequency_and_incidence[i]);
+    }
+    return F;
+
+
 }
 
 double SurfaceElevationFromGRPC::wave_height(const double x,                                  //!< x-position in the NED frame (in meters)
