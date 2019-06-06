@@ -235,7 +235,7 @@ TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_n
  * filter_ratio = np.floor(100*pct)
  * \endcode
  */
-TEST_F(discretizeTest, filter)
+TEST_F(discretizeTest, filtering_with_a_ratio_of_1_should_merely_sort_the_spectrum_by_amplitude)
 {
     DiscreteDirectionalWaveSpectrum d;
     d.Si = a.random_vector_of<double>().of_size(3);
