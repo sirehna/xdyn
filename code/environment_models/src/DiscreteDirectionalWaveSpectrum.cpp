@@ -27,8 +27,6 @@ DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :
                     psi(),
                     k(),
                     phase(),
-                    domega(1),
-                    dpsi(1),
                     pdyn_factor(),
                     pdyn_factor_sh()
 {

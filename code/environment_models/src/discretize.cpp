@@ -36,8 +36,6 @@ DiscreteDirectionalWaveSpectrum common(
     DiscreteDirectionalWaveSpectrum ret;
     ret.omega = S.get_angular_frequencies(omega_min, omega_max, nfreq);
     ret.psi = D.get_directions(nfreq);
-    if (ret.omega.size()>1) ret.domega = ret.omega[1]-ret.omega[0];
-    if (ret.psi.size()>1)   ret.dpsi = ret.psi[1]-ret.psi[0];
     ret.Si.reserve(ret.omega.size());
     ret.Dj.reserve(ret.psi.size());
     for (const auto omega:ret.omega) ret.Si.push_back(S(omega));

@@ -50,8 +50,6 @@ TEST_F(discretizeTest, example)
 //! [discretizeTest expected output]
     ASSERT_EQ(1000, A.Dj.size());
     ASSERT_EQ(1000, A.Si.size());
-    ASSERT_DOUBLE_EQ(2.99/999., A.domega);
-    ASSERT_DOUBLE_EQ(0.002*PI, A.dpsi);
 //! [discretizeTest expected output]
 }
 
@@ -66,8 +64,6 @@ TEST_F(discretizeTest, Dirac_in_frequency)
     const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
     ASSERT_EQ(1000, A.Dj.size());
     ASSERT_EQ(1, A.Si.size());
-    ASSERT_DOUBLE_EQ(1, A.domega);
-    ASSERT_DOUBLE_EQ(0.002*PI, A.dpsi);
     ASSERT_DOUBLE_EQ(Hs*Hs/8, A.Si.front());
 }
 
@@ -83,8 +79,6 @@ TEST_F(discretizeTest, Dirac_in_direction)
     const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
     ASSERT_EQ(1, A.Dj.size());
     ASSERT_EQ(1000, A.Si.size());
-    ASSERT_DOUBLE_EQ(2.99/999, A.domega);
-    ASSERT_DOUBLE_EQ(1, A.dpsi);
     ASSERT_DOUBLE_EQ(1, A.Dj.front());
 }
 
