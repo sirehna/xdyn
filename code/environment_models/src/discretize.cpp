@@ -112,17 +112,57 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
     FlatDiscreteDirectionalWaveSpectrum ret;
     const size_t nOmega = spectrum.omega.size();
     const size_t nPsi = spectrum.psi.size();
+    double domega = 1;
+    double dpsi = 1;
     for (size_t i = 0 ; i < nOmega ; ++i)
     {
+        if (nOmega > 1)
+        {
+            if (i == 0)
+            {
+                domega = (spectrum.omega.at(1)-spectrum.omega.at(0));
+            }
+            else if (i == nOmega - 1)
+            {
+                domega = (spectrum.omega.at(nOmega-1)-spectrum.omega.at(nOmega-2));
+            }
+            else
+            {
+                domega = (spectrum.omega.at(i)-spectrum.omega.at(i-1))/2 + (spectrum.omega.at(i+1)-spectrum.omega.at(i))/2;
+            }
+        }
+        else
+        {
+            domega = 1;
+        }
         for (size_t j = 0 ; j < nPsi ; ++j)
         {
+            if (nPsi > 1)
+            {
+                if (j == 0)
+                {
+                    dpsi = (spectrum.psi.at(1)-spectrum.psi.at(0));
+                }
+                else if (j == nPsi - 1)
+                {
+                    dpsi = (spectrum.psi.at(nPsi-1)-spectrum.psi.at(nPsi-2));
+                }
+                else
+                {
+                    dpsi = (spectrum.psi.at(j)-spectrum.psi.at(j-1))/2 + (spectrum.psi.at(j+1)-spectrum.psi.at(j))/2;
+                }
+            }
+            else
+            {
+                dpsi = 1;
+            }
             ret.k.push_back(spectrum.k[i]);
             ret.omega.push_back(spectrum.omega[i]);
             ret.psi.push_back(spectrum.psi[j]);
             ret.cos_psi.push_back(cos(spectrum.psi[j]));
             ret.sin_psi.push_back(sin(spectrum.psi[j]));
             const double s = spectrum.Si[i] * spectrum.Dj[j];
-            ret.a.push_back(sqrt(2 * s * spectrum.domega * spectrum.dpsi));
+            ret.a.push_back(sqrt(2 * s * domega * dpsi));
         }
     }
     ret.pdyn_factor = spectrum.pdyn_factor;

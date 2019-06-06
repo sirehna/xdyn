@@ -244,8 +244,6 @@ TEST_F(discretizeTest, filtering_with_a_ratio_of_1_should_merely_sort_the_spectr
     d.omega = {0,1,2};
     d.phase = std::vector<std::vector<double> >(3,std::vector<double>(4,0));
     d.psi = {10,11,12,13};
-    d.domega = 1.0;
-    d.dpsi = 1.0;
 
     // Si.Dj     =   20    16    15    12    12     9     8
     // for (i,j) = (2,1) (2,2) (0,1) (0,2) (2,3) (0,3) (1,2)
@@ -285,8 +283,6 @@ TEST_F(discretizeTest, filtering_with_a_ratio_of_r_should_give_us_at_least_a_rat
     d.omega = {0,1,2};
     d.phase = std::vector<std::vector<double> >(3,std::vector<double>(4,0));
     d.psi = {10,11,12,13};
-    d.domega = 1.0;
-    d.dpsi = 1.0;
 
     FlatDiscreteDirectionalWaveSpectrum s_ori = flatten(d);
     double original_energy = 0;
