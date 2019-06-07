@@ -66,7 +66,7 @@ int main(int , char** )
         x.at(i) = xmin + (xmax - xmin) * ((double)i) / ((double)nx - 1.);
     }
 
-    std::vector<double> eta = wave.elevation(x, y, t);
+    std::vector<double> eta = wave.get_elevation(x, y, t);
 
     for (size_t j = 0; j < nz; ++j)
     {

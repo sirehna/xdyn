@@ -129,17 +129,17 @@ TEST_F(FroudeKrylovForceModelTest, validate_formula_against_sos_stab)
     const Airy wave(A, phi);
 
     std::vector<double> x{-0.1}; std::vector<double> y{0}; double z=0.2;
-    const double F1 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
+    const double F1 = rho*g*dS*Hs/2*exp(-k*(z-wave.get_elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
     x.at(0)=0.1; y.at(0)=0; z = 0.2;
-    const double F2 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
+    const double F2 = rho*g*dS*Hs/2*exp(-k*(z-wave.get_elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
     x.at(0)=0; y.at(0)=-0.1; z = 0.2;
-    const double F3 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
+    const double F3 = rho*g*dS*Hs/2*exp(-k*(z-wave.get_elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
     x.at(0)=0; y.at(0)=0.1; z = 0.2;
-    const double F4 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
+    const double F4 = rho*g*dS*Hs/2*exp(-k*(z-wave.get_elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
     x.at(0)=0; y.at(0)=0; z = 0.1;
-    const double F5 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
+    const double F5 = rho*g*dS*Hs/2*exp(-k*(z-wave.get_elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
     x.at(0)=0; y.at(0)=0; z = 0.3;
-    const double F6 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
+    const double F6 = rho*g*dS*Hs/2*exp(-k*(z-wave.get_elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
 
     const double Fx = F2 - F1;
     const double Fy = F4 - F3;

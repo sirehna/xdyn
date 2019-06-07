@@ -42,19 +42,6 @@ class Airy : public WaveModel
                             const std::vector<double>& rao_phase //!< Phase of the RAO
                              ) const;
 
-        /**  \brief Surface elevation
-          *  \returns Elevations of a list of points at a given instant, in meters.
-          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
-          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 29
-          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
-          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
-          */
-        std::vector<double> elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
-                                      const std::vector<double> &y,            //!< y-positions in the NED frame (in meters)
-                                      const double t                           //!< Current time instant (in seconds)
-                                      ) const;
-
         /**  \brief Wave velocity (projected in the NED frame, at a point (x,y,z)).
           *  \returns Orbital velocity in m/s
           *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
@@ -78,6 +65,19 @@ class Airy : public WaveModel
         std::vector<std::vector<double> > phase;
         boost::mt19937 rng;
         boost::random::uniform_real_distribution<double> generate_random_phase;
+
+        /**  \brief Surface elevation
+          *  \returns Elevations of a list of points at a given instant, in meters.
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
+          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 29
+          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
+          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
+          */
+        std::vector<double> elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
+                                      const std::vector<double> &y,            //!< y-positions in the NED frame (in meters)
+                                      const double t                           //!< Current time instant (in seconds)
+                                      ) const;
 
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (by DNV), "unsteady pressure" (by Faltinsen) or constant pressure contour (by Lloyd)

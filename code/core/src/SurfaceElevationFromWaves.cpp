@@ -50,7 +50,7 @@ std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<dou
 
     for (const auto model:models)
     {
-        const std::vector<double> model_wave_height = model->elevation(x, y, t);
+        const std::vector<double> model_wave_height = model->get_elevation(x, y, t);
         for (size_t i = 0; i < model_wave_height.size(); ++i)
         {
             zwave.at(i) += model_wave_height.at(i);

@@ -91,10 +91,6 @@ std::vector<double> Airy::elevation(
     const double t                //!< Current time instant (in seconds)
     ) const
 {
-    if (x.size() != y.size())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating Airy surface elevation: the x and y vectors don't have the same size (size of x: " << x.size() << ", size of y: " << y.size() << ")");
-    }
     std::vector<double> zeta(x.size());
     const size_t n = spectrum.psi.size();
 
