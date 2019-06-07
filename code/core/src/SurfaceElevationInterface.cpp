@@ -124,18 +124,6 @@ double SurfaceElevationInterface::evaluate_rao(
     return 0;
 }
 
-ssc::kinematics::Point SurfaceElevationInterface::orbital_velocity(
-        const double ,   //!< gravity (in m/s^2)
-        const double ,   //!< x-position in the NED frame (in meters)
-        const double ,   //!< y-position in the NED frame (in meters)
-        const double ,   //!< z-position in the NED frame (in meters)
-        const double ,   //!< current instant (in seconds)
-        const double     //!< Wave elevation at (x,y) in the NED frame (in meters)
-        ) const
-{
-    return ssc::kinematics::Point("NED", 0, 0, 0);
-}
-
 ssc::kinematics::PointMatrix SurfaceElevationInterface::orbital_velocity(
     const double,                  //!< gravity (in m/s^2)
     const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)

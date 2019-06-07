@@ -127,25 +127,6 @@ std::vector<double> SurfaceElevationFromWaves::dynamic_pressure(const double rho
     return pdyn;
 }
 
-ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                                                   const double x,   //!< x-position in the NED frame (in meters)
-                                                                   const double y,   //!< y-position in the NED frame (in meters)
-                                                                   const double z,   //!< z-position in the NED frame (in meters)
-                                                                   const double t,   //!< z-position in the NED frame (in meters)
-                                                                   const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                                                   ) const
-{
-    ssc::kinematics::Point Vwaves("NED", 0, 0, 0);
-    for (auto model:directional_spectra)
-    {
-        auto vw = model->orbital_velocity(g, x, y, z, t, eta);
-        Vwaves.x() += vw.x();
-        Vwaves.y() += vw.y();
-        Vwaves.z() += vw.z();
-    }
-    return Vwaves;
-}
-
 ssc::kinematics::PointMatrix SurfaceElevationFromWaves::orbital_velocity(const double g,                //!< gravity (in m/s^2)
                                                                          const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
                                                                          const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
