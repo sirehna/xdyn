@@ -73,21 +73,21 @@ int main(int , char** )
         z.at(j) = zmin + (zmax - zmin) * ((double)j) / ((double)nz - 1.);
     }
 
+    const ssc::kinematics::PointMatrix Vsurf = wave.orbital_velocity(g, x, y, eta, t, eta);
     for (size_t i = 0; i < nx; ++i)
     {
-        const ssc::kinematics::Point Vsurf = wave.orbital_velocity(g, x.at(i), y.at(i), eta.at(i), t, eta.at(i));
-        usurf.at(i) = Vsurf.v(0);
-        wsurf.at(i) = Vsurf.v(2);
+        usurf.at(i) = Vsurf.m(0, i);
+        wsurf.at(i) = Vsurf.m(2, i);
 
         const std::vector<double> pdyn_i = wave.get_dynamic_pressure(rho, g, std::vector<double>(nz, x.at(i)), std::vector<double>(nz, y.at(i)), z, std::vector<double>(nz, eta.at(i)), t);
         pdyn.insert(pdyn.begin() + nz * i, pdyn_i.begin(), pdyn_i.end());
-
+        
+        const ssc::kinematics::PointMatrix V = wave.orbital_velocity(g, std::vector<double>(nz, x.at(i)), std::vector<double>(nz, y.at(i)), z, t, std::vector<double>(nz, eta.at(i)));
         for (size_t j = 0 ; j < nz ; ++j)
         {
-            const ssc::kinematics::Point V = wave.orbital_velocity(g, x.at(i), y.at(i), z.at(j), t, eta.at(i));
-            uorb.at(nz*i+j) = V.v(0);
-            vorb.at(nz*i+j) = V.v(1);
-            worb.at(nz*i+j) = V.v(2);
+            uorb.at(nz*i+j) = V.m(0, j);
+            vorb.at(nz*i+j) = V.m(1, j);
+            worb.at(nz*i+j) = V.m(2, j);
         }
     }
 
