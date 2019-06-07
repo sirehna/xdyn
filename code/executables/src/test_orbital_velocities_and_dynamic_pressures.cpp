@@ -79,7 +79,7 @@ int main(int , char** )
         usurf.at(i) = Vsurf.v(0);
         wsurf.at(i) = Vsurf.v(2);
 
-        const std::vector<double> pdyn_i = wave.dynamic_pressure(rho, g, std::vector<double>(nz, x.at(i)), std::vector<double>(nz, y.at(i)), z, std::vector<double>(nz, eta.at(i)), t);
+        const std::vector<double> pdyn_i = wave.get_dynamic_pressure(rho, g, std::vector<double>(nz, x.at(i)), std::vector<double>(nz, y.at(i)), z, std::vector<double>(nz, eta.at(i)), t);
         pdyn.insert(pdyn.begin() + nz * i, pdyn_i.begin(), pdyn_i.end());
 
         for (size_t j = 0 ; j < nz ; ++j)

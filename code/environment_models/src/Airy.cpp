@@ -122,12 +122,6 @@ std::vector<double> Airy::dynamic_pressure(
     const double t                  //!< Current time instant (in seconds)
     ) const
 {
-    if (x.size() != y.size() || x.size() != z.size() || x.size() != eta.size())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException,
-              "Error when calculating Airy dynamic pressure: the x, y, z and eta vectors don't have the same size (size of x: " << x.size()
-                << ", size of y: " << y.size() << ", size of z: " << z.size() << ", size of eta: " << eta.size() << ")");
-    }
     std::vector<double> p(x.size(), 0);
 
     for (size_t j = 0; j < p.size(); ++j)

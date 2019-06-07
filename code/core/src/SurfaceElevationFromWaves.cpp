@@ -113,7 +113,7 @@ std::vector<double> SurfaceElevationFromWaves::dynamic_pressure(const double rho
     std::vector<double> pdyn(x.size(), 0);
     for (const auto model : models)
     {
-        std::vector<double> dynamic_pressure_for_model = model->dynamic_pressure(rho, g, x, y, z, eta, t);
+        std::vector<double> dynamic_pressure_for_model = model->get_dynamic_pressure(rho, g, x, y, z, eta, t);
         for (size_t i = 0; i < pdyn.size(); ++i)
         {
             pdyn[i] += dynamic_pressure_for_model.at(i);
