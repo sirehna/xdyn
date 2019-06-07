@@ -144,14 +144,15 @@ TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
     ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     SurfaceElevationFromWaves wave(get_model());
     const double g = 4.57;
-    const double x = 3.7;
-    const double y = 5.3;
-    const double z = 1.62;
+    const std::vector<double> x {3.7};
+    const std::vector<double> y {5.3};
+    const std::vector<double> z {1.62};
+    const std::vector<double> eta {0};
     const double t = 664.2;
-    ssc::kinematics::Point v = wave.orbital_velocity(g, x, y, z, t, 0);
-    EXPECT_NEAR(0.25451004448140752, v.x(),1e-10);
-    EXPECT_NEAR(0.25451004448140752, v.y(),1e-10);
-    EXPECT_NEAR(0.1991307825735438, v.z(),1e-10);
+    ssc::kinematics::PointMatrix v = wave.orbital_velocity(g, x, y, z, t, eta);
+    EXPECT_NEAR(0.25451004448140752, v.m(0,0),1e-10);
+    EXPECT_NEAR(0.25451004448140752, v.m(1,0),1e-10);
+    EXPECT_NEAR(0.1991307825735438, v.m(2,0),1e-10);
 }
 
 TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
