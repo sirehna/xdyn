@@ -136,6 +136,23 @@ ssc::kinematics::Point SurfaceElevationInterface::orbital_velocity(
     return ssc::kinematics::Point("NED", 0, 0, 0);
 }
 
+ssc::kinematics::PointMatrix SurfaceElevationInterface::orbital_velocity(
+    const double,                  //!< gravity (in m/s^2)
+    const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+    const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+    const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+    const double,                  //!< current instant (in seconds)
+    const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+    ) const
+{
+    if (x.size() != y.size() || x.size() != z.size() || x.size() != eta.size())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating orbital velocity: the x, y, z and eta vectors don't have the same size (size of x: "
+            << x.size() << ", size of y: " << y.size() << ", size of z: " << z.size() << ", size of eta: " << eta.size() << ")");
+    }
+    return ssc::kinematics::PointMatrix(ssc::kinematics::Matrix3Xd::Zero(3,x.size()), "NED");
+}
+
 std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_directions_for_each_model() const
 {
     return std::vector<std::vector<double> >();
