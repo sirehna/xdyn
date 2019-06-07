@@ -161,9 +161,9 @@ ssc::kinematics::PointMatrix SurfaceElevationFromWaves::orbital_velocity(const d
     }
     ssc::kinematics::PointMatrix Vwaves(ssc::kinematics::Matrix3Xd::Zero(3,x.size()), "NED");
     
-    for (auto model:models)
+    for (auto spectrum:directional_spectra)
     {
-        ssc::kinematics::PointMatrix vw = model->orbital_velocity(g, x, y, z, t, eta);
+        ssc::kinematics::PointMatrix vw = spectrum->orbital_velocity(g, x, y, z, t, eta);
         for (int i = 0; i < vw.m.cols(); ++i) {
             Vwaves.m(0, i) += vw.m(0, i);
             Vwaves.m(1, i) += vw.m(1, i);
