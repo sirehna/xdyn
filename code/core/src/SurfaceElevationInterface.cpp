@@ -159,7 +159,7 @@ std::vector<double> SurfaceElevationInterface::get_dynamic_pressure(
     if (n != eta.size())
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException,
-            "Error when getting dynamic pression: the vector of positions of points P and the vector of their corresponding wave elevations don't have the same size (size of P: "
+            "Error when calculating dynamic pressure: the vector of positions of points P and the vector of their corresponding wave elevations don't have the same size (size of P: "
                 << n << ", size of eta: " << eta.size() << ")")
     }
     const ssc::kinematics::PointMatrix OP = compute_position_in_NED_frame(P, k);
