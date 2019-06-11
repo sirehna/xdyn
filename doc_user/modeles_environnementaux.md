@@ -1206,8 +1206,9 @@ waves:
 
 xdyn permet d'utiliser des modèles de houle sur un serveur distant. L'intérêt
 est que l'on peut ainsi mettre en oeuvre des modèles de houle qui ne sont pas
-implémentés dans le code d'xdyn sans intervenir sur le code source d'xdyn en
-C++.
+implémentés dans le code d'xdyn. Ces modèles peuvent être implémentés dans le
+langage informatique que l'on souhaite (Python, Java, Go...) et utilisables
+comme les modèles de houle "internes" de xdyn.
 
 ### Technologie utilisée
 
@@ -1223,7 +1224,7 @@ C++). On obtient ainsi :
 - Un protocole de communication rapide.
 
 Ainsi, les modèles de houle externes qui respectent cette interface peuvent être
-utilisés en Python, Matlab (via l'API Java de gRPC).
+par exemple utilisés, outre par xdyn, en Python et en Matlab (via l'API Java de gRPC).
 
 ### Interface pour les modèles de houle
 
@@ -1249,17 +1250,17 @@ http://localhost:50001 est paramétré comme suit :
 
 Si le modèle de houle contient des paramètres, ceux-ci doivent figurer à la suite
 dans le fichier YAML d'xdyn et ils sont transmis directement au serveur sans être
-interprêtés par xdyn. Par exemple, un modèle d'Airy pourrait être paramétré de la façon
-suivante :
+interprêtés par xdyn. Par exemple, un modèle d'Airy unidirectionnel avec un spectre
+de JONSWAP pourrait être paramétré de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: grpc
   url: http://localhost:50001
-  Hs: {value: 5, unit: m}
-  Tp: {value: 15, unit: s}
+  Hs: 5
+  Tp: 15
   gamma: 1.2
   seed of the random data generator: 0
-  waves propagating to: {value: 90, unit: deg}
+  waves propagating to: 90
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Exemple d'utilisation
