@@ -51,7 +51,7 @@ int main(int , char** )
     const size_t nz = 640;
 
     double t = 0;
-    std::vector<double> pdyn(nx*nz);
+    std::vector<double> pdyn; pdyn.reserve(nx*nz);
     std::vector<double> uorb(nx*nz);
     std::vector<double> vorb(nx*nz);
     std::vector<double> worb(nx*nz);
