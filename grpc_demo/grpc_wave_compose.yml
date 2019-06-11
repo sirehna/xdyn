@@ -1,14 +1,19 @@
 version: '3'
 services:
-  server:
+  waves-server:
     build: ../code/waves_grpc/python_server
     user: ${CURRENT_UID}
   xdyn:
     image: xdyn
     working_dir: /data
-    entrypoint: ./wait-for-it.sh server:50051 -s -t 20 -- xdyn grpc.yml --dt 0.1 --tend 0.2 -o tsv
+    entrypoint: ./wait-for-it.sh waves-server:50051 -s -t 20 -- xdyn-for-cs grpc.yml --dt 0.1 -p 9002
     volumes:
     - .:/data
     user: ${CURRENT_UID}
     depends_on:
-    - server
+    - waves-server
+  test:
+    build: .
+    user: ${CURRENT_UID}
+    depends_on:
+    - xdyn
