@@ -237,15 +237,39 @@ ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states
     const ssc::kinematics::Point P("NED", -P.v);
     const std::vector<double> x{P.x()};
     const std::vector<double> y{P.y()};
-    const double eta = env.w->wave_height(x, y, t).at(0);
-    const auto Vwater_ground = env.w->orbital_velocity(env.g, P.x(), P.y(), P.z(), t, eta);
-    const ssc::kinematics::Point Vship_ground(rudder_position.get_frame(), states.u(), states.v(),states.w());
-    const ssc::kinematics::Point Vship_water("NED", Vship_ground.x() - Vwater_ground.x(),
-                                                    Vship_ground.y() - Vwater_ground.y(),
-                                                    Vship_ground.z() - Vwater_ground.z());
-    const auto Vwater_ground_projected_in_body = Tbody2ned.get_rot()*Vship_water.v;
+    double eta = 0;
+    try
+    {
+        eta = env.w->wave_height(x, y, t).at(0);
+    }
+    catch (const ssc::exception_handling::Exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the propeller+rudder force model which uses the wave elevations to compute the orbital velocity on the rudder. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
+    }
+    try
+    {
+        ssc::kinematics::Point Vwater_ground;
+        try
+        {
+            Vwater_ground = env.w->orbital_velocity(env.g, P.x(), P.y(), P.z(), t, eta);
+        }
+        catch (const ssc::exception_handling::Exception& e)
+        {
+            THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the propeller+rudder force model which needs the orbital velocity on the rudder. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
+        }
+        const ssc::kinematics::Point Vship_ground(rudder_position.get_frame(), states.u(), states.v(),states.w());
+        const ssc::kinematics::Point Vship_water("NED", Vship_ground.x() - Vwater_ground.x(),
+                                                        Vship_ground.y() - Vwater_ground.y(),
+                                                        Vship_ground.z() - Vwater_ground.z());
+        const auto Vwater_ground_projected_in_body = Tbody2ned.get_rot()*Vship_water.v;
 
-    return ssc::kinematics::Point(rudder_position.get_frame(), Vwater_ground_projected_in_body);
+        return ssc::kinematics::Point(rudder_position.get_frame(), Vwater_ground_projected_in_body);
+    }
+    catch (const ssc::exception_handling::Exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the propeller+rudder force model which needs the orbital velocities of the wave particles. During the evaluation of these orbital velocities, the following problem occurred:\n" << e.get_message());
+    }
+    return ssc::kinematics::Point();
 }
 
 RudderForceModel::Yaml RudderForceModel::parse(const std::string& yaml)

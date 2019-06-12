@@ -85,13 +85,27 @@ class DiffractionForceModel::Impl
             {
                 // For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
                 // periods[direction][omega]
-                periods_for_each_direction = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
+                try
+                {
+                    periods_for_each_direction = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
+                }
+                catch (const ssc::exception_handling::Exception& e)
+                {
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the spectral discretization (in angular frequency) of the wave models. When querying the wave model for this discretization, the following problem occurred:\n" << e.get_message());
+                }
                 const auto hdb_periods = hdb.get_diffraction_module_periods();
                 if (not(hdb_periods.empty()))
                 {
                     check_all_omegas_are_within_bounds(hdb_periods.front(), periods_for_each_direction, hdb_periods.back());
                 }
-                psis = env.w->get_wave_directions_for_each_model();
+                try
+                {
+                    psis = env.w->get_wave_directions_for_each_model();
+                }
+                catch (const ssc::exception_handling::Exception& e)
+                {
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the spatial discretization (in incidence) of the wave models. When querying the wave model for this discretization, the following problem occurred:\n" << e.get_message());
+                }
             }
             else
             {
@@ -143,12 +157,18 @@ class DiffractionForceModel::Impl
                             rao_phases[degree_of_freedom_idx][spectrum_idx][omega_beta_idx] = -rao.interpolate_phase(degree_of_freedom_idx, periods_for_each_direction[spectrum_idx][omega_beta_idx], beta);
                         }
                     }
-
-                    w((int)degree_of_freedom_idx) = env.w->evaluate_rao(position_in_ned_for_the_wave_model.x(),
-                                                    position_in_ned_for_the_wave_model.y(),
-                                                    t,
-                                                    rao_modules[degree_of_freedom_idx],
-                                                    rao_phases[degree_of_freedom_idx]);
+                    try
+                    {
+                        w((int)degree_of_freedom_idx) = env.w->evaluate_rao(position_in_ned_for_the_wave_model.x(),
+                                                        position_in_ned_for_the_wave_model.y(),
+                                                        t,
+                                                        rao_modules[degree_of_freedom_idx],
+                                                        rao_phases[degree_of_freedom_idx]);
+                    }
+                    catch (const ssc::exception_handling::Exception& e)
+                    {
+                        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which evaluates a Response Amplitude Operator using a wave model. During this evaluation, the following problem occurred:\n" << e.get_message());
+                    }
                 }
             }
             const auto ww = express_aquaplus_wrench_in_xdyn_coordinates(w);

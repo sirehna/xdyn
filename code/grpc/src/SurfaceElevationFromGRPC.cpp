@@ -33,22 +33,20 @@ class SurfaceElevationFromGRPC::Impl
             SetParameterResponse response;
             grpc::ClientContext context;
             const grpc::Status status = stub->set_parameters(&context, request, &response);
-            throw_if_invalid_status(status);
-            if (not(response.error_message().empty()))
-            {
-                THROW(__PRETTY_FUNCTION__, GRPCError, "An error has occurred when using a distant wave model defined via gRPC. The model is defined in the YAML by:\n" + yaml + "\nxdyn managed to contact the wave server but during initialization (set_parameters), the server returned the following error message:\n" + response.error_message());
-            }
+            throw_if_invalid_status("set_parameters", status);
         }
 
-        void throw_if_invalid_status(const grpc::Status& status) const
+        void throw_if_invalid_status(const std::string& rpc_method, const grpc::Status& status) const
         {
-            const std::string base_error_msg = "An error has occurred when using a distant wave model defined via gRPC. The model is defined in the YAML by:\n" + yaml + "\n";
-            const std::string contact_team_msg = "support team with the following error message (cf. https://grpc.github.io/grpc/cpp/grpc_2impl_2codegen_2status_8h.html):\n";
+            const std::string base_error_msg = "an error occurred when using the distant wave model defined via gRPC (method '" + rpc_method + "').\n";
+            const std::string yaml_msg = "The YAML you provided for this gRPC model is:\n\n" + yaml + "\n";
+            const std::string contact_team_msg = "support team with the following error code (cf. https://grpc.github.io/grpc/cpp/grpc_2impl_2codegen_2status_8h.html): ";
             const std::string user_error_msg = "Check that the server is running and accessible from the URL defined in the YAML file: " + url;
             const std::string dev_error_msg = "This is a problem with xdyn and should never happen: please contact xdyn's " + contact_team_msg;
-            const std::string network_error_msg = "Maybe the server is temporarily inaccessible? Give it another try, otherwise contact xdyn's " + contact_team_msg;
-            const std::string server_error_msg = "This is a problem with the wave model server and not xdyn: please contact the wave server's " + contact_team_msg;
+            const std::string network_error_msg = "We couldn't reach the gRPC wave server at this URL: " + url + " Maybe the server is temporarily inaccessible or hasn't started yet? Either wait and give it another try or change the 'url' key in the YAML file. If all else fails, contact xdyn's " + contact_team_msg;
+            const std::string server_error_msg = "The wave model server responded with the following error code: " + status.error_message()  + "\nMaybe the parameters you defined in xdyn's YAML file are incorrect? " + yaml_msg + "\nPlease check the wave server's documentation! If the problem persists, try contacting the wave server's " + contact_team_msg;
             const std::string authentication_error_msg = "This wave server requires authentication and xdyn does not support this yet.";
+            const std::string unimplemented = "This wave server does not implement gRPC method '" + rpc_method + "': either disable all force models that need it or use another wave model. Otherwise, contact the wave model's " + contact_team_msg;
             switch(status.error_code())
             {
                 case grpc::StatusCode::OK:
@@ -98,7 +96,7 @@ class SurfaceElevationFromGRPC::Impl
                 }
                 case grpc::StatusCode::INVALID_ARGUMENT:
                 {
-                    THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + dev_error_msg + "INVALID_ARGUMENT");
+                    THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "INVALID_ARGUMENT");
                     break;
                 }
                 case grpc::StatusCode::NOT_FOUND:
@@ -133,7 +131,7 @@ class SurfaceElevationFromGRPC::Impl
                 }
                 case grpc::StatusCode::UNIMPLEMENTED:
                 {
-                    THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "UNIMPLEMENTED");
+                    THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + unimplemented + "UNIMPLEMENTED");
                     break;
                 }
                 case grpc::StatusCode::UNKNOWN:
@@ -158,7 +156,7 @@ class SurfaceElevationFromGRPC::Impl
             grpc::ClientContext context;
             XYZTGrid response;
             const grpc::Status status = stub->elevations(&context, request, &response);
-            throw_if_invalid_status(status);
+            throw_if_invalid_status("elevations", status);
             std::vector<double> ret;
             ret.reserve(response.z_size());
             std::copy(response.z().begin(), response.z().end(), std::back_inserter(ret));
@@ -175,7 +173,7 @@ class SurfaceElevationFromGRPC::Impl
             grpc::ClientContext context;
             DynamicPressuresResponse response;
             const grpc::Status status = stub->dynamic_pressures(&context, request, &response);
-            throw_if_invalid_status(status);
+            throw_if_invalid_status("dynamic_pressures", status);
             std::vector<double> ret;
             ret.reserve(response.pdyn_size());
             std::copy(response.pdyn().begin(), response.pdyn().end(), std::back_inserter(ret));
@@ -192,7 +190,7 @@ class SurfaceElevationFromGRPC::Impl
             grpc::ClientContext context;
             OrbitalVelocitiesResponse response;
             const grpc::Status status = stub->orbital_velocities(&context, request, &response);
-            throw_if_invalid_status(status);
+            throw_if_invalid_status("orbital_velocities", status);
             if (response.vx_size() != 1)
             {
                 THROW(__PRETTY_FUNCTION__, GRPCError, "An error has occurred when using a distant wave model defined via gRPC. The model is defined in the YAML by:\n" + yaml + "\nxdyn managed to contact the wave server but during initialization (set_parameters), the server returned the following error message:\n" << "Was only expecting one orbital velocity for x, but got a vector of size " << response.vx_size());
@@ -223,7 +221,7 @@ class SurfaceElevationFromGRPC::Impl
             grpc::ClientContext context;
             SpectrumResponse response;
             const grpc::Status status = stub->spectrum(&context, request, &response);
-            throw_if_invalid_status(status);
+            throw_if_invalid_status("spectrum", status);
             DiscreteDirectionalWaveSpectrum s;
             s.Si.reserve(response.si_size());
             std::copy(response.si().begin(), response.si().end(), std::back_inserter(s.Si));
@@ -253,7 +251,7 @@ class SurfaceElevationFromGRPC::Impl
             grpc::ClientContext context;
             Directions response;
             const grpc::Status status = stub->directions_for_rao(&context, request, &response);
-            throw_if_invalid_status(status);
+            throw_if_invalid_status("directions_for_rao", status);
             std::vector<std::vector<double> > wave_directions;
             if (response.psis_size())
             {
@@ -270,7 +268,7 @@ class SurfaceElevationFromGRPC::Impl
             grpc::ClientContext context;
             AngularFrequencies response;
             const grpc::Status status = stub->angular_frequencies_for_rao(&context, request, &response);
-            throw_if_invalid_status(status);
+            throw_if_invalid_status("angular_frequencies_for_rao", status);
             std::vector<std::vector<double> > omegas;
             if (response.omegas_size())
             {

@@ -51,7 +51,15 @@ std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const E
         ++that_facet_index;
     }
     // Compute dynamic pressure for all facets
-    const std::vector<double> pdyn = env.w->get_dynamic_pressure(env.rho, env.g, M, env.k, average_eta_per_facet, t);
+    std::vector<double> pdyn;
+    try
+    {
+        pdyn = env.w->get_dynamic_pressure(env.rho, env.g, M, env.k, average_eta_per_facet, t);
+    }
+    catch (const ssc::exception_handling::Exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the Froude-Krylov force model which uses the dynamic pressures calculated by a wave model. When querying the wave model for these dynamic pressures, the following problem occurred:\n" << e.get_message());
+    }
 
     return [pdyn](const FacetIterator &that_facet,
                   const size_t that_facet_index,
