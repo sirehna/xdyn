@@ -128,18 +128,17 @@ TEST_F(FroudeKrylovForceModelTest, validate_formula_against_sos_stab)
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
     const Airy wave(A, phi);
 
-    std::vector<double> x{-0.1}; std::vector<double> y{0}; double z=0.2;
-    const double F1 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
-    x.at(0)=0.1; y.at(0)=0; z = 0.2;
-    const double F2 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
-    x.at(0)=0; y.at(0)=-0.1; z = 0.2;
-    const double F3 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
-    x.at(0)=0; y.at(0)=0.1; z = 0.2;
-    const double F4 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
-    x.at(0)=0; y.at(0)=0; z = 0.1;
-    const double F5 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
-    x.at(0)=0; y.at(0)=0; z = 0.3;
-    const double F6 = rho*g*dS*Hs/2*exp(-k*(z-wave.elevation(x,y,t).at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
+    const std::vector<double> x{-0.1, 0.1, 0, 0, 0, 0};
+    const std::vector<double> y{0, 0, -0.1, 0.1, 0, 0};
+    const std::vector<double> z{0.2, 0.2, 0.2, 0.2, 0.1, 0.3};
+    const std::vector<double> eta = wave.get_elevation(x,y,t);
+    
+    const double F1 = rho*g*dS*Hs/2*exp(-k*(z.at(0)-eta.at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
+    const double F2 = rho*g*dS*Hs/2*exp(-k*(z.at(1)-eta.at(1)))*cos(omega0*t-k*(x.at(1)*cos(psi)+y.at(1)*sin(psi))+phi);
+    const double F3 = rho*g*dS*Hs/2*exp(-k*(z.at(2)-eta.at(2)))*cos(omega0*t-k*(x.at(2)*cos(psi)+y.at(2)*sin(psi))+phi);
+    const double F4 = rho*g*dS*Hs/2*exp(-k*(z.at(3)-eta.at(3)))*cos(omega0*t-k*(x.at(3)*cos(psi)+y.at(3)*sin(psi))+phi);
+    const double F5 = rho*g*dS*Hs/2*exp(-k*(z.at(4)-eta.at(4)))*cos(omega0*t-k*(x.at(4)*cos(psi)+y.at(4)*sin(psi))+phi);
+    const double F6 = rho*g*dS*Hs/2*exp(-k*(z.at(5)-eta.at(5)))*cos(omega0*t-k*(x.at(5)*cos(psi)+y.at(5)*sin(psi))+phi);
 
     const double Fx = F2 - F1;
     const double Fy = F4 - F3;

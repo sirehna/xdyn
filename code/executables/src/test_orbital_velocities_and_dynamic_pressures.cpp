@@ -51,37 +51,46 @@ int main(int , char** )
     const size_t nz = 640;
 
     double t = 0;
-    std::vector<double> pdyn(nx*nz);
+    std::vector<double> pdyn; pdyn.reserve(nx*nz);
     std::vector<double> uorb(nx*nz);
     std::vector<double> vorb(nx*nz);
     std::vector<double> worb(nx*nz);
     std::vector<double> x(nx);
     std::vector<double> y(nx, 0);
     std::vector<double> z(nz);
-    std::vector<double> eta(nx); //!< wave elevation
     std::vector<double> usurf(nx); //!< u-component of the orbital velocity, taken on the air-water interface (free surface)
     std::vector<double> wsurf(nx); //!< w-component of the orbital velocity, taken on the air-water interface (free surface)
-    for (size_t i = 0 ; i < nx ; ++i)
-    {
-        x.at(i) = xmin + (xmax - xmin)* ((double)i)/((double)nx - 1.);
-    }
-    eta = wave.elevation(x, y, t);
 
-    for (size_t i = 0 ; i < nx ; ++i)
+    for (size_t i = 0; i < nx; ++i)
+    {
+        x.at(i) = xmin + (xmax - xmin) * ((double)i) / ((double)nx - 1.);
+    }
+
+    std::vector<double> eta = wave.get_elevation(x, y, t);
+
+    for (size_t j = 0; j < nz; ++j)
+    {
+        z.at(j) = zmin + (zmax - zmin) * ((double)j) / ((double)nz - 1.);
+    }
+
+    for (size_t i = 0; i < nx; ++i)
     {
         const ssc::kinematics::Point Vsurf = wave.orbital_velocity(g, x.at(i), y.at(i), eta.at(i), t, eta.at(i));
         usurf.at(i) = Vsurf.v(0);
         wsurf.at(i) = Vsurf.v(2);
+
+        const std::vector<double> pdyn_i = wave.get_dynamic_pressure(rho, g, std::vector<double>(nz, x.at(i)), std::vector<double>(nz, y.at(i)), z, std::vector<double>(nz, eta.at(i)), t);
+        pdyn.insert(pdyn.begin() + nz * i, pdyn_i.begin(), pdyn_i.end());
+
         for (size_t j = 0 ; j < nz ; ++j)
         {
-            z.at(j) = zmin + (zmax - zmin)* ((double)j)/((double)nz - 1.);
-            pdyn.at(nz * i + j) = wave.dynamic_pressure(rho, g, x.at(i), y.at(i), z.at(j), eta.at(i), t);
             const ssc::kinematics::Point V = wave.orbital_velocity(g, x.at(i), y.at(i), z.at(j), t, eta.at(i));
             uorb.at(nz*i+j) = V.v(0);
             vorb.at(nz*i+j) = V.v(1);
             worb.at(nz*i+j) = V.v(2);
         }
     }
+
     std::cout << "{\"nx\": " << nx
               << ", \"nz\": " << nz
               << ", \"x\": " << x

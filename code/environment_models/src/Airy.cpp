@@ -91,10 +91,6 @@ std::vector<double> Airy::elevation(
     const double t                //!< Current time instant (in seconds)
     ) const
 {
-    if (x.size() != y.size())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating Airy surface elevation: the x and y vectors don't have the same size (size of x: " << x.size() << ", size of y: " << y.size() << ")");
-    }
     std::vector<double> zeta(x.size());
     const size_t n = spectrum.psi.size();
 
@@ -112,38 +108,50 @@ std::vector<double> Airy::elevation(
     return zeta;
 }
 
-double Airy::dynamic_pressure(
-        const double rho, //!< water density (in kg/m^3)
-        const double g,   //!< gravity (in m/s^2)
-        const double x,   //!< x-position in the NED frame (in meters)
-        const double y,   //!< y-position in the NED frame (in meters)
-        const double z,   //!< z-position in the NED frame (in meters)
-        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-        const double t    //!< Current time instant (in seconds)
-        ) const
+std::vector<double> Airy::dynamic_pressure(
+    const double rho,               //!< water density (in kg/m^3)
+    const double g,                 //!< gravity (in m/s^2)
+    const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+    const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+    const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+    const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+    const double t                  //!< Current time instant (in seconds)
+    ) const
 {
-    if (std::isnan(z))
+    std::vector<double> p(x.size(), 0);
+
+    for (size_t j = 0; j < p.size(); ++j)
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "z (value to rescale, in meters) was NaN");
+        if (std::isnan(z[j]))
+        {
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "z (value to rescale, in meters) was NaN");
+        }
+        if (std::isnan(eta[j]))
+        {
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "eta (wave height, in meters) was NaN");
+        }
+
+        if (z[j] < eta[j])
+        {
+            p[j] = 0;
+        }
+        else
+        {
+            const size_t n = spectrum.psi.size();
+            for (size_t i = 0; i < n; ++i)
+            {
+                const double a = spectrum.a[i];
+                const double k = spectrum.k[i];
+                const double omega_t = spectrum.omega[i] * t;
+                const double pdyn_fact = spectrum.pdyn_factor(k, z[j], eta[j]);
+                const double k_xCosPsi_ySinPsi = k * (x[j] * spectrum.cos_psi[i] + y[j] * spectrum.sin_psi[i]);
+                const double theta = spectrum.phase[i];
+                p[j] += a * pdyn_fact * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
+            }
+            p[j] *= rho * g;
+        }
+        
     }
-    if (std::isnan(eta))
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "eta (wave height, in meters) was NaN");
-    }
-    double p = 0;
-    if (z<eta) return 0;
-    const size_t n = spectrum.psi.size();
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        const double a = spectrum.a[i];
-        const double k = spectrum.k[i];
-        const double omega_t = spectrum.omega[i] * t;
-        const double pdyn_fact = spectrum.pdyn_factor(k, z, eta);
-        const double k_xCosPsi_ySinPsi = k * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        const double theta = spectrum.phase[i];
-        p += a * pdyn_fact * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
-    }
-    p *= rho*g;
     return p;
 }
 

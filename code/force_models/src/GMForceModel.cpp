@@ -130,11 +130,19 @@ double GMForceModel::pe(const BodyStates& , const std::vector<double>& , const E
     return 0;
 }
 
-GMForceModel::DF GMForceModel::dF(const FacetIterator& ,
-                      const EnvironmentAndFrames& ,
-                      const BodyStates& ,
-                      const double
-                      ) const
+std::function<GMForceModel::DF(const FacetIterator &, const size_t, const EnvironmentAndFrames &, const BodyStates &, const double)>
+    GMForceModel::get_dF(const FacetIterator& begin_facet,
+                         const FacetIterator& end_facet,
+                         const EnvironmentAndFrames& env,
+                         const BodyStates& states,
+                         const double t) const
 {
-    return GMForceModel::DF(EPoint(),EPoint());
+    return [](const FacetIterator &,
+              const size_t,
+              const EnvironmentAndFrames &,
+              const BodyStates &,
+              const double t)
+    {
+        return GMForceModel::DF(EPoint(), EPoint());
+    };
 }

@@ -42,6 +42,30 @@ class Airy : public WaveModel
                             const std::vector<double>& rao_phase //!< Phase of the RAO
                              ) const;
 
+        /**  \brief Wave velocity (projected in the NED frame, at a point (x,y,z)).
+          *  \returns Orbital velocity in m/s
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 70
+          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
+          *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 75
+          *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
+          */
+        ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
+                                                const double x,   //!< x-position in the NED frame (in meters)
+                                                const double y,   //!< y-position in the NED frame (in meters)
+                                                const double z,   //!< z-position in the NED frame (in meters)
+                                                const double t,   //!< Current time instant (in seconds)
+                                                const double eta  //!< Wave height at x,y,t (in meters)
+                                                ) const;
+
+
+
+    private:
+        Airy(); // Disabled
+        std::vector<std::vector<double> > phase;
+        boost::mt19937 rng;
+        boost::random::uniform_real_distribution<double> generate_random_phase;
+
         /**  \brief Surface elevation
           *  \returns Elevations of a list of points at a given instant, in meters.
           *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
@@ -69,38 +93,14 @@ class Airy : public WaveModel
           *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
           *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
-        double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
-                                const double g,   //!< gravity (in m/s^2)
-                                const double x,   //!< x-position in the NED frame (in meters)
-                                const double y,   //!< y-position in the NED frame (in meters)
-                                const double z,   //!< z-position in the NED frame (in meters)
-                                const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                const double t    //!< Current time instant (in seconds)
-                                ) const;
-
-        /**  \brief Wave velocity (projected in the NED frame, at a point (x,y,z)).
-          *  \returns Orbital velocity in m/s
-          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 70
-          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
-          *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 75
-          *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
-          */
-        ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                                const double x,   //!< x-position in the NED frame (in meters)
-                                                const double y,   //!< y-position in the NED frame (in meters)
-                                                const double z,   //!< z-position in the NED frame (in meters)
-                                                const double t,   //!< Current time instant (in seconds)
-                                                const double eta  //!< Wave height at x,y,t (in meters)
-                                                ) const;
-
-
-
-    private:
-        Airy(); // Disabled
-        std::vector<std::vector<double> > phase;
-        boost::mt19937 rng;
-        boost::random::uniform_real_distribution<double> generate_random_phase;
+        std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
+                                             const double g,                 //!< gravity (in m/s^2)
+                                             const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+                                             const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+                                             const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+                                             const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                             const double t                  //!< Current time instant (in seconds)
+                                            ) const;
 };
 
 #endif /* AIRY_HPP_ */

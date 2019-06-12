@@ -24,11 +24,20 @@ ssc::kinematics::Wrench SurfaceForceModel::operator()(const BodyStates& states, 
     zg_calculator->update_transform(env.k->get("NED", states.name));
     ssc::kinematics::UnsafeWrench F(states.G);
     const double orientation_factor = states.intersector->mesh->orientation_factor;
-    const auto e = end(states.intersector);
 
+    const auto b = begin(states.intersector);
+    const auto e = end(states.intersector);
+    std::function<SurfaceForceModel::DF(const FacetIterator &,
+                                        const size_t,
+                                        const EnvironmentAndFrames &,
+                                        const BodyStates &,
+                                        const double)> dF_lambda =
+        get_dF(b, e, env, states, t);
+    
+    size_t facet_index = 0;
     for (auto that_facet = begin(states.intersector) ; that_facet != e ; ++that_facet)
     {
-        const DF f = dF(that_facet, env, states, t);
+        const DF f = dF_lambda(that_facet, facet_index, env, states, t);
         const double x = (f.C(0)-states.G.v(0));
         const double y = (f.C(1)-states.G.v(1));
         const double z = (f.C(2)-states.G.v(2));
@@ -38,6 +47,7 @@ ssc::kinematics::Wrench SurfaceForceModel::operator()(const BodyStates& states, 
         F.K() += orientation_factor*(y*f.dF(2)-z*f.dF(1));
         F.M() += orientation_factor*(z*f.dF(0)-x*f.dF(2));
         F.N() += orientation_factor*(x*f.dF(1)-y*f.dF(0));
+        ++facet_index;
     }
     return F;
 }

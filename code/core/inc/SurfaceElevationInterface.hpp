@@ -95,13 +95,13 @@ class SurfaceElevationInterface
           *  \returns Pdyn (in Pascal)
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
-        double get_dynamic_pressure(const double rho,                           //!< Water density (in kg/m^3)
-                                    const double g,                             //!< Gravity (in m/s^2)
-                                    const ssc::kinematics::Point& P,            //!< Position of point P, relative to the centre of the NED frame, but projected in any frame
-                                    const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
-                                    const double eta,                           //!< Wave elevation at P in the NED frame (in meters)
-                                    const double t                              //!< Current instant (in seconds)
-                                    ) const;
+        std::vector<double> get_dynamic_pressure(const double rho,                        //!< Water density (in kg/m^3)
+                                                 const double g,                          //!< Gravity (in m/s^2)
+                                                 const ssc::kinematics::PointMatrix& P,   //!< Positions of points P, relative to the centre of the NED frame, but projected in any frame
+                                                 const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+                                                 const std::vector<double>& eta,          //!< Wave elevation at P in the NED frame (in meters)
+                                                 const double t                           //!< Current instant (in seconds)
+                                                 ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
           *  \returns Vector of coordinates on the free surface (in the NED frame),
@@ -165,14 +165,14 @@ class SurfaceElevationInterface
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation VI.34, page 183
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 68
           */
-        virtual double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
-                                        const double g,   //!< gravity (in m/s^2)
-                                        const double x,   //!< x-position in the NED frame (in meters)
-                                        const double y,   //!< y-position in the NED frame (in meters)
-                                        const double z,   //!< z-position in the NED frame (in meters)
-                                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                        const double t    //!< Current time instant (in seconds)
-                                        ) const = 0;
+        virtual std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
+                                                     const double g,                 //!< gravity (in m/s^2)
+                                                     const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+                                                     const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+                                                     const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+                                                     const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                     const double t                  //!< Current time instant (in seconds)
+                                                     ) const = 0;
 
         /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
           */

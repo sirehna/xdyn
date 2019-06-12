@@ -125,14 +125,16 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure)
 //! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
     for (double t = 0 ; t < 30 ; t+=0.1)
     {
-        const ssc::kinematics::Point P("NED", a.random<double>().between(-100,100), a.random<double>().between(-100,100), 6);
+
+        const ssc::kinematics::Point Q("NED", a.random<double>().between(-100, 100), a.random<double>().between(-100, 100), 6);
+        ssc::kinematics::PointMatrix P(Q.v, "NED");
         const double rho = a.random<double>().between(0,100);
         const double g = a.random<double>().between(0,10);
-        const double x = P.x();
-        const double y = P.y();
-        const double z = P.z();
+        const double x = P.m(0,0);
+        const double y = P.m(1,0);
+        const double z = P.m(2,0);
 
-        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*sin(-2*PI/Tp*t + k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, 0, t), 1E-6) << "t = " << t;
+        ASSERT_NEAR(Hs/2*rho*g*exp(-k_*z)*sin(-2*PI/Tp*t + k_*(x*cos(psi0)+y*sin(psi0)) +phi), wave.get_dynamic_pressure(rho, g, P, k, std::vector<double>{0}, t).at(0), 1E-6) << "t = " << t;
     }
 //! [SurfaceElevationFromWavesTest dynamic_pressure expected output]
 }
@@ -203,40 +205,43 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure_plus_hydrostatic)
     const ssc::kinematics::Point P4("NED", PI, 0, 0);
     const ssc::kinematics::Point P5("NED", 3 * PI / 2, 0, 1 + 1E-10);
 
+    ssc::kinematics::PointMatrix M("NED", 5);
+    M.m(0, 0) = P1.x(); M.m(1, 0) = P1.y(); M.m(2, 0) = P1.z();
+    M.m(0, 1) = P2.x(); M.m(1, 1) = P2.y(); M.m(2, 1) = P2.z();
+    M.m(0, 2) = P3.x(); M.m(1, 2) = P3.y(); M.m(2, 2) = P3.z();
+    M.m(0, 3) = P4.x(); M.m(1, 3) = P4.y(); M.m(2, 3) = P4.z();
+    M.m(0, 4) = P5.x(); M.m(1, 4) = P5.y(); M.m(2, 4) = P5.z();
+
     const std::vector<double> x{P1.x(), P2.x(), P3.x(), P4.x(), P5.x()};
     const std::vector<double> y{P1.y(), P2.y(), P3.y(), P4.y(), P5.y()};
     const double t = 0;
 
-    std::vector<double> wave_height = wave.wave_height(x, y, t);
-    
+    const std::vector<double> wave_height = wave.wave_height(x, y, t);
+    const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, M, k, wave_height, t);
+
     const double EPS = 1E-4;
     const double phs1 = rho*g*P1.z();
-    const double pdyn1 = wave.get_dynamic_pressure(rho, g, P1, k, wave_height.at(0), t);
     ASSERT_NEAR(-rho*g, phs1, EPS);
-    ASSERT_NEAR(rho*g*(cosh(h+1)/cosh(h)), pdyn1, EPS);
-    ASSERT_NEAR(rho*g*(cosh(h+1)/cosh(h) - 1), phs1 + pdyn1, EPS);
+    ASSERT_NEAR(rho*g*(cosh(h+1)/cosh(h)), pdyn.at(0), EPS);
+    ASSERT_NEAR(rho*g*(cosh(h+1)/cosh(h) - 1), phs1 + pdyn.at(0), EPS);
 
     const double phs2 = rho*g*P2.z();
-    const double pdyn2 = wave.get_dynamic_pressure(rho, g, P2, k, wave_height.at(1), t);
     ASSERT_NEAR(-rho*g*0.5, phs2, EPS);
-    ASSERT_NEAR(rho*g*(cosh(h+0.5)/cosh(h)), pdyn2, EPS);
-    ASSERT_NEAR(rho*g*(cosh(h+0.5)/cosh(h) - 0.5), phs2 + pdyn2, EPS);
+    ASSERT_NEAR(rho*g*(cosh(h+0.5)/cosh(h)), pdyn.at(1), EPS);
+    ASSERT_NEAR(rho*g*(cosh(h+0.5)/cosh(h) - 0.5), phs2 + pdyn.at(1), EPS);
 
     const double phs3 = rho*g*P3.z();
-    const double pdyn3 = wave.get_dynamic_pressure(rho, g, P3, k, wave_height.at(2), t);
     ASSERT_NEAR(0, phs3, EPS);
-    ASSERT_NEAR(rho*g, pdyn3, EPS);
-    ASSERT_NEAR(rho*g, phs3 + pdyn3, EPS);
+    ASSERT_NEAR(rho*g, pdyn.at(2), EPS);
+    ASSERT_NEAR(rho*g, phs3 + pdyn.at(2), EPS);
 
     const double phs4 = rho*g*P4.z();
-    const double pdyn4 = wave.get_dynamic_pressure(rho, g, P4, k, wave_height.at(3), t);
     ASSERT_NEAR(0, phs4, EPS);
-    ASSERT_NEAR(0, pdyn4, EPS);
-    ASSERT_NEAR(0, phs4 + pdyn4, EPS);
+    ASSERT_NEAR(0, pdyn.at(3), EPS);
+    ASSERT_NEAR(0, phs4 + pdyn.at(3), EPS);
 
     const double phs5 = rho*g*P5.z();
-    const double pdyn5 = wave.get_dynamic_pressure(rho, g, P5, k, wave_height.at(4), t);
     ASSERT_NEAR(rho*g, phs5, EPS);
-    ASSERT_NEAR(-rho*g*(cosh(h-1)/cosh(h)), pdyn5, EPS);
-    ASSERT_NEAR(rho*g*(1-cosh(h-1)/cosh(h)), phs5 + pdyn5, EPS);
+    ASSERT_NEAR(-rho*g*(cosh(h-1)/cosh(h)), pdyn.at(4), EPS);
+    ASSERT_NEAR(rho*g*(1-cosh(h-1)/cosh(h)), phs5 + pdyn.at(4), EPS);
 }

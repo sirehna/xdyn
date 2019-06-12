@@ -35,18 +35,30 @@ std::string FastHydrostaticForceModel::get_name() const
     return this->model_name();
 }
 
-SurfaceForceModel::DF FastHydrostaticForceModel::dF(const FacetIterator& that_facet, const EnvironmentAndFrames& env, const BodyStates& states, const double) const
-{
-    if (that_facet->area == 0) return DF(EPoint(0,0,0),EPoint(0,0,0));
-    const double zG = zg_calculator->get_zG_in_NED(that_facet->centre_of_gravity);
-    const EPoint dS = that_facet->area*that_facet->unit_normal;
-    const EPoint C = get_application_point(that_facet, states, zG);
-    return DF(-env.rho*env.g*zG*dS,C);
-}
-
 EPoint FastHydrostaticForceModel::get_application_point(const FacetIterator& that_facet, const BodyStates&, const double) const
 {
     return that_facet->centre_of_gravity; // In Body frame
+}
+
+std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const EnvironmentAndFrames &, const BodyStates &, const double)>
+    FastHydrostaticForceModel::get_dF(const FacetIterator& begin_facet,
+                                      const FacetIterator& end_facet,
+                                      const EnvironmentAndFrames& env,
+                                      const BodyStates& states,
+                                      const double t) const
+{
+    return [this](const FacetIterator &that_facet,
+                  const size_t that_facet_index,
+                  const EnvironmentAndFrames &env,
+                  const BodyStates &states,
+                  const double t)
+    {
+        if (that_facet->area == 0) return DF(EPoint(0,0,0),EPoint(0,0,0));
+        const double zG = zg_calculator->get_zG_in_NED(that_facet->centre_of_gravity);
+        const EPoint dS = that_facet->area*that_facet->unit_normal;
+        const EPoint C = get_application_point(that_facet, states, zG);
+        return DF(-env.rho*env.g*zG*dS,C);
+    };
 }
 
 double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector<double>&, const EnvironmentAndFrames& env) const

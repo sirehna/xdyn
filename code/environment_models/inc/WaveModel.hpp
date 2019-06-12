@@ -40,16 +40,14 @@ class WaveModel
                                     const std::vector<double>& rao_phase //!< Phase of the RAO
                                      ) const = 0;
 
-        /**  \author lli
-          *  \date Aug 1, 2014, 3:24:45 PM
-          *  \brief Surface elevation
+        /**  \brief Computes the surface elevations at given points.
           *  \returns Elevations of a list of points at a given instant, in meters.
           *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
           */
-        virtual std::vector<double> elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
-                                              const std::vector<double> &y, //!< y-positions in the NED frame (in meters)
-                                              const double t                //!< Current time instant (in seconds)
-                                              ) const = 0;
+        std::vector<double> get_elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
+                                          const std::vector<double> &y, //!< y-positions in the NED frame (in meters)
+                                          const double t                //!< Current time instant (in seconds)
+                                         ) const;
 
         /**  \author cec
           *  \date Feb 3, 2015, 10:06:45 AM
@@ -64,21 +62,18 @@ class WaveModel
                                                         const double eta  //!< Wave height at x,y,t (in meters)
                                                         ) const = 0;
 
-        /**  \brief Pressure induced by waves
-          *  \returns Pressure (in Pa) induced by the waves, at a given point in the fluid
-          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
-          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
+        /**  \brief Computes the dynamic pressure at a given point.
+          *  \returns Pressure (in Pa) induced by the waves, at given points in the fluid
           *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
-        virtual double dynamic_pressure(const double rho, //!< water density (in kg/m^3)
-                                        const double g,   //!< gravity (in m/s^2)
-                                        const double x,   //!< x-position in the NED frame (in meters)
-                                        const double y,   //!< y-position in the NED frame (in meters)
-                                        const double z,   //!< z-position in the NED frame (in meters)
-                                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                        const double t    //!< Current time instant (in seconds)
-                                        ) const = 0;
+        std::vector<double> get_dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
+                                                 const double g,                 //!< gravity (in m/s^2)
+                                                 const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+                                                 const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+                                                 const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+                                                 const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                 const double t                  //!< Current time instant (in seconds)
+                                                ) const;
 
         /**  \returns List of angular frequencies for which the spectra will be calculated.
           *  \details Needed by the RAOs (RadiationForceModel)
@@ -94,6 +89,33 @@ class WaveModel
 
     private:
         WaveModel(); // Disabled
+
+        /**  \author cec
+          *  \date Aug 1, 2014, 3:24:45 PM
+          *  \brief Surface elevation
+          *  \returns Elevations of a list of points at a given instant, in meters.
+          *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
+          */
+        virtual std::vector<double> elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
+                                              const std::vector<double> &y, //!< y-positions in the NED frame (in meters)
+                                              const double t                //!< Current time instant (in seconds)
+                                              ) const = 0;
+
+        /**  \brief Pressure induced by waves
+          *  \returns Pressure (in Pa) induced by the waves, at given points in the fluid
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
+          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
+          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
+          */
+        virtual std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
+                                                     const double g,                 //!< gravity (in m/s^2)
+                                                     const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+                                                     const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+                                                     const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+                                                     const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                     const double t                  //!< Current time instant (in seconds)
+                                                    ) const = 0;
 
     protected:
         FlatDiscreteDirectionalWaveSpectrum spectrum;
