@@ -36,6 +36,7 @@ class Observer
     public:
         Observer(const std::vector<std::string>& data);
         void observe(const Sim& sys, const double t);
+        void observe_everything(const Sim& sys, const double t);
         virtual ~Observer();
 
         template <typename T> void write(

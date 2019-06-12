@@ -36,6 +36,16 @@ void Observer::observe(const Sim& sys, const double t)
     serialize_everything();
 }
 
+void Observer::observe_everything(const Sim& sys, const double t)
+{
+    write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
+    sys.output(sys.state,*this, t);
+    for (const auto& initializer:initialize) initializer.second();
+    flush_after_initialization();
+    for (const auto& serializer:serialize) serializer.second();
+    flush_after_write();
+}
+
 void Observer::initialize_everything_if_necessary()
 {
     if (not(initialized))
