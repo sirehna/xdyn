@@ -164,15 +164,8 @@ ssc::kinematics::PointMatrix Airy::orbital_velocity(
         const std::vector<double>& eta //!< Wave heights at x,y,t (in meters)
         ) const
 {
-    const size_t n_points = x.size();
-    if (n_points != y.size() || n_points != z.size() || n_points != eta.size())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating Airy orbital velocity: the x, y, z and eta vectors don't have the same size (size of x: "
-            << n_points << ", size of y: " << y.size() << ", size of z: " << z.size() << ", size of eta: " << eta.size() << ")");
-    }
-
-    ssc::kinematics::PointMatrix M("NED", n_points);
-    for (size_t point_index = 0; point_index < n_points; ++point_index) {
+    ssc::kinematics::PointMatrix M("NED", x.size());
+    for (size_t point_index = 0; point_index < x.size(); ++point_index) {
 
         if (z.at(point_index) < eta.at(point_index)) 
         {

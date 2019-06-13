@@ -297,14 +297,14 @@ TEST_F(AiryTest, norm_of_orbital_velocity_should_only_depend_on_z)
     std::vector<double> z{100};
     std::vector<double> eta{0};
 
-    ssc::kinematics::PointMatrix V = wave.orbital_velocity(g,x,y,z,t,eta);
+    ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g,x,y,z,t,eta);
     const double ref = std::sqrt(V.m(0,0)*V.m(0,0) + V.m(1,0)*V.m(1,0) + V.m(2,0)*V.m(2,0));
 
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         x.at(0) = a.random<double>().between(-100,100);
         y.at(0) = a.random<double>().between(-100,100);
-        V = wave.orbital_velocity(g,x,y,z,t,eta);
+        V = wave.get_orbital_velocity(g,x,y,z,t,eta);
         const double norm = std::sqrt(V.m(0,0)*V.m(0,0) + V.m(1,0)*V.m(1,0) + V.m(2,0)*V.m(2,0));
         ASSERT_NEAR(ref, norm, EPS);
     }
@@ -337,7 +337,7 @@ TEST_F(AiryTest, orbital_velocity_non_regression_test)
     std::vector<double> z{0.2, 0.2, 0.2, 0.2, 0.1, 0.3};
     std::vector<double> eta{0, 0, 0, 0, 0, 0};
     
-    V = wave.orbital_velocity(g,x,y,z,t,eta);
+    V = wave.get_orbital_velocity(g,x,y,z,t,eta);
     ASSERT_EQ("NED", V.get_frame());
 
     EXPECT_NEAR(-0.013625903643418017, V.m(0,0), EPS);
@@ -393,7 +393,7 @@ TEST_F(AiryTest, orbital_velocity_sanity_check)
         const std::vector<double> y {a.random<double>().between(-100,100)};
         const std::vector<double> z {a.random<double>().between(2,5)};
         const std::vector<double> eta {0};
-        const ssc::kinematics::PointMatrix V = wave.orbital_velocity(g,x,y,z,t,eta);
+        const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g,x,y,z,t,eta);
         ASSERT_NEAR(std::abs(cos(psi)),std::abs(V.m(0,0)/hypot(V.m(0,0),V.m(1,0))), EPS) << "i = " << i;
         ASSERT_NEAR(std::abs(sin(psi)),std::abs(V.m(1,0)/hypot(V.m(0,0),V.m(1,0))), EPS) << "i = " << i;
     }
@@ -427,7 +427,7 @@ TEST_F(AiryTest, orbital_velocity_and_elevation_should_have_opposite_signs)
         const std::vector<double> y{a.random<double>().between(-100,100)};
         const std::vector<double> z{a.random<double>().between(2,5)};
 
-        const ssc::kinematics::PointMatrix V = wave.orbital_velocity(g, x, y, z, t, std::vector<double>{0});
+        const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, x, y, z, t, std::vector<double>{0});
         const std::vector<double> eta = wave.get_elevation(x, y, t);
 
         ASSERT_LE(V.m(0,0)*eta.at(0), 0);
@@ -560,7 +560,7 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const std::vector<double> z{1, 30};
 
     const std::vector<double> eta = wave.get_elevation(x, y, t);
-    const ssc::kinematics::PointMatrix V = wave.orbital_velocity(g, x, y, z, t, eta);
+    const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, x, y, z, t, eta);
     const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, x, y, z, eta, t);
 
     const double eps=1E-6;
@@ -606,7 +606,7 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const std::vector<double> z{4, 30};
 
     const std::vector<double> eta = wave.get_elevation(x, y, t);
-    const ssc::kinematics::PointMatrix V = wave.orbital_velocity(g, x, y, z, t, eta);
+    const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, x, y, z, t, eta);
     const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, x, y, z, eta, t);
     const double ptot1 = rho * g * z.at(0) + pdyn.at(0);
     const double ptot2 = rho * g * z.at(1) + pdyn.at(1);
@@ -729,7 +729,7 @@ TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_wat
         const std::vector<double> z{eta.at(0) - 0.1, h + 0.1, h};
 
         const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, x, y, z, eta, t);
-        const ssc::kinematics::PointMatrix V = wave.orbital_velocity(g, x, y, z, t, eta);
+        const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, x, y, z, t, eta);
         
         ASSERT_DOUBLE_EQ(0, pdyn.at(0));
         ASSERT_DOUBLE_EQ(0, pdyn.at(1));
@@ -770,6 +770,6 @@ TEST_F(AiryTest, get_dynamic_pressure_and_orbital_velocities_should_be_0_above_w
         const std::vector<double> eta = wave.get_elevation(x, y, t);
         const std::vector<double> z{eta.at(0) - 0.1};
         ASSERT_DOUBLE_EQ(0, wave.get_dynamic_pressure(rho, g, x, y, z, eta, t).at(0));
-        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g, x, y, z, t, eta).m.col(0).norm());
+        ASSERT_DOUBLE_EQ(0, wave.get_orbital_velocity(g, x, y, z, t, eta).m.col(0).norm());
     }
 }
