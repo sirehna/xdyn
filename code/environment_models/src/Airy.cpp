@@ -155,40 +155,6 @@ std::vector<double> Airy::dynamic_pressure(
     return p;
 }
 
-ssc::kinematics::Point Airy::orbital_velocity(
-        const double g,   //!< gravity (in m/s^2)
-        const double x,   //!< x-position in the NED frame (in meters)
-        const double y,   //!< y-position in the NED frame (in meters)
-        const double z,   //!< z-position in the NED frame (in meters)
-        const double t,   //!< Current time instant (in seconds)
-        const double eta  //!< Wave height at x,y,t (in meters)
-        ) const
-{
-    double u = 0;
-    double v = 0;
-    double w = 0;
-    if (z < eta) return ssc::kinematics::Point("NED", 0, 0, 0);
-
-    const size_t n = spectrum.psi.size();
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        const double omega = spectrum.omega[i];
-        const double k = spectrum.k[i];
-        const double pdyn_factor = spectrum.pdyn_factor(k,z,0); // No stretching for the orbital velocity
-        const double pdyn_factor_sh = spectrum.pdyn_factor_sh(k,z,0); // No stretching for the orbital velocity
-        const double k_xCosPsi_ySinPsi = k * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        const double theta = -omega * t + k_xCosPsi_ySinPsi + spectrum.phase[i];
-        const double cos_theta = cos(theta);
-        const double sin_theta = sin(theta);
-        const double a_k_omega = spectrum.a[i] * k / omega;
-        const double a_k_omega_pdyn_factor_sin_theta = a_k_omega * pdyn_factor * sin_theta;
-        u += a_k_omega_pdyn_factor_sin_theta * spectrum.cos_psi[i];
-        v += a_k_omega_pdyn_factor_sin_theta * spectrum.sin_psi[i];
-        w += a_k_omega * pdyn_factor_sh * cos_theta;
-    }
-    return ssc::kinematics::Point("NED", u * g, v * g, w * g);
-}
-
 ssc::kinematics::PointMatrix Airy::orbital_velocity(
         const double g,                //!< gravity (in m/s^2)
         const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)

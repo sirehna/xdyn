@@ -52,19 +52,6 @@ class WaveModel
         /**  \author cec
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
-          *  \returns Velocity of the fluid at a given point & instant, in m/s
-          */
-        virtual ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                                        const double x,   //!< x-position in the NED frame (in meters)
-                                                        const double y,   //!< y-position in the NED frame (in meters)
-                                                        const double z,   //!< z-position in the NED frame (in meters)
-                                                        const double t,   //!< Current time instant (in seconds)
-                                                        const double eta  //!< Wave height at x,y,t (in meters)
-                                                        ) const = 0;
-
-        /**  \author cec
-          *  \date Feb 3, 2015, 10:06:45 AM
-          *  \brief Orbital velocity
           *  \returns Velocities of the fluid at given points & instant, in m/s
           */
         virtual ssc::kinematics::PointMatrix orbital_velocity(const double g,           //!< gravity (in m/s^2)
