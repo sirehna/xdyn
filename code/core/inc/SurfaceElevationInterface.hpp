@@ -83,7 +83,7 @@ class SurfaceElevationInterface
                                                               const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
                                                               const double t,                //!< Current time instant (in seconds)
                                                               const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                             ) const;
+                                                             ) const = 0;
 
         virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
         virtual std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
