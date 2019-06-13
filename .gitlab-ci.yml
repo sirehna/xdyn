@@ -2,6 +2,7 @@ stages:
   - git_submodule
   - lint
   - build
+  - test
   - doc
 
 git_submodule:
@@ -39,6 +40,11 @@ build:debian:
      when: on_success
      paths:
      - xdyn.deb
+
+test:grpc:
+    stage: test
+    script:
+     - cd grpc_demo && make
 
 doc:
    stage: doc
