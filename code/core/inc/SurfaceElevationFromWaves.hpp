@@ -35,17 +35,6 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
                 const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
                 const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
 
-        /**
-         *  \section ex1 Example
-         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height example
-         *  \section ex2 Expected output
-         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
-         *  */
-        std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                        const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                        const double t                //!< Current instant (in seconds)
-                                        ) const;
-
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force and torque
           */
@@ -65,6 +54,17 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
         void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
     private:
         SurfaceElevationFromWaves(); // Disabled
+
+        /**
+         *  \section ex1 Example
+         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height example
+         *  \section ex2 Expected output
+         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
+         *  */
+        std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                        const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                        const double t                //!< Current instant (in seconds)
+                                        ) const;
 
         /**  \author cec
           *  \date Feb 3, 2015, 10:06:45 AM

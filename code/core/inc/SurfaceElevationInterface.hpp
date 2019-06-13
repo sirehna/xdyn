@@ -136,6 +136,19 @@ class SurfaceElevationInterface
                 const ssc::kinematics::PointMatrixPtr& Mned   //!< Output mesh in NED frame
                 ) const;
 
+        /**  \brief Computes the surface elevation at given points.
+          *  \returns Surface elevations of a list of points at a given instant, in meters.
+          *  \returns zwave - z
+          */
+        std::vector<double> get_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                            const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                            const double t                //!< Current instant (in seconds)
+                                           ) const;
+
+        virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
+
+
+      private:
         /**  \brief Surface elevation
               *  \returns Surface elevations of a list of points at a given instant, in meters.
               *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
@@ -149,8 +162,6 @@ class SurfaceElevationInterface
                                                 const double t                //!< Current instant (in seconds)
                                                 ) const = 0;
 
-        virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
-      private:
         /**  \author cec
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity

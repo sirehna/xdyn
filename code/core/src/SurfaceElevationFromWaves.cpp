@@ -6,7 +6,6 @@
  */
 
 #include "SurfaceElevationFromWaves.hpp"
-#include "InternalErrorException.hpp"
 
 #include <ssc/exception_handling.hpp>
 
@@ -42,10 +41,6 @@ std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<dou
                                                            const double t                //!< Current instant (in seconds)
                                                            ) const
 {
-    if (x.size() != y.size())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating surface elevation from waves: the x and y vectors don't have the same size (size of x: " << x.size() << ", size of y: " << y.size() << ")");
-    }
     std::vector<double> zwave(x.size(), 0);
 
     for (const auto directional_spectrum:directional_spectra)

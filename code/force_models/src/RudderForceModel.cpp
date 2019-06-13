@@ -241,7 +241,7 @@ ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states
     std::vector<double> eta;
     try
     {
-        eta = env.w->wave_height(x, y, t);
+        eta = env.w->get_wave_height(x, y, t);
     }
     catch (const ssc::exception_handling::Exception& e)
     {

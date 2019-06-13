@@ -6,7 +6,6 @@
  */
 
 #include "DefaultSurfaceElevation.hpp"
-#include "InternalErrorException.hpp"
 
 DefaultSurfaceElevation::DefaultSurfaceElevation(
         const double wave_height_,
@@ -16,11 +15,8 @@ DefaultSurfaceElevation::DefaultSurfaceElevation(
 {
 }
 
-std::vector<double> DefaultSurfaceElevation::wave_height(const std::vector<double> &x, const std::vector<double> &y, const double) const
+std::vector<double> DefaultSurfaceElevation::wave_height(const std::vector<double> &x, const std::vector<double> &, const double) const
 {
-    if (x.size() != y.size()) {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating surface elevation for a flat sea surface: the x and y vectors don't have the same size (size of x: " << x.size() << ", size of y: "<< y.size() << ")");
-    }
     return std::vector<double>(x.size(), zwave);
 }
 
