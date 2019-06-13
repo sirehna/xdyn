@@ -56,6 +56,16 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
                             const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
                              ) const;
 
+        std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
+
+        std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
+
+        std::vector<WaveModelPtr> get_models() const {return directional_spectra;};
+
+        void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
+    private:
+        SurfaceElevationFromWaves(); // Disabled
+
         /**  \author cec
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
@@ -68,16 +78,6 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
                                                       const double t,                 //!< Current time instant (in seconds)
                                                       const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
                                                      ) const;
-
-        std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
-
-        std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
-
-        std::vector<WaveModelPtr> get_models() const {return directional_spectra;};
-
-        void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
-    private:
-        SurfaceElevationFromWaves(); // Disabled
 
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (by DNV), "unsteady pressure" (by Faltinsen) or constant pressure contour (by Lloyd)

@@ -149,7 +149,7 @@ TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
     const std::vector<double> z {1.62};
     const std::vector<double> eta {0};
     const double t = 664.2;
-    ssc::kinematics::PointMatrix v = wave.orbital_velocity(g, x, y, z, t, eta);
+    ssc::kinematics::PointMatrix v = wave.get_orbital_velocity(g, x, y, z, t, eta);
     EXPECT_NEAR(0.25451004448140752, v.m(0,0),1e-10);
     EXPECT_NEAR(0.25451004448140752, v.m(1,0),1e-10);
     EXPECT_NEAR(0.1991307825735438, v.m(2,0),1e-10);

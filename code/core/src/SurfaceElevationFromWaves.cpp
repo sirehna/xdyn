@@ -135,13 +135,7 @@ ssc::kinematics::PointMatrix SurfaceElevationFromWaves::orbital_velocity(const d
                                                                          const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
                                                                         ) const
 {
-    if (x.size() != y.size() || x.size() != z.size() || x.size() != eta.size())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating orbital velocity: the x, y, z and eta vectors don't have the same size (size of x: "
-            << x.size() << ", size of y: " << y.size() << ", size of z: " << z.size() << ", size of eta: " << eta.size() << ")");
-    }
     ssc::kinematics::PointMatrix Vwaves(ssc::kinematics::Matrix3Xd::Zero(3,x.size()), "NED");
-    
     for (auto spectrum:directional_spectra)
     {
         ssc::kinematics::PointMatrix vw = spectrum->get_orbital_velocity(g, x, y, z, t, eta);
