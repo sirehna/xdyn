@@ -3,6 +3,11 @@ services:
   waves-server:
     build: ../code/waves_grpc/python_server
     user: ${CURRENT_UID}
+    entrypoint: ["/bin/bash", "/entrypoint.sh", "/work/airy.py"]
+    working_dir: /work
+    volumes:
+    - .:/work
+    - ../code/waves_grpc:/proto
   xdyn:
     image: xdyn
     working_dir: /data
