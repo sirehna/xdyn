@@ -58,6 +58,21 @@ class Airy : public WaveModel
                                                 const double eta  //!< Wave height at x,y,t (in meters)
                                                 ) const;
 
+        /**  \brief Wave velocity (projected in the NED frame, at points (x,y,z)).
+          *  \returns Orbital velocities in m/s
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 70
+          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
+          *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 75
+          *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
+          */
+        ssc::kinematics::PointMatrix orbital_velocity(const double g,                //!< gravity (in m/s^2)
+                                                      const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+                                                      const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+                                                      const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+                                                      const double t,                //!< Current time instant (in seconds)
+                                                      const std::vector<double>& eta //!< Wave heights at x,y,t (in meters)
+                                                     ) const;
 
 
     private:

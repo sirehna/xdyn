@@ -62,6 +62,19 @@ class WaveModel
                                                         const double eta  //!< Wave height at x,y,t (in meters)
                                                         ) const = 0;
 
+        /**  \author cec
+          *  \date Feb 3, 2015, 10:06:45 AM
+          *  \brief Orbital velocity
+          *  \returns Velocities of the fluid at given points & instant, in m/s
+          */
+        virtual ssc::kinematics::PointMatrix orbital_velocity(const double g,           //!< gravity (in m/s^2)
+                                                        const std::vector<double>& x,   //!< x-positions in the NED frame (in meters)
+                                                        const std::vector<double>& y,   //!< y-positions in the NED frame (in meters)
+                                                        const std::vector<double>& z,   //!< z-positions in the NED frame (in meters)
+                                                        const double t,                 //!< Current time instant (in seconds)
+                                                        const std::vector<double>& eta  //!< Wave heights at x,y,t (in meters)
+                                                       ) const = 0;
+
         /**  \brief Computes the dynamic pressure at a given point.
           *  \returns Pressure (in Pa) induced by the waves, at given points in the fluid
           *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
