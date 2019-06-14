@@ -44,6 +44,7 @@ build:debian:
 test:grpc:
     stage: test
     script:
+     - docker build . --tag xdyn
      - cd grpc_demo && make
 
 doc:
