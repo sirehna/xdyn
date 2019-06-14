@@ -1224,7 +1224,10 @@ C++). On obtient ainsi :
 - Un protocole de communication rapide.
 
 Ainsi, les modèles de houle externes qui respectent cette interface peuvent être
-par exemple utilisés, outre par xdyn, en Python et en Matlab (via l'API Java de gRPC).
+utilisés, outre par xdyn, par des applications clientes écrites
+en Python, en C++, en Java... Par exemple, on pourrait implémenter un modèle
+de capteur de houle en Java en utilisant un modèle de houle externe écrit,
+mettons, en Python.
 
 ### Interface pour les modèles de houle
 
@@ -1233,10 +1236,9 @@ l'adresse suivante :
 
 [https://gitlab.sirehna.com/sirehna/demo_docker_grpc/blob/master/waves.proto](https://gitlab.sirehna.com/sirehna/demo_docker_grpc/blob/master/waves.proto)
 
-Ce fichier est nécessaire si l'on souhaite écrire un modèle de houle externe
-(un serveur de houle) appelable par xdyn.  Il n'est pas nécessaire pour
-utiliser un modèle de houle déjà écrit (mais il est utilisé lors de la compilation
-d'xdyn lui-même).
+Ce fichier est nécessaire si l'on souhaite implémenter un modèle de houle distant
+(un serveur de houle) appelable par xdyn, mais il n'est pas nécessaire pour
+utiliser depuis xdyn un modèle de houle existant satisfaisant cette interface.
 
 ### Paramétrage dans xdyn
 

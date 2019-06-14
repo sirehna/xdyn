@@ -17,7 +17,7 @@ Pour ce tutoriel, on a besoin :
 
 Le modèle de houle peut être implémenté en Python. Afin de simplifier
 sa mise en oeuvre, on peut utiliser le dépôt
-https://gitlab.sirehna.com/sirehna/demo_docker_grpc qui contient déjà un
+[https://gitlab.sirehna.com/sirehna/demo_docker_grpc](https://gitlab.sirehna.com/sirehna/demo_docker_grpc) qui contient déjà un
 exemple de serveur de houle en Python.
 
 ### Mise en donnée xdyn
