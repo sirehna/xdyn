@@ -2153,3 +2153,34 @@ actionneurs du même type) ainsi que la projection de ce même effort suivant
 l'axe $`X`$ du repère NED.
 
 
+## Modèle d'effort distant
+
+Si l'on souhaite utiliser un modèle d'effort qui n'est pas implémenté dans xdyn, il est possible
+de l'implémenter séparément et de l'appeler depuis xdyn, sans intervenir sur le code source d'xdyn.
+
+### Description
+
+Comme pour les modèles de [houle
+distants](#utilisation-dun-modèle-de-houle-distant), on utilise la technologie
+"[gRPC](https://grpc.io/)" : le modèle d'effort sera alors encapsulé dans un
+service et appelé par xdyn en utilisant des paramètres spécifiés dans le
+fichier de configuration YAML d'xdyn.
+
+### Paramétrage
+
+Dans la section `controlled forces`, on ajoute une section de la forme suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: grpc
+  url: http://localhost:50001
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Le paramètre `model: grpc` indique à xdyn qu'il s'agit d'un modèle d'effort
+distant et `url` donne l'adresse à laquelle le serveur gRPC peut être joint.
+
+Ces modèles ont accès à toutes les commandes définies dans la simulation.
+Le point d'application des modèles d'effort gRPC est l'origine du repère "body".
+
+### Exemple d'utilisation
+
+Le [tutoriel 10](#tutoriel-10-utilisation-dun-modèle-deffort-distant) détaille
