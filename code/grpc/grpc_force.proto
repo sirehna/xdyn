@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+
+service Force
+{
+    rpc set_parameters(SetParameterRequest)                    returns (SetParameterResponse);
+    rpc force(ForceRequest)                                    returns (ForceResponse);
+    rpc required_wave_information(RequiredWaveInformationRequest)   returns (RequiredWaveInformationResponse);
+}
+
+message RequiredWaveInformationRequest
+{
+}
+
+message RequiredWaveInformationResponse
+{
+    XYTGrid elevations = 1; // Points at which the force model requires wave elevations. Updated at each timestep if needs_wave_outputs was set to true.
+    XYZTGrid dynamic_pressures  = 2; // Points at which the force model requires dynamic pressures. Updated at each timestep if needs_wave_outputs was set to true.
+    XYZTGrid orbital_velocities = 3; // Points at which the force model requires orbital velocities. Updated at each timestep if needs_wave_outputs was set to true.
+    SpectrumRequest spectrum = 4; // Point at which we want to linearize the spectrum (if necessary)
+    bool angular_frequencies_for_rao = 5; // Does the force model need the angular frequencies?
+    bool directions_for_rao= 6; // Does the force model need the spatial discretization?
+}
+
+message SpectrumRequest
+{
+    bool model_requires_spectrum = 1; // If set to false, x, y and t won't be initialized: this means the force model doesn't need a linear spectrum.
+    double x = 1; // Positions (in meters) at which we want the equivalent linear spectrum. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame.
+    double y = 2; // Positions (in meters) at which we want the equivalent linear spectrum. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame.
+    double t = 3; // Simulation time (in seconds). The linearization is valid at that instant. The documentation of each waves model should describe how the phases are defined.
+}
+
+message WaveInformation
+{
+    XYZTGrid elevations = 1; // Elevations computed for this force model
+    DynamicPressuresResponse dynamic_pressures = 2; // Dynamic pressures computed for this force model
+    OrbitalVelocitiesResponse orbital_velocities = 3; // Orbital velocities computed for this force model
+    SpectrumResponse spectrum = 4; // Spectrum computed for this force model
+    AngularFrequencies angular_frequencies_for_rao = 5; // Angular frequencies at which the spectrum was discretized at (if requested by the force model)
+    Directions directions_for_rao = 6; // Directions the spectrum was discretized at (if requested by the force model)
+}
+
+message SetParameterRequest
+{
+    string parameters = 1; // YAML string containing the parameters to set for this particular model.
+}
+
+message SetParameterResponse
+{
+    double max_history_length = 1; // How far back should the history values in ForceRequest go?
+    bool needs_wave_outputs = 2; // Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
+}
+
+message ShipStates
+{
+    repeated double t = 0; // Simulation time (in seconds).
+    repeated double x = 1; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double y = 2; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double z = 3; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double u = 4; // Projection on axis X of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double v = 5; // Projection on axis Y of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double w = 6; // Projection on axis Z of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double p = 7; // Projection on axis X of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double q = 8; //Projection on axis Y of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double r = 9; //Projection on axis Z of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double qr =10 ; //	Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qi = 11; //	First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qj = 12; //	Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qk = 13; //	Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double phi = 14; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated double theta = 15; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated double psi = 16; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated string rotations_convention = 17; // Angle convention chosen in xdyn's YAML file. Use it to check the convention is what you are expecting! Format: ["psi", "theta'", "phi''"]
+}
+
+message ForceRequest
+{
+    ShipStates ship_states  = 1;
+    map<string, double> commands = 2; // All commands known by xdyn at this timestep
+    WaveInformation wave_information = 3; // Wave information that was requested by the force model
+}
+
+message XYZTGrid // Tridimensional grid on which we wish to compute the dynamic pressure or the orbital velocity, or simply the output of the wave elevations
+{
+    repeated double x = 1; // Positions (in meters) at which we want the value of interest. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y and z.
+    repeated double y = 2; // Positions (in meters) at which we want the value of interest. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x and z.
+    repeated double z = 3; // Positions (in meters) at which we want the value of interest. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x and y.
+    double t = 4;          // Simulation time (in seconds). All values are calculated at that instant. The documentation of each waves model should describe how the phases are defined.
+}
+
+message DynamicPressuresResponse
+{
+    repeated double x = 1; // Positions (in meters) at which the dynamic pressure was computed. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y, z and pdyn.
+    repeated double y = 2; // Positions (in meters) at which the dynamic pressure was computed. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, z and pdyn.
+    repeated double z = 3; // Positions (in meters) at which the dynamic pressure was computed. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, y and pdyn.
+    double t = 4;          // Simulation time (in seconds). All values were calculated at that instant. The documentation of each waves model should describe how the phases are defined.
+    repeated double pdyn = 5; // Dynamic pressure (in Pascal) for each (x,y,z) value at t. Should be the same size as x, y and z.
+}
+
+message OrbitalVelocitiesResponse
+{
+    repeated double x = 1; // Positions (in meters) at which the orbital velocity was computed. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y, z, vx, vy and vz.
+    repeated double y = 2; // Positions (in meters) at which the orbital velocity was computed. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, z, vx, vy and vz.
+    repeated double z = 3; // Positions (in meters) at which the orbital velocity was computed. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, y, vx, vy and vz.
+    double t = 4;          // Simulation time (in seconds). All values were calculated at that instant. The documentation of each waves model should describe how the phases are defined.
+    repeated double vx = 5; // Projection on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vy and vz.
+    repeated double vy = 6; // Projection on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vx and vz.
+    repeated double vz = 7; // Projection on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vx and vy.
+}
