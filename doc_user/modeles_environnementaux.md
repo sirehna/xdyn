@@ -1267,7 +1267,7 @@ de JONSWAP pourrait être paramétré de la façon suivante :
 
 ### Exemple d'utilisation
 
-Le [tutoriel 7](#tutoriel-7-utilisation-dun-modèle-de-houle-distant) détaille
+Le [tutoriel 9](#tutoriel-9-utilisation-dun-modèle-de-houle-distant) détaille
 la mise en oeuvre de la simulation.
 
 
