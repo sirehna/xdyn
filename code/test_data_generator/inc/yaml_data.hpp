@@ -92,6 +92,7 @@ namespace test_data
     std::string simserver_message_without_Dt();
     std::string man_with_delay();
     std::string invalid_json_for_cs();
+    std::string tutorial_09_gRPC_wave_model();
 }
 
 #endif /* YAML_DATA_HPP_ */
