@@ -343,14 +343,6 @@ double SurfaceElevationFromGRPC::evaluate_rao(const double x, //!< x-position of
 
 }
 
-double SurfaceElevationFromGRPC::wave_height(const double x,                                  //!< x-position in the NED frame (in meters)
-                         const double y,                                  //!< y-position in the NED frame (in meters)
-                         const double t                                   //!< Current time instant (in seconds)
-                         ) const
-{
-    const auto r = wave_height(std::vector<double>(1,x),std::vector<double>(1,y), t);
-    return r.back();
-}
 std::vector<double> SurfaceElevationFromGRPC::wave_height(const std::vector<double>& x,                                  //!< x-position in the NED frame (in meters)
                               const std::vector<double>& y,                                  //!< y-position in the NED frame (in meters)
                               const double t                                   //!< Current time instant (in seconds)
@@ -373,17 +365,6 @@ std::vector<double> SurfaceElevationFromGRPC::wave_height(const std::vector<doub
   *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
   *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
   */
-double SurfaceElevationFromGRPC::dynamic_pressure(const double rho, //!< water density (in kg/m^3)
-                        const double g,   //!< gravity (in m/s^2)
-                        const double x,   //!< x-position in the NED frame (in meters)
-                        const double y,   //!< y-position in the NED frame (in meters)
-                        const double z,   //!< z-position in the NED frame (in meters)
-                        const double eta, //!< Wave elevation at (x,y) in the NED frame (in meters)
-                        const double t    //!< Current time instant (in seconds)
-                        ) const
-{
-    return dynamic_pressure(rho, g, {x}, {y}, {z}, {eta}, t);
-}
 std::vector<double> SurfaceElevationFromGRPC::dynamic_pressure(const double , //!< water density (in kg/m^3) (not used for gRPC)
         const double ,   //!< gravity (in m/s^2) (not used for gRPC)
         const std::vector<double>& x,   //!< x-position in the NED frame (in meters)
