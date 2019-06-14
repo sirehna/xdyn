@@ -3,7 +3,7 @@ services:
   waves-server:
     build: ../code/waves_grpc/python_server
     user: ${CURRENT_UID}
-    entrypoint: ["/bin/bash", "/entrypoint.sh", "/work/airy.py"]
+    entrypoint: ["/bin/bash", "/entrypoint.sh", "airy.py"]
     working_dir: /work
     volumes:
     - .:/work
