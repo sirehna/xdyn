@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.8)
 project(grpc)
 
 set(SRC src/SurfaceElevationFromGRPC.cpp
+        src/GRPCForceModel.cpp
         )
 
 # Using C++ 2011
@@ -50,6 +51,9 @@ INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS}) # For MeshIntersector
+include_directories(${hdb_interpolators_INCLUDE_DIRS}) # For History
 
 # gRPC
 SET(waves_proto ${CMAKE_CURRENT_SOURCE_DIR}/../waves_grpc/waves.proto)
@@ -73,3 +77,5 @@ ADD_CUSTOM_COMMAND(
 
 add_library (${PROJECT_NAME} OBJECT ${SRC} ${waves_proto_srcs} ${waves_grpc_srcs})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+
+add_subdirectory(unit_tests)

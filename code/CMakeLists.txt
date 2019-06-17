@@ -150,6 +150,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:interface_hdf5_tests>
         $<TARGET_OBJECTS:observers_and_api_tests>
         $<TARGET_OBJECTS:gz_curves_tests>
+        $<TARGET_OBJECTS:grpc_tests>
         )
 
 TARGET_LINK_LIBRARIES(${TEST_EXE}
