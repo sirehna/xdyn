@@ -46,7 +46,6 @@ class Observer
             serialize[address.name] = get_serializer(val, address);
         }
 
-        virtual void write_before_simulation(const std::vector<DiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
         virtual void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
 
     protected:

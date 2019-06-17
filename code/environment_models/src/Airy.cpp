@@ -64,23 +64,23 @@ double Airy::evaluate_rao(
         const double x,                           //!< x-position of the RAO's calculation point in the NED frame (in meters)
         const double y,                           //!< y-position of the RAO's calculation point in the NED frame (in meters)
         const double t,                           //!< Current time instant (in seconds)
-        const std::vector<double>& rao_module,    //!< Module of the RAO
-        const std::vector<double>& rao_phase      //!< Phase of the RAO
+        const std::vector<double>& rao_module_for_each_frequency_and_incidence,    //!< "Flattened" matrix containing the module of the RAO for each angular frequency omega and each wave incidence beta
+        const std::vector<double>& rao_phase_for_each_frequency_and_incidence      //!< "Flattened" matrix containing the phase of the RAO for each angular frequency omega and each wave incidence beta
         ) const
 {
     double F = 0;
-    const size_t n = rao_module.size();
-    if (n != spectrum.k.size())
+    const size_t nb_of_omegas_x_nb_of_directions = rao_module_for_each_frequency_and_incidence.size();
+    if (nb_of_omegas_x_nb_of_directions != spectrum.k.size())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "rao size is " << n << ", which does not match spectrum size (" << spectrum.k.size() << ")");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Number of angular frequencies times number of incidences in HDB RAO is " << nb_of_omegas_x_nb_of_directions << ", which does not match spectrum size (" << spectrum.k.size() << " (omega,psi) pairs)");
     }
-    for (size_t i = 0 ; i < n ; ++i)
+    for (size_t i = 0 ; i < nb_of_omegas_x_nb_of_directions ; ++i) // For each (omega,beta) pair
     {
-        const double rao_a = rao_module[i] * spectrum.a[i];
+        const double rao_amplitude = rao_module_for_each_frequency_and_incidence[i] * spectrum.a[i];
         const double omega_t = spectrum.omega[i] * t;
         const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
         const double theta = spectrum.phase[i];
-        F -= rao_a * sin(-omega_t + k_xCosPsi_ySinPsi + theta + rao_phase[i]);
+        F -= rao_amplitude * sin(-omega_t + k_xCosPsi_ySinPsi + theta + rao_phase_for_each_frequency_and_incidence[i]);
     }
     return F;
 }

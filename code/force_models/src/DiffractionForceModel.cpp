@@ -78,18 +78,34 @@ class DiffractionForceModel::Impl
           : initialized(false), env(env_),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
         rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
-        periods(),
+        periods_for_each_direction(),
         psis()
         {
             if (env.w.use_count()>0)
             {
-                periods = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
+                // For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
+                // periods[direction][omega]
+                try
+                {
+                    periods_for_each_direction = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
+                }
+                catch (const ssc::exception_handling::Exception& e)
+                {
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the spectral discretization (in angular frequency) of the wave models. When querying the wave model for this discretization, the following problem occurred:\n" << e.get_message());
+                }
                 const auto hdb_periods = hdb.get_diffraction_module_periods();
                 if (not(hdb_periods.empty()))
                 {
-                    check_all_omegas_are_within_bounds(hdb_periods.front(), periods, hdb_periods.back());
+                    check_all_omegas_are_within_bounds(hdb_periods.front(), periods_for_each_direction, hdb_periods.back());
                 }
-                psis = env.w->get_wave_directions_for_each_model();
+                try
+                {
+                    psis = env.w->get_wave_directions_for_each_model();
+                }
+                catch (const ssc::exception_handling::Exception& e)
+                {
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the spatial discretization (in incidence) of the wave models. When querying the wave model for this discretization, the following problem occurred:\n" << e.get_message());
+                }
             }
             else
             {
@@ -114,34 +130,45 @@ class DiffractionForceModel::Impl
             std::array<std::vector<std::vector<double> >, 6 > rao_phases;
             if (env.w.use_count()>0)
             {
-                if (not(periods.empty()))
+                const size_t nb_of_spectra = periods_for_each_direction.size();
+                if (not(periods_for_each_direction.empty()))
                 {
-
+                    // Resize for each degree of freedom
                     for (size_t k = 0 ; k < 6 ; ++k)
                     {
-                        rao_modules[k].resize(periods.size());
-                        rao_phases[k].resize(periods.size());
+                        rao_modules[k].resize(nb_of_spectra);
+                        rao_phases[k].resize(nb_of_spectra);
                     }
                 }
-                for (size_t k = 0 ; k < 6 ; ++k)
+                for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
                 {
-                    for (size_t i = 0 ; i < periods.size() ; ++i)
+                    for (size_t spectrum_idx = 0 ; spectrum_idx < nb_of_spectra ; ++spectrum_idx) // For each directional spectrum
                     {
-                        rao_modules[k][i].resize(periods[i].size());
-                        rao_phases[k][i].resize(periods[i].size());
-                        for (size_t j = 0 ; j < periods[i].size() ; ++j)
+                        const size_t nb_of_period_incidence_pairs = periods_for_each_direction[spectrum_idx].size();
+                        rao_modules[degree_of_freedom_idx][spectrum_idx].resize(nb_of_period_incidence_pairs);
+                        rao_phases[degree_of_freedom_idx][spectrum_idx].resize(nb_of_period_incidence_pairs);
+                        for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
                         {
-                            const double beta = psi - psis.at(i).at(j);
-                                rao_modules[k][i][j] = rao.interpolate_module(k, periods[i][j], beta);
-                                rao_phases[k][i][j] = -rao.interpolate_phase(k, periods[i][j], beta);
+                            // Wave incidence
+                            const double beta = psi - psis.at(spectrum_idx).at(omega_beta_idx);
+                            // Interpolate RAO module for this axis, period and incidence
+                            rao_modules[degree_of_freedom_idx][spectrum_idx][omega_beta_idx] = rao.interpolate_module(degree_of_freedom_idx, periods_for_each_direction[spectrum_idx][omega_beta_idx], beta);
+                            // Interpolate RAO phase for this axis, period and incidence
+                            rao_phases[degree_of_freedom_idx][spectrum_idx][omega_beta_idx] = -rao.interpolate_phase(degree_of_freedom_idx, periods_for_each_direction[spectrum_idx][omega_beta_idx], beta);
                         }
                     }
-
-                    w((int)k) = env.w->evaluate_rao(position_in_ned_for_the_wave_model.x(),
-                                                    position_in_ned_for_the_wave_model.y(),
-                                                    t,
-                                                    rao_modules[k],
-                                                    rao_phases[k]);
+                    try
+                    {
+                        w((int)degree_of_freedom_idx) = env.w->evaluate_rao(position_in_ned_for_the_wave_model.x(),
+                                                        position_in_ned_for_the_wave_model.y(),
+                                                        t,
+                                                        rao_modules[degree_of_freedom_idx],
+                                                        rao_phases[degree_of_freedom_idx]);
+                    }
+                    catch (const ssc::exception_handling::Exception& e)
+                    {
+                        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which evaluates a Response Amplitude Operator using a wave model. During this evaluation, the following problem occurred:\n" << e.get_message());
+                    }
                 }
             }
             const auto ww = express_aquaplus_wrench_in_xdyn_coordinates(w);
@@ -176,7 +203,7 @@ class DiffractionForceModel::Impl
         EnvironmentAndFrames env;
         Eigen::Vector3d H0;
         DiffractionInterpolator rao;
-        std::vector<std::vector<double> > periods;
+        std::vector<std::vector<double> > periods_for_each_direction;
         std::vector<std::vector<double> > psis;
 
 };

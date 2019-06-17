@@ -10,6 +10,7 @@
 #include "external_data_structures_parsers.hpp"
 #include "yaml.h"
 #include "InvalidInputException.hpp"
+#include "YamlGRPC.hpp"
 #include <ssc/yaml_parser.hpp>
 #include <sstream>
 
@@ -333,4 +334,81 @@ template <typename T> bool comparator(const Comparison c, const T& left, const T
             return false;
     }
     return false;
+}
+
+std::string opname(const Comparison c);
+std::string opname(const Comparison c)
+{
+    switch(c)
+    {
+        case LT:
+            return "<";
+        case LE:
+            return "<=";
+        case GT:
+            return ">";
+        case GE:
+            return ">=";
+        case EQ:
+            return "=";
+        case NE:
+            return "!=";
+        default:
+            return "";
+    }
+    return "";
+}
+
+template <typename T> void assert_(const Comparison c, const T& value, const T& limit, const std::string& key)
+{
+    if (not(comparator(c, value, limit)))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error parsing HOS model parameters ('wave' section in the YAML file): '" << key << "' should be " << opname(c) << " " << limit << ", but got " << value);
+    }
+}
+
+void checks_on_p1_p2_m(const std::string& key, const int value);
+void checks_on_p1_p2_m(const std::string& key, const int value)
+{
+    assert_(NE, value, 6, key);
+    assert_(NE, value,10, key);
+    assert_(NE, value,12, key);
+    assert_(NE, value,13, key);
+    assert_(NE, value,16, key);
+    assert_(NE, value,18, key);
+    assert_(NE, value,20, key);
+    assert_(NE, value,21, key);
+    assert_(NE, value,22, key);
+    assert_(NE, value,24, key);
+    assert_(NE, value,25, key);
+    assert_(NE, value,26, key);
+    assert_(NE, value,27, key);
+    assert_(NE, value,28, key);
+    assert_(LT, value,30, key);
+}
+
+void operator >> (const YAML::Node& node, YamlGRPC& f);
+void operator >> (const YAML::Node& node, YamlGRPC& f)
+{
+    node["url"] >> f.url;
+    try
+    {
+        node["output"] >> f.output;
+    }
+    catch(std::exception& ) // Nothing to do: 'output' section is not mandatory
+    {
+    }
+
+}
+
+YamlGRPC parse_grpc(const std::string& yaml)
+{
+    YamlGRPC out;
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    node >> out;
+    out.rest_of_the_yaml = yaml;
+    return out;
 }

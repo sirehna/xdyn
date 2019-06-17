@@ -27,6 +27,7 @@
 #include "ManeuveringForceModel.hpp"
 #include "SimpleStationKeepingController.hpp"
 #include "RudderForceModel.hpp"
+#include "SurfaceElevationFromGRPC.hpp"
 #include "HydrostaticForceModel.hpp"
 #include "GMForceModel.hpp"
 #include "KtKqForceModel.hpp"
@@ -47,6 +48,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<Cos2sDirectionalSpreading>()
            .can_parse<SurfaceElevationFromWaves>()
            .can_parse<Airy>()
+           .can_parse<SurfaceElevationFromGRPC>()
            .can_parse<WageningenControlledForceModel>()
            .can_parse<GravityForceModel>()
            .can_parse<ExactHydrostaticForceModel>()

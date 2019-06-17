@@ -8,6 +8,7 @@
 
 #include "Hdf5WaveObserver.hpp"
 #include "InternalErrorException.hpp"
+#include "Hdf5WaveSpectrumObserver.hpp"
 
 Hdf5Addressing::Hdf5Addressing(
         const DataAddressing& addressing,
@@ -98,11 +99,6 @@ void Hdf5Observer::flush_after_write()
 
 void Hdf5Observer::flush_value_during_write()
 {
-}
-#include "Hdf5WaveSpectrumObserver.hpp"
-void Hdf5Observer::write_before_simulation(const std::vector<DiscreteDirectionalWaveSpectrum>& s, const DataAddressing&)
-{
-    hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
 }
 
 void Hdf5Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& s, const DataAddressing&)

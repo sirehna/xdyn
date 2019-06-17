@@ -109,7 +109,15 @@ std::vector<double> LinearHydrostaticForceModel::get_zH(const double t) const
     const std::vector<double> x({P1_ned.x(), P2_ned.x(), P3_ned.x(), P4_ned.x()});
     const std::vector<double> y({P1_ned.y(), P2_ned.y(), P3_ned.y(), P4_ned.y()});
 
-    return env.w->wave_height(x, y, t);
+    try
+    {
+        return env.w->wave_height(x, y, t);
+    }
+    catch (const ssc::exception_handling::Exception& e)
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the linear hydrostatic force model which uses the wave elevations at four points. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
+    }
+    return {};
 }
 
 ssc::kinematics::Wrench LinearHydrostaticForceModel::operator()(const BodyStates& states, const double t) const

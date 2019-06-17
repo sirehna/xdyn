@@ -177,3 +177,15 @@ TEST_F(environment_parsersTest, can_parse_stretching_data)
     ASSERT_DOUBLE_EQ(456, yaml.spectra.at(1).stretching.delta);
     ASSERT_DOUBLE_EQ(101, yaml.spectra.at(1).stretching.h);
 }
+
+TEST_F(environment_parsersTest, can_parse_grpc_data)
+{
+    const std::string yaml_string = "model: grpc\n"
+                                    "url: localhost:50001\n"
+                                    "xmin: -10\n"
+                                    "xmax: 10\n";
+    const YamlGRPC yaml_grpc = parse_grpc(yaml_string);
+    ASSERT_EQ("localhost:50001", yaml_grpc.url);
+    ASSERT_EQ(yaml_string, yaml_grpc.rest_of_the_yaml);
+}
+

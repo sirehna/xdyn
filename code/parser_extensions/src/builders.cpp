@@ -11,7 +11,9 @@
 #include "EnvironmentAndFrames.hpp"
 #include "discretize.hpp"
 #include "Stretching.hpp"
+#include "SurfaceElevationFromGRPC.hpp"
 #include "InvalidInputException.hpp"
+#include "YamlGRPC.hpp"
 
 boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
@@ -114,7 +116,7 @@ WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_mode
 boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<SurfaceElevationFromWaves>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<SurfaceElevationInterfacePtr> ret;
-    if (model == "waves") // The "model" key is always "waves", except for the default wave model "no waves"
+    if (model == "waves") // The "model" key is always "waves" for xdyn's internal wave models, except for the default wave model "no waves"
     {
         const YamlWaveModel input = parse_waves(yaml);
         const auto output_mesh = make_wave_mesh(input.output);
@@ -187,6 +189,18 @@ boost::optional<WaveDirectionalSpreadingPtr> DirectionalSpreadingBuilder<Cos2sDi
     {
         const YamlCos2s data = parse_cos2s(yaml);
         ret.reset(WaveDirectionalSpreadingPtr (new Cos2sDirectionalSpreading(data.psi0, data.s)));
+    }
+    return ret;
+}
+
+boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<SurfaceElevationFromGRPC>::try_to_parse(const std::string& model, const std::string& yaml) const
+{
+    boost::optional<SurfaceElevationInterfacePtr> ret;
+    if (model == "grpc")
+    {
+        const YamlGRPC input = parse_grpc(yaml);
+        const auto output_mesh = make_wave_mesh(input.output);
+        ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromGRPC(input, output_mesh)));
     }
     return ret;
 }

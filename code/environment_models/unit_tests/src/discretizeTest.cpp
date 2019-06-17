@@ -50,8 +50,6 @@ TEST_F(discretizeTest, example)
 //! [discretizeTest expected output]
     ASSERT_EQ(1000, A.Dj.size());
     ASSERT_EQ(1000, A.Si.size());
-    ASSERT_DOUBLE_EQ(2.99/999., A.domega);
-    ASSERT_DOUBLE_EQ(0.002*PI, A.dpsi);
 //! [discretizeTest expected output]
 }
 
@@ -66,8 +64,6 @@ TEST_F(discretizeTest, Dirac_in_frequency)
     const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
     ASSERT_EQ(1000, A.Dj.size());
     ASSERT_EQ(1, A.Si.size());
-    ASSERT_DOUBLE_EQ(1, A.domega);
-    ASSERT_DOUBLE_EQ(0.002*PI, A.dpsi);
     ASSERT_DOUBLE_EQ(Hs*Hs/8, A.Si.front());
 }
 
@@ -83,8 +79,6 @@ TEST_F(discretizeTest, Dirac_in_direction)
     const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
     ASSERT_EQ(1, A.Dj.size());
     ASSERT_EQ(1000, A.Si.size());
-    ASSERT_DOUBLE_EQ(2.99/999, A.domega);
-    ASSERT_DOUBLE_EQ(1, A.dpsi);
     ASSERT_DOUBLE_EQ(1, A.Dj.front());
 }
 
@@ -235,118 +229,72 @@ TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_n
  * filter_ratio = np.floor(100*pct)
  * \endcode
  */
-TEST_F(discretizeTest, filter)
+TEST_F(discretizeTest, filtering_with_a_ratio_of_1_should_merely_sort_the_spectrum_by_amplitude)
 {
     DiscreteDirectionalWaveSpectrum d;
-    d.Si = a.random_vector_of<double>().of_size(3);
-    d.Dj = a.random_vector_of<double>().of_size(4);
+    d.Si = {3,2,4};
+    d.Dj = {1,5,4,3};
     d.k = a.random_vector_of<double>().of_size(3);
-    d.omega = a.random_vector_of<double>().of_size(3);
+    d.omega = {0,1,2};
     d.phase = std::vector<std::vector<double> >(3,std::vector<double>(4,0));
-    d.psi = a.random_vector_of<double>().of_size(4);
-    d.domega = 1.0;
-    d.dpsi = 1.0;
+    d.psi = {10,11,12,13};
 
-    d.omega[0] = 0;
-    d.omega[1] = 1;
-    d.omega[2] = 2;
-    d.psi[0] = 10;
-    d.psi[1] = 11;
-    d.psi[2] = 12;
-    d.psi[3] = 13;
+    // Si.Dj     =   20    16    15    12    12     9     8
+    // for (i,j) = (2,1) (2,2) (0,1) (0,2) (2,3) (0,3) (1,2)
 
-    d.Dj[0] = 1;
-    d.Dj[1] = 5;
-    d.Dj[2] = 4;
-    d.Dj[3] = 3;
-
-    d.Si[0] = 3;
-    d.Si[1] = 2;
-    d.Si[2] = 4;
+    const auto domega = [](const size_t i){return ((i==0) || (i==2)) ? 0.5 : 1;};
+    const auto dpsi = [](const size_t j){return ((j==0) || (j==3)) ? 0.5 : 1;};
 
     FlatDiscreteDirectionalWaveSpectrum s_ori = flatten(d);
-    ASSERT_EQ(12, s_ori.a.size());
-    ASSERT_EQ(12, s_ori.omega.size());
-    ASSERT_EQ(12, s_ori.psi.size());
-    ASSERT_EQ(12, s_ori.cos_psi.size());
-    ASSERT_EQ(12, s_ori.sin_psi.size());
-    ASSERT_EQ(12, s_ori.k.size());
-    ASSERT_EQ(0, s_ori.phase.size());
+    EXPECT_EQ(12, s_ori.a.size());
+    EXPECT_EQ(12, s_ori.omega.size());
+    EXPECT_EQ(12, s_ori.psi.size());
+    EXPECT_EQ(12, s_ori.cos_psi.size());
+    EXPECT_EQ(12, s_ori.sin_psi.size());
+    EXPECT_EQ(12, s_ori.k.size());
+    EXPECT_EQ(0, s_ori.phase.size());
 
-    FlatDiscreteDirectionalWaveSpectrum s = filter(s_ori, 0.0);
-    ASSERT_EQ(0, s.a.size());
+    const FlatDiscreteDirectionalWaveSpectrum s = filter(s_ori, 1);
+    EXPECT_EQ(12, s.a.size());
 
-    s = filter(s_ori, 0.17);
-    ASSERT_EQ(1, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(40), s.a[0]);
-    ASSERT_DOUBLE_EQ(2, s.omega[0]);
-    ASSERT_DOUBLE_EQ(11, s.psi[0]);
+    const std::vector<size_t> i = {1,2,1,2,0,0,1,2,0,1,2,0};
+    const std::vector<size_t> j = {1,1,2,2,1,2,3,3,3,0,0,0};
 
-    s = filter(s_ori, 0.30);
-    ASSERT_EQ(2, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(32), s.a[1]);
-    ASSERT_DOUBLE_EQ(2, s.omega[1]);
-    ASSERT_DOUBLE_EQ(12, s.psi[1]);
+    for (size_t k = 0 ; k < 12; ++k)
+    {
+        EXPECT_DOUBLE_EQ(sqrt(2*domega(i[k])*dpsi(j[k])*d.Si[i[k]]*d.Dj[j[k]]), s.a[k]);
+        EXPECT_DOUBLE_EQ(d.omega[i[k]], s.omega[k]);
+        EXPECT_DOUBLE_EQ(d.psi[j[k]], s.psi[k]);
+    }
+}
 
-    s = filter(s_ori, 0.43);
-    ASSERT_EQ(3, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(30), s.a[2]);
-    ASSERT_DOUBLE_EQ(0, s.omega[2]);
-    ASSERT_DOUBLE_EQ(11, s.psi[2]);
+TEST_F(discretizeTest, filtering_with_a_ratio_of_r_should_give_us_at_least_a_ratio_r_of_the_energy)
+{
+    DiscreteDirectionalWaveSpectrum d;
+    d.Si = {3,2,4};
+    d.Dj = {1,5,4,3};
+    d.k = a.random_vector_of<double>().of_size(3);
+    d.omega = {0,1,2};
+    d.phase = std::vector<std::vector<double> >(3,std::vector<double>(4,0));
+    d.psi = {10,11,12,13};
 
-    s = filter(s_ori, 0.53);
-    ASSERT_EQ(4, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(24), s.a[3]);
-    ASSERT_DOUBLE_EQ(0, s.omega[3]);
-    ASSERT_DOUBLE_EQ(12, s.psi[3]);
-
-    s = filter(s_ori, 0.64);
-    ASSERT_EQ(5, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(24), s.a[4]);
-    ASSERT_DOUBLE_EQ(2, s.omega[4]);
-    ASSERT_DOUBLE_EQ(13, s.psi[4]);
-
-    s = filter(s_ori, 0.72);
-    ASSERT_EQ(6, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(20), s.a[5]);
-    ASSERT_DOUBLE_EQ(1, s.omega[5]);
-    ASSERT_DOUBLE_EQ(11, s.psi[5]);
-
-    s = filter(s_ori, 0.80);
-    ASSERT_EQ(7, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(18), s.a[6]);
-    ASSERT_DOUBLE_EQ(0, s.omega[6]);
-    ASSERT_DOUBLE_EQ(13, s.psi[6]);
-
-    s = filter(s_ori, 0.87);
-    ASSERT_EQ(8, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(16), s.a[7]);
-    ASSERT_DOUBLE_EQ(1, s.omega[7]);
-    ASSERT_DOUBLE_EQ(12, s.psi[7]);
-
-    s = filter(s_ori, 0.92);
-    ASSERT_EQ(9, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(12), s.a[8]);
-    ASSERT_DOUBLE_EQ(1, s.omega[8]);
-    ASSERT_DOUBLE_EQ(13, s.psi[8]);
-
-    s = filter(s_ori, 0.95);
-    ASSERT_EQ(10, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(8), s.a[9]);
-    ASSERT_DOUBLE_EQ(2, s.omega[9]);
-    ASSERT_DOUBLE_EQ(10, s.psi[9]);
-
-    s = filter(s_ori, 0.98);
-    ASSERT_EQ(11, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(6), s.a[10]);
-    ASSERT_DOUBLE_EQ(0, s.omega[10]);
-    ASSERT_DOUBLE_EQ(10, s.psi[10]);
-
-    s = filter(s_ori, 1.0);
-    ASSERT_EQ(12, s.a.size());
-    ASSERT_DOUBLE_EQ(sqrt(4), s.a[11]);
-    ASSERT_DOUBLE_EQ(1, s.omega[11]);
-    ASSERT_DOUBLE_EQ(10, s.psi[11]);
+    FlatDiscreteDirectionalWaveSpectrum s_ori = flatten(d);
+    double original_energy = 0;
+    for (const double a : s_ori.a)
+    {
+        original_energy += a*a;
+    }
+    for (size_t r = 0 ; r <= 100 ; ++r)
+    {
+        const double ratio = ((double)r)/100.;
+        const FlatDiscreteDirectionalWaveSpectrum s = filter(s_ori, ratio);
+        double energy = 0;
+        for (const double a : s.a)
+        {
+            energy += a*a;
+        }
+        EXPECT_GE(energy, ratio*original_energy);
+    }
 }
 
 TEST_F(discretizeTest, dynamic_pressure_factor)
