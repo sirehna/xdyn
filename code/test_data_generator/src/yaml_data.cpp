@@ -5032,7 +5032,7 @@ std::string test_data::tutorial_10_gRPC_force_model()
        << "    controlled forces:\n"
        << "      - name: parametric oscillator\n"
        << "        model: grpc\n"
-       << "        url: force-model:9902\n"
+       << "        url: force-model:9002\n"
        << "        k: 60\n"
        << "        c: 1\n"
        << "    \n"
