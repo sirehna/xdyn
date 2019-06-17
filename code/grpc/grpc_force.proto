@@ -90,20 +90,32 @@ message XYZTGrid // Tridimensional grid on which we wish to compute the dynamic 
 
 message DynamicPressuresResponse
 {
-    repeated double x = 1; // Positions (in meters) at which the dynamic pressure was computed. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y, z and pdyn.
-    repeated double y = 2; // Positions (in meters) at which the dynamic pressure was computed. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, z and pdyn.
-    repeated double z = 3; // Positions (in meters) at which the dynamic pressure was computed. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, y and pdyn.
-    double t = 4;          // Simulation time (in seconds). All values were calculated at that instant. The documentation of each waves model should describe how the phases are defined.
+    repeated double x = 1;    // Positions (in meters) at which the dynamic pressure was computed. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y, z and pdyn.
+    repeated double y = 2;    // Positions (in meters) at which the dynamic pressure was computed. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, z and pdyn.
+    repeated double z = 3;    // Positions (in meters) at which the dynamic pressure was computed. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, y and pdyn.
+    double t = 4;             // Simulation time (in seconds). All values were calculated at that instant. The documentation of each waves model should describe how the phases are defined.
     repeated double pdyn = 5; // Dynamic pressure (in Pascal) for each (x,y,z) value at t. Should be the same size as x, y and z.
 }
 
 message OrbitalVelocitiesResponse
 {
-    repeated double x = 1; // Positions (in meters) at which the orbital velocity was computed. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y, z, vx, vy and vz.
-    repeated double y = 2; // Positions (in meters) at which the orbital velocity was computed. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, z, vx, vy and vz.
-    repeated double z = 3; // Positions (in meters) at which the orbital velocity was computed. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, y, vx, vy and vz.
-    double t = 4;          // Simulation time (in seconds). All values were calculated at that instant. The documentation of each waves model should describe how the phases are defined.
+    repeated double x = 1;  // Positions (in meters) at which the orbital velocity was computed. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y, z, vx, vy and vz.
+    repeated double y = 2;  // Positions (in meters) at which the orbital velocity was computed. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, z, vx, vy and vz.
+    repeated double z = 3;  // Positions (in meters) at which the orbital velocity was computed. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, y, vx, vy and vz.
+    double t = 4;           // Simulation time (in seconds). All values were calculated at that instant. The documentation of each waves model should describe how the phases are defined.
     repeated double vx = 5; // Projection on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vy and vz.
     repeated double vy = 6; // Projection on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vx and vz.
     repeated double vz = 7; // Projection on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vx and vy.
 }
+
+message ForceResponse
+{
+    double Fx = 1;                              // Projection of the force acting on "BODY" on the X-axis of the body frame.
+    double Fy = 2;                              // Projection of the force acting on "BODY" on the Y-axis of the body frame.
+    double Fz = 3;                              // Projection of the force acting on "BODY" on the Z-axis of the body frame.
+    double Tx = 4;                              // Projection of the torque acting on "BODY" on the X-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double Ty = 5;                              // Projection of the torque acting on "BODY" on the Y-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double Tz = 6;                              // Projection of the torque acting on "BODY" on the Z-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    map<string, double> extra_observations = 7; // Anything we wish to serialize. Specific to each force model.
+}
+
