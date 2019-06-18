@@ -18,7 +18,8 @@ std::string GRPCForceModel::model_name() {return "grpc force";}
 
 GRPCForceModel::Input::Input() :
         url(),
-        name()
+        name(),
+        parameters()
 {
 }
 
@@ -31,6 +32,9 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     GRPCForceModel::Input ret;
     node["url"] >> ret.url;
     node["name"] >> ret.name;
+    YAML::Emitter out;
+    out << node;
+    ret.parameters = out.c_str();
     return ret;
 }
 

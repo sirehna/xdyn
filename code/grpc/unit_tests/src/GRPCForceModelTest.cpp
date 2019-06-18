@@ -39,3 +39,14 @@ TEST_F(GRPCForceModelTest, can_parse_name)
     const auto input = GRPCForceModel::parse(test_data::gRPC_force_model());
     ASSERT_EQ("parametric oscillator", input.name);
 }
+
+TEST_F(GRPCForceModelTest, can_parse_rest_of_yaml_parameters)
+{
+    const auto input = GRPCForceModel::parse(test_data::gRPC_force_model());
+    ASSERT_EQ("c: 1\n"
+              "k: 60\n"
+              "model: grpc\n"
+              "name: parametric oscillator\n"
+              "url: force-model:9002"
+              , input.parameters);
+}
