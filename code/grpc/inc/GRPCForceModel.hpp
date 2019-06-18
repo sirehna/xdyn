@@ -20,6 +20,7 @@ class GRPCForceModel : public ForceModel
         {
             Input();
             std::string url;
+            std::string name;
         };
 
         GRPCForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);

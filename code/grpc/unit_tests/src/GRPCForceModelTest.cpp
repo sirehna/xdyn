@@ -33,3 +33,9 @@ TEST_F(GRPCForceModelTest, can_parse_reference_frame)
     const auto input = GRPCForceModel::parse(test_data::gRPC_force_model());
     ASSERT_EQ("force-model:9002", input.url);
 }
+
+TEST_F(GRPCForceModelTest, can_parse_name)
+{
+    const auto input = GRPCForceModel::parse(test_data::gRPC_force_model());
+    ASSERT_EQ("parametric oscillator", input.name);
+}
