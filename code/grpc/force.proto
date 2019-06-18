@@ -10,6 +10,10 @@ service Force
 
 message RequiredWaveInformationRequest
 {
+        double t = 1; // Simulation time (in seconds).
+        double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+        double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+        double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
 }
 
 message RequiredWaveInformationResponse
@@ -22,12 +26,29 @@ message RequiredWaveInformationResponse
     bool directions_for_rao= 6; // Does the force model need the spatial discretization?
 }
 
+message XYTGrid // Bidimensional grid on which we want to compute the surface elevations
+{
+    repeated double x = 1; // Positions (in meters) at which we want the value of interest. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y.
+    repeated double y = 2; // Positions (in meters) at which we want the value of interest. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x.
+    double t = 3;          // Simulation time (in seconds). All values are calculated at that instant. The documentation of each waves model should describe how the phases are defined.
+}
+
 message SpectrumRequest
 {
     bool model_requires_spectrum = 1; // If set to false, x, y and t won't be initialized: this means the force model doesn't need a linear spectrum.
-    double x = 1; // Positions (in meters) at which we want the equivalent linear spectrum. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame.
-    double y = 2; // Positions (in meters) at which we want the equivalent linear spectrum. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame.
-    double t = 3; // Simulation time (in seconds). The linearization is valid at that instant. The documentation of each waves model should describe how the phases are defined.
+    double x = 2; // Positions (in meters) at which we want the equivalent linear spectrum. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame.
+    double y = 3; // Positions (in meters) at which we want the equivalent linear spectrum. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame.
+    double t = 4; // Simulation time (in seconds). The linearization is valid at that instant. The documentation of each waves model should describe how the phases are defined.
+}
+
+message SpectrumResponse
+{
+    repeated double Si = 1;                    // Discretized spectral density for each omega (should therefore be the same size as omega) (in s m^2/rad)
+    repeated double Dj = 2;                    // Spatial spreading for each psi (should therefore be the same size as psi) (in 1/rad)
+    repeated double omega = 3;                 // Angular frequencies the spectrum was discretized at (in rad/s).
+    repeated double psi = 4;                   // Directions between 0 & 2pi the spatial spreading was discretized at (in rad)
+    repeated double k = 5;                     // Discretized wave number for each frequency (should therefore be the same size as omega) in rad/m.
+    repeated PhasesForEachFrequency phase = 6; // Random phases, for each (direction,frequency) couple (but time invariant), should have the same size as psi. In radian.
 }
 
 message WaveInformation
@@ -47,35 +68,35 @@ message SetParameterRequest
 
 message SetParameterResponse
 {
-    double max_history_length = 1; // How far back should the history values in ForceRequest go?
+    double max_history_length = 1; // How far back (in seconds) should the history values in ForceRequest go?
     bool needs_wave_outputs = 2; // Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
 }
 
-message ShipStates
+message States
 {
-    repeated double t = 0; // Simulation time (in seconds).
-    repeated double x = 1; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double y = 2; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double z = 3; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double u = 4; // Projection on axis X of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double v = 5; // Projection on axis Y of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double w = 6; // Projection on axis Z of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double p = 7; // Projection on axis X of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double q = 8; //Projection on axis Y of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double r = 9; //Projection on axis Z of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double qr =10 ; //	Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qi = 11; //	First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qj = 12; //	Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qk = 13; //	Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double phi = 14; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-    repeated double theta = 15; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-    repeated double psi = 16; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-    repeated string rotations_convention = 17; // Angle convention chosen in xdyn's YAML file. Use it to check the convention is what you are expecting! Format: ["psi", "theta'", "phi''"]
+    repeated double t = 1; // Simulation time (in seconds).
+    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double u = 5; // Projection on axis X of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double v = 6; // Projection on axis Y of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double w = 7; // Projection on axis Z of the NED frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double p = 8; // Projection on axis X of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double q = 9; //Projection on axis Y of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double r = 10; //Projection on axis Z of the NED frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double qr =11 ; //	Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qi = 12; //	First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qj = 13; //	Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qk = 14; //	Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double phi = 15; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated double theta = 16; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated double psi = 17; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated string rotations_convention = 18; // Angle convention chosen in xdyn's YAML file. Use it to check the convention is what you are expecting! Format: ["psi", "theta'", "phi''"]
 }
 
 message ForceRequest
 {
-    ShipStates ship_states  = 1;
+    States states  = 1;
     map<string, double> commands = 2; // All commands known by xdyn at this timestep
     WaveInformation wave_information = 3; // Wave information that was requested by the force model
 }
@@ -113,9 +134,23 @@ message ForceResponse
     double Fx = 1;                              // Projection of the force acting on "BODY" on the X-axis of the body frame.
     double Fy = 2;                              // Projection of the force acting on "BODY" on the Y-axis of the body frame.
     double Fz = 3;                              // Projection of the force acting on "BODY" on the Z-axis of the body frame.
-    double Tx = 4;                              // Projection of the torque acting on "BODY" on the X-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
-    double Ty = 5;                              // Projection of the torque acting on "BODY" on the Y-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
-    double Tz = 6;                              // Projection of the torque acting on "BODY" on the Z-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double Mx = 4;                              // Projection of the torque acting on "BODY" on the X-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double My = 5;                              // Projection of the torque acting on "BODY" on the Y-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double Mz = 6;                              // Projection of the torque acting on "BODY" on the Z-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
     map<string, double> extra_observations = 7; // Anything we wish to serialize. Specific to each force model.
 }
 
+message PhasesForEachFrequency
+{
+    repeated double phase = 1; //!< Random phase (should have the same size as omega in SpectrumResponse. In radian.
+}
+
+message AngularFrequencies
+{
+    repeated double omegas = 1; // Angular frequencies the spectrum was discretized at (in rad/s). Used, for example, when interpolating the wave RAOs.
+}
+
+message Directions
+{
+    repeated double psis = 1; // Directions between [0, 2pi[ the spatial spreading was discretized at (in rad). Used, for example, when interpolating the wave RAOs.
+}
