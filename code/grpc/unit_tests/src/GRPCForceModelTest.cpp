@@ -48,5 +48,5 @@ TEST_F(GRPCForceModelTest, can_parse_rest_of_yaml_parameters)
               "model: grpc\n"
               "name: parametric oscillator\n"
               "url: force-model:9002"
-              , input.parameters);
+              , input.yaml);
 }
