@@ -1,11 +1,22 @@
 syntax = "proto3";
 
+import "wave_types.proto";
 
 service Force
 {
-    rpc set_parameters(SetParameterRequest)                    returns (SetParameterResponse);
-    rpc force(ForceRequest)                                    returns (ForceResponse);
-    rpc required_wave_information(RequiredWaveInformationRequest)   returns (RequiredWaveInformationResponse);
+    rpc get_commands(CommandsRequest)                             returns (CommandsResponse);
+    rpc set_parameters(SetParameterRequest)                       returns (SetParameterResponse);
+    rpc force(ForceRequest)                                       returns (ForceResponse);
+    rpc required_wave_information(RequiredWaveInformationRequest) returns (RequiredWaveInformationResponse);
+}
+
+message CommandsRequest
+{
+}
+
+message CommandsResponse
+{
+    repeated string commands = 1;
 }
 
 message RequiredWaveInformationRequest
@@ -24,31 +35,7 @@ message RequiredWaveInformationResponse
     SpectrumRequest spectrum = 4; // Point at which we want to linearize the spectrum (if necessary)
     bool angular_frequencies_for_rao = 5; // Does the force model need the angular frequencies?
     bool directions_for_rao= 6; // Does the force model need the spatial discretization?
-}
-
-message XYTGrid // Bidimensional grid on which we want to compute the surface elevations
-{
-    repeated double x = 1; // Positions (in meters) at which we want the value of interest. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y.
-    repeated double y = 2; // Positions (in meters) at which we want the value of interest. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x.
-    double t = 3;          // Simulation time (in seconds). All values are calculated at that instant. The documentation of each waves model should describe how the phases are defined.
-}
-
-message SpectrumRequest
-{
-    bool model_requires_spectrum = 1; // If set to false, x, y and t won't be initialized: this means the force model doesn't need a linear spectrum.
-    double x = 2; // Positions (in meters) at which we want the equivalent linear spectrum. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame.
-    double y = 3; // Positions (in meters) at which we want the equivalent linear spectrum. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame.
-    double t = 4; // Simulation time (in seconds). The linearization is valid at that instant. The documentation of each waves model should describe how the phases are defined.
-}
-
-message SpectrumResponse
-{
-    repeated double Si = 1;                    // Discretized spectral density for each omega (should therefore be the same size as omega) (in s m^2/rad)
-    repeated double Dj = 2;                    // Spatial spreading for each psi (should therefore be the same size as psi) (in 1/rad)
-    repeated double omega = 3;                 // Angular frequencies the spectrum was discretized at (in rad/s).
-    repeated double psi = 4;                   // Directions between 0 & 2pi the spatial spreading was discretized at (in rad)
-    repeated double k = 5;                     // Discretized wave number for each frequency (should therefore be the same size as omega) in rad/m.
-    repeated PhasesForEachFrequency phase = 6; // Random phases, for each (direction,frequency) couple (but time invariant), should have the same size as psi. In radian.
+    bool need_spectrum = 7;
 }
 
 message WaveInformation
@@ -61,12 +48,12 @@ message WaveInformation
     Directions directions_for_rao = 6; // Directions the spectrum was discretized at (if requested by the force model)
 }
 
-message SetParameterRequest
+message SetForceParameterRequest
 {
     string parameters = 1; // YAML string containing the parameters to set for this particular model.
 }
 
-message SetParameterResponse
+message SetForceParameterResponse
 {
     double max_history_length = 1; // How far back (in seconds) should the history values in ForceRequest go?
     bool needs_wave_outputs = 2; // Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
@@ -101,34 +88,6 @@ message ForceRequest
     WaveInformation wave_information = 3; // Wave information that was requested by the force model
 }
 
-message XYZTGrid // Tridimensional grid on which we wish to compute the dynamic pressure or the orbital velocity, or simply the output of the wave elevations
-{
-    repeated double x = 1; // Positions (in meters) at which we want the value of interest. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y and z.
-    repeated double y = 2; // Positions (in meters) at which we want the value of interest. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x and z.
-    repeated double z = 3; // Positions (in meters) at which we want the value of interest. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x and y.
-    double t = 4;          // Simulation time (in seconds). All values are calculated at that instant. The documentation of each waves model should describe how the phases are defined.
-}
-
-message DynamicPressuresResponse
-{
-    repeated double x = 1;    // Positions (in meters) at which the dynamic pressure was computed. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y, z and pdyn.
-    repeated double y = 2;    // Positions (in meters) at which the dynamic pressure was computed. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, z and pdyn.
-    repeated double z = 3;    // Positions (in meters) at which the dynamic pressure was computed. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, y and pdyn.
-    double t = 4;             // Simulation time (in seconds). All values were calculated at that instant. The documentation of each waves model should describe how the phases are defined.
-    repeated double pdyn = 5; // Dynamic pressure (in Pascal) for each (x,y,z) value at t. Should be the same size as x, y and z.
-}
-
-message OrbitalVelocitiesResponse
-{
-    repeated double x = 1;  // Positions (in meters) at which the orbital velocity was computed. Projected on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as y, z, vx, vy and vz.
-    repeated double y = 2;  // Positions (in meters) at which the orbital velocity was computed. Projected on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, z, vx, vy and vz.
-    repeated double z = 3;  // Positions (in meters) at which the orbital velocity was computed. Projected on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame. Should be the same size as x, y, vx, vy and vz.
-    double t = 4;           // Simulation time (in seconds). All values were calculated at that instant. The documentation of each waves model should describe how the phases are defined.
-    repeated double vx = 5; // Projection on the X-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vy and vz.
-    repeated double vy = 6; // Projection on the Y-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vx and vz.
-    repeated double vz = 7; // Projection on the Z-axis of the Earth-centered, Earth-fixed North-East-Down reference frame of the velocity of each partical. In meters per second. Should be the same size as x, y, z, vx and vy.
-}
-
 message ForceResponse
 {
     double Fx = 1;                              // Projection of the force acting on "BODY" on the X-axis of the body frame.
@@ -138,19 +97,4 @@ message ForceResponse
     double My = 5;                              // Projection of the torque acting on "BODY" on the Y-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
     double Mz = 6;                              // Projection of the torque acting on "BODY" on the Z-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
     map<string, double> extra_observations = 7; // Anything we wish to serialize. Specific to each force model.
-}
-
-message PhasesForEachFrequency
-{
-    repeated double phase = 1; //!< Random phase (should have the same size as omega in SpectrumResponse. In radian.
-}
-
-message AngularFrequencies
-{
-    repeated double omegas = 1; // Angular frequencies the spectrum was discretized at (in rad/s). Used, for example, when interpolating the wave RAOs.
-}
-
-message Directions
-{
-    repeated double psis = 1; // Directions between [0, 2pi[ the spatial spreading was discretized at (in rad). Used, for example, when interpolating the wave RAOs.
 }

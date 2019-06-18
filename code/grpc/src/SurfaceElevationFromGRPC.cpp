@@ -12,7 +12,8 @@
 #include <string>
 
 #include <grpcpp/grpcpp.h>
-#include "waves.grpc.pb.h"
+#include "wave_grpc.grpc.pb.h"
+#include "wave_types.grpc.pb.h"
 
 #include "discretize.hpp"
 #include "SurfaceElevationFromGRPC.hpp"
