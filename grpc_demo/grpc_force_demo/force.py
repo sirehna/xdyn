@@ -312,6 +312,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
 
         """
         self.model = model
+        self.wave_information_required = False
 
     def set_parameters(self, request, context):
         """Set the parameters of self.model.
@@ -329,8 +330,12 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
 
         """
         LOGGER.info('Received parameters: %s', request.parameters)
+        ret = force_pb2.SetParameterResponse()
         try:
-            self.model.set_parameters(request.parameters)
+            out = self.model.set_parameters(request.parameters)
+            ret.max_history_length = out['max_history_length']
+            ret.needs_wave_outputs = out['needs_wave_outputs']
+            self.wave_information_required = ret.needs_wave_outputs
         except KeyError as exception:
             match = closest_match(list(yaml.safe_load(request.parameters)),
                                   str(exception).replace("'", ""))
@@ -338,31 +343,31 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
                                 + str(exception)
                                 + " in the YAML. " + match)
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-            return force_pb2.SetParameterResponse(error_message=
-                                                  repr(exception))
         except Exception as exception:
             context.set_details(repr(exception))
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-            return force_pb2.SetParameterResponse(error_message=
-                                                  repr(exception))
-        return force_pb2.SetParameterResponse(error_message='')
+        return ret
 
     def force(self, request, context):
+        """Marshall force model's arguments from gRPC."""
+        response = force_pb2.ForceResponse()
         try:
-            required_wave_information =  \
-                self.model.required_wave_information(request.t, request.x,
-                                                     request.y, request.z)
+            out = model.force(request.states, request.commands,
+                              wave_information)
+            response.Fx = out['Fx']
+            response.Fy = out['Fy']
+            response.Fz = out['Fz']
+            response.Mx = out['Mx']
+            response.My = out['My']
+            response.Mz = out['Mz']
+            response.extra_observations.update(out['extra_observations'])
         except NotImplementedError as exception:
             context.set_details(repr(exception))
             context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         except Exception as exception:
             context.set_details(repr(exception))
             context.set_code(grpc.StatusCode.UNKNOWN)
-        response = force_pb2.ForceResponse()
-        response.x[:] = request.x
-        response.y[:] = request.y
-        response.z[:] = z_s
-        response.t = request.t
+        return response
 
     def required_wave_information(self, request, context):
         LOGGER.info('required_wave_information')
@@ -372,17 +377,49 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
                 required_wave_information =  \
                     self.model.required_wave_information(request.t, request.x,
                                                          request.y, request.z)
+                response.elevations.x[:] =\
+                    required_wave_information['elevations']['x']
+                response.elevations.y[:] =\
+                    required_wave_information['elevations']['y']
+                response.elevations.z[:] =\
+                    required_wave_information['elevations']['t']
+                response.elevations.t =\
+                    required_wave_information['elevations']['t']
+                response.dynamic_pressures.x[:] =\
+                    required_wave_information['dynamic_pressures']['x']
+                response.dynamic_pressures.y[:] =\
+                    required_wave_information['dynamic_pressures']['y']
+                response.dynamic_pressures.z[:] =\
+                    required_wave_information['dynamic_pressures']['z']
+                response.dynamic_pressures.t =\
+                    required_wave_information['dynamic_pressures']['t']
+                response.orbital_velocities.x[:] =\
+                    required_wave_information['orbital_velocities']['x']
+                response.orbital_velocities.y[:] =\
+                    required_wave_information['orbital_velocities']['y']
+                response.orbital_velocities.z[:] =\
+                    required_wave_information['orbital_velocities']['z']
+                response.orbital_velocities.t =\
+                    required_wave_information['orbital_velocities']['t']
+                if required_wave_information['spectrum'] is not None:
+                    response.spectrum.model_requires_spectrum = True
+                    response.spectrum.x =\
+                        required_wave_information['spectrum']['x']
+                    response.spectrum.y =\
+                        required_wave_information['spectrum']['y']
+                    response.spectrum.t =\
+                        required_wave_information['spectrum']['t']
+
+                response.angular_frequencies_for_rao =\
+                    required_wave_information['angular_frequencies_for_rao']
+                response.directions_for_rao =\
+                    required_wave_information['directions_for_rao']
             except NotImplementedError as exception:
                 context.set_details(repr(exception))
                 context.set_code(grpc.StatusCode.UNIMPLEMENTED)
             except Exception as exception:
                 context.set_details(repr(exception))
                 context.set_code(grpc.StatusCode.UNKNOWN)
-            response = waves_pb2.XYZTGrid()
-            response.x[:] = request.x
-            response.y[:] = request.y
-            response.z[:] = z_s
-            response.t = request.t
         return response
 
 
