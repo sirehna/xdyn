@@ -81,29 +81,45 @@ class Model:
         -------
         dict
             Should contain the following fields:
-            - elevations (list of dict): Each element should contain
-                - x (double) Points at which the force model requires wave
-                  elevations (projection on X-axis, in meters)
-                - y (double) Points at which the force model requires wave
-                  elevations (projection on Y-axis, in meters)
+            - elevations (dict): Each element should contain
+                - x (list of doubles) Points at which the force model requires
+                  wave elevations (projection on X-axis, in meters, expressed
+                  in the Earth-centered, Earth-fixed North-East-Down reference
+                  frame.
+                - y (list of doubles) Points at which the force model requires
+                  wave elevations (projection on Y-axis, in meters, expressed
+                  in the Earth-centered, Earth-fixed North-East-Down reference
+                  frame.
                 - t (double) Time at which the force model requires wave
                   elevations (in seconds)
-            - dynamic_pressures (list of dict): Each element should contain
-                - x (double) Points at which the force model requires dynamic
-                  pressures (projection on X-axis, in meters)
-                - y (double) Points at which the force model requires dynamic
-                  pressures (projection on Y-axis, in meters)
-                - z (double) Points at which the force model requires dynamic
-                  pressures (projection on Z-axis, in meters)
+            - dynamic_pressures (dict): Each element should contain
+                - x (list of doubles) Points at which the force model requires
+                  dynamic pressures (projection on X-axis, in meters, expressed
+                  in the Earth-centered, Earth-fixed North-East-Down reference
+                  frame.
+                - y (list of doubles) Points at which the force model requires
+                  dynamic pressures (projection on Y-axis, in meters, expressed
+                  in the Earth-centered, Earth-fixed North-East-Down reference
+                  frame.
+                - z (list of doubles) Points at which the force model requires
+                  dynamic pressures (projection on Z-axis, in meters, expressed
+                  in the Earth-centered, Earth-fixed North-East-Down reference
+                  frame.
                 - t (double) Time at which the force model requires dynamic
                   pressures (in seconds)
-            - orbital_velocities (list of dict): Each element should contain
-                - x (double) Points at which the force model requires orbital
-                  velocities (projection on X-axis, in meters)
-                - y (double) Points at which the force model requires orbital
-                  velocities (projection on Y-axis, in meters)
-                - z (double) Points at which the force model requires orbital
-                  velocities (projection on Z-axis, in meters)
+            - orbital_velocities (dict): Each element should contain
+                - x (list of doubles) Points at which the force model requires
+                  orbital velocities (projection on X-axis, in meters,
+                  expressed in the Earth-centered, Earth-fixed North-East-Down
+                  reference frame.
+                - y (list of doubles) Points at which the force model requires
+                  orbital velocities (projection on Y-axis, in meters,
+                  expressed in the Earth-centered, Earth-fixed North-East-Down
+                  reference frame.
+                - z (list of doubles) Points at which the force model requires
+                  orbital velocities (projection on Z-axis, in meters,
+                  expressed in the Earth-centered, Earth-fixed North-East-Down
+                  reference frame.
                 - t (double) Time at which the force model requires orbital
                   velocities (in seconds)
             - spectrum (dict or None): If it's a dict, should contain:
