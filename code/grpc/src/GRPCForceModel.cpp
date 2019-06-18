@@ -6,15 +6,12 @@
  */
 
 
-#include "GRPCForceModel.hpp"
-#include "Body.hpp"
 #include "yaml.h"
 #include <ssc/macros.hpp>
 #include <ssc/yaml_parser.hpp>
-
 #include <ssc/kinematics.hpp>
 
-std::string GRPCForceModel::model_name() {return "grpc force";}
+std::string GRPCForceModel::model_name() {return "grpc";}
 
 GRPCForceModel::Input::Input() :
         url(),
