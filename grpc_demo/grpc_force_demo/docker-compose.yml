@@ -1,0 +1,17 @@
+version: '3'
+services:
+  force-model:
+    build: .
+    entrypoint: ["/bin/bash", "/entrypoint.sh", "/work/harmonic_oscillator.py"]
+    working_dir: /work
+    volumes:
+    - .:/work
+    - ../../code/grpc:/proto
+  xdyn:
+    image: xdyn
+    working_dir: /data
+    entrypoint: xdyn tutorial_10_gRPC_force_model.yml --dt 0.1 --tend 1 -o tsv
+    volumes:
+    - .:/data
+    depends_on:
+    - force-model
