@@ -1,6 +1,7 @@
 """Facilitate the creation of a gRPC force model in Python."""
 from difflib import SequenceMatcher
 import logging
+import wave_types_pb2
 import force_pb2
 import force_pb2_grpc
 import time
@@ -138,6 +139,10 @@ class Model:
         """
         raise NotImplementedError(inspect.currentframe().f_code.co_name
                                   + NOT_IMPLEMENTED)
+
+    def get_commands(self):
+        """By default, a force model needs no commands."""
+        return []
 
     def force(self, states, commands, wave_information):
         """Calculate the force & torque.
@@ -313,6 +318,13 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         """
         self.model = model
         self.wave_information_required = False
+
+    def get_commands(self, _, __):
+        """Return the list of commands expected by this model."""
+        LOGGER.info('get_commands')
+        out = force_pb2.CommandsResponse()
+        out.commands[:] = self.model.get_commands()
+        return ret
 
     def set_parameters(self, request, context):
         """Set the parameters of self.model.

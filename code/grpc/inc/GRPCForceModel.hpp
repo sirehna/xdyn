@@ -10,10 +10,10 @@
 
 
 #include "EnvironmentAndFrames.hpp"
-#include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 #include <ssc/kinematics.hpp>
 
-class GRPCForceModel : public ForceModel
+class GRPCForceModel : public ControllableForceModel
 {
     public:
         struct Input
@@ -25,13 +25,15 @@ class GRPCForceModel : public ForceModel
         };
 
         GRPCForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands) const;
         static Input parse(const std::string& yaml);
         static std::string model_name();
 
     private:
         GRPCForceModel(); // Disabled
         EnvironmentAndFrames env;
+        class Impl;
+        TR1(shared_ptr)<Impl> pimpl;
 };
 
 
