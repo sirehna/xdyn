@@ -322,8 +322,9 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
     def get_commands(self, _, __):
         """Return the list of commands expected by this model."""
         LOGGER.info('get_commands')
-        out = force_pb2.CommandsResponse()
-        out.commands[:] = self.model.get_commands()
+        ret = force_pb2.CommandsResponse()
+        ret.commands[:] = self.model.get_commands()
+        LOGGER.info(ret)
         return ret
 
     def set_parameters(self, request, context):
