@@ -193,9 +193,7 @@ std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& inp
 YamlPosition get_origin_of_BODY_frame(const std::string& body_name);
 YamlPosition get_origin_of_BODY_frame(const std::string& body_name)
 {
-    YamlPosition ret;
-    ret.frame = body_name;
-    return ret;
+    return YamlPosition(YamlCoordinates(), YamlAngle(), body_name);
 }
 
 GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
