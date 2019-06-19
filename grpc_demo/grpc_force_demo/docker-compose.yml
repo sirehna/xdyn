@@ -7,6 +7,7 @@ services:
     volumes:
     - .:/work
     - ../../code/grpc:/proto
+    - ../../code/waves_grpc:/proto_waves
   xdyn:
     image: xdyn
     working_dir: /data
