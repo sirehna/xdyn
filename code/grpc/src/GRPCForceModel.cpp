@@ -137,8 +137,13 @@ class GRPCForceModel::Impl
             : input(input_)
             , stub(Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials())))
         {
+            set_parameters(input.yaml);
+        }
+
+        void set_parameters(const std::string& yaml) const
+        {
             SetParameterRequest request;
-            request.set_parameters(input.yaml);
+            request.set_parameters(yaml);
             SetParameterResponse response;
             grpc::ClientContext context;
             const grpc::Status status = stub->set_parameters(&context, request, &response);
