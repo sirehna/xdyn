@@ -12,6 +12,7 @@
 #include "DefaultSurfaceElevation.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
+#include "GRPCForceModel.hpp"
 #include "JonswapSpectrum.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
 #include "stl_reader.hpp"
@@ -67,7 +68,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<GMForceModel>()
            .can_parse<KtKqForceModel>()
            .can_parse<ConstantForceModel>()
-           .can_parse<LinearHydrostaticForceModel>();
+           .can_parse<LinearHydrostaticForceModel>()
+           .can_parse<GRPCForceModel>();
     return builder;
 }
 
