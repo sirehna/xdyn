@@ -349,7 +349,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
 
         """
         LOGGER.info('Received parameters: %s', request.parameters)
-        ret = force_pb2.SetParameterResponse()
+        ret = force_pb2.SetForceParameterResponse()
         try:
             out = self.model.set_parameters(request.parameters)
             ret.max_history_length = out['max_history_length']
