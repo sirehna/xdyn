@@ -53,7 +53,13 @@ class Model:
 
         Returns
         -------
-        True if the force model needs wave data, False otherwise.
+        dict containing the following fields:
+        - max_history_length (double): How many seconds of state history does
+          this model need? 0 means we just need the latest value (at t).
+        - needs_wave_outputs (bool): True if the model requires wave
+          information (elevations, dynamic pressures or orbital velocities²)
+          (in which case method 'required_wave_information' will be called).
+          False otherwise.
 
         """
         raise NotImplementedError(inspect.currentframe().f_code.co_name
