@@ -184,6 +184,12 @@ class FromGRPC
             std::copy(response.elevations().y().begin(), response.elevations().y().end(), std::back_inserter(ret.elevations.y));
             ret.need_spectrum = response.need_spectrum();
             ret.orbital_velocities.t = response.orbital_velocities().t();
+            ret.orbital_velocities.x.reserve(response.orbital_velocities().x_size());
+            std::copy(response.orbital_velocities().x().begin(), response.orbital_velocities().x().end(), std::back_inserter(ret.orbital_velocities.x));
+            ret.orbital_velocities.y.reserve(response.orbital_velocities().y_size());
+            std::copy(response.orbital_velocities().y().begin(), response.orbital_velocities().y().end(), std::back_inserter(ret.orbital_velocities.y));
+            ret.orbital_velocities.z.reserve(response.orbital_velocities().z_size());
+            std::copy(response.orbital_velocities().z().begin(), response.orbital_velocities().z().end(), std::back_inserter(ret.orbital_velocities.z));
             ret.spectrum.t = response.spectrum().t();
             ret.spectrum.x = response.spectrum().x();
             ret.spectrum.y = response.spectrum().y();
@@ -201,6 +207,7 @@ class FromGRPC
             ret(5) = response.mz();
             return ret;
         }
+
 };
 
 class ToGRPC
