@@ -180,7 +180,7 @@ class SurfaceElevationFromGRPC::Impl
             return ret;
         }
 
-        ssc::kinematics::Point orbital_velocities(const std::vector<double>& x, const std::vector<double>& y, const std::vector<double>& z, const double t)
+        ssc::kinematics::PointMatrix orbital_velocities(const std::vector<double>& x, const std::vector<double>& y, const std::vector<double>& z, const double t)
         {
             XYZTGrid request;
             *request.mutable_x() = {x.begin(),x.end()};
@@ -210,7 +210,13 @@ class SurfaceElevationFromGRPC::Impl
             std::copy(response.vx().begin(), response.vx().end(), std::back_inserter(vx));
             std::copy(response.vy().begin(), response.vy().end(), std::back_inserter(vy));
             std::copy(response.vz().begin(), response.vz().end(), std::back_inserter(vz));
-            ssc::kinematics::Point ret("NED", vx.front(), vy.front(), vz.front());
+            ssc::kinematics::PointMatrix ret("NED", response.vx_size());
+            for (int i = 0 ; i < response.vx_size() ; ++i)
+            {
+                ret.m(0, i) = response.vx(i);
+                ret.m(1, i) = response.vy(i);
+                ret.m(2, i) = response.vz(i);
+            }
             return ret;
         }
 
@@ -385,14 +391,25 @@ std::vector<double> SurfaceElevationFromGRPC::dynamic_pressure(const double , //
   *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 75
   *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
   */
-ssc::kinematics::Point SurfaceElevationFromGRPC::orbital_velocity(const double ,   //!< gravity (in m/s^2) (not used for gRPC)
+ssc::kinematics::Point SurfaceElevationFromGRPC::orbital_velocity(const double g,   //!< gravity (in m/s^2) (not used for gRPC)
                                         const double x,   //!< x-position in the NED frame (in meters)
                                         const double y,   //!< y-position in the NED frame (in meters)
                                         const double z,   //!< z-position in the NED frame (in meters)
                                         const double t,   //!< Current time instant (in seconds)
-                                        const double   //!< Wave height at x,y,t (in meters) (not used for gRPC)
+                                        const double eta  //!< Wave height at x,y,t (in meters) (not used for gRPC)
                                         ) const
 {
-    return pimpl->orbital_velocities({x}, {y}, {z}, t);
+    const ssc::kinematics::PointMatrix Ps = this->orbital_velocity(g, std::vector<double>(1,x), std::vector<double>(1,y), std::vector<double>(1,z), t, std::vector<double>(1,eta));
+    return ssc::kinematics::Point(Ps.get_frame(), Ps.m(0,0), Ps.m(1,0), Ps.m(2,0));
+}
 
+ssc::kinematics::PointMatrix SurfaceElevationFromGRPC::orbital_velocity(const double ,                //!< gravity (in m/s^2)
+                                              const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+                                              const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+                                              const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+                                              const double t,                //!< Current time instant (in seconds)
+                                              const std::vector<double>& //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                             ) const
+{
+    return pimpl->orbital_velocities(x, y, z, t);
 }

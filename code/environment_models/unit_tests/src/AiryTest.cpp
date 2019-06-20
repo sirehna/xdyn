@@ -292,20 +292,21 @@ TEST_F(AiryTest, norm_of_orbital_velocity_should_only_depend_on_z)
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
     const Airy wave(A, phi);
 
-    ssc::kinematics::Point V;
-    for (double z = 100 ; z < 200 ; z+=100)
+    std::vector<double> x{0};
+    std::vector<double> y{0};
+    std::vector<double> z{100};
+    std::vector<double> eta{0};
+
+    ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g,x,y,z,t,eta);
+    const double ref = std::sqrt(V.m(0,0)*V.m(0,0) + V.m(1,0)*V.m(1,0) + V.m(2,0)*V.m(2,0));
+
+    for (size_t i = 0 ; i < 100 ; ++i)
     {
-        double x=0; double y=0;
-        ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t,0);
-        const double ref = std::sqrt(V.x()*V.x() + V.y()*V.y() + V.z()*V.z());
-        for (size_t i = 0 ; i < 100 ; ++i)
-        {
-            x = a.random<double>().between(-100,100);
-            y = a.random<double>().between(-100,100);
-            V = wave.orbital_velocity(g,x,y,z,t,0);
-            const double norm = std::sqrt(V.x()*V.x() + V.y()*V.y() + V.z()*V.z());
-            ASSERT_NEAR(ref, norm, EPS);
-        }
+        x.at(0) = a.random<double>().between(-100,100);
+        y.at(0) = a.random<double>().between(-100,100);
+        V = wave.get_orbital_velocity(g,x,y,z,t,eta);
+        const double norm = std::sqrt(V.m(0,0)*V.m(0,0) + V.m(1,0)*V.m(1,0) + V.m(2,0)*V.m(2,0));
+        ASSERT_NEAR(ref, norm, EPS);
     }
 }
 
@@ -329,43 +330,39 @@ TEST_F(AiryTest, orbital_velocity_non_regression_test)
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
     const Airy wave(A, phi);
 
-    ssc::kinematics::Point V;
-    double x=-0.1; double y=0; double z=0.2;
-    V = wave.orbital_velocity(g,x,y,z,t,0);
+    ssc::kinematics::PointMatrix V;
+
+    std::vector<double> x{-0.1, 0.1, 0, 0, 0, 0};
+    std::vector<double> y{0, 0, -0.1, 0.1, 0, 0};
+    std::vector<double> z{0.2, 0.2, 0.2, 0.2, 0.1, 0.3};
+    std::vector<double> eta{0, 0, 0, 0, 0, 0};
+    
+    V = wave.get_orbital_velocity(g,x,y,z,t,eta);
     ASSERT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013625903643418017, V.x(), EPS);
-    EXPECT_NEAR(-0.023600757409437876, V.y(), EPS);
-    EXPECT_NEAR(0.054396641584981066, V.z(), EPS);
-    x=0.1;y=0;z=0.2;
-    V = wave.orbital_velocity(g,x,y,z,t,0);
-    EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013186340021821508, V.x(), EPS);
-    EXPECT_NEAR(-0.022839410883673743, V.y(), EPS);
-    EXPECT_NEAR(0.054828253332012813, V.z(), EPS);
-    x=0;y=-0.1;z=0.2;
-    V = wave.orbital_velocity(g,x,y,z,t,0);
-    EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013785918416543868, V.x(), EPS);
-    EXPECT_NEAR(-0.02387791112645346, V.y(), EPS);
-    EXPECT_NEAR(0.054235130955620707, V.z(), EPS);
-    x=0;y=0.1;z=0.2;
-    V = wave.orbital_velocity(g,x,y,z,t,0);
-    EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013024588330772734, V.x(), EPS);
-    EXPECT_NEAR(-0.022559248736567082, V.y(), EPS);
-    EXPECT_NEAR(0.054982688288036041, V.z(), EPS);
-    x=0;y=0;z=0.1;
-    V = wave.orbital_velocity(g,x,y,z,t,0);
-    EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013624110585758166, V.x(), EPS);
-    EXPECT_NEAR(-0.023597651742470114, V.y(), EPS);
-    EXPECT_NEAR(0.055500467086839214, V.z(), EPS);
-    x=0;y=0;z=0.3;
-    V = wave.orbital_velocity(g,x,y,z,t,0);
-    EXPECT_EQ("NED", V.get_frame());
-    EXPECT_NEAR(-0.013192475538380495, V.x(), EPS);
-    EXPECT_NEAR(-0.022850037910084588, V.y(), EPS);
-    EXPECT_NEAR(0.053742117681957483, V.z(), EPS);
+
+    EXPECT_NEAR(-0.013625903643418017, V.m(0,0), EPS);
+    EXPECT_NEAR(-0.023600757409437876, V.m(1,0), EPS);
+    EXPECT_NEAR(0.054396641584981066, V.m(2,0), EPS);
+
+    EXPECT_NEAR(-0.013186340021821508, V.m(0,1), EPS);
+    EXPECT_NEAR(-0.022839410883673743, V.m(1,1), EPS);
+    EXPECT_NEAR(0.054828253332012813, V.m(2,1), EPS);
+
+    EXPECT_NEAR(-0.013785918416543868, V.m(0,2), EPS);
+    EXPECT_NEAR(-0.02387791112645346, V.m(1,2), EPS);
+    EXPECT_NEAR(0.054235130955620707, V.m(2,2), EPS);
+
+    EXPECT_NEAR(-0.013024588330772734, V.m(0,3), EPS);
+    EXPECT_NEAR(-0.022559248736567082, V.m(1,3), EPS);
+    EXPECT_NEAR(0.054982688288036041, V.m(2,3), EPS);
+
+    EXPECT_NEAR(-0.013624110585758166, V.m(0,4), EPS);
+    EXPECT_NEAR(-0.023597651742470114, V.m(1,4), EPS);
+    EXPECT_NEAR(0.055500467086839214, V.m(2,4), EPS);
+
+    EXPECT_NEAR(-0.013192475538380495, V.m(0,5), EPS);
+    EXPECT_NEAR(-0.022850037910084588, V.m(1,5), EPS);
+    EXPECT_NEAR(0.053742117681957483, V.m(2,5), EPS);
 }
 
 TEST_F(AiryTest, orbital_velocity_sanity_check)
@@ -392,12 +389,13 @@ TEST_F(AiryTest, orbital_velocity_sanity_check)
     {
         const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
         const Airy wave(A, a.random<double>().between(-PI,PI));
-        const double x=a.random<double>().between(-100,100);
-        const double y=a.random<double>().between(-100,100);
-        const double z=a.random<double>().between(2,5);
-        const ssc::kinematics::Point V = wave.orbital_velocity(g,x,y,z,t,0);
-        ASSERT_NEAR(std::abs(cos(psi)),std::abs(V.x()/hypot(V.x(),V.y())), EPS) << "i = " << i;
-        ASSERT_NEAR(std::abs(sin(psi)),std::abs(V.y()/hypot(V.x(),V.y())), EPS) << "i = " << i;
+        const std::vector<double> x {a.random<double>().between(-100,100)};
+        const std::vector<double> y {a.random<double>().between(-100,100)};
+        const std::vector<double> z {a.random<double>().between(2,5)};
+        const std::vector<double> eta {0};
+        const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g,x,y,z,t,eta);
+        ASSERT_NEAR(std::abs(cos(psi)),std::abs(V.m(0,0)/hypot(V.m(0,0),V.m(1,0))), EPS) << "i = " << i;
+        ASSERT_NEAR(std::abs(sin(psi)),std::abs(V.m(1,0)/hypot(V.m(0,0),V.m(1,0))), EPS) << "i = " << i;
     }
 }
 
@@ -427,11 +425,13 @@ TEST_F(AiryTest, orbital_velocity_and_elevation_should_have_opposite_signs)
         const Airy wave(A, a.random<double>().between(-PI,PI));
         const std::vector<double> x{a.random<double>().between(-100,100)};
         const std::vector<double> y{a.random<double>().between(-100,100)};
-        const double z=a.random<double>().between(2,5);
-        const ssc::kinematics::Point V = wave.orbital_velocity(g, x.at(0), y.at(0), z, t, 0);
-        const double eta = wave.get_elevation(x, y, t).at(0);
-        ASSERT_LE(V.x()*eta,0);
-        ASSERT_LE(V.y()*eta,0);
+        const std::vector<double> z{a.random<double>().between(2,5)};
+
+        const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, x, y, z, t, std::vector<double>{0});
+        const std::vector<double> eta = wave.get_elevation(x, y, t);
+
+        ASSERT_LE(V.m(0,0)*eta.at(0), 0);
+        ASSERT_LE(V.m(1,0)*eta.at(0), 0);
     }
 
 }
@@ -558,24 +558,22 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const std::vector<double> x(2, a.random<double>().between(-10, 10));
     const std::vector<double> y(2, a.random<double>().between(-10, 10));
     const std::vector<double> z{1, 30};
-    const std::vector<double> eta = wave.get_elevation(x, y, t);
-    
-    const ssc::kinematics::Point V1 = wave.orbital_velocity(g, x.at(0), y.at(0), z.at(0), t, eta.at(0));
-    const ssc::kinematics::Point V2 = wave.orbital_velocity(g, x.at(1), y.at(1), z.at(1), t, eta.at(1));
 
+    const std::vector<double> eta = wave.get_elevation(x, y, t);
+    const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, x, y, z, t, eta);
     const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, x, y, z, eta, t);
 
     const double eps=1E-6;
 
-    ASSERT_NEAR(cosh(k * (h - z.at(0))) / cosh(k * (h - z.at(1))), ((double)V1.v(0)) / ((double)V2.v(0)), eps);
+    ASSERT_NEAR(cosh(k * (h - z.at(0))) / cosh(k * (h - z.at(1))), ((double)V.m(0,0)) / ((double)V.m(0,1)), eps);
     ASSERT_NEAR(cosh(k * (h - z.at(0))) / cosh(k * (h - z.at(1))), pdyn.at(0) / pdyn.at(1), eps);
     ASSERT_LT(0, rho * g * z.at(0) + pdyn.at(0));
     ASSERT_LT(0, rho * g * z.at(1) + pdyn.at(1));
     ASSERT_LT(std::abs(pdyn.at(1)), std::abs(pdyn.at(0)));
-    ASSERT_LE(std::abs((double)V2.v(0)), std::abs((double)V1.v(0)));
-    ASSERT_LE(std::abs((double)V2.v(1)), std::abs((double)V1.v(1)));
-    ASSERT_LE(std::abs((double)V2.v(2)), std::abs((double)V1.v(2)));
-    ASSERT_NEAR(sinh(k * (h - z.at(0))) / sinh(k * (h - z.at(1))), ((double)V1.v(2)) / ((double)V2.v(2)), eps);
+    ASSERT_LE(std::abs((double)V.m(0,1)), std::abs((double)V.m(0,0)));
+    ASSERT_LE(std::abs((double)V.m(1,1)), std::abs((double)V.m(1,0)));
+    ASSERT_LE(std::abs((double)V.m(2,1)), std::abs((double)V.m(2,0)));
+    ASSERT_NEAR(sinh(k * (h - z.at(0))) / sinh(k * (h - z.at(1))), ((double)V.m(2,0)) / ((double)V.m(2,1)), eps);
 }
 
 TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_depth_in_infinite_depth)
@@ -608,8 +606,7 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const std::vector<double> z{4, 30};
 
     const std::vector<double> eta = wave.get_elevation(x, y, t);
-    const ssc::kinematics::Point V1 = wave.orbital_velocity(g, x.at(0), y.at(0), z.at(0), t, eta.at(0));
-    const ssc::kinematics::Point V2 = wave.orbital_velocity(g, x.at(1), y.at(1), z.at(1), t, eta.at(1));
+    const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, x, y, z, t, eta);
     const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, x, y, z, eta, t);
     const double ptot1 = rho * g * z.at(0) + pdyn.at(0);
     const double ptot2 = rho * g * z.at(1) + pdyn.at(1);
@@ -620,12 +617,12 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     ASSERT_LT(0, ptot1);
     ASSERT_LT(0, ptot2);
     ASSERT_LT(std::abs(pdyn.at(1)), std::abs(pdyn.at(0)));
-    ASSERT_NEAR(exp(-k * z.at(0)) / exp(-k * z.at(1)), ((double)V1.v(0)) / ((double)V2.v(0)), eps);
+    ASSERT_NEAR(exp(-k * z.at(0)) / exp(-k * z.at(1)), ((double)V.m(0,0)) / ((double)V.m(0,1)), eps);
     ASSERT_NEAR(exp(-k * z.at(0)) / exp(-k * z.at(1)), pdyn.at(0) / pdyn.at(1), eps);
-    ASSERT_LE(std::abs((double)V2.v(0)),std::abs((double)V1.v(0)));
-    ASSERT_LE(std::abs((double)V2.v(1)),std::abs((double)V1.v(1)));
-    ASSERT_LE(std::abs((double)V2.v(2)),std::abs((double)V1.v(2)));
-    ASSERT_NEAR(exp(-k * z.at(0)) / exp(-k * z.at(1)), ((double)V1.v(2)) / ((double)V2.v(2)), eps);
+    ASSERT_LE(std::abs((double)V.m(0,1)),std::abs((double)V.m(0,0)));
+    ASSERT_LE(std::abs((double)V.m(1,1)),std::abs((double)V.m(1,0)));
+    ASSERT_LE(std::abs((double)V.m(2,1)),std::abs((double)V.m(2,0)));
+    ASSERT_NEAR(exp(-k * z.at(0)) / exp(-k * z.at(1)), ((double)V.m(2,0)) / ((double)V.m(2,1)), eps);
 }
 
 TEST_F(AiryTest, total_pressure_should_always_be_positive_in_finite_depth)
@@ -726,17 +723,19 @@ TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_wat
 
     for (size_t i = 0 ; i < 100 ; ++i)
     {
-        const std::vector<double> x(2, a.random<double>().between(-100, 100));
-        const std::vector<double> y(2, a.random<double>().between(-100, 100));
+        const std::vector<double> x(3, a.random<double>().between(-100, 100));
+        const std::vector<double> y(3, a.random<double>().between(-100, 100));
         const std::vector<double> eta = wave.get_elevation(x, y, t);
-        const std::vector<double> z{eta.at(0) - 0.1, h + 0.1};
+        const std::vector<double> z{eta.at(0) - 0.1, h + 0.1, h};
+
         const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, x, y, z, eta, t);
+        const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, x, y, z, t, eta);
+        
         ASSERT_DOUBLE_EQ(0, pdyn.at(0));
         ASSERT_DOUBLE_EQ(0, pdyn.at(1));
-        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g, x.at(0), y.at(0), z.at(0), t, eta.at(0)).v.norm());
-        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g, x.at(1), y.at(1), z.at(1), t, eta.at(1)).v.norm());
-        const auto V = wave.orbital_velocity(g, x.at(0), y.at(0), h, t, eta.at(0)).v;
-        ASSERT_DOUBLE_EQ(0, (double)V(2)); // Sea bed is impervious
+        ASSERT_DOUBLE_EQ(0, V.m.col(0).norm());
+        ASSERT_DOUBLE_EQ(0, V.m.col(1).norm());
+        ASSERT_DOUBLE_EQ(0, (double)V.m(2,2)); // Sea bed is impervious
     }
 }
 
@@ -771,6 +770,6 @@ TEST_F(AiryTest, get_dynamic_pressure_and_orbital_velocities_should_be_0_above_w
         const std::vector<double> eta = wave.get_elevation(x, y, t);
         const std::vector<double> z{eta.at(0) - 0.1};
         ASSERT_DOUBLE_EQ(0, wave.get_dynamic_pressure(rho, g, x, y, z, eta, t).at(0));
-        ASSERT_DOUBLE_EQ(0, wave.orbital_velocity(g, x.at(0), y.at(0), z.at(0), t, eta.at(0)).v.norm());
+        ASSERT_DOUBLE_EQ(0, wave.get_orbital_velocity(g, x, y, z, t, eta).m.col(0).norm());
     }
 }

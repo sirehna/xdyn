@@ -71,7 +71,7 @@ ssc::kinematics::PointMatrix SurfaceElevationInterface::get_points_on_free_surfa
         x[i] = (double)ret.m(0, i);
         y[i] = (double)ret.m(1, i);
     }
-    const std::vector<double> wave_height_ = wave_height(x, y, t);
+    const std::vector<double> wave_height_ = get_wave_height(x, y, t);
     for (size_t i = 0; i < n; ++i)
     {
         ret.m(2, i) = wave_height_.at(i);
@@ -106,7 +106,7 @@ void SurfaceElevationInterface::update_surface_elevation(
         x[i] = (double)OP.m(0, i);
         y[i] = (double)OP.m(1, i);
     }
-    surface_elevation_for_each_point_in_mesh = wave_height(x, y, t);
+    surface_elevation_for_each_point_in_mesh = get_wave_height(x, y, t);
     for (size_t i = 0; i < n; ++i)
     {
         relative_wave_height_for_each_point_in_mesh[i] = (double)OP.m(2, i) - surface_elevation_for_each_point_in_mesh.at(i);
@@ -124,16 +124,34 @@ double SurfaceElevationInterface::evaluate_rao(
     return 0;
 }
 
-ssc::kinematics::Point SurfaceElevationInterface::orbital_velocity(
-        const double ,   //!< gravity (in m/s^2)
-        const double ,   //!< x-position in the NED frame (in meters)
-        const double ,   //!< y-position in the NED frame (in meters)
-        const double ,   //!< z-position in the NED frame (in meters)
-        const double ,   //!< current instant (in seconds)
-        const double     //!< Wave elevation at (x,y) in the NED frame (in meters)
-        ) const
+std::vector<double> SurfaceElevationInterface::get_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                                               const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                                               const double t                //!< Current instant (in seconds)
+                                                              ) const
 {
-    return ssc::kinematics::Point("NED", 0, 0, 0);
+    if (x.size() != y.size())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating surface elevation: the x and y vectors don't have the same size (size of x: "
+            << x.size() << ", size of y: " << y.size() << ")");
+    }
+    return wave_height(x,y,t);
+}
+
+ssc::kinematics::PointMatrix SurfaceElevationInterface::get_orbital_velocity(
+    const double g,                //!< gravity (in m/s^2)
+    const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+    const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+    const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+    const double t,                //!< current instant (in seconds)
+    const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+    ) const
+{
+    if (x.size() != y.size() || x.size() != z.size() || x.size() != eta.size())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating orbital velocity: the x, y, z and eta vectors don't have the same size (size of x: "
+            << x.size() << ", size of y: " << y.size() << ", size of z: " << z.size() << ", size of eta: " << eta.size() << ")");
+    }
+    return orbital_velocity(g, x, y, z, t, eta);
 }
 
 std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_directions_for_each_model() const

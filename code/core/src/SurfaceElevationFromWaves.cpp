@@ -6,7 +6,6 @@
  */
 
 #include "SurfaceElevationFromWaves.hpp"
-#include "InternalErrorException.hpp"
 
 #include <ssc/exception_handling.hpp>
 
@@ -42,10 +41,6 @@ std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<dou
                                                            const double t                //!< Current instant (in seconds)
                                                            ) const
 {
-    if (x.size() != y.size())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Error when calculating surface elevation from waves: the x and y vectors don't have the same size (size of x: " << x.size() << ", size of y: " << y.size() << ")");
-    }
     std::vector<double> zwave(x.size(), 0);
 
     for (const auto directional_spectrum:directional_spectra)
@@ -127,21 +122,23 @@ std::vector<double> SurfaceElevationFromWaves::dynamic_pressure(const double rho
     return pdyn;
 }
 
-ssc::kinematics::Point SurfaceElevationFromWaves::orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                                                   const double x,   //!< x-position in the NED frame (in meters)
-                                                                   const double y,   //!< y-position in the NED frame (in meters)
-                                                                   const double z,   //!< z-position in the NED frame (in meters)
-                                                                   const double t,   //!< z-position in the NED frame (in meters)
-                                                                   const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                                                   ) const
+ssc::kinematics::PointMatrix SurfaceElevationFromWaves::orbital_velocity(const double g,                //!< gravity (in m/s^2)
+                                                                         const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+                                                                         const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+                                                                         const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+                                                                         const double t,                //!< Current time instant (in seconds)
+                                                                         const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                                        ) const
 {
-    ssc::kinematics::Point Vwaves("NED", 0, 0, 0);
-    for (auto model:directional_spectra)
+    ssc::kinematics::PointMatrix Vwaves(ssc::kinematics::Matrix3Xd::Zero(3,x.size()), "NED");
+    for (auto spectrum:directional_spectra)
     {
-        auto vw = model->orbital_velocity(g, x, y, z, t, eta);
-        Vwaves.x() += vw.x();
-        Vwaves.y() += vw.y();
-        Vwaves.z() += vw.z();
+        ssc::kinematics::PointMatrix vw = spectrum->get_orbital_velocity(g, x, y, z, t, eta);
+        for (int i = 0; i < vw.m.cols(); ++i) {
+            Vwaves.m(0, i) += vw.m(0, i);
+            Vwaves.m(1, i) += vw.m(1, i);
+            Vwaves.m(2, i) += vw.m(2, i);
+        }
     }
     return Vwaves;
 }

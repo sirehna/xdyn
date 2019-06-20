@@ -106,7 +106,7 @@ TEST_F(SurfaceElevationFromWavesTest, relative_wave_height)
         const ssc::kinematics::Point P("NED", a.random<double>(), a.random<double>(), a.random<double>());
         const std::vector<double> x{P.x()};
         const std::vector<double> y{P.y()};
-        ASSERT_NEAR(-Hs/2*sin(-2*PI/Tp*t + k_*(x.at(0)*cos(psi0)+y.at(0)*sin(psi0)) +phi), wave.wave_height(x, y, t).at(0), 1E-5);
+        ASSERT_NEAR(-Hs/2*sin(-2*PI/Tp*t + k_*(x.at(0)*cos(psi0)+y.at(0)*sin(psi0)) +phi), wave.get_wave_height(x, y, t).at(0), 1E-5);
     }
 //! [SurfaceElevationFromWavesTest relative_wave_height expected output]
 }
@@ -144,14 +144,15 @@ TEST_F(SurfaceElevationFromWavesTest, orbital_velocity)
     ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     SurfaceElevationFromWaves wave(get_model());
     const double g = 4.57;
-    const double x = 3.7;
-    const double y = 5.3;
-    const double z = 1.62;
+    const std::vector<double> x {3.7};
+    const std::vector<double> y {5.3};
+    const std::vector<double> z {1.62};
+    const std::vector<double> eta {0};
     const double t = 664.2;
-    ssc::kinematics::Point v = wave.orbital_velocity(g, x, y, z, t, 0);
-    EXPECT_NEAR(0.25451004448140752, v.x(),1e-10);
-    EXPECT_NEAR(0.25451004448140752, v.y(),1e-10);
-    EXPECT_NEAR(0.1991307825735438, v.z(),1e-10);
+    ssc::kinematics::PointMatrix v = wave.get_orbital_velocity(g, x, y, z, t, eta);
+    EXPECT_NEAR(0.25451004448140752, v.m(0,0),1e-10);
+    EXPECT_NEAR(0.25451004448140752, v.m(1,0),1e-10);
+    EXPECT_NEAR(0.1991307825735438, v.m(2,0),1e-10);
 }
 
 TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
@@ -216,7 +217,7 @@ TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure_plus_hydrostatic)
     const std::vector<double> y{P1.y(), P2.y(), P3.y(), P4.y(), P5.y()};
     const double t = 0;
 
-    const std::vector<double> wave_height = wave.wave_height(x, y, t);
+    const std::vector<double> wave_height = wave.get_wave_height(x, y, t);
     const std::vector<double> pdyn = wave.get_dynamic_pressure(rho, g, M, k, wave_height, t);
 
     const double EPS = 1E-4;

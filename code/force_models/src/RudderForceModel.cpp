@@ -237,10 +237,11 @@ ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states
     const ssc::kinematics::Point P("NED", -P.v);
     const std::vector<double> x{P.x()};
     const std::vector<double> y{P.y()};
-    double eta = 0;
+    const std::vector<double> z{P.z()};
+    std::vector<double> eta;
     try
     {
-        eta = env.w->wave_height(x, y, t).at(0);
+        eta = env.w->get_wave_height(x, y, t);
     }
     catch (const ssc::exception_handling::Exception& e)
     {
@@ -248,21 +249,12 @@ ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states
     }
     try
     {
-        ssc::kinematics::Point Vwater_ground;
-        try
-        {
-            Vwater_ground = env.w->orbital_velocity(env.g, P.x(), P.y(), P.z(), t, eta);
-        }
-        catch (const ssc::exception_handling::Exception& e)
-        {
-            THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the propeller+rudder force model which needs the orbital velocity on the rudder. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
-        }
-        const ssc::kinematics::Point Vship_ground(rudder_position.get_frame(), states.u(), states.v(),states.w());
-        const ssc::kinematics::Point Vship_water("NED", Vship_ground.x() - Vwater_ground.x(),
-                                                        Vship_ground.y() - Vwater_ground.y(),
-                                                        Vship_ground.z() - Vwater_ground.z());
+        const ssc::kinematics::PointMatrix Vwater_ground = env.w->get_orbital_velocity(env.g, x, y, z, t, eta);
+        const ssc::kinematics::Point Vship_ground(rudder_position.get_frame(), states.u(), states.v(), states.w());
+        const ssc::kinematics::Point Vship_water("NED", Vship_ground.x() - Vwater_ground.m(0,0),
+                                                        Vship_ground.y() - Vwater_ground.m(1,0),
+                                                        Vship_ground.z() - Vwater_ground.m(2,0));
         const auto Vwater_ground_projected_in_body = Tbody2ned.get_rot()*Vship_water.v;
-
         return ssc::kinematics::Point(rudder_position.get_frame(), Vwater_ground_projected_in_body);
     }
     catch (const ssc::exception_handling::Exception& e)

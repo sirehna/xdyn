@@ -72,24 +72,22 @@ class SurfaceElevationInterface
                                     const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
                                    ) const;
 
-        /**  \author cec
-          *  \date Feb 3, 2015, 10:06:45 AM
-          *  \brief Orbital velocity
-          *  \returns Velocity of the fluid at a given point & instant, in m/s
+        /**  \brief Computes the orbital velocity at given points.
+          *  \returns Velocity of the fluid at given points & instant, in m/s
           */
-        virtual ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                                        const double x,   //!< x-position in the NED frame (in meters)
-                                                        const double y,   //!< y-position in the NED frame (in meters)
-                                                        const double z,   //!< z-position in the NED frame (in meters)
-                                                        const double t,   //!< z-position in the NED frame (in meters)
-                                                        const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
-                                                       ) const;
-
+        ssc::kinematics::PointMatrix get_orbital_velocity(const double g,                //!< gravity (in m/s^2)
+                                                          const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+                                                          const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+                                                          const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+                                                          const double t,                //!< Current time instant (in seconds)
+                                                          const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                         ) const;
+        
         virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
         virtual std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
 
-        /**  \brief Computes the dynamic pressure at a given point.
-          *  \details The input point P can be projected into any reference
+        /**  \brief Computes the dynamic pressure at given points.
+          *  \details The input point matrix P can be projected into any reference
           *           frame: this method will request a transform from a
           *           Kinematics object to express it in the NED frame.
           *  \returns Pdyn (in Pascal)
@@ -138,6 +136,19 @@ class SurfaceElevationInterface
                 const ssc::kinematics::PointMatrixPtr& Mned   //!< Output mesh in NED frame
                 ) const;
 
+        /**  \brief Computes the surface elevation at given points.
+          *  \returns Surface elevations of a list of points at a given instant, in meters.
+          *  \returns zwave - z
+          */
+        std::vector<double> get_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                            const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+                                            const double t                //!< Current instant (in seconds)
+                                           ) const;
+
+        virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
+
+
+      private:
         /**  \brief Surface elevation
               *  \returns Surface elevations of a list of points at a given instant, in meters.
               *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
@@ -151,8 +162,19 @@ class SurfaceElevationInterface
                                                 const double t                //!< Current instant (in seconds)
                                                 ) const = 0;
 
-        virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
-      private:
+        /**  \author cec
+          *  \date Feb 3, 2015, 10:06:45 AM
+          *  \brief Orbital velocity
+          *  \returns Velocity of the fluid at given points & instant, in m/s
+          */
+        virtual ssc::kinematics::PointMatrix orbital_velocity(const double g,                //!< gravity (in m/s^2)
+                                                              const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+                                                              const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+                                                              const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+                                                              const double t,                //!< Current time instant (in seconds)
+                                                              const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                             ) const = 0;
+
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (DNV), "unsteady pressure" (Faltinsen) or constant pressure contour (Lloyd)
           *           The dynamic pressure is in fact one of the terms of Bernoulli's equation, which can be derived from the conservation

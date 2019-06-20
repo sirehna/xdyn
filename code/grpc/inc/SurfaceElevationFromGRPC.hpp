@@ -77,13 +77,30 @@ class SurfaceElevationFromGRPC : public SurfaceElevationInterface
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 75
           *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
           */
-        ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
-                                                const double x,   //!< x-position in the NED frame (in meters)
-                                                const double y,   //!< y-position in the NED frame (in meters)
-                                                const double z,   //!< z-position in the NED frame (in meters)
-                                                const double t,   //!< Current time instant (in seconds)
-                                                const double eta  //!< Wave height at x,y,t (in meters)
-                                                ) const;
+        /**  \author cec
+          *  \date Feb 3, 2015, 10:06:45 AM
+          *  \brief Orbital velocity
+          *  \returns Velocity of the fluid at a given point & instant, in m/s
+          */
+        virtual ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
+                                                        const double x,   //!< x-position in the NED frame (in meters)
+                                                        const double y,   //!< y-position in the NED frame (in meters)
+                                                        const double z,   //!< z-position in the NED frame (in meters)
+                                                        const double t,   //!< z-position in the NED frame (in meters)
+                                                        const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
+                                                       ) const;
+        /**  \author cec
+          *  \date Feb 3, 2015, 10:06:45 AM
+          *  \brief Orbital velocity
+          *  \returns Velocity of the fluid at given points & instant, in m/s
+          */
+        virtual ssc::kinematics::PointMatrix orbital_velocity(const double g,                //!< gravity (in m/s^2)
+                                                              const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+                                                              const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+                                                              const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+                                                              const double t,                //!< Current time instant (in seconds)
+                                                              const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                             ) const;
 
     private:
         SurfaceElevationFromGRPC(); // Disabled (private & without implementation)
