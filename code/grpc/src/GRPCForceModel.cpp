@@ -230,11 +230,39 @@ class ToGRPC
             {
                 THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs a wave spectrum. Unfortunately we haven't implemented this yet.");
             }
-            if (not(wave_request.orbital_velocities.x.empty()))
-            {
-                THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs orbital velocities. Unfortunately we haven't implemented this yet.");
-            }
             WaveInformation* wave_information = new WaveInformation();
+            try
+            {
+                wave_information->mutable_orbital_velocities()->set_t(t);
+                copy_from_double_vector(wave_request.orbital_velocities.x, wave_information->mutable_orbital_velocities()->mutable_x());
+                copy_from_double_vector(wave_request.orbital_velocities.y, wave_information->mutable_orbital_velocities()->mutable_y());
+                copy_from_double_vector(wave_request.orbital_velocities.z, wave_information->mutable_orbital_velocities()->mutable_z());
+                std::vector<double> eta;
+                try
+                {
+                    eta = env.w->wave_height(wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.t);
+                }
+                catch (const ssc::exception_handling::Exception& e)
+                {
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which, indirectly, needs wave elevations (to compute the dynamic pressures). When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
+                }
+                const ssc::kinematics::PointMatrix orbital_velocities = env.w->orbital_velocity(env.g, wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.z, t, eta);
+
+                std::vector<double> vx(orbital_velocities.m.cols()), vy(orbital_velocities.m.cols()), vz(orbital_velocities.m.cols());
+                for (int j = 0 ; j < orbital_velocities.m.cols() ; ++j)
+                {
+                    vx[j] = orbital_velocities.m(0,j);
+                    vy[j] = orbital_velocities.m(1,j);
+                    vz[j] = orbital_velocities.m(2,j);
+                }
+                copy_from_double_vector(vx, wave_information->mutable_orbital_velocities()->mutable_vx());
+                copy_from_double_vector(vy, wave_information->mutable_orbital_velocities()->mutable_vy());
+                copy_from_double_vector(vz, wave_information->mutable_orbital_velocities()->mutable_vz());
+            }
+            catch (const ssc::exception_handling::Exception& e)
+            {
+                THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs orbital velocities. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
+            }
             try
             {
                 wave_information->mutable_elevations()->set_t(t);
