@@ -11,7 +11,7 @@ services:
   xdyn:
     image: xdyn
     working_dir: /data
-    entrypoint:  ./wait-for-it.sh force-model:9002 -s -t 20 -- xdyn tutorial_10_gRPC_force_model.yml --dt 0.1 --tend 1 -o tsv
+    entrypoint:  ./wait-for-it.sh force-model:9002 -s -t 20 -- xdyn tutorial_10_gRPC_force_model.yml --dt 0.1 --tend 10 -o tsv
     volumes:
     - .:/data
     depends_on:
