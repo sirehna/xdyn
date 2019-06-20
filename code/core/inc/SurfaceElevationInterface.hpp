@@ -147,8 +147,6 @@ class SurfaceElevationInterface
 
         virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
 
-
-      private:
         /**  \brief Surface elevation
               *  \returns Surface elevations of a list of points at a given instant, in meters.
               *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
