@@ -75,6 +75,7 @@ class History
 
         bool is_empty() const;
 
+        std::vector<double> get_values(const double tmax) const;
         std::vector<double> get_dates(const double tmax) const;
 
     private:
