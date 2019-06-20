@@ -221,9 +221,11 @@ class SurfaceElevationFromGRPC::Impl
             return ret;
         }
 
-        FlatDiscreteDirectionalWaveSpectrum spectrum(const double t)
+        FlatDiscreteDirectionalWaveSpectrum spectrum(const double x, const double y, const double t)
         {
             SpectrumRequest request;
+            request.set_x(x);
+            request.set_y(y);
             request.set_t(t);
             grpc::ClientContext context;
             SpectrumResponse response;
@@ -331,7 +333,7 @@ double SurfaceElevationFromGRPC::evaluate_rao(const double x, //!< x-position of
     const std::vector<double> rao_module_for_each_frequency_and_incidence = rao_modules.front();
     const std::vector<double> rao_phase_for_each_frequency_and_incidence = rao_phases.front();
     const size_t nb_of_omegas_x_nb_of_directions = rao_module_for_each_frequency_and_incidence.size();
-    const auto spectrum = pimpl->spectrum(t);
+    const auto spectrum = pimpl->spectrum(x, y, t);
     if (nb_of_omegas_x_nb_of_directions != spectrum.k.size())
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "Number of angular frequencies times number of incidences in HDB RAO is " << nb_of_omegas_x_nb_of_directions << ", which does not match spectrum size (" << spectrum.k.size() << " (omega,psi) pairs)");
