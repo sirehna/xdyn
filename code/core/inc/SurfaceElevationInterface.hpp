@@ -195,7 +195,7 @@ class SurfaceElevationInterface
                                                      const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
                                                      const double t                  //!< Current time instant (in seconds)
                                                      ) const = 0;
-
+    private:
         /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
           */
         ssc::kinematics::PointMatrixPtr get_output_mesh_in_NED_frame(const ssc::kinematics::KinematicsPtr& k //!< Object used to compute the transforms to the NED frame
