@@ -371,8 +371,8 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         """Marshall force model's arguments from gRPC."""
         response = force_pb2.ForceResponse()
         try:
-            out = model.force(request.states, request.commands,
-                              wave_information)
+            out = self.model.force(request.states, request.commands,
+                              request.wave_information)
             response.Fx = out['Fx']
             response.Fy = out['Fy']
             response.Fz = out['Fz']
