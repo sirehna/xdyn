@@ -4999,7 +4999,7 @@ std::string test_data::tutorial_10_gRPC_force_model()
        << "        psi: {value: 0, unit: rad}\n"
        << "    initial position of body frame relative to NED:\n"
        << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
+       << "        x: {value: 5, unit: m}\n"
        << "        y: {value: 0, unit: m}\n"
        << "        z: {value: 1, unit: m}\n"
        << "        phi: {value: 0, unit: deg}\n"
