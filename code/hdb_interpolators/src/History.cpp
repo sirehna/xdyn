@@ -313,3 +313,23 @@ bool History::is_empty() const
 {
     return L.size() == 0;
 }
+
+std::vector<double> History::get_dates(const double tmax) const
+{
+    const double t = get_current_time();
+    if (tmax == 0)
+    {
+        return {t};
+    }
+    std::vector<double> ret;
+    ret.reserve(L.size());
+
+    for (size_t i = 0 ; i < L.size() ; ++i)
+    {
+        if (tmax >= t - L[i].first)
+        {
+            ret.push_back(L[i].first);
+        }
+    }
+    return ret;
+}

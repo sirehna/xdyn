@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <algorithm>    // std::transform
+#include <numeric>      // std::partial_sum
 
 #include "History.hpp"
 #include "HistoryTest.hpp"
@@ -315,4 +317,35 @@ TEST_F(HistoryTest, bug_3207_absurd_history_value)
     h.record(t, val);
     ASSERT_EQ(101, h.size());
     ASSERT_DOUBLE_EQ(-9.7036909645190687675e-07, h(10));
+}
+
+TEST_F(HistoryTest, can_get_list_of_instants)
+{
+    for (size_t k = 0 ; k < 100 ; ++k)
+    {
+        const size_t n = a.random<size_t>().between(1,10);
+        const double eps = 1E-15;
+        const std::vector<double> dt = a.random_vector_of<double>().of_size(n).between(eps,1);
+        const std::vector<double> x = a.random_vector_of<double>().of_size(n);
+        std::vector<double> t(n);
+        std::partial_sum(dt.begin(), dt.end(), t.begin());
+        std::vector<std::pair<double,double> > L(n);
+        for (size_t i = 0 ; i < n ; ++i)
+        {
+            L[i] = {t[i],x[i]};
+        }
+        const History h(L);
+        const double tend = t.back();
+
+        for (size_t i = 0 ; i < n ; ++i)
+        {
+            const double Dt = tend - t[n-i-1] + eps;
+            const std::vector<double> t_out = h.get_dates(Dt);
+            ASSERT_EQ(i+1, t_out.size()) << "i = " << i;
+            for (size_t j = 0 ; j <= i ; j++)
+            {
+                ASSERT_DOUBLE_EQ(t_out.at(j), t.at(n-1-i+j)) << "i = " << i << ", j = " << j;
+            }
+        }
+    }
 }

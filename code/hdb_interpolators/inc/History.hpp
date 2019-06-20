@@ -75,6 +75,8 @@ class History
 
         bool is_empty() const;
 
+        std::vector<double> get_dates(const double tmax) const;
+
     private:
         typedef std::pair<double,double> TimeValue;
         typedef std::vector<TimeValue> Container;
