@@ -5,7 +5,7 @@ import "wave_types.proto";
 service Force
 {
     rpc get_commands(CommandsRequest)                             returns (CommandsResponse);
-    rpc set_parameters(SetParameterRequest)                       returns (SetParameterResponse);
+    rpc set_parameters(SetForceParameterRequest)                  returns (SetForceParameterResponse);
     rpc force(ForceRequest)                                       returns (ForceResponse);
     rpc required_wave_information(RequiredWaveInformationRequest) returns (RequiredWaveInformationResponse);
 }
@@ -21,10 +21,10 @@ message CommandsResponse
 
 message RequiredWaveInformationRequest
 {
-        double t = 1; // Simulation time (in seconds).
-        double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-        double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-        double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double t = 1; // Simulation time (in seconds).
+    double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
 }
 
 message RequiredWaveInformationResponse

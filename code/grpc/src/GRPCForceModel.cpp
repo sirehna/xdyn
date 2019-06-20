@@ -142,9 +142,9 @@ class GRPCForceModel::Impl
 
         void set_parameters(const std::string& yaml) const
         {
-            SetParameterRequest request;
+            SetForceParameterRequest request;
             request.set_parameters(yaml);
-            SetParameterResponse response;
+            SetForceParameterResponse response;
             grpc::ClientContext context;
             const grpc::Status status = stub->set_parameters(&context, request, &response);
             throw_if_invalid_status(input, "set_parameters", status);
