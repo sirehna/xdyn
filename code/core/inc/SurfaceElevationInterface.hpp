@@ -65,12 +65,12 @@ class SurfaceElevationInterface
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force and torque
           */
-        virtual double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                                    const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                                    const double t, //!< Current time instant (in seconds)
-                                    const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO
-                                    const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
-                                   ) const;
+        double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+                            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+                            const double t, //!< Current time instant (in seconds)
+                            const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO
+                            const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
+                            ) const;
 
         /**  \brief Computes the orbital velocity at given points.
           *  \returns Velocity of the fluid at given points & instant, in m/s

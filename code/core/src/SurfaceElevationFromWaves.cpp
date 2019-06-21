@@ -55,34 +55,14 @@ std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<dou
     return zwave;
 }
 
-double SurfaceElevationFromWaves::evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                    const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                    const double t, //!< Current time instant (in seconds)
-                    const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO (spectrum_index, flattened_omega_x_psi_index)
-                    const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO (spectrum_index, flattened_omega_x_psi_index)
-                     ) const
-{
-    double rao = 0;
-    // The RAOs from the HDB file are interpolated by hdb_interpolators/DiffractionInterpolator
-    // called by class DiffractionForceModel::Impl's constructor which ensures that the first
-    // dimension of rao_phase & rao_module is the index of the directional spectrum and the
-    // second index is the position in the "flattened" (omega,psi) matrix. The RAO's are interpolated
-    // at the periods and incidences specified by each wave directional spectrum.
-    for (size_t spectrum_idx = 0 ; spectrum_idx < directional_spectra.size() ; ++spectrum_idx)
-    {
-        const auto rao_module_for_each_frequency_and_incidence = rao_module.at(spectrum_idx);
-        const auto rao_phase_for_each_frequency_and_incidence = rao_phase.at(spectrum_idx);
-        rao += directional_spectra.at(spectrum_idx)->evaluate_rao(x,y,t,rao_module_for_each_frequency_and_incidence,rao_phase_for_each_frequency_and_incidence);
-    }
-    return rao;
-}
-
 std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_directional_spectra(const double, const double, const double) const
 {
     std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
     ret.reserve(directional_spectra.size());
     for (const auto& spectrum:directional_spectra)
+    {
         ret.push_back(spectrum->get_spectrum());
+    }
     return ret;
 }
 
