@@ -55,6 +55,8 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
     private:
         SurfaceElevationFromWaves(); // Disabled
 
+        std::vector<FlatDiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const;
+
         /**
          *  \section ex1 Example
          *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height example

@@ -43,3 +43,8 @@ std::vector<double> DefaultSurfaceElevation::dynamic_pressure(const double,     
 {
     return std::vector<double>(x.size(), 0);
 }
+
+std::vector<FlatDiscreteDirectionalWaveSpectrum> DefaultSurfaceElevation::get_directional_spectra(const double, const double, const double) const
+{
+    return std::vector<FlatDiscreteDirectionalWaveSpectrum>();
+}

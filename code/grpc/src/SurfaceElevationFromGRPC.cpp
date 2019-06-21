@@ -433,3 +433,8 @@ ssc::kinematics::PointMatrix SurfaceElevationFromGRPC::orbital_velocity(const do
 {
     return pimpl->orbital_velocities(x, y, z, t);
 }
+
+std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_directional_spectra(const double x, const double y, const double t) const
+{
+    return pimpl->directional_spectra(x, y, t);
+}

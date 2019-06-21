@@ -64,7 +64,8 @@ class DefaultSurfaceElevation : public SurfaceElevationInterface
                                              const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
                                              const double t                  //!< Current time instant (in seconds)
                                              ) const;
-        
+
+        std::vector<FlatDiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const;
         double zwave;
 };
 
