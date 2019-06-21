@@ -224,15 +224,58 @@ class ToGRPC
             return request;
         }
 
+        SpectrumResponse* from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const
+        {
+            SpectrumResponse* spectrum_response = new SpectrumResponse();
+            for (const auto& spectrum:spectra)
+            {
+                const auto s = spectrum_response->add_spectrum();
+                for (const auto& Si:spectrum.Si)
+                {
+                    s->add_si(Si);
+                }
+                for (const auto& Dj:spectrum.Dj)
+                {
+                    s->add_dj(Dj);
+                }
+                for (const auto& k:spectrum.k)
+                {
+                    s->add_k(k);
+                }
+                for (const auto& omega:spectrum.omega)
+                {
+                    s->add_omega(omega);
+                }
+                const auto p = s->add_phase();
+                for (const auto& phases:spectrum.phase)
+                {
+                    for (const auto& phase:phases)
+                    {
+                        p->add_phase(phase);
+                    }
+                }
+            }
+            return spectrum_response;
+        }
+
         WaveInformation* from_wave_information(const WaveRequest& wave_request, const double t, const EnvironmentAndFrames& env) const
         {
-            if (wave_request.need_spectrum)
-            {
-                THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs a wave spectrum. Unfortunately we haven't implemented this yet.");
-            }
             WaveInformation* wave_information = new WaveInformation();
             if (env.w.use_count())
             {
+                if (wave_request.need_spectrum)
+                {
+                    try
+                    {
+                        const auto directional_spectra = env.w->get_directional_spectra(wave_request.spectrum.x, wave_request.spectrum.y, wave_request.spectrum.t);
+                        auto spectrum = from_discrete_directional_wave_spectra(directional_spectra);
+                        wave_information->set_allocated_spectrum(spectrum);
+                    }
+                    catch (const ssc::exception_handling::Exception& e)
+                    {
+                        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which requires a linearized wave directional spectrum. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
+                    }
+                }
                 try
                 {
                     wave_information->mutable_orbital_velocities()->set_t(t);
