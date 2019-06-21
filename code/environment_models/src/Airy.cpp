@@ -39,27 +39,6 @@ generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
     }
 }
 
-Airy::Airy(const FlatDiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(spectrum_),
-phase(std::vector<std::vector<double> >()),
-rng(),
-generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
-{
-    const size_t n = spectrum.psi.size();
-    spectrum.phase = std::vector<double> (n, constant_random_phase);
-}
-
-Airy::Airy(const FlatDiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(spectrum_),
-phase(std::vector<std::vector<double> >()),
-rng(boost::mt19937((unsigned int)random_number_generator_seed)),
-generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
-{
-    const size_t n = spectrum.psi.size();
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        spectrum.phase.push_back(generate_random_phase(rng));
-    }
-}
-
 double Airy::evaluate_rao(
         const double x,                           //!< x-position of the RAO's calculation point in the NED frame (in meters)
         const double y,                           //!< y-position of the RAO's calculation point in the NED frame (in meters)
