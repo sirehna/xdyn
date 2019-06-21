@@ -126,7 +126,7 @@ double SurfaceElevationInterface::evaluate_rao(
     // dimension of rao_phase & rao_module is the index of the directional spectrum and the
     // second index is the position in the "flattened" (omega,psi) matrix. The RAO's are interpolated
     // at the periods and incidences specified by each wave directional spectrum.
-    const auto directional_spectra = get_directional_spectra(x, y, t);
+    const auto directional_spectra = get_flat_directional_spectra(x, y, t);
     double F = 0;
     for (size_t spectrum_idx = 0 ; spectrum_idx < directional_spectra.size() ; ++spectrum_idx)
     {

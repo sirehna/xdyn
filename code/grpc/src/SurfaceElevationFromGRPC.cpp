@@ -393,3 +393,8 @@ std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_d
 {
     return pimpl->directional_spectra(x, y, t);
 }
+
+std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_flat_directional_spectra(const double x, const double y, const double t) const
+{
+    return pimpl->directional_spectra(x, y, t);
+}

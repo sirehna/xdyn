@@ -66,6 +66,17 @@ std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_
     return ret;
 }
 
+std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_flat_directional_spectra(const double, const double, const double) const
+{
+    std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
+    ret.reserve(directional_spectra.size());
+    for (const auto& spectrum:directional_spectra)
+    {
+        ret.push_back(spectrum->get_spectrum());
+    }
+    return ret;
+}
+
 // For each spectrum, the wave propagation directions
 // Usually, a vector of vectors of size 1: {{psi_1},{psi_2},...,{psi_n}}
 std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions_for_each_model() const
