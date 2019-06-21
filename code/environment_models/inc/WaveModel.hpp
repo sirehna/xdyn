@@ -27,7 +27,7 @@
 class WaveModel
 {
     public:
-        WaveModel(const FlatDiscreteDirectionalWaveSpectrum& spectrum);
+        WaveModel(const FlatDiscreteDirectionalWaveSpectrum& flat_spectrum, const DiscreteDirectionalWaveSpectrum& spectrum);
         virtual ~WaveModel();
 
         /**  \brief Calculate radiation forces using first order force RAO
@@ -131,6 +131,7 @@ class WaveModel
 
     protected:
         FlatDiscreteDirectionalWaveSpectrum flat_spectrum;
+        DiscreteDirectionalWaveSpectrum spectrum;
 };
 
 typedef TR1(shared_ptr)<WaveModel> WaveModelPtr;

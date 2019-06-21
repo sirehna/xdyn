@@ -18,7 +18,7 @@
 #define PI M_PI
 
 
-Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(flatten(spectrum_)),
+Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(flatten(spectrum_), spectrum_),
 phase(std::vector<std::vector<double> >()),
 rng(),
 generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
@@ -27,7 +27,7 @@ generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
     flat_spectrum.phase = std::vector<double> (n, constant_random_phase);
 }
 
-Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(flatten(spectrum_)),
+Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(flatten(spectrum_), spectrum_),
 phase(std::vector<std::vector<double> >()),
 rng(boost::mt19937((unsigned int)random_number_generator_seed)),
 generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
