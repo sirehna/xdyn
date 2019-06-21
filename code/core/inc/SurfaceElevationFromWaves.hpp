@@ -45,8 +45,8 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
     private:
         SurfaceElevationFromWaves(); // Disabled
 
-        std::vector<FlatDiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const;
         std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(const double x, const double y, const double t) const;
+        std::vector<DiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const;
 
         /**
          *  \section ex1 Example

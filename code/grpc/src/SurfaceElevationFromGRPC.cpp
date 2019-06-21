@@ -221,7 +221,7 @@ class SurfaceElevationFromGRPC::Impl
             return ret;
         }
 
-        std::vector<FlatDiscreteDirectionalWaveSpectrum> directional_spectra(const double x, const double y, const double t)
+        std::vector<DiscreteDirectionalWaveSpectrum> directional_spectra(const double x, const double y, const double t)
         {
             SpectrumRequest request;
             request.set_x(x);
@@ -231,7 +231,7 @@ class SurfaceElevationFromGRPC::Impl
             SpectrumResponse response;
             const grpc::Status status = stub->spectrum(&context, request, &response);
             throw_if_invalid_status("spectrum", status);
-            std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
+            std::vector<DiscreteDirectionalWaveSpectrum> ret;
             {
                 for (int i = 0 ; i < response.spectrum_size() ; ++i)
                 {
@@ -255,7 +255,7 @@ class SurfaceElevationFromGRPC::Impl
                             std::copy(response.spectrum(i).phase(i).phase().begin(), response.spectrum(i).phase(i).phase().end(), std::back_inserter(s.phase[i]));
                         }
                     }
-                    ret.push_back(flatten(s));
+                    ret.push_back(s);
                 }
             }
             return ret;
@@ -389,12 +389,18 @@ ssc::kinematics::PointMatrix SurfaceElevationFromGRPC::orbital_velocity(const do
     return pimpl->orbital_velocities(x, y, z, t);
 }
 
-std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_directional_spectra(const double x, const double y, const double t) const
+std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_flat_directional_spectra(const double x, const double y, const double t) const
 {
-    return pimpl->directional_spectra(x, y, t);
+    std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
+    const auto spectra = get_directional_spectra(x, y, t);
+    for (const auto& spectrum:spectra)
+    {
+        ret.push_back(flatten(spectrum));
+    }
+    return ret;
 }
 
-std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_flat_directional_spectra(const double x, const double y, const double t) const
+std::vector<DiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_directional_spectra(const double x, const double y, const double t) const
 {
     return pimpl->directional_spectra(x, y, t);
 }

@@ -55,7 +55,7 @@ std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<dou
     return zwave;
 }
 
-std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_directional_spectra(const double, const double, const double) const
+std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_flat_directional_spectra(const double, const double, const double) const
 {
     std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
     ret.reserve(directional_spectra.size());
@@ -66,9 +66,9 @@ std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_
     return ret;
 }
 
-std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_flat_directional_spectra(const double, const double, const double) const
+std::vector<DiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_directional_spectra(const double, const double, const double) const
 {
-    std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
+    std::vector<DiscreteDirectionalWaveSpectrum> ret;
     ret.reserve(directional_spectra.size());
     for (const auto& spectrum:directional_spectra)
     {

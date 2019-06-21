@@ -83,8 +83,8 @@ class WaveModel
           */
         std::vector<double> get_psis() const;
 
-        FlatDiscreteDirectionalWaveSpectrum get_spectrum() const {return flat_spectrum;};
         FlatDiscreteDirectionalWaveSpectrum get_flat_spectrum() const {return flat_spectrum;};
+        DiscreteDirectionalWaveSpectrum get_spectrum() const {return spectrum;};
 
     private:
         WaveModel(); // Disabled
