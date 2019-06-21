@@ -82,7 +82,7 @@ class SurfaceElevationFromGRPC : public SurfaceElevationInterface
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at a given point & instant, in m/s
           */
-        virtual ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
+        ssc::kinematics::Point orbital_velocity(const double g,   //!< gravity (in m/s^2)
                                                         const double x,   //!< x-position in the NED frame (in meters)
                                                         const double y,   //!< y-position in the NED frame (in meters)
                                                         const double z,   //!< z-position in the NED frame (in meters)
@@ -94,7 +94,7 @@ class SurfaceElevationFromGRPC : public SurfaceElevationInterface
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at given points & instant, in m/s
           */
-        virtual ssc::kinematics::PointMatrix orbital_velocity(const double g,                //!< gravity (in m/s^2)
+        ssc::kinematics::PointMatrix orbital_velocity(const double g,                //!< gravity (in m/s^2)
                                                               const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
                                                               const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
                                                               const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
