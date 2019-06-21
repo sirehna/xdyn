@@ -61,7 +61,7 @@ std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_
     ret.reserve(directional_spectra.size());
     for (const auto& spectrum:directional_spectra)
     {
-        ret.push_back(spectrum->get_spectrum());
+        ret.push_back(spectrum->get_flat_spectrum());
     }
     return ret;
 }
@@ -147,7 +147,7 @@ void SurfaceElevationFromWaves::serialize_wave_spectra_before_simulation(Observe
 {
     std::vector<FlatDiscreteDirectionalWaveSpectrum> spectra;
     spectra.reserve(directional_spectra.size());
-    for (const auto spectrum:directional_spectra) spectra.push_back(spectrum->get_spectrum());
+    for (const auto spectrum:directional_spectra) spectra.push_back(spectrum->get_flat_spectrum());
     const DataAddressing address;
     observer->write_before_simulation(spectra, address);
 }

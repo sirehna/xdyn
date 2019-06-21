@@ -83,7 +83,8 @@ class WaveModel
           */
         std::vector<double> get_psis() const;
 
-        FlatDiscreteDirectionalWaveSpectrum get_spectrum() const {return spectrum;};
+        FlatDiscreteDirectionalWaveSpectrum get_spectrum() const {return flat_spectrum;};
+        FlatDiscreteDirectionalWaveSpectrum get_flat_spectrum() const {return flat_spectrum;};
 
     private:
         WaveModel(); // Disabled
@@ -129,7 +130,7 @@ class WaveModel
                                                     ) const = 0;
 
     protected:
-        FlatDiscreteDirectionalWaveSpectrum spectrum;
+        FlatDiscreteDirectionalWaveSpectrum flat_spectrum;
 };
 
 typedef TR1(shared_ptr)<WaveModel> WaveModelPtr;
