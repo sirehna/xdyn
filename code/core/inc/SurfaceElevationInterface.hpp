@@ -194,10 +194,11 @@ class SurfaceElevationInterface
                                                      const double t                  //!< Current time instant (in seconds)
                                                      ) const = 0;
 
-    private:
         virtual std::vector<FlatDiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const = 0;
         /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
           */
+
+    private:
         ssc::kinematics::PointMatrixPtr get_output_mesh_in_NED_frame(const ssc::kinematics::KinematicsPtr& k //!< Object used to compute the transforms to the NED frame
                                                                     ) const;
 
