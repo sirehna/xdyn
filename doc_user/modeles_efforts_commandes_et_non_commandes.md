@@ -929,18 +929,20 @@ expressions simples des états et du temps peuvent être calculées, par exemple
   Nrvv: 0
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`reference frame`: Définit la transformation permettant de passer d'un repère
-connu (dont le nom est donné par `frame` au repère dans lequel sont exprimés
+- `reference frame`: Définit la transformation permettant de passer d'un repère
+connu (dont le nom est donné par `frame`) au repère dans lequel sont exprimés
 les efforts. Le torseur est automatiquement déplacé au
 centre de gravité (point (0,0,0) du repère "body").
-`commands`: optionnel. Le modèle de manœuvrabilité peut accepter des commandes
+- `commands`: optionnel. Le modèle de manœuvrabilité peut accepter des commandes
 externes. Il peut aussi utiliser les commandes de n'importe quel autre modèle
 d'effort (mais il faut pour cela bien renseigner le nom complet de la commande,
 soit par exemple `PropRudd(rpm)`)
-`X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
+- `X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
 body), exprimé au point d'application défini ci-dessus.
 
-Voici un exemple (très simplifié) de modèle de manoeuvrabilité qui utilise les commandes d'un modèle d'hélice + safran qui illustre la syntaxe pour utiliser dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
+Voici un exemple (très simplifié) de modèle de manoeuvrabilité qui utilise les
+commandes d'un modèle d'hélice + safran qui illustre la syntaxe pour utiliser
+dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
 
 ~~~~{.yaml}
 - name: SBPropRudd
