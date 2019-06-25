@@ -401,7 +401,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
                 response.elevations.y[:] =\
                     required_wave_information['elevations']['y']
                 response.elevations.z[:] =\
-                    required_wave_information['elevations']['t']
+                    required_wave_information['elevations']['z']
                 response.elevations.t =\
                     required_wave_information['elevations']['t']
                 response.dynamic_pressures.x[:] =\
