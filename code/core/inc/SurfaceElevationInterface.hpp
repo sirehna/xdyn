@@ -100,6 +100,14 @@ class SurfaceElevationInterface
                                                  const std::vector<double>& eta,          //!< Wave elevation at P in the NED frame (in meters)
                                                  const double t                           //!< Current instant (in seconds)
                                                  ) const;
+        std::vector<double> get_and_check_dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
+                                                           const double g,                 //!< gravity (in m/s^2)
+                                                           const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+                                                           const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+                                                           const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+                                                           const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+                                                           const double t                  //!< Current time instant (in seconds)
+                                                           ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
           *  \returns Vector of coordinates on the free surface (in the NED frame),
@@ -147,14 +155,20 @@ class SurfaceElevationInterface
 
         virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
 
+        virtual std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(const double x, const double y, const double t) const = 0;
+        virtual std::vector<DiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const = 0;
+        /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
+          */
+
+    private:
         /**  \brief Surface elevation
-              *  \returns Surface elevations of a list of points at a given instant, in meters.
-              *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
-              *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
-              *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 29
-              *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
-              *  \returns zwave - z
-              */
+          *  \returns Surface elevations of a list of points at a given instant, in meters.
+          *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
+          *  \see "Hydrodynamique des Structures Offshore", 2002, Bernard Molin, Editions TECHNIP, page 76
+          *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 29
+          *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
+          *  \returns zwave - z
+          */
         virtual std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                                 const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                                 const double t                //!< Current instant (in seconds)
@@ -193,13 +207,6 @@ class SurfaceElevationInterface
                                                      const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
                                                      const double t                  //!< Current time instant (in seconds)
                                                      ) const = 0;
-
-        virtual std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(const double x, const double y, const double t) const = 0;
-        virtual std::vector<DiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const = 0;
-        /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
-          */
-
-    private:
         ssc::kinematics::PointMatrixPtr get_output_mesh_in_NED_frame(const ssc::kinematics::KinematicsPtr& k //!< Object used to compute the transforms to the NED frame
                                                                     ) const;
 

@@ -285,13 +285,13 @@ class ToGRPC
                     std::vector<double> eta;
                     try
                     {
-                        eta = env.w->wave_height(wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.t);
+                        eta = env.w->get_wave_height(wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.t);
                     }
                     catch (const ssc::exception_handling::Exception& e)
                     {
                         THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which, indirectly, needs wave elevations (to compute the dynamic pressures). When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
                     }
-                    const ssc::kinematics::PointMatrix orbital_velocities = env.w->orbital_velocity(env.g, wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.z, t, eta);
+                    const ssc::kinematics::PointMatrix orbital_velocities = env.w->get_orbital_velocity(env.g, wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.z, t, eta);
 
                     std::vector<double> vx(orbital_velocities.m.cols()), vy(orbital_velocities.m.cols()), vz(orbital_velocities.m.cols());
                     for (int j = 0 ; j < orbital_velocities.m.cols() ; ++j)
@@ -313,7 +313,7 @@ class ToGRPC
                     wave_information->mutable_elevations()->set_t(t);
                     copy_from_double_vector(wave_request.elevations.x, wave_information->mutable_elevations()->mutable_x());
                     copy_from_double_vector(wave_request.elevations.y, wave_information->mutable_elevations()->mutable_y());
-                    copy_from_double_vector(env.w->wave_height(wave_request.elevations.x, wave_request.elevations.y, wave_request.elevations.t), wave_information->mutable_elevations()->mutable_z());
+                    copy_from_double_vector(env.w->get_wave_height(wave_request.elevations.x, wave_request.elevations.y, wave_request.elevations.t), wave_information->mutable_elevations()->mutable_z());
                 }
                 catch (const ssc::exception_handling::Exception& e)
                 {
@@ -325,8 +325,8 @@ class ToGRPC
                     copy_from_double_vector(wave_request.dynamic_pressures.x, wave_information->mutable_dynamic_pressures()->mutable_x());
                     copy_from_double_vector(wave_request.dynamic_pressures.y, wave_information->mutable_dynamic_pressures()->mutable_y());
                     copy_from_double_vector(wave_request.dynamic_pressures.z, wave_information->mutable_dynamic_pressures()->mutable_z());
-                    const std::vector<double> eta = env.w->wave_height(wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.t);
-                    copy_from_double_vector(env.w->dynamic_pressure(env.rho, env.g, wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.z, eta, t), wave_information->mutable_dynamic_pressures()->mutable_pdyn());
+                    const std::vector<double> eta = env.w->get_wave_height(wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.t);
+                    copy_from_double_vector(env.w->get_and_check_dynamic_pressure(env.rho, env.g, wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.z, eta, t), wave_information->mutable_dynamic_pressures()->mutable_pdyn());
                 }
                 catch (const ssc::exception_handling::Exception& e)
                 {
