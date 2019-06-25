@@ -127,7 +127,7 @@ docker-compose up
 
 ### Sans Docker
 
-Si l'on utilise pas Docker, il faut lancer le serveur de houle manuellement:
+Si l'on n'utilise pas Docker, il faut lancer le serveur de houle manuellement:
 
 ```shell
 python3 harmonic_oscillator.py
