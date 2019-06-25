@@ -929,18 +929,20 @@ expressions simples des états et du temps peuvent être calculées, par exemple
   Nrvv: 0
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`reference frame`: Définit la transformation permettant de passer d'un repère
-connu (dont le nom est donné par `frame` au repère dans lequel sont exprimés
+- `reference frame`: Définit la transformation permettant de passer d'un repère
+connu (dont le nom est donné par `frame`) au repère dans lequel sont exprimés
 les efforts. Le torseur est automatiquement déplacé au
 centre de gravité (point (0,0,0) du repère "body").
-`commands`: optionnel. Le modèle de manœuvrabilité peut accepter des commandes
+- `commands`: optionnel. Le modèle de manœuvrabilité peut accepter des commandes
 externes. Il peut aussi utiliser les commandes de n'importe quel autre modèle
 d'effort (mais il faut pour cela bien renseigner le nom complet de la commande,
 soit par exemple `PropRudd(rpm)`)
-`X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
+- `X`, `Y`, `Z`, `K`, `M`, `N` : coordonnées du torseur d'effort (dans le repère
 body), exprimé au point d'application défini ci-dessus.
 
-Voici un exemple (très simplifié) de modèle de manoeuvrabilité qui utilise les commandes d'un modèle d'hélice + safran qui illustre la syntaxe pour utiliser dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
+Voici un exemple (très simplifié) de modèle de manoeuvrabilité qui utilise les
+commandes d'un modèle d'hélice + safran qui illustre la syntaxe pour utiliser
+dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
 
 ~~~~{.yaml}
 - name: SBPropRudd
@@ -2153,3 +2155,34 @@ actionneurs du même type) ainsi que la projection de ce même effort suivant
 l'axe $`X`$ du repère NED.
 
 
+## Modèle d'effort distant
+
+Si l'on souhaite utiliser un modèle d'effort qui n'est pas implémenté dans xdyn, il est possible
+de l'implémenter séparément et de l'appeler depuis xdyn, sans intervenir sur le code source d'xdyn.
+
+### Description
+
+Comme pour les modèles de [houle
+distants](#utilisation-dun-modèle-de-houle-distant), on utilise la technologie
+"[gRPC](https://grpc.io/)" : le modèle d'effort sera alors encapsulé dans un
+service et appelé par xdyn en utilisant des paramètres spécifiés dans le
+fichier de configuration YAML d'xdyn.
+
+### Paramétrage
+
+Dans la section `controlled forces`, on ajoute une section de la forme suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: grpc
+  url: http://localhost:50001
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Le paramètre `model: grpc` indique à xdyn qu'il s'agit d'un modèle d'effort
+distant et `url` donne l'adresse à laquelle le serveur gRPC peut être joint.
+
+Ces modèles ont accès à toutes les commandes définies dans la simulation.
+Le point d'application des modèles d'effort gRPC est l'origine du repère "body".
+
+### Exemple d'utilisation
+
+Le [tutoriel 10](#tutoriel-10-utilisation-dun-modèle-deffort-distant) détaille

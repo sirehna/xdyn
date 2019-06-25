@@ -7,6 +7,11 @@ ADD_CUSTOM_TARGET(
 
 INSTALL(DIRECTORY "${PROJECT_SOURCE_DIR}/../postprocessing/MatLab/" DESTINATION "matlab")
 
+MESSAGE(STATUS "Related xdyn proto files will be installed in proto directory")
+INSTALL(FILES "${PROJECT_SOURCE_DIR}/grpc/force.proto" DESTINATION "proto")
+INSTALL(FILES "${PROJECT_SOURCE_DIR}/waves_grpc/wave_grpc.proto" DESTINATION "proto")
+INSTALL(FILES "${PROJECT_SOURCE_DIR}/waves_grpc/wave_types.proto" DESTINATION "proto")
+
 FILE(GLOB script ${CMAKE_SOURCE_DIR}/integration_tests.py)
 ADD_CUSTOM_TARGET(python_script)
 ADD_CUSTOM_COMMAND(TARGET python_script POST_BUILD

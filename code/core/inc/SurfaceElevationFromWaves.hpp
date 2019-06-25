@@ -35,16 +35,6 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
                 const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
                 const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
 
-        /**  \brief Calculate radiation forces using first order force RAO
-          *  \returns Force and torque
-          */
-        double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                            const double t, //!< Current time instant (in seconds)
-                            const std::vector<std::vector<double> >& rao_module, //!< Module of the RAO
-                            const std::vector<std::vector<double> >& rao_phase //!< Phase of the RAO
-                             ) const;
-
         std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
 
         std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
@@ -54,6 +44,9 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
         void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
     private:
         SurfaceElevationFromWaves(); // Disabled
+
+        std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(const double x, const double y, const double t) const;
+        std::vector<DiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const;
 
         /**
          *  \section ex1 Example

@@ -171,6 +171,9 @@ test-debian:
             bash <(curl -s https://codecov.io/bash);\
             fi"
 
+docker:
+	./ninja_debian.sh package && cp build_deb9/xdyn.deb . &&  docker build . --tag xdyn
+
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb9
 doc: CPACK_GENERATOR = DEB

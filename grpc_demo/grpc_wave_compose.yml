@@ -11,7 +11,7 @@ services:
   xdyn:
     image: xdyn
     working_dir: /data
-    entrypoint: ./wait-for-it.sh waves-server:50051 -s -t 20 -- xdyn-for-cs grpc.yml --dt 0.1 -p 9002
+    entrypoint: ./wait-for-it.sh waves-server:50051 -s -t 20 -- xdyn-for-cs tutorial_09_gRPC_wave_model.yml --dt 0.1 -p 9002
     volumes:
     - .:/data
     user: ${CURRENT_UID}

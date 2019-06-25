@@ -241,7 +241,7 @@ ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states
     std::vector<double> eta;
     try
     {
-        eta = env.w->get_wave_height(x, y, t);
+        eta = env.w->get_and_check_wave_height(x, y, t);
     }
     catch (const ssc::exception_handling::Exception& e)
     {
@@ -249,7 +249,7 @@ ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states
     }
     try
     {
-        const ssc::kinematics::PointMatrix Vwater_ground = env.w->get_orbital_velocity(env.g, x, y, z, t, eta);
+        const ssc::kinematics::PointMatrix Vwater_ground = env.w->get_and_check_orbital_velocity(env.g, x, y, z, t, eta);
         const ssc::kinematics::Point Vship_ground(rudder_position.get_frame(), states.u(), states.v(), states.w());
         const ssc::kinematics::Point Vship_water("NED", Vship_ground.x() - Vwater_ground.m(0,0),
                                                         Vship_ground.y() - Vwater_ground.m(1,0),

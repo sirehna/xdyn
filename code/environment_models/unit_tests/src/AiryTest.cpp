@@ -512,7 +512,7 @@ TEST_F(AiryTest, should_respect_dirac_inputs)
     const Stretching ss(ys);
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
     const Airy wave(A, 0.0);
-    FlatDiscreteDirectionalWaveSpectrum s = wave.get_spectrum();
+    FlatDiscreteDirectionalWaveSpectrum s = wave.get_flat_spectrum();
     ASSERT_EQ(1, s.a.size());
     ASSERT_EQ(1, s.omega.size());
     ASSERT_EQ(1, s.psi.size());

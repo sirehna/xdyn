@@ -12,7 +12,8 @@
 #include <string>
 
 #include <grpcpp/grpcpp.h>
-#include "waves.grpc.pb.h"
+#include "wave_grpc.grpc.pb.h"
+#include "wave_types.grpc.pb.h"
 
 #include "discretize.hpp"
 #include "SurfaceElevationFromGRPC.hpp"
@@ -220,50 +221,63 @@ class SurfaceElevationFromGRPC::Impl
             return ret;
         }
 
-        FlatDiscreteDirectionalWaveSpectrum spectrum(const double t)
+        std::vector<DiscreteDirectionalWaveSpectrum> directional_spectra(const double x, const double y, const double t)
         {
             SpectrumRequest request;
+            request.set_x(x);
+            request.set_y(y);
             request.set_t(t);
             grpc::ClientContext context;
             SpectrumResponse response;
             const grpc::Status status = stub->spectrum(&context, request, &response);
             throw_if_invalid_status("spectrum", status);
-            DiscreteDirectionalWaveSpectrum s;
-            s.Si.reserve(response.si_size());
-            std::copy(response.si().begin(), response.si().end(), std::back_inserter(s.Si));
-            s.Dj.reserve(response.dj_size());
-            std::copy(response.dj().begin(), response.dj().end(), std::back_inserter(s.Dj));
-            s.omega.reserve(response.omega_size());
-            std::copy(response.omega().begin(), response.omega().end(), std::back_inserter(s.omega));
-            s.psi.reserve(response.psi_size());
-            std::copy(response.psi().begin(), response.psi().end(), std::back_inserter(s.psi));
-            s.k.reserve(response.k_size());
-            std::copy(response.k().begin(), response.k().end(), std::back_inserter(s.k));
-            if (response.phase_size())
+            std::vector<DiscreteDirectionalWaveSpectrum> ret;
             {
-                s.phase.resize(response.phase_size());
-                for (int i = 0 ; i < response.phase_size() ; ++i)
+                for (int i = 0 ; i < response.spectrum_size() ; ++i)
                 {
-                    s.phase[i].reserve(response.phase(i).phase_size());
-                    std::copy(response.phase(i).phase().begin(), response.phase(i).phase().end(), std::back_inserter(s.phase[i]));
+                    DiscreteDirectionalWaveSpectrum s;
+                    s.Si.reserve(response.spectrum(i).si_size());
+                    std::copy(response.spectrum(i).si().begin(), response.spectrum(i).si().end(), std::back_inserter(s.Si));
+                    s.Dj.reserve(response.spectrum(i).dj_size());
+                    std::copy(response.spectrum(i).dj().begin(), response.spectrum(i).dj().end(), std::back_inserter(s.Dj));
+                    s.omega.reserve(response.spectrum(i).omega_size());
+                    std::copy(response.spectrum(i).omega().begin(), response.spectrum(i).omega().end(), std::back_inserter(s.omega));
+                    s.psi.reserve(response.spectrum(i).psi_size());
+                    std::copy(response.spectrum(i).psi().begin(), response.spectrum(i).psi().end(), std::back_inserter(s.psi));
+                    s.k.reserve(response.spectrum(i).k_size());
+                    std::copy(response.spectrum(i).k().begin(), response.spectrum(i).k().end(), std::back_inserter(s.k));
+                    if (response.spectrum(i).phase_size())
+                    {
+                        s.phase.resize(response.spectrum(i).phase_size());
+                        for (int i = 0 ; i < response.spectrum(i).phase_size() ; ++i)
+                        {
+                            s.phase[i].reserve(response.spectrum(i).phase(i).phase_size());
+                            std::copy(response.spectrum(i).phase(i).phase().begin(), response.spectrum(i).phase(i).phase().end(), std::back_inserter(s.phase[i]));
+                        }
+                    }
+                    ret.push_back(s);
                 }
             }
-            return flatten(s);
+            return ret;
         }
 
         std::vector<std::vector<double> > get_wave_directions_for_each_model()
         {
             DirectionsRequest request;
             grpc::ClientContext context;
-            Directions response;
+            DirectionsResponse response;
             const grpc::Status status = stub->directions_for_rao(&context, request, &response);
             throw_if_invalid_status("directions_for_rao", status);
             std::vector<std::vector<double> > wave_directions;
-            if (response.psis_size())
+            if (response.directions_size())
             {
-                wave_directions.resize(1);
-                wave_directions[0].reserve(response.psis_size());
-                std::copy(response.psis().begin(), response.psis().end(), std::back_inserter(wave_directions[0]));
+                wave_directions.resize(response.directions_size());
+                for (int i = 0 ; i < response.directions_size() ; ++i)
+                {
+                    wave_directions[i].reserve(response.directions(i).psis_size());
+                    std::copy(response.directions(i).psis().begin(), response.directions(i).psis().end(), std::back_inserter(wave_directions[i]));
+                }
+
             }
             return wave_directions;
         }
@@ -272,15 +286,18 @@ class SurfaceElevationFromGRPC::Impl
         {
             AngularFrequenciesRequest request;
             grpc::ClientContext context;
-            AngularFrequencies response;
+            AngularFrequenciesResponse response;
             const grpc::Status status = stub->angular_frequencies_for_rao(&context, request, &response);
             throw_if_invalid_status("angular_frequencies_for_rao", status);
             std::vector<std::vector<double> > omegas;
-            if (response.omegas_size())
+            if (response.angular_frequencies_size())
             {
-                omegas.resize(1);
-                omegas[0].reserve(response.omegas_size());
-                std::copy(response.omegas().begin(), response.omegas().end(), std::back_inserter(omegas[0]));
+                omegas.resize(response.angular_frequencies_size());
+                for (int i = 0 ; i < response.angular_frequencies_size() ; ++i)
+                {
+                    omegas[i].reserve(response.angular_frequencies(i).omegas_size());
+                    std::copy(response.angular_frequencies(i).omegas().begin(), response.angular_frequencies(i).omegas().end(), std::back_inserter(omegas[i]));
+                }
             }
             return omegas;
         }
@@ -305,48 +322,6 @@ std::vector<std::vector<double> > SurfaceElevationFromGRPC::get_wave_directions_
 std::vector<std::vector<double> > SurfaceElevationFromGRPC::get_wave_angular_frequency_for_each_model() const
 {
     return pimpl->get_wave_angular_frequency_for_each_model();
-}
-
-double SurfaceElevationFromGRPC::evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                                              const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                                              const double t, //!< Current time instant (in seconds)
-                                              const std::vector<std::vector<double> >& rao_modules, //!< Module of the RAO (spectrum_index, flattened_omega_x_psi_index)
-                                              const std::vector<std::vector<double> >& rao_phases //!< Phase of the RAO (spectrum_index, flattened_omega_x_psi_index)
-                             ) const
-{
-    // The RAOs from the HDB file are interpolated by hdb_interpolators/DiffractionInterpolator
-    // called by class DiffractionForceModel::Impl's constructor which ensures that the first
-    // dimension of rao_phase & rao_module is the index of the directional spectrum and the
-    // second index is the position in the "flattened" (omega,psi) matrix. The RAO's are interpolated
-    // at the periods and incidences specified by each wave directional spectrum.
-    if (rao_modules.size() != 1)
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "RAO module should be of size 1xn: there is only one \"direction spectrum\" for gRPC wave models.");
-    }
-    if (rao_phases.size() != 1)
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "RAO module should be of size 1xn: there is only one \"direction spectrum\" for gRPC wave models.");
-    }
-    const std::vector<double> rao_module_for_each_frequency_and_incidence = rao_modules.front();
-    const std::vector<double> rao_phase_for_each_frequency_and_incidence = rao_phases.front();
-    const size_t nb_of_omegas_x_nb_of_directions = rao_module_for_each_frequency_and_incidence.size();
-    const auto spectrum = pimpl->spectrum(t);
-    if (nb_of_omegas_x_nb_of_directions != spectrum.k.size())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Number of angular frequencies times number of incidences in HDB RAO is " << nb_of_omegas_x_nb_of_directions << ", which does not match spectrum size (" << spectrum.k.size() << " (omega,psi) pairs)");
-    }
-    double F = 0;
-    for (size_t i = 0 ; i < nb_of_omegas_x_nb_of_directions ; ++i) // For each (omega,beta) pair
-    {
-        const double rao_amplitude = rao_module_for_each_frequency_and_incidence[i] * spectrum.a[i];
-        const double omega_t = spectrum.omega[i] * t;
-        const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        const double theta = spectrum.phase[i];
-        F -= rao_amplitude * sin(-omega_t + k_xCosPsi_ySinPsi + theta + rao_phase_for_each_frequency_and_incidence[i]);
-    }
-    return F;
-
-
 }
 
 std::vector<double> SurfaceElevationFromGRPC::wave_height(const std::vector<double>& x,                                  //!< x-position in the NED frame (in meters)
@@ -412,4 +387,20 @@ ssc::kinematics::PointMatrix SurfaceElevationFromGRPC::orbital_velocity(const do
                                              ) const
 {
     return pimpl->orbital_velocities(x, y, z, t);
+}
+
+std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_flat_directional_spectra(const double x, const double y, const double t) const
+{
+    std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
+    const auto spectra = get_directional_spectra(x, y, t);
+    for (const auto& spectrum:spectra)
+    {
+        ret.push_back(flatten(spectrum));
+    }
+    return ret;
+}
+
+std::vector<DiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_directional_spectra(const double x, const double y, const double t) const
+{
+    return pimpl->directional_spectra(x, y, t);
 }

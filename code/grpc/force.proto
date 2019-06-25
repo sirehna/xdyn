@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+import "wave_types.proto";
+
+service Force
+{
+    rpc get_commands(CommandsRequest)                             returns (CommandsResponse);
+    rpc set_parameters(SetForceParameterRequest)                  returns (SetForceParameterResponse);
+    rpc force(ForceRequest)                                       returns (ForceResponse);
+    rpc required_wave_information(RequiredWaveInformationRequest) returns (RequiredWaveInformationResponse);
+}
+
+message CommandsRequest
+{
+}
+
+message CommandsResponse
+{
+    repeated string commands = 1;
+}
+
+message RequiredWaveInformationRequest
+{
+    double t = 1; // Simulation time (in seconds).
+    double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+}
+
+message RequiredWaveInformationResponse
+{
+    XYTGrid elevations = 1; // Points at which the force model requires wave elevations. Updated at each timestep if needs_wave_outputs was set to true.
+    XYZTGrid dynamic_pressures  = 2; // Points at which the force model requires dynamic pressures. Updated at each timestep if needs_wave_outputs was set to true.
+    XYZTGrid orbital_velocities = 3; // Points at which the force model requires orbital velocities. Updated at each timestep if needs_wave_outputs was set to true.
+    SpectrumRequest spectrum = 4; // Point at which we want to linearize the spectrum (if necessary)
+    bool angular_frequencies_for_rao = 5; // Does the force model need the angular frequencies?
+    bool directions_for_rao= 6; // Does the force model need the spatial discretization?
+    bool need_spectrum = 7;
+}
+
+message WaveInformation
+{
+    XYZTGrid elevations = 1; // Elevations computed for this force model
+    DynamicPressuresResponse dynamic_pressures = 2; // Dynamic pressures computed for this force model
+    OrbitalVelocitiesResponse orbital_velocities = 3; // Orbital velocities computed for this force model
+    SpectrumResponse spectrum = 4; // Spectrum computed for this force model
+    AngularFrequencies angular_frequencies_for_rao = 5; // Angular frequencies at which the spectrum was discretized at (if requested by the force model)
+    Directions directions_for_rao = 6; // Directions the spectrum was discretized at (if requested by the force model)
+}
+
+message SetForceParameterRequest
+{
+    string parameters = 1; // YAML string containing the parameters to set for this particular model.
+}
+
+message SetForceParameterResponse
+{
+    double max_history_length = 1; // How far back (in seconds) should the history values in ForceRequest go?
+    bool needs_wave_outputs = 2; // Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
+}
+
+message States
+{
+    repeated double t = 1; // Simulation time (in seconds).
+    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double qr =11 ; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double phi = 15; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated double theta = 16; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated double psi = 17; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    repeated string rotations_convention = 18; // Angle convention chosen in xdyn's YAML file. Use it to check the convention is what you are expecting! Format: ["psi", "theta'", "phi''"]
+}
+
+message ForceRequest
+{
+    States states  = 1;
+    map<string, double> commands = 2; // All commands known by xdyn at this timestep
+    WaveInformation wave_information = 3; // Wave information that was requested by the force model
+}
+
+message ForceResponse
+{
+    double Fx = 1;                              // Projection of the force acting on "BODY" on the X-axis of the body frame.
+    double Fy = 2;                              // Projection of the force acting on "BODY" on the Y-axis of the body frame.
+    double Fz = 3;                              // Projection of the force acting on "BODY" on the Z-axis of the body frame.
+    double Mx = 4;                              // Projection of the torque acting on "BODY" on the X-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double My = 5;                              // Projection of the torque acting on "BODY" on the Y-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double Mz = 6;                              // Projection of the torque acting on "BODY" on the Z-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    map<string, double> extra_observations = 7; // Anything we wish to serialize. Specific to each force model.
+}

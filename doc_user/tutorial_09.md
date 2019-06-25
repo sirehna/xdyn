@@ -1,4 +1,4 @@
-## Tutoriel 7 : utilisation d'un modèle de houle distant
+## Tutoriel 9 : utilisation d'un modèle de houle distant
 
 Ce tutoriel explique comment utiliser un modèle de houle externe
 dans xdyn.
@@ -22,77 +22,14 @@ exemple de serveur de houle en Python.
 
 ### Mise en donnée xdyn
 
-Dans un fichier YAML (nommé `grpc.yml` dans cet exemple) on écrit :
+Dans un fichier YAML (nommé `tutorial_09_gRPC_wave_model.yml` dans cet exemple) on écrit :
 
-```yaml
-rotations convention: [psi, theta', phi'']
+```python echo=False, results='raw', name='tutorial_09_load_yaml'
+yaml_data = load_yaml('tutorial_09_gRPC_wave_model.yml')
+```
 
-environmental constants:
-    g: {value: 9.81, unit: m/s^2}
-    rho: {value: 1026, unit: kg/m^3}
-    nu: {value: 1.18e-6, unit: m^2/s}
-environment models:
-  - model: grpc
-    url: waves-server:50051
-    Hs: 5
-    Tp: 15
-    gamma: 1.2
-    waves propagating to: 0
-    omega: [1,2,3]
-bodies: # All bodies have NED as parent frame
-  - name: cube
-    mesh: cube.stl
-    position of body frame relative to mesh:
-        frame: mesh
-        x: {value: 0, unit: m}
-        y: {value: 0, unit: m}
-        z: {value: 0.5, unit: m}
-        phi: {value: 0, unit: rad}
-        theta: {value: 0, unit: rad}
-        psi: {value: 0, unit: rad}
-    initial position of body frame relative to NED:
-        frame: NED
-        x: {value:  0, unit: m}
-        y: {value: 0, unit: m}
-        z: {value: 0.25, unit: m}
-        phi: {value: 0, unit: deg}
-        theta: {value: 2, unit: deg}
-        psi: {value: 0, unit: rad}
-    initial velocity of body frame relative to NED:
-        frame: cube
-        u: {value: 0, unit: m/s}
-        v: {value: 0, unit: m/s}
-        w: {value: 0, unit: m/s}
-        p: {value: 0, unit: rad/s}
-        q: {value: 0, unit: deg/s}
-        r: {value: 0, unit: rad/s}
-    dynamics:
-        hydrodynamic forces calculation point in body frame:
-            x: {value: 0.696, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 1.418, unit: m}
-        centre of inertia:
-            frame: cube
-            x: {value: 0, unit: m}
-            y: {value: 0, unit: m}
-            z: {value: 0.4, unit: m}
-        rigid body inertia matrix at the center of gravity and projected in the body frame:
-            row 1: [83.33,0,0,0,0,0]
-            row 2: [0,83.33,0,0,0,0]
-            row 3: [0,0,83.33,0,0,0]
-            row 4: [0,0,0,83.33,0,0]
-            row 5: [0,0,0,0,83.33,0]
-            row 6: [0,0,0,0,0,83.33]
-        added mass matrix at the center of gravity and projected in the body frame:
-            row 1: [0,0,0,0,0,0]
-            row 2: [0,0,0,0,0,0]
-            row 3: [0,0,0,0,0,0]
-            row 4: [0,0,0,0,0,0]
-            row 5: [0,0,0,0,0,0]
-            row 6: [0,0,0,0,0,0]
-    external forces:
-      - model: gravity
-      - model: non-linear hydrostatic (fast)
+```python echo=False, results='raw', name='tutorial_09_print_yaml'
+print_yaml(yaml_data)
 ```
 
 ### Ecriture du modèle de houle
@@ -247,7 +184,7 @@ services:
   xdyn:
     image: sirehna/xdyn
     working_dir: /data
-    entrypoint: xdyn grpc.yml --dt 0.1 --tend 1 -o tsv
+    entrypoint: xdyn tutorial_09_gRPC_wave_model.yml --dt 0.1 --tend 1 -o tsv
     volumes:
     - .:/data
     depends_on:
@@ -287,5 +224,5 @@ environment models:
 On peut alors lancer xdyn normalement :
 
 ```bash
-./xdyn grpc.yml --dt 0.1 --tend 1 -o tsv
+./xdyn tutorial_09_gRPC_wave_model.yml --dt 0.1 --tend 1 -o tsv
 ```

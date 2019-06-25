@@ -18,45 +18,24 @@
 #define PI M_PI
 
 
-Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(flatten(spectrum_)),
+Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(flatten(spectrum_), spectrum_),
 phase(std::vector<std::vector<double> >()),
 rng(),
 generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 {
-    const size_t n = spectrum.psi.size();
-    spectrum.phase = std::vector<double> (n, constant_random_phase);
+    const size_t n = flat_spectrum.psi.size();
+    flat_spectrum.phase = std::vector<double> (n, constant_random_phase);
 }
 
-Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(flatten(spectrum_)),
+Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(flatten(spectrum_), spectrum_),
 phase(std::vector<std::vector<double> >()),
 rng(boost::mt19937((unsigned int)random_number_generator_seed)),
 generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
 {
-    const size_t n = spectrum.psi.size();
+    const size_t n = flat_spectrum.psi.size();
     for (size_t i = 0 ; i < n ; ++i)
     {
-        spectrum.phase.push_back(generate_random_phase(rng));
-    }
-}
-
-Airy::Airy(const FlatDiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(spectrum_),
-phase(std::vector<std::vector<double> >()),
-rng(),
-generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
-{
-    const size_t n = spectrum.psi.size();
-    spectrum.phase = std::vector<double> (n, constant_random_phase);
-}
-
-Airy::Airy(const FlatDiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : WaveModel(spectrum_),
-phase(std::vector<std::vector<double> >()),
-rng(boost::mt19937((unsigned int)random_number_generator_seed)),
-generate_random_phase(boost::random::uniform_real_distribution<double>(0,2*PI))
-{
-    const size_t n = spectrum.psi.size();
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        spectrum.phase.push_back(generate_random_phase(rng));
+        flat_spectrum.phase.push_back(generate_random_phase(rng));
     }
 }
 
@@ -70,16 +49,16 @@ double Airy::evaluate_rao(
 {
     double F = 0;
     const size_t nb_of_omegas_x_nb_of_directions = rao_module_for_each_frequency_and_incidence.size();
-    if (nb_of_omegas_x_nb_of_directions != spectrum.k.size())
+    if (nb_of_omegas_x_nb_of_directions != flat_spectrum.k.size())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Number of angular frequencies times number of incidences in HDB RAO is " << nb_of_omegas_x_nb_of_directions << ", which does not match spectrum size (" << spectrum.k.size() << " (omega,psi) pairs)");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Number of angular frequencies times number of incidences in HDB RAO is " << nb_of_omegas_x_nb_of_directions << ", which does not match spectrum size (" << flat_spectrum.k.size() << " (omega,psi) pairs)");
     }
     for (size_t i = 0 ; i < nb_of_omegas_x_nb_of_directions ; ++i) // For each (omega,beta) pair
     {
-        const double rao_amplitude = rao_module_for_each_frequency_and_incidence[i] * spectrum.a[i];
-        const double omega_t = spectrum.omega[i] * t;
-        const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x * spectrum.cos_psi[i] + y * spectrum.sin_psi[i]);
-        const double theta = spectrum.phase[i];
+        const double rao_amplitude = rao_module_for_each_frequency_and_incidence[i] * flat_spectrum.a[i];
+        const double omega_t = flat_spectrum.omega[i] * t;
+        const double k_xCosPsi_ySinPsi = flat_spectrum.k[i] * (x * flat_spectrum.cos_psi[i] + y * flat_spectrum.sin_psi[i]);
+        const double theta = flat_spectrum.phase[i];
         F -= rao_amplitude * sin(-omega_t + k_xCosPsi_ySinPsi + theta + rao_phase_for_each_frequency_and_incidence[i]);
     }
     return F;
@@ -92,15 +71,15 @@ std::vector<double> Airy::elevation(
     ) const
 {
     std::vector<double> zeta(x.size());
-    const size_t n = spectrum.psi.size();
+    const size_t n = flat_spectrum.psi.size();
 
     for (size_t j = 0; j < zeta.size(); ++j) {
         for (size_t i = 0 ; i < n ; ++i)
         {
-            const double a = spectrum.a[i];
-            const double omega_t = spectrum.omega[i] * t;
-            const double k_xCosPsi_ySinPsi = spectrum.k[i] * (x.at(j) * spectrum.cos_psi[i] + y.at(j) * spectrum.sin_psi[i]);
-            const double theta = spectrum.phase[i];
+            const double a = flat_spectrum.a[i];
+            const double omega_t = flat_spectrum.omega[i] * t;
+            const double k_xCosPsi_ySinPsi = flat_spectrum.k[i] * (x.at(j) * flat_spectrum.cos_psi[i] + y.at(j) * flat_spectrum.sin_psi[i]);
+            const double theta = flat_spectrum.phase[i];
             zeta.at(j) -= a * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
         }
     }
@@ -137,15 +116,15 @@ std::vector<double> Airy::dynamic_pressure(
         }
         else
         {
-            const size_t n = spectrum.psi.size();
+            const size_t n = flat_spectrum.psi.size();
             for (size_t i = 0; i < n; ++i)
             {
-                const double a = spectrum.a[i];
-                const double k = spectrum.k[i];
-                const double omega_t = spectrum.omega[i] * t;
-                const double pdyn_fact = spectrum.pdyn_factor(k, z[j], eta[j]);
-                const double k_xCosPsi_ySinPsi = k * (x[j] * spectrum.cos_psi[i] + y[j] * spectrum.sin_psi[i]);
-                const double theta = spectrum.phase[i];
+                const double a = flat_spectrum.a[i];
+                const double k = flat_spectrum.k[i];
+                const double omega_t = flat_spectrum.omega[i] * t;
+                const double pdyn_fact = flat_spectrum.pdyn_factor(k, z[j], eta[j]);
+                const double k_xCosPsi_ySinPsi = k * (x[j] * flat_spectrum.cos_psi[i] + y[j] * flat_spectrum.sin_psi[i]);
+                const double theta = flat_spectrum.phase[i];
                 p[j] += a * pdyn_fact * sin(-omega_t + k_xCosPsi_ySinPsi + theta);
             }
             p[j] *= rho * g;
@@ -173,24 +152,24 @@ ssc::kinematics::PointMatrix Airy::orbital_velocity(
             M.m(1, point_index) = 0;
             M.m(2, point_index) = 0;
         } else {
-            const size_t n = spectrum.psi.size();
+            const size_t n = flat_spectrum.psi.size();
             double u = 0;
             double v = 0;
             double w = 0;
             for (size_t i = 0 ; i < n ; ++i)
             {
-                const double omega = spectrum.omega[i];
-                const double k = spectrum.k[i];
-                const double pdyn_factor = spectrum.pdyn_factor(k,z[point_index],0); // No stretching for the orbital velocity
-                const double pdyn_factor_sh = spectrum.pdyn_factor_sh(k,z[point_index],0); // No stretching for the orbital velocity
-                const double k_xCosPsi_ySinPsi = k * (x[point_index] * spectrum.cos_psi[i] + y[point_index] * spectrum.sin_psi[i]);
-                const double theta = -omega * t + k_xCosPsi_ySinPsi + spectrum.phase[i];
+                const double omega = flat_spectrum.omega[i];
+                const double k = flat_spectrum.k[i];
+                const double pdyn_factor = flat_spectrum.pdyn_factor(k,z[point_index],0); // No stretching for the orbital velocity
+                const double pdyn_factor_sh = flat_spectrum.pdyn_factor_sh(k,z[point_index],0); // No stretching for the orbital velocity
+                const double k_xCosPsi_ySinPsi = k * (x[point_index] * flat_spectrum.cos_psi[i] + y[point_index] * flat_spectrum.sin_psi[i]);
+                const double theta = -omega * t + k_xCosPsi_ySinPsi + flat_spectrum.phase[i];
                 const double cos_theta = cos(theta);
                 const double sin_theta = sin(theta);
-                const double a_k_omega = spectrum.a[i] * k / omega;
+                const double a_k_omega = flat_spectrum.a[i] * k / omega;
                 const double a_k_omega_pdyn_factor_sin_theta = a_k_omega * pdyn_factor * sin_theta;
-                u += a_k_omega_pdyn_factor_sin_theta * spectrum.cos_psi[i];
-                v += a_k_omega_pdyn_factor_sin_theta * spectrum.sin_psi[i];
+                u += a_k_omega_pdyn_factor_sin_theta * flat_spectrum.cos_psi[i];
+                v += a_k_omega_pdyn_factor_sin_theta * flat_spectrum.sin_psi[i];
                 w += a_k_omega * pdyn_factor_sh * cos_theta;
             }
             M.m(0, point_index) = u * g;
