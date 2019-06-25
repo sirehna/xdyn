@@ -174,6 +174,9 @@ test-debian:
 docker:
 	./ninja_debian.sh package && cp build_deb9/xdyn.deb . &&  docker build . --tag xdyn
 
+docker_grpc_force_model:
+	cd grpc_docker/force && make
+
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb9
 doc: CPACK_GENERATOR = DEB
