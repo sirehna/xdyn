@@ -111,7 +111,7 @@ std::vector<double> LinearHydrostaticForceModel::get_zH(const double t) const
 
     try
     {
-        return env.w->get_wave_height(x, y, t);
+        return env.w->get_and_check_wave_height(x, y, t);
     }
     catch (const ssc::exception_handling::Exception& e)
     {

@@ -71,7 +71,7 @@ ssc::kinematics::PointMatrix SurfaceElevationInterface::get_points_on_free_surfa
         x[i] = (double)ret.m(0, i);
         y[i] = (double)ret.m(1, i);
     }
-    const std::vector<double> wave_height_ = get_wave_height(x, y, t);
+    const std::vector<double> wave_height_ = get_and_check_wave_height(x, y, t);
     for (size_t i = 0; i < n; ++i)
     {
         ret.m(2, i) = wave_height_.at(i);
@@ -106,7 +106,7 @@ void SurfaceElevationInterface::update_surface_elevation(
         x[i] = (double)OP.m(0, i);
         y[i] = (double)OP.m(1, i);
     }
-    surface_elevation_for_each_point_in_mesh = get_wave_height(x, y, t);
+    surface_elevation_for_each_point_in_mesh = get_and_check_wave_height(x, y, t);
     for (size_t i = 0; i < n; ++i)
     {
         relative_wave_height_for_each_point_in_mesh[i] = (double)OP.m(2, i) - surface_elevation_for_each_point_in_mesh.at(i);
@@ -150,7 +150,7 @@ double SurfaceElevationInterface::evaluate_rao(
     return F;
 }
 
-std::vector<double> SurfaceElevationInterface::get_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+std::vector<double> SurfaceElevationInterface::get_and_check_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                                                const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                                                const double t                //!< Current instant (in seconds)
                                                               ) const

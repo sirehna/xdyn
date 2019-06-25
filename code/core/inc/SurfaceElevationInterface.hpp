@@ -148,7 +148,7 @@ class SurfaceElevationInterface
           *  \returns Surface elevations of a list of points at a given instant, in meters.
           *  \returns zwave - z
           */
-        std::vector<double> get_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+        std::vector<double> get_and_check_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                             const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                             const double t                //!< Current instant (in seconds)
                                            ) const;

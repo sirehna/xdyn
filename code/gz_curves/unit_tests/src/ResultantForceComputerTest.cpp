@@ -68,7 +68,7 @@ TEST_F(ResultantForceComputerTest, sim_only_contains_default_surface_elevation)
         const std::vector<double> x{a.random<double>().between(-1000, 1000)};
         const std::vector<double> y{a.random<double>().between(-1000, 1000)};
         const double t = a.random<double>().between(0,1000);
-        ASSERT_DOUBLE_EQ(0, env.w->get_wave_height(x,y,t).at(0));
+        ASSERT_DOUBLE_EQ(0, env.w->get_and_check_wave_height(x,y,t).at(0));
     }
 }
 

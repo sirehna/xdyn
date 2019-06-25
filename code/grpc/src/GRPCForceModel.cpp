@@ -285,7 +285,7 @@ class ToGRPC
                     std::vector<double> eta;
                     try
                     {
-                        eta = env.w->get_wave_height(wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.t);
+                        eta = env.w->get_and_check_wave_height(wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.t);
                     }
                     catch (const ssc::exception_handling::Exception& e)
                     {
@@ -313,7 +313,7 @@ class ToGRPC
                     wave_information->mutable_elevations()->set_t(t);
                     copy_from_double_vector(wave_request.elevations.x, wave_information->mutable_elevations()->mutable_x());
                     copy_from_double_vector(wave_request.elevations.y, wave_information->mutable_elevations()->mutable_y());
-                    copy_from_double_vector(env.w->get_wave_height(wave_request.elevations.x, wave_request.elevations.y, wave_request.elevations.t), wave_information->mutable_elevations()->mutable_z());
+                    copy_from_double_vector(env.w->get_and_check_wave_height(wave_request.elevations.x, wave_request.elevations.y, wave_request.elevations.t), wave_information->mutable_elevations()->mutable_z());
                 }
                 catch (const ssc::exception_handling::Exception& e)
                 {
@@ -325,7 +325,7 @@ class ToGRPC
                     copy_from_double_vector(wave_request.dynamic_pressures.x, wave_information->mutable_dynamic_pressures()->mutable_x());
                     copy_from_double_vector(wave_request.dynamic_pressures.y, wave_information->mutable_dynamic_pressures()->mutable_y());
                     copy_from_double_vector(wave_request.dynamic_pressures.z, wave_information->mutable_dynamic_pressures()->mutable_z());
-                    const std::vector<double> eta = env.w->get_wave_height(wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.t);
+                    const std::vector<double> eta = env.w->get_and_check_wave_height(wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.t);
                     copy_from_double_vector(env.w->get_and_check_dynamic_pressure(env.rho, env.g, wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.z, eta, t), wave_information->mutable_dynamic_pressures()->mutable_pdyn());
                 }
                 catch (const ssc::exception_handling::Exception& e)
