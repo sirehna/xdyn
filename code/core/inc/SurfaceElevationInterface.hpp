@@ -75,7 +75,7 @@ class SurfaceElevationInterface
         /**  \brief Computes the orbital velocity at given points.
           *  \returns Velocity of the fluid at given points & instant, in m/s
           */
-        ssc::kinematics::PointMatrix get_orbital_velocity(const double g,                //!< gravity (in m/s^2)
+        ssc::kinematics::PointMatrix get_and_check_orbital_velocity(const double g,                //!< gravity (in m/s^2)
                                                           const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
                                                           const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
                                                           const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
