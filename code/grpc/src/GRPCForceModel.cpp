@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-
+#include <vector>
 #include <grpcpp/grpcpp.h>
 #include "force.pb.h"
 #include "force.grpc.pb.h"
@@ -18,9 +18,11 @@
 #include "Body.hpp"
 #include "GRPCError.hpp"
 #include "GRPCForceModel.hpp"
+#include "GRPCTypes.hpp"
 
-void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status);
-void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status)
+
+void throw_if_invalid_status(const Input& input, const std::string& rpc_method, const grpc::Status& status);
+void throw_if_invalid_status(const Input& input, const std::string& rpc_method, const grpc::Status& status)
 {
     const std::string base_error_msg = std::string("an error occurred when using the distant force model '") + input.name + "' defined via gRPC (method '" + rpc_method + "').\n";
     const std::string yaml_msg = "The YAML you provided for this gRPC model is:\n\n" + input.yaml + "\n";
@@ -131,39 +133,6 @@ void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::stri
     }
 }
 
-struct XYTs
-{
-    std::vector<double> x;
-    std::vector<double> y;
-    double t;
-};
-
-struct XYZTs
-{
-    std::vector<double> x;
-    std::vector<double> y;
-    std::vector<double> z;
-    double t;
-};
-
-struct XYT
-{
-    double x;
-    double y;
-    double t;
-};
-
-struct WaveRequest
-{
-    XYTs elevations;
-    XYZTs dynamic_pressures;
-    XYZTs orbital_velocities;
-    XYT spectrum;
-    bool angular_frequencies_for_rao;
-    bool directions_for_rao;
-    bool need_spectrum;
-};
-
 class FromGRPC
 {
     public:
@@ -213,7 +182,7 @@ class FromGRPC
 class ToGRPC
 {
     public:
-        ToGRPC(const GRPCForceModel::Input& input_) : input(input_) {}
+        ToGRPC(const Input& input_) : input(input_) {}
         RequiredWaveInformationRequest from_required_wave_information(const double t, const double x, const double y, const double z) const
         {
             RequiredWaveInformationRequest request;
@@ -417,7 +386,7 @@ class ToGRPC
         {
             *destination = {origin.begin(), origin.end()};
         }
-        GRPCForceModel::Input input;
+        Input input;
         ToGRPC(); // Disabled
 
 };
@@ -502,20 +471,14 @@ class GRPCForceModel::Impl
 
 std::string GRPCForceModel::model_name() {return "grpc";}
 
-GRPCForceModel::Input::Input() :
-        url(),
-        name(),
-        yaml()
-{
-}
 
-GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
+Input GRPCForceModel::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    GRPCForceModel::Input ret;
+    Input ret;
     node["url"] >> ret.url;
     node["name"] >> ret.name;
     YAML::Emitter out;
@@ -524,8 +487,8 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     return ret;
 }
 
-std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& input);
-std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& input)
+std::vector<std::string> get_commands_from_grpc(const Input& input);
+std::vector<std::string> get_commands_from_grpc(const Input& input)
 {
     std::unique_ptr<Force::Stub> stub = Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials()));
     CommandsRequest request;
@@ -545,7 +508,7 @@ YamlPosition get_transformation_to_model_frame(const std::string& body_name)
     return YamlPosition(YamlCoordinates(), YamlAngle(), body_name);
 }
 
-GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+GRPCForceModel::GRPCForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
         ControllableForceModel(input.name, get_commands_from_grpc(input), get_transformation_to_model_frame(body_name_), body_name_, env_),
         env(env_),
         pimpl(new Impl(input, env_.rot.convention))
