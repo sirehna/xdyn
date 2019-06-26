@@ -19,10 +19,11 @@
 #include "GRPCError.hpp"
 #include "GRPCForceModel.hpp"
 #include "GRPCTypes.hpp"
+#include "ToGRPC.hpp"
 
 
-void throw_if_invalid_status(const Input& input, const std::string& rpc_method, const grpc::Status& status);
-void throw_if_invalid_status(const Input& input, const std::string& rpc_method, const grpc::Status& status)
+void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status);
+void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status)
 {
     const std::string base_error_msg = std::string("an error occurred when using the distant force model '") + input.name + "' defined via gRPC (method '" + rpc_method + "').\n";
     const std::string yaml_msg = "The YAML you provided for this gRPC model is:\n\n" + input.yaml + "\n";
@@ -394,7 +395,7 @@ class ToGRPC
 class GRPCForceModel::Impl
 {
     public:
-        Impl(const Input& input_, const std::vector<std::string>& rotation_convention_)
+        Impl(const GRPCForceModel::Input& input_, const std::vector<std::string>& rotation_convention_)
             : input(input_)
             , stub(Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials())))
             , extra_observations()
@@ -459,7 +460,7 @@ class GRPCForceModel::Impl
             }
             return new WaveInformation();
         }
-        Input input;
+        GRPCForceModel::Input input;
         std::unique_ptr<Force::Stub> stub;
         std::map<std::string,double> extra_observations;
         double max_history_length;
@@ -472,13 +473,13 @@ class GRPCForceModel::Impl
 std::string GRPCForceModel::model_name() {return "grpc";}
 
 
-Input GRPCForceModel::parse(const std::string& yaml)
+GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    Input ret;
+    GRPCForceModel::Input ret;
     node["url"] >> ret.url;
     node["name"] >> ret.name;
     YAML::Emitter out;
@@ -487,8 +488,8 @@ Input GRPCForceModel::parse(const std::string& yaml)
     return ret;
 }
 
-std::vector<std::string> get_commands_from_grpc(const Input& input);
-std::vector<std::string> get_commands_from_grpc(const Input& input)
+std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& input);
+std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& input)
 {
     std::unique_ptr<Force::Stub> stub = Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials()));
     CommandsRequest request;
@@ -508,7 +509,7 @@ YamlPosition get_transformation_to_model_frame(const std::string& body_name)
     return YamlPosition(YamlCoordinates(), YamlAngle(), body_name);
 }
 
-GRPCForceModel::GRPCForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
         ControllableForceModel(input.name, get_commands_from_grpc(input), get_transformation_to_model_frame(body_name_), body_name_, env_),
         env(env_),
         pimpl(new Impl(input, env_.rot.convention))

@@ -12,12 +12,16 @@
 #include "EnvironmentAndFrames.hpp"
 #include "ControllableForceModel.hpp"
 #include <ssc/kinematics.hpp>
-#include "GRPCTypes.hpp"
-
 
 class GRPCForceModel : public ControllableForceModel
 {
     public:
+        struct Input
+        {
+            std::string url;
+            std::string name;
+            std::string yaml;
+        };
         GRPCForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
         ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands) const;
         static Input parse(const std::string& yaml);

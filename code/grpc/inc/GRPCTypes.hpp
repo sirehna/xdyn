@@ -8,15 +8,7 @@
 #ifndef GRPC_INC_GRPCTYPES_HPP_
 #define GRPC_INC_GRPCTYPES_HPP_
 
-#include <string>
 #include <vector>
-
-struct Input
-{
-    std::string url;
-    std::string name;
-    std::string yaml;
-};
 
 struct XYTs
 {

@@ -16,10 +16,12 @@
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 #include "EnvironmentAndFrames.hpp"
 
+#include "GRPCForceModel.hpp"
+
 class ToGRPC
 {
     public:
-        ToGRPC(const Input& input_);
+        ToGRPC(const GRPCForceModel::Input& input_);
         RequiredWaveInformationRequest from_required_wave_information(const double t, const double x, const double y, const double z) const;
         SpectrumResponse* from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const;
         WaveInformation* from_wave_information(const WaveRequest& wave_request, const double t, const EnvironmentAndFrames& env) const;
@@ -30,7 +32,7 @@ class ToGRPC
     private:
         void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination) const;
         void copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination) const;
-        Input input;
+        GRPCForceModel::Input input;
         ToGRPC(); // Disabled
 };
 

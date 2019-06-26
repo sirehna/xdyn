@@ -8,7 +8,7 @@
 
 #include "ToGRPC.hpp"
 
-ToGRPC::ToGRPC(const Input& input_)
+ToGRPC::ToGRPC(const GRPCForceModel::Input& input_)
     : input(input_)
 {}
 
