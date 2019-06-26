@@ -31,9 +31,11 @@ class GRPCForceModel : public ControllableForceModel
     private:
         void extra_observations(Observer& observer) const;
         GRPCForceModel(); // Disabled
-        EnvironmentAndFrames env;
         class Impl;
-        TR1(shared_ptr)<Impl> pimpl;
+        std::shared_ptr<Impl> pimpl;
+        GRPCForceModel(const std::shared_ptr<Impl>& pimpl, const std::string& body_name, const EnvironmentAndFrames& env);
+        EnvironmentAndFrames env;
+
 };
 
 

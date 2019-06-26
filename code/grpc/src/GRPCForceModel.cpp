@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include <memory> // std::make_shared
 #include <vector>
 #include <grpcpp/grpcpp.h>
 #include "force.pb.h"
@@ -151,6 +152,11 @@ class GRPCForceModel::Impl
             set_parameters(input.yaml);
         }
 
+        GRPCForceModel::Input get_input() const
+        {
+            return input;
+        }
+
         void set_parameters(const std::string& yaml)
         {
             SetForceParameterResponse response;
@@ -253,9 +259,15 @@ YamlPosition get_transformation_to_model_frame(const std::string& body_name)
 }
 
 GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(input.name, get_commands_from_grpc(input), get_transformation_to_model_frame(body_name_), body_name_, env_),
-        env(env_),
-        pimpl(new Impl(input, env_.rot.convention))
+        GRPCForceModel(std::make_shared<GRPCForceModel::Impl>(input, env_.rot.convention), body_name_, env_)
+
+{
+}
+
+GRPCForceModel::GRPCForceModel(const std::shared_ptr<Impl>& pimpl_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+        ControllableForceModel(pimpl->get_input().name, get_commands_from_grpc(pimpl->get_input()), get_transformation_to_model_frame(body_name_), body_name_, env_),
+        pimpl(pimpl_),
+        env(env_)
 
 {
 }
