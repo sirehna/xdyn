@@ -4,6 +4,7 @@ project(grpc)
 set(SRC src/SurfaceElevationFromGRPC.cpp
         src/GRPCForceModel.cpp
         src/ToGRPC.cpp
+        src/FromGRPC.cpp
         )
 
 # Using C++ 2011
