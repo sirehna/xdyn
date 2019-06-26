@@ -177,6 +177,9 @@ docker:
 docker_grpc_force_model:
 	cd grpc_docker/force && make
 
+docker_grpc_waves_model:
+	cd code/waves_grpc/python_server && make CONTAINER_NAME=xdyn-waves-grpc:python3
+
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb9
 doc: CPACK_GENERATOR = DEB
