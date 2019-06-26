@@ -539,14 +539,14 @@ std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& inp
     return ret;
 }
 
-YamlPosition get_origin_of_BODY_frame(const std::string& body_name);
-YamlPosition get_origin_of_BODY_frame(const std::string& body_name)
+YamlPosition get_transformation_to_model_frame(const std::string& body_name);
+YamlPosition get_transformation_to_model_frame(const std::string& body_name)
 {
     return YamlPosition(YamlCoordinates(), YamlAngle(), body_name);
 }
 
 GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(input.name, get_commands_from_grpc(input), get_origin_of_BODY_frame(body_name_), body_name_, env_),
+        ControllableForceModel(input.name, get_commands_from_grpc(input), get_transformation_to_model_frame(body_name_), body_name_, env_),
         env(env_),
         pimpl(new Impl(input, env_.rot.convention))
 
