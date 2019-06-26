@@ -5,8 +5,6 @@
  *      Author: cady
  */
 
-//#include "BodyBuilder.hpp"
-//#include "EnvironmentAndFrames.hpp"
 #include "GRPCForceModel.hpp"
 #include "GRPCForceModelTest.hpp"
 #include "yaml_data.hpp"
