@@ -1,4 +1,4 @@
-all: windows debian doc
+all: windows debian doc all_docker_images
 
 windows: windows_gccx_posix
 debian: debian_9_release_gcc_6
