@@ -51,7 +51,9 @@ script:
   - if [ "$TARGET" == "debian_9_release_gcc_6" ];
     then
     echo "Create xdyn grpc force model docker container";
-    make docker_grpc_force_model
+    make docker_grpc_force_model;
+    echo "Create xdyn grpc waves model docker container";
+    make docker_grpc_waves_model;
     fi
 
 after_success:
@@ -66,10 +68,12 @@ after_success:
   docker tag xweave sirehna/xweave;
   docker tag xdyn sirehna/xdyn;
   docker tag xdyn-force-grpc:python3 sirehna/xdyn-force-grpc:python3;
+  docker tag xdyn-waves-grpc:python3 sirehna/xdyn-waves-grpc:python3;
   docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
   docker push sirehna/xdyn;
   docker push sirehna/xweave;
   docker push sirehna/xdyn-force-grpc:python3;
+  docker push sirehna/xdyn-waves-grpc:python3;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_8_release_gcc_492" ];
   then
