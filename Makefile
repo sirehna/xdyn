@@ -1,4 +1,4 @@
-all: windows debian doc
+all: windows debian doc all_docker_images
 
 windows: windows_gccx_posix
 debian: debian_9_release_gcc_6
@@ -173,6 +173,15 @@ test-debian:
 
 docker:
 	./ninja_debian.sh package && cp build_deb9/xdyn.deb . &&  docker build . --tag xdyn
+
+docker_grpc_force_model:
+	cd grpc_docker/force && make
+
+docker_grpc_waves_model:
+	cd code/waves_grpc/python_server && make CONTAINER_NAME=xdyn-waves-grpc:python3
+
+all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
+	echo "Build all docker images after having run 'make debian'"
 
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb9

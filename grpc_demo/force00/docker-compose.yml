@@ -1,0 +1,18 @@
+version: '3'
+services:
+  force-model:
+    image: xdyn-force-grpc:python3
+    command: harmonic_oscillator.py
+    working_dir: /work
+    volumes:
+    - .:/work
+    user: ${CURRENT_UID}
+  xdyn:
+    image: xdyn
+    working_dir: /data
+    command: tutorial_10_gRPC_force_model.yml --dt 0.1 --tend 10 -o tsv
+    volumes:
+    - .:/data
+    user: ${CURRENT_UID}
+    depends_on:
+    - force-model
