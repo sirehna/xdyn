@@ -180,6 +180,9 @@ docker_grpc_force_model:
 docker_grpc_waves_model:
 	cd code/waves_grpc/python_server && make CONTAINER_NAME=xdyn-waves-grpc:python3
 
+all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
+	echo "Build all docker images after having run 'make debian'"
+
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb9
 doc: CPACK_GENERATOR = DEB
