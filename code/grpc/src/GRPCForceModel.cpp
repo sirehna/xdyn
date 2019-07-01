@@ -198,6 +198,18 @@ class GRPCForceModel::Impl
             return extra_observations;
         }
 
+        std::vector<std::string> get_commands()
+        {
+            CommandsResponse response;
+            grpc::ClientContext context;
+            const grpc::Status status = stub->get_commands(&context, CommandsRequest(), &response);
+            throw_if_invalid_status(input, "get_commands", status);
+            std::vector<std::string> ret;
+            ret.reserve(response.commands_size());
+            std::copy(response.commands().begin(), response.commands().end(), std::back_inserter(ret));
+            return ret;
+        }
+
     private:
         Impl(); // Disabled
         WaveInformation* get_wave_information(const double t, const double x, const double y, const double z, const EnvironmentAndFrames& env) const
@@ -237,21 +249,6 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     return ret;
 }
 
-std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& input);
-std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& input)
-{
-    std::unique_ptr<Force::Stub> stub = Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials()));
-    CommandsRequest request;
-    CommandsResponse response;
-    grpc::ClientContext context;
-    const grpc::Status status = stub->get_commands(&context, request, &response);
-    throw_if_invalid_status(input, "get_commands", status);
-    std::vector<std::string> ret;
-    ret.reserve(response.commands_size());
-    std::copy(response.commands().begin(), response.commands().end(), std::back_inserter(ret));
-    return ret;
-}
-
 YamlPosition get_transformation_to_model_frame(const std::string& body_name);
 YamlPosition get_transformation_to_model_frame(const std::string& body_name)
 {
@@ -265,7 +262,7 @@ GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::st
 }
 
 GRPCForceModel::GRPCForceModel(const std::shared_ptr<Impl>& pimpl_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(pimpl->get_input().name, get_commands_from_grpc(pimpl->get_input()), get_transformation_to_model_frame(body_name_), body_name_, env_),
+        ControllableForceModel(pimpl->get_input().name, pimpl->get_commands(), get_transformation_to_model_frame(body_name_), body_name_, env_),
         pimpl(pimpl_),
         env(env_)
 
