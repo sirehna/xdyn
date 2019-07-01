@@ -60,6 +60,9 @@ class Model:
           information (elevations, dynamic pressures or orbital velocities²)
           (in which case method 'required_wave_information' will be called).
           False otherwise.
+        - commands (list of strings): list of command names (eg. ['beta1',
+          'beta2']) that are required by this model & should be supplied by
+          xdyn (in the 'commands' section of the YAML file).
 
         """
         raise NotImplementedError(inspect.currentframe().f_code.co_name
@@ -145,10 +148,6 @@ class Model:
         """
         raise NotImplementedError(inspect.currentframe().f_code.co_name
                                   + NOT_IMPLEMENTED)
-
-    def get_commands(self):
-        """By default, a force model needs no commands."""
-        return []
 
     def force(self, states, commands, wave_information):
         """Calculate the force & torque.
@@ -324,14 +323,6 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         """
         self.model = model
         self.wave_information_required = False
-
-    def get_commands(self, _, __):
-        """Return the list of commands expected by this model."""
-        LOGGER.info('get_commands')
-        ret = force_pb2.CommandsResponse()
-        ret.commands[:] = self.model.get_commands()
-        LOGGER.info(ret)
-        return ret
 
     def set_parameters(self, request, context):
         """Set the parameters of self.model.

@@ -148,6 +148,7 @@ class GRPCForceModel::Impl
             , rotation_convention(rotation_convention_)
             , to_grpc(ToGRPC(input))
             , from_grpc(FromGRPC())
+            , commands()
         {
             set_parameters(input.yaml);
         }
@@ -165,6 +166,8 @@ class GRPCForceModel::Impl
             throw_if_invalid_status(input, "set_parameters", status);
             needs_wave_outputs = response.needs_wave_outputs();
             max_history_length = response.max_history_length();
+            commands.reserve(response.commands_size());
+            std::copy(response.commands().begin(), response.commands().end(), std::back_inserter(commands));
         }
 
         WaveRequest required_wave_information(const double t, const double x, const double y, const double z) const
@@ -198,16 +201,9 @@ class GRPCForceModel::Impl
             return extra_observations;
         }
 
-        std::vector<std::string> get_commands()
+        std::vector<std::string> get_commands() const
         {
-            CommandsResponse response;
-            grpc::ClientContext context;
-            const grpc::Status status = stub->get_commands(&context, CommandsRequest(), &response);
-            throw_if_invalid_status(input, "get_commands", status);
-            std::vector<std::string> ret;
-            ret.reserve(response.commands_size());
-            std::copy(response.commands().begin(), response.commands().end(), std::back_inserter(ret));
-            return ret;
+            return commands;
         }
 
     private:
@@ -229,6 +225,7 @@ class GRPCForceModel::Impl
         std::vector<std::string> rotation_convention;
         ToGRPC to_grpc;
         FromGRPC from_grpc;
+        std::vector<std::string> commands;
 };
 
 std::string GRPCForceModel::model_name() {return "grpc";}

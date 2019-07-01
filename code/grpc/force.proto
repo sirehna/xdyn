@@ -4,7 +4,6 @@ import "wave_types.proto";
 
 service Force
 {
-    rpc get_commands(CommandsRequest)                             returns (CommandsResponse);
     rpc set_parameters(SetForceParameterRequest)                  returns (SetForceParameterResponse);
     rpc force(ForceRequest)                                       returns (ForceResponse);
     rpc required_wave_information(RequiredWaveInformationRequest) returns (RequiredWaveInformationResponse);
@@ -56,7 +55,8 @@ message SetForceParameterRequest
 message SetForceParameterResponse
 {
     double max_history_length = 1; // How far back (in seconds) should the history values in ForceRequest go?
-    bool needs_wave_outputs = 2; // Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
+    bool needs_wave_outputs = 2;   // Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
+    repeated string commands = 3;  // List of commands needed by this model, without the model name (e.g. ['beta1', 'beta2'])
 }
 
 message States
