@@ -9,15 +9,6 @@ service Force
     rpc required_wave_information(RequiredWaveInformationRequest) returns (RequiredWaveInformationResponse);
 }
 
-message CommandsRequest
-{
-}
-
-message CommandsResponse
-{
-    repeated string commands = 1;
-}
-
 message RequiredWaveInformationRequest
 {
     double t = 1; // Simulation time (in seconds).
