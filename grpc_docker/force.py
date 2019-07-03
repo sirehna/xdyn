@@ -368,7 +368,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         except Exception as exception:
             context.set_details(repr(exception))
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-        return ret
+        return response
 
     def force(self, request, context):
         """Marshall force model's arguments from gRPC."""
