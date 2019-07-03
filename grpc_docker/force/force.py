@@ -43,13 +43,16 @@ NOT_IMPLEMENTED = "is not implemented in this model."
 class Model:
     """Derive from this class to implement a gRPC force model for xdyn."""
 
-    def set_parameters(self, parameters):
+    def set_parameters(self, parameters, body_name):
         """Initialize the force model with YAML parameters.
 
         Parameters
         ----------
-        parameters : string
+        parameters: string
             YAML string containing the parameters of this model. Can be empty.
+        body_name: string
+            Name of the "body" reference frame. Needed, eg. if you want to
+            express the wrench in that reference frame.
 
         Returns
         -------
@@ -351,7 +354,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         LOGGER.info('Received parameters: %s', request.parameters)
         response = force_pb2.SetForceParameterResponse()
         try:
-            out = self.model.set_parameters(request.parameters)
+            out = self.model.set_parameters(request.parameters, request.body_name)
             response.max_history_length = out['max_history_length']
             response.needs_wave_outputs = out['needs_wave_outputs']
             self.wave_information_required = response.needs_wave_outputs

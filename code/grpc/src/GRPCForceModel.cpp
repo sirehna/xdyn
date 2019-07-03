@@ -139,7 +139,7 @@ void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::stri
 class GRPCForceModel::Impl
 {
     public:
-        Impl(const GRPCForceModel::Input& input_, const std::vector<std::string>& rotation_convention_)
+        Impl(const GRPCForceModel::Input& input_, const std::vector<std::string>& rotation_convention_, const std::string& body_name)
             : input(input_)
             , stub(Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials())))
             , extra_observations()
@@ -151,7 +151,7 @@ class GRPCForceModel::Impl
             , commands()
             , force_frame()
         {
-            set_parameters(input.yaml);
+            set_parameters(input.yaml, body_name);
         }
 
         GRPCForceModel::Input get_input() const
@@ -159,11 +159,11 @@ class GRPCForceModel::Impl
             return input;
         }
 
-        void set_parameters(const std::string& yaml)
+        void set_parameters(const std::string& yaml, const std::string& body_name)
         {
             SetForceParameterResponse response;
             grpc::ClientContext context;
-            const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml), &response);
+            const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml, body_name), &response);
             throw_if_invalid_status(input, "set_parameters", status);
             needs_wave_outputs = response.needs_wave_outputs();
             max_history_length = response.max_history_length();
@@ -261,7 +261,7 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
 }
 
 GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        GRPCForceModel(std::make_shared<GRPCForceModel::Impl>(input, env_.rot.convention), body_name_, env_)
+        GRPCForceModel(std::make_shared<GRPCForceModel::Impl>(input, env_.rot.convention, body_name_), body_name_, env_)
 
 {
 }

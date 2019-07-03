@@ -41,6 +41,7 @@ message WaveInformation
 message SetForceParameterRequest
 {
     string parameters = 1; // YAML string containing the parameters to set for this particular model.
+    string body_name = 2; // Name of the body this force model is acting upon. Useful, eg., if you want to express the force & torque in the body's reference frame.
 }
 
 message SetForceParameterResponse

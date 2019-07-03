@@ -198,10 +198,11 @@ ForceRequest ToGRPC::from_force_request(States* states, const std::map<std::stri
     return request;
 }
 
-SetForceParameterRequest ToGRPC::from_yaml(const std::string& yaml) const
+SetForceParameterRequest ToGRPC::from_yaml(const std::string& yaml, const std::string body_name) const
 {
     SetForceParameterRequest request;
     request.set_parameters(yaml);
+    request.set_body_name(body_name);
     return request;
 }
 
