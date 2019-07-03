@@ -149,6 +149,7 @@ class GRPCForceModel::Impl
             , to_grpc(ToGRPC(input))
             , from_grpc(FromGRPC())
             , commands()
+            , force_frame()
         {
             set_parameters(input.yaml);
         }
@@ -168,6 +169,13 @@ class GRPCForceModel::Impl
             max_history_length = response.max_history_length();
             commands.reserve(response.commands_size());
             std::copy(response.commands().begin(), response.commands().end(), std::back_inserter(commands));
+            force_frame.frame = response.frame();
+            force_frame.angle.phi = response.phi();
+            force_frame.angle.theta = response.theta();
+            force_frame.angle.psi = response.psi();
+            force_frame.coordinates.x = response.x();
+            force_frame.coordinates.y = response.y();
+            force_frame.coordinates.z = response.z();
         }
 
         WaveRequest required_wave_information(const double t, const double x, const double y, const double z) const
@@ -206,9 +214,9 @@ class GRPCForceModel::Impl
             return commands;
         }
 
-        YamlPosition get_transformation_to_model_frame(const std::string& body_name) const
+        YamlPosition get_transformation_to_model_frame() const
         {
-            return YamlPosition(YamlCoordinates(), YamlAngle(), body_name);
+            return force_frame;
         }
 
     private:
@@ -231,6 +239,7 @@ class GRPCForceModel::Impl
         ToGRPC to_grpc;
         FromGRPC from_grpc;
         std::vector<std::string> commands;
+        YamlPosition force_frame;
 };
 
 std::string GRPCForceModel::model_name() {return "grpc";}
@@ -258,7 +267,7 @@ GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::st
 }
 
 GRPCForceModel::GRPCForceModel(const std::shared_ptr<Impl>& pimpl_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(pimpl->get_input().name, pimpl->get_commands(), pimpl->get_transformation_to_model_frame(body_name_), body_name_, env_),
+        ControllableForceModel(pimpl_->get_input().name, pimpl_->get_commands(), pimpl_->get_transformation_to_model_frame(), body_name_, env_),
         pimpl(pimpl_),
         env(env_)
 
