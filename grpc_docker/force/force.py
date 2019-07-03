@@ -330,7 +330,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         Parameters
         ----------
         request : SetParameterRequest
-            Defined in waves.proto.
+            Defined in force.proto.
 
         Returns
         -------
