@@ -17,7 +17,7 @@ class HarmonicOscillator(force.Model):
         param = yaml.safe_load(parameters)
         self.k = param['k']
         self.c = param['c']
-        return {'max_history_length': 0, 'needs_wave_outputs': False}
+        return {'max_history_length': 0, 'needs_wave_outputs': False, 'frame': 'NED', 'x': 0, 'y': 0, 'z': 0, 'phi': 0, 'theta': 0, 'psi': 0}
 
     def force(self, states, _, __):
         """Force model."""
