@@ -206,6 +206,11 @@ class GRPCForceModel::Impl
             return commands;
         }
 
+        YamlPosition get_transformation_to_model_frame(const std::string& body_name) const
+        {
+            return YamlPosition(YamlCoordinates(), YamlAngle(), body_name);
+        }
+
     private:
         Impl(); // Disabled
         WaveInformation* get_wave_information(const double t, const double x, const double y, const double z, const EnvironmentAndFrames& env) const
@@ -246,12 +251,6 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     return ret;
 }
 
-YamlPosition get_transformation_to_model_frame(const std::string& body_name);
-YamlPosition get_transformation_to_model_frame(const std::string& body_name)
-{
-    return YamlPosition(YamlCoordinates(), YamlAngle(), body_name);
-}
-
 GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
         GRPCForceModel(std::make_shared<GRPCForceModel::Impl>(input, env_.rot.convention), body_name_, env_)
 
@@ -259,7 +258,7 @@ GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::st
 }
 
 GRPCForceModel::GRPCForceModel(const std::shared_ptr<Impl>& pimpl_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(pimpl->get_input().name, pimpl->get_commands(), get_transformation_to_model_frame(body_name_), body_name_, env_),
+        ControllableForceModel(pimpl->get_input().name, pimpl->get_commands(), pimpl->get_transformation_to_model_frame(body_name_), body_name_, env_),
         pimpl(pimpl_),
         env(env_)
 
