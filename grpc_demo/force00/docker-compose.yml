@@ -7,12 +7,12 @@ services:
     volumes:
     - .:/work
     user: ${CURRENT_UID}
-  xdyn:
-    image: xdyn
-    working_dir: /data
-    command: tutorial_10_gRPC_force_model.yml --dt 0.1 --tend 10 -o tsv
+  xweave:
+    image: sirehna/xweave
+    working_dir: /work
+    command: -f markdown -k python3 tutorial_10.pmd -o tutorial_10.md
     volumes:
-    - .:/data
+    - .:/work
     user: ${CURRENT_UID}
     depends_on:
     - force-model
