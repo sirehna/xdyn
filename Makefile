@@ -175,7 +175,7 @@ docker:
 	./ninja_debian.sh package && cp build_deb9/xdyn.deb . &&  docker build . --tag xdyn
 
 docker_grpc_force_model:
-	cd grpc_docker/force && make
+	cd grpc_docker && make
 
 docker_grpc_waves_model:
 	cd code/waves_grpc/python_server && make CONTAINER_NAME=xdyn-waves-grpc:python3
