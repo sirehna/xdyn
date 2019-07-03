@@ -2181,7 +2181,23 @@ Le paramètre `model: grpc` indique à xdyn qu'il s'agit d'un modèle d'effort
 distant et `url` donne l'adresse à laquelle le serveur gRPC peut être joint.
 
 Ces modèles ont accès à toutes les commandes définies dans la simulation.
-Le point d'application des modèles d'effort gRPC est l'origine du repère "body".
+Le point d'application des modèles d'effort gRPC est défini par le modèle
+d'effort lui-même, et de la même façon que pour le modèle de manoeuvrabilité.
+
+Ainsi, les réponses renvoyées à xdyn par le modèle d'effort sont définies par :
+
+```proto
+message ForceResponse
+{
+    double Fx = 1;                              // Projection of the force acting on "BODY" on the X-axis of the body frame.
+    double Fy = 2;                              // Projection of the force acting on "BODY" on the Y-axis of the body frame.
+    double Fz = 3;                              // Projection of the force acting on "BODY" on the Z-axis of the body frame.
+    double Mx = 4;                              // Projection of the torque acting on "BODY" on the X-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double My = 5;                              // Projection of the torque acting on "BODY" on the Y-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double Mz = 6;                              // Projection of the torque acting on "BODY" on the Z-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    map<string, double> extra_observations = 7; // Anything we wish to serialize. Specific to each force model.
+}
+```
 
 ### Exemple d'utilisation
 
