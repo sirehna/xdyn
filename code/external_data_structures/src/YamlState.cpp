@@ -2,7 +2,7 @@
 
 YamlState::YamlState()
     : AbstractStates<double>()
-    , t(), phi(), theta(), psi()
+    , t(), phi(), theta(), psi(), extra_observations()
 {
 }
 
@@ -22,7 +22,7 @@ YamlState::YamlState(const double t_
         ,const double qk_
        ) :
         AbstractStates<double>(x_,y_,z_,u_,v_,w_,p_,q_,r_,qr_,qi_,qj_,qk_)
-        , t(t_), phi(), theta(), psi()
+        , t(t_), phi(), theta(), psi(), extra_observations()
 {}
 
 bool operator==(const YamlState& lhs, const YamlState& rhs)
