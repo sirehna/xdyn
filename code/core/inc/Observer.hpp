@@ -66,7 +66,7 @@ class Observer
     private:
         Observer(); // Disabled
 
-        void initialize_stuff_to_write_if_necessary();
+        void initialize_serialization_of_requested_variables();
         void serialize_stuff_to_write();
 
         bool initialized;
