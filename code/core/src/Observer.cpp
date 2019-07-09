@@ -75,12 +75,12 @@ void Observer::serialize_requested_variables()
     before_write();
     for (auto stuff:requested_serializations)
     {
-        auto serialize_stuff = serialize.find(stuff);
-        if (serialize_stuff == serialize.end())
+        auto serialization_functor = serialize.find(stuff);
+        if (serialization_functor == serialize.end())
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
         }
-        serialize_stuff->second();
+        serialization_functor->second();
         if (i<(n-1)) flush_value_during_write();
         ++i;
     }
