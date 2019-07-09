@@ -73,12 +73,12 @@ void Observer::serialize_requested_variables()
     const size_t n = requested_serializations.size();
     size_t i = 0;
     before_write();
-    for (auto stuff:requested_serializations)
+    for (auto variable_name:requested_serializations)
     {
-        auto serialization_functor = serialize.find(stuff);
+        auto serialization_functor = serialize.find(variable_name);
         if (serialization_functor == serialize.end())
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << variable_name << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
         }
         serialization_functor->second();
         if (i<(n-1)) flush_value_during_write();
