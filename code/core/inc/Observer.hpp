@@ -67,7 +67,7 @@ class Observer
         Observer(); // Disabled
 
         void initialize_serialization_of_requested_variables();
-        void serialize_stuff_to_write();
+        void serialize_requested_variables();
 
         bool initialized;
         std::vector<std::string> requested_serializations;

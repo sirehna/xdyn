@@ -33,7 +33,7 @@ void Observer::observe(const Sim& sys, const double t)
     write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     sys.output(sys.state,*this, t);
     initialize_serialization_of_requested_variables();
-    serialize_stuff_to_write();
+    serialize_requested_variables();
 }
 
 void Observer::observe_everything(const Sim& sys, const double t)
@@ -68,7 +68,7 @@ void Observer::initialize_serialization_of_requested_variables()
     initialized = true;
 }
 
-void Observer::serialize_stuff_to_write()
+void Observer::serialize_requested_variables()
 {
     const size_t n = requested_serializations.size();
     size_t i = 0;
