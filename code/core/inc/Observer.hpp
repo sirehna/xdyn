@@ -67,7 +67,7 @@ class Observer
         Observer(); // Disabled
 
         void initialize_stuff_to_write_if_necessary();
-        void serialize_everything();
+        void serialize_stuff_to_write();
 
         bool initialized;
         std::vector<std::string> stuff_to_write;
