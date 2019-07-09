@@ -10,7 +10,7 @@
 #include "Sim.hpp"
 #include "SurfaceElevationGrid.hpp"
 
-Observer::Observer(const std::vector<std::string>& data_) : initialized(false), stuff_to_write(data_), serialize(), initialize()
+Observer::Observer(const std::vector<std::string>& data_) : initialized(false), requested_serializations(data_), serialize(), initialize()
 {
 }
 
@@ -50,9 +50,9 @@ void Observer::initialize_stuff_to_write_if_necessary()
 {
     if (not(initialized))
     {
-        const size_t n = stuff_to_write.size();
+        const size_t n = requested_serializations.size();
         size_t i = 0;
-        for (auto stuff:stuff_to_write)
+        for (auto stuff:requested_serializations)
         {
             auto initialize_stuff = initialize.find(stuff);
             if (initialize_stuff == initialize.end())
@@ -70,10 +70,10 @@ void Observer::initialize_stuff_to_write_if_necessary()
 
 void Observer::serialize_stuff_to_write()
 {
-    const size_t n = stuff_to_write.size();
+    const size_t n = requested_serializations.size();
     size_t i = 0;
     before_write();
-    for (auto stuff:stuff_to_write)
+    for (auto stuff:requested_serializations)
     {
         auto serialize_stuff = serialize.find(stuff);
         if (serialize_stuff == serialize.end())

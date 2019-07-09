@@ -70,7 +70,7 @@ class Observer
         void serialize_stuff_to_write();
 
         bool initialized;
-        std::vector<std::string> stuff_to_write;
+        std::vector<std::string> requested_serializations;
         std::map<std::string, std::function<void()> > serialize;
         std::map<std::string, std::function<void()> > initialize;
 };
