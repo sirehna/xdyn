@@ -32,27 +32,34 @@ void Observer::observe(const Sim& sys, const double t)
 {
     write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     sys.output(sys.state,*this, t);
-    initialize_serialization_of_requested_variables();
-    serialize_requested_variables();
+    initialize_serialization_of_requested_variables(requested_serializations);
+    serialize_requested_variables(requested_serializations);
+}
+
+std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map);
+std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map)
+{
+    std::vector<std::string> ret;
+    std::transform(map.begin(), map.end(), std::back_inserter(ret), [](const std::pair<std::string, std::function<void()> >& p){return p.first;});
+    return ret;
 }
 
 void Observer::observe_everything(const Sim& sys, const double t)
 {
     write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     sys.output(sys.state,*this, t);
-    for (const auto& initializer:initialize) initializer.second();
-    flush_after_initialization();
-    for (const auto& serializer:serialize) serializer.second();
-    flush_after_write();
+    const auto all_vars = all_variables(initialize);
+    initialize_serialization_of_requested_variables(all_vars);
+    serialize_requested_variables(all_vars);
 }
 
-void Observer::initialize_serialization_of_requested_variables()
+void Observer::initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize)
 {
     if (not(initialized))
     {
-        const size_t n = requested_serializations.size();
+        const size_t n = variables_to_serialize.size();
         size_t i = 0;
-        for (auto stuff:requested_serializations)
+        for (auto stuff:variables_to_serialize)
         {
             auto initialize_stuff = initialize.find(stuff);
             if (initialize_stuff == initialize.end())
@@ -68,12 +75,12 @@ void Observer::initialize_serialization_of_requested_variables()
     initialized = true;
 }
 
-void Observer::serialize_requested_variables()
+void Observer::serialize_requested_variables(const std::vector<std::string>& variables_to_serialize)
 {
-    const size_t n = requested_serializations.size();
+    const size_t n = variables_to_serialize.size();
     size_t i = 0;
     before_write();
-    for (auto variable_name:requested_serializations)
+    for (auto variable_name:variables_to_serialize)
     {
         auto serialization_functor = serialize.find(variable_name);
         if (serialization_functor == serialize.end())

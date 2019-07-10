@@ -66,8 +66,8 @@ class Observer
     private:
         Observer(); // Disabled
 
-        void initialize_serialization_of_requested_variables();
-        void serialize_requested_variables();
+        void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);
+        void serialize_requested_variables(const std::vector<std::string>& variables_to_serialize);
 
         bool initialized;
         std::vector<std::string> requested_serializations;
