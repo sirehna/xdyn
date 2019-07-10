@@ -35,7 +35,7 @@ class Observer
 {
     public:
         Observer(const std::vector<std::string>& data);
-        void observe(const Sim& sys, const double t); // Only what was requested by the user in the YAML file
+        virtual void observe(const Sim& sys, const double t); // Only what was requested by the user in the YAML file
         void observe_everything(const Sim& sys, const double t); // Everything (not just what the user asked). Used for co-simulation
         virtual ~Observer();
 
