@@ -856,7 +856,7 @@ character                       = "A" | "B" | "C" | "D" | "E" | "F" | "G"
 extended-char                   = character | "-" | "+"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les fichiers HDB sont donc constituées d'une liste d'éléments, ces éléments
+Les fichiers HDB sont donc constitués d'une liste d'éléments, ces éléments
 étant pouvant être de type `string-key`, `value-key`, `vector-section`,
 `matrix-section`, `list-of-matrix-sections` ou
 `list-of-matrix-sections-with-id`. xdyn ne tient pas compte de l'ordre dans
