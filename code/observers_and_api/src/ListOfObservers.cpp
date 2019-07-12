@@ -28,6 +28,10 @@ ListOfObservers::ListOfObservers(const std::vector<YamlOutput>& yaml) : observer
     }
 }
 
+ListOfObservers::ListOfObservers(const std::vector<ObserverPtr>& observers_) : observers(observers_)
+{
+}
+
 void ListOfObservers::observe(const Sim& sys, const double t)
 {
     for (auto observer:observers)
