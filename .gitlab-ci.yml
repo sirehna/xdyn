@@ -47,7 +47,7 @@ test:grpc:
      - docker build . --tag xdyn
      - make docker_grpc_force_model
      - make docker_grpc_waves_model
-     - cd grpc_demo && make
+     - cd grpc_tests && make
 
 doc:
    stage: doc
