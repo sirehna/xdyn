@@ -33,6 +33,7 @@ YamlState convert_without_angles(const Res& res)
     ret.phi   = 0;
     ret.theta = 0;
     ret.psi   = 0;
+    ret.extra_observations = res.extra_observations;
     return ret;
 }
 
