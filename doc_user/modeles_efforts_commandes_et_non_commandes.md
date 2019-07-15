@@ -2182,7 +2182,7 @@ distant et `url` donne l'adresse à laquelle le serveur gRPC peut être joint.
 
 Ces modèles ont accès à toutes les commandes définies dans la simulation.
 Le point d'application des modèles d'effort gRPC est défini par le modèle
-d'effort lui-même, et de la même façon que pour le modèle de manoeuvrabilité.
+d'effort lui-même, et de la même façon que pour le modèle de manœuvrabilité.
 
 Ainsi, les réponses renvoyées à xdyn par le modèle d'effort sont définies par :
 
