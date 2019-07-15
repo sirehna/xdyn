@@ -357,6 +357,13 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             out = self.model.set_parameters(request.parameters, request.body_name)
             response.max_history_length = out['max_history_length']
             response.needs_wave_outputs = out['needs_wave_outputs']
+            response.frame = out['frame']
+            response.x = out['x']
+            response.y = out['y']
+            response.z = out['z']
+            response.phi = out['phi']
+            response.theta = out['theta']
+            response.psi = out['psi']
             self.wave_information_required = response.needs_wave_outputs
         except KeyError as exception:
             match = closest_match(list(yaml.safe_load(request.parameters)),
