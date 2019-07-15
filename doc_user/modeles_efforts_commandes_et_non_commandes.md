@@ -2189,12 +2189,12 @@ Ainsi, les réponses renvoyées à xdyn par le modèle d'effort sont définies p
 ```proto
 message ForceResponse
 {
-    double Fx = 1;                              // Projection of the force acting on "BODY" on the X-axis of the body frame.
-    double Fy = 2;                              // Projection of the force acting on "BODY" on the Y-axis of the body frame.
-    double Fz = 3;                              // Projection of the force acting on "BODY" on the Z-axis of the body frame.
-    double Mx = 4;                              // Projection of the torque acting on "BODY" on the X-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
-    double My = 5;                              // Projection of the torque acting on "BODY" on the Y-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
-    double Mz = 6;                              // Projection of the torque acting on "BODY" on the Z-axis of the body frame, expressed at the origin of the BODY frame (center of gravity).
+    double Fx = 1;                              // Projection of the force acting on "BODY" on the X-axis of the frame defined by the force model itself and returned by set_parameters.
+    double Fy = 2;                              // Projection of the force acting on "BODY" on the Y-axis of the frame defined by the force model itself and returned by set_parameters.
+    double Fz = 3;                              // Projection of the force acting on "BODY" on the Z-axis of the frame defined by the force model itself and returned by set_parameters.
+    double Mx = 4;                              // Projection of the torque acting on "BODY" on the X-axis of the frame defined by the force model itself and returned by set_parameters, expressed at the origin of that frame.
+    double My = 5;                              // Projection of the torque acting on "BODY" on the Y-axis of the frame defined by the force model itself and returned by set_parameters, expressed at the origin of that frame.
+    double Mz = 6;                              // Projection of the torque acting on "BODY" on the Z-axis of the frame defined by the force model itself and returned by set_parameters, expressed at the origin of that frame.
     map<string, double> extra_observations = 7; // Anything we wish to serialize. Specific to each force model.
 }
 ```
