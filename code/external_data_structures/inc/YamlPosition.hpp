@@ -11,6 +11,7 @@
 #include "YamlCoordinates.hpp"
 #include "YamlAngle.hpp"
 
+#include <ostream>
 #include <string>
 
 struct YamlPosition
@@ -21,5 +22,7 @@ struct YamlPosition
     YamlAngle angle;
     std::string frame;
 };
+
+std::ostream& operator<<(std::ostream& os, const YamlPosition& w);
 
 #endif /* YAMLPOSITION_HPP_ */
