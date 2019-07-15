@@ -5,7 +5,8 @@
  *      Author: cady
  */
 
-
+#include <memory> // std::make_shared
+#include <vector>
 #include <grpcpp/grpcpp.h>
 #include "force.pb.h"
 #include "force.grpc.pb.h"
@@ -18,6 +19,10 @@
 #include "Body.hpp"
 #include "GRPCError.hpp"
 #include "GRPCForceModel.hpp"
+#include "GRPCTypes.hpp"
+#include "ToGRPC.hpp"
+#include "FromGRPC.hpp"
+
 
 void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status);
 void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status)
@@ -131,301 +136,10 @@ void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::stri
     }
 }
 
-struct XYTs
-{
-    std::vector<double> x;
-    std::vector<double> y;
-    double t;
-};
-
-struct XYZTs
-{
-    std::vector<double> x;
-    std::vector<double> y;
-    std::vector<double> z;
-    double t;
-};
-
-struct XYT
-{
-    double x;
-    double y;
-    double t;
-};
-
-struct WaveRequest
-{
-    XYTs elevations;
-    XYZTs dynamic_pressures;
-    XYZTs orbital_velocities;
-    XYT spectrum;
-    bool angular_frequencies_for_rao;
-    bool directions_for_rao;
-    bool need_spectrum;
-};
-
-class FromGRPC
-{
-    public:
-        WaveRequest to_wave_request(const RequiredWaveInformationResponse& response) const
-        {
-            WaveRequest ret;
-            ret.angular_frequencies_for_rao = response.angular_frequencies_for_rao();
-            ret.directions_for_rao = response.directions_for_rao();
-            ret.dynamic_pressures.t = response.dynamic_pressures().t();
-            ret.dynamic_pressures.x.reserve(response.dynamic_pressures().x_size());
-            std::copy(response.dynamic_pressures().x().begin(), response.dynamic_pressures().x().end(), std::back_inserter(ret.dynamic_pressures.x));
-            ret.dynamic_pressures.y.reserve(response.dynamic_pressures().y_size());
-            std::copy(response.dynamic_pressures().y().begin(), response.dynamic_pressures().y().end(), std::back_inserter(ret.dynamic_pressures.y));
-            ret.elevations.t = response.elevations().t();
-            ret.elevations.x.reserve(response.elevations().x_size());
-            std::copy(response.elevations().x().begin(), response.elevations().x().end(), std::back_inserter(ret.elevations.x));
-            ret.elevations.y.reserve(response.elevations().y_size());
-            std::copy(response.elevations().y().begin(), response.elevations().y().end(), std::back_inserter(ret.elevations.y));
-            ret.need_spectrum = response.need_spectrum();
-            ret.orbital_velocities.t = response.orbital_velocities().t();
-            ret.orbital_velocities.x.reserve(response.orbital_velocities().x_size());
-            std::copy(response.orbital_velocities().x().begin(), response.orbital_velocities().x().end(), std::back_inserter(ret.orbital_velocities.x));
-            ret.orbital_velocities.y.reserve(response.orbital_velocities().y_size());
-            std::copy(response.orbital_velocities().y().begin(), response.orbital_velocities().y().end(), std::back_inserter(ret.orbital_velocities.y));
-            ret.orbital_velocities.z.reserve(response.orbital_velocities().z_size());
-            std::copy(response.orbital_velocities().z().begin(), response.orbital_velocities().z().end(), std::back_inserter(ret.orbital_velocities.z));
-            ret.spectrum.t = response.spectrum().t();
-            ret.spectrum.x = response.spectrum().x();
-            ret.spectrum.y = response.spectrum().y();
-            return ret;
-        }
-
-        ssc::kinematics::Vector6d to_force(const ForceResponse& response) const
-        {
-            ssc::kinematics::Vector6d ret;
-            ret(0) = response.fx();
-            ret(1) = response.fy();
-            ret(2) = response.fz();
-            ret(3) = response.mx();
-            ret(4) = response.my();
-            ret(5) = response.mz();
-            return ret;
-        }
-
-};
-
-class ToGRPC
-{
-    public:
-        ToGRPC(const GRPCForceModel::Input& input_) : input(input_) {}
-        RequiredWaveInformationRequest from_required_wave_information(const double t, const double x, const double y, const double z) const
-        {
-            RequiredWaveInformationRequest request;
-            request.set_t(t);
-            request.set_x(x);
-            request.set_y(y);
-            request.set_z(z);
-            return request;
-        }
-
-        SpectrumResponse* from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const
-        {
-            SpectrumResponse* spectrum_response = new SpectrumResponse();
-            for (const auto& spectrum:spectra)
-            {
-                const auto s = spectrum_response->add_spectrum();
-                for (const auto& Si:spectrum.Si)
-                {
-                    s->add_si(Si);
-                }
-                for (const auto& Dj:spectrum.Dj)
-                {
-                    s->add_dj(Dj);
-                }
-                for (const auto& k:spectrum.k)
-                {
-                    s->add_k(k);
-                }
-                for (const auto& omega:spectrum.omega)
-                {
-                    s->add_omega(omega);
-                }
-                const auto p = s->add_phase();
-                for (const auto& phases:spectrum.phase)
-                {
-                    for (const auto& phase:phases)
-                    {
-                        p->add_phase(phase);
-                    }
-                }
-            }
-            return spectrum_response;
-        }
-
-        WaveInformation* from_wave_information(const WaveRequest& wave_request, const double t, const EnvironmentAndFrames& env) const
-        {
-            WaveInformation* wave_information = new WaveInformation();
-            if (env.w.use_count())
-            {
-                if (wave_request.need_spectrum)
-                {
-                    try
-                    {
-                        const auto directional_spectra = env.w->get_directional_spectra(wave_request.spectrum.x, wave_request.spectrum.y, wave_request.spectrum.t);
-                        auto spectrum = from_discrete_directional_wave_spectra(directional_spectra);
-                        wave_information->set_allocated_spectrum(spectrum);
-                    }
-                    catch (const ssc::exception_handling::Exception& e)
-                    {
-                        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which requires a linearized wave directional spectrum. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
-                    }
-                }
-                try
-                {
-                    wave_information->mutable_orbital_velocities()->set_t(t);
-                    copy_from_double_vector(wave_request.orbital_velocities.x, wave_information->mutable_orbital_velocities()->mutable_x());
-                    copy_from_double_vector(wave_request.orbital_velocities.y, wave_information->mutable_orbital_velocities()->mutable_y());
-                    copy_from_double_vector(wave_request.orbital_velocities.z, wave_information->mutable_orbital_velocities()->mutable_z());
-                    std::vector<double> eta;
-                    try
-                    {
-                        eta = env.w->get_and_check_wave_height(wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.t);
-                    }
-                    catch (const ssc::exception_handling::Exception& e)
-                    {
-                        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which, indirectly, needs wave elevations (to compute the dynamic pressures). When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
-                    }
-                    const ssc::kinematics::PointMatrix orbital_velocities = env.w->get_and_check_orbital_velocity(env.g, wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.z, t, eta);
-
-                    std::vector<double> vx(orbital_velocities.m.cols()), vy(orbital_velocities.m.cols()), vz(orbital_velocities.m.cols());
-                    for (int j = 0 ; j < orbital_velocities.m.cols() ; ++j)
-                    {
-                        vx[j] = orbital_velocities.m(0,j);
-                        vy[j] = orbital_velocities.m(1,j);
-                        vz[j] = orbital_velocities.m(2,j);
-                    }
-                    copy_from_double_vector(vx, wave_information->mutable_orbital_velocities()->mutable_vx());
-                    copy_from_double_vector(vy, wave_information->mutable_orbital_velocities()->mutable_vy());
-                    copy_from_double_vector(vz, wave_information->mutable_orbital_velocities()->mutable_vz());
-                }
-                catch (const ssc::exception_handling::Exception& e)
-                {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs orbital velocities. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
-                }
-                try
-                {
-                    wave_information->mutable_elevations()->set_t(t);
-                    copy_from_double_vector(wave_request.elevations.x, wave_information->mutable_elevations()->mutable_x());
-                    copy_from_double_vector(wave_request.elevations.y, wave_information->mutable_elevations()->mutable_y());
-                    copy_from_double_vector(env.w->get_and_check_wave_height(wave_request.elevations.x, wave_request.elevations.y, wave_request.elevations.t), wave_information->mutable_elevations()->mutable_z());
-                }
-                catch (const ssc::exception_handling::Exception& e)
-                {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs wave elevations. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
-                }
-                try
-                {
-                    wave_information->mutable_dynamic_pressures()->set_t(t);
-                    copy_from_double_vector(wave_request.dynamic_pressures.x, wave_information->mutable_dynamic_pressures()->mutable_x());
-                    copy_from_double_vector(wave_request.dynamic_pressures.y, wave_information->mutable_dynamic_pressures()->mutable_y());
-                    copy_from_double_vector(wave_request.dynamic_pressures.z, wave_information->mutable_dynamic_pressures()->mutable_z());
-                    const std::vector<double> eta = env.w->get_and_check_wave_height(wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.t);
-                    copy_from_double_vector(env.w->get_and_check_dynamic_pressure(env.rho, env.g, wave_request.dynamic_pressures.x, wave_request.dynamic_pressures.y, wave_request.dynamic_pressures.z, eta, t), wave_information->mutable_dynamic_pressures()->mutable_pdyn());
-                }
-                catch (const ssc::exception_handling::Exception& e)
-                {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs dynamic pressures. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
-                }
-                try
-                {
-                    wave_information->mutable_orbital_velocities()->set_t(t);
-                    copy_from_double_vector(wave_request.orbital_velocities.x, wave_information->mutable_orbital_velocities()->mutable_x());
-                    copy_from_double_vector(wave_request.orbital_velocities.y, wave_information->mutable_orbital_velocities()->mutable_y());
-                    copy_from_double_vector(wave_request.orbital_velocities.z, wave_information->mutable_orbital_velocities()->mutable_z());
-                }
-                catch (const ssc::exception_handling::Exception& e)
-                {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs orbital velocities. When querying the wave model for this information, the following problem occurred:\n" << e.get_message());
-                }
-            }
-            else
-            {
-                THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the gRPC force model '" << input.name << "' which needs data from a wave model. However, none were defined in the YAML file: please define a wave model in the 'environment models' section of the YAML file.");
-            }
-            return wave_information;
-        }
-
-        States* from_state(const BodyStates& state, const double max_history_length, const EnvironmentAndFrames& env) const
-        {
-            const auto qr = state.qr.get_values(max_history_length);
-            const auto qi = state.qi.get_values(max_history_length);
-            const auto qj = state.qj.get_values(max_history_length);
-            const auto qk = state.qk.get_values(max_history_length);
-            std::vector<double> phi(qr.size());
-            std::vector<double> theta(qr.size());
-            std::vector<double> psi(qr.size());
-            for (size_t i = 0 ; i < qr.size() ; ++i)
-            {
-                ssc::kinematics::RotationMatrix R = Eigen::Quaternion<double>(qr[i],qi[i],qj[i],qk[i]).matrix();
-                const ssc::kinematics::EulerAngles euler_angles = state.convert(R, env.rot);
-                phi[i] = euler_angles.phi;
-                theta[i] = euler_angles.theta;
-                psi[i] = euler_angles.psi;
-            }
-            States* ret = new States();
-
-            copy_from_double_vector(state.x.get_dates(max_history_length), ret->mutable_t());
-            copy_from_double_vector(state.x.get_values(max_history_length), ret->mutable_x());
-            copy_from_double_vector(state.y.get_values(max_history_length), ret->mutable_y());
-            copy_from_double_vector(state.z.get_values(max_history_length), ret->mutable_z());
-            copy_from_double_vector(state.u.get_values(max_history_length), ret->mutable_u());
-            copy_from_double_vector(state.v.get_values(max_history_length), ret->mutable_v());
-            copy_from_double_vector(state.w.get_values(max_history_length), ret->mutable_w());
-            copy_from_double_vector(state.p.get_values(max_history_length), ret->mutable_p());
-            copy_from_double_vector(state.q.get_values(max_history_length), ret->mutable_q());
-            copy_from_double_vector(state.r.get_values(max_history_length), ret->mutable_r());
-            copy_from_double_vector(qr, ret->mutable_qr());
-            copy_from_double_vector(qi, ret->mutable_qi());
-            copy_from_double_vector(qj, ret->mutable_qj());
-            copy_from_double_vector(qk, ret->mutable_qk());
-            copy_from_double_vector(phi, ret->mutable_phi());
-            copy_from_double_vector(theta, ret->mutable_theta());
-            copy_from_double_vector(psi, ret->mutable_psi());
-            copy_from_string_vector(env.rot.convention, ret->mutable_rotations_convention());
-            return ret;
-        }
-
-        ForceRequest from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information) const
-        {
-            ForceRequest request;
-            request.set_allocated_wave_information(wave_information);
-            request.mutable_commands()->insert(commands.begin(), commands.end());
-            request.set_allocated_states(states);
-            return request;
-        }
-
-        SetForceParameterRequest from_yaml(const std::string& yaml) const
-        {
-            SetForceParameterRequest request;
-            request.set_parameters(yaml);
-            return request;
-        }
-
-    private:
-        void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination) const
-        {
-            *destination = {origin.begin(), origin.end()};
-        }
-
-        void copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination) const
-        {
-            *destination = {origin.begin(), origin.end()};
-        }
-        GRPCForceModel::Input input;
-        ToGRPC(); // Disabled
-
-};
-
 class GRPCForceModel::Impl
 {
     public:
-        Impl(const Input& input_, const std::vector<std::string>& rotation_convention_)
+        Impl(const GRPCForceModel::Input& input_, const std::vector<std::string>& rotation_convention_, const std::string& body_name)
             : input(input_)
             , stub(Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials())))
             , extra_observations()
@@ -434,18 +148,34 @@ class GRPCForceModel::Impl
             , rotation_convention(rotation_convention_)
             , to_grpc(ToGRPC(input))
             , from_grpc(FromGRPC())
+            , commands()
+            , force_frame()
         {
-            set_parameters(input.yaml);
+            set_parameters(input.yaml, body_name);
         }
 
-        void set_parameters(const std::string& yaml)
+        GRPCForceModel::Input get_input() const
+        {
+            return input;
+        }
+
+        void set_parameters(const std::string& yaml, const std::string& body_name)
         {
             SetForceParameterResponse response;
             grpc::ClientContext context;
-            const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml), &response);
+            const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml, body_name), &response);
             throw_if_invalid_status(input, "set_parameters", status);
             needs_wave_outputs = response.needs_wave_outputs();
             max_history_length = response.max_history_length();
+            commands.reserve(response.commands_size());
+            std::copy(response.commands().begin(), response.commands().end(), std::back_inserter(commands));
+            force_frame.frame = response.frame();
+            force_frame.angle.phi = response.phi();
+            force_frame.angle.theta = response.theta();
+            force_frame.angle.psi = response.psi();
+            force_frame.coordinates.x = response.x();
+            force_frame.coordinates.y = response.y();
+            force_frame.coordinates.z = response.z();
         }
 
         WaveRequest required_wave_information(const double t, const double x, const double y, const double z) const
@@ -479,6 +209,16 @@ class GRPCForceModel::Impl
             return extra_observations;
         }
 
+        std::vector<std::string> get_commands() const
+        {
+            return commands;
+        }
+
+        YamlPosition get_transformation_to_model_frame() const
+        {
+            return force_frame;
+        }
+
     private:
         Impl(); // Disabled
         WaveInformation* get_wave_information(const double t, const double x, const double y, const double z, const EnvironmentAndFrames& env) const
@@ -490,7 +230,7 @@ class GRPCForceModel::Impl
             }
             return new WaveInformation();
         }
-        Input input;
+        GRPCForceModel::Input input;
         std::unique_ptr<Force::Stub> stub;
         std::map<std::string,double> extra_observations;
         double max_history_length;
@@ -498,16 +238,12 @@ class GRPCForceModel::Impl
         std::vector<std::string> rotation_convention;
         ToGRPC to_grpc;
         FromGRPC from_grpc;
+        std::vector<std::string> commands;
+        YamlPosition force_frame;
 };
 
 std::string GRPCForceModel::model_name() {return "grpc";}
 
-GRPCForceModel::Input::Input() :
-        url(),
-        name(),
-        yaml()
-{
-}
 
 GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
 {
@@ -524,31 +260,16 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     return ret;
 }
 
-std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& input);
-std::vector<std::string> get_commands_from_grpc(const GRPCForceModel::Input& input)
-{
-    std::unique_ptr<Force::Stub> stub = Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials()));
-    CommandsRequest request;
-    CommandsResponse response;
-    grpc::ClientContext context;
-    const grpc::Status status = stub->get_commands(&context, request, &response);
-    throw_if_invalid_status(input, "get_commands", status);
-    std::vector<std::string> ret;
-    ret.reserve(response.commands_size());
-    std::copy(response.commands().begin(), response.commands().end(), std::back_inserter(ret));
-    return ret;
-}
-
-YamlPosition get_origin_of_BODY_frame(const std::string& body_name);
-YamlPosition get_origin_of_BODY_frame(const std::string& body_name)
-{
-    return YamlPosition(YamlCoordinates(), YamlAngle(), body_name);
-}
-
 GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(input.name, get_commands_from_grpc(input), get_origin_of_BODY_frame(body_name_), body_name_, env_),
-        env(env_),
-        pimpl(new Impl(input, env_.rot.convention))
+        GRPCForceModel(TR1(shared_ptr)<GRPCForceModel::Impl>(new GRPCForceModel::Impl(input, env_.rot.convention, body_name_)), body_name_, env_)
+
+{
+}
+
+GRPCForceModel::GRPCForceModel(const TR1(shared_ptr)<Impl>& pimpl_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+        ControllableForceModel(pimpl_->get_input().name, pimpl_->get_commands(), pimpl_->get_transformation_to_model_frame(), body_name_, env_),
+        pimpl(pimpl_),
+        env(env_)
 
 {
 }

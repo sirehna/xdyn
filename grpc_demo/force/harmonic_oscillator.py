@@ -12,12 +12,12 @@ class HarmonicOscillator(force.Model):
         self.k = 0
         self.c = 0
 
-    def set_parameters(self, parameters):
+    def set_parameters(self, parameters, body_name):
         """Parameter k is stiffness and c is damping."""
         param = yaml.safe_load(parameters)
         self.k = param['k']
         self.c = param['c']
-        return {'max_history_length': 0, 'needs_wave_outputs': False}
+        return {'max_history_length': 0, 'needs_wave_outputs': False, 'frame': body_name, 'x': 0, 'y': 0, 'z': 0, 'phi': 0, 'theta': 0, 'psi': 0}
 
     def force(self, states, _, __):
         """Force model."""

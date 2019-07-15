@@ -43,13 +43,16 @@ NOT_IMPLEMENTED = "is not implemented in this model."
 class Model:
     """Derive from this class to implement a gRPC force model for xdyn."""
 
-    def set_parameters(self, parameters):
+    def set_parameters(self, parameters, body_name):
         """Initialize the force model with YAML parameters.
 
         Parameters
         ----------
-        parameters : string
+        parameters: string
             YAML string containing the parameters of this model. Can be empty.
+        body_name: string
+            Name of the "body" reference frame. Needed, eg. if you want to
+            express the wrench in that reference frame.
 
         Returns
         -------
@@ -60,6 +63,9 @@ class Model:
           information (elevations, dynamic pressures or orbital velocities²)
           (in which case method 'required_wave_information' will be called).
           False otherwise.
+        - commands (list of strings): list of command names (eg. ['beta1',
+          'beta2']) that are required by this model & should be supplied by
+          xdyn (in the 'commands' section of the YAML file).
 
         """
         raise NotImplementedError(inspect.currentframe().f_code.co_name
@@ -145,10 +151,6 @@ class Model:
         """
         raise NotImplementedError(inspect.currentframe().f_code.co_name
                                   + NOT_IMPLEMENTED)
-
-    def get_commands(self):
-        """By default, a force model needs no commands."""
-        return []
 
     def force(self, states, commands, wave_information):
         """Calculate the force & torque.
@@ -325,36 +327,37 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         self.model = model
         self.wave_information_required = False
 
-    def get_commands(self, _, __):
-        """Return the list of commands expected by this model."""
-        LOGGER.info('get_commands')
-        ret = force_pb2.CommandsResponse()
-        ret.commands[:] = self.model.get_commands()
-        LOGGER.info(ret)
-        return ret
-
     def set_parameters(self, request, context):
         """Set the parameters of self.model.
 
         Parameters
         ----------
         request : SetParameterRequest
-            Defined in waves.proto.
+            Defined in force.proto.
 
         Returns
         -------
         dict
             Should contain the following fields:
-            - error_message (string): empty if everything went OK.
+            - max_history_length (double): How far back (in seconds) should the history values in ForceRequest go?
+            - needs_wave_outputs (bool): Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
+            - commands (repeated string): List of commands needed by this model, without the model name (e.g. ['beta1', 'beta2'])
+            - frame (string): Reference frame from which we define the reference in which the forces and torques are expressed.
+            - x (double): Position along the x-axis of 'frame' of the point of application of the force.
+            - y (double): Position along the y-axis of 'frame' of the point of application of the force.
+            - z (double): Position along the z-axis of 'frame' of the point of application of the force.
+            - phi (double): First Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+            - psi (double): Second Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+            - theta (double): Third Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
 
         """
         LOGGER.info('Received parameters: %s', request.parameters)
-        ret = force_pb2.SetForceParameterResponse()
+        response = force_pb2.SetForceParameterResponse()
         try:
-            out = self.model.set_parameters(request.parameters)
-            ret.max_history_length = out['max_history_length']
-            ret.needs_wave_outputs = out['needs_wave_outputs']
-            self.wave_information_required = ret.needs_wave_outputs
+            out = self.model.set_parameters(request.parameters, request.body_name)
+            response.max_history_length = out['max_history_length']
+            response.needs_wave_outputs = out['needs_wave_outputs']
+            self.wave_information_required = response.needs_wave_outputs
         except KeyError as exception:
             match = closest_match(list(yaml.safe_load(request.parameters)),
                                   str(exception).replace("'", ""))
@@ -365,7 +368,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         except Exception as exception:
             context.set_details(repr(exception))
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-        return ret
+        return response
 
     def force(self, request, context):
         """Marshall force model's arguments from gRPC."""

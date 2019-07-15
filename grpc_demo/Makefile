@@ -1,5 +1,5 @@
 .PHONY: all
 
 all:
-	make -C force00
-	make -C waves00
+	make -C force
+	make -C waves
