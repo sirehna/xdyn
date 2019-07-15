@@ -1,3 +1,5 @@
+#include <iomanip> // std::setprecision
+
 #include "parse_history.hpp"
 
 #include "YamlState.hpp"
@@ -65,6 +67,9 @@ YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
 std::string encode_YamlStates(const std::vector<YamlState>& states)
 {
     std::stringstream ss;
+    // Set precision to shortes possible representation , without losing precision
+    // Cf. https://stackoverflow.com/a/23437425, and, more specifically answer https://stackoverflow.com/a/4462034
+    ss << std::defaultfloat << std::setprecision(17);
     ss << "[";
     for (size_t i = 0 ; i < states.size() ; ++i)
     {
