@@ -54,7 +54,7 @@ message SetForceParameterResponse
     double y = 6;                  // Position along the y-axis of 'frame' of the point of application of the force.
     double z = 7;                  // Position along the z-axis of 'frame' of the point of application of the force.
     double phi = 8;                // First Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-    double theta = 9;                // Second Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+    double theta = 9;              // Second Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
     double psi = 10;               // Third Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
 }
 
