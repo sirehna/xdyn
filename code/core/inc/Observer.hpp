@@ -35,7 +35,8 @@ class Observer
 {
     public:
         Observer(const std::vector<std::string>& data);
-        void observe(const Sim& sys, const double t);
+        virtual void observe(const Sim& sys, const double t); // Only what was requested by the user in the YAML file
+        void observe_everything(const Sim& sys, const double t); // Everything (not just what the user asked). Used for co-simulation
         virtual ~Observer();
 
         template <typename T> void write(
@@ -65,11 +66,11 @@ class Observer
     private:
         Observer(); // Disabled
 
-        void initialize_everything_if_necessary();
-        void serialize_everything();
+        void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);
+        void serialize_requested_variables(const std::vector<std::string>& variables_to_serialize);
 
         bool initialized;
-        std::vector<std::string> stuff_to_write;
+        std::vector<std::string> requested_serializations;
         std::map<std::string, std::function<void()> > serialize;
         std::map<std::string, std::function<void()> > initialize;
 };

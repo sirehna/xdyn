@@ -1,6 +1,7 @@
 #ifndef EXTERNAL_DATA_STRUCTURES_INC_YAMLSTATE_HPP_
 #define EXTERNAL_DATA_STRUCTURES_INC_YAMLSTATE_HPP_
 
+#include <map>
 #include <vector>
 #include "AbstractStates.hpp"
 
@@ -27,6 +28,7 @@ struct YamlState : AbstractStates<double>
     double phi;
     double theta;
     double psi;
+    std::map<std::string, double> extra_observations; //!< extra outputs from force models. Corresponds to 'extra_observations' in code/grpc/force.proto#L99
 };
 
 bool operator==(const YamlState& state1, const YamlState& state2);

@@ -9,6 +9,17 @@ SimServer::SimServer(const std::string& yaml_model, const std::string& solver, c
 {
 }
 
+SimServer::SimServer(const std::string& yaml_model,
+                  const VectorOfVectorOfPoints& mesh,
+                  const std::string& solver,
+                  const double dt)
+: builder(yaml_model, mesh)
+, dt(dt)
+, stepper(builder, solver, dt)
+{
+}
+
+
 std::vector<YamlState> SimServer::play_one_step(const std::string& raw_yaml)
 {
     SimServerInputs simstepperinfo = parse_SimServerInputs(raw_yaml, builder.Tmax);

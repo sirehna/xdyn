@@ -16,6 +16,7 @@ class ListOfObservers
 {
     public:
         ListOfObservers(const std::vector<YamlOutput>& yaml);
+        ListOfObservers(const std::vector<ObserverPtr>& observers);
         void observe(const Sim& sys, const double t);
         std::vector<ObserverPtr> get() const;
         bool empty() const;

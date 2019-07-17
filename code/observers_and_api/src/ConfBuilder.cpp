@@ -8,3 +8,9 @@ ConfBuilder::ConfBuilder(const std::string& yaml)
     , Tmax(sim.get_bodies().front()->get_states().x.get_Tmax())
 {
 }
+
+ConfBuilder::ConfBuilder(const std::string& yaml, const VectorOfVectorOfPoints& mesh)
+    : sim(get_system(yaml, mesh, 0))
+    , Tmax(sim.get_bodies().front()->get_states().x.get_Tmax())
+{
+}

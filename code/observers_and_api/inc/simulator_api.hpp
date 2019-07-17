@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 
+#include "EverythingObserver.hpp"
 #include "Sim.hpp"
 #include "SimulatorBuilder.hpp"
 #include "SimObserver.hpp"
@@ -25,7 +26,7 @@ Sim get_system(const YamlSimulatorInput& yaml, const std::map<std::string, Vecto
 
 template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)
 {
-    SimObserver observer;
+    EverythingObserver observer;
     ssc::solver::quicksolve<StepperType>(sys, tstart, tend, dt, observer);
     return observer.get();
 }

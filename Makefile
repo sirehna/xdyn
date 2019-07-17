@@ -1,7 +1,8 @@
-all: windows debian doc all_docker_images
+all: windows debian debug doc all_docker_images
 
 windows: windows_gccx_posix
 debian: debian_9_release_gcc_6
+debug: debian_9_debug_gcc_6
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
 
@@ -42,6 +43,15 @@ debian_9_release_gcc_6: BOOST_ROOT = /opt/boost
 debian_9_release_gcc_6: SSC_ROOT = /opt/ssc
 debian_9_release_gcc_6: ci_env=
 debian_9_release_gcc_6: cmake-debian-target build-debian test-debian
+
+debian_9_debug_gcc_6: BUILD_TYPE = Debug
+debian_9_debug_gcc_6: BUILD_DIR = build_deb9_dbg
+debian_9_debug_gcc_6: CPACK_GENERATOR = DEB
+debian_9_debug_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
+debian_9_debug_gcc_6: BOOST_ROOT = /opt/boost
+debian_9_debug_gcc_6: SSC_ROOT = /opt/ssc
+debian_9_debug_gcc_6: ci_env=
+debian_9_debug_gcc_6: cmake-debian-target build-debian
 
 debian_9_coverage_gcc_6: BUILD_TYPE = Coverage
 debian_9_coverage_gcc_6: BUILD_DIR = build_deb9

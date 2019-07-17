@@ -16,6 +16,9 @@ class MapObserver : public Observer
         MapObserver(const std::vector<std::string>& data);
         std::map<std::string,std::vector<double> > get() const;
 
+    protected:
+        std::map<std::string,std::vector<double> > m;
+
     private:
         using Observer::get_serializer;
         using Observer::get_initializer;
@@ -24,8 +27,6 @@ class MapObserver : public Observer
         void flush_after_initialization();
         void flush_after_write();
         void flush_value_during_write();
-
-        std::map<std::string,std::vector<double> > m;
 };
 
 #endif /* MAPOBSERVER_HPP_ */

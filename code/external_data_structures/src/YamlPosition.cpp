@@ -18,3 +18,18 @@ YamlPosition::YamlPosition(const YamlCoordinates& c, const YamlAngle& a, const s
         frame(f)
 {
 }
+
+std::ostream& operator<<(std::ostream& os, const YamlPosition& w)
+{
+    os << std::endl
+       << "    frame: " << w.frame << std::endl
+       << "    coordinates:" << std::endl
+       << "        x: " << w.coordinates.x << std::endl
+       << "        y: " << w.coordinates.y << std::endl
+       << "        z: " << w.coordinates.z << std::endl
+       << "    angle:" << std::endl
+       << "        phi: " << w.angle.phi << std::endl
+       << "        theta: " << w.angle.theta << std::endl
+       << "        psi: " << w.angle.psi << std::endl;
+    return os;
+}
