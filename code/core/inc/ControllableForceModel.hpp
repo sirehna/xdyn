@@ -85,6 +85,7 @@ class ControllableForceModel
         void feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, const ssc::kinematics::Point& G) const;
 
     protected:
+        virtual void extra_observations(Observer& observer) const;
         EnvironmentAndFrames env;
         std::vector<std::string> commands;
 

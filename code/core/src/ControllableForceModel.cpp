@@ -141,6 +141,7 @@ void ControllableForceModel::feed(Observer& observer, ssc::kinematics::Kinematic
     observer.write((double)torque_in_ned_frame_at_O(0),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Mx"},std::string("Mx(")+name+","+body_name+",NED)"));
     observer.write((double)torque_in_ned_frame_at_O(1),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","My"},std::string("My(")+name+","+body_name+",NED)"));
     observer.write((double)torque_in_ned_frame_at_O(2),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Mz"},std::string("Mz(")+name+","+body_name+",NED)"));
+    extra_observations(observer);
 }
 
 double ControllableForceModel::get_Tmax() const
@@ -151,4 +152,8 @@ double ControllableForceModel::get_Tmax() const
 std::string ControllableForceModel::get_body_name() const
 {
     return body_name;
+}
+
+void ControllableForceModel::extra_observations(Observer&) const
+{
 }
