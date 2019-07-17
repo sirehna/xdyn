@@ -389,7 +389,6 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             response.Mx = out['Mx']
             response.My = out['My']
             response.Mz = out['Mz']
-            LOGGER.info(response.Fx)
             response.extra_observations.update(out['extra_observations'])
         except NotImplementedError as exception:
             context.set_details(repr(exception))
