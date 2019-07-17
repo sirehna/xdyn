@@ -64,6 +64,25 @@ YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
     return infos;
 }
 
+std::ostream& operator<<(std::ostream& os, const std::map<std::string, double>& m);
+std::ostream& operator<<(std::ostream& os, const std::map<std::string, double>& m)
+{
+    os << "{";
+    const size_t n = m.size();
+    size_t i = 0;
+    for (const auto key_value:m)
+    {
+        os << "\"" << key_value.first << "\": " << key_value.second;
+        if (i < n-1)
+        {
+            os << ", ";
+        }
+        i++;
+    }
+    os << "}";
+    return os;
+}
+
 std::string encode_YamlStates(const std::vector<YamlState>& states)
 {
     std::stringstream ss;
@@ -90,7 +109,8 @@ std::string encode_YamlStates(const std::vector<YamlState>& states)
            << "\"qk\": " << states[i].qk << ", "
            << "\"phi\": " << states[i].phi << ", "
            << "\"theta\": " << states[i].theta << ", "
-           << "\"psi\": " << states[i].psi
+           << "\"psi\": " << states[i].psi << ", "
+           << "\"extra_observations\": " << states[i].extra_observations
            << "}";
         if (i < states.size()-1) ss << ",";
         ss << std::endl;
