@@ -12,9 +12,14 @@ services:
     working_dir: /data
     entrypoint: |
            ./wait-for-it.sh force-model:9002 -s -t 20 --
-            xdyn xdyn.yml --dt 0.1 --tend 0.5 -o tsv
+            xdyn-for-cs xdyn.yml --dt 0.1 -p 9002
     volumes:
     - .:/data
     user: ${CURRENT_UID}
     depends_on:
     - force-model
+  test:
+    build: .
+    user: ${CURRENT_UID}
+    depends_on:
+    - xdyn
