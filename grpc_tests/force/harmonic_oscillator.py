@@ -27,7 +27,7 @@ class HarmonicOscillator(force.Model):
                 'Mx': 0,
                 'My': 0,
                 'Mz': 0,
-                'extra_observations': {}}
+                'extra_observations': {'k':2}}
 
 
 if __name__ == '__main__':

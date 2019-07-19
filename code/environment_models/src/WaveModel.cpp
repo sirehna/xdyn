@@ -7,21 +7,81 @@
 
 #include "WaveModel.hpp"
 #include "InternalErrorException.hpp"
+#include "discretize.hpp"
 #include <cmath> // For isnan
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_real_distribution.hpp>
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
 
-WaveModel::WaveModel(const FlatDiscreteDirectionalWaveSpectrum& flat_spectrum_, const DiscreteDirectionalWaveSpectrum& spectrum_) : flat_spectrum(flat_spectrum_), spectrum(spectrum_)
+DiscreteDirectionalWaveSpectrum add_constant_phases(DiscreteDirectionalWaveSpectrum spectrum, const double constant_phase);
+DiscreteDirectionalWaveSpectrum add_constant_phases(DiscreteDirectionalWaveSpectrum spectrum, const double constant_phase)
+{
+    const size_t n = spectrum.Si.size();
+    const size_t p = spectrum.Dj.size();
+    if (n*p>0)
+    {
+        spectrum.phase.resize(n);
+        for (size_t i = 0 ; i < n ; ++i)
+        {
+           spectrum.phase[i] = std::vector<double>(n, constant_phase);
+        }
+
+    }
+    return spectrum;
+}
+
+DiscreteDirectionalWaveSpectrum add_random_phases(DiscreteDirectionalWaveSpectrum spectrum, const int random_number_generator_seed);
+DiscreteDirectionalWaveSpectrum add_random_phases(DiscreteDirectionalWaveSpectrum spectrum, const int random_number_generator_seed)
+{
+    const size_t n = spectrum.Si.size();
+    const size_t p = spectrum.Dj.size();
+    if (n*p>0)
+    {
+        spectrum.phase.resize(n);
+        boost::mt19937 rng((unsigned int)random_number_generator_seed);
+        boost::random::uniform_real_distribution<double> generate_random_phase(0,2*PI);
+        for (size_t i = 0 ; i < n ; ++i)
+        {
+           spectrum.phase[i].resize(p);
+           for (size_t j = 0 ; j < p ; ++j)
+           {
+               spectrum.phase[i][j] = generate_random_phase(rng);
+           }
+        }
+
+    }
+    return spectrum;
+}
+
+WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_phase) : spectrum(add_constant_phases(spectrum_, constant_phase)), flat_spectrum(flatten(spectrum))
+{
+    check_sizes();
+}
+
+WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : spectrum(add_random_phases(spectrum_, random_number_generator_seed)), flat_spectrum(flatten(spectrum))
+{
+    check_sizes();
+}
+
+void WaveModel::check_sizes() const
 {
     if (flat_spectrum.omega.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'omega' values devined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'omega' values defined in DiscreteDirectionalWaveSpectrum");
     }
     if (flat_spectrum.a.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'a' values devined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'a' values defined in DiscreteDirectionalWaveSpectrum");
     }
     if (flat_spectrum.k.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'k' values devined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'k' values defined in DiscreteDirectionalWaveSpectrum");
+    }
+    if (flat_spectrum.phase.empty())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'phase' values defined in DiscreteDirectionalWaveSpectrum");
     }
 
     for (const auto omega:flat_spectrum.omega)

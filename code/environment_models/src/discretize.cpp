@@ -112,6 +112,10 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
     const size_t nPsi = spectrum.psi.size();
     double domega = 1;
     double dpsi = 1;
+    if (nOmega*nPsi > 0)
+    {
+        ret.phase.reserve(nOmega*nPsi);
+    }
     for (size_t i = 0 ; i < nOmega ; ++i)
     {
         if (nOmega > 1)
@@ -161,6 +165,7 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
             ret.sin_psi.push_back(sin(spectrum.psi[j]));
             const double s = spectrum.Si[i] * spectrum.Dj[j];
             ret.a.push_back(sqrt(2 * s * domega * dpsi));
+            ret.phase.push_back(spectrum.phase.at(i).at(j));
         }
     }
     ret.pdyn_factor = spectrum.pdyn_factor;

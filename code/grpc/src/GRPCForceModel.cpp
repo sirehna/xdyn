@@ -196,6 +196,7 @@ class GRPCForceModel::Impl
             const auto wave_information = get_wave_information(t, state.x(0), state.y(0), state.z(0), env);
             const grpc::Status status = stub->force(&context, to_grpc.from_force_request(states, commands, wave_information), &response);
             throw_if_invalid_status(input, "force", status);
+            extra_observations = std::map<std::string,double>(response.extra_observations().begin(),response.extra_observations().end());
             return from_grpc.to_force(response);
         }
 

@@ -1,3 +1,6 @@
+#include <cmath> //std::isnan
+#include <iomanip> // std::setprecision
+
 #include "parse_history.hpp"
 
 #include "YamlState.hpp"
@@ -62,9 +65,39 @@ YamlSimServerInputs decode_YamlSimServerInputs(const std::string& json)
     return infos;
 }
 
+std::ostream& operator<<(std::ostream& os, const std::map<std::string, double>& m);
+std::ostream& operator<<(std::ostream& os, const std::map<std::string, double>& m)
+{
+    os << "{";
+    const size_t n = m.size();
+    size_t i = 0;
+    for (const auto key_value:m)
+    {
+        os << "\"" << key_value.first << "\": ";
+        if (std::isnan(key_value.second))
+        {
+            os << "null";
+        }
+        else
+        {
+            os << key_value.second;
+        }
+        if (i < n-1)
+        {
+            os << ", ";
+        }
+        i++;
+    }
+    os << "}";
+    return os;
+}
+
 std::string encode_YamlStates(const std::vector<YamlState>& states)
 {
     std::stringstream ss;
+    // Set precision to shortest possible representation, without losing precision
+    // Cf. https://stackoverflow.com/a/23437425, and, more specifically answer https://stackoverflow.com/a/4462034
+    ss << std::defaultfloat << std::setprecision(17);
     ss << "[";
     for (size_t i = 0 ; i < states.size() ; ++i)
     {
@@ -85,7 +118,8 @@ std::string encode_YamlStates(const std::vector<YamlState>& states)
            << "\"qk\": " << states[i].qk << ", "
            << "\"phi\": " << states[i].phi << ", "
            << "\"theta\": " << states[i].theta << ", "
-           << "\"psi\": " << states[i].psi
+           << "\"psi\": " << states[i].psi << ", "
+           << "\"extra_observations\": " << states[i].extra_observations
            << "}";
         if (i < states.size()-1) ss << ",";
         ss << std::endl;

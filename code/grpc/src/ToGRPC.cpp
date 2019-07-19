@@ -36,17 +36,21 @@ SpectrumResponse* ToGRPC::from_discrete_directional_wave_spectra(const std::vect
         {
             s->add_dj(Dj);
         }
-        for (const auto& k:spectrum.k)
-        {
-            s->add_k(k);
-        }
         for (const auto& omega:spectrum.omega)
         {
             s->add_omega(omega);
         }
-        const auto p = s->add_phase();
+        for (const auto& psi:spectrum.psi)
+        {
+            s->add_psi(psi);
+        }
+        for (const auto& k:spectrum.k)
+        {
+            s->add_k(k);
+        }
         for (const auto& phases:spectrum.phase)
         {
+            const auto p = s->add_phase();
             for (const auto& phase:phases)
             {
                 p->add_phase(phase);

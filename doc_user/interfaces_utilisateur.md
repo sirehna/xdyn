@@ -533,6 +533,15 @@ Exemple de sortie:
 }
 ~~~~
 
+La représentation textuelle de ces nombres flottants est faite de façon unique (et non
+exacte) : cela signifie que si les flottants sont différents (binairement),
+leur représentation textuelle sera différente. Cela signifie également que si xdyn lit
+la représentation textuelle et la traduit en binaire, on retrouvera bien la valeur binaire
+initiale. En d'autres termes, la fonction flottant -> texte est injective. Cela
+n'implique pas qu'elle soit bijective, puisque si l'on part d'une
+représentation textuelle, que l'on convertit en binaire pour reconvertir ensuite en
+texte on ne retrouvera pas nécessairement le texte initial.
+
 ### Description des entrées/sorties pour une utilisation en "Co-Simulation" (x(t) -> [x(t), ...,x(t+Dt)])
 
 | Entrées    | Type                                   | Détail                                                                                                                                                  |
@@ -682,3 +691,14 @@ Exemple de sortie:
   }
 ]
 ~~~~
+
+Comme pour le "model exchange", la représentation textuelle de ces nombres
+flottants est faite de façon unique (et non exacte) : cela signifie que si les
+flottants sont différents (binairement), leur représentation textuelle sera
+différente. Cela signifie également que si xdyn lit la représentation textuelle
+et la traduit en binaire, on retrouvera bien la valeur binaire initiale. En
+d'autres termes, la fonction flottant -> texte est injective. Cela n'implique
+pas qu'elle soit bijective, puisque si l'on part d'une représentation
+textuelle, que l'on convertit en binaire pour reconvertir ensuite en texte on
+ne retrouvera pas nécessairement le texte initial.
+

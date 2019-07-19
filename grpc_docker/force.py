@@ -389,7 +389,6 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             response.Mx = out['Mx']
             response.My = out['My']
             response.Mz = out['Mz']
-            LOGGER.info(response.Fx)
             response.extra_observations.update(out['extra_observations'])
         except NotImplementedError as exception:
             context.set_details(repr(exception))
@@ -400,39 +399,39 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         return response
 
     def required_wave_information(self, request, context):
-        LOGGER.info('required_wave_information')
         response = force_pb2.RequiredWaveInformationResponse()
         if self.wave_information_required:
             try:
                 required_wave_information =  \
                     self.model.required_wave_information(request.t, request.x,
                                                          request.y, request.z)
-                response.elevations.x[:] =\
-                    required_wave_information['elevations']['x']
-                response.elevations.y[:] =\
-                    required_wave_information['elevations']['y']
-                response.elevations.z[:] =\
-                    required_wave_information['elevations']['z']
-                response.elevations.t =\
-                    required_wave_information['elevations']['t']
-                response.dynamic_pressures.x[:] =\
-                    required_wave_information['dynamic_pressures']['x']
-                response.dynamic_pressures.y[:] =\
-                    required_wave_information['dynamic_pressures']['y']
-                response.dynamic_pressures.z[:] =\
-                    required_wave_information['dynamic_pressures']['z']
-                response.dynamic_pressures.t =\
-                    required_wave_information['dynamic_pressures']['t']
-                response.orbital_velocities.x[:] =\
-                    required_wave_information['orbital_velocities']['x']
-                response.orbital_velocities.y[:] =\
-                    required_wave_information['orbital_velocities']['y']
-                response.orbital_velocities.z[:] =\
-                    required_wave_information['orbital_velocities']['z']
-                response.orbital_velocities.t =\
-                    required_wave_information['orbital_velocities']['t']
-                if required_wave_information['spectrum'] is not None:
-                    response.spectrum.model_requires_spectrum = True
+                if 'elevations' in required_wave_information:
+                    response.elevations.x[:] =\
+                        required_wave_information['elevations']['x']
+                    response.elevations.y[:] =\
+                        required_wave_information['elevations']['y']
+                    response.elevations.t =\
+                        required_wave_information['elevations']['t']
+                if 'dynamic_pressures' in required_wave_information:
+                    response.dynamic_pressures.x[:] =\
+                        required_wave_information['dynamic_pressures']['x']
+                    response.dynamic_pressures.y[:] =\
+                        required_wave_information['dynamic_pressures']['y']
+                    response.dynamic_pressures.z[:] =\
+                        required_wave_information['dynamic_pressures']['z']
+                    response.dynamic_pressures.t =\
+                        required_wave_information['dynamic_pressures']['t']
+                if 'orbital_velocities' in required_wave_information:
+                    response.orbital_velocities.x[:] =\
+                        required_wave_information['orbital_velocities']['x']
+                    response.orbital_velocities.y[:] =\
+                        required_wave_information['orbital_velocities']['y']
+                    response.orbital_velocities.z[:] =\
+                        required_wave_information['orbital_velocities']['z']
+                    response.orbital_velocities.t =\
+                        required_wave_information['orbital_velocities']['t']
+                if 'spectrum' in required_wave_information:
+                    response.need_spectrum = True
                     response.spectrum.x =\
                         required_wave_information['spectrum']['x']
                     response.spectrum.y =\

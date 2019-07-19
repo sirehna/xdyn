@@ -22,7 +22,7 @@ YamlJonswap          parse_jonswap(const std::string& yaml);
 YamlPiersonMoskowitz parse_pierson_moskowitz(const std::string& yaml);
 YamlBretschneider    parse_bretschneider(const std::string& yaml);
 YamlCos2s            parse_cos2s(const std::string& yaml);
-boost::optional<int> parse_airy(const std::string& yaml);
+boost::optional<int> parse_seed_of_random_number_generator(const std::string& yaml);
 YamlGRPC             parse_grpc(const std::string& yaml);
 
 #endif  /* ENVIRONMENT_PARSERS_HPP_ */

@@ -28,7 +28,10 @@ template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double
 {
     EverythingObserver observer;
     ssc::solver::quicksolve<StepperType>(sys, tstart, tend, dt, observer);
-    return observer.get();
+    observer.observe(sys, tend);
+    auto ret = observer.get();
+    ret.resize(ret.size()-1);
+    return ret;
 }
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const double tstart, const double tend, const double dt)
