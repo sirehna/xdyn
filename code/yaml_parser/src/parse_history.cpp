@@ -1,3 +1,4 @@
+#include <cmath> //std::isnan
 #include <iomanip> // std::setprecision
 
 #include "parse_history.hpp"
@@ -72,7 +73,15 @@ std::ostream& operator<<(std::ostream& os, const std::map<std::string, double>& 
     size_t i = 0;
     for (const auto key_value:m)
     {
-        os << "\"" << key_value.first << "\": " << key_value.second;
+        os << "\"" << key_value.first << "\": ";
+        if (std::isnan(key_value.second))
+        {
+            os << "null";
+        }
+        else
+        {
+            os << key_value.second;
+        }
         if (i < n-1)
         {
             os << ", ";
