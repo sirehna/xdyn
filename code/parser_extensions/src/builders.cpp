@@ -37,7 +37,7 @@ boost::optional<WaveModelPtr> WaveModelBuilder<Airy>::try_to_parse(const std::st
     boost::optional<WaveModelPtr> ret;
     if (model == "airy")
     {
-        const boost::optional<int> seed = parse_airy(yaml);
+        const boost::optional<int> seed = parse_seed_of_random_number_generator(yaml);
         if (seed)
         {
             ret.reset(WaveModelPtr(new Airy(spectrum,*seed)));
