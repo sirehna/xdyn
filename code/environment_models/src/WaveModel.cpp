@@ -13,15 +13,15 @@ WaveModel::WaveModel(const FlatDiscreteDirectionalWaveSpectrum& flat_spectrum_, 
 {
     if (flat_spectrum.omega.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'omega' values devined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'omega' values defined in DiscreteDirectionalWaveSpectrum");
     }
     if (flat_spectrum.a.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'a' values devined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'a' values defined in DiscreteDirectionalWaveSpectrum");
     }
     if (flat_spectrum.k.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'k' values devined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'k' values defined in DiscreteDirectionalWaveSpectrum");
     }
 
     for (const auto omega:flat_spectrum.omega)
