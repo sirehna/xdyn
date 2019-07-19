@@ -290,12 +290,6 @@ boost::optional<int>                  parse_airy(const std::string& yaml)
                 {
                     throw(e);
                 }
-                if (ret)
-                {
-                }
-                else
-                {
-                }
             }
             catch(...)
             {
