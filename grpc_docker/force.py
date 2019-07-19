@@ -399,7 +399,6 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         return response
 
     def required_wave_information(self, request, context):
-        LOGGER.info('required_wave_information')
         response = force_pb2.RequiredWaveInformationResponse()
         if self.wave_information_required:
             try:
