@@ -8,10 +8,6 @@
 #ifndef AIRY_HPP_
 #define AIRY_HPP_
 
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_real_distribution.hpp>
-
-
 #include <ssc/kinematics.hpp>
 
 #include "WaveModel.hpp"
@@ -42,9 +38,6 @@ class Airy : public WaveModel
 
     private:
         Airy(); // Disabled
-        std::vector<std::vector<double> > phase;
-        boost::mt19937 rng;
-        boost::random::uniform_real_distribution<double> generate_random_phase;
 
         /**  \brief Surface elevation
           *  \returns Elevations of a list of points at a given instant, in meters.

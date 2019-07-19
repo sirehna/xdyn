@@ -252,7 +252,7 @@ TEST_F(discretizeTest, filtering_with_a_ratio_of_1_should_merely_sort_the_spectr
     EXPECT_EQ(12, s_ori.cos_psi.size());
     EXPECT_EQ(12, s_ori.sin_psi.size());
     EXPECT_EQ(12, s_ori.k.size());
-    EXPECT_EQ(0, s_ori.phase.size());
+    EXPECT_EQ(12, s_ori.phase.size());
 
     const FlatDiscreteDirectionalWaveSpectrum s = filter(s_ori, 1);
     EXPECT_EQ(12, s.a.size());

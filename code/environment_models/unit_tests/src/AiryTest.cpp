@@ -72,6 +72,32 @@ TEST_F(AiryTest, single_frequency_single_direction_at_one_point)
     //! [AiryTest expected output]
 }
 
+TEST_F(AiryTest, serialized_spectrum_should_have_all_the_information_we_need)
+{
+    const double psi0 = PI/4;
+    const double Hs = 3;
+    const double Tp = 10;
+    const double omega0 = 2*PI/Tp;
+    const double omega_min = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
+    const size_t nfreq = a.random<size_t>().between(2,100);
+    YamlStretching ys;
+    ys.h = 0;
+    ys.delta = 1;
+    const Stretching s(ys);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s);
+    int random_seed = 0;
+    const Airy wave(A, random_seed);
+    const DiscreteDirectionalWaveSpectrum serialized_spectrum = wave.get_spectrum();
+    ASSERT_FALSE(serialized_spectrum.phase.empty());
+    ASSERT_EQ(1, serialized_spectrum.phase.size());
+    for (const auto phase:serialized_spectrum.phase)
+    {
+        ASSERT_EQ(1, phase.size());
+        ASSERT_NE(0, phase.front());
+    }
+}
+
 TEST_F(AiryTest, two_frequencies_single_direction_at_one_point)
 {
     const double psi0 = PI/4;
