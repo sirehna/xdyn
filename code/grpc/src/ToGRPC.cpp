@@ -48,9 +48,9 @@ SpectrumResponse* ToGRPC::from_discrete_directional_wave_spectra(const std::vect
         {
             s->add_k(k);
         }
-        const auto p = s->add_phase();
         for (const auto& phases:spectrum.phase)
         {
+            const auto p = s->add_phase();
             for (const auto& phase:phases)
             {
                 p->add_phase(phase);
