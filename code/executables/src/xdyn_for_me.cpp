@@ -67,7 +67,7 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
             SimServerInputs server_inputs = parse_SimServerInputs(input_yaml, xdyn_for_me->get_Tmax());
             const std::vector<double> dx_dt = xdyn_for_me->calculate_dx_dt(server_inputs);
             std::stringstream ss;
-            // Set precision to shortes possible representation , without losing precision
+            // Set precision to shortest possible representation, without losing precision
             // Cf. https://stackoverflow.com/a/23437425, and, more specifically answer https://stackoverflow.com/a/4462034
             ss << std::defaultfloat << std::setprecision(17);
             ss << "{"
