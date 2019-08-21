@@ -63,15 +63,15 @@ debian_9_coverage_gcc_6: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_9_coverage_gcc_6: ci_env=`bash <(curl -s https://codecov.io/env)`
 debian_9_coverage_gcc_6: cmake-debian-target build-debian test-debian
 
-debian_9_release_gcc_82: BUILD_TYPE = Release
-debian_9_release_gcc_82: BUILD_DIR = build_deb9_gcc820
-debian_9_release_gcc_82: CPACK_GENERATOR = DEB
-debian_9_release_gcc_82: DOCKER_IMAGE = sirehna/base-image-debian9-gcc820-xdyn
-debian_9_release_gcc_82: BOOST_ROOT = /opt/boost
-debian_9_release_gcc_82: SSC_ROOT = /opt/ssc
-debian_9_release_gcc_82: HDF5_DIR = /usr/local/hdf5/share/cmake
-debian_9_release_gcc_82: ci_env=
-debian_9_release_gcc_82: cmake-debian-target build-debian test-debian
+debian_10_release_gcc_8: BUILD_TYPE = Release
+debian_10_release_gcc_8: BUILD_DIR = build_deb10_gcc8
+debian_10_release_gcc_8: CPACK_GENERATOR = DEB
+debian_10_release_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
+debian_10_release_gcc_8: BOOST_ROOT = /opt/boost
+debian_10_release_gcc_8: SSC_ROOT = /opt/ssc
+debian_10_release_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_release_gcc_8: ci_env=
+debian_10_release_gcc_8: cmake-debian-target build-debian test-debian
 
 windows_gccx_posix: BUILD_TYPE=Release
 windows_gccx_posix: BUILD_DIR=build_win_posix

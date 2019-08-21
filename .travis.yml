@@ -23,9 +23,9 @@ matrix:
     - name: "Debian 9 coverage GCC 6"
       env:
         - TARGET=debian_9_coverage_gcc_6
-    - name: "Debian 9 release GCC 820"
+    - name: "Debian 10 release GCC 8"
       env:
-        - TARGET=debian_9_release_gcc_82
+        - TARGET=debian_10_release_gcc_8
     - name: "Windows cross compilation Gcc X PosixThreads release"
       env:
         - TARGET=windows_gccx_posix
@@ -75,19 +75,19 @@ after_success:
   docker push sirehna/xdyn-force-grpc:python3;
   docker push sirehna/xdyn-waves-grpc:python3;
   fi
-- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_8_release_gcc_492" ];
-  then
-  echo "Fetching generated deb";
-  ls -altr build_deb8/xdyn.deb;
-  shasum -a256 build_deb8/xdyn.deb;
-  cp build_deb8/xdyn.deb xdyn_binary_debian8_amd64.deb;
-  fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_9_release_gcc_6" ];
   then
   echo "Fetching generated deb";
   ls -altr build_deb9/xdyn.deb;
   shasum -a256 build_deb9/xdyn.deb;
   cp build_deb9/xdyn.deb xdyn_binary_debian9_amd64.deb;
+  fi
+- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_10_release_gcc_8" ];
+  then
+  echo "Fetching generated deb";
+  ls -altr build_deb10/xdyn.deb;
+  shasum -a256 build_deb10/xdyn.deb;
+  cp build_deb10/xdyn.deb xdyn_binary_debian10_amd64.deb;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gccx_posix" ];
   then
