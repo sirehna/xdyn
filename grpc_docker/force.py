@@ -364,6 +364,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             response.phi = out['phi']
             response.theta = out['theta']
             response.psi = out['psi']
+            response.commands[:] = out['commands']
             self.wave_information_required = response.needs_wave_outputs
         except KeyError as exception:
             match = closest_match(list(yaml.safe_load(request.parameters)),
