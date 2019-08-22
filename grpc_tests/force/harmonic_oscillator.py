@@ -19,11 +19,16 @@ class HarmonicOscillator(force.Model):
         self.c = param['c']
         return {'max_history_length': 0, 'needs_wave_outputs': False,
                 'frame': body_name, 'x': 0, 'y': 0, 'z': 0, 'phi': 0,
-                'theta': 0, 'psi': 0}
+                'theta': 0, 'psi': 0, 'commands': ['omega']}
 
-    def force(self, states, _, __):
+    def force(self, states, commands, __):
         """Force model."""
-        return {'Fx': -self.k*states.x[0] - self.c*states.u[0],
+
+        if 'omega' not in commands:
+            raise KeyError("Command 'omega' was not provided. Got [" +
+                           ','.join(commands) + ']')
+        omega = commands['omega']
+        return {'Fx': omega*(-self.k*states.x[0] - self.c*states.u[0]),
                 'Fy': 0,
                 'Fz': 0,
                 'Mx': 0,
