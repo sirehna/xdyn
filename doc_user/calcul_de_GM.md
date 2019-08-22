@@ -93,7 +93,7 @@ tend vers un point appelé métacentre.
 
 Plan de la surface libre du liquide au repos
 
-#### Flottaison
+#### Flottaison
 
 Intersection du flotteur et du plan de flottaison
 
@@ -116,7 +116,7 @@ C'est le point d'application des efforts hydrostatiques.
 Flottaisons limitant des carènes de même volume. On peut démontrer
 qu'il [existe une flottaison isocarène]().
 
-#### Axe d'inclinaison
+#### Axe d'inclinaison
 
 Intersection de deux flottaisons isocarènes infiniment voisines.
 
