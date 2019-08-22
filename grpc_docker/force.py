@@ -364,7 +364,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             response.phi = out['phi']
             response.theta = out['theta']
             response.psi = out['psi']
-            response.commands[:] = out['commands']
+            response.commands[:] = self.model.required_commands
             self.wave_information_required = response.needs_wave_outputs
         except KeyError as exception:
             match = closest_match(list(yaml.safe_load(request.parameters)),
@@ -382,6 +382,10 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         """Marshall force model's arguments from gRPC."""
         response = force_pb2.ForceResponse()
         try:
+            for required_command in self.model.required_commands:
+                if required_command not in request.commands:
+                    raise KeyError("Command '" + required_command + "' was not provided. Got [" +
+                               ','.join(request.commands) + ']')
             out = self.model.force(request.states, request.commands,
                               request.wave_information)
             response.Fx = out['Fx']

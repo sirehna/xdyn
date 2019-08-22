@@ -11,6 +11,7 @@ class HarmonicOscillator(force.Model):
         """Initialize parameters from 'set_parameters' to None."""
         self.k = 0
         self.c = 0
+        self.required_commands = ['omega']
 
     def set_parameters(self, parameters, body_name):
         """Parameter k is stiffness and c is damping."""
@@ -19,14 +20,11 @@ class HarmonicOscillator(force.Model):
         self.c = param['c']
         return {'max_history_length': 0, 'needs_wave_outputs': False,
                 'frame': body_name, 'x': 0, 'y': 0, 'z': 0, 'phi': 0,
-                'theta': 0, 'psi': 0, 'commands': ['omega']}
+                'theta': 0, 'psi': 0}
 
     def force(self, states, commands, __):
         """Force model."""
 
-        if 'omega' not in commands:
-            raise KeyError("Command 'omega' was not provided. Got [" +
-                           ','.join(commands) + ']')
         omega = commands['omega']
         return {'Fx': omega*(-self.k*states.x[0] - self.c*states.u[0]),
                 'Fy': 0,
