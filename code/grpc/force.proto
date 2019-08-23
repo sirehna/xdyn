@@ -42,6 +42,7 @@ message SetForceParameterRequest
 {
     string parameters = 1; // YAML string containing the parameters to set for this particular model.
     string body_name = 2; // Name of the body this force model is acting upon. Useful, eg., if you want to express the force & torque in the body's reference frame.
+    string instance_name = 3; // Name of the instance of this force model. Useful, eg., if you need to use the same model multiple times in the same simulation, with different parameters. Eg. for a propeller model you might want a port instance & a starboard one, differing in their position.
 }
 
 message SetForceParameterResponse
@@ -85,6 +86,7 @@ message ForceRequest
     States states  = 1;
     map<string, double> commands = 2; // All commands known by xdyn at this timestep
     WaveInformation wave_information = 3; // Wave information that was requested by the force model
+    string instance_name = 4; // Name of the instance of this force model. Useful, eg., if you need to use the same model multiple times in the same simulation, with different parameters. Eg. for a propeller model you might want a port instance & a starboard one, differing in their position.
 }
 
 message ForceResponse

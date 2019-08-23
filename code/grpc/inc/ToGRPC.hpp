@@ -26,8 +26,8 @@ class ToGRPC
         SpectrumResponse* from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const;
         WaveInformation* from_wave_information(const WaveRequest& wave_request, const double t, const EnvironmentAndFrames& env) const;
         States* from_state(const BodyStates& state, const double max_history_length, const EnvironmentAndFrames& env) const;
-        ForceRequest from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information) const;
-        SetForceParameterRequest from_yaml(const std::string& yaml, const std::string body_name) const;
+        ForceRequest from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information, const std::string& instance_name) const;
+        SetForceParameterRequest from_yaml(const std::string& yaml, const std::string body_name, const std::string& instance_name) const;
 
     private:
         void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination) const;

@@ -8,6 +8,7 @@ import time
 import grpc
 import yaml
 from concurrent import futures
+from functools import partial
 
 import inspect
 
@@ -42,6 +43,10 @@ NOT_IMPLEMENTED = "is not implemented in this model."
 
 class Model:
     """Derive from this class to implement a gRPC force model for xdyn."""
+
+    def set_required_commands(self, body_name, commands):
+        self.required_commands = [body_name + "(" + command +
+                                  ")" for command in commands]
 
     def set_parameters(self, parameters, body_name):
         """Initialize the force model with YAML parameters.
@@ -315,7 +320,7 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 class ForceServicer(force_pb2_grpc.ForceServicer):
     """Implements the gRPC methods defined in waves.proto."""
 
-    def __init__(self, model):
+    def __init__(self, model_class):
         """Constructor.
 
         Parameters
@@ -324,8 +329,10 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             Implements the scalar force model to use.
 
         """
-        self.model = model
         self.wave_information_required = False
+        self.model_class = model_class
+        self.model = {}
+        self.required_commands = {}
 
     def set_parameters(self, request, context):
         """Set the parameters of self.model.
@@ -374,7 +381,11 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         LOGGER.info('Received parameters: %s', request.parameters)
         response = force_pb2.SetForceParameterResponse()
         try:
-            out = self.model.set_parameters(request.parameters, request.body_name)
+            instance = self.model_class(request.parameters, request.body_name)
+            self.model[request.instance_name] = instance
+            out = instance.get_parameters(request.body_name)
+            self.required_commands[request.instance_name] =\
+                out['required_commands']
             response.max_history_length = out['max_history_length']
             response.needs_wave_outputs = out['needs_wave_outputs']
             response.frame = out['frame']
@@ -384,7 +395,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             response.phi = out['phi']
             response.theta = out['theta']
             response.psi = out['psi']
-            response.commands[:] = self.model.required_commands
+            response.commands[:] = out['required_commands']
             self.wave_information_required = response.needs_wave_outputs
         except KeyError as exception:
             match = closest_match(list(yaml.safe_load(request.parameters)),
@@ -398,16 +409,32 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
         return response
 
+    def to_xdyn_command_name(self, instance_name, command):
+        """Convert a command name to a form recognizable by xdyn."""
+        return instance_name + '(' + command + ')'
+
+    def get_command(self, available_commands, instance_name, command):
+        """Get command from xdyn or throw an exception."""
+        formatted_command = self.to_xdyn_command_name(instance_name, command)
+        if formatted_command not in available_commands:
+            raise KeyError("Command '" + formatted_command +
+                           "' was not provided. Got [" +
+                           ','.join(available_commands) + ']')
+        return available_commands[formatted_command]
+
     def force(self, request, context):
         """Marshall force model's arguments from gRPC."""
         response = force_pb2.ForceResponse()
         try:
-            for required_command in self.model.required_commands:
-                if required_command not in request.commands:
-                    raise KeyError("Command '" + required_command + "' was not provided. Got [" +
-                               ','.join(request.commands) + ']')
-            out = self.model.force(request.states, request.commands,
-                              request.wave_information)
+            required_commands = self.required_commands[request.instance_name]
+            get_command_value = partial(self.get_command, request.commands,
+                                        request.instance_name)
+            commands = {command: get_command_value(command) for command in
+                        required_commands}
+            out = self.model[request.instance_name].force(request.states,
+                                                          commands,
+                                                          request.wave_information
+                                                          )
             response.Fx = out['Fx']
             response.Fy = out['Fy']
             response.Fz = out['Fz']

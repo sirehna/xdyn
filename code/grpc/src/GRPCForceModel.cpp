@@ -151,7 +151,7 @@ class GRPCForceModel::Impl
             , commands()
             , force_frame()
         {
-            set_parameters(input.yaml, body_name);
+            set_parameters(input.yaml, body_name, input.name);
         }
 
         GRPCForceModel::Input get_input() const
@@ -159,11 +159,11 @@ class GRPCForceModel::Impl
             return input;
         }
 
-        void set_parameters(const std::string& yaml, const std::string& body_name)
+        void set_parameters(const std::string& yaml, const std::string& body_name, const std::string& instance_name)
         {
             SetForceParameterResponse response;
             grpc::ClientContext context;
-            const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml, body_name), &response);
+            const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml, body_name, instance_name), &response);
             throw_if_invalid_status(input, "set_parameters", status);
             needs_wave_outputs = response.needs_wave_outputs();
             max_history_length = response.max_history_length();
@@ -188,13 +188,13 @@ class GRPCForceModel::Impl
             return from_grpc.to_wave_request(response);
         }
 
-        ssc::kinematics::Vector6d force(const double t, const BodyStates& state, const std::map<std::string,double>& commands, const EnvironmentAndFrames& env)
+        ssc::kinematics::Vector6d force(const double t, const BodyStates& state, const std::map<std::string,double>& commands, const EnvironmentAndFrames& env, const std::string& instance_name)
         {
             ForceResponse response;
             grpc::ClientContext context;
             const auto states = to_grpc.from_state(state, max_history_length, env);
             const auto wave_information = get_wave_information(t, state.x(0), state.y(0), state.z(0), env);
-            const grpc::Status status = stub->force(&context, to_grpc.from_force_request(states, commands, wave_information), &response);
+            const grpc::Status status = stub->force(&context, to_grpc.from_force_request(states, commands, wave_information, instance_name), &response);
             throw_if_invalid_status(input, "force", status);
             extra_observations = std::map<std::string,double>(response.extra_observations().begin(),response.extra_observations().end());
             return from_grpc.to_force(response);
@@ -263,7 +263,6 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
 
 GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
         GRPCForceModel(TR1(shared_ptr)<GRPCForceModel::Impl>(new GRPCForceModel::Impl(input, env_.rot.convention, body_name_)), body_name_, env_)
-
 {
 }
 
@@ -277,7 +276,7 @@ GRPCForceModel::GRPCForceModel(const TR1(shared_ptr)<Impl>& pimpl_, const std::s
 
 ssc::kinematics::Vector6d GRPCForceModel::get_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands) const
 {
-    const auto ret = pimpl->force(t, states, commands, env);
+    const auto ret = pimpl->force(t, states, commands, env, get_name());
     return ret;
 }
 
