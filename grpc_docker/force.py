@@ -383,7 +383,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         try:
             instance = self.model_class(request.parameters, request.body_name)
             self.model[request.instance_name] = instance
-            out = instance.get_parameters(request.body_name)
+            out = instance.get_parameters()
             self.required_commands[request.instance_name] =\
                 out['required_commands']
             response.max_history_length = out['max_history_length']

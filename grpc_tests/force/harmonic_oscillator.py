@@ -14,7 +14,7 @@ class HarmonicOscillator(force.Model):
         self.c = param['c']
         self.body_name = body_name
 
-    def get_parameters(self, body_name):
+    def get_parameters(self):
         """Parameter k is stiffness and c is damping."""
         return {'max_history_length': 0, 'needs_wave_outputs': False,
                 'frame': self.body_name, 'x': 0, 'y': 0, 'z': 0, 'phi': 0,
