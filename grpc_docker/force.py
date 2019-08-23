@@ -366,12 +366,12 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
               are expressed. Depends on the angle convention chosen in the
               'rotations convention' section of xdyn's input file. See xdyn's
               documentation for details.
-            - psi (double): Second Euler angle defining the rotation from
+            - theta (double): Second Euler angle defining the rotation from
               'frame' to the reference frame in which the forces and torques
               are expressed. Depends on the angle convention chosen in the
               'rotations convention' section of xdyn's input file. See xdyn's
               documentation for details.
-            - theta (double): Third Euler angle defining the rotation from
+            - psi (double): Third Euler angle defining the rotation from
               'frame' to the reference frame in which the forces and torques
               are expressed. Depends on the angle convention chosen in the
               'rotations convention' section of xdyn's input file.
