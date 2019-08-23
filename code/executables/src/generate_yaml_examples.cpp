@@ -27,6 +27,7 @@ int main(int argc, const char* argv[])
     yaml["tutorial_08_diffraction.yml"]       = test_data::test_ship_diffraction();
     yaml["tutorial_09_gRPC_wave_model.yml"]   = test_data::tutorial_09_gRPC_wave_model();
     yaml["tutorial_10_gRPC_force_model.yml"]  = test_data::tutorial_10_gRPC_force_model();
+    yaml["tutorial_10_gRPC_force_model_commands.yml"]  = test_data::tutorial_10_gRPC_force_model_commands();
     yaml["oscillating_cube_test.yml"]         = test_data::oscillating_cube_example();
     yaml["stable_cube_test.yml"]              = test_data::stable_cube_example();
     yaml["stable_rolling_cube_test.yml"]      = test_data::stable_rolling_cube_test();
