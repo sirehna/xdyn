@@ -339,16 +339,36 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         -------
         dict
             Should contain the following fields:
-            - max_history_length (double): How far back (in seconds) should the history values in ForceRequest go?
-            - needs_wave_outputs (bool): Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
-            - commands (repeated string): List of commands needed by this model, without the model name (e.g. ['beta1', 'beta2'])
-            - frame (string): Reference frame from which we define the reference in which the forces and torques are expressed.
-            - x (double): Position along the x-axis of 'frame' of the point of application of the force.
-            - y (double): Position along the y-axis of 'frame' of the point of application of the force.
-            - z (double): Position along the z-axis of 'frame' of the point of application of the force.
-            - phi (double): First Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-            - psi (double): Second Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-            - theta (double): Third Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+            - max_history_length (double): How far back (in seconds) should the
+              history values in ForceRequest go?
+            - needs_wave_outputs (bool): Should the force model be queried at
+              each time step using the 'required_wave_information' rpc method
+              to know what wave information it requires?
+            - commands (repeated string): List of commands needed by this
+              model, without the model name (e.g. ['beta1', 'beta2'])
+            - frame (string): Reference frame from which we define the
+              reference in which the forces and torques are expressed.
+            - x (double): Position along the x-axis of 'frame' of the point of
+              application of the force.
+            - y (double): Position along the y-axis of 'frame' of the point of
+              application of the force.
+            - z (double): Position along the z-axis of 'frame' of the point of
+              application of the force.
+            - phi (double): First Euler angle defining the rotation from
+              'frame' to the reference frame in which the forces and torques
+              are expressed. Depends on the angle convention chosen in the
+              'rotations convention' section of xdyn's input file. See xdyn's
+              documentation for details.
+            - psi (double): Second Euler angle defining the rotation from
+              'frame' to the reference frame in which the forces and torques
+              are expressed. Depends on the angle convention chosen in the
+              'rotations convention' section of xdyn's input file. See xdyn's
+              documentation for details.
+            - theta (double): Third Euler angle defining the rotation from
+              'frame' to the reference frame in which the forces and torques
+              are expressed. Depends on the angle convention chosen in the
+              'rotations convention' section of xdyn's input file.
+              See xdyn's documentation for details.
 
         """
         LOGGER.info('Received parameters: %s', request.parameters)
