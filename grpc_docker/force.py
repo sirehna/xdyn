@@ -65,7 +65,7 @@ class Model:
         - max_history_length (double): How many seconds of state history does
           this model need? 0 means we just need the latest value (at t).
         - needs_wave_outputs (bool): True if the model requires wave
-          information (elevations, dynamic pressures or orbital velocities²)
+          information (elevations, dynamic pressures or orbital velocities)
           (in which case method 'required_wave_information' will be called).
           False otherwise.
         - commands (list of strings): list of command names (eg. ['beta1',
