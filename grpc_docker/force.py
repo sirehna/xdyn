@@ -38,7 +38,7 @@ def closest_match(expected_keys, unknown_key):
     return ""
 
 
-NOT_IMPLEMENTED = "is not implemented in this model."
+NOT_IMPLEMENTED = " is not implemented in this model."
 
 
 class Model:
