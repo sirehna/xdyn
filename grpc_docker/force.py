@@ -8,6 +8,7 @@ import time
 import grpc
 import yaml
 from concurrent import futures
+from functools import partial
 
 import inspect
 
@@ -37,11 +38,15 @@ def closest_match(expected_keys, unknown_key):
     return ""
 
 
-NOT_IMPLEMENTED = "is not implemented in this model."
+NOT_IMPLEMENTED = " is not implemented in this model."
 
 
 class Model:
     """Derive from this class to implement a gRPC force model for xdyn."""
+
+    def set_required_commands(self, body_name, commands):
+        self.required_commands = [body_name + "(" + command +
+                                  ")" for command in commands]
 
     def set_parameters(self, parameters, body_name):
         """Initialize the force model with YAML parameters.
@@ -60,7 +65,7 @@ class Model:
         - max_history_length (double): How many seconds of state history does
           this model need? 0 means we just need the latest value (at t).
         - needs_wave_outputs (bool): True if the model requires wave
-          information (elevations, dynamic pressures or orbital velocities²)
+          information (elevations, dynamic pressures or orbital velocities)
           (in which case method 'required_wave_information' will be called).
           False otherwise.
         - commands (list of strings): list of command names (eg. ['beta1',
@@ -315,7 +320,7 @@ _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 class ForceServicer(force_pb2_grpc.ForceServicer):
     """Implements the gRPC methods defined in waves.proto."""
 
-    def __init__(self, model):
+    def __init__(self, model_class):
         """Constructor.
 
         Parameters
@@ -324,8 +329,10 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             Implements the scalar force model to use.
 
         """
-        self.model = model
         self.wave_information_required = False
+        self.model_class = model_class
+        self.model = {}
+        self.required_commands = {}
 
     def set_parameters(self, request, context):
         """Set the parameters of self.model.
@@ -339,22 +346,46 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         -------
         dict
             Should contain the following fields:
-            - max_history_length (double): How far back (in seconds) should the history values in ForceRequest go?
-            - needs_wave_outputs (bool): Should the force model be queried at each time step using the 'required_wave_information' rpc method to know what wave information it requires?
-            - commands (repeated string): List of commands needed by this model, without the model name (e.g. ['beta1', 'beta2'])
-            - frame (string): Reference frame from which we define the reference in which the forces and torques are expressed.
-            - x (double): Position along the x-axis of 'frame' of the point of application of the force.
-            - y (double): Position along the y-axis of 'frame' of the point of application of the force.
-            - z (double): Position along the z-axis of 'frame' of the point of application of the force.
-            - phi (double): First Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-            - psi (double): Second Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-            - theta (double): Third Euler angle defining the rotation from 'frame' to the reference frame in which the forces and torques are expressed. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
+            - max_history_length (double): How far back (in seconds) should the
+              history values in ForceRequest go?
+            - needs_wave_outputs (bool): Should the force model be queried at
+              each time step using the 'required_wave_information' rpc method
+              to know what wave information it requires?
+            - commands (repeated string): List of commands needed by this
+              model, without the model name (e.g. ['beta1', 'beta2'])
+            - frame (string): Reference frame from which we define the
+              reference in which the forces and torques are expressed.
+            - x (double): Position along the x-axis of 'frame' of the point of
+              application of the force.
+            - y (double): Position along the y-axis of 'frame' of the point of
+              application of the force.
+            - z (double): Position along the z-axis of 'frame' of the point of
+              application of the force.
+            - phi (double): First Euler angle defining the rotation from
+              'frame' to the reference frame in which the forces and torques
+              are expressed. Depends on the angle convention chosen in the
+              'rotations convention' section of xdyn's input file. See xdyn's
+              documentation for details.
+            - theta (double): Second Euler angle defining the rotation from
+              'frame' to the reference frame in which the forces and torques
+              are expressed. Depends on the angle convention chosen in the
+              'rotations convention' section of xdyn's input file. See xdyn's
+              documentation for details.
+            - psi (double): Third Euler angle defining the rotation from
+              'frame' to the reference frame in which the forces and torques
+              are expressed. Depends on the angle convention chosen in the
+              'rotations convention' section of xdyn's input file.
+              See xdyn's documentation for details.
 
         """
         LOGGER.info('Received parameters: %s', request.parameters)
         response = force_pb2.SetForceParameterResponse()
         try:
-            out = self.model.set_parameters(request.parameters, request.body_name)
+            instance = self.model_class(request.parameters, request.body_name)
+            self.model[request.instance_name] = instance
+            out = instance.get_parameters()
+            self.required_commands[request.instance_name] =\
+                out['required_commands']
             response.max_history_length = out['max_history_length']
             response.needs_wave_outputs = out['needs_wave_outputs']
             response.frame = out['frame']
@@ -364,6 +395,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             response.phi = out['phi']
             response.theta = out['theta']
             response.psi = out['psi']
+            response.commands[:] = out['required_commands']
             self.wave_information_required = response.needs_wave_outputs
         except KeyError as exception:
             match = closest_match(list(yaml.safe_load(request.parameters)),
@@ -377,12 +409,32 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
         return response
 
+    def to_xdyn_command_name(self, instance_name, command):
+        """Convert a command name to a form recognizable by xdyn."""
+        return instance_name + '(' + command + ')'
+
+    def get_command(self, available_commands, instance_name, command):
+        """Get command from xdyn or throw an exception."""
+        formatted_command = self.to_xdyn_command_name(instance_name, command)
+        if formatted_command not in available_commands:
+            raise KeyError("Command '" + formatted_command +
+                           "' was not provided. Got [" +
+                           ','.join(available_commands) + ']')
+        return available_commands[formatted_command]
+
     def force(self, request, context):
         """Marshall force model's arguments from gRPC."""
         response = force_pb2.ForceResponse()
         try:
-            out = self.model.force(request.states, request.commands,
-                              request.wave_information)
+            required_commands = self.required_commands[request.instance_name]
+            get_command_value = partial(self.get_command, request.commands,
+                                        request.instance_name)
+            commands = {command: get_command_value(command) for command in
+                        required_commands}
+            out = self.model[request.instance_name].force(request.states,
+                                                          commands,
+                                                          request.wave_information
+                                                          )
             response.Fx = out['Fx']
             response.Fy = out['Fy']
             response.Fz = out['Fz']
@@ -403,7 +455,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         if self.wave_information_required:
             try:
                 required_wave_information =  \
-                    self.model.required_wave_information(request.t, request.x,
+                    self.model[request.instance_name].required_wave_information(request.t, request.x,
                                                          request.y, request.z)
                 if 'elevations' in required_wave_information:
                     response.elevations.x[:] =\

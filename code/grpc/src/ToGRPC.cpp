@@ -12,13 +12,14 @@ ToGRPC::ToGRPC(const GRPCForceModel::Input& input_)
     : input(input_)
 {}
 
-RequiredWaveInformationRequest ToGRPC::from_required_wave_information(const double t, const double x, const double y, const double z) const
+RequiredWaveInformationRequest ToGRPC::from_required_wave_information(const double t, const double x, const double y, const double z, const std::string& instance_name) const
 {
     RequiredWaveInformationRequest request;
     request.set_t(t);
     request.set_x(x);
     request.set_y(y);
     request.set_z(z);
+    request.set_instance_name(instance_name);
     return request;
 }
 
@@ -193,20 +194,22 @@ States* ToGRPC::from_state(const BodyStates& state, const double max_history_len
     return ret;
 }
 
-ForceRequest ToGRPC::from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information) const
+ForceRequest ToGRPC::from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information, const std::string& instance_name) const
 {
     ForceRequest request;
     request.set_allocated_wave_information(wave_information);
     request.mutable_commands()->insert(commands.begin(), commands.end());
     request.set_allocated_states(states);
+    request.set_instance_name(instance_name);
     return request;
 }
 
-SetForceParameterRequest ToGRPC::from_yaml(const std::string& yaml, const std::string body_name) const
+SetForceParameterRequest ToGRPC::from_yaml(const std::string& yaml, const std::string body_name, const std::string& instance_name) const
 {
     SetForceParameterRequest request;
     request.set_parameters(yaml);
     request.set_body_name(body_name);
+    request.set_instance_name(instance_name);
     return request;
 }
 

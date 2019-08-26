@@ -5042,9 +5042,14 @@ std::string test_data::tutorial_10_gRPC_force_model()
        << "        model: grpc\n"
        << "        url: force-model:9002\n"
        << "        k: 60\n"
-       << "        c: 1\n"
-       << "    \n"
-       << "commands:\n"
+       << "        c: 1\n";
+    return ss.str();
+}
+
+std::string test_data::tutorial_10_gRPC_force_model_commands()
+{
+    std::stringstream ss;
+    ss << "commands:\n"
        << "  - name: parametric oscillator\n"
        << "    t: [0,1,3,10]\n"
        << "    omega: {unit: rad/s, values: [3, 30, 30, 40]}\n";

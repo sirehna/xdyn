@@ -5,7 +5,7 @@ all:
 	docker-compose \
 		up \
 		-t 0 \
-        --exit-code-from xdyn \
+        --exit-code-from test \
         --abort-on-container-exit \
         --build
 
