@@ -455,7 +455,7 @@ class ForceServicer(force_pb2_grpc.ForceServicer):
         if self.wave_information_required:
             try:
                 required_wave_information =  \
-                    self.model.required_wave_information(request.t, request.x,
+                    self.model[request.instance_name].required_wave_information(request.t, request.x,
                                                          request.y, request.z)
                 if 'elevations' in required_wave_information:
                     response.elevations.x[:] =\

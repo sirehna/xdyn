@@ -12,13 +12,14 @@ ToGRPC::ToGRPC(const GRPCForceModel::Input& input_)
     : input(input_)
 {}
 
-RequiredWaveInformationRequest ToGRPC::from_required_wave_information(const double t, const double x, const double y, const double z) const
+RequiredWaveInformationRequest ToGRPC::from_required_wave_information(const double t, const double x, const double y, const double z, const std::string& instance_name) const
 {
     RequiredWaveInformationRequest request;
     request.set_t(t);
     request.set_x(x);
     request.set_y(y);
     request.set_z(z);
+    request.set_instance_name(instance_name);
     return request;
 }
 

@@ -22,7 +22,7 @@ class ToGRPC
 {
     public:
         ToGRPC(const GRPCForceModel::Input& input_);
-        RequiredWaveInformationRequest from_required_wave_information(const double t, const double x, const double y, const double z) const;
+        RequiredWaveInformationRequest from_required_wave_information(const double t, const double x, const double y, const double z, const std::string& instance_name) const;
         SpectrumResponse* from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const;
         WaveInformation* from_wave_information(const WaveRequest& wave_request, const double t, const EnvironmentAndFrames& env) const;
         States* from_state(const BodyStates& state, const double max_history_length, const EnvironmentAndFrames& env) const;

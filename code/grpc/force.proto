@@ -15,6 +15,7 @@ message RequiredWaveInformationRequest
     double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
     double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
     double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    string instance_name = 5; // Name of the instance of this force model. Useful, eg., if you need to use the same model multiple times in the same simulation, with different parameters. Eg. for a propeller model you might want a port instance & a starboard one, differing in their position.
 }
 
 message RequiredWaveInformationResponse

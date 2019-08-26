@@ -180,7 +180,7 @@ class GRPCForceModel::Impl
 
         WaveRequest required_wave_information(const double t, const double x, const double y, const double z) const
         {
-            const RequiredWaveInformationRequest required_wave_information_request = to_grpc.from_required_wave_information(t, x, y, z);
+            const RequiredWaveInformationRequest required_wave_information_request = to_grpc.from_required_wave_information(t, x, y, z, input.name);
             RequiredWaveInformationResponse response;
             grpc::ClientContext context;
             const grpc::Status status = stub->required_wave_information(&context, required_wave_information_request, &response);
