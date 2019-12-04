@@ -18,8 +18,12 @@ services:
     user: ${CURRENT_UID}
     depends_on:
     - force-model
+    environment:
+      - no_proxy
   test:
     build: .
     user: ${CURRENT_UID}
     depends_on:
     - xdyn
+    environment:
+      - no_proxy
