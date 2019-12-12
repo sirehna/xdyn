@@ -121,19 +121,19 @@ void ControllableForceModel::feed(Observer& observer, ssc::kinematics::Kinematic
     const auto force_in_ned_frame_at_O = rot_from_body_frame_to_ned*tau_in_body_frame_at_G.force;
     const auto torque_in_ned_frame_at_O = rot_from_body_frame_to_ned*(tau_in_body_frame_at_G.torque+OG.cross(tau_in_body_frame_at_G.force));;
 
-    observer.write(tau_in_body_frame_at_G.X(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Fx"},std::string("Fx(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.Y(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Fy"},std::string("Fy(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.Z(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Fz"},std::string("Fz(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.K(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Mx"},std::string("Mx(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.M(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"My"},std::string("My(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.N(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Mz"},std::string("Mz(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_G.X(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fx"},std::string("Fx(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_G.Y(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fy"},std::string("Fy(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_G.Z(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fz"},std::string("Fz(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_G.K(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Mx"},std::string("Mx(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_G.M(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"My"},std::string("My(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_G.N(),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Mz"},std::string("Mz(")+name+","+body_name+","+body_name+")"));
 
-    observer.write((double)force_in_internal_frame_at_P(0),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fx"},std::string("Fx(")+name+","+body_name+","+name+")"));
-    observer.write((double)force_in_internal_frame_at_P(1),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fy"},std::string("Fy(")+name+","+body_name+","+name+")"));
-    observer.write((double)force_in_internal_frame_at_P(2),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Fz"},std::string("Fz(")+name+","+body_name+","+name+")"));
-    observer.write((double)torque_in_internal_frame_at_P(0),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Mx"},std::string("Mx(")+name+","+body_name+","+name+")"));
-    observer.write((double)torque_in_internal_frame_at_P(1),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"My"},std::string("My(")+name+","+body_name+","+name+")"));
-    observer.write((double)torque_in_internal_frame_at_P(2),DataAddressing(std::vector<std::string>{"efforts",body_name,name,body_name,"Mz"},std::string("Mz(")+name+","+body_name+","+name+")"));
+    observer.write((double)force_in_internal_frame_at_P(0),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Fx"},std::string("Fx(")+name+","+body_name+","+name+")"));
+    observer.write((double)force_in_internal_frame_at_P(1),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Fy"},std::string("Fy(")+name+","+body_name+","+name+")"));
+    observer.write((double)force_in_internal_frame_at_P(2),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Fz"},std::string("Fz(")+name+","+body_name+","+name+")"));
+    observer.write((double)torque_in_internal_frame_at_P(0),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Mx"},std::string("Mx(")+name+","+body_name+","+name+")"));
+    observer.write((double)torque_in_internal_frame_at_P(1),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"My"},std::string("My(")+name+","+body_name+","+name+")"));
+    observer.write((double)torque_in_internal_frame_at_P(2),DataAddressing(std::vector<std::string>{"efforts",body_name,name,name,"Mz"},std::string("Mz(")+name+","+body_name+","+name+")"));
 
     observer.write((double)force_in_ned_frame_at_O(0),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Fx"},std::string("Fx(")+name+","+body_name+",NED)"));
     observer.write((double)force_in_ned_frame_at_O(1),DataAddressing(std::vector<std::string>{"efforts",body_name,name,"NED","Fy"},std::string("Fy(")+name+","+body_name+",NED)"));
