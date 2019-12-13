@@ -255,7 +255,7 @@ soit
 p_{\textrm{dyn}} = \rho\cdot g
 \sum_{i=1}^{nfreq}A(\omega_i,\gamma)
 \frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
-\sin(\gamma)+ y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})
+\cos(\gamma)+ y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})
 ```
 
 - $`g`$ désigne l'accélération de la pesanteur (9.81 $`m/s^2`$)
@@ -272,7 +272,7 @@ on obtient donc :
 ```math
 p_{\textrm{dyn}}\mathop  \approx \limits_{x \to \infty } \rho\cdot g
 \sum_{i=1}^{nfreq}A(\omega_i,\gamma)
-e^{-k_i\cdot z}\sin(k_i\cdot(x\cdot\sin(\gamma_j)+ y\cdot
+e^{-k_i\cdot z}\sin(k_i\cdot(x\cdot\cos(\gamma)+ y\cdot
 \sin(\gamma))-\omega_i\cdot t+\phi_{i})
 ```
 
@@ -323,7 +323,8 @@ Comme
 ```math
 1-  \frac{\cosh(k(h-z))}{\cosh(k h)} \leq 0
 ```
- et $`\eta\leq z \leq 0`$ (on est sous l'eau),
+
+et $`\eta\leq z \leq 0`$ (on est sous l'eau),
 
 ```math
 \eta \left(1- \frac{\cosh(k(h-z))}{\cosh(k h)}\right)\geq 0
