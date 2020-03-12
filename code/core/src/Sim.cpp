@@ -237,7 +237,7 @@ void Sim::set_bodystates(const std::vector<State>& states)
     pimpl->bodies.at(0)->set_states_history(states.at(0));
     if (not(states.at(0).x.is_empty()))
     {
-        state = states.at(0).get_StateType(0);
+        state = states.at(0).get_StateType(states.at(0).x.size()-1);
     }
 }
 
