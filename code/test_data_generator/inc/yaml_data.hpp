@@ -94,6 +94,7 @@ namespace test_data
     std::string invalid_json_for_cs();
     std::string tutorial_09_gRPC_wave_model();
     std::string tutorial_10_gRPC_force_model();
+    std::string tutorial_10_gRPC_force_model_commands();
     std::string gRPC_force_model();
 }
 

@@ -27,10 +27,20 @@ yaml_data = load_yaml('tutorial_10_gRPC_force_model.yml')
 print_yaml(yaml_data)
 ```
 
+On crée un fichier contenant les commandes pour le modèle gRPC (`tutorial_10_gRPC_force_model_commands.yml` dans cet exemple) :
+
+```python echo=False, results='raw', name='tutorial_10_load_yaml_commands'
+yaml_cmds = load_yaml('tutorial_10_gRPC_force_model_commands.yml')
+```
+
+```python echo=False, results='raw', name='tutorial_10_print_yaml_commands'
+print_yaml(yaml_cmds)
+```
+
+
 La connexion au modèle d'effort distant est définie dans la section suivante :
 
-
-```python echo=False, results='raw', name='tutorial_10_print_yaml'
+```python echo=False, results='raw', name='tutorial_10_print_yaml_subsection'
 print_yaml(yaml_data, 'bodies/0/controlled forces')
 ```
 
@@ -112,7 +122,7 @@ services:
   xdyn:
     image: sirehna/xdyn
     working_dir: /data
-    entrypoint: xdyn tutorial_10_gRPC_force_model.yml --dt 0.1 --tend 1 -o tsv
+    entrypoint: xdyn tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml --dt 0.1 --tend 1 -o tsv
     volumes:
     - .:/data
     depends_on:
@@ -152,5 +162,5 @@ controlled forces:
 On peut alors lancer xdyn normalement :
 
 ```bash
-./xdyn tutorial_10_gRPC_force_model.yml --dt 0.1 --tend 1 -o tsv
+./xdyn tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml --dt 0.1 --tend 1 -o tsv
 ```

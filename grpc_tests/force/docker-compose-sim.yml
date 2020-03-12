@@ -2,7 +2,7 @@ version: '3'
 services:
   force-model:
     image: xdyn-force-grpc:python3
-    command: model.py
+    command: harmonic_oscillator.py
     working_dir: /work
     volumes:
     - .:/work
@@ -10,20 +10,11 @@ services:
   xdyn:
     image: xdyn
     working_dir: /data
-    entrypoint: |
-           ./wait-for-it.sh force-model:9002 -s -t 20 --
-            xdyn-for-cs xdyn.yml --dt 0.1 -p 9002
+    entrypoint: ./wait-for-it.sh force-model:9002 -s -t 20 -- xdyn tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml --dt 0.1 --tend 0.2 -o out.csv
     volumes:
     - .:/data
     user: ${CURRENT_UID}
     depends_on:
     - force-model
     environment:
-      - no_proxy
-  test:
-    build: .
-    user: ${CURRENT_UID}
-    depends_on:
-    - xdyn
-    environment:
-      - no_proxy
+    - no_proxy
