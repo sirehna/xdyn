@@ -4,7 +4,6 @@ author: Sirehna
 numbersections: true
 eqnos-cleveref: true
 eqnos-plus-name: Eq.
-xnos-number-sections: true
+xnos-number-by-section: true
 link-citations: true
 ---
-
