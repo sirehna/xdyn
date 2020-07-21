@@ -1,11 +1,15 @@
-all: windows debian debug doc all_docker_images
+all: submodule windows debian debug doc all_docker_images
 
 windows: windows_gccx_posix
 debian: debian_9_release_gcc_6
 debug: debian_9_debug_gcc_6
 
-.PHONY: fetch-ssc-windows cmake-windows package-windows windows doc
+.PHONY: fetch-ssc-windows cmake-windows package-windows windows doc submodule
 
+
+submodule:
+	git submodule sync --recursive
+	git submodule update --init --recursive
 
 cmake-debian: BUILD_TYPE = Release
 cmake-debian: BUILD_DIR = build_deb9
