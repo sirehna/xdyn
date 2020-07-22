@@ -48,25 +48,6 @@ debian_9_release_gcc_6: SSC_ROOT = /opt/ssc
 debian_9_release_gcc_6: ci_env=
 debian_9_release_gcc_6: cmake-debian-target build-debian test-debian
 
-debian_9_debug_gcc_6: BUILD_TYPE = Debug
-debian_9_debug_gcc_6: BUILD_DIR = build_deb9_dbg
-debian_9_debug_gcc_6: CPACK_GENERATOR = DEB
-debian_9_debug_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
-debian_9_debug_gcc_6: BOOST_ROOT = /opt/boost
-debian_9_debug_gcc_6: SSC_ROOT = /opt/ssc
-debian_9_debug_gcc_6: ci_env=
-debian_9_debug_gcc_6: cmake-debian-target build-debian
-
-debian_9_coverage_gcc_6: BUILD_TYPE = Coverage
-debian_9_coverage_gcc_6: BUILD_DIR = build_deb9
-debian_9_coverage_gcc_6: CPACK_GENERATOR = DEB
-debian_9_coverage_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
-debian_9_coverage_gcc_6: BOOST_ROOT = /opt/boost
-debian_9_coverage_gcc_6: SSC_ROOT = /opt/ssc
-debian_9_coverage_gcc_6: HDF5_DIR = /usr/local/hdf5/share/cmake
-debian_9_coverage_gcc_6: ci_env=`bash <(curl -s https://codecov.io/env)`
-debian_9_coverage_gcc_6: cmake-debian-target build-debian test-debian
-
 debian_10_release_gcc_8: BUILD_TYPE = Release
 debian_10_release_gcc_8: BUILD_DIR = build_deb10
 debian_10_release_gcc_8: CPACK_GENERATOR = DEB
