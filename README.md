@@ -142,6 +142,50 @@ All arguments after the script name are passed to the GTest executable. Please
 refer to [the Google Test documentation for details and other available
 options](https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#running-a-subset-of-the-tests).
 
+## Running xdyn
+
+### Running Windows or Debian xdyn
+
+Install the xdyn executable (for debian, the command is `sudo dpkg -i xdyn.deb`), then run:
+
+~~~~~~~{.bash}
+xdyn <yaml file> [xdyn options]
+~~~~~~~
+
+All options can be found in [the documentation](https://sirehna.github.io/xdyn/#ligne-de-commande).
+
+For example, to run the first example from the [tutorials](https://sirehna.github.io/xdyn/#tutoriels):
+
+~~~~~~~{.bash}
+./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
+~~~~~~~
+
+### Running Debian xdyn with Docker
+
+To compile xdyn and install it on a Docker image:
+
+~~~~~~~{.bash}
+make debian
+make docker
+~~~~~~~
+
+To run xdyn:
+
+~~~~~~~{.bash}
+docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/path_to_yaml_file xdyn <yaml file> [xdyn options]
+~~~~~~~
+
+For example, to run the first example from the [tutorials](https://sirehna.github.io/xdyn/#tutoriels) and display the results in the terminal:
+
+~~~~~~~{.bash}
+docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/build_debian/executables/demos xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
+~~~~~~~
+
+One can also plot the results (pandoc and matplotlib should be installed first):
+
+~~~~~~~{.bash}
+docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/build_debian/executables/demos xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv | python3 postprocessing/Python/plot.py tutorial_01_plot 0 3
+~~~~~~~
 
 ## Deployment
 
