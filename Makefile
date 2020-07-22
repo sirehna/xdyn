@@ -1,8 +1,8 @@
 all: submodule windows debian debug doc all_docker_images
 
 windows: windows_gccx_posix
-debian: debian_9_release_gcc_6
-debug: debian_9_debug_gcc_6
+debian: debian_10_release_gcc_8
+debug: debian_10_debug_gcc_8
 
 .PHONY: fetch-ssc-windows cmake-windows package-windows windows doc submodule
 
@@ -12,9 +12,9 @@ submodule:
 	git submodule update --init --recursive
 
 cmake-debian: BUILD_TYPE = Release
-cmake-debian: BUILD_DIR = build_deb9
+cmake-debian: BUILD_DIR = build_deb10
 cmake-debian: CPACK_GENERATOR = DEB
-cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
+cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
 cmake-debian: BOOST_ROOT = /opt/boost
 cmake-debian: SSC_ROOT = /opt/ssc
 cmake-debian: ci_env=
@@ -195,7 +195,7 @@ test-debian:
 
 
 docker:
-	./ninja_debian.sh package && cp build_deb9/xdyn.deb . &&  docker build . --tag xdyn
+	./ninja_debian.sh package && cp build_deb10/xdyn.deb . &&  docker build . --tag xdyn
 
 docker_grpc_force_model:
 	cd grpc_docker && make

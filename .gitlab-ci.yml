@@ -33,7 +33,7 @@ build:windows:
 build:debian:
    stage: build
    script:
-     - make debian
+     - make debian_9_release_gcc_6
      - mv build_deb9/xdyn.deb .
    artifacts:
      when: on_success

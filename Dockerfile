@@ -1,15 +1,15 @@
 # Steps to produce sirehna/xdyn docker image
 #
 # make debian
-# cp code/build_deb9/xdyn.deb .
+# cp code/build_deb10/xdyn.deb .
 # docker build . -f Dockerfile --tag sirehna/xdyn
 # docker run sirehna/xdyn --help
-FROM debian:stretch-slim
+FROM debian:stable-slim
 RUN apt-get update -yq && \
     apt-get install \
         --yes \
         --no-install-recommends \
-        libgfortran3 \
+        libgfortran5 \
         libquadmath0 && \
     apt-get autoclean && \
     apt-get autoremove && \
