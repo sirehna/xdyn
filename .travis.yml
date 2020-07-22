@@ -85,9 +85,9 @@ after_success:
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_10_release_gcc_8" ];
   then
   echo "Fetching generated deb";
-  ls -altr build_deb10_gcc8/xdyn.deb;
-  shasum -a256 build_deb10_gcc8/xdyn.deb;
-  cp build_deb10_gcc8/xdyn.deb xdyn_binary_debian10_amd64.deb;
+  ls -altr build_deb10/xdyn.deb;
+  shasum -a256 build_deb10/xdyn.deb;
+  cp build_deb10/xdyn.deb xdyn_binary_debian10_amd64.deb;
   fi
 - if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "windows_gccx_posix" ];
   then

@@ -68,7 +68,7 @@ debian_9_coverage_gcc_6: ci_env=`bash <(curl -s https://codecov.io/env)`
 debian_9_coverage_gcc_6: cmake-debian-target build-debian test-debian
 
 debian_10_release_gcc_8: BUILD_TYPE = Release
-debian_10_release_gcc_8: BUILD_DIR = build_deb10_gcc8
+debian_10_release_gcc_8: BUILD_DIR = build_deb10
 debian_10_release_gcc_8: CPACK_GENERATOR = DEB
 debian_10_release_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
 debian_10_release_gcc_8: BOOST_ROOT = /opt/boost
