@@ -219,3 +219,8 @@ doc: build-debian
 	cp ../$(BUILD_DIR)/xdyn.deb . && \
 	make && \
 	mv doc.html ..
+
+clean:
+	rm -f xdyn.deb
+	rm -rf build_deb10 build_deb10_dbg build_win_posix
+	make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html

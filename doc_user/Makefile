@@ -81,4 +81,6 @@ clean:
 	      concatenated_doc.pmd \
 	      concatenated_doc.md \
 	      concatenated_doc_pandoc.md  \
-	      doc.html
+	      doc.html \
+	      pict*.svg
+	rm -rf tuto_execution
