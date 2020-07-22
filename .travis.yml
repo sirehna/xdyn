@@ -35,20 +35,20 @@ before_install:
 
 script:
   - make $TARGET
-  - if [ "$TARGET" == "debian_9_release_gcc_6" ];
+  - if [ "$TARGET" == "debian_10_release_gcc_8" ];
     then
     echo "Generate documentation";
     make doc;
     cp doc.html xdyn_doc_user.html;
     mkdir -p public && cp doc.html public/index.html;
     fi
-  - if [ "$TARGET" == "debian_9_release_gcc_6" ];
+  - if [ "$TARGET" == "debian_10_release_gcc_8" ];
     then
     echo "Create xdyn docker container";
     cp build_deb9/xdyn.deb .;
     docker build --tag xdyn .;
     fi
-  - if [ "$TARGET" == "debian_9_release_gcc_6" ];
+  - if [ "$TARGET" == "debian_10_release_gcc_8" ];
     then
     echo "Create xdyn grpc force model docker container";
     make docker_grpc_force_model;
@@ -61,7 +61,7 @@ after_success:
     echo "TRAVIS_BRANCH  $TRAVIS_BRANCH"
     echo "TRAVIS_TAG     $TRAVIS_TAG"
     echo "TARGET         $TARGET"
-- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_9_release_gcc_6" ];
+- if [ "$TRAVIS_TAG" ] && [ "$TARGET" == "debian_10_release_gcc_8" ];
   then
   echo "Pushing xdyn docker image to dockerhub";
   docker images;

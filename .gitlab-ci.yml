@@ -33,8 +33,8 @@ build:windows:
 build:debian:
    stage: build
    script:
-     - make debian_9_release_gcc_6
-     - mv build_deb9/xdyn.deb .
+     - make debian
+     - mv build_deb10/xdyn.deb .
    artifacts:
      when: on_success
      paths:
@@ -51,7 +51,7 @@ test:grpc:
 doc:
    stage: doc
    script:
-     - mkdir -p build_deb9 && cp xdyn.deb build_deb9/.
+     - mkdir -p build_deb10 && cp xdyn.deb build_deb10/.
      - make doc -W build-debian
    dependencies:
      - build:debian

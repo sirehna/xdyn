@@ -208,9 +208,9 @@ all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
 
 
 doc: BUILD_TYPE = Release
-doc: BUILD_DIR = build_deb9
+doc: BUILD_DIR = build_deb10
 doc: CPACK_GENERATOR = DEB
-doc: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
+doc: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
 doc: BOOST_ROOT = /opt/boost
 doc: SSC_ROOT = /opt/ssc
 doc: ci_env=
