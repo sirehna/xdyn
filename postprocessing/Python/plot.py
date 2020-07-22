@@ -17,14 +17,14 @@ k = 0
 legend = []
 for idx in sys.argv[2:]:
     if (k % 2 == 0):
-        x = R.ix[:, int(idx)]
+        x = R.iloc[:, int(idx)]
         plt.xlabel(x.name)
     else:
-        y = R.ix[:, int(idx)]
+        y = R.iloc[:, int(idx)]
         plt.plot(x, y, label = y.name)
         legend.append(y.name)
     k += 1
 
 plt.legend(legend, loc = 'upper right')
-plt.show()
+# plt.show()
 plt.savefig(output)
