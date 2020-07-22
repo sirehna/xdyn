@@ -93,6 +93,7 @@ code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
             cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp &&\
             cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt"
 
+
 cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true
 	docker run --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
@@ -125,8 +126,6 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
               -DCMAKE_SYSTEM_VERSION=7 \
             /opt/share/code"
 
-
-
 build-windows:
 	docker run --rm -u $(shell id -u ):$(shell id -g ) -v $(shell pwd):/opt/share -w /opt/share $(DOCKER_IMAGE) /bin/bash -c \
            "cd /opt/share &&\
@@ -144,6 +143,7 @@ test-windows:
             export WINEPREFIX=/opt/share/.wine;\
             wine winecfg;\
             wine ./run_all_tests --gtest_filter=-*ocket*:*ot_throw_if_CSV_file_exists"
+
 
 cmake-debian-target: SHELL:=/bin/bash
 cmake-debian-target: code/yaml-cpp/CMakeLists.txt
@@ -163,7 +163,6 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
              -DHDF5_DIR=$(HDF5_DIR) \
              -DBOOST_ROOT:PATH=$(BOOST_ROOT) \
             /opt/share/code"
-
 
 build-debian: SHELL:=/bin/bash
 build-debian:
@@ -185,6 +184,7 @@ test-debian:
             bash <(curl -s https://codecov.io/bash);\
             fi"
 
+
 docker:
 	./ninja_debian.sh package && cp build_deb9/xdyn.deb . &&  docker build . --tag xdyn
 
@@ -196,6 +196,7 @@ docker_grpc_waves_model:
 
 all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
 	echo "Build all docker images after having run 'make debian'"
+
 
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb9
