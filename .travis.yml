@@ -20,12 +20,12 @@ matrix:
     - name: "Debian 9 release GCC 6"
       env:
         - TARGET=debian_9_release_gcc_6
-    - name: "Debian 9 coverage GCC 6"
-      env:
-        - TARGET=debian_9_coverage_gcc_6
     - name: "Debian 10 release GCC 8"
       env:
         - TARGET=debian_10_release_gcc_8
+    - name: "Debian 10 coverage GCC 8"
+      env:
+        - TARGET=debian_10_coverage_gcc_8
     - name: "Windows cross compilation Gcc X PosixThreads release"
       env:
         - TARGET=windows_gccx_posix

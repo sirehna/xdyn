@@ -10,6 +10,7 @@ build_deb10_dbg
 build_windows
 build_win_posix
 code/build_*
+code/yaml-cpp
 build_doc
 install
 install*32
