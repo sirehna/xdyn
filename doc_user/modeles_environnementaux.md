@@ -1235,7 +1235,7 @@ mettons, en Python.
 Le fichier de définition de l'interface des modèles de houle est disponible à
 l'adresse suivante :
 
-[https://gitlab.sirehna.com/sirehna/demo_docker_grpc/blob/master/waves.proto](https://gitlab.sirehna.com/sirehna/demo_docker_grpc/blob/master/waves.proto)
+[https://gitlab.sirehna.com/sirehna/waves_gRPC/-/blob/master/wave_grpc.proto](https://gitlab.sirehna.com/sirehna/waves_gRPC/-/blob/master/wave_grpc.proto)
 
 Ce fichier est nécessaire si l'on souhaite implémenter un modèle de houle distant
 (un serveur de houle) appelable par xdyn, mais il n'est pas nécessaire pour
