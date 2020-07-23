@@ -8,8 +8,8 @@ debug: debian_10_debug_gcc_8
 
 
 submodule:
-	git submodule sync --recursive
-	git submodule update --init --recursive
+	@git submodule sync --recursive
+	@git submodule update --init --recursive
 
 cmake-debian: BUILD_TYPE = Release
 cmake-debian: BUILD_DIR = build_deb10
@@ -244,4 +244,4 @@ clean:
 	rm -f xdyn.deb
 	rm -rf build_*
 	rm -rf yaml-cpp
-	make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html
+	@make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html
