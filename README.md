@@ -163,7 +163,7 @@ from the executables/demos folder, you can run:
 
 ### Running xdyn on Debian
 
-Compile xdyn (`make windows`) and install the xdyn executable
+Compile xdyn (`make debian`) and install the xdyn executable
 (`sudo dpkg -i xdyn.deb`).
 You'll also need to install libgfortran3 (for debian9) or
 libgfortran5 (for debian10).
