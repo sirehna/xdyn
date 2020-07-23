@@ -144,9 +144,31 @@ options](https://github.com/google/googletest/blob/master/googletest/docs/advanc
 
 ## Running xdyn
 
-### Running Windows or Debian xdyn
+### Running xdyn on Windows
 
-Install the xdyn executable (for debian, the command is `sudo dpkg -i xdyn.deb`), then run:
+Compile xdyn (`make windows`), install the xdyn executable, then run:
+
+~~~~~~~{.bash}
+./xdyn <yaml file> [xdyn options]
+~~~~~~~
+
+All options can be found in [the documentation](https://sirehna.github.io/xdyn/#ligne-de-commande).
+
+For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels),
+from the executables/demos folder, you can run:
+
+~~~~~~~{.bash}
+./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
+~~~~~~~
+
+### Running xdyn on Debian
+
+Compile xdyn (`make windows`) and install the xdyn executable
+(`sudo dpkg -i xdyn.deb`).
+You'll also need to install libgfortran3 (for debian9) or
+libgfortran5 (for debian10).
+
+You can then run:
 
 ~~~~~~~{.bash}
 xdyn <yaml file> [xdyn options]
@@ -154,10 +176,11 @@ xdyn <yaml file> [xdyn options]
 
 All options can be found in [the documentation](https://sirehna.github.io/xdyn/#ligne-de-commande).
 
-For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels):
+For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels),
+from the executables/demos folder, you can run:
 
 ~~~~~~~{.bash}
-./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
+xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
 ~~~~~~~
 
 ### Running xdyn on Debian with Docker
