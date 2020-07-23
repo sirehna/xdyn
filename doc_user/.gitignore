@@ -11,6 +11,7 @@ dist
 report.egg-info
 err.txt
 log.txt
+concatenated_doc*.md
 concatenated_doc.pmd
 images/AB2_stability.svg
 images/euler_stability.svg
@@ -21,3 +22,5 @@ images/tutorial_*.svg
 images/spectrum*.*g
 images/waveB*.*g
 images/waveM*.*g
+tuto_execution
+pict*.svg

@@ -3,8 +3,8 @@ docker run \
     --name xdyn-ninja-debian \
     --rm \
     -u $( id -u ):$( id -g ) \
-    -v $(pwd)/build_deb9:/build \
+    -v $(pwd)/build_deb10:/build \
     -w /build \
     -v $(pwd):/opt/share \
-    sirehna/base-image-debian9-gcc6-xdyn \
+    sirehna/base-image-debian10-gcc8-xdyn \
     /bin/sh -c "cd /build && ninja `echo $*`"

@@ -1,7 +1,7 @@
 # Dockerfile with xdyn, a python interpreter, various python libraries, and
 # pandoc
 #
-FROM python:3.7.3-slim-stretch
+FROM python:3.7
 
 # Install
 # - gcc to build psutil package used by pandoc-eqnos
@@ -9,7 +9,7 @@ FROM python:3.7.3-slim-stretch
 RUN apt-get update && \
     apt-get install --yes \
         gcc \
-        libgfortran3 \
+        libgfortran5 \
         libquadmath0 && \
     python3 -m pip install psutil && \
     apt-get remove -y gcc && \

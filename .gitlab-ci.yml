@@ -1,25 +1,17 @@
 stages:
-  - git_submodule
   - lint
   - build
   - test
   - doc
 
-git_submodule:
-   stage: git_submodule
-   script:
-     - git submodule sync --recursive
-     - git submodule update --init --recursive
+default:
+  before_script:
+    - make submodule
 
 lint:
    stage: lint
    script:
-     - cd code &&
-       if grep --recursive --include={*.cpp,*.c,*.hpp,*.h,*.md,*.yml,*.cmake.*.xml,*.html,*.in,*.txt}
-               --exclude-dir={eigen,eigen3-hdf5,gcovr,gtest,gmock,google-test,yaml-cpp} -P "\t" . ;
-       then echo "Tabs found in the lines shown above."; false;
-       else echo "Repo passed no-tabs check."; fi &&
-       cd ..
+     - make lint
 
 build:windows:
    stage: build
@@ -35,7 +27,7 @@ build:debian:
    stage: build
    script:
      - make debian
-     - mv build_deb9/xdyn.deb .
+     - mv build_deb10/xdyn.deb .
    artifacts:
      when: on_success
      paths:
@@ -52,7 +44,7 @@ test:grpc:
 doc:
    stage: doc
    script:
-     - mkdir -p build_deb9 && cp xdyn.deb build_deb9/.
+     - mkdir -p build_deb10 && cp xdyn.deb build_deb10/.
      - make doc -W build-debian
    dependencies:
      - build:debian
