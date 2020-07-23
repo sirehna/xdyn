@@ -160,28 +160,32 @@ For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutorie
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
 ~~~~~~~
 
-### Running Debian xdyn with Docker
+### Running xdyn on Debian with Docker
 
-To compile xdyn and install it on a Docker image:
+To create a Docker image containing xdyn, run:
 
 ~~~~~~~{.bash}
 make debian
 make docker
 ~~~~~~~
 
-To run xdyn:
+To run the xdyn Docker container, use:
 
 ~~~~~~~{.bash}
 docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/path_to_yaml_file xdyn <yaml file> [xdyn options]
 ~~~~~~~
 
-For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels) and display the results in the terminal:
+For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels)
+and display the results in the terminal, assuming we are in the project's root
+directory:
 
 ~~~~~~~{.bash}
 docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/build_debian/executables/demos xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
 ~~~~~~~
 
-One can also plot the results (pandoc and matplotlib should be installed first):
+Results can be plotted using [Matplotlib](https://matplotlib.org/) and
+[pandas](https://pandas.pydata.org/) (which can be installed using
+`pip3 install matplotlib pandas`):
 
 ~~~~~~~{.bash}
 docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/build_debian/executables/demos xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv | python3 postprocessing/Python/plot.py tutorial_01_plot 0 3
