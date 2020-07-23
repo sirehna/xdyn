@@ -154,7 +154,7 @@ xdyn <yaml file> [xdyn options]
 
 All options can be found in [the documentation](https://sirehna.github.io/xdyn/#ligne-de-commande).
 
-For example, to run the first example from the [tutorials](https://sirehna.github.io/xdyn/#tutoriels):
+For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels):
 
 ~~~~~~~{.bash}
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
@@ -175,7 +175,7 @@ To run xdyn:
 docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/path_to_yaml_file xdyn <yaml file> [xdyn options]
 ~~~~~~~
 
-For example, to run the first example from the [tutorials](https://sirehna.github.io/xdyn/#tutoriels) and display the results in the terminal:
+For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels) and display the results in the terminal:
 
 ~~~~~~~{.bash}
 docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/build_debian/executables/demos xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
