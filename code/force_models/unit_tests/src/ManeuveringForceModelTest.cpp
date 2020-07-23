@@ -317,9 +317,9 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_simple_maneuvering_model)
     ASSERT_DOUBLE_EQ(320032, F.X());
     ASSERT_DOUBLE_EQ(160000, F.Y());
     ASSERT_DOUBLE_EQ(0, F.Z());
-    ASSERT_DOUBLE_EQ(0, F.K());
-    ASSERT_DOUBLE_EQ(0, F.M());
-    ASSERT_DOUBLE_EQ(0, F.N());
+    ASSERT_NEAR(0, F.K(), 1e-15);
+    ASSERT_NEAR(0, F.M(), 1e-15);
+    ASSERT_NEAR(0, F.N(), 1e-15);
 }
 
 
@@ -406,8 +406,8 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
     ASSERT_DOUBLE_EQ(-93470409.32377005, F.X());
     ASSERT_DOUBLE_EQ(190870415.43062863, F.Y());
     ASSERT_DOUBLE_EQ(0, F.Z());
-    ASSERT_DOUBLE_EQ(0, F.K());
-    ASSERT_DOUBLE_EQ(0, F.M());
+    ASSERT_NEAR(0, F.K(), 1e-15);
+    ASSERT_NEAR(0, F.M(), 1e-15);
     ASSERT_DOUBLE_EQ(253134236.3875341, F.N());
 }
 
@@ -443,8 +443,8 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
     ASSERT_DOUBLE_EQ(-160307.53008106418, F.X());
     ASSERT_DOUBLE_EQ(349066.3153463915, F.Y());
     ASSERT_DOUBLE_EQ(0, F.Z());
-    ASSERT_DOUBLE_EQ(0, F.K());
-    ASSERT_DOUBLE_EQ(0, F.M());
+    ASSERT_NEAR(0, F.K(), 1e-15);
+    ASSERT_NEAR(0, F.M(), 1e-15);
     ASSERT_DOUBLE_EQ(-178317.02217866198, F.N());
 }
 
