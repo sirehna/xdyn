@@ -101,7 +101,7 @@ code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
 
 cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true
-	docker run --rm \
+	docker run $(ci_env) --rm \
 	    -u $(shell id -u ):$(shell id -g ) \
 	    -v $(shell pwd):/opt/share \
 	    -w /opt/share \
@@ -136,7 +136,7 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	        /opt/share/code"
 
 build-windows:
-	docker run --rm \
+	docker run $(ci_env) --rm \
 	    -u $(shell id -u ):$(shell id -g ) \
 	    -v $(shell pwd):/opt/share \
 	    -w /opt/share \
@@ -150,7 +150,7 @@ build-windows:
 	        ninja package"
 
 test-windows:
-	docker run --rm \
+	docker run $(ci_env) --rm \
 	    -u $(shell id -u ):$(shell id -g ) \
 	    -v $(shell pwd):/opt/share \
 	    -w /opt/share \
