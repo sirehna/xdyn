@@ -204,13 +204,15 @@ test-debian:
 	    -v $(shell pwd):/opt/share \
 	    -w /opt/share \
 	    $(DOCKER_IMAGE) /bin/bash -c \
-	       "cd $(BUILD_DIR) &&\
+	       "cp validation/codecov_bash.sh $(BUILD_DIR) && \
+	        cd $(BUILD_DIR) &&\
 	        ./run_all_tests &&\
 	        if [[ $(BUILD_TYPE) == Coverage ]];\
 	        then\
 	        echo Coverage;\
 	        gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
-	        bash <(curl -s https://codecov.io/bash);\
+	        bash codecov_bash.sh && \
+	        rm codecov_bash.sh;\
 	        fi"
 
 
