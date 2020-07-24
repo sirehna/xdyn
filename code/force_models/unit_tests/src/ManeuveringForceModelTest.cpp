@@ -42,12 +42,12 @@ TEST_F(ManeuveringForceModelTest, can_parse_frame_of_reference)
     const auto data = ManeuveringForceModel::parse(test_data::maneuvering());
 //! [ManeuveringForceModelTest example]
 //! [ManeuveringForceModelTest expected output]
-    ASSERT_DOUBLE_EQ(0.696,       data.frame_of_reference.coordinates.x);
-    ASSERT_DOUBLE_EQ(0,           data.frame_of_reference.coordinates.y);
-    ASSERT_DOUBLE_EQ(1.418,       data.frame_of_reference.coordinates.z);
-    ASSERT_DOUBLE_EQ(0.7,         data.frame_of_reference.angle.phi);
-    ASSERT_DOUBLE_EQ(2*PI/180.,   data.frame_of_reference.angle.theta);
-    ASSERT_DOUBLE_EQ(0.3*PI/180., data.frame_of_reference.angle.psi);
+    ASSERT_DOUBLE_EQ(0.696,         data.frame_of_reference.coordinates.x);
+    ASSERT_DOUBLE_EQ(0,             data.frame_of_reference.coordinates.y);
+    ASSERT_DOUBLE_EQ(1.418,         data.frame_of_reference.coordinates.z);
+    ASSERT_DOUBLE_EQ(0.7,           data.frame_of_reference.angle.phi);
+    ASSERT_DOUBLE_EQ(-166.*PI/180., data.frame_of_reference.angle.theta);
+    ASSERT_DOUBLE_EQ(125.*PI/180.,  data.frame_of_reference.angle.psi);
 //! [ManeuveringForceModelTest expected output]
 }
 
