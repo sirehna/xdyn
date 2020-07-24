@@ -4254,27 +4254,6 @@ std::string test_data::bug_2963_gm()
     return ss.str();
 }
 
-std::string test_data::manoeuvring_with_euler_angles_and_quaternions()
-{
-    std::stringstream ss;
-    ss << "reference frame:\n"
-       << "    frame: TestShip\n"
-       << "    x: {value: 0.696, unit: m}\n"
-       << "    y: {value: 0, unit: m}\n"
-       << "    z: {value: 1.418, unit: m}\n"
-       << "    phi: {value: 0.7, unit: rad}\n"
-       << "    theta: {value: 2, unit: deg}\n"
-       << "    psi: {value: 0.3, unit: deg}\n"
-       << "name: test\n"
-       << "X: phi(t)\n"
-       << "Y: theta(t)\n"
-       << "Z: psi(t)\n"
-       << "K: qr(t)\n"
-       << "M: qi(t)\n"
-       << "N: qj(t)+qk(t)\n";
-    return ss.str();
-}
-
 std::string test_data::man_with_delay()
 {
     std::stringstream ss;

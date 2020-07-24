@@ -533,12 +533,24 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
     ASSERT_NEAR(83417.03517334405, F.N(), 1e-9);
 }
 
-TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_manoeuvring)
+TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering)
 {
-    auto data = ManeuveringForceModel::parse(test_data::manoeuvring_with_euler_angles_and_quaternions());
-    // Re-initialize to zero
-    data.frame_of_reference.angle = YamlAngle();
-    data.frame_of_reference.coordinates = YamlCoordinates();
+    const std::string yaml = "reference frame:\n"
+                             "    frame: TestShip\n"
+                             "    x: {value: 0.696, unit: m}\n"
+                             "    y: {value: 0, unit: m}\n"
+                             "    z: {value: 1.418, unit: m}\n"
+                             "    phi: {value: 0.7, unit: rad}\n"
+                             "    theta: {value: -166, unit: deg}\n"
+                             "    psi: {value: 125, unit: deg}\n"
+                             "name: test\n"
+                             "X: phi(t)\n"
+                             "Y: theta(t)\n"
+                             "Z: psi(t)\n"
+                             "K: qr(t)\n"
+                             "M: qi(t)\n"
+                             "N: qj(t)+qk(t)\n";
+    auto data = ManeuveringForceModel::parse(yaml);
     const auto env = get_env_with_default_rotation_convention();
     ManeuveringForceModel force(data,"TestShip", env);
     YamlRotation rot;
