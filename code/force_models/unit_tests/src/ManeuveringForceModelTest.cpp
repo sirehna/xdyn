@@ -378,10 +378,7 @@ man(0.1,2.04,6.28,0.45,0.01,5.869,0.23,0,0.38)
 
 TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_frame_of_reference)
 {
-    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
-    // Re-initialize frame to zero
-    data.frame_of_reference.angle = YamlAngle();
-    data.frame_of_reference.coordinates = YamlCoordinates();
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering_with_same_frame_of_reference());
     const auto env = get_env_with_default_rotation_convention();
     ManeuveringForceModel force(data,"TestShip", env);
     auto states = get_body("TestShip")->get_states();
@@ -414,10 +411,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_
 
 TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_frame_of_reference2)
 {
-    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
-    // Re-initialize to zero
-    data.frame_of_reference.angle = YamlAngle();
-    data.frame_of_reference.coordinates = YamlCoordinates();
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering_with_same_frame_of_reference());
     const auto env = get_env_with_default_rotation_convention();
     ManeuveringForceModel force(data,"TestShip", env);
 
