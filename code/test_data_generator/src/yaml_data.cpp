@@ -2443,19 +2443,10 @@ std::string test_data::simple_track_keeping()
     return ss.str();
 }
 
-std::string test_data::maneuvering()
+std::string test_data::maneuvering_commands()
 {
     std::stringstream ss;
-    ss << "reference frame:\n"
-       << "    frame: TestShip\n"
-       << "    x: {value: 0.696, unit: m}\n"
-       << "    y: {value: 0, unit: m}\n"
-       << "    z: {value: 1.418, unit: m}\n"
-       << "    phi: {value: 0.7, unit: rad}\n"
-       << "    theta: {value: -166, unit: deg}\n"
-       << "    psi: {value: 125, unit: deg}\n"
-       << "name: test\n"
-       << "commands: [a,b,c]\n"
+    ss << "commands: [a,b,c]\n"
        << "X: 0.5*rho*Vs^2*L^2*X_\n"
        << "Y: 0.5*rho*Vs^2*L^2*Y_\n"
        << "Z: 0\n"
@@ -2493,6 +2484,38 @@ std::string test_data::maneuvering()
        << "Nrrr: 0\n"
        << "Nrvv: 0\n"
        << "\n";
+    return ss.str();
+}
+
+std::string test_data::maneuvering_with_same_frame_of_reference()
+{
+    std::stringstream ss;
+    ss << "reference frame:\n"
+       << "    frame: TestShip\n"
+       << "    x: {value: 0, unit: m}\n"
+       << "    y: {value: 0, unit: m}\n"
+       << "    z: {value: 0, unit: m}\n"
+       << "    phi: {value: 0, unit: rad}\n"
+       << "    theta: {value: 0, unit: deg}\n"
+       << "    psi: {value: 0, unit: deg}\n"
+       << "name: test\n"
+       << maneuvering_commands();
+    return ss.str();
+}
+
+std::string test_data::maneuvering()
+{
+    std::stringstream ss;
+    ss << "reference frame:\n"
+       << "    frame: TestShip\n"
+       << "    x: {value: 0.696, unit: m}\n"
+       << "    y: {value: 0, unit: m}\n"
+       << "    z: {value: 1.418, unit: m}\n"
+       << "    phi: {value: 0.7, unit: rad}\n"
+       << "    theta: {value: -166, unit: deg}\n"
+       << "    psi: {value: 125, unit: deg}\n"
+       << "name: test\n"
+       << maneuvering_commands();
     return ss.str();
 }
 

@@ -48,6 +48,8 @@ namespace test_data
     std::string diffraction();
     std::string test_ship_radiation_damping();
     std::string simple_track_keeping();
+    std::string maneuvering_commands();
+    std::string maneuvering_with_same_frame_of_reference();
     std::string maneuvering();
     std::string bug_2641();
     std::string simple_station_keeping();
