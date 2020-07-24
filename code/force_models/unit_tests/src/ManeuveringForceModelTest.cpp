@@ -376,9 +376,10 @@ man(1,2,3,4,5,6,7,8,9)
 man(0.1,2.04,6.28,0.45,0.01,5.869,0.23,0,0.38)
  */
 
-TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
+TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_frame_of_reference)
 {
     auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    // Re-initialize frame to zero
     data.frame_of_reference.angle = YamlAngle();
     data.frame_of_reference.coordinates = YamlCoordinates();
     const auto env = get_env_with_default_rotation_convention();
@@ -411,7 +412,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
     ASSERT_DOUBLE_EQ(253134236.3875341, F.N());
 }
 
-TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
+TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_frame_of_reference2)
 {
     auto data = ManeuveringForceModel::parse(test_data::maneuvering());
     // Re-initialize to zero
