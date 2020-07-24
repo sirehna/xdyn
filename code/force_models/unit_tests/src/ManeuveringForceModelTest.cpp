@@ -380,26 +380,26 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_
 {
     auto data = ManeuveringForceModel::parse(test_data::maneuvering_with_same_frame_of_reference());
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"TestShip", env);
-    auto states = get_body("TestShip")->get_states();
-
-    states.x.record(0, 1);
-    states.y.record(0, 2);
-    states.z.record(0, 3);
-    states.u.record(0, 4);
-    states.v.record(0, 5);
-    states.w.record(0, 6);
-    states.p.record(0, 7);
-    states.q.record(0, 8);
-    states.r.record(0, 9);
-
     const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 1);
+    states.y.record(t, 2);
+    states.z.record(t, 3);
+    states.u.record(t, 4);
+    states.v.record(t, 5);
+    states.w.record(t, 6);
+    states.p.record(t, 7);
+    states.q.record(t, 8);
+    states.r.record(t, 9);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
     command_listener.set("test(b)", 0.);
     command_listener.set("test(c)", 0.);
+
+    ManeuveringForceModel force(data,"TestShip", env);
     const auto F = force(states, t, command_listener, env.k, states.G);
+
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_DOUBLE_EQ(-93470409.32377005, F.X());
     ASSERT_DOUBLE_EQ(190870415.43062863, F.Y());
@@ -413,27 +413,26 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_
 {
     auto data = ManeuveringForceModel::parse(test_data::maneuvering_with_same_frame_of_reference());
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"TestShip", env);
-
-    auto states = get_body("TestShip")->get_states();
-
-    states.x.record(0, 0.1);
-    states.y.record(0, 2.04);
-    states.z.record(0, 6.28);
-    states.u.record(0, 0.45);
-    states.v.record(0, 0.01);
-    states.w.record(0, 5.869);
-    states.p.record(0, 0.23);
-    states.q.record(0, 0);
-    states.r.record(0, 0.38);
-
     const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 0.1);
+    states.y.record(t, 2.04);
+    states.z.record(t, 6.28);
+    states.u.record(t, 0.45);
+    states.v.record(t, 0.01);
+    states.w.record(t, 5.869);
+    states.p.record(t, 0.23);
+    states.q.record(t, 0);
+    states.r.record(t, 0.38);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
     command_listener.set("test(b)", 0.);
     command_listener.set("test(c)", 0.);
+
+    ManeuveringForceModel force(data,"TestShip", env);
     const auto F = force(states, t, command_listener, env.k, states.G);
+
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_DOUBLE_EQ(-160307.53008106418, F.X());
     ASSERT_DOUBLE_EQ(349066.3153463915, F.Y());
@@ -472,26 +471,26 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
 {
     auto data = ManeuveringForceModel::parse(test_data::maneuvering());
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"TestShip", env);
-    auto states = get_body("TestShip")->get_states();
-
-    states.x.record(0, 1);
-    states.y.record(0, 2);
-    states.z.record(0, 3);
-    states.u.record(0, 4);
-    states.v.record(0, 5);
-    states.w.record(0, 6);
-    states.p.record(0, 7);
-    states.q.record(0, 8);
-    states.r.record(0, 9);
-
     const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 1);
+    states.y.record(t, 2);
+    states.z.record(t, 3);
+    states.u.record(t, 4);
+    states.v.record(t, 5);
+    states.w.record(t, 6);
+    states.p.record(t, 7);
+    states.q.record(t, 8);
+    states.r.record(t, 9);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
     command_listener.set("test(b)", 0.);
     command_listener.set("test(c)", 0.);
+
+    ManeuveringForceModel force(data,"TestShip", env);
     const auto F = force(states, t, command_listener, env.k, states.G);
+
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_NEAR(-154542121.87051487, F.X(), 1e-7);
     ASSERT_NEAR(-33809357.80807002, F.Y(), 1e-7);
@@ -505,27 +504,26 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
 {
     auto data = ManeuveringForceModel::parse(test_data::maneuvering());
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"TestShip", env);
-
-    auto states = get_body("TestShip")->get_states();
-
-    states.x.record(0, 0.1);
-    states.y.record(0, 2.04);
-    states.z.record(0, 6.28);
-    states.u.record(0, 0.45);
-    states.v.record(0, 0.01);
-    states.w.record(0, 5.869);
-    states.p.record(0, 0.23);
-    states.q.record(0, 0);
-    states.r.record(0, 0.38);
-
     const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 0.1);
+    states.y.record(t, 2.04);
+    states.z.record(t, 6.28);
+    states.u.record(t, 0.45);
+    states.v.record(t, 0.01);
+    states.w.record(t, 5.869);
+    states.p.record(t, 0.23);
+    states.q.record(t, 0);
+    states.r.record(t, 0.38);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
     command_listener.set("test(b)", 0.);
     command_listener.set("test(c)", 0.);
+
+    ManeuveringForceModel force(data,"TestShip", env);
     const auto F = force(states, t, command_listener, env.k, states.G);
+
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_NEAR(-276711.3255011981, F.X(), 1e-9);
     ASSERT_NEAR(-70281.82055578004, F.Y(), 1e-9);
