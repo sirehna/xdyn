@@ -587,6 +587,79 @@ TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering_with_same_
     ASSERT_DOUBLE_EQ(states.qj()+states.qk(), (double)F.N());
 }
 
+/*  The following test data was generated using this Python code (the input quaternion should be normalized):
+
+from math import cos, sin
+from scipy.spatial.transform import Rotation
+import numpy as np
+
+rotX = lambda alpha: np.array([[1.0, 0.0, 0.0], [0.0, +cos(alpha), -sin(alpha)], [0.0, +sin(alpha), +cos(alpha)]])
+rotY = lambda alpha: np.array([[+cos(alpha), 0.0, +sin(alpha)], [0.0, 1.0, 0.0], [-sin(alpha), 0.0, +cos(alpha)]])
+rotZ = lambda alpha: np.array([[+cos(alpha), -sin(alpha), 0.0], [+sin(alpha), +cos(alpha), 0.0], [0.0, 0.0, 1.0]])
+
+def get_force_and_torque(x, y, z, u, v, w, p, q, r, qr, qi, qj, qk, phi, theta, psi, tx, ty, tz):
+    rotation_fom_quaternions = Rotation.from_quat([qk, qj, qi, qr]).as_euler('ZYX')
+
+    F_local = np.array([[rotation_fom_quaternions[0]], [rotation_fom_quaternions[1]], [rotation_fom_quaternions[2]]])
+    rot = rotZ(psi) @ rotY(theta) @ rotX(phi)
+    F = rot @ F_local
+
+    T_local = np.array([[qr], [qi], [qj + qk]])
+    OM = np.array([[tx], [ty], [tz]])
+    T = np.cross(OM.T, F.T).T + (rot @ T_local)
+
+    return {'F': F,\
+            'T': T
+           }
+ */
+
+TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering)
+{
+    const std::string yaml = "reference frame:\n"
+                             "    frame: TestShip\n"
+                             "    x: {value: 0.696, unit: m}\n"
+                             "    y: {value: 0, unit: m}\n"
+                             "    z: {value: 1.418, unit: m}\n"
+                             "    phi: {value: 0.7, unit: rad}\n"
+                             "    theta: {value: -166, unit: deg}\n"
+                             "    psi: {value: 125, unit: deg}\n"
+                             "name: test\n"
+                             "X: phi(t)\n"
+                             "Y: theta(t)\n"
+                             "Z: psi(t)\n"
+                             "K: qr(t)\n"
+                             "M: qi(t)\n"
+                             "N: qj(t)+qk(t)\n";
+    auto data = ManeuveringForceModel::parse(yaml);
+    const auto env = get_env_with_default_rotation_convention();
+    const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 0.1);
+    states.y.record(t, 2.04);
+    states.z.record(t, 6.28);
+    states.u.record(t, 0.45);
+    states.v.record(t, 0.01);
+    states.w.record(t, 5.869);
+    states.p.record(t, 0.23);
+    states.q.record(t, 0);
+    states.r.record(t, 0.38);
+    states.qr.record(t, 0.47978680878362095);
+    states.qi.record(t, 0.4931142201387216);
+    states.qj.record(t, 0.5064416314938222);
+    states.qk.record(t, 0.5197690428489228);
+
+    ssc::data_source::DataSource command_listener;
+
+    ManeuveringForceModel force(data,"TestShip", env);
+    const auto F = force(states, t, command_listener, env.k, states.G);
+    ASSERT_NEAR(1.917565962059328, (double)F.X(), 1e-14);
+    ASSERT_NEAR(-0.8788836899394064, (double)F.Y(), 1e-14);
+    ASSERT_NEAR(-0.8088077018359574, (double)F.Z(), 1e-14);
+    ASSERT_NEAR(1.8988663216207913, (double)F.K(), 1e-14);
+    ASSERT_NEAR(2.8450652134487004, (double)F.M(), 1e-14);
+    ASSERT_NEAR(-1.5654434261669063, (double)F.N(), 1e-14);
+}
+
 TEST_F(ManeuveringForceModelTest, can_get_Tmax)
 {
     const auto data = ManeuveringForceModel::parse(test_data::man_with_delay());
