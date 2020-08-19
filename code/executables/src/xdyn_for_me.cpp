@@ -18,6 +18,8 @@
 #include <ssc/text_file_reader.hpp>
 #include <ssc/websocket.hpp>
 
+#include <google/protobuf/stubs/common.h>
+
 #define ADDRESS "127.0.0.1"
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 
@@ -140,6 +142,7 @@ int main(int argc, char** argv)
     {
         run();
     }
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }
 

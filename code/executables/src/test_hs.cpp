@@ -21,7 +21,7 @@
 #include "SurfaceElevationFromWaves.hpp"
 #include "YamlWaveModelInput.hpp"
 #include "Stretching.hpp"
-
+#include <google/protobuf/stubs/common.h>
 #include <ssc/kinematics.hpp>
 
 #define BODY "body 1"
@@ -101,5 +101,6 @@ int main(int argc, char* argv[])
     auto env = get_env();
     test(FroudeKrylovForceModel(BODY, env), env, n);
     //test(FastHydrostaticForceModel(env), env, N);
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }

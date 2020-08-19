@@ -12,6 +12,7 @@
 #include "stl_data.hpp"
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"
+#include <google/protobuf/stubs/common.h>
 #include <fstream>
 
 int main(int argc, const char* argv[])
@@ -29,5 +30,6 @@ int main(int argc, const char* argv[])
     stl["test_ship.hdb"]    = test_data::test_ship_hdb();
 
     write_files(path, stl);
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }

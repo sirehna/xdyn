@@ -35,6 +35,5 @@ int main(int argc, const char* argv[])
     yaml["test_ship_in_waves.yml"]            = test_data::test_ship_waves_test();
 
     write_files(path, yaml);
-
     return 0;
 }
