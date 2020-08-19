@@ -138,6 +138,7 @@ INSTALL(FILES integration_tests.py
 
 SET(TEST_EXE run_all_tests)
 ADD_EXECUTABLE(${TEST_EXE}
+        executables/src/run_all_tests.cpp
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>
