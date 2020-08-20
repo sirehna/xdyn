@@ -7,6 +7,6 @@ docker run $TERMINAL \
     -u $( id -u $USER ):$( id -g $USER ) \
     -v $(pwd)/build_deb10:/build \
     -w /build \
-    -t \
+    -it \
     sirehna/base-image-debian10-gcc8-xdyn \
     /bin/bash -c "export LD_LIBRARY_PATH=/build; ./run_all_tests `echo $*`"

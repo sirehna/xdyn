@@ -1,5 +1,5 @@
 #!/bin/sh
-docker run  --rm \
+docker run -it --rm \
     -u $(id -u):$(id -g) \
     -v $(pwd):/opt/share \
     -w /opt/share \

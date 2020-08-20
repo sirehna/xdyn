@@ -8,6 +8,6 @@ docker run $TERMINAL \
     -u $( id -u $USER ):$( id -g $USER ) \
     -v $(pwd)/build_deb10_dbg:/build \
     -w /build \
-    -t \
+    -it \
     valgrind \
     /bin/bash -c "export LD_LIBRARY_PATH=/build; valgrind --leak-check=full --track-origins=yes --error-exitcode=1 ./run_all_tests `echo $*`"
