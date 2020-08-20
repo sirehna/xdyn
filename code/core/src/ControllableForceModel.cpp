@@ -68,8 +68,7 @@ ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& sta
     const auto GO = -G.v;
     const auto GP = GO + OP;
     const auto force_in_G_expressed_in_body_frame = rot_from_internal_frame_to_body_frame*force;
-    const auto torque_in_G_expressed_in_body_frame = rot_from_internal_frame_to_body_frame * torque + GP.cross(force_in_G_expressed_in_body_frame);
-
+    const Eigen::Vector3d torque_in_G_expressed_in_body_frame = rot_from_internal_frame_to_body_frame * torque + GP.cross(force_in_G_expressed_in_body_frame);
     const ssc::kinematics::UnsafeWrench tau_in_body_frame_at_G(states.G, force_in_G_expressed_in_body_frame, torque_in_G_expressed_in_body_frame);
     latest_force_in_body_frame = tau_in_body_frame_at_G;
 
