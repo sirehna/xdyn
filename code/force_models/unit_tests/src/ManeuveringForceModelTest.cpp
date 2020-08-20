@@ -563,10 +563,10 @@ TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering_with_same_
     states.p.record(t, 0.23);
     states.q.record(t, 0);
     states.r.record(t, 0.38);
-    states.qr.record(t, 0.36);
-    states.qi.record(t, 0.37);
-    states.qj.record(t, 0.38);
-    states.qk.record(t, 0.39);
+    states.qr.record(t, 0.47978680878362095);
+    states.qi.record(t, 0.4931142201387216);
+    states.qj.record(t, 0.5064416314938222);
+    states.qk.record(t, 0.5197690428489228);
 
     YamlRotation rot;
     rot.order_by = "angle";
