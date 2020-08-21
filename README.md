@@ -226,6 +226,30 @@ Results can be plotted using [Matplotlib](https://matplotlib.org/) and
 docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/build_debian/executables/demos xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv | python3 postprocessing/Python/plot.py tutorial_01_plot 0 3
 ~~~~~~~
 
+## Debugging
+
+### Valgrind
+
+The memory analyzer [Valgrind](https://valgrind.org/) can be used during
+development to check for memory leaks and use of uninitialized values.
+To use it, first build a debug version (if you haven't already):
+
+~~~~~~{.bash}
+./ninja_debug.sh run_all_tests
+~~~~~
+
+then run:
+
+~~~~~~{.bash}
+./run_all_tests_valgrind.sh
+~~~~~
+
+This script accepts any [flag `run_all_tests` does](https://gitlab.inria.fr/Phylophile/Treerecs/blob/f6551e06797b52819ba3e630b92315254a944da5/tests/gtest/googletest/docs/AdvancedGuide.md#running-test-programs-advanced-options), in particular filtering:
+
+~~~~~~{.bash}
+./run_all_tests_valgrind.sh --gtest_filter='Gravity*'
+~~~~~
+
 ## Deployment
 
 Add additional notes about how to deploy this on a live system.
