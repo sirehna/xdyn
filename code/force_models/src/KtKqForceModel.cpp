@@ -7,7 +7,7 @@
 #include <ssc/yaml_parser.hpp>
 #include <ssc/interpolation.hpp>
 #include "external_data_structures_parsers.hpp"
-
+#include "NumericalErrorException.hpp"
 #include "KtKqForceModel.hpp"
 #include "yaml.h"
 
@@ -66,10 +66,32 @@ KtKqForceModel::KtKqForceModel(const Yaml& input, const std::string& body_name_,
 
 double KtKqForceModel::get_Kt(const std::map<std::string,double>&, const double J) const
 {
-    return pimpl->Kt.f(J);
+    double ret = 0;
+    try
+    {
+        ret = pimpl->Kt.f(J);
+    }
+    catch (const ssc::interpolation::IndexFinderException& e)
+    {
+        std::stringstream ss;
+        ss << "Unable to interpolate Kt as a function of J when using model '" << model_name() << "'. Got the following error: " << e.get_message();
+        THROW(__PRETTY_FUNCTION__, NumericalErrorException, ss.str());
+    }
+    return ret;
 }
 
 double KtKqForceModel::get_Kq(const std::map<std::string,double>&, const double J) const
 {
-    return pimpl->Kq.f(J);
+    double ret = 0;
+    try
+    {
+        ret = pimpl->Kq.f(J);
+    }
+    catch (const ssc::interpolation::IndexFinderException& e)
+    {
+        std::stringstream ss;
+        ss << "Unable to interpolate Kq as a function of J when using model '" << model_name() << "'. Got the following error: " << e.get_message();
+        THROW(__PRETTY_FUNCTION__, NumericalErrorException, ss.str());
+    }
+    return ret;
 }
