@@ -78,7 +78,15 @@ void WageningenControlledForceModel::check(const double P_D, const double J) con
     }
     if ((J<0) or (J>1.5))
     {
-        std::cerr << "Warning: Wageningen model used outside of its domain. Maybe n is too small? Invalid advance ratio J: expected 0 <= J <= 1.5 but got J=" << J << ". Saturating at 1.5 to continue simulation." << std::endl;
+        std::cerr << "Warning: Wageningen model used outside of its domain. Maybe n is too small? Invalid advance ratio J: expected 0 <= J <= 1.5 but got J=" << J << ". ";
+    }
+    if (J<0)
+    {
+        std::cerr <<"Saturating at 0 to continue simulation." << std::endl;
+    }
+    if (J>1.5)
+    {
+        std::cerr <<"Saturating at 1.5 to continue simulation." << std::endl;
     }
 }
 
