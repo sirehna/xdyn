@@ -2443,19 +2443,10 @@ std::string test_data::simple_track_keeping()
     return ss.str();
 }
 
-std::string test_data::maneuvering()
+std::string test_data::maneuvering_commands()
 {
     std::stringstream ss;
-    ss << "reference frame:\n"
-       << "    frame: TestShip\n"
-       << "    x: {value: 0.696, unit: m}\n"
-       << "    y: {value: 0, unit: m}\n"
-       << "    z: {value: 1.418, unit: m}\n"
-       << "    phi: {value: 0.7, unit: rad}\n"
-       << "    theta: {value: 2, unit: deg}\n"
-       << "    psi: {value: 0.3, unit: deg}\n"
-       << "name: test\n"
-       << "commands: [a,b,c]\n"
+    ss << "commands: [a,b,c]\n"
        << "X: 0.5*rho*Vs^2*L^2*X_\n"
        << "Y: 0.5*rho*Vs^2*L^2*Y_\n"
        << "Z: 0\n"
@@ -2493,6 +2484,38 @@ std::string test_data::maneuvering()
        << "Nrrr: 0\n"
        << "Nrvv: 0\n"
        << "\n";
+    return ss.str();
+}
+
+std::string test_data::maneuvering_with_same_frame_of_reference()
+{
+    std::stringstream ss;
+    ss << "reference frame:\n"
+       << "    frame: TestShip\n"
+       << "    x: {value: 0, unit: m}\n"
+       << "    y: {value: 0, unit: m}\n"
+       << "    z: {value: 0, unit: m}\n"
+       << "    phi: {value: 0, unit: rad}\n"
+       << "    theta: {value: 0, unit: deg}\n"
+       << "    psi: {value: 0, unit: deg}\n"
+       << "name: test\n"
+       << maneuvering_commands();
+    return ss.str();
+}
+
+std::string test_data::maneuvering()
+{
+    std::stringstream ss;
+    ss << "reference frame:\n"
+       << "    frame: TestShip\n"
+       << "    x: {value: 0.696, unit: m}\n"
+       << "    y: {value: 0, unit: m}\n"
+       << "    z: {value: 1.418, unit: m}\n"
+       << "    phi: {value: 0.7, unit: rad}\n"
+       << "    theta: {value: -166, unit: deg}\n"
+       << "    psi: {value: 125, unit: deg}\n"
+       << "name: test\n"
+       << maneuvering_commands();
     return ss.str();
 }
 
@@ -4228,27 +4251,6 @@ std::string test_data::bug_2963_gm()
        << "      - model: GM\n"
        << "        name of hydrostatic force model: hydrostatic\n"
        << "        roll step: {value: 60, unit: degree}\n";
-    return ss.str();
-}
-
-std::string test_data::manoeuvring_with_euler_angles_and_quaternions()
-{
-    std::stringstream ss;
-    ss << "reference frame:\n"
-       << "    frame: TestShip\n"
-       << "    x: {value: 0.696, unit: m}\n"
-       << "    y: {value: 0, unit: m}\n"
-       << "    z: {value: 1.418, unit: m}\n"
-       << "    phi: {value: 0.7, unit: rad}\n"
-       << "    theta: {value: 2, unit: deg}\n"
-       << "    psi: {value: 0.3, unit: deg}\n"
-       << "name: test\n"
-       << "X: phi(t)\n"
-       << "Y: theta(t)\n"
-       << "Z: psi(t)\n"
-       << "K: qr(t)\n"
-       << "M: qi(t)\n"
-       << "N: qj(t)+qk(t)\n";
     return ss.str();
 }
 

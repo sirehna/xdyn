@@ -8,7 +8,7 @@
 #include <exception>
 #include <functional>
 #include <iostream>
-
+#include <google/protobuf/stubs/common.h>
 #include "yaml-cpp/exceptions.h"
 
 #include <ssc/check_ssc_version.hpp>
@@ -188,5 +188,7 @@ int main(int argc, char** argv)
             return -1;
         }
     }
-    return run(input_data);
+    const auto ret = run(input_data);
+    google::protobuf::ShutdownProtobufLibrary();
+    return ret;
 }

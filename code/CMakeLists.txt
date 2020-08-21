@@ -137,7 +137,9 @@ INSTALL(FILES integration_tests.py
         DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 
 SET(TEST_EXE run_all_tests)
+INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 ADD_EXECUTABLE(${TEST_EXE}
+        executables/src/run_all_tests.cpp
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>

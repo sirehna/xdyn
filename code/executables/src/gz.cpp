@@ -7,6 +7,7 @@
 
 
 
+#include <google/protobuf/stubs/common.h>
 #include <ssc/text_file_reader.hpp>
 
 #include "display_command_line_arguments.hpp"
@@ -126,5 +127,6 @@ int main(int argc, char** argv)
             };
         report_xdyn_exceptions_to_user(f, [](const std::string& s){std::cerr << s;});
     }
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }

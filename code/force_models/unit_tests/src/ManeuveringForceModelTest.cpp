@@ -42,12 +42,12 @@ TEST_F(ManeuveringForceModelTest, can_parse_frame_of_reference)
     const auto data = ManeuveringForceModel::parse(test_data::maneuvering());
 //! [ManeuveringForceModelTest example]
 //! [ManeuveringForceModelTest expected output]
-    ASSERT_DOUBLE_EQ(0.696,       data.frame_of_reference.coordinates.x);
-    ASSERT_DOUBLE_EQ(0,           data.frame_of_reference.coordinates.y);
-    ASSERT_DOUBLE_EQ(1.418,       data.frame_of_reference.coordinates.z);
-    ASSERT_DOUBLE_EQ(0.7,         data.frame_of_reference.angle.phi);
-    ASSERT_DOUBLE_EQ(2*PI/180.,   data.frame_of_reference.angle.theta);
-    ASSERT_DOUBLE_EQ(0.3*PI/180., data.frame_of_reference.angle.psi);
+    ASSERT_DOUBLE_EQ(0.696,         data.frame_of_reference.coordinates.x);
+    ASSERT_DOUBLE_EQ(0,             data.frame_of_reference.coordinates.y);
+    ASSERT_DOUBLE_EQ(1.418,         data.frame_of_reference.coordinates.z);
+    ASSERT_DOUBLE_EQ(0.7,           data.frame_of_reference.angle.phi);
+    ASSERT_DOUBLE_EQ(-166.*PI/180., data.frame_of_reference.angle.theta);
+    ASSERT_DOUBLE_EQ(125.*PI/180.,  data.frame_of_reference.angle.psi);
 //! [ManeuveringForceModelTest expected output]
 }
 
@@ -317,9 +317,9 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_simple_maneuvering_model)
     ASSERT_DOUBLE_EQ(320032, F.X());
     ASSERT_DOUBLE_EQ(160000, F.Y());
     ASSERT_DOUBLE_EQ(0, F.Z());
-    ASSERT_DOUBLE_EQ(0, F.K());
-    ASSERT_DOUBLE_EQ(0, F.M());
-    ASSERT_DOUBLE_EQ(0, F.N());
+    ASSERT_NEAR(0, F.K(), 1e-15);
+    ASSERT_NEAR(0, F.M(), 1e-15);
+    ASSERT_NEAR(0, F.N(), 1e-15);
 }
 
 
@@ -376,114 +376,288 @@ man(1,2,3,4,5,6,7,8,9)
 man(0.1,2.04,6.28,0.45,0.01,5.869,0.23,0,0.38)
  */
 
-TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
+TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_frame_of_reference)
 {
-    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
-    data.frame_of_reference.angle = YamlAngle();
-    data.frame_of_reference.coordinates = YamlCoordinates();
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering_with_same_frame_of_reference());
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"TestShip", env);
-    auto states = get_body("TestShip")->get_states();
-
-    states.x.record(0, 1);
-    states.y.record(0, 2);
-    states.z.record(0, 3);
-    states.u.record(0, 4);
-    states.v.record(0, 5);
-    states.w.record(0, 6);
-    states.p.record(0, 7);
-    states.q.record(0, 8);
-    states.r.record(0, 9);
-
     const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 1);
+    states.y.record(t, 2);
+    states.z.record(t, 3);
+    states.u.record(t, 4);
+    states.v.record(t, 5);
+    states.w.record(t, 6);
+    states.p.record(t, 7);
+    states.q.record(t, 8);
+    states.r.record(t, 9);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
     command_listener.set("test(b)", 0.);
     command_listener.set("test(c)", 0.);
+
+    ManeuveringForceModel force(data,"TestShip", env);
     const auto F = force(states, t, command_listener, env.k, states.G);
+
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_DOUBLE_EQ(-93470409.32377005, F.X());
     ASSERT_DOUBLE_EQ(190870415.43062863, F.Y());
     ASSERT_DOUBLE_EQ(0, F.Z());
-    ASSERT_DOUBLE_EQ(0, F.K());
-    ASSERT_DOUBLE_EQ(0, F.M());
+    ASSERT_NEAR(0, F.K(), 1e-15);
+    ASSERT_NEAR(0, F.M(), 1e-15);
     ASSERT_DOUBLE_EQ(253134236.3875341, F.N());
+}
+
+TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_frame_of_reference2)
+{
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering_with_same_frame_of_reference());
+    const auto env = get_env_with_default_rotation_convention();
+    const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 0.1);
+    states.y.record(t, 2.04);
+    states.z.record(t, 6.28);
+    states.u.record(t, 0.45);
+    states.v.record(t, 0.01);
+    states.w.record(t, 5.869);
+    states.p.record(t, 0.23);
+    states.q.record(t, 0);
+    states.r.record(t, 0.38);
+
+    ssc::data_source::DataSource command_listener;
+    command_listener.set("test(a)", 0.);
+    command_listener.set("test(b)", 0.);
+    command_listener.set("test(c)", 0.);
+
+    ManeuveringForceModel force(data,"TestShip", env);
+    const auto F = force(states, t, command_listener, env.k, states.G);
+
+    ASSERT_EQ("TestShip", F.get_frame());
+    ASSERT_DOUBLE_EQ(-160307.53008106418, F.X());
+    ASSERT_DOUBLE_EQ(349066.3153463915, F.Y());
+    ASSERT_DOUBLE_EQ(0, F.Z());
+    ASSERT_NEAR(0, F.K(), 1e-15);
+    ASSERT_NEAR(0, F.M(), 1e-15);
+    ASSERT_DOUBLE_EQ(-178317.02217866198, F.N());
+}
+
+/*  The following test data was generated adding this Python code
+to the function defined above:
+
+from math import cos, sin
+import numpy as np
+
+rotX = lambda alpha: np.array([[1.0, 0.0, 0.0], [0.0, +cos(alpha), -sin(alpha)], [0.0, +sin(alpha), +cos(alpha)]])
+rotY = lambda alpha: np.array([[+cos(alpha), 0.0, +sin(alpha)], [0.0, 1.0, 0.0], [-sin(alpha), 0.0, +cos(alpha)]])
+rotZ = lambda alpha: np.array([[+cos(alpha), -sin(alpha), 0.0], [+sin(alpha), +cos(alpha), 0.0], [0.0, 0.0, 1.0]])
+
+def get_force_and_torque(x, y, z, u, v, w, p, q, r, phi, theta, psi, tx, ty, tz):
+    man_results = man(x, y, z, u, v, w, p, q, r)
+    F_local = np.array([[man_results['X']], [man_results['Y']], [man_results['Z']]])
+    rot = rotZ(psi) @ rotY(theta) @ rotX(phi)
+    F = rot @ F_local
+
+    T_local = np.array([[man_results['K']], [man_results['M']], [man_results['N']]])
+    OM = np.array([[tx], [ty], [tz]])
+    T = np.cross(OM.T, F.T).T + (rot @ T_local)
+
+    return {'F': F,\
+            'T': T
+           }
+ */
+
+TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
+{
+    auto data = ManeuveringForceModel::parse(test_data::maneuvering());
+    const auto env = get_env_with_default_rotation_convention();
+    const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 1);
+    states.y.record(t, 2);
+    states.z.record(t, 3);
+    states.u.record(t, 4);
+    states.v.record(t, 5);
+    states.w.record(t, 6);
+    states.p.record(t, 7);
+    states.q.record(t, 8);
+    states.r.record(t, 9);
+
+    ssc::data_source::DataSource command_listener;
+    command_listener.set("test(a)", 0.);
+    command_listener.set("test(b)", 0.);
+    command_listener.set("test(c)", 0.);
+
+    ManeuveringForceModel force(data,"TestShip", env);
+    const auto F = force(states, t, command_listener, env.k, states.G);
+
+    ASSERT_EQ("TestShip", F.get_frame());
+    ASSERT_NEAR(-154542121.87051487, F.X(), 1e-7);
+    ASSERT_NEAR(-33809357.80807002, F.Y(), 1e-7);
+    ASSERT_NEAR(-141922136.39238492, F.Z(), 1e-7);
+    ASSERT_NEAR(208388848.83699098, F.K(), 1e-7);
+    ASSERT_NEAR(-65195179.1700744, F.M(), 1e-7);
+    ASSERT_NEAR(-211388078.67544204, F.N(), 1e-7);
 }
 
 TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
 {
     auto data = ManeuveringForceModel::parse(test_data::maneuvering());
-    // Re-initialize to zero
-    data.frame_of_reference.angle = YamlAngle();
-    data.frame_of_reference.coordinates = YamlCoordinates();
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"TestShip", env);
-
-    auto states = get_body("TestShip")->get_states();
-
-    states.x.record(0, 0.1);
-    states.y.record(0, 2.04);
-    states.z.record(0, 6.28);
-    states.u.record(0, 0.45);
-    states.v.record(0, 0.01);
-    states.w.record(0, 5.869);
-    states.p.record(0, 0.23);
-    states.q.record(0, 0);
-    states.r.record(0, 0.38);
-
     const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 0.1);
+    states.y.record(t, 2.04);
+    states.z.record(t, 6.28);
+    states.u.record(t, 0.45);
+    states.v.record(t, 0.01);
+    states.w.record(t, 5.869);
+    states.p.record(t, 0.23);
+    states.q.record(t, 0);
+    states.r.record(t, 0.38);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
     command_listener.set("test(b)", 0.);
     command_listener.set("test(c)", 0.);
+
+    ManeuveringForceModel force(data,"TestShip", env);
     const auto F = force(states, t, command_listener, env.k, states.G);
+
     ASSERT_EQ("TestShip", F.get_frame());
-    ASSERT_DOUBLE_EQ(-160307.53008106418, F.X());
-    ASSERT_DOUBLE_EQ(349066.3153463915, F.Y());
-    ASSERT_DOUBLE_EQ(0, F.Z());
-    ASSERT_DOUBLE_EQ(0, F.K());
-    ASSERT_DOUBLE_EQ(0, F.M());
-    ASSERT_DOUBLE_EQ(-178317.02217866198, F.N());
+    ASSERT_NEAR(-276711.3255011981, F.X(), 1e-9);
+    ASSERT_NEAR(-70281.82055578004, F.Y(), 1e-9);
+    ASSERT_NEAR(-256976.85644612607, F.Z(), 1e-9);
+    ASSERT_NEAR(-13365.244892291332, F.K(), 1e-9);
+    ASSERT_NEAR(-252382.944875907, F.M(), 1e-9);
+    ASSERT_NEAR(83417.03517334405, F.N(), 1e-9);
 }
 
-TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_manoeuvring)
+TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering_with_same_frame_of_reference)
 {
-    auto data = ManeuveringForceModel::parse(test_data::manoeuvring_with_euler_angles_and_quaternions());
-    // Re-initialize to zero
-    data.frame_of_reference.angle = YamlAngle();
-    data.frame_of_reference.coordinates = YamlCoordinates();
+    const std::string yaml = "reference frame:\n"
+                             "    frame: TestShip\n"
+                             "    x: {value: 0, unit: m}\n"
+                             "    y: {value: 0, unit: m}\n"
+                             "    z: {value: 0, unit: m}\n"
+                             "    phi: {value: 0, unit: rad}\n"
+                             "    theta: {value: 0, unit: deg}\n"
+                             "    psi: {value: 0, unit: deg}\n"
+                             "name: test\n"
+                             "X: phi(t)\n"
+                             "Y: theta(t)\n"
+                             "Z: psi(t)\n"
+                             "K: qr(t)\n"
+                             "M: qi(t)\n"
+                             "N: qj(t)+qk(t)\n";
+    auto data = ManeuveringForceModel::parse(yaml);
     const auto env = get_env_with_default_rotation_convention();
-    ManeuveringForceModel force(data,"TestShip", env);
+    const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 0.1);
+    states.y.record(t, 2.04);
+    states.z.record(t, 6.28);
+    states.u.record(t, 0.45);
+    states.v.record(t, 0.01);
+    states.w.record(t, 5.869);
+    states.p.record(t, 0.23);
+    states.q.record(t, 0);
+    states.r.record(t, 0.38);
+    states.qr.record(t, 0.47978680878362095);
+    states.qi.record(t, 0.4931142201387216);
+    states.qj.record(t, 0.5064416314938222);
+    states.qk.record(t, 0.5197690428489228);
+
     YamlRotation rot;
     rot.order_by = "angle";
     rot.convention.push_back("z");
     rot.convention.push_back("y'");
     rot.convention.push_back("x''");
-    auto states = get_body("TestShip")->get_states();
-    states.x.record(0, 0.1);
-    states.y.record(0, 2.04);
-    states.z.record(0, 6.28);
-    states.u.record(0, 0.45);
-    states.v.record(0, 0.01);
-    states.w.record(0, 5.869);
-    states.p.record(0, 0.23);
-    states.q.record(0, 0);
-    states.r.record(0, 0.38);
-    states.qr.record(0, 0.36);
-    states.qi.record(0, 0.37);
-    states.qj.record(0, 0.38);
-    states.qk.record(0, 0.39);
     const auto angles = states.get_angles(rot);
+
     ssc::data_source::DataSource command_listener;
-    const auto F = force(states, 0, command_listener, env.k, states.G);
+
+    ManeuveringForceModel force(data,"TestShip", env);
+    const auto F = force(states, t, command_listener, env.k, states.G);
     ASSERT_DOUBLE_EQ(angles.phi, (double)F.X());
     ASSERT_DOUBLE_EQ(angles.theta, (double)F.Y());
     ASSERT_DOUBLE_EQ(angles.psi, (double)F.Z());
     ASSERT_DOUBLE_EQ(states.qr(), (double)F.K());
     ASSERT_DOUBLE_EQ(states.qi(), (double)F.M());
     ASSERT_DOUBLE_EQ(states.qj()+states.qk(), (double)F.N());
+}
+
+/*  The following test data was generated using this Python code (the input quaternion should be normalized):
+
+from math import cos, sin
+from scipy.spatial.transform import Rotation
+import numpy as np
+
+rotX = lambda alpha: np.array([[1.0, 0.0, 0.0], [0.0, +cos(alpha), -sin(alpha)], [0.0, +sin(alpha), +cos(alpha)]])
+rotY = lambda alpha: np.array([[+cos(alpha), 0.0, +sin(alpha)], [0.0, 1.0, 0.0], [-sin(alpha), 0.0, +cos(alpha)]])
+rotZ = lambda alpha: np.array([[+cos(alpha), -sin(alpha), 0.0], [+sin(alpha), +cos(alpha), 0.0], [0.0, 0.0, 1.0]])
+
+def get_force_and_torque(x, y, z, u, v, w, p, q, r, qr, qi, qj, qk, phi, theta, psi, tx, ty, tz):
+    rotation_fom_quaternions = Rotation.from_quat([qk, qj, qi, qr]).as_euler('ZYX')
+
+    F_local = np.array([[rotation_fom_quaternions[0]], [rotation_fom_quaternions[1]], [rotation_fom_quaternions[2]]])
+    rot = rotZ(psi) @ rotY(theta) @ rotX(phi)
+    F = rot @ F_local
+
+    T_local = np.array([[qr], [qi], [qj + qk]])
+    OM = np.array([[tx], [ty], [tz]])
+    T = np.cross(OM.T, F.T).T + (rot @ T_local)
+
+    return {'F': F,\
+            'T': T
+           }
+ */
+
+TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering)
+{
+    const std::string yaml = "reference frame:\n"
+                             "    frame: TestShip\n"
+                             "    x: {value: 0.696, unit: m}\n"
+                             "    y: {value: 0, unit: m}\n"
+                             "    z: {value: 1.418, unit: m}\n"
+                             "    phi: {value: 0.7, unit: rad}\n"
+                             "    theta: {value: -166, unit: deg}\n"
+                             "    psi: {value: 125, unit: deg}\n"
+                             "name: test\n"
+                             "X: phi(t)\n"
+                             "Y: theta(t)\n"
+                             "Z: psi(t)\n"
+                             "K: qr(t)\n"
+                             "M: qi(t)\n"
+                             "N: qj(t)+qk(t)\n";
+    auto data = ManeuveringForceModel::parse(yaml);
+    const auto env = get_env_with_default_rotation_convention();
+    const double t = 0;
+    auto states = get_body("TestShip")->get_states();
+    states.x.record(t, 0.1);
+    states.y.record(t, 2.04);
+    states.z.record(t, 6.28);
+    states.u.record(t, 0.45);
+    states.v.record(t, 0.01);
+    states.w.record(t, 5.869);
+    states.p.record(t, 0.23);
+    states.q.record(t, 0);
+    states.r.record(t, 0.38);
+    states.qr.record(t, 0.47978680878362095);
+    states.qi.record(t, 0.4931142201387216);
+    states.qj.record(t, 0.5064416314938222);
+    states.qk.record(t, 0.5197690428489228);
+
+    ssc::data_source::DataSource command_listener;
+
+    ManeuveringForceModel force(data,"TestShip", env);
+    const auto F = force(states, t, command_listener, env.k, states.G);
+    ASSERT_NEAR(1.917565962059328, (double)F.X(), 1e-14);
+    ASSERT_NEAR(-0.8788836899394064, (double)F.Y(), 1e-14);
+    ASSERT_NEAR(-0.8088077018359574, (double)F.Z(), 1e-14);
+    ASSERT_NEAR(1.8988663216207913, (double)F.K(), 1e-14);
+    ASSERT_NEAR(2.8450652134487004, (double)F.M(), 1e-14);
+    ASSERT_NEAR(-1.5654434261669063, (double)F.N(), 1e-14);
 }
 
 TEST_F(ManeuveringForceModelTest, can_get_Tmax)

@@ -48,6 +48,8 @@ namespace test_data
     std::string diffraction();
     std::string test_ship_radiation_damping();
     std::string simple_track_keeping();
+    std::string maneuvering_commands();
+    std::string maneuvering_with_same_frame_of_reference();
     std::string maneuvering();
     std::string bug_2641();
     std::string simple_station_keeping();
@@ -73,7 +75,6 @@ namespace test_data
     std::string bug_2963_fk();
     std::string bug_2963_diff();
     std::string bug_2963_gm();
-    std::string manoeuvring_with_euler_angles_and_quaternions();
     std::string bug_3004();
     std::string bug_3003();
     std::string bug_2984();

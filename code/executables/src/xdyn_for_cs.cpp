@@ -7,6 +7,7 @@
 #include <ssc/text_file_reader.hpp>
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
+#include <google/protobuf/stubs/common.h>
 #include <sstream>
 
 using namespace ssc::websocket;
@@ -104,5 +105,6 @@ int main(int argc, char** argv)
     {
         run();
     }
+    google::protobuf::ShutdownProtobufLibrary();
     return error;
 }

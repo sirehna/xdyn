@@ -68,6 +68,16 @@ debian_10_coverage_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_coverage_gcc_8: ci_env=`bash <(curl -s https://codecov.io/env)`
 debian_10_coverage_gcc_8: cmake-debian-target build-debian test-debian
 
+debian_10_profile_gcc_8: BUILD_TYPE = Profile
+debian_10_profile_gcc_8: BUILD_DIR = build_deb10_profile
+debian_10_profile_gcc_8: CPACK_GENERATOR = DEB
+debian_10_profile_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
+debian_10_profile_gcc_8: BOOST_ROOT = /opt/boost
+debian_10_profile_gcc_8: SSC_ROOT = /opt/ssc
+debian_10_profile_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_profile_gcc_8: ci_env=
+debian_10_profile_gcc_8: cmake-debian-target build-debian test-debian
+
 debian_10_debug_gcc_8: BUILD_TYPE = Debug
 debian_10_debug_gcc_8: BUILD_DIR = build_deb10_dbg
 debian_10_debug_gcc_8: CPACK_GENERATOR = DEB

@@ -314,18 +314,19 @@ TEST_F(SimTest, LONG_propulsion_and_resistance)
     const size_t N = 250;
     const auto res = simulate<ssc::solver::EulerStepper>(yaml, test_ship_stl, 0, N, 1, commands);
     ASSERT_EQ(N+1, res.size());
+    const double tolerance = 1e-15;
     for (size_t i = 0 ; i <= N ; ++i)
     {
         const double t = res.at(i).t;
         ASSERT_LE(2.79963*(t-40), res.at(i).x[XIDX(0)]);
-        ASSERT_DOUBLE_EQ(0, res.at(i).x[YIDX(0)]);
-        ASSERT_DOUBLE_EQ(1, res.at(i).x[ZIDX(0)]);
+        ASSERT_NEAR(0, res.at(i).x[YIDX(0)], tolerance);
+        ASSERT_NEAR(1, res.at(i).x[ZIDX(0)], tolerance);
         ASSERT_LE(2.79963*(1-exp(-0.012*t)), res.at(i).x[UIDX(0)]) << i;
-        ASSERT_DOUBLE_EQ(0, res.at(i).x[VIDX(0)]);
-        ASSERT_DOUBLE_EQ(0, res.at(i).x[WIDX(0)]);
+        ASSERT_NEAR(0, res.at(i).x[VIDX(0)], tolerance);
+        ASSERT_NEAR(0, res.at(i).x[WIDX(0)], tolerance);
         ASSERT_NEAR(-0.00109667*t, res.at(i).x[PIDX(0)], 8E-2);
-        ASSERT_DOUBLE_EQ(0, res.at(i).x[QIDX(0)]) << "i = " << i;
-        ASSERT_DOUBLE_EQ(0, res.at(i).x[RIDX(0)]) << "i = " << i;
+        ASSERT_NEAR(0, res.at(i).x[QIDX(0)], tolerance) << "i = " << i;
+        ASSERT_NEAR(0, res.at(i).x[RIDX(0)], tolerance) << "i = " << i;
     }
 }
 

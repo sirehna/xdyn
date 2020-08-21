@@ -5,6 +5,7 @@
  *      Author: cady
  */
 #include <vector> // Needs to be declared before ssc/macros.hpp to overload <<
+#include <google/protobuf/stubs/common.h>
 #include "Airy.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
@@ -109,6 +110,6 @@ int main(int , char** )
               << ", \"h\": " << ys.h
               << ", \"delta\": " << ys.delta
               << "}\n";
-
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }

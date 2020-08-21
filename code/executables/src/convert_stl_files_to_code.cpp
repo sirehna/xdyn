@@ -2,6 +2,7 @@
 #include "stl_reader.hpp"
 #include "stl_writer.hpp"
 #include "base91.hpp"
+#include <google/protobuf/stubs/common.h>
 #include <ssc/text_file_reader.hpp>
 #include <iostream>
 #include <string>
@@ -72,5 +73,6 @@ int main(int argc, char** argv)
     const VectorOfVectorOfPoints points = read_stl(stl_file.get_contents());
 
     std::cout << "const std::string s = \"" << write_binary_cpp(points) << "\";\n";
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }
