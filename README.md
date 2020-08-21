@@ -250,6 +250,42 @@ This script accepts any [flag `run_all_tests` does](https://gitlab.inria.fr/Phyl
 ./run_all_tests_valgrind.sh --gtest_filter='Gravity*'
 ~~~~~
 
+### GDB
+
+A script called `gdb.sh` can be used during development to launch `xdyn` or the
+unit tests under [GDB](https://www.gnu.org/software/gdb/).
+
+To debug xdyn, first build a debug version (if you haven't already):
+
+~~~~~~{.bash}
+./ninja_debug.sh xdyn
+~~~~~
+
+Then run:
+
+~~~~~~{.bash}
+./gdb.sh /build/executables/xdyn
+~~~~~~
+
+This will open a GDB prompt. To close it, press Ctrl+D. For more details on how
+to use GDB, refer to [the official GDB
+documentation](https://www.gnu.org/software/gdb/).
+
+To launch the debugger on the unit tests run:
+To launch the debugger on the unit tests, first build a debug version (if you
+haven't already):
+
+~~~~~{.bash}
+./ninja_debug.sh run_all_tests
+~~~~~
+
+Then run:
+
+~~~~~{.bash}
+./gdb.sh run_all_tests
+~~~~~
+
+
 ## Deployment
 
 Add additional notes about how to deploy this on a live system.
