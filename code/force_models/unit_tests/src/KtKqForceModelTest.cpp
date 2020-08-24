@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "NumericalErrorException.hpp"
 #include "KtKqForceModel.hpp"
 #include "KtKqForceModelTest.hpp"
 #include "yaml_data.hpp"
@@ -77,3 +78,19 @@ TEST_F(KtKqForceModelTest, force)
     ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(4));
     ASSERT_EQ(0, w.get_force(states, a.random<double>(),commands)(5));
 }
+
+TEST_F(KtKqForceModelTest, clarify_exception_message_for_Kt_Kq_interpolation_errors)
+{
+    auto input = KtKqForceModel::parse(test_data::kt_kq());
+    EnvironmentAndFrames env;
+    env.rho = 1024;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    const KtKqForceModel w(input, "", env);
+    BodyStates states;
+    states.u.record(0, 1);
+
+    std::map<std::string,double> commands;
+    commands["rpm"] = 2*PI*0.025;
+    EXPECT_THROW( w.get_force(states, a.random<double>(),commands)(0), NumericalErrorException);
+}
+
