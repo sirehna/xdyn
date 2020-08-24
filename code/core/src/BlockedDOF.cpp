@@ -9,6 +9,7 @@
 
 #include "BlockedDOF.hpp"
 #include "InvalidInputException.hpp"
+#include "NumericalErrorException.hpp"
 #include "external_data_structures_parsers.hpp"
 
 #include <ssc/csv_file_reader.hpp>
@@ -203,7 +204,18 @@ void BlockedDOF::force_states(StateType& x, const double t) const
 {
     for (auto dof:pimpl->blocked_dof)
     {
-        x[pimpl->state_index(dof.first)] = dof.second->f(t);
+        double forced_value = 0;
+        try
+        {
+            forced_value = dof.second->f(t);
+        }
+        catch(const ssc::interpolation::IndexFinderException& e)
+        {
+            std::stringstream ss;
+            ss << "Unable to interpolate value of forced state '" << dof.first << "' at t=" << t << "s: " << e.get_message();
+            THROW(__PRETTY_FUNCTION__, NumericalErrorException, ss.str());
+        }
+        x[pimpl->state_index(dof.first)] = forced_value;
     }
 }
 
