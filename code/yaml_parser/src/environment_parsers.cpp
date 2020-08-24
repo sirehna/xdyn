@@ -95,7 +95,16 @@ void operator >> (const YAML::Node& node, YamlStretching& g)
 {
     try
     {
-        ssc::yaml_parser::parse_uv(node["h"], g.h);
+        try
+        {
+            ssc::yaml_parser::parse_uv(node["h"], g.h);
+        }
+        catch(const YAML::Exception& e)
+        {
+            std::stringstream ss;
+            ss << "Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: {unit: 'm', value: 101}\nbut got the following error trying to parse it: " << e.what();
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+        }
         node["delta"] >> g.delta;
     }
     catch(std::exception& e)
