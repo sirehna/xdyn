@@ -271,7 +271,6 @@ This will open a GDB prompt. To close it, press Ctrl+D. For more details on how
 to use GDB, refer to [the official GDB
 documentation](https://www.gnu.org/software/gdb/).
 
-To launch the debugger on the unit tests run:
 To launch the debugger on the unit tests, first build a debug version (if you
 haven't already):
 
