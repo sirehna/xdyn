@@ -458,7 +458,7 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
   seed of the random data generator: 0
   stretching:
      delta: 0
-     h: 100
+     h: {unit: m, value: 100}
   directional spreading:
      type: dirac
      waves propagating to: {value: 90, unit: deg}
