@@ -882,3 +882,8 @@ TEST_F(SimTest, bug_3187)
     ASSERT_DOUBLE_EQ(669, res.at(10).x[3]);
     ASSERT_DOUBLE_EQ(669, res.at(11).x[3]);
 }
+
+TEST_F(SimTest, bug_3185_should_detect_frame_toto_does_not_exist)
+{
+    ASSERT_THROW(simulate<ssc::solver::EulerStepper>(test_data::bug_3185_with_invalid_frame(), 0, 11, 1), InvalidInputException);
+}

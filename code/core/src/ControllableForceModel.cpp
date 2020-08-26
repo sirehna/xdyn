@@ -102,7 +102,15 @@ void ControllableForceModel::feed(Observer& observer, ssc::kinematics::Kinematic
     // O1 is the origin of the body frame (current ship position)
     // P is the origin of the ControllableForceModel's internal frame
 
-    const auto Tbody_to_internal = k->get(body_name, name);
+    ssc::kinematics::Transform Tbody_to_internal;
+    try
+    {
+        Tbody_to_internal = k->get(body_name, name);
+    }
+    catch (const ssc::kinematics::KinematicsException& e)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When computing controlled force model '" << name << "' we were unable to find frame '" << name << "' used to express the reference frame in which the forces are expressed. Use 'NED' or '" << body_name << "' in the 'frame' section perhaps?");
+    }
     const auto rot_from_body_frame_to_internal_frame = Tbody_to_internal.get_rot().transpose();
     const auto Tbody_to_ned = k->get(body_name, "NED");
     const auto rot_from_body_frame_to_ned = Tbody_to_ned.get_rot().transpose();
