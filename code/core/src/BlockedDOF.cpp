@@ -56,6 +56,7 @@ class Builder
         {
             check_states_are_not_defined_twice(input);
         }
+
         std::map<BlockableState, Interpolator> get_forced_states() const
         {
             std::map<BlockableState, Interpolator> ret;
@@ -66,6 +67,7 @@ class Builder
 
     private:
         Builder();
+
         void throw_if_already_defined(const BlockableState& state, std::map<BlockableState, bool>& defined) const
         {
             if (defined[state])
@@ -154,12 +156,17 @@ class Builder
             }
             return Interpolator();
         }
+
         YamlBlockedDOF input;
 };
 
 struct BlockedDOF::Impl
 {
-    Impl(const Builder& builder, const size_t body_idx_) : blocked_dof(builder.get_forced_states()), body_idx(body_idx_) {}
+    Impl(Builder builder, const size_t body_idx_)
+            : blocked_dof(builder.get_forced_states())
+            , body_idx(body_idx_)
+    {}
+
     std::map<BlockableState, Interpolator> blocked_dof;
     size_t body_idx;
 
