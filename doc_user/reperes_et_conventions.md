@@ -540,7 +540,15 @@ dans le [fichier HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
 ### Forçage de degrés de liberté
 
 Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
-P, Q, R pour chaque corps.
+P, Q, R pour chaque corps. Bien qu'il soit théoriquement possible de forces
+l'attitude et la position (x, y, z, phi, theta, psi), xdyn ne le permet pas car
+cela impliquerait aussi de forcer les vitesses (u, v, w, p, q, r). Une
+complexité supplémentaire apparaît lorsque l'on souhaite forcer les angles
+d'Euler (par exemple un cap $`\psi`$) puisque cela implique de résoudre un
+problème de minimisation pour trouver les quaternions donnant les angles
+d'Euler forcés. Forcer à la fois des positions, des attitude et des vitesses
+peut conduire à des situations incohérentes qu'il faudrait détecter, tandis que
+le forçage des vitesses u, v, w, p, q, r ne présente pas ces difficultés.
 
 Pour forcer les degrés de liberté, on ajoute la section (facultative) suivante
 à la section `body` :
@@ -584,6 +592,11 @@ Si les valeurs sont lues depuis un fichier CSV :
 
 Pour les valeurs de t hors de l'intervalle [tmin,tmax], l'état est supposé
 libre (non forcé).
+
+Lorsque l'on force un degré de liberté, sa dérivée est également forcée avant
+l'appel au solveur. Les modèles d'effort sont appelés avec les états forcés et
+les états sont à nouveau forcés après l'appel au solveur, afin de ne pas
+intégrer les états forcés.
 
 Il est possible de récupérer dans les sorties l'écart entre l'effort réel et
 l'effort permettant de conserver les forçages, en d'autres termes il est
