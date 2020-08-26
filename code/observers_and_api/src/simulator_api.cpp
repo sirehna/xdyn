@@ -153,3 +153,4 @@ MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh)
     meshes[name] = read_stl(mesh);
     return meshes;
 }
+

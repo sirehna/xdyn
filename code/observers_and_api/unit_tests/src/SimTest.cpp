@@ -875,4 +875,10 @@ TEST_F(SimTest, bug_3187)
     ASSERT_DOUBLE_EQ(667, res.at(3).x[3]);
     ASSERT_DOUBLE_EQ(668, res.at(4).x[3]);
     ASSERT_DOUBLE_EQ(669, res.at(5).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(6).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(7).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(8).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(9).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(10).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(11).x[3]);
 }
