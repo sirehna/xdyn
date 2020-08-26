@@ -892,3 +892,28 @@ TEST_F(SimTest, bug_3185_should_simulate_properly)
 {
     simulate<ssc::solver::EulerStepper>(test_data::bug_3185(), 0, 11, 1);
 }
+
+
+TEST_F(SimTest, bug_3185_all_data_should_be_there)
+{
+    const std::string yaml = test_data::bug_3185();
+    ListOfObservers observer(parse_output(yaml));
+    const auto input = SimulatorYamlParser(yaml).parse();
+    auto sys = get_system(input,0);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.1, observer);
+    const auto m = get_map(observer);
+    ASSERT_EQ(13, m.size());
+    ASSERT_NE(m.end(), m.find("t"));
+    ASSERT_NE(m.end(), m.find("Fx(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Fy(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Fz(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Mx(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("My(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Mz(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Fx(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("Fy(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("Fz(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("Mx(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("My(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("Mz(portside propeller,dtmb,NED)"));
+}
