@@ -6,6 +6,7 @@
  */
 
 #include <map>
+#include <vector>
 
 #include "BlockedDOF.hpp"
 #include "InvalidInputException.hpp"
@@ -14,6 +15,8 @@
 
 #include <ssc/csv_file_reader.hpp>
 #include <ssc/text_file_reader.hpp>
+
+typedef YamlDOF<std::vector<double> > Table;
 
 std::ostream& operator<<(std::ostream& os, const BlockableState& s);
 std::ostream& operator<<(std::ostream& os, const BlockableState& s)
@@ -85,7 +88,7 @@ class Builder
                 throw_if_already_defined(state.state, defined_in_csv);
             }
         }
-        Interpolator build(const YamlDOF<std::vector<double> >& y) const
+        Interpolator build(const Table& y) const
         {
             try
             {
