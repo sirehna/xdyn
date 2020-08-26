@@ -52,16 +52,28 @@ typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> Interpolator;
 class Builder
 {
     public:
-        Builder(const YamlBlockedDOF& yaml) : input(yaml)
+        Builder(const YamlBlockedDOF& yaml) : input(yaml), tables(build_tables())
         {
             check_states_are_not_defined_twice(input);
+        }
+
+        std::vector<Table> build_tables() const
+        {
+            std::vector<Table> t = input.from_yaml;
+            for (const auto y:input.from_csv)
+            {
+                t.push_back(read_table_from_csv(y));
+            }
+            return t;
         }
 
         std::map<BlockableState, Interpolator> get_forced_states() const
         {
             std::map<BlockableState, Interpolator> ret;
-            for (const auto y:input.from_csv) ret[y.state] = read_table_from_csv(y);
-            for (const auto y:input.from_yaml) ret[y.state] = build_interpolator(y);
+            for (const auto table:tables)
+            {
+                ret[table.state] = build_interpolator(table);
+            }
             return ret;
         }
 
@@ -121,8 +133,9 @@ class Builder
             return Interpolator();
         }
 
-        Interpolator read_table_from_csv(const YamlCSVDOF& y) const
+        Table read_table_from_csv(const YamlCSVDOF& y) const
         {
+            Table table;
             try
             {
                 const ssc::text_file_reader::TextFileReader txt(y.filename);
@@ -138,14 +151,9 @@ class Builder
                 {
                     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find column " << y.value << " in CSV file " << y.filename);
                 }
-                const auto t = it1->second;
-                const auto state = it2->second;
-                Table table;
                 table.interpolation = y.interpolation;
-                table.state = y.state;
-                table.t = t;
-                table.value = state;
-                return build_interpolator(table);
+                table.t = it1->second;
+                table.value = it2->second;
             }
             catch(const ssc::exception_handling::Exception& e)
             {
@@ -155,10 +163,11 @@ class Builder
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.what());
             }
-            return Interpolator();
+            return table;
         }
 
         YamlBlockedDOF input;
+        std::vector<Table> tables;
 };
 
 struct BlockedDOF::Impl
