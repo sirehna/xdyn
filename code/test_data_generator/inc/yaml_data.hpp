@@ -98,6 +98,7 @@ namespace test_data
     std::string tutorial_10_gRPC_force_model_commands();
     std::string gRPC_force_model();
     std::string bug_3187();
+    std::string bug_3185_with_invalid_frame();
 }
 
 #endif /* YAML_DATA_HPP_ */
