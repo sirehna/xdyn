@@ -887,3 +887,8 @@ TEST_F(SimTest, bug_3185_should_detect_frame_toto_does_not_exist)
 {
     ASSERT_THROW(simulate<ssc::solver::EulerStepper>(test_data::bug_3185_with_invalid_frame(), 0, 11, 1), InvalidInputException);
 }
+
+TEST_F(SimTest, bug_3185_should_simulate_properly)
+{
+    simulate<ssc::solver::EulerStepper>(test_data::bug_3185(), 0, 11, 1);
+}
