@@ -47,6 +47,7 @@ class Body
         void update(const EnvironmentAndFrames& env, const StateType& x, const double t);
         void update_kinematics(StateType x, const ssc::kinematics::KinematicsPtr& k) const;
         void update_body_states(StateType x, const double t);
+        void force_states(StateType& x, const double t) const;
         StateType block_states_if_necessary(StateType x, const double t) const;
 
         /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account

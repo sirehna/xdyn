@@ -91,6 +91,11 @@ void Body::update_body_states(StateType x, const double t)
     states.qk.record(t, *_QK(x,idx));
 }
 
+void Body::force_states(StateType& x, const double t) const
+{
+    blocked_states.force_states(x,t);
+}
+
 void Body::update_projection_of_z_in_mesh_frame(const double g,
                                                 const ssc::kinematics::KinematicsPtr& k)
 {
