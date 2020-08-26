@@ -61,7 +61,7 @@ class Builder
         {
             std::map<BlockableState, Interpolator> ret;
             for (const auto y:input.from_csv) ret[y.state] = build(y);
-            for (const auto y:input.from_yaml) ret[y.state] = build(y);
+            for (const auto y:input.from_yaml) ret[y.state] = build_interpolator(y);
             return ret;
         }
 
@@ -90,11 +90,25 @@ class Builder
                 throw_if_already_defined(state.state, defined_in_csv);
             }
         }
-        Interpolator build(const Table& y) const
+        Interpolator build_interpolator(const Table& y) const
         {
             try
             {
-                return build(y.t, y.value, y.interpolation);
+                switch(y.interpolation)
+                {
+                    case InterpolationType::LINEAR:
+                        return Interpolator(new ssc::interpolation::LinearInterpolationVariableStep(y.t, y.value));
+                        break;
+                    case InterpolationType::PIECEWISE_CONSTANT:
+                        return Interpolator(new ssc::interpolation::PiecewiseConstantVariableStep<double>(y.t, y.value));
+                        break;
+                    case InterpolationType::SPLINE:
+                        return Interpolator(new ssc::interpolation::SplineVariableStep(y.t, y.value));
+                        break;
+                    default:
+                        break;
+                }
+                return Interpolator();
             }
             catch(const ssc::exception_handling::Exception& e)
             {
@@ -126,7 +140,12 @@ class Builder
                 }
                 const auto t = it1->second;
                 const auto state = it2->second;
-                return build(t, state, y.interpolation);
+                Table table;
+                table.interpolation = y.interpolation;
+                table.state = y.state;
+                table.t = t;
+                table.value = state;
+                return build_interpolator(table);
             }
             catch(const ssc::exception_handling::Exception& e)
             {
@@ -135,24 +154,6 @@ class Builder
             catch(const std::exception& e)
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.what());
-            }
-            return Interpolator();
-        }
-        Interpolator build(const std::vector<double>& t, const std::vector<double>& state, const InterpolationType& interpolation_type) const
-        {
-            switch(interpolation_type)
-            {
-                case InterpolationType::LINEAR:
-                    return Interpolator(new ssc::interpolation::LinearInterpolationVariableStep(t, state));
-                    break;
-                case InterpolationType::PIECEWISE_CONSTANT:
-                    return Interpolator(new ssc::interpolation::PiecewiseConstantVariableStep<double>(t, state));
-                    break;
-                case InterpolationType::SPLINE:
-                    return Interpolator(new ssc::interpolation::SplineVariableStep(t, state));
-                    break;
-                default:
-                    break;
             }
             return Interpolator();
         }
