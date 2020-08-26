@@ -917,3 +917,46 @@ TEST_F(SimTest, bug_3185_all_data_should_be_there)
     ASSERT_NE(m.end(), m.find("My(portside propeller,dtmb,NED)"));
     ASSERT_NE(m.end(), m.find("Mz(portside propeller,dtmb,NED)"));
 }
+
+TEST_F(SimTest, bug_3185_check_values)
+{
+    const std::string yaml = test_data::bug_3185();
+    ListOfObservers observer(parse_output(yaml));
+    const auto input = SimulatorYamlParser(yaml).parse();
+    auto sys = get_system(input,0);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.1, observer);
+    auto m = get_map(observer);
+
+    const auto Fx_dtmb = m["Fx(portside propeller,dtmb,dtmb)"];
+    const auto Fy_dtmb = m["Fy(portside propeller,dtmb,dtmb)"];
+    const auto Fz_dtmb = m["Fz(portside propeller,dtmb,dtmb)"];
+    const auto Mx_dtmb = m["Mx(portside propeller,dtmb,dtmb)"];
+    const auto My_dtmb = m["My(portside propeller,dtmb,dtmb)"];
+    const auto Mz_dtmb = m["Mz(portside propeller,dtmb,dtmb)"];
+    const auto Fx_ned = m["Fx(portside propeller,dtmb,NED)"];
+    const auto Fy_ned = m["Fy(portside propeller,dtmb,NED)"];
+    const auto Fz_ned = m["Fz(portside propeller,dtmb,NED)"];
+    const auto Mx_ned = m["Mx(portside propeller,dtmb,NED)"];
+    const auto My_ned = m["My(portside propeller,dtmb,NED)"];
+    const auto Mz_ned = m["Mz(portside propeller,dtmb,NED)"];
+
+    const size_t n = Fx_dtmb.size();
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        const double fx_dtmb = Fx_dtmb.at(i);
+        const double fy_dtmb = Fy_dtmb.at(i);
+        const double fz_dtmb = Fz_dtmb.at(i);
+        const double mx_dtmb = Mx_dtmb.at(i);
+        const double my_dtmb = My_dtmb.at(i);
+        const double mz_dtmb = Mz_dtmb.at(i);
+        const double fx_ned = Fx_ned.at(i);
+        const double fy_ned = Fy_ned.at(i);
+        const double fz_ned = Fz_ned.at(i);
+        const double mx_ned = Mx_ned.at(i);
+        const double my_ned = My_ned.at(i);
+        const double mz_ned = Mz_ned.at(i);
+        // Norm should be preserved
+        ASSERT_DOUBLE_EQ(fx_dtmb*fx_dtmb+fy_dtmb*fy_dtmb+fz_dtmb*fz_dtmb, fx_ned*fx_ned+fy_ned*fy_ned+fz_ned*fz_ned);
+        ASSERT_DOUBLE_EQ(mx_dtmb*mx_dtmb+my_dtmb*my_dtmb+mz_dtmb*mz_dtmb, mx_ned*mx_ned+my_ned*my_ned+mz_ned*mz_ned);
+    }
+}
