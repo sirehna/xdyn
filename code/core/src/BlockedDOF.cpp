@@ -60,7 +60,7 @@ class Builder
         std::map<BlockableState, Interpolator> get_forced_states() const
         {
             std::map<BlockableState, Interpolator> ret;
-            for (const auto y:input.from_csv) ret[y.state] = build(y);
+            for (const auto y:input.from_csv) ret[y.state] = read_table_from_csv(y);
             for (const auto y:input.from_yaml) ret[y.state] = build_interpolator(y);
             return ret;
         }
@@ -121,7 +121,7 @@ class Builder
             return Interpolator();
         }
 
-        Interpolator build(const YamlCSVDOF& y) const
+        Interpolator read_table_from_csv(const YamlCSVDOF& y) const
         {
             try
             {
