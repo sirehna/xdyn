@@ -2024,14 +2024,23 @@ Pour obtenir les sorties d'effort de ce modèle, on écrit par exemple :
 output:
    - format: csv
      filename: propRudd.csv
-     data: [t, 'Fx(Prop. & rudder,TestShip,TestShip)', 'Fx(Prop. & rudder,TestShip,NED)']
+     data: [t, 'Fx(Prop. & rudder,TestShip,TestShip)', 'Fy(Prop. & rudder,TestShip,NED)']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Lorsque l'on demande un effort, on précise :
+
+- La composante que l'on veut (Fx et My ici)
+- Le nom du modèle d'effort ("Prop. & rudder" dans notre exemple)
+- Le nom du corps ("TestShip")
+- Le repère d'expression ("TestShip" et "NED"). Ce repère ne peut être que le
+  repère "body" ("TestShip" ici), le repère "NED" ou le repère lié au modèle
+  d'effort.
+
 On obtient dans l'exemple précédent la projection suivant l'axe $`X`$ du repère
-`TestShip` de l'effort `Prop. & rudder` (correspondant au nom de l'actionneur
-renseigné dans la clef `name` afin de pouvoir définir plusieurs actionneurs du
-même type) ainsi que la projection de ce même effort suivant l'axe $`X`$ du repère
-NED.
+`TestShip` de l'effort `Prop. & rudder` agissant sur le navire et correspondant
+au nom de l'actionneur renseigné dans la clef `name` afin de pouvoir définir
+plusieurs actionneurs du même type, ainsi que la projection sur l'axe Y du
+repère NED du moment autour de l'axe Y du navire.
 
 ### Références
 
