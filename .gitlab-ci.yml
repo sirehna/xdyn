@@ -16,7 +16,7 @@ lint:
 build:windows:
    stage: build
    script:
-     - make windows
+     - make NB_OF_PARALLEL_BUILDS="-j 1" windows
      - mv build_win_posix/xdyn.zip .
    artifacts:
      when: on_success
@@ -26,7 +26,7 @@ build:windows:
 build:debian:
    stage: build
    script:
-     - make debian
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian
      - mv build_deb10/xdyn.deb .
    artifacts:
      when: on_success

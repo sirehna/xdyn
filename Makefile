@@ -157,7 +157,7 @@ build-windows:
 	        mkdir -p /opt/share/.wine;\
 	        export WINEPREFIX=/opt/share/.wine;\
 	        wine winecfg;\
-	        ninja package"
+	        ninja $(NB_OF_PARALLEL_BUILDS) package"
 
 test-windows:
 	docker run $(ci_env) --rm \
@@ -205,7 +205,7 @@ build-debian:
 	       "cd /opt/share && \
 	        mkdir -p $(BUILD_DIR) && \
 	        cd $(BUILD_DIR) && \
-	        ninja package"
+	        ninja $(NB_OF_PARALLEL_BUILDS) package"
 
 test-debian: SHELL:=/bin/bash
 test-debian:
