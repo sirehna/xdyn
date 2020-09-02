@@ -546,7 +546,7 @@ cela impliquerait aussi de forcer les vitesses (u, v, w, p, q, r). Une
 complexité supplémentaire apparaît lorsque l'on souhaite forcer les angles
 d'Euler (par exemple un cap $`\psi`$) puisque cela implique de résoudre un
 problème de minimisation pour trouver les quaternions donnant les angles
-d'Euler forcés. Forcer à la fois des positions, des attitude et des vitesses
+d'Euler forcés. Forcer à la fois des positions, des attitudes et des vitesses
 peut conduire à des situations incohérentes qu'il faudrait détecter, tandis que
 le forçage des vitesses u, v, w, p, q, r ne présente pas ces difficultés.
 
