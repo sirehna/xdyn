@@ -540,7 +540,7 @@ dans le [fichier HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
 ### Forçage de degrés de liberté
 
 Il est possible de forcer les valeurs des degrés de liberté suivant : U, V, W,
-P, Q, R pour chaque corps. Bien qu'il soit théoriquement possible de forces
+P, Q, R pour chaque corps. Bien qu'il soit théoriquement possible de forcer
 l'attitude et la position (x, y, z, phi, theta, psi), xdyn ne le permet pas car
 cela impliquerait aussi de forcer les vitesses (u, v, w, p, q, r). Une
 complexité supplémentaire apparaît lorsque l'on souhaite forcer les angles
