@@ -5,14 +5,19 @@
  *      Author: cady
  */
 
+#include <algorithm>
 #include <map>
+#include <vector>
 
 #include "BlockedDOF.hpp"
 #include "InvalidInputException.hpp"
+#include "NumericalErrorException.hpp"
 #include "external_data_structures_parsers.hpp"
 
 #include <ssc/csv_file_reader.hpp>
 #include <ssc/text_file_reader.hpp>
+
+typedef YamlDOF<std::vector<double> > Table;
 
 std::ostream& operator<<(std::ostream& os, const BlockableState& s);
 std::ostream& operator<<(std::ostream& os, const BlockableState& s)
@@ -48,20 +53,56 @@ typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> Interpolator;
 class Builder
 {
     public:
-        Builder(const YamlBlockedDOF& yaml) : input(yaml)
+        Builder(const YamlBlockedDOF& yaml) : input(yaml), tables(build_tables())
         {
             check_states_are_not_defined_twice(input);
         }
+
+        std::vector<Table> build_tables() const
+        {
+            std::vector<Table> t = input.from_yaml;
+            for (const auto y:input.from_csv)
+            {
+                t.push_back(read_table_from_csv(y));
+            }
+            return t;
+        }
+
         std::map<BlockableState, Interpolator> get_forced_states() const
         {
             std::map<BlockableState, Interpolator> ret;
-            for (const auto y:input.from_csv) ret[y.state] = build(y);
-            for (const auto y:input.from_yaml) ret[y.state] = build(y);
+            for (const auto table:tables)
+            {
+                ret[table.state] = build_interpolator(table);
+            }
             return ret;
+        }
+
+        std::map<BlockableState, double> get_tmin() const
+        {
+            std::map<BlockableState, double> tmin;
+            for (const auto table:tables)
+            {
+                const auto min = std::min_element(table.t.begin(), table.t.end());
+                tmin[table.state] = *min;
+            }
+            return tmin;
+        }
+
+        std::map<BlockableState, double> get_tmax() const
+        {
+            std::map<BlockableState, double> tmax;
+            for (const auto table:tables)
+            {
+                const auto max = std::max_element(table.t.begin(), table.t.end());
+                tmax[table.state] = *max;
+            }
+            return tmax;
         }
 
     private:
         Builder();
+
         void throw_if_already_defined(const BlockableState& state, std::map<BlockableState, bool>& defined) const
         {
             if (defined[state])
@@ -84,11 +125,25 @@ class Builder
                 throw_if_already_defined(state.state, defined_in_csv);
             }
         }
-        Interpolator build(const YamlDOF<std::vector<double> >& y) const
+        Interpolator build_interpolator(const Table& y) const
         {
             try
             {
-                return build(y.t, y.value, y.interpolation);
+                switch(y.interpolation)
+                {
+                    case InterpolationType::LINEAR:
+                        return Interpolator(new ssc::interpolation::LinearInterpolationVariableStep(y.t, y.value));
+                        break;
+                    case InterpolationType::PIECEWISE_CONSTANT:
+                        return Interpolator(new ssc::interpolation::PiecewiseConstantVariableStep<double>(y.t, y.value));
+                        break;
+                    case InterpolationType::SPLINE:
+                        return Interpolator(new ssc::interpolation::SplineVariableStep(y.t, y.value));
+                        break;
+                    default:
+                        break;
+                }
+                return Interpolator();
             }
             catch(const ssc::exception_handling::Exception& e)
             {
@@ -101,8 +156,9 @@ class Builder
             return Interpolator();
         }
 
-        Interpolator build(const YamlCSVDOF& y) const
+        Table read_table_from_csv(const YamlCSVDOF& y) const
         {
+            Table table;
             try
             {
                 const ssc::text_file_reader::TextFileReader txt(y.filename);
@@ -118,9 +174,9 @@ class Builder
                 {
                     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find column " << y.value << " in CSV file " << y.filename);
                 }
-                const auto t = it1->second;
-                const auto state = it2->second;
-                return build(t, state, y.interpolation);
+                table.interpolation = y.interpolation;
+                table.t = it1->second;
+                table.value = it2->second;
             }
             catch(const ssc::exception_handling::Exception& e)
             {
@@ -130,34 +186,39 @@ class Builder
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, "Error when building forced state '" << y.state << "' defined in 'forced DOF/from CSV': " << e.what());
             }
-            return Interpolator();
+            return table;
         }
-        Interpolator build(const std::vector<double>& t, const std::vector<double>& state, const InterpolationType& interpolation_type) const
-        {
-            switch(interpolation_type)
-            {
-                case InterpolationType::LINEAR:
-                    return Interpolator(new ssc::interpolation::LinearInterpolationVariableStep(t, state));
-                    break;
-                case InterpolationType::PIECEWISE_CONSTANT:
-                    return Interpolator(new ssc::interpolation::PiecewiseConstantVariableStep<double>(t, state));
-                    break;
-                case InterpolationType::SPLINE:
-                    return Interpolator(new ssc::interpolation::SplineVariableStep(t, state));
-                    break;
-                default:
-                    break;
-            }
-            return Interpolator();
-        }
+
         YamlBlockedDOF input;
+        std::vector<Table> tables;
 };
 
 struct BlockedDOF::Impl
 {
-    Impl(const Builder& builder, const size_t body_idx_) : blocked_dof(builder.get_forced_states()), body_idx(body_idx_) {}
+    Impl(Builder builder, const size_t body_idx_)
+            : blocked_dof(builder.get_forced_states())
+            , body_idx(body_idx_)
+            , tmin(builder.get_tmin())
+            , tmax(builder.get_tmax())
+    {}
+
     std::map<BlockableState, Interpolator> blocked_dof;
     size_t body_idx;
+    std::map<BlockableState, double> tmin;
+    std::map<BlockableState, double> tmax;
+
+    bool state_is_blocked_at_that_date(const BlockableState& s, const double t) const
+    {
+
+        const auto min_ = tmin.find(s);
+        const auto max_ = tmax.find(s);
+        if ((min_ != tmin.end()) && (max_ != tmax.end()))
+        {
+
+            return (min_->second <= t) && (t <= max_->second);
+        }
+        return false;
+    }
 
     size_t state_index(const BlockableState& s)
     {
@@ -203,7 +264,21 @@ void BlockedDOF::force_states(StateType& x, const double t) const
 {
     for (auto dof:pimpl->blocked_dof)
     {
-        x[pimpl->state_index(dof.first)] = dof.second->f(t);
+        if (pimpl->state_is_blocked_at_that_date(dof.first, t))
+        {
+            double forced_value = 0;
+            try
+            {
+                forced_value = dof.second->f(t);
+            }
+            catch(const ssc::interpolation::IndexFinderException& e)
+            {
+                std::stringstream ss;
+                ss << "Unable to interpolate value of forced state '" << dof.first << "' at t=" << t << " s: " << e.get_message();
+                THROW(__PRETTY_FUNCTION__, NumericalErrorException, ss.str());
+            }
+            x[pimpl->state_index(dof.first)] = forced_value;
+        }
     }
 }
 
@@ -211,7 +286,21 @@ void BlockedDOF::force_state_derivatives(StateType& dx_dt, const double t) const
 {
     for (auto dof:pimpl->blocked_dof)
     {
-        dx_dt[pimpl->state_index(dof.first)] = dof.second->df(t);
+        if (pimpl->state_is_blocked_at_that_date(dof.first, t))
+        {
+            double forced_value = 0;
+            try
+            {
+                forced_value = dof.second->df(t);
+            }
+            catch(const ssc::interpolation::IndexFinderException& e)
+            {
+                std::stringstream ss;
+                ss << "Unable to interpolate value of forced state derivative 'd" << dof.first << "/dt' at t=" << t << " s: " << e.get_message();
+                THROW(__PRETTY_FUNCTION__, NumericalErrorException, ss.str());
+            }
+            dx_dt[pimpl->state_index(dof.first)] = forced_value;
+        }
     }
 }
 

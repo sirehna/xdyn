@@ -116,6 +116,14 @@ void Sim::operator()(const StateType& x, StateType& dxdt, double t)
     pimpl->_dx_dt = dxdt;
 }
 
+void Sim::force_states(StateType& x, const double t) const
+{
+    for (auto body: pimpl->bodies)
+    {
+        body->force_states(x, t);
+    }
+}
+
 void Sim::dx_dt(const StateType& x, StateType& dxdt, const double t)
 {
     for (auto body: pimpl->bodies)

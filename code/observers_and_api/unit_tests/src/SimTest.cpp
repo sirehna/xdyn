@@ -864,3 +864,21 @@ TEST_F(SimTest, issue_20_constant_force)
     auto sys = get_system(input,test_ship_stl,0);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
 }
+
+TEST_F(SimTest, bug_3187)
+{
+    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(test_data::bug_3187(), 0, 11, 1);
+
+    ASSERT_DOUBLE_EQ(1, res.at(0).x[3]);
+    ASSERT_DOUBLE_EQ(1, res.at(1).x[3]);
+    ASSERT_DOUBLE_EQ(666, res.at(2).x[3]);
+    ASSERT_DOUBLE_EQ(667, res.at(3).x[3]);
+    ASSERT_DOUBLE_EQ(668, res.at(4).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(5).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(6).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(7).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(8).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(9).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(10).x[3]);
+    ASSERT_DOUBLE_EQ(669, res.at(11).x[3]);
+}
