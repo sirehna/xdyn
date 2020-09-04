@@ -1,6 +1,10 @@
-.PHONY: all clean build images
+.PHONY: all build clean check images
 
-all: build doc.html
+all: check build doc.html
+
+check: concatenated_doc.md
+	@docker run -t --rm -u $(shell id -u):$(shell id -g) --entrypoint xdyn -w /work -v $(shell pwd)/tuto_execution:/work xweave tutorial_06_propulsion.yml --dt 0.1 --tend 1 > err
+	@if grep -q "Warning" err ; then echo "There was a warning in one of the tutorials" && rm -f err && exit 1; else echo "Tutorials executed with no warnings or errors" && rm -f err && exit 0; fi
 
 concatenated_doc.pmd: \
     metadata.yaml \
