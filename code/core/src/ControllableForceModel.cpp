@@ -95,6 +95,41 @@ double ControllableForceModel::get_command(const std::string& command_name, ssc:
     return ret;
 }
 
+ssc::kinematics::Transform ControllableForceModel::get_transform_from_body_to_internal_frame(const ssc::kinematics::KinematicsPtr& k) const
+{
+    ssc::kinematics::Transform Tbody_to_internal;
+    bool internal_frame_exists = false;
+    try
+    {
+        k->get(body_name, from_internal_frame_to_a_known_frame.get_from_frame());
+        internal_frame_exists = true;
+    }
+    catch (const ssc::kinematics::KinematicsException& e)
+    {
+    }
+    try
+    {
+        k->get("NED", from_internal_frame_to_a_known_frame.get_from_frame());
+        internal_frame_exists = true;
+    }
+    catch (const ssc::kinematics::KinematicsException& e)
+    {
+    }
+    if (not(internal_frame_exists))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When computing controlled force model '" << name << "' we were unable to find frame '" << from_internal_frame_to_a_known_frame.get_from_frame() << "' used to express the reference frame in which the forces are expressed. Use 'NED' or '" << body_name << "' in the 'frame' section perhaps?");
+    }
+    try
+    {
+        Tbody_to_internal = k->get(body_name, name);
+    }
+    catch (const ssc::kinematics::KinematicsException& e)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When computing controlled force model '" << name << "' we were unable to find frame '" << name << "' used to express the reference frame in which the forces are expressed. Use 'NED' or '" << body_name << "' in the 'frame' section perhaps?");
+    }
+    return Tbody_to_internal;
+}
+
 void ControllableForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, const ssc::kinematics::Point& G) const
 {
     // G is the point in which 'latest_force_in_body_frame' is expressed (sum of forces)
@@ -102,7 +137,7 @@ void ControllableForceModel::feed(Observer& observer, ssc::kinematics::Kinematic
     // O1 is the origin of the body frame (current ship position)
     // P is the origin of the ControllableForceModel's internal frame
 
-    const auto Tbody_to_internal = k->get(body_name, name);
+    const auto Tbody_to_internal = get_transform_from_body_to_internal_frame(k);
     const auto rot_from_body_frame_to_internal_frame = Tbody_to_internal.get_rot().transpose();
     const auto Tbody_to_ned = k->get(body_name, "NED");
     const auto rot_from_body_frame_to_ned = Tbody_to_ned.get_rot().transpose();

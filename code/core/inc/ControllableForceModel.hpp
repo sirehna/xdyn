@@ -93,6 +93,7 @@ class ControllableForceModel
         ControllableForceModel(); // Deactivated
         double get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const;
         std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener, const double t) const;
+        ssc::kinematics::Transform get_transform_from_body_to_internal_frame(const ssc::kinematics::KinematicsPtr& k) const;
 
         std::string name;
         std::string body_name;

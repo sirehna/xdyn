@@ -882,3 +882,103 @@ TEST_F(SimTest, bug_3187)
     ASSERT_DOUBLE_EQ(669, res.at(10).x[3]);
     ASSERT_DOUBLE_EQ(669, res.at(11).x[3]);
 }
+
+TEST_F(SimTest, bug_3185_should_detect_frame_toto_does_not_exist)
+{
+    ASSERT_THROW(simulate<ssc::solver::EulerStepper>(test_data::bug_3185_with_invalid_frame(), 0, 11, 1), InvalidInputException);
+}
+
+TEST_F(SimTest, bug_3185_should_simulate_properly)
+{
+    simulate<ssc::solver::EulerStepper>(test_data::bug_3185(), 0, 11, 1);
+}
+
+
+TEST_F(SimTest, bug_3185_all_data_should_be_there)
+{
+    const std::string yaml = test_data::bug_3185();
+    ListOfObservers observer(parse_output(yaml));
+    const auto input = SimulatorYamlParser(yaml).parse();
+    auto sys = get_system(input,0);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.1, observer);
+    const auto m = get_map(observer);
+    ASSERT_EQ(13, m.size());
+    ASSERT_NE(m.end(), m.find("t"));
+    ASSERT_NE(m.end(), m.find("Fx(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Fy(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Fz(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Mx(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("My(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Mz(portside propeller,dtmb,dtmb)"));
+    ASSERT_NE(m.end(), m.find("Fx(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("Fy(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("Fz(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("Mx(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("My(portside propeller,dtmb,NED)"));
+    ASSERT_NE(m.end(), m.find("Mz(portside propeller,dtmb,NED)"));
+}
+
+TEST_F(SimTest, bug_3185_check_values)
+{
+
+    const std::string yaml = test_data::bug_3185();
+    ListOfObservers observer(parse_output(yaml));
+    const auto input = SimulatorYamlParser(yaml).parse();
+    auto sys = get_system(input,0);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.2, observer);
+    auto m = get_map(observer);
+
+    const auto Fx_prop = m["Fx(portside propeller,dtmb,portside propeller)"];
+    const auto Fy_prop = m["Fy(portside propeller,dtmb,portside propeller)"];
+    const auto Fz_prop = m["Fz(portside propeller,dtmb,portside propeller)"];
+    const auto Mx_prop = m["Mx(portside propeller,dtmb,portside propeller)"];
+    const auto My_prop = m["My(portside propeller,dtmb,portside propeller)"];
+    const auto Mz_prop = m["Mz(portside propeller,dtmb,portside propeller)"];
+    const auto Fx_ned = m["Fx(portside propeller,dtmb,NED)"];
+    const auto Fy_ned = m["Fy(portside propeller,dtmb,NED)"];
+    const auto Fz_ned = m["Fz(portside propeller,dtmb,NED)"];
+    const auto Mx_ned = m["Mx(portside propeller,dtmb,NED)"];
+    const auto My_ned = m["My(portside propeller,dtmb,NED)"];
+    const auto Mz_ned = m["Mz(portside propeller,dtmb,NED)"];
+
+    const double phi = PI/3;
+    const double theta = PI/4;
+    const double psi = PI/6;
+    // Rz(psi)*Ry(theta)*Rx(phi), cf. https://math.stackexchange.com/a/3081640
+    double R[3][3];
+    using std::cos;
+    using std::sin;
+    R[0][0] = cos(theta)*cos(psi); R[0][1] = cos(psi)*sin(theta)*sin(phi)-cos(phi)*sin(psi); R[0][2] = cos(phi)*sin(psi)*sin(theta)+sin(phi)*sin(psi);
+    R[1][0] = cos(theta)*sin(psi); R[1][1] = cos(phi)*cos(psi)+sin(theta)*sin(phi)*sin(psi); R[1][2] = cos(phi)*sin(psi)*sin(theta)-sin(phi)*cos(psi);
+    R[2][0] = -sin(psi);           R[2][1] = cos(theta)*sin(phi);                            R[2][2] = cos(theta)*cos(phi);
+
+    const size_t n = Fx_prop.size();
+    for (size_t i = 1 ; i < n ; ++i)
+    {
+        const double fx_prop = Fx_prop.at(i);
+        const double fy_prop = Fy_prop.at(i);
+        const double fz_prop = Fz_prop.at(i);
+        const double mx_prop = Mx_prop.at(i);
+        const double my_prop = My_prop.at(i);
+        const double mz_prop = Mz_prop.at(i);
+        const double fx_ned = Fx_ned.at(i);
+        const double fy_ned = Fy_ned.at(i);
+        const double fz_ned = Fz_ned.at(i);
+        const double mx_ned = Mx_ned.at(i);
+        const double my_ned = My_ned.at(i);
+        const double mz_ned = Mz_ned.at(i);
+        // Norm should be preserved
+        ASSERT_DOUBLE_EQ(fx_prop*fx_prop+fy_prop*fy_prop+fz_prop*fz_prop, fx_ned*fx_ned+fy_ned*fy_ned+fz_ned*fz_ned);
+        ASSERT_DOUBLE_EQ(mx_prop*mx_prop+my_prop*my_prop+mz_prop*mz_prop, mx_ned*mx_ned+my_ned*my_ned+mz_ned*mz_ned);
+
+        // Thrust should be rotated properly
+        ASSERT_DOUBLE_EQ(R[0][0]*fx_prop + R[0][1]*fy_prop + R[0][2]*fz_prop, fx_ned);
+        ASSERT_DOUBLE_EQ(R[1][0]*fx_prop + R[1][1]*fy_prop + R[1][2]*fz_prop, fy_ned);
+        ASSERT_DOUBLE_EQ(R[2][0]*fx_prop + R[2][1]*fy_prop + R[2][2]*fz_prop, fz_ned);
+
+        // Torque should be rotated properly
+        ASSERT_DOUBLE_EQ(R[0][0]*mx_prop + R[0][1]*my_prop + R[0][2]*mz_prop, mx_ned);
+        ASSERT_DOUBLE_EQ(R[1][0]*mx_prop + R[1][1]*my_prop + R[1][2]*mz_prop, my_ned);
+        ASSERT_DOUBLE_EQ(R[2][0]*mx_prop + R[2][1]*my_prop + R[2][2]*mz_prop, mz_ned);
+    }
+}
