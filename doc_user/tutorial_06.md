@@ -55,7 +55,7 @@ execCommand('xdyn tutorial_06_propulsion.yml --dt 0.1 --tend 20 -o out.csv')
 
 ### Résultats
 
-Voici l'évolution temporelle de la vitesse pour la cas 1D :
+Voici l'évolution temporelle de la vitesse d'avance :
 
 ```python echo=False, results='raw', name='tutorial_06_plot_results'
 data = csv('out.csv')
