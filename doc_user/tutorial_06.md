@@ -51,7 +51,6 @@ La simulation peut maintenant être lancée comme suit :
 
 ```python echo=False, results='raw', name='tutorial_06_launch_simulation'
 execCommand('xdyn tutorial_06_propulsion.yml --dt 0.1 --tend 20 -o out.csv')
-execCommand('xdyn tutorial_06_1D_propulsion.yml --dt 0.1 --tend 20 -o out_1D.csv')
 ```
 
 ### Résultats
