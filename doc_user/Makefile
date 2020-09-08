@@ -1,6 +1,6 @@
 .PHONY: all build clean check images
 
-all: check build doc.html
+all: check doc.html
 
 check: build concatenated_doc.md
 	@docker run -t --rm -u $(shell id -u):$(shell id -g) --entrypoint xdyn -w /work -v $(shell pwd)/tuto_execution:/work xweave tutorial_06_propulsion.yml --dt 0.1 --tend 1 > err
