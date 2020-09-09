@@ -1,6 +1,7 @@
 .PHONY: all
 
 all:
+	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
 	@CURRENT_UID=$(shell id -u):$(shell id -g) \
 	docker-compose \
 		up \
