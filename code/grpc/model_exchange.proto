@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+service ModelExchange
+{
+    rpc dx_dt(ModelExchangeRequest) returns (ModelExchangeResponse);
+}
+
+message ModelExchangeRequest
+{
+    States states = 1; // Ship states
+    map<string, double> commands = 2; // Controlled forces commands
+}
+
+message States
+{
+    repeated double t = 1; // Simulation time (in seconds).
+    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double qr =11 ; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+}
+
+message ModelExchangeResponse
+{
+    repeated double dx_dt = 2; // Derivative of the projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double dy_dt = 3; // Derivative of the projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double dz_dt = 4; // Derivative of the projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double du_dt = 5; // Derivative of the projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double dv_dt = 6; // Derivative of the projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double dw_dt = 7; // Derivative of the projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double dp_dt = 8; // Derivative of the projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double dq_dt = 9; // Derivative of the projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double dr_dt = 10; // Derivative of the projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double dqr_dt =11 ; // Derivative of the real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double dqi_dt = 12; // Derivative of the first imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double dqj_dt = 13; // Derivative of the second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double dqk_dt = 14; // Derivative of the third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double dphi_dt = 15; // Derivative of the first "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+    repeated double dtheta_dt = 16; // Derivative of the second "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+    repeated double dpsi_dt = 17; // Derivative of the third "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+}
+

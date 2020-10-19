@@ -1,3 +1,4 @@
+changequote(`{{', `}}')
 
 # Ligne de commande
 
@@ -577,60 +578,8 @@ texte on ne retrouvera pas nécessairement le texte initial.
 L'interface gRPC est décrite par le [fichier proto](https://developers.google.com/protocol-buffers/docs/proto3) suivant :
 
 ~~~~{.protobuf}
-service ModelExchange
-{
-    rpc dx_dt(ModelExchangeRequest) returns (ModelExchangeResponse);
-}
-
-message ModelExchangeRequest
-{
-    States states = 1; // Ship states
-    map<string, double> commands = 2; // Controlled forces commands
-}
-
-message States
-{
-    repeated double t = 1; // Simulation time (in seconds).
-    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double qr =11 ; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double phi = 15; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-    repeated double theta = 16; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-    repeated double psi = 17; // Euler angle. Depends on the angle convention chosen in the 'rotations convention' section of xdyn's input file. See xdyn's documentation for details.
-    repeated string rotations_convention = 18; // Angle convention chosen in xdyn's YAML file. Use it to check the convention is what you are expecting! Format: ["psi", "theta'", "phi''"]
-}
-
-message ModelExchangeResponse
-{
-    repeated double dx_dt = 2; // Derivative of the projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double dy_dt = 3; // Derivative of the projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double dz_dt = 4; // Derivative of the projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double du_dt = 5; // Derivative of the projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double dv_dt = 6; // Derivative of the projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double dw_dt = 7; // Derivative of the projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double dp_dt = 8; // Derivative of the projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double dq_dt = 9; // Derivative of the projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double dr_dt = 10; // Derivative of the projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double dqr_dt =11 ; // Derivative of the real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double dqi_dt = 12; // Derivative of the first imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double dqj_dt = 13; // Derivative of the second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double dqk_dt = 14; // Derivative of the third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double dphi_dt = 15; // Derivative of the first "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
-    repeated double dtheta_dt = 16; // Derivative of the second "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
-    repeated double dpsi_dt = 17; // Derivative of the third "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
-}
+include({{model_exchange.proto}})
 ~~~~
-
 
 ### Description des entrées/sorties pour une utilisation en "Co-Simulation" (x(t) -> [x(t), ...,x(t+Dt)])
 
@@ -795,53 +744,5 @@ ne retrouvera pas nécessairement le texte initial.
 L'interface gRPC est décrite par le [fichier proto](https://developers.google.com/protocol-buffers/docs/proto3) suivant :
 
 ~~~~{.protobuf}
-service Cosimulation
-{
-    rpc step(CosimulationRequest) returns (CosimulationResponse);
-}
-
-message CosimulationRequest
-{
-    float Dt = 1; // Strictly positive float: simulation duration (in seconds). The solver will integrate the ship states from t0 to t0 + Dt, where t0 is the last date in the t list in the states structure, and return the states at t0 + Dt. The simulation will run with a stop size of dt, dt being specified from the command line. t0 is therefore present both in the request and the response, with the same associated values.
-    States states = 2; // State history
-}
-
-message States
-{
-    repeated double t = 1; // Simulation time (in seconds). If the models used do not need state history, this list can contain just one element. The last value in the list is always interpreted as the beginning of the next integration step (see above). All lists in this structure should have the same size.
-    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame.
-    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double qr =11 ; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-}
-
-message CosimulationResponse
-{
-    double t = 1; // t0 + Dt
-    double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame.
-    double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    double qr = 11 ; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    double phi = 15; // First "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
-    double theta = 16; // Second "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
-    double psi = 17; // Third "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
-}
+include({{cosimulation.proto}})
 ~~~~
