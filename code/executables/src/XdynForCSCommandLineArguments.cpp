@@ -9,7 +9,7 @@
 #include "XdynForCSCommandLineArguments.hpp"
 
 XdynForCSCommandLineArguments::XdynForCSCommandLineArguments() : yaml_filenames(),
-solver(), initial_timestep(), catch_exceptions(), port(0), verbose(false), show_help(false), show_websocket_debug_information(false)
+solver(), initial_timestep(), catch_exceptions(), port(0), verbose(false), show_help(false), show_websocket_debug_information(false), grpc(false)
 {
 }
 

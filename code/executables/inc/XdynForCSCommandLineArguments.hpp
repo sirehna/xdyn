@@ -23,6 +23,7 @@ struct XdynForCSCommandLineArguments
     bool verbose;
     bool show_help;
     bool show_websocket_debug_information;
+    bool grpc;
 };
 
 #endif /* EXECUTABLES_INC_XDYNFORCSCOMMANDLINEARGUMENTS_HPP_ */
