@@ -2,13 +2,16 @@
 #include "parse_history.hpp"
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "parse_XdynForCSCommandLineArguments.hpp"
+#include "CosimulationServiceImpl.hpp"
 
 #include <ssc/websocket/WebSocketServer.hpp>
 #include <ssc/text_file_reader.hpp>
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include <google/protobuf/stubs/common.h>
+#include <grpcpp/grpcpp.h>
 #include <sstream>
+#include <functional>
 
 using namespace ssc::websocket;
 
@@ -67,18 +70,40 @@ void inthand(int)
     stop = 1;
 }
 
-void start_server(const XdynForCSCommandLineArguments& input_data);
-void start_server(const XdynForCSCommandLineArguments& input_data)
+TR1(shared_ptr)<SimServer> get_SimServer(const XdynForCSCommandLineArguments& input_data);
+TR1(shared_ptr)<SimServer> get_SimServer(const XdynForCSCommandLineArguments& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
-    TR1(shared_ptr)<SimServer> sim_server (new SimServer(yaml, input_data.solver, input_data.initial_timestep));
-    SimulationMessage handler(sim_server, input_data.verbose);
+    return TR1(shared_ptr)<SimServer>(new SimServer(yaml, input_data.solver, input_data.initial_timestep));
+}
+
+void start_ws_server(const XdynForCSCommandLineArguments& input_data);
+void start_ws_server(const XdynForCSCommandLineArguments& input_data)
+{
+    SimulationMessage handler(get_SimServer(input_data), input_data.verbose);
     std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
     TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, input_data.show_websocket_debug_information));
     signal(SIGINT, inthand);
     while(!stop){}
     std::cout << std::endl << "Gracefully stopping the websocket server..." << std::endl;
+}
+
+void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
+void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
+{
+    std::stringstream ss;
+    ss << "0.0.0.0:" << input_data.port;
+    const std::string server_address = ss.str();
+    CosimulationServiceImpl service(get_SimServer(input_data));
+
+    grpc::ServerBuilder builder;
+    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+    builder.RegisterService(&service);
+    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+    std::cout << "Server listening on " << server_address << std::endl;
+    server->Wait();
+    std::cout << std::endl << "Gracefully stopping the gRPC server..." << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -92,13 +117,17 @@ int main(int argc, char** argv)
         return error;
     }
     if (input_data.empty() || input_data.show_help) return EXIT_SUCCESS;
-    const auto run = [input_data](){
+    const auto run_ws = [input_data](){
     {
-        start_server(input_data);
+        start_ws_server(input_data);
     }};
+    const std::function< void(void) > run_grpc = [input_data](){
+    {
+        start_grpc_server(input_data);
+    }};
+    const std::function< void(void) > run = input_data.grpc ? run_grpc : run_ws;
     if (input_data.catch_exceptions)
     {
-
         report_xdyn_exceptions_to_user(run, [](const std::string& s){std::cerr << s;});
     }
     else

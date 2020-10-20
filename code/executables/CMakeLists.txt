@@ -2,13 +2,38 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(executables)
 
 # Using C++ 2011
-# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't
-# declare non-standard functions
-# (and _stricmp() is non-standard - it's just a version of strcmp() that's
-# case-insensitive).
+# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
+# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
-IF(NOT(MSVC))
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    UNSET(CMAKE_CXX_FLAGS)
+    SET(CMAKE_CXX_FLAGS "-std=gnu++0x")
+    IF(MINGW)
+        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pedantic -pedantic-errors -Wextra -Wall -Wfatal-errors ")
+        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable ")
+        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wpointer-arith -Wmissing-format-attribute -Wsign-compare -Wundef ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual -Wwrite-strings -Wno-deprecated -Wvariadic-macros")
+    ELSE()
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pedantic -pedantic-errors -Wextra -Wall -Wunused-function")
+        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wpointer-arith -Wmissing-format-attribute -Wsign-compare -Wundef ")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros")
+        IF(CMAKE_SIZEOF_VOID_P EQUAL 8) # If on a 64 bit machine
+            IF(UNIX AND NOT WIN32) # If on Linux
+                SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+                # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
+                # SET(REQUIRED_GCC_VERSION_FOR_FLAG_STRICT_ALIASING 8.0.0)
+                # IF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL ${REQUIRED_GCC_VERSION_FOR_FLAG_STRICT_ALIASING})
+                #     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wstrict-aliasing=2")
+                #     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wstrict-aliasing=2")
+                # ENDIF()
+            ENDIF()
+        ENDIF()
+    ENDIF()
+ELSE()
+    SET(CMAKE_CXX_FLAGS "")
 ENDIF()
 
 INCLUDE_DIRECTORIES(inc)
@@ -36,6 +61,43 @@ INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
+
+
+# For gRPC
+INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
+
+SET(cosimulation_proto ${CMAKE_CURRENT_SOURCE_DIR}/../grpc/cosimulation.proto)
+SET(cosimulation_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.pb.cc")
+SET(cosimulation_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.pb.h")
+SET(cosimulation_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.grpc.pb.cc")
+SET(cosimulation_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.grpc.pb.h")
+GET_FILENAME_COMPONENT(proto_path "${cosimulation_proto}" PATH)
+ADD_CUSTOM_COMMAND(
+      OUTPUT "${cosimulation_proto_srcs}" "${cosimulation_proto_hdrs}" "${cosimulation_grpc_srcs}" "${cosimulation_grpc_hdrs}"
+      COMMAND ${PROTOBUF_PROTOC}
+      ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+           --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+           -I "${PROTOC_PREFIX}${proto_path}"
+           --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
+           "${PROTOC_PREFIX}${cosimulation_proto}"
+      DEPENDS "${cosimulation_proto}")
+
+SET(model_exchange_proto ${CMAKE_CURRENT_SOURCE_DIR}/../grpc/model_exchange.proto)
+SET(model_exchange_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.pb.cc")
+SET(model_exchange_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.pb.h")
+SET(model_exchange_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.grpc.pb.cc")
+SET(model_exchange_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.grpc.pb.h")
+ADD_CUSTOM_COMMAND(
+      OUTPUT "${model_exchange_proto_srcs}" "${model_exchange_proto_hdrs}" "${model_exchange_grpc_srcs}" "${model_exchange_grpc_hdrs}"
+      COMMAND ${PROTOBUF_PROTOC}
+      ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+           --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+           -I "${PROTOC_PREFIX}${proto_path}"
+           --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
+           "${PROTOC_PREFIX}${model_exchange_proto}"
+      DEPENDS "${model_exchange_proto}")
 
 CONFIGURE_FILE(
         src/display_command_line_arguments.cpp
@@ -160,6 +222,9 @@ ADD_EXECUTABLE(xdyn-for-cs
         src/XdynForCSCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_cs.cpp
+        src/CosimulationServiceImpl.cpp
+        "${cosimulation_proto_srcs}"
+        "${cosimulation_grpc_srcs}"
         )
 
 TARGET_LINK_LIBRARIES(xdyn-for-cs
