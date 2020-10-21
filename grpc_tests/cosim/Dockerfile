@@ -5,4 +5,4 @@ ADD wait-for-it.sh ./
 ADD cosimulation.proto ./
 RUN python -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. cosimulation.proto
 ADD tests.py ./
-ENTRYPOINT ./wait-for-it.sh xdyn:9002 -s -t 20 -- nosetests -x -v -d --nocapture --nologcapture --rednose
+ENTRYPOINT ./wait-for-it.sh xdyn:9002 -s -t 20 -- nosetests -x -v -d --nocapture --nologcapture

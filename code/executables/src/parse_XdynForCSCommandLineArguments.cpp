@@ -64,6 +64,7 @@ int get_input_data(int argc, char **argv, XdynForCSCommandLineArguments& input_d
     input_data.verbose = has.verbose;
     input_data.show_help = has.help;
     input_data.show_websocket_debug_information = has.show_websocket_debug_information;
+    input_data.grpc = has.grpc;
     if (has.help)
     {
         print_usage(std::cout, desc, argv[0], "This is a ship simulator (co-simulation server version)");

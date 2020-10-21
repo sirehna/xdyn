@@ -30,7 +30,6 @@ std::string description(const std::string& des)
     return ss.str();
 }
 
-
 BooleanArguments parse_input(int argc, char **argv, const po::options_description& desc)
 {
     po::positional_options_description p;
@@ -45,6 +44,7 @@ BooleanArguments parse_input(int argc, char **argv, const po::options_descriptio
     ret.debug = vm.count("debug")>0;
     ret.verbose = vm.count("verbose")>0;
     ret.show_websocket_debug_information = vm.count("websocket-debug")>0;
+    ret.grpc = vm.count("grpc")>0;
     return ret;
 }
 

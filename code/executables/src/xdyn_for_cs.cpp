@@ -101,7 +101,7 @@ void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
     builder.RegisterService(&service);
     std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-    std::cout << "Server listening on " << server_address << std::endl;
+    std::cout << "gRPC server listening on " << server_address << std::endl;
     server->Wait();
     std::cout << std::endl << "Gracefully stopping the gRPC server..." << std::endl;
 }
