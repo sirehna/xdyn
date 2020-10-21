@@ -1,0 +1,31 @@
+{
+    "dockerFile": "Dockerfile.vscode",
+    "name": "gRPC Python",
+    "extensions": [
+        "ms-python.python"
+    ],
+    "containerEnv": {
+        "PYTHONPATH": "$PYTHONPATH:/extra-imports"
+    },
+    "mounts": [
+    ],
+    "settings": {
+        "python.pythonPath": "/opt/conda/bin/python",
+        "python.linting.pylintPath": "/opt/conda/bin/pylint",
+        "python.analysis.cacheFolderPath": "/tmp",
+        "python.analysis.logLevel": "Warning",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.linting.lintOnSave": true,
+        "python.linting.pycodestyleEnabled": true,
+        "python.linting.pycodestylePath": "/opt/conda/bin/pycodestyle",
+        "python.formatting.autopep8Path": "/opt/conda/bin/autopep8",
+        "python.linting.pylintUseMinimalCheckers": false,
+        "editor.rulers": [
+            80
+        ],
+        "python.linting.pylintArgs": [
+            "--extension-pkg-whitelist=cv2"
+        ]
+    }
+}

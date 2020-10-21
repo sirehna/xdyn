@@ -1,0 +1,7 @@
+FROM continuumio/miniconda:4.7.12
+ADD requirements.txt .
+RUN conda install --yes --file requirements.txt
+RUN conda install --yes  pylint autopep8 pycodestyle
+ENV PYTHONPATH=/opt/conda/
+ADD cosimulation.proto ./
+RUN python -m grpc_tools.protoc -I . --python_out=/opt/conda/ --grpc_python_out=/opt/conda/ cosimulation.proto
