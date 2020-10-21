@@ -4,8 +4,8 @@ import logging
 import os
 import unittest
 import grpc
-import cosimulation_pb2
-from cosimulation_pb2 import CosimulationRequest
+import math
+from cosimulation_pb2 import CosimulationRequestEuler
 import cosimulation_pb2_grpc
 
 SERVICE_NAME = "xdyn-client"
@@ -26,7 +26,7 @@ class Cosim:
         xdyn_server_url = os.environ['xdyn_server_url']
         xdyn_channel = grpc.insecure_channel(xdyn_server_url)
         self.xdyn_stub = cosimulation_pb2_grpc.CosimulationStub(xdyn_channel)
-        self.request = CosimulationRequest()
+        self.request = CosimulationRequestEuler()
 
     def step(self, state, Dt):
         """Run a cosimulation step."""
@@ -40,12 +40,28 @@ class Cosim:
         self.request.states.p[:] = [state['p']]
         self.request.states.q[:] = [state['q']]
         self.request.states.r[:] = [state['r']]
-        self.request.states.qr[:] = [state['qr']]
-        self.request.states.qi[:] = [state['qi']]
-        self.request.states.qj[:] = [state['qj']]
-        self.request.states.qk[:] = [state['qk']]
+        self.request.states.phi[:] = [state['phi']]
+        self.request.states.theta[:] = [state['theta']]
+        self.request.states.psi[:] = [state['psi']]
         self.request.Dt = Dt
-        return self.xdyn_stub.step(self.request)
+        res = self.xdyn_stub.step_euler_321(self.request)
+        return {'t': res.all_states.t,
+                'x': res.all_states.x,
+                'y': res.all_states.y,
+                'z': res.all_states.z,
+                'u': res.all_states.u,
+                'v': res.all_states.v,
+                'w': res.all_states.w,
+                'p': res.all_states.p,
+                'q': res.all_states.q,
+                'r': res.all_states.r,
+                'qr': res.all_states.qr,
+                'qi': res.all_states.qi,
+                'qj': res.all_states.qj,
+                'qk': res.all_states.qk,
+                'phi': res.all_states.phi,
+                'theta': res.all_states.theta,
+                'psi': res.all_states.psi}
 
 
 class Tests(unittest.TestCase):
@@ -65,8 +81,8 @@ class Tests(unittest.TestCase):
                  'p': 0,
                  'q': 0,
                  'r': 0,
-                 'qr': 0,
-                 'qi': 0,
-                 'qj': 0,
-                 'qk': 0}
-        self.cosim.step(state, 3)
+                 'phi': 0.5*math.pi,
+                 'theta': 0,
+                 'psi': 0}
+        res = self.cosim.step(state, 3)
+        print(res)

@@ -19,7 +19,8 @@
 class CosimulationServiceImpl final : public Cosimulation::Service {
     public:
         explicit CosimulationServiceImpl(const TR1(shared_ptr)<SimServer>& simserver);
-        grpc::Status step(grpc::ServerContext* context, const CosimulationRequest* request, CosimulationResponse* response) override;
+        grpc::Status step_quaternion(grpc::ServerContext* context, const CosimulationRequestQuaternion* request, CosimulationResponse* response) override;
+        grpc::Status step_euler_321(grpc::ServerContext* context, const CosimulationRequestEuler* request, CosimulationResponse* response) override;
 
     private:
         TR1(shared_ptr)<SimServer> simserver;
