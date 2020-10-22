@@ -71,9 +71,9 @@ class Tests(unittest.TestCase):
     """All unit tests."""
 
     cosim = Cosim()
+    res = {}
 
-    def test_can_run_a_single_cosimulation(self):
-        """Make sure we can at least instantiate the gRPC cosimulation."""
+    def setUp(self):
         state = {'t': 2,
                  'x': 0,
                  'y': 0,
@@ -87,22 +87,25 @@ class Tests(unittest.TestCase):
                  'phi': 0,  # .5*math.pi,
                  'theta': 0,
                  'psi': 0}
-        res = self.cosim.step(state, 3)
+        self.res = self.cosim.step(state, 3)
+
+    def test_can_run_a_single_cosimulation(self):
+        """Make sure the cosimulation results are correct."""
         expected_z = [0.0, 0.049049963199999999999, 0.19619999999999999, 0.44144999999999995, 0.7847999999999998, 1.2262499999999998, 1.7658, 2.40345, 3.1391999999999998, 3.9730499999999997, 4.904999999999999, 5.9350499999999995, 7.063199999999999, 8.289449999999999, 9.613799999999998, 11.036249999999997,
                       12.556799999999997, 14.175449999999998, 15.892199999999994, 17.707049999999988, 19.619999999999983, 21.63104999999998, 23.740199999999977, 25.947449999999975, 28.25279999999997, 30.656249999999964, 33.15779999999996, 35.75744999999995, 38.455199999999934, 41.251049999999935, 44.14499999999993]
-        for z1, z2 in zip(res['z'], expected_z):
+        for z1, z2 in zip(self.res['z'], expected_z):
             assert abs(z1 - z2) < EPS
-        for x in res['x']:
+        for x in self.res['x']:
             assert abs(x) < EPS
-        for y in res['y']:
+        for y in self.res['y']:
             assert abs(y) < EPS
-        for u in res['u']:
+        for u in self.res['u']:
             assert abs(u) < EPS
-        for v in res['v']:
+        for v in self.res['v']:
             assert abs(v) < EPS
-        for p in res['p']:
+        for p in self.res['p']:
             assert abs(p) < EPS
-        for q in res['q']:
+        for q in self.res['q']:
             assert abs(q) < EPS
-        for r in res['r']:
+        for r in self.res['r']:
             assert abs(r) < EPS
