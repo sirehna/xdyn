@@ -236,16 +236,13 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
     }
 }
 
-void Sim::set_bodystates(const std::vector<State>& states)
+void Sim::set_bodystates(const State& states_history)
 {
-    if(states.size()!=1 or pimpl->bodies.size()!=1)
+    pimpl->bodies.at(0)->set_states_history(states_history);
+    if (not(states_history.x.is_empty()))
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "'states' size must be 1");
-    }
-    pimpl->bodies.at(0)->set_states_history(states.at(0));
-    if (not(states.at(0).x.is_empty()))
-    {
-        state = states.at(0).get_StateType(states.at(0).x.size()-1);
+        // Initialize current body state with last state in history
+        state = states_history.get_StateType(states_history.x.size()-1);
     }
 }
 

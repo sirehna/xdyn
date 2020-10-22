@@ -56,7 +56,7 @@ class Sim
 
         void output(const StateType& x, Observer& obs, double t) const;
 
-        void set_bodystates(const std::vector<State>& states);
+        void set_bodystates(const State& state_history);
 
         std::map<std::string,std::vector<ForcePtr> > get_forces() const;
         std::vector<BodyPtr> get_bodies() const;

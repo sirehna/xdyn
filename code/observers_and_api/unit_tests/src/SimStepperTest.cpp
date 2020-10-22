@@ -157,16 +157,14 @@ TEST_F(SimStepperTest, sim_update)
 {
     ConfBuilder builder(test_data::falling_ball_example());
     Sim sim(builder.sim);
-    const std::vector<State>states1 = {State(AbstractStates<double>(4.0, 8.0 ,12.0 ,1.0 ,0.0 ,0.0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,0.0)};
-    const std::vector<State>states2 = {State(AbstractStates<double>(5.0, 200.0 ,300.0 ,1.0 ,0.0 ,0.0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,0.0)};
     const StateType x1 = {100.0, 200.0 ,300.0 ,1.0 ,0.0 ,0.0 ,0 ,0 ,0 ,1 ,0 ,0 ,0};
     const StateType x2 = {400.0, 500.0 ,600.0 ,1.0 ,0.0 ,0.0 ,0 ,0 ,0 ,1 ,0 ,0 ,0};
 
-    sim.set_bodystates(states1);
+    sim.set_bodystates(State(AbstractStates<double>(4.0, 8.0 ,12.0 ,1.0 ,0.0 ,0.0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,0.0));
     sim.get_bodies().front()->update_body_states(x1, 10.0);
-    sim.set_bodystates(states1);
+    sim.set_bodystates(State(AbstractStates<double>(4.0, 8.0 ,12.0 ,1.0 ,0.0 ,0.0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,0.0));
     sim.get_bodies().front()->update_body_states(x2, 10.0);
-    sim.set_bodystates(states2);
+    sim.set_bodystates(State(AbstractStates<double>(5.0, 200.0 ,300.0 ,1.0 ,0.0 ,0.0 ,0 ,0 ,0 ,1 ,0 ,0 ,0) ,0.0));
     ASSERT_EQ(sim.get_bodies().front()->get_states().x(), 5.0);
 }
 
