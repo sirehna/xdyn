@@ -1,10 +1,10 @@
 """Integration tests for gRPC cosimulation."""
 
+import math
 import logging
 import os
 import unittest
 import grpc
-import math
 from cosimulation_pb2 import CosimulationRequestEuler
 import cosimulation_pb2_grpc
 
