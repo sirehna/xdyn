@@ -70,7 +70,7 @@ class Tests(unittest.TestCase):
     cosim = Cosim()
 
     def test_can_run_a_single_cosimulation(self):
-        """Make sure we can at least instatiate the gRPC cosimulation."""
+        """Make sure we can at least instantiate the gRPC cosimulation."""
         state = {'t': 2,
                  'x': 0,
                  'y': 0,
