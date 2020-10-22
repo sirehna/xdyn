@@ -75,16 +75,16 @@ class Tests(unittest.TestCase):
 
     def setUp(self):
         state = {'t': 2,
-                 'x': 0,
-                 'y': 0,
-                 'z': 0,
-                 'u': 0,
-                 'v': 0,
-                 'w': 0,
+                 'x': 1,
+                 'y': 2,
+                 'z': 3,
+                 'u': 4,
+                 'v': 5,
+                 'w': 6,
                  'p': 0,
                  'q': 0,
                  'r': 0,
-                 'phi': 0,  # .5*math.pi,
+                 'phi': 0,
                  'theta': 0,
                  'psi': 0}
         self.res = self.cosim.step(state, 3)
@@ -93,22 +93,16 @@ class Tests(unittest.TestCase):
         """Make sure the cosimulation results are correct."""
         expected_z = [0.0, 0.049049963199999999999, 0.19619999999999999, 0.44144999999999995, 0.7847999999999998, 1.2262499999999998, 1.7658, 2.40345, 3.1391999999999998, 3.9730499999999997, 4.904999999999999, 5.9350499999999995, 7.063199999999999, 8.289449999999999, 9.613799999999998, 11.036249999999997,
                       12.556799999999997, 14.175449999999998, 15.892199999999994, 17.707049999999988, 19.619999999999983, 21.63104999999998, 23.740199999999977, 25.947449999999975, 28.25279999999997, 30.656249999999964, 33.15779999999996, 35.75744999999995, 38.455199999999934, 41.251049999999935, 44.14499999999993]
-        for z1, z2 in zip(self.res['z'], expected_z):
-            assert abs(z1 - z2) < EPS
-        for x in self.res['x']:
-            assert abs(x) < EPS
-        for y in self.res['y']:
-            assert abs(y) < EPS
-        for u in self.res['u']:
-            assert abs(u) < EPS
-        for v in self.res['v']:
-            assert abs(v) < EPS
-        for p in self.res['p']:
-            assert abs(p) < EPS
-        for q in self.res['q']:
-            assert abs(q) < EPS
-        for r in self.res['r']:
-            assert abs(r) < EPS
+        for i in range(len(self.res['t'])):
+            t = self.res['t'][i]
+            assert abs(self.res['z'][i] - expected_z[i] - 3-t*6) < EPS
+            assert abs(self.res['x'][i]-t*4-1) < EPS
+            assert abs(self.res['y'][i]-t*5-2) < EPS
+            assert abs(self.res['u'][i]-4) < EPS
+            assert abs(self.res['v'][i]-5) < EPS
+            assert abs(self.res['p'][i]) < EPS
+            assert abs(self.res['q'][i]) < EPS
+            assert abs(self.res['r'][i]) < EPS
 
     def test_check_time_vector(self):
         """Time vector should have the right size & hold correct values."""
