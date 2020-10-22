@@ -189,6 +189,7 @@ grpc::Status to_grpc(grpc::ServerContext* , const std::vector<YamlState>& res, C
         all_states->add_phi(s.phi);
         all_states->add_theta(s.theta);
         all_states->add_psi(s.psi);
+        all_states->add_t(s.t);
     }
 
     last_state->set_t(state.t);

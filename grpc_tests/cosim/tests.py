@@ -109,3 +109,11 @@ class Tests(unittest.TestCase):
             assert abs(q) < EPS
         for r in self.res['r']:
             assert abs(r) < EPS
+
+    def test_check_time_vector(self):
+        """Time vector should have the right size & hold correct values."""
+        t_ = 0
+        assert len(self.res['t']) == 31
+        for t in self.res['t']:
+            assert abs(t - t_) < EPS
+            t_ += 0.1
