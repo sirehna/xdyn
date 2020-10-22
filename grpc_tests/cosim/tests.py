@@ -117,3 +117,22 @@ class Tests(unittest.TestCase):
         for t in self.res['t']:
             assert abs(t - t_) < EPS
             t_ += 0.1
+
+    def test_states_length(self):
+        """States should all have the same size."""
+        assert len(self.res['t']) == len(self.res['x'])
+        assert len(self.res['t']) == len(self.res['y'])
+        assert len(self.res['t']) == len(self.res['z'])
+        assert len(self.res['t']) == len(self.res['u'])
+        assert len(self.res['t']) == len(self.res['v'])
+        assert len(self.res['t']) == len(self.res['w'])
+        assert len(self.res['t']) == len(self.res['p'])
+        assert len(self.res['t']) == len(self.res['q'])
+        assert len(self.res['t']) == len(self.res['r'])
+        assert len(self.res['t']) == len(self.res['q'])
+        assert len(self.res['t']) == len(self.res['q'])
+        assert len(self.res['t']) == len(self.res['q'])
+        assert len(self.res['t']) == len(self.res['q'])
+        assert len(self.res['t']) == len(self.res['phi'])
+        assert len(self.res['t']) == len(self.res['theta'])
+        assert len(self.res['t']) == len(self.res['psi'])
