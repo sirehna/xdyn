@@ -166,7 +166,7 @@ grpc::Status to_grpc(grpc::ServerContext* , const std::vector<YamlState>& res, C
 {
     if (res.empty())
     {
-        return grpc::Status(grpc::StatusCode::INTERNAL, "We got a zero-size res vector from SimServer::play_one_step. This should never happen and is a big in xdyn's gRPC implementation. Please contact xdyn's support team!");
+        return grpc::Status(grpc::StatusCode::INTERNAL, "We got a zero-size res vector from SimServer::play_one_step. This should never happen and is a bug in xdyn's gRPC implementation. Please contact xdyn's support team!");
     }
     const YamlState state = res.back();
     CosimulationState* last_state = new CosimulationState();
