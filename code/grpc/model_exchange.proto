@@ -2,16 +2,23 @@ syntax = "proto3";
 
 service ModelExchange
 {
-    rpc dx_dt(ModelExchangeRequest) returns (ModelExchangeResponse);
+    rpc dx_dt_quaternion(ModelExchangeRequestQuaternion) returns (ModelExchangeResponse);
+    rpc dx_dt_euler_321(ModelExchangeRequestEuler) returns (ModelExchangeResponse);
 }
 
-message ModelExchangeRequest
+message ModelExchangeRequestQuaternion
 {
-    States states = 1; // Ship states
+    ModelExchangeStatesQuaternion states = 1; // Ship states
     map<string, double> commands = 2; // Controlled forces commands
 }
 
-message States
+message ModelExchangeRequestEuler
+{
+    ModelExchangeStatesEuler states = 1; // Ship states
+    map<string, double> commands = 2; // Controlled forces commands
+}
+
+message ModelExchangeStatesQuaternion
 {
     repeated double t = 1; // Simulation time (in seconds).
     repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
@@ -29,23 +36,45 @@ message States
     repeated double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
 }
 
-message ModelExchangeResponse
+message ModelExchangeStatesEuler
 {
-    repeated double dx_dt = 2; // Derivative of the projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double dy_dt = 3; // Derivative of the projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double dz_dt = 4; // Derivative of the projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
-    repeated double du_dt = 5; // Derivative of the projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double dv_dt = 6; // Derivative of the projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double dw_dt = 7; // Derivative of the projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
-    repeated double dp_dt = 8; // Derivative of the projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double dq_dt = 9; // Derivative of the projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double dr_dt = 10; // Derivative of the projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
-    repeated double dqr_dt =11 ; // Derivative of the real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double dqi_dt = 12; // Derivative of the first imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double dqj_dt = 13; // Derivative of the second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double dqk_dt = 14; // Derivative of the third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
-    repeated double dphi_dt = 15; // Derivative of the first "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
-    repeated double dtheta_dt = 16; // Derivative of the second "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
-    repeated double dpsi_dt = 17; // Derivative of the third "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+    repeated double t = 1; // Simulation time (in seconds).
+    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double phi = 11; // First Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    repeated double theta = 12; // Second Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    repeated double psi = 13; // Third Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
 }
 
+message ModelExchangeResponse
+{
+    ModelExchangeStateDerivatives d_dt = 1; // State derivatives at t
+}
+
+message ModelExchangeStateDerivatives
+{
+    double t = 1; // Simulation time (in seconds): date to which all these state values correspond
+    double x = 2; // Derivative of the projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double y = 3; // Derivative of the projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z = 4; // Derivative of the projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double u = 5; // Derivative of the projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double v = 6; // Derivative of the projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double w = 7; // Derivative of the projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double p = 8; // Derivative of the projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double q = 9; // Derivative of the projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double r = 10; // Derivative of the projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double qr = 11 ; // Derivative of the real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qi = 12; // Derivative of the first imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qj = 13; // Derivative of the second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qk = 14; // Derivative of the third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double phi = 15; // Derivative of the first Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    double theta = 16; // Derivative of the second Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    double psi = 17; // Derivative of the third Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+}
