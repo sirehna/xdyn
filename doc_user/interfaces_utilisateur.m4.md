@@ -442,12 +442,12 @@ Le navigateur Chrome dispose d'une extension websocket [Simple Websocket
 Client](https://chrome.google.com/webstore/detail/simple-websocket-client/pfdhoblngboilpfeibdedpjgfnlcodoo?hl=en)
 qui permet de faire quelques tests de bon fonctionnement.
 
-### Utilisation avec Matlab
+### Utilisation avec MatLab
 
-On initie une connexion websocket via MATLAB en utilisant par exemple
-[MatlabWebSocket](https://github.com/jebej/MatlabWebSocket).
-Il faut également pouvoir encoder et décoder du JSON en MATLAB, par exemple en
-utilisant les fonctions MATLAB [jsondecode et
+On initie une connexion websocket via MatLab en utilisant par exemple
+[MatLabWebSocket](https://github.com/jebej/MatlabWebSocket).
+Il faut également pouvoir encoder et décoder du JSON en MatLab, par exemple en
+utilisant les fonctions MatLab [jsondecode et
 jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
 
 ### Description des entrées/sorties pour une utilisation en "Model Exchange" (x -> dx/dt)
