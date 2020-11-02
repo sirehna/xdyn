@@ -361,7 +361,7 @@ des états $`\frac{dX}{dt}`$.
 
 ### Protocole utilisé
 
-Les serveur "model exchange" et "co-simulation" peuvent être lancés soit en
+Les serveurs "model exchange" et "co-simulation" peuvent être lancés soit en
 mode "JSON + websocket" (par défaut), soit en mode "gRPC", en utilisant le
 paramètre `--grpc` sur la ligne de commande.
 
