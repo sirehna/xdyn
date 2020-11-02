@@ -106,3 +106,6 @@ class Tests(unittest.TestCase):
         assert abs(self.d_dt['qj']) < EPS
         assert abs(self.d_dt['qk']) < EPS
         assert abs(self.d_dt['z'] - self.initial_state['w']) < EPS
+        assert abs(self.d_dt['phi']) < EPS
+        assert abs(self.d_dt['theta']) < EPS
+        assert abs(self.d_dt['psi']) < EPS
