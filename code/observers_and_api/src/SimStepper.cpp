@@ -56,9 +56,8 @@ std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body)
 std::vector<YamlState> SimStepper::step(const SimServerInputs& infos, double Dt)
 {
     const double tstart = infos.t;
-    const std::vector<State>states = {infos.full_state_history};
     sim.reset_history();
-    sim.set_bodystates(states);
+    sim.set_bodystates(infos.full_state_history);
     sim.set_command_listener(infos.commands);
     std::vector<Res> results;
     if(solver == "euler")

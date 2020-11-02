@@ -21,6 +21,7 @@ struct XdynForMECommandLineArguments
     bool verbose;
     bool show_help;
     bool show_websocket_debug_information;
+    bool grpc;
 };
 
 

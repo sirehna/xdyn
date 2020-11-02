@@ -26,6 +26,17 @@ concatenated_doc.pmd: \
 	rm -f concatenated_doc.pmd
 	for f in $^ ; do (cat $$f; echo "")  >> concatenated_doc.pmd ; done
 
+m4 :=  docker run -t --rm \
+               -v $(shell pwd):/work \
+               -v $(shell pwd)/../code/grpc:/grpc \
+               -w /work \
+               -u $(shell id -u):$(shell id -g) \
+               --entrypoint /usr/bin/m4 \
+               sirehna/pandoc@sha256:cc4ec54f6e09cda3cc57c6a125764bc0bb12712511e3f0560a69de6f762761e7
+interfaces_utilisateur.md: interfaces_utilisateur.m4.md ../code/grpc/cosimulation.proto ../code/grpc/model_exchange.proto
+	$(m4) -I/grpc $< > $@
+
+
 xdyn-pweave := docker run -t \
                -v $(shell pwd):/work \
                -w /work \

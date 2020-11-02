@@ -47,6 +47,7 @@ po::options_description get_options_description(XdynForMECommandLineArguments& i
         ("websocket-debug,w",                                                            "Display *all* websocket-related information (connect/disconnect, payload, etc.): very chatty.")
         ("port,p",     po::value<short unsigned int>(&input_data.port),                  "port for the websocket server. Available values are 1024-65535 (2^16, but port 0 is reserved and unavailable and ports in range 1-1023 are privileged (application needs to be run as root to have access to those ports)")
         ("debug,d",                                                                      "Used by the application's support team to help error diagnosis. Allows us to pinpoint the exact location in code where the error occurred (do not catch exceptions), eg. for use in a debugger.")
+        ("grpc,g",                                                                       "Launch a gRPC server instead of the (default) JSON+websocket server.")
     ;
     return desc;
 }
@@ -59,6 +60,7 @@ int get_input_data(int argc, char **argv, XdynForMECommandLineArguments& input_d
     input_data.verbose = has.verbose;
     input_data.show_help = has.help;
     input_data.show_websocket_debug_information = has.show_websocket_debug_information;
+    input_data.grpc = has.grpc;
     if (has.help)
     {
         print_usage(std::cout, desc, argv[0], "This is a ship simulator (model exchange version)");

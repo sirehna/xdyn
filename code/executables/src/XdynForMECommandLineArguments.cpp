@@ -12,7 +12,8 @@ XdynForMECommandLineArguments::XdynForMECommandLineArguments() : yaml_filenames(
                          port(0),
                          verbose(false),
                          show_help(false),
-                         show_websocket_debug_information(false)
+                         show_websocket_debug_information(false),
+                         grpc(false)
 {
 }
 

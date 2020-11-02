@@ -12,6 +12,7 @@
 #include "display_command_line_arguments.hpp"
 #include "HistoryParser.hpp"
 #include "parse_XdynForMECommandLineArguments.hpp"
+#include "ModelExchangeServiceImpl.hpp"
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynForMECommandLineArguments.hpp"
 
@@ -102,8 +103,8 @@ struct SimulationMessage : public ssc::websocket::MessageHandler
         const bool verbose;
 };
 
-void start_server(const XdynForMECommandLineArguments& input_data);
-void start_server(const XdynForMECommandLineArguments& input_data)
+void start_ws_server(const XdynForMECommandLineArguments& input_data);
+void start_ws_server(const XdynForMECommandLineArguments& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
@@ -114,6 +115,25 @@ void start_server(const XdynForMECommandLineArguments& input_data)
     signal(SIGINT, inthand);
     while(!stop){}
     std::cout << std::endl << "Gracefully stopping the websocket server..." << std::endl;
+}
+
+void start_grpc_server(const XdynForMECommandLineArguments& input_data);
+void start_grpc_server(const XdynForMECommandLineArguments& input_data)
+{
+    std::stringstream ss;
+    ss << "0.0.0.0:" << input_data.port;
+    const std::string server_address = ss.str();
+    const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
+    const auto yaml = yaml_reader.get_contents();
+    XdynForME xdyn(yaml);
+    ModelExchangeServiceImpl service(xdyn);
+    grpc::ServerBuilder builder;
+    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+    builder.RegisterService(&service);
+    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+    std::cout << "gRPC server listening on " << server_address << std::endl;
+    server->Wait();
+    std::cout << std::endl << "Gracefully stopping the gRPC server..." << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -130,10 +150,15 @@ int main(int argc, char** argv)
     {
         return 0;
     }
-    const auto run = [input_data](){
+    const auto run_ws = [input_data](){
     {
-        start_server(input_data);
+        start_ws_server(input_data);
     }};
+    const std::function< void(void) > run_grpc = [input_data](){
+    {
+        start_grpc_server(input_data);
+    }};
+    const std::function< void(void) > run = input_data.grpc ? run_grpc : run_ws;
     if (input_data.catch_exceptions)
     {
         report_xdyn_exceptions_to_user(run, [](const std::string& s){std::cerr << s;});

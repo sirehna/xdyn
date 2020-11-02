@@ -18,6 +18,8 @@ class SimServer
                   const double dt);
 
         std::vector<YamlState> play_one_step(const std::string& raw_yaml);
+        std::vector<YamlState> play_one_step(const SimServerInputs& raw_yaml);
+        std::vector<YamlState> play_one_step(const YamlSimServerInputs& inputs);
 
     private :
         SimServer();

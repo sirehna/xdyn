@@ -1,0 +1,19 @@
+version: '3'
+services:
+  xdyn:
+    image: xdyn
+    working_dir: /data
+    entrypoint: xdyn-for-cs tutorial_01_falling_ball.yml --grpc --dt 0.1 -p 9002
+    volumes:
+    - .:/data
+    user: ${CURRENT_UID}
+    environment:
+    - no_proxy
+  test:
+    build: .
+    user: ${CURRENT_UID}
+    depends_on:
+    - xdyn
+    environment:
+    - no_proxy
+    - xdyn_server_url

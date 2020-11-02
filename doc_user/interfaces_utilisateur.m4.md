@@ -1,3 +1,4 @@
+changequote(`{{', `}}')
 
 # Ligne de commande
 
@@ -340,7 +341,7 @@ print('`' * 3)
 print('~' * 4)
 ```
 
-## Utilisation de xdyn en serveur websocket
+## Utilisation de xdyn en mode serveur
 
 ### Description
 
@@ -352,20 +353,38 @@ l'interroger par plusieurs clients.
 Il s'agit d'une utilisation en "model exchange" (au sens de la [spécification
 "Functional Mockup
 Interface"](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=2ahUKEwimvuWL6tDeAhUC1hoKHWiwALAQFjABegQIBBAC&url=https%3A%2F%2Fsvn.modelica.org%2Ffmi%2Fbranches%2Fpublic%2Fspecifications%2Fv2.0%2FFMI_for_ModelExchange_and_CoSimulation_v2.0.pdf&usg=AOvVaw2ePLxrLtnb42qW1aLIVoov)),
-par opposition à "xdyn for Co-simulation". La différence se situe dans
+par opposition à "xdyn for co-simulation". La différence se situe dans
 l'utilisation du solveur : dans le cas de la co-simulation, on utilise le
 solveur interne de xdyn (le serveur renvoie les états intégrés au pas suivant
 $`X(t+dt)`$). Dans le cas "model exchange", le serveur renvoie la dérivée
 des états $`\frac{dX}{dt}`$.
 
-### Justification technique
+### Protocole utilisé
 
-L'utilisation des websockets permet des temps de réponse plus courts (puisque
-c'est un protocole assez léger, comparé au HTTP par exemple). Dans
-l'implémentation actuelle, les messages envoyés sont en JSON, pour offrir un
-bon compromis entre la verbosité (moins que du XML mais plus qu'un format
-binaire) et une utilisation plus aisée qu'un format type [Protobuf](https://developers.google.com/protocol-buffers/) ou [Thrift](https://thrift.apache.org/),
-quitte à sacrifier un peu de performance (taille des messages, temps d'encodage/décodage).
+Les serveurs "model exchange" et "co-simulation" peuvent être lancés soit en
+mode "JSON + websocket" (par défaut), soit en mode "gRPC", en utilisant le
+paramètre `--grpc` sur la ligne de commande.
+
+- L'utilisation des websockets permet des temps de réponse plus courts (puisque
+  c'est un protocole assez léger, comparé au HTTP par exemple). Les messages
+  envoyés sont en JSON, pour offrir un bon compromis entre la verbosité (moins
+  que du XML mais plus qu'un format binaire) et une utilisation plus aisée
+  qu'un format binaire, quitte à sacrifier un peu de performance. La façon
+  choisie de sérialiser les nombres en chaînes de caractère nous assure d'une
+  part que deux nombres flottants différents donneront deux chaînes de
+  caractères différentes et d'autre part que lorsque l'on relit une telle
+  réprésentation textuelle, le nombre flottant ainsi obtenu ne peut être
+  confondu avec aucun autre nombre flottant.
+- Le format [gRPC](https://grpc.io/) est un format binaire performant pour
+  l'appel distant de procédures, ce qui permet d'appeler xdyn depuis une
+  [grande variété de langages](https://grpc.io/docs/languages/) et de plateformes.
+  Le gRPC utilise le protocole HTTP/2, et non les websockets. Les websockets
+  [utilisent un masque](https://tools.ietf.org/html/rfc6455#section-10.3) qui
+  leur imposent de parcourir les messages entièrement pour masquer le contenu,
+  et le client doit faire l'opération inverse, ce qui prend du temps : le gRPC
+  n'a pas ce problème. Le gRPC utilise le format [protocol
+  buffers](https://developers.google.com/protocol-buffers) pour encoder les
+  messages ce qui est plus efficace et clarifie les interfaces.
 
 ### Lancement du serveur "Model Exchange"
 
@@ -379,6 +398,12 @@ navire. Concrètement, on lance le serveur comme suit :
 ~~~~
 
 où `--port` sert à définir le port sur lequel écoute le serveur websocket.
+
+Pour lancer ce serveur en mode gRPC, on remplace la ligne précédente par :
+
+~~~~{.bash}
+./xdyn-for-me --grpc --port 9002 tutorial_01_falling_ball.yml
+~~~~
 
 La liste complète des options avec leur description est obtenue en lançant
 l'exécutable avec le flag `-h`.
@@ -402,6 +427,12 @@ où `--port` sert à définir le port sur lequel écoute le serveur websocket.
 La liste complète des options avec leur description est obtenue en lançant
 l'exécutable avec le flag `-h`.
 
+Pour lancer ce serveur en mode gRPC, on remplace la ligne précédente par :
+
+~~~~{.bash}
+./xdyn-for-cs --grpc --port 9002 tutorial_01_falling_ball.yml --dt 0.1
+~~~~
+
 Ensuite, on peut se connecter à l'adresse du serveur pour l'interroger.
 
 
@@ -411,12 +442,12 @@ Le navigateur Chrome dispose d'une extension websocket [Simple Websocket
 Client](https://chrome.google.com/webstore/detail/simple-websocket-client/pfdhoblngboilpfeibdedpjgfnlcodoo?hl=en)
 qui permet de faire quelques tests de bon fonctionnement.
 
-### Utilisation avec Matlab
+### Utilisation avec MatLab
 
-On initie une connexion websocket via MATLAB en utilisant par exemple
-[MatlabWebSocket](https://github.com/jebej/MatlabWebSocket).
-Il faut également pouvoir encoder et décoder du JSON en MATLAB, par exemple en
-utilisant les fonctions MATLAB [jsondecode et
+On initie une connexion websocket via MatLab en utilisant par exemple
+[MatLabWebSocket](https://github.com/jebej/MatlabWebSocket).
+Il faut également pouvoir encoder et décoder du JSON en MatLab, par exemple en
+utilisant les fonctions MatLab [jsondecode et
 jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
 
 ### Description des entrées/sorties pour une utilisation en "Model Exchange" (x -> dx/dt)
@@ -424,6 +455,8 @@ jsonencode](https://fr.mathworks.com/help/matlab/json-format.html).
 Dans ce mode, xdyn calcule uniquement la dérivée des 13 états navire mais
 n'effectue pas l'intégration numérique, ce qui permet d'utiliser un solveur
 externe, par exemple Matlab ou Simulink.
+
+#### Interface JSON
 
 | Entrées    | Type                                                             | Détail                                                                                                                                                                                                                                                                  |
 | ---------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -541,6 +574,12 @@ initiale. En d'autres termes, la fonction flottant -> texte est injective. Cela
 n'implique pas qu'elle soit bijective, puisque si l'on part d'une
 représentation textuelle, que l'on convertit en binaire pour reconvertir ensuite en
 texte on ne retrouvera pas nécessairement le texte initial.
+
+L'interface gRPC est décrite par le [fichier proto](https://developers.google.com/protocol-buffers/docs/proto3) suivant :
+
+~~~~{.protobuf}
+include({{model_exchange.proto}})
+~~~~
 
 ### Description des entrées/sorties pour une utilisation en "Co-Simulation" (x(t) -> [x(t), ...,x(t+Dt)])
 
@@ -702,3 +741,8 @@ pas qu'elle soit bijective, puisque si l'on part d'une représentation
 textuelle, que l'on convertit en binaire pour reconvertir ensuite en texte on
 ne retrouvera pas nécessairement le texte initial.
 
+L'interface gRPC est décrite par le [fichier proto](https://developers.google.com/protocol-buffers/docs/proto3) suivant :
+
+~~~~{.protobuf}
+include({{cosimulation.proto}})
+~~~~

@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+service Cosimulation
+{
+    rpc step_quaternion(CosimulationRequestQuaternion) returns (CosimulationResponse);
+    rpc step_euler_321(CosimulationRequestEuler) returns (CosimulationResponse);
+}
+
+message CosimulationRequestQuaternion
+{
+    float Dt = 1; // Strictly positive float: simulation duration (in seconds). The solver will integrate the ship states from t0 to t0 + Dt, where t0 is the last date in the t list in the states structure, and return the states at t0 + Dt. The simulation will run with a stop size of dt, dt being specified from the command line. t0 is therefore present both in the request and the response, with the same associated values.
+    CosimulationStatesQuaternion states = 2; // State history
+    map<string,float> commands = 3; // Commands at t0 (for controlled forces)
+}
+
+message CosimulationRequestEuler
+{
+    float Dt = 1; // Strictly positive float: simulation duration (in seconds). The solver will integrate the ship states from t0 to t0 + Dt, where t0 is the last date in the t list in the states structure, and return the states at t0 + Dt. The simulation will run with a stop size of dt, dt being specified from the command line. t0 is therefore present both in the request and the response, with the same associated values.
+    CosimulationStatesEuler states = 2; // State history
+    map<string,float> commands = 3; // Commands at t0 (for controlled forces)
+}
+
+message CosimulationStatesQuaternion
+{
+    repeated double t = 1; // Simulation time (in seconds). If the models used do not need state history, this list can contain just one element. The last value in the list is always interpreted as the beginning of the next integration step (see above). All lists in this structure should have the same size.
+    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame.
+    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double qr =11 ; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+}
+
+message CosimulationStatesEuler
+{
+    repeated double t = 1; // Simulation time (in seconds). If the models used do not need state history, this list can contain just one element. The last value in the list is always interpreted as the beginning of the next integration step (see above). All lists in this structure should have the same size.
+    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame.
+    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double phi = 11; // First Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    repeated double theta = 12; // Second Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    repeated double psi = 13; // Third Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+}
+
+message CosimulationState
+{
+    double t = 1; // Simulation time (in seconds). If the models used do not need state history, this list can contain just one element. The last value in the list is always interpreted as the beginning of the next integration step (see above). All lists in this structure should have the same size.
+    double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame.
+    double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double qr =11 ; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double phi = 15; // First "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+    double theta = 16; // First "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+    double psi = 17; // First "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+}
+
+message CosimulationStates
+{
+    repeated double t = 1; // Simulation time (in seconds). If the models used do not need state history, this list can contain just one element. The last value in the list is always interpreted as the beginning of the next integration step (see above). All lists in this structure should have the same size.
+    repeated double x = 2; // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame.
+    repeated double y = 3; // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double z = 4; // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    repeated double u = 5; // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double v = 6; // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double w = 7; // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    repeated double p = 8; // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double q = 9; // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double r = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    repeated double qr =11 ; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    repeated double phi = 15; // First "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+    repeated double theta = 16; // First "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+    repeated double psi = 17; // First "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
+}
+
+message CosimulationResponse
+{
+    CosimulationStates all_states = 1; // All intermediate simulation states (at the minor timestep dt, not Dt), including the last one.
+    CosimulationState last_state = 2; // Just the last state
+}
+

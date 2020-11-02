@@ -21,8 +21,7 @@ double XdynForME::get_Tmax() const
 StateType XdynForME::calculate_dx_dt(const SimServerInputs& server_inputs)
 {
     const double t = server_inputs.t;
-    const std::vector<State>states(1, server_inputs.state_history_except_last_point);
-    builder.sim.set_bodystates(states);
+    builder.sim.set_bodystates(server_inputs.state_history_except_last_point);
     builder.sim.set_command_listener(server_inputs.commands);
 
     StateType dx_dt(13, 0);
