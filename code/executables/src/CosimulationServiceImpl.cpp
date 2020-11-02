@@ -169,6 +169,10 @@ grpc::Status to_grpc(grpc::ServerContext* , const std::vector<YamlState>& res, C
         return grpc::Status(grpc::StatusCode::INTERNAL, "We got a zero-size res vector from SimServer::play_one_step. This should never happen and is a bug in xdyn's gRPC implementation. Please contact xdyn's support team!");
     }
     const YamlState state = res.back();
+    // No memory leaks here because we will call set_allocated_* which will take
+    // ownership of these pointers.
+    // Cf. https://developers.google.com/protocol-buffers/docs/reference/cpp-generated
+    // See discussion here: https://gitlab.sirehna.com/sirehna/xdyn/-/merge_requests/83#note_41051
     CosimulationState* last_state = new CosimulationState();
     CosimulationStates* all_states = new CosimulationStates();
     for (const auto s:res)
