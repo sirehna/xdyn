@@ -560,7 +560,7 @@ TEST_F(SimTest, LONG_can_simulate_radiation_damping)
     command_listener.set<double>("propeller(beta)", 0.8);
     command_listener.check_out();
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_radiation_damping(), test_data::cube(), 0, T, dt, command_listener);
-    ASSERT_NEAR(0.65842512818042176, res.at(5).x[XIDX(0)], 1E-3);
+    ASSERT_NEAR(0.64349959510185351, res.at(5).x[XIDX(0)], 1E-3);
 }
 
 TEST_F(SimTest, bug_2963_should_not_be_able_to_use_fast_hydrostatic_without_specifying_wave_model)
