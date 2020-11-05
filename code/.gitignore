@@ -7,3 +7,4 @@ RemoteSystemsTempFiles
 debug
 profile
 release
+yaml-cpp

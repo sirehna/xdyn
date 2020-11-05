@@ -4,6 +4,7 @@ build*64
 build_debian
 build_deb8
 build_deb9
+build_deb10*
 build_windows
 build_win_posix
 code/build_*
