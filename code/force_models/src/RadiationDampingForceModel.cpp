@@ -136,7 +136,7 @@ class RadiationDampingForceModel::Impl
             double K_X_dot = 0;
             for (size_t k = 0 ; k < 6 ; ++k)
             {
-            	const History his = get_velocity_history_from_index(k, states);
+                const History his = get_velocity_history_from_index(k, states);
                 if (his.get_duration() >= Tmin)
                 {
                     // Integrate up to Tmax if possible, but never exceed the history length
@@ -149,16 +149,16 @@ class RadiationDampingForceModel::Impl
 
         History get_velocity_history_from_index(const size_t i, const BodyStates& states) const
         {
-        	switch(i)
-        	{
-        		case 0: return states.u;
-        		case 1: return states.v;
-        		case 2: return states.w;
-        		case 3: return states.p;
-        		case 4: return states.q;
-        		case 5: return states.r;
-        		default: return History();
-        	}
+            switch(i)
+            {
+                case 0: return states.u;
+                case 1: return states.v;
+                case 2: return states.w;
+                case 3: return states.p;
+                case 4: return states.q;
+                case 5: return states.r;
+                default: return History();
+            }
         }
 
         ssc::kinematics::Wrench get_wrench(const BodyStates& states)
