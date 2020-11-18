@@ -1,7 +1,7 @@
 os: linux
 dist: trusty
 
-language: c++
+language: cpp
 
 git:
   submodules: true
