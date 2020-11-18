@@ -123,9 +123,9 @@ deploy:
     branch: master
 - provider: pages
   cleanup: false
-  local-dir: public
-  github-token: $GITHUB_TOKEN
-  keep-history: false
+  local_dir: public
+  token: $GITHUB_TOKEN
+  keep_history: false
   on:
     tags: true
     repo: sirehna/xdyn
