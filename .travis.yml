@@ -45,7 +45,7 @@ script:
   - if [ "$TARGET" == "debian_10_release_gcc_8" ];
     then
     echo "Create xdyn docker container";
-    cp build_deb9/xdyn.deb .;
+    cp build_deb10/xdyn.deb .;
     docker build --tag xdyn .;
     fi
   - if [ "$TARGET" == "debian_10_release_gcc_8" ];
