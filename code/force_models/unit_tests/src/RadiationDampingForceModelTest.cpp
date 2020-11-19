@@ -169,3 +169,79 @@ TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
     const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_DOUBLE_EQ(input.yaml.tau_max, F.get_Tmax());
 }
+
+
+TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
+{
+    RadiationDampingForceModel::Input input;
+    const bool only_diagonal_terms = true;
+    input.hdb = get_hdb_data(not(only_diagonal_terms));
+    input.yaml = get_yaml_data(false);
+    input.yaml.type_of_quadrature_for_convolution = TypeOfQuadrature::RECTANGLE;
+    const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
+    BodyStates states(100);
+    const double tmin = 0.20943950000000000067;
+    const double tmax = 10;
+    const double eps = 1E-6;
+    const double t0 = 5.1047197500000001114;
+
+    states.u.record(0, 0);
+    states.v.record(0, 0);
+    states.w.record(0, 0);
+    states.p.record(0, 0);
+    states.q.record(0, 0);
+    states.r.record(0, 0);
+
+    states.u.record(tmax-t0-eps, 0);
+    states.v.record(tmax-t0-eps, 0);
+    states.w.record(tmax-t0-eps, 0);
+    states.p.record(tmax-t0-eps, 0);
+    states.q.record(tmax-t0-eps, 0);
+    states.r.record(tmax-t0-eps, 0);
+
+    const double u0 = 1;
+    const double v0 = 2;
+    const double w0 = 3;
+    const double p0 = 4;
+    const double q0 = 5;
+    const double r0 = 6;
+
+    states.u.record(tmax-t0-eps/2, u0);
+    states.v.record(tmax-t0-eps/2, v0);
+    states.w.record(tmax-t0-eps/2, w0);
+    states.p.record(tmax-t0-eps/2, p0);
+    states.q.record(tmax-t0-eps/2, q0);
+    states.r.record(tmax-t0-eps/2, r0);
+    states.u.record(tmax-t0+eps/2, u0);
+    states.v.record(tmax-t0+eps/2, v0);
+    states.w.record(tmax-t0+eps/2, w0);
+    states.p.record(tmax-t0+eps/2, p0);
+    states.q.record(tmax-t0+eps/2, q0);
+    states.r.record(tmax-t0+eps/2, r0);
+
+    states.u.record(tmax-t0+eps, 0);
+    states.v.record(tmax-t0+eps, 0);
+    states.w.record(tmax-t0+eps, 0);
+    states.p.record(tmax-t0+eps, 0);
+    states.q.record(tmax-t0+eps, 0);
+    states.r.record(tmax-t0+eps, 0);
+
+    states.u.record(tmax, 0);
+    states.v.record(tmax, 0);
+    states.w.record(tmax, 0);
+    states.p.record(tmax, 0);
+    states.q.record(tmax, 0);
+    states.r.record(tmax, 0);
+    auto Frad = F(states,0);
+    const double k = -0.50135576185179109299;
+    ASSERT_NEAR(test_data::analytical_K(5.1047197500000001114), k, EPS);
+    const double conv = -(tmax-tmin )/100*k;
+
+
+    ASSERT_NEAR(conv * (11*u0 + 12*v0 + 13*w0 + 14*p0 + 15*q0 + 16*r0), Frad.X(), EPS);
+    ASSERT_NEAR(conv * (21*u0 + 22*v0 + 23*w0 + 24*p0 + 25*q0 + 26*r0), Frad.Y(), EPS);
+    ASSERT_NEAR(conv * (31*u0 + 32*v0 + 33*w0 + 34*p0 + 35*q0 + 36*r0), Frad.Z(), EPS);
+    ASSERT_NEAR(conv * (41*u0 + 42*v0 + 43*w0 + 44*p0 + 45*q0 + 46*r0), Frad.K(), 10*EPS);
+    ASSERT_NEAR(conv * (51*u0 + 52*v0 + 53*w0 + 54*p0 + 55*q0 + 56*r0), Frad.M(), 10*EPS);
+    ASSERT_NEAR(conv * (61*u0 + 62*v0 + 63*w0 + 64*p0 + 65*q0 + 66*r0), Frad.N(), 10*EPS);
+}
