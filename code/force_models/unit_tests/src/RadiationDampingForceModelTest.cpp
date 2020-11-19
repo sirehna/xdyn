@@ -38,7 +38,7 @@ void RadiationDampingForceModelTest::TearDown()
 {
 }
 
-TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data() const
+TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data(const bool only_diagonal_terms) const
 {
     std::vector<double> Br;
     const double omega_min = 0.01;
@@ -46,7 +46,7 @@ TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data() const
     const size_t N = 460;
     const auto omegas = RadiationDampingBuilder(TypeOfQuadrature::FILON,TypeOfQuadrature::GAUSS_KRONROD).build_exponential_intervals(omega_min, omega_max, N);
     for (auto omega:omegas) Br.push_back(test_data::analytical_Br(omega));
-    return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Br));
+    return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Br, only_diagonal_terms));
 }
 
 YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data(const bool show_debug) const
