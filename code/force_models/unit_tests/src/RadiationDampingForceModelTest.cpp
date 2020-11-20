@@ -80,6 +80,28 @@ TEST_F(RadiationDampingForceModelTest, parser)
     ASSERT_DOUBLE_EQ(1.418, r.calculation_point_in_body_frame.z);
 }
 
+void record(BodyStates& states, const double t, const double value);
+void record(BodyStates& states, const double t, const double value)
+{
+    states.u.record(t, value);
+    states.v.record(t, value);
+    states.w.record(t, value);
+    states.p.record(t, value);
+    states.q.record(t, value);
+    states.r.record(t, value);
+}
+
+void record(BodyStates& states, const double t, const double u, const double v, const double w, const double p, const double q, const double r);
+void record(BodyStates& states, const double t, const double u, const double v, const double w, const double p, const double q, const double r)
+{
+    states.u.record(t, u);
+    states.v.record(t, v);
+    states.w.record(t, w);
+    states.p.record(t, p);
+    states.q.record(t, q);
+    states.r.record(t, r);
+}
+
 TEST_F(RadiationDampingForceModelTest, example)
 {
 //! [RadiationDampingForceModelTest example]
@@ -94,12 +116,7 @@ TEST_F(RadiationDampingForceModelTest, example)
     states.name = body_name;
 //! [RadiationDampingForceModelTest example]
 //! [RadiationDampingForceModelTest expected output]
-    states.u.record(0, 1);
-    states.v.record(0, 1);
-    states.w.record(0, 1);
-    states.p.record(0, 1);
-    states.q.record(0, 1);
-    states.r.record(0, 1);
+    record(states, 0, 1);
     auto Frad = F(states,0);
     ASSERT_EQ(0, Frad.X());
     ASSERT_EQ(0, Frad.Y());
@@ -108,12 +125,7 @@ TEST_F(RadiationDampingForceModelTest, example)
     ASSERT_EQ(0, Frad.M());
     ASSERT_EQ(0, Frad.N());
     ASSERT_EQ(body_name, F(states, 0).get_frame());
-    states.u.record(100, 1);
-    states.v.record(100, 1);
-    states.w.record(100, 1);
-    states.p.record(100, 1);
-    states.q.record(100, 1);
-    states.r.record(100, 1);
+    record(states, 100, 1);
     Frad = F(states,100);
 
     const double Fexpected = -ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);
@@ -185,19 +197,8 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     const double eps = 1E-6;
     const double t0 = 5.1047197500000001114;
 
-    states.u.record(0, 0);
-    states.v.record(0, 0);
-    states.w.record(0, 0);
-    states.p.record(0, 0);
-    states.q.record(0, 0);
-    states.r.record(0, 0);
-
-    states.u.record(tmax-t0-eps, 0);
-    states.v.record(tmax-t0-eps, 0);
-    states.w.record(tmax-t0-eps, 0);
-    states.p.record(tmax-t0-eps, 0);
-    states.q.record(tmax-t0-eps, 0);
-    states.r.record(tmax-t0-eps, 0);
+    record(states, 0, 0);
+    record(states, tmax-t0-eps, 0);
 
     const double u0 = 1;
     const double v0 = 2;
@@ -206,32 +207,11 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     const double q0 = 5;
     const double r0 = 6;
 
-    states.u.record(tmax-t0-eps/2, u0);
-    states.v.record(tmax-t0-eps/2, v0);
-    states.w.record(tmax-t0-eps/2, w0);
-    states.p.record(tmax-t0-eps/2, p0);
-    states.q.record(tmax-t0-eps/2, q0);
-    states.r.record(tmax-t0-eps/2, r0);
-    states.u.record(tmax-t0+eps/2, u0);
-    states.v.record(tmax-t0+eps/2, v0);
-    states.w.record(tmax-t0+eps/2, w0);
-    states.p.record(tmax-t0+eps/2, p0);
-    states.q.record(tmax-t0+eps/2, q0);
-    states.r.record(tmax-t0+eps/2, r0);
+    record(states, tmax-t0-eps/2, u0, v0, w0, p0, q0, r0);
+    record(states, tmax-t0+eps/2, u0, v0, w0, p0, q0, r0);
+    record(states, tmax-t0+eps, 0);
+    record(states, tmax, 0);
 
-    states.u.record(tmax-t0+eps, 0);
-    states.v.record(tmax-t0+eps, 0);
-    states.w.record(tmax-t0+eps, 0);
-    states.p.record(tmax-t0+eps, 0);
-    states.q.record(tmax-t0+eps, 0);
-    states.r.record(tmax-t0+eps, 0);
-
-    states.u.record(tmax, 0);
-    states.v.record(tmax, 0);
-    states.w.record(tmax, 0);
-    states.p.record(tmax, 0);
-    states.q.record(tmax, 0);
-    states.r.record(tmax, 0);
     const auto Frad = F(states,0);
     // This is the result of the discrete Fourier transform: it does not
     // exactly match the value given by the (analytical) continuous Fourier
@@ -239,7 +219,6 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     const double k = -0.50135576185179109299;
     ASSERT_NEAR(test_data::analytical_K(t0), k, 3E-3);
     const double conv = -(tmax-tmin )/100*k;
-
 
     ASSERT_NEAR(conv * (11*u0 + 12*v0 + 13*w0 + 14*p0 + 15*q0 + 16*r0), Frad.X(), EPS);
     ASSERT_NEAR(conv * (21*u0 + 22*v0 + 23*w0 + 24*p0 + 25*q0 + 26*r0), Frad.Y(), EPS);
