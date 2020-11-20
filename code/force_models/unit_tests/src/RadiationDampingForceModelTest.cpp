@@ -38,7 +38,7 @@ void RadiationDampingForceModelTest::TearDown()
 {
 }
 
-TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data() const
+TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data(const bool only_diagonal_terms) const
 {
     std::vector<double> Br;
     const double omega_min = 0.01;
@@ -46,7 +46,7 @@ TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data() const
     const size_t N = 460;
     const auto omegas = RadiationDampingBuilder(TypeOfQuadrature::FILON,TypeOfQuadrature::GAUSS_KRONROD).build_exponential_intervals(omega_min, omega_max, N);
     for (auto omega:omegas) Br.push_back(test_data::analytical_Br(omega));
-    return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Br));
+    return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Br, only_diagonal_terms));
 }
 
 YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data(const bool show_debug) const
@@ -80,6 +80,28 @@ TEST_F(RadiationDampingForceModelTest, parser)
     ASSERT_DOUBLE_EQ(1.418, r.calculation_point_in_body_frame.z);
 }
 
+void record(BodyStates& states, const double t, const double value);
+void record(BodyStates& states, const double t, const double value)
+{
+    states.u.record(t, value);
+    states.v.record(t, value);
+    states.w.record(t, value);
+    states.p.record(t, value);
+    states.q.record(t, value);
+    states.r.record(t, value);
+}
+
+void record(BodyStates& states, const double t, const double u, const double v, const double w, const double p, const double q, const double r);
+void record(BodyStates& states, const double t, const double u, const double v, const double w, const double p, const double q, const double r)
+{
+    states.u.record(t, u);
+    states.v.record(t, v);
+    states.w.record(t, w);
+    states.p.record(t, p);
+    states.q.record(t, q);
+    states.r.record(t, r);
+}
+
 TEST_F(RadiationDampingForceModelTest, example)
 {
 //! [RadiationDampingForceModelTest example]
@@ -94,12 +116,7 @@ TEST_F(RadiationDampingForceModelTest, example)
     states.name = body_name;
 //! [RadiationDampingForceModelTest example]
 //! [RadiationDampingForceModelTest expected output]
-    states.u.record(0, 1);
-    states.v.record(0, 1);
-    states.w.record(0, 1);
-    states.p.record(0, 1);
-    states.q.record(0, 1);
-    states.r.record(0, 1);
+    record(states, 0, 1);
     auto Frad = F(states,0);
     ASSERT_EQ(0, Frad.X());
     ASSERT_EQ(0, Frad.Y());
@@ -108,12 +125,7 @@ TEST_F(RadiationDampingForceModelTest, example)
     ASSERT_EQ(0, Frad.M());
     ASSERT_EQ(0, Frad.N());
     ASSERT_EQ(body_name, F(states, 0).get_frame());
-    states.u.record(100, 1);
-    states.v.record(100, 1);
-    states.w.record(100, 1);
-    states.p.record(100, 1);
-    states.q.record(100, 1);
-    states.r.record(100, 1);
+    record(states, 100, 1);
     Frad = F(states,100);
 
     const double Fexpected = -ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);
@@ -168,4 +180,50 @@ TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
     input.yaml = get_yaml_data(false);
     const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_DOUBLE_EQ(input.yaml.tau_max, F.get_Tmax());
+}
+
+
+TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
+{
+    RadiationDampingForceModel::Input input;
+    const bool only_diagonal_terms = true;
+    input.hdb = get_hdb_data(not(only_diagonal_terms));
+    input.yaml = get_yaml_data(false);
+    input.yaml.type_of_quadrature_for_convolution = TypeOfQuadrature::RECTANGLE;
+    const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
+    BodyStates states(100);
+    const double tmin = 0.20943950000000000067;
+    const double tmax = 10;
+    const double eps = 1E-6;
+    const double t0 = 5.1047197500000001114;
+
+    record(states, 0, 0);
+    record(states, tmax-t0-eps, 0);
+
+    const double u0 = 1;
+    const double v0 = 2;
+    const double w0 = 3;
+    const double p0 = 4;
+    const double q0 = 5;
+    const double r0 = 6;
+
+    record(states, tmax-t0-eps/2, u0, v0, w0, p0, q0, r0);
+    record(states, tmax-t0+eps/2, u0, v0, w0, p0, q0, r0);
+    record(states, tmax-t0+eps, 0);
+    record(states, tmax, 0);
+
+    const auto Frad = F(states,0);
+    // This is the result of the discrete Fourier transform: it does not
+    // exactly match the value given by the (analytical) continuous Fourier
+    // transform.
+    const double k = -0.50135576185179109299;
+    ASSERT_NEAR(test_data::analytical_K(t0), k, 3E-3);
+    const double conv = -(tmax-tmin )/100*k;
+
+    ASSERT_NEAR(conv * (11*u0 + 12*v0 + 13*w0 + 14*p0 + 15*q0 + 16*r0), Frad.X(), EPS);
+    ASSERT_NEAR(conv * (21*u0 + 22*v0 + 23*w0 + 24*p0 + 25*q0 + 26*r0), Frad.Y(), EPS);
+    ASSERT_NEAR(conv * (31*u0 + 32*v0 + 33*w0 + 34*p0 + 35*q0 + 36*r0), Frad.Z(), EPS);
+    ASSERT_NEAR(conv * (41*u0 + 42*v0 + 43*w0 + 44*p0 + 45*q0 + 46*r0), Frad.K(), 10*EPS);
+    ASSERT_NEAR(conv * (51*u0 + 52*v0 + 53*w0 + 54*p0 + 55*q0 + 56*r0), Frad.M(), 10*EPS);
+    ASSERT_NEAR(conv * (61*u0 + 62*v0 + 63*w0 + 64*p0 + 65*q0 + 66*r0), Frad.N(), 10*EPS);
 }

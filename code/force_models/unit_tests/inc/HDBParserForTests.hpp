@@ -13,7 +13,7 @@
 class HDBParserForTests : public HDBParser
 {
     public:
-        HDBParserForTests(const std::vector<double>& omega, const std::vector<double>& Br);
+        HDBParserForTests(const std::vector<double>& omega, const std::vector<double>& Br, const bool only_diagonal_terms_=false);
         std::vector<double> get_radiation_damping_angular_frequencies() const;
         std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const;
 
@@ -21,6 +21,7 @@ class HDBParserForTests : public HDBParser
         HDBParserForTests();
         std::vector<double> omega;
         std::vector<double> Br;
+        bool only_diagonal_terms;
 };
 
 #endif /* HDBPARSERFORTESTS_HPP_ */
