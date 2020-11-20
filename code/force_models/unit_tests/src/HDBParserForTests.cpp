@@ -7,7 +7,9 @@
 
 #include "HDBParserForTests.hpp"
 
-HDBParserForTests::HDBParserForTests(const std::vector<double>& omega_, const std::vector<double>& Br_, const bool only_diagonal_terms_) : omega(omega_), Br(Br_), only_diagonal_terms(only_diagonal_terms_)
+HDBParserForTests::HDBParserForTests(const std::vector<double>& omega_, const std::vector<double>& Br_, const bool only_diagonal_terms_)
+: omega(omega_)
+, Br(Br_), only_diagonal_terms(only_diagonal_terms_)
 {
 }
 
