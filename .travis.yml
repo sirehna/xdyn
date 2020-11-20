@@ -1,3 +1,10 @@
+# This file contains description of the CI process with https://travis-ci.org
+#
+# We use a Linux Ubuntu Focal Fossa distribution to run docker.
+# We pull base image that contains our dependencies and mount
+# XDyn code in a volume to compile it.
+#
+# See this webpage to configure the jobs
 # https://docs.travis-ci.com/user/reference/focal
 os: linux
 dist: focal
