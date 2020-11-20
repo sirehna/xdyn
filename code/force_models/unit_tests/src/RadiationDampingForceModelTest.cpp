@@ -234,7 +234,7 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     states.r.record(tmax, 0);
     const auto Frad = F(states,0);
     const double k = -0.50135576185179109299;
-    ASSERT_NEAR(test_data::analytical_K(t0), k, EPS);
+    ASSERT_NEAR(test_data::analytical_K(t0), k, 3E-3);
     const double conv = -(tmax-tmin )/100*k;
 
 
