@@ -19,6 +19,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/SumOfWaveDirectionalSpreadings.cpp
         src/WaveDirectionalSpreading.cpp
         src/Stretching.cpp
+        src/WindModel.cpp
         )
 
 # Using C++ 2011
@@ -36,6 +37,7 @@ INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
 include_directories(${external_data_structures_INCLUDE_DIRS})
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 
 add_library (${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
