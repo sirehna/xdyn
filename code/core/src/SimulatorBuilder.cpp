@@ -23,6 +23,7 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const doubl
                                         wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
                                         directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
                                         spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
+										wind_model_parsers(),
                                         command_listener(command_listener_),
                                         t0(t0_)
 {
