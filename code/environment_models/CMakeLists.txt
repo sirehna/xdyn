@@ -20,6 +20,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/WaveDirectionalSpreading.cpp
         src/Stretching.cpp
         src/WindModel.cpp
+        src/DefaultWindModel.cpp
         )
 
 # Using C++ 2011
