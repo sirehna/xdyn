@@ -13,6 +13,7 @@ FILE(GLOB SRC src/JonswapSpectrumTest.cpp
               src/discretizeTest.cpp
               src/WaveSpectralDensityTest.cpp
               src/StretchingTest.cpp
+              src/DefaultWindModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
