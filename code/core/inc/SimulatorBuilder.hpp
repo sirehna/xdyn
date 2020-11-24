@@ -195,7 +195,7 @@ class SimulatorBuilder
     private:
         SimulatorBuilder(); // Disabled
         std::map<std::string, double> get_max_history_length(const std::vector<ListOfForces>& forces_for_all_bodies, const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies) const;
-        SurfaceElevationPtr get_wave() const;
+        void set_environment_models(EnvironmentAndFrames& env) const;
         ListOfForces forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
         ListOfControlledForces controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
         void add(const YamlModel& model, ListOfForces& L, const std::string& name, const EnvironmentAndFrames& env) const;

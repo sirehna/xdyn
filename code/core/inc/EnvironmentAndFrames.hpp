@@ -12,6 +12,7 @@
 #include "Body.hpp"
 #include "StateMacros.hpp"
 #include "SurfaceElevationInterface.hpp"
+#include "WindModel.hpp"
 #include <ssc/kinematics.hpp>
 
 class Observer;
@@ -21,6 +22,7 @@ struct EnvironmentAndFrames
     EnvironmentAndFrames();
     void feed(Observer& observer, double t, const std::vector<BodyPtr>& bodies, const StateType& state) const;
     SurfaceElevationPtr w;
+    WindModelPtr wind;
     ssc::kinematics::KinematicsPtr k;
     double rho;
     double nu;

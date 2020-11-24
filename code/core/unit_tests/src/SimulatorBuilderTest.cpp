@@ -12,6 +12,7 @@
 #include "generate_body_for_tests.hpp"
 #include <ssc/kinematics.hpp>
 #include "DefaultSurfaceElevation.hpp"
+#include "DefaultWindModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
 
@@ -61,6 +62,7 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
 TEST_F(SimulatorBuilderTest, can_get_rho_and_g)
 {
     builder.can_parse<DefaultSurfaceElevation>();
+    builder.can_parse<DefaultWindModel>();
     const auto env = builder.get_environment();
     ASSERT_DOUBLE_EQ(9.81,env.g);
     ASSERT_DOUBLE_EQ(1000,env.rho);
@@ -79,6 +81,7 @@ std::vector<BodyPtr> SimulatorBuilderTest::get_body_vector(const std::string& na
 TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
 {
     builder.can_parse<DefaultSurfaceElevation>();
+    builder.can_parse<DefaultWindModel>();
     const auto bodies = get_body_vector(a.random<std::string>());
 
     ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
@@ -93,6 +96,7 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_body_to_mesh_transform)
 TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 {
     builder.can_parse<DefaultSurfaceElevation>();
+    builder.can_parse<DefaultWindModel>();
     const auto bodies = get_body_vector(a.random<std::string>());
     ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics());
     builder.add_initial_transforms(bodies,k);
@@ -117,12 +121,14 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     input2.environment.push_back(model);
     SimulatorBuilder builder2(input2, 0);
     builder2.can_parse<DefaultSurfaceElevation>();
+    builder2.can_parse<DefaultWindModel>();
     ASSERT_THROW(builder2.get_environment(), InternalErrorException);
 }
 
 TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
 {
     builder.can_parse<DefaultSurfaceElevation>();
+    builder.can_parse<DefaultWindModel>();
     MeshMap m;
     const std::string name = input.bodies.front().name;
     m[name] = two_triangles();

@@ -35,6 +35,7 @@
 #include "LinearHydrostaticForceModel.hpp"
 #include "listeners.hpp"
 #include "ConstantForceModel.hpp"
+#include "DefaultWindModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener);
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener)
@@ -69,7 +70,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
            .can_parse<KtKqForceModel>()
            .can_parse<ConstantForceModel>()
            .can_parse<LinearHydrostaticForceModel>()
-           .can_parse<GRPCForceModel>();
+           .can_parse<GRPCForceModel>()
+		   .can_parse<DefaultWindModel>();
     return builder;
 }
 
