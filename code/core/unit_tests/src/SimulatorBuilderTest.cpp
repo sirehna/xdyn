@@ -109,6 +109,13 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 
 TEST_F(SimulatorBuilderTest, should_throw_if_no_wave_parser_defined)
 {
+	builder.can_parse<DefaultWindModel>();
+    ASSERT_THROW(builder.get_environment(), InternalErrorException);
+}
+
+TEST_F(SimulatorBuilderTest, should_throw_if_no_wind_parser_defined)
+{
+	builder.can_parse<DefaultSurfaceElevation>();
     ASSERT_THROW(builder.get_environment(), InternalErrorException);
 }
 
@@ -117,6 +124,19 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     YamlModel model;
     model.model = "no waves";
     model.yaml = "constant sea elevation in NED frame:\n   unit: m\n   value: 12";
+    auto input2 = input;
+    input2.environment.push_back(model);
+    SimulatorBuilder builder2(input2, 0);
+    builder2.can_parse<DefaultSurfaceElevation>();
+    builder2.can_parse<DefaultWindModel>();
+    ASSERT_THROW(builder2.get_environment(), InternalErrorException);
+}
+
+TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wind_model_twice)
+{
+    YamlModel model;
+    model.model = "no wind";
+    model.yaml = "";
     auto input2 = input;
     input2.environment.push_back(model);
     SimulatorBuilder builder2(input2, 0);
