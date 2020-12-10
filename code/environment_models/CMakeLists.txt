@@ -21,6 +21,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/Stretching.cpp
         src/WindModel.cpp
         src/DefaultWindModel.cpp
+        src/WindMeanVelocityProfile.cpp
         )
 
 # Using C++ 2011
@@ -36,6 +37,7 @@ INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
 include_directories(${external_data_structures_INCLUDE_DIRS})
+include_directories(${yaml_parser_INCLUDE_DIRS})
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
