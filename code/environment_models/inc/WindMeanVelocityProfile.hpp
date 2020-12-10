@@ -34,11 +34,13 @@ public:
 	virtual ~WindMeanVelocityProfile();
 
 	Eigen::Vector3d get_wind(const Eigen::Vector3d& position, const double t) const override;
-	virtual Eigen::Vector3d get_mean_wind(const double z) const=0;
+	virtual double get_wind_velocity(const double z) const=0;
 	static Input parse(const std::string& yaml_input);
 
 protected:
 	double velocity;
+
+private:
 	Eigen::Vector3d direction;
 };
 

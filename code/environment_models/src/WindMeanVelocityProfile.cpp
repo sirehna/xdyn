@@ -18,7 +18,7 @@ WindMeanVelocityProfile::~WindMeanVelocityProfile(){}
 
 Eigen::Vector3d WindMeanVelocityProfile::get_wind(const Eigen::Vector3d& position, const double) const
 {
-	return get_mean_wind(position(2));
+	return get_wind_velocity(position(2))*direction;
 }
 
 WindMeanVelocityProfile::Input WindMeanVelocityProfile::parse(const std::string& yaml_input)
