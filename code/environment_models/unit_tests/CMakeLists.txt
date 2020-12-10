@@ -14,6 +14,7 @@ FILE(GLOB SRC src/JonswapSpectrumTest.cpp
               src/WaveSpectralDensityTest.cpp
               src/StretchingTest.cpp
               src/DefaultWindModelTest.cpp
+              src/WindMeanVelocityProfileTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
