@@ -23,6 +23,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/DefaultWindModel.cpp
         src/WindMeanVelocityProfile.cpp
         src/UniformWindVelocityProfile.cpp
+        src/PowerLawWindVelocityProfile.cpp
         )
 
 # Using C++ 2011
