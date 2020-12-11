@@ -24,6 +24,7 @@ set(SRC src/WaveSpectralDensity.cpp
         src/WindMeanVelocityProfile.cpp
         src/UniformWindVelocityProfile.cpp
         src/PowerLawWindVelocityProfile.cpp
+        src/LogWindVelocityProfile.cpp
         )
 
 # Using C++ 2011
