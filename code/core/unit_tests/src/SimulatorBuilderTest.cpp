@@ -156,3 +156,14 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
     const auto env = builder.get_environment();
     ASSERT_THROW(builder.get_forces(env), InvalidInputException);
 }
+
+TEST_F(SimulatorBuilderTest, wind_model_is_available_from_env)
+{
+	builder.can_parse<DefaultSurfaceElevation>();
+	builder.can_parse<DefaultWindModel>();
+	const auto env = builder.get_environment();
+	Eigen::Vector3d position;
+	position << a.random<double>(), a.random<double>(), -abs(a.random<double>());
+	double time(a.random<double>());
+	ASSERT_NO_THROW(Eigen::Vector3d wind = env.wind->get_wind(position, time));
+}
