@@ -164,7 +164,7 @@ TEST_F(ManeuveringForceModelTest, internal_exp)
     BodyStates states;
     ssc::data_source::DataSource ds;
     const double t = a.random<double>();
-    ASSERT_DOUBLE_EQ(x, f(states, ds, t));
+    ASSERT_NEAR(x, f(states, ds, t),1e-12);
 }
 
 TEST_F(ManeuveringForceModelTest, internal_difference)
