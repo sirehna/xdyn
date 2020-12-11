@@ -13,9 +13,14 @@
 
 LogWindVelocityProfile::LogWindVelocityProfile(const Input& input): WindMeanVelocityProfile(input), z0(input.z0), z_ref(input.z_ref)
 {
-	//if(z_ref<=0) THROW(__PRETTY_FUNCTION__, InvalidInputException, "the reference height must be strictly positive");
-	//if(z0<=0) THROW(__PRETTY_FUNCTION__, InvalidInputException, "the roughness length must be strictly positive");
-	// TODO: find out why the compile error "'__ss' was not declared in this scope" occurs during expansion of THROW macro
+	if(z_ref<=0)
+	{
+		THROW(__PRETTY_FUNCTION__, InvalidInputException, "the reference height must be strictly positive");
+	}
+	if(z0<=0)
+	{
+		THROW(__PRETTY_FUNCTION__, InvalidInputException, "the roughness length must be strictly positive");
+	}
 }
 
 LogWindVelocityProfile::~LogWindVelocityProfile ()

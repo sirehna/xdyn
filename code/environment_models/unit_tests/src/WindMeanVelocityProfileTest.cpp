@@ -11,6 +11,7 @@
 #include "UniformWindVelocityProfile.hpp"
 #include "PowerLawWindVelocityProfile.hpp"
 #include "LogWindVelocityProfile.hpp"
+#include "InvalidInputException.hpp"
 
 #include "WindMeanVelocityProfileTest.hpp"
 
@@ -75,6 +76,16 @@ TEST_F(WindMeanVelocityProfileTest, PowerLawWindVelocityProfile_returns_right_va
 	ASSERT_DOUBLE_EQ(0.,wind_vector(2));
 }
 
+TEST_F(WindMeanVelocityProfileTest, PowerLawWindVelocityProfile_constructor_should_throw_if_invalid_input)
+{
+	PowerLawWindVelocityProfile::Input input;
+	input.velocity=8;
+	input.direction=135*M_PI/180;
+	input.alpha=0.11;
+	input.z_ref=-1;
+	ASSERT_THROW(PowerLawWindVelocityProfile force_model(input),InvalidInputException);
+}
+
 TEST_F(WindMeanVelocityProfileTest, can_parse_LogWindVelocityProfile_input)
 {
 	std::string yaml_input = "{velocity: {unit: m/s, value: 8}, direction: {unit: rad, value: 1}, roughness length: {unit: m, value: 0.005}, reference height: {unit: m, value: 10}}";
@@ -101,4 +112,17 @@ TEST_F(WindMeanVelocityProfileTest, LogWindVelocityProfile_returns_right_value)
 	ASSERT_DOUBLE_EQ(wind_velocity*cos(input.direction),wind_vector(0));
 	ASSERT_DOUBLE_EQ(wind_velocity*sin(input.direction),wind_vector(1));
 	ASSERT_DOUBLE_EQ(0.,wind_vector(2));
+}
+
+TEST_F(WindMeanVelocityProfileTest, LogWindVelocityProfile_constructor_should_throw_if_invalid_input)
+{
+	LogWindVelocityProfile::Input input;
+	input.velocity = 8;
+	input.direction = 135*M_PI/180;
+	input.z0 = 0.005;
+	input.z_ref = -1;
+	ASSERT_THROW(LogWindVelocityProfile force_model(input),InvalidInputException);
+	input.z0 = -1;
+	input.z_ref = 10;
+	ASSERT_THROW(LogWindVelocityProfile force_model(input),InvalidInputException);
 }
