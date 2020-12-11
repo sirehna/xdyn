@@ -5,10 +5,9 @@
  *      Author: mcharlou2016
  */
 
-#include <math.h>
+#include <cmath>
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
-#include <iostream>
 
 #include "InvalidInputException.hpp"
 
@@ -39,7 +38,7 @@ PowerLawWindVelocityProfile::Input PowerLawWindVelocityProfile::parse(const std:
 
 double PowerLawWindVelocityProfile::get_wind_velocity(const double z) const
 {
-	if(z<=0) return velocity*pow(-z/z_ref,alpha); // -z because the NED frame has negative z above sea level
+	if(z<=0) return velocity*std::pow(-z/z_ref,alpha); // -z because the NED frame has negative z above sea level
 	else return 0.;
 }
 
