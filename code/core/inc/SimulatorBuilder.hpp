@@ -30,6 +30,8 @@
 #include <ssc/data_source.hpp>
 #include <ssc/kinematics.hpp>
 
+#include "WindModel.hpp"
+
 class BodyBuilder;
 typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;
 
@@ -157,6 +159,23 @@ class SimulatorBuilder
             spectrum_parsers->push_back(SpectrumBuilderPtr(new SpectrumBuilder<T>()));
             return *this;
         }
+
+        /**  \brief Add the capacity to parse certain YAML inputs for wind models (eg. cRPC wind model)
+         *  \details This method must not be called with any parameters: the
+         *  default parameter is only there so we can use boost::enable_if. This
+         *  allows us to use can_parse for several types derived from a few
+         *  base classes (WaveModelInterface, ForceModel...) & the compiler will
+         *  automagically choose the right version of can_parse.
+         *  \returns *this (so we can chain calls to can_parse)
+         *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
+         */
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<WindModel,T> >::type* dummy = 0)
+        {
+        	(void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+        	wind_model_parsers.push_back(WindModel::build_parser<T>());
+        	return *this;
+        }
+
         std::vector<BodyPtr> get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces, std::map<std::string,double> Tmax) const;
         EnvironmentAndFrames get_environment() const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
@@ -176,7 +195,7 @@ class SimulatorBuilder
     private:
         SimulatorBuilder(); // Disabled
         std::map<std::string, double> get_max_history_length(const std::vector<ListOfForces>& forces_for_all_bodies, const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies) const;
-        SurfaceElevationPtr get_wave() const;
+        void set_environment_models(EnvironmentAndFrames& env) const;
         ListOfForces forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
         ListOfControlledForces controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
         void add(const YamlModel& model, ListOfForces& L, const std::string& name, const EnvironmentAndFrames& env) const;
@@ -191,6 +210,7 @@ class SimulatorBuilder
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
         TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
+        std::vector<WindParser> wind_model_parsers;
         ssc::data_source::DataSource command_listener;
         double t0; //!< First time step (to initialize state history)
 };
