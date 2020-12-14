@@ -16,7 +16,6 @@
 #include <Eigen/Dense>
 
 #include <ssc/kinematics.hpp>
-#include "ForceModel.hpp"
 #include "GeometricTypes3d.hpp"
 #include "MeshIntersector.hpp"
 #include "StateMacros.hpp"
