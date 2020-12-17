@@ -130,3 +130,10 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
     const auto env = builder.get_environment();
     ASSERT_THROW(builder.get_forces(env), InvalidInputException);
 }
+
+TEST_F(SimulatorBuilderTest, can_get_rho_air)
+{
+    builder.can_parse<DefaultSurfaceElevation>();
+    const auto env = builder.get_environment();
+    ASSERT_DOUBLE_EQ(1.225,env.get_rho_air());
+}
