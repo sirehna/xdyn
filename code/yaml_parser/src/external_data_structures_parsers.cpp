@@ -256,6 +256,12 @@ void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f)
 {
     ssc::yaml_parser::parse_uv(node["g"], f.g);
     ssc::yaml_parser::parse_uv(node["rho"], f.rho);
+    if(node.FindValue("air rho"))
+    {
+    	double rho_air;
+    	ssc::yaml_parser::parse_uv(node["air rho"], rho_air);
+    	f.rho_air = rho_air;
+    }
     ssc::yaml_parser::parse_uv(node["nu"], f.nu);
 }
 
