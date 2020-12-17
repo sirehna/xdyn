@@ -19,11 +19,16 @@ EnvironmentAndFrames::EnvironmentAndFrames() : w(),
                                                rho(0),
                                                nu(0),
                                                g(0),
-                                               rot()
+                                               rot(),
+											   rho_air()
 {
     if (rho<0.0)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "rho can not be negative");
+    }
+    if (rho_air && rho_air<0.0)
+    {
+    	THROW(__PRETTY_FUNCTION__, InvalidInputException, "air rho can not be negative");
     }
     if (nu<0.0)
     {
@@ -60,4 +65,18 @@ void EnvironmentAndFrames::feed(
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
                 "In the YAML file (section [environment models/model/output/frame of reference]): the output reference frame is not defined (" << e.get_message() << ")");
     }
+}
+
+void EnvironmentAndFrames::set_rho_air(double value)
+{
+	rho_air = value;
+}
+
+double EnvironmentAndFrames::get_rho_air() const
+{
+	if(not(rho_air.is_initialized()))
+	{
+		THROW(__PRETTY_FUNCTION__, InvalidInputException,"The value of rho_air was requested, but was not specified in the input YAML file. Make sure the key 'air rho' is present in the 'environmental constants' section.")
+	}
+	return rho_air.get();
 }

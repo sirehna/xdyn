@@ -63,6 +63,7 @@ EnvironmentAndFrames SimulatorBuilder::get_environment() const
     EnvironmentAndFrames env;
     env.g = input.environmental_constants.g;
     env.rho = input.environmental_constants.rho;
+    if(input.environmental_constants.rho_air) env.set_rho_air(input.environmental_constants.rho_air.get());
     env.nu = input.environmental_constants.nu;
     env.rot = input.rotations;
     env.w = get_wave();

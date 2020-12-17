@@ -18,6 +18,7 @@
 
 struct YamlBody;
 struct YamlRotation;
+struct EnvironmentAndFrames;
 
 class Observer;
 

@@ -8,11 +8,14 @@
 #ifndef YAMLENVIRONMENTALCONSTANTS_HPP_
 #define YAMLENVIRONMENTALCONSTANTS_HPP_
 
+#include <boost/optional.hpp>
+
 struct YamlEnvironmentalConstants
 {
     YamlEnvironmentalConstants();
     double g;
     double rho;
+    boost::optional<double> rho_air;
     double nu;
 };
 

@@ -10,6 +10,7 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/ControllableForceModelTest.cpp
               src/random_kinematics.cpp
               src/BlockedDOFTest.cpp
+              src/EnvironmentAndFramesTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
